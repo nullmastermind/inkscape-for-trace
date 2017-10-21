@@ -66,6 +66,7 @@
 #include <gtkmm/colorbutton.h>
 #include <gdkmm/general.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/eventbox.h>
 
 using namespace Inkscape::Filters;
 

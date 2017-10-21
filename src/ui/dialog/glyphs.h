@@ -37,7 +37,7 @@ class GlyphColumns;
 class GlyphsPanel : public Inkscape::UI::Widget::Panel
 {
 public:
-    GlyphsPanel(gchar const *prefsPath = "/dialogs/glyphs");
+    GlyphsPanel();
     virtual ~GlyphsPanel();
 
     static GlyphsPanel& getInstance();

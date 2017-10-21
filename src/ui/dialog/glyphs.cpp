@@ -317,8 +317,8 @@ GlyphColumns *GlyphsPanel::getColumns()
 /**
  * Constructor
  */
-GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
-    Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_GLYPHS),
+GlyphsPanel::GlyphsPanel() :
+    Inkscape::UI::Widget::Panel("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS),
     store(Gtk::ListStore::create(*getColumns())),
     iconView(0),
     entry(0),
@@ -455,8 +455,6 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
 
     show_all_children();
-
-    restorePanelPrefs();
 
     // Connect this up last
     conn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &GlyphsPanel::setTargetDesktop) );

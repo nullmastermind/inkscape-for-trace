@@ -45,14 +45,9 @@ public:
     LayersPanel();
     virtual ~LayersPanel();
 
-    //virtual void setOrientation( Gtk::AnchorType how );
-
     static LayersPanel& getInstance();
 
     void setDesktop( SPDesktop* desktop );
-
-protected:
-    //virtual void _handleAction( int setId, int itemId );
 
 private:
     class ModelColumns;

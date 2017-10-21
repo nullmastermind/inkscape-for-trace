@@ -24,6 +24,7 @@
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/button.h>
 
 #include "ui/dialog/desktop-tracker.h"
 #include "message.h"

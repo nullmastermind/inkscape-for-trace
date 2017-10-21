@@ -18,12 +18,7 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/eventbox.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
 #include "enums.h"
-#include <vector>
 #include <map>
 
 class SPDesktop;
@@ -31,6 +26,7 @@ class SPDocument;
 
 namespace Gtk {
 	class CheckMenuItem;
+        class Button;
 	class ButtonBox;
 	class MenuItem;
 }
@@ -42,8 +38,6 @@ namespace Inkscape {
 class Selection;
 
 namespace UI {
-
-class PreviewFillable;
 
 namespace Widget {
 
@@ -68,15 +62,12 @@ public:
      * @param prefs_path characteristic path to load/save dialog position.
      * @param verb_num the dialog verb.
      */
-    Panel(gchar const *prefs_path = 0, int verb_num = 0, bool menu_desired = false);
-
+    Panel(gchar const *prefs_path = 0, int verb_num = 0);
     virtual ~Panel();
 
     gchar const *getPrefsPath() const;
     
     int const &getVerb() const;
-
-    virtual void setOrientation(SPAnchorType how);
 
     virtual void present();  //< request to be present
 
@@ -105,10 +96,6 @@ protected:
      * Returns a pointer to a Gtk::Box containing the child widgets.
      */
     Gtk::Box *_getContents() { return &_contents; }
-    void _setTargetFillable(PreviewFillable *target);
-    void _regItem(Gtk::MenuItem* item, int group, int id);
-
-    virtual void _handleAction(int set_id, int item_id);
     virtual void _apply();
 
     virtual void _handleResponse(int response_id);
@@ -121,8 +108,6 @@ protected:
      * Stores characteristic path for loading/saving the dialog position.
      */
     Glib::ustring const _prefs_path;
-    bool _menu_desired;
-    SPAnchorType _anchor;
 
     /* Signals */
     sigc::signal<void, int> _signal_response;
@@ -132,27 +117,12 @@ protected:
     sigc::signal<void, SPDesktop *> _signal_deactive_desktop;
 
 private:
-    void _init();
-    void _bounceCall(int i, int j);
-
-    void _popper(GdkEventButton *btn);
-    void _wrapToggled(Gtk::CheckMenuItem *toggler);
-
     SPDesktop       *_desktop;
 
     int              _verb_num;
 
-    Gtk::HBox        _top_bar;
-    Gtk::VBox        _right_bar;
     Gtk::VBox        _contents;
-    Gtk::Image       _temp_arrow;
-    Gtk::EventBox    _menu_popper;
-    Gtk::Menu       *_menu;
     Gtk::ButtonBox  *_action_area;  //< stores response buttons
-
-    std::vector<Gtk::Widget *> _non_horizontal;
-    std::vector<Gtk::Widget *> _non_vertical;
-    PreviewFillable *_fillable;
 
     /* A map to store which widget that emits a certain response signal */
     typedef std::map<int, Gtk::Widget *> ResponseMap;

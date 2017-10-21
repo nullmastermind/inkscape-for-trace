@@ -43,15 +43,12 @@ public:
     TagsPanel();
     virtual ~TagsPanel();
 
-    //virtual void setOrientation( Gtk::AnchorType how );
-
     static TagsPanel& getInstance();
 
     void setDesktop( SPDesktop* desktop );
     void setDocument( SPDesktop* desktop, SPDocument* document);
 
 protected:
-    //virtual void _handleAction( int setId, int itemId );
     friend void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject *cp);
 private:
     class ModelColumns;

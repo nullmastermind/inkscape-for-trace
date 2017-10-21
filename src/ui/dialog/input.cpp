@@ -29,6 +29,7 @@
 #include <gtkmm/progressbar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treestore.h>
+#include <gtkmm/eventbox.h>
 
 #include "device-manager.h"
 #include "preferences.h"
