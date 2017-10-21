@@ -902,7 +902,7 @@ void TagsPanel::_setExpanded(const Gtk::TreeModel::iterator& iter, const Gtk::Tr
  * Constructor
  */
 TagsPanel::TagsPanel() :
-    UI::Widget::Panel("", "/dialogs/tags", SP_VERB_DIALOG_TAGS),
+    UI::Widget::Panel("/dialogs/tags", SP_VERB_DIALOG_TAGS),
     _rootWatcher(0),
     deskTrack(),
     _desktop(0),

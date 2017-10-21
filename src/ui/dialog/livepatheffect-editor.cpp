@@ -81,7 +81,7 @@ static void lpe_style_button(Gtk::Button& btn, char const* iconName)
  */
 
 LivePathEffectEditor::LivePathEffectEditor()
-    : UI::Widget::Panel("", "/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
+    : UI::Widget::Panel("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
       deskTrack(),
       lpe_list_locked(false),
       lpe_changed(true),

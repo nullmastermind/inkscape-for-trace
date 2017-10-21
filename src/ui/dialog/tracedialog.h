@@ -32,7 +32,7 @@ public:
      * Constructor
      */
     TraceDialog() : 
-     UI::Widget::Panel("", "/dialogs/trace", SP_VERB_SELECTION_TRACE)
+     UI::Widget::Panel("/dialogs/trace", SP_VERB_SELECTION_TRACE)
      {}
 
 

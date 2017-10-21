@@ -55,7 +55,7 @@ void PrintColorsPreviewDialog::toggle_black(){
 }
 
 PrintColorsPreviewDialog::PrintColorsPreviewDialog()
- : UI::Widget::Panel("", "/dialogs/printcolorspreview", SP_VERB_DIALOG_PRINT_COLORS_PREVIEW)
+ : UI::Widget::Panel("/dialogs/printcolorspreview", SP_VERB_DIALOG_PRINT_COLORS_PREVIEW)
 {
     Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox());
 

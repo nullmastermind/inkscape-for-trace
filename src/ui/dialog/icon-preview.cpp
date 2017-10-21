@@ -88,7 +88,7 @@ void IconPreviewPanel::on_button_clicked(int which)
  * Constructor
  */
 IconPreviewPanel::IconPreviewPanel() :
-    UI::Widget::Panel("", "/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
+    UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
     deskTrack(),
     desktop(0),
     document(0),

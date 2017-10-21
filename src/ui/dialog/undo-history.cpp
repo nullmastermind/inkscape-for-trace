@@ -94,7 +94,7 @@ UndoHistory& UndoHistory::getInstance()
 }
 
 UndoHistory::UndoHistory()
-    : UI::Widget::Panel ("", "/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
+    : UI::Widget::Panel("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
       _document_replaced_connection(),
       _desktop(getDesktop()),
       _document(_desktop ? _desktop->doc() : NULL),

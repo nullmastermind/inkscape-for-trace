@@ -55,13 +55,12 @@ void Panel::prep() {
     eek_preview_set_size_mappings( G_N_ELEMENTS(sizes), sizes );
 }
 
-Panel::Panel(Glib::ustring const &label, gchar const *prefs_path,
+Panel::Panel(gchar const *prefs_path,
              int verb_num,
              bool menu_desired) :
     _prefs_path(prefs_path),
     _menu_desired(menu_desired),
     _desktop(SP_ACTIVE_DESKTOP),
-    _label(label),
     _verb_num(verb_num),
     _temp_arrow(),
     _menu(0),
@@ -256,16 +255,6 @@ void Panel::_init()
         (*iter)->hide();
     }
 
-    // _close_button.set_label("X");
-
-    if (!_label.empty()) {
-        _tab_title.set_label(_label);
-        _top_bar.pack_start(_tab_title);
-    }
-
-    // _top_bar.pack_end(_close_button, false, false);
-
-
     if ( _menu_desired ) {
         _top_bar.pack_end(_menu_popper, false, false);
         gint width = 0;
@@ -302,17 +291,6 @@ void Panel::_init()
     _bounceCall(PANEL_SETTING_BORDER, panel_border);
 }
 
-void Panel::setLabel(Glib::ustring const &label)
-{
-    if (_label.empty() && !label.empty())
-        _top_bar.pack_start(_tab_title);
-    else if (!_label.empty() && label.empty())
-        _top_bar.remove(_tab_title);
-
-    _label = label;
-    _tab_title.set_label(_label);
-}
-
 void Panel::setOrientation(SPAnchorType how)
 {
     if (_anchor != how) {
@@ -336,8 +314,6 @@ void Panel::setOrientation(SPAnchorType how)
                 }
                 // Ensure we are not in "list" mode
                 _bounceCall(PANEL_SETTING_MODE, 1);
-                if (!_label.empty())
-                    _top_bar.remove(_tab_title);
             }
             break;
 
@@ -530,11 +506,6 @@ void Panel::_wrapToggled(Gtk::CheckMenuItem* toggler)
 gchar const *Panel::getPrefsPath() const
 {
     return _prefs_path.data();
-}
-
-Glib::ustring const &Panel::getLabel() const
-{
-    return _label;
 }
 
 int const &Panel::getVerb() const

@@ -60,7 +60,7 @@ DocumentMetadata::getInstance()
 
 
 DocumentMetadata::DocumentMetadata()
-    : UI::Widget::Panel ("", "/dialogs/documentmetadata", SP_VERB_DIALOG_METADATA)
+    : UI::Widget::Panel("/dialogs/documentmetadata", SP_VERB_DIALOG_METADATA)
 {
     hide();
     _getContents()->set_spacing (4);

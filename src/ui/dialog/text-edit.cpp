@@ -56,7 +56,7 @@ namespace UI {
 namespace Dialog {
 
 TextEdit::TextEdit()
-    : UI::Widget::Panel("", "/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
+    : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
       text_label(_("_Text"), true),
       vari_label(_("_Variants"), true),

@@ -208,7 +208,7 @@ void Memory::Private::stop_update_task() {
 }
 
 Memory::Memory() 
-    : UI::Widget::Panel ("", "/dialogs/memory", SP_VERB_HELP_MEMORY),
+    : UI::Widget::Panel("/dialogs/memory", SP_VERB_HELP_MEMORY),
       _private(*(new Memory::Private())) 
 {
     _getContents()->pack_start(_private.view);

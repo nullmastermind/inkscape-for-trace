@@ -69,7 +69,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("", "/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
+FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
 {
      
     const std::string req_widgets[] = {"FilterEditor", "FilterList", "FilterFERX", "FilterFERY", "FilterFERH", "FilterFERW", "FilterPreview", "FilterPrimitiveDescImage", "FilterPrimitiveList", "FilterPrimitiveDescText", "FilterPrimitiveAdd"};

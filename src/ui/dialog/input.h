@@ -25,7 +25,7 @@ class InputDialog : public UI::Widget::Panel
 public:
     static InputDialog &getInstance();
 
-    InputDialog() : UI::Widget::Panel("", "/dialogs/inputdevices", SP_VERB_DIALOG_INPUT) {}
+    InputDialog() : UI::Widget::Panel("/dialogs/inputdevices", SP_VERB_DIALOG_INPUT) {}
     virtual ~InputDialog() {}
 };
 

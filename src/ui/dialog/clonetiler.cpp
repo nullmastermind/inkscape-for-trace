@@ -68,7 +68,7 @@ static gdouble trace_zoom;
 static SPDocument *trace_doc = NULL;
 
 CloneTiler::CloneTiler () :
-    UI::Widget::Panel ("", "/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
+    UI::Widget::Panel("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
     desktop(NULL),
     deskTrack(),
     table_row_labels(NULL)

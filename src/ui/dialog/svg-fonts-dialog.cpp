@@ -995,7 +995,7 @@ void SvgFontsDialog::add_font(){
 }
 
 SvgFontsDialog::SvgFontsDialog()
- : UI::Widget::Panel("", "/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
+ : UI::Widget::Panel("/dialogs/svgfonts", SP_VERB_DIALOG_SVG_FONTS),
    _add(_("_New"), true)
 {
     kerning_slider = Gtk::manage(new Gtk::Scale(Gtk::ORIENTATION_HORIZONTAL));

@@ -46,7 +46,7 @@ namespace UI {
 namespace Dialog {
 
 XmlTree::XmlTree (void) :
-    UI::Widget::Panel ("", "/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
+    UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
     blocked (0),
     _message_stack (NULL),
     _message_context (NULL),

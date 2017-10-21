@@ -38,7 +38,7 @@ namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke()
-    : UI::Widget::Panel ("", "/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE),
+    : UI::Widget::Panel("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE),
       _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),

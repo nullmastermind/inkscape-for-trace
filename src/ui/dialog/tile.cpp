@@ -27,7 +27,7 @@ namespace UI {
 namespace Dialog {
 
 ArrangeDialog::ArrangeDialog()
-	: UI::Widget::Panel("", "/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE),
+	: UI::Widget::Panel("/dialogs/gridtiler", SP_VERB_SELECTION_ARRANGE),
 	  _gridArrangeTab(new GridArrangeTab(this)),
       _polarArrangeTab(new PolarArrangeTab(this))
 {

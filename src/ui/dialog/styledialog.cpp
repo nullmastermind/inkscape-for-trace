@@ -236,7 +236,7 @@ Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog 
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 StyleDialog::StyleDialog() :
-    UI::Widget::Panel("", "/dialogs/style", SP_VERB_DIALOG_STYLE),
+    UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE),
     _updating(false),
     _textNode(NULL),
     _desktopTracker()

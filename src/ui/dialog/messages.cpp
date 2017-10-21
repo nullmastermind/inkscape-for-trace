@@ -43,7 +43,7 @@ void Messages::clear()
  * Constructor
  */
 Messages::Messages()
-    : UI::Widget::Panel("", "/dialogs/messages", SP_VERB_DIALOG_DEBUG),
+    : UI::Widget::Panel("/dialogs/messages", SP_VERB_DIALOG_DEBUG),
       buttonClear(_("_Clear"), _("Clear log messages")),
       checkCapture(_("Capture log messages"), _("Capture log messages"))
 {

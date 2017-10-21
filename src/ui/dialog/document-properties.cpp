@@ -88,7 +88,7 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : UI::Widget::Panel ("", "/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
+    : UI::Widget::Panel("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
       _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
       _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
       _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),

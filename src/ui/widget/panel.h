@@ -65,23 +65,15 @@ public:
     /**
      * Construct a Panel.
      *
-     * @param label label for the panel of a dialog, shown at the top.
      * @param prefs_path characteristic path to load/save dialog position.
      * @param verb_num the dialog verb.
      */
-    Panel(Glib::ustring const &label = "", gchar const *prefs_path = 0,
-          int verb_num = 0,
-          bool menu_desired = false);
+    Panel(gchar const *prefs_path = 0, int verb_num = 0, bool menu_desired = false);
 
     virtual ~Panel();
 
     gchar const *getPrefsPath() const;
     
-    /**
-     * Sets a label for the panel and displays it in the panel at the top (is not the title bar of a floating dialog).
-     */
-    void setLabel(Glib::ustring const &label);
-    Glib::ustring const &getLabel() const;
     int const &getVerb() const;
 
     virtual void setOrientation(SPAnchorType how);
@@ -148,16 +140,13 @@ private:
 
     SPDesktop       *_desktop;
 
-    Glib::ustring    _label;
     int              _verb_num;
 
     Gtk::HBox        _top_bar;
     Gtk::VBox        _right_bar;
     Gtk::VBox        _contents;
-    Gtk::Label       _tab_title;
     Gtk::Image       _temp_arrow;
     Gtk::EventBox    _menu_popper;
-    Gtk::Button      _close_button;
     Gtk::Menu       *_menu;
     Gtk::ButtonBox  *_action_area;  //< stores response buttons
 

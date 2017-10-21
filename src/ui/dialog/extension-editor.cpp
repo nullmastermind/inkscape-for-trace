@@ -41,7 +41,7 @@ namespace Dialog {
  * a new extension is selected, the notebooks are changed appropriately.
  */
 ExtensionEditor::ExtensionEditor()
-    : UI::Widget::Panel ("", "/dialogs/extensioneditor", SP_VERB_DIALOG_EXTENSIONEDITOR)
+    : UI::Widget::Panel("/dialogs/extensioneditor", SP_VERB_DIALOG_EXTENSIONEDITOR)
 {
     _notebook_info.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _notebook_help.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);

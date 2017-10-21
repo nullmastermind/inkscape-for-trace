@@ -77,7 +77,7 @@ static const SPAttrDesc image_nohref_desc[] = {
 };
 
 ObjectAttributes::ObjectAttributes (void) :
-    UI::Widget::Panel ("", "/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
+    UI::Widget::Panel("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
     blocked (false),
     CurrentItem(NULL),
     attrTable(Gtk::manage(new SPAttributeTable())),

@@ -797,7 +797,7 @@ bool LayersPanel::_rowSelectFunction( Glib::RefPtr<Gtk::TreeModel> const & /*mod
  * Constructor
  */
 LayersPanel::LayersPanel() :
-    UI::Widget::Panel("", "/dialogs/layers", SP_VERB_DIALOG_LAYERS),
+    UI::Widget::Panel("/dialogs/layers", SP_VERB_DIALOG_LAYERS),
     deskTrack(),
     _maxNestDepth(20),
     _desktop(0),

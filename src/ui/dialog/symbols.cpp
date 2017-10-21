@@ -103,7 +103,7 @@ SymbolColumns* SymbolsDialog::getColumns()
  * Constructor
  */
 SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
-  UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SYMBOLS),
+  UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SYMBOLS),
   store(Gtk::ListStore::create(*getColumns())),
   all_docs_processed(0),
   icon_view(0),

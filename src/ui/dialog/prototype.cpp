@@ -25,9 +25,7 @@ namespace Dialog {
 // Note that in order for a dialog to be restored, it must be listed in SPDesktop::show_dialogs().
 
 Prototype::Prototype() :
-    // UI::Widget::Panel("Prototype Label", "/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE,
-    //                "Prototype Apply Label", true),
-    UI::Widget::Panel("Prototype Label", "/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE),
+    UI::Widget::Panel("/dialogs/prototype", SP_VERB_DIALOG_PROTOTYPE),
 
     desktopTracker() //,
     // desktopChangedConnection()

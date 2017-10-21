@@ -49,7 +49,7 @@ namespace Dialog {
 
 
 SpellCheck::SpellCheck (void) :
-    UI::Widget::Panel ("", "/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
+    UI::Widget::Panel("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
     _text(NULL),
     _layout(NULL),
     _stops(0),

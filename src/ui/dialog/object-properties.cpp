@@ -44,7 +44,7 @@ namespace UI {
 namespace Dialog {
 
 ObjectProperties::ObjectProperties()
-    : UI::Widget::Panel ("", "/dialogs/object/", SP_VERB_DIALOG_ITEM)
+    : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
     , _blocked (false)
     , _current_item(NULL)
     , _label_id(_("_ID:"), 1)

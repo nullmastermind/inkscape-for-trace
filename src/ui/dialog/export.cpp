@@ -121,7 +121,7 @@ static const char * selection_labels[SELECTION_NUMBER_OF] = {
 };
 
 Export::Export (void) :
-    UI::Widget::Panel ("", "/dialogs/export/", SP_VERB_DIALOG_EXPORT),
+    UI::Widget::Panel("/dialogs/export/", SP_VERB_DIALOG_EXPORT),
     current_key(SELECTION_PAGE),
     original_name(),
     doc_export_name(),

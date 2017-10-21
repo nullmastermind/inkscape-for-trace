@@ -54,7 +54,7 @@ static void on_selection_modified(Inkscape::Selection *selection, Transformation
 ########################################################################*/
 
 Transformation::Transformation()
-    : UI::Widget::Panel ("", "/dialogs/transformation", SP_VERB_DIALOG_TRANSFORM),
+    : UI::Widget::Panel("/dialogs/transformation", SP_VERB_DIALOG_TRANSFORM),
       _page_move              (4, 2),
       _page_scale             (4, 2),
       _page_rotate            (4, 2),

@@ -60,7 +60,7 @@ namespace UI {
 namespace Dialog {
 
 Find::Find()
-    : UI::Widget::Panel("", "/dialogs/find", SP_VERB_DIALOG_FIND),
+    : UI::Widget::Panel("/dialogs/find", SP_VERB_DIALOG_FIND),
 
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
       entry_replace(_("R_eplace:"), _("Replace match with this value")),

@@ -910,7 +910,7 @@ static void on_selection_changed(AlignAndDistribute *daad)
 
 
 AlignAndDistribute::AlignAndDistribute()
-    : UI::Widget::Panel ("", "/dialogs/align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
+    : UI::Widget::Panel("/dialogs/align", SP_VERB_DIALOG_ALIGN_DISTRIBUTE),
       randomize_bbox(),
       _alignFrame(_("Align")),
       _distributeFrame(_("Distribute")),
