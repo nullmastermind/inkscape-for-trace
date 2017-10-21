@@ -23,7 +23,6 @@
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/floating-behavior.h"
 #include "ui/dialog/dock-behavior.h"
-#include "preferences.h"
 #include "inkscape.h"
 #include "desktop.h"
 
@@ -154,12 +153,6 @@ PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int co
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/showclose")) {
-        // TODO: make the order of buttons obey the global preference
-        panel.addResponseButton(_("_Close"), Gtk::RESPONSE_CLOSE);
-    }
-
     show_all_children();
 }
 
@@ -198,12 +191,6 @@ PanelDialog<Behavior::FloatingBehavior>::PanelDialog(UI::Widget::Panel &panel, c
 
     _document_replaced_connection =
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/showclose")) {
-        // TODO: make the order of buttons obey the global preference
-        panel.addResponseButton(_("_Close"), Gtk::RESPONSE_CLOSE);
-    }
 
     show_all_children();
 }
