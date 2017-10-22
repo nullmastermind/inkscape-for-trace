@@ -1,4 +1,3 @@
-
 /*
  * A simple interface for previewing representations.
  *
@@ -31,7 +30,7 @@ namespace UI {
 
 
 PreviewHolder::PreviewHolder() :
-    Box(),
+    Bin(),
     _scroller(0),
     _insides(0),
     _prefCols(0),
@@ -45,7 +44,7 @@ PreviewHolder::PreviewHolder() :
 {
     set_name( "PreviewHolder" );
     _scroller = Gtk::manage(new Gtk::ScrolledWindow());
-    _scroller->set_name( "PreviewHolderScrolledWindow" );
+    _scroller->set_name( "PreviewHolderScroller" );
     _scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     _insides = Gtk::manage(new Gtk::Grid());
@@ -56,12 +55,17 @@ PreviewHolder::PreviewHolder() :
     _scroller->set_vexpand();
     _scroller->add( *_insides );
 
-    pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
+#if GTK_CHECK_VERSION(3,16,0)
+    // Disable overlay scrolling as the scrollbar covers up swatches.
+    // For some reason this also makes the height 55px.
+    _scroller->set_overlay_scrolling(false);
+#endif
+
+    add(*_scroller);
 }
 
 PreviewHolder::~PreviewHolder()
 {
-
 }
 
 bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
@@ -162,7 +166,6 @@ void PreviewHolder::addPreview( Previewable* preview )
         }
 
         _scroller->show_all_children();
-        _scroller->queue_draw();
     }
 }
 
@@ -249,32 +252,6 @@ void PreviewHolder::setColumnPref( int cols )
     _prefCols = cols;
 }
 
-void PreviewHolder::get_preferred_height_vfunc(int& minimum_height, int& natural_height) const
-{
-    // If we have a child (swatch), use that to get it's height.
-    auto children = _insides->get_children();
-    int minimum_height_child = 0;
-    int natural_height_child = 0;
-    if (children.size() > 0) {
-        children[0]->get_preferred_height(minimum_height_child, natural_height_child);
-    }
-
-    if (_wrap) {
-        // If wrapped, make height three times child height (seems reasonable).
-        minimum_height = 3 * minimum_height_child;
-        natural_height = 3 * natural_height_child;
-    } else {
-        // If not wrapped, height is sum of child height and scrollbar height.
-
-        // Get horizontal scrollbar height.
-        int minimum_height_scrollbar = 0;
-        int natural_height_scrollbar = 0;
-        _scroller->get_hscrollbar()->get_preferred_height(minimum_height_scrollbar, natural_height_scrollbar);
-
-        minimum_height = minimum_height_child + minimum_height_scrollbar;
-        natural_height = natural_height_child + natural_height_scrollbar;
-    }
-}
 
 /**
  * Calculate the grid side of a preview holder
@@ -290,13 +267,16 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& n
     ncols = itemCount;
     nrows = 1;
 
-#if GTK_CHECK_VERSION(3,16,0)
-    // Disable overlay scrolling as the scrollbar covers up swatches.
-    _scroller->set_overlay_scrolling(false);
-#endif
-
     if ( _anchor == SP_ANCHOR_SOUTH || _anchor == SP_ANCHOR_NORTH ) {
-        // Horizontal layout, long bar.
+        Gtk::Requisition req;
+        Gtk::Requisition req_natural;
+        _scroller->get_preferred_size(req, req_natural);
+        int currW = _scroller->get_width();
+        if ( currW > req.width ) {
+            req.width = currW;
+        }
+
+        auto hs = _scroller->get_hscrollbar();
 
         if (_wrap && item != NULL) {
 
@@ -407,7 +387,6 @@ void PreviewHolder::rebuildUI()
     }
 
     _scroller->show_all_children();
-    _scroller->queue_draw();
 }
 
 

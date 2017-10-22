@@ -17,7 +17,7 @@
 # include "config.h"
 #endif
 
-#include <gtkmm/box.h>
+#include <gtkmm/bin.h>
 
 namespace Gtk {
 class Grid;
@@ -32,7 +32,7 @@ namespace UI {
 
 class Previewable;
 
-class PreviewHolder : public Gtk::Box
+class PreviewHolder : public Gtk::Bin
 {
 public:
     PreviewHolder();
@@ -54,7 +54,6 @@ public:
     virtual bool getWrap() const { return _wrap; }
 
 protected:
-    virtual void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const override;
     virtual bool on_scroll_event(GdkEventScroll*);
 
 private:
