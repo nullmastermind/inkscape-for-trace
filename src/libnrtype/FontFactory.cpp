@@ -934,7 +934,10 @@ void font_factory::AddFontsDir(char const *utf8dir)
     dir = g_filename_from_utf8(utf8dir, -1, NULL, NULL, NULL);
 # endif
 
-    FcConfig *conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+    FcConfig *conf = NULL;
+# if PANGO_VERSION_CHECK(1,38,0)
+    pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+# endif
     FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
     if (res = FcTrue) {
         g_info("Fonts dir '%s' added successfully.", utf8dir);
