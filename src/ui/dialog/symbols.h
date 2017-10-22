@@ -81,22 +81,22 @@ private:
     Glib::ustring selectedSymbolDocTitle();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
-
-    void getSymbols();
-    std::pair<Glib::ustring, SPDocument*> getSymbols(Glib::ustring title);
-    void addSymbols( SPDocument* symbol_document );
+    void getSymbolsFilename();
+    Glib::ustring documentTitle(SPDocument* doc);
+    std::pair<Glib::ustring, SPDocument*> getSymbolsSet(Glib::ustring title);
     void addSymbol( SPObject* symbol, Glib::ustring doc_title);
     SPDocument* symbolsPreviewDoc();
-
     void symbolsInDocRecursive(SPObject *r, std::vector<SPSymbol*> &l);
     std::vector<SPSymbol*> symbolsInDoc( SPDocument* document);
     void useInDoc(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> useInDoc( SPDocument* document);
-    void prepareFindSymbols(GdkEventKey* evt);
-    void findSymbols();
+    void beforeAddSymbols(GdkEventKey* evt);
+    void addSymbols();
+    bool addSymbolsInDoc(SPDocument* document);
     void clearSearch();
-    bool findSymbolsInDoc(SPDocument* document, Glib::ustring doc_title);
-    bool parseDocuments();
+    bool callbackGetSymbolsSets();
+    bool callbackGetSymbols();
+    
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
 
     Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
@@ -112,23 +112,23 @@ private:
 
     bool sensitive;
     
+    bool loading;
+    
     bool processed;
     
     size_t number_docs;
-    Glib::ustring last_symbol_set;
     Glib::RefPtr<Gtk::ListStore> store;
+    Glib::ustring search_str;
     Gtk::ComboBoxText* symbol_set;
     Gtk::ProgressBar* progress_bar;
     Gtk::HBox* progress;
     Gtk::SearchEntry* search;
-    Glib::ustring search_str;
     Gtk::IconView* icon_view;
     Gtk::Button* add_symbol;
     Gtk::Button* remove_symbol;
     Gtk::Button* zoom_in;
     Gtk::Button* zoom_out;
     Gtk::Grid* table;
-    Gtk::Switch * global;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
 
