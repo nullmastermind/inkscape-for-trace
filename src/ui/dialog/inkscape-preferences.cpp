@@ -1946,64 +1946,59 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line( false, "", _misc_namedicon_delay, "",
                            _("When on, named icons will be rendered before displaying the ui. This is for working around bugs in GTK+ named icon notification"), true);
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    {
-        // TRANSLATORS: following strings are paths in Inkscape preferences - Misc - System info
+    _page_system.add_group_header( _("System info"));
 
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
+    _sys_user_config.set_editable(false);
+    _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-        _page_system.add_group_header( _("System info"));
+    _sys_user_prefs.set_text(prefs->getPrefsFilename());
+    _sys_user_prefs.set_editable(false);
+    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
 
-        _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
-        _sys_user_config.set_editable(false);
-        _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
+    _sys_user_extension_dir.set_text((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""));
+    _sys_user_extension_dir.set_editable(false);
+    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
 
-        _sys_user_prefs.set_text(prefs->getPrefsFilename());
-        _sys_user_prefs.set_editable(false);
-        _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
+    _sys_user_cache.set_text(g_get_user_cache_dir());
+    _sys_user_cache.set_editable(false);
+    _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of users cache"), true);
 
-        _sys_user_extension_dir.set_text((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""));
-        _sys_user_extension_dir.set_editable(false);
-        _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
-
-        _sys_user_cache.set_text(g_get_user_cache_dir());
-        _sys_user_cache.set_editable(false);
-        _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of users cache"), true);
-
-        Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
-        if (tmp_dir.empty()) {
-            tmp_dir = Glib::get_tmp_dir();
-        }
-        _sys_tmp_files.set_text(tmp_dir);
-        _sys_tmp_files.set_editable(false);
-        _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
-
-        _sys_data.set_text( INKSCAPE_DATADIR );
-        _sys_data.set_editable(false);
-        _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
-
-        _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
-        _sys_extension_dir.set_editable(false);
-        _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
-
-        Glib::ustring tmp;
-        appendList( tmp, g_get_system_data_dirs() );
-        _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
-        _sys_systemdata.set_editable(false);
-        _sys_systemdata_scroll.add(_sys_systemdata);
-        _sys_systemdata_scroll.set_size_request(100, 80);
-        _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-        _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
-        _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
-
-        tmp = "";
-        gchar** paths = 0;
-        gint count = 0;
-        gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
-        appendList( tmp, paths );
-        g_strfreev(paths);
-        _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
+    Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
+    if (tmp_dir.empty()) {
+        tmp_dir = Glib::get_tmp_dir();
     }
+    _sys_tmp_files.set_text(tmp_dir);
+    _sys_tmp_files.set_editable(false);
+    _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
+
+    _sys_data.set_text( INKSCAPE_DATADIR );
+    _sys_data.set_editable(false);
+    _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
+
+    _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
+    _sys_extension_dir.set_editable(false);
+    _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
+
+    Glib::ustring tmp;
+    appendList( tmp, g_get_system_data_dirs() );
+    _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
+    _sys_systemdata.set_editable(false);
+    _sys_systemdata_scroll.add(_sys_systemdata);
+    _sys_systemdata_scroll.set_size_request(100, 80);
+    _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
+    _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
+
+    tmp = "";
+    gchar** paths = 0;
+    gint count = 0;
+    gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
+    appendList( tmp, paths );
+    g_strfreev(paths);
+    _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
     _sys_icon.set_editable(false);
     _sys_icon_scroll.add(_sys_icon);
     _sys_icon_scroll.set_size_request(100, 80);
