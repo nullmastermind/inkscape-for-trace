@@ -47,8 +47,8 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
     _verb_num(verb_num),
     _action_area(0)
 {
-    set_name( "InkscapePanel" );
-    set_orientation( Gtk::ORIENTATION_VERTICAL );
+    set_name("InkscapePanel");
+    set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     signalResponse().connect(sigc::mem_fun(*this, &Panel::_handleResponse));
     signalActivateDesktop().connect(sigc::mem_fun(*this, &Panel::setDesktop));
@@ -99,13 +99,6 @@ void Panel::_apply()
 
 Gtk::Button *Panel::addResponseButton(const Glib::ustring &button_text, int response_id, bool pack_start)
 {
-    Gtk::Button *button = new Gtk::Button(button_text, true);
-    _addResponseButton(button, response_id, pack_start);
-    return button;
-}
-
-void Panel::_addResponseButton(Gtk::Button *button, int response_id, bool pack_start)
-{
     // Create a button box for the response buttons if it's the first button to be added
     if (!_action_area) {
         _action_area = new Gtk::ButtonBox();
@@ -115,10 +108,12 @@ void Panel::_addResponseButton(Gtk::Button *button, int response_id, bool pack_s
         pack_end(*_action_area, Gtk::PACK_SHRINK, 0);
     }
 
+    Gtk::Button *button = new Gtk::Button(button_text, true);
+
     _action_area->pack_end(*button);
 
     if (pack_start) {
-        _action_area->set_child_secondary( *button , true);
+        _action_area->set_child_secondary(*button , true);
     }
 
     if (response_id != 0) {
@@ -126,18 +121,8 @@ void Panel::_addResponseButton(Gtk::Button *button, int response_id, bool pack_s
         button->signal_clicked().connect(sigc::bind(_signal_response.make_slot(), response_id));
         _response_map[response_id] = button;
     }
-}
 
-void Panel::setDefaultResponse(int response_id)
-{
-    ResponseMap::iterator widget_found;
-    widget_found = _response_map.find(response_id);
-
-    if (widget_found != _response_map.end()) {
-        widget_found->second->activate();
-        widget_found->second->property_can_default() = true;
-        widget_found->second->grab_default();
-    }
+    return button;
 }
 
 void Panel::setResponseSensitive(int response_id, bool setting)

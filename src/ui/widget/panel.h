@@ -18,17 +18,14 @@
 #endif
 
 #include <gtkmm/box.h>
-#include "enums.h"
 #include <map>
 
 class SPDesktop;
 class SPDocument;
 
 namespace Gtk {
-	class CheckMenuItem;
-        class Button;
-	class ButtonBox;
-	class MenuItem;
+    class Button;
+    class ButtonBox;
 }
 
 struct InkscapeApplication;
@@ -83,7 +80,6 @@ public:
     /* Methods providing a Gtk::Dialog like interface for adding buttons that emit Gtk::RESPONSE
      * signals on click. */
     Gtk::Button* addResponseButton (const Glib::ustring &button_text, int response_id, bool pack_start=false);
-    void setDefaultResponse(int response_id);
     void setResponseSensitive(int response_id, bool setting);
 
     /* Return signals. Signals emitted by PanelDialog. */
@@ -101,7 +97,6 @@ protected:
     virtual void _handleResponse(int response_id);
 
     /* Helper methods */
-    void _addResponseButton(Gtk::Button *button, int response_id, bool pack_start=false);
     Inkscape::Selection *_getSelection();
 
     /**

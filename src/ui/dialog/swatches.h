@@ -12,10 +12,15 @@
 
 #include <gtkmm/eventbox.h>
 #include <gtkmm/image.h>
-#include <gtkmm/menu.h>
 
 #include "ui/widget/panel.h"
 #include "enums.h"
+
+namespace Gtk {
+    class Menu;
+    class MenuItem;
+    class CheckMenuItem;
+}
 
 namespace Inkscape {
 namespace UI {
