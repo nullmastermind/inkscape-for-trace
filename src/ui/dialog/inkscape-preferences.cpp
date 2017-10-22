@@ -1991,9 +1991,10 @@ void InkscapePreferences::initPageSystem()
         _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
         _sys_systemdata.set_editable(false);
         _sys_systemdata_scroll.add(_sys_systemdata);
-        _sys_systemdata_scroll.set_size_request(0, 80);
+        _sys_systemdata_scroll.set_size_request(100, 80);
         _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-         _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
+        _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
+        _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
         tmp = "";
         gchar** paths = 0;
@@ -2005,8 +2006,9 @@ void InkscapePreferences::initPageSystem()
     }
     _sys_icon.set_editable(false);
     _sys_icon_scroll.add(_sys_icon);
-    _sys_icon_scroll.set_size_request(0, 80);
+    _sys_icon_scroll.set_size_request(100, 80);
     _sys_icon_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _sys_icon_scroll.set_shadow_type(Gtk::SHADOW_IN);
     _page_system.add_line(true,  _("Icon theme: "), _sys_icon_scroll, "", _("Locations of icon themes"), true);
 
     this->AddPage(_page_system, _("System"), PREFS_PAGE_SYSTEM);
