@@ -1930,12 +1930,7 @@ void InkscapePreferences::initPageSpellcheck()
 
 static void appendList( Glib::ustring& tmp, const gchar* const*listing )
 {
-    bool first = true;
     for (const gchar* const* ptr = listing; *ptr; ptr++) {
-        if (!first) {
-            tmp += "  ";
-        }
-        first = false;
         tmp += *ptr;
         tmp += "\n";
     }
@@ -2000,22 +1995,12 @@ void InkscapePreferences::initPageSystem()
         _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
          _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
-        {
-            tmp = "";
-            gchar** paths = 0;
-            gint count = 0;
-            gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
-            if (count > 0) {
-                tmp += paths[0];
-                tmp += "\n";
-                for (int i = 1; i < count; i++) {
-                    tmp += "  ";
-                    tmp += paths[i];
-                    tmp += "\n";
-                }
-            }
-        }
-
+        tmp = "";
+        gchar** paths = 0;
+        gint count = 0;
+        gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
+        appendList( tmp, paths );
+        g_strfreev(paths);
         _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
     }
     _sys_icon.set_editable(false);
