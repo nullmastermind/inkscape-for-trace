@@ -147,7 +147,7 @@ void Preferences::_load()
                 return;
             }
             // create some subdirectories for user stuff
-            char const *user_dirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
+            char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", NULL};
             for (int i=0; user_dirs[i]; ++i) {
                 // XXX Why are we doing this here? shouldn't this be an IO load item?
                 char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);

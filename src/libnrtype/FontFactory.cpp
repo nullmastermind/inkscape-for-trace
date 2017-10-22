@@ -17,8 +17,11 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <fontconfig/fontconfig.h>
+#include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
 #include <pango/pango-ot.h>
+#include "io/sys.h"
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "util/unordered-containers.h"
@@ -912,6 +915,35 @@ void font_factory::AddInCache(font_instance *who)
     ents[nbEnt].f = who;
     ents[nbEnt].age = 1.0;
     nbEnt++;
+}
+
+void font_factory::AddFontsDir(char const *utf8dir)
+{
+#ifdef USE_PANGO_WIN32
+    g_info("Adding additional font directories only supported for fontconfig backend.");
+#else
+    if (!Inkscape::IO::file_test(utf8dir, G_FILE_TEST_IS_DIR)) {
+        g_warning("Fonts dir '%s' does not exist and will be ignored.", utf8dir);
+        return;
+    }
+
+    gchar *dir;
+# ifdef WIN32
+    dir = g_win32_locale_filename_from_utf8(utf8dir);
+# else
+    dir = g_filename_from_utf8(utf8dir, -1, NULL, NULL, NULL);
+# endif
+
+    FcConfig *conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+    FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
+    if (res = FcTrue) {
+        g_info("Fonts dir '%s' added successfully.", utf8dir);
+    } else {
+        g_warning("Could not add fonts dir '%s'.", utf8dir);
+    }
+
+    g_free(dir);
+#endif
 }
 
 /*
