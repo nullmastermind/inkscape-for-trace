@@ -567,7 +567,6 @@ SwatchesPanel& SwatchesPanel::getInstance()
 SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
     Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SWATCHES),
     _menu(0),
-    _fillable(0),
     _holder(0),
     _clear(0),
     _remove(0),
@@ -576,7 +575,6 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
     _currentDocument(0)
 {
     _holder = new PreviewHolder();
-    _setTargetFillable(_holder);
 
     _build_menu();
 
@@ -891,25 +889,25 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_SIZE: {
         prefs->setInt(_prefs_path + "/panel_size", value);
 
-        ViewType curr_type = _fillable->getPreviewType();
-        guint curr_ratio = _fillable->getPreviewRatio();
-        ::BorderStyle curr_border = _fillable->getPreviewBorder();
+        ViewType curr_type = _holder->getPreviewType();
+        guint curr_ratio = _holder->getPreviewRatio();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
 
         switch (value) {
         case 0:
-            _fillable->setStyle(::PREVIEW_SIZE_TINY, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(::PREVIEW_SIZE_TINY, curr_type, curr_ratio, curr_border);
             break;
         case 1:
-            _fillable->setStyle(::PREVIEW_SIZE_SMALL, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(::PREVIEW_SIZE_SMALL, curr_type, curr_ratio, curr_border);
             break;
         case 2:
-            _fillable->setStyle(::PREVIEW_SIZE_MEDIUM, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(::PREVIEW_SIZE_MEDIUM, curr_type, curr_ratio, curr_border);
             break;
         case 3:
-            _fillable->setStyle(::PREVIEW_SIZE_BIG, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(::PREVIEW_SIZE_BIG, curr_type, curr_ratio, curr_border);
             break;
         case 4:
-            _fillable->setStyle(::PREVIEW_SIZE_HUGE, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(::PREVIEW_SIZE_HUGE, curr_type, curr_ratio, curr_border);
             break;
         default:
             break;
@@ -920,15 +918,15 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_MODE: {
         prefs->setInt(_prefs_path + "/panel_mode", value);
 
-        ::PreviewSize curr_size = _fillable->getPreviewSize();
-        guint curr_ratio = _fillable->getPreviewRatio();
-        ::BorderStyle curr_border = _fillable->getPreviewBorder();
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        guint curr_ratio = _holder->getPreviewRatio();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
         switch (value) {
         case 0:
-            _fillable->setStyle(curr_size, VIEW_TYPE_LIST, curr_ratio, curr_border);
+            _holder->setStyle(curr_size, VIEW_TYPE_LIST, curr_ratio, curr_border);
             break;
         case 1:
-            _fillable->setStyle(curr_size, VIEW_TYPE_GRID, curr_ratio, curr_border);
+            _holder->setStyle(curr_size, VIEW_TYPE_GRID, curr_ratio, curr_border);
             break;
         default:
             break;
@@ -938,29 +936,29 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_SHAPE: {
         prefs->setInt(_prefs_path + "/panel_ratio", value);
 
-        ViewType curr_type = _fillable->getPreviewType();
-        ::PreviewSize curr_size = _fillable->getPreviewSize();
-        ::BorderStyle curr_border = _fillable->getPreviewBorder();
+        ViewType curr_type = _holder->getPreviewType();
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        ::BorderStyle curr_border = _holder->getPreviewBorder();
 
-        _fillable->setStyle(curr_size, curr_type, value, curr_border);
+        _holder->setStyle(curr_size, curr_type, value, curr_border);
         break;
     }
     case SWATCHES_SETTINGS_BORDER: {
         prefs->setInt(_prefs_path + "/panel_border", value);
 
-        ::PreviewSize curr_size = _fillable->getPreviewSize();
-        ViewType curr_type = _fillable->getPreviewType();
-        guint curr_ratio = _fillable->getPreviewRatio();
+        ::PreviewSize curr_size = _holder->getPreviewSize();
+        ViewType curr_type = _holder->getPreviewType();
+        guint curr_ratio = _holder->getPreviewRatio();
 
         switch (value) {
         case 0:
-            _fillable->setStyle(curr_size, curr_type, curr_ratio, BORDER_NONE);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_NONE);
             break;
         case 1:
-            _fillable->setStyle(curr_size, curr_type, curr_ratio, BORDER_SOLID);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_SOLID);
             break;
         case 2:
-            _fillable->setStyle(curr_size, curr_type, curr_ratio, BORDER_WIDE);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_WIDE);
             break;
         default:
             break;
@@ -969,7 +967,7 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     }
     case SWATCHES_SETTINGS_WRAP: {
         prefs->setBool(_prefs_path + "/panel_wrap", value);
-        _fillable->setWrap(value);
+        _holder->setWrap(value);
         break;
     }
     case SWATCHES_SETTINGS_PALETTE: {
@@ -992,11 +990,6 @@ void SwatchesPanel::_wrapToggled(Gtk::CheckMenuItem* toggler)
     if (toggler) {
         _updateSettings(SWATCHES_SETTINGS_WRAP, toggler->get_active() ? 1 : 0);
     }
-}
-
-void SwatchesPanel::_setTargetFillable(PreviewFillable *target)
-{
-    _fillable = target;
 }
 
 void SwatchesPanel::_regItem(Gtk::MenuItem* item, int id)

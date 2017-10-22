@@ -21,7 +21,6 @@ namespace Gtk {
 namespace Inkscape {
 namespace UI {
 
-class PreviewFillable;
 class PreviewHolder;
 
 namespace Dialogs {
@@ -76,8 +75,6 @@ private:
     SPDesktop*  _currentDesktop;
     SPDocument* _currentDocument;
 
-
-    void _setTargetFillable(PreviewFillable *target);
     void _regItem(Gtk::MenuItem* item, int id);
 
     void _updateSettings(int settings, int value);
@@ -85,7 +82,6 @@ private:
     void _wrapToggled(Gtk::CheckMenuItem *toggler);
 
     Gtk::Menu       *_menu;
-    PreviewFillable *_fillable;
 
     sigc::connection _documentConnection;
     sigc::connection _selChanged;

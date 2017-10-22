@@ -189,7 +189,6 @@ set(ui_SRC
 	interface.h
     monitor.h
 	previewable.h
-	previewfillable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h

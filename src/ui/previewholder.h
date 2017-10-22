@@ -24,14 +24,15 @@ class Grid;
 class ScrolledWindow;
 }
 
-#include "previewfillable.h"
 #include "../widgets/eek-preview.h"
 #include "enums.h"
 
 namespace Inkscape {
 namespace UI {
 
-class PreviewHolder : public Gtk::Box, public PreviewFillable
+class Previewable;
+
+class PreviewHolder : public Gtk::Box
 {
 public:
     PreviewHolder();

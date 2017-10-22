@@ -11,6 +11,7 @@
  */
 
 
+#include "previewable.h"
 #include "previewholder.h"
 
 #include <gtkmm/scrolledwindow.h>
@@ -31,7 +32,6 @@ namespace UI {
 
 PreviewHolder::PreviewHolder() :
     Box(),
-    PreviewFillable(),
     _scroller(0),
     _insides(0),
     _prefCols(0),
