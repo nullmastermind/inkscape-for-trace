@@ -79,6 +79,7 @@ void DialogPage::add_line(bool                 indent,
     
     auto hb = Gtk::manage(new Gtk::Box());
     hb->set_spacing(12);
+    hb->set_hexpand(true);
     hb->pack_start(widget, expand_widget, expand_widget);
         
     // Pack an additional widget into a box with the widget if desired 
@@ -865,7 +866,6 @@ void PrefMultiEntry::init(Glib::ustring const &prefs_path, int height)
     // TODO: Figure out if there's a way to specify height in lines instead of px
     //       and how to obtain a reasonable default width if 'expand_widget' is not used
     set_size_request(100, height);
-    set_hexpand(true);
     set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     set_shadow_type(Gtk::SHADOW_IN);
 
