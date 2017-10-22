@@ -6,6 +6,7 @@
  *
  * Copyright (C) 2012 Tavmjong Bah
  *               2013 Martin Owens
+ *               2017 Jabiertxo Arraiza
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -81,29 +82,31 @@ private:
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
 
-    void get_symbols();
-    Glib::ustring get_symbols(Glib::ustring title);
-    void add_symbols( SPDocument* symbol_document );
-    void add_symbol( SPObject* symbol, Glib::ustring doc_title);
-    SPDocument* symbols_preview_doc();
+    void getSymbols();
+    std::pair<Glib::ustring, SPDocument*> getSymbols(Glib::ustring title);
+    void addSymbols( SPDocument* symbol_document );
+    void addSymbol( SPObject* symbol, Glib::ustring doc_title);
+    SPDocument* symbolsPreviewDoc();
 
-    void symbols_in_doc_recursive(SPObject *r, std::vector<SPSymbol*> &l);
-    std::vector<SPSymbol*> symbols_in_doc( SPDocument* document);
-    void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
-    std::vector<SPUse*> use_in_doc( SPDocument* document);
-    void prepare_find_symbols(GdkEventKey* evt);
-    void find_symbols();
-    bool parse_documents();
-    gchar const* style_from_use( gchar const* id, SPDocument* document);
+    void symbolsInDocRecursive(SPObject *r, std::vector<SPSymbol*> &l);
+    std::vector<SPSymbol*> symbolsInDoc( SPDocument* document);
+    void useInDoc(SPObject *r, std::vector<SPUse*> &l);
+    std::vector<SPUse*> useInDoc( SPDocument* document);
+    void prepareFindSymbols(GdkEventKey* evt);
+    void findSymbols();
+    void clearSearch();
+    bool findSymbolsInDoc(SPDocument* document, Glib::ustring doc_title);
+    bool parseDocuments();
+    gchar const* styleFromUse( gchar const* id, SPDocument* document);
 
-    Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);
+    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
 
     /* Keep track of all symbol template documents */
-    std::map<Glib::ustring, SPDocument*> symbolSets;
+    std::map<Glib::ustring, SPDocument*> symbol_sets;
 
     // Index into sizes which is selected
     int pack_size;
-
+    
     // Scale factor
     int scale_factor;
 
@@ -112,27 +115,28 @@ private:
     bool processed;
     
     size_t number_docs;
-
+    Glib::ustring last_symbol_set;
     Glib::RefPtr<Gtk::ListStore> store;
-    Gtk::ComboBoxText* symbolSet;
-    Gtk::ProgressBar* progressbar;
+    Gtk::ComboBoxText* symbol_set;
+    Gtk::ProgressBar* progress_bar;
     Gtk::HBox* progress;
     Gtk::SearchEntry* search;
     Glib::ustring search_str;
-    Gtk::IconView* iconView;
-    Gtk::Button* addSymbol;
-    Gtk::Button* removeSymbol;
-    Gtk::Button* zoomIn;
-    Gtk::Button* zoomOut;
+    Gtk::IconView* icon_view;
+    Gtk::Button* add_symbol;
+    Gtk::Button* remove_symbol;
+    Gtk::Button* zoom_in;
+    Gtk::Button* zoom_out;
     Gtk::Grid* table;
+    Gtk::Switch * global;
     Gtk::ScrolledWindow *scroller;
-    Gtk::ToggleButton* fitSymbol;
+    Gtk::ToggleButton* fit_symbol;
 
     void setTargetDesktop(SPDesktop *desktop);
-    SPDesktop*  currentDesktop;
-    DesktopTracker deskTrack;
-    SPDocument* currentDocument;
-    SPDocument* previewDocument; /* Document to render single symbol */
+    SPDesktop*  current_desktop;
+    DesktopTracker desk_track;
+    SPDocument* current_document;
+    SPDocument* preview_document; /* Document to render single symbol */
 
     /* For rendering the template drawing */
     unsigned key;

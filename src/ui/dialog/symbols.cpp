@@ -101,11 +101,11 @@ SymbolColumns* SymbolsDialog::getColumns()
 SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SYMBOLS),
   store(Gtk::ListStore::create(*getColumns())),
-  iconView(0),
-  currentDesktop(0),
-  deskTrack(),
-  currentDocument(0),
-  previewDocument(0),
+  icon_view(0),
+  current_desktop(0),
+  desk_track(),
+  current_document(0),
+  preview_document(0),
   instanceConns()
 {
 
@@ -119,43 +119,87 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   /******************** Symbol Sets *************************/
   Gtk::Label* labelSet = new Gtk::Label(_("Symbol set: "));
   table->attach(*Gtk::manage(labelSet),0,row,1,1);
-  symbolSet = new Gtk::ComboBoxText();  // Fill in later
-  symbolSet->append(_("Current Document"));
-  symbolSet->set_active_text(_("Current Document"));
-  symbolSet->set_hexpand();
-  table->attach(*Gtk::manage(symbolSet),1,row,1,1);
-  sigc::connection connSet = symbolSet->signal_changed().connect(
+  symbol_set = new Gtk::ComboBoxText();  // Fill in later
+  symbol_set->append(_("Current Document"));
+  symbol_set->set_active_text(_("Current Document"));
+  symbol_set->set_hexpand();
+  table->attach(*Gtk::manage(symbol_set),1,row,1,1);
+  sigc::connection connSet = symbol_set->signal_changed().connect(
           sigc::mem_fun(*this, &SymbolsDialog::rebuild));
   instanceConns.push_back(connSet);
 
   ++row;
+  
+  Gtk::Separator* separator_sets = new Gtk::Separator();
+  separator_sets->set_margin_top(3);
+  separator_sets->set_margin_bottom(3);
+  table->attach(*Gtk::manage(separator_sets),0,row,2,1);
+
+  ++row;
+  /********************    Search    *************************/
+  
+  Gtk::Label* label_global = new Gtk::Label(_("Global Search: "));
+  table->attach(*Gtk::manage(label_global),0,row,1,1);
+  Gtk::HBox * global_container = new Gtk::HBox();
+  global = new Gtk::Switch();
+  global->set_state(false);
+  global_container->pack_start(* global, Gtk::PACK_SHRINK);
+  Gtk::Separator* separator_global = new Gtk::Separator(Gtk::ORIENTATION_VERTICAL);
+  separator_global->set_margin_right(3);
+  separator_global->set_margin_left(3);
+  global_container->pack_start(* separator_global, Gtk::PACK_SHRINK);
+  search = Gtk::manage(new Gtk::SearchEntry());  // Search
+  search->set_tooltip_text(_("Return to start search."));
+  search->signal_key_press_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::prepareFindSymbols));
+  search->signal_search_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::clearSearch));
+  global_container->pack_start(* search, Gtk::PACK_EXPAND_WIDGET);
+  table->attach(*Gtk::manage(global_container),1,row,1,1);
+
+  ++row;
+  
+  /******************** Progress *******************************/
+  progress = new Gtk::HBox();
+  progress_bar = Gtk::manage(new Gtk::ProgressBar()); 
+  table->attach(*Gtk::manage(progress),0,row, 2, 1);
+  progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
+  progress->set_margin_top(5);
+
+  ++row;
+
+  Gtk::Separator* separator_search = new Gtk::Separator();
+  separator_search->set_margin_top(2);
+  separator_search->set_margin_bottom(3);
+  table->attach(*Gtk::manage(separator_search),0,row,2,1);
+
+  ++row;
+
 
   /********************* Icon View **************************/
   SymbolColumns* columns = getColumns();
 
-  iconView = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
-  //iconView->set_text_column(  columns->symbol_id  );
-  iconView->set_tooltip_column( 1 );
-  iconView->set_pixbuf_column( columns->symbol_image );
+  icon_view = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
+  //icon_view->set_text_column(  columns->symbol_id  );
+  icon_view->set_tooltip_column( 1 );
+  icon_view->set_pixbuf_column( columns->symbol_image );
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
-  iconView->set_size_request( 100, 200 );
+  icon_view->set_size_request( 100, 200 );
 
   std::vector< Gtk::TargetEntry > targets;
   targets.push_back(Gtk::TargetEntry( "application/x-inkscape-paste"));
 
-  iconView->enable_model_drag_source (targets, Gdk::BUTTON1_MASK, Gdk::ACTION_COPY);
-  iconView->signal_drag_data_get().connect(
+  icon_view->enable_model_drag_source (targets, Gdk::BUTTON1_MASK, Gdk::ACTION_COPY);
+  icon_view->signal_drag_data_get().connect(
           sigc::mem_fun(*this, &SymbolsDialog::iconDragDataGet));
 
   sigc::connection connIconChanged;
-  connIconChanged = iconView->signal_selection_changed().connect(
+  connIconChanged = icon_view->signal_selection_changed().connect(
           sigc::mem_fun(*this, &SymbolsDialog::iconChanged));
   instanceConns.push_back(connIconChanged);
 
   scroller = new Gtk::ScrolledWindow();
   scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
-  scroller->add(*Gtk::manage(iconView));
+  scroller->add(*Gtk::manage(icon_view));
   scroller->set_hexpand();
   scroller->set_vexpand();
   table->attach(*Gtk::manage(scroller),0,row,2,1);
@@ -169,35 +213,30 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->set_hexpand();
   table->attach(*Gtk::manage(tools),0,row,2,1);
 
-  auto addSymbolImage = Gtk::manage(new Gtk::Image());
-  addSymbolImage->set_from_icon_name("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto add_symbol_image = Gtk::manage(new Gtk::Image());
+  add_symbol_image->set_from_icon_name("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
-  addSymbol = Gtk::manage(new Gtk::Button());
-  addSymbol->add(*addSymbolImage);
-  addSymbol->set_tooltip_text(_("Add Symbol from the current document."));
-  addSymbol->set_relief( Gtk::RELIEF_NONE );
-  addSymbol->set_focus_on_click( false );
-  addSymbol->signal_activate().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
-  tools->pack_start(* addSymbol, Gtk::PACK_SHRINK);
+  add_symbol = Gtk::manage(new Gtk::Button());
+  add_symbol->add(*add_symbol_image);
+  add_symbol->set_tooltip_text(_("Add Symbol from the current document."));
+  add_symbol->set_relief( Gtk::RELIEF_NONE );
+  add_symbol->set_focus_on_click( false );
+  add_symbol->signal_activate().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
+  tools->pack_start(* add_symbol, Gtk::PACK_SHRINK);
 
-  auto removeSymbolImage = Gtk::manage(new Gtk::Image());
-  removeSymbolImage->set_from_icon_name("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto remove_symbolImage = Gtk::manage(new Gtk::Image());
+  remove_symbolImage->set_from_icon_name("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
-  removeSymbol = Gtk::manage(new Gtk::Button());
-  removeSymbol->add(*removeSymbolImage);
-  removeSymbol->set_tooltip_text(_("Remove Symbol from the current document."));
-  removeSymbol->set_relief( Gtk::RELIEF_NONE );
-  removeSymbol->set_focus_on_click( false );
-  removeSymbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::revertSymbol));
-  tools->pack_start(* removeSymbol, Gtk::PACK_SHRINK);
+  remove_symbol = Gtk::manage(new Gtk::Button());
+  remove_symbol->add(*remove_symbolImage);
+  remove_symbol->set_tooltip_text(_("Remove Symbol from the current document."));
+  remove_symbol->set_relief( Gtk::RELIEF_NONE );
+  remove_symbol->set_focus_on_click( false );
+  remove_symbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::revertSymbol));
+  tools->pack_start(* remove_symbol, Gtk::PACK_SHRINK);
 
   Gtk::Label* spacer = Gtk::manage(new Gtk::Label(""));
   tools->pack_start(* Gtk::manage(spacer));
-  search = Gtk::manage(new Gtk::SearchEntry());  // Search
-  search->set_tooltip_text(_("Return to start search. Use * to get all symbols (slow)."));
-  tools->pack_start(* search, Gtk::PACK_SHRINK);
-
-  search->signal_key_press_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::prepare_find_symbols));
 
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
@@ -225,87 +264,79 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   tools->pack_start(* button, Gtk::PACK_SHRINK);
 
   // Toggle scale to fit on/off
-  auto fitSymbolImage = Gtk::manage(new Gtk::Image());
-  fitSymbolImage->set_from_icon_name("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto fit_symbolImage = Gtk::manage(new Gtk::Image());
+  fit_symbolImage->set_from_icon_name("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
-  fitSymbol = Gtk::manage(new Gtk::ToggleButton());
-  fitSymbol->add(*fitSymbolImage);
-  fitSymbol->set_tooltip_text(_("Toggle 'fit' symbols in icon space."));
-  fitSymbol->set_relief( Gtk::RELIEF_NONE );
-  fitSymbol->set_focus_on_click( false );
-  fitSymbol->set_active( true );
-  fitSymbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::rebuild));
-  tools->pack_start(* fitSymbol, Gtk::PACK_SHRINK);
+  fit_symbol = Gtk::manage(new Gtk::ToggleButton());
+  fit_symbol->add(*fit_symbolImage);
+  fit_symbol->set_tooltip_text(_("Toggle 'fit' symbols in icon space."));
+  fit_symbol->set_relief( Gtk::RELIEF_NONE );
+  fit_symbol->set_focus_on_click( false );
+  fit_symbol->set_active( true );
+  fit_symbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::rebuild));
+  tools->pack_start(* fit_symbol, Gtk::PACK_SHRINK);
 
   // Render size (scales symbols within display area)
   scale_factor = 0; // Default 1:1 * pack_size/pack_size default
-  auto zoomOutImage = Gtk::manage(new Gtk::Image());
-  zoomOutImage->set_from_icon_name("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto zoom_outImage = Gtk::manage(new Gtk::Image());
+  zoom_outImage->set_from_icon_name("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
-  zoomOut = Gtk::manage(new Gtk::Button());
-  zoomOut->add(*zoomOutImage);
-  zoomOut->set_tooltip_text(_("Make symbols smaller by zooming out."));
-  zoomOut->set_relief( Gtk::RELIEF_NONE );
-  zoomOut->set_focus_on_click( false );
-  zoomOut->set_sensitive( false );
-  zoomOut->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomout));
-  tools->pack_start(* zoomOut, Gtk::PACK_SHRINK);
+  zoom_out = Gtk::manage(new Gtk::Button());
+  zoom_out->add(*zoom_outImage);
+  zoom_out->set_tooltip_text(_("Make symbols smaller by zooming out."));
+  zoom_out->set_relief( Gtk::RELIEF_NONE );
+  zoom_out->set_focus_on_click( false );
+  zoom_out->set_sensitive( false );
+  zoom_out->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomout));
+  tools->pack_start(* zoom_out, Gtk::PACK_SHRINK);
 
-  auto zoomInImage = Gtk::manage(new Gtk::Image());
-  zoomInImage->set_from_icon_name("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto zoom_inImage = Gtk::manage(new Gtk::Image());
+  zoom_inImage->set_from_icon_name("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
-  zoomIn = Gtk::manage(new Gtk::Button());
-  zoomIn->add(*zoomInImage);
-  zoomIn->set_tooltip_text(_("Make symbols bigger by zooming in."));
-  zoomIn->set_relief( Gtk::RELIEF_NONE );
-  zoomIn->set_focus_on_click( false );
-  zoomIn->set_sensitive( false );
-  zoomIn->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomin));
-  tools->pack_start(* zoomIn, Gtk::PACK_SHRINK);
+  zoom_in = Gtk::manage(new Gtk::Button());
+  zoom_in->add(*zoom_inImage);
+  zoom_in->set_tooltip_text(_("Make symbols bigger by zooming in."));
+  zoom_in->set_relief( Gtk::RELIEF_NONE );
+  zoom_in->set_focus_on_click( false );
+  zoom_in->set_sensitive( false );
+  zoom_in->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomin));
+  tools->pack_start(* zoom_in, Gtk::PACK_SHRINK);
 
-  ++row;
-
-  /******************** Progress *******************************/
-  progress    = new Gtk::HBox();
-  progressbar = Gtk::manage(new Gtk::ProgressBar()); 
-  table->attach(*Gtk::manage(progress),0,row, 2, 1);
-  progress->pack_start(* progressbar, Gtk::PACK_EXPAND_WIDGET);
-  progress->set_margin_top(5);
   ++row;
 
   /**********************************************************/
   sensitive = true;
   processed = false;
   search_str = "";
-  currentDesktop  = SP_ACTIVE_DESKTOP;
-  currentDocument = currentDesktop->getDocument();
+  current_desktop  = SP_ACTIVE_DESKTOP;
+  current_document = current_desktop->getDocument();
 
-  previewDocument = symbols_preview_doc(); /* Template to render symbols in */
-  previewDocument->ensureUpToDate(); /* Necessary? */
+  preview_document = symbolsPreviewDoc(); /* Template to render symbols in */
+  preview_document->ensureUpToDate(); /* Necessary? */
 
   key = SPItem::display_key_new(1);
-  renderDrawing.setRoot(previewDocument->getRoot()->invoke_show(renderDrawing, key, SP_ITEM_SHOW_DISPLAY ));
+  renderDrawing.setRoot(preview_document->getRoot()->invoke_show(renderDrawing, key, SP_ITEM_SHOW_DISPLAY ));
 
   // This might need to be a global variable so setTargetDesktop can modify it
-  SPDefs *defs = currentDocument->getDefs();
+  SPDefs *defs = current_document->getDefs();
   sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
   instanceConns.push_back(defsModifiedConn);
 
-  sigc::connection selectionChangedConn = currentDesktop->selection->connectChanged(
+  sigc::connection selectionChangedConn = current_desktop->selection->connectChanged(
           sigc::mem_fun(*this, &SymbolsDialog::selectionChanged));
   instanceConns.push_back(selectionChangedConn);
 
-  sigc::connection documentReplacedConn = currentDesktop->connectDocumentReplaced(
+  sigc::connection documentReplacedConn = current_desktop->connectDocumentReplaced(
           sigc::mem_fun(*this, &SymbolsDialog::documentReplaced));
   instanceConns.push_back(documentReplacedConn);
-  get_symbols();
-  add_symbols( currentDocument ); /* Defaults to current document */
+  getSymbols();
+  addSymbols( current_document ); /* Defaults to current document */
 
   sigc::connection desktopChangeConn =
-    deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
+    desk_track.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
   instanceConns.push_back( desktopChangeConn );
-  Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::parse_documents) );
-  deskTrack.connect(GTK_WIDGET(gobj()));
+  Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::parseDocuments) );
+  desk_track.connect(GTK_WIDGET(gobj()));
 }
 
 SymbolsDialog::~SymbolsDialog()
@@ -314,7 +345,7 @@ SymbolsDialog::~SymbolsDialog()
       it->disconnect();
   }
   instanceConns.clear();
-  deskTrack.disconnect();
+  desk_track.disconnect();
 }
 
 SymbolsDialog& SymbolsDialog::getInstance()
@@ -356,12 +387,12 @@ void SymbolsDialog::rebuild() {
     return;
   }
 
-  if( fitSymbol->get_active() ) {
-    zoomIn->set_sensitive( false );
-    zoomOut->set_sensitive( false );
+  if( fit_symbol->get_active() ) {
+    zoom_in->set_sensitive( false );
+    zoom_out->set_sensitive( false );
   } else {
-    zoomIn->set_sensitive( true);
-    zoomOut->set_sensitive( true );
+    zoom_in->set_sensitive( true);
+    zoom_out->set_sensitive( true );
   }
 
   store->clear();
@@ -369,35 +400,35 @@ void SymbolsDialog::rebuild() {
   if( !symbol_document ) { 
       // Symbol must be from Current Document (this method of
       // checking should be language independent).
-      symbol_document = currentDocument;
-      addSymbol->set_sensitive( true );
-      removeSymbol->set_sensitive( true );
+      symbol_document = current_document;
+      add_symbol->set_sensitive( true );
+      remove_symbol->set_sensitive( true );
   } else {
-    addSymbol->set_sensitive( false );
-    removeSymbol->set_sensitive( false );
+    add_symbol->set_sensitive( false );
+    remove_symbol->set_sensitive( false );
   }
-  if (symbolSet->get_active_text() == "Search") {
-    find_symbols();
+  if (symbol_set->get_active_text() == _("Global Search")) {
+    findSymbols();
   } else {
-    add_symbols( symbol_document );
+    findSymbolsInDoc(symbol_document, last_symbol_set);
   }
 }
 
 void SymbolsDialog::insertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->currentDesktop) );
+    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->current_desktop) );
     sp_action_perform (action, NULL);
 }
 
 void SymbolsDialog::revertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_UNSYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->currentDesktop ) );
+    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->current_desktop ) );
     sp_action_perform (action, NULL);
 }
 
 void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*context*/, Gtk::SelectionData& data, guint /*info*/, guint /*time*/)
 {
-  auto iconArray = iconView->get_selected_items();
+  auto iconArray = icon_view->get_selected_items();
 
   if( iconArray.empty() ) {
     //std::cout << "  iconArray empty: huh? " << std::endl;
@@ -414,7 +445,7 @@ void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*cont
 
 void SymbolsDialog::defsModified(SPObject * /*object*/, guint /*flags*/)
 {
-  if ( !symbolSets[symbolSet->get_active_text()] ) {
+  if ( !symbol_sets[symbol_set->get_active_text()] ) {
     rebuild();
   }
 }
@@ -425,14 +456,14 @@ void SymbolsDialog::selectionChanged(Inkscape::Selection *selection) {
   SPObject* symbol = symbol_document->getObjectById(symbol_id);
 
   if(symbol && !selection->includes(symbol)) {
-      iconView->unselect_all();
+      icon_view->unselect_all();
   }
 }
 
 void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
 {
-  currentDesktop  = desktop;
-  currentDocument = document;
+  current_desktop  = desktop;
+  current_document = document;
   rebuild();
 }
 
@@ -440,18 +471,17 @@ SPDocument* SymbolsDialog::selectedSymbols(bool ignorecurrent) {
   /* OK, we know symbol name... now we need to copy it to clipboard, bon chance! */
   Glib::ustring doc_title = selectedSymbolDocTitle();
   if (doc_title.empty()) {
-    doc_title = symbolSet->get_active_text();
+    doc_title = symbol_set->get_active_text();
   }
-  SPDocument* symbol_document = symbolSets[doc_title];
+  SPDocument* symbol_document = symbol_sets[doc_title];
   if( !symbol_document ) {
-    doc_title = get_symbols(doc_title);
-    symbol_document = symbolSets[doc_title];
+    symbol_document = getSymbols(doc_title).second;
     // Symbol must be from Current Document (this method of checking should be language independent).
     if( !symbol_document ) {
       if (ignorecurrent) {
         return NULL;
       }
-      return currentDocument;
+      return current_document;
     }
   }
   return symbol_document;
@@ -459,7 +489,7 @@ SPDocument* SymbolsDialog::selectedSymbols(bool ignorecurrent) {
 
 Glib::ustring SymbolsDialog::selectedSymbolId() {
 
-  auto iconArray = iconView->get_selected_items();
+  auto iconArray = icon_view->get_selected_items();
 
   if( !iconArray.empty() ) {
     Gtk::TreeModel::Path const & path = *iconArray.begin();
@@ -471,7 +501,7 @@ Glib::ustring SymbolsDialog::selectedSymbolId() {
 
 Glib::ustring SymbolsDialog::selectedSymbolDocTitle() {
 
-  auto iconArray = iconView->get_selected_items();
+  auto iconArray = icon_view->get_selected_items();
 
   if( !iconArray.empty() ) {
     Gtk::TreeModel::Path const & path = *iconArray.begin();
@@ -493,15 +523,15 @@ void SymbolsDialog::iconChanged() {
     gchar const* style = symbol->getAttribute("inkscape:symbol-style");
     if( !style ) {
       // If no default style in <symbol>, look in documents.
-      if( symbol_document == currentDocument ) {
-        style = style_from_use( symbol_id.c_str(), currentDocument );
+      if( symbol_document == current_document ) {
+        style = styleFromUse( symbol_id.c_str(), current_document );
       } else {
         style = symbol_document->getReprRoot()->attribute("style");
       }
     }
 
     ClipboardManager *cm = ClipboardManager::get();
-    cm->copySymbol(symbol->getRepr(), style, symbol_document == currentDocument);
+    cm->copySymbol(symbol->getRepr(), style, symbol_document == current_document);
   }
 }
 
@@ -624,7 +654,7 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 #endif
 
 /* Hunts preference directories for symbol files */
-void SymbolsDialog::get_symbols() {
+void SymbolsDialog::getSymbols() {
 
     using namespace Inkscape::IO::Resource;
     Glib::ustring title;
@@ -638,8 +668,8 @@ void SymbolsDialog::get_symbols() {
             if(title.empty()) {
               title = _("Unnamed Symbols");
             }
-            symbolSets[title]= NULL;
-            symbolSet->append(title);
+            symbol_sets[title]= NULL;
+            symbol_set->append(title);
             ++number_docs;
         }
 #ifdef WITH_LIBVISIO
@@ -650,8 +680,8 @@ void SymbolsDialog::get_symbols() {
             if(title.empty()) {
               title = _("Unnamed Symbols");
             }
-            symbolSets[title]= NULL;
-            symbolSet->append(title);
+            symbol_sets[title]= NULL;
+            symbol_set->append(title);
             ++number_docs;
         }
 #endif
@@ -659,8 +689,9 @@ void SymbolsDialog::get_symbols() {
 }
 
 /* Hunts preference directories for symbol files */
-Glib::ustring SymbolsDialog::get_symbols(Glib::ustring title) {
-
+std::pair<Glib::ustring, SPDocument*>
+SymbolsDialog::getSymbols(Glib::ustring title) 
+{
     using namespace Inkscape::IO::Resource;
     SPDocument* symbol_doc = NULL;
     Glib::ustring new_title;
@@ -695,21 +726,21 @@ Glib::ustring SymbolsDialog::get_symbols(Glib::ustring title) {
         }
 #endif
         if(symbol_doc) {
-            symbolSets.erase(title);
-            symbolSets[new_title]= symbol_doc;
+            symbol_sets.erase(title);
+            symbol_sets[new_title]= symbol_doc;
             sensitive = false;
-            symbolSet->remove_text(i);
-            symbolSet->insert (i, new_title);
-            symbolSet->set_active(i);
-            symbolSet->set_active_text(new_title);
+            symbol_set->remove_text(i);
+            symbol_set->insert (i, new_title);
+            symbol_set->set_active(i);
+            symbol_set->set_active_text(new_title);
             sensitive = true;
             break;
         }
     }
-    return new_title;
+    return std::make_pair(new_title, symbol_doc);
 }
 
-void SymbolsDialog::symbols_in_doc_recursive (SPObject *r, std::vector<SPSymbol*> &l)
+void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::vector<SPSymbol*> &l)
 {
   if(!r) return;
 
@@ -723,19 +754,19 @@ void SymbolsDialog::symbols_in_doc_recursive (SPObject *r, std::vector<SPSymbol*
   }
 
   for (auto& child: r->children) {
-    symbols_in_doc_recursive( &child, l );
+    symbolsInDocRecursive( &child, l );
   }
 }
 
-std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbol_document)
+std::vector<SPSymbol*> SymbolsDialog::symbolsInDoc( SPDocument* symbol_document)
 {
 
   std::vector<SPSymbol*> l;
-  symbols_in_doc_recursive (symbol_document->getRoot(), l );
+  symbolsInDocRecursive (symbol_document->getRoot(), l );
   return l;
 }
 
-void SymbolsDialog::use_in_doc_recursive (SPObject *r, std::vector<SPUse*> &l)
+void SymbolsDialog::useInDoc (SPObject *r, std::vector<SPUse*> &l)
 {
 
   if ( dynamic_cast<SPUse *>(r) ) {
@@ -743,22 +774,22 @@ void SymbolsDialog::use_in_doc_recursive (SPObject *r, std::vector<SPUse*> &l)
   }
 
   for (auto& child: r->children) {
-    use_in_doc_recursive( &child, l );
+    useInDoc( &child, l );
   }
 }
 
-std::vector<SPUse*> SymbolsDialog::use_in_doc( SPDocument* useDocument) {
+std::vector<SPUse*> SymbolsDialog::useInDoc( SPDocument* useDocument) {
   std::vector<SPUse*> l;
-  use_in_doc_recursive (useDocument->getRoot(), l);
+  useInDoc (useDocument->getRoot(), l);
   return l;
 }
 
 // Returns style from first <use> element found that references id.
 // This is a last ditch effort to find a style.
-gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* document) {
+gchar const* SymbolsDialog::styleFromUse( gchar const* id, SPDocument* document) {
 
   gchar const* style = 0;
-  std::vector<SPUse*> l = use_in_doc( document );
+  std::vector<SPUse*> l = useInDoc( document );
   for( auto use:l ) {
     if ( use ) {
       gchar const *href = use->getRepr()->attribute("xlink:href");
@@ -776,107 +807,157 @@ gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* documen
   return style;
 }
 
-void SymbolsDialog::add_symbols( SPDocument* symbol_document ) {
-  std::vector<SPSymbol*> l = symbols_in_doc( symbol_document );
+void SymbolsDialog::addSymbols( SPDocument* symbol_document ) {
+  std::vector<SPSymbol*> l = symbolsInDoc( symbol_document );
   Glib::ustring doc_title = "";
   if (symbol_document->getRoot()->title()) {
     doc_title = symbol_document->getRoot()->title();
   }
   for(auto symbol:l) {
     if (symbol) {
-      add_symbol( symbol, doc_title);
+      addSymbol( symbol, doc_title);
     }
   }
 }
 
-void SymbolsDialog::prepare_find_symbols(GdkEventKey* evt) {
-  search_str = search->get_text().lowercase();
-  if (evt->keyval != GDK_KEY_Return || search_str.empty()) {
-    return;
-  }
-  progressbar->set_fraction(0.0);
-  search->set_text(_("Searching..."));
-  search->set_sensitive(false);
-  if(processed) {
-    find_symbols();
-  } else {
-    dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(true);
+void SymbolsDialog::clearSearch() 
+{
+  search_str = search->get_text();
+  if(search_str.empty()) {
+    store->clear();
+    findSymbolsInDoc(symbol_sets[last_symbol_set], last_symbol_set);
+    symbol_set->set_active_text(last_symbol_set);
   }
 }
 
-bool SymbolsDialog::parse_documents(){
-  if (search->get_text() != _("Searching...")) {
-      dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(false);
+void SymbolsDialog::prepareFindSymbols(GdkEventKey* evt) 
+{
+  search_str = search->get_text().lowercase();
+  if (evt->keyval != GDK_KEY_Return) {
+    return;
+  }
+  progress_bar->set_fraction(0.0);
+  search->set_text(_("Searching..."));
+  search->set_sensitive(false);
+  global->set_sensitive(false);
+  if(!global->get_active()) {
+    bool icons_found = false;
+    Glib::ustring doc_title = symbol_set->get_active_text();
+    if (!doc_title.empty()) {
+      SPDocument* symbol_document = symbol_sets[doc_title];
+      if(symbol_document) {
+        store->clear();
+        icons_found = findSymbolsInDoc(symbol_document, doc_title);
+      }
+    }
+    if (!icons_found) {
+      for(auto const &symbol_document_map : symbol_sets) {
+        SPDocument* symbol_document = symbol_document_map.second;
+        Glib::ustring doc_title = symbol_document_map.first;
+        //Cover the two cases if search document is procesed or not (title based or filename based)
+        if (doc_title.lowercase() == "search") {
+          if(!symbol_document) {
+            symbol_document = getSymbols(symbol_document_map.first).second;
+          }
+          addSymbols(symbol_document);
+          break;
+        }
+      }
+    }
+    search->set_text(search_str);
+    search->set_sensitive(true);
+    global->set_sensitive(true);
+    dynamic_cast<Gtk::Widget *>(progress_bar)->set_visible(false);
+  } else if(processed) {
+    findSymbols();
+  } else {
+    dynamic_cast<Gtk::Widget *>(progress_bar)->set_visible(true);
+  }
+}
+
+bool SymbolsDialog::parseDocuments(){
+  if (search->get_text() != _("Searching...") || !global->get_active()) {
+      dynamic_cast<Gtk::Widget *>(progress_bar)->set_visible(false);
       return true;
   }
   size_t counter = 0;
-  for(auto const &symbol_document_map : symbolSets) {
+  for(auto const &symbol_document_map : symbol_sets) {
     ++counter;
     SPDocument* symbol_document = symbol_document_map.second;
     if (symbol_document) {
       continue;
     }
-    get_symbols(symbol_document_map.first);
-    progressbar->set_fraction(((100.0/number_docs) * counter)/100.0);
+    getSymbols(symbol_document_map.first);
+    progress_bar->set_fraction(((100.0/number_docs) * counter)/100.0);
     return true;
   }
-  find_symbols();
+  findSymbols();
   processed = true;
-  progressbar->set_fraction(1.0);
+  progress_bar->set_fraction(1.0);
   return false;
 }
 
-void SymbolsDialog::find_symbols() {
+bool SymbolsDialog::findSymbolsInDoc(SPDocument* symbol_document, Glib::ustring doc_title) {
+  bool icons_found = false;
+  std::vector<SPSymbol*> l = symbolsInDoc(symbol_document);
+  last_symbol_set = doc_title;
+  for(auto symbol:l) {
+    gchar const *symbol_title_char = symbol->title();
+    gchar const *symbol_desc_char = symbol->description();
+    if (symbol_title_char) {
+      bool found = false;
+      Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
+      auto pos = symbol_title.rfind(search_str);
+      if (pos != std::string::npos) {
+        found = true;
+      }
+      if (!found && symbol_desc_char) {
+        Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
+        auto pos = symbol_desc.rfind(search_str);
+        if (pos != std::string::npos) {
+          found = true;
+        }
+      }
+      if (symbol && (search_str.empty() || found)) {
+        addSymbol( symbol, doc_title);
+        icons_found = true;
+      }
+    }
+  }
+  return icons_found;
+}
+
+void SymbolsDialog::findSymbols() {
   bool icons_found = false;
   SPDocument* searchdoc;
-  size_t counter = 0;
   store->clear();
-  for(auto const &symbol_document_map : symbolSets) {
-    ++counter;
+  for(auto const &symbol_document_map : symbol_sets) {
     SPDocument* symbol_document = symbol_document_map.second;
     if (!symbol_document) {
-      return;
+      continue;
     }
     Glib::ustring doc_title = symbol_document_map.first;
     if (doc_title == "Search") {
       searchdoc = symbol_document;
       continue;
     }
-    std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
-    for(auto symbol:l) {
-      gchar const *symbol_title_char = symbol->title();
-      gchar const *symbol_desc_char = symbol->description();
-      if (symbol_title_char) {
-        bool found = false;
-        Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
-        auto pos = symbol_title.rfind(search_str);
-        if (pos != std::string::npos) {
-          found = true;
-        }
-        if (!found && symbol_desc_char) {
-          Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
-          auto pos = symbol_desc.rfind(search_str);
-          if (pos != std::string::npos) {
-            found = true;
-          }
-        }
-        if (symbol && (search_str == "*" || found)) {
-          add_symbol( symbol, doc_title);
-          icons_found = true;
-        }
-      }
+    if(findSymbolsInDoc(symbol_document, doc_title) && !icons_found) {
+      icons_found = true;
     }
   }
   if (!icons_found) {
-    add_symbols(searchdoc);
+    addSymbols(searchdoc);
   }
-  symbolSet->set_active_text(_("Search"));  
+  if (global->get_active()) {
+    symbol_set->set_active_text(_("Global Search"));
+  }
   search->set_text(search_str);
   search->set_sensitive(true);
-  dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(false);
+  global->set_sensitive(true);
+  dynamic_cast<Gtk::Widget *>(progress_bar)->set_visible(false);
 }
 
-void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
+void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
 
   SymbolColumns* columns = getColumns();
 
@@ -887,11 +968,11 @@ void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
   }
   Glib::ustring symbol_title = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", title) ));
   if (doc_title.empty()) {
-    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(NULL, "Symbol", (Glib::ustring(" [") +_("Current Document") + Glib::ustring("]")).c_str())));
+    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(NULL, "Symbol", (Glib::ustring(" (") +_("Current Document") + Glib::ustring(")")).c_str())));
   } else {
-    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(NULL, "Symbol", (Glib::ustring(" [") + doc_title + Glib::ustring("]")).c_str())));
+    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(g_dpgettext2(NULL, "Symbol", (Glib::ustring(" (") + doc_title + Glib::ustring(")")).c_str())));
   }
-  Glib::RefPtr<Gdk::Pixbuf> pixbuf = draw_symbol( symbol );
+  Glib::RefPtr<Gdk::Pixbuf> pixbuf = drawSymbol( symbol );
 
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
@@ -914,16 +995,16 @@ void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
  * the temporary document is rendered.
  */
 Glib::RefPtr<Gdk::Pixbuf>
-SymbolsDialog::draw_symbol(SPObject *symbol)
+SymbolsDialog::drawSymbol(SPObject *symbol)
 {
   // Create a copy repr of the symbol with id="the_symbol"
-  Inkscape::XML::Document *xml_doc = previewDocument->getReprDoc();
+  Inkscape::XML::Document *xml_doc = preview_document->getReprDoc();
   Inkscape::XML::Node *repr = symbol->getRepr()->duplicate(xml_doc);
   repr->setAttribute("id", "the_symbol");
 
-  // Replace old "the_symbol" in previewDocument by new.
-  Inkscape::XML::Node *root = previewDocument->getReprRoot();
-  SPObject *symbol_old = previewDocument->getObjectById("the_symbol");
+  // Replace old "the_symbol" in preview_document by new.
+  Inkscape::XML::Node *root = preview_document->getReprRoot();
+  SPObject *symbol_old = preview_document->getObjectById("the_symbol");
   if (symbol_old) {
       symbol_old->deleteObject(false);
   }
@@ -932,9 +1013,9 @@ SymbolsDialog::draw_symbol(SPObject *symbol)
   gchar const* style = repr->attribute("inkscape:symbol-style");
   if( !style ) {
     // If no default style in <symbol>, look in documents.
-    if( symbol->document == currentDocument ) {
+    if( symbol->document == current_document ) {
       gchar const *id = symbol->getRepr()->attribute("id");
-      style = style_from_use( id, symbol->document );
+      style = styleFromUse( id, symbol->document );
     } else {
       style = symbol->document->getReprRoot()->attribute("style");
     }
@@ -951,19 +1032,19 @@ SymbolsDialog::draw_symbol(SPObject *symbol)
   //defsrepr->appendChild(repr);
   Inkscape::GC::release(repr);
 
-  // Uncomment this to get the previewDocument documents saved (useful for debugging)
+  // Uncomment this to get the preview_document documents saved (useful for debugging)
   // FILE *fp = fopen (g_strconcat(id, ".svg", NULL), "w");
-  // sp_repr_save_stream(previewDocument->getReprDoc(), fp);
+  // sp_repr_save_stream(preview_document->getReprDoc(), fp);
   // fclose (fp);
 
-  // Make sure previewDocument is up-to-date.
-  previewDocument->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-  previewDocument->ensureUpToDate();
+  // Make sure preview_document is up-to-date.
+  preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+  preview_document->ensureUpToDate();
 
-  // Make sure we have symbol in previewDocument
-  SPObject *object_temp = previewDocument->getObjectById( "the_use" );
-  previewDocument->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-  previewDocument->ensureUpToDate();
+  // Make sure we have symbol in preview_document
+  SPObject *object_temp = preview_document->getObjectById( "the_use" );
+  preview_document->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+  preview_document->ensureUpToDate();
 
   SPItem *item = dynamic_cast<SPItem *>(object_temp);
   g_assert(item != NULL);
@@ -987,7 +1068,7 @@ SymbolsDialog::draw_symbol(SPObject *symbol)
     if( width == 0.0 ) width = 1.0;
     if( height == 0.0 ) height = 1.0;
 
-    if( fitSymbol->get_active() )
+    if( fit_symbol->get_active() )
         scale = psize / std::max(width, height);
     else
       scale = pow( 2.0, scale_factor/2.0 ) * psize / 32.0;
@@ -1003,7 +1084,7 @@ SymbolsDialog::draw_symbol(SPObject *symbol)
  * Symbols are by default not rendered so a <use> element is
  * provided.
  */
-SPDocument* SymbolsDialog::symbols_preview_doc()
+SPDocument* SymbolsDialog::symbolsPreviewDoc()
 {
   // BUG: <symbol> must be inside <defs>
   gchar const *buffer =
@@ -1021,9 +1102,9 @@ SPDocument* SymbolsDialog::symbols_preview_doc()
 
 void SymbolsDialog::setTargetDesktop(SPDesktop *desktop)
 {
-  if (this->currentDesktop != desktop) {
-    this->currentDesktop = desktop;
-    if( !symbolSets[symbolSet->get_active_text()] ) {
+  if (this->current_desktop != desktop) {
+    this->current_desktop = desktop;
+    if( !symbol_sets[symbol_set->get_active_text()] ) {
       // Symbol set is from Current document, update
       rebuild();
     }
