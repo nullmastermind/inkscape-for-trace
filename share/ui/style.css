@@ -88,7 +88,8 @@ combobox window.popup scrolledwindow treeview separator {
     -GtkComboBox-appears-as-list: true;
 }
 
-#LockGuides {
+#LockGuides,
+#StickyZoom,
+#CMS_Adjust {
     padding: 0;
 }
-
