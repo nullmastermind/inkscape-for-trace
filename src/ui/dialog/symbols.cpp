@@ -115,15 +115,15 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   table->set_margin_right(3);
   table->set_margin_top(4);
   // panel is a cloked Gtk::VBox
-  _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
+  _getContents()->pack_start(* Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
   guint row = 0;
 
   /******************** Symbol Sets *************************/
-  Gtk::Label* labelSet = new Gtk::Label(_("Symbol set: "));
-  table->attach(*Gtk::manage(labelSet),0,row,1,1);
+  Gtk::Label* label_set = new Gtk::Label(_("Symbol set: "));
+  table->attach(*Gtk::manage(label_set),0,row,1,1);
   symbol_set = new Gtk::ComboBoxText();  // Fill in later
   symbol_set->append(_("Current Document"));
-  symbol_set->append(_("Search all sets"));
+  symbol_set->append(_("All symbols sets"));
   symbol_set->set_active_text(_("Current Document"));
   symbol_set->set_hexpand();
   table->attach(*Gtk::manage(symbol_set),1,row,1,1);
@@ -133,13 +133,13 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   ++row;
   
-  /******************** Progress *******************************/
-  progress = new Gtk::HBox();
-  progress_bar = Gtk::manage(new Gtk::ProgressBar()); 
-  table->attach(*Gtk::manage(progress),0,row, 2, 1);
-  progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
-  progress->set_margin_top(8);
-  progress->set_margin_bottom(8);
+  /********************    Separator    *************************/
+  
+
+  Gtk::Separator* separator = Gtk::manage(new Gtk::Separator());  // Search
+  separator->set_margin_top(10);
+  separator->set_margin_bottom(10);
+  table->attach(*Gtk::manage(separator),0,row,2,1);
 
   ++row;
 
@@ -185,7 +185,24 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->add(*Gtk::manage(icon_view));
   scroller->set_hexpand();
   scroller->set_vexpand();
-  table->attach(*Gtk::manage(scroller),0,row,2,1);
+  overlay = new Gtk::Overlay();
+  overlay->set_hexpand();
+  overlay->set_vexpand();
+  overlay->add(* scroller);
+  table->attach(*Gtk::manage(overlay),0,row,2,1);
+  
+  ++row;
+
+  /******************** Progress *******************************/
+  progress = new Gtk::HBox();
+  progress_bar = Gtk::manage(new Gtk::ProgressBar()); 
+  table->attach(*Gtk::manage(progress),0,row, 2, 1);
+  progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
+  progress->set_margin_top(15);
+  progress->set_margin_bottom(15);
+  progress->set_margin_left(20);
+  progress->set_margin_right(20);
+
   ++row;
 
   /******************** Tools *******************************/
@@ -289,7 +306,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   /**********************************************************/
   sensitive = true;
-  processed = false;
   search_str = "";
   current_desktop  = SP_ACTIVE_DESKTOP;
   current_document = current_desktop->getDocument();
@@ -313,6 +329,10 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
           sigc::mem_fun(*this, &SymbolsDialog::documentReplaced));
   instanceConns.push_back(documentReplacedConn);
   getSymbolsFilename();
+  icons_found = false;
+  
+  Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
+  
   addSymbolsInDoc(current_document); /* Defaults to current document */
 
   sigc::connection desktopChangeConn =
@@ -389,13 +409,14 @@ void SymbolsDialog::rebuild() {
     add_symbol->set_sensitive( false );
     remove_symbol->set_sensitive( false );
   }
-  if (symbol_set->get_active_text() == _("Search all sets")) {
-    store->clear();
-    if (search_str != "" && processed) {
-      addSymbols();
-    }
-  } else {
+  if (search->get_text() != _("Searching...")) {
+    search_str = "";
     search->set_text("");
+  }
+  icons_found = false;
+  if (symbol_set->get_active_text() == _("All symbols sets")) {
+    store->clear();
+  } else {
     addSymbolsInDoc(symbol_document);
   }
 }
@@ -816,8 +837,13 @@ void SymbolsDialog::clearSearch()
     search_str = "";
     store->clear();
     Glib::ustring current = symbol_set->get_active_text();
-    if (current != _("Search all sets")) {
-      addSymbolsInDoc(symbol_sets[current]);
+    if (current != _("All symbols sets")) {
+      icons_found = false;
+      SPDocument* symbol_document = symbol_sets[current];
+      if (current == _("Current Document")) {
+        symbol_document = current_document;
+      }
+      addSymbolsInDoc(symbol_document);
     }
   }
 }
@@ -832,120 +858,134 @@ void SymbolsDialog::beforeAddSymbols(GdkEventKey* evt)
   search->set_text(_("Searching..."));
   search->set_sensitive(false);
   Glib::ustring current = symbol_set->get_active_text();
-  if (current != _("Search all sets")) {
-    bool icons_found = false;
+  if (current != _("All symbols sets")) {
     Glib::ustring doc_title = symbol_set->get_active_text();
     if (!doc_title.empty()) {
       SPDocument* symbol_document = symbol_sets[doc_title];
-      if(symbol_document) {
-        store->clear();
-        icons_found = addSymbolsInDoc(symbol_document);
+      if (current == _("Current Document")) {
+        symbol_document = current_document;
       }
+      store->clear();
+      icons_found = false;
+      addSymbolsInDoc(symbol_document);
     }
-    if (!icons_found) {
-      //show overlay
-    }
-    search->set_text(search_str);
-    search->set_sensitive(true);
-  } else if(processed) {
-    Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackGetSymbols) );
+  } else if(all_docs_processed) {
     addSymbols();
-  } else {
-    Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackGetSymbolsSets) );
   }
 }
 
-bool SymbolsDialog::callbackGetSymbolsSets(){
+bool SymbolsDialog::callbackSymbols(){
   Glib::ustring current = symbol_set->get_active_text();
-  if (search->get_text() != _("Searching...") || current != _("Search all sets")) {
-      return true;
-  }
-  size_t counter = 0;
-  for(auto const &symbol_document_map : symbol_sets) {
-    ++counter;
-    SPDocument* symbol_document = symbol_document_map.second;
-    if (symbol_document) {
-      continue;
-    }
-    symbol_document = getSymbolsSet(symbol_document_map.first).second;
-    symbol_set->set_active_text(_("Search all sets"));
-    if (!symbol_document) {
-      continue;
-    }
-    progress_bar->set_fraction(((100.0/number_docs) * counter)/100.0);
-    return true;
-  }
-  addSymbols();
-  processed = true;
-  progress_bar->set_fraction(1.0);
-  return false;
-}
-
-bool SymbolsDialog::callbackGetSymbols()
-{
-  if (loading && processed) {
-    progress_bar->pulse();
-    return true;
-  }
-  return false;
-}
-
-bool SymbolsDialog::addSymbolsInDoc(SPDocument* symbol_document) {
-  bool icons_found = false;
-  if (!symbol_document) {
-    return false; //Search all
-  }
-  Glib::ustring doc_title = documentTitle(symbol_document);
-  if (doc_title.empty()) {
-    return false;
-  }
-  std::vector<SPSymbol*> l = symbolsInDoc(symbol_document);
-  loading = false;
-  for(auto symbol:l) {
-    gchar const *symbol_title_char = symbol->title();
-    gchar const *symbol_desc_char = symbol->description();
-    if (symbol_title_char) {
-      bool found = false;
-      Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
-      auto pos = symbol_title.rfind(search_str);
-      if (pos != std::string::npos) {
-        found = true;
-      }
-      if (!found && symbol_desc_char) {
-        Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
-        auto pos = symbol_desc.rfind(search_str);
+  if (l.size()) {
+    for (auto symbol:l) {
+      counter_symbols ++;
+      gchar const *symbol_title_char = symbol->title();
+      gchar const *symbol_desc_char = symbol->description();
+      if (symbol_title_char) {
+        bool found = false;
+        Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
+        auto pos = symbol_title.rfind(search_str);
         if (pos != std::string::npos) {
           found = true;
         }
+        if (!found && symbol_desc_char) {
+          Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
+          auto pos = symbol_desc.rfind(search_str);
+          if (pos != std::string::npos) {
+            found = true;
+          }
+        }
+        if (symbol && (search_str.empty() || found)) {
+          addSymbol( symbol, doc_title);
+          icons_found = true;
+        }
       }
-      if (symbol && (search_str.empty() || found)) {
-        addSymbol( symbol, doc_title);
-        icons_found = true;
+      progress_bar->set_fraction(((100.0/number_symbols) * counter_symbols)/100.0);
+      l.erase(l.begin());
+      //to get more items and best performance
+      int modulus = number_symbols > 200 ? 50 : (number_symbols/4);
+      if (modulus && counter_symbols % modulus == 0 && !l.empty()) { 
+        return true;
       }
     }
-
+    if (!icons_found && !search_str.empty()) {
+      Gtk::Image* no_results_icon = new Gtk::Image(getSearchPixbuf());
+      no_results_icon->set_halign(Gtk::ALIGN_CENTER );
+      no_results_icon->set_valign(Gtk::ALIGN_CENTER );
+      Gtk::Label* no_results = new Gtk::Label();
+      no_results->set_halign(Gtk::ALIGN_CENTER );
+      no_results->set_valign(Gtk::ALIGN_CENTER );
+      no_results->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"x-large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
+      Gtk::Label* different = new Gtk::Label();
+      different->set_halign(Gtk::ALIGN_CENTER );
+      different->set_valign(Gtk::ALIGN_CENTER );
+      different->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"medium\">") + Glib::ustring(_("Try a different search")) + Glib::ustring("</span>"));
+      overlay->add_overlay(* no_results_icon);
+      overlay->add_overlay(* no_results);
+      overlay->add_overlay(* different);
+    }
+    search->set_text(search_str);
+    search->set_sensitive(true);
+    return true;
+  } else if (current == _("All symbols sets") &&
+      search->get_text() == _("Searching...") ) {
+    size_t counter = 0;
+    for(auto const &symbol_document_map : symbol_sets) {
+      ++counter;
+      SPDocument* symbol_document = symbol_document_map.second;
+      if (symbol_document) {
+        continue;
+      }
+      symbol_document = getSymbolsSet(symbol_document_map.first).second;
+      symbol_set->set_active_text(_("All symbols sets"));
+      if (!symbol_document) {
+        continue;
+      }
+      progress_bar->set_fraction(((100.0/number_docs) * counter)/100.0);
+      return true;
+    }
+    progress_bar->set_fraction(1.0);
+    all_docs_processed = true;
+    addSymbols();
+    return true;
   }
-  loading = false;
-  return icons_found;
+  return true;
+}
+
+void SymbolsDialog::addSymbolsInDoc(SPDocument* symbol_document) {
+  if (!symbol_document) {
+    return; //Search all
+  }
+  doc_title = documentTitle(symbol_document);
+  if (doc_title.empty()) {
+    doc_title = _("Untitled document"); ;
+  }
+  progress_bar->set_fraction(0.0);
+  counter_symbols = 0;
+  std::vector<SPSymbol *> container_symbols_tmp = symbolsInDoc(symbol_document);
+  number_symbols = container_symbols_tmp.size();
+  l = container_symbols_tmp;
+  container_symbols_tmp.clear();
 }
 
 void SymbolsDialog::addSymbols() {
-  bool icons_found = false;
   store->clear();
+  icons_found = false;
+  std::vector<SPSymbol *> container_symbols;
   for(auto const &symbol_document_map : symbol_sets) {
     SPDocument* symbol_document = symbol_document_map.second;
     if (!symbol_document) {
       continue;
     }
-    if(addSymbolsInDoc(symbol_document) && !icons_found) {
-      icons_found = true;
-    }
+    std::vector<SPSymbol *> container_symbols_tmp = symbolsInDoc(symbol_document);
+    container_symbols.insert(container_symbols.end(), container_symbols_tmp.begin(), container_symbols_tmp.end());
+    container_symbols_tmp.clear();
   }
-  if (!icons_found) {
-    //Show overlay
-  }
-  search->set_text(search_str);
-  search->set_sensitive(true);
+  counter_symbols = 0;
+  progress_bar->set_fraction(0.0);
+  number_symbols = container_symbols.size();
+  l = container_symbols;
+  container_symbols.clear();
 }
 
 void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
@@ -1089,6 +1129,38 @@ SPDocument* SymbolsDialog::symbolsPreviewDoc()
 "  <use id=\"the_use\" xlink:href=\"#the_symbol\"/>"
 "</svg>";
   return SPDocument::createNewDocFromMem( buffer, strlen(buffer), FALSE );
+}
+
+/*
+ * Return search symbol pixbuf
+ */
+Glib::RefPtr<Gdk::Pixbuf>
+SymbolsDialog::getSearchPixbuf()
+{
+  // BUG: <symbol> must be inside <defs>
+  gchar const *buffer =
+"<svg xmlns=\"http://www.w3.org/2000/svg\""
+"     xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
+"  <defs id=\"defs\">"
+"    <symbol"
+"       id=\"symbol1411\">"
+"      <title"
+"         id=\"title1407\">Search Taiga Icon</title>"
+"      <path"
+"         style=\"fill:#99999;stroke:none\""
+"         d=\"M 113.20621,0 C 51.572319,0 1.4123458,50.157856 1.4123458,111.79254 c 0,61.63469 50.1591792,111.79387 111.7938642,111.79387 26.86712,0 51.55036,-9.53558 70.85251,-25.39312 l 72.74084,72.74031 12.72037,-12.72038 -72.51727,-72.51673 c 17.41144,-19.71728 27.9961,-45.59803 27.9961,-73.90395 C 224.99876,50.157856 174.84011,0 113.20621,0 Z m 0,17.990079 c 51.91231,0 93.80379,41.890421 93.80379,93.802461 0,51.91284 -41.89174,93.80379 -93.80379,93.80379 -51.912835,0 -93.803785,-41.89095 -93.803785,-93.80379 0,-51.912305 41.89095,-93.803784 93.803785,-93.803784 z\""
+"         id=\"path1409\" />"
+"    </symbol>"
+"  </defs>"
+"</svg>";
+  
+  SPDocument* doc = SPDocument::createNewDocFromMem( buffer, strlen(buffer), FALSE );
+  std::vector<SPSymbol*> l = symbolsInDoc(doc);
+  int prev_scale_factor = scale_factor;
+  scale_factor = 10;
+  Glib::RefPtr<Gdk::Pixbuf> pb = drawSymbol(l[0]);
+  scale_factor = prev_scale_factor;
+  return pb;
 }
 
 void SymbolsDialog::setTargetDesktop(SPDesktop *desktop)

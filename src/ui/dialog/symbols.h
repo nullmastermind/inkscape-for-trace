@@ -92,31 +92,26 @@ private:
     std::vector<SPUse*> useInDoc( SPDocument* document);
     void beforeAddSymbols(GdkEventKey* evt);
     void addSymbols();
-    bool addSymbolsInDoc(SPDocument* document);
+    void addSymbolsInDoc(SPDocument* document);
     void clearSearch();
-    bool callbackGetSymbolsSets();
-    bool callbackGetSymbols();
-    
+    bool callbackSymbols();
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
-
+    Glib::ustring doc_title;
     Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
-
+    Glib::RefPtr<Gdk::Pixbuf> getSearchPixbuf();
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbol_sets;
-
+    std::vector<SPSymbol*> l;
     // Index into sizes which is selected
     int pack_size;
-    
     // Scale factor
     int scale_factor;
-
     bool sensitive;
-    
-    bool loading;
-    
-    bool processed;
-    
+    bool all_docs_processed;
     size_t number_docs;
+    size_t number_symbols;
+    size_t counter_symbols;
+    bool icons_found;
     Glib::RefPtr<Gtk::ListStore> store;
     Glib::ustring search_str;
     Gtk::ComboBoxText* symbol_set;
@@ -131,6 +126,7 @@ private:
     Gtk::Grid* table;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
+    Gtk::Overlay* overlay;
 
     void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  current_desktop;
