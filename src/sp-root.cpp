@@ -245,12 +245,12 @@ void SPRoot::setRootDimensions()
 
     } else {
 
-        if( !this->width._set ) {
-            this->width.set(  SVGLength::PX, 100,  100 ); // Random default
+        if( !this->width._set || this->width.unit == SVGLength::PERCENT) {
+            this->width.set(  SVGLength::PX, 300,  300 ); // CSS/SVG default
         }
 
-        if( !this->height._set ) {
-            this->height.set( SVGLength::PX, 100,  100 ); // Random default
+        if( !this->height._set || this->height.unit == SVGLength::PERCENT) {
+            this->height.set( SVGLength::PX, 150,  150 ); // CSS/SVG default
         }
     }
 
