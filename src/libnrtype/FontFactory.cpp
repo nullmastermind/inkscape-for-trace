@@ -936,7 +936,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
 
     FcConfig *conf = NULL;
 # if PANGO_VERSION_CHECK(1,38,0)
-    pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
 # endif
     FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
     if (res = FcTrue) {
@@ -968,7 +968,7 @@ void font_factory::AddFontFile(char const *utf8file)
 
     FcConfig *conf = NULL;
 # if PANGO_VERSION_CHECK(1,38,0)
-    pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
 # endif
     FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
     if (res = FcTrue) {
