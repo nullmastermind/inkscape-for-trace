@@ -949,6 +949,38 @@ void font_factory::AddFontsDir(char const *utf8dir)
 #endif
 }
 
+void font_factory::AddFontFile(char const *utf8file)
+{
+#ifdef USE_PANGO_WIN32
+    g_info("Adding additional font only supported for fontconfig backend.");
+#else
+    if (!Inkscape::IO::file_test(utf8file, G_FILE_TEST_IS_REGULAR)) {
+        g_warning("Font file '%s' does not exist and will be ignored.", utf8file);
+        return;
+    }
+
+    gchar *file;
+# ifdef WIN32
+    file = g_win32_locale_filename_from_utf8(utf8file);
+# else
+    file = g_filename_from_utf8(utf8file, -1, NULL, NULL, NULL);
+# endif
+
+    FcConfig *conf = NULL;
+# if PANGO_VERSION_CHECK(1,38,0)
+    pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+# endif
+    FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
+    if (res = FcTrue) {
+        g_info("Font file '%s' added successfully.", utf8file);
+    } else {
+        g_warning("Could not add font file '%s'.", utf8file);
+    }
+
+    g_free(file);
+#endif
+}
+
 /*
   Local Variables:
   mode:c++

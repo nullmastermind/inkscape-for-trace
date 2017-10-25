@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 
+// For font-rule
+#include "libnrtype/FontFactory.h"
+
 using Inkscape::XML::TEXT_NODE;
 
 SPStyleElem::SPStyleElem() : SPObject() {
@@ -308,12 +311,61 @@ end_font_face_cb(CRDocHandler *a_handler)
                   unsigned(font_face_rule->type));
     }
 
-    std::cout << "end_font_face_cb: font face rule unsupported." << std::endl;
+    std::cout << "end_font_face_cb: font face rule limited support." << std::endl;
     cr_declaration_dump (font_face_rule->kind.font_face_rule->decl_list, stdout, 2, TRUE);
     printf ("\n");
 
+    // Get document
+    SPDocument* document = parse_tmp.document;
+    if (!document) {
+        std::cerr << "end_font_face_cb: No document!" << std::endl;
+        return;
+    }
+    if (!document->getURI()) {
+        std::cerr << "end_font_face_cb: Document URI is NULL" << std::endl;
+        return;
+    }
+
+    // Add ttf or otf fonts.
+    CRDeclaration const *cur = NULL;
+    for (cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
+        if (cur->property &&
+            cur->property->stryng &&
+            cur->property->stryng->str &&
+            strcmp(cur->property->stryng->str, "src") == 0 ) {
+
+            if (cur->value &&
+                cur->value->content.str &&
+                cur->value->content.str->stryng &&
+                cur->value->content.str->stryng->str) {
+
+                Glib::ustring value = cur->value->content.str->stryng->str;
+                std::size_t found = value.find_last_of("ttf");
+
+                if (value.rfind("ttf") == (value.length() - 3) ||
+                    value.rfind("otf") == (value.length() - 3)) {
+
+                    // Get file
+                    Glib::ustring ttf_file =
+                        Inkscape::IO::Resource::get_filename (document->getURI(), value);
+
+                    if (!ttf_file.empty()) {
+                        font_factory *factory = font_factory::Default();
+                        factory->AddFontFile( ttf_file.c_str() );
+                        std::cout << "end_font_face_cb: Added font: " << ttf_file << std::endl;
+
+                        // FIX ME: Need to refresh font list.
+                    } else {
+                        std::cout << "end_font_face_cb: Failed to add: " << value << std::endl;
+                    }
+                }
+            }
+        }
+    }
+
     parse_tmp.currStmt = NULL;
     parse_tmp.stmtType = NO_STMT;
+
 }
 
 static void
