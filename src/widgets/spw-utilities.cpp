@@ -61,31 +61,6 @@ Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int r
   return label_widget;
 }
 
-GtkWidget *
-spw_label_old(GtkWidget *table, const gchar *label_text, int col, int row)
-{
-  GtkWidget *label_widget;
-
-  label_widget = gtk_label_new (label_text);
-  g_assert(label_widget != NULL);
-  gtk_widget_set_halign(label_widget, GTK_ALIGN_END);
-  gtk_widget_show (label_widget);
-
-#if GTK_CHECK_VERSION(3,12,0)
-  gtk_widget_set_margin_start(label_widget, 4);
-  gtk_widget_set_margin_end(label_widget, 4);
-#else
-  gtk_widget_set_margin_left(label_widget, 4);
-  gtk_widget_set_margin_right(label_widget, 4);
-#endif
-  gtk_widget_set_hexpand(label_widget, TRUE);
-  gtk_widget_set_halign(label_widget, GTK_ALIGN_FILL);
-  gtk_widget_set_valign(label_widget, GTK_ALIGN_CENTER);
-  gtk_grid_attach(GTK_GRID(table), label_widget, col, row, 1, 1);
-
-  return label_widget;
-}
-
 /**
  * Creates a horizontal layout manager with 4-pixel spacing between children
  * and space for 'width' columns.
@@ -102,94 +77,6 @@ Gtk::HBox * spw_hbox(Gtk::Grid * table, int width, int col, int row)
   table->attach(*hb, col, row, width, 1);
 
   return hb;
-}
-
-/**
- * Creates a checkbutton widget and adds it to a vbox.
- * This is a compound widget that includes a label.
- */
-GtkWidget *spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *vbox,
-					const gchar *label, const gchar *tip, gchar *key, GCallback cb)
-{
-  g_assert (dialog != NULL);
-  g_assert (vbox != NULL);
-
-  GtkWidget *b = gtk_check_button_new_with_label (label);
-  gtk_widget_set_tooltip_text(b, tip);
-  g_assert (b != NULL);
-  gtk_widget_show (b);
-  gtk_box_pack_start (GTK_BOX (vbox), b, FALSE, FALSE, 0);
-  g_object_set_data (G_OBJECT (b), "key", key);
-  g_object_set_data (G_OBJECT (dialog), key, b);
-  g_signal_connect (G_OBJECT (b), "toggled", cb, dialog);
-  return b;
-}
-
-
-/**
- * Creates a checkbutton widget and adds it to a table.
- * This is a compound widget that includes a label.
- */
-GtkWidget *
-spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
-                const gchar * label, gchar * key, int /*col*/, int row,
-                int insensitive, GCallback cb)
-{
-  GtkWidget *b;
-
-  g_assert(dialog != NULL);
-  g_assert(table  != NULL);
-
-  GtkWidget *l = gtk_label_new (label);
-  gtk_widget_set_halign(l, GTK_ALIGN_END);
-  gtk_widget_show (l);
-
-  gtk_widget_set_halign(l, GTK_ALIGN_FILL);
-  gtk_widget_set_hexpand(l, TRUE);
-  gtk_widget_set_valign(l, GTK_ALIGN_CENTER);
-  gtk_grid_attach(GTK_GRID(table), l, 0, row, 1, 1);
-
-  b = gtk_check_button_new ();
-  gtk_widget_show (b);
-
-  gtk_widget_set_halign(b, GTK_ALIGN_FILL);
-  gtk_widget_set_hexpand(b, TRUE);
-  gtk_widget_set_valign(b, GTK_ALIGN_CENTER);
-  gtk_grid_attach(GTK_GRID(table), b, 1, row, 1, 1);
-
-  g_object_set_data (G_OBJECT (b), "key", key);
-  g_object_set_data (G_OBJECT (dialog), key, b);
-  g_signal_connect (G_OBJECT (b), "toggled", cb, dialog);
-  if (insensitive == 1) {
-    gtk_widget_set_sensitive (b, FALSE);
-  }
-  return b;
-}
-
-/**
- * Creates a dropdown widget.  This is a compound widget that includes
- * a label as well as the dropdown.
- */
-GtkWidget *
-spw_dropdown(GtkWidget * dialog, GtkWidget * table,
-	     const gchar * label_text, gchar * key, int row,
-	     GtkWidget * selector
-	     )
-{
-  g_assert(dialog   != NULL);
-  g_assert(table    != NULL);
-  g_assert(selector != NULL);
-
-  spw_label_old(table, label_text, 0, row);
-
-  gtk_widget_show (selector);
-  gtk_widget_set_halign(selector, GTK_ALIGN_FILL);
-  gtk_widget_set_hexpand(selector, TRUE);
-  gtk_widget_set_valign(selector, GTK_ALIGN_CENTER);
-  gtk_grid_attach(GTK_GRID(table), selector, 1, row, 1, 1);
-
-  g_object_set_data (G_OBJECT (dialog), key, selector);
-  return selector;
 }
 
 static void
