@@ -105,6 +105,9 @@ option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_YAML "Compile with YAML support (enables xverbs)" ON)
 
+option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
+mark_as_advanced(WITH_FUZZ)
+
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
 # -----------------------------------------------------------------------------
@@ -150,6 +153,7 @@ endif()
 #
 # end badness
 # -----------------------------------------------------------------------------
+
 
 # -----------------------------------------------------------------------------
 # Relocatable Binary
