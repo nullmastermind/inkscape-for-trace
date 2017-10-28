@@ -76,9 +76,9 @@ private:
     void defsModified(SPObject *object, guint flags);
     void selectionChanged(Inkscape::Selection *selection);
     void documentReplaced(SPDesktop *desktop, SPDocument *document);
-    SPDocument* selectedSymbols(bool ignorecurrent = false);
+    SPDocument* selectedSymbols();
     Glib::ustring selectedSymbolId();
-    Glib::ustring selectedSymbolDocTitle();
+    Glib::ustring selectedSymbolTitle();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
     void getSymbolsFilename();
@@ -91,6 +91,7 @@ private:
     void useInDoc(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> useInDoc( SPDocument* document);
     void beforeSearch(GdkEventKey* evt);
+    void unsensitive(GdkEventKey* evt);
     void addSymbols();
     void addSymbolsInDoc(SPDocument* document);
     void clearSearch();
