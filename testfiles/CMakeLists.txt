@@ -34,8 +34,9 @@ add_subdirectory(rendering_tests)
 
 if(WITH_FUZZ)
     add_executable(fuzz fuzzer.cpp)
-    target_link_libraries(fuzz inkscape_base -lFuzzer "-fsanitize=address"
-        "-fsanitize-coverage=edge,trace-pc-guard,indirect-calls,trace-cmp,trace-div,trace-gep"
-        "-fno-omit-frame-pointer")
-
+    if(EXISTS ${LIB_FUZZING_ENGINE})
+        target_link_libraries(fuzz inkscape_base -lFuzzingEngine)
+    else()
+        target_link_libraries(fuzz inkscape_base -lFuzzer)
+    endif()
 endif()

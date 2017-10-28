@@ -106,6 +106,7 @@ option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_YAML "Compile with YAML support (enables xverbs)" ON)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
+mark_as_advanced(WITH_FUZZ)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
@@ -153,19 +154,6 @@ endif()
 # end badness
 # -----------------------------------------------------------------------------
 
-
-# -----------------------------------------------------------------------------
-# Fuzzing
-# -----------------------------------------------------------------------------
-
-mark_as_advanced(WITH_FUZZ)
-if(WITH_FUZZ)
-    add_definitions("-fsanitize=address"#,undefined,signed-integer-overflow
-    "-fsanitize-coverage=edge,trace-pc-guard,indirect-calls,trace-cmp,trace-div,trace-gep"
-    "-fno-omit-frame-pointer")
-    set(CMAKE_C_COMPILER /usr/bin/clang)
-    set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-endif()
 
 # -----------------------------------------------------------------------------
 # Relocatable Binary
