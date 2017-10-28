@@ -13,7 +13,6 @@ include(CMakeScripts/ConfigPaths.cmake)
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
 # avoid having empty buildtype

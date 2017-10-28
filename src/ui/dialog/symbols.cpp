@@ -220,7 +220,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   add_symbol->set_tooltip_text(_("Add Symbol from the current document."));
   add_symbol->set_relief( Gtk::RELIEF_NONE );
   add_symbol->set_focus_on_click( false );
-  add_symbol->signal_activate().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
+  add_symbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
   tools->pack_start(* add_symbol, Gtk::PACK_SHRINK);
 
   auto remove_symbolImage = Gtk::manage(new Gtk::Image());
@@ -421,14 +421,15 @@ void SymbolsDialog::rebuild() {
 }
 
 void SymbolsDialog::insertSymbol() {
+    std::cout << "fgasgggggggggggggg" << std::endl;
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->current_desktop) );
+    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop) );
     sp_action_perform (action, NULL);
 }
 
 void SymbolsDialog::revertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_UNSYMBOL );
-    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) this->current_desktop ) );
+    SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop ) );
     sp_action_perform (action, NULL);
 }
 
