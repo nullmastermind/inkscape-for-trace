@@ -32,7 +32,12 @@ foreach(source ${TEST_SOURCES})
 endforeach()
 add_subdirectory(rendering_tests)
 
+
 if(WITH_FUZZ)
+    # to use the fuzzer, make sure you use the right compiler (clang)
+    # with the right flags -fsanitize=address -fsanitize-coverage=edge,trace-pc-guard,indirect-calls,trace-cmp,trace-div,trace-gep -fno-omit-frame-pointer
+    # (see libfuzzer doc for info in flags)
+    # first line is for integration into oss-fuzz https://github.com/google/oss-fuzz
     add_executable(fuzz fuzzer.cpp)
     if(EXISTS ${LIB_FUZZING_ENGINE})
         target_link_libraries(fuzz inkscape_base -lFuzzingEngine)
