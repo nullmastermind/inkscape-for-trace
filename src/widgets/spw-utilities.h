@@ -27,22 +27,6 @@ namespace Gtk {
 
 Gtk::Label * spw_label(Gtk::Grid *table, gchar const *label_text, int col, int row, Gtk::Widget *target);
 Gtk::HBox * spw_hbox(Gtk::Grid *table, int width, int col, int row);
-GtkWidget * spw_label_old(GtkWidget *table, gchar const *label_text, int col, int row);
-
-GtkWidget *
-spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *table,
-		     const gchar *label, const gchar *tip, gchar *key, GCallback cb);
-
-GtkWidget *
-spw_checkbutton(GtkWidget *dialog, GtkWidget *table,
-		gchar const *label, gchar *key, int col, int row,
-		int sensitive, GCallback cb);
-
-GtkWidget *
-spw_dropdown(GtkWidget *dialog, GtkWidget *table,
-	     gchar const *label, gchar *key, int row,
-	     GtkWidget *selector
-	     );
 
 void sp_set_font_size (GtkWidget *w, guint font);
 void sp_set_font_size_smaller (GtkWidget *w);

@@ -1935,11 +1935,18 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
     mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
     mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags") );
+    mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
+
 
     for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {
         Glib::ustring pref = iter->second;
         int visible = prefs->getInt(pref + "/visible", 0);
         if (visible) {
+
+            // Try to ensure that the panel is created attached to the correct desktop (bug 1720096).
+            // There must be a better way of handling this problem!
+            INKSCAPE.activate_desktop(this);
+
             _dlg_mgr->showDialog(iter->first.c_str(), false); // without grabbing focus, we need focus to remain on the canvas
         }
     }

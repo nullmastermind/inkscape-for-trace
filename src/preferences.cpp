@@ -393,6 +393,9 @@ std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
     Inkscape::XML::Node *node = _getNode(path, false);
     if (node) {
         for (Inkscape::XML::NodeSiblingIterator i = node->firstChild(); i; ++i) {
+            if (i->attribute("id") == NULL) {
+                continue;
+            }
             temp.push_back(path + '/' + i->attribute("id"));
         }
     }
@@ -702,6 +705,9 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
             }
 
             for (child = node->firstChild(); child; child = child->next()) {
+                if (child->attribute("id") == NULL) {
+                    continue;
+                }
                 if (!strcmp(splits[part_i], child->attribute("id"))) {
                     break;
                 }

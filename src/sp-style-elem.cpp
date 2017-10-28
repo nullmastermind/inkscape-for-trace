@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 
+// For font-rule
+#include "libnrtype/FontFactory.h"
+
 using Inkscape::XML::TEXT_NODE;
 
 SPStyleElem::SPStyleElem() : SPObject() {
@@ -281,8 +284,10 @@ start_font_face_cb(CRDocHandler *a_handler,
                   static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
         // fixme: Check whether we need to unref currStmt if non-NULL.
     }
+    CRStatement *font_face_rule = cr_statement_new_at_font_face_rule (parse_tmp.stylesheet, NULL);
+    g_return_if_fail(font_face_rule && font_face_rule->type == AT_FONT_FACE_RULE_STMT);
     parse_tmp.stmtType = FONT_FACE_STMT;
-    parse_tmp.currStmt = NULL;
+    parse_tmp.currStmt = font_face_rule;
 }
 
 static void
@@ -291,13 +296,76 @@ end_font_face_cb(CRDocHandler *a_handler)
     g_return_if_fail(a_handler->app_data != NULL);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if (parse_tmp.stmtType != FONT_FACE_STMT || parse_tmp.currStmt != NULL) {
-        g_warning("Expecting currStmt==NULL and stmtType==1 (FONT_FACE_STMT) at end of @font-face, but found currStmt=%p, stmtType=%u",
-                  static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
-        // fixme: Check whether we need to unref currStmt if non-NULL.
-        parse_tmp.currStmt = NULL;
+
+    CRStatement *const font_face_rule = parse_tmp.currStmt;
+    if (parse_tmp.stmtType == FONT_FACE_STMT
+        && font_face_rule
+        && font_face_rule->type == AT_FONT_FACE_RULE_STMT)
+    {
+        parse_tmp.stylesheet->statements = cr_statement_append(parse_tmp.stylesheet->statements,
+                                                               font_face_rule);
+    } else {
+        g_warning("Found stmtType=%u, stmt=%p, stmt.type=%u.",
+                  unsigned(parse_tmp.stmtType),
+                  font_face_rule,
+                  unsigned(font_face_rule->type));
     }
+
+    std::cout << "end_font_face_cb: font face rule limited support." << std::endl;
+    cr_declaration_dump (font_face_rule->kind.font_face_rule->decl_list, stdout, 2, TRUE);
+    printf ("\n");
+
+    // Get document
+    SPDocument* document = parse_tmp.document;
+    if (!document) {
+        std::cerr << "end_font_face_cb: No document!" << std::endl;
+        return;
+    }
+    if (!document->getURI()) {
+        std::cerr << "end_font_face_cb: Document URI is NULL" << std::endl;
+        return;
+    }
+
+    // Add ttf or otf fonts.
+    CRDeclaration const *cur = NULL;
+    for (cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
+        if (cur->property &&
+            cur->property->stryng &&
+            cur->property->stryng->str &&
+            strcmp(cur->property->stryng->str, "src") == 0 ) {
+
+            if (cur->value &&
+                cur->value->content.str &&
+                cur->value->content.str->stryng &&
+                cur->value->content.str->stryng->str) {
+
+                Glib::ustring value = cur->value->content.str->stryng->str;
+                std::size_t found = value.find_last_of("ttf");
+
+                if (value.rfind("ttf") == (value.length() - 3) ||
+                    value.rfind("otf") == (value.length() - 3)) {
+
+                    // Get file
+                    Glib::ustring ttf_file =
+                        Inkscape::IO::Resource::get_filename (document->getURI(), value);
+
+                    if (!ttf_file.empty()) {
+                        font_factory *factory = font_factory::Default();
+                        factory->AddFontFile( ttf_file.c_str() );
+                        std::cout << "end_font_face_cb: Added font: " << ttf_file << std::endl;
+
+                        // FIX ME: Need to refresh font list.
+                    } else {
+                        std::cout << "end_font_face_cb: Failed to add: " << value << std::endl;
+                    }
+                }
+            }
+        }
+    }
+
+    parse_tmp.currStmt = NULL;
     parse_tmp.stmtType = NO_STMT;
+
 }
 
 static void
@@ -305,26 +373,38 @@ property_cb(CRDocHandler *const a_handler,
             CRString *const a_name,
             CRTerm *const a_value, gboolean const a_important)
 {
+    // std::cout << "property_cb: Entrance: " << a_name->stryng->str << ": " << cr_term_to_string(a_value) << std::endl;
     g_return_if_fail(a_handler && a_name);
     g_return_if_fail(a_handler->app_data != NULL);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if (parse_tmp.stmtType == FONT_FACE_STMT) {
-        if (parse_tmp.currStmt != NULL) {
-            g_warning("Found non-NULL currStmt %p though stmtType==FONT_FACE_STMT.", parse_tmp.currStmt);
-        }
-        /* We currently ignore @font-face descriptors. */
-        return;
-    }
+
     CRStatement *const ruleset = parse_tmp.currStmt;
-    g_return_if_fail(ruleset
-                     && ruleset->type == RULESET_STMT
-                     && parse_tmp.stmtType == NORMAL_RULESET_STMT);
-    CRDeclaration *const decl = cr_declaration_new(ruleset, cr_string_dup(a_name), a_value);
+    g_return_if_fail(ruleset);
+
+    CRDeclaration *const decl = cr_declaration_new (ruleset, cr_string_dup(a_name), a_value);
     g_return_if_fail(decl);
     decl->important = a_important;
-    CRStatus const append_status = cr_statement_ruleset_append_decl(ruleset, decl);
-    g_return_if_fail(append_status == CR_OK);
+
+    switch (parse_tmp.stmtType) {
+
+        case NORMAL_RULESET_STMT: {
+            g_return_if_fail (ruleset->type == RULESET_STMT);
+            CRStatus const append_status = cr_statement_ruleset_append_decl (ruleset, decl);
+            g_return_if_fail (append_status == CR_OK);
+            break;
+        }
+        case FONT_FACE_STMT: {
+            g_return_if_fail (ruleset->type == AT_FONT_FACE_RULE_STMT);
+            CRDeclaration *new_decls = cr_declaration_append (ruleset->kind.font_face_rule->decl_list, decl);
+            g_return_if_fail (new_decls);
+            ruleset->kind.font_face_rule->decl_list = new_decls;
+            break;
+        }
+        default:
+            g_warning ("property_cb: Unhandled stmtType: %u", parse_tmp.stmtType);
+            return;
+    }
 }
 
 CRParser*
@@ -405,6 +485,7 @@ void SPStyleElem::read_content() {
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );
+    // cr_stylesheet_dump (document->style_sheet, stdout);
 }
 
 /**
