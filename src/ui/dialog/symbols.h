@@ -78,7 +78,7 @@ private:
     void documentReplaced(SPDesktop *desktop, SPDocument *document);
     SPDocument* selectedSymbols();
     Glib::ustring selectedSymbolId();
-    Glib::ustring selectedSymbolTitle();
+    Glib::ustring selectedSymbolDocTitle();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
     void getSymbolsFilename();
@@ -100,7 +100,7 @@ private:
     Glib::ustring ellipsize(Glib::ustring data, size_t limit = 40);
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
     Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol, unsigned force_psize = 0);
-    Glib::RefPtr<Gdk::Pixbuf> getStockPixbuf(gchar const * symbol_title, unsigned psize);
+    Glib::RefPtr<Gdk::Pixbuf> getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize);
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbol_sets;
     std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
@@ -138,6 +138,7 @@ private:
     Gtk::Grid* table;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
+    Gtk::IconSize iconsize;
 
     void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  current_desktop;
