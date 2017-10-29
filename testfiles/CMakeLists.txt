@@ -39,7 +39,7 @@ if(WITH_FUZZ)
     # (see libfuzzer doc for info in flags)
     # first line is for integration into oss-fuzz https://github.com/google/oss-fuzz
     add_executable(fuzz fuzzer.cpp)
-    if(EXISTS ${LIB_FUZZING_ENGINE})
+    if(LIB_FUZZING_ENGINE)
         target_link_libraries(fuzz inkscape_base -lFuzzingEngine)
     else()
         target_link_libraries(fuzz inkscape_base -lFuzzer)
