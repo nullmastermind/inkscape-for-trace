@@ -604,9 +604,9 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
         }
         // unlink and delete all references in the list
         (*it)->unlink();
-        delete *it;
-        it = this->path_effect_list->erase(it);
+        ++it;
     }
+    this->path_effect_list->clear();
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
     if (!keep_paths) {
