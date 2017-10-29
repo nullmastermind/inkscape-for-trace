@@ -99,12 +99,14 @@ private:
     void enableWidgets(bool enable);
     Glib::ustring ellipsize(Glib::ustring data, size_t limit = 40);
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
-    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
-    Glib::RefPtr<Gdk::Pixbuf> getSearchPixbuf();
+    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol, unsigned force_psize = 0);
+    Glib::RefPtr<Gdk::Pixbuf> getStockPixbuf(gchar const * symbol_title, unsigned psize);
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbol_sets;
     std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
     // Index into sizes which is selected
+    Glib::RefPtr<Gdk::Pixbuf> noresults_icon;
+    Glib::RefPtr<Gdk::Pixbuf> search_icon;
     int pack_size;
     // Scale factor
     int scale_factor;
@@ -128,10 +130,14 @@ private:
     Gtk::Button* more;
     Gtk::Button* fewer;
     Gtk::HBox* tools;
+    Gtk::Overlay* overlay;
+    Gtk::Image* overlay_icon;
+    Gtk::Image* overlay_opacity;
+    Gtk::Label* overlay_title;
+    Gtk::Label* overlay_desc;
     Gtk::Grid* table;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
-    Gtk::Overlay* overlay;
 
     void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  current_desktop;
