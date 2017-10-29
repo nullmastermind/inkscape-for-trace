@@ -398,9 +398,13 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
 
             continue;
         }
-        
+
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if (lpeitem) {
+            lpeitem->removeAllPathEffects(true);
+        }
+
         if (group) {
-            group->removeAllPathEffects(true);
             std::vector<SPItem*> item_list = sp_item_group_item_list(group);
             
             std::vector<Inkscape::XML::Node*> item_to_select;

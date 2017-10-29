@@ -255,7 +255,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 
 void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
+    if (SP_IS_SHAPE(lpeitem) && !keep_paths) {
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
         SPCSSAttr *css = sp_repr_css_attr_new ();
         if (lpeitem->style->fill.isPaintserver()) {
