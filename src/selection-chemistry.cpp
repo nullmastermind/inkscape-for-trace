@@ -95,6 +95,8 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "live_effects/effect.h"
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 #include "live_effects/parameter/originalpath.h"
 #include "layer-manager.h"
 #include "object-set.h"
@@ -3862,7 +3864,7 @@ void ObjectSet::setClipGroup()
  * If \a apply_clip_path parameter is true, clipPath is created, otherwise mask
  *
  */
- void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool skip_undo)
+ void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool skip_undo, bool inverse)
 {
     if(!desktop() && apply_to_layer)
         return;
@@ -4016,7 +4018,26 @@ void ObjectSet::setClipGroup()
         }
 
         apply_mask_to->setAttribute(attributeName, Glib::ustring("url(#") + mask_id + ')');
-
+        if (inverse) {
+            using namespace Inkscape::LivePathEffect;
+            if (apply_clip_path) {
+                Effect::createAndApply(POWERCLIP, doc, item);
+                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                lpe->getRepr()->setAttribute("is_inverse", "false");
+                lpe->getRepr()->setAttribute("is_visible", "true");
+                lpe->getRepr()->setAttribute("inverse", "true");
+                lpe->getRepr()->setAttribute("flatten", "false");
+                lpe->getRepr()->setAttribute("hide_clip", "false");
+            } else {
+                Effect::createAndApply(POWERMASK, doc, item);
+                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                lpe->getRepr()->setAttribute("invert", "false");
+                lpe->getRepr()->setAttribute("is_visible", "true");
+                lpe->getRepr()->setAttribute("hide_mask", "false");
+                lpe->getRepr()->setAttribute("background", "true");
+                lpe->getRepr()->setAttribute("background_color", "#ffffffff");
+            }
+        }
     }
 
     for (std::vector<SPItem*>::const_iterator i = items_to_delete.begin(); i != items_to_delete.end(); ++i) {
