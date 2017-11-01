@@ -33,6 +33,7 @@ private:
     BoolParam background;
     ColorPickerParam background_color;
     Geom::Path mask_box;
+    guint32 previous_color;
 };
 
 } //namespace LivePathEffect

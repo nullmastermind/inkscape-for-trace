@@ -4028,6 +4028,7 @@ void ObjectSet::setClipGroup()
                 lpe->getRepr()->setAttribute("inverse", "true");
                 lpe->getRepr()->setAttribute("flatten", "false");
                 lpe->getRepr()->setAttribute("hide_clip", "false");
+                dynamic_cast<LPEPowerClip *>(lpe)->convertShapes();
             } else {
                 Effect::createAndApply(POWERMASK, doc, item);
                 Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();

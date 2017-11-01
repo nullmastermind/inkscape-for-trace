@@ -19,7 +19,6 @@
 #include "uri.h"
 #include "extract-uri.h"
 #include <bad-uri-exception.h>
-
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -41,12 +40,14 @@ LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     registerParameter(&hide_mask);
     registerParameter(&background);
     registerParameter(&background_color);
+    previous_color = background_color.get_value();
 }
 
 LPEPowerMask::~LPEPowerMask() {}
 
 void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
+        //To avoid close of color dialog and better performance on change color
     SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if(hide_mask && mask) {
         SP_ITEM(sp_lpe_item)->mask_ref->detach();
@@ -60,35 +61,40 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     }
     mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if (mask) {
-        uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("mask"))), true);
-        SP_ITEM(sp_lpe_item)->mask_ref->detach();
-        Geom::OptRect bbox = sp_lpe_item->visualBounds();
-        if(!bbox) {
-            return;
-        }
-        if (uri.param_getSVGValue()) {
-            try {
-                SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
-            } catch (Inkscape::BadURIException &e) {
-                g_warning("%s", e.what());
+        if (previous_color != background_color.get_value()) {
+            previous_color = background_color.get_value();
+            setMask();
+        } else {
+            uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("mask"))), true);
+            SP_ITEM(sp_lpe_item)->mask_ref->detach();
+            Geom::OptRect bbox = sp_lpe_item->visualBounds();
+            if(!bbox) {
+                return;
+            }
+            if (uri.param_getSVGValue()) {
+                try {
+                    SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+                } catch (Inkscape::BadURIException &e) {
+                    g_warning("%s", e.what());
+                    SP_ITEM(sp_lpe_item)->mask_ref->detach();
+                }
+            } else {
                 SP_ITEM(sp_lpe_item)->mask_ref->detach();
             }
-        } else {
-            SP_ITEM(sp_lpe_item)->mask_ref->detach();
+            Geom::Rect bboxrect = (*bbox);
+            bboxrect.expandBy(1);
+            Geom::Point topleft      = bboxrect.corner(0);
+            Geom::Point topright     = bboxrect.corner(1);
+            Geom::Point bottomright  = bboxrect.corner(2);
+            Geom::Point bottomleft   = bboxrect.corner(3);
+            mask_box.clear();
+            mask_box.start(topleft);
+            mask_box.appendNew<Geom::LineSegment>(topright);
+            mask_box.appendNew<Geom::LineSegment>(bottomright);
+            mask_box.appendNew<Geom::LineSegment>(bottomleft);
+            mask_box.close();
+            setMask();
         }
-        Geom::Rect bboxrect = (*bbox);
-        bboxrect.expandBy(1);
-        Geom::Point topleft      = bboxrect.corner(0);
-        Geom::Point topright     = bboxrect.corner(1);
-        Geom::Point bottomright  = bboxrect.corner(2);
-        Geom::Point bottomleft   = bboxrect.corner(3);
-        mask_box.clear();
-        mask_box.start(topleft);
-        mask_box.appendNew<Geom::LineSegment>(topright);
-        mask_box.appendNew<Geom::LineSegment>(bottomright);
-        mask_box.appendNew<Geom::LineSegment>(bottomleft);
-        mask_box.close();
-        setMask();
     }
 }
 
