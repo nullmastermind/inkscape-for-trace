@@ -422,7 +422,7 @@ public:
     void tile(bool apply = true); //"Object to Pattern"
     void untile();
     void createBitmapCopy();
-    void setMask(bool apply_clip_path, bool apply_to_layer = false, bool skip_undo = false, bool inverse = false);
+    void setMask(bool apply_clip_path, bool apply_to_layer = false, bool skip_undo = false);
     void editMask(bool clip);
     void unsetMask(const bool apply_clip_path, const bool skip_undo = false);
     void setClipGroup();

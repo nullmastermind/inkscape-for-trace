@@ -395,6 +395,25 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
     }
 }
 
+void sp_inverse_powerclip(Inkscape::Selection *sel) {
+    if (!sel->isEmpty()) {
+        auto selList = sel->items();
+        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
+            SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
+            if (lpeitem) {
+                Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
+                Effect* lpe = lpeitem->getCurrentLPE();
+                lpe->getRepr()->setAttribute("is_inverse", "false");
+                lpe->getRepr()->setAttribute("is_visible", "true");
+                lpe->getRepr()->setAttribute("inverse", "true");
+                lpe->getRepr()->setAttribute("flatten", "false");
+                lpe->getRepr()->setAttribute("hide_clip", "false");
+                dynamic_cast<LPEPowerClip *>(lpe)->convertShapes();
+            }
+        }
+    }
+}
+
 }; //namespace LivePathEffect
 }; /* namespace Inkscape */
 

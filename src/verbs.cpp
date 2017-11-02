@@ -85,6 +85,9 @@
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 #include "ui/dialog/save-template-dialog.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;
@@ -1593,7 +1596,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->setMask(false, false);
             break;
         case SP_VERB_OBJECT_SET_INVERSE_MASK:
-            sel->setMask(false, false, false, true);
+            sel->setMask(false, false);
+            using Inkscape::LivePathEffect;
+            sp_inverse_powermask(sp_action_get_selection(action));
             break;
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
@@ -1605,7 +1610,9 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->setMask(true, false);
             break;
         case SP_VERB_OBJECT_SET_INVERSE_CLIPPATH:
-            sel->setMask(true, false, false, true);
+            sel->setMask(true, false);
+            using Inkscape::LivePathEffect;
+            sp_inverse_powerclip(sp_action_get_selection(action));
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();

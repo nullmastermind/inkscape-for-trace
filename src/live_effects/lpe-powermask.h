@@ -35,6 +35,9 @@ private:
     Geom::Path mask_box;
 };
 
+void sp_inverse_powermask(Inkscape::Selection *sel);
+
 } //namespace LivePathEffect
 } //namespace Inkscape
+
 #endif
