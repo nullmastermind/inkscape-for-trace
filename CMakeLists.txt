@@ -95,6 +95,7 @@ option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
+option(BUILD_SHARED_LIBS "Compile libraries as shared and not static" ON)
 
 option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
