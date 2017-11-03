@@ -430,6 +430,8 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         Inkscape::XML::Node *parent = item->getRepr()->parent();
         // remember id
         char const *id = item->getRepr()->attribute("id");
+        // remember class
+        char const *class_attr = item->getRepr()->attribute("class");        
         // remember title
         gchar *title = item->title();
         // remember description
@@ -444,6 +446,8 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
 
         // restore id
         repr->setAttribute("id", id);
+        // restore class
+        repr->setAttribute("class", class_attr);
         // add the new repr to the parent
         parent->appendChild(repr);
         SPObject* newObj = document->getObjectByRepr(repr);

@@ -398,7 +398,7 @@ guint32 sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 dfl)
      * this check wrapper. */
     gchar const *end = str;
     guint32 const ret = internal_sp_svg_read_color(str, &end, dfl);
-    assert(((ret == dfl) && (end == str))
+    g_assert(((ret == dfl) && (end == str))
            || (((ret & 0xff) == 0)
                && (str < end)));
     if (str < end) {
@@ -407,7 +407,7 @@ guint32 sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 dfl)
         buf[end - str] = '\0';
         gchar const *buf_end = buf;
         guint32 const check = internal_sp_svg_read_color(buf, &buf_end, 1);
-        assert(check == ret
+        g_assert(check == ret
                && buf_end - buf == end - str);
         g_free(buf);
 
@@ -425,7 +425,7 @@ guint32 sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 dfl)
  */
 static void rgb24_to_css(char *const buf, unsigned const rgb24)
 {
-    assert(rgb24 < (1u << 24));
+    g_assert(rgb24 < (1u << 24));
 
     /* SVG 1.1 Full allows additional colour names not supported by SVG Tiny, but we don't bother
      * with them: it's good for these colours to be copyable to non-SVG CSS stylesheets and for

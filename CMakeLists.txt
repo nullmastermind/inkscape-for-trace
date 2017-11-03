@@ -95,6 +95,7 @@ option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
+option(BUILD_SHARED_LIBS "Compile libraries as shared and not static" ON)
 
 option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
@@ -147,7 +148,7 @@ add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
 add_definitions(-DHAVE_TR1_UNORDERED_SET) # XXX make an option!
-if(NOT WIN32)
+if(BUILD_SHARED_LIBS AND NOT WIN32)
     add_definitions(-fPIC)
 endif()
 #
