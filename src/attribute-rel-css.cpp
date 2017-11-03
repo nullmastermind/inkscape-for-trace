@@ -25,7 +25,6 @@
 #include "path-prefix.h"
 #include "preferences.h"
 
-
 SPAttributeRelCSS * SPAttributeRelCSS::instance = NULL;
 bool SPAttributeRelCSS::foundFileProp = false;
 bool SPAttributeRelCSS::foundFileDefault = false;
