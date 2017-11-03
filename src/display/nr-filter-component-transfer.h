@@ -46,6 +46,8 @@ public:
     double amplitude[4];
     double exponent[4];
     double offset[4];
+
+    virtual Glib::ustring name() { return Glib::ustring("Component Transfer"); }
 };
 
 } /* namespace Filters */

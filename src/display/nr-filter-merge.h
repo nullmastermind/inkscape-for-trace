@@ -32,6 +32,8 @@ public:
     virtual void set_input(int input);
     virtual void set_input(int input, int slot);
 
+    virtual Glib::ustring name() { return Glib::ustring("Merge"); }
+
 private:
     std::vector<int> _input_image;
 };

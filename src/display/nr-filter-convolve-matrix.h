@@ -47,6 +47,8 @@ public:
     void set_edgeMode(FilterConvolveMatrixEdgeMode mode);    
     void set_preserveAlpha(bool pa);
 
+    virtual Glib::ustring name() { return Glib::ustring("Convolve Matrix"); }
+
 private:
     std::vector<double> kernelMatrix;
     int targetX, targetY;

@@ -35,6 +35,8 @@ public:
     virtual void set_scale(double s);
     virtual void set_channel_selector(int s, FilterDisplacementMapChannelSelector channel);
 
+    virtual Glib::ustring name() { return Glib::ustring("Displacement Map"); }
+
 private:
     double scale;
     int _input2;

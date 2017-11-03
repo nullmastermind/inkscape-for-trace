@@ -28,6 +28,8 @@ public:
     virtual void render_cairo(FilterSlot &slot);
     virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
     virtual double complexity(Geom::Affine const &ctm);
+
+    virtual Glib::ustring name() { return Glib::ustring("Tile"); }
 };
 
 } /* namespace Filters */

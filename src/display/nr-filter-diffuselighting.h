@@ -47,6 +47,8 @@ public:
     double surfaceScale;
     guint32 lighting_color;
 
+    virtual Glib::ustring name() { return Glib::ustring("Diffuse Lighting"); }
+
 private:
     SVGICCColor *icc;
 };
