@@ -86,7 +86,17 @@ Glib::ustring build_lines(Geom::Rect bounding_area,
 void
 Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    Inkscape::Selection * selection     = ((SPDesktop *)document)->selection;
+    SPDesktop *desktop = ((SPDesktop *)document);
+    Inkscape::Selection * selection = NULL;
+    if (desktop) {
+        selection = desktop->getSelection();
+        if (selection && !selection->params.empty()) {
+            selection->restoreBackup();
+            if (!desktop->on_live_extension) {
+                selection->emptyBackup();
+            }
+        }
+    }
 
     Geom::Rect bounding_area = Geom::Rect(Geom::Point(0,0), Geom::Point(100,100));
     if (selection->isEmpty()) {

@@ -54,9 +54,6 @@ private:
     Glib::RefPtr<Glib::MainLoop> _mainloop;
     /** \brief  The document that we're working on. */
     Inkscape::UI::View::View * _doc;
-    /** \brief  A list of the IDs of all the selected objects before
-                we started to work on this document. */
-    std::list<Glib::ustring> _selected;
     /** \brief  A document cache if we were passed one. */
     Implementation::ImplementationDocumentCache * _docCache;
 

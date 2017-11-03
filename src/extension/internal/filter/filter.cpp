@@ -122,8 +122,17 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 	}
 
 	//printf("Calling filter effect\n");
-    Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
-
+	SPDesktop *desktop = (SPDesktop *)document;
+    Inkscape::Selection * selection = NULL;
+	if (desktop) {
+	    selection = desktop->selection;
+        if (selection && !selection->params.empty()) {
+            selection->restoreBackup();
+            if (!desktop->on_live_extension) {
+                selection->emptyBackup();
+            }
+        }
+    }
     // TODO need to properly refcount the items, at least
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 

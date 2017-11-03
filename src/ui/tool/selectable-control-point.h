@@ -28,7 +28,9 @@ public:
     virtual Geom::Rect bounds() const {
         return Geom::Rect(position(), position());
     }
+    virtual void select(bool toselect);
     friend class NodeList;
+
 
 protected:
 
