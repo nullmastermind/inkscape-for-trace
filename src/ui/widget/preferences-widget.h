@@ -28,6 +28,8 @@
 #include <sigc++/sigc++.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
 #include <gtkmm/grid.h>
@@ -192,6 +194,16 @@ public:
     void init(Glib::ustring const &prefs_path, bool mask);
 protected:
     Glib::ustring _prefs_path;
+    void on_changed();
+};
+
+class PrefMultiEntry : public Gtk::ScrolledWindow
+{
+public:
+    void init(Glib::ustring const &prefs_path, int height);
+protected:
+    Glib::ustring       _prefs_path;
+    Gtk::TextView       _text;
     void on_changed();
 };
 

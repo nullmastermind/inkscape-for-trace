@@ -2,6 +2,10 @@
 #add your test here (do not put the .svg extension)
 set(RENDERING_TESTS 
     test-empty
+    test-glyph-y-pos
+    test-rtl-vertical
+    selector-important-002
+    selector-important-003
 )
 
 

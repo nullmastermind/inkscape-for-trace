@@ -17,8 +17,11 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <fontconfig/fontconfig.h>
+#include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
 #include <pango/pango-ot.h>
+#include "io/sys.h"
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "util/unordered-containers.h"
@@ -89,26 +92,20 @@ font_factory::font_factory(void) :
     nbEnt(0), // Note: this "ents" cache only keeps fonts from being unreffed, does not speed up access
     maxEnt(32),
     ents(static_cast<font_entry*>(g_malloc(maxEnt*sizeof(font_entry)))),
-
 #ifdef USE_PANGO_WIN32
     fontServer(pango_win32_font_map_for_display()),
-    fontContext(pango_win32_get_context()),
     pangoFontCache(pango_win32_font_map_get_font_cache(fontServer)),
     hScreenDC(pango_win32_get_dc()),
 #else
     fontServer(pango_ft2_font_map_new()),
-    fontContext(0),
 #endif
+    fontContext(pango_font_map_create_context(fontServer)),
     fontSize(512),
     loadedPtr(new FaceMapType())
 {
-#ifdef USE_PANGO_WIN32
-#else
+#ifndef USE_PANGO_WIN32
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer),
                                       72, 72);
-    
-    fontContext = pango_font_map_create_context(fontServer);
-
     pango_ft2_font_map_set_default_substitute(PANGO_FT2_FONT_MAP(fontServer),
                                               FactorySubstituteFunc,
                                               this,
@@ -627,6 +624,154 @@ Glib::ustring extract_tag( guint32 *tag ) {
     return tag_name;
 }
 
+// Extract which OpenType tables are in the font. A list of all tables (regardless of which script and langauge
+// they are in) will be stored as a std::map in the openTypeTables field of the font_instance
+// This Harfbuzz code replaces an earlier Pango version as the Pango functions are deprecated.
+void extract_openTypeTables(font_instance *res) {
+    // Empty map... bitmap fonts seem to be loaded multiple times.
+    res->openTypeTables.clear();
+
+#ifndef USE_PANGO_WIN32
+    auto const face = hb_ft_face_create(res->theFace, NULL);
+
+    // First time to get size of array
+    auto script_count = hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, NULL, NULL);
+    auto const scripts_hb = g_new(hb_tag_t, script_count + 1);
+
+    // Second time to fill array (this two step process was not necessary with Pango).
+    hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, &script_count, scripts_hb);
+
+    for(unsigned int i = 0; i < script_count; ++i) {
+        auto language_count = hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, NULL, NULL);
+
+        if(language_count > 0) {
+            auto const languages_hb = g_new(hb_tag_t, language_count + 1);
+            hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, &language_count, languages_hb);
+
+            for(unsigned int j = 0; j < language_count; ++j) {
+                auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, NULL, NULL);
+                auto const features_hb = g_new(hb_tag_t, feature_count + 1);
+                hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, &feature_count, features_hb);
+
+                for(unsigned int k = 0; k < feature_count; ++k) {
+                    ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
+                }
+
+                g_free(features_hb);
+            }
+
+            g_free(languages_hb);
+        }
+        else {
+            // Even if no languages are present there is still the default.
+            auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
+                                                                        HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
+                                                                        0, NULL, NULL);
+            auto const features_hb = g_new(hb_tag_t, feature_count + 1); 
+            hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
+                                                   HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
+                                                   0, &feature_count, features_hb);
+
+            for(unsigned int k = 0; k < feature_count; ++k) {
+                ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
+            }
+
+            g_free(features_hb);
+        }
+    }
+
+// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
+// but this was only released in harfbuzz >= 0.9.30
+// #if HB_VERSION_ATLEAST(1,2,3)
+#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
+    // Find glyphs in OpenType substitution tables ('gsub').
+    // Note that pango's functions are just dummies. Must use harfbuzz.
+
+    // Loop over all tables
+    for (auto table: res->openTypeTables) {
+
+        // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
+        if (table.first == "salt" ||
+            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't') ) ) {
+            // std::cout << " Table: " << table.first << std::endl;
+
+            Glib::ustring unicode_characters;
+
+            unsigned int feature_index;
+            if (  hb_ot_layout_language_find_feature (face, HB_OT_TAG_GSUB,
+                                                      0,  // Assume one script exists with index 0
+                                                      HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
+                                                      HB_TAG(table.first[0],
+                                                             table.first[1],
+                                                             table.first[2],
+                                                             table.first[3]),
+                                                      &feature_index ) ) {
+
+                // std::cout << "  Found feature, number: " << feature_index << std::endl;
+                unsigned int lookup_indexes[32]; 
+                unsigned int lookup_count = 32;
+                int count = hb_ot_layout_feature_get_lookups (face, HB_OT_TAG_GSUB,
+                                                              feature_index,
+                                                              0, // Start
+                                                              &lookup_count,
+                                                              lookup_indexes );
+                // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
+
+                if (count > 0) {
+                    hb_set_t* glyphs_before = NULL; // hb_set_create();
+                    hb_set_t* glyphs_input  = hb_set_create();
+                    hb_set_t* glyphs_after  = NULL; // hb_set_create();
+                    hb_set_t* glyphs_output = NULL; // hb_set_create();
+
+                    // For now, just look at first index
+                    hb_ot_layout_lookup_collect_glyphs (face, HB_OT_TAG_GSUB,
+                                                        lookup_indexes[0],
+                                                        glyphs_before,
+                                                        glyphs_input,
+                                                        glyphs_after,
+                                                        glyphs_output );
+
+                    hb_font_t *font = hb_font_create (face);
+
+                    // Without this, all functions return 0, etc.
+                    hb_ft_font_set_funcs (font);
+
+                    hb_codepoint_t codepoint = -1;
+                    while (hb_set_next (glyphs_input, &codepoint)) {
+
+                        // There is a unicode to glyph mapping function but not the inverse!
+                        for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
+                            hb_codepoint_t glyph = 0;
+                            hb_font_get_nominal_glyph (font, unicode_i, &glyph);
+                            if ( glyph == codepoint) {
+                                unicode_characters += (gunichar)unicode_i;
+                                continue;
+                            }
+                        }
+                    }
+                    res->openTypeSubstitutions[table.first] = unicode_characters;
+
+                    hb_set_destroy (glyphs_input);
+                    hb_font_destroy (font);
+                }
+            } else {
+                // std::cout << "  Did not find '" << table.first << "'!" << std::endl;
+            }
+        }
+    }
+    // for (auto table: res->openTypeSubstitutions) {
+    //     std::cout << table.first << ": " << table.second << std::endl;
+    // }
+#else
+    std::cerr << "Requires Harfbuzz 1.2.3 for visualizing alternative glyph OpenType tables. "
+              << "Compiled with: " << HB_VERSION_STRING << "." << std::endl;
+#endif
+
+    hb_face_destroy (face);
+    g_free(scripts_hb);
+#endif // USE_PANGO_WIN32
+}
+
 font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
 {
 #ifdef USE_PANGO_WIN32
@@ -685,157 +830,18 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             // no match
             if ( canFail ) {
                 PANGO_DEBUG("falling back to 'sans-serif'\n");
-                descr = pango_font_description_new();
-                pango_font_description_set_family(descr,"sans-serif");
-                res = Face(descr,false);
-                pango_font_description_free(descr);
+                PangoFontDescription *new_descr = pango_font_description_new();
+                pango_font_description_set_family(new_descr, "sans-serif");
+                res = Face(new_descr, false);
+                pango_font_description_free(new_descr);
+            } else {
+                g_critical("Could not load any face for font '%s'.", pango_font_description_to_string(descr));
             }
         }
 
-        // Extract which OpenType tables are in the font. We'll make a list of all tables
-        // regardless of which script and langauge they are in.  This Harfbuzz code replaces
-        // an earlier Pango version as the Pango functions are deprecated.
-
-        // Empty map... bitmap fonts seem to be loaded multiple times.
-        res->openTypeTables.clear();
-
-        auto const face = hb_ft_face_create(res->theFace, NULL);
-
-        // First time to get size of array
-        auto script_count = hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, NULL, NULL);
-        auto const scripts_hb = g_new(hb_tag_t, script_count + 1);
-
-        // Second time to fill array (this two step process was not necessary with Pango).
-        hb_ot_layout_table_get_script_tags(face, HB_OT_TAG_GSUB, 0, &script_count, scripts_hb);
-
-        for(unsigned int i = 0; i < script_count; ++i) {
-            auto language_count = hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, NULL, NULL);
-
-            if(language_count > 0) {
-                auto const languages_hb = g_new(hb_tag_t, language_count + 1);
-                hb_ot_layout_script_get_language_tags(face, HB_OT_TAG_GSUB, i, 0, &language_count, languages_hb);
-
-                for(unsigned int j = 0; j < language_count; ++j) {
-                    auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, NULL, NULL);
-                    auto const features_hb = g_new(hb_tag_t, feature_count + 1);
-                    hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i, j, 0, &feature_count, features_hb);
-
-                    for(unsigned int k = 0; k < feature_count; ++k) {
-                        ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
-                    }
-
-                    g_free(features_hb);
-                }
-
-                g_free(languages_hb);
-            }
-            else {
-                // Even if no languages are present there is still the default.
-                auto feature_count = hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
-                                                                            HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                                            0, NULL, NULL);
-                auto const features_hb = g_new(hb_tag_t, feature_count + 1); 
-                hb_ot_layout_language_get_feature_tags(face, HB_OT_TAG_GSUB, i,
-                                                       HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                       0, &feature_count, features_hb);
-
-                for(unsigned int k = 0; k < feature_count; ++k) {
-                    ++(res->openTypeTables[ extract_tag(&features_hb[k])]);
-                }
-
-                g_free(features_hb);
-            }
+        if (res) {
+            extract_openTypeTables(res);
         }
-
-// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
-// but this was only released in harfbuzz >= 0.9.30
-// #if HB_VERSION_ATLEAST(1,2,3)
-#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
-        // Find glyphs in OpenType substitution tables ('gsub').
-        // Note that pango's functions are just dummies. Must use harfbuzz.
-
-        // Loop over all tables
-        for (auto table: res->openTypeTables) {
-
-            // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
-            if (table.first == "salt" ||
-                (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't') ) ) {
-                // std::cout << " Table: " << table.first << std::endl;
-
-                Glib::ustring unicode_characters;
-
-                unsigned int feature_index;
-                if (  hb_ot_layout_language_find_feature (face, HB_OT_TAG_GSUB,
-                                                          0,  // Assume one script exists with index 0
-                                                          HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                          HB_TAG(table.first[0],
-                                                                 table.first[1],
-                                                                 table.first[2],
-                                                                 table.first[3]),
-                                                          &feature_index ) ) {
-
-                    // std::cout << "  Found feature, number: " << feature_index << std::endl;
-                    unsigned int lookup_indexes[32]; 
-                    unsigned int lookup_count = 32;
-                    int count = hb_ot_layout_feature_get_lookups (face, HB_OT_TAG_GSUB,
-                                                                  feature_index,
-                                                                  0, // Start
-                                                                  &lookup_count,
-                                                                  lookup_indexes );
-                    // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
-
-                    if (count > 0) {
-                        hb_set_t* glyphs_before = NULL; // hb_set_create();
-                        hb_set_t* glyphs_input  = hb_set_create();
-                        hb_set_t* glyphs_after  = NULL; // hb_set_create();
-                        hb_set_t* glyphs_output = NULL; // hb_set_create();
-
-                        // For now, just look at first index
-                        hb_ot_layout_lookup_collect_glyphs (face, HB_OT_TAG_GSUB,
-                                                            lookup_indexes[0],
-                                                            glyphs_before,
-                                                            glyphs_input,
-                                                            glyphs_after,
-                                                            glyphs_output );
-
-                        hb_font_t *font = hb_font_create (face);
-
-                        // Without this, all functions return 0, etc.
-                        hb_ft_font_set_funcs (font);
-
-                        hb_codepoint_t codepoint = -1;
-                        while (hb_set_next (glyphs_input, &codepoint)) {
-
-                            // There is a unicode to glyph mapping function but not the inverse!
-                            for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
-                                hb_codepoint_t glyph = 0;
-                                hb_font_get_nominal_glyph (font, unicode_i, &glyph);
-                                if ( glyph == codepoint) {
-                                    unicode_characters += (gunichar)unicode_i;
-                                    continue;
-                                }
-                            }
-                        }
-                        res->openTypeSubstitutions[table.first] = unicode_characters;
-
-                        hb_set_destroy (glyphs_input);
-                        hb_font_destroy (font);
-                    }
-                } else {
-                    // std::cout << "  Did not find '" << table.first << "'!" << std::endl;
-                }
-            }
-        }
-        // for (auto table: res->openTypeSubstitutions) {
-        //     std::cout << table.first << ": " << table.second << std::endl;
-        // }
-#else
-        std::cerr << "Requires Harfbuzz 1.2.3 for visualizing alternative glyph OpenType tables. "
-                  << "Compiled with: " << HB_VERSION_STRING << "." << std::endl;
-#endif
-
-        hb_face_destroy (face);
-        g_free(scripts_hb);
     } else {
         // already here
         res = loadedFaces[descr];
@@ -909,6 +915,70 @@ void font_factory::AddInCache(font_instance *who)
     ents[nbEnt].f = who;
     ents[nbEnt].age = 1.0;
     nbEnt++;
+}
+
+void font_factory::AddFontsDir(char const *utf8dir)
+{
+#ifdef USE_PANGO_WIN32
+    g_info("Adding additional font directories only supported for fontconfig backend.");
+#else
+    if (!Inkscape::IO::file_test(utf8dir, G_FILE_TEST_IS_DIR)) {
+        g_warning("Fonts dir '%s' does not exist and will be ignored.", utf8dir);
+        return;
+    }
+
+    gchar *dir;
+# ifdef WIN32
+    dir = g_win32_locale_filename_from_utf8(utf8dir);
+# else
+    dir = g_filename_from_utf8(utf8dir, -1, NULL, NULL, NULL);
+# endif
+
+    FcConfig *conf = NULL;
+# if PANGO_VERSION_CHECK(1,38,0)
+    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+# endif
+    FcBool res = FcConfigAppFontAddDir(conf, (FcChar8 const *)dir);
+    if (res == FcTrue) {
+        g_info("Fonts dir '%s' added successfully.", utf8dir);
+    } else {
+        g_warning("Could not add fonts dir '%s'.", utf8dir);
+    }
+
+    g_free(dir);
+#endif
+}
+
+void font_factory::AddFontFile(char const *utf8file)
+{
+#ifdef USE_PANGO_WIN32
+    g_info("Adding additional font only supported for fontconfig backend.");
+#else
+    if (!Inkscape::IO::file_test(utf8file, G_FILE_TEST_IS_REGULAR)) {
+        g_warning("Font file '%s' does not exist and will be ignored.", utf8file);
+        return;
+    }
+
+    gchar *file;
+# ifdef WIN32
+    file = g_win32_locale_filename_from_utf8(utf8file);
+# else
+    file = g_filename_from_utf8(utf8file, -1, NULL, NULL, NULL);
+# endif
+
+    FcConfig *conf = NULL;
+# if PANGO_VERSION_CHECK(1,38,0)
+    conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
+# endif
+    FcBool res = FcConfigAppFontAddFile(conf, (FcChar8 const *)file);
+    if (res == FcTrue) {
+        g_info("Font file '%s' added successfully.", utf8file);
+    } else {
+        g_warning("Could not add font file '%s'.", utf8file);
+    }
+
+    g_free(file);
+#endif
 }
 
 /*

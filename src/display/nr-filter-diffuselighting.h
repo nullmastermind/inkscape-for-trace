@@ -7,7 +7,7 @@
  * Authors:
  *   Niko Kiirala <niko@kiirala.com>
  *   Jean-Rene Reinhard <jr@komite.net>
- * 
+ *
  * Copyright (C) 2007 authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -26,7 +26,7 @@ typedef unsigned int guint32;
 
 namespace Inkscape {
 namespace Filters {
-    
+
 class FilterDiffuseLighting : public FilterPrimitive {
 public:
     FilterDiffuseLighting();
@@ -54,7 +54,7 @@ private:
 } /* namespace Filters */
 } /* namespace Inkscape */
 
-#endif /* __NR_FILTER_DIFFUSELIGHTING_H__ */
+#endif /* SEEN_NR_FILTER_DIFFUSELIGHTING_H */
 /*
   Local Variables:
   mode:c++

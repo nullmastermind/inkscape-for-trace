@@ -12,8 +12,6 @@
 
 #include "event-log.h"
 #include <glibmm/i18n.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 #include "desktop.h"
 #include "inkscape.h"
@@ -60,9 +58,9 @@ public:
     Inkscape::EventLog::CallbackMap *_callbacks;
 };
 
-void addBlocker(std::vector<boost::shared_ptr<SignalBlocker> > &blockers, sigc::connection *connection)
+void addBlocker(std::vector<std::unique_ptr<SignalBlocker> > &blockers, sigc::connection *connection)
 {
-    blockers.push_back(boost::make_shared<SignalBlocker>(connection));
+    blockers.emplace_back(new SignalBlocker(connection));
 }
 
 
@@ -98,7 +96,7 @@ public:
             dlg._event_list_selection->set_mode(Gtk::SELECTION_SINGLE);
 
             {
-                std::vector<boost::shared_ptr<SignalBlocker> > blockers;
+                std::vector<std::unique_ptr<SignalBlocker> > blockers;
                 addBlocker(blockers, &(*dlg._callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
                 addBlocker(blockers, &(*dlg._callback_connections)[Inkscape::EventLog::CALLB_EXPAND]);
 
@@ -119,7 +117,7 @@ public:
 
     void collapseRow(Gtk::TreeModel::Path const &path)
     {
-        std::vector<boost::shared_ptr<SignalBlocker> > blockers;
+        std::vector<std::unique_ptr<SignalBlocker> > blockers;
         for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
         {
             addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
@@ -134,7 +132,7 @@ public:
 
     void selectRow(Gtk::TreeModel::Path const &path)
     {
-        std::vector<boost::shared_ptr<SignalBlocker> > blockers;
+        std::vector<std::unique_ptr<SignalBlocker> > blockers;
         for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
         {
             addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
@@ -152,7 +150,7 @@ public:
     void clearEventList(Glib::RefPtr<Gtk::TreeStore> eventListStore)
     {
         if (eventListStore) {
-            std::vector<boost::shared_ptr<SignalBlocker> > blockers;
+            std::vector<std::unique_ptr<SignalBlocker> > blockers;
             for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
             {
                 addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);

@@ -104,12 +104,16 @@ void ObjectSet::_removeDescendantsFromSet(SPObject *object) {
     }
 }
 
-void ObjectSet::_remove(SPObject *object) {
+void ObjectSet::_disconnect(SPObject *object) {
     _releaseConnections[object].disconnect();
     _releaseConnections.erase(object);
-    _container.get<hashed>().erase(object);
     _remove3DBoxesRecursively(object);
     _releaseSignals(object);
+}
+
+void ObjectSet::_remove(SPObject *object) {
+    _disconnect(object);
+    _container.get<hashed>().erase(object);
 }
 
 void ObjectSet::_add(SPObject *object) {
@@ -120,9 +124,9 @@ void ObjectSet::_add(SPObject *object) {
 }
 
 void ObjectSet::_clear() {
-    for (auto object: _container) {
-        _remove(object);
-    }
+    for (auto object: _container)
+        _disconnect(object);
+    _container.clear();
 }
 
 SPObject *ObjectSet::_getMutualAncestor(SPObject *object) {

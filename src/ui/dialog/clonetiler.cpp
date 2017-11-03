@@ -1993,18 +1993,16 @@ void CloneTiler::remove(bool do_undo/* = true*/)
     SPObject *parent = obj->parent;
 
 // remove old tiling
-    GSList *to_delete = NULL;
+    std::vector<SPObject *> to_delete;
     for (auto& child: parent->children) {
         if (is_a_clone_of (&child, obj)) {
-            to_delete = g_slist_prepend (to_delete, &child);
+            to_delete.push_back(&child);
         }
     }
-    for (GSList *i = to_delete; i; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (auto obj:to_delete) {
         g_assert(obj != NULL);
         obj->deleteObject();
     }
-    g_slist_free (to_delete);
 
     change_selection (selection);
 
@@ -2639,11 +2637,10 @@ void CloneTiler::reset_recursive(GtkWidget *w)
     }
 
     if (GTK_IS_CONTAINER(w)) {
-        GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
-        for (GList *i = ch; i != NULL; i = i->next) {
-            reset_recursive (GTK_WIDGET(i->data));
+        std::vector<Gtk::Widget*> c = Glib::wrap(GTK_CONTAINER(w))->get_children();
+        for ( auto i : c ) {
+            reset_recursive(i->gobj());
         }
-        g_list_free (ch);
     }
 }
 

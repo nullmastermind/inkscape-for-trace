@@ -3114,7 +3114,7 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_CLONETILER, "DialogClonetiler", N_("Create Tiled Clones..."),
                    N_("Create multiple clones of selected object, arranging them into a pattern or scattering"), INKSCAPE_ICON("dialog-tile-clones")),
     new DialogVerb(SP_VERB_DIALOG_ATTR, "DialogObjectAttributes", N_("_Object attributes..."),
-                   N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-attributes")),
+                   N_("Edit the object attributes..."), INKSCAPE_ICON("dialog-object-properties")),
     new DialogVerb(SP_VERB_DIALOG_ITEM, "DialogObjectProperties", N_("_Object Properties..."),
                    N_("Edit the ID, locked and visible status, and other object properties"), INKSCAPE_ICON("dialog-object-properties")),
     new DialogVerb(SP_VERB_DIALOG_INPUT, "DialogInput", N_("_Input Devices..."),

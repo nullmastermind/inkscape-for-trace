@@ -32,6 +32,7 @@
 #include "attributes.h"
 #include "sp-item-transform.h"
 #include "sp-root.h"
+#include "sp-rect.h"
 #include "sp-offset.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
@@ -55,11 +56,11 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
+static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write);
 
 SPGroup::SPGroup() : SPLPEItem(),
     _expanded(false),
-    _insertBottom(false),
+    _insert_bottom(false),
     _layer_mode(SPGroup::GROUP)
 {
 }
@@ -225,7 +226,7 @@ void SPGroup::modified(guint flags) {
 
 Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         if (!repr) {
             if (dynamic_cast<SPSwitch *>(this)) {
@@ -235,22 +236,18 @@ Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::
             }
         }
 
-        l = NULL;
-
         for (auto& child: children) {
             if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
                 if (crepr) {
-                    l = g_slist_prepend (l, crepr);
+                    l.push_back(crepr);
                 }
             }
         }
-
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
@@ -509,8 +506,8 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     group->removeAllPathEffects(false);
 
     /* Step 1 - generate lists of children objects */
-    GSList *items = NULL;
-    GSList *objects = NULL;
+    std::vector<Inkscape::XML::Node *> items;
+    std::vector<Inkscape::XML::Node *> objects;
     Geom::Affine const g(group->transform);
 
     for (auto& child: group->children) {
@@ -601,11 +598,11 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             }
             g_free(affinestr);
 
-            items = g_slist_prepend (items, nrepr);
+            items.push_back(nrepr);
 
         } else {
             Inkscape::XML::Node *nrepr = child.getRepr()->duplicate(prepr->document());
-            objects = g_slist_prepend (objects, nrepr);
+            objects.push_back(nrepr);
         }
     }
 
@@ -617,21 +614,20 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     group->deleteObject(true, false);
 
     /* Step 3 - add nonitems */
-    if (objects) {
+    if (!objects.empty()) {
         Inkscape::XML::Node *last_def = defs->getRepr()->lastChild();
-        while (objects) {
-            Inkscape::XML::Node *repr = (Inkscape::XML::Node *) objects->data;
+        for (auto i=objects.rbegin();i!=objects.rend();++i) {
+            Inkscape::XML::Node *repr = *i; 
             if (!sp_repr_is_meta_element(repr)) {
                 defs->getRepr()->addChild(repr, last_def);
             }
             Inkscape::GC::release(repr);
-            objects = g_slist_remove (objects, objects->data);
         }
     }
 
     /* Step 4 - add items */
-    while (items) {
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) items->data;
+    for (auto i=items.rbegin();i!=items.rend();++i) {
+        Inkscape::XML::Node *repr = *i;
         // add item
         prepr->appendChild(repr);
         // restore position; since the items list was prepended (i.e. reverse), we now add
@@ -642,14 +638,13 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));
 
         if (item) {
-            item->doWriteTransform(repr, item->transform, NULL, false);
+            item->doWriteTransform(item->transform, NULL, false);
             children.insert(children.begin(),item);
         } else {
             g_assert_not_reached();
         }
 
         Inkscape::GC::release(repr);
-        items = g_slist_remove (items, items->data);
     }
 
     if (do_done) {
@@ -712,8 +707,8 @@ void SPGroup::setExpanded(bool isexpanded) {
 }
 
 void SPGroup::setInsertBottom(bool insertbottom) {
-    if ( _insertBottom != insertbottom) {
-        _insertBottom = insertbottom;
+    if ( _insert_bottom != insertbottom) {
+        _insert_bottom = insertbottom;
     }
 }
 
@@ -784,24 +779,24 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                            tAff[4] = 0.0;
                            tAff[5] = 0.0;
                         }
-                        item->doWriteTransform(item->getRepr(), tAff, NULL, true);
+                        item->doWriteTransform(tAff, NULL, true);
                     } else {
                         // used for other import
-                        SPItem *subItem = NULL;
+                        SPItem *sub_item = NULL;
                         if (item->clip_ref->getObject()) {
-                            subItem = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
+                            sub_item = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
                         }
-                        if (subItem != NULL) {
-                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
+                        if (sub_item != NULL) {
+                            sub_item->doWriteTransform(sub_item->transform*sc, NULL, true);
                         }
-                        subItem = NULL;
+                        sub_item = NULL;
                         if (item->mask_ref->getObject()) {
-                            subItem = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
+                            sub_item = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
                         }
-                        if (subItem != NULL) {
-                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
+                        if (sub_item != NULL) {
+                            sub_item->doWriteTransform(sub_item->transform*sc, NULL, true);
                         }
-                        item->doWriteTransform(item->getRepr(), sc.inverse()*item->transform*sc, NULL, true);
+                        item->doWriteTransform(sc.inverse()*item->transform*sc, NULL, true);
                         group->scaleChildItemsRec(sc, p, false);
                     }
                 } else {
@@ -812,10 +807,10 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                         Geom::Affine final = s.inverse() * sc * s;
                         
                         gchar const *conn_type = NULL;
-                        SPText *textItem = dynamic_cast<SPText *>(item);
-                        bool isTextTextpath = textItem && textItem->firstChild() && dynamic_cast<SPTextPath *>(textItem->firstChild());
-                        if (isTextTextpath) {
-                            textItem->optimizeTextpathText();
+                        SPText *text_item = dynamic_cast<SPText *>(item);
+                        bool is_text_path = text_item && text_item->firstChild() && dynamic_cast<SPTextPath *>(text_item->firstChild());
+                        if (is_text_path) {
+                            text_item->optimizeTextpathText();
                         } else {
                             SPFlowtext *flowText = dynamic_cast<SPFlowtext *>(item);
                             if (flowText) {
@@ -838,24 +833,24 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                         Persp3D *persp = dynamic_cast<Persp3D *>(item);
                         if (persp) {
                             persp3d_apply_affine_transformation(persp, final);
-                        } else if (isTextTextpath && !item->transform.isIdentity()) {
+                        } else if (is_text_path && !item->transform.isIdentity()) {
                             // Save and reset current transform
                             Geom::Affine tmp(item->transform);
                             item->transform = Geom::Affine();
                             // Apply scale
                             item->set_i2d_affine(item->i2dt_affine() * sc);
-                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            item->doWriteTransform(item->transform, NULL, true);
                             // Scale translation and restore original transform
                             tmp[4] *= sc[0];
                             tmp[5] *= sc[1];
-                            item->doWriteTransform(item->getRepr(), tmp, NULL, true);
+                            item->doWriteTransform(tmp, NULL, true);
                         } else if (dynamic_cast<SPUse *>(item)) {
                             // calculate the matrix we need to apply to the clone
                             // to cancel its induced transform from its original
                             Geom::Affine move = final.inverse() * item->transform * final;
-                            item->doWriteTransform(item->getRepr(), move, &move, true);
+                            item->doWriteTransform(move, &move, true);
                         } else {
-                            item->doWriteTransform(item->getRepr(), item->transform*sc, NULL, true);
+                            item->doWriteTransform(item->transform*sc, NULL, true);
                         }
                         
                         if (conn_type != NULL) {
@@ -907,11 +902,11 @@ void SPGroup::update_patheffect(bool write) {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-        SPObject *subitem = *iter;
+        SPObject *sub_item = *iter;
 
-        SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(subitem);
-        if (lpeItem) {
-            lpeItem->update_patheffect(write);
+        SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
+        if (lpe_item) {
+            lpe_item->update_patheffect(write);
         }
     }
 
@@ -939,36 +934,54 @@ void SPGroup::update_patheffect(bool write) {
 }
 
 static void
-sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
+sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
 {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-        SPObject *subitem = *iter;
+        SPObject *sub_item = *iter;
 
-        SPGroup *subGroup = dynamic_cast<SPGroup *>(subitem);
-        if (subGroup) {
-            sp_group_perform_patheffect(subGroup, topgroup, write);
+        SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
+        if (sub_group) {
+            sp_group_perform_patheffect(sub_group, top_group, write);
         } else {
-            SPShape *subShape = dynamic_cast<SPShape *>(subitem);
-            if (subShape) {
+            SPShape *sub_shape = dynamic_cast<SPShape *>(sub_item);
+            if (sub_shape) {
                 SPCurve * c = NULL;
-
-                SPPath *subPath = dynamic_cast<SPPath *>(subShape);
-                if (subPath) {
-                    c = subPath->get_original_curve();
-                } else {
-                    c = subShape->getCurve();
+                // If item is a SPRect, convert it to path first:
+                if ( dynamic_cast<SPRect *>(sub_shape) ) {
+                    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                    if (desktop) {
+                        Inkscape::Selection *sel = desktop->getSelection();
+                        if ( sel && !sel->isEmpty() ) {
+                            sel->clear();
+                            sel->add(SP_ITEM(sub_shape));
+                            sel->toCurves();
+                            sub_item = sel->singleItem();
+                            sub_shape = dynamic_cast<SPShape *>(sub_item);
+                            if (!sub_shape) {
+                                continue;
+                            }
+                            sel->clear();
+                            sel->add(SP_ITEM(top_group));
+                        }
+                    }
                 }
+                c = sub_shape->getCurve();
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {
-                    c->transform(i2anc_affine(subitem, topgroup));
-                    success = topgroup->performPathEffect(c, subShape);
-                    c->transform(i2anc_affine(subitem, topgroup).inverse());
-                    Inkscape::XML::Node *repr = subitem->getRepr();
+                    c->transform(i2anc_affine(sub_item, top_group));
+                    success = top_group->performPathEffect(c, sub_shape);
+                    c->transform(i2anc_affine(sub_item, top_group).inverse());
+                    Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        subShape->setCurve(c, TRUE);
+                        SPPath *sub_path = dynamic_cast<SPPath *>(sub_item);
+                        if (!sub_path) {
+                            sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
+                            sub_shape->setCurve(c, TRUE);
+                            sub_shape->setCurveInsync( c, TRUE);
+                        }
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
@@ -984,7 +997,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
                             Geom::PathVector pv = sp_svg_read_pathv(value);
                             SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                             if (oldcurve) {
-                                subShape->setCurve(oldcurve, TRUE);
+                                sub_shape->setCurve(oldcurve, TRUE);
                                 oldcurve->unref();
                             }
                         }

@@ -21,7 +21,6 @@ namespace Tools {
 DynamicBase::DynamicBase(gchar const *const *cursor_shape)
     : ToolBase(cursor_shape)
     , accumulated(NULL)
-    , segments(NULL)
     , currentshape(NULL)
     , currentcurve(NULL)
     , cal1(NULL)
@@ -62,10 +61,10 @@ DynamicBase::~DynamicBase() {
         this->accumulated = 0;
     }
 
-    while (this->segments) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
-        this->segments = g_slist_remove(this->segments, this->segments->data);
+    for (auto i:segments) {
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
     }
+    segments.clear();
 
     if (this->currentcurve) {
         this->currentcurve = this->currentcurve->unref();

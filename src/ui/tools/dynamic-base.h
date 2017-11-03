@@ -20,6 +20,7 @@
  */
 
 #include "ui/tools/tool-base.h"
+#include "display/sp-canvas-item.h"
 
 struct SPCanvasItem;
 class SPCurve;
@@ -48,7 +49,7 @@ protected:
     SPCurve *accumulated;
 
     /** canvas items for "committed" segments */
-    GSList *segments;
+    std::vector<SPCanvasItem*> segments;
 
     /** canvas item for red "leading" segment */
     SPCanvasItem *currentshape;

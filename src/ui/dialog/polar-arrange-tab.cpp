@@ -140,7 +140,7 @@ static void rotateAround(SPItem *item, Geom::Point center, Geom::Rotate const &r
     center = item->getCenter();
 
 	item->set_i2d_affine(item->i2dt_affine() * affine);
-	item->doWriteTransform(item->getRepr(), item->transform);
+	item->doWriteTransform(item->transform);
 
 	if(item->isCenterSet())
 	{

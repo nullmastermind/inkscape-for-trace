@@ -171,7 +171,7 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
     this->attributes.writeTo(repr);
 
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr=NULL;
@@ -185,14 +185,13 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
             }
 
             if ( c_repr ) {
-                l = g_slist_prepend(l, c_repr);
+                l.push_back(c_repr);
             }
         }
 
-        while ( l ) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i = l.rbegin(); i!= l.rend(); ++i) {
+            repr->addChild((*i), NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
@@ -395,7 +394,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node* c_repr=NULL;
@@ -409,14 +408,13 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
             }
 
             if ( c_repr ) {
-                l = g_slist_prepend(l, c_repr);
+                l.push_back(c_repr);
             }
         }
 
-        while ( l ) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for( auto i = l.rbegin(); i != l.rend(); ++i ) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
@@ -462,24 +460,23 @@ void sp_textpath_to_text(SPObject *tp)
     xy *= tp->document->getDocumentScale().inverse(); // Convert to user-units.
     
     // make a list of textpath children
-    GSList *tp_reprs = NULL;
+    std::vector<Inkscape::XML::Node *> tp_reprs;
 
     for (auto& o: tp->children) {
-        tp_reprs = g_slist_prepend(tp_reprs, o.getRepr());
+        tp_reprs.push_back(o.getRepr());
     }
 
-    for ( GSList *i = tp_reprs ; i ; i = i->next ) {
+    for (auto i = tp_reprs.rbegin(); i != tp_reprs.rend(); ++i) {
         // make a copy of each textpath child
-        Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) i->data)->duplicate(text->getRepr()->document());
+        Inkscape::XML::Node *copy = (*i)->duplicate(text->getRepr()->document());
         // remove the old repr from under textpath
-        tp->getRepr()->removeChild((Inkscape::XML::Node *) i->data);
+        tp->getRepr()->removeChild(*i);
         // put its copy under text
         text->getRepr()->addChild(copy, NULL); // fixme: copy id
     }
 
     //remove textpath
     tp->deleteObject();
-    g_slist_free(tp_reprs);
 
     // set x/y on text (to be near where it was when on path)
     /* fixme: Yuck, is this really the right test? */

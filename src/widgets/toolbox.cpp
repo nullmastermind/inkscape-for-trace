@@ -795,13 +795,10 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
     SPDesktop *old_desktop = static_cast<SPDesktop*>(ptr);
 
     if (old_desktop) {
-        GList *children, *iter;
-
-        children = gtk_container_get_children(GTK_CONTAINER(toolbox));
-        for ( iter = children ; iter ; iter = iter->next ) {
-            gtk_container_remove( GTK_CONTAINER(toolbox), GTK_WIDGET(iter->data) );
+        std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(toolbox))->get_children();
+        for ( auto i:children ) {
+            gtk_container_remove( GTK_CONTAINER(toolbox), i->gobj() );
         }
-        g_list_free(children);
     }
 
     g_object_set_data(G_OBJECT(toolbox), "desktop", (gpointer)desktop);
@@ -894,20 +891,20 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
                 g_message("                is a BOX");
 #endif // DUMP_DETAILS
 
-                GList* children = gtk_container_get_children(GTK_CONTAINER(child));
-                if (children) {
-                    for (GList* curr = children; curr; curr = g_list_next(curr)) {
-                        GtkWidget* child2 = GTK_WIDGET(curr->data);
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
+                if (!children.empty()) {
+                    for (auto curr:children) {
+                        GtkWidget* child2 = curr->gobj();
 #if DUMP_DETAILS
                         GType type3 = G_OBJECT_TYPE(child2);
                         g_message("                child2   [%s]", g_type_name(type3));
 #endif // DUMP_DETAILS
 
                         if (GTK_IS_CONTAINER(child2)) {
-                            GList* children2 = gtk_container_get_children(GTK_CONTAINER(child2));
-                            if (children2) {
-                                for (GList* curr2 = children2; curr2; curr2 = g_list_next(curr2)) {
-                                    GtkWidget* child3 = GTK_WIDGET(curr2->data);
+                            std::vector<Gtk::Widget*> children2 = Glib::wrap(GTK_CONTAINER(child2))->get_children();
+                            if (!children2.empty()) {
+                                for (auto curr2:children2) {
+                                    GtkWidget* child3 = curr2->gobj();
 #if DUMP_DETAILS
                                     GType type4 = G_OBJECT_TYPE(child3);
                                     g_message("                    child3   [%s]", g_type_name(type4));
@@ -917,7 +914,6 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
                                         gtk_orientable_set_orientation(GTK_ORIENTABLE(childBar), orientation);
                                     }
                                 }
-                                g_list_free(children2);
                             }
                         }
 
@@ -929,7 +925,6 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
                             g_message("need to add dynamic switch");
                         }
                     }
-                    g_list_free(children);
                 } else {
                     // The call is being made before the toolbox proper has been setup.
                     g_object_set_data(G_OBJECT(toolbox), HANDLE_POS_MARK, GINT_TO_POINTER(pos));

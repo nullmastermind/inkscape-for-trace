@@ -6,7 +6,7 @@
  *
  * "This filter composites two objects together using commonly used
  * imaging software blending modes. It performs a pixel-wise combination
- * of two input images." 
+ * of two input images."
  * http://www.w3.org/TR/SVG11/filters.html#feBlend
  *
  * Authors:
@@ -16,6 +16,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#include <set>
 
 #include "display/nr-filter-primitive.h"
 
@@ -29,14 +30,14 @@ enum FilterBlendMode {
     BLEND_DARKEN,
     BLEND_LIGHTEN,
     // New in CSS Compositing and Blending Level 1
-    BLEND_OVERLAY,   
+    BLEND_OVERLAY,
     BLEND_COLORDODGE,
     BLEND_COLORBURN,
     BLEND_HARDLIGHT,
     BLEND_SOFTLIGHT,
     BLEND_DIFFERENCE,
     BLEND_EXCLUSION,
-    BLEND_HUE,       
+    BLEND_HUE,
     BLEND_SATURATION,
     BLEND_COLOR,
     BLEND_LUMINOSITY,
@@ -59,6 +60,7 @@ public:
     void set_mode(FilterBlendMode mode);
 
 private:
+    static const std::set<FilterBlendMode> _valid_modes;
     FilterBlendMode _blend_mode;
     int _input2;
 };

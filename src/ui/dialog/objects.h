@@ -16,7 +16,6 @@
 # include <config.h>
 #endif
 
-#include <boost/scoped_ptr.hpp>
 #include <gtkmm/box.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
@@ -168,7 +167,7 @@ private:
     Gtk::Box        _blur_vbox;
 
     Gtk::Dialog _colorSelectorDialog;
-    boost::scoped_ptr<Inkscape::UI::SelectedColor> _selectedColor;
+    std::unique_ptr<Inkscape::UI::SelectedColor> _selectedColor;
     
     //Methods:
     

@@ -55,6 +55,14 @@ FontButtonParam::param_getSVGValue() const
     return g_strdup(value.c_str());
 }
 
+gchar *
+FontButtonParam::param_getDefaultSVGValue() const
+{
+    return g_strdup(defvalue.c_str());
+}
+
+
+
 Gtk::Widget *
 FontButtonParam::param_newWidget()
 {

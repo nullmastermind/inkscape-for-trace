@@ -42,20 +42,6 @@ namespace Extension {
 
 /* For internal use only.
      Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
-class optionentry {
-public:
-    optionentry (Glib::ustring * val, Glib::ustring * txt) {
-        value = val;
-        text = txt;
-    }
-    ~optionentry() {
-        delete value;
-        delete text;
-    }
-
-    Glib::ustring * value;
-    Glib::ustring * text;
-};
 
 ParamRadioButton::ParamRadioButton(const gchar * name,
                                    const gchar * text,
@@ -68,7 +54,6 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
     : Parameter(name, text, description, hidden, indent, ext)
     , _value(0)
     , _mode(mode)
-    , choices(0)
 {
     // Read XML tree to add enumeration items:
     // printf("Extension Constructor: ");
@@ -105,7 +90,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
                 }
 
                 if ( (newtext) && (newvalue) ) {   // logical error if this is not true here
-                    choices = g_slist_append( choices, new optionentry(newvalue, newtext) );
+                    choices.push_back(new optionentry(newvalue, newtext));
                 }
             }
             child_repr = child_repr->next();
@@ -115,8 +100,8 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
     // Initialize _value with the default value from xml
     // for simplicity : default to the contents of the first xml-child
     const char * defaultval = NULL;
-    if (choices) {
-        defaultval = (static_cast<optionentry*> (choices->data))->value->c_str();
+    if (!choices.empty()) {
+        defaultval = (static_cast<optionentry*> (choices[0]))->value->c_str();
     }
 
     gchar * pref_name = this->pref_name();
@@ -135,11 +120,9 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
 ParamRadioButton::~ParamRadioButton (void)
 {
     //destroy choice strings
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        delete (reinterpret_cast<optionentry *>(list->data));
+    for(auto i:choices) {
+        delete i;
     }
-    g_slist_free(choices);
-
     g_free(_value);
 }
 
@@ -166,8 +149,7 @@ const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inksc
     }
 
     Glib::ustring * settext = NULL;
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        optionentry * entr = reinterpret_cast<optionentry *>(list->data);
+    for (auto entr:choices) {
         if ( !entr->value->compare(in) ) {
             settext = entr->value;
             break;  // break out of for loop
@@ -278,8 +260,7 @@ Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
 {
     Glib::ustring value = "";
 
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        optionentry * entr = reinterpret_cast<optionentry *>(list->data);
+    for ( auto entr:choices) {
         if ( !entr->text->compare(label) ) {
             value = *(entr->value);
             break;
@@ -319,8 +300,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     // add choice strings as radiobuttons
     // and select last selected option (_value)
     Gtk::RadioButtonGroup group;
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        optionentry * entr = reinterpret_cast<optionentry *>(list->data);
+    for (auto entr:choices) {
         Glib::ustring * text = entr->text;
         switch ( _mode ) {
             case MINIMAL:

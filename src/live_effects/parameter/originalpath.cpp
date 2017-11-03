@@ -36,6 +36,7 @@ OriginalPathParam::OriginalPathParam( const Glib::ustring& label, const Glib::us
     : PathParam(label, tip, key, wr, effect, "")
 {
     oncanvas_editable = false;
+    _from_original_d = false;
 }
 
 OriginalPathParam::~OriginalPathParam()
@@ -90,7 +91,11 @@ OriginalPathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*
 {
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(linked_obj)) {
-        curve = SP_SHAPE(linked_obj)->getCurve();
+        if (_from_original_d) {
+            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+        } else {
+            curve = SP_SHAPE(linked_obj)->getCurve();
+        }
     }
     if (SP_IS_TEXT(linked_obj)) {
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();

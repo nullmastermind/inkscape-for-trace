@@ -64,9 +64,12 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
+	parameter/colorpicker.cpp
 	parameter/hidden.cpp
 	parameter/item-reference.cpp
 	parameter/item.cpp
+	parameter/message.cpp
+	parameter/originalitemarray.cpp
 	parameter/originalitem.cpp
 	parameter/originalpath.cpp
 	parameter/originalpatharray.cpp
@@ -154,9 +157,12 @@ set(live_effects_SRC
 
 	parameter/array.h
 	parameter/bool.h
+	parameter/colorpicker.h
 	parameter/hidden.h
 	parameter/enum.h
 	parameter/item.h
+	parameter/message.h
+	parameter/originalitemarray.cpp
 	parameter/item-reference.h
 	parameter/originalitem.h
 	parameter/originalpath.h

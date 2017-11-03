@@ -120,7 +120,7 @@ static void sp_spray_rotate_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *i
     // Rotate item.
     item->set_i2d_affine(item->i2dt_affine() * affine);
     // Use each item's own transform writer, consistent with sp_selection_apply_affine()
-    item->doWriteTransform(item->getRepr(), item->transform);
+    item->doWriteTransform(item->transform);
     // Restore the center position (it's changed because the bbox center changed)
     if (item->isCenterSet()) {
         item->setCenter(c);
@@ -133,7 +133,7 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
 {
     Geom::Translate const s(c);
     item->set_i2d_affine(item->i2dt_affine() * s.inverse() * scale * s);
-    item->doWriteTransform(item->getRepr(), item->transform);
+    item->doWriteTransform(item->transform);
 }
 
 SprayTool::SprayTool()
@@ -1375,7 +1375,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
         }
 
         case GDK_KEY_PRESS:
-            switch (get_group0_keyval (&event->key)) {
+            switch (get_latin_keyval (&event->key)) {
                 case GDK_KEY_j:
                 case GDK_KEY_J:
                     if (MOD__SHIFT_ONLY(event)) {
@@ -1487,7 +1487,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_RELEASE: {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            switch (get_group0_keyval(&event->key)) {
+            switch (get_latin_keyval(&event->key)) {
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
                     this->update_cursor(false);

@@ -711,19 +711,18 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     // in the case of SP_OBJECT_WRITE_BUILD, the item should always be newly created,
     // so we need to add any children from the underlying object to the new repr
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *>l;
         for (auto& child: object->children) {
             if (dynamic_cast<SPTitle *>(&child) || dynamic_cast<SPDesc *>(&child)) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
                 if (crepr) {
-                    l = g_slist_prepend (l, crepr);
+                    l.push_back(crepr);
                 }
             }
         }
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i = l.rbegin(); i!= l.rend(); ++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: object->children) {
@@ -1407,9 +1406,11 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
-            if (lpeobj && lpeobj->get_lpe()) {
-                Inkscape::LivePathEffect::Effect * effect = lpeobj->get_lpe();
-                effect->transform_multiply(postmul, set);
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+                if (lpe && lpe->isReady()) {
+                    lpe->transform_multiply(postmul, set);
+                }
             }
         }
     }
@@ -1422,9 +1423,8 @@ Geom::Affine SPItem::set_transform(Geom::Affine const &transform) {
 	return transform;
 }
 
-void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &transform, Geom::Affine const *adv, bool compensate)
+void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const *adv, bool compensate)
 {
-    g_return_if_fail(repr != NULL);
     // calculate the relative transform, if not given by the adv attribute
     Geom::Affine advertized_transform;
     if (adv != NULL) {

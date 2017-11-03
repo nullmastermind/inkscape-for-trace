@@ -1077,8 +1077,8 @@ SPDesktopWidget::shutdown()
                 doc->getName());
             // fix for bug lp:168809
 	    GtkWidget *ma = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-	    GList *ma_labels = gtk_container_get_children(GTK_CONTAINER(ma));
-	    GtkWidget *label = GTK_WIDGET(g_list_first(ma_labels)->data);
+            std::vector<Gtk::Widget*> ma_labels = Glib::wrap(GTK_CONTAINER(ma))->get_children();
+	    GtkWidget *label = GTK_WIDGET(ma_labels[0]->gobj());
 	    gtk_widget_set_can_focus(label, FALSE);
 
             GtkWidget *close_button;
@@ -1136,8 +1136,8 @@ SPDesktopWidget::shutdown()
                 doc->getName() ? doc->getName() : "Unnamed");
             // fix for bug lp:168809
 	    GtkWidget *ma = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-	    GList *ma_labels = gtk_container_get_children(GTK_CONTAINER(ma));
-	    GtkWidget *label = GTK_WIDGET(g_list_first(ma_labels)->data);
+            std::vector<Gtk::Widget*> ma_labels = Glib::wrap(GTK_CONTAINER(ma))->get_children();
+	    GtkWidget *label = GTK_WIDGET(ma_labels[0]->gobj());
 	    gtk_widget_set_can_focus(label, FALSE);
 
             GtkWidget *close_button;
@@ -1734,22 +1734,22 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
          * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
          */
         if (GTK_IS_CONTAINER(aux_toolbox)) {
-            GList *ch = gtk_container_get_children (GTK_CONTAINER(aux_toolbox));
-            for (GList *i = ch; i != NULL; i = i->next) {
-                if (GTK_IS_CONTAINER(i->data)) {
-                    GList *grch = gtk_container_get_children (GTK_CONTAINER(i->data));
-                    for (GList *j = grch; j != NULL; j = j->next) {
+            std::vector<Gtk::Widget*> ch = Glib::wrap(GTK_CONTAINER(aux_toolbox))->get_children();
+            for (auto i:ch) {
+                if (GTK_IS_CONTAINER(i->gobj())) {
+                    std::vector<Gtk::Widget*> grch = dynamic_cast<Gtk::Container*>(i)->get_children();
+                    for (auto j:grch) {
 
-                        if (!GTK_IS_WIDGET(j->data)) // wasn't a widget
+                        if (!GTK_IS_WIDGET(j->gobj())) // wasn't a widget
                             continue;
 
                         // Don't apply to text toolbar. We want to be able to
                         // use different units for text. (Bug 1562217)
-                        const gchar* name = gtk_widget_get_name( (GTK_WIDGET(j->data)) );
-                        if (strcmp( name, "TextToolbar") == 0)
+                        const Glib::ustring name = j->get_name();
+                        if ( name == "TextToolbar")
                             continue;
 
-                        gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->data), (gpointer) "tracker");
+                        gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->gobj()), (gpointer) "tracker");
                         if (t == NULL) // didn't find any tracker data
                             continue;
 
@@ -1941,12 +1941,10 @@ static void
 sp_dtw_zoom_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
 {
     SPDesktop *dt = SP_DESKTOP_WIDGET (data)->desktop;
-
-    GList* children = gtk_container_get_children (GTK_CONTAINER (menu));
-    for ( auto iter = children ; iter ; iter = g_list_next (iter)) {
-        gtk_container_remove (GTK_CONTAINER (menu), GTK_WIDGET (iter->data));
+    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(menu))->get_children();
+    for ( auto iter : children) {
+        Glib::wrap(GTK_CONTAINER(menu))->remove(*iter);
     }
-    g_list_free (children);
 
     GtkWidget *item;
 
@@ -2129,11 +2127,10 @@ sp_dtw_rotation_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer dat
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(data);
 
-    GList* children = gtk_container_get_children (GTK_CONTAINER (menu));
-    for ( auto iter = children ; iter ; iter = g_list_next (iter)) {
-        gtk_container_remove (GTK_CONTAINER (menu), GTK_WIDGET (iter->data));
+    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(menu))->get_children();
+    for ( auto iter : children) {
+        Glib::wrap(GTK_CONTAINER(menu))->remove(*iter);
     }
-    g_list_free (children);
 
     GtkWidget *item;
 

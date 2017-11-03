@@ -374,23 +374,20 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
     }
 
     if (dynamic_cast<SPGroup *>(item) && !dynamic_cast<SPBox3D *>(item)) {
-        GSList *children = NULL;
+        std::vector<SPItem *> children;
         for (auto& child: item->children) {
-            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(&child))) {
-                children = g_slist_prepend(children, &child);
+            if (dynamic_cast<SPItem *>(&child)) {
+                children.push_back(dynamic_cast<SPItem *>(&child));
             }
         }
 
-        for (GSList *i = children; i; i = i->next) {
-            SPItem *child = dynamic_cast<SPItem *>(static_cast<SPObject *>(i->data));
+        for (auto i = children.rbegin(); i!= children.rend(); ++i) {
+            SPItem *child = *i; 
             g_assert(child != NULL);
             if (sp_tweak_dilate_recursive (selection, child, p, vector, mode, radius, force, fidelity, reverse)) {
                 did = true;
             }
         }
-
-        g_slist_free(children);
-
     } else {
         if (mode == TWEAK_MODE_MOVE) {
 
@@ -1287,7 +1284,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
         }
         case GDK_KEY_PRESS:
         {
-            switch (get_group0_keyval (&event->key)) {
+            switch (get_latin_keyval (&event->key)) {
                 case GDK_KEY_m:
                 case GDK_KEY_M:
                 case GDK_KEY_0:
@@ -1482,7 +1479,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
         }
         case GDK_KEY_RELEASE: {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            switch (get_group0_keyval(&event->key)) {
+            switch (get_latin_keyval(&event->key)) {
                 case GDK_KEY_Shift_L:
                 case GDK_KEY_Shift_R:
                     this->update_cursor(false);

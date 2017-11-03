@@ -42,13 +42,9 @@ public:
     /** Completely recalculates the layout. */
     void rebuildLayout();
 
-//semiprivate:  (need to be accessed by the C-style functions still)
+    //semiprivate:  (need to be accessed by the C-style functions still)
     TextTagAttributes attributes;
     Inkscape::Text::Layout layout;
-
-    // SVG 2 Auto-wrapped text
-    SVGLength width;
-    SVGLength height;
 
     /** when the object is transformed it's nicer to change the font size
     and coordinates when we can, rather than just applying a matrix
@@ -71,6 +67,9 @@ private:
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
+
+    /** Union all exlusion shapes. */
+    Shape* _buildExclusionShape() const;
 
 public:
     /** Optimize textpath text on next set_transform. */

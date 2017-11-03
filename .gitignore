@@ -1,5 +1,6 @@
 doxygen_warnings.log
 doxygen/
+gtest/
 build
 share/inkscape
 share/*/*.h

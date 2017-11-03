@@ -1005,7 +1005,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         text_item_box->transform *= Geom::Translate(pos);
         text_item_box->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         text_item_box->updateRepr();
-        text_item_box->doWriteTransform(text_item_box->getRepr(), text_item_box->transform, NULL, true);
+        text_item_box->doWriteTransform(text_item_box->transform, NULL, true);
         Inkscape::XML::Node *rlabel = text_item_box->getRepr();
         text_item_box->deleteObject();
         measure_repr->addChild(rlabel, NULL);
@@ -1014,7 +1014,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         text_item->transform *= Geom::Rotate(angle);
         text_item->transform *= Geom::Translate(pos);
         text_item->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-        text_item->doWriteTransform(text_item->getRepr(), text_item->transform, NULL, true);
+        text_item->doWriteTransform(text_item->transform, NULL, true);
     }
 }
 

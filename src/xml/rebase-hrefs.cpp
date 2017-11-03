@@ -112,8 +112,8 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
      *
      * However, if we find that xlink:href doesn't need rebasing, then return immediately
      * with no change to attributes. */
-    ptr_shared<char> old_href;
-    ptr_shared<char> sp_absref;
+    ptr_shared old_href;
+    ptr_shared sp_absref;
     List<AttributeRecord const> ret;
     {
         for (List<AttributeRecord const> ai(attributes); ai; ++ai) {

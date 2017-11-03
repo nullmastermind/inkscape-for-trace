@@ -25,6 +25,8 @@
 
 #include "ui/dialog/dialog-manager.h"
 #include <gtkmm/icontheme.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtkmm/separatormenuitem.h>
 #include "file.h"
 #include <glibmm/miscutils.h>
 
@@ -51,7 +53,6 @@
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "helper/action.h"
-#include "helper/gnome-utils.h"
 #include "helper/window.h"
 #include "io/sys.h"
 #include "ui/dialog-events.h"
@@ -109,8 +110,7 @@ static GtkTargetEntry *completeDropTargets = 0;
 static int completeDropTargetsCount = 0;
 static bool temporarily_block_actions = false;
 
-#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
-static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
+static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 static void sp_ui_import_files(gchar *buffer);
 static void sp_ui_import_one_file(char const *filename);
 static void sp_ui_import_one_file_with_check(gpointer filename, gpointer unused);
@@ -221,19 +221,14 @@ sp_create_window(SPViewWidget *vw, bool editable)
 
     if ( completeDropTargets == 0 || completeDropTargetsCount == 0 )
     {
-        std::vector<gchar*> types;
+        std::vector<Glib::ustring> types;
 
-        GSList *list = gdk_pixbuf_get_formats();
-        while ( list ) {
-            int i = 0;
-            GdkPixbufFormat *one = (GdkPixbufFormat*)list->data;
-            gchar** typesXX = gdk_pixbuf_format_get_mime_types(one);
-            for ( i = 0; typesXX[i]; i++ ) {
-                types.push_back(g_strdup(typesXX[i]));
+        std::vector<Gdk::PixbufFormat> list = Gdk::Pixbuf::get_formats();
+        for (auto one:list) {
+            std::vector<Glib::ustring> typesXX = one.get_mime_types();
+            for (auto i:typesXX) {
+                types.push_back(i);
             }
-            g_strfreev(typesXX);
-
-            list = g_slist_next(list);
         }
         completeDropTargetsCount = nui_drop_target_entries + types.size();
         completeDropTargets = new GtkTargetEntry[completeDropTargetsCount];
@@ -242,8 +237,8 @@ sp_create_window(SPViewWidget *vw, bool editable)
         }
         int pos = nui_drop_target_entries;
 
-        for (std::vector<gchar*>::iterator it = types.begin() ; it != types.end() ; ++it) {
-            completeDropTargets[pos].target = *it;
+        for (std::vector<Glib::ustring>::iterator it = types.begin() ; it != types.end() ; ++it) {
+            completeDropTargets[pos].target = g_strdup((*it).c_str());
             completeDropTargets[pos].flags = 0;
             completeDropTargets[pos].info = IMAGE_DATA;
             pos++;
@@ -452,14 +447,14 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
                                                    Inkscape::UI::View::View *view,
                                                    bool                      show_icon = false,
                                                    bool                      radio     = false,
-                                                   GSList                   *group     = NULL)
+                                                   Gtk::RadioMenuItem::Group *group    = NULL)
 {
-    GtkWidget *item;
+    Gtk::Widget *item;
 
     // Just create a menu separator if this isn't a real action.
     // Otherwise, create a real menu item
     if (verb->get_code() == SP_VERB_NONE) {
-        item = gtk_separator_menu_item_new();
+        item = new Gtk::SeparatorMenuItem();
     } else {
         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
 
@@ -468,9 +463,9 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         // Create the menu item itself, either as a radio menu item, or just
         // a regular menu item depending on whether the "radio" flag is set
         if (radio) {
-            item = gtk_radio_menu_item_new(group);
+            item = new Gtk::RadioMenuItem(*group);
         } else {
-            item = gtk_menu_item_new();
+            item = new Gtk::MenuItem();
         }
 
         // Create a box to contain all the widgets (icon, label, accelerator)
@@ -491,8 +486,8 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         GtkAccelGroup *accel_group = sp_shortcut_get_accel_group();
         gtk_menu_set_accel_group(menu, accel_group);
 
-        sp_shortcut_add_accelerator(item, sp_shortcut_get_primary(verb));
-        gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item);
+        sp_shortcut_add_accelerator(item->gobj(), sp_shortcut_get_primary(verb));
+        gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item->gobj());
 
         GtkWidget *icon;
 
@@ -509,33 +504,34 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
 
         // Finally, pack all the widgets into the menu item
-        gtk_container_add(GTK_CONTAINER(item), box);
+        gtk_container_add(GTK_CONTAINER(item->gobj()), box);
 
 
         action->signal_set_sensitive.connect(
             sigc::bind<0>(
                 sigc::ptr_fun(&gtk_widget_set_sensitive),
-                item));
+                item->gobj()));
         action->signal_set_name.connect(
             sigc::bind<0>(
                 sigc::ptr_fun(&sp_ui_menu_item_set_name),
-                item));
+                item->gobj()));
 
         if (!action->sensitive) {
-            gtk_widget_set_sensitive(item, FALSE);
+            item->set_sensitive(false);
         }
 
-        gtk_widget_set_events(item, GDK_KEY_PRESS_MASK);
-        g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
-        g_signal_connect( G_OBJECT(item), "activate", G_CALLBACK(sp_ui_menu_activate), action );
-        g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select_action), action );
-        g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
+        gtk_widget_set_events(item->gobj(), GDK_KEY_PRESS_MASK);
+
+        g_object_set_data(G_OBJECT(item->gobj()), "view", (gpointer) view);
+        g_signal_connect( G_OBJECT(item->gobj()), "activate", G_CALLBACK(sp_ui_menu_activate), action );
+        g_signal_connect( G_OBJECT(item->gobj()), "select", G_CALLBACK(sp_ui_menu_select_action), action );
+        g_signal_connect( G_OBJECT(item->gobj()), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
     }
 
-    gtk_widget_show_all(item);
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+    item->show_all();
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item->gobj());
 
-    return item;
+    return item->gobj();
 
 } // end of sp_ui_menu_append_item_from_verb
 
@@ -770,25 +766,24 @@ static void addTaskMenuItems(GtkMenu *menu, Inkscape::UI::View::View *view)
         0, 0
     };
 
-    GSList *group = 0;
+    Gtk::RadioMenuItem::Group group;
     int count = 0;
     gint active = Inkscape::UI::UXManager::getInstance()->getDefaultTask( dynamic_cast<SPDesktop*>(view) );
     for (gchar const **strs = data; strs[0]; strs += 2, count++)
     {
-        GtkWidget *item = gtk_radio_menu_item_new_with_label( group, strs[0] );
-        group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(item) );
+        Gtk::RadioMenuItem *item = new Gtk::RadioMenuItem(group,Glib::ustring(strs[0]));
         if ( count == active )
         {
-            gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM(item), TRUE );
+            item->set_active();
         }
 
-        g_object_set_data( G_OBJECT(item), "view", view );
-        g_signal_connect( G_OBJECT(item), "toggled", reinterpret_cast<GCallback>(taskToggled), GINT_TO_POINTER(count) );
-        g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), const_cast<gchar*>(strs[1]) );
-        g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), 0 );
+        g_object_set_data( G_OBJECT(item->gobj()), "view", view );
+        g_signal_connect( G_OBJECT(item->gobj()), "toggled", reinterpret_cast<GCallback>(taskToggled), GINT_TO_POINTER(count) );
+        g_signal_connect( G_OBJECT(item->gobj()), "select", G_CALLBACK(sp_ui_menu_select), const_cast<gchar*>(strs[1]) );
+        g_signal_connect( G_OBJECT(item->gobj()), "deselect", G_CALLBACK(sp_ui_menu_deselect), 0 );
 
-        gtk_widget_show( item );
-        gtk_menu_shell_append( GTK_MENU_SHELL(menu), item );
+        item->show();
+        gtk_menu_shell_append( GTK_MENU_SHELL(menu), GTK_WIDGET(item->gobj()) );
     }
 }
 
@@ -832,7 +827,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 {
     if (menus == NULL) return;
     if (menu == NULL)  return;
-    GSList *group = NULL;
+    Gtk::RadioMenuItem::Group group;
 
     for (Inkscape::XML::Node *menu_pntr = menus;
          menu_pntr != NULL;
@@ -864,8 +859,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 
             if (verb != NULL) {
                 if (menu_pntr->attribute("radio") != NULL) {
-                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, show_icon, true, group);
-                    group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(item));
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, show_icon, true, &group);
                     if (menu_pntr->attribute("default") != NULL) {
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
                     }
@@ -881,7 +875,8 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                     }
                 } else {
                     sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icon);
-                    group = NULL;
+                    Gtk::RadioMenuItem::Group group2;
+                    group = group2;
                 }
             } else {
                 gchar string[120];
@@ -1339,12 +1334,13 @@ static void sp_ui_drag_leave( GtkWidget */*widget*/,
 static void
 sp_ui_import_files(gchar *buffer)
 {
-    GList *list = gnome_uri_list_extract_filenames(buffer);
-    if (!list)
-        return;
-    g_list_foreach(list, sp_ui_import_one_file_with_check, NULL);
-    g_list_foreach(list, (GFunc) g_free, NULL);
-    g_list_free(list);
+    gchar** l = g_uri_list_extract_uris(buffer);
+    for (int i = 0; i< g_strv_length (l); i++) {
+        gchar *f = g_filename_from_uri (l[i], NULL, NULL);
+        sp_ui_import_one_file_with_check(f, NULL);
+        g_free(f);
+    }
+    g_strfreev(l);
 }
 
 static void
@@ -1436,14 +1432,12 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
             if (GTK_IS_LABEL(child)) {
                 gtk_label_set_markup_with_mnemonic(GTK_LABEL (child), name.c_str());
             } else if (GTK_IS_BOX(child)) {
-                GList *children = gtk_container_get_children(GTK_CONTAINER(child));
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
 
                 // Label is second child in list
-                GtkWidget *label = GTK_WIDGET(children->next->data);
-
-                gtk_label_set_markup_with_mnemonic(
-                GTK_LABEL (label),
-                name.c_str());
+                Gtk::Label *label = dynamic_cast<Gtk::Label*>(children[1]);
+                if(!label) return;
+                label->set_markup_with_mnemonic(name);
             }//else sp_ui_menu_append_item_from_verb has been modified and can set
             //a menu item in yet another way...
         }

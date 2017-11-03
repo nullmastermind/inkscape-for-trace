@@ -33,6 +33,7 @@ namespace Resource {
 enum Type {
     APPICONS,
     EXTENSIONS,
+    FONTS,
     GRADIENTS,
     ICONS,
     KEYS,
@@ -56,7 +57,7 @@ enum Domain {
     USER
 };
 
-Util::ptr_shared<char> get_path(Domain domain, Type type,
+Util::ptr_shared get_path(Domain domain, Type type,
                                 char const *filename=NULL);
 
 Glib::ustring get_path_ustring(Domain domain, Type type,

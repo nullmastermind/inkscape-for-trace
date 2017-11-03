@@ -267,7 +267,7 @@ protected:
 
     Gtk::Menu _popup_sw; 
     Gtk::RadioButtonGroup _sw_group;
-    GSList *_unit_mis;
+    std::vector<Gtk::RadioMenuItem*> _unit_mis;
     void on_popup_units(Inkscape::Util::Unit const *u);
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;

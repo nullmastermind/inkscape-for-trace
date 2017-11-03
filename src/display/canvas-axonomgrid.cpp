@@ -294,8 +294,8 @@ CanvasAxonomGrid::readRepr()
         gridunit = unit_table.getUnit(value); // Display unit identifier in grid menu
     }
 
-    for (GSList *l = canvasitems; l != NULL; l = l->next) {
-        sp_canvas_item_request_update ( SP_CANVAS_ITEM(l->data) );
+    for (auto i:canvasitems) {
+        sp_canvas_item_request_update(i);
     }
     return;
 }

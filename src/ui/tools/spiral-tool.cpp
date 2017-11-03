@@ -232,7 +232,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_PRESS:
-            switch (get_group0_keyval(&event->key)) {
+            switch (get_latin_keyval(&event->key)) {
                 case GDK_KEY_Alt_R:
                 case GDK_KEY_Control_L:
                 case GDK_KEY_Control_R:
@@ -291,7 +291,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_RELEASE:
-            switch (get_group0_keyval(&event->key)) {
+            switch (get_latin_keyval(&event->key)) {
                 case GDK_KEY_Alt_L:
                 case GDK_KEY_Alt_R:
                 case GDK_KEY_Control_L:
@@ -372,11 +372,10 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
 
     /* status text */
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(rad, "px");
-    GString *rads = g_string_new(q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring rads = q.string(desktop->namedview->display_units);
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
-                               rads->str, sp_round((arg + 2.0*M_PI*this->spiral->revo)*180/M_PI, 0.0001));
-    g_string_free(rads, FALSE);
+                               rads.c_str(), sp_round((arg + 2.0*M_PI*this->spiral->revo)*180/M_PI, 0.0001));
 }
 
 void SpiralTool::finishItem() {
@@ -390,7 +389,7 @@ void SpiralTool::finishItem() {
 
         spiral->set_shape();
         spiral->updateRepr(SP_OBJECT_WRITE_EXT);
-        spiral->doWriteTransform(spiral->getRepr(), spiral->transform, NULL, true);
+        spiral->doWriteTransform(spiral->transform, NULL, true);
 
         this->desktop->canvas->endForcedFullRedraws();
 

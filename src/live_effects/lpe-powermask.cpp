@@ -4,7 +4,6 @@
 #include "live_effects/lpe-powermask.h"
 #include <2geom/path-intersection.h>
 #include <2geom/intersection-graph.h>
-#include "display/drawing-item.h"
 #include "display/curve.h"
 #include "helper/geom.h"
 #include "sp-mask.h"
@@ -16,6 +15,9 @@
 #include "svg/svg.h"
 #include "ui/tools-switch.h"
 #include "path-chemistry.h"
+#include "uri.h"
+#include "extract-uri.h"
+#include <bad-uri-exception.h>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -25,40 +27,68 @@ namespace LivePathEffect {
 
 LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
+    uri("Store the uri of mask", "", "uri", &wr, this, "false", false),
     invert(_("Invert mask"), _("Invert mask"), "invert", &wr, this, false),
     wrap(_("Wrap mask data"), _("Wrap mask data allowing previous filters"), "wrap", &wr, this, false),
+    hide_mask(_("Hide mask"), _("Hide mask"), "hide_mask", &wr, this, false),
     background(_("Add background to mask"), _("Add background to mask"), "background", &wr, this, false),
-    //lock(_("Lock mask"), _("Lock mask"), "lock", &wr, this, false),
     background_style(_("Background Style"), _("CSS to background"), "background_style", &wr, this,"fill:#ffffff;opacity:1;")
-   
 {
+    registerParameter(&uri);
     registerParameter(&invert);
     registerParameter(&wrap);
-    //registerParameter(&lock);
+    registerParameter(&hide_mask);
     registerParameter(&background);
     registerParameter(&background_style);
     //lock.param_setValue(false);
     background_style.param_hide_canvas_text();
-    hide_mask = false;
 }
 
 LPEPowerMask::~LPEPowerMask() {}
 
 void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
-    original_bbox(lpeitem);
-    SPMask *mask = SP_ITEM(lpeitem)->mask_ref->getObject();
-    Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
-    Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
-    Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);
-    Geom::Point bottomleft   = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.min() - 5);
-    mask_box.clear();
-    mask_box.start(topleft);
-    mask_box.appendNew<Geom::LineSegment>(topright);
-    mask_box.appendNew<Geom::LineSegment>(bottomright);
-    mask_box.appendNew<Geom::LineSegment>(bottomleft);
-    mask_box.close();
-    if(mask) {
+    SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    if(hide_mask && mask) {
+        SP_ITEM(sp_lpe_item)->mask_ref->detach();
+    } else if (!hide_mask && !mask && uri.param_getSVGValue()) {
+        try {
+            SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+        } catch (Inkscape::BadURIException &e) {
+            g_warning("%s", e.what());
+            SP_ITEM(sp_lpe_item)->mask_ref->detach();
+        }
+    }
+    mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    if (mask) {
+        uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("mask"))), true);
+        SP_ITEM(sp_lpe_item)->mask_ref->detach();
+        Geom::OptRect bbox = sp_lpe_item->visualBounds();
+        if(!bbox) {
+            return;
+        }
+        if (uri.param_getSVGValue()) {
+            try {
+                SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+            } catch (Inkscape::BadURIException &e) {
+                g_warning("%s", e.what());
+                SP_ITEM(sp_lpe_item)->mask_ref->detach();
+            }
+        } else {
+            SP_ITEM(sp_lpe_item)->mask_ref->detach();
+        }
+        Geom::Rect bboxrect = (*bbox);
+        bboxrect.expandBy(1);
+        Geom::Point topleft      = bboxrect.corner(0);
+        Geom::Point topright     = bboxrect.corner(1);
+        Geom::Point bottomright  = bboxrect.corner(2);
+        Geom::Point bottomleft   = bboxrect.corner(3);
+        mask_box.clear();
+        mask_box.start(topleft);
+        mask_box.appendNew<Geom::LineSegment>(topright);
+        mask_box.appendNew<Geom::LineSegment>(bottomright);
+        mask_box.appendNew<Geom::LineSegment>(bottomleft);
+        mask_box.close();
         setMask();
     }
 }
@@ -225,37 +255,6 @@ LPEPowerMask::doEffect (SPCurve * curve)
 {
 }
 
-void
-LPEPowerMask::toggleMask() {
-    SPItem * item = SP_ITEM(sp_lpe_item);
-    if (item) {
-        SPMask *mask = item->mask_ref->getObject();
-        if (mask) {
-            hide_mask = !hide_mask;
-            if(hide_mask) {
-                SPItemView *v;
-                for (v = item->display; v != NULL; v = v->next) {
-                    mask->sp_mask_hide(v->arenaitem->key());
-                }
-            } else {
-                Geom::OptRect bbox = item->geometricBounds();
-                for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                    if (!v->arenaitem->key()) {
-                        v->arenaitem->setKey(SPItem::display_key_new(3));
-                    }
-                    Inkscape::DrawingItem *ai = mask->sp_mask_show(
-                                                           v->arenaitem->drawing(),
-                                                           v->arenaitem->key());
-                    bbox.unionWith(ai->geometricBounds());
-                    v->arenaitem->setMask(ai);
-                    mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
-                }
-            }
-            mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        }
-    }
-}
-
 //void
 //LPEPowerMask::transform_multiply(Geom::Affine const& postmul, bool set)
 //{
@@ -282,44 +281,6 @@ LPEPowerMask::toggleMask() {
 //}
 
 
-
-Gtk::Widget *
-LPEPowerMask::newWidget()
-{
-    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
-
-    vbox->set_border_width(5);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(6);
-
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    while (it != param_vector.end()) {
-        if ((*it)->widget_is_visible) {
-            Parameter * param = *it;
-            Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
-            Glib::ustring * tip = param->param_getTooltip();
-            if (widg) {
-                vbox->pack_start(*widg, true, true, 2);
-                if (tip) {
-                    widg->set_tooltip_text(*tip);
-                } else {
-                    widg->set_tooltip_text("");
-                    widg->set_has_tooltip(false);
-                }
-            }
-        }
-
-        ++it;
-    }
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle mask visibiliy"))));
-    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerMask::toggleMask));
-    toggle_button->set_size_request(140,30);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*toggle_button, false, false,2);
-    return dynamic_cast<Gtk::Widget *>(vbox);
-}
 
 void 
 LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)

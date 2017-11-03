@@ -513,7 +513,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
         } else {
             path = uri;
         }
-        std::cout << "Added base: '" << path << "'\n";
+        std::cout << "Added base: '" << path << std::endl;
         document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;

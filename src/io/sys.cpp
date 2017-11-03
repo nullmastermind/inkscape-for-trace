@@ -18,7 +18,6 @@
 #include <fstream>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <glibmm/fileutils.h>
 #include <glibmm/ustring.h>
 #include <gtk/gtk.h>
 
@@ -71,10 +70,20 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
     if ( filename )
     {
+        // ensure we open the file in binary mode (not needed in POSIX but doesn't hurt either)
         Glib::ustring how( mode );
         if ( how.find("b") == Glib::ustring::npos )
         {
-            how.append("b"); // not needed in POSIX but doesn't hurt either
+            how.append("b");
+        }
+        // when opening a file for writing: create parent directories if they don't exist already
+        if ( how.find("w") != Glib::ustring::npos )
+        {
+            gchar *dirname = g_path_get_dirname(utf8name);
+            if (g_mkdir_with_parents(dirname, 0777)) {
+                g_warning("Could not create directory '%s'", dirname);
+            }
+            g_free(dirname);
         }
         fp = g_fopen(filename, how.c_str());
         g_free(filename);
@@ -95,26 +104,6 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
         filename = 0;
     }
     return retval;
-}
-
-/* 
- * Wrapper around Glib::file_open_tmp().
- * Returns a handle to the temp file.
- * name_used contains the actual name used (a raw filename, not necessarily utf8).
- * 
- * Returns:
- * A file handle (as from open()) to the file opened for reading and writing. 
- * The file is opened in binary mode on platforms where there is a difference. 
- * The file handle should be closed with close().
- * 
- * Note:
- * On Windows Vista Glib::file_open_tmp fails with the current version of glibmm
- * A special case is implemented for WIN32. This can be removed if the issue is fixed
- * in future versions of glibmm 
- * */
-int Inkscape::IO::file_open_tmp(std::string& name_used, const std::string& prefix)
-{
-    return Glib::file_open_tmp(name_used, prefix);
 }
 
 bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )

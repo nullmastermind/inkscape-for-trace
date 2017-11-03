@@ -215,21 +215,25 @@ push @{$properties{ "white-space" }->{elements}}, @text_content_elements;
 $properties{ "white-space" }->{default} = "normal";
 $properties{ "white-space" }->{inherit} = "yes";
 
-push @{$properties{ "shape-inside" }->{elements}}, @text_content_elements;
+push @{$properties{ "shape-inside" }->{elements}}, "text";
 $properties{ "shape-inside" }->{default} = "auto";
 $properties{ "shape-inside" }->{inherit} = "no";
 
-push @{$properties{ "shape-outside" }->{elements}}, @text_content_elements;
-$properties{ "shape-outside" }->{default} = "auto";
-$properties{ "shape-outside" }->{inherit} = "no";
+push @{$properties{ "shape-subtract" }->{elements}}, "text";
+$properties{ "shape-subtract" }->{default} = "auto";
+$properties{ "shape-subtract" }->{inherit} = "no";
 
-push @{$properties{ "shape-padding" }->{elements}}, @text_content_elements;
-$properties{ "shape-padding" }->{default} = "none";
+push @{$properties{ "shape-padding" }->{elements}}, "text";
+$properties{ "shape-padding" }->{default} = "0";
 $properties{ "shape-padding" }->{inherit} = "no";
 
-push @{$properties{ "shape-margin" }->{elements}}, @text_content_elements;
+push @{$properties{ "shape-margin" }->{elements}}, "text";
 $properties{ "shape-margin" }->{default} = "0";
 $properties{ "shape-margin" }->{inherit} = "no";
+
+push @{$properties{ "inline-size" }->{elements}}, "text";
+$properties{ "inline-size" }->{default} = "0";
+$properties{ "inline-size" }->{inherit} = "no";
 
 
 #CSS Text Level 3

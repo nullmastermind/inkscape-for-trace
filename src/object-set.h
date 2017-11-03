@@ -370,7 +370,7 @@ public:
     bool unlinkRecursive(const bool skip_undo = false);
     void relink();
     void cloneOriginal();
-    void cloneOriginalPathLPE();
+    void cloneOriginalPathLPE(bool allow_transforms = false);
     Inkscape::XML::Node* group();
     void popFromGroup();
     void ungroup();
@@ -476,6 +476,7 @@ protected:
 
 private:
     BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const unsigned int verb = SP_VERB_NONE, const Glib::ustring description = "");
+    void _disconnect(SPObject* object);
 
 };
 

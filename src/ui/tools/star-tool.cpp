@@ -246,7 +246,7 @@ bool StarTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval(&event->key)) {
+        switch (get_latin_keyval(&event->key)) {
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:
         case GDK_KEY_Control_R:
@@ -306,7 +306,7 @@ bool StarTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_RELEASE:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:
@@ -389,14 +389,12 @@ void StarTool::drag(Geom::Point p, guint state)
 
     /* status text */
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(r1, "px");
-    GString *rads = g_string_new(q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring rads = q.string(desktop->namedview->display_units);
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                ( this->isflatsided?
                                  _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
                                  : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
-                               rads->str, sp_round((arg1) * 180 / M_PI, 0.0001));
-
-    g_string_free(rads, FALSE);
+                               rads.c_str(), sp_round((arg1) * 180 / M_PI, 0.0001));
 }
 
 void StarTool::finishItem() {
@@ -415,7 +413,7 @@ void StarTool::finishItem() {
         this->star->setCenter(this->center);
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
-        this->star->doWriteTransform(this->star->getRepr(), this->star->transform, NULL, true);
+        this->star->doWriteTransform(this->star->transform, NULL, true);
 
         desktop->canvas->endForcedFullRedraws();
 

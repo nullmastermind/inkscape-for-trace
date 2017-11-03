@@ -556,10 +556,10 @@ bool font_instance::FontDecoration( double &underline_position,   double &underl
         return false;
     }
     double scale=1.0/parent->fontSize;
-    underline_position    = fabs(otm.otmUnderscorePosition *scale);
-    underline_thickness   = fabs(otm.otmUnderscoreSize     *scale);
-    linethrough_position  = fabs(otm.otmStrikeoutPosition  *scale);
-    linethrough_thickness = fabs(otm.otmStrikeoutSize      *scale);
+    underline_position    = fabs(otm.otmsUnderscorePosition *scale);
+    underline_thickness   = fabs(otm.otmsUnderscoreSize     *scale);
+    linethrough_position  = fabs(otm.otmsStrikeoutPosition  *scale);
+    linethrough_thickness = fabs(otm.otmsStrikeoutSize      *scale);
 #else
     if ( theFace->units_per_EM == 0 ) {
         return false; // bitmap font
@@ -683,12 +683,12 @@ void font_instance::FindFontMetrics() {
     if ( theFace ) {
 
 #ifdef USE_PANGO_WIN32
-        
+        OUTLINETEXTMETRIC otm;
         if ( GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm) ) {
             double scale=1.0/parent->fontSize;
             _ascent      = fabs(otm.otmMacAscent  * scale);
             _descent     = fabs(otm.otmMacDescent * scale);
-            _xheight     = fabs(otm.otmXHeight    * scale);
+            _xheight     = fabs(otm.otmsXHeight    * scale);
             _ascent_max  = fabs(otm.otmAscent     * scale);
             _descent_max = fabs(otm.otmDescent    * scale);
 

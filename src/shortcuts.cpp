@@ -153,7 +153,7 @@ guint sp_shortcut_translate_event(GdkEventKey const *event, guint *effective_mod
     guint remaining_modifiers = 0;
     guint resulting_modifiers = 0;  // remaining modifiers encoded in high-bit mask
 
-    keyval = Inkscape::UI::Tools::get_group0_keyval(event, &consumed_modifiers);
+    keyval = Inkscape::UI::Tools::get_latin_keyval(event, &consumed_modifiers);
 
     remaining_modifiers = initial_modifiers & ~consumed_modifiers;
     resulting_modifiers = ( remaining_modifiers & GDK_SHIFT_MASK ? SP_SHORTCUT_SHIFT_MASK : 0 ) |
@@ -485,7 +485,7 @@ void sp_shortcut_file_export_do(char const *exportname) {
  * Shortcut file consists of pairs of bind elements :
  * Element (a) is used for shortcut display in menus (display="True") and contains the gdk_keyval_name of the shortcut key
  * Element (b) is used in shortcut lookup and contains an uppercase version of the gdk_keyval_name,
- *   or a gdk_keyval_name name and the "Shift" modifier for Shift altered hardware code keys (see get_group0_keyval() for explanation)
+ *   or a gdk_keyval_name name and the "Shift" modifier for Shift altered hardware code keys (see get_latin_keyval() for explanation)
  */
 void sp_shortcut_delete_from_file(char const * /*action*/, unsigned int const shortcut) {
 

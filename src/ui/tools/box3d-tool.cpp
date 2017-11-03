@@ -335,7 +335,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Up:
         case GDK_KEY_Down:
         case GDK_KEY_KP_Up:
@@ -529,9 +529,9 @@ void Box3dTool::drag(guint /*state*/) {
                 side->setAttribute("style", cur_style.data());
             } else {
                 // use default style 
-                GString *pstring = g_string_new("");
-                g_string_printf (pstring, "/tools/shapes/3dbox/%s", box3d_side_axes_string(side));
-                desktop->applyCurrentOrToolStyle (side, pstring->str, false);
+                Glib::ustring tool_path = Glib::ustring::compose("/tools/shapes/3dbox/%1",
+                        box3d_side_axes_string(side));
+                desktop->applyCurrentOrToolStyle (side, tool_path, false);
             }
 
             side->updateRepr(); // calls box3d_side_write() and updates, e.g., the axes string description

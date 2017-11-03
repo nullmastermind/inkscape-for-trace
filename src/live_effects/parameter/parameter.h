@@ -57,6 +57,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue) = 0;   // returns true if new value is valid / accepted.
     virtual gchar * param_getSVGValue() const = 0;
+    virtual gchar * param_getDefaultSVGValue() const = 0;
     virtual void param_widget_is_visible(bool is_visible) {widget_is_visible = is_visible;}
     void write_to_SVG();
  
@@ -109,6 +110,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
 
     virtual void param_set_default();
     void param_update_default(gdouble default_value);

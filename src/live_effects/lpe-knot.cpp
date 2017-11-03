@@ -199,7 +199,7 @@ CrossingPoints::CrossingPoints(Geom::PathVector const &paths) : std::vector<Cros
                             cp.tj = times[k].second + jj;
                             push_back(cp);
                         }else{
-                            std::cout<<"ooops: find_(self)_intersections returned NaN:";
+                            std::cout<<"ooops: find_(self)_intersections returned NaN:" << std::endl;
                             //std::cout<<"intersection "<<i<<"["<<ii<<"](NaN)= "<<j<<"["<<jj<<"](NaN)\n";
                         }
                     }

@@ -27,10 +27,6 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 
-#ifdef WITH_GNOME_VFS
-# include <libgnomevfs/gnome-vfs-init.h>  // gnome_vfs_initialized
-#endif
-
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
@@ -1300,11 +1296,7 @@ void Export::onBrowse ()
                                       _("_Save"),   GTK_RESPONSE_ACCEPT,
                                       NULL );
 
-#ifdef WITH_GNOME_VFS
-    if (gnome_vfs_initialized()) {
-        gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(fs), false);
-    }
-#endif
+    gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(fs), false);
 
     sp_transientize (fs);
 

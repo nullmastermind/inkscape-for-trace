@@ -9,7 +9,7 @@
  */
 
 #include "ui/widget/registered-widget.h"
-#include <glibmm/i18n.h>
+#include <gtkmm/alignment.h>
 
 #include "live_effects/parameter/text.h"
 #include "live_effects/effect.h"
@@ -18,8 +18,9 @@
 #include "inkscape.h"
 #include "verbs.h"
 #include "display/canvas-text.h"
-
 #include <2geom/sbasis-geometric.h>
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 
@@ -115,6 +116,23 @@ TextParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+TextParam::param_getDefaultSVGValue() const
+{
+    Inkscape::SVGOStringStream os;
+    os << defvalue;
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
+}
+
+void 
+TextParam::setTextParam(Inkscape::UI::Widget::RegisteredText *rsu) 
+{
+    Glib::ustring str(rsu->getText());
+    param_setValue(str);
+    write_to_SVG();
+}
+
 Gtk::Widget *
 TextParam::param_newWidget()
 {
@@ -122,9 +140,16 @@ TextParam::param_newWidget()
         param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
     rsu->setText(value);
     rsu->setProgrammatically = false;
-
     rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change text parameter"));
-    return dynamic_cast<Gtk::Widget *> (rsu);
+    Gtk::Box *text_container = Gtk::manage(new Gtk::Box());
+    Gtk::Button *set =  Gtk::manage(new Gtk::Button(Glib::ustring("✔")));
+    set->signal_clicked()
+    .connect(sigc::bind<Inkscape::UI::Widget::RegisteredText *>(sigc::mem_fun(*this, &TextParam::setTextParam),rsu));
+    text_container->pack_start(*rsu, false, false, 2);
+    text_container->pack_start(*set, false, false, 2);
+    Gtk::Widget *return_widg = dynamic_cast<Gtk::Widget *> (text_container);
+    return_widg->set_halign(Gtk::ALIGN_END);
+    return return_widg;
 }
 
 void

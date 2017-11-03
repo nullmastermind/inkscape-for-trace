@@ -50,8 +50,6 @@ namespace Dialog {
 
 SpellCheck::SpellCheck (void) :
     UI::Widget::Panel ("", "/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
-    _rects(NULL),
-    _seen_objects(NULL),
     _text(NULL),
     _layout(NULL),
     _stops(0),
@@ -196,12 +194,11 @@ void SpellCheck::setTargetDesktop(SPDesktop *desktop)
 
 void SpellCheck::clearRects()
 {
-    for (GSList *it = _rects; it; it = it->next) {
-        sp_canvas_item_hide(SP_CANVAS_ITEM(it->data));
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(it->data));
+    for(auto t : _rects) {
+        sp_canvas_item_hide(t);
+        sp_canvas_item_destroy(t);
     }
-    g_slist_free(_rects);
-    _rects = NULL;
+    _rects.clear();
 }
 
 void SpellCheck::disconnect()
@@ -214,47 +211,39 @@ void SpellCheck::disconnect()
     }
 }
 
-GSList *SpellCheck::allTextItems (SPObject *r, GSList *l, bool hidden, bool locked)
+void SpellCheck::allTextItems (SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked)
 {
     if (!desktop)
-        return l; // no desktop to check
+        return; // no desktop to check
 
     if (SP_IS_DEFS(r))
-        return l; // we're not interested in items in defs
+        return; // we're not interested in items in defs
 
     if (!strcmp(r->getRepr()->name(), "svg:metadata")) {
-        return l; // we're not interested in metadata
+        return; // we're not interested in metadata
     }
 
     for (auto& child: r->children) {
         if (SP_IS_ITEM (&child) && !child.cloned && !desktop->isLayer(SP_ITEM(&child))) {
                 if ((hidden || !desktop->itemIsHidden(SP_ITEM(&child))) && (locked || !SP_ITEM(&child)->isLocked())) {
                     if (SP_IS_TEXT(&child) || SP_IS_FLOWTEXT(&child))
-                        l = g_slist_prepend (l, &child);
+                        l.push_back(static_cast<SPItem*>(&child));
                 }
         }
-        l = allTextItems (&child, l, hidden, locked);
+        allTextItems (&child, l, hidden, locked);
     }
-    return l;
+    return;
 }
 
 bool
 SpellCheck::textIsValid (SPObject *root, SPItem *text)
 {
-    GSList *l = NULL;
-    l = allTextItems (root, l, false, true);
-    for (GSList *i = l; i; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
-        if (item == text) {
-            g_slist_free (l);
-            return true;
-        }
-    }
-    g_slist_free (l);
-    return false;
+    std::vector<SPItem*> l;
+    allTextItems (root, l, false, true);
+    return (std::find(l.begin(), l.end(), text) != l.end());
 }
 
-gint SpellCheck::compareTextBboxes (gconstpointer a, gconstpointer b)
+bool SpellCheck::compareTextBboxes (gconstpointer a, gconstpointer b)//returns a<b
 {
     SPItem *i1 = SP_ITEM(a);
     SPItem *i2 = SP_ITEM(b);
@@ -262,41 +251,28 @@ gint SpellCheck::compareTextBboxes (gconstpointer a, gconstpointer b)
     Geom::OptRect bbox1 = i1->desktopVisualBounds();
     Geom::OptRect bbox2 = i2->desktopVisualBounds();
     if (!bbox1 || !bbox2) {
-        return 0;
+        return false;
     }
 
     // vector between top left corners
     Geom::Point diff = Geom::Point(bbox2->min()[Geom::X], bbox2->max()[Geom::Y]) -
                        Geom::Point(bbox1->min()[Geom::X], bbox1->max()[Geom::Y]);
 
-    // sort top to bottom, left to right, but:
-    // if i2 is higher only 0.2 or less times it is righter than i1, put i1 first
-    if (diff[Geom::Y] > 0.2 * diff[Geom::X])
-        return 1;
-    else
-        return -1;
-
-    return 0;
+    return diff[Geom::Y] == 0 ? (diff[Geom::X] < 0) : (diff[Geom::Y] < 0);
 }
 
 // We regenerate and resort the list every time, because user could have changed it while the
 // dialog was waiting
 SPItem *SpellCheck::getText (SPObject *root)
 {
-    GSList *l = NULL;
-    l = allTextItems (root, l, false, true);
-    l = g_slist_sort(l, (GCompareFunc)SpellCheck::compareTextBboxes);
+    std::vector<SPItem*> l;
+    allTextItems (root, l, false, true);
+    std::sort(l.begin(),l.end(),SpellCheck::compareTextBboxes);
 
-    for (GSList *i = l; i; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
-        if (!g_slist_find (_seen_objects, item)) {
-            _seen_objects = g_slist_prepend(_seen_objects, item);
-            g_slist_free(l);
+    for (auto item:l) {
+        if(_seen_objects.insert(item).second)
             return item;
-        }
     }
-
-    g_slist_free(l);
     return NULL;
 }
 
@@ -402,8 +378,7 @@ SpellCheck::init(SPDesktop *d)
     _root = desktop->getDocument()->getRoot();
 
     // empty the list of objects we've checked
-    g_slist_free (_seen_objects);
-    _seen_objects = NULL;
+    _seen_objects.clear();
 
     // grab first text
     nextText();
@@ -456,8 +431,7 @@ SpellCheck::finished ()
         g_free(label);
     }
 
-    g_slist_free(_seen_objects);
-    _seen_objects = NULL;
+    _seen_objects.clear();
 
     desktop = NULL;
     _root = NULL;
@@ -615,7 +589,7 @@ SpellCheck::nextWord()
             curve->lineto(area.corner(0));
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(rect), curve);
             sp_canvas_item_show(rect);
-            _rects = g_slist_prepend(_rects, rect);
+            _rects.push_back(rect);
 
             // scroll to make it all visible
             Geom::Point const center = desktop->get_display_area().midpoint();
@@ -707,10 +681,10 @@ SpellCheck::nextWord()
 void
 SpellCheck::deleteLastRect ()
 {
-    if (_rects) {
-        sp_canvas_item_hide(SP_CANVAS_ITEM(_rects->data));
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(_rects->data));
-        _rects = _rects->next; // pop latest-prepended rect
+    if (!_rects.empty()) {
+        sp_canvas_item_hide(_rects.back());
+        sp_canvas_item_destroy(_rects.back());
+        _rects.pop_back(); // pop latest-prepended rect
     }
 }
 
@@ -860,7 +834,6 @@ SpellCheck::onStart ()
 }
 }
 }
-
 
 /*
   Local Variables:

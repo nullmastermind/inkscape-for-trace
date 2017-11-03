@@ -11,15 +11,15 @@
  */
 
 #include "live_effects/effect.h"
-
-#include <gtkmm/expander.h>
+#include "ui/dialog/styledialog.h"
 
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/fontbutton.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
 #include "live_effects/parameter/bool.h"
-#include "live_effects/parameter/originalpath.h"
+#include "live_effects/parameter/colorpicker.h"
+#include "live_effects/parameter/message.h"
 #include <libnrtype/font-lister.h>
 #include <2geom/angle.h>
 #include <2geom/ray.h>
@@ -44,24 +44,24 @@ public:
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doEffect (SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows = false);
+    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
-    void onExpanderChanged();
     void createArrowMarker(const char * mode);
     bool hasMeassure (size_t i);
-    virtual Gtk::Widget *newWidget();
 private:
     UnitParam unit;
-    FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
+    ColorPickerParam coloropacity;
+    FontButtonParam fontbutton;
     ScalarParam precision;
     ScalarParam fix_overlaps;
     ScalarParam position;
     ScalarParam text_top_bottom;
-    ScalarParam text_right_left;
     ScalarParam helpline_distance;
     ScalarParam helpline_overlap;
+    ScalarParam line_width;
     ScalarParam scale;
     TextParam format;
     TextParam blacklist;
@@ -70,22 +70,16 @@ private:
     BoolParam flip_side;
     BoolParam scale_sensitive;
     BoolParam local_locale;
-    BoolParam line_group_05;
     BoolParam rotate_anotation;
     BoolParam hide_back;
-    TextParam dimline_format;
-    TextParam helperlines_format;
-    TextParam anotation_format;
-    TextParam arrows_format;
+    MessageParam message;
     Glib::ustring display_unit;
-    bool expanded;
-    Gtk::Expander * expander;
     double doc_scale;
     double fontsize;
     double anotation_width;
     double previous_size;
     double arrow_gap;
-
+    Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 

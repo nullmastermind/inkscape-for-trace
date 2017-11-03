@@ -434,7 +434,7 @@ bool ConnectorTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_PRESS:
-            ret = this->_handleKeyPress(get_group0_keyval (&event->key));
+            ret = this->_handleKeyPress(get_latin_keyval (&event->key));
             break;
 
         default:
@@ -904,7 +904,7 @@ void ConnectorTool::_flushWhite(SPCurve *gc) {
             this->newconn->updateRepr();
         }
 
-        this->newconn->doWriteTransform(this->newconn->getRepr(), this->newconn->transform, NULL, true);
+        this->newconn->doWriteTransform(this->newconn->transform, NULL, true);
 
         // Only set the selection after we are finished with creating the attributes of
         // the connector.  Otherwise, the selection change may alter the defaults for

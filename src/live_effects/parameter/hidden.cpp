@@ -59,6 +59,15 @@ HiddenParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+HiddenParam::param_getDefaultSVGValue() const
+{
+    Inkscape::SVGOStringStream os;
+    os << defvalue;
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
+}
+
 Gtk::Widget *
 HiddenParam::param_newWidget()
 {

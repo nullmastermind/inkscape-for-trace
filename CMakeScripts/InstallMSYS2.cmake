@@ -66,7 +66,6 @@ if(WIN32)
     ${MINGW_BIN}/libicudt[0-9]*.dll
     ${MINGW_BIN}/libicuin[0-9]*.dll
     ${MINGW_BIN}/libicuuc[0-9]*.dll
-    ${MINGW_BIN}/libidn-[0-9]*.dll
     ${MINGW_BIN}/libidn2-[0-9]*.dll
     ${MINGW_BIN}/libintl-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll

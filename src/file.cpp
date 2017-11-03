@@ -71,10 +71,6 @@ using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
 using Inkscape::IO::Resource::USER;
 
-#ifdef WITH_GNOME_VFS
-# include <libgnomevfs/gnome-vfs.h>
-#endif
-
 #ifdef WITH_DBUS
 #include "extension/dbus/dbus-init.h"
 #endif
@@ -685,91 +681,6 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     }
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, msg.c_str());
     return true;
-}
-
-/*
- * Used only for remote saving using VFS and a specific uri. Gets the file at the /tmp.
- */
-bool
-file_save_remote(SPDocument */*doc*/,
-    #ifdef WITH_GNOME_VFS
-                 const Glib::ustring &uri,
-    #else
-                 const Glib::ustring &/*uri*/,
-    #endif
-                 Inkscape::Extension::Extension */*key*/, bool /*saveas*/, bool /*official*/)
-{
-#ifdef WITH_GNOME_VFS
-
-#define BUF_SIZE 8192
-    gnome_vfs_init();
-
-    GnomeVFSHandle    *from_handle = NULL;
-    GnomeVFSHandle    *to_handle = NULL;
-    GnomeVFSFileSize  bytes_read;
-    GnomeVFSFileSize  bytes_written;
-    GnomeVFSResult    result;
-    guint8 buffer[8192];
-
-    gchar* uri_local = g_filename_from_utf8( uri.c_str(), -1, NULL, NULL, NULL);
-
-    if ( uri_local == NULL ) {
-        g_warning( "Error converting filename to locale encoding.");
-    }
-
-    // Gets the temp file name.
-    Glib::ustring fileName = Glib::get_tmp_dir ();
-    fileName.append(G_DIR_SEPARATOR_S);
-    fileName.append((gnome_vfs_uri_extract_short_name(gnome_vfs_uri_new(uri_local))));
-
-    // Open the temp file to send.
-    result = gnome_vfs_open (&from_handle, fileName.c_str(), GNOME_VFS_OPEN_READ);
-
-    if (result != GNOME_VFS_OK) {
-        g_warning("Could not find the temp saving.");
-        return false;
-    }
-
-    gnome_vfs_create (&to_handle, uri_local, GNOME_VFS_OPEN_WRITE, FALSE, GNOME_VFS_PERM_USER_ALL);
-    result = gnome_vfs_open (&to_handle, uri_local, GNOME_VFS_OPEN_WRITE);
-
-    if (result != GNOME_VFS_OK) {
-        g_warning("file creating: %s", gnome_vfs_result_to_string(result));
-        return false;
-    }
-
-    while (1) {
-
-        result = gnome_vfs_read (from_handle, buffer, 8192, &bytes_read);
-
-        if ((result == GNOME_VFS_ERROR_EOF) &&(!bytes_read)){
-            gnome_vfs_close (from_handle);
-            gnome_vfs_close (to_handle);
-            return true;
-        }
-
-        if (result != GNOME_VFS_OK) {
-            g_warning("%s", gnome_vfs_result_to_string(result));
-            return false;
-        }
-        result = gnome_vfs_write (to_handle, buffer, bytes_read, &bytes_written);
-        if (result != GNOME_VFS_OK) {
-            g_warning("%s", gnome_vfs_result_to_string(result));
-            return false;
-        }
-
-
-        if (bytes_read != bytes_written){
-            return false;
-        }
-
-    }
-    return true;
-#else
-    // in case we do not have GNOME_VFS
-    return false;
-#endif
-
 }
 
 

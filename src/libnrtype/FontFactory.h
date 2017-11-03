@@ -136,6 +136,12 @@ public:
     // internal
     void                  AddInCache(font_instance *who);
 
+    /// Add a directory from which to include additional fonts
+    void                  AddFontsDir(char const *utf8dir);
+
+    /// Add a an additional font.
+    void                  AddFontFile(char const *utf8file);
+
 private:
     void*                 loadedPtr;
 

@@ -59,6 +59,13 @@ ToggleButtonParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+ToggleButtonParam::param_getDefaultSVGValue() const
+{
+    gchar * str = g_strdup(defvalue ? "true" : "false");
+    return str;
+}
+
 void 
 ToggleButtonParam::param_update_default(bool default_value)
 {
@@ -140,21 +147,25 @@ ToggleButtonParam::refresh_button()
     if(!box_button){
         return;
     }
-    GList * childs = gtk_container_get_children(GTK_CONTAINER(box_button->gobj()));
-    guint total_widgets = g_list_length (childs);
+    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(box_button))->get_children();
     if (!param_label.empty()) {
+        Gtk::Label *lab = dynamic_cast<Gtk::Label*>(children[children.size()-1]);
+        if (!lab) return;
         if(value || inactive_label.empty()){
-            gtk_label_set_text(GTK_LABEL(g_list_nth_data(childs, total_widgets-1)), param_label.c_str());
+            lab->set_text(param_label.c_str());
         }else{
-            gtk_label_set_text(GTK_LABEL(g_list_nth_data(childs, total_widgets-1)), inactive_label.c_str());
+            lab->set_text(inactive_label.c_str());
         }
     }
     if ( _icon_active ) {
         GdkPixbuf * icon_pixbuf = NULL;
+        Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
+        Gtk::IconSize is(_icon_size);
+        if (!im) return;
         if(!value){ 
-            gtk_image_set_from_icon_name (GTK_IMAGE(g_list_nth_data(childs, 0)), _icon_inactive, _icon_size);
+            im->set_from_icon_name(_icon_inactive, is);
         } else {
-            gtk_image_set_from_icon_name (GTK_IMAGE(g_list_nth_data(childs, 0)), _icon_active, _icon_size);
+            im->set_from_icon_name(_icon_active, is);
         }
     }
 }

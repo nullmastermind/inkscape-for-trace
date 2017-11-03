@@ -527,7 +527,7 @@ void Tracer::traceThread()
         if (reprobj)
             {
             SPItem *newItem = SP_ITEM(reprobj);
-            newItem->doWriteTransform(pathRepr, tf, NULL);
+            newItem->doWriteTransform(tf);
             }
         if (nrPaths == 1)
             {

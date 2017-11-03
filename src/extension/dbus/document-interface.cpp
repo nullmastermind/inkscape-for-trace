@@ -968,10 +968,7 @@ document_interface_save_as (DocumentInterface *doc_interface,
 {
     // FIXME: Isn't there a verb we can use for this instead?
     SPDocument * doc = doc_interface->target.getDocument();
-    #ifdef WITH_GNOME_VFS
-    const Glib::ustring file(filename);
-    return file_save_remote(doc, file, NULL, TRUE, TRUE);
-    #endif
+
     if (!doc || strlen(filename)<1) { //Safety check
         return false;
     }

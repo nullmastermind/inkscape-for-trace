@@ -52,18 +52,13 @@ void SPDefs::modified(unsigned int flags) {
     }
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
-
-    GSList *l = NULL;
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = SP_OBJECT(l->data);
-        l = g_slist_remove(l, child);
+    for (auto child:l) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
@@ -78,20 +73,17 @@ Inkscape::XML::Node* SPDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             repr = xml_doc->createElement("svg:defs");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
             if (crepr) {
-                l = g_slist_prepend(l, crepr);
+                l.push_back(crepr);
             }
         }
-
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
-
     } else {
         for (auto& child: children) {
             child.updateRepr(flags);

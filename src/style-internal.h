@@ -59,6 +59,10 @@ enum SPStyleSrc {
  *   reading in the properties backwards. If a property is already set, it
  *   prevents an earlier property from being read.
  *
+ *   A declaration with an "!important" rule overrides any other declarations (except those that
+ *   also have an "!important" rule). Attributes can not use the "!important" rule and the rule
+ *   is not inherited.
+ *
  *   In order for cascading to work, each element in the tree must be read in from top to bottom
  *   (parent before child). At each step, if a style property is not explicitly set, the property
  *   value is taken from the parent. Some properties have "computed" values that depend on:
@@ -122,6 +126,7 @@ public:
           inherits(inherits),
           set(false),
           inherit(false),
+          important(false),
           style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
           style(NULL)
     {}
@@ -131,12 +136,41 @@ public:
 
     virtual void read( gchar const *str ) = 0;
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
-        if ( !set ) {
-            read( str );
+        if (!str) return;
+
+        bool has_important = false;
+        Glib::ustring stripped = strip_important(str, has_important); // Sets 'has_important'
+
+        // '!important' is invalid on attributes, don't read.
+        if (source == SP_STYLE_SRC_ATTRIBUTE && has_important){
+            return;
+        }
+
+        if ( !set || (has_important && !important) ) {
+            read( stripped.c_str() );
             if ( set ) {
                 style_src = source;
+                if (has_important) {
+                    important = true;
+                }
             }
         }
+    }
+
+    Glib::ustring important_str() const {
+        return Glib::ustring(important ? " !important" : "");
+    }
+
+    Glib::ustring strip_important( gchar const *str, bool &important ) {
+        assert (str != NULL);
+        Glib::ustring string = Glib::ustring(str);
+        auto pos = string.rfind( " !important" );
+        important = false;
+        if (pos != std::string::npos) {
+            important = true;
+            string.erase(pos);
+        }
+        return string;
     }
 
     virtual void readAttribute( Inkscape::XML::Node *repr ) {
@@ -147,7 +181,7 @@ public:
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const = 0;
     virtual void clear() {
-        set = false, inherit = false;
+        set = false, inherit = false, important = false;
     }
 
     virtual void cascade( const SPIBase* const parent ) = 0;
@@ -162,6 +196,7 @@ public:
         name        = rhs.name;
         inherits    = rhs.inherits;
         set         = rhs.set;
+        important   = rhs.important;
         inherit     = rhs.inherit;
         style_src   = rhs.style_src;
         style       = rhs.style;
@@ -183,6 +218,7 @@ public:
     unsigned inherits : 1;    // Property inherits by default from parent.
     unsigned set : 1;         // Property has been explicitly set (vs. inherited).
     unsigned inherit : 1;     // Property value set to 'inherit'.
+    unsigned important : 1;   // Property rule 'important' has been explicitly set.
     SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet).
 
   // To do: make private after g_asserts removed

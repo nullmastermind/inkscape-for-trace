@@ -48,6 +48,12 @@ UnitParam::param_getSVGValue() const
     return g_strdup(unit->abbr.c_str());
 }
 
+gchar *
+UnitParam::param_getDefaultSVGValue() const
+{
+    return g_strdup(defunit->abbr.c_str());
+}
+
 void
 UnitParam::param_set_default()
 {

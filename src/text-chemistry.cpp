@@ -119,7 +119,7 @@ text_put_on_path()
         parent->appendChild(repr);
 
         SPItem *new_item = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
-        new_item->doWriteTransform(repr, text->transform);
+        new_item->doWriteTransform(text->transform);
         new_item->updateRepr();
 
         Inkscape::GC::release(repr);
@@ -140,9 +140,9 @@ text_put_on_path()
     text->getRepr()->setAttribute("transform", NULL);
 
     // make a list of text children
-    GSList *text_reprs = NULL;
+    std::vector<Inkscape::XML::Node *> text_reprs;
     for(auto& o: text->children) {
-        text_reprs = g_slist_prepend(text_reprs, o.getRepr());
+        text_reprs.push_back(o.getRepr());
     }
 
     // create textPath and put it into the text
@@ -158,9 +158,9 @@ text_put_on_path()
     }
     text->getRepr()->addChild(textpath, NULL);
 
-    for ( GSList *i = text_reprs ; i ; i = i->next ) {
+    for (auto i=text_reprs.rbegin();i!=text_reprs.rend();++i) {
         // Make a copy of each text child
-        Inkscape::XML::Node *copy = ((Inkscape::XML::Node *) i->data)->duplicate(xml_doc);
+        Inkscape::XML::Node *copy = (*i)->duplicate(xml_doc);
         // We cannot have multiline in textpath, so remove line attrs from tspans
         if (!strcmp(copy->name(), "svg:tspan")) {
             copy->setAttribute("sodipodi:role", NULL);
@@ -168,7 +168,7 @@ text_put_on_path()
             copy->setAttribute("y", NULL);
         }
         // remove the old repr from under text
-        text->getRepr()->removeChild(reinterpret_cast<Inkscape::XML::Node *>(i->data));
+        text->getRepr()->removeChild(*i);
         // put its copy into under textPath
         textpath->addChild(copy, NULL); // fixme: copy id
     }
@@ -179,7 +179,6 @@ text_put_on_path()
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
                        _("Put text on path"));
-    g_slist_free(text_reprs);
 }
 
 void
@@ -393,7 +392,7 @@ text_unflow ()
     }
 
     std::vector<SPItem*> new_objs;
-    GSList *old_objs = NULL;
+    std::vector<SPItem *> old_objs;
 
     auto items = selection->items();
     for(auto i=items.begin();i!=items.end();++i){
@@ -444,7 +443,7 @@ text_unflow ()
         text->_adjustFontsizeRecursive(text, ex);
 
         new_objs.push_back((SPItem*)text_object);
-        old_objs = g_slist_prepend (old_objs, flowtext);
+        old_objs.push_back(flowtext);
 
         Inkscape::GC::release(rtext);
         Inkscape::GC::release(rtspan);
@@ -454,11 +453,9 @@ text_unflow ()
     selection->clear();
     reverse(new_objs.begin(),new_objs.end());
     selection->setList(new_objs);
-    for (GSList *i = old_objs; i; i = i->next) {
-        SP_OBJECT(i->data)->deleteObject (true);
+    for (auto i:old_objs) {
+        i->deleteObject (true);
     }
-
-    g_slist_free (old_objs);
 
     DocumentUndo::done(doc, SP_VERB_CONTEXT_TEXT, 
                        _("Unflow flowed text"));
@@ -505,7 +502,7 @@ flowtext_to_text()
         parent->addChild(repr, item->getRepr());
 
         SPItem *new_item = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
-        new_item->doWriteTransform(repr, item->transform);
+        new_item->doWriteTransform(item->transform);
         new_item->updateRepr();
     
         Inkscape::GC::release(repr);

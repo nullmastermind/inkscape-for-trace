@@ -1,6 +1,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdkmm/pixbuf.h>
+#include <gdkmm/pixbufformat.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <glib/gprintf.h>
 #include <glibmm/i18n.h>
 #include "dir-util.h"
@@ -63,7 +64,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
     bool embed = ( link.compare( "embed" ) == 0 );
  
     SPDocument *doc = NULL;
-    boost::scoped_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
+    std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
 
     // TODO: the pixbuf is created again from the base64-encoded attribute in SPImage.
     // Find a way to create the pixbuf only once.
@@ -163,14 +164,9 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 void
 GdkpixbufInput::init(void)
 {
-    GSList * formatlist, * formatlisthead;
-
-    /* \todo I'm not sure if I need to free this list */
-    for (formatlist = formatlisthead = gdk_pixbuf_get_formats();
-         formatlist != NULL;
-         formatlist = g_slist_next(formatlist)) {
-
-        GdkPixbufFormat *pixformat = (GdkPixbufFormat *)formatlist->data;
+    static std::vector< Gdk::PixbufFormat > formatlist = Gdk::Pixbuf::get_formats();
+    for (auto i: formatlist) {
+        GdkPixbufFormat *pixformat = i.gobj();
 
         gchar *name =        gdk_pixbuf_format_get_name(pixformat);
         gchar *description = gdk_pixbuf_format_get_description(pixformat);
@@ -240,8 +236,6 @@ GdkpixbufInput::init(void)
         g_strfreev(mimetypes);
         g_strfreev(extensions);
     }
-
-    g_slist_free(formatlisthead);
 }
 
 } } }  /* namespace Inkscape, Extension, Implementation */

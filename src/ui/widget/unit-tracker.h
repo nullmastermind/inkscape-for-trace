@@ -17,6 +17,7 @@
 
 #include <map>
 #include "util/units.h"
+#include "widgets/ege-select-one-action.h"
 
 using Inkscape::Util::Unit;
 using Inkscape::Util::UnitType;
@@ -65,9 +66,8 @@ private:
     Inkscape::Util::Unit const *_activeUnit;
     bool _activeUnitInitialized;
     GtkListStore *_store;
-    GSList *_unitList;
-    GSList *_actionList;
-    GSList *_adjList;
+    std::vector<EgeSelectOneAction*> _actionList;
+    std::vector<GtkAdjustment*> _adjList;
     std::map <GtkAdjustment *, gdouble> _priorValues;
 };
 

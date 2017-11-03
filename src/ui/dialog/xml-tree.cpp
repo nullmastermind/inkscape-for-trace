@@ -856,7 +856,7 @@ void XmlTree::on_document_uri_set(gchar const * /*uri*/, SPDocument * /*document
 
 gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*/)
 {
-    switch (Inkscape::UI::Tools::get_group0_keyval (event)) {
+    switch (Inkscape::UI::Tools::get_latin_keyval (event)) {
         case GDK_KEY_Escape: // defocus
             gtk_widget_destroy(w);
             return TRUE;

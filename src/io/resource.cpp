@@ -52,6 +52,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
                 case FILTERS: temp = INKSCAPE_FILTERDIR; break;
+                case FONTS: temp = INKSCAPE_FONTSDIR; break;
                 case GRADIENTS: temp = INKSCAPE_GRADIENTSDIR; break;
                 case ICONS: temp = INKSCAPE_PIXMAPDIR; break;
                 case KEYS: temp = INKSCAPE_KEYSDIR; break;
@@ -87,6 +88,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             switch (type) {
                 case EXTENSIONS: name = "extensions"; break;
                 case FILTERS: name = "filters"; break;
+                case FONTS: name = "fonts"; break;
                 case GRADIENTS: name = "gradients"; break;
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
@@ -113,10 +115,10 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
     return path;
 }
 
-Util::ptr_shared<char> get_path(Domain domain, Type type, char const *filename)
+Util::ptr_shared get_path(Domain domain, Type type, char const *filename)
 {
     char *path = _get_path(domain, type, filename);
-    Util::ptr_shared<char> result=Util::share_string(path);
+    Util::ptr_shared result=Util::share_string(path);
     g_free(path);
     return result;
 }

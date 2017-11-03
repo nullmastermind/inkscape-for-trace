@@ -82,6 +82,15 @@ TransformedPointParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+TransformedPointParam::param_getDefaultSVGValue() const
+{
+    Inkscape::SVGOStringStream os;
+    os << defvalue;
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
+}
+
 void
 TransformedPointParam::param_update_default(Geom::Point default_point)
 {

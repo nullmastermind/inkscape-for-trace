@@ -417,7 +417,7 @@ static void sp_text_context_setup_text(TextTool *tc)
     text_item->transform = SP_ITEM(ec->desktop->currentLayer())->i2doc_affine().inverse();
 
     text_item->updateRepr();
-    text_item->doWriteTransform(text_item->getRepr(), text_item->transform, NULL, true);
+    text_item->doWriteTransform(text_item->transform, NULL, true);
     DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                _("Create text"));
 }
@@ -575,13 +575,9 @@ bool TextTool::root_handler(GdkEvent* event) {
                 // status text
                 Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(fabs((p - this->p0)[Geom::X]), "px");
                 Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(fabs((p - this->p0)[Geom::Y]), "px");
-                GString *xs = g_string_new(x_q.string(desktop->namedview->display_units).c_str());
-                GString *ys = g_string_new(y_q.string(desktop->namedview->display_units).c_str());
-                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs->str, ys->str);
-
-                g_string_free(xs, FALSE);
-                g_string_free(ys, FALSE);
-
+                Glib::ustring xs = x_q.string(desktop->namedview->display_units);
+                Glib::ustring ys = y_q.string(desktop->namedview->display_units);
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Flowed text frame</b>: %s &#215; %s"), xs.c_str(), ys.c_str());
             } else if (!this->sp_event_context_knot_mouseover()) {
                 SnapManager &m = desktop->namedview->snap_manager;
                 m.setup(desktop);
@@ -657,7 +653,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
             break;
         case GDK_KEY_PRESS: {
-            guint const group0_keyval = get_group0_keyval(&event->key);
+            guint const group0_keyval = get_latin_keyval(&event->key);
 
             if (group0_keyval == GDK_KEY_KP_Add ||
                 group0_keyval == GDK_KEY_KP_Subtract) {
@@ -965,7 +961,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->text) {
                                     if (MOD__ALT(event)) {
                                         gint mul = 1 + gobble_key_events(
-                                            get_group0_keyval(&event->key), 0); // with any mask
+                                            get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*-10, 0));
                                         else
@@ -989,7 +985,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->text) {
                                     if (MOD__ALT(event)) {
                                         gint mul = 1 + gobble_key_events(
-                                            get_group0_keyval(&event->key), 0); // with any mask
+                                            get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(mul*10, 0));
                                         else
@@ -1013,7 +1009,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->text) {
                                     if (MOD__ALT(event)) {
                                         gint mul = 1 + gobble_key_events(
-                                            get_group0_keyval(&event->key), 0); // with any mask
+                                            get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*-10));
                                         else
@@ -1037,7 +1033,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->text) {
                                     if (MOD__ALT(event)) {
                                         gint mul = 1 + gobble_key_events(
-                                            get_group0_keyval(&event->key), 0); // with any mask
+                                            get_latin_keyval(&event->key), 0); // with any mask
                                         if (MOD__SHIFT(event))
                                             sp_te_adjust_kerning_screen(this->text, this->text_sel_start, this->text_sel_end, desktop, Geom::Point(0, mul*10));
                                         else

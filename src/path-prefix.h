@@ -34,6 +34,7 @@
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
 #  define INKSCAPE_FILTERDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/filters" )
+#  define INKSCAPE_FONTSDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/fonts" )
 #  define INKSCAPE_GRADIENTSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/gradients" )
 #  define INKSCAPE_KEYSDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/keys" )
 #  define INKSCAPE_PIXMAPDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/icons" )
@@ -58,6 +59,7 @@
 #    define INKSCAPE_EXAMPLESDIR  WIN32_DATADIR("examples")
 #    define INKSCAPE_EXTENSIONDIR WIN32_DATADIR("extensions")
 #    define INKSCAPE_FILTERDIR    WIN32_DATADIR("filters")
+#    define INKSCAPE_FONTSDIR     WIN32_DATADIR("fonts")
 #    define INKSCAPE_GRADIENTSDIR WIN32_DATADIR("gradients")
 #    define INKSCAPE_KEYSDIR      WIN32_DATADIR("keys")
 #    define INKSCAPE_PIXMAPDIR    WIN32_DATADIR("icons")
@@ -81,6 +83,7 @@
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    "Contents/Resources/share/inkscape/filters"
+#    define INKSCAPE_FONTSDIR     "Contents/Resources/share/inkscape/fonts"
 #    define INKSCAPE_GRADIENTSDIR "Contents/Resources/share/inkscape/gradients"
 #    define INKSCAPE_KEYSDIR      "Contents/Resources/share/inkscape/keys"
 #    define INKSCAPE_PIXMAPDIR    "Contents/Resources/share/inkscape/icons"
@@ -104,6 +107,7 @@
 #    define INKSCAPE_EXAMPLESDIR  INKSCAPE_DATADIR "/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR INKSCAPE_DATADIR "/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    INKSCAPE_DATADIR "/inkscape/filters"
+#    define INKSCAPE_FONTSDIR     INKSCAPE_DATADIR "/inkscape/fonts"
 #    define INKSCAPE_GRADIENTSDIR INKSCAPE_DATADIR "/inkscape/gradients"
 #    define INKSCAPE_KEYSDIR      INKSCAPE_DATADIR "/inkscape/keys"
 #    define INKSCAPE_PIXMAPDIR    INKSCAPE_DATADIR "/inkscape/icons"

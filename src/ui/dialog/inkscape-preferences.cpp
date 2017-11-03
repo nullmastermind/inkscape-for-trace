@@ -22,6 +22,8 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
 #include <gtkmm/main.h>
+#include <gtkmm/recentmanager.h>
+#include <gtkmm/recentinfo.h>
 
 #include "preferences.h"
 #include "verbs.h"
@@ -498,10 +500,19 @@ void InkscapePreferences::initPageTools()
 
     _page_text.add_group_header( _("Text units"));
     _font_unit_type.init( "/options/font/unitType", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), SP_CSS_UNIT_PT );
-    _page_text.add_line( false, _("Text size unit type:"), _font_unit_type, "",
+    _page_text.add_line( true, _("Text size unit type:"), _font_unit_type, "",
                        _("Set the type of unit used in the text toolbar and text dialogs"), false);
     _font_output_px.init ( _("Always output text size in pixels (px)"), "/options/font/textOutputPx", true);
 //    _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
+
+    _page_text.add_group_header( _("Font directories"));
+    _font_fontsdir_system.init( _("Use Inkscape's fonts directory"), "/options/font/use_fontsdir_system", true);
+    _page_text.add_line( true, "", _font_fontsdir_system, "", _("Load additional fonts from \"fonts\" directory located in Inkscape's global \"share\" directory"));
+    _font_fontsdir_user.init( _("Use user's fonts directory"), "/options/font/use_fontsdir_user", true);
+    _page_text.add_line( true, "", _font_fontsdir_user, "", _("Load additional fonts from \"fonts\" directory located in Inkscape's user configuration directory"));
+    _font_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
+    _page_text.add_line(true, _("Additional font directories"), _font_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
+    
 
     this->AddNewObjectsStyle(_page_text, "/tools/text");
 
@@ -1959,12 +1970,7 @@ void InkscapePreferences::initPageSpellcheck()
 
 static void appendList( Glib::ustring& tmp, const gchar* const*listing )
 {
-    bool first = true;
     for (const gchar* const* ptr = listing; *ptr; ptr++) {
-        if (!first) {
-            tmp += "  ";
-        }
-        first = false;
         tmp += *ptr;
         tmp += "\n";
     }
@@ -1980,77 +1986,64 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line( false, "", _misc_namedicon_delay, "",
                            _("When on, named icons will be rendered before displaying the ui. This is for working around bugs in GTK+ named icon notification"), true);
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    {
-        // TRANSLATORS: following strings are paths in Inkscape preferences - Misc - System info
+    _page_system.add_group_header( _("System info"));
 
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
+    _sys_user_config.set_editable(false);
+    _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-        _page_system.add_group_header( _("System info"));
+    _sys_user_prefs.set_text(prefs->getPrefsFilename());
+    _sys_user_prefs.set_editable(false);
+    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
 
-        _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
-        _sys_user_config.set_editable(false);
-        _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
+    _sys_user_extension_dir.set_text((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""));
+    _sys_user_extension_dir.set_editable(false);
+    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
 
-        _sys_user_prefs.set_text(prefs->getPrefsFilename());
-        _sys_user_prefs.set_editable(false);
-        _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
+    _sys_user_cache.set_text(g_get_user_cache_dir());
+    _sys_user_cache.set_editable(false);
+    _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of users cache"), true);
 
-        _sys_user_extension_dir.set_text((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""));
-        _sys_user_extension_dir.set_editable(false);
-        _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
-
-        _sys_user_cache.set_text(g_get_user_cache_dir());
-        _sys_user_cache.set_editable(false);
-        _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of users cache"), true);
-
-        Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
-        if (tmp_dir.empty()) {
-            tmp_dir = Glib::get_tmp_dir();
-        }
-        _sys_tmp_files.set_text(tmp_dir);
-        _sys_tmp_files.set_editable(false);
-        _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
-
-        _sys_data.set_text( INKSCAPE_DATADIR );
-        _sys_data.set_editable(false);
-        _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
-
-        _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
-        _sys_extension_dir.set_editable(false);
-        _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
-
-        Glib::ustring tmp;
-        appendList( tmp, g_get_system_data_dirs() );
-        _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
-        _sys_systemdata.set_editable(false);
-        _sys_systemdata_scroll.add(_sys_systemdata);
-        _sys_systemdata_scroll.set_size_request(0, 80);
-        _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-         _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
-
-        {
-            tmp = "";
-            gchar** paths = 0;
-            gint count = 0;
-            gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
-            if (count > 0) {
-                tmp += paths[0];
-                tmp += "\n";
-                for (int i = 1; i < count; i++) {
-                    tmp += "  ";
-                    tmp += paths[i];
-                    tmp += "\n";
-                }
-            }
-        }
-
-        _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
+    Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
+    if (tmp_dir.empty()) {
+        tmp_dir = Glib::get_tmp_dir();
     }
+    _sys_tmp_files.set_text(tmp_dir);
+    _sys_tmp_files.set_editable(false);
+    _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
+
+    _sys_data.set_text( INKSCAPE_DATADIR );
+    _sys_data.set_editable(false);
+    _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
+
+    _sys_extension_dir.set_text(INKSCAPE_EXTENSIONDIR);
+    _sys_extension_dir.set_editable(false);
+    _page_system.add_line(true, _("Inkscape extensions: "), _sys_extension_dir, "", _("Location of the Inkscape extensions"), true);
+
+    Glib::ustring tmp;
+    appendList( tmp, g_get_system_data_dirs() );
+    _sys_systemdata.get_buffer()->insert(_sys_systemdata.get_buffer()->end(), tmp);
+    _sys_systemdata.set_editable(false);
+    _sys_systemdata_scroll.add(_sys_systemdata);
+    _sys_systemdata_scroll.set_size_request(100, 80);
+    _sys_systemdata_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _sys_systemdata_scroll.set_shadow_type(Gtk::SHADOW_IN);
+    _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
+
+    tmp = "";
+    gchar** paths = 0;
+    gint count = 0;
+    gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
+    appendList( tmp, paths );
+    g_strfreev(paths);
+    _sys_icon.get_buffer()->insert(_sys_icon.get_buffer()->end(), tmp);
     _sys_icon.set_editable(false);
     _sys_icon_scroll.add(_sys_icon);
-    _sys_icon_scroll.set_size_request(0, 80);
+    _sys_icon_scroll.set_size_request(100, 80);
     _sys_icon_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _sys_icon_scroll.set_shadow_type(Gtk::SHADOW_IN);
     _page_system.add_line(true,  _("Icon theme: "), _sys_icon_scroll, "", _("Locations of icon themes"), true);
 
     this->AddPage(_page_system, _("System"), PREFS_PAGE_SYSTEM);
@@ -2097,21 +2090,15 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
 
 void InkscapePreferences::on_reset_open_recent_clicked()
 {
-    GtkRecentManager* manager = gtk_recent_manager_get_default();
-    GList* recent_list = gtk_recent_manager_get_items(manager);
-    GList* element;
-    GError* error;
+    Glib::RefPtr<Gtk::RecentManager> manager = Gtk::RecentManager::get_default();
+    std::vector< Glib::RefPtr< Gtk::RecentInfo > > recent_list = manager->get_items();
 
     //Remove only elements that were added by Inkscape
-    for (element = g_list_first(recent_list); element; element = g_list_next(element)){
-        error = NULL;
-        GtkRecentInfo* info = (GtkRecentInfo*) element->data;
-        if (gtk_recent_info_has_application(info, g_get_prgname())){
-            gtk_recent_manager_remove_item(manager, gtk_recent_info_get_uri(info), &error);
+    for (auto e : recent_list) {
+        if (e->has_application(g_get_prgname())) {
+            manager->remove_item(e->get_uri());
         }
-        gtk_recent_info_unref (info);
     }
-    g_list_free(recent_list);
 }
 
 void InkscapePreferences::on_pagelist_selection_changed()

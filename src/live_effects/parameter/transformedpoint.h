@@ -37,6 +37,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
 
     Geom::Point getVector() const { return vector; };
     Geom::Point getOrigin() const { return origin; };

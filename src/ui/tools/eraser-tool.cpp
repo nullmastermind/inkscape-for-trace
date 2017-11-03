@@ -360,10 +360,9 @@ void EraserTool::cancel() {
     this->is_drawing = false;
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
             /* Remove all temporary line segments */
-            while (this->segments) {
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
-                this->segments = g_slist_remove(this->segments, this->segments->data);
-            }
+    for (auto i : this->segments)
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+    this->segments.clear();
             /* reset accumulated curve */
             this->accumulated->reset();
             this->clear_current();
@@ -464,10 +463,9 @@ bool EraserTool::root_handler(GdkEvent* event) {
             this->apply(motion_dt);
 
             /* Remove all temporary line segments */
-            while (this->segments) {
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
-                this->segments = g_slist_remove(this->segments, this->segments->data);
-            }
+            for (auto i : this->segments)
+                sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+            this->segments.clear();
 
             /* Create object */
             this->fit_and_split(true);
@@ -494,7 +492,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
     }
 
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
 //        case GDK_KEY_Up:
 //        case GDK_KEY_KP_Up:
 //            if (!MOD__CTRL_ONLY(event)) {
@@ -598,7 +596,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_RELEASE:
-        switch (get_group0_keyval(&event->key)) {
+        switch (get_latin_keyval(&event->key)) {
             case GDK_KEY_Control_L:
             case GDK_KEY_Control_R:
                 this->message_context->clear();
@@ -780,7 +778,7 @@ void EraserTool::set_to_accumulated() {
                                         if (dup_clip) {
                                             SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
                                             if (dup_clip_obj) {
-                                                dup_clip_obj->doWriteTransform(dup_clip, item->transform);
+                                                dup_clip_obj->doWriteTransform(item->transform);
                                                 sp_object_ref(clip_path, 0);
                                                 clip_path->deleteObject(true);
                                                 sp_object_unref(clip_path);
@@ -1015,7 +1013,7 @@ void EraserTool::fit_and_split(bool release) {
                 }
 
                 // FIXME: this->segments is always NULL at this point??
-                if (!this->segments) { // first segment
+                if (this->segments.empty()) { // first segment
                     add_cap(this->currentcurve, b2[1], b2[0], b1[0], b1[1], this->cap_rounding);
                 }
 
@@ -1072,7 +1070,7 @@ void EraserTool::fit_and_split(bool release) {
             /* fixme: Cannot we cascade it to root more clearly? */
             g_signal_connect(G_OBJECT(cbp), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
 
-            this->segments = g_slist_prepend(this->segments, cbp);
+            this->segments.push_back(cbp);
 
             if (eraser_mode == ERASER_MODE_DELETE) {
                 sp_canvas_item_hide(cbp);

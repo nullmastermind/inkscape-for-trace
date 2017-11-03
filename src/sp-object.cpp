@@ -199,7 +199,7 @@ typedef Debug::SimpleEvent<Debug::Event::REFCOUNT> BaseRefCountEvent;
 
 class RefCountEvent : public BaseRefCountEvent {
 public:
-    RefCountEvent(SPObject *object, int bias, Util::ptr_shared<char> name)
+    RefCountEvent(SPObject *object, int bias, Util::ptr_shared name)
     : BaseRefCountEvent(name)
     {
         _addProperty("object", Util::format("%p", object));
@@ -1540,7 +1540,10 @@ char * SPObject::getTitleOrDesc(gchar const *svg_tagname) const
     char *result = NULL;
     SPObject *elem = findFirstChild(svg_tagname);
     if ( elem ) {
-        result = elem->textualContent();
+        //This string copy could be avoided by changing 
+        //the return type of SPObject::getTitleOrDesc 
+        //to std::unique_ptr<Glib::ustring>
+        result = g_strdup(elem->textualContent().c_str());
     }
     return result;
 }
@@ -1625,24 +1628,22 @@ SPObject* SPObject::findFirstChild(gchar const *tagname) const
     return nullptr;
 }
 
-char* SPObject::textualContent() const
+Glib::ustring SPObject::textualContent() const
 {
-    GString* text = g_string_new("");
+    Glib::ustring text;
 
     for (auto& child: children)
     {
         Inkscape::XML::NodeType child_type = child.repr->type();
 
         if (child_type == Inkscape::XML::ELEMENT_NODE) {
-            char* new_string = child.textualContent();
-            g_string_append(text, new_string);
-            g_free(new_string);
+            text += child.textualContent();
         }
         else if (child_type == Inkscape::XML::TEXT_NODE) {
-            g_string_append(text, child.repr->content());
+            text += child.repr->content();
         }
     }
-    return g_string_free(text, FALSE);
+    return text;
 }
 
 // For debugging: Print SP tree structure.

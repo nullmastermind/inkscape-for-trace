@@ -76,7 +76,7 @@ public:
         _filter(filter)
     {}
     virtual ~PrefNodeObserver() {}
-    virtual void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared<char>, Util::ptr_shared<char>);
+    virtual void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared);
 private:
     Observer &_observer;
     Glib::ustring const _filter;
@@ -147,7 +147,7 @@ void Preferences::_load()
                 return;
             }
             // create some subdirectories for user stuff
-            char const *user_dirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
+            char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", NULL};
             for (int i=0; user_dirs[i]; ++i) {
                 // XXX Why are we doing this here? shouldn't this be an IO load item?
                 char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);
@@ -393,6 +393,9 @@ std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
     Inkscape::XML::Node *node = _getNode(path, false);
     if (node) {
         for (Inkscape::XML::NodeSiblingIterator i = node->firstChild(); i; ++i) {
+            if (i->attribute("id") == NULL) {
+                continue;
+            }
             temp.push_back(path + '/' + i->attribute("id"));
         }
     }
@@ -561,7 +564,7 @@ Preferences::Observer::~Observer()
     prefs->removeObserver(*this);
 }
 
-void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared<char>, Util::ptr_shared<char> new_value)
+void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared new_value)
 {
     // filter out attributes we don't watch
     gchar const *attr_name = g_quark_to_string(name);
@@ -702,6 +705,9 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
             }
 
             for (child = node->firstChild(); child; child = child->next()) {
+                if (child->attribute("id") == NULL) {
+                    continue;
+                }
                 if (!strcmp(splits[part_i], child->attribute("id"))) {
                     break;
                 }

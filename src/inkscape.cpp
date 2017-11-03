@@ -23,6 +23,7 @@
 #include <map>
 
 #include <glibmm/fileutils.h>
+#include <glibmm/regex.h>
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
@@ -47,6 +48,7 @@
 #include "inkscape.h"
 #include "io/sys.h"
 #include "io/resource.h"
+#include "libnrtype/FontFactory.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "resource-manager.h"
@@ -429,6 +431,7 @@ Application::Application(const char* argv, bool use_gui) :
     _trackalt(FALSE),
     _use_gui(use_gui)
 {
+    using namespace Inkscape::IO::Resource;
     /* fixme: load application defaults */
 
     segv_handler = signal (SIGSEGV, Application::crash_handler);
@@ -487,9 +490,10 @@ Application::Application(const char* argv, bool use_gui) :
         Inkscape::UI::Dialog::DebugDialog::getInstance()->captureLogMessages();
     }
 
-    /* Check for global remapping of Alt key */
     if (use_gui)
     {
+        Inkscape::UI::Tools::init_latin_keys_group();
+        /* Check for global remapping of Alt key */
         mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
         trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
     }
@@ -498,6 +502,22 @@ Application::Application(const char* argv, bool use_gui) :
     Inkscape::Extension::init();
 
     autosave_init();
+    
+    /* Initialize font factory */
+    font_factory *factory = font_factory::Default();
+    if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
+        char const *fontsdir = get_path(SYSTEM, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
+    if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
+        char const *fontsdir = get_path(USER, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
+    Glib::ustring fontdirs_pref = prefs->getString("/options/font/custom_fontdirs");
+    std::vector<Glib::ustring> fontdirs = Glib::Regex::split_simple("\\|", fontdirs_pref);
+    for (auto &fontdir : fontdirs) {
+        factory->AddFontsDir(fontdir.c_str());
+    }
 }
 
 Application::~Application()
@@ -579,8 +599,8 @@ Application::crash_handler (int /*signum*/)
     gint count = 0;
     gchar *curdir = g_get_current_dir(); // This one needs to be freed explicitly
     gchar *inkscapedir = g_path_get_dirname(INKSCAPE._argv0); // Needs to be freed
-    GSList *savednames = NULL;
-    GSList *failednames = NULL;
+    std::vector<gchar *> savednames;
+    std::vector<gchar *> failednames;
     for (std::map<SPDocument*,int>::iterator iter = INKSCAPE._document_set.begin(), e = INKSCAPE._document_set.end();
           iter != e;
           ++iter) {
@@ -641,10 +661,10 @@ Application::crash_handler (int /*signum*/)
             // Save
             if (file) {
                 sp_repr_save_stream (repr->document(), file, SP_SVG_NS_URI);
-                savednames = g_slist_prepend (savednames, g_strdup (c));
+                savednames.push_back(g_strdup (c));
                 fclose (file);
             } else {
-                failednames = g_slist_prepend (failednames, (doc->getName()) ? g_strdup(doc->getName()) : g_strdup (_("Untitled document")));
+                failednames.push_back((doc->getName()) ? g_strdup(doc->getName()) : g_strdup (_("Untitled document")));
             }
             count++;
         }
@@ -652,18 +672,16 @@ Application::crash_handler (int /*signum*/)
     g_free(curdir);
     g_free(inkscapedir);
 
-    savednames = g_slist_reverse (savednames);
-    failednames = g_slist_reverse (failednames);
-    if (savednames) {
+    if (!savednames.empty()) {
         fprintf (stderr, "\nEmergency save document locations:\n");
-        for (GSList *l = savednames; l != NULL; l = l->next) {
-            fprintf (stderr, "  %s\n", (gchar *) l->data);
+        for (auto i:savednames) {
+            fprintf (stderr, "  %s\n", i);
         }
     }
-    if (failednames) {
+    if (!failednames.empty()) {
         fprintf (stderr, "\nFailed to do emergency save for documents:\n");
-        for (GSList *l = failednames; l != NULL; l = l->next) {
-            fprintf (stderr, "  %s\n", (gchar *) l->data);
+        for (auto i:failednames) {
+            fprintf (stderr, "  %s\n", i);
         }
     }
 
@@ -681,11 +699,11 @@ Application::crash_handler (int /*signum*/)
     char const *fstr = _("Automatic backup of the following documents failed:\n");
     gint nllen = strlen ("\n");
     gint len = strlen (istr) + strlen (sstr) + strlen (fstr);
-    for (GSList *l = savednames; l != NULL; l = l->next) {
-        len = len + SP_INDENT + strlen ((gchar *) l->data) + nllen;
+    for (auto i:savednames) {
+        len = len + SP_INDENT + strlen (i) + nllen;
     }
-    for (GSList *l = failednames; l != NULL; l = l->next) {
-        len = len + SP_INDENT + strlen ((gchar *) l->data) + nllen;
+    for (auto i:failednames) {
+        len = len + SP_INDENT + strlen (i) + nllen;
     }
     len += 1;
     gchar *b = g_new (gchar, len);
@@ -693,29 +711,29 @@ Application::crash_handler (int /*signum*/)
     len = strlen (istr);
     memcpy (b + pos, istr, len);
     pos += len;
-    if (savednames) {
+    if (!savednames.empty()) {
         len = strlen (sstr);
         memcpy (b + pos, sstr, len);
         pos += len;
-        for (GSList *l = savednames; l != NULL; l = l->next) {
+        for (auto i:savednames) {
             memset (b + pos, ' ', SP_INDENT);
             pos += SP_INDENT;
-            len = strlen ((gchar *) l->data);
-            memcpy (b + pos, l->data, len);
+            len = strlen(i);
+            memcpy (b + pos, i, len);
             pos += len;
             memcpy (b + pos, "\n", nllen);
             pos += nllen;
         }
     }
-    if (failednames) {
+    if (!failednames.empty()) {
         len = strlen (fstr);
         memcpy (b + pos, fstr, len);
         pos += len;
-        for (GSList *l = failednames; l != NULL; l = l->next) {
+        for (auto i:failednames) {
             memset (b + pos, ' ', SP_INDENT);
             pos += SP_INDENT;
-            len = strlen ((gchar *) l->data);
-            memcpy (b + pos, l->data, len);
+            len = strlen(i);
+            memcpy (b + pos, i, len);
             pos += len;
             memcpy (b + pos, "\n", nllen);
             pos += nllen;

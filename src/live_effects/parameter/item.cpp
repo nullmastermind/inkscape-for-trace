@@ -43,6 +43,7 @@ ItemParam::ItemParam( const Glib::ustring& label, const Glib::ustring& tip,
       href(NULL),
       ref( (SPObject*)effect->getLPEObj() )
 {
+    last_transform = Geom::identity();
     defvalue = g_strdup(default_value);
     ref_changed_connection = ref.changedSignal().connect(sigc::mem_fun(*this, &ItemParam::ref_changed));
 }
@@ -101,7 +102,16 @@ ItemParam::param_readSVGValue(const gchar * strvalue)
 gchar *
 ItemParam::param_getSVGValue() const
 {
-    return g_strdup(href);
+    if (href) {
+        return g_strdup(href);
+    }
+    return g_strdup("");
+}
+
+gchar *
+ItemParam::param_getDefaultSVGValue() const
+{
+    return g_strdup(defvalue);
 }
 
 Gtk::Widget *
@@ -204,7 +214,16 @@ ItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
     emit_changed();
     SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    last_transform = Geom::identity();
 }
+
+void
+ItemParam::linked_transformed_callback(Geom::Affine const *rel_transf, SPItem */*moved_item*/)
+{
+    last_transform = *rel_transf;
+    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+}
+
 
 void
 ItemParam::on_link_button_click()

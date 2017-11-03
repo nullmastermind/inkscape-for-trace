@@ -197,10 +197,8 @@ sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *cs
             SPObject *obj = *i;
             Box3DSide *side = dynamic_cast<Box3DSide *>(obj);
             if (side) {
-                const char * descr  = box3d_side_axes_string(side);
-                if (descr != NULL) {
-                    prefs->mergeStyle(Glib::ustring("/desktop/") + descr + "/style", css_write);
-                }
+                prefs->mergeStyle(
+                        Glib::ustring("/desktop/") + box3d_side_axes_string(side) + "/style", css_write);
             }
         }
         sp_repr_css_attr_unref(css_write);

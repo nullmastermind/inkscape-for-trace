@@ -98,14 +98,12 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
         Satellites satellites;
         double power = radius;
-        std::cout << power << "power\n";
         if (!flexible) {
             SPDocument * document = SP_ACTIVE_DOCUMENT;
             SPNamedView *nv = sp_document_namedview(document, NULL);
             Glib::ustring display_unit = nv->display_units->abbr;
             power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
         }
-        std::cout << power << "power22222222\n";
         SatelliteType satellite_type = FILLET;
         std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
         boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);

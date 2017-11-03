@@ -761,6 +761,10 @@ Inkscape::XML::Node* ObjectSet::group() {
     group->setPosition(topmost + 1);
 
     set(doc->getObjectByRepr(group));
+    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem*>(*(items().begin()));
+    if (lpeitem) {
+        sp_lpe_item_update_patheffect(lpeitem, true, true);
+    }
     DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
                        C_("Verb", "Group"));
 
@@ -768,18 +772,12 @@ Inkscape::XML::Node* ObjectSet::group() {
 }
 
 
-static gint clone_depth_descending(gconstpointer a, gconstpointer b) {
+static bool clone_depth_descending(gconstpointer a, gconstpointer b) {
     SPUse *use_a = static_cast<SPUse *>(const_cast<gpointer>(a));
     SPUse *use_b = static_cast<SPUse *>(const_cast<gpointer>(b));
     int depth_a = use_a->cloneDepth();
     int depth_b = use_b->cloneDepth();
-    if (depth_a < depth_b) {
-        return 1;
-    } else if (depth_a == depth_b) {
-        return 0;
-    } else {
-        return -1;
-    }
+    return (depth_a==depth_b)?(a<b):(depth_a>depth_b);
 }
 
 void ObjectSet::popFromGroup(){
@@ -822,7 +820,7 @@ static void ungroup_impl(ObjectSet *set)
 
     // If any of the clones refer to the groups, unlink them and replace them with successors
     // in the items list.
-    GSList *clones_to_unlink = NULL;
+    std::vector<SPUse*> clones_to_unlink;
     for (std::vector<SPItem*>::const_iterator item = items.begin(); item != items.end(); ++item) {
         SPUse *use = dynamic_cast<SPUse *>(*item);
 
@@ -832,21 +830,19 @@ static void ungroup_impl(ObjectSet *set)
         }
 
         if (groups.find(original) !=  groups.end()) {
-            clones_to_unlink = g_slist_prepend(clones_to_unlink, *item);
+            clones_to_unlink.push_back(use);
         }
     }
 
     // Unlink clones beginning from those with highest clone depth.
     // This way we can be sure than no additional automatic unlinking happens,
     // and the items in the list remain valid
-    clones_to_unlink = g_slist_sort(clones_to_unlink, clone_depth_descending);
+    std::sort(clones_to_unlink.begin(),clones_to_unlink.end(),clone_depth_descending);
 
-    for (GSList *item = clones_to_unlink; item; item = item->next) {
-        SPUse *use = static_cast<SPUse *>(item->data);
-        std::vector<SPItem*>::iterator items_node = std::find(items.begin(),items.end(), item->data);
+    for (auto use:clones_to_unlink) {
+        std::vector<SPItem*>::iterator items_node = std::find(items.begin(),items.end(), use);
         *items_node = use->unlink();
     }
-    g_slist_free(clones_to_unlink);
 
     // do the actual work
     for (std::vector<SPItem*>::iterator item = items.begin(); item != items.end(); ++item) {
@@ -1666,7 +1662,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
-                            use->doWriteTransform(use->getRepr(), item->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(item->transform.inverse(), NULL, compensate);
                         }
                     }
                 }
@@ -1710,13 +1706,13 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 
                 if (prefs_parallel) {
                     Geom::Affine move = result * clone_move * t_inv;
-                    item->doWriteTransform(item->getRepr(), move, &move, compensate);
+                    item->doWriteTransform(move, &move, compensate);
 
                 } else if (prefs_unmoved) {
                     //if (dynamic_cast<SPUse *>(sp_use_get_original(dynamic_cast<SPUse *>(item))))
                     //    clone_move = Geom::identity();
                     Geom::Affine move = result * clone_move;
-                    item->doWriteTransform(item->getRepr(), move, &t, compensate);
+                    item->doWriteTransform(move, &t, compensate);
                 }
 
             } else if (transform_offset_with_source && (prefs_parallel || prefs_unmoved) && affine.isTranslation()){
@@ -1725,23 +1721,23 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 
                 if (prefs_parallel) {
                     Geom::Affine move = result * offset_move * t_inv;
-                    item->doWriteTransform(item->getRepr(), move, &move, compensate);
+                    item->doWriteTransform(move, &move, compensate);
 
                 } else if (prefs_unmoved) {
                     Geom::Affine move = result * offset_move;
-                    item->doWriteTransform(item->getRepr(), move, &t, compensate);
+                    item->doWriteTransform(move, &t, compensate);
                 }
 
             } else {
                 // just apply the result
-                item->doWriteTransform(item->getRepr(), result, &t, compensate);
+                item->doWriteTransform(result, &t, compensate);
             }
 
         } else {
             if (set_i2d) {
                 item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
             }
-            item->doWriteTransform(item->getRepr(), item->transform, NULL, compensate);
+            item->doWriteTransform(item->transform, NULL, compensate);
         }
 
         if (adjust_transf_center) { // The transformation center should not be touched in case of pasting or importing, which is allowed by this if clause
@@ -2101,8 +2097,6 @@ std::vector<SPItem*> sp_get_same_object_type(SPItem *sel, std::vector<SPItem*> &
     return matches;
 }
 
-GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrokeStyleType type);
-
 /*
  * Find all items in src list that have the same stroke style as sel by type
  * Return the list of matching items
@@ -2339,14 +2333,15 @@ typedef struct Forward {
 
     static Iterator children(SPObject *o) { return o->firstChild(); }
     static Iterator siblings_after(SPObject *o) { return o->getNext(); }
-    static void dispose(Iterator /*i*/) {}
+    static void dispose(Iterator i) {}
 
     static SPObject *object(Iterator i) { return i; }
     static Iterator next(Iterator i) { return i->getNext(); }
+    static bool isNull(Iterator i) {return (!i);}
 } Forward;
 
 typedef struct ListReverse {
-    typedef GSList *Iterator;
+    typedef std::list<SPObject *> *Iterator;
 
     static Iterator children(SPObject *o) {
         return make_list(o, NULL);
@@ -2355,23 +2350,24 @@ typedef struct ListReverse {
         return make_list(o->parent, o);
     }
     static void dispose(Iterator i) {
-        g_slist_free(i);
+        delete i;
     }
 
     static SPObject *object(Iterator i) {
-        return reinterpret_cast<SPObject *>(i->data);
+        return *(i->begin());
     }
-    static Iterator next(Iterator i) { return i->next; }
+    static Iterator next(Iterator i) { i->pop_front(); return i; }
+    
+    static bool isNull(Iterator i) {return i->empty();}
 
 private:
-    static GSList *make_list(SPObject *object, SPObject *limit) {
-        GSList *list = NULL;
+    static std::list<SPObject *> *make_list(SPObject *object, SPObject *limit) {
+        auto list = new std::list<SPObject *>;
         for (auto &child: object->children) {
             if (&child == limit) {
                 break;
             }
-            list = g_slist_prepend(list, &child);
-
+            list->push_front(&child);
         }
         return list;
     }
@@ -2380,7 +2376,7 @@ private:
 
 
 template <typename D>
-SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
+SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *root,
                   bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
 {
     typename D::Iterator children;
@@ -2388,22 +2384,24 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
 
     SPItem *found=NULL;
 
-    if (path) {
-        SPObject *object=reinterpret_cast<SPObject *>(path->data);
+    if (!path.empty()) {
+        SPObject *object=path.back();
+        path.pop_back();
         g_assert(object->parent == root);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, path->next, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+            found = next_item<D>(desktop, path, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
         }
         iter = children = D::siblings_after(object);
     } else {
         iter = children = D::children(root);
     }
 
-    while ( iter && !found ) {
+    while ( !D::isNull(iter) && !found ) {
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
             if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
-                found = next_item<D>(desktop, NULL, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+                std::vector<SPObject *> empt;
+                found = next_item<D>(desktop, empt, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
             }
         } else {
             SPItem *item = dynamic_cast<SPItem *>(object);
@@ -2440,19 +2438,19 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
         }
     }
 
-    GSList *path=NULL;
+    std::vector<SPObject *> path;
     while ( current != root ) {
-        path = g_slist_prepend(path, current);
+        path.push_back(current);
         current = current->parent;
     }
 
     SPItem *next;
     // first, try from the current object
     next = next_item<D>(desktop, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-    g_slist_free(path);
 
     if (!next) { // if we ran out of objects, start over at the root
-        next = next_item<D>(desktop, NULL, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+        std::vector<SPObject *> empt;
+        next = next_item<D>(desktop, empt, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
     }
 
     return next;
@@ -2552,37 +2550,7 @@ void sp_selection_next_patheffect_param(SPDesktop * dt)
 void ObjectSet::editMask(bool /*clip*/)
 {
     return;
-    /*if (!dt) return;
-    using namespace Inkscape::UI;
-
-    Inkscape::Selection *selection = dt->getSelection();
-    if (!selection || selection->isEmpty()) return;
-
-    GSList const *items = selection->itemList();
-    bool has_path = false;
-    for (GSList *i = const_cast<GSList*>(items); i; i= i->next) {
-        SPItem *item = SP_ITEM(i->data);
-        SPObject *search = clip
-            ? (item->clip_ref ? item->clip_ref->getObject() : NULL)
-            : item->mask_ref ? item->mask_ref->getObject() : NULL;
-        has_path |= has_path_recursive(search);
-        if (has_path) break;
-    }
-    if (has_path) {
-        if (!tools_isactive(dt, TOOLS_NODES)) {
-            tools_switch(dt, TOOLS_NODES);
-        }
-        ink_node_tool_set_mode(INK_NODE_TOOL(dt->event_context),
-            clip ? NODE_TOOL_EDIT_CLIPPING_PATHS : NODE_TOOL_EDIT_MASKS);
-    } else if (clip) {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE,
-            _("The selection has no applied clip path."));
-    } else {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE,
-            _("The selection has no applied mask."));
-    }*/
 }
-
 
 
 
@@ -2849,18 +2817,6 @@ void ObjectSet::cloneOriginal()
                 SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
                 if (flowtext) {
                     original = flowtext->get_frame(NULL); // first frame only
-                } else {
-                    SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(item);
-                    if (lpeItem) {
-                        // check if the applied LPE is Clone original, if so, go to the refered path
-                        Inkscape::LivePathEffect::Effect* lpe = lpeItem->getPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL);
-                        if (lpe) {
-                            Inkscape::LivePathEffect::Parameter *lpeparam = lpe->getParameter("linkedpath");
-                            if (Inkscape::LivePathEffect::OriginalPathParam *pathparam = dynamic_cast<Inkscape::LivePathEffect::OriginalPathParam *>(lpeparam)) {
-                                original = pathparam->getObject();
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -2915,35 +2871,44 @@ void ObjectSet::cloneOriginal()
 }
 
 /**
-* This creates a new path, applies the Original Path LPE, and has it refer to the selection.
+* This applies the Fill Between Many LPE, and has it refer to the selection.
 */
-void ObjectSet::cloneOriginalPathLPE()
+void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 {
 
     Inkscape::SVGOStringStream os;
     SPObject * firstItem = NULL;
     auto items_= items();
+    bool multiple = false;
     for (auto i=items_.begin();i!=items_.end();++i){
         if (SP_IS_SHAPE(*i) || SP_IS_TEXT(*i)) {
             if (firstItem) {
                 os << "|";
+                multiple = true;
             } else {
                 firstItem = SP_ITEM(*i);
             }
-            os << '#' << SP_ITEM(*i)->getId() << ",0";
+            os << '#' << SP_ITEM(*i)->getId() << ",0,1";
         }
     }
     if (firstItem) {
         Inkscape::XML::Document *xml_doc = document()->getReprDoc();
         SPObject *parent = firstItem->parent;
-
         // create the LPE
         Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
-        {
+        if (multiple) {
             lpe_repr->setAttribute("effect", "fill_between_many");
             lpe_repr->setAttribute("linkedpaths", os.str());
-            document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
+            lpe_repr->setAttribute("applied", "true");
+        } else {
+            lpe_repr->setAttribute("effect", "clone_original");
+            lpe_repr->setAttribute("linkeditem", ((Glib::ustring)"#" + (Glib::ustring)firstItem->getId()).c_str());
         }
+        gchar const *method_str = allow_transforms ?  "d" : "bsplinespiro";
+        lpe_repr->setAttribute("method", method_str);
+        gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
+        lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
+        document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
         Inkscape::GC::release(lpe_repr);
 
@@ -2953,18 +2918,21 @@ void ObjectSet::cloneOriginalPathLPE()
             clone->setAttribute("d", "M 0 0", false);
             // add the new clone to the top of the original's parent
             parent->appendChildRepr(clone);
+            // select the new object:
+            set(clone);
+            Inkscape::GC::release(clone);
             SPObject *clone_obj = document()->getObjectById(clone->attribute("id"));
             SPLPEItem *clone_lpeitem = dynamic_cast<SPLPEItem *>(clone_obj);
             if (clone_lpeitem) {
                 clone_lpeitem->addPathEffect(lpe_id_href, false);
             }
         }
+        if (multiple) {
+            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
+        } else {
+            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Clone original"));
+        }
 
-        DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
-        // select the new object:
-        set(clone);
-
-        Inkscape::GC::release(clone);
     } else {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select path(s) to fill."));
@@ -3171,7 +3139,7 @@ void ObjectSet::toSymbol()
                 prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
                 // Remove transform on group, updating clones.
-                the_group->doWriteTransform(object->getRepr(), Geom::identity());
+                the_group->doWriteTransform(Geom::identity());
 
                 // restore compensation setting
                 prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -3483,7 +3451,7 @@ void ObjectSet::untile()
 
                 if (i) {
                     Geom::Affine transform( i->transform * pat_transform );
-                    i->doWriteTransform(i->getRepr(), transform);
+                    i->doWriteTransform(transform);
 
                     new_select.push_back(i);
                 } else {
@@ -3871,11 +3839,10 @@ void ObjectSet::setClipGroup()
     clone->setAttribute("inkscape:transform-center-x", inner->attribute("inkscape:transform-center-x"), false);
     clone->setAttribute("inkscape:transform-center-y", inner->attribute("inkscape:transform-center-y"), false);
 
-    const Geom::Affine maskTransform(Geom::Affine::identity());
     std::vector<Inkscape::XML::Node*> templist;
     templist.push_back(clone);
     // add the new clone to the top of the original's parent
-    gchar const *mask_id = SPClipPath::create(templist, doc, &maskTransform);
+    gchar const *mask_id = SPClipPath::create(templist, doc);
     
     
     outer->setAttribute("clip-path", g_strdup_printf("url(#%s)", mask_id));
@@ -3933,7 +3900,7 @@ void ObjectSet::setClipGroup()
     clear();
 
     // create a list of duplicates
-    std::vector<Inkscape::XML::Node*> mask_items;
+    std::vector<std::pair<Inkscape::XML::Node*, Geom::Affine>> mask_items;
     std::vector<SPItem*> apply_to_items;
     std::vector<SPItem*> items_to_delete;
     std::vector<SPItem*> items_to_select;
@@ -3953,12 +3920,8 @@ void ObjectSet::setClipGroup()
                 || (topmost && !apply_to_layer && *i == items_.back())
                 || apply_to_layer){
 
-            Geom::Affine oldtr=(*i)->transform;
-            oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
-            (*i)->doWriteTransform((*i)->getRepr(), (*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
-            (*i)->doWriteTransform((*i)->getRepr(), oldtr);
-            mask_items.push_back(dup);
+            mask_items.push_back(std::make_pair(dup, (*i)->i2doc_affine()));
 
             if (remove_original) {
                 items_to_delete.push_back(*i);
@@ -4003,11 +3966,15 @@ void ObjectSet::setClipGroup()
     gchar const *attributeName = apply_clip_path ? "clip-path" : "mask";
     for (std::vector<SPItem*>::const_reverse_iterator i = apply_to_items.rbegin(); i != apply_to_items.rend(); ++i) {
         SPItem *item = reinterpret_cast<SPItem *>(*i);
-        // inverted object transform should be applied to a mask object,
-        // as mask is calculated in user space (after applying transform)
+
         std::vector<Inkscape::XML::Node*> mask_items_dup;
-        for(std::vector<Inkscape::XML::Node*>::const_iterator it=mask_items.begin();it!=mask_items.end();++it)
-            mask_items_dup.push_back((*it)->duplicate(xml_doc));
+        std::map<Inkscape::XML::Node*, Geom::Affine> dup_transf;
+        for (auto it = mask_items.begin(); it != mask_items.end(); ++it) {
+            Inkscape::XML::Node *dup = ((*it).first)->duplicate(xml_doc);
+            mask_items_dup.push_back(dup);
+            dup_transf[dup] = (*it).second;
+        }
+
         Inkscape::XML::Node *current = SP_OBJECT(*i)->getRepr();
         // Node to apply mask to
         Inkscape::XML::Node *apply_mask_to = current;
@@ -4033,13 +4000,19 @@ void ObjectSet::setClipGroup()
             Inkscape::GC::release(group);
         }
 
-        Geom::Affine maskTransform(item->i2doc_affine().inverse());
-
         gchar const *mask_id = NULL;
         if (apply_clip_path) {
-            mask_id = SPClipPath::create(mask_items_dup, doc, &maskTransform);
+            mask_id = SPClipPath::create(mask_items_dup, doc);
         } else {
-            mask_id = sp_mask_create(mask_items_dup, doc, &maskTransform);
+            mask_id = sp_mask_create(mask_items_dup, doc);
+        }
+
+        // inverted object transform should be applied to a mask object,
+        // as mask is calculated in user space (after applying transform)
+        for (auto it = mask_items_dup.begin(); it != mask_items_dup.end(); ++it) {
+            SPItem *clip_item = SP_ITEM(doc->getObjectByRepr(*it));
+            clip_item->doWriteTransform(dup_transf[*it]);
+            clip_item->doWriteTransform(clip_item->transform * item->i2doc_affine().inverse());
         }
 
         apply_mask_to->setAttribute(attributeName, Glib::ustring("url(#") + mask_id + ')');
@@ -4084,7 +4057,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     std::vector<SPItem*> items_(items().begin(), items().end());
     clear();
 
-    GSList *items_to_ungroup = NULL;
+    std::vector<SPGroup *> items_to_ungroup;
     std::vector<SPItem*> items_to_select(items_);
 
 
@@ -4117,7 +4090,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
                 // ungroup only groups we created when setting clip/mask
                 if (group->layerMode() == SPGroup::MASK_HELPER) {
-                    items_to_ungroup = g_slist_prepend(items_to_ungroup, group);
+                    items_to_ungroup.push_back(group);
                 }
 
         }
@@ -4126,7 +4099,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     // restore mask objects into a document
     for ( std::map<SPObject*,SPItem*>::iterator it = referenced_objects.begin() ; it != referenced_objects.end() ; ++it) {
         SPObject *obj = (*it).first; // Group containing the clipped paths or masks
-        GSList *items_to_move = NULL;
+        std::vector<Inkscape::XML::Node *> items_to_move;
         for (auto& child: obj->children) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
@@ -4134,7 +4107,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
             }
-            items_to_move = g_slist_prepend(items_to_move, copy);
+            items_to_move.push_back(copy);
         }
 
         if (!obj->isReferenced()) {
@@ -4147,8 +4120,8 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         gint pos = ((*it).second)->getRepr()->position();
 
         // Iterate through all clipped paths / masks
-        for (GSList *i = items_to_move; NULL != i; i = i->next) {
-            Inkscape::XML::Node *repr = static_cast<Inkscape::XML::Node *>(i->data);
+        for (auto i=items_to_move.rbegin();i!=items_to_move.rend();++i) {
+            Inkscape::XML::Node *repr = *i;
 
             // insert into parent, restore pos
             parent->appendChild(repr);
@@ -4160,15 +4133,13 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             // transform mask, so it is moved the same spot where mask was applied
             Geom::Affine transform(mask_item->transform);
             transform *= (*it).second->transform;
-            mask_item->doWriteTransform(mask_item->getRepr(), transform);
+            mask_item->doWriteTransform(transform);
         }
-
-        g_slist_free(items_to_move);
     }
 
     // ungroup marked groups added when setting mask
-    for (GSList *i = items_to_ungroup ; NULL != i ; i = i->next) {
-        SPGroup *group = dynamic_cast<SPGroup *>(static_cast<SPObject *>(i->data));
+    for (auto i=items_to_ungroup.rbegin();i!=items_to_ungroup.rend();++i) {
+        SPGroup *group = *i;
         if (group) {
             items_to_select.erase(std::remove(items_to_select.begin(), items_to_select.end(), group), items_to_select.end());
             std::vector<SPItem*> children;
@@ -4178,8 +4149,6 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             g_assert_not_reached();
         }
     }
-
-    g_slist_free(items_to_ungroup);
 
     // rebuild selection
     addList(items_to_select);

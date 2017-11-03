@@ -106,8 +106,8 @@ public:
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared<char> /*old_content*/, Util::ptr_shared<char> /*new_content*/ ) {}
-    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared<char> /*old_value*/, Util::ptr_shared<char> /*new_value*/ ) {
+    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) {}
+    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) {
         if ( _pnl && _obj ) {
             if ( name == _labelAttr ) {
                 _pnl->_updateObject( _obj);
@@ -522,7 +522,7 @@ void TagsPanel::_checkTreeSelection()
 bool TagsPanel::_handleKeyEvent(GdkEventKey *event)
 {
 
-    switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
+    switch (Inkscape::UI::Tools::get_latin_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         case GDK_KEY_F2: {
@@ -1103,14 +1103,6 @@ void TagsPanel::setDesktop( SPDesktop* desktop )
             setDocument(_desktop, _desktop->doc());
         }
     }
-/*
-    GSList const *layers = _desktop->doc()->getResourceList( "layer" );
-    g_message( "layers list starts at %p", layers );
-    for ( GSList const *iter=layers ; iter ; iter = iter->next ) {
-        SPObject *layer=static_cast<SPObject *>(iter->data);
-        g_message("  {%s}   [%s]", layer->id, layer->label() );
-    }
-*/
     deskTrack.setBase(desktop);
 }
 

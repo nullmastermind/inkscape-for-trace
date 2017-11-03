@@ -25,7 +25,7 @@ CPPFLAGS="-fno-stack-protector -I/usr/local/src/inkscape/extra/static/include"
 LDFLAGS="-L/usr/local/src/inkscape/extra/static/lib"
 CXX="ccache apg++" 
 export PATH PKG_CONFIG_PATH CPPFLAGS LDFLAGS CXX
-prepareBuild --enable-binreloc --with-gnome-vfs=no --enable-lcms
+prepareBuild --enable-binreloc --enable-lcms
 
 [BuildUnprepare]
 unprepareBuild

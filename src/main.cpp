@@ -59,6 +59,7 @@
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"
+#include "selection-chemistry.h"
 #include "ui/interface.h"
 #include "print.h"
 #include "color.h"
@@ -180,7 +181,8 @@ enum {
 
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
-static int sp_do_export_png(SPDocument *doc);
+static int do_export_png(SPDocument *doc);
+static int do_export_svg(SPDocument* doc);
 static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_emf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_wmf(SPDocument* doc, gchar const* uri, char const *mime);
@@ -294,7 +296,7 @@ static void resetCommandlineGlobals() {
 #ifdef WIN32
 static bool replaceArgs( int& argc, char**& argv );
 #endif
-static GSList *sp_process_args(poptContext ctx);
+static std::vector<gchar *> sp_process_args(poptContext ctx);
 struct poptOption options[] = {
     {"version", 'V',
      POPT_ARG_NONE, NULL, SP_ARG_VERSION,
@@ -353,7 +355,7 @@ struct poptOption options[] = {
 
     {"export-margin", 0,
      POPT_ARG_STRING, &sp_export_margin, SP_ARG_EXPORT_MARGIN,
-     N_("Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"),
+     N_("Sets margin around exported area (default 0) in units of page size for SVG and mm for PS/EPS/PDF"),
      N_("VALUE")},
 
     {"export-area-snap", 0,
@@ -700,10 +702,6 @@ main(int argc, char **argv)
         RegistryTool rt;
         rt.setPathInfo();
     }
-
-    // disable "client side decorations" as they prevent window borders and titlebars to be drawn with native theming
-    // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
-    g_setenv("GTK_CSD", "0", FALSE);
 #endif
     set_extensions_env();
 
@@ -733,6 +731,7 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--export-png", 12)
             || !strcmp(argv[i], "-l")
             || !strncmp(argv[i], "--export-plain-svg", 18)
+            || !strncmp(argv[i], "--export-inkscape-svg", 21)
             || !strcmp(argv[i], "-i")
             || !strncmp(argv[i], "--export-area-drawing", 21)
             || !strcmp(argv[i], "-D")
@@ -815,46 +814,19 @@ static void fixupSingleFilename( gchar **orig, gchar **spare )
 
 
 
-static GSList *fixupFilenameEncoding( GSList* fl )
+static void fixupFilenameEncoding( std::vector<gchar*> &filenames)
 {
-    GSList *newFl = NULL;
-    while ( fl ) {
-        gchar *fn = static_cast<gchar*>(fl->data);
-        fl = g_slist_remove( fl, fl->data );
+    for (int i=0; i<filenames.size(); ++i ) {
+        gchar *fn = filenames[i];
         gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
         if ( newFileName ) {
-
-            if ( 0 )
-            {
-                gchar *safeFn = Inkscape::IO::sanitizeString(fn);
-                gchar *safeNewFn = Inkscape::IO::sanitizeString(newFileName);
-                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                       "Note: Converted '%s' to '%s'", safeFn, safeNewFn );
-                gtk_dialog_run (GTK_DIALOG (w));
-                gtk_widget_destroy (w);
-                g_free(safeNewFn);
-                g_free(safeFn);
-            }
-
             g_free( fn );
-            fn = newFileName;
-            newFileName = 0;
+            filenames[i] = newFileName;
         }
-        else
-            if ( 0 )
-        {
-            gchar *safeFn = Inkscape::IO::sanitizeString(fn);
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Error: Unable to convert '%s'", safeFn );
-            gtk_dialog_run (GTK_DIALOG (w));
-            gtk_widget_destroy (w);
-            g_free(safeFn);
-        }
-        newFl = g_slist_append( newFl, fn );
     }
-    return newFl;
 }
 
-static int sp_common_main( int argc, char const **argv, GSList **flDest )
+static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flDest )
 {
 #ifdef ENABLE_NLS
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
@@ -866,7 +838,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     g_return_val_if_fail(ctx != NULL, 1);
 
     /* Collect own arguments */
-    GSList *fl = sp_process_args(ctx);
+    std::vector<gchar*> fl = sp_process_args(ctx);
     poptFreeContext(ctx);
    
 #ifdef ENABLE_NLS
@@ -877,7 +849,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )
     {
-        fl = fixupFilenameEncoding( fl );
+        fixupFilenameEncoding( fl );
     }
 
     // Check the globals for filename-fixup
@@ -916,12 +888,10 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
 
     // Return the list if wanted, else free it up.
     if ( flDest ) {
-        *flDest = fl;
-        fl = 0;
+        flDest->insert(flDest->end(),fl.begin(),fl.end());
     } else {
-        while ( fl ) {
-            g_free( fl->data );
-            fl = g_slist_remove( fl, fl->data );
+        for (auto i:fl) {
+            g_free(i);
         }
     }
     return 0;
@@ -931,7 +901,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-guint get_group0_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
+guint get_latin_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
 
 }
 }
@@ -989,7 +959,7 @@ snooper(GdkEvent *event, gpointer /*data*/) {
             alt_pressed = TRUE && (event->button.state & GDK_MOD1_MASK);
             break;
         case GDK_KEY_PRESS:
-            keyval = Inkscape::UI::Tools::get_group0_keyval(&event->key);
+            keyval = Inkscape::UI::Tools::get_latin_keyval(&event->key);
             if (keyval == GDK_KEY_Alt_L) altL_pressed = TRUE;
             if (keyval == GDK_KEY_Alt_R) altR_pressed = TRUE;
             alt_pressed = alt_pressed || altL_pressed || altR_pressed;
@@ -1000,7 +970,7 @@ snooper(GdkEvent *event, gpointer /*data*/) {
                 event->key.state &= ~GDK_MOD1_MASK;
             break;
         case GDK_KEY_RELEASE:
-            keyval = Inkscape::UI::Tools::get_group0_keyval(&event->key);
+            keyval = Inkscape::UI::Tools::get_latin_keyval(&event->key);
             if (keyval == GDK_KEY_Alt_L) altL_pressed = FALSE;
             if (keyval == GDK_KEY_Alt_R) altR_pressed = FALSE;
             if (!altL_pressed && !altR_pressed)
@@ -1020,7 +990,7 @@ sp_main_gui(int argc, char const **argv)
 {
     Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
 
-    GSList *fl = NULL;
+    std::vector<gchar *> fl;
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
@@ -1036,11 +1006,10 @@ sp_main_gui(int argc, char const **argv)
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     Inkscape::Application::create(argv[0], true);
 
-    while (fl) {
-        if (sp_file_open((gchar *)fl->data,NULL)) {
+    for (auto i:fl) {
+        if (sp_file_open(i,NULL)) {
             create_new=false;
         }
-        fl = g_slist_remove(fl, fl->data);
     }
     if (create_new) {
         sp_file_new_default();
@@ -1060,11 +1029,11 @@ sp_main_gui(int argc, char const **argv)
 /**
  * Process file list
  */
-static int sp_process_file_list(GSList *fl)
+static int sp_process_file_list(std::vector<gchar*> fl)
 {
     int retVal = 0;
 #ifdef WITH_DBUS
-    if (!fl) {
+    if (fl.empty()) {
         // If we've been asked to listen for D-Bus messages, enter a main loop here
         // The main loop may be exited by calling "exit" on the D-Bus application interface.
         if (sp_dbus_listen) {
@@ -1074,8 +1043,7 @@ static int sp_process_file_list(GSList *fl)
     }
 #endif // WITH_DBUS
 
-    while (fl) {
-        const gchar *filename = (gchar *)fl->data;
+    for (auto filename:fl) {
 
         SPDocument *doc = NULL;
         try {
@@ -1128,51 +1096,10 @@ static int sp_process_file_list(GSList *fl)
                 sp_print_document_to_file(doc, sp_global_printer);
             }
             if (sp_export_png || (sp_export_id && sp_export_use_hints)) {
-                retVal |= sp_do_export_png(doc);
+                retVal |= do_export_png(doc);
             }
             if (sp_export_svg || sp_export_inkscape_svg) {
-                if (sp_export_text_to_path) {
-                    std::vector<SPItem*> items;
-                    SPRoot *root = doc->getRoot();
-                    doc->ensureUpToDate();
-                    for (auto& iter: root->children) {
-                        SPItem* item = (SPItem*) &iter;
-                        if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
-                            continue;
-                        }
-
-                        te_update_layout_now_recursive(item);
-                        items.push_back(item);
-                    }
-
-                    std::vector<SPItem*> selected;
-                    std::vector<Inkscape::XML::Node*> to_select;
-
-                    sp_item_list_to_curves(items, selected, to_select);
-
-                }
-                if(sp_export_id) {
-                    doc->ensureUpToDate();
-
-                    // "crop" the document to the specified object, cleaning as we go.
-                    SPObject *obj = doc->getObjectById(sp_export_id);
-                    if (sp_export_id_only) {
-                        // If -j then remove all other objects to complete the "crop"
-                        doc->getRoot()->cropToObject(obj);
-                    }
-                    Inkscape::ObjectSet s(doc);
-                    s.set(obj);
-                    s.fitCanvas(false);
-                }
-                if (sp_export_svg) {
-                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
-                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
-                }
-                if (sp_export_inkscape_svg) {
-                    // Export as inkscape SVG.
-                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
-                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-                }
+                retVal |= do_export_svg(doc);
             }
             if (sp_export_ps) {
                 retVal |= do_export_ps_pdf(doc, sp_export_ps, "image/x-postscript");
@@ -1201,7 +1128,6 @@ static int sp_process_file_list(GSList *fl)
 
             delete doc;
         }
-        fl = g_slist_remove(fl, fl->data);
     }
     return retVal;
 }
@@ -1258,7 +1184,7 @@ static int sp_main_shell(char const* command_name)
                         poptContext ctx = poptGetContext(NULL, argc, const_cast<const gchar**>(argv), options, 0);
                         poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
                         if ( ctx ) {
-                            GSList *fl = sp_process_args(ctx);
+                            std::vector<gchar *> fl = sp_process_args(ctx);
                             if (sp_process_file_list(fl)) {
                                 retval = -1;
                             }
@@ -1297,11 +1223,11 @@ int sp_main_console(int argc, char const **argv)
     char **argv2 = const_cast<char **>(argv);
     gtk_init_check( &argc, &argv2 );
 
-    GSList *fl = NULL;
+    std::vector<gchar*> fl;
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    if (fl == NULL && !sp_shell
+    if (fl.empty() && !sp_shell
 #ifdef WITH_DBUS
         && !sp_dbus_listen
 #endif // WITH_DBUS
@@ -1397,8 +1323,13 @@ do_query_all_recurse (SPObject *o)
     }
 }
 
+/**
+ *  Perform a PNG export
+ *
+ *  \param doc Document to export.
+ */
 
-static int sp_do_export_png(SPDocument *doc)
+static int do_export_png(SPDocument *doc)
 {
     Glib::ustring filename;
     bool filename_from_hint = false;
@@ -1607,12 +1538,10 @@ static int sp_do_export_png(SPDocument *doc)
         path = filename;
     }
 
-    int retcode = 0;
     //check if specified directory exists
-
     if (!Inkscape::IO::file_directory_exists(filename.c_str())) {
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", filename.c_str());
-        retcode = 1;
+        return 1;
     } else {
         g_print("Background RRGGBBAA: %08x\n", bgcolor);
 
@@ -1626,13 +1555,97 @@ static int sp_do_export_png(SPDocument *doc)
                 g_print("Bitmap saved as: %s\n", filename.c_str());
             } else {
                 g_warning("Bitmap failed to save to: %s", filename.c_str());
+                return 1;
             }
         } else {
             g_warning("Calculated bitmap dimensions %lu %lu are out of range (1 - %lu). Nothing exported.", width, height, (unsigned long int)PNG_UINT_31_MAX);
+            return 1;
         }
     }
 
-    return retcode;
+    return 0;
+}
+
+/**
+ *  Perform an SVG export
+ *
+ *  \param doc Document to export.
+ */
+
+static int do_export_svg(SPDocument* doc)
+{
+    if (sp_export_text_to_path) {
+        std::vector<SPItem*> items;
+        SPRoot *root = doc->getRoot();
+        doc->ensureUpToDate();
+        for (auto& iter: root->children) {
+            SPItem* item = (SPItem*) &iter;
+            if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
+                continue;
+            }
+
+            te_update_layout_now_recursive(item);
+            items.push_back(item);
+        }
+
+        std::vector<SPItem*> selected;
+        std::vector<Inkscape::XML::Node*> to_select;
+
+        sp_item_list_to_curves(items, selected, to_select);
+
+    }
+    if (sp_export_margin) {
+        gdouble margin = g_ascii_strtod(sp_export_margin, NULL);
+        doc->ensureUpToDate();
+        SPNamedView *nv;
+        Inkscape::XML::Node *nv_repr;
+        if ((nv = sp_document_namedview(doc, 0)) && (nv_repr = nv->getRepr())) {
+            sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", margin);
+        }
+    }
+    if(sp_export_area_drawing) {
+        fit_canvas_to_drawing(doc, sp_export_margin ? true : false);
+    }
+    if(sp_export_id) {
+        doc->ensureUpToDate();
+
+        // "crop" the document to the specified object, cleaning as we go.
+        SPObject *obj = doc->getObjectById(sp_export_id);
+        if (sp_export_id_only) {
+            // If -j then remove all other objects to complete the "crop"
+            doc->getRoot()->cropToObject(obj);
+        }
+        Inkscape::ObjectSet s(doc);
+        s.set(obj);
+        if (!sp_export_area_page) {
+            s.fitCanvas(sp_export_margin ? true : false);
+        }
+    }
+
+    int ret = 0;
+    if (sp_export_svg) {
+        try {
+            Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
+                        false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+        } catch (Inkscape::Extension::Output::save_failed &e) {
+            g_warning("Failed to save plain SVG to: %s", sp_export_svg);
+            ret = 1;
+        }
+    }
+    if (sp_export_inkscape_svg) {
+        // Export as inkscape SVG.
+        try {
+            Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
+                        false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        } catch (Inkscape::Extension::Output::save_failed &e) {
+            g_warning("Failed to save Inkscape SVG to: %s", sp_export_inkscape_svg);
+            ret = 1;
+        }
+    }
+    return ret;
 }
 
 /**
@@ -2131,10 +2144,10 @@ bool replaceArgs( int& argc, char**& argv )
 }
 #endif // WIN32
 
-static GSList *
+static std::vector<gchar *>
 sp_process_args(poptContext ctx)
 {
-    GSList *fl = NULL;
+    std::vector<gchar *> fl;
 
     gint a;
     while ((a = poptGetNextOpt(ctx)) != -1) {
@@ -2142,7 +2155,7 @@ sp_process_args(poptContext ctx)
             case SP_ARG_FILE: {
                 gchar const *fn = poptGetOptArg(ctx);
                 if (fn != NULL) {
-                    fl = g_slist_append(fl, g_strdup(fn));
+                    fl.push_back(g_strdup(fn));
                 }
                 break;
             }
@@ -2214,7 +2227,7 @@ sp_process_args(poptContext ctx)
     gchar const ** const args = poptGetArgs(ctx);
     if (args != NULL) {
         for (unsigned i = 0; args[i] != NULL; i++) {
-            fl = g_slist_append(fl, g_strdup(args[i]));
+            fl.push_back(g_strdup(args[i]));
         }
     }
 

@@ -15,6 +15,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <set>
 
 #include <glibmm/i18n.h>
 #include "xml/quote.h"
@@ -33,16 +34,15 @@
 // Returns a list of terms for the items to be used in the statusbar
 char* collect_terms (const std::vector<SPItem*> &items)
 {
-    GSList *check = NULL;
+    std::set<Glib::ustring> check;
     std::stringstream ss;
     bool first = true;
 
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();++iter ) {
         SPItem *item = *iter;
-        if (item) {
-            const char *term = item->displayName();
-            if (term != NULL && g_slist_find (check, term) == NULL) {
-                check = g_slist_prepend (check, (void *) term);
+        if (item && item->displayName()) {
+            Glib::ustring term(item->displayName());
+            if (term != "" && (check.insert(term).second)) {
                 ss << (first ? "" : ", ") << "<b>" << term << "</b>";
                 first = false;
             }
@@ -54,14 +54,13 @@ char* collect_terms (const std::vector<SPItem*> &items)
 // Returns the number of terms in the list
 static int count_terms (const std::vector<SPItem*> &items)
 {
-    GSList *check = NULL;
+    std::set<Glib::ustring> check;
     int count=0;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();++iter ) {
         SPItem *item = *iter;
-        if (item) {
-            const char *term = item->displayName();
-            if (term != NULL && g_slist_find (check, term) == NULL) {
-                check = g_slist_prepend (check, (void *) term);
+        if (item && item->displayName()) {
+            Glib::ustring term(item->displayName());
+            if (term != "" && (check.insert(term).second)) {
                 count++;
             }
         }

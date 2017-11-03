@@ -176,7 +176,7 @@ public:
     std::vector<SPCtrlLine *> lines;
 
     void printDraggers(); // convenience for debugging
-    /* 
+    /*
      * FIXME: Should the following functions be merged?
      *        Also, they should make use of the info in a VanishingPoint structure (regarding boxes
      *        and perspectives) rather than each time iterating over the whole list of selected items?

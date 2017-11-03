@@ -64,7 +64,12 @@ public:
         gchar * str = g_strdup( enumdataconv->get_key(value).c_str() );
         return str;
     };
-
+    
+    gchar * param_getDefaultSVGValue() const {
+        gchar * str = g_strdup( enumdataconv->get_key(defvalue).c_str() );
+        return str;
+    };
+    
     E get_value() const {
         return value;
     }

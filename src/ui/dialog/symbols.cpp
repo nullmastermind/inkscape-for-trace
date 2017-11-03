@@ -617,52 +617,48 @@ void SymbolsDialog::get_symbols() {
     }
 }
 
-GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)
+void SymbolsDialog::symbols_in_doc_recursive (SPObject *r, std::vector<SPSymbol*> &l)
 {
-  g_return_val_if_fail(r != NULL, l);
+  if(!r) return;
 
   // Stop multiple counting of same symbol
   if ( dynamic_cast<SPUse *>(r) ) {
-    return l;
+    return;
   }
 
   if ( dynamic_cast<SPSymbol *>(r) ) {
-    l = g_slist_prepend (l, r);
+    l.push_back(dynamic_cast<SPSymbol *>(r));
   }
 
   for (auto& child: r->children) {
-    l = symbols_in_doc_recursive( &child, l );
+    symbols_in_doc_recursive( &child, l );
   }
+}
 
+std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument )
+{
+
+  std::vector<SPSymbol*> l;
+  symbols_in_doc_recursive (symbolDocument->getRoot(), l );
   return l;
 }
 
-GSList* SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument ) {
-
-  GSList *l = NULL;
-  l = symbols_in_doc_recursive (symbolDocument->getRoot(), l );
-  l = g_slist_reverse( l );
-  return l;
-}
-
-GSList* SymbolsDialog::use_in_doc_recursive (SPObject *r, GSList *l)
+void SymbolsDialog::use_in_doc_recursive (SPObject *r, std::vector<SPUse*> &l)
 {
 
   if ( dynamic_cast<SPUse *>(r) ) {
-    l = g_slist_prepend (l, r);
+    l.push_back(dynamic_cast<SPUse *>(r));
   }
 
   for (auto& child: r->children) {
-    l = use_in_doc_recursive( &child, l );
+    use_in_doc_recursive( &child, l );
   }
-
-  return l;
 }
 
-GSList* SymbolsDialog::use_in_doc( SPDocument* useDocument ) {
+std::vector<SPUse*> SymbolsDialog::use_in_doc( SPDocument* useDocument ) {
 
-  GSList *l = NULL;
-  l = use_in_doc_recursive (useDocument->getRoot(), l );
+  std::vector<SPUse*> l;
+  use_in_doc_recursive (useDocument->getRoot(), l);
   return l;
 }
 
@@ -671,10 +667,8 @@ GSList* SymbolsDialog::use_in_doc( SPDocument* useDocument ) {
 gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* document) {
 
   gchar const* style = 0;
-  GSList* l = use_in_doc( document );
-  for( ; l != NULL; l = l->next ) {
-    SPObject *obj = reinterpret_cast<SPObject *>(l->data);
-    SPUse *use = dynamic_cast<SPUse *>(obj);
+  std::vector<SPUse*> l = use_in_doc( document );
+  for( auto use:l ) {
     if ( use ) {
       gchar const *href = use->getRepr()->attribute("xlink:href");
       if( href ) {
@@ -693,10 +687,8 @@ gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* documen
 
 void SymbolsDialog::add_symbols( SPDocument* symbolDocument ) {
 
-  GSList* l = symbols_in_doc( symbolDocument );
-  for( ; l != NULL; l = l->next ) {
-    SPObject *obj = reinterpret_cast<SPObject *>(l->data);
-    SPSymbol *symbol = dynamic_cast<SPSymbol *>(obj);
+  std::vector<SPSymbol*> l = symbols_in_doc( symbolDocument );
+  for(auto symbol:l) {
     if (symbol) {
       add_symbol( symbol );
     }

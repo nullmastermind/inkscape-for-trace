@@ -112,7 +112,7 @@ protected:
 
     virtual Gtk::Widget * newSpecificWidget() = 0;
 
-    GSList * canvasitems;  // list of created canvasitems
+    std::vector<SPCanvasItem*> canvasitems;  // list of created canvasitems
 
     SPNamedView * namedview;
 

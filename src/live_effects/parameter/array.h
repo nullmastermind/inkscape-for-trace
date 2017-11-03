@@ -67,6 +67,10 @@ public:
         gchar * str = g_strdup(os.str().c_str());
         return str;
     }
+    
+    virtual gchar * param_getDefaultSVGValue() const {
+        return g_strdup("");
+    }
 
     void param_setValue(std::vector<StorageType> const &new_vector) {
         _vector = new_vector;

@@ -502,16 +502,12 @@ sp_tref_convert_to_tspan(SPObject *obj)
     // RECURSIVE CASE
     ////////////////////
     else {
-        GSList *l = NULL;
+        std::vector<SPObject *> l;
         for (auto& child: obj->children) {
             sp_object_ref(&child, obj);
-            l = g_slist_prepend (l, &child);
+            l.push_back(&child);
         }
-        l = g_slist_reverse (l);
-        while (l) {
-            SPObject *child = reinterpret_cast<SPObject *>(l->data); // We just built this list, so cast is safe.
-            l = g_slist_remove (l, child);
-
+        for(auto child:l) {
             // Note that there may be more than one conversion happening here, so if it's not a
             // tref being passed into this function, the returned value can't be specifically known
             new_tspan = sp_tref_convert_to_tspan(child);

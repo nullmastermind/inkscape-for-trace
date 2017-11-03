@@ -47,7 +47,7 @@ class SPUseReference;
  * a change occurs to the offset (change of source or change of radius).
  * just like the sp-star and other, this path derivative can make control
  * points, or more precisely one control point, that's enough to define the
- * radius (look in object-edit).
+ * radius (look in shape-editor-knotholders).
  */
 class SPOffset : public SPShape {
 public:

@@ -727,7 +727,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
 
                 Geom::Affine scaler = get_scale_transform_for_variable_stroke (*bbox_pref, *bbox_geom, transform_stroke, preserve, x0, y0, x1, y1);
                 item->set_i2d_affine(item->i2dt_affine() * scaler);
-                item->doWriteTransform(item->getRepr(), item->transform);
+                item->doWriteTransform(item->transform);
             }
         }
     } else {

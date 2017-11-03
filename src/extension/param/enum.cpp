@@ -32,20 +32,6 @@
 namespace Inkscape {
 namespace Extension {
 
-/* For internal use only.
-     Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
-class enumentry {
-public:
-    enumentry (Glib::ustring &val, Glib::ustring &text) :
-        value(val),
-        text(text)
-    {}
-
-    Glib::ustring value;
-    Glib::ustring text;
-};
-
-
 ParamComboBox::ParamComboBox(const gchar * name,
                              const gchar * text,
                              const gchar * description,
@@ -55,7 +41,6 @@ ParamComboBox::ParamComboBox(const gchar * name,
                              Inkscape::XML::Node * xml)
     : Parameter(name, text, description, hidden, indent, ext)
     , _value(NULL)
-    , choices(NULL)
 {
     const char *xmlval = NULL; // the value stored in XML
 
@@ -93,7 +78,7 @@ ParamComboBox::ParamComboBox(const gchar * name,
                 }
 
                 if ( (!newtext.empty()) && (!newvalue.empty()) ) {   // logical error if this is not true here
-                    choices = g_slist_append( choices, new enumentry(newvalue, newtext) );
+                    choices.push_back(new enumentry(newvalue, newtext) );
                 }
             }
         }
@@ -120,11 +105,9 @@ ParamComboBox::ParamComboBox(const gchar * name,
 ParamComboBox::~ParamComboBox (void)
 {
     //destroy choice strings
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        delete (reinterpret_cast<enumentry *>(list->data));
+    for (auto i:choices) {
+        delete i;
     }
-    g_slist_free(choices);
-
     g_free(_value);
 }
 
@@ -151,8 +134,7 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
     }
 
     Glib::ustring settext;
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        enumentry * entr = reinterpret_cast<enumentry *>(list->data);
+    for (auto entr:choices) {
         if ( !entr->text.compare(in) ) {
             settext = entr->value;
             break;  // break out of for loop
@@ -181,8 +163,7 @@ bool ParamComboBox::contains(const gchar * text, SPDocument const * /*doc*/, Ink
         return false; /* Can't have NULL string */
     }
 
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        enumentry * entr = reinterpret_cast<enumentry *>(list->data);
+    for (auto entr:choices) {
         if ( !entr->text.compare(text) )
             return true;
     }
@@ -256,8 +237,7 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
     ParamComboBoxEntry * combo = Gtk::manage(new ParamComboBoxEntry(this, doc, node, changeSignal));
     // add choice strings:
     Glib::ustring settext;
-    for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
-        enumentry * entr = reinterpret_cast<enumentry *>(list->data);
+    for (auto entr:choices) {
         Glib::ustring text = entr->text;
         combo->append(text);
 

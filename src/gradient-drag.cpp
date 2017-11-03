@@ -2875,8 +2875,9 @@ void GrDrag::deleteSelected(bool just_one)
         SPGradient * vector;
     };
 
-    GSList *midstoplist = NULL;  // list of stops that must be deleted (will be deleted first)
-    GSList *endstoplist = NULL;  // list of stops that must be deleted
+    std::vector<SPStop *> midstoplist;// list of stops that must be deleted (will be deleted first)
+    std::vector<StructStopInfo *> endstoplist;// list of stops that must be deleted
+
     while (!selected.empty()) {
         GrDragger *dragger = *(selected.begin());
         for(std::vector<GrDraggable *>::const_iterator drgble = dragger->draggables.begin(); drgble != dragger->draggables.end(); ++drgble) {
@@ -2892,14 +2893,14 @@ void GrDrag::deleteSelected(bool just_one)
                         SPStop *stop = sp_get_stop_i(vector, draggable->point_i);
                         // check if already present in list. (e.g. when both RG_MID1 and RG_MID2 were selected)
                         bool present = false;
-                        for (GSList const * l = midstoplist; l != NULL; l = l->next) {
-                            if ( (SPStop*)l->data == stop ) {
+                        for (auto i:midstoplist) {
+                            if ( i == stop ) {
                                 present = true;
                                 break; // no need to search further.
                             }
                         }
                         if (!present)
-                            midstoplist = g_slist_append(midstoplist, stop);
+                            midstoplist.push_back(stop);
                     }
                     break;
                 case POINT_LG_BEGIN:
@@ -2922,14 +2923,14 @@ void GrDrag::deleteSelected(bool just_one)
                             stopinfo->vector = vector;
                             // check if already present in list. (e.g. when both R1 and R2 were selected)
                             bool present = false;
-                            for (GSList const * l = endstoplist; l != NULL; l = l->next) {
-                                if ( ((StructStopInfo*)l->data)->spstop == stopinfo->spstop ) {
+                            for (auto i : endstoplist) {
+                                if ( i->spstop == stopinfo->spstop ) {
                                     present = true;
                                     break; // no need to search further.
                                 }
                             }
                             if (!present)
-                                endstoplist = g_slist_append(endstoplist, stopinfo);
+                                endstoplist.push_back(stopinfo);
                         }
                     }
                     break;
@@ -2941,15 +2942,13 @@ void GrDrag::deleteSelected(bool just_one)
         selected.erase(dragger);
         if ( just_one ) break; // iterate once if just_one is set.
     }
-    while (midstoplist) {
-        SPStop *stop = (SPStop*) midstoplist->data;
+    for (auto stop:midstoplist) {
         document = stop->document;
         Inkscape::XML::Node * parent = stop->getRepr()->parent();
         parent->removeChild(stop->getRepr());
-        midstoplist = g_slist_remove(midstoplist, stop);
     }
-    while (endstoplist) {
-        StructStopInfo *stopinfo  = (StructStopInfo*) endstoplist->data;
+
+    for (auto stopinfo:endstoplist) {
         document = stopinfo->spstop->document;
 
         // 2 is the minimum, cannot delete more than that without deleting the whole vector
@@ -3096,7 +3095,6 @@ void GrDrag::deleteSelected(bool just_one)
             sp_repr_css_attr_unref (css);
         }
 
-        endstoplist = g_slist_remove(endstoplist, stopinfo);
         delete stopinfo;
     }
 

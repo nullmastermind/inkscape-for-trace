@@ -43,11 +43,8 @@
 
 SPUse::SPUse()
     : SPItem(),
+      SPDimensions(),
       child(NULL),
-      x(),
-      y(),
-      width(),
-      height(),
       href(NULL),
       ref(new SPUseReference(this)),
       _delete_connection(),
@@ -356,22 +353,21 @@ Geom::Affine SPUse::get_root_transform() {
     //track the ultimate source of a chain of uses
     SPObject *orig = this->child;
 
-    GSList *chain = NULL;
-    chain = g_slist_prepend(chain, this);
+    std::vector<SPItem*> chain;
+    chain.push_back(this);
 
     while (dynamic_cast<SPUse *>(orig)) {
-        chain = g_slist_prepend(chain, orig);
+        chain.push_back(dynamic_cast<SPItem *>(orig));
         orig = dynamic_cast<SPUse *>(orig)->child;
     }
 
-    chain = g_slist_prepend(chain, orig);
-
+    chain.push_back(dynamic_cast<SPItem *>(orig));
 
     // calculate the accummulated transform, starting from the original
     Geom::Affine t(Geom::identity());
 
-    for (GSList *i = chain; i != NULL; i = i->next) {
-        SPItem *i_tem = reinterpret_cast<SPItem *>(i->data);
+    for (auto i=chain.rbegin(); i!=chain.rend(); ++i) {
+        SPItem *i_tem = *i;
 
         // "An additional transformation translate(x,y) is appended to the end (i.e.,
         // right-side) of the transform attribute on the generated 'g', where x and y
@@ -385,8 +381,6 @@ Geom::Affine SPUse::get_root_transform() {
 
         t *= i_tem->transform;
     }
-
-    g_slist_free(chain);
     return t;
 }
 
@@ -442,7 +436,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
-                    item->doWriteTransform(clip.getRepr(),item->transform, &identity);
+                    item->doWriteTransform(item->transform, &identity);
             	}
             }
         }
@@ -452,7 +446,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
-                    item->doWriteTransform(mask.getRepr(),item->transform, &identity);
+                    item->doWriteTransform(item->transform, &identity);
             	}
             }
         }
@@ -482,7 +476,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
         	if(item){
                 item->transform *= clone_move.inverse();
                 Geom::Affine identity;
-                item->doWriteTransform(clip.getRepr(),item->transform, &identity);
+                item->doWriteTransform(item->transform, &identity);
         	}
         }
     }
@@ -492,7 +486,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
         	if(item){
                 item->transform *= clone_move.inverse();
                 Geom::Affine identity;
-                item->doWriteTransform(mask.getRepr(),item->transform, &identity);
+                item->doWriteTransform(item->transform, &identity);
         	}
         }
     }
@@ -500,7 +494,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
 
     // commit the compensation
     this->transform *= clone_move;
-    this->doWriteTransform(this->getRepr(), this->transform, &advertized_move);
+    this->doWriteTransform(this->transform, &advertized_move);
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -584,21 +578,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
     /* Set up child viewport */
-    if (this->x.unit == SVGLength::PERCENT) {
-        this->x.computed = this->x.value * ictx->viewport.width();
-    }
-
-    if (this->y.unit == SVGLength::PERCENT) {
-        this->y.computed = this->y.value * ictx->viewport.height();
-    }
-
-    if (this->width.unit == SVGLength::PERCENT) {
-        this->width.computed = this->width.value * ictx->viewport.width();
-    }
-
-    if (this->height.unit == SVGLength::PERCENT) {
-        this->height.computed = this->height.value * ictx->viewport.height();
-    }
+    this->calcDimsFromParentViewport(ictx);
 
     childflags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
@@ -742,7 +722,7 @@ SPItem *SPUse::unlink() {
     {
         Geom::Affine nomove(Geom::identity());
         // Advertise ourselves as not moving.
-        item->doWriteTransform(item->getRepr(), t, &nomove);
+        item->doWriteTransform(t, &nomove);
     }
 
     return item;

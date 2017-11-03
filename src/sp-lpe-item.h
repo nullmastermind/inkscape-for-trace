@@ -94,14 +94,13 @@ public:
     void removeAllPathEffects(bool keep_paths);
     void addPathEffect(std::string value, bool reset);
     void addPathEffect(LivePathEffectObject * new_lpeobj);
-    void apply_to_mask(SPItem * item);
-    void apply_to_clippath(SPItem * item);
-    void apply_to_clip_or_mask(SPItem * clip_mask, SPItem * item);
+    void applyToMask(SPItem * item);
+    void applyToClipPath(SPItem * item);
+    void applyToClipPathOrMask(SPItem * clip_mask, SPItem * item);
     bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1);
 
     void editNextParamOncanvas(SPDesktop *dt);
 };
-
 void sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write); // careful, class already has method with *very* similar name!
 
 #endif /* !SP_LPE_ITEM_H_SEEN */

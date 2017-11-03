@@ -41,10 +41,13 @@
 
 #include <cmath>
 #include <string.h>
+#include <vector>
+#include <algorithm>
 
+#include <gtkmm/container.h>
+#include <gtkmm/radiomenuitem.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "icon-size.h"
 #include "widgets/ege-adjustment-action.h"
 #include "gimp/gimpspinscale.h"
 #include "ui/icon-names.h"
@@ -111,7 +114,7 @@ struct _EgeAdjustmentActionPrivate
     gdouble page;
     gint appearanceMode;
     gboolean transferFocus;
-    GList* descriptions;
+    std::vector<EgeAdjustmentDescr*> descriptions;
     gchar* appearance;
     gchar* iconId;
     GtkIconSize iconSize;
@@ -268,7 +271,7 @@ static void ege_adjustment_action_init( EgeAdjustmentAction* action )
     action->private_data->page = 0.0;
     action->private_data->appearanceMode = APPEARANCE_NONE;
     action->private_data->transferFocus = FALSE;
-    action->private_data->descriptions = 0;
+    //action->private_data->descriptions = 0;
     action->private_data->appearance = 0;
     action->private_data->iconId = 0;
     action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
@@ -514,11 +517,13 @@ static void egeAct_free_description( gpointer data, gpointer user_data ) {
 
 static void egeAct_free_all_descriptions( EgeAdjustmentAction* action )
 {
-    if ( action->private_data->descriptions ) {
-        g_list_foreach( action->private_data->descriptions, egeAct_free_description, 0 );
-        g_list_free( action->private_data->descriptions );
-        action->private_data->descriptions = 0;
+    for(auto i:action->private_data->descriptions) {
+        egeAct_free_description(i,0);
     }
+    for(auto i:action->private_data->descriptions) {
+        g_free(i);
+    }
+    action->private_data->descriptions.clear();
 }
 
 static gint egeAct_compare_descriptions( gconstpointer a, gconstpointer b )
@@ -551,7 +556,8 @@ void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar 
             EgeAdjustmentDescr* descr = g_new0( EgeAdjustmentDescr, 1 );
             descr->descr = descriptions[i] ? g_strdup( descriptions[i] ) : 0;
             descr->value = values[i];
-            action->private_data->descriptions = g_list_insert_sorted( action->private_data->descriptions, (gpointer)descr, egeAct_compare_descriptions );
+            action->private_data->descriptions.push_back(descr);
+            std::sort(action->private_data->descriptions.begin(),action->private_data->descriptions.end());
         }
     }
 }
@@ -609,8 +615,8 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
             default:
                 if ( what >= BUMP_CUSTOM ) {
                     guint index = what - BUMP_CUSTOM;
-                    if ( index < g_list_length( act->private_data->descriptions ) ) {
-                        EgeAdjustmentDescr* descr = (EgeAdjustmentDescr*)g_list_nth_data( act->private_data->descriptions, index );
+                    if ( index < act->private_data->descriptions.size() ) {
+                        EgeAdjustmentDescr* descr = act->private_data->descriptions[index];
                         if ( descr ) {
                             gtk_adjustment_set_value( act->private_data->adj, descr->value );
                         }
@@ -620,14 +626,13 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
     }
 }
 
-static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, GSList** group, gdouble num, gboolean active )
+static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, Gtk::RadioMenuItem::Group *group, gdouble num, gboolean active )
 {
     char* str = 0;
     EgeAdjustmentDescr* marker = 0;
-    GList* cur = act->private_data->descriptions;
+    std::vector<EgeAdjustmentDescr*> cur = act->private_data->descriptions;
 
-    while ( cur ) {
-        EgeAdjustmentDescr* descr = (EgeAdjustmentDescr*)cur->data;
+    for (auto descr:cur) {
         gdouble delta = num - descr->value;
         if ( delta < 0.0 ) {
             delta = -delta;
@@ -636,17 +641,14 @@ static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* men
             marker = descr;
             break;
         }
-        cur = g_list_next( cur );
     }
 
     str = g_strdup_printf( act->private_data->format, num,
                            ((marker && marker->descr) ? ": " : ""),
                            ((marker && marker->descr) ? marker->descr : ""));
 
-    *dst = gtk_radio_menu_item_new_with_label( *group, str );
-    if ( !*group) {
-        *group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(*dst) );
-    }
+    auto rmi = new Gtk::RadioMenuItem(*group,Glib::ustring(str));
+    *dst = GTK_WIDGET(rmi->gobj());
     if ( active ) {
         gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM(*dst), TRUE );
     }
@@ -658,44 +660,41 @@ static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* men
     g_free(str);
 }
 
-static GList* flush_explicit_items( GList* descriptions,
+static int flush_explicit_items( std::vector<EgeAdjustmentDescr*> descriptions,
+                                    int pos,
                                     GCallback toggleCb,
                                     int val,
                                     GtkWidget* menu,
                                     EgeAdjustmentAction* act,
                                     GtkWidget** dst,
-                                    GSList** group,
+                                    Gtk::RadioMenuItem::Group *group,
                                     gdouble num )
 {
-    GList* cur = descriptions;
+    if(pos >= descriptions.size() || pos < 0) return pos;
+    EgeAdjustmentDescr* descr = descriptions[pos];
 
-    if ( cur ) {
-        gdouble valUpper = num + act->private_data->epsilon;
-        gdouble valLower = num - act->private_data->epsilon;
+    gdouble valUpper = num + act->private_data->epsilon;
+    gdouble valLower = num - act->private_data->epsilon;
 
-        EgeAdjustmentDescr* descr = (EgeAdjustmentDescr*)cur->data;
-
-        while ( cur && descr && (descr->value >= valLower) ) {
-            if ( descr->value > valUpper ) {
-                create_single_menu_item( toggleCb, val + g_list_position(act->private_data->descriptions, cur), menu, act, dst, group, descr->value, FALSE );
-            }
-
-            cur = g_list_previous( cur );
-            descr = cur ? (EgeAdjustmentDescr*)cur->data : 0;
+    while ( pos>=0 && pos<descriptions.size() && descr && (descr->value >= valLower) ) {
+        if ( descr->value > valUpper ) {
+            create_single_menu_item( toggleCb, val + ( std::find(act->private_data->descriptions.begin(),act->private_data->descriptions.end(),descr) - act->private_data->descriptions.begin() ) , menu, act, dst, group, descr->value, FALSE );
         }
+        pos--;
+        descr = (pos<0) ? descriptions[pos] : NULL;
     }
 
-    return cur;
+    return pos;
 }
 
 static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
 {
     GtkWidget* menu = gtk_menu_new();
 
-    GSList* group = 0;
+    Gtk::RadioMenuItem::Group group;
     GtkWidget* single = 0;
-
-    GList* addOns = g_list_last( act->private_data->descriptions );
+    std::vector<EgeAdjustmentDescr*> list = act->private_data->descriptions;
+    int addOns = list.size() - 1;
 
     gdouble base = gtk_adjustment_get_value( act->private_data->adj );
     gdouble lower = 0.0;
@@ -711,37 +710,37 @@ static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
 
 
     if ( base < upper ) {
-        addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, upper );
+        addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, upper );
         create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_TOP, menu, act, &single, &group, upper, FALSE );
         if ( (base + page) < upper ) {
-            addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base + page );
+            addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base + page );
             create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_PAGE_UP, menu, act, &single, &group, base + page, FALSE );
         }
         if ( (base + step) < upper ) {
-            addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base + step );
+            addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base + step );
             create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_UP, menu, act, &single, &group, base + step, FALSE );
         }
     }
 
-    addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base );
+    addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base );
     create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_NONE, menu, act, &single, &group, base, TRUE );
 
     if ( base > lower ) {
         if ( (base - step) > lower ) {
-            addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base - step );
+            addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base - step );
             create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_DOWN, menu, act, &single, &group, base - step, FALSE );
         }
         if ( (base - page) > lower ) {
-            addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base - page );
+            addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, base - page );
             create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_PAGE_DOWN, menu, act, &single, &group, base - page, FALSE );
         }
-        addOns = flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, lower );
+        addOns = flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, lower );
         create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_BOTTOM, menu, act, &single, &group, lower, FALSE );
     }
 
-    if ( act->private_data->descriptions ) {
-        gdouble value = ((EgeAdjustmentDescr*)act->private_data->descriptions->data)->value;
-        flush_explicit_items( addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, value );
+    if ( !act->private_data->descriptions.empty() ) {
+        gdouble value = ((EgeAdjustmentDescr*)act->private_data->descriptions[0])->value;
+        flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, value );
     }
 
     return menu;
@@ -965,36 +964,37 @@ static gboolean process_tab( GtkWidget* widget, int direction )
     GtkWidget* ggp = gp ? gtk_widget_get_parent(gp) : 0;
 
     if ( ggp && GTK_IS_TOOLBAR(ggp) ) {
-        GList* kids = gtk_container_get_children( GTK_CONTAINER(ggp) );
-        if ( kids ) {
+        std::vector<Gtk::Widget*> kids = Glib::wrap(GTK_CONTAINER(ggp))->get_children();
+        if ( !kids.empty() ) {
             GtkWidget* curr = widget;
             while ( curr && (gtk_widget_get_parent(curr) != ggp) ) {
                 curr = gtk_widget_get_parent( curr );
             }
             if ( curr ) {
-                GList* mid = g_list_find( kids, curr );
-                while ( mid ) {
-                    mid = ( direction < 0 ) ? g_list_previous(mid) : g_list_next(mid);
-                    if ( mid && GTK_IS_TOOL_ITEM(mid->data) ) {
+                std::vector<Gtk::Widget*>::iterator mid=kids.end();
+                for(auto i = kids.begin(); i!= kids.end(); ++i){
+                    if(curr == (*i)->gobj())
+                        mid = i;
+                }
+                while ( mid != kids.end() && !(mid==kids.begin() && direction<0 )  ) {
+                    mid = ( direction < 0 ) ? std::prev(mid) : ++mid;
+                    if ( mid!=kids.end() && GTK_IS_TOOL_ITEM((*mid)->gobj()) ) {
                         /* potential target */
-                        GtkWidget* child = gtk_bin_get_child( GTK_BIN(mid->data) );
+                        GtkWidget* child = gtk_bin_get_child( GTK_BIN((*mid)->gobj()) );
                         if ( child && GTK_IS_BOX(child) ) { /* could be ours */
-                            GList* subChildren = gtk_container_get_children( GTK_CONTAINER(child) );
-                            if ( subChildren ) {
-                                GList* last = g_list_last(subChildren);
-                                if ( last && GTK_IS_SPIN_BUTTON(last->data) && gtk_widget_is_sensitive( GTK_WIDGET(last->data) ) ) {
-                                    gtk_widget_grab_focus( GTK_WIDGET(last->data) );
+                            std::vector<Gtk::Widget*> subChildren = Glib::wrap(GTK_CONTAINER(child))->get_children();
+                            if ( ! subChildren.empty() ) {
+                                Gtk::Widget *last = subChildren[subChildren.size()-1];
+                                if ( GTK_IS_SPIN_BUTTON(last->gobj()) && gtk_widget_is_sensitive( GTK_WIDGET(last->gobj()) ) ) {
+                                    gtk_widget_grab_focus( GTK_WIDGET(last->gobj()) );
                                     handled = TRUE;
-                                    mid = 0; /* to stop loop */
+                                    mid = kids.end(); /* to stop loop */
                                 }
-
-                                g_list_free(subChildren);
                             }
                         }
                     }
                 }
             }
-            g_list_free( kids );
         }
     }
 

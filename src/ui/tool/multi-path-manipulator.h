@@ -77,8 +77,8 @@ public:
     sigc::signal<void> signal_coords_changed; /// Emitted whenever the coordinates
         /// shown in the status bar need updating
 private:
-    typedef std::pair<ShapeRecord, boost::shared_ptr<PathManipulator> > MapPair;
-    typedef std::map<ShapeRecord, boost::shared_ptr<PathManipulator> > MapType;
+    typedef std::pair<ShapeRecord, std::shared_ptr<PathManipulator> > MapPair;
+    typedef std::map<ShapeRecord, std::shared_ptr<PathManipulator> > MapType;
 
     template <typename R>
     void invokeForAll(R (PathManipulator::*method)()) {
@@ -88,11 +88,11 @@ private:
             // be a valid iterator and then assign i to it.
             MapType::iterator next_i = i;
             ++next_i;
-            // i->second is a boost::shared_ptr so try to hold on to it so
+            // i->second is a std::shared_ptr so try to hold on to it so
             // it won't get freed prematurely by the WriteXML() method or
             // whatever. See https://bugs.launchpad.net/inkscape/+bug/1617615
             // Applicable to empty paths.
-            boost::shared_ptr<PathManipulator> hold(i->second);
+            std::shared_ptr<PathManipulator> hold(i->second);
             ((hold.get())->*method)();
             i = next_i;
         }

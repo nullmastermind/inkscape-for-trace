@@ -149,7 +149,6 @@ CanvasGrid::CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocume
     }
 
     namedview = nv;
-    canvasitems = NULL;
 }
 
 CanvasGrid::~CanvasGrid()
@@ -157,11 +156,9 @@ CanvasGrid::~CanvasGrid()
     if (repr) {
         repr->removeListenerByData (this);
     }
-
-    while (canvasitems) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(canvasitems->data));
-        canvasitems = g_slist_remove(canvasitems, canvasitems->data);
-    }
+    for (auto i:canvasitems)
+        sp_canvas_item_destroy(i);
+    canvasitems.clear();
 }
 
 const char *
@@ -276,8 +273,8 @@ CanvasGrid::createCanvasItem(SPDesktop * desktop)
 //           but share the same CanvasGrid object; that is what this function is for.
 
     // check if there is already a canvasitem on this desktop linking to this grid
-    for (GSList *l = canvasitems; l != NULL; l = l->next) {
-        if ( desktop->getGridGroup() == SP_CANVAS_GROUP(SP_CANVAS_ITEM(l->data)->parent) ) {
+    for (auto i:canvasitems) {
+        if ( desktop->getGridGroup() == SP_CANVAS_GROUP(i->parent) ) {
             return NULL;
         }
     }
@@ -287,7 +284,7 @@ CanvasGrid::createCanvasItem(SPDesktop * desktop)
     sp_canvas_item_show(SP_CANVAS_ITEM(item));
 
     g_object_ref(item);    // since we're keeping a link to this item, we need to bump up the ref count
-    canvasitems = g_slist_prepend(canvasitems, item);
+    canvasitems.push_back(item);
 
     return item;
 }
@@ -650,8 +647,8 @@ CanvasXYGrid::readRepr()
         gridunit = unit_table.getUnit(value); // Display unit identifier in grid menu
     }
 
-    for (GSList *l = canvasitems; l != NULL; l = l->next) {
-        sp_canvas_item_request_update ( SP_CANVAS_ITEM(l->data) );
+    for (auto i:canvasitems) {
+        sp_canvas_item_request_update(i);
     }
 
     return;

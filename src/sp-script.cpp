@@ -73,47 +73,6 @@ Inkscape::XML::Node* SPScript::write(Inkscape::XML::Document* /*doc*/, Inkscape:
 	return repr;
 }
 
-//static Inkscape::XML::Node *sp_script_write(SPObject *object, Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
-//{
-/*
-TODO:
- code copied from sp-defs
- decide what to do here!
-
-    if (flags & SP_OBJECT_WRITE_BUILD) {
-
-        if (!repr) {
-            repr = xml_doc->createElement("svg:script");
-        }
-
-        GSList *l = NULL;
-        for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
-            Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
-            if (crepr) {
-                l = g_slist_prepend(l, crepr);
-            }
-        }
-
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
-        }
-
-    } else {
-        for ( SPObject *child = object->firstChild() ; child; child = child->getNext() ) {
-            child->updateRepr(flags);
-        }
-    }
-
-    if (((SPObjectClass *) (parent_class))->write) {
-        (* ((SPObjectClass *) (parent_class))->write)(object, xml_doc, repr, flags);
-    }
-*/
-//
-//	return ((SPScript*)object)->cscript->onWrite(xml_doc, repr, flags);
-//}
-
 /*
   Local Variables:
   mode:c++

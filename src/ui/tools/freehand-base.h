@@ -66,15 +66,15 @@ public:
     SPCurve *blue_curve;
 
     // Green
-    GSList *green_bpaths;
+    std::vector<SPCanvasItem*> green_bpaths;
     SPCurve *green_curve;
     SPDrawAnchor *green_anchor;
     gboolean green_closed; // a flag meaning we hit the green anchor, so close the path on itself
 
     // White
     SPItem *white_item;
-    GSList *white_curves;
-    GSList *white_anchors;
+    std::list<SPCurve *> white_curves;
+    std::vector<SPDrawAnchor*> white_anchors;
 
     // Alternative curve to use on continuing the exisiting curve in case of
     // bspline or spirolive, because using anchor curves gives random memory

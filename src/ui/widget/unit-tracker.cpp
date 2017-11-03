@@ -14,7 +14,7 @@
 
 #include "style-internal.h"
 #include "unit-tracker.h"
-#include "widgets/ege-select-one-action.h"
+//#include "widgets/ege-select-one-action.h"
 
 #define COLUMN_STRING 0
 
@@ -31,9 +31,6 @@ UnitTracker::UnitTracker(UnitType unit_type) :
     _activeUnit(NULL),
     _activeUnitInitialized(false),
     _store(0),
-    _unitList(0),
-    _actionList(0),
-    _adjList(0),
     _priorValues()
 {
     _store = gtk_list_store_new(1, G_TYPE_STRING);
@@ -58,17 +55,17 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 UnitTracker::~UnitTracker()
 {
     // Unhook weak references to GtkActions
-    while (_actionList) {
-        g_signal_handlers_disconnect_by_func(G_OBJECT(_actionList->data), (gpointer) _unitChangedCB, this);
-        g_object_weak_unref(G_OBJECT(_actionList->data), _actionFinalizedCB, this);
-        _actionList = g_slist_delete_link(_actionList, _actionList);
+    for (auto i : _actionList) {
+        g_signal_handlers_disconnect_by_func(G_OBJECT(i), (gpointer) _unitChangedCB, this);
+        g_object_weak_unref(G_OBJECT(i), _actionFinalizedCB, this);
     }
+    _actionList.clear();
 
     // Unhook weak references to GtkAdjustments
-    while (_adjList) {
-        g_object_weak_unref(G_OBJECT(_adjList->data), _adjustmentFinalizedCB, this);
-        _adjList = g_slist_delete_link(_adjList, _adjList);
+    for (auto i : _adjList) {
+        g_object_weak_unref(G_OBJECT(i), _adjustmentFinalizedCB, this);
     }
+    _adjList.clear();
 }
 
 bool UnitTracker::isUpdating() const
@@ -109,9 +106,9 @@ void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
 
 void UnitTracker::addAdjustment(GtkAdjustment *adj)
 {
-    if (!g_slist_find(_adjList, adj)) {
+    if (std::find(_adjList.begin(),_adjList.end(),adj)!=_adjList.end()) {
         g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
-        _adjList = g_slist_append(_adjList, adj);
+        _adjList.push_back(adj);
     }
 }
 
@@ -147,7 +144,7 @@ GtkAction *UnitTracker::createAction(gchar const *name, gchar const *label, gcha
     ege_select_one_action_set_appearance(act1, "minimal");
     g_object_weak_ref(G_OBJECT(act1), _actionFinalizedCB, this);
     g_signal_connect(G_OBJECT(act1), "changed", G_CALLBACK(_unitChangedCB), this);
-    _actionList = g_slist_append(_actionList, act1);
+    _actionList.push_back(act1);
 
     return GTK_ACTION(act1);
 }
@@ -180,9 +177,10 @@ void UnitTracker::_adjustmentFinalizedCB(gpointer data, GObject *where_the_objec
 
 void UnitTracker::_actionFinalized(GObject *where_the_object_was)
 {
-    GSList *target = g_slist_find(_actionList, where_the_object_was);
-    if (target) {
-        _actionList = g_slist_remove(_actionList, where_the_object_was);
+    EgeSelectOneAction* act = (EgeSelectOneAction*)(where_the_object_was);
+    auto it = std::find(_actionList.begin(),_actionList.end(), act);
+    if (it != _actionList.end()) {
+        _actionList.erase(it);
     } else {
         g_warning("Received a finalization callback for unknown object %p", where_the_object_was);
     }
@@ -190,9 +188,10 @@ void UnitTracker::_actionFinalized(GObject *where_the_object_was)
 
 void UnitTracker::_adjustmentFinalized(GObject *where_the_object_was)
 {
-    GSList *target = g_slist_find(_adjList, where_the_object_was);
-    if (target) {
-        _adjList = g_slist_remove(_adjList, where_the_object_was);
+    GtkAdjustment* adj = (GtkAdjustment*)(where_the_object_was);
+    auto it = std::find(_adjList.begin(),_adjList.end(), adj);
+    if (it != _adjList.end()) {
+        _adjList.erase(it);
     } else {
         g_warning("Received a finalization callback for unknown object %p", where_the_object_was);
     }
@@ -217,7 +216,7 @@ void UnitTracker::_setActive(gint active)
                 Inkscape::Util::Unit const *newUnit = unit_table.getUnit(newAbbr);
                 _activeUnit = newUnit;
 
-                if (_adjList) {
+                if (!_adjList.empty()) {
                     _fixupAdjustments(unit, newUnit);
                 }
 
@@ -230,11 +229,8 @@ void UnitTracker::_setActive(gint active)
 
         _active = active;
 
-        for ( GSList *cur = _actionList ; cur ; cur = g_slist_next(cur) ) {
-            if (IS_EGE_SELECT_ONE_ACTION(cur->data)) {
-                EgeSelectOneAction *act = EGE_SELECT_ONE_ACTION(cur->data);
-                ege_select_one_action_set_active(act, active);
-            }
+        for (auto act:_actionList) {
+            ege_select_one_action_set_active(act, active);
         }
         
         _activeUnitInitialized = true;
@@ -244,8 +240,7 @@ void UnitTracker::_setActive(gint active)
 void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit)
 {
     _isUpdating = true;
-    for ( GSList *cur = _adjList ; cur ; cur = g_slist_next(cur) ) {
-        GtkAdjustment *adj = GTK_ADJUSTMENT(cur->data);
+    for ( auto adj : _adjList ) {
         gdouble oldVal = gtk_adjustment_get_value(adj);
         gdouble val = oldVal;
 

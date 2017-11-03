@@ -181,8 +181,8 @@ protected:
     std::vector<Geom::Point> selectedNodesPoints;
 
 private:
-    void setDefaultParam(Glib::ustring pref_path, gchar * value, Gtk::Button *set , Gtk::Button *unset);
-    void unsetDefaultParam(Glib::ustring pref_path, Gtk::Button *set , Gtk::Button *unset);
+    void setDefaultParam(Glib::ustring pref_path, Glib::ustring par, gchar * value, gchar * defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
+    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring par, gchar * value, gchar * defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;

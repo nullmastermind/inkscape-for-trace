@@ -43,7 +43,7 @@ public:
 
 void box3d_side_position_set (Box3DSide *side); // FIXME: Replace this by box3d_side_set_shape??
 
-char *box3d_side_axes_string(Box3DSide *side);
+Glib::ustring box3d_side_axes_string(Box3DSide *side);
 
 Persp3D *box3d_side_perspective(Box3DSide *side);
 

@@ -72,13 +72,13 @@ static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*a
         // std::cout << "sp_canvas_rotate_update: surface_copy is NULL" << std::endl;
         return;
     }
-    
+
     // Destroy surface_rotated if it already exists.
     if (cr->surface_rotated != NULL) {
         cairo_surface_destroy (cr->surface_rotated);
         cr->surface_rotated = NULL;
     }
-    
+
     // Create rotated surface
     cr->surface_rotated = ink_cairo_surface_create_identical(cr->surface_copy);
     double width  = cairo_image_surface_get_width  (cr->surface_rotated);
@@ -91,7 +91,7 @@ static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*a
     cairo_set_source_surface( context, cr->surface_copy, 0, 0 );
     cairo_paint(        context );
     cairo_destroy(      context);
-    
+
     // We cover the entire canvas
     item->x1 = -G_MAXINT;
     item->y1 = -G_MAXINT;
@@ -108,8 +108,9 @@ static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
     // std::cout << "  buf->rect:         " << buf->rect << std::endl;
     // std::cout << "  buf->canvas_rect: " << buf->canvas_rect << std::endl;
     SPCanvasRotate *cr = SP_CANVAS_ROTATE(item);
+    auto ct = buf->ct;
 
-    if (!buf->ct) {
+    if (!ct) {
         return;
     }
 
@@ -119,26 +120,26 @@ static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     // Draw rotated canvas
-    cairo_save (buf->ct);
-    cairo_translate (buf->ct,
+    cairo_save (ct);
+    cairo_translate (ct,
                      buf->canvas_rect.left() - buf->rect.left(),
                      buf->canvas_rect.top()  - buf->rect.top() );
-    cairo_set_operator (buf->ct, CAIRO_OPERATOR_SOURCE );
-    cairo_set_source_surface (buf->ct, cr->surface_rotated, 0, 0 );
-    cairo_paint   (buf->ct);
-    cairo_restore (buf->ct);
+    cairo_set_operator (ct, CAIRO_OPERATOR_SOURCE );
+    cairo_set_source_surface (ct, cr->surface_rotated, 0, 0 );
+    cairo_paint   (ct);
+    cairo_restore (ct);
 
 
     // Draw line from center to cursor
-    cairo_save (buf->ct);
-    cairo_translate   (buf->ct, -buf->rect.left(), -buf->rect.top());
-    cairo_new_path    (buf->ct);
-    cairo_move_to     (buf->ct, cr->center[Geom::X], cr->center[Geom::Y]);
-    cairo_rel_line_to (buf->ct, cr->cursor[Geom::X], cr->cursor[Geom::Y]);
-    cairo_set_line_width (buf->ct, 2);
-    ink_cairo_set_source_rgba32 (buf->ct, 0xff00007f);
-    cairo_stroke (buf->ct);
-    cairo_restore (buf->ct);
+    cairo_save (ct);
+    cairo_translate   (ct, -buf->rect.left(), -buf->rect.top());
+    cairo_new_path    (ct);
+    cairo_move_to     (ct, cr->center[Geom::X], cr->center[Geom::Y]);
+    cairo_rel_line_to (ct, cr->cursor[Geom::X], cr->cursor[Geom::Y]);
+    cairo_set_line_width (ct, 2);
+    ink_cairo_set_source_rgba32 (ct, 0xff00007f);
+    cairo_stroke (ct);
+    cairo_restore (ct);
 
 }
 
@@ -187,7 +188,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
             // Correct line for snapping of angle
             double distance = rcursor.length();
-            cr->cursor = Geom::Point::polar( Geom::rad_from_deg(angle), distance );        
+            cr->cursor = Geom::Point::polar( Geom::rad_from_deg(angle), distance );
 
             // Update screen
             // sp_canvas_item_request_update( item );
@@ -214,7 +215,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
                 cr->surface_rotated = NULL;
             }
             // sp_canvas_item_show (desktop->drawing);
-            
+
             break;
         case GDK_KEY_PRESS:
             // std::cout << "  Key press: " << std::endl;
@@ -260,10 +261,10 @@ void sp_canvas_rotate_paint (SPCanvasRotate *canvas_rotate, cairo_surface_t *bac
 
     double width  = cairo_image_surface_get_width  (background);
     double height = cairo_image_surface_get_height (background);
-    
+
     // Draw rotated canvas
     cairo_t *context = cairo_create( background );
-    
+
     cairo_save (context);
     cairo_set_operator( context, CAIRO_OPERATOR_SOURCE );
     cairo_translate(    context, width/2.0, height/2.0 );

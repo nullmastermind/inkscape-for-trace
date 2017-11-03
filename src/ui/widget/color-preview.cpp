@@ -11,6 +11,7 @@
 
 #include "ui/widget/color-preview.h"
 #include "display/cairo-utils.h"
+#include <cairo.h>
 
 #define SPCP_DEFAULT_WIDTH 32
 #define SPCP_DEFAULT_HEIGHT 12
@@ -70,45 +71,45 @@ ColorPreview::setRgba32 (guint32 rgba)
 bool
 ColorPreview::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 {
-    GdkRectangle warea, carea;
-    gint w2;
-
+    double x, y, width, height;
     const Gtk::Allocation& allocation = get_allocation();
-    warea.x = allocation.get_x();
-    warea.y = allocation.get_y();
-    warea.width = allocation.get_width();
-    warea.height = allocation.get_height();
+    x = 0;
+    y = 0;
+    width = allocation.get_width()/2.0;
+    height = allocation.get_height();
+
+    double radius = height / 7.5;
+    double degrees = M_PI / 180.0;
+    cairo_new_sub_path (cr->cobj());
+    cairo_line_to(cr->cobj(), width, 0);
+    cairo_line_to(cr->cobj(), width, height);
+    cairo_arc (cr->cobj(), x + radius, y + height - radius, radius, 90 * degrees, 180 * degrees);
+    cairo_arc (cr->cobj(), x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
+    cairo_close_path (cr->cobj());
 
     /* Transparent area */
 
-    w2 = warea.width / 2;
-
-    carea.x = warea.x;
-    carea.y = warea.y;
-    carea.width = w2;
-    carea.height = warea.height;
-
     cairo_pattern_t *checkers = ink_cairo_pattern_create_checkerboard();
 
-    cr->rectangle(carea.x, carea.y, carea.width, carea.height);
     cairo_set_source(cr->cobj(), checkers);
     cr->fill_preserve();
     ink_cairo_set_source_rgba32(cr->cobj(), _rgba);
     cr->fill();
-
     cairo_pattern_destroy(checkers);
 
     /* Solid area */
 
-    carea.x = warea.x + w2;
-    carea.y = warea.y;
-    carea.width = warea.width - w2;
-    carea.height = warea.height;
+    x = width;
 
-    cr->rectangle(carea.x, carea.y, carea.width, carea.height);
+    cairo_new_sub_path (cr->cobj());
+    cairo_arc (cr->cobj(), x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+    cairo_arc (cr->cobj(), x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+    cairo_line_to(cr->cobj(), x, height);
+    cairo_line_to(cr->cobj(), x, y);
+    cairo_close_path (cr->cobj());
     ink_cairo_set_source_rgba32(cr->cobj(), _rgba | 0xff);
     cr->fill();
-
+    
     return true;
 }
 

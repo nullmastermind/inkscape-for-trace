@@ -205,41 +205,29 @@ static void freehand_simplify_lpe(InkToggleAction* itact, GObject *dataKludge) {
     }
 }
 
-/**
- * Generate the list of freehand advanced shape option entries.
- */
-static GList * freehand_shape_dropdown_items_list() {
-    GList *glist = NULL;
-
-    glist = g_list_append (glist, const_cast<gchar *>(C_("Freehand shape", "None")));
-    glist = g_list_append (glist, _("Triangle in"));
-    glist = g_list_append (glist, _("Triangle out"));
-    glist = g_list_append (glist, _("Ellipse"));
-    glist = g_list_append (glist, _("From clipboard"));
-    glist = g_list_append (glist, _("Bend from clipboard"));
-    glist = g_list_append (glist, _("Last applied"));
-
-    return glist;
-}
-
 static void freehand_add_advanced_shape_options(GtkActionGroup* mainActions, GObject* holder, bool tool_is_pencil)
 {
     /*advanced shape options */
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
-
-        GList* items = 0;
         gint count = 0;
-        for ( items = freehand_shape_dropdown_items_list(); items ; items = g_list_next(items) )
+        std::vector<gchar*> freehand_shape_dropdown_items_list = { 
+            const_cast<gchar *>(C_("Freehand shape", "None")), 
+            _("Triangle in"),     
+            _("Triangle out"), 
+            _("Ellipse"), 
+            _("From clipboard"), 
+            _("Bend from clipboard"), 
+            _("Last applied") };
+
+        for (auto item:freehand_shape_dropdown_items_list)
         {
             GtkTreeIter iter;
             gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, reinterpret_cast<gchar*>(items->data), 1, count, -1 );
+            gtk_list_store_set( model, &iter, 0, item, 1, count, -1 );
             count++;
         }
-        g_list_free( items );
-        items = 0;
         EgeSelectOneAction* act1 = ege_select_one_action_new(
             tool_is_pencil ? "SetPencilShapeAction" : "SetPenShapeAction",
             _("Shape:"), (_("Shape of new paths drawn by this tool")), NULL, GTK_TREE_MODEL(model));

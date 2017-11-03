@@ -861,18 +861,18 @@ bool PenTool::_handle2ButtonPress(GdkEventButton const &bevent) {
 
 void PenTool::_redrawAll() {
     // green
-    if (this->green_bpaths) {
+    if (! this->green_bpaths.empty()) {
         // remove old piecewise green canvasitems
-        while (this->green_bpaths) {
-            sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-            this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+        for (auto i : this->green_bpaths){
+            sp_canvas_item_destroy(i);
         }
+        this->green_bpaths.clear();
         // one canvas bpath for all of green_curve
         SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve, true);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
 
-        this->green_bpaths = g_slist_prepend(this->green_bpaths, canvas_shape);
+        this->green_bpaths.push_back(canvas_shape);
     }
     if (this->green_anchor) {
         SP_CTRL(this->green_anchor->ctrl)->moveto(this->green_anchor->dp);
@@ -1063,7 +1063,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         }
     }
 
-    switch (get_group0_keyval (&event->key)) {
+    switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Left: // move last point left
         case GDK_KEY_KP_Left:
             if (!MOD__CTRL(event)) { // not ctrl
@@ -1254,10 +1254,10 @@ void PenTool::_resetColors() {
     this->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), NULL, true);
     // Green
-    while (this->green_bpaths) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-        this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+    for (auto i:this->green_bpaths) {
+        sp_canvas_item_destroy(i);
     }
+    this->green_bpaths.clear();
     this->green_curve->reset();
     if (this->green_anchor) {
         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
@@ -1292,7 +1292,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 
     Geom::Point rel = p - this->p[pc_point_to_compare];
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
-    GString *dist = g_string_new(q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring dist = q.string(desktop->namedview->display_units);
     double angle = atan2(rel[Geom::Y], rel[Geom::X]) * 180 / M_PI;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/compassangledisplay/value", 0) != 0) {
@@ -1302,8 +1302,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
         }
     }
 
-    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist->str);
-    g_string_free(dist, false);
+    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist.c_str());
 }
 
 // this function changes the colors red, green and blue making them transparent or not, depending on if spiro is being used.
@@ -1334,17 +1333,17 @@ void PenTool::_bsplineSpiroColor()
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
-    if (this->green_bpaths) {
+    if (!this->green_bpaths.empty()) {
         // remove old piecewise green canvasitems
-        while (this->green_bpaths) {
-            sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-            this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+        for (auto i:this->green_bpaths) {
+            sp_canvas_item_destroy(i);
         }
+        this->green_bpaths.clear();
         // one canvas bpath for all of green_curve
         SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve, true);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
-        this->green_bpaths = g_slist_prepend(this->green_bpaths, canvas_shape);
+        this->green_bpaths.push_back(canvas_shape);
     }
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->red_bpath), this->red_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 }
@@ -1557,18 +1556,18 @@ void PenTool::_bsplineSpiroMotion(guint const state){
                     this->overwrite_curve = tmp_curve->copy();
                 }
             }
-            if (this->green_bpaths) {
+            if (!this->green_bpaths.empty()) {
                 this->green_curve = tmp_curve->copy();
                 // remove old piecewise green canvasitems
-                while (this->green_bpaths) {
-                    sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-                    this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+                for (auto i: this->green_bpaths) {
+                    sp_canvas_item_destroy(i);
                 }
+                this->green_bpaths.clear();
                 // one canvas bpath for all of green_curve
                 SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve, true);
                 sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
                 sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
-                this->green_bpaths = g_slist_prepend(this->green_bpaths, canvas_shape);
+                this->green_bpaths.push_back(canvas_shape);
             }
         }
         if (cubic) {
@@ -1929,7 +1928,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
         curve->unref();
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
-        this->green_bpaths = g_slist_prepend(this->green_bpaths, canvas_shape);
+        this->green_bpaths.push_back(canvas_shape);
 
         this->p[0] = this->p[3];
         this->p[1] = this->p[4];
@@ -1955,11 +1954,9 @@ bool PenTool::_undoLastPoint() {
         // Reset red curve
         this->red_curve->reset();
         // Destroy topmost green bpath
-        if (this->green_bpaths) {
-            if (this->green_bpaths->data) {
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-            }
-            this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+        if (!this->green_bpaths.empty()) {
+            sp_canvas_item_destroy(this->green_bpaths.back());
+            this->green_bpaths.pop_back();
         }
         // Get last segment
         if ( this->green_curve->is_unset() ) {
@@ -1987,11 +1984,9 @@ bool PenTool::_undoLastPoint() {
         // delete the last segment of the green curve
         if (this->green_curve->get_segment_count() == 1) {
             this->npoints = 5;
-            if (this->green_bpaths) {
-                if (this->green_bpaths->data) {
-                    sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-                }
-                this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+            if (!this->green_bpaths.empty()) {
+                sp_canvas_item_destroy(this->green_bpaths.back());
+                this->green_bpaths.pop_back();
             }
             this->green_curve->reset();
         } else {

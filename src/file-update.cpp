@@ -359,7 +359,7 @@ void sp_file_convert_dpi(SPDocument *doc)
                   "but is better for physical output that relies on accurate sizes and positions (for example, for "
                   "3D printing.)\n\n"
                   "More information about this change are available in the <a "
-                  "href='https://inkscape.org/en/learn/faq#todo-todo-todo'>Inkscape FAQ</a>"
+                  "href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a>"
                   "</small>"));
             moreinfo_text.set_line_wrap(true);
             moreinfo_text.set_size_request(554,-1);

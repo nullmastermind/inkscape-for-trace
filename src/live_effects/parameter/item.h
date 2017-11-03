@@ -34,14 +34,14 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
-
+    virtual gchar * param_getDefaultSVGValue() const;
     virtual void param_set_default();
     virtual void param_update_default(const gchar * default_value);
     void param_set_and_write_default();
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
-
     sigc::signal <void> signal_item_pasted;
     sigc::signal <void> signal_item_changed;
+    Geom::Affine last_transform;
     bool changed; /* this gets set whenever the path is changed (this is set to true, and then the signal_item_changed signal is emitted).
                    * the user must set it back to false if she wants to use it sensibly */
 protected:
@@ -60,7 +60,7 @@ protected:
     void linked_modified(SPObject *linked_obj, guint flags);
     void linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item);
     virtual void linked_modified_callback(SPObject *linked_obj, guint flags);
-    virtual void linked_transformed_callback(Geom::Affine const * /*rel_transf*/, SPItem * /*moved_item*/) {};
+    virtual void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem */*moved_item*/);
     void on_link_button_click();
 
     void emit_changed();

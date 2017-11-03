@@ -28,6 +28,7 @@
 #include <libnrtype/font-instance.h>
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 #include "svg/svg.h"
 #include "display/drawing-text.h"
 #include "attributes.h"
@@ -72,10 +73,6 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "textLength" );
     this->readAttr( "lengthAdjust" );
 
-    // SVG 2 Auto wrapped text
-    this->readAttr( "width" );
-    this->readAttr( "height" );
-
     SPItem::build(doc, repr);
 
     this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
@@ -107,22 +104,6 @@ void SPText::set(unsigned int key, const gchar* value) {
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
 
-            case SP_ATTR_WIDTH:
-                if (!this->width.read(value) || this->width.value < 0.0) {
-                    this->width.unset();
-                }
-
-                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                break;
-
-            case SP_ATTR_HEIGHT:
-                if (!this->height.read(value) || this->height.value < 0.0) {
-                    this->height.unset();
-                }
-
-                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                break;
-
             default:
                 SPItem::set(key, value);
                 break;
@@ -144,30 +125,24 @@ void SPText::remove_child(Inkscape::XML::Node *rch) {
 
 
 void SPText::update(SPCtx *ctx, guint flags) {
+
     unsigned childflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         childflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
 
     // Create temporary list of children
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child, this);
-        l = g_slist_prepend (l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject*>(l->data); // We just built this list, so cast is safe.
-        l = g_slist_remove (l, child);
-
+    for (auto child:l) {
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             /* fixme: Do we need transform? */
             child->updateDisplay(ctx, childflags);
         }
-
         sp_object_unref(child, this);
     }
 
@@ -187,6 +162,18 @@ void SPText::update(SPCtx *ctx, guint flags) {
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 
         attributes.update( em, ex, w, h );
+
+        // Set inline_size computed value if necessary (i.e. if unit is %).
+        if (style->inline_size.set) {
+            if (style->inline_size.unit == SP_CSS_UNIT_PERCENT) {
+                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
+                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                    style->inline_size.computed = style->inline_size.value * ictx->viewport.width();
+                } else {
+                    style->inline_size.computed = style->inline_size.value * ictx->viewport.height();
+                }
+            }
+        }
 
         /* fixme: It is not nice to have it here, but otherwise children content changes does not work */
         /* fixme: Even now it may not work, as we are delayed */
@@ -230,23 +217,16 @@ void SPText::modified(guint flags) {
     }
 
     // Create temporary list of children
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child, this);
-        l = g_slist_prepend (l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject*>(l->data); // We just built this list, so cast is safe.
-        l = g_slist_remove (l, child);
-
+    for (auto child:l) {
         if (cflags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(cflags);
         }
-
         sp_object_unref(child, this);
     }
 }
@@ -257,7 +237,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             repr = xml_doc->createElement("svg:text");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             if (SP_IS_TITLE(&child) || SP_IS_DESC(&child)) {
@@ -273,14 +253,13 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             }
 
             if (crepr) {
-                l = g_slist_prepend (l, crepr);
+                l.push_back(crepr);
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
@@ -298,14 +277,6 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     this->attributes.writeTo(repr);
     this->rebuildLayout();  // copied from update(), see LP Bug 1339305
-
-    // SVG 2 Auto-wrapped text
-    if( this->width.computed > 0.0 ) {
-        sp_repr_set_svg_double(repr, "width", this->width.computed);
-    }
-    if( this->height.computed > 0.0 ) {
-        sp_repr_set_svg_double(repr, "height", this->height.computed);
-    }
 
     SPItem::write(xml_doc, repr, flags);
 
@@ -359,7 +330,7 @@ gchar* SPText::description() const {
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(style->font_size.computed, "px");
     q.quantity *= this->i2doc_affine().descrim();
-    GString *xs = g_string_new(q.string(sp_style_get_css_unit_string(unit)).c_str());
+    Glib::ustring xs = q.string(sp_style_get_css_unit_string(unit));
 
     char const *trunc = "";
     Inkscape::Text::Layout const *layout = te_get_layout((SPItem *) this);
@@ -369,8 +340,8 @@ gchar* SPText::description() const {
     }
 
     char *ret = ( SP_IS_TEXT_TEXTPATH(this)
-      ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs->str)
-      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs->str) );
+      ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs.c_str())
+      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs.c_str()) );
     return ret;
 }
 
@@ -465,60 +436,133 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
-    // Test SVG 2 text in shape implementation
     // To do: follow SPItem clip_ref/mask_ref code
     if (style->shape_inside.set ) {
 
-        // Extract out id
-        Glib::ustring shape_url = style->shape_inside.value;
-        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-            std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
-        } else {
-            shape_url.erase(0,5);
-            shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
-            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
-            if ( shape ) {
+        // Find union of all exclusion shapes
+        Shape *exclusion_shape;
+        if(style->shape_subtract.set) {
+            exclusion_shape = _buildExclusionShape();
+        }
 
-                // This code adapted from sp-flowregion.cpp: GetDest()
-                if (!(shape->_curve)) {
-                    shape->set_shape();
-                }
-                SPCurve *curve = shape->getCurve();
-
-                if ( curve ) {
-                    Path *temp = new Path;
-                    Path *padded = new Path;
-                    temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
-                    if( style->shape_padding.set ) {
-                        // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
-                        temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
-                    } else {
-                        // std::cout << "  no padding" << std::endl;
-                        padded->Copy( temp );
-                    }
-                    padded->Convert( 0.25 );  // Convert to polyline
-                    Shape* sh = new Shape;
-                    padded->Fill( sh, 0 );
-                    // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
-                    //   std::cout << " ........ " << temp->pts[i].p << std::endl;
-                    // }
-                    // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
-                    Shape *uncross = new Shape;
-                    uncross->ConvertToShape( sh );
-                    layout.appendWrapShape( uncross );
-
-                    delete temp;
-                    delete padded;
-                    delete sh;
-                    // delete uncross;
-                } else {
-                    std::cerr << "SPText::_buildLayoutInput(): Failed to get curve." << std::endl;
-                }
+        // Extract out shapes (a comma separated list of urls)
+        Glib::ustring shapeInside_value = style->shape_inside.value;
+        std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
+        for (int i=0; i<shapes_url.size(); ++i) {
+            Glib::ustring shape_url = shapes_url.at(i);
+            if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
             } else {
-                std::cerr << "SPText::_buildLayoutInput(): Failed to find shape." << std::endl;
+                shape_url.erase(0,5);
+                shape_url.erase(shape_url.size()-1,1);
+                std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
+                SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+                if ( shape ) {
+
+                    // This code adapted from sp-flowregion.cpp: GetDest()
+                    if (!(shape->_curve)) {
+                        shape->set_shape();
+                    }
+                    SPCurve *curve = shape->getCurve();
+
+                    if ( curve ) {
+                        Path *temp = new Path;
+                        Path *padded = new Path;
+                        temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+                        if( style->shape_padding.set ) {
+                            // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
+                            temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
+                        } else {
+                            // std::cout << "  no padding" << std::endl;
+                            padded->Copy( temp );
+                        }
+                        padded->Convert( 0.25 );  // Convert to polyline
+                        Shape* sh = new Shape;
+                        padded->Fill( sh, 0 );
+                        // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
+                        //   std::cout << " ........ " << temp->pts[i].p << std::endl;
+                        // }
+                        // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
+                        Shape *uncross = new Shape;
+                        uncross->ConvertToShape( sh );
+
+                        // Subtract exclusion shape
+                        if(style->shape_subtract.set) {
+                            Shape *copy = new Shape;
+                            if (exclusion_shape && exclusion_shape->hasEdges()) {
+                                copy->Booleen(uncross, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                            } else {
+                                copy->Copy(uncross);
+                            }
+                            layout.appendWrapShape( copy );
+                            //delete exclusion_shape;
+                            continue;
+                        }
+
+                        layout.appendWrapShape( uncross );
+
+                        delete temp;
+                        delete padded;
+                        delete sh;
+                        // delete uncross;
+                    } else {
+                        std::cerr << "SPText::_buildLayoutInput(): Failed to get curve." << std::endl;
+                    }
+                } else {
+                    std::cerr << "SPText::_buildLayoutInput(): Failed to find shape." << std::endl;
+                }
             }
         }
+    } else if (style->inline_size.set) {
+        // If both shape_inside and inline_size are set, shape_inside wins out.
+
+        // We construct a rectange with one dimension set by the computed value of 'inline-size'
+        // and the other dimension set to infinity. Text is layed out starting at the 'x' and 'y'
+        // attribute values. This is handled elsewhere.
+
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        Geom::Rect frame;
+        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+            mode == SP_CSS_WRITING_MODE_RL_TB) {
+            // horizontal
+            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (-inline_size/2.0, 0 );
+            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                frame *= Geom::Translate (-inline_size, 0);
+            }
+        } else {
+            // vertical
+            frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (0, -inline_size/2.0);
+            } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                frame *= Geom::Translate (0, -inline_size);
+            }
+        }
+        // std::cout << " inline_size frame: " << frame << std::endl;
+
+        Shape *shape = new Shape;
+        shape->Reset();
+        int v0 = shape->AddPoint(frame.corner(0));
+        int v1 = shape->AddPoint(frame.corner(1));
+        int v2 = shape->AddPoint(frame.corner(2));
+        int v3 = shape->AddPoint(frame.corner(3));
+        shape->AddEdge(v0, v1);
+        shape->AddEdge(v1, v2);
+        shape->AddEdge(v2, v3);
+        shape->AddEdge(v3, v0);
+        Shape *uncross = new Shape;
+        uncross->ConvertToShape( shape );
+
+        layout.appendWrapShape( uncross );
+
+        delete shape;
     }
 
     if (SP_IS_TEXT(root)) {
@@ -526,6 +570,8 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
 
         layout.strut.reset();
         if (style) {
+
+            // Strut
             font_instance *font = font_factory::Default()->FaceFromStyle( style );
             if (font) {
                 font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
@@ -541,6 +587,32 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
                     layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
                 }
             }
+
+            // SVG 2 Text wrapping
+            if (style->shape_inside.set) {
+                // 'x' and 'y' attributes are always ignored.
+                optional_attrs.x.clear();
+                optional_attrs.y.clear();
+            }
+            else if (style->inline_size.set) {
+                // For horizontal text:
+                //   'x' is used to calculate the left/right edges of the rectangle but is not
+                //   needed later. If not deleted here, it will cause an incorrect positioning
+                //   of the first line.
+                //   'y' is used to determine where the first line box is located and is needed
+                //   during the output stage.
+                // For vertical text:
+                //   Follow above but exchange 'x' and 'y'.
+                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
+                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                    // Horizontal text
+                    optional_attrs.x.clear();
+                } else {
+                    // Vertical text
+                    optional_attrs.y.clear();
+                }
+            }
+
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
@@ -608,6 +680,63 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     }
 
     return length;
+}
+
+Shape* SPText::_buildExclusionShape() const
+{
+    Shape *result = new Shape(); // Union of all exlusion shapes
+    Shape *shape_temp = new Shape();
+
+    Glib::ustring shapeSubtract_value = style->shape_subtract.value;
+
+    // Extract out shapes (a comma separated list of urls)
+    std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
+
+    for(int i=0; i<shapes_url.size(); i++) {
+        Glib::ustring shape_url = shapes_url.at(i);
+        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
+        } else {
+            shape_url.erase(0,5);
+            shape_url.erase(shape_url.size()-1,1);
+            // std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
+            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+            if ( shape ) {
+                // This code adapted from sp-flowregion.cpp: GetDest()
+                if (!(shape->_curve)) {
+                    shape->set_shape();
+                }
+                SPCurve *curve = shape->getCurve();
+
+                if ( curve ) {
+                    Path *temp = new Path;
+                    Path *margin = new Path;
+                    temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+
+                    if( shape->style->shape_margin.set ) {
+                        temp->OutsideOutline ( margin, -shape->style->shape_margin.computed, join_round, butt_straight, 20.0 );
+                    } else {
+                        margin->Copy( temp );
+                    }
+
+                    margin->Convert( 0.25 );  // Convert to polyline
+                    Shape* sh = new Shape;
+                    margin->Fill( sh, 0 );
+
+                    Shape *uncross = new Shape;
+                    uncross->ConvertToShape( sh );
+
+                    if (result->hasEdges()) {
+                        shape_temp->Booleen(result, uncross, bool_op_union);
+                        std::swap(result, shape_temp);
+                    } else {
+                        result->Copy(uncross);
+                    }
+                }
+            }
+        }
+    }
+    return result;
 }
 
 void SPText::rebuildLayout()

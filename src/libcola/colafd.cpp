@@ -75,7 +75,7 @@ void dumpSquareMatrix(unsigned n, T** L) {
     for(unsigned i=0;i<n;i++) {
         printf("{");
         for(unsigned j=0;j<n;j++) {
-            std::cout<<L[i][j];
+            std::cout<<L[i][j]<<std::endl;;
             char c=j==n-1?'}':',';
             printf("%c",c);
         }

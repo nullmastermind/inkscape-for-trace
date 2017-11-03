@@ -130,20 +130,9 @@ static void check_extensions();
  */
 static void
 update_pref(Glib::ustring const &pref_path,
-            gchar const *pref_default) // , GSList *extension_family)
+            gchar const *pref_default) 
 {
     Glib::ustring pref = Inkscape::Preferences::get()->getString(pref_path);
-    /*
-    gboolean missing=TRUE;
-    for (GSList *list = extension_family; list; list = g_slist_next(list)) {
-        g_assert( list->data );
-
-        Inkscape::Extension *extension;
-        extension = reinterpret_cast<Inkscape::Extension *>(list->data);
-
-        if (!strcmp(extension->get_id(),pref)) missing=FALSE;
-    }
-    */
     if (!Inkscape::Extension::db.get( pref.data() ) /*missing*/) {
         Inkscape::Preferences::get()->setString(pref_path, pref_default);
     }

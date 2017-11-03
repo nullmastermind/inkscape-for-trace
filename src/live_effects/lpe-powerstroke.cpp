@@ -267,7 +267,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 
 void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem)) {
+    if (SP_IS_SHAPE(lpeitem) && !keep_paths) {
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
         SPCSSAttr *css = sp_repr_css_attr_new ();
         if (lpeitem->style->fill.isPaintserver()) {
@@ -288,7 +288,7 @@ void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
         }
 
         Inkscape::CSSOStringStream os;
-        os << offset_points.median_width() * 2;
+        os << std::abs(offset_points.median_width()) * 2;
         sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
 
         sp_repr_css_set_property(css, "fill", "none");

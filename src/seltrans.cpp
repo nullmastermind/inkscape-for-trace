@@ -63,7 +63,7 @@ static gboolean sp_sel_trans_handle_event(SPKnot *knot, GdkEvent *event, SPSelTr
         case GDK_MOTION_NOTIFY:
             break;
         case GDK_KEY_PRESS:
-            if (Inkscape::UI::Tools::get_group0_keyval (&event->key) == GDK_KEY_space) {
+            if (Inkscape::UI::Tools::get_latin_keyval (&event->key) == GDK_KEY_space) {
                 /* stamping mode: both mode(show content and outline) operation with knot */
                 if (!SP_KNOT_IS_GRABBED(knot)) {
                     return FALSE;
@@ -558,7 +558,7 @@ void Inkscape::SelTrans::stamp()
                 new_affine = &original_item->transform;
             }
 
-            copy_item->doWriteTransform(copy_repr, *new_affine);
+            copy_item->doWriteTransform(*new_affine);
 
             if ( copy_item->isCenterSet() && _center ) {
                 copy_item->setCenter(*_center * _current_relative_affine);
@@ -1309,12 +1309,10 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     // status text
     Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(pt[Geom::X], "px");
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(pt[Geom::Y], "px");
-    GString *xs = g_string_new(x_q.string(_desktop->namedview->display_units).c_str());
-    GString *ys = g_string_new(y_q.string(_desktop->namedview->display_units).c_str());
-    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"), xs->str, ys->str);
-    g_string_free(xs, FALSE);
-    g_string_free(ys, FALSE);
-
+    Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
+    Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
+    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"),
+            xs.c_str(), ys.c_str());
     return TRUE;
 }
 
@@ -1455,11 +1453,11 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
     // status text
     Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(dxy[Geom::X], "px");
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(dxy[Geom::Y], "px");
-    GString *xs = g_string_new(x_q.string(_desktop->namedview->display_units).c_str());
-    GString *ys = g_string_new(y_q.string(_desktop->namedview->display_units).c_str());
-    _message_context.setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
-    g_string_free(xs, TRUE);
-    g_string_free(ys, TRUE);
+    Glib::ustring xs(x_q.string(_desktop->namedview->display_units));
+    Glib::ustring ys(y_q.string(_desktop->namedview->display_units));
+    _message_context.setF(Inkscape::NORMAL_MESSAGE,
+            _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"),
+            xs.c_str(), ys.c_str());
 }
 
 // Given a location of a handle at the visual bounding box, find the corresponding location at the

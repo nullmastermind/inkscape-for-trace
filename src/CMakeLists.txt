@@ -14,6 +14,7 @@ set(sp_SRC
   sp-cursor.cpp
   sp-defs.cpp
   sp-desc.cpp
+  sp-dimensions.cpp
   sp-ellipse.cpp
   sp-factory.cpp
   sp-filter-primitive.cpp
@@ -97,6 +98,7 @@ set(sp_SRC
   sp-cursor.h
   sp-defs.h
   sp-desc.h
+  sp-dimensions.h
   sp-ellipse.h
   sp-factory.h
   sp-filter-primitive.h
@@ -323,7 +325,6 @@ set(inkscape_SRC
   guide-snapper.h
   help.h
   helper-fns.h
-  icon-size.h
   id-clash.h
   inkscape-version.h
   inkscape.h
@@ -479,7 +480,6 @@ if(WIN32)
   list(APPEND main_SRC
     registrytool.h
     registrytool.cpp
-    winmain.cpp
   )
 
   # Configure and add the platform specific resource files (enabling the app icon).
@@ -540,7 +540,7 @@ set(INKSCAPE_TARGET_LIBS
 )
 
 # Build everything except main and inkview.c in a shared library.
-add_library(inkscape_base SHARED ${inkscape_SRC} ${sp_SRC})
+add_library(inkscape_base ${inkscape_SRC} ${sp_SRC})
 
 if(WITH_DBUS)
     add_dependencies(inkscape_base inkscape_dbus)

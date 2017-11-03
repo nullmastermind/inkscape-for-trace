@@ -126,18 +126,13 @@ void SPClipPath::update(SPCtx* ctx, unsigned int flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = SP_OBJECT(l->data);
-        l = g_slist_remove(l, child);
-
+    for (auto child:l) {
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
@@ -165,22 +160,16 @@ void SPClipPath::modified(unsigned int flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = SP_OBJECT(l->data);
-        l = g_slist_remove(l, child);
-
+    for (auto child:l) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-
         sp_object_unref(child);
     }
 }
@@ -292,7 +281,7 @@ sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view)
 }
 
 // Create a mask element (using passed elements), add it to <defs>
-const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document, Geom::Affine const* applyTransform)
+const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document)
 {
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
 
@@ -306,12 +295,7 @@ const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDoc
 
     for (std::vector<Inkscape::XML::Node*>::const_iterator it = reprs.begin(); it != reprs.end(); ++it) {
         Inkscape::XML::Node *node = (*it);
-        SPItem *item = SP_ITEM(clip_path_object->appendChildRepr(node));
-
-        if (NULL != applyTransform) {
-            Geom::Affine transform (item->transform * (*applyTransform));
-            item->doWriteTransform(item->getRepr(), transform);
-        }
+        clip_path_object->appendChildRepr(node);
     }
 
     Inkscape::GC::release(repr);

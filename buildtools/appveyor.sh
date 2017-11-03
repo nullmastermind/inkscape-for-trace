@@ -9,18 +9,29 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 
 ### setup
 
+# reduce time required to install packages by disabling pacman's disk space checking
+sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
+
+# update MSYS2-packages and MINGW-packages (but only for current architecture)
+pacman -Quq | grep -v mingw-w64- | xargs pacman -S --needed --noconfirm --noprogressbar
+pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S --needed --noconfirm --noprogressbar
+
 # do everything in /build
 cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
 mkdir build
 cd build
 
-# write an empty fonts.conf to speed up fc-cache
-export FONTCONFIG_FILE=/dummy-fonts.conf
-cat >"$FONTCONFIG_FILE" <<EOF
+# write custom fonts.conf to speed up fc-cache and use/download fonts required for tests
+export FONTCONFIG_FILE=$(cygpath -a fonts.conf)
+cat > "$FONTCONFIG_FILE" <<EOF
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig></fontconfig>
+<fontconfig><dir>$(cygpath -aw fonts)</dir></fontconfig>
 EOF
+
+mkdir fonts
+wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
+    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 --directory=fonts
 
 # install dependencies
 message "--- Installing dependencies"
@@ -30,17 +41,6 @@ pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} --needed --noconfirm --
 export CCACHE_DIR=$(cygpath -a ccache/master)
 ccache --max-size=200M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
-
-# patched cairo to avoid crash when printing
-#   - https://bugs.launchpad.net/inkscape/+bug/1665768
-#   - https://bugs.freedesktop.org/show_bug.cgi?id=101833
-#   - https://github.com/Alexpux/MINGW-packages/pull/2825
-wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz \
-    && pacman -U $MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz --noconfirm
-
-# missing dependency for python2-pillow
-#   - https://github.com/Alexpux/MINGW-packages/pull/2824
-pacman -S $MINGW_PACKAGE_PREFIX-libraqm --needed --noconfirm --noprogressbar
 
 
 ### build / test
@@ -78,8 +78,8 @@ if [ -n "$err" ]; then warning "installed executable produces output on stderr:"
 INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
 err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
-# run tests (don't fail yet as most tests SEGFAULT on exit)
-#ninja check || warning "tests failed" # disabled because of sporadic deadlocks :-(
+# run tests
+ninja check || error "tests failed"
 
 message "##### BUILD SUCCESSFULL #####\n\n"
 

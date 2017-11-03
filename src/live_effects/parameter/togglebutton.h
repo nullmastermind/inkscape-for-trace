@@ -12,7 +12,6 @@
 #include <sigc++/signal.h>
 
 #include "live_effects/parameter/parameter.h"
-#include "icon-size.h"
 #include "ui/widget/registered-widget.h"
 
 namespace Inkscape {
@@ -41,6 +40,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
 
     void param_setValue(bool newvalue);
     virtual void param_set_default();

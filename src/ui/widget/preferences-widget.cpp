@@ -34,6 +34,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/convert.h>
+#include <glibmm/regex.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -78,6 +79,7 @@ void DialogPage::add_line(bool                 indent,
     
     auto hb = Gtk::manage(new Gtk::Box());
     hb->set_spacing(12);
+    hb->set_hexpand(true);
     hb->pack_start(widget, expand_widget, expand_widget);
         
     // Pack an additional widget into a box with the widget if desired 
@@ -857,6 +859,35 @@ void PrefEntry::on_changed()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString(_prefs_path, this->get_text());
     }
+}
+
+void PrefMultiEntry::init(Glib::ustring const &prefs_path, int height)
+{
+    // TODO: Figure out if there's a way to specify height in lines instead of px
+    //       and how to obtain a reasonable default width if 'expand_widget' is not used
+    set_size_request(100, height);
+    set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    set_shadow_type(Gtk::SHADOW_IN);
+
+    add(_text);
+
+    _prefs_path = prefs_path;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring value = prefs->getString(_prefs_path);
+    value = Glib::Regex::create("\\|")->replace_literal(value, 0, "\n", (Glib::RegexMatchFlags)0);
+    _text.get_buffer()->set_text(value);
+    _text.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, &PrefMultiEntry::on_changed));
+}
+
+void PrefMultiEntry::on_changed()
+{
+    if (get_visible()) //only take action if user changed value
+    {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        Glib::ustring value = _text.get_buffer()->get_text();
+        value = Glib::Regex::create("\\n")->replace_literal(value, 0, "|", (Glib::RegexMatchFlags)0);
+        prefs->setString(_prefs_path, value);
+    } 
 }
 
 void PrefColorPicker::init(Glib::ustring const &label, Glib::ustring const &prefs_path,

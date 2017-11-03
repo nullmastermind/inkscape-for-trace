@@ -107,8 +107,7 @@ static const GtkTargetEntry ui_drop_target_entries [] = {
     {"application/x-color", 0, APP_X_COLOR}
 };
 
-#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
-static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
+static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 
 /* convenience function */
 static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
@@ -139,7 +138,6 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
       _opacity_blocked (false),
 
-      _unit_mis(NULL),
       _sw_unit(NULL)
 {
     set_name("SelectedStyle");
@@ -336,7 +334,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         while(iter != m.end()) {
             Gtk::RadioMenuItem *mi = Gtk::manage(new Gtk::RadioMenuItem(_sw_group));
             mi->add(*(new Gtk::Label(iter->first, Gtk::ALIGN_START)));
-            _unit_mis = g_slist_append(_unit_mis, mi);
+            _unit_mis.push_back(mi);
             Inkscape::Util::Unit const *u = unit_table.getUnit(iter->first);
             mi->signal_activate().connect(sigc::bind<Inkscape::Util::Unit const *>(sigc::mem_fun(*this, &SelectedStyle::on_popup_units), u));
             _popup_sw.attach(*mi, 0,1, row, row+1);
@@ -449,6 +447,7 @@ SelectedStyle::~SelectedStyle()
     delete selection_modified_connection;
     subselection_changed_connection->disconnect();
     delete subselection_changed_connection;
+    _unit_mis.clear();
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
         delete _color_preview[i];
@@ -488,9 +487,7 @@ SelectedStyle::setDesktop(SPDesktop *desktop)
     _sw_unit = desktop->getNamedView()->display_units;
 
     // Set the doc default unit active in the units list
-    gint length = g_slist_length(_unit_mis);
-    for (int i = 0; i < length; i++) {
-        Gtk::RadioMenuItem *mi = (Gtk::RadioMenuItem *) g_slist_nth_data(_unit_mis, i);
+    for ( auto mi:_unit_mis ) {
         if (mi && mi->get_label() == _sw_unit->abbr) {
             mi->set_active();
             break;

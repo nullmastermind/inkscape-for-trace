@@ -412,9 +412,12 @@ RegisteredColorPicker::on_changed (guint32 rgba)
         local_repr = dt->getNamedView()->getRepr();
         local_doc = dt->getDocument();
     }
-
     gchar c[32];
-    sp_svg_write_color(c, sizeof(c), rgba);
+    if (_akey == _ckey + "_opacity_LPE") { //For LPE parameter we want stored with alpha
+        sprintf(c, "#%08x", rgba);
+    } else {
+        sp_svg_write_color(c, sizeof(c), rgba);
+    }
     bool saved = DocumentUndo::getUndoSensitive(local_doc);
     DocumentUndo::setUndoSensitive(local_doc, false);
     local_repr->setAttribute(_ckey.c_str(), c);

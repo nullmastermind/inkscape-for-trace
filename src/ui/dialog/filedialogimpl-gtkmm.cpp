@@ -31,10 +31,6 @@
 #include "path-prefix.h"
 #include "preferences.h"
 
-#ifdef WITH_GNOME_VFS
-#include <libgnomevfs/gnome-vfs.h>
-#endif
-
 #include <gtkmm/expander.h>
 
 #include <glibmm/convert.h>
@@ -663,11 +659,9 @@ void FileDialogBaseGtk::_updatePreviewCallback()
     Glib::ustring fileName = get_preview_filename();
     bool enabled = previewCheckbox.get_active();
 
-#ifdef WITH_GNOME_VFS
-    if (fileName.empty() && gnome_vfs_initialized()) {
+    if (fileName.empty()) {
         fileName = get_preview_uri();
     }
-#endif
 
     if (enabled && !fileName.empty()) {
         svgPreview.set(fileName, _dialogType);
@@ -698,11 +692,7 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
         set_select_multiple(true);
     }
 
-#ifdef WITH_GNOME_VFS
-    if (gnome_vfs_initialized()) {
-        set_local_only(false);
-    }
-#endif
+    set_local_only(false);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -883,10 +873,11 @@ bool FileOpenDialogImplGtk::show()
             extension = extensionMap[gtk_file_filter_get_name(filter)];
         }
         myFilename = get_filename();
-#ifdef WITH_GNOME_VFS
-        if (myFilename.empty() && gnome_vfs_initialized())
+
+        if (myFilename.empty()) {
             myFilename = get_uri();
-#endif
+        }
+
         cleanup(true);
         return true;
     } else {
@@ -928,10 +919,10 @@ std::vector<Glib::ustring> FileOpenDialogImplGtk::getFilenames()
     for (auto it : result_tmp)
         result.push_back(it);
 
-#ifdef WITH_GNOME_VFS
-    if (result.empty() && gnome_vfs_initialized())
+    if (result.empty()) {
         result = get_uris();
-#endif
+    }
+
     return result;
 }
 
@@ -963,11 +954,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     /* One file at a time */
     set_select_multiple(false);
 
-#ifdef WITH_GNOME_VFS
-    if (gnome_vfs_initialized()) {
-        set_local_only(false);
-    }
-#endif
+    set_local_only(false);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -1310,11 +1297,11 @@ void FileSaveDialogImplGtk::updateNameAndExtension()
 {
     // Pick up any changes the user has typed in.
     Glib::ustring tmp = get_filename();
-#ifdef WITH_GNOME_VFS
-    if (tmp.empty() && gnome_vfs_initialized()) {
+
+    if (tmp.empty()) {
         tmp = get_uri();
     }
-#endif
+
     if (!tmp.empty()) {
         myFilename = tmp;
     }
@@ -1449,11 +1436,7 @@ FileExportDialogImpl::FileExportDialogImpl(Gtk::Window &parentWindow, const Glib
     /* One file at a time */
     set_select_multiple(false);
 
-#ifdef WITH_GNOME_VFS
-    if (gnome_vfs_initialized()) {
-        set_local_only(false);
-    }
-#endif
+    set_local_only(false);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -1634,11 +1617,10 @@ bool FileExportDialogImpl::show()
             extension = type.extension;
         }
         myFilename = get_filename();
-#ifdef WITH_GNOME_VFS
-        if (myFilename.empty() && gnome_vfs_initialized()) {
+
+        if (myFilename.empty()) {
             myFilename = get_uri();
         }
-#endif
 
         /*
 

@@ -17,6 +17,8 @@
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 
+#include "live_effects/effect.h"
+
 #include <2geom/angle.h>
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
@@ -501,11 +503,18 @@ void SPGenericEllipse::set_shape(bool force)
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
-    // Allow live effects
-    if (hasPathEffect() && pathEffectsEnabled()) {
+    if (hasPathEffect() && pathEffectsEnabled() && 
+        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
+    {
+        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
+        // also if the effect is type BEND PATH to fix bug #179842
+        this->adjust_livepatheffect(xform);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         return xform;
     }
-
     /* Calculate ellipse start in parent coords. */
     Geom::Point pos(Geom::Point(this->cx.computed, this->cy.computed) * xform);
 
@@ -554,6 +563,9 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
+
+    // Adjust livepatheffect
+    this->adjust_livepatheffect(xform);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

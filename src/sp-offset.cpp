@@ -63,7 +63,7 @@ class SPDocument;
  * a change occurs to the offset (change of source or change of radius).
  * just like the sp-star and other, this path derivative can make control
  * points, or more precisely one control point, that's enough to define the
- * radius (look in object-edit).
+ * radius (look in shape-editor-knotholders).
  */
 
 static void refresh_offset_source(SPOffset* offset);
@@ -764,7 +764,7 @@ vectors_are_clockwise (Geom::Point A, Geom::Point B, Geom::Point C)
 }
 
 /**
- * Distance to the original path; that function is called from object-edit
+ * Distance to the original path; that function is called from shape-editor-knotholders
  * to set the radius when the control knot moves.
  *
  * The sign of the result is the radius we're going to offset the shape with,
@@ -1065,7 +1065,7 @@ static void sp_offset_move_compensate(Geom::Affine const *mp, SPItem */*original
 
     // commit the compensation
     self->transform *= offset_move;
-    self->doWriteTransform(self->getRepr(), self->transform, &advertized_move);
+    self->doWriteTransform(self->transform, &advertized_move);
     self->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 

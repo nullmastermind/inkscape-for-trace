@@ -15,6 +15,7 @@
  */
 
 #include "sp-object.h"
+#include "sp-dimensions.h"
 #include "svg/svg-length.h"
 
 #define SP_FILTER_PRIMITIVE(obj) (dynamic_cast<SPFilterPrimitive*>((SPObject*)obj))
@@ -26,15 +27,12 @@ class Filter;
 class FilterPrimitive;
 } }
 
-class SPFilterPrimitive : public SPObject {
+class SPFilterPrimitive : public SPObject, public SPDimensions {
 public:
 	SPFilterPrimitive();
 	virtual ~SPFilterPrimitive();
 
     int image_in, image_out;
-
-    /* filter primitive subregion */
-    SVGLength x, y, height, width;
 
 protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);

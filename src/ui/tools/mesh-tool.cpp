@@ -170,68 +170,6 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
     // FIXME
     // We need to update mesh gradient handles.
     // Get gradient this drag belongs too..
-    // std::cout << "mesh_selection_changed: selection: objects: " << n_obj << std::endl;
-    // GSList *itemList = (GSList *) selection->itemList();
-    // while( itemList ) {
-
-    //     SPItem *item = SP_ITEM( itemList->data );
-    //     // std::cout << "  item: " << SP_OBJECT(item)->getId() << std::endl;
-
-    //     SPStyle *style = item->style;
-    //     if (style && (style->fill.isPaintserver())) {
-
-    //         SPPaintServer *server = item->style->getFillPaintServer();
-    //         if ( SP_IS_MESHGRADIENT(server) ) {
-
-    //             SPMeshGradient *mg = SP_MESHGRADIENT(server);
-
-    //             guint rows    = 0;//mg->array.patches.size();
-    //             for ( guint i = 0; i < rows; ++i ) {
-    //                 guint columns = 0;//mg->array.patches[0].size();
-    //                 for ( guint j = 0; j < columns; ++j ) {
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     itemList = itemList->next;
-    // }
-
-    // GList* dragger_ptr = drag->draggers;  // Points to GrDragger class (group of GrDraggable)
-    // guint count = 0;
-    // while( dragger_ptr ) {
-
-    //     std::cout << "mesh_selection_changed: dragger: " << ++count << std::endl;
-    //     GSList* draggable_ptr = ((GrDragger *) dragger_ptr->data)->draggables;
-
-    //     while( draggable_ptr ) {
-
-    //         std::cout << "mesh_selection_changed:  draggable: " << draggable_ptr << std::endl;
-    //         GrDraggable *draggable = (GrDraggable *) draggable_ptr->data;
-
-    //         gint point_type     = draggable->point_type;
-    //         gint point_i        = draggable->point_i;
-    //         bool fill_or_stroke = draggable->fill_or_stroke;
-
-    //         if( point_type == POINT_MG_CORNER ) {
-
-    //             //std::cout << "mesh_selection_changed:   POINT_MG_CORNER: " << point_i << std::endl;
-    //             // Now we must create or destroy corresponding handles.
-
-    //             if( g_list_find( drag->selected, dragger_ptr->data ) ) {
-    //                 //std::cout << "gradient_selection_changed:    Selected: " << point_i << std::endl;
-    //                 // Which meshes does this point belong to?
-
-    //             } else {
-    //                 //std::cout << "mesh_selection_changed:    Not Selected: " << point_i << std::endl;
-    //             }
-    //         }
-
-    //         draggable_ptr = draggable_ptr->next;
-
-    //     }
-
-    //     dragger_ptr = dragger_ptr->next;
-    // }
 }
 
 void MeshTool::setup() {
@@ -887,7 +825,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 #endif
 
         // FIXME: tip
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:
@@ -926,7 +864,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Left:
         case GDK_KEY_KP_4:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
+                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -950,7 +888,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Up:
         case GDK_KEY_KP_8:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
+                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -974,7 +912,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Right:
         case GDK_KEY_KP_6:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
+                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -998,7 +936,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_Down:
         case GDK_KEY_KP_2:
             if (!MOD__CTRL(event)) { // not ctrl
-                gint mul = 1 + gobble_key_events(get_group0_keyval(&event->key), 0); // with any mask
+                gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -1096,7 +1034,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 #ifdef DEBUG_MESH
         std::cout << "sp_mesh_context_root_handler: GDK_KEY_RELEASE" << std::endl;
 #endif
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:

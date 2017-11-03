@@ -156,9 +156,11 @@ src/live_effects/lpe-taperstroke.cpp
 src/live_effects/lpe-transform_2pts.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/parameter/bool.cpp
+src/live_effects/parameter/colorpicker.cpp
 src/live_effects/parameter/enum.h
 src/live_effects/parameter/fontbutton.cpp
 src/live_effects/parameter/item.cpp
+src/live_effects/parameter/originalitemarray.cpp
 src/live_effects/parameter/originalitem.cpp
 src/live_effects/parameter/originalpath.cpp
 src/live_effects/parameter/originalpatharray.cpp
@@ -274,7 +276,7 @@ src/ui/dialog/tracedialog.cpp
 src/ui/dialog/transformation.cpp
 src/ui/dialog/xml-tree.cpp
 src/ui/interface.cpp
-src/ui/object-edit.cpp
+src/ui/shape-editor-knotholders.cpp
 src/ui/tool/curve-drag-point.cpp
 src/ui/tool/multi-path-manipulator.cpp
 src/ui/tool/node.cpp

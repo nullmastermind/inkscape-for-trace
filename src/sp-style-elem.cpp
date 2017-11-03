@@ -12,6 +12,9 @@
 #include <iostream>
 #include <fstream>
 
+// For font-rule
+#include "libnrtype/FontFactory.h"
+
 using Inkscape::XML::TEXT_NODE;
 
 SPStyleElem::SPStyleElem() : SPObject() {
@@ -106,14 +109,14 @@ Inkscape::XML::Node* SPStyleElem::write(Inkscape::XML::Document* xml_doc, Inksca
 
 
 /** Returns the concatenation of the content of the text children of the specified object. */
-static GString *
+static Glib::ustring
 concat_children(Inkscape::XML::Node const &repr)
 {
-    GString *ret = g_string_sized_new(0);
-    // effic: 0 is just to catch bugs.  Increase to something reasonable.
+    Glib::ustring ret;
+    // effic: Initialising ret to a reasonable starting size could speed things up.
     for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != NULL; rch = rch->next()) {
         if ( rch->type() == TEXT_NODE ) {
-            ret = g_string_append(ret, rch->content());
+            ret += rch->content();
         }
     }
     return ret;
@@ -174,6 +177,10 @@ import_style_cb (CRDocHandler *a_handler,
     SPDocument* document = parse_tmp.document;
     if (!document) {
         std::cerr << "import_style_cb: No document!" << std::endl;
+        return;
+    }
+    if (!document->style_sheet) {
+        std::cerr << "import_style_cb: No document style sheet!" << std::endl;
         return;
     }
     if (!document->getURI()) {
@@ -277,8 +284,10 @@ start_font_face_cb(CRDocHandler *a_handler,
                   static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
         // fixme: Check whether we need to unref currStmt if non-NULL.
     }
+    CRStatement *font_face_rule = cr_statement_new_at_font_face_rule (parse_tmp.stylesheet, NULL);
+    g_return_if_fail(font_face_rule && font_face_rule->type == AT_FONT_FACE_RULE_STMT);
     parse_tmp.stmtType = FONT_FACE_STMT;
-    parse_tmp.currStmt = NULL;
+    parse_tmp.currStmt = font_face_rule;
 }
 
 static void
@@ -287,13 +296,76 @@ end_font_face_cb(CRDocHandler *a_handler)
     g_return_if_fail(a_handler->app_data != NULL);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if (parse_tmp.stmtType != FONT_FACE_STMT || parse_tmp.currStmt != NULL) {
-        g_warning("Expecting currStmt==NULL and stmtType==1 (FONT_FACE_STMT) at end of @font-face, but found currStmt=%p, stmtType=%u",
-                  static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
-        // fixme: Check whether we need to unref currStmt if non-NULL.
-        parse_tmp.currStmt = NULL;
+
+    CRStatement *const font_face_rule = parse_tmp.currStmt;
+    if (parse_tmp.stmtType == FONT_FACE_STMT
+        && font_face_rule
+        && font_face_rule->type == AT_FONT_FACE_RULE_STMT)
+    {
+        parse_tmp.stylesheet->statements = cr_statement_append(parse_tmp.stylesheet->statements,
+                                                               font_face_rule);
+    } else {
+        g_warning("Found stmtType=%u, stmt=%p, stmt.type=%u.",
+                  unsigned(parse_tmp.stmtType),
+                  font_face_rule,
+                  unsigned(font_face_rule->type));
     }
+
+    std::cout << "end_font_face_cb: font face rule limited support." << std::endl;
+    cr_declaration_dump (font_face_rule->kind.font_face_rule->decl_list, stdout, 2, TRUE);
+    printf ("\n");
+
+    // Get document
+    SPDocument* document = parse_tmp.document;
+    if (!document) {
+        std::cerr << "end_font_face_cb: No document!" << std::endl;
+        return;
+    }
+    if (!document->getURI()) {
+        std::cerr << "end_font_face_cb: Document URI is NULL" << std::endl;
+        return;
+    }
+
+    // Add ttf or otf fonts.
+    CRDeclaration const *cur = NULL;
+    for (cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
+        if (cur->property &&
+            cur->property->stryng &&
+            cur->property->stryng->str &&
+            strcmp(cur->property->stryng->str, "src") == 0 ) {
+
+            if (cur->value &&
+                cur->value->content.str &&
+                cur->value->content.str->stryng &&
+                cur->value->content.str->stryng->str) {
+
+                Glib::ustring value = cur->value->content.str->stryng->str;
+                std::size_t found = value.find_last_of("ttf");
+
+                if (value.rfind("ttf") == (value.length() - 3) ||
+                    value.rfind("otf") == (value.length() - 3)) {
+
+                    // Get file
+                    Glib::ustring ttf_file =
+                        Inkscape::IO::Resource::get_filename (document->getURI(), value);
+
+                    if (!ttf_file.empty()) {
+                        font_factory *factory = font_factory::Default();
+                        factory->AddFontFile( ttf_file.c_str() );
+                        std::cout << "end_font_face_cb: Added font: " << ttf_file << std::endl;
+
+                        // FIX ME: Need to refresh font list.
+                    } else {
+                        std::cout << "end_font_face_cb: Failed to add: " << value << std::endl;
+                    }
+                }
+            }
+        }
+    }
+
+    parse_tmp.currStmt = NULL;
     parse_tmp.stmtType = NO_STMT;
+
 }
 
 static void
@@ -301,26 +373,38 @@ property_cb(CRDocHandler *const a_handler,
             CRString *const a_name,
             CRTerm *const a_value, gboolean const a_important)
 {
+    // std::cout << "property_cb: Entrance: " << a_name->stryng->str << ": " << cr_term_to_string(a_value) << std::endl;
     g_return_if_fail(a_handler && a_name);
     g_return_if_fail(a_handler->app_data != NULL);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if (parse_tmp.stmtType == FONT_FACE_STMT) {
-        if (parse_tmp.currStmt != NULL) {
-            g_warning("Found non-NULL currStmt %p though stmtType==FONT_FACE_STMT.", parse_tmp.currStmt);
-        }
-        /* We currently ignore @font-face descriptors. */
-        return;
-    }
+
     CRStatement *const ruleset = parse_tmp.currStmt;
-    g_return_if_fail(ruleset
-                     && ruleset->type == RULESET_STMT
-                     && parse_tmp.stmtType == NORMAL_RULESET_STMT);
-    CRDeclaration *const decl = cr_declaration_new(ruleset, cr_string_dup(a_name), a_value);
+    g_return_if_fail(ruleset);
+
+    CRDeclaration *const decl = cr_declaration_new (ruleset, cr_string_dup(a_name), a_value);
     g_return_if_fail(decl);
     decl->important = a_important;
-    CRStatus const append_status = cr_statement_ruleset_append_decl(ruleset, decl);
-    g_return_if_fail(append_status == CR_OK);
+
+    switch (parse_tmp.stmtType) {
+
+        case NORMAL_RULESET_STMT: {
+            g_return_if_fail (ruleset->type == RULESET_STMT);
+            CRStatus const append_status = cr_statement_ruleset_append_decl (ruleset, decl);
+            g_return_if_fail (append_status == CR_OK);
+            break;
+        }
+        case FONT_FACE_STMT: {
+            g_return_if_fail (ruleset->type == AT_FONT_FACE_RULE_STMT);
+            CRDeclaration *new_decls = cr_declaration_append (ruleset->kind.font_face_rule->decl_list, decl);
+            g_return_if_fail (new_decls);
+            ruleset->kind.font_face_rule->decl_list = new_decls;
+            break;
+        }
+        default:
+            g_warning ("property_cb: Unhandled stmtType: %u", parse_tmp.stmtType);
+            return;
+    }
 }
 
 CRParser*
@@ -364,10 +448,6 @@ void SPStyleElem::read_content() {
     // style element would correspond to document->style_sheet, while
     // laters ones are chained on using style_sheet->next).
 
-    if (document->style_sheet != NULL) {
-        cr_stylesheet_destroy (document->style_sheet);
-        document->style_sheet = NULL;
-    }
     document->style_sheet = cr_stylesheet_new (NULL);
     CRParser *parser = parser_init(document->style_sheet, document);
 
@@ -376,17 +456,20 @@ void SPStyleElem::read_content() {
     ParseTmp *parse_tmp = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
 
     //XML Tree being used directly here while it shouldn't be.
-    GString *const text = concat_children(*getRepr());
+    Glib::ustring const text = concat_children(*getRepr());
     CRStatus const parse_status =
-        cr_parser_parse_buf (parser, reinterpret_cast<guchar *>(text->str), text->len, CR_UTF_8);
+        cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
     // std::cout << "SPStyeElem::read_content: result:" << std::endl;
     // const gchar* string = cr_stylesheet_to_string (document->style_sheet);
     // std::cout << (string?string:"Null") << std::endl;
 
     if (parse_status == CR_OK) {
-        cr_cascade_set_sheet(document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
+        // Also destroys old style sheet:
+        cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
     } else {
+        cr_stylesheet_destroy (document->style_sheet);
+        document->style_sheet = NULL;
         if (parse_status != CR_PARSING_ERROR) {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
             /* Better than nothing.  TODO: Improve libcroco's error handling.  At a minimum, add a
@@ -402,6 +485,7 @@ void SPStyleElem::read_content() {
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );
+    // cr_stylesheet_dump (document->style_sheet, stdout);
 }
 
 /**
