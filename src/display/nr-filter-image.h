@@ -40,6 +40,8 @@ public:
     bool from_element;
     SPItem* SVGElem;
 
+    virtual Glib::ustring name() { return Glib::ustring("Image"); }
+
 private:
     SPDocument *document;
     char *feImageHref;

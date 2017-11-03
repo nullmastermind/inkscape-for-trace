@@ -35,6 +35,8 @@ public:
     virtual void set_color(guint32 c);
     virtual void set_icc(SVGICCColor *icc_color);
 
+    virtual Glib::ustring name() { return Glib::ustring("Flood"); }
+
 private:
     double opacity;
     guint32 color;

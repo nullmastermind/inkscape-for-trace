@@ -56,6 +56,8 @@ public:
      */
     void set_deviation(double x, double y);
 
+    virtual Glib::ustring name() { return Glib::ustring("Gaussian Blur"); }
+
 private:
     double _deviation_x;
     double _deviation_y;

@@ -168,7 +168,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view->set_pixbuf_column( columns->symbol_image );
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
-  icon_view->set_size_request( 100, 200 );
+  icon_view->set_size_request( 100, 250 );
 
   std::vector< Gtk::TargetEntry > targets;
   targets.push_back(Gtk::TargetEntry( "application/x-inkscape-paste"));
@@ -191,6 +191,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay->set_hexpand();
   overlay->set_vexpand();
   overlay->add(* scroller);
+  scroller->set_size_request(100, 250);
   table->attach(*Gtk::manage(overlay),0,row,2,1);
 
   ++row;
@@ -327,7 +328,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   iconsize =  Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
   overlay_icon = new Gtk::Image();
   overlay_icon->set_from_icon_name("none", iconsize);
-  overlay_icon = new Gtk::Image(noresults_icon);
+  overlay_icon = new Gtk::Image();
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
   overlay_icon->set_valign(Gtk::ALIGN_START );
   overlay_icon->set_margin_top(45);
@@ -364,11 +365,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
   
   addSymbolsInDoc(current_document); /* Defaults to current document */
-
   sigc::connection desktopChangeConn =
     desk_track.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
   instanceConns.push_back( desktopChangeConn );
   desk_track.connect(GTK_WIDGET(gobj()));
+  overlay->hide();
 }
 
 SymbolsDialog::~SymbolsDialog()
@@ -820,7 +821,6 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::vector<std::pair<Gl
   if ( dynamic_cast<SPSymbol *>(r) ) {
     l.push_back(std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r)));
   }
-
   for (auto& child: r->children) {
     symbolsInDocRecursive(&child, l, doc_title);
   }

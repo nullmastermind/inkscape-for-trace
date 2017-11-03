@@ -39,6 +39,8 @@ public:
     void set_xradius(double x);
     void set_yradius(double y);
 
+    virtual Glib::ustring name() { return Glib::ustring("Morphology"); }
+
 private:
     FilterMorphologyOperator Operator;
     double xradius;
