@@ -190,16 +190,17 @@ Selection::setBackup ()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
-        std::vector<SPItem*> selected_items = itemList();
         _selected_ids.clear();
         _seldata.clear();
         params.clear();
-        for(std::vector<SPItem*>::const_iterator x = selected_items.begin(); x != selected_items.end(); ++x){
+        auto items = const_cast<Selection *>(this)->items();
+        for (auto iter = items.begin(); iter != items.end(); ++iter) {
+            SPItem *item = *iter;
             std::string selected_id;
             selected_id += "--id=";
-            selected_id += (*x)->getId();
+            selected_id += item->getId();
             params.push_front(selected_id);
-            _selected_ids.push_back((*x)->getId());
+            _selected_ids.push_back(item->getId());
         }
         Inkscape::UI::Tools::NodeTool *tool = 0;
         
