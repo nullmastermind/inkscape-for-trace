@@ -1597,8 +1597,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_SET_INVERSE_MASK:
             sel->setMask(false, false);
-            using Inkscape::LivePathEffect;
-            sp_inverse_powermask(sp_action_get_selection(action));
+            Inkscape::LivePathEffect::sp_inverse_powermask(sp_action_get_selection(action));
             break;
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
@@ -1611,8 +1610,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_SET_INVERSE_CLIPPATH:
             sel->setMask(true, false);
-            using Inkscape::LivePathEffect;
-            sp_inverse_powerclip(sp_action_get_selection(action));
+            Inkscape::LivePathEffect::sp_inverse_powerclip(sp_action_get_selection(action));
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();

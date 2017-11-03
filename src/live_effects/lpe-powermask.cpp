@@ -303,7 +303,7 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
     }
 }
 
-void sp_inverse_powerclip(Inkscape::Selection *sel) {
+void sp_inverse_powermask(Inkscape::Selection *sel) {
     if (!sel->isEmpty()) {
         auto selList = sel->items();
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
