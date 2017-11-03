@@ -6,19 +6,20 @@
  *
  * Copyright (C) 2012 Tavmjong Bah
  *               2013 Martin Owens
+ *               2017 Jabiertxo Arraiza
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
+#include <gtkmm.h>
 
 #include "display/drawing.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 #include "sp-symbol.h"
 #include "sp-use.h"
-
 #include <vector>
 
 class SPObject;
@@ -77,45 +78,73 @@ private:
     void documentReplaced(SPDesktop *desktop, SPDocument *document);
     SPDocument* selectedSymbols();
     Glib::ustring selectedSymbolId();
+    Glib::ustring selectedSymbolDocTitle();
     void iconChanged();
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
-
-    void get_symbols();
-    void add_symbols( SPDocument* symbol_document );
-    void add_symbol( SPObject* symbol_document );
-    SPDocument* symbols_preview_doc();
-
-    void symbols_in_doc_recursive(SPObject *r, std::vector<SPSymbol*> &l);
-    std::vector<SPSymbol*> symbols_in_doc( SPDocument* document );
-    void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
-    std::vector<SPUse*> use_in_doc( SPDocument* document );
-    gchar const* style_from_use( gchar const* id, SPDocument* document);
-
-    Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);
-
+    void getSymbolsFilename();
+    Glib::ustring documentTitle(SPDocument* doc);
+    std::pair<Glib::ustring, SPDocument*> getSymbolsSet(Glib::ustring title);
+    void addSymbol( SPObject* symbol, Glib::ustring doc_title);
+    SPDocument* symbolsPreviewDoc();
+    void symbolsInDocRecursive (SPObject *r, std::vector<std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title);
+    std::vector<std::pair<Glib::ustring, SPSymbol*> > symbolsInDoc( SPDocument* document, Glib::ustring doc_title);
+    void useInDoc(SPObject *r, std::vector<SPUse*> &l);
+    std::vector<SPUse*> useInDoc( SPDocument* document);
+    void beforeSearch(GdkEventKey* evt);
+    void unsensitive(GdkEventKey* evt);
+    void addSymbols();
+    void addSymbolsInDoc(SPDocument* document);
+    void clearSearch();
+    bool callbackSymbols();
+    void enableWidgets(bool enable);
+    Glib::ustring ellipsize(Glib::ustring data, size_t limit = 40);
+    gchar const* styleFromUse( gchar const* id, SPDocument* document);
+    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol, unsigned force_psize = 0);
+    Glib::RefPtr<Gdk::Pixbuf> getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize);
     /* Keep track of all symbol template documents */
-    std::map<Glib::ustring, SPDocument*> symbolSets;
-
+    std::map<Glib::ustring, SPDocument*> symbol_sets;
+    std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
     // Index into sizes which is selected
+    Glib::RefPtr<Gdk::Pixbuf> noresults_icon;
+    Glib::RefPtr<Gdk::Pixbuf> search_icon;
     int pack_size;
-
     // Scale factor
     int scale_factor;
-
+    bool sensitive;
+    bool all_docs_processed;
+    size_t number_docs;
+    size_t number_symbols;
+    size_t counter_symbols;
+    bool icons_found;
     Glib::RefPtr<Gtk::ListStore> store;
-    Gtk::ComboBoxText* symbolSet;
-    Gtk::IconView* iconView;
-    Gtk::Button* addSymbol;
-    Gtk::Button* removeSymbol;
-    Gtk::Button* zoomIn;
-    Gtk::Button* zoomOut;
-    Gtk::ToggleButton* fitSymbol;
+    Glib::ustring search_str;
+    Gtk::ComboBoxText* symbol_set;
+    Gtk::ProgressBar* progress_bar;
+    Gtk::HBox* progress;
+    Gtk::SearchEntry* search;
+    Gtk::IconView* icon_view;
+    Gtk::Button* add_symbol;
+    Gtk::Button* remove_symbol;
+    Gtk::Button* zoom_in;
+    Gtk::Button* zoom_out;
+    Gtk::Button* more;
+    Gtk::Button* fewer;
+    Gtk::HBox* tools;
+    Gtk::Overlay* overlay;
+    Gtk::Image* overlay_icon;
+    Gtk::Image* overlay_opacity;
+    Gtk::Label* overlay_title;
+    Gtk::Label* overlay_desc;
+    Gtk::Grid* table;
+    Gtk::ScrolledWindow *scroller;
+    Gtk::ToggleButton* fit_symbol;
+    Gtk::IconSize iconsize;
 
     void setTargetDesktop(SPDesktop *desktop);
-    SPDesktop*  currentDesktop;
-    DesktopTracker deskTrack;
-    SPDocument* currentDocument;
-    SPDocument* previewDocument; /* Document to render single symbol */
+    SPDesktop*  current_desktop;
+    DesktopTracker desk_track;
+    SPDocument* current_document;
+    SPDocument* preview_document; /* Document to render single symbol */
 
     /* For rendering the template drawing */
     unsigned key;
