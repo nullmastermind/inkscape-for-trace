@@ -59,6 +59,8 @@ public:
     virtual void set_input(int input, int slot);
     void set_mode(FilterBlendMode mode);
 
+    virtual Glib::ustring name() { return Glib::ustring("Blend"); }
+
 private:
     static const std::set<FilterBlendMode> _valid_modes;
     FilterBlendMode _blend_mode;

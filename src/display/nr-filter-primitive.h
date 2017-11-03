@@ -14,6 +14,8 @@
 #include <2geom/forward.h>
 #include <2geom/rect.h>
 
+#include <glibmm/ustring.h>
+
 #include "display/nr-filter-types.h"
 #include "svg/svg-length.h"
 
@@ -120,6 +122,9 @@ public:
      * Sets style for access to properties used by filter primitives.
      */
     void setStyle(SPStyle *style);
+
+    // Useful for debugging
+    virtual Glib::ustring name() { return Glib::ustring("No name"); }
 
 protected:
     int _input;

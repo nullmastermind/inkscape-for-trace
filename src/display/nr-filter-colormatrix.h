@@ -46,6 +46,8 @@ public:
     virtual void set_value(double value);
     virtual void set_values(std::vector<double> const &values);
 
+    virtual Glib::ustring name() { return Glib::ustring("Color Matrix"); }
+
 public:
     struct ColorMatrixMatrix {
         ColorMatrixMatrix(std::vector<double> const &values);

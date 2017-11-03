@@ -54,6 +54,9 @@ public:
     void set_stitchTiles(bool st);
     void set_type(FilterTurbulenceType t);
     void set_updated(bool u);
+
+    virtual Glib::ustring name() { return Glib::ustring("Turbulence"); }
+
 private:
 
     TurbulenceGenerator *gen;

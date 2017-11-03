@@ -36,6 +36,8 @@ public:
     void set_operator(FeCompositeOperator op);
     void set_arithmetic(double k1, double k2, double k3, double k4);
 
+    virtual Glib::ustring name() { return Glib::ustring("Composite"); }
+
 private:
     FeCompositeOperator op;
     double k1, k2, k3, k4;

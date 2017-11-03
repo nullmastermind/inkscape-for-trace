@@ -105,8 +105,6 @@ private:
     std::map<Glib::ustring, SPDocument*> symbol_sets;
     std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
     // Index into sizes which is selected
-    Glib::RefPtr<Gdk::Pixbuf> noresults_icon;
-    Glib::RefPtr<Gdk::Pixbuf> search_icon;
     int pack_size;
     // Scale factor
     int scale_factor;
