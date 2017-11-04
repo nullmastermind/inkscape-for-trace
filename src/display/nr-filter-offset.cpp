@@ -42,25 +42,11 @@ void FilterOffset::render_cairo(FilterSlot &slot)
     Geom::Rect vp = filter_primitive_area( slot.get_units() );
     slot.set_primitive_area(_output, vp); // Needed for tiling
 
-    // Handle bounding box case
-    double x = dx;
-    double y = dy;
-    if( slot.get_units().get_primitive_units() == SP_FILTER_UNITS_OBJECTBOUNDINGBOX ) {
-        Geom::OptRect bbox = slot.get_units().get_item_bbox();
-        if( bbox ) {
-            x *= (*bbox).width();
-            y *= (*bbox).height();
-        }
-    }
+    Geom::Affine p2pb = slot.get_units().get_matrix_primitiveunits2pb();
+    double x = dx * p2pb.expansionX();
+    double y = dy * p2pb.expansionY();
 
-    Geom::Affine trans = slot.get_units().get_matrix_user2pb();
-
-    Geom::Point offset(x, y);
-    offset *= trans;
-    offset[X] -= trans[4];
-    offset[Y] -= trans[5];
-
-    cairo_set_source_surface(ct, in, offset[X], offset[Y]);
+    cairo_set_source_surface(ct, in, x, y);
     cairo_paint(ct);
     cairo_destroy(ct);
 
