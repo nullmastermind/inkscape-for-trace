@@ -341,8 +341,8 @@ Geom::Point adjust_circles( Geom::Circle &circle1, Geom::Circle &circle2, Geom::
     Geom::Point p0 = points[0].point();
     Geom::Point p1 = points[1].point();
     // std::cout << "    points: " << p0 << "; " << p1 << std::endl;
-    if( abs( Geom::distance( p0, circle2.center() ) - circle2.radius() ) <
-        abs( Geom::distance( p1, circle2.center() ) - circle2.radius() ) ) {
+    if( std::abs( Geom::distance( p0, circle2.center() ) - circle2.radius() ) <
+        std::abs( Geom::distance( p1, circle2.center() ) - circle2.radius() ) ) {
         return p0;
     } else {
         return p1;
