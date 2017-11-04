@@ -1420,8 +1420,9 @@ void InkscapePreferences::initPageRendering()
     _page_rendering.add_line( false, _("Rendering _cache size:"), _rendering_cache_size, C_("mebibyte (2^20 bytes) abbreviation","MiB"), _("Set the amount of memory per document which can be used to store rendered parts of the drawing for later reuse; set to zero to disable caching"), false);
 
     // rendering tile multiplier
-    _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 64.0, 1.0, 4.0, 1.0, true, false);
-    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _("requires restart"), _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
+    _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 512.0, 1.0, 16.0, 16.0, true, false);
+    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _(""),
+                              _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
