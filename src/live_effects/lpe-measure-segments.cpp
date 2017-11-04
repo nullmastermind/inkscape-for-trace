@@ -139,6 +139,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
     star_ellipse_fix = Geom::identity();
+    message.param_set_min_height(95);
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {}

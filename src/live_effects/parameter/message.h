@@ -33,10 +33,12 @@ public:
     void param_setValue(const gchar * message);
     
     virtual void param_set_default();
-
+    void param_set_min_height(int height);
     const gchar *  get_value() const { return message; };
 
 private:
+    Gtk::Label * _label;
+    int _min_height;
     MessageParam(const MessageParam&);
     MessageParam& operator=(const MessageParam&);
     gchar *  message;
