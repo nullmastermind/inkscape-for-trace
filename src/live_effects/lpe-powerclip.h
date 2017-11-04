@@ -38,6 +38,8 @@ private:
     bool convert_shapes;
 };
 
+void sp_inverse_powerclip(Inkscape::Selection *sel);
+
 } //namespace LivePathEffect
 } //namespace Inkscape
 #endif

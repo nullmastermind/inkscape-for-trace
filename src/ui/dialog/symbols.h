@@ -128,12 +128,13 @@ private:
     Gtk::Button* more;
     Gtk::Button* fewer;
     Gtk::HBox* tools;
+#if GTK_CHECK_VERSION(3,2,4)
     Gtk::Overlay* overlay;
+#endif
     Gtk::Image* overlay_icon;
     Gtk::Image* overlay_opacity;
     Gtk::Label* overlay_title;
     Gtk::Label* overlay_desc;
-    Gtk::Grid* table;
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
     Gtk::IconSize iconsize;

@@ -36,6 +36,9 @@ private:
     guint32 previous_color;
 };
 
+void sp_inverse_powermask(Inkscape::Selection *sel);
+
 } //namespace LivePathEffect
 } //namespace Inkscape
+
 #endif
