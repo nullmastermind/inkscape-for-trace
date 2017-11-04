@@ -397,11 +397,13 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
             next = std::find( cycling_items.begin(), cycling_items.end(), cycling_cur_item );
             g_assert (next != cycling_items.end());
             next++;
-            if (next == cycling_items.end())
-                if ( cycling_wrap ) 
+            if (next == cycling_items.end()) {
+                if ( cycling_wrap ) {
                     next = cycling_items.begin();
-                else 
+                } else {
                     next--;
+                }
+            }
         }
     } else { 
         if (! cycling_cur_item) {
