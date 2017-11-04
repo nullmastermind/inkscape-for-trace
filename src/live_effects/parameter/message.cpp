@@ -21,7 +21,7 @@ MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip
       defmessage(g_strdup(default_message))
 {
     _label  = NULL;
-    _min_min_height = -1;
+    _min_height = -1;
 }
 
 void
