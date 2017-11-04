@@ -2359,7 +2359,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         InkSelectOneAction* act =
             InkSelectOneAction::create( "TextLineSpacingAction", // Name
                                         _("Line Spacing Mode"),   // Label
-                                        _("How should multiple baselines be spaced?\n Adapative: Line spacing adapts to font size.\n Minimum: Like Adaptive but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
+                                        _("How should multiple baselines be spaced?\n Adaptive: Line spacing adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
         act->use_radio( false );
