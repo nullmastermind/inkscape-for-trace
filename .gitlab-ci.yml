@@ -43,7 +43,7 @@ inkscape:mac:
     # Tools
     - brew install cmake intltool libtool pkg-config ccache
     # Libraries
-    - brew install bdw-gc boost gdl gettext gsl gtkmm3 libcdr libvisio libwpg pango popt poppler potrace libsoup
+    - brew install bdw-gc boost gdl gettext gsl gtkmm3 gtkspell3 imagemagick@6 jemalloc libcdr libvisio libyaml libwpg pango popt poppler potrace libsoup
     # Testing tools
     # TODO
     # Cleanup
@@ -55,7 +55,7 @@ inkscape:mac:
   script:
     - mkdir -p build
     - cd build
-    - cmake .. -DIntl_INCLUDE_DIR=/usr/local/opt/gettext/include -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - cmake .. -DCMAKE_PREFIX_PATH="/usr/local/opt/gettext;/usr/local/opt/imagemagick@6/;/usr/local/opt/icu4c/" -DWITH_OPENMP=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
     - make -j1
     - cd ..
   artifacts:
