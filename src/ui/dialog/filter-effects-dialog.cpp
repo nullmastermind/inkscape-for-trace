@@ -1749,7 +1749,6 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
       _in_drag(0),
       _observer(new Inkscape::XML::SignalObserver)
 {
-    d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
     signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
 
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
@@ -1926,7 +1925,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
     
     auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     GdkRGBA bg_color, fg_color;
-    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
+    gdk_rgba_parse(&bg_color, "#f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
 
     GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
@@ -1935,7 +1934,6 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                          (bg_color.alpha + fg_color.alpha)/2.0};
     
     GdkRGBA bg_color_active, fg_color_active;
-    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_ACTIVE, &fg_color_active);
 
     GdkRGBA mid_color_active = {(bg_color_active.red + fg_color_active.red)/2.0,
@@ -1959,12 +1957,12 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             _vertical_layout->set_text(_(FPInputConverter.get_label((FilterPrimitiveInput)i).c_str()));
             const int x = text_start_x + get_input_type_width() * i;
 	    cr->save();
-	    cr->rectangle(x, 0, get_input_type_width(), vis.get_height());
 	    gdk_cairo_set_source_rgba(cr->cobj(), &bg_color);
+	    cr->rectangle(x, 0, get_input_type_width(), vis.get_height());
 	    cr->fill_preserve();
 
 	    gdk_cairo_set_source_rgba(cr->cobj(), &fg_color);
-	    cr->move_to(x+get_input_type_width(), 0);
+	    cr->move_to(x + get_input_type_width(), 5);
 	    cr->rotate_degrees(90);
 	    _vertical_layout->show_in_cairo_context(cr);
             
@@ -1974,6 +1972,8 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 	    cr->stroke();
 	    cr->restore();
         }
+        cr->rectangle(vis.get_x(), 0, vis.get_width(), vis.get_height());
+        cairo_clip(cr->cobj());
     }
 
     int row_index = 0;
@@ -1993,6 +1993,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         auto dm = display->get_device_manager();
         auto device = dm->get_client_pointer();
 #endif
+        cairo_set_line_width (cr->cobj(),0.5);
         get_bin_window()->get_device_position(device, mx, my, mask);
 
         // Outline the bottom of the connection area
@@ -2001,7 +2002,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
         gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
 
-	cr->move_to(x, y + h);
+	cr->move_to(vis.get_x(), y + h);
 	cr->line_to(outline_x, y + h);
         // Side outline
 	cr->line_to(outline_x, y - 1);
@@ -2023,7 +2024,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 		cr->save();
 
                 gdk_cairo_set_source_rgba(cr->cobj(),
-                                          inside && mask & GDK_BUTTON1_MASK ?
+                                          (inside && mask & GDK_BUTTON1_MASK) ?
                                           &mid_color : 
                                           &mid_color_active);
 
@@ -2052,7 +2053,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 	    cr->save();
 		
             gdk_cairo_set_source_rgba(cr->cobj(),
-                                      inside && mask & GDK_BUTTON1_MASK ?
+                                      (inside && mask & GDK_BUTTON1_MASK) ?
                                       &mid_color : 
                                       &mid_color_active);
 
@@ -2078,7 +2079,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 		cr->save();
 
                 gdk_cairo_set_source_rgba(cr->cobj(),
-                                          inside && mask & GDK_BUTTON1_MASK ?
+                                          (inside && mask & GDK_BUTTON1_MASK) ?
                                           &mid_color : 
                                           &mid_color_active);
 
@@ -2628,8 +2629,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     _sizegroup = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
     // Initialize widget hierarchy
-    auto hpaned = Gtk::manage(new Gtk::Paned);
-    _primitive_box = Gtk::manage(new Gtk::Paned);
+    auto hpaned = Gtk::manage(new Gtk::Paned());
+    _primitive_box = Gtk::manage(new Gtk::Paned(Gtk::ORIENTATION_VERTICAL));
 
     _sw_infobox = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
@@ -2659,7 +2660,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     _infobox_desc.set_valign(Gtk::ALIGN_START);
     _infobox_desc.set_justify(Gtk::JUSTIFY_LEFT);
     _infobox_desc.set_line_wrap(true);
-    _infobox_desc.set_size_request(200, -1);
+    _infobox_desc.set_size_request(300, -1);
     
     vb_desc->pack_start(_infobox_desc, true, true);
     
@@ -2667,7 +2668,7 @@ FilterEffectsDialog::FilterEffectsDialog()
     infobox->pack_start(*vb_desc, true, true);
     
     //_sw_infobox->set_size_request(-1, -1);
-    _sw_infobox->set_size_request(200, -1);
+    _sw_infobox->set_size_request(300, -1);
     _sw_infobox->add(*infobox);
     
     //vb_prims->set_size_request(-1, 50);
