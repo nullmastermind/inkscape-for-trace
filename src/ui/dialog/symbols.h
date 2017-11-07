@@ -138,7 +138,6 @@ private:
     Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fit_symbol;
     Gtk::IconSize iconsize;
-
     void setTargetDesktop(SPDesktop *desktop);
     SPDesktop*  current_desktop;
     DesktopTracker desk_track;
