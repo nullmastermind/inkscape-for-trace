@@ -157,6 +157,7 @@ namespace XML {}
  * - \subpage XmlTree - XML backbone of the document
  * - \subpage Rendering - rendering and buffering
  * - \subpage OtherServices - what doesn't fit in the above
+ * - \subpage PythonExtensions
  *
  * See also the <a href="dirs.html">other directories</a> until doxygen
  * allows setting links to those doc files.
@@ -343,6 +344,14 @@ namespace XML {}
  * [\ref document-undo.cpp]
  *
  * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h]
+ */
+/** \page PythonExtensions Python Extensions API
+ *
+ * simplepath [\ref simplepath.py, \ref simplepath.rb]
+ *
+ * simpletransform [\ref simpletransform.py]
+ *
+ * simplestyle [\ref simplestyle.py]
  */
 
 
