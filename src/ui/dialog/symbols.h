@@ -144,7 +144,9 @@ private:
     DesktopTracker desk_track;
     SPDocument* current_document;
     SPDocument* preview_document; /* Document to render single symbol */
-
+    
+    sigc::connection idleconn;
+    
     /* For rendering the template drawing */
     unsigned key;
     Inkscape::Drawing renderDrawing;

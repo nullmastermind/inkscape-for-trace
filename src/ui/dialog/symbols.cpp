@@ -368,8 +368,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   getSymbolsFilename();
   icons_found = false;
   
-  Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
-  
   addSymbolsInDoc(current_document); /* Defaults to current document */
   sigc::connection desktopChangeConn =
     desk_track.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
@@ -385,6 +383,7 @@ SymbolsDialog::~SymbolsDialog()
   for (std::vector<sigc::connection>::iterator it =  instanceConns.begin(); it != instanceConns.end(); ++it) {
       it->disconnect();
   }
+  idleconn.disconnect();
   instanceConns.clear();
   desk_track.disconnect();
 }
@@ -447,6 +446,8 @@ void SymbolsDialog::rebuild() {
     search->set_text("");
   }
   if (symbol_document) {
+    idleconn.disconnect();
+    idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
     addSymbolsInDoc(symbol_document);
   }
 }
@@ -895,6 +896,8 @@ void SymbolsDialog::clearSearch()
     SPDocument* symbol_document = selectedSymbols();
     if (symbol_document) {
       //We are not in search all docs
+      idleconn.disconnect();
+      idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
       icons_found = false;
       addSymbolsInDoc(symbol_document);
     } else {
@@ -920,6 +923,8 @@ void SymbolsDialog::beforeSearch(GdkEventKey* evt)
   progress_bar->set_fraction(0.0);
   enableWidgets(false);
   SPDocument* symbol_document = selectedSymbols();
+  idleconn.disconnect();
+  idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
   if (symbol_document) {
     //We are not in search all docs
     search->set_text(_("Searching..."));
@@ -1062,7 +1067,7 @@ bool SymbolsDialog::callbackSymbols(){
     search->set_text(search_str);
     sensitive = true;
     enableWidgets(true);
-    return true;
+    return false;
   }
   return true;
 }
