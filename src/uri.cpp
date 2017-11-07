@@ -158,7 +158,7 @@ const std::string URI::getFullPath(std::string const &base) const {
     if(!base.empty() && !path.empty() && path[0] != '/') {
         path = Glib::build_filename(base, path);
     }
-    // Check the existance of the file
+    // Check the existence of the file
     if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS)
       || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {
         path.clear();

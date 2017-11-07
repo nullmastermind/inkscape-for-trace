@@ -71,7 +71,7 @@ python  ../buildtools/msys2checkdeps.py check inkscape/ || error "missing librar
 message "--- Running tests"
 # check if the installed executable works
 inkscape/inkscape.exe -V || error "installed executable won't run"
-PATH= inkscape/inkscape.exe -V >/dev/null || error "installed executable won't run with empty PATH (missing dependecies?)"
+PATH= inkscape/inkscape.exe -V >/dev/null || error "installed executable won't run with empty PATH (missing dependencies?)"
 err=$(PATH= inkscape/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
 # check if the uninstalled executable works
@@ -81,7 +81,7 @@ if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr
 # run tests
 ninja check || error "tests failed"
 
-message "##### BUILD SUCCESSFULL #####\n\n"
+message "##### BUILD SUCCESSFUL #####\n\n"
 
 
 ### package

@@ -174,7 +174,7 @@ std::string Inkscape::XML::calc_abs_doc_base(gchar const *doc_base)
      * It's probably not worth trying to address this until we're using proper
      * relative URL/IRI href processing (with liburiparser).
      *
-     * (Note that one possibile difficulty with `..' is symlinks.) */
+     * (Note that one possible difficulty with `..' is symlinks.) */
     std::string ret;
 
     if (!doc_base) {

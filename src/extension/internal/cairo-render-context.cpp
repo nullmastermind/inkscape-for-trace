@@ -606,7 +606,7 @@ CairoRenderContext::popLayer(void)
                 clip_ctx->setImageTarget(CAIRO_FORMAT_A8);
                 clip_ctx->setClipMode(CLIP_MODE_MASK);  // Raster
                 // This code ties the clipping to the document coordinates. It doesn't allow
-                // for a clipped object intially drawn off the page and then translated onto
+                // for a clipped object initially drawn off the page and then translated onto
                 // the page.
                 if (!clip_ctx->setupSurface(_width, _height)) {
                     TRACE(("clip: setupSurface failed\n"));
@@ -1482,7 +1482,7 @@ CairoRenderContext::_prepareRenderText()
 }
 
 /*  We need CairoPaintOrder as markers are rendered in a separate step and may be rendered
- *  inbetween fill and stroke.
+ *  in between fill and stroke.
  */
 bool
 CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle const *style, Geom::OptRect const &pbox, CairoPaintOrder order)

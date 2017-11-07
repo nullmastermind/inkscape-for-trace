@@ -35,7 +35,7 @@ public:
 
     SPObject *owner;
 
-    // concerning the Persp3D (we only use SPBox3D) that is refered to:
+    // concerning the Persp3D (we only use SPBox3D) that is referred to:
     char *persp_href;
     Inkscape::XML::Node *persp_repr;
     Persp3D *persp;

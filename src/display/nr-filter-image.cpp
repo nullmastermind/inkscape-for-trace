@@ -144,7 +144,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
          * (See http://www.w3.org/TR/xmlbase/#resolution .) */
         gchar *fullname = feImageHref;
         if ( !g_file_test( fullname, G_FILE_TEST_EXISTS ) ) {
-            // Try to load from relative postion combined with document base
+            // Try to load from relative position combined with document base
             if( document ) {
                 fullname = g_build_filename( document->getBase(), feImageHref, NULL );
             }

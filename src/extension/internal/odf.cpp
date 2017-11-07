@@ -6,7 +6,7 @@
  * within Inkscape.  Although the initial implementations will be very lossy
  * due to the differences in the models of SVG and ODF, they will hopefully
  * improve greatly with time.  People should consider this to be a framework
- * that can be continously upgraded for ever improving fidelity.  Potential
+ * that can be continuously upgraded for ever improving fidelity.  Potential
  * developers should especially look in preprocess() and writeTree() to see how
  * the SVG tree is scanned, read, translated, and then written to ODF.
  *
@@ -1400,7 +1400,7 @@ bool OdfOutput::processStyle(SPItem *item, const Glib::ustring &id, const Glib::
         }
     }
 
-    // Dont need a new style
+    // Don't need a new style
     if (styleMatch)
     {
         return false;

@@ -636,7 +636,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                     }
                 } else if (this->item_to_select) {
                     if (over_line && line) {
-                        // Clicked on an existing gradient line, dont change selection. This stops
+                        // Clicked on an existing gradient line, don't change selection. This stops
                         // possible change in selection during a double click with overlapping objects
                     } else {
                         // no dragging, select clicked item if any

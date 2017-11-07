@@ -63,7 +63,7 @@ Optional compiler switches for development:
   -DDBG_TR_INPUT   draw input text and their bounding rectangles in SVG output
   -DTEST           build the test program
   -DDBG_LOOP       force the test program to cycle 5 times.  Useful for finding
-                   memory leaks.  Ouput file is overwritten each time.
+                   memory leaks.  Output file is overwritten each time.
 
 
 File:      text_reassemble.c

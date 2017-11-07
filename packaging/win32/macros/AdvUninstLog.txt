@@ -48,7 +48,7 @@ these installation blocks. See included examples for details.
 Supports unlimited updates/reinstallations.
 
 Supports two uninstaller modes. Interactive mode requires confirmation
-to remove every other file exept those files that have been installed.
+to remove every other file except those files that have been installed.
 Unattended mode leaves intact every other file without bothering users.
 
 In case when uninstall log (uninstall.dat) has been removed manually instead

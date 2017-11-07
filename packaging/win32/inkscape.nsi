@@ -836,7 +836,7 @@ Function .onInit ; initialise the installer {{{2
       /DESKTOP=(OFF/ON): Desktop icon$\r$\n \
       /QUICKLAUNCH=(OFF/ON): quick launch icon$\r$\n \
       /SVGEDITOR=(OFF/ON): default SVG editor$\r$\n \
-      /CONTEXTMENUE=(OFF/ON): context menue integration$\r$\n \
+      /CONTEXTMENUE=(OFF/ON): context menu integration$\r$\n \
       /PREFERENCES=(OFF/ON): delete users preference files$\r$\n \
       /PYTHON=(OFF/ON): python distribution$\r$\n \
       /ADDFILES=(OFF/ON): additional files$\r$\n \
@@ -844,7 +844,7 @@ Function .onInit ; initialise the installer {{{2
       /EXAMPLES=(OFF/ON): examples$\r$\n \
       /TUTORIALS=(OFF/ON): tutorials$\r$\n \
       /DICTIONARIES=(OFF/ON): dictionaries$\r$\n \
-      /LANGUAGES=(OFF/ON): translated menues, examples, etc.$\r$\n \
+      /LANGUAGES=(OFF/ON): translated menus, examples, etc.$\r$\n \
       /[locale code]=(OFF/ON): e.g am, es, es_MX as in Inkscape supported"
     Abort
   ${EndIf}

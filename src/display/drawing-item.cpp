@@ -99,7 +99,7 @@ void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
  * you always need to delete the item views of children before deleting
  * the view of the parent. Do not call delete on things returned from show()
  * - this will cause dangling pointers inside the SPItem and lead to a crash.
- * Use the corresponing hide() method.
+ * Use the corresponding hide() method.
  *
  * Outside of the SP tree, you should not use any references after the root node
  * has been deleted.

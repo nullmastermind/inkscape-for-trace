@@ -669,7 +669,7 @@ static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, Tool
             }
             if (n > 1) {
 
-                // Mulitple stops selected
+                // Multiple stops selected
                 GtkListStore *store = (GtkListStore *)gtk_combo_box_get_model(GTK_COMBO_BOX(combo_box));
                 if (!store) {
                     return;

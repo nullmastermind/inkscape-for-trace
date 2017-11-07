@@ -45,7 +45,7 @@ private:
     std::vector<Glib::ustring>  _slides;     // list of filenames for each slide
     int                         _current;    // index of the currently displayed slide
     SPDocument                 *_doc;        // parsed SPDocument of the currently displayed slide
-    bool                        _fullscreen; // is window fullscreen? (also controls wether to launch in fullscreen mode)
+    bool                        _fullscreen; // is window fullscreen? (also controls whether to launch in fullscreen mode)
     int                         _timer;      // time after which slides are automatically changed (in seconds)
     double                      _scale;      // scale factor for images
     GtkWidget                  *_view;       // the canvas to which the images are drawn

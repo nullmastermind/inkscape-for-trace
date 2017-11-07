@@ -103,12 +103,12 @@ enum SPStyleSrc {
  *   The C structures that these classes are evolved from were designed to be embedded in to the
  *   style structure (i.e they are "internal" and thus have an "I" in the SPI prefix). However,
  *   they should be reasonably stand-alone and can provide some functionality outside of the style
- *   stucture (i.e. reading and writing style strings). Some properties do need access to other
+ *   structure (i.e. reading and writing style strings). Some properties do need access to other
  *   properties from the same object (e.g. SPILength sometimes needs to know font size) to
- *   calculate 'computed' values. Inheritence, of course, requires access to the parent object's
+ *   calculate 'computed' values. Inheritance, of course, requires access to the parent object's
  *   style class.
  *
- *   The only real outside dependancy is SPObject... which is needed in the cases of SPIPaint and
+ *   The only real outside dependency is SPObject... which is needed in the cases of SPIPaint and
  *   SPIFilter for setting up the "href". (Currently, SPDocument is needed but this dependency
  *   should be removed as an "href" only needs the SPDocument for attaching an external document to
  *   the XML tree [see uri-references.cpp]. If SPDocument is really needed, it can be obtained from

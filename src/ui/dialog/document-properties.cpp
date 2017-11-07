@@ -1217,7 +1217,7 @@ void DocumentProperties::changeEmbeddedScript(){
 
             //XML Tree being used directly here while it shouldn't be.
             SPObject* child = obj->firstChild();
-            //TODO: shouldnt we get all children instead of simply the first child?
+            //TODO: shouldn't we get all children instead of simply the first child?
 
             if (child && child->getRepr()){
                 const gchar* content = child->getRepr()->content();

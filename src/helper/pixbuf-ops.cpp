@@ -58,7 +58,7 @@ static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
 
 
 // The following is a mutation of the flood fill code, the marker preview, and random other samplings.
-// The dpi settings dont do anything yet, but I want them to, and was wanting to keep reasonably close
+// The dpi settings don't do anything yet, but I want them to, and was wanting to keep reasonably close
 // to the call for the interface to the png writing.
 
 bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,

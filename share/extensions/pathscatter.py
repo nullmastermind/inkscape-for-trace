@@ -183,10 +183,10 @@ class PathScatter(pathmodifier.Diffeo):
 
     def lengthtotime(self,l):
         '''
-        Recieves an arc length l, and returns the index of the segment in self.skelcomp 
+        Receives an arc length l, and returns the index of the segment in self.skelcomp 
         containing the corresponding point, to gether with the position of the point on this segment.
 
-        If the deformer is closed, do computations modulo the toal length.
+        If the deformer is closed, do computations modulo the total length.
         '''
         if self.skelcompIsClosed:
             l=l % sum(self.lengths)
@@ -201,7 +201,7 @@ class PathScatter(pathmodifier.Diffeo):
 
     def localTransformAt(self,s,follow=True):
         '''
-        receives a length, and returns the coresponding point and tangent of self.skelcomp
+        receives a length, and returns the corresponding point and tangent of self.skelcomp
         if follow is set to false, returns only the translation
         '''
         i,t=self.lengthtotime(s)

@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # # # # # # # #
  
 
-# # # extension's begining # # #
+# # # extension's beginning # # #
 
 # These two lines are only needed if you don't put the script directly into
 # the installation directory

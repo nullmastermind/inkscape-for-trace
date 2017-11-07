@@ -67,7 +67,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
 
     show_all_children();
 
-    // These signals dont properly detect change in desktop, rely on owner dialog to call setSubject() from setTargetDesktop()
+    // These signals don't properly detect change in desktop, rely on owner dialog to call setSubject() from setTargetDesktop()
     //_desktop_activated = g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (&ObjectCompositeSettings::_on_desktop_activate), this );
     //_desktop_activated = g_signal_connect ( G_OBJECT (INKSCAPE), "deactivate_desktop", G_CALLBACK (&ObjectCompositeSettings::_on_desktop_deactivate), this );
 }

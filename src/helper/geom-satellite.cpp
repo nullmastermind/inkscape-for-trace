@@ -113,7 +113,7 @@ double Satellite::radToLen(
     return len;
 }
 
-///Convert a satelite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
+///Convert a satellite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
 double Satellite::lenToRad(
     double const A, Geom::Curve const &curve_in,
     Geom::Curve const &curve_out,

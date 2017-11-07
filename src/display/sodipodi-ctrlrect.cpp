@@ -212,7 +212,7 @@ void CtrlRect::render(SPCanvasBuf *buf)
             cairo_stroke_preserve(buf->ct);
         }
 
-        cairo_new_path( buf->ct ); // Clear path or get wierd artifacts.
+        cairo_new_path( buf->ct ); // Clear path or get weird artifacts.
         cairo_restore(buf->ct);
     }
 }

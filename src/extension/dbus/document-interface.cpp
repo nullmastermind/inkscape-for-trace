@@ -151,7 +151,7 @@ get_name_from_object (SPObject * obj)
 
 /*
  * Some verbs (cut, paste) only work on the active layer.
- * This makes sure that the document that is about to recive a command is active.
+ * This makes sure that the document that is about to receive a command is active.
  */
 void
 desktop_ensure_active (SPDesktop* desk) {

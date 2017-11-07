@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 svg_and_media_zip_output.py
-An extention which collects all images to the documents directory and
+An extension which collects all images to the documents directory and
 creates a zip archive containing all images and the document
 
 Copyright (C) 2005 Pim Snel, pim@lingewoud.com
@@ -30,10 +30,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 TODOs
 - fix bug: not saving existing .zip after a Collect for Output is run
-     this bug occurs because after running an effect extention the inkscape:output_extension is reset to svg.inkscape
+     this bug occurs because after running an effect extension the inkscape:output_extension is reset to svg.inkscape
      the file name is still xxx.zip. after saving again the file xxx.zip is written with a plain .svg which
      looks like a corrupt zip
-- maybe add better extention
+- maybe add better extension
 - consider switching to lzma in order to allow cross platform compression with no encoding problem...
 '''
 # standard library
@@ -206,7 +206,7 @@ class CompressedMediaOutput(inkex.Effect):
         #inkex.errormsg(_('Locale: %s') % locale.getpreferredencoding())
         if docname is None:
             docname = self.args[-1]
-        # TODO: replace whatever extention
+        # TODO: replace whatever extension
         docstripped = os.path.basename(docname.replace('.zip', ''))
         docstripped = docstripped.replace('.svg', '')
         docstripped = docstripped.replace('.svgz', '')

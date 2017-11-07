@@ -178,7 +178,7 @@ def check_text_on_path(svg, element, scale_x, scale_y):
 
 
 def check_use(svg, element, scale_x, scale_y):
-    """Check whether to skip scaling an instanciated element (<use>)."""
+    """Check whether to skip scaling an instantiated element (<use>)."""
     skip = False
     path = get_linked(svg, element)
     if not is_in_defs(svg, path):

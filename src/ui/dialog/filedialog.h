@@ -352,7 +352,7 @@ public:
     virtual Glib::ustring getDestinationUnits() = 0;
 
     /**
-     * Return the destination DPI image resulution, if bitmap
+     * Return the destination DPI image resolution, if bitmap
      */
     virtual double getDestinationDPI() = 0;
 

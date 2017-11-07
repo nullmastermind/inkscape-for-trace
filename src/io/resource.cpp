@@ -134,7 +134,7 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
 }
 
 /*
- * Same as get_path, but checks for file's existance and falls back
+ * Same as get_path, but checks for file's existence and falls back
  * from USER to SYSTEM modes.
  *
  *  type - The type of file to get, such as extension, template, ui etc
@@ -214,7 +214,7 @@ Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
  *  domain - Optional domain (overload), will check return domains if not.
  *  type - The type of files, e.g. TEMPLATES
  *  path - Instead of Domain and Type, specify the path to get the files from.
- *  extentions - A list of extensions to return, e.g. xml, svg
+ *  extensions - A list of extensions to return, e.g. xml, svg
  *  exclusions - A list of names to exclude e.g. default.xml
  */
 std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)

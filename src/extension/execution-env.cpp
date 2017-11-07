@@ -97,7 +97,7 @@ ExecutionEnv::genDocCache (void) {
     return;
 }
 
-/** \brief  Destory a document cache
+/** \brief  Destroy a document cache
 
     Just delete it.
 */

@@ -50,7 +50,7 @@ ErrorFileNotice::ErrorFileNotice (void) :
 
 {
     // \FIXME change this
-    /* This is some filler text, needs to change before relase */
+    /* This is some filler text, needs to change before release */
     Glib::ustring dialog_text(_("<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</span>\n\nThe failed extensions have been skipped.  Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log located at: "));
     gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
     dialog_text += ext_error_file;
@@ -59,7 +59,7 @@ ErrorFileNotice::ErrorFileNotice (void) :
 
     auto vbox = get_content_area();
 
-    /* This is some filler text, needs to change before relase */
+    /* This is some filler text, needs to change before release */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     checkbutton = Gtk::manage(new Gtk::CheckButton(_("Show dialog on startup")));
     vbox->pack_start(*checkbutton, true, false, 5);

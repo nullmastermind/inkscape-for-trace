@@ -42,14 +42,14 @@ class DistantLight {
         /**
          * Computes the light vector of the distant light
          *
-         * \param v a Fvector referece where we store the result
+         * \param v a Fvector reference where we store the result
          */
         void light_vector(NR::Fvector &v);
         
         /**
          * Computes the light components of the distant light
          *
-         * \param lc a Fvector referece where we store the result, X=R, Y=G, Z=B
+         * \param lc a Fvector reference where we store the result, X=R, Y=G, Z=B
          */
         void light_components(NR::Fvector &lc);
 
@@ -77,7 +77,7 @@ class PointLight {
          * x, y and z are given in the arena_item coordinate, they are used as
          * is
          *
-         * \param v a Fvector referece where we store the result
+         * \param v a Fvector reference where we store the result
          * \param x x coordinate of the current point
          * \param y y coordinate of the current point
          * \param z z coordinate of the current point
@@ -87,7 +87,7 @@ class PointLight {
         /**
          * Computes the light components of the distant light
          *
-         * \param lc a Fvector referece where we store the result, X=R, Y=G, Z=B
+         * \param lc a Fvector reference where we store the result, X=R, Y=G, Z=B
          */
         void light_components(NR::Fvector &lc);
 
@@ -118,7 +118,7 @@ class SpotLight {
          * x, y and z are given in the arena_item coordinate, they are used as
          * is
          *
-         * \param v a Fvector referece where we store the result
+         * \param v a Fvector reference where we store the result
          * \param x x coordinate of the current point
          * \param y y coordinate of the current point
          * \param z z coordinate of the current point
@@ -129,7 +129,7 @@ class SpotLight {
          * Computes the light components of the distant light at the current
          * point. We only need the light vector to compute theses
          *
-         * \param lc a Fvector referece where we store the result, X=R, Y=G, Z=B
+         * \param lc a Fvector reference where we store the result, X=R, Y=G, Z=B
          * \param L the light vector of the current point
          */
         void light_components(NR::Fvector &lc, const NR::Fvector &L);

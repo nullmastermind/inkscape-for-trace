@@ -57,7 +57,7 @@ class Grid_Polar(inkex.Effect):
         self.OptionParser.add_option("--dx",
                         action="store", type="float", 
                         dest="dx", default=10.0,
-                        help="Major X divison Spacing")
+                        help="Major X division Spacing")
         self.OptionParser.add_option("--subdivs",
                         action="store", type="int", 
                         dest="subdivs", default=2,
@@ -196,7 +196,7 @@ class Grid_Polar(inkex.Effect):
                               'MajorXDiv'+str(i), majglx)
 
          
-        #Y DIVISONS
+        #Y DIVISIONS
         #Shortcuts for divisions
         sd  = self.options.subdivs   
         ssd = self.options.subsubdivs 

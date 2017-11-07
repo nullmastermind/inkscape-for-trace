@@ -1654,7 +1654,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
                 // If unit is set to 'px', use the preferred display unit (if absolute).
                 line_height_unit =
                     prefs->getInt("/tools/text/lineheight/display_unit", SP_CSS_UNIT_PT);
-                // But not if prefered unit is relative
+                // But not if preferred unit is relative
                 if (line_height_unit != SP_CSS_UNIT_NONE &&
                     line_height_unit != SP_CSS_UNIT_EM &&
                     line_height_unit != SP_CSS_UNIT_EX &&

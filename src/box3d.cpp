@@ -962,7 +962,7 @@ box3d_recompute_z_orders (SPBox3D *box) {
             break;
         default:
         /*
-         * For each VP F, check wether the half-line from the corner3 to F crosses the line segment
+         * For each VP F, check whether the half-line from the corner3 to F crosses the line segment
          * joining the other two VPs. If this is the case, it determines the "central" corner from
          * which the visible sides can be deduced. Otherwise, corner3 is the central corner.
          */

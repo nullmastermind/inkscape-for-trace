@@ -52,7 +52,7 @@ class ColorRandomizeColorModificationTest(unittest.TestCase):
         hsl = extract_hsl(self.e, self.e.colmod(150, 100, 200))
         self.assertEqual([0.47, 0.59], [round(hsl[1], 2), round(hsl[2], 2)])
 
-    @unittest.skip("Inaccurate convertion")
+    @unittest.skip("Inaccurate conversion")
     def test_random_lightness(self):
         """ Random lightness only. Hue and saturation not changed. """
         args = ['-y 0', '-t 0', '-m 50', 'svg/empty-SVG.svg']

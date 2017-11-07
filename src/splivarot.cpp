@@ -744,7 +744,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             // that's why you needed the nesting
             // ConvertToFormeNested() dumped all the subpath in a single Path "res", so we need
             // to get the path for each part of the polygon. that's why you need the nesting info:
-            // to know in wich subpath to add a subpath
+            // to know in which subpath to add a subpath
             resPath=res->SubPathsWithNesting(nbRP, true, nbNest, nesting, conts);
 
             // cleaning
@@ -864,7 +864,7 @@ void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine 
     if (marker_item->getRepr()) {
         Inkscape::XML::Node *m_repr = marker_item->getRepr()->duplicate(xml_doc);
         g_repr->appendChild(m_repr);
-        //There is a special group to markers whith this reverse the order in clussion
+        //There is a special group to markers with this reverse the order in clussion
         m_repr->setPosition(0);
         SPItem *marker_item = (SPItem *) doc->getObjectByRepr(m_repr);
         marker_item->doWriteTransform(tr);

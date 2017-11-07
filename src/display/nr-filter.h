@@ -40,7 +40,7 @@ public:
      * New primitive is placed so that it will be executed after all filter
      * primitives defined beforehand for this filter object.
      * Should this filter not have enough space for a new primitive, the filter
-     * is enlarged to accomodate the new filter element. It may be enlarged by
+     * is enlarged to accommodate the new filter element. It may be enlarged by
      * more that one element.
      * Returns a handle (non-negative integer) to the filter primitive created.
      * Returns -1, if type is not valid filter primitive type or filter

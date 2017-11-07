@@ -1004,7 +1004,7 @@ void XmlTree::cmd_delete_attr()
 
     SPObject *updated = current_document->getObjectByRepr(selected_repr);
     if (updated) {
-        // force immediate update of dependant attributes
+        // force immediate update of dependent attributes
         updated->updateRepr();
     }
 
@@ -1028,7 +1028,7 @@ void XmlTree::cmd_set_attr()
 
     SPObject *updated = current_document->getObjectByRepr(selected_repr);
     if (updated) {
-        // force immediate update of dependant attributes
+        // force immediate update of dependent attributes
         updated->updateRepr();
     }
 

@@ -578,7 +578,7 @@ StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
 
     /*
      * Optimization when all the references to this marker are from this item
-     * then we can reuse it and dont need to fork
+     * then we can reuse it and don't need to fork
      */
     Glib::ustring urlId = Glib::ustring::format("url(#", marker->getRepr()->attribute("id"), ")");
     unsigned int refs = 0;

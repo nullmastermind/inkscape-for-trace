@@ -130,7 +130,7 @@ FontSubstitution::show(Glib::ustring out, std::vector<SPItem*> &l)
  *
  * Return a list of SPItems where fonts have been substituted.
  *
- * Walk thru all the objects ...
+ * Walk through all the objects ...
  * a. Build up a list of the objects with fonts defined in the style attribute
  * b. Build up a list of the objects rendered fonts - taken for the objects layout/spans
  * If there are fonts in a. that are not in b. then those fonts have been substituted.

@@ -25,7 +25,7 @@ namespace Inkscape {
 class EventLogPrivate;
 
 /**
- * A simple log for maintaining a history of commited, undone and redone events along with their
+ * A simple log for maintaining a history of committed, undone and redone events along with their
  * type. It implements the UndoStackObserver and should be registered with a
  * CompositeUndoStackObserver for each document. The event log is then notified on all commit, undo
  * and redo events and will store a representation of them in an internal Gtk::TreeStore.
@@ -34,7 +34,7 @@ class EventLogPrivate;
  * as its children.
  *
  * If a Gtk::TreeView is connected to the event log, the TreeView's selection and its nodes
- * expanded/collapsed state will be updated as events are commited, undone and redone. Whenever
+ * expanded/collapsed state will be updated as events are committed, undone and redone. Whenever
  * this happens, the event log will block the TreeView's callbacks to prevent circular updates.
  */
 class EventLog : public UndoStackObserver, public sigc::trackable
@@ -135,7 +135,7 @@ private:
     const_iterator _getUndoEvent() const; //< returns the current undoable event or NULL if none
     const_iterator _getRedoEvent() const; //< returns the current redoable event or NULL if none
 
-    void _clearUndo();  //< erase all previously commited events
+    void _clearUndo();  //< erase all previously committed events
     void _clearRedo();  //< erase all previously undone events
 
     void checkForVirginity(); //< marks the document as untouched if undo/redo reaches a previously saved state

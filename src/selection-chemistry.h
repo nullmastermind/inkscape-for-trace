@@ -2,7 +2,7 @@
 #define SEEN_SELECTION_CHEMISTRY_H
 
 /*
- * Miscellanous operations on selected items
+ * Miscellaneous operations on selected items
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
