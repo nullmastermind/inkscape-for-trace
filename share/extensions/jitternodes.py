@@ -26,7 +26,7 @@ def randomize((x, y), rx, ry, dist):
         r2 = random.gauss(0.0,ry)
     elif dist == "Pareto":
         '''
-        sign is used ot fake a double sided pareto distribution.
+        sign is used to fake a double sided pareto distribution.
         for parameter value between 1 and 2 the distribution has infinite variance
         I truncate the distribution to a high value and then normalize it.
         The idea is to get spiky distributions, any distribution with long-tails is

@@ -107,7 +107,7 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
     tgtlength_rdm.param_set_range(0, 1.);
     tgt_places_rdmness.param_set_range(0, 1.);
     //this is not very smart, but required to avoid having lot of tangents stacked on short components.
-    //Nota: we could specify a density instead of an absolute number, but this would be scale dependant.
+    //Note: we could specify a density instead of an absolute number, but this would be scale dependent.
     concatenate_before_pwd2 = true;
 #endif
 }

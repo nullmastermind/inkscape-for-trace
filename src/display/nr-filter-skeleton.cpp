@@ -1,14 +1,14 @@
 /*
  * Filter primitive renderer skeleton class
  * You can create your new filter primitive renderer by replacing
- * all occurences of Skeleton, skeleton and SKELETON with your filter
+ * all occurrences of Skeleton, skeleton and SKELETON with your filter
  * type, like gaussian or blend in respective case.
  *
  * This can be accomplished with the following sed command:
  * sed -e "s/Skeleton/Name/g" -e "s/skeleton/name/" -e "s/SKELETON/NAME/"
  * nr-filter-skeleton.cpp >nr-filter-name.cpp
  *
- * (on one line, replace occurences of 'name' with your filter name)
+ * (on one line, replace occurrences of 'name' with your filter name)
  *
  * Remember to convert the .h file too. The sed command is same for both
  * files.

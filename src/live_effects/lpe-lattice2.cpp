@@ -103,7 +103,7 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPELattice2::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 {
     PathVector pathv = path_from_piecewise(pwd2_in,0.001);
-    //this is because strange problems whith sb2 and LineSegment
+    //this is because strange problems with sb2 and LineSegment
     PathVector cubic = pathv_to_cubicbezier(pathv);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const &pwd2_in_linear_and_cubic = paths_to_pw(cubic);
     D2<SBasis2d> sb2;

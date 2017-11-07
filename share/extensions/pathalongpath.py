@@ -151,7 +151,7 @@ class PathAlongPath(pathmodifier.Diffeo):
 
     def lengthtotime(self,l):
         '''
-        Recieves an arc length l, and returns the index of the segment in self.skelcomp 
+        Receives an arc length l, and returns the index of the segment in self.skelcomp 
         containing the corresponding point, to gether with the position of the point on this segment.
 
         If the deformer is closed, do computations modulo the toal length.

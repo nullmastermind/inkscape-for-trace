@@ -16,7 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 """
-Renderer for barcodes, SVG extention for Inkscape.
+Renderer for barcodes, SVG extension for Inkscape.
 
 For supported barcodes see Barcode module directory.
 """

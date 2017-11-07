@@ -188,7 +188,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
     SPCanvasGroup *root = canvas->getRoot();
 
-    /* Setup adminstrative layers */
+    /* Setup administrative layers */
     acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, NULL);
     g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
     main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);

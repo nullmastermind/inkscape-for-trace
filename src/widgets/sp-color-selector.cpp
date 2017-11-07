@@ -248,7 +248,7 @@ void ColorSelector::_updateInternals( const SPColor& color, gfloat alpha, gboole
     gboolean grabbed = held && !_held;
     gboolean released = !held && _held;
 
-    // Store these before emmiting any signals
+    // Store these before emitting any signals
     _held = held;
     if ( colorDifferent )
     {

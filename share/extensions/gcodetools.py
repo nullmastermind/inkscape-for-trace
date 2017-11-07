@@ -290,7 +290,7 @@ def point_inside_csp(p,csp, on_the_path = True) :
 		 				if y1==y : 
 		 					# the point is on the path 
 		 					return on_the_path
-	 					# if t == 0 we sould have considered this case previously. 
+	 					# if t == 0 we should have considered this case previously. 
 	 					if t == 1 :
 							# we have to check the next segmant if it is on the same side of the ray
 							st_d = csp_normalized_slope(sp1,sp2,1)[0]
@@ -1319,7 +1319,7 @@ def csp_segment_convex_hull(sp1,sp2):
 	if not (m1 and m2) and m3 : return [c,a,d]
 	if not (m1 and m3) and m2 : return [b,c,d]
 	
-	raise ValueError, "csp_segment_convex_hull happend something that shouldnot happen!"	
+	raise ValueError, "csp_segment_convex_hull happened which is something that shouldn't happen!"	
 
 	
 ################################################################################
@@ -3038,7 +3038,7 @@ class Arangement_Genetic:
 
 	
 	def similarity(self,sp1,top) :
-		# Define similarity as a simple distance between two points in len(gene)*len(spiece) -th dimentions
+		# Define similarity as a simple distance between two points in len(gene)*len(spiece) -th dimensions
 		# for sp2 in top_spieces sum(|sp1-sp2|)/top_count
 		sim = 0
 		for sp2 in top : 
@@ -3603,7 +3603,7 @@ class Gcodetools(inkex.Effect):
 		self.OptionParser.add_option("",   "--min-arc-radius",				action="store", type="float", 		dest="min_arc_radius", default=".1",				help="All arc having radius less than minimum will be considered as straight line")		
 
 		self.OptionParser.add_option("",   "--engraving-sharp-angle-tollerance",action="store", type="float",	dest="engraving_sharp_angle_tollerance", default="150",		help="All angles thar are less than engraving-sharp-angle-tollerance will be thought sharp")		
-		self.OptionParser.add_option("",   "--engraving-max-dist",			action="store", type="float", 		dest="engraving_max_dist", default="10",					help="Distanse from original path where engraving is not needed (usualy it's cutting tool diameter)")		
+		self.OptionParser.add_option("",   "--engraving-max-dist",			action="store", type="float", 		dest="engraving_max_dist", default="10",					help="Distanse from original path where engraving is not needed (usually it's cutting tool diameter)")		
 		self.OptionParser.add_option("",   "--engraving-newton-iterations", action="store", type="int", 		dest="engraving_newton_iterations", default="4",			help="Number of sample points used to calculate distance")		
 		self.OptionParser.add_option("",   "--engraving-draw-calculation-paths",action="store", type="inkbool",	dest="engraving_draw_calculation_paths", default=False,		help="Draw additional graphics to debug engraving path")		
 		self.OptionParser.add_option("",   "--engraving-cutter-shape-function",action="store", type="string", 	dest="engraving_cutter_shape_function", default="w",		help="Cutter shape function z(w). Ex. cone: w. ")
@@ -4108,7 +4108,7 @@ class Gcodetools(inkex.Effect):
 ###		Errors handling function, notes are just printed into Logfile, 
 ###		warnings are printed into log file and warning message is displayed but
 ###		extension continues working, errors causes log and execution is halted
-###		Notes, warnings adn errors could be assigned to space or comma or dot 
+###		Notes, warnings and errors could be assigned to space or comma or dot 
 ###		sepparated strings (case is ignoreg).
 ################################################################################
 	def error(self, s, type_= "Warning"):
@@ -4775,7 +4775,7 @@ class Gcodetools(inkex.Effect):
 						
 						# Reverse path if needed.
 						if min_y!=float("-inf") :
-							# Move outline subpath to the begining of csp
+							# Move outline subpath to the beginning of csp
 	 					 	subp = csp[min_i]
 	 					 	del csp[min_i]
 	 					 	j = min_j

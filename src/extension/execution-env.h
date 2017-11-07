@@ -69,7 +69,7 @@ private:
     bool _show_errors;
 public:
 
-    /** \brief  Create a new context for exection of an effect
+    /** \brief  Create a new context for execution of an effect
         \param effect  The effect to execute
         \param doc     The document to execute the effect on
         \param docCache  The implementation cache of the document.  May be

@@ -215,7 +215,7 @@
             }
 
 
-        /// Make sure the top and left of the grid dont move by compensating for align values.
+        /// Make sure the top and left of the grid don't move by compensating for align values.
     if (RowHeightButton.get_active()){
         grid_top = grid_top - (((row_height - row_heights[0]) / 2)*(VertAlign));
     }

@@ -118,7 +118,7 @@ function jessyInkInit()
 	if (jessyInkInitialised)
 		return;
 
-	// Making the presentation scaleable.
+	// Making the presentation scalable.
 	var VIEWBOX = ROOT_NODE.getAttribute("viewBox");
 
 	if (VIEWBOX)

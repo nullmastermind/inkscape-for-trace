@@ -189,7 +189,7 @@ def isColor(c):
     if c.lower() in svgcolors.keys():
         return True
     #might be "none" or some undefined color constant or rgb()
-    #however, rgb() shouldnt occur at this point
+    #however, rgb() shouldn't occur at this point
     return False
 
 def parseColor(c):

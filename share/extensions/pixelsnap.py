@@ -19,7 +19,7 @@ TODO: Transforming points isn't quite perfect, to say the least. In particular,
     BUT, some handles that are attached to a particular point are conceptually
     handles of the prev/next node.
     Best way to fix it would be to keep a list of the fractional_offsets[] of
-    each point, without transforming anything. Then go thru each point and
+    each point, without transforming anything. Then go through each point and
     transform the appropriate handle according to the relevant fraction_offset
     in the list.
     

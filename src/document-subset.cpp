@@ -65,7 +65,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
                 }
 
                 if ( first == last ) {
-                    // compare to the single possiblity left
+                    // compare to the single possibility left
                     int pos = sp_object_compare_position(*last, obj);
                     if ( pos < 0 ) {
                         ++last;

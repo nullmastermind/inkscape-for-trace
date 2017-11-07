@@ -426,7 +426,7 @@ ImplementationDocumentCache *Script::newDocCache( Inkscape::Extension::Extension
 
 /**
     \return   A dialog for preferences
-    \brief    A stub funtion right now
+    \brief    A stub function right now
     \param    module    Module who's preferences need getting
     \param    filename  Hey, the file you're getting might be important
 
@@ -442,7 +442,7 @@ Gtk::Widget *Script::prefs_input(Inkscape::Extension::Input *module,
 
 /**
     \return   A dialog for preferences
-    \brief    A stub funtion right now
+    \brief    A stub function right now
     \param    module    Module whose preferences need getting
 
     This function should really do something, right now it doesn't.
@@ -602,8 +602,8 @@ void Script::save(Inkscape::Extension::Output *module,
 
 /**
     \return    none
-    \brief     This function uses an extention as a effect on a document.
-    \param     module   Extention to effect with.
+    \brief     This function uses an extension as an effect on a document.
+    \param     module   Extension to effect with.
     \param     doc      Document to run through the effect.
 
     This function is a little bit trickier than the previous two.  It

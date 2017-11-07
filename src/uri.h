@@ -53,7 +53,7 @@ public:
     /**
      * Determines if the URI represented is 'relative' as per RFC 2396.
      *
-     * Relative URI references are distinguished by not begining with a
+     * Relative URI references are distinguished by not beginning with a
      * scheme name.
      *
      * @return \c true if the URI is relative, \c false if it is absolute.

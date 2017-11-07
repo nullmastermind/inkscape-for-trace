@@ -70,7 +70,7 @@ while( my $t = $p->get_token ) {
     if( $t->[0] eq 'S' and lc $t->[1] eq 'h2') {
 	$t = $p->get_token;
 	if( $t->[1] =~ /Presentation/ ) {
-	    print "Found: $t->[1], quiting.\n";
+	    print "Found: $t->[1], quitting.\n";
 	    last;
 	}
     }

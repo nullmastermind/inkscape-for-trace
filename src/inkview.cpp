@@ -60,8 +60,8 @@ public:
     // this list contains all arguments that are not recognized as an option (so needs to be checked)
     Glib::OptionGroup::vecustrings filenames;
 
-    bool fullscreen = false; // wether to launch in fullscreen mode
-    bool recursive = false;  // wether to search folders for SVG files recursively
+    bool fullscreen = false; // whether to launch in fullscreen mode
+    bool recursive = false;  // whether to search folders for SVG files recursively
     int timer = 0;           // time (in seconds) after which the next image of the slideshow is automatically loaded
     double scale = 1;        // scale factor for images
                              //   (currently only applied to the first image - others are resized to window dimensions)

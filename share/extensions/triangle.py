@@ -147,7 +147,7 @@ class Grid_Polar(inkex.Effect):
             s_b = self.options.s_b
             a_a = self.options.a_a*pi/180 #in rad
             
-            if (a_a < pi/2.0) and (s_a < s_b) and (s_a > s_b*sin(a_a) ): #this is an ambigous case
+            if (a_a < pi/2.0) and (s_a < s_b) and (s_a > s_b*sin(a_a) ): #this is an ambiguous case
                 ambiguous=True#we will give both answers
             else:
                 ambiguous=False

@@ -694,7 +694,7 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
 
     set_local_only(false);
 
-    /* Initalize to Autodetect */
+    /* Initialize to Autodetect */
     extension = NULL;
     /* No filename to start out with */
     myFilename = "";
@@ -956,7 +956,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
 
     set_local_only(false);
 
-    /* Initalize to Autodetect */
+    /* Initialize to Autodetect */
     extension = NULL;
     /* No filename to start out with */
     myFilename = "";
@@ -1438,7 +1438,7 @@ FileExportDialogImpl::FileExportDialogImpl(Gtk::Window &parentWindow, const Glib
 
     set_local_only(false);
 
-    /* Initalize to Autodetect */
+    /* Initialize to Autodetect */
     extension = NULL;
     /* No filename to start out with */
     myFilename = "";

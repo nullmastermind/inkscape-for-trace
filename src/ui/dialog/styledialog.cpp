@@ -191,7 +191,7 @@ StyleDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path) co
 
 
 /**
- * Allow dropping only inbetween other selectors.
+ * Allow dropping only in between other selectors.
  */
 bool
 StyleDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& dest,
@@ -750,7 +750,7 @@ void StyleDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 /**
  * @brief StyleDialog::_getIdList
  * @param sel
- * @return This function returns a comma seperated list of ids for objects in input vector.
+ * @return This function returns a comma separated list of ids for objects in input vector.
  * It is used in creating an 'id' selector. It relies on objects having 'id's.
  */
 Glib::ustring StyleDialog::_getIdList(std::vector<SPObject*> sel)

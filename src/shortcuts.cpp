@@ -291,7 +291,7 @@ Inkscape::XML::Document *sp_shortcut_create_template_file(char const *filename) 
 
 /*
  * Get a list of keyboard shortcut files names and paths from the system and users paths
- * Dont add the users custom keyboards file
+ * Don't add the users custom keyboards file
  */
 void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<Glib::ustring> *paths) {
     using namespace Inkscape::IO::Resource;

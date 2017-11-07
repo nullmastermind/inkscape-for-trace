@@ -32,7 +32,7 @@ typedef enum {
     NODE_CUSP,
 /**  This node continuously joins two segments, with continuous *unit* tangent. */
     NODE_SMOOTH,
-/**  This node is symmetric. I.e. continously joins two segments with continuous derivative */
+/**  This node is symmetric. I.e. continuously joins two segments with continuous derivative */
     NODE_SYMM
 } NodeType;
 

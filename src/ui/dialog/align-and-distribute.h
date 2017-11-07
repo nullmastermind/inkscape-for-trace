@@ -185,7 +185,7 @@ private :
 
 
     virtual void on_button_click() {
-        //Retreive selected objects
+        //Retrieve selected objects
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;
 

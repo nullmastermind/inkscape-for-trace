@@ -181,7 +181,7 @@ class Grid_Polar(inkex.Effect):
                               self.options.a_divs_th, 'RadialGridline'+str(i), grid)
         
         if self.options.a_subdivs > 1: #draw angular subdivs
-            for i in range(0, self.options.a_divs): #for each major divison
+            for i in range(0, self.options.a_divs): #for each major division
                 for j in range(1, self.options.a_subdivs): #draw the subdivisions
                     angle = i*dtheta-j*dtheta/self.options.a_subdivs+pi/2.0 # the angle of the subdivion line
                     draw_SVG_line(dr*self.options.a_subdivs_cent*sin(angle),

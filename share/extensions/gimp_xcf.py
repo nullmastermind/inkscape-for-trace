@@ -153,7 +153,7 @@ class MyEffect(inkex.Effect):
         if (self.options.saveGrid and self.document.xpath(gridXpath, namespaces=inkex.NSS)):
             gridNode = self.xpathSingle(gridXpath)
             if gridNode != None:
-                # These attributes could be nonexistant
+                # These attributes could be nonexistent
                 spacingX = gridNode.get('spacingx')
                 if spacingX == None:
                     spacingX = 1

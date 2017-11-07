@@ -35,7 +35,7 @@ $ARCH-toolchain \
 $ARCH-cmake \
 $ARCH-ninja
 
-# install Inkscape dependecies (required)
+# install Inkscape dependencies (required)
 eval pacman -S --needed --noconfirm \
 $ARCH-gc \
 $ARCH-gsl \
@@ -47,7 +47,7 @@ $ARCH-gtkmm3 \
 $ARCH-gdl \
 $ARCH-libsoup
 
-# install Inkscape dependecies (optional)
+# install Inkscape dependencies (optional)
 eval pacman -S --needed --noconfirm \
 $ARCH-poppler \
 $ARCH-potrace \

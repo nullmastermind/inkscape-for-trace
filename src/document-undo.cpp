@@ -34,7 +34,7 @@
  * Gtk spinbutton) from the UI into a single undoable step.
  *
  * For controls implemented by Sodipodi itself, implementing undo as a
- * single step is usually done in a more efficent way. Most controls have
+ * single step is usually done in a more efficient way. Most controls have
  * the abstract model of grab, drag, release, and change user
  * action. During the grab phase, all modifications are done to the
  * SPObject directly - i.e. they do not change XML tree, and thus do not

@@ -171,7 +171,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 
 // get_stock_item returns a pointer to an instance of the desired stock object in the current doc
 // if necessary it will import the object. Copes with name clashes through use of the inkscape:stockid property
-// This should be set to be the same as the id in the libary file.
+// This should be set to be the same as the id in the library file.
 
 SPObject *get_stock_item(gchar const *urn, gboolean stock)
 {

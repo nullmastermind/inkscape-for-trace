@@ -306,7 +306,7 @@ class FuncPlot(inkex.Effect):
                     clipId = self.uniqueId('clipPath')
                     clip.set('id', clipId)
                     newpath.set('clip-path', 'url(#'+clipId+')')
-                # option wether to remove the rectangle or not.
+                # option whether to remove the rectangle or not.
                 if self.options.remove:
                     node.getparent().remove(node)
         if newpath is None:

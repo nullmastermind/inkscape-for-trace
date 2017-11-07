@@ -289,7 +289,7 @@ void ColorNotebook::_updateICCButtons()
 
             /* Some literature states that when the sum of paint values exceed 320%, it is considered to be a satured
                color,
-                which means the paper can get too wet due to an excessive ammount of ink. This may lead to several
+                which means the paper can get too wet due to an excessive amount of ink. This may lead to several
                issues
                 such as misalignment and poor quality of printing in general.*/
             if (ink_sum > 3.2)

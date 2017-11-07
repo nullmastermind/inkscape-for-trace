@@ -105,7 +105,7 @@
       </arg>
       <arg type="s" name="type" direction="in" >
         <doc:doc>
-          <doc:summary>A single letter denoting what type of node is beeing appended.</doc:summary>
+          <doc:summary>A single letter denoting what type of node is being appended.</doc:summary>
         </doc:doc>
       </arg>
       <arg type="ad" name="arguments" direction="in" >

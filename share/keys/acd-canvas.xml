@@ -38,7 +38,7 @@ has. E.g. both Airbrush, Speaker Notes and Multigon tools have A as shortcut.
 This is so weird for Inkscape that we cannot even emulate that properly :-)
 
 Following tools exist in Canvas and have a shortcut, but are not used in this 
-scheme due to reasons explained above and absense of such tools in Inkscape:
+scheme due to reasons explained above and absence of such tools in Inkscape:
 
 Linear Dimensioning Tool - somewhat close to Dimensions+Measure Path
 Knife tool - K

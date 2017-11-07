@@ -4,7 +4,7 @@
 Copyright (c) 2005-2015 authors:
 Original version: Toine de Greef (a.degreef@chello.nl)
 Modified (2010-2015) by Nicolas Dufour (nicoduf@yahoo.fr) (blur support, units
-convertion, comments, and some other fixes)
+conversion, comments, and some other fixes)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2863,7 +2863,7 @@ exclude-result-prefixes="rdf xlink xs exsl libxslt inkscape">
 
 <!-- 
   // Clip Geometry for path //
-  TODO: PathGeometry is positionned in the object's space, and thus needs to be translated.
+  TODO: PathGeometry is positioned in the object's space, and thus needs to be translated.
 -->
 <xsl:template mode="geometry" match="*[name(.) = 'path']">
   <PathGeometry>

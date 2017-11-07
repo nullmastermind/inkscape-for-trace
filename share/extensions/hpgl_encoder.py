@@ -284,14 +284,14 @@ class hpglEncoder:
         return [x, y]
 
     def processOffset(self, cmd, posX, posY, pen):
-        # calculate offset correction (or dont)
+        # calculate offset correction (or don't)
         if self.toolOffset == 0.0 or self.dryRun:
             self.storePoint(cmd, posX, posY, pen)
         else:
             # insert data into cache
             self.vData.pop(0)
             self.vData.insert(3, [cmd, posX, posY, pen])
-            # decide if enough data is availabe
+            # decide if enough data is available
             if self.vData[2][1] != 'False':
                 if self.vData[1][1] == 'False':
                     self.storePoint(self.vData[2][0], self.vData[2][1], self.vData[2][2], self.vData[2][3])
