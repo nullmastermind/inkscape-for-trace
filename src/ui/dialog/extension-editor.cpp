@@ -116,7 +116,7 @@ ExtensionEditor::setExtensionIter(const Gtk::TreeModel::iterator &iter)
 }
 
 /**
- * Called every time a new extention is selected
+ * Called every time a new extension is selected
  *
  * This function is set up to handle the signal for a changed extension
  * from the tree view in the left pane.  It figure out which extension

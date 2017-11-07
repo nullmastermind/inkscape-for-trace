@@ -602,7 +602,7 @@ extension-element-prefixes="math">
 
 <!--
   // Linear gradient //
-  Full convertion to FXG would require some math.
+  Full conversion to FXG would require some math.
 -->
 <xsl:template name="linearGradient">
   <xsl:param name="id" />
@@ -657,7 +657,7 @@ extension-element-prefixes="math">
 <!--
   // Radial gradient //
     
-  Full convertion to FXG would require some math.
+  Full conversion to FXG would require some math.
 -->
 <xsl:template name="radialGradient">
   <xsl:param name="id" />

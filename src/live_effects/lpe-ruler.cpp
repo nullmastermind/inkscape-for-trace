@@ -171,7 +171,7 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
     if (border_marks == BORDERMARK_END || border_marks == BORDERMARK_BOTH){
         Point A = pwd2_in.lastValue();
         Point n = rot90(unit_vector(speed.lastValue()))*sign;
-        //speed.lastValue() is somtimes wrong when the path is closed: a tiny line seg might added at the end to fix rounding errors...
+        //speed.lastValue() is sometimes wrong when the path is closed: a tiny line seg might added at the end to fix rounding errors...
         //TODO: Find a better fix!! (How do we know if the path was closed?)
         if ( A == pwd2_in.firstValue() &&
              speed.segs.size() > 1 &&

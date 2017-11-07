@@ -38,7 +38,7 @@ class GimpXCFBasicTest(unittest.TestCase):
         self.assertEqual(e.valid, 0)
 
     def test_empty_layer_file(self):
-        # default-inkscape-SVG.svg is a copy of the defaut Inkscape
+        # default-inkscape-SVG.svg is a copy of the default Inkscape
         # template, with one empty layer.
         # The file must have at least one non empty layer and thus the
         # extension rejects it and send an error message.

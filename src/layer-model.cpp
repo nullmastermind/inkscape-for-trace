@@ -138,7 +138,7 @@ void LayerModel::toggleLockOtherLayers(SPObject *object) {
     bool othersLocked = false;
     std::vector<SPObject*> layers;
     for ( SPObject* obj = Inkscape::next_layer(currentRoot(), object); obj; obj = Inkscape::next_layer(currentRoot(), obj) ) {
-        // Dont lock any ancestors, since that would in turn lock the layer as well
+        // Don't lock any ancestors, since that would in turn lock the layer as well
         if (!obj->isAncestorOf(object)) {
             layers.push_back(obj);
             othersLocked |= !SP_ITEM(obj)->isLocked();

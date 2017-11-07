@@ -54,7 +54,7 @@ class Grid_Polar(inkex.Effect):
         self.OptionParser.add_option("--dx",
                         action="store", type="float", 
                         dest="dx", default=100.0,
-                        help="Major X divison Spacing")
+                        help="Major X division Spacing")
         self.OptionParser.add_option("--x_subdivs",
                         action="store", type="int", 
                         dest="x_subdivs", default=2,
@@ -183,12 +183,12 @@ class Grid_Polar(inkex.Effect):
         draw_SVG_rect(0, 0, xmax, ymax, self.options.border_th,
                       'none', 'Border', grid) #border rectangle
         
-        #DO THE X DIVISONS======================================
+        #DO THE X DIVISIONS======================================
         sd  = self.options.x_subdivs #sub divs per div
         ssd = self.options.x_subsubdivs #subsubdivs per subdiv
         
-        for i in range(0, self.options.x_divs): #Major x divisons
-            if i>0: #dont draw first line (we made a proper border)
+        for i in range(0, self.options.x_divs): #Major x divisions
+            if i>0: #don't draw first line (we made a proper border)
                 draw_SVG_line(self.options.dx*i, 0,
                               self.options.dx*i,ymax,
                               self.options.x_divs_th,
@@ -226,12 +226,12 @@ class Grid_Polar(inkex.Effect):
                                       self.options.x_subsubdivs_th,
                                       'SubminorXDiv'+str(i)+':'+str(j)+':'+str(k), mminglx)
          
-        #DO THE Y DIVISONS========================================
+        #DO THE Y DIVISIONS========================================
         sd  = self.options.y_subdivs    #sub divs per div
         ssd = self.options.y_subsubdivs #subsubdivs per subdiv
                                       
-        for i in range(0, self.options.y_divs): #Major y divisons
-            if i>0:#dont draw first line (we will make a border)
+        for i in range(0, self.options.y_divs): #Major y divisions
+            if i>0:#don't draw first line (we will make a border)
                 draw_SVG_line(0, self.options.dy*i,
                               xmax, self.options.dy*i,
                               self.options.y_divs_th,

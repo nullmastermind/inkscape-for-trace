@@ -133,7 +133,7 @@ private:
                 This function first find which integer the bit is in by
                 dividing by \c BITS_IN_INT and then which bit in the
                 integer by getting the modulus.  The selected integer is
-                the \c |= with a \c 1 shifted left by the possition.
+                the \c |= with a \c 1 shifted left by the position.
             */
             inline void set (const unsigned int pos) {
                 unsigned int array_pos = pos / BITS_IN_INT;

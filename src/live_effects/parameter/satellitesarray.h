@@ -5,14 +5,14 @@
  * Inkscape::LivePathEffectParameters
  * Copyright (C) Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
  * Special thanks to Johan Engelen for the base of the effect -powerstroke-
- * Also to ScislaC for point me to the idea
- * Also su_v for his construvtive feedback and time
+ * Also to ScislaC for pointing me to the idea
+ * Also su_v for his constructive feedback and time
  * To Nathan Hurst for his review and help on refactor
- * and finaly to Liam P. White for his big help on coding, that save me a lot of
- * hours
+ * and finally to Liam P. White for his big help on coding, 
+ * that saved me a lot of hours
  *
  *
- * This parameter act as bridge from pathVectorSatellites class to serialize it as a LPE
+ * This parameter acts as a bridge from pathVectorSatellites class to serialize it as a LPE
  * parameter
  *
  * Released under GNU GPL, read the file 'COPYING' for more information

@@ -1,5 +1,5 @@
 /** @file
- * Miscellanous operations on selected items.
+ * Miscellaneous operations on selected items.
  */
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -1998,7 +1998,7 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
         if (iter) {
             SPIPaint *iter_paint = (type == SP_FILL_COLOR) ? &(iter->style->fill) : &(iter->style->stroke);
             match = false;
-            if (sel_paint->isColor() && iter_paint->isColor() // color == color comparision doesnt seem to work here.
+            if (sel_paint->isColor() && iter_paint->isColor() // color == color comparison doesn't seem to work here.
                 && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {
                 match = true;
             } else if (sel_paint->isPaintserver() && iter_paint->isPaintserver()) {

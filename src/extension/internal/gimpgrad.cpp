@@ -35,7 +35,7 @@ namespace Internal {
 /**
     \brief  A function to allocate anything -- just an example here
     \param  module  Unused
-    \return Whether the load was sucessful
+    \return Whether the load was successful
 */
 bool GimpGrad::load (Inkscape::Extension::Extension */*module*/)
 {
@@ -106,10 +106,10 @@ static Glib::ustring stop_svg(ColorRGBA const in_color, double const location)
     of entries just reading until it fails.
 
     The other small piece of trickery here is that GIMP gradients define
-    a left possition, right possition and middle possition.  SVG gradients
-    have no middle possition in them.  In order to handle this case the
+    a left position, right position and middle position.  SVG gradients
+    have no middle position in them.  In order to handle this case the
     left and right colors are averaged in a linear manner and the middle
-    possition is used for that color.
+    position is used for that color.
 
     That is another point, the GIMP gradients support many different types
     of gradients -- linear being the most simple.  This plugin assumes

@@ -520,7 +520,7 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
             Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             for (unsigned i=0; i<subpaths.size(); i++){
                 paths.push_back(subpaths[i]);
-                //FIXME: do we have to be more carefull when trying to access stroke width?
+                //FIXME: do we have to be more careful when trying to access stroke width?
                 stroke_widths.push_back(lpeitem->style->stroke_width.computed);
             }
         }

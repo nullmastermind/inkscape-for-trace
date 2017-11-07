@@ -1236,7 +1236,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         sp_canvas_item_destroy(measure_tmp_items[idx]);
     }
     measure_tmp_items.clear();
-    //TODO:Calculate the measure area for current lenght and origin
+    //TODO:Calculate the measure area for current length and origin
     // and use canvas->requestRedraw. In the calculation need a gap for outside text
     // maybe this remove the trash lines on measure use
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

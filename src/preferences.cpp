@@ -774,7 +774,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     node->setAttribute(attr_key.c_str(), value.c_str());
 }
 
-// The _extract* methods are where the actual wrok is done - they define how preferences are stored
+// The _extract* methods are where the actual work is done - they define how preferences are stored
 // in the XML file.
 
 bool Preferences::_extractBool(Entry const &v)

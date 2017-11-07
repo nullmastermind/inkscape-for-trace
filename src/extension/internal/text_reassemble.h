@@ -231,7 +231,7 @@ typedef struct {
    \brief List of all members of a single complex.
 */
 typedef struct {
-   int        *members;        /**< array of immediate children (for TR_PARA_* these are indicies 
+   int        *members;        /**< array of immediate children (for TR_PARA_* these are indices 
                                     for TR_TEXT or TR_LINE complexes also in cxi. For TR_TEXT
                                     and TR_LINE these are indices to the actual text in tpi.)         */
    uint32_t    space;          /**< storage slots allocated                                           */

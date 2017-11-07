@@ -19,7 +19,7 @@ namespace UI {
 namespace Dialog {
 
 //Yes, I know we shouldn't hardcode CMYK. This class needs to be refactored
-// in order to accomodate spot colors and color components defined using 
+// in order to accommodate spot colors and color components defined using 
 // ICC colors. --Juca
 
 void PrintColorsPreviewDialog::toggle_cyan(){

@@ -1100,7 +1100,7 @@ struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
         return license_by_uri;
     }
     else if (license_by_uri != NULL) {
-        // Only cc:license property, set structure for backward compatiblity
+        // Only cc:license property, set structure for backward compatibility
         setLicense(document, license_by_uri);
 
         return license_by_uri;
@@ -1224,7 +1224,7 @@ void rdf_add_from_preferences(SPDocument *doc)
         return;
     }
 
-    // If there is already some metadata in the doc (from a template) dont add default metadata
+    // If there is already some metadata in the doc (from a template) don't add default metadata
     for (struct rdf_work_entity_t *entity = rdf_work_entities; entity && entity->name; entity++) {
         if ( entity->editable == RDF_EDIT_GENERIC &&
                 rdf_get_work_entity (doc, entity)) {

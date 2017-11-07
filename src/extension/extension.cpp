@@ -365,7 +365,7 @@ Extension::get_name (void)
     mark to the world that it has been deactivated.  It also removes
     the current implementation and replaces it with a standard one.  This
     makes it so that we don't have to continually check if there is an
-    implementation, but we are gauranteed to have a benign one.
+    implementation, but we are guaranteed to have a benign one.
 
     \warning It is important to note that there is no 'activate' function.
     Running this function is irreversable.

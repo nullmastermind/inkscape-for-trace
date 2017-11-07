@@ -343,7 +343,7 @@ PathParam::set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & newpa
  *
  * If write_to_svg = true :
  *          The new path data is written to SVG. In this case the signal_path_changed signal
- *          is not directly emited in this method, because writing to SVG
+ *          is not directly emitted in this method, because writing to SVG
  *          triggers the LPEObject to which this belongs to call Effect::setParameter which calls
  *          PathParam::readSVGValue, which finally emits the signal_path_changed signal.
  * If write_to_svg = false :

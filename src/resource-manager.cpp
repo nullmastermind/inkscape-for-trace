@@ -130,7 +130,7 @@ public:
     /**
      * Try to parse href into a local filename using standard methods.
      *
-     * @return true if successfull.
+     * @return true if successful.
      */
     bool extractFilepath( Glib::ustring const &href, std::string &uri );
 
@@ -138,7 +138,7 @@ public:
      * Try to parse href into a local filename using some non-standard methods.
      * This means the href is likely invalid and should be rewritten.
      *
-     * @return true if successfull.
+     * @return true if successful.
      */
     bool reconstructFilepath( Glib::ustring const &href, std::string &uri );
 
@@ -362,7 +362,7 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
 
                     SPObject *updated = doc->getObjectByRepr(ir);
                     if (updated) {
-                        // force immediate update of dependant attributes
+                        // force immediate update of dependent attributes
                         updated->updateRepr();
                     }
 

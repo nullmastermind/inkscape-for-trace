@@ -21,7 +21,7 @@ This code defines a basic class (PathModifier) of effects whose purpose is
 to somehow deform given objects: one common tasks for all such effect is to
 convert shapes, groups, clones to paths. The class has several functions to
 make this (more or less!) easy.
-As an exemple, a second class (Diffeo) is derived from it,
+As an example, a second class (Diffeo) is derived from it,
 to implement deformations of the form X=f(x,y), Y=g(x,y)...
 
 TODO: Several handy functions are defined, that might in fact be of general

@@ -563,7 +563,7 @@ namespace Widget {
           if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
           std::string ott_list = "OpenType tables not included above: ";
           for(it = table_copy.begin(); it != table_copy.end(); ++it) {
-              // std::cout << "Other: " << it->first << "  Occurances: " << it->second << std::endl;
+              // std::cout << "Other: " << it->first << "  Occurrences: " << it->second << std::endl;
               ott_list += it->first;
               ott_list += ", ";
           }

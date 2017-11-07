@@ -97,7 +97,7 @@ def parsePath(d):
             else:                
                 command = token
         else:
-            #command was omited
+            #command was omitted
             #use last command's implicit next command
             needParam = False
             if lastCommand:

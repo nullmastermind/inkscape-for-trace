@@ -146,7 +146,7 @@ FileOpenDialogImplWin32::FileOpenDialogImplWin32(Gtk::Window &parent,
                                        const gchar *title) :
     FileDialogBaseWin32(parent, dir, title, fileTypes, "dialogs.open")
 {
-    // Initalize to Autodetect
+    // Initialize to Autodetect
     _extension = NULL;
 
     // Set our dialog type (open, import, etc...)
@@ -1329,7 +1329,7 @@ void FileOpenDialogImplWin32::render_preview()
         GetBValue(background) / 255.0);
     context->paint();
 
-    //----- Draw the drop shaddow -----//
+    //----- Draw the drop shadow -----//
 
     // Left Edge
     x = frameX + shaddowOffsetX - halfBlurRadius;

@@ -8,9 +8,9 @@
 #   MODE
 #     list          - list dependencies in human-readable form with full path and list of dependents
 #     list-compact  - list dependencies in compact form (as a plain list of filenames)
-#     check         - check for missing or unused dependecies (see below for details)
-#     check-missing - check if all required dependecies are present in PATH
-#                     exits with error code 2 if missing dependecies are found and prints the list to stderr
+#     check         - check for missing or unused dependencies (see below for details)
+#     check-missing - check if all required dependencies are present in PATH
+#                     exits with error code 2 if missing dependencies are found and prints the list to stderr
 #     check-unused  - check if any of the libraries in the root of PATH are unused and prints the list to stderr
 #
 #  PATH

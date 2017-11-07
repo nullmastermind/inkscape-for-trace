@@ -14,7 +14,7 @@ its own group.
 
 The whole sphere can be tilted towards or away from the veiwer by a given 
 number of degrees. If the whole sphere is then rotated normally in Inkscape,
-any position can be acheived.
+any position can be achieved.
 
 There is an option to hide the lines at the back of the sphere, as if the 
 sphere were opaque.

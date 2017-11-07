@@ -195,7 +195,7 @@ struct OrderingGroupConnection {
         Connect(1, toIn);
     }
 
-    // Connect one of the conection endpoints to the given point
+    // Connect one of the connection endpoints to the given point
     void Connect(int index, OrderingGroupPoint *point)
     {
         assert(point);

@@ -205,7 +205,7 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
         output /= 2.;
 
         return output;
-        /*Of course, the result is not perfect, but on a graphical point of view, this is sufficent.*/
+        /*Of course, the result is not perfect, but on a graphical point of view, this is sufficient.*/
 
     }
 

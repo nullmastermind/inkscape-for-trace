@@ -88,7 +88,7 @@ def run(command_format, prog_name):
     except Exception:
         pass
 
-    # Ouput error message (if any) and exit.
+    # Output error message (if any) and exit.
     if msg is not None:
         sys.stderr.write(msg + "\n")
         sys.exit(1)

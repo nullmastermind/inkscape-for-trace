@@ -733,7 +733,7 @@ void FillNStroke::updateFromPaint()
                 if (!pattern) {
 
                     /* No Pattern in paint selector should mean that we just
-                     * changed mode - dont do jack.
+                     * changed mode - don't do jack.
                      */
 
                 } else {

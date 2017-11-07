@@ -145,7 +145,7 @@ void FilterDisplacementMap::area_enlarge(Geom::IntRect &area, Geom::Affine const
     double scalex = scale/2.*(std::fabs(trans[0])+std::fabs(trans[1]));
     double scaley = scale/2.*(std::fabs(trans[2])+std::fabs(trans[3]));
 
-    //FIXME: no +2 should be there!... (noticable only for big scales at big zoom factor)
+    //FIXME: no +2 should be there!... (noticeable only for big scales at big zoom factor)
     area.expandBy(scalex+2, scaley+2);
 }
 

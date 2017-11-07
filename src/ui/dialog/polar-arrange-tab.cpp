@@ -183,7 +183,7 @@ static Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle
 
 /**
  * Returns the selected anchor point in document coordinates. If anchor
- * is 0 to 8, then a bounding box point has been choosen. If it is 9 however
+ * is 0 to 8, then a bounding box point has been chosen. If it is 9 however
  * the rotational center is chosen.
  * @todo still using a hack to get the real coordinate space (subtracting document height
  * 		 and inverting axes)

@@ -96,7 +96,7 @@ GType ege_adjustment_action_get_type( void );
 
 /*
  * Note: This normally could be implemented via a GType property for the class to construct,
- * but gtkmm classes implemented in C++ only will often not funciton properly.
+ * but gtkmm classes implemented in C++ only will often not function properly.
  *
  */
 
