@@ -446,8 +446,6 @@ void SymbolsDialog::rebuild() {
     search->set_text("");
   }
   if (symbol_document) {
-    idleconn.disconnect();
-    idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
     addSymbolsInDoc(symbol_document);
   }
 }
@@ -896,8 +894,6 @@ void SymbolsDialog::clearSearch()
     SPDocument* symbol_document = selectedSymbols();
     if (symbol_document) {
       //We are not in search all docs
-      idleconn.disconnect();
-      idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
       icons_found = false;
       addSymbolsInDoc(symbol_document);
     } else {
@@ -923,8 +919,6 @@ void SymbolsDialog::beforeSearch(GdkEventKey* evt)
   progress_bar->set_fraction(0.0);
   enableWidgets(false);
   SPDocument* symbol_document = selectedSymbols();
-  idleconn.disconnect();
-  idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
   if (symbol_document) {
     //We are not in search all docs
     search->set_text(_("Searching..."));
@@ -932,6 +926,8 @@ void SymbolsDialog::beforeSearch(GdkEventKey* evt)
     icons_found = false;
     addSymbolsInDoc(symbol_document);
   } else {
+    idleconn.disconnect();
+    idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
     search->set_text(_("Loading documents..."));
   }
 }
@@ -1094,6 +1090,10 @@ void SymbolsDialog::addSymbolsInDoc(SPDocument* symbol_document) {
     search->set_text(search_str);
     sensitive = true;
     enableWidgets(true);
+    idleconn.disconnect();
+  } else {
+    idleconn.disconnect();
+    idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
   }
 #if GTK_CHECK_VERSION(3,2,4)
   Glib::ustring current = symbol_set->get_active_text();
@@ -1135,6 +1135,7 @@ void SymbolsDialog::addSymbols() {
     overlay_title->show();
     overlay_desc->show();
 #endif
+    idleconn.disconnect();
     sensitive = false;
     search->set_text(search_str);
     sensitive = true;
