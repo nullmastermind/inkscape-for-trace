@@ -447,6 +447,9 @@ void SymbolsDialog::rebuild() {
   }
   if (symbol_document) {
     addSymbolsInDoc(symbol_document);
+  } else {
+    idleconn.disconnect();
+    idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
   }
 }
 
@@ -897,6 +900,8 @@ void SymbolsDialog::clearSearch()
       icons_found = false;
       addSymbolsInDoc(symbol_document);
     } else {
+      idleconn.disconnect();
+      idleconn = Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::callbackSymbols));
       enableWidgets(true);
     }
   }
