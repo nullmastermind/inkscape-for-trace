@@ -86,8 +86,8 @@ private:
     std::pair<Glib::ustring, SPDocument*> getSymbolsSet(Glib::ustring title);
     void addSymbol( SPObject* symbol, Glib::ustring doc_title);
     SPDocument* symbolsPreviewDoc();
-    void symbolsInDocRecursive (SPObject *r, std::vector<std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title);
-    std::vector<std::pair<Glib::ustring, SPSymbol*> > symbolsInDoc( SPDocument* document, Glib::ustring doc_title);
+    void symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title);
+    std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > symbolsInDoc( SPDocument* document, Glib::ustring doc_title);
     void useInDoc(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> useInDoc( SPDocument* document);
     void beforeSearch(GdkEventKey* evt);
@@ -106,7 +106,7 @@ private:
     Glib::RefPtr<Gdk::Pixbuf> getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize);
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbol_sets;
-    std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
+    std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > l;
     // Index into sizes which is selected
     int pack_size;
     // Scale factor

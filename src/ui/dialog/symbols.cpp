@@ -828,7 +828,7 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
       for(auto const &symbol_document_map : symbol_sets) {
         symbol_set->append(symbol_document_map.first);
       }
-      symbol_set->set_active_text(new_title);
+      symbol_set->set_active_text(title);
       sensitive = true;
       return std::make_pair(title, symbol_sets[title]);
     }
@@ -873,7 +873,7 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
     return std::make_pair(new_title, symbol_doc);
 }
 
-void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::vector<std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title)
+void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > &l, Glib::ustring doc_title)
 {
   if(!r) return;
 
@@ -882,19 +882,24 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::vector<std::pair<Gl
     return;
   }
 
-  if ( dynamic_cast<SPSymbol *>(r) ) {
-    l.push_back(std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r)));
+  if ( dynamic_cast<SPSymbol *>(r) && r->title()) {
+    Glib::ustring current = symbol_set->get_active_text();
+    if (current == ALLDOCS) {
+      l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+    } else {
+      l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+    }
   }
   for (auto& child: r->children) {
     symbolsInDocRecursive(&child, l, doc_title);
   }
 }
 
-std::vector<std::pair<Glib::ustring, SPSymbol*> > 
+std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > 
 SymbolsDialog::symbolsInDoc( SPDocument* symbol_document, Glib::ustring doc_title)
 {
 
-  std::vector<std::pair<Glib::ustring, SPSymbol*> > l;
+  std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > l;
   if (symbol_document) {
     symbolsInDocRecursive (symbol_document->getRoot(), l , doc_title);
   }
@@ -999,8 +1004,8 @@ bool SymbolsDialog::callbackSymbols(){
   if (l.size()) {
     showOverlay();
     for (auto symbol_data = l.begin(); symbol_data != l.end();) {
-      Glib::ustring doc_title = symbol_data->first;
-      SPSymbol * symbol = symbol_data->second;
+      Glib::ustring doc_title = symbol_data->second.first;
+      SPSymbol * symbol = symbol_data->second.second;
       counter_symbols ++;
       gchar const *symbol_title_char = symbol->title();
       gchar const *symbol_desc_char = symbol->description();
@@ -1116,8 +1121,10 @@ void SymbolsDialog::addSymbols() {
       continue;
     }
     Glib::ustring doc_title = documentTitle(symbol_document);
-    std::vector<std::pair<Glib::ustring, SPSymbol*> > l_tmp = symbolsInDoc(symbol_document, doc_title);
-    l.insert(l.end(), std::make_move_iterator(l_tmp.begin()), std::make_move_iterator(l_tmp.end()));
+    std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > l_tmp = symbolsInDoc(symbol_document, doc_title);
+    for(auto &p : l_tmp ) {
+      l[p.first] = p.second;
+    }
     l_tmp.clear();
   }
   counter_symbols = 0;
@@ -1310,11 +1317,11 @@ gchar const *buffer =
 "</svg>";
   
   SPDocument* doc = SPDocument::createNewDocFromMem( buffer, strlen(buffer), FALSE );
-  std::vector<std::pair<Glib::ustring, SPSymbol*> > symbols_data = symbolsInDoc(doc, "Overlay Doc");
+  std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > symbols_data = symbolsInDoc(doc, "Overlay Doc");
   Glib::RefPtr<Gdk::Pixbuf> pixbuf(NULL);
   for(auto data:symbols_data) {
-    Glib::ustring doc_title = data.first;
-    SPSymbol * symbol = data.second;
+    Glib::ustring doc_title = data.second.first;
+    SPSymbol * symbol = data.second.second;
     if (!strcmp(symbol->getId(), icon_title)) {
       pixbuf = drawSymbol(symbol, psize);
       return pixbuf;
