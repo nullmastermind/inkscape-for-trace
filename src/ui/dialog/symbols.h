@@ -94,10 +94,13 @@ private:
     void unsensitive(GdkEventKey* evt);
     void addSymbols();
     void addSymbolsInDoc(SPDocument* document);
+    void showOverlay();
+    void hideOverlay();
     void clearSearch();
     bool callbackSymbols();
+    bool callbackAllSymbols();
     void enableWidgets(bool enable);
-    Glib::ustring ellipsize(Glib::ustring data, size_t limit = 40);
+    Glib::ustring ellipsize(Glib::ustring data, size_t limit);
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
     Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol, unsigned force_psize = 0);
     Glib::RefPtr<Gdk::Pixbuf> getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize);
