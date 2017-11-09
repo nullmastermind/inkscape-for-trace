@@ -161,7 +161,11 @@ public:
      * of the ui widgets to match the xml).
      */
     void updateFitMarginsUI(Inkscape::XML::Node *nv_repr);
- 
+    
+    /**
+     * Updates the margin widgets. If lock widget is active
+     */
+    void on_margin_changed(RegisteredScalar* widg);
     /**
      * Updates the scale widgets. (Just changes the values of the ui widgets.)
      */
@@ -225,13 +229,15 @@ protected:
     //### Fit Page options
     Gtk::Expander        _fitPageMarginExpander;
 
-    Gtk::Grid            _marginTable;
-    RegisteredScalar     _marginTop;
-    RegisteredScalar     _marginLeft;
-    RegisteredScalar     _marginRight;
-    RegisteredScalar     _marginBottom;
-    Gtk::Button          _fitPageButton;
-    bool                 _lockMarginUpdate;
+    Gtk::Grid             _marginTable;
+    RegisteredCheckButton _marginLock;
+    RegisteredScalar      _marginTop;
+    RegisteredScalar      _marginLeft;
+    RegisteredScalar      _marginRight;
+    RegisteredScalar      _marginBottom;
+    Gtk::Button           _fitPageButton;
+    bool                  _lockMarginUpdate;
+    bool                  _marginLocked;
 
     // Document scale
     Gtk::Frame           _scaleFrame;
@@ -265,6 +271,10 @@ protected:
     sigc::connection    _changedvy_connection;
     sigc::connection    _changedvw_connection;
     sigc::connection    _changedvh_connection;
+    sigc::connection    _changedmt_connection;
+    sigc::connection    _changedmb_connection;
+    sigc::connection    _changedml_connection;
+    sigc::connection    _changedmr_connection;
 
     Registry            *_widgetRegistry;
 
