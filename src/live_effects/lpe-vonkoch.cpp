@@ -169,7 +169,7 @@ LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)
 }
 
 
-//Usefull?? 
+//Useful?? 
 //void 
 //LPEVonKoch::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 /*{

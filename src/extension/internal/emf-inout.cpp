@@ -1056,7 +1056,7 @@ Emf::pix_to_abs_size(PEMF_CALLBACK_DATA d, double px)
 void
 Emf::snap_to_faraway_pair(double *x, double *y)
 {
-    if((abs(abs(*x) - faraway)/faraway <= 1e-4) && (abs(abs(*y) - faraway)/faraway <= 1e-4)){
+    if((std::abs(std::abs(*x) - faraway)/faraway <= 1e-4) && (std::abs(std::abs(*y) - faraway)/faraway <= 1e-4)){
         *x = (*x > 0 ? faraway : -faraway);
         *y = (*y > 0 ? faraway : -faraway);
     }

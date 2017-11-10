@@ -240,7 +240,7 @@ class ParamCurves(inkex.Effect):
 
                 # add path into SVG structure
                 node.getparent().append(newpath)
-                # option wether to remove the rectangle or not.
+                # option whether to remove the rectangle or not.
                 if self.options.remove:
                   node.getparent().remove(node)
 

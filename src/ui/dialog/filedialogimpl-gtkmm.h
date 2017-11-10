@@ -446,7 +446,7 @@ public:
         { return destUnitsSpinner.getUnitAbbr(); }
 
     /**
-     * Return the destination DPI image resulution, if bitmap
+     * Return the destination DPI image resolution, if bitmap
      */
     double getDestinationDPI()
         { return destDPISpinner.getValue(); }

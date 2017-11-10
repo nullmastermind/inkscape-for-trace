@@ -66,7 +66,7 @@ private:
     class MarkerColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         Gtk::TreeModelColumn<Glib::ustring> label;
-        Gtk::TreeModelColumn<const gchar *> marker;   // ustring doesnt work here on windows due to unicode
+        Gtk::TreeModelColumn<const gchar *> marker;   // ustring doesn't work here on windows due to unicode
         Gtk::TreeModelColumn<gboolean> stock;
         Gtk::TreeModelColumn<Gtk::Image *> image;
         Gtk::TreeModelColumn<gboolean> history;

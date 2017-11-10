@@ -835,13 +835,13 @@ Effect::defaultParamSet()
             bool valid = prefs->getEntry(pref_path).isValid();
             const gchar * set_or_upd;
             Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + Glib::ustring(param->param_getDefaultSVGValue()) + Glib::ustring("\n");
-            Glib::ustring ove = Glib::ustring(_("<b>Default value overrided:</b> ")) + Glib::ustring(prefs->getString(pref_path)) + Glib::ustring("\n");
+            Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> ")) + Glib::ustring(prefs->getString(pref_path)) + Glib::ustring("\n");
             if (valid) {
                 set_or_upd = _("Update");
                 def = Glib::ustring(_("<b>Default value:</b> <s>")) + Glib::ustring(param->param_getDefaultSVGValue()) + Glib::ustring("</s>\n");
             } else {
                 set_or_upd = _("Set");
-                ove = Glib::ustring(_("<b>Default value overrided:</b> None\n"));
+                ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
             }
             Glib::ustring cur = Glib::ustring(_("<b>Current parameter value:</b> ")) + Glib::ustring(param->param_getSVGValue());
             Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
@@ -892,7 +892,7 @@ Effect::setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, gchar * 
     set->set_label((Glib::ustring)label);
     unset->set_sensitive(true);
     Glib::ustring def = Glib::ustring(_("<b>Default value:</b> <s>")) + Glib::ustring(defvalue) + Glib::ustring("</s>\n");
-    Glib::ustring ove = Glib::ustring(_("<b>Default value overrided:</b> ")) + Glib::ustring(value) + Glib::ustring("\n");
+    Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> ")) + Glib::ustring(value) + Glib::ustring("\n");
     Glib::ustring cur = Glib::ustring(_("<b>Current parameter value:</b> ")) + Glib::ustring(value);
     parameter_label->set_tooltip_markup((tooltip + def + ove + cur).c_str());
 }
@@ -906,7 +906,7 @@ Effect::unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, gchar 
     set->set_label((Glib::ustring)label);
     unset->set_sensitive(false);
     Glib::ustring def = Glib::ustring(_("<b>Default value:</b> ")) + Glib::ustring(defvalue) + Glib::ustring("\n");
-    Glib::ustring ove = Glib::ustring(_("<b>Default value overrided:</b> None\n"));
+    Glib::ustring ove = Glib::ustring(_("<b>Default value overridden:</b> None\n"));
     Glib::ustring cur = Glib::ustring(_("<b>Current parameter value:</b> ")) + Glib::ustring(value);
     parameter_label->set_tooltip_markup((tooltip + def + ove + cur).c_str());
 }

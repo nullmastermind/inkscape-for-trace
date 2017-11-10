@@ -113,7 +113,7 @@ using namespace Inkscape::IO::Resource;
 namespace Inkscape {
 namespace Extension {
 
-/** This is the extention that all files are that are pulled from
+/** This is the extension that all files are that are pulled from
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inx"
 

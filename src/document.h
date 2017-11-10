@@ -312,7 +312,7 @@ private:
  *
  * 1. There is reference request dictionary, that contains
  * objects (styles) needing certain id. Object::build checks
- * final id against it, and invokes necesary methods
+ * final id against it, and invokes necessary methods
  *
  * 2. Removing referenced object is simply prohibited -
  * needs analyse, how we can deal with situations, where

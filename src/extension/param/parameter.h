@@ -158,7 +158,7 @@ public:
     const static int GUI_PARAM_WIDGETS_SPACING = 4;
     /** Recommended indentation width of parameters (in px) */
     const static int GUI_INDENTATION = 12;
-    /** Recommended maximum line lenght for wrapping textual parameters (in chars) */
+    /** Recommended maximum line length for wrapping textual parameters (in chars) */
     const static int GUI_MAX_LINE_LENGTH = 60;
 
 

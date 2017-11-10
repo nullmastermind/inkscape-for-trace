@@ -345,7 +345,7 @@ PathVector LPEEmbroderyStitch::doEffect_path(PathVector const &path_in)
                     Piecewise<D2<SBasis> > pwOneEqdist = arc_length_parametrization(pwOne);
                     Interval pwdomain = pwOneEqdist.domain();
 
-                    // Compute the points of teh shortened piece
+                    // Compute the points of the shortened piece
                     Coord len = pwdomain.max() - pwdomain.min();
                     Coord offs = 0.5 * (show_stitch_gap < 0.5 * len ? show_stitch_gap : 0.5 * len);
                     Point p1 = pwOneEqdist.valueAt(pwdomain.min() + offs);

@@ -36,7 +36,7 @@ namespace Internal {
 /**
     \brief  A function to allocated anything -- just an example here
     \param  module  Unused
-    \return Whether the load was sucessful
+    \return Whether the load was successful
 */
 bool
 BlurEdge::load (Inkscape::Extension::Extension */*module*/)

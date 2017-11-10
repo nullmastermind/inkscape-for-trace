@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 """
 
 # Run a command that generates an UniConvertor export file from a SVG file.
-# On success, outputs the contents of the UniConverter convertion to stdout, 
+# On success, outputs the contents of the UniConverter conversion to stdout, 
 # and exits with a return code of 0.
 # On failure, outputs an error message to stderr, and exits with a return
 # code of 1.
@@ -85,7 +85,7 @@ def run(command_format, prog_name, uniconv_format):
     except Exception:
         pass
 
-    # Ouput error message (if any) and exit.
+    # Output error message (if any) and exit.
     if msg is not None:
         sys.stderr.write(msg + "\n")
         sys.exit(1)

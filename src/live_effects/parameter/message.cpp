@@ -20,7 +20,8 @@ MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip
       message(g_strdup(default_message)),
       defmessage(g_strdup(default_message))
 {
-
+    _label  = NULL;
+    _min_height = -1;
 }
 
 void
@@ -54,6 +55,16 @@ MessageParam::param_getDefaultSVGValue() const
     return defmessage;
 }
 
+void
+MessageParam::param_set_min_height(int height)
+{
+    _min_height = height;
+    if (_label) {
+        _label->set_size_request(-1, _min_height);
+    }
+}
+
+
 Gtk::Widget *
 MessageParam::param_newWidget()
 {
@@ -61,11 +72,12 @@ MessageParam::param_newWidget()
     Gtk::Widget * widg_frame = frame->get_label_widget();
     widg_frame->set_margin_right(5);
     widg_frame->set_margin_left(5);
-    Gtk::Label * label = new Gtk::Label (message, Gtk::ALIGN_END);
-    label->set_use_underline (true);
-    label->set_use_markup();
-    label->set_line_wrap(true);
-    Gtk::Widget * widg_label = dynamic_cast<Gtk::Widget *> (label);
+    _label = new Gtk::Label (message, Gtk::ALIGN_END);
+    _label->set_use_underline (true);
+    _label->set_use_markup();
+    _label->set_line_wrap(true);
+    _label->set_size_request(-1, _min_height);
+    Gtk::Widget* widg_label = dynamic_cast<Gtk::Widget *> (_label);
     widg_label->set_margin_top(8);
     widg_label->set_margin_bottom(10);
     widg_label->set_margin_right(6);

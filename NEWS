@@ -66,7 +66,7 @@ Extended video: <https://www.youtube.com/watch?v=bFakiI5f0-Y>
 Based in Spiro Live Path Effect, now show result while drawing.
 
   • Nodes cusp (SHIFT) and Spiro.
-  • Handle append path on cusp and Spiro mode whith helper preview path.
+  • Handle append path on cusp and Spiro mode with helper preview path.
 
 Spirolive.gif
 
@@ -103,7 +103,7 @@ The options in the Live effect dialog give you control on bspline paths.
   • Ignore cusp nodes, affect to all other widgets changes and, for example,
     retain cusp nodes when you change the power.
   • Change only selected nodes, affect to all other widgets changes.
-  • Show a helper path whith the final shape and the generated new nodes.
+  • Show a helper path with the final shape and the generated new nodes.
 
  
 
@@ -189,7 +189,7 @@ A LPE version of Show Handles extension.
   • Work on paths, shapes and groups.
   • Work on clones
   • Node and Handle shapes resizeables
-  • If not a clone, is a destructive LPE, dont save styles, work on a copy!
+  • If not a clone, is a destructive LPE, don't save styles, work on a copy!
 
 ShowHandles.gif
 

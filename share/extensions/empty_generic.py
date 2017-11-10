@@ -61,7 +61,7 @@ class C(inkex.Effect):
       namedview.set( 'bordercolor', pagecolor )
       namedview.set( 'borderopacity', "0" )
 
-    # This nees more thought... we need to set "Current layer" to (root), how?
+    # This needs more thought... we need to set "Current layer" to (root), how?
     # if self.options.generic_layer:
     #   # Add layer
     #   inkex.debug( "We want a layer" )

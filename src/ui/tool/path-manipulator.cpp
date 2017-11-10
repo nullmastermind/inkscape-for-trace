@@ -1688,7 +1688,7 @@ void PathManipulator::_updateOutlineOnZoomChange()
     if (_show_path_direction) _updateOutline();
 }
 
-/** Compute the radius from the edge of the path where clicks chould initiate a curve drag
+/** Compute the radius from the edge of the path where clicks should initiate a curve drag
  * or segment selection, in window coordinates. */
 double PathManipulator::_getStrokeTolerance()
 {

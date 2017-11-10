@@ -386,7 +386,7 @@ Geom::Affine SPUse::get_root_transform() {
 
 /**
  * Returns the transform that leads to the use from its immediate original.
- * Does not inlcude the original's transform if any.
+ * Does not include the original's transform if any.
  */
 Geom::Affine SPUse::get_parent_transform() {
     Geom::Affine t(Geom::identity());

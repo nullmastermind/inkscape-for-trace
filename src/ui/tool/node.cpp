@@ -168,7 +168,7 @@ void Handle::move(Geom::Point const &new_pos)
         }
         setPosition(new_pos);
 
-        //move the handler and its oposite the same proportion
+        //move the handler and its opposite the same proportion
         if(_pm()._isBSpline()){
             setPosition(_pm()._bsplineHandleReposition(this, false));
             bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -186,7 +186,7 @@ void Handle::move(Geom::Point const &new_pos)
             / Geom::L2sq(direction)) * direction;
         setRelativePos(new_delta);
 
-        //move the handler and its oposite the same proportion
+        //move the handler and its opposite the same proportion
         if(_pm()._isBSpline()){ 
             setPosition(_pm()._bsplineHandleReposition(this, false));
             bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -213,7 +213,7 @@ void Handle::move(Geom::Point const &new_pos)
     }
     setPosition(new_pos);
 
-    // moves the handler and its oposite the same proportion
+    // moves the handler and its opposite the same proportion
     if(_pm()._isBSpline()){
         setPosition(_pm()._bsplineHandleReposition(this, false));
         bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -307,7 +307,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-//this function moves the handler and its oposite to the default proportion of DEFAULT_START_POWER
+//this function moves the handler and its opposite to the default proportion of DEFAULT_START_POWER
 void Handle::handle_2button_press(){
     if(_pm()._isBSpline()){
         setPosition(_pm()._bsplineHandleReposition(this, DEFAULT_START_POWER));
@@ -364,7 +364,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
-        // moves the handler and its oposite in X fixed positions depending on parameter "steps with control" 
+        // moves the handler and its opposite in X fixed positions depending on parameter "steps with control" 
         // by default in live BSpline
         if(_pm()._isBSpline()){
             setPosition(new_pos);
@@ -478,7 +478,7 @@ Glib::ustring Handle::_getTip(unsigned state) const
 {
     char const *more;
     // a trick to mark as bspline if the node has no strength, we are going to use it later
-    // to show the appropiate messages. We cannot do it in any different way becasue the function is constant
+    // to show the appropriate messages. We cannot do it in any different way because the function is constant
     Handle *h = const_cast<Handle *>(this);
     bool isBSpline = _pm()._isBSpline();
     bool can_shift_rotate = _parent->type() == NODE_CUSP && !other()->isDegenerate();

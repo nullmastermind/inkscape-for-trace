@@ -33,7 +33,6 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
            _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     setupDialog(title);
-    set_relief (Gtk::RELIEF_NONE);
     _preview.show();
     add (_preview);
     set_tooltip_text (tip);

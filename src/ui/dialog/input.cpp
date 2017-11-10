@@ -559,7 +559,7 @@ Glib::RefPtr<Gdk::Pixbuf> InputDialogImpl::getPix(PixId id)
 }
 
 
-// Now that we've defined the *Impl class, we can do the method to aquire one.
+// Now that we've defined the *Impl class, we can do the method to acquire one.
 InputDialog &InputDialog::getInstance()
 {
     InputDialog *dialog = new InputDialogImpl();

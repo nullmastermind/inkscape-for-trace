@@ -125,7 +125,7 @@ document_interface_node (DocumentInterface *doc_interface, gchar *svgtype,
 
 
 /****************************************************************************
-     ENVIORNMENT FUNCTIONS
+     ENVIRONMENT FUNCTIONS
 ****************************************************************************/
 gdouble
 document_interface_document_get_width (DocumentInterface *doc_interface);

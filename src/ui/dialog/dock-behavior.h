@@ -70,7 +70,7 @@ private:
 
     /** Internal helpers */
     Gtk::Paned *_getPaned();              //< gives the parent pane, if the dock item has one
-    void _requestHeight(int height);      //< tries to resize the dock item to the requested hieght
+    void _requestHeight(int height);      //< tries to resize the dock item to the requested height
 
     /** Internal signal handlers */
     void _onHide();

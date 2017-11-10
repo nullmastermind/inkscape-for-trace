@@ -22,7 +22,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 //TODO: growfor/fadefor can be expressed in unit of width.
-//TODO: make round/sharp end choices independant for start and end.
+//TODO: make round/sharp end choices independent for start and end.
 //TODO: define more styles like in calligtool.
 //TODO: allow fancy ends.
 
@@ -166,7 +166,7 @@ LPEDynastroke::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                  //  General  formula:  n1 = w*u with ||u||=1 and u.v = -dw/dt            
                  Piecewise<SBasis> dw = derivative(w);
                  Piecewise<SBasis> ncomp = sqrt(dot(v,v)-dw*dw,.1,3);
-                 //FIXME: is force continuity usefull? compatible with corners?
+                 //FIXME: is force continuity useful? compatible with corners?
 //                 std::cout<<"ici\n";
                  n1 = -dw*v + ncomp*rot90(v);
                  n1 = w*force_continuity(unitVector(n1),.1);

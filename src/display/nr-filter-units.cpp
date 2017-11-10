@@ -83,24 +83,15 @@ Geom::Affine FilterUnits::get_matrix_user2pb() const {
 
 Geom::Affine FilterUnits::get_matrix_units2pb(SPFilterUnits units) const {
     if ( item_bbox && (units == SP_FILTER_UNITS_OBJECTBOUNDINGBOX) ) {
-        Geom::Affine u2pb = get_matrix_user2pb();
-        Geom::Point origo(item_bbox->min());
-        origo *= u2pb;
-        Geom::Point i_end(item_bbox->max()[X], item_bbox->min()[Y]);
-        i_end *= u2pb;
-        Geom::Point j_end(item_bbox->min()[X], item_bbox->max()[Y]);
-        j_end *= u2pb;
 
-        double len_i = sqrt((origo[X] - i_end[X]) * (origo[X] - i_end[X])
-                            + (origo[Y] - i_end[Y]) * (origo[Y] - i_end[Y]));
-        double len_j = sqrt((origo[X] - j_end[X]) * (origo[X] - j_end[X])
-                            + (origo[Y] - j_end[Y]) * (origo[Y] - j_end[Y]));
+        Geom::Affine u2pb = get_matrix_user2pb();
 
         /* TODO: make sure that user coordinate system (0,0) is in correct
          * place in pixblock coordinates */
-        Geom::Scale scaling(1.0 / len_i, 1.0 / len_j);
+        Geom::Scale scaling(item_bbox->width(), item_bbox->height());
         u2pb *= scaling;
         return u2pb;
+
     } else if (units == SP_FILTER_UNITS_USERSPACEONUSE) {
         return get_matrix_user2pb();
     } else {

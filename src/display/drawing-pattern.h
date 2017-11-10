@@ -39,7 +39,7 @@ public:
      */
     void setPatternToUserTransform(Geom::Affine const &new_trans);
     /**
-     * Set the tile rect position and dimentions in content coordinate system
+     * Set the tile rect position and dimensions in content coordinate system
      */
     void setTileRect(Geom::Rect const &tile_rect);
     /**

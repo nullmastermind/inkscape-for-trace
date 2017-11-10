@@ -184,10 +184,12 @@
        <separator/>
        <submenu _name="Cli_p">
            <verb verb-id="ObjectSetClipPath" />
+           <verb verb-id="ObjectSetInverseClipPath" />
            <verb verb-id="ObjectUnSetClipPath" />
        </submenu>
        <submenu _name="Mas_k">
            <verb verb-id="ObjectSetMask" />
+           <verb verb-id="ObjectSetInverseMask" />
            <verb verb-id="ObjectUnSetMask" />
        </submenu>
        <submenu _name="Patter_n">

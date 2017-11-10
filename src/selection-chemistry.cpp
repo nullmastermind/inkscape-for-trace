@@ -1,5 +1,5 @@
 /** @file
- * Miscellanous operations on selected items.
+ * Miscellaneous operations on selected items.
  */
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -1998,7 +1998,7 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
         if (iter) {
             SPIPaint *iter_paint = (type == SP_FILL_COLOR) ? &(iter->style->fill) : &(iter->style->stroke);
             match = false;
-            if (sel_paint->isColor() && iter_paint->isColor() // color == color comparision doesnt seem to work here.
+            if (sel_paint->isColor() && iter_paint->isColor() // color == color comparison doesn't seem to work here.
                 && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {
                 match = true;
             } else if (sel_paint->isPaintserver() && iter_paint->isPaintserver()) {
@@ -3096,7 +3096,6 @@ void ObjectSet::toSymbol()
 
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-
     // Check if something is selected.
     if (isEmpty()) {
       if (desktop())
@@ -3154,8 +3153,11 @@ void ObjectSet::toSymbol()
 
     // For a single group, copy relevant attributes.
     if( single_group ) {
-
         symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
+        symbol_repr->setAttribute("title",  the_group->getAttribute("title"));
+        if (!the_group->getAttribute("title")) {
+            symbol_repr->setAttribute("title", _("Symbol without title"));
+        }
         symbol_repr->setAttribute("class",  the_group->getAttribute("class"));
         Glib::ustring id = the_group->getAttribute("id");
         the_group->setAttribute("id", id + "_transform");
@@ -3214,7 +3216,6 @@ void ObjectSet::unSymbol()
 {
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-
     // Check if something is selected.
     if (isEmpty()) {
         if(desktop())
@@ -3236,8 +3237,12 @@ void ObjectSet::unSymbol()
 
     // Create new <g> and insert in current layer
     Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
-    symbol->parent->getRepr()->appendChild(group);
-
+    //TODO: Better handle if no desktop, currently go to defs without it
+    if(desktop()) {
+        desktop()->currentLayer()->getRepr()->appendChild(group);
+    } else {
+        symbol->parent->getRepr()->appendChild(group);
+    }
     // Move all children of symbol to group
     std::vector<SPObject*> children = symbol->childList(false);
 
@@ -3265,6 +3270,7 @@ void ObjectSet::unSymbol()
     // Copy relevant attributes
     group->setAttribute("style", symbol->getAttribute("style"));
     group->setAttribute("class", symbol->getAttribute("class"));
+    group->setAttribute("title", symbol->getAttribute("title"));
     group->setAttribute("inkscape:transform-center-x",
                         symbol->getAttribute("inkscape:transform-center-x"));
     group->setAttribute("inkscape:transform-center-y",

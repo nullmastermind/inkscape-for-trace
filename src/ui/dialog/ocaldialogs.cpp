@@ -84,7 +84,7 @@ ExportDialog::ExportDialog(Gtk::Window &parentWindow,
      * and a Entry to take the filename
      * Later put the extension selection and checkbox (?)
      */
-    /* Initalize to Autodetect */
+    /* Initialize to Autodetect */
 /*
     extension = NULL;
 */
@@ -1063,7 +1063,7 @@ ImportDialog::ImportDialog(Gtk::Window& parent_window, FileDialogType file_types
                                                    const Glib::ustring &title) :
     FileDialogBase(title, parent_window)
 {
-    // Initalize to Autodetect
+    // Initialize to Autodetect
     extension = NULL;
     // No filename to start out with
     Glib::ustring search_keywords = "";

@@ -79,8 +79,8 @@ public:
     void setSatelliteType(gchar const *A);
     gchar const *getSatelliteTypeGchar() const;
     SatelliteType satellite_type;
-    //The value stored could be a time value of the satellite in the curve or a lenght of distance to the node from the satellite
-    //"is_time" tell is if is a time or lenght value
+    //The value stored could be a time value of the satellite in the curve or a length of distance to the node from the satellite
+    //"is_time" tells us if it's a time or length value
     bool is_time;
     bool selected;
     bool has_mirror;

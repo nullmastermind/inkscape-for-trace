@@ -85,6 +85,9 @@
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 #include "ui/dialog/save-template-dialog.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;
@@ -1592,6 +1595,10 @@ void ObjectVerb::perform( SPAction *action, void *data)
         case SP_VERB_OBJECT_SET_MASK:
             sel->setMask(false, false);
             break;
+        case SP_VERB_OBJECT_SET_INVERSE_MASK:
+            sel->setMask(false, false);
+            Inkscape::LivePathEffect::sp_inverse_powermask(sp_action_get_selection(action));
+            break;
         case SP_VERB_OBJECT_EDIT_MASK:
             sel->editMask(false);
             break;
@@ -1600,6 +1607,10 @@ void ObjectVerb::perform( SPAction *action, void *data)
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
             sel->setMask(true, false);
+            break;
+        case SP_VERB_OBJECT_SET_INVERSE_CLIPPATH:
+            sel->setMask(true, false);
+            Inkscape::LivePathEffect::sp_inverse_powerclip(sp_action_get_selection(action));
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
             sel->setClipGroup();
@@ -2873,12 +2884,16 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("object-flip-vertical")),
     new ObjectVerb(SP_VERB_OBJECT_SET_MASK, "ObjectSetMask", N_("_Set"),
                  N_("Apply mask to selection (using the topmost object as mask)"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_SET_INVERSE_MASK, "ObjectSetInverseMask", N_("_Set Inverse (LPE)"),
+                 N_("Apply inverse mask to selection (using the topmost object as mask)"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_EDIT_MASK, "ObjectEditMask", N_("_Edit"),
                  N_("Edit mask"), INKSCAPE_ICON("path-mask-edit")),
     new ObjectVerb(SP_VERB_OBJECT_UNSET_MASK, "ObjectUnSetMask", N_("_Release"),
                  N_("Remove mask from selection"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_SET_CLIPPATH, "ObjectSetClipPath", N_("_Set"),
                  N_("Apply clipping path to selection (using the topmost object as clipping path)"), NULL),
+    new ObjectVerb(SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, "ObjectSetInverseClipPath", N_("_Set Inverse (LPE)"),
+                 N_("Apply inverse clipping path to selection (using the topmost object as clipping path)"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_CREATE_CLIP_GROUP, "ObjectCreateClipGroup", N_("Create Cl_ip Group"),
                  N_("Creates a clip group using the selected objects as a base"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_EDIT_CLIPPATH, "ObjectEditClipPath", N_("_Edit"),

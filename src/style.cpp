@@ -610,7 +610,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
 
         // Shorthands are not allowed as presentation properites. Note: text-decoration and
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
-        // non-shorthand for compatability with older renders, so they should not be in this list.
+        // non-shorthand for compatibility with older renders, so they should not be in this list.
         // We could add a flag to SPIBase to avoid string comparison.
         if( _properties[i]->name.compare( "font" ) != 0 &&
             _properties[i]->name.compare( "marker" ) != 0 ) {
@@ -2039,7 +2039,7 @@ css_quote(Glib::ustring &val)
             quote = true;
         }
         if( it == val.begin() && !g_ascii_isalpha(*it) ) {
-            // A non-ASCII/non-alpha initial value on any indentifier needs quotes.
+            // A non-ASCII/non-alpha initial value on any identifier needs quotes.
             // (Actually it's a bit more complicated but as it never hurts to quote...)
             quote = true;
         }

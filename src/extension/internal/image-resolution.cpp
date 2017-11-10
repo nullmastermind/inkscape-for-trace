@@ -414,7 +414,7 @@ void ImageResolution::readmagick(char const *fn) {
     x_ = image.xResolution();
     y_ = image.yResolution();
 
-// TODO: find out why the hell the following convertion is necessary
+// TODO: find out why the hell the following conversion is necessary
     if (type == "BMP") {
         x_ = Inkscape::Util::Quantity::convert(x_, "in", "cm");
         y_ = Inkscape::Util::Quantity::convert(y_, "in", "cm");

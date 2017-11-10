@@ -323,7 +323,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
             doc->changeUriAndHrefs(saved_uri);
         }
         doc->setModifiedSinceSave(saved_modified);
-        // free used ressources
+        // free used resources
         g_free(saved_output_extension);
         g_free(saved_dataloss);
         g_free(saved_uri);

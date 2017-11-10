@@ -33,6 +33,8 @@ public:
     void set_dx(double amount);
     void set_dy(double amount);
 
+    virtual Glib::ustring name() { return Glib::ustring("Offset"); }
+
 private:
     double dx, dy;
 };

@@ -41,7 +41,7 @@ DrawingContext::Save::~Save()
 void DrawingContext::Save::save(DrawingContext &dc)
 {
     if (_dc) {
-        // TODO: it might be better to treat this occurence as a bug
+        // TODO: it might be better to treat this occurrence as a bug
         _dc->restore();
     }
     _dc = &dc;

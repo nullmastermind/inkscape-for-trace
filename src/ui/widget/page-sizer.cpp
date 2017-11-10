@@ -219,6 +219,7 @@ PageSizer::PageSizer(Registry & _wr)
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),
+      _marginLock( _("L_ock"), _("Lock margins"), "lock-margins", _wr ),
       _marginTop( _("T_op margin:"), _("Top margin"), "fit-margin-top", _wr ),
       _marginLeft( _("L_eft:"), _("Left margin"), "fit-margin-left", _wr),
       _marginRight( _("Ri_ght:"), _("Right margin"), "fit-margin-right", _wr),
@@ -376,27 +377,33 @@ PageSizer::PageSizer(Registry & _wr)
     _marginTop.set_halign(Gtk::ALIGN_CENTER);
     _marginTop.set_hexpand();
     _marginTop.set_vexpand();
-    _marginTable.attach(_marginTop,     0, 0, 2, 1);
+    
+    _marginTable.attach(_marginTop,     0, 0, 3, 1);
 
-    _marginLeft.set_halign(Gtk::ALIGN_START);
+    _marginLeft.set_halign(Gtk::ALIGN_CENTER);
     _marginLeft.set_hexpand();
     _marginLeft.set_vexpand();
     _marginTable.attach(_marginLeft,    0, 1, 1, 1);
-
-    _marginRight.set_halign(Gtk::ALIGN_END);
+    
+    _marginLock.set_halign(Gtk::ALIGN_CENTER);
+    _marginLock.set_hexpand();
+    _marginLock.set_vexpand();
+    _marginTable.attach(_marginLock,    1, 1, 1, 1);
+    
+    _marginRight.set_halign(Gtk::ALIGN_CENTER);
     _marginRight.set_hexpand();
     _marginRight.set_vexpand();
-    _marginTable.attach(_marginRight,   1, 1, 1, 1);
-
+    _marginTable.attach(_marginRight,   2, 1, 1, 1);
+    
     _marginBottom.set_halign(Gtk::ALIGN_CENTER);
     _marginBottom.set_hexpand();
     _marginBottom.set_vexpand();
-    _marginTable.attach(_marginBottom,  0, 2, 2, 1);
+    _marginTable.attach(_marginBottom,  0, 2, 3, 1);
 
     _fitPageButton.set_halign(Gtk::ALIGN_CENTER);
     _fitPageButton.set_hexpand();
     _fitPageButton.set_vexpand();
-    _marginTable.attach(_fitPageButton, 0, 3, 2, 1);
+    _marginTable.attach(_fitPageButton, 0, 3, 3, 1);
     
     _fitPageButton.set_use_underline();
     _fitPageButton.set_label(_("_Resize page to drawing or selection (Ctrl+Shift+R)"));
@@ -474,6 +481,10 @@ PageSizer::init ()
     _changedvy_connection = _viewboxY.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvw_connection = _viewboxW.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvh_connection = _viewboxH.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
+    _changedmt_connection = _marginTop.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginTop));
+    _changedmb_connection = _marginBottom.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginBottom));
+    _changedml_connection = _marginLeft.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginLeft));
+    _changedmr_connection = _marginRight.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginRight));
     show_all_children();
 }
 
@@ -889,6 +900,24 @@ PageSizer::on_viewbox_changed()
         std::cerr
             << "PageSizer::on_viewbox_changed(): width and height must both be greater than zero."
             << std::endl;
+    }
+}
+
+/**
+ * Callback for viewbox widgets
+ */
+void
+PageSizer::on_margin_changed(RegisteredScalar* widg)
+{
+    double value = widg->getValue(); 
+    if (_widgetRegistry->isUpdating()) return;
+    if (_marginLock.get_active() && !_marginLocked) {
+        _marginLocked = true;
+        _marginLeft.setValue(value);
+        _marginRight.setValue(value);
+        _marginTop.setValue(value);
+        _marginBottom.setValue(value);
+        _marginLocked = false;
     }
 }
 

@@ -252,7 +252,7 @@ InkWeb.__logSequence = function ( msg ) {
 }
 
 InkWeb.logToString = function (conf) {
-  /* Show the log in a formated string.
+  /* Show the log in a formatted string.
   ** conf attributes:
   **   format: a string to format the log itens.
   **   formatError: to format the error log itens.

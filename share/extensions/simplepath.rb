@@ -86,7 +86,7 @@ def parsePath(d)
                   unless lastCommand or token.upcase == 'M'
                 command = token
             else
-                #command was omited
+                #command was omitted
                 #use last command's implicit next command
                 raise 'Invalid path, no initial command.' unless lastCommand
                 if lastCommand =~ /[A-Z]/

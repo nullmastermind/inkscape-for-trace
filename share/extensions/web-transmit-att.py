@@ -28,7 +28,7 @@ class InkWebTransmitAtt(inkwebeffect.InkWebEffect):
         self.OptionParser.add_option("-a", "--att",
                         action="store", type="string",
                         dest="att", default="fill",
-                        help="Attribute to transmited.")
+                        help="Attribute to transmitted.")
         self.OptionParser.add_option("-w", "--when",
                         action="store", type="string",
                         dest="when", default="onclick",

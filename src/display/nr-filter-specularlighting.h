@@ -49,6 +49,8 @@ public:
     double specularExponent;
     guint32 lighting_color;
 
+    virtual Glib::ustring name() { return Glib::ustring("Specular Lighting"); }
+
 private:
     SVGICCColor *icc;
 };

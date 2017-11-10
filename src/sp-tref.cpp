@@ -238,7 +238,7 @@ gchar* SPTRef::description() const {
 }
 
 
-/* For the sigc::connection changes (i.e. when the object being refered to changes) */
+/* For the sigc::connection changes (i.e. when the object being referred to changes) */
 static void
 sp_tref_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPTRef *tref)
 {

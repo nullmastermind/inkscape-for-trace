@@ -616,7 +616,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     // Decide which filter to use for X and Y
     // This threshold was determined by trial-and-error for one specific machine,
     // so there's a good chance that it's not optimal.
-    // Whatever you do, don't go below 1 (and preferrably not even below 2), as
+    // Whatever you do, don't go below 1 (and preferably not even below 2), as
     // the IIR filter gets unstable there.
     bool use_IIR_x = deviation_x > 3;
     bool use_IIR_y = deviation_y > 3;

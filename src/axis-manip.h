@@ -216,7 +216,7 @@ inline Box3D::Axis third_axis_direction (Box3D::Axis plane) {
     return (Box3D::Axis) (plane ^ 0x7);
 }
 
-/* returns the first/second axis direction occuring in the (possibly compound) expression 'dirs' */
+/* returns the first/second axis direction occurring in the (possibly compound) expression 'dirs' */
 inline Box3D::Axis extract_first_axis_direction (Box3D::Axis dirs) {
     if (dirs & Box3D::X) return Box3D::X;
     if (dirs & Box3D::Y) return Box3D::Y;
@@ -231,7 +231,7 @@ inline Box3D::Axis orth_plane_or_axis (Box3D::Axis axis) {
     return (Box3D::Axis) (Box3D::XYZ ^ axis);
 }
 
-/* returns an axis direction perpendicular to the ones occuring in the (possibly compound) expression 'dirs' */
+/* returns an axis direction perpendicular to the ones occurring in the (possibly compound) expression 'dirs' */
 inline Box3D::Axis get_perpendicular_axis_direction (Box3D::Axis dirs) {
     if (!(dirs & Box3D::X)) return Box3D::X;
     if (!(dirs & Box3D::Y)) return Box3D::Y;

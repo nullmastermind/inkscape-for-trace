@@ -2189,13 +2189,13 @@ void PdfParser::fillPatch(GfxPatch *patch, int nComps, int depth) {
   int i;
 
   for (i = 0; i < nComps; ++i) {
-    if (abs(patch->color[0][0].c[i] - patch->color[0][1].c[i])
+    if (std::abs(patch->color[0][0].c[i] - patch->color[0][1].c[i])
 	  > patchColorDelta ||
-	abs(patch->color[0][1].c[i] - patch->color[1][1].c[i])
+	std::abs(patch->color[0][1].c[i] - patch->color[1][1].c[i])
 	  > patchColorDelta ||
-	abs(patch->color[1][1].c[i] - patch->color[1][0].c[i])
+	std::abs(patch->color[1][1].c[i] - patch->color[1][0].c[i])
 	  > patchColorDelta ||
-	abs(patch->color[1][0].c[i] - patch->color[0][0].c[i])
+	std::abs(patch->color[1][0].c[i] - patch->color[0][0].c[i])
 	  > patchColorDelta) {
       break;
     }

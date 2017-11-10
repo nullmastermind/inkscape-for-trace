@@ -82,7 +82,7 @@ static void err(const char *fmt, ...)
  * tree and finds all of the opacities and multiplies them.
  *
  * We use this for our "flat" object output.  If the code is modified
- * to reflect a tree of <groups>, then this will be unneccessary.
+ * to reflect a tree of <groups>, then this will be unnecessary.
  */
 static double effective_opacity(const SPStyle *style)
 {
