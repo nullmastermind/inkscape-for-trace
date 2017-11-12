@@ -70,7 +70,7 @@ PencilTool::PencilTool()
     , state(SP_PENCIL_CONTEXT_IDLE)
     , req_tangent(0, 0)
     , is_drawing(false)
-    , points_parsed(2)
+    , points_parsed(0)
     , sketch_n(0)
     , _powerpreviewtail(NULL)
     , _powerpreview(NULL)
@@ -651,13 +651,8 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
     Inkscape::XML::Node *previewend = NULL;
     if (_powerpreview) {
         Effect* lpe = SP_LPE_ITEM(_powerpreview)->getCurrentLPE();
-        if (write) {
-            lpe->getRepr()->setAttribute("end_linecap_type", "butt");
-        }
-        lpe->getRepr()->setAttribute("interpolator_type" , "SpiroInterpolator");
-        lpe->getRepr()->setAttribute("start_linecap_type", "round");
-        lpe->getRepr()->setAttribute("linejoin_type", "round");
-        
+        //lpe->getRepr()->setAttribute("interpolator_type" , "SpiroInterpolator");
+        //lpe->getRepr()->setAttribute("linejoin_type", "round");
         gchar * path_str = sp_svg_write_path(path);
         _powerpreview->setAttribute("inkscape:original-d" , path_str);
         g_free(path_str);
@@ -672,12 +667,8 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
                 Inkscape::XML::Node *preview = NULL;
                 preview = xml_doc->createElement("svg:path");
                 preview->setAttribute("sodipodi:insensitive", "true");
-                sp_desktop_apply_style_tool(desktop, preview, "/tools/freehand/pencil", false);
                 _powerpreviewtail = SP_ITEM(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(preview));
-                SPCSSAttr *css = sp_css_attr_from_object(_powerpreviewtail, SP_STYLE_FLAG_ALWAYS);
-                std::cout << sp_repr_css_property(css, "stroke", "none") << "sp_repr_css_property(css," << std::endl;
-                sp_repr_css_set_property (css, "fill", sp_repr_css_property(css, "stroke", "none"));
-                sp_repr_css_set_property (css, "stroke","none");
+                SPCSSAttr *css = sp_css_attr_from_object(_powerpreview, SP_STYLE_FLAG_ALWAYS);
                 Glib::ustring css_str;
                 sp_repr_css_write_string(css,css_str);
                 preview->setAttribute("style", css_str.c_str());
@@ -689,18 +680,20 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
     } else {
         previewend = xml_doc->createElement("svg:path");
         previewend->setAttribute("sodipodi:insensitive", "true");
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_set_property (css, "fill","none");
-        sp_repr_css_set_property (css, "stroke","#ff0000");
-        sp_repr_css_set_property (css, "opacity","1");
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        previewend->setAttribute("style", css_str.c_str());
+        sp_desktop_apply_style_tool(desktop, previewend, Glib::ustring("/tools/freehand/pencil").data(), false);
+        _powerpreview = SP_ITEM(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(previewend));
         gchar * path_str = sp_svg_write_path(path);
         previewend->setAttribute("d" , path_str);
         g_free(path_str);
-        _powerpreview = SP_ITEM(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(previewend));
         Inkscape::GC::release(previewend);
+        SPCSSAttr *css = sp_css_attr_from_object(_powerpreview, SP_STYLE_FLAG_ALWAYS);
+        const gchar * stroke = sp_repr_css_property(css, "stroke", "none");
+        const gchar * fill = sp_repr_css_property(css, "fill", "none");
+        sp_repr_css_set_property (css, "fill", stroke);
+        sp_repr_css_set_property (css, "stroke", fill);
+        Glib::ustring css_str;
+        sp_repr_css_write_string(css,css_str);
+        previewend->setAttribute("style", css_str.c_str());
         Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), _powerpreview);
         Effect* lpe = SP_LPE_ITEM(_powerpreview)->getCurrentLPE();
         static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
@@ -735,7 +728,11 @@ PencilTool::addPowerStrokePencil()
     SPCurve * previous_red = red_curve->copy();
     SPCurve * previous_green = green_curve->copy();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    //Simplify a bit the base curve to avoid artifacts
+    double tolerance = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
+    prefs->setDouble("/tools/freehand/pencil/tolerance", 18.0);
     _interpolate();
+    prefs->setDouble("/tools/freehand/pencil/tolerance", tolerance);
     if (sa) {
         curve = sa->curve;
         if (!green_curve->is_empty()) {
@@ -769,7 +766,7 @@ PencilTool::addPowerStrokePencil()
     }
     Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
     Geom::Coord scale = transformCoordinate.expansionX();
-    Geom::PathVector pathvector = curve->get_pathvector();
+    pressure_pv = curve->get_pathvector();
     //pathvector *= transformCoordinate.inverse();
     double zoom = SP_EVENT_CONTEXT(this)->desktop->current_zoom() * 5.0;
     double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
@@ -803,7 +800,7 @@ PencilTool::addPowerStrokePencil()
         }
         if (start || std::abs(previous_pressure - pressure_computed) > gap_pressure  / (zoom * pressure_factor)) {
             Geom::Point position = *point;
-            double pos = Geom::nearest_time(position, pathvector[0]);
+            double pos = Geom::nearest_time(position, pressure_pv[0]);
             if (!start && 
                 (pos > 1e6 || 
                 (previous_point != Geom::Point(0,0) && Geom::distance(*point, previous_point) < tol)) )
@@ -816,19 +813,23 @@ PencilTool::addPowerStrokePencil()
             tmp_points.push_back(Geom::Point(pos, pressure_computed));
         }
     }
-    this->ps.clear();
-    this->wps.clear();
     if (tmp_points.size() > 0) {
-        Geom::Point start = Geom::Point(0,0);
-        double start_pos = 0.0;
+        bool write = false;
+        if (points_parsed != tmp_points.size()) {
+            points_parsed = tmp_points.size();
+            write = true;
+        }
         std::vector<Geom::Point> pointsend;
+        Geom::Point prev = Geom::Point(0,0);
+        if (tmp_points.size() > 2) {
+            prev = tmp_points[tmp_points.size() - 3];
+        }
+        Geom::Point start = Geom::Point(0,0);
         if (tmp_points.size() > 1) {
             start = tmp_points[tmp_points.size() - 2];
-        } else {
-            start = tmp_points[tmp_points.size() - 1];
         }
-        Geom::Point middle = tmp_points[tmp_points.size()-1];
-        Geom::Path out = pathvector[0];
+        Geom::Point end = tmp_points[tmp_points.size()-1];
+        Geom::Path out = pressure_pv[0];
         if (tmp_points.size() == 1) {
             pointsend.push_back(tmp_points[0]);
             this->points.push_back(tmp_points[0]);
@@ -836,24 +837,24 @@ PencilTool::addPowerStrokePencil()
             pointsend.push_back(tmp_points[0]);
             pointsend.push_back(tmp_points[1]);
             this->points.push_back(tmp_points[1]);
-        } else if (points_parsed != tmp_points.size()-2) {
-            out = pathvector[0].portion(start[Geom::X], pathvector[0].size());
+        } else if (write) {
+            Geom::Point pos = pressure_pv[0].pointAt(start[Geom::X]);
+            out = pressure_pv[0].portion(prev[Geom::X], pressure_pv[0].size());
+            pointsend.push_back(Geom::Point(0, prev[Geom::Y]));
+            pointsend.push_back(Geom::Point(Geom::nearest_time(pos, out), start[Geom::Y]));
+            pointsend.push_back(Geom::Point(out.size(), end[Geom::Y]));
             this->points.push_back(Geom::Point(start[Geom::X], start[Geom::Y]));
-            pointsend.push_back(Geom::Point(0, start[Geom::Y]));
-            pointsend.push_back(Geom::Point(out.size(), middle[Geom::Y]));
         } else {
             double pressure_base = pow(this->pressure, pressure_sensibility);
             double pressure_shirnked = (pressure_base * (max - min)) + min;
             double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
-            out = pathvector[0].portion(middle[Geom::X], pathvector[0].size());
-            pointsend.push_back(Geom::Point(0, middle[Geom::Y]));
+            Geom::Point pos = pressure_pv[0].pointAt(end[Geom::X]);
+            out = pressure_pv[0].portion(start[Geom::X], pressure_pv[0].size());
+            pointsend.push_back(Geom::Point(0, start[Geom::Y]));
+            pointsend.push_back(Geom::Point(Geom::nearest_time(pos, out), end[Geom::Y]));
             pointsend.push_back(Geom::Point(out.size(), pressure_computed));
         }
-        bool write = false;
-        if (tmp_points.size() > 1 && points_parsed != tmp_points.size()-2) {
-            points_parsed = tmp_points.size()-2;
-            write = true;
-        }
+
         _powerStrokePreview(out * transformCoordinate.inverse(), pointsend,  write);
         pointsend.clear();
     }
@@ -900,11 +901,11 @@ void PencilTool::_interpolate() {
         double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 1.0, 100.0) * 0.4;
         tol = std::min(tol,tol2);
     }
-    //To avoid artifacts on pressure power stroke
-    if (input_has_pressure) {
-        tol = std::min(18.0,tol);
+    //To avoid artifacts on pressure power
+    if (input_has_pressure && tol < 18.0 * 0.4) {
+        tol = 18.0 * 0.4;
     }
-    std::cout << tol << "tol" << std::endl;
+
     double tolerance_sq = 0.02 * square(this->desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
 
     g_assert(is_zero(this->req_tangent) || is_unit_vector(this->req_tangent));

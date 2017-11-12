@@ -235,14 +235,18 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (dc->input_has_pressure) {
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
-            Geom::Path path;
+            Geom::PathVector pathv;
             if (sp_shape) {
                 SPCurve * c = sp_shape->getCurve();
                 if (!c) {
                     pt->points.clear();
                     return;
                 }
-                path = c->get_pathvector()[0];
+                pathv = c->get_pathvector();
+                SPCurve * tmp_curve_to_adjust = new SPCurve();
+                tmp_curve_to_adjust->set_pathvector(pt->pressure_pv);
+                sp_shape->setCurve(tmp_curve_to_adjust, true);
+                tmp_curve_to_adjust->unref();
             }
             pt->removePowerStrokePreview();
             double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
@@ -262,7 +266,17 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
             Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
             Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
             lpe->getRepr()->setAttribute("interpolator_type" , "CubicBezierSmooth");
-            static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
+            LPEPowerStroke* pslpe = static_cast<LPEPowerStroke*>(lpe);
+            if (pslpe) {
+                pslpe->offset_points.param_set_and_write_new_value(pt->points);
+                if (sp_shape) {
+                    SPCurve * tmp_curve_to_adjust = new SPCurve();
+                    tmp_curve_to_adjust->set_pathvector(pathv);
+                    sp_shape->setCurve(tmp_curve_to_adjust, true);
+                    tmp_curve_to_adjust->unref();
+                    pslpe->adjustForNewPath(pt->pressure_pv);
+                }
+            }
             pt->points.clear();
             return;
         }

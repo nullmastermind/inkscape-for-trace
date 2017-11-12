@@ -10,6 +10,7 @@
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
+#include <2geom/pathvector.h>
 
 
 #define DDC_MIN_PRESSURE      0.0
@@ -47,6 +48,8 @@ public:
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
     std::vector<double> wps;
+    
+    Geom::PathVector pressure_pv;
 
     void addPowerStrokePencil();
     void removePowerStrokePreview();
