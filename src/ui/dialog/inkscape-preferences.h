@@ -500,10 +500,9 @@ protected:
     static void AddFirstAndLastCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPressureSensibility(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
+    static void AddPressureSensitivity(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddPowerStrokeKnotDistanceFactor(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddPowerStrokeGapPressureFactor(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
-    static void AddPowerStrokeUseOptimusValues(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = NULL);
 
     void on_pagelist_selection_changed();

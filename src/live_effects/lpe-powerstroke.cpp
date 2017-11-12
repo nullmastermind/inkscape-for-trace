@@ -563,13 +563,19 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::PathVector path_out;
     if (path_in.empty()) {
-        return path_out;
+        return path_in;
     }
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = pathv[0].toPwSb();
+    if (!pwd2_in.size()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
+    if (!der.size()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > n = unitVector(der,0.0001);
-    if (!n.size() || !pwd2_in.size() || !n.size()) {
+    if (!n.size()) {
         return path_in;
     }
     n = rot90(n);
@@ -639,10 +645,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
-
-    Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
+    Piecewise<D2<SBasis> > pwd2_out = compose(pwd2_in,x) + y*compose(n,x);
     Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
-
     Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     if (pathv[0].closed()) {

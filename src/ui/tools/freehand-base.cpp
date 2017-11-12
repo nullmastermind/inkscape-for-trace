@@ -235,39 +235,33 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (dc->input_has_pressure) {
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
+            Geom::Path path;
             if (sp_shape) {
                 SPCurve * c = sp_shape->getCurve();
                 if (!c) {
+                    pt->points.clear();
                     return;
                 }
-                pt->addPowerStrokePencil(c);
+                path = c->get_pathvector()[0];
             }
+            pt->removePowerStrokePreview();
+            double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
+            double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
+            if (min > max){
+                min = max;
+            }
+            Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
+            Geom::Coord scale = transformCoordinate.expansionX();
+            double pressure_shirnked = (1.0 * (max - min)) + min;
+            double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
             if(pt->points.empty()){
-                //if use mouse give a line
-                double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
-                double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
-                if (min > max){
-                    min = max;
-                }
-                Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-                Geom::Coord scale = transformCoordinate.expansionX();
-                double pressure_shirnked = (1.0 * (max - min)) + min;
-                double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
-                pt->points.push_back(Geom::Point(0,pressure_computed));
+                pt->points.push_back(Geom::Point(0, pressure_computed));
             }
             Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
             Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-            if(prefs->getBool("/tools/freehand/pencil/optimus-powerstroke",true)) {
-                lpe->getRepr()->setAttribute("start_linecap_type", "round");
-                lpe->getRepr()->setAttribute("end_linecap_type", "round");
-                lpe->getRepr()->setAttribute("sort_points", "true");
-                lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
-                lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-                lpe->getRepr()->setAttribute("miter_limit", "4");
-                lpe->getRepr()->setAttribute("linejoin_type", "round");
-            }
+            lpe->getRepr()->setAttribute("interpolator_type" , "CubicBezierSmooth");
             static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
             pt->points.clear();
             return;
