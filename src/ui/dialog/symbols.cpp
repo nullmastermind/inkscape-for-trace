@@ -69,8 +69,8 @@ namespace Inkscape {
 namespace UI {
 
 namespace Dialog {
-const Glib::ustring CURRENTDOC = _("Current Document");
-const Glib::ustring ALLDOCS    = _("All symbols sets");
+const Glib::ustring CURRENTDOC = _("Current document");
+const Glib::ustring ALLDOCS    = _("All symbol sets");
 // See: http://developer.gnome.org/gtkmm/stable/classGtk_1_1TreeModelColumnRecord.html
 class SymbolColumns : public Gtk::TreeModel::ColumnRecord
 {
@@ -102,6 +102,7 @@ SymbolColumns* SymbolsDialog::getColumns()
 SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SYMBOLS),
   store(Gtk::ListStore::create(*getColumns())),
+  all_docs_processed(0),
   icon_view(0),
   current_desktop(0),
   desk_track(),
@@ -448,40 +449,29 @@ void SymbolsDialog::showOverlay() {
 #if GTK_CHECK_VERSION(3,2,4)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
   overlay_icon->set_from_icon_name("none", iconsize);
-  if (current == ALLDOCS && 
-      search->get_text() != _("Loading all symbols...") &&
-      !l.size()) 
+  if (current == ALLDOCS && !l.size()) 
   {
     if (!all_docs_processed ) {
       overlay_icon->set_from_icon_name("searching", iconsize);
-      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets ...")) + Glib::ustring("</span>"));
+      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("First search can be slow.")) + Glib::ustring("</span>"));
     } else if (!icons_found && !search_str.empty()) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term.")) + Glib::ustring("</span>"));
     } else {
       overlay_icon->set_from_icon_name("searching", iconsize);
-      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets ...")) + Glib::ustring("</span>"));
+      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("")) + Glib::ustring("</span>"));
     }
-  } else if (current == ALLDOCS && search->get_text() == _("Loading all symbols...")) {
-    if (!all_docs_processed) {
-      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Loading all symbol sets ...")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">")+ Glib::ustring(_("When run for the first time, search will be slow.\nPlease wait ...")) + Glib::ustring("</span>"));
-      overlay_icon->show();
-      overlay_title->show();
-      overlay_icon->set_from_icon_name("searching", iconsize);
-      overlay_desc->show();
-    } 
   } else if (!number_symbols && (current != CURRENTDOC || !search_str.empty())) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term,\nor switch to a different symbol set.")) + Glib::ustring("</span>"));
   } else if (!number_symbols && current == CURRENTDOC) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\"size=\"large\">")  + Glib::ustring(_("No symbols found")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">")  + Glib::ustring(_("No symbols in current document\nChoose a different symbol set\nor add a new symbol.")) + Glib::ustring("</span>"));
+      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">")  + Glib::ustring(_("No symbols in current document.\nChoose a different symbol set\nor add a new symbol.")) + Glib::ustring("</span>"));
   } else if (!icons_found && !search_str.empty()) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("You could try a different search term,\nor switch to a different symbol set.")) + Glib::ustring("</span>"));
+      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term,\nor switch to a different symbol set.")) + Glib::ustring("</span>"));
   } 
   overlay_opacity->show();
   overlay_icon->show();
@@ -1081,7 +1071,7 @@ bool SymbolsDialog::callbackAllSymbols(){
     progress_bar->set_fraction(1.0);
     all_docs_processed = true;
     addSymbols();
-    search->set_text("Searching....");
+    search->set_text("Searching...");
     return false;
   }
   return true;
