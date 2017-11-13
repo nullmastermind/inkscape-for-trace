@@ -48,10 +48,8 @@ public:
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
     std::vector<double> wps;
-    
-    Geom::PathVector pressure_pv;
 
-    void addPowerStrokePencil();
+    void addPowerStrokePencil(SPCurve * c);
     void removePowerStrokePreview();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
