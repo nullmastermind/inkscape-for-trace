@@ -864,6 +864,8 @@ Application::remove_desktop (SPDesktop * desktop)
         g_error("Attempted to remove desktop not in list.");
     }
 
+    desktop->setEventContext("");
+
     if (DESKTOP_IS_ACTIVE (desktop)) {
         signal_deactivate_desktop.emit(desktop);
         if (_desktops->size() > 1) {

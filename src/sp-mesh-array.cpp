@@ -935,27 +935,18 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
         mg_array = mg;
     }
 
-    // First we must delete reprs for old mesh rows and patches.
-    std::vector<SPObject*> descendant_objects;
-    std::vector<Inkscape::XML::Node *> descendant_reprs;
-    for (auto& row: mg_array->children) {
-        descendant_reprs.push_back(row.getRepr());
-        descendant_objects.push_back(&row);
-        for (auto& patch: row.children) {
-            descendant_reprs.push_back(patch.getRepr());
-            descendant_objects.push_back(&patch);
-            for (auto& stop: patch.children) {
-                descendant_reprs.push_back(stop.getRepr());
-                descendant_objects.push_back(&stop);
-            }
-        }
+    // First we must delete reprs for old mesh rows and patches. We only need to call the
+    // deleteObject() method, which in turn calls sp_repr_unparent. Since iterators do not play
+    // well with boost::intrusive::list (which ChildrenList derive from) we need to iterate over a
+    // copy of the pointers to the objects.
+    std::vector<SPObject*> children_pointers;
+    for (auto& row : mg_array->children) {
+        children_pointers.push_back(&row);
     }
 
-    for (auto i:descendant_objects)
+    for (auto i : children_pointers) {
         i->deleteObject();
-
-    for (auto i:descendant_reprs)
-        sp_repr_unparent(i);
+    }
 
     // Now we build new reprs
     Inkscape::XML::Node *mesh = mg->getRepr();
