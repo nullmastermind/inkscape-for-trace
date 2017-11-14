@@ -19,7 +19,7 @@ Creates a new filter primitive under this filter object.
 New primitive is placed so that it will be executed after all filter
 primitives defined beforehand for this filter object.
 Should this filter not have enough space for a new primitive, the filter
-is enlarged to accomodate the new filter element. It may be enlarged by more
+is enlarged to accommodate the new filter element. It may be enlarged by more
 that one element.
 Returns a pointer to the filter primitive created.
 Returns NULL, if type is not valid filter primitive type or filter primitive
@@ -225,5 +225,5 @@ Passing either of these functions a negative value, NaN or infinity is
 considered an error and no changes to filter state are made. If not set, 
 default value of zero is used, which means the filter results in 
 transparent black image.
-(NB: as for now, the default value can be overriden with configuration 
+(NB: as for now, the default value can be overridden with configuration 
 file parameter options.filtertest)

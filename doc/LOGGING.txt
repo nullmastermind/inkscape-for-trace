@@ -1,7 +1,7 @@
 
 Logging Inkscape events can be done by switching on DEBUG logs:
 
-Set the enviroment variables:
+Set the environment variables:
 
 INKSCAPE_DEBUG_LOG=filename.xml
 INKSCAPE_DEBUG_FILTER=Comma,List,Options
