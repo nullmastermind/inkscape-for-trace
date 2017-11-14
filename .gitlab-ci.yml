@@ -64,6 +64,18 @@ inkscape:mac:
       - build/
   allow_failure: true
 
+inkscape:doc:
+  stage: build
+  script:
+    - cd buildtools
+    - doxygen Doxyfile
+    - doxygen Doxyfile-extensions
+    - cd ..
+  artifacts:
+    paths:
+      - doc/doxygen
+      - doc/doxygen-extensions
+
 # This job is a static analysis build by clang.
 # It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
 # Make sure the timeout of the build is big enough
