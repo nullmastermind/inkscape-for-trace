@@ -652,7 +652,7 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
     Inkscape::XML::Node *previewend = NULL;
     if (_powerpreview) {
         Effect* lpe = SP_LPE_ITEM(_powerpreview)->getCurrentLPE();
-        lpe->getRepr()->setAttribute("interpolator_type" , "SpiroInterpolator");
+        lpe->getRepr()->setAttribute("interpolator_type" , "CubicBezierSmooth");
         lpe->getRepr()->setAttribute("linejoin_type", "round");
         static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
         gchar * path_str = sp_svg_write_path(path);
@@ -660,11 +660,7 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
         g_free(path_str);
         if (write) {
             SPCurve * curve = SP_SHAPE(_powerpreview)->getCurve();
-            if (_powerpreviewtail) {
-                SPCurve * previous_curve = SP_SHAPE(_powerpreviewtail)->getCurve();
-                curve->append(previous_curve, false);
-                previous_curve->unref();
-            } else {
+            if (!_powerpreviewtail) {
                 Inkscape::XML::Node *preview = NULL;
                 preview = xml_doc->createElement("svg:path");
                 preview->setAttribute("sodipodi:insensitive", "true");
@@ -675,7 +671,9 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
                 preview->setAttribute("style", css_str.c_str());
                 Inkscape::GC::release(preview);
             }
-            SP_SHAPE(_powerpreviewtail)->setCurve(curve, true);
+            if (!curve->is_empty()) {
+                SP_SHAPE(_powerpreviewtail)->setCurve(curve, true);
+            }
             curve->unref();
         }
     } else {
@@ -692,6 +690,8 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
         const gchar * fill = sp_repr_css_property(css, "fill", "none");
         if (!strcmp(fill, "none")) {
             fill   = "#000000";
+        }
+        if (!strcmp(stroke, "none")) {
             stroke = "#000000";
         }
         sp_repr_css_set_property (css, "fill", stroke);
@@ -701,7 +701,10 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
         previewend->setAttribute("style", css_str.c_str());
         Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), _powerpreview);
         Effect* lpe = SP_LPE_ITEM(_powerpreview)->getCurrentLPE();
-        static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
+        LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
+        if (ps) {
+            ps->offset_points.param_set_and_write_new_value(points);
+        }
    }
 }
 
@@ -734,13 +737,13 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     SPCurve * curve;
     if(!c) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        SPCurve * previous_red = red_curve->copy();
-        SPCurve * previous_green = green_curve->copy();
         //Simplify a bit the base curve to avoid artifacts
         double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
         prefs->setDouble("/tools/freehand/pencil/tolerance", 18.0);
         _interpolate();
         prefs->setDouble("/tools/freehand/pencil/tolerance", tol);
+        SPCurve * previous_red = red_curve->copy();
+        SPCurve * previous_green = green_curve->copy();
         live = true;
         if (sa) {
             curve = sa->curve;
@@ -810,16 +813,16 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     bool start = true;
     auto pressure = this->wps.begin();
     bool buttonrelease = false;
+    bool lastsegmentpressure = 0.0;
     for (auto point = this->ps.begin(); point != this->ps.end(); ++point,++pressure) {
         //Maybe the 12 POW can be moved to a preferences 12 give a good results of sensibility on my tablet
         //But maybe is a tweakable value. less number = less sensibility
         //8 give an aceptable max witht to powerstoke
         double pressure_base = pow(*pressure, pressure_sensibility);
-        double pressure_shirnked = (pressure_base * (max - min)) + min;
-        double pressure_factor = pressure_base/pressure_shirnked;
-        double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
-        if (pressure_computed < 0.05 && previous_pressure != 0.0 ) {
-            pressure_computed = previous_pressure;
+        double pressure_shrunk = (pressure_base * (max - min)) + min;
+        double pressure_factor = pressure_base/pressure_shrunk;
+        double pressure_computed = (pressure_shrunk * 8.0 * scale) / zoom;
+        if (this->wps[this->wps.size()-1] < 0.5) {
             buttonrelease = true;
         }
         if (start || std::abs(previous_pressure - pressure_computed) > gap_pressure  / (zoom * pressure_factor)) {
@@ -835,6 +838,10 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
                 continue;
             }
             previous_point = *point;
+            if (pathvector[0].size()-1 < pos) {
+                this->points.push_back(Geom::Point(pos, previous_pressure));
+                break;
+            }
             previous_pressure = pressure_computed;
             start = false;
             this->points.push_back(Geom::Point(pos, pressure_computed));
@@ -863,18 +870,14 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
             pointsend.push_back(this->points[0]);
             pointsend.push_back(this->points[1]);
         } else if (write) {
-            Geom::Point pos = out.pointAt(start[Geom::X]);
-            out = out.portion(prev[Geom::X], out.size());
-            pointsend.push_back(Geom::Point(0, prev[Geom::Y]));
-            pointsend.push_back(Geom::Point(Geom::nearest_time(pos, out), start[Geom::Y]));
+            pointsend = this->points;
         } else {
             double pressure_base = pow(this->pressure, pressure_sensibility);
-            double pressure_shirnked = (pressure_base * (max - min)) + min;
-            double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
+            double pressure_shrunk = (pressure_base * (max - min)) + min;
+            double pressure_computed = (pressure_shrunk * 8.0 * scale) / zoom;
             Geom::Point pos = out.pointAt(start[Geom::X]);
-            out = out.portion(prev[Geom::X], out.size());
-            pointsend.push_back(Geom::Point(0, prev[Geom::Y]));
-            pointsend.push_back(Geom::Point(Geom::nearest_time(pos, out), start[Geom::Y]));
+            out = out.portion(start[Geom::X], out.size());
+            pointsend.push_back(Geom::Point(0, start[Geom::Y]));
             pointsend.push_back(Geom::Point(out.size(), pressure_computed));
         }
         _powerStrokePreview(out * transformCoordinate.inverse(), pointsend,  write);
@@ -910,7 +913,7 @@ void PencilTool::_interpolate() {
     if ( this->ps.size() <= 1 ) {
         return;
     }
-
+    
     using Geom::X;
     using Geom::Y;
 
@@ -923,8 +926,19 @@ void PencilTool::_interpolate() {
         tol = std::min(tol,tol2);
     }
     //To avoid artifacts on pressure power
-    if (input_has_pressure && tol < 18.0 * 0.4) {
-        tol = 18.0 * 0.4;
+    if (input_has_pressure) {
+        if (tol < 18.0 * 0.4) {
+            tol = 18.0 * 0.4;
+        }
+        size_t i = this->ps.size();
+        while (i > 3 &&
+               (this->wps[this->wps.size()-1] < 0.5 || 
+                Geom::distance(this->ps[this->ps.size()-1], this->ps[this->ps.size()-2]) < Geom::distance(this->ps[this->ps.size()-2], this->ps[this->ps.size()-3])/2.0) )
+        {
+            this->ps.pop_back();
+            this->wps.pop_back();
+            i--;
+        }
     }
 
     double tolerance_sq = 0.02 * square(this->desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
@@ -959,12 +973,17 @@ void PencilTool::_interpolate() {
                 point_at2 = Geom::Point(point_at2[X] + HANDLE_CUBIC_GAP, point_at2[Y] + HANDLE_CUBIC_GAP);
                 this->green_curve->curveto(point_at1,point_at2,b[4*c+3]);
             }else{
-                this->green_curve->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
+                if (c == n_segs - 1 && input_has_pressure) {
+                    this->green_curve->curveto(b[4 * c + 1], b[4 * c + 3], b[4 * c + 3]);
+                } else {
+                    this->green_curve->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
+                }
             }
         }
         if (!input_has_pressure) {
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->green_curve);
         }
+        
         /* Fit and draw and copy last point */
         g_assert(!this->green_curve->is_empty());
 
