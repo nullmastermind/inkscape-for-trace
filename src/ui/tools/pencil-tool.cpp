@@ -673,6 +673,8 @@ PencilTool::_powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points
             }
             if (!curve->is_empty()) {
                 SP_SHAPE(_powerpreviewtail)->setCurve(curve, true);
+            } else {
+                addPowerStrokePencil(NULL);
             }
             curve->unref();
         }
@@ -932,8 +934,8 @@ void PencilTool::_interpolate() {
         }
         size_t i = this->ps.size();
         while (i > 3 &&
-               (this->wps[this->wps.size()-1] < 0.5 || 
-                Geom::distance(this->ps[this->ps.size()-1], this->ps[this->ps.size()-2]) < Geom::distance(this->ps[this->ps.size()-2], this->ps[this->ps.size()-3])/2.0) )
+               (this->wps[i-1] < 0.5 || 
+                Geom::distance(this->ps[i-1], this->ps[i-2]) < Geom::distance(this->ps[i-2], this->ps[i-3])/2.0) )
         {
             this->ps.pop_back();
             this->wps.pop_back();
