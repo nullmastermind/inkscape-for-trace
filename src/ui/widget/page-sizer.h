@@ -166,6 +166,9 @@ public:
      * Updates the margin widgets. If lock widget is active
      */
     void on_margin_changed(RegisteredScalar* widg);
+    
+    void on_margin_lock_changed();
+    
     /**
      * Updates the scale widgets. (Just changes the values of the ui widgets.)
      */
@@ -271,6 +274,7 @@ protected:
     sigc::connection    _changedvy_connection;
     sigc::connection    _changedvw_connection;
     sigc::connection    _changedvh_connection;
+    sigc::connection    _changedlk_connection;
     sigc::connection    _changedmt_connection;
     sigc::connection    _changedmb_connection;
     sigc::connection    _changedml_connection;

@@ -481,6 +481,7 @@ PageSizer::init ()
     _changedvy_connection = _viewboxY.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvw_connection = _viewboxW.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvh_connection = _viewboxH.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
+    _changedlk_connection = _marginLock.signal_clicked().connect (sigc::mem_fun (*this, &PageSizer::on_margin_lock_changed));
     _changedmt_connection = _marginTop.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginTop));
     _changedmb_connection = _marginBottom.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginBottom));
     _changedml_connection = _marginLeft.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginLeft));
@@ -903,9 +904,30 @@ PageSizer::on_viewbox_changed()
     }
 }
 
-/**
- * Callback for viewbox widgets
- */
+void
+PageSizer::on_margin_lock_changed()
+{
+    if (_marginLock.get_active()) {
+        double left   = _marginLeft.getValue();
+        double right  = _marginRight.getValue();
+        double top    = _marginTop.getValue();
+        double bottom = _marginBottom.getValue();
+        if (Geom::are_near(left,right)) {
+            if (Geom::are_near(left, top)) {
+                on_margin_changed(&_marginBottom);
+            } else {
+                on_margin_changed(&_marginTop);
+            }
+        } else {
+            if (Geom::are_near(left, top)) {
+                on_margin_changed(&_marginRight);
+            } else {
+                on_margin_changed(&_marginLeft);
+            }
+        }
+    }
+}
+
 void
 PageSizer::on_margin_changed(RegisteredScalar* widg)
 {
