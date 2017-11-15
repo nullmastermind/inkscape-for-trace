@@ -16,6 +16,8 @@
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
 
+#include <iostream>
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -37,8 +39,13 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
     int phys = width;
 
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-    _property_pixbuf_on  = icon_theme->load_icon(_pixOnName,  phys, (Gtk::IconLookupFlags)0);
-    _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
+    try {
+        _property_pixbuf_on  = icon_theme->load_icon(_pixOnName,  phys, (Gtk::IconLookupFlags)0);
+        _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
+    }
+    catch (const Gtk::IconThemeError& e) {
+        std::cerr << "ImageToggler::ImageToggler(): " << e.what() << std::endl;
+    }
 
     property_pixbuf() = _property_pixbuf_off.get_value();
 }
