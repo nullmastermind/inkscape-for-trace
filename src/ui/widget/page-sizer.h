@@ -240,7 +240,6 @@ protected:
     RegisteredScalar      _marginBottom;
     Gtk::Button           _fitPageButton;
     bool                  _lockMarginUpdate;
-    bool                  _marginLocked;
 
     // Document scale
     Gtk::Frame           _scaleFrame;

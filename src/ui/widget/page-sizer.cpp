@@ -933,13 +933,13 @@ PageSizer::on_margin_changed(RegisteredScalar* widg)
 {
     double value = widg->getValue(); 
     if (_widgetRegistry->isUpdating()) return;
-    if (_marginLock.get_active() && !_marginLocked) {
-        _marginLocked = true;
+    if (_marginLock.get_active() && !_lockMarginUpdate) {
+        _lockMarginUpdate = true;
         _marginLeft.setValue(value);
         _marginRight.setValue(value);
         _marginTop.setValue(value);
         _marginBottom.setValue(value);
-        _marginLocked = false;
+        _lockMarginUpdate = false;
     }
 }
 
