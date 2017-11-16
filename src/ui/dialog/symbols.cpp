@@ -25,6 +25,7 @@
 #include "io/sys.h"
 #include "io/resource.h"
 
+#include "display/cairo-utils.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
 #include "ui/icon-names.h"
@@ -226,6 +227,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 #else
   table->attach(*Gtk::manage(scroller),0,row,2,1);
 #endif
+  previous_height = 0;
   ++row;
 
   /******************** Progress *******************************/
@@ -349,9 +351,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // This might need to be a global variable so setTargetDesktop can modify it
   SPDefs *defs = current_document->getDefs();
-#if GTK_CHECK_VERSION(3,2,4)
-  overlay_opacity->set(getOverlay(overlay_opacity, "overlay", 1000));
-#endif
+
   sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
   instanceConns.push_back(defsModifiedConn);
 
@@ -432,6 +432,7 @@ void SymbolsDialog::rebuild() {
   SPDocument* symbol_document = selectedSymbols();
   icons_found = false;
   //We are not in search all docs
+
   if (search->get_text() != _("Searching...") &&
     search->get_text() != _("Loading all symbols...") &&
     search->get_text() != _("Searching....") ) 
@@ -472,7 +473,14 @@ void SymbolsDialog::showOverlay() {
   } else if (!icons_found && !search_str.empty()) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term,\nor switch to a different symbol set.")) + Glib::ustring("</span>"));
-  } 
+  }
+  gint width = scroller->get_allocated_width();
+  gint height = scroller->get_allocated_height();
+  if (previous_height != height) {
+    previous_height = height;
+    overlay_opacity->set_size_request(width, height);
+    overlay_opacity->set(getOverlay(width, height));
+  }
   overlay_opacity->show();
   overlay_icon->show();
   overlay_title->show();
@@ -878,12 +886,17 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
     return;
   }
 
-  if ( dynamic_cast<SPSymbol *>(r) && r->title()) {
-    Glib::ustring current = symbol_set->get_active_text();
-    if (current == ALLDOCS) {
-      l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+  if ( dynamic_cast<SPSymbol *>(r)) {
+    if(r->title()) {
+      Glib::ustring current = symbol_set->get_active_text();
+      if (current == ALLDOCS) {
+        l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      } else {
+        l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      }
     } else {
-      l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      Glib::ustring id = r->getAttribute("id");
+      l[Glib::ustring(_("Symbol without title ")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     }
   }
   for (auto& child: r->children) {
@@ -1020,7 +1033,7 @@ bool SymbolsDialog::callbackSymbols(){
           }
         }
       }
-      if (symbol && (search_str.empty() || found || (search_str.empty() && !symbol_title_char))) {
+      if (symbol && (search_str.empty() || found)) {
         addSymbol( symbol, doc_title);
         icons_found = true;
       }
@@ -1144,16 +1157,17 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
   SymbolColumns* columns = getColumns();
 
   gchar const *id    = symbol->getRepr()->attribute("id");
-  gchar const *title = symbol->title(); // From title element
-  if( !title ) {
-    title = id;
-  }
+  gchar * title = symbol->title(); // From title element
   if (doc_title.empty()) {
     doc_title = CURRENTDOC;
   }
-  Glib::ustring symbol_title = Glib::ustring(title) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  Glib::ustring symbol_title = "";
+  if(title) {
+    symbol_title = Glib::ustring(title) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  } else {
+    symbol_title = Glib::ustring(_("Symbol without title ")) + Glib::ustring(id) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  }
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = drawSymbol( symbol );
-
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
     (*row)[columns->symbol_id]        = Glib::ustring( id );
@@ -1161,7 +1175,7 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
     (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "SymbolDoc", doc_title.c_str()) ));
     (*row)[columns->symbol_image]     = pixbuf;
   }
-
+  g_free(title);
   delete columns;
 }
 
@@ -1175,7 +1189,7 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
  * the temporary document is rendered.
  */
 Glib::RefPtr<Gdk::Pixbuf>
-SymbolsDialog::drawSymbol(SPObject *symbol, unsigned force_psize)
+SymbolsDialog::drawSymbol(SPObject *symbol)
 {
   // Create a copy repr of the symbol with id="the_symbol"
   Inkscape::XML::Document *xml_doc = preview_document->getReprDoc();
@@ -1253,11 +1267,6 @@ SymbolsDialog::drawSymbol(SPObject *symbol, unsigned force_psize)
     else
       scale = pow( 2.0, scale_factor/2.0 ) * psize / 32.0;
 
-    if (force_psize > 0) {
-      psize = force_psize;
-      scale = psize / ceil(std::max(width, height)); 
-    }
-     
     pixbuf = Glib::wrap(render_pixbuf(renderDrawing, scale, *dbox, psize));
   }
 
@@ -1289,41 +1298,18 @@ SPDocument* SymbolsDialog::symbolsPreviewDoc()
  * Update image widgets
  */
 Glib::RefPtr<Gdk::Pixbuf> 
-SymbolsDialog::getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize)
+SymbolsDialog::getOverlay(gint width, gint height)
 {
-gchar const *buffer =
-"<svg xmlns=\"http://www.w3.org/2000/svg\""
-"     xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
-"     xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\""
-"     xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
-"  <title>Inkscape</title> "
-"  <defs id=\"defs\">"
-"    <symbol"
-"       id=\"overlay\">"
-"      <title"
-"         id=\"overlay_title\">Overlay</title>"
-"      <desc"
-"         id=\"overlay_desc\">Overlay Square</desc>"
-"      <path"
-"         style=\"fill:#ffffff;opacity:0.75;stroke:none\""
-"         d=\"M 0,1 H 1 V 2 H 0 Z\""
-"         id=\"overlay_shape_1\" />"
-"    </symbol>"
-"  </defs>"
-"</svg>";
-  
-  SPDocument* doc = SPDocument::createNewDocFromMem( buffer, strlen(buffer), FALSE );
-  std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > symbols_data = symbolsInDoc(doc, "Overlay Doc");
-  Glib::RefPtr<Gdk::Pixbuf> pixbuf(NULL);
-  for(auto data:symbols_data) {
-    Glib::ustring doc_title = data.second.first;
-    SPSymbol * symbol = data.second.second;
-    if (!strcmp(symbol->getId(), icon_title)) {
-      pixbuf = drawSymbol(symbol, psize);
-      return pixbuf;
-    }
-  }
-  return pixbuf;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  cr = cairo_create (surface);
+  cairo_set_source_rgba(cr, 1, 1, 1, 0.75);
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_fill (cr);
+  GdkPixbuf* pixbuf = ink_pixbuf_create_from_cairo_surface(surface);
+  cairo_destroy (cr);
+  return Glib::wrap(pixbuf);
 }
 
 void SymbolsDialog::setTargetDesktop(SPDesktop *desktop)

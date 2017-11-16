@@ -3149,17 +3149,35 @@ void ObjectSet::toSymbol()
     // Create new <symbol>
     Inkscape::XML::Node *defsrepr = doc->getDefs()->getRepr();
     Inkscape::XML::Node *symbol_repr = xml_doc->createElement("svg:symbol");
+    Inkscape::XML::Node *title_repr = xml_doc->createElement("svg:title");
+    
     defsrepr->appendChild(symbol_repr);
-
+    bool settitle = false;
     // For a single group, copy relevant attributes.
     if( single_group ) {
-        symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
-        symbol_repr->setAttribute("title",  the_group->getAttribute("title"));
-        if (!the_group->getAttribute("title")) {
-            symbol_repr->setAttribute("title", _("Symbol without title"));
-        }
-        symbol_repr->setAttribute("class",  the_group->getAttribute("class"));
         Glib::ustring id = the_group->getAttribute("id");
+        symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
+        
+        gchar * title = the_group->title();
+        if (title) {
+            symbol_repr->appendChild(title_repr);
+            title_repr->appendChild(xml_doc->createTextNode(title));
+            title_repr->setPosition(0);
+            Inkscape::GC::release(title_repr);
+        }
+        g_free(title);
+        
+        gchar * desc = the_group->desc();
+        if (desc) {
+            Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
+            desc_repr->setContent(desc);
+            desc_repr->appendChild(xml_doc->createTextNode(desc));
+            symbol_repr->appendChild(desc_repr);
+            desc_repr->setPosition(1);
+            Inkscape::GC::release(desc_repr);
+        }
+        g_free(desc);
+        symbol_repr->setAttribute("class",  the_group->getAttribute("class"));
         the_group->setAttribute("id", id + "_transform");
         symbol_repr->setAttribute("id", id);
 
@@ -3176,9 +3194,27 @@ void ObjectSet::toSymbol()
 
     // Move selected items to new <symbol>
     for (std::vector<SPObject*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
-      Inkscape::XML::Node *repr = (*i)->getRepr();
-      repr->parent()->removeChild(repr);
-      symbol_repr->addChild(repr,NULL);
+        gchar* title = (*i)->title();
+        if (!single_group && !settitle && title) {
+            symbol_repr->appendChild(title_repr);
+            title_repr->appendChild(xml_doc->createTextNode(title));
+            title_repr->setPosition(0);
+            Inkscape::GC::release(title_repr);
+            gchar * desc = (*i)->desc();
+            if (desc) {
+                Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
+                desc_repr->appendChild(xml_doc->createTextNode(desc));
+                symbol_repr->appendChild(desc_repr);
+                Inkscape::GC::release(desc_repr);
+                desc_repr->setPosition(1);
+            }
+            g_free(desc);
+            settitle = true;
+        }
+        g_free(title);
+        Inkscape::XML::Node *repr = (*i)->getRepr();
+        repr->parent()->removeChild(repr);
+        symbol_repr->addChild(repr, NULL);
     }
 
     if( single_group && transform.isTranslation() ) {
