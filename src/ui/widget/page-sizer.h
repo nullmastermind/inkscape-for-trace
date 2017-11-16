@@ -232,14 +232,15 @@ protected:
     //### Fit Page options
     Gtk::Expander        _fitPageMarginExpander;
 
-    Gtk::Grid             _marginTable;
-    RegisteredCheckButton _marginLock;
-    RegisteredScalar      _marginTop;
-    RegisteredScalar      _marginLeft;
-    RegisteredScalar      _marginRight;
-    RegisteredScalar      _marginBottom;
-    Gtk::Button           _fitPageButton;
-    bool                  _lockMarginUpdate;
+    Gtk::Grid              _marginTable;
+    RegisteredToggleButton _marginLock;
+    Gtk::Image             _lock_icon;
+    RegisteredScalar       _marginTop;
+    RegisteredScalar       _marginLeft;
+    RegisteredScalar       _marginRight;
+    RegisteredScalar       _marginBottom;
+    Gtk::Button            _fitPageButton;
+    bool                   _lockMarginUpdate;
 
     // Document scale
     Gtk::Frame           _scaleFrame;
