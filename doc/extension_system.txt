@@ -234,7 +234,7 @@ An input extension provides a way to get data into Inkscape.  This type
 of extension creates a document given a filename.  This is done by using
 the 'open' method within the class.  Also, there is a 'prefs' function
 which will generate a GtkDialog.  This dialog is then used to get any
-settings that the incomming file and extension my use.  This function is
+settings that the incoming file and extension may use.  This function is
 executed, and the dialog returns, before the open method is called.
 
 There are also several other settings stored in an Input extension.

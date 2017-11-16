@@ -45,7 +45,12 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
         int width = 0;
         int height = 0;
         Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
-        _icon_pixbuf = iconTheme->load_icon(icon_name, width);
+        try {
+            _icon_pixbuf = iconTheme->load_icon(icon_name, width);
+        }
+        catch (const Gtk::IconThemeError& e) {
+            std::cerr << "DocItem::DocItem(): " << e.what() << std::endl;
+        }
     }
 
     if ( _icon_pixbuf ) {

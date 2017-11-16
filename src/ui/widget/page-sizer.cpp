@@ -219,7 +219,8 @@ PageSizer::PageSizer(Registry & _wr)
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),
-      _marginLock( _("L_ock"), _("Lock margins"), "lock-margins", _wr ),
+      _marginLock( _("Loc_k margins"), _("Lock margins"), "lock-margins", _wr, false, NULL, NULL),
+      _lock_icon(),
       _marginTop( _("T_op margin:"), _("Top margin"), "fit-margin-top", _wr ),
       _marginLeft( _("L_eft:"), _("Left margin"), "fit-margin-left", _wr),
       _marginRight( _("Ri_ght:"), _("Right margin"), "fit-margin-right", _wr),
@@ -249,7 +250,6 @@ PageSizer::PageSizer(Registry & _wr)
     _viewboxY.setDigits(2);
     _viewboxW.setDigits(2);
     _viewboxH.setDigits(2);
-
     _dimensionWidth.setRange( 0.00001, 10000000 );
     _dimensionHeight.setRange( 0.00001, 10000000 );
     _scaleX.setRange( 0.00001, 100000 );
@@ -370,7 +370,6 @@ PageSizer::PageSizer(Registry & _wr)
     
     //## Set up margin settings
     _marginTable.set_border_width(4);
-
     _marginTable.set_row_spacing(4);
     _marginTable.set_column_spacing(4);
 
@@ -384,10 +383,19 @@ PageSizer::PageSizer(Registry & _wr)
     _marginLeft.set_hexpand();
     _marginLeft.set_vexpand();
     _marginTable.attach(_marginLeft,    0, 1, 1, 1);
-    
+
+    _marginLock.set_active(false);
     _marginLock.set_halign(Gtk::ALIGN_CENTER);
     _marginLock.set_hexpand();
     _marginLock.set_vexpand();
+
+    //_lock_icon = new Gtk::Image();
+    _lock_icon.set_halign(Gtk::ALIGN_CENTER);
+    _lock_icon.set_valign(Gtk::ALIGN_START);
+    _lock_icon.set_from_icon_name("object-unlocked", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    _lock_icon.show();    
+    _marginLock.add(_lock_icon);
+
     _marginTable.attach(_marginLock,    1, 1, 1, 1);
     
     _marginRight.set_halign(Gtk::ALIGN_CENTER);
@@ -481,6 +489,7 @@ PageSizer::init ()
     _changedvy_connection = _viewboxY.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvw_connection = _viewboxW.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
     _changedvh_connection = _viewboxH.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_viewbox_changed));
+    _changedlk_connection = _marginLock.signal_toggled().connect (sigc::mem_fun (*this, &PageSizer::on_margin_lock_changed));
     _changedmt_connection = _marginTop.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginTop));
     _changedmb_connection = _marginBottom.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginBottom));
     _changedml_connection = _marginLeft.signal_value_changed().connect (sigc::bind<RegisteredScalar*>(sigc::mem_fun (*this, &PageSizer::on_margin_changed), &_marginLeft));
@@ -903,21 +912,45 @@ PageSizer::on_viewbox_changed()
     }
 }
 
-/**
- * Callback for viewbox widgets
- */
+void
+PageSizer::on_margin_lock_changed()
+{
+    if (_marginLock.get_active()) {
+        _lock_icon.set_from_icon_name("object-locked", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        double left   = _marginLeft.getValue();
+        double right  = _marginRight.getValue();
+        double top    = _marginTop.getValue();
+        double bottom = _marginBottom.getValue();
+        if (Geom::are_near(left,right)) {
+            if (Geom::are_near(left, top)) {
+                on_margin_changed(&_marginBottom);
+            } else {
+                on_margin_changed(&_marginTop);
+            }
+        } else {
+            if (Geom::are_near(left, top)) {
+                on_margin_changed(&_marginRight);
+            } else {
+                on_margin_changed(&_marginLeft);
+            }
+        }
+    } else {
+        _lock_icon.set_from_icon_name("object-unlocked", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    }
+}
+
 void
 PageSizer::on_margin_changed(RegisteredScalar* widg)
 {
     double value = widg->getValue(); 
     if (_widgetRegistry->isUpdating()) return;
-    if (_marginLock.get_active() && !_marginLocked) {
-        _marginLocked = true;
+    if (_marginLock.get_active() && !_lockMarginUpdate) {
+        _lockMarginUpdate = true;
         _marginLeft.setValue(value);
         _marginRight.setValue(value);
         _marginTop.setValue(value);
         _marginBottom.setValue(value);
-        _marginLocked = false;
+        _lockMarginUpdate = false;
     }
 }
 

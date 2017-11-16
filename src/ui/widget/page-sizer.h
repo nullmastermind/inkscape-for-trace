@@ -166,6 +166,9 @@ public:
      * Updates the margin widgets. If lock widget is active
      */
     void on_margin_changed(RegisteredScalar* widg);
+    
+    void on_margin_lock_changed();
+    
     /**
      * Updates the scale widgets. (Just changes the values of the ui widgets.)
      */
@@ -229,15 +232,15 @@ protected:
     //### Fit Page options
     Gtk::Expander        _fitPageMarginExpander;
 
-    Gtk::Grid             _marginTable;
-    RegisteredCheckButton _marginLock;
-    RegisteredScalar      _marginTop;
-    RegisteredScalar      _marginLeft;
-    RegisteredScalar      _marginRight;
-    RegisteredScalar      _marginBottom;
-    Gtk::Button           _fitPageButton;
-    bool                  _lockMarginUpdate;
-    bool                  _marginLocked;
+    Gtk::Grid              _marginTable;
+    RegisteredToggleButton _marginLock;
+    Gtk::Image             _lock_icon;
+    RegisteredScalar       _marginTop;
+    RegisteredScalar       _marginLeft;
+    RegisteredScalar       _marginRight;
+    RegisteredScalar       _marginBottom;
+    Gtk::Button            _fitPageButton;
+    bool                   _lockMarginUpdate;
 
     // Document scale
     Gtk::Frame           _scaleFrame;
@@ -271,6 +274,7 @@ protected:
     sigc::connection    _changedvy_connection;
     sigc::connection    _changedvw_connection;
     sigc::connection    _changedvh_connection;
+    sigc::connection    _changedlk_connection;
     sigc::connection    _changedmt_connection;
     sigc::connection    _changedmb_connection;
     sigc::connection    _changedml_connection;

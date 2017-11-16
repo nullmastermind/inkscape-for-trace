@@ -1049,9 +1049,12 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             SPCSSAttr *css = take_style_from_item(tc->text);
             for (int i = 0; i < nr_blocks; ++i)
             {
-                gchar const *w = sp_repr_css_property(css, "font-size", "40px");
-                if (w)
+                gchar const *w = sp_repr_css_property(css, "font-size", "0px");
+
+                // Don't set font-size if it wasn't set.
+                if (w && strcmp(w, "0px") != 0) {
                     sp_repr_css_set_property(te_selected_style[i], "font-size", w);
+                }
             }
 
             for (int i = 0; i < text.length(); ++i)
