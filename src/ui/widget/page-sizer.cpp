@@ -219,7 +219,7 @@ PageSizer::PageSizer(Registry & _wr)
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),
-      _marginLock( _(""), _("Lock margins"), "lock-margins", _wr, false, NULL, NULL),
+      _marginLock( _("Loc_k margins"), _("Lock margins"), "lock-margins", _wr, false, NULL, NULL),
       _lock_icon(),
       _marginTop( _("T_op margin:"), _("Top margin"), "fit-margin-top", _wr ),
       _marginLeft( _("L_eft:"), _("Left margin"), "fit-margin-left", _wr),
