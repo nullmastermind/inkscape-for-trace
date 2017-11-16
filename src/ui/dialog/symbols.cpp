@@ -886,12 +886,17 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
     return;
   }
 
-  if ( dynamic_cast<SPSymbol *>(r) && r->title()) {
-    Glib::ustring current = symbol_set->get_active_text();
-    if (current == ALLDOCS) {
-      l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+  if ( dynamic_cast<SPSymbol *>(r)) {
+    if(r->title()) {
+      Glib::ustring current = symbol_set->get_active_text();
+      if (current == ALLDOCS) {
+        l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      } else {
+        l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      }
     } else {
-      l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      Glib::ustring id = r->getAttribute("id");
+      l[Glib::ustring(_("Symbol without title ")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     }
   }
   for (auto& child: r->children) {
@@ -1028,7 +1033,7 @@ bool SymbolsDialog::callbackSymbols(){
           }
         }
       }
-      if (symbol && (search_str.empty() || found || (search_str.empty() && !symbol_title_char))) {
+      if (symbol && (search_str.empty() || found)) {
         addSymbol( symbol, doc_title);
         icons_found = true;
       }
@@ -1152,16 +1157,17 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
   SymbolColumns* columns = getColumns();
 
   gchar const *id    = symbol->getRepr()->attribute("id");
-  gchar const *title = symbol->title(); // From title element
-  if( !title ) {
-    title = id;
-  }
+  gchar * title = symbol->title(); // From title element
   if (doc_title.empty()) {
     doc_title = CURRENTDOC;
   }
-  Glib::ustring symbol_title = Glib::ustring(title) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  Glib::ustring symbol_title = "";
+  if(title) {
+    symbol_title = Glib::ustring(title) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  } else {
+    symbol_title = Glib::ustring(_("Symbol without title ")) + Glib::ustring(id) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+  }
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = drawSymbol( symbol );
-
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
     (*row)[columns->symbol_id]        = Glib::ustring( id );
@@ -1169,7 +1175,7 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
     (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "SymbolDoc", doc_title.c_str()) ));
     (*row)[columns->symbol_image]     = pixbuf;
   }
-
+  g_free(title);
   delete columns;
 }
 
