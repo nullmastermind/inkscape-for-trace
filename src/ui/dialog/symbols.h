@@ -102,8 +102,8 @@ private:
     void enableWidgets(bool enable);
     Glib::ustring ellipsize(Glib::ustring data, size_t limit);
     gchar const* styleFromUse( gchar const* id, SPDocument* document);
-    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol, unsigned force_psize = 0);
-    Glib::RefPtr<Gdk::Pixbuf> getOverlay(Gtk::Image* image, gchar const * icon_title, unsigned psize);
+    Glib::RefPtr<Gdk::Pixbuf> drawSymbol(SPObject *symbol);
+    Glib::RefPtr<Gdk::Pixbuf> getOverlay(gint width, gint height);
     /* Keep track of all symbol template documents */
     std::map<Glib::ustring, SPDocument*> symbol_sets;
     std::map<Glib::ustring, std::pair<Glib::ustring, SPSymbol*> > l;
@@ -112,6 +112,7 @@ private:
     // Scale factor
     int scale_factor;
     bool sensitive;
+    double previous_height;
     bool all_docs_processed;
     size_t number_docs;
     size_t number_symbols;

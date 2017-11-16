@@ -3149,14 +3149,25 @@ void ObjectSet::toSymbol()
     // Create new <symbol>
     Inkscape::XML::Node *defsrepr = doc->getDefs()->getRepr();
     Inkscape::XML::Node *symbol_repr = xml_doc->createElement("svg:symbol");
+    Inkscape::XML::Node *title_repr = xml_doc->createElement("svg:title");
+    Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
     defsrepr->appendChild(symbol_repr);
-
+    bool settitle = false;
     // For a single group, copy relevant attributes.
     if( single_group ) {
         symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
-        symbol_repr->setAttribute("title",  the_group->getAttribute("title"));
-        if (!the_group->getAttribute("title")) {
-            symbol_repr->setAttribute("title", _("Symbol without title"));
+        
+        symbol_repr->appendChild(title_repr);
+        gchar * title = the_group->title();
+        if (title) {
+            title_repr->setContent(title);
+        } else {
+            title_repr->setContent(_("Symbol without title"));
+        }
+        gchar * desc = the_group->desc();
+        if (desc) {
+            desc_repr->setContent(desc);
+            symbol_repr->appendChild(desc_repr);
         }
         symbol_repr->setAttribute("class",  the_group->getAttribute("class"));
         Glib::ustring id = the_group->getAttribute("id");
@@ -3176,9 +3187,25 @@ void ObjectSet::toSymbol()
 
     // Move selected items to new <symbol>
     for (std::vector<SPObject*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
-      Inkscape::XML::Node *repr = (*i)->getRepr();
-      repr->parent()->removeChild(repr);
-      symbol_repr->addChild(repr,NULL);
+        gchar* title = (*i)->title();
+        if (!single_group && !settitle && title) {
+            symbol_repr->appendChild(title_repr);
+            title_repr->setContent(title);
+            gchar * desc = (*i)->desc();
+            if (desc) {
+                desc_repr->setContent(desc);
+                symbol_repr->appendChild(desc_repr);
+            }
+            settitle = true;
+        }
+        Inkscape::XML::Node *repr = (*i)->getRepr();
+        repr->parent()->removeChild(repr);
+        symbol_repr->addChild(repr, NULL);
+    }
+
+    if (!settitle) {
+       symbol_repr->appendChild(title_repr);
+       title_repr->setContent(_("Symbol without title"));
     }
 
     if( single_group && transform.isTranslation() ) {
