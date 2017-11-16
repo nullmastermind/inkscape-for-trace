@@ -434,8 +434,8 @@ void SymbolsDialog::rebuild() {
   //We are not in search all docs
 
   if (search->get_text() != _("Searching...") &&
-      search->get_text() != _("Loading all symbols...") &&
-      search->get_text() != _("Searching....") ) 
+    search->get_text() != _("Loading all symbols...") &&
+    search->get_text() != _("Searching....") ) 
   {
     search_str = "";
     search->set_text("");
@@ -572,17 +572,17 @@ SPDocument* SymbolsDialog::selectedSymbols() {
   SPDocument* symbol_document = symbol_sets[doc_title];
   if( !symbol_document ) {
     symbol_document = getSymbolsSet(doc_title).second;
-  }
-  // Symbol must be from Current Document (this method of checking should be language independent).
-  if( !symbol_document ) {
-    // Symbol must be from Current Document (this method of
-    // checking should be language independent).
-    symbol_document = current_document;
-    add_symbol->set_sensitive( true );
-    remove_symbol->set_sensitive( true );
-  } else {
-    add_symbol->set_sensitive( false );
-    remove_symbol->set_sensitive( false );
+    // Symbol must be from Current Document (this method of checking should be language independent).
+    if( !symbol_document ) {
+      // Symbol must be from Current Document (this method of
+      // checking should be language independent).
+      symbol_document = current_document;
+      add_symbol->set_sensitive( true );
+      remove_symbol->set_sensitive( true );
+    } else {
+      add_symbol->set_sensitive( false );
+      remove_symbol->set_sensitive( false );
+    }
   }
   return symbol_document;
 }
@@ -890,9 +890,18 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
     if(r->title()) {
       Glib::ustring current = symbol_set->get_active_text();
       if (current == ALLDOCS) {
-        l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        if (l.count(doc_title + r->title()) > 0) {
+          l[doc_title + r->title() + Glib::ustring("_") + r->getId()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        } else {
+          l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        }
       } else {
-        l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        if (l.count(r->title()) > 0) {
+          l[r->title() + Glib::ustring("_") + r->getId()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        } else {
+          l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+        }
+        
       }
     } else {
       Glib::ustring id = r->getAttribute("id");
