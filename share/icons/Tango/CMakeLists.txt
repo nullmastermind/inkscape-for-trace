@@ -1,4 +1,4 @@
-set(THEME hicolor)
+set(THEME Tango)
 
 set(PIXMAP_SIZES "scalable")
 set(CONTENT "actions")
