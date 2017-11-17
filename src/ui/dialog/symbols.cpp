@@ -887,25 +887,11 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
   }
 
   if ( dynamic_cast<SPSymbol *>(r)) {
+    Glib::ustring id = r->getAttribute("id");
     if(r->title()) {
-      Glib::ustring current = symbol_set->get_active_text();
-      if (current == ALLDOCS) {
-        if (l.count(doc_title + r->title()) > 0) {
-          l[doc_title + r->title() + Glib::ustring("_") + r->getId()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-        } else {
-          l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-        }
-      } else {
-        if (l.count(r->title()) > 0) {
-          l[r->title() + Glib::ustring("_") + r->getId()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-        } else {
-          l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-        }
-        
-      }
+      l[doc_title + r->title() + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     } else {
-      Glib::ustring id = r->getAttribute("id");
-      l[Glib::ustring(_("Symbol without title ")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      l[Glib::ustring(_("notitle_")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     }
   }
   for (auto& child: r->children) {
