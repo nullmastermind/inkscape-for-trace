@@ -614,9 +614,11 @@ Glib::ustring SymbolsDialog::selectedSymbolDocTitle() {
 Glib::ustring SymbolsDialog::documentTitle(SPDocument* symbol_doc) {
   if (symbol_doc) {
     SPRoot * root = symbol_doc->getRoot();
-    if (root->title()) {
-      return ellipsize(Glib::ustring(root->title()), 33);
+    gchar * title = root->title();
+    if (title) {
+      return ellipsize(Glib::ustring(title), 33);
     }
+    g_free(title);
   }
   Glib::ustring current = symbol_set->get_active_text();
   if (current == CURRENTDOC) {
@@ -887,17 +889,14 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
   }
 
   if ( dynamic_cast<SPSymbol *>(r)) {
-    if(r->title()) {
-      Glib::ustring current = symbol_set->get_active_text();
-      if (current == ALLDOCS) {
-        l[doc_title + r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-      } else {
-        l[r->title()] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
-      }
+    Glib::ustring id = r->getAttribute("id");
+    gchar * title = r->title();
+    if(title) {
+      l[doc_title + title + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     } else {
-      Glib::ustring id = r->getAttribute("id");
-      l[Glib::ustring(_("Symbol without title ")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+      l[Glib::ustring(_("notitle_")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     }
+    g_free(title);
   }
   for (auto& child: r->children) {
     symbolsInDocRecursive(&child, l, doc_title);
@@ -1016,8 +1015,8 @@ bool SymbolsDialog::callbackSymbols(){
       Glib::ustring doc_title = symbol_data->second.first;
       SPSymbol * symbol = symbol_data->second.second;
       counter_symbols ++;
-      gchar const *symbol_title_char = symbol->title();
-      gchar const *symbol_desc_char = symbol->description();
+      gchar *symbol_title_char = symbol->title();
+      gchar *symbol_desc_char = symbol->description();
       bool found = false;
       if (symbol_title_char) {
         Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
@@ -1042,6 +1041,8 @@ bool SymbolsDialog::callbackSymbols(){
       symbol_data = l.erase(l.begin());
       //to get more items and best performance
       int modulus = number_symbols > 200 ? 50 : (number_symbols/4);
+      g_free(symbol_title_char);
+      g_free(symbol_desc_char);
       if (modulus && counter_symbols % modulus == 0 && !l.empty()) { 
         return true;
       }

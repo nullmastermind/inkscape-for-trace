@@ -220,7 +220,17 @@
   <!-- gradient toolbar -->
   <remap id='controls_fill' newid='object-fill'/>
   <remap id='controls_stroke' newid='object-stroke'/>
-  
+
+  <!-- lpe toolbar -->
+  <remap id='lpetool_show_bbox'   newid='show-bounding-box'/>
+  <remap id='all_inactive_old'    newid='draw-geometry-inactive'/>
+  <remap id='angle_bisector'      newid='draw-geometry-angle-bisector'/>
+  <remap id='circle_3pts'         newid='draw-geometry-circle-from-three-points'/>
+  <remap id='line_segment'        newid='draw-geometry-line-segment'/>
+  <remap id='mirror_symmetry'     newid='draw-geometry-mirror'/>
+  <remap id='parralel'            newid='draw-geometry-line-parallel'/>
+  <remap id='perp_bisector'       newid='draw-geometry-line-perpendicular'/>
+
   <!-- snapping toolbar -->
   <remap id='toggle_snap_global' newid='snap'/>
   <remap id='toggle_snap_bbox' newid='snap-bounding-box'/>
@@ -258,11 +268,13 @@
   <remap id='distribute_left' newid='distribute-horizontal-left'/>
   <remap id='distribute_hcentre' newid='distribute-horizontal-center'/>
   <remap id='distribute_right' newid='distribute-horizontal-right'/>
+  <remap id='distrobute-hdist' newid='distribute-horizontal-gaps'/>
   <remap id='distribute_baselines_hor' newid='distribute-horizontal-baseline'/>
   
   <remap id='distribute_bottom' newid='distribute-vertical-bottom'/>
   <remap id='distribute_vcentre' newid='distribute-vertical-center'/>
   <remap id='distribute_top' newid='distribute-vertical-top'/>
+  <remap id='distrobute-vdist' newid='distribute-vertical-gaps'/>
   <remap id='distribute_baselines_vert' newid='distribute-vertical-baseline'/>
   
   <remap id='distribute_randomize' newid='distribute-randomize'/>
