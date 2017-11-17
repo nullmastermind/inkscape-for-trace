@@ -888,11 +888,13 @@ void SymbolsDialog::symbolsInDocRecursive (SPObject *r, std::map<Glib::ustring, 
 
   if ( dynamic_cast<SPSymbol *>(r)) {
     Glib::ustring id = r->getAttribute("id");
-    if(r->title()) {
-      l[doc_title + r->title() + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
+    gchar * title = r->title();
+    if(title) {
+      l[doc_title + title + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     } else {
       l[Glib::ustring(_("notitle_")) + id] = std::make_pair(doc_title,dynamic_cast<SPSymbol *>(r));
     }
+    g_free(title);
   }
   for (auto& child: r->children) {
     symbolsInDocRecursive(&child, l, doc_title);
