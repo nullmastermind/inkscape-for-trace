@@ -45,15 +45,20 @@
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/unit-tracker.h"
 #include "ui/tools/arc-tool.h"
 #include "verbs.h"
 #include "widgets/spinbutton-events.h"
+#include "widgets/widget-sizes.h"
 #include "xml/node-event-vector.h"
 
+using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::Util::Quantity;
+using Inkscape::Util::unit_table;
 
 //########################
 //##    Circle / Arc    ##
@@ -73,6 +78,72 @@ static void sp_arctb_sensitivize( GObject *tbl, double v1, double v2 )
         gtk_action_set_sensitive( ocb, TRUE );
         gtk_action_set_sensitive( make_whole, TRUE );
     }
+}
+
+static void sp_arctb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *value_name)
+{
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
+
+    UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
+    Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
+
+    SPDocument* document = desktop->getDocument();
+    Geom::Scale scale = document->getDocumentScale();
+
+    if (DocumentUndo::getUndoSensitive(document)) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble(Glib::ustring("/tools/shapes/arc/") + value_name,
+            Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
+    }
+
+    // quit if run by the attr_changed listener
+    if (g_object_get_data( tbl, "freeze" ) || tracker->isUpdating()) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE));
+
+    bool modmade = false;
+    Inkscape::Selection *selection = desktop->getSelection();
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
+        SPItem *item = *i;
+        if (SP_IS_GENERICELLIPSE(item)) {
+
+            SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
+
+            if (!strcmp(value_name, "rx")) {
+                ge->rx = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px") / scale[Geom::X];
+            } else {
+                ge->ry = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px") / scale[Geom::Y];
+            }
+
+            ge->normalize();
+            (SP_OBJECT(ge))->updateRepr();
+            (SP_OBJECT(ge))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+            modmade = true;
+        }
+    }
+
+    if (modmade) {
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC,
+                           _("Change arc"));
+    }
+
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
+}
+
+static void sp_arctb_rx_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    sp_arctb_value_changed(adj, tbl, "rx");
+}
+
+static void sp_arctb_ry_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    sp_arctb_value_changed(adj, tbl, "ry");
 }
 
 static void
@@ -204,6 +275,14 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
 static void sp_arctb_defaults(GtkWidget *, GObject *obj)
 {
     GtkAdjustment *adj;
+    adj = GTK_ADJUSTMENT( g_object_get_data(obj, "rx") );
+    gtk_adjustment_set_value(adj, 0.0);
+    gtk_adjustment_value_changed(adj);
+
+    adj = GTK_ADJUSTMENT( g_object_get_data(obj, "ry") );
+    gtk_adjustment_set_value(adj, 0.0);
+    gtk_adjustment_value_changed(adj);
+
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "start") );
     gtk_adjustment_set_value(adj, 0.0);
     gtk_adjustment_value_changed(adj);
@@ -228,6 +307,34 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
 
     // in turn, prevent callbacks from responding
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
+
+    UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
+    Unit const *unit = tracker->getActiveUnit();
+    g_return_if_fail(unit != NULL);
+
+    gdouble radius = 0;
+    gdouble rx = 0;
+    gdouble ry = 0;
+    sp_repr_get_double(repr, "r", &radius);
+    if (radius) {
+        rx = ry = radius;
+    } else {
+        sp_repr_get_double(repr, "rx", &rx);
+        sp_repr_get_double(repr, "ry", &ry);
+    }
+
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
+    SPDocument* document = desktop->getDocument();
+    Geom::Scale scale = document->getDocumentScale();
+
+    GtkAdjustment *adj;
+    adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "rx") );
+    gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit) * scale[Geom::X]);
+    gtk_adjustment_value_changed(adj);
+
+    adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "ry") );
+    gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit) * scale[Geom::Y]);
+    gtk_adjustment_value_changed(adj);
 
     gdouble start = 0.;
     gdouble end = 0.;
@@ -297,6 +404,11 @@ static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GOb
         g_object_set_data( tbl, "single", GINT_TO_POINTER(TRUE) );
         g_object_set( G_OBJECT(act), "label", _("<b>Change:</b>"), NULL );
 
+        GtkAction* rx = GTK_ACTION( g_object_get_data( tbl, "rx_action" ) );
+        gtk_action_set_sensitive(rx, TRUE);
+        GtkAction* ry = GTK_ACTION( g_object_get_data( tbl, "ry_action" ) );
+        gtk_action_set_sensitive(ry, TRUE);
+
         if (repr) {
             g_object_set_data( tbl, "repr", repr );
             Inkscape::GC::anchor(repr);
@@ -320,12 +432,55 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
     EgeAdjustmentAction* eact = 0;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
+    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+    tracker->setActiveUnit(unit_table.getUnit("px"));
+    g_object_set_data( holder, "tracker", tracker );
 
     {
         EgeOutputAction* act = ege_output_action_new( "ArcStateAction", _("<b>New:</b>"), "", 0 );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "mode_action", act );
+    }
+
+    /* Radius X */
+    {
+        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+        eact = create_adjustment_action( "ArcRadiusXAction",
+                                         _("Radius X"), _("Rx:"), _("X Radius of arc"),
+                                         "/tools/shapes/arc/rx", 0,
+                                         GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-arc",
+                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                         labels, values, G_N_ELEMENTS(labels),
+                                         sp_arctb_rx_value_changed, tracker);
+        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
+        g_object_set_data( holder, "rx_action", eact );
+        gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+
+    /* Radius Y */
+    {
+        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+        eact = create_adjustment_action( "ArcRadiusYAction",
+                                         _("Radius Y"), _("Ry:"), _("Y Radius of arc"),
+                                         "/tools/shapes/arc/ry", 0,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                         labels, values, G_N_ELEMENTS(labels),
+                                         sp_arctb_ry_value_changed, tracker);
+        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
+        g_object_set_data( holder, "ry_action", eact );
+        gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+
+    // add the units menu
+    {
+        GtkAction* act = tracker->createAction( "ArcUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act );
     }
 
     /* Start */

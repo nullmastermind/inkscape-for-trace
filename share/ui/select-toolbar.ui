@@ -248,6 +248,10 @@
   <toolbar name='ArcToolbar'>
     <toolitem action='ArcStateAction' />
     <separator />
+    <toolitem action='ArcRadiusXAction' />
+    <toolitem action='ArcRadiusYAction' />
+    <toolitem action='ArcUnitsAction' />
+    <separator />
     <toolitem action='ArcStartAction' />
     <toolitem action='ArcEndAction' />
     <separator />
