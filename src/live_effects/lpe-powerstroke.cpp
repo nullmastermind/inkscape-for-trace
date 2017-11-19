@@ -645,7 +645,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
-    Piecewise<D2<SBasis> > pwd2_out = compose(pwd2_in,x) + y*compose(n,x);
+    Piecewise<D2<SBasis> > pwd2_out   =          compose(pwd2_in,x) + y*compose(n,x);
     Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
     Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);

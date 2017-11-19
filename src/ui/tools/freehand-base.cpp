@@ -242,24 +242,24 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 }
                 pt->addPowerStrokePencil(c);
             }
-            double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
-            double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
-            if (min > max){
-                min = max;
-            }
-            Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-            Geom::Coord scale = transformCoordinate.expansionX();
-            double pressure_shirnked = (1.0 * (max - min)) + min;
-            double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
             if(pt->points.empty()){
-                pt->points.push_back(Geom::Point(0, pressure_computed));
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+                const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
+                double swidth;
+                sp_svg_number_read_d(stroke_width, &swidth);
+                swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
+                if (!swidth) {
+                    swidth = swidth/2;
+                }
+                pt->points.push_back(Geom::Point(0, swidth));
             }
             Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
             Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
             lpe->getRepr()->setAttribute("sort_points", "true");
             lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+            lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
+            lpe->getRepr()->setAttribute("miter_limit", "4");
             lpe->getRepr()->setAttribute("linejoin_type", "round");
             static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
             pt->points.clear();

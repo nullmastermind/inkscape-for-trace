@@ -90,18 +90,28 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
 }
 
 /** call this method to recalculate the controlpoints when path is reversed.*/
-void
-PowerStrokePointArrayParam::reverse_controlpoints()
+std::vector<Geom::Point>
+PowerStrokePointArrayParam::reverse_controlpoints(bool write)
 {
+    std::vector<Geom::Point> controlpoints;
     if (!last_pwd2.empty()) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in_reverse = reverse(last_pwd2);
         for (unsigned int i = 0; i < _vector.size(); ++i) {
             Geom::Point control_pos = last_pwd2.valueAt(_vector[i][Geom::X]);
             double new_pos = Geom::nearest_time(control_pos, pwd2_in_reverse);
+            controlpoints.push_back(Geom::Point(new_pos,_vector[i][Geom::Y]));
             _vector[i][Geom::X] = new_pos;
         }
-        write_to_SVG();
+        if (write) {
+            write_to_SVG();
+            _vector.clear();
+            _vector = controlpoints;
+            controlpoints.clear();
+            write_to_SVG();
+            return _vector;
+        }
     }
+    return controlpoints;
 }
 
 float PowerStrokePointArrayParam::median_width()

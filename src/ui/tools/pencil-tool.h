@@ -6,7 +6,7 @@
  */
 
 #include "ui/tools/freehand-base.h"
-
+#include "sp-shape.h"
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
@@ -70,10 +70,10 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    void _powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points, bool write);
-    SPItem *_powerpreview;
-    SPItem *_powerpreviewtail;
-    bool _second_chance_preview;
+    void _powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> points, bool write);
+    SPShape *_powerpreview;
+    SPShape *_powerpreviewtail;
+    bool _previewok;
     gchar const * end_linecap_type; 
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
