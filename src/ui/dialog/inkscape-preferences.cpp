@@ -204,30 +204,22 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
-void InkscapePreferences::AddPressureSensitivity(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
-{
-    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/pressure-sensitivity", 1, 100.0, 1.0, 10.0, def_value, true, false);
-    p.add_line( false, _("Pressure sensitivity:"), *sb, _("on tablet usage"),
-                       _("Pressure sensitivity, 12 is the default value"),
-                       false );
-}
 
 void InkscapePreferences::AddPowerStrokeKnotDistanceFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
 {
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
     sb->init ( prefs_path + "/knots-distance", 0.1, 9999.0, 1.0, 10.0, def_value, false, false);
     p.add_line( false, _("Minimum knot distance factor:"), *sb, _("on tablet usage"),
-                       _("This unitless value affects the density of LPE knots. The default value is 135. A small value allows you to draw squiggly lines, while a higher value creates smoother lines with less width differences."),
+                       _("This unitless value affects the density of LPE knots. A small value allows you to draw squiggly lines, while a higher value creates smoother lines with less width differences."),
                        false );
 }
 
-void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
 {
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/gap-pressure", 0.01, 9999.0, 1.0, 10.0, def_value, false, false);
-    p.add_line( false, _("Pressure change needed to create knot:"), *sb, _("on tablet usage"),
-                       _("Difference in pressure that is required to create a new PowerStroke knot. This factor is one of several that are taken into account when deciding where to place a knot. The default value is 1."),
+    sb->init ( prefs_path + "/gap-pressure", 1, 100, 1, 10, def_value, true, false);
+    p.add_line( false, _("Minimun pressure % diference needed to create knot:"), *sb, _("on tablet usage"),
+                       _("Minimun percent difference in pressure that is required to create a new PowerStroke knot."),
                        false );
 }
 
@@ -450,9 +442,8 @@ void InkscapePreferences::initPageTools()
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Pressure sensitivity settings"));
-    this->AddPressureSensitivity(_page_pencil, "/tools/freehand/pencil", 12.0);
     this->AddPowerStrokeKnotDistanceFactor(_page_pencil, "/tools/freehand/pencil", 135.0);
-    this->AddPowerStrokeGapPressureFactor(_page_pencil, "/tools/freehand/pencil", 1.0);
+    this->AddPowerStrokeGapPressureFactor(_page_pencil, "/tools/freehand/pencil", 10);
 
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",

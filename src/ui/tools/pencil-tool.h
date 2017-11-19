@@ -73,7 +73,8 @@ private:
     void _powerStrokePreview(Geom::Path path, std::vector<Geom::Point> points, bool write);
     SPItem *_powerpreview;
     SPItem *_powerpreviewtail;
-
+    bool _second_chance_preview;
+    gchar const * end_linecap_type; 
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
