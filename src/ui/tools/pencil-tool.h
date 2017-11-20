@@ -79,7 +79,7 @@ private:
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
     void _fitAndSplit();
-    void _interpolate();
+    void _interpolate(bool realize = false);
     void _sketchInterpolate();
     void _extinput(GdkEvent *event);
     void _cancel();
