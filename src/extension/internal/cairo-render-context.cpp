@@ -882,7 +882,7 @@ CairoRenderContext::finish(bool finish_surface)
 {
     g_assert( _is_valid );
 
-    if (_vector_based_target)
+    if (_vector_based_target && finish_surface)
         cairo_show_page(_cr);
 
     // PDF+TeX Output, see CairoRenderContext::_prepareRenderGraphic()
@@ -898,8 +898,7 @@ CairoRenderContext::finish(bool finish_surface)
     if (finish_surface)
         cairo_surface_finish(_surface);
     cairo_status_t status = cairo_surface_status(_surface);
-    if (finish_surface)
-        cairo_surface_destroy(_surface);
+    cairo_surface_destroy(_surface);
     _surface = NULL;
 
     if (_layout)
