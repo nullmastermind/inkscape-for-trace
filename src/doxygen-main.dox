@@ -345,7 +345,6 @@ namespace XML {}
  * {\ref dialogs/} [\ref decimal-round.h] [\ref enums.h]
  */
 
-
 /*
   Local Variables:
   mode:c++
