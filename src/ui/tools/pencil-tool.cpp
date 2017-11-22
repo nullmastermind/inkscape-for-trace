@@ -74,7 +74,7 @@ PencilTool::PencilTool()
     , sketch_n(0)
     , _powerpreviewtail(NULL)
     , _powerpreview(NULL)
-    , _previewok(true)
+    , _preview_ok(true)
 {
 }
 
@@ -281,6 +281,10 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     // Once the user has moved farther than tolerance from the original location
     // (indicating they intend to move the object, not click), then always process the
     // motion notify coordinates as given (no snapping back to origin)
+    if (input_has_pressure && pencil_within_tolerance) {
+        p = desktop->w2d(pencil_drag_origin_w);
+        anchor = spdc_test_inside(this, pencil_drag_origin_w);
+    }
     pencil_within_tolerance = false;
 
     switch (this->state) {
@@ -288,8 +292,8 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
             /* Set red endpoint */
             if (input_has_pressure) {
                 this->state = SP_PENCIL_CONTEXT_FREEHAND;
-                return true;
-            }
+                return false;
+            } 
             if (anchor) {
                 p = anchor->dp;
             } else {
@@ -313,6 +317,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                     this->green_anchor = sp_draw_anchor_new(this, this->green_curve, TRUE, this->p[0]);
                 }
                 if (anchor) {
+                    std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
                     p = anchor->dp;
                 }
                 if ( this->npoints != 0) { // buttonpress may have happened before we entered draw context!
@@ -350,7 +355,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
             // Show the pre-snap indicator to communicate to the user where we would snap to if he/she were to
             // a) press the mousebutton to start a freehand drawing, or
             // b) release the mousebutton to finish a freehand drawing
-            if (!this->sp_event_context_knot_mouseover() && !input_has_pressure) {
+            if (!this->sp_event_context_knot_mouseover()) {
                 SnapManager &m = desktop->namedview->snap_manager;
                 m.setup(desktop, true);
                 m.preSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_NODE_HANDLE));
@@ -712,9 +717,9 @@ PencilTool::_powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> 
         }
         if (!curve->is_empty()) {
             _powerpreviewtail->setCurve(curve, true);
-            _previewok = true;
+            _preview_ok = true;
         } else {//if (!_second_chance_preview) {
-            _previewok = false;
+            _preview_ok = false;
         }
     }
     curve->unref();
@@ -747,7 +752,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     this->points.clear();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double tol          = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
-    double gap_pressure = prefs->getIntLimited("/tools/freehand/pencil/gap-pressure",10, 1, 100)/100.0;
+    double gap_pressure = prefs->getIntLimited("/tools/freehand/pencil/ps-step-pressure",10, 1, 100)/100.0;
     double min          = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
     double max          = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
     if (min > max){
@@ -797,7 +802,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
                 if (curve->is_empty()) {
                     curve = green_curve->copy();
                 } else {
-                    green_curve->move_endpoints(curve->first_path()->finalPoint(), *green_curve->last_point());
+                    green_curve->move_endpoints(curve->first_path()->finalPoint(), green_curve->first_path()->finalPoint());
                     curve->append_continuous( green_curve, 0.0625);
                 }
                 if (!red_curve->is_empty()) {
@@ -846,21 +851,13 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     double pos = Geom::nearest_time(position, path);
     for (auto point = this->ps.begin(); point != this->ps.end(); ++point, ++pressure) {
         counter++;
-//        //remove end pressure gap
-//        if (this->ps.size() > 4 && this->ps.size()-4 < counter) {
-//            break;
-//        }
         double pressure_shrunk = (*pressure * (max - min)) + min;
        //We need half width for power stroke
         pressure_computed = pressure_shrunk * dezoomify_factor/2.0;
         //remove start pressure gap
-        if (counter < 2) {
-            if (start) {
-                start = false;
-                this->points.push_back(Geom::Point(pos + 0.01, pressure_computed));
-            } else {
-                this->points[this->points.size()-1] = Geom::Point(pos + 0.01, pressure_computed);
-            }
+        if (start) {
+            start = false;
+            this->points.push_back(Geom::Point(pos + 0.01, pressure_computed));
             previous_pressure = pressure_shrunk;
             continue;
         }
@@ -869,14 +866,14 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
             position *= transformCoordinate.inverse();
         }
         pos = Geom::nearest_time(position, path);
-        if (pos < 1e6 && std::abs(previous_pressure - pressure_shrunk) > gap_pressure) {
+        if (pos < 1e6 && std::abs(previous_pressure - pressure_shrunk) > gap_pressure && pos < path.size() - 1) {
             previous_pressure = pressure_shrunk;
             this->points.push_back(Geom::Point(pos, pressure_computed));
         }
     }
     if (live && this->points.size() > 0) {
         bool write = false;
-        if (points_parsed != this->points.size() || !_previewok) {
+        if (points_parsed != this->points.size() || !_preview_ok) {
             points_parsed = this->points.size();
             write = true;
         }
@@ -939,22 +936,41 @@ void PencilTool::_interpolate(bool realize) {
         if (tol < 18.0 * 0.4) {
             tol = 18.0 * 0.4;
         }
-        //Smooth start segments
+        //we dont need a exact calulation set up a high precission
+        //we remove pointa at start and end nearest to 1/20 of total length
+        double distance = 0;
+        Geom::Point prev = this->ps[0];
+        for (auto i:this->ps) {
+            if (i == prev) {
+                continue;
+            }
+            distance += Geom::distance(i, prev);
+            prev = i;
+        }
+        double smoothlenght = (distance/this->ps.size()); 
+        std::cout << smoothlenght << "smoothlenght" << std::endl;
+
+//        //Double check to limit on large strokes
+//        double limitlenght = desktop->get_display_area().diameter()/20.0;
+//        std::cout << limitlenght << "limitlenght" << std::endl;
+//        //smoothlenght = std::min(smoothlenght, limitlenght);
+//        //Smooth start segments
+
+
+
+
         if (realize && this->ps.size() > 3) {
-            this->ps.erase(this->ps.begin() + 1, this->ps.begin() + 2);
-            this->wps.erase(this->wps.begin() + 1, this->wps.begin() + 2);
+            Geom::Point start_point = *this->ps.begin();
+            while ( this->ps.size() > 6 && Geom::distance(*(this->ps.begin()+1), start_point) < smoothlenght) {
+                this->ps.erase(this->ps.begin() + 1);
+                this->wps.erase(this->wps.begin() + 1);
+            }
         }
         //Smooth last segments
         if (realize && this->ps.size() > 3) {
-            double start_distance = Geom::distance(this->ps[0], this->ps[1]);
             Geom::Point last_point = *this->ps.end();
-            std::cout << start_distance << "start_distance" << std::endl;
-            std::cout << Geom::distance(*this->ps.end(), last_point) << "distance" << std::endl;
-            std::cout << "::::::::::::::::::::::::::::::::::::::distance" << std::endl;
             bool erased = false;
-            while ( this->ps.size() > 9 && Geom::distance(*this->ps.end(), last_point) < start_distance) {
-                std::cout << Geom::distance(*this->ps.end(), last_point) << "distance" << std::endl;
-                std::cout << start_distance << "start_distance" << std::endl;
+            while ( this->ps.size() > 6 && Geom::distance(*this->ps.end(), last_point) < smoothlenght) {
                 this->ps.pop_back();
                 this->wps.pop_back();
                 erased = true;
@@ -999,13 +1015,13 @@ void PencilTool::_interpolate(bool realize) {
                 this->green_curve->curveto(point_at1,point_at2,b[4*c+3]);
             } else {
                 //force retracted handle at end if power stroke
-//                if (c == n_segs - 1 && input_has_pressure) {
-//                    this->green_curve->curveto(b[4 * c + 1], b[4 * c + 3], b[4 * c + 3]);
-//                } else if (c == 0 && input_has_pressure) {
-//                    this->green_curve->curveto(b[4 * c], b[4 * c + 2], b[4 * c + 3]);
-//                } else {
+                if (c == n_segs - 1 && input_has_pressure) {
+                    this->green_curve->curveto(b[4 * c + 1], b[4 * c + 3], b[4 * c + 3]);
+                } else if (c == 0 && input_has_pressure) {
+                    this->green_curve->curveto(b[4 * c], b[4 * c + 2], b[4 * c + 3]);
+                } else {
                     this->green_curve->curveto(b[4 * c + 1], b[4 * c + 2], b[4 * c + 3]);
-                //}
+                }
             }
         }
         if (!input_has_pressure) {

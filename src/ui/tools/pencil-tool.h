@@ -73,7 +73,7 @@ private:
     void _powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> points, bool write);
     SPShape *_powerpreview;
     SPShape *_powerpreviewtail;
-    bool _previewok;
+    bool _preview_ok;
     gchar const * end_linecap_type; 
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();

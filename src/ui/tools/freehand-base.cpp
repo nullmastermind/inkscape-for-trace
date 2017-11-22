@@ -330,7 +330,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
     if (item && SP_IS_LPE_ITEM(item)) {
         //Store the clipboard path to apply in the future without the use of clipboard
         static Geom::PathVector previous_shape_pathv;
@@ -397,11 +396,16 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         }
         if (SP_IS_PENCIL_CONTEXT(dc)) {
             if (dc->input_has_pressure) {
-                std::vector<Geom::Point> points;
-                spdc_apply_powerstroke_shape(points, dc, item);
-                shape = NONE;
-                //To allow retain color
-                shape_applied = true;
+                if (shape == NONE) {
+                    std::vector<Geom::Point> points;
+                    spdc_apply_powerstroke_shape(points, dc, item);
+                    //To allow retain color
+                    shape_applied = true;
+                } else {
+                    PencilTool *pt = SP_PENCIL_CONTEXT(dc);
+                    pt->removePowerStrokePreview();
+                    shape == NONE;
+                }
             }
         }
 #define SHAPE_LENGTH 10
@@ -865,7 +869,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             //Bend needs the transforms applied after, Other effects best before
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
+            (dc, item, c, true);
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();

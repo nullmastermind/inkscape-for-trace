@@ -204,12 +204,12 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
-void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
+void InkscapePreferences::AddPencilPowerStrokePressureStep(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
 {
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/gap-pressure", 1, 100, 1, 10, def_value, true, false);
-    p.add_line( false, _("Pressure diference on knots:"), *sb, _("%"),
-                       _("Pressure diference percent that is required to create a new PowerStroke knot."),
+    sb->init ( prefs_path + "/ps-step-pressure", 1, 100, 1, 10, def_value, true, false);
+    p.add_line( false, _("Pressure change for new knot:"), *sb, _("%"),
+                       _("Percentage increase / decrease of stylus pressure that is required to create a new PowerStroke knot."),
                        false );
 }
 
@@ -432,7 +432,7 @@ void InkscapePreferences::initPageTools()
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Pressure sensitivity settings"));
-    this->AddPowerStrokeGapPressureFactor(_page_pencil, "/tools/freehand/pencil", 10);
+    this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 10);
 
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
