@@ -66,6 +66,8 @@ inkscape:mac:
 
 inkscape:doc:
   stage: build
+  only:
+    - schedules
   script:
     - cd buildtools
     - doxygen Doxyfile
@@ -81,7 +83,7 @@ inkscape:doc:
 # Make sure the timeout of the build is big enough
 clang:
   stage: build
-  only: 
+  only:
     - schedules
   script:
     - apt-get update -yqq && apt-get install -y clang-3.8 clang
@@ -105,13 +107,17 @@ test:linux:
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
-  when: manual
   dependencies:
+    - inkscape:doc
     - clang
   script:
+    - mkdir -p public/
     - if test -e scan; then cp -r scan/* public; fi
+    - if test -e doxygen; then cp -r doxygen/html/ public/doxygen/; fi
+    - if test -e doxygen-extensions; then cp -r doxygen/html/ public/doxygen-extensions/; fi
   artifacts:
     paths:
       - public
   only:
     - master
+    - schedules
