@@ -41,12 +41,15 @@ using Geom::Y;
  * When a drawing context is created for this surface, its pixels
  * will cover the area under the given rectangle.
  */
-DrawingSurface::DrawingSurface(Geom::IntRect const &area)
+DrawingSurface::DrawingSurface(Geom::IntRect const &area, int device_scale)
     : _surface(NULL)
     , _origin(area.min())
     , _scale(1, 1)
     , _pixels(area.dimensions())
-{}
+    , _device_scale(device_scale)
+{
+    std::cout << "DrawingSurface::DrawingSurface() 1" << std::endl;
+}
 
 /**
  * Creates a surface with the given logical and physical extents.
@@ -56,12 +59,15 @@ DrawingSurface::DrawingSurface(Geom::IntRect const &area)
  * @param logbox Logical extents of the surface
  * @param pixdims Pixel dimensions of the surface.
  */
-DrawingSurface::DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &pixdims)
+DrawingSurface::DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &pixdims, int device_scale)
     : _surface(NULL)
     , _origin(logbox.min())
     , _scale(pixdims[X] / logbox.width(), pixdims[Y] / logbox.height())
     , _pixels(pixdims)
-{}
+    , _device_scale(device_scale)
+{
+    std::cout << "DrawingSurface::DrawingSurface() 2" << std::endl;
+}
 
 /** 
  * Wrap a cairo_surface_t.
@@ -73,9 +79,23 @@ DrawingSurface::DrawingSurface(cairo_surface_t *surface, Geom::Point const &orig
     , _origin(origin)
     , _scale(1, 1)
 {
+    std::cout << "DrawingSurface::DrawingSurface() 3" << std::endl;
     cairo_surface_reference(surface);
-    _pixels[X] = cairo_image_surface_get_width(surface);
-    _pixels[Y] = cairo_image_surface_get_height(surface);
+
+    double x_scale = 0;
+    double y_scale = 0;
+    cairo_surface_get_device_scale( surface, &x_scale, &y_scale);
+    if (x_scale != y_scale) {
+        std::cerr << "DrawingSurface::DrawingSurface: non-uniform device scale!" << std::endl;
+    }
+    _device_scale = x_scale;
+    if (_device_scale != 1 && _device_scale != 2) {
+        std::cerr << "DrawingSurface::DrawingSurface: device scale not 1 or 2! ("
+                  << _device_scale << ")" << std::endl;
+    }
+
+    _pixels[X] = cairo_image_surface_get_width(surface)/_device_scale;
+    _pixels[Y] = cairo_image_surface_get_height(surface)/_device_scale;
 }
 
 DrawingSurface::~DrawingSurface()
@@ -119,6 +139,13 @@ DrawingSurface::scale() const
     return _scale;
 }
 
+/// Device scale for HiDPI screens
+int
+DrawingSurface::device_scale() const
+{
+    return _device_scale;
+}
+
 /// Get the transformation applied to the drawing context on construction.
 Geom::Affine
 DrawingSurface::drawingTransform() const
@@ -153,7 +180,11 @@ DrawingSurface::createRawContext()
 {
     // deferred allocation
     if (!_surface) {
-        _surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, _pixels[X], _pixels[Y]);
+        _surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                              _pixels[X] * _device_scale,
+                                              _pixels[Y] * _device_scale);
+        std::cout << "DrawingSurface::createRawContext() Entrance" << std::endl;
+        cairo_surface_set_device_scale(_surface, _device_scale, _device_scale);
     }
     cairo_t *ct = cairo_create(_surface);
     if (_scale != Geom::Scale::identity()) {
@@ -172,8 +203,8 @@ DrawingSurface::pixelArea() const
 
 //////////////////////////////////////////////////////////////////////////////
 
-DrawingCache::DrawingCache(Geom::IntRect const &area)
-    : DrawingSurface(area)
+DrawingCache::DrawingCache(Geom::IntRect const &area, int device_scale)
+    : DrawingSurface(area, device_scale)
     , _clean_region(cairo_region_create())
     , _pending_area(area)
 {}

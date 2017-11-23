@@ -29,8 +29,8 @@ class DrawingContext;
 class DrawingSurface
 {
 public:
-    explicit DrawingSurface(Geom::IntRect const &area);
-    DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &pixdims);
+    explicit DrawingSurface(Geom::IntRect const &area, int device_scale = 1);
+    DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &pixdims, int device_scale = 1);
     DrawingSurface(cairo_surface_t *surface, Geom::Point const &origin);
     virtual ~DrawingSurface();
 
@@ -39,6 +39,7 @@ public:
     Geom::Point dimensions() const;
     Geom::Point origin() const;
     Geom::Scale scale() const;
+    int device_scale() const;
     Geom::Affine drawingTransform() const;
     cairo_surface_type_t type() const;
     void dropContents();
@@ -53,6 +54,7 @@ protected:
     Geom::Point _origin;
     Geom::Scale _scale;
     Geom::IntPoint _pixels;
+    int _device_scale; // To support HiDPI screens
     bool _has_context;
 
     friend class DrawingContext;
@@ -62,7 +64,7 @@ class DrawingCache
     : public DrawingSurface
 {
 public:
-    explicit DrawingCache(Geom::IntRect const &area);
+    explicit DrawingCache(Geom::IntRect const &area, int device_scale = 1);
     ~DrawingCache();
 
     void markDirty(Geom::IntRect const &area = Geom::IntRect::infinite());

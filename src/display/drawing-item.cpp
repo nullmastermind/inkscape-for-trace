@@ -667,7 +667,7 @@ struct MaskLuminanceToAlpha {
 
 /**
  * Rasterize items.
- * This method submits the drawing opeartions required to draw this item
+ * This method submits the drawing operations required to draw this item
  * to the supplied DrawingContext, restricting drawing the specified area.
  *
  * This method does some common tasks and calls the item-specific rendering
@@ -678,6 +678,15 @@ struct MaskLuminanceToAlpha {
 unsigned
 DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
+    std::cout << "\nDrawingItem::render:"   << std::endl;
+    std::cout << "  area:     " << area     << std::endl;
+    if (_drawbox)
+        std::cout << "  _drawbox: " << *_drawbox << std::endl;
+    else
+        std::cout << "  No _drawbox" << std::endl;
+    std::cout << "  Surface: width: " << cairo_image_surface_get_width(dc.rawTarget())
+              << "  height: " << cairo_image_surface_get_height(dc.rawTarget()) << std::endl;
+
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
 
@@ -698,6 +707,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
     if (!carea) return RENDER_OK;
+    std::cout << "  carea: " << *carea << std::endl;
+
+    // Device scale for HiDPI screens (either 1 or 2)
+    int device_scale = dc.surface()->device_scale();
+    std::cout << "DrawingItem::render: device_scale: " << device_scale << std::endl;
 
     switch(_antialias){
         case 0:
@@ -731,7 +745,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             Geom::OptIntRect cl = _drawing.cacheLimit();
             cl.intersectWith(_drawbox);
             if (cl) {
-                _cache = new DrawingCache(*cl);
+                _cache = new DrawingCache(*cl, device_scale);
             }
         }
     } else {
@@ -770,6 +784,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
+        std::cout << "   short-circuit!" << std::endl;
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
@@ -785,7 +800,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         iarea.intersectWith(_drawbox);
     }
 
-    DrawingSurface intermediate(*iarea);
+    std::cout << " intermediate area required! Device scale: " << device_scale << std::endl;
+    DrawingSurface intermediate(*iarea, device_scale);
     DrawingContext ict(intermediate);
     unsigned render_result = RENDER_OK;
 
@@ -832,7 +848,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
                 if (bg_root->_background_new) break;
             }
             if (bg_root) {
-                DrawingSurface bg(*iarea);
+                DrawingSurface bg(*iarea, device_scale);
                 DrawingContext bgdc(bg);
                 bg_root->render(bgdc, *iarea, flags | RENDER_FILTER_BACKGROUND, this);
                 _filter->render(this, ict, &bgdc);
@@ -854,6 +870,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // 6. Paint the completed rendering onto the base context (or into cache)
     if (_cached && _cache) {
+        std::cout << "  cache!!!!!!!!!!!!!!" << std::endl;
         DrawingContext cachect(*_cache);
         cachect.rectangle(*carea);
         cachect.setOperator(CAIRO_OPERATOR_SOURCE);
