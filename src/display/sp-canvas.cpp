@@ -1606,9 +1606,9 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
 
     // Move to the right row
-    data += stride * (paint_rect.top() - _y0);
+    data += stride * (paint_rect.top() - _y0)*(int)y_scale;
     // Move to the right pixel inside of that row
-    data += 4 * (paint_rect.left() - _x0);
+    data += 4 * (paint_rect.left() - _x0)*(int)x_scale;
     cairo_surface_t *imgs = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32,
          paint_rect.width()*x_scale, paint_rect.height()*y_scale, stride);
 
@@ -1655,11 +1655,12 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
             }
             cairo_surface_mark_dirty(imgs);
         }
+        cairo_surface_write_to_png( imgs, "hmm3.png" );
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     cairo_surface_mark_dirty(_backing_store);
-    cairo_surface_write_to_png( _backing_store, "hmm3.png" );
+    cairo_surface_write_to_png( _backing_store, "hmm4.png" );
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
@@ -1838,6 +1839,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     setup.mouse_loc = sp_canvas_window_to_world(this, Geom::Point(x,y));
 
+    std::cout << "        : " << setup.mouse_loc << std::endl;
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 16, 1, 512);
 
@@ -1932,11 +1935,14 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
 
     cairo_rectangle_list_t *rects = cairo_copy_clip_rectangle_list(cr);
     cairo_region_t *dirty_region = cairo_region_create();
+    std::cout << "  number of rectangles: " << rects->num_rectangles << std::endl;
 
     for (int i = 0; i < rects->num_rectangles; i++) {
         cairo_rectangle_t rectangle = rects->rectangles[i];
         Geom::Rect dr = Geom::Rect::from_xywh(rectangle.x + canvas->_x0, rectangle.y + canvas->_y0,
                                               rectangle.width, rectangle.height);
+        std::cout << "  " << i << ": " << dr << std::endl;
+
         Geom::IntRect ir = dr.roundOutwards();
         cairo_rectangle_int_t irect = { ir.left(), ir.top(), ir.width(), ir.height() };
         cairo_region_union_rectangle(dirty_region, &irect);
@@ -2123,6 +2129,13 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
         std::cerr << "SPCanvas::scrollTo(): non-uniform device scale!" << std::endl;
     }
 
+    std::cout << "  ix: " << ix << " iy: " << iy << " dx: " << dx << " dy: " << dy << std::endl;
+    std::cout << "  old_area: " << old_area << std::endl;
+    std::cout << "  new_area: " << new_area << std::endl;
+    std::cout << "  allocation: " << allocation.width << "x" << allocation.height << std::endl;
+    std::cout << "  device_scale: " << device_scale << std::endl;
+    std::cout << "  x_scale: " << x_scale << std::endl;
+
     cairo_surface_t *new_backing_store = NULL;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (_surface_for_similar != NULL)
@@ -2139,12 +2152,15 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                                        allocation.height * device_scale);
 
     cairo_surface_set_device_scale(new_backing_store, x_scale, y_scale);
+
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
     cairo_translate(cr, -ix, -iy);
     cairo_set_source(cr, _background);
     cairo_paint(cr);
+
+    cairo_surface_write_to_png( _backing_store, "scroll0.png" );
 
     // Copy the old backing store contents
     cairo_set_source_surface(cr, _backing_store, _x0, _y0);
@@ -2154,6 +2170,8 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     cairo_destroy(cr);
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
+
+    cairo_surface_write_to_png( _backing_store, "scroll1.png" );
 
     _dx0 = cx; // here the 'd' stands for double, not delta!
     _dy0 = cy;
