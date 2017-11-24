@@ -48,7 +48,7 @@ DrawingSurface::DrawingSurface(Geom::IntRect const &area, int device_scale)
     , _pixels(area.dimensions())
     , _device_scale(device_scale)
 {
-    std::cout << "DrawingSurface::DrawingSurface() 1" << std::endl;
+    assert(_device_scale > 0);
 }
 
 /**
@@ -66,7 +66,7 @@ DrawingSurface::DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &p
     , _pixels(pixdims)
     , _device_scale(device_scale)
 {
-    std::cout << "DrawingSurface::DrawingSurface() 2" << std::endl;
+    assert(_device_scale > 0);
 }
 
 /** 
@@ -79,7 +79,6 @@ DrawingSurface::DrawingSurface(cairo_surface_t *surface, Geom::Point const &orig
     , _origin(origin)
     , _scale(1, 1)
 {
-    std::cout << "DrawingSurface::DrawingSurface() 3" << std::endl;
     cairo_surface_reference(surface);
 
     double x_scale = 0;
@@ -89,10 +88,7 @@ DrawingSurface::DrawingSurface(cairo_surface_t *surface, Geom::Point const &orig
         std::cerr << "DrawingSurface::DrawingSurface: non-uniform device scale!" << std::endl;
     }
     _device_scale = x_scale;
-    if (_device_scale != 1 && _device_scale != 2) {
-        std::cerr << "DrawingSurface::DrawingSurface: device scale not 1 or 2! ("
-                  << _device_scale << ")" << std::endl;
-    }
+    assert(_device_scale > 0);
 
     _pixels[X] = cairo_image_surface_get_width(surface)/_device_scale;
     _pixels[Y] = cairo_image_surface_get_height(surface)/_device_scale;
@@ -183,7 +179,6 @@ DrawingSurface::createRawContext()
         _surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                               _pixels[X] * _device_scale,
                                               _pixels[Y] * _device_scale);
-        std::cout << "DrawingSurface::createRawContext() Entrance" << std::endl;
         cairo_surface_set_device_scale(_surface, _device_scale, _device_scale);
     }
     cairo_t *ct = cairo_create(_surface);
