@@ -574,8 +574,18 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     // The code below works even when the target is not an image surface
     if (ctrl->mode == SP_CTRL_MODE_XOR) {
+
         // 1. Copy the affected part of output to a temporary surface
-        cairo_surface_t *work = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+
+        // Find device scale of source surface
+        double x_scale = 0;
+        double y_scale = 0;
+        cairo_surface_get_device_scale(cairo_get_target(buf->ct), &x_scale, &y_scale);
+
+        // Size in device pixels. Does not set device scale.
+        cairo_surface_t *work = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w * x_scale, h * y_scale);
+        cairo_surface_set_device_scale(work, x_scale, y_scale);
+
         cairo_t *cr = cairo_create(work);
         cairo_translate(cr, -ctrl->box.left(), -ctrl->box.top());
         cairo_set_source_surface(cr, cairo_get_target(buf->ct), buf->rect.left(), buf->rect.top());
@@ -586,22 +596,31 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_surface_flush(work);
         int strideb = cairo_image_surface_get_stride(work);
         unsigned char *pxb = cairo_image_surface_get_data(work);
+
+        int device_scale = x_scale;
         guint32 *p = ctrl->cache;
         for (int i=0; i<h; ++i) {
-            guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
+            guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb*device_scale);
             for (int j=0; j<w; ++j) {
                 guint32 cc = *p++;
                 guint32 ac = cc & 0xff;
                 if (ac == 0 && cc != 0) {
-                    *pb++ = argb32_from_rgba(cc | 0x000000ff);
+                    *pb = argb32_from_rgba(cc | 0x000000ff);
                 } else {
                     EXTRACT_ARGB32(*pb, ab,rb,gb,bb)
                     guint32 ro = compose_xor(rb, (cc & 0xff000000) >> 24, ac);
                     guint32 go = compose_xor(gb, (cc & 0x00ff0000) >> 16, ac);
                     guint32 bo = compose_xor(bb, (cc & 0x0000ff00) >>  8, ac);
                     ASSEMBLE_ARGB32(px, ab,ro,go,bo)
-                    *pb++ = px;
+                    *pb = px;
                 }
+                if (device_scale == 2) {
+                    *(pb+1)           = *pb;
+                    *(pb+strideb/4)   = *pb;
+                    *(pb+strideb/4+1) = *pb;
+                    pb++;
+                }
+                pb++;
             }
         }
         cairo_surface_mark_dirty(work);
