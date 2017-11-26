@@ -18,8 +18,6 @@
  */
 
 
-#ifdef __WIN32__
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -30,28 +28,29 @@
 
 
 /**
- * Provide a similar mechanism for Win32.  Enable a macro,
- * WIN32_DATADIR, that can look up subpaths for inkscape resources
- */
-
-/**
- * Get the Windows-equivalent of INKSCAPE_DATADIR and append a relative path
+ * Determine the location of the Inkscape data directory (typically the share/ folder
+ * from where Inkscape should be loading resources) and append a relative path
  *
- *  - by default INKSCAPE_DATADIR will be relative to the called executable
+ *  - by default use the compile time value of INKSCAPE_DATADIR
+ *  - on Windows inkscape_datadir will be relative to the called executable by default
  *    (typically inkscape/share but also handles the case where the executable is in a /bin subfolder)
- *  - to override set the INKSCAPE_DATADIR environment variable
+ *  - if the environment variable INKSCAPE_DATADIR is set it will override all of the above
  */
-char *win32_append_datadir(const char *relative_path)
+char *append_inkscape_datadir(const char *relative_path)
 {
-    static gchar *datadir;
-    if (!datadir) {
-        gchar const *inkscape_datadir = g_getenv("INKSCAPE_DATADIR");
-        if (inkscape_datadir) {
-            datadir = g_strdup(inkscape_datadir);
+    static gchar *inkscape_datadir;
+    if (!inkscape_datadir) {
+        gchar const *datadir_env = g_getenv("INKSCAPE_DATADIR");
+        if (datadir_env) {
+            inkscape_datadir = g_strdup(datadir_env);
         } else {
+#ifdef _WIN32
             gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
-            datadir = g_build_filename(module_path, "share", NULL);
+            inkscape_datadir = g_build_filename(module_path, "share", NULL);
             g_free(module_path);
+#else
+            inkscape_datadir = INKSCAPE_DATADIR;
+#endif
         }
     }
 
@@ -59,9 +58,8 @@ char *win32_append_datadir(const char *relative_path)
         relative_path = "";
     }
 
-    return g_build_filename(datadir, relative_path, NULL);
+    return g_build_filename(inkscape_datadir, relative_path, NULL);
 }
-#endif /* __WIN32__ */
 
 
 /*
