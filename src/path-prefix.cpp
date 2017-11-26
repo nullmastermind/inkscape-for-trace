@@ -38,7 +38,7 @@
  */
 char *append_inkscape_datadir(const char *relative_path)
 {
-    static gchar *inkscape_datadir;
+    static gchar const *inkscape_datadir;
     if (!inkscape_datadir) {
         gchar const *datadir_env = g_getenv("INKSCAPE_DATADIR");
         if (datadir_env) {
