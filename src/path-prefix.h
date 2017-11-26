@@ -18,9 +18,12 @@
 #endif
 #include "prefix.h"
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif /* __cplusplus */
+#ifdef __WIN32__
+char *win32_append_datadir(const char *relative_path);
+#define WIN32_DATADIR(suffix) (win32_append_datadir(suffix))
+#undef INKSCAPE_DATADIR
+#define INKSCAPE_DATADIR WIN32_DATADIR(NULL)
+#endif
 
 #ifdef ENABLE_BINRELOC
 /* The way that we're building now is with a shared library between Inkscape
@@ -126,9 +129,5 @@
 #    define CREATE_PATTERNSDIR  INKSCAPE_DATADIR "/create/patterns/vector"
 #	 endif
 #endif
-
-//#ifdef __cplusplus
-//}
-//#endif /* __cplusplus */
 
 #endif /* _PATH_PREFIX_H_ */

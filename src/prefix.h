@@ -118,11 +118,4 @@ char *br_extract_prefix(const char *path);
 }
 #endif /* __cplusplus */
 
-#ifdef __WIN32__
-char *win32_append_datadir(const char *relative_path);
-#undef INKSCAPE_DATADIR
-#define INKSCAPE_DATADIR win32_append_datadir(NULL)
-#define WIN32_DATADIR(suffix) (win32_append_datadir(suffix))
-#endif
-
 #endif /* _PREFIX_H_ */
