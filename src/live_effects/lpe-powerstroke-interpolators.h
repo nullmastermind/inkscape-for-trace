@@ -15,7 +15,7 @@
 #include <2geom/path.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/sbasis-to-bezier.h>
-
+#include <math.h>
 #include "live_effects/spiro.h"
 
 
@@ -27,6 +27,7 @@ enum InterpolatorType {
   INTERP_LINEAR,
   INTERP_CUBICBEZIER,
   INTERP_CUBICBEZIER_JOHAN,
+  INTERP_BSPLINE,
   INTERP_SPIRO,
   INTERP_CUBICBEZIER_SMOOTH,
   INTERP_CENTRIPETAL_CATMULLROM
@@ -63,6 +64,38 @@ public:
 private:
     Linear(const Linear&);
     Linear& operator=(const Linear&);
+};
+
+class BSpline : public Interpolator {
+public:
+    BSpline() {};
+    virtual ~BSpline() {};
+
+    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+        Path path;
+        path.start( points.at(0) );
+        for (unsigned int i = 1 ; i < points.size(); ++i) {
+            Geom::Point pointA = points.at(i-1);
+            Geom::Point pointB = points.at(i);
+            Geom::Ray ray(pointA, pointB);
+            double angle = ray.angle();
+            if (angle == 0) {
+                continue;
+            }
+            std::cout << angle << "angle" << std::endl;
+            double k1 = (Geom::distance(pointA, pointB)*std::sin(angle))/2.0;
+                        std::cout << k1 << "k1" << std::endl;
+                                    std::cout << std::sin(angle) << "std::sin(angle)" << std::endl;
+            Geom::Point handle_1 = Geom::Point::polar(angle, k1) + pointA;
+            Geom::Point handle_2 = Geom::Point::polar(angle, k1 * 2) + pointA;
+            path.appendNew<CubicBezier>(handle_1, handle_2, pointB);
+        }
+        return path;
+    };
+
+private:
+    BSpline(const BSpline&);
+    BSpline& operator=(const BSpline&);
 };
 
 // this class is terrible
@@ -302,6 +335,8 @@ Interpolator::create(InterpolatorType type) {
         return new Geom::Interpolate::CubicBezierSmooth();
       case INTERP_CENTRIPETAL_CATMULLROM:
         return new Geom::Interpolate::CentripetalCatmullRomInterpolator();
+      case INTERP_BSPLINE:
+        return new Geom::Interpolate::BSpline();
       default:
         return new Geom::Interpolate::Linear();
     }
