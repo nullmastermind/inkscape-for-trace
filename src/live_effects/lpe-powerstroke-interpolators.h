@@ -74,21 +74,17 @@ public:
     virtual Path interpolateToPath(std::vector<Point> const &points) const {
         Path path;
         path.start( points.at(0) );
-        for (unsigned int i = 1 ; i < points.size(); ++i) {
-            Geom::Point pointA = points.at(i-1);
-            Geom::Point pointB = points.at(i);
-            Geom::Ray ray(pointA, pointB);
-            double angle = ray.angle();
-            if (angle == 0) {
-                continue;
-            }
-            std::cout << angle << "angle" << std::endl;
-            double k1 = (Geom::distance(pointA, pointB)*std::sin(angle))/2.0;
-                        std::cout << k1 << "k1" << std::endl;
-                                    std::cout << std::sin(angle) << "std::sin(angle)" << std::endl;
-            Geom::Point handle_1 = Geom::Point::polar(angle, k1) + pointA;
-            Geom::Point handle_2 = Geom::Point::polar(angle, k1 * 2) + pointA;
-            path.appendNew<CubicBezier>(handle_1, handle_2, pointB);
+        Geom::Point handle_prev = points.at(0);
+        for (unsigned int i = 1 ; i < points.size() - 2; ++i) {
+            Geom::Line line_a(points.at(i), points.at(i+1));
+            Geom::Line line_b(points.at(i+1), points.at(i+2));
+            Geom::Point handle_next_tmp = line_a.pointAt(line_a.nearestTime(points.at(i-1)));
+            Geom::Point handle_next = line_b.pointAt(line_b.nearestTime(handle_next_tmp));
+            Geom::Line line_handles(handle_next, points.at(i-1));
+            double angle = line_handles.angle();
+            Geom::Point handle_2 = Geom::Point::polar(angle, Geom::distance(handle_next,points.at(i))) + handle_next;
+            path.appendNew<CubicBezier>(handle_prev, handle_2, points.at(i));
+            handle_prev = handle_next;
         }
         return path;
     };
