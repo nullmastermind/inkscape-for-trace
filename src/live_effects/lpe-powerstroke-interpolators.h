@@ -74,18 +74,41 @@ public:
     virtual Path interpolateToPath(std::vector<Point> const &points) const {
         Path path;
         path.start( points.at(0) );
+        Geom::Point handle_1(0,0);
         Geom::Point handle_prev = points.at(0);
-        for (unsigned int i = 1 ; i < points.size() - 2; ++i) {
-            Geom::Line line_a(points.at(i), points.at(i+1));
-            Geom::Line line_b(points.at(i+1), points.at(i+2));
-            Geom::Point handle_next_tmp = line_a.pointAt(line_a.nearestTime(points.at(i-1)));
-            Geom::Point handle_next = line_b.pointAt(line_b.nearestTime(handle_next_tmp));
-            Geom::Line line_handles(handle_next, points.at(i-1));
-            double angle = line_handles.angle();
-            Geom::Point handle_2 = Geom::Point::polar(angle, Geom::distance(handle_next,points.at(i))) + handle_next;
+        for (unsigned int i = 1 ; i < points.size() - 1; ++i) {
+            Geom::Line line_a(points.at(i - 1), points.at(i));
+            double angle_a = line_a.angle();
+            Geom::Line line_b(points.at(i),points.at(i + 1));
+            double angle_b = line_b.angle();
+            Geom::Line line_handles(line_a.pointAt(0.66667),line_b.pointAt(0.33334));
+            line_handles *= Geom::Translate(points.at(i) - line_handles.pointAt(0.5));
+            Geom::Line line_perp_a(line_a.pointAt(0.5), Geom::Point::polar(angle_a + Geom::rad_from_deg(90),1) +line_a.pointAt(0.5));
+            Geom::Line line_perp_b(line_b.pointAt(0.5), Geom::Point::polar(angle_b + Geom::rad_from_deg(90),1) +line_b.pointAt(0.5));
+            std::vector<CurveIntersection> result = line_perp_a.intersect(line_perp_b);
+            Geom::Point handle_2(0,0);
+            if(result.size() > 0) {
+                Geom::Line line_to_handle_a(result[0],line_a.pointAt(0.66667));
+                Geom::Line line_to_handle_b(result[0],line_b.pointAt(0.33334));
+                std::vector<CurveIntersection> handle_a_res = line_to_handle_a.intersect(line_handles);
+                std::vector<CurveIntersection> handle_b_res = line_to_handle_b.intersect(line_handles);
+                if(handle_a_res.size() > 0) {
+                    handle_2 = handle_a_res[0];
+                }
+                if(handle_a_res.size() > 0) {
+                    handle_1 = handle_b_res[0];
+                }
+            }
+            if (i == 1) {
+                Geom::Line start_segment(handle_prev,handle_2);
+                handle_prev = start_segment.pointAt(0.5);
+            }
             path.appendNew<CubicBezier>(handle_prev, handle_2, points.at(i));
-            handle_prev = handle_next;
+            handle_prev = handle_1;
         }
+        Geom::Point last = points.at(points.size()-1);
+        Geom::Line last_segment(last,handle_1);
+        path.appendNew<CubicBezier>(handle_1, last_segment.pointAt(0.5), last);
         return path;
     };
 
