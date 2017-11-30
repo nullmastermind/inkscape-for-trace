@@ -583,20 +583,14 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     if (!ctrl->defined) return;
     if ((!ctrl->filled) && (!ctrl->stroked)) return;
 
-    // Find device scale of source surface.
-    double x_scale = 0;
-    double y_scale = 0;
-    cairo_surface_get_device_scale(cairo_get_target(buf->ct), &x_scale, &y_scale);
-    int device_scale = x_scale;
-
     // the control-image is rendered into ctrl->cache
     if (!ctrl->build) {
-        sp_ctrl_build_cache (ctrl, device_scale);
+        sp_ctrl_build_cache (ctrl, buf->device_scale);
     }
 
     // Must match width/height sp_ctrl_build_cache.
-    int w = (ctrl->width  * 2 + 1) * device_scale;
-    int h = (ctrl->height * 2 + 1) * device_scale;
+    int w = (ctrl->width  * 2 + 1) * buf->device_scale;
+    int h = (ctrl->height * 2 + 1) * buf->device_scale;
 
     // The code below works even when the target is not an image surface
     if (ctrl->mode == SP_CTRL_MODE_XOR) {
@@ -605,7 +599,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
         // Size in device pixels. Does not set device scale.
         cairo_surface_t *work = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
-        cairo_surface_set_device_scale(work, device_scale, device_scale);
+        cairo_surface_set_device_scale(work, buf->device_scale, buf->device_scale);
 
         cairo_t *cr = cairo_create(work);
         cairo_translate(cr, -ctrl->box.left(), -ctrl->box.top());
@@ -644,7 +638,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_save(buf->ct);
         cairo_set_source_surface(buf->ct, work,
             ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
-        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/device_scale, h/device_scale);
+        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/buf->device_scale, h/buf->device_scale);
         cairo_clip(buf->ct);
         cairo_set_operator(buf->ct, CAIRO_OPERATOR_SOURCE);
         cairo_paint(buf->ct);
