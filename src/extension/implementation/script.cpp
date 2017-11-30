@@ -737,8 +737,12 @@ void Script::effect(Inkscape::Extension::Effect *module,
                   Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG),
                   tempfilename_out.c_str());
         } catch (const Inkscape::Extension::Input::open_failed &e) {
-            /// \todo Popup dialog here
             g_warning("Extension returned output that could not be parsed: %s", e.what());
+            Gtk::MessageDialog warning(
+                    _("The output from the extension could not be parsed."),
+                    false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+            warning.set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
+            warning.run();
         }
     } // data_read
 
