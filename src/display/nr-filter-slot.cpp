@@ -270,6 +270,14 @@ int FilterSlot::get_blurquality(void) {
     return blurquality;
 }
 
+void FilterSlot::set_device_scale(int const s) {
+    device_scale = s;
+}
+
+int FilterSlot::get_device_scale() {
+    return device_scale;
+}
+
 Geom::Rect FilterSlot::get_slot_area() const {
     Geom::Point p(_slot_x, _slot_y);
     Geom::Point dim(_slot_w, _slot_h);
