@@ -205,6 +205,13 @@ if(WIN32)
     ${MINGW_LIB}/enchant/libenchant_aspell.dll
     DESTINATION lib/enchant)
 
+  # tcl/tk related files (required for tkinter)
+  install(DIRECTORY
+    ${MINGW_PATH}/lib/tcl8
+    ${MINGW_PATH}/lib/tcl8.6
+    ${MINGW_PATH}/lib/tk8.6
+    DESTINATION lib)
+
   # Necessary to run extensions on windows if it is not in the path
   if (HAVE_MINGW64)
     install(FILES
