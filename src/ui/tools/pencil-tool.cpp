@@ -115,7 +115,7 @@ void PencilTool::_endpointSnap(Geom::Point &p, guint const state) {
         }
     } else {
         if (!(state & GDK_SHIFT_MASK)) { //SHIFT disables all snapping, except the angular snapping above
-                                         //After all, the user explicitely asked for angular snapping by
+                                         //After all, the user explicitly asked for angular snapping by
                                          //pressing CTRL
             boost::optional<Geom::Point> origin = this->npoints > 0 ? this->p[0] : boost::optional<Geom::Point>();
             spdc_endpoint_snap_free(this, p, origin, state);
@@ -322,7 +322,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         // Only in freehand mode we have to add the first point also to this->ps (apparently)
                         // - We cannot add this point in spdc_set_startpoint, because we only need it for freehand
                         // - We cannot do this in the button press handler because at that point we don't know yet
-                        //   wheter we're going into freehand mode or not
+                        //   whether we're going into freehand mode or not
                         this->ps.push_back(this->p[0]);
                         this->wps.push_back(this->pressure);
                     }
@@ -769,9 +769,9 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     bool start = true;
     auto pressure = this->wps.begin();
     for (auto point = this->ps.begin(); point != this->ps.end(); ++point,++pressure) {
-        //Maybe the 12 POW can be moved to a preferences 12 give a good results of sensibility on my tablet
+        //Maybe the 12 POW can be moved to a preferences 12 gives a good results of sensibility on my tablet
         //But maybe is a tweakable value. less number = less sensibility
-        //8 give an aceptable max witht to powerstoke
+        //8 give an acceptable max width to powerstoke
         double pressure_base = pow(*pressure, pressure_sensibility);
         double pressure_shirnked = (pressure_base * (max - min)) + min;
         double pressure_factor = pressure_base/pressure_shirnked;

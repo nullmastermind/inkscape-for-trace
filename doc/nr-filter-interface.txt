@@ -143,7 +143,7 @@ contains the filter effect area
 Filter effects region and filter primitive subregion
 ====================================================
 
-void Filter::set_x(SVGLength &lenght)
+void Filter::set_x(SVGLength &length)
 void FilterPrimitive::set_x(SVGLength &length)
 
 void Filter::set_y(SVGLength &length)

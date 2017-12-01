@@ -116,7 +116,7 @@ enum SPStyleSrc {
  *
  */
 
-/// Virtual base class for all SPStyle interal classes
+/// Virtual base class for all SPStyle internal classes
 class SPIBase
 {
 
@@ -733,7 +733,7 @@ public:
     gchar *value_default;
 };
 
-/// Color type interal to SPStyle, FIXME Add string value to store SVG named color.
+/// Color type internal to SPStyle, FIXME Add string value to store SVG named color.
 class SPIColor : public SPIBase
 {
 

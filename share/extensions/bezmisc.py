@@ -113,7 +113,7 @@ def bezierslopeatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
 
 def beziertatslope(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),(dy,dx)):
     ax,ay,bx,by,cx,cy,x0,y0=bezierparameterize(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)))
-    #quadratic coefficents of slope formula
+    #quadratic coefficients of slope formula
     if dx:
         slope = 1.0*(dy/dx)
         a=3*ay-3*ax*slope
