@@ -18,6 +18,8 @@ set(TEST_SOURCES
 	style-test)
 
 set(TEST_LIBS
+    ${GTEST_LIBRARIES}
+    ${GMOCK_LIBRARIES}
 	gmock_main
 	inkscape_base)
 

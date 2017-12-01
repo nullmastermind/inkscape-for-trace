@@ -64,12 +64,26 @@ inkscape:mac:
       - build/
   allow_failure: true
 
+inkscape:doc:
+  stage: build
+  only:
+    - schedules
+  script:
+    - cd buildtools
+    - doxygen Doxyfile
+    - doxygen Doxyfile-extensions
+    - cd ..
+  artifacts:
+    paths:
+      - doc/doxygen
+      - doc/doxygen-extensions
+
 # This job is a static analysis build by clang.
 # It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
 # Make sure the timeout of the build is big enough
 clang:
   stage: build
-  only: 
+  only:
     - schedules
   script:
     - apt-get update -yqq && apt-get install -y clang-3.8 clang
@@ -93,13 +107,17 @@ test:linux:
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
-  when: manual
   dependencies:
+    - inkscape:doc
     - clang
   script:
-    - if test -e scan; then cp -r scan/* public; fi
+    - mkdir -p public/
+    - sed "s/%DATE%/$(date '+%B %d, %Y')/" buildtools/ci-index.html > public/index.html
+    - if test -e scan; then cp -rv scan/* public/scan-build; fi
+    - if test -e doc/doxygen; then cp -rv doc/doxygen/html public/doxygen; fi
+    - if test -e doc/doxygen-extensions; then cp -rv doc/doxygen-extensions/html public/doxygen-extensions; fi
   artifacts:
     paths:
       - public
   only:
-    - master
+    - schedules

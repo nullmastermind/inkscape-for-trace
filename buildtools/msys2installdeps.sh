@@ -68,9 +68,9 @@ $ARCH-libyaml
 #     or (always!) run pacman with the additional command line switch
 #        --ignore=mingw-w64-*-imagemagick
 for arch in $(eval echo $ARCH); do
-  wget -nv https://gitlab.com/Ede123/bintray/raw/master/${arch}-imagemagick-6.9.9.15-1-any.pkg.tar.xz \
-    && pacman -U --needed --noconfirm ${arch}-imagemagick-6.9.9.15-1-any.pkg.tar.xz \
-    && rm  ${arch}-imagemagick-6.9.9.15-1-any.pkg.tar.xz
+  wget -nv https://gitlab.com/Ede123/bintray/raw/master/${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
+    && pacman -U --needed --noconfirm ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
+    && rm  ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz
 done
 
 

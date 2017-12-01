@@ -1432,7 +1432,7 @@ void InkscapePreferences::initPageRendering()
 
     // rendering tile multiplier
     _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 512.0, 1.0, 16.0, 16.0, true, false);
-    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _(""),
+    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, "",
                               _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
 
     /* blur quality */

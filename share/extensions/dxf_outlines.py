@@ -341,7 +341,7 @@ class MyEffect(inkex.Effect):
         if not scale:
             scale = 25.4/96     # if no scale is specified, assume inch as baseunit
         scale /= self.unittouu('1px')
-        h = self.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0])
+        h = self.unittouu(self.getDocumentHeight())
         doc = self.document.getroot()
         # process viewBox height attribute to correct page scaling
         viewBox = doc.get('viewBox')
