@@ -43,7 +43,6 @@ private:
     BoolParam nodes;
     BoolParam handles;
     BoolParam original_path;
-    BoolParam original_d;
     BoolParam show_center_node;
     ScalarParam scale_nodes_and_handles;
     double stroke_width;

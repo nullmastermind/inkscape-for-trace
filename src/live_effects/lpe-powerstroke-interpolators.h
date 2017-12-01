@@ -15,7 +15,7 @@
 #include <2geom/path.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <math.h>
+
 #include "live_effects/spiro.h"
 
 
@@ -27,7 +27,6 @@ enum InterpolatorType {
   INTERP_LINEAR,
   INTERP_CUBICBEZIER,
   INTERP_CUBICBEZIER_JOHAN,
-  INTERP_BSPLINE,
   INTERP_SPIRO,
   INTERP_CUBICBEZIER_SMOOTH,
   INTERP_CENTRIPETAL_CATMULLROM
@@ -64,57 +63,6 @@ public:
 private:
     Linear(const Linear&);
     Linear& operator=(const Linear&);
-};
-
-class BSpline : public Interpolator {
-public:
-    BSpline() {};
-    virtual ~BSpline() {};
-
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
-        Path path;
-        path.start( points.at(0) );
-        Geom::Point handle_1(0,0);
-        Geom::Point handle_prev = points.at(0);
-        for (unsigned int i = 1 ; i < points.size() - 1; ++i) {
-            Geom::Line line_a(points.at(i - 1), points.at(i));
-            double angle_a = line_a.angle();
-            Geom::Line line_b(points.at(i),points.at(i + 1));
-            double angle_b = line_b.angle();
-            Geom::Line line_handles(line_a.pointAt(0.66667),line_b.pointAt(0.33334));
-            line_handles *= Geom::Translate(points.at(i) - line_handles.pointAt(0.5));
-            Geom::Line line_perp_a(line_a.pointAt(0.5), Geom::Point::polar(angle_a + Geom::rad_from_deg(90),1) +line_a.pointAt(0.5));
-            Geom::Line line_perp_b(line_b.pointAt(0.5), Geom::Point::polar(angle_b + Geom::rad_from_deg(90),1) +line_b.pointAt(0.5));
-            std::vector<CurveIntersection> result = line_perp_a.intersect(line_perp_b);
-            Geom::Point handle_2(0,0);
-            if(result.size() > 0) {
-                Geom::Line line_to_handle_a(result[0],line_a.pointAt(0.66667));
-                Geom::Line line_to_handle_b(result[0],line_b.pointAt(0.33334));
-                std::vector<CurveIntersection> handle_a_res = line_to_handle_a.intersect(line_handles);
-                std::vector<CurveIntersection> handle_b_res = line_to_handle_b.intersect(line_handles);
-                if(handle_a_res.size() > 0) {
-                    handle_2 = handle_a_res[0];
-                }
-                if(handle_a_res.size() > 0) {
-                    handle_1 = handle_b_res[0];
-                }
-            }
-            if (i == 1) {
-                Geom::Line start_segment(handle_prev,handle_2);
-                handle_prev = start_segment.pointAt(0.5);
-            }
-            path.appendNew<CubicBezier>(handle_prev, handle_2, points.at(i));
-            handle_prev = handle_1;
-        }
-        Geom::Point last = points.at(points.size()-1);
-        Geom::Line last_segment(last,handle_1);
-        path.appendNew<CubicBezier>(handle_1, last_segment.pointAt(0.5), last);
-        return path;
-    };
-
-private:
-    BSpline(const BSpline&);
-    BSpline& operator=(const BSpline&);
 };
 
 // this class is terrible
@@ -354,8 +302,6 @@ Interpolator::create(InterpolatorType type) {
         return new Geom::Interpolate::CubicBezierSmooth();
       case INTERP_CENTRIPETAL_CATMULLROM:
         return new Geom::Interpolate::CentripetalCatmullRomInterpolator();
-      case INTERP_BSPLINE:
-        return new Geom::Interpolate::BSpline();
       default:
         return new Geom::Interpolate::Linear();
     }
