@@ -878,11 +878,11 @@ CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t
 }
 
 bool
-CairoRenderContext::finish(void)
+CairoRenderContext::finish(bool finish_surface)
 {
     g_assert( _is_valid );
 
-    if (_vector_based_target)
+    if (_vector_based_target && finish_surface)
         cairo_show_page(_cr);
 
     // PDF+TeX Output, see CairoRenderContext::_prepareRenderGraphic()
@@ -893,10 +893,12 @@ CairoRenderContext::finish(void)
     }
 
     cairo_destroy(_cr);
-    cairo_surface_finish(_surface);
+    _cr = NULL;
+    
+    if (finish_surface)
+        cairo_surface_finish(_surface);
     cairo_status_t status = cairo_surface_status(_surface);
     cairo_surface_destroy(_surface);
-    _cr = NULL;
     _surface = NULL;
 
     if (_layout)

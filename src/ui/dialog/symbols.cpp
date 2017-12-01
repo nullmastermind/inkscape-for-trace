@@ -462,7 +462,7 @@ void SymbolsDialog::showOverlay() {
     } else {
       overlay_icon->set_from_icon_name("searching", iconsize);
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("")) + Glib::ustring("</span>"));
+      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring("</span>"));
     }
   } else if (!number_symbols && (current != CURRENTDOC || !search_str.empty())) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
