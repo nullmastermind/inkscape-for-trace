@@ -123,8 +123,7 @@ static const Util::EnumData<unsigned> InterpolatorTypeData[] = {
     {Geom::Interpolate::INTERP_CUBICBEZIER          , N_("CubicBezierFit"), "CubicBezierFit"},
     {Geom::Interpolate::INTERP_CUBICBEZIER_JOHAN     , N_("CubicBezierJohan"), "CubicBezierJohan"},
     {Geom::Interpolate::INTERP_SPIRO  , N_("SpiroInterpolator"), "SpiroInterpolator"},
-    {Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM, N_("Centripetal Catmull-Rom"), "CentripetalCatmullRom"},
-    {Geom::Interpolate::INTERP_BSPLINE          , N_("BSpline"), "BSpline"}
+    {Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM, N_("Centripetal Catmull-Rom"), "CentripetalCatmullRom"}
 };
 static const Util::EnumDataConverter<unsigned> InterpolatorTypeConverter(InterpolatorTypeData, sizeof(InterpolatorTypeData)/sizeof(*InterpolatorTypeData));
 
@@ -627,23 +626,12 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     if (Geom::Interpolate::CubicBezierSmooth *smooth = dynamic_cast<Geom::Interpolate::CubicBezierSmooth*>(interpolator)) {
         smooth->setBeta(interpolator_beta);
     }
-    bool is_bspline = false;
-    if (Geom::Interpolate::BSpline *bspline = dynamic_cast<Geom::Interpolate::BSpline*>(interpolator)) {
-        is_bspline = true;
-    }
     Geom::Path strokepath = interpolator->interpolateToPath(ts);
-    std::vector<Geom::Point> mirrorts;
-    for(auto point:ts) {
-        Geom::Point p = Geom::Point(point[Geom::X],point[Geom::Y]*-1);
-        mirrorts.push_back(p);
-    }
-    Geom::Path strokepath_mirror = interpolator->interpolateToPath(mirrorts);
+    delete interpolator;
 
     // apply the inverse knot-xcoord scaling that was applied before the interpolation
     strokepath *= Scale(1/xcoord_scaling, 1);
-    strokepath_mirror *= Scale(1/xcoord_scaling, 1);
-    Geom::Path fixed_path = strokepath;
-    Geom::Path fixed_mirrorpath = strokepath_mirror;
+
     D2<Piecewise<SBasis> > patternd2 = make_cuts_independent(strokepath.toPwSb());
     Piecewise<SBasis> x = Piecewise<SBasis>(patternd2[0]);
     Piecewise<SBasis> y = Piecewise<SBasis>(patternd2[1]);
@@ -655,67 +643,12 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         x = portion(x, rtsmin.at(0), rtsmax.at(0));
         y = portion(y, rtsmin.at(0), rtsmax.at(0));
     }
-    if (!is_bspline) {
 
-        LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
-        Piecewise<D2<SBasis> > pwd2_out   =          compose(pwd2_in,x) + y*compose(n,x);
-        Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
-        fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
-        fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
-    } else {
-        std::vector<Geom::Point> ts_pos;
-        for(auto point:ts) {
-            if (point[Geom::X] > pwd2_in.size() || point[Geom::X] < 0) {
-                g_warning("Broken powerstroke point at %f, I won't try to add that", point[Geom::X]);
-                continue;
-            }
-            point = pwd2_in.valueAt(point[Geom::X]) + (point[Geom::Y] * scale_width) * n.valueAt(point[Geom::X]);
-            ts_pos.push_back(point);
-        }
-        strokepath = interpolator->interpolateToPath(ts_pos);
-        std::vector<Geom::Point> ts_pos_mirror;
-        for(auto point:ts) {
-            point = Geom::Point(point[Geom::X],point[Geom::Y]*-1);
-            if (point[Geom::X] > pwd2_in.size() || point[Geom::X] < 0) {
-                g_warning("Broken powerstroke point at %f, I won't try to add that", point[Geom::X]);
-                continue;
-            }
-            point = pwd2_in.valueAt(point[Geom::X]) + (point[Geom::Y] * scale_width) * n.valueAt(point[Geom::X]);
-            ts_pos_mirror.push_back(point);
-        }
-        strokepath_mirror = interpolator->interpolateToPath(ts_pos_mirror);
-//        Geom::Path fixed_path;
-//        fixed_path.start(strokepath.initialPoint());
-//        for (Geom::Path::const_iterator curve = strokepath->begin(); curve !=  strokepath->end(); ++curve) {
-//            Geom::Point pointA = curve.initialPoint();
-//            Geom::Point pointB = curve.finalPoint();
-//            double angle = pointA.angle()-pointB.angle();
-//            if (angle==0) {
-//                continue;
-//            }
-//            double k1 = (Geom::distance(pointA, pointB)/cos(angle)/5.0) * 2;
-//            Geom::Point handle_1 = Geom::Point::polar(angle, k1) + pointA;
-//            Geom::Point handle_2 = Geom::Point::polar(angle, k1 * 2) + pointA;
-//            fixed_path..appendNew<CubicBezier>(handle_1, handle_2, pointB);
-//        }
-//        
-//        Geom::Path fixed_mirrorpath;
-//        fixed_mirrorpath.start(strokepath_mirror.initialPoint());
-//        for (Geom::Path::const_iterator curve = strokepath_mirror->begin(); curve !=  strokepath_mirror->end(); ++curve) {
-//            Geom::Point pointA = curve.initialPoint();
-//            Geom::Point pointB = curve.finalPoint();
-//            double angle = pointA.angle()-pointB.angle();
-//            if (angle==0) {
-//                continue;
-//            }
-//            double k1 = (Geom::distance(pointA, pointB)/cos(angle)/5.0) * 2;
-//            Geom::Point handle_1 = Geom::Point::polar(angle, k1) + pointA;
-//            Geom::Point handle_2 = Geom::Point::polar(angle, k1 * 2) + pointA;
-//            fixed_mirrorpath..appendNew<CubicBezier>(handle_1, handle_2, pointB);
-//        }
-        
-    }
-    delete interpolator;
+    LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
+    Piecewise<D2<SBasis> > pwd2_out   =          compose(pwd2_in,x) + y*compose(n,x);
+    Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
+    Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
+    Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     if (pathv[0].closed()) {
         fixed_path.close(true);
         path_out.push_back(fixed_path);
@@ -730,31 +663,31 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
             case LINECAP_PEAK:
             {
                 Geom::Point end_deriv = -unitTangentAt( reverse(pwd2_in.segs.back()), 0.);
-                double radius = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
-                Geom::Point midpoint = 0.5*(fixed_path.finalPoint() + fixed_mirrorpath.initialPoint()) + radius*end_deriv;
+                double radius = 0.5 * distance(pwd2_out.lastValue(), mirrorpath.firstValue());
+                Geom::Point midpoint = 0.5*(pwd2_out.lastValue() + mirrorpath.firstValue()) + radius*end_deriv;
                 fixed_path.appendNew<LineSegment>(midpoint);
-                fixed_path.appendNew<LineSegment>(fixed_mirrorpath.initialPoint());
+                fixed_path.appendNew<LineSegment>(mirrorpath.firstValue());
                 break;
             }
             case LINECAP_SQUARE:
             {
                 Geom::Point end_deriv = -unitTangentAt( reverse(pwd2_in.segs.back()), 0.);
-                double radius = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
-                fixed_path.appendNew<LineSegment>( fixed_path.finalPoint() + radius*end_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() + radius*end_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() );
+                double radius = 0.5 * distance(pwd2_out.lastValue(), mirrorpath.firstValue());
+                fixed_path.appendNew<LineSegment>( pwd2_out.lastValue() + radius*end_deriv );
+                fixed_path.appendNew<LineSegment>( mirrorpath.firstValue() + radius*end_deriv );
+                fixed_path.appendNew<LineSegment>( mirrorpath.firstValue() );
                 break;
             }
             case LINECAP_BUTT:
             {
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.initialPoint() );
+                fixed_path.appendNew<LineSegment>( mirrorpath.firstValue() );
                 break;
             }
             case LINECAP_ROUND:
             default:
             {
-                double radius1 = 0.5 * distance(fixed_path.finalPoint(), fixed_mirrorpath.initialPoint());
-                fixed_path.appendNew<EllipticalArc>( radius1, radius1, M_PI/2., false, y.lastValue() < 0, fixed_mirrorpath.initialPoint() );
+                double radius1 = 0.5 * distance(pwd2_out.lastValue(), mirrorpath.firstValue());
+                fixed_path.appendNew<EllipticalArc>( radius1, radius1, M_PI/2., false, y.lastValue() < 0, mirrorpath.firstValue() );
                 break;
             }
         }
@@ -767,31 +700,31 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
             case LINECAP_PEAK:
             {
                 Geom::Point start_deriv = unitTangentAt( pwd2_in.segs.front(), 0.);
-                double radius = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
-                Geom::Point midpoint = 0.5*(fixed_mirrorpath.finalPoint() + fixed_path.initialPoint()) - radius*start_deriv;
+                double radius = 0.5 * distance(pwd2_out.firstValue(), mirrorpath.lastValue());
+                Geom::Point midpoint = 0.5*(mirrorpath.lastValue() + pwd2_out.firstValue()) - radius*start_deriv;
                 fixed_path.appendNew<LineSegment>( midpoint );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                fixed_path.appendNew<LineSegment>( pwd2_out.firstValue() );
                 break;
             }
             case LINECAP_SQUARE:
             {
                 Geom::Point start_deriv = unitTangentAt( pwd2_in.segs.front(), 0.);
-                double radius = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
-                fixed_path.appendNew<LineSegment>( fixed_mirrorpath.finalPoint() - radius*start_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() - radius*start_deriv );
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                double radius = 0.5 * distance(pwd2_out.firstValue(), mirrorpath.lastValue());
+                fixed_path.appendNew<LineSegment>( mirrorpath.lastValue() - radius*start_deriv );
+                fixed_path.appendNew<LineSegment>( pwd2_out.firstValue() - radius*start_deriv );
+                fixed_path.appendNew<LineSegment>( pwd2_out.firstValue() );
                 break;
             }
             case LINECAP_BUTT:
             {
-                fixed_path.appendNew<LineSegment>( fixed_path.initialPoint() );
+                fixed_path.appendNew<LineSegment>( pwd2_out.firstValue() );
                 break;
             }
             case LINECAP_ROUND:
             default:
             {
-                double radius2 = 0.5 * distance(fixed_path.initialPoint(), fixed_mirrorpath.finalPoint());
-                fixed_path.appendNew<EllipticalArc>( radius2, radius2, M_PI/2., false, y.firstValue() < 0, fixed_path.initialPoint() );
+                double radius2 = 0.5 * distance(pwd2_out.firstValue(), mirrorpath.lastValue());
+                fixed_path.appendNew<EllipticalArc>( radius2, radius2, M_PI/2., false, y.firstValue() < 0, pwd2_out.firstValue() );
                 break;
             }
         }

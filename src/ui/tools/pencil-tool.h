@@ -70,7 +70,6 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    void _startAnchorToCurve();
     void _powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> points, bool write);
     SPShape *_powerpreview;
     SPShape *_powerpreviewtail;

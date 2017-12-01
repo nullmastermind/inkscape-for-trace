@@ -85,7 +85,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , green_anchor(NULL)
     , green_closed(false)
     , white_item(NULL)
-    , sa_overwrited(NULL)
+    , overwrite_curve(NULL)
     , sa(NULL)
     , ea(NULL)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
@@ -144,7 +144,7 @@ void FreehandBase::setup() {
     this->green_closed = FALSE;
 
     // Create start anchor alternative curve
-    this->sa_overwrited = new SPCurve();
+    this->overwrite_curve = new SPCurve();
 
     this->attach = TRUE;
     spdc_attach_selection(this, this->selection);
@@ -254,22 +254,15 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 }
                 pt->points.push_back(Geom::Point(0, swidth));
             }
+            Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
             Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-            LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
-            if (!ps) {
-                Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
-                lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                ps = static_cast<LPEPowerStroke*>(lpe);
-            }
-            if (ps) {
-                lpe->getRepr()->setAttribute("sort_points", "true");
-                lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
-                lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-                lpe->getRepr()->setAttribute("miter_limit", "100");
-                lpe->getRepr()->setAttribute("linejoin_type", "miter");
-                ps->offset_points.param_set_and_write_new_value(pt->points);
-                pt->points.clear();
-            }
+            lpe->getRepr()->setAttribute("sort_points", "true");
+            lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+            lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
+            lpe->getRepr()->setAttribute("miter_limit", "100");
+            lpe->getRepr()->setAttribute("linejoin_type", "miter");
+            static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
+            pt->points.clear();
             return;
         }
     }
@@ -603,9 +596,6 @@ static void spdc_selection_modified(Inkscape::Selection *sel, guint /*flags*/, F
 
 static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/)
 {
-    if (SP_IS_PENCIL_CONTEXT(dc) && dc->sa && dc->input_has_pressure) {
-        return;
-    }
     // We reset white and forget white/start/end anchors
     spdc_reset_white(dc);
     dc->sa = NULL;
@@ -728,6 +718,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c->unref();
         return;
     }
+
     // Step A - test, whether we ended on green anchor
     if ( (forceclosed && 
          (!dc->sa || (dc->sa && dc->sa->curve->is_empty()))) || 
@@ -741,6 +732,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c->unref();
         return;
     }
+
     // Step B - both start and end anchored to same curve
     if ( dc->sa && dc->ea
          && ( dc->sa->curve == dc->ea->curve )
@@ -749,21 +741,38 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     {
         // We hit bot start and end of single curve, closing paths
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Closing path."));
-        dc->sa_overwrited->append_continuous(c, 0.0625);
-        c->unref();
-        dc->sa_overwrited->closepath_current();
-        if(dc->sa){
-            dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
-            dc->white_curves.push_back(dc->sa_overwrited);
+        if (dc->sa->start && !(dc->sa->curve->is_closed()) ) {
+            c = reverse_then_unref(c);
         }
-        
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+            dc->overwrite_curve->append_continuous(c, 0.0625);
+            c->unref();
+            dc->overwrite_curve->closepath_current();
+            if(dc->sa){
+                dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
+                dc->white_curves.push_back(dc->overwrite_curve);
+            }
+        }else{
+            dc->sa->curve->append_continuous(c, 0.0625);
+            c->unref();
+            dc->sa->curve->closepath_current();
+        }
         spdc_flush_white(dc, NULL);
         return;
     }
+
     // Step C - test start
     if (dc->sa) {
-        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
-        SPCurve *s = dc->sa_overwrited;
+        SPCurve *s = dc->sa->curve;
+        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), s));
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                s = dc->overwrite_curve;
+        }
+        if (dc->sa->start) {
+            s = reverse_then_unref(s);
+        }
         s->append_continuous(c, 0.0625);
         c->unref();
         c = s;
@@ -795,6 +804,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c->append_continuous(e, 0.0625);
         e->unref();
     }
+
     if (forceclosed) 
     {
         dc->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Path is closed."));
@@ -859,7 +869,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             //Bend needs the transforms applied after, Other effects best before
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
+            (dc, item, c, true);
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
@@ -869,17 +879,8 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
             }
-        } else if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (dc->input_has_pressure) {
-                spdc_check_for_and_apply_waiting_LPE(dc,  dc->white_item, c, false);
-//                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-//                shapeType shape = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
-//                if (shape == NONE) {
-//                    std::vector<Geom::Point> points;
-//                    spdc_apply_powerstroke_shape(points, dc, dc->white_item);
-//                }
-            }
         }
+
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,
                          _("Draw path"));
 
@@ -948,11 +949,7 @@ static void spdc_free_colors(FreehandBase *dc)
     if (dc->blue_curve) {
         dc->blue_curve = dc->blue_curve->unref();
     }
-    
-    // Overwrite start anchor curve
-    if (dc->sa_overwrited) {
-        dc->sa_overwrited = dc->sa_overwrited->unref();
-    }
+
     // Green
     for (auto i : dc->green_bpaths)
         sp_canvas_item_destroy(i);
