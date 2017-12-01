@@ -901,6 +901,7 @@ void Export::setExporting(bool exporting, Glib::ustring const &text)
 
 Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
     Gtk::Dialog *dlg = new Gtk::Dialog(_("Export in progress"), TRUE);
+    dlg->set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
 
     Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
     prg->set_text(progress_text);
