@@ -12,6 +12,7 @@
 #include <2geom/svg-path-parser.h>
 #include "helper/geom.h"
 #include "desktop-style.h"
+#include "display/curve.h"
 #include "style.h"
 #include "svg/svg.h"
 
@@ -27,12 +28,14 @@ LPEShowHandles::LPEShowHandles(LivePathEffectObject *lpeobject)
       handles(_("Show handles"), _("Show handles"), "handles", &wr, this, true),
       original_path(_("Show path"), _("Show path"), "original_path", &wr, this, true),
       show_center_node(_("Show center of node"), _("Show center of node"), "show_center_node", &wr, this, false),
+      original_d(_("Show original"), _("Show original"), "original_d", &wr, this, false),
       scale_nodes_and_handles(_("Scale nodes and handles"), _("Scale nodes and handles"), "scale_nodes_and_handles", &wr, this, 10)
 {
     registerParameter(&nodes);
     registerParameter(&handles);
     registerParameter(&original_path);
     registerParameter(&show_center_node);
+    registerParameter(&original_d);
     registerParameter(&scale_nodes_and_handles);
     scale_nodes_and_handles.param_set_range(0, 500.);
     scale_nodes_and_handles.param_set_increments(1, 1);
@@ -80,7 +83,7 @@ void LPEShowHandles::doBeforeEffect (SPLPEItem const* lpeitem)
 Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in)
 {
     Geom::PathVector path_out;
-    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     if(original_path) {
         for (unsigned int i=0; i < path_in.size(); i++) {
             path_out.push_back(path_in[i]);
@@ -89,10 +92,26 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
     if(!outline_path.empty()) {
         outline_path.clear();
     }
-    generateHelperPath(original_pathv);
+    if (original_d) {
+        SPCurve * shape_curve = sp_shape->getCurveBeforeLPE();
+        if (shape_curve) {
+            Geom::PathVector original_curve = shape_curve->get_pathvector();
+            if(original_path) {
+                for (unsigned int i=0; i < original_curve.size(); i++) {
+                    path_out.push_back(original_curve[i]);
+                }
+            }
+            original_pathv.insert(original_pathv.end(), original_curve.begin(), original_curve.end());
+        }
+        generateHelperPath(original_pathv);
+        shape_curve->unref();
+    } else {
+        generateHelperPath(original_pathv);
+    }
     for (unsigned int i=0; i < outline_path.size(); i++) {
         path_out.push_back(outline_path[i]);
     }
+
     return path_out;
 }
 
