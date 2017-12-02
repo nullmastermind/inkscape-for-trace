@@ -165,6 +165,24 @@ sp_toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
 }
 
 static void 
+sp_toggle_only_selected( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/measure/only_selected", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Measures only selected."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Measure all."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+static void 
 sp_toggle_show_hidden( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -333,6 +351,18 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          0, 0, 0,
                                          sp_measure_offset_value_changed, NULL, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+
+    /* measure only selected */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureOnlySelected",
+                                                      _("Measure only selected"),
+                                                      _("Measure only selected"),
+                                                      INKSCAPE_ICON("snap-bounding-box-center"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/only_selected", false) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_only_selected), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 
     /* ignore_1st_and_last */

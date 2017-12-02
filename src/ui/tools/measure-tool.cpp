@@ -1159,6 +1159,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
         int precision = prefs->getInt("/tools/measure/precision", 2);
         Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
+        bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
         if (!unit_name.compare("")) {
             unit_name = "px";
         }
@@ -1191,6 +1192,14 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         Geom::Point rel_position = Geom::Point(origin, origin);
         Geom::Point pos = desktop->w2d(cursor);
         double gap = Inkscape::Util::Quantity::convert(7 + fontsize, "px", unit->abbr);
+        if (only_selected) {
+            if (desktop->getSelection()->includes(over)) {
+                showItemInfoText(pos + (rel_position * zoom),_("Selected"),fontsize);
+            } else {
+                showItemInfoText(pos + (rel_position * zoom),_("Not selected"),fontsize);
+            }
+            rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
+        }
         if (SP_IS_SHAPE(over)) {
             precision_str << _("Length") <<  ": %." << precision << "f %s";
             measure_str = g_strdup_printf(precision_str.str().c_str(), item_length, unit_name.c_str());
@@ -1202,7 +1211,6 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
         }
-
         precision_str <<  "Y: %." << precision << "f %s";
         measure_str = g_strdup_printf(precision_str.str().c_str(), item_y, unit_name.c_str());
         precision_str.str("");
@@ -1274,8 +1282,12 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
         current_layer = desktop->currentLayer();
     }
     std::vector<double> intersection_times;
+    bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
     for (std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); ++i) {
         SPItem *item = *i;
+        if (!desktop->getSelection()->includes(*i) && only_selected) {
+            continue;
+        }
         if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
             if (SP_IS_SHAPE(item)) {
                 calculate_intersections(desktop, item, lineseg, SP_SHAPE(item)->getCurve(), intersection_times);
