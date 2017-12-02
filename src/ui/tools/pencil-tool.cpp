@@ -684,6 +684,7 @@ PencilTool::_powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> 
         Effect* lpe = lpeitem->getCurrentLPE();
         lpe->getRepr()->setAttribute("sort_points", "true");
         lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+        lpe->getRepr()->setAttribute("interpolate_original", "true");
         lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
         lpe->getRepr()->setAttribute("miter_limit", "100");
         lpe->getRepr()->setAttribute("linejoin_type", "miter");

@@ -123,8 +123,7 @@ static const Util::EnumData<unsigned> InterpolatorTypeData[] = {
     {Geom::Interpolate::INTERP_CUBICBEZIER          , N_("CubicBezierFit"), "CubicBezierFit"},
     {Geom::Interpolate::INTERP_CUBICBEZIER_JOHAN     , N_("CubicBezierJohan"), "CubicBezierJohan"},
     {Geom::Interpolate::INTERP_SPIRO  , N_("SpiroInterpolator"), "SpiroInterpolator"},
-    {Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM, N_("Centripetal Catmull-Rom"), "CentripetalCatmullRom"},
-    {Geom::Interpolate::INTERP_BSPLINE          , N_("BSpline"), "BSpline"}
+    {Geom::Interpolate::INTERP_CENTRIPETAL_CATMULLROM, N_("Centripetal Catmull-Rom"), "CentripetalCatmullRom"}
 };
 static const Util::EnumDataConverter<unsigned> InterpolatorTypeConverter(InterpolatorTypeData, sizeof(InterpolatorTypeData)/sizeof(*InterpolatorTypeData));
 
@@ -165,8 +164,8 @@ static const Util::EnumDataConverter<unsigned> LineJoinTypeConverter(LineJoinTyp
 LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     offset_points(_("Offset points"), _("Offset points"), "offset_points", &wr, this),
-    interpolate_original(_("Interpolate original"), _("Interpolate original path"), "interpolate_original", &wr, this, false),
     sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve"), "sort_points", &wr, this, true),
+    interpolate_original(_("Interpolate original"), _("Interpolate original path"), "interpolate_original", &wr, this, false),
     interpolator_type(_("Interpolator type:"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path"), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CUBICBEZIER),
     interpolator_beta(_("Smoothness:"), _("Sets the smoothness for the CubicBezierJohan interpolator; 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
     scale_width(_("Width scale:"), _("Width scale all points"), "scale_width", &wr, this, 1.0),
@@ -706,7 +705,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     Geom::Path fixed_path;
     Geom::Path fixed_mirrorpath;
     Geom::Path strokepath;
-    if (interpolate_original) {
+    if (interpolate_original && 2==1) {
         std::vector<Geom::Point> ts_normal;
         std::vector<Geom::Point> ts_mirror;
         
@@ -782,7 +781,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         y = portion(y, rtsmin.at(0), rtsmax.at(0));
     }
 
-    if (!interpolate_original) { 
+    if (!interpolate_original || 2>1) { 
         LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
         Piecewise<D2<SBasis> > pwd2_out   =          compose(pwd2_in,x) + y*compose(n,x);
         Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));

@@ -15,7 +15,7 @@
 #include <2geom/path.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <math.h>
+
 #include "live_effects/spiro.h"
 
 
@@ -29,8 +29,7 @@ enum InterpolatorType {
   INTERP_CUBICBEZIER_JOHAN,
   INTERP_SPIRO,
   INTERP_CUBICBEZIER_SMOOTH,
-  INTERP_CENTRIPETAL_CATMULLROM,
-  INTERP_BSPLINE
+  INTERP_CENTRIPETAL_CATMULLROM
 };
 
 class Interpolator {
@@ -64,77 +63,6 @@ public:
 private:
     Linear(const Linear&);
     Linear& operator=(const Linear&);
-};
-
-class BSpline : public Interpolator {
-public:
-    BSpline() {};
-    virtual ~BSpline() {};
-
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
-        Path path;
-        path.start( points.at(0) );
-
-        Geom::Point point_a = points.at(0);
-        Geom::Point point_b = points.at(1);
-        Geom::Point point_c = points.at(2);
-        Geom::Point point_d = points.at(2);
-        if (points.size() > 3) {
-            point_d = points.at(3);
-        }
-        Geom::Point handle_1 = point_a;
-        Geom::Point handle_2 = point_b;
-        Geom::Point node_1 = point_a;
-        Geom::Point node_2 = point_b; //if the line is straight with next
-        Geom::Line line_ab(point_a, point_b);
-        Geom::Line line_bc(point_b, point_c);
-        Geom::Line line_cd(point_c, point_d);
-        Geom::Point handle_next(line_bc.pointAt(0.33334)); //if the line is straight with next
-        Geom::Point center_ab = line_ab.pointAt(0.5);
-        Geom::Point center_bc = line_bc.pointAt(0.5);
-        Geom::Point center_cd = line_cd.pointAt(0.5);
-        Geom::Line cross_line_hlp(line_ab.pointAt(0.66667), center_cd);
-        Geom::Point cross_center_hlp = cross_line_hlp.pointAt(0.5);
-        double angle_ab = line_ab.angle();
-        double angle_bc = line_bc.angle();
-        double angle_cd = line_cd.angle();
-        double cross_angle_hlp = cross_line_hlp.angle();
-        Geom::Line perpend_ab(center_ab, center_ab + Geom::Point::polar(angle_ab + Geom::rad_from_deg(90),1));
-        Geom::Line perpend_bc(center_bc, center_bc + Geom::Point::polar(angle_bc + Geom::rad_from_deg(90),1));
-        Geom::Line cross_1   (cross_center_hlp, cross_center_hlp + Geom::Point::polar(cross_angle_hlp + Geom::rad_from_deg(90),1));
-        std::vector<CurveIntersection> cross_hlp = perpend_ab.intersect(perpend_bc);
-        if(cross_hlp.size() > 0) {
-            cross_line_hlp.setPoints(cross_hlp[0], line_ab.pointAt(0.66667));
-            cross_angle_hlp = cross_line_hlp.angle();
-            Geom::Line cross_2(line_ab.pointAt(0.66667), line_ab.pointAt(0.66667) + Geom::Point::polar(cross_angle_hlp + Geom::rad_from_deg(90),1));
-            std::vector<CurveIntersection> cross = cross_1.intersect(cross_2);
-            if(cross.size() > 0) {
-                Geom::Line handle_line(cross[0],point_b);
-                handle_2 = handle_line.pointAt(2.0);
-                Geom::Line rootline(points.at(0),handle_2);
-                handle_1 =  rootline.pointAt(0.5);                
-                node_2 = rootline.pointAt(1.5);
-                handle_next = cross[0];
-            }
-        }
-        path.appendNew<CubicBezier>(handle_1, handle_2, points.at(1));
-        for (unsigned int i = 2 ; i < points.size(); ++i) {
-            Geom::Line rootline(node_2, handle_next);
-            handle_2 = rootline.pointAt(2.0);
-            node_2 = rootline.pointAt(3.0);
-            path.appendNew<CubicBezier>(handle_next, handle_2, points.at(i));
-            Geom::Line handleline(handle_2, points.at(i));
-            handle_next = handleline.pointAt(2.0);
-        }
-        Geom::Point last = points.at(points.size()-1);
-        Geom::LineSegment last_segment(handle_next,last);
-        path.appendNew<CubicBezier>(last_segment.initialPoint(), last_segment.pointAt(0.5), last);
-        return path;
-    };
-
-private:
-    BSpline(const BSpline&);
-    BSpline& operator=(const BSpline&);
 };
 
 // this class is terrible
@@ -374,8 +302,6 @@ Interpolator::create(InterpolatorType type) {
         return new Geom::Interpolate::CubicBezierSmooth();
       case INTERP_CENTRIPETAL_CATMULLROM:
         return new Geom::Interpolate::CentripetalCatmullRomInterpolator();
-      case INTERP_BSPLINE:
-        return new Geom::Interpolate::BSpline();
       default:
         return new Geom::Interpolate::Linear();
     }
