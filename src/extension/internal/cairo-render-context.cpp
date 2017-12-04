@@ -884,12 +884,16 @@ CairoRenderContext::finish(bool finish_surface)
     if (_vector_based_target && finish_surface)
         cairo_show_page(_cr);
 
+    cairo_status_t status = cairo_status(_cr);
+    if (status != CAIRO_STATUS_SUCCESS)
+        g_critical("error while rendering output: %s", cairo_status_to_string(status));
+
     cairo_destroy(_cr);
     _cr = NULL;
     
     if (finish_surface)
         cairo_surface_finish(_surface);
-    cairo_status_t status = cairo_surface_status(_surface);
+    status = cairo_surface_status(_surface);
     cairo_surface_destroy(_surface);
     _surface = NULL;
 
