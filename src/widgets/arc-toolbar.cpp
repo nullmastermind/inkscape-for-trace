@@ -82,6 +82,13 @@ static void sp_arctb_sensitivize( GObject *tbl, double v1, double v2 )
 
 static void sp_arctb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *value_name)
 {
+    // Per SVG spec "a [radius] value of zero disables rendering of the element".
+    // However our implementation does not allow a setting of zero in the UI (not even in the XML editor)
+    // and ugly things happen if it's forced here, so better leave the properties untouched.
+    if (!gtk_adjustment_get_value(adj)) {
+        return;
+    }
+
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
