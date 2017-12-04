@@ -315,6 +315,10 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
         sp_repr_get_double(repr, "rx", &rx);
         sp_repr_get_double(repr, "ry", &ry);
     }
+    if (!rx) {
+        sp_repr_get_double(repr, "sodipodi:rx", &rx);
+        sp_repr_get_double(repr, "sodipodi:ry", &ry);
+    }
 
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
     SPDocument* document = desktop->getDocument();
