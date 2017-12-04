@@ -423,7 +423,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                         // This is allowed, if we just canceled curve
                     case PenTool::POINT:
                         if (this->npoints == 0) {
-                            this->_bsplineSpiroColor();
+                            this->setPolylineMode();
                             Geom::Point p;
                             if ((bevent.state & GDK_CONTROL_MASK) && (this->polylines_only || this->polylines_paraxial)) {
                                 p = event_dt;
@@ -444,7 +444,13 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                             // Set start anchor
 
                             this->sa = anchor;
-                            if(anchor){
+                            if (anchor) {
+                                //Put the start overwrite curve always on the same direction
+                                if (anchor->start) {
+                                    this->sa_overwrited = this->sa->curve->create_reverse();
+                                } else {
+                                    this->sa_overwrited = this->sa->curve->copy();
+                                }
                                 this->_bsplineSpiroStartAnchor(bevent.state & GDK_SHIFT_MASK);
                             }
                             if (anchor && (!this->hasWaitingLPE()|| this->bspline || this->spiro)) {
@@ -473,7 +479,6 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                             }
                             this->_setInitialPoint(p);
                         } else {
-
                             // Set end anchor
                             this->ea = anchor;
                             Geom::Point p;
@@ -497,6 +502,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 this->_setSubsequentPoint(p, true);
                             }
                         }
+                        this->_bsplineSpiroColor();
                         // avoid the creation of a control point so a node is created in the release event
                         this->state = (this->spiro || this->bspline || this->polylines_only) ? PenTool::POINT : PenTool::CONTROL;
                         ret = true;
@@ -734,26 +740,9 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
             case PenTool::MODE_CLICK:
                 switch (this->state) {
                     case PenTool::POINT:
-                        if ( this->npoints == 0 ) {
-                            // Start new thread only with button release
-                            this->_bsplineSpiroColor();
-                            if (anchor) {
-                                p = anchor->dp;
-                            }
-                            this->sa = anchor;
-                            // continue the existing curve
-                            if (anchor) {
-                                if(this->bspline || this->spiro){
-                                    this->_bsplineSpiroStartAnchor(revent.state & GDK_SHIFT_MASK);;
-                                }
-                            }
-                            this->_setInitialPoint(p);
-                        } else {
-                            // Set end anchor here
-                            this->ea = anchor;
-                            if (anchor) {
-                                p = anchor->dp;
-                            }
+                        this->ea = anchor;
+                        if (anchor) {
+                            p = anchor->dp;
                         }
                         this->state = PenTool::CONTROL;
                         break;
@@ -1264,6 +1253,8 @@ void PenTool::_resetColors() {
     }
     this->sa = NULL;
     this->ea = NULL;
+    this->sa_overwrited->reset();
+
     this->npoints = 0;
     this->red_curve_is_valid = false;
 }
@@ -1415,11 +1406,7 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
         this->spiro = false;
     }
     if(!this->spiro && !this->bspline){
-        SPCurve *tmp_curve = this->sa->curve->copy();
-        if (this->sa->start) {
-            tmp_curve  = tmp_curve ->create_reverse();
-        }
-        this->overwrite_curve = tmp_curve ;
+        _bsplineSpiroColor();
         return;
     }
     if(shift){
@@ -1433,14 +1420,10 @@ void PenTool::_bsplineSpiroStartAnchorOn()
 {
     using Geom::X;
     using Geom::Y;
-    SPCurve *tmp_curve = this->sa->curve->copy();
-    if (this->sa->start) {
-        tmp_curve  = tmp_curve ->create_reverse();
-    }
-    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmp_curve ->last_segment());
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*this->sa_overwrited ->last_segment());
     SPCurve *last_segment = new SPCurve();
-    Geom::Point point_a = tmp_curve->last_segment()->initialPoint();
-    Geom::Point point_d = *tmp_curve->last_point();
+    Geom::Point point_a = this->sa_overwrited->last_segment()->initialPoint();
+    Geom::Point point_d = *this->sa_overwrited->last_point();
     Geom::Point point_c = point_d + (1./3)*(point_a - point_d);
     point_c = Geom::Point(point_c[X] + HANDLE_CUBIC_GAP, point_c[Y] + HANDLE_CUBIC_GAP);
     if(cubic){
@@ -1450,43 +1433,34 @@ void PenTool::_bsplineSpiroStartAnchorOn()
         last_segment->moveto(point_a);
         last_segment->curveto(point_a,point_c,point_d);
     }
-    if( tmp_curve ->get_segment_count() == 1){
-        tmp_curve  = last_segment;
+    if( this->sa_overwrited->get_segment_count() == 1){
+        this->sa_overwrited  = last_segment->copy();
     }else{
         //we eliminate the last segment
-        tmp_curve ->backspace();
+        this->sa_overwrited->backspace();
         //and we add it again with the recreation
-        tmp_curve ->append_continuous(last_segment, 0.0625);
+        this->sa_overwrited->append_continuous(last_segment, 0.0625);
     }
-    if (this->sa->start) {
-        tmp_curve  = tmp_curve ->create_reverse();
-    }
-    this->overwrite_curve = tmp_curve ;
+    last_segment->unref();
 }
 
 void PenTool::_bsplineSpiroStartAnchorOff()
 {
-    SPCurve *tmp_curve  = this->sa->curve->copy();
-    if(this->sa->start)
-        tmp_curve  = tmp_curve ->create_reverse();
-    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmp_curve ->last_segment());
+    Geom::CubicBezier const * cubic = dynamic_cast<Geom::CubicBezier const*>(&*this->sa_overwrited->last_segment());
     if(cubic){
         SPCurve *last_segment = new SPCurve();
         last_segment->moveto((*cubic)[0]);
         last_segment->curveto((*cubic)[1],(*cubic)[3],(*cubic)[3]);
-        if( tmp_curve ->get_segment_count() == 1){
-            tmp_curve  = last_segment;
+        if( this->sa_overwrited->get_segment_count() == 1){
+            this->sa_overwrited = last_segment->copy();
         }else{
             //we eliminate the last segment
-            tmp_curve ->backspace();
+            this->sa_overwrited->backspace();
             //and we add it again with the recreation
-            tmp_curve ->append_continuous(last_segment, 0.0625);
+            this->sa_overwrited->append_continuous(last_segment, 0.0625);
         }
+        last_segment->unref();
     }
-    if (this->sa->start) {
-        tmp_curve  = tmp_curve ->create_reverse();
-    }
-    this->overwrite_curve = tmp_curve;
 }
 
 void PenTool::_bsplineSpiroMotion(guint const state){
@@ -1503,17 +1477,14 @@ void PenTool::_bsplineSpiroMotion(guint const state){
     this->p[2] = Geom::Point(this->p[2][X] + HANDLE_CUBIC_GAP,this->p[2][Y] + HANDLE_CUBIC_GAP);
     if (this->green_curve->is_unset() && !this->sa) {
         this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
-        this->p[1] = Geom::Point(this->p[1][X] + HANDLE_CUBIC_GAP,this->p[1][Y] + HANDLE_CUBIC_GAP);
+        this->p[1] = Geom::Point(this->p[1][X] + HANDLE_CUBIC_GAP, this->p[1][Y] + HANDLE_CUBIC_GAP);
         if(shift){
             this->p[2] = this->p[3];
         }
     } else if (!this->green_curve->is_unset()){
         tmp_curve  = this->green_curve->copy();
     } else {
-        tmp_curve  = this->overwrite_curve->copy();
-        if(this->sa->start) {
-            tmp_curve  = tmp_curve ->create_reverse();
-        }
+        tmp_curve  = this->sa_overwrited->copy();
     }
     if ((state & GDK_MOD1_MASK ) && previous != Geom::Point(0,0)) { //ALT drag
         this->p[0] = this->p[0] + (this->p[3] - previous);
@@ -1550,11 +1521,7 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             }
             cubic = dynamic_cast<Geom::CubicBezier const*>(&*tmp_curve ->last_segment());
             if (this->sa && this->green_curve->is_unset()) {
-                if(this->sa->start) {
-                    this->overwrite_curve = tmp_curve->copy()->create_reverse();
-                } else {
-                    this->overwrite_curve = tmp_curve->copy();
-                }
+                this->sa_overwrited = tmp_curve->copy();
             }
             if (!this->green_bpaths.empty()) {
                 this->green_curve = tmp_curve->copy();
@@ -1587,6 +1554,9 @@ void PenTool::_bsplineSpiroMotion(guint const state){
                 }
                 if (shift) {
                     this->p[2] = this->p[3];
+                }
+                if(Geom::are_near((*cubic)[3], (*cubic)[2])) {
+                    this->p[1] = this->p[0];
                 }
             } else {
                 this->p[1] =  (*cubic)[3] + ((*cubic)[3] - (*cubic)[2] );
@@ -1627,19 +1597,13 @@ void PenTool::_bsplineSpiroEndAnchorOn()
     SPCurve *tmp_curve;
     SPCurve *last_segment = new SPCurve();
     Geom::Point point_c(0,0);
-    bool reverse = false;
     if( this->green_anchor && this->green_anchor->active ){
         tmp_curve  = this->green_curve->create_reverse();
         if(this->green_curve->get_segment_count()==0){
             return;
         }
-        reverse = true;
     } else if(this->sa){
-        tmp_curve  = this->overwrite_curve->copy();
-        if(!this->sa->start){
-            tmp_curve  = tmp_curve ->create_reverse();
-            reverse = true;
-        }
+        tmp_curve  = this->sa_overwrited->copy()->create_reverse();
     }else{
         return;
     }
@@ -1665,17 +1629,16 @@ void PenTool::_bsplineSpiroEndAnchorOn()
         //and we add it again with the recreation
         tmp_curve ->append_continuous(last_segment, 0.0625);
     }
-    if (reverse) {
-        tmp_curve  = tmp_curve ->create_reverse();
-    }
+    tmp_curve  = tmp_curve ->create_reverse();
     if( this->green_anchor && this->green_anchor->active )
     {
         this->green_curve->reset();
-        this->green_curve = tmp_curve ;
+        this->green_curve = tmp_curve->copy();
     }else{
-        this->overwrite_curve->reset();
-        this->overwrite_curve = tmp_curve ;
+        this->sa_overwrited->reset();
+        this->sa_overwrited = tmp_curve->copy();
     }
+    tmp_curve->unref();
 }
 
 void PenTool::_bsplineSpiroEndAnchorOff()
@@ -1683,20 +1646,14 @@ void PenTool::_bsplineSpiroEndAnchorOff()
 
     SPCurve *tmp_curve;
     SPCurve *last_segment = new SPCurve();
-    bool reverse = false;
     this->p[2] = this->p[3];
     if( this->green_anchor && this->green_anchor->active ){
         tmp_curve  = this->green_curve->create_reverse();
         if(this->green_curve->get_segment_count()==0){
             return;
         }
-        reverse = true;
     } else if(this->sa){
-        tmp_curve  = this->overwrite_curve->copy();
-        if(!this->sa->start){
-            tmp_curve  = tmp_curve ->create_reverse();
-            reverse = true;
-        }
+        tmp_curve  = this->sa_overwrited->copy()->create_reverse();
     }else{
         return;
     }
@@ -1716,17 +1673,17 @@ void PenTool::_bsplineSpiroEndAnchorOff()
         //and we add it again with the recreation
         tmp_curve ->append_continuous(last_segment, 0.0625);
     }
-    if (reverse) {
-        tmp_curve  = tmp_curve ->create_reverse();
-    }
+    tmp_curve  = tmp_curve ->create_reverse();
+
     if( this->green_anchor && this->green_anchor->active )
     {
         this->green_curve->reset();
-        this->green_curve = tmp_curve ;
+        this->green_curve = tmp_curve->copy();
     }else{
-        this->overwrite_curve->reset();
-        this->overwrite_curve = tmp_curve ;
+        this->sa_overwrited->reset();
+        this->sa_overwrited = tmp_curve->copy();
     }
+    tmp_curve->unref();
 }
 
 //prepares the curves for its transformation into BSpline curve.
@@ -1740,10 +1697,7 @@ void PenTool::_bsplineSpiroBuild()
     SPCurve *curve = new SPCurve();
     //If we continuate the existing curve we add it at the start
     if(this->sa && !this->sa->curve->is_unset()){
-        curve = this->overwrite_curve->copy();
-        if (this->sa->start) {
-            curve = curve->create_reverse();
-        }
+        curve = this->sa_overwrited->copy();
     }
 
     if (!this->green_curve->is_unset()){
@@ -2038,7 +1992,6 @@ void PenTool::_finish(gboolean const closed) {
     // cancelate line without a created segment
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
-    this->overwrite_curve = NULL;
     this->sa = NULL;
     this->ea = NULL;
 
