@@ -128,8 +128,7 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _renderer(parent),
     _render_mode(RENDER_MODE_NORMAL),
     _clip_mode(CLIP_MODE_MASK),
-    _omittext_state(EMPTY),
-    _omittext_missing_pages(0)
+    _omittext_state(EMPTY)
 {
 }
 
@@ -885,19 +884,16 @@ CairoRenderContext::finish(bool finish_surface)
     if (_vector_based_target && finish_surface)
         cairo_show_page(_cr);
 
-    // PDF+TeX Output, see CairoRenderContext::_prepareRenderGraphic()
-    while (_omittext_missing_pages > 0) {
-            _omittext_missing_pages--;
-            g_warning("PDF+TeX output: issuing blank PDF page at end (workaround for previous error)");
-            cairo_show_page(_cr);
-    }
+    cairo_status_t status = cairo_status(_cr);
+    if (status != CAIRO_STATUS_SUCCESS)
+        g_critical("error while rendering output: %s", cairo_status_to_string(status));
 
     cairo_destroy(_cr);
     _cr = NULL;
     
     if (finish_surface)
         cairo_surface_finish(_surface);
-    cairo_status_t status = cairo_surface_status(_surface);
+    status = cairo_surface_status(_surface);
     cairo_surface_destroy(_surface);
     _surface = NULL;
 
@@ -1444,28 +1440,38 @@ CairoRenderContext::_prepareRenderGraphic()
 {
     // Only PDFLaTeX supports importing a single page of a graphics file,
     // so only PDF backend gets interleaved text/graphics
-    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
+    if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF && _render_mode != RENDER_MODE_CLIP) {
         if (_omittext_state == NEW_PAGE_ON_GRAPHIC) {
-            if (cairo_get_group_target(_cr) != cairo_get_target(_cr)) {
-                // we are in the middle of a group, i. e., between cairo_push_group() and cairo_pop_group().
-                // cairo_show_page() has no effect here!
-                // To ensure that the the generated TeX source doesn't try to include non-existing pages,
-                // we will later output an extra blank page.
-                // This is a workaround for bug #1417470.
-                g_warning("PDF+TeX output: Found text inside a clipped/masked group. This is not supported, the Z-order will be incorrect. Blank pages will be added to the PDF output to work around bug #1417470.");
-                _omittext_missing_pages++;
-            } else {
-                // no group is active, create new page
-                cairo_show_page(_cr);
-                // Output missing pages (workaround for the 'if' case above).
-                // With this solution, the Z-order is more wrong than necessary.
-                // It would be better to print the blank pages first, and then the actual current page.
-                // However, this isn't easily possible with cairo.
-                while (_omittext_missing_pages > 0) {
-                    _omittext_missing_pages--;
-                    g_warning("PDF+TeX output: issuing blank PDF page (workaround for previous error)");
-                    cairo_show_page(_cr);
-                }
+            // better set this immediately (not sure if masks applied during "popLayer" could call
+            // this function, too, triggering the same code again in error
+            _omittext_state = GRAPHIC_ON_TOP;
+
+            // As we can not emit the page in the middle of a layer (aka group) - it will not be fully painted yet! -
+            // the following basically mirrors the calls in CairoRenderer::renderItem (but in reversed order)
+            // - first traverse all saved states in reversed order (i.e. from deepest nesting to the top)
+            //   and apply clipping / masking to layers on the way (this is done in popLayer)
+            // - then emit the page using cairo_show_page()
+            // - finally restore the previous state with proper transforms and appropriate layers again
+            // 
+            // TODO: While this appears to be an ugly hack it seems to work
+            //       Somebody with a more intimate understanding of cairo and the renderer implementation might
+            //       be able to implement this in a cleaner way, though.
+            int stack_size = _state_stack.size();
+            for (int i = stack_size-1; i > 0; i--) {
+                if (_state_stack[i]->need_layer)
+                    popLayer();
+                cairo_restore(_cr);
+                _state = _state_stack[i-1];
+            }
+
+            cairo_show_page(_cr);
+
+            for (int i = 1; i < stack_size; i++) {
+                cairo_save(_cr);
+                _state = _state_stack[i];
+                if (_state->need_layer)
+                    pushLayer();
+                setTransform(_state->transform);
             }
         }
         _omittext_state = GRAPHIC_ON_TOP;
