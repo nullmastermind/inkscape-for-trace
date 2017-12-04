@@ -14,6 +14,7 @@
 # include <config.h>
 #endif
 
+
 #include "scalar.h"
 #include "spinbutton.h"
 #include <gtkmm/scale.h>
@@ -29,7 +30,6 @@ Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
     : Labelled(label, tooltip, new SpinButton(), suffix, icon, mnemonic),
       setProgrammatically(false)
 {
-
 }
 
 Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
@@ -153,6 +153,7 @@ Glib::SignalProxy<bool, GdkEventButton*> Scalar::signal_button_release_event()
 {
     return static_cast<SpinButton*>(_widget)->signal_button_release_event();
 }
+
 
 } // namespace Widget
 } // namespace UI

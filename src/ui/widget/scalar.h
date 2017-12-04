@@ -78,6 +78,7 @@ public:
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
            bool mnemonic = true);
+
     /**
      * Fetches the precision of the spin buton.
      */
@@ -150,10 +151,12 @@ public:
      * Signal raised when the spin button's value changes.
      */
     Glib::SignalProxy0<void> signal_value_changed();
+
     /**
      * Signal raised when the spin button's pressed.
      */
-    Glib::SignalProxy< bool, GdkEventButton* > signal_button_release_event();
+    Glib::SignalProxy<bool, GdkEventButton*> signal_button_release_event();
+
     /**
      * true if the value was set by setValue, not changed by the user;
      * if a callback checks it, it must reset it back to false.
