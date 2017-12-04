@@ -103,7 +103,6 @@ RandomParam::param_update_default(const gchar * default_value){
 void
 RandomParam::param_set_value(gdouble val, long newseed)
 {
-    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);
@@ -154,10 +153,16 @@ RandomParam::param_newWidget()
     }
     regrandom->setRange(min, max);
     regrandom->setProgrammatically = false;
+    regrandom->signal_button_release_event().connect(sigc::mem_fun (*this, &RandomParam::on_button_release));
 
     regrandom->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change random parameter"));
 
     return dynamic_cast<Gtk::Widget *> (regrandom);
+}
+
+bool RandomParam::on_button_release(GdkEventButton* button_event) {
+    param_effect->upd_params = true;
+    return false;
 }
 
 RandomParam::operator gdouble()

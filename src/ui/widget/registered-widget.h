@@ -244,9 +244,8 @@ public:
             Registry& wr,
             Inkscape::XML::Node* repr_in = NULL,
             SPDocument *doc_in = NULL );
-
 protected:
-    sigc::connection  _value_changed_connection;
+    sigc::connection _value_changed_connection;
     void on_value_changed();
 };
 
