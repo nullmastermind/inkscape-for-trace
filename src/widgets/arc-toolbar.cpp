@@ -122,9 +122,9 @@ static void sp_arctb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const
             SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
 
             if (!strcmp(value_name, "rx")) {
-                ge->rx = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px") / scale[Geom::X];
+                ge->setVisibleRx(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
             } else {
-                ge->ry = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px") / scale[Geom::Y];
+                ge->setVisibleRy(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
             }
 
             ge->normalize();
@@ -308,37 +308,25 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
     // in turn, prevent callbacks from responding
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-    UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
-    Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    gpointer item = g_object_get_data( tbl, "item" );
+    if (item && SP_IS_GENERICELLIPSE(item)) {
+        SPGenericEllipse *ge = SP_GENERICELLIPSE(item);
 
-    gdouble radius = 0;
-    gdouble rx = 0;
-    gdouble ry = 0;
-    sp_repr_get_double(repr, "r", &radius);
-    if (radius) {
-        rx = ry = radius;
-    } else {
-        sp_repr_get_double(repr, "rx", &rx);
-        sp_repr_get_double(repr, "ry", &ry);
+        UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
+        Unit const *unit = tracker->getActiveUnit();
+        g_return_if_fail(unit != NULL);
+
+        GtkAdjustment *adj;
+        adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "rx") );
+        gdouble rx = ge->getVisibleRx();
+        gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit));
+        gtk_adjustment_value_changed(adj);
+
+        adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "ry") );
+        gdouble ry = ge->getVisibleRy();
+        gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit));
+        gtk_adjustment_value_changed(adj);
     }
-    if (!rx) {
-        sp_repr_get_double(repr, "sodipodi:rx", &rx);
-        sp_repr_get_double(repr, "sodipodi:ry", &ry);
-    }
-
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    SPDocument* document = desktop->getDocument();
-    Geom::Scale scale = document->getDocumentScale();
-
-    GtkAdjustment *adj;
-    adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "rx") );
-    gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit) * scale[Geom::X]);
-    gtk_adjustment_value_changed(adj);
-
-    adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "ry") );
-    gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit) * scale[Geom::Y]);
-    gtk_adjustment_value_changed(adj);
 
     gdouble start = 0.;
     gdouble end = 0.;
@@ -387,14 +375,18 @@ static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GOb
 {
     int n_selected = 0;
     Inkscape::XML::Node *repr = NULL;
+    SPItem *item = NULL;
 
+    if ( g_object_get_data( tbl, "repr" ) ) {
+        g_object_set_data( tbl, "item", NULL );
+    }
     purge_repr_listener( tbl, tbl );
 
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
-        SPItem *item = *i;
-        if (SP_IS_GENERICELLIPSE(item)) {
+        if (SP_IS_GENERICELLIPSE(*i)) {
             n_selected++;
+            item = *i;
             repr = item->getRepr();
         }
     }
@@ -415,6 +407,7 @@ static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GOb
 
         if (repr) {
             g_object_set_data( tbl, "repr", repr );
+            g_object_set_data( tbl, "item", item );
             Inkscape::GC::anchor(repr);
             sp_repr_add_listener(repr, &arc_tb_repr_events, tbl);
             sp_repr_synthesize_events(repr, &arc_tb_repr_events, tbl);
