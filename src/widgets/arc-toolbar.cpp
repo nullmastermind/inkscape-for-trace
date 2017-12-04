@@ -452,7 +452,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
         gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "ArcRadiusXAction",
-                                         _("Radius X"), _("Rx:"), _("X Radius of arc"),
+                                         _("Horizontal radius"), _("Rx:"), _("Horizontal radius of the circle, ellipse, or arc"),
                                          "/tools/shapes/arc/rx", 0,
                                          GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-arc",
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
@@ -469,7 +469,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
         gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "ArcRadiusYAction",
-                                         _("Radius Y"), _("Ry:"), _("Y Radius of arc"),
+                                         _("Vertical radius"), _("Ry:"), _("Vertical radius of the circle, ellipse, or arc"),
                                          "/tools/shapes/arc/ry", 0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
