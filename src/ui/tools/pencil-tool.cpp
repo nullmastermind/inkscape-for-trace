@@ -214,7 +214,12 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                 }
                 if (anchor) {
                     p = anchor->dp;
-                    this->overwrite_curve = anchor->curve;
+                    //Put the start overwrite curve always on the same direction
+                    if (anchor->start) {
+                        this->sa_overwrited =  anchor->curve->create_reverse();
+                    } else {
+                        this->sa_overwrited =  anchor->curve->copy();
+                    }
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
                     m.setup(desktop, true, _powerpreview);
@@ -278,6 +283,25 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
             return false;   // Do not drag if we're within tolerance from origin.
         }
     }
+    // motion notify coordinates as given (no snapping back to origin)
+    if (input_has_pressure && pencil_within_tolerance) {
+        anchor = spdc_test_inside(this, pencil_drag_origin_w);
+        if (anchor) {
+            this->sa = anchor;
+            //Put the start overwrite curve always on the same direction
+            if (anchor->start) {
+                this->sa_overwrited = this->sa->curve->create_reverse();
+            } else {
+                this->sa_overwrited = this->sa->curve->copy();
+            }
+            p = anchor->dp;
+            this->_setStartpoint(p);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+        }
+    }
+    if (input_has_pressure) {
+        this->state = SP_PENCIL_CONTEXT_FREEHAND;
+    } 
 
     // Once the user has moved farther than tolerance from the original location
     // (indicating they intend to move the object, not click), then always process the
@@ -287,10 +311,6 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     switch (this->state) {
         case SP_PENCIL_CONTEXT_ADDLINE:
             /* Set red endpoint */
-            if (input_has_pressure) {
-                this->state = SP_PENCIL_CONTEXT_FREEHAND;
-                return true;
-            }
             if (anchor) {
                 p = anchor->dp;
             } else {
@@ -690,7 +710,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     this->points.clear();
     using namespace Inkscape::LivePathEffect;
     bool live = false;
-    SPCurve * curve;
+    SPCurve * curve = new SPCurve();
     if(!c) {
         SPCurve * previous_red = red_curve->copy();
         SPCurve * previous_green = green_curve->copy();
@@ -701,23 +721,26 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
         _interpolate();
         prefs->setDouble("/tools/freehand/pencil/tolerance", tol);
         live = true;
-        if (sa) {
-            curve = sa->curve;
-            if (!green_curve->is_empty()) {
+        if (sa && sa->curve) {
+            curve = sa_overwrited->copy();
+            if (!green_curve->is_unset()) {
                 curve->append_continuous( green_curve, 0.0625);
-                if (!red_curve->is_empty()) {
+                if (!red_curve->is_unset()) {
                     curve->append_continuous( red_curve, 0.0625);
                 }
             }
         } else {
-            if (!green_curve->is_empty()) {
+            if (!green_curve->is_unset()) {
                 curve = green_curve->copy();
-                if (!red_curve->is_empty()) {
+                if (!red_curve->is_unset()) {
                     curve->append_continuous( red_curve, 0.0625);
                 }
             } else {
                 curve = NULL;
             }
+        }
+        if (curve->is_empty()) {
+            curve = NULL;
         }
         red_curve = previous_red->copy();
         green_curve = previous_green->copy();
