@@ -73,9 +73,9 @@ class Code128(Barcode):
         blocks = []
         block = ''
 
-        # Split up into sections of numbers, or charicters
-        # This makes sure that all the charicters are encoded
-        # In the best way posible for Code128
+        # Split up into sections of numbers, or characters
+        # This makes sure that all the characters are encoded
+        # In the best way possible for Code128
         for datum in re.findall(r'(?:(?:\d\d){2,})|(?:^\d\d)|.', text):
             if len(datum) == 1:
                 block = block + datum

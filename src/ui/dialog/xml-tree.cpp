@@ -447,7 +447,7 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
             gtk_tree_selection_select_iter(selection, &node);
 
         } else {
-            g_message("XmlTree::set_tree_select : Couldnt find repr node");
+            g_message("XmlTree::set_tree_select : Couldn't find repr node");
         }
     } else {
         GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));

@@ -36,7 +36,7 @@ namespace GC {
  *   1. The garbage collector uses strictly topologically-ordered
  *      finalization; if objects with finalizers reference each other
  *      directly or indirectly, the collector will refuse to finalize (and
- *      therefor free) them.  You'll see a warning on the console if this
+ *      therefore free) them.  You'll see a warning on the console if this
  *      happens.
  *
  *      The best way to limit this effect is to only make "leaf" objects

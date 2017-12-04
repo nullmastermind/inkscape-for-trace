@@ -91,7 +91,7 @@ class Code93(Barcode):
 
         return PALLET[check % 47]
 
-    # Some charicters need re-ENCODE into the code93 specification
+    # Some characters need re-ENCODE into the code93 specification
     def encode_ascii(self, text):
         result = []
         for char in text:

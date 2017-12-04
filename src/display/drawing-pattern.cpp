@@ -165,8 +165,8 @@ unsigned DrawingPattern::_updateItem(Geom::IntRect const &area, UpdateContext co
     const double oversampling = 2.0;
     double scale = det_ctm*det_ps2user*det_child_transform * oversampling;
     //FIXME: When scale is too big (zooming in a hatch), cairo doesn't render the pattern
-    //More precisely it fails when seting pattern matrix in DrawingPattern::renderPattern
-    //Fully correct solution should make use of visible area bbox and change hach tile rect
+    //More precisely it fails when setting pattern matrix in DrawingPattern::renderPattern
+    //Fully correct solution should make use of visible area bbox and change hatch tile rect
     //accordingly
     if (scale > 25) {
         scale = 25;

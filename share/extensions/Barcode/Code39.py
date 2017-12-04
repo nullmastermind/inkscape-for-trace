@@ -73,7 +73,7 @@ class Code39(Barcode):
     def encode(self, text):
         self.text = text.upper()
         result = ''
-        # It isposible for us to encode code39
+        # It is possible for us to encode code39
         # into full ascii, but this feature is
         # not enabled here
         for char in '*' + self.text + '*':

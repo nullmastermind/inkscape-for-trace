@@ -625,7 +625,7 @@ Glib::ustring Layout::dumpAsText() const
                +  Glib::ustring::compose("    direction %1, block-progression %2\n", direction_to_text(_spans[span_index].direction), direction_to_text(_spans[span_index].block_progression))
                +  "    ** characters:\n";
         Glib::ustring::const_iterator iter_char = _spans[span_index].input_stream_first_character;
-        // very inefficent code. what the hell, it's only debug stuff.
+        // very inefficient code. what the hell, it's only debug stuff.
         for (unsigned char_index = 0 ; char_index < _characters.size() ; char_index++) {
             union {const PangoLogAttr* pattr; const unsigned* uattr;} u;
             u.pattr = &_characters[char_index].char_attributes;
