@@ -309,7 +309,7 @@ bool sp_attribute_check_attribute(Glib::ustring element, Glib::ustring id, Glib:
 
         // First check if it is a presentation attribute. Presentation attributes can be applied to
         // any element.  At the moment, we are only going to check if it is a possibly useful
-        // attribute. Note, we don't explicitely check against the list of elements where presentation
+        // attribute. Note, we don't explicitly check against the list of elements where presentation
         // attributes are allowed (See SVG1.1 spec, Appendix M.2).
         if( !SPAttributeRelCSS::findIfValid( attribute, element ) ) {
 

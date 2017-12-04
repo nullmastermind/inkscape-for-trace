@@ -233,6 +233,7 @@ set(inkscape_SRC
   object-set.cpp
   object-snapper.cpp
   path-chemistry.cpp
+  path-prefix.cpp
   persp3d-reference.cpp
   persp3d.cpp
   perspective-line.cpp

@@ -672,7 +672,7 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
     root->removeChild(tempdoc->getDefs()->getRepr());
     std::vector<Inkscape::XML::Node const *> reprs;
     if (strcmp(type, "*") == 0){
-        //TODO:Fill vector with all posible elements
+        //TODO:Fill vector with all possible elements
         std::vector<Glib::ustring> types;
         types.push_back((Glib::ustring)"svg:path");
         types.push_back((Glib::ustring)"svg:circle");

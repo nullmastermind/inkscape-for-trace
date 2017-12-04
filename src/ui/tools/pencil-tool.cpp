@@ -113,7 +113,7 @@ void PencilTool::_endpointSnap(Geom::Point &p, guint const state) {
         }
     } else {
         if (!(state & GDK_SHIFT_MASK)) { //SHIFT disables all snapping, except the angular snapping above
-                                         //After all, the user explicitely asked for angular snapping by
+                                         //After all, the user explicitly asked for angular snapping by
                                          //pressing CTRL
             boost::optional<Geom::Point> origin = this->npoints > 0 ? this->p[0] : boost::optional<Geom::Point>();
             spdc_endpoint_snap_free(this, p, origin, state);
@@ -325,7 +325,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         // Only in freehand mode we have to add the first point also to this->ps (apparently)
                         // - We cannot add this point in spdc_set_startpoint, because we only need it for freehand
                         // - We cannot do this in the button press handler because at that point we don't know yet
-                        //   wheter we're going into freehand mode or not
+                        //   whether we're going into freehand mode or not
                         this->ps.push_back(this->p[0]);
                         this->wps.push_back(this->pressure);
                     }

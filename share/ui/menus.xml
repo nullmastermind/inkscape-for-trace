@@ -120,6 +120,13 @@
          <!--verb verb-id="ViewColorModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
        </submenu>
+       <submenu _name="_Canvas orientation">
+         <verb verb-id="FlipHorizontal"/>
+         <verb verb-id="FlipVertical"/>
+         <verb verb-id="FlipNone"/>
+         <separator/>
+         <verb verb-id="RotateZero"/>
+       </submenu>
        <separator/>
        <verb verb-id="ToggleGrid" check="yes" />
        <verb verb-id="ToggleGuides" check="yes" />

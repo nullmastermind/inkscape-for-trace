@@ -3028,11 +3028,11 @@ Verb *Verb::_base_verbs[] = {
 
     new ZoomVerb(SP_VERB_ROTATE_CW,   "RotateClockwise",        N_("Rotate Clockwise"),         N_("Rotate canvas clockwise"),         NULL),
     new ZoomVerb(SP_VERB_ROTATE_CCW,  "RotateCounterClockwise", N_("Rotate Counter-Clockwise"), N_("Rotate canvas counter-clockwise"), NULL),
-    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Rotate Zero"),              N_("Reset canvas rotation to zero"),   NULL),
+    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Reset Rotation"),           N_("Reset canvas rotation to zero"),   NULL),
 
-    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontal"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
-    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertical"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
-    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Flip None"),       N_("Undo any flip"),            NULL),
+    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontally"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
+    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertically"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
+    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Reset Flip"),        N_("Undo any flip"),            NULL),
 
 
 // WHY ARE THE FOLLOWING ZoomVerbs???

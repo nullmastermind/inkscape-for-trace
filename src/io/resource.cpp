@@ -209,7 +209,7 @@ Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
 }
 
 /*
- * Get's all the files in a given type, for all domain types.
+ * Gets all the files in a given type, for all domain types.
  *
  *  domain - Optional domain (overload), will check return domains if not.
  *  type - The type of files, e.g. TEMPLATES

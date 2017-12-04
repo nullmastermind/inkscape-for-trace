@@ -140,6 +140,7 @@
     <separator />
     <toolitem action='measure_units_label' />
     <toolitem action='MeasureUnitsAction' />
+    <toolitem action='MeasureOnlySelected' />
     <toolitem action='MeasureIgnore1stAndLast' />
     <toolitem action='MeasureInBettween' />
     <toolitem action='MeasureShowHidden' />
