@@ -275,13 +275,6 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
 static void sp_arctb_defaults(GtkWidget *, GObject *obj)
 {
     GtkAdjustment *adj;
-    adj = GTK_ADJUSTMENT( g_object_get_data(obj, "rx") );
-    gtk_adjustment_set_value(adj, 0.0);
-    gtk_adjustment_value_changed(adj);
-
-    adj = GTK_ADJUSTMENT( g_object_get_data(obj, "ry") );
-    gtk_adjustment_set_value(adj, 0.0);
-    gtk_adjustment_value_changed(adj);
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "start") );
     gtk_adjustment_set_value(adj, 0.0);
