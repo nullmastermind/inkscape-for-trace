@@ -14,7 +14,7 @@
 # include <config.h>
 #endif
 
-
+#include <glibmm/signalproxy.h>
 #include "scalar.h"
 #include "spinbutton.h"
 #include <gtkmm/scale.h>
