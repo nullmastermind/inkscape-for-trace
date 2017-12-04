@@ -298,9 +298,9 @@ RegisteredScalar::on_value_changed()
     _wr->setUpdating (true);
 
     Inkscape::SVGOStringStream os;
-    //Force exact 0 if decimals over to 10
-    double val = getValue() < 1E-10 && getValue() > -1E-10?0.0:getValue();
-    os << val << ';';
+    //Force exact 0 if decimals over to 6
+    double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
+    os << val;
     //TODO: Test is ok remove this sensitives
     //also removed in registed text and in registered random
     //set_sensitive(false);
@@ -784,8 +784,8 @@ RegisteredRandom::on_value_changed()
     _wr->setUpdating (true);
 
     Inkscape::SVGOStringStream os;
-    //Force exact 0 if decimals over to 10
-    double val = getValue() < 1E-10 && getValue() > -1E-10?0.0:getValue();
+    //Force exact 0 if decimals over to 6
+    double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
     os << val << ';' << getStartSeed();
     write_to_xml(os.str().c_str());
     _wr->setUpdating (false);
