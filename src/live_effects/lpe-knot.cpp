@@ -510,12 +510,7 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
         }
     }
     else if (SP_IS_SHAPE(lpeitem)) {
-        SPCurve * c = NULL;
-        if (SP_IS_PATH(lpeitem)) {
-            c = SP_PATH(lpeitem)->get_curve_for_edit();
-        } else {
-            c = SP_SHAPE(lpeitem)->getCurve();
-        }
+        SPCurve * c = SP_SHAPE(lpeitem)->getCurve();
         if (c) {
             Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             for (unsigned i=0; i<subpaths.size(); i++){
@@ -524,6 +519,7 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
                 stroke_widths.push_back(lpeitem->style->stroke_width.computed);
             }
         }
+        c->unref();
     }
 }
 
