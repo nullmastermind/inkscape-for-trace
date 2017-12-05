@@ -148,7 +148,7 @@ Glib::SignalProxy0<void> Scalar::signal_value_changed()
     return static_cast<SpinButton*>(_widget)->signal_value_changed();
 }
 
-Glib::SignalProxy<bool, GdkEventButton*> Scalar::signal_button_release_event()
+Glib::SignalProxy1<bool, GdkEventButton*> Scalar::signal_button_release_event()
 {
     return static_cast<SpinButton*>(_widget)->signal_button_release_event();
 }

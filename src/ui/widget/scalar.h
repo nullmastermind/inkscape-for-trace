@@ -12,7 +12,6 @@
 #ifndef INKSCAPE_UI_WIDGET_SCALAR_H
 #define INKSCAPE_UI_WIDGET_SCALAR_H
 
-#include <glibmm/signalproxy.h>
 #include "labelled.h"
 
 namespace Inkscape {
@@ -156,7 +155,7 @@ public:
     /**
      * Signal raised when the spin button's pressed.
      */
-    Glib::SignalProxy<bool, GdkEventButton*> signal_button_release_event();
+    Glib::SignalProxy1<bool, GdkEventButton*> signal_button_release_event();
 
     /**
      * true if the value was set by setValue, not changed by the user;
