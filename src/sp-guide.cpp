@@ -112,9 +112,8 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         this->set_label(this->label, false);
         break;
     case SP_ATTR_INKSCAPE_LOCKED:
-        this->locked = helperfns_read_bool(value, false);
         if (value) {
-            this->set_locked(this->locked, false);
+            this->set_locked(helperfns_read_bool(value, false), false);
         }
         break;
     case SP_ATTR_ORIENTATION:
@@ -275,7 +274,8 @@ void SPGuide::showSPGuide(SPCanvasGroup *group, GCallback handler)
 {
     SPCanvasItem *item = sp_guideline_new(group, label, point_on_line, normal_to_line);
     sp_guideline_set_color(SP_GUIDELINE(item), color);
-
+    sp_guideline_set_locked(SP_GUIDELINE(item), locked);
+    
     g_signal_connect(G_OBJECT(item), "event", G_CALLBACK(handler), this);
 
     views.push_back(SP_GUIDELINE(item));

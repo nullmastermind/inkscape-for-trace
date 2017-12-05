@@ -272,6 +272,11 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         if ( INKSCAPE.use_gui() ) {
+            
+            SPNamedView *nv = desktop->namedview;
+            if (nv->lockguides) {
+                desktop->toggleGuidesLock();
+            }
             // Perform a fixup pass for hrefs.
             if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc) ) {
                 Glib::ustring msg = _("Broken links have been changed to point to existing files.");
