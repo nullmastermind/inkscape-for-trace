@@ -129,9 +129,6 @@ ScalarParam::param_update_default(const gchar * default_value)
 void
 ScalarParam::param_set_value(gdouble val)
 {
-    if (value != val) {
-        param_effect->upd_params = true;
-    }
     value = val;
     if (integer)
         value = round(value);
@@ -180,7 +177,7 @@ ScalarParam::param_set_undo(bool set_undo)
 Gtk::Widget *
 ScalarParam::param_newWidget()
 {
-    if(widget_is_visible){
+    if (widget_is_visible) {
         Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
@@ -192,6 +189,7 @@ ScalarParam::param_newWidget()
         if (add_slider) {
             rsu->addSlider();
         }
+        rsu->signal_button_release_event().connect(sigc::mem_fun (*this, &ScalarParam::on_button_release));
         if(_set_undo){
             rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
@@ -199,6 +197,11 @@ ScalarParam::param_newWidget()
     } else {
         return NULL;
     }
+}
+
+bool ScalarParam::on_button_release(GdkEventButton* button_event) {
+    param_effect->upd_params = true;
+    return false;
 }
 
 void

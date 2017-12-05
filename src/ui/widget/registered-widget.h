@@ -12,11 +12,11 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
-#include "ui/widget/scalar.h"
 #include <2geom/affine.h>
 #include "xml/node.h"
 #include "registry.h"
 
+#include "ui/widget/scalar.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/point.h"
 #include "ui/widget/text.h"
@@ -244,9 +244,8 @@ public:
             Registry& wr,
             Inkscape::XML::Node* repr_in = NULL,
             SPDocument *doc_in = NULL );
-
 protected:
-    sigc::connection  _value_changed_connection;
+    sigc::connection _value_changed_connection;
     void on_value_changed();
 };
 

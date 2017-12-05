@@ -146,11 +146,17 @@ PointParam::param_newWidget()
     pointwdg->setValue( *this );
     pointwdg->clearProgrammatically();
     pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
+    pointwdg->signal_button_release_event().connect(sigc::mem_fun (*this, &PointParam::on_button_release));
 
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
     return dynamic_cast<Gtk::Widget *> (hbox);
+}
+
+bool PointParam::on_button_release(GdkEventButton* button_event) {
+    param_effect->upd_params = true;
+    return false;
 }
 
 void

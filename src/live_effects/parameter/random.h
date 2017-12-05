@@ -57,6 +57,7 @@ protected:
     gdouble defvalue;
 
 private:
+    bool on_button_release(GdkEventButton* button_event);
     long setup_seed(long);
     gdouble rand();
 
