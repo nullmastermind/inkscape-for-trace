@@ -71,7 +71,6 @@
 
   <toolbar name='TweakToolbar'>
     <toolitem action='TweakWidthAction' />
-    <separator />
     <toolitem action='TweakForceAction' />
     <toolitem action='TweakPressureAction' />
     <separator />
@@ -133,18 +132,17 @@
 
   <toolbar name='MeasureToolbar'>
     <toolitem action='MeasureFontSizeAction' />
-    <separator />
     <toolitem action='MeasurePrecisionAction' />
-    <separator />
     <toolitem action='MeasureScaleAction' />
-    <separator />
     <toolitem action='measure_units_label' />
     <toolitem action='MeasureUnitsAction' />
+    <separator />
     <toolitem action='MeasureOnlySelected' />
     <toolitem action='MeasureIgnore1stAndLast' />
     <toolitem action='MeasureInBettween' />
     <toolitem action='MeasureShowHidden' />
     <toolitem action='MeasureAllLayers' />
+    <separator />
     <toolitem action='MeasureReverse' />
     <toolitem action='MeasureToPhantom' />
     <toolitem action='MeasureToGuides' />
@@ -154,9 +152,7 @@
   </toolbar>
 
   <toolbar name='StarToolbar'>
-    <separator />
     <toolitem action='StarStateAction' />
-    <separator />
     <toolitem action='FlatAction' />
     <separator />
     <toolitem action='MagnitudeAction' />
@@ -181,10 +177,8 @@
   <toolbar name='3DBoxToolbar'>
     <toolitem action='3DBoxAngleXAction' />
     <toolitem action='3DBoxVPXStateAction' />
-    <separator />
     <toolitem action='3DBoxAngleYAction' />
     <toolitem action='3DBoxVPYStateAction' />
-    <separator />
     <toolitem action='3DBoxAngleZAction' />
     <toolitem action='3DBoxVPZStateAction' />
   </toolbar>
@@ -248,6 +242,9 @@
 
   <toolbar name='ArcToolbar'>
     <toolitem action='ArcStateAction' />
+    <toolitem action='ArcRadiusXAction' />
+    <toolitem action='ArcRadiusYAction' />
+    <toolitem action='ArcUnitsAction' />
     <separator />
     <toolitem action='ArcStartAction' />
     <toolitem action='ArcEndAction' />
@@ -260,7 +257,6 @@
 
   <toolbar name='PaintbucketToolbar'>
     <toolitem action='ChannelsAction' />
-    <separator />
     <toolitem action='ThresholdAction' />
     <separator />
     <toolitem action='OffsetAction' />
@@ -379,6 +375,7 @@
     <toolitem action='ConnectorAvoidAction' />
     <toolitem action='ConnectorIgnoreAction' />
     <toolitem action='ConnectorOrthogonalAction' />
+    <separator />
     <toolitem action='ConnectorCurvatureAction' />
     <toolitem action='ConnectorSpacingAction' />
     <toolitem action='ConnectorGraphAction' />
