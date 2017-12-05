@@ -12,6 +12,7 @@
 #ifndef INKSCAPE_UI_WIDGET_SCALAR_H
 #define INKSCAPE_UI_WIDGET_SCALAR_H
 
+#include <glibmm/signalproxy.h>
 #include "labelled.h"
 
 namespace Inkscape {
