@@ -276,16 +276,20 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     // Align vertically on the baseline of the font (retreived from the anchor point)
     // Align horizontally on anchorpoint
     gchar const *alignment = NULL;
+    gchar const *alignstack = NULL;
     switch (style->text_anchor.computed) {
     case SP_CSS_TEXT_ANCHOR_START:
-        alignment = "[lb]";
+        alignment = "[lt]";
+        alignstack = "[l]";
         break;
     case SP_CSS_TEXT_ANCHOR_END:
-        alignment = "[rb]";
+        alignment = "[rt]";
+        alignstack = "[r]";
         break;
     case SP_CSS_TEXT_ANCHOR_MIDDLE:
     default:
-        alignment = "[b]";
+        alignment = "[t]";
+        alignstack = "[c]";
         break;
     }
     Geom::Point anchor = textobj->attributes.firstXY() * transform();
@@ -332,12 +336,14 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         os << "\\rotatebox{" << degrees << "}{";
     }
     os << "\\makebox(0,0)" << alignment << "{";
-    os << "\\smash{";  // smash the text, to be able to put the makebox coordinates at the baseline
+    os << "\\shortstack" << alignstack << "{";
+    os << "\\smash{";
+    bool smash_closed = false;
 
         // Walk through all spans in the text object.
         // Write span strings to LaTeX, associated with font weight and style.
         Inkscape::Text::Layout const &layout = *(te_get_layout (textobj));
-        for (Inkscape::Text::Layout::iterator li = layout.begin(), le = layout.end(); 
+        for (Inkscape::Text::Layout::iterator li = layout.begin(), le = layout.end();
              li != le; li.nextStartOfSpan())
         {
             SPStyle const &spanstyle = *(sp_te_style_at_position (textobj, li));
@@ -372,22 +378,33 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
             if (!spanstr) {
                 continue;
             }
+
             // replace carriage return with double slash
-            gchar ** splitstr = g_strsplit(spanstr, "\n", -1);
-            gchar *spanstr_new = g_strjoinv("\\\\ ", splitstr);
-            os << spanstr_new;
+            gchar ** splitstr = g_strsplit(spanstr, "\n", 2);
+            os << splitstr[0];
+
+            // smash the first line of the text only, to be able to align the rest of the makebox top
+            // assuming that spans always end at the end of a line
+            if (g_strv_length(splitstr) > 1)
+            {
+                if (!smash_closed)
+                {
+                    os << "}"; // smash end
+                    smash_closed = true;
+                }
+                os << "\\\\";
+            }
+
             g_strfreev(splitstr);
-            g_free(spanstr_new);
 
             if (is_oblique) { os << "}"; } // oblique end
             if (is_italic) { os << "}"; } // italic end
             if (is_bold) { os << "}"; } // bold end
         }
 
-    os << "}"; // smash end
-    if (has_rotation) {
-        os << "}"; // rotatebox end
-    }
+    if (!smash_closed) { os << "}"; } // smash end
+    os << "}"; // shortstack end
+    if (has_rotation) { os << "}"; } // rotatebox end
     os << "}"; //makebox end
     os << "}%\n"; // put end
 
