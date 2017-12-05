@@ -346,37 +346,40 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         for (Inkscape::Text::Layout::iterator li = layout.begin(), le = layout.end();
              li != le; li.nextStartOfSpan())
         {
-            SPStyle const &spanstyle = *(sp_te_style_at_position (textobj, li));
-            bool is_bold = false, is_italic = false, is_oblique = false;
-
-            if (spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_500 ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_600 ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_700 ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_800 ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_900 ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_BOLD ||
-                spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_BOLDER) 
-            {
-                is_bold = true;
-                os << "\\textbf{";
-            }
-            if (spanstyle.font_style.computed == SP_CSS_FONT_STYLE_ITALIC) 
-            {
-                is_italic = true;
-                os << "\\textit{";
-            }
-            if (spanstyle.font_style.computed == SP_CSS_FONT_STYLE_OBLIQUE) 
-            {
-                is_oblique = true;
-                os << "\\textsl{";  // this is an accurate choice if the LaTeX chosen font matches the font in Inkscape. Gives bad results when it is not so...
-            }
-
             Inkscape::Text::Layout::iterator ln = li; 
             ln.nextStartOfSpan();
             Glib::ustring uspanstr = sp_te_get_string_multiline (textobj, li, ln);
             const gchar *spanstr = uspanstr.c_str();
             if (!spanstr) {
                 continue;
+            }
+
+            bool is_bold = false, is_italic = false, is_oblique = false;
+
+            // newline character only -> don't attempt to add style (will break compilation in LaTeX)
+            if (g_strcmp0(spanstr, "\n")) {
+                SPStyle const &spanstyle = *(sp_te_style_at_position (textobj, li));
+                if (spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_500 ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_600 ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_700 ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_800 ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_900 ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_BOLD ||
+                    spanstyle.font_weight.computed == SP_CSS_FONT_WEIGHT_BOLDER) 
+                {
+                    is_bold = true;
+                    os << "\\textbf{";
+                }
+                if (spanstyle.font_style.computed == SP_CSS_FONT_STYLE_ITALIC) 
+                {
+                    is_italic = true;
+                    os << "\\textit{";
+                }
+                if (spanstyle.font_style.computed == SP_CSS_FONT_STYLE_OBLIQUE) 
+                {
+                    is_oblique = true;
+                    os << "\\textsl{";  // this is an accurate choice if the LaTeX chosen font matches the font in Inkscape. Gives bad results when it is not so...
+                }
             }
 
             // replace carriage return with double slash
