@@ -108,12 +108,14 @@ protected:
 
         bool saved = DocumentUndo::getUndoSensitive(local_doc);
         DocumentUndo::setUndoSensitive(local_doc, false);
+        const char * svgstr_old = local_repr->attribute(_key.c_str());
         if (!write_undo) {
             local_repr->setAttribute(_key.c_str(), svgstr);
         }
         DocumentUndo::setUndoSensitive(local_doc, saved);
-
-        local_doc->setModifiedSinceSave();
+        if (svgstr_old && svgstr && strcmp(svgstr_old,svgstr)) {
+            local_doc->setModifiedSinceSave();
+        }
 
         if (write_undo) {
             local_repr->setAttribute(_key.c_str(), svgstr);
