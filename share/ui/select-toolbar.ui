@@ -213,8 +213,6 @@
     <toolitem action='PencilLpeSimplify' />
     <toolitem action='PencilLpeSimplifyFlatten' />
     <separator />
-    <toolitem action='PencilResetAction' />
-    <separator />
     <toolitem action='SetPencilShapeAction'/>
   </toolbar>
 
