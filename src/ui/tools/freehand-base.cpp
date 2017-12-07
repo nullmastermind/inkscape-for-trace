@@ -36,6 +36,7 @@
 #include "ui/tools/lpe-tool.h"
 #include "selection-chemistry.h"
 #include "sp-item-group.h"
+#include "sp-rect.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
@@ -466,6 +467,8 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,true)){
                     SPItem * pasted_clipboard = dc->selection->singleItem();
+                    dc->selection->toCurves();
+                    pasted_clipboard = dc->selection->singleItem();
                     if(pasted_clipboard){
                         Inkscape::XML::Node *pasted_clipboard_root = pasted_clipboard->getRepr();
                         Inkscape::XML::Node *path = sp_repr_lookup_name(pasted_clipboard_root, "svg:path", -1); // unlimited search depth
@@ -494,6 +497,19 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 gchar const *svgd = item->getRepr()->attribute("d");
                 if(bend_item && (SP_IS_SHAPE(bend_item) || SP_IS_GROUP(bend_item))){
+                    // If item is a SPRect, convert it to path first:
+                    if ( dynamic_cast<SPRect *>(bend_item) ) {
+                        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                        if (desktop) {
+                            Inkscape::Selection *sel = desktop->getSelection();
+                            if ( sel && !sel->isEmpty() ) {
+                                sel->clear();
+                                sel->add(bend_item);
+                                sel->toCurves();
+                                bend_item = sel->singleItem();
+                            }
+                        }
+                    }
                     bend_item->moveTo(item,false);
                     bend_item->transform.setTranslation(Geom::Point());
                     spdc_apply_bend_shape(svgd, dc, bend_item);
