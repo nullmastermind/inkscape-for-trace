@@ -57,6 +57,7 @@ public:
 private:
     PointParam(const PointParam&);
     PointParam& operator=(const PointParam&);
+    bool on_button_release(GdkEventButton* button_event);
     Geom::Point defvalue;
     bool liveupdate;
     KnotHolder *knoth;

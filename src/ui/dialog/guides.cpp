@@ -96,7 +96,7 @@ void GuidelinePropertiesDialog::_onOK()
         normal = Geom::rot90(Geom::Point::polar(rad_angle, 1.0));
     }
     //To allow reposition from dialog
-    _guide->set_locked(false, true);
+    _guide->set_locked(false, false);
 
     _guide->set_normal(normal, true);
 

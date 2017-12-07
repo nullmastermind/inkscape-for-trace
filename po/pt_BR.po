@@ -826,7 +826,7 @@ msgstr "Dentro e Fora"
 #: ../share/filters/filters.svg.h:268
 #, fuzzy
 msgid "Inner colorized shadow, outer black shadow"
-msgstr "Inner colorida sombra, sombra preta exterior"
+msgstr "Sombra colorida interior, sombra preta exterior"
 
 #: ../share/filters/filters.svg.h:270
 msgid "Air Spray"
@@ -881,12 +881,12 @@ msgstr "Chacoalhados líquido"
 #: ../share/filters/filters.svg.h:292
 #, fuzzy
 msgid "Colorizable filling with flow inside like transparency"
-msgstr "Colorizable enchimento com fluxo no interior como transparência"
+msgstr "Preenchimento colorizável com fluxo no interior como transparência"
 
 #: ../share/filters/filters.svg.h:294
 #, fuzzy
 msgid "Soft Focus Lens"
-msgstr "Soft focus lente"
+msgstr "Lente de foco suave"
 
 #: ../share/filters/filters.svg.h:296
 msgid "Glowing image content without blurring it"

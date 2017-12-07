@@ -279,7 +279,6 @@ RegisteredScalar::RegisteredScalar ( const Glib::ustring& label, const Glib::ust
     init_parent(key, wr, repr_in, doc_in);
 
     setProgrammatically = false;
-
     setRange (-1e6, 1e6);
     setDigits (2);
     setIncrements(0.1, 1.0);
@@ -299,12 +298,14 @@ RegisteredScalar::on_value_changed()
     _wr->setUpdating (true);
 
     Inkscape::SVGOStringStream os;
-    os << getValue();
-
-    set_sensitive(false);
+    //Force exact 0 if decimals over to 6
+    double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
+    os << val;
+    //TODO: Test is ok remove this sensitives
+    //also removed in registed text and in registered random
+    //set_sensitive(false);
     write_to_xml(os.str().c_str());
-    set_sensitive(true);
-
+    //set_sensitive(true);
     _wr->setUpdating (false);
 }
 
@@ -342,11 +343,9 @@ RegisteredText::on_activate()
     }
     _wr->setUpdating (true);
     Glib::ustring str(getText());
-    set_sensitive(false);
     Inkscape::SVGOStringStream os;
     os << str;
     write_to_xml(os.str().c_str());
-    set_sensitive(true);
     _wr->setUpdating (false);
 }
 
@@ -757,7 +756,6 @@ RegisteredRandom::RegisteredRandom ( const Glib::ustring& label, const Glib::ust
     init_parent(key, wr, repr_in, doc_in);
 
     setProgrammatically = false;
-
     setRange (-1e6, 1e6);
     setDigits (2);
     setIncrements(0.1, 1.0);
@@ -786,12 +784,10 @@ RegisteredRandom::on_value_changed()
     _wr->setUpdating (true);
 
     Inkscape::SVGOStringStream os;
-    os << getValue() << ';' << getStartSeed();
-
-    set_sensitive(false);
+    //Force exact 0 if decimals over to 6
+    double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
+    os << val << ';' << getStartSeed();
     write_to_xml(os.str().c_str());
-    set_sensitive(true);
-
     _wr->setUpdating (false);
 }
 

@@ -60,7 +60,10 @@ private:
     ScalarParam  tang_offset;
     BoolParam    prop_units;
     BoolParam    vertical_pattern;
+    BoolParam    hide_knot;
     ScalarParam  fuse_tolerance;
+    KnotHolderEntity *knot_entity;
+    Geom::PathVector helper_path;
     void on_pattern_pasted();
 
     LPEPatternAlongPath(const LPEPatternAlongPath&);

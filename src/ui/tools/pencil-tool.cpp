@@ -211,7 +211,12 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
                 }
                 if (anchor) {
                     p = anchor->dp;
-                    this->overwrite_curve = anchor->curve;
+                    //Put the start overwrite curve always on the same direction
+                    if (anchor->start) {
+                        this->sa_overwrited =  anchor->curve->create_reverse();
+                    } else {
+                        this->sa_overwrited =  anchor->curve->copy();
+                    }
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
                 } else {
                     m.setup(desktop, true);
@@ -277,6 +282,25 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
             return false;   // Do not drag if we're within tolerance from origin.
         }
     }
+    // motion notify coordinates as given (no snapping back to origin)
+    if (input_has_pressure && pencil_within_tolerance) {
+        anchor = spdc_test_inside(this, pencil_drag_origin_w);
+        if (anchor) {
+            this->sa = anchor;
+            //Put the start overwrite curve always on the same direction
+            if (anchor->start) {
+                this->sa_overwrited = this->sa->curve->create_reverse();
+            } else {
+                this->sa_overwrited = this->sa->curve->copy();
+            }
+            p = anchor->dp;
+            this->_setStartpoint(p);
+            desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Continuing selected path"));
+        }
+    }
+    if (input_has_pressure) {
+        this->state = SP_PENCIL_CONTEXT_FREEHAND;
+    } 
 
     // Once the user has moved farther than tolerance from the original location
     // (indicating they intend to move the object, not click), then always process the
@@ -760,7 +784,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
         min = max;
     }
     bool live = false;
-    SPCurve * curve;
+    SPCurve * curve  = new SPCurve();
     if (sa) {
         Effect* lpe = SP_LPE_ITEM(white_item)->getCurrentLPE();
         LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
@@ -786,39 +810,26 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
         stroreps.clear();
         strorewps.clear();
         prefs->setDouble("/tools/freehand/pencil/tolerance", tol);
-        if (sa) {
-            curve = sa->curve;
-            if(prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 1 || 
-               prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 2)
-            {
-                curve = overwrite_curve;
-            }
-            if (sa->start) {
-                SPCurve *ret = curve->create_reverse();
-                curve->unref();
-                curve = ret->copy();
-                ret->unref();
-            }
-            if (!green_curve->is_empty()) {
-                if (curve->is_empty()) {
-                    curve = green_curve->copy();
-                } else {
-                    green_curve->move_endpoints(curve->first_path()->finalPoint(), green_curve->first_path()->finalPoint());
-                    curve->append_continuous( green_curve, 0.0625);
-                }
-                if (!red_curve->is_empty()) {
+        if (sa && sa->curve) {
+            curve = sa_overwrited->copy();
+            if (!green_curve->is_unset()) {
+                curve->append_continuous( green_curve, 0.0625);
+                if (!red_curve->is_unset()) {
                     curve->append_continuous( red_curve, 0.0625);
                 }
             }
         } else {
-            if (!green_curve->is_empty()) {
+            if (!green_curve->is_unset()) {
                 curve = green_curve->copy();
-                if (!red_curve->is_empty()) {
+                if (!red_curve->is_unset()) {
                     curve->append_continuous( red_curve, 0.0625);
                 }
             } else {
                 curve = NULL;
             }
+        }
+        if (curve->is_empty()) {
+            curve = NULL;
         }
         red_curve = previous_red->copy();
         green_curve = previous_green->copy();

@@ -12,11 +12,11 @@
 #ifndef INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 #define INKSCAPE_UI_WIDGET_REGISTERED_WIDGET__H_
 
-#include "ui/widget/scalar.h"
 #include <2geom/affine.h>
 #include "xml/node.h"
 #include "registry.h"
 
+#include "ui/widget/scalar.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/point.h"
 #include "ui/widget/text.h"
@@ -108,12 +108,14 @@ protected:
 
         bool saved = DocumentUndo::getUndoSensitive(local_doc);
         DocumentUndo::setUndoSensitive(local_doc, false);
+        const char * svgstr_old = local_repr->attribute(_key.c_str());
         if (!write_undo) {
             local_repr->setAttribute(_key.c_str(), svgstr);
         }
         DocumentUndo::setUndoSensitive(local_doc, saved);
-
-        local_doc->setModifiedSinceSave();
+        if (svgstr_old && svgstr && strcmp(svgstr_old,svgstr)) {
+            local_doc->setModifiedSinceSave();
+        }
 
         if (write_undo) {
             local_repr->setAttribute(_key.c_str(), svgstr);
@@ -244,9 +246,8 @@ public:
             Registry& wr,
             Inkscape::XML::Node* repr_in = NULL,
             SPDocument *doc_in = NULL );
-
 protected:
-    sigc::connection  _value_changed_connection;
+    sigc::connection _value_changed_connection;
     void on_value_changed();
 };
 

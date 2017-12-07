@@ -42,7 +42,6 @@ first) but I think we can first forget about them.
 
 namespace Inkscape {
 namespace LivePathEffect {
-Geom::PathVector pap_helper_path;
 
 namespace WPAP {
     class KnotHolderEntityWidthPatternAlongPath : public LPEKnotHolderEntity {
@@ -82,6 +81,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
         "prop_units", &wr, this, false),
     vertical_pattern(_("Pattern is _vertical"), _("Rotate pattern 90 deg before applying"),
         "vertical_pattern", &wr, this, false),
+    hide_knot(_("Hide width knot"), _("Hide width knot"),"hide_knot", &wr, this, false),
     fuse_tolerance(_("_Fuse nearby ends:"), _("Fuse ends closer than this number. 0 means don't fuse."),
         "fuse_tolerance", &wr, this, 0)
 {
@@ -94,10 +94,11 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     registerParameter(&tang_offset);
     registerParameter(&prop_units);
     registerParameter(&vertical_pattern);
+    registerParameter(&hide_knot);
     registerParameter(&fuse_tolerance);
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
-
+    knot_entity = NULL;
     _provides_knotholder_entities = true;
 
 }
@@ -114,6 +115,15 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::OptRect bbox = pattern.get_pathvector().boundsFast();
     if (bbox) {
         original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
+    }
+    if (knot_entity) {
+        if (hide_knot) {
+            helper_path.clear();
+            knot_entity->knot->hide();
+        } else {
+            knot_entity->knot->show();
+        }
+        knot_entity->update_knot();
     }
 }
 
@@ -272,16 +282,20 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
 void
 LPEPatternAlongPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
-    hp_vec.push_back(pap_helper_path);
+    hp_vec.push_back(helper_path);
 }
 
 
 void 
 LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
-    KnotHolderEntity *e = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
-    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
-    knotholder->add(e);
+    knot_entity = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
+    knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    knotholder->add(knot_entity);
+    if (hide_knot) {
+        knot_entity->knot->hide();
+        knot_entity->update_knot();
+    }
 }
 
 namespace WPAP {
@@ -290,7 +304,7 @@ void
 KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-    
+
     Geom::Point const s = snap_knot_position(p, state);
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
@@ -325,7 +339,6 @@ Geom::Point
 KnotHolderEntityWidthPatternAlongPath::knot_get() const
 {
     LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
         SPCurve *curve_before = sp_shape->getCurveBeforeLPE();
@@ -341,13 +354,14 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
             }
             ray.setAngle(ray.angle() + Geom::rad_from_deg(90));
             Geom::Point result_point = Geom::Point::polar(ray.angle(), (lpe->original_height/2.0) * lpe->prop_scale) + ptA;
-
-            pap_helper_path.clear();
-            Geom::Path hp(result_point);
-            hp.appendNew<Geom::LineSegment>(ptA);
-            pap_helper_path.push_back(hp);
-            hp.clear();
-            curve_before->unref();        
+            lpe->helper_path.clear();
+            if (!lpe->hide_knot) {
+                Geom::Path hp(result_point);
+                hp.appendNew<Geom::LineSegment>(ptA);
+                lpe->helper_path.push_back(hp);
+                hp.clear();
+            }
+            curve_before->unref();
             return result_point;
         }
     }

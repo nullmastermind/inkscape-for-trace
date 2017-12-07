@@ -388,6 +388,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
+
     g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
     gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
 
@@ -993,7 +994,7 @@ void sp_update_guides_lock( GtkWidget */*button*/, gpointer data )
     
     if ( down != nv->lockguides ) {
         nv->lockguides = down;
-        sp_namedview_guides_toggle_lock(doc, repr);
+        sp_namedview_guides_toggle_lock(doc, nv);
         if (down) {
             dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Locked all guides"));
         } else {
@@ -1658,7 +1659,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);
-    sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), namedview->lockguides );
 
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
 
@@ -1670,7 +1670,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->menubar = sp_ui_main_menubar (dtw->desktop);
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
-    SPNamedView *nv = dtw->desktop->namedview;
+
     gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
     dtw->layoutWidgets();
 

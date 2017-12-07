@@ -76,11 +76,8 @@ public:
     std::list<SPCurve *> white_curves;
     std::vector<SPDrawAnchor*> white_anchors;
 
-    // Alternative curve to use on continuing the exisiting curve in case of
-    // bspline or spirolive, because using anchor curves gives random memory
-    // bugs as reported by su_v when running this code on macOS (as well as
-    // making the code hard to understand).
-    SPCurve *overwrite_curve;
+    // Temporary modiffied curve when start anchor
+    SPCurve *sa_overwrited;
 
     // Start anchor
     SPDrawAnchor *sa;
