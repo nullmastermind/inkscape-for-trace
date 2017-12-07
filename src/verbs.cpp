@@ -1125,21 +1125,27 @@ void SelectionVerb::perform(SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
+            selection->toCurves(true);
             selection->pathUnion();
             break;
         case SP_VERB_SELECTION_INTERSECT:
+            selection->toCurves(true);
             selection->pathIntersect();
             break;
         case SP_VERB_SELECTION_DIFF:
+            selection->toCurves(true);
             selection->pathDiff();
             break;
         case SP_VERB_SELECTION_SYMDIFF:
+            selection->toCurves(true);
             selection->pathSymDiff();
             break;
         case SP_VERB_SELECTION_CUT:
+            selection->toCurves(true);
             selection->pathCut();
             break;
         case SP_VERB_SELECTION_SLICE:
+            selection->toCurves(true);
             selection->pathSlice();
             break;
         case SP_VERB_SELECTION_GROW:
@@ -1253,6 +1259,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
             tools_switch(dt, TOOLS_NODES);
             break;
         case SP_VERB_SELECTION_OUTLINE:
+            selection->toCurves(true);
             sp_selected_path_outline(dt);
             break;
         case SP_VERB_SELECTION_OUTLINE_LEGACY:
