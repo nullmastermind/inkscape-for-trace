@@ -1394,6 +1394,11 @@ void InkscapePreferences::initPageBehavior()
     _page_clones.add_line(true, "", _clone_relink_on_duplicate, "",
                         _("When duplicating a selection containing both a clone and its original (possibly in groups), relink the duplicated clone to the duplicated original instead of the old original"));
 
+    _page_clones.add_group_header( _("Unlinking clones"));
+    _clone_to_curves.init ( _("Paths operations unlink clones"), "/options/pathoperationsunlink/value", true);
+    _page_clones.add_line(true, "", _clone_to_curves, "",
+                        _("This paths operations unlink clones: stroke to path, boolops operations, to curves, combine"));
+
     //TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
     this->AddPage(_page_clones, _("Clones"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLONES);
 

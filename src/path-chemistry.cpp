@@ -55,7 +55,10 @@ ObjectSet::combine(bool skip_undo)
 {
     //Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = document();
-    unlinkRecursive(true);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        unlinkRecursive(true);
+    }
     std::vector<SPItem*> items_copy(items().begin(), items().end());
     
     if (items_copy.size() < 1) {
@@ -306,7 +309,10 @@ void ObjectSet::toCurves(bool skip_undo)
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
-    unlinkRecursive(true);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        unlinkRecursive(true);
+    }
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     clear();
@@ -337,7 +343,10 @@ void ObjectSet::toLPEItems()
     if (isEmpty()) {
         return;
     }
-    unlinkRecursive(true);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        unlinkRecursive(true);
+    }
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     clear();
