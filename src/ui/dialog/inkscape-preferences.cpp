@@ -213,6 +213,15 @@ void InkscapePreferences::AddPencilPowerStrokePressureStep(DialogPage &p, Glib::
                        false );
 }
 
+void InkscapePreferences::AddPencilPowerStrokeMinSimplify(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
+{
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init ( prefs_path + "/powerstrokemintolerance", 1, 100, 1, 10, def_value, true, false);
+    p.add_line( false, _("Power Stroke base min simplify:"), *sb, _("%"),
+                       _("Base simplify for pencil with pressure"),
+                       false );
+}
+
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -433,6 +442,7 @@ void InkscapePreferences::initPageTools()
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Pressure sensitivity settings"));
     this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 10);
+    this->AddPencilPowerStrokeMinSimplify(_page_pencil, "/tools/freehand/pencil", 40);
 
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",

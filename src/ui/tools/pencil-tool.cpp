@@ -341,7 +341,6 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                     this->green_anchor = sp_draw_anchor_new(this, this->green_curve, TRUE, this->p[0]);
                 }
                 if (anchor) {
-                    std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
                     p = anchor->dp;
                 }
                 if ( this->npoints != 0) { // buttonpress may have happened before we entered draw context!
@@ -777,6 +776,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     this->points.clear();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double tol          = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
+    double pstol        = prefs->getDoubleLimited("/tools/freehand/pencil/powerstrokemintolerance", 45.0, 1.0, 100.0);
     double gap_pressure = prefs->getIntLimited("/tools/freehand/pencil/ps-step-pressure",10, 1, 100)/100.0;
     double min          = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
     double max          = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
@@ -801,7 +801,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
         //Simplify a bit the base curve to avoid artifacts
         SPCurve * previous_red = red_curve->copy();
         SPCurve * previous_green = green_curve->copy();
-        prefs->setDouble("/tools/freehand/pencil/tolerance", 18.0);
+        prefs->setDouble("/tools/freehand/pencil/tolerance", pstol);
         std::vector<Geom::Point> stroreps = this->ps;
         std::vector<double> strorewps = this->wps;
         _interpolate(true);
@@ -945,8 +945,9 @@ void PencilTool::_interpolate(bool realize) {
     }
     //To avoid artifacts on pressure power
     if (input_has_pressure) {
-        if (tol < 18.0 * 0.4) {
-            tol = 18.0 * 0.4;
+        double pstol = prefs->getDoubleLimited("/tools/freehand/pencil/powerstrokemintolerance", 40);
+        if (tol < pstol * 0.4) {
+            tol = pstol * 0.4;
         }
         //we dont need a exact calulation set up a high precission
         //we remove pointa at start and end nearest to 1/20 of total length
