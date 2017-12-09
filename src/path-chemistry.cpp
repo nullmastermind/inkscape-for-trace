@@ -56,9 +56,6 @@ ObjectSet::combine(bool skip_undo)
     //Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = document();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
-        unlinkRecursive(true);
-    }
     std::vector<SPItem*> items_copy(items().begin(), items().end());
     
     if (items_copy.size() < 1) {

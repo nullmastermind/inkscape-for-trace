@@ -1397,7 +1397,7 @@ void InkscapePreferences::initPageBehavior()
     _page_clones.add_group_header( _("Unlinking clones"));
     _clone_to_curves.init ( _("Path operations unlink clones"), "/options/pathoperationsunlink/value", true);
     _page_clones.add_line(true, "", _clone_to_curves, "",
-                        _("The following path operations will unlink clones: Stroke to path, Boolean operations, Object to Path, Combine"));
+                        _("The following path operations will unlink clones: Stroke to path, Object to Path, Boolean operations, Combine and Break Apart"));
 
     //TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
     this->AddPage(_page_clones, _("Clones"), iter_behavior, PREFS_PAGE_BEHAVIOR_CLONES);

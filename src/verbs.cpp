@@ -1288,9 +1288,11 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 
         case SP_VERB_SELECTION_COMBINE:
+            selection->toCurves(true);
             selection->combine();
             break;
         case SP_VERB_SELECTION_BREAK_APART:
+            selection->toCurves(true);
             selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
