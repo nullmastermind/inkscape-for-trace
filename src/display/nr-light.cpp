@@ -41,11 +41,11 @@ void DistantLight::light_components(NR::Fvector &lc) {
     lc[LIGHT_BLUE] = SP_RGBA32_B_U(color);
 }
 
-PointLight::PointLight(SPFePointLight *light, guint32 lighting_color, const Geom::Affine &trans) {
+PointLight::PointLight(SPFePointLight *light, guint32 lighting_color, const Geom::Affine &trans, int device_scale) {
     color = lighting_color;
-    l_x = light->x;
-    l_y = light->y;
-    l_z = light->z;
+    l_x = light->x * device_scale;
+    l_y = light->y * device_scale;
+    l_z = light->z * device_scale;
     NR::convert_coord(l_x, l_y, l_z, trans);
 }
 
@@ -64,15 +64,15 @@ void PointLight::light_components(NR::Fvector &lc) {
     lc[LIGHT_BLUE] = SP_RGBA32_B_U(color);
 }
 
-SpotLight::SpotLight(SPFeSpotLight *light, guint32 lighting_color, const Geom::Affine &trans) {
+SpotLight::SpotLight(SPFeSpotLight *light, guint32 lighting_color, const Geom::Affine &trans, int device_scale) {
     double p_x, p_y, p_z;
     color = lighting_color;
-    l_x = light->x;
-    l_y = light->y;
-    l_z = light->z;
-    p_x = light->pointsAtX;
-    p_y = light->pointsAtY;
-    p_z = light->pointsAtZ;
+    l_x = light->x * device_scale;
+    l_y = light->y * device_scale;
+    l_z = light->z * device_scale;
+    p_x = light->pointsAtX * device_scale;
+    p_y = light->pointsAtY * device_scale;
+    p_z = light->pointsAtZ * device_scale;
     cos_lca = std::cos(M_PI / 180 * light->limitingConeAngle);
     speExp = light->specularExponent;
     NR::convert_coord(l_x, l_y, l_z, trans);

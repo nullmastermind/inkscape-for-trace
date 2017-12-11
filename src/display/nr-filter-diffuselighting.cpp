@@ -83,9 +83,10 @@ private:
 
 struct DiffusePointLight : public DiffuseLight {
     DiffusePointLight(cairo_surface_t *bumpmap, SPFePointLight *light, guint32 color,
-            Geom::Affine const &trans, double scale, double diffuse_constant, double x0, double y0)
+                      Geom::Affine const &trans, double scale, double diffuse_constant,
+                      double x0, double y0, int device_scale)
         : DiffuseLight(bumpmap, scale, diffuse_constant)
-        , _light(light, color, trans)
+        , _light(light, color, trans, device_scale)
         , _x0(x0)
         , _y0(y0)
     {
@@ -105,9 +106,10 @@ private:
 
 struct DiffuseSpotLight : public DiffuseLight {
     DiffuseSpotLight(cairo_surface_t *bumpmap, SPFeSpotLight *light, guint32 color,
-            Geom::Affine const &trans, double scale, double diffuse_constant, double x0, double y0)
+                     Geom::Affine const &trans, double scale, double diffuse_constant,
+                     double x0, double y0, int device_scale)
         : DiffuseLight(bumpmap, scale, diffuse_constant)
-        , _light(light, color, trans)
+        , _light(light, color, trans, device_scale)
         , _x0(x0)
         , _y0(y0)
     {}
@@ -160,11 +162,18 @@ void FilterDiffuseLighting::render_cairo(FilterSlot &slot)
     set_cairo_surface_ci(out, ci_fp );
     guint32 color = SP_RGBA32_F_COMPOSE( r, g, b, 1.0 ); 
 
+    int device_scale = slot.get_device_scale();
+
     Geom::Rect slot_area = slot.get_slot_area();
     Geom::Point p = slot_area.min();
+
+    // trans has inverse y... so we can't just scale by device_scale! We must instead explicitly
+    // scale the point and spot light coordinates (as well as "scale").
+
     Geom::Affine trans = slot.get_units().get_matrix_primitiveunits2pb();
+
     double x0 = p[Geom::X], y0 = p[Geom::Y];
-    double scale = surfaceScale * trans.descrim();
+    double scale = surfaceScale * trans.descrim() * device_scale;
 
     switch (light_type) {
     case DISTANT_LIGHT:
@@ -173,11 +182,11 @@ void FilterDiffuseLighting::render_cairo(FilterSlot &slot)
         break;
     case POINT_LIGHT:
         ink_cairo_surface_synthesize(out,
-            DiffusePointLight(input, light.point, color, trans, scale, diffuseConstant, x0, y0));
+            DiffusePointLight(input, light.point, color, trans, scale, diffuseConstant, x0, y0, device_scale));
         break;
     case SPOT_LIGHT:
         ink_cairo_surface_synthesize(out,
-            DiffuseSpotLight(input, light.spot, color, trans, scale, diffuseConstant, x0, y0));
+            DiffuseSpotLight(input, light.spot, color, trans, scale, diffuseConstant, x0, y0, device_scale));
         break;
     default: {
         cairo_t *ct = cairo_create(out);

@@ -55,6 +55,7 @@ struct SPCanvasBuf {
 
     unsigned char *buf;
     int buf_rowstride;
+    int device_scale; // For high DPI monitors.
     bool is_empty;
 };
 
@@ -176,6 +177,8 @@ public:
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
     int _y0; ///< World coordinate of the topmost pixels of window
+
+    int _device_scale; ///< Scale for high DPI montiors
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;

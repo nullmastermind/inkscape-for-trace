@@ -69,8 +69,9 @@ class PointLight {
          * \param trans the transformation between absolute coordinate (those
          * employed in the sp light object) and current coordinate (those
          * employed in the rendering)
+         * \param device_scale for high DPI monitors.
          */
-        PointLight(SPFePointLight *light, guint32 lighting_color, const Geom::Affine &trans);
+        PointLight(SPFePointLight *light, guint32 lighting_color, const Geom::Affine &trans, int device_scale = 1);
         virtual ~PointLight();
         /**
          * Computes the light vector of the distant light at point (x,y,z).
@@ -109,8 +110,9 @@ class SpotLight {
          * \param trans the transformation between absolute coordinate (those
          * employed in the sp light object) and current coordinate (those
          * employed in the rendering)
+         * \param device_scale for high DPI monitors.
          */
-        SpotLight(SPFeSpotLight *light, guint32 lighting_color, const Geom::Affine &trans);
+        SpotLight(SPFeSpotLight *light, guint32 lighting_color, const Geom::Affine &trans, int device_scale = 1);
         virtual ~SpotLight();
 
         /**

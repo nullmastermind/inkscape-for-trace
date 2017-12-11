@@ -583,6 +583,12 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
 
     double deviation_x_orig = dx * trans.expansionX();
     double deviation_y_orig = dy * trans.expansionY();
+
+    int device_scale = slot.get_device_scale();
+
+    deviation_x_orig *= device_scale;
+    deviation_y_orig *= device_scale;
+
     cairo_format_t fmt = cairo_image_surface_get_format(in);
     int bytes_per_pixel = 0;
     switch (fmt) {
@@ -604,7 +610,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     int x_step = 1 << _effect_subsample_step_log2(deviation_x_orig, quality);
     int y_step = 1 << _effect_subsample_step_log2(deviation_y_orig, quality);
     bool resampling = x_step > 1 || y_step > 1;
-    int w_orig = ink_cairo_surface_get_width(in);
+    int w_orig = ink_cairo_surface_get_width(in);  // Pixels
     int h_orig = ink_cairo_surface_get_height(in);
     int w_downsampled = resampling ? static_cast<int>(ceil(static_cast<double>(w_orig)/x_step))+1 : w_orig;
     int h_downsampled = resampling ? static_cast<int>(ceil(static_cast<double>(h_orig)/y_step))+1 : h_orig;
@@ -633,8 +639,10 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
 
     cairo_surface_t *downsampled = NULL;
     if (resampling) {
+        // Divide by device scale as w_downsampled is in pixels while
+        // cairo_surface_create_similar() uses device units.
         downsampled = cairo_surface_create_similar(in, cairo_surface_get_content(in),
-            w_downsampled, h_downsampled);
+            w_downsampled/device_scale, h_downsampled/device_scale);
         cairo_t *ct = cairo_create(downsampled);
         cairo_scale(ct, static_cast<double>(w_downsampled)/w_orig, static_cast<double>(h_downsampled)/h_orig);
         cairo_set_source_surface(ct, in, 0, 0);
@@ -671,7 +679,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
     cairo_surface_mark_dirty(downsampled);
     if (resampling) {
         cairo_surface_t *upsampled = cairo_surface_create_similar(downsampled, cairo_surface_get_content(downsampled),
-            w_orig, h_orig);
+            w_orig/device_scale, h_orig/device_scale);
         cairo_t *ct = cairo_create(upsampled);
         cairo_scale(ct, static_cast<double>(w_orig)/w_downsampled, static_cast<double>(h_orig)/h_downsampled);
         cairo_set_source_surface(ct, downsampled, 0, 0);

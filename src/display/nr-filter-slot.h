@@ -72,6 +72,12 @@ public:
     /** Gets the gaussian filtering quality. Affects used interpolation methods */
     int get_blurquality(void);
 
+    /** Sets the device scale; for high DPI monitors. */
+    void set_device_scale(int const s);
+
+    /** Gets the device scale; for high DPI monitors. */
+    int get_device_scale();
+
     FilterUnits const &get_units() const { return _units; }
     Geom::Rect get_slot_area() const;
 
@@ -98,6 +104,7 @@ private:
     int _last_out;
     FilterQuality filterquality;
     int blurquality;
+    int device_scale;
 
     cairo_surface_t *_get_transformed_source_graphic();
     cairo_surface_t *_get_transformed_background();

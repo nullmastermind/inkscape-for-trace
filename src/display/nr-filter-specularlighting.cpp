@@ -93,9 +93,9 @@ private:
 struct SpecularPointLight : public SpecularLight {
     SpecularPointLight(cairo_surface_t *bumpmap, SPFePointLight *light, guint32 color,
             Geom::Affine const &trans, double scale, double specular_constant,
-            double specular_exponent, double x0, double y0)
+            double specular_exponent, double x0, double y0, int device_scale)
         : SpecularLight(bumpmap, scale, specular_constant, specular_exponent)
-        , _light(light, color, trans)
+        , _light(light, color, trans, device_scale)
         , _x0(x0)
         , _y0(y0)
     {
@@ -117,9 +117,9 @@ private:
 struct SpecularSpotLight : public SpecularLight {
     SpecularSpotLight(cairo_surface_t *bumpmap, SPFeSpotLight *light, guint32 color,
             Geom::Affine const &trans, double scale, double specular_constant,
-            double specular_exponent, double x0, double y0)
+            double specular_exponent, double x0, double y0, int device_scale)
         : SpecularLight(bumpmap, scale, specular_constant, specular_exponent)
-        , _light(light, color, trans)
+        , _light(light, color, trans, device_scale)
         , _x0(x0)
         , _y0(y0)
     {}
@@ -173,11 +173,17 @@ void FilterSpecularLighting::render_cairo(FilterSlot &slot)
     set_cairo_surface_ci(out, ci_fp );
     guint32 color = SP_RGBA32_F_COMPOSE( r, g, b, 1.0 ); 
 
+    int device_scale = slot.get_device_scale();
+
+    // trans has inverse y... so we can't just scale by device_scale! We must instead explicitly
+    // scale the point and spot light coordinates (as well as "scale").
+
     Geom::Affine trans = slot.get_units().get_matrix_primitiveunits2pb();
+
     Geom::Point p = slot.get_slot_area().min();
     double x0 = p[Geom::X];
     double y0 = p[Geom::Y];
-    double scale = surfaceScale * trans.descrim();
+    double scale = surfaceScale * trans.descrim() * device_scale;
     double ks = specularConstant;
     double se = specularExponent;
 
@@ -188,11 +194,11 @@ void FilterSpecularLighting::render_cairo(FilterSlot &slot)
         break;
     case POINT_LIGHT:
         ink_cairo_surface_synthesize(out,
-            SpecularPointLight(input, light.point, color, trans, scale, ks, se, x0, y0));
+            SpecularPointLight(input, light.point, color, trans, scale, ks, se, x0, y0, device_scale));
         break;
     case SPOT_LIGHT:
         ink_cairo_surface_synthesize(out,
-            SpecularSpotLight(input, light.spot, color, trans, scale, ks, se, x0, y0));
+            SpecularSpotLight(input, light.spot, color, trans, scale, ks, se, x0, y0, device_scale));
         break;
     default: {
         cairo_t *ct = cairo_create(out);

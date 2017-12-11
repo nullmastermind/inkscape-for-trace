@@ -842,8 +842,19 @@ ink_cairo_surface_create_identical(cairo_surface_t *s)
 cairo_surface_t *
 ink_cairo_surface_create_same_size(cairo_surface_t *s, cairo_content_t c)
 {
-    cairo_surface_t *ns = cairo_surface_create_similar(s, c,
-        ink_cairo_surface_get_width(s), ink_cairo_surface_get_height(s));
+    // ink_cairo_surface_get_width()/height() returns value in pixels
+    // cairo_surface_create_similar() uses device units
+    double x_scale = 0;
+    double y_scale = 0;
+    cairo_surface_get_device_scale( s, &x_scale, &y_scale );
+
+    assert (x_scale > 0);
+    assert (y_scale > 0);
+
+    cairo_surface_t *ns =
+        cairo_surface_create_similar(s, c,
+                                     ink_cairo_surface_get_width(s)/x_scale,
+                                     ink_cairo_surface_get_height(s)/y_scale);
     return ns;
 }
 
@@ -908,6 +919,9 @@ ink_cairo_surface_blit(cairo_surface_t *src, cairo_surface_t *dest)
     }
 }
 
+/**
+ * Return width in pixels.
+ */
 int
 ink_cairo_surface_get_width(cairo_surface_t *surface)
 {
@@ -916,6 +930,10 @@ ink_cairo_surface_get_width(cairo_surface_t *surface)
     assert(cairo_surface_get_type(surface) == CAIRO_SURFACE_TYPE_IMAGE);
     return cairo_image_surface_get_width(surface);
 }
+
+/**
+ * Return height in pixels.
+ */
 int
 ink_cairo_surface_get_height(cairo_surface_t *surface)
 {
