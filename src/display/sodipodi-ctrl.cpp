@@ -606,7 +606,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_set_source_surface(cr, cairo_get_target(buf->ct), buf->rect.left(), buf->rect.top());
         cairo_paint(cr);
         cairo_destroy(cr);
-        cairo_surface_write_to_png( work, "ctrl0.png" );
+        // cairo_surface_write_to_png( work, "ctrl0.png" );
 
         // 2. Composite the control on a temporary surface
         cairo_surface_flush(work);
@@ -632,7 +632,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
             }
         }
         cairo_surface_mark_dirty(work);
-        cairo_surface_write_to_png( work, "ctrl1.png" );
+        // cairo_surface_write_to_png( work, "ctrl1.png" );
 
         // 3. Replace the affected part of output with contents of temporary surface
         cairo_save(buf->ct);
@@ -647,6 +647,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     } else {
         cairo_surface_t *cache = cairo_image_surface_create_for_data(
             reinterpret_cast<unsigned char*>(ctrl->cache), CAIRO_FORMAT_ARGB32, w, h, w*4);
+        cairo_surface_set_device_scale(cache, buf->device_scale, buf->device_scale);
         cairo_set_source_surface(buf->ct, cache,
             ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
         cairo_paint(buf->ct);
