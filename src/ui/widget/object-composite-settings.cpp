@@ -41,6 +41,7 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
   _fe_vbox(false, 0),
   _blocked(false)
 {
+    set_name( "CompositeSettings");
 
     // Filter Effects
     pack_start(_fe_vbox, false, false, 2);

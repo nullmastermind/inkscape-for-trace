@@ -21,6 +21,7 @@ SpinScale::SpinScale(const char* label, double value, double lower, double upper
                      double /*climb_rate*/, int digits, const SPAttributeEnum a, const char* tip_text)
     : AttrWidget(a, value)
 {
+    set_name("SpinScale");
     _adjustment = Gtk::Adjustment::create(value, lower, upper, step_inc);
     _spinscale = gimp_spin_scale_new (_adjustment->gobj(), label, digits);
 
@@ -122,6 +123,7 @@ DualSpinScale::DualSpinScale(const char* label1, const char* label2, double valu
       //TRANSLATORS: "Link" means to _link_ two sliders together
       _link(C_("Sliders", "Link"))
 {
+    set_name("DualSpinScale");
     signal_value_changed().connect(signal_attr_changed().make_slot());
 
     _s1.get_adjustment()->signal_value_changed().connect(_signal_value_changed.make_slot());

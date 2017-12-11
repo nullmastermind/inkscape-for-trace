@@ -199,6 +199,7 @@ sp_paint_selector_init(SPPaintSelector *psel)
     /* Paint style button box */
     psel->style = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous(GTK_BOX(psel->style), FALSE);
+    gtk_widget_set_name(psel->style,"PaintSelector");
     gtk_widget_show(psel->style);
     gtk_container_set_border_width(GTK_CONTAINER(psel->style), 4);
     gtk_box_pack_start(GTK_BOX(psel), psel->style, FALSE, FALSE, 0);

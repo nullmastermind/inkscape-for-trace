@@ -20,6 +20,7 @@ namespace Widget {
 NotebookPage::NotebookPage(int n_rows, int n_columns, bool expand, bool fill, guint padding)
     :_table(Gtk::manage(new Gtk::Grid()))
 {
+    set_name("NotebookPage");
     set_border_width(2);
 
     _table->set_row_spacing(2);
