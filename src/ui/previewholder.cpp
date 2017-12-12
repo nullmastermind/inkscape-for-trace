@@ -30,7 +30,7 @@ namespace UI {
 
 
 PreviewHolder::PreviewHolder() :
-    VBox(),
+    Box(),
     PreviewFillable(),
     _scroller(0),
     _insides(0),
@@ -45,25 +45,18 @@ PreviewHolder::PreviewHolder() :
 {
     set_name( "PreviewHolder" );
     _scroller = Gtk::manage(new Gtk::ScrolledWindow());
-    _scroller->set_name( "PreviewHolderScroller" );
-    ((Gtk::ScrolledWindow *)_scroller)->set_policy(Gtk::POLICY_AUTOMATIC,
-                                                   Gtk::POLICY_AUTOMATIC);
+    _scroller->set_name( "PreviewHolderScrolledWindow" );
+    _scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     _insides = Gtk::manage(new Gtk::Grid());
     _insides->set_name( "PreviewHolderGrid" );
     _insides->set_column_spacing(8);
-    
-    // Add a container with the scroller and a spacer
-    Gtk::Grid* spaceHolder = Gtk::manage(new Gtk::Grid());
-    spaceHolder->set_name( "PreviewHolderSpaceHolder" );
 
     _scroller->set_hexpand();
     _scroller->set_vexpand();
     _scroller->add( *_insides );
     
-    spaceHolder->attach( *_scroller, 0, 0, 1, 1);
-
-    pack_start(*spaceHolder, Gtk::PACK_EXPAND_WIDGET);
+    pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
 }
 
 PreviewHolder::~PreviewHolder()
@@ -74,7 +67,7 @@ PreviewHolder::~PreviewHolder()
 bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
 {
     // Scroll horizontally by page on mouse wheel
-    auto adj = dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->get_hadjustment();
+    auto adj = _scroller->get_hadjustment();
 
     if (!adj) {
         return FALSE;
@@ -95,7 +88,7 @@ void PreviewHolder::clear()
     _prefCols = 0;
     // Kludge to restore scrollbars
     if ( !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
-        dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
+        _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
     }
     rebuildUI();
 }
@@ -116,11 +109,11 @@ void PreviewHolder::addPreview( Previewable* preview )
             case VIEW_TYPE_LIST:
                 {
                     Gtk::Widget* label = Gtk::manage(preview->getPreview(PREVIEW_STYLE_BLURB, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
-                    Gtk::Widget* thing = Gtk::manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
+                    Gtk::Widget* item = Gtk::manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
 
-                    thing->set_hexpand();
-                    thing->set_vexpand();
-                    _insides->attach(*thing, 0, i, 1, 1);
+                    item->set_hexpand();
+                    item->set_vexpand();
+                    _insides->attach(*item, 0, i, 1, 1);
 
                     label->set_hexpand();
                     label->set_valign(Gtk::ALIGN_CENTER);
@@ -130,15 +123,15 @@ void PreviewHolder::addPreview( Previewable* preview )
                 break;
             case VIEW_TYPE_GRID:
                 {
-                    Gtk::Widget* thing = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize, _ratio, _border));
+                    Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize, _ratio, _border));
 
-                    int width = 1;
-                    int height = 1;
-                    calcGridSize( thing, items.size(), width, height );
+                    int ncols = 1;
+                    int nrows = 1;
+                    calcGridSize( item, items.size(), ncols, nrows );
 
                     // Column and row for the new widget
-                    int col = i % width;
-                    int row = i / width;
+                    int col = i % ncols;
+                    int row = i / ncols;
 
 		    auto kids = _insides->get_children();
 		    int childCount = (int)kids.size();
@@ -147,17 +140,17 @@ void PreviewHolder::addPreview( Previewable* preview )
 		    // Loop through the existing widgets and move them to new location
 		    for ( int j = 1; j < childCount; j++ ) {
 			    auto target = kids[childCount - (j + 1)];
-			    int col2 = j % width;
-			    int row2 = j / width;
+			    int col2 = j % ncols;
+			    int row2 = j / ncols;
 			    _insides->remove( *target );
 
 			    target->set_hexpand();
 			    target->set_vexpand();
 			    _insides->attach( *target, col2, row2, 1, 1);
 		    }
-		    thing->set_hexpand();
-		    thing->set_vexpand();
-		    _insides->attach(*thing, col, row, 1, 1);
+		    item->set_hexpand();
+		    item->set_vexpand();
+		    _insides->attach(*item, col, row, 1, 1);
                 }
         }
 
@@ -186,52 +179,52 @@ void PreviewHolder::setStyle( ::PreviewSize size, ViewType view, guint ratio, ::
         _border = border;
         // Kludge to restore scrollbars
         if ( !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
-            dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
+            _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
         }
         rebuildUI();
     }
 }
 
-void PreviewHolder::setOrientation(SPAnchorType how)
+void PreviewHolder::setOrientation(SPAnchorType anchor)
 {
-    if ( _anchor != how )
+    if ( _anchor != anchor )
     {
-        _anchor = how;
+        _anchor = anchor;
         switch ( _anchor )
         {
             case SP_ANCHOR_NORTH:
             case SP_ANCHOR_SOUTH:
             {
-                dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, _wrap ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_NEVER );
+                _scroller->set_policy( Gtk::POLICY_AUTOMATIC, _wrap ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_NEVER );
             }
             break;
 
             case SP_ANCHOR_EAST:
             case SP_ANCHOR_WEST:
             {
-                dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC );
+                _scroller->set_policy( Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC );
             }
             break;
 
             default:
             {
-                dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+                _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
             }
         }
         rebuildUI();
     }
 }
 
-void PreviewHolder::setWrap( bool b )
+void PreviewHolder::setWrap( bool wrap )
 {
-    if ( b != _wrap ) {
-        _wrap = b;
+    if (_wrap != wrap ) {
+        _wrap = wrap;
         switch ( _anchor )
         {
             case SP_ANCHOR_NORTH:
             case SP_ANCHOR_SOUTH:
             {
-                dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, _wrap ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_NEVER );
+                _scroller->set_policy( Gtk::POLICY_AUTOMATIC, _wrap ? Gtk::POLICY_AUTOMATIC : Gtk::POLICY_NEVER );
             }
             break;
             default:
@@ -253,7 +246,7 @@ void PreviewHolder::on_size_allocate( Gtk::Allocation& allocation )
 {
 //     g_message( "on_size_allocate(%d, %d) (%d, %d)", allocation.get_x(), allocation.get_y(), allocation.get_width(), allocation.get_height() );
 //     g_message("            anchor:%d", _anchor);
-    Gtk::VBox::on_size_allocate( allocation );
+    Gtk::Box::on_size_allocate( allocation );
 
 /*    if ( _insides && !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
 	Gtk::Requisition req;
@@ -262,9 +255,9 @@ void PreviewHolder::on_size_allocate( Gtk::Allocation& allocation )
         gint delta = allocation.get_width() - req.width;
 
         if ( (delta > 4) && req.height < allocation.get_height() ) {
-            dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_NEVER, Gtk::POLICY_NEVER );
+            _scroller->set_policy( Gtk::POLICY_NEVER, Gtk::POLICY_NEVER );
         } else {
-            dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
+            _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
         }
     }*/
 }
@@ -281,16 +274,16 @@ void PreviewHolder::on_size_allocate( Gtk::Allocation& allocation )
 /**
  * Calculate the grid side of a preview holder
  *
- * \param[in]  thing
- * \param[in]  itemCount  The number of items to pack into the grid
- * \param[out] width      The width of the grid
- * \param[out] height     The height of the grid
+ * \param[in]  item
+ * \param[in]  itemCount  The number of items to pack into the grid.
+ * \param[out] ncols      The number of columns in grid.
+ * \param[out] height     The number of rows in grid.
  */
-void PreviewHolder::calcGridSize( const Gtk::Widget* thing, int itemCount, int& width, int& height )
+void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& ncols, int& nrows )
 {
     // Initially set all items in a horizontal row
-    width = itemCount;
-    height = 1;
+    ncols = itemCount;
+    nrows = 1;
 
 #if GTK_CHECK_VERSION(3,16,0)
     // Disable overlay scrolling as the scrollbar covers up swatches.
@@ -307,7 +300,7 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* thing, int itemCount, int& 
             req.width = currW;
         }
 
-        auto hs = dynamic_cast<Gtk::ScrolledWindow*>(_scroller)->get_hscrollbar();
+        auto hs = _scroller->get_hscrollbar();
 
         if ( hs ) {
             Gtk::Requisition scrollReq;
@@ -320,22 +313,22 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* thing, int itemCount, int& 
 
         Gtk::Requisition req2;
         Gtk::Requisition req2_natural;
-	const_cast<Gtk::Widget*>(thing)->get_preferred_size(req2, req2_natural);
+	const_cast<Gtk::Widget*>(item)->get_preferred_size(req2, req2_natural);
 
         int h2 = ((req2.height > 0) && (req.height > req2.height)) ? (req.height / req2.height) : 1;
         int w2 = ((req2.width > 0) && (req.width > req2.width)) ? (req.width / req2.width) : 1;
-        width = (itemCount + (h2 - 1)) / h2;
-        if ( width < w2 ) {
-            width = w2;
+        ncols = (itemCount + (h2 - 1)) / h2;
+        if ( ncols < w2 ) {
+            ncols = w2;
         }
     } else {
-        width = (_baseSize == PREVIEW_SIZE_SMALL || _baseSize == PREVIEW_SIZE_TINY) ? COLUMNS_FOR_SMALL : COLUMNS_FOR_LARGE;
+        ncols = (_baseSize == PREVIEW_SIZE_SMALL || _baseSize == PREVIEW_SIZE_TINY) ? COLUMNS_FOR_SMALL : COLUMNS_FOR_LARGE;
         if ( _prefCols > 0 ) {
-            width = _prefCols;
+            ncols = _prefCols;
         }
-        height = (itemCount + (width - 1)) / width;
-        if ( height < 1 ) {
-            height = 1;
+        nrows = (itemCount + (ncols - 1)) / ncols;
+        if ( nrows < 1 ) {
+            nrows = 1;
         }
     }
 }
@@ -359,11 +352,11 @@ void PreviewHolder::rebuildUI()
                     Gtk::Widget* label = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _view, _baseSize, _ratio, _border));
                     //label->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
 
-                    Gtk::Widget* thing = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, _border));
+                    Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, _border));
 
-                    thing->set_hexpand();
-                    thing->set_vexpand();
-                    _insides->attach(*thing, 0, i, 1, 1);
+                    item->set_hexpand();
+                    item->set_vexpand();
+                    _insides->attach(*item, 0, i, 1, 1);
 
                     label->set_hexpand();
                     label->set_valign(Gtk::ALIGN_CENTER);
@@ -378,17 +371,17 @@ void PreviewHolder::rebuildUI()
             {
                 int col = 0;
                 int row = 0;
-                int width = 2;
-                int height = 1;
+                int ncols = 2;
+                int nrows = 1;
 
                 for ( unsigned int i = 0; i < items.size(); i++ ) {
 
                     // If this is the last row, flag so the previews can draw a bottom
-                    ::BorderStyle border = ((row == height -1) && (_border == BORDER_SOLID)) ? BORDER_SOLID_LAST_ROW : _border;
-                    Gtk::Widget* thing = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
+                    ::BorderStyle border = ((row == nrows -1) && (_border == BORDER_SOLID)) ? BORDER_SOLID_LAST_ROW : _border;
+                    Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
 
                     if ( !_insides ) {
-                        calcGridSize( thing, items.size(), width, height );
+                        calcGridSize( item, items.size(), ncols, nrows );
 
                         _insides = Gtk::manage(new Gtk::Grid());
                         if (_border == BORDER_WIDE) {
@@ -397,11 +390,11 @@ void PreviewHolder::rebuildUI()
                         }
                     }
 
-                    thing->set_hexpand();
-                    thing->set_vexpand();
-                    _insides->attach( *thing, col, row, 1, 1);
+                    item->set_hexpand();
+                    item->set_vexpand();
+                    _insides->attach( *item, col, row, 1, 1);
 
-                    if ( ++col >= width ) {
+                    if ( ++col >= ncols ) {
                         col = 0;
                         row++;
                     }
