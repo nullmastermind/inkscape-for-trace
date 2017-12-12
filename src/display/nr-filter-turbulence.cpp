@@ -378,6 +378,19 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
     cairo_surface_t *input = slot.getcairo(_input);
     cairo_surface_t *out = ink_cairo_surface_create_same_size(input, CAIRO_CONTENT_COLOR_ALPHA);
 
+    // It is probably possible to render at a device scale greater than one
+    // but for the moment rendering at a device scale of one is the easiest.
+    // cairo_image_surface_get_width() returns width in pixels but
+    // cairo_surface_create_similar() requires width in device units so divide by device scale.
+    // We are rendering at a device scale of 1... so divide by device scale again!
+    double x_scale = 0;
+    double y_scale = 0;
+    cairo_surface_get_device_scale(input, &x_scale, &y_scale);
+    int width  = ceil(cairo_image_surface_get_width( input)/x_scale/x_scale);
+    int height = ceil(cairo_image_surface_get_height(input)/y_scale/y_scale);
+    cairo_surface_t *temp = cairo_surface_create_similar (input, CAIRO_CONTENT_COLOR_ALPHA, width, height);
+    cairo_surface_set_device_scale( temp, 1, 1 );
+
     // color_interpolation_filter is determined by CSS value (see spec. Turbulence).
     if( _style ) {
         set_cairo_surface_ci(out, (SPColorInterpolation)_style->color_interpolation_filters.computed );
@@ -395,8 +408,16 @@ void FilterTurbulence::render_cairo(FilterSlot &slot)
     Geom::Rect slot_area = slot.get_slot_area();
     double x0 = slot_area.min()[Geom::X];
     double y0 = slot_area.min()[Geom::Y];
+    ink_cairo_surface_synthesize(temp, Turbulence(*gen, unit_trans, x0, y0));
 
-    ink_cairo_surface_synthesize(out, Turbulence(*gen, unit_trans, x0, y0));
+    // cairo_surface_write_to_png( temp, "turbulence0.png" );
+
+    cairo_t *ct = cairo_create(out);
+    cairo_set_source_surface(ct, temp, 0, 0);
+    cairo_paint(ct);
+    cairo_destroy(ct);
+
+    cairo_surface_destroy(temp);
 
     cairo_surface_mark_dirty(out);
 

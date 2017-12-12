@@ -7,6 +7,7 @@
  */
 
 #include <2geom/transforms.h>
+#include <2geom/line.h>
 #include "sp-canvas-util.h"
 #include "sodipodi-ctrl.h"
 #include "display/cairo-utils.h"
@@ -303,9 +304,9 @@ sp_ctrl_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item)
 }
 
 bool 
-sp_point_inside_line(Geom::Point a, Geom::Point b, Geom::Point c, double tolerance = 0.1){
-    //http://stackoverflow.com/questions/328107/how-can-you-determine-a-point-is-between-two-other-points-on-a-line-segment
-    return Geom::are_near(Geom::distance(a,c) + Geom::distance(c,b) , Geom::distance(a,b), tolerance);
+sp_point_inside_line(Geom::Point a, Geom::Point b, Geom::Point c, double tolerance = 0.1) {
+    Geom::LineSegment segment(a, b);
+    return Geom::are_near(c, segment, tolerance);
 }
 
 bool 
@@ -320,12 +321,9 @@ sp_point_inside_triangle(Geom::Point p1,Geom::Point p2,Geom::Point p3, Geom::Poi
 }
 
 static void
-sp_ctrl_build_cache (SPCtrl *ctrl)
+sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
 {
-    guint32 *p, *q;
-    gint size, x, y, z, s, a, width, height, c;
     guint32 stroke_color, fill_color;
-
     if (ctrl->filled) {
         if (ctrl->mode == SP_CTRL_MODE_XOR) {
             fill_color = ctrl->fill_color;
@@ -335,6 +333,7 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
     } else {
         fill_color = 0;
     }
+
     if (ctrl->stroked) {
         if (ctrl->mode == SP_CTRL_MODE_XOR) {
             stroke_color = ctrl->stroke_color;
@@ -344,203 +343,226 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
     } else {
         stroke_color = fill_color;
     }
-    gint32 stroke_color_smooth =  SP_RGBA32_F_COMPOSE(SP_RGBA32_R_F(stroke_color), SP_RGBA32_G_F(stroke_color), SP_RGBA32_B_F(stroke_color), 0.15);
-    width = (ctrl->width * 2 +1);
-    height = (ctrl->height * 2 +1);
-    c = ctrl->width; // Only used for pre-set square drawing
-    size = width * height;
+
+    gint width  = (ctrl->width  * 2 + 1) * device_scale;
+    gint height = (ctrl->height * 2 + 1) * device_scale;
     if (width < 2) return;
+    gint size = width * height;
 
     if (ctrl->cache) delete[] ctrl->cache;
     ctrl->cache = new guint32[size];
-    Geom::Point point;
-    Geom::Point p1;
-    Geom::Point p2;
-    Geom::Point p3;
-    if(ctrl->shape == SP_CTRL_SHAPE_TRIANGLE){
-        Geom::Affine m = Geom::Translate(Geom::Point(-width/2.0,-height/2.0));
-        m *= Geom::Rotate(-ctrl->angle);
-        m *= Geom::Translate(Geom::Point(width/2.0, height/2.0));
-        p1 = Geom::Point(0,height/2);
-        p2 = Geom::Point(width - (width/M_PI), height/M_PI);
-        p3 = Geom::Point(width - (width/M_PI), height-(height/M_PI));
-        p1 *= m;
-        p2 *= m;
-        p3 *= m;
-        p1 = p1.floor();
-        p2 = p2.floor();
-        p3 = p3.floor();
-    }
+
     switch (ctrl->shape) {
         case SP_CTRL_SHAPE_SQUARE:
-            p = ctrl->cache;
-            // top edge
-            for (x=0; x < width; x++) {
-                *p++ = stroke_color;
-            }
-            // middle
-            for (y = 2; y < height; y++) {
-                *p++ = stroke_color; // stroke at first and last pixel
-                for (x=2; x < width; x++) {
-                    *p++ = fill_color; // fill in the middle
+        {
+            guint32* p = ctrl->cache;
+
+            for (int i = 0; i < width; ++i) {
+                for (int j = 0; j < height; ++j) {
+                    if ( i > device_scale - 1      &&
+                         j > device_scale - 1      &&
+                         width  - i > device_scale &&
+                         height  -j > device_scale) {
+                        *p++ = fill_color;
+                    } else {
+                        *p++ = stroke_color;
+                    }
                 }
-                *p++ = stroke_color;
             }
-            // bottom edge
-            for (x=0; x < width; x++) {
-                *p++ = stroke_color;
-            }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_DIAMOND:
-            p = ctrl->cache;
-            for (y = 0; y < height; y++) {
-                z = abs (c - y);
-                for (x = 0; x < z; x++) {
-                    *p++ = 0;
-                }
-                *p++ = stroke_color; x++;
-                for (; x < width - z -1; x++) {
-                    *p++ = fill_color;
-                }
-                if (z != c) {
-                    *p++ = stroke_color; x++;
-                }
-                for (; x < width; x++) {
-                    *p++ = 0;
+        {
+            // width == height
+            guint32* p = ctrl->cache;
+            int m = (width+1)/2;
+
+            for (int i = 0; i < width; ++i) {
+                for (int j = 0; j < height; ++j) {
+                    if (          i  +           j  > m-1+device_scale &&
+                         (width-1-i) +           j  > m-1+device_scale &&
+                         (width-1-i) + (height-1-j) > m-1+device_scale &&
+                                i    + (height-1-j) > m-1+device_scale ) {
+                        *p++ = fill_color;
+                    } else
+                    if (          i  +           j  > m-2 &&
+                         (width-1-i) +           j  > m-2 &&
+                         (width-1-i) + (height-1-j) > m-2 &&
+                                i    + (height-1-j) > m-2 ) {
+                        *p++ = stroke_color;
+                    } else {
+                        *p++ = 0;
+                    }
                 }
             }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_CIRCLE:
-            p = ctrl->cache;
-            q = p + size -1;
-            s = -1;
-            for (y = 0; y <= c ; y++) {
-                a = abs (c - y);
-                z = (gint)(0.0 + sqrt ((c+.4)*(c+.4) - a*a));
-                x = 0;
-                while (x < c-z) {
-                    *p++ = 0;
-                    *q-- = 0;
-                    x++;
+        {
+            guint32* p = ctrl->cache;
+
+            double rs  = width/2.0;
+            double rs2 = rs*rs;
+            double rf  = rs-device_scale;
+            double rf2 = rf*rf;
+
+            for (int i = 0; i < width; ++i) {
+                for (int j = 0; j < height; ++j) {
+
+                    double rx = i - (width /2.0) + 0.5;
+                    double ry = j - (height/2.0) + 0.5;
+                    double r2 = rx*rx + ry*ry;
+
+                    if (r2 < rf2) {
+                        *p++ = fill_color;
+                    } else if (r2 < rs2) {
+                        *p++ = stroke_color;
+                    } else {
+                        *p++ = 0;
+                    }
                 }
-                do {
-                    *p++ = stroke_color;
-                    *q-- = stroke_color;
-                    x++;
-                } while (x < c-s);
-                while (x < MIN(c+s+1, c+z)) {
-                    *p++ = fill_color;
-                    *q-- = fill_color;
-                    x++;
-                }
-                do {
-                    *p++ = stroke_color;
-                    *q-- = stroke_color;
-                    x++;
-                } while (x <= c+z);
-                while (x < width) {
-                    *p++ = 0;
-                    *q-- = 0;
-                    x++;
-                }
-                s = z;
             }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_TRIANGLE:
-            p = ctrl->cache;
-            for(y = 0; y < height; y++) {
-                for(x = 0; x < width; x++) {
-                    point = Geom::Point(x,y);
-                    if (sp_point_inside_triangle(p1, p2, p3, point)) {
+        {
+            guint* p = ctrl->cache;
+
+            Geom::Affine m = Geom::Translate(Geom::Point(-width/2.0,-height/2.0));
+            m *= Geom::Rotate(-ctrl->angle);
+            m *= Geom::Translate(Geom::Point(width/2.0, height/2.0));
+
+            // Construct an arrowhead (triangle) of maximum size that won't leak out of rectangle
+            // defined by width and height, assuming width == height.
+            double w2 = width/2.0;
+            double h2 = height/2.0;
+            double w2cos = w2 * cos( M_PI/6 );
+            double h2sin = h2 * sin( M_PI/6 );
+            Geom::Point p1s(0, h2);
+            Geom::Point p2s(w2 + w2cos, h2 + h2sin);
+            Geom::Point p3s(w2 + w2cos, h2 - h2sin);
+            // Needed for constructing smaller arrowhead below.
+            double theta = atan2( Geom::Point( p2s - p1s ) );
+            p1s *= m;
+            p2s *= m;
+            p3s *= m;
+
+            // Construct a smaller arrow head for fill.
+            Geom::Point p1f(device_scale/sin(theta), h2);
+            Geom::Point p2f(w2 + w2cos, h2 - h2sin + device_scale/cos(theta));
+            Geom::Point p3f(w2 + w2cos, h2 + h2sin - device_scale/cos(theta));
+            p1f *= m;
+            p2f *= m;
+            p3f *= m;
+
+            for(int y = 0; y < height; y++) {
+                for(int x = 0; x < width; x++) {
+                    Geom::Point point = Geom::Point(x+0.5,y+0.5);
+                    if (sp_point_inside_triangle(p1f, p2f, p3f, point)) {
                         p[(y*width)+x] = fill_color;
-                    } else if (point == p1 || point == p2 || point == p3 || sp_point_inside_line(p1, p2, point, 0.2) ||
-                               sp_point_inside_line(p3, p1, point, 0.2))
-                    {
+                    } else
+                        if (sp_point_inside_triangle(p1s, p2s, p3s, point)) {
                         p[(y*width)+x] = stroke_color;
-                    } else if (sp_point_inside_line(p1, p2, point, 0.5) ||
-                               sp_point_inside_line(p3, p1, point, 0.5))
-                    {
-                        p[(y*width)+x] = stroke_color_smooth;
                     } else {
                         p[(y*width)+x] = 0;
                     }
                 }
             }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_CROSS:
-            p = ctrl->cache;
-            for (y = 0; y < height; y++) {
-                z = abs (c - y);
-                for (x = 0; x < c-z; x++) {
-                    *p++ = 0;
-                }
-                *p++ = stroke_color; x++;
-                for (; x < c + z; x++) {
-                    *p++ = 0;
-                }
-                if (z != 0) {
-                    *p++ = stroke_color; x++;
-                }
-                for (; x < width; x++) {
-                    *p++ = 0;
+        {
+            guint* p = ctrl->cache;
+            for(int y = 0; y < height; y++) {
+                for(int x = 0; x < width; x++) {
+                    if ( abs(x - y)             < device_scale ||
+                         abs(width - 1 - x - y) < device_scale  ) {
+                        *p++ = stroke_color;
+                    } else {
+                        *p++ = 0;
+                    }
                 }
             }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_BITMAP:
+        {
             if (ctrl->pixbuf) {
-                unsigned char *px;
-                unsigned int rs;
-                px = gdk_pixbuf_get_pixels (ctrl->pixbuf);
-                rs = gdk_pixbuf_get_rowstride (ctrl->pixbuf);
-                for (y = 0; y < height; y++){
-                    guint32 *d;
-                    unsigned char *s;
-                    s = px + y * rs;
-                    d = ctrl->cache + height * y;
-                    for (x = 0; x < width; x++) {
+                unsigned char* px = gdk_pixbuf_get_pixels (ctrl->pixbuf);
+                unsigned int   rs = gdk_pixbuf_get_rowstride (ctrl->pixbuf);
+                for (int y = 0; y < height/device_scale; y++){
+                    for (int x = 0; x < width/device_scale; x++) {
+                        unsigned char *s = px + rs*y + 4*x;
+                        guint32 color;
                         if (s[3] < 0x80) {
-                            *d++ = 0;
+                            color = 0;
                         } else if (s[0] < 0x80) {
-                            *d++ = stroke_color;
+                            color = stroke_color;
                         } else {
-                            *d++ = fill_color;
+                            color = fill_color;
                         }
-                        s += 4;
+
+                        // Fill in device_scale x device_scale block
+                        for (int i = 0; i < device_scale; ++i) {
+                            for (int j = 0; j < device_scale; ++j) {
+                                guint* p = ctrl->cache +
+                                    (x * device_scale + i) +            // Column
+                                    (y * device_scale + j) * width;     // Row
+                                *p = color;
+                            }
+                        }
                     }
                 }
             } else {
-                g_print ("control has no pixmap\n");
+                g_print ("control has no pixbuf\n");
             }
+
             ctrl->build = TRUE;
             break;
+        }
 
         case SP_CTRL_SHAPE_IMAGE:
+        {
             if (ctrl->pixbuf) {
-                guint r = gdk_pixbuf_get_rowstride (ctrl->pixbuf);
-                guint32 *px;
+                guint rs = gdk_pixbuf_get_rowstride (ctrl->pixbuf);
                 guchar *data = gdk_pixbuf_get_pixels (ctrl->pixbuf);
-                p = ctrl->cache;
-                for (y = 0; y < height; y++){
-                    px = reinterpret_cast<guint32*>(data + y * r);
-                    for (x = 0; x < width; x++) {
-                        *p++ = *px++;
+
+                for (int y = 0; y < height/device_scale; y++){
+                    for (int x = 0; x < width/device_scale; x++) {
+                        guint32 *px = reinterpret_cast<guint32*>(data + rs*y + 4*x);
+
+                        // Fill in device_scale x device_scale block
+                        for (int i = 0; i < device_scale; ++i) {
+                            for (int j = 0; j < device_scale; ++j) {
+                                guint* p = ctrl->cache +
+                                    (x * device_scale + i) +            // Column
+                                    (y * device_scale + j) * width;     // Row
+                                *p = *px;
+                            }
+                        }
                     }
                 }
             } else {
-                g_print ("control has no pixmap\n");
+                g_print ("control has no pixbuf\n");
             }
             ctrl->build = TRUE;
             break;
+        }
 
         default:
             break;
@@ -556,9 +578,6 @@ static inline guint32 compose_xor(guint32 bg, guint32 fg, guint32 a)
 static void
 sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-    //gint y0, y1, y, x0,x1,x;
-    //guchar *p, *q, a;
-
     SPCtrl *ctrl = SP_CTRL (item);
 
     if (!ctrl->defined) return;
@@ -566,26 +585,34 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
     // the control-image is rendered into ctrl->cache
     if (!ctrl->build) {
-        sp_ctrl_build_cache (ctrl);
+        sp_ctrl_build_cache (ctrl, buf->device_scale);
     }
 
-    int w = (ctrl->width * 2 + 1);
-    int h = (ctrl->height * 2 + 1);
+    // Must match width/height sp_ctrl_build_cache.
+    int w = (ctrl->width  * 2 + 1) * buf->device_scale;
+    int h = (ctrl->height * 2 + 1) * buf->device_scale;
 
     // The code below works even when the target is not an image surface
     if (ctrl->mode == SP_CTRL_MODE_XOR) {
+
         // 1. Copy the affected part of output to a temporary surface
+
+        // Size in device pixels. Does not set device scale.
         cairo_surface_t *work = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+        cairo_surface_set_device_scale(work, buf->device_scale, buf->device_scale);
+
         cairo_t *cr = cairo_create(work);
         cairo_translate(cr, -ctrl->box.left(), -ctrl->box.top());
         cairo_set_source_surface(cr, cairo_get_target(buf->ct), buf->rect.left(), buf->rect.top());
         cairo_paint(cr);
         cairo_destroy(cr);
+        // cairo_surface_write_to_png( work, "ctrl0.png" );
 
         // 2. Composite the control on a temporary surface
         cairo_surface_flush(work);
         int strideb = cairo_image_surface_get_stride(work);
         unsigned char *pxb = cairo_image_surface_get_data(work);
+
         guint32 *p = ctrl->cache;
         for (int i=0; i<h; ++i) {
             guint32 *pb = reinterpret_cast<guint32*>(pxb + i*strideb);
@@ -605,12 +632,13 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
             }
         }
         cairo_surface_mark_dirty(work);
+        // cairo_surface_write_to_png( work, "ctrl1.png" );
 
         // 3. Replace the affected part of output with contents of temporary surface
         cairo_save(buf->ct);
         cairo_set_source_surface(buf->ct, work,
             ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
-        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w, h);
+        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/buf->device_scale, h/buf->device_scale);
         cairo_clip(buf->ct);
         cairo_set_operator(buf->ct, CAIRO_OPERATOR_SOURCE);
         cairo_paint(buf->ct);
@@ -619,6 +647,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     } else {
         cairo_surface_t *cache = cairo_image_surface_create_for_data(
             reinterpret_cast<unsigned char*>(ctrl->cache), CAIRO_FORMAT_ARGB32, w, h, w*4);
+        cairo_surface_set_device_scale(cache, buf->device_scale, buf->device_scale);
         cairo_set_source_surface(buf->ct, cache,
             ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
         cairo_paint(buf->ct);

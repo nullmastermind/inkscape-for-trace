@@ -1123,25 +1123,42 @@ void SPCanvas::handle_get_preferred_height(GtkWidget *widget, gint *minimum_heig
 void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
-    GtkAllocation old_allocation;
 
+    // Allocation does not depend on device scale.
+    GtkAllocation old_allocation;
     gtk_widget_get_allocation(widget, &old_allocation);
 
-//    Geom::IntRect old_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
-//        old_allocation.width, old_allocation.height);
+    // For HiDPI monitors.
+    canvas->_device_scale = gtk_widget_get_scale_factor( widget );
 
     Geom::IntRect new_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
         allocation->width, allocation->height);
 
-    // resize backing store
+    // Resize backing store.
     cairo_surface_t *new_backing_store = NULL;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    if (canvas->_surface_for_similar != NULL)
-        new_backing_store = cairo_surface_create_similar_image(canvas->_surface_for_similar,
-                CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
+    if (canvas->_surface_for_similar != NULL) {
+
+        // Size in device pixels. Does not set device scale.
+        new_backing_store =
+            cairo_surface_create_similar_image(canvas->_surface_for_similar,
+                                               CAIRO_FORMAT_ARGB32,
+                                               allocation->width  * canvas->_device_scale,
+                                               allocation->height * canvas->_device_scale);
+    }
 #endif
-    if (new_backing_store == NULL)
-        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
+    if (new_backing_store == NULL) {
+
+        // Size in device pixels. Does not set device scale.
+        new_backing_store =
+            cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                       allocation->width  * canvas->_device_scale,
+                                       allocation->height * canvas->_device_scale);
+    }
+
+    // Set device scale
+    cairo_surface_set_device_scale(new_backing_store, canvas->_device_scale, canvas->_device_scale);
+
     if (canvas->_backing_store) {
         cairo_t *cr = cairo_create(new_backing_store);
         cairo_translate(cr, -canvas->_x0, -canvas->_y0);
@@ -1521,7 +1538,6 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Prevent crash if paintSingleBuffer is called before _backing_store is
     // initialized.
-
     if (_backing_store == NULL)
         return;
 
@@ -1530,9 +1546,11 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.buf_rowstride = 0;
     buf.rect = paint_rect;
     buf.canvas_rect = canvas_rect;
+    buf.device_scale = _device_scale;
     buf.is_empty = true;
 
     // Make sure the following code does not go outside of _backing_store's data
+    // FIXME for device_scale.
     assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
     assert(paint_rect.left() - _x0 >= 0);
     assert(paint_rect.top() - _y0 >= 0);
@@ -1541,14 +1559,28 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Create a temporary surface that draws directly to _backing_store
     cairo_surface_flush(_backing_store);
+    // cairo_surface_write_to_png( _backing_store, "debug0.png" );
     unsigned char *data = cairo_image_surface_get_data(_backing_store);
     int stride = cairo_image_surface_get_stride(_backing_store);
+
+    // Check we are using correct device scale
+    double x_scale = 0;
+    double y_scale = 0;
+    cairo_surface_get_device_scale(_backing_store, &x_scale, &y_scale);
+    assert (_device_scale == (int)x_scale);
+    assert (_device_scale == (int)y_scale);
+
     // Move to the right row
-    data += stride * (paint_rect.top() - _y0);
+    data += stride * (paint_rect.top() - _y0) * (int)y_scale;
     // Move to the right pixel inside of that row
-    data += 4 * (paint_rect.left() - _x0);
-    cairo_surface_t *imgs = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32,
-            paint_rect.width(), paint_rect.height(), stride);
+    data += 4 * (paint_rect.left() - _x0) * (int)x_scale;
+    cairo_surface_t *imgs =
+        cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32,
+                                            paint_rect.width()  * _device_scale,
+                                            paint_rect.height() * _device_scale,
+                                            stride);
+    cairo_surface_set_device_scale(imgs, _device_scale, _device_scale);
+
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -1557,10 +1589,12 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
     cairo_restore(buf.ct);
+    // cairo_surface_write_to_png( imgs, "debug1.png" );
 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
+    // cairo_surface_write_to_png( imgs, "debug2.png" );
 
     // output to X
     cairo_destroy(buf.ct);
@@ -1590,6 +1624,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     cairo_surface_mark_dirty(_backing_store);
+    // cairo_surface_write_to_png( _backing_store, "debug3.png" );
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
@@ -1730,7 +1765,6 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     Geom::OptIntRect area = paint_rect & canvas_rect;
     if (!area || area->hasZeroArea()) return 0;
-
     paint_rect = *area;
 
     PaintRectSetup setup;
@@ -1787,18 +1821,33 @@ void SPCanvas::endForcedFullRedraws()
 }
 
 gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
+
     SPCanvas *canvas = SP_CANVAS(widget);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar == NULL && canvas->_backing_store != NULL) {
-        canvas->_surface_for_similar = cairo_surface_create_similar(
-                cairo_get_target(cr), CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
+
+        // Device scale is copied but since this is only created one time, we'll
+        // need to check/set device scale anytime it is used in case window moved
+        // to monitor with different scale.
+        canvas->_surface_for_similar =
+            cairo_surface_create_similar(cairo_get_target(cr), CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
+
+        // Check we are using correct device scale
+        double x_scale = 0;
+        double y_scale = 0;
+        cairo_surface_get_device_scale(canvas->_backing_store, &x_scale, &y_scale);
+        assert (canvas->_device_scale == (int)x_scale);
+        assert (canvas->_device_scale == (int)y_scale);
 
         // Reallocate backing store so that cairo can use shared memory
+        // Function does NOT copy device scale! Width and height are in device pixels.
         cairo_surface_t *new_backing_store = cairo_surface_create_similar_image(
                 canvas->_surface_for_similar, CAIRO_FORMAT_ARGB32,
                 cairo_image_surface_get_width(canvas->_backing_store),
                 cairo_image_surface_get_height(canvas->_backing_store));
+
+        cairo_surface_set_device_scale(new_backing_store, canvas->_device_scale, canvas->_device_scale);
 
         // Copy the old backing store contents
         cairo_t *cr = cairo_create(new_backing_store);
@@ -1824,6 +1873,7 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
         cairo_rectangle_t rectangle = rects->rectangles[i];
         Geom::Rect dr = Geom::Rect::from_xywh(rectangle.x + canvas->_x0, rectangle.y + canvas->_y0,
                                               rectangle.width, rectangle.height);
+
         Geom::IntRect ir = dr.roundOutwards();
         cairo_rectangle_int_t irect = { ir.left(), ir.top(), ir.width(), ir.height() };
         cairo_region_union_rectangle(dirty_region, &irect);
@@ -1837,7 +1887,7 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
     }
     cairo_region_destroy(dirty_region);
 
-	return TRUE;
+    return TRUE;
 }
 
 gint SPCanvas::handle_key_event(GtkWidget *widget, GdkEventKey *event)
@@ -1979,7 +2029,11 @@ SPCanvasGroup *SPCanvas::getRoot()
  */
 void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrolling)
 {
-    GtkAllocation allocation;
+    // To do: extract out common code with SPCanvas::handle_size_allocate()
+
+    // For HiDPI monitors
+    int device_scale = gtk_widget_get_scale_factor(GTK_WIDGET(this));
+    assert( device_scale == _device_scale);
 
     double cx = c[Geom::X];
     double cy = c[Geom::Y];
@@ -1992,24 +2046,42 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     Geom::IntRect old_area = getViewboxIntegers();
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
 
+    GtkAllocation allocation;
     gtk_widget_get_allocation(&_widget, &allocation);
 
-    // adjust backing store contents
+    // Adjust backing store contents
     assert(_backing_store);
+
     cairo_surface_t *new_backing_store = NULL;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (_surface_for_similar != NULL)
-        new_backing_store = cairo_surface_create_similar_image(
-                _surface_for_similar, CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
+
+        // Size in device pixels. Does not set device scale.
+        new_backing_store =
+            cairo_surface_create_similar_image(_surface_for_similar,
+                                               CAIRO_FORMAT_ARGB32,
+                                               allocation.width  * _device_scale,
+                                               allocation.height * _device_scale);
 #endif
     if (new_backing_store == NULL)
-        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
+
+        // Size in device pixels. Does not set device scale.
+        new_backing_store =
+            cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                       allocation.width  * _device_scale,
+                                       allocation.height * _device_scale);
+
+    // Set device scale
+    cairo_surface_set_device_scale(new_backing_store, _device_scale, _device_scale);
+
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
     cairo_translate(cr, -ix, -iy);
     cairo_set_source(cr, _background);
     cairo_paint(cr);
+
+    // cairo_surface_write_to_png( _backing_store, "scroll0.png" );
 
     // Copy the old backing store contents
     cairo_set_source_surface(cr, _backing_store, _x0, _y0);
@@ -2019,6 +2091,8 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     cairo_destroy(cr);
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
+
+    // cairo_surface_write_to_png( _backing_store, "scroll1.png" );
 
     _dx0 = cx; // here the 'd' stands for double, not delta!
     _dy0 = cy;

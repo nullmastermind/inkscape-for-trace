@@ -42,6 +42,7 @@
 #include "display/drawing.h"
 #include "display/drawing-item.h"
 #include "display/drawing-context.h"
+#include "display/drawing-surface.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 #include "svg/svg-length.h"
@@ -95,6 +96,9 @@ Filter::~Filter()
 
 int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, DrawingContext *bgdc)
 {
+    // std::cout << "Filter::render() for: " << const_cast<Inkscape::DrawingItem *>(item)->name() << std::endl;
+    // std::cout << "  graphic drawing_scale: " << graphic.surface()->device_scale() << std::endl;
+
     if (_primitive.empty()) {
         // when no primitives are defined, clear source graphic
         graphic.setSource(0,0,0,0);
@@ -150,6 +154,7 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
     FilterSlot slot(const_cast<Inkscape::DrawingItem*>(item), bgdc, graphic, units);
     slot.set_quality(filterquality);
     slot.set_blurquality(blurquality);
+    slot.set_device_scale(graphic.surface()->device_scale());
 
     for (unsigned i = 0 ; i < _primitive.size() ; i++) {
         _primitive[i]->render_cairo(slot);

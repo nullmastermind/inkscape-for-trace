@@ -171,9 +171,10 @@ void FilterMorphology::render_cairo(FilterSlot &slot)
         return;
     }
 
+    int device_scale = slot.get_device_scale();
     Geom::Affine p2pb = slot.get_units().get_matrix_primitiveunits2pb();
-    double xr = fabs(xradius * p2pb.expansionX());
-    double yr = fabs(yradius * p2pb.expansionY());
+    double xr = fabs(xradius * p2pb.expansionX()) * device_scale;
+    double yr = fabs(yradius * p2pb.expansionY()) * device_scale;
     int bpp = cairo_image_surface_get_format(input) == CAIRO_FORMAT_A8 ? 1 : 4;
 
     cairo_surface_t *interm = ink_cairo_surface_create_identical(input);

@@ -47,6 +47,7 @@ FilterImage::~FilterImage()
 
 void FilterImage::render_cairo(FilterSlot &slot)
 {
+    std::cout << "FilterImage::render_cairo: Entrance" << std::endl;
     if (!feImageHref)
         return;
 
@@ -78,8 +79,11 @@ void FilterImage::render_cairo(FilterSlot &slot)
     if( feImageWidth  == 0 ) feImageWidth  = bbox_width;
     if( feImageHeight == 0 ) feImageHeight = bbox_height;
 
+    int device_scale = slot.get_device_scale();
+
     // Internal image, like <use>
     if (from_element) {
+        std::cout << "  Internal image" << std::endl;
         if (!SVGElem) return;
 
         // TODO: do not recreate the rendering tree every time
@@ -108,8 +112,12 @@ void FilterImage::render_cairo(FilterSlot &slot)
         */
 
         Geom::Rect sa = slot.get_slot_area();
-        cairo_surface_t *out = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-            sa.width(), sa.height());
+        cairo_surface_t *out =
+            cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                       sa.width()  * device_scale,
+                                       sa.height() * device_scale);
+        cairo_surface_set_device_scale(out, device_scale, device_scale);
+
         Inkscape::DrawingContext dc(out, sa.min());
         dc.transform(user2pb); // we are now in primitive units
         dc.translate(feImageX, feImageY);
@@ -128,11 +136,14 @@ void FilterImage::render_cairo(FilterSlot &slot)
 
         slot.set(_output, out);
         cairo_surface_destroy(out);
+        std::cout << "  feImage: out: " << cairo_image_surface_get_width( out) << std::endl;
+        std::cout << "FilterImage::render_cairo: Exit 2" << std::endl;
         return;
     }
 
     // External image, like <image>
     if (!image && !broken_ref) {
+        std::cout << "  External image" << std::endl;
         broken_ref = true;
 
         /* TODO: If feImageHref is absolute, then use that (preferably handling the
@@ -170,10 +181,12 @@ void FilterImage::render_cairo(FilterSlot &slot)
     }
 
     cairo_surface_t *image_surface = image->getSurfaceRaw();
-
+    std::cout << "    image: " << cairo_image_surface_get_width(image_surface) << std::endl;
     Geom::Rect sa = slot.get_slot_area();
     cairo_surface_t *out = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-        sa.width(), sa.height());
+        sa.width() * device_scale, sa.height() * device_scale);
+    cairo_surface_set_device_scale( out, device_scale, device_scale );
+    std::cout << "    out:   " << cairo_image_surface_get_width(out) << std::endl;
 
     // For the moment, we'll assume that any image is in sRGB color space
     // set_cairo_surface_ci(out, SP_CSS_COLOR_INTERPOLATION_SRGB);
@@ -278,8 +291,8 @@ void FilterImage::render_cairo(FilterSlot &slot)
     cairo_set_source_surface(ct, image_surface, 0, 0);
     cairo_paint(ct);
     cairo_destroy(ct);
-
     slot.set(_output, out);
+    std::cout << "FilterImage::render_cairo: Exit 2" << std::endl;
 }
 
 bool FilterImage::can_handle_affine(Geom::Affine const &)
