@@ -53,10 +53,8 @@ public:
     virtual bool getWrap() const { return _wrap; }
 
 protected:
-    virtual void on_size_allocate( Gtk::Allocation& allocation );
+    virtual void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const override;
     virtual bool on_scroll_event(GdkEventScroll*);
-//    virtual void on_size_request( Gtk::Requisition* requisition );
-
 
 private:
     void rebuildUI();
