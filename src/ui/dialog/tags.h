@@ -19,7 +19,6 @@
 #include <gtkmm/dialog.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/panel.h"
-#include "ui/widget/object-composite-settings.h"
 #include "desktop-tracker.h"
 #include "ui/widget/style-subject.h"
 #include "selection.h"
