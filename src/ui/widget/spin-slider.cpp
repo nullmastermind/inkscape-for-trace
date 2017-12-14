@@ -23,6 +23,7 @@ SpinSlider::SpinSlider(double value, double lower, double upper, double step_inc
       _adjustment(Gtk::Adjustment::create(value, lower, upper, step_inc)),
       _scale(_adjustment), _spin(_adjustment, climb_rate, digits)
 {
+    set_name("SpinSlider");
     signal_value_changed().connect(signal_attr_changed().make_slot());
 
     pack_start(_scale);

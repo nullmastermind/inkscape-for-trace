@@ -93,3 +93,8 @@ combobox window.popup scrolledwindow treeview separator {
 #CMS_Adjust {
     padding: 0;
 }
+
+/* Keep pallete scrollbar from generating warnings. */
+#PreviewHolderScrolledWindow .vertical slider {
+  min-height: 15px;
+}

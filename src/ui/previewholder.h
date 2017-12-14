@@ -18,10 +18,10 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/bin.h>
 
 namespace Gtk {
 class Grid;
+class ScrolledWindow;
 }
 
 #include "previewfillable.h"
@@ -31,7 +31,7 @@ class Grid;
 namespace Inkscape {
 namespace UI {
 
-class PreviewHolder : public Gtk::VBox, public PreviewFillable
+class PreviewHolder : public Gtk::Box, public PreviewFillable
 {
 public:
     PreviewHolder();
@@ -49,21 +49,19 @@ public:
     virtual ViewType getPreviewType() const { return _view; }
     virtual guint getPreviewRatio() const { return _ratio; }
     virtual ::BorderStyle getPreviewBorder() const { return _border; }
-    virtual void setWrap( bool b );
+    virtual void setWrap( bool wrap );
     virtual bool getWrap() const { return _wrap; }
 
 protected:
-    virtual void on_size_allocate( Gtk::Allocation& allocation );
+    virtual void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const override;
     virtual bool on_scroll_event(GdkEventScroll*);
-//    virtual void on_size_request( Gtk::Requisition* requisition );
-
 
 private:
     void rebuildUI();
-    void calcGridSize( const Gtk::Widget* thing, int itemCount, int& width, int& height );
+    void calcGridSize( const Gtk::Widget* item, int itemCount, int& ncols, int& nrows );
 
     std::vector<Previewable*> items;
-    Gtk::Bin *_scroller;
+    Gtk::ScrolledWindow *_scroller;
     Gtk::Grid *_insides;
 
     int _prefCols;

@@ -15,7 +15,6 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/scale.h>
 #include <gtkmm/togglebutton.h>
 #include "spinbutton.h"
 #include "attr-widget.h"
@@ -26,9 +25,9 @@ namespace Widget {
 
 /**
  * Wrap the gimpspinscale class
- * A combo widget with label, scale slider, spinbutton and adjustment
+ * A combo widget with label, scale slider, spinbutton, and adjustment
  */
-class SpinScale : public Gtk::HBox, public AttrWidget
+class SpinScale : public Gtk::Box, public AttrWidget
 {
 
 public:
@@ -64,7 +63,7 @@ public:
  *
  * @see SpinScale
  */
-class DualSpinScale : public Gtk::HBox, public AttrWidget
+class DualSpinScale : public Gtk::Box, public AttrWidget
 {
 public:
     DualSpinScale(const char* label1, const char* label2, double value, double lower, double upper, double step_inc,

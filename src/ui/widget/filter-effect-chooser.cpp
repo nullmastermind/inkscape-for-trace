@@ -24,6 +24,8 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
       _blend(BlendModeConverter, SP_ATTR_INVALID, false),
       _blur(_("Blur (%)"), 0, 0, 100, 1, 0.01, 1)
 {
+    set_name("SimpleFilterModifier");
+
     _flags = flags;
 
     if (flags & BLEND) {
