@@ -55,7 +55,7 @@ ObjectSet::combine(bool skip_undo)
 {
     //Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = document();
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     std::vector<SPItem*> items_copy(items().begin(), items().end());
     
     if (items_copy.size() < 1) {
@@ -299,14 +299,17 @@ void ObjectSet::toCurves(bool skip_undo)
             desktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
         return;
     }
-
+    
     bool did = false;
     if (desktop()) {
         desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Converting objects to paths..."));
         // set "busy" cursor
         desktop()->setWaitingCursor();
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        unlinkRecursive(true);
+    }
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     clear();
@@ -337,7 +340,10 @@ void ObjectSet::toLPEItems()
     if (isEmpty()) {
         return;
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
+        unlinkRecursive(true);
+    }
     std::vector<SPItem*> selected(items().begin(), items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     clear();
@@ -366,12 +372,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         { 
             continue;
         }
-        //TODO: decide if we want to unlink clones or not, for now keep previous functionality retaining clones as is
-        SPUse *use = dynamic_cast<SPUse *>(item);
-        if (use) {
-            continue;
-        }
-        
+
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (path && !path->_curve_before_lpe) {
             // remove connector attributes
