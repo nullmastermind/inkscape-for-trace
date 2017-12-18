@@ -259,10 +259,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
             Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
             lpe->getRepr()->setAttribute("sort_points", "true");
             lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
-            lpe->getRepr()->setAttribute("interpolate_original", "true");
-            lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-            lpe->getRepr()->setAttribute("miter_limit", "100");
-            lpe->getRepr()->setAttribute("linejoin_type", "miter");
             static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
             pt->points.clear();
             return;

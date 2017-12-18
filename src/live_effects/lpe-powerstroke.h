@@ -38,7 +38,6 @@ public:
 
 private:
     BoolParam sort_points;
-    BoolParam interpolate_original;
     EnumParam<unsigned> interpolator_type;
     ScalarParam interpolator_beta;
     ScalarParam scale_width;
@@ -46,7 +45,6 @@ private:
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
-    bool interpolate_original_prev;
     LPEPowerStroke(const LPEPowerStroke&);
     LPEPowerStroke& operator=(const LPEPowerStroke&);
 };

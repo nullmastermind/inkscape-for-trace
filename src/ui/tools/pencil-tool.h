@@ -44,9 +44,10 @@ public:
     Geom::Point req_tangent;
 
     bool is_drawing;
-    size_t points_parsed;
     std::vector<Geom::Point> ps;
+    std::vector<Geom::Point> key_nodes;
     std::vector<Geom::Point> points;
+    std::vector<Geom::Point> points_pos;
     std::vector<double> wps;
 
     void addPowerStrokePencil(SPCurve * c);
@@ -70,16 +71,14 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    void _powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> points, bool write);
+    void _powerStrokePreview(Geom::Path const path, std::vector<Geom::Point> points);
     SPShape *_powerpreview;
-    SPShape *_powerpreviewtail;
-    bool _preview_ok;
-    gchar const * end_linecap_type; 
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
     void _fitAndSplit();
-    void _interpolate(bool realize = false);
+    void _interpolate();
+    void _interpolate(SPCurve * curve);
     void _sketchInterpolate();
     void _extinput(GdkEvent *event);
     void _cancel();
