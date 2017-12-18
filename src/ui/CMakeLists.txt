@@ -140,6 +140,8 @@ set(ui_SRC
 	widget/highlight-picker.cpp
 	widget/imageicon.cpp
 	widget/imagetoggler.cpp
+	widget/ink-select-one-action.cpp
+	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
 	widget/labelled.cpp
 	widget/layer-selector.cpp
@@ -147,7 +149,6 @@ set(ui_SRC
 	widget/licensor.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
-	widget/ink-select-one-action.cpp
 	widget/page-sizer.cpp
 	widget/panel.cpp
 	widget/point.cpp
@@ -333,13 +334,14 @@ set(ui_SRC
 	widget/insertordericon.h
 	widget/imageicon.h
 	widget/imagetoggler.h
+	widget/ink-select-one-action.h
+	widget/ink-spinscale.h
 	widget/labelled.h
 	widget/layer-selector.h
 	widget/layertypeicon.h
 	widget/licensor.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
-	widget/ink-select-one-action.h
 	widget/page-sizer.h
 	widget/panel.h
 	widget/point.h

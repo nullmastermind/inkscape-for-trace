@@ -22,7 +22,7 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
       _lb_blur(_("_Blur:")),
       _lb_blur_unit(_("%")),
       _blend(BlendModeConverter, SP_ATTR_INVALID, false),
-      _blur(_("Blur (%)"), 0, 0, 100, 1, 0.01, 1)
+      _blur(_("Blur (%)"), 0, 0, 100, 1, 1, 1)
 {
     set_name("SimpleFilterModifier");
 

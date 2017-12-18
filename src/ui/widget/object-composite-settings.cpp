@@ -52,8 +52,6 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
     pack_start(_opacity_vbox, false, false, 2);
     _opacity_vbox.pack_start(_opacity_scale);
 
-    _opacity_scale.set_appearance("compact");
-
     _opacity_scale.signal_value_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;

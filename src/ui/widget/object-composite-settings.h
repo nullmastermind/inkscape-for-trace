@@ -46,7 +46,7 @@ private:
     Glib::ustring   _opacity_tag;
 
     Gtk::VBox       _opacity_vbox;
-    Inkscape::UI::Widget::SpinScale _opacity_scale;
+    SpinScale       _opacity_scale;
 
     StyleSubject *_subject;
 

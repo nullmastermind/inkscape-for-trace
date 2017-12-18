@@ -46,12 +46,12 @@
 
 #include <gtkmm/container.h>
 #include <gtkmm/radiomenuitem.h>
+#include <gtkmm/adjustment.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "widgets/ege-adjustment-action.h"
-#include "gimp/gimpspinscale.h"
 #include "ui/icon-names.h"
-
+#include "ui/widget/ink-spinscale.h"
 
 static void ege_adjustment_action_finalize( GObject* object );
 static void ege_adjustment_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
@@ -820,7 +820,11 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
         if ( act->private_data->appearanceMode == APPEARANCE_FULL ) {
             /* Slider */
-            spinbutton  = gimp_spin_scale_new (act->private_data->adj, g_value_get_string( &value ), 0);
+            InkSpinScale* inkspinscale =
+              new InkSpinScale(Glib::wrap(act->private_data->adj));
+            inkspinscale->set_label( g_value_get_string( &value ));
+            inkspinscale->set_digits(0);
+            spinbutton = (GtkWidget*)inkspinscale->gobj();
             gtk_widget_set_size_request(spinbutton, 100, -1);
 
         } else if ( act->private_data->appearanceMode == APPEARANCE_MINIMAL ) {

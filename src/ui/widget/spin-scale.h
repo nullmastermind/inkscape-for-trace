@@ -2,6 +2,7 @@
  * Author:
  *
  * Copyright (C) 2012 Author
+ *               2017 Tavmjong Bah
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -16,27 +17,30 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/togglebutton.h>
-#include "spinbutton.h"
 #include "attr-widget.h"
+#include "ink-spinscale.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
 /**
- * Wrap the gimpspinscale class
- * A combo widget with label, scale slider, spinbutton, and adjustment
+ * Wrap the InkSpinScale class and attach an attribute.
+ * A combo widget with label, scale slider, spinbutton, and adjustment;
  */
 class SpinScale : public Gtk::Box, public AttrWidget
 {
 
 public:
-    SpinScale(const char* label, double value, double lower, double upper, double step_inc, double climb_rate,
-	       int digits, const SPAttributeEnum a = SP_ATTR_INVALID, const char* tip_text = NULL);
+    SpinScale(const Glib::ustring label, double value,
+              double lower, double upper,
+              double step_increment, double page_increment, int digits,
+              const SPAttributeEnum a = SP_ATTR_INVALID, const Glib::ustring tip_text = "");
 
-    SpinScale(const char* label,
-              Glib::RefPtr<Gtk::Adjustment> adj,
-	      int digits, const SPAttributeEnum a = SP_ATTR_INVALID, const char* tip_text = NULL);
+    // Used by extensions
+    SpinScale(const Glib::ustring label,
+              Glib::RefPtr<Gtk::Adjustment> adjustment, int digits,
+              const SPAttributeEnum a = SP_ATTR_INVALID, const Glib::ustring tip_text = "");
 
     virtual Glib::ustring get_as_attribute() const;
     virtual void set_from_attribute(SPObject*);
@@ -46,11 +50,10 @@ public:
     double get_value() const;
     void set_value(const double);
     void set_focuswidget(GtkWidget *widget);
-    void set_appearance(const gchar* appearance);
     
 private:
     Glib::RefPtr<Gtk::Adjustment> _adjustment;
-    GtkWidget *_spinscale;
+    InkSpinScale _inkspinscale;
 
 public:
     const decltype(_adjustment) get_adjustment() const;
@@ -66,8 +69,11 @@ public:
 class DualSpinScale : public Gtk::Box, public AttrWidget
 {
 public:
-    DualSpinScale(const char* label1, const char* label2, double value, double lower, double upper, double step_inc,
-                   double climb_rate, int digits, const SPAttributeEnum, char* tip_text1, char* tip_text2);
+    DualSpinScale(const Glib::ustring label1, const Glib::ustring label2,
+                  double value, double lower, double upper,
+                  double step_increment, double page_increment, int digits,
+                  const SPAttributeEnum a,
+                  const Glib::ustring tip_text1, const Glib::ustring tip_text2);
 
     virtual Glib::ustring get_as_attribute() const;
     virtual void set_from_attribute(SPObject*);
