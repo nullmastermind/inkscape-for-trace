@@ -372,6 +372,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
     double pt_size = Inkscape::Util::Quantity::convert(sp_style_css_size_units_to_px(sp_font_selector_get_size(fsel), unit), "px", "pt");
+    pt_size = std::min(pt_size, 100.0);
 
     // Pango font size is in 1024ths of a point
     // C++11: Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
