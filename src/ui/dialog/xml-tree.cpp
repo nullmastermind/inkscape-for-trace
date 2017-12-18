@@ -231,6 +231,7 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
     scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller->set_shadow_type(Gtk::SHADOW_IN);
+    scroller->set_size_request(0, 60);
 
     attr_vbox.pack_start(*scroller, TRUE, TRUE, 0);
 
