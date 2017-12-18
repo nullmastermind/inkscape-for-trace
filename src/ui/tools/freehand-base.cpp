@@ -242,6 +242,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     return;
                 }
                 pt->addPowerStrokePencil(c);
+                sp_shape->setCurve(c, true);
             }
             if(pt->points.empty()){
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
