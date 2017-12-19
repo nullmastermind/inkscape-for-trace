@@ -1,3 +1,19 @@
+/*
+ * Authors:
+ *   Tavmjong Bah <tavmjong@free.fr>
+ *
+ * Copyright  (C) 2017 Tavmjong Bah
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+/** \file
+   A widget that allows entering a numerical value either by
+   clicking/dragging on a custom Gtk::Scale or by using a
+   Gtk::SpinButton. The custom Gtk::Scale differs from the stock
+   Gtk::Scale in that it includes a label to save space and has a
+   "slow dragging" mode triggered by the Alt key.
+*/
 
 #include "ink-spinscale.h"
 #include <gdkmm/general.h>
@@ -10,37 +26,28 @@
 
 #include <iostream>
 
-// Constructor for Gtk::Range is protected... must derive a new class.
-InkRange::InkRange(Glib::RefPtr<Gtk::Adjustment> adjustment, Gtk::SpinButton* spinbutton)
-  : Glib::ObjectBase("InkRange")
-  , Gtk::Range()
+InkScale::InkScale(Glib::RefPtr<Gtk::Adjustment> adjustment, Gtk::SpinButton* spinbutton)
+  : Glib::ObjectBase("InkScale")
+  , Gtk::Scale(adjustment)
   , _spinbutton(spinbutton)
   , _dragging(false)
   , _drag_start(0)
   , _drag_offset(0)
 {
-  set_name("InkRange");
-  set_adjustment(adjustment);
+  set_name("InkScale");
   // std::cout << "GType name: " << G_OBJECT_TYPE_NAME(gobj()) << std::endl;
 }
 
 void
-InkRange::set_label(Glib::ustring label) {
+InkScale::set_label(Glib::ustring label) {
   _label = label;
 }
 
 bool
-InkRange::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
+InkScale::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
 
-  // std::cout << "\nInkRange::on_draw" << std::endl;
+  Gtk::Range::on_draw(cr);
 
-  // Get our own style info...
-  // auto style = get_style_context();
-  // auto state = style->get_state();
-  // std::cout << "color:      " << style->get_color( state ).to_string() << std::endl;
-  // std::cout << "background: " << style->get_background_color( state ).to_string() << std::endl;
-  // std::cout << "border:     " << style->get_border_color( state ).to_string() << std::endl;
-  
   // Get SpinButton style info...
   auto style_spin = _spinbutton->get_style_context();
   auto state_spin = style_spin->get_state();
@@ -55,38 +62,37 @@ InkRange::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
   int x, y;
   _spinbutton->get_layout_offsets(x, y);
 
+  // Fill widget proportional to value.
+  double fraction = get_fraction();
+
+  // Get trough rectangle and clipping point for text.
+  Gdk::Rectangle slider_area = get_range_rect();
+  double clip_text_x = slider_area.get_x() + slider_area.get_width() * fraction;
+
   // Render text in normal text color.
   cr->save();
+  cr->rectangle(clip_text_x, 0, get_width(), get_height());
+  cr->clip();
   Gdk::Cairo::set_source_rgba(cr, text_color);
-  cr->set_source_rgba(0, 0, 0, 1);
+  //cr->set_source_rgba(0, 0, 0, 1);
   cr->move_to(5, y );
   layout_label->show_in_cairo_context(cr);
   cr->restore();
 
-  // Fill widget proportional to value.
-  double fraction = get_fraction();
-
-  // Render bar (over normal text to reduce blurriness).
-  Gdk::RGBA fill_color("rgba(74,144,217,1.0)");
-  Gdk::Cairo::set_source_rgba(cr, fill_color);
-  cr->rectangle(0, 0, get_width() * fraction, get_height());
-  cr->fill_preserve(); // Save rectangle for clipping text.
-
   // Render text, clipped, in white over bar (TODO: use same color as SpinButton progress bar).
   cr->save();
+  cr->rectangle(0, 0, clip_text_x, get_height());
   cr->clip();
   cr->set_source_rgba(1, 1, 1, 1);
   cr->move_to(5, y);
   layout_label->show_in_cairo_context(cr);
   cr->restore();
 
-  return false;
+  return true;
 }
 
 bool
-InkRange::on_button_press_event(GdkEventButton* button_event) {
-
-  _dragging = true;
+InkScale::on_button_press_event(GdkEventButton* button_event) {
 
   if (! (button_event->state & GDK_MOD1_MASK) ) {
     set_adjustment_value(button_event->x);
@@ -101,14 +107,14 @@ InkRange::on_button_press_event(GdkEventButton* button_event) {
 }
 
 bool
-InkRange::on_button_release_event(GdkEventButton* button_event) {
+InkScale::on_button_release_event(GdkEventButton* button_event) {
 
   _dragging = false;
   return true;
 }
 
 bool
-InkRange::on_motion_notify_event(GdkEventMotion* motion_event) {
+InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
 
   double x = motion_event->x;
   double y = motion_event->y;
@@ -144,7 +150,7 @@ InkRange::on_motion_notify_event(GdkEventMotion* motion_event) {
 }
 
 double
-InkRange::get_fraction() {
+InkScale::get_fraction() {
 
   Glib::RefPtr<Gtk::Adjustment> adjustment = get_adjustment();
   double upper = adjustment->get_upper();
@@ -156,13 +162,16 @@ InkRange::get_fraction() {
 }
 
 void
-InkRange::set_adjustment_value(double x) {
+InkScale::set_adjustment_value(double x) {
 
   Glib::RefPtr<Gtk::Adjustment> adjustment = get_adjustment();
   double upper = adjustment->get_upper();
   double lower = adjustment->get_lower();
-  double fraction = x / (double)get_width();
+
+  Gdk::Rectangle slider_area = get_range_rect();
+  double fraction = (x - slider_area.get_x()) / (double)slider_area.get_width();
   double value = fraction * (upper - lower) + lower;
+
   adjustment->set_value( value );
 }
 
@@ -186,9 +195,12 @@ InkSpinScale::InkSpinScale(double value, double lower,
   _spinbutton  = Gtk::manage(new Gtk::SpinButton(_adjustment));
   _spinbutton->set_numeric();
   _spinbutton->signal_key_release_event().connect(sigc::mem_fun(*this,&InkSpinScale::on_key_release_event),false);
-  _range       = Gtk::manage(new InkRange(_adjustment, _spinbutton));
+
+  _scale       = Gtk::manage(new InkScale(_adjustment, _spinbutton));
+  _scale->set_draw_value(false);
+
   pack_end( *_spinbutton,  Gtk::PACK_SHRINK );
-  pack_end( *_range,       Gtk::PACK_EXPAND_WIDGET );
+  pack_end( *_scale,       Gtk::PACK_EXPAND_WIDGET );
 }
 
 InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
@@ -200,14 +212,17 @@ InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
 
   _spinbutton  = Gtk::manage(new Gtk::SpinButton(_adjustment));
   _spinbutton->set_numeric();
-  _range       = Gtk::manage(new InkRange(_adjustment, _spinbutton));
+
+  _scale       = Gtk::manage(new InkScale(_adjustment, _spinbutton));
+  _scale->set_draw_value(false);
+
   pack_end( *_spinbutton,  Gtk::PACK_SHRINK );
-  pack_end( *_range,       Gtk::PACK_EXPAND_WIDGET );
+  pack_end( *_scale,       Gtk::PACK_EXPAND_WIDGET );
 }
 
 void
 InkSpinScale::set_label(Glib::ustring label) {
-  _range->set_label(label);
+  _scale->set_label(label);
 }
 
 void

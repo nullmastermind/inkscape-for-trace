@@ -118,6 +118,7 @@ combobox window.popup scrolledwindow treeview separator {
   border-style: solid;
   border-width: 1px;
   border-radius: 3px;
+  padding: 0px;
 }
 
 #InkSpinScale spinbutton {
@@ -126,6 +127,25 @@ combobox window.popup scrolledwindow treeview separator {
   border-radius: 0 3px 3px 0;
   box-shadow: none;
   padding: 0 0 0 1px;
+}
+
+/* Hide slider */
+#InkSpinScale slider {
+    background: none;
+    border:     none;
+    outline:    none;
+    min-width:  0px;
+    min-height: 0px;
+    padding:    0px;
+    margin:     0px;
+}
+
+#InkSpinScale scale {
+    padding: 2px;
+}
+
+#InkSpinScale trough {
+    min-height: 24px;
 }
 
 #InkSpinScale box.active {

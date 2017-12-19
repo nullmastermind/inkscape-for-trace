@@ -1,20 +1,37 @@
 #ifndef INK_SPINSCALE_H
 #define INK_SPINSCALE_H
 
+/*
+ * Authors:
+ *   Tavmjong Bah <tavmjong@free.fr>
+ *
+ * Copyright  (C) 2017 Tavmjong Bah
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+/**
+   A widget that allows entering a numerical value either by
+   clicking/dragging on a custom Gtk::Scale or by using a
+   Gtk::SpinButton. The custom Gtk::Scale differs from the stock
+   Gtk::Scale in that it includes a label to save space and has a
+   "slow-dragging" mode triggered by the Alt key.
+*/
+
 #include <glibmm/ustring.h>
 
 #include <gtkmm/box.h>
-#include <gtkmm/range.h>
+#include <gtkmm/scale.h>
 
 namespace Gtk {
   class SpinButton;
 }
 
-class InkRange : public Gtk::Range
+class InkScale : public Gtk::Scale
 {
  public:
-  InkRange(Glib::RefPtr<Gtk::Adjustment>, Gtk::SpinButton* spinbutton);
-  ~InkRange() {};
+  InkScale(Glib::RefPtr<Gtk::Adjustment>, Gtk::SpinButton* spinbutton);
+  ~InkScale() {};
 
   void set_label(Glib::ustring label);
 
@@ -64,7 +81,7 @@ class InkSpinScale : public Gtk::Box
 
  protected:
 
-  InkRange*                      _range;
+  InkScale*                      _scale;
   Gtk::SpinButton*               _spinbutton;
   Glib::RefPtr<Gtk::Adjustment>  _adjustment;
   GtkWidget*                     _focus_widget;
