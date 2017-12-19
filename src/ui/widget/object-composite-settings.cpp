@@ -33,42 +33,24 @@ namespace Widget {
 
 ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags)
 : _verb_code(verb_code),
+  _blend_tag(Glib::ustring(history_prefix) + ":blend"),
   _blur_tag(Glib::ustring(history_prefix) + ":blur"),
   _opacity_tag(Glib::ustring(history_prefix) + ":opacity"),
-  _opacity_vbox(false, 0),
-  _opacity_scale(_("Opacity (%)"), 100.0, 0.0, 100.0, 1.0, 1.0, 1),
-  _fe_cb(flags),
-  _fe_vbox(false, 0),
+  _filter_modifier(flags),
   _blocked(false)
 {
-    set_name( "CompositeSettings");
+    set_name( "ObjectCompositeSettings");
 
     // Filter Effects
-    pack_start(_fe_vbox, false, false, 2);
-    _fe_vbox.pack_start(_fe_cb, false, false, 0);
-    _fe_cb.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
+    pack_start(_filter_modifier, false, false, 2);
 
-    // Opacity
-    pack_start(_opacity_vbox, false, false, 2);
-    _opacity_vbox.pack_start(_opacity_scale);
-
-    _opacity_scale.signal_value_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
+    _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
+    _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
+    _filter_modifier.signal_opacity_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    _opacity_scale.set_focuswidget(GTK_WIDGET(desktop->canvas));
-
-    /* SizeGroup keeps the blur and opacity labels aligned in Fill & Stroke dlg */
-/*
-    GtkSizeGroup *labels = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-    gtk_size_group_add_widget(labels, GTK_WIDGET(_opacity_label.gobj()));
-    gtk_size_group_add_widget(labels, GTK_WIDGET(_fe_cb.get_blur_label()->gobj()));
-*/
 
     show_all_children();
-
-    // These signals don't properly detect change in desktop, rely on owner dialog to call setSubject() from setTargetDesktop()
-    //_desktop_activated = g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (&ObjectCompositeSettings::_on_desktop_activate), this );
-    //_desktop_activated = g_signal_connect ( G_OBJECT (INKSCAPE), "deactivate_desktop", G_CALLBACK (&ObjectCompositeSettings::_on_desktop_deactivate), this );
 }
 
 ObjectCompositeSettings::~ObjectCompositeSettings() {
@@ -84,6 +66,12 @@ void ObjectCompositeSettings::setSubject(StyleSubject *subject) {
     }
 }
 
+// We get away with sharing one callback for blend and blur as this is used by
+//  * the Layers dialog where only one layer can be selected at a time,
+//  * the Fill and Stroke dialog where only blur is used.
+// If both blend and blur are used in a dialog where more than one object can
+// be selected then this should be split into separate functions for blend and
+// blur (like in the Objects dialog).
 void
 ObjectCompositeSettings::_blendBlurValueChanged()
 {
@@ -108,12 +96,12 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     double radius;
     if (bbox) {
         double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-        radius = _fe_cb.get_blur_value() * perimeter / 400;
+        radius = _filter_modifier.get_blur_value() * perimeter / 400;
     } else {
         radius = 0;
     }
 
-    const Glib::ustring blendmode = _fe_cb.get_blend_mode();
+    const Glib::ustring blendmode = _filter_modifier.get_blend_mode();
 
     //apply created filter to every selected item
     std::vector<SPObject*> sel = _subject->list();
@@ -148,7 +136,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     }
 
     DocumentUndo::maybeDone(document, _blur_tag.c_str(), _verb_code,
-                            _("Change blur"));
+                            _("Change blur/blend filter"));
 
     // resume interruptibility
     //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
@@ -172,15 +160,10 @@ ObjectCompositeSettings::_opacityValueChanged()
         return;
     _blocked = true;
 
-    // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in crash 1580903
-    // UPDATE: crash fixed in GTK+ 2.10.7 (bug 374378), remove this as soon as it's reasonably common
-    // (though this only fixes the crash, not the multiple change events)
-    //sp_canvas_force_full_redraw_after_interruptions(desktop->getCanvas(), 0);
-
     SPCSSAttr *css = sp_repr_css_attr_new ();
 
     Inkscape::CSSOStringStream os;
-    os << CLAMP (_opacity_scale.get_adjustment()->get_value() / 100, 0.0, 1.0);
+    os << CLAMP (_filter_modifier.get_opacity_value() / 100, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
 
     _subject->setCSS(css);
@@ -216,14 +199,11 @@ ObjectCompositeSettings::_subjectChanged() {
 
     switch (result) {
         case QUERY_STYLE_NOTHING:
-            _opacity_vbox.set_sensitive(false);
-            // gtk_widget_set_sensitive (opa, FALSE);
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently
         case QUERY_STYLE_MULTIPLE_SAME:
-            _opacity_vbox.set_sensitive(true);
-            _opacity_scale.get_adjustment()->set_value(100 * SP_SCALE24_TO_FLOAT(query.opacity.value));
+            _filter_modifier.set_opacity_value(100 * SP_SCALE24_TO_FLOAT(query.opacity.value));
             break;
     }
 
@@ -231,16 +211,13 @@ ObjectCompositeSettings::_subjectChanged() {
     const int blend_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLEND);
     switch(blend_result) {
         case QUERY_STYLE_NOTHING:
-            _fe_cb.set_sensitive(false);
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_SAME:
-            _fe_cb.set_blend_mode(query.filter_blend_mode.value);
-            _fe_cb.set_sensitive(true);
+            _filter_modifier.set_blend_mode(query.filter_blend_mode.value);
             break;
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
             // TODO: set text
-            _fe_cb.set_sensitive(false);
             break;
     }
 
@@ -248,7 +225,7 @@ ObjectCompositeSettings::_subjectChanged() {
         int blur_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLUR);
         switch (blur_result) {
             case QUERY_STYLE_NOTHING: //no blurring
-                _fe_cb.set_blur_sensitive(false);
+                _filter_modifier.set_blur_value(0);
                 break;
             case QUERY_STYLE_SINGLE:
             case QUERY_STYLE_MULTIPLE_AVERAGED:
@@ -256,14 +233,21 @@ ObjectCompositeSettings::_subjectChanged() {
                 Geom::OptRect bbox = _subject->getBounds(SPItem::GEOMETRIC_BBOX);
                 if (bbox) {
                     double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-                    _fe_cb.set_blur_sensitive(true);
                     //update blur widget value
                     float radius = query.filter_gaussianBlur_deviation.value;
                     float percent = radius * 400 / perimeter; // so that for a square, 100% == half side
-                    _fe_cb.set_blur_value(percent);
+                    _filter_modifier.set_blur_value(percent);
                 }
                 break;
         }
+    }
+
+    // If we have nothing selected, disable dialog.
+    if (result       == QUERY_STYLE_NOTHING &&
+        blend_result == QUERY_STYLE_NOTHING ) {
+        _filter_modifier.set_sensitive( false );
+    } else {
+        _filter_modifier.set_sensitive( true );
     }
 
     _blocked = false;

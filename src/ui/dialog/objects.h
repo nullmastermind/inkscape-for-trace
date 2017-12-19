@@ -3,8 +3,10 @@
  *
  * Authors:
  *   Theodore Janeczko
+ *   Tavmjong Bah
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
+ *               Tavmjong Bah 2017
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -151,20 +153,8 @@ private:
     Gtk::Label _highlightHeader;
     Gtk::Label _nameHeader;
 
-    /* Composite Settings */
-    Gtk::Box        _composite_vbox;
-    Gtk::Box        _opacity_vbox;
-    Gtk::Box        _opacity_hbox;
-    Gtk::Label      _opacity_label;
-    Gtk::Label      _opacity_label_unit;
-    Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
-    Gtk::Scale      _opacity_hscale;
-    Inkscape::UI::Widget::SpinButton _opacity_spin_button;
-    
-    Inkscape::UI::Widget::SimpleFilterModifier _fe_cb;
-    Gtk::Box        _fe_vbox;
-    Inkscape::UI::Widget::SimpleFilterModifier _fe_blur;
-    Gtk::Box        _blur_vbox;
+    /* Composite Settings (blend, blur, opacity). */
+    Inkscape::UI::Widget::SimpleFilterModifier _filter_modifier;
 
     Gtk::Dialog _colorSelectorDialog;
     std::unique_ptr<Inkscape::UI::SelectedColor> _selectedColor;

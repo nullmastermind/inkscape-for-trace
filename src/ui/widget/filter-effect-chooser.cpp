@@ -3,8 +3,9 @@
  *
  * Author:
  *   Nicholas Bishop <nicholasbishop@gmail.com>
+ *   Tavmjong Bah
  *
- * Copyright (C) 2007 Authors
+ * Copyright (C) 2007, 2017 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -18,11 +19,11 @@ namespace UI {
 namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
-    : _lb_blend(_("Blend mode:")),
-      _lb_blur(_("_Blur:")),
-      _lb_blur_unit(_("%")),
-      _blend(BlendModeConverter, SP_ATTR_INVALID, false),
-      _blur(_("Blur (%)"), 0, 0, 100, 1, 1, 1)
+    : _flags( flags )
+    , _lb_blend(_("Blend mode:"))
+    , _blend(BlendModeConverter, SP_ATTR_INVALID, false)
+    , _blur(   _("Blur (%)"   ), 0, 0, 100, 1, 1, 1)
+    , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 1, 1)
 {
     set_name("SimpleFilterModifier");
 
@@ -30,25 +31,40 @@ SimpleFilterModifier::SimpleFilterModifier(int flags)
 
     if (flags & BLEND) {
         add(_hb_blend);
+        _lb_blend.set_use_underline();
+        _lb_blend.set_mnemonic_widget(_blend);
         _hb_blend.pack_start(_lb_blend, false, false, 0);
         _hb_blend.pack_start(_blend);
     }
+
     if (flags & BLUR) {
         add(_blur);
     }
 
+    if (flags & OPACITY) {
+        add(_opacity);
+    }
+
     show_all_children();
 
-    _hb_blend.set_spacing(12);
-    _lb_blend.set_use_underline();
-    _lb_blend.set_mnemonic_widget(_blend);
-    _blend.signal_changed().connect(signal_blend_blur_changed());
-    _blur.signal_value_changed().connect(signal_blend_blur_changed());
+    _blend.signal_changed().connect(signal_blend_changed());
+    _blur.signal_value_changed().connect(signal_blur_changed());
+    _opacity.signal_value_changed().connect(signal_opacity_changed());
 }
 
-sigc::signal<void>& SimpleFilterModifier::signal_blend_blur_changed()
+sigc::signal<void>& SimpleFilterModifier::signal_blend_changed()
 {
-    return _signal_blend_blur_changed;
+    return _signal_blend_changed;
+}
+
+sigc::signal<void>& SimpleFilterModifier::signal_blur_changed()
+{
+    return _signal_blur_changed;
+}
+
+sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
+{
+    return _signal_opacity_changed;
 }
 
 const Glib::ustring SimpleFilterModifier::get_blend_mode()
@@ -75,9 +91,14 @@ void SimpleFilterModifier::set_blur_value(const double val)
     _blur.set_value(val);
 }
 
-void SimpleFilterModifier::set_blur_sensitive(const bool s)
+double SimpleFilterModifier::get_opacity_value() const
 {
-    _blur.set_sensitive(s);
+    return _opacity.get_value();
+}
+
+void SimpleFilterModifier::set_opacity_value(const double val)
+{
+    _opacity.set_value(val);
 }
 
 }
