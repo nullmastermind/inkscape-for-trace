@@ -98,6 +98,9 @@ public:
     /** \brief Wait for the effect to complete if it hasn't. */
     bool wait (void);
 
+    /** \brief Return reference to working dialog (if any) */
+    Gtk::Dialog *get_working_dialog (void) { return _visibleDialog; };
+
 private:
     void runComplete (void);
     void createPrefsDialog (Gtk::Widget * controls);

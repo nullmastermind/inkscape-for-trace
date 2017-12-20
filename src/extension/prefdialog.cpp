@@ -131,6 +131,7 @@ PrefDialog::~PrefDialog ( )
         _exEnv->cancel();
         delete _exEnv;
         _exEnv = NULL;
+        _effect->set_execution_env(_exEnv);
     }
 
     if (_effect != NULL) {
@@ -173,6 +174,7 @@ PrefDialog::preview_toggle (void) {
         set_modal(true);
         if (_exEnv == NULL) {
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, NULL, false, false);
+            _effect->set_execution_env(_exEnv);
             _exEnv->run();
         }
     } else {
@@ -182,6 +184,7 @@ PrefDialog::preview_toggle (void) {
             _exEnv->undo();
             delete _exEnv;
             _exEnv = NULL;
+            _effect->set_execution_env(_exEnv);
         }
     }
 }
@@ -230,6 +233,7 @@ PrefDialog::on_response (int signal) {
             }
             delete _exEnv;
             _exEnv = NULL;
+            _effect->set_execution_env(_exEnv);
         }
     }
 

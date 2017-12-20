@@ -274,6 +274,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
 
 
     ExecutionEnv executionEnv(this, doc);
+    execution_env = &executionEnv;
     timer->lock();
     executionEnv.run();
     if (executionEnv.wait()) {
