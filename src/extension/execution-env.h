@@ -103,13 +103,8 @@ public:
 
 private:
     void runComplete (void);
-    void createPrefsDialog (Gtk::Widget * controls);
     void createWorkingDialog (void);
     void workingCanceled (const int resp);
-    void processingCancel (void);
-    void processingComplete(void);
-    void documentCancel (void);
-    void documentCommit (void);
     void reselect (void);
     void genDocCache (void);
     void killDocCache (void);
