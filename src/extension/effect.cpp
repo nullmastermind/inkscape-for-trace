@@ -352,6 +352,12 @@ Effect::get_info_widget(void)
     return Extension::get_info_widget();
 }
 
+PrefDialog *
+Effect::get_pref_dialog (void)
+{
+    return _prefDialog;
+}
+
 void
 Effect::set_pref_dialog (PrefDialog * prefdialog)
 {

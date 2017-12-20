@@ -12,7 +12,8 @@
 #include <config.h>
 #endif
 
-#include "gtkmm/messagedialog.h"
+#include <gtkmm/dialog.h>
+#include <gtkmm/messagedialog.h>
 
 #include "execution-env.h"
 #include "prefdialog.h"
@@ -141,7 +142,15 @@ ExecutionEnv::createWorkingDialog (void) {
     g_free(dlgmessage);
 
     if (!_effect->is_silent()){
-        _visibleDialog->show();
+        Gtk::Dialog *dlg = _effect->get_pref_dialog();
+        if (dlg) {
+            _visibleDialog->set_transient_for(*dlg);
+        } else {
+            // ToDo: Do we need to make the window transient for the main window here?
+            //       Currently imossible to test because of GUI freezing during save,
+            //       see https://bugs.launchpad.net/inkscape/+bug/967416
+        }
+        _visibleDialog->show_now();
     }
 
     return;
