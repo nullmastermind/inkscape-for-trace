@@ -241,8 +241,51 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 if (!c) {
                     return;
                 }
-                pt->addPowerStrokePencil(c);
-                sp_shape->setCurve(c, true);
+                if(dc->sa) {
+                    c = dc->sa_overwrited->copy();
+                    Effect* lpe = SP_LPE_ITEM(dc->white_item)->getCurrentLPE();
+                    LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
+                    std::vector<Geom::Point> points;
+                    if (ps) {
+                        if (dc->sa->start) {
+                            points = ps->offset_points.reverse_controlpoints(false);
+                        } else {
+                            points = ps->offset_points.data();
+                        }
+                    }
+                    size_t sa_curve_size = dc->sa->curve->get_segment_count();
+                    for (auto ptp:pt->points) {
+                        ptp[Geom::X] = ptp[Geom::X] + sa_curve_size;
+                        points.push_back(ptp);
+                    }
+                    pt->addPowerStrokePencil(c);
+                    if (lpe) {
+                        gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                        item->setAttribute("inkscape:original-d" , pvector_str);
+                        g_free(pvector_str);
+                    } else {
+                        gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                        item->setAttribute("d" , pvector_str);
+                        g_free(pvector_str);
+                    }
+                    if (ps) {
+                        ps->offset_points.param_set_and_write_new_value(points);
+                        points.clear();
+                        return;
+                    }
+                } else {
+                    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                    pt->addPowerStrokePencil(c);
+                    if (lpe) {
+                        gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                        item->setAttribute("inkscape:original-d" , pvector_str);
+                        g_free(pvector_str);
+                    } else {
+                        gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                        item->setAttribute("d" , pvector_str);
+                        g_free(pvector_str);
+                    }
+                }
             }
             if(pt->points.empty()){
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -868,7 +911,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             //Bend needs the transforms applied after, Other effects best before
-            (dc, item, c, true);
+            spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();

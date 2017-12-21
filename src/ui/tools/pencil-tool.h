@@ -44,13 +44,15 @@ public:
     Geom::Point req_tangent;
 
     bool is_drawing;
+    double previous_pressure;
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> key_nodes;
     std::vector<Geom::Point> points;
     std::vector<Geom::Point> points_pos;
     std::vector<double> wps;
 
-    void addPowerStrokePencil(SPCurve * c);
+    void addPowerStrokePencil(SPCurve *& c);
+    void addPowerStrokePencil();
     void removePowerStrokePreview();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
@@ -65,6 +67,7 @@ protected:
     virtual bool root_handler(GdkEvent* event);
 
 private:
+    SPCurve * _curve;
     bool _handleButtonPress(GdkEventButton const &bevent);
     bool _handleMotionNotify(GdkEventMotion const &mevent);
     bool _handleButtonRelease(GdkEventButton const &revent);

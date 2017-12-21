@@ -73,6 +73,7 @@ PencilTool::PencilTool()
     , is_drawing(false)
     , sketch_n(0)
     , _powerpreview(NULL)
+    , _curve(NULL)
 {
 }
 
@@ -81,7 +82,7 @@ void PencilTool::setup() {
     if (prefs->getBool("/tools/freehand/pencil/selcue")) {
         this->enableSelectionCue();
     }
-
+    this->_curve = new SPCurve();
     FreehandBase::setup();
 
     this->is_drawing = false;
@@ -91,6 +92,7 @@ void PencilTool::setup() {
 
 
 PencilTool::~PencilTool() {
+    this->_curve->unref();
 }
 
 void PencilTool::_extinput(GdkEvent *event) {
@@ -453,9 +455,8 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
 
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
                     this->_interpolate();
-                    //Remove here because points are recalculated once finish. This is because we want live preview.
-                    this->points.clear();
                     spdc_concat_colors_and_flush(this, FALSE);
+                    this->points.clear();
                     this->sa = NULL;
                     this->ea = NULL;
                     this->ps.clear();
@@ -732,7 +733,18 @@ PencilTool::removePowerStrokePreview()
     }
 }
 void 
-PencilTool::addPowerStrokePencil(SPCurve * c) 
+PencilTool::addPowerStrokePencil(SPCurve *& c) 
+{
+    if(sa) {
+        c->append_continuous( this->_curve->copy(), 0.0625);
+    } else {
+        c = this->_curve->copy();
+    }
+    return;
+}
+
+void 
+PencilTool::addPowerStrokePencil() 
 {
     using namespace Inkscape::LivePathEffect;
     this->points.clear();
@@ -744,59 +756,31 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     double max  = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
     //This is a calculated number of nodes from 2 to 7 to get a simplify simil
     int    tol  = 2 + (prefs->getIntLimited("/tools/freehand/pencil/tolerance",10, 1, 100)/20);
-
+    Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
     if (min > max){
         min = max;
     }
-    bool live = false;
-    SPCurve * curve  = new SPCurve();
-    if (sa) {
-        Effect* lpe = SP_LPE_ITEM(white_item)->getCurrentLPE();
-        LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
-        if (ps) {
-            if (sa->start) {
-                this->points = ps->offset_points.reverse_controlpoints(false);
-            } else {
-                this->points = ps->offset_points.data();
-            }
-        }
-    }
-    if(!c) {
-        live = true;
-        if (sa && sa->curve) {
-            curve = sa_overwrited->copy();
-            if (!green_curve->is_unset()) {
-                curve->append_continuous( green_curve, 0.0625);
-                if (!red_curve->is_unset()) {
-                    curve->append_continuous( red_curve, 0.0625);
-                }
-            }
-        } else {
-            if (!green_curve->is_unset()) {
-                curve = green_curve->copy();
-                if (!red_curve->is_unset()) {
-                    curve->append_continuous( red_curve, 0.0625);
-                }
-            } else {
-                curve = NULL;
-            }
-        }
-        if (!curve || curve->is_unset()) {
-            curve = NULL;
+
+    if (!green_curve->is_unset()) {
+        this->_curve = green_curve->copy();
+        if (!red_curve->is_unset()) {
+            this->_curve->append_continuous( red_curve, 0.0625);
         }
     } else {
-        curve = c->copy();
-        removePowerStrokePreview();
+        this->_curve = NULL;
+    }
+    if (!this->_curve || this->_curve->is_unset()) {
+        this->_curve = NULL;
     }
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
     }
-    if (!curve) {
+    if (!this->_curve) {
         return;
     }
-    Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-    Geom::PathVector pathvector = curve->get_pathvector();
+
+    Geom::PathVector pathvector = this->_curve->get_pathvector();
     if (!pathvector.size()) {
         return;
     }
@@ -807,11 +791,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     bool start     = true;
     auto pressure  = this->wps.begin();
     size_t counter = 0;
-    Geom::Point position = *this->ps.begin();
-    if (!live) {
-        position *= transformCoordinate.inverse();
-    }
-    double pos = Geom::nearest_time(position, path);
+    Geom::Point position = Geom::Point();
     size_t last = 0;
     for (auto point = this->ps.begin(); point != this->ps.end(); ++point, ++pressure) {
         position = *point;
@@ -821,6 +801,9 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
        //We need half width for power stroke
         pressure_computed = pressure_shrunk * dezoomify_factor/2.0;
         //remove start pressure gap
+        position *= transform_coordinate.inverse();
+
+        double pos = Geom::nearest_time(position, path);
         if (start) {
             start = false;
             this->points.push_back(Geom::Point(pos, pressure_computed));
@@ -829,14 +812,11 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
             previous_pressure = pressure_shrunk;
             continue;
         }
-        if (!live) {
-            position *= transformCoordinate.inverse();
-        }
-        pos = Geom::nearest_time(position, path);
+
         if (counter%tol == 0) {
             this->key_nodes.push_back(position);
         }
-        if (pos < 1e6 && std::abs(previous_pressure - pressure_shrunk) > step && pos < path.size() - 1) {
+        if (pos < 1e6 && std::abs(previous_pressure - pressure_shrunk) > step ) {
             previous_pressure = pressure_shrunk;
             this->points.push_back(Geom::Point(pos, pressure_computed));
             this->points_pos.push_back(position);
@@ -848,20 +828,23 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
             this->key_nodes.pop_back();
         }
     }
-    bool last_added = counter%tol == 0;
-    if (!last_added) {
+    std::cout << *pressure << "pressure" << std::endl;
+    std::cout << this->pressure  << "pressure222" << std::endl;
+    //Smooth end
+    if (counter%tol != 0) {
         this->key_nodes.pop_back();
-        this->key_nodes.push_back(position);
+    } else {
+        this->key_nodes.pop_back();
+        this->key_nodes.pop_back();
     }
+    this->key_nodes.push_back(position);
+
     if (this->points.size() > 0) {
-        _interpolate(curve);
-        if (live && !curve->is_empty()) {
-            _powerStrokePreview(curve->get_pathvector()[0] * transformCoordinate.inverse(), this->points);
-        } else {
-            c = curve->copy();
+        _interpolate(this->_curve);
+        if (!this->_curve->is_empty()) {
+            _powerStrokePreview(this->_curve->get_pathvector()[0], this->points);
         }
     }
-    curve->unref();
 }
 
 void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
@@ -881,7 +864,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
                 sp_canvas_item_destroy(i);
             }
             this->green_bpaths.clear();
-            this->addPowerStrokePencil(NULL);
+            this->addPowerStrokePencil();
         }
     }
 }
@@ -982,7 +965,11 @@ void PencilTool::_interpolate() {
     this->green_curve->reset();
     this->red_curve->reset();
     this->red_curve_is_valid = false;
-    _interpolate(this->green_curve);
+    if (input_has_pressure && _curve) {
+        this->green_curve = _curve->copy();
+    } else {
+        _interpolate(this->green_curve);
+    }
 }
 
 
