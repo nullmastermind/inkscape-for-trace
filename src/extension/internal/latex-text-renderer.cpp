@@ -41,6 +41,7 @@
 
 #include "util/units.h"
 
+#include "extension/output.h"
 #include "extension/system.h"
 
 #include "inkscape-version.h"
@@ -68,7 +69,9 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
     if (exportId && strcmp(exportId, "")) {
         // we want to export the given item only
         base = dynamic_cast<SPItem *>(doc->getObjectById(exportId));
-        g_assert(base != NULL);
+        if (!base) {
+            throw Inkscape::Extension::Output::export_id_not_found(exportId);
+        }
         pageBoundingBox = exportCanvas;
     }
     else {
