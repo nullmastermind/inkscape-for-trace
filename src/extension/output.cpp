@@ -213,12 +213,7 @@ Output::prefs (void)
 void
 Output::save(SPDocument *doc, gchar const *filename)
 {
-        try {
-            imp->save(this, doc, filename);
-        }
-        catch (...) {
-            throw Inkscape::Extension::Output::save_failed();
-        }
+    imp->save(this, doc, filename);
 
 	return;
 }
