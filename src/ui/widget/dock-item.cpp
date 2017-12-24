@@ -29,8 +29,7 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     _x(0),
     _y(0),
     _grab_focus_on_realize(false),
-    _gdl_dock_item(0),
-    _dock_item_action_area(0)
+    _gdl_dock_item(0)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GdlDockItemBehavior gdl_dock_behavior =

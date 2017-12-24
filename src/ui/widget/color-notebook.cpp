@@ -55,6 +55,8 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
     : Gtk::Grid()
     , _selected_color(color)
 {
+    set_name("ColorNotebook");
+
     Page *page;
 
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);

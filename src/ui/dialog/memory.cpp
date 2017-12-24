@@ -210,7 +210,7 @@ Memory::Memory()
     : UI::Widget::Panel ("", "/dialogs/memory", SP_VERB_HELP_MEMORY, _("Recalculate")),
       _private(*(new Memory::Private())) 
 {
-    _getContents()->add(_private.view);
+    _getContents()->pack_start(_private.view);
 
     _private.update();
 

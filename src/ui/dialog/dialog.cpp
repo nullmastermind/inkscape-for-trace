@@ -168,9 +168,14 @@ void Dialog::read_geometry()
 
 #if WITH_GTKMM_3_22
     auto const display = Gdk::Display::get_default();
-    auto const monitor = display->get_primary_monitor();
+    auto monitor = display->get_primary_monitor();
 
-    // If user hasn't configured a primary monitor, nullptr is returned.
+    // If user hasn't configured a primary monitor, nullptr is returned so try first monitor.
+    if (!monitor) {
+        std::cerr << "Dialog::read_geometry: no primary monitor configured!" << std::endl;
+        monitor = display->get_monitor(0);
+    }
+
     Gdk::Rectangle screen_geometry;
     if (monitor) {
         monitor->get_geometry(screen_geometry);
@@ -179,7 +184,7 @@ void Dialog::read_geometry()
     auto const screen_height = screen_geometry.get_height();
 #else
     auto const screen_width  = gdk_screen_width();
-    auto const screen_height = gdk_screen_width();
+    auto const screen_height = gdk_screen_height();
 #endif
 
     // If there are stored values for where the dialog should be

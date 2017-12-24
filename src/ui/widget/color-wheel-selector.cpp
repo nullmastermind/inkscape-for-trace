@@ -31,6 +31,8 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
     , _wheel(0)
     , _slider(0)
 {
+    set_name("ColorWheelSelector");
+
     _initUI();
     _color_changed_connection = color.signal_changed.connect(sigc::mem_fun(this, &ColorWheelSelector::_colorChanged));
     _color_dragged_connection = color.signal_dragged.connect(sigc::mem_fun(this, &ColorWheelSelector::_colorChanged));

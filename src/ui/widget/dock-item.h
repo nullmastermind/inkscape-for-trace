@@ -108,11 +108,10 @@ private:
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
 
     /** Interface widgets, will be packed like 
-     * gdl_dock_item -> _frame -> _dock_item_box -> (_dock_item_action_area) 
+     * gdl_dock_item -> _frame -> _dock_item_box
      */
     Gtk::Frame _frame;
     Gtk::VBox _dock_item_box;
-    Gtk::HButtonBox *_dock_item_action_area;
 
     /** Internal signal handlers */
     void _onHide();

@@ -56,7 +56,8 @@ Dock::Dock(Gtk::Orientation orientation)
 #endif
       _scrolled_window (Gtk::manage(new Gtk::ScrolledWindow))
 {
-    _scrolled_window->set_name("Dock");
+    gtk_widget_set_name(_gdl_dock, "GdlDock");
+
 #if WITH_GDL_3_6
     gtk_orientable_set_orientation(GTK_ORIENTABLE(_gdl_dock_bar),
                                    static_cast<GtkOrientation>(orientation));
@@ -65,25 +66,22 @@ Dock::Dock(Gtk::Orientation orientation)
                                  static_cast<GtkOrientation>(orientation));
 #endif
 
-    switch(orientation) {
-        case Gtk::ORIENTATION_VERTICAL:
-            _dock_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-            break;
-        case Gtk::ORIENTATION_HORIZONTAL:
-            _dock_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    }
-    
+    _filler.set_name("DockBoxFiller");
+
     _paned = Gtk::manage(new Gtk::Paned(orientation));
+    _paned->set_name("DockBoxPane");
+    _paned->pack1(*Glib::wrap(GTK_WIDGET(_gdl_dock)), false,  false);
+    _paned->pack2(_filler,                            true,   false);
+    //                                                resize, shrink
 
-    _scrolled_window->add(*_dock_box);
-    _scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
-
-    _paned->pack1(*Glib::wrap(GTK_WIDGET(_gdl_dock)), false, false);
-    _paned->pack2(_filler, true, false);
-
+    _dock_box = Gtk::manage(new Gtk::Box(orientation));
+    _dock_box->set_name("DockBox");
     _dock_box->pack_start(*_paned, Gtk::PACK_EXPAND_WIDGET);
     _dock_box->pack_end(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock_bar))), Gtk::PACK_SHRINK);
 
+    _scrolled_window->set_name("DockScrolledWindow");
+    _scrolled_window->add(*_dock_box);
+    _scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     _scrolled_window->set_size_request(0);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -215,7 +213,6 @@ void Dock::toggleDockable(int width, int height)
         parent_paned->set_position(prev_horizontal_position);
         _paned->set_position(prev_vertical_position);
     }
-
 }
 
 void Dock::scrollToItem(DockItem& item)
