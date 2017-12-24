@@ -31,22 +31,22 @@
 #include <gtkmm/image.h>
 
 InkSelectOneAction* InkSelectOneAction::create(const Glib::ustring &name,
-                                               const Glib::ustring &label,
+                                               const Glib::ustring &group_label,
                                                const Glib::ustring &tooltip,
                                                const Glib::ustring &stock_id,
                                                Glib::RefPtr<Gtk::ListStore> store ) {
 
-    return new InkSelectOneAction(name, label, tooltip, stock_id, store);
+    return new InkSelectOneAction(name, group_label, tooltip, stock_id, store);
 }
 
 InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
-                                        const Glib::ustring &label,
+                                        const Glib::ustring &group_label,
                                         const Glib::ustring &tooltip,
                                         const Glib::ustring &stock_id,
                                         Glib::RefPtr<Gtk::ListStore> store ) :
-    Gtk::Action(name, stock_id, label, tooltip),
+    Gtk::Action(name, stock_id, group_label, tooltip),
     _name( name ),
-    _label( label ),
+    _group_label( group_label ),
     _tooltip( tooltip ),
     _stock_id( stock_id ),
     _store (store),
@@ -136,6 +136,11 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         Gtk::Box* box = Gtk::manage(new Gtk::Box());
         tool_item->add (*box);  
 
+        if (_use_group_label) {
+            Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
+            box->add( *group_label );
+        }
+
         Gtk::RadioAction::Group group;
         int index = 0;
         auto children = _store->children();
@@ -165,6 +170,10 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
 
             Gtk::ToolItem* item = action->create_tool_item(); 
             box->add (*item);
+        }
+
+        if (_radioaction) {
+            _radioaction->set_current_value (_active);
         }
 
         _radioaction->signal_changed().connect( sigc::mem_fun(*this, &InkSelectOneAction::on_changed_radioaction));
