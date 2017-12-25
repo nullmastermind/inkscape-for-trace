@@ -160,7 +160,7 @@ void SPAttributeTable::set_object(SPObject *object,
             ll->set_halign(Gtk::ALIGN_END);
             ll->set_valign(Gtk::ALIGN_CENTER);
             ll->set_vexpand();
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
             ll->set_margin_start(XPAD);
             ll->set_margin_end(XPAD);
 #else
@@ -177,7 +177,7 @@ void SPAttributeTable::set_object(SPObject *object,
             ee->set_text (val ? val : (const gchar *) "");
             ee->set_hexpand();
             ee->set_vexpand();
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
             ee->set_margin_start(XPAD);
             ee->set_margin_end(XPAD);
 #else

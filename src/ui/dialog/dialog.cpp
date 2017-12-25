@@ -20,7 +20,7 @@
 #include "dialog-manager.h"
 #include <gtkmm/dialog.h>
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
 # include <gdkmm/monitor.h>
 #endif
 
@@ -166,7 +166,7 @@ void Dialog::read_geometry()
         resize(w, h);
     }
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
     auto const display = Gdk::Display::get_default();
     auto monitor = display->get_primary_monitor();
 

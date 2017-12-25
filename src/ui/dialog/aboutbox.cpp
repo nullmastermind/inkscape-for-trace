@@ -108,14 +108,14 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
               Inkscape::version_string);
     label->set_markup(label_text);
 
-#if WITH_GTKMM_3_10
+#if GTKMM_CHECK_VERSION(3,10,0)
     label->set_halign(Gtk::ALIGN_END);
     label->set_valign(Gtk::ALIGN_CENTER);
 #else
     label->set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
 #endif
 
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
     label->set_margin_start(5);
     label->set_margin_end(5);
 #else
@@ -132,13 +132,13 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
 
     link->set_markup(website_link);
 
-#if WITH_GTKMM_3_10
+#if GTKMM_CHECK_VERSION(3,10,0)
     link->set_halign(Gtk::ALIGN_END);
 #else
     link->set_alignment(Gtk::ALIGN_END);
 #endif
 
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
     label->set_margin_start(5);
     label->set_margin_end(5);
     label->set_margin_top(5);

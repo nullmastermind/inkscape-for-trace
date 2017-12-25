@@ -247,54 +247,6 @@ set(TRY_GTKSPELL ON)
         )
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 
-    # Check whether we can use new features in Gtkmm 3.10
-    # TODO: Drop this test and bump the version number in the GTK test above
-    #       as soon as all supported distributions provide Gtkmm >= 3.10
-    pkg_check_modules(GTKMM_3_10
-	gtkmm-3.0>=3.10,
-	)
-
-    if("${GTKMM_3_10_FOUND}")
-        message("Using Gtkmm 3.10 build")
-        set (WITH_GTKMM_3_10 ON)
-    endif()
-
-    # Check whether we can use new features in Gtkmm 3.12
-    # TODO: Drop this test and bump the version number in the GTK test above
-    #       as soon as all supported distributions provide Gtkmm >= 3.12
-    pkg_check_modules(GTKMM_3_12
-	gtkmm-3.0>=3.12,
-	)
-
-    if("${GTKMM_3_12_FOUND}")
-        message("Using Gtkmm 3.12 build")
-        set (WITH_GTKMM_3_12 ON)
-    endif()
-
-    # Check whether we can use new features in Gtkmm 3.16
-    # TODO: Drop this test and bump the version number in the GTK test above
-    #       as soon as all supported distributions provide Gtkmm >= 3.16
-    pkg_check_modules(GTKMM_3_16
-	gtkmm-3.0>=3.16,
-	)
-
-    if("${GTKMM_3_16_FOUND}")
-        message("Using Gtkmm 3.16 build")
-        set (WITH_GTKMM_3_16 ON)
-    endif()
-
-    # Check whether we can use new features in Gtkmm 3.22
-    # TODO: Drop this test and bump the version number in the GTK test above
-    #       as soon as all supported distributions provide Gtkmm >= 3.22
-    pkg_check_modules(GTKMM_3_22
-	gtkmm-3.0>=3.22,
-	)
-
-    if("${GTKMM_3_22_FOUND}")
-        message("Using Gtkmm 3.22 build")
-        set (WITH_GTKMM_3_22 ON)
-    endif()
-
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")

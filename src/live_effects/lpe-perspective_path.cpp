@@ -227,7 +227,7 @@ LPEPerspectivePath::newWidget()
     }
     Gtk::HBox * perspectiveId = Gtk::manage(new Gtk::HBox(true,0));
 
-#if WITH_GTKMM_3_10
+#if GTKMM_CHECK_VERSION(3,10,0)
     Gtk::Label* labelPerspective = Gtk::manage(new Gtk::Label("Perspective ID:", Gtk::ALIGN_START, Gtk::ALIGN_START));
 #else
     Gtk::Label* labelPerspective = Gtk::manage(new Gtk::Label("Perspective ID:", 0., 0.));
@@ -241,7 +241,7 @@ LPEPerspectivePath::newWidget()
     vbox->pack_start(*perspectiveId, true, true, 2);
     Gtk::Button* apply3D = Gtk::manage(new Gtk::Button());
 
-#if WITH_GTKMM_3_10
+#if GTKMM_CHECK_VERSION(3,10,0)
     Gtk::Label *apply3DLabel = Gtk::manage(new Gtk::Label(_("Refresh perspective"), Gtk::ALIGN_START, Gtk::ALIGN_CENTER));
 #else
     Gtk::Label *apply3DLabel = Gtk::manage(new Gtk::Label(_("Refresh perspective"), 0.0, 0.5));

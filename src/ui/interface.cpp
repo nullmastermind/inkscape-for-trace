@@ -30,7 +30,7 @@
 #include "file.h"
 #include <glibmm/miscutils.h>
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
 # include <gdkmm/monitor.h>
 #endif
 
@@ -175,7 +175,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
             gint full = prefs->getBool("/desktop/geometry/fullscreen");
             gint maxed = prefs->getBool("/desktop/geometry/maximized");
             if (pw>0 && ph>0) {
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
                 auto const display = Gdk::Display::get_default();
                 auto const monitor = display->get_primary_monitor();
 

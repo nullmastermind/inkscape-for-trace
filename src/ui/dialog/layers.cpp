@@ -151,7 +151,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     }
 
     Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
-#if WITH_GTKMM_3_16
+#if GTKMM_CHECK_VERSION(3,16,0)
     menu_label->set_xalign(0.0);
 #else
     menu_label->set_alignment(0.0, 0.5);

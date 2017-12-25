@@ -96,7 +96,7 @@ void DialogPage::add_line(bool                 indent,
         label_widget->set_mnemonic_widget(widget);
         
         if (indent) {
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
             label_widget->set_margin_start(12);
 #else
             label_widget->set_margin_left(12);
@@ -112,7 +112,7 @@ void DialogPage::add_line(bool                 indent,
     if (label == "")
     {
         if (indent) {
-#if WITH_GTKMM_3_12
+#if GTKMM_CHECK_VERSION(3,12,0)
             hb->set_margin_start(12);
 #else
             hb->set_margin_left(12);
