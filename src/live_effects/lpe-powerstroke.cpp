@@ -325,7 +325,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
 /* per definition, each discontinuity should be fixed with a join-ending, as defined by linejoin_type
 */
     Geom::PathBuilder pb;
-    if (B.size() == 0) {
+    if (B.empty()) {
         return pb.peek().front();
     }
 
@@ -558,7 +558,6 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
     return pb.peek().front();
 }
 
-
 Geom::PathVector
 LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 {
@@ -570,9 +569,15 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = pathv[0].toPwSb();
+    if (pwd2_in.empty()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
-    Piecewise<D2<SBasis> > n = unitVector(der,0.0001);
-    if (!n.size() || !pwd2_in.size() || !n.size()) {
+    if (der.empty()) {
+        return path_in;
+    }
+    Piecewise<D2<SBasis> > n = unitVector(der,0.00001);
+    if (n.empty()) {
         return path_in;
     }
 
@@ -598,8 +603,16 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         // add extra points for interpolation between first and last point
         Point first_point = ts.front();
         Point last_point = ts.back();
+        //TODO: this is wrong we need to give a calulated Y value
         ts.insert(ts.begin(), last_point - Point(pwd2_in.domain().extent() ,0));
-        ts.push_back( first_point + Point(pwd2_in.domain().extent() ,0) );
+//        double startpercentwidth = ts.front()[Geom::X]/pwd2_in.domain().max();
+//        double endpercentwidth = (pwd2_in.domain().max() - ts.back()[Geom::X])/pwd2_in.domain().max();
+//        double totalwidth = endpercentwidth + startpercentwidth ;
+//        double factor = endpercentwidth/totalwidth;
+//        std::cout << factor << "factor" << std::endl;
+//        double gap = ts.front()[Geom::Y] - ts.back()[Geom::Y];
+//        ts.insert(ts.begin(), Point( pwd2_in.domain().min(), ts.back()[Geom::Y] - (gap / factor) ) );
+//        ts.push_back( Point( pwd2_in.domain().max(), ts.back()[Geom::Y] - (gap / factor) ) );
     } else {
         // add width data for first and last point on the path
         // depending on cap type, these first and last points have width zero or take the width from the closest width point.
@@ -643,7 +656,9 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
-
+    if (x.empty() || y.empty()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
     Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
 

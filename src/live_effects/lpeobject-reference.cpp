@@ -76,8 +76,10 @@ LPEObjectReference::link(const char *to)
 void
 LPEObjectReference::unlink(void)
 {
-    g_free(lpeobject_href);
-    lpeobject_href = NULL;
+    if (lpeobject_href) {
+        g_free(lpeobject_href);
+        lpeobject_href = NULL;
+    }
     detach();
 }
 
