@@ -6,8 +6,9 @@
  *
  * Author:
  *   Nicholas Bishop <nicholasbishop@gmail.com>
+ *   Tavmjong Bah
  *
- * Copyright (C) 2007 Authors
+ * Copyright (C) 2007, 2017 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -23,40 +24,47 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-/* Allows basic control over feBlend and feGaussianBlur effects,
-   with an option to use the full filter effect controls. */
+/* Allows basic control over feBlend and feGaussianBlur effects as well as opacity.
+ *  Common for Object, Layers, and Fill and Stroke dialogs.
+*/
 class SimpleFilterModifier : public Gtk::VBox
 {
 public:
     enum Flags {
-      NONE=0,
-      BLUR=1,
-      BLEND=2
+      NONE   = 0,
+      BLUR   = 1,
+      OPACITY= 2,
+      BLEND  = 4
     };
 
     SimpleFilterModifier(int flags);
 
-    sigc::signal<void>& signal_blend_blur_changed();
+    sigc::signal<void>& signal_blend_changed();
+    sigc::signal<void>& signal_blur_changed();
+    sigc::signal<void>& signal_opacity_changed();
 
     const Glib::ustring get_blend_mode();
     // Uses blend mode enum values, or -1 for a complex filter
     void set_blend_mode(const int);
 
     double get_blur_value() const;
-    void set_blur_value(const double);
-    void set_blur_sensitive(const bool);
-    Gtk::Label *get_blur_label() { return &_lb_blur; };
+    void   set_blur_value(const double);
+
+    double get_opacity_value() const;
+    void   set_opacity_value(const double);
 
 private:
     int _flags;
-    Gtk::HBox _hb_blend;
-    Gtk::HBox _hb_blur;
-    Gtk::Label _lb_blend, _lb_blur, _lb_blur_unit;
 
+    Gtk::HBox _hb_blend;
+    Gtk::Label _lb_blend;
     ComboBoxEnum<Inkscape::Filters::FilterBlendMode> _blend;
     SpinScale _blur;
+    SpinScale _opacity;
 
-    sigc::signal<void> _signal_blend_blur_changed;
+    sigc::signal<void> _signal_blend_changed;
+    sigc::signal<void> _signal_blur_changed;
+    sigc::signal<void> _signal_opacity_changed;
 };
 
 }

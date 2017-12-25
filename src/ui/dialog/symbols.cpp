@@ -192,7 +192,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->add(*Gtk::manage(icon_view));
   scroller->set_hexpand();
   scroller->set_vexpand();
-#if GTK_CHECK_VERSION(3,2,4)
+#if GTKMM_CHECK_VERSION(3,14,0)
   overlay = new Gtk::Overlay();
   overlay->set_hexpand();
   overlay->set_vexpand();
@@ -447,7 +447,7 @@ void SymbolsDialog::rebuild() {
   }
 }
 void SymbolsDialog::showOverlay() {
-#if GTK_CHECK_VERSION(3,2,4)
+#if GTKMM_CHECK_VERSION(3,14,0)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
   overlay_icon->set_from_icon_name("none", iconsize);
   if (current == ALLDOCS && !l.size()) 
@@ -495,7 +495,7 @@ void SymbolsDialog::showOverlay() {
 }
 
 void SymbolsDialog::hideOverlay() {
-#if GTK_CHECK_VERSION(3,2,4)
+#if GTKMM_CHECK_VERSION(3,14,0)
     overlay_opacity->hide();
     overlay_icon->hide();
     overlay_title->hide();

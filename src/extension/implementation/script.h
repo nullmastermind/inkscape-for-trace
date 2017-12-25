@@ -15,6 +15,7 @@
 
 #include "implementation.h"
 #include <gtkmm/enums.h>
+#include <gtkmm/window.h>
 #include <glibmm/main.h>
 #include <glibmm/spawn.h>
 #include <glibmm/fileutils.h>
@@ -65,6 +66,14 @@ private:
       * data
       */
     Glib::ustring helper_extension;
+
+     /**
+      * The window which should be considered as "parent window" of the script execution,
+      * e.g. when showin warning messages
+      *
+      * If set to NULL the main window of the currently active document is used.
+      */
+    Gtk::Window *parent_window;
 
     std::string solve_reldir(Inkscape::XML::Node *repr_in);
     bool check_existence (std::string const& command);

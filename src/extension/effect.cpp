@@ -274,6 +274,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
 
 
     ExecutionEnv executionEnv(this, doc);
+    execution_env = &executionEnv;
     timer->lock();
     executionEnv.run();
     if (executionEnv.wait()) {
@@ -350,6 +351,12 @@ Gtk::VBox *
 Effect::get_info_widget(void)
 {
     return Extension::get_info_widget();
+}
+
+PrefDialog *
+Effect::get_pref_dialog (void)
+{
+    return _prefDialog;
 }
 
 void

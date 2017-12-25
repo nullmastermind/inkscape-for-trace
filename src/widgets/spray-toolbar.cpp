@@ -35,13 +35,13 @@
 #include "desktop.h"
 #include "inkscape.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
 #include "toolbox.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/panel-dialog.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/icon-names.h"
 
 #include <glibmm/i18n.h>
@@ -101,6 +101,7 @@ static void sp_stb_update_widgets( GObject *tbl )
 static void sp_spray_init( GObject *tbl){
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int mode = prefs->getInt("/tools/spray/mode", 0);
+
     bool show = true;
     if(mode == 3 || mode == 2){
         show = false;
@@ -161,9 +162,8 @@ static void sp_spray_standard_deviation_value_changed( GtkAdjustment *adj, GObje
             gtk_adjustment_get_value(adj));
 }
 
-static void sp_spray_mode_changed( EgeSelectOneAction *act, GObject * tbl )
+static void sp_spray_mode_changed( GObject * tbl, int mode )
 {
-    int mode = ege_select_one_action_get_active( act );
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/spray/mode", mode);
     sp_spray_init(tbl);
@@ -352,56 +352,53 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     /* Mode */
     {
-        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Spray with copies"),
-                            1, _("Spray copies of the initial selection"),
-                            2, INKSCAPE_ICON("spray-mode-copy"),
-                            -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Spray with clones"),
-                            1, _("Spray clones of the initial selection"),
-                            2, INKSCAPE_ICON("spray-mode-clone"),
-                            -1 );
-        
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Spray with copies");
+        row[columns.col_tooltip  ] = _("Spray copies of the initial selection");
+        row[columns.col_icon     ] = INKSCAPE_ICON("spray-mode-copy");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] =   _("Spray with clones");
+        row[columns.col_tooltip  ] =   _("Spray clones of the initial selection");
+        row[columns.col_icon     ] =   INKSCAPE_ICON("spray-mode-clone");
+        row[columns.col_sensitive] =  true;
+
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Spray single path"),
-                            1, _("Spray objects in a single path"),
-                            2, INKSCAPE_ICON("spray-mode-union"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Spray single path");
+        row[columns.col_tooltip  ] = _("Spray objects in a single path");
+        row[columns.col_icon     ] = INKSCAPE_ICON("spray-mode-union");
+        row[columns.col_sensitive] = true;
 #endif
-        
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Delete sprayed items"),
-                            1, _("Delete sprayed items from selection"),
-                            2, INKSCAPE_ICON("draw-eraser"),
-                            -1 );
-        
-        EgeSelectOneAction* act = ege_select_one_action_new( "SprayModeAction", _("Mode"), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("Mode:"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "mode_action", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Delete sprayed items");
+        row[columns.col_tooltip  ] = _("Delete sprayed items from selection");
+        row[columns.col_icon     ] = INKSCAPE_ICON("draw-eraser");
+        row[columns.col_sensitive] = true;
 
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "SprayModeAction",   // Name
+                                        _("Mode"),           // Label
+                                        _(""),               // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( true );
+        act->use_group_label( true );
         gint mode = prefs->getInt("/tools/spray/mode", 1);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_spray_mode_changed), holder );
+        act->set_active( mode );
 
-        g_object_set_data( G_OBJECT(holder), "spray_tool_mode", act);
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_spray_mode_changed), holder));
     }
 
     {   /* Population */

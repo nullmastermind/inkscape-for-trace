@@ -76,6 +76,9 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
     if (exportId && strcmp(exportId, "")) {
         // we want to export the given item only
         base = SP_ITEM(doc->getObjectById(exportId));
+        if (!base) {
+            throw Inkscape::Extension::Output::export_id_not_found(exportId);
+        }
         pageBoundingBox = exportCanvas;
     }
     else {

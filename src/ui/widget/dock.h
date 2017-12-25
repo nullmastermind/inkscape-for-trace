@@ -70,7 +70,7 @@ protected:
     Gtk::Paned          *_paned;
     GtkWidget           *_gdl_dock;
     GdlDockBar          *_gdl_dock_bar;
-    Gtk::VBox            _filler;
+    Gtk::Box             _filler;
     Gtk::ScrolledWindow *_scrolled_window;
 
     /** Internal signal handlers */

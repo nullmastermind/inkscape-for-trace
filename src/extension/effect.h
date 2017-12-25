@@ -125,6 +125,7 @@ public:
     bool no_doc; // if true, the effect does not process SVG document at all, so no need to save, read, and watch for errors
     bool no_live_preview; // if true, the effect does not need "live preview" checkbox in its dialog
 
+    PrefDialog *get_pref_dialog (void);
     void        set_pref_dialog (PrefDialog * prefdialog);
 private:
     static gchar *   remove_ (gchar * instr);

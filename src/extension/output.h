@@ -31,6 +31,11 @@ public:
     class save_cancelled {};     /**< Saving was cancelled */
     class no_extension_found {}; /**< Failed because we couldn't find an extension to match the filename */
     class file_read_only {};     /**< The existing file can not be opened for writing */
+    class export_id_not_found {  /**< The object ID requested for export could not be found in the document */
+        public:
+            const gchar * const id;
+            export_id_not_found(const gchar * const id = NULL) : id{id} {};
+    };
 
                  Output (Inkscape::XML::Node * in_repr,
                          Implementation::Implementation * in_imp);

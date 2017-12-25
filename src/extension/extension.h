@@ -71,6 +71,7 @@ class SPDocument;
 namespace Inkscape {
 namespace Extension {
 
+class ExecutionEnv;
 class Dependency;
 class ExpirationTimer;
 class ExpirationTimer;
@@ -109,6 +110,7 @@ private:
 protected:
     Inkscape::XML::Node *repr;            /**< The XML description of the Extension */
     Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
+    ExecutionEnv * execution_env;         /**< Execution environment of the extension (currently only used by Effects) */
     ExpirationTimer * timer;              /**< Timeout to unload after a given time */
 
 public:
@@ -130,6 +132,8 @@ public:
     bool          deactivated  (void);
     void          printFailure (Glib::ustring reason);
     Implementation::Implementation * get_imp (void) { return imp; };
+    void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
+    ExecutionEnv *get_execution_env (void) { return execution_env; };
 
 /* Parameter Stuff */
 private:

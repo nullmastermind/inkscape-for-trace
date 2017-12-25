@@ -2,6 +2,7 @@
  * Author:
  *
  * Copyright (C) 2012 Author
+ *               2017 Tavmjong Bah
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -11,50 +12,49 @@
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 
-#include "widgets/gimp/gimpspinscale.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-SpinScale::SpinScale(const char* label, double value, double lower, double upper, double step_inc,
-                     double /*climb_rate*/, int digits, const SPAttributeEnum a, const char* tip_text)
+SpinScale::SpinScale(const Glib::ustring label, double value,
+                     double lower, double upper,
+                     double step_increment, double page_increment, int digits,
+                     const SPAttributeEnum a, const Glib::ustring tip_text)
     : AttrWidget(a, value)
+    , _inkspinscale(value, lower, upper, step_increment, page_increment, 0)
 {
     set_name("SpinScale");
-    _adjustment = Gtk::Adjustment::create(value, lower, upper, step_inc);
-    _spinscale = gimp_spin_scale_new (_adjustment->gobj(), label, digits);
+
+    _inkspinscale.set_label (label);
+    _inkspinscale.set_digits (digits);
+    _inkspinscale.set_tooltip_text (tip_text);
+
+    _adjustment = _inkspinscale.get_adjustment();
 
     signal_value_changed().connect(signal_attr_changed().make_slot());
 
-    pack_start(*Gtk::manage(Glib::wrap(_spinscale)));
-
-    if (tip_text){
-        gtk_widget_set_tooltip_text( _spinscale, tip_text );
-    }
+    pack_start(_inkspinscale);
 
     show_all_children();
 }
 
-SpinScale::SpinScale(const char* label,
-                     Glib::RefPtr<Gtk::Adjustment> adj,
-                     int digits,
-                     const SPAttributeEnum a,
-                     const char* tip_text)
-    : AttrWidget(a, 0.0),
-      _adjustment(adj)
-
+SpinScale::SpinScale(const Glib::ustring label,
+                     Glib::RefPtr<Gtk::Adjustment> adjustment, int digits,
+                     const SPAttributeEnum a, const Glib::ustring tip_text)
+    : AttrWidget(a, 0.0)
+    , _inkspinscale(adjustment)
 {
+    set_name("SpinScale");
 
-    _spinscale = gimp_spin_scale_new (_adjustment->gobj(), label, digits);
+    _inkspinscale.set_label (label);
+    _inkspinscale.set_digits (digits);
+    _inkspinscale.set_tooltip_text (tip_text);
+
+    _adjustment = _inkspinscale.get_adjustment();
 
     signal_value_changed().connect(signal_attr_changed().make_slot());
 
-    pack_start(*Gtk::manage(Glib::wrap(_spinscale)));
-
-    if (tip_text){
-        gtk_widget_set_tooltip_text( _spinscale, tip_text );
-    }
+    pack_start(_inkspinscale);
 
     show_all_children();
 }
@@ -63,16 +63,16 @@ Glib::ustring SpinScale::get_as_attribute() const
 {
     const double val = _adjustment->get_value();
 
-    //if(_spin.get_digits() == 0)
-    //    return Glib::Ascii::dtostr((int)val);
-    //else
+    if( _inkspinscale.get_digits() == 0)
+        return Glib::Ascii::dtostr((int)val);
+    else
         return Glib::Ascii::dtostr(val);
 }
 
 void SpinScale::set_from_attribute(SPObject* o)
 {
     const gchar* val = attribute_value(o);
-    if(val)
+    if (val)
         _adjustment->set_value(Glib::Ascii::strtod(val));
     else
         _adjustment->set_value(get_default()->as_double());
@@ -95,13 +95,7 @@ void SpinScale::set_value(const double val)
 
 void SpinScale::set_focuswidget(GtkWidget *widget)
 {
-    gimp_spin_scale_set_focuswidget(_spinscale, widget);
-}
-
-
-void SpinScale::set_appearance(const gchar* appearance)
-{
-    gimp_spin_scale_set_appearance(_spinscale, appearance);
+    _inkspinscale.set_focus_widget(widget);
 }
 
 const decltype(SpinScale::_adjustment) SpinScale::get_adjustment() const
@@ -115,11 +109,14 @@ decltype(SpinScale::_adjustment) SpinScale::get_adjustment()
 }
 
 
-DualSpinScale::DualSpinScale(const char* label1, const char* label2, double value, double lower, double upper, double step_inc,
-                               double climb_rate, int digits, const SPAttributeEnum a, char* tip_text1, char* tip_text2)
+DualSpinScale::DualSpinScale(const Glib::ustring label1, const Glib::ustring label2,
+                             double value, double lower, double upper,
+                             double step_increment, double page_increment, int digits,
+                             const SPAttributeEnum a,
+                             const Glib::ustring tip_text1, const Glib::ustring tip_text2)
     : AttrWidget(a),
-      _s1(label1, value, lower, upper, step_inc, climb_rate, digits, SP_ATTR_INVALID, tip_text1),
-      _s2(label2, value, lower, upper, step_inc, climb_rate, digits, SP_ATTR_INVALID, tip_text2),
+      _s1(label1, value, lower, upper, step_increment, page_increment, digits, SP_ATTR_INVALID, tip_text1),
+      _s2(label2, value, lower, upper, step_increment, page_increment, digits, SP_ATTR_INVALID, tip_text2),
       //TRANSLATORS: "Link" means to _link_ two sliders together
       _link(C_("Sliders", "Link"))
 {
@@ -132,7 +129,7 @@ DualSpinScale::DualSpinScale(const char* label1, const char* label2, double valu
 
     _link.signal_toggled().connect(sigc::mem_fun(*this, &DualSpinScale::link_toggled));
 
-    Gtk::VBox* vb = Gtk::manage(new Gtk::VBox);
+    Gtk::Box* vb = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     vb->add(_s1);
     vb->add(_s2);
     pack_start(*vb);
@@ -198,12 +195,6 @@ SpinScale& DualSpinScale::get_SpinScale2()
 {
     return _s2;
 }
-
-/*void DualSpinScale::remove_scale()
-{
-    _s1.remove_scale();
-    _s2.remove_scale();
-}*/
 
 void DualSpinScale::link_toggled()
 {

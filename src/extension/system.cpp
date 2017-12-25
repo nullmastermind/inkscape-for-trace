@@ -330,7 +330,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 
         g_free(fileName);
 
-        throw Inkscape::Extension::Output::save_failed();
+        throw;
     }
 
     // If it is an unofficial save, set the modified attributes back to what they were.

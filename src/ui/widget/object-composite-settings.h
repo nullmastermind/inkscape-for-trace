@@ -18,7 +18,6 @@
 #include <glibmm/ustring.h>
 
 #include "ui/widget/filter-effect-chooser.h"
-#include "ui/widget/spinbutton.h"
 
 class SPDesktop;
 struct InkscapeApplication;
@@ -42,16 +41,13 @@ public:
 
 private:
     unsigned int    _verb_code;
+    Glib::ustring   _blend_tag;
     Glib::ustring   _blur_tag;
     Glib::ustring   _opacity_tag;
 
-    Gtk::VBox       _opacity_vbox;
-    Inkscape::UI::Widget::SpinScale _opacity_scale;
-
     StyleSubject *_subject;
 
-    SimpleFilterModifier _fe_cb;
-    Gtk::VBox       _fe_vbox;
+    SimpleFilterModifier _filter_modifier;
 
     bool _blocked;
     gulong _desktop_activated;

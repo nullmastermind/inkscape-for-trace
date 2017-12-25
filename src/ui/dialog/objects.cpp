@@ -4,8 +4,10 @@
  * Authors:
  *   Theodore Janeczko
  *   Tweaked by Liam P White for use in Inkscape
+ *   Tavmjong Bah
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
+ *               Tavmjong Bah 2017
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -280,7 +282,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
     }
 
     Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
-#if WITH_GTKMM_3_16
+#if GTKMM_CHECK_VERSION(3,16,0)
     menu_label->set_xalign(0.0);
 #else
     menu_label->set_alignment(0.0, 0.5);
@@ -509,27 +511,30 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
  */
 void ObjectsPanel::_setCompositingValues(SPItem *item)
 {
-    //Block the connections to avoid interference
+    // Block the connections to avoid interference
     _opacityConnection.block();
     _blendConnection.block();
     _blurConnection.block();
 
-    //Set the opacity
-    _opacity_adjustment->set_value((item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1) * _opacity_adjustment->get_upper());
+    // Set the opacity
+    double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
+    opacity *= 100; // Display in percent.
+    _filter_modifier.set_opacity_value(opacity);
+
     SPFeBlend *spblend = NULL;
     SPGaussianBlur *spblur = NULL;
-    if (item->style->getFilter())
-    {
+    if (item->style->getFilter()) {
+
         for (auto& primitive_obj: item->style->getFilter()->children) {
             if (!SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
                 break;
             }
-            if(SP_IS_FEBLEND(&primitive_obj) && !spblend) {
+            if (SP_IS_FEBLEND(&primitive_obj) && !spblend) {
                 //Get the blend mode
                 spblend = SP_FEBLEND(&primitive_obj);
             }
 
-            if(SP_IS_GAUSSIANBLUR(&primitive_obj) && !spblur) {
+            if (SP_IS_GAUSSIANBLUR(&primitive_obj) && !spblur) {
                 //Get the blur value
                 spblur = SP_GAUSSIANBLUR(&primitive_obj);
             }
@@ -537,15 +542,15 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     }
 
     //Set the blend mode
-    _fe_cb.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
-    
+    _filter_modifier.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
+
     //Set the blur value
     Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
     if (bbox && spblur) {
         double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-        _fe_blur.set_blur_value(spblur->stdDeviation.getNumber() * 400 / perimeter);
+        _filter_modifier.set_blur_value(spblur->stdDeviation.getNumber() * 400 / perimeter);
     } else {
-        _fe_blur.set_blur_value(0);
+        _filter_modifier.set_blur_value(0);
     }
     
     //Unblock connections
@@ -1494,7 +1499,7 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
     if (item)
     {
         item->style->opacity.set = TRUE;
-        item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_opacity_adjustment->get_value() / _opacity_adjustment->get_upper());
+        item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_filter_modifier.get_opacity_value() / 100);
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
@@ -1505,7 +1510,7 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
 void ObjectsPanel::_blendValueChanged()
 {
     _blockCompositeUpdate = true;
-    const Glib::ustring blendmode = _fe_cb.get_blend_mode();
+    const Glib::ustring blendmode = _filter_modifier.get_blend_mode();
 
     _tree.get_selection()->selected_foreach_iter(sigc::bind<Glib::ustring>(sigc::mem_fun(*this, &ObjectsPanel::_blendChangedIter), blendmode));
     DocumentUndo::done(_document, SP_VERB_DIALOG_OBJECTS, _("Set object blend mode"));
@@ -1534,11 +1539,12 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
                     if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
                         break;
                     }
+                    // We should read in the current radius and use that!
                     if (SP_IS_GAUSSIANBLUR(&primitive)) {
                         Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
                         if (bbox) {
                             double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-                            radius =  _fe_blur.get_blur_value() * perimeter / 400;
+                            radius =  _filter_modifier.get_blur_value() * perimeter / 400;
                         }
                     }
                 }
@@ -1576,7 +1582,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
 void ObjectsPanel::_blurValueChanged()
 {
     _blockCompositeUpdate = true;
-    _tree.get_selection()->selected_foreach_iter(sigc::bind<double>(sigc::mem_fun(*this, &ObjectsPanel::_blurChangedIter), _fe_blur.get_blur_value()));
+    _tree.get_selection()->selected_foreach_iter(sigc::bind<double>(sigc::mem_fun(*this, &ObjectsPanel::_blurChangedIter), _filter_modifier.get_blur_value()));
     DocumentUndo::maybeDone(_document, "blur", SP_VERB_DIALOG_OBJECTS, _("Set object blur"));    
     _blockCompositeUpdate = false;
 }
@@ -1649,17 +1655,9 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _composite_vbox(Gtk::ORIENTATION_VERTICAL),
-    _opacity_vbox(Gtk::ORIENTATION_VERTICAL),
-    _opacity_label(_("Opacity:")),
-    _opacity_label_unit(_("%")),
-    _opacity_adjustment(Gtk::Adjustment::create(100.0, 0.0, 100.0, 1.0, 1.0, 0.0)),
-    _opacity_hscale(_opacity_adjustment),
-    _opacity_spin_button(_opacity_adjustment, 0.01, 1),
-    _fe_cb(UI::Widget::SimpleFilterModifier::BLEND),
-    _fe_vbox(Gtk::ORIENTATION_VERTICAL),
-    _fe_blur(UI::Widget::SimpleFilterModifier::BLUR),
-    _blur_vbox(Gtk::ORIENTATION_VERTICAL),
+    _filter_modifier( UI::Widget::SimpleFilterModifier::BLEND   |
+                      UI::Widget::SimpleFilterModifier::BLUR    |
+                      UI::Widget::SimpleFilterModifier::OPACITY ),
     _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     //Create the tree model and store
@@ -1794,58 +1792,12 @@ ObjectsPanel::ObjectsPanel() :
     _page.pack_start( _scroller, Gtk::PACK_EXPAND_WIDGET );
 
     //Set up the compositing items
-    //Blend mode filter effect
-    _composite_vbox.pack_start(_fe_vbox, false, false, 2);
-
-    _fe_cb.set_halign(Gtk::ALIGN_FILL);
-    _fe_cb.set_valign(Gtk::ALIGN_END);
-
-#if WITH_GTKMM_3_12
-    _fe_cb.set_margin_start(4);
-#else
-    _fe_cb.set_margin_left(4);
-#endif
-
-    _fe_vbox.pack_start(_fe_cb, false, false, 0);
-    _blendConnection = _fe_cb.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
-
-    //Blur filter effect
-    _composite_vbox.pack_start(_blur_vbox, false, false, 2);
-
-    _fe_blur.set_hexpand();
-    _fe_blur.set_halign(Gtk::ALIGN_FILL);
-    _fe_blur.set_valign(Gtk::ALIGN_END);
-    
-#if WITH_GTKMM_3_12
-    _fe_blur.set_margin_start(4);
-#else
-    _fe_blur.set_margin_left(4);
-#endif
-
-    _blur_vbox.pack_start(_fe_blur, false, false, 0);
-    _blurConnection = _fe_blur.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
-    
-    //Opacity
-    _composite_vbox.pack_start(_opacity_vbox, false, false, 2);
-    _opacity_label.set_halign(Gtk::ALIGN_END);
-    _opacity_label.set_valign(Gtk::ALIGN_CENTER);
-    _opacity_hbox.pack_start(_opacity_label, false, false, 3);
-    _opacity_vbox.pack_start(_opacity_hbox, false, false, 0);
-    _opacity_hbox.pack_start(_opacity_hscale, true, true, 0);
-    _opacity_hbox.pack_start(_opacity_spin_button, false, false, 0);
-    _opacity_hbox.pack_start(_opacity_label_unit, false, false, 3);
-    _opacity_hscale.set_draw_value(false);
-    _opacityConnection = _opacity_adjustment->signal_value_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
-    _opacity_label.set_mnemonic_widget(_opacity_hscale);
-    
-    //Keep the labels aligned
-    GtkSizeGroup *labels = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
-    gtk_size_group_add_widget(labels, GTK_WIDGET(_opacity_label.gobj()));
-    gtk_size_group_add_widget(labels, GTK_WIDGET(_fe_cb.get_blur_label()->gobj()));
-    gtk_size_group_add_widget(labels, GTK_WIDGET(_fe_blur.get_blur_label()->gobj()));
+    _blendConnection   = _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
+    _blurConnection    = _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
+    _opacityConnection = _filter_modifier.signal_opacity_changed().connect(   sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
 
     //Pack the compositing functions and the button row
-    _page.pack_end(_composite_vbox, Gtk::PACK_SHRINK);
+    _page.pack_end(_filter_modifier, Gtk::PACK_SHRINK);
     _page.pack_end(_buttonsRow, Gtk::PACK_SHRINK);
 
     //Pack into the panel contents
@@ -1914,7 +1866,7 @@ ObjectsPanel::ObjectsPanel() :
     _buttonsRow.pack_start(_buttonsSecondary, Gtk::PACK_EXPAND_WIDGET);
     _buttonsRow.pack_end(_buttonsPrimary, Gtk::PACK_EXPAND_WIDGET);
 
-    _watching.push_back(&_composite_vbox);
+    _watching.push_back(&_filter_modifier);
     
     //Set up the pop-up menu
     // -------------------------------------------------------

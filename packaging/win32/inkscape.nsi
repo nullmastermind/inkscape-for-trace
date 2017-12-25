@@ -314,11 +314,6 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   File /nonfatal /a /r /x *.??*.???* /x examples /x extensions /x locale /x tutorials ${INKSCAPE_DIST_DIR}\share\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   ; this files are added because it slips through the filter
-  SetOutPath $INSTDIR\share\icons
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.png
-  File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.svg
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\share\templates
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
   File /a ${INKSCAPE_DIST_DIR}\share\templates\default.en_US.svg

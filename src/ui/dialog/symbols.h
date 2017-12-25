@@ -132,7 +132,7 @@ private:
     Gtk::Button* more;
     Gtk::Button* fewer;
     Gtk::HBox* tools;
-#if GTK_CHECK_VERSION(3,2,4)
+#if GTKMM_CHECK_VERSION(3,14,0)
     Gtk::Overlay* overlay;
 #endif
     Gtk::Image* overlay_icon;

@@ -17,7 +17,7 @@
 
 #include "preferences.h"
 
-#define TOOLBAR_SLIDER_HINT "full"
+#define TOOLBAR_SLIDER_HINT "compact"
 
 typedef struct _EgeAdjustmentAction      EgeAdjustmentAction;
 

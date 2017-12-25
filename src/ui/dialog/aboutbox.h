@@ -15,13 +15,17 @@
 #ifndef INKSCAPE_UI_DIALOG_ABOUTBOX_H
 #define INKSCAPE_UI_DIALOG_ABOUTBOX_H
 
-#include <gtkmm/dialog.h>
+#include <gtkmm/aboutdialog.h>
+
+namespace Gtk {
+class AspectFrame;
+}
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class AboutBox : public Gtk::Dialog {
+class AboutBox : public Gtk::AboutDialog {
 
 public:
 
@@ -31,14 +35,16 @@ public:
 private:
 
     AboutBox();
+
+    /** A widget containing an SVG "splash screen"
+     *  image to display in the content area of the dialo
+     */
+    Gtk::AspectFrame *_splash_widget;
     
     void initStrings();
-    
-    Glib::ustring authors_text;
-    Glib::ustring translators_text;
-    Glib::ustring license_text;
+    void build_splash_widget();
 
-    virtual void on_response(int response_id);
+    void on_response(int response_id) override;
 };
 
 } // namespace Dialog

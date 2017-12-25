@@ -57,6 +57,7 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
     : _help(NULL)
     , silent(false)
     , _gui(true)
+    , execution_env(NULL)
 {
     repr = in_repr;
     Inkscape::GC::anchor(in_repr);

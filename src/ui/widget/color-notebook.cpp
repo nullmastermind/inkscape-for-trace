@@ -55,6 +55,8 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
     : Gtk::Grid()
     , _selected_color(color)
 {
+    set_name("ColorNotebook");
+
     Page *page;
 
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
@@ -321,9 +323,11 @@ void ColorNotebook::_addPage(Page &page)
 
         Glib::ustring mode_name = page.selector_factory->modeName();
         Gtk::Widget *tab_label = Gtk::manage(new Gtk::Label(mode_name));
+        tab_label->set_name("ColorModeLabel");
         gint page_num = gtk_notebook_append_page(GTK_NOTEBOOK(_book), selector_widget->gobj(), tab_label->gobj());
 
         _buttons[page_num] = gtk_radio_button_new_with_label(NULL, mode_name.c_str());
+        gtk_widget_set_name(_buttons[page_num], "ColorModeButton");
         gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
         if (page_num > 0) {
             auto g = Glib::wrap(GTK_RADIO_BUTTON(_buttons[0]))->get_group();

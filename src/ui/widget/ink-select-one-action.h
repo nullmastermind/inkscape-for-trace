@@ -61,6 +61,7 @@ public:
     void use_radio( bool use_radio ) { _use_radio = use_radio; }
     void use_label( bool use_label ) { _use_label = use_label; }
     void use_icon(  bool use_icon  ) { _use_icon  = use_icon;  }
+    void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
   
     gint get_active() { return _active; }
     void set_active( gint active );
@@ -81,7 +82,7 @@ protected:
 private:
 
     Glib::ustring _name;
-    Glib::ustring _label;
+    Glib::ustring _group_label;
     Glib::ustring _tooltip;
     Glib::ustring _stock_id;
     Glib::RefPtr<Gtk::ListStore> _store;
@@ -92,6 +93,7 @@ private:
     bool _use_radio;  // Applies to tool item only
     bool _use_label;
     bool _use_icon;   // Applies to menu item only
+    bool _use_group_label; // Applies to tool item only
     Gtk::BuiltinIconSize _icon_size;
 
     /* Combobox in tool */
@@ -109,7 +111,7 @@ private:
     void on_toggled_radiomenu(int n);
 
     InkSelectOneAction (const Glib::ustring &name,
-                        const Glib::ustring &label,
+                        const Glib::ustring &group_label,
                         const Glib::ustring &tooltip,
                         const Glib::ustring &stock_id,
                         Glib::RefPtr<Gtk::ListStore> store );

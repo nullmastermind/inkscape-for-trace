@@ -37,7 +37,7 @@
 #include "sp-root.h"
 #include <gtkmm/window.h>
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
 # include <gdkmm/monitor.h>
 #else
 # include <gdkmm/screen.h>
@@ -745,7 +745,7 @@ gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
 Geom::Point calcAnchorPoint(gint const x, gint const y,
                             gint const w, gint const h, gint const minOnscreen)
 {
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
     Gdk::Rectangle screen_geometry;
 
     auto const display = Gdk::Display::get_default();
@@ -798,7 +798,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
         Gdk::Rectangle monitor_geometry;
 
-#if WITH_GTKMM_3_22
+#if GTKMM_CHECK_VERSION(3,22,0)
         auto const display = Gdk::Display::get_default();
         auto const monitor = display->get_primary_monitor();
 
