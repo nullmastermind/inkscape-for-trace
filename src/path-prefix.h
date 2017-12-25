@@ -35,6 +35,7 @@ char *append_inkscape_datadir(const char *relative_path);
 #  define INKSCAPE_APPICONDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/pixmaps" )
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
 #  define INKSCAPE_BINDDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/bind" )
+#  define INKSCAPE_DOCDIR         BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/doc" )
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
 #  define INKSCAPE_FILTERDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/filters" )
@@ -60,6 +61,7 @@ char *append_inkscape_datadir(const char *relative_path);
 #    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("bind")
+#    define INKSCAPE_DOCDIR       append_inkscape_datadir("doc")
 #    define INKSCAPE_EXAMPLESDIR  append_inkscape_datadir("examples")
 #    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("extensions")
 #    define INKSCAPE_FILTERDIR    append_inkscape_datadir("filters")
@@ -84,6 +86,7 @@ char *append_inkscape_datadir(const char *relative_path);
 #    define INKSCAPE_APPICONDIR   "Contents/Resources/share/pixmaps"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
 #    define INKSCAPE_BINDDIR      "Contents/Resources/share/inkscape/bind"
+#    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    "Contents/Resources/share/inkscape/filters"
@@ -108,6 +111,7 @@ char *append_inkscape_datadir(const char *relative_path);
 #    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
+#    define INKSCAPE_DOCDIR       append_inkscape_datadir("inkscape/doc")
 #    define INKSCAPE_EXAMPLESDIR  append_inkscape_datadir("inkscape/examples")
 #    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("inkscape/extensions")
 #    define INKSCAPE_FILTERDIR    append_inkscape_datadir("inkscape/filters")
