@@ -16,13 +16,13 @@ files supplied on the command line in the given order.
 
 =head1 KEYBINDINGS
 
-    Left or Page Up: show previous slide
-    Right, Page Down, or space bar: show next slide
-    Up: go to first slide
-    Down: go to last slide
-    Escape, q or Q: quit
-    F11: go to fullscreen mode/revert back to window mode
-    Return: pop up window with slide buttons (first, prev, next, last)
+Left or Page Up: show previous slide
+Right, Page Down or space bar: show next slide
+Up or Home: go to first slide
+Down or End: go to last slide
+Escape or Q: quit
+F11: go to fullscreen mode/revert back to window mode
+Return: pop up window with slide buttons (first, prev, next, last)
 
 =head1 EXAMPLES
 
@@ -39,12 +39,12 @@ There are no options yet.
 
 =head1 TODO
 
-    add a default SVG for when a document does not load.
-    add a usage/help command line switch
+Add a default SVG for when a document does not load.
+Add a usage/help command line switch.
 
 =head1 SEE ALSO
 
-L<inkscape> and the inkview related part of the inkscape wiki:
+L<inkscape> and the inkview related part of the Inkscape wiki:
 
 L<http://wiki.inkscape.org/wiki/index.php/Inkview>
 
@@ -55,7 +55,7 @@ L<http://www.inkscape.org/>
 Johan Ceuppens
 
 This codebase owes its existence to a large number of contributors
-throughout its various incarnations.  See inkscape(1) for more
+throughout its various incarnations. See inkscape(1) for more
 information.
 
 This man-page was written by Wolfram Quester
