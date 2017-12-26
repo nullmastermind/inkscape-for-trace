@@ -42,20 +42,22 @@ public:
     void writeRepr(Inkscape::XML::Node *const repr) const;
     void getAttachedItems(SPItem *[2]) const;
     void getEndpoints(Geom::Point endPts[]) const;
-    double getCurvature(void) const;
-    SPConnEnd** getConnEnds(void);
-    bool isOrthogonal(void) const;
+    double getCurvature() const;
+    SPConnEnd** getConnEnds();
+    bool isOrthogonal() const;
     friend void recreateCurve(SPCurve *curve, Avoid::ConnRef *connRef, double curvature);
-    void tellLibavoidNewEndpoints(const bool processTransaction = false);
-    bool reroutePathFromLibavoid(void);
-    void makePathInvalid(void);
-    void update(void);
-    bool isAutoRoutingConn(void);
-    void rerouteFromManipulation(void);
+    void tellLibavoidNewEndpoints(bool const processTransaction = false);
+    bool reroutePathFromLibavoid();
+    void makePathInvalid();
+    void update();
+    bool isAutoRoutingConn();
+    void rerouteFromManipulation();
 
 private:
+    void _updateEndPoints();
+
     SPConnEnd *_connEnd[2];
-    
+
     SPPath *_path;
 
     // libavoid's internal representation of the item.
@@ -63,11 +65,9 @@ private:
 
     int _connType;
     double _connCurvature;
-    
+
     // A sigc connection for transformed signal.
     sigc::connection _transformed_connection;
-    
-    void storeIds(void);
 };
 
 

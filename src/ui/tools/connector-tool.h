@@ -57,8 +57,8 @@ namespace Tools {
 
 class ConnectorTool : public ToolBase {
 public:
-	ConnectorTool();
-	virtual ~ConnectorTool();
+    ConnectorTool();
+    virtual ~ConnectorTool();
 
     Inkscape::Selection *selection;
     Geom::Point p[5];
@@ -107,41 +107,41 @@ public:
     gchar *ehref;
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 
-	static const std::string prefsPath;
+    static std::string const prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+    virtual void setup();
+    virtual void finish();
+    virtual void set(const Inkscape::Preferences::Entry& val);
+    virtual bool root_handler(GdkEvent* event);
+    virtual bool item_handler(SPItem* item, GdkEvent* event);
 
-	virtual const std::string& getPrefsPath();
+    virtual std::string const& getPrefsPath();
 
     void cc_clear_active_shape();
     void cc_set_active_conn(SPItem *item);
     void cc_clear_active_conn();
 
 private:
-	void _selectionChanged(Inkscape::Selection *selection);
+    void _selectionChanged(Inkscape::Selection *selection);
 
-	bool _handleButtonPress(GdkEventButton const &bevent);
-	bool _handleMotionNotify(GdkEventMotion const &mevent);
-	bool _handleButtonRelease(GdkEventButton const &revent);
-	bool _handleKeyPress(guint const keyval);
+    bool _handleButtonPress(GdkEventButton const &bevent);
+    bool _handleMotionNotify(GdkEventMotion const &mevent);
+    bool _handleButtonRelease(GdkEventButton const &revent);
+    bool _handleKeyPress(guint const keyval);
 
-	void _setInitialPoint(Geom::Point const p);
-	void _setSubsequentPoint(Geom::Point const p);
-	void _finishSegment(Geom::Point p);
-	void _resetColors();
-	void _finish();
-	void _concatColorsAndFlush();
-	void _flushWhite(SPCurve *gc);
+    void _setInitialPoint(Geom::Point const p);
+    void _setSubsequentPoint(Geom::Point const p);
+    void _finishSegment(Geom::Point p);
+    void _resetColors();
+    void _finish();
+    void _concatColorsAndFlush();
+    void _flushWhite(SPCurve *gc);
 
-	void _activeShapeAddKnot(SPItem* item);
-	void _setActiveShape(SPItem *item);
-	bool _ptHandleTest(Geom::Point& p, gchar **href);
+    void _activeShapeAddKnot(SPItem* item);
+    void _setActiveShape(SPItem *item);
+    bool _ptHandleTest(Geom::Point& p, gchar **href);
 
-	void _reroutingFinish(Geom::Point *const p);
+    void _reroutingFinish(Geom::Point *const p);
 };
 
 void cc_selection_set_avoid(bool const set_ignore);
