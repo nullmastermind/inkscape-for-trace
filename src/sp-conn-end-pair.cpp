@@ -93,64 +93,48 @@ static void avoid_conn_transformed(Geom::Affine const */*mp*/, SPItem *moved_ite
 
 void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
 {
-    switch (key)
-    {
-        case SP_ATTR_CONNECTOR_TYPE:
-            if (value && (strcmp(value, "polyline") == 0 || strcmp(value, "orthogonal") == 0)) {
-                int newconnType = strcmp(value, "polyline") ? SP_CONNECTOR_ORTHOGONAL : SP_CONNECTOR_POLYLINE;
+    switch (key) {
+    case SP_ATTR_CONNECTOR_TYPE:
+        if (value && (strcmp(value, "polyline") == 0 || strcmp(value, "orthogonal") == 0)) {
+            int new_conn_type = strcmp(value, "polyline") ? SP_CONNECTOR_ORTHOGONAL : SP_CONNECTOR_POLYLINE;
 
-                if (!_connRef) {
-                    _connType = newconnType;
-                    Avoid::Router *router = _path->document->router;
-                    GQuark itemID = g_quark_from_string(_path->getId());
-                    _connRef = new Avoid::ConnRef(router/*, itemID*/);
-                    switch (newconnType)
-                    {
-                        case SP_CONNECTOR_POLYLINE:
-                            _connRef->setRoutingType(Avoid::ConnType_PolyLine);
-                            break;
-                        case SP_CONNECTOR_ORTHOGONAL:
-                            _connRef->setRoutingType(Avoid::ConnType_Orthogonal);
-                    }
-                    _transformed_connection = _path->connectTransformed(
-                            sigc::ptr_fun(&avoid_conn_transformed));
-                } else if (newconnType != _connType) {
-                    _connType = newconnType;
-                    switch (newconnType)
-                    {
-                        case SP_CONNECTOR_POLYLINE:
-                            _connRef->setRoutingType(Avoid::ConnType_PolyLine);
-                            break;
-                        case SP_CONNECTOR_ORTHOGONAL:
-                            _connRef->setRoutingType(Avoid::ConnType_Orthogonal);
-                    }
-                    sp_conn_reroute_path(_path);
-                }
-            } else {
-                _connType = SP_CONNECTOR_NOAVOID;
+            if (!_connRef) {
+                _connType = new_conn_type;
+                Avoid::Router *router = _path->document->router;
+                _connRef = new Avoid::ConnRef(router);
+                _connRef->setRoutingType(new_conn_type == SP_CONNECTOR_POLYLINE ?
+                    Avoid::ConnType_PolyLine : Avoid::ConnType_Orthogonal);
+                _transformed_connection = _path->connectTransformed(sigc::ptr_fun(&avoid_conn_transformed));
+            } else if (new_conn_type != _connType) {
+                _connType = new_conn_type;
+                _connRef->setRoutingType(new_conn_type == SP_CONNECTOR_POLYLINE ?
+                    Avoid::ConnType_PolyLine : Avoid::ConnType_Orthogonal);
+                sp_conn_reroute_path(_path);
+            }
+        } else {
+            _connType = SP_CONNECTOR_NOAVOID;
 
-                if (_connRef) {
-                    _connRef->router()->deleteConnector(_connRef);
-                    _connRef = NULL;
-                    _transformed_connection.disconnect();
-                }
+            if (_connRef) {
+                _connRef->router()->deleteConnector(_connRef);
+                _connRef = NULL;
+                _transformed_connection.disconnect();
             }
-            break;
-        case SP_ATTR_CONNECTOR_CURVATURE:
-            if (value) {
-                _connCurvature = g_strtod(value, NULL);
-                if (_connRef && _connRef->isInitialised()) {
-                    // Redraw the connector, but only if it has been initialised.
-                    sp_conn_reroute_path(_path);
-                }
+        }
+        break;
+    case SP_ATTR_CONNECTOR_CURVATURE:
+        if (value) {
+            _connCurvature = g_strtod(value, NULL);
+            if (_connRef && _connRef->isInitialised()) {
+                // Redraw the connector, but only if it has been initialised.
+                sp_conn_reroute_path(_path);
             }
-            break;
-        case SP_ATTR_CONNECTION_START:
-        case SP_ATTR_CONNECTION_END:
-            this->_connEnd[(key == SP_ATTR_CONNECTION_START ? 0 : 1)]->setAttacherHref(value, _path);
-            break;
+        }
+        break;
+    case SP_ATTR_CONNECTION_START:
+    case SP_ATTR_CONNECTION_END:
+        this->_connEnd[(key == SP_ATTR_CONNECTION_START ? 0 : 1)]->setAttacherHref(value, _path);
+        break;
     }
-
 }
 
 void SPConnEndPair::writeRepr(Inkscape::XML::Node *const repr) const
@@ -202,9 +186,9 @@ void SPConnEndPair::getEndpoints(Geom::Point endPts[]) const
             endPts[h] = h2attItem[h]->avoidRef->getConnectionPointPos();
         } else if (!curve->is_empty()) {
             if (h == 0) {
-                endPts[h] = *(curve->first_point())*i2d;
+                endPts[h] = *(curve->first_point()) * i2d;
             } else {
-                endPts[h] = *(curve->last_point())*i2d;
+                endPts[h] = *(curve->last_point()) * i2d;
             }
         }
     }
@@ -242,54 +226,33 @@ void SPConnEndPair::rerouteFromManipulation()
 }
 
 
-// Called from sp_path_update to initialise the endpoints.
+// Called from SPPath::update to initialise the endpoints.
 void SPConnEndPair::update()
 {
     if (_connType != SP_CONNECTOR_NOAVOID) {
         g_assert(_connRef != NULL);
-        if (!(_connRef->isInitialised())) {
-            Geom::Point endPt[2];
-            getEndpoints(endPt);
-
-            Avoid::Point src(endPt[0][Geom::X], endPt[0][Geom::Y]);
-            Avoid::Point dst(endPt[1][Geom::X], endPt[1][Geom::Y]);
-
-            _connRef->setEndpoints(src, dst);
+        if (!_connRef->isInitialised()) {
+            _updateEndPoints();
             _connRef->setCallback(&redrawConnectorCallback, _path);
         }
-        // Store the ID of the objects attached to the connector.
-        storeIds();
     }
 }
 
-
-void SPConnEndPair::storeIds()
+void SPConnEndPair::_updateEndPoints()
 {
-    if (_connEnd[0]->href) {
-        // href begins with a '#' which we don't want.
-        const char *startId = _connEnd[0]->href + 1;
-        GQuark itemId = g_quark_from_string(startId);
-        //_connRef->setEndPointId(Avoid::VertID::src, itemId);
-    } else {
-        //_connRef->setEndPointId(Avoid::VertID::src, 0);
-    }
-    if (_connEnd[1]->href) {
-        // href begins with a '#' which we don't want.
-        const char *endId = _connEnd[1]->href + 1;
-        GQuark itemId = g_quark_from_string(endId);
-        //_connRef->setEndPointId(Avoid::VertID::tar, itemId);
-    } else {
-        //_connRef->setEndPointId(Avoid::VertID::tar, 0);
-    }
+    Geom::Point endPt[2];
+    getEndpoints(endPt);
+
+    Avoid::Point src(endPt[0][Geom::X], endPt[0][Geom::Y]);
+    Avoid::Point dst(endPt[1][Geom::X], endPt[1][Geom::Y]);
+
+    _connRef->setEndpoints(src, dst);
 }
 
 
 bool SPConnEndPair::isAutoRoutingConn()
 {
-    if (_connType != SP_CONNECTOR_NOAVOID) {
-        return true;
-    }
-    return false;
+    return _connType != SP_CONNECTOR_NOAVOID;
 }
 
 void SPConnEndPair::makePathInvalid()
@@ -336,7 +299,7 @@ void recreateCurve(SPCurve *curve, Avoid::ConnRef *connRef, const gdouble curvat
 }
 
 
-void SPConnEndPair::tellLibavoidNewEndpoints(const bool processTransaction)
+void SPConnEndPair::tellLibavoidNewEndpoints(bool const processTransaction)
 {
     if (!isAutoRoutingConn()) {
         // Do nothing
@@ -344,13 +307,7 @@ void SPConnEndPair::tellLibavoidNewEndpoints(const bool processTransaction)
     }
     makePathInvalid();
 
-    Geom::Point endPt[2];
-    getEndpoints(endPt);
-
-    Avoid::Point src(endPt[0][Geom::X], endPt[0][Geom::Y]);
-    Avoid::Point dst(endPt[1][Geom::X], endPt[1][Geom::Y]);
-
-    _connRef->setEndpoints(src, dst);
+    _updateEndPoints();
     if (processTransaction) {
         _connRef->router()->processTransaction();
     }
