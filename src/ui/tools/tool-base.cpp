@@ -1126,10 +1126,15 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
+#if GTKMM_CHECK_VERSION(3,22,0)
+    case GDK_KEY_PRESS:
+        CM->popup_at_pointer(event);
+#else
         CM->popup(event->button.button, event->button.time);
         break;
     case GDK_KEY_PRESS:
         CM->popup(0, event->key.time);
+#endif
         break;
     default:
         break;

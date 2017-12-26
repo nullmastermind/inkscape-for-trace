@@ -564,21 +564,33 @@ void DocumentProperties::populate_linked_profiles_box()
 void DocumentProperties::external_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _ExternalScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _ExternalScriptsContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 
 void DocumentProperties::embedded_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _EmbeddedScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _EmbeddedScriptsContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 
 void DocumentProperties::linked_profiles_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _EmbProfContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _EmbProfContextMenu.popup(event->button, event->time);
+#endif
     }
 }
 

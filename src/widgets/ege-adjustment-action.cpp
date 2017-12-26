@@ -792,10 +792,14 @@ static gboolean event_cb( EgeAdjustmentAction* act, GdkEvent* evt )
     if ( evt->type == GDK_BUTTON_PRESS ) {
         if ( evt->button.button == 3 ) {
             if ( IS_EGE_ADJUSTMENT_ACTION(act) ) {
-                GdkEventButton* btnevt = (GdkEventButton*)evt;
                 GtkWidget* menu = create_popup_number_menu(act);
                 gtk_widget_show_all( menu );
+#if GTK_CHECK_VERSION(3,22,0)
+                gtk_menu_popup_at_pointer( GTK_MENU(menu), evt );
+#else
+                GdkEventButton* btnevt = (GdkEventButton*)evt;
                 gtk_menu_popup( GTK_MENU(menu), NULL, NULL, NULL, NULL, btnevt->button, btnevt->time );
+#endif
             }
             handled = TRUE;
         }
