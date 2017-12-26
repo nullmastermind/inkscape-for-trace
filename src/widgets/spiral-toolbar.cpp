@@ -126,7 +126,10 @@ static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 
     adj = GTK_ADJUSTMENT(g_object_get_data(obj, "revolution"));
     gtk_adjustment_set_value(adj, rev);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT(g_object_get_data(obj, "expansion"));
     gtk_adjustment_set_value(adj, exp);
@@ -134,7 +137,10 @@ static void sp_spl_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 
     adj = GTK_ADJUSTMENT(g_object_get_data(obj, "t0"));
     gtk_adjustment_set_value(adj, t0);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     spinbutton_defocus(tbl);
 }

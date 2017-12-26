@@ -267,7 +267,10 @@ static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
         sp_repr_get_double(repr, "inkscape:connector-spacing", &spacing);
 
         gtk_adjustment_set_value(adj, spacing);
+
+#if !GTK_CHECK_VERSION(3,18,0)
         gtk_adjustment_value_changed(adj);
+#endif
 
         spinbutton_defocus(tbl);
     }
