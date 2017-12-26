@@ -16,19 +16,19 @@
 
 static void change_endpts(SPCurve *const curve, double const endPos[2]);
 
-SPConnEnd::SPConnEnd(SPObject *const owner) :
-    ref(owner),
-    href(NULL),
+SPConnEnd::SPConnEnd(SPObject *const owner)
+    : ref(owner)
+    , href(NULL)
     // Default to center connection endpoint
-    _changed_connection(),
-    _delete_connection(),
-    _transformed_connection(),
-    _group_connection()
+    , _changed_connection()
+    , _delete_connection()
+    , _transformed_connection()
+    , _group_connection()
 {
 }
 
-static SPObject const *
-get_nearest_common_ancestor(SPObject const *const obj, SPItem const *const objs[2]) {
+static SPObject const *get_nearest_common_ancestor(SPObject const *const obj, SPItem const *const objs[2])
+{
     SPObject const *anc_sofar = obj;
     for (unsigned i = 0; i < 2; ++i) {
         if ( objs[i] != NULL ) {
@@ -40,8 +40,8 @@ get_nearest_common_ancestor(SPObject const *const obj, SPItem const *const objs[
 
 
 static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_pv, SPItem* item,
-        const Geom::Affine& item_transform, double& intersect_pos) {
-
+        const Geom::Affine& item_transform, double& intersect_pos)
+{
     double initial_pos = intersect_pos;
     // if this is a group...
     if (SP_IS_GROUP(item)) {
@@ -97,8 +97,8 @@ static bool try_get_intersect_point_with_item_recursive(Geom::PathVector& conn_p
 //
 static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
         const Geom::Affine& item_transform, const Geom::Affine& conn_transform,
-        const bool at_start, double& intersect_pos) {
-
+        const bool at_start, double& intersect_pos)
+{
     // Copy the curve and apply transformations up to common ancestor.
     SPCurve* conn_curve = conn->_curve->copy();
     conn_curve->transform(conn_transform);
@@ -106,8 +106,7 @@ static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
     Geom::PathVector conn_pv = conn_curve->get_pathvector();
 
     // If this is not the starting point, use Geom::Path::reverse() to reverse the path
-    if (!at_start)
-    {
+    if (!at_start) {
         // connectors are actually a single path, so consider the first element from a Geom::PathVector
         conn_pv[0] = conn_pv[0].reversed();
     }
@@ -118,13 +117,15 @@ static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
     // Find the intersection.
     bool result = try_get_intersect_point_with_item_recursive(conn_pv, item, item_transform, intersect_pos);
 
-    if (!result)
+    if (!result) {
         // No intersection point has been found (why?)
         // just default to connector end
         intersect_pos = 0;
+    }
     // If not at the starting point, recompute position with respect to original path
-    if (!at_start)
+    if (!at_start) {
         intersect_pos = conn_pv[0].size() - intersect_pos;
+    }
     // Free the curve copy.
     conn_curve->unref();
 
@@ -132,9 +133,7 @@ static bool try_get_intersect_point_with_item(SPPath* conn, SPItem* item,
 }
 
 
-static void
-sp_conn_get_route_and_redraw(SPPath *const path,
-        const bool updatePathRepr = true)
+static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePathRepr = true)
 {
     // Get the new route around obstacles.
     bool rerouted = path->connEndPair.reroutePathFromLibavoid();
@@ -169,9 +168,7 @@ sp_conn_get_route_and_redraw(SPPath *const path,
 }
 
 
-static void
-sp_conn_end_shape_move(Geom::Affine const */*mp*/, SPItem */*moved_item*/,
-                            SPPath *const path)
+static void sp_conn_end_shape_move(Geom::Affine const */*mp*/, SPItem */*moved_item*/, SPPath *const path)
 {
     if (path->connEndPair.isAutoRoutingConn()) {
         path->connEndPair.tellLibavoidNewEndpoints();
@@ -179,8 +176,7 @@ sp_conn_end_shape_move(Geom::Affine const */*mp*/, SPItem */*moved_item*/,
 }
 
 
-void
-sp_conn_reroute_path(SPPath *const path)
+void sp_conn_reroute_path(SPPath *const path)
 {
     if (path->connEndPair.isAutoRoutingConn()) {
         path->connEndPair.tellLibavoidNewEndpoints();
@@ -188,8 +184,7 @@ sp_conn_reroute_path(SPPath *const path)
 }
 
 
-void
-sp_conn_reroute_path_immediate(SPPath *const path)
+void sp_conn_reroute_path_immediate(SPPath *const path)
 {
     if (path->connEndPair.isAutoRoutingConn()) {
         bool processTransaction = true;
@@ -208,12 +203,10 @@ void sp_conn_redraw_path(SPPath *const path)
 }
 
 
-static void
-change_endpts(SPCurve *const curve, double const endPos[2])
+static void change_endpts(SPCurve *const curve, double const endPos[2])
 {
     // Use Geom::Path::portion to cut the curve at the end positions
-    if (endPos[0] > endPos[1])
-    {
+    if (endPos[0] > endPos[1]) {
         // Path is "negative", reset the curve and return
         curve->reset();
         return;
@@ -224,8 +217,7 @@ change_endpts(SPCurve *const curve, double const endPos[2])
     curve->set_pathvector(new_path_vector);
 }
 
-static void
-sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)
+static void sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)
 {
     char const * const attrs[] = {
         "inkscape:connection-start", "inkscape:connection-end"};
@@ -233,55 +225,43 @@ sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned const handle_ix)
     /* I believe this will trigger sp_conn_end_href_changed. */
 }
 
-void
-sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix)
+void sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix)
 {
     sp_conn_end_deleted(NULL, owner, handle_ix);
 }
 
-void
-SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
+void SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
 {
-    if ( value && href && ( strcmp(value, href) == 0 ) ) {
-        /* No change, do nothing. */
-    } 
-    else 
-    {
-        if (!value)
-        {
-            ref.detach();
-            g_free(href);
-            href = NULL;
-        }
-        else
-        {
-            bool validRef = true;
-            href = g_strdup(value);
-            // Now do the attaching, which emits the changed signal.
-            try {
-                ref.attach(Inkscape::URI(value));
-            } catch (Inkscape::BadURIException &e) {
-                /* TODO: Proper error handling as per
-                * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing.  (Also needed for
-                * sp-use.) */
-                g_warning("%s", e.what());
-                validRef = false;
-            }
+    bool validRef = true;
 
-            if ( !validRef )
-            {
-                ref.detach();
-                g_free(href);
-                href = NULL;
-            }
+    if (value && href && strcmp(value, href) == 0) {
+        /* No change, do nothing. */
+    } else if (!value) {
+        validRef = false;
+    } else {
+        href = g_strdup(value);
+        // Now do the attaching, which emits the changed signal.
+        try {
+            ref.attach(Inkscape::URI(value));
+        } catch (Inkscape::BadURIException &e) {
+            /* TODO: Proper error handling as per
+            * http://www.w3.org/TR/SVG11/implnote.html#ErrorProcessing.  (Also needed for
+            * sp-use.) */
+            g_warning("%s", e.what());
+            validRef = false;
         }
+    }
+
+    if (!validRef) {
+        ref.detach();
+        g_free(href);
+        href = NULL;
     }
 }
 
 
-void
-sp_conn_end_href_changed(SPObject */*old_ref*/, SPObject */*ref*/,
-                         SPConnEnd *connEndPtr, SPPath *const path, unsigned const handle_ix)
+void sp_conn_end_href_changed(SPObject */*old_ref*/, SPObject */*ref*/,
+        SPConnEnd *connEndPtr, SPPath *const path, unsigned const handle_ix)
 {
     g_return_if_fail(connEndPtr != NULL);
     SPConnEnd &connEnd = *connEndPtr;
