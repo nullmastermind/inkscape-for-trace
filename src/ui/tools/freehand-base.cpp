@@ -884,7 +884,6 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
                 if (!dc->white_item) {
                      dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
                 }
-                std::cout << "lololololo----------------------lololo" << std::endl;
                 spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c, false);
                 dc->selection->set(dc->white_item);
             }

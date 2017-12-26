@@ -771,7 +771,7 @@ PencilTool::addPowerStrokePencil()
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double step = prefs->getIntLimited("/tools/freehand/pencil/ps-step-pressure",10, 1, 100)/100.0;
+    double step = prefs->getIntLimited("/tools/freehand/pencil/ps-step-pressure",5, 1, 100)/100.0;
     double min  = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
     double max  = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
     Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
@@ -790,11 +790,16 @@ PencilTool::addPowerStrokePencil()
     double dezoomify_factor  = 0.05 * 1000/SP_EVENT_CONTEXT(this)->desktop->current_zoom();//\/100 we want 100% = 1;
     double last_pressure     = this->_wps.back();
     double pressure_shrunk   = (last_pressure * (max - min)) + min;
+    step = (step * (max - min)) + min;
     //We need half width for power stroke
     double pressure_computed =  pressure_shrunk * dezoomify_factor/2.0;
     this->_last_point        = this->ps.back();
     this->_last_point       *= transform_coordinate.inverse();
-    if (this->ps.size() == 1 || std::abs(_previous_pressure - pressure_shrunk) > step ) {
+    if (this->ps.size() == 1 ||
+        std::abs(_previous_pressure - pressure_shrunk) > step || 
+        _previous_pressure == 0.0 || 
+        (_previous_pressure > step &&  pressure_shrunk < step)) 
+    {
         _previous_pressure = pressure_shrunk;
         this->points.push_back(Geom::Point(0, pressure_computed));
         this->_points_pos.push_back(this->_last_point);

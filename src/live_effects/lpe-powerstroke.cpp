@@ -599,20 +599,33 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     if (sort_points) {
         sort(ts.begin(), ts.end(), compare_offsets);
     }
+    // create stroke path where points (x,y) := (t, offset)
+    Geom::Interpolate::Interpolator *interpolator = Geom::Interpolate::Interpolator::create(static_cast<Geom::Interpolate::InterpolatorType>(interpolator_type.get_value()));
+    if (Geom::Interpolate::CubicBezierJohan *johan = dynamic_cast<Geom::Interpolate::CubicBezierJohan*>(interpolator)) {
+        johan->setBeta(interpolator_beta);
+    }
+    if (Geom::Interpolate::CubicBezierSmooth *smooth = dynamic_cast<Geom::Interpolate::CubicBezierSmooth*>(interpolator)) {
+        smooth->setBeta(interpolator_beta);
+    }
     if (pathv[0].closed()) {
-        // add extra points for interpolation between first and last point
-        Point first_point = ts.front();
-        Point last_point = ts.back();
-        //TODO: this is wrong we need to give a calulated Y value
-        ts.insert(ts.begin(), last_point - Point(pwd2_in.domain().extent() ,0));
-//        double startpercentwidth = ts.front()[Geom::X]/pwd2_in.domain().max();
-//        double endpercentwidth = (pwd2_in.domain().max() - ts.back()[Geom::X])/pwd2_in.domain().max();
-//        double totalwidth = endpercentwidth + startpercentwidth ;
-//        double factor = endpercentwidth/totalwidth;
-//        std::cout << factor << "factor" << std::endl;
-//        double gap = ts.front()[Geom::Y] - ts.back()[Geom::Y];
-//        ts.insert(ts.begin(), Point( pwd2_in.domain().min(), ts.back()[Geom::Y] - (gap / factor) ) );
-//        ts.push_back( Point( pwd2_in.domain().max(), ts.back()[Geom::Y] - (gap / factor) ) );
+        std::vector<Geom::Point> ts_close;
+        //we have only one knot or overwrite before
+        Geom::Point start = Geom::Point( pwd2_in.domain().min(), ts.front()[Geom::Y]);
+        Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]); 
+        if (ts.size() > 1) {
+            ts_close.push_back(ts[ts.size()-2]);
+            ts_close.push_back(ts.back());
+            ts_close.push_back(ts.front());
+            ts_close.push_back(ts[1]);
+            Geom::Path closepath = interpolator->interpolateToPath(ts_close);
+            start = closepath.pointAt(Geom::nearest_time(Geom::Point( pwd2_in.domain().min(),0), closepath));
+            start[Geom::X] = pwd2_in.domain().min();
+            end   = start;
+            end[Geom::X] = pwd2_in.domain().max();
+        }
+        ts.insert(ts.begin(), start );
+        ts.push_back( end );
+        ts_close.clear();
     } else {
         // add width data for first and last point on the path
         // depending on cap type, these first and last points have width zero or take the width from the closest width point.
@@ -629,14 +642,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     for (std::size_t i = 0, e = ts.size(); i < e; ++i) {
         ts[i][Geom::X] *= xcoord_scaling;
     }
-    // create stroke path where points (x,y) := (t, offset)
-    Geom::Interpolate::Interpolator *interpolator = Geom::Interpolate::Interpolator::create(static_cast<Geom::Interpolate::InterpolatorType>(interpolator_type.get_value()));
-    if (Geom::Interpolate::CubicBezierJohan *johan = dynamic_cast<Geom::Interpolate::CubicBezierJohan*>(interpolator)) {
-        johan->setBeta(interpolator_beta);
-    }
-    if (Geom::Interpolate::CubicBezierSmooth *smooth = dynamic_cast<Geom::Interpolate::CubicBezierSmooth*>(interpolator)) {
-        smooth->setBeta(interpolator_beta);
-    }
+    
     Geom::Path strokepath = interpolator->interpolateToPath(ts);
     delete interpolator;
 

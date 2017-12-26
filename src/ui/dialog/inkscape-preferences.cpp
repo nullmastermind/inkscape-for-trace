@@ -432,7 +432,7 @@ void InkscapePreferences::initPageTools()
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Pressure sensitivity settings"));
-    this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 10);
+    this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 5);
 
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
