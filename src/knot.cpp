@@ -471,7 +471,9 @@ void SPKnot::updateCtrl() {
 void SPKnot::_setCtrlState() {
     int state = SP_KNOT_STATE_NORMAL;
 
-    if (this->flags & SP_KNOT_DRAGGING) {
+    if (this->flags | SP_KNOT_VISIBLE) {
+        return;
+    } else if (this->flags & SP_KNOT_DRAGGING) {
         state = SP_KNOT_STATE_DRAGGING;
     } else if (this->flags & SP_KNOT_MOUSEOVER) {
         state = SP_KNOT_STATE_MOUSEOVER;
