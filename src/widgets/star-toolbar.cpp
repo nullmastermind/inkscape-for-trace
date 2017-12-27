@@ -417,19 +417,31 @@ static void sp_stb_defaults( GtkWidget * /*widget*/, GObject *dataKludge )
 
     adj = GTK_ADJUSTMENT( g_object_get_data( dataKludge, "magnitude" ) );
     gtk_adjustment_set_value(adj, mag);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT( g_object_get_data( dataKludge, "proportion" ) );
     gtk_adjustment_set_value(adj, prop);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT( g_object_get_data( dataKludge, "rounded" ) );
     gtk_adjustment_set_value(adj, rounded);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT( g_object_get_data( dataKludge, "randomized" ) );
     gtk_adjustment_set_value(adj, randomized);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 }
 
 static void star_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);

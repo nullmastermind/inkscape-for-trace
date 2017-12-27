@@ -1038,11 +1038,19 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 swatch->setDesktop( desktop );
                 swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
                 swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
+
+#if GTKMM_CHECK_VERSION(3,12,0)
+                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
+#else
+                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
+#endif
+
+                swatch->set_margin_top(AUX_SPACING);
+                swatch->set_margin_bottom(AUX_SPACING);
+
                 auto swatch_ = GTK_WIDGET( swatch->gobj() );
-                gtk_widget_set_margin_left(swatch_, AUX_BETWEEN_BUTTON_GROUPS);
-                gtk_widget_set_margin_right(swatch_, AUX_BETWEEN_BUTTON_GROUPS);
-                gtk_widget_set_margin_top(swatch_, AUX_SPACING);
-                gtk_widget_set_margin_bottom(swatch_, AUX_SPACING);
                 gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
             }
             if(i==0){

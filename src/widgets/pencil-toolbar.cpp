@@ -265,7 +265,10 @@ static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 
     adj = GTK_ADJUSTMENT(g_object_get_data(obj, "tolerance"));
     gtk_adjustment_set_value(adj, tolerance);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     spinbutton_defocus(tbl);
 }

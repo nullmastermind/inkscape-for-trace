@@ -114,8 +114,15 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
     /********************    Table    *************************/
   auto table = new Gtk::Grid();
+
+#if GTKMM_CHECK_VERSION(3,12,0)
+  table->set_margin_start(3);
+  table->set_margin_end(3);
+#else
   table->set_margin_left(3);
   table->set_margin_right(3);
+#endif
+
   table->set_margin_top(4);
   // panel is a cloked Gtk::VBox
   _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
@@ -154,8 +161,15 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   search->set_tooltip_text(_("Return to start search."));
   search->signal_key_press_event().connect_notify(  sigc::mem_fun(*this, &SymbolsDialog::beforeSearch));
   search->signal_key_release_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::unsensitive));
+
+#if GTKMM_CHECK_VERSION(3,12,0)
+  search->set_margin_start(10);
+  search->set_margin_end(10);
+#else
   search->set_margin_left(10);
   search->set_margin_right(10);
+#endif
+
   search->set_margin_bottom(6);
   search->signal_search_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::clearSearch));
   table->attach(*Gtk::manage(search),0,row,2,1);
@@ -237,8 +251,14 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
   progress->set_margin_top(15);
   progress->set_margin_bottom(15);
+
+#if GTKMM_CHECK_VERSION(3,12,0)
+  progress->set_margin_start(20);
+  progress->set_margin_end(20);
+#else
   progress->set_margin_left(20);
   progress->set_margin_right(20);
+#endif
 
   ++row;
 

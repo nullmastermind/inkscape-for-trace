@@ -83,7 +83,11 @@ void Panel::_popper(GdkEventButton* event)
 {
     if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 3 || event->button == 1) ) {
         if (_menu) {
+#if GTKMM_CHECK_VERSION(3,22,0)
+            _menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
             _menu->popup(event->button, event->time);
+#endif
         }
     }
 }

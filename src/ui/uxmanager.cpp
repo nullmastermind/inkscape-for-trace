@@ -20,6 +20,10 @@
 #include "util/ege-tags.h"
 #include "widgets/toolbox.h"
 
+#if GTKMM_CHECK_VERSION(3,22,0)
+# include <gdkmm/monitor.h>
+#endif
+
 using std::vector;
 
 class TrackItem
@@ -120,10 +124,28 @@ UXManagerImpl::UXManagerImpl() :
     tags.addTag(ege::Tag("General"));
     tags.addTag(ege::Tag("Icons"));
 
+    // Figure out if we're on a widescreen display
+#if GTKMM_CHECK_VERSION(3,22,0)
+    auto display = Gdk::Display::get_default();
+    auto monitor = display->get_primary_monitor();
+
+    // Fallback to monitor number 0 if the user hasn't configured a primary monitor
+    if (!monitor) {
+        monitor = display->get_monitor(0);
+    }
+
+    if(monitor) {
+        Gdk::Rectangle monitor_geometry;
+        monitor->get_geometry(monitor_geometry);
+
+        int const width  = monitor_geometry.get_width();
+        int const height = monitor_geometry.get_height();
+#else
     Glib::RefPtr<Gdk::Screen> defaultScreen = Gdk::Screen::get_default();
     if (defaultScreen) {
         int width = defaultScreen->get_width();
         int height = defaultScreen->get_height();
+#endif
         gdouble aspect = static_cast<gdouble>(width) / static_cast<gdouble>(height);
         if (aspect > 1.65) {
             _widescreen = true;

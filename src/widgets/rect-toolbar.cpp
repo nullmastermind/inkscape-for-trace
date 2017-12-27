@@ -152,12 +152,18 @@ static void sp_rtb_defaults( GtkWidget * /*widget*/, GObject *obj)
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "rx") );
     gtk_adjustment_set_value(adj, 0.0);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     // this is necessary if the previous value was 0, but we still need to run the callback to change all selected objects
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "ry") );
     gtk_adjustment_set_value(adj, 0.0);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     sp_rtb_sensitivize( obj );
 }

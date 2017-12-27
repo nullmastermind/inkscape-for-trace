@@ -285,11 +285,17 @@ static void sp_arctb_defaults(GtkWidget *, GObject *obj)
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "start") );
     gtk_adjustment_set_value(adj, 0.0);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "end") );
     gtk_adjustment_set_value(adj, 0.0);
+
+#if !GTK_CHECK_VERSION(3,18,0)
     gtk_adjustment_value_changed(adj);
+#endif
 
     spinbutton_defocus(GTK_WIDGET(obj));
 }
@@ -320,12 +326,18 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
         adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "rx") );
         gdouble rx = ge->getVisibleRx();
         gtk_adjustment_set_value(adj, Quantity::convert(rx, "px", unit));
+
+#if !GTK_CHECK_VERSION(3,18,0)
         gtk_adjustment_value_changed(adj);
+#endif
 
         adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "ry") );
         gdouble ry = ge->getVisibleRy();
         gtk_adjustment_set_value(adj, Quantity::convert(ry, "px", unit));
+
+#if !GTK_CHECK_VERSION(3,18,0)
         gtk_adjustment_value_changed(adj);
+#endif
     }
 
     gdouble start = 0.;

@@ -822,7 +822,11 @@ SelectedStyle::on_fill_click(GdkEventButton *event)
             fs->showPageFill();
 
     } else if (event->button == 3) { // right-click, popup menu
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _popup[SS_FILL].popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _popup[SS_FILL].popup(event->button, event->time);
+#endif
     } else if (event->button == 2) { // middle click, toggle none/lastcolor
         if (_mode[SS_FILL] == SS_NONE) {
             on_fill_lastused();
@@ -840,7 +844,11 @@ SelectedStyle::on_stroke_click(GdkEventButton *event)
         if (Dialog::FillAndStroke *fs = get_fill_and_stroke_panel(_desktop))
             fs->showPageStrokePaint();
     } else if (event->button == 3) { // right-click, popup menu
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _popup[SS_STROKE].popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _popup[SS_STROKE].popup(event->button, event->time);
+#endif
     } else if (event->button == 2) { // middle click, toggle none/lastcolor
         if (_mode[SS_STROKE] == SS_NONE) {
             on_stroke_lastused();
@@ -858,7 +866,11 @@ SelectedStyle::on_sw_click(GdkEventButton *event)
         if (Dialog::FillAndStroke *fs = get_fill_and_stroke_panel(_desktop))
             fs->showPageStrokeStyle();
     } else if (event->button == 3) { // right-click, popup menu
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _popup_sw.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _popup_sw.popup(event->button, event->time);
+#endif
     } else if (event->button == 2) { // middle click, toggle none/lastwidth?
         //
     }

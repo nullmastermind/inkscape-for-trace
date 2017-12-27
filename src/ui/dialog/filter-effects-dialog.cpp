@@ -1624,7 +1624,12 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 	auto items = _menu->get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
+
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
+#else
         _menu->popup(event->button, event->time);
+#endif
     }
 }
 
@@ -2484,7 +2489,12 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 	auto items = _primitive_menu->get_children();
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
+
+#if GTKMM_CHECK_VERSION(3,22,0)
+        _primitive_menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(e));
+#else
         _primitive_menu->popup(e->button, e->time);
+#endif
 
         return true;
     }
