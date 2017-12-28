@@ -310,7 +310,7 @@ Geom::PathVector pathliv_to_pathvector(Path *pathliv){
 // take the source paths from the file, do the operation, delete the originals and add the results
 BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const unsigned int verb, const Glib::ustring description)
 {
-    if (nullptr != desktop() && !skip_undo) {
+    if (nullptr != desktop()) {
         SPDocument *doc = desktop()->getDocument();
         BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true);
         switch(returnCode) {
@@ -327,10 +327,14 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             boolop_display_error_message(desktop(), _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
             break;
         case DONE_NO_PATH:
-            DocumentUndo::done(doc, SP_VERB_NONE, description);
+            if (!skip_undo) {
+                DocumentUndo::done(doc, SP_VERB_NONE, description);
+            }
             break;
         case DONE:
-            DocumentUndo::done(doc, verb, description);
+            if (!skip_undo) {
+                DocumentUndo::done(doc, verb, description);
+            }
             break;
         }
         return returnCode;
