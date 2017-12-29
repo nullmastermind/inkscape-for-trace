@@ -33,6 +33,7 @@ public:
     virtual ~LPECloneOriginal();
     virtual void doEffect (SPCurve * curve);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doOnRemove(SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void cloneAttrbutes(SPObject *origin, SPObject *dest, const char * attributes, const char * style_attributes);
     void modified(SPObject */*obj*/, guint /*flags*/);

@@ -147,12 +147,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
                     c_pv *= i2anc_affine(dest, sp_lpe_item);
                     c->set_pathvector(c_pv);
                     if (!path_origin) {
-                        shape_dest->setCurveInsync(c, TRUE);
+                        shape_dest->setCurveBeforeLPE(c);
                         gchar *str = sp_svg_write_path(c_pv);
                         dest->getRepr()->setAttribute(attribute, str);
                         g_free(str);
                     } else {
-                        shape_dest->setCurve(c, TRUE);
+                        shape_dest->setCurveBeforeLPE(c);
                     }
                     c->unref();
                 } else {
@@ -305,15 +305,36 @@ LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
     }
 }
 
+void LPECloneOriginal::doOnRemove(SPLPEItem const* lpeitem)
+{
+   if (linkeditem.linksToItem() && lpeitem->path_effect_list->size() == 1 && !keep_paths) {
+        SPDesktop * dt = SP_ACTIVE_DESKTOP;
+        SPObject * obj = dynamic_cast<SPObject*>(sp_lpe_item);
+        SPItem * orig  = SP_ITEM(linkeditem.getObject());
+        const gchar * transform = lpeitem->getRepr()->attribute("transform");
+        dt->selection->clear();
+        dt->selection->add(orig, true);
+        dt->selection->clone();
+        dt->selection->singleItem()->setAttribute("transform" , transform);
+        //TODO: get a way to realy delete current LPEItem
+        obj->getRepr()->setAttribute("original-d", NULL);
+        obj->getRepr()->setAttribute("d", "0,0");   
+        obj->getRepr()->setAttribute("inkscape:label", "SAFE TO REMOVE");   
+        obj->getRepr()->setAttribute("inkscape:connector-curvature", NULL);
+        obj->getRepr()->setAttribute("transform", NULL);
+        obj->getRepr()->setAttribute("style", "opacity:0");
+    }
+}
+
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
-    if (linkeditem.linksToItem()) {
-        SPShape * shape = getCurrentShape();
-        if(shape){
-            curve->set_pathvector(shape->getCurve()->get_pathvector());
-        }
-    }
+//    if (linkeditem.linksToItem()) {
+//        SPShape * shape = getCurrentShape();
+//        if(shape){
+//            curve->set_pathvector(shape->getCurveBeforeLPE()->get_pathvector());
+//        }
+//    }
 }
 
 } // namespace LivePathEffect

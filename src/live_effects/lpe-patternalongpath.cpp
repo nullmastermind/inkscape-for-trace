@@ -116,14 +116,21 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
     if (bbox) {
         original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
     }
-    if (knot_entity) {
-        if (hide_knot) {
-            helper_path.clear();
-            knot_entity->knot->hide();
-        } else {
-            knot_entity->knot->show();
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
+        SPItem * item = sel->singleItem();
+        if (item->getId() == sp_lpe_item->getId() && static_cast<LPEPatternAlongPath*>(sp_lpe_item->getCurrentLPE()) == this) {
+            if (knot_entity && knot_entity->knot) {
+                if (hide_knot) {
+                    helper_path.clear();
+                    knot_entity->knot->hide();
+                } else {
+                    knot_entity->knot->show();
+                }
+                knot_entity->update_knot();
+            }
         }
-        knot_entity->update_knot();
     }
 }
 
