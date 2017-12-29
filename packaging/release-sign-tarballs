@@ -5,7 +5,7 @@ VERSION="0.92"
 PKG_NAME="inkscape"
 LIST_TO="inkscape-announce@lists.sf.net"
 LIST_CC="inkscape-devel@lists.sf.net"
-VCS_SYSTEM="bzr"
+VCS_SYSTEM="git"
 
 #                       Locate Dependencies
 #------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ HELP
 #------------------------------------------------------------------------------
 
 check_local_changes() {
-    lines=$(bzr diff | wc -l)
+    lines=$(git diff | wc -l)
     if [ $lines -gt 0 ]; then
         echo ""
         echo "Uncommitted changes found. Did you forget to commit? Aborting."
@@ -81,8 +81,8 @@ check_local_changes() {
 # Create the package distribution
 # Return 0 on success, 1 on fail
 make_dist() {
-    if [ $VCS_SYSTEM = "bzr" ] && [ ! -d .bzr ]; then
-	echo "Error: There is no bzr repository here: $(pwd)"
+    if [ $VCS_SYSTEM = "git" ] && [ ! -d .git ]; then
+	echo "Error: There is no git repository here: $(pwd)"
 	return 1
     else
 	echo "Error: Unrecognized version control '$VCS_SYSTEM'."
