@@ -99,9 +99,11 @@ static void use_pencil_pressure(InkToggleAction* itact, GObject *dataKludge) {
     if (pressure) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "minpressure") ), true );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "maxpressure") ), true );
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "shape_action") ), false );
     } else {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "minpressure") ), false );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "maxpressure") ), false );
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "shape_action") ), true );
     }
 }
 
@@ -237,7 +239,7 @@ static void freehand_add_advanced_shape_options(GtkActionGroup* mainActions, GOb
         g_signal_connect( G_OBJECT(act1), "changed", G_CALLBACK(freehand_change_shape), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act1) );
         g_object_set_data( holder, "shape_action", act1 );
-        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 || (tool_is_pencil && prefs->getBool("/tools/freehand/pencil/pressure", false))) {
             gtk_action_set_visible( GTK_ACTION(act1), false );
         } else {
             gtk_action_set_visible( GTK_ACTION(act1), true );
@@ -513,7 +515,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                         _("Use pressure input"),
                                                         INKSCAPE_ICON("draw-use-pressure"),
                                                         GTK_ICON_SIZE_SMALL_TOOLBAR );
-        bool pressure = prefs->getBool(freehand_tool_name(holder) + "/pressure", true);
+        bool pressure = prefs->getBool(freehand_tool_name(holder) + "/pressure", false);
         gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(itact), pressure );
         g_signal_connect_after(  G_OBJECT(itact), "toggled", G_CALLBACK(use_pencil_pressure), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );

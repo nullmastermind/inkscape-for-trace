@@ -6,10 +6,11 @@
  */
 
 #include "ui/tools/freehand-base.h"
-
+#include "sp-shape.h"
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
+#include <2geom/pathvector.h>
 
 
 #define DDC_MIN_PRESSURE      0.0
@@ -36,25 +37,15 @@ class PencilTool : public FreehandBase {
 public:
     PencilTool();
     virtual ~PencilTool();
-
     Geom::Point p[16];
-    gint npoints;
-    PencilState state;
-    Geom::Point req_tangent;
-
-    bool is_drawing;
-
     std::vector<Geom::Point> ps;
-
     std::vector<Geom::Point> points;
-    std::vector<double> wps;
-
-    void addPowerStrokePencil(SPCurve * c);
+    void addPowerStrokePencil(SPCurve *& c);
+    void addPowerStrokePencil();
+    void removePowerStrokePreview();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
-
     static const std::string prefsPath;
-
     virtual const std::string& getPrefsPath();
 
 protected:
@@ -69,17 +60,28 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    SPItem *_powerpreview;
-
+    void _powerStrokePreview(Geom::Path const path);
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
     void _fitAndSplit();
     void _interpolate();
+    void _powerstrokeInterpolate(bool apply);
     void _sketchInterpolate();
     void _extinput(GdkEvent *event);
     void _cancel();
     void _endpointSnap(Geom::Point &p, guint const state);
+    std::vector<double> _wps;
+    std::vector<Geom::Point> _points_pos;
+    std::vector<Geom::Point> _key_nodes;
+    Geom::Point _last_point;
+    double _previous_pressure;
+    SPCurve * _curve;
+    SPShape *_powerpreview;
+    Geom::Point _req_tangent;
+    bool _is_drawing;
+    PencilState _state;
+    gint _npoints;
 };
 
 }

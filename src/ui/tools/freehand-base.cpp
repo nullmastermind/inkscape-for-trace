@@ -23,6 +23,7 @@
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-simplify.h"
+#include "live_effects/lpe-powerstroke.h"
 #include "display/canvas-bpath.h"
 #include "svg/svg.h"
 #include "display/curve.h"
@@ -37,7 +38,6 @@
 #include "selection-chemistry.h"
 #include "sp-item-group.h"
 #include "sp-rect.h"
-#include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
 // clipboard support
@@ -92,7 +92,8 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
     , red_curve_is_valid(false)
     , anchor_statusbar(false)
-    , input_has_pressure(false)
+    , tablet_enabled(false)
+    , is_tablet(false)
     , pressure(DEFAULT_PRESSURE)
 {
 }
@@ -234,44 +235,52 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     if (SP_IS_PENCIL_CONTEXT(dc)) {
         PencilTool *pt = SP_PENCIL_CONTEXT(dc);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (dc->input_has_pressure) {
+        if (dc->tablet_enabled) {
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
             if (sp_shape) {
                 SPCurve * c = sp_shape->getCurve();
                 if (!c) {
                     return;
                 }
+                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                LPEPowerStroke* ps = NULL;
                 pt->addPowerStrokePencil(c);
-            }
-            if(pt->points.empty()){
-                //if use mouse give a line
-                double zoom = SP_EVENT_CONTEXT(dc)->desktop->current_zoom() * 5.0;
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 0, 1, 100) / 100.0;
-                double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 100, 1, 100) / 100.0;
-                if (min > max){
-                    min = max;
+                if (lpe) {
+                    ps = static_cast<LPEPowerStroke*>(lpe);
+                    gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                    item->setAttribute("inkscape:original-d" , pvector_str);
+                    g_free(pvector_str);
+                } else {
+                    gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
+                    item->setAttribute("d" , pvector_str);
+                    g_free(pvector_str);
                 }
-                Geom::Affine transformCoordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-                Geom::Coord scale = transformCoordinate.expansionX();
-                double pressure_shirnked = (1.0 * (max - min)) + min;
-                double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
-                pt->points.push_back(Geom::Point(0,pressure_computed));
+                if (ps && dc->sa) {
+                    ps->offset_points.param_set_and_write_new_value(pt->points);
+                    return;
+                }
+                if(pt->points.empty()){
+                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
+                    const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
+                    double swidth;
+                    sp_svg_number_read_d(stroke_width, &swidth);
+                    swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
+                    if (!swidth) {
+                        swidth = swidth/2;
+                    }
+                    points.push_back(Geom::Point(0, swidth));
+                }
+                Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
+                lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                ps = static_cast<LPEPowerStroke*>(lpe);
+                if (ps) {
+                    ps->getRepr()->setAttribute("sort_points", "true");
+                    ps->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+                    ps->offset_points.param_set_and_write_new_value(pt->points);
+                }
+                return;
             }
-            Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
-            Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-            if(prefs->getBool("/tools/freehand/pencil/optimus-powerstroke",true)) {
-                lpe->getRepr()->setAttribute("start_linecap_type", "round");
-                lpe->getRepr()->setAttribute("end_linecap_type", "round");
-                lpe->getRepr()->setAttribute("sort_points", "true");
-                lpe->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
-                lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-                lpe->getRepr()->setAttribute("miter_limit", "4");
-                lpe->getRepr()->setAttribute("linejoin_type", "round");
-            }
-            static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(pt->points);
-            pt->points.clear();
-            return;
         }
     }
 
@@ -338,7 +347,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
     if (item && SP_IS_LPE_ITEM(item)) {
         //Store the clipboard path to apply in the future without the use of clipboard
         static Geom::PathVector previous_shape_pathv;
@@ -404,12 +412,12 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             swidth = swidth/2;
         }
         if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (dc->input_has_pressure) {
+            if (dc->tablet_enabled) {
                 std::vector<Geom::Point> points;
                 spdc_apply_powerstroke_shape(points, dc, item);
-                shape = NONE;
-                //To allow retain color
                 shape_applied = true;
+                shape = NONE;
+                previous_shape_type = NONE;
             }
         }
 #define SHAPE_LENGTH 10
@@ -615,7 +623,7 @@ static void spdc_selection_modified(Inkscape::Selection *sel, guint /*flags*/, F
 
 static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/)
 {
-    if (SP_IS_PENCIL_CONTEXT(dc) && dc->sa && dc->input_has_pressure) {
+    if (SP_IS_PENCIL_CONTEXT(dc) && dc->sa) {
         return;
     }
     // We reset white and forget white/start/end anchors
@@ -766,24 +774,27 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         dc->sa_overwrited->append_continuous(c, 0.0625);
         c->unref();
         dc->sa_overwrited->closepath_current();
-        if(dc->sa){
+        if (!dc->white_curves.empty()) {
             dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
-            dc->white_curves.push_back(dc->sa_overwrited);
         }
-        
+        dc->white_curves.push_back(dc->sa_overwrited);
         spdc_flush_white(dc, NULL);
         return;
     }
     // Step C - test start
     if (dc->sa) {
-        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
+        if (!dc->white_curves.empty()) {
+            dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
+        }
         SPCurve *s = dc->sa_overwrited;
         s->append_continuous(c, 0.0625);
         c->unref();
         c = s;
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e = dc->ea->curve;
-        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), e));
+        if (!dc->white_curves.empty()) {
+            dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), e));
+        }
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
         }
@@ -838,8 +849,8 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
     // Now we have to go back to item coordinates at last
     c->transform( dc->white_item
-                            ? (dc->white_item)->dt2i_affine()
-                            : dc->desktop->dt2doc() );
+                ? (dc->white_item)->dt2i_affine()
+                : dc->desktop->dt2doc() );
 
     SPDesktop *desktop = dc->desktop;
     SPDocument *doc = desktop->getDocument();
@@ -868,9 +879,17 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             repr->setAttribute("d", str);
         g_free(str);
 
+        if (SP_IS_PENCIL_CONTEXT(dc)) {
+            if (dc->tablet_enabled) {
+                if (!dc->white_item) {
+                     dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+                }
+                spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c, false);
+                dc->selection->set(dc->white_item);
+            }
+        }
         if (!dc->white_item) {
             // Attach repr
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             //Bend needs the transforms applied after, Other effects best before
             spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
@@ -882,16 +901,6 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             dc->selection->set(repr);
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
-            }
-        } else if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (dc->input_has_pressure) {
-                spdc_check_for_and_apply_waiting_LPE(dc,  dc->white_item, c, false);
-//                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-//                shapeType shape = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
-//                if (shape == NONE) {
-//                    std::vector<Geom::Point> points;
-//                    spdc_apply_powerstroke_shape(points, dc, dc->white_item);
-//                }
             }
         }
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,

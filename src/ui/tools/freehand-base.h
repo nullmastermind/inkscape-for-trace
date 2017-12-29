@@ -96,7 +96,9 @@ public:
 
     bool anchor_statusbar;
     
-    bool input_has_pressure;
+    bool tablet_enabled;
+
+    bool is_tablet;
 
     gdouble pressure;
     virtual void set(const Inkscape::Preferences::Entry& val);

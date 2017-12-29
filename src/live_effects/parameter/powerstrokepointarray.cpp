@@ -89,6 +89,31 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
     }
 }
 
+/** call this method to recalculate the controlpoints when path is reversed.*/
+std::vector<Geom::Point>
+PowerStrokePointArrayParam::reverse_controlpoints(bool write)
+{
+    std::vector<Geom::Point> controlpoints;
+    if (!last_pwd2.empty()) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in_reverse = reverse(last_pwd2);
+        for (unsigned int i = 0; i < _vector.size(); ++i) {
+            Geom::Point control_pos = last_pwd2.valueAt(_vector[i][Geom::X]);
+            double new_pos = Geom::nearest_time(control_pos, pwd2_in_reverse);
+            controlpoints.push_back(Geom::Point(new_pos,_vector[i][Geom::Y]));
+            _vector[i][Geom::X] = new_pos;
+        }
+        if (write) {
+            write_to_SVG();
+            _vector.clear();
+            _vector = controlpoints;
+            controlpoints.clear();
+            write_to_SVG();
+            return _vector;
+        }
+    }
+    return controlpoints;
+}
+
 float PowerStrokePointArrayParam::median_width()
 {
 	size_t size = _vector.size();
@@ -205,22 +230,21 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
         if (state & GDK_MOD1_MASK) {
             // delete the clicked knot
             std::vector<Geom::Point> & vec = _pparam->_vector;
-            vec.erase(vec.begin() + _index);
-            _pparam->param_set_and_write_new_value(vec);
-
-            // remove knot from knotholder
-            parent_holder->entity.remove(this);
-            // shift knots down one index
-            for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
-                PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
-                if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
-                    if (pspa_ent->_index > this->_index) {
-                        --pspa_ent->_index;
+            if (vec.size() > 1) { //Force dont remove last knot
+                vec.erase(vec.begin() + _index);
+                _pparam->param_set_and_write_new_value(vec);
+                // shift knots down one index
+                for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
+                    PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
+                    if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
+                        if (pspa_ent->_index > this->_index) {
+                            --pspa_ent->_index;
+                        }
                     }
-                }
-            };
-            // delete self and return
-            delete this;
+                };
+                // temporary hide, when knotholder were recreated it finaly drop
+                this->knot->hide();
+            }
             return;
         } else {
             // add a knot to XML

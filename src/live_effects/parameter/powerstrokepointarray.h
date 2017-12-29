@@ -47,6 +47,7 @@ public:
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2_normal() const { return last_pwd2_normal; }
 
     void recalculate_controlpoints_for_new_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    std::vector<Geom::Point> reverse_controlpoints(bool write);
     void set_scale_width(double scale_width){_scale_width = scale_width;};
     double _scale_width;
     friend class PowerStrokePointArrayParamKnotHolderEntity;
