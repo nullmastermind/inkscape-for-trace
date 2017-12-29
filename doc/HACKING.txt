@@ -1,24 +1,3 @@
-Compiling the BZR version
-=========================
-grep Build-Depends debian/control to see a list of (Debian) packages needed for
-compilation.
-
-inkscape.spec.in has a partial list of requirements: 
-
-  grep Requires inkscape.spec.in
-
-At the time of writing, it contains only one package; if you use an RPM-based
-distribution, then please consider updating the Requires/BuildRequires lines to
-help other users of your distribution.  If you don't have BZR write access,
-then you can submit a patch to the bug tracker
-<https://bugs.launchpad.net/inkscape>.
-
-
-See http://wiki.inkscape.org/wiki/index.php/CompilingInkscape for more general
-remarks about compiling, including how to find some of the needed packages for
-your distribution, and suggestions for developers.
-
-
 Contributing to Inkscape
 ========================
 Inkscape welcomes your contributions to help turn it into a fully
@@ -30,7 +9,7 @@ Inkscape more powerful and successful. You probably already have an idea
 of something you'd like to work on. If not, here are just a few ways you
 can help: 
 
-   * Pick a bug, fix it, and send in a patch ("diff -uNrp" or "cvs diff -up")
+   * Pick a bug, fix it, and send in a merge request on gitlab
    * Choose a feature you want to see developed, and make it
    * If you speak a language in addition to English, work on your
      language's i18n file in the po/ directory
@@ -41,14 +20,21 @@ can help:
    * Author a HOWTO describing a trick or technique you've figured out
 
 
-BZR Access
+GIT Access
 ==========
-See https://inkscape.org/en/develop/inkscape-bzr/ for how to access BZR,
-including browsing BZR from a web client.
+Inkscape is currently developed on git, with the code hosted on gitlab.
 
-We give BZR write access out to people with proven interest in helping develop
+ * https://gitlab.com/inkscape/inkscape
+
+We give write access out to people with proven interest in helping develop
 the codebase.  Proving your interest is straightforward:  Make two
 contributions and request access.
+
+Compiling the development version
+=================================
+See http://wiki.inkscape.org/wiki/index.php/CompilingInkscape for general
+remarks about compiling, including how to find some of the needed packages for
+your distribution, and suggestions for developers.
 
 
 Patch Decisions
@@ -72,15 +58,18 @@ least consistent.
 
 Makefiles
 =========
-Makefiles under the src directory are all more or less merged into one
-src/Makefile.am that sources the Makefile_insert files from each directory.
+Inkscape currently uses CMake. We encourage you to build it by creating a build 
+folder, and running 
 
-Note that it's still logically just one file, so variable definitions
-(including INCLUDES etc.) are shared, and variables defined in one
-Makefile_insert can be used in another.
+`cmake <<<source folder>>> \`
+`-DCMAKE_C_COMPILER_LAUNCHER=ccache \`
+`-DCMAKE_CXX_COMPILER_LAUNCHER=ccache \`
+`-DCMAKE_BUILD_TYPE=Debug \`
+`-DCMAKE_INSTALL_PREFIX:PATH=$PWD/..`
 
-Thus, consider either adding a `blah_' prefix to the name of any variables you
-define in blah/Makefile_insert (if it's intended to be local to that
-Makefile_insert), or putting the definition in src/Makefile.am.  In particular,
-note that check_PROGRAMS, DISTCLEANFILES, etc. are in src/Makefile.am.
+This uses ccache to speed up later builds (optional), create a Debug build 
+(use "Release" otherwise) and makes a local install prefix.
 
+(If you have ninja available, add "-G Ninja" to enable it)
+
+Then, run `make -j$(nproc) install` (or `ninja install`) to build & install
