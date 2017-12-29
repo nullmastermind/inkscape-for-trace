@@ -56,42 +56,42 @@ void sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffs
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating);
 
 bool Inkscape::ObjectSet::pathUnion(const bool skip_undo) {
-    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, SP_VERB_SELECTION_UNION, _("Union"));
+    BoolOpErrors result = pathBoolOp(bool_op_union, skip_undo, false, SP_VERB_SELECTION_UNION, _("Union"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathIntersect(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+    BoolOpErrors result = pathBoolOp(bool_op_inters, skip_undo, false, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, SP_VERB_SELECTION_DIFF, _("Difference"));
+    BoolOpErrors result = pathBoolOp(bool_op_diff, skip_undo, false, SP_VERB_SELECTION_DIFF, _("Difference"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSymDiff(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
+    BoolOpErrors result = pathBoolOp(bool_op_symdiff, skip_undo, false, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathCut(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, SP_VERB_SELECTION_CUT, _("Division"));
+    BoolOpErrors result = pathBoolOp(bool_op_cut, skip_undo, false, SP_VERB_SELECTION_CUT, _("Division"));
     return DONE == result;
 }
 
 bool
 Inkscape::ObjectSet::pathSlice(const bool skip_undo)
 {
-    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, SP_VERB_SELECTION_SLICE, _("Cut path"));
+    BoolOpErrors result = pathBoolOp(bool_op_slice, skip_undo, false, SP_VERB_SELECTION_SLICE, _("Cut path"));
     return DONE == result;
 }
 
@@ -308,11 +308,11 @@ Geom::PathVector pathliv_to_pathvector(Path *pathliv){
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
-BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const unsigned int verb, const Glib::ustring description)
+BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, const bool checked, const unsigned int verb, const Glib::ustring description)
 {
-    if (nullptr != desktop() && !skip_undo) {
+    if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
-        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true);
+        BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true);
         switch(returnCode) {
         case ERR_TOO_LESS_PATHS_1:
             boolop_display_error_message(desktop(), _("Select <b>at least 1 path</b> to perform a boolean union."));
@@ -327,10 +327,14 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             boolop_display_error_message(desktop(), _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
             break;
         case DONE_NO_PATH:
-            DocumentUndo::done(doc, SP_VERB_NONE, description);
+            if (!skip_undo) { 
+                DocumentUndo::done(doc, SP_VERB_NONE, description);
+            }
             break;
         case DONE:
-            DocumentUndo::done(doc, verb, description);
+            if (!skip_undo) { 
+                DocumentUndo::done(doc, verb, description);
+            }
             break;
         }
         return returnCode;

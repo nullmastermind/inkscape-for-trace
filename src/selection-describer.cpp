@@ -108,7 +108,10 @@ SelectionDescriber::~SelectionDescriber()
 
 void SelectionDescriber::_selectionModified(Inkscape::Selection *selection, guint /*flags*/)
 {
-    _updateMessageFromSelection(selection);
+    //TODO: finaly drop this function
+    //This realy alwais overvrite values like moving....
+    //I think is better only show this message when selection changes
+    //_updateMessageFromSelection(selection);
 }
 
 void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {
