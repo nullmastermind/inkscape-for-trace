@@ -367,6 +367,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
         return;
     }
 
+    Glib::ustring font_spec_escaped = Glib::Markup::escape_text( font_spec );
     Glib::ustring phrase_escaped = Glib::Markup::escape_text( phrase );
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -379,7 +380,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     std::ostringstream size_st;
     size_st << int(pt_size * PANGO_SCALE); // Markup code expects integers
 
-    Glib::ustring markup = "<span font=\'" + font_spec +
+    Glib::ustring markup = "<span font=\'" + font_spec_escaped +
         "\' size=\'" + size_st.str() + "\'>" + phrase_escaped + "</span>";
 
     preview_label.set_markup(markup.c_str());
