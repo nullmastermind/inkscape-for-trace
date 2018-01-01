@@ -476,7 +476,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     /* min pressure */
     {
         eact = create_adjustment_action( "MinPressureAction",
-                                         _("Min presure"), _("Min:"), _("Min percent of pressure"),
+                                         _("Min pressure"), _("Min:"), _("Min percent of pressure"),
                                          "/tools/freehand/pencil/minpressure", 0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 100, 1, 0,
@@ -494,7 +494,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     /* max pressure */
     {
         eact = create_adjustment_action( "MaxPressureAction",
-                                         _("Max presure"), _("Max:"), _("Max percent of pressure"),
+                                         _("Max pressure"), _("Max:"), _("Max percent of pressure"),
                                          "/tools/freehand/pencil/maxpressure", 100,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0, 100, 1, 0,

@@ -34,7 +34,7 @@ static const Util::EnumData<LPEEmbroderyStitch::order_method> OrderMethodData[LP
     { LPEEmbroderyStitch::order_method_tsp_kopt_2,        N_("traveling salesman 2-opt (fast, bad)"),  "tsp-2opt" },
     { LPEEmbroderyStitch::order_method_tsp_kopt_3,        N_("traveling salesman 3-opt (fast, ok)"),   "tsp-3opt" },
     { LPEEmbroderyStitch::order_method_tsp_kopt_4,        N_("traveling salesman 4-opt (seconds)"),    "tsp-4opt" },
-    { LPEEmbroderyStitch::order_method_tsp_kopt_5,        N_("traveling salesman 5-opt (miutes)"),     "tsp-5opt" }
+    { LPEEmbroderyStitch::order_method_tsp_kopt_5,        N_("traveling salesman 5-opt (minutes)"),    "tsp-5opt" }
 };
 
 static const Util::EnumDataConverter<LPEEmbroderyStitch::order_method>

@@ -130,7 +130,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MEASURE_SEGMENTS,      N_("Measure Segments"),                "measure_segments"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
-    {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
+    {EMBRODERY_STITCH,      N_("Embroidery stitch"),                "embrodery_stitch"},
     {POWERCLIP,             N_("Power clip"),                      "powerclip"},
     {POWERMASK,             N_("Power mask"),                      "powermask"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
