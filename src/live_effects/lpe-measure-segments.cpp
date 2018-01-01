@@ -74,9 +74,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
     scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
     local_locale(_("Local Number Format"), _("Local number format"), "local_locale", &wr, this, true),
-    rotate_anotation(_("Rotate Anotation"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
+    rotate_anotation(_("Rotate Annotation"), _("Rotate Annotation"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
-    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use <b>\"Style Dialog\"</b> to more styling. Each meassure element has extra selectors. Use !important to override defaults..."))
+    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use <b>\"Style Dialog\"</b> to more styling. Each measure element has extra selectors. Use !important to override defaults..."))
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);

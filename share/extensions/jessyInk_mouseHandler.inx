@@ -13,7 +13,7 @@
 			</param>
 		</page>
     <page name="help" _gui-text="Help">
-      <_param name="help_text" type="description">This extension allows you customise the mouse handler JessyInk uses. Please see code.google.com/p/jessyink for more details.</_param>
+      <_param name="help_text" type="description">This extension allows you customize the mouse handler JessyInk uses. Please see code.google.com/p/jessyink for more details.</_param>
     </page>
   </param>
   <effect>

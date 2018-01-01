@@ -36,7 +36,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     method(_("Shape linked"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D),
     attributes("Attributes linked", "Attributes linked, comma separated atributes", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked, comma separated attributes like fill, filter, opacity", "style_attributes", &wr, this,""),
-    allow_transforms(_("Alow transforms"), _("Alow transforms"), "allow_transforms", &wr, this, true)
+    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
 {
     //0.92 compatibility
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");

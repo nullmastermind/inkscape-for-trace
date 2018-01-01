@@ -54,7 +54,7 @@
 			<param name="index_setNumberOfColumnsToDefault" type="string" _gui-text="Set number of columns to default:">0</param>
 		</page>
     <page name="help" _gui-text="Help">
-      <_param name="help_text" type="description">This extension allows you customise the key bindings JessyInk uses. Please see code.google.com/p/jessyink for more details.</_param>
+      <_param name="help_text" type="description">This extension allows you customize the key bindings JessyInk uses. Please see code.google.com/p/jessyink for more details.</_param>
     </page>
   </param>
   <effect>

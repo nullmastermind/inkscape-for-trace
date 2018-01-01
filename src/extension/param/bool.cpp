@@ -83,8 +83,8 @@ public:
      *
      * @param  param  Which parameter to adjust on changing the check button
      */
-    ParamBoolCheckButton (ParamBool * param, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
-            Gtk::CheckButton(), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
+    ParamBoolCheckButton (ParamBool * param, gchar * label, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
+            Gtk::CheckButton(label), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
         this->set_active(_pref->get(NULL, NULL) /**\todo fix */);
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));
         return;
@@ -133,11 +133,7 @@ Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node,
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
 
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
-    label->show();
-    hbox->pack_end(*label, true, true);
-
-    ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, doc, node, changeSignal));
+    ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, _text, doc, node, changeSignal));
     checkbox->show();
     hbox->pack_start(*checkbox, false, false);
 
