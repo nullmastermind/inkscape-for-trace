@@ -44,6 +44,11 @@ namespace BeP {
 class KnotHolderEntityWidthBendPath : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityWidthBendPath(LPEBendPath * effect) : LPEKnotHolderEntity(effect) {}
+        virtual ~KnotHolderEntityWidthBendPath()
+        {
+            LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
+            lpe->_knot_entity = NULL;
+        }
         virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
         virtual Geom::Point knot_get() const;
     };
@@ -67,7 +72,7 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
     
-    knot_entity = NULL;
+    _knot_entity = NULL;
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
     concatenate_before_pwd2 = true;
@@ -85,20 +90,14 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem);
     original_height = boundingbox_Y.max() - boundingbox_Y.min();
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-        SPItem * item = sel->singleItem();
-        if (item->getId() == sp_lpe_item->getId() && static_cast<LPEBendPath*>(sp_lpe_item->getCurrentLPE()) == this) {
-            if (knot_entity && knot_entity->knot) {
-                if (hide_knot) {
-                    helper_path.clear();
-                    knot_entity->knot->hide();
-                } else {
-                    knot_entity->knot->show();
-                }
-                knot_entity->update_knot();
-            }
+    if (_knot_entity) {
+        if (hide_knot) {
+            helper_path.clear();
+            _knot_entity->knot->hide();
+        } else {
+            _knot_entity->knot->show();
         }
+        _knot_entity->update_knot();
     }
 }
 
@@ -187,12 +186,12 @@ LPEBendPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom:
 void 
 LPEBendPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
-    knot_entity = new BeP::KnotHolderEntityWidthBendPath(this);
-    knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
-    knotholder->add(knot_entity);
+    _knot_entity = new BeP::KnotHolderEntityWidthBendPath(this);
+    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    knotholder->add(_knot_entity);
     if (hide_knot) {
-        knot_entity->knot->hide();
-        knot_entity->update_knot();
+        _knot_entity->knot->hide();
+        _knot_entity->update_knot();
     }
 }
 
