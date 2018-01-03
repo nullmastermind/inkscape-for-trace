@@ -823,6 +823,14 @@ void SymbolsDialog::getSymbolsTitle() {
             }
             std::string::size_type position_exit = line.find ("<defs");
             if (position_exit != std::string::npos) {
+                std::size_t found = filename.find_last_of("/\\");
+                filename = filename.substr(found+1);
+                title = filename.erase(filename.rfind('.'));
+                if(title.empty()) {
+                  title = _("Unnamed Symbols");
+                }
+                symbol_sets[title]= NULL;
+                ++number_docs;
                 break;
             }
         } 
@@ -860,8 +868,16 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
         std::string line;
         while (std::getline(infile, line)) {
             std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
-            new_title = ellipsize(Glib::ustring(title_res), 33);
-            if (!title_res.empty() && title == new_title) {
+            if (!title_res.empty()) {
+              new_title = ellipsize(Glib::ustring(title_res), 33);
+            }
+            std::size_t pos = filename.find_last_of("/\\");
+            Glib::ustring filename_short = "";
+            if (pos != std::string::npos) {
+              filename_short = filename.substr(pos+1);
+            }
+            if (title == new_title || filename_short == title + ".svg") {
+                new_title = title;
                 if(Glib::str_has_suffix(filename, ".svg")) {
                     symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
                 }
