@@ -384,8 +384,8 @@ void PreviewHolder::rebuildUI()
                     BORDER_SOLID_LAST_ROW : _border;
 
                 Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
-                item->set_hexpand(false);
-                item->set_vexpand(false);
+                item->set_hexpand();
+                item->set_vexpand();
 
                 if (i == 0) {
                     // We need one item shown before we can call calcGridSize()...
