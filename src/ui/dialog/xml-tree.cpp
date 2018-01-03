@@ -214,7 +214,6 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *attr_scroller = new Gtk::ScrolledWindow();
     attr_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     attr_scroller->set_shadow_type(Gtk::SHADOW_IN);
-    attr_scroller->set_size_request(0, 60);
 
     attr_subpaned_container.pack1( *attr_scroller );
     attr_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(attributes))));
@@ -231,17 +230,15 @@ XmlTree::XmlTree (void) :
     Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
     scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller->set_shadow_type(Gtk::SHADOW_IN);
-    scroller->set_size_request(0, 60);
 
     attr_vbox.pack_start(*scroller, TRUE, TRUE, 0);
 
-    attr_value.set_size_request(0, 60);
     attr_value.set_wrap_mode(Gtk::WRAP_CHAR);
     attr_value.set_tooltip_text( _("Attribute value") );// TRANSLATORS: "Attribute" is a noun here
     attr_value.set_editable(TRUE);
     scroller->add(attr_value);
 
-    attr_subpaned_container.pack2( attr_vbox, FALSE, TRUE );
+    attr_subpaned_container.pack2( attr_vbox, FALSE, FALSE );
 
     /* text */
     text_container.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
