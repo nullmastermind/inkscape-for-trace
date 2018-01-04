@@ -406,7 +406,7 @@ Application::add_style_sheet()
       // Gtk::CssProviderError not defined until 3.16.
       catch (const Gtk::CssProviderError& ex)
       {
-          g_error("CSSProviderError::load_from_path(): %s\n(%s)",
+          g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
                  style.c_str(), ex.what().c_str());
       }
 #else
