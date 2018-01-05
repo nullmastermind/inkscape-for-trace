@@ -35,6 +35,7 @@ LPELattice2::LPELattice2(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     horizontal_mirror(_("Mirror movements in horizontal"), _("Mirror movements in horizontal"), "horizontal_mirror", &wr, this, false),
     vertical_mirror(_("Mirror movements in vertical"), _("Mirror movements in vertical"), "vertical_mirror", &wr, this, false),
+    perimetral(_("Use only perimeter"), _("Use only perimeter"), "perimetral", &wr, this, false),
     live_update(_("Update while moving knots (maybe slow)"), _("Update while moving knots (maybe slow)"), "live_update", &wr, this, true),
     grid_point_0(_("Control 0:"), _("Control 0 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"), "gridpoint0", &wr, this),
     grid_point_1(_("Control 1:"), _("Control 1 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"), "gridpoint1", &wr, this),
@@ -66,6 +67,7 @@ LPELattice2::LPELattice2(LivePathEffectObject *lpeobject) :
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     registerParameter(&horizontal_mirror);
     registerParameter(&vertical_mirror);
+    registerParameter(&perimetral);
     registerParameter(&live_update);
     registerParameter(&grid_point_0);
     registerParameter(&grid_point_1);
@@ -240,7 +242,11 @@ LPELattice2::newWidget()
             }
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
-                if (param->param_key == "horizontal_mirror" || param->param_key == "vertical_mirror" || param->param_key == "live_update") {
+                if (param->param_key == "horizontal_mirror" || 
+                    param->param_key == "vertical_mirror" || 
+                    param->param_key == "live_update" ||
+                    param->param_key == "perimetral") 
+                {
                     vbox->pack_start(*widg, true, true, 2);
                 } else {
                     vbox_expander->pack_start(*widg, true, true, 2);
@@ -317,6 +323,7 @@ LPELattice2::horizontal(PointParam &param_one, PointParam &param_two, Geom::Line
     param_two.param_setValue(B, live_update);
 }
 
+
 void
 LPELattice2::doBeforeEffect (SPLPEItem const* lpeitem)
 {
@@ -347,6 +354,36 @@ LPELattice2::doBeforeEffect (SPLPEItem const* lpeitem)
         horizontal(grid_point_16, grid_point_18,horiz);
         horizontal(grid_point_17, grid_point_19,horiz);
         horizontal(grid_point_20x21, grid_point_22x23,horiz);
+    }
+    if (perimetral) {
+        grid_point_16.param_hide_knot(true);
+        grid_point_20x21.param_hide_knot(true);
+        grid_point_17.param_hide_knot(true);
+        grid_point_28x30.param_hide_knot(true);
+        grid_point_32x33x34x35.param_hide_knot(true);
+        grid_point_29x31.param_hide_knot(true);
+        grid_point_18.param_hide_knot(true);
+        grid_point_22x23.param_hide_knot(true);
+        grid_point_19.param_hide_knot(true);
+        grid_point_16.param_set_default();
+        grid_point_20x21.param_set_default();
+        grid_point_17.param_set_default();
+        grid_point_28x30.param_set_default();
+        grid_point_32x33x34x35.param_set_default();
+        grid_point_29x31.param_set_default();
+        grid_point_18.param_set_default();
+        grid_point_22x23.param_set_default();
+        grid_point_19.param_set_default();
+    } else {
+        grid_point_16.param_hide_knot(false);
+        grid_point_20x21.param_hide_knot(false);
+        grid_point_17.param_hide_knot(false);
+        grid_point_28x30.param_hide_knot(false);
+        grid_point_32x33x34x35.param_hide_knot(false);
+        grid_point_29x31.param_hide_knot(false);
+        grid_point_18.param_hide_knot(false);
+        grid_point_22x23.param_hide_knot(false);
+        grid_point_19.param_hide_knot(false);
     }
 }
 
@@ -537,55 +574,78 @@ LPELattice2::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom:
     hp_vec.clear();
 
     SPCurve *c = new SPCurve();
-    calculateCurve(grid_point_0,grid_point_4, c,true, true);
-    calculateCurve(grid_point_4,grid_point_8x9, c,true, false);
-    calculateCurve(grid_point_8x9,grid_point_5, c,true, false);
-    calculateCurve(grid_point_5,grid_point_1, c,true, false);
+    if (perimetral) {
+        calculateCurve(grid_point_0,grid_point_4, c,true, true);
+        calculateCurve(grid_point_4,grid_point_8x9, c,true, false);
+        calculateCurve(grid_point_8x9,grid_point_5, c,true, false);
+        calculateCurve(grid_point_5,grid_point_1, c,true, false);
+        
+        calculateCurve(grid_point_1,grid_point_13, c, false, true);
+        calculateCurve(grid_point_13,grid_point_25x27, c,false, false);
+        calculateCurve(grid_point_25x27,grid_point_15, c,false, false);
+        calculateCurve(grid_point_15,grid_point_3, c, false, false);
+        
+        calculateCurve(grid_point_2,grid_point_6, c,true, true);
+        calculateCurve(grid_point_6,grid_point_10x11, c,true, false);
+        calculateCurve(grid_point_10x11,grid_point_7, c,true, false);
+        calculateCurve(grid_point_7,grid_point_3, c,true, false);
+        
+        calculateCurve(grid_point_0,grid_point_12, c,false, true);
+        calculateCurve(grid_point_12,grid_point_24x26, c,false, false);
+        calculateCurve(grid_point_24x26,grid_point_14, c,false, false);
+        calculateCurve(grid_point_14,grid_point_2, c,false, false);
+        
+    } else {
+        calculateCurve(grid_point_0,grid_point_4, c,true, true);
+        calculateCurve(grid_point_4,grid_point_8x9, c,true, false);
+        calculateCurve(grid_point_8x9,grid_point_5, c,true, false);
+        calculateCurve(grid_point_5,grid_point_1, c,true, false);
 
-    calculateCurve(grid_point_12,grid_point_16, c,true, true);
-    calculateCurve(grid_point_16,grid_point_20x21, c,true, false);
-    calculateCurve(grid_point_20x21,grid_point_17, c,true, false);
-    calculateCurve(grid_point_17,grid_point_13, c,true, false);
+        calculateCurve(grid_point_12,grid_point_16, c,true, true);
+        calculateCurve(grid_point_16,grid_point_20x21, c,true, false);
+        calculateCurve(grid_point_20x21,grid_point_17, c,true, false);
+        calculateCurve(grid_point_17,grid_point_13, c,true, false);
 
-    calculateCurve(grid_point_24x26,grid_point_28x30, c,true, true);
-    calculateCurve(grid_point_28x30,grid_point_32x33x34x35, c,true, false);
-    calculateCurve(grid_point_32x33x34x35,grid_point_29x31, c,true, false);
-    calculateCurve(grid_point_29x31,grid_point_25x27, c,true, false);
+        calculateCurve(grid_point_24x26,grid_point_28x30, c,true, true);
+        calculateCurve(grid_point_28x30,grid_point_32x33x34x35, c,true, false);
+        calculateCurve(grid_point_32x33x34x35,grid_point_29x31, c,true, false);
+        calculateCurve(grid_point_29x31,grid_point_25x27, c,true, false);
 
-    calculateCurve(grid_point_14,grid_point_18, c,true, true);
-    calculateCurve(grid_point_18,grid_point_22x23, c,true, false);
-    calculateCurve(grid_point_22x23,grid_point_19, c,true, false);
-    calculateCurve(grid_point_19,grid_point_15, c,true, false);
+        calculateCurve(grid_point_14,grid_point_18, c,true, true);
+        calculateCurve(grid_point_18,grid_point_22x23, c,true, false);
+        calculateCurve(grid_point_22x23,grid_point_19, c,true, false);
+        calculateCurve(grid_point_19,grid_point_15, c,true, false);
 
-    calculateCurve(grid_point_2,grid_point_6, c,true, true);
-    calculateCurve(grid_point_6,grid_point_10x11, c,true, false);
-    calculateCurve(grid_point_10x11,grid_point_7, c,true, false);
-    calculateCurve(grid_point_7,grid_point_3, c,true, false);
+        calculateCurve(grid_point_2,grid_point_6, c,true, true);
+        calculateCurve(grid_point_6,grid_point_10x11, c,true, false);
+        calculateCurve(grid_point_10x11,grid_point_7, c,true, false);
+        calculateCurve(grid_point_7,grid_point_3, c,true, false);
 
-    calculateCurve(grid_point_0,grid_point_12, c,false, true);
-    calculateCurve(grid_point_12,grid_point_24x26, c,false, false);
-    calculateCurve(grid_point_24x26,grid_point_14, c,false, false);
-    calculateCurve(grid_point_14,grid_point_2, c,false, false);
+        calculateCurve(grid_point_0,grid_point_12, c,false, true);
+        calculateCurve(grid_point_12,grid_point_24x26, c,false, false);
+        calculateCurve(grid_point_24x26,grid_point_14, c,false, false);
+        calculateCurve(grid_point_14,grid_point_2, c,false, false);
 
-    calculateCurve(grid_point_4,grid_point_16, c,false, true);
-    calculateCurve(grid_point_16,grid_point_28x30, c,false, false);
-    calculateCurve(grid_point_28x30,grid_point_18, c,false, false);
-    calculateCurve(grid_point_18,grid_point_6, c,false, false);
+        calculateCurve(grid_point_4,grid_point_16, c,false, true);
+        calculateCurve(grid_point_16,grid_point_28x30, c,false, false);
+        calculateCurve(grid_point_28x30,grid_point_18, c,false, false);
+        calculateCurve(grid_point_18,grid_point_6, c,false, false);
 
-    calculateCurve(grid_point_8x9,grid_point_20x21, c,false, true);
-    calculateCurve(grid_point_20x21,grid_point_32x33x34x35, c,false, false);
-    calculateCurve(grid_point_32x33x34x35,grid_point_22x23, c,false, false);
-    calculateCurve(grid_point_22x23,grid_point_10x11, c,false, false);
+        calculateCurve(grid_point_8x9,grid_point_20x21, c,false, true);
+        calculateCurve(grid_point_20x21,grid_point_32x33x34x35, c,false, false);
+        calculateCurve(grid_point_32x33x34x35,grid_point_22x23, c,false, false);
+        calculateCurve(grid_point_22x23,grid_point_10x11, c,false, false);
 
-    calculateCurve(grid_point_5,grid_point_17, c, false, true);
-    calculateCurve(grid_point_17,grid_point_29x31, c,false, false);
-    calculateCurve(grid_point_29x31,grid_point_19, c,false, false);
-    calculateCurve(grid_point_19,grid_point_7, c,false, false);
+        calculateCurve(grid_point_5,grid_point_17, c, false, true);
+        calculateCurve(grid_point_17,grid_point_29x31, c,false, false);
+        calculateCurve(grid_point_29x31,grid_point_19, c,false, false);
+        calculateCurve(grid_point_19,grid_point_7, c,false, false);
 
-    calculateCurve(grid_point_1,grid_point_13, c, false, true);
-    calculateCurve(grid_point_13,grid_point_25x27, c,false, false);
-    calculateCurve(grid_point_25x27,grid_point_15, c,false, false);
-    calculateCurve(grid_point_15,grid_point_3, c, false, false);
+        calculateCurve(grid_point_1,grid_point_13, c, false, true);
+        calculateCurve(grid_point_13,grid_point_25x27, c,false, false);
+        calculateCurve(grid_point_25x27,grid_point_15, c,false, false);
+        calculateCurve(grid_point_15,grid_point_3, c, false, false);
+    }
     hp_vec.push_back(c->get_pathvector());
 }
 

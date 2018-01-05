@@ -25,7 +25,7 @@ PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
     :   Parameter(label, tip, key, wr, effect), 
         defvalue(default_value),
         liveupdate(live_update),
-        knoth(NULL)
+        _knot_entity(NULL)
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode  = SP_KNOT_MODE_XOR;
@@ -75,6 +75,23 @@ PointParam::param_update_default(const gchar * default_point)
     }
 }
 
+void 
+PointParam::param_hide_knot(bool hide) {
+    if (_knot_entity) {
+        bool update = false;
+        if (hide && _knot_entity->knot->flags & SP_KNOT_VISIBLE) {
+            update = true;
+            _knot_entity->knot->hide();
+        } else if(!hide && !(_knot_entity->knot->flags & SP_KNOT_VISIBLE)) {
+            update = true;
+            _knot_entity->knot->show();
+        }
+        if (update) {
+            _knot_entity->update_knot();
+        }
+    }
+}
+
 void
 PointParam::param_setValue(Geom::Point newpoint, bool write)
 {
@@ -86,8 +103,8 @@ PointParam::param_setValue(Geom::Point newpoint, bool write)
         param_write_to_repr(str);
         g_free(str);
     }
-    if(knoth && liveupdate){
-        knoth->update_knots();
+    if(_knot_entity && liveupdate){
+        _knot_entity->update_knot();
     }
 }
 
@@ -170,7 +187,7 @@ PointParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint
 class PointParamKnotHolderEntity : public KnotHolderEntity {
 public:
     PointParamKnotHolderEntity(PointParam *p) { this->pparam = p; }
-    virtual ~PointParamKnotHolderEntity() { this->pparam->knoth = NULL;}
+    virtual ~PointParamKnotHolderEntity() { this->pparam->_knot_entity = NULL;}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;
@@ -198,7 +215,7 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
     pparam->param_setValue(s);
     SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
     if(splpeitem && this->pparam->liveupdate){
-        sp_lpe_item_update_patheffect(splpeitem, false, false);
+        sp_lpe_item_update_patheffect(splpeitem, true, true);
     }
 }
 
@@ -216,7 +233,7 @@ PointParamKnotHolderEntity::knot_click(guint state)
             this->pparam->param_set_default();
             SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
             if(splpeitem){
-                sp_lpe_item_update_patheffect(splpeitem, false, false);
+                sp_lpe_item_update_patheffect(splpeitem, true, true);
             }
         }
     }
@@ -225,11 +242,10 @@ PointParamKnotHolderEntity::knot_click(guint state)
 void
 PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
-    knoth = knotholder;
-    PointParamKnotHolderEntity *e = new PointParamKnotHolderEntity(this);
+    _knot_entity = new PointParamKnotHolderEntity(this);
     // TODO: can we ditch handleTip() etc. because we have access to handle_tip etc. itself???
-    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
-    knotholder->add(e);
+    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
+    knotholder->add(_knot_entity);
 }
 
 } /* namespace LivePathEffect */

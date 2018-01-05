@@ -42,6 +42,7 @@ public:
     inline const gchar *handleTip() const { return handle_tip ? handle_tip : param_tooltip.c_str(); }
     void param_setValue(Geom::Point newpoint, bool write = false);
     void param_set_default();
+    void param_hide_knot(bool hide);
     Geom::Point param_get_default() const;
     void param_set_liveupdate(bool live_update);
     void param_update_default(Geom::Point default_point);
@@ -60,7 +61,7 @@ private:
     bool on_button_release(GdkEventButton* button_event);
     Geom::Point defvalue;
     bool liveupdate;
-    KnotHolder *knoth;
+    KnotHolderEntity * _knot_entity;
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;
     guint32 knot_color;
