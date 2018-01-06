@@ -56,6 +56,7 @@ class Plot(inkex.Effect):
         self.OptionParser.add_option('--flat',              action='store', type='float',   dest='flat',              default=1.2,     help='Curve flatness')
         self.OptionParser.add_option('--autoAlign',         action='store', type='inkbool', dest='autoAlign',         default='TRUE',  help='Auto align')
         self.OptionParser.add_option('--debug',             action='store', type='inkbool', dest='debug',             default='FALSE', help='Show debug information')
+        self.OptionParser.add_option('--convertObjects',    action='store', type='inkbool', dest='convertObjects',    default='TRUE',  help='Convert objects to paths')
 
     def effect(self):
         # get hpgl data

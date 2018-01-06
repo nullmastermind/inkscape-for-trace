@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import math
 import re
 import string
+from subprocess import Popen, PIPE
+from shutil import copy2
 # local libraries
 import bezmisc
 import cspsubdiv
@@ -52,9 +54,13 @@ class hpglEncoder:
                 "precut":bool
                 "autoAlign":bool
                 "debug":bool
+                "convertObjects":bool
         '''
         self.options = effect.options
-        self.doc = effect.document.getroot()
+        if self.options.convertObjects:
+            self.doc = self.convertObjectsToPaths(effect.args[-1], effect.document)
+        else:
+            self.doc = effect.document.getroot()
         self.docWidth = effect.unittouu(self.doc.get('width'))
         self.docHeight = effect.unittouu(self.doc.get('height'))
         self.hpgl = ''
@@ -103,6 +109,24 @@ class hpglEncoder:
                 self.debugValues['viewBoxHeight'] = viewBox2[3]
             self.viewBoxTransformX = self.docWidth / effect.unittouu(effect.addDocumentUnit(viewBox2[2]))
             self.viewBoxTransformY = self.docHeight / effect.unittouu(effect.addDocumentUnit(viewBox2[3]))
+
+    def convertObjectsToPaths(self, file, document):
+        tempfile = inkex.os.path.splitext(file)[0] + "-prepare.svg"
+        # tempfile is needed here only because we want to force the extension to be .svg
+        # so that we can open and close it silently
+        copy2(file, tempfile)
+
+        # Unfortunately this briefly pops up the GUI and cannot be done with -z, see https://bugs.launchpad.net/inkscape/+bug/843260
+        p = Popen('inkscape --verb=EditSelectAllInAllLayers --verb=EditUnlinkClone --verb=ObjectToPath --verb=FileSave --verb=FileQuit ' + tempfile, shell=True, stdout=PIPE, stderr=PIPE)
+        (out, err) = p.communicate()
+
+        if p.returncode != 0:
+            inkex.errormsg(_("Failed to convert objects to paths. Continued without converting."))
+            inkex.errormsg(out)
+            inkex.errormsg(err)
+            return document.getroot()
+        else:
+            return inkex.etree.parse(tempfile).getroot()
 
     def getHpgl(self):
         # dryRun to find edges

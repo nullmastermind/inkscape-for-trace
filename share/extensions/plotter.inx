@@ -87,6 +87,7 @@
       <param name="autoAlign" type="boolean" _gui-text="Auto align" _gui-description="Check this to auto align the drawing to the zero point (Plus the tool offset if used). If unchecked you have to make sure that all parts of your drawing are within the document border! (Default: Checked)">true</param>
       <param name="space" type="description">&#xa0;</param>
       <param name="debug" type="boolean" _gui-text="Show debug information" _gui-description="Check this to get verbose information about the plot without actually sending something to the plotter (A.k.a. data dump) (Default: Unchecked)">false</param>
+      <param name="convertObjects" type="boolean" _gui-text="Convert objects to paths" _gui-description="Check this to automatically (nondestructively) convert all objects to paths before plotting (Default: Checked)">true</param>
     </page>
   </param>
   <_param name="settingsHelp" type="description">All these settings depend on the plotter you use, for more information please consult the manual or homepage for your plotter.</_param>
