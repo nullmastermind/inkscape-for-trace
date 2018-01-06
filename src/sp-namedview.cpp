@@ -785,33 +785,24 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     bool show_dialogs = true;
 
     // restore window size and position stored with the document
+    Gtk::Window *win = desktop->getToplevel();
+    g_assert(win);
     if (geometry_from_last) {
         // do nothing, as we already have code for that in interface.cpp
         // TODO: Probably should not do similar things in two places
     } else if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
-        Gtk::Window *win = desktop->getToplevel();
-        if (win) {
-            win->maximize();
-        }
+        win->maximize();
     } else {
-
-        // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
         Gdk::Rectangle monitor_geometry;
-
 #if GTKMM_CHECK_VERSION(3,22,0)
         auto const display = Gdk::Display::get_default();
-        auto const monitor = display->get_primary_monitor();
-
-        // If user hasn't configured a primary monitor, nullptr is returned.
-        if (monitor) {
-            monitor->get_geometry(monitor_geometry);
-        }
+        auto const monitor = display->get_monitor_at_window(win->get_window());
+        monitor->get_geometry(monitor_geometry);
 #else
         auto const default_screen = Gdk::Screen::get_default();
-        auto const monitor_number = default_screen->get_primary_monitor();
+        auto const monitor_number = default_screen->get_monitor_at_window(win->get_window());
         default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
 #endif
-
         int w = monitor_geometry.get_width();
         int h = monitor_geometry.get_height();
 
