@@ -737,41 +737,6 @@ void SPNamedView::show(SPDesktop *desktop)
     desktop->showGrids(grids_visible, false);
 }
 
-namespace {
-
-gint const MIN_ONSCREEN_DISTANCE = 100;
-gdouble const NEWDOC_X_SCALE = 0.75;
-gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
-
-Geom::Point calcAnchorPoint(gint const x, gint const y,
-                            gint const w, gint const h, gint const minOnscreen)
-{
-#if GTKMM_CHECK_VERSION(3,22,0)
-    Gdk::Rectangle screen_geometry;
-
-    auto const display = Gdk::Display::get_default();
-    auto const monitor = display->get_primary_monitor();
-    monitor->get_geometry(screen_geometry);
-    int screen_width  = screen_geometry.get_width();
-    int screen_height = screen_geometry.get_height();
-#else
-    int screen_width  = gdk_screen_width();
-    int screen_height = gdk_screen_height();
-#endif
-
-    // prevent the window from moving off the screen to the right or to the bottom
-    gint ax = MIN(screen_width  - minOnscreen, x);
-    gint ay = MIN(screen_height - minOnscreen, y);
-
-    // prevent the window from moving off the screen to the left or to the top
-    ax = MAX(minOnscreen - w, ax);
-    ay = MAX(minOnscreen - h, ay);
-
-    return Geom::Point(ax, ay);
-}
-
-} // namespace
-
 /*
  * Restores window geometry from the document settings or defaults in prefs
  */
@@ -813,8 +778,8 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             h = MIN(h, nv->window_height);      
             move_to_screen = true;
         } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
-            w *= NEWDOC_X_SCALE;
-            h *= NEWDOC_Y_SCALE;
+            w *= 0.75;
+            h *= 0.75;
         } else if (default_size == PREFS_WINDOW_SIZE_SMALL) {
             w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
         } 
@@ -833,8 +798,9 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 #endif
             desktop->setWindowSize(w, h);
             if (move_to_screen) {
-                Geom::Point origin = calcAnchorPoint(nv->window_x, nv->window_y, w, h, MIN_ONSCREEN_DISTANCE);
-                desktop->setWindowPosition(origin);
+                win->hide();
+                desktop->setWindowPosition(Geom::Point(nv->window_x, nv->window_y));
+                win->show();
             }
         }
     }
