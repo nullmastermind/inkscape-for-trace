@@ -14,23 +14,27 @@ Symbol files should be carefully prepared.
 1. The SVG should be clean: No unnecessary transforms, sensible path
    data, etc. Do a manual inspection. Remove cruft like guide-lines,
    grids, etc.
+   
+2. The SVG itself needs a <title> element, placed before any <symbol>
+   tags, which contains the name of the symbol set, without any
+   surrounding extra spaces. The whole element needs to be on a line
+   of its own. If no title element is provided, or its syntax isn't
+   correct, the name of the file will be used as a label for the
+   symbol set in the user interface instead.
  
-2. Avoid adding unnecessary style properties in the symbol elements;
-   this prevents the user from over-riding the default styling by
+3. Avoid adding unnecessary style properties in the symbol elements;
+   this prevents the user from overriding the default styling by
    specifying the style on the <use> element. Default styling can be
    specified in the root SVG element. Inkscape will apply this
    styling by default in the <use> element.
 
-3. Provide a meaningful <title> element for each symbol. This will be
+4. Provide a meaningful <title> element for each symbol. This will be
    appear in the GUI as a tool-tip.
 
-4. Make sure there are no "transform" elements in the <symbol>
+5. Make sure there are no "transform" elements in the <symbol>
    element. Transforms are not allowed per specification and are not
    supported in most browsers. ('refX' and 'refY' are allowed in SVG
    2.)
 
-5. Add a section with <use> elements to demonstrate the symbols is the
+6. Add a section with <use> elements to demonstrate the symbols if the
    file is opened by itself.
-
-
-
