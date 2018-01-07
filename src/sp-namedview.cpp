@@ -754,18 +754,18 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
                (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
         win->maximize();
     } else {
-        Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
-        int w = monitor_geometry.get_width();
-        int h = monitor_geometry.get_height();
-
+        int w = 0;
+        int h = 0;
         bool move_to_screen = false;
-        if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) { 
-            w = MIN(w, nv->window_width);
-            h = MIN(h, nv->window_height);      
+        if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) {
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(nv->window_x, nv->window_y);
+            w = MIN(monitor_geometry.get_width(), nv->window_width);
+            h = MIN(monitor_geometry.get_height(), nv->window_height);      
             move_to_screen = true;
         } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
-            w *= 0.75;
-            h *= 0.75;
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
+            w = 0.75 * monitor_geometry.get_width();
+            h = 0.75 * monitor_geometry.get_height();
         } else if (default_size == PREFS_WINDOW_SIZE_SMALL) {
             w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
         } 
