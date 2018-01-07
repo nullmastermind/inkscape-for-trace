@@ -40,6 +40,7 @@
 #include "document.h"
 
 #include "ui/interface.h"
+#include "ui/monitor.h"
 #include "desktop.h"
 #include "selection-chemistry.h"
 #include "svg-view-widget.h"
@@ -133,8 +134,6 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
                                      Glib::ustring const &name);
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
-static const int MIN_ONSCREEN_DISTANCE = 50;
-
 void
 sp_create_window(SPViewWidget *vw, bool editable)
 {
@@ -171,6 +170,9 @@ sp_create_window(SPViewWidget *vw, bool editable)
             gint full = prefs->getBool("/desktop/geometry/fullscreen");
             gint maxed = prefs->getBool("/desktop/geometry/maximized");
             if (pw>0 && ph>0) {
+                Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
+                pw = std::min(pw, monitor_geometry.get_width());
+                ph = std::min(ph, monitor_geometry.get_height());      
                 desktop->setWindowSize(pw, ph);
                 desktop->setWindowPosition(Geom::Point(px, py));
             }
