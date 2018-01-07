@@ -373,7 +373,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // This might need to be a global variable so setTargetDesktop can modify it
   SPDefs *defs = current_document->getDefs();
-
   sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
   instanceConns.push_back(defsModifiedConn);
 
@@ -852,6 +851,11 @@ void SymbolsDialog::getSymbolsTitle() {
 std::pair<Glib::ustring, SPDocument*>
 SymbolsDialog::getSymbolsSet(Glib::ustring title) 
 {
+    SPDocument* symbol_doc = NULL;
+    Glib::ustring current = symbol_set->get_active_text();
+    if (current == CURRENTDOC) {
+      return std::make_pair(CURRENTDOC, symbol_doc);
+    }
     if (symbol_sets[title]) {
       sensitive = false;
       symbol_set->remove_all();
@@ -867,7 +871,6 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
       return std::make_pair(title, symbol_sets[title]);
     }
     using namespace Inkscape::IO::Resource;
-    SPDocument* symbol_doc = NULL;
     Glib::ustring new_title;
 
     std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 

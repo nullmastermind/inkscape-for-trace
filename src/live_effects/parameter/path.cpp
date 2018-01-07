@@ -277,10 +277,13 @@ PathParam::param_editOncanvas(SPItem *item, SPDesktop * dt)
         r.item = reinterpret_cast<SPItem*>(param_effect->getLPEObj());
         r.lpe_key = param_key;
         Geom::PathVector stored_pv =  _pathvector;
-        param_write_to_repr("M0,0 L1,0");
-        gchar *svgd = sp_svg_write_path(stored_pv);
-        param_write_to_repr(svgd);
-        g_free(svgd);
+        if (_pathvector.empty()) {
+            param_write_to_repr("M0,0 L1,0");
+        } else {
+            gchar *svgd = sp_svg_write_path(stored_pv);
+            param_write_to_repr(svgd);
+            g_free(svgd);
+        }
     } else {
         r.item = ref.getObject();
     }
