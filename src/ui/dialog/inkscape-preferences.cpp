@@ -707,10 +707,16 @@ void InkscapePreferences::initPageUI()
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
     {
-        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Small"), C_("Window size", "Large"), C_("Window size", "Maximized")};
-        int defaultSizeValues[] = {PREFS_WINDOW_SIZE_SMALL, PREFS_WINDOW_SIZE_LARGE, PREFS_WINDOW_SIZE_MAXIMIZED};
+        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),
+                                             C_("Window size", "Small"),
+                                             C_("Window size", "Large"),
+                                             C_("Window size", "Maximized")};
+        int defaultSizeValues[] = {PREFS_WINDOW_SIZE_NATURAL,
+                                   PREFS_WINDOW_SIZE_SMALL,
+                                   PREFS_WINDOW_SIZE_LARGE,
+                                   PREFS_WINDOW_SIZE_MAXIMIZED};
 
-        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), PREFS_WINDOW_SIZE_LARGE);
+        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), PREFS_WINDOW_SIZE_NATURAL);
         _page_windows.add_line( false, _("Default window size:"),  _win_default_size, "",
                            _("Set the default window size"), false);
     }

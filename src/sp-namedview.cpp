@@ -740,7 +740,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     SPNamedView *nv = desktop->namedview;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    int default_size = prefs->getInt("/options/defaultwindowsize/value", PREFS_WINDOW_SIZE_LARGE);
+    int default_size = prefs->getInt("/options/defaultwindowsize/value", PREFS_WINDOW_SIZE_NATURAL);
     bool new_document = (nv->window_width <= 0) || (nv->window_height <= 0);
     bool show_dialogs = true;
 
@@ -754,6 +754,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
                (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
         win->maximize();
     } else {
+        const int MIN_WINDOW_SIZE = 600;
         int w = 0;
         int h = 0;
         bool move_to_screen = false;
@@ -764,11 +765,13 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             move_to_screen = true;
         } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
             Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
-            w = 0.75 * monitor_geometry.get_width();
-            h = 0.75 * monitor_geometry.get_height();
+            w = MAX(0.75 * monitor_geometry.get_width(), MIN_WINDOW_SIZE);
+            h = MAX(0.75 * monitor_geometry.get_height(), MIN_WINDOW_SIZE);
         } else if (default_size == PREFS_WINDOW_SIZE_SMALL) {
-            w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
-        } 
+            w = h = MIN_WINDOW_SIZE;
+        } else if (default_size == PREFS_WINDOW_SIZE_NATURAL) {
+            // don't set size (i.e. keep the gtk+ default, which will be the natural size)
+        }
         if ((w > 0) && (h > 0)) {
 #ifndef WIN32
             gint dx= 0;

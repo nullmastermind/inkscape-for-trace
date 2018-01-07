@@ -122,6 +122,7 @@ enum PrefsSaveWindowGeometry {
 /* default window size preference values (/options/defaultwindowsize/value) */
 
 enum PrefsDefaultWindowSize {
+    PREFS_WINDOW_SIZE_NATURAL = -1,
     PREFS_WINDOW_SIZE_SMALL = 0,
     PREFS_WINDOW_SIZE_LARGE = 1,
     PREFS_WINDOW_SIZE_MAXIMIZED = 2,
