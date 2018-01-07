@@ -52,7 +52,8 @@ RegisteredCheckButton::RegisteredCheckButton (const Glib::ustring& label, const 
     setProgrammatically = false;
 
     set_tooltip_text (tip);
-    Gtk::Label *l = new Gtk::Label (label);
+    Gtk::Label *l = new Gtk::Label();
+    l->set_markup(label);
     l->set_use_underline (true);
     add (*manage (l));
 
