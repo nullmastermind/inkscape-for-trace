@@ -721,7 +721,7 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
     // even if this is not possible the alternate short (8.3) file name will be used if available
     fullname = g_win32_locale_filename_from_utf8(filename.c_str());
   #else
-    filename.copy(fullname, filename.length());
+    fullname = strdup(filename.c_str());
   #endif
 
   RVNGFileStream input(fullname);
@@ -730,7 +730,6 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
   }
-
   RVNGStringVector output;
   RVNGStringVector titles;
 #if WITH_LIBVISIO01
@@ -742,7 +741,6 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 #endif
     return NULL;
   }
-
   if (output.empty()) {
     return NULL;
   }
@@ -798,7 +796,6 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 
   tmpSVGOutput += "  </defs>\n";
   tmpSVGOutput += "</svg>\n";
-
   return SPDocument::createNewDocFromMem( tmpSVGOutput.c_str(), strlen( tmpSVGOutput.c_str()), 0 );
 
 }
@@ -876,19 +873,17 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
     std::regex matchtitle (".*?<title.*?>(.*?)<(/| /)"); 
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
         if(Glib::str_has_suffix(filename, ".vss")) {
+#ifdef WITH_LIBVISIO
           std::size_t pos = filename.find_last_of("/\\");
           Glib::ustring filename_short = "";
           if (pos != std::string::npos) {
             filename_short = filename.substr(pos+1);
           }
-          if (filename_short == title + ".svg") {
+          if (filename_short == title + ".vss") {
               new_title = title;
-#ifdef WITH_LIBVISIO
-              if(Glib::str_has_suffix(filename, ".vss")) {
-                  symbol_doc = read_vss(filename, title);
-              }
-#endif
+              symbol_doc = read_vss(Glib::ustring(filename), title);
           }
+#endif
         } else {
             std::ifstream infile(filename);
             std::string line;
