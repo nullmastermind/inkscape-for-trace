@@ -1636,7 +1636,7 @@ void FileSaveDialogImplWin32::createFilterMenu()
         const gchar *filter_extension = omod->get_extension();
         filter.filter = g_utf8_to_utf16(
             filter_extension, -1, NULL, &filter.filter_length, NULL);
-        knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(filter_extension).icasefold(), omod));
+        knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(filter_extension).casefold(), omod));
 
         // Type
         filter.name = g_utf8_to_utf16(
