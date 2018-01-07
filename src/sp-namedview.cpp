@@ -27,6 +27,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop-events.h"
+#include "enums.h"
 
 #include "sp-guide.h"
 #include "sp-item-group.h"
@@ -778,19 +779,19 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 {
     SPNamedView *nv = desktop->namedview;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool geometry_from_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
-    bool geometry_from_last = (2 == prefs->getInt("/options/savewindowgeometry/value", 0));
-    gint default_geometry = prefs->getInt("/options/defaultwindowsize/value", 1);
+    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+    int default_size = prefs->getInt("/options/defaultwindowsize/value", PREFS_WINDOW_SIZE_LARGE);
     bool new_document = (nv->window_width <= 0) || (nv->window_height <= 0);
     bool show_dialogs = true;
 
     // restore window size and position stored with the document
     Gtk::Window *win = desktop->getToplevel();
     g_assert(win);
-    if (geometry_from_last) {
+    if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
         // do nothing, as we already have code for that in interface.cpp
         // TODO: Probably should not do similar things in two places
-    } else if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
+    } else if ((window_geometry == PREFS_WINDOW_GEOMETRY_FILE && nv->window_maximized) ||
+               (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
         win->maximize();
     } else {
         Gdk::Rectangle monitor_geometry;
@@ -807,14 +808,14 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         int h = monitor_geometry.get_height();
 
         bool move_to_screen = false;
-        if (geometry_from_file and !new_document) {
+        if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) { 
             w = MIN(w, nv->window_width);
-            h = MIN(h, nv->window_height);          
+            h = MIN(h, nv->window_height);      
             move_to_screen = true;
-        } else if (default_geometry == 1) {
+        } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
             w *= NEWDOC_X_SCALE;
             h *= NEWDOC_Y_SCALE;
-        } else if (default_geometry == 0) {
+        } else if (default_size == PREFS_WINDOW_SIZE_SMALL) {
             w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
         } 
         if ((w > 0) && (h > 0)) {
@@ -903,7 +904,8 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
 void sp_namedview_document_from_window(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool save_geometry_in_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
+    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+    bool save_geometry_in_file = window_geometry == PREFS_WINDOW_GEOMETRY_FILE;
     bool save_viewport_in_file = prefs->getBool("/options/savedocviewport/value", true);
     Inkscape::XML::Node *view = desktop->namedview->getRepr();
     Geom::Rect const r = desktop->get_display_area();

@@ -30,6 +30,7 @@
 #include "file.h"
 #include <glibmm/miscutils.h>
 
+#include "enums.h"
 #include "inkscape.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -161,8 +162,8 @@ sp_create_window(SPViewWidget *vw, bool editable)
         win->signal_focus_in_event().connect(sigc::mem_fun(*desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gint prefs_geometry = (2==prefs->getInt("/options/savewindowgeometry/value", 0));
-        if (prefs_geometry) {
+        int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+        if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
             gint pw = prefs->getInt("/desktop/geometry/width", -1);
             gint ph = prefs->getInt("/desktop/geometry/height", -1);
             gint px = prefs->getInt("/desktop/geometry/x", -1);
