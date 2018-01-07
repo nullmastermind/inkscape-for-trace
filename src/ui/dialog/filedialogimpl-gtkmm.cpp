@@ -948,6 +948,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
                         (save_method == Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY) ? "/dialogs/save_copy"
                                                                                          : "/dialogs/save_as")
     , save_method(save_method)
+    , fromCB(false)
 {
     FileSaveDialog::myDocTitle = docTitle;
 
@@ -1014,6 +1015,8 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
         fileNameEntry->signal_activate().connect(
             sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileNameEntryChangedCallback));
     }
+    signal_selection_changed().connect(
+        sigc::mem_fun(*this, &FileSaveDialogImplGtk::fileNameChanged));
 
     // Let's do more customization
     std::vector<Gtk::Expander *> expanders;
@@ -1102,8 +1105,25 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
     auto filter = Gtk::FileFilter::create();
     filter->add_pattern(type.pattern);
     set_filter(filter);
+    
+    if (fromCB) {
+        //do not update if called from a name change
+        fromCB = false; 
+        return;
+    }
 
     updateNameAndExtension();
+}
+
+void FileSaveDialogImplGtk::fileNameChanged() {
+    Glib::ustring name = get_filename();
+    Glib::ustring::size_type pos = name.rfind('.');
+    if ( pos == Glib::ustring::npos ) return;
+    Glib::ustring ext = name.substr( pos ).casefold();
+    if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
+    if (knownExtensions.find(ext) == knownExtensions.end()) return;
+    fromCB = true;
+    fileTypeComboBox.set_active_text(_(knownExtensions[ext]->get_filetypename()));
 }
 
 void FileSaveDialogImplGtk::addFileType(Glib::ustring name, Glib::ustring pattern)
@@ -1139,7 +1159,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
         type.name = (_(omod->get_filetypename()));
         type.pattern = "*";
         Glib::ustring extension = omod->get_extension();
-        knownExtensions.insert(extension.casefold());
+        knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(extension.casefold(), omod));
         fileDialogExtensionToPattern(type.pattern, extension);
         type.extension = omod;
         fileTypeComboBox.append(type.name);

@@ -1636,7 +1636,7 @@ void FileSaveDialogImplWin32::createFilterMenu()
         const gchar *filter_extension = omod->get_extension();
         filter.filter = g_utf8_to_utf16(
             filter_extension, -1, NULL, &filter.filter_length, NULL);
-        knownExtensions.insert( Glib::ustring(filter_extension).casefold() );
+        knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(filter_extension).icasefold(), omod));
 
         // Type
         filter.name = g_utf8_to_utf16(
@@ -1709,7 +1709,7 @@ void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring patt
     
     filter_length = all_exe_files.name_length + all_exe_files.filter_length + 3; // Add 3 for two \0s and a *
 
-    knownExtensions.insert( Glib::ustring(all_exe_files_filter).casefold() );
+    knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(all_exe_files_filter).casefold(), NULL));
 
     int extension_index = 0;
     _extension_map = new Inkscape::Extension::Extension*[filter_count];

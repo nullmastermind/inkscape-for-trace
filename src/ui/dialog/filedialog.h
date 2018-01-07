@@ -227,7 +227,7 @@ protected:
     /**
      * List of known file extensions.
      */
-    std::set<Glib::ustring> knownExtensions;
+    std::map<Glib::ustring, Inkscape::Extension::Output*> knownExtensions;
 
 
     void appendExtension(Glib::ustring& path, Inkscape::Extension::Output* outputExtension);
