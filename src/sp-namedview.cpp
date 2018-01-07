@@ -28,6 +28,7 @@
 #include "document-undo.h"
 #include "desktop-events.h"
 #include "enums.h"
+#include "ui/monitor.h"
 
 #include "sp-guide.h"
 #include "sp-item-group.h"
@@ -37,12 +38,6 @@
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
 #include <gtkmm/window.h>
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#else
-# include <gdkmm/screen.h>
-#endif
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -759,16 +754,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
                (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
         win->maximize();
     } else {
-        Gdk::Rectangle monitor_geometry;
-#if GTKMM_CHECK_VERSION(3,22,0)
-        auto const display = Gdk::Display::get_default();
-        auto const monitor = display->get_monitor_at_window(win->get_window());
-        monitor->get_geometry(monitor_geometry);
-#else
-        auto const default_screen = Gdk::Screen::get_default();
-        auto const monitor_number = default_screen->get_monitor_at_window(win->get_window());
-        default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
-#endif
+        Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
         int w = monitor_geometry.get_width();
         int h = monitor_geometry.get_height();
 
