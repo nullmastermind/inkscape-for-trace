@@ -49,6 +49,7 @@
 #include "ui/dialog/swatches.h"
 #include "ui/icon-names.h"
 #include "ui/widget/dock.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
 #include "ui/uxmanager.h"
@@ -1557,8 +1558,11 @@ void
 SPDesktopWidget::setToolboxSelectOneValue (gchar const *id, int value)
 {
     gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
-    if (hb) {
+    if (IS_EGE_SELECT_ONE_ACTION(hb)) {
         ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(hb), value);
+    }
+    if (static_cast<InkSelectOneAction*>(hb)) {
+        static_cast<InkSelectOneAction*>(hb)->set_active( value );
     }
 }
 

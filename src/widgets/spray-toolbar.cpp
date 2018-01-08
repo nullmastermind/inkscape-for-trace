@@ -162,7 +162,7 @@ static void sp_spray_standard_deviation_value_changed( GtkAdjustment *adj, GObje
             gtk_adjustment_get_value(adj));
 }
 
-static void sp_spray_mode_changed( GObject * tbl, int mode )
+static void sp_spray_mode_changed( GObject *tbl, int mode )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/spray/mode", mode);
@@ -397,6 +397,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         act->set_active( mode );
 
         gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "spray_tool_mode", act );
 
         act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_spray_mode_changed), holder));
     }
