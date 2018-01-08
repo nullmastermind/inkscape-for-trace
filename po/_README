@@ -22,7 +22,7 @@ TODO:
 - consider dropping intltool-update and use xgettext with proper options
   (it should be able to handle most of our source files nowadays)
 - clean up this directory, evaluate which files are still useful (and document them / add targets to CMake), see
-    check-markup (and dependecies bad.po.test, bad.po.test.exp)
+    check-markup (and dependencies bad.po.test, bad.po.test.exp)
     check_for_tutorial_problems.sh
     language_statistics.sh (and dependency LINGUAS)
     update_po_files.sh

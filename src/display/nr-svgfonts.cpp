@@ -166,7 +166,7 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
     unsigned int len;
 
     bool missing;
-    //First we findout whats the number of glyphs needed.
+    //First we find out what's the number of glyphs needed.
     while(g_utf8_get_char(_utf8)){
         missing = true;
         for (i=0; i < (unsigned long) this->glyphs.size(); i++){

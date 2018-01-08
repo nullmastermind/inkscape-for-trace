@@ -89,7 +89,7 @@ private:
 }
 
 /** LayerSelector constructor.  Creates lock and hide buttons,
- *  initalizes the layer dropdown selector with a label renderer,
+ *  initializes the layer dropdown selector with a label renderer,
  *  and hooks up signal for setting the desktop layer when the
  *  selector is changed.
  */

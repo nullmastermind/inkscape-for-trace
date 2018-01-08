@@ -38,7 +38,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <!-- Freehand has separate tools for Ellipse and Arc unlike Inkscape.  -->
   <bind key="F3" modifiers="Shift" action="ToolArc" display="true"/>
 
-  <!-- Star (Inkscape).  Polygon (Freehand) inlcudes star options.  -->
+  <!-- Star (Inkscape).  Polygon (Freehand) includes star options.  -->
   <bind key="F8" modifiers="Shift" action="ToolStar" />
 
   <!-- Freehand does not use a keybinding for the Spiral tool.  

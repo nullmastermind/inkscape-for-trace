@@ -2963,11 +2963,11 @@ void ObjectSet::toMarker(bool apply)
         return;
     }
 
-    // FIXME: Inverted Y coodinate
+    // FIXME: Inverted Y coordinate
     Geom::Point doc_height( 0, doc->getHeight().value("px"));
 
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coodinate  
+    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coordinate  
     Geom::Point move_p = doc_height - corner;
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));

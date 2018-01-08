@@ -164,7 +164,7 @@ CleanEdges::get_filter_text (Inkscape::Extension::Extension * ext)
     Combine vertical and horizontal blur
 
     Filter's parameters:
-    * Brighness (0.->10., default 0) -> composite (k3)
+    * Brightness (0.->10., default 0) -> composite (k3)
     * Fading (0.->1., default 0) -> composite (k4)
     * Horizontal blur (0.01->20., default 5) -> blur (stdDeviation)
     * Vertical blur (0.01->20., default 5) -> blur (stdDeviation)

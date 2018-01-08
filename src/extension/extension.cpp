@@ -237,9 +237,9 @@ Extension::loaded (void)
     \brief   A function to check the validity of the extension
 
     This function chekcs to make sure that there is an id, a name, a
-    repr and an implemenation for this extension.  Then it checks all
+    repr and an implementation for this extension.  Then it checks all
     of the dependencies to see if they pass.  Finally, it asks the
-    implmentation to do a check of itself.
+    implementation to do a check of itself.
 
     On each check, if there is a failure, it will print a message to the
     error log for that failure.  It is important to note that the function

@@ -293,7 +293,7 @@ class hpglEncoder:
                                 oldPosY = posY
 
     def getLength(self, x1, y1, x2, y2, absolute=True):
-        # calc absoulute or relative length between two points
+        # calc absolute or relative length between two points
         length = math.sqrt((x2 - x1) ** 2.0 + (y2 - y1) ** 2.0)
         if absolute:
             length = math.fabs(length)

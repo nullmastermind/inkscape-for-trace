@@ -68,7 +68,7 @@ public:
     int replace_primitive(int primitive, FilterPrimitiveType type);
 
     /**
-     * Returns a pointer to the primitive, which the handle corrensponds to.
+     * Returns a pointer to the primitive, which the handle corresponds to.
      * If the handle is not valid, returns NULL.
      */
     FilterPrimitive *get_primitive(int handle);

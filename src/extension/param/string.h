@@ -19,7 +19,7 @@ private:
     /** \brief  Internal value.  This should point to a string that has
                 been allocated in memory.  And should be free'd. */
     gchar * _value;
-    /** \brief Internal value. This indicates the maximum lenth of the string. Zero meaning unlimited.
+    /** \brief Internal value. This indicates the maximum length of the string. Zero meaning unlimited.
       */
     gint _max_length;
 public:

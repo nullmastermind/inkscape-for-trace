@@ -18,7 +18,7 @@
 
 enum FeCompositeOperator {
     // Default value is 'over', but let's distinquish specifying the
-    // default and implicitely using the default
+    // default and implicitly using the default
     COMPOSITE_DEFAULT,
     COMPOSITE_OVER,              /* Source Over */
     COMPOSITE_IN,                /* Source In   */

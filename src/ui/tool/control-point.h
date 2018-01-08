@@ -314,7 +314,7 @@ protected:
     void _setPixbuf(Glib::RefPtr<Gdk::Pixbuf>);
 
     /**
-     * Determins if the control point is not visible yet still reacting to events.
+     * Determines if the control point is not visible yet still reacting to events.
      *
      * @return true if non-visible, false otherwise.
      */

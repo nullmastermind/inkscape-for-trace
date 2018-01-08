@@ -67,7 +67,7 @@ class MyEffect(inkex.Effect):
         self.OptionParser.add_option("--colortab",
                         action="store", type="string",
                         dest="colortab",
-                        help="The selected cutom color tab when OK was pressed")
+                        help="The selected custom color tab when OK was pressed")
 
     def effect(self):
         defs = self.xpathSingle('/svg:svg//svg:defs')

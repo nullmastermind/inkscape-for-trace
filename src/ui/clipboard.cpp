@@ -1513,7 +1513,7 @@ void ClipboardManagerImpl::_setClipboardColor(guint32 color)
 
 
 /**
- * Put a notification on the mesage stack.
+ * Put a notification on the message stack.
  */
 void ClipboardManagerImpl::_userWarn(SPDesktop *desktop, char const *msg)
 {

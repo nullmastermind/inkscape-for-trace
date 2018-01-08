@@ -391,7 +391,7 @@ static void sp_font_selector_emit_set (SPFontSelector *fsel)
     char             *family=NULL, *style=NULL;
 
     //We need to check this here since most GtkTreeModel operations are not atomic
-    //See GtkListStore documenation, Chapter "Atomic Operations" --mderezynski
+    //See GtkListStore documentation, Chapter "Atomic Operations" --mderezynski
 
     model_family = gtk_tree_view_get_model (GTK_TREE_VIEW (fsel->family_treeview));
     if (!model_family) return;

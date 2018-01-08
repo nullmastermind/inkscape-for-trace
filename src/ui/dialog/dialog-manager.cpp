@@ -84,7 +84,7 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
  *  initialize dialogs lazily - instead of constructing them during
  *  application startup, they're constructed the first time they're
  *  actually invoked by InkscapeApplication.  The constructed
- *  dialog is held here after that, so future invokations of the
+ *  dialog is held here after that, so future invocations of the
  *  dialog don't need to get re-constructed each time.  The memory for
  *  the dialogs are then reclaimed when the DialogManager is destroyed.
  *

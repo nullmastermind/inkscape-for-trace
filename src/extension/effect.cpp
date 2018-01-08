@@ -259,7 +259,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
     \param  doc  The Inkscape::UI::View::View to do the effect on
 
     This function first insures that the extension is loaded, and if not,
-    loads it.  It then calls the implemention to do the actual work.  It
+    loads it.  It then calls the implementation to do the actual work.  It
     also resets the last effect pointer to be this effect.  Finally, it
     executes a \c SPDocumentUndo::done to commit the changes to the undo
     stack.

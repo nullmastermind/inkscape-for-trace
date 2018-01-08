@@ -102,7 +102,7 @@ class JessyInk_Install(inkex.Effect):
 		for node in self.document.xpath("//*[@jessyink:masterSlide]", namespaces=inkex.NSS):
 			node.attrib["{" + inkex.NSS["jessyink"] + "}masterSlide"] = node.attrib["{" + inkex.NSS["jessyink"] + "}masterSlide"].replace("=", ":")
 
-		# Udpate transitions.
+		# Update transitions.
 		for node in self.document.xpath("//*[@jessyInk_transitionIn]", namespaces=inkex.NSS):
 			node.attrib["{" + inkex.NSS["jessyink"] + "}transitionIn"] = node.attrib["jessyInk_transitionIn"]
 			del node.attrib["jessyInk_transitionIn"]

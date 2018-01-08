@@ -314,7 +314,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         gtk_action_group_add_action( mainActions, act );
     }
 
-    /* Precission */
+    /* Precision */
     {
         eact = create_adjustment_action( "MeasurePrecisionAction",
                                          _("Precision"), _("Precision:"),

@@ -59,7 +59,7 @@ The guiding principles behind the design of this API were:
 
       <partintro>
         <para>
-        Inkscape provides a D-Bus API for programs to interactivly script vector graphics.
+        Inkscape provides a D-Bus API for programs to interactively script vector graphics.
         </para>
         <para>
         This API is not yet stable and is likely to change in the future.

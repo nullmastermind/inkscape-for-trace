@@ -68,7 +68,7 @@ class Printing_Marks (inkex.Effect):
         self.OptionParser.add_option("--unit",
                                      action="store", type="string",
                                      dest="unit", default="px",
-                                     help="Draw measurment")
+                                     help="Draw measurement")
         self.OptionParser.add_option("--crop_offset",
                                      action="store", type="float",
                                      dest="crop_offset", default=0,

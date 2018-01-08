@@ -181,7 +181,7 @@ private:
     void setDesktop(SPDesktop *desktop);
 
     /**
-     * Flag to ensure only one operation is perfomed at once
+     * Flag to ensure only one operation is performed at once
      */
     gint blocked;
 

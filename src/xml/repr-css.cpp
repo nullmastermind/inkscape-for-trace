@@ -377,7 +377,7 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
 
     // libcroco uses %.17f for formatting... leading to trailing zeros or small rounding errors.
     // CSSOStringStream is used here to write valid CSS (as in sp_style_write_string). This has
-    // the additional benefit of respecting the numerical precission set in the SVG Output
+    // the additional benefit of respecting the numerical precision set in the SVG Output
     // preferences. We assume any numerical part comes first (if not, the whole string is copied).
     std::stringstream ss( value );
     double number = 0;

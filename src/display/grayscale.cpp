@@ -39,7 +39,7 @@ guint32 process(guint32 rgba) {
 guint32 process(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
 
     /** To reduce banding in gradients, this calculation is tweaked a bit
-     *  by outputing blue+1 or red+1 or both. The luminance is calculated
+     *  by outputting blue+1 or red+1 or both. The luminance is calculated
      *  times 4. Then last two bits are used to determine if red and/or blue
      *  can be increased by one. Then these two bits are discarded.
      *  So the output color it still looks gray, but has more than 256 steps.

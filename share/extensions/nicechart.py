@@ -273,7 +273,7 @@ class NiceChart(inkex.Effect):
         # Get access to main SVG document element and get its dimensions.
         svg = self.document.getroot()
         
-        # Get the page attibutes:
+        # Get the page attributes:
         width  = self.getUnittouu(svg.get('width'))
         height = self.getUnittouu(svg.attrib['height'])
         

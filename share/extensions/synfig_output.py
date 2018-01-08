@@ -1000,7 +1000,7 @@ def path_to_bline_list(path_d, nodetypes=None, mtx=[[1.0, 0.0, 0.0], [0.0, 1.0, 
 def extract_style(node, style_attrib="style"):
     #return simplestyle.parseStyle(node.get("style"))
 
-    # Work around a simplestyle bug in older verions of Inkscape
+    # Work around a simplestyle bug in older versions of Inkscape
     # that leaves spaces at the beginning and end of values
     s = node.get(style_attrib)
     if s is None:

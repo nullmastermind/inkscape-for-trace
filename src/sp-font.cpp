@@ -179,7 +179,7 @@ Inkscape::XML::Node* SPFont::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     sp_repr_set_svg_double(repr, "vert-adv-y", this->vert_adv_y);
 
     if (repr != this->getRepr()) {
-        // All the below COPY_ATTR funtions are directly using 
+        // All the below COPY_ATTR functions are directly using 
         //  the XML Tree while they shouldn't
         COPY_ATTR(repr, this->getRepr(), "horiz-origin-x");
         COPY_ATTR(repr, this->getRepr(), "horiz-origin-y");

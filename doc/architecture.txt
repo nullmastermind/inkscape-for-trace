@@ -403,7 +403,7 @@ similar views.  The SPView base class has very little functionality of
 its own.
 
 SPViewWidget is a GUI widget that contain a single SPView. It is also
-an abstract base class with little funtionality of its own.
+an abstract base class with little functionality of its own.
 
 2.6. SPDesktop
 

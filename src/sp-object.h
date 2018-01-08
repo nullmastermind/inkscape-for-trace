@@ -456,7 +456,7 @@ public:
      *
      * @param propagate If it is set to true, it emits a delete signal.
      *
-     * @param propagate_descendants If it is is true, it recursively sends the delete signal to children.
+     * @param propagate_descendants If it is true, it recursively sends the delete signal to children.
      */
     void deleteObject(bool propagate, bool propagate_descendants);
 

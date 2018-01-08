@@ -2,7 +2,7 @@
  *  This file came from libwpg as a source, their utility wpg2svg
  *  specifically.  It has been modified to work as an Inkscape extension.
  *  The Inkscape extension code is covered by this copyright, but the
- *  rest is covered by the one bellow.
+ *  rest is covered by the one below.
  *
  * Authors:
  *   Ted Gould <ted@gould.cx>

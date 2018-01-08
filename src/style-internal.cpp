@@ -2172,7 +2172,7 @@ SPIFontSize::merge( const SPIBase* const parent ) {
                      ( p->type == SP_FONT_SIZE_LENGTH &&
                        p->unit != SP_CSS_UNIT_EM &&
                        p->unit != SP_CSS_UNIT_EX ) ) {
-                    // Parent absolut size
+                    // Parent absolute size
                     type = SP_FONT_SIZE_LENGTH;
 
                 } else {

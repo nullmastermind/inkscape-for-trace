@@ -31,7 +31,7 @@
 #include "document.h"
 #include "document-undo.h"
 
-// needed for on-canvas editting:
+// needed for on-canvas editing:
 #include "ui/tools-switch.h"
 #include "ui/shape-editor.h"
 

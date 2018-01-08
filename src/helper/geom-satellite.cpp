@@ -162,7 +162,7 @@ double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
     return t;
 }
 
-///Get the time from a length A in other curve, a bolean inverse gived to reverse time
+///Get the time from a length A in other curve, a boolean inverse given to reverse time
 double Satellite::time(double A, bool inverse,
                        Geom::Curve const &curve_in) const
 {
@@ -197,7 +197,7 @@ Geom::Point Satellite::getPosition(Geom::Curve const &curve_in, bool inverse) co
     return curve_in.pointAt(t);
 }
 
-///Set the position of the satellite from a gived point P
+///Set the position of the satellite from a given point P
 void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse)
 {
     Geom::Curve * curve = const_cast<Geom::Curve *>(&curve_in);

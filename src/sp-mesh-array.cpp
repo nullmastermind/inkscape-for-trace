@@ -2460,7 +2460,7 @@ guint SPMeshNodeArray::insert( std::vector<guint> corners ) {
 
 /**
    Moves handles in response to a corner node move.
-   p_old: orignal position of moved corner node.
+   p_old: original position of moved corner node.
    corner: the corner node moved (draggable index, i.e. point_i).
    selected: list of all corners selected (draggable indices).
    op: how other corners should be moved.

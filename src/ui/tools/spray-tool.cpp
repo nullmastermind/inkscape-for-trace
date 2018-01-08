@@ -799,7 +799,7 @@ static bool fit_item(SPDesktop *desktop,
             }
             if (pick_to_presence) {
                 if (g_random_double_range (0, 1) > val) {
-                    //Hidding the element is a way to retain original
+                    //Hiding the element is a way to retain original
                     //behaviour of tiled clones for presence option.
                     sp_repr_css_set_property(css, "opacity", "0");
                 }

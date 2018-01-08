@@ -557,7 +557,7 @@ function jessyInkInit()
 	jessyInkInitialised = true;
 }
 
-/** Function to subtitute the auto-texts.
+/** Function to substitute the auto-texts.
  *
  *  @param node the node
  *  @param slideName name of the slide the node is on

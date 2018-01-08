@@ -1,4 +1,4 @@
-Both spsvgview and sodipodi are mostly built frome set of common
+Both spsvgview and sodipodi are mostly built from a set of common
 libraries (these are static of course, to save people from
 versioning pain, but can in theory function as dynamic libs
 as well).

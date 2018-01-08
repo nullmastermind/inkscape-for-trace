@@ -491,7 +491,7 @@ SPStyle::~SPStyle() {
     fill_ps_changed_connection.disconnect();
     stroke_ps_changed_connection.disconnect();
 
-    // The following shoud be moved into SPIPaint and SPIFilter
+    // The following should be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
         fill_ps_modified_connection.disconnect();
     }

@@ -901,7 +901,7 @@ extension-element-prefixes="math">
 
 <!--
   // Use //
-  Could be implemented via librairies
+  Could be implemented via libraries
   (but since it is not supported by Inkscape, not implemented yet)
 -->
 <xsl:template mode="forward" match="*[name(.) = 'use']">
@@ -2257,7 +2257,7 @@ extension-element-prefixes="math">
   * Generic fonts.
   * Embedded fonts (in defs).
   * Character rotation.
-  * Character positionning (x and y).
+  * Character positioning (x and y).
   * Text-anchor.
   * Text stroke.
   

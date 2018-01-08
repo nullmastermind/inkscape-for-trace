@@ -150,7 +150,7 @@ LPEPowerMask::setMask(){
         filter->appendChild(primitive2);
         Inkscape::GC::release(primitive2);
     }
-//Not sure if finaly need to resurrect this
+//Not sure if finally need to resurrect this
 //    if(wrap && is_visible){
 //        Glib::ustring g_data_id = mask_id + (Glib::ustring)"_container";
 //        if((elemref = document->getObjectById(g_data_id))){

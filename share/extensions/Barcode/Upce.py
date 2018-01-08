@@ -61,7 +61,7 @@ class Upce(EanBarcode):
 
         # There are 4 cases to convert:
         if maker[2:] == '000' or maker[2:] == '100' or maker[2:] == '200':
-            # Maxium number product code digits can be encoded
+            # Maximum number product code digits can be encoded
             if product[:2] == '00':
                 return maker[:2] + product[2:] + maker[2]
         elif maker[3:5] == '00':

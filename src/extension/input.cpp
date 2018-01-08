@@ -114,7 +114,7 @@ Input::~Input (void)
 
     This function checks to make sure that the input extension has
     a filename extension and a MIME type.  Then it calls the parent
-    class' check function which also checks out the implmentation.
+    class' check function which also checks out the implementation.
 */
 bool
 Input::check (void)
@@ -135,7 +135,7 @@ Input::check (void)
     This function acts as the first step in creating a new document
     from a file.  The first thing that this does is make sure that the
     file actually exists.  If it doesn't, a NULL is returned.  If the
-    file exits, then it is opened using the implmentation of this extension.
+    file exits, then it is opened using the implementation of this extension.
 */
 SPDocument *
 Input::open (const gchar *uri)

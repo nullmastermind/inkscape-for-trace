@@ -516,7 +516,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     } else if (style->inline_size.set) {
         // If both shape_inside and inline_size are set, shape_inside wins out.
 
-        // We construct a rectange with one dimension set by the computed value of 'inline-size'
+        // We construct a rectangle with one dimension set by the computed value of 'inline-size'
         // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
         // attribute values. This is handled elsewhere.
 

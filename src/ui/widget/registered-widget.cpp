@@ -303,7 +303,7 @@ RegisteredScalar::on_value_changed()
     double val = getValue() < 1e-6 && getValue() > -1e-6?0.0:getValue();
     os << val;
     //TODO: Test is ok remove this sensitives
-    //also removed in registed text and in registered random
+    //also removed in registered text and in registered random
     //set_sensitive(false);
     write_to_xml(os.str().c_str());
     //set_sensitive(true);

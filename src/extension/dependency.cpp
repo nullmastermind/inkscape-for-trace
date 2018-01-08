@@ -90,7 +90,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
 }
 
 /**
-    \brief   This depenency is not longer needed
+    \brief   This dependency is not longer needed
 
     Unreference the XML structure.
 */

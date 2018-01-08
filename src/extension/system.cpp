@@ -411,7 +411,7 @@ get_print(gchar const *key)
  * \param    doc  The XML description of the module
  *
  * This function basically has two segments.  The first is that it goes through the Repr tree
- * provided, and determines what kind of of module this is, and what kind of implementation to use.
+ * provided, and determines what kind of module this is, and what kind of implementation to use.
  * All of these are then stored in two enums that are defined in this function.  This makes it
  * easier to add additional types (which will happen in the future, I'm sure).
  *

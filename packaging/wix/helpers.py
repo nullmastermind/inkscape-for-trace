@@ -13,7 +13,7 @@ from io import open # needed for support of encoding parameter in Python 2
 #    - btool builds used [root]/inkscape
 #    - cmake builds use [root]/build/inkscape unless "DESTDIR" is specified
 def get_inkscape_dist_dir():
-    # fisrt check the environment variable
+    # first check the environment variable
     sourcedir = os.getenv('INKSCAPE_DIST_PATH')
     if sourcedir is None:
         sourcedir = ''

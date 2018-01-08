@@ -127,7 +127,7 @@ get_object_by_name (SPDocument *doc, gchar *name, GError **error)
 /*
  * Tests for NULL strings and throws an appropriate error.
  * Every method that takes a string parameter (other than the 
- * name of an object, that's tested seperatly) should call this.
+ * name of an object, that's tested separately) should call this.
  */
 gboolean
 dbus_check_string (gchar *string, GError ** error, const gchar * errorstr)
@@ -183,7 +183,7 @@ selection_get_center_y (Inkscape::Selection *sel){
  * original selection.
  *
  * This should be mostly transparent to the user who need never
- * know we never bothered to implement it seperatly.  Although
+ * know we never bothered to implement it separately.  Although
  * they might see the selection box flicker if used in a loop.
  */
 std::vector<SPObject*>

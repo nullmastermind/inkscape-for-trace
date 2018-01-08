@@ -998,7 +998,7 @@ Section Uninstall ; do the uninstalling {{{
           ; Remove File
           ClearErrors
           Delete $filename
-          ;now recursivly remove the path
+          ;now recursively remove the path
           ${Do}
             ClearErrors
             ${un.GetParent} $filename $filename

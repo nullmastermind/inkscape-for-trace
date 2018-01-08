@@ -123,7 +123,7 @@ text_put_on_path()
         new_item->updateRepr();
 
         Inkscape::GC::release(repr);
-        text->deleteObject(); // delete the orignal flowtext
+        text->deleteObject(); // delete the original flowtext
 
         desktop->getDocument()->ensureUpToDate();
 

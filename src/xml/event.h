@@ -209,7 +209,7 @@ private:
 };
 
 /**
- * @brief Obect representing child order change
+ * @brief Object representing child order change
  */
 class EventChgOrder : public Event {
 public:

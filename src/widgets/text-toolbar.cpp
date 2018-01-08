@@ -1695,7 +1695,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         } else {
             tracker->setActiveUnitByAbbr(sp_style_get_css_unit_string(line_height_unit));
         }
-        // Save unit so we can do convertions between new/old units.
+        // Save unit so we can do conversions between new/old units.
         g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(line_height_unit));
 
         // Enable and turn on only if selection includes an object with line height set.

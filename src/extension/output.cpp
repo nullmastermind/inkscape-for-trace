@@ -110,7 +110,7 @@ Output::~Output (void)
 
 	This function checks to make sure that the output extension has
 	a filename extension and a MIME type.  Then it calls the parent
-	class' check function which also checks out the implmentation.
+	class' check function which also checks out the implementation.
 */
 bool
 Output::check (void)
@@ -202,7 +202,7 @@ Output::prefs (void)
 	\param   filename  File to save the document as
 
 	This function does a little of the dirty work involved in saving
-	a document so that the implementation only has to worry about geting
+	a document so that the implementation only has to worry about getting
 	bits on the disk.
 
 	The big thing that it does is remove and read the fields that are

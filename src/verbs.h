@@ -37,7 +37,7 @@ class View;
 
 /**
  * This anonymous enum is used to provide a list of the Verbs
- * which are defined staticly in the verb files.  There may be
+ * which are defined statically in the verb files.  There may be
  * other verbs which are defined dynamically also.
  */
 enum {
@@ -416,7 +416,7 @@ namespace Inkscape {
  */
 class Verb {
 private:
-    /** An easy to use defition of the table of verbs by code. */
+    /** An easy to use definition of the table of verbs by code. */
     typedef std::map<unsigned int, Inkscape::Verb *> VerbTable;
 
     /** A table of all the dynamically created verbs. */

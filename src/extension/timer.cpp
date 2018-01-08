@@ -156,7 +156,7 @@ ExpirationTimer::idle_func (void)
         return false;
     }
 
-    /* evalutate current */
+    /* evaluate current */
     if (timer_list->expired()) {
         timer_list->extension->set_state(Extension::STATE_UNLOADED);
     }

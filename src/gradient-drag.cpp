@@ -1703,7 +1703,7 @@ GrDragger::~GrDragger()
 {
     // unselect if it was selected
     // Hmm, this causes a race condition as it triggers a call to gradient_selection_changed which
-    // can be executed while a list of draggers is being deleted. It doesn't acutally seem to be
+    // can be executed while a list of draggers is being deleted. It doesn't actually seem to be
     // necessary.
     //this->parent->setDeselected(this);
 

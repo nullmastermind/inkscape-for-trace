@@ -59,7 +59,7 @@ public:
     void deallocate(pointer p, size_type) { ::operator delete(p, GC); }
 };
 
-// allocators with the same collection policy are interchangable
+// allocators with the same collection policy are interchangeable
 
 template <typename T1, typename T2,
           CollectionPolicy collect1, CollectionPolicy collect2>

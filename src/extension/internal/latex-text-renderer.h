@@ -60,7 +60,7 @@ protected:
     FILE * _stream;
     gchar * _filename;
 
-    bool _pdflatex; /** true if ouputting for pdfLaTeX*/
+    bool _pdflatex; /** true if outputting for pdfLaTeX*/
 
     LaTeXOmitTextPageState _omittext_state;
     gulong _omittext_page;

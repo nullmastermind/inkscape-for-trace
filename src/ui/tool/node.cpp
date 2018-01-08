@@ -750,7 +750,7 @@ void Node::_updateAutoHandles()
         return;
     }
 
-    // Auto nodes automaticaly adjust their handles to give an appearance of smoothness,
+    // Auto nodes automatically adjust their handles to give an appearance of smoothness,
     // no matter what their surroundings are.
     Geom::Point vec_next = _next()->position() - position();
     Geom::Point vec_prev = _prev()->position() - position();
@@ -880,7 +880,7 @@ void Node::setType(NodeType type, bool update_handles)
             break;
         default: break;
         }
-        /* in node type changes, about bspline traces, we can mantain them with NO_POWER power in border mode,
+        /* in node type changes, about bspline traces, we can maintain them with NO_POWER power in border mode,
            or we give them the default power in curve mode */
         if(_pm()._isBSpline()){
             double weight = NO_POWER;

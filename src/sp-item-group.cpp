@@ -992,7 +992,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                         c->unref();
                     } else {
-                        // LPE was unsuccesfull or doeffect stack return null. Read the old 'd'-attribute.
+                        // LPE was unsuccessful or doeffect stack return null. Read the old 'd'-attribute.
                         if (gchar const * value = repr->attribute("d")) {
                             Geom::PathVector pv = sp_svg_read_pathv(value);
                             SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);

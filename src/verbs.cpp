@@ -574,7 +574,7 @@ SPAction *TextVerb::make_action(Inkscape::ActionContext const & context)
  * This function does a couple of things.  The most obvious is that
  * it allocates and creates the action.  When it does this it
  * translates the \c _name and \c _tip variables.  This allows them
- * to be staticly allocated easily, and get translated in the end.  Then,
+ * to be statically allocated easily, and get translated in the end.  Then,
  * if the action gets crated, a listener is added to the action with
  * the vector that is passed in.
  *

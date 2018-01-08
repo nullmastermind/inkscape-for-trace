@@ -31,7 +31,7 @@ def valid_id(identifier):
 
 def directory(root, breadcrumb, level, exclude=[]):
 	"""
-	list all files and directory recursivly
+	list all files and directory recursively
 	create the file_ids dictionary to be used in ComponentGroup references
 	"""
 	global file_ids
@@ -62,7 +62,7 @@ def directory(root, breadcrumb, level, exclude=[]):
 
 def test_conditions(value, conditions):
 	"""
-	check if "value" fullfills any of the "conditions", where a condition can be
+	check if "value" fulfills any of the "conditions", where a condition can be
 	   - a string that has to be a substring of "value"
 	   - a compiled regex pattern which has to match in "value"
 	"""

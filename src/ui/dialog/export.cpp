@@ -1759,7 +1759,7 @@ void Export::onBitmapHeightChange ()
  * xdpi value is saved in the preferences for the next time the dialog
  * is opened.  (does the selection dpi need to be set here?)
  *
- * A check is done to to ensure that we aren't outputing an invalid width,
+ * A check is done to to ensure that we aren't outputting an invalid width,
  * this is set by SP_EXPORT_MIN_SIZE.  If that is the case the dpi is
  * changed to make it valid.
  *

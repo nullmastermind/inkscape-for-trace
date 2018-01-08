@@ -147,7 +147,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
     SPObject const *const ancestor = get_nearest_common_ancestor(path, h2attItem);
     Geom::Affine const path2anc(i2anc_affine(path, ancestor));
 
-    // Set sensible values incase there the connector ends are not
+    // Set sensible values in case there the connector ends are not
     // attached to any shapes.
     Geom::PathVector conn_pv = path->_curve->get_pathvector();
     double endPos[2] = { 0.0, static_cast<double>(conn_pv[0].size()) };

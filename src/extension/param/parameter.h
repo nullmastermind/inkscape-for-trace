@@ -154,7 +154,7 @@ public:
     const static int GUI_BOX_MARGIN = 10;
     /** Recommended spacing between multiple Parameters packed into a box (in px) */
     const static int GUI_BOX_SPACING = 4;
-    /** Recommended spacing between the widgets making up a signle Parameter (e.g. label and input) (in px) */
+    /** Recommended spacing between the widgets making up a single Parameter (e.g. label and input) (in px) */
     const static int GUI_PARAM_WIDGETS_SPACING = 4;
     /** Recommended indentation width of parameters (in px) */
     const static int GUI_INDENTATION = 12;

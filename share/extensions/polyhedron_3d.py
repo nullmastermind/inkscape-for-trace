@@ -219,7 +219,7 @@ def get_normal( pts, face): #returns the normal vector for the plane passing tho
 
 def get_unit_normal(pts, face, cw_wound): #returns the unit normal for the plane passing through the first three points of face, taking account of winding
     if cw_wound:
-        winding = -1 #if it is clockwise wound, reverse the vecotr direction
+        winding = -1 #if it is clockwise wound, reverse the vector direction
     else:
         winding = 1 #else leave alone
     

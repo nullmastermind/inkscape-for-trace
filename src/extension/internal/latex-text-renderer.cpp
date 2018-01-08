@@ -131,7 +131,7 @@ LaTeXTextRenderer::~LaTeXTextRenderer(void)
 }
 
 /** This should create the output LaTeX file, and assign it to _stream.
- * @return Returns true when succesfull
+ * @return Returns true when successful
  */
 bool
 LaTeXTextRenderer::setTargetFile(gchar const *filename) {
@@ -276,7 +276,7 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     SPStyle *style = textobj->style;
 
     // get position and alignment
-    // Align vertically on the baseline of the font (retreived from the anchor point)
+    // Align vertically on the baseline of the font (retrieved from the anchor point)
     // Align horizontally on anchorpoint
     gchar const *alignment = NULL;
     gchar const *alignstack = NULL;
