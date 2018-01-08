@@ -247,7 +247,7 @@
     <toolitem action='ArcStartAction' />
     <toolitem action='ArcEndAction' />
     <separator />
-    <toolitem action='ArcOpenAction' />
+    <toolitem action='ArcTypeAction' />
     <separator />
     <toolitem action='ArcResetAction' />
     <separator />

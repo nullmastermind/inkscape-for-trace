@@ -36,7 +36,6 @@
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "mod360.h"
@@ -45,6 +44,7 @@
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
 #include "ui/tools/arc-tool.h"
 #include "verbs.h"
@@ -221,12 +221,12 @@ static void sp_arctb_end_value_changed(GtkAdjustment *adj, GObject *tbl)
 }
 
 
-static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_arctb_type_changed( GObject *tbl, int type )
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt("/tools/shapes/arc/arc_type", ege_select_one_action_get_active(act));
+        prefs->setInt("/tools/shapes/arc/arc_type", type);
     }
 
     // quit if run by the attr_changed listener
@@ -237,11 +237,9 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
     // in turn, prevent listener from responding
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-
-    int mode = ege_select_one_action_get_active(act);
     Glib::ustring arc_type = "slice";
     bool open = false;
-    switch (mode) {
+    switch (type) {
         case 0:
             arc_type = "slice";
             open = false;
@@ -255,7 +253,7 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
             open = true; // For backward compat, not truly open but chord most like arc.
             break;
         default:
-            std::cerr << "sp_arctb_open_state_changed: bad arc type: " << mode << std::endl;
+            std::cerr << "sp_arctb_type_changed: bad arc type: " << type << std::endl;
     }
                
     bool modmade = false;
@@ -361,14 +359,15 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
         arctypestr = (openstr ? "arc" : "slice");
     }
 
-    EgeSelectOneAction *ocb = EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "open_action" ) );
+    InkSelectOneAction *typeAction =
+        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "type_action" ) );
 
     if (!strcmp(arctypestr,"slice")) {
-        ege_select_one_action_set_active( ocb, 0 );
+        typeAction->set_active( 0 );
     } else if (!strcmp(arctypestr,"arc")) {
-        ege_select_one_action_set_active( ocb, 1 );
+        typeAction->set_active( 1 );
     } else {
-        ege_select_one_action_set_active( ocb, 2 );
+        typeAction->set_active( 2 );
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
@@ -520,44 +519,46 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
 
     /* Arc: Slice, Arc, Chord */
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Slice"),
-                            1, _("Switch to slice (closed shape with two radii)"),
-                            2, INKSCAPE_ICON("draw-ellipse-segment"),
-                            -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Arc (Open)"),
-                            1, _("Switch to arc (unclosed shape)"),
-                            2, INKSCAPE_ICON("draw-ellipse-arc"),
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Chord"),
-                            1, _("Switch to chord (closed shape)"),
-                            2, INKSCAPE_ICON("draw-ellipse-chord"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Slice");
+        row[columns.col_tooltip  ] = _("Switch to slice (closed shape with two radii)"),
+        row[columns.col_icon     ] = INKSCAPE_ICON("draw-ellipse-segment");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "ArcOpenAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "open_action", act );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Arc (Open)");
+        row[columns.col_tooltip  ] = _("Switch to arc (unclosed shape)");
+        row[columns.col_icon     ] = INKSCAPE_ICON("draw-ellipse-arc");
+        row[columns.col_sensitive] = true;
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Chord");
+        row[columns.col_tooltip  ] = _("Switch to chord (closed shape)"),
+        row[columns.col_icon     ] = INKSCAPE_ICON("draw-ellipse-chord");
+        row[columns.col_sensitive] = true;
 
-        int arc_type = prefs->getInt("/tools/shapes/arc/arc_type", 0);
-        ege_select_one_action_set_active( act, arc_type );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_arctb_open_state_changed), holder );
+         InkSelectOneAction* act =
+            InkSelectOneAction::create( "ArcTypeAction",   // Name
+                                        _(""),             // Label
+                                        _(""),             // Tooltip
+                                        "Not Used",        // Icon
+                                        store );           // Tree store
+
+        act->use_radio( true );
+        act->use_group_label( false );
+        gint type = prefs->getInt("/tools/shapes/arc/arc_type", 0);
+        act->set_active( type );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "type_action", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_arctb_type_changed), holder));
     }
 
     /* Make Whole */
