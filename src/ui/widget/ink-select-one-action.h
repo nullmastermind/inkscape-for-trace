@@ -64,6 +64,7 @@ public:
     void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
   
     gint get_active() { return _active; }
+    Glib::ustring get_active_text();
     void set_active( gint active );
     void set_icon_size( Gtk::BuiltinIconSize size ) { _icon_size = size; }
 

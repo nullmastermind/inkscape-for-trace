@@ -35,12 +35,12 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "widgets/ink-action.h"
 #include "widgets/ink-toggle-action.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/ink-select-one-action.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
@@ -68,17 +68,12 @@ void update_presets_list(GObject *tbl)
         return;
     }
 
-    EgeSelectOneAction *sel = static_cast<EgeSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
-    if (!sel) {
-        // WTF!? This will cause a segfault if ever reached
-        //ege_select_one_action_set_active(sel, 0);
-        return;
-    }
+    InkSelectOneAction *act = static_cast<InkSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
 
     std::vector<Glib::ustring> presets = get_presets_list();
 
-    int ege_index = 1;
-    for (std::vector<Glib::ustring>::iterator i = presets.begin(); i != presets.end(); ++i, ++ege_index) {
+    int index = 1;  // 0 is for no preset.
+    for (std::vector<Glib::ustring>::iterator i = presets.begin(); i != presets.end(); ++i, ++index) {
         bool match = true;
 
         std::vector<Inkscape::Preferences::Entry> preset = prefs->getAllEntries(*i);
@@ -113,14 +108,14 @@ void update_presets_list(GObject *tbl)
         if (match) {
             // newly added item is at the same index as the
             // save command, so we need to change twice for it to take effect
-            ege_select_one_action_set_active(sel, 0);
-            ege_select_one_action_set_active(sel, ege_index); // one-based index
+            act->set_active(0);
+            act->set_active(index);
             return;
         }
     }
 
     // no match found
-    ege_select_one_action_set_active(sel, 0);
+    act->set_active(0);
 }
 
 static void sp_ddc_mass_value_changed( GtkAdjustment *adj, GObject* tbl )
@@ -208,15 +203,18 @@ static void sp_dcc_build_presets_list(GObject *tbl)
 {
     g_object_set_data(tbl, "presets_blocked", GINT_TO_POINTER(TRUE));
 
-    EgeSelectOneAction* selector = static_cast<EgeSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
-    GtkListStore* model = GTK_LIST_STORE(ege_select_one_action_get_model(selector));
-    gtk_list_store_clear (model);
+    InkSelectOneAction* act = static_cast<InkSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
 
-    {
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("No preset"), 1, 0, -1 );
-    }
+    Glib::RefPtr<Gtk::ListStore> store = act->get_store();
+    store->clear();
+
+    InkSelectOneActionColumns columns;
+
+    Gtk::TreeModel::Row row;
+
+    row = *(store->append());
+    row[columns.col_label    ] = _("No preset");
+    row[columns.col_sensitive] = true;
 
     // iterate over all presets to populate the list
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -226,18 +224,13 @@ static void sp_dcc_build_presets_list(GObject *tbl)
     for (std::vector<Glib::ustring>::iterator i = presets.begin(); i != presets.end(); ++i) {
         GtkTreeIter iter;
         Glib::ustring preset_name = prefs->getString(*i + "/name");
+
         if (!preset_name.empty()) {
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, _(preset_name.data()), 1, ii++, -1 );
+            row = *(store->append());
+            row[columns.col_label    ] = _(preset_name.data());
+            row[columns.col_sensitive] = true;
         }
     }
-
-/*    {
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Save..."), 1, ii, -1 );
-        g_object_set_data(tbl, "save_presets_index", GINT_TO_POINTER(ii));
-    }*/
 
     g_object_set_data(tbl, "presets_blocked", GINT_TO_POINTER(FALSE));
 
@@ -257,16 +250,14 @@ static void sp_dcc_save_profile(GtkWidget * /*widget*/, GObject *tbl)
         return;
     }
 
-    EgeSelectOneAction *sel = static_cast<EgeSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
-    //gint preset_index = ege_select_one_action_get_active( sel );
-    Glib::ustring current_profile_name = _("No preset");
-    if (ege_select_one_action_get_active_text( sel )) {
-        current_profile_name = ege_select_one_action_get_active_text( sel );
-    }
+    InkSelectOneAction *act = static_cast<InkSelectOneAction *>(g_object_get_data(tbl, "profile_selector"));
+
+    Glib::ustring current_profile_name = act->get_active_text();
 
     if (current_profile_name == _("No preset")) {
         current_profile_name = "";
     }
+
     CalligraphicProfileRename::show(desktop, current_profile_name);
     if ( !CalligraphicProfileRename::applied()) {
         // dialog cancelled
@@ -341,38 +332,20 @@ static void sp_dcc_save_profile(GtkWidget * /*widget*/, GObject *tbl)
 }
 
 
-static void sp_ddc_change_profile(EgeSelectOneAction* act, GObject* tbl)
+static void sp_ddc_change_profile(GObject* tbl, int mode)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    guint preset_index = ege_select_one_action_get_active( act );
-    // This is necessary because EgeSelectOneAction spams us with GObject "changed" signal calls
-    // even when the preset is not changed. It would be good to replace it with something more
-    // modern. Index 0 means "No preset", so we don't do anything.
-    if (preset_index == 0) {
-        return;
-    }
-
-/*
-    gint save_presets_index = GPOINTER_TO_INT(g_object_get_data(tbl, "save_presets_index"));
-
-    if (preset_index == save_presets_index) {
-        // this is the Save command
-        sp_dcc_save_profile(NULL, tbl);
-        return;
-    }
-*/
 
     if (g_object_get_data(tbl, "presets_blocked")) {
         return;
     }
 
-    // preset_index is one-based so we subtract 1
+    // mode is one-based so we subtract 1
     std::vector<Glib::ustring> presets = get_presets_list();
 
     Glib::ustring preset_path = "";
-    if (preset_index - 1 < presets.size()) {
-        preset_path = presets.at(preset_index - 1);
+    if (mode - 1 < presets.size()) {
+        preset_path = presets.at(mode - 1);
     }
 
     if (!preset_path.empty()) {
@@ -404,8 +377,6 @@ static void sp_ddc_change_profile(EgeSelectOneAction* act, GObject* tbl)
             }
         }
         g_object_set_data(tbl, "presets_blocked", GINT_TO_POINTER(FALSE));
-    } else {
-        ege_select_one_action_set_active(act, 0);
     }
 }
 
@@ -603,17 +574,26 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
         /*calligraphic profile */
         {
-            GtkListStore* model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-            EgeSelectOneAction* act1 = ege_select_one_action_new ("SetProfileAction", "" , (_("Choose a preset")), NULL, GTK_TREE_MODEL(model));
-            ege_select_one_action_set_appearance (act1, "compact");
-            g_object_set_data (holder, "profile_selector", act1 );
+            InkSelectOneActionColumns columns;
 
-            g_object_set_data(holder, "presets_blocked", GINT_TO_POINTER(FALSE));
+            Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+            InkSelectOneAction* act =
+                InkSelectOneAction::create( "SetProfileAction",   // Name
+                                            "",                   // Label
+                                            _("Choose a preset"), // Tooltip
+                                            "NotUsed",            // Icon
+                                            store );              // Tree store
+            act->use_radio( false );
+            act->use_label( true );
+
+            g_object_set_data (holder, "profile_selector", act);
 
             sp_dcc_build_presets_list (holder);
 
-            g_signal_connect(G_OBJECT(act1), "changed", G_CALLBACK(sp_ddc_change_profile), holder);
-            gtk_action_group_add_action(mainActions, GTK_ACTION(act1));
+            gtk_action_group_add_action(mainActions, GTK_ACTION( act->gobj() ));
+
+            act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_ddc_change_profile), holder));
         }
 
         /*calligraphic profile editor */

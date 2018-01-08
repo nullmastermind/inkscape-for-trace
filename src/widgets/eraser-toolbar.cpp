@@ -31,18 +31,17 @@
 #include <glibmm/i18n.h>
 
 #include "eraser-toolbar.h"
-#include "calligraphy-toolbar.h" // TODO: needed for update_presets_list
 
 #include <array>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
 #include "toolbox.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/icon-names.h"
 #include "ui/tools/eraser-tool.h"
 
@@ -54,39 +53,42 @@ using Inkscape::UI::PrefPusher;
 //##       Eraser       ##
 //########################
 
+// A dummy function for PrefPusher.
+// The code was calling the update_presets_list function in the calligraphy tool
+// which was immediately returning. TODO: Investigate this further.
+void eraser_update_presets_list(GObject *tbl)
+{
+    return;
+}
+
 static void sp_erc_width_value_changed( GtkAdjustment *adj, GObject *tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble( "/tools/eraser/width", gtk_adjustment_get_value(adj) );
-    update_presets_list(tbl);
 }
 
 static void sp_erc_mass_value_changed( GtkAdjustment *adj, GObject* tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble( "/tools/eraser/mass", gtk_adjustment_get_value(adj) );
-    update_presets_list(tbl);
 }
 
 static void sp_erc_velthin_value_changed( GtkAdjustment *adj, GObject* tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble("/tools/eraser/thinning", gtk_adjustment_get_value(adj) );
-    update_presets_list(tbl);
 }
 
 static void sp_erc_cap_rounding_value_changed( GtkAdjustment *adj, GObject* tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble( "/tools/eraser/cap_rounding", gtk_adjustment_get_value(adj) );
-    update_presets_list(tbl);
 }
 
 static void sp_erc_tremor_value_changed( GtkAdjustment *adj, GObject* tbl )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble( "/tools/eraser/tremor", gtk_adjustment_get_value(adj) );
-    update_presets_list(tbl);
 }
 
 static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint eraser_mode)
@@ -100,15 +102,15 @@ static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint er
     }
 }
 
-static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_erasertb_mode_changed( GObject *tbl, int mode )
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    guint eraser_mode = ege_select_one_action_get_active( act );
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt( "/tools/eraser/mode", eraser_mode );
+        prefs->setInt( "/tools/eraser/mode", mode );
     }
-    sp_set_tbl_eraser_mode_visibility(tbl, eraser_mode);
+    sp_set_tbl_eraser_mode_visibility(tbl, mode);
+
     // only take action if run by the attr_changed listener
     if (!g_object_get_data( tbl, "freeze" )) {
         // in turn, prevent listener from responding
@@ -136,51 +138,53 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint eraser_mode = FALSE;
+    gint eraser_mode = ERASER_MODE_DELETE;
+
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Delete"),
-                            1, _("Delete objects touched by the eraser"),
-                            2, INKSCAPE_ICON("draw-eraser-delete-objects"),
-                            -1 );
+        InkSelectOneActionColumns columns;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Cut"),
-                            1, _("Cut out from paths and shapes"),
-                            2, INKSCAPE_ICON("path-difference"),
-                            -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Clip"),
-                            1, _("Clip from objects"),
-                            2, INKSCAPE_ICON("path-intersection"),
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "EraserModeAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("Mode:"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "eraser_mode_action", act );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Delete");
+        row[columns.col_tooltip  ] = _("Delete objects touched by eraser");
+        row[columns.col_icon     ] = INKSCAPE_ICON("draw-eraser-delete-objects");
+        row[columns.col_sensitive] = true;
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2);
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1);
+        row = *(store->append());
+        row[columns.col_label    ] = _("Cut");
+        row[columns.col_tooltip  ] = _("Cut out from paths and shapes");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-difference");
+        row[columns.col_sensitive] = true;
 
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        eraser_mode = prefs->getInt("/tools/eraser/mode", ERASER_MODE_CLIP);
-        ege_select_one_action_set_active( act, eraser_mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_erasertb_mode_changed), holder );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Clip");
+        row[columns.col_tooltip  ] = _("Clip from objects");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-intersection");
+        row[columns.col_sensitive] = true;
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "EraserModeAction",  // Name
+                                        _("Mode"),           // Label
+                                        "",                  // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+        act->use_radio( true );
+        act->use_group_label( true );
+        eraser_mode = prefs->getInt("/tools/eraser/mode", ERASER_MODE_CLIP); // Used at end
+        act->set_active( eraser_mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "EraserModeAction", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_erasertb_mode_changed), holder));
     }
 
+
+    /* Width */
     {
-        /* Width */
         gchar const* labels[] = {_("(no width)"),_("(hairline)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad stroke)")};
         gdouble values[] = {0, 1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "EraserWidthAction",
@@ -196,6 +200,8 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         g_object_set_data( holder, "width", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
+
+
     /* Use Pressure button */
     {
         InkToggleAction* act = ink_toggle_action_new( "EraserPressureAction",
@@ -204,15 +210,16 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                       INKSCAPE_ICON("draw-use-pressure"),
                                                       GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/eraser/usepressure", update_presets_list, holder);
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/eraser/usepressure", eraser_update_presets_list, holder);
         g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
         g_object_set_data( holder, "usepressure", act );
     }
-    {
-    
+
+
     /* Thinning */
+    {
         gchar const* labels[] = {_("(speed blows up stroke)"), 0, 0, _("(slight widening)"), _("(constant width)"), _("(slight thinning, default)"), 0, 0, _("(speed deflates stroke)")};
-            gdouble values[] = {-100, -40, -20, -10, 0, 10, 20, 40, 100};
+        gdouble values[] = {-100, -40, -20, -10, 0, 10, 20, 40, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "EraserThinningAction",
                                                               _("Eraser Stroke Thinning"), _("Thinning:"),
                                                               _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"),
@@ -224,9 +231,11 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "thinning", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
-        {
-        /* Cap Rounding */
+    }
+
+
+    /* Cap Rounding */
+    {
             gchar const* labels[] = {_("(blunt caps, default)"), _("(slightly bulging)"), 0, 0, _("(approximately round)"), _("(long protruding caps)")};
         gdouble values[] = {0, 0.3, 0.5, 1.0, 1.4, 5.0};
         // TRANSLATORS: "cap" means "end" (both start and finish) here
@@ -241,11 +250,12 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "cap_rounding", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
+    }
 
-        {
-        /* Tremor */
-            gchar const* labels[] = {_("(smooth line)"), _("(slight tremor)"), _("(noticeable tremor)"), 0, 0, _("(maximum tremor)")};
+
+    /* Tremor */
+    {
+        gchar const* labels[] = {_("(smooth line)"), _("(slight tremor)"), _("(noticeable tremor)"), 0, 0, _("(maximum tremor)")};
         gdouble values[] = {0, 10, 20, 40, 60, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "EraserTremorAction",
                                                               _("EraserStroke Tremor"), _("Tremor:"),
@@ -260,9 +270,11 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         g_object_set_data( holder, "tremor", eact );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
+    }
+
+
+    /* Mass */
     {
-        /* Mass */
             gchar const* labels[] = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), 0, 0, _("(maximum inertia)")};
         gdouble values[] = {0.0, 2, 10, 20, 50, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "EraserMassAction",
@@ -278,6 +290,8 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
+
+
     /* Overlap */
     {
         InkToggleAction* act = ink_toggle_action_new( "EraserBreakAppart",
@@ -290,6 +304,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toogle_break_apart), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
+
     sp_set_tbl_eraser_mode_visibility(holder, eraser_mode);
 }
 

@@ -80,6 +80,13 @@ void InkSelectOneAction::set_active (gint active) {
     }
 }
 
+Glib::ustring InkSelectOneAction::get_active_text () {
+    Gtk::TreeModel::Row row = _store->children()[_active];
+    InkSelectOneActionColumns columns;
+    Glib::ustring label = row[columns.col_label];
+    return label;
+}
+
 Gtk::Widget* InkSelectOneAction::create_menu_item_vfunc() {
 
     if (_menuitem == nullptr) {
