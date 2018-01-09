@@ -559,19 +559,20 @@ target_link_libraries(inkview inkscape_base)
 #Define the installation
 if(NOT WIN32)
   install(TARGETS
-    inkscape_base
     inkscape
     inkview 
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib/inkscape
-    ARCHIVE DESTINATION lib/inkscape)
+    RUNTIME DESTINATION bin)
+  if(BUILD_SHARED_LIBS)
+    install(TARGETS inkscape_base LIBRARY DESTINATION lib/inkscape)
+  endif()
 else()
   install(TARGETS
-    inkscape_base
     inkscape
     inkscape_com
     inkview
     inkview_com
-    RUNTIME DESTINATION .
-    ARCHIVE DESTINATION .)
+    RUNTIME DESTINATION .)
+  if(BUILD_SHARED_LIBS)
+    install(TARGETS inkscape_base RUNTIME DESTINATION .)
+  endif()
 endif()
