@@ -16,6 +16,15 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 # ----------------------------------------------------------------------------
 list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 
+
+# Define the flags for profiling if desired:
+if(WITH_PROFILING)
+    set(BUILD_SHARED_LIBS off)
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pg")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+endif()
+
+
 # ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
