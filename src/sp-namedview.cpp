@@ -27,6 +27,8 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop-events.h"
+#include "enums.h"
+#include "ui/monitor.h"
 
 #include "sp-guide.h"
 #include "sp-item-group.h"
@@ -36,12 +38,6 @@
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
 #include <gtkmm/window.h>
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#else
-# include <gdkmm/screen.h>
-#endif
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -736,41 +732,6 @@ void SPNamedView::show(SPDesktop *desktop)
     desktop->showGrids(grids_visible, false);
 }
 
-namespace {
-
-gint const MIN_ONSCREEN_DISTANCE = 100;
-gdouble const NEWDOC_X_SCALE = 0.75;
-gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
-
-Geom::Point calcAnchorPoint(gint const x, gint const y,
-                            gint const w, gint const h, gint const minOnscreen)
-{
-#if GTKMM_CHECK_VERSION(3,22,0)
-    Gdk::Rectangle screen_geometry;
-
-    auto const display = Gdk::Display::get_default();
-    auto const monitor = display->get_primary_monitor();
-    monitor->get_geometry(screen_geometry);
-    int screen_width  = screen_geometry.get_width();
-    int screen_height = screen_geometry.get_height();
-#else
-    int screen_width  = gdk_screen_width();
-    int screen_height = gdk_screen_height();
-#endif
-
-    // prevent the window from moving off the screen to the right or to the bottom
-    gint ax = MIN(screen_width  - minOnscreen, x);
-    gint ay = MIN(screen_height - minOnscreen, y);
-
-    // prevent the window from moving off the screen to the left or to the top
-    ax = MAX(minOnscreen - w, ax);
-    ay = MAX(minOnscreen - h, ay);
-
-    return Geom::Point(ax, ay);
-}
-
-} // namespace
-
 /*
  * Restores window geometry from the document settings or defaults in prefs
  */
@@ -778,54 +739,49 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 {
     SPNamedView *nv = desktop->namedview;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool geometry_from_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
-    bool geometry_from_last = (2 == prefs->getInt("/options/savewindowgeometry/value", 0));
-    gint default_geometry = prefs->getInt("/options/defaultwindowsize/value", 1);
+    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+    int default_size = prefs->getInt("/options/defaultwindowsize/value", PREFS_WINDOW_SIZE_NATURAL);
     bool new_document = (nv->window_width <= 0) || (nv->window_height <= 0);
     bool show_dialogs = true;
 
     // restore window size and position stored with the document
-    if (geometry_from_last) {
+    Gtk::Window *win = desktop->getToplevel();
+    g_assert(win);
+    if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
         // do nothing, as we already have code for that in interface.cpp
         // TODO: Probably should not do similar things in two places
-    } else if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
-        Gtk::Window *win = desktop->getToplevel();
-        if (win) {
-            win->maximize();
-        }
+    } else if ((window_geometry == PREFS_WINDOW_GEOMETRY_FILE && nv->window_maximized) ||
+               (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
+        win->maximize();
     } else {
-
-        // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
-        Gdk::Rectangle monitor_geometry;
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-        auto const display = Gdk::Display::get_default();
-        auto const monitor = display->get_primary_monitor();
-
-        // If user hasn't configured a primary monitor, nullptr is returned.
-        if (monitor) {
-            monitor->get_geometry(monitor_geometry);
-        }
-#else
-        auto const default_screen = Gdk::Screen::get_default();
-        auto const monitor_number = default_screen->get_primary_monitor();
-        default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
-#endif
-
-        int w = monitor_geometry.get_width();
-        int h = monitor_geometry.get_height();
-
+        const int MIN_WINDOW_SIZE = 600;
+        int w = 0;
+        int h = 0;
         bool move_to_screen = false;
-        if (geometry_from_file and !new_document) {
-            w = MIN(w, nv->window_width);
-            h = MIN(h, nv->window_height);          
+        if (window_geometry == PREFS_WINDOW_GEOMETRY_FILE && !new_document) {
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(nv->window_x, nv->window_y);
+            w = MIN(monitor_geometry.get_width(), nv->window_width);
+            h = MIN(monitor_geometry.get_height(), nv->window_height);      
             move_to_screen = true;
-        } else if (default_geometry == 1) {
-            w *= NEWDOC_X_SCALE;
-            h *= NEWDOC_Y_SCALE;
-        } else if (default_geometry == 0) {
-            w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
-        } 
+        } else if (default_size == PREFS_WINDOW_SIZE_LARGE) {
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
+            w = MAX(0.75 * monitor_geometry.get_width(), MIN_WINDOW_SIZE);
+            h = MAX(0.75 * monitor_geometry.get_height(), MIN_WINDOW_SIZE);
+        } else if (default_size == PREFS_WINDOW_SIZE_SMALL) {
+            w = h = MIN_WINDOW_SIZE;
+        } else if (default_size == PREFS_WINDOW_SIZE_NATURAL) {
+            // don't set size (i.e. keep the gtk+ default, which will be the natural size)
+            // unless gtk+ decided it would be a good idea to show a window that is larger than the screen
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_window(win->get_window());
+            int monitor_width =  monitor_geometry.get_width();
+            int monitor_height = monitor_geometry.get_height();
+            int window_width, window_height;
+            win->get_size(window_width, window_height);
+            if (window_width > monitor_width || window_height > monitor_height) {
+                w = std::min(monitor_width, window_width);
+                h = std::min(monitor_height, window_height);
+            }
+        }
         if ((w > 0) && (h > 0)) {
 #ifndef WIN32
             gint dx= 0;
@@ -841,8 +797,9 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 #endif
             desktop->setWindowSize(w, h);
             if (move_to_screen) {
-                Geom::Point origin = calcAnchorPoint(nv->window_x, nv->window_y, w, h, MIN_ONSCREEN_DISTANCE);
-                desktop->setWindowPosition(origin);
+                win->hide();
+                desktop->setWindowPosition(Geom::Point(nv->window_x, nv->window_y));
+                win->show();
             }
         }
     }
@@ -912,7 +869,8 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
 void sp_namedview_document_from_window(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool save_geometry_in_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
+    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+    bool save_geometry_in_file = window_geometry == PREFS_WINDOW_GEOMETRY_FILE;
     bool save_viewport_in_file = prefs->getBool("/options/savedocviewport/value", true);
     Inkscape::XML::Node *view = desktop->namedview->getRepr();
     Geom::Rect const r = desktop->get_display_area();

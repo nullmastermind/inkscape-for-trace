@@ -30,10 +30,7 @@
 #include "file.h"
 #include <glibmm/miscutils.h>
 
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#endif
-
+#include "enums.h"
 #include "inkscape.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -43,6 +40,7 @@
 #include "document.h"
 
 #include "ui/interface.h"
+#include "ui/monitor.h"
 #include "desktop.h"
 #include "selection-chemistry.h"
 #include "svg-view-widget.h"
@@ -136,8 +134,6 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
                                      Glib::ustring const &name);
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
-static const int MIN_ONSCREEN_DISTANCE = 50;
-
 void
 sp_create_window(SPViewWidget *vw, bool editable)
 {
@@ -165,9 +161,8 @@ sp_create_window(SPViewWidget *vw, bool editable)
         win->signal_focus_in_event().connect(sigc::mem_fun(*desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gint prefs_geometry =
-            (2==prefs->getInt("/options/savewindowgeometry/value", 0));
-        if (prefs_geometry) {
+        int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+        if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
             gint pw = prefs->getInt("/desktop/geometry/width", -1);
             gint ph = prefs->getInt("/desktop/geometry/height", -1);
             gint px = prefs->getInt("/desktop/geometry/x", -1);
@@ -175,39 +170,11 @@ sp_create_window(SPViewWidget *vw, bool editable)
             gint full = prefs->getBool("/desktop/geometry/fullscreen");
             gint maxed = prefs->getBool("/desktop/geometry/maximized");
             if (pw>0 && ph>0) {
-#if GTKMM_CHECK_VERSION(3,22,0)
-                auto const display = Gdk::Display::get_default();
-                auto const monitor = display->get_primary_monitor();
-
-                // A Gdk::Rectangle in "application pixel" units
-                Gdk::Rectangle screen_geometry;
-                monitor->get_geometry(screen_geometry);
-                auto const screen_width  = screen_geometry.get_width();
-                auto const screen_height = screen_geometry.get_height();
-#else
-                auto const screen_width  = gdk_screen_width();
-                auto const screen_height = gdk_screen_height();
-#endif
-                gint w = MIN(screen_width,  pw);
-                gint h = MIN(screen_height, ph);
-                gint x = MIN(screen_width  - MIN_ONSCREEN_DISTANCE, px);
-                gint y = MIN(screen_height - MIN_ONSCREEN_DISTANCE, py);
-                if (w>0 && h>0) {
-                    x = MIN(screen_width - w,  x);
-                    y = MIN(screen_height - h, y);
-                    desktop->setWindowSize(w, h);
-                }
-
-                // Only restore xy for the first window so subsequent windows don't overlap exactly
-                // with first.  (Maybe rule should be only restore xy if it's different from xy of
-                // other desktops?)
-
-                // Empirically it seems that active_desktop==this desktop only the first time a
-                // desktop is created.
-                SPDesktop *active_desktop = SP_ACTIVE_DESKTOP;
-                if (active_desktop == desktop || active_desktop==NULL) {
-                    desktop->setWindowPosition(Geom::Point(x, y));
-                }
+                Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
+                pw = std::min(pw, monitor_geometry.get_width());
+                ph = std::min(ph, monitor_geometry.get_height());      
+                desktop->setWindowSize(pw, ph);
+                desktop->setWindowPosition(Geom::Point(px, py));
             }
             if (maxed) {
                 win->maximize();
@@ -216,8 +183,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
                 win->fullscreen();
             }
         }
-
-    } 
+    }
 
     if ( completeDropTargets == 0 || completeDropTargetsCount == 0 )
     {

@@ -684,9 +684,9 @@ void InkscapePreferences::initPageUI()
     }
 
     // Windows
-    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", 1, true, 0);
-    _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", 2, false, &_win_save_geom);
-    _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", 0, false, &_win_save_geom);
+    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, 0);
+    _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
+    _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE, false, &_win_save_geom);
 
     _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", 1, true, 0);
     _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", 0, false, &_win_save_dialog_pos_on);
@@ -707,10 +707,16 @@ void InkscapePreferences::initPageUI()
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
     {
-        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Small"), C_("Window size", "Large"), C_("Window size", "Maximized")};
-        int defaultSizeValues[] = {0, 1, 2};
+        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Default"),
+                                             C_("Window size", "Small"),
+                                             C_("Window size", "Large"),
+                                             C_("Window size", "Maximized")};
+        int defaultSizeValues[] = {PREFS_WINDOW_SIZE_NATURAL,
+                                   PREFS_WINDOW_SIZE_SMALL,
+                                   PREFS_WINDOW_SIZE_LARGE,
+                                   PREFS_WINDOW_SIZE_MAXIMIZED};
 
-        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), 1 );
+        _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), PREFS_WINDOW_SIZE_NATURAL);
         _page_windows.add_line( false, _("Default window size:"),  _win_default_size, "",
                            _("Set the default window size"), false);
     }

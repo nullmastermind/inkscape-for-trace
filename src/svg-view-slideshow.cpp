@@ -30,11 +30,6 @@
 #endif
 
 #include <glibmm/main.h>
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#endif
-
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/image.h>
@@ -42,15 +37,12 @@
 
 #include "document.h"
 #include "ui/icon-names.h"
+#include "ui/monitor.h"
 #include "util/units.h"
 
 #include "svg-view.h"
 #include "svg-view-slideshow.h"
 #include "svg-view-widget.h"
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#endif
 
 
 SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_screen, int timer, double scale)
@@ -64,34 +56,9 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_scr
     , _ctrlwin(NULL)
 {
     // setup initial document
-#if GTKMM_CHECK_VERSION(3,22,0)
-    auto display = Gdk::Display::get_default();
-    auto monitor = display->get_primary_monitor();
-
-    // Fallback to monitor number 0 if the user hasn't configured a primary monitor
-    if (!monitor) {
-        monitor = display->get_monitor(0);
-    }
-
-    if (monitor) {
-        Gdk::Rectangle monitor_geometry;
-        monitor->get_geometry(monitor_geometry);
-
-        auto const monitor_width  = monitor_geometry.get_width();
-        auto const monitor_height = monitor_geometry.get_height();
-
-#else
-    auto default_screen = Gdk::Screen::get_default();
-
-    if (default_screen) {
-        auto const monitor_width  = default_screen->get_width();
-        auto const monitor_height = default_screen->get_height();
-#endif
-
-        set_default_size(MIN ((int)_doc->getWidth().value("px")*_scale,  monitor_width  - 64),
-                         MIN ((int)_doc->getHeight().value("px")*_scale, monitor_height - 64));
-
-    }
+    Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_primary(); // TODO: is inkview always launched on primary monitor?
+    set_default_size(MIN ((int)_doc->getWidth().value("px")*_scale,  monitor_geometry.get_width()  - 64),
+                     MIN ((int)_doc->getHeight().value("px")*_scale, monitor_geometry.get_height() - 64));
 
     _view = sp_svg_view_widget_new(_doc);
     SP_SVG_VIEW_WIDGET(_view)->setResize( false, _doc->getWidth().value("px"), _doc->getHeight().value("px") );

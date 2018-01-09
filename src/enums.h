@@ -111,5 +111,22 @@ enum PrefsMaskobjectGrouping {
     PREFS_MASKOBJECT_GROUPING_ALL = 2,
 };
 
+/* save window geometry preference values (/options/savewindowgeometry/value) */
+
+enum PrefsSaveWindowGeometry {
+    PREFS_WINDOW_GEOMETRY_NONE = 0,
+    PREFS_WINDOW_GEOMETRY_FILE = 1,
+    PREFS_WINDOW_GEOMETRY_LAST = 2,
+};
+
+/* default window size preference values (/options/defaultwindowsize/value) */
+
+enum PrefsDefaultWindowSize {
+    PREFS_WINDOW_SIZE_NATURAL = -1,
+    PREFS_WINDOW_SIZE_SMALL = 0,
+    PREFS_WINDOW_SIZE_LARGE = 1,
+    PREFS_WINDOW_SIZE_MAXIMIZED = 2,
+};
+
 #endif
 
