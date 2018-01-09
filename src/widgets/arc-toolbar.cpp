@@ -66,16 +66,16 @@ using Inkscape::Util::unit_table;
 
 static void sp_arctb_sensitivize( GObject *tbl, double v1, double v2 )
 {
-    GtkAction *ocb = GTK_ACTION( g_object_get_data( tbl, "open_action" ) );
+    Gtk::Action *ocb = static_cast<Gtk::Action*>( g_object_get_data( tbl, "type_action" ) );
     GtkAction *make_whole = GTK_ACTION( g_object_get_data( tbl, "make_whole" ) );
 
     if (v1 == 0 && v2 == 0) {
         if (g_object_get_data( tbl, "single" )) { // only for a single selected ellipse (for now)
-            gtk_action_set_sensitive( ocb, FALSE );
+            ocb->set_sensitive(false);
             gtk_action_set_sensitive( make_whole, FALSE );
         }
     } else {
-        gtk_action_set_sensitive( ocb, TRUE );
+        ocb->set_sensitive(true);
         gtk_action_set_sensitive( make_whole, TRUE );
     }
 }
