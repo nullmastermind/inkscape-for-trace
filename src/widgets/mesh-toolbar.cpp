@@ -26,7 +26,6 @@
 
 #include "verbs.h"
 
-#include "widgets/button.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/gradient-vector.h"
 #include "widgets/gradient-image.h"
@@ -41,13 +40,13 @@
 
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "gradient-drag.h"
 #include "sp-mesh-gradient.h"
 #include "gradient-chemistry.h"
 #include "ui/icon-names.h"
 
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
@@ -152,9 +151,7 @@ static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
     if (blocked)
         return;
 
-    GtkWidget *widget = GTK_WIDGET(data);
-
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(data), "desktop"));
     if (!desktop) {
         return;
     }
@@ -175,11 +172,11 @@ static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
         ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
         // std::cout << "   type: " << ms_type << std::endl;
         
-        EgeSelectOneAction* type = (EgeSelectOneAction *) g_object_get_data(G_OBJECT(widget), "mesh_select_type_action");
-        gtk_action_set_sensitive( GTK_ACTION(type), (ms_selected && !ms_type_multi) );
-        if (ms_selected) {
+        InkSelectOneAction* type = static_cast<InkSelectOneAction*> (g_object_get_data(G_OBJECT(data), "mesh_select_type_action"));
+        if (type) {
+            type->set_sensitive(!ms_type_multi);
             blocked = TRUE;
-            ege_select_one_action_set_active( type, ms_type );
+            type->set_active(ms_type);
             blocked = FALSE;
         }
     }
@@ -211,18 +208,16 @@ static void ms_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject *widg
  * Callback functions for user actions
  */
 
-static void ms_new_geometry_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
+static void ms_new_geometry_changed( GObject * /*tbl*/, int mode )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint geometrymode = ege_select_one_action_get_active( act ) == 0 ? SP_MESH_GEOMETRY_NORMAL : SP_MESH_GEOMETRY_CONICAL;
-    prefs->setInt("/tools/mesh/mesh_geometry", geometrymode);
+    prefs->setInt("/tools/mesh/mesh_geometry", mode);
 }
 
-static void ms_new_fillstroke_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
+static void ms_new_fillstroke_changed( GObject * /*tbl*/, int mode )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::PaintTarget fsmode = (ege_select_one_action_get_active( act ) == 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
-    prefs->setInt("/tools/gradient/newfillorstroke", (fsmode == Inkscape::FOR_FILL) ? 1 : 0);
+    prefs->setInt("/tools/mesh/newfillorstroke", mode);
 }
 
 static void ms_row_changed(GtkAdjustment *adj, GObject * /*tbl*/ )
@@ -262,20 +257,18 @@ static void ms_col_changed(GtkAdjustment *adj, GObject * /*tbl*/ )
 /**
  * Sets mesh type: Coons, Bicubic
  */
-static void ms_type_changed(EgeSelectOneAction *act, GtkWidget *widget)
+static void ms_type_changed( GObject *tbl, int mode )
 {
-    // std::cout << "ms_type_changed" << std::endl;
     if (blocked) {
         return;
     }
 
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients(selection);
 
-    SPMeshType type = (SPMeshType) ege_select_one_action_get_active(act);
+    SPMeshType type = (SPMeshType) mode;
     for (auto i = meshes.begin(); i != meshes.end(); ++i) {
-        // std::cout << "   type: " << type << std::endl;
         (*i)->type = type;
         (*i)->type_set = true;
         (*i)->updateRepr();
@@ -379,65 +372,82 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
     EgeAdjustmentAction* eact = 0;
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     /* New mesh: normal or conical */
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                0, _("normal"), 1, _("Create mesh gradient"), 2, INKSCAPE_ICON("paint-gradient-mesh"), -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                0, _("conical"), 1, _("Create conical gradient"), 2, INKSCAPE_ICON("paint-gradient-conical"), -1 );
+        Gtk::TreeModel::Row row;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "MeshNewTypeAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("New:"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "mesh_new_type_action", act );
+        row = *(store->append());
+        row[columns.col_label    ] = _("normal");
+        row[columns.col_tooltip  ] = _("Create mesh gradient");
+        row[columns.col_icon     ] = INKSCAPE_ICON("paint-gradient-mesh");
+        row[columns.col_sensitive] = true;
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        row = *(store->append());
+        row[columns.col_label    ] = _("conical");
+        row[columns.col_tooltip  ] = _("Create conical gradient");
+        row[columns.col_icon     ] = INKSCAPE_ICON("paint-gradient-conical");
+        row[columns.col_sensitive] = true;
 
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL) != SP_MESH_GEOMETRY_NORMAL;
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(ms_new_geometry_changed), holder );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "MeshNewTypeAction", // Name
+                                        _("New:"),           // Label
+                                        _(""),               // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( true );
+        act->use_group_label( true );
+        gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "mesh_new_type_mode", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_new_geometry_changed), holder));
     }
 
     /* New gradient on fill or stroke*/
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("fill"), 1, _("Create gradient in the fill"), 2, INKSCAPE_ICON("object-fill"), -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("stroke"), 1, _("Create gradient in the stroke"), 2, INKSCAPE_ICON("object-stroke"), -1 );
+        Gtk::TreeModel::Row row;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "MeshNewFillStrokeAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("on:"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "mesh_new_fillstroke_action", act );
+        row = *(store->append());
+        row[columns.col_label    ] = _("fill");
+        row[columns.col_tooltip  ] = _("Create gradient in the fill");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-fill");
+        row[columns.col_sensitive] = true;
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        row = *(store->append());
+        row[columns.col_label    ] = _("stroke");
+        row[columns.col_tooltip  ] = _("Create gradient in the stroke");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-stroke");
+        row[columns.col_sensitive] = true;
 
-        /// @todo Convert to boolean?
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool fillstrokemode = !prefs->getBool("/tools/gradient/newfillorstroke", true);
-        ege_select_one_action_set_active( act, fillstrokemode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(ms_new_fillstroke_changed), holder );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "MeshNewFillStrokeAction", // Name
+                                        _(""),               // Label
+                                        _(""),               // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( true );
+        act->use_group_label( false );
+        gint mode = prefs->getInt("/tools/mesh/newfillorstroke");
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "mesh_new_type_mode", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_new_fillstroke_changed), holder));
     }
 
     /* Number of mesh rows */
@@ -529,25 +539,43 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
     /* Type */
     {
-        GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, C_("Type", "Coons"), 1, SP_MESH_TYPE_COONS, -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Bicubic"), 1, SP_MESH_TYPE_BICUBIC, -1 );
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = C_("Type", "Coons");
+        row[columns.col_tooltip  ] = _("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Bicubic");
+        row[columns.col_tooltip  ] = _("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
 
         // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        EgeSelectOneAction* act = ege_select_one_action_new( "MeshSmoothAction", _("Coons"),
-               _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."),
-                NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("Smoothing:"), NULL );
-        ege_select_one_action_set_appearance( act, "compact" );
-        gtk_action_set_sensitive( GTK_ACTION(act), FALSE );
-        g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(ms_type_changed), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "MeshSmoothAction",  // Name
+                                        _("Smoothing"),      // Label
+                                        _("Coons: no smothing. Bicubic: smothing across patch boundaries."),               // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( false );
+        act->use_label( true );
+        act->use_icon( false );
+        act->use_group_label( true );
+        act->set_sensitive( false );
+        act->set_active( 0 );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "mesh_select_type_action", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_type_changed), holder));
     }
 
     {

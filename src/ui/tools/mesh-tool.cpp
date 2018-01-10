@@ -501,6 +501,10 @@ bool MeshTool::root_handler(GdkEvent* event) {
     this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     double const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
 
+    // Get value of fill or stroke preference
+    Inkscape::PaintTarget fill_or_stroke_pref =
+        static_cast<Inkscape::PaintTarget>(prefs->getInt("/tools/mesh/newfillorstroke"));
+
     GrDrag *drag = this->_grdrag;
     g_assert (drag);
 
@@ -536,11 +540,8 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 if (!selection->isEmpty()) {
                     SPStyle *style = selection->items().front()->style;
                     if (style) {
-                        Inkscape::PaintTarget fill_or_stroke =
-                            (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ?
-                            Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
                         SPPaintServer *server =
-                            (fill_or_stroke == Inkscape::FOR_FILL) ?
+                            (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
                             style->getFillPaintServer():
                             style->getStrokePaintServer();
                         if (server && SP_IS_MESHGRADIENT(server)) 
@@ -608,11 +609,8 @@ bool MeshTool::root_handler(GdkEvent* event) {
             if (!selection->isEmpty()) {
                 SPStyle *style = selection->items().front()->style;
                 if (style) {
-                    Inkscape::PaintTarget fill_or_stroke =
-                        (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ?
-                        Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
                     SPPaintServer *server =
-                        (fill_or_stroke == Inkscape::FOR_FILL) ?
+                        (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
                         style->getFillPaintServer():
                         style->getStrokePaintServer();
                     if (server && SP_IS_MESHGRADIENT(server)) 
@@ -751,11 +749,8 @@ bool MeshTool::root_handler(GdkEvent* event) {
                     if (!selection->isEmpty()) {
                         SPStyle *style = selection->items().front()->style;
                         if (style) {
-                            Inkscape::PaintTarget fill_or_stroke =
-                                (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ?
-                                Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
                             SPPaintServer *server =
-                                (fill_or_stroke == Inkscape::FOR_FILL) ?
+                                (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
                                 style->getFillPaintServer():
                                 style->getStrokePaintServer();
                             if (server && SP_IS_MESHGRADIENT(server)) 
@@ -1070,13 +1065,12 @@ static void sp_mesh_new_default(MeshTool &rc) {
     if (!selection->isEmpty()) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Inkscape::PaintTarget fill_or_stroke =
-            (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ?
-            Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+        Inkscape::PaintTarget fill_or_stroke_pref =
+            static_cast<Inkscape::PaintTarget>(prefs->getInt("/tools/mesh/newfillorstroke"));
 
         // Ensure mesh is immediately editable.
         // Editing both fill and stroke at same time doesn't work well so avoid.
-        if (fill_or_stroke == Inkscape::FOR_FILL) {
+        if (fill_or_stroke_pref == Inkscape::FOR_FILL) {
             prefs->setBool("/tools/mesh/edit_fill",   true );
             prefs->setBool("/tools/mesh/edit_stroke", false);
         } else {
@@ -1109,12 +1103,13 @@ static void sp_mesh_new_default(MeshTool &rc) {
 
             // Get corresponding object
             SPMeshGradient *mg = static_cast<SPMeshGradient *>(document->getObjectByRepr(repr));
-            mg->array.create(mg, *i, (fill_or_stroke == Inkscape::FOR_FILL) ?
+            mg->array.create(mg, *i, (fill_or_stroke_pref == Inkscape::FOR_FILL) ?
                              (*i)->geometricBounds() : (*i)->visualBounds());
 
             bool isText = SP_IS_TEXT(*i);
-            sp_style_set_property_url (*i, ((fill_or_stroke == Inkscape::FOR_FILL) ? "fill":"stroke"),
-                                   mg, isText);
+            sp_style_set_property_url(*i,
+                                      ((fill_or_stroke_pref == Inkscape::FOR_FILL) ? "fill":"stroke"),
+                                      mg, isText);
 
             (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
