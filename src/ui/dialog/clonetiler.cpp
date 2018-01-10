@@ -1315,8 +1315,20 @@ Geom::Affine CloneTiler::get_transform(
     if( !shifty_excludeh ) shiftj += j;
 
     // Add exponential shift if necessary
-    if ( shiftx_exp != 1.0 ) shifti = pow( shifti, shiftx_exp );
-    if ( shifty_exp != 1.0 ) shiftj = pow( shiftj, shifty_exp );
+    if (shiftx_exp != 1.0) {
+        if (shifti >= 0.0) {
+            shifti = pow(shifti, shiftx_exp);
+        } else {
+            shifti = -pow(-shifti, shiftx_exp);
+        }
+    }
+    if (shifty_exp != 1.0) {
+        if (shiftj >= 0.0) {
+            shiftj = pow(shiftj, shifty_exp);
+        } else {
+            shiftj = -pow(-shiftj, shifty_exp);
+        }
+    }
 
     // Final shift
     Geom::Affine rect_translate (Geom::Translate (w * shifti, h * shiftj));
