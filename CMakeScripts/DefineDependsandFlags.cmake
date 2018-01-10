@@ -39,7 +39,7 @@ if(WIN32)
 
 	list(APPEND INKSCAPE_LIBS "-lgomp")
 	list(APPEND INKSCAPE_LIBS "-lwinpthread")
-	
+
 	if(HAVE_MINGW64)
 		list(APPEND INKSCAPE_CXX_FLAGS "-m64")
 	else()
@@ -116,7 +116,7 @@ if(ENABLE_POPPLER)
 	set(HAVE_POPPLER ON)
 	if(ENABLE_POPPLER_CAIRO)
 	    if(POPPLER_CAIRO_FOUND AND POPPLER_GLIB_FOUND)
-		set(HAVE_POPPLER_CAIRO ON)	  
+		set(HAVE_POPPLER_CAIRO ON)
 	    endif()
 	    if(POPPLER_GLIB_FOUND AND CAIRO_SVG_FOUND)
 		set(HAVE_POPPLER_GLIB ON)
@@ -220,7 +220,7 @@ if(WITH_DBUS)
     list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/src/extension/dbus/)
     list(APPEND INKSCAPE_LIBS ${DBUS_LIBRARIES})
     add_definitions(${DBUS_CFLAGS_OTHER})
-    
+
     else()
 	set(WITH_DBUS OFF)
     endif()
@@ -379,6 +379,14 @@ list(REMOVE_DUPLICATES INKSCAPE_CXX_FLAGS)
 foreach(flag ${INKSCAPE_CXX_FLAGS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}" CACHE STRING "" FORCE)
 endforeach()
+
+# Some linkers, like gold, don't find symbols recursively. So we have to link against X11 explicitly
+find_package(X11)
+if(X11_FOUND)
+    list(APPEND INKSCAPE_INCS_SYS ${X11_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS ${X11_LIBRARIES})
+endif(X11_FOUND)
+
 # end Dependencies
 
 list(REMOVE_DUPLICATES INKSCAPE_LIBS)
