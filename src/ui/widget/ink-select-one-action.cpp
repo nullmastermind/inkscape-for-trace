@@ -137,16 +137,16 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
 
     Gtk::ToolItem *tool_item = new Gtk::ToolItem;
 
+    Gtk::Box* box = Gtk::manage(new Gtk::Box());
+    tool_item->add (*box);
+
+    if (_use_group_label) {
+        Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
+        box->add( *group_label );
+    }
+
     if (_use_radio) {
         // Create radio actions (note: these are not radio buttons).
-
-        Gtk::Box* box = Gtk::manage(new Gtk::Box());
-        tool_item->add (*box);  
-
-        if (_use_group_label) {
-            Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
-            box->add( *group_label );
-        }
 
         Gtk::RadioAction::Group group;
         int index = 0;
@@ -213,7 +213,7 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         _combobox->signal_changed().connect(
             sigc::mem_fun(*this, &InkSelectOneAction::on_changed_combobox));
 
-        tool_item->add (*_combobox);
+        box->add (*_combobox);
     }
 
     tool_item->show_all();
