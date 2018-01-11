@@ -1085,7 +1085,7 @@ void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
         markup = "<span foreground='darkblue'>";
 
         /* See if font-family on system */
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family_escaped);
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
         for (size_t i = 0; i < tokens.size(); ++i) {
 
             Glib::ustring token = tokens[i];
