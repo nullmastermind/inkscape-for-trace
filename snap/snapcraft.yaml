@@ -88,7 +88,9 @@ parts:
       - -usr/sbin/update-icon-caches
     prime:
       - -lib/inkscape/*.a
-    after: [desktop-gtk3]
+    after:
+      - desktop-gtk3
+      - gnome-3-26
   snapcraft-wrapper:
     plugin: dump
     source: packaging/snappy/
@@ -101,6 +103,13 @@ parts:
     stage-packages:
       - pstoedit
       - python-uniconvertor
+    after:
+      - gnome-3-26
+  gnome-3-26:
+    plugin: nil
+    prepare: |
+       add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
+       apt-get -y update
 
 apps:
   inkscape:
