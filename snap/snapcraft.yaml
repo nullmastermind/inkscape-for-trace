@@ -107,10 +107,11 @@ parts:
       - gnome-3-26
   gnome-3-26:
     plugin: nil
-    prepare: |
-       add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
-       apt-get -y update
-       apt-get -y dist-upgrade
+# Not until gtkmm is in the ppa
+#    prepare: |
+#       add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
+#       apt-get -y update
+#       apt-get -y dist-upgrade
 
 apps:
   inkscape:
