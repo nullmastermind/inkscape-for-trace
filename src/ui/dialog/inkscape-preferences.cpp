@@ -68,8 +68,10 @@ using Inkscape::CMSSystem;
 
 InkscapePreferences::InkscapePreferences()
     : UI::Widget::Panel ("", "/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
-      _max_dialog_width(0),
-      _max_dialog_height(0),
+      _minimum_width(0),
+      _minimum_height(0),
+      _natural_width(0),
+      _natural_height(0),
       _current_page(0),
       _init(true)
 {
@@ -97,6 +99,10 @@ InkscapePreferences::InkscapePreferences()
     hbox_list_page->pack_start(*list_frame, false, true, 0);
     _page_list.set_headers_visible(false);
     scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    scrolled_window->set_propagate_natural_width();
+    scrolled_window->set_propagate_natural_height();
+#endif
     scrolled_window->add(_page_list);
     list_frame->set_shadow_type(Gtk::SHADOW_IN);
     list_frame->add(*scrolled_window);
@@ -113,6 +119,10 @@ InkscapePreferences::InkscapePreferences()
 
     Gtk::ScrolledWindow* pageScroller = Gtk::manage(new Gtk::ScrolledWindow());
     pageScroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    pageScroller->set_propagate_natural_width();
+    pageScroller->set_propagate_natural_height();
+#endif
     pageScroller->add(*vbox_page);
     hbox_list_page->pack_start(*pageScroller, true, true, 0);
 
@@ -136,10 +146,30 @@ InkscapePreferences::InkscapePreferences()
     signalPresent().connect(sigc::mem_fun(*this, &InkscapePreferences::_presentPages));
 
     //calculate the size request for this dialog
-    this->show_all_children();
     _page_list.expand_all();
-    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::SetMaxDialogSize));
-    _getContents()->set_size_request(_max_dialog_width, _max_dialog_height);
+#if GTKMM_CHECK_VERSION(3,22,0)
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+#else
+    // we don't have Gtk::ScrolledWindow::set_propagate_natural_width/height so work around it:
+    // -> store current policy
+    Gtk::PolicyType scrolled_window_h, scrolled_window_v,
+                    pageScroller_h, pageScroller_v;
+    scrolled_window->get_policy(scrolled_window_h, scrolled_window_v);
+    pageScroller->get_policy(pageScroller_h, pageScroller_v);
+    // -> calculate minimum size with current policy
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+    int minimum_width  = _minimum_width;
+    int minimum_height = _minimum_height;
+    // -> calculate natural size with Gtk::POLICY_NEVER (i.e. no scrollbars)
+    scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    pageScroller->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
+    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
+    // -> reset policy to previously stored values and reset minimum size to reasonable values as stored above
+    scrolled_window->set_policy(scrolled_window_h, scrolled_window_v);
+    pageScroller->set_policy(pageScroller_h, pageScroller_v);
+    _minimum_width  = minimum_width;
+    _minimum_height = minimum_height;
+#endif
     _page_list.collapse_all();
 }
 
@@ -2032,17 +2062,19 @@ void InkscapePreferences::initPageSystem()
     this->AddPage(_page_system, _("System"), PREFS_PAGE_SYSTEM);
 }
 
-bool InkscapePreferences::SetMaxDialogSize(const Gtk::TreeModel::iterator& iter)
+bool InkscapePreferences::GetSizeRequest(const Gtk::TreeModel::iterator& iter)
 {
     Gtk::TreeModel::Row row = *iter;
     DialogPage* page = row[_page_list_columns._col_page];
     _page_frame.add(*page);
     this->show_all_children();
-    Gtk::Requisition sreq;
+    Gtk::Requisition sreq_minimum;
     Gtk::Requisition sreq_natural;
-    this->get_preferred_size(sreq_natural, sreq);
-    _max_dialog_width=std::max(_max_dialog_width, sreq.width);
-    _max_dialog_height=std::max(_max_dialog_height, sreq.height);
+    _getContents()->get_preferred_size(sreq_minimum, sreq_natural);
+    _minimum_width  = std::max(_minimum_width,  sreq_minimum.width);
+    _minimum_height = std::max(_minimum_height, sreq_minimum.height);
+    _natural_width  = std::max(_natural_width,  sreq_natural.width);
+    _natural_height = std::max(_natural_height, sreq_natural.height);
     _page_frame.remove();
     return false;
 }

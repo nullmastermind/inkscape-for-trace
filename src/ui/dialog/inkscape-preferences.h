@@ -485,14 +485,32 @@ protected:
     Glib::RefPtr<Gtk::TreeModelFilter> _kb_filter;
     gboolean _kb_shortcuts_loaded;
 
-    int _max_dialog_width;
-    int _max_dialog_height;
+    int _minimum_width;
+    int _minimum_height;
+    int _natural_width;
+    int _natural_height;
+    bool GetSizeRequest(const Gtk::TreeModel::iterator& iter);
+    void get_preferred_width_vfunc (int& minimum_width, int& natural_width) const {
+        minimum_width = _minimum_width;
+        natural_width = _natural_width;
+    }
+    void get_preferred_width_for_height_vfunc (int height, int& minimum_width, int& natural_width) const {
+        minimum_width = _minimum_width;
+        natural_width = _natural_width;
+    }
+    void get_preferred_height_vfunc (int& minimum_height, int& natural_height) const {
+        minimum_height = _minimum_height;
+        natural_height = _natural_height;
+    }
+    void get_preferred_height_for_width_vfunc (int width, int& minimum_height, int& natural_height) const {
+        minimum_height = _minimum_height;
+        natural_height = _natural_height;
+    }
     int _sb_width;
     UI::Widget::DialogPage* _current_page;
 
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, int id);
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, Gtk::TreeModel::iterator parent, int id);
-    bool SetMaxDialogSize(const Gtk::TreeModel::iterator& iter);
     bool PresentPage(const Gtk::TreeModel::iterator& iter);
 
     static void AddSelcueCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
