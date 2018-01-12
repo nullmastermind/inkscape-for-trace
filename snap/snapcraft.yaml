@@ -115,8 +115,24 @@ parts:
 apps:
   inkscape:
     command: desktop-launch ${SNAP}/snapcraft.sh inkscape
-    plugs: [home, unity7, gsettings, cups-control, desktop, desktop-legacy]
+    plugs:
+      - home
+      - unity7
+      - gsettings
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - x11
+      - wayland
     desktop: share/applications/inkscape.desktop
   viewer:
     command: desktop-launch ${SNAP}/snapcraft.sh inkview
-    plugs: [home, unity7, gsettings, cups-control, desktop, desktop-legacy]
+    plugs:
+      - home
+      - unity7
+      - gsettings
+      - cups-control
+      - desktop
+      - desktop-legacy
+      - x11
+      - wayland
