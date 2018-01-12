@@ -110,6 +110,7 @@ parts:
     prepare: |
        add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
        apt-get -y update
+       apt-get -y dist-upgrade
 
 apps:
   inkscape:
