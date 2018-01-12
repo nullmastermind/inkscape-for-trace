@@ -1,6 +1,7 @@
 
 #add your test here (do not put the .svg extension)
 set(RENDERING_TESTS 
+    test-baseline-shift
     test-empty
     test-glyph-y-pos
     test-rtl-vertical

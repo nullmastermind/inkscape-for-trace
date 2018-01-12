@@ -779,7 +779,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     // y-coordinate is flipped between vertical and horizontal text...
                     // delta_y is common offset but applied with opposite sign
                     double delta_x = unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
-                    double delta_y = unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier + unbroken_span.baseline_shift;
+                    double delta_y = unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier - unbroken_span.baseline_shift;
                     SPCSSBaseline dominant_baseline = _flow._blockBaseline();
 
                     if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
