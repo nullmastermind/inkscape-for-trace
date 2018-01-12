@@ -5,6 +5,9 @@ build
 share/inkscape
 share/*/*.h
 
+inkscape_devel_*.snap
+inkscape_devel_source.tar.bz2
+
 *.pyc
 *.old
 *.swp
