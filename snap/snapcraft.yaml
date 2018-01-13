@@ -109,7 +109,6 @@ parts:
     plugin: nil
     prepare: |
        add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
-       add-apt-repository -y ppa:ken-vandine/gnome-3-26
        apt-get -y update
        apt-get -y dist-upgrade
 
