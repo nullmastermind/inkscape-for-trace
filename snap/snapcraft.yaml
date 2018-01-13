@@ -107,6 +107,8 @@ parts:
       - gnome-3-26
   gnome-3-26:
     plugin: nil
+    build-packages:
+      - software-properties-common
     prepare: |
        add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
        apt-get -y update
