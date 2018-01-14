@@ -213,7 +213,9 @@ static char const preamble[] =
 "    \\errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package \'transparent.sty\' is not loaded}%\n"
 "    \\renewcommand\\transparent[1]{}%\n"
 "  }%\n"
-"  \\providecommand\\rotatebox[2]{#2}%\n";
+"  \\providecommand\\rotatebox[2]{#2}%\n"
+"  \\newcommand*\\fsize{\\dimexpr\\f@size pt\\relax}%\n"
+"  \\newcommand*\\lineheight[1]{\\fontsize{\\fsize}{#1\\fsize}\\selectfont}%\n";
 
 static char const postamble[] =
 "  \\end{picture}%\n"
@@ -279,20 +281,20 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     // Align vertically on the baseline of the font (retrieved from the anchor point)
     // Align horizontally on anchorpoint
     gchar const *alignment = NULL;
-    gchar const *alignstack = NULL;
+    gchar const *aligntabular = NULL;
     switch (style->text_anchor.computed) {
     case SP_CSS_TEXT_ANCHOR_START:
         alignment = "[lt]";
-        alignstack = "[l]";
+        aligntabular = "{l}";
         break;
     case SP_CSS_TEXT_ANCHOR_END:
         alignment = "[rt]";
-        alignstack = "[r]";
+        aligntabular = "{r}";
         break;
     case SP_CSS_TEXT_ANCHOR_MIDDLE:
     default:
         alignment = "[t]";
-        alignstack = "[c]";
+        aligntabular = "{c}";
         break;
     }
     Geom::Point anchor = textobj->attributes.firstXY() * transform();
@@ -324,6 +326,16 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     double degrees = -180/M_PI * Geom::atan2(wotransl.xAxis());
     bool has_rotation = !Geom::are_near(degrees,0.);
 
+    // get line-height
+    float line_height;
+    if (style->line_height.unit == SP_CSS_UNIT_NONE) {
+        // unitless 'line-height' (use as-is, computed value is relative value)
+        line_height = style->line_height.computed;
+    } else {
+        // 'line-height' with unit (make relative, computed value is absolute value)
+        line_height = style->line_height.computed / style->font_size.computed;
+    }
+
     // write to LaTeX
     Inkscape::SVGOStringStream os;
     os.setf(std::ios::fixed); // don't use scientific notation
@@ -339,9 +351,11 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
         os << "\\rotatebox{" << degrees << "}{";
     }
     os << "\\makebox(0,0)" << alignment << "{";
-    os << "\\shortstack" << alignstack << "{";
+    if (line_height != 1) {
+        os << "\\lineheight{" << line_height << "}";
+    }
     os << "\\smash{";
-    bool smash_closed = false;
+    os << "\\begin{tabular}[t]" << aligntabular;
 
         // Walk through all spans in the text object.
         // Write span strings to LaTeX, associated with font weight and style.
@@ -388,19 +402,10 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
             // replace carriage return with double slash
             gchar ** splitstr = g_strsplit(spanstr, "\n", 2);
             os << splitstr[0];
-
-            // smash the first line of the text only, to be able to align the rest of the makebox top
-            // assuming that spans always end at the end of a line
             if (g_strv_length(splitstr) > 1)
             {
-                if (!smash_closed)
-                {
-                    os << "}"; // smash end
-                    smash_closed = true;
-                }
                 os << "\\\\";
             }
-
             g_strfreev(splitstr);
 
             if (is_oblique) { os << "}"; } // oblique end
@@ -408,8 +413,8 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
             if (is_bold) { os << "}"; } // bold end
         }
 
-    if (!smash_closed) { os << "}"; } // smash end
-    os << "}"; // shortstack end
+    os << "\\end{tabular}"; // tabular end
+    os << "}"; // smash end
     if (has_rotation) { os << "}"; } // rotatebox end
     os << "}"; //makebox end
     os << "}%\n"; // put end
@@ -681,7 +686,6 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     os.setf(std::ios::fixed); // no scientific notation
 
     // scaling of the image when including it in LaTeX
-
     os << "  \\ifx\\svgwidth\\undefined%\n";
     os << "    \\setlength{\\unitlength}{" << Inkscape::Util::Quantity::convert(d.width(), "px", "pt") << "bp}%\n"; // note: 'bp' is the Postscript pt unit in LaTeX, see LP bug #792384
     os << "    \\ifx\\svgscale\\undefined%\n";
@@ -697,6 +701,11 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     os << "  \\makeatother%\n";
 
     os << "  \\begin{picture}(" << _width << "," << _height << ")%\n";
+
+    // set \baselineskip equal to fontsize (the closest we can seem to get to CSS "line-height: 1;")
+    // and remove column spacing from tabular
+    os << "    \\lineheight{1}%\n";
+    os << "    \\setlength\\tabcolsep{0pt}%\n";
 
     fprintf(_stream, "%s", os.str().c_str());
 
