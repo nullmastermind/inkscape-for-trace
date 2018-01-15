@@ -89,12 +89,12 @@ namespace Widget {
     _ligatures_contextual.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
 
     // Add to frame
-    _ligatures_vbox.add( _ligatures_common );
-    _ligatures_vbox.add( _ligatures_discretionary );
-    _ligatures_vbox.add( _ligatures_historical );
-    _ligatures_vbox.add( _ligatures_contextual );
+    _ligatures_vbox.pack_start( _ligatures_common        );
+    _ligatures_vbox.pack_start( _ligatures_discretionary );
+    _ligatures_vbox.pack_start( _ligatures_historical    );
+    _ligatures_vbox.pack_start( _ligatures_contextual    );
     _ligatures_frame.add( _ligatures_vbox );
-    add( _ligatures_frame );
+    pack_start( _ligatures_frame, Gtk::PACK_SHRINK );
 
     ligatures_init();
     
@@ -116,11 +116,11 @@ namespace Widget {
     _position_super.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
 
     // Add to frame
-    _position_vbox.add( _position_normal );
-    _position_vbox.add( _position_sub );
-    _position_vbox.add( _position_super );
+    _position_vbox.pack_start( _position_normal);
+    _position_vbox.pack_start( _position_sub   );
+    _position_vbox.pack_start( _position_super );
     _position_frame.add( _position_vbox );
-    add( _position_frame );
+    pack_start( _position_frame, Gtk::PACK_SHRINK );
 
     position_init();
 
@@ -154,15 +154,15 @@ namespace Widget {
     _caps_titling.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::caps_callback) );
 
     // Add to frame
-    _caps_vbox.add( _caps_normal );
-    _caps_vbox.add( _caps_small );
-    _caps_vbox.add( _caps_all_small );
-    _caps_vbox.add( _caps_petite );
-    _caps_vbox.add( _caps_all_petite );
-    _caps_vbox.add( _caps_unicase );
-    _caps_vbox.add( _caps_titling );
+    _caps_vbox.pack_start( _caps_normal    );
+    _caps_vbox.pack_start( _caps_small     );
+    _caps_vbox.pack_start( _caps_all_small );
+    _caps_vbox.pack_start( _caps_petite    );
+    _caps_vbox.pack_start( _caps_all_petite);
+    _caps_vbox.pack_start( _caps_unicase   );
+    _caps_vbox.pack_start( _caps_titling   );
     _caps_frame.add( _caps_vbox );
-    add( _caps_frame );
+    pack_start( _caps_frame, Gtk::PACK_SHRINK );
 
     caps_init();
 
@@ -208,22 +208,22 @@ namespace Widget {
     _numeric_slashed_zero.signal_clicked().connect (  sigc::mem_fun(*this, &FontVariants::numeric_callback) );
 
     // Add to frame
-    _numeric_stylebox.add( _numeric_default_style );
-    _numeric_stylebox.add( _numeric_lining );
-    _numeric_stylebox.add( _numeric_old_style );
-    _numeric_vbox.add( _numeric_stylebox );
-    _numeric_widthbox.add( _numeric_default_width );
-    _numeric_widthbox.add( _numeric_proportional );
-    _numeric_widthbox.add( _numeric_tabular );
-    _numeric_vbox.add( _numeric_widthbox );
-    _numeric_fractionbox.add( _numeric_default_fractions );
-    _numeric_fractionbox.add( _numeric_diagonal );
-    _numeric_fractionbox.add( _numeric_stacked );
-    _numeric_vbox.add( _numeric_fractionbox );
-    _numeric_vbox.add( _numeric_ordinal );
-    _numeric_vbox.add( _numeric_slashed_zero );
+    _numeric_stylebox.pack_start( _numeric_default_style );
+    _numeric_stylebox.pack_start( _numeric_lining );
+    _numeric_stylebox.pack_start( _numeric_old_style );
+    _numeric_vbox.pack_start( _numeric_stylebox );
+    _numeric_widthbox.pack_start( _numeric_default_width );
+    _numeric_widthbox.pack_start( _numeric_proportional );
+    _numeric_widthbox.pack_start( _numeric_tabular );
+    _numeric_vbox.pack_start( _numeric_widthbox );
+    _numeric_fractionbox.pack_start( _numeric_default_fractions );
+    _numeric_fractionbox.pack_start( _numeric_diagonal );
+    _numeric_fractionbox.pack_start( _numeric_stacked );
+    _numeric_vbox.pack_start( _numeric_fractionbox );
+    _numeric_vbox.pack_start( _numeric_ordinal );
+    _numeric_vbox.pack_start( _numeric_slashed_zero );
     _numeric_frame.add( _numeric_vbox );
-    add( _numeric_frame );
+    pack_start( _numeric_frame, Gtk::PACK_SHRINK );
     
 
     // Feature settings ---------------------
@@ -238,12 +238,12 @@ namespace Widget {
     _feature_substitutions.set_line_wrap( true );
 
     // Add to frame
-    _feature_vbox.add( _feature_entry );
-    _feature_vbox.add( _feature_label );
-    _feature_vbox.add( _feature_list  );
-    _feature_vbox.add( _feature_substitutions );
+    _feature_vbox.pack_start( _feature_entry );
+    _feature_vbox.pack_start( _feature_label );
+    _feature_vbox.pack_start( _feature_list  );
+    _feature_vbox.pack_start( _feature_substitutions );
     _feature_frame.add( _feature_vbox );
-    add( _feature_frame );
+    pack_start( _feature_frame, Gtk::PACK_SHRINK  );
 
     // Add signals
     //_feature_entry.signal_key_press_event().connect ( sigc::mem_fun(*this, &FontVariants::feature_callback) );
