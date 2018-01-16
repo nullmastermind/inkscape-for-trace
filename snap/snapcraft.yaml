@@ -83,8 +83,6 @@ parts:
       - libsvg-perl
       - libxml-xql-perl
       - ruby
-    stage:
-      - -usr/sbin/update-icon-caches
     prime:
       - -lib/inkscape/*.a
     after:
@@ -104,10 +102,6 @@ parts:
       - python-uniconvertor
     after:
       - gnome-3-26
-    prime:
-      - -usr/lib/*/glib-2.0/
-      - -usr/share/doc/
-      - -usr/share/lintian/
   gnome-3-26:
     plugin: nil
     build-packages:
@@ -117,6 +111,32 @@ parts:
        apt-get -y update
        apt-get -y dist-upgrade
        apt-get -y install gtk-update-icon-cache
+  desktop-gtk3:
+    source: https://github.com/Ubuntu/snapcraft-desktop-helpers.git
+    source-type: git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - libgtk-3-dev
+    stage-packages:
+      - libxkbcommon0  # XKB_CONFIG_ROOT
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libgtk-3-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk-3-bin
+      - unity-gtk3-module
+      - libappindicator3-1
+      - locales-all
+      - xdg-user-dirs
+    after:
+      - gnome-3-26
 
 apps:
   inkscape:
