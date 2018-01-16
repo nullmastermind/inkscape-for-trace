@@ -104,6 +104,10 @@ parts:
       - python-uniconvertor
     after:
       - gnome-3-26
+    prime:
+      - -usr/lib/*/glib-2.0/
+      - -usr/share/doc/
+      - -usr/share/lintian/
   gnome-3-26:
     plugin: nil
     build-packages:
