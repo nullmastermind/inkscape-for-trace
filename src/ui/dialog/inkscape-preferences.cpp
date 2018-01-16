@@ -67,7 +67,7 @@ using Inkscape::CMSSystem;
 
 
 InkscapePreferences::InkscapePreferences()
-    : UI::Widget::Panel ("", "/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
+    : UI::Widget::Panel ("/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
       _minimum_width(0),
       _minimum_height(0),
       _natural_width(0),
