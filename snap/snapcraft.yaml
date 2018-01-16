@@ -42,7 +42,6 @@ parts:
       - liblcms2-dev
       - libmagick++-dev
       - libpango1.0-dev
-      - libpng12-dev
       - libpoppler-glib-dev
       - libpoppler-private-dev
       - libpopt-dev
@@ -113,6 +112,7 @@ parts:
        add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
        apt-get -y update
        apt-get -y dist-upgrade
+       apt-get -y install gtk-update-icon-cache
 
 apps:
   inkscape:
