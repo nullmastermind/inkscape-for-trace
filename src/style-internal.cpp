@@ -206,6 +206,7 @@ SPIScale24::merge( const SPIBase* const parent ) {
                 std::cerr << "SPIScale24::merge: unhandled property: " << name << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
+                set = (value != 1.0);
             } else {
                 if( inherit ) value = p->value; // Insures child is up-to-date
                 value = SP_SCALE24_MUL( value, p->value );
