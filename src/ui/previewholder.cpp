@@ -313,12 +313,13 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& n
                 natural_width_item = 1;
             }
             ncols = width_scroller / natural_width_item - 1;
-            nrows = itemCount / ncols;
 
             // On first run, scroller width is not set correct... so we need to fudge it:
             if (ncols < 2) {
                 ncols = itemCount/2;
                 nrows = 2;
+            } else {
+                nrows = itemCount / ncols;
             }
         }
     } else {
