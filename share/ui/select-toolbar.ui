@@ -330,10 +330,9 @@
     <toolitem action='GradientSelectGradientAction' />
     <toolitem action='GradientEditLinkAction' />
     <toolitem action='GradientEditReverseAction' />
-    <toolitem action='GradientSelectSpreadAction' />
+    <toolitem action='GradientSelectRepeatAction' />
     <separator />
     <toolitem action='GradientEditStopsAction' />
-    <toolitem action='GradientStopAction' />
     <toolitem action='GradientEditOffsetAction' />
     <toolitem action='GradientEditAddAction' />
     <toolitem action='GradientEditDeleteAction' />
