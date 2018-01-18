@@ -95,8 +95,14 @@ combobox window.popup scrolledwindow treeview separator {
 }
 
 /* Keep pallete scrollbar from generating warnings. */
-#PreviewHolderScrolledWindow .vertical slider {
+#PreviewHolderScroller .vertical slider {
     min-height: 15px;
+}
+
+/* Override minimum size of container children for palette. */
+#ColorItemPreview {
+  min-height: 5px;
+  min-width:  5px;
 }
 
 /* Reduce width of Fill and Stroke dialog */
