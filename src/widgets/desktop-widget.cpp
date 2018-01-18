@@ -324,25 +324,28 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_name(dtw->vbox, "DesktopMainTable");
     gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(dtw->vbox) );
+
+    /* Status bar */
     dtw->statusbar = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_name(dtw->statusbar, "DesktopStatusBar");
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
 
+    /* Swatches panel */
     {
         using Inkscape::UI::Dialogs::SwatchesPanel;
 
-        dtw->panels = new SwatchesPanel("/embedded/swatches" /*false*/);
+        dtw->panels = new SwatchesPanel("/embedded/swatches");
         dtw->panels->setOrientation(SP_ANCHOR_SOUTH);
         dtw->panels->set_vexpand(false);
         gtk_box_pack_end( GTK_BOX( dtw->vbox ), GTK_WIDGET(dtw->panels->gobj()), FALSE, TRUE, 0 );
     }
 
+    /* DesktopHBox (Vertical toolboxes, canvas) */
     dtw->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_name(dtw->hbox, "DesktopHbox");
-
     gtk_box_pack_end( GTK_BOX (dtw->vbox), dtw->hbox, TRUE, TRUE, 0 );
-    gtk_widget_show(dtw->hbox);
 
+    /* Toolboxes */
     dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
 
@@ -356,6 +359,17 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
+
+    /* Canvas table wrapper */
+    auto tbl_wrapper = gtk_grid_new(); // Is this widget really needed? No!
+    gtk_widget_set_name(tbl_wrapper, "CanvasTableWrapper");
+    gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
+
+    /* Canvas table */
+    dtw->canvas_tbl = gtk_grid_new();
+    gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
+    // Added to table wrapper later either directly or via paned window shared with dock.
+
     // Lock guides button
     dtw->guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
@@ -368,6 +382,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     wnd->set_name("LockGuides");
     auto context = wnd->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -378,43 +394,41 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
     gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt->name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
+
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 
-    auto tbl_wrapper = gtk_grid_new(); // Is this widget really needed?
-    gtk_widget_set_name(tbl_wrapper, "CanvasTableWrapper");
-    dtw->canvas_tbl = gtk_grid_new();
-    gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
-    
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
-
-    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
-    gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
 
     /* Vertical ruler */
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
     gtk_widget_set_name(dtw->vruler, "VerticalRuler");
-
-    /* Vertical ruler */
     dtw->vruler_box = eventbox;
     sp_ruler_set_unit (SP_RULER (dtw->vruler), pt);
     gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(pt->name_plural.c_str()));
     gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 1, 1);
 
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 1, 1);
 
     // Horizontal scrollbar
     dtw->hadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
     dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
     gtk_widget_set_name(dtw->hscrollbar, "HorizontalScrollbar");
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 1, 1);
+
+    // By packing the sticky zoom button and vertical scrollbar in a box it allows the canvas to
+    // expand fully to the top if the rulers are hidden.
+    // (Otherwise, the canvas is pushed down by the height of the sticky zoom button.)
+
+    // Vertical Scrollbar box
     dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 0, 1, 2);
 
     // Sticky zoom button
     dtw->sticky_zoom = sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
@@ -424,15 +438,14 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                                                  _("Zoom drawing if window size changes"));
     gtk_widget_set_name(dtw->sticky_zoom, "StickyZoom");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs->getBool("/options/stickyzoom/value"));
-    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
+    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
 
     // Vertical scrollbar
     dtw->vadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
     dtw->vscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT(dtw->vadj));
     gtk_widget_set_name(dtw->vscrollbar, "VerticalScrollbar");
     gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->vscrollbar, TRUE, TRUE, 0);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 0, 1, 2);
 
     gchar const* tip = "";
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
@@ -1508,11 +1521,11 @@ void SPDesktopWidget::layoutWidgets()
     if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
         gtk_widget_hide (dtw->hscrollbar);
         gtk_widget_hide (dtw->vscrollbar_box);
-        gtk_widget_hide ( dtw->cms_adjust );
+        gtk_widget_hide (dtw->cms_adjust);
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
         gtk_widget_show_all (dtw->vscrollbar_box);
-        gtk_widget_show_all( dtw->cms_adjust );
+        gtk_widget_show_all (dtw->cms_adjust);
     }
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
@@ -2210,12 +2223,12 @@ sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw)
     if (gtk_widget_get_visible (dtw->hscrollbar)) {
         gtk_widget_hide (dtw->hscrollbar);
         gtk_widget_hide (dtw->vscrollbar_box);
-        gtk_widget_hide ( dtw->cms_adjust );
+        gtk_widget_hide (dtw->cms_adjust);
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
     } else {
         gtk_widget_show_all (dtw->hscrollbar);
         gtk_widget_show_all (dtw->vscrollbar_box);
-        gtk_widget_show_all( dtw->cms_adjust );
+        gtk_widget_show_all (dtw->cms_adjust);
         prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
     }
 }
