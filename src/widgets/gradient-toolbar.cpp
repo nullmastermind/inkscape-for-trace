@@ -39,6 +39,7 @@
 #include "style.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
+#include "ui/util.h"
 #include "ui/tools/gradient-tool.h"
 #include "verbs.h"
 #include "widgets/gradient-image.h"

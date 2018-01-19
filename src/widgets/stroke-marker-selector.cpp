@@ -32,10 +32,11 @@
 #include "sp-root.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "helper/stock-items.h"
-#include "gradient-vector.h"
 
 #include <gtkmm/icontheme.h>
 #include "ui/widget/spinbutton.h"
+#include "ui/util.h"
+
 #include "stroke-style.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
@@ -389,7 +390,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
         else
             row = *(marker_store->append());
 
-        row[marker_columns.label] = gr_ellipsize_text(markid, 20);
+        row[marker_columns.label] = ink_ellipsize_text(markid, 20);
         // Non "stock" markers can also have "inkscape:stockid" (when using extension ColorMarkers),
         // So use !is_history instead to determine is it is "stock" (ie in the markers.svg file)
         row[marker_columns.stock] = !history;

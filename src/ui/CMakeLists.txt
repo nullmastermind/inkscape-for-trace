@@ -5,13 +5,14 @@ set(ui_SRC
 	dialog-events.cpp
 	draw-anchor.cpp
 	interface.cpp
-    monitor.cpp
+        monitor.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
 	shape-editor-knotholders.cpp
 	tool-factory.cpp
 	tools-switch.cpp
+        util.cpp
 	uxmanager.cpp
 
 	cache/svg_preview_cache.cpp
@@ -59,7 +60,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
-       dialog/cssdialog.cpp
+        dialog/cssdialog.cpp
 	dialog/debug.cpp
 	dialog/desktop-tracker.cpp
 	dialog/dialog-manager.cpp
@@ -187,13 +188,14 @@ set(ui_SRC
 	event-debug.h
 	icon-names.h
 	interface.h
-    monitor.h
+        monitor.h
 	previewable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h
 	tool-factory.h
 	tools-switch.h
+        util.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h
@@ -205,7 +207,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
-       dialog/cssdialog.h
+        dialog/cssdialog.h
 	dialog/debug.h
 	dialog/desktop-tracker.h
 	dialog/dialog-manager.h

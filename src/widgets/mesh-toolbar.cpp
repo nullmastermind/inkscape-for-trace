@@ -27,7 +27,6 @@
 #include "verbs.h"
 
 #include "widgets/spinbutton-events.h"
-#include "widgets/gradient-vector.h"
 #include "widgets/gradient-image.h"
 #include "style.h"
 

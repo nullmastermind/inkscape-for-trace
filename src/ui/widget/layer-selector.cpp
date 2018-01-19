@@ -28,11 +28,11 @@
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "ui/icon-names.h"
+#include "ui/util.h"
 #include "util/filter-list.h"
 #include "util/reverse-list.h"
 #include "verbs.h"
 #include "xml/node-event-vector.h"
-#include "widgets/gradient-vector.h"
 
 namespace Inkscape {
 namespace Widgets {
@@ -573,7 +573,7 @@ void LayerSelector::_prepareLabelRenderer(
             label = _("(root)");
         }
 
-        gchar *text = g_markup_printf_escaped(format, gr_ellipsize_text (label, 50).c_str());
+        gchar *text = g_markup_printf_escaped(format, ink_ellipsize_text (label, 50).c_str());
         _label_renderer.property_markup() = text;
         g_free(text);
         g_free(format);

@@ -8,6 +8,7 @@
 #include <set>
 
 #include "ui/dialog-events.h"
+#include "ui/util.h"
 #include "ui/widget/color-icc-selector.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
@@ -16,7 +17,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"
-#include "widgets/gradient-vector.h"
 
 #define noDEBUG_LCMS
 
@@ -685,7 +685,7 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
         Inkscape::ColorProfile *prof = it;
 
         gtk_list_store_append(store, &iter);
-        gtk_list_store_set(store, &iter, 0, gr_ellipsize_text(prof->name, 25).c_str(), 1, prof->name, -1);
+        gtk_list_store_set(store, &iter, 0, ink_ellipsize_text(prof->name, 25).c_str(), 1, prof->name, -1);
 
         if (name == prof->name) {
             gtk_combo_box_set_active(combo, index);
