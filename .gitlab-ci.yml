@@ -25,6 +25,7 @@ inkscape:linux:
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
     - make -j3 install
     - make -j3 tests
+    - cpack -G DEB
     - cd ..
   artifacts:
     expire_in: 1 year
