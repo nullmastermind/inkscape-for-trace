@@ -311,3 +311,4 @@ endif()
 endif()
 
 message("------------------------------------------------------------------------")
+include(CMakeScripts/ConfigCPack.cmake)
