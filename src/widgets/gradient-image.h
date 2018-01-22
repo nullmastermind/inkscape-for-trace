@@ -14,8 +14,13 @@
  */
 
 #include <gtk/gtk.h>
+#include <glibmm/refptr.h>
 
 class SPGradient;
+class SPStop;
+namespace Gdk {
+    class Pixbuf;
+}
 
 #include <sigc++/connection.h>
 
@@ -41,6 +46,8 @@ GType sp_gradient_image_get_type (void);
 
 GtkWidget *sp_gradient_image_new (SPGradient *gradient);
 GdkPixbuf *sp_gradient_to_pixbuf (SPGradient *gr, int width, int height);
+Glib::RefPtr<Gdk::Pixbuf> sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height);
+Glib::RefPtr<Gdk::Pixbuf> sp_gradstop_to_pixbuf_ref (SPStop     *gr, int width, int height);
 void sp_gradient_image_set_gradient (SPGradientImage *gi, SPGradient *gr);
 
 #endif
