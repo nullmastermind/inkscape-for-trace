@@ -13,7 +13,6 @@
 #define SEEN_INKSCAPE_DISPLAY_CAIRO_UTILS_H
 
 #include <2geom/forward.h>
-#include <boost/noncopyable.hpp>
 #include <cairomm/cairomm.h>
 #include "style.h"
 

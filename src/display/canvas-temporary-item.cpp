@@ -50,7 +50,7 @@ TemporaryItem::~TemporaryItem()
     if (canvasitem) {
         // destroying the item automatically hides it
         sp_canvas_item_destroy(canvasitem);
-        canvasitem = NULL;
+        canvasitem = nullptr;
     }
 }
 

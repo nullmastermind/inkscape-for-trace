@@ -11,7 +11,6 @@
  */
 
 
-#include <cstddef>
 #include <sigc++/signal.h>
 
 struct SPCanvasItem;

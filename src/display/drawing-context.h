@@ -12,8 +12,6 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 
-#include <2geom/affine.h>
-#include <2geom/angle.h>
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
 #include <boost/utility.hpp>

@@ -9,9 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "inkscape.h"
-#include "desktop.h"
-
 #include "canvas-debug.h"
 #include "sp-canvas.h"
 #include "cairo-utils.h"
