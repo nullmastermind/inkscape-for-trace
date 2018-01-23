@@ -13,7 +13,6 @@
 #include "canvas-grid.h"
 
 struct SPCanvasBuf;
-class  SPDesktop;
 class SPNamedView;
 
 namespace Inkscape {

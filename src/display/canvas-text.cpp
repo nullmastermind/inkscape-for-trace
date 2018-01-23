@@ -19,7 +19,6 @@
 #include "canvas-text.h"
 #include "display/cairo-utils.h"
 #include "desktop.h"
-#include "color.h"
 #include "display/sp-canvas.h"
 
 static void sp_canvastext_destroy(SPCanvasItem *object);

@@ -15,8 +15,11 @@
 #include "display/cairo-utils.h"
 
 #include <stdexcept>
+
 #include <glib/gstdio.h>
 #include <glibmm/fileutils.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include <2geom/pathvector.h>
 #include <2geom/curves.h>
 #include <2geom/affine.h>
@@ -24,12 +27,13 @@
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
+
+#include <boost/operators.hpp>
+#include <boost/optional/optional.hpp>
 
 #include "color.h"
 #include "style.h"
-#include "helper/geom-curves.h"
-#include "display/cairo-templates.h"
+#include "cairo-templates.h"
 
 /**
  * Key for cairo_surface_t to keep track of current color interpolation value
