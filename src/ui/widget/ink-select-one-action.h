@@ -37,11 +37,15 @@ public:
     InkSelectOneActionColumns() {
         add (col_label);
         add (col_icon);
+        add (col_pixbuf);
+        add (col_data);  // Used to store a pointer
         add (col_tooltip);
         add (col_sensitive);
     }
     Gtk::TreeModelColumn<Glib::ustring> col_label;
     Gtk::TreeModelColumn<Glib::ustring> col_icon;
+    Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >   col_pixbuf;
+    Gtk::TreeModelColumn<void *>        col_data;
     Gtk::TreeModelColumn<Glib::ustring> col_tooltip;
     Gtk::TreeModelColumn<bool>          col_sensitive;
 };
@@ -58,9 +62,10 @@ public:
                                       Glib::RefPtr<Gtk::ListStore> store );
 
     /* Style of action */
-    void use_radio( bool use_radio ) { _use_radio = use_radio; }
-    void use_label( bool use_label ) { _use_label = use_label; }
-    void use_icon(  bool use_icon  ) { _use_icon  = use_icon;  }
+    void use_radio(  bool use_radio  ) { _use_radio  = use_radio;  }
+    void use_label(  bool use_label  ) { _use_label  = use_label;  }
+    void use_icon(   bool use_icon   ) { _use_icon   = use_icon;   }
+    void use_pixbuf( bool use_pixbuf ) { _use_pixbuf = use_pixbuf; }
     void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
   
     gint get_active() { return _active; }
@@ -94,6 +99,7 @@ private:
     bool _use_radio;  // Applies to tool item only
     bool _use_label;
     bool _use_icon;   // Applies to menu item only
+    bool _use_pixbuf;
     bool _use_group_label; // Applies to tool item only
     Gtk::BuiltinIconSize _icon_size;
 

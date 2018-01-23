@@ -53,6 +53,7 @@ InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
     _use_radio (true),
     _use_label (true),
     _use_icon  (true),
+    _use_pixbuf (false),
     _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
     _combobox (nullptr),
     _radioaction (nullptr),
@@ -192,11 +193,16 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         _combobox->set_model(_store);
 
         InkSelectOneActionColumns columns;
-        if (_use_icon ) {
+        if (_use_icon) {
             Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
             renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
             _combobox->pack_start (*renderer, false);
             _combobox->add_attribute (*renderer, "icon_name", columns.col_icon   );
+        } else if (_use_pixbuf) {
+            Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
+            //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+            _combobox->pack_start (*renderer, false);
+            _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf   );
         }
   
         if (_use_label) {

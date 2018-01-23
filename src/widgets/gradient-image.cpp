@@ -11,11 +11,15 @@
  */
 
 #include <sigc++/sigc++.h>
+#include <glibmm/refptr.h>
+#include <gdkmm/pixbuf.h>
+#include <cairomm/surface.h>
 
 #include "display/cairo-utils.h"
 #include "gradient-image.h"
 #include "macros.h"
 #include "sp-gradient.h"
+#include "sp-stop.h"
 
 #define VBLOCK 16
 
@@ -149,6 +153,75 @@ sp_gradient_to_pixbuf (SPGradient *gr, int width, int height)
 
     // no need to free s - the call below takes ownership
     GdkPixbuf *pixbuf = ink_pixbuf_create_from_cairo_surface(s);
+    return pixbuf;
+}
+
+
+Glib::RefPtr<Gdk::Pixbuf>
+sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height)
+{
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_t *ct = cairo_create(s);
+
+    cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
+    cairo_set_source(ct, check);
+    cairo_paint(ct);
+    cairo_pattern_destroy(check);
+
+    if (gr) {
+        cairo_pattern_t *p = sp_gradient_create_preview_pattern(gr, width);
+        cairo_set_source(ct, p);
+        cairo_paint(ct);
+        cairo_pattern_destroy(p);
+    }
+
+    cairo_destroy(ct);
+    cairo_surface_flush(s);
+
+    Cairo::RefPtr<Cairo::Surface> sref = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+        Gdk::Pixbuf::create(sref, 0, 0, width, height);
+
+    cairo_surface_destroy(s);
+
+    return pixbuf;
+}
+
+
+Glib::RefPtr<Gdk::Pixbuf>
+sp_gradstop_to_pixbuf_ref (SPStop *stop, int width, int height)
+{
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_t *ct = cairo_create(s);
+
+    /* Checkerboard background */
+    cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
+    cairo_rectangle(ct, 0, 0, width, height);
+    cairo_set_source(ct, check);
+    cairo_fill_preserve(ct);
+    cairo_pattern_destroy(check);
+
+    if (stop) {
+        /* Alpha area */
+        cairo_rectangle(ct, 0, 0, width/2, height);
+        ink_cairo_set_source_rgba32(ct, stop->get_rgba32());
+        cairo_fill(ct);
+
+        /* Solid area */
+        cairo_rectangle(ct, width/2, 0, width, height);
+        ink_cairo_set_source_rgba32(ct, stop->get_rgba32() | 0xff);
+        cairo_fill(ct);
+    }
+
+    cairo_destroy(ct);
+    cairo_surface_flush(s);
+
+    Cairo::RefPtr<Cairo::Surface> sref = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+        Gdk::Pixbuf::create(sref, 0, 0, width, height);
+
+    cairo_surface_destroy(s);
+
     return pixbuf;
 }
 
