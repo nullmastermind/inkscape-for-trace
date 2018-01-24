@@ -667,8 +667,25 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
-    } catch (...) {
+    } catch (std::exception &e) {
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
+        gchar *text = g_strdup_printf(_("File %s could not be saved.\n\n"
+                                        "The following additional information was returned by the output extension:\n"
+                                        "'%s'"), safeUri, e.what());
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        g_free(safeUri);
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
+        return false;
+    } catch (...) {
+        g_critical("Extension '%s' threw an unspecified exception.", key->get_id());
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
+        gchar *text = g_strdup_printf(_("File %s could not be saved."), safeUri);
+        SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        sp_ui_error_dialog(text);
+        g_free(text);
+        g_free(safeUri);
         doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     }
