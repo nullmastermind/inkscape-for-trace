@@ -4,7 +4,3 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   FILE(GLOB PIXMAP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/${pixmap_size}/*.png ${CMAKE_CURRENT_SOURCE_DIR}/${pixmap_size}/*.svg)
   install(FILES ${PIXMAP_FILES} DESTINATION ${SHARE_INSTALL}/icons/${THEME}/${pixmap_size}/apps)
 endforeach(pixmap_size)
-
-# I hope that this is actually run after installing the files.
-install(CODE "execute_process(COMMAND gtk-update-icon-cache -f -t ${CMAKE_CURRENT_SOURCE_DIR})")
-install(FILES icon-theme.cache DESTINATION ${SHARE_INSTALL}/icons/${THEME})
