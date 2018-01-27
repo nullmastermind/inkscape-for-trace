@@ -10,7 +10,7 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   endforeach(content)
 endforeach(pixmap_size)
 
-if(WIN32)
+if(0)
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -f -t ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})")
     install(FILES ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/icon-theme.cache DESTINATION ${SHARE_INSTALL}/icons/${THEME})
 endif()
