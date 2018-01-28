@@ -53,7 +53,7 @@ set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
 # workaround for omission in cmake 2.8.4's GNU.cmake, fixed in 2.8.5
 if(CMAKE_COMPILER_IS_GNUCC)
     if(NOT DARWIN)
-	set(CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem ")
+    set(CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem ")
     endif()
 endif()
 
@@ -115,30 +115,6 @@ mark_as_advanced(WITH_FUZZ)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 
-# -----------------------------------------------------------------------------
-# Test Harness
-# -----------------------------------------------------------------------------
-find_package(GTest) # gtest 1.8.0 and later already include gmock
-if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
-    set(GMOCK_PRESENT ON)
-else()
-    unset(GTEST_FOUND)
-    if(NOT GMOCK_DIR)
-        find_path(GMOCK_DIR
-              NAMES src/gmock.cc
-              PATHS "$ENV{GMOCK_DIR}"
-                "/usr/src/googletest/googlemock"
-                    "/usr/src/gmock"
-                "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-             )
-    endif(NOT GMOCK_DIR)
-    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
-        set(GMOCK_PRESENT ON)
-    else()
-        set(GMOCK_PRESENT OFF)
-        message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
-    endif()
-endif()
 
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
@@ -167,9 +143,93 @@ if (ENABLE_BINRELOC)
 endif()
 
 # -----------------------------------------------------------------------------
-# Dist Targets
+# Subdirectories
 # -----------------------------------------------------------------------------
-include(CMakeScripts/Dist.cmake)
+add_subdirectory(src)
+
+if(ENABLE_NLS)
+    add_subdirectory(po)
+endif(ENABLE_NLS)
+
+if(NOT WIN32)
+    include(CMakeScripts/Pod2man.cmake)
+    add_subdirectory(man)
+endif()
+
+# -----------------------------------------------------------------------------
+# Test Harness
+# -----------------------------------------------------------------------------
+find_package(GTest) # gtest 1.8.0 and later already include gmock
+if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
+    set(GMOCK_PRESENT ON)
+else()
+    unset(GTEST_FOUND)
+    if(NOT GMOCK_DIR)
+        find_path(GMOCK_DIR
+              NAMES src/gmock.cc
+              PATHS "$ENV{GMOCK_DIR}"
+                "/usr/src/googletest/googlemock"
+                    "/usr/src/gmock"
+                "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+             )
+    endif(NOT GMOCK_DIR)
+    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+        set(GMOCK_PRESENT ON)
+    else()
+        set(GMOCK_PRESENT OFF)
+        message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
+    endif()
+endif()
+if(GMOCK_PRESENT)
+    enable_testing()
+    set(CMAKE_CTEST_COMMAND ctest -V)
+    if(WIN32)
+        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
+    endif()
+    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
+    add_dependencies(check inkscape)
+endif()
+
+# -----------------------------------------------------------------------------
+# Canonicalize the flags to speed up recompilation using ccache/etc.
+# This should be the last thing we do:
+# -----------------------------------------------------------------------------
+include(CMakeScripts/CanonicalizeFlagsVar.cmake)
+canonicalize_flags_var("${CMAKE_CXX_FLAGS}" _new_cxx)
+set(CMAKE_CXX_FLAGS "${_new_cxx}" CACHE STRING "" FORCE)
+# message(FATAL_ERROR "CMAKE_CXX_FLAGS = <${CMAKE_CXX_FLAGS}>")
+
+
+
+
+# -----------------------------------------------------------------------------
+# Clean Targets
+# -----------------------------------------------------------------------------
+add_custom_target(clean-cmake-files
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_SOURCE_DIR}/CMakeScripts/CleanAll.cmake"
+)
+
+add_custom_target(clean-all
+    COMMAND ${CMAKE_BUILD_TOOL} clean
+    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_SOURCE_DIR}/CMakeScripts/CleanAll.cmake"
+)
+
+# -----------------------------------------------------------------------------
+# Install Target
+# -----------------------------------------------------------------------------
+add_subdirectory(share)
+
+install(FILES
+	AUTHORS
+	TRANSLATORS
+	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
+
+if(HAVE_MSYS2)
+  include(CMakeScripts/InstallMSYS2.cmake)
+else()
+  include(CMakeScripts/Install.cmake)
+endif()
 
 # -----------------------------------------------------------------------------
 # Uninstall Target
@@ -186,72 +246,17 @@ else()
         "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 endif()
 
-
 # -----------------------------------------------------------------------------
-# Subdirectories
+# Dist Targets
 # -----------------------------------------------------------------------------
-add_subdirectory(src)
-
-if(ENABLE_NLS)
-    add_subdirectory(po)
-endif(ENABLE_NLS)
-
-if(NOT WIN32)
-    include(CMakeScripts/Pod2man.cmake)
-    add_subdirectory(man)
-endif()
-
-# -----------------------------------------------------------------------------
-# Installation
-# -----------------------------------------------------------------------------
-add_subdirectory(share)
-
-if(HAVE_MSYS2)
-  include(CMakeScripts/InstallMSYS2.cmake)
-else()
-  include(CMakeScripts/Install.cmake)
-endif()
-
-# -----------------------------------------------------------------------------
-# Clean
-# -----------------------------------------------------------------------------
-add_custom_target(clean-cmake-files
-    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_SOURCE_DIR}/CMakeScripts/CleanAll.cmake"
-)
-
-add_custom_target(clean-all
-    COMMAND ${CMAKE_BUILD_TOOL} clean
-    COMMAND "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_SOURCE_DIR}/CMakeScripts/CleanAll.cmake"
-)
-
-#-----------------------------------------------------------------------------
-if(GMOCK_PRESENT)
-    enable_testing()
-    set(CMAKE_CTEST_COMMAND ctest -V)
-    if(WIN32)
-        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
-    endif()
-    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
-    add_dependencies(check inkscape)
-endif()
-
-# Canonicalize the flags to speed up recompilation using ccache/etc.
-# This should be the last thing we do:
-include(CMakeScripts/CanonicalizeFlagsVar.cmake)
-canonicalize_flags_var("${CMAKE_CXX_FLAGS}" _new_cxx)
-set(CMAKE_CXX_FLAGS "${_new_cxx}" CACHE STRING "" FORCE)
-# message(FATAL_ERROR "CMAKE_CXX_FLAGS = <${CMAKE_CXX_FLAGS}>")
-
-install(FILES
-	AUTHORS
-	TRANSLATORS
-	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
+include(CMakeScripts/Dist.cmake)
 
 # -----------------------------------------------------------------------------
 # Packaging (CPack)
 # -----------------------------------------------------------------------------
 include(CMakeScripts/ConfigCPack.cmake)
+
+
 
 # ----------------------------------------------------------------------
 # Information Summary
