@@ -134,6 +134,7 @@ if(WIN32)
 
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION share/icons)
+  install(CODE "execute_process(COMMAND gtk-update-icon-cache \${CMAKE_INSTALL_PREFIX}/share/icons/Adwaita)")
 
   # translations for libraries (we usually shouldn't need many)
   file(GLOB inkscape_translations RELATIVE ${CMAKE_SOURCE_DIR}/po/ ${CMAKE_SOURCE_DIR}/po/*.po)
