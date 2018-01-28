@@ -50,6 +50,11 @@ if(HAVE_CAIRO_PDF)
     set(RENDER_WITH_PANGO_CAIRO TRUE)
 endif()
 
+# Relocatable Binary
+if (ENABLE_BINRELOC)
+	add_definitions(-DENABLE_BINRELOC)
+endif()
+
 # Create the configuration files config.h in the binary root dir
 configure_file(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/include/config.h)
 add_definitions(-DHAVE_CONFIG_H)
