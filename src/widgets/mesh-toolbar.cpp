@@ -396,7 +396,7 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         InkSelectOneAction* act =
             InkSelectOneAction::create( "MeshNewTypeAction", // Name
                                         _("New:"),           // Label
-                                        _(""),               // Tooltip
+                                        "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
@@ -433,8 +433,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
         InkSelectOneAction* act =
             InkSelectOneAction::create( "MeshNewFillStrokeAction", // Name
-                                        _(""),               // Label
-                                        _(""),               // Tooltip
+                                        "",                  // Label
+                                        "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
@@ -546,13 +546,13 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
         row = *(store->append());
         row[columns.col_label    ] = C_("Type", "Coons");
-        row[columns.col_tooltip  ] = _("");
+        row[columns.col_tooltip  ] = "";
         row[columns.col_icon     ] = "NotUsed";
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
         row[columns.col_label    ] = _("Bicubic");
-        row[columns.col_tooltip  ] = _("");
+        row[columns.col_tooltip  ] = "";
         row[columns.col_icon     ] = "NotUsed";
         row[columns.col_sensitive] = true;
 

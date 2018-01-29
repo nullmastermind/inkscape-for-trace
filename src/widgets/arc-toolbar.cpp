@@ -543,10 +543,10 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
         row[columns.col_icon     ] = INKSCAPE_ICON("draw-ellipse-chord");
         row[columns.col_sensitive] = true;
 
-         InkSelectOneAction* act =
+        InkSelectOneAction* act =
             InkSelectOneAction::create( "ArcTypeAction",   // Name
-                                        _(""),             // Label
-                                        _(""),             // Tooltip
+                                        "",                // Label
+                                        "",                // Tooltip
                                         "Not Used",        // Icon
                                         store );           // Tree store
 

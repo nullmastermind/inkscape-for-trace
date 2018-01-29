@@ -910,7 +910,7 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
         InkSelectOneAction* act =
             InkSelectOneAction::create( "GradientNewFillStrokeAction", // Name
-                                        _(""),               // Label
+                                        "",                  // Label
                                         "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store

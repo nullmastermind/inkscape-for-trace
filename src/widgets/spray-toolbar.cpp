@@ -387,7 +387,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         InkSelectOneAction* act =
             InkSelectOneAction::create( "SprayModeAction",   // Name
                                         _("Mode"),           // Label
-                                        _(""),               // Tooltip
+                                        "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
