@@ -454,6 +454,11 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
+
+    EgeAdjustmentAction* eact = 0;
+
     {
         EgeOutputAction* act = ege_output_action_new( "StarStateAction", _("<b>New:</b>"), "", 0 );
         ege_output_action_set_use_markup( act, TRUE );
@@ -461,47 +466,42 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         g_object_set_data( holder, "mode_action", act );
     }
 
+    /* Flatsided checkbox */
     {
-        EgeAdjustmentAction* eact = 0;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
+        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
 
-        /* Flatsided checkbox */
-        {
-            GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        GtkTreeIter iter;
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Polygon"),
+                            1, _("Regular polygon (with one handle) instead of a star"),
+                            2, INKSCAPE_ICON("draw-polygon"),
+                            -1 );
 
-            GtkTreeIter iter;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, _("Polygon"),
-                                1, _("Regular polygon (with one handle) instead of a star"),
-                                2, INKSCAPE_ICON("draw-polygon"),
-                                -1 );
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Star"),
+                            1, _("Star instead of a regular polygon (with one handle)"),
+                            2, INKSCAPE_ICON("draw-star"),
+                            -1 );
 
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, _("Star"),
-                                1, _("Star instead of a regular polygon (with one handle)"),
-                                2, INKSCAPE_ICON("draw-star"),
-                                -1 );
+        EgeSelectOneAction* act = ege_select_one_action_new( "FlatAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        g_object_set_data( holder, "flat_action", act );
 
-            EgeSelectOneAction* act = ege_select_one_action_new( "FlatAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
-            gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-            g_object_set_data( holder, "flat_action", act );
+        ege_select_one_action_set_appearance( act, "full" );
+        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
+        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
+        ege_select_one_action_set_icon_column( act, 2 );
+        ege_select_one_action_set_icon_size( act, secondarySize );
+        ege_select_one_action_set_tooltip_column( act, 1  );
 
-            ege_select_one_action_set_appearance( act, "full" );
-            ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-            g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-            ege_select_one_action_set_icon_column( act, 2 );
-            ege_select_one_action_set_icon_size( act, secondarySize );
-            ege_select_one_action_set_tooltip_column( act, 1  );
+        ege_select_one_action_set_active( act, isFlatSided ? 0 : 1 );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_stb_sides_flat_state_changed), holder);
+    }
 
-            ege_select_one_action_set_active( act, isFlatSided ? 0 : 1 );
-            g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_stb_sides_flat_state_changed), holder);
-        }
-
-        /* Magnitude */
-        {
+    /* Magnitude */
+    {
         gchar const* labels[] = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), 0, 0, 0, 0, 0};
         gdouble values[] = {3, 4, 5, 6, 7, 8, 10, 12, 20};
         eact = create_adjustment_action( "MagnitudeAction",
@@ -514,10 +514,10 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
+    }
 
-        /* Spoke ratio */
-        {
+    /* Spoke ratio */
+    {
         gchar const* labels[] = {_("thin-ray star"), 0, _("pentagram"), _("hexagram"), _("heptagram"), _("octagram"), _("regular polygon")};
         gdouble values[] = {0.01, 0.2, 0.382, 0.577, 0.692, 0.765, 1};
         eact = create_adjustment_action( "SpokeAction",
@@ -532,17 +532,18 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          sp_stb_proportion_value_changed );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "prop_action", eact );
-        }
 
         if ( !isFlatSided ) {
             gtk_action_set_visible( GTK_ACTION(eact), TRUE );
         } else {
             gtk_action_set_visible( GTK_ACTION(eact), FALSE );
         }
+    }
 
-        /* Roundedness */
-        {
-        gchar const* labels[] = {_("stretched"), _("twisted"), _("slightly pinched"), _("NOT rounded"), _("slightly rounded"), _("visibly rounded"), _("well rounded"), _("amply rounded"), 0, _("stretched"), _("blown up")};
+    /* Roundedness */
+    {
+        gchar const* labels[] = {_("stretched"), _("twisted"), _("slightly pinched"), _("NOT rounded"), _("slightly rounded"),
+                                 _("visibly rounded"), _("well rounded"), _("amply rounded"), 0, _("stretched"), _("blown up")};
         gdouble values[] = {-1, -0.2, -0.03, 0, 0.05, 0.1, 0.2, 0.3, 0.5, 1, 10};
         eact = create_adjustment_action( "RoundednessAction",
                                          _("Rounded"), _("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
@@ -553,10 +554,10 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          sp_stb_rounded_value_changed );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
+    }
 
-        /* Randomization */
-        {
+    /* Randomization */
+    {
         gchar const* labels[] = {_("NOT randomized"), _("slightly irregular"), _("visibly randomized"), _("strongly randomized"), _("blown up")};
         gdouble values[] = {0, 0.01, 0.1, 0.5, 10};
         eact = create_adjustment_action( "RandomizationAction",
@@ -568,21 +569,18 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          sp_stb_randomized_value_changed, NULL /*unit tracker*/, 0.1, 3 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-        }
     }
 
+    /* Reset */
     {
-        /* Reset */
-        {
-            InkAction* inky = ink_action_new( "StarResetAction",
-                                             _("Defaults"),
-                                             _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
-                                             INKSCAPE_ICON("edit-clear"),
-                                             GTK_ICON_SIZE_SMALL_TOOLBAR);
-            g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_stb_defaults), holder );
-            gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-            gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
-        }
+        InkAction* inky = ink_action_new( "StarResetAction",
+                                          _("Defaults"),
+                                          _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
+                                          INKSCAPE_ICON("edit-clear"),
+                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
+        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_stb_defaults), holder );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+        gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
     }
 
     desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(star_toolbox_watch_ec), holder));
