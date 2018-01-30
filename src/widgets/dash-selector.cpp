@@ -19,14 +19,19 @@
 #include "dash-selector.h"
 
 #include <cstring>
+
 #include <glibmm/i18n.h>
+
 #include <2geom/coord.h>
 
-#include "style.h"
-#include "ui/dialog-events.h"
 #include "preferences.h"
-#include "ui/widget/spinbutton.h"
+
 #include "display/cairo-utils.h"
+
+#include "style.h"
+
+#include "ui/dialog-events.h"
+#include "ui/widget/spinbutton.h"
 
 gchar const *const SPDashSelector::_prefs_path = "/palette/dashes";
 

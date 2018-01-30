@@ -23,7 +23,6 @@
 
 #include "document.h"
 #include "selection.h"
-#include "sp-object.h"
 #include "2geom/geom.h"
 
 #include "svg/path-string.h"

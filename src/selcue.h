@@ -15,7 +15,10 @@
 
 #include <cstddef>
 #include <list>
+
 #include <sigc++/sigc++.h>
+
+#include "preferences.h"
 
 class  SPDesktop;
 struct SPCanvasItem;

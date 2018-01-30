@@ -17,24 +17,25 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
 #include <gtkmm/treeview.h>
 
-#include "gradient-vector.h"
-
-#include "document.h"
-#include "document-undo.h"
 #include "document-private.h"
+#include "document-undo.h"
+#include "document.h"
 #include "gradient-chemistry.h"
-#include "inkscape.h"
-#include "verbs.h"
-#include "helper/action.h"
-#include "preferences.h"
-
-#include <glibmm/i18n.h>
-
-#include "paint-selector.h"
-#include "style.h"
+#include "gradient-vector.h"
 #include "id-clash.h"
+#include "inkscape.h"
+#include "paint-selector.h"
+#include "preferences.h"
+#include "verbs.h"
+
+#include "object/sp-defs.h"
+#include "style.h"
+
+#include "helper/action.h"
+
 #include "ui/icon-names.h"
 
 enum {

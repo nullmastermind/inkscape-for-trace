@@ -23,10 +23,9 @@
 #include <string>
 
 //#include "libnrtype/font-instance.h"
-#include "style.h"
-#include "sp-item.h"
 #include <cairo.h>
 
+class SPItem;
 class SPClipPath;
 class SPMask;
 class SPHatchPath;

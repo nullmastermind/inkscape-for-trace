@@ -26,28 +26,30 @@
 #  include <glibmm/dispatcher.h>
 #endif // GLIBMM_DISABLE_DEPRECATED
 
-#include "pixelartdialog.h"
-#include <gtkmm/radiobutton.h>
-#include <gtkmm/messagedialog.h>
-
 #include <glibmm/i18n.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/radiobutton.h>
 
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/frame.h"
-
-#include "desktop.h"
 #include "desktop-tracker.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "message-stack.h"
+#include "pixelartdialog.h"
 #include "selection.h"
 
-#include "sp-image.h"
 #include "display/cairo-utils.h"
+
 #include "libdepixelize/kopftracer2011.h"
-#include "document.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
+
+#include "object/sp-image.h"
+
 #include "svg/css-ostringstream.h"
-#include "document-undo.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+
+#include "ui/widget/frame.h"
+#include "ui/widget/spinbutton.h"
 
 #ifdef HAVE_OPENMP
 #include <omp.h>

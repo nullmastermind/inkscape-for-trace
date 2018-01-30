@@ -18,33 +18,36 @@
 #include <glibmm/i18n.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
+
 #include <2geom/transforms.h>
 #include <2geom/circle.h>
 
+#include "color-rgba.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
 #include "macros.h"
+#include "message-context.h"
+#include "preferences.h"
+#include "selection.h"
+#include "sp-cursor.h"
+#include "verbs.h"
+
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "display/cairo-utils.h"
-#include "svg/svg-color.h"
-#include "color-rgba.h"
-#include "desktop-style.h"
-#include "preferences.h"
-#include "sp-namedview.h"
-#include "sp-cursor.h"
-#include "desktop.h"
 
-#include "selection.h"
-#include "document-undo.h"
+#include "object/sp-namedview.h"
 
 #include "pixmaps/cursor-dropper-f.xpm"
 #include "pixmaps/cursor-dropper-s.xpm"
 #include "pixmaps/cursor-dropping-f.xpm"
 #include "pixmaps/cursor-dropping-s.xpm"
 
+#include "svg/svg-color.h"
+
 #include "ui/tools/dropper-tool.h"
-#include "message-context.h"
-#include "verbs.h"
 
 using Inkscape::DocumentUndo;
 

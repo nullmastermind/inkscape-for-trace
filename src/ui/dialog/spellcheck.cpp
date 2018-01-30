@@ -23,15 +23,20 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
 #include "ui/interface.h"
-#include "sp-flowtext.h"
 #include "text-editing.h"
-#include "sp-tref.h"
-#include "sp-defs.h"
 #include "selection-chemistry.h"
 #include "display/curve.h"
 #include "document-undo.h"
-#include "sp-root.h"
 #include "verbs.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-object.h"
+#include "object/sp-root.h"
+#include "object/sp-string.h"
+#include "object/sp-text.h"
+#include "object/sp-tref.h"
+
 #include <glibmm/i18n.h>
 
 #ifdef WIN32

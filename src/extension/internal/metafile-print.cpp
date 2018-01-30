@@ -23,11 +23,11 @@
 #include "extension/internal/metafile-print.h"
 #include "extension/print.h"
 #include "path-prefix.h"
-#include "sp-gradient.h"
-#include "sp-image.h"
-#include "sp-linear-gradient.h"
-#include "sp-pattern.h"
-#include "sp-radial-gradient.h"
+#include "object/sp-gradient.h"
+#include "object/sp-image.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
 #include "style.h"
 
 namespace Inkscape {

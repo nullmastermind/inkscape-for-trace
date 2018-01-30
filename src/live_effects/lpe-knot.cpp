@@ -12,11 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-shape.h"
-#include "sp-path.h"
 #include "display/curve.h"
 #include "live_effects/lpe-knot.h"
-#include "style.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
@@ -26,6 +23,10 @@
 #include <2geom/bezier-to-sbasis.h>
 #include <2geom/basic-intersection.h>
 #include "helper/geom.h"
+
+#include "object/sp-shape.h"
+#include "object/sp-path.h"
+#include "style.h"
 
 // for change crossing undo
 #include "verbs.h"

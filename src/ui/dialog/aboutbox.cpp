@@ -21,7 +21,7 @@
 # include <config.h>
 #endif
 
-#include "ui/dialog/aboutbox.h"
+#include "aboutbox.h"
 
 #include <fstream>
 
@@ -32,15 +32,17 @@
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/textview.h>
 
-#include "path-prefix.h"
 #include "document.h"
+#include "inkscape-version.h"
+#include "path-prefix.h"
 #include "svg-view-widget.h"
-#include "sp-text.h"
 #include "text-editing.h"
+
+#include "object/sp-text.h"
+
 #include "ui/icon-names.h"
 #include "util/units.h"
 
-#include "inkscape-version.h"
 
 
 namespace Inkscape {

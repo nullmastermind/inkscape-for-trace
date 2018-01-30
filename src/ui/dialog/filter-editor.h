@@ -12,10 +12,6 @@
 #ifndef INKSCAPE_UI_DIALOG_FILTER_EDITOR_H
 #define INKSCAPE_UI_DIALOG_FILTER_EDITOR_H
 
-#include "attributes.h"
-#include "ui/widget/panel.h"
-#include "sp-filter.h"
-
 #include <gtkmm/notebook.h>
 #include <gtkmm/sizegroup.h>
 #include <gtkmm/builder.h>
@@ -27,6 +23,9 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
+
+#include "ui/widget/panel.h"
+
 
 namespace Inkscape {
 namespace UI {

@@ -24,8 +24,6 @@
 #include "pov-out.h"
 #include <inkscape.h>
 #include <inkscape-version.h>
-#include <sp-path.h>
-#include <style.h>
 #include <display/curve.h>
 #include <extension/system.h>
 #include <2geom/pathvector.h>
@@ -34,7 +32,10 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include <io/sys.h>
-#include "sp-root.h"
+
+#include "object/sp-root.h"
+#include "object/sp-path.h"
+#include "style.h"
 
 #include <string>
 #include <stdio.h>

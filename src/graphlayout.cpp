@@ -12,23 +12,28 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#include <algorithm>
+#include <cstring>
 #include <iostream>
 #include <map>
 #include <vector>
-#include <algorithm>
-#include <cstring>
+
 #include <2geom/transforms.h>
 
-#include "desktop.h"
-#include "inkscape.h"
-#include "sp-namedview.h"
-#include "graphlayout.h"
-#include "sp-item-transform.h"
-#include "style.h"
 #include "conn-avoid-ref.h"
+#include "desktop.h"
+#include "graphlayout.h"
+#include "inkscape.h"
+
 #include "libavoid/router.h"
+
 #include "libcola/cola.h"
 #include "libcola/connected_components.h"
+
+#include "object/sp-item-transform.h"
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+#include "style.h"
 
 using namespace std;
 using namespace cola;

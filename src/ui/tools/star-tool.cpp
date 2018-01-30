@@ -22,27 +22,30 @@
 #include <string>
 
 #include <gdk/gdkkeysyms.h>
-
-#include "macros.h"
-#include "display/sp-canvas.h"
-#include "sp-star.h"
-#include "document.h"
-#include "document-undo.h"
-#include "sp-namedview.h"
-#include "selection.h"
-
-#include "desktop.h"
-#include "desktop-style.h"
-#include "message-context.h"
-#include "pixmaps/cursor-star.xpm"
 #include <glibmm/i18n.h>
-#include "xml/node-event-vector.h"
+
 #include "context-fns.h"
-#include "ui/shape-editor.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "macros.h"
+#include "message-context.h"
+#include "selection.h"
 #include "verbs.h"
+
+#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
 
+#include "object/sp-namedview.h"
+#include "object/sp-star.h"
+
+#include "pixmaps/cursor-star.xpm"
+
+#include "ui/shape-editor.h"
 #include "ui/tools/star-tool.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

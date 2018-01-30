@@ -28,22 +28,27 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 
 #include "spiral-toolbar.h"
 
 #include "desktop.h"
 #include "document-undo.h"
+#include "selection.h"
+#include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-spiral.h"
+
+#include "ui/icon-names.h"
+#include "ui/uxmanager.h"
+
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
 #include "widgets/ink-action.h"
-#include "selection.h"
-#include "sp-spiral.h"
-#include "toolbox.h"
-#include "ui/icon-names.h"
-#include "ui/uxmanager.h"
-#include "verbs.h"
 #include "widgets/spinbutton-events.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;

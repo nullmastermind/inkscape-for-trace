@@ -15,7 +15,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/notebook-page.h"
 
 #include "desktop-style.h"
 #include "document.h"
@@ -23,15 +22,18 @@
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "style.h"
-#include "svg/css-ostringstream.h"
-#include "ui/icon-names.h"
 #include "verbs.h"
+
+#include "svg/css-ostringstream.h"
+
+#include "ui/icon-names.h"
+#include "ui/view/view-widget.h"
+#include "ui/widget/notebook-page.h"
+
 #include "widgets/fill-style.h"
 #include "widgets/paint-selector.h"
 #include "widgets/stroke-style.h"
 
-#include "ui/view/view-widget.h"
 
 namespace Inkscape {
 namespace UI {

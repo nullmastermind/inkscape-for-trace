@@ -30,34 +30,38 @@
 #include <cstring>
 #include <numeric>
 
-#include "svg/svg.h"
-#include "display/canvas-bpath.h"
-#include "display/cairo-utils.h"
 #include <2geom/pathvector.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
-#include "display/curve.h"
-#include "macros.h"
-#include "document.h"
-#include "document-undo.h"
-#include "selection.h"
-#include "desktop.h"
-#include "desktop-events.h"
 
-#include "desktop-style.h"
-#include "message-context.h"
-#include "pixmaps/cursor-calligraphy.xpm"
 #include "context-fns.h"
+#include "desktop-events.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "inkscape.h"
+#include "macros.h"
+#include "message-context.h"
+#include "selection.h"
 #include "splivarot.h"
-#include "sp-item-group.h"
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "sp-text.h"
-#include "display/sp-canvas.h"
-#include "display/canvas-arena.h"
-#include "livarot/Shape.h"
 #include "verbs.h"
+
+#include "display/cairo-utils.h"
+#include "display/canvas-arena.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+#include "display/sp-canvas.h"
+
+#include "livarot/Shape.h"
+
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+
+#include "pixmaps/cursor-calligraphy.xpm"
+
+#include "svg/svg.h"
+
 
 #include "ui/tools/calligraphic-tool.h"
 #include "ui/tools/freehand-base.h"

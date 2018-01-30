@@ -19,15 +19,18 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "desktop.h"
-#include "document.h" // for SPDocumentUndo::done()
 #include "document-undo.h"
-#include "libnrtype/font-instance.h"
-#include "sp-flowtext.h"
-#include "sp-text.h"
-#include "verbs.h"
-#include "widgets/font-selector.h"
-#include "text-editing.h"
+#include "document.h" // for SPDocumentUndo::done()
 #include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "libnrtype/font-instance.h"
+
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
+
+#include "widgets/font-selector.h"
 
 namespace Inkscape {
 namespace UI {

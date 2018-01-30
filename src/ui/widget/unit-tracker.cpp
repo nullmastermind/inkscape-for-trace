@@ -12,9 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "style-internal.h"
 #include "unit-tracker.h"
-//#include "widgets/ege-select-one-action.h"
+
+#include <algorithm>
 
 #define COLUMN_STRING 0
 

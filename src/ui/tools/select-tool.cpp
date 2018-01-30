@@ -17,36 +17,43 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #include <cstring>
 #include <string>
+
 #include <gdk/gdkkeysyms.h>
-#include "macros.h"
-#include "rubberband.h"
-#include "document.h"
-#include "document-undo.h"
-#include "selection.h"
-#include "sp-cursor.h"
-#include "style.h"
-#include "pixmaps/cursor-select-m.xpm"
-#include "pixmaps/cursor-select-d.xpm"
-#include "pixmaps/handles.xpm"
 #include <glibmm/i18n.h>
 
-#include "ui/tools/select-tool.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "macros.h"
+#include "message-stack.h"
+#include "rubberband.h"
 #include "selection-chemistry.h"
+#include "selection-describer.h"
+#include "selection.h"
+#include "seltrans.h"
+#include "sp-cursor.h"
+
+#include "display/drawing-item.h"
+#include "display/sp-canvas.h"
+#include "display/sp-canvas-item.h"
+
+#include "object/box3d.h"
+#include "style.h"
+
+#include "pixmaps/cursor-select-d.xpm"
+#include "pixmaps/cursor-select-m.xpm"
+#include "pixmaps/handles.xpm"
+
+#include "ui/tools-switch.h"
+#include "ui/tools/select-tool.h"
+
 #ifdef WITH_DBUS
 #include "extension/dbus/document-interface.h"
 #endif
-#include "desktop.h"
 
-#include "sp-root.h"
-#include "ui/tools-switch.h"
-#include "message-stack.h"
-#include "selection-describer.h"
-#include "seltrans.h"
-#include "box3d.h"
-#include "display/sp-canvas.h"
-#include "display/drawing-item.h"
 
 using Inkscape::DocumentUndo;
 

@@ -17,38 +17,42 @@
 #include <config.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
 #include <gtkmm/clipboard.h>
+#include <glibmm/i18n.h>
+
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
 #include <display/sp-ctrlquadr.h>
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
 
 #include "context-fns.h"
-
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "pixmaps/cursor-text-insert.xpm"
-#include "pixmaps/cursor-text.xpm"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "ui/shape-editor.h"
-#include "sp-flowtext.h"
-#include "sp-namedview.h"
-#include "sp-text.h"
-#include "style.h"
-#include "ui/tools/text-tool.h"
 #include "text-editing.h"
-#include "ui/control-manager.h"
 #include "verbs.h"
-#include "xml/node-event-vector.h"
+
+#include "object/sp-flowtext.h"
+#include "object/sp-namedview.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "pixmaps/cursor-text-insert.xpm"
+#include "pixmaps/cursor-text.xpm"
+
+#include "ui/control-manager.h"
+#include "ui/shape-editor.h"
+#include "ui/tools/text-tool.h"
+
 #include "xml/attribute-record.h"
+#include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"
 
 using Inkscape::ControlManager;

@@ -26,7 +26,7 @@
 
 #include <extension/extension.h>
 #include "document-private.h"
-#include "sp-object.h"
+#include "object/sp-defs.h"
 #include <color.h>
 
 #include "parameter.h"

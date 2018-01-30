@@ -20,7 +20,7 @@
 #include "helper/action-context.h"
 #include "preferences.h"
 #include "path-chemistry.h"
-#include "sp-item.h"
+#include "object/sp-item.h"
 
 #include "extension/effect.h"
 #include "extension/system.h"

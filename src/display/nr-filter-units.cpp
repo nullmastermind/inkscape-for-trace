@@ -12,7 +12,7 @@
 #include <glib.h>
 
 #include "display/nr-filter-units.h"
-#include "sp-filter-units.h"
+#include "object/sp-filter-units.h"
 #include <2geom/transforms.h>
 
 using Geom::X;

@@ -15,10 +15,13 @@
 #endif
 
 #include "document.h"
-#include "sp-item-group.h"
-#include "xml/repr.h"
-#include "util/find-last-if.h"
 #include "layer-fns.h"
+
+#include "object/sp-item-group.h"
+
+#include "util/find-last-if.h"
+
+#include "xml/repr.h"
 
 // TODO move the documentation comments into the .h file
 

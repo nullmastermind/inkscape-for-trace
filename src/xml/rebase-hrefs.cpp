@@ -1,13 +1,18 @@
-#include "xml/rebase-hrefs.h"
-#include "dir-util.h"
-#include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
-#include "io/sys.h"
-#include "sp-object.h"
-#include "streq.h"
-#include "xml/node.h"
-#include <glibmm/miscutils.h>
+
 #include <glibmm/convert.h>
+#include <glibmm/miscutils.h>
 #include <glibmm/uriutils.h>
+
+#include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
+#include "dir-util.h"
+#include "streq.h"
+
+#include "io/sys.h"
+
+#include "object/sp-object.h"
+
+#include "xml/node.h"
+#include "xml/rebase-hrefs.h"
 
 using Inkscape::XML::AttributeRecord;
 

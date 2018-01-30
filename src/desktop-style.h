@@ -12,6 +12,11 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <vector>
+
+#include <glib.h>
+
 class ColorRGBA;
 class SPCSSAttr;
 class SPDesktop;

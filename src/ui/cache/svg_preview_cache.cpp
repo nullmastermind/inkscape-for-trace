@@ -20,16 +20,18 @@
 #endif
 
 #include <gtk/gtk.h>
+
 #include <2geom/transforms.h>
-#include "sp-namedview.h"
+
 #include "selection.h"
 #include "inkscape.h"
-#include "sp-rect.h"
 #include "document-private.h"
+
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-item.h"
 #include "display/drawing.h"
+
 
 #include "ui/cache/svg_preview_cache.h"
 

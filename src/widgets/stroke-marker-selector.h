@@ -10,6 +10,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <vector>
+
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -19,10 +20,13 @@
 #include "desktop.h"
 #include "document.h"
 #include "inkscape.h"
+
 #include "display/drawing.h"
-#include "sp-marker.h"
+
+class SPMarker;
 
 namespace Gtk {
+
 class Container;
 class Adjustment;
 }

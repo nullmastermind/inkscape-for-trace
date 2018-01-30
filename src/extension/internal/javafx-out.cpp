@@ -25,10 +25,6 @@
 #include "javafx-out.h"
 #include <inkscape.h>
 #include <inkscape-version.h>
-#include <sp-path.h>
-#include <sp-linear-gradient.h>
-#include <sp-radial-gradient.h>
-#include <style.h>
 #include <display/curve.h>
 #include <display/canvas-bpath.h>
 #include <svg/svg.h>
@@ -39,7 +35,12 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include <io/sys.h>
-#include "sp-root.h"
+
+#include "object/sp-root.h"
+#include "object/sp-path.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "style.h"
 
 #include <string>
 #include <stdio.h>

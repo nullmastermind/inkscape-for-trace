@@ -14,29 +14,33 @@
  * Released under GNU GPL
  */
 
-#include <gdk/gdkkeysyms.h>
 #include <cstring>
 #include <string>
 
-#include "macros.h"
-#include "display/sp-canvas.h"
-#include "sp-spiral.h"
-#include "document.h"
-#include "document-undo.h"
-#include "sp-namedview.h"
-#include "selection.h"
+#include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
 
-#include "desktop.h"
+#include "context-fns.h"
 #include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "macros.h"
 #include "message-context.h"
 #include "pixmaps/cursor-spiral.xpm"
-#include "ui/tools/spiral-tool.h"
-#include <glibmm/i18n.h>
-#include "xml/node-event-vector.h"
-#include "context-fns.h"
-#include "ui/shape-editor.h"
+#include "selection.h"
 #include "verbs.h"
+
 #include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-spiral.h"
+
+#include "ui/shape-editor.h"
+#include "ui/tools/spiral-tool.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

@@ -19,15 +19,17 @@
 
 #include "registered-widget.h"
 
-#include "widgets/spinbutton-events.h"
+#include <gtkmm/radiobutton.h>
+
+#include "verbs.h"
+
+#include "object/sp-root.h"
 
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
-#include "verbs.h"
-#include "sp-root.h"
+#include "widgets/spinbutton-events.h"
 
-#include <gtkmm/radiobutton.h>
 
 namespace Inkscape {
 namespace UI {

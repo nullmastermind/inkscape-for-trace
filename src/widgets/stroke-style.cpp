@@ -17,11 +17,19 @@
 
 #define noSP_SS_VERBOSE
 
-#include "stroke-style.h"
-#include "sp-stop.h"
-#include "svg/svg-color.h"
-#include "ui/widget/unit-menu.h"
 #include "desktop-widget.h"
+#include "stroke-style.h"
+
+#include "object/sp-marker.h"
+#include "object/sp-namedview.h"
+#include "object/sp-rect.h"
+#include "object/sp-stop.h"
+#include "object/sp-text.h"
+
+#include "svg/svg-color.h"
+
+#include "ui/widget/unit-menu.h"
+
 #include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;

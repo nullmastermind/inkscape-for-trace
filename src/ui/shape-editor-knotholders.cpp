@@ -15,24 +15,26 @@
 #include <config.h>
 #endif
 
-#include "sp-item.h"
-#include "sp-rect.h"
-#include "box3d.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-offset.h"
-#include "sp-flowtext.h"
-#include "preferences.h"
-#include "style.h"
-#include "desktop.h"
-
-#include "sp-namedview.h"
-#include "live_effects/effect.h"
-#include "sp-pattern.h"
 #include <glibmm/i18n.h>
+
+#include "preferences.h"
+#include "desktop.h"
 #include "knotholder.h"
 #include "knot-holder-entity.h"
+
+#include "live_effects/effect.h"
+
+#include "object/box3d.h"
+#include "object/sp-ellipse.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-item.h"
+#include "object/sp-namedview.h"
+#include "object/sp-offset.h"
+#include "object/sp-pattern.h"
+#include "object/sp-rect.h"
+#include "object/sp-spiral.h"
+#include "object/sp-star.h"
+#include "style.h"
 
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil((v) / (m) - 0.5)) * (m)) : ((floor((v) / (m) + 0.5)) * (m)))
 

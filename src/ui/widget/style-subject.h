@@ -12,9 +12,13 @@
 
 #include <boost/optional.hpp>
 #include <2geom/rect.h>
-#include "sp-item.h"
 #include <stddef.h>
 #include <sigc++/sigc++.h>
+
+#include "object/sp-item.h"
+#include "object/sp-tag.h"
+#include "object/sp-tag-use.h"
+#include "object/sp-tag-use-reference.h"
 
 class SPDesktop;
 class SPObject;

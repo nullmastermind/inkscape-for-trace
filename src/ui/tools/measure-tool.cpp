@@ -15,37 +15,47 @@
 #endif
 
 #include <gtkmm.h>
+#include <glibmm/i18n.h>
+
 #include <boost/none_t.hpp>
-#include "util/units.h"
-#include "display/curve.h"
-#include "display/sodipodi-ctrl.h"
-#include "display/sp-ctrlline.h"
-#include "display/sp-ctrlcurve.h"
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-util.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "ui/tools/measure-tool.h"
-#include "ui/tools/freehand-base.h"
+
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
-#include "ui/dialog/knot-properties.h"
-#include "sp-namedview.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "sp-defs.h"
-#include "sp-root.h"
-#include "svg/stringstream.h"
-#include "rubberband.h"
-#include "path-chemistry.h"
+
+#include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "text-editing.h"
-#include "pixmaps/cursor-measure.xpm"
 #include "inkscape.h"
-#include "desktop-style.h"
+#include "path-chemistry.h"
+#include "rubberband.h"
+#include "text-editing.h"
 #include "verbs.h"
-#include <glibmm/i18n.h>
+
+#include "display/curve.h"
+#include "display/sodipodi-ctrl.h"
+#include "display/sp-canvas-util.h"
+#include "display/sp-canvas.h"
+#include "display/sp-ctrlcurve.h"
+#include "display/sp-ctrlline.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+
+#include "pixmaps/cursor-measure.xpm"
+
+#include "svg/stringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+
+#include "ui/dialog/knot-properties.h"
+#include "ui/tools/freehand-base.h"
+#include "ui/tools/measure-tool.h"
+
+#include "util/units.h"
 
 using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;

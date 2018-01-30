@@ -16,16 +16,18 @@
  */
 
 #include "knot-holder-entity.h"
-#include "knotholder.h"
-#include "sp-item.h"
-#include "style.h"
-#include "preferences.h"
-#include "macros.h"
-#include "sp-pattern.h"
-#include "snap.h"
+
 #include "desktop.h"
 #include "inkscape.h"
-#include "sp-namedview.h"
+#include "knotholder.h"
+#include "macros.h"
+#include "preferences.h"
+#include "snap.h"
+
+#include "object/sp-item.h"
+#include "object/sp-namedview.h"
+#include "object/sp-pattern.h"
+#include "style.h"
 
 int KnotHolderEntity::counter = 0;
 

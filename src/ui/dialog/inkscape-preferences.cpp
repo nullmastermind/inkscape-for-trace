@@ -18,6 +18,7 @@
 #endif
 
 #include "inkscape-preferences.h"
+
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
@@ -25,27 +26,31 @@
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/recentinfo.h>
 
+#include "cms-system.h"
+#include "document.h"
+#include "enums.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "path-prefix.h"
 #include "preferences.h"
-#include "verbs.h"
 #include "selcue.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "shortcuts.h"
+#include "verbs.h"
+
+#include "display/canvas-grid.h"
+#include "display/nr-filter-gaussian.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
-#include "message-stack.h"
-#include "style.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/widget/style-swatch.h"
-#include "display/nr-filter-gaussian.h"
-#include "cms-system.h"
-#include "color-profile.h"
-#include "display/canvas-grid.h"
-#include "path-prefix.h"
+
 #include "io/resource.h"
 #include "io/sys.h"
-#include "inkscape.h"
-#include "shortcuts.h"
-#include "document.h"
 
+#include "object/color-profile.h"
+#include "style.h"
+
+#include "ui/widget/style-swatch.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>

@@ -19,7 +19,7 @@
 #include <2geom/point.h>
 #include "ui/tools/tool-base.h"
 
-#include "sp-star.h"
+class SPStar;
 
 namespace Inkscape {
 namespace UI {

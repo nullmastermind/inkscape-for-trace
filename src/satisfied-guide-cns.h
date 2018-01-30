@@ -3,7 +3,8 @@
 
 #include <2geom/forward.h>
 #include <vector>
-#include "sp-item.h"
+
+#include "snap-candidate.h"
 
 class SPDesktop;
 class SPGuideConstraint;

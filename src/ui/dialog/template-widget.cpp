@@ -14,14 +14,14 @@
 #include <gtkmm/messagedialog.h>
 
 #include "desktop.h"
-
 #include "document.h"
 #include "document-undo.h"
 #include "file.h"
-#include "sp-namedview.h"
-#include "extension/implementation/implementation.h"
 #include "inkscape.h"
 
+#include "extension/implementation/implementation.h"
+
+#include "object/sp-namedview.h"
 
 namespace Inkscape {
 namespace UI {

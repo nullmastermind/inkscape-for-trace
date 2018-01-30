@@ -23,10 +23,8 @@
 #include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
-#include "sp-item.h"
-#include "object-set.h"
+#include "object/object-set.h"
 
-class SPItem;
 
 namespace Inkscape {
 class LayerModel;

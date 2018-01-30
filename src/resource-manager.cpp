@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 #include <gtkmm/recentmanager.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
@@ -19,10 +20,12 @@
 #include "resource-manager.h"
 
 #include "document.h"
-#include "sp-object.h"
-#include "xml/node.h"
 #include "document-undo.h"
 #include "verbs.h"
+
+#include "object/sp-object.h"
+
+#include "xml/node.h"
 
 namespace Inkscape {
 

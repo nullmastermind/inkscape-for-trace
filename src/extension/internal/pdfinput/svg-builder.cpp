@@ -38,6 +38,7 @@
 #include "io/base64stream.h"
 #include "display/nr-filter-utils.h"
 #include "libnrtype/font-instance.h"
+#include "object/sp-defs.h"
 
 #include "Function.h"
 #include "GfxState.h"

@@ -22,52 +22,49 @@
 
 #include <numeric>
 
-#include "ui/dialog/dialog-manager.h"
-
-#include "svg/svg.h"
-
-#include "macros.h"
-#include "document.h"
-#include "document-undo.h"
-#include "selection.h"
-#include "desktop.h"
-#include "desktop-events.h"
-
-#include "message-context.h"
-#include "pixmaps/cursor-spray.xpm"
-#include "context-fns.h"
-#include "inkscape.h"
-
-#include "splivarot.h"
-#include "sp-item-group.h"
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "path-chemistry.h"
-
-// For color picking
-#include "display/drawing.h"
-#include "display/drawing-context.h"
-#include "display/cairo-utils.h"
-#include "desktop-style.h"
-#include "svg/svg-color.h"
-
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "display/sp-canvas.h"
-#include "display/canvas-arena.h"
-#include "display/curve.h"
-#include "livarot/Shape.h"
-#include <2geom/circle.h>
-#include "box3d.h"
-#include "sp-item-transform.h"
-#include "filter-chemistry.h"
-
-#include "ui/tools/spray-tool.h"
-#include "helper/action.h"
-#include "verbs.h"
-
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
+
+#include <2geom/circle.h>
+
+
+#include "context-fns.h"
+#include "desktop-events.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "filter-chemistry.h"
+#include "inkscape.h"
+#include "macros.h"
+#include "message-context.h"
+#include "path-chemistry.h"
+#include "selection.h"
+#include "splivarot.h"
+#include "verbs.h"
+
+#include "display/cairo-utils.h"
+#include "display/canvas-arena.h"
+#include "display/curve.h"
+#include "display/drawing-context.h"
+#include "display/drawing.h"
+#include "display/sp-canvas.h"
+
+#include "helper/action.h"
+
+#include "livarot/Shape.h"
+
+#include "object/box3d.h"
+#include "object/sp-item-transform.h"
+
+#include "pixmaps/cursor-spray.xpm"
+
+#include "svg/svg.h"
+#include "svg/svg-color.h"
+
+#include "ui/tools/spray-tool.h"
+#include "ui/dialog/dialog-manager.h"
+
 
 using Inkscape::DocumentUndo;
 using namespace std;

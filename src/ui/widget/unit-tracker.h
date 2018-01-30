@@ -16,7 +16,10 @@
 #define INKSCAPE_UI_WIDGET_UNIT_TRACKER_H
 
 #include <map>
+#include <vector>
+
 #include "util/units.h"
+
 #include "widgets/ege-select-one-action.h"
 
 using Inkscape::Util::Unit;

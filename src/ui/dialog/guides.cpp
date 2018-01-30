@@ -16,21 +16,26 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
 #include "guides.h"
 
-#include "display/guideline.h"
-#include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
-#include "sp-guide.h"
-#include "sp-namedview.h"
-
-#include "ui/tools/tool-base.h"
-#include "widgets/desktop-widget.h"
 #include <glibmm/i18n.h>
-#include "ui/dialog-events.h"
+
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "message-context.h"
 #include "verbs.h"
+
+#include "object/sp-guide.h"
+#include "object/sp-namedview.h"
+
+#include "display/guideline.h"
+
+#include "ui/dialog-events.h"
+#include "ui/tools/tool-base.h"
+
+#include "widgets/desktop-widget.h"
 
 namespace Inkscape {
 namespace UI {

@@ -18,35 +18,41 @@
 #include <cstring>
 #include <string>
 #include <vector>
+
 #include <glib.h>
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "sp-path.h"
-#include "sp-image.h"
-#include "sp-marker.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "style.h"
-#include "document.h"
+#include <glibmm/i18n.h>
+
+#include <2geom/svg-path-parser.h> // to get from SVG on boolean to Geom::Path
+#include <2geom/svg-path-writer.h>
+
+#include "splivarot.h"
+
 #include "document-undo.h"
+#include "document.h"
 #include "layer-model.h"
 #include "message-stack.h"
 #include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
 
-#include <glibmm/i18n.h>
-
-#include "xml/repr-sorting.h"
-#include <2geom/svg-path-writer.h>
 #include "helper/geom.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
-#include "splivarot.h"
-#include "verbs.h"
-#include "2geom/svg-path-parser.h" // to get from SVG on boolean to Geom::Path
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-marker.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "svg/svg.h"
+
 #include "util/units.h"            // to get abbr for document units
+
+#include "xml/repr-sorting.h"
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 

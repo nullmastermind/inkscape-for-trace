@@ -11,7 +11,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <gtkmm.h>
-#include "persp3d.h"
+
 //#include "transf_mat_3x4.h"
 #include "document-private.h"
 #include "live_effects/lpe-perspective_path.h"
@@ -19,6 +19,9 @@
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include <util/units.h>
+
+#include "object/persp3d.h"
+#include "object/sp-defs.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

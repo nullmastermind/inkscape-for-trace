@@ -1,7 +1,7 @@
 #ifndef SEEN_SP_GUIDE_ATTACHMENT_H
 #define SEEN_SP_GUIDE_ATTACHMENT_H
 
-#include "sp-item.h"
+#include "object/sp-item.h"
 
 class SPGuideAttachment {
 public:

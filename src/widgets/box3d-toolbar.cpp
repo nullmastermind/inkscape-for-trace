@@ -28,23 +28,28 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 
 #include "box3d-toolbar.h"
-#include "box3d.h"
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ink-toggle-action.h"
 #include "inkscape.h"
-#include "persp3d.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/box3d.h"
+#include "object/persp3d.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ink-toggle-action.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;

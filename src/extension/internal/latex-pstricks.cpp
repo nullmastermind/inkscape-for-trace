@@ -28,7 +28,6 @@
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "latex-pstricks.h"
-#include "sp-item.h"
 #include "style.h"
 #include "document.h"
 #include <cstring>

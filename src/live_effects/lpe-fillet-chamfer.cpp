@@ -9,13 +9,17 @@
  */
 
 #include "live_effects/lpe-fillet-chamfer.h"
+
 #include "helper/geom.h"
-#include "display/curve.h"
 #include "helper/geom-curves.h"
 #include "helper/geom-satellite.h"
+
 #include <2geom/elliptical-arc.h>
 #include "knotholder.h"
+#include "display/curve.h"
 #include <boost/optional.hpp>
+
+#include "object/sp-shape.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

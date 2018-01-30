@@ -66,39 +66,44 @@
  *
  */
 
-
-
-#include <gdk/gdkkeysyms.h>
 #include <string>
 #include <cstring>
 
-#include "ui/tools/connector-tool.h"
-#include "pixmaps/cursor-connector.xpm"
-#include "xml/node-event-vector.h"
-#include "svg/svg.h"
-#include "desktop.h"
-#include "desktop-style.h"
+#include <glibmm/i18n.h>
+#include <glibmm/stringutils.h>
+#include <gdk/gdkkeysyms.h>
 
-#include "document.h"
+#include "context-fns.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "selection.h"
-#include "inkscape.h"
-#include "sp-path.h"
-#include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
-#include <glibmm/i18n.h>
-#include <glibmm/stringutils.h>
 #include "snap.h"
-#include "sp-conn-end.h"
-#include "libavoid/router.h"
-#include "context-fns.h"
-#include "sp-namedview.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "display/curve.h"
 #include "verbs.h"
+
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+#include "display/sp-canvas.h"
+
+#include "libavoid/router.h"
+
+#include "object/sp-conn-end.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+
+#include "pixmaps/cursor-connector.xpm"
+
+#include "svg/svg.h"
+
+#include "ui/tools/connector-tool.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

@@ -21,7 +21,9 @@
 #endif
 
 #include "text-edit.h"
-#include <libnrtype/font-instance.h>
+
+#include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
@@ -29,27 +31,32 @@ extern "C" {
 }
 #endif
 
-#include <libnrtype/font-lister.h>
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "text-editing.h"
+#include "verbs.h"
 
 #include "helper/window.h"
-#include "inkscape.h"
-#include "document.h"
-#include "desktop.h"
-#include "desktop-style.h"
 
-#include "document-undo.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "ui/icon-names.h"
-#include "verbs.h"
-#include "ui/interface.h"
+#include <libnrtype/font-instance.h>
+#include <libnrtype/font-lister.h>
+
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
+#include "object/sp-textpath.h"
+
 #include "svg/css-ostringstream.h"
-#include "widgets/font-selector.h"
-#include <glibmm/i18n.h>
-#include <glibmm/markup.h>
+
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+
 #include "util/units.h"
-#include "sp-textpath.h"
+
+#include "widgets/font-selector.h"
+
 
 namespace Inkscape {
 namespace UI {

@@ -13,8 +13,9 @@
  */
 #include "live_effects/lpe-perp_bisector.h"
 #include "display/curve.h"
-#include "sp-path.h"
 #include "line-geometry.h"
+
+#include "object/sp-path.h"
 
 #include "knotholder.h"
 

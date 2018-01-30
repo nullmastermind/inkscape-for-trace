@@ -20,23 +20,24 @@
 #include "util/units.h"
 #include "svg/svg-length.h"
 #include "svg/svg-color.h"
+#include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "display/curve.h"
 #include "helper/geom.h"
 #include "2geom/affine.h"
 #include "path-chemistry.h"
-#include "style.h"
-#include "sp-root.h"
-#include "sp-defs.h"
-#include "sp-item.h"
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
 #include "document.h"
 #include "document-undo.h"
 #include <iomanip>
 #include <cmath>
+
+#include "object/sp-root.h"
+#include "object/sp-defs.h"
+#include "object/sp-item.h"
+#include "object/sp-shape.h"
+#include "object/sp-path.h"
+#include "object/sp-star.h"
+#include "object/sp-spiral.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

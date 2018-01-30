@@ -16,7 +16,7 @@
 #include <boost/optional.hpp>
 
 #include "axis-manip.h" // FIXME: This is only for Box3D::epsilon; move that to a better location
-#include "persp3d.h"
+#include "object/persp3d.h"
 
 class SPDesktop;
 typedef unsigned int guint32;

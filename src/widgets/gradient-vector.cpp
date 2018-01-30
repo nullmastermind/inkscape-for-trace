@@ -23,37 +23,47 @@
 #include <config.h>
 #endif
 
-#include <glibmm.h>
-#include "gradient-vector.h"
-#include "ui/widget/color-preview.h"
-#include "verbs.h"
-#include "macros.h"
-#include <glibmm/i18n.h>
 #include <set>
-#include "../widgets/gradient-image.h"
-#include "../inkscape.h"
-#include "../document-private.h"
-#include "../gradient-chemistry.h"
-#include "../helper/window.h"
+
+#include <glibmm.h>
+#include <glibmm/i18n.h>
+
+
+
+
+#include "document-private.h"
+#include "gradient-chemistry.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "gradient-vector.h"
+#include "layer-manager.h"
+#include "macros.h"
+#include "selection-chemistry.h"
+#include "verbs.h"
+
+#include "helper/window.h"
+
 #include "io/resource.h"
 
-#include "xml/repr.h"
-
-#include "../preferences.h"
-#include "svg/css-ostringstream.h"
-#include "sp-stop.h"
-#include "selection-chemistry.h"
+#include "object/sp-defs.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
+#include "object/sp-stop.h"
 #include "style.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "desktop.h"
-#include "layer-manager.h"
 
-#include "document-undo.h"
+#include "svg/css-ostringstream.h"
 
 #include "ui/dialog-events.h"
 #include "ui/selected-color.h"
 #include "ui/widget/color-notebook.h"
+#include "ui/widget/color-preview.h"
+
+#include "widgets/gradient-image.h"
+
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::SelectedColor;

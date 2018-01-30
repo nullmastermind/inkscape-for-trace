@@ -21,7 +21,6 @@
 #include "clonetiler.h"
 
 #include <glibmm/i18n.h>
-#include <2geom/transforms.h>
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/checkbutton.h>
@@ -29,26 +28,35 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/radiobutton.h>
 
-#include "desktop.h"
+#include <2geom/transforms.h>
 
-#include "display/cairo-utils.h"
-#include "display/drawing.h"
-#include "display/drawing-context.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
+#include "document.h"
 #include "filter-chemistry.h"
-#include "ui/widget/unit-menu.h"
-#include "helper/window.h"
 #include "inkscape.h"
-#include "ui/interface.h"
 #include "message-stack.h"
-#include "sp-namedview.h"
-#include "svg/svg-color.h"
-#include "svg/svg.h"
-#include "ui/icon-names.h"
-#include "ui/widget/spinbutton.h"
 #include "unclump.h"
 #include "verbs.h"
+
+#include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing.h"
+
+#include "helper/window.h"
+
+#include "object/sp-item.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+#include "object/sp-use.h"
+
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/unit-menu.h"
+
+#include "svg/svg-color.h"
+#include "svg/svg.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;

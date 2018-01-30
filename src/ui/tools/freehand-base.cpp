@@ -20,28 +20,33 @@
 #include <config.h>
 #endif
 
+#include "desktop-style.h"
+#include "macros.h"
+#include "message-stack.h"
+#include "selection-chemistry.h"
+
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
-#include "display/canvas-bpath.h"
-#include "svg/svg.h"
-#include "display/curve.h"
 
-#include "desktop-style.h"
+#include "svg/svg.h"
+
+#include "object/sp-item-group.h"
+#include "object/sp-path.h"
+#include "object/sp-rect.h"
+#include "object/sp-use.h"
+#include "style.h"
+
+#include "ui/clipboard.h"
+#include "ui/control-manager.h"
 #include "ui/draw-anchor.h"
-#include "macros.h"
-#include "message-stack.h"
+#include "ui/tools/lpe-tool.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
-#include "ui/tools/lpe-tool.h"
-#include "selection-chemistry.h"
-#include "sp-item-group.h"
-#include "sp-rect.h"
-#include "style.h"
-#include "ui/control-manager.h"
-// clipboard support
-#include "ui/clipboard.h"
 
 #define MIN_PRESSURE      0.0
 #define MAX_PRESSURE      1.0

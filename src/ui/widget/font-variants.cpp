@@ -13,13 +13,14 @@
 
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
+
 #include <libnrtype/font-instance.h>
 
 #include "font-variants.h"
 
 // For updating from selection
 #include "desktop.h"
-#include "sp-text.h"
+#include "object/sp-text.h"
 
 namespace Inkscape {
 namespace UI {

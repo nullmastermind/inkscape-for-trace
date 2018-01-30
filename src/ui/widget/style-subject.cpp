@@ -5,14 +5,13 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include "ui/widget/style-subject.h"
+#include "style-subject.h"
 
 #include "desktop.h"
-#include "xml/sp-css-attr.h"
 #include "desktop-style.h"
-
 #include "selection.h"
-#include "style.h"
+
+#include "xml/sp-css-attr.h"
 
 namespace Inkscape {
 namespace UI {

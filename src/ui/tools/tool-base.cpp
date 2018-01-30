@@ -18,10 +18,31 @@
 #include <config.h>
 #endif
 
-#include "widgets/desktop-widget.h"
+#include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
 
 #include "shortcuts.h"
 #include "file.h"
+
+
+
+#include "desktop-events.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "gradient-drag.h"
+#include "knot-ptr.h"
+#include "macros.h"
+#include "message-context.h"
+#include "rubberband.h"
+#include "selcue.h"
+#include "selection.h"
+#include "sp-cursor.h"
+
+#include "display/sp-canvas.h"
+#include "display/sp-canvas-group.h"
+#include "display/canvas-rotate.h"
+
+#include "object/sp-guide.h"
 
 #include "ui/contextmenu.h"
 #include "ui/interface.h"
@@ -36,27 +57,9 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tool/shape-record.h"
 
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
+#include "widgets/desktop-widget.h"
 
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-group.h"
-#include "display/canvas-rotate.h"
 #include "xml/node-event-vector.h"
-#include "sp-cursor.h"
-#include "desktop.h"
-
-#include "desktop-events.h"
-#include "desktop-style.h"
-#include "sp-namedview.h"
-#include "selection.h"
-#include "macros.h"
-#include "message-context.h"
-#include "gradient-drag.h"
-#include "rubberband.h"
-#include "selcue.h"
-#include "sp-guide.h"
-#include "knot-ptr.h"
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = FALSE;

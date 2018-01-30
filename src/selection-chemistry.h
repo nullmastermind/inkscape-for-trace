@@ -18,10 +18,12 @@
  */
 
 #include <2geom/forward.h>
-#include "sp-item.h"
 
 class SPCSSAttr;
 class SPDesktop;
+class SPDocument;
+class SPItem;
+class SPObject;
 
 namespace Inkscape {
 

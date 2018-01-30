@@ -8,12 +8,14 @@
  */
 
 #include <algorithm>
+#include <cstring>
 
 #include "profile-manager.h"
-#include "document.h"
-#include "color-profile.h"
 
-#include <cstring>
+#include "document.h"
+
+#include "object/color-profile.h"
+
 
 namespace Inkscape {
 

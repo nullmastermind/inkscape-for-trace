@@ -36,31 +36,38 @@
 #include <gtkmm/toolitem.h>
 #include <glibmm/i18n.h>
 
-#include "../desktop.h"
-#include "../desktop-style.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "../helper/action.h"
+#include "inkscape.h"
+#include "shortcuts.h"
+#include "verbs.h"
+
 #include "ink-action.h"
 #include "ink-toggle-action.h"
-#include "../inkscape.h"
-#include "ui/interface.h"
-#include "../shortcuts.h"
-#include "../sp-namedview.h"
-#include "ui/tools-switch.h"
-#include "../ui/icon-names.h"
-#include "../ui/widget/style-swatch.h"
-#include "../ui/widget/unit-tracker.h"
-#include "../verbs.h"
-#include "../widgets/button.h"
-#include "../widgets/spinbutton-events.h"
-#include "ui/widget/spinbutton.h"
-#include "../widgets/spw-utilities.h"
-#include "../widgets/widget-sizes.h"
-#include "../xml/attribute-record.h"
-#include "../xml/node-event-vector.h"
-#include "ui/uxmanager.h"
+
+#include "helper/action.h"
+
 #include "io/resource.h"
+
+#include "object/sp-namedview.h"
+
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/tools-switch.h"
+#include "ui/uxmanager.h"
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/style-swatch.h"
+#include "ui/widget/unit-tracker.h"
+
+#include "widgets/button.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/spinbutton-events.h"
+#include "widgets/spw-utilities.h"
+#include "widgets/widget-sizes.h"
+
+#include "xml/attribute-record.h"
+#include "xml/node-event-vector.h"
 
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"

@@ -26,22 +26,21 @@
 #include <config.h>
 #endif
 
-#include "style-internal.h"
-
 #include <glibmm/regex.h>
 
-#include "bad-uri-exception.h"
+#include "style-internal.h"
 #include "style.h"
 
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-
+#include "bad-uri-exception.h"
+#include "extract-uri.h"
+#include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
 
-#include "extract-uri.h"
-#include "preferences.h"
+#include "svg/svg.h"
+#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
+
 #include "util/units.h"
 
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS

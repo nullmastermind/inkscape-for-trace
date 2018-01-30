@@ -10,39 +10,46 @@
  */
 
 #ifdef WITH_YAML
-#include <ui/view/view.h>
-#include <desktop.h>
-#include <helper/action.h>
-#include <helper/action-context.h>
-#include <selection.h>
-#include <verbs.h>
-#include <inkscape.h>
 
-#include <document.h>
+#include <list>
+#include <map>
 
+#include <glib.h>
+#include <glib/gstdio.h>
 #include <glibmm/i18n.h>
 
 #include "main-cmdlinexact.h"
 
+#include "desktop.h"
+#include "document-undo.h"
+#include "document-undo.h"
+#include "document.h"
+#include "file.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "resource-manager.h"
+#include "selection.h"
+#include "verbs.h"
 #include "yaml.h"
 
-#include "extension/system.h"
-#include "file.h"
-#include <glib.h>
-#include <glib/gstdio.h>
-#include "sp-root.h"
-#include "document-undo.h"
-#include "util/units.h"
-#include "sp-namedview.h"
-#include "resource-manager.h"
-#include "ui/dialog/font-substitution.h"
 #include "extension/db.h"
-#include "preferences.h"
+#include "extension/system.h"
+
+#include "helper/action-context.h"
+#include "helper/action.h"
 #include "helper/png-write.h"
-#include <document-undo.h>
-#include <ui/view/view-widget.h>
-#include <ui/interface.h>
-#include <io/sys.h>
+
+#include "io/sys.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog/font-substitution.h"
+#include "ui/interface.h"
+#include "ui/view/view-widget.h"
+#include "ui/view/view.h"
+
+#include "util/units.h"
 
 #define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 

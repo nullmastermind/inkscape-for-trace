@@ -33,8 +33,8 @@
 
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
-#include "sp-item.h"
-#include "sp-root.h"
+#include "object/sp-item.h"
+#include "object/sp-root.h"
 
 #include <2geom/affine.h>
 #include "document.h"

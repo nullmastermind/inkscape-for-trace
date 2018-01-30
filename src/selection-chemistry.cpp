@@ -25,86 +25,96 @@
 #include <config.h>
 #endif
 
+#include <boost/range/adaptor/reversed.hpp>
+#include <cstring>
+#include <glibmm/i18n.h>
+#include <map>
+#include <string>
+
 #include <gtkmm/clipboard.h>
 
-#include "file.h"
 #include "selection-chemistry.h"
+
+#include "file.h"
 
 // TOOD fixme: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
-#include "svg/svg.h"
-#include "desktop.h"
-#include "desktop-style.h"
-#include "layer-model.h"
-#include "selection.h"
-#include "ui/tools-switch.h"
-#include "io/resource.h"
 
-#include "message-stack.h"
-#include "sp-item-transform.h"
-#include "sp-marker.h"
-#include "sp-textpath.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "sp-flowtext.h"
-#include "sp-flowregion.h"
-#include "sp-image.h"
-#include "sp-rect.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-polyline.h"
-#include "sp-line.h"
-#include "text-editing.h"
-#include "display/sp-canvas.h"
-#include "ui/tools/text-tool.h"
-#include "ui/tools/connector-tool.h"
-#include "sp-path.h"
-#include "sp-conn-end.h"
-#include "ui/tools/dropper-tool.h"
-#include <glibmm/i18n.h>
-#include "xml/rebase-hrefs.h"
-#include "style.h"
+#include "context-fns.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "sp-gradient-reference.h"
-#include "sp-linear-gradient.h"
-#include "sp-pattern.h"
-#include "sp-symbol.h"
-#include "sp-radial-gradient.h"
-#include "ui/tools/gradient-tool.h"
-#include "sp-namedview.h"
-#include "sp-offset.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "helper/png-write.h"
-#include "layer-fns.h"
-#include "context-fns.h"
-#include <map>
-#include <cstring>
-#include <string>
-#include <boost/range/adaptor/reversed.hpp>
-#include "sp-item.h"
-#include "box3d.h"
-#include "persp3d.h"
-#include "xml/simple-document.h"
 #include "gradient-drag.h"
-#include "display/cairo-utils.h"
+#include "layer-fns.h"
+#include "layer-manager.h"
+#include "layer-model.h"
+#include "message-stack.h"
 #include "path-chemistry.h"
-#include "ui/tool/control-point-selection.h"
-#include "ui/tool/multi-path-manipulator.h"
+#include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "display/cairo-utils.h"
+#include "display/sp-canvas.h"
+
+#include "helper/png-write.h"
+
+#include "io/resource.h"
+
 #include "live_effects/effect.h"
 #include "live_effects/parameter/originalpath.h"
-#include "layer-manager.h"
-#include "object-set.h"
-#include "svg/svg-color.h"
 
-// For clippath editing
-#include "ui/tools/node-tool.h"
+#include "object/box3d.h"
+#include "object/object-set.h"
+#include "object/persp3d.h"
+#include "object/sp-clippath.h"
+#include "object/sp-conn-end.h"
+#include "object/sp-defs.h"
+#include "object/sp-ellipse.h"
+#include "object/sp-flowregion.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-gradient-reference.h"
+#include "object/sp-image.h"
+#include "object/sp-item-transform.h"
+#include "object/sp-item.h"
+#include "object/sp-line.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-marker.h"
+#include "object/sp-mask.h"
+#include "object/sp-namedview.h"
+#include "object/sp-offset.h"
+#include "object/sp-path.h"
+#include "object/sp-pattern.h"
+#include "object/sp-polyline.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-spiral.h"
+#include "object/sp-star.h"
+#include "object/sp-symbol.h"
+#include "object/sp-textpath.h"
+#include "object/sp-tref.h"
+#include "object/sp-tspan.h"
+#include "object/sp-use.h"
+#include "style.h"
+
+#include "svg/svg-color.h"
+#include "svg/svg.h"
 
 #include "ui/clipboard.h"
-#include "verbs.h"
+#include "ui/tool/control-point-selection.h"
+#include "ui/tool/multi-path-manipulator.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/connector-tool.h"
+#include "ui/tools/dropper-tool.h"
+#include "ui/tools/gradient-tool.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/text-tool.h"
+
+#include "xml/rebase-hrefs.h"
+#include "xml/simple-document.h"
 
 using Inkscape::DocumentUndo;
 using Geom::X;

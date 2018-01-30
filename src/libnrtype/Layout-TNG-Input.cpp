@@ -21,8 +21,6 @@
 #include "Layout-TNG.h"
 #include "style.h"
 #include "svg/svg-length.h"
-#include "sp-object.h"
-#include "sp-string.h"
 #include "FontFactory.h"
 
 

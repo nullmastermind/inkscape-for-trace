@@ -33,11 +33,14 @@
 
 #include "color.h"
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+
+#include "object/color-profile.h"
+
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+
 #include "cms-system.h"
 
 using std::sprintf;

@@ -17,19 +17,23 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <vector>
+#include <map>
+
 #include "style-enums.h"
 
 #include "color.h"
+
+#include "object/sp-marker-loc.h"
+#include "object/sp-filter.h"
+#include "object/sp-filter-reference.h"
+#include "object/sp-paint-server-reference.h"
+#include "object/uri.h"
+
 #include "svg/svg-icc-color.h"
-#include "sp-marker-loc.h"
-#include "sp-filter.h"
-#include "sp-filter-reference.h"
-#include "sp-paint-server-reference.h"
-#include "uri.h"
+
 #include "xml/repr.h"
 
-#include <vector>
-#include <map>
 
 struct SPStyleEnum;
 

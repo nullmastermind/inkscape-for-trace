@@ -23,7 +23,8 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "originalitem.h"
-#include "uri.h"
+
+#include "object/uri.h"
 
 #include "live_effects/effect.h"
 

@@ -26,8 +26,8 @@
 
 #include <2geom/point.h>
 
-#include "sp-gradient.h" // TODO refactor enums to external .h file
-#include "sp-mesh-array.h"
+#include "object/sp-gradient.h" // TODO refactor enums to external .h file
+#include "object/sp-mesh-array.h"
 
 class SPKnot;
 

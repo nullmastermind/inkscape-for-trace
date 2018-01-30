@@ -23,8 +23,9 @@
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "document.h"
-#include "sp-root.h"
-#include "sp-defs.h"
+#include "object/sp-root.h"
+#include "object/sp-defs.h"
+#include "object/sp-use.h"
 #include "util/units.h"
 
 #include "helper/pixbuf-ops.h"

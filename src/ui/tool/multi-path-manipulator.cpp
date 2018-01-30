@@ -10,22 +10,25 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "node.h"
+#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include "desktop.h"
 
+#include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "live_effects/lpeobject.h"
 #include "message-stack.h"
-#include "sp-path.h"
+#include "node.h"
+#include "verbs.h"
+
+#include "live_effects/lpeobject.h"
+
+#include "object/sp-path.h"
+
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
-#include "verbs.h"
 
-#include <gdk/gdkkeysyms.h>
 
 namespace Inkscape {
 namespace UI {

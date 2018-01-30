@@ -16,20 +16,22 @@
 
 #include <memory>
 
-#include "attributes.h"
-#include "ui/widget/panel.h"
-#include "sp-filter.h"
-#include "ui/widget/combo-enums.h"
-
-#include "ui/widget/spin-scale.h"
-#include "xml/helper-observer.h"
-#include "ui/dialog/desktop-tracker.h"
-
 #include <gtkmm/notebook.h>
 #include <gtkmm/sizegroup.h>
 
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
+
+#include "attributes.h"
+
+#include "ui/dialog/desktop-tracker.h"
+#include "ui/widget/combo-enums.h"
+#include "ui/widget/panel.h"
+#include "ui/widget/spin-scale.h"
+
+#include "xml/helper-observer.h"
+
+class SPFilter;
 
 namespace Inkscape {
 namespace UI {

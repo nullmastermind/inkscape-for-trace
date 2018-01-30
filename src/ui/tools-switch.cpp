@@ -20,15 +20,14 @@
 
 #include "ui/tools-switch.h"
 
-#include "box3d.h"
-#include "sp-ellipse.h"
-#include "sp-flowtext.h"
-#include "sp-offset.h"
-#include "sp-path.h"
-#include "sp-rect.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-text.h"
+#include "object/sp-rect.h"
+#include "object/sp-ellipse.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-offset.h"
+#include "object/sp-path.h"
+#include "object/sp-star.h"
+#include "object/sp-spiral.h"
+#include "object/sp-text.h"
 
 // TODO: How many of these are actually needed?
 #include "ui/tools/arc-tool.h"

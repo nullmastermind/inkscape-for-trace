@@ -22,7 +22,8 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "path-reference.h"
-#include "sp-object.h"
+
+class SPObject;
 
 namespace Inkscape {
 

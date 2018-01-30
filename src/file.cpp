@@ -33,38 +33,45 @@
 
 #include <gtkmm.h>
 
-#include "ui/dialog/ocaldialogs.h"
-#include "desktop.h"
+#include "file.h"
 
-#include "extension/effect.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "ui/tools/tool-base.h"
-#include "extension/db.h"
-#include "extension/input.h"
-#include "extension/output.h"
-#include "file.h"
-#include "helper/png-write.h"
+#include "event-log.h"
 #include "id-clash.h"
-#include "inkscape.h"
 #include "inkscape-version.h"
-#include "ui/interface.h"
-#include "io/sys.h"
-#include "io/resource.h"
+#include "inkscape.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "print.h"
-#include "resource-manager.h"
 #include "rdf.h"
+#include "resource-manager.h"
 #include "selection-chemistry.h"
-#include "sp-namedview.h"
+#include "verbs.h"
+
+#include "extension/db.h"
+#include "extension/effect.h"
+#include "extension/input.h"
+#include "extension/output.h"
+
+#include "helper/png-write.h"
+
+#include "io/resource.h"
+#include "io/sys.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
 #include "style.h"
+
+#include "ui/dialog/font-substitution.h"
+#include "ui/dialog/ocaldialogs.h"
+#include "ui/interface.h"
+#include "ui/tools/tool-base.h"
 #include "ui/view/view-widget.h"
+
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
-#include "verbs.h"
-#include "event-log.h"
-#include "ui/dialog/font-substitution.h"
 
 
 using Inkscape::DocumentUndo;

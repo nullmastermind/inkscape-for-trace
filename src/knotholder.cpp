@@ -13,32 +13,39 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "document.h"
-#include "document-undo.h"
-#include "desktop.h"
-#include "verbs.h"
-#include "box3d.h"
-#include "style.h"
-#include "knot.h"
 #include "knotholder.h"
+
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "knot-holder-entity.h"
-#include "display/sp-canvas.h"
-#include "ui/tools/rect-tool.h"
-#include "ui/tools/arc-tool.h"
-#include "ui/tools-switch.h"
-#include "ui/tools/tweak-tool.h"
-#include "ui/tools/node-tool.h"
-#include "ui/shape-editor.h"
-#include "ui/tools/spiral-tool.h"
-#include "ui/control-manager.h"
-#include "sp-shape.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-offset.h"
-#include "sp-pattern.h"
-#include "live_effects/lpeobject.h"
+#include "knot.h"
+#include "verbs.h"
+
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+
+#include "object/box3d.h"
+#include "object/sp-ellipse.h"
+#include "object/sp-offset.h"
+#include "object/sp-pattern.h"
+#include "object/sp-rect.h"
+#include "object/sp-shape.h"
+#include "object/sp-spiral.h"
+#include "object/sp-star.h"
+#include "style.h"
+
+#include "display/sp-canvas.h"
+
+#include "ui/control-manager.h"
+#include "ui/shape-editor.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/arc-tool.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/rect-tool.h"
+#include "ui/tools/spiral-tool.h"
+#include "ui/tools/tweak-tool.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

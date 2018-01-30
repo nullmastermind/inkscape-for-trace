@@ -17,28 +17,35 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #include <cstring>
 #include <string>
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "display/curve.h"
-#include <glibmm/i18n.h>
-#include "sp-path.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "text-editing.h"
-#include "style.h"
-#include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
-#include "message-stack.h"
-#include "selection.h"
 
-#include "box3d.h"
-#include "selection-chemistry.h"
+#include <glibmm/i18n.h>
+
+
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "message-stack.h"
 #include "path-chemistry.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "text-editing.h"
 #include "verbs.h"
-#include "object-set.h"
+
+#include "display/curve.h"
+
+#include "object/box3d.h"
+#include "object/object-set.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "svg/svg.h"
+
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::ObjectSet;

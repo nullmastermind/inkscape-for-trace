@@ -19,7 +19,6 @@
 #include "desktop.h"
 
 #include "document.h"
-#include "sp-root.h"
 #include "style.h"
 
 namespace Inkscape {

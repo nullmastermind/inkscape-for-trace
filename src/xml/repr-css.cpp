@@ -21,13 +21,16 @@
 #include <cstring>
 #include <string>
 #include <sstream>
+
 #include <glibmm/ustring.h>
+
+#include "libcroco/cr-declaration.h"
+
 #include "svg/css-ostringstream.h"
 
 #include "xml/repr.h"
 #include "xml/simple-document.h"
 #include "xml/sp-css-attr.h"
-#include "style.h"
 
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;

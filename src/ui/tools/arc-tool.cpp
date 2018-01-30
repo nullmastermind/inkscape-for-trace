@@ -19,31 +19,35 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "macros.h"
-#include <glibmm/i18n.h>
-#include "display/sp-canvas.h"
-#include "sp-ellipse.h"
-#include "document.h"
+#include "context-fns.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
+#include "document.h"
+#include "macros.h"
+#include "message-context.h"
+#include "preferences.h"
 #include "selection.h"
+#include "snap.h"
+#include "verbs.h"
+
+#include "display/sp-canvas.h"
+#include "display/sp-canvas-item.h"
+
+#include "object/sp-ellipse.h"
+#include "object/sp-namedview.h"
 
 #include "pixmaps/cursor-ellipse.xpm"
-#include "xml/repr.h"
-#include "xml/node-event-vector.h"
-#include "preferences.h"
-#include "message-context.h"
-#include "desktop.h"
-#include "desktop-style.h"
-#include "context-fns.h"
-#include "verbs.h"
+
+#include "ui/tools/arc-tool.h"
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
 
-#include "ui/tools/arc-tool.h"
-#include "display/sp-canvas-item.h"
+#include "xml/repr.h"
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

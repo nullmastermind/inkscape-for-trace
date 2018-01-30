@@ -25,14 +25,15 @@
 #include "io/sys.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
+#include "display/cairo-utils.h"
 #include "document.h"
-#include "sp-item.h"
-#include "sp-root.h"
-#include "sp-defs.h"
 #include "preferences.h"
 #include "rdf.h"
-#include "display/cairo-utils.h"
 #include "util/units.h"
+
+#include "object/sp-item.h"
+#include "object/sp-root.h"
+#include "object/sp-defs.h"
 
 /* This is an example of how to use libpng to read and write PNG files.
  * The file libpng.txt is much more verbose then this.  If you have not

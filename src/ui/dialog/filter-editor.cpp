@@ -14,54 +14,53 @@
 #include "config.h"
 #endif
 
-#include "dialog-manager.h"
+#include <string>
 
+#include <gtkmm.h>
 #include <gdkmm/display.h>
+#include <glibmm/convert.h>
+#include <glibmm/error.h>
+#include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/stringutils.h>
+
 #if GTK_CHECK_VERSION(3, 20, 0)
 # include <gdkmm/seat.h>
 #else
 # include <gdkmm/devicemanager.h>
 #endif
 
-#include "ui/widget/spinbutton.h"
-
-#include <glibmm/i18n.h>
-#include <glibmm/stringutils.h>
-#include <glibmm/main.h>
-#include <glibmm/convert.h>
-#include <glibmm/error.h>
 
 #include "desktop.h"
-
-#include "document.h"
+#include "dialog-manager.h"
 #include "document-undo.h"
+#include "document.h"
 #include "filter-chemistry.h"
 #include "filter-editor.h"
 #include "filter-enums.h"
 #include "inkscape.h"
-#include "filters/blend.h"
-#include "filters/colormatrix.h"
-#include "filters/componenttransfer.h"
-#include "filters/componenttransfer-funcnode.h"
-#include "filters/convolvematrix.h"
-#include "filters/distantlight.h"
-#include "filters/merge.h"
-#include "filters/mergenode.h"
-#include "filters/pointlight.h"
-#include "filters/spotlight.h"
-
-#include "style.h"
-#include "svg/svg-color.h"
-#include "ui/dialog/filedialog.h"
+#include "selection-chemistry.h"
 #include "verbs.h"
 
 #include "io/sys.h"
 #include "io/resource.h"
-#include "selection-chemistry.h"
 
-#include <string>
+#include "object/filters/blend.h"
+#include "object/filters/colormatrix.h"
+#include "object/filters/componenttransfer.h"
+#include "object/filters/componenttransfer-funcnode.h"
+#include "object/filters/convolvematrix.h"
+#include "object/filters/distantlight.h"
+#include "object/filters/merge.h"
+#include "object/filters/mergenode.h"
+#include "object/filters/pointlight.h"
+#include "object/filters/spotlight.h"
+#include "style.h"
 
-#include <gtkmm.h>
+#include "svg/svg-color.h"
+
+#include "ui/dialog/filedialog.h"
+#include "ui/widget/spinbutton.h"
 
 using namespace Inkscape::Filters;
 using namespace Inkscape::IO::Resource;

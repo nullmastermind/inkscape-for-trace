@@ -8,7 +8,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include "sp-lpe-item.h"
+
+class SPLPEItem;
 
 #include <2geom/interval.h>
 

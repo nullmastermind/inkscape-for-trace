@@ -15,7 +15,6 @@
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
 #include "preferences.h"
-#include "style.h"
 
 #include "display/cairo-utils.h"
 

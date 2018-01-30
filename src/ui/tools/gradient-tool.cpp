@@ -16,31 +16,34 @@
 #include <config.h>
 #endif
 
-
+#include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "macros.h"
-#include "document.h"
-#include "selection.h"
 #include "desktop.h"
-
+#include "document-undo.h"
+#include "document.h"
+#include "gradient-chemistry.h"
+#include "gradient-drag.h"
+#include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "pixmaps/cursor-gradient.xpm"
-#include "pixmaps/cursor-gradient-add.xpm"
-#include "ui/tools/gradient-tool.h"
-#include "gradient-chemistry.h"
-#include <glibmm/i18n.h>
-#include "gradient-drag.h"
-#include "display/sp-ctrlline.h"
-#include "sp-stop.h"
-#include "svg/css-ostringstream.h"
-#include "snap.h"
-#include "sp-namedview.h"
 #include "rubberband.h"
-#include "document-undo.h"
-#include "verbs.h"
 #include "selection-chemistry.h"
+#include "selection.h"
+#include "snap.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-stop.h"
+
+#include "display/sp-ctrlline.h"
+
+#include "pixmaps/cursor-gradient-add.xpm"
+#include "pixmaps/cursor-gradient.xpm"
+
+#include "svg/css-ostringstream.h"
+
+#include "ui/tools/gradient-tool.h"
 
 using Inkscape::DocumentUndo;
 

@@ -26,19 +26,25 @@
 #include <config.h>
 #endif
 
-#include "ui/dialog/dialog-manager.h"
 #include <glibmm/i18n.h>
-
 #include <2geom/transforms.h>
+
 #include <2geom/rect.h>
 
-#include "ui/tools/box3d-tool.h"
-#include "color.h"
-#include "desktop-events.h"
 #include "desktop.h"
 
+#include "color.h"
+#include "desktop-events.h"
 #include "desktop-style.h"
 #include "device-manager.h"
+#include "document-undo.h"
+#include "event-log.h"
+#include "layer-fns.h"
+#include "layer-manager.h"
+#include "message-context.h"
+#include "message-stack.h"
+#include "resource-manager.h"
+
 #include "display/canvas-arena.h"
 #include "display/canvas-debug.h"
 #include "display/canvas-grid.h"
@@ -50,21 +56,20 @@
 #include "display/sodipodi-ctrlrect.h"
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas-util.h"
-#include "document-undo.h"
-#include "event-log.h"
+
 #include "helper/action-context.h"
-#include "ui/interface.h"
-#include "layer-fns.h"
-#include "layer-manager.h"
-#include "message-context.h"
-#include "message-stack.h"
-#include "resource-manager.h"
-#include "ui/tools/select-tool.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "ui/tool-factory.h"
-#include "widgets/desktop-widget.h"
 #include "helper/action.h" //sp_action_perform
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog/dialog-manager.h"
+#include "ui/interface.h"
+#include "ui/tool-factory.h"
+#include "ui/tools/box3d-tool.h"
+#include "ui/tools/select-tool.h"
+
+#include "widgets/desktop-widget.h"
 
 // TODO those includes are only for node tool quick zoom. Remove them after fixing it.
 #include "ui/tools/node-tool.h"

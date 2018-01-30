@@ -24,48 +24,53 @@
 
 #define noERASER_VERBOSE
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
 #include <string>
 #include <cstring>
 #include <numeric>
 
-#include "svg/svg.h"
-#include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
+
 #include <2geom/bezier-utils.h>
-
-#include "macros.h"
-#include "document.h"
-#include "selection.h"
-#include "desktop.h"
-#include "desktop-events.h"
-
-#include "desktop-style.h"
-#include "message-context.h"
-#include "pixmaps/cursor-eraser.xpm"
-#include "context-fns.h"
-#include "rubberband.h"
-#include "splivarot.h"
-#include "sp-item-group.h"
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "sp-clippath.h"
-#include "sp-rect.h"
-#include "sp-text.h"
-#include "sp-root.h"
-#include "display/canvas-bpath.h"
-#include "display/canvas-arena.h"
-#include "document-undo.h"
-#include "verbs.h"
-#include "style.h"
 #include <2geom/pathvector.h>
-#include "path-chemistry.h"
-#include "selection-chemistry.h"
-#include "display/curve.h"
-#include "layer-model.h"
+
+#include "context-fns.h"
+#include "desktop-events.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "layer-manager.h"
+#include "layer-model.h"
+#include "macros.h"
+#include "message-context.h"
+#include "path-chemistry.h"
+#include "rubberband.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "splivarot.h"
+#include "verbs.h"
+
+#include "display/sp-canvas.h"
+#include "display/canvas-arena.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+
+#include "object/sp-clippath.h"
+#include "object/sp-item-group.h"
+#include "object/sp-path.h"
+#include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
+#include "style.h"
+
+#include "pixmaps/cursor-eraser.xpm"
+
+#include "svg/svg.h"
+
 #include "ui/tools/eraser-tool.h"
 
 using Inkscape::DocumentUndo;

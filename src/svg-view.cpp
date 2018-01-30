@@ -14,12 +14,17 @@
  */
 
 #include <2geom/transforms.h>
+
+#include "svg-view.h"
+
+#include "document.h"
+
 #include "display/canvas-arena.h"
 #include "display/drawing-group.h"
-#include "document.h"
-#include "sp-item.h"
-#include "svg-view.h"
-#include "sp-root.h"
+
+#include "object/sp-item.h"
+#include "object/sp-root.h"
+
 #include "util/units.h"
 
 SPSVGView::SPSVGView(SPCanvasGroup *parent)

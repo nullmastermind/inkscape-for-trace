@@ -14,27 +14,29 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
+#include <glibmm/convert.h>
+#include <glibmm/regex.h>
+
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/table.h>
 
-#include "preferences.h"
-#include "ui/widget/preferences-widget.h"
-#include "verbs.h"
-#include "selcue.h"
-#include "io/sys.h"
+
 #include "desktop.h"
 #include "inkscape.h"
-
 #include "message-stack.h"
-#include "style.h"
+#include "preferences.h"
+#include "selcue.h"
 #include "selection-chemistry.h"
-#include "ui/dialog/filedialog.h"
+#include "verbs.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/convert.h>
-#include <glibmm/regex.h>
+#include "io/sys.h"
+
+#include "ui/dialog/filedialog.h"
+#include "ui/widget/preferences-widget.h"
+
 
 #ifdef WIN32
 #include <windows.h>

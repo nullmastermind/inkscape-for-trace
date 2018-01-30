@@ -37,7 +37,7 @@
 #include <glibmm/ustring.h>
 
 #include "preferences.h"
-#include "sp-gradient.h" // TODO refactor enums out to their own .h file
+#include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
 
 class SPCSSAttr;
 struct SPCanvas;

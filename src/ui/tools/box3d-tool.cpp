@@ -16,30 +16,36 @@
  */
 
 #include <gdk/gdkkeysyms.h>
-
-#include "macros.h"
-#include "display/sp-canvas.h"
-#include "document.h"
-#include "document-undo.h"
-#include "sp-namedview.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-
-#include "display/sp-canvas-item.h"
-#include "desktop.h"
-#include "message-context.h"
-#include "pixmaps/cursor-3dbox.xpm"
-#include "box3d.h"
-#include "ui/tools/box3d-tool.h"
 #include <glibmm/i18n.h>
-#include "xml/node-event-vector.h"
+
+
 #include "context-fns.h"
 #include "desktop-style.h"
-#include "perspective-line.h"
-#include "box3d-side.h"
+#include "desktop.h"
 #include "document-private.h"
-#include "ui/shape-editor.h"
+#include "document-undo.h"
+#include "document.h"
+#include "macros.h"
+#include "message-context.h"
+#include "perspective-line.h"
+#include "selection-chemistry.h"
+#include "selection.h"
 #include "verbs.h"
+
+#include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
+
+#include "pixmaps/cursor-3dbox.xpm"
+
+#include "object/box3d-side.h"
+#include "object/box3d.h"
+#include "object/sp-defs.h"
+#include "object/sp-namedview.h"
+
+#include "ui/shape-editor.h"
+#include "ui/tools/box3d-tool.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

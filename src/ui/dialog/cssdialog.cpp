@@ -12,10 +12,12 @@
  */
 
 #include "cssdialog.h"
-#include "ui/widget/addtoicon.h"
+
 #include "verbs.h"
-#include "sp-object.h"
 #include "selection.h"
+
+#include "ui/widget/addtoicon.h"
+
 #include "xml/attribute-record.h"
 
 namespace Inkscape {

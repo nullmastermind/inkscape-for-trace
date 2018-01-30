@@ -10,37 +10,35 @@
 #include "config.h"
 #endif
 
+#include <set>
+
+#include <glibmm/i18n.h>
+#include <glibmm/regex.h>
+
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 
-#include <set>
 #include "font-substitution.h"
 
-#include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
-
-#include "ui/dialog-events.h"
-
+#include "inkscape.h"
 #include "selection-chemistry.h"
-
-#include "sp-root.h"
-#include "sp-text.h"
-#include "sp-textpath.h"
-#include "sp-flowtext.h"
-#include "sp-flowdiv.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "style.h"
 #include "text-editing.h"
+
+#include "object/sp-root.h"
+#include "object/sp-text.h"
+#include "object/sp-textpath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-tspan.h"
 
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/regex.h>
+#include "ui/dialog-events.h"
 
 namespace Inkscape {
 namespace UI {

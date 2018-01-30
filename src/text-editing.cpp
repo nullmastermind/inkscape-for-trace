@@ -20,24 +20,24 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
+#include "document.h"
 #include "inkscape.h"
 #include "message-stack.h"
+#include "text-editing.h"
+
+#include "object/sp-textpath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowregion.h"
+#include "object/sp-item-group.h"
+#include "object/sp-tref.h"
+#include "object/sp-tspan.h"
 #include "style.h"
+
 #include "util/units.h"
 
-#include "document.h"
 #include "xml/attribute-record.h"
 #include "xml/sp-css-attr.h"
-
-#include "sp-textpath.h"
-#include "sp-flowtext.h"
-#include "sp-flowdiv.h"
-#include "sp-flowregion.h"
-#include "sp-item-group.h"
-#include "sp-tref.h"
-#include "sp-tspan.h"
-
-#include "text-editing.h"
 
 static const gchar *tref_edit_message = _("You cannot edit <b>cloned character data</b>.");
 

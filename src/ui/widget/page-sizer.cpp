@@ -25,11 +25,13 @@
 
 #include <glibmm/i18n.h>
 
+#include "verbs.h"
 
 #include "helper/action.h"
-#include "sp-root.h"
+
+#include "object/sp-root.h"
+
 #include "ui/widget/button.h"
-#include "verbs.h"
 
 using std::pair;
 using Inkscape::Util::unit_table;

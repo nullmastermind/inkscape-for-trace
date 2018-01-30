@@ -11,9 +11,10 @@
 
 #include <sigc++/sigc++.h>
 
-#include "uri-references.h"
+#include "object/uri-references.h"
 
 namespace Inkscape {
+
 namespace XML {
 class Node;
 }

@@ -8,7 +8,27 @@
  * Marc Jeanmougin
  * su_v
  */
+#include <clocale>
+#include <string>
+
 #include <gtkmm.h>
+
+#include "desktop.h"
+#include "dir-util.h"
+#include "document-undo.h"
+#include "document.h"
+#include "file.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "message.h"
+#include "preferences.h"
+#include "print.h"
+#include "proj_pt.h"
+#include "selection-chemistry.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "display/canvas-grid.h"
 
 #include "extension/effect.h"
 #include "extension/db.h"
@@ -16,39 +36,24 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
-#include "inkscape.h"
-#include "preferences.h"
-
-#include "file.h"
-#include "sp-root.h"
-#include "sp-text.h"
-#include "sp-tspan.h"
-#include "sp-flowdiv.h"
-#include "sp-flowtext.h"
-#include "sp-object.h"
-#include "sp-item.h"
-#include "style.h"
-#include "sp-defs.h"
-#include "dir-util.h"
-#include "document.h"
-#include <string>
-#include <clocale>
-#include "text-editing.h"
-#include "document-undo.h"
-#include "display/canvas-grid.h"
-#include "sp-guide.h"
-#include "selection-chemistry.h"
-#include "persp3d.h"
-#include "proj_pt.h"
-#include "ui/shape-editor.h"
 #include "io/sys.h"
-#include "print.h"
+
+#include "object/persp3d.h"
+#include "object/sp-defs.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-guide.h"
+#include "object/sp-item.h"
+#include "object/sp-namedview.h"
+#include "object/sp-object.h"
+#include "object/sp-root.h"
+#include "object/sp-text.h"
+#include "object/sp-tspan.h"
+#include "style.h"
+
 #include "ui/interface.h"
-#include "desktop.h"
-#include "message.h"
-#include "message-stack.h"
-#include "verbs.h"
-#include "sp-namedview.h"
+#include "ui/shape-editor.h"
+
  
 using Inkscape::DocumentUndo;
 using namespace std;

@@ -12,7 +12,7 @@
  */
 
 #include "live_effects/lpe-offset.h"
-#include "sp-shape.h"
+#include "object/sp-shape.h"
 #include "display/curve.h"
 #include <2geom/elliptical-arc.h>
 // TODO due to internal breakage in glibmm headers, this must be last:

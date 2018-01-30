@@ -16,39 +16,44 @@
 #endif
 
 #include "objects.h"
+
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 #include <glibmm/main.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
-#include "ui/dialog-events.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
+#include "document.h"
 #include "filter-chemistry.h"
-#include "filters/blend.h"
-#include "filters/gaussian-blur.h"
-#include "helper/action.h"
 #include "inkscape.h"
 #include "layer-manager.h"
 #include "shortcuts.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "sp-root.h"
-#include "sp-shape.h"
+#include "verbs.h"
+
+#include "helper/action.h"
+
+#include "object/filters/blend.h"
+#include "object/filters/gaussian-blur.h"
+#include "object/sp-clippath.h"
+#include "object/sp-mask.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
 #include "style.h"
-#include "ui/tools-switch.h"
+
+#include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
-#include "ui/widget/imagetoggler.h"
-#include "ui/widget/layertypeicon.h"
-#include "ui/widget/insertordericon.h"
-#include "ui/widget/clipmaskicon.h"
-#include "ui/widget/highlight-picker.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
-#include "verbs.h"
+#include "ui/widget/clipmaskicon.h"
 #include "ui/widget/color-notebook.h"
+#include "ui/widget/highlight-picker.h"
+#include "ui/widget/imagetoggler.h"
+#include "ui/widget/insertordericon.h"
+#include "ui/widget/layertypeicon.h"
+
 #include "xml/node-observer.h"
 
 //#define DUMP_LAYERS 1

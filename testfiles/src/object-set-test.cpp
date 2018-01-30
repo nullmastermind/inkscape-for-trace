@@ -10,12 +10,12 @@
  */
 #include <gtest/gtest.h>
 #include <doc-per-case-test.h>
-#include <src/sp-factory.h>
-#include <src/sp-rect.h>
-#include <src/sp-path.h>
-#include <src/sp-use.h>
-#include <src/sp-root.h>
-#include <src/object-set.h>
+#include <src/object/sp-factory.h>
+#include <src/object/sp-rect.h>
+#include <src/object/sp-path.h>
+#include <src/object/sp-use.h>
+#include <src/object/sp-root.h>
+#include <src/object/object-set.h>
 #include <xml/node.h>
 #include <src/xml/text-node.h>
 #include <src/xml/simple-document.h>

@@ -17,25 +17,28 @@
  */
 
 #include "xml-tree.h"
+
 #include <glibmm/i18n.h>
 
-#include "desktop.h"
 
-#include "ui/dialog-events.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "ui/tools/tool-base.h"
-#include "helper/window.h"
+#include "document.h"
 #include "inkscape.h"
-#include "ui/interface.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "shortcuts.h"
-#include "sp-root.h"
-#include "sp-string.h"
-#include "sp-tspan.h"
-#include "ui/icon-names.h"
 #include "verbs.h"
+
+#include "helper/window.h"
+
+#include "object/sp-root.h"
+#include "object/sp-string.h"
+
+#include "ui/dialog-events.h"
+#include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/tools/tool-base.h"
 
 #include "widgets/sp-xmlview-attr-list.h"
 #include "widgets/sp-xmlview-content.h"

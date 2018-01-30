@@ -15,11 +15,12 @@
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 
-#include "uri.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "display/curve.h"
 #include "live_effects/effect.h"
+
+#include "object/uri.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
 
 #include "inkscape.h"
 #include "desktop.h"

@@ -12,7 +12,7 @@
  */
 
 #include "live_effects/lpe-parallel.h"
-#include "sp-shape.h"
+#include "object/sp-shape.h"
 #include "display/curve.h"
 
 #include "knotholder.h"

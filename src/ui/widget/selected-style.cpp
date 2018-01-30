@@ -15,38 +15,43 @@
 
 #include "selected-style.h"
 
-#include "widgets/spw-utilities.h"
-#include "ui/widget/color-preview.h"
+#include <gtkmm/separatormenuitem.h>
 
-#include "selection.h"
 
-#include "style.h"
 #include "desktop-style.h"
-#include "sp-namedview.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-pattern.h"
+#include "document-undo.h"
+#include "gradient-chemistry.h"
+#include "message-context.h"
+#include "selection.h"
+#include "sp-cursor.h"
+
+#include "display/sp-canvas.h"
+
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-namedview.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "style.h"
+
+#include "pixmaps/cursor-adj-a.xpm"
+#include "pixmaps/cursor-adj-h.xpm"
+#include "pixmaps/cursor-adj-l.xpm"
+#include "pixmaps/cursor-adj-s.xpm"
+
+#include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
+
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/panel-dialog.h"
-#include "document-undo.h"
-#include "widgets/widget-sizes.h"
-#include "widgets/spinbutton-events.h"
-#include "widgets/gradient-image.h"
-#include "svg/svg-color.h"
-#include "svg/css-ostringstream.h"
 #include "ui/tools/tool-base.h"
-#include "message-context.h"
-#include <display/sp-canvas.h>
-#include "pixmaps/cursor-adj-h.xpm"
-#include "pixmaps/cursor-adj-s.xpm"
-#include "pixmaps/cursor-adj-l.xpm"
-#include "pixmaps/cursor-adj-a.xpm"
-#include "sp-cursor.h"
-#include "gradient-chemistry.h"
+#include "ui/widget/color-preview.h"
 
-#include <gtkmm/separatormenuitem.h>
+#include "widgets/gradient-image.h"
+#include "widgets/spinbutton-events.h"
+#include "widgets/spw-utilities.h"
+#include "widgets/widget-sizes.h"
 
 using Inkscape::Util::unit_table;
 

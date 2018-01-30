@@ -10,25 +10,31 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpe-bspline.h"
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
-#include "ui/tool/path-manipulator.h"
 
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
+
+#include "helper/geom.h"
+
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
-#include "helper/geom.h"
+
+#include "object/sp-path.h"
 #include "style.h"
+
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
+#include "ui/tool/path-manipulator.h"
+
 #include "xml/node-observer.h"
 
 namespace Inkscape {

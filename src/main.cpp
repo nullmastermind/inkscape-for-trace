@@ -63,7 +63,6 @@
 #include "ui/interface.h"
 #include "print.h"
 #include "color.h"
-#include "sp-root.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -72,8 +71,13 @@
 #include "inkscape.h"
 #include "inkscape-version.h"
 
-#include "sp-namedview.h"
-#include "sp-guide.h"
+#include "object/object-set.h"
+#include "object/sp-guide.h"
+#include "object/sp-root.h"
+#include "object/sp-namedview.h"
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
+
 #include "xml/repr.h"
 
 #include "io/sys.h"
@@ -119,9 +123,6 @@
 #include "verbs.h"
 
 #include "path-chemistry.h"
-#include "object-set.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
 #include "text-editing.h"
 
 enum {

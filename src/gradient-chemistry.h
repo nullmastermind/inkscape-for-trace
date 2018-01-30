@@ -18,11 +18,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-gradient.h"
+#include "object/sp-gradient.h"
 
 class SPCSSAttr;
 class SPItem;
-typedef unsigned int guint32;
+class SPGradient;
+class SPDesktop;
+
 
 /**
  * Either normalizes given gradient to vector, or returns fresh normalized

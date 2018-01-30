@@ -9,8 +9,9 @@
  *  Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
-#include "sp-namedview.h"
-#include "desktop.h"
+#include <gtk/gtk.h>
+
+#include "snapper.h"
 
 /**
  *  Construct new Snapper for named view.

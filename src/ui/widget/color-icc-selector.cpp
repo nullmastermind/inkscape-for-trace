@@ -2,26 +2,28 @@
 #include "config.h"
 #endif
 
+#include <set>
+
 #include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
 
-#include <set>
+#include "colorspace.h"
+#include "document.h"
+#include "inkscape.h"
+#include "profile-manager.h"
+
+#include "svg/svg-icc-color.h"
 
 #include "ui/dialog-events.h"
 #include "ui/util.h"
 #include "ui/widget/color-icc-selector.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
-#include "svg/svg-icc-color.h"
-#include "colorspace.h"
-#include "document.h"
-#include "inkscape.h"
-#include "profile-manager.h"
 
 #define noDEBUG_LCMS
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "color-profile.h"
+#include "object/color-profile.h"
 #include "cms-system.h"
 #include "color-profile-cms-fns.h"
 

@@ -20,31 +20,36 @@
 #include <cstring>
 #include <string>
 
-#include <2geom/transforms.h>
 #include <gdk/gdkkeysyms.h>
-#include "document.h"
-#include "document-undo.h"
-#include "sp-namedview.h"
-#include "desktop.h"
+#include <glibmm/i18n.h>
+
+#include <2geom/transforms.h>
+
+#include "seltrans.h"
 
 #include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "knot.h"
 #include "message-stack.h"
-#include "pure-transform.h"
-#include "selection.h"
-#include "ui/tools/select-tool.h"
-#include "sp-item-transform.h"
-#include "sp-root.h"
-#include "seltrans-handles.h"
-#include "seltrans.h"
-#include "selection-chemistry.h"
-#include "verbs.h"
-#include <glibmm/i18n.h>
-#include "display/sp-ctrlline.h"
-#include "display/sodipodi-ctrl.h"
 #include "mod360.h"
+#include "pure-transform.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "seltrans-handles.h"
+#include "verbs.h"
+
 #include "display/snap-indicator.h"
+#include "display/sodipodi-ctrl.h"
+#include "display/sp-ctrlline.h"
+
+#include "object/sp-item-transform.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
 #include "ui/control-manager.h"
+#include "ui/tools/select-tool.h"
 
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;

@@ -13,22 +13,26 @@
 
 #include "style-swatch.h"
 
-#include "widgets/spw-utilities.h"
-#include "ui/widget/color-preview.h"
+#include <glibmm/i18n.h>
+#include <gtkmm/grid.h>
 
-#include "style.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-pattern.h"
-#include "xml/sp-css-attr.h"
-#include "widgets/widget-sizes.h"
-#include "util/units.h"
-#include "helper/action.h"
 #include "inkscape.h"
 #include "verbs.h"
-#include <glibmm/i18n.h>
 
-#include <gtkmm/grid.h>
+#include "object/sp-linear-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "style.h"
+
+#include "helper/action.h"
+
+#include "ui/widget/color-preview.h"
+#include "util/units.h"
+
+#include "widgets/spw-utilities.h"
+#include "widgets/widget-sizes.h"
+
+#include "xml/sp-css-attr.h"
 
 enum {
     SS_FILL,

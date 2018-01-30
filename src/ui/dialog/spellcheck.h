@@ -29,13 +29,17 @@
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "sp-text.h"
+
+#include "text-editing.h"
 
 #ifdef HAVE_ASPELL
 #include <aspell.h>
 #endif  /* HAVE_ASPELL */
 
 class SPDesktop;
+class SPObject;
+class SPItem;
+class SPCanvasItem;
 
 namespace Inkscape {
 class Preferences;

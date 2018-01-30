@@ -18,8 +18,9 @@
 
 #include <glib.h>
 #include "extension/implementation/implementation.h"
-#include <sp-path.h>
 
+class SPObject;
+class SPItem;
 
 namespace Inkscape
 {

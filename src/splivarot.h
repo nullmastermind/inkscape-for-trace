@@ -10,7 +10,7 @@
 #include <2geom/forward.h>
 #include <2geom/path.h>
 #include "livarot/Path.h"
-#include "object-set.h"
+#include "object/object-set.h"  // bool_op
 
 class SPCurve;
 class SPDesktop;

@@ -34,8 +34,8 @@
 #include <libuemf/symbol_convert.h>
 
 #include "document.h"
-#include "sp-root.h" // even though it is included indirectly by wmf-inout.h
-#include "sp-path.h"
+#include "object/sp-root.h" // even though it is included indirectly by wmf-inout.h
+#include "object/sp-path.h"
 #include "print.h"
 #include "extension/system.h"
 #include "extension/print.h"

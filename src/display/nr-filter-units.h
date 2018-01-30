@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-filter-units.h"
+#include "object/sp-filter-units.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 

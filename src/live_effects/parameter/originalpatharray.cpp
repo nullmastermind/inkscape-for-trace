@@ -27,13 +27,15 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "originalpath.h"
-#include "uri.h"
 #include "display/curve.h"
 
 #include <2geom/coord.h>
 #include <2geom/point.h>
-#include "sp-shape.h"
-#include "sp-text.h"
+
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "object/uri.h"
+
 #include "live_effects/effect.h"
 
 #include "verbs.h"

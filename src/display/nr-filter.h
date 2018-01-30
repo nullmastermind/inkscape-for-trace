@@ -17,7 +17,7 @@
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-types.h"
 #include "svg/svg-length.h"
-#include "sp-filter-units.h"
+#include "object/sp-filter-units.h"
 #include "inkgc/gc-managed.h"
 
 namespace Inkscape {

@@ -46,7 +46,7 @@
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 #include "svg/svg-length.h"
-#include "sp-filter-units.h"
+//#include "sp-filter-units.h"
 #include "preferences.h"
 
 namespace Inkscape {

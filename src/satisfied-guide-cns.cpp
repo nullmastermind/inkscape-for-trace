@@ -1,8 +1,12 @@
+
 #include <2geom/coord.h>
-#include "desktop.h"
-#include "sp-guide.h"
-#include "sp-namedview.h"
+
 #include "satisfied-guide-cns.h"
+
+#include "desktop.h"
+
+#include "object/sp-guide.h"
+#include "object/sp-namedview.h"
 
 void satisfied_guide_cns(SPDesktop const &desktop,
                          std::vector<Inkscape::SnapCandidatePoint> const &snappoints,

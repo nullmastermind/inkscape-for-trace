@@ -21,43 +21,53 @@
 #include <config.h>
 #endif
 
+#include "flood-tool.h"
+
 #include <cmath>
-#include "trace/potrace/inkscape-potrace.h"
-#include <2geom/pathvector.h>
-#include <gdk/gdkkeysyms.h>
 #include <queue>
+
+#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
+
+#include <2geom/pathvector.h>
 
 #include "color.h"
 #include "context-fns.h"
-#include "desktop.h"
-
 #include "desktop-style.h"
-#include "display/cairo-utils.h"
-#include "display/drawing-context.h"
-#include "display/drawing-image.h"
-#include "display/drawing.h"
-#include "display/sp-canvas.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "ui/tools/flood-tool.h"
-#include "livarot/Path.h"
-#include "livarot/Shape.h"
+#include "document.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
 #include "selection.h"
-#include "ui/shape-editor.h"
 #include "splivarot.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "svg/svg.h"
-#include "trace/imagemap.h"
-#include "xml/node-event-vector.h"
 #include "verbs.h"
 
+#include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing-image.h"
+#include "display/drawing.h"
+#include "display/sp-canvas.h"
+
+#include "livarot/Path.h"
+#include "livarot/Shape.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+#include "object/sp-root.h"
+
 #include "pixmaps/cursor-paintbucket.xpm"
+
+#include "svg/svg.h"
+
+#include "trace/imagemap.h"
+#include "trace/potrace/inkscape-potrace.h"
+
+#include "ui/shape-editor.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

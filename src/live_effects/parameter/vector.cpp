@@ -8,7 +8,7 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/parameter/vector.h"
-#include "sp-lpe-item.h"
+
 #include "knotholder.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"

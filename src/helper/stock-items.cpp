@@ -25,17 +25,17 @@
 #include "path-prefix.h"
 
 #include <xml/repr.h>
-#include "sp-gradient.h"
 #include "document-private.h"
-#include "sp-pattern.h"
-#include "sp-marker.h"
 #include "desktop.h"
 #include "inkscape.h"
 
 #include "io/sys.h"
 #include "stock-items.h"
 
-
+#include "object/sp-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-marker.h"
+#include "object/sp-defs.h"
 
 static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc);
 static SPObject *sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc);

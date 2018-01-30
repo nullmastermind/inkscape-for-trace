@@ -6,9 +6,8 @@
 #include "live_effects/lpe-fill-between-strokes.h"
 
 #include "display/curve.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "svg/svg.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

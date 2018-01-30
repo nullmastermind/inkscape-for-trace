@@ -11,17 +11,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "desktop.h"
+#include "selcue.h"
 
+#include "desktop.h"
 #include "selection.h"
-#include "display/sp-canvas-util.h"
+#include "text-editing.h"
+
 #include "display/sodipodi-ctrl.h"
 #include "display/sodipodi-ctrlrect.h"
+#include "display/sp-canvas-util.h"
+
 #include "libnrtype/Layout-TNG.h"
-#include "text-editing.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "selcue.h"
+
+#include "object/sp-flowtext.h"
+#include "object/sp-text.h"
 
 Inkscape::SelCue::BoundingBoxPrefsObserver::BoundingBoxPrefsObserver(SelCue &sel_cue) :
     Observer("/tools/bounding_box"),

@@ -17,9 +17,10 @@
 #include "desktop.h"
 #include "document.h"
 #include "knotholder.h"
-#include "sp-shape.h"
-#include "sp-path.h"
 #include "inkscape.h"
+
+#include "object/sp-path.h"
+
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
 

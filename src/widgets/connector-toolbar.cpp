@@ -35,19 +35,24 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
 #include "enums.h"
 #include "graphlayout.h"
 #include "ink-action.h"
 #include "ink-toggle-action.h"
 #include "inkscape.h"
-#include "sp-namedview.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/uxmanager.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
 #include "widgets/spinbutton-events.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;

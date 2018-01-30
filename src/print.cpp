@@ -15,17 +15,22 @@
 # include "config.h"
 #endif
 
-#include "ui/dialog/print.h"
 #include "print.h"
-#include "display/drawing.h"
-#include "display/drawing-item.h"
-#include "inkscape.h"
+
 #include "desktop.h"
 #include "document.h"
-#include "sp-item.h"
+#include "inkscape.h"
+
+#include "display/drawing-item.h"
+#include "display/drawing.h"
+
 #include "extension/print.h"
 #include "extension/system.h"
-#include "sp-root.h"
+
+#include "object/sp-item.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog/print.h"
 
 
 unsigned int

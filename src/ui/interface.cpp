@@ -23,56 +23,63 @@
 #include <config.h>
 #endif
 
-#include "ui/dialog/dialog-manager.h"
 #include <gtkmm/icontheme.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-#include "file.h"
 #include <glibmm/miscutils.h>
 
-#include "enums.h"
-#include "inkscape.h"
-#include "extension/db.h"
-#include "extension/effect.h"
-#include "extension/input.h"
-#include "preferences.h"
-#include "shortcuts.h"
-#include "document.h"
-
-#include "ui/interface.h"
-#include "ui/monitor.h"
+#include "desktop-style.h"
 #include "desktop.h"
-#include "selection-chemistry.h"
-#include "svg-view-widget.h"
-#include "widgets/desktop-widget.h"
-#include "sp-item-group.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "helper/action.h"
-#include "helper/window.h"
-#include "io/sys.h"
-#include "ui/dialog-events.h"
+#include "document-undo.h"
+#include "document.h"
+#include "enums.h"
+#include "file.h"
+#include "gradient-drag.h"
+#include "inkscape.h"
 #include "message-context.h"
-#include "ui/uxmanager.h"
-#include "ui/clipboard.h"
+#include "message-stack.h"
+#include "preferences.h"
+#include "selection-chemistry.h"
+#include "shortcuts.h"
+#include "svg-view-widget.h"
 
 #include "display/sp-canvas.h"
-#include "svg/svg-color.h"
-#include "desktop-style.h"
-#include "style.h"
-#include "ui/tools/tool-base.h"
-#include "gradient-drag.h"
-#include "widgets/ege-paint-def.h"
-#include "document-undo.h"
-#include "sp-anchor.h"
-#include "sp-clippath.h"
-#include "sp-image.h"
-#include "sp-mask.h"
-#include "message-stack.h"
-#include "ui/dialog/layer-properties.h"
+
+#include "extension/db.h"
+#include "extension/effect.h"
 #include "extension/find_extension_by_mime.h"
+#include "extension/input.h"
+
+#include "helper/action.h"
+#include "helper/window.h"
+
+#include "io/sys.h"
+
+#include "object/sp-anchor.h"
+#include "object/sp-clippath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-item-group.h"
+#include "object/sp-mask.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "svg/svg-color.h"
+
+#include "ui/clipboard.h"
+#include "ui/dialog-events.h"
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/layer-properties.h"
+#include "ui/interface.h"
+#include "ui/monitor.h"
+#include "ui/tools/tool-base.h"
+#include "ui/uxmanager.h"
+
+#include "widgets/desktop-widget.h"
+#include "widgets/ege-paint-def.h"
 
 using Inkscape::DocumentUndo;
 

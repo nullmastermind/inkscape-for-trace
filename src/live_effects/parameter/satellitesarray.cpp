@@ -10,7 +10,7 @@
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
-#include "sp-lpe-item.h"
+
 #include "inkscape.h"
 #include <preferences.h>
 // TODO due to internal breakage in glibmm headers,

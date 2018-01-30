@@ -18,8 +18,10 @@
 
 #include "knot.h"
 #include "selection.h"
-#include "persp3d.h"
-#include "box3d.h"
+
+#include "object/persp3d.h"
+#include "object/box3d.h"
+
 #include "ui/control-manager.h" // TODO break enums out separately
 
 class SPBox3D;

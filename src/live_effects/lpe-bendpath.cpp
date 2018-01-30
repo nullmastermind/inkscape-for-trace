@@ -6,7 +6,6 @@
  */
 
 #include "live_effects/lpe-bendpath.h"
-#include "sp-item-group.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include "display/curve.h"

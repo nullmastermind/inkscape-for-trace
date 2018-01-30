@@ -42,12 +42,15 @@
 #include "io/resource.h"
 #include "message-context.h"
 #include "path-prefix.h"
-#include "style.h"
+
 #include "ui/previewholder.h"
 #include "widgets/desktop-widget.h"
 #include "widgets/gradient-vector.h"
 #include "display/cairo-utils.h"
-#include "sp-gradient-reference.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-gradient-reference.h"
+
 #include "dialog-manager.h"
 #include "verbs.h"
 #include "gradient-chemistry.h"

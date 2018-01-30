@@ -14,25 +14,30 @@
 #endif
 
 #include "layers.h"
+
 #include <gtkmm/icontheme.h>
 #include <gtkmm/separatormenuitem.h>
 #include <glibmm/main.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "helper/action.h"
+#include "document.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
-#include "svg/css-ostringstream.h"
-#include "ui/icon-names.h"
-#include "ui/widget/imagetoggler.h"
-#include "verbs.h"
-#include "sp-root.h"
-#include "ui/tools/tool-base.h"
 #include "selection-chemistry.h"
+#include "verbs.h"
+
+#include "helper/action.h"
+
+#include "object/sp-root.h"
+
+#include "svg/css-ostringstream.h"
+
+#include "ui/icon-names.h"
+#include "ui/tools/tool-base.h"
+#include "ui/widget/imagetoggler.h"
 
 //#define DUMP_LAYERS 1
 

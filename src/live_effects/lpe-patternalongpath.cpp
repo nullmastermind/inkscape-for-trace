@@ -4,15 +4,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <cmath>
+#include <algorithm>
+
+#include <2geom/bezier-to-sbasis.h>
+
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
 #include "display/curve.h"
 
-#include <2geom/bezier-to-sbasis.h>
+#include "object/sp-shape.h"
 
 #include "knotholder.h"
-#include <cmath>
-#include <algorithm>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

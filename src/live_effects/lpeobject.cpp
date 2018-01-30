@@ -15,6 +15,8 @@
 #include "document.h"
 #include "document-private.h"
 
+#include "object/sp-defs.h"
+
 //#define LIVEPATHEFFECT_VERBOSE
 
 static void livepatheffect_on_repr_attr_changed (Inkscape::XML::Node * repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);

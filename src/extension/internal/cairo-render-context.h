@@ -24,7 +24,7 @@
 #include <2geom/forward.h>
 #include <2geom/affine.h>
 
-#include "style.h"
+#include "style-internal.h" // SPIEnum
 
 #include <cairo.h>
 

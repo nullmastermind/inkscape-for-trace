@@ -11,14 +11,19 @@
  * Released under GNU GPL
  */
 
-#include <sigc++/connection.h>
-#include "ui/tools/tool-base.h"
 #include <vector>
+
+#include <sigc++/connection.h>
+
+#include "ui/tools/tool-base.h"
 
 #define SP_FLOOD_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::FloodTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_FLOOD_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::FloodTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
 namespace Inkscape {
+
+class Selection;
+
 namespace UI {
 namespace Tools {
 

@@ -20,11 +20,12 @@
 
 #include "document-metadata.h"
 #include "desktop.h"
-
 #include "rdf.h"
-#include "sp-namedview.h"
-#include "ui/widget/entity-entry.h"
 #include "verbs.h"
+
+#include "object/sp-namedview.h"
+
+#include "ui/widget/entity-entry.h"
 #include "xml/node-event-vector.h"
 
 

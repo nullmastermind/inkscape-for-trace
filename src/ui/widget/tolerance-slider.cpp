@@ -12,24 +12,26 @@
 #include <config.h>
 #endif
 
+#include "tolerance-slider.h"
+
+#include "registry.h"
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/scale.h>
 
-#include "xml/repr.h"
-#include "svg/stringstream.h"
-
 #include "inkscape.h"
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
 
-#include "sp-namedview.h"
+#include "object/sp-namedview.h"
 
-#include "registry.h"
-#include "tolerance-slider.h"
+#include "svg/stringstream.h"
+
+#include "xml/repr.h"
 
 namespace Inkscape {
 namespace UI {

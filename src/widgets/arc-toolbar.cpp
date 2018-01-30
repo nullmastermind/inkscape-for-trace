@@ -28,28 +28,32 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
-
 #include "arc-toolbar.h"
+
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "mod360.h"
 #include "selection.h"
-#include "sp-ellipse.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-ellipse.h"
+
 #include "ui/icon-names.h"
+#include "ui/tools/arc-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
-#include "ui/tools/arc-tool.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/widget-sizes.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::Widget::UnitTracker;

@@ -21,8 +21,10 @@
 
 #include "color.h"
 #include "fill-or-stroke.h"
-#include "sp-gradient-spread.h"
-#include "sp-gradient-units.h"
+
+#include "object/sp-gradient-spread.h"
+#include "object/sp-gradient-units.h"
+
 #include "ui/selected-color.h"
 
 class SPGradient;

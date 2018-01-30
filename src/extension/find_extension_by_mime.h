@@ -19,6 +19,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "input.h"
+
 namespace Inkscape {
 namespace Extension {
 static inline Inkscape::Extension::Extension *find_by_mime(const char *const mime)

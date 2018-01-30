@@ -19,25 +19,25 @@
 #include "stroke-marker-selector.h"
 
 #include <glibmm/i18n.h>
-
-
-#include "style.h"
-#include "ui/dialog-events.h"
+#include <gtkmm/icontheme.h>
 
 #include "desktop-style.h"
 #include "path-prefix.h"
-#include "io/sys.h"
-#include "sp-marker.h"
-#include "sp-defs.h"
-#include "sp-root.h"
-#include "ui/cache/svg_preview_cache.h"
+#include "stroke-style.h"
+
 #include "helper/stock-items.h"
 
-#include <gtkmm/icontheme.h>
-#include "ui/widget/spinbutton.h"
-#include "ui/util.h"
+#include "io/sys.h"
 
-#include "stroke-style.h"
+#include "object/sp-defs.h"
+#include "object/sp-marker.h"
+#include "object/sp-root.h"
+#include "style.h"
+
+#include "ui/cache/svg_preview_cache.h"
+#include "ui/dialog-events.h"
+#include "ui/util.h"
+#include "ui/widget/spinbutton.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
 

@@ -41,42 +41,44 @@
 #include "message-stack.h"
 #include "context-fns.h"
 #include "ui/tools/dropper-tool.h" // used in copy()
-#include "style.h"
 #include "extension/db.h" // extension database
 #include "extension/input.h"
 #include "extension/output.h"
 #include "selection-chemistry.h"
 #include <2geom/transforms.h>
-#include "box3d.h"
 #include "gradient-drag.h"
-#include "sp-marker.h"
-#include "sp-item-transform.h" // for sp_item_scale_rel, used in _pasteSize
-#include "sp-path.h"
-#include "sp-pattern.h"
-#include "sp-gradient-reference.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "sp-textpath.h"
-#include "sp-rect.h"
-#include "sp-object.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
-#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
-#include "svg/css-ostringstream.h" // used in copy
 #include "ui/tools/text-tool.h"
 #include "text-editing.h"
 #include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "util/units.h"
 #include "helper/png-write.h"
-#include "svg/svg-color.h"
-#include "sp-namedview.h"
-#include "persp3d.h"
-#include "object-set.h"
 #include "extension/find_extension_by_mime.h"
+
+#include "object/box3d.h"
+#include "object/persp3d.h"
+#include "object/sp-clippath.h"
+#include "object/sp-defs.h"
+#include "object/sp-gradient-reference.h"
+#include "object/sp-item-transform.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-marker.h"
+#include "object/sp-mask.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-use.h"
+#include "object/sp-textpath.h"
+#include "style.h"
+
+#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
+#include "svg/css-ostringstream.h" // used in copy
+#include "svg/svg-color.h"
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"

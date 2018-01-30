@@ -13,7 +13,7 @@
 
 #include "attributes.h"
 #include "cms-system.h"
-#include "color-profile.h"
+#include "object/color-profile.h"
 #include "doc-per-case-test.h"
 
 namespace {

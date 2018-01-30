@@ -11,10 +11,12 @@
 #include "display/curve.h"
 #include "inkscape.h"
 #include "selection.h"
-#include "sp-shape.h"
-#include "sp-text.h"
-#include "sp-defs.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-shape.h"
+
 #include "svg/svg.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

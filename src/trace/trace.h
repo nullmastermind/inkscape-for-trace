@@ -18,10 +18,10 @@
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
 #include <vector>
-#include <sp-shape.h>
 
 class SPImage;
-class  SPItem;
+class SPItem;
+class SPShape;
 
 namespace Inkscape {
 

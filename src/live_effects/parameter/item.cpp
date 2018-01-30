@@ -27,7 +27,7 @@
 // clipboard support
 #include "ui/clipboard.h"
 // required for linking to other paths
-#include "uri.h"
+#include "object/uri.h"
 
 #include "ui/icon-names.h"
 

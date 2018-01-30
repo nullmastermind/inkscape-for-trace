@@ -1,4 +1,7 @@
+
 #include "helper-observer.h"
+
+#include "object/sp-object.h"
 
 namespace Inkscape {
 namespace XML {

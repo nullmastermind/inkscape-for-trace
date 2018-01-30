@@ -34,10 +34,8 @@
 
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
-#include "sp-item.h"
-#include "style.h"
-#include "sp-root.h"
-#include "sp-shape.h"
+#include "object/sp-item.h"
+#include "object/sp-root.h"
 
 #include "io/sys.h"
 #include "document.h"

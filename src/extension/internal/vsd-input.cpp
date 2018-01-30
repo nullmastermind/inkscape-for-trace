@@ -54,6 +54,7 @@
 
 #include "svg-view-widget.h"
 
+#include "object/sp-root.h"
 
 #include "util/units.h"
 

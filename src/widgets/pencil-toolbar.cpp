@@ -32,26 +32,35 @@
 #include <glibmm/i18n.h>
 
 #include "pencil-toolbar.h"
+
 #include "desktop.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
+#include "selection.h"
+#include "toolbox.h"
+
 #include "ink-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
-#include "toolbox.h"
-#include "ui/tools-switch.h"
+
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-simplify.h"
+#include "live_effects/lpe-spiro.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+
+#include "display/curve.h"
+
+#include "object/sp-shape.h"
+
 #include "ui/icon-names.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/uxmanager.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-select-one-action.h"
 #include "widgets/spinbutton-events.h"
-#include <selection.h>
-#include "display/curve.h"
-#include "live_effects/lpe-simplify.h"
-#include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-spiro.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
+
 
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;

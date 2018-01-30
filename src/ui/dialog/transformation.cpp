@@ -16,21 +16,24 @@
 #endif
 
 #include <gtkmm/dialog.h>
+
 #include <2geom/transforms.h>
 
-#include "document.h"
-#include "document-undo.h"
-#include "desktop.h"
-
-#include "transformation.h"
 #include "align-and-distribute.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "inkscape.h"
-#include "selection-chemistry.h"
 #include "message-stack.h"
+#include "selection-chemistry.h"
+#include "transformation.h"
 #include "verbs.h"
-#include "sp-namedview.h"
-#include "sp-item-transform.h"
+
+#include "object/sp-item-transform.h"
+#include "object/sp-namedview.h"
+
 #include "ui/icon-names.h"
+
 
 
 namespace Inkscape {

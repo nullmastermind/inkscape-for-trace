@@ -11,6 +11,9 @@
 #ifndef SEEN_DIALOGS_UNCLUMP_H
 #define SEEN_DIALOGS_UNCLUMP_H
 
+#include <vector>
+
+class SPItem;
 
 void unclump(std::vector<SPItem*> &items);
 

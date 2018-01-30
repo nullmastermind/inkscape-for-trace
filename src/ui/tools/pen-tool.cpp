@@ -16,42 +16,47 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gdk/gdkkeysyms.h>
 #include <cstring>
 #include <string>
 
+#include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
+
+#include <2geom/curves.h>
+
+#include "context-fns.h"
+#include "desktop.h"
+#include "macros.h"
+#include "message-context.h"
+#include "message-stack.h"
+#include "selection-chemistry.h"
+#include "selection.h"
 #include "shortcuts.h"
 #include "verbs.h"
 
-#include "ui/tools/pen-tool.h"
-#include "sp-namedview.h"
-#include "desktop.h"
-
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/draw-anchor.h"
-#include "message-stack.h"
-#include "message-context.h"
-#include "display/sp-canvas.h"
-#include "display/curve.h"
-#include "pixmaps/cursor-pen.xpm"
 #include "display/canvas-bpath.h"
-#include "display/sp-ctrlline.h"
+#include "display/curve.h"
 #include "display/sodipodi-ctrl.h"
-#include <glibmm/i18n.h>
-#include "macros.h"
-#include "context-fns.h"
-#include "ui/tools-switch.h"
+#include "display/sp-canvas.h"
+#include "display/sp-ctrlline.h"
+
+#include "object/sp-path.h"
+
+#include "pixmaps/cursor-pen.xpm"
+
 #include "ui/control-manager.h"
+#include "ui/draw-anchor.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/pen-tool.h"
+
 // we include the necessary files for BSpline & Spiro
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
+
 #define INKSCAPE_LPE_SPIRO_C
 #include "live_effects/lpe-spiro.h"
 
-
-#include <2geom/curves.h>
 #include "helper/geom-nodetype.h"
 
 // For handling un-continuous paths:

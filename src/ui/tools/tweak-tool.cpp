@@ -11,67 +11,67 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <numeric>
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
-#include <numeric>
+#include <2geom/circle.h>
 
-#include "svg/svg.h"
-
-#include "macros.h"
-#include "document.h"
-#include "document-undo.h"
-#include "selection.h"
-#include "desktop.h"
-#include "desktop-events.h"
-
-#include "desktop-style.h"
-#include "message-context.h"
-#include "pixmaps/cursor-tweak-move.xpm"
-#include "pixmaps/cursor-tweak-move-in.xpm"
-#include "pixmaps/cursor-tweak-move-out.xpm"
-#include "pixmaps/cursor-tweak-move-jitter.xpm"
-#include "pixmaps/cursor-tweak-scale-up.xpm"
-#include "pixmaps/cursor-tweak-scale-down.xpm"
-#include "pixmaps/cursor-tweak-rotate-clockwise.xpm"
-#include "pixmaps/cursor-tweak-rotate-counterclockwise.xpm"
-#include "pixmaps/cursor-tweak-more.xpm"
-#include "pixmaps/cursor-tweak-less.xpm"
-#include "pixmaps/cursor-tweak-thin.xpm"
-#include "pixmaps/cursor-tweak-thicken.xpm"
-#include "pixmaps/cursor-tweak-attract.xpm"
-#include "pixmaps/cursor-tweak-repel.xpm"
-#include "pixmaps/cursor-tweak-push.xpm"
-#include "pixmaps/cursor-tweak-roughen.xpm"
-#include "pixmaps/cursor-tweak-color.xpm"
 #include "context-fns.h"
-#include "inkscape.h"
-#include "splivarot.h"
-#include "sp-item-group.h"
-#include "sp-shape.h"
-#include "sp-path.h"
-#include "path-chemistry.h"
-#include "sp-stop.h"
-#include "sp-gradient-reference.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-mesh-array.h"
+#include "desktop-events.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "filter-chemistry.h"
 #include "gradient-chemistry.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "display/sp-canvas.h"
+#include "inkscape.h"
+#include "macros.h"
+#include "message-context.h"
+#include "path-chemistry.h"
+#include "selection.h"
+#include "splivarot.h"
+#include "verbs.h"
+
 #include "display/canvas-arena.h"
 #include "display/curve.h"
+#include "display/sp-canvas.h"
+
 #include "livarot/Shape.h"
-#include <2geom/circle.h>
+
+#include "object/box3d.h"
+#include "object/filters/gaussian-blur.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-item-transform.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-path.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+#include "object/sp-text.h"
 #include "style.h"
-#include "box3d.h"
-#include "sp-item-transform.h"
-#include "filter-chemistry.h"
-#include "filters/gaussian-blur.h"
-#include "verbs.h"
+
+#include "pixmaps/cursor-tweak-attract.xpm"
+#include "pixmaps/cursor-tweak-color.xpm"
+#include "pixmaps/cursor-tweak-less.xpm"
+#include "pixmaps/cursor-tweak-more.xpm"
+#include "pixmaps/cursor-tweak-move-in.xpm"
+#include "pixmaps/cursor-tweak-move-jitter.xpm"
+#include "pixmaps/cursor-tweak-move-out.xpm"
+#include "pixmaps/cursor-tweak-move.xpm"
+#include "pixmaps/cursor-tweak-push.xpm"
+#include "pixmaps/cursor-tweak-repel.xpm"
+#include "pixmaps/cursor-tweak-rotate-clockwise.xpm"
+#include "pixmaps/cursor-tweak-rotate-counterclockwise.xpm"
+#include "pixmaps/cursor-tweak-roughen.xpm"
+#include "pixmaps/cursor-tweak-scale-down.xpm"
+#include "pixmaps/cursor-tweak-scale-up.xpm"
+#include "pixmaps/cursor-tweak-thicken.xpm"
+#include "pixmaps/cursor-tweak-thin.xpm"
+
+#include "svg/svg.h"
 
 #include "ui/tools/tweak-tool.h"
 

@@ -32,7 +32,6 @@
 #include <boost/optional/optional.hpp>
 
 #include "color.h"
-#include "style.h"
 #include "cairo-templates.h"
 
 /**

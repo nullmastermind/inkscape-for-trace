@@ -20,8 +20,6 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "xml/event-fns.h"
-#include "sp-defs.h"
-#include "sp-root.h"
 #include "document.h"
 
 #include "composite-undo-stack-observer.h"
@@ -29,6 +27,8 @@
 
 // XXX only for testing!
 #include "console-output-undo-observer.h"
+
+class SPObject;
 
 namespace Inkscape {
 namespace XML {

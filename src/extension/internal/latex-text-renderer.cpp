@@ -27,16 +27,17 @@
 #include "libnrtype/Layout-TNG.h"
 #include <2geom/transforms.h>
 #include <2geom/rect.h>
-
 #include <glibmm/i18n.h>
-#include "sp-item.h"
-#include "sp-item-group.h"
+
+#include "object/sp-item.h"
+#include "object/sp-item-group.h"
+#include "object/sp-root.h"
+#include "object/sp-use.h"
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-rect.h"
 #include "style.h"
-#include "sp-root.h"
-#include "sp-use.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "sp-rect.h"
+
 #include "text-editing.h"
 
 #include "util/units.h"

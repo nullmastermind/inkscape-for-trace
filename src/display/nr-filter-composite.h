@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "filters/composite.h"
+#include "object/filters/composite.h"
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-units.h"

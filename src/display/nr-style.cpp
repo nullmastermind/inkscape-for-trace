@@ -11,7 +11,7 @@
 
 #include "display/nr-style.h"
 #include "style.h"
-#include "sp-paint-server.h"
+#include "object/sp-paint-server.h"
 #include "display/canvas-bpath.h" // contains SPStrokeJoinType, SPStrokeCapType etc. (WTF!)
 #include "display/drawing-context.h"
 #include "display/drawing-pattern.h"

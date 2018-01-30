@@ -9,7 +9,7 @@
 
 #include "live_effects/effect.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
+
 
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-geometric.h>

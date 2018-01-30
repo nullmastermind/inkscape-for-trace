@@ -22,13 +22,14 @@
 #endif
 
 #include "inkscape.h"
-#include "xml/repr.h"
 #include "preferences.h"
-
-#include "sp-shape.h"
-#include "sp-path.h"
 #include "desktop.h"
 #include "document.h"
+
+#include "object/sp-shape.h"
+#include "object/sp-path.h"
+
+#include "xml/repr.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 

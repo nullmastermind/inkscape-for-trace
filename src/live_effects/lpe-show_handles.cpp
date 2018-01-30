@@ -13,8 +13,10 @@
 #include "helper/geom.h"
 #include "desktop-style.h"
 #include "display/curve.h"
-#include "style.h"
 #include "svg/svg.h"
+
+#include "object/sp-shape.h"
+#include "style.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

@@ -21,15 +21,18 @@
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "sp-defs.h"
 #include "helper/geom.h"
 #include "2geom/intersection-graph.h"
 #include "2geom/path-intersection.h"
 #include "2geom/affine.h"
 #include "helper/geom.h"
-#include "sp-lpe-item.h"
 #include "path-chemistry.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-path.h"
+#include "object/sp-lpe-item.h"
 #include "style.h"
+
 #include "xml/sp-css-attr.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:

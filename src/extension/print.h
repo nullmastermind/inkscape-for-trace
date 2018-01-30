@@ -13,7 +13,8 @@
 
 #include "extension.h"
 
-#include "sp-item.h"
+class SPItem;
+class SPStyle;
 
 namespace Inkscape {
 

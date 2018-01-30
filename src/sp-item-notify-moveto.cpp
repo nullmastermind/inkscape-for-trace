@@ -2,11 +2,14 @@
  * Implementation of sp_item_notify_moveto().
  */
 
-#include <sp-item.h>
 #include <2geom/transforms.h>
-#include <sp-guide.h>
-#include <sp-item-rm-unsatisfied-cns.h>
-#include <sp-item-notify-moveto.h>
+
+#include "sp-item-notify-moveto.h"
+
+#include "object/sp-guide.h"
+#include "object/sp-item.h"
+#include "object/sp-item-rm-unsatisfied-cns.h"
+
 using std::vector;
 
 #define return_if_fail(test) if (!(test)) { printf("WARNING: assertion '%s' failed", #test); return; }

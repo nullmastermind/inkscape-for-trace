@@ -12,25 +12,30 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "svg/svg.h"
-#include <2geom/path-intersection.h>
-#include <2geom/line.h>
 #include <2geom/circle.h>
+#include <2geom/line.h>
+#include <2geom/path-intersection.h>
 #include <2geom/path-sink.h>
+
+#include "desktop.h"
 #include "document.h"
-#include "sp-namedview.h"
-#include "sp-image.h"
-#include "sp-item-group.h"
-#include "sp-use.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
 #include "text-editing.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
-#include "desktop.h"
-#include "sp-root.h"
+
+#include "object/sp-clippath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-item-group.h"
+#include "object/sp-mask.h"
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
+
+#include "svg/svg.h"
 
 Inkscape::ObjectSnapper::ObjectSnapper(SnapManager *sm, Geom::Coord const d)
     : Snapper(sm, d)

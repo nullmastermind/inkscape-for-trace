@@ -12,11 +12,16 @@
  */
 
 #include <utility>
+
 #include <2geom/transforms.h>
-#include "sp-item.h"
-#include "sp-item-transform.h"
-#include "libvpsc/rectangle.h"
+
 #include "removeoverlap.h"
+
+#include "libvpsc/rectangle.h"
+
+#include "object/sp-item.h"
+#include "object/sp-item-transform.h"
+
 
 using vpsc::Rectangle;
 

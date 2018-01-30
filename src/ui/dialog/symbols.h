@@ -18,11 +18,11 @@
 #include "display/drawing.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "sp-symbol.h"
-#include "sp-use.h"
 #include <vector>
 
 class SPObject;
+class SPSymbol;
+class SPUse;
 
 namespace Inkscape {
 namespace UI {

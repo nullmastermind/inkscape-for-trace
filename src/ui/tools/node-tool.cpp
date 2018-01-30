@@ -10,41 +10,49 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "ui/tool/curve-drag-point.h"
 #include <glib/gi18n.h>
-#include "desktop.h"
+#include <gdk/gdkkeysyms.h>
 
-#include "display/sp-canvas-group.h"
+
+
+#include "desktop.h"
+#include "document.h"
+#include "message-context.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "snap.h"
+
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+#include "display/sp-canvas-group.h"
 #include "display/sp-canvas.h"
-#include "document.h"
+
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
-#include "message-context.h"
-#include "selection.h"
-#include "ui/shape-editor.h" // temporary!
-#include "snap.h"
-#include "sp-namedview.h"
-#include "sp-clippath.h"
-#include "sp-item-group.h"
-#include "sp-mask.h"
-#include "sp-text.h"
+
+#include "object/sp-clippath.h"
+#include "object/sp-item-group.h"
+#include "object/sp-mask.h"
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+#include "object/sp-text.h"
+
+#include "pixmaps/cursor-node-d.xpm"
+#include "pixmaps/cursor-node.xpm"
+
 #include "ui/control-manager.h"
-#include "ui/tools/node-tool.h"
-#include "ui/tools-switch.h"
-#include "ui/tools/tool-base.h"
+#include "ui/shape-editor.h" // temporary!
 #include "ui/tool/control-point-selection.h"
+#include "ui/tool/curve-drag-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/selector.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/tool-base.h"
 
-#include "pixmaps/cursor-node.xpm"
-#include "pixmaps/cursor-node-d.xpm"
-#include "selection-chemistry.h"
-
-#include <gdk/gdkkeysyms.h>
 
 /** @struct NodeTool
  *

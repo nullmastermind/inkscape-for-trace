@@ -12,18 +12,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-attribute-widget.h"
-
 #include <glibmm/i18n.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
 
-#include "sp-object.h"
-#include "xml/repr.h"
+#include "sp-attribute-widget.h"
+
 #include "macros.h"
 #include "document.h"
 #include "document-undo.h"
 #include "verbs.h"
+
+#include "object/sp-object.h"
+
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 

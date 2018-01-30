@@ -21,49 +21,46 @@
 # include "config.h"
 #endif
 
-#include "widgets/dash-selector.h"
-#include <gtkmm/radiobutton.h>
-#include <gtkmm/grid.h>
-
 #include <glibmm/i18n.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/radiobutton.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
-#include "ui/dialog-events.h"
-#include "display/canvas-bpath.h" // for SP_STROKE_LINEJOIN_*
-#include "display/drawing.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
+#include "fill-n-stroke-factory.h"
+#include "fill-style.h" // to get sp_fill_style_widget_set_desktop
 #include "gradient-chemistry.h"
-#include "helper/stock-items.h"
+
 #include "inkscape.h"
 #include "io/sys.h"
-#include "sp-marker.h"
-#include "preferences.h"
 #include "path-prefix.h"
+#include "preferences.h"
 #include "selection.h"
-#include "sp-linear-gradient.h"
-#include "sp-namedview.h"
-#include "sp-pattern.h"
-#include "sp-radial-gradient.h"
-#include "sp-rect.h"
-#include "sp-text.h"
+#include "verbs.h"
+
+#include "display/canvas-bpath.h" // for SP_STROKE_LINEJOIN_*
+#include "display/drawing.h"
+
+#include "helper/stock-items.h"
+
 #include "style.h"
+
 #include "svg/css-ostringstream.h"
+
 #include "ui/cache/svg_preview_cache.h"
+#include "ui/dialog-events.h"
 #include "ui/icon-names.h"
+#include "ui/widget/spinbutton.h"
+
+#include "widgets/dash-selector.h"
 #include "widgets/paint-selector.h"
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
-#include "ui/widget/spinbutton.h"
+#include "widgets/stroke-marker-selector.h"
+
 #include "xml/repr.h"
-
-#include "stroke-style.h"
-#include "stroke-marker-selector.h"
-#include "fill-style.h" // to get sp_fill_style_widget_set_desktop
-#include "fill-n-stroke-factory.h"
-
-#include "verbs.h"
 
 namespace Gtk {
 class Widget;

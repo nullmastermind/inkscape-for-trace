@@ -6,7 +6,7 @@
 
 #include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/transformedpoint.h"
-#include "sp-lpe-item.h"
+
 #include "knotholder.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"

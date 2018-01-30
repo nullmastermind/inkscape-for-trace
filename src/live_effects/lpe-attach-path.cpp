@@ -7,8 +7,6 @@
 #include <math.h>
 #include "live_effects/lpe-attach-path.h"
 #include "display/curve.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "2geom/path-sink.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

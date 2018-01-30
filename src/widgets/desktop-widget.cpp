@@ -24,50 +24,57 @@
 # include "config.h"
 #endif
 
+#include <gtkmm/cssprovider.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/paned.h>
+
 #include <2geom/rect.h>
 
-#include "ui/dialog/dialog-manager.h"
-#include "ui/tools/box3d-tool.h"
+#include "attributes.h"
 #include "cms-system.h"
 #include "conn-avoid-ref.h"
-#include "desktop.h"
 #include "desktop-events.h"
-
 #include "desktop-widget.h"
-#include "display/sp-canvas.h"
-#include "display/canvas-arena.h"
+#include "desktop.h"
 #include "ege-color-prof-tracker.h"
-#include "widgets/ege-select-one-action.h"
-#include <extension/db.h>
 #include "file.h"
+#include "inkscape-version.h"
+#include "verbs.h"
+
+#include "display/canvas-arena.h"
+#include "display/sp-canvas.h"
+
+#include "extension/db.h"
+
 #include "helper/action.h"
-#include "util/units.h"
-#include "ui/widget/unit-tracker.h"
-#include "ui/interface.h"
-#include "sp-image.h"
-#include "sp-namedview.h"
+
+#include "object/sp-image.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/swatches.h"
 #include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/tools/box3d-tool.h"
+#include "ui/uxmanager.h"
 #include "ui/widget/dock.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
-#include "ui/uxmanager.h"
+#include "ui/widget/unit-tracker.h"
+
 #include "util/ege-appear-time-tracker.h"
-#include "sp-root.h"
-#include "attributes.h"
+#include "util/units.h"
+
 // We're in the "widgets" directory, so no need to explicitly prefix these:
 #include "button.h"
+#include "ege-select-one-action.h"
 #include "gimp/ruler.h"
 #include "spinbutton-events.h"
 #include "spw-utilities.h"
 #include "toolbox.h"
 #include "widget-sizes.h"
-#include "verbs.h"
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/messagedialog.h>
-#include "inkscape-version.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;

@@ -14,12 +14,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "xml/repr.h"
-#include "rdf.h"
-#include "sp-item-group.h"
 #include "inkscape.h"
-#include "sp-root.h"
 #include "preferences.h"
+#include "rdf.h"
+
+#include "object/sp-item-group.h"
+#include "object/sp-root.h"
+
+#include "xml/repr.h"
 
 /*
    Example RDF XML from various places...

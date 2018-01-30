@@ -14,19 +14,19 @@
 #include "live_effects/lpe-bool.h"
 
 #include "display/curve.h"
-#include "sp-item.h"
+
 #include "2geom/path.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "2geom/bezier-curve.h"
 #include "2geom/path-sink.h"
 #include "2geom/affine.h"
-#include "splivarot.h"
+#include "2geom/svg-path-parser.h"
+
 #include "helper/geom.h"
+
+#include "splivarot.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/path-description.h"
-#include "2geom/svg-path-parser.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

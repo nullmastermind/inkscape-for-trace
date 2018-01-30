@@ -17,24 +17,20 @@
 #include <glib.h>
 #include <glibmm/miscutils.h>
 
-#include "sp-root.h"
 #include "display/curve.h"
 #include "extension/internal/metafile-inout.h" // picks up PNG
 #include "extension/print.h"
 #include "path-prefix.h"
-#include "sp-gradient.h"
-#include "sp-image.h"
-#include "sp-linear-gradient.h"
-#include "sp-pattern.h"
-#include "sp-radial-gradient.h"
-#include "style.h"
 #include "document.h"
 #include "util/units.h"
 #include "ui/shape-editor.h"
-#include "sp-namedview.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "preferences.h"
+
+#include "object/sp-root.h"
+#include "object/sp-namedview.h"
+#include "svg/stringstream.h"
 
 namespace Inkscape {
 namespace Extension {

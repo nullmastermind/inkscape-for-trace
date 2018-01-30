@@ -6,7 +6,8 @@
 
 #include "node-observer.h"
 #include "node.h"
-#include "sp-object.h"
+
+class SPObject;
 
 namespace Inkscape {
 namespace XML {

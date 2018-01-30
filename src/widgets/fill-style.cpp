@@ -25,27 +25,28 @@
 #include <gtkmm/box.h>
 #include <glibmm/i18n.h>
 
-#include "verbs.h"
-
-#include "desktop.h"
-#include "selection.h"
-
 #include "desktop-style.h"
-#include "display/sp-canvas.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
+#include "fill-n-stroke-factory.h"
+#include "fill-style.h"
 #include "gradient-chemistry.h"
 #include "inkscape.h"
-#include "sp-linear-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-pattern.h"
-#include "sp-radial-gradient.h"
-#include "sp-text.h"
-#include "style.h"
-#include "widgets/paint-selector.h"
+#include "selection.h"
+#include "verbs.h"
 
-#include "fill-style.h"
-#include "fill-n-stroke-factory.h"
+#include "object/sp-defs.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-text.h"
+#include "style.h"
+
+#include "display/sp-canvas.h"
+
+#include "widgets/paint-selector.h"
 
 
 // These can be deleted once we sort out the libart dependence.

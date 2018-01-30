@@ -20,10 +20,13 @@
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "style.h"
 #include "helper/geom.h"
 #include "xml/sp-css-attr.h"
 #include "path-chemistry.h"
+
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

@@ -15,15 +15,15 @@
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
 
-#include "uri.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "display/curve.h"
 #include "live_effects/effect.h"
 
 #include "inkscape.h"
 #include "desktop.h"
 #include "selection.h"
+
+#include "object/uri.h"
+
 #include "ui/icon-names.h"
 
 namespace Inkscape {

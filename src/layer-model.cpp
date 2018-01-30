@@ -25,14 +25,16 @@
 #include <config.h>
 #endif
 
+#include "layer-model.h"
+
 #include "document.h"
 #include "layer-fns.h"
-#include "layer-model.h"
 #include "object-hierarchy.h"
-#include "sp-defs.h"
-#include "sp-item.h"
-#include "sp-item-group.h"
-#include "sp-root.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-item.h"
+#include "object/sp-item-group.h"
+#include "object/sp-root.h"
 
 // Callbacks
 static void _layer_activated(SPObject *layer, Inkscape::LayerModel *layer_model);

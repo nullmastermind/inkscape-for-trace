@@ -9,8 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
  
-#include "sp-object.h"
+
 #include "effect-enum.h"
+
+#include "object/sp-object.h"
 
 namespace Inkscape {
     namespace XML {

@@ -35,38 +35,43 @@
 // Note that gtkmm headers must be included before gtk+ C headers
 // in all files.  The same applies for glibmm/glib etc.
 // If this is not done, then errors will be generate relating to Glib::Threads being undefined
+
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
 
 #include "desktop.h"
 
-#include "display/curve.h"
-#include "display/sp-canvas.h"
 #include "document.h"
-#include "ui/tools/freehand-base.h"
-#include "extension/effect.h"
 #include "file.h"
 #include "gradient-drag.h"
-#include "helper/action.h"
 #include "help.h"
 #include "inkscape.h"
-#include "ui/interface.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
-#include "ui/tools/select-tool.h"
 #include "selection-chemistry.h"
 #include "seltrans.h"
-#include "ui/shape-editor.h"
 #include "shortcuts.h"
-#include "sp-defs.h"
-#include "sp-flowtext.h"
-#include "sp-guide.h"
 #include "splivarot.h"
-#include "sp-namedview.h"
 #include "text-chemistry.h"
-#include "ui/tools-switch.h"
+
+#include "display/curve.h"
+#include "display/sp-canvas.h"
+
+#include "extension/effect.h"
+
+#include "helper/action.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-guide.h"
+#include "object/sp-namedview.h"
+
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
@@ -79,15 +84,17 @@
 #include "ui/dialog/layers.h"
 #include "ui/dialog/new-from-template.h"
 #include "ui/dialog/object-properties.h"
+#include "ui/dialog/save-template-dialog.h"
+#include "ui/dialog/spellcheck.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"
-#include "ui/dialog/spellcheck.h"
 #include "ui/icon-names.h"
+#include "ui/interface.h"
+#include "ui/shape-editor.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/freehand-base.h"
 #include "ui/tools/node-tool.h"
-#include "ui/dialog/save-template-dialog.h"
-#include "live_effects/effect.h"
-#include "live_effects/lpe-powerclip.h"
-#include "live_effects/lpe-powermask.h"
+#include "ui/tools/select-tool.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;

@@ -23,8 +23,8 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include <vector>
-#include "sp-gradient-spread.h"
-#include "sp-gradient-units.h"
+#include "object/sp-gradient-spread.h"
+#include "object/sp-gradient-units.h"
 
 class SPDocument;
 class SPGradient;

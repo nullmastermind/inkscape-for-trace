@@ -10,15 +10,21 @@
 #include "live_effects/parameter/enum.h"
 #include "helper/geom-pathstroke.h"
 
-#include "style.h"
-#include "svg/svg-color.h"
 #include "desktop-style.h"
-#include "svg/css-ostringstream.h"
+
 #include "display/curve.h"
+
+#include "object/sp-item-group.h"
+#include "object/sp-shape.h"
+#include "style.h"
+
+#include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
 
 #include <2geom/elliptical-arc.h>
 
 #include "lpe-jointype.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

@@ -14,7 +14,8 @@
 #include "gdkpixbuf-input.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
-#include "sp-image.h"
+#include "object/sp-image.h"
+#include "object/sp-root.h"
 #include "util/units.h"
 #include <set>
 

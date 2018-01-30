@@ -15,6 +15,8 @@
 namespace Gtk {
 class RadioButton;
 class Scale;
+class VBox;
+class HBox;
 }
 
 namespace Inkscape {

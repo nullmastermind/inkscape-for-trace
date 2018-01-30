@@ -15,46 +15,55 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
 #include <map>
 #include <string>
 
-#include "ui/dialog/guides.h"
 #include "desktop-events.h"
 
 #include <gdkmm/display.h>
+#include <gtk/gtk.h>
 #if GTK_CHECK_VERSION(3, 20, 0)
 # include <gdkmm/seat.h>
 #else
 # include <gdkmm/devicemanager.h>
 #endif
 
-#include <2geom/line.h>
-#include <2geom/angle.h>
 #include <glibmm/i18n.h>
 
-#include "desktop.h"
+#include <2geom/line.h>
+#include <2geom/angle.h>
 
-#include "ui/dialog-events.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "message-context.h"
+#include "preferences.h"
+#include "snap.h"
+#include "sp-cursor.h"
+#include "verbs.h"
+
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
 #include "display/guideline.h"
 #include "display/snap-indicator.h"
-#include "document.h"
-#include "document-undo.h"
-#include "ui/tools/tool-base.h"
-#include "helper/action.h"
-#include "message-context.h"
-#include "preferences.h"
-#include "snap.h"
 #include "display/sp-canvas.h"
-#include "sp-guide.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "ui/tools-switch.h"
-#include "verbs.h"
-#include "widgets/desktop-widget.h"
-#include "sp-cursor.h"
+
+#include "helper/action.h"
+
 #include "pixmaps/cursor-select.xpm"
+
+#include "object/sp-guide.h"
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog-events.h"
+#include "ui/tools-switch.h"
+#include "ui/dialog/guides.h"
+#include "ui/tools/tool-base.h"
+
+#include "widgets/desktop-widget.h"
+
 #include "xml/repr.h"
 
 using Inkscape::DocumentUndo;

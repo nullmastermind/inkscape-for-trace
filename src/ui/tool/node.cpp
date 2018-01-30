@@ -9,23 +9,26 @@
 #include <iostream>
 #include <stdexcept>
 #include <boost/utility.hpp>
-#include "multi-path-manipulator.h"
+
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
+
 #include <2geom/bezier-utils.h>
+
+#include "desktop.h"
+#include "multi-path-manipulator.h"
+#include "snap.h"
+
 #include "display/sp-ctrlline.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
-#include "desktop.h"
 
-#include "snap.h"
-#include "sp-namedview.h"
 #include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
-#include <gdk/gdkkeysyms.h>
 
 namespace {
 

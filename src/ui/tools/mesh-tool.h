@@ -20,7 +20,8 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
-#include "sp-mesh-array.h"
+
+#include "object/sp-mesh-array.h"
 
 #define SP_MESH_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::MeshTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_MESH_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::MeshTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)

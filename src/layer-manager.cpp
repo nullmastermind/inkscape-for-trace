@@ -9,18 +9,24 @@
  */
 
 #include <set>
+
 #include <sigc++/functors/mem_fun.h>
 #include <sigc++/adaptors/hide.h>
-#include "inkgc/gc-managed.h"
-#include "gc-finalized.h"
-#include "document.h"
-#include "desktop.h"
 
+
+#include "desktop.h"
+#include "document.h"
+#include "gc-finalized.h"
 #include "layer-manager.h"
 #include "selection.h"
-#include "sp-item-group.h"
-#include "xml/node-observer.h"
+
+#include "inkgc/gc-managed.h"
+
+#include "object/sp-item-group.h"
+
 #include "util/format.h"
+
+#include "xml/node-observer.h"
 
 namespace Inkscape {
 

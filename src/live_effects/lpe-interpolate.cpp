@@ -13,8 +13,10 @@
 
 #include <2geom/sbasis-to-bezier.h>
 
-#include "sp-path.h"
 #include "display/curve.h"
+
+#include "object/sp-path.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

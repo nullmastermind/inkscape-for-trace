@@ -39,33 +39,42 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
 #include <string>
 #include <cstring>
+
 #include <2geom/transforms.h>
 
-#include "widgets/desktop-widget.h"
 #include "desktop.h"
 #include "dir-util.h"
-#include "display/drawing.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "file.h"
 #include "id-clash.h"
-#include "inkscape.h"
 #include "inkscape-version.h"
-#include "libavoid/router.h"
-#include "persp3d.h"
+#include "inkscape.h"
 #include "profile-manager.h"
 #include "rdf.h"
-#include "sp-factory.h"
-#include "sp-namedview.h"
-#include "sp-symbol.h"
-#include "xml/rebase-hrefs.h"
 
+#include "display/drawing.h"
+
+#include "libavoid/router.h"
+
+#include "libcroco/cr-parser.h"
 #include "libcroco/cr-sel-eng.h"
 #include "libcroco/cr-selector.h"
-#include "libcroco/cr-parser.h"
-#include "src/xml/croco-node-iface.h"
+
+#include "object/persp3d.h"
+#include "object/sp-factory.h"
+#include "object/sp-defs.h"
+#include "object/sp-root.h"
+#include "object/sp-namedview.h"
+#include "object/sp-symbol.h"
+
+#include "widgets/desktop-widget.h"
+
+#include "xml/croco-node-iface.h"
+#include "xml/rebase-hrefs.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;

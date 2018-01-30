@@ -15,11 +15,13 @@
 #include "ui/widget/scalar.h"
 #include "live_effects/lpe-curvestitch.h"
 
-#include "sp-path.h"
+#include "object/sp-path.h"
+
 #include "svg/svg.h"
 #include "xml/repr.h"
 
 #include <2geom/bezier-to-sbasis.h>
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

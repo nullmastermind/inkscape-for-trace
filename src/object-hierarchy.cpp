@@ -11,8 +11,9 @@
 
 #include <cstdio>
 
-#include "sp-object.h"
 #include "object-hierarchy.h"
+
+#include "object/sp-object.h"
 
 namespace Inkscape {
 

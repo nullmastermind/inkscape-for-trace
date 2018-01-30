@@ -8,12 +8,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <map>
+
 #include "gc-finalized.h"
 #include "document-subset.h"
 #include "document.h"
-#include "sp-object.h"
 
-#include <map>
+#include "object/sp-object.h"
+
 
 namespace Inkscape {
 

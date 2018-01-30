@@ -40,6 +40,12 @@
 
 #include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
+#include <gtk/gtk.h>
+#include <glibmm/i18n.h>
+
+#include "ui/dialog-events.h"
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/frame.h"
 
 #include "extension/system.h"
 #include "extension/input.h"
@@ -51,11 +57,8 @@
 #include "inkscape.h"
 #include "util/units.h"
 
-#include "ui/dialog-events.h"
-#include <gtk/gtk.h>
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/frame.h"
-#include <glibmm/i18n.h>
+#include "object/sp-root.h"
+
 
 #include <gdkmm/general.h>
 

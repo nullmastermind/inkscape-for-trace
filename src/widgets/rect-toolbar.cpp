@@ -28,25 +28,30 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 
 #include "rect-toolbar.h"
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "widgets/ink-action.h"
 #include "inkscape.h"
-#include "sp-namedview.h"
-#include "sp-rect.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-rect.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/unit-tracker.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
+#include "widgets/ink-action.h"
 #include "widgets/widget-sizes.h"
+
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::Widget::UnitTracker;

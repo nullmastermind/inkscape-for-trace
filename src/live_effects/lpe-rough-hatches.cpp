@@ -15,8 +15,8 @@
 #include "ui/widget/scalar.h"
 #include "live_effects/lpe-rough-hatches.h"
 
-#include "sp-item.h"
-#include "sp-path.h"
+#include "object/sp-item.h"
+
 #include "xml/repr.h"
 
 #include <2geom/sbasis-math.h>

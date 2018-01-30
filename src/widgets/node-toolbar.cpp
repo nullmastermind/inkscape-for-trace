@@ -28,24 +28,28 @@
 #include <config.h>
 #endif
 
-#include "ui/tool/multi-path-manipulator.h"
 #include <glibmm/i18n.h>
-#include "node-toolbar.h"
+
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
 #include "ink-toggle-action.h"
 #include "ink-tool-menu-action.h"
 #include "inkscape.h"
+#include "node-toolbar.h"
 #include "selection-chemistry.h"
-#include "sp-namedview.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "object/sp-namedview.h"
+
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
+#include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/unit-tracker.h"
-#include "verbs.h"
+
+#include "widgets/ege-adjustment-action.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;

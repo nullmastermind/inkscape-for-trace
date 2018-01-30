@@ -25,16 +25,18 @@
 #include "selection.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
-#include "sp-font-face.h"
 #include "desktop.h"
 
 #include <sstream>
 #include "display/nr-svgfonts.h"
 #include "verbs.h"
-#include "sp-glyph.h"
-#include "sp-missing-glyph.h"
-#include "sp-font.h"
-#include "sp-glyph-kerning.h"
+
+#include "object/sp-font-face.h"
+#include "object/sp-glyph.h"
+#include "object/sp-missing-glyph.h"
+#include "object/sp-font.h"
+#include "object/sp-glyph-kerning.h"
+#include "object/sp-defs.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>

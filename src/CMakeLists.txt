@@ -2,188 +2,13 @@
 # Define the main source
 # -----------------------------------------------------------------------------
 
-set(sp_SRC
+set(inkscape_SRC
   attribute-rel-css.cpp
   attribute-rel-svg.cpp
   attribute-rel-util.cpp
   attribute-sort-util.cpp
-  sp-anchor.cpp
-  sp-clippath.cpp
-  sp-conn-end-pair.cpp
-  sp-conn-end.cpp
-  sp-cursor.cpp
-  sp-defs.cpp
-  sp-desc.cpp
-  sp-dimensions.cpp
-  sp-ellipse.cpp
-  sp-factory.cpp
-  sp-filter-primitive.cpp
-  sp-filter-reference.cpp
-  sp-filter.cpp
-  sp-flowdiv.cpp
-  sp-flowregion.cpp
-  sp-flowtext.cpp
-  sp-font-face.cpp
-  sp-font.cpp
-  sp-glyph-kerning.cpp
-  sp-glyph.cpp
-  sp-gradient-reference.cpp
-  sp-gradient.cpp
-  sp-guide.cpp
-  sp-hatch-path.cpp
-  sp-hatch.cpp
-  sp-image.cpp
-  sp-item-group.cpp
-  sp-item-notify-moveto.cpp
-  sp-item-rm-unsatisfied-cns.cpp
-  sp-item-transform.cpp
-  sp-item-update-cns.cpp
-  sp-item.cpp
-  sp-line.cpp
-  sp-linear-gradient.cpp
-  sp-lpe-item.cpp
-  sp-marker.cpp
-  sp-mask.cpp
-  sp-mesh-array.cpp
-  sp-mesh-gradient.cpp
-  sp-mesh-patch.cpp
-  sp-mesh-row.cpp
-  sp-metadata.cpp
-  sp-missing-glyph.cpp
-  sp-namedview.cpp
-  sp-object-group.cpp
-  sp-object.cpp
-  sp-offset.cpp
-  sp-paint-server.cpp
-  sp-path.cpp
-  sp-pattern.cpp
-  sp-polygon.cpp
-  sp-polyline.cpp
-  sp-radial-gradient.cpp
-  sp-rect.cpp
-  sp-root.cpp
-  sp-script.cpp
-  sp-shape.cpp
-  sp-solid-color.cpp
-  sp-spiral.cpp
-  sp-star.cpp
-  sp-stop.cpp
-  sp-string.cpp
-  sp-style-elem.cpp
-  sp-switch.cpp
-  sp-symbol.cpp
-  sp-tag-use-reference.cpp
-  sp-tag-use.cpp
-  sp-tag.cpp
-  sp-text.cpp
-  sp-title.cpp
-  sp-tref-reference.cpp
-  sp-tref.cpp
-  sp-tspan.cpp
-  sp-use-reference.cpp
-  sp-use.cpp
-  splivarot.cpp
-  viewbox.cpp
-
-  # -------
-  # Headers
-  attribute-rel-css.h
-  attribute-rel-svg.h
-  attribute-rel-util.h
-  attribute-sort-util.h
-  sp-anchor.h
-  sp-clippath.h
-  sp-conn-end-pair.h
-  sp-conn-end.h
-  sp-cursor.h
-  sp-defs.h
-  sp-desc.h
-  sp-dimensions.h
-  sp-ellipse.h
-  sp-factory.h
-  sp-filter-primitive.h
-  sp-filter-reference.h
-  sp-filter-units.h
-  sp-filter.h
-  sp-flowdiv.h
-  sp-flowregion.h
-  sp-flowtext.h
-  sp-font-face.h
-  sp-font.h
-  sp-glyph-kerning.h
-  sp-glyph.h
-  sp-gradient-reference.h
-  sp-gradient-spread.h
-  sp-gradient-units.h
-  sp-gradient-vector.h
-  sp-gradient.h
-  sp-guide-attachment.h
-  sp-guide-constraint.h
-  sp-guide.h
-  sp-hatch-path.h
-  sp-hatch.h
-  sp-image.h
-  sp-item-group.h
-  sp-item-notify-moveto.h
-  sp-item-rm-unsatisfied-cns.h
-  sp-item-transform.h
-  sp-item-update-cns.h
-  sp-item.h
-  sp-line.h
-  sp-linear-gradient.h
-  sp-lpe-item.h
-  sp-marker-loc.h
-  sp-marker.h
-  sp-mask.h
-  sp-mesh-array.h
-  sp-mesh-gradient.h
-  sp-mesh-patch.h
-  sp-mesh-row.h
-  sp-metadata.h
-  sp-missing-glyph.h
-  sp-namedview.h
-  sp-object-group.h
-  sp-object.h
-  sp-offset.h
-  sp-paint-server-reference.h
-  sp-paint-server.h
-  sp-path.h
-  sp-pattern.h
-  sp-polygon.h
-  sp-polyline.h
-  sp-radial-gradient.h
-  sp-rect.h
-  sp-root.h
-  sp-script.h
-  sp-shape.h
-  sp-solid-color.h
-  sp-spiral.h
-  sp-star.h
-  sp-stop.h
-  sp-string.h
-  sp-style-elem.h
-  sp-switch.h
-  sp-symbol.h
-  sp-tag.h
-  sp-tag-use.h
-  sp-tag-use-reference.h
-  sp-text.h
-  sp-textpath.h
-  sp-title.h
-  sp-tref-reference.h
-  sp-tref.h
-  sp-tspan.h
-  sp-use-reference.h
-  sp-use.h
-  viewbox.h
-)
-
-set(inkscape_SRC
   attributes.cpp
   axis-manip.cpp
-  box3d-side.cpp
-  box3d.cpp
-  color-profile.cpp
   color.cpp
   composite-undo-stack-observer.cpp
   conditions.cpp
@@ -230,12 +55,9 @@ set(inkscape_SRC
   message-stack.cpp
   mod360.cpp
   object-hierarchy.cpp
-  object-set.cpp
   object-snapper.cpp
   path-chemistry.cpp
   path-prefix.cpp
-  persp3d-reference.cpp
-  persp3d.cpp
   perspective-line.cpp
   preferences.cpp
   prefix.cpp
@@ -261,6 +83,9 @@ set(inkscape_SRC
   snapped-line.cpp
   snapped-point.cpp
   snapper.cpp
+  splivarot.cpp
+  sp-cursor.cpp
+  sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
   svg-view-slideshow.cpp
@@ -271,8 +96,6 @@ set(inkscape_SRC
   transf_mat_3x4.cpp
   unclump.cpp
   unicoderange.cpp
-  uri-references.cpp
-  uri.cpp
   vanishing-point.cpp
   verbs.cpp
   version.cpp
@@ -282,15 +105,16 @@ set(inkscape_SRC
   MultiPrinter.h
   PylogFormatter.h
   TRPIFormatter.h
+  attribute-rel-css.h
+  attribute-rel-svg.h
+  attribute-rel-util.h
+  attribute-sort-util.h
   attributes.h
   axis-manip.h
   bad-uri-exception.h
-  box3d-side.h
-  box3d.h
   cms-color-types.h
   cms-system.h
   color-profile-cms-fns.h
-  color-profile.h
   color-rgba.h
   color.h
   colorspace.h
@@ -350,12 +174,9 @@ set(inkscape_SRC
   mod360.h
   number-opt-number.h
   object-hierarchy.h
-  object-set.h
   object-snapper.h
   path-chemistry.h
   path-prefix.h
-  persp3d-reference.h
-  persp3d.h
   perspective-line.h
   preferences-skeleton.h
   preferences.h
@@ -385,6 +206,10 @@ set(inkscape_SRC
   snapped-line.h
   snapped-point.h
   snapper.h
+  sp-cursor.h
+  sp-guide-attachment.h
+  sp-guide-constraint.h
+  sp-item-notify-moveto.h
   splivarot.h
   streq.h
   strneq.h
@@ -403,8 +228,6 @@ set(inkscape_SRC
   unclump.h
   undo-stack-observer.h
   unicoderange.h
-  uri-references.h
-  uri.h
   vanishing-point.h
   verbs.h
   version.h
@@ -440,10 +263,10 @@ list(APPEND inkscape_SRC
 add_subdirectory(debug)
 add_subdirectory(display)
 add_subdirectory(extension)
-add_subdirectory(filters)
 add_subdirectory(helper)
 add_subdirectory(io)
 add_subdirectory(live_effects)
+add_subdirectory(object)
 add_subdirectory(svg)
 add_subdirectory(trace)
 add_subdirectory(ui)

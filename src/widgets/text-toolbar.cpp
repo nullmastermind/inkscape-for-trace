@@ -30,35 +30,41 @@
 #include <config.h>
 #endif
 
-#include "libnrtype/font-lister.h"
 #include <glibmm/i18n.h>
+
 #include "text-toolbar.h"
 
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ege-adjustment-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
-#include "widgets/ink-comboboxentry-action.h"
-#include "widgets/style-utils.h"
 #include "inkscape.h"
 #include "selection-chemistry.h"
-#include "sp-flowtext.h"
-#include "sp-root.h"
-#include "sp-text.h"
-#include "sp-tspan.h"
-#include "sp-flowdiv.h"
-#include "style.h"
-#include "svg/css-ostringstream.h"
 #include "text-editing.h"
 #include "toolbox.h"
+#include "verbs.h"
+
+#include "libnrtype/font-lister.h"
+
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-root.h"
+#include "object/sp-text.h"
+#include "object/sp-tspan.h"
+#include "style.h"
+
+#include "svg/css-ostringstream.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
-#include "ui/widget/unit-tracker.h"
 #include "ui/widget/ink-select-one-action.h"
-#include "verbs.h"
+#include "ui/widget/unit-tracker.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ink-comboboxentry-action.h"
+#include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;

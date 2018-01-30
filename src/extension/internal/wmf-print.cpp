@@ -38,11 +38,8 @@
 #include <2geom/curves.h>
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-#include "sp-item.h"
 
-#include "style.h"
 #include "inkscape-version.h"
-#include "sp-root.h"
 
 #include "util/units.h"
 
@@ -50,17 +47,19 @@
 #include "extension/print.h"
 #include "document.h"
 #include "path-prefix.h"
-#include "sp-pattern.h"
-#include "sp-image.h"
-#include "sp-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-linear-gradient.h"
-#include "display/cairo-utils.h"
+
+#include "object/sp-pattern.h"
+#include "object/sp-image.h"
+#include "object/sp-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-root.h"
+#include "object/sp-item.h"
 
 #include "splivarot.h"             // pieces for union on shapes
 #include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
-#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
+#include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
 
 #include "wmf-print.h"
 

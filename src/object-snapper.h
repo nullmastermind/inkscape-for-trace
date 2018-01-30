@@ -11,13 +11,13 @@
  */
 
 #include "snapper.h"
-#include "sp-path.h"
 #include "splivarot.h"
 #include "snap-candidate.h"
 
 class SPNamedView;
-class  SPItem;
-class  SPObject;
+class SPItem;
+class SPObject;
+class SPPath;
 
 namespace Inkscape
 {

@@ -6,12 +6,13 @@
  */
 
 #include "ui/tools/freehand-base.h"
-#include "sp-shape.h"
+
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
 #include <2geom/pathvector.h>
 
+class SPShape;
 
 #define DDC_MIN_PRESSURE      0.0
 #define DDC_MAX_PRESSURE      1.0

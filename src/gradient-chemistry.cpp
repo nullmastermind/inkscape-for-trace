@@ -18,37 +18,39 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "widgets/gradient-vector.h"
+#include <glibmm/i18n.h>
 
 #include <2geom/transforms.h>
 #include <2geom/bezier-curve.h>
 #include <2geom/crossing.h>
 #include <2geom/line.h>
 
-#include "style.h"
+#include "desktop-style.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "desktop.h"
-#include "desktop-style.h"
-
-#include "ui/tools/tool-base.h"
+#include "gradient-chemistry.h"
+#include "gradient-drag.h"
 #include "selection.h"
 #include "verbs.h"
-#include <glibmm/i18n.h>
 
-#include "sp-gradient-reference.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-stop.h"
-#include "gradient-drag.h"
-#include "gradient-chemistry.h"
+#include "object/sp-defs.h"
+#include "object/sp-gradient-reference.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+#include "object/sp-text.h"
+#include "object/sp-tspan.h"
+#include "style.h"
 
-#include "sp-text.h"
-#include "sp-tspan.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
+
+#include "ui/tools/tool-base.h"
+
+#include "widgets/gradient-vector.h"
 
 #define noSP_GR_VERBOSE
 

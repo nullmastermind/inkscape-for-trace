@@ -14,30 +14,35 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gdk/gdkkeysyms.h>
 #include <cstring>
 #include <string>
 
-#include "macros.h"
-#include "display/sp-canvas.h"
-#include "sp-rect.h"
-#include "document.h"
-#include "document-undo.h"
-#include "sp-namedview.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-
-#include "desktop.h"
-#include "desktop-style.h"
-#include "message-context.h"
-#include "pixmaps/cursor-rect.xpm"
-#include "ui/tools/rect-tool.h"
+#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include "xml/node-event-vector.h"
+
 #include "context-fns.h"
-#include "ui/shape-editor.h"
+#include "desktop-style.h"
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "macros.h"
+#include "message-context.h"
+#include "selection-chemistry.h"
+#include "selection.h"
 #include "verbs.h"
+
 #include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
+
+#include "object/sp-rect.h"
+#include "object/sp-namedview.h"
+
+#include "pixmaps/cursor-rect.xpm"
+
+#include "ui/shape-editor.h"
+#include "ui/tools/rect-tool.h"
+
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 

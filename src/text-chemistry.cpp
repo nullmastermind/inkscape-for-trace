@@ -19,23 +19,25 @@
 #include <string>
 #include <glibmm/i18n.h>
 
-#include "xml/repr.h"
-#include "sp-rect.h"
-#include "sp-textpath.h"
-#include "inkscape.h"
+
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
 #include "message-stack.h"
+#include "text-chemistry.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowregion.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-rect.h"
+#include "object/sp-textpath.h"
+#include "object/sp-tspan.h"
 #include "style.h"
 
-#include "text-editing.h"
-#include "text-chemistry.h"
-#include "sp-flowtext.h"
-#include "sp-flowregion.h"
-#include "sp-flowdiv.h"
-#include "sp-tspan.h"
-#include "verbs.h"
+#include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 

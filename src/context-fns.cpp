@@ -1,12 +1,16 @@
 #include <glibmm/i18n.h>
 
 #include "context-fns.h"
+
 #include "desktop.h"
-#include "display/snap-indicator.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "snap.h"
-#include "sp-namedview.h"
+
+#include "display/snap-indicator.h"
+
+#include "object/sp-namedview.h"
+
 #include "ui/tools/tool-base.h"
 
 static const double midpt_1_goldenratio = (1 + goldenratio) / 2;

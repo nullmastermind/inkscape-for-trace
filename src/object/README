@@ -1,0 +1,118 @@
+
+This directory contains classes that are derived from SPObject as well as closely related code.
+
+The object tree implements an XML-to-display primitive mapping, and
+provides an object hierarchy that can be modified using the
+GUI. Changes in the XML tree are automatically propagated to the
+object tree via observers, but not the other way around — a function
+called updateRepr() must be explicitly called. Relevant nodes of the
+object tree contains fully cascaded CSS style information. The object
+tree also includes clones of objects that are referenced by the <use>
+element in the XML tree (this is needed as clones may have different
+styling due to inheritance).
+
+See: http://wiki.inkscape.org/wiki/index.php/Object_tree
+
+Object class inheritance:
+
+sp-object.h:
+  color-profile.h:    class ColorProfile
+  persp3d.h:          class Persp3D
+  sp-defs.h:          class SPDefs
+  sp-desc.h:          class SPDesc
+  sp-filter.h:        class SPFilter
+  sp-flowdiv.h:       class SPFlowline
+  sp-flowdiv.h:       class SPFlowregionbreak
+  sp-font-face.h:     class SPFontFace
+  sp-font.h:          class SPFont
+  sp-glyph.h:         class SPGlyph
+  sp-glyph-kerning.h: class SPGlyphKerning
+    sp-glyph-kerning.h: class SPHkern
+    sp-glyph-kerning.h: class SPVkern
+  sp-guide.h:         class SPGuide
+  sp-hatch-path.h:    class SPHatchPath
+  sp-item.h:          class SPItem
+    sp-flowdiv.h:       class SPFlowdiv
+    sp-flowdiv.h:       class SPFlowtspan
+    sp-flowdiv.h:       class SPFlowpara
+    sp-flowregion.h:    class SPFlowregion
+    sp-flowregion.h:    class SPFlowregionExclude
+    sp-flowtext.h:      class SPFlowtext
+    sp-image.h:         class SPImage
+    sp-lpe-item.h:      class SPLPEItem
+      sp-item-group.h:    class SPGroup
+        box3d.h:            class SPBox3D
+        sp-anchor.h:        class SPAnchor
+        sp-marker.h:        class SPMarker
+        sp-root.h:          class SPRoot
+        sp-switch.h:        class SPSwitch
+        sp-symbol.h:        class SPSymbol
+      sp-shape.h:         class SPShape
+        sp-ellipse.h:       class SPGenericEllipse
+        sp-line.h:          class SPLine
+        sp-offset.h:        class SPOffset
+        sp-path.h:          class SPPath
+        sp-polygon.h:       class SPPolygon
+          sp-star.h:          class SPStar
+        sp-polyline.h:      class SPPolyLine
+          box3d-side.h:       class Box3DSide
+        sp-rect.h:          class SPRect
+        sp-spiral.h:        class SPSpiral
+    sp-text.h:          class SPText
+    sp-textpath.h:      class SPTextPath
+    sp-tref.h:          class SPTRef
+    sp-tspan.h:         class SPTSpan
+    sp-use.h:           class SPUse
+  sp-mesh-patch.h:    class SPMeshpatch
+  sp-mesh-row.h:      class SPMeshrow
+  sp-metadata.h:      class SPMetadata
+  sp-missing-glyph.h: class SPMissingGlyph
+  sp-object-group.h:  class SPObjectGroup
+    sp-clippath.h:      class SPClipPath
+    sp-mask.h:          class SPMask
+    sp-namedview.h:     class SPNamedView
+  sp-paint-server.h:  class SPPaintServer
+    sp-gradient.h:      class SPGradient
+      sp-linear-gradient.h: class SPLinearGradient
+      sp-mesh-gradient.h:   class SPMeshGradient
+      sp-radial-gradient.h: class SPRadialGradient
+    sp-hatch.h:         class SPHatch
+    sp-pattern.h:       class SPPattern
+    sp-solid-color.h:   class SPSolidColor
+  sp-script.h:        class SPScript
+  sp-stop.h:          class SPStop
+  sp-string.h:        class SPString
+  sp-style-elem.h:    class SPStyleElem
+  sp-tag.h:           class SPTag
+  sp-tag-use.h:       class SPTagUse
+  sp-title.h:         class SPTitle
+
+Other related files:
+
+  object-set.h:
+  persp3d-reference.h
+  sp-conn-end-pair.h
+  sp-conn-end.h
+  sp-dimensions.h
+  sp-factory.h
+  sp-filter-reference.h
+  sp-filter-units.h
+  sp-gradient-reference.h
+  sp-gradient-spread.h
+  sp-gradient-units.h
+  sp-gradient-vector.h
+  sp-item-rm-unsatisfied-cns.h
+  sp-item-transform.h
+  sp-item-update-cns.h
+  sp-marker-loc.h
+  sp-mesh-array.h
+  sp-paint-server-reference.h
+  sp-tag-use-reference.h
+  sp-tref-reference.h
+  sp-use-reference.h
+  style-enums.h
+  style-internal.h
+  style.h
+  uri.h
+  uri-references.h
+  viewbox.h

@@ -26,7 +26,8 @@
 #include "message-context.h"
 #include "seltrans-handles.h"
 #include "selcue.h"
-#include "sp-item.h"
+
+#include "object/sp-item.h"
 
 
 class  SPKnot;

@@ -18,15 +18,18 @@
 #include "vanishing-point.h"
 
 #include "desktop.h"
-#include "display/sp-canvas-item.h"
-#include "display/sp-ctrlline.h"
 #include "document-undo.h"
 #include "perspective-line.h"
 #include "snap.h"
-#include "sp-namedview.h"
+#include "verbs.h"
+
+#include "display/sp-canvas-item.h"
+#include "display/sp-ctrlline.h"
+
+#include "object/sp-namedview.h"
+
 #include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
-#include "verbs.h"
 
 using Inkscape::CTLINE_PRIMARY;
 using Inkscape::CTLINE_SECONDARY;

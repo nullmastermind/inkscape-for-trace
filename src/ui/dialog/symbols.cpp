@@ -39,10 +39,11 @@
 
 #include "document.h"
 #include "inkscape.h"
-#include "sp-root.h"
-#include "sp-use.h"
-#include "sp-defs.h"
-#include "sp-symbol.h"
+
+#include "object/sp-root.h"
+#include "object/sp-use.h"
+#include "object/sp-defs.h"
+#include "object/sp-symbol.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>

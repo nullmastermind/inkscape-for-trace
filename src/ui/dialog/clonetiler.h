@@ -14,12 +14,19 @@
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/color-picker.h"
-#include "sp-root.h"
 
 namespace Gtk {
     class CheckButton;
     class ComboBox;
     class ToggleButton;
+}
+
+class SPItem;
+class SPObject;
+
+namespace Geom {
+    class Rect;
+    class Affine;
 }
 
 namespace Inkscape {

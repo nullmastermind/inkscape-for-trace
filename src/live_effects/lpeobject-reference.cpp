@@ -12,7 +12,7 @@
 
 #include "bad-uri-exception.h"
 #include "live_effects/lpeobject.h"
-#include "uri.h"
+#include "object/uri.h"
 
 namespace Inkscape {
 

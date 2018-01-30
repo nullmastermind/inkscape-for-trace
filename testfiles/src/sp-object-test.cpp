@@ -9,8 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <gtest/gtest.h>
-#include <src/sp-object.h>
-#include <src/sp-item.h>
+#include <src/object/sp-object.h>
+#include <src/object/sp-item.h>
 #include <src/xml/node.h>
 #include <src/xml/text-node.h>
 #include <doc-per-case-test.h>

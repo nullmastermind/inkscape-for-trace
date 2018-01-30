@@ -18,25 +18,29 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
+#include <gtk/gtk.h>
+
 #include <2geom/sbasis-geometric.h>
 
-#include <glibmm/i18n.h>
-#include "pixmaps/cursor-crosshairs.xpm"
-#include <gtk/gtk.h>
 #include "desktop.h"
+#include "document.h"
 #include "message-context.h"
-#include "ui/shape-editor.h"
+#include "message-stack.h"
 #include "selection.h"
 
-#include "document.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-text.h"
-#include "message-stack.h"
-#include "sp-path.h"
+
+#include "object/sp-path.h"
+
+#include "pixmaps/cursor-crosshairs.xpm"
+
 #include "util/units.h"
 
 #include "ui/tools/lpe-tool.h"
+#include "ui/shape-editor.h"
 
 using Inkscape::Util::unit_table;
 using Inkscape::UI::Tools::PenTool;

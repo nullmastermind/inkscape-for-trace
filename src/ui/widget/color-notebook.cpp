@@ -24,14 +24,16 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/radiobutton.h>
 
-#include "preferences.h"
-#include "widgets/spw-utilities.h"
-#include "svg/svg-icc-color.h"
-#include "inkscape.h"
-#include "document.h"
-#include "profile-manager.h"
-#include "color-profile.h"
 #include "cms-system.h"
+#include "document.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "profile-manager.h"
+
+#include "object/color-profile.h"
+
+#include "svg/svg-icc-color.h"
+
 #include "ui/dialog-events.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
@@ -40,6 +42,8 @@
 #include "ui/widget/color-notebook.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-wheel-selector.h"
+
+#include "widgets/spw-utilities.h"
 
 using Inkscape::CMSSystem;
 

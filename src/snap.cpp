@@ -16,19 +16,25 @@
  */
 
 #include <utility>
+
 #include <2geom/transforms.h>
 
-#include "sp-namedview.h"
+#include "snap.h"
+
+#include "desktop.h"
+#include "inkscape.h"
 #include "pure-transform.h"
 
 #include "display/canvas-grid.h"
 #include "display/snap-indicator.h"
 
-#include "inkscape.h"
-#include "desktop.h"
-#include "sp-guide.h"
-#include "ui/tools/tool-base.h"
 #include "helper/mathfns.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-guide.h"
+
+#include "ui/tools/tool-base.h"
+
 using std::vector;
 using Inkscape::Util::round_to_upper_multiple_plus;
 using Inkscape::Util::round_to_lower_multiple_plus;

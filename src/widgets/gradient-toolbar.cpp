@@ -16,13 +16,12 @@
 #include <config.h>
 #endif
 
-#include "ui/widget/color-preview.h"
 #include <glibmm/i18n.h>
+
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ege-adjustment-action.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "gradient-toolbar.h"
@@ -31,17 +30,22 @@
 #include "ink-toggle-action.h"
 #include "macros.h"
 #include "selection.h"
-#include "sp-defs.h"
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-stop.h"
-#include "style.h"
 #include "toolbox.h"
-#include "ui/icon-names.h"
-#include "ui/util.h"
-#include "ui/tools/gradient-tool.h"
-#include "ui/widget/ink-select-one-action.h"
 #include "verbs.h"
+
+#include "object/sp-defs.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+#include "style.h"
+
+#include "ui/icon-names.h"
+#include "ui/tools/gradient-tool.h"
+#include "ui/util.h"
+#include "ui/widget/color-preview.h"
+#include "ui/widget/ink-select-one-action.h"
+
+#include "widgets/ege-adjustment-action.h"
 #include "widgets/gradient-image.h"
 #include "widgets/gradient-vector.h"
 

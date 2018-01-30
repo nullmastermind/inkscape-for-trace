@@ -17,19 +17,21 @@
 #include <config.h>
 #endif
 
+#include "entity-entry.h"
+
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 
-#include "inkscape.h"
-#include "rdf.h"
-#include "ui/widget/registry.h"
-#include "sp-root.h"
-#include "document-undo.h"
 #include "document-private.h"
+#include "document-undo.h"
+#include "inkscape.h"
 #include "preferences.h"
+#include "rdf.h"
 #include "verbs.h"
 
-#include "entity-entry.h"
+#include "object/sp-root.h"
+
+#include "ui/widget/registry.h"
 
 namespace Inkscape {
 namespace UI {

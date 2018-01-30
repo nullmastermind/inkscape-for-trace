@@ -17,36 +17,44 @@
  */
 
 #include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
+
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/bezier-utils.h>
 
 #include "ui/tools/pencil-tool.h"
+
+
 #include "desktop.h"
 #include "inkscape.h"
 
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/draw-anchor.h"
-#include "message-stack.h"
-#include "message-context.h"
-#include "sp-path.h"
-#include "snap.h"
-#include "pixmaps/cursor-pencil.xpm"
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/bezier-utils.h>
-#include "display/canvas-bpath.h"
-#include <glibmm/i18n.h>
 #include "context-fns.h"
-#include "sp-namedview.h"
-#include "xml/node.h"
-#include "xml/sp-css-attr.h"
-#include "svg/svg.h"
-#include "display/curve.h"
 #include "desktop-style.h"
-#include "style.h"
-#include "display/sp-canvas.h"
+#include "message-context.h"
+#include "message-stack.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "snap.h"
+
+#include "display/canvas-bpath.h"
 #include "display/curve.h"
+#include "display/sp-canvas.h"
+
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
+
+#include "object/sp-path.h"
+#include "style.h"
+
+#include "pixmaps/cursor-pencil.xpm"
+
+#include "svg/svg.h"
+
+#include "ui/draw-anchor.h"
 #include "ui/tool/event-utils.h"
+
+#include "xml/node.h"
+#include "xml/sp-css-attr.h"
 
 namespace Inkscape {
 namespace UI {

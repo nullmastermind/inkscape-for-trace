@@ -21,32 +21,34 @@
 #include "config.h"
 #endif
 
-#include "align-and-distribute.h"
-#include <2geom/transforms.h>
-#include "ui/widget/spinbutton.h"
+#include <glibmm/i18n.h>
 
-#include "unclump.h"
+#include <2geom/transforms.h>
+
+#include "align-and-distribute.h"
+
+#include "desktop.h"
+#include "document-undo.h"
 #include "document.h"
 #include "graphlayout.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "removeoverlap.h"
-#include "sp-flowtext.h"
-#include "sp-item-transform.h"
-#include "sp-text.h"
 #include "text-editing.h"
-#include "ui/tools-switch.h"
-#include "ui/icon-names.h"
-#include "ui/tools/node-tool.h"
-#include "ui/tool/multi-path-manipulator.h"
-#include "ui/tool/control-point-selection.h"
+#include "unclump.h"
 #include "verbs.h"
-#include "sp-root.h"
-#include "document-undo.h"
-#include "desktop.h"
 
-#include <glibmm/i18n.h>
+#include "object/sp-flowtext.h"
+#include "object/sp-item-transform.h"
+#include "object/sp-root.h"
+#include "object/sp-text.h"
 
+#include "ui/icon-names.h"
+#include "ui/tool/control-point-selection.h"
+#include "ui/tool/multi-path-manipulator.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/node-tool.h"
+#include "ui/widget/spinbutton.h"
 
 namespace Inkscape {
 namespace UI {

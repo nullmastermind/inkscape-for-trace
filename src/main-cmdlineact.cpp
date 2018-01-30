@@ -7,18 +7,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information
  */
 
-#include <ui/view/view.h>
-#include <desktop.h>
-#include <helper/action.h>
-#include <selection.h>
-#include <verbs.h>
-#include <inkscape.h>
-#include <document.h>
-#include <file.h>
-
-#include <glibmm/i18n.h>
+#include <list>
 
 #include "main-cmdlineact.h"
+
+#include "desktop.h"
+#include "document.h"
+#include "file.h"
+#include "inkscape.h"
+#include "selection.h"
+#include "verbs.h"
+
+#include "helper/action.h"
+
+#include "ui/view/view.h"
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 

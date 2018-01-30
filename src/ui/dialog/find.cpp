@@ -17,43 +17,44 @@
 #include "find.h"
 
 #include <gtkmm/entry.h>
+#include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
+#include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "selection-chemistry.h"
+#include "text-editing.h"
 #include "verbs.h"
 
-#include "message-stack.h"
 #include "helper/window.h"
-#include "inkscape.h"
-#include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
 
+#include "object/sp-defs.h"
+#include "object/sp-ellipse.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-image.h"
+#include "object/sp-line.h"
+#include "object/sp-offset.h"
+#include "object/sp-path.h"
+#include "object/sp-polyline.h"
+#include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-spiral.h"
+#include "object/sp-star.h"
+#include "object/sp-text.h"
+#include "object/sp-tref.h"
+#include "object/sp-tspan.h"
+#include "object/sp-use.h"
 
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "sp-flowdiv.h"
-#include "text-editing.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "selection-chemistry.h"
-#include "sp-defs.h"
-#include "sp-rect.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-spiral.h"
-#include "sp-path.h"
-#include "sp-line.h"
-#include "sp-polyline.h"
-#include "sp-item-group.h"
-#include "sp-image.h"
-#include "sp-offset.h"
-#include "sp-root.h"
-#include "xml/node-iterators.h"
-#include "xml/attribute-record.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/regex.h>
+#include "xml/attribute-record.h"
+#include "xml/node-iterators.h"
+
 
 namespace Inkscape {
 namespace UI {

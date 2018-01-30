@@ -6,7 +6,7 @@
 #include "ui/widget/scalar.h"
 #include "display/curve.h"
 #include "helper/geom-curves.h"
-#include "sp-path.h"
+#include "object/sp-path.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
 #include "preferences.h"

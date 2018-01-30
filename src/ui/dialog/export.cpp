@@ -30,35 +30,36 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
-#include "ui/widget/unit-menu.h"
-#include "helper/window.h"
-#include "inkscape.h"
-#include "document.h"
-#include "document-undo.h"
-
-#include "file.h"
-#include "sp-namedview.h"
-#include "selection-chemistry.h"
-
-#include "ui/dialog-events.h"
-#include "preferences.h"
-#include "verbs.h"
-#include "ui/interface.h"
-#include "sp-root.h"
-
-#include "extension/output.h"
-#include "extension/db.h"
-
-#include "io/sys.h"
-#include "io/resource.h"
-
-#include "helper/png-write.h"
-
 #include <gdl/gdl-dock-item.h>
+
+#include "document-undo.h"
+#include "document.h"
+#include "file.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "selection-chemistry.h"
+#include "verbs.h"
 
 // required to set status message after export
 #include "desktop.h"
 #include "message-stack.h"
+
+#include "helper/png-write.h"
+#include "helper/window.h"
+
+#include "io/resource.h"
+#include "io/sys.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+
+#include "ui/dialog-events.h"
+#include "ui/interface.h"
+#include "ui/widget/unit-menu.h"
+
+#include "extension/db.h"
+#include "extension/output.h"
+
 
 #ifdef WIN32
 #include <windows.h>

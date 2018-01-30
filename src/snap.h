@@ -18,6 +18,7 @@
 #define SEEN_SNAP_H
 
 #include <vector>
+
 #include "guide-snapper.h"
 #include "object-snapper.h"
 #include "snap-preferences.h"

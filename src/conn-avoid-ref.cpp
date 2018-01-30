@@ -15,25 +15,27 @@
 #include <string>
 #include <iostream>
 
-#include "sp-item.h"
-#include "display/curve.h"
-#include "2geom/line.h"
 #include "2geom/convex-hull.h"
-#include "svg/stringstream.h"
-#include "conn-avoid-ref.h"
-#include "sp-conn-end.h"
-#include "sp-path.h"
-#include "libavoid/router.h"
-#include "libavoid/shape.h"
-#include "xml/node.h"
-#include "document.h"
-#include "desktop.h"
+#include "2geom/line.h"
 
+#include "conn-avoid-ref.h"
+#include "desktop.h"
 #include "document-undo.h"
-#include "sp-namedview.h"
-#include "sp-item-group.h"
+#include "document.h"
 #include "inkscape.h"
 #include "verbs.h"
+
+#include "display/curve.h"
+
+#include "libavoid/router.h"
+#include "libavoid/shape.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-shape.h"
+
+#include "svg/stringstream.h"
+
+#include "xml/node.h"
 
 using Inkscape::DocumentUndo;
 

@@ -13,7 +13,9 @@
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
-#include "sp-namedview.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
 
 namespace Inkscape {
 namespace UI {

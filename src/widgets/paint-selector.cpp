@@ -25,30 +25,36 @@
 #include <string>
 #include <vector>
 
-#include "widgets/swatch-selector.h"
-#include "sp-pattern.h"
 #include <glibmm/i18n.h>
-#include "widgets/widget-sizes.h"
-#include "xml/repr.h"
 
-#include "sp-linear-gradient.h"
-#include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-stop.h"
-/* fixme: Move it from dialogs to here */
+#include "desktop-style.h"
+#include "document-private.h"
 #include "gradient-selector.h"
-#include <inkscape.h>
-#include <document-private.h>
-#include <desktop-style.h>
-#include <style.h>
-#include "svg/css-ostringstream.h"
+#include "inkscape.h"
+#include "paint-selector.h"
 #include "path-prefix.h"
-#include "io/sys.h"
+
 #include "helper/stock-items.h"
+
+#include "style.h"
+
+#include "io/sys.h"
+
+#include "object/sp-linear-gradient.h"
+#include "object/sp-mesh-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+
+#include "svg/css-ostringstream.h"
+
 #include "ui/icon-names.h"
 #include "ui/widget/color-notebook.h"
 
-#include "paint-selector.h"
+#include "widgets/swatch-selector.h"
+#include "widgets/widget-sizes.h"
+
+#include "xml/repr.h"
 
 #ifdef SP_PS_VERBOSE
 #include "svg/svg-icc-color.h"

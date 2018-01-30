@@ -13,11 +13,13 @@
 
 #include <algorithm>
 #include <map>
+
 #include <2geom/transforms.h>
-#include "sp-item.h"
+
 #include "unclump.h"
 
-#include <glib.h>
+#include "object/sp-item.h"
+
 
 // Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
 // cache the centers, widths, and heights of items

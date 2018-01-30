@@ -9,14 +9,15 @@
  * Released under the GNU GPL, read the file 'COPYING' for more information.
  */
 
-#include "ui/dialog/prototype.h"
-#include "verbs.h"
+#include "prototype.h"
+
 #include "desktop.h"
 #include "document.h"
 #include "selection.h"
+#include "verbs.h"
 
 // Only for use in demonstration widget.
-#include "sp-root.h"
+#include "object/sp-root.h"
 
 namespace Inkscape {
 namespace UI {

@@ -1,15 +1,21 @@
+
 #include "swatch-selector.h"
+
 #include <glibmm/i18n.h>
 
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
-#include "sp-stop.h"
+#include "verbs.h"
+
+#include "object/sp-stop.h"
+
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
-#include "verbs.h"
+
 #include "ui/widget/color-notebook.h"
+
 #include "xml/node.h"
 
 namespace Inkscape

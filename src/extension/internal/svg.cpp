@@ -21,14 +21,13 @@
 #include <vector>
 #include <giomm/file.h>
 
-#include "sp-object.h"
+
 #include "svg.h"
 #include "file.h"
 #include "extension/system.h"
 #include "extension/output.h"
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
-#include "sp-root.h"
 #include "document.h"
 
 namespace Inkscape {

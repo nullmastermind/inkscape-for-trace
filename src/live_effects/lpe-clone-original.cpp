@@ -12,8 +12,12 @@
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "sp-clippath.h"
-#include "sp-mask.h"
+
+#include "object/sp-clippath.h"
+#include "object/sp-mask.h"
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+
 #include "xml/sp-css-attr.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:

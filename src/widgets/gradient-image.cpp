@@ -11,17 +11,19 @@
  */
 
 #include <sigc++/sigc++.h>
+
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
+
 #include <cairomm/surface.h>
 
-#include "display/cairo-utils.h"
 #include "gradient-image.h"
 #include "macros.h"
-#include "sp-gradient.h"
-#include "sp-stop.h"
 
-#define VBLOCK 16
+#include "display/cairo-utils.h"
+
+#include "object/sp-gradient.h"
+#include "object/sp-stop.h"
 
 static void sp_gradient_image_size_request (GtkWidget *widget, GtkRequisition *requisition);
 

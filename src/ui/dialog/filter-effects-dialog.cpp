@@ -19,17 +19,19 @@
 #include "config.h"
 #endif
 
-#include "dialog-manager.h"
 #include <gtkmm/imagemenuitem.h>
 
 #include <gdkmm/display.h>
+#include <gdkmm/general.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/colorbutton.h>
+#include <gtkmm/eventbox.h>
 #if GTK_CHECK_VERSION(3, 20, 0)
 # include <gdkmm/seat.h>
 #else
 # include <gdkmm/devicemanager.h>
 #endif
 
-#include "ui/widget/spinbutton.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
@@ -37,36 +39,35 @@
 #include <glibmm/convert.h>
 
 #include "desktop.h"
-
-#include "document.h"
+#include "dialog-manager.h"
 #include "document-undo.h"
+#include "document.h"
 #include "filter-chemistry.h"
 #include "filter-effects-dialog.h"
 #include "filter-enums.h"
 #include "inkscape.h"
-#include "filters/blend.h"
-#include "filters/colormatrix.h"
-#include "filters/componenttransfer.h"
-#include "filters/componenttransfer-funcnode.h"
-#include "filters/convolvematrix.h"
-#include "filters/distantlight.h"
-#include "filters/merge.h"
-#include "filters/mergenode.h"
-#include "filters/pointlight.h"
-#include "filters/spotlight.h"
-
-#include "style.h"
-#include "svg/svg-color.h"
-#include "ui/dialog/filedialog.h"
+#include "selection-chemistry.h"
 #include "verbs.h"
 
-#include "io/sys.h"
-#include "selection-chemistry.h"
+#include "object/filters/blend.h"
+#include "object/filters/colormatrix.h"
+#include "object/filters/componenttransfer.h"
+#include "object/filters/componenttransfer-funcnode.h"
+#include "object/filters/convolvematrix.h"
+#include "object/filters/distantlight.h"
+#include "object/filters/merge.h"
+#include "object/filters/mergenode.h"
+#include "object/filters/pointlight.h"
+#include "object/filters/spotlight.h"
+#include "style.h"
 
-#include <gtkmm/colorbutton.h>
-#include <gdkmm/general.h>
-#include <gtkmm/checkbutton.h>
-#include <gtkmm/eventbox.h>
+#include "svg/svg-color.h"
+
+#include "ui/dialog/filedialog.h"
+#include "ui/widget/spinbutton.h"
+
+#include "io/sys.h"
+
 
 using namespace Inkscape::Filters;
 

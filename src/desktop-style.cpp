@@ -14,33 +14,39 @@
 
 #include <string>
 #include <cstring>
+
 #include <glibmm.h>
 
-#include "desktop.h"
+#include "desktop-style.h"
+
 #include "color-rgba.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "selection.h"
+#include "desktop.h"
 #include "inkscape.h"
+#include "selection.h"
+
+#include "object/box3d-side.h"
+#include "object/sp-flowdiv.h"
+#include "object/sp-flowregion.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-path.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-textpath.h"
+#include "object/sp-tref.h"
+#include "object/sp-tspan.h"
+#include "object/sp-use.h"
 #include "style.h"
-#include "filters/blend.h"
-#include "filters/gaussian-blur.h"
-#include "sp-flowtext.h"
-#include "sp-flowregion.h"
-#include "sp-flowdiv.h"
-#include "sp-linear-gradient.h"
-#include "sp-pattern.h"
-#include "sp-radial-gradient.h"
-#include "sp-textpath.h"
-#include "sp-tref.h"
-#include "sp-tspan.h"
-#include "xml/sp-css-attr.h"
-#include "sp-path.h"
+#include "object/filters/blend.h"
+#include "object/filters/gaussian-blur.h"
+
+#include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+
 #include "ui/tools/tool-base.h"
 
-#include "desktop-style.h"
-#include "box3d-side.h"
+#include "xml/sp-css-attr.h"
 
 namespace {
 
