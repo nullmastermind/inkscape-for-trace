@@ -42,7 +42,6 @@
 
 #include "widgets/ink-action.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "widgets/toolbox.h"
 
 using Inkscape::UI::Widget::UnitTracker;
