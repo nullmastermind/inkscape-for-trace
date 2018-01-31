@@ -56,9 +56,9 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/ink-select-one-action.h"
 
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "widgets/spinbutton-events.h"
 
 
@@ -79,13 +79,10 @@ static Glib::ustring const freehand_tool_name(GObject *dataKludge)
              : "/tools/freehand/pencil" );
 }
 
-static void freehand_mode_changed(EgeSelectOneAction* act, GObject* tbl)
+static void freehand_mode_changed(GObject* tbl, int mode)
 {
-    gint mode = ege_select_one_action_get_active(act);
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt(freehand_tool_name(tbl) + "/freehand-mode", mode);
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
 
     if (mode == 1 || mode == 2) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), true );
@@ -108,98 +105,101 @@ static void use_pencil_pressure(InkToggleAction* itact, GObject *dataKludge) {
     if (pressure) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "minpressure") ), true );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "maxpressure") ), true );
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "shape_action") ), false );
+        InkSelectOneAction* act =
+            static_cast<InkSelectOneAction*>( g_object_get_data( dataKludge, "shape_action" ) );
+        act->set_visible (false);
     } else {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "minpressure") ), false );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "maxpressure") ), false );
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(dataKludge, "shape_action") ), true );
+        InkSelectOneAction* act =
+            static_cast<InkSelectOneAction*>( g_object_get_data( dataKludge, "shape_action" ) );
+        act->set_visible (true);
     }
 }
 
 static void sp_add_freehand_mode_toggle(GtkActionGroup* mainActions, GObject* holder, bool tool_is_pencil)
 {
     /* Freehand mode toggle buttons */
-    {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        guint freehandMode = prefs->getInt(( tool_is_pencil ? "/tools/freehand/pencil/freehand-mode" : "/tools/freehand/pen/freehand-mode" ), 0);
-        GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
-        {
-            GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    guint freehandMode = prefs->getInt(( tool_is_pencil ?
+                                         "/tools/freehand/pencil/freehand-mode" :
+                                         "/tools/freehand/pen/freehand-mode" ), 0);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
-            GtkTreeIter iter;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, _("Bezier"),
-                                1, _("Create regular Bezier path"),
-                                2, INKSCAPE_ICON("path-mode-bezier"),
-                                -1 );
+    InkSelectOneActionColumns columns;
 
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, _("Spiro"),
-                                1, _("Create Spiro path"),
-                                2, INKSCAPE_ICON("path-mode-spiro"),
-                                -1 );
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter,
-                                0, _("BSpline"),
-                                1, _("Create BSpline path"),
-                                2, INKSCAPE_ICON("path-mode-bspline"),
-                                -1 );
-            if (!tool_is_pencil) {
-                gtk_list_store_append( model, &iter );
-                gtk_list_store_set( model, &iter,
-                                    0, _("Zigzag"),
-                                    1, _("Create a sequence of straight line segments"),
-                                    2, INKSCAPE_ICON("path-mode-polyline"),
-                                    -1 );
+    Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-                gtk_list_store_append( model, &iter );
-                gtk_list_store_set( model, &iter,
-                                    0, _("Paraxial"),
-                                    1, _("Create a sequence of paraxial line segments"),
-                                    2, INKSCAPE_ICON("path-mode-polyline-paraxial"),
-                                    -1 );
-            }            
-            EgeSelectOneAction* act = ege_select_one_action_new(tool_is_pencil ?
-                                                                "FreehandModeActionPencil" :
-                                                                "FreehandModeActionPen",
-                                                                (_("Mode:")), (_("Mode of new lines drawn by this tool")), NULL, GTK_TREE_MODEL(model) );
-            gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    Gtk::TreeModel::Row row;
 
-            ege_select_one_action_set_appearance( act, "full" );
-            ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-            g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-            ege_select_one_action_set_icon_column( act, 2 );
-            ege_select_one_action_set_icon_size( act, secondarySize );
-            ege_select_one_action_set_tooltip_column( act, 1  );
+    row = *(store->append());
+    row[columns.col_label    ] = _("Bezier");
+    row[columns.col_tooltip  ] = _("Create regular Bezier path");
+    row[columns.col_icon     ] = INKSCAPE_ICON("path-mode-bezier");
+    row[columns.col_sensitive] = true;
 
-            ege_select_one_action_set_active( act, freehandMode);
-            g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(freehand_mode_changed), holder);
-        }
-        {
-            /* LPE bspline spiro flatten */
-            InkAction* inky = ink_action_new( tool_is_pencil ? "FlattenSpiroBsplinePencil" :
-                                                "FlattenSpiroBsplinePen",
-                                              _("LPE spiro or bspline flatten"),
-                                              _("LPE spiro or bspline flatten"),
-                                              INKSCAPE_ICON("flatten"),
-                                              GTK_ICON_SIZE_SMALL_TOOLBAR );
-            g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_flatten_spiro_bspline), holder );
-            gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-            g_object_set_data( holder, "flatten_spiro_bspline", inky );
-            if (freehandMode == 1 || freehandMode == 2) {
-                gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), true );
-            } else {
-                gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), false );
-            }
-        }
+    row = *(store->append());
+    row[columns.col_label    ] = _("Spiro");
+    row[columns.col_tooltip  ] = _("Create Spiro path");
+    row[columns.col_icon     ] = INKSCAPE_ICON("path-mode-spiro");
+    row[columns.col_sensitive] = true;
+
+    row = *(store->append());
+    row[columns.col_label    ] = _("BSpline");
+    row[columns.col_tooltip  ] = _("Create BSpline path");
+    row[columns.col_icon     ] = INKSCAPE_ICON("path-mode-bspline");
+    row[columns.col_sensitive] = true;
+
+    if (!tool_is_pencil) {
+        row = *(store->append());
+        row[columns.col_label    ] = _("Zigzag");
+        row[columns.col_tooltip  ] = _("Create a sequence of straight line segments");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-mode-polyline");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Paraxial");
+        row[columns.col_tooltip  ] = _("Create a sequence of paraxial line segments");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-mode-polyline-paraxial");
+        row[columns.col_sensitive] = true;
+    }
+
+    InkSelectOneAction* act =
+        InkSelectOneAction::create( tool_is_pencil ?
+                                    "FreehandModeActionPencil" :
+                                    "FreehandModeActionPen",
+                                    _("Mode"),           // Label
+                                    _("Mode of new lines drawn by this tool"), // Tooltip
+                                    "Not Used",          // Icon
+                                    store );             // Tree store
+    act->use_radio( true );
+    act->use_label( true );
+    act->set_active( freehandMode );
+
+    gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+    // g_object_set_data( dataKludge, "flat_action", act );
+
+    act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&freehand_mode_changed), holder));
+
+    /* LPE bspline spiro flatten */
+    InkAction* inky = ink_action_new( tool_is_pencil ? "FlattenSpiroBsplinePencil" :
+                                      "FlattenSpiroBsplinePen",
+                                      _("LPE spiro or bspline flatten"),
+                                      _("LPE spiro or bspline flatten"),
+                                      INKSCAPE_ICON("flatten"),
+                                      GTK_ICON_SIZE_SMALL_TOOLBAR );
+    g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_flatten_spiro_bspline), holder );
+    gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+    g_object_set_data( holder, "flatten_spiro_bspline", inky );
+    if (freehandMode == 1 || freehandMode == 2) {
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), true );
+    } else {
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_spiro_bspline") ), false );
     }
 }
 
-static void freehand_change_shape(EgeSelectOneAction* act, GObject *dataKludge) {
-    gint shape = ege_select_one_action_get_active( act );
+static void freehand_change_shape(GObject *dataKludge, int shape) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt(freehand_tool_name(dataKludge) + "/shape", shape);
 }
@@ -219,41 +219,60 @@ static void freehand_simplify_lpe(InkToggleAction* itact, GObject *dataKludge) {
 static void freehand_add_advanced_shape_options(GtkActionGroup* mainActions, GObject* holder, bool tool_is_pencil)
 {
     /*advanced shape options */
-    {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
-        gint count = 0;
-        std::vector<gchar*> freehand_shape_dropdown_items_list = { 
-            const_cast<gchar *>(C_("Freehand shape", "None")), 
-            _("Triangle in"),     
-            _("Triangle out"), 
-            _("Ellipse"), 
-            _("From clipboard"), 
-            _("Bend from clipboard"), 
-            _("Last applied") };
 
-        for (auto item:freehand_shape_dropdown_items_list)
-        {
-            GtkTreeIter iter;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, item, 1, count, -1 );
-            count++;
-        }
-        EgeSelectOneAction* act1 = ege_select_one_action_new(
-            tool_is_pencil ? "SetPencilShapeAction" : "SetPenShapeAction",
-            _("Shape:"), (_("Shape of new paths drawn by this tool")), NULL, GTK_TREE_MODEL(model));
-        g_object_set( act1, "short_label", _("Shape:"), NULL );
-        ege_select_one_action_set_appearance( act1, "compact" );
-        ege_select_one_action_set_active( act1, prefs->getInt(( tool_is_pencil ? "/tools/freehand/pencil/shape" : "/tools/freehand/pen/shape" ), 0) );
-        g_signal_connect( G_OBJECT(act1), "changed", G_CALLBACK(freehand_change_shape), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act1) );
-        g_object_set_data( holder, "shape_action", act1 );
-        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 || (tool_is_pencil && prefs->getBool("/tools/freehand/pencil/pressure", false))) {
-            gtk_action_set_visible( GTK_ACTION(act1), false );
-        } else {
-            gtk_action_set_visible( GTK_ACTION(act1), true );
-        }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    std::vector<gchar*> freehand_shape_dropdown_items_list = {
+        const_cast<gchar *>(C_("Freehand shape", "None")),
+        _("Triangle in"),
+        _("Triangle out"),
+        _("Ellipse"),
+        _("From clipboard"),
+        _("Bend from clipboard"),
+        _("Last applied")
+    };
+
+    InkSelectOneActionColumns columns;
+
+    Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+    Gtk::TreeModel::Row row;
+
+    for (auto item:freehand_shape_dropdown_items_list) {
+
+        row = *(store->append());
+        row[columns.col_label    ] = item;
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
     }
+
+    InkSelectOneAction* act =
+        InkSelectOneAction::create( tool_is_pencil ?
+                                    "SetPencilShapeAction" :
+                                    "SetPenShapeAction", // Name
+                                    _("Shape"),          // Label
+                                    _("Shape of new paths drawn by this tool"), // Tooltip
+                                    "Not Used",          // Icon
+                                    store );             // Tree store
+
+    act->use_radio( false );
+    act->use_icon( false );
+    act->use_label( true );
+    act->use_group_label( true );
+    int shape = prefs->getInt( (tool_is_pencil ?
+                                "/tools/freehand/pencil/shape" :
+                                "/tools/freehand/pen/shape" ), 0);
+    act->set_active( shape );
+
+    gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+    g_object_set_data( holder, "shape_action", act );
+
+    bool hide = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 ||
+        (tool_is_pencil && prefs->getBool("/tools/freehand/pencil/pressure", false));
+    act->set_visible( !hide );
+
+    act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&freehand_change_shape), holder));
 }
 
 void sp_pen_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainActions, GObject* holder)
