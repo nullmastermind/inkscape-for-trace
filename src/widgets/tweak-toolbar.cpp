@@ -28,19 +28,23 @@
 #include "config.h"
 #endif
 
-#include "ui/widget/spinbutton.h"
 #include <glibmm/i18n.h>
+
 #include "tweak-toolbar.h"
+
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "widgets/ege-select-one-action.h"
-#include "ink-radio-action.h"
-#include "ink-toggle-action.h"
-#include "toolbox.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/tweak-tool.h"
+#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/spinbutton.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
+#include "widgets/ink-radio-action.h"
+#include "widgets/ink-toggle-action.h"
+#include "widgets/toolbox.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -71,14 +75,14 @@ static void sp_tweak_pressure_state_changed( GtkToggleAction *act, gpointer /*da
     prefs->setBool("/tools/tweak/usepressure", gtk_toggle_action_get_active(act));
 }
 
-static void sp_tweak_mode_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_tweak_mode_changed( GObject *tbl, int mode )
 {
-    int mode = ege_select_one_action_get_active( act );
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/tweak/mode", mode);
 
     static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
-    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) || (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
+    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
+                 (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
     for (size_t i = 0; i < G_N_ELEMENTS(names); ++i) {
         GtkAction *act = GTK_ACTION(g_object_get_data( tbl, names[i] ));
         if (act) {
@@ -155,118 +159,108 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     /* Mode */
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Move mode"),
-                            1, _("Move objects in any direction"),
-                            2, INKSCAPE_ICON("object-tweak-push"),
-                            -1 );
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Move in/out mode"),
-                            1, _("Move objects towards cursor; with Shift from cursor"),
-                            2, INKSCAPE_ICON("object-tweak-attract"),
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Move jitter mode"),
-                            1, _("Move objects in random directions"),
-                            2, INKSCAPE_ICON("object-tweak-randomize"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Move mode");
+        row[columns.col_tooltip  ] = _("Move objects in any direction");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-push");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Scale mode"),
-                            1, _("Shrink objects, with Shift enlarge"),
-                            2, INKSCAPE_ICON("object-tweak-shrink"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Move in/out mode");
+        row[columns.col_tooltip  ] = _("Move objects towards cursor; with Shift from cursor");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-attract");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Rotate mode"),
-                            1, _("Rotate objects, with Shift counterclockwise"),
-                            2, INKSCAPE_ICON("object-tweak-rotate"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Move jitter mode");
+        row[columns.col_tooltip  ] = _("Move objects in random directions");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-randomize");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Duplicate/delete mode"),
-                            1, _("Duplicate objects, with Shift delete"),
-                            2, INKSCAPE_ICON("object-tweak-duplicate"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Scale mode");
+        row[columns.col_tooltip  ] = _("Shrink objects, with Shift enlarge");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-shrink");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Push mode"),
-                            1, _("Push parts of paths in any direction"),
-                            2, INKSCAPE_ICON("path-tweak-push"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Rotate mode");
+        row[columns.col_tooltip  ] = _("Rotate objects, with Shift counterclockwise");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-rotate");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Shrink/grow mode"),
-                            1, _("Shrink (inset) parts of paths; with Shift grow (outset)"),
-                            2, INKSCAPE_ICON("path-tweak-shrink"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Duplicate/delete mode");
+        row[columns.col_tooltip  ] = _("Duplicate objects, with Shift delete");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-duplicate");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Attract/repel mode"),
-                            1, _("Attract parts of paths towards cursor; with Shift from cursor"),
-                            2, INKSCAPE_ICON("path-tweak-attract"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Push mode");
+        row[columns.col_tooltip  ] = _("Push parts of paths in any direction");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-push");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Roughen mode"),
-                            1, _("Roughen parts of paths"),
-                            2, INKSCAPE_ICON("path-tweak-roughen"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Shrink/grow mode");
+        row[columns.col_tooltip  ] = _("Shrink (inset) parts of paths; with Shift grow (outset)");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-shrink");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Color paint mode"),
-                            1, _("Paint the tool's color upon selected objects"),
-                            2, INKSCAPE_ICON("object-tweak-paint"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Attract/repel mode");
+        row[columns.col_tooltip  ] = _("Attract parts of paths towards cursor; with Shift from cursor");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-attract");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Color jitter mode"),
-                            1, _("Jitter the colors of selected objects"),
-                            2, INKSCAPE_ICON("object-tweak-jitter-color"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Roughen mode");
+        row[columns.col_tooltip  ] = _("Roughen parts of paths");
+        row[columns.col_icon     ] = INKSCAPE_ICON("path-tweak-roughen");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Blur mode"),
-                            1, _("Blur selected objects more; with Shift, blur less"),
-                            2, INKSCAPE_ICON("object-tweak-blur"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Color paint mode");
+        row[columns.col_tooltip  ] = _("Paint the tool's color upon selected objects");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-paint");
+        row[columns.col_sensitive] = true;
 
+        row = *(store->append());
+        row[columns.col_label    ] = _("Color jitter mode");
+        row[columns.col_tooltip  ] = _("Jitter the colors of selected objects");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-jitter-color");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "TweakModeAction", _("Mode"), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act, "short_label", _("Mode:"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "mode_action", act );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Blur mode");
+        row[columns.col_tooltip  ] = _("Blur selected objects more; with Shift, blur less");
+        row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-blur");
+        row[columns.col_sensitive] = true;
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TweakModeAction",   // Name
+                                        _("Mode"),           // Label
+                                        (""),                // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
 
-        gint mode = prefs->getInt("/tools/tweak/mode", 0);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_tweak_mode_changed), holder );
+        act->use_radio( true );
+        act->use_icon( true );
+        act->use_label( false );
+        act->use_group_label( true );
+        int mode = prefs->getInt("/tools/tweak/mode", 0);
+        act->set_active( mode );
 
-        g_object_set_data( G_OBJECT(holder), "tweak_tool_mode", act);
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "tweak_tool_mode", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_tweak_mode_changed), holder));
     }
 
     guint mode = prefs->getInt("/tools/tweak/mode", 0);
