@@ -33,14 +33,17 @@
 #include "paintbucket-toolbar.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
-#include "toolbox.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
+
 #include "widgets/ink-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-select-one-action.h"
+#include "widgets/toolbox.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
@@ -54,10 +57,8 @@ using Inkscape::Util::unit_table;
 //##     Paintbucket     ##
 //#########################
 
-static void paintbucket_channels_changed(EgeSelectOneAction* act, GObject* /*tbl*/)
+static void paintbucket_channels_changed(GObject* /*tbl*/, int channels)
 {
-    gint channels = ege_select_one_action_get_active( act );
-    //flood_channels_set_channels( channels );
     Inkscape::UI::Tools::FloodTool::set_channels(channels);
 }
 
@@ -67,10 +68,10 @@ static void paintbucket_threshold_changed(GtkAdjustment *adj, GObject * /*tbl*/)
     prefs->setInt("/tools/paintbucket/threshold", (gint)gtk_adjustment_get_value(adj));
 }
 
-static void paintbucket_autogap_changed(EgeSelectOneAction* act, GObject * /*tbl*/)
+static void paintbucket_autogap_changed(GObject * /*tbl*/, int autogap)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/paintbucket/autogap", ege_select_one_action_get_active( act ));
+    prefs->setInt("/tools/paintbucket/autogap", autogap);
 }
 
 static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
@@ -106,10 +107,13 @@ static void paintbucket_defaults(GtkWidget *, GObject *tbl)
         }
     }
 
-    EgeSelectOneAction* channels_action = EGE_SELECT_ONE_ACTION( g_object_get_data (tbl, "channels_action" ) );
-    ege_select_one_action_set_active( channels_action, Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
-    EgeSelectOneAction* autogap_action = EGE_SELECT_ONE_ACTION( g_object_get_data (tbl, "autogap_action" ) );
-    ege_select_one_action_set_active( autogap_action, 0 );
+    InkSelectOneAction* channels_action =
+        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "channels_action" ) );
+    channels_action->set_active( Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
+
+    InkSelectOneAction* autogap_action =
+        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "autogap_action" ) );
+    autogap_action->set_active( 0 );
 }
 
 void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -117,26 +121,40 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
     EgeAdjustmentAction* eact = 0;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
+    // Channel
     {
-        GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
+        InkSelectOneActionColumns columns;
 
-        gint count = 0;
-        const std::vector<Glib::ustring>& channel_list = Inkscape::UI::Tools::FloodTool::channel_list;
-        for (std::vector<Glib::ustring>::const_iterator iterator = channel_list.begin();
-             iterator != channel_list.end(); ++iterator ) {
-            GtkTreeIter iter;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, _((*iterator).c_str()), 1, count, -1 );
-            count++;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        for (auto item: Inkscape::UI::Tools::FloodTool::channel_list) {
+            row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_tooltip  ] = ("");
+            row[columns.col_icon     ] = "NotUsed";
+            row[columns.col_sensitive] = true;
         }
 
-        EgeSelectOneAction* act1 = ege_select_one_action_new( "ChannelsAction", _("Fill by"), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act1, "short_label", _("Fill by:"), NULL );
-        ege_select_one_action_set_appearance( act1, "compact" );
-        ege_select_one_action_set_active( act1, prefs->getInt("/tools/paintbucket/channels", 0) );
-        g_signal_connect( G_OBJECT(act1), "changed", G_CALLBACK(paintbucket_channels_changed), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act1) );
-        g_object_set_data( holder, "channels_action", act1 );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "ChannelsAction",    // Name
+                                        _("Fill by"),        // Label
+                                        (""),                // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( false );
+        act->use_icon( false );
+        act->use_label( true );
+        act->use_group_label( true );
+        int channels = prefs->getInt("/tools/paintbucket/channels", 0);
+        act->set_active( channels );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "channels_action", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&paintbucket_channels_changed), holder));
     }
 
     // Spacing spinbox
@@ -184,24 +202,38 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
     /* Auto Gap */
     {
-        GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
+        InkSelectOneActionColumns columns;
 
-        gint count = 0;
-        const std::vector<Glib::ustring>& gap_list = Inkscape::UI::Tools::FloodTool::gap_list;
-        for (std::vector<Glib::ustring>::const_iterator iterator = gap_list.begin();
-             iterator != gap_list.end(); ++iterator ) {
-            GtkTreeIter iter;
-            gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, g_dpgettext2(NULL, "Flood autogap", (*iterator).c_str()), 1, count, -1 );
-            count++;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        for (auto item: Inkscape::UI::Tools::FloodTool::gap_list) {
+            row = *(store->append());
+            row[columns.col_label    ] = item;
+            row[columns.col_tooltip  ] = ("");
+            row[columns.col_icon     ] = "NotUsed";
+            row[columns.col_sensitive] = true;
         }
-        EgeSelectOneAction* act2 = ege_select_one_action_new( "AutoGapAction", _("Close gaps"), (""), NULL, GTK_TREE_MODEL(model) );
-        g_object_set( act2, "short_label", _("Close gaps:"), NULL );
-        ege_select_one_action_set_appearance( act2, "compact" );
-        ege_select_one_action_set_active( act2, prefs->getBool("/tools/paintbucket/autogap") );
-        g_signal_connect( G_OBJECT(act2), "changed", G_CALLBACK(paintbucket_autogap_changed), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act2) );
-        g_object_set_data( holder, "autogap_action", act2 );
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "AutoGapAction",     // Name
+                                        _("Close gaps"),     // Label
+                                        (""),                // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+
+        act->use_radio( false );
+        act->use_icon( false );
+        act->use_label( true );
+        act->use_group_label( true );
+        int autogap = prefs->getInt("/tools/paintbucket/autogap");
+        act->set_active( autogap );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "autogap_action", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&paintbucket_autogap_changed), holder));
     }
 
     /* Reset */
