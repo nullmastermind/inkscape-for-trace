@@ -883,8 +883,8 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
         act->use_radio( true );
         act->use_group_label( true );
-        gint mode = prefs->getInt("/tools/gradient/newgradient", SP_MESH_GEOMETRY_NORMAL);
-        act->set_active( mode );
+        gint mode = prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR);
+        act->set_active( mode == SP_GRADIENT_TYPE_LINEAR ? 0 : 1 ); // linear == 1, radial == 2
 
         gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( data, "gradient_new_type_mode", act );
