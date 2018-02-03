@@ -106,7 +106,7 @@ void UnitTracker::setActiveUnitByAbbr(gchar const *abbr)
 
 void UnitTracker::addAdjustment(GtkAdjustment *adj)
 {
-    if (std::find(_adjList.begin(),_adjList.end(),adj)!=_adjList.end()) {
+    if (std::find(_adjList.begin(),_adjList.end(),adj) == _adjList.end()) {
         g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
         _adjList.push_back(adj);
     }
