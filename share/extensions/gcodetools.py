@@ -35,6 +35,7 @@ History of CLT changes to engraving and other functions it uses:
 12 Jun ver 208 Now scales correctly if orientation points moved or stretched.
 12 Jun ver 209. Now detect if engraving toolshape not a function of radius
                 Graphics now indicate Gcode toolpath, limited by min(tool diameter/2,max-dist)
+24 Jan 2017 Removed hard-coded scale values from orientation point calculation
 TODO Change line division to be recursive, depending on what line is touched. See line_divide
 
 
@@ -3603,7 +3604,7 @@ class Gcodetools(inkex.Effect):
 		self.OptionParser.add_option("",   "--min-arc-radius",				action="store", type="float", 		dest="min_arc_radius", default=".1",				help="All arc having radius less than minimum will be considered as straight line")		
 
 		self.OptionParser.add_option("",   "--engraving-sharp-angle-tollerance",action="store", type="float",	dest="engraving_sharp_angle_tollerance", default="150",		help="All angles thar are less than engraving-sharp-angle-tollerance will be thought sharp")		
-		self.OptionParser.add_option("",   "--engraving-max-dist",			action="store", type="float", 		dest="engraving_max_dist", default="10",					help="Distanse from original path where engraving is not needed (usually it's cutting tool diameter)")		
+		self.OptionParser.add_option("",   "--engraving-max-dist",			action="store", type="float", 		dest="engraving_max_dist", default="10",					help="Distance from original path where engraving is not needed (usually it's cutting tool diameter)")		
 		self.OptionParser.add_option("",   "--engraving-newton-iterations", action="store", type="int", 		dest="engraving_newton_iterations", default="4",			help="Number of sample points used to calculate distance")		
 		self.OptionParser.add_option("",   "--engraving-draw-calculation-paths",action="store", type="inkbool",	dest="engraving_draw_calculation_paths", default=False,		help="Draw additional graphics to debug engraving path")		
 		self.OptionParser.add_option("",   "--engraving-cutter-shape-function",action="store", type="string", 	dest="engraving_cutter_shape_function", default="w",		help="Cutter shape function z(w). Ex. cone: w. ")
@@ -5856,26 +5857,20 @@ class Gcodetools(inkex.Effect):
 				print_("Overruding height from 100 percents to %s" % doc_height)
 			if self.options.unit == "G21 (All units in mm)" : 
 				points = [[0.,0.,self.options.Zsurface],[100.,0.,self.options.Zdepth],[0.,100.,0.]]
-				orientation_scale = 3.5433070660
-				print_("orientation_scale < 0 ===> switching to mm units=%0.10f"%orientation_scale )
 			elif self.options.unit == "G20 (All units in inches)" :
 				points = [[0.,0.,self.options.Zsurface],[5.,0.,self.options.Zdepth],[0.,5.,0.]]
-				orientation_scale = 90
-				print_("orientation_scale < 0 ===> switching to inches units=%0.10f"%orientation_scale )
 			if self.options.orientation_points_count == "2" :
 				points = points[:2]
-			print_(("using orientation scale",orientation_scale,"i=",points))
 			for i in points :
-				si = [i[0]*orientation_scale, i[1]*orientation_scale]
 				g = inkex.etree.SubElement(orientation_group, inkex.addNS('g','svg'), {'gcodetools': "Gcodetools orientation point (%s points)" % self.options.orientation_points_count})
 				inkex.etree.SubElement(	g, inkex.addNS('path','svg'), 
 					{
 						'style':	"stroke:none;fill:#000000;", 	
-						'd':'m %s,%s 2.9375,-6.343750000001 0.8125,1.90625 6.843748640396,-6.84374864039 0,0 0.6875,0.6875 -6.84375,6.84375 1.90625,0.812500000001 z z' % (si[0], -si[1]+doc_height),
+						'd':'m %s,%s 2.9375,-6.343750000001 0.8125,1.90625 6.843748640396,-6.84374864039 0,0 0.6875,0.6875 -6.84375,6.84375 1.90625,0.812500000001 z z' % (i[0], -i[1]+doc_height),
 						'gcodetools': "Gcodetools orientation point arrow"
 					})
 
-				draw_text("(%s; %s; %s)" % (i[0],i[1],i[2]), (si[0]+10), (-si[1]-10+doc_height), group = g, gcodetools_tag = "Gcodetools orientation point text")
+				draw_text("(%s; %s; %s)" % (i[0],i[1],i[2]), (i[0]+10), (-i[1]-10+doc_height), group = g, gcodetools_tag = "Gcodetools orientation point text")
 
 		
 ################################################################################
