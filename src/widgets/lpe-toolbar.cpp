@@ -117,26 +117,30 @@ static void sp_lpetool_toolbox_sel_changed(Inkscape::Selection *selection, GObje
     lpetool_create_measuring_items(lc, selection);
 
     // activate line segment combo box if a single item with LPELineSegment is selected
-    GtkAction* w = GTK_ACTION(g_object_get_data(tbl, "lpetool_line_segment_action"));
+    InkSelectOneAction* act =
+        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "lpetool_line_segment_action" ) );
+
     SPItem *item = selection->singleItem();
     if (item && SP_IS_LPE_ITEM(item) && lpetool_item_has_construction(lc, item)) {
+
         SPLPEItem *lpeitem = SP_LPE_ITEM(item);
         Effect* lpe = lpeitem->getCurrentLPE();
         if (lpe && lpe->effectType() == LINE_SEGMENT) {
             LPELineSegment *lpels = static_cast<LPELineSegment*>(lpe);
             g_object_set_data(tbl, "currentlpe", lpe);
             g_object_set_data(tbl, "currentlpeitem", lpeitem);
-            gtk_action_set_sensitive(w, TRUE);
-            ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(w), lpels->end_type.get_value());
+            act->set_sensitive(true);
+            act->set_active( lpels->end_type.get_value() );
         } else {
             g_object_set_data(tbl, "currentlpe", NULL);
             g_object_set_data(tbl, "currentlpeitem", NULL);
-            gtk_action_set_sensitive(w, FALSE);
+            act->set_sensitive(false);
         }
+
     } else {
         g_object_set_data(tbl, "currentlpe", NULL);
         g_object_set_data(tbl, "currentlpeitem", NULL);
-        gtk_action_set_sensitive(w, FALSE);
+        act->set_sensitive(false);
     }
 }
 
@@ -214,31 +218,7 @@ static void lpetool_toggle_set_bbox(GtkToggleAction *act, gpointer data)
     gtk_toggle_action_set_active(act, false);
 }
 
-static void sp_line_segment_build_list(GObject *tbl)
-{
-    g_object_set_data(tbl, "line_segment_list_blocked", GINT_TO_POINTER(TRUE));
-
-    EgeSelectOneAction* selector = static_cast<EgeSelectOneAction *>(g_object_get_data(tbl, "lpetool_line_segment_action"));
-    GtkListStore* model = GTK_LIST_STORE(ege_select_one_action_get_model(selector));
-    gtk_list_store_clear (model);
-
-    // TODO: we add the entries of rht combo box manually; later this should be done automatically
-    {
-        GtkTreeIter iter;
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Closed"), 1, 0, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open start"), 1, 1, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open end"), 1, 2, -1 );
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("Open both"), 1, 3, -1 );
-    }
-
-    g_object_set_data(tbl, "line_segment_list_blocked", GINT_TO_POINTER(FALSE));
-}
-
-static void sp_lpetool_change_line_segment_type(EgeSelectOneAction* act, GObject* tbl)
+static void sp_lpetool_change_line_segment_type(GObject* tbl, int mode)
 {
     using namespace Inkscape::LivePathEffect;
 
@@ -254,7 +234,7 @@ static void sp_lpetool_change_line_segment_type(EgeSelectOneAction* act, GObject
     SPLPEItem *lpeitem = static_cast<SPLPEItem *>(g_object_get_data(tbl, "currentlpeitem"));
     if (lpeitem) {
         SPLPEItem *lpeitem = static_cast<SPLPEItem *>(g_object_get_data(tbl, "currentlpeitem"));
-        lpe->end_type.param_set_value(static_cast<Inkscape::LivePathEffect::EndType>(ege_select_one_action_get_active(act)));
+        lpe->end_type.param_set_value(static_cast<Inkscape::LivePathEffect::EndType>(mode));
         sp_lpe_item_update_patheffect(lpeitem, true, true);
     }
 
@@ -357,18 +337,52 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
 
     /* Combo box to choose line segment type */
     {
-        GtkListStore* model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-        EgeSelectOneAction* act = ege_select_one_action_new ("LPELineSegmentAction", "" , (_("Choose a line segment type")), NULL, GTK_TREE_MODEL(model));
-        ege_select_one_action_set_appearance (act, "compact");
+        InkSelectOneActionColumns columns;
+
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Closed");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open start");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open end");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Open both");
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "LPELineSegmentAction", // Name
+                                        (""),                   // Label
+                                        _("Choose a line segement type"), // Tooltip
+                                        "Not Used",             // Icon
+                                        store );                // Tree store
+
+        act->use_radio( false );
+        act->use_icon( false );
+        act->use_label( true );
+        act->set_sensitive( false );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data (holder, "lpetool_line_segment_action", act );
 
-        g_object_set_data(holder, "line_segment_list_blocked", GINT_TO_POINTER(FALSE));
-
-        sp_line_segment_build_list (holder);
-
-        g_signal_connect(G_OBJECT(act), "changed", G_CALLBACK(sp_lpetool_change_line_segment_type), holder);
-        gtk_action_set_sensitive( GTK_ACTION(act), FALSE );
-        gtk_action_group_add_action(mainActions, GTK_ACTION(act));
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(sp_lpetool_change_line_segment_type), holder));
     }
 
     /* Display measuring info for selected items */
