@@ -68,6 +68,7 @@ Filter::filters_all (void )
     NudgeRGB::init();
     NudgeCMY::init();
     Quadritone::init();
+    SimpleBlend::init();
     Solarize::init();
     Tritone::init();
 
