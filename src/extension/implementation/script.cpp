@@ -116,6 +116,7 @@ std::string Script::resolveInterpreterExecutable(const Glib::ustring &interpName
 
     // Do we have a supported interpreter type?
     if (!foundInterp) {
+        g_critical("Script::resolveInterpreterExecutable(): unknown script interpreter '%s'", interpNameArg.c_str());
         return "";
     }
     std::string interpreter_path = Glib::filename_from_utf8(interp->defaultval);
@@ -134,7 +135,12 @@ std::string Script::resolveInterpreterExecutable(const Glib::ustring &interpName
     // PATH is set up to contain the Python and Perl binary directories
     // on Windows, so no extra code is necessary.
     if (!Glib::path_is_absolute(interpreter_path)) {
-        interpreter_path = Glib::find_program_in_path(interpreter_path);
+        std::string found_path = Glib::find_program_in_path(interpreter_path);
+        if (found_path.empty()) { 
+            g_critical("Script::resolveInterpreterExecutable(): failed to locate script interpreter '%s'; "
+                       "'%s' not found on PATH", interpNameArg.c_str(), interpreter_path.c_str());
+        }
+        interpreter_path = found_path;
     }
     return interpreter_path;
 }
@@ -290,20 +296,22 @@ bool Script::load(Inkscape::Extension::Extension *module)
     Inkscape::XML::Node *child_repr = module->get_repr()->firstChild();
     while (child_repr != NULL) {
         if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "script")) {
-            child_repr = child_repr->firstChild();
-            while (child_repr != NULL) {
+            for (child_repr = child_repr->firstChild(); child_repr != NULL; child_repr = child_repr->next()) {
                 if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "command")) {
                     const gchar *interpretstr = child_repr->attribute("interpreter");
                     if (interpretstr != NULL) {
                         std::string interpString = resolveInterpreterExecutable(interpretstr);
-                        command.push_back(interpString);
+                        if (interpString.empty()) {
+                            continue; // can't have a script extension with empty interpreter
+                        } else {
+                            command.push_back(interpString);
+                        }
                     }
                     command.push_back(solve_reldir(child_repr));
                 }
                 if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "helper_extension")) {
                     helper_extension = child_repr->firstChild()->content();
                 }
-                child_repr = child_repr->next();
             }
 
             break;
@@ -311,7 +319,8 @@ bool Script::load(Inkscape::Extension::Extension *module)
         child_repr = child_repr->next();
     }
 
-    //g_return_val_if_fail(command.length() > 0, false);
+    // TODO: Currently this causes extensions to fail silently, see comment in Extension::set_state()
+    g_return_val_if_fail(command.size() > 0, false);
 
     return true;
 }
@@ -1012,7 +1021,6 @@ int Script::execute (const std::list<std::string> &in_command,
                  file_listener &fileout)
 {
     g_return_val_if_fail(!in_command.empty(), 0);
-    // printf("Executing\n");
 
     std::vector<std::string> argv;
 
@@ -1024,8 +1032,19 @@ int Script::execute (const std::list<std::string> &in_command,
     // Use Glib::find_program_in_path instead of the equivalent
     // Glib::spawn_* functionality, because _wspawnp is broken on Windows:
     // it doesn't work when PATH contains Unicode directories
+    //
+    // Note:
+    //  - We already have an absolute path here for interpreted scripts, see Script::resolveInterpreterExecutable()
+    //  - For "normal" scripts we might not as we only use the rudimentary functionality in Script::solve_reldir().
+    //    However we already track dependencies down in a much more reliable way in Dependency::check(), so it might
+    //    make sense to eventually store and use that result instead of duplicating partial functionality here.
     if (!Glib::path_is_absolute(program)) {
-        program = Glib::find_program_in_path(program);
+        std::string found_program = Glib::find_program_in_path(program);
+        if (found_program.empty()) {
+            g_critical("Script::execute(): failed to locate program '%s' on PATH", program.c_str());
+            return 0;
+        }
+        program = found_program;
     }
     argv.push_back(program);
 
@@ -1074,7 +1093,7 @@ int Script::execute (const std::list<std::string> &in_command,
                                      &stdout_pipe,   // STDOUT
                                      &stderr_pipe);  // STDERR
     } catch (Glib::Error &e) {
-        printf("Can't Spawn!!! spawn returns: %s\n", e.what().data());
+        g_critical("Script::execute(): failed to execute program '%s'.\n\tReason: %s", program.c_str(), e.what().data());
         return 0;
     }
 
