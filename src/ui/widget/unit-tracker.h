@@ -18,9 +18,12 @@
 #include <map>
 #include <vector>
 
+#include <gtkmm/liststore.h>
+#include <gtkmm/action.h>
+
 #include "util/units.h"
 
-#include "widgets/ege-select-one-action.h"
+class InkSelectOneAction;
 
 using Inkscape::Util::Unit;
 using Inkscape::Util::UnitType;
@@ -50,17 +53,24 @@ public:
     void prependUnit(Inkscape::Util::Unit const *u);
     void setFullVal(GtkAdjustment *adj, gdouble val);
 
-    GtkAction *createAction(gchar const *name, gchar const *label, gchar const *tooltip);
+    InkSelectOneAction *createAction(Glib::ustring const &name,
+                                     Glib::ustring const &label,
+                                     Glib::ustring const &tooltip);
 
 protected:
     UnitType _type;
 
 private:
-    static void _unitChangedCB(GtkAction *action, gpointer data);
+
+    // Callbacks
+    void _unitChangedCB(int active);
     static void _actionFinalizedCB(gpointer data, GObject *where_the_object_was);
     static void _adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was);
+
     void _setActive(gint index);
     void _fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit);
+
+    // Cleanup
     void _actionFinalized(GObject *where_the_object_was);
     void _adjustmentFinalized(GObject *where_the_object_was);
 
@@ -68,8 +78,9 @@ private:
     bool _isUpdating;
     Inkscape::Util::Unit const *_activeUnit;
     bool _activeUnitInitialized;
-    GtkListStore *_store;
-    std::vector<EgeSelectOneAction*> _actionList;
+
+    Glib::RefPtr<Gtk::ListStore> _store;
+    std::vector<InkSelectOneAction*> _actionList;
     std::vector<GtkAdjustment*> _adjList;
     std::map <GtkAdjustment *, gdouble> _priorValues;
 };

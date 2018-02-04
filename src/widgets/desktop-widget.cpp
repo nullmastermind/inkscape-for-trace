@@ -1576,9 +1576,6 @@ void
 SPDesktopWidget::setToolboxSelectOneValue (gchar const *id, int value)
 {
     gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
-    if (IS_EGE_SELECT_ONE_ACTION(hb)) {
-        ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(hb), value);
-    }
     if (static_cast<InkSelectOneAction*>(hb)) {
         static_cast<InkSelectOneAction*>(hb)->set_active( value );
     }

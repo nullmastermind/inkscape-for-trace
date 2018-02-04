@@ -42,6 +42,7 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -523,8 +524,10 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     contextActions->push_back( GTK_ACTION(eact) );
 
     // Add the units menu.
-    act = tracker->createAction( "UnitsAction", _("Units"), ("") );
-    gtk_action_group_add_action( selectionActions, act );
+    {
+        InkSelectOneAction* act = tracker->createAction( "UnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( selectionActions, act->gobj() );
+    }
 
     g_object_set_data( G_OBJECT(spw), "selectionActions", selectionActions );
     g_object_set_data( G_OBJECT(spw), "contextActions", contextActions );

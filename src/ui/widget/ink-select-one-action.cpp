@@ -63,6 +63,11 @@ InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
 
 void InkSelectOneAction::set_active (gint active) {
 
+    if (active < 0) {
+        std::cerr << "InkSelectOneAction::set_active: active < 0: " << active << std::endl;
+        return;
+    }
+
     if (_active != active) {
 
         _active = active;
@@ -229,14 +234,18 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
 
 void InkSelectOneAction::on_changed_combobox() {
 
-    set_active( _combobox->get_active_row_number() );
-     _changed.emit (_active);
+    int row = _combobox->get_active_row_number();
+    if (row < 0) row = 0;  // Happens when Gtk::ListStore reconstructed
+    set_active( row );
+    _changed.emit (_active);
+    _changed_after.emit (_active);
 }
 
 void InkSelectOneAction::on_changed_radioaction(const Glib::RefPtr<Gtk::RadioAction>& current) {
 
     set_active( current->get_current_value() );
     _changed.emit (_active);
+    _changed_after.emit (_active);
 }
 
 void InkSelectOneAction::on_toggled_radiomenu(int n) {
@@ -246,6 +255,7 @@ void InkSelectOneAction::on_toggled_radiomenu(int n) {
     if ( n < _radiomenuitems.size() &&_radiomenuitems[ n ]->get_active()) {
         set_active ( n );
         _changed.emit (_active);
+        _changed_after.emit (_active);
     }
 }
 

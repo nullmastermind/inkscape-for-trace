@@ -164,18 +164,20 @@ static void lpetool_toggle_show_measuring_info(GtkToggleAction *act, GObject *tb
         return;
     }
 
-    GtkAction *unitact = static_cast<GtkAction*>(g_object_get_data(tbl, "lpetool_units_action"));
+    bool show = gtk_toggle_action_get_active( act );
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/lpetool/show_measuring_info",  show);
+
     LpeTool *lc = SP_LPETOOL_CONTEXT(desktop->event_context);
-    if (tools_isactive(desktop, TOOLS_LPETOOL)) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool show = gtk_toggle_action_get_active( act );
-        prefs->setBool("/tools/lpetool/show_measuring_info",  show);
-        lpetool_show_measuring_info(lc, show);
-        gtk_action_set_sensitive(GTK_ACTION(unitact), show);
-    }
+    lpetool_show_measuring_info(lc, show);
+
+    InkSelectOneAction* unitact =
+        static_cast<InkSelectOneAction*>(g_object_get_data(tbl, "lpetool_units_action"));
+    unitact->set_sensitive( show );
 }
 
-static void lpetool_unit_changed(GtkAction* /*act*/, GObject* tbl)
+static void lpetool_unit_changed(GObject* tbl, int /* NotUsed */)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
@@ -397,13 +399,13 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool( "/tools/lpetool/show_measuring_info", true ) );
     }
 
-    // add the units menu
+    // Add the units menu
     {
-        GtkAction* act = tracker->createAction( "LPEToolUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(lpetool_unit_changed), holder );
+        InkSelectOneAction* act = tracker->createAction( "LPEToolUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
+        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&lpetool_unit_changed), holder));
         g_object_set_data(holder, "lpetool_units_action", act);
-        gtk_action_set_sensitive(act, prefs->getBool("/tools/lpetool/show_measuring_info", true));
+        act->set_sensitive( prefs->getBool("/tools/lpetool/show_measuring_info", true));
     }
 
     /* Open LPE dialog (to adapt parameters numerically) */

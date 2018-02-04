@@ -33,17 +33,20 @@
 #include "measure-toolbar.h"
 
 #include "desktop.h"
-#include "inkscape.h"
-#include "message-stack.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "toolbox.h"
 #include "ink-action.h"
 #include "ink-toggle-action.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "toolbox.h"
+
 #include "ui/icon-names.h"
 #include "ui/tools/measure-tool.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
+
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
@@ -134,7 +137,7 @@ sp_measure_precision_value_changed(GtkAdjustment *adj, GObject *tbl)
 }
 
 static void 
-sp_measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
+sp_measure_unit_changed(GObject* tbl, int /* notUsed */)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Glib::ustring const unit = tracker->getActiveUnit()->abbr;
@@ -309,9 +312,9 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
 
     /* units menu */
     {
-        GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_measure_unit_changed), holder );
-        gtk_action_group_add_action( mainActions, act );
+        InkSelectOneAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
+        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&sp_measure_unit_changed), holder));
+        gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
     /* Precision */

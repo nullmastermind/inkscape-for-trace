@@ -466,7 +466,6 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_arctb_rx_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "rx_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -483,7 +482,6 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_arctb_ry_value_changed, tracker);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
         g_object_set_data( holder, "ry_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -491,8 +489,8 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
 
     // add the units menu
     {
-        GtkAction* act = tracker->createAction( "ArcUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
+        Gtk::Action* act = tracker->createAction( "ArcUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
     /* Start */

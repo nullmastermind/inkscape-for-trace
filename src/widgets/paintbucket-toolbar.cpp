@@ -179,9 +179,10 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
         tracker->setActiveUnit(u);
     }
     g_object_set_data( holder, "tracker", tracker );
+
     {
-        GtkAction* act = tracker->createAction( "PaintbucketUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
+        InkSelectOneAction* act = tracker->createAction( "PaintbucketUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
     // Offset spinbox
@@ -194,8 +195,6 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             "inkscape:paintbucket-offset", -1e4, 1e4, 0.1, 0.5,
             0, 0, 0,
             paintbucket_offset_changed, tracker, 1, 2);
-        tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
-
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 

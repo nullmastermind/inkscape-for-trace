@@ -8,13 +8,18 @@
  *
  * Copyright (C) 2007 Jon A. Cruz
  * Copyright (C) 2013 Matthew Petroff
+ * Copyright (C) 2018 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
+#include <iostream>
+
 #include "unit-tracker.h"
 
-#include <algorithm>
+#include "ink-select-one-action.h"
+
 
 #define COLUMN_STRING 0
 
@@ -30,21 +35,28 @@ UnitTracker::UnitTracker(UnitType unit_type) :
     _isUpdating(false),
     _activeUnit(NULL),
     _activeUnitInitialized(false),
-    _store(0),
+    _store(nullptr),
     _priorValues()
 {
-    _store = gtk_list_store_new(1, G_TYPE_STRING);
-    
-    GtkTreeIter iter;
     UnitTable::UnitMap m = unit_table.units(unit_type);
     
+    InkSelectOneActionColumns columns;
+    _store = Gtk::ListStore::create(columns);
+    Gtk::TreeModel::Row row;
 
     for (UnitTable::UnitMap::iterator m_iter = m.begin(); m_iter != m.end(); ++m_iter) {
-        Glib::ustring text = m_iter->first;
-        gtk_list_store_append(_store, &iter);
-        gtk_list_store_set(_store, &iter, COLUMN_STRING, text.c_str(), -1);
+
+        Glib::ustring unit = m_iter->first;
+
+        row = *(_store->append());
+        row[columns.col_label    ] = unit;
+        row[columns.col_tooltip  ] = ("");
+        row[columns.col_icon     ] = "NotUsed";
+        row[columns.col_sensitive] = true;
     }
-    gint count = gtk_tree_model_iter_n_children(GTK_TREE_MODEL(_store), 0);
+
+    // Why?
+    gint count = _store->children().size();
     if ((count > 0) && (_active > count)) {
         _setActive(--count);
     } else {
@@ -54,11 +66,6 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 
 UnitTracker::~UnitTracker()
 {
-    // Unhook weak references to GtkActions
-    for (auto i : _actionList) {
-        g_signal_handlers_disconnect_by_func(G_OBJECT(i), (gpointer) _unitChangedCB, this);
-        g_object_weak_unref(G_OBJECT(i), _actionFinalizedCB, this);
-    }
     _actionList.clear();
 
     // Unhook weak references to GtkAdjustments
@@ -81,18 +88,15 @@ Inkscape::Util::Unit const * UnitTracker::getActiveUnit() const
 void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
 {
     if (unit) {
-        GtkTreeIter iter;
+
+        InkSelectOneActionColumns columns;
         int index = 0;
-        gboolean found = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(_store), &iter);
-        while (found) {
-            gchar *storedUnit = 0;
-            gtk_tree_model_get(GTK_TREE_MODEL(_store), &iter, COLUMN_STRING, &storedUnit, -1);
-            if (storedUnit && (!unit->abbr.compare(storedUnit))) {
-                _setActive(index);
+        for (auto& row: _store->children() ) {
+            Glib::ustring storedUnit = row[columns.col_label];
+            if (!unit->abbr.compare (storedUnit)) {
+                _setActive (index);
                 break;
             }
-            
-            found = gtk_tree_model_iter_next(GTK_TREE_MODEL(_store), &iter);
             index++;
         }
     }
@@ -109,23 +113,37 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
     if (std::find(_adjList.begin(),_adjList.end(),adj) == _adjList.end()) {
         g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
         _adjList.push_back(adj);
+    } else {
+        std::cerr << "UnitTracker::addAjustment: Ajustment already added!" << std::endl;
     }
 }
 
 void UnitTracker::addUnit(Inkscape::Util::Unit const *u)
 {
-    GtkTreeIter iter;
-    gtk_list_store_append(_store, &iter);
-    gtk_list_store_set(_store, &iter, COLUMN_STRING, u ? u->abbr.c_str() : "NULL", -1);
+    InkSelectOneActionColumns columns;
+
+    Gtk::TreeModel::Row row;
+    row = *(_store->append());
+    row[columns.col_label    ] = u ? u->abbr.c_str() : "";
+    row[columns.col_tooltip  ] = ("");
+    row[columns.col_icon     ] = "NotUsed";
+    row[columns.col_sensitive] = true;
 }
 
 void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
 {
-    GtkTreeIter iter;
-    gtk_list_store_prepend(_store, &iter);
-    gtk_list_store_set(_store, &iter, COLUMN_STRING, u ? u->abbr.c_str() : "NULL", -1);
+    InkSelectOneActionColumns columns;
+
+    Gtk::TreeModel::Row row;
+    row = *(_store->prepend());
+    row[columns.col_label    ] = u ? u->abbr.c_str() : "";
+    row[columns.col_tooltip  ] = ("");
+    row[columns.col_icon     ] = "NotUsed";
+    row[columns.col_sensitive] = true;
+
     /* Re-shuffle our default selection here (_active gets out of sync) */
     setActiveUnit(_activeUnit);
+
 }
 
 void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
@@ -133,30 +151,28 @@ void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
     _priorValues[adj] = val;
 }
 
-GtkAction *UnitTracker::createAction(gchar const *name, gchar const *label, gchar const *tooltip)
+InkSelectOneAction *UnitTracker::createAction(Glib::ustring const &name,
+                                     Glib::ustring const &label,
+                                     Glib::ustring const &tooltip)
 {
-    EgeSelectOneAction *act1 = ege_select_one_action_new(name, label, tooltip, NULL, GTK_TREE_MODEL(_store));
-    ege_select_one_action_set_label_column(act1, COLUMN_STRING);
-    if (_active) {
-        ege_select_one_action_set_active(act1, _active);
-    }
+    InkSelectOneAction* act =
+        InkSelectOneAction::create( name, label, tooltip, "NotUsed", _store);
 
-    ege_select_one_action_set_appearance(act1, "minimal");
-    g_object_weak_ref(G_OBJECT(act1), _actionFinalizedCB, this);
-    g_signal_connect(G_OBJECT(act1), "changed", G_CALLBACK(_unitChangedCB), this);
-    _actionList.push_back(act1);
+    act->use_radio( false );
+    act->use_label( true );
+    act->use_icon( false );
+    act->use_group_label( false );
+    act->set_active( _active );
 
-    return GTK_ACTION(act1);
+    act->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
+    _actionList.push_back(act);
+
+    return act;
 }
 
-void UnitTracker::_unitChangedCB(GtkAction *action, gpointer data)
+void UnitTracker::_unitChangedCB(int active)
 {
-    if (action && data) {
-        EgeSelectOneAction *act = EGE_SELECT_ONE_ACTION(action);
-        gint active = ege_select_one_action_get_active(act);
-        UnitTracker *self = reinterpret_cast<UnitTracker *>(data);
-        self->_setActive(active);
-    }
+    _setActive(active);
 }
 
 void UnitTracker::_actionFinalizedCB(gpointer data, GObject *where_the_object_was)
@@ -177,7 +193,7 @@ void UnitTracker::_adjustmentFinalizedCB(gpointer data, GObject *where_the_objec
 
 void UnitTracker::_actionFinalized(GObject *where_the_object_was)
 {
-    EgeSelectOneAction* act = (EgeSelectOneAction*)(where_the_object_was);
+    InkSelectOneAction* act = (InkSelectOneAction*)(where_the_object_was);
     auto it = std::find(_actionList.begin(),_actionList.end(), act);
     if (it != _actionList.end()) {
         _actionList.erase(it);
@@ -202,37 +218,49 @@ void UnitTracker::_setActive(gint active)
     if ( active != _active || !_activeUnitInitialized ) {
         gint oldActive = _active;
 
-        GtkTreeIter iter;
-        gboolean found = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(_store), &iter, NULL, oldActive);
-        if (found) {
-            gchar *abbr;
-            gtk_tree_model_get(GTK_TREE_MODEL(_store), &iter, COLUMN_STRING, &abbr, -1);
-            Inkscape::Util::Unit const *unit = unit_table.getUnit(abbr);
+        if (_store) {
 
-            found = gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(_store), &iter, NULL, active);
-            if (found) {
-                gchar *newAbbr;
-                gtk_tree_model_get(GTK_TREE_MODEL(_store), &iter, COLUMN_STRING, &newAbbr, -1);
-                Inkscape::Util::Unit const *newUnit = unit_table.getUnit(newAbbr);
-                _activeUnit = newUnit;
+            // Find old and new units
+            InkSelectOneActionColumns columns;
+            int index = 0;
+            Glib::ustring oldAbbr( "NotFound" );
+            Glib::ustring newAbbr( "NotFound" );
+            for (auto& row: _store->children() ) {
+                if (index == _active) {
+                    oldAbbr = row[columns.col_label];
+                }
+                if (index == active) {
+                    newAbbr = row[columns.col_label];
+                }
+                if (newAbbr != "NotFound" && oldAbbr != "NotFound") break;
+                ++index;
+            }
 
-                if (!_adjList.empty()) {
-                    _fixupAdjustments(unit, newUnit);
+            if (oldAbbr != "NotFound") {
+
+                if (newAbbr != "NotFound") {
+                    Inkscape::Util::Unit const *oldUnit = unit_table.getUnit(oldAbbr);
+                    Inkscape::Util::Unit const *newUnit = unit_table.getUnit(newAbbr);
+                    _activeUnit = newUnit;
+
+                    if (!_adjList.empty()) {
+                        _fixupAdjustments(oldUnit, newUnit);
+                    }
+                } else {
+                    std::cerr << "UnitTracker::_setActive: Did not find new unit: " << active << std::endl;
                 }
 
             } else {
-                g_warning("Did not find new unit");
+                std::cerr << "UnitTracker::_setActive: Did not find old unit: " << oldActive
+                          << "  new: " << active << std::endl;
             }
-        } else {
-            g_warning("Did not find old unit");
         }
-
         _active = active;
 
-        for (auto act:_actionList) {
-            ege_select_one_action_set_active(act, active);
+        for (auto act: _actionList) {
+            act->set_active (active);
         }
-        
+
         _activeUnitInitialized = true;
     }
 }
@@ -267,3 +295,14 @@ void UnitTracker::_fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscap
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

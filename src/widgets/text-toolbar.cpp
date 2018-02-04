@@ -733,7 +733,7 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
 }
 
 
-static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
+static void sp_text_lineheight_unit_changed( GObject *tbl, int /* Not Used */ )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
@@ -1778,12 +1778,12 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         }
 
         // In Minimum and Adaptive modes, don't allow unit change (must remain unitless).
-        GtkAction* textLineHeightUnitsAction =
-            static_cast<GtkAction*>(g_object_get_data( tbl, "TextLineHeightUnitsAction") );
+        InkSelectOneAction* textLineHeightUnitsAction =
+            static_cast<InkSelectOneAction*>(g_object_get_data( tbl, "TextLineHeightUnitsAction") );
         if (activeButtonLS == 0 || (activeButtonLS == 1 && outer)) {
-            gtk_action_set_sensitive (textLineHeightUnitsAction, false);
+            textLineHeightUnitsAction->set_sensitive(false);
         } else {
-            gtk_action_set_sensitive (textLineHeightUnitsAction, true);
+            textLineHeightUnitsAction->set_sensitive(true);
         }
 
         // Word spacing
@@ -2279,7 +2279,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "TextDirectionAction", act );
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_direction_changed), holder));
+        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_direction_changed), holder));
     }
 
     /* Line height unit tracker */
@@ -2325,9 +2325,9 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* Line height units */
     {
-        GtkAction* act = tracker->createAction( "TextLineHeightUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_lineheight_unit_changed), holder );
+        InkSelectOneAction* act = tracker->createAction( "TextLineHeightUnitsAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act->gobj() );
+        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_lineheight_unit_changed), holder));
         g_object_set_data( holder, "TextLineHeightUnitsAction", act );
     }
 
