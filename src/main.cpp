@@ -566,6 +566,11 @@ gchar * blankParam = g_strdup("");
  */
 static void _win32_set_inkscape_env(gchar const *exe)
 {
+    // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
+    wchar_t *exe_w = (wchar_t *)g_utf8_to_utf16(exe, -1, NULL, NULL, NULL);
+    SetDllDirectoryW(exe_w);
+    g_free(exe_w);
+
     gchar const *path = g_getenv("PATH");
     gchar const *pythonpath = g_getenv("PYTHONPATH");
 
