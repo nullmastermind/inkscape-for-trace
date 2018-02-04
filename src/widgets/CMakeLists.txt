@@ -13,7 +13,6 @@ set(widgets_SRC
 	ege-adjustment-action.cpp
 	ege-output-action.cpp
 	ege-paint-def.cpp
-	ege-select-one-action.cpp
 	eraser-toolbar.cpp
 	fill-style.cpp
 	font-selector.cpp
@@ -68,7 +67,6 @@ set(widgets_SRC
 	ege-adjustment-action.h
 	ege-output-action.h
 	ege-paint-def.h
-	ege-select-one-action.h
 	eraser-toolbar.h
 	fill-n-stroke-factory.h
 	fill-style.h
