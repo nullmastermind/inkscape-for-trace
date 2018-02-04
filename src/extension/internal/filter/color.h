@@ -24,6 +24,7 @@
  *   Nudge RGB
  *   Nudge CMY
  *   Quadritone
+ *   Simple blend
  *   Solarize
  *   Tritone
  *
@@ -1541,6 +1542,89 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
 
     return _filter;
 }; /* Quadritone filter */
+
+
+/**
+    \brief    Custom predefined Simple blend filter.
+    
+    Simple blend filter.
+
+    Filter's parameters:
+    * Color (guint, default 16777215) -> flood1 (flood-opacity, flood-color)
+    * Blend mode (enum, default Hue) -> blend1 (mode)
+*/
+class SimpleBlend : public Inkscape::Extension::Internal::Filter::Filter {
+protected:
+    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+
+public:
+    SimpleBlend ( ) : Filter() { };
+    virtual ~SimpleBlend ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    
+    static void init (void) {
+        Inkscape::Extension::build_from_mem(
+            "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
+              "<name>" N_("Simple blend") "</name>\n"
+              "<id>org.inkscape.effect.filter.SimpleBlend</id>\n"
+              "<param name=\"color\" _gui-text=\"" N_("Color") "\" type=\"color\">16777215</param>\n"
+              "<param name=\"blendmode\" _gui-text=\"" N_("Blend mode:") "\" type=\"enum\">\n"
+                "<_item value=\"normal\">" N_("Normal") "</_item>\n"          
+                "<_item value=\"multiply\">" N_("Multiply") "</_item>\n"
+                "<_item value=\"screen\">" N_("Screen") "</_item>\n"
+                "<_item value=\"saturation\">" N_("Saturation") "</_item>\n"
+                "<_item value=\"darken\">" N_("Darken") "</_item>\n"
+                "<_item value=\"difference\">" N_("Difference") "</_item>\n"          
+                "<_item value=\"lighten\">" N_("Lighten") "</_item>\n"
+                "<_item value=\"luminosity\">" N_("Luminosity") "</_item>\n"
+                "<_item value=\"overlay\">" N_("Overlay") "</_item>\n"
+                "<_item value=\"color-dodge\">" N_("Color Dodge") "</_item>\n"
+                "<_item value=\"color-burn\">" N_("Color Burn") "</_item>\n"          
+                "<_item value=\"color\">" N_("Color") "</_item>\n"
+                "<_item value=\"hard-light\">" N_("Hard Light") "</_item>\n"
+                "<_item value=\"hue\">" N_("Hue") "</_item>\n"
+                "<_item value=\"exclusion\">" N_("Exclusion") "</_item>\n"
+              "</param>\n"
+              "<effect>\n"
+                "<object-type>all</object-type>\n"
+                "<effects-menu>\n"
+                  "<submenu name=\"" N_("Filters") "\">\n"
+                    "<submenu name=\"" N_("Color") "\"/>\n"
+                  "</submenu>\n"
+                "</effects-menu>\n"
+                "<menu-tip>" N_("Simple blend filter") "</menu-tip>\n"
+              "</effect>\n"
+            "</inkscape-extension>\n", new SimpleBlend());
+    };
+};
+
+gchar const *
+SimpleBlend::get_filter_text (Inkscape::Extension::Extension * ext)
+{
+    if (_filter != NULL) g_free((void *)_filter);
+
+    std::ostringstream a;
+    std::ostringstream r;
+    std::ostringstream g;
+    std::ostringstream b;
+    std::ostringstream blend;
+
+    guint32 color = ext->get_param_color("color");
+    r << ((color >> 24) & 0xff);
+    g << ((color >> 16) & 0xff);
+    b << ((color >>  8) & 0xff);
+    a << (color & 0xff) / 255.0F;
+    blend << ext->get_param_enum("blendmode");
+
+    _filter = g_strdup_printf(
+        "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Simple blend\">\n"
+          "<feFlood result=\"flood1\" flood-color=\"rgb(%s,%s,%s)\" flood-opacity=\"%s\" />\n"
+          "<feBlend result=\"blend1\" in=\"flood1\" in2=\"SourceGraphic\" mode=\"%s\" />\n"
+          "<feComposite operator=\"in\" in=\"blend1\" in2=\"SourceGraphic\" />\n"
+        "</filter>\n", r.str().c_str(), g.str().c_str(), b.str().c_str(),
+                       a.str().c_str(), blend.str().c_str());
+
+    return _filter;
+}; /* SimpleBlend filter */
 
 /**
     \brief    Custom predefined Solarize filter.
