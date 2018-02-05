@@ -102,9 +102,6 @@ set(inkscape_SRC
 
   # -------
   # Headers
-  MultiPrinter.h
-  PylogFormatter.h
-  TRPIFormatter.h
   attribute-rel-css.h
   attribute-rel-svg.h
   attribute-rel-util.h
