@@ -44,7 +44,6 @@
 #include "ui/tools/tool-base.h"
 #include "inkscape.h"
 #include "style.h"
-#include "message-stack.h"
 
 #define noPATH_VERBOSE
 
