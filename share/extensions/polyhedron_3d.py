@@ -193,7 +193,7 @@ def get_darkened_colour( (r,g,b), factor):
                 + "%02X" % floor( factor*b ) #make the colour string
 
 def make_rotation_log(options):
-#makes a string recording the axes and angles of each roation, so an object can be repeated
+#makes a string recording the axes and angles of each rotation, so an object can be repeated
     return   options.r1_ax+str('%.2f'%options.r1_ang)+':'+\
              options.r2_ax+str('%.2f'%options.r2_ang)+':'+\
              options.r3_ax+str('%.2f'%options.r3_ang)+':'+\

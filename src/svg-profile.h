@@ -127,7 +127,7 @@ private:
                 return false;
             }
 
-            /** \brief A convience function to set a particular bit in the
+            /** \brief A convenience function to set a particular bit in the
                        bitfield
 
                 This function first find which integer the bit is in by

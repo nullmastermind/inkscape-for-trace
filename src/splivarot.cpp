@@ -281,7 +281,7 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
         free(toCut);
     } else if ( bop == bool_op_cut ) {
         // il faut appeler pour desallouer PointData (pas vital, mais bon)
-        // the Booleen() function did not deallocated the point_data array in theShape, because this
+        // the Booleen() function did not deallocate the point_data array in theShape, because this
         // function needs it.
         // this function uses the point_data to get the winding number of each path (ie: is a hole or not)
         // for later reconstruction in objects, you also need to extract which path is parent of holes (nesting info)
@@ -659,7 +659,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         free(toCut);
     } else if ( bop == bool_op_cut ) {
         // il faut appeler pour desallouer PointData (pas vital, mais bon)
-        // the Booleen() function did not deallocated the point_data array in theShape, because this
+        // the Booleen() function did not deallocate the point_data array in theShape, because this
         // function needs it.
         // this function uses the point_data to get the winding number of each path (ie: is a hole or not)
         // for later reconstruction in objects, you also need to extract which path is parent of holes (nesting info)

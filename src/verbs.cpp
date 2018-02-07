@@ -575,7 +575,7 @@ SPAction *TextVerb::make_action(Inkscape::ActionContext const & context)
 }
 
 /**
- * A quick little convience function to make building actions
+ * A quick little convenience function to make building actions
  * a little bit easier.
  *
  * This function does a couple of things.  The most obvious is that
