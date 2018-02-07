@@ -78,7 +78,6 @@ import copy
 import sys
 import time
 import cmath
-import numpy
 import codecs
 import random
 # local library
@@ -92,6 +91,12 @@ import bezmisc
 ### Check if inkex has errormsg (0.46 version does not have one.) Could be removed later.
 if "errormsg" not in dir(inkex):
 	inkex.errormsg = lambda msg: sys.stderr.write((unicode(msg) + "\n").encode("UTF-8"))
+
+try:
+    import numpy
+except:
+    inkex.errormsg(_("Failed to import the numpy modules. These modules are required by this extension. Please install them and try again.  On a Debian-like system this can be done with the command, sudo apt-get install python-numpy."))
+    exit()
 
 
 def bezierslopeatt(((bx0,by0),(bx1,by1),(bx2,by2),(bx3,by3)),t):
