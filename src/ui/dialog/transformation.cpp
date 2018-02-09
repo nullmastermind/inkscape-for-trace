@@ -359,6 +359,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_a.setDigits(3);
     _scalar_transform_a.setIncrements(0.1, 1.0);
     _scalar_transform_a.setValue(1.0);
+    _scalar_transform_a.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_a, 0, 0, 1, 1);
 
@@ -370,6 +371,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_b.setDigits(3);
     _scalar_transform_b.setIncrements(0.1, 1.0);
     _scalar_transform_b.setValue(0.0);
+    _scalar_transform_b.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_b, 0, 1, 1, 1);
 
@@ -381,6 +383,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_c.setDigits(3);
     _scalar_transform_c.setIncrements(0.1, 1.0);
     _scalar_transform_c.setValue(0.0);
+    _scalar_transform_c.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_c, 1, 0, 1, 1);
 
@@ -393,6 +396,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_d.setDigits(3);
     _scalar_transform_d.setIncrements(0.1, 1.0);
     _scalar_transform_d.setValue(1.0);
+    _scalar_transform_d.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_d, 1, 1, 1, 1);
 
@@ -405,6 +409,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_e.setDigits(3);
     _scalar_transform_e.setIncrements(0.1, 1.0);
     _scalar_transform_e.setValue(0.0);
+    _scalar_transform_e.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_e, 2, 0, 1, 1);
 
@@ -417,6 +422,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_f.setDigits(3);
     _scalar_transform_f.setIncrements(0.1, 1.0);
     _scalar_transform_f.setValue(0.0);
+    _scalar_transform_f.setWidthChars(6);
 
     _page_transform.table().attach(_scalar_transform_f, 2, 1, 1, 1);
 

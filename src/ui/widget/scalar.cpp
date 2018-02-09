@@ -130,6 +130,12 @@ void Scalar::setValue(double value, bool setProg)
     static_cast<SpinButton*>(_widget)->set_value(value);
 }
 
+void Scalar::setWidthChars(uint chars)
+{
+    g_assert(_widget != NULL);
+    static_cast<SpinButton*>(_widget)->set_width_chars(chars);
+}
+
 void Scalar::update()
 {
     g_assert(_widget != nullptr);

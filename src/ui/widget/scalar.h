@@ -138,6 +138,11 @@ public:
     void    setValue(double value, bool setProg = true);
 
     /**
+     * Sets the width of the spin button by number of characters.
+     */
+    void    setWidthChars(unsigned chars);
+
+    /**
      * Manually forces an update of the spin button.
      */
     void    update();
