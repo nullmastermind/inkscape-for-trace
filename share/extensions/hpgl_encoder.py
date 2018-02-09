@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 import math
 import re
 import string
+from distutils.spawn import find_executable
 from subprocess import Popen, PIPE
 from shutil import copy2
 # local libraries
@@ -116,8 +117,13 @@ class hpglEncoder:
         # so that we can open and close it silently
         copy2(file, tempfile)
 
+        command = 'inkscape --verb=EditSelectAllInAllLayers --verb=EditUnlinkClone --verb=ObjectToPath --verb=FileSave --verb=FileQuit ' + tempfile
+
+        if find_executable('xvfb-run'):
+            command = 'xvfb-run ' + command
+
         # Unfortunately this briefly pops up the GUI and cannot be done with -z, see https://bugs.launchpad.net/inkscape/+bug/843260
-        p = Popen('inkscape --verb=EditSelectAllInAllLayers --verb=EditUnlinkClone --verb=ObjectToPath --verb=FileSave --verb=FileQuit ' + tempfile, shell=True, stdout=PIPE, stderr=PIPE)
+        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
         (out, err) = p.communicate()
 
         if p.returncode != 0:
