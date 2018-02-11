@@ -104,7 +104,7 @@ Dependency::~Dependency (void)
     \return  Whether or not the dependency passes.
 
     This function depends largely on all of the enums.  The first level
-    that is evaluted is the \c _type.
+    that is evaluated is the \c _type.
 
     If the type is \c TYPE_EXTENSION then the id for the extension is
     looked up in the database.  If the extension is found, and it is

@@ -45,7 +45,7 @@ class Effect : public Extension {
     void merge_menu (Inkscape::XML::Node * base, Inkscape::XML::Node * start, Inkscape::XML::Node * patern, Inkscape::XML::Node * mergee);
 
     /** \brief  This is the verb type that is used for all effect's verbs.
-                It provides convience functions and maintains a pointer
+                It provides convenience functions and maintains a pointer
                 back to the effect that created it.  */
     class EffectVerb : public Inkscape::Verb {
         private:
