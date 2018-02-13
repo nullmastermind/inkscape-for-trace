@@ -21,29 +21,32 @@
 
 #include <glibmm/i18n.h>
 
-#include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "sp-lpe-item.h"
-
-#include "display/curve.h"
 #include <2geom/curves.h>
-#include "helper/geom-curves.h"
 
-#include "svg/svg.h"
-#include "xml/repr.h"
 #include "attributes.h"
-
-#include "sp-path.h"
-#include "sp-guide.h"
-
-#include "document.h"
-#include "desktop.h"
-
 #include "desktop-style.h"
-#include "ui/tools/tool-base.h"
+#include "desktop.h"
+#include "display/curve.h"
+#include "document.h"
 #include "inkscape.h"
 #include "style.h"
+
+#include "helper/geom-curves.h"
+
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+
+#include "sp-guide.h"
+#include "sp-lpe-item.h"
+#include "sp-path.h"
+
+#include "svg/svg.h"
+
+#include "ui/tools/tool-base.h"
+
+#include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 
 #define noPATH_VERBOSE
 
@@ -109,13 +112,18 @@ void SPPath::convert_to_guides() const {
     sp_guide_pt_pairs_to_guides(this->document, pts);
 }
 
-SPPath::SPPath() : SPShape(), connEndPair(this) {
+SPPath::SPPath()
+    : SPShape()
+    , connEndPair(this)
+    , d_source( SP_STYLE_SRC_UNSET )
+{
 }
 
 SPPath::~SPPath() {
 }
 
 void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
+
     /* Are these calls actually necessary? */
     this->readAttr( "marker" );
     this->readAttr( "marker-start" );
@@ -164,7 +172,6 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     /* d is a required attribute */
     char const *d = this->getAttribute("d", NULL);
-
     if (d == NULL) {
         // First see if calculating the path effect will generate "d":
         this->update_patheffect(true);
@@ -173,8 +180,11 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
         // I guess that didn't work, now we have nothing useful to write ("")
         if (d == NULL) {
             this->setKeyValue( sp_attribute_lookup("d"), "");
+        } else {
+            d_source = SP_STYLE_SRC_ATTRIBUTE;
         }
     }
+
 }
 
 void SPPath::release() {
@@ -275,8 +285,44 @@ g_message("sp_path_write writes 'd' attribute");
 }
 
 void SPPath::update(SPCtx *ctx, guint flags) {
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+    }
+
+    // Our code depends on 'd' being an attribute (LPE's, etc.). To support 'd' as a property, we
+    // check it here (after the style property has been evaluated, this allows us to properly
+    // handled precedence of property vs attribute). If we read in a 'd' set by styling, convert it
+    // to an attribute. We'll convert it back on output.
+
+    d_source = style->d.style_src;
+
+    if (style->d.set &&
+
+        (d_source == SP_STYLE_SRC_STYLE_PROP | d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
+
+        if (style->d.value) {
+
+            Geom::PathVector pv = sp_svg_read_pathv(style->d.value);
+            SPCurve *curve = new SPCurve(pv);
+            if (curve) {
+
+                // Update curve
+                this->setCurveInsync(curve, TRUE);
+                curve->unref();
+
+                // Convert from property to attribute (convert back on write)
+                getRepr()->setAttribute("d", style->d.value);
+
+                SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
+                sp_repr_css_unset_property ( css, "d");
+                sp_repr_css_set ( getRepr(), css, "style" );
+                sp_repr_css_attr_unref ( css );
+
+            } else {
+                // Do nothing... don't overwrite 'd' from attribute
+            }
+        }
     }
 
     SPShape::update(ctx, flags);
@@ -370,7 +416,6 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
         curve->unref();
     }
 }
-
 
 /**
  * Adds a original_curve to the path.  If owner is specified, a reference

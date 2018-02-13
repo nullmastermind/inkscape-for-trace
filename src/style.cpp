@@ -97,6 +97,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //   font-family
     //   font-specification
 
+
+    // SVG 2 attributes promoted to properties. (When geometry properties are added, move after font.)
+    d(                "d"                                    ),  // SPIString Not inherited!
+
     // Font related properties and 'font' shorthand
     font_style(       "font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL   ),
     font_variant(     "font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL ),
@@ -281,6 +285,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // This might be too resource hungary... but for now it possible to loop over properties
+
+    // SVG 2: Attributes promoted to properties
+    _properties.push_back( &d );
 
     // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
     _properties.push_back( &color );
@@ -702,6 +709,9 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
     g_return_if_fail(val != NULL);
 
     switch (id) {
+        case SP_ATTR_D:
+            d.readIfUnset( val, source );
+            break;
         case SP_PROP_INKSCAPE_FONT_SPEC:
             font_specification.readIfUnset( val, source );
             break;

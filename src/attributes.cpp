@@ -138,7 +138,6 @@ static SPStyleProp const props[] = {
     {SP_ATTR_X, "x"},
     {SP_ATTR_Y, "y"},
     /* SPPath */
-    {SP_ATTR_D, "d"},
     {SP_ATTR_INKSCAPE_ORIGINAL_D, "inkscape:original-d"},
     /* (Note: XML representation of connectors may change in future.) */
     {SP_ATTR_CONNECTOR_TYPE, "inkscape:connector-type"},
@@ -422,6 +421,9 @@ static SPStyleProp const props[] = {
 
     /* CSS & SVG Properites */
 
+    /* SVG 2 Attributes promoted to properties */
+    {SP_ATTR_D, "d"},
+
     /* Paint */
     {SP_PROP_COLOR, "color"},
     {SP_PROP_OPACITY, "opacity"},
@@ -552,6 +554,7 @@ static SPStyleProp const props[] = {
 
     /* LivePathEffect */
     {SP_PROP_PATH_EFFECT, "effect"},
+
 };
 
 #define n_attrs (sizeof(props) / sizeof(props[0]))
