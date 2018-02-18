@@ -275,7 +275,7 @@ template <int S, int T> SolutionKind gaussjord_solve (double A[S][T], double x[T
         }
     }
 
-    // we need to adapt the value if we we are in the "projective case" (see above)
+    // we need to adapt the value if we are in the "projective case" (see above)
     double val_new = (proj ? projectify<S,T>(cols, B, x, index, val) : val);
 
     if (index >= 0 && index < T) {

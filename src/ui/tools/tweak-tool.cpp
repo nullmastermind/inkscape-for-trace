@@ -793,7 +793,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
             r = radius / rg->r.computed;
         }
 
-        // Normalize pos to 0..1, taking into accound gradient spread:
+        // Normalize pos to 0..1, taking into account gradient spread:
         double pos_e = pos;
         if (gradient->getSpread() == SP_GRADIENT_SPREAD_PAD) {
             if (pos > 1) {

@@ -120,7 +120,7 @@ sp_pathvector_boolop_slice_intersect(Geom::PathVector const &pathva, Geom::PathV
     // (h) fill a bool vector with information which pieces are in
     // (i) filter the descr_cmd of the result path with this bool vector
     //
-    // The main inefficieny here is step (e) because I use a winding function of the area-shape which goes
+    // The main inefficiency here is step (e) because I use a winding function of the area-shape which goes
     // through the complete edge list for each point I ask for, so effort is n-edges-contour * n-edges-area.
     // It is tricky to improve this without building into the livarot code.
     // One way might be to decide at the intersection points which edges touching the intersection points are
