@@ -18,7 +18,6 @@
 
 #include "sp-shape.h"
 #include "sp-conn-end-pair.h"
-#include "style-internal.h" // For SPStyleSrc
 
 class SPCurve;
 
@@ -48,22 +47,19 @@ public: // should be made protected
 public:
     SPConnEndPair connEndPair;
 
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-    virtual void release();
-    virtual void update(SPCtx* ctx, unsigned int flags);
+	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+	virtual void release();
+	virtual void update(SPCtx* ctx, unsigned int flags);
 
-    virtual void set(unsigned int key, char const* value);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	virtual void set(unsigned int key, char const* value);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
 
-    virtual const char* displayName() const;
-    virtual char* description() const;
-    virtual Geom::Affine set_transform(Geom::Affine const &transform);
+        virtual const char* displayName() const;
+	virtual char* description() const;
+	virtual Geom::Affine set_transform(Geom::Affine const &transform);
     virtual void convert_to_guides() const;
 
     virtual void update_patheffect(bool write);
-
-private:
-    SPStyleSrc d_source;  // Source of 'd' value, saved for output.
 };
 
 #endif // SEEN_SP_PATH_H
