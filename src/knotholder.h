@@ -60,7 +60,7 @@ public:
     void add_pattern_knotholder();
 
     void setEditTransform(Geom::Affine edit_transform);
-    Geom::Affine getEditTranform() const { return _edit_transform; }
+    Geom::Affine getEditTransform() const { return _edit_transform; }
 
     bool knot_mouseover() const;
 
