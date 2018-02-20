@@ -1,5 +1,5 @@
 <inkscape-extension>
-    <_name>myDXF Output</_name>
+    <_name>Desktop Cutting Plotter R12</_name>
     <id>org.ekips.output.dxf12_outlines</id>
         <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
         <dependency type="executable" location="extensions">inkex.py</dependency>
