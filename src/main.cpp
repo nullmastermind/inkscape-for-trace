@@ -571,74 +571,24 @@ static void _win32_set_inkscape_env(gchar const *exe)
     SetDllDirectoryW(exe_w);
     g_free(exe_w);
 
+    // add inkscape directory to PATH
     gchar const *path = g_getenv("PATH");
-    gchar const *pythonpath = g_getenv("PYTHONPATH");
-
-    gchar *python = g_build_filename(exe, "python", NULL);
-    gchar *scripts = g_build_filename(exe, "python", "Scripts", NULL);
-    gchar *perl = g_build_filename(exe, "python", NULL);
-    gchar *pythonlib = g_build_filename(exe, "python", "Lib", NULL);
-    gchar *pythondll = g_build_filename(exe, "python", "DLLs", NULL);
-
-    // Python 2.x needs short paths in PYTHONPATH.
-    // Otherwise it doesn't work when Inkscape is installed in Unicode directories.
-    // g_win32_locale_filename_from_utf8 is the GLib wrapper for GetShortPathName.
-    // Remove this once we move to Python 3.0.
-    gchar *python_s = g_win32_locale_filename_from_utf8(python);
-    gchar *pythonlib_s = g_win32_locale_filename_from_utf8(pythonlib);
-    gchar *pythondll_s = g_win32_locale_filename_from_utf8(pythondll);
-
     gchar *new_path;
-    gchar *new_pythonpath;
     if (path) {
-        new_path = g_strdup_printf("%s;%s;%s;%s;%s", exe, python, scripts, perl, path);
+        new_path = g_strdup_printf("%s;%s", exe, path);
     } else {
-        new_path = g_strdup_printf("%s;%s;%s;%s", exe, python, scripts, perl);
+        new_path = g_strdup(exe);
     }
-    if (pythonpath) {
-        new_pythonpath = g_strdup_printf("%s;%s;%s;%s",
-             python_s, pythonlib_s, pythondll_s, pythonpath);
-    } else {
-        new_pythonpath = g_strdup_printf("%s;%s;%s",
-            python_s, pythonlib_s, pythondll_s);
-    }
-
     g_setenv("PATH", new_path, TRUE);
-    g_setenv("PYTHONPATH", new_pythonpath, TRUE);
-
-    /*
-    printf("PATH = %s\n\n", g_getenv("PATH"));
-    printf("PYTHONPATH = %s\n\n", g_getenv("PYTHONPATH"));
-
-    gchar *p = g_find_program_in_path("python");
-    if (p) {
-        printf("python in %s\n\n", p);
-        g_free(p);
-    } else {
-        printf("python not found\n\n");
-    }*/
+    g_free(new_path);
 
     // INKSCAPE_LOCALEDIR is needed by Python/Gettext
     gchar *localepath = g_build_filename(exe, PACKAGE_LOCALE_DIR, NULL);
     g_setenv("INKSCAPE_LOCALEDIR", localepath, TRUE);
+    g_free(localepath);
 
     // prevent "please insert disk" messages. fixes bug #950781
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
-
-    g_free(python);
-    g_free(scripts);
-    g_free(perl);
-    g_free(pythonlib);
-    g_free(pythondll);
-
-    g_free(python_s);
-    g_free(pythonlib_s);
-    g_free(pythondll_s);
-
-    g_free(new_path);
-    g_free(new_pythonpath);
-
-    g_free(localepath);
 }
 #endif
 
