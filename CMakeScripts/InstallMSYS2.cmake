@@ -103,6 +103,7 @@ if(WIN32)
     ${MINGW_BIN}/libunistring-[0-9]*.dll
     ${MINGW_BIN}/libvisio-0.[0-9]*.dll
     ${MINGW_BIN}/libwebp-[0-9]*.dll
+    ${MINGW_BIN}/libwebpdemux-[0-9]*.dll
     ${MINGW_BIN}/libwebpmux-[0-9]*.dll
     ${MINGW_BIN}/libwinpthread-[0-9]*.dll
     ${MINGW_BIN}/libwpd-0.[0-9]*.dll
