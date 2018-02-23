@@ -35,7 +35,7 @@ to browse through the examples included in the inkscape package.
 
 =head1 OPTIONS
 
-There are no options yet.
+-s, --scale=NUM     Scale image by factor NUM
 
 =head1 TODO
 
