@@ -59,6 +59,17 @@ public:
     ImplementationDocumentCache (Inkscape::UI::View::View * view) :
             _view(view)
     {
+        SPDesktop *desktop = (SPDesktop*)view;
+        Inkscape::Selection * selection = NULL;
+        if (desktop) {
+            selection = desktop->getSelection();
+            if (selection && !selection->params.empty()) {
+                selection->restoreBackup();
+                if (!desktop->on_live_extension) {
+                    selection->emptyBackup();
+                }
+            }
+        }
         return;
     };
     virtual ~ImplementationDocumentCache ( ) { return; };

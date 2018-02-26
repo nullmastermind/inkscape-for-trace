@@ -54,6 +54,7 @@ void
 BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
     
+    Inkscape::Selection * selection     = static_cast<SPDesktop *>(desktop)->selection;
 
     float width = module->get_param_float("blur-width");
     int   steps = module->get_param_int("num-steps");
@@ -61,17 +62,6 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double old_offset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
-    SPDesktop *deskt = static_cast<SPDesktop *>(desktop);
-    Inkscape::Selection * selection = NULL;
-    if (deskt) {
-        selection = deskt->selection;
-        if (selection && !selection->params.empty()) {
-            selection->restoreBackup();
-            if (!deskt->on_live_extension) {
-                selection->emptyBackup();
-            }
-        }
-    }
     // TODO need to properly refcount the items, at least
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     selection->clear();

@@ -120,19 +120,9 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 	if (filterdoc == NULL) {
 		return; // could not parse the XML source of the filter; typically parser will stderr a warning
 	}
-
 	//printf("Calling filter effect\n");
-	SPDesktop *desktop = (SPDesktop *)document;
-    Inkscape::Selection * selection = NULL;
-	if (desktop) {
-	    selection = desktop->selection;
-        if (selection && !selection->params.empty()) {
-            selection->restoreBackup();
-            if (!desktop->on_live_extension) {
-                selection->emptyBackup();
-            }
-        }
-    }
+    Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
+
     // TODO need to properly refcount the items, at least
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 

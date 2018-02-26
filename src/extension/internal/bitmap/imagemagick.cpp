@@ -64,16 +64,6 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     _imageItems(NULL)
 {
     SPDesktop *desktop = (SPDesktop*)view;
-    Inkscape::Selection * selection = NULL;
-    if (desktop) {
-        selection = desktop->getSelection();
-        if (selection && !selection->params.empty()) {
-            selection->restoreBackup();
-            if (!desktop->on_live_extension) {
-                selection->emptyBackup();
-            }
-        }
-    }
     auto selectedItemList = desktop->selection->items();
     int selectCount = (int) boost::distance(selectedItemList);
     
