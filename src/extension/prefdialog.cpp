@@ -211,8 +211,13 @@ PrefDialog::preview_toggle (void) {
             delete _exEnv;
             _exEnv = NULL;
             _effect->set_execution_env(_exEnv);
+            if (desktop && selection) {
+                selection->restoreBackup();
+                desktop->on_live_extension = false;
+            }
         }
     }
+    document->setModifiedSinceSave(modified);
 }
 
 void
