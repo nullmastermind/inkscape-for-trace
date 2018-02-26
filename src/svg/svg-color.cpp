@@ -491,7 +491,8 @@ void sp_svg_write_color(gchar *buf, unsigned const buflen, guint32 const rgba32)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned const rgb24 = rgba32 >> 8;
-    if (prefs->getBool("/options/svgoutput/usenamedcolors")) {
+    if ( prefs->getBool("/options/svgoutput/usenamedcolors") &&
+        !prefs->getBool("/options/svgoutput/disable_optimizations" )) {
         rgb24_to_css(buf, rgb24);
     } else {
         g_snprintf(buf, buflen, "#%06x", rgb24);

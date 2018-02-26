@@ -418,28 +418,11 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
     SPDesktop *desktop = (SPDesktop *) view;
     sp_namedview_document_from_window(desktop);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool sort_attributes = prefs->getBool("/options/svgoutput/sort_attributes", false);
-    bool incorrect_style_properties_remove = prefs->getBool("/options/svgoutput/incorrect_style_properties_remove", false);
-    bool incorrect_attributes_remove = prefs->getBool("/options/svgoutput/incorrect_attributes_remove", false);
-    bool usenamedcolors = prefs->getBool("/options/svgoutput/usenamedcolors", false);
-    bool forcerepeatcommands = prefs->getBool("/options/svgoutput/forcerepeatcommands", false);
-    bool style_defaults_remove = prefs->getBool("/options/svgoutput/style_defaults_remove", false);
-    prefs->setBool("/options/svgoutput/sort_attributes", false);
-    prefs->setBool("/options/svgoutput/incorrect_style_properties_remove", false);
-    prefs->setBool("/options/svgoutput/incorrect_attributes_remove", false);
-    prefs->setBool("/options/svgoutput/usenamedcolors", false);
-    prefs->setBool("/options/svgoutput/forcerepeatcommands", false);
-    prefs->setBool("/options/svgoutput/style_defaults_remove", false);
+    prefs->setBool("/options/svgoutput/disable_optimizations", true);
     Inkscape::Extension::save(
               Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
               view->doc(), _filename.c_str(), false, false, false, Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
-
-    prefs->setBool("/options/svgoutput/sort_attributes", sort_attributes);
-    prefs->setBool("/options/svgoutput/incorrect_style_properties_remove", incorrect_style_properties_remove);
-    prefs->setBool("/options/svgoutput/incorrect_attributes_remove", incorrect_attributes_remove);
-    prefs->setBool("/options/svgoutput/usenamedcolors", usenamedcolors);
-    prefs->setBool("/options/svgoutput/forcerepeatcommands", forcerepeatcommands);
-    prefs->setBool("/options/svgoutput/style_defaults_remove", style_defaults_remove);
+    prefs->setBool("/options/svgoutput/disable_optimizations", false);
     return;
 }
 
