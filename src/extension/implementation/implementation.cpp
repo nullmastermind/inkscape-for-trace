@@ -27,6 +27,23 @@ namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
+void
+ImplementationDocumentCache::ImplementationDocumentCache (Inkscape::UI::View::View * view)
+     : _view(view)
+{
+    SPDesktop *desktop = (SPDesktop*)view;
+    Inkscape::Selection * selection = NULL;
+    if (desktop) {
+        selection = desktop->getSelection();
+        if (selection && !selection->params.empty()) {
+            selection->restoreBackup();
+            if (!desktop->on_live_extension) {
+                selection->emptyBackup();
+            }
+        }
+    }
+}
+
 Gtk::Widget *
 Implementation::prefs_input(Inkscape::Extension::Input *module, gchar const */*filename*/) {
     return module->autogui(NULL, NULL);
