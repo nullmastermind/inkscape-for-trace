@@ -26,12 +26,9 @@ static int const maxprec = 16;
 int Inkscape::SVG::PathString::numericprecision;
 int Inkscape::SVG::PathString::minimumexponent;
 Inkscape::SVG::PATHSTRING_FORMAT Inkscape::SVG::PathString::format;
-bool forcerepeatcommands =  prefs->getBool("/options/svgoutput/disable_optimizations" );
-if (!forcerepeatcommands)  {
-    forcerepeatcommands = Inkscape::Preferences::get()->getBool("/options/svgoutput/forcerepeatcommands");
-}
+
 Inkscape::SVG::PathString::PathString() :
-    force_repeat_commands(forcerepeatcommands)
+    force_repeat_commands(!Inkscape::Preferences::get()->getBool("/options/svgoutput/disable_optimizations" ) && Inkscape::Preferences::get()->getBool("/options/svgoutput/forcerepeatcommands"))
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     format = (PATHSTRING_FORMAT)prefs->getIntLimited("/options/svgoutput/pathstring_format", 1, 0, PATHSTRING_FORMAT_SIZE - 1 );
