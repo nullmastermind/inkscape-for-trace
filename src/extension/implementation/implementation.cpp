@@ -27,7 +27,6 @@ namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
-void
 ImplementationDocumentCache::ImplementationDocumentCache (Inkscape::UI::View::View * view)
      : _view(view)
 {
@@ -42,6 +41,7 @@ ImplementationDocumentCache::ImplementationDocumentCache (Inkscape::UI::View::Vi
             }
         }
     }
+    return;
 }
 
 Gtk::Widget *
