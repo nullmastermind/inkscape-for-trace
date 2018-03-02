@@ -63,6 +63,7 @@ enum EffectType {
     LINE_SEGMENT,
     OFFSET,
     PARALLEL,
+    PTS2ELLIPSE,
     PATH_LENGTH,
     PERP_BISECTOR,
     PERSPECTIVE_PATH,

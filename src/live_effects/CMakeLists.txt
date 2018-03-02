@@ -61,6 +61,7 @@ set(live_effects_SRC
 	lpeobject.cpp
 	spiro-converters.cpp
 	spiro.cpp
+	lpe-pts2ellipse.cpp
 
 	parameter/array.cpp
 	parameter/bool.cpp
@@ -154,6 +155,7 @@ set(live_effects_SRC
 	lpeobject.h
 	spiro-converters.h
 	spiro.h
+	lpe-pts2ellipse.h
 
 	parameter/array.h
 	parameter/bool.h

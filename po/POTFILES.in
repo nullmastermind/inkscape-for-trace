@@ -144,6 +144,7 @@ src/live_effects/lpe-perspective-envelope.cpp
 src/live_effects/lpe-powerclip.cpp
 src/live_effects/lpe-powermask.cpp
 src/live_effects/lpe-powerstroke.cpp
+src/live_effects/lpe-pts2ellipse.cpp
 src/live_effects/lpe-rough-hatches.cpp
 src/live_effects/lpe-roughen.cpp
 src/live_effects/lpe-ruler.cpp
