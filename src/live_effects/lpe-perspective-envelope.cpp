@@ -414,6 +414,9 @@ LPEPerspectiveEnvelope::newWidget()
     reset_button->set_size_request(140,30);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*reset_button, false, false,2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -462,7 +465,7 @@ LPEPerspectiveEnvelope::horizontal(PointParam &param_one, PointParam &param_two,
 void
 LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     Geom::Line vert(Geom::Point(boundingbox_X.middle(),boundingbox_Y.max()), Geom::Point(boundingbox_X.middle(), boundingbox_Y.min()));
     Geom::Line horiz(Geom::Point(boundingbox_X.min(),boundingbox_Y.middle()), Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()));
     if(vertical_mirror) {
@@ -503,7 +506,7 @@ void
 LPEPerspectiveEnvelope::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
     setDefaults();
     resetGrid();
 }

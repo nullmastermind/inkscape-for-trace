@@ -29,13 +29,16 @@ namespace Inkscape {
 namespace UI {
 
 KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop);
+KnotHolder *createLPEKnotHolder(SPItem *item, SPDesktop *desktop);
 
 bool ShapeEditor::_blockSetItem = false;
 
 ShapeEditor::ShapeEditor(SPDesktop *dt, Geom::Affine edit_transform) :
     desktop(dt),
     knotholder(nullptr),
+    lpeknotholder(nullptr),
     knotholder_listener_attached_for(nullptr),
+    lpeknotholder_listener_attached_for(nullptr),
     _edit_transform(edit_transform)
 {
 }
@@ -58,24 +61,42 @@ void ShapeEditor::unset_item(bool keep_knotholder) {
             this->knotholder = NULL;
         }
     }
+    if (this->lpeknotholder) {
+        Inkscape::XML::Node *old_repr = this->lpeknotholder->repr;
+        if (old_repr && old_repr == lpeknotholder_listener_attached_for) {
+            sp_repr_remove_listener_by_data(old_repr, this);
+            Inkscape::GC::release(old_repr);
+            lpeknotholder_listener_attached_for = NULL;
+        }
+
+        if (!keep_knotholder) {
+            delete this->lpeknotholder;
+            this->lpeknotholder = NULL;
+        }
+    }
 }
 
 bool ShapeEditor::has_knotholder() {
-    return this->knotholder != NULL;
+    return this->knotholder != NULL || this->lpeknotholder != NULL;
 }
 
 void ShapeEditor::update_knotholder() {
     if (this->knotholder)
         this->knotholder->update_knots();
+    if (this->lpeknotholder)
+        this->lpeknotholder->update_knots();
 }
 
 bool ShapeEditor::has_local_change() {
-    return (this->knotholder && this->knotholder->local_change != 0);
+    return (this->knotholder && this->knotholder->local_change != 0) || (this->lpeknotholder && this->lpeknotholder->local_change != 0);
 }
 
 void ShapeEditor::decrement_local_change() {
     if (this->knotholder) {
         this->knotholder->local_change = FALSE;
+    }
+    if (this->lpeknotholder) {
+        this->lpeknotholder->local_change = FALSE;
     }
 }
 
@@ -123,6 +144,10 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
             // only recreate knotholder if none is present
             this->knotholder = createKnotHolder(item, desktop);
         }
+        if (!this->lpeknotholder) {
+            // only recreate knotholder if none is present
+            this->lpeknotholder = createLPEKnotHolder(item, desktop);
+        }
         if (this->knotholder) {
             this->knotholder->setEditTransform(_edit_transform);
             this->knotholder->update_knots();
@@ -132,6 +157,17 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
                 Inkscape::GC::anchor(repr);
                 sp_repr_add_listener(repr, &shapeeditor_repr_events, this);
                 knotholder_listener_attached_for = repr;
+            }
+        }
+        if (this->lpeknotholder) {
+            this->lpeknotholder->setEditTransform(_edit_transform);
+            this->lpeknotholder->update_knots();
+            // setting new listener
+            repr = this->lpeknotholder->repr;
+            if (repr != lpeknotholder_listener_attached_for) {
+                Inkscape::GC::anchor(repr);
+                sp_repr_add_listener(repr, &shapeeditor_repr_events, this);
+                lpeknotholder_listener_attached_for = repr;
             }
         }
     }
@@ -145,6 +181,9 @@ void ShapeEditor::reset_item(bool keep_knotholder)
     if (knotholder) {
         SPObject *obj = desktop->getDocument()->getObjectByRepr(knotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
         set_item(SP_ITEM(obj), keep_knotholder);
+    } else if (lpeknotholder) {
+        SPObject *obj = desktop->getDocument()->getObjectByRepr(lpeknotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
+        set_item(SP_ITEM(obj), keep_knotholder);
     }
 }
 
@@ -155,7 +194,9 @@ bool ShapeEditor::knot_mouseover() const {
     if (this->knotholder) {
         return knotholder->knot_mouseover();
     }
-    
+    if (this->lpeknotholder) {
+        return lpeknotholder->knot_mouseover();
+    }
 
     return false;
 }

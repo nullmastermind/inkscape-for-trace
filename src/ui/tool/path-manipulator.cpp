@@ -190,7 +190,7 @@ void PathManipulator::writeXML()
 {
     if (!_live_outline)
         _updateOutline();
-    if (!_live_objects)
+    if (_live_objects)
         _setGeometry();
 
     if (!_path) return;
@@ -1152,6 +1152,9 @@ void PathManipulator::_createControlPointsFromGeometry()
             ++i;
         }
     }
+    if (pathv.empty()) {
+        return;
+    }
     _spcurve->set_pathvector(pathv);
 
     pathv *= (_edit_transform * _i2d_transform);
@@ -1358,6 +1361,23 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     builder.flush();
     Geom::PathVector pathv = builder.peek() * (_edit_transform * _i2d_transform).inverse();
+    for (Geom::PathVector::iterator i = pathv.begin(); i != pathv.end(); ) {
+        // NOTE: this utilizes the fact that Geom::PathVector is an std::vector.
+        // When we erase an element, the next one slides into position,
+        // so we do not increment the iterator even though it is theoretically invalidated.
+        if (i->empty()) {
+            i = pathv.erase(i);
+        } else {
+            ++i;
+        }
+    }
+    if (pathv.empty()) {
+        return;
+    }
+
+    if (_spcurve->get_pathvector() == pathv) {
+        return;
+    }
     _spcurve->set_pathvector(pathv);
     if (alert_LPE) {
         /// \todo note that _path can be an Inkscape::LivePathEffect::Effect* too, kind of confusing, rework member naming?
@@ -1371,7 +1391,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             }
         }
     }
-
     if (_live_outline)
         _updateOutline();
     if (_live_objects)
@@ -1465,7 +1484,7 @@ void PathManipulator::_getGeometry()
         }
     } else {
         _spcurve->unref();
-        _spcurve = _path->get_curve_for_edit();
+        _spcurve = _path->getCurveForEdit();
         // never allow NULL to sneak in here!
         if (_spcurve == NULL) {
             _spcurve = new SPCurve();
@@ -1477,7 +1496,6 @@ void PathManipulator::_getGeometry()
 void PathManipulator::_setGeometry()
 {
     using namespace Inkscape::LivePathEffect;
-
     if (!_lpe_key.empty()) {
         // copied from nodepath.cpp
         // NOTE: if we are editing an LPE param, _path is not actually an SPPath, it is
@@ -1485,17 +1503,22 @@ void PathManipulator::_setGeometry()
         Effect *lpe = LIVEPATHEFFECT(_path)->get_lpe();
         if (lpe) {
             PathParam *pathparam = dynamic_cast<PathParam *>(lpe->getParameter(_lpe_key.data()));
+            if (pathparam->get_pathvector() == _spcurve->get_pathvector()) {
+                return; //False we dont update LPE
+            }
             pathparam->set_new_value(_spcurve->get_pathvector(), false);
             LIVEPATHEFFECT(_path)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     } else {
+        // return true to leave the decission on empty to the caller. 
+        // Maybe the path become empty and we want to update to empty
         if (empty()) return;
-        if (SPCurve * original = _path->get_original_curve()){
+        if (SPCurve * original = _path->getCurveBeforeLPE()){
             if(!_spcurve->is_equal(original)) {
-                _path->set_original_curve(_spcurve, false, false);
+                _path->setCurveBeforeLPE(_spcurve);
                 delete original;
             }
-        } else if(!_spcurve->is_equal(_path->get_curve())) {
+        } else if(!_spcurve->is_equal(_path->getCurve(true))) {
             _path->setCurve(_spcurve, false);
         }
     }
@@ -1658,7 +1681,6 @@ Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
 
     Geom::Affine to_desktop = _edit_transform * _i2d_transform;
     Geom::PathVector pv = _spcurve->get_pathvector();
-
     boost::optional<Geom::PathVectorTime> pvp =
         pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());
     if (!pvp) return dist;

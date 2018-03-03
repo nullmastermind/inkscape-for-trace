@@ -413,7 +413,6 @@ std::vector<SPObject*> SPObject::childList(bool add_ref, Action) {
         l.push_back(&child);
     }
     return l;
-
 }
 
 gchar const *SPObject::label() const {

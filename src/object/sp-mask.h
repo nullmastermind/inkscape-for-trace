@@ -47,6 +47,10 @@ public:
 	Inkscape::DrawingItem *sp_mask_show(Inkscape::Drawing &drawing, unsigned int key);
 	void sp_mask_hide(unsigned int key);
 
+    Geom::OptRect geometricBounds(Geom::Affine const &transform);
+
+    Geom::OptRect visualBounds(Geom::Affine const &transform) ;
+
 	void sp_mask_set_bbox(unsigned int key, Geom::OptRect const &bbox);
 
 protected:

@@ -157,7 +157,7 @@ void SPPolygon::set(unsigned int key, const gchar* value) {
                 curve->closepath();
             }
 
-            this->setCurve(curve, TRUE);
+            this->setCurve(curve);
             curve->unref();
             break;
         }

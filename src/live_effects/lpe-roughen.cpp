@@ -163,6 +163,9 @@ Gtk::Widget *LPERoughen::newWidget()
         }
         ++it;
     }
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

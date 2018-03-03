@@ -107,13 +107,7 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
 {
     KnotHolder *knotholder = NULL;
 
-    SPLPEItem *lpe = dynamic_cast<SPLPEItem *>(item);
-    if (lpe &&
-        lpe->getCurrentLPE() &&
-        lpe->getCurrentLPE()->isVisible() &&
-        lpe->getCurrentLPE()->providesKnotholder()) {
-        knotholder = sp_lpe_knot_holder(lpe, desktop);
-    } else if (dynamic_cast<SPRect *>(item)) {
+    if (dynamic_cast<SPRect *>(item)) {
         knotholder = new RectKnotHolder(desktop, item, NULL);
     } else if (dynamic_cast<SPBox3D *>(item)) {
         knotholder = new Box3DKnotHolder(desktop, item, NULL);
@@ -136,6 +130,20 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
         }
     }
 
+    return knotholder;
+}
+
+KnotHolder *createLPEKnotHolder(SPItem *item, SPDesktop *desktop)
+{
+    KnotHolder *knotholder = NULL;
+
+    SPLPEItem *lpe = dynamic_cast<SPLPEItem *>(item);
+    if (lpe &&
+        lpe->getCurrentLPE() &&
+        lpe->getCurrentLPE()->isVisible() &&
+        lpe->getCurrentLPE()->providesKnotholder()) {
+        knotholder = sp_lpe_knot_holder(lpe, desktop);
+    }
     return knotholder;
 }
 

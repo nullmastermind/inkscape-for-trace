@@ -23,6 +23,7 @@ public:
     virtual Gtk::Widget * newWidget();
     //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
+    virtual void doAfterEffect (SPLPEItem const* lpeitem);
     void addInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);

@@ -2545,7 +2545,7 @@ SPCurve* curve_for_item(SPItem *item)
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(item)) {
         if (SP_IS_PATH(item)) {
-            curve = SP_PATH(item)->get_curve_for_edit();
+            curve = SP_PATH(item)->getCurveForEdit();
         } else {
             curve = SP_SHAPE(item)->getCurve();
         }
@@ -2573,7 +2573,7 @@ SPCurve* curve_for_item_before_LPE(SPItem *item)
     
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(item)) {
-        curve = SP_SHAPE(item)->getCurveBeforeLPE();
+        curve = SP_SHAPE(item)->getCurveForEdit();
     }
     else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))
     {

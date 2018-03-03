@@ -64,14 +64,12 @@ public:
     virtual Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
     virtual const char *displayName() const;
 
-    virtual void set_shape(bool force = false);
+    virtual void set_shape();
     virtual Geom::Affine set_transform(Geom::Affine const &xform);
 
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
 
     virtual void modified(unsigned int flags);
-
-    virtual void update_patheffect(bool write);
 
     /**
      * @brief Makes sure that start and end lie between 0 and 2 * PI.

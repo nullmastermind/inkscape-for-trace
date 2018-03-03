@@ -139,6 +139,9 @@ Gtk::Widget *LPEBSpline::newWidget()
 
         ++it;
     }
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -164,7 +167,7 @@ void LPEBSpline::changeWeight(double weight_ammount)
 {
     SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
     if(path) {
-        SPCurve *curve = path->get_curve_for_edit();
+        SPCurve *curve = path->getCurveForEdit();
         doBSplineFromWidget(curve, weight_ammount/100.0);
         gchar *str = sp_svg_write_path(curve->get_pathvector());
         path->getRepr()->setAttribute("inkscape:original-d", str);

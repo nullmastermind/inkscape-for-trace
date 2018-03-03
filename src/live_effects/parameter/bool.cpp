@@ -57,15 +57,13 @@ BoolParam::param_readSVGValue(const gchar * strvalue)
 gchar *
 BoolParam::param_getSVGValue() const
 {
-    gchar * str = g_strdup(value ? "true" : "false");
-    return str;
+    return g_strdup(value ? "true" : "false");
 }
 
 gchar *
 BoolParam::param_getDefaultSVGValue() const
 {
-    gchar * str = g_strdup(defvalue ? "true" : "false");
-    return str;
+    return g_strdup(defvalue ? "true" : "false");
 }
 
 Gtk::Widget *

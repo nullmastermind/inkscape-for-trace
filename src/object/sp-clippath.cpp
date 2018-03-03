@@ -238,14 +238,12 @@ void SPClipPath::setBBox(unsigned int key, Geom::OptRect const &bbox) {
 
 Geom::OptRect SPClipPath::geometricBounds(Geom::Affine const &transform) {
     Geom::OptRect bbox;
-
     for (auto& i: children) {
         if (SP_IS_ITEM(&i)) {
-        	Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(Geom::Affine(SP_ITEM(&i)->transform) * transform);
-			bbox.unionWith(tmp);
+            Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(transform);
+            bbox.unionWith(tmp);
         }
     }
-
     return bbox;
 }
 

@@ -111,7 +111,9 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         SatelliteType satellite_type = FILLET;
         std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
         boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-        std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode.param_getSVGValue()));
+        gchar * mode_str = mode.param_getSVGValue();
+        std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode_str));
+        g_free(mode_str);
         if (it != gchar_map_to_satellite_type.end()) {
             satellite_type = it->second;
         }
@@ -250,7 +252,9 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
 
     vbox->pack_start(*fillet_container, true, true, 2);
     vbox->pack_start(*chamfer_container, true, true, 2);
-
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return vbox;
 }
 
@@ -320,14 +324,14 @@ void LPEFilletChamfer::setSelected(PathVectorSatellites *_pathvector_satellites)
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
-    if (sp_curve) {
+    if (!pathvector_before_effect.empty()) {
         //fillet chamfer specific calls
         satellites_param.setUseDistance(use_knot_distance);
         satellites_param.setCurrentZoom(current_zoom);
         //mandatory call
         satellites_param.setEffectType(effectType());
-        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(sp_curve->get_pathvector());
-        //if are different sizes call to recalculate
+        Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
+        //if are diferent sizes call to recalculate
         //TODO: Update the satellite data in paths modified,
         Satellites satellites = satellites_param.data();
         if (satellites.empty()) {
@@ -338,7 +342,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             size_t number_nodes = pathv.nodes().size();
             size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != previous_number_nodes) {
-                Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(sp_curve->get_pathvector());
                 Satellites satellites;
                 double power = radius;
                 if (!flexible) {
@@ -350,7 +353,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 SatelliteType satellite_type = FILLET;
                 std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
                 boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
-                std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode.param_getSVGValue()));
+                gchar * mode_str = mode.param_getSVGValue();
+                std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode_str));
+                g_free(mode_str);
                 if (it != gchar_map_to_satellite_type.end()) {
                     satellite_type = it->second;
                 }

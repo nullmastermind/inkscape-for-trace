@@ -124,7 +124,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
             if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
                 SPCurve *c = NULL;
                 if (method == CLM_BSPLINESPIRO) {
-                    c = shape_origin->getCurveBeforeLPE();
+                    c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
                         PathEffectList lpelist = lpe_item->getEffectList();
@@ -142,7 +142,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
                         }
                     }
                 } else if(method == CLM_ORIGINALD) {
-                    c = shape_origin->getCurveBeforeLPE();
+                    c = shape_origin->getCurveForEdit();
                 } else {
                     c = shape_origin->getCurve();
                 }
@@ -200,15 +200,17 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (method != CLM_NONE) {
             attr += Glib::ustring("d,");
         }
-        attr += Glib::ustring(attributes.param_getSVGValue()) + Glib::ustring(",");
-        if (attr.size()  && !Glib::ustring(attributes.param_getSVGValue()).size()) {
+        gchar * attributes_str = attributes.param_getSVGValue();
+        attr += Glib::ustring(attributes_str) + Glib::ustring(",");
+        if (attr.size()  && !Glib::ustring(attributes_str).size()) {
             attr.erase (attr.size()-1, 1);
         }
+        gchar * style_attributes_str = style_attributes.param_getSVGValue();
         Glib::ustring style_attr = "";
-        if (style_attr.size() && !Glib::ustring(style_attributes.param_getSVGValue()).size()) {
+        if (style_attr.size() && !Glib::ustring( style_attributes_str).size()) {
             style_attr.erase (style_attr.size()-1, 1);
         }
-        style_attr += Glib::ustring(style_attributes.param_getSVGValue()) + Glib::ustring(",");
+        style_attr += Glib::ustring( style_attributes_str) + Glib::ustring(",");
 
         SPItem * orig =  SP_ITEM(linkeditem.getObject()); 
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
@@ -257,6 +259,8 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
 
         linked = g_strdup(id);
+        g_free(style_attributes_str);
+        g_free(attributes_str);
         g_free(id);
     } else {
         linked = g_strdup("");
@@ -336,7 +340,7 @@ LPECloneOriginal::doEffect (SPCurve * curve)
 //    if (linkeditem.linksToItem()) {
 //        SPShape * shape = getCurrentShape();
 //        if(shape){
-//            curve->set_pathvector(shape->getCurveBeforeLPE()->get_pathvector());
+//            curve->set_pathvector(shape->getCurveForEdit()->get_pathvector());
 //        }
 //    }
 }

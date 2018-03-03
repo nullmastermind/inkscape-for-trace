@@ -91,7 +91,7 @@ void SPPolyLine::set(unsigned int key, const gchar* value) {
                 }
             }
 		
-            this->setCurve(curve, TRUE);
+            this->setCurve(curve);
             curve->unref();
             break;
 	}

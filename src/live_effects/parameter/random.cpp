@@ -67,8 +67,7 @@ RandomParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << value << ';' << startseed;
-    gchar * str = g_strdup(os.str().c_str());
-    return str;
+    return g_strdup(os.str().c_str());
 }
 
 gchar *
@@ -76,8 +75,7 @@ RandomParam::param_getDefaultSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << defvalue << ';' << defseed;
-    gchar * str = g_strdup(os.str().c_str());
-    return str;
+    return g_strdup(os.str().c_str());
 }
 
 void

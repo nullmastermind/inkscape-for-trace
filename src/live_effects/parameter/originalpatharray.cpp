@@ -428,9 +428,9 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     if (SP_IS_SHAPE(linked_obj)) {
         SPLPEItem * lpe_item = SP_LPE_ITEM(linked_obj);
         if (_from_original_d) {
-            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
         } else if (_allow_only_bspline_spiro && lpe_item && lpe_item->hasPathEffect()){
-            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+            curve = SP_SHAPE(linked_obj)->getCurveForEdit();
             PathEffectList lpelist = lpe_item->getEffectList();
             PathEffectList::iterator i;
             for (i = lpelist.begin(); i != lpelist.end(); ++i) {
@@ -524,13 +524,12 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
         }
         os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
     }
-    gchar * str = g_strdup(os.str().c_str());
-    return str;
+    return g_strdup(os.str().c_str());
 }
 
 gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const
 {
-    return "";
+    return g_strdup("");
 }
 
 void OriginalPathArrayParam::update()

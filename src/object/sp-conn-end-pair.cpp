@@ -175,7 +175,7 @@ void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
 
 void SPConnEndPair::getEndpoints(Geom::Point endPts[]) const
 {
-    SPCurve const *curve = _path->get_curve_reference();
+    SPCurve const *curve = _path->getCurveForEdit(true);
     SPItem *h2attItem[2] = {0};
     getAttachedItems(h2attItem);
     Geom::Affine i2d = _path->i2doc_affine();
@@ -322,7 +322,7 @@ bool SPConnEndPair::reroutePathFromLibavoid()
         return false;
     }
 
-    SPCurve *curve = _path->get_curve();
+    SPCurve *curve = _path->getCurve(true);
 
     recreateCurve(curve, _connRef, _connCurvature);
 

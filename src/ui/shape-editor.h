@@ -36,6 +36,7 @@ public:
 
     bool knot_mouseover() const;
     KnotHolder *knotholder;
+    KnotHolder *lpeknotholder;
     bool has_knotholder();
     static void blockSetItem(bool b) { _blockSetItem = b; } // kludge
     static void event_attr_changed(Inkscape::XML::Node * /*repr*/, char const *name, char const * /*old_value*/,
@@ -46,6 +47,7 @@ private:
 
     SPDesktop *desktop;
     Inkscape::XML::Node *knotholder_listener_attached_for;
+    Inkscape::XML::Node *lpeknotholder_listener_attached_for;
     Geom::Affine _edit_transform;
 };
 

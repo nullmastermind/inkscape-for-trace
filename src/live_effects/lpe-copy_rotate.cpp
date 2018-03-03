@@ -17,6 +17,7 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
+#include "live_effects/lpeobject.h"
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
@@ -55,7 +56,6 @@ pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &
     return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
 }
 
-
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     method(_("Method:"), _("Rotate methods"), "method", RMConverter, &wr, this, RM_NORMAL),
@@ -66,7 +66,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     gap(_("Gap"), _("Gap"), "gap", &wr, this, -0.0001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
+    mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, true),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
 {
@@ -129,12 +129,15 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             if (numcopies_gap > 0 && num_copies != 0) {
                 guint counter = num_copies - 1;
                 while (numcopies_gap > 0) {
-                    const char * id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
-                     if (!id || strlen(id) == 0) {
+                    Glib::ustring id = Glib::ustring("rotated-");
+                    id += std::to_string(counter);
+                    id += "-";
+                    id += this->lpeobj->getId();
+                    if (id.empty()) {
                         return;
                     }
                     SPObject *elemref = NULL;
-                    if ((elemref = document->getObjectById(id))) {
+                    if (elemref = document->getObjectById(id.c_str())) {
                         SP_ITEM(elemref)->setHidden(true);
                     }
                     counter++;
@@ -144,10 +147,14 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             previous_num_copies = num_copies;
         }
         SPObject *elemref = NULL;
-        const char * id = g_strdup(Glib::ustring("rotated-").append("0").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
         guint counter = 0;
-        while((elemref = document->getObjectById(id))) {
-            id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+        Glib::ustring id = "rotated-0-";
+        id += this->lpeobj->getId();
+        while((elemref = document->getObjectById(id.c_str()))) {
+            id = Glib::ustring("rotated-");
+            id += std::to_string(counter);
+            id += "-";
+            id += this->lpeobj->getId();
             if (SP_ITEM(elemref)->isHidden()) {
                 items.push_back(id);
             }
@@ -184,7 +191,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool root, bool reset) 
+LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -197,35 +204,61 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, transform, false, reset); 
+            cloneD(*obj_it, dest_child, transform, reset); 
             index++;
         }
+        return;
     }
     SPShape * shape =  SP_SHAPE(orig);
-    if (shape && !SP_IS_PATH(dest)) {
+    SPPath * path =  SP_PATH(dest);
+    if (shape && !path) {   
         const char * id = dest->getId();
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         dest->getRepr()->setAttribute("d", id);
+        path =  SP_PATH(dest);
     }
-    if (SP_IS_PATH(dest) && shape) {
-        SPCurve *c = NULL;
-        if (root) {
-            c = new SPCurve();
-            c->set_pathvector(pathvector_after_effect);
-        } else {
-            c = shape->getCurve();
-        }
+    if (path && shape) {
+        SPCurve *c = shape->getCurve();
         if (c) {
-            SP_PATH(dest)->setCurve(c, TRUE);
+            gchar *str = sp_svg_write_path(c->get_pathvector());
+            path->getRepr()->setAttribute("d", str);
+            g_free(str);
             c->unref();
         } else {
-            dest->getRepr()->setAttribute("d", NULL);
+            path->getRepr()->setAttribute("d", NULL);
         }
         if (reset) {
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
         }
     }
+}
+
+Inkscape::XML::Node *
+LPECopyRotate::createPathBase(SPObject *elemref) {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return NULL;
+    }
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *prev = elemref->getRepr();
+    SPGroup *group = dynamic_cast<SPGroup *>(elemref);
+    if (group) {
+        Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
+        container->setAttribute("transform", prev->attribute("transform"));
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+        Inkscape::XML::Node *previous = NULL;
+        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            SPObject *sub_item = *iter;
+            Inkscape::XML::Node *resultnode = createPathBase(sub_item);
+            container->addChild(resultnode, previous);
+            previous = resultnode;
+        }
+        return container;
+    }
+    Inkscape::XML::Node *resultnode = xml_doc->createElement("svg:path");
+    resultnode->setAttribute("transform", prev->attribute("transform"));
+    return resultnode;
 }
 
 void
@@ -236,64 +269,32 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+    Glib::ustring elemref_id = Glib::ustring("rotated-");
+    elemref_id += std::to_string(i);
+    elemref_id += "-";
+    elemref_id += this->lpeobj->getId();
     items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
-    if ((elemref = document->getObjectById(elemref_id))) {
+    if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {
-        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        std::vector<const char *> attrs;
-        attrs.push_back("inkscape:path-effect");
-        attrs.push_back("inkscape:original-d");
-        attrs.push_back("sodipodi:type");
-        attrs.push_back("sodipodi:rx");
-        attrs.push_back("sodipodi:ry");
-        attrs.push_back("sodipodi:cx");
-        attrs.push_back("sodipodi:cy");
-        attrs.push_back("sodipodi:end");
-        attrs.push_back("sodipodi:start");
-        attrs.push_back("inkscape:flatsided");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:rounded");
-        attrs.push_back("sodipodi:arg1");
-        attrs.push_back("sodipodi:arg2");
-        attrs.push_back("sodipodi:r1");
-        attrs.push_back("sodipodi:r2");
-        attrs.push_back("sodipodi:sides");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("sodipodi:argument");
-        attrs.push_back("sodipodi:expansion");
-        attrs.push_back("sodipodi:radius");
-        attrs.push_back("sodipodi:revolution");
-        attrs.push_back("sodipodi:t0");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("x");
-        attrs.push_back("y");
-        attrs.push_back("rx");
-        attrs.push_back("ry");
-        attrs.push_back("width");
-        attrs.push_back("height");
-        phantom->setAttribute("id", elemref_id);
-        for(const char * attr : attrs) { 
-            phantom->setAttribute(attr, NULL);
-        }
+        phantom = createPathBase(sp_lpe_item);
+        phantom->setAttribute("id", elemref_id.c_str());
+        reset = true;
     }
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, true, reset);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, reset);
     gchar *str = sp_svg_transform_write(transform);
     elemref->getRepr()->setAttribute("transform" , str);
     g_free(str);
     SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
-        copy->setAttribute("id", elemref_id);
+        copy->setAttribute("id", elemref_id.c_str());
         container->appendChildRepr(copy);
         Inkscape::GC::release(copy);
         elemref->deleteObject();
@@ -340,6 +341,9 @@ Gtk::Widget * LPECopyRotate::newWidget()
     reset_button->set_size_request(110,20);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*reset_button, false, false,2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -348,7 +352,7 @@ void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
@@ -375,7 +379,7 @@ void
 LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     if (copies_to_360 && num_copies > 2) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
@@ -711,7 +715,7 @@ void
 LPECopyRotate::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
 }
 
 void

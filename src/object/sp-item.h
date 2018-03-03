@@ -290,6 +290,10 @@ public:
      */
     bool isFiltered() const;
 
+    SPObject* isInMask() const;
+
+    SPObject* isInClipPath() const;
+
     void invoke_print(SPPrintContext *ctx);
 
     /**

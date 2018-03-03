@@ -115,6 +115,9 @@ LPESimplify::newWidget()
         ++it;
     }
     vbox->pack_start(*buttons,true, true, 2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

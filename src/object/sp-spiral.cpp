@@ -196,24 +196,6 @@ void SPSpiral::update(SPCtx *ctx, guint flags) {
     SPShape::update(ctx, flags);
 }
 
-void SPSpiral::update_patheffect(bool write) {
-    this->set_shape(true);
-
-    if (write) {
-        Inkscape::XML::Node *repr = this->getRepr();
-
-        if ( this->_curve != NULL ) {
-            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-            repr->setAttribute("d", str);
-            g_free(str);
-        } else {
-            repr->setAttribute("d", NULL);
-        }
-    }
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-}
-
 const char* SPSpiral::displayName() const {
     return _("Spiral");
 }
@@ -310,7 +292,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
     g_assert (is_unit_vector (hat2));
 }
 
-void SPSpiral::set_shape(bool force) {
+void SPSpiral::set_shape() {
     if (hasBrokenPathEffect()) {
         g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
 
@@ -318,7 +300,7 @@ void SPSpiral::set_shape(bool force) {
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
             SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync( cold, TRUE);
+            this->setCurveInsync(cold);
             this->setCurveBeforeLPE( cold );
             cold->unref();
         }
@@ -363,28 +345,22 @@ void SPSpiral::set_shape(bool force) {
         this->fitAndDraw(c, (1.0 - t) / (SAMPLE_SIZE - 1.0), darray, hat1, hat2, &t);
     }
 
-    /* Reset the shape'scurve to the "original_curve"
+    /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveBeforeLPE()) {
-        if(!force && this->getCurveBeforeLPE()->get_pathvector() == c->get_pathvector()) {
-            c->unref();
-            return;
+    SPCurve * before = this->getCurveBeforeLPE();
+    if (before || this->hasPathEffectRecursive()) {
+        if (!before || before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
         }
+    } else {
+        this->setCurveInsync(c);
     }
-    setCurveInsync( c, TRUE);
-    setCurveBeforeLPE( c );
-
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe);
-
-        if (success) {
-            this->setCurveInsync( c_lpe, TRUE);
-        }
-
-        c_lpe->unref();
+    if (before) {
+        before->unref();
     }
-
     c->unref();
 }
 

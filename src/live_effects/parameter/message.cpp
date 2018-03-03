@@ -17,8 +17,8 @@ MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, const gchar * default_message )
     : Parameter(label, tip, key, wr, effect),
-      message(g_strdup(default_message)),
-      defmessage(g_strdup(default_message))
+      message(default_message),
+      defmessage(default_message)
 {
     _label  = NULL;
     _min_height = -1;
@@ -33,7 +33,7 @@ MessageParam::param_set_default()
 void 
 MessageParam::param_update_default(const gchar * default_message)
 {
-    defmessage = g_strdup(default_message);
+    defmessage = default_message;
 }
 
 bool
@@ -46,13 +46,13 @@ MessageParam::param_readSVGValue(const gchar * strvalue)
 gchar *
 MessageParam::param_getSVGValue() const
 {
-    return message;
+    return g_strdup(message);
 }
 
 gchar *
 MessageParam::param_getDefaultSVGValue() const
 {
-    return defmessage;
+    return g_strdup(defmessage);
 }
 
 void
@@ -106,7 +106,7 @@ MessageParam::param_setValue(const gchar * strvalue)
     if (strcmp(strvalue, message) != 0) {
         param_effect->upd_params = true;
     }
-    message = g_strdup(strvalue);
+    message = strvalue;
 }
 
 

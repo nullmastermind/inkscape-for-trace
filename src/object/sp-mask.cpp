@@ -115,6 +115,33 @@ void SPMask::set(unsigned int key, const gchar* value) {
 	}
 }
 
+Geom::OptRect 
+SPMask::geometricBounds(Geom::Affine const &transform) {
+    Geom::OptRect bbox;
+
+    for (auto& i: children) {
+        if (SP_IS_ITEM(&i)) {
+            Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(Geom::Affine(SP_ITEM(&i)->transform) * transform);
+            bbox.unionWith(tmp);
+        }
+    }
+
+    return bbox;
+}
+
+Geom::OptRect 
+SPMask::visualBounds(Geom::Affine const &transform) {
+    Geom::OptRect bbox;
+    for (auto& i: children) {
+        if (SP_IS_ITEM(&i)) {
+            Geom::OptRect tmp = SP_ITEM(&i)->visualBounds(transform);
+            bbox.unionWith(tmp);
+        }
+    }
+
+    return bbox;
+}
+
 void SPMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	/* Invoke SPObjectGroup implementation */
 	SPObjectGroup::child_added(child, ref);

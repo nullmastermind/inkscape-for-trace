@@ -37,7 +37,8 @@
 #include "sp-path.h"
 #include "preferences.h"
 #include "attributes.h"
-
+#include "svg/svg.h"
+#include "svg/path-string.h"
 #include "live_effects/lpeobject.h"
 
 #include "helper/mathfns.h" // for triangle_area()
@@ -416,7 +417,7 @@ void SPShape::modified(unsigned int flags) {
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {
     Geom::OptRect bbox;
 
-    if (!this->_curve) {
+    if (!this->_curve || this->_curve->get_pathvector().empty()) {
     	return bbox;
     }
 
@@ -738,6 +739,38 @@ void SPShape::print(SPPrintContext* ctx) {
 	}
 }
 
+void SPShape::update_patheffect(bool write)
+{
+    if (SPCurve *c_lpe = this->getCurveForEdit()) {
+        /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
+         * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+        this->setCurveInsync(c_lpe);
+        this->resetClipPathAndMaskLPE();
+        bool success = false;
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            success = this->performPathEffect(c_lpe, SP_SHAPE(this));
+            if (success) {
+                this->setCurveInsync(c_lpe);
+                this->applyToClipPath(this);
+                this->applyToMask(this);
+            }
+        }
+
+        if (write && success) {
+            Inkscape::XML::Node *repr = this->getRepr();
+            if (c_lpe != NULL) {
+                gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
+                repr->setAttribute("d", str);
+                g_free(str);
+            } else {
+                repr->setAttribute("d", NULL);
+            }
+        }
+        c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
+}
+
 Inkscape::DrawingItem* SPShape::show(Inkscape::Drawing &drawing, unsigned int /*key*/, unsigned int /*flags*/) {
     // std::cout << "SPShape::show(): " << (getId()?getId():"null") << std::endl;
     Inkscape::DrawingShape *s = new Inkscape::DrawingShape(drawing);
@@ -995,49 +1028,24 @@ void SPShape::setCurve(SPCurve *new_curve, unsigned int owner)
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+
 /**
  * Sets _curve_before_lpe to refer to the curve.
  */
 void
-SPShape::setCurveBeforeLPE (SPCurve *new_curve)
+SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
 {
     if (_curve_before_lpe) {
         _curve_before_lpe = _curve_before_lpe->unref();
     }
 
     if (new_curve) {
-        _curve_before_lpe = new_curve->ref();
-    }
-}
-
-/**
- * Return duplicate of curve (if any exists) or NULL if there is no curve
- */
-SPCurve * SPShape::getCurve() const
-{
-    if (_curve) {
-        return _curve->copy();
-    }
-
-    return NULL;
-}
-
-/**
- * Return duplicate of curve *before* LPE (if any exists) or NULL if there is no curve
- */
-SPCurve * SPShape::getCurveBeforeLPE() const
-{
-    if (hasPathEffectRecursive()) {
-        if (_curve_before_lpe) {
-            return this->_curve_before_lpe->copy();
-        }
-    } else {
-        if (_curve) {
-            return _curve->copy();
+        if (owner) {
+            _curve_before_lpe = new_curve->ref();
+        } else {
+            _curve_before_lpe = new_curve->copy();
         }
     }
-
-    return NULL;
 }
 
 /**
@@ -1056,6 +1064,57 @@ void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
             _curve = new_curve->copy();
         }
     }
+}
+
+
+/**
+ * Return curve (if any exists) or NULL if there is no curve
+* if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurve(unsigned int owner) const
+{
+    if (_curve) {
+        if(owner) {
+            return _curve;
+        }
+        return _curve->copy();
+    }
+
+    return NULL;
+}
+
+/**
+ * Return  curve *before* LPE (if any exists) or NULL if there is no curve
+ * If force is set allow return curve_before_lpe even if not
+ * has path effect like in clips and mask
+ * if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
+{
+    if (_curve_before_lpe) {
+        if (owner) {
+            return _curve_before_lpe;
+        }
+        return _curve_before_lpe->copy();
+    } 
+    return NULL;
+}
+
+/**
+ * Return curve for edit
+ * If force is set allow return curve_before_lpe even if not
+ * has path effect like in clips and mask
+ * if owner == 0 return a copy
+ */
+SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
+{
+    if (_curve_before_lpe) {
+        if (owner) {
+            return _curve_before_lpe;
+        }
+        return _curve_before_lpe->copy();
+    }
+    return getCurve(owner);
 }
 
 void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {

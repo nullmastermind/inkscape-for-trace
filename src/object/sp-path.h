@@ -30,22 +30,11 @@ class SPCurve;
  */
 class SPPath : public SPShape {
 public:
-	SPPath();
-	virtual ~SPPath();
+    SPPath();
+    virtual ~SPPath();
 
     int nodesInPath() const;
-
-    // still in lowercase because the names should be clearer on whether curve, curve->copy or curve-ref is returned.
-    void     set_original_curve (SPCurve *curve, unsigned int owner, bool write);
-    SPCurve* get_original_curve () const;
-    SPCurve* get_curve_for_edit () const;
-    const SPCurve* get_curve_reference() const;
-
-public: // should be made protected
-    SPCurve* get_curve();
     friend class SPConnEndPair;
-
-public:
     SPConnEndPair connEndPair;
 
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
@@ -59,9 +48,6 @@ public:
     virtual char* description() const;
     virtual Geom::Affine set_transform(Geom::Affine const &transform);
     virtual void convert_to_guides() const;
-
-    virtual void update_patheffect(bool write);
-
 private:
     SPStyleSrc d_source;  // Source of 'd' value, saved for output.
 };

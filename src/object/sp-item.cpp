@@ -29,7 +29,6 @@
 
 #include "inkscape.h"
 #include "desktop.h"
-
 #include "gradient-chemistry.h"
 #include "conn-avoid-ref.h"
 #include "conditions.h"
@@ -1077,6 +1076,23 @@ gchar *SPItem::detailedDescription() const {
 
 bool SPItem::isFiltered() const {
 	return (style && style->filter.href && style->filter.href->getObject());
+}
+
+
+SPObject* SPItem::isInMask() const {
+    SPObject* parent = this->parent;
+    while (parent && !dynamic_cast<SPMask *>(parent)) {
+        parent = parent->parent;
+    }
+    return parent;
+}
+
+SPObject* SPItem::isInClipPath() const {
+    SPObject* parent = this->parent;
+    while (parent && !dynamic_cast<SPClipPath *>(parent)) {
+        parent = parent->parent;
+    }
+    return parent;
 }
 
 unsigned SPItem::display_key_new(unsigned numkeys)

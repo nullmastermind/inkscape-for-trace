@@ -268,6 +268,9 @@ LPELattice2::newWidget()
     expander->set_expanded(expanded);
     vbox->pack_start(*expander, true, true, 2);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPELattice2::onExpanderChanged) );
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -327,7 +330,7 @@ LPELattice2::horizontal(PointParam &param_one, PointParam &param_two, Geom::Line
 void
 LPELattice2::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     setDefaults();
     Geom::Line vert(grid_point_8x9.param_get_default(),grid_point_10x11.param_get_default());
     Geom::Line horiz(grid_point_24x26.param_get_default(),grid_point_25x27.param_get_default());
@@ -551,7 +554,7 @@ void
 LPELattice2::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
     setDefaults();
     resetGrid();
 }

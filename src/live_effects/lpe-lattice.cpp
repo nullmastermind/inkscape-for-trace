@@ -164,7 +164,7 @@ LPELattice::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
 void
 LPELattice::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
 }
 
 void
@@ -172,7 +172,7 @@ LPELattice::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 
-    original_bbox(SP_LPE_ITEM(item), false);
+    original_bbox(SP_LPE_ITEM(item), false, true);
     
     // place the 16 control points
     grid_point0[Geom::X] = boundingbox_X.min();

@@ -17,6 +17,8 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
@@ -46,9 +48,11 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    void toMirror(Geom::Affine transform);
-    //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
-    void cloneD(SPObject *orig, SPObject *dest, bool live, bool root);
+    virtual Gtk::Widget * newWidget();
+    void toMirror(Geom::Affine transform, bool reset);
+    void cloneD(SPObject *orig, SPObject *dest, bool reset);
+    Inkscape::XML::Node * createPathBase(SPObject *elemref);
+    void resetStyles();
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -63,9 +67,9 @@ private:
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;
-    TextParam id_origin;
     Geom::Point previous_center;
     SPObject * container;
+    bool reset;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
 };

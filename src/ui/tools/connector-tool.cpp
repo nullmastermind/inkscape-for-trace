@@ -617,7 +617,7 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
         Geom::Affine i2d ( (this->clickeditem)->i2dt_affine() );
         Geom::Affine d2i = i2d.inverse();
         SPPath *path = SP_PATH(this->clickeditem);
-        SPCurve *curve = path->get_curve();
+        SPCurve *curve = path->getCurve(true);
         if (this->clickedhandle == this->endpt_handle[0]) {
             Geom::Point o = this->endpt_handle[1]->pos;
             curve->stretch_endpoints(p * d2i, o * d2i);
@@ -628,7 +628,7 @@ bool ConnectorTool::_handleMotionNotify(GdkEventMotion const &mevent)
         sp_conn_reroute_path_immediate(path);
 
         // Copy this to the temporary visible path
-        this->red_curve = path->get_curve_for_edit();
+        this->red_curve = path->getCurveForEdit();
         this->red_curve->transform(i2d);
 
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), this->red_curve, true);
@@ -1041,7 +1041,7 @@ static gboolean endpt_handler(SPKnot */*knot*/, GdkEvent *event, ConnectorTool *
             }
 
             // Show the red path for dragging.
-            cc->red_curve = SP_PATH(cc->clickeditem)->get_curve_for_edit();
+            cc->red_curve = SP_PATH(cc->clickeditem)->getCurveForEdit();
             Geom::Affine i2d = (cc->clickeditem)->i2dt_affine();
             cc->red_curve->transform(i2d);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(cc->red_bpath), cc->red_curve, true);
@@ -1135,7 +1135,7 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
 {
     g_assert( SP_IS_PATH(item) );
 
-    const SPCurve *curve = SP_PATH(item)->get_curve_reference();
+    const SPCurve *curve = SP_PATH(item)->getCurveForEdit(true);
     Geom::Affine i2dt = item->i2dt_affine();
 
     if (this->active_conn == item) {
@@ -1275,7 +1275,7 @@ static bool cc_item_is_shape(SPItem *item)
 bool cc_item_is_connector(SPItem *item)
 {
     if (SP_IS_PATH(item)) {
-        bool closed = SP_PATH(item)->get_curve_reference()->is_closed();
+        bool closed = SP_PATH(item)->getCurveForEdit(true)->is_closed();
         if (SP_PATH(item)->connEndPair.isAutoRoutingConn() && !closed) {
             // To be considered a connector, an object must be a non-closed
             // path that is marked with a "inkscape:connector-type" attribute.

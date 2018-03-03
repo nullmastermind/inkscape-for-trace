@@ -645,7 +645,7 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
 
         // Curve list
         // We keep it in desktop coordinates to eliminate calculation errors
-        SPCurve *norm = SP_PATH(item)->get_curve_for_edit();
+        SPCurve *norm = SP_PATH(item)->getCurveForEdit();
         norm->transform((dc->white_item)->i2dt_affine());
         g_return_if_fail( norm != NULL );
         dc->white_curves = norm->split();

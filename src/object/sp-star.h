@@ -54,8 +54,7 @@ public:
 	virtual char* description() const;
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
 
-	virtual void update_patheffect(bool write);
-	virtual void set_shape(bool force = false);
+	virtual void set_shape();
 	virtual Geom::Affine set_transform(Geom::Affine const& xform);
 };
 

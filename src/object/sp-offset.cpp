@@ -361,7 +361,7 @@ void SPOffset::set_shape() {
             SPCurve *c = new SPCurve(pv);
             g_assert(c != NULL);
 
-            this->setCurveInsync (c, TRUE);
+            this->setCurveInsync (c);
             this->setCurveBeforeLPE(c);
 
             c->unref();
@@ -669,7 +669,7 @@ void SPOffset::set_shape() {
         SPCurve *c = new SPCurve(pv);
         g_assert(c != NULL);
 
-        this->setCurveInsync (c, TRUE);
+        this->setCurveInsync (c);
         this->setCurveBeforeLPE(c);
         c->unref();
 

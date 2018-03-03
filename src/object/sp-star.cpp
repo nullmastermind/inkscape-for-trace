@@ -223,23 +223,6 @@ void SPStar::update(SPCtx *ctx, guint flags) {
     SPShape::update(ctx, flags);
 }
 
-void SPStar::update_patheffect(bool write) {
-    this->set_shape(true);
-
-    if (write) {
-        Inkscape::XML::Node *repr = this->getRepr();
-
-        if ( this->_curve != NULL ) {
-            gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
-            repr->setAttribute("d", str);
-            g_free(str);
-        } else {
-            repr->setAttribute("d", NULL);
-        }
-    }
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-}
 
 const char* SPStar::displayName() const {
     if (this->flatsided == false)
@@ -364,7 +347,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 #define NEXT false
 #define PREV true
 
-void SPStar::set_shape(bool force) {
+void SPStar::set_shape() {
     // perhaps we should convert all our shapes into LPEs without source path
     // and with knotholders for parameters, then this situation will be handled automatically
     // by disabling the entire stack (including the shape LPE)
@@ -375,7 +358,7 @@ void SPStar::set_shape(bool force) {
             // unconditionally read the curve from d, if any, to preserve appearance
             Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
             SPCurve *cold = new SPCurve(pv);
-            this->setCurveInsync( cold, TRUE);
+            this->setCurveInsync(cold);
             this->setCurveBeforeLPE(cold);
             cold->unref();
         }
@@ -445,28 +428,22 @@ void SPStar::set_shape(bool force) {
 
     c->closepath();
 
-    /* Reset the shape'scurve to the "original_curve"
+    /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
-    if(this->getCurveBeforeLPE()) {
-        if(!force && this->getCurveBeforeLPE()->get_pathvector() == c->get_pathvector()) {
-            c->unref();
-            return;
+    SPCurve * before = this->getCurveBeforeLPE();
+    if (before || this->hasPathEffectRecursive()) {
+        if (!before || before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
         }
+    } else {
+        this->setCurveInsync(c);
     }
-    this->setCurveInsync( c, TRUE);
-    this->setCurveBeforeLPE( c );
-
-    if (hasPathEffect() && pathEffectsEnabled()) {
-        SPCurve *c_lpe = c->copy();
-        bool success = this->performPathEffect(c_lpe);
-
-        if (success) {
-            this->setCurveInsync( c_lpe, TRUE);
-        } 
-
-        c_lpe->unref();
+    if (before) {
+        before->unref();
     }
-
     c->unref();
 }
 

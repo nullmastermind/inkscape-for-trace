@@ -50,13 +50,14 @@ LPEPowerMask::~LPEPowerMask() {}
 
 void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
-        //To avoid close of color dialog and better performance on change color
+    //To avoid close of color dialog and better performance on change color
     SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    gchar * uri_str = uri.param_getSVGValue();
     if(hide_mask && mask) {
         SP_ITEM(sp_lpe_item)->mask_ref->detach();
-    } else if (!hide_mask && !mask && uri.param_getSVGValue()) {
+    } else if (!hide_mask && !mask && uri_str) {
         try {
-            SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+            SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri_str));
         } catch (Inkscape::BadURIException &e) {
             g_warning("%s", e.what());
             SP_ITEM(sp_lpe_item)->mask_ref->detach();
@@ -72,11 +73,13 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
             SP_ITEM(sp_lpe_item)->mask_ref->detach();
             Geom::OptRect bbox = sp_lpe_item->visualBounds();
             if(!bbox) {
+                g_free(uri_str);
                 return;
             }
-            if (uri.param_getSVGValue()) {
+            uri_str = uri.param_getSVGValue();
+            if (uri_str) {
                 try {
-                    SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+                    SP_ITEM(sp_lpe_item)->mask_ref->attach(Inkscape::URI(uri_str));
                 } catch (Inkscape::BadURIException &e) {
                     g_warning("%s", e.what());
                     SP_ITEM(sp_lpe_item)->mask_ref->detach();
@@ -99,6 +102,7 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
             setMask();
         }
     }
+    g_free(uri_str);
 }
 
 void

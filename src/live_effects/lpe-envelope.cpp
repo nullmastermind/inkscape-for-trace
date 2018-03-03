@@ -42,7 +42,7 @@ void
 LPEEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     // get the item bounding box
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
@@ -218,7 +218,7 @@ LPEEnvelope::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
 
-    original_bbox(SP_LPE_ITEM(item));
+    original_bbox(SP_LPE_ITEM(item), false, true);
 
     Geom::Point Up_Left(boundingbox_X.min(), boundingbox_Y.min());
     Geom::Point Up_Right(boundingbox_X.max(), boundingbox_Y.min());

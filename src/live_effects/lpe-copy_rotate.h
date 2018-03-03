@@ -48,7 +48,8 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void toItem(Geom::Affine transform, size_t i, bool reset);
-    void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool root, bool reset);
+    void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
+    Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);

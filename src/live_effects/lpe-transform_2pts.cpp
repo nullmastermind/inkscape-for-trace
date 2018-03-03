@@ -89,13 +89,13 @@ void
 LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
-        pathvector = sp_path->get_original_curve()->get_pathvector();
+        pathvector = sp_path->getCurveForEdit()->get_pathvector();
     }
     if(!pathvector.empty()) {
         point_a = pathvector.initialPoint();
@@ -120,14 +120,14 @@ void
 LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    original_bbox(lpeitem);
+    original_bbox(lpeitem, false, true);
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
 
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
-        pathvector = sp_path->get_original_curve()->get_pathvector();
+        pathvector = sp_path->getCurveForEdit()->get_pathvector();
     }
     if(from_original_width_toggler != from_original_width) {
         from_original_width_toggler = from_original_width;
@@ -183,7 +183,7 @@ LPETransform2Pts::updateIndex()
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(sp_lpe_item);
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
-        pathvector = sp_path->get_original_curve()->get_pathvector();
+        pathvector = sp_path->getCurveForEdit()->get_pathvector();
     }
     if(pathvector.empty()) {
         return;
@@ -362,6 +362,9 @@ Gtk::Widget *LPETransform2Pts::newWidget()
     vbox->pack_start(*button2, true, true, 2);
     vbox->pack_start(*button3, true, true, 2);
     vbox->pack_start(*button4, true, true, 2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

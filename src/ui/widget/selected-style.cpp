@@ -109,7 +109,7 @@ typedef enum {
 // code, those warnings are actually desired. They say "Hey! Fix this". We
 // definitely don't want to hide/ignore them. --JonCruz
 static const GtkTargetEntry ui_drop_target_entries [] = {
-    {"application/x-color", 0, APP_X_COLOR}
+    {g_strdup("application/x-color"), 0, APP_X_COLOR}
 };
 
 static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);

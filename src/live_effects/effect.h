@@ -10,6 +10,7 @@
 #include <glibmm/ustring.h>
 #include <2geom/forward.h>
 #include "ui/widget/registry.h"
+#include <gtkmm/expander.h>
 #include "parameter/bool.h"
 #include "effect-enum.h"
 
@@ -79,8 +80,8 @@ public:
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
-    SPShape * getCurrentShape(){ return sp_shape; };
-    void setCurrentShape(SPShape * shape);
+    SPShape * getCurrentShape() const { return current_shape; };
+    void setCurrentShape(SPShape * shape) { current_shape = shape; }
     void processObjects(LpeAction lpe_action);
 
     /*
@@ -136,7 +137,6 @@ public:
     bool is_load;
     bool upd_params;
     BoolParam is_visible;
-    SPCurve * sp_curve;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;
 protected:
@@ -175,17 +175,19 @@ protected:
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    SPShape * sp_shape; // these get stored in doBeforeEffect_impl before doEffect chain, or in performPathEffects on groups, and derived classes may do as they please with them.
-    std::vector<const char *> items;
+    SPShape * current_shape; // these get stored in performPathEffects.
+    std::vector<Glib::ustring> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
 
 private:
-    void setDefaultParam(Glib::ustring pref_path, Glib::ustring par, gchar * value, gchar * defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
-    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring par, gchar * value, gchar * defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
+    void onDefaultsExpanderChanged(Gtk::Expander * expander);
+    void setDefaultParam(Glib::ustring pref_path, Glib::ustring par, Glib::ustring  value, Glib::ustring  defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
+    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring par, Glib::ustring value, Glib::ustring defvalue, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;
+    bool defaultsopen;
 
     Effect(const Effect&);
     Effect& operator=(const Effect&);

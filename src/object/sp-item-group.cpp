@@ -58,7 +58,7 @@
 
 using Inkscape::DocumentUndo;
 
-static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write);
+static void sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write);
 
 SPGroup::SPGroup() : SPLPEItem(),
     _expanded(false),
@@ -88,7 +88,6 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
     SPLPEItem::child_added(child, ref);
 
     SPObject *last_child = this->lastChild();
-
     if (last_child && last_child->getRepr() == child) {
         // optimization for the common special case where the child is being added at the end
         SPItem *item = dynamic_cast<SPItem *>(last_child);
@@ -121,7 +120,6 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
             }
         }
     }
-
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -642,13 +640,13 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         if (item) {
             item->doWriteTransform(item->transform, NULL, false);
             children.insert(children.begin(),item);
+            item->requestModified(SP_OBJECT_MODIFIED_FLAG);
         } else {
             g_assert_not_reached();
         }
 
         Inkscape::GC::release(repr);
     }
-
     if (do_done) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Ungroup"));
     }
@@ -900,54 +898,52 @@ void SPGroup::update_patheffect(bool write) {
 #ifdef GROUP_VERBOSE
     g_message("sp_group_update_patheffect: %p\n", lpeitem);
 #endif
-
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
-
-        SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
-        if (lpe_item) {
-            lpe_item->update_patheffect(write);
+        if (sub_item) {
+            SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
+            if (lpe_item) {
+                lpe_item->update_patheffect(write);
+            }
         }
     }
 
+    this->resetClipPathAndMaskLPE();
     if (hasPathEffect() && pathEffectsEnabled()) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
-
-            if (lpeobj && lpeobj->get_lpe()) {
-                lpeobj->get_lpe()->doBeforeEffect_impl(this);
-            }
-        }
-
-        sp_group_perform_patheffect(this, this, write);
-        
-        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
-        {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
-
-            if (lpeobj && lpeobj->get_lpe()) {
-                lpeobj->get_lpe()->doAfterEffect(this);
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                if (lpe) {
+                    lpeobj->get_lpe()->doBeforeEffect_impl(this);
+                    sp_group_perform_patheffect(this, this, lpe, write);
+                    lpeobj->get_lpe()->doAfterEffect(this);
+                }
             }
         }
     }
 }
 
 static void
-sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
+sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write)
 {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *sub_item = *iter;
-
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
-            sp_group_perform_patheffect(sub_group, top_group, write);
+            sp_group_perform_patheffect(sub_group, top_group, lpe, write);
         } else {
-            SPShape *sub_shape = dynamic_cast<SPShape *>(sub_item);
+            SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
+            SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
+            SPItem* clipmaskto = dynamic_cast<SPItem  *>(sub_item);
+            if (clipmaskto) {
+                top_group->applyToClipPath(clipmaskto, lpe);
+                top_group->applyToMask(clipmaskto, lpe);
+            }
             if (sub_shape) {
                 SPCurve * c = NULL;
                 // If item is a SPRect, convert it to path first:
@@ -973,19 +969,16 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {
+                    lpe->pathvector_before_effect = c->get_pathvector();
                     c->transform(i2anc_affine(sub_item, top_group));
-                    success = top_group->performPathEffect(c, sub_shape);
+                    success = top_group->performOnePathEffect(c, sub_shape, lpe);
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        SPPath *sub_path = dynamic_cast<SPPath *>(sub_item);
-                        if (!sub_path) {
-                            sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
-                            sub_shape->setCurve(c, TRUE);
-                            sub_shape->setCurveInsync( c, TRUE);
-                        }
+                        sub_shape->setCurveInsync(c);
+                        lpe->pathvector_after_effect = c->get_pathvector();
                         if (write) {
-                            gchar *str = sp_svg_write_path(c->get_pathvector());
+                            gchar *str = sp_svg_write_path(lpe->pathvector_after_effect);
                             repr->setAttribute("d", str);
 #ifdef GROUP_VERBOSE
                             g_message("sp_group_perform_patheffect writes 'd' attribute");
@@ -999,7 +992,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                             Geom::PathVector pv = sp_svg_read_pathv(value);
                             SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                             if (oldcurve) {
-                                sub_shape->setCurve(oldcurve, TRUE);
+                                sub_shape->setCurve(oldcurve);
                                 oldcurve->unref();
                             }
                         }
@@ -1007,6 +1000,11 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                 }
             }
         }
+    }
+    SPItem* clipmaskto = dynamic_cast<SPItem *>(group);
+    if (clipmaskto) {
+        top_group->applyToClipPath(clipmaskto, lpe);
+        top_group->applyToMask(clipmaskto, lpe);
     }
 }
 

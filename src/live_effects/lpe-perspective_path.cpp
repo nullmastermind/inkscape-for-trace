@@ -255,6 +255,9 @@ LPEPerspectivePath::newWidget()
     Gtk::Widget* apply3DWidget = dynamic_cast<Gtk::Widget *>(apply3D);
     apply3DWidget->set_tooltip_text("Refresh perspective");
     vbox->pack_start(*apply3DWidget, true, true,2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
