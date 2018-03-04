@@ -225,6 +225,11 @@
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
 #cmakedefine LPE_ENABLE_TEST_EFFECTS 1
 
+/* Local variables to store GTKMM version
+#cmakedefine INKSCAPE_GTKMM_MAJOR_VERSION @INKSCAPE_GTKMM_MAJOR_VERSION@
+#cmakedefine INKSCAPE_GTKMM_MINOR_VERSION @INKSCAPE_GTKMM_MINOR_VERSION@
+#cmakedefine INKSCAPE_GTKMM_MICRO_VERSION @INKSCAPE_GTKMM_MICRO_VERSION@
+
 /**
  * Check GtkMM version
  *
@@ -245,10 +250,10 @@
  * Returns: %TRUE if GTK+ headers are new enough
  */
 #define GTKMM_CHECK_VERSION(major,minor,micro)                            \
-    (GTKMM_MAJOR_VERSION > (major) ||                                     \
-     (GTKMM_MAJOR_VERSION == (major) && GTKMM_MINOR_VERSION > (minor)) || \
-     (GTKMM_MAJOR_VERSION == (major) && GTKMM_MINOR_VERSION == (minor) && \
-      GTKMM_MICRO_VERSION >= (micro)))
+  (INKSCAPE_GTKMM_MAJOR_VERSION > (major) ||                                     \
+  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION > (minor)) || \
+  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION == (minor) && \
+  INKSCAPE_GTKMM_MICRO_VERSION >= (micro)))
 
 #endif /* _CONFIG_H_ */
 
