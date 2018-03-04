@@ -225,7 +225,7 @@
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
 #cmakedefine LPE_ENABLE_TEST_EFFECTS 1
 
-/* Local variables to store GTKMM version
+/* Local variables to store GTKMM version */
 #cmakedefine INKSCAPE_GTKMM_MAJOR_VERSION @INKSCAPE_GTKMM_MAJOR_VERSION@
 #cmakedefine INKSCAPE_GTKMM_MINOR_VERSION @INKSCAPE_GTKMM_MINOR_VERSION@
 #cmakedefine INKSCAPE_GTKMM_MICRO_VERSION @INKSCAPE_GTKMM_MICRO_VERSION@
