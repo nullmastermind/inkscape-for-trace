@@ -294,7 +294,11 @@ set(inkscape_SRC
 # Setup the executable
 # -----------------------------------------------------------------------------
 set(main_SRC main.cpp)
-set(view_SRC inkview.cpp)
+set(view_SRC
+  inkview.cpp
+  inkview-options-group.cpp
+  inkview-options-group.h
+)
 
 if(WIN32)
   # Sources for the inkscape executable on Windows.
