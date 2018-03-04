@@ -280,8 +280,6 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 lpe = SP_LPE_ITEM(item)->getCurrentLPE();
                 ps = static_cast<LPEPowerStroke*>(lpe);
                 if (ps) {
-                    ps->getRepr()->setAttribute("sort_points", "true");
-                    ps->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
                     ps->offset_points.param_set_and_write_new_value(pt->points);
                 }
                 return;
