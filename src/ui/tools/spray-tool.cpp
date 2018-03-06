@@ -52,8 +52,6 @@
 
 #include "helper/action.h"
 
-#include "livarot/Shape.h"
-
 #include "object/box3d.h"
 #include "object/sp-item-transform.h"
 

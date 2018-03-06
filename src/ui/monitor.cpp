@@ -45,7 +45,7 @@ Gdk::Rectangle get_monitor_geometry_primary() {
     Gdk::Rectangle monitor_geometry;
 #if GTKMM_CHECK_VERSION(3,22,0)
     auto const display = Gdk::Display::get_default();
-    auto const monitor = display->get_primary_monitor();
+    auto monitor = display->get_primary_monitor();
 
     // Fallback to monitor number 0 if the user hasn't configured a primary monitor
     if (!monitor) {

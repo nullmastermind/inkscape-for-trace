@@ -6,9 +6,6 @@
 
 // structure that holds data describing how to render glyphs of a font
 
-class Path;
-class Shape;
-
 // Different raster styles.
 struct font_style {
     Geom::Affine  transform; // the ctm. contains the font-size
@@ -21,8 +18,6 @@ struct font_style {
     int           nbDash;
     double        dash_offset;
     double*       dashes;
-
-    void          Apply(Path *src, Shape *dst); // utility: applies the style to the path and stores the result in the shape
 };
 
 
