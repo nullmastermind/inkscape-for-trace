@@ -27,7 +27,6 @@
 #include <2geom/path-sink.h>
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
-#include "livarot/Path.h"
 #include "util/unordered-containers.h"
 
 
@@ -121,8 +120,7 @@ typedef FT_Vector const FREETYPE_VECTOR;
 typedef FT_Vector FREETYPE_VECTOR;
 #endif
 
-// outline as returned by freetype -> livarot Path
-// see nr-type-ft2.cpp for the freetype -> artBPath on which this code is based
+// outline as returned by freetype
 static int ft2_move_to(FREETYPE_VECTOR *to, void * i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
