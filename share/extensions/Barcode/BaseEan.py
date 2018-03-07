@@ -91,6 +91,8 @@ class EanBarcode(Barcode):
     def encode(self, code):
         """Encode any EAN barcode"""
         code = code.replace(' ', '').strip()
+        guide = code.endswith('>')
+        code = code.strip('>')
 
         if not code.isdigit():
             return self.error(code, 'Not a Number, must be digits 0-9 only')
@@ -115,9 +117,9 @@ class EanBarcode(Barcode):
                 code = self.append_checksum(code)
             elif not self.verify_checksum(code):
                 return self.error(code, 'Checksum failed, omit for new sum')
-        return self._encode(self.intarray(code))
+        return self._encode(self.intarray(code), guide=guide)
 
-    def _encode(self, num):
+    def _encode(self, num, guide=False):
         """
         Write your EAN encoding function, it's passed in an array of int and
         it should return a string on 1 and 0 for black and white parts
@@ -131,17 +133,12 @@ class EanBarcode(Barcode):
         parts += list(right) + [self.guard_bar]
         return ''.join(parts)
 
-    def get_checksum(self, number):
+    def get_checksum(self, num):
         """Generate a UPCA/EAN13/EAN8 Checksum"""
-        weight = [3, 1] * len(number)
-        result = 0
-        # We need to work from left to right so reverse
-        number = number[::-1]
-        # checksum based on first digits.
-        for i in range(len(number)):
-            result += int(number[i]) * weight[i]
+        # Left to right,checksum based on first digits.
+        total = sum([int(n) * (3, 1)[x % 2] for x, n in enumerate(num[::-1])])
         # Modulous result to a single digit checksum
-        checksum = self.magic - (result % self.magic)
+        checksum = self.magic - (total % self.magic)
         if checksum < 0 or checksum >= self.magic:
             return '0'
         return str(checksum)

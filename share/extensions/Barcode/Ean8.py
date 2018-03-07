@@ -27,8 +27,11 @@ class Ean8(EanBarcode):
     checks = [8]
     lengths = [7]
 
-    def _encode(self, n):
+    def _encode(self, num, guide=False):
         """Encode an ean8 barcode"""
-        self.text = self.space(n[:4], 3, n[4:])
-        return self.enclose(self.encode_left(n[:4]), self.encode_right(n[4:]))
+        self.text = self.space(num[:4], 3, num[4:])
+        return self.enclose(
+            self.encode_left(num[:4]),
+            self.encode_right(num[4:])
+        )
 

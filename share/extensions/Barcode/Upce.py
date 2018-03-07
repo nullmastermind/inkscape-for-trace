@@ -34,10 +34,10 @@ class Upce(EanBarcode):
     checks = [7, 12]
     center_bar = '020'
 
-    def _encode(self, n):
+    def _encode(self, num, guide=False):
         """Generate a UPC-E Barcode"""
-        self.text = self.space(['0'], 2, n[:6], 2, n[-1])
-        code = self.encode_interleaved(n[-1], n[:6], FAMS)
+        self.text = self.space(['0'], 2, num[:6], 2, num[-1])
+        code = self.encode_interleaved(num[-1], num[:6], FAMS)
         return self.enclose(code)
 
     def append_checksum(self, number):
