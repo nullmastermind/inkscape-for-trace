@@ -279,6 +279,42 @@ void SPPath::update(SPCtx *ctx, guint flags) {
         flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
     }
 
+    // Our code depends on 'd' being an attribute (LPE's, etc.). To support 'd' as a property, we
+    // check it here (after the style property has been evaluated, this allows us to properly
+    // handled precedence of property vs attribute). If we read in a 'd' set by styling, convert it
+    // to an attribute. We'll convert it back on output.
+
+    d_source = style->d.style_src;
+
+    if (style->d.set &&
+
+        (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
+
+        if (style->d.value) {
+
+            Geom::PathVector pv = sp_svg_read_pathv(style->d.value);
+            SPCurve *curve = new SPCurve(pv);
+            if (curve) {
+
+                // Update curve
+                this->setCurveInsync(curve, TRUE);
+                curve->unref();
+
+                // Convert from property to attribute (convert back on write)
+                getRepr()->setAttribute("d", style->d.value);
+
+                SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
+                sp_repr_css_unset_property ( css, "d");
+                sp_repr_css_set ( getRepr(), css, "style" );
+                sp_repr_css_attr_unref ( css );
+
+                style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
+            } else {
+                // Do nothing... don't overwrite 'd' from attribute
+            }
+        }
+    }
+
     SPShape::update(ctx, flags);
 
     this->connEndPair.update();

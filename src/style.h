@@ -91,6 +91,11 @@ public:
     /* ----------------------- THE PROPERTIES ------------------------- */
     /*                    Match order in style.cpp.                     */
 
+    /* SVG 2 attributes promoted to properties. */
+
+    /** Path data */
+    SPIString d;
+
     /* Font ---------------------------- */
 
     /** Font style */
