@@ -141,7 +141,7 @@ static void sp_arctb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const
 
     if (modmade) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC,
-                           _("Ellipse: Change Rx/Ry"));
+                           _("Ellipse: Change radius"));
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
