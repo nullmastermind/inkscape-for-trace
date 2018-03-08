@@ -1476,7 +1476,7 @@ void InkscapePreferences::initPageRendering()
     // rendering tile multiplier
     _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 512.0, 1.0, 16.0, 16.0, true, false);
     _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, "",
-                              _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size. On modern hardware, increasing this value (default: 16) can lead to improved performance with faster redrawing."), false);
+                              _("Increase to get a better performance when there are large areas with filtered objects in your drawing. Decrease to make zooming and panning in relevant areas faster on low-end hardware in drawings with few or no filters."), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
