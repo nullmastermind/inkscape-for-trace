@@ -43,7 +43,7 @@ public:
     SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
     SPCurve * getCurveForEdit (unsigned int owner = FALSE) const;
     void setCurve (SPCurve *curve, unsigned int owner = TRUE);
-    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = TRUE);
+    void setCurveBeforeLPE (SPCurve *new_curve, unsigned int owner = TRUE, bool write = FALSE);
     void setCurveInsync (SPCurve *curve, unsigned int owner = TRUE);
     int hasMarkers () const;
     int numberOfMarkers (int type) const;

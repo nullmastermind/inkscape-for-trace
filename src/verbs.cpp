@@ -1461,7 +1461,6 @@ void LayerVerb::perform(SPAction *action, void *data)
                 dt->getSelection()->clear();
                 SPObject *old_layer=dt->currentLayer();
 
-                sp_object_ref(old_layer, NULL);
                 SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
                 if (!survivor) {
                     survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
@@ -1477,7 +1476,6 @@ void LayerVerb::perform(SPAction *action, void *data)
                 // http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
                 //
                 old_layer->deleteObject();
-                sp_object_unref(old_layer, NULL);
                 if (survivor) {
                     dt->setCurrentLayer(survivor);
                 }

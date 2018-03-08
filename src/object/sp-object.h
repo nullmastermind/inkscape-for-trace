@@ -58,7 +58,6 @@ class SPObject;
 #include <sigc++/signal.h>
 #include <vector>
 #include <boost/intrusive/list.hpp>
-
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
 

@@ -488,9 +488,7 @@ Effect::processObjects(LpeAction lpe_action)
             switch (lpe_action){
             case LPE_TO_OBJECTS:
                 if (item->isHidden()) {
-                    sp_object_ref(item, 0 );
                     item->deleteObject(true);
-                    sp_object_unref(item);
                 } else {
                     if (elemnode->attribute("inkscape:path-effect")) {
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
@@ -500,9 +498,7 @@ Effect::processObjects(LpeAction lpe_action)
                 break;
 
             case LPE_ERASE:
-                sp_object_ref(item, 0 );
                 item->deleteObject(true);
-                sp_object_unref(item);
                 break;
 
             case LPE_VISIBILITY:

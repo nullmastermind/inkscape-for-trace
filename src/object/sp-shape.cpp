@@ -733,7 +733,7 @@ void SPShape::print(SPPrintContext* ctx) {
 
 	if (add_comments) {
 		gchar * comment = g_strdup_printf("end '%s'",
-										  this->defaultLabel());
+		this->defaultLabel());
 		sp_print_comment(ctx, comment);
 		g_free(comment);
 	}
@@ -1033,7 +1033,7 @@ void SPShape::setCurve(SPCurve *new_curve, unsigned int owner)
  * Sets _curve_before_lpe to refer to the curve.
  */
 void
-SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
+SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner, bool write)
 {
     if (_curve_before_lpe) {
         _curve_before_lpe = _curve_before_lpe->unref();
@@ -1046,6 +1046,8 @@ SPShape::setCurveBeforeLPE(SPCurve *new_curve, unsigned int owner)
             _curve_before_lpe = new_curve->copy();
         }
     }
+    sp_lpe_item_update_patheffect(this, true, write);
+    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**

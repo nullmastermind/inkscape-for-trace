@@ -17,6 +17,7 @@
 
 #include <cstring>
 #include <string>
+
 #include <boost/range/adaptor/transformed.hpp>
 
 #include "helper/sp-marshal.h"
@@ -27,6 +28,7 @@
 #include "document.h"
 #include "preferences.h"
 #include "style.h"
+#include "live_effects/lpeobject.h"
 #include "sp-factory.h"
 #include "sp-paint-server.h"
 #include "sp-root.h"
@@ -454,6 +456,8 @@ void SPObject::requestOrphanCollection() {
         // leave it
     } else if (IS_COLORPROFILE(this)) {
         // leave it
+    } else if (IS_LIVEPATHEFFECT(this)) {
+        document->queueForOrphanCollection(this);
     } else {
         document->queueForOrphanCollection(this);
 
@@ -1198,7 +1202,7 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
     bool already_propagated = (!(this->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
     this->uflags |= flags;
-
+    
     /* If requestModified has already been called on this object or one of its children, then we
      * don't need to set CHILD_MODIFIED on our ancestors because it's already been done.
      */

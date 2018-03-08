@@ -190,8 +190,7 @@ void PathManipulator::writeXML()
 {
     if (!_live_outline)
         _updateOutline();
-    if (_live_objects)
-        _setGeometry();
+    _setGeometry();
 
     if (!_path) return;
     _observer->block();
@@ -201,9 +200,7 @@ void PathManipulator::writeXML()
     } else {
         // this manipulator will have to be destroyed right after this call
         _getXMLNode()->removeObserver(*_observer);
-        sp_object_ref(_path);
         _path->deleteObject(true, true);
-        sp_object_unref(_path);
         _path = NULL;
     }
     _observer->unblock();
@@ -1393,8 +1390,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
     }
     if (_live_outline)
         _updateOutline();
-    if (_live_objects)
-        _setGeometry();
+    _setGeometry();
 }
 
 /** Build one segment of the geometric representation.
@@ -1515,8 +1511,8 @@ void PathManipulator::_setGeometry()
         if (empty()) return;
         if (SPCurve * original = _path->getCurveBeforeLPE()){
             if(!_spcurve->is_equal(original)) {
-                _path->setCurveBeforeLPE(_spcurve);
-                delete original;
+                _path->setCurveBeforeLPE(_spcurve, false, false);
+                original->unref();
             }
         } else if(!_spcurve->is_equal(_path->getCurve(true))) {
             _path->setCurve(_spcurve, false);

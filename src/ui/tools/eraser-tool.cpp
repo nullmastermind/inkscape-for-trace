@@ -702,10 +702,8 @@ void EraserTool::set_to_accumulated() {
                         SPItem *item = *i;
                         SPUse *use = dynamic_cast<SPUse *>(item);
                         if (SP_IS_PATH(item) && SP_PATH(item)->nodesInPath () == 2){
-                            sp_object_ref( *i, 0 );
                             SPItem *item = *i;
                             item->deleteObject(true);
-                            sp_object_unref(item);
                             workDone = true;
                         } else if (SP_IS_GROUP(item) || use ) {
                             /*Do nothing*/
@@ -784,9 +782,7 @@ void EraserTool::set_to_accumulated() {
                                             SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
                                             if (dup_clip_obj) {
                                                 dup_clip_obj->doWriteTransform(item->transform);
-                                                sp_object_ref(clip_path, 0);
                                                 clip_path->deleteObject(true);
-                                                sp_object_unref(clip_path);
                                                 selection->raiseToTop(true);
                                                 selection->add(dup_clip);
                                                 selection->pathDiff(true);
@@ -813,9 +809,7 @@ void EraserTool::set_to_accumulated() {
                             } else {
                                 SPItem *erase_clip = selection->singleItem();
                                 if (erase_clip) {
-                                    sp_object_ref(erase_clip, 0);
                                     erase_clip->deleteObject(true);
-                                    sp_object_unref(erase_clip);
                                 }
                             }
                             workDone = true;
@@ -826,14 +820,9 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else {
-                    for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
-                        sp_object_ref( *i, 0 );
-                    }
-
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
                         SPItem *item = *i;
                         item->deleteObject(true);
-                        sp_object_unref(item);
                         workDone = true;
                     }
                 }

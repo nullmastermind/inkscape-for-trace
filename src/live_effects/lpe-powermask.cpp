@@ -203,9 +203,7 @@ LPEPowerMask::setMask(){
             mask->getRepr()->appendChild(mask_node);
             Inkscape::GC::release(mask_node);
         }
-        sp_object_ref(elemref, 0 );
         elemref->deleteObject(true);
-        sp_object_unref(elemref);
     }
 //    }
     std::vector<SPObject*> mask_list = mask->childList(true);

@@ -468,9 +468,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                     double chance = g_random_double_range(0, 1);
                     if (chance <= prob) {
                         if (reverse) { // delete
-                            sp_object_ref(item, NULL);
                             item->deleteObject(true, true);
-                            sp_object_unref(item, NULL);
                         } else { // duplicate
                             SPDocument *doc = item->document;
                             Inkscape::XML::Document* xml_doc = doc->getReprDoc();

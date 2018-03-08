@@ -87,15 +87,7 @@ void SPLPEItem::release() {
     delete this->lpe_modified_connection_list;
     this->lpe_modified_connection_list = NULL;
 
-    PathEffectList::iterator it = this->path_effect_list->begin();
-    
-    while ( it != this->path_effect_list->end() ) {
-        // unlink and delete all references in the list
-        (*it)->unlink();
-        delete *it;
-        it = this->path_effect_list->erase(it);
-    }
-
+    this->path_effect_list->clear();
     // delete the list itself
     delete this->path_effect_list;
     this->path_effect_list = NULL;
@@ -128,7 +120,6 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                     delete *it;
                     it = this->path_effect_list->erase(it);
                 }
-
                 // Parse the contents of "value" to rebuild the path effect reference list
                 if ( value ) {
                     std::istringstream iss(value);
@@ -527,9 +518,9 @@ void SPLPEItem::addPathEffect(LivePathEffectObject * new_lpeobj)
 void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
 {
     Inkscape::LivePathEffect::LPEObjectReference* lperef = this->getCurrentLPEReference();
-    if (!lperef)
+    if (!lperef) {
         return;
-
+    }
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
         effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
@@ -556,11 +547,14 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             return;
         }
     }
-    
-    PathEffectList::iterator it = this->path_effect_list->begin();
-    
-    while ( it != this->path_effect_list->end() ) {
-        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+    PathEffectList new_list = *this->path_effect_list;
+    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
+    for (i = new_list.begin(); i != new_list.end(); ++i) {
+        Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
+        if (!lperef) {
+            continue;
+        }
+        LivePathEffectObject *lpeobj = lperef->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
             if (lpe) {
@@ -568,11 +562,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
                 lpe->doOnRemove(this);
             }
         }
-        // unlink and delete all references in the list
-        (*it)->unlink();
-        ++it;
     }
-    this->path_effect_list->clear();
+    new_list.clear();
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
     if (!keep_paths) {

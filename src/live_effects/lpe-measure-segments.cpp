@@ -339,9 +339,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
         SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
         Inkscape::GC::release(copy);
-        sp_object_ref(elemref, 0 );
         elemref->deleteObject(true);
-        sp_object_unref(elemref);
         copy->setAttribute("id", id.c_str());
         elemref = elemref_copy;
     }
@@ -490,9 +488,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
         Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
         SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
         Inkscape::GC::release(copy);
-        sp_object_ref(elemref, 0 );
         elemref->deleteObject(true);
-        sp_object_unref(elemref);
         copy->setAttribute("id", id.c_str());
     }
 }
