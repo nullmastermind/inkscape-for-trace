@@ -481,7 +481,12 @@ void SPGenericEllipse::set_shape()
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
     if (before || this->hasPathEffectRecursive()) {
-        this->setCurveBeforeLPE(c);
+        if (!before || before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            this->update_patheffect(false);
+        } else {
+            this->setCurveBeforeLPE(c);
+        }
     } else {
         this->setCurveInsync(c);
     }

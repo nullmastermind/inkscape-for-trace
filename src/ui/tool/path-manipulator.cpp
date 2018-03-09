@@ -1511,7 +1511,8 @@ void PathManipulator::_setGeometry()
         if (empty()) return;
         if (SPCurve * original = _path->getCurveBeforeLPE()){
             if(!_spcurve->is_equal(original)) {
-                _path->setCurveBeforeLPE(_spcurve, false, false);
+                _path->setCurveBeforeLPE(_spcurve, false);
+                sp_lpe_item_update_patheffect(_path, true, false);
                 original->unref();
             }
         } else if(!_spcurve->is_equal(_path->getCurve(true))) {
