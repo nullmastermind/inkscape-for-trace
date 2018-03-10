@@ -275,7 +275,8 @@ $properties{ "text-decoration-stroke" }->{default} = "NO_DEFAULT";
 $properties{ "text-decoration-stroke" }->{inherit} = "no";
 
 
-# CSS Fonts
+
+# CSS Fonts Level 3
 push @{$properties{ "font-variant-ligatures" }->{elements}}, @container_elements;
 push @{$properties{ "font-variant-ligatures" }->{elements}}, @text_content_elements;
 $properties{ "font-variant-ligatures" }->{default} = "normal";
@@ -315,6 +316,13 @@ push @{$properties{ "font-feature-settings" }->{elements}}, @container_elements;
 push @{$properties{ "font-feature-settings" }->{elements}}, @text_content_elements;
 $properties{ "font-feature-settings" }->{default} = "normal";
 $properties{ "font-feature-settings" }->{inherit} = "yes";
+
+
+# CSS Fonts Level 4
+push @{$properties{ "font-variation-settings" }->{elements}}, @container_elements;
+push @{$properties{ "font-variation-settings" }->{elements}}, @text_content_elements;
+$properties{ "font-variation-settings" }->{default} = "normal";
+$properties{ "font-variation-settings" }->{inherit} = "yes";
 
 
 # CSS Writing Modes

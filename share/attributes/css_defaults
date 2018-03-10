@@ -70,6 +70,8 @@
 
 "font-variant-position" - "normal" - "yes"
 
+"font-variation-settings" - "normal" - "yes"
+
 "font-weight" - "normal" - "yes"
 
 "glyph-orientation-horizontal" - "0deg" - "yes"

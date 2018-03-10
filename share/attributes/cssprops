@@ -70,6 +70,8 @@
 
 "font-variant-position" - "a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use","altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
+"font-variation-settings" - "a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use","altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
+
 "font-weight" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
 "glyph-orientation-horizontal" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
