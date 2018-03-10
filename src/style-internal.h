@@ -530,11 +530,13 @@ public:
         return !(*this == rhs);
     }
 
+    virtual const Glib::ustring toString() const;
+
   // To do: make private
 public:
     bool normal : 1;
     bool inherit : 1;
-    std::map<char*, float> axes;
+    std::map<Glib::ustring, float> axes;
 };
 
 

@@ -534,35 +534,33 @@ SPIFontVariationSettings::read( gchar const *str ) {
         set = true;
         inherit = false;
         normal = true;
-        axes.empty();
+        axes.clear();
         return;
     }
 
-    gchar ** strarray = g_strsplit(str, " ", 0);
-    unsigned int i=0;
-    while (strarray[i]){
-        char axis_name[5];
-        if (strlen(strarray[i]) >= 8
-            && (strarray[i][0] == '\"' || strarray[i][0] == '\'')
-            && (strarray[i][5] == '\"' || strarray[i][5] == '\'')
-            && strarray[i][6] == ' ') {
-            strncpy(axis_name, &strarray[i][1], 4);
-            axis_name[4] = '\0';
+    // Matching must use a Glib::ustring or matching may produce
+    // subtle errors which may be shown by an "Invalid byte sequence
+    // in conversion input" error.
+    Glib::ustring string(str);
 
-            gfloat value;
-            if (sp_svg_number_read_f(&strarray[i][7], &value)) {
-                set = true;
-                inherit = false;
-                axes.insert(std::pair<char*,float>(axis_name,value));
-            } else {
-                //invalid syntax while parsing attribute
-                break;
-            }
-            normal = false;
-        }
-        i++;
+    // Match a pattern of a CSS <string> of length 4, whitespace, CSS <number>.
+    // (CSS string is quoted).
+    Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s+([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
+    Glib::MatchInfo matchInfo;
+    regex->match(string, matchInfo);
+
+    while (matchInfo.matches()) {
+
+      float value = std::stod(matchInfo.fetch(2));
+      axes.insert(std::pair<Glib::ustring,float>(matchInfo.fetch(1), value));
+
+      matchInfo.next();
     }
-    g_strfreev (strarray);
+    if (!axes.empty()) {
+        set = true;
+        inherit = false;
+        normal = false;
+    }
 };
 
 const Glib::ustring
@@ -576,10 +574,8 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
             return (name + ":normal" + important_str() + ";");
         } else {
             Inkscape::CSSOStringStream os;
-            for (std::map<char*,float>::const_iterator it=axes.begin(); it!=axes.end(); ++it){
-                os << "\"" << it->first << "\" " << it->second << " ";
-                // FIXME: can we avoid the last space char ?
-            }
+            os << name << ":";
+            os << toString();
             os << important_str();
             os << ";";
             return os.str();
@@ -590,12 +586,29 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
 
 void
 SPIFontVariationSettings::cascade( const SPIBase* const parent ) {
-//    std::cerr << "SPIVariableFontAxisOrNormal::cascade(): TODO: Implement-me!" << std::endl;
+
+    if( const SPIFontVariationSettings* p = dynamic_cast<const SPIFontVariationSettings*>(parent) ) {
+        if( (inherits && !set) || inherit ) {
+            normal   = p->normal;
+            axes.clear();
+            axes     = p->axes;
+        }
+    } else {
+        std::cerr << "SPIFontVariationSettings::cascade(): Incorrect parent type" << std::endl;
+    }
 }
 
 void
 SPIFontVariationSettings::merge( const SPIBase* const parent ) {
-//    std::cerr << "SPIVariableFontAxisOrNormal::merge(): TODO: Implement-me!" << std::endl;
+    if( const SPIFontVariationSettings* p = dynamic_cast<const SPIFontVariationSettings*>(parent) ) {
+        // if( inherits ) {  'font-variation-settings' always inherits.
+        if( (!set || inherit) && p->set && !(p->inherit) ) {
+            set     = p->set;
+            inherit = p->inherit;
+            normal  = p->normal;
+            axes    = p->axes;
+        }
+    }
 }
 
 bool
@@ -607,6 +620,23 @@ SPIFontVariationSettings::operator==(const SPIBase& rhs) {
     } else {
         return false;
     }
+}
+
+// Generate a string useful for passing to Pango, etc.
+const Glib::ustring
+SPIFontVariationSettings::toString() const {
+
+    Inkscape::CSSOStringStream os;
+    for (auto it=axes.begin(); it!=axes.end(); ++it){
+        os << "'" << it->first << "' " << it->second << " ";
+    }
+
+    std::string string = os.str(); // Glib::ustring doesn't have pop_back()
+    if (!string.empty()) {
+        string.pop_back(); // Delete extra space at end
+    }
+
+    return string;
 }
 
 // SPIEnum --------------------------------------------------------------

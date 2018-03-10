@@ -157,6 +157,10 @@ std::vector<StyleRead> getStyleData()
     StyleRead("font-variant-numeric:tabular-nums slashed-zero"),
     StyleRead("font-variant-numeric:tabular-nums proportional-nums", "font-variant-numeric:proportional-nums"),
 
+    StyleRead("font-variation-settings:'wght' 400"),
+    StyleRead("font-variation-settings:'wght'  400", "font-variation-settings:'wght' 400"),
+    StyleRead("font-variation-settings:'wght' 400 'slnt' 0.5", "font-variation-settings:'slnt' 0.5 'wght' 400" ),
+
     // Should be moved down
     StyleRead("text-indent:12em"),                        // SPILength?
     StyleRead("text-align:center"),                       // SPIEnum
@@ -503,6 +507,11 @@ std::vector<StyleCascade> getStyleCascadeData()
 
     // SPIString and SPIFontString
 
+    StyleCascade("font-variation-settings:'wght' 400", "",          "font-variation-settings:'wght' 400"),
+    StyleCascade("font-variation-settings:'wght' 100",
+                 "font-variation-settings:'wght' 400",
+                 "font-variation-settings:'wght' 400"),
+
     // SPIPaint
 
     // SPIPaintOrder
@@ -550,8 +559,8 @@ TEST(StyleTest, Cascade) {
     //           << "  Child: "  << i.child
     //           << "  Result: " << i.result << std::endl;
     // std::cout << " Write: ";
-    // std::cout << "  Parent: " << style_parent.write( SP_STYLE_FLAG_IFSET ) 
-    //           << "  Child: "  << style_child.write( SP_STYLE_FLAG_IFSET ) 
+    // std::cout << "  Parent: " << style_parent.write( SP_STYLE_FLAG_IFSET )
+    //           << "  Child: "  << style_child.write( SP_STYLE_FLAG_IFSET )
     //           << "  Result: " << style_result.write( SP_STYLE_FLAG_IFSET ) << std::endl;
 
     style_child.cascade( &style_parent );
