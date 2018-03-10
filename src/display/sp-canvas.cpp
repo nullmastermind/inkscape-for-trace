@@ -905,9 +905,12 @@ void SPCanvasGroup::add(SPCanvasItem *item)
 
 void SPCanvasGroup::remove(SPCanvasItem *item)
 {
-
     g_return_if_fail(item != NULL);
-    items.remove(item);
+
+    auto position = std::find(items.begin(), items.end(), item);
+    if (position != items.end()) {
+        items.erase(position);
+    }
 
     // Unparent the child
     item->parent = NULL;
