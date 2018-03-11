@@ -46,7 +46,7 @@ class InkScale : public Gtk::Scale
  private:
 
   double get_fraction();
-  void set_adjustment_value(double x);
+  void set_adjustment_value(double x, bool constrained = false);
 
   Gtk::SpinButton * _spinbutton; // Needed to get placement/text color.
   Glib::ustring _label;

@@ -95,7 +95,8 @@ bool
 InkScale::on_button_press_event(GdkEventButton* button_event) {
 
   if (! (button_event->state & GDK_MOD1_MASK) ) {
-    set_adjustment_value(button_event->x);
+    bool constrained = button_event->state & GDK_CONTROL_MASK;
+    set_adjustment_value(button_event->x, constrained);
   }
 
   // Dragging must be initialized after any adjustment due to button press.
@@ -123,7 +124,8 @@ InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
 
     if (! (motion_event->state & GDK_MOD1_MASK) ) {
       // Absolute change
-      set_adjustment_value(x);
+      bool constrained = motion_event->state & GDK_CONTROL_MASK;
+      set_adjustment_value(x, constrained);
     } else {
       // Relative change
       double xx = (_drag_offset + (x - _drag_start) * 0.1);
@@ -162,15 +164,33 @@ InkScale::get_fraction() {
 }
 
 void
-InkScale::set_adjustment_value(double x) {
+InkScale::set_adjustment_value(double x, bool constrained) {
 
   Glib::RefPtr<Gtk::Adjustment> adjustment = get_adjustment();
   double upper = adjustment->get_upper();
   double lower = adjustment->get_lower();
+  double range = upper-lower;
 
   Gdk::Rectangle slider_area = get_range_rect();
   double fraction = (x - slider_area.get_x()) / (double)slider_area.get_width();
-  double value = fraction * (upper - lower) + lower;
+  double value = fraction * range + lower;
+  
+  if (constrained) {
+    // TODO: do we want preferences for (any of) these?
+    if (fmod(range+1,16) == 0) {
+        value = round(value/16) * 16;
+    } else if (range >= 1000 && fmod(upper,100) == 0) {
+        value = round(value/100) * 100;
+    } else if (range >= 100 && fmod(upper,10) == 0) {
+        value = round(value/10) * 10;
+    } else if (range > 20 && fmod(upper,5) == 0) {
+        value = round(value/5) * 5;
+    } else if (range > 2) {
+        value = round(value);
+    } else if (range <= 2) {
+        value = round(value*10) / 10;
+    }
+  }
 
   adjustment->set_value( value );
 }
