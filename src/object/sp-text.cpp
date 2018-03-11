@@ -188,7 +188,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
             this->_clearFlow(g);
             g->setStyle(this->style, this->parent->style);
-            // pass the bbox of the this this as paintbox (used for paintserver fills)
+            // pass the bbox of this as paintbox (used for paintserver fills)
             this->layout.show(g, paintbox);
         }
     }

@@ -619,7 +619,7 @@ bool SvgBuilder::isPatternTypeSupported(GfxPattern *pattern) {
  * \brief Creates a pattern from poppler's data structure
  * Handles linear and radial gradients. Creates a new PdfParser and uses it to
  * build a tiling pattern.
- * \return an url pointing to the created pattern
+ * \return a url pointing to the created pattern
  */
 gchar *SvgBuilder::_createPattern(GfxPattern *pattern, GfxState *state, bool is_stroke) {
     gchar *id = NULL;

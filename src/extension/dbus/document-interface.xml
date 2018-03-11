@@ -459,7 +459,7 @@ c
       </arg>
       <doc:doc>
         <doc:description>
-          <doc:para>Merge this this string with the current style for the document.  All new shapes will use this style if it exists.</doc:para>
+          <doc:para>Merge this string with the current style for the document.  All new shapes will use this style if it exists.</doc:para>
         </doc:description>
         <doc:seealso><doc:ref type="interface" to="Style Strings">Style Strings</doc:ref>, <doc:ref type="method" to="document.merge_css">merge_css()</doc:ref></doc:seealso>
       </doc:doc>

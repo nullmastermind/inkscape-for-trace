@@ -51,7 +51,7 @@ class FoldableBox(inkex.Effect):
         self.OptionParser.add_option("-t", "--tab-proportion",
                         action="store", type="float",
                         dest="tabProportion", default=0.6,
-                        help="Inner tab propotion for upper tab")
+                        help="Inner tab proportion for upper tab")
         self.OptionParser.add_option("-g", "--guide-line",
                         action="store", type="inkbool",
                         dest="guideLine", default=True,
