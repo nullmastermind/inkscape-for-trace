@@ -244,9 +244,18 @@ gfloat ColorScales::getScaled(const GtkAdjustment *a)
     return val;
 }
 
-void ColorScales::setScaled(GtkAdjustment *a, gfloat v)
+void ColorScales::setScaled(GtkAdjustment *a, gfloat v, bool constrained)
 {
-    gfloat val = v * gtk_adjustment_get_upper(a);
+    gdouble upper = gtk_adjustment_get_upper(a);
+    gfloat val = v * upper;
+    if (constrained) {
+        // TODO: do we want preferences for these?
+        if (upper == 255) {
+            val = round(val/16) * 16;
+        } else {
+            val = round(val/10) * 10;
+        }
+    }
     gtk_adjustment_set_value(a, val);
 }
 
