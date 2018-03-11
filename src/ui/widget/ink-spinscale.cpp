@@ -137,7 +137,7 @@ InkScale::on_motion_notify_event(GdkEventMotion* motion_event) {
   if (! (motion_event->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK))) {
 
     auto display = get_display();
-    auto cursor = Gdk::Cursor::create(display, Gdk::SB_DOWN_ARROW);
+    auto cursor = Gdk::Cursor::create(display, Gdk::SB_UP_ARROW);
     // Get Gdk::window (not Gtk::window).. set cursor for entire window.
     // Would need to unset with leave event.
     // get_window()->set_cursor( cursor );
