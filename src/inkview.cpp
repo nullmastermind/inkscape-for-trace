@@ -46,25 +46,41 @@
 #include "svg-view-slideshow.h"
 #include "inkview-options-group.h"
 
-/** get a list of valid SVG files from a list of strings */
-std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames, bool recursive = false, bool first_iteration = false)
+/**
+ * @brief Get a list of valid SVG files from a list of strings
+ *
+ * @param[in] filenames       The list of filenames/folders to check
+ * @param[in] recursive       True if we want to search within subfolders
+ * @param[in] first_iteration True if this is the first iteration of the search
+ *
+ * @returns A new vector containing the complete paths for any valid SVG files
+ */
+std::vector<Glib::ustring>
+get_valid_files(std::vector<Glib::ustring> filenames,
+                bool                       recursive = false,
+                bool                       first_iteration = false)
 {
+    // List to store all the valid files found by the search
     std::vector<Glib::ustring> valid_files;
 
+    // Loop through all the input filenames
     for(auto file : filenames)
     {
+        // First check if the file actually exists.  Skip to the next item if not
         if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
             g_printerr("%s: %s\n", _("File or folder does not exist"), file.c_str());
             continue;
         }
 
+        // Now determine if this is a directory or a single file
         if (Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_IS_DIR )) {
+
             // only recurse into directories if explicitly specified by user on command line or if recursive = true
             if (first_iteration || recursive) {
                 std::vector<Glib::ustring> new_filenames;
                 Glib::Dir directory(file);
                 for (auto new_file: directory) {
-                        new_filenames.push_back(Glib::build_filename(file, new_file));
+                    new_filenames.push_back(Glib::build_filename(file, new_file));
                 }
                 std::vector<Glib::ustring> new_valid_files = get_valid_files(new_filenames, recursive);
                 valid_files.insert(valid_files.end(), new_valid_files.begin(), new_valid_files.end());
@@ -78,6 +94,8 @@ std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames,
                 }
             }
 
+            // Try to create a new document from the contents of the file, and if it is valid
+            // add the path to the list
             auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
             if(doc) {
                 /* Append to list */
