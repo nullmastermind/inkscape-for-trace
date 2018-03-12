@@ -159,7 +159,7 @@ std::vector<StyleRead> getStyleData()
 
     StyleRead("font-variation-settings:'wght' 400"),
     StyleRead("font-variation-settings:'wght'  400", "font-variation-settings:'wght' 400"),
-    StyleRead("font-variation-settings:'wght' 400 'slnt' 0.5", "font-variation-settings:'slnt' 0.5 'wght' 400" ),
+    StyleRead("font-variation-settings:'wght' 400, 'slnt' 0.5", "font-variation-settings:'slnt' 0.5, 'wght' 400" ),
 
     // Should be moved down
     StyleRead("text-indent:12em"),                        // SPILength?

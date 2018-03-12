@@ -538,24 +538,26 @@ SPIFontVariationSettings::read( gchar const *str ) {
         return;
     }
 
+
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", str);
+
+    // Match a pattern of a CSS <string> of length 4, whitespace, CSS <number>.
+    // (CSS string is quoted with double quotes).
+
     // Matching must use a Glib::ustring or matching may produce
     // subtle errors which may be shown by an "Invalid byte sequence
     // in conversion input" error.
-    Glib::ustring string(str);
-
-    // Match a pattern of a CSS <string> of length 4, whitespace, CSS <number>.
-    // (CSS string is quoted).
     Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s+([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
     Glib::MatchInfo matchInfo;
-    regex->match(string, matchInfo);
 
-    while (matchInfo.matches()) {
-
-      float value = std::stod(matchInfo.fetch(2));
-      axes.insert(std::pair<Glib::ustring,float>(matchInfo.fetch(1), value));
-
-      matchInfo.next();
+    for (auto token: tokens) {
+        regex->match(token, matchInfo);
+        if (matchInfo.matches()) {
+            float value = std::stod(matchInfo.fetch(2));
+            axes.insert(std::pair<Glib::ustring,float>(matchInfo.fetch(1), value));
+        }
     }
+
     if (!axes.empty()) {
         set = true;
         inherit = false;
@@ -628,12 +630,13 @@ SPIFontVariationSettings::toString() const {
 
     Inkscape::CSSOStringStream os;
     for (auto it=axes.begin(); it!=axes.end(); ++it){
-        os << "'" << it->first << "' " << it->second << " ";
+        os << "'" << it->first << "' " << it->second << ", ";
     }
 
     std::string string = os.str(); // Glib::ustring doesn't have pop_back()
     if (!string.empty()) {
         string.pop_back(); // Delete extra space at end
+        string.pop_back(); // Delete extra comma at end
     }
 
     return string;
