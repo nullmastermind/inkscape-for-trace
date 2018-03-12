@@ -144,7 +144,6 @@ public:
 
         bool has_important = false;
         Glib::ustring stripped = strip_important(str, has_important); // Sets 'has_important'
-
         // '!important' is invalid on attributes, don't read.
         if (source == SP_STYLE_SRC_ATTRIBUTE && has_important){
             return;
@@ -512,7 +511,8 @@ public:
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
-        axes.empty();
+        SPIBase::clear();
+        axes.clear();
         normal = true;
     }
 
