@@ -30,69 +30,6 @@
 #include "util/unordered-containers.h"
 
 
-struct font_style_hash : public std::unary_function<font_style, size_t> {
-    size_t operator()(font_style const &x) const;
-};
-
-struct font_style_equal : public std::binary_function<font_style, font_style, bool> {
-    bool operator()(font_style const &a, font_style const &b) const;
-};
-
-static const double STROKE_WIDTH_THREASHOLD = 0.01;
-
-
-
-size_t font_style_hash::operator()(const font_style &x) const {
-    int h = 0;
-    int n = static_cast<int>(floor(100 * x.stroke_width));
-    h *= 12186;
-    h += n;
-    n = (x.vertical) ? 1:0;
-    h *= 12186;
-    h += n;
-    if ( x.stroke_width >= STROKE_WIDTH_THREASHOLD ) {
-        n = x.stroke_cap * 10 + x.stroke_join + static_cast<int>(x.stroke_miter_limit * 100);
-        h *= 12186;
-        h += n;
-        if ( x.nbDash > 0 ) {
-            n = x.nbDash;
-            h *= 12186;
-            h += n;
-            n = static_cast<int>(floor(100 * x.dash_offset));
-            h *= 12186;
-            h += n;
-            for (int i = 0; i < x.nbDash; i++) {
-                n = static_cast<int>(floor(100 * x.dashes[i]));
-                h *= 12186;
-                h += n;
-            }
-        }
-    }
-    return h;
-}
-
-bool font_style_equal::operator()(const font_style &a,const font_style &b) const {
-    bool same = true;
-    for (int i = 0; (i < 6) && same; i++) {
-        same = ( static_cast<int>(100 * a.transform[i]) == static_cast<int>(100 * b.transform[i]) );
-    }
-    same &= ( a.vertical == b.vertical )
-        && ( a.stroke_width > STROKE_WIDTH_THREASHOLD ) == ( b.stroke_width > STROKE_WIDTH_THREASHOLD );
-    if ( same && ( a.stroke_width > STROKE_WIDTH_THREASHOLD ) ) {
-        same = ( a.stroke_cap == b.stroke_cap )
-            && ( a.stroke_join == b.stroke_join )
-            && ( static_cast<int>(a.stroke_miter_limit * 100) == static_cast<int>(b.stroke_miter_limit * 100) )
-            && ( a.nbDash == b.nbDash );
-        if ( same && ( a.nbDash > 0 ) ) {
-            same = ( static_cast<int>(floor(100 * a.dash_offset)) == static_cast<int>(floor(100 * b.dash_offset)) );
-            for (int i = 0; (i < a.nbDash) && same; i++) {
-                same = ( static_cast<int>(floor(100 * a.dashes[i])) == static_cast<int>(floor(100 * b.dashes[i])) );
-            }
-        }
-    }
-    return same;
-}
-
 #ifndef USE_PANGO_WIN32
 /*
  * Outline extraction
@@ -255,24 +192,29 @@ void font_instance::Unref(void)
 void font_instance::InitTheFace()
 {
     if (theFace == NULL && pFont != NULL) {
+
 #ifdef USE_PANGO_WIN32
-    if ( !theFace ) {
+
         LOGFONT *lf=pango_win32_font_logfont(pFont);
         g_assert(lf != NULL);
-        theFace=pango_win32_font_cache_load(parent->pangoFontCache,lf);
+        theFace = pango_win32_font_cache_load(parent->pangoFontCache,lf);
         g_free(lf);
-    }
-    XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
-    SetWorldTransform(parent->hScreenDC, &identity);
-    SetGraphicsMode(parent->hScreenDC, GM_COMPATIBLE);
-    SelectObject(parent->hScreenDC,theFace);
+
+        XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+        SetWorldTransform(parent->hScreenDC, &identity);
+        SetGraphicsMode(parent->hScreenDC, GM_COMPATIBLE);
+        SelectObject(parent->hScreenDC,theFace);
+
 #else
-    theFace=pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
-    if ( theFace ) {
-        FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
-    }
+
+        theFace = pango_fc_font_lock_face(PANGO_FC_FONT(pFont));
+        if ( theFace ) {
+            FT_Select_Charmap(theFace,ft_encoding_unicode) && FT_Select_Charmap(theFace,ft_encoding_symbol);
+        }
+
 #endif
-    FindFontMetrics();
+
+        FindFontMetrics();
     }
 }
 
