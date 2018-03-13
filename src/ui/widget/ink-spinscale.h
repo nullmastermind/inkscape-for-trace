@@ -84,7 +84,7 @@ class InkSpinScale : public Gtk::Box
   InkScale*                      _scale;
   Gtk::SpinButton*               _spinbutton;
   Glib::RefPtr<Gtk::Adjustment>  _adjustment;
-  GtkWidget*                     _focus_widget;
+  GtkWidget*                     _focus_widget = nullptr;
 
   bool on_key_release_event(GdkEventKey* key_event) override;
 
