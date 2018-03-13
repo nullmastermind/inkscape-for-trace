@@ -538,7 +538,7 @@ static char const *style_to_text(PangoStyle s)
     return "???";
 }
 
-static char const *weight_to_text(PangoWeight w)
+static std::string weight_to_text(PangoWeight w)
 {
     switch (w) {
         case PANGO_WEIGHT_THIN      : return "thin";
@@ -556,7 +556,7 @@ static char const *weight_to_text(PangoWeight w)
         case PANGO_WEIGHT_HEAVY     : return "heavy";
         case PANGO_WEIGHT_ULTRAHEAVY: return "ultraheavy";
     }
-    return "???";
+    return std::to_string(w);
 }
 #endif //DEBUG_TEXTLAYOUT_DUMPASTEXT
 
@@ -611,7 +611,19 @@ Glib::ustring Layout::dumpAsText() const
                  _lines[_chunks[_spans[span_index].in_chunk].in_line].baseline_y,
                  _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape)
                +  Glib::ustring::compose("  in chunk %1 (x=%2, baselineshift=%3)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
+
         if (_spans[span_index].font) {
+#if PANGO_VERSION_CHECK(1,41,1)
+            const char* variations = pango_font_description_get_variations(_spans[span_index].font->descr);
+            result += Glib::ustring::compose(
+                "    font '%1' %2 %3 %4 %5\n",
+                sp_font_description_get_family(_spans[span_index].font->descr),
+                _spans[span_index].font_size,
+                style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
+                weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) ),
+                (variations?variations:"")
+            );
+#else
             result += Glib::ustring::compose(
                 "    font '%1' %2 %3 %4\n",
                 sp_font_description_get_family(_spans[span_index].font->descr),
@@ -619,6 +631,7 @@ Glib::ustring Layout::dumpAsText() const
                 style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
                 weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) )
             );
+#endif
         }
         result += Glib::ustring::compose("    x_start = %1, x_end = %2\n", _spans[span_index].x_start, _spans[span_index].x_end)
                +  Glib::ustring::compose("    line height: ascent %1, descent %2\n", _spans[span_index].line_height.ascent, _spans[span_index].line_height.descent)
