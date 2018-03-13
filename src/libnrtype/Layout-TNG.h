@@ -678,11 +678,6 @@ public:
     /** The strut is the minimum value used in calculating line height. */
     FontMetrics strut;
 
-    /// see _enum_converter()
-    struct EnumConversionItem {
-        int input, output;
-    };
-
 private:
     /** Erases all the stuff set by the owner as input, ie #_input_stream
     and #_input_wrap_shapes. */
@@ -755,11 +750,6 @@ private:
     We also don't want to write five bits of identical code just with
     different variable names. */
     static void _copyInputVector(std::vector<SVGLength> const &input_vector, unsigned input_offset, std::vector<SVGLength> *output_vector, size_t max_length);
-
-    /** There are a few cases where we have different sets of enums meaning
-    the same thing, eg Pango font styles vs. SPStyle font styles. These need
-    converting. */
-    static int _enum_converter(int input, EnumConversionItem const *conversion_table, unsigned conversion_table_size);
 
     /** The overall block-progression of the whole flow. */
     inline Direction _blockProgression() const

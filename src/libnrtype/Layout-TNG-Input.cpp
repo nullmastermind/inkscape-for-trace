@@ -122,15 +122,6 @@ void Layout::appendWrapShape(Shape const *shape, DisplayAlign display_align)
     _input_wrap_shapes.back().display_align = display_align;
 }
 
-int Layout::_enum_converter(int input, EnumConversionItem const *conversion_table, unsigned conversion_table_size)
-{
-    for (unsigned i = 0 ; i < conversion_table_size ; i++) {
-        if (conversion_table[i].input == input)
-            return conversion_table[i].output;
-    }
-    return conversion_table[0].output;
-}
-
 Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() const
 {
     switch( style->writing_mode.computed ) {
@@ -203,45 +194,6 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
     return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 }
 
-static const Layout::EnumConversionItem enum_convert_spstyle_style_to_pango_style[] = {
-    {SP_CSS_FONT_STYLE_NORMAL,  PANGO_STYLE_NORMAL},
-    {SP_CSS_FONT_STYLE_ITALIC,  PANGO_STYLE_ITALIC},
-    {SP_CSS_FONT_STYLE_OBLIQUE, PANGO_STYLE_OBLIQUE}
-};
-
-static const Layout::EnumConversionItem enum_convert_spstyle_weight_to_pango_weight[] = {
-  // NB: The Pango web page calls 500 "the normal font" but both CSS2 and the Pango
-  // enumeration define 400 as normal.
-    {SP_CSS_FONT_WEIGHT_NORMAL, PANGO_WEIGHT_NORMAL},
-    {SP_CSS_FONT_WEIGHT_BOLD,   PANGO_WEIGHT_BOLD},
-    {SP_CSS_FONT_WEIGHT_100,    PANGO_WEIGHT_THIN},
-    {SP_CSS_FONT_WEIGHT_200,    PANGO_WEIGHT_ULTRALIGHT},
-    {SP_CSS_FONT_WEIGHT_300,    PANGO_WEIGHT_LIGHT},
-    {SP_CSS_FONT_WEIGHT_400,    PANGO_WEIGHT_NORMAL},
-    {SP_CSS_FONT_WEIGHT_500,    PANGO_WEIGHT_MEDIUM},
-    {SP_CSS_FONT_WEIGHT_600,    PANGO_WEIGHT_SEMIBOLD},
-    {SP_CSS_FONT_WEIGHT_700,    PANGO_WEIGHT_BOLD},
-    {SP_CSS_FONT_WEIGHT_800,    PANGO_WEIGHT_ULTRABOLD},
-    {SP_CSS_FONT_WEIGHT_900,    PANGO_WEIGHT_HEAVY}
-};
-
-static const Layout::EnumConversionItem enum_convert_spstyle_stretch_to_pango_stretch[] = {
-    {SP_CSS_FONT_STRETCH_NORMAL,          PANGO_STRETCH_NORMAL},
-    {SP_CSS_FONT_STRETCH_ULTRA_CONDENSED, PANGO_STRETCH_ULTRA_CONDENSED},
-    {SP_CSS_FONT_STRETCH_EXTRA_CONDENSED, PANGO_STRETCH_EXTRA_CONDENSED},
-    {SP_CSS_FONT_STRETCH_CONDENSED,       PANGO_STRETCH_CONDENSED},
-    {SP_CSS_FONT_STRETCH_SEMI_CONDENSED,  PANGO_STRETCH_SEMI_CONDENSED},
-    {SP_CSS_FONT_STRETCH_SEMI_EXPANDED,   PANGO_STRETCH_SEMI_EXPANDED},
-    {SP_CSS_FONT_STRETCH_EXPANDED,        PANGO_STRETCH_EXPANDED},
-    {SP_CSS_FONT_STRETCH_EXTRA_EXPANDED,  PANGO_STRETCH_EXTRA_EXPANDED},
-    {SP_CSS_FONT_STRETCH_ULTRA_EXPANDED,  PANGO_STRETCH_ULTRA_EXPANDED}
-};
-
-static const Layout::EnumConversionItem enum_convert_spstyle_variant_to_pango_variant[] = {
-    {SP_CSS_FONT_VARIANT_NORMAL,     PANGO_VARIANT_NORMAL},
-    {SP_CSS_FONT_VARIANT_SMALL_CAPS, PANGO_VARIANT_SMALL_CAPS}
-};
-
 font_instance *Layout::InputStreamTextSource::styleGetFontInstance() const
 {
     PangoFontDescription *descr = styleGetFontDescription();
@@ -253,71 +205,30 @@ font_instance *Layout::InputStreamTextSource::styleGetFontInstance() const
 
 PangoFontDescription *Layout::InputStreamTextSource::styleGetFontDescription() const
 {
-    PangoFontDescription *descr = pango_font_description_new();
-    // Pango can't cope with spaces before or after the commas - let's remove them.
-    // this code is not exactly unicode-safe, but it's similar to what's done in
-    // pango, so it's not the limiting factor
-    Glib::ustring family;
-    if (style->font_family.value == NULL) {
-        family = "sans-serif";
-    } else {
-        gchar **families = g_strsplit(style->font_family.value, ",", -1);
-        if (families) {
-            for (gchar **f = families ; *f ; ++f) {
-                g_strstrip(*f);
-                if (!family.empty()) family += ',';
-                family += *f;
-            }
-        }
-        g_strfreev(families);
-    }
+    // This use to be done by code here but it duplicated more complete code in FontFactory.cpp.
+    PangoFontDescription *descr = ink_font_description_from_style( style );
 
-    pango_font_description_set_family(descr,family.c_str());
-    pango_font_description_set_weight(
-        descr,
-        (PangoWeight)_enum_converter(
-            style->font_weight.computed,
-            enum_convert_spstyle_weight_to_pango_weight,
-            sizeof(enum_convert_spstyle_weight_to_pango_weight) / sizeof(enum_convert_spstyle_weight_to_pango_weight[0])
-        )
-    );
-    pango_font_description_set_style(
-        descr,
-        (PangoStyle)_enum_converter(
-            style->font_style.computed,
-            enum_convert_spstyle_style_to_pango_style,
-            sizeof(enum_convert_spstyle_style_to_pango_style) / sizeof(enum_convert_spstyle_style_to_pango_style[0])
-        )
-    );
-    pango_font_description_set_variant(
-        descr,
-        (PangoVariant)_enum_converter(
-            style->font_variant.computed,
-            enum_convert_spstyle_variant_to_pango_variant,
-            sizeof(enum_convert_spstyle_variant_to_pango_variant) / sizeof(enum_convert_spstyle_variant_to_pango_variant[0])
-        )
-    );
+    // Font size not yet set
 #ifdef USE_PANGO_WIN32
-    // damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
-    pango_font_description_set_size(
-        descr,
-        (int) ((font_factory::Default())->fontSize*PANGO_SCALE*72 / GetDeviceCaps(pango_win32_get_dc(),LOGPIXELSY)) // mandatory huge size (hinting workaround)
+
+    // Damn Pango fudges the size, so we need to unfudge. See source of pango_win32_font_map_init()
+    pango_font_description_set_size(descr,
+        (int) ((font_factory::Default())->fontSize*PANGO_SCALE*72 / GetDeviceCaps(pango_win32_get_dc(),LOGPIXELSY))
     );
-    // we don't set stretch on Win32, because pango-win32 has no concept of it
+
+    // We unset stretch on Win32, because pango-win32 has no concept of it
     // (Windows doesn't really provide any useful field it could use).
     // If we did set stretch, then any text with a font-stretch attribute would
-    // end up falling back to Arial.
+    // end up falling back to a default.
+    pango_font_description_unset_fields(descr, PANGO_FONT_MASK_STRETCH);
+
 #else
-    pango_font_description_set_size(descr, (int) ((font_factory::Default())->fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
-    pango_font_description_set_stretch(
-        descr,
-        (PangoStretch)_enum_converter(
-            style->font_stretch.computed,
-            enum_convert_spstyle_stretch_to_pango_stretch,
-            sizeof(enum_convert_spstyle_stretch_to_pango_stretch) / sizeof(enum_convert_spstyle_stretch_to_pango_stretch[0])
-        )
-    );
+
+    // mandatory huge size (hinting workaround)
+    pango_font_description_set_size(descr, (int) ((font_factory::Default())->fontSize*PANGO_SCALE));
+
 #endif
+
     return descr;
 }
 

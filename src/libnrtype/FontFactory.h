@@ -48,6 +48,10 @@ struct font_descr_equal : public std::binary_function<PangoFontDescription*, Pan
     bool operator()(PangoFontDescription *const &a, PangoFontDescription *const &b) const;
 };
 
+// Constructs a PangoFontDescription from SPStyle. Font size is not included.
+// User must free return value.
+PangoFontDescription* ink_font_description_from_style(SPStyle const *style);
+
 // Wraps calls to pango_font_description_get_family with some name substitution
 const char *sp_font_description_get_family(PangoFontDescription const *fontDescr);
 
