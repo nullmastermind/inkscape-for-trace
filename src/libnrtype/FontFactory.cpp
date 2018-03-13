@@ -45,8 +45,14 @@ size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {
     h += (int)pango_font_description_get_weight(x);
     h *= 1128467;
     h += (int)pango_font_description_get_stretch(x);
+#if PANGO_VERSION_CHECK(1,41,1)
+    char const *theV = pango_font_description_get_variations(x);
+    h *= 1128467;
+    h += (theV)?g_str_hash(theV):0;
+#endif
     return h;
 }
+
 bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDescription *const &b) const {
     //if ( pango_font_description_equal(a,b) ) return true;
     char const *fa = sp_font_description_get_family(a);
@@ -57,6 +63,10 @@ bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDesc
     if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
     if ( pango_font_description_get_weight(a) != pango_font_description_get_weight(b) ) return false;
     if ( pango_font_description_get_stretch(a) != pango_font_description_get_stretch(b) ) return false;
+#if PANGO_VERSION_CHECK(1,41,1)
+    if ( g_strcmp0( pango_font_description_get_variations(a),
+                    pango_font_description_get_variations(b) ) != 0 ) return false;
+#endif
     return true;
 }
 
@@ -111,6 +121,12 @@ font_factory::font_factory(void) :
                                               this,
                                               NULL);
 #endif
+
+// TEMP
+#if PANGO_VERSION_CHECK(1,41,1)
+    std::cerr << "Pango version: " << pango_version_string() << std::endl;
+#endif
+
 }
 
 font_factory::~font_factory(void)
@@ -234,7 +250,6 @@ Glib::ustring font_factory::GetUIStyleString(PangoFontDescription const *fontDes
         // For now, keep it as style name taken from pango
         char *fontDescrAsString = pango_font_description_to_string(fontDescrCopy);
         style = fontDescrAsString;
-
         g_free(fontDescrAsString);
         fontDescrAsString = 0;
         pango_font_description_free(fontDescrCopy);
@@ -338,7 +353,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         if (faceDescr) {
             Glib::ustring familyUIName = GetUIFamilyString(faceDescr);
             Glib::ustring styleUIName = GetUIStyleString(faceDescr);
-            // std::cout << familyUIName << "  " << styleUIName << "  " << displayName << std::endl;
+            // std::cout << "  " << familyUIName << "  styleUIName: " << styleUIName << "  displayName: " << displayName << std::endl;
             // Disable synthesized (faux) font faces except for CSS generic faces
             if (pango_font_face_is_synthesized(faces[currentFace]) ) {
                 if (familyUIName.compare( "sans-serif" ) != 0 &&
@@ -547,6 +562,10 @@ font_instance* font_factory::FaceFromStyle(SPStyle const *style)
                     pango_font_description_set_variant(temp_descr, PANGO_VARIANT_NORMAL);
                     break;
             }
+
+#if PANGO_VERSION_CHECK(1,41,1)
+            pango_font_description_set_variations(temp_descr, style->font_variation_settings.toString().c_str());
+#endif
 
             font = Face(temp_descr);
             pango_font_description_free(temp_descr);
@@ -854,18 +873,20 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
     return res;
 }
 
-font_instance *font_factory::Face(char const *family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
-{
-    PangoFontDescription *temp_descr = pango_font_description_new();
-    pango_font_description_set_family(temp_descr,family);
-    pango_font_description_set_weight(temp_descr,(PangoWeight)weight);
-    pango_font_description_set_stretch(temp_descr,(PangoStretch)stretch);
-    pango_font_description_set_style(temp_descr,(PangoStyle)style);
-    pango_font_description_set_variant(temp_descr,(PangoVariant)variant);
-    font_instance *res = Face(temp_descr);
-    pango_font_description_free(temp_descr);
-    return res;
-}
+// Not used, need to add variations if ever used.
+// font_instance *font_factory::Face(char const *family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
+// {
+//     // std::cout << "font_factory::Face(family, variant, style, weight, stretch,)" << std::endl;
+//     PangoFontDescription *temp_descr = pango_font_description_new();
+//     pango_font_description_set_family(temp_descr,family);
+//     pango_font_description_set_weight(temp_descr,(PangoWeight)weight);
+//     pango_font_description_set_stretch(temp_descr,(PangoStretch)stretch);
+//     pango_font_description_set_style(temp_descr,(PangoStyle)style);
+//     pango_font_description_set_variant(temp_descr,(PangoVariant)variant);
+//     font_instance *res = Face(temp_descr);
+//     pango_font_description_free(temp_descr);
+//     return res;
+// }
 
 void font_factory::UnrefFace(font_instance *who)
 {
