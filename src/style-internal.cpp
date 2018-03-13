@@ -577,7 +577,15 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
         } else {
             Inkscape::CSSOStringStream os;
             os << name << ":";
-            os << toString();
+
+            for (auto it=axes.begin(); it!=axes.end(); /* nothing */ ){
+                os << "'" << it->first << "' " << it->second;
+                ++it;
+                if (it!=axes.end()) {
+                    os << ", ";
+                }
+            }
+
             os << important_str();
             os << ";";
             return os.str();
@@ -630,12 +638,11 @@ SPIFontVariationSettings::toString() const {
 
     Inkscape::CSSOStringStream os;
     for (auto it=axes.begin(); it!=axes.end(); ++it){
-        os << "'" << it->first << "' " << it->second << ", ";
+        os << it->first << "=" << it->second << ",";
     }
 
     std::string string = os.str(); // Glib::ustring doesn't have pop_back()
     if (!string.empty()) {
-        string.pop_back(); // Delete extra space at end
         string.pop_back(); // Delete extra comma at end
     }
 
