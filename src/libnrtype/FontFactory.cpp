@@ -197,7 +197,10 @@ PangoFontDescription* ink_font_description_from_style(SPStyle const *style)
     }
 
 #if PANGO_VERSION_CHECK(1,41,1)
-    pango_font_description_set_variations(descr, style->font_variation_settings.toString().c_str());
+    // Check if set as Pango will add @ to string even if empty (bug in Pango?).
+    if (style->font_variation_settings.set) {
+        pango_font_description_set_variations(descr, style->font_variation_settings.toString().c_str());
+    }
 #endif
 
     return descr;
