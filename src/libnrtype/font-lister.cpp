@@ -735,146 +735,17 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
     }
 }
 
-// We do this ourselves as we can't rely on FontFactory.
+
 Glib::ustring FontLister::fontspec_from_style(SPStyle *style)
 {
 
-    //std::cout << "FontLister:fontspec_from_style: " << std::endl;
+    PangoFontDescription* descr = ink_font_description_from_style( style );
+    Glib::ustring fontspec = pango_font_description_to_string( descr );
+    pango_font_description_free(descr);
 
-    Glib::ustring fontspec;
-    if (style) {
+    //std::cout << "FontLister:fontspec_from_style: " << fontspec << std::endl;
 
-        //  First try to use the font specification if it is set
-        if (style->font_specification.set && style->font_specification.value && *style->font_specification.value) {
-
-            fontspec = style->font_specification.value;
-
-        } else {
-
-            fontspec = style->font_family.value;
-            fontspec += ",";
-
-            // Use weight names as defined by Pango
-            switch (style->font_weight.computed) {
-
-                case SP_CSS_FONT_WEIGHT_100:
-                    fontspec += " Thin";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_200:
-                    fontspec += " Ultra-Light";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_300:
-                    fontspec += " Light";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_400:
-                case SP_CSS_FONT_WEIGHT_NORMAL:
-                    //fontspec += " normal";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_500:
-                    fontspec += " Medium";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_600:
-                    fontspec += " Semi-Bold";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_700:
-                case SP_CSS_FONT_WEIGHT_BOLD:
-                    fontspec += " Bold";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_800:
-                    fontspec += " Ultra-Bold";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_900:
-                    fontspec += " Heavy";
-                    break;
-
-                case SP_CSS_FONT_WEIGHT_LIGHTER:
-                case SP_CSS_FONT_WEIGHT_BOLDER:
-                default:
-                    g_warning("Unrecognized font_weight.computed value");
-                    break;
-            }
-
-            switch (style->font_style.computed) {
-                case SP_CSS_FONT_STYLE_ITALIC:
-                    fontspec += " italic";
-                    break;
-
-                case SP_CSS_FONT_STYLE_OBLIQUE:
-                    fontspec += " oblique";
-                    break;
-
-                case SP_CSS_FONT_STYLE_NORMAL:
-                default:
-                    //fontspec += " normal";
-                    break;
-            }
-
-            switch (style->font_stretch.computed) {
-
-                case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
-                    fontspec += " ultra-condensed";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
-                    fontspec += " extra-condensed";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_CONDENSED:
-                case SP_CSS_FONT_STRETCH_NARROWER:
-                    fontspec += " condensed";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
-                    fontspec += " semi-condensed";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_NORMAL:
-                    //fontspec += " normal";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
-                    fontspec += " semi-expanded";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXPANDED:
-                case SP_CSS_FONT_STRETCH_WIDER:
-                    fontspec += " expanded";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
-                    fontspec += " extra-expanded";
-                    break;
-
-                case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
-                    fontspec += " ultra-expanded";
-                    break;
-
-                default:
-                    //fontspec += " normal";
-                    break;
-            }
-
-            switch (style->font_variant.computed) {
-
-                case SP_CSS_FONT_VARIANT_SMALL_CAPS:
-                    fontspec += "small-caps";
-                    break;
-
-                default:
-                    //fontspec += "normal";
-                    break;
-            }
-        }
-    }
-    return canonize_fontspec(fontspec);
+    return fontspec;
 }
 
 
