@@ -754,8 +754,7 @@ void SPShape::update_patheffect(bool write)
                 this->applyToClipPath(this);
                 this->applyToMask(this);
             }
-        }
-
+        } 
         if (write && success) {
             Inkscape::XML::Node *repr = this->getRepr();
             if (c_lpe != NULL) {
@@ -765,9 +764,9 @@ void SPShape::update_patheffect(bool write)
             } else {
                 repr->setAttribute("d", NULL);
             }
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
         c_lpe->unref();
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 

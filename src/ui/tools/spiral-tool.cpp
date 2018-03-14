@@ -398,6 +398,8 @@ void SpiralTool::finishItem() {
         this->desktop->canvas->endForcedFullRedraws();
 
         this->desktop->getSelection()->set(this->spiral);
+        this->desktop->getSelection()->set(this->spiral);
+
         DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_SPIRAL, _("Create spiral"));
 
         this->spiral = NULL;

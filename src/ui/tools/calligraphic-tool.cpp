@@ -948,7 +948,6 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
             // This is its result.
             result = desktop->getSelection()->singleItem();
         }
-
         result->doWriteTransform(result->transform, NULL, true);
     } else {
         if (this->repr) {

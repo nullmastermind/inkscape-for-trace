@@ -460,8 +460,12 @@ void RectTool::finishItem() {
         this->rect->doWriteTransform(this->rect->transform, NULL, true);
 
         this->desktop->canvas->endForcedFullRedraws();
-
+        
         this->desktop->getSelection()->set(this->rect);
+
+        if (this->rect->hasPathEffectRecursive()) {
+            this->desktop->getSelection()->toCurves();
+        }
 
         DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_RECT, _("Create rectangle"));
 

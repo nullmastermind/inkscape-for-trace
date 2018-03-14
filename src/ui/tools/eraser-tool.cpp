@@ -835,8 +835,13 @@ void EraserTool::set_to_accumulated() {
                 selection->clear();
 
                 if ( wasSelection ) {
-                    if ( !remainingItems.empty() ) {
-                        selection->add(remainingItems.begin(), remainingItems.end());
+                    for (std::vector<SPItem*>::const_iterator j = remainingItems.begin(); j != remainingItems.end(); ++j){
+                        SPItem * item = *j;
+                        SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(item);
+                        if (lpeitem->hasPathEffectRecursive()) {
+                            sp_lpe_item_update_patheffect (lpeitem, true, false);
+                        }
+                        selection->add(item);
                     }
                 }
             }

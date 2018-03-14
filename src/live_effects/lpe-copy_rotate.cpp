@@ -213,6 +213,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     SPPath * path =  SP_PATH(dest);
     if (shape && !path) {   
         const char * id = dest->getId();
+        shape->removeAllPathEffects(true);
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         dest->getRepr()->setAttribute("d", id);

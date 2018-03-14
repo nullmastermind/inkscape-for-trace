@@ -269,7 +269,7 @@ void SPRect::set_shape() {
     this->setCurveBeforeLPE(c);
 
     // LPE is not applied because result can generally not be represented as SPRect
-
+    
     c->unref();
 }
 

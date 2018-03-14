@@ -381,7 +381,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         }
 
         SPPath *path = dynamic_cast<SPPath *>(item);
-        if (path && !path->_curve_before_lpe) {
+        if (path && !path->hasPathEffect()) {
             // remove connector attributes
             if (item->getAttribute("inkscape:connector-type") != NULL) {
                 item->removeAttribute("inkscape:connection-start");
@@ -576,7 +576,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     {
         SPShape *shape = dynamic_cast<SPShape *>(item);
         if (shape) {
-            curve = shape->getCurve();
+            curve = shape->getCurveForEdit();
         }
     }
 

@@ -434,7 +434,7 @@ void SPStar::set_shape() {
     if (before || this->hasPathEffectRecursive()) {
         if (!before || before->get_pathvector() != c->get_pathvector()){
             this->setCurveBeforeLPE(c);
-            this->update_patheffect(false);
+            sp_lpe_item_update_patheffect(this, true, false);
         } else {
             this->setCurveBeforeLPE(c);
         }

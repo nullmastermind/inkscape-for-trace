@@ -98,6 +98,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                     return;
                 }
                 Inkscape::XML::Document *xml_doc = document->getReprDoc();
+                SP_SHAPE(clip_data)->removeAllPathEffects(true);
                 Inkscape::XML::Node *clip_path_node = sp_selected_item_to_curved_repr(SP_ITEM(clip_data), 0);
                 // remember the position of the item
                 gint pos = clip_data->getRepr()->position();

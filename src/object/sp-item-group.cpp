@@ -197,7 +197,7 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
 }
 
 void SPGroup::modified(guint flags) {
-    // std::cout << "SPGroup::modified(): " << (getId()?getId():"null") << std::endl;
+    //std::cout << "SPGroup::modified(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::modified(flags);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;

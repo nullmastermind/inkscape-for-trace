@@ -425,7 +425,7 @@ void ArcTool::finishItem() {
 
         desktop->getSelection()->set(this->arc);
 
-		DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
 
         this->arc = NULL;
     }

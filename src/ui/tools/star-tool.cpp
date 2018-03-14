@@ -421,6 +421,9 @@ void StarTool::finishItem() {
         desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->star);
+        if (this->star->hasPathEffectRecursive()) {
+            sp_lpe_item_update_patheffect (this->star, true, false);
+        }
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_STAR,
                            _("Create star"));
 
