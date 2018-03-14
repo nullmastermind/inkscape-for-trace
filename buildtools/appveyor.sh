@@ -91,3 +91,18 @@ then
 else
     ninja dist-win-7z-fast
 fi
+
+# create redirect to the 7z archive we just created (and are about to upload as an artifact)
+FILENAME=$(ls inkscape*.7z)
+URL=https://ci.appveyor.com/api/buildjobs/$APPVEYOR_JOB_ID/artifacts/build%2F$FILENAME
+BRANCH=$APPVEYOR_REPO_BRANCH
+HTMLNAME=latest_${BRANCH}_x${MSYSTEM#MINGW}.html
+sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/appveyor_redirect_template.html > $HTMLNAME
+# upload redirect to http://alpha.inkscape.org/snapshots/
+if [ "${APPVEYOR_REPO_NAME}" == "inkscape/inkscape" ] && [ -n "${SSH_KEY}" ]; then
+    if [ "$BRANCH" == "master" ] || [ "$BRANCH" == "0.92.x" ]; then
+        echo -e "-----BEGIN RSA PRIVATE KEY-----\n${SSH_KEY}\n-----END RSA PRIVATE KEY-----" > ssh_key
+        scp -oStrictHostKeyChecking=no -i ssh_key $HTMLNAME appveyor-ci@alpha.inkscape.org:/var/www/alpha.inkscape.org/public_html/snapshots/
+        rm -f ssh_key
+    fi
+fi
