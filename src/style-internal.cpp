@@ -596,9 +596,8 @@ SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_
 
 void
 SPIFontVariationSettings::cascade( const SPIBase* const parent ) {
-
     if( const SPIFontVariationSettings* p = dynamic_cast<const SPIFontVariationSettings*>(parent) ) {
-        if( (inherits && !set) || inherit ) {
+        if( !set || inherit ) {  // Always inherits
             normal   = p->normal;
             axes.clear();
             axes     = p->axes;

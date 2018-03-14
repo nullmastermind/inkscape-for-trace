@@ -520,6 +520,7 @@ public:
     virtual void merge(   const SPIBase* const parent );
 
     SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
+        SPIBase::operator=(rhs);
         axes = rhs.axes;
         normal = rhs.normal;
         return *this;
