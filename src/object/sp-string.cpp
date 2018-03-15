@@ -30,14 +30,18 @@
 #####################################################*/
 
 SPString::SPString() : SPObject() {
+
+    // This is dangerous but strings shouldn't have style.
+    // delete (style);
+    // style = nullptr;
 }
 
 SPString::~SPString() {
 }
 
 void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
-    SPString* object = this;
-    object->read_content();
+
+    read_content();
 
     SPObject::build(doc, repr);
 }
@@ -49,13 +53,11 @@ void SPString::release() {
 
 void SPString::read_content() {
 
-    SPString* object = this;
-    SPString *string = SP_STRING(object);
-
-    string->string.clear();
+    setLabel("SPString");
+    string.clear();
 
     //XML Tree being used directly here while it shouldn't be.
-    gchar const *xml_string = string->getRepr()->content();
+    gchar const *xml_string = getRepr()->content();
 
     // std::cout << ">" << (xml_string?xml_string:"Null") << "<" << std::endl;
 
@@ -79,23 +81,23 @@ void SPString::read_content() {
     bool is_css         = false;
 
     // Strings don't have style, check parent for style
-    if( object->parent && object->parent->style ) {
-        if( object->parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
-            object->parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ||
-            object->parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRELINE  ) {
+    if( parent && parent->style ) {
+        if( parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
+            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ||
+            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRELINE  ) {
             collapse_line = false;
         }
-        if( object->parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
-            object->parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ) {
+        if( parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PRE     ||
+            parent->style->white_space.computed == SP_CSS_WHITE_SPACE_PREWRAP ) {
             collapse_space = false;
         }
-        if( object->parent->style->white_space.computed != SP_CSS_WHITE_SPACE_NORMAL ) {
+        if( parent->style->white_space.computed != SP_CSS_WHITE_SPACE_NORMAL ) {
             is_css = true; // If white-space not normal, we assume white-space is set.
         }
     }
     if( !is_css ) {
         // SVG 2: Use 'xml:space' only if 'white-space' not 'normal'.
-        if (object->xml_space.value == SP_XML_SPACE_PRESERVE) {
+        if (xml_space.value == SP_XML_SPACE_PRESERVE) {
             collapse_space = false;
         }
     }
@@ -116,7 +118,7 @@ void SPString::read_content() {
                     if( !is_css && collapse_space ) continue; // xml:space == 'default' strips LFs.
                     white_space = true;        // Convert to space and collapse
                 } else {
-                    string->string += c;       // Preserve line feed
+                    string += c;       // Preserve line feed
                     continue;
                 }
                 break;
@@ -124,7 +126,7 @@ void SPString::read_content() {
                 if( collapse_space ) {
                     white_space = true;        // Convert to space and collapse
                 } else {
-                    string->string += c;       // Preserve tab
+                    string += c;       // Preserve tab
                     continue;
                 }
                 break;
@@ -132,31 +134,30 @@ void SPString::read_content() {
                 if( collapse_space ) {
                     white_space = true;        // Collapse white space
                 } else {
-                    string->string += c;       // Preserve space
+                    string += c;       // Preserve space
                     continue;
                 }
                 break;
             default:
-                if( white_space && (!string->string.empty() || (object->getPrev() != NULL))) {
-                    string->string += ' ';
+                if( white_space && (!string.empty() || (getPrev() != NULL))) {
+                    string += ' ';
                 }
-                string->string += c;
+                string += c;
                 white_space = false;
 
         } // End switch
     } // End loop
 
     // Insert white space at end if more text follows
-    if (white_space && object->getRepr()->next() != NULL) { // can't use SPObject::getNext() when the SPObject tree is still being built
-        string->string += ' ';
+    if (white_space && getRepr()->next() != NULL) { // can't use SPObject::getNext() when the SPObject tree is still being built
+        string += ' ';
     }
 
-    // std::cout << ">" << string->string << "<" << std::endl;
-    object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    // std::cout << ">" << string << "<" << std::endl;
+    requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void SPString::update(SPCtx * /*ctx*/, unsigned /*flags*/) {
-//    SPObject::onUpdate(ctx, flags);
 
     // if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
     //     /* Parent style or we ourselves changed, so recalculate */
