@@ -1252,10 +1252,11 @@ objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res
         texts ++;
 
         if (set &&
-            ( ( style_res->font_weight.computed  != style->font_weight.computed  ) ||
-              ( style_res->font_style.computed   != style->font_style.computed   ) ||
-              ( style_res->font_stretch.computed != style->font_stretch.computed ) ||
-              ( style_res->font_variant.computed != style->font_variant.computed ) ) ) {
+            ( ( style_res->font_weight.computed    != style->font_weight.computed  ) ||
+              ( style_res->font_style.computed     != style->font_style.computed   ) ||
+              ( style_res->font_stretch.computed   != style->font_stretch.computed ) ||
+              ( style_res->font_variant.computed   != style->font_variant.computed ) ||
+              ( style_res->font_variation_settings != style->font_variation_settings ) ) ) {
             different = true;  // different styles
         }
 
@@ -1264,6 +1265,7 @@ objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res
         style_res->font_style.value = style_res->font_style.computed = style->font_style.computed;
         style_res->font_stretch.value = style_res->font_stretch.computed = style->font_stretch.computed;
         style_res->font_variant.value = style_res->font_variant.computed = style->font_variant.computed;
+        style_res->font_variation_settings = style->font_variation_settings;
         style_res->text_align.value = style_res->text_align.computed = style->text_align.computed;
         style_res->font_size.value = style->font_size.value;
         style_res->font_size.unit = style->font_size.unit;
