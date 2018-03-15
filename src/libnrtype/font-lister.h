@@ -17,6 +17,8 @@
  */
 
 #include <map>
+#include <set>
+
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treepath.h>
@@ -263,7 +265,7 @@ public:
 private:
     FontLister();
 
-    void update_font_list_recursive(SPObject *r, std::list<Glib::ustring> *l);
+    void update_font_data_recursive(SPObject& r, std::map<Glib::ustring, std::set<Glib::ustring>> &font_data);
 
     Glib::RefPtr<Gtk::ListStore> font_list_store;
     Glib::RefPtr<Gtk::ListStore> style_list_store;
