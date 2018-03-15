@@ -1,0 +1,265 @@
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+/* Define WIN32 when on windows */
+#ifndef WIN32
+#mesondefine WIN32
+#endif
+
+/* Use binreloc thread support? */
+#mesondefine BR_PTHREADS
+
+/* Use AutoPackage? */
+#mesondefine ENABLE_BINRELOC
+
+/* define to 1 if you have lcms version 1.x */
+#mesondefine HAVE_LIBLCMS1
+
+/* define to 1 if you have lcms version 2.x */
+#mesondefine HAVE_LIBLCMS2
+
+/* always defined to indicate that i18n is enabled */
+#mesondefine ENABLE_NLS
+
+/* Build with OSX .app data dir paths? */
+#mesondefine ENABLE_OSX_APP_LOCATIONS
+
+/* Translation domain used */
+#define GETTEXT_PACKAGE "${PROJECT_NAME}"
+
+/* Define to 1 if you have the `bind_textdomain_codeset' function. */
+#mesondefine HAVE_BIND_TEXTDOMAIN_CODESET
+
+/* Whether the Cairo PDF backend is available */
+#mesondefine HAVE_CAIRO_PDF
+#mesondefine PANGO_ENABLE_ENGINE
+#mesondefine RENDER_WITH_PANGO_CAIRO
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#mesondefine HAVE_FCNTL_H
+
+/* Define to 1 if you have the `floor' function. */
+#mesondefine HAVE_FLOOR
+
+/* Define to 1 if you have the `fpsetmask' function. */
+#mesondefine HAVE_FPSETMASK
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#mesondefine HAVE_GETTIMEOFDAY
+
+/* Build with Gtkmm 3.0.x or higher */
+#mesondefine WITH_GTKMM_3_0
+
+/* Build with Gtkmm 3.10.x or higher */
+#mesondefine WITH_GTKMM_3_10
+
+/* Build with Gtkmm 3.12.x or higher */
+#mesondefine WITH_GTKMM_3_12
+
+/* Build with Gtkmm 3.16.x or higher */
+#mesondefine WITH_GTKMM_3_16
+
+/* Build with Gtkmm 3.22.x or higher */
+#mesondefine WITH_GTKMM_3_22
+
+/* Build with GDL 3.6 or higher */
+#mesondefine WITH_GDL_3_6
+
+/* Define to 1 if you have the <ieeefp.h> header file. */
+#mesondefine HAVE_IEEEFP_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#mesondefine HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `mallinfo' function. */
+#mesondefine HAVE_MALLINFO
+
+/* Define to 1 if you have the <malloc.h> header file. */
+#mesondefine HAVE_MALLOC_H
+
+/* Define to 1 if you have the `memmove' function. */
+#mesondefine HAVE_MEMMOVE
+
+/* Define to 1 if you have the <memory.h> header file. */
+#mesondefine HAVE_MEMORY_H
+
+/* Define to 1 if you have the `memset' function. */
+#mesondefine HAVE_MEMSET
+
+/* Use OpenMP (via meson) */
+#mesondefine HAVE_OPENMP
+
+/* Use aspell for built-in spellchecker */
+#mesondefine HAVE_ASPELL
+
+/* Use libpoppler for direct PDF import */
+#mesondefine HAVE_POPPLER
+
+/* Use libpoppler-cairo for rendering PDF preview */
+#mesondefine HAVE_POPPLER_CAIRO
+
+/* Use libpoppler-glib and Cairo-SVG for PDF import */
+#mesondefine HAVE_POPPLER_GLIB
+
+/* Use color space API from Poppler >= 0.26.0 */
+#mesondefine POPPLER_EVEN_NEWER_COLOR_SPACE_API
+
+/* Use color space API from Poppler >= 0.29.0 */
+#mesondefine POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API
+
+/* Use object API from Poppler >= 0.58.0 */
+#mesondefine POPPLER_NEW_OBJECT_API
+
+/* Define to 1 if you have the `pow' function. */
+#mesondefine HAVE_POW
+
+/* Define to 1 if you have the `sqrt' function. */
+#mesondefine HAVE_SQRT
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#mesondefine HAVE_STDINT_H
+
+/* Define to 1 if you have the `strpbrk' function. */
+#mesondefine HAVE_STRPBRK
+
+/* Define to 1 if you have the `strrchr' function. */
+#mesondefine HAVE_STRRCHR
+
+/* Define to 1 if you have the `strspn' function. */
+#mesondefine HAVE_STRSPN
+
+/* Define to 1 if you have the `strstr' function. */
+#mesondefine HAVE_STRSTR
+
+/* Define to 1 if you have the `strtoul' function. */
+#mesondefine HAVE_STRTOUL
+
+/* Define to 1 if `fordblks' is member of `struct mallinfo'. */
+#mesondefine HAVE_STRUCT_MALLINFO_FORDBLKS
+
+/* Define to 1 if `fsmblks' is member of `struct mallinfo'. */
+#mesondefine HAVE_STRUCT_MALLINFO_FSMBLKS
+
+/* Define to 1 if `hblkhd' is member of `struct mallinfo'. */
+#mesondefine HAVE_STRUCT_MALLINFO_HBLKHD
+
+/* Define to 1 if `uordblks' is member of `struct mallinfo'. */
+#mesondefine HAVE_STRUCT_MALLINFO_UORDBLKS
+
+/* Define to 1 if `usmblks' is member of `struct mallinfo'. */
+#mesondefine HAVE_STRUCT_MALLINFO_USMBLKS
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#mesondefine HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#mesondefine HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#mesondefine HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#mesondefine HAVE_UNISTD_H
+
+/* Base data directory -- only path-prefix.h should use it! */
+#define INKSCAPE_DATADIR "${INKSCAPE_DATADIR}"
+
+/* Base library directory -- only path-prefix.h should use it! */
+#define INKSCAPE_LIBDIR "${INKSCAPE_LIBDIR}"
+
+/* Name of package */
+#define PACKAGE "${PROJECT_NAME}"
+
+/* Localization directory */
+#define PACKAGE_LOCALE_DIR "${PACKAGE_LOCALE_DIR}"
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME "${PROJECT_NAME}"
+
+/* Build in dbus */
+#mesondefine WITH_DBUS
+
+/* enable gtk spelling widget */
+#mesondefine WITH_GTKSPELL
+
+/* Image Magick++ support for bitmap effects */
+#mesondefine WITH_IMAGE_MAGICK
+
+/* Use libjpeg */
+#mesondefine HAVE_JPEG
+
+/* Build in libcdr */
+#mesondefine WITH_LIBCDR
+
+/* Build using libcdr 0.0.x */
+#mesondefine WITH_LIBCDR00
+
+/* Build using libcdr 0.1.x */
+#mesondefine WITH_LIBCDR01
+
+/* Build in libvisio */
+#mesondefine WITH_LIBVISIO
+
+/* Build using libvisio 0.0.x */
+#mesondefine WITH_LIBVISIO00
+
+/* Build using libvisio 0.1.x */
+#mesondefine WITH_LIBVISIO01
+
+/* Build in libwpg */
+#mesondefine WITH_LIBWPG
+
+/* Build in libwpg-0.1 */
+#mesondefine WITH_LIBWPG01
+
+/* Build in libwpg-0.2 */
+#mesondefine WITH_LIBWPG02
+
+/* Build in libwpg-0.3 */
+#mesondefine WITH_LIBWPG03
+
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#mesondefine WORDS_BIGENDIAN
+
+/* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
+#mesondefine LPE_ENABLE_TEST_EFFECTS
+
+/* Local variables to store GTKMM version */
+/*
+#define INKSCAPE_GTKMM_MAJOR_VERSION @INKSCAPE_GTKMM_MAJOR_VERSION@
+#define INKSCAPE_GTKMM_MINOR_VERSION @INKSCAPE_GTKMM_MINOR_VERSION@
+#define INKSCAPE_GTKMM_MICRO_VERSION @INKSCAPE_GTKMM_MICRO_VERSION@
+*/
+
+/**
+ * Check GtkMM version
+ *
+ * This is adapted from the upstream Gtk+ macro for use with GtkMM
+ *
+ * @todo Perhaps this should be in its own header?  However, this is likely to
+ *       be used very frequently, so It would be annoying to have to add another
+ *	 header inclusion in many files
+ *
+ *
+ * @major: major version (e.g. 1 for version 1.2.5)
+ * @minor: minor version (e.g. 2 for version 1.2.5)
+ * @micro: micro version (e.g. 5 for version 1.2.5)
+ *
+ * Returns %TRUE if the version of the GTK+ header files
+ * is the same as or newer than the passed-in version.
+ *
+ * Returns: %TRUE if GTK+ headers are new enough
+ */
+
+/*
+#define GTKMM_CHECK_VERSION(major,minor,micro)                            \
+  (INKSCAPE_GTKMM_MAJOR_VERSION > (major) ||                                     \
+  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION > (minor)) || \
+  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION == (minor) && \
+  INKSCAPE_GTKMM_MICRO_VERSION >= (micro)))
+*/
+
+#endif /* _CONFIG_H_ */
+
+
