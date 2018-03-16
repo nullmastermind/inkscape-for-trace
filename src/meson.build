@@ -1,23 +1,17 @@
 # All folders for internal inkscape
 # these call add_inkscape_source
-#add_subdirectory(debug)
 #add_subdirectory(extension)
-#add_subdirectory(helper)
 #add_subdirectory(io)
-#add_subdirectory(live_effects)
-#add_subdirectory(svg)
 #add_subdirectory(trace)
-#add_subdirectory(util)
 #add_subdirectory(widgets)
 
 # Directories containing lists files that describe building internal libraries
-#add_subdirectory(libavoid)
 #add_subdirectory(libcroco)
 #add_subdirectory(libuemf)
-#add_subdirectory(libvpsc)
 #add_subdirectory(libdepixelize)
 
 subdir('debug')
+subdir('util')
 subdir('svg')
 subdir('live_effects')
 subdir('libavoid')

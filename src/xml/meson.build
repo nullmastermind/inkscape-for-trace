@@ -53,7 +53,8 @@ xml_deps = [
   glib_dep,
   glibmm_dep,
   xml2_dep,
-  libdebug_dep
+  libdebug_dep,
+  libutil_dep
 ]
 
 lib_xml = static_library('xml',
