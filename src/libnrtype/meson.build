@@ -34,3 +34,4 @@ libnrtype = static_library('nrtype',
   c_args: common_cflags,
   link_args: common_ldflags)
 
+libnrtype_dep = declare_dependency(link_with : libnrtype)

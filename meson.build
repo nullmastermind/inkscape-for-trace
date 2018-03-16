@@ -8,18 +8,22 @@ project('inkscape', 'cpp',
         meson_version : '>= 0.43.0',
         license: 'GPLv3+')
 
+sigcpp_req   = '>= 2.6.2' #TODO: review required version: 2.8.0 ?
 gdl_req      = '>= 3.6.0'
 pango_req    = '>= 1.41.0'
 cairo_req    = '>= 1.14.0'
 glib_req     = '>= 2.36.0'
+glibmm_req   = '>= 2.46.3' #TODO review: 2.54.0 ?
 gtkmm_req    = '>= 3.16.0'
 xml2_req     = '>= 2.7.4'
 
 # Dependencies
+sigcpp_dep     = dependency('sigc++-2.0', version: sigcpp_req, required : true)
 gdl_dep        = dependency('gdl-3.0', version: gdl_req, required : true)
 cairo_dep      = dependency('cairo', version: cairo_req, required : true)
 xml2_dep       = dependency('libxml-2.0', version: xml2_req, required : true)
 glib_dep       = dependency('glib-2.0', version: glib_req, required : true)
+glibmm_dep     = dependency('glibmm-2.4', version: glibmm_req, required : true)
 gtkmm_dep      = dependency('gtkmm-3.0', version: gtkmm_req, required : true)
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
@@ -67,7 +71,9 @@ inkscape_sources = [
 inkscape_deps = [
   gtkmm_dep,
   xml2_dep,
-  gdl_dep
+  gdl_dep,
+  libnrtype_dep,
+  libinkgc_dep
 ]
 
 executable('inkscape',
