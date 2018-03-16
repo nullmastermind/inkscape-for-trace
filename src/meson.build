@@ -1,7 +1,6 @@
 # All folders for internal inkscape
 # these call add_inkscape_source
 #add_subdirectory(extension)
-#add_subdirectory(io)
 #add_subdirectory(trace)
 #add_subdirectory(widgets)
 
@@ -11,6 +10,7 @@
 #add_subdirectory(libdepixelize)
 
 subdir('debug')
+subdir('io')
 subdir('util')
 subdir('svg')
 subdir('live_effects')

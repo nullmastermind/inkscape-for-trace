@@ -26,6 +26,8 @@ xml2_req     = '>= 2.7.4'
 harfbuzz_req = '>= 0.9'
 bohemgc_req  = '>= 7.4.2'
 png_req      = '>= 1.2.54' #TODO: 1.6.2 ?
+soup_req     = '>= 2.41.90'
+zlib_req     = '>= 1.1.4'
 
 # Dependencies
 sigcpp_dep     = dependency('sigc++-2.0',  version: sigcpp_req,   required : true)
@@ -47,6 +49,8 @@ harfbuzz_dep   = dependency('harfbuzz',    version: harfbuzz_req, required : fal
 boehmgc_dep    = dependency('bdw-gc',      version: bohemgc_req,  required : true)
 gsl_dep        = dependency('gsl',                                required : true)
 png_dep        = dependency('libpng',      version: png_req,      required : true)
+soup_dep       = dependency('libsoup-2.4', version: soup_req,     required : true)
+zlib_dep       = dependency('zlib',        version: zlib_req,     required : true)
 
 add_project_arguments('-DHAVE_CONFIG_H', language: 'cpp')
 
