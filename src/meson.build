@@ -17,6 +17,7 @@
 #add_subdirectory(libvpsc)
 #add_subdirectory(libdepixelize)
 
+subdir('debug')
 subdir('libavoid')
 subdir('libvpsc') #libcola depends on libvpsc, so here the order matters
 subdir('libcola')
