@@ -183,7 +183,6 @@ spobject_deps = [
   xml2_dep,
   gdkmm_dep,
   libhelper_dep
-#  gsl_dep
 #  spobject_filters_dep
 ]
 
@@ -191,8 +190,6 @@ spobject = static_library('spobject',
   sources: [spobject_sources,
             spobject_headers],
   dependencies: spobject_deps,
-  include_directories: [srcinc, confinc],
-  c_args: common_cflags,
-  link_args: common_ldflags)
+  include_directories: [srcinc, confinc])
 
 libspobject_dep = declare_dependency(link_with : spobject)

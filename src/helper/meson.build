@@ -32,8 +32,9 @@ helper_headers = files([
 ])
 
 marshallers = gnome.genmarshal('sp-marshal',
-sources : 'sp-marshal.list',
-extra_args : ['-UG_ENABLE_DEBUG', '--prototypes'])
+  sources : 'sp-marshal.list',
+  prefix : 'sp_marshal',
+  extra_args : ['-UG_ENABLE_DEBUG', '--prototypes'])
 
 marshallers_c = marshallers[0]
 marshallers_h = marshallers[1]

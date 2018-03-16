@@ -21,8 +21,6 @@ libinkgc = static_library('inkgc',
   sources: [inkgc_sources,
             inkgc_headers],
   dependencies: inkgc_deps,
-  include_directories: [srcinc, confinc],
-  c_args: common_cflags,
-  link_args: common_ldflags)
+  include_directories: [srcinc, confinc])
 
 libinkgc_dep = declare_dependency(link_with : libinkgc)

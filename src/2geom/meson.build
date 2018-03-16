@@ -138,8 +138,6 @@ lib2geom = static_library('2geom',
   sources: [lib_2geom_sources,
             lib_2geom_headers],
   dependencies: lib_2geom_deps,
-  include_directories: [srcinc, confinc],
-  c_args: common_cflags,
-  link_args: common_ldflags)
+  include_directories: [srcinc, confinc])
 
 lib2geom_dep = declare_dependency(link_with : lib2geom)

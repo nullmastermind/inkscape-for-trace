@@ -32,8 +32,6 @@ libnrtype = static_library('nrtype',
   sources: [layout_tng_sources,
             layout_tng_headers],
   dependencies: layout_tng_deps,
-  include_directories: [srcinc, confinc],
-  c_args: common_cflags,
-  link_args: common_ldflags)
+  include_directories: [srcinc, confinc])
 
 libnrtype_dep = declare_dependency(link_with : libnrtype)

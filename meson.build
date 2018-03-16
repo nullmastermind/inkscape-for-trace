@@ -46,9 +46,6 @@ boehmgc_dep    = dependency('bdw-gc',      version: bohemgc_req,  required : tru
 gsl_dep        = dependency('gsl',                                required : true)
 png_dep        = dependency('libpng',      version: png_req,      required : true)
 
-
-common_cflags = ''
-common_ldflags = ''
 add_project_arguments('-DHAVE_CONFIG_H', language: 'cpp')
 
 confinc = include_directories('.')
@@ -81,14 +78,9 @@ configure_file(input: 'config.h.meson',
                output: 'config.h',
                configuration: cdata)
 
-inkscape_sources = [
-  ui_sources, ui_headers
-]
-
-inkscape_deps = [
-  gtkmm_dep,
-  xml2_dep,
-  gdl_dep,
+common_deps = [
+  libsrcdir_dep,
+  libui_dep,
   libnrtype_dep,
   libinkgc_dep,
   lib2geom_dep,
@@ -96,9 +88,16 @@ inkscape_deps = [
   libhelper_dep
 ]
 
+inkscape_deps = [
+  glibmm_dep,
+  gtkmm_dep,
+  xml2_dep
+]
+
 executable('inkscape',
-  sources: inkscape_sources,
-  dependencies : inkscape_deps,
+  sources: 'src/inkscape.cpp',
+  dependencies : [common_deps,
+                  inkscape_deps],
   include_directories: [srcinc, confinc]
 )
 

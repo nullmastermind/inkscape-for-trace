@@ -360,8 +360,6 @@ ui_headers = files([
   'view/view.h'
 ])
 
-
-
 #TODO:
 
 #if(WIN32)
@@ -380,3 +378,17 @@ ui_headers = files([
 #if ("${HAVE_POTRACE}")
 #	add_inkscape_source("${ui_flood_and_trace_SRC}")
 #endif()
+
+ui_deps = [
+  gtkmm_dep,
+  xml2_dep,
+  gdl_dep,
+]
+
+libui = static_library('ui',
+  sources: [ui_sources,
+            ui_headers],
+  dependencies: ui_deps,
+  include_directories: [srcinc, confinc])
+
+libui_dep = declare_dependency(link_with : libui)
