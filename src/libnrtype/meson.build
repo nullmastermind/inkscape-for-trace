@@ -25,7 +25,8 @@ layout_tng_deps = [
   gtkmm_dep,
   xml2_dep,
   pangoft2_dep,
-  harfbuzz_dep
+  harfbuzz_dep,
+  liblivarot_dep
 ]
 
 libnrtype = static_library('nrtype',

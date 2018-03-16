@@ -20,6 +20,7 @@ glib_req     = '>= 2.36.0'
 glibmm_req   = '>= 2.46.3' #TODO review: 2.54.0 ?
 gtk_req      = '>= 3.18.9' #TODO review: 3.21.5 ?
 gtkmm_req    = '>= 3.16.0'
+gdk_req      = '>= 3.8'
 gdkmm_req    = '>= 3.8'
 xml2_req     = '>= 2.7.4'
 harfbuzz_req = '>= 0.9'
@@ -37,6 +38,7 @@ gobject_dep    = dependency('gobject-2.0',                        required : tru
 glibmm_dep     = dependency('glibmm-2.4',  version: glibmm_req,   required : true)
 gtk_dep        = dependency('gtk+-3.0',    version: gtk_req,      required : true)
 gtkmm_dep      = dependency('gtkmm-3.0',   version: gtkmm_req,    required : true)
+gdk_dep        = dependency('gdk-3.0',     version: gdk_req,      required : true)
 gdkmm_dep      = dependency('gdkmm-3.0',   version: gdkmm_req,    required : true)
 pango_dep      = dependency('pango',       version: pango_req,    required : true)
 pangoft2_dep   = dependency('pangoft2',    version: pangoft2_req, required : true)

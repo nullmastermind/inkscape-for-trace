@@ -18,12 +18,12 @@
 #add_subdirectory(libcroco)
 #add_subdirectory(libuemf)
 #add_subdirectory(libvpsc)
-#add_subdirectory(livarot)
 #add_subdirectory(libdepixelize)
 
 subdir('2geom')
 subdir('helper')
 subdir('inkgc')
+subdir('livarot') #libnrtype depends on livarot, so here the order mathers
 subdir('libnrtype')
 subdir('object')
 subdir('ui')
