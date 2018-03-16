@@ -53,9 +53,7 @@ libavoid_headers = files([
   'vpsc.h'
 ])
 
-libavoid_deps = [
-
-]
+libavoid_deps = []
 
 libavoid = static_library('libavoid',
   sources: [libavoid_sources,

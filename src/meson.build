@@ -265,8 +265,9 @@ srcdir_deps = [
   xml2_dep,
   sigcpp_dep,
   libhelper_dep,
-  libcola_dep
-  #libdisplay_dep
+  libcola_dep,
+  libavoid_dep,
+  libdisplay_dep
 ]
 
 lib_srcdir = static_library('srcdir',
