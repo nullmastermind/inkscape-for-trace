@@ -11,11 +11,14 @@ project('inkscape', 'cpp',
 sigcpp_req   = '>= 2.6.2' #TODO: review required version: 2.8.0 ?
 gdl_req      = '>= 3.6.0'
 pango_req    = '>= 1.41.0'
+pangoft2_req = '>= 1.37.2'
 cairo_req    = '>= 1.14.0'
 glib_req     = '>= 2.36.0'
 glibmm_req   = '>= 2.46.3' #TODO review: 2.54.0 ?
 gtkmm_req    = '>= 3.16.0'
 xml2_req     = '>= 2.7.4'
+harfbuzz_req = '>= 0.9'
+bohemgc_req  = '>= 7.4.2'
 
 # Dependencies
 sigcpp_dep     = dependency('sigc++-2.0', version: sigcpp_req, required : true)
@@ -25,11 +28,11 @@ xml2_dep       = dependency('libxml-2.0', version: xml2_req, required : true)
 glib_dep       = dependency('glib-2.0', version: glib_req, required : true)
 glibmm_dep     = dependency('glibmm-2.4', version: glibmm_req, required : true)
 gtkmm_dep      = dependency('gtkmm-3.0', version: gtkmm_req, required : true)
-pango_dep      = dependency('pango', version: pango_req,
-                            fallback : ['pango', 'libpango_dep'])
-pangocairo_dep = dependency('pangocairo', version: cairo_req,
-                            fallback : ['pango', 'libpangocairo_dep'])
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
+pango_dep      = dependency('pango', version: pango_req, required : true)
+pangoft2_dep   = dependency('pangoft2', version: pangoft2_req, required : true)
+pangocairo_dep = dependency('pangocairo', version: cairo_req, required : true)
+harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req, required: false)
+boehmgc_dep    = dependency('bdw-gc', version: bohemgc_req, required: true)
 
 common_cflags = ''
 common_ldflags = ''

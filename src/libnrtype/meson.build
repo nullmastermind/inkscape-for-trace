@@ -23,7 +23,9 @@ layout_tng_headers = files([
 layout_tng_deps = [
   glib_dep,
   gtkmm_dep,
-  xml2_dep
+  xml2_dep,
+  pangoft2_dep,
+  harfbuzz_dep
 ]
 
 libnrtype = static_library('nrtype',

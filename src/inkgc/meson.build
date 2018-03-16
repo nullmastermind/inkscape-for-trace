@@ -13,7 +13,8 @@ inkgc_headers = files([
 inkgc_deps = [
   glib_dep,
   glibmm_dep,
-  sigcpp_dep
+  sigcpp_dep,
+  boehmgc_dep
 ]
 
 libinkgc = static_library('inkgc',
