@@ -87,7 +87,8 @@ common_deps = [
   libinkgc_dep,
   lib2geom_dep,
   libspobject_dep,
-  libhelper_dep
+  libhelper_dep,
+  libxml_dep
 ]
 
 inkscape_deps = [

@@ -9,7 +9,6 @@
 #add_subdirectory(trace)
 #add_subdirectory(util)
 #add_subdirectory(widgets)
-#add_subdirectory(xml)
 
 # Directories containing lists files that describe building internal libraries
 #add_subdirectory(libavoid)
@@ -27,6 +26,7 @@ subdir('libnrtype')
 subdir('object')
 subdir('ui')
 subdir('display')
+subdir('xml')
 
 srcdir_sources = files([
   'attribute-rel-css.cpp',
