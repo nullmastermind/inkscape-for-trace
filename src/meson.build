@@ -1,7 +1,6 @@
 # All folders for internal inkscape
 # these call add_inkscape_source
 #add_subdirectory(debug)
-#add_subdirectory(display)
 #add_subdirectory(extension)
 #add_subdirectory(helper)
 #add_subdirectory(io)
@@ -27,6 +26,7 @@ subdir('livarot') #libnrtype depends on livarot, so here the order mathers
 subdir('libnrtype')
 subdir('object')
 subdir('ui')
+subdir('display')
 
 srcdir_sources = files([
   'attribute-rel-css.cpp',
