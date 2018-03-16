@@ -17,11 +17,12 @@
 #add_subdirectory(libvpsc)
 #add_subdirectory(libdepixelize)
 
+subdir('libavoid')
 subdir('libcola')
 subdir('2geom')
 subdir('helper')
 subdir('inkgc')
-subdir('livarot') #libnrtype depends on livarot, so here the order mathers
+subdir('livarot') #libnrtype depends on livarot, so here the order matters
 subdir('libnrtype')
 subdir('object')
 subdir('ui')
