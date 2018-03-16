@@ -1,3 +1,4 @@
-subdir('libnrtype')
+subdir('2geom')
 subdir('inkgc')
+subdir('libnrtype')
 subdir('ui')

@@ -33,6 +33,7 @@ pangoft2_dep   = dependency('pangoft2', version: pangoft2_req, required : true)
 pangocairo_dep = dependency('pangocairo', version: cairo_req, required : true)
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req, required: false)
 boehmgc_dep    = dependency('bdw-gc', version: bohemgc_req, required: true)
+gsl_dep        = dependency('gsl', required: true)
 
 common_cflags = ''
 common_ldflags = ''
@@ -76,7 +77,8 @@ inkscape_deps = [
   xml2_dep,
   gdl_dep,
   libnrtype_dep,
-  libinkgc_dep
+  libinkgc_dep,
+  lib2geom_dep
 ]
 
 executable('inkscape',
