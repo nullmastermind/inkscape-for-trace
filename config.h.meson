@@ -25,7 +25,7 @@
 #mesondefine ENABLE_OSX_APP_LOCATIONS
 
 /* Translation domain used */
-#define GETTEXT_PACKAGE "${PROJECT_NAME}"
+#define GETTEXT_PACKAGE "@PROJECT_NAME@"
 
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #mesondefine HAVE_BIND_TEXTDOMAIN_CODESET
@@ -162,19 +162,19 @@
 #mesondefine HAVE_UNISTD_H
 
 /* Base data directory -- only path-prefix.h should use it! */
-#define INKSCAPE_DATADIR "${INKSCAPE_DATADIR}"
+#define INKSCAPE_DATADIR "@INKSCAPE_DATADIR@"
 
 /* Base library directory -- only path-prefix.h should use it! */
-#define INKSCAPE_LIBDIR "${INKSCAPE_LIBDIR}"
+#define INKSCAPE_LIBDIR "@INKSCAPE_LIBDIR@"
 
 /* Name of package */
-#define PACKAGE "${PROJECT_NAME}"
+#define PACKAGE "@PROJECT_NAME@"
 
 /* Localization directory */
-#define PACKAGE_LOCALE_DIR "${PACKAGE_LOCALE_DIR}"
+#define PACKAGE_LOCALE_DIR "@PACKAGE_LOCALE_DIR@"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "${PROJECT_NAME}"
+#define PACKAGE_NAME "@PROJECT_NAME@"
 
 /* Build in dbus */
 #mesondefine WITH_DBUS
@@ -226,11 +226,9 @@
 #mesondefine LPE_ENABLE_TEST_EFFECTS
 
 /* Local variables to store GTKMM version */
-/*
 #define INKSCAPE_GTKMM_MAJOR_VERSION @INKSCAPE_GTKMM_MAJOR_VERSION@
 #define INKSCAPE_GTKMM_MINOR_VERSION @INKSCAPE_GTKMM_MINOR_VERSION@
 #define INKSCAPE_GTKMM_MICRO_VERSION @INKSCAPE_GTKMM_MICRO_VERSION@
-*/
 
 /**
  * Check GtkMM version
@@ -251,15 +249,10 @@
  *
  * Returns: %TRUE if GTK+ headers are new enough
  */
-
-/*
 #define GTKMM_CHECK_VERSION(major,minor,micro)                            \
   (INKSCAPE_GTKMM_MAJOR_VERSION > (major) ||                                     \
   (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION > (minor)) || \
   (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION == (minor) && \
   INKSCAPE_GTKMM_MICRO_VERSION >= (micro)))
-*/
 
 #endif /* _CONFIG_H_ */
-
-

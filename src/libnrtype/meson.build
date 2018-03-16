@@ -20,21 +20,17 @@ layout_tng_headers = files([
   'font-style.h'
 ])
 
-#install_headers(layout_tng_headers)
-
 layout_tng_deps = [
   glib_dep,
   gtkmm_dep,
   xml2_dep
 ]
 
-layout_tng_inc = include_directories('.')
-
 libnrtype = static_library('nrtype',
   sources: [layout_tng_sources,
             layout_tng_headers],
   dependencies: layout_tng_deps,
-  include_directories: [srcinc, confinc, layout_tng_inc],
+  include_directories: [srcinc, confinc],
   c_args: common_cflags,
   link_args: common_ldflags)
 
