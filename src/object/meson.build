@@ -173,7 +173,7 @@ spobject_headers = files([
   'viewbox.h'
 ])
 
-#subdir(filters)
+subdir('filters')
 
 spobject_deps = [
   cairomm_dep,
@@ -182,8 +182,8 @@ spobject_deps = [
   gtkmm_dep,
   xml2_dep,
   gdkmm_dep,
-  libhelper_dep
-#  spobject_filters_dep
+  libhelper_dep,
+  libspobject_filters_dep
 ]
 
 spobject = static_library('spobject',
