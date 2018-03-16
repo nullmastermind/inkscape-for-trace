@@ -183,6 +183,7 @@ spobject_deps = [
   xml2_dep,
   gdkmm_dep,
   libhelper_dep,
+  liblpe_dep,
   libspobject_filters_dep
 ]
 

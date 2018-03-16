@@ -19,6 +19,7 @@
 
 subdir('debug')
 subdir('svg')
+subdir('live_effects')
 subdir('libavoid')
 subdir('libvpsc') #libcola depends on libvpsc, so here the order matters
 subdir('libcola')
