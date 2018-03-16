@@ -1,4 +1,6 @@
 subdir('2geom')
+subdir('helper')
 subdir('inkgc')
 subdir('libnrtype')
+subdir('object')
 subdir('ui')
