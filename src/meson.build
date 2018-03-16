@@ -12,12 +12,12 @@
 
 # Directories containing lists files that describe building internal libraries
 #add_subdirectory(libavoid)
-#add_subdirectory(libcola)
 #add_subdirectory(libcroco)
 #add_subdirectory(libuemf)
 #add_subdirectory(libvpsc)
 #add_subdirectory(libdepixelize)
 
+subdir('libcola')
 subdir('2geom')
 subdir('helper')
 subdir('inkgc')
@@ -263,6 +263,7 @@ srcdir_deps = [
   xml2_dep,
   sigcpp_dep,
   libhelper_dep,
+  libcola_dep
   #libdisplay_dep
 ]
 
