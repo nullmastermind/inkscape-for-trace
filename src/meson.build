@@ -18,6 +18,7 @@
 #add_subdirectory(libdepixelize)
 
 subdir('libavoid')
+subdir('libvpsc') #libcola depends on libvpsc, so here the order matters
 subdir('libcola')
 subdir('2geom')
 subdir('helper')

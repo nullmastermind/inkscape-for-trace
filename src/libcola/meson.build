@@ -25,7 +25,7 @@ libcola_headers = files([
 ])
 
 libcola_deps = [
-
+  libvpsc_dep
 ]
 
 libcola = static_library('libcola',
