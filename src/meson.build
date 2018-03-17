@@ -23,6 +23,14 @@ subdir('inkgc')
 subdir('ui')
 subdir('display')
 
+# inkscape_version.cpp
+vdata = configuration_data()
+vdata.set('INKSCAPE_VERSION', meson.project_version())
+vdata.set('INKSCAPE_REVISION', 'foo')
+inkscape_version_file = configure_file(
+  input: 'inkscape-version.cpp.meson',
+  output: 'inkscape-version.cpp',
+  configuration: vdata)
 
 srcdir_sources = files([
   'attribute-rel-css.cpp',
@@ -268,7 +276,8 @@ srcdir_deps = [
 
 lib_srcdir = static_library('srcdir',
   sources: [srcdir_sources,
-            srcdir_headers],
+            srcdir_headers,
+            inkscape_version_file],
   dependencies: srcdir_deps,
   include_directories: [srcinc, confinc, helperinc])
 
