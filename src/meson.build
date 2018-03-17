@@ -4,6 +4,7 @@
 #add_subdirectory(libdepixelize)
 
 subdir('debug')
+subdir('libuemf')
 subdir('libcroco') # required by object, so here the order matters
 subdir('live_effects') # required by object
 subdir('helper') # required by object
