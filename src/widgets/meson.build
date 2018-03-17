@@ -1,4 +1,4 @@
-#subdir(gimp)
+subdir('gimp')
 
 libwidgets_sources = files([
   'arc-toolbar.cpp',
@@ -119,10 +119,11 @@ libwidgets_deps = [
   glibmm_dep,
   gtkmm_dep,
   xml2_dep,
-  gdl_dep
+  gdl_dep,
+  libgimpwidgets_dep
 ]
 
-libwidgets = static_library('libwidgets',
+libwidgets = static_library('widgets',
   sources: [libwidgets_sources,
             libwidgets_headers],
   dependencies: libwidgets_deps,

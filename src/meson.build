@@ -4,21 +4,21 @@
 #add_subdirectory(libdepixelize)
 
 subdir('debug')
+subdir('libcroco') #libspobject depends on libcroco, so here the order matters
+subdir('live_effects') #libspobject depends on liblpe, so here the order matters
+subdir('helper') #libspobject depends on libhelper, so here the order matters
+subdir('object') #libwidgets depends on libspobject, so here the order matters
 subdir('widgets')
 subdir('io')
 subdir('util')
 subdir('svg')
-subdir('live_effects')
-subdir('libcroco')
 subdir('libavoid')
 subdir('libvpsc') #libcola depends on libvpsc, so here the order matters
 subdir('libcola')
 subdir('2geom')
-subdir('helper')
 subdir('inkgc')
 subdir('livarot') #libnrtype depends on livarot, so here the order matters
 subdir('libnrtype')
-subdir('object')
 subdir('ui')
 subdir('display')
 subdir('xml')
