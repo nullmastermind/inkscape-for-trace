@@ -10,6 +10,7 @@
 #add_subdirectory(libdepixelize)
 
 subdir('debug')
+subdir('widgets')
 subdir('io')
 subdir('util')
 subdir('svg')
