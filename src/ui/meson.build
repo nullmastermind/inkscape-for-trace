@@ -383,7 +383,8 @@ ui_deps = [
   gtkmm_dep,
   xml2_dep,
   gdl_dep,
-  libwidgets_dep
+  libwidgets_dep,
+  libdepixelize_dep
 ]
 
 libui = static_library('ui',

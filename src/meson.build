@@ -1,7 +1,4 @@
-#add_subdirectory(extension)
 #add_subdirectory(trace)
-#add_subdirectory(libuemf)
-#add_subdirectory(libdepixelize)
 
 subdir('debug')
 subdir('libuemf')
@@ -19,6 +16,7 @@ subdir('xml')
 subdir('extension')
 subdir('libavoid')
 subdir('libvpsc') # required by libcola
+subdir('libdepixelize')
 subdir('libcola')
 subdir('2geom')
 subdir('inkgc')
