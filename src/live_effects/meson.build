@@ -185,7 +185,7 @@ lpe_deps = [
   xml2_dep
 ]
 
-liblpe = static_library('liblpe',
+liblpe = static_library('lpe',
   sources: [lpe_sources,
             lpe_headers],
   dependencies: lpe_deps,

@@ -33,6 +33,7 @@ zlib_req     = '>= 1.1.4'
 sigcpp_dep     = dependency('sigc++-2.0',  version: sigcpp_req,   required : true)
 gdl_dep        = dependency('gdl-3.0',     version: gdl_req,      required : true)
 cairo_dep      = dependency('cairo',       version: cairo_req,    required : true)
+cairopdf_dep   = dependency('cairo-pdf',                           required : true)
 cairomm_dep    = dependency('cairomm-1.0', version: cairomm_req,  required : true)
 xml2_dep       = dependency('libxml-2.0',  version: xml2_req,     required : true)
 glib_dep       = dependency('glib-2.0',    version: glib_req,     required : true)
@@ -67,6 +68,7 @@ subdir('src')
 
 cdata = configuration_data()
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
+cdata.set('HAVE_CAIRO_PDF', cairopdf_dep.found())
 #cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 if gdl_dep.found()
