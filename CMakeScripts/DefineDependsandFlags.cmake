@@ -68,9 +68,13 @@ if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
 endif()
 
 
-find_package(JeMalloc)
-if (JEMALLOC_FOUND)
-	list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+if(WITH_JEMALLOC)
+    find_package(JeMalloc)
+    if (JEMALLOC_FOUND)
+        list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+    else()
+        set(WITH_JEMALLOC OFF)
+    endif()
 endif()
 
 if(ENABLE_LCMS)
