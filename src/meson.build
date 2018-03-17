@@ -12,9 +12,10 @@ subdir('widgets')
 subdir('livarot') # required by libnrtype
 subdir('svg') # required by libnrtype
 subdir('libnrtype')
-subdir('extension')
-subdir('io')
 subdir('util')
+subdir('io')
+subdir('xml')
+subdir('extension')
 subdir('libavoid')
 subdir('libvpsc') # required by libcola
 subdir('libcola')
@@ -22,7 +23,7 @@ subdir('2geom')
 subdir('inkgc')
 subdir('ui')
 subdir('display')
-subdir('xml')
+
 
 srcdir_sources = files([
   'attribute-rel-css.cpp',

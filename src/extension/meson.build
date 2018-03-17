@@ -246,6 +246,15 @@ libextension = static_library('extension',
   sources: [extension_sources,
             extension_headers],
   dependencies: libextension_deps,
-  include_directories: [srcinc, confinc])
+  include_directories: [confinc, srcinc],
+  implicit_include_directories: false)
+# NOTE:
+# The reason for disabling implicit includedirs above is that
+# the Inkscape source tree has got two different headers with
+# the same filename:
+# src/print.h and src/extension/print.h
+# Due to an implicit -I../src/extension the wrong header ended up
+# being used resulting in a broken build.
+# -- Felipe "Juca" Sanches
 
 libextension_dep = declare_dependency(link_with : libextension)
