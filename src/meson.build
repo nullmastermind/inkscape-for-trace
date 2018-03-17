@@ -257,12 +257,14 @@ srcdir_deps = [
   gtkmm_dep,
   glibmm_dep,
   gdl_dep,
+  gmodule_dep,
   xml2_dep,
   sigcpp_dep,
   libhelper_dep,
   libcola_dep,
   libavoid_dep,
-  libdisplay_dep
+  libdisplay_dep,
+  libextension_dep
 ]
 
 lib_srcdir = static_library('srcdir',

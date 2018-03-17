@@ -239,7 +239,8 @@ extension_headers = files([
 
 libextension_deps = [
   gtkmm_dep,
-  xml2_dep
+  xml2_dep,
+  xslt_dep
 ]
 
 libextension = static_library('extension',

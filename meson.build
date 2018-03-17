@@ -28,6 +28,7 @@ bohemgc_req  = '>= 7.4.2'
 png_req      = '>= 1.2.54' #TODO: 1.6.2 ?
 soup_req     = '>= 2.41.90'
 zlib_req     = '>= 1.1.4'
+xslt_req     = '>= 1.1.25'
 
 # Dependencies
 sigcpp_dep     = dependency('sigc++-2.0',  version: sigcpp_req,   required : true)
@@ -43,6 +44,7 @@ gtk_dep        = dependency('gtk+-3.0',    version: gtk_req,      required : tru
 gtkmm_dep      = dependency('gtkmm-3.0',   version: gtkmm_req,    required : true)
 gdk_dep        = dependency('gdk-3.0',     version: gdk_req,      required : true)
 gdkmm_dep      = dependency('gdkmm-3.0',   version: gdkmm_req,    required : true)
+gmodule_dep    = dependency('gmodule-2.0',                        required : true)
 pango_dep      = dependency('pango',       version: pango_req,    required : true)
 pangoft2_dep   = dependency('pangoft2',    version: pangoft2_req, required : true)
 pangocairo_dep = dependency('pangocairo',  version: cairo_req,    required : true)
@@ -53,6 +55,7 @@ png_dep        = dependency('libpng',      version: png_req,      required : tru
 soup_dep       = dependency('libsoup-2.4', version: soup_req,     required : true)
 zlib_dep       = dependency('zlib',        version: zlib_req,     required : true)
 x11_dep        = dependency('x11',                                required : true)
+xslt_dep       = dependency('libxslt',     version: xslt_req,     required : true)
 
 add_project_arguments('-DHAVE_CONFIG_H', language: 'cpp')
 
