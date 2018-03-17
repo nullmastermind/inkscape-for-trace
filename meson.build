@@ -51,6 +51,7 @@ gsl_dep        = dependency('gsl',                                required : tru
 png_dep        = dependency('libpng',      version: png_req,      required : true)
 soup_dep       = dependency('libsoup-2.4', version: soup_req,     required : true)
 zlib_dep       = dependency('zlib',        version: zlib_req,     required : true)
+x11_dep        = dependency('x11',                                required : true)
 
 add_project_arguments('-DHAVE_CONFIG_H', language: 'cpp')
 
@@ -92,13 +93,14 @@ common_deps = [
   lib2geom_dep,
   libspobject_dep,
   libhelper_dep,
-  libxml_dep
+  libxml_dep,
 ]
 
 inkscape_deps = [
   glibmm_dep,
   gtkmm_dep,
-  xml2_dep
+  xml2_dep,
+  x11_dep
 ]
 
 executable('inkscape',
