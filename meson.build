@@ -29,6 +29,7 @@ png_req      = '>= 1.2.54' #TODO: 1.6.2 ?
 soup_req     = '>= 2.41.90'
 zlib_req     = '>= 1.1.4'
 xslt_req     = '>= 1.1.25'
+popt_req     = '>= 1.14'
 
 # Dependencies
 sigcpp_dep     = dependency('sigc++-2.0',  version: sigcpp_req,   required : true)
@@ -56,6 +57,7 @@ soup_dep       = dependency('libsoup-2.4', version: soup_req,     required : tru
 zlib_dep       = dependency('zlib',        version: zlib_req,     required : true)
 x11_dep        = dependency('x11',                                required : true)
 xslt_dep       = dependency('libxslt',     version: xslt_req,     required : true)
+popt_dep       = dependency('popt',        version: popt_req,     required : true)
 
 add_project_arguments('-DHAVE_CONFIG_H', language: 'cpp')
 
@@ -105,11 +107,13 @@ inkscape_deps = [
   glibmm_dep,
   gtkmm_dep,
   xml2_dep,
-  x11_dep
+  x11_dep,
+  popt_dep
 ]
 
 executable('inkscape',
-  sources: 'src/inkscape.cpp',
+  sources: ['src/inkscape.cpp',
+            'src/main.cpp'],
   dependencies : [common_deps,
                   inkscape_deps],
   include_directories: [srcinc, confinc]
