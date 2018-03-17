@@ -184,6 +184,7 @@ spobject_deps = [
   gdkmm_dep,
   libhelper_dep,
   liblpe_dep,
+  libcroco_dep,
   libspobject_filters_dep
 ]
 

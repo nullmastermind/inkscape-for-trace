@@ -1,11 +1,5 @@
-# All folders for internal inkscape
-# these call add_inkscape_source
 #add_subdirectory(extension)
 #add_subdirectory(trace)
-#add_subdirectory(widgets)
-
-# Directories containing lists files that describe building internal libraries
-#add_subdirectory(libcroco)
 #add_subdirectory(libuemf)
 #add_subdirectory(libdepixelize)
 
@@ -15,6 +9,7 @@ subdir('io')
 subdir('util')
 subdir('svg')
 subdir('live_effects')
+subdir('libcroco')
 subdir('libavoid')
 subdir('libvpsc') #libcola depends on libvpsc, so here the order matters
 subdir('libcola')
