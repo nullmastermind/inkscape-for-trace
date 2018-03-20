@@ -51,19 +51,8 @@ struct FT2GeomData {
     double scale;
 };
 
-// Note: Freetype 2.2.1 redefined function signatures for functions to be placed in an
-// FT_Outline_Funcs structure.  This is needed to keep backwards compatibility with the
-// 2.1.x series.
-
-/* *** BEGIN #if HACK *** */
-#if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 2
-typedef FT_Vector const FREETYPE_VECTOR;
-#else
-typedef FT_Vector FREETYPE_VECTOR;
-#endif
-
 // outline as returned by freetype
-static int ft2_move_to(FREETYPE_VECTOR *to, void * i_user)
+static int ft2_move_to(FT_Vector const *to, void * i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
@@ -73,7 +62,7 @@ static int ft2_move_to(FREETYPE_VECTOR *to, void * i_user)
     return 0;
 }
 
-static int ft2_line_to(FREETYPE_VECTOR *to, void *i_user)
+static int ft2_line_to(FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
@@ -83,7 +72,7 @@ static int ft2_line_to(FREETYPE_VECTOR *to, void *i_user)
     return 0;
 }
 
-static int ft2_conic_to(FREETYPE_VECTOR *control, FREETYPE_VECTOR *to, void *i_user)
+static int ft2_conic_to(FT_Vector const *control, FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y), c(control->x, control->y);
@@ -93,7 +82,7 @@ static int ft2_conic_to(FREETYPE_VECTOR *control, FREETYPE_VECTOR *to, void *i_u
     return 0;
 }
 
-static int ft2_cubic_to(FREETYPE_VECTOR *control1, FREETYPE_VECTOR *control2, FREETYPE_VECTOR *to, void *i_user)
+static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT_Vector const *to, void *i_user)
 {
     FT2GeomData *user = (FT2GeomData*)i_user;
     Geom::Point p(to->x, to->y);
