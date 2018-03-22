@@ -9,6 +9,7 @@
 #define INKSCAPE_CANVAS_GRID_H
 
 #include "sp-canvas-item.h"
+#include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
 #include "line-snapper.h"
 
@@ -124,8 +125,12 @@ protected:
     // For dealing with old Inkscape SVG files (pre 0.92)
     bool legacy;
     bool pixel;
-    
- private:
+
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_enabled;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_snap_visible_only;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_visible;
+
+private:
     CanvasGrid(const CanvasGrid&);
     CanvasGrid& operator=(const CanvasGrid&);
 };
@@ -160,6 +165,16 @@ private:
     void updateWidgets();
 
     bool render_dotted;
+
+    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sx;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol;
+    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_dotted;
 };
 
 

@@ -56,6 +56,16 @@ private:
     CanvasAxonomGrid& operator=(const CanvasAxonomGrid&);
 
     void updateWidgets();
+
+    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy;
+    Inkscape::UI::Widget::RegisteredScalar *_rsu_ax;
+    Inkscape::UI::Widget::RegisteredScalar *_rsu_az;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol;
+    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi;
 };
 
 
