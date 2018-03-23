@@ -2,6 +2,8 @@
 #ifndef SEEN_OPENTYPEUTIL_H
 #define SEEN_OPENTYPEUTIL_H
 
+#ifndef USE_PANGO_WIN32
+
 #include <map>
 
 #include <ft2build.h>
@@ -47,7 +49,7 @@ void readOpenTypeFvarTable (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarAxis>& axes,
                             std::map<Glib::ustring, OTVarNamed>& named);
 
-
+#endif /* !USE_PANGO_WIND32    */
 #endif /* !SEEN_OPENTYPEUTIL_H */
 
 /*

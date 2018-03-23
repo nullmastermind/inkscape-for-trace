@@ -1,5 +1,8 @@
 
+#ifndef USE_PANGO_WIN32
+
 #include "OpenTypeUtil.h"
+
 
 #include <iostream>  // For debugging
 
@@ -243,9 +246,10 @@ void readOpenTypeFvarTable(const FT_Face ft_face,
 
     }
 
-#endif
+#endif /* FREETYPE Version */
 }
 
+#endif /* !USE_PANGO_WIND32    */
 
 /*
   Local Variables:
