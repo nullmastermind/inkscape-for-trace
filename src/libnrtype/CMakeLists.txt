@@ -9,6 +9,7 @@ set(nrtype_SRC
 	Layout-TNG-OutIter.cpp
 	Layout-TNG-Output.cpp
 	Layout-TNG-Scanline-Makers.cpp
+        OpenTypeUtil.cpp
 
 	# -------
 	# Headers
@@ -19,6 +20,7 @@ set(nrtype_SRC
 	FontFactory.h
 	Layout-TNG-Scanline-Maker.h
 	Layout-TNG.h
+        OpenTypeUtil.cpp
 )
 
 add_inkscape_lib(nrtype_LIB "${nrtype_SRC}")
