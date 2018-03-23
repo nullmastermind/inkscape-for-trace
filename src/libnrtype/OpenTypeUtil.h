@@ -16,10 +16,36 @@
  * All three provide variable amounts of access to data.
  */
 
+// An OpenType fvar axis
+class OTVarAxis {
+ public:
+  OTVarAxis()
+    : minimum(0)
+    , maximum(1000)
+    , set_val(500) {};
+
+  OTVarAxis(double _minimum, double _maximum, double _set_val)
+    : minimum(_minimum)
+    , maximum(_maximum)
+    , set_val(_set_val) {};
+
+  double minimum;
+  double maximum;
+  double set_val;
+};
+
+class OTVarNamed {
+  std::map<Glib::ustring, double> axes;
+};
+
 
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, int>& tables,
                             std::map<Glib::ustring, Glib::ustring>& substitutions);
+
+void readOpenTypeFvarTable (const FT_Face ft_face,
+                            std::map<Glib::ustring, OTVarAxis>& axes,
+                            std::map<Glib::ustring, OTVarNamed>& named);
 
 
 #endif /* !SEEN_OPENTYPEUTIL_H */

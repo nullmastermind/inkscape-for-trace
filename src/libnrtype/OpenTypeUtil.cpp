@@ -194,7 +194,59 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     hb_face_destroy (hb_face);
 }
 
-  
+void readOpenTypeFvarTable(const FT_Face ft_face,
+                           std::map<Glib::ustring, OTVarAxis>& axes,
+                           std::map<Glib::ustring, OTVarNamed>& named) {
+
+#if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
+    FT_MM_Var* mmvar = NULL;
+    FT_Multi_Master mmtype;
+    if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
+        FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
+        FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
+
+        std::cout << "  Multiple Masters: variables: " << mmvar->num_axis
+                  << "  named styles: " << mmvar->num_namedstyles << std::endl;
+
+        FT_Fixed coords[mmvar->num_axis];
+        FT_Get_Var_Design_Coordinates( ft_face, mmvar->num_axis, coords );
+
+        for (size_t i = 0; i < mmvar->num_axis; ++i) {
+            FT_Var_Axis* axis = &mmvar->axis[i];
+            axes[axis->name] =  OTVarAxis(FTFixedToDouble(axis->minimum),
+                                          FTFixedToDouble(axis->maximum),
+                                          FTFixedToDouble(coords[i]));
+        }
+
+        for (auto a: axes) {
+            std::cout << " " << a.first
+                      << " min: " << a.second.minimum
+                      << " max: " << a.second.maximum
+                      << " set: " << a.second.set_val << std::endl;
+        }
+
+    //     const FT_UInt numNames = FT_Get_Sfnt_Name_Count(ft_face);
+    //     std::cout << "  number of names: " << numNames << std::endl;
+    //     FT_SfntName ft_name;
+    //     for (FT_UInt i = 0; i < numNames; ++i) {
+
+    //         if (FT_Get_Sfnt_Name(ft_face, i, &ft_name) != 0) {
+    //             continue;
+    //         }
+
+    //         Glib::ustring name;
+    //         for (size_t j = 0; j < ft_name.string_len; ++j) {
+    //             name += (char)ft_name.string[j];
+    //         }
+    //         std::cout << " " << i << ": " << name << std::endl;
+    //     }
+
+    }
+
+#endif
+}
+
+
 /*
   Local Variables:
   mode:c++
