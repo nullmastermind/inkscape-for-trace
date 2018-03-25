@@ -76,57 +76,6 @@ sp_grid_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba)
 namespace Inkscape {
 
 
-/**
-* A DIRECT COPY-PASTE FROM DOCUMENT-PROPERTIES.CPP  TO QUICKLY GET RESULTS
-*
- * Helper function that attachs widgets in a 3xn table. The widgets come in an
- * array that has two entries per table row. The two entries code for four
- * possible cases: (0,0) means insert space in first column; (0, non-0) means
- * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
- * (non-0, non-0) means two widgets in columns 2 and 3.
-**/
-#define SPACE_SIZE_X 15
-#define SPACE_SIZE_Y 10
-static inline void
-attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
-{
-    for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2) {
-        if (arr[i] && arr[i+1]) {
-            (const_cast<Gtk::Widget&>(*arr[i])).set_hexpand();
-            (const_cast<Gtk::Widget&>(*arr[i])).set_valign(Gtk::ALIGN_CENTER);
-            table.attach(const_cast<Gtk::Widget&>(*arr[i]),   1, r, 1, 1);
-
-            (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
-            (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
-            table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 2, r, 1, 1);
-        } else {
-            if (arr[i+1]) {
-                (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
-                (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
-                table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
-            } else if (arr[i]) {
-                Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
-#if GTK_CHECK_VERSION(3,16,0)
-                label.set_xalign(0.0);
-                label.set_yalign(0.5);
-#else
-                label.set_alignment (0.0);
-#endif
-                label.set_hexpand();
-                label.set_valign(Gtk::ALIGN_CENTER);
-                table.attach(label, 0, r, 3, 1);
-            } else {
-                Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-                space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-                space->set_halign(Gtk::ALIGN_CENTER);
-                space->set_valign(Gtk::ALIGN_CENTER);
-                table.attach(*space, 0, r, 1, 1);
-            }
-        }
-        ++r;
-    }
-}
-
 CanvasAxonomGrid::CanvasAxonomGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument * in_doc)
     : CanvasGrid(nv, in_repr, in_doc, GRID_AXONOMETRIC)
 {
@@ -319,7 +268,7 @@ CanvasAxonomGrid::newSpecificWidget()
     table->set_row_spacing(2);
     table->set_column_spacing(2);
 
-_wr.setUpdating (true);
+    _wr.setUpdating (true);
 
     _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
@@ -340,7 +289,6 @@ _wr.setUpdating (true);
     _rcp_gcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Minor grid line _color:"), _("Minor grid line color"), _("Color of the minor grid lines"),
             "color", "opacity", _wr, repr, doc));
-
     _rcp_gmcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Ma_jor grid line color:"), _("Major grid line color"),
             _("Color of the major (highlighted) grid lines"),
@@ -358,22 +306,7 @@ _wr.setUpdating (true);
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
-_wr.setUpdating (false);
-
-    Gtk::Widget const *const widget_array[] = {
-        0,       _rumg,
-        0,                  _rsu_ox,
-        0,                  _rsu_oy,
-        0,                  _rsu_sy,
-        0,                  _rsu_ax,
-        0,                  _rsu_az,
-        _rcp_gcol->_label,   _rcp_gcol,
-        0,                  0,
-        _rcp_gmcol->_label,  _rcp_gmcol,
-        0,                   _rsi,
-    };
-
-    attach_all (*table, widget_array, sizeof(widget_array));
+    _wr.setUpdating (false);
 
     // set widget values
     _rumg->setUnit (gridunit->abbr);
@@ -399,7 +332,18 @@ _wr.setUpdating (false);
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;
 
-    return table;
+    Gtk::VBox *right = new Gtk::VBox();
+    right->pack_start(*_rumg);
+    right->pack_start(*_rsu_ox);
+    right->pack_start(*_rsu_oy);
+    right->pack_start(*_rsu_sy);
+    right->pack_start(*_rsu_ax);
+    right->pack_start(*_rsu_az);
+    right->pack_start(*_rcp_gcol);
+    right->pack_start(*_rcp_gmcol);
+    right->pack_start(*_rsi);
+
+    return right;
 }
 
 

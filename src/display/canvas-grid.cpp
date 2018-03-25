@@ -318,13 +318,24 @@ CanvasGrid::newWidget()
     vbox->pack_start(*_rcb_enabled, true, true);
     vbox->pack_start(*_rcb_visible, true, true);
     vbox->pack_start(*_rcb_snap_visible_only, true, true);
-    Gtk::Widget * gridwdg = newSpecificWidget();
-    vbox->pack_start(*gridwdg, true, true);
+
+    alignment = Gtk::manage( new Inkscape::UI::Widget::AnchorSelector() );
+    alignment->setAlignment(0, 2);
+    alignment->on_selectionChanged().connect(sigc::mem_fun(*this, &CanvasGrid::align_changed));
+
+    Gtk::VBox *left = new Gtk::VBox();
+    left->pack_start(*Gtk::manage(new Gtk::Label(_("Align to page:"))), false, false);
+    left->pack_start(*alignment, false, false);
+
+    Gtk::HBox *outer = new Gtk::HBox();
+    outer->pack_start(*left, true, true);
+    outer->pack_start(*newSpecificWidget(), false, false);
+    vbox->pack_start(*outer, true, true);
 
     std::list<Gtk::Widget*> slaves;
     slaves.push_back(_rcb_visible);
     slaves.push_back(_rcb_snap_visible_only);
-    slaves.push_back(gridwdg);
+    slaves.push_back(outer);
     _rcb_enabled->setSlaveWidgets(slaves);
 
     // set widget values
@@ -375,61 +386,18 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     repr->setAttribute("originy", os_y.str().c_str());
 }
 
+void CanvasGrid::align_changed()
+{
+    Geom::Point dimensions = doc->getDimensions();
+    dimensions[Geom::X] *= alignment->getHorizontalAlignment() * 0.5;
+    dimensions[Geom::Y] *= 1 - (alignment->getVerticalAlignment() * 0.5);
+    setOrigin(dimensions);
+}
+
+
 
 // ##########################################################
 //   CanvasXYGrid
-
-
-/**
-* "attach_all" function
-* A DIRECT COPY-PASTE FROM DOCUMENT-PROPERTIES.CPP  TO QUICKLY GET RESULTS
-*
- * Helper function that attachs widgets in a 3xn table. The widgets come in an
- * array that has two entries per table row. The two entries code for four
- * possible cases: (0,0) means insert space in first column; (0, non-0) means
- * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
- * (non-0, non-0) means two widgets in columns 2 and 3.
-**/
-#define SPACE_SIZE_X 15
-#define SPACE_SIZE_Y 10
-static inline void attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
-{
-    for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2) {
-        if (arr[i] && arr[i+1]) {
-            (const_cast<Gtk::Widget&>(*arr[i])).set_hexpand();
-            (const_cast<Gtk::Widget&>(*arr[i])).set_valign(Gtk::ALIGN_CENTER);
-            table.attach(const_cast<Gtk::Widget&>(*arr[i]),   1, r, 1, 1);
-
-            (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
-            (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
-            table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 2, r, 1, 1);
-        } else {
-            if (arr[i+1]) {
-                (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
-                (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
-                table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
-            } else if (arr[i]) {
-                Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
-#if GTK_CHECK_VERSION(3,16,0)
-                label.set_xalign(0.0);
-                label.set_yalign(0.5);
-#else
-                label.set_alignment (0.0);
-#endif
-                label.set_hexpand();
-                label.set_valign(Gtk::ALIGN_CENTER);
-                table.attach(label, 0, r, 3, 1);
-            } else {
-                Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-                space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-                space->set_halign(Gtk::ALIGN_CENTER);
-                space->set_valign(Gtk::ALIGN_CENTER);
-                table.attach(*space, 0, r, 1, 1);
-            }
-        }
-        ++r;
-    }
-}
 
 CanvasXYGrid::CanvasXYGrid (SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument * in_doc)
     : CanvasGrid(nv, in_repr, in_doc, GRID_RECTANGULAR)
@@ -667,10 +635,6 @@ CanvasXYGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const */*ke
 Gtk::Widget *
 CanvasXYGrid::newSpecificWidget()
 {
-    auto table = Gtk::manage( new Gtk::Grid() );
-    table->set_row_spacing(2);
-    table->set_column_spacing(2);
-
     _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
     _rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
@@ -716,21 +680,6 @@ CanvasXYGrid::newSpecificWidget()
             _("_Show dots instead of lines"), _("If set, displays dots at gridpoints instead of gridlines"),
             "dotted", _wr, false, repr, doc) );
 
-    Gtk::Widget const *const widget_array[] = {
-        0,                  _rumg,
-        0,                  _rsu_ox,
-        0,                  _rsu_oy,
-        0,                  _rsu_sx,
-        0,                  _rsu_sy,
-        _rcp_gcol->_label,  _rcp_gcol,
-        0,                  0,
-        _rcp_gmcol->_label, _rcp_gmcol,
-        0,                  _rsi,
-        0,                  _rcb_dotted,
-    };
-
-    attach_all (*table, widget_array, sizeof(widget_array));
-
     // set widget values
     _rumg->setUnit (gridunit->abbr);
 
@@ -761,7 +710,18 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sx->setProgrammatically = false;
     _rsu_sy->setProgrammatically = false;
 
-    return table;
+    Gtk::VBox *right = new Gtk::VBox();
+    right->pack_start(*_rumg);
+    right->pack_start(*_rsu_ox);
+    right->pack_start(*_rsu_oy);
+    right->pack_start(*_rsu_sx);
+    right->pack_start(*_rsu_sy);
+    right->pack_start(*_rcp_gcol);
+    right->pack_start(*_rcp_gmcol);
+    right->pack_start(*_rsi);
+    right->pack_start(*_rcb_dotted);
+
+    return right;
 }
 
 
