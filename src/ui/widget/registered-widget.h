@@ -76,6 +76,8 @@ protected:
     RegisteredWidget( A& a, B& b, C& c ): W( a, b, c ) { construct(); }
     template< typename A, typename B, typename C, typename D >
     RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) { construct(); }
+    template< typename A, typename B, typename C, typename D, typename E >
+    RegisteredWidget( A& a, B& b, C& c, D d, E e ): W( a, b, c, d, e ) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F>
     RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
@@ -266,7 +268,7 @@ protected:
     void on_activate();
 };
 
-class RegisteredColorPicker : public RegisteredWidget<ColorPicker> {
+class RegisteredColorPicker : public RegisteredWidget<LabelledColorPicker> {
 public:
     virtual ~RegisteredColorPicker();
 
@@ -281,8 +283,6 @@ public:
 
     void setRgba32 (guint32);
     void closeWindow();
-
-    Gtk::Label *_label;
 
 protected:
     Glib::ustring _ckey, _akey;

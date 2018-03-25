@@ -365,13 +365,10 @@ RegisteredColorPicker::RegisteredColorPicker(const Glib::ustring& label,
                                              Registry& wr,
                                              Inkscape::XML::Node* repr_in,
                                              SPDocument *doc_in)
-    : RegisteredWidget<ColorPicker> (title, tip, 0, true)
+    : RegisteredWidget<LabelledColorPicker> (label, title, tip, 0, true)
 {
     init_parent("", wr, repr_in, doc_in);
 
-    _label = new Gtk::Label (label, Gtk::ALIGN_END);
-    _label->set_use_underline (true);
-    _label->set_mnemonic_widget (*this);
     _ckey = ckey;
     _akey = akey;
     _changed_connection = connectChanged (sigc::mem_fun (*this, &RegisteredColorPicker::on_changed));
@@ -385,13 +382,13 @@ RegisteredColorPicker::~RegisteredColorPicker()
 void
 RegisteredColorPicker::setRgba32 (guint32 rgba)
 {
-    ColorPicker::setRgba32 (rgba);
+    LabelledColorPicker::setRgba32 (rgba);
 }
 
 void
 RegisteredColorPicker::closeWindow()
 {
-    ColorPicker::closeWindow();
+    LabelledColorPicker::closeWindow();
 }
 
 void

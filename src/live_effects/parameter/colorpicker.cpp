@@ -105,7 +105,7 @@ ColorPickerParam::param_newWidget()
     hbox->set_border_width(5);
     hbox->set_homogeneous(false);
     hbox->set_spacing(2);
-    Inkscape::UI::Widget::RegisteredColorPicker * colorpickerwdg = Gtk::manage(
+    Inkscape::UI::Widget::RegisteredColorPicker * colorpickerwdg =
         new Inkscape::UI::Widget::RegisteredColorPicker( param_label,
                                                          param_label,
                                                          param_tooltip,
@@ -113,17 +113,13 @@ ColorPickerParam::param_newWidget()
                                                          param_key + "_opacity_LPE",
                                                         *param_wr,
                                                          param_effect->getRepr(),
-                                                         param_effect->getSPDoc() ) );
-    Gtk::Label * label = new Gtk::Label (param_label, Gtk::ALIGN_END);
-    label->set_use_underline (true);
-    label->set_mnemonic_widget (*colorpickerwdg);
+                                                         param_effect->getSPDoc() );
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
     colorpickerwdg->setRgba32(value);
     DocumentUndo::setUndoSensitive(document, saved);
     colorpickerwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change color button parameter"));
-    hbox->pack_start(*dynamic_cast<Gtk::Widget *> (label), true, true);
     hbox->pack_start(*dynamic_cast<Gtk::Widget *> (colorpickerwdg), true, true);
     return dynamic_cast<Gtk::Widget *> (hbox);
 }

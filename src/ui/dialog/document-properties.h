@@ -119,8 +119,6 @@ protected:
     //---------------------------------------------------------------
     Gtk::Grid            _rcb_doc_props_left;
     Gtk::Grid            _rcb_doc_props_right;
-    Gtk::Box             _rcp_bg_col;
-    Gtk::Box             _rcp_bord_col;
     UI::Widget::RegisteredCheckButton _rcb_antialias;
     UI::Widget::RegisteredCheckButton _rcb_checkerboard;
     UI::Widget::RegisteredCheckButton _rcb_canb;

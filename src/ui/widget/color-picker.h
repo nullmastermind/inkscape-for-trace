@@ -13,6 +13,8 @@
 #ifndef __COLOR_PICKER_H__
 #define __COLOR_PICKER_H__
 
+#include "labelled.h"
+
 #include <stddef.h>
 
 #include <gtkmm/dialog.h>
@@ -68,6 +70,29 @@ protected:
     Gtk::Dialog _colorSelectorDialog;
     SelectedColor _selected_color;
     Gtk::Widget *_color_selector;
+};
+
+
+class LabelledColorPicker : public Labelled {
+public:
+
+    LabelledColorPicker (const Glib::ustring& label,
+                         const Glib::ustring& title,
+                         const Glib::ustring& tip,
+                         const guint32 rgba,
+                         bool undo) : Labelled(label, tip, new ColorPicker(title, tip, rgba, undo)) {}
+
+    ~LabelledColorPicker()
+        { static_cast<ColorPicker*>(_widget)->~ColorPicker(); }
+
+    void setRgba32 (guint32 rgba)
+        { static_cast<ColorPicker*>(_widget)->setRgba32 (rgba); }
+
+    void closeWindow()
+        { static_cast<ColorPicker*>(_widget)->closeWindow (); }
+
+    sigc::connection connectChanged (const sigc::slot<void,guint>& slot)
+        { return static_cast<ColorPicker*>(_widget)->connectChanged(slot); }
 };
 
 }//namespace Widget

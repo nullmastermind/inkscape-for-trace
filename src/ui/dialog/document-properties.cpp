@@ -318,27 +318,23 @@ void DocumentProperties::build_page()
     };
 
     attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
-    _rcp_bg_col.pack_start(*_rcp_bg._label, false, false, 2);
-    _rcp_bg_col.pack_start(_rcp_bg, false, false, 2);
     Gtk::Widget *const widget_array_left[] =
     {
         label_bkg,        0,
         0,                &_rcb_checkerboard,
-        0,                &_rcp_bg_col,
+        0,                &_rcp_bg,
         label_dsp,        0,
         0,                &_rcb_antialias,
     };
 
     attach_all(_rcb_doc_props_left, widget_array_left, G_N_ELEMENTS(widget_array_left),0,1);
-    _rcp_bord_col.pack_start(*_rcp_bord._label, false, false, 2);
-    _rcp_bord_col.pack_start(_rcp_bord, false, false, 2);
     Gtk::Widget *const widget_array_right[] =
     {
         label_bdr,        0,
         0,                &_rcb_canb,
         0,                &_rcb_bord,
         0,                &_rcb_shad,
-        0,                &_rcp_bord_col,
+        0,                &_rcp_bord,
     };
     
     attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right),0,1, true);
@@ -346,7 +342,7 @@ void DocumentProperties::build_page()
     std::list<Gtk::Widget*> _slaveList;
     _slaveList.push_back(&_rcb_bord);
     _slaveList.push_back(&_rcb_shad);
-    _slaveList.push_back(&_rcp_bord_col);
+    _slaveList.push_back(&_rcp_bord);
     _rcb_canb.setSlaveWidgets(_slaveList);
 
     attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
@@ -363,8 +359,8 @@ void DocumentProperties::build_guides()
     {
         label_gui,        0,
         0,                &_rcb_sgui,
-        _rcp_gui._label,  &_rcp_gui,
-        _rcp_hgui._label, &_rcp_hgui
+        0,                &_rcp_gui,
+        0,                &_rcp_hgui
     };
 
     attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
