@@ -8,6 +8,7 @@
 # Alexey Remizov <alexey@remizov.pp.ru>, 2004.
 # bulia byak <buliabyak@users.sf.net>, 2004.
 # Alexandre Prokoudine <alexandre.prokoudine@gmail.com>, 2004-2015, 2016, 2017.
+# Igor Zhigunov <craysy@gmail.com>, 2016, 2017
 # Victor Ryzhykh <victorr2007@yandex.ru>, 2018.
 msgid ""
 msgstr ""
