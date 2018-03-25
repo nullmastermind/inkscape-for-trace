@@ -38,14 +38,6 @@ Glib::ustring extract_tag( guint32 *tag ) {
     return tag_name;
 }
 
-inline double FTFixedToDouble (FT_Fixed value) {
-    return static_cast<FT_Int32>(value) / 65536.0;
-}
-
-inline FT_Fixed FTDoubleToFixed (double value) {
-    return static_cast<FT_Fixed>(value * 65536);
-}
-
 
 // Make a list of all tables fount in the GSUB
 // This list includes all tables regardless of script or language.

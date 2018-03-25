@@ -40,6 +40,13 @@ class OTVarNamed {
   std::map<Glib::ustring, double> axes;
 };
 
+inline double FTFixedToDouble (FT_Fixed value) {
+    return static_cast<FT_Int32>(value) / 65536.0;
+}
+
+inline FT_Fixed FTDoubleToFixed (double value) {
+    return static_cast<FT_Fixed>(value * 65536);
+}
 
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, int>& tables,
