@@ -212,7 +212,8 @@ import_style_cb (CRDocHandler *a_handler,
     delete parse_new;
 };
 
-/* NOT USED, incomplete libcroco implementation */
+#if 0
+/* FIXME: NOT USED, incomplete libcroco implementation */
 static void
 import_style_result_cb (CRDocHandler *a_this,
                         GList *a_media_list,
@@ -223,6 +224,7 @@ import_style_result_cb (CRDocHandler *a_this,
     /* a_uri_default_ns and a_sheet are set to NULL and are unused by libcroco */
     std::cerr << "import_style_result_cb: unimplemented" << std::endl;
 };
+#endif
 
 static void
 start_selector_cb(CRDocHandler *a_handler,
@@ -340,7 +342,6 @@ end_font_face_cb(CRDocHandler *a_handler)
                 cur->value->content.str->stryng->str) {
 
                 Glib::ustring value = cur->value->content.str->stryng->str;
-                std::size_t found = value.find_last_of("ttf");
 
                 if (value.rfind("ttf") == (value.length() - 3) ||
                     value.rfind("otf") == (value.length() - 3)) {

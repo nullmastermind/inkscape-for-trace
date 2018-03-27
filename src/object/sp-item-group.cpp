@@ -938,7 +938,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
             sp_group_perform_patheffect(sub_group, top_group, lpe, write);
         } else {
             SPShape* sub_shape = dynamic_cast<SPShape *>(sub_item);
-            SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
+            //SPPath*  sub_path  = dynamic_cast<SPPath  *>(sub_item);
             SPItem* clipmaskto = dynamic_cast<SPItem  *>(sub_item);
             if (clipmaskto) {
                 top_group->applyToClipPath(clipmaskto, lpe);

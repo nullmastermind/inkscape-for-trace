@@ -1938,7 +1938,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
     if (dt->namedview->display_units && (dt->namedview->display_units->abbr == abbr))
         zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
 
-    Geom::Rect const d = dt->get_display_area();
+    //Geom::Rect const d = dt->get_display_area();
 
     Geom::Rect const d_canvas = dt->getCanvas()->getViewbox(); // Not SVG 'viewBox'
     Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.

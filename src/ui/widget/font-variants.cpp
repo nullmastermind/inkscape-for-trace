@@ -662,29 +662,31 @@ namespace Widget {
       
       // Caps
       {
-          unsigned caps_new = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
+          //unsigned caps_new;
           Glib::ustring css_string;
           if( _caps_normal.get_active() ) {
               css_string = "normal";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
           } else if( _caps_small.get_active() ) {
               css_string = "small-caps";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_SMALL;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_SMALL;
           } else if( _caps_all_small.get_active() ) {
               css_string = "all-small-caps";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL;
           } else if( _caps_petite.get_active() ) {
               css_string = "petite";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_PETITE;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_PETITE;
           } else if( _caps_all_petite.get_active() ) {
               css_string = "all-petite";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE;
           } else if( _caps_unicase.get_active() ) {
               css_string = "unicase";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_UNICASE;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_UNICASE;
           } else if( _caps_titling.get_active() ) {
               css_string = "titling";
-              caps_new = SP_CSS_FONT_VARIANT_CAPS_TITLING;
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_TITLING;
+          //} else {
+          //    caps_new = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
           }
 
           // May not be necessary... need to test.

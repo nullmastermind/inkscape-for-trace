@@ -170,11 +170,9 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
              if (parent_text != NULL) {
                  family = SP_TEXT(parent_text)->layout.getFontFamily(0);
                  // Add all the spans fonts to the set
-                 gint ii = 0;
-                 for (auto& child: parent_text->children) {
-                     family = SP_TEXT(parent_text)->layout.getFontFamily(ii);
+                 for (unsigned int f=0; f < parent_text->children.size(); f++) {
+                     family = SP_TEXT(parent_text)->layout.getFontFamily(f);
                      setFontSpans.insert(family);
-                     ii++;
                  }
              }
         }

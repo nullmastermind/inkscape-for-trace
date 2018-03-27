@@ -450,7 +450,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
         // Extract out shapes (a comma separated list of urls)
         Glib::ustring shapeInside_value = style->shape_inside.value;
         std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
-        for (int i=0; i<shapes_url.size(); ++i) {
+        for (unsigned int i=0; i<shapes_url.size(); ++i) {
             Glib::ustring shape_url = shapes_url.at(i);
             if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
                 std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
@@ -694,7 +694,7 @@ Shape* SPText::_buildExclusionShape() const
     // Extract out shapes (a comma separated list of urls)
     std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
 
-    for(int i=0; i<shapes_url.size(); i++) {
+    for(unsigned int i=0; i<shapes_url.size(); i++) {
         Glib::ustring shape_url = shapes_url.at(i);
         if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
                 std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
