@@ -766,8 +766,6 @@ bool Application::load_menus()
 {
     using namespace Inkscape::IO::Resource;
     Glib::ustring filename = get_filename(UIS, MENUS_FILE);
-    gchar *menus_xml = 0;
-    gsize len = 0;
 
     _menus = sp_repr_read_file(filename.c_str(), NULL);
     if ( !_menus ) {

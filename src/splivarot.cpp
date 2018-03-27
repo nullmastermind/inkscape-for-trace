@@ -1408,7 +1408,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 //The fill
                 Inkscape::XML::Node *fill = NULL;
                 if (!legacy) {
-                    gchar const *f_val = sp_repr_css_property(ncsf, "fill", NULL);
+//                    gchar const *f_val = sp_repr_css_property(ncsf, "fill", NULL);
                     if( !item->style->fill.noneSet ){
                         fill = xml_doc->createElement("svg:path");
                         sp_repr_css_change(fill, ncsf, "style");

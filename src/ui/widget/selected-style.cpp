@@ -121,6 +121,8 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     :
       current_stroke_width(0),
 
+      _sw_unit(NULL),
+
       _desktop (NULL),
       _table(),
       _fill_label (_("Fill:")),
@@ -141,9 +143,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
       _stroke_width_place(this),
       _stroke_width (""),
 
-      _opacity_blocked (false),
-
-      _sw_unit(NULL)
+      _opacity_blocked (false)
 {
     set_name("SelectedStyle");
     _drop[0] = _drop[1] = 0;

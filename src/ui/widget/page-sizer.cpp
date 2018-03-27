@@ -22,15 +22,10 @@
 #endif
 
 #include "page-sizer.h"
-
 #include <glibmm/i18n.h>
-
 #include "verbs.h"
-
 #include "helper/action.h"
-
 #include "object/sp-root.h"
-
 #include "ui/widget/button.h"
 
 using std::pair;
@@ -922,7 +917,7 @@ PageSizer::on_margin_lock_changed()
         double left   = _marginLeft.getValue();
         double right  = _marginRight.getValue();
         double top    = _marginTop.getValue();
-        double bottom = _marginBottom.getValue();
+        //double bottom = _marginBottom.getValue();
         if (Geom::are_near(left,right)) {
             if (Geom::are_near(left, top)) {
                 on_margin_changed(&_marginBottom);

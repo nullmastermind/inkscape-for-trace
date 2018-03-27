@@ -1,4 +1,4 @@
-    /*
+/*
  * Here are handlers for modifying selections, specific to paths
  *
  * Authors:
@@ -61,8 +61,8 @@ void
 ObjectSet::combine(bool skip_undo)
 {
     //Inkscape::Selection *selection = desktop->getSelection();
+    //Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     SPDocument *doc = document();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     std::vector<SPItem*> items_copy(items().begin(), items().end());
     
     if (items_copy.size() < 1) {

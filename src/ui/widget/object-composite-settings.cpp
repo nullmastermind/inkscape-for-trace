@@ -48,8 +48,6 @@ ObjectCompositeSettings::ObjectCompositeSettings(unsigned int verb_code, char co
     _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_blendBlurValueChanged));
     _filter_modifier.signal_opacity_changed().connect(sigc::mem_fun(*this, &ObjectCompositeSettings::_opacityValueChanged));
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-
     show_all_children();
 }
 

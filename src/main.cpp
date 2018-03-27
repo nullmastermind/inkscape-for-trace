@@ -772,7 +772,7 @@ static void fixupSingleFilename( gchar **orig, gchar **spare )
 
 static void fixupFilenameEncoding( std::vector<gchar*> &filenames)
 {
-    for (int i=0; i<filenames.size(); ++i ) {
+    for (unsigned int i=0; i<filenames.size(); ++i) {
         gchar *fn = filenames[i];
         gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
         if ( newFileName ) {

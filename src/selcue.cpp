@@ -97,7 +97,7 @@ void Inkscape::SelCue::_updateItemBboxes(Inkscape::Preferences *prefs)
 void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
 {
     auto items = _selection->items();
-    if (_item_bboxes.size() != boost::distance(items)) {
+    if (_item_bboxes.size() != (unsigned int) boost::distance(items)) {
         _newItemBboxes();
         return;
     }
