@@ -1888,6 +1888,7 @@ sp_css_attr_unset_blacklist(SPCSSAttr *css)
 {
     sp_repr_css_set_property(css, "color",               NULL);
     sp_repr_css_set_property(css, "clip-rule",           NULL);
+    sp_repr_css_set_property(css, "d",                   NULL);
     sp_repr_css_set_property(css, "display",             NULL);
     sp_repr_css_set_property(css, "overflow",            NULL);
     sp_repr_css_set_property(css, "visibility",          NULL);
