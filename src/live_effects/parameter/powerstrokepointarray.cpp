@@ -194,6 +194,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
         prefs->setDouble("/live_effect/power_stroke/width", offset);
     }
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+    SP_LPE_ITEM(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 Geom::Point
