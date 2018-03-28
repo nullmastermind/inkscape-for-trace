@@ -94,6 +94,12 @@ void sp_shortcut_init()
         success = try_shortcuts_file(shortcutfile.c_str());
         reason = "Unable to read key file set in preferences";
     }
+#ifdef WITH_CARBON_INTEGRATION
+    if (!success) {
+        g_info("%s. Falling back to 'carbon.xml' for MacOSX keyboards.", reason);
+        success = try_shortcuts_file(get_path(SYSTEM, KEYS, "carbon.xml"));
+    }
+#endif
     if (!success) {
         g_info("%s. Falling back to 'default.xml'.", reason);
         success = try_shortcuts_file(get_path(SYSTEM, KEYS, "default.xml"));
