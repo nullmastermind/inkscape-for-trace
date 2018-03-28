@@ -424,7 +424,10 @@ void ArcTool::finishItem() {
         desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->arc);
-
+        if (this->arc->hasPathEffectRecursive()) {
+            this->arc->set_shape();
+            sp_lpe_item_update_patheffect (this->arc, true, false);
+        }
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
 
         this->arc = NULL;

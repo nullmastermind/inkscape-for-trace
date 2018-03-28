@@ -398,8 +398,12 @@ void SpiralTool::finishItem() {
         this->desktop->canvas->endForcedFullRedraws();
 
         this->desktop->getSelection()->set(this->spiral);
-        this->desktop->getSelection()->set(this->spiral);
-
+        
+        if (spiral->hasPathEffectRecursive()) {
+            this->spiral->set_shape();
+            sp_lpe_item_update_patheffect (this->spiral, true, false);
+        }
+        
         DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_SPIRAL, _("Create spiral"));
 
         this->spiral = NULL;

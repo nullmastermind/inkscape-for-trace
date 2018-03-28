@@ -417,11 +417,11 @@ void StarTool::finishItem() {
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
         this->star->doWriteTransform(this->star->transform, NULL, true);
-
         desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->star);
         if (this->star->hasPathEffectRecursive()) {
+            this->star->set_shape();
             sp_lpe_item_update_patheffect (this->star, true, false);
         }
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_STAR,

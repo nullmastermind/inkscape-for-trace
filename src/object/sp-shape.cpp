@@ -1068,7 +1068,7 @@ void SPShape::setCurveInsync(SPCurve *new_curve, unsigned int owner)
 
 /**
  * Return curve (if any exists) or NULL if there is no curve
-* if owner == 0 return a copy
+ * if owner == 0 return a copy
  */
 SPCurve * SPShape::getCurve(unsigned int owner) const
 {
@@ -1084,8 +1084,6 @@ SPCurve * SPShape::getCurve(unsigned int owner) const
 
 /**
  * Return  curve *before* LPE (if any exists) or NULL if there is no curve
- * If force is set allow return curve_before_lpe even if not
- * has path effect like in clips and mask
  * if owner == 0 return a copy
  */
 SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
@@ -1101,8 +1099,6 @@ SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
 
 /**
  * Return curve for edit
- * If force is set allow return curve_before_lpe even if not
- * has path effect like in clips and mask
  * if owner == 0 return a copy
  */
 SPCurve * SPShape::getCurveForEdit(unsigned int owner) const

@@ -358,8 +358,14 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     } else if (SPPath * path = dynamic_cast<SPPath *>(lpeitem)) {
         Inkscape::XML::Node *pathrepr = path->getRepr();
         if ( !pathrepr->attribute("inkscape:original-d") ) {
-            pathrepr->setAttribute("inkscape:original-d", pathrepr->attribute("d"));
-            path->setCurveBeforeLPE(path->getCurve());
+            if (gchar const * value = pathrepr->attribute("d")) {
+                Geom::PathVector pv = sp_svg_read_pathv(value);
+                pathrepr->setAttribute("inkscape:original-d", value);
+                SPCurve * original = new SPCurve();
+                original->set_pathvector(pv);
+                path->setCurveBeforeLPE(original);
+                original->unref();
+            }
         }
     } else if (SPShape * shape = dynamic_cast<SPShape *>(lpeitem)) {
         if (SPCurve * c_lpe = shape->getCurveBeforeLPE()) {

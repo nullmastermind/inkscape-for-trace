@@ -199,7 +199,6 @@ void SPPath::set(unsigned int key, const gchar* value) {
                 
             }
             sp_lpe_item_update_patheffect(this, true, true);
-            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
        case SP_ATTR_D:
