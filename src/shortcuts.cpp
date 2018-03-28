@@ -682,7 +682,7 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                     modifiers |= SP_SHORTCUT_ALT_MASK;
                 } else if (!strcmp(mod, "Super")) {
                     modifiers |= SP_SHORTCUT_SUPER_MASK;
-                } else if (!strcmp(mod, "Hyper")) {
+                } else if (!strcmp(mod, "Hyper") || !strcmp(mod, "Cmd")) {
                     modifiers |= SP_SHORTCUT_HYPER_MASK;
                 } else if (!strcmp(mod, "Meta")) {
                     modifiers |= SP_SHORTCUT_META_MASK;
