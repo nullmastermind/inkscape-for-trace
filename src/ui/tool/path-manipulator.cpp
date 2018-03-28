@@ -1513,6 +1513,7 @@ void PathManipulator::_setGeometry()
             if(!_spcurve->is_equal(original)) {
                 _path->setCurveBeforeLPE(_spcurve, false);
                 sp_lpe_item_update_patheffect(_path, true, false);
+                _path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 original->unref();
             }
         } else if(!_spcurve->is_equal(_path->getCurve(true))) {
