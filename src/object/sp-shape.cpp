@@ -764,9 +764,9 @@ void SPShape::update_patheffect(bool write)
             } else {
                 repr->setAttribute("d", NULL);
             }
-            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
         c_lpe->unref();
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 
