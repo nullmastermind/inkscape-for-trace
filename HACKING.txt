@@ -9,15 +9,15 @@ Inkscape more powerful and successful. You probably already have an idea
 of something you'd like to work on. If not, here are just a few ways you
 can help: 
 
-   * Pick a bug, fix it, and send in a merge request on gitlab
-   * Choose a feature you want to see developed, and make it
+   * Pick a bug, fix it, and send in a merge request on gitlab.
+   * Choose a feature you want to see developed, and make it.
    * If you speak a language in addition to English, work on your
-     language's i18n file in the po/ directory
-   * Find a new bug and report it
-   * Help answer questions for new Inkscapers on Jabber, IRC or the
-     mailing lists
-   * Write an article advocating Inkscape
-   * Author a HOWTO describing a trick or technique you've figured out
+     language's i18n file in the po/ directory.
+   * Find a new bug and report it.
+   * Help answer questions for new Inkscapers on IRC, forum, or the
+     mailing lists.
+   * Write an article advocating Inkscape.
+   * Author a HOWTO describing a trick or technique you've figured out.
 
 
 GIT Access
@@ -56,6 +56,14 @@ you, just follow the general style of the surrounding code, so that it is at
 least consistent.
 
 
+Documentation
+=============
+
+Code needs to be documented. Future Inkscape developers will really
+appreciate this. New files should have one or two lines describing the
+purpose of the code inside the file.
+
+
 Makefiles
 =========
 Inkscape currently uses CMake. We encourage you to build it by creating a build 
@@ -73,3 +81,11 @@ This uses ccache to speed up later builds (optional), create a Debug build
 (If you have ninja available, add "-G Ninja" to enable it)
 
 Then, run `make -j$(nproc) install` (or `ninja install`) to build & install
+
+
+Testing
+=======
+
+Before landing a patch, the unit tests should pass.
+
+See: http://wiki.inkscape.org/wiki/index.php/CMake#Using_CMake_to_run_tests
