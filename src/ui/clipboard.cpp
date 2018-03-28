@@ -1060,17 +1060,19 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 }
             }
 
-            for (int i = 0; i < text.length(); ++i)
+            for (unsigned int i = 0; i < text.length(); ++i)
                 it.prevCharacter();
+
             it_next = layout->charIndexToIterator(layout->iteratorToCharIndex(it));
 
             for (int i = 0; i < nr_blocks; ++i)
             {
-                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it_next.nextCharacter();
+
                 sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
                 te_update_layout_now_recursive(tc->text);
-                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it.nextCharacter();
             }
         }

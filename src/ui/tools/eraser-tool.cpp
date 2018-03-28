@@ -786,7 +786,7 @@ void EraserTool::set_to_accumulated() {
                                                 selection->raiseToTop(true);
                                                 selection->add(dup_clip);
                                                 selection->pathDiff(true);
-                                                SPItem * clip = SP_ITEM(*(selection->items().begin()));
+                                                //SPItem * clip = SP_ITEM(*(selection->items().begin()));
                                             }
                                         }
                                     }

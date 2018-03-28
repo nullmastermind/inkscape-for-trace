@@ -342,6 +342,9 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
                 DocumentUndo::done(doc, verb, description);
             }
             break;
+        case DONE_NO_ACTION:
+            // Do nothing (?)
+            break;
         }
         return returnCode;
     }

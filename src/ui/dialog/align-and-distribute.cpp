@@ -169,7 +169,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     Geom::Point mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
                                  a.my0 * b->min()[Geom::Y] + a.my1 * b->max()[Geom::Y]);
 
-    if (sel_as_group)
+    if (sel_as_group) {
         if (focus) {
             // use bounding box of all selected elements except the "focused" element
             Inkscape::ObjectSet copy;
@@ -180,6 +180,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
             // use bounding box of all selected elements
             b = selection->preferredBounds();
         }
+    }
 
     //Move each item in the selected list separately
     bool changed = false;

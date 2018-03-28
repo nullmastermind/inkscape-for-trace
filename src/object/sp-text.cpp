@@ -442,7 +442,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     if (style->shape_inside.set ) {
 
         // Find union of all exclusion shapes
-        Shape *exclusion_shape;
+        Shape *exclusion_shape = NULL;
         if(style->shape_subtract.set) {
             exclusion_shape = _buildExclusionShape();
         }

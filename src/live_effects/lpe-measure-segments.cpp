@@ -233,8 +233,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *rtext = NULL;
-    double doc_w = document->getRoot()->width.value;
-    
+
     Glib::ustring lpobjid = this->lpeobj->getId();
     Glib::ustring itemid  = sp_lpe_item->getId();
     Glib::ustring id = Glib::ustring("text-on-");
@@ -486,7 +485,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     } else if (elemref->parent != sp_lpe_item->parent) {
         Inkscape::XML::Node *old_repr = elemref->getRepr();
         Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-        SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
+        sp_lpe_item->parent->appendChildRepr(copy);
         Inkscape::GC::release(copy);
         elemref->deleteObject(true);
         copy->setAttribute("id", id.c_str());
@@ -612,7 +611,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             display_unit = "px";
         }
         doc_scale = Inkscape::Util::Quantity::convert( scaledoc[Geom::X], "px", display_unit.c_str() );
-        if( doc_scale > 0 ) {
+        if (doc_scale > 0) {
             doc_scale= 1.0/doc_scale;
         } else {
             doc_scale = 1.0;
@@ -672,19 +671,19 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 Geom::Point start = pathvector[i].pointAt(j);
                 Geom::Point end = pathvector[i].pointAt(j + 1);
                 Geom::Point next = Geom::Point(0,0);
-                if(pathvector[i].closed() && pathvector[i].size() == j+1){
+                if (pathvector[i].closed() && pathvector[i].size() == j+1){
                     end = pathvector[i].pointAt(0);
                     next = pathvector[i].pointAt(1);
                 } else if (pathvector[i].size() > j + 1) {
                     next = pathvector[i].pointAt(j+2);
                 }
-                if(hasMeassure(counter) && !Geom::are_near(start, end)) {
+                if (hasMeassure(counter) && !Geom::are_near(start, end)) {
                     Glib::ustring idprev = Glib::ustring("infoline-on-start-");
                     idprev += Glib::ustring::format(counter-1);
                     idprev += "-";
                     idprev += lpobjid;
-                    SPObject *elemref = NULL;
-                    if (elemref = document->getObjectById(idprev.c_str())) {
+                    SPObject *elemref = document->getObjectById(idprev.c_str());
+                    if (elemref){
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
                             SPCurve* prevcurve = path->getCurve();
@@ -698,8 +697,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     idstart += Glib::ustring::format(counter);
                     idstart += "-";
                     idstart += lpobjid;
-                    elemref = NULL;
-                    if (elemref = document->getObjectById(idstart.c_str())) {
+                    elemref = document->getObjectById(idstart.c_str());
+                    if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
                             SPCurve* startcurve = path->getCurve();
@@ -713,8 +712,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     idend += Glib::ustring::format(counter);
                     idend += "-";
                     idend += lpobjid;
-                    elemref = NULL;
-                    if (elemref = document->getObjectById(idend.c_str())) {
+                    elemref = document->getObjectById(idend.c_str());
+                    if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
                             SPCurve* endcurve = path->getCurve();
@@ -728,8 +727,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     idnext += Glib::ustring::format(counter+1);
                     idnext += "-";
                     idnext += lpobjid;
-                    elemref = NULL;
-                    if (elemref = document->getObjectById(idnext.c_str())) {
+                    elemref = document->getObjectById(idnext.c_str());
+                    if (elemref) {
                         SPPath* path = dynamic_cast<SPPath *>(elemref);
                         if (path) {
                             SPCurve* nextcurve = path->getCurve();
@@ -766,7 +765,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         items.push_back(Glib::ustring("ArrowDIN-start"));
                         items.push_back(Glib::ustring("ArrowDIN-end"));
                     }
-                    if ((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01) || 
+                    if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) || 
                          fix_overlaps_degree == 180) &&
                         Geom::are_near(start, start_stored, 0.01) && 
                         Geom::are_near(end, end_stored, 0.01) && 

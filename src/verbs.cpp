@@ -2058,7 +2058,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         }
         case SP_VERB_FLIP_VERTICAL:
         {
-            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            /* gint mul = 1 + */ Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
             // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;

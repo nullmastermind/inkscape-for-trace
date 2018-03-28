@@ -613,7 +613,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
             }
         } else {
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-            Inkscape::Util::Unit const * unit = desktop->getNamedView()->getDisplayUnit();
+            //Inkscape::Util::Unit const * unit = desktop->getNamedView()->getDisplayUnit();
             for (size_t idx = 0; idx < measure_item.size(); ++idx) {
                 sp_canvas_item_destroy(measure_item[idx]);
             }

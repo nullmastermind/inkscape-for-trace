@@ -73,14 +73,14 @@ const std::string MeshTool::prefsPath = "/tools/mesh";
 
 MeshTool::MeshTool()
     : ToolBase(cursor_gradient_xpm)
+// TODO: Why are these connections stored as pointers?
+    , selcon(NULL)
+    , subselcon(NULL)
     , cursor_addnode(false)
     , node_added(false)
     , show_handles(true)
     , edit_fill(true)
     , edit_stroke(true)
-// TODO: Why are these connections stored as pointers?
-    , selcon(NULL)
-    , subselcon(NULL)
 {
     // TODO: This value is overwritten in the root handler
     this->tolerance = 6;
@@ -1060,7 +1060,6 @@ static void sp_mesh_new_default(MeshTool &rc) {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
-    ToolBase *ec = SP_EVENT_CONTEXT(&rc);
 
     if (!selection->isEmpty()) {
 

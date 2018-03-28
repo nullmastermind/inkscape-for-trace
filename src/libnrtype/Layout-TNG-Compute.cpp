@@ -1507,7 +1507,6 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
     TRACE(("    initial line_box_height (em size): %f\n", line_box_height->emSize() ));
 
     UnbrokenSpanPosition span_pos;
-    static int trys = 0;
     for( ; ; ) {
         // Get regions where one can place one line of text (can be more than one, if filling a
         // donut for example).
