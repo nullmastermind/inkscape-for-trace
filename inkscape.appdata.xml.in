@@ -33,4 +33,33 @@
       <_caption>Main application window</_caption>
     </screenshot>
   </screenshots>
+  <releases>
+    <release version="0.92.3" date="2018-03-23">
+      <description>
+        <ul>
+          <li>New command-line options th control page size when exporting to SVG</li>
+          <li>Support for left-to-right languages in the text tool</li>
+          <li>Improvements to the circle, ellipse, and arc tool</li>
+          <li>Support for multi-line text when exporting to PDF and LaTeX</li>
+          <li>Many bugfixes</li>
+          <li>And many more! See the full list at http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92.3</li>
+        </ul>
+      </description>
+    </release>
+    <release version="0.92.2" date="2017-08-07">
+      <description>
+        <ul>
+          <li>Better importing and exporting of EMF/WMF files, PDF/PDF+Latex documents, Visio Stencil files, and XML files</li>
+          <li>Greater stability when printing on Windows</li>
+          <li>Improved fill and stroke HSL color selection</li>
+          <li>Greater stability when reverting and saving files</li>
+          <li>An additional handle at the center of rectangles, circles/ellipses, and stars, to allow quick and accurate alignment of these shapes with other objects</li>
+          <li>A command line option for updating the file's DPI value that allows for easier processing of large file collections</li>
+          <li>Improvements to user-defined shortcuts, including the acceptance of previously restricted special characters</li>
+          <li>Migration to Gitlab to make contribution easier. See https://inkscape.org/en/news/2017/06/10/inkscape-moves-gitlab/</li>
+          <li>And many more! See the full list at http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92.2</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
 </component>
