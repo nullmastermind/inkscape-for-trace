@@ -82,7 +82,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
             index++;
         }
     }
-    //Attributes
+    //Attribute
     SPShape * shape_origin =  SP_SHAPE(origin);
     SPPath * path_origin =  SP_PATH(origin);
     SPShape * shape_dest =  SP_SHAPE(dest);
@@ -212,7 +212,10 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
         style_attr += Glib::ustring( style_attributes_str) + Glib::ustring(",");
 
-        SPItem * orig =  SP_ITEM(linkeditem.getObject()); 
+        SPItem * orig =  SP_ITEM(linkeditem.getObject());
+        if(!orig) {
+            return;
+        }
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
         Geom::OptRect o_bbox = orig->geometricBounds();
         Geom::OptRect d_bbox = dest->geometricBounds();
@@ -319,6 +322,9 @@ void LPECloneOriginal::doOnRemove(SPLPEItem const* lpeitem)
         SPDesktop * dt = SP_ACTIVE_DESKTOP;
         SPObject * obj = dynamic_cast<SPObject*>(sp_lpe_item);
         SPItem * orig  = SP_ITEM(linkeditem.getObject());
+        if(!orig) {
+            return;
+        }
         const gchar * transform = lpeitem->getRepr()->attribute("transform");
         dt->selection->clear();
         dt->selection->add(orig, true);
@@ -337,12 +343,6 @@ void LPECloneOriginal::doOnRemove(SPLPEItem const* lpeitem)
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
-//    if (linkeditem.linksToItem()) {
-//        SPShape * shape = getCurrentShape();
-//        if(shape){
-//            curve->set_pathvector(shape->getCurveForEdit()->get_pathvector());
-//        }
-//    }
 }
 
 } // namespace LivePathEffect
