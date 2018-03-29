@@ -14,6 +14,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+//Please fill in the same order than in effect.cpp:98
 enum EffectType {
     BEND_PATH = 0,
     GEARS,
@@ -53,6 +54,8 @@ enum EffectType {
     EMBRODERY_STITCH,
     POWERCLIP,
     POWERMASK,
+    PTS2ELLIPSE,
+    OFFSET,
     DOEFFECTSTACK_TEST,
     ANGLE_BISECTOR,
     CIRCLE_WITH_RADIUS,
@@ -61,9 +64,7 @@ enum EffectType {
     EXTRUDE,
     LATTICE,
     LINE_SEGMENT,
-    OFFSET,
     PARALLEL,
-    PTS2ELLIPSE,
     PATH_LENGTH,
     PERP_BISECTOR,
     PERSPECTIVE_PATH,
