@@ -37,10 +37,10 @@
     <release version="0.92.3" date="2018-03-23">
       <description>
         <ul>
-          <li>New command-line options th control page size when exporting to SVG</li>
+          <li>New command-line options to control page size when exporting to SVG</li>
           <li>Support for left-to-right languages in the text tool</li>
-          <li>Improvements to the circle, ellipse, and arc tool</li>
-          <li>Support for multi-line text when exporting to PDF and LaTeX</li>
+          <li>Improvements to the circle/ellipse/arc tool</li>
+          <li>Support for multi-line text when exporting to PDF+LaTeX</li>
           <li>Many bugfixes</li>
           <li>And many more! See the full list at http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92.3</li>
         </ul>
