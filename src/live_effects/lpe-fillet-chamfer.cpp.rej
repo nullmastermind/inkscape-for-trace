@@ -1,0 +1,41 @@
+--- src/live_effects/lpe-fillet-chamfer.cpp
++++ src/live_effects/lpe-fillet-chamfer.cpp
+@@ -338,11 +338,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
+             doOnApply(lpeItem);
+             satellites = satellites_param.data();
+         }
++        bool write = false;
+         if (_pathvector_satellites) {
+             size_t number_nodes = pathv.nodes().size();
+             size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
+             if (number_nodes != previous_number_nodes) {
+-                Satellites satellites;
+                 double power = radius;
+                 if (!flexible) {
+                     SPDocument * document = SP_ACTIVE_DOCUMENT;
+@@ -367,6 +367,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
+                 satellite.setHidden(hide_knots);
+                 _pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
+                 satellites = _pathvector_satellites->getSatellites();
++                write = true;
+             }
+         }
+         if (_degenerate_hide) {
+@@ -410,7 +411,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
+         }
+         _pathvector_satellites->setPathVector(pathv);
+         _pathvector_satellites->setSatellites(satellites);
+-        satellites_param.setPathVectorSatellites(_pathvector_satellites, false);
++        satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
+         refreshKnots();
+     } else {
+         g_warning("LPE Fillet can only be applied to shapes (not groups).");
+@@ -549,7 +550,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
+             if (time1 == time0) {
+                 start_arc_point = curve_it1->pointAt(time0);
+             }
+-            if (time1 != 1) {
++            if (time1 != 1 && !Geom::are_near(angle,Geom::rad_from_deg(360))) {
+                 if (time1 != time0 || (time1 == 1 && time0 == 1)) {
+                     if (!knot_curve_1->isDegenerate()) {
+                         tmp_path.append(*knot_curve_1);

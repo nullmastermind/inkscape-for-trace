@@ -1,0 +1,38 @@
+--- src/helper/geom-pathvectorsatellites.cpp
++++ src/helper/geom-pathvectorsatellites.cpp
+@@ -41,7 +41,7 @@ size_t PathVectorSatellites::getTotalSatellites()
+ {
+     size_t counter = 0;
+     for (size_t i = 0; i < _satellites.size(); ++i) {
+-        for (size_t j = 0; j < _satellites[i].size(); ++j) {
++        for (size_t j = 0; j < _satellites[i].size(); ++j) { 
+             counter++;
+         }
+     }
+@@ -204,10 +204,24 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
+     size_t previous_number_nodes = _pathvector.nodes().size();
+     for (size_t i = 0; i < pathv.size(); i++) {
+         std::vector<Satellite> path_satellites;
+-        for (size_t j = 0; j < pathv[i].size_closed(); j++) {
++        size_t count = pathv[i].size_default();
++        if ( pathv[i].closed()) {
++          const Geom::Curve &closingline = pathv[i].back_closed(); 
++          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
++            count = pathv[i].size_open();
++          }
++        }
++        for (size_t j = 0; j < count; j++) {
+             found = false;
+             for (size_t k = 0; k < _pathvector.size(); k++) {
+-                for (size_t l = 0; l < _pathvector[k].size_closed(); l++) {
++                size_t count2 = _pathvector[k].size_default();
++                if ( _pathvector[k].closed()) {
++                  const Geom::Curve &closingline = _pathvector[k].back_closed(); 
++                  if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
++                    count2 = _pathvector[k].size_open();
++                  }
++                }
++                for (size_t l = 0; l < count2; l++) {
+                     if (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint()))
+                     {
+                         path_satellites.push_back(_satellites[k][l]);

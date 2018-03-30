@@ -24,6 +24,7 @@
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpe-curvestitch.h"
+#include "live_effects/lpe-dash-stroke.h"
 #include "live_effects/lpe-dynastroke.h"
 #include "live_effects/lpe-ellipse_5pts.h"
 #include "live_effects/lpe-envelope.h"
@@ -133,7 +134,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILL_BETWEEN_MANY,     N_("Fill between many"),               "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),             "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),                    "bounding_box"},
-/* 9.93 */
+/* 0.93 */
     {MEASURE_SEGMENTS,      N_("Measure Segments"),                "measure_segments"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
@@ -142,6 +143,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {POWERMASK,             N_("Power mask"),                      "powermask"},
     {PTS2ELLIPSE,           N_("Ellipse from points"),             "pts2ellipse"},
     {OFFSET,                N_("Offset"),                          "offset"},
+    {DASH_STROKE,           N_("Dash Stroke"),                     "dash_stroke"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -345,6 +347,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case PTS2ELLIPSE:
             neweffect = static_cast<Effect*> ( new LPEPts2Ellipse(lpeobj) );
+            break;
+        case DASH_STROKE:
+            neweffect = static_cast<Effect*> ( new LPEDashStroke(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
