@@ -770,23 +770,25 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
 
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", str);
 
-    Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("(\\w{4})=([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
-    Glib::MatchInfo matchInfo;
-    for (auto token: tokens) {
-        regex->match(token, matchInfo);
-        if (matchInfo.matches()) {
-            variations += "'";
-            variations += matchInfo.fetch(1);
-            variations += "' ";
-            variations += matchInfo.fetch(2);
-            variations += ", ";
+    if (str) {
+        Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("(\\w{4})=([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
+        Glib::MatchInfo matchInfo;
+        for (auto token: tokens) {
+            regex->match(token, matchInfo);
+            if (matchInfo.matches()) {
+                variations += "'";
+                variations += matchInfo.fetch(1);
+                variations += "' ";
+                variations += matchInfo.fetch(2);
+                variations += ", ";
+            }
         }
+        if (variations.length() >= 2) { // Remove last comma/space
+            variations.pop_back();
+            variations.pop_back();
+        }
+        sp_repr_css_set_property(css, "font-variation-settings", variations.c_str());
     }
-    if (variations.length() >= 2) { // Remove last comma/space
-        variations.pop_back();
-        variations.pop_back();
-    }
-    sp_repr_css_set_property(css, "font-variation-settings", variations.c_str());
 #endif
 }
 
