@@ -1,0 +1,11 @@
+
+
+This directory contains widgets written in 'C'.
+
+To do:
+
+* Replace 'C' widgets by 'C++' widgets.
+* Move toolbar widgets to 'ui/toolbar'.
+* Temporary move to 'ui/widgets/legacy'.
+
+

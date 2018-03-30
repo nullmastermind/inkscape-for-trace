@@ -1,0 +1,8 @@
+
+
+This directory contains code related to the Boehm Gargage Collector.
+
+To do:
+
+* Replace this code with C++11 smart pointers.
+

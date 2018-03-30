@@ -1,0 +1,21 @@
+
+
+This directory contains all the code related to the Graphical User Interface.
+
+To do:
+
+* Move all GTK related code here.
+* Better organize directories:
+
+  - cache
+  - dialog
+  - menu
+  - onscreen
+  - toolbar
+  - tools
+  - view?
+  - widget
+  -- basic
+  -- composite
+  -- etc.
+

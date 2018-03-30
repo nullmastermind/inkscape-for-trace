@@ -1,0 +1,17 @@
+
+
+This directory contains code for rendering graphics to the
+canvas. This includes rendering of SVG elements (DrawingItem and
+derived classes) as well as rendering of control items -
+nodes/handles/lines (CanvasItem and derived classes).
+
+Currently we rely on the "Cairo" graphics library for rendering.
+
+To do:
+
+* Split into three directories: drawing, canvas, common.
+* Remove SPCurve.
+
+
+
+
