@@ -82,7 +82,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
             index++;
         }
     }
-    //Attribute
+    //Attributes
     SPShape * shape_origin =  SP_SHAPE(origin);
     SPPath * path_origin =  SP_PATH(origin);
     SPShape * shape_dest =  SP_SHAPE(dest);
