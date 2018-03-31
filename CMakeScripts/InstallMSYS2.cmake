@@ -22,6 +22,8 @@ if(WIN32)
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libatk-1.0-[0-9]*.dll
     ${MINGW_BIN}/libatkmm-1.6-[0-9]*.dll
+    ${MINGW_BIN}/libbrotlicommon.dll
+    ${MINGW_BIN}/libbrotlidec.dll
     ${MINGW_BIN}/libbz2-[0-9]*.dll
     ${MINGW_BIN}/libcairo-[0-9]*.dll
     ${MINGW_BIN}/libcairo-gobject-[0-9]*.dll
@@ -96,7 +98,6 @@ if(WIN32)
     ${MINGW_BIN}/libsigc-2.0-[0-9]*.dll
     ${MINGW_BIN}/libsoup-2.4-[0-9]*.dll
     ${MINGW_BIN}/libsqlite3-[0-9]*.dll
-    ${MINGW_BIN}/libssh2-[0-9]*.dll
     ${MINGW_BIN}/libstdc++-[0-9]*.dll
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
     ${MINGW_BIN}/libtiff-[0-9]*.dll
