@@ -141,10 +141,9 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             while (curve_it1 != curve_endit) {
                 Geom::Path segment = (*path_it).portion(p_index, p_index + 1);
                 if(unifysegment) {
-                    numberdashes_fixed = (size_t)ceil((*curve_it1).length()/(dashsize_fixed + holesize_fixed));
-                    if (halfextreme) {
-                        numberdashes_fixed++;
-                    }
+                    double integral;
+                    double fractional = modf((*curve_it1).length()/(dashsize_fixed + holesize_fixed), &integral);
+                    numberdashes_fixed = (size_t)integral + 1;
                     numberholes = numberdashes_fixed - 1;
                     ammount = numberdashes_fixed + numberholes;
                     if (halfextreme) {
