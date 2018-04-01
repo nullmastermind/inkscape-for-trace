@@ -95,21 +95,24 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             curve_endit = path_it->end_open();
           }
         }
-
-        size_t numberholes = numberdashes - 1;
-        size_t ammount = numberdashes + numberholes;
+        size_t numberdashes_fixed = numberdashes;
+        if(!splitsegments) {
+            numberdashes_fixed++;
+        }
+        size_t numberholes = numberdashes_fixed - 1;
+        size_t ammount = numberdashes_fixed + numberholes;
         if (halfextreme) {
             ammount--;
         }
         double base = 1/(double)ammount;
-        double globaldash =  base * numberdashes * (1 + holefactor);
+        double globaldash =  base * numberdashes_fixed * (1 + holefactor);
         if (halfextreme) { 
-            globaldash =  base * (numberdashes - 1) * (1 + holefactor);
+            globaldash =  base * (numberdashes_fixed - 1) * (1 + holefactor);
         }
         double globalhole =  1-globaldash;
-        double dashpercent = globaldash/numberdashes;
+        double dashpercent = globaldash/numberdashes_fixed;
         if (halfextreme) { 
-           dashpercent = globaldash/(numberdashes -1);
+           dashpercent = globaldash/(numberdashes_fixed -1);
         }
         double holepercent = globalhole/numberholes;
         double dashsize_fixed = 0;
@@ -133,12 +136,12 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             curve_endit = path_it->end_default();
         }
         size_t p_index = 0;
-        size_t start_index = 0;
+        size_t start_index = result.size();
         if(splitsegments) {
             while (curve_it1 != curve_endit) {
                 Geom::Path segment = (*path_it).portion(p_index, p_index + 1);
                 if(unifysegment) {
-                    size_t numberdashes_fixed = (size_t)ceil((*curve_it1).length()/(dashsize_fixed + holesize_fixed));
+                    numberdashes_fixed = (size_t)ceil((*curve_it1).length()/(dashsize_fixed + holesize_fixed));
                     if (halfextreme) {
                         numberdashes_fixed++;
                     }
@@ -175,7 +178,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                         } else {
                             result.push_back(segment.portion(0.0, dashpercent));
                         }
-                        start_index = result.size()-1;
                     }
                     
                     double start = dashpercent + holepercent;
@@ -203,7 +205,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                         result[result.size()-1].append(segment.portion(start, end));
                     } else {
                         result.push_back(segment.portion(start, end));
-                        start_index = result.size()-1;
                     }
                     double startsize = dashsize + holesize;
                     if (halfextreme) {
@@ -218,6 +219,14 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                         endsize = startsize + dashsize;
                         start = timeAtLength(startsize,segment);
                         end   = timeAtLength(endsize,segment);
+                    }
+                }
+                if (curve_it2 == curve_endit) {
+                    if (path_it->closed()) {
+                        Geom::Path end = result[result.size()-1];
+                        end.setFinal(result[start_index].initialPoint());
+                        end.append(result[start_index]);
+                        result[start_index] = end;
                     }
                 }
                 p_index ++;
@@ -235,7 +244,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                 end = timeAtLength(dashsize,pwd2);
             }
             result.push_back((*path_it).portion(start, end));
-            start_index = result.size()-1;
             double startsize = dashsize + holesize;
             if (halfextreme) {
                 startsize = (dashsize/2.0) + holesize;
@@ -250,8 +258,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                 start = timeAtLength(startsize,pwd2);
                 end   = timeAtLength(endsize,pwd2);
             }
-        }
-        if (curve_it2 == curve_endit) {
             if (path_it->closed()) {
                 Geom::Path end = result[result.size()-1];
                 end.setFinal(result[start_index].initialPoint());
