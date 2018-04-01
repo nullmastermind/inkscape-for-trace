@@ -196,8 +196,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             } else {
                 end = timeAtLength(dashsize,pwd2);
             }
-            std::cout << end << "end" << std::endl;
-            std::cout << start << "start" << std::endl;
             result.push_back((*path_it).portion(start, end));
             start_index = result.size()-1;
             double startsize = dashsize + holesize;
@@ -208,8 +206,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             start = timeAtLength(startsize,pwd2);
             end   = timeAtLength(endsize,pwd2);
             while (start  < (*path_it).size() && start  > 0) {
-                std::cout << end << "end" << std::endl;
-                std::cout << start << "start" << std::endl;
                 result.push_back((*path_it).portion(start, end));
                 startsize = endsize + holesize;
                 endsize = startsize + dashsize;
