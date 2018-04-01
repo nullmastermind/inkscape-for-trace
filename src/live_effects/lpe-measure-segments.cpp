@@ -9,14 +9,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpe-measure-segments.h"
 #include "2geom/affine.h"
 #include "2geom/angle.h"
 #include "2geom/point.h"
 #include "2geom/ray.h"
 #include "display/curve.h"
 #include "helper/geom.h"
-#include "live_effects/lpe-measure-segments.h"
 #include "object/sp-defs.h"
 #include "object/sp-item.h"
 #include "object/sp-path.h"
@@ -82,7 +83,18 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     local_locale(_("Local Number Format"), _("Local number format"), "local_locale", &wr, this, true),
     rotate_anotation(_("Rotate Annotation"), _("Rotate Annotation"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
-    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use <b>\"Style Dialog\"</b> to more styling. Each measure element has extra selectors. Use !important to override defaults..."))
+    hide_arrows(_("Hide arrows"), _("Hide arrows"), "hide_arrows", &wr, this, false),
+    smallx100(_("Multiply lower 1"), _("Multiply by 100 less than 1"), "smallx100", &wr, this, false),
+    linked_items(_("Linked items:"), _("Items that generate a measured projection with his nodes"), "linked_items", &wr, this),
+    distance_projection(_("Distance"), _("Distance away nearest point"), "distance_projection", &wr, this, 20.0),
+    blacklist_nodes(_("Blacklist nodes"), _("Optional node index that be excluded from measure"), "blacklist_nodes", &wr, this,""),
+    whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
+    vertical_projection(_("Vertical projection"), _("Not horizontal but vertical"), "vertical_projection", &wr, this, false),
+    oposite_projection(_("Oposite projection"), _("Use the other side of selected elements"), "oposite_projection", &wr, this, false),
+    general(_("General"), _("General"), "general", &wr, this, ""),
+    projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
+    options(_("Options"), _("Options"), "options", &wr, this, ""),
+    tips(_("Tips"), _("Tips"), "tips", &wr, this, "")
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);
@@ -106,7 +118,18 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&local_locale);
     registerParameter(&rotate_anotation);
     registerParameter(&hide_back);
-    registerParameter(&message);
+    registerParameter(&hide_arrows);
+    registerParameter(&smallx100);
+    registerParameter(&linked_items);
+    registerParameter(&distance_projection);
+    registerParameter(&blacklist_nodes);
+    registerParameter(&whitelist_nodes);
+    registerParameter(&vertical_projection);
+    registerParameter(&oposite_projection);
+    registerParameter(&general);
+    registerParameter(&projection);
+    registerParameter(&options);
+    registerParameter(&tips);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
@@ -143,13 +166,128 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
+
+    distance_projection.param_set_range(-999999.0, 999999.0);
+    distance_projection.param_set_increments(1, 1);
+    distance_projection.param_set_digits(5);
+    star_ellipse_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
-    message.param_set_min_height(85);
     previous_size = 0;
+    pagenumber = 0;
+    notebook = NULL;
+    general.param_update_default(_("Base of the lpe, focus on meassure display and positioning"));
+    projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
+    " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
+    options.param_update_default(_("Here we show meassure settings that usualy dont change too much"));
+    tips.param_update_default(_("<b>Style Dialog</b> Use to more styling using XML editor to find apropiate classes"
+    " or ID's\n<b>Default Parameters</b> In all LPE, at the bottom, can change them for future uses\n"
+    "<b>Blacklists...</b> This allow hide some segments or projection steps to measure"));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
     doOnRemove(NULL);
+}
+
+Gtk::Widget *
+LPEMeasureSegments::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    vbox->set_border_width(0);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(0);
+    Gtk::VBox *vbox0 = Gtk::manage(new Gtk::VBox());
+    vbox0->set_border_width(5);
+    vbox0->set_homogeneous(false);
+    vbox0->set_spacing(2);
+    Gtk::VBox *vbox1 = Gtk::manage(new Gtk::VBox());
+    vbox1->set_border_width(5);
+    vbox1->set_homogeneous(false);
+    vbox1->set_spacing(2);
+    Gtk::VBox *vbox2 = Gtk::manage(new Gtk::VBox());
+    vbox2->set_border_width(5);
+    vbox2->set_homogeneous(false);
+    vbox2->set_spacing(2);
+    //Help page
+    Gtk::VBox *vbox3 = Gtk::manage(new Gtk::VBox());
+    vbox3->set_border_width(5);
+    vbox3->set_homogeneous(false);
+    vbox3->set_spacing(2);
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter * param = *it;
+            Gtk::Widget * widg = param->param_newWidget();
+            Glib::ustring * tip = param->param_getTooltip();
+            if (widg) {
+                if (       param->param_key == "linked_items") {
+                    vbox1->pack_start(*widg, true, true, 2);
+                } else if (param->param_key == "distance_projection" ||
+                           param->param_key == "blacklist_nodes"     ||
+                           param->param_key == "whitelist_nodes"     ||
+                           param->param_key == "vertical_projection" ||
+                           param->param_key == "oposite_projection"    ) 
+                {
+                    vbox1->pack_start(*widg, false, true, 2);
+                } else if (param->param_key == "precision"    ||
+                           param->param_key == "fix_overlaps" ||
+                           param->param_key == "coloropacity" ||
+                           param->param_key == "font"         ||
+                           param->param_key == "format"       ||
+                           param->param_key == "blacklist"    ||
+                           param->param_key == "whitelist"    ||
+                           param->param_key == "local_locale" ||
+                           param->param_key == "smallx100"    ||
+                           param->param_key == "hide_arrows"    ) 
+                {
+                    vbox2->pack_start(*widg, false, true, 2);
+                } else if (param->param_key == "general"    ||
+                           param->param_key == "projection" ||
+                           param->param_key == "options"    ||
+                           param->param_key == "tips"         )
+                {
+                    vbox3->pack_start(*widg, false, true, 2);
+                } else {
+                    vbox0->pack_start(*widg, false, true, 2);
+                }
+
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
+                }
+            }
+        }
+
+        ++it;
+    }
+
+    //Move the notebook outside because this widget usualy are destroyed and recreated
+    //And the signal that fire page change is called on destroy, making imposible to
+    //retain last used page with this signal.
+    //https://mail.gnome.org/archives/gtkmm-list/2013-June/msg00020.html
+    notebook = Gtk::manage(new Gtk::Notebook());
+    notebook->append_page (*vbox0, Glib::ustring(_("General")));
+    notebook->append_page (*vbox1, Glib::ustring(_("Projection")));
+    notebook->append_page (*vbox2, Glib::ustring(_("Options")));
+    notebook->append_page (*vbox3, Glib::ustring(_("Help")));
+    vbox0->show_all();
+    vbox1->show_all();
+    vbox2->show_all();
+    vbox3->show_all();
+    vbox->pack_start(*notebook, true, true, 2);
+    notebook->set_current_page(pagenumber);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        //Wrap to make it more omogenious
+        Gtk::VBox *vbox4 = Gtk::manage(new Gtk::VBox());
+        vbox4->set_border_width(5);
+        vbox4->set_homogeneous(false);
+        vbox4->set_spacing(2);
+        vbox4->pack_start(*widg, true, true, 2);
+        vbox->pack_start(*vbox4, true, true, 2);
+    }
+    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void
@@ -304,6 +442,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         setlocale (LC_NUMERIC, "C");
     }
     gchar length_str[64];
+    if (smallx100 &&  length < 1.0) {
+        length *= 100;
+    }
     g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     setlocale (LC_NUMERIC, locale_base);
     gchar * format_str = format.param_getSVGValue();
@@ -599,7 +740,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-
+    if (notebook) {
+        pagenumber = notebook->get_current_page();
+    }
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
         //only check constrain viewbox on X

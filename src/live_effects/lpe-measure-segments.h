@@ -9,13 +9,12 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <gtkmm.h>
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
+#include "live_effects/parameter/enum.h"
+#include "live_effects/parameter/originalitemarray.h"
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/colorpicker.h"
-#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/fontbutton.h"
 #include "live_effects/parameter/message.h"
 #include "live_effects/parameter/text.h"
@@ -41,6 +40,8 @@ public:
     virtual void doOnRemove(SPLPEItem const* /*lpeitem*/);
     virtual void doEffect(SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+    virtual Gtk::Widget * newWidget();
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);
@@ -67,15 +68,30 @@ private:
     BoolParam local_locale;
     BoolParam rotate_anotation;
     BoolParam hide_back;
-    MessageParam message;
+    BoolParam hide_arrows;
+    BoolParam smallx100;
+    OriginalItemArrayParam linked_items;
+    ScalarParam distance_projection;
+    TextParam blacklist_nodes;
+    BoolParam whitelist_nodes;
+    BoolParam vertical_projection;
+    BoolParam oposite_projection;
+    MessageParam general;
+    MessageParam projection;
+    MessageParam options;
+    MessageParam tips;
     Glib::ustring display_unit;
+    bool locked_pagenumber;
     double doc_scale;
     double fontsize;
     double anotation_width;
     double previous_size;
     unsigned rgb24;
     double arrow_gap;
+    guint pagenumber;
     gchar const* locale_base;
+    Geom::Affine star_ellipse_fix;
+    Gtk::Notebook * notebook;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 
