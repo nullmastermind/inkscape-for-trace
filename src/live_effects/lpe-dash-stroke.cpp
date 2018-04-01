@@ -18,14 +18,16 @@ LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
     holefactor(_("Hole factor"), _("Hole factor"), "holefactor", &wr, this, 0.0),
     splitsegments(_("Use segments"), _("Use segments"), "splitsegments", &wr, this, true),
     halfextreme(_("Half start/end"), _("Start and end of each segment has half size"), "halfextreme", &wr, this, true),
+    unifysegment(_("Unify dashes"), _("Aprox unify the dashes lenght using the min with segment"), "unifysegment", &wr, this, true),
     message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Add <b>\"Fill Between Many LPE\"</b> to add fill."))
 {
     registerParameter(&numberdashes);
     registerParameter(&holefactor);
     registerParameter(&splitsegments);
     registerParameter(&halfextreme);
+    registerParameter(&unifysegment);
     registerParameter(&message);
-    numberdashes.param_set_range(0, 5000);
+    numberdashes.param_set_range(2, 999999999);
     numberdashes.param_set_increments(1, 1);
     numberdashes.param_set_digits(0);
     holefactor.param_set_range(-0.99999, 0.99999);
@@ -93,10 +95,7 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             curve_endit = path_it->end_open();
           }
         }
-        if(splitsegments) {
-            //double item_length = Geom::length(paths_to_pw(path_it));
-            //item_length = Inkscape::Util::Quantity::convert(item_length * scale, unit->abbr, unit_name);
-        }
+
         size_t numberholes = numberdashes - 1;
         size_t ammount = numberdashes + numberholes;
         if (halfextreme) {
@@ -113,12 +112,53 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
            dashpercent = globaldash/(numberdashes -1);
         }
         double holepercent = globalhole/numberholes;
-
+        double dashsize_fixed = 0;
+        double holesize_fixed = 0;
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = (*path_it).toPwSb();
+        double lenght_pwd2 = length (pwd2);
+        double minlenght = lenght_pwd2;
+        if(unifysegment) {
+            while (curve_it1 != curve_endit) {
+                double lenght_segment = (*curve_it1).length();
+                if (lenght_segment < minlenght) {
+                    minlenght = lenght_segment;
+                    dashsize_fixed = (*curve_it1).length() * dashpercent;
+                    holesize_fixed = (*curve_it1).length() * holepercent;
+                } 
+                ++curve_it1;
+                ++curve_it2;
+            } 
+            curve_it1 = path_it->begin();
+            curve_it2 = ++(path_it->begin());
+            curve_endit = path_it->end_default();
+        }
         size_t p_index = 0;
         size_t start_index = 0;
         if(splitsegments) {
             while (curve_it1 != curve_endit) {
                 Geom::Path segment = (*path_it).portion(p_index, p_index + 1);
+                if(unifysegment) {
+                    size_t numberdashes_fixed = (size_t)ceil((*curve_it1).length()/(dashsize_fixed + holesize_fixed));
+                    if (halfextreme) {
+                        numberdashes_fixed++;
+                    }
+                    numberholes = numberdashes_fixed - 1;
+                    ammount = numberdashes_fixed + numberholes;
+                    if (halfextreme) {
+                        ammount--;
+                    }
+                    base = 1/(double)ammount;
+                    globaldash =  base * numberdashes_fixed * (1 + holefactor);
+                    if (halfextreme) { 
+                        globaldash =  base * (numberdashes_fixed - 1) * (1 + holefactor);
+                    }
+                    globalhole =  1-globaldash;
+                    dashpercent = globaldash/numberdashes_fixed;
+                    if (halfextreme) { 
+                       dashpercent = globaldash/(numberdashes_fixed -1);
+                    }
+                    holepercent = globalhole/numberholes;
+                }
                 double dashsize = (*curve_it1).length() * dashpercent;
                 double holesize = (*curve_it1).length() * holepercent;
                 if ((*curve_it1).isLineSegment()) {
@@ -187,8 +227,6 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
         } else {
             double start = 0.0;
             double end = 0.0;
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = (*path_it).toPwSb();
-            double lenght_pwd2 = length (pwd2);
             double dashsize = lenght_pwd2 * dashpercent;
             double holesize = lenght_pwd2 * holepercent;
             if (halfextreme) {

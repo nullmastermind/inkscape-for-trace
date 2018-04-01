@@ -26,6 +26,7 @@ private:
     ScalarParam holefactor;
     BoolParam splitsegments;
     BoolParam halfextreme;
+    BoolParam unifysegment;
     MessageParam message;
 };
 
