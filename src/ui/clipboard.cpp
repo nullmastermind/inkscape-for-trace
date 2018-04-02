@@ -107,7 +107,7 @@ public:
     virtual bool pastePathEffect(ObjectSet *set);
     virtual Glib::ustring getPathParameter(SPDesktop* desktop);
     virtual Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop);
-    virtual std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const *type);
+    virtual std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*", gint maxdepth = -1);
     virtual const gchar *getFirstObjectID();
 
     ClipboardManagerImpl();
@@ -661,7 +661,7 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
  * @return A vector containing all IDs or empty if no shape or text item was found.
  * type. Set to "*" to retrieve all elements of the types vector inside, feel free to populate more
  */
-std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *desktop, gchar const* type)
+std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *desktop, gchar const* type, gint maxdepth)
 {
     std::vector<Glib::ustring> result;
     SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
@@ -686,11 +686,11 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
         types.push_back((Glib::ustring)"svg:image");
         for (auto i=types.begin();i!=types.end();++i) {
             Glib::ustring type_elem = *i;
-            std::vector<Inkscape::XML::Node const *> reprs_found = sp_repr_lookup_name_many(root, type_elem.c_str(), -1); // unlimited search depth
+            std::vector<Inkscape::XML::Node const *> reprs_found = sp_repr_lookup_name_many(root, type_elem.c_str(), maxdepth); // unlimited search depth
             reprs.insert(reprs.end(), reprs_found.begin(), reprs_found.end());
         }
     } else {
-        reprs = sp_repr_lookup_name_many(root, type, -1); // unlimited search depth
+        reprs = sp_repr_lookup_name_many(root, type, maxdepth);
     }
     for (auto i=reprs.begin();i!=reprs.end();++i) {
         Inkscape::XML::Node const * node = *i;

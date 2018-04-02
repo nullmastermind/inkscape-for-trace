@@ -754,7 +754,19 @@ double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, 
     return angle;
 }
 
-std::vector< Point > getNodes(SPItem * item)
+std::vector< Point > 
+transformNodes(std::vector< Point > nodes, Geom::Affine transform)
+{
+    std::vector< Point > result;
+    for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
+        Geom::Point point = (*iter);
+        result.push_back(point * transform);
+    }
+    return result;
+}
+
+std::vector< Point > 
+getNodes(SPItem * item)
 {
     std::vector< Point > current_nodes;
     SPShape    * shape    = dynamic_cast<SPShape     *> (item);
@@ -766,12 +778,12 @@ std::vector< Point > getNodes(SPItem * item)
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *sub_item = *iter;
-            std::vector< Point > nodes = getNodes(sub_item);
+            std::vector< Point > nodes = transformNodes(getNodes(sub_item), item->transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape) {
         SPCurve * c = shape->getCurve();
-        current_nodes = c->get_pathvector().nodes();
+        current_nodes = transformNodes(c->get_pathvector().nodes(), item->transform);
         c->unref();
     } else if (text || flowtext) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -791,7 +803,7 @@ std::vector< Point > getNodes(SPItem * item)
                 curve->unref();
                 continue;
             }
-            std::vector< Point > letter_nodes = curve->get_pathvector().nodes();
+            std::vector< Point > letter_nodes = transformNodes(curve->get_pathvector().nodes(), item->transform);
             current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
             if (iter == te_get_layout(item)->end()) {
                 break;
@@ -800,10 +812,10 @@ std::vector< Point > getNodes(SPItem * item)
     } else {
         Geom::OptRect bbox = item->geometricBounds();
         if (bbox) {
-            current_nodes.push_back((*bbox).corner(0));
-            current_nodes.push_back((*bbox).corner(1));
-            current_nodes.push_back((*bbox).corner(2));
-            current_nodes.push_back((*bbox).corner(3));
+            current_nodes.push_back((*bbox).corner(0) * item->transform);
+            current_nodes.push_back((*bbox).corner(1) * item->transform);
+            current_nodes.push_back((*bbox).corner(2) * item->transform);
+            current_nodes.push_back((*bbox).corner(3) * item->transform);
         }
     }
     return current_nodes;
@@ -844,7 +856,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     std::vector< Point > nodes;
     for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
         SPObject *obj;
-        if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+        if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
             SPItem * item = dynamic_cast<SPItem *>(obj);
             if (item) {
                 hasprojection = true;

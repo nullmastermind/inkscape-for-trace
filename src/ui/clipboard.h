@@ -51,7 +51,7 @@ public:
     virtual bool pastePathEffect(ObjectSet *set) = 0;
     virtual Glib::ustring getPathParameter(SPDesktop* desktop) = 0;
     virtual Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop) = 0;
-    virtual std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*") = 0;
+    virtual std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*", gint maxdepth = -1) = 0;
     virtual const gchar *getFirstObjectID() = 0;
 
     static ClipboardManager *get();

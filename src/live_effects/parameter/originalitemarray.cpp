@@ -283,7 +283,7 @@ OriginalItemArrayParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
      //without second parameter populate all elements filled inside the called function
-    std::vector<Glib::ustring> itemsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP);
+    std::vector<Glib::ustring> itemsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "*", 1);
 
     if (itemsid.empty()) {
         return;
