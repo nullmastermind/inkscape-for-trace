@@ -18,7 +18,11 @@
 #include "2geom/ray.h"
 #include "display/curve.h"
 #include "helper/geom.h"
+#include "text-editing.h"
 #include "object/sp-defs.h"
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-item-group.h"
 #include "object/sp-item.h"
 #include "object/sp-path.h"
 #include "object/sp-root.h"
@@ -32,7 +36,7 @@
 #include "util/units.h"
 #include "xml/node.h"
 #include "xml/sp-css-attr.h"
-
+#include "libnrtype/Layout-TNG.h"
 #include "document.h"
 #include "document-undo.h"
 #include "inkscape.h"
@@ -174,7 +178,8 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    notebook = NULL;
+    hasprojection = false;
+    notebookpointer = NULL;
     general.param_update_default(_("Base of the lpe, focus on meassure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
@@ -267,7 +272,7 @@ LPEMeasureSegments::newWidget()
     //And the signal that fire page change is called on destroy, making imposible to
     //retain last used page with this signal.
     //https://mail.gnome.org/archives/gtkmm-list/2013-June/msg00020.html
-    notebook = Gtk::manage(new Gtk::Notebook());
+    Gtk::Notebook * notebook = Gtk::manage(new Gtk::Notebook());
     notebook->append_page (*vbox0, Glib::ustring(_("General")));
     notebook->append_page (*vbox1, Glib::ustring(_("Projection")));
     notebook->append_page (*vbox2, Glib::ustring(_("Options")));
@@ -278,6 +283,7 @@ LPEMeasureSegments::newWidget()
     vbox3->show_all();
     vbox->pack_start(*notebook, true, true, 2);
     notebook->set_current_page(pagenumber);
+    notebookpointer = Gtk::manage(notebook);
     if(Gtk::Widget* widg = defaultParamSet()) {
         //Wrap to make it more omogenious
         Gtk::VBox *vbox4 = Gtk::manage(new Gtk::VBox());
@@ -442,10 +448,14 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         setlocale (LC_NUMERIC, "C");
     }
     gchar length_str[64];
-    if (smallx100 &&  length < 1.0) {
-        length *= 100;
+    bool x100 = false;
+    if (smallx100 && length < 1 ) {
+        length *=100;
+        x100 = true;
+        g_snprintf(length_str, 64, "%.*f", (int)precision - 2, length);
+    } else {
+        g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     }
-    g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     setlocale (LC_NUMERIC, locale_base);
     gchar * format_str = format.param_getSVGValue();
     Glib::ustring label_value(format_str);
@@ -454,9 +464,14 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     if(s < label_value.length()) {
         label_value.replace(s,s+9,length_str);
     }
+    
     s = label_value.find(Glib::ustring("{unit}"),0);
     if(s < label_value.length()) {
-        label_value.replace(s,s+6,unit.get_abbreviation());
+        if (x100) {
+            label_value.replace(s,s+6,"");
+        } else {
+            label_value.replace(s,s+6,unit.get_abbreviation());
+        }
     }
     if ( !valid ) {
         label_value = Glib::ustring(_("Non Uniform Scale"));
@@ -590,10 +605,12 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     }
     if (main) {
         line->setAttribute("inkscape:label", "dinline");
-        if (arrows_outside) {
-            style += "marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);";
-        } else {
-            style += "marker-start:url(#ArrowDIN-start);marker-end:url(#ArrowDIN-end);";
+        if (!hide_arrows) {
+            if (arrows_outside) {
+                style += "marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);";
+            } else {
+                style += "marker-start:url(#ArrowDIN-start);marker-end:url(#ArrowDIN-end);";
+            }
         }
     } else {
         line->setAttribute("inkscape:label", "dinhelpline");
@@ -689,10 +706,19 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
+Geom::PathVector 
+LPEMeasureSegments::doEffect_path (Geom::PathVector const & path_in) {
+    if (hasprojection) {
+        Geom::PathVector projectline_pv;
+        projectline_pv.push_back(projectionline);
+        return projectline_pv;
+    }
+    return path_in;
+}
+
 bool
-LPEMeasureSegments::hasMeassure (size_t i)
+LPEMeasureSegments::isWhitelist (size_t i, gchar * blacklist_str, bool whitelist)
 {
-    gchar * blacklist_str = blacklist.param_getSVGValue();
     std::string listsegments(std::string(blacklist_str) + std::string(","));
     g_free(blacklist_str);
     listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
@@ -713,7 +739,8 @@ LPEMeasureSegments::hasMeassure (size_t i)
     return false;
 }
 
-double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, double fix_overlaps){
+double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, double fix_overlaps)
+{
     Geom::Ray ray_1(p2,p1);
     Geom::Ray ray_2(p3,p1);
     bool ccw_toggle = cross(p1 - p2, p3 - p2) < 0;
@@ -725,6 +752,69 @@ double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, 
         angle = 0;
     }
     return angle;
+}
+
+std::vector< Point > getNodes(SPItem * item)
+{
+    std::vector< Point > current_nodes;
+    SPShape    * shape    = dynamic_cast<SPShape     *> (item);
+    SPText     * text     = dynamic_cast<SPText      *> (item);
+    SPGroup    * group    = dynamic_cast<SPGroup     *> (item);
+    SPFlowtext * flowtext = dynamic_cast<SPFlowtext  *> (item);
+    //TODO handle clones/use
+    if (group) {
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+            SPItem *sub_item = *iter;
+            std::vector< Point > nodes = getNodes(sub_item);
+            current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
+        }
+    } else if (shape) {
+        SPCurve * c = shape->getCurve();
+        current_nodes = c->get_pathvector().nodes();
+        c->unref();
+    } else if (text || flowtext) {
+        Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
+        do {
+            Inkscape::Text::Layout::iterator iter_next = iter;
+            iter_next.nextGlyph(); // iter_next is one glyph ahead from iter
+            if (iter == iter_next) {
+                break;
+            }
+            // get path from iter to iter_next:
+            SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
+            iter = iter_next; // shift to next glyph
+            if (!curve) {
+                continue; // error converting this glyph
+            }
+            if (curve->is_empty()) { // whitespace glyph?
+                curve->unref();
+                continue;
+            }
+            std::vector< Point > letter_nodes = curve->get_pathvector().nodes();
+            current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
+            if (iter == te_get_layout(item)->end()) {
+                break;
+            }
+        } while (true);
+    } else {
+        Geom::OptRect bbox = item->geometricBounds();
+        if (bbox) {
+            current_nodes.push_back((*bbox).corner(0));
+            current_nodes.push_back((*bbox).corner(1));
+            current_nodes.push_back((*bbox).corner(2));
+            current_nodes.push_back((*bbox).corner(3));
+        }
+    }
+    return current_nodes;
+}
+
+bool sortPointsX (Geom::Point a,Geom::Point b) { 
+    return (a[Geom::X] < b[Geom::X]); 
+}
+
+bool sortPointsY (Geom::Point a,Geom::Point b) { 
+    return (a[Geom::Y] < b[Geom::Y]); 
 }
 
 void
@@ -740,9 +830,97 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-    if (notebook) {
-        pagenumber = notebook->get_current_page();
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && notebookpointer && 
+        desktop->getSelection()->includes(sp_lpe_item) && 
+        desktop->getSelection()->singleItem ()) 
+    {
+        pagenumber = notebookpointer->get_current_page();
+    } else {
+        notebookpointer = NULL;
     }
+    //Projection prepare
+    Geom::PathVector pathvector;
+    std::vector< Point > nodes;
+    for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
+        SPObject *obj;
+        if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+            SPItem * item = dynamic_cast<SPItem *>(obj);
+            if (item) {
+                hasprojection = true;
+                std::vector< Point > current_nodes = getNodes(item);
+                nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+            }
+        }
+    }
+    if (hasprojection) {
+        std::vector<Point> result;
+        double mindistance = std::numeric_limits<double>::max();
+        double maxdistance = 0.0;
+        for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
+            Geom::Point point = (*iter);
+
+            if (vertical_projection) {
+                if (point[Geom::X] < mindistance) {
+                    mindistance = point[Geom::X];
+                }
+                if (point[Geom::X] > maxdistance) {
+                    maxdistance = point[Geom::X];
+                }
+            } else {
+                if (point[Geom::Y] < mindistance) {
+                    mindistance = point[Geom::Y];
+                }
+                if (point[Geom::Y] > maxdistance) {
+                    maxdistance = point[Geom::Y];
+                }
+            }
+        }
+        for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
+            Geom::Point point = (*iter);
+            if (vertical_projection) {
+                Geom::Coord xpos = oposite_projection?distance_projection+maxdistance:-distance_projection+mindistance;
+                result.push_back(Geom::Point(xpos, point[Geom::Y]));
+            } else {
+                Geom::Coord ypos = oposite_projection?distance_projection+maxdistance:-distance_projection+mindistance;
+                result.push_back(Geom::Point(point[Geom::X], ypos));
+            }
+        }
+        if (vertical_projection) {
+            std::sort (result.begin(), result.end(), sortPointsY);
+        } else {
+            std::sort (result.begin(), result.end(), sortPointsX);
+        }
+        Geom::Path path;
+        Geom::Point prevpoint(0,0);
+        size_t counter = 0;
+        bool started = false;
+        for ( std::vector<Point>::iterator iter = result.begin(); iter != result.end(); ++iter ) {
+            Geom::Point point = (*iter);
+            if (Geom::are_near(prevpoint, point)){
+                continue;
+            }
+            gchar * blacklist_nodes_str = blacklist_nodes.param_getSVGValue();
+            if (isWhitelist(counter + 1, blacklist_nodes_str, (bool)whitelist_nodes)) {
+                if (!started) {
+                    path.setInitial(point);
+                    started = true;
+                } else {
+                    path.appendNew<Geom::LineSegment>(point);
+                }
+            }
+            counter ++;
+            prevpoint = point;
+        }
+        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
+        path *= affinetransform;
+        projectionline.clear();
+        projectionline.setInitial(path.initialPoint());
+        projectionline.appendNew<Geom::LineSegment>(path.finalPoint());
+        pathvector.push_back(path);
+    }
+
+    //end projection prepare
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
         //only check constrain viewbox on X
@@ -778,7 +956,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Point end_stored = Geom::Point(0,0); 
         Geom::Point next_stored = Geom::Point(0,0);
         Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
-        Geom::PathVector pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+        if (!hasprojection) {
+            pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+        }
         c->unref();
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
@@ -814,7 +994,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 } else if (pathvector[i].size() > j + 1) {
                     next = pathvector[i].pointAt(j+2);
                 }
-                if (hasMeassure(counter) && !Geom::are_near(start, end)) {
+                gchar * blacklist_str = blacklist.param_getSVGValue();
+                if (isWhitelist(counter + 1, blacklist_str, (bool)whitelist) && !Geom::are_near(start, end)) {
                     Glib::ustring idprev = Glib::ustring("infoline-on-start-");
                     idprev += Glib::ustring::format(counter-1);
                     idprev += "-";
@@ -895,12 +1076,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     texton += "-";
                     texton += lpobjid;
                     items.push_back(texton);
-                    if (arrows_outside) {
-                        items.push_back(Glib::ustring("ArrowDINout-start"));
-                        items.push_back(Glib::ustring("ArrowDINout-end"));
-                    } else {
-                        items.push_back(Glib::ustring("ArrowDIN-start"));
-                        items.push_back(Glib::ustring("ArrowDIN-end"));
+                    if (!hide_arrows) {
+                        if (arrows_outside) {
+                            items.push_back(Glib::ustring("ArrowDINout-start"));
+                            items.push_back(Glib::ustring("ArrowDINout-end"));
+                        } else {
+                            items.push_back(Glib::ustring("ArrowDIN-start"));
+                            items.push_back(Glib::ustring("ArrowDIN-end"));
+                        }
                     }
                     if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) || 
                          fix_overlaps_degree == 180) &&
@@ -1002,12 +1185,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                     length = Geom::distance(start,end)  * scale;
                     Geom::Point pos = Geom::middle_point(hstart,hend);
-                    if (arrows_outside) {
-                        createArrowMarker(Glib::ustring("ArrowDINout-start"));
-                        createArrowMarker(Glib::ustring("ArrowDINout-end"));
-                    } else {
-                        createArrowMarker(Glib::ustring("ArrowDIN-start"));
-                        createArrowMarker(Glib::ustring("ArrowDIN-end"));
+                    if (!hide_arrows) {
+                        if (arrows_outside) {
+                            createArrowMarker(Glib::ustring("ArrowDINout-start"));
+                            createArrowMarker(Glib::ustring("ArrowDINout-end"));
+                        } else {
+                            createArrowMarker(Glib::ustring("ArrowDIN-start"));
+                            createArrowMarker(Glib::ustring("ArrowDIN-end"));
+                        }
                     }
                     if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
                         pos = pos - Point::polar(angle_cross, text_top_bottom  + (fontsize/2.5));
@@ -1037,6 +1222,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                     if(flip_side) {
                        arrow_gap *= -1;
+                    }
+                    if(hide_arrows) {
+                        arrow_gap *= 0;
                     }
                     createLine(end, hend, Glib::ustring("infoline-on-end-"), counter, false, false);
                     if (!arrows_outside) {
