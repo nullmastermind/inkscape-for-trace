@@ -120,7 +120,6 @@ set(inkscape_SRC
   conn-avoid-ref.h
   console-output-undo-observer.h
   context-fns.h
-  decimal-round.h
   desktop-events.h
   desktop-style.h
   desktop.h
