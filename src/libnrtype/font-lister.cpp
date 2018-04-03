@@ -766,9 +766,9 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
     // Convert Pango variations string to CSS format
     const char* str = pango_font_description_get_variations(desc);
 
-    if (str) {
+    std::string variations;
 
-        std::string variations;
+    if (str) {
 
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", str);
 
@@ -788,7 +788,12 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
             variations.pop_back();
             variations.pop_back();
         }
+    }
+
+    if (!variations.empty()) {
         sp_repr_css_set_property(css, "font-variation-settings", variations.c_str());
+    } else {
+        sp_repr_css_unset_property(css,  "font-variation-settings" );
     }
 #endif
 }
