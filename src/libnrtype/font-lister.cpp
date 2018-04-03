@@ -766,11 +766,12 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
     // Convert Pango variations string to CSS format
     const char* str = pango_font_description_get_variations(desc);
 
-    std::string variations;
-
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", str);
-
     if (str) {
+
+        std::string variations;
+
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", str);
+
         Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("(\\w{4})=([-+]?\\d*\\.?\\d+([eE][-+]?\\d+)?)");
         Glib::MatchInfo matchInfo;
         for (auto token: tokens) {
