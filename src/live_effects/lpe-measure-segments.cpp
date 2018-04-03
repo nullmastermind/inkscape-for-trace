@@ -92,9 +92,11 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     linked_items(_("Linked items:"), _("Items that generate a measured projection with his nodes"), "linked_items", &wr, this),
     distance_projection(_("Distance"), _("Distance away nearest point"), "distance_projection", &wr, this, 20.0),
     blacklist_nodes(_("Blacklist nodes"), _("Optional node index that be excluded from measure"), "blacklist_nodes", &wr, this,""),
+    active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
     whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
     vertical_projection(_("Vertical projection"), _("Not horizontal but vertical"), "vertical_projection", &wr, this, false),
     oposite_projection(_("Oposite projection"), _("Use the other side of selected elements"), "oposite_projection", &wr, this, false),
+    hide_projection_line(_("Hide projection line"), _("Hide projection line"), "hide_projection_line", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
     projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
     options(_("Options"), _("Options"), "options", &wr, this, ""),
@@ -115,6 +117,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&scale);
     registerParameter(&format);
     registerParameter(&blacklist);
+    registerParameter(&active_projection);
     registerParameter(&whitelist);
     registerParameter(&arrows_outside);
     registerParameter(&flip_side);
@@ -130,6 +133,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&whitelist_nodes);
     registerParameter(&vertical_projection);
     registerParameter(&oposite_projection);
+    registerParameter(&hide_projection_line);
     registerParameter(&general);
     registerParameter(&projection);
     registerParameter(&options);
@@ -178,7 +182,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    hasprojection = false;
     notebookpointer = NULL;
     general.param_update_default(_("Base of the lpe, focus on meassure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
@@ -227,11 +230,13 @@ LPEMeasureSegments::newWidget()
             if (widg) {
                 if (       param->param_key == "linked_items") {
                     vbox1->pack_start(*widg, true, true, 2);
-                } else if (param->param_key == "distance_projection" ||
+                } else if (param->param_key == "active_projection"   ||
+                           param->param_key == "distance_projection" ||
                            param->param_key == "blacklist_nodes"     ||
                            param->param_key == "whitelist_nodes"     ||
                            param->param_key == "vertical_projection" ||
-                           param->param_key == "oposite_projection"    ) 
+                           param->param_key == "oposite_projection"  ||
+                           param->param_key == "hide_projection_line"  ) 
                 {
                     vbox1->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "precision"    ||
@@ -708,11 +713,6 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 
 Geom::PathVector 
 LPEMeasureSegments::doEffect_path (Geom::PathVector const & path_in) {
-    if (hasprojection) {
-        Geom::PathVector projectline_pv;
-        projectline_pv.push_back(projectionline);
-        return projectline_pv;
-    }
     return path_in;
 }
 
@@ -833,6 +833,7 @@ void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    Glib::ustring lpobjid = this->lpeobj->getId();
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
@@ -859,13 +860,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
             SPItem * item = dynamic_cast<SPItem *>(obj);
             if (item) {
-                hasprojection = true;
                 std::vector< Point > current_nodes = getNodes(item);
                 nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
             }
         }
     }
-    if (hasprojection) {
+    if (active_projection) {
+        std::vector< Point > current_nodes = getNodes(splpeitem);
+        nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
         std::vector<Point> result;
         double mindistance = std::numeric_limits<double>::max();
         double maxdistance = 0.0;
@@ -924,12 +926,24 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             counter ++;
             prevpoint = point;
         }
-        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
-        path *= affinetransform;
-        projectionline.clear();
-        projectionline.setInitial(path.initialPoint());
-        projectionline.appendNew<Geom::LineSegment>(path.finalPoint());
+        createLine(Geom::Point(), Geom::Point(), Glib::ustring("proyection-line-"), 0, true, true, true);
+        if (!hide_projection_line) {
+            Glib::ustring projection_line_on = "proyection-line-";
+            projection_line_on += "0";
+            projection_line_on += "-";
+            projection_line_on += lpobjid;
+            items.push_back(projection_line_on);
+            createLine(path.initialPoint(), path.finalPoint(), Glib::ustring("proyection-line-"), 0, false, false);
+        }
         pathvector.push_back(path);
+        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
+        Geom::Affine writed_transform = Geom::identity();
+        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
+        if (star_ellipse_fix != Geom::identity()) {
+            pathvector *= star_ellipse_fix.inverse();
+        } else {
+            pathvector *= writed_transform.inverse();
+        }
     }
 
     //end projection prepare
@@ -968,7 +982,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Point end_stored = Geom::Point(0,0); 
         Geom::Point next_stored = Geom::Point(0,0);
         Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
-        if (!hasprojection) {
+        if (!active_projection) {
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         }
         c->unref();
@@ -985,7 +999,6 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         double start_angle_cross = 0;
         double end_angle_cross = 0;
         gint counter = -1;
-        Glib::ustring lpobjid = this->lpeobj->getId();
         bool previous_fix_overlaps = true;
         for (size_t i = 0; i < pathvector.size(); i++) {
             for (size_t j = 0; j < pathvector[i].size(); j++) {
