@@ -1,0 +1,26 @@
+
+This directory contains Gio::Actions.
+
+"A GAction (Gio::Action) is a representation of a single
+user-interesting action in an application."
+(https://wiki.gnome.org/HowDoI/GAction)
+
+In more layman terms, it provides a uniform interface for calling
+functions with an optional single parameter that is not tied to the
+GUI.
+
+Actions provide two operations:
+
+* activation (which results in calling the function),
+* state change (if the action supports a state).
+
+While actions are defined independent of the GUI (unlike GtkAction),
+the can be used by "actionable widgets" (menus, buttons, etc.) by
+simply referring to them by name. They can also be remotely activated
+by D-Bus and GNotifications.
+
+To do:
+
+* Convert 'verbs' to Gio::Actions.
+* Update command line to use actions.
+* Update GUI to use actions.
