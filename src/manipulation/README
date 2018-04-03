@@ -1,0 +1,16 @@
+
+This directory contains code that allows manipulation of the SVG
+tree. The manipulations can be to:
+
+* Elements: creating, deleting, reordering, selection.
+* Attributes: adding, removing, changing the value.
+* Properties: adding, removing, changing the value.
+
+This code in this directory should be kept GUI independent.
+
+To do:
+
+* Move relevant code here.
+* Remove GUI dependency if necessary.
+
+
