@@ -390,7 +390,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     id += lpobjid;
     SPObject *elemref = NULL;
     Inkscape::XML::Node *rtspan = NULL;
-        elemref = document->getObjectById(id.c_str());
+    elemref = document->getObjectById(id.c_str());
 
     if (elemref) {
         rtext = elemref->getRepr();
@@ -433,7 +433,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     }
     sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
     if (remove) {
-        sp_repr_css_set_property (css, "display","hidden");
+        sp_repr_css_set_property (css, "display","none");
     }
     sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
     Glib::ustring css_str;
@@ -766,7 +766,7 @@ transformNodes(std::vector< Point > nodes, Geom::Affine transform)
 }
 
 std::vector< Point > 
-getNodes(SPItem * item)
+getNodes(SPItem * item, Geom::Affine transform)
 {
     std::vector< Point > current_nodes;
     SPShape    * shape    = dynamic_cast<SPShape     *> (item);
@@ -778,12 +778,12 @@ getNodes(SPItem * item)
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *sub_item = *iter;
-            std::vector< Point > nodes = transformNodes(getNodes(sub_item), item->transform);
+            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform), transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape) {
         SPCurve * c = shape->getCurve();
-        current_nodes = transformNodes(c->get_pathvector().nodes(), item->transform);
+        current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
         c->unref();
     } else if (text || flowtext) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -803,7 +803,7 @@ getNodes(SPItem * item)
                 curve->unref();
                 continue;
             }
-            std::vector< Point > letter_nodes = transformNodes(curve->get_pathvector().nodes(), item->transform);
+            std::vector< Point > letter_nodes = transformNodes(curve->get_pathvector().nodes(), transform);
             current_nodes.insert(current_nodes.end(),letter_nodes.begin(),letter_nodes.end());
             if (iter == te_get_layout(item)->end()) {
                 break;
@@ -812,10 +812,10 @@ getNodes(SPItem * item)
     } else {
         Geom::OptRect bbox = item->geometricBounds();
         if (bbox) {
-            current_nodes.push_back((*bbox).corner(0) * item->transform);
-            current_nodes.push_back((*bbox).corner(1) * item->transform);
-            current_nodes.push_back((*bbox).corner(2) * item->transform);
-            current_nodes.push_back((*bbox).corner(3) * item->transform);
+            current_nodes.push_back((*bbox).corner(0) * transform);
+            current_nodes.push_back((*bbox).corner(1) * transform);
+            current_nodes.push_back((*bbox).corner(2) * transform);
+            current_nodes.push_back((*bbox).corner(3) * transform);
         }
     }
     return current_nodes;
@@ -855,18 +855,23 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     //Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
-    for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
-        SPObject *obj;
-        if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
-            SPItem * item = dynamic_cast<SPItem *>(obj);
-            if (item) {
-                std::vector< Point > current_nodes = getNodes(item);
-                nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+    if (active_projection) {
+        for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
+            SPObject *obj;
+            if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+                SPItem * item = dynamic_cast<SPItem *>(obj);
+                if (item) {
+                    std::vector< Point > current_nodes = getNodes(item, item->transform);
+                    nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+                }
             }
         }
-    }
-    if (active_projection) {
-        std::vector< Point > current_nodes = getNodes(splpeitem);
+        Geom::Affine writed_transform = Geom::identity();
+        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
+        if (star_ellipse_fix != Geom::identity()) {
+            writed_transform = star_ellipse_fix;
+        }
+        std::vector< Point > current_nodes = getNodes(splpeitem, writed_transform);
         nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
         std::vector<Point> result;
         double mindistance = std::numeric_limits<double>::max();
@@ -893,10 +898,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
             Geom::Point point = (*iter);
             if (vertical_projection) {
-                Geom::Coord xpos = oposite_projection?distance_projection+maxdistance:-distance_projection+mindistance;
+                Geom::Coord xpos = oposite_projection?maxdistance+distance_projection:mindistance-distance_projection;
                 result.push_back(Geom::Point(xpos, point[Geom::Y]));
             } else {
-                Geom::Coord ypos = oposite_projection?distance_projection+maxdistance:-distance_projection+mindistance;
+                Geom::Coord ypos = oposite_projection?maxdistance+distance_projection:mindistance-distance_projection;
                 result.push_back(Geom::Point(point[Geom::X], ypos));
             }
         }
@@ -926,24 +931,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             counter ++;
             prevpoint = point;
         }
-        createLine(Geom::Point(), Geom::Point(), Glib::ustring("proyection-line-"), 0, true, true, true);
-        if (!hide_projection_line) {
-            Glib::ustring projection_line_on = "proyection-line-";
-            projection_line_on += "0";
-            projection_line_on += "-";
-            projection_line_on += lpobjid;
-            items.push_back(projection_line_on);
-            createLine(path.initialPoint(), path.finalPoint(), Glib::ustring("proyection-line-"), 0, false, false);
-        }
         pathvector.push_back(path);
-        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
-        Geom::Affine writed_transform = Geom::identity();
-        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-        if (star_ellipse_fix != Geom::identity()) {
-            pathvector *= star_ellipse_fix.inverse();
-        } else {
-            pathvector *= writed_transform.inverse();
-        }
     }
 
     //end projection prepare
@@ -984,6 +972,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
         if (!active_projection) {
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+            Geom::Affine writed_transform = Geom::identity();
+            sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
+            if (star_ellipse_fix != Geom::identity()) {
+                pathvector *= star_ellipse_fix;
+                star_ellipse_fix = Geom::identity();
+            } else {
+                pathvector *= writed_transform;
+            }
         }
         c->unref();
         Geom::Affine writed_transform = Geom::identity();
@@ -1001,7 +997,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         gint counter = -1;
         bool previous_fix_overlaps = true;
         for (size_t i = 0; i < pathvector.size(); i++) {
-            for (size_t j = 0; j < pathvector[i].size(); j++) {
+            size_t count = pathvector[i].size_default();
+            if ( pathvector[i].closed()) {
+              const Geom::Curve &closingline = pathvector[i].back_closed(); 
+              if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                count = pathvector[i].size_open();
+              }
+            }
+            for (size_t j = 0; j < count; j++) {
                 counter++;
                 gint fix_overlaps_degree = fix_overlaps;
                 Geom::Point prev = Geom::Point(0,0);
