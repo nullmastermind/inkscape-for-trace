@@ -17,6 +17,7 @@
 #include "preferences.h"
 #include "object/sp-object.h"
 #include "object/sp-root.h"
+#include "object/sp-namedview.h"
 #include "xml/repr.h"
 
 #include <glibmm/regex.h>
@@ -325,11 +326,13 @@ void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring,
             font_data[font_family].insert(font_style);
         }
     } else {
-        std::cerr << "FontLister::update_font_data_recursive: descr without font family!" << std::endl;
+        // We're starting from root and looking at all elements... we should probably white list text/containers.
+        std::cerr << "FontLister::update_font_data_recursive: descr without font family! " << (r.getId()?r.getId():"null") << std::endl;
     }
     pango_font_description_free(descr);
 
     for (auto& child: r.children) {
+        if (SP_IS_NAMEDVIEW(&r)) continue;
         update_font_data_recursive(child, font_data);
     }
 }
