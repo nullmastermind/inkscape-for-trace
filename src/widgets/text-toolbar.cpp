@@ -1473,9 +1473,6 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontStyleAction"  ) );
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-    if (!subselection) {
-        fontlister->update_font_list( SP_ACTIVE_DESKTOP->getDocument());
-    }
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
