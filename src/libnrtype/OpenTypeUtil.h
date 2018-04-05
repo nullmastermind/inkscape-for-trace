@@ -50,7 +50,8 @@ inline FT_Fixed FTDoubleToFixed (double value) {
 
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, int>& tables,
-                            std::map<Glib::ustring, Glib::ustring>& substitutions);
+                            std::map<Glib::ustring, Glib::ustring>& stylistic,
+                            std::map<Glib::ustring, Glib::ustring>& ligatures);
 
 void readOpenTypeFvarTable (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarAxis>& axes,

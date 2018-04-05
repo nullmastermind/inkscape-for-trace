@@ -2,7 +2,7 @@
  * Author:
  *   Tavmjong Bah <tavmjong@free.fr>
  *
- * Copyright (C) 2015 Tavmong Bah
+ * Copyright (C) 2015, 2018 Tavmong Bah
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
@@ -90,11 +90,15 @@ namespace Widget {
     _ligatures_contextual.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
 
     // Add to frame
-    _ligatures_vbox.pack_start( _ligatures_common        );
-    _ligatures_vbox.pack_start( _ligatures_discretionary );
-    _ligatures_vbox.pack_start( _ligatures_historical    );
-    _ligatures_vbox.pack_start( _ligatures_contextual    );
-    _ligatures_frame.add( _ligatures_vbox );
+    _ligatures_grid.attach( _ligatures_common,              0, 0, 1, 1);
+    _ligatures_grid.attach( _ligatures_discretionary,       0, 1, 1, 1);
+    _ligatures_grid.attach( _ligatures_historical,          0, 2, 1, 1);
+    _ligatures_grid.attach( _ligatures_contextual,          0, 3, 1, 1);
+    _ligatures_grid.attach( _ligatures_label_common,        1, 0, 1, 1);
+    _ligatures_grid.attach( _ligatures_label_discretionary, 1, 1, 1, 1);
+    _ligatures_grid.attach( _ligatures_label_historical,    1, 2, 1, 1);
+    _ligatures_grid.attach( _ligatures_label_contextual,    1, 3, 1, 1);
+    _ligatures_frame.add( _ligatures_grid );
     pack_start( _ligatures_frame, Gtk::PACK_SHRINK );
 
     ligatures_init();
@@ -539,6 +543,32 @@ namespace Widget {
               _numeric_slashed_zero.set_sensitive( false );
           }
 
+          // List available ligatures
+          Glib::ustring markup_liga;
+          Glib::ustring markup_dlig;
+          Glib::ustring markup_hlig;
+          Glib::ustring markup_calt;
+          for (auto table: res->openTypeLigatures) {
+
+              Glib::ustring markup;
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "'>";
+              markup += Glib::Markup::escape_text(table.second);
+              markup += "</span>";
+
+              if (table.first == "liga") markup_liga += markup;
+              if (table.first == "clig") markup_liga += markup;
+              if (table.first == "dlig") markup_dlig += markup;
+              if (table.first == "hlig") markup_hlig += markup;
+              if (table.first == "calt") markup_calt += markup;
+          }
+
+          _ligatures_label_common.set_markup        ( markup_liga.c_str() );
+          _ligatures_label_discretionary.set_markup ( markup_dlig.c_str() );
+          _ligatures_label_historical.set_markup    ( markup_hlig.c_str() );
+          _ligatures_label_contextual.set_markup    ( markup_calt.c_str() );
+
           // Make list of tables not handled above... eventually add Gtk::Label with
           // this info.
           std::map<Glib::ustring,int> table_copy = res->openTypeTables;
@@ -574,7 +604,7 @@ namespace Widget {
           // "<span foreground='darkblue'>";
           Glib::ustring markup;
 
-          for (auto table: res->openTypeSubstitutions) {
+          for (auto table: res->openTypeStylistic) {
 
               markup += table.first;
               markup += ": ";

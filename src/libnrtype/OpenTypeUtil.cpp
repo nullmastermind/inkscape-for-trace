@@ -39,14 +39,17 @@ Glib::ustring extract_tag( guint32 *tag ) {
 }
 
 
-// Make a list of all tables fount in the GSUB
+// Make a list of all tables found in the GSUB
 // This list includes all tables regardless of script or language.
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, int>& tables,
-                            std::map<Glib::ustring, Glib::ustring>& substitutions) {
+                            std::map<Glib::ustring, Glib::ustring>& stylistic,
+                            std::map<Glib::ustring, Glib::ustring>& ligatures
+    ) {
 
     tables.clear();
-    substitutions.clear();
+    stylistic.clear();
+    ligatures.clear();
 
     // Use Harfbuzz, Pango's equivalent calls are deprecated.
     auto const hb_face = hb_ft_face_create(ft_face, NULL);
@@ -109,11 +112,16 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     for (auto table: tables) {
 
         // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
-        if (table.first == "salt" ||
-            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't') ) ) {
-            // std::cout << " Table: " << table.first << std::endl;
+        bool style    = table.first == "salt" ||
+            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't'));
 
-            Glib::ustring unicode_characters;
+        bool ligature = ( table.first == "liga" ||  // Standard ligatures
+                          table.first == "clig" ||  // Common ligatures
+                          table.first == "dlig" ||  // Discretionary ligatures
+                          table.first == "hlig" ||  // Historical ligatures
+                          table.first == "calt" );  // Contextual alternatives
+
+        if (style || ligature ) {
 
             unsigned int feature_index;
             if (  hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB,
@@ -137,9 +145,9 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
 
                 if (count > 0) {
                     hb_set_t* glyphs_before = NULL; // hb_set_create();
-                    hb_set_t* glyphs_input  = hb_set_create();
+                    hb_set_t* glyphs_input  = hb_set_create();  // For stylistic
                     hb_set_t* glyphs_after  = NULL; // hb_set_create();
-                    hb_set_t* glyphs_output = NULL; // hb_set_create();
+                    hb_set_t* glyphs_output = hb_set_create();  // For ligatures
 
                     // For now, just look at first index
                     hb_ot_layout_lookup_collect_glyphs (hb_face, HB_OT_TAG_GSUB,
@@ -154,20 +162,44 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                     // Without this, all functions return 0, etc.
                     hb_ft_font_set_funcs (hb_font);
 
-                    hb_codepoint_t codepoint = -1;
-                    while (hb_set_next (glyphs_input, &codepoint)) {
+                    Glib::ustring unicode_characters;
 
-                        // There is a unicode to glyph mapping function but not the inverse!
-                        for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
-                            hb_codepoint_t glyph = 0;
-                            hb_font_get_nominal_glyph (hb_font, unicode_i, &glyph);
-                            if ( glyph == codepoint) {
-                                unicode_characters += (gunichar)unicode_i;
-                                continue;
+                    hb_codepoint_t codepoint = -1;
+
+                    if (style) {
+                        while (hb_set_next (glyphs_input, &codepoint)) {
+
+                            // There is a unicode to glyph mapping function but not the inverse!
+                            for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
+                                hb_codepoint_t glyph = 0;
+                                hb_font_get_nominal_glyph (hb_font, unicode_i, &glyph);
+                                if ( glyph == codepoint) {
+                                    unicode_characters += (gunichar)unicode_i;
+                                    continue;
+                                }
                             }
                         }
+                        stylistic[table.first] = unicode_characters;
                     }
-                    substitutions[table.first] = unicode_characters;
+
+                    // Don't know how to extract all input glyphs...
+                    // glyphs_input contains last input glyph, so just use output.
+                    if (ligature) {
+                        while (hb_set_next (glyphs_output, &codepoint)) {
+
+                            // There is a unicode to glyph mapping function but not the inverse!
+                            for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
+                                hb_codepoint_t glyph = 0;
+                                hb_font_get_nominal_glyph (hb_font, unicode_i, &glyph);
+                                if ( glyph == codepoint) {
+                                    unicode_characters += (gunichar)unicode_i;
+                                    unicode_characters += " "; // Add space
+                                    continue;
+                                }
+                            }
+                        }
+                        ligatures[table.first] = unicode_characters;
+                    }
 
                     hb_set_destroy (glyphs_input);
                     hb_font_destroy (hb_font);
@@ -176,6 +208,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                 // std::cout << "  Did not find '" << table.first << "'!" << std::endl;
             }
         }
+
     }
     // for (auto table: res->openTypeSubstitutions) {
     //     std::cout << table.first << ": " << table.second << std::endl;
