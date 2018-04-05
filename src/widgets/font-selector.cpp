@@ -33,7 +33,7 @@ struct SPFontSelector
 {
     GtkBox hbox;
 
-    unsigned int block_emit : 1;
+    bool block_emit;
 
     GtkWidget *family;
     GtkWidget *style;
@@ -439,7 +439,6 @@ void sp_font_selector_set_fontspec (SPFontSelector *fsel, Glib::ustring fontspec
         std::pair<Glib::ustring, Glib::ustring> ui = font_lister->ui_from_fontspec( fontspec );
         Glib::ustring family = ui.first;
         Glib::ustring style = ui.second;
-
         Gtk::TreePath path;
         try {
             path = font_lister->get_row_for_font (family);
@@ -449,10 +448,10 @@ void sp_font_selector_set_fontspec (SPFontSelector *fsel, Glib::ustring fontspec
         }
 
         // High light selected family and scroll so it is in view.
-        fsel->block_emit = TRUE;
+        fsel->block_emit = true;
         gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (fsel->family_treeview)), path.gobj());
         gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (fsel->family_treeview), path.gobj(), NULL, TRUE, 0.5, 0.5);
-        fsel->block_emit = FALSE;   // TODO: Should this be moved to the end?
+        fsel->block_emit = false;   // TODO: Should this be moved to the end?
 
 
         // We don't need to get best style since this is only called on a new
