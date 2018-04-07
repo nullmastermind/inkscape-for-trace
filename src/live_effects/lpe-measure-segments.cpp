@@ -96,7 +96,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
     vertical_projection(_("Vertical projection"), _("Not horizontal but vertical"), "vertical_projection", &wr, this, false),
     oposite_projection(_("Oposite projection"), _("Use the other side of selected elements"), "oposite_projection", &wr, this, false),
-    hide_projection_line(_("Hide projection line"), _("Hide projection line"), "hide_projection_line", &wr, this, false),
+    all_items_position(_("Global projection position"), _("Use also all items linked as base of projection position"), "all_items_position", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
     projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
     options(_("Options"), _("Options"), "options", &wr, this, ""),
@@ -133,7 +133,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&whitelist_nodes);
     registerParameter(&vertical_projection);
     registerParameter(&oposite_projection);
-    registerParameter(&hide_projection_line);
+    registerParameter(&all_items_position);
     registerParameter(&general);
     registerParameter(&projection);
     registerParameter(&options);
@@ -148,6 +148,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
 
     format.param_hide_canvas_text();
     blacklist.param_hide_canvas_text();
+    blacklist_nodes.param_hide_canvas_text();
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
@@ -182,7 +183,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    notebookpointer = NULL;
     general.param_update_default(_("Base of the lpe, focus on meassure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
@@ -235,8 +235,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "blacklist_nodes"     ||
                            param->param_key == "whitelist_nodes"     ||
                            param->param_key == "vertical_projection" ||
-                           param->param_key == "oposite_projection"  ||
-                           param->param_key == "hide_projection_line"  ) 
+                           param->param_key == "oposite_projection"    ) 
                 {
                     vbox1->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "precision"    ||
@@ -288,7 +287,7 @@ LPEMeasureSegments::newWidget()
     vbox3->show_all();
     vbox->pack_start(*notebook, true, true, 2);
     notebook->set_current_page(pagenumber);
-    notebookpointer = Gtk::manage(notebook);
+    notebook->signal_switch_page().connect(sigc::mem_fun(*this, &LPEMeasureSegments::on_my_switch_page));
     if(Gtk::Widget* widg = defaultParamSet()) {
         //Wrap to make it more omogenious
         Gtk::VBox *vbox4 = Gtk::manage(new Gtk::VBox());
@@ -301,6 +300,14 @@ LPEMeasureSegments::newWidget()
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
+void 
+LPEMeasureSegments::on_my_switch_page(Gtk::Widget* page, guint page_number)
+{
+    if(!page->get_parent()->in_destruction()) {
+        pagenumber = page_number;
+    }
+}
+
 void
 LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 {
@@ -311,12 +318,11 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
     Glib::ustring lpobjid = this->lpeobj->getId();
     Glib::ustring itemid  = sp_lpe_item->getId();
     Glib::ustring style;
-    gchar c[32];
-    sprintf(c, "#%06x", rgb24);
-    style = Glib::ustring("fill:") + Glib::ustring(c);
+    style = Glib::ustring("fill:context-stroke;");
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
     style = style + Glib::ustring(";fill-opacity:") + Glib::ustring(os.str());
+    style = style + Glib::ustring(";stroke:none");
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *arrow = NULL;
@@ -634,8 +640,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     style += Glib::ustring(c);
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
-    style += ";stroke-opacity:";
-    style += os.str();
+    style = style + Glib::ustring(";stroke-opacity:") + Glib::ustring(os.str());
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css, style.c_str());
     Glib::ustring css_str;
@@ -773,6 +778,13 @@ getNodes(SPItem * item, Geom::Affine transform)
     SPText     * text     = dynamic_cast<SPText      *> (item);
     SPGroup    * group    = dynamic_cast<SPGroup     *> (item);
     SPFlowtext * flowtext = dynamic_cast<SPFlowtext  *> (item);
+    Geom::OptRect bbox = item->geometricBounds();
+    if (bbox) {
+        current_nodes.push_back((*bbox).corner(0) * transform);
+        current_nodes.push_back((*bbox).corner(1) * transform);
+        current_nodes.push_back((*bbox).corner(2) * transform);
+        current_nodes.push_back((*bbox).corner(3) * transform);
+    }
     //TODO handle clones/use
     if (group) {
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
@@ -809,14 +821,6 @@ getNodes(SPItem * item, Geom::Affine transform)
                 break;
             }
         } while (true);
-    } else {
-        Geom::OptRect bbox = item->geometricBounds();
-        if (bbox) {
-            current_nodes.push_back((*bbox).corner(0) * transform);
-            current_nodes.push_back((*bbox).corner(1) * transform);
-            current_nodes.push_back((*bbox).corner(2) * transform);
-            current_nodes.push_back((*bbox).corner(3) * transform);
-        }
     }
     return current_nodes;
 }
@@ -843,39 +847,32 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && notebookpointer && 
-        desktop->getSelection()->includes(sp_lpe_item) && 
-        desktop->getSelection()->singleItem ()) 
-    {
-        pagenumber = notebookpointer->get_current_page();
-    } else {
-        notebookpointer = NULL;
-    }
     //Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
     if (active_projection) {
-        for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
-            SPObject *obj;
-            if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
-                SPItem * item = dynamic_cast<SPItem *>(obj);
-                if (item) {
-                    std::vector< Point > current_nodes = getNodes(item, item->transform);
-                    nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
-                }
-            }
-        }
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
         if (star_ellipse_fix != Geom::identity()) {
             writed_transform = star_ellipse_fix;
         }
+        if ( all_items_position) {
+            for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
+                SPObject *obj;
+                if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+                    SPItem * item = dynamic_cast<SPItem *>(obj);
+                    if (item) {
+                        std::vector< Point > current_nodes = getNodes(item, item->transform);
+                        nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+                    }
+                }
+            }
+        }
         std::vector< Point > current_nodes = getNodes(splpeitem, writed_transform);
         nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
         std::vector<Point> result;
         double mindistance = std::numeric_limits<double>::max();
-        double maxdistance = 0.0;
+        double maxdistance = -std::numeric_limits<double>::max();
         for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
             Geom::Point point = (*iter);
 
@@ -892,6 +889,18 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 }
                 if (point[Geom::Y] > maxdistance) {
                     maxdistance = point[Geom::Y];
+                }
+            }
+        }
+        if ( !all_items_position) {
+            for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
+                SPObject *obj;
+                if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+                    SPItem * item = dynamic_cast<SPItem *>(obj);
+                    if (item) {
+                        std::vector< Point > current_nodes = getNodes(item, item->transform);
+                        nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+                    }
                 }
             }
         }
@@ -950,12 +959,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         } else {
             doc_scale = 1.0;
         }
-        unsigned const color = coloropacity.get_value() >> 8;
+        unsigned long const color = coloropacity.get_value() >> 8;
+        guint32 color32 = coloropacity.get_value();
         bool colorchanged = false;
-        if (color != rgb24) {
+        if (color32 != rgb32) {
             colorchanged = true;
         }
         rgb24 = color;
+        rgb32 = color32;
         SPCurve * c = NULL;
         gchar * fontbutton_str = fontbutton.param_getSVGValue();
         Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);

@@ -46,6 +46,7 @@ public:
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);
     bool isWhitelist(size_t i, gchar * blacklist_str, bool whitelist);
+    void on_my_switch_page(Gtk::Widget* page, guint page_number);
 private:
     UnitParam unit;
     EnumParam<OrientationMethod> orientation;
@@ -67,6 +68,7 @@ private:
     BoolParam flip_side;
     BoolParam scale_sensitive;
     BoolParam local_locale;
+    BoolParam all_items_position;
     BoolParam rotate_anotation;
     BoolParam hide_back;
     BoolParam hide_arrows;
@@ -77,7 +79,6 @@ private:
     BoolParam whitelist_nodes;
     BoolParam vertical_projection;
     BoolParam oposite_projection;
-    BoolParam hide_projection_line;
     MessageParam general;
     MessageParam projection;
     MessageParam options;
@@ -88,12 +89,12 @@ private:
     double fontsize;
     double anotation_width;
     double previous_size;
-    unsigned rgb24;
+    unsigned long rgb24;
+    guint32 rgb32;
     double arrow_gap;
     guint pagenumber;
     gchar const* locale_base;
     Geom::Affine star_ellipse_fix;
-    Gtk::Notebook * notebookpointer;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 
