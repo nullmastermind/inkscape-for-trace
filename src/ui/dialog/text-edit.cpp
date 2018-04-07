@@ -84,49 +84,14 @@ TextEdit::TextEdit()
       samplephrase(_("AaBbCcIiPpQq12369$\342\202\254\302\242?.;/()"))
 {
 
+    /* Font tab -------------------------------- */
+
     /* Font selector */
     GtkWidget *fontsel = sp_font_selector_new ();
     gtk_widget_set_size_request (fontsel, 0, 150);
     fsel = SP_FONT_SELECTOR(fontsel);
     fontsel_hbox.pack_start(*Gtk::manage(Glib::wrap(fontsel)), true, true);
-
-    /* Align buttons */
-    styleButton(&align_left,    _("Align left"),                 INKSCAPE_ICON("format-justify-left"),    NULL);
-    styleButton(&align_center,  _("Align center"),               INKSCAPE_ICON("format-justify-center"), &align_left);
-    styleButton(&align_right,   _("Align right"),                INKSCAPE_ICON("format-justify-right"),  &align_left);
-    styleButton(&align_justify, _("Justify (only flowed text)"), INKSCAPE_ICON("format-justify-fill"),   &align_left);
-
-    align_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-
-    layout_hbox.pack_start(align_sep, false, false, 10);
-
-    /* Direction buttons */
-    styleButton(&text_horizontal, _("Horizontal text"), INKSCAPE_ICON("format-text-direction-horizontal"), NULL);
-    styleButton(&text_vertical, _("Vertical text"), INKSCAPE_ICON("format-text-direction-vertical"), &text_horizontal);
-
-    text_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-
-    layout_hbox.pack_start(text_sep, false, false, 10);
-
-    // Text start Offset
-    {
-        startOffset = gtk_combo_box_text_new_with_entry ();
-        gtk_widget_set_size_request(startOffset, 90, -1);
-
-        const gchar *spacings[] = {"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%", NULL};
-        for (int i = 0; spacings[i]; i++) {
-            gtk_combo_box_text_append_text(reinterpret_cast<GtkComboBoxText *>(startOffset), spacings[i]);
-        }
-        gtk_entry_set_text(reinterpret_cast<GtkEntry *>(gtk_bin_get_child(reinterpret_cast<GtkBin *>(startOffset))), "0%");
-
-        gtk_widget_set_tooltip_text(startOffset, _("Text path offset"));
-
-        auto sep = Gtk::manage(new Gtk::Separator());
-        sep->set_orientation(Gtk::ORIENTATION_VERTICAL);
-        layout_hbox.pack_start(*sep, false, false, 10);
-
-        layout_hbox.pack_start(*Gtk::manage(Glib::wrap(startOffset)), false, false);
-    }
+    fontsel_hbox.set_name("Font Selector HBox");
 
     /* Font preview */
     preview_label.set_ellipsize(Pango::ELLIPSIZE_END);
@@ -136,7 +101,7 @@ TextEdit::TextEdit()
     font_vbox.pack_start(fontsel_hbox, true, true);
     font_vbox.pack_start(preview_label, true, true, VB_MARGIN);
 
-    /* Text tab */
+    /* Text tab -------------------------------- */
     scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller.set_shadow_type(Gtk::SHADOW_IN);
 
@@ -145,12 +110,12 @@ TextEdit::TextEdit()
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
 #ifdef WITH_GTKSPELL
-/*
+    /*
        TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
        language (either as 2nd arg of gtkspell_new_attach, or with explicit
        gtkspell_set_language call in; see advanced.c example in gtkspell docs).
        onReadSelection looks like a suitable place.
-*/
+    */
     GtkSpellChecker * speller = gtk_spell_checker_new();
 
     if (! gtk_spell_checker_attach(speller, GTK_TEXT_VIEW(text_view))) {
@@ -163,11 +128,13 @@ TextEdit::TextEdit()
     scroller.add(*Gtk::manage(Glib::wrap(text_view)));
     text_vbox.pack_start(scroller, true, true, 0);
 
+    /* Notebook -----------------------------------*/
+    notebook.set_name( "TextEdit Notebook" );
     notebook.append_page(font_vbox, font_label);
     notebook.append_page(text_vbox, text_label);
     notebook.append_page(vari_vbox, vari_label);
     
-    /* Buttons */
+    /* Buttons (under notebook) ------------------ */
     setasdefault_button.set_use_underline(true);
     apply_button.set_can_default();
     button_row.pack_start(setasdefault_button, false, false, 0);
@@ -175,15 +142,14 @@ TextEdit::TextEdit()
     button_row.pack_end(apply_button, false, false, VB_MARGIN);
 
     Gtk::Box *contents = _getContents();
+    contents->set_name("TextEdit Dialog Box");
     contents->set_spacing(4);
     contents->pack_start(notebook, true, true);
     contents->pack_start(button_row, false, false, VB_MARGIN);
 
     /* Signal handlers */
     g_signal_connect ( G_OBJECT (fontsel), "font_set", G_CALLBACK (onFontChange), this );
-    // g_signal_connect ( G_OBJECT (spacing_combo), "changed", G_CALLBACK (onLineSpacingChange), this );
     g_signal_connect ( G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this );
-    g_signal_connect(startOffset, "changed", G_CALLBACK(onStartOffsetChange), this);
     setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
@@ -203,24 +169,6 @@ TextEdit::~TextEdit()
     desktopChangeConn.disconnect();
     deskTrack.disconnect();
     fontVariantChangedConn.disconnect();
-}
-
-void TextEdit::styleButton(Gtk::RadioButton *button, gchar const *tooltip, gchar const *icon_name, Gtk::RadioButton *group_button )
-{
-    GtkWidget *icon = gtk_image_new_from_icon_name( icon_name, GTK_ICON_SIZE_SMALL_TOOLBAR );
-
-    if (group_button) {
-        Gtk::RadioButton::Group group = group_button->get_group();
-        button->set_group(group);
-    }
-
-    button->add(*Gtk::manage(Glib::wrap(icon)));
-    button->set_tooltip_text(tooltip);
-    button->set_relief(Gtk::RELIEF_NONE);
-    button->set_mode(false);
-    button->signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onToggle));
-
-    layout_hbox.pack_start(*button, false, false);
 }
 
 void TextEdit::onSelectionModified(guint flags )
@@ -257,46 +205,40 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         guint items = getSelectedTextCount ();
         if (items == 1) {
             gtk_widget_set_sensitive (text_view, TRUE);
-            gtk_widget_set_sensitive( startOffset, SP_IS_TEXT_TEXTPATH(text) );
-            if (SP_IS_TEXT_TEXTPATH(text)) {
-                SPTextPath *tp = SP_TEXTPATH(text->firstChild());
-                if (tp->getAttribute("startOffset")) {
-                    gtk_entry_set_text(reinterpret_cast<GtkEntry *>(gtk_bin_get_child(reinterpret_cast<GtkBin *>(startOffset))), tp->getAttribute("startOffset"));
-                }
-            }
         } else {
             gtk_widget_set_sensitive (text_view, FALSE);
-            gtk_widget_set_sensitive( startOffset, FALSE );
         }
         apply_button.set_sensitive ( false );
         setasdefault_button.set_sensitive ( true );
 
-        //if (docontent) {  // When would we NOT want to show the content ?
-            gchar *str;
-            str = sp_te_get_string_multiline (text);
-            if (str) {
-                if (items == 1) {
-                    gtk_text_buffer_set_text (text_buffer, str, strlen (str));
-                    gtk_text_buffer_set_modified (text_buffer, FALSE);
-                }
-                phrase = str;
-
-            } else {
-                gtk_text_buffer_set_text (text_buffer, "", 0);
+        gchar *str;
+        str = sp_te_get_string_multiline (text);
+        if (str) {
+            if (items == 1) {
+                gtk_text_buffer_set_text (text_buffer, str, strlen (str));
+                gtk_text_buffer_set_modified (text_buffer, FALSE);
             }
-        //} // end of if (docontent)
+            phrase = str;
+
+        } else {
+            gtk_text_buffer_set_text (text_buffer, "", 0);
+        }
+
         text->getRepr(); // was being called but result ignored. Check this.
     } else {
         gtk_widget_set_sensitive (text_view, FALSE);
-        gtk_widget_set_sensitive( startOffset, FALSE );
         apply_button.set_sensitive ( false );
         setasdefault_button.set_sensitive ( false );
     }
 
     if (dostyle) {
+
         // create temporary style
         SPStyle query(SP_ACTIVE_DOCUMENT);
-        // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
+
+        // Query style from desktop into it. This returns a result flag and fills query with the
+        // style of subselection, if any, or selection
+
         //int result_fontspec = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONT_SPECIFICATION);
         int result_family = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFAMILY);
         int result_style = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
@@ -304,8 +246,9 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
         // If querying returned nothing, read the style from the text tool prefs (default style for new texts)
         // (Ok to not get a font specification - must just rely on the family and style in that case)
-        if (result_family == QUERY_STYLE_NOTHING || result_style == QUERY_STYLE_NOTHING
-                || result_numbers == QUERY_STYLE_NOTHING) {
+        if (result_family == QUERY_STYLE_NOTHING ||
+            result_style  == QUERY_STYLE_NOTHING ||
+            result_numbers == QUERY_STYLE_NOTHING) {
             query.readFromPrefs("/tools/text");
         }
 
@@ -326,44 +269,14 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
         setPreviewText (fontspec, phrase);
 
-        if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
-            if (query.text_align.computed == SP_CSS_TEXT_ALIGN_JUSTIFY) {
-                align_justify.set_active();
-            } else {
-                align_left.set_active();
-            }
-        } else if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-            align_center.set_active();
-        } else {
-            align_right.set_active();
-        }
-
-        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
-            text_horizontal.set_active();
-        } else {
-            text_vertical.set_active();
-        }
-
-        /*
-        double height;
-        if (query.line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-        else if (query.line_height.unit == SP_CSS_UNIT_PERCENT)
-            height = query.line_height.value;
-        else height = query.line_height.computed;
-        gchar *sstr = g_strdup_printf ("%d%%", (int) floor(height * 100 + 0.5));
-
-        gtk_entry_set_text ((GtkEntry *) gtk_bin_get_child ((GtkBin *) spacing_combo), sstr);
-        g_free(sstr);
-        */
-
         // Update font variant widget
         //int result_variants =
         sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
         int result_features =
             sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
         vari_vbox.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
-
     }
+
     blocked = false;
 }
 
@@ -371,6 +284,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
 {
     if (font_spec.empty()) {
+        preview_label.set_markup("");
         return;
     }
 
@@ -383,12 +297,9 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     pt_size = std::min(pt_size, 100.0);
 
     // Pango font size is in 1024ths of a point
-    // C++11: Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
-    std::ostringstream size_st;
-    size_st << int(pt_size * PANGO_SCALE); // Markup code expects integers
-
+    Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
     Glib::ustring markup = "<span font=\'" + font_spec_escaped +
-        "\' size=\'" + size_st.str() + "\'>" + phrase_escaped + "</span>";
+        "\' size=\'" + size + "\'>" + phrase_escaped + "</span>";
 
     preview_label.set_markup(markup.c_str());
 }
@@ -469,32 +380,6 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             sp_repr_css_set_property (css, "font-size", os.str().c_str());
         }
 
-        // Layout
-        if ( align_left.get_active() ) {
-            sp_repr_css_set_property (css, "text-anchor", "start");
-            sp_repr_css_set_property (css, "text-align", "start");
-        } else  if ( align_center.get_active() ) {
-            sp_repr_css_set_property (css, "text-anchor", "middle");
-            sp_repr_css_set_property (css, "text-align", "center");
-        } else  if ( align_right.get_active() ){
-            sp_repr_css_set_property (css, "text-anchor", "end");
-            sp_repr_css_set_property (css, "text-align", "end");
-        } else {
-            // Align Justify
-            sp_repr_css_set_property (css, "text-anchor", "start");
-            sp_repr_css_set_property (css, "text-align", "justify");
-        }
-
-        if (text_horizontal.get_active()) {
-            sp_repr_css_set_property (css, "writing-mode", "lr");
-        } else {
-            sp_repr_css_set_property (css, "writing-mode", "tb");
-        }
-
-        // Note that SVG 1.1 does not support line-height but we use it.
-        // const gchar *sstr = gtk_combo_box_text_get_active_text ((GtkComboBoxText *) spacing_combo);
-        // sp_repr_css_set_property (css, "line-height", sstr);
-
         // Font variants
         vari_vbox.fill_css( css );
 
@@ -563,62 +448,38 @@ void TextEdit::onApply()
     blocked = false;
 }
 
-void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
+void TextEdit::onChange()
 {
-    if (!self || self->blocked) {
+    if (blocked) {
         return;
     }
 
-    SPItem *text = self->getSelectedTextItem();
+    SPItem *text = getSelectedTextItem();
 
     GtkTextIter start;
     GtkTextIter end;
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     gchar *str = gtk_text_buffer_get_text(text_buffer, &start, &end, TRUE);
-    Glib::ustring fontspec = sp_font_selector_get_fontspec(self->fsel);
 
-    if( !fontspec.empty() ) {
-        const gchar *phrase = str && *str ? str : self->samplephrase.c_str();
-        self->setPreviewText(fontspec, phrase);
-    } else {
-        self->preview_label.set_markup("");
-    }
+    Glib::ustring fontspec = sp_font_selector_get_fontspec(fsel);
+    const gchar *phrase = str && *str ? str : samplephrase.c_str();
+    setPreviewText(fontspec, phrase);
     g_free (str);
 
     if (text) {
-        self->apply_button.set_sensitive ( true );
-        //self->onApply();
+        apply_button.set_sensitive ( true );
     }
-    self->setasdefault_button.set_sensitive ( true);
+    setasdefault_button.set_sensitive ( true);
+}
+
+void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
+{
+    self->onChange();
 }
 
 void TextEdit::onFontChange(SPFontSelector * /*fontsel*/, gchar* fontspec, TextEdit *self)
 {
-    GtkTextIter start, end;
-    gchar *str;
-
-    if (!self || self->blocked)
-        return;
-
-    SPItem *text = self->getSelectedTextItem ();
-
-    gtk_text_buffer_get_bounds (self->text_buffer, &start, &end);
-    str = gtk_text_buffer_get_text (self->text_buffer, &start, &end, TRUE);
-
-    if (fontspec) {
-        const gchar *phrase = str && *str ? str : self->samplephrase.c_str();
-        self->setPreviewText(fontspec, phrase);
-    } else {
-        self->preview_label.set_markup("");
-    }
-    g_free(str);
-
-    if (text) {
-        self->apply_button.set_sensitive ( true );
-        //self->onApply();
-    }
-    self->setasdefault_button.set_sensitive ( true );
-
+    self->onChange();
 }
 
 void TextEdit::onFontVariantChange(TextEdit *self)
@@ -630,49 +491,6 @@ void TextEdit::onFontVariantChange(TextEdit *self)
 
     if (text) {
         self->apply_button.set_sensitive ( true );
-    }
-    self->setasdefault_button.set_sensitive ( true );
-}
-
-void TextEdit::onStartOffsetChange(GtkTextBuffer * /*text_buffer*/, TextEdit *self)
-{
-    SPItem *text = self->getSelectedTextItem();
-    if (text && SP_IS_TEXT_TEXTPATH(text))
-    {
-        SPTextPath *tp = SP_TEXTPATH(text->firstChild());
-        const gchar *sstr = gtk_combo_box_text_get_active_text(reinterpret_cast<GtkComboBoxText *>(self->startOffset));
-        tp->setAttribute("startOffset", sstr);
-
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "startOffset", SP_VERB_CONTEXT_TEXT, _("Set text style"));
-    }
-}
-
-void TextEdit::onToggle()
-{
-    if (blocked)
-        return;
-
-    SPItem *text = getSelectedTextItem ();
-
-    if (text) {
-        apply_button.set_sensitive ( true );
-        //onApply();
-    }
-    setasdefault_button.set_sensitive ( true );
-}
-
-
-void TextEdit::onLineSpacingChange(GtkComboBox* /*widget*/, gpointer data)
-{
-    TextEdit *self  = static_cast<TextEdit *>(data);
-    if (!self || self->blocked)
-        return;
-
-    SPItem *text = self->getSelectedTextItem ();
-
-    if (text) {
-        self->apply_button.set_sensitive ( true );
-        //self->onApply();
     }
     self->setasdefault_button.set_sensitive ( true );
 }

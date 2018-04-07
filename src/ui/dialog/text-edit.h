@@ -26,9 +26,7 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/button.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/radiobutton.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/separator.h>
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 #include "ui/dialog/desktop-tracker.h"
@@ -36,7 +34,6 @@
 
 class SPItem;
 struct SPFontSelector;
-//class FontVariants;
 class font_instance;
 class SPCSSAttr;
 
@@ -86,8 +83,6 @@ protected:
      * @param content Indicates whether the modification of the user includes a style change. Actually refers to the question if we do want to show the content? (Parameter currently not used)
      */
     void onReadSelection (gboolean style, gboolean content);
-    void onToggle ();
-    static void onLineSpacingChange (GtkComboBox* widget, gpointer data);
     
     /**
      * Callback invoked when the user modifies the text of the selected text object.
@@ -96,9 +91,9 @@ protected:
      * modified the text in the selected object. The UI of the dialog is
      * updated. The subfunction setPreviewText updates the preview label.
      *
-     * @param text_buffer pointer to GtkTextBuffer with the text of the selected text object
      * @param self pointer to the current instance of the dialog.
      */
+    void onChange ();
     static void onTextChange (GtkTextBuffer *text_buffer, TextEdit *self);
     
     /**
@@ -124,14 +119,6 @@ protected:
     static void onFontVariantChange (TextEdit *self);
 
     /**
-     * Callback invoked when the user modifies the startOffset of text on a path.
-     *
-     * @param text_buffer pointer to the GtkTextBuffer with the text of the selected text object.
-     * @param self pointer to the current instance of the dialog.
-     */
-    static void onStartOffsetChange(GtkTextBuffer *text_buffer, TextEdit *self);
-
-    /**
      * Get the selected text off the main canvas.
      *
      * @return SPItem pointer to the selected text object
@@ -155,18 +142,6 @@ protected:
     SPCSSAttr *fillTextStyle ();
 
     /**
-     * Helper function to style radio buttons with icons, tooltips.
-     * 
-     * styleButton is used when creating the dialog.
-     * 
-     * @param button pointer to the button which is created
-     * @param tooltip pointer to its tooltip string
-     * @param iconname string identifying the icon to be shown
-     * @param group_button group to which the radio button belongs to
-     */
-    void styleButton(Gtk::RadioButton *button, gchar const *tooltip, gchar const *iconname, Gtk::RadioButton *group_button  );
-
-    /**
      * Can be invoked for setting the desktop. Currently not used.
      */
     void setDesktop(SPDesktop *desktop);
@@ -187,41 +162,33 @@ private:
      */
     Gtk::Notebook notebook;
 
+    // Tab 1: Font ---------------------- //
     Gtk::VBox font_vbox;
     Gtk::Label font_label;
+
     Gtk::Box fontsel_hbox;
     SPFontSelector *fsel;
+    Gtk::Label preview_label;  // Share with variants tab?
 
-    Gtk::Box layout_hbox;
-    Gtk::RadioButton align_left;
-    Gtk::RadioButton align_center;
-    Gtk::RadioButton align_right;
-    Gtk::RadioButton align_justify;
-    Gtk::Separator  align_sep;
-    Gtk::RadioButton text_vertical;
-    Gtk::RadioButton text_horizontal;
-    Gtk::Separator  text_sep;
-
-    GtkWidget *spacing_combo;
-
-    GtkWidget *startOffset;
-
-    Gtk::Label preview_label;
-
-    Gtk::Label text_label;
+    // Tab 2: Text ---------------------- //
     Gtk::VBox text_vbox;
+    Gtk::Label text_label;
+
     Gtk::ScrolledWindow scroller;
     GtkWidget *text_view; // TODO - Convert this to a Gtk::TextView, but GtkSpell doesn't seem to work with it
     GtkTextBuffer *text_buffer;
 
+    // Tab 3: Variants ----------------- //
     Inkscape::UI::Widget::FontVariants vari_vbox;
     Gtk::Label vari_label;
-    
+
+    // Shared ------- ------------------ //
     Gtk::HBox button_row;
     Gtk::Button setasdefault_button;
     Gtk::Button close_button;
     Gtk::Button apply_button;
 
+    // Signals
     SPDesktop *desktop;
     DesktopTracker deskTrack;
     sigc::connection desktopChangeConn;
@@ -230,8 +197,11 @@ private:
     sigc::connection selectModifiedConn;
     sigc::connection fontVariantChangedConn;
 
+    // Other
     bool blocked;
     const Glib::ustring samplephrase;
+
+
     TextEdit(TextEdit const &d);
     TextEdit operator=(TextEdit const &d);
 };
