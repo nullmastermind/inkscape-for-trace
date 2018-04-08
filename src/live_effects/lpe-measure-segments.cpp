@@ -91,12 +91,12 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     smallx100(_("Multiply lower 1"), _("Multiply by 100 less than 1"), "smallx100", &wr, this, false),
     linked_items(_("Linked items:"), _("Items that generate a measured projection with his nodes"), "linked_items", &wr, this),
     distance_projection(_("Distance"), _("Distance away nearest point"), "distance_projection", &wr, this, 20.0),
-    blacklist_nodes(_("Blacklist nodes"), _("Optional node index that be excluded from measure"), "blacklist_nodes", &wr, this,""),
+    angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
+    blacklist_nodes(_("Blacklist nodes"), _("Optional node index that be excluded from measure, node index is refreshed by each value"), "blacklist_nodes", &wr, this,""),
     active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
-    whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
-    vertical_projection(_("Vertical projection"), _("Not horizontal but vertical"), "vertical_projection", &wr, this, false),
-    oposite_projection(_("Oposite projection"), _("Use the other side of selected elements"), "oposite_projection", &wr, this, false),
-    all_items_position(_("Global projection position"), _("Use also all items linked as base of projection position"), "all_items_position", &wr, this, false),
+    //whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
+    avoid_overlapping(_("Avoid overlap measures"), _("Turn not fit measures"), "avoid_overlapping", &wr, this, true),
+    onbbox(_("Measure bounding box"), _("Measure Geometric bounding box"), "onbbox", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
     projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
     options(_("Options"), _("Options"), "options", &wr, this, ""),
@@ -129,11 +129,11 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&smallx100);
     registerParameter(&linked_items);
     registerParameter(&distance_projection);
+    registerParameter(&angle_projection);
     registerParameter(&blacklist_nodes);
-    registerParameter(&whitelist_nodes);
-    registerParameter(&vertical_projection);
-    registerParameter(&oposite_projection);
-    registerParameter(&all_items_position);
+    registerParameter(&avoid_overlapping);
+    //registerParameter(&whitelist_nodes);
+    registerParameter(&onbbox);
     registerParameter(&general);
     registerParameter(&projection);
     registerParameter(&options);
@@ -179,14 +179,17 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     distance_projection.param_set_range(-999999.0, 999999.0);
     distance_projection.param_set_increments(1, 1);
     distance_projection.param_set_digits(5);
+    angle_projection.param_set_range(0.0, 360.0);
+    angle_projection.param_set_increments(90.0, 90.0);
+    angle_projection.param_set_digits(2);
     star_ellipse_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Base of the lpe, focus on meassure display and positioning"));
+    general.param_update_default(_("Base of the lpe, focus on measure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
-    options.param_update_default(_("Here we show meassure settings that usualy dont change too much"));
+    options.param_update_default(_("Here we show measure settings that usualy dont change too much"));
     tips.param_update_default(_("<b>Style Dialog</b> Use to more styling using XML editor to find apropiate classes"
     " or ID's\n<b>Default Parameters</b> In all LPE, at the bottom, can change them for future uses\n"
     "<b>Blacklists...</b> This allow hide some segments or projection steps to measure"));
@@ -232,22 +235,22 @@ LPEMeasureSegments::newWidget()
                     vbox1->pack_start(*widg, true, true, 2);
                 } else if (param->param_key == "active_projection"   ||
                            param->param_key == "distance_projection" ||
+                           param->param_key == "angle_projection"    ||
                            param->param_key == "blacklist_nodes"     ||
-                           param->param_key == "whitelist_nodes"     ||
-                           param->param_key == "vertical_projection" ||
-                           param->param_key == "oposite_projection"    ) 
+                        // param->param_key == "whitelist_nodes"     ||
+                           param->param_key == "onbbox"                )
                 {
                     vbox1->pack_start(*widg, false, true, 2);
-                } else if (param->param_key == "precision"    ||
-                           param->param_key == "fix_overlaps" ||
-                           param->param_key == "coloropacity" ||
-                           param->param_key == "font"         ||
-                           param->param_key == "format"       ||
-                           param->param_key == "blacklist"    ||
-                           param->param_key == "whitelist"    ||
-                           param->param_key == "local_locale" ||
-                           param->param_key == "smallx100"    ||
-                           param->param_key == "hide_arrows"    ) 
+                } else if (param->param_key == "precision"     ||
+                           param->param_key == "fix_overlaps"  ||
+                           param->param_key == "coloropacity"  ||
+                           param->param_key == "font"          ||
+                           param->param_key == "format"        ||
+                           param->param_key == "blacklist"     ||
+                           param->param_key == "whitelist"     ||
+                           param->param_key == "local_locale"  ||
+                           param->param_key == "smallx100"     ||
+                           param->param_key == "hide_arrows"     )
                 {
                     vbox2->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "general"    ||
@@ -312,7 +315,7 @@ void
 LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    if (!document) {
+    if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
         return;
     }
     Glib::ustring lpobjid = this->lpeobj->getId();
@@ -382,7 +385,7 @@ void
 LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    if (!document) {
+    if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -537,16 +540,15 @@ void
 LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    if (!document) {
+    if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
     Glib::ustring lpobjid = this->lpeobj->getId();
-    Glib::ustring itemid  = sp_lpe_item->getId();
+    Glib::ustring itemid  = sp_lpe_item->getId(); 
     Glib::ustring id = name;
     id += Glib::ustring::format(counter);
     id += "-";
     id += lpobjid;
-    
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = document->getObjectById(id.c_str());
     Inkscape::XML::Node *line = NULL;
@@ -722,13 +724,10 @@ LPEMeasureSegments::doEffect_path (Geom::PathVector const & path_in) {
 }
 
 bool
-LPEMeasureSegments::isWhitelist (size_t i, gchar * blacklist_str, bool whitelist)
+LPEMeasureSegments::isWhitelist (size_t i, std::string listsegments, bool whitelist)
 {
-    std::string listsegments(std::string(blacklist_str) + std::string(","));
-    g_free(blacklist_str);
-    listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
-    size_t s = listsegments.find(std::to_string(i) + std::string(","),0);
-    if(s < listsegments.length()) {
+    size_t s = listsegments.find(std::to_string(i) + std::string(","), 0);
+    if (s != std::string::npos) {
         if (whitelist) {
             return true;
         } else {
@@ -771,26 +770,19 @@ transformNodes(std::vector< Point > nodes, Geom::Affine transform)
 }
 
 std::vector< Point > 
-getNodes(SPItem * item, Geom::Affine transform)
+getNodes(SPItem * item, Geom::Affine transform, bool onbbox)
 {
     std::vector< Point > current_nodes;
     SPShape    * shape    = dynamic_cast<SPShape     *> (item);
     SPText     * text     = dynamic_cast<SPText      *> (item);
     SPGroup    * group    = dynamic_cast<SPGroup     *> (item);
     SPFlowtext * flowtext = dynamic_cast<SPFlowtext  *> (item);
-    Geom::OptRect bbox = item->geometricBounds();
-    if (bbox) {
-        current_nodes.push_back((*bbox).corner(0) * transform);
-        current_nodes.push_back((*bbox).corner(1) * transform);
-        current_nodes.push_back((*bbox).corner(2) * transform);
-        current_nodes.push_back((*bbox).corner(3) * transform);
-    }
     //TODO handle clones/use
     if (group) {
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *sub_item = *iter;
-            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform), transform);
+            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox), transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
     } else if (shape) {
@@ -821,15 +813,22 @@ getNodes(SPItem * item, Geom::Affine transform)
                 break;
             }
         } while (true);
+    } else {
+        onbbox = true;
+    }
+    if (onbbox) {
+        Geom::OptRect bbox = item->geometricBounds();
+        if (bbox) {
+            current_nodes.push_back((*bbox).corner(0) * transform);
+            current_nodes.push_back((*bbox).corner(1) * transform);
+            current_nodes.push_back((*bbox).corner(2) * transform);
+            current_nodes.push_back((*bbox).corner(3) * transform);
+        }
     }
     return current_nodes;
 }
 
-bool sortPointsX (Geom::Point a,Geom::Point b) { 
-    return (a[Geom::X] < b[Geom::X]); 
-}
-
-bool sortPointsY (Geom::Point a,Geom::Point b) { 
+bool sortPoints (Geom::Point a,Geom::Point b) { 
     return (a[Geom::Y] < b[Geom::Y]); 
 }
 
@@ -851,85 +850,95 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
     if (active_projection) {
-        Geom::Affine writed_transform = Geom::identity();
-        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-        if (star_ellipse_fix != Geom::identity()) {
-            writed_transform = star_ellipse_fix;
-        }
-        if ( all_items_position) {
-            for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
-                SPObject *obj;
-                if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
-                    SPItem * item = dynamic_cast<SPItem *>(obj);
-                    if (item) {
-                        std::vector< Point > current_nodes = getNodes(item, item->transform);
-                        nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
-                    }
-                }
+        Geom::OptRect bbox = sp_lpe_item->geometricBounds();
+        Geom::Point pojpoint = Geom::Point();
+        if (bbox) {
+            Geom::Point mid =  bbox->midpoint();
+            double angle = Geom::rad_from_deg(angle_projection);
+            Geom::Affine writed_transform = Geom::identity();
+            sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
+            if (star_ellipse_fix != Geom::identity()) {
+                writed_transform = star_ellipse_fix;
             }
-        }
-        std::vector< Point > current_nodes = getNodes(splpeitem, writed_transform);
-        nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
-        std::vector<Point> result;
-        double mindistance = std::numeric_limits<double>::max();
-        double maxdistance = -std::numeric_limits<double>::max();
-        for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
-            Geom::Point point = (*iter);
-
-            if (vertical_projection) {
-                if (point[Geom::X] < mindistance) {
-                    mindistance = point[Geom::X];
-                }
+            Geom::Affine transform = writed_transform;
+            transform *= Geom::Translate(-mid);
+            transform *= Geom::Rotate(angle).inverse();
+            transform *= Geom::Translate(mid);
+            std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox);
+            nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
+            std::vector<Point> result;
+            Geom::OptRect bbox = sp_lpe_item->geometricBounds();
+            Geom::Point pojpoint = Geom::Point();
+            double maxdistance = -std::numeric_limits<double>::max();
+            for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
+                Geom::Point point = (*iter);
+                point *= Geom::Translate(-mid);
+                point *= Geom::Rotate(angle).inverse();
+                point *= Geom::Translate(mid);
                 if (point[Geom::X] > maxdistance) {
                     maxdistance = point[Geom::X];
                 }
-            } else {
-                if (point[Geom::Y] < mindistance) {
-                    mindistance = point[Geom::Y];
-                }
-                if (point[Geom::Y] > maxdistance) {
-                    maxdistance = point[Geom::Y];
-                }
             }
-        }
-        if ( !all_items_position) {
             for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
                 SPObject *obj;
                 if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
-                        std::vector< Point > current_nodes = getNodes(item, item->transform);
+                        Geom::Affine writed_transform = Geom::identity();
+                        sp_svg_transform_read(item->getAttribute("transform"), &writed_transform );
+                        Geom::Affine transform = writed_transform;
+                        transform *= Geom::Translate(-mid);
+                        transform *= Geom::Rotate(angle).inverse();
+                        transform *= Geom::Translate(mid);
+                        std::vector< Point > current_nodes = getNodes(item, transform, onbbox);
                         nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
                     }
                 }
             }
-        }
-        for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
-            Geom::Point point = (*iter);
-            if (vertical_projection) {
-                Geom::Coord xpos = oposite_projection?maxdistance+distance_projection:mindistance-distance_projection;
+
+            for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
+                Geom::Point point = (*iter);
+                double dproj = Inkscape::Util::Quantity::convert(distance_projection, display_unit.c_str(), unit.get_abbreviation());
+                Geom::Coord xpos = maxdistance + dproj;
                 result.push_back(Geom::Point(xpos, point[Geom::Y]));
-            } else {
-                Geom::Coord ypos = oposite_projection?maxdistance+distance_projection:mindistance-distance_projection;
-                result.push_back(Geom::Point(point[Geom::X], ypos));
             }
-        }
-        if (vertical_projection) {
-            std::sort (result.begin(), result.end(), sortPointsY);
-        } else {
-            std::sort (result.begin(), result.end(), sortPointsX);
-        }
-        Geom::Path path;
-        Geom::Point prevpoint(0,0);
-        size_t counter = 0;
-        bool started = false;
-        for ( std::vector<Point>::iterator iter = result.begin(); iter != result.end(); ++iter ) {
-            Geom::Point point = (*iter);
-            if (Geom::are_near(prevpoint, point)){
-                continue;
-            }
+            std::sort (result.begin(), result.end(), sortPoints);
+            Geom::Path path;
+            Geom::Point prevpoint(0,0);
+            size_t counter = 0;
+            bool started = false;
             gchar * blacklist_nodes_str = blacklist_nodes.param_getSVGValue();
-            if (isWhitelist(counter + 1, blacklist_nodes_str, (bool)whitelist_nodes)) {
+            std::vector<Geom::Point> points;
+            for ( std::vector<Point>::iterator iter = result.begin(); iter != result.end(); ++iter ) {
+                Geom::Point point = (*iter);
+                if (Geom::are_near(prevpoint, point)){
+                    continue;
+                }
+                points.push_back(point);
+                prevpoint = point;
+            }
+            char * token = strtok(blacklist_nodes_str,",");
+//            std::vector<Geom::Point> white_points;
+//            white_points.insert(white_points.begin(),points.begin(),points.end());
+            while(token != NULL){
+                if (points.size() >= std::stoi(token)) {
+                    points.erase(points.begin()+std::stoi(token)-1);
+                }
+                token = strtok(NULL, ",");
+            }
+//            if (whitelist_nodes) {
+//                for ( std::vector<Geom::Point>::iterator iter = white_points.begin(); iter != white_points.end(); ++iter ) {
+//                    Geom::Point point = (*iter);
+//                    if (points.size() && Geom::are_near(point,points[0])) {
+//                        points.erase(points.begin());
+//                    } else {
+//                        points.push_back(point);
+//                    }
+//                }
+//            }
+            free(blacklist_nodes_str);
+            for ( std::vector<Geom::Point>::iterator iter = points.begin(); iter != points.end(); ++iter ) {
+                Geom::Point point = (*iter);
                 if (!started) {
                     path.setInitial(point);
                     started = true;
@@ -937,10 +946,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     path.appendNew<Geom::LineSegment>(point);
                 }
             }
-            counter ++;
-            prevpoint = point;
+            pathvector.push_back(path);
+            pathvector *= Geom::Translate(-mid);
+            pathvector *= Geom::Rotate(angle);
+            pathvector *= Geom::Translate(mid);
         }
-        pathvector.push_back(path);
     }
 
     //end projection prepare
@@ -1034,7 +1044,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     next = pathvector[i].pointAt(j+2);
                 }
                 gchar * blacklist_str = blacklist.param_getSVGValue();
-                if (isWhitelist(counter + 1, blacklist_str, (bool)whitelist) && !Geom::are_near(start, end)) {
+                std::string listsegments(std::string(blacklist_str) + std::string(","));
+                listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
+                g_free(blacklist_str);
+                if (isWhitelist(counter + 1, listsegments, (bool)whitelist) && !Geom::are_near(start, end)) {
                     Glib::ustring idprev = Glib::ustring("infoline-on-start-");
                     idprev += Glib::ustring::format(counter-1);
                     idprev += "-";
@@ -1243,7 +1256,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         length *= parents_scale;
                     }
                     if ((anotation_width/2) > Geom::distance(hstart,hend)/2.0) {
-                        pos = pos - Point::polar(angle_cross, position);
+                        if (avoid_overlapping) {
+                            angle += Geom::rad_from_deg(90);
+                        } else {
+                            pos = pos - Point::polar(angle_cross, position);
+                        }
                     }
                     if (scale_sensitive && !affinetransform.preservesAngles()) {
                         createTextLabel(pos, counter, length, angle, remove, false);

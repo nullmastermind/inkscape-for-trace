@@ -45,7 +45,7 @@ public:
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);
-    bool isWhitelist(size_t i, gchar * blacklist_str, bool whitelist);
+    bool isWhitelist(size_t i,  std::string listsegments, bool whitelist);
     void on_my_switch_page(Gtk::Widget* page, guint page_number);
 private:
     UnitParam unit;
@@ -68,17 +68,17 @@ private:
     BoolParam flip_side;
     BoolParam scale_sensitive;
     BoolParam local_locale;
-    BoolParam all_items_position;
     BoolParam rotate_anotation;
     BoolParam hide_back;
     BoolParam hide_arrows;
+    BoolParam onbbox;
     BoolParam smallx100;
     OriginalItemArrayParam linked_items;
     ScalarParam distance_projection;
+    ScalarParam angle_projection;
     TextParam blacklist_nodes;
-    BoolParam whitelist_nodes;
-    BoolParam vertical_projection;
-    BoolParam oposite_projection;
+    //BoolParam whitelist_nodes;
+    BoolParam avoid_overlapping;
     MessageParam general;
     MessageParam projection;
     MessageParam options;

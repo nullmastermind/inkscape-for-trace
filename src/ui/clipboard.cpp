@@ -682,6 +682,7 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
         types.push_back((Glib::ustring)"svg:rect");
         types.push_back((Glib::ustring)"svg:ellipse");
         types.push_back((Glib::ustring)"svg:text");
+        types.push_back((Glib::ustring)"svg:use");
         types.push_back((Glib::ustring)"svg:g");
         types.push_back((Glib::ustring)"svg:image");
         for (auto i=types.begin();i!=types.end();++i) {
