@@ -7,6 +7,7 @@
 # Henrik Larsson <henrik.p.larsson@gmail.com>, 2006, 2007.
 # Elias Norberg <elno0959 at student.su.se>, 2009
 # Jesper Öqvist <jesper@llbit.se>, 2010
+# Oscar Gustafsson <oscar.gustafsson@gmail.com>, 2018
 #
 msgid ""
 msgstr ""
@@ -24,7 +25,6 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
-#, fuzzy
 msgid "Inkscape"
 msgstr "Inkscape"
 
@@ -69,7 +69,7 @@ msgstr ""
 #: ../inkscape.desktop.in.h:6
 #, fuzzy
 msgid "New Drawing"
-msgstr "Teckning"
+msgstr "Ny teckning"
 
 #: ../share/filters/filters.svg.h:2
 #, fuzzy
@@ -105,7 +105,7 @@ msgstr "Metallgjutning"
 
 #: ../share/filters/filters.svg.h:8
 msgid "Smooth drop-like bevel with metallic finish"
-msgstr "Slät dropp-lik fasning med metallisk finish"
+msgstr "Slät dropplik fasning med metallisk finish"
 
 #: ../share/filters/filters.svg.h:10
 #, fuzzy
@@ -225,7 +225,7 @@ msgstr "Förvräng"
 #: ../share/filters/filters.svg.h:40
 #, fuzzy
 msgid "Horizontal rippling of edges"
-msgstr "Hoirsontell krusning av kanterna"
+msgstr "Horisontell krusning av kanterna"
 
 # TODO
 #: ../share/filters/filters.svg.h:42
@@ -400,7 +400,6 @@ msgid "Gray bevelled wires with drop shadows"
 msgstr "Gråa fasade trådar med skuggning"
 
 #: ../share/filters/filters.svg.h:98
-#, fuzzy
 msgid "Swiss Cheese"
 msgstr "Schweizerost"
 
@@ -409,7 +408,6 @@ msgid "Random inner-bevel holes"
 msgstr "Slumpad infasade hål"
 
 #: ../share/filters/filters.svg.h:102
-#, fuzzy
 msgid "Blue Cheese"
 msgstr "Blåmögelost"
 
@@ -435,7 +433,7 @@ msgstr "inskjutning"
 #: ../share/filters/filters.svg.h:811
 #: ../src/extension/internal/filter/shadows.h:81
 msgid "Shadows and Glows"
-msgstr "Skuggor och Sken"
+msgstr "Skuggor och sken"
 
 #: ../share/filters/filters.svg.h:112
 #, fuzzy
@@ -449,7 +447,7 @@ msgstr "Droppande"
 
 #: ../share/filters/filters.svg.h:116
 msgid "Random paint streaks downwards"
-msgstr "Stokastiska penseldrag nedåt"
+msgstr "Slumpmässiga penseldrag nedåt"
 
 #: ../share/filters/filters.svg.h:118
 #, fuzzy
@@ -561,7 +559,7 @@ msgstr "Matt fasning"
 
 #: ../share/filters/filters.svg.h:152
 msgid "Soft, pastel-colored, blurry bevel"
-msgstr "Mjuk, pastell-färgad, suddig fasning"
+msgstr "Mjuk, pastellfärgad, suddig fasning"
 
 #: ../share/filters/filters.svg.h:154
 msgid "Thin Membrane"
@@ -592,7 +590,6 @@ msgid "Glowing metal texture"
 msgstr "Glödande metalltextur"
 
 #: ../share/filters/filters.svg.h:166
-#, fuzzy
 msgid "Leaves"
 msgstr "Löv"
 
@@ -614,7 +611,7 @@ msgstr "Genomskinlig"
 
 #: ../share/filters/filters.svg.h:172
 msgid "Illuminated translucent plastic or glass effect"
-msgstr "Upplyst genomskinlig plast eller glas effekt"
+msgstr "Upplyst genomskinlig plast- eller glaseffekt"
 
 #: ../share/filters/filters.svg.h:174
 #, fuzzy
@@ -626,9 +623,8 @@ msgid "Waxy texture which keeps its iridescence through color fill change"
 msgstr "Vaxig textur som behåller sitt skimmer genom färg och fyllnadsändring"
 
 #: ../share/filters/filters.svg.h:178
-#, fuzzy
 msgid "Eroded Metal"
-msgstr "Rostig Metal"
+msgstr "Rostig metall"
 
 #: ../share/filters/filters.svg.h:180
 msgid "Eroded metal texture with ridges, grooves, holes and bumps"
@@ -636,22 +632,21 @@ msgstr "Rostig metalltextur med kanter, skåror, hål och knölar"
 
 #: ../share/filters/filters.svg.h:182
 msgid "Cracked Lava"
-msgstr "Sprucken Lava"
+msgstr "Sprucken lava"
 
 #: ../share/filters/filters.svg.h:184
 msgid "A volcanic texture, a little like leather"
-msgstr "En vulkaniska texture, lite som läder"
+msgstr "En vulkaniska textur, lite som läder"
 
 #: ../share/filters/filters.svg.h:186
 msgid "Bark"
-msgstr ""
+msgstr "Bark"
 
 #: ../share/filters/filters.svg.h:188
 msgid "Bark texture, vertical; use with deep colors"
 msgstr "Barktextur, vertikal; använd med djupa färger"
 
 #: ../share/filters/filters.svg.h:190
-#, fuzzy
 msgid "Lizard Skin"
 msgstr "Ödleskinn"
 
@@ -699,13 +694,13 @@ msgstr "Geléeffekt med stark refraktion"
 #: ../share/filters/filters.svg.h:210
 #, fuzzy
 msgid "Metallized Paint"
-msgstr "Metallic färg"
+msgstr "Metallicfärg"
 
 #: ../share/filters/filters.svg.h:212
 msgid ""
 "Metallized effect with a soft lighting, slightly translucent at the edges"
 msgstr ""
-"Mettalic färg-effekt med en mjuk ljussättning, svagt genomskinlig vid "
+"Mettalicfärgeffekt med en mjuk ljussättning, svagt genomskinlig vid "
 "kanterna"
 
 #: ../share/filters/filters.svg.h:214
@@ -811,7 +806,7 @@ msgstr "Skrynklad matt plast, med smälta kanter"
 #: ../share/filters/filters.svg.h:254
 #, fuzzy
 msgid "Enamel Jewelry"
-msgstr "Emalj-smycke"
+msgstr "Emaljsmycke"
 
 #: ../share/filters/filters.svg.h:256
 msgid "Slightly cracked enameled texture"
@@ -839,11 +834,11 @@ msgstr "Skrynklat blankt papper-effekt som kan användas för bilder och objekt"
 #: ../share/filters/filters.svg.h:266
 #, fuzzy
 msgid "In and Out"
-msgstr "In och Ut"
+msgstr "In och ut"
 
 #: ../share/filters/filters.svg.h:268
 msgid "Inner colorized shadow, outer black shadow"
-msgstr "Innre färgad skugga, yttre svart skugga"
+msgstr "Inre färgad skugga, yttre svart skugga"
 
 #: ../share/filters/filters.svg.h:270
 #, fuzzy
@@ -934,12 +929,12 @@ msgstr "Ilumminerad mosaik-effekt i glas, med ljus kommande nedanifrån"
 #: ../share/filters/filters.svg.h:306
 #, fuzzy
 msgid "HSL Bumps Alpha"
-msgstr "HSL Bumpar alpha"
+msgstr "HSL bumpar alpha"
 
 # TODO
 #: ../share/filters/filters.svg.h:308
 msgid "Same as HSL Bumps but with transparent highlights"
-msgstr "Samma som HSL Bumpar men med transparenta accentueringar"
+msgstr "Samma som HSL bumpar men med transparenta accentueringar"
 
 #: ../share/filters/filters.svg.h:310
 #, fuzzy
@@ -948,7 +943,7 @@ msgstr "Bubbliga bumpar alpha"
 
 #: ../share/filters/filters.svg.h:312
 msgid "Same as Bubbly Bumps but with transparent highlights"
-msgstr "Samma som Bubbliga Bumpar men med transparenta accentueringar"
+msgstr "Samma som bubbliga bumpar men med transparenta accentueringar"
 
 #: ../share/filters/filters.svg.h:314 ../share/filters/filters.svg.h:362
 #, fuzzy
@@ -1001,9 +996,8 @@ msgid "Colorized blotches, like a crowd of people"
 msgstr "Färglagda plumpar, som en grupp människor"
 
 #: ../share/filters/filters.svg.h:334
-#, fuzzy
 msgid "Scotland"
-msgstr "Scotland"
+msgstr "Skottland"
 
 #: ../share/filters/filters.svg.h:336
 msgid "Colorized mountain tops out of the fog"
@@ -1139,7 +1133,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:398
 msgid "3D Wood"
-msgstr ""
+msgstr "3D trä"
 
 #: ../share/filters/filters.svg.h:400
 msgid "3D warped, fibered wood texture"
@@ -1155,7 +1149,6 @@ msgid "3D warped, iridescent pearly shell texture"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:406
-#, fuzzy
 msgid "Tiger Fur"
 msgstr "Tigerpäls"
 
@@ -1326,7 +1319,7 @@ msgstr ""
 #: ../share/filters/filters.svg.h:446
 #, fuzzy
 msgid "Old Postcard"
-msgstr "Gammat vykort"
+msgstr "Gammalt vykort"
 
 #: ../share/filters/filters.svg.h:448
 msgid "Slightly posterize and draw edges like on old printed postcards"
@@ -1645,7 +1638,6 @@ msgstr ""
 "Metallisk folie-effekt som kombinerar två ljustyper och variabel skrynklighet"
 
 #: ../share/filters/filters.svg.h:574
-#, fuzzy
 msgid "Soft Colors"
 msgstr "Mjuka färger"
 
@@ -1664,9 +1656,8 @@ msgid "Bumps effect with a bevel, color flood and complex lighting"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:582
-#, fuzzy
 msgid "Growing Cells"
-msgstr "Glödande metall"
+msgstr "Växande celler"
 
 #: ../share/filters/filters.svg.h:584
 msgid "Random rounded living cells like fill"
@@ -1695,19 +1686,16 @@ msgid "Reduce or remove antialiasing around shapes"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:594
-#, fuzzy
 msgid "Basic Diffuse Bump"
-msgstr "Exportera"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:596
-#, fuzzy
 msgid "Matte emboss effect"
-msgstr "Ta bort effekter"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:598
-#, fuzzy
 msgid "Basic Specular Bump"
-msgstr "Exportera"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:600
 #, fuzzy
@@ -1719,19 +1707,16 @@ msgid "Basic Two Lights Bump"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:604
-#, fuzzy
 msgid "Two types of lighting emboss effect"
-msgstr "Flytta slingeffekt upp"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:606
-#, fuzzy
 msgid "Linen Canvas"
-msgstr "Duk"
+msgstr "Linneduk"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
-#, fuzzy
 msgid "Painting canvas emboss effect"
-msgstr "Flytta slingeffekt upp"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:610
 #, fuzzy
@@ -1739,9 +1724,8 @@ msgid "Plasticine"
 msgstr "Gips"
 
 #: ../share/filters/filters.svg.h:612
-#, fuzzy
 msgid "Matte modeling paste emboss effect"
-msgstr "Flytta slingeffekt upp"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:614
 #, fuzzy
@@ -1755,9 +1739,8 @@ msgid "Paper Bump"
 msgstr "Bumpar"
 
 #: ../share/filters/filters.svg.h:620
-#, fuzzy
 msgid "Paper like emboss effect"
-msgstr "Flytta slingeffekt upp"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:622
 #, fuzzy
@@ -1765,9 +1748,8 @@ msgid "Jelly Bump"
 msgstr "Största höjd för bumpar"
 
 #: ../share/filters/filters.svg.h:624
-#, fuzzy
 msgid "Convert pictures to thick jelly"
-msgstr "Konvertera text till slingor"
+msgstr "Konvertera bilder till tjock gelé"
 
 #: ../share/filters/filters.svg.h:626
 #, fuzzy
@@ -1830,9 +1812,8 @@ msgid "Flatten Transparency"
 msgstr "Genomskinliga dialogrutor:"
 
 #: ../share/filters/filters.svg.h:652
-#, fuzzy
 msgid "Adds a white opaque background"
-msgstr "Ta bort bakgrund"
+msgstr "Lägger till en vit ogenomskinlig bakgrund"
 
 #: ../share/filters/filters.svg.h:654
 #, fuzzy
@@ -1855,9 +1836,8 @@ msgid "Enhance and redraw color edges in 1 bit black and white"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:662
-#, fuzzy
 msgid "Poster Draw"
-msgstr "Gips"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:664
 msgid "Enhance and redraw edges around posterized areas"
@@ -1889,9 +1869,8 @@ msgid "Poster Color Fun"
 msgstr "Klistra in färg"
 
 #: ../share/filters/filters.svg.h:678
-#, fuzzy
 msgid "Poster Rough"
-msgstr "Gips"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:680
 msgid "Adds roughness to one of the two channels of the Poster paint filter"
@@ -1991,20 +1970,17 @@ msgstr "Geléeffekt med stark refraktion"
 
 # TODO
 #: ../share/filters/filters.svg.h:730
-#, fuzzy
 msgid "Comics"
-msgstr "Kombinerat"
+msgstr "Serietidning"
 
 #: ../share/filters/filters.svg.h:732
-#, fuzzy
 msgid "Comics cartoon drawing effect"
-msgstr "Flytta slingeffekt upp"
+msgstr ""
 
 # TODO
 #: ../share/filters/filters.svg.h:734
-#, fuzzy
 msgid "Comics Draft"
-msgstr "Kombinerat"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:736 ../share/filters/filters.svg.h:768
 msgid "Draft painted cartoon shading with a glassy look"
@@ -2012,18 +1988,16 @@ msgstr ""
 
 # TODO
 #: ../share/filters/filters.svg.h:738
-#, fuzzy
 msgid "Comics Fading"
-msgstr "Kombinerat"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:740
 msgid "Cartoon paint style with some fading at the edges"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:742
-#, fuzzy
 msgid "Brushed Metal"
-msgstr "Rostig Metal"
+msgstr "Borstad metall"
 
 #: ../share/filters/filters.svg.h:744
 #, fuzzy
@@ -2055,9 +2029,8 @@ msgid "Deep Chrome"
 msgstr "Krombalans"
 
 #: ../share/filters/filters.svg.h:756
-#, fuzzy
 msgid "Dark chrome effect"
-msgstr "Nuvarande effekt"
+msgstr ""
 
 # TODO
 #: ../share/filters/filters.svg.h:758
@@ -2073,7 +2046,7 @@ msgstr "Vattenfärgseffekt"
 #: ../share/filters/filters.svg.h:762
 #, fuzzy
 msgid "Sharp Metal"
-msgstr "Skarpare"
+msgstr "Skarp metall"
 
 #: ../share/filters/filters.svg.h:764
 #, fuzzy
@@ -2174,9 +2147,8 @@ msgid "Old chromolithographic effect"
 msgstr "Skapa och applicera slingeffekt"
 
 #: ../share/filters/filters.svg.h:806
-#, fuzzy
 msgid "Convoluted Bump"
-msgstr "Klon"
+msgstr ""
 
 #: ../share/filters/filters.svg.h:808
 #, fuzzy
@@ -31108,7 +31080,6 @@ msgstr ""
 "omforma dem."
 
 #: ../src/widgets/desktop-widget.cpp:608
-#, fuzzy
 msgid "Cursor coordinates"
 msgstr "Muspekarkoordinater"
 
@@ -31117,64 +31088,52 @@ msgid "Z:"
 msgstr "Z:"
 
 #: ../src/widgets/desktop-widget.cpp:731
-#, fuzzy
 msgid "grayscale"
-msgstr "Gråskala"
+msgstr "gråskala"
 
 #: ../src/widgets/desktop-widget.cpp:732
-#, fuzzy
 msgid ", grayscale"
-msgstr "Gråskala"
+msgstr ", gråskala"
 
 #: ../src/widgets/desktop-widget.cpp:733
-#, fuzzy
 msgid "print colors preview"
-msgstr "Tryckfärgsförhandsgranskning"
+msgstr "tryckfärgsförhandsgranskning"
 
 #: ../src/widgets/desktop-widget.cpp:734
-#, fuzzy
 msgid ", print colors preview"
-msgstr "Tryckfärgsförhandsgranskning"
+msgstr ", tryckfärgsförhandsgranskning"
 
 #: ../src/widgets/desktop-widget.cpp:735
-#, fuzzy
 msgid "outline"
-msgstr "Kontur"
+msgstr "kontur"
 
 #: ../src/widgets/desktop-widget.cpp:736
-#, fuzzy
 msgid "no filters"
-msgstr "Inga _Filter"
+msgstr "inga _filter"
 
 #: ../src/widgets/desktop-widget.cpp:763
-#, fuzzy, c-format
 msgid "%s%s: %d (%s%s) - Inkscape"
-msgstr "%s: %d - Inkscape"
+msgstr "%s%s: %d (%s%s) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:765 ../src/widgets/desktop-widget.cpp:769
-#, fuzzy, c-format
 msgid "%s%s: %d (%s) - Inkscape"
-msgstr "%s: %d - Inkscape"
+msgstr "%s%s: %d (%s) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:771
-#, fuzzy, c-format
 msgid "%s%s: %d - Inkscape"
-msgstr "%s: %d - Inkscape"
+msgstr "%s%s: %d - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:777
-#, fuzzy, c-format
 msgid "%s%s (%s%s) - Inkscape"
-msgstr "%s - Inkscape"
+msgstr "%s%s (%s%s) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:779 ../src/widgets/desktop-widget.cpp:783
-#, fuzzy, c-format
 msgid "%s%s (%s) - Inkscape"
-msgstr "%s - Inkscape"
+msgstr "%s%s (%s) - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:785
-#, fuzzy, c-format
 msgid "%s%s - Inkscape"
-msgstr "%s - Inkscape"
+msgstr "%s%s - Inkscape"
 
 #: ../src/widgets/desktop-widget.cpp:957
 #, fuzzy
@@ -31187,12 +31146,10 @@ msgid "Unlocked all guides"
 msgstr "Lås upp alla lager"
 
 #: ../src/widgets/desktop-widget.cpp:976
-#, fuzzy
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr "Färghanterad display är <b>aktiverad</b> i detta fönster"
 
 #: ../src/widgets/desktop-widget.cpp:978
-#, fuzzy
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr "Färghanterad display är <b>inaktiverad</b> i detta fönster"
 
@@ -31267,7 +31224,6 @@ msgid "Assign"
 msgstr "Tilldela"
 
 #: ../src/widgets/ege-paint-def.cpp:87
-#, fuzzy
 msgid "remove"
 msgstr "ta bort"
 
@@ -31276,7 +31232,6 @@ msgid "Delete objects touched by the eraser"
 msgstr "Radera objekt som vidrörs av sudden"
 
 #: ../src/widgets/eraser-toolbar.cpp:150
-#, fuzzy
 msgid "Cut"
 msgstr "Klipp ut"
 
@@ -31351,29 +31306,25 @@ msgid "Set fill color"
 msgstr "Sätt fyllningsfärg"
 
 #: ../src/widgets/fill-style.cpp:447 ../src/widgets/fill-style.cpp:525
-#, fuzzy
 msgid "Set stroke color"
-msgstr "Sött linjefärg"
+msgstr "Sätt linjefärg"
 
 #: ../src/widgets/fill-style.cpp:623
-#, fuzzy
 msgid "Set gradient on fill"
-msgstr "Sätt gradient i fyllningen"
+msgstr "Sätt gradient för fyllningen"
 
 #: ../src/widgets/fill-style.cpp:623
-#, fuzzy
 msgid "Set gradient on stroke"
-msgstr "Sätt gradient i linjen"
+msgstr "Sätt gradient för linjen"
 
 #: ../src/widgets/fill-style.cpp:723
 #, fuzzy
 msgid "Set mesh on fill"
-msgstr "Sätt mönsterfyllnad"
+msgstr "Sätt rutnät för fyllningen"
 
 #: ../src/widgets/fill-style.cpp:723
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Sätt mönster i linje"
+msgstr "Sätt rutnät för linje"
 
 #: ../src/widgets/fill-style.cpp:784
 #, fuzzy
@@ -31383,13 +31334,12 @@ msgstr "Sätt mönsterfyllnad"
 #: ../src/widgets/fill-style.cpp:785
 #, fuzzy
 msgid "Set pattern on stroke"
-msgstr "Sätt mönster i linje"
+msgstr "Sätt mönster för linje"
 
 #: ../src/widgets/font-selector.cpp:103 ../src/widgets/text-toolbar.cpp:1316
 #: ../src/widgets/text-toolbar.cpp:1702
-#, fuzzy
 msgid "Font size"
-msgstr "Typsnittsstorlek:"
+msgstr "Typsnittsstorlek"
 
 #. gtk_box_set_homogeneous(GTK_BOX(fsel), TRUE);
 #. gtk_box_set_spacing(GTK_BOX(fsel), 4);
@@ -31400,7 +31350,6 @@ msgstr "Typsnittsfamilj"
 
 #. Style frame
 #: ../src/widgets/font-selector.cpp:166
-#, fuzzy
 msgctxt "Font selector"
 msgid "Style"
 msgstr "Stil"
@@ -31408,7 +31357,7 @@ msgstr "Stil"
 #: ../src/widgets/font-selector.cpp:194
 #, fuzzy
 msgid "Face"
-msgstr "Ytor"
+msgstr ""
 
 #: ../src/widgets/font-selector.cpp:219 ../share/extensions/dots.inx.h:3
 #: ../share/extensions/nicechart.inx.h:17
@@ -31416,32 +31365,30 @@ msgid "Font size:"
 msgstr "Typsnittsstorlek:"
 
 #: ../src/widgets/gimp/ruler.cpp:184
-#, fuzzy
 msgid "The orientation of the ruler"
-msgstr "Orienteringen på dockobjektet"
+msgstr "Linjalens orientering"
 
 #: ../src/widgets/gimp/ruler.cpp:194
-#, fuzzy
 msgid "Unit of the ruler"
-msgstr "Bredd för mönstret"
+msgstr "Linjalens enhet"
 
 #: ../src/widgets/gimp/ruler.cpp:201
 msgid "Lower"
-msgstr "Sänk"
+msgstr "Undre"
 
 #: ../src/widgets/gimp/ruler.cpp:202
 #, fuzzy
 msgid "Lower limit of ruler"
-msgstr "Sänk till föregående lager"
+msgstr "Linjalens undre gräns"
 
 #: ../src/widgets/gimp/ruler.cpp:211
 #, fuzzy
 msgid "Upper"
-msgstr "Pipett"
+msgstr "Övre"
 
 #: ../src/widgets/gimp/ruler.cpp:212
 msgid "Upper limit of ruler"
-msgstr ""
+msgstr "Linjalens övre gräns"
 
 #: ../src/widgets/gimp/ruler.cpp:221
 #, fuzzy
@@ -31449,28 +31396,25 @@ msgid "Position"
 msgstr "Position"
 
 #: ../src/widgets/gimp/ruler.cpp:222
-#, fuzzy
 msgid "Position of mark on the ruler"
-msgstr "Upplösning:"
+msgstr ""
 
 #: ../src/widgets/gimp/ruler.cpp:231
 #, fuzzy
 msgid "Max Size"
-msgstr "Storlek"
+msgstr "Max storlek"
 
 #: ../src/widgets/gimp/ruler.cpp:232
 msgid "Maximum size of the ruler"
-msgstr ""
+msgstr "Linjalens maximala storlek"
 
 #: ../src/widgets/gradient-selector.cpp:187
-#, fuzzy
 msgid "Create a duplicate gradient"
-msgstr "Skapa och redigera gradienter"
+msgstr "Skapa en duplicerad gradient"
 
 #: ../src/widgets/gradient-selector.cpp:198
-#, fuzzy
 msgid "Edit gradient"
-msgstr "Radiell gradient"
+msgstr "Ändra gradient"
 
 #: ../src/widgets/gradient-selector.cpp:267
 #: ../src/widgets/paint-selector.cpp:222
@@ -31479,27 +31423,23 @@ msgid "Swatch"
 msgstr "Färgprov"
 
 #: ../src/widgets/gradient-selector.cpp:317
-#, fuzzy
 msgid "Rename gradient"
-msgstr "Linjär gradient"
+msgstr "Byt namn på gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:157
 #: ../src/widgets/gradient-toolbar.cpp:170
 #: ../src/widgets/gradient-toolbar.cpp:759
 #: ../src/widgets/gradient-toolbar.cpp:1098
-#, fuzzy
 msgid "No gradient"
-msgstr "Flytta gradienter"
+msgstr "Ingen gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:177
-#, fuzzy
 msgid "Multiple gradients"
-msgstr "Flytta gradienter"
+msgstr "Flera gradienter"
 
 #: ../src/widgets/gradient-toolbar.cpp:679
-#, fuzzy
 msgid "Multiple stops"
-msgstr "Flera stilar"
+msgstr "Flera stopp"
 
 #: ../src/widgets/gradient-toolbar.cpp:777
 #: ../src/widgets/gradient-vector.cpp:578
@@ -31511,9 +31451,8 @@ msgid "Assign gradient to object"
 msgstr "Tilldela gradient till objekt"
 
 #: ../src/widgets/gradient-toolbar.cpp:953
-#, fuzzy
 msgid "Set gradient repeat"
-msgstr "Sätt gradient i linjen"
+msgstr "Sätt repetition för gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:991
 #: ../src/widgets/gradient-vector.cpp:691
@@ -31521,9 +31460,8 @@ msgid "Change gradient stop offset"
 msgstr "Ändra gradient stopp-avstånd"
 
 #: ../src/widgets/gradient-toolbar.cpp:1038
-#, fuzzy
 msgid "linear"
-msgstr "Linjär"
+msgstr "linjär"
 
 #: ../src/widgets/gradient-toolbar.cpp:1038
 msgid "Create linear gradient"
@@ -31531,7 +31469,7 @@ msgstr "Skapa linjär gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:1042
 msgid "radial"
-msgstr ""
+msgstr "radiell"
 
 #: ../src/widgets/gradient-toolbar.cpp:1042
 msgid "Create radial (elliptic or circular) gradient"
@@ -31539,65 +31477,56 @@ msgstr "Skapa radiell (elliptisk eller cirkulär) gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:1045 ../src/widgets/mesh-toolbar.cpp:396
 msgid "New:"
-msgstr ""
+msgstr "Ny:"
 
 #: ../src/widgets/gradient-toolbar.cpp:1068 ../src/widgets/mesh-toolbar.cpp:419
-#, fuzzy
 msgid "fill"
-msgstr "Blindskrift"
+msgstr "fyllning"
 
 #: ../src/widgets/gradient-toolbar.cpp:1068 ../src/widgets/mesh-toolbar.cpp:419
 msgid "Create gradient in the fill"
 msgstr "Skapa gradient i fyllningen"
 
 #: ../src/widgets/gradient-toolbar.cpp:1072 ../src/widgets/mesh-toolbar.cpp:423
-#, fuzzy
 msgid "stroke"
-msgstr "Linje:"
+msgstr "linje"
 
 #: ../src/widgets/gradient-toolbar.cpp:1072 ../src/widgets/mesh-toolbar.cpp:423
 msgid "Create gradient in the stroke"
 msgstr "Skapa gradient i linjen"
 
 #: ../src/widgets/gradient-toolbar.cpp:1075 ../src/widgets/mesh-toolbar.cpp:426
-#, fuzzy
 msgid "on:"
-msgstr "på"
+msgstr "på:"
 
 #: ../src/widgets/gradient-toolbar.cpp:1100
 msgid "Select"
-msgstr "Markera"
+msgstr "Välj"
 
 #: ../src/widgets/gradient-toolbar.cpp:1100
-#, fuzzy
 msgid "Choose a gradient"
-msgstr "Välj en förinställning"
+msgstr "Välj en gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:1101
-#, fuzzy
 msgid "Select:"
-msgstr "Markera"
+msgstr "Välj:"
 
 #: ../src/widgets/gradient-toolbar.cpp:1116
-#, fuzzy
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "Ingen"
 
 #: ../src/widgets/gradient-toolbar.cpp:1119
-#, fuzzy
 msgid "Reflected"
-msgstr "speglad"
+msgstr "Speglad"
 
 #: ../src/widgets/gradient-toolbar.cpp:1122
-#, fuzzy
 msgid "Direct"
-msgstr "direkt"
+msgstr "Direkt"
 
 #: ../src/widgets/gradient-toolbar.cpp:1124
-#, fuzzy
 msgid "Repeat"
-msgstr "Upprepa:"
+msgstr "Upprepa"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: ../src/widgets/gradient-toolbar.cpp:1126
@@ -31609,17 +31538,14 @@ msgid ""
 msgstr ""
 
 #: ../src/widgets/gradient-toolbar.cpp:1131
-#, fuzzy
 msgid "Repeat:"
 msgstr "Upprepa:"
 
 #: ../src/widgets/gradient-toolbar.cpp:1145
-#, fuzzy
 msgid "No stops"
-msgstr "Ingen linje"
+msgstr "Inga stopp"
 
 #: ../src/widgets/gradient-toolbar.cpp:1147
-#, fuzzy
 msgid "Stops"
 msgstr "_Stopp"
 
@@ -31629,9 +31555,8 @@ msgid "Select a stop for the current gradient"
 msgstr "Redigera stopp i gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:1148
-#, fuzzy
 msgid "Stops:"
-msgstr "_Stopp"
+msgstr "_Stopp:"
 
 #. Label
 #: ../src/widgets/gradient-toolbar.cpp:1160
@@ -31648,9 +31573,8 @@ msgstr "Skjut ut markerade slingor"
 
 #: ../src/widgets/gradient-toolbar.cpp:1178
 #: ../src/widgets/gradient-toolbar.cpp:1179
-#, fuzzy
 msgid "Insert new stop"
-msgstr "Infoga nod"
+msgstr "Infoga nytt stopp"
 
 #: ../src/widgets/gradient-toolbar.cpp:1192
 #: ../src/widgets/gradient-toolbar.cpp:1193
@@ -31659,14 +31583,12 @@ msgid "Delete stop"
 msgstr "Ta bort stopp"
 
 #: ../src/widgets/gradient-toolbar.cpp:1207
-#, fuzzy
 msgid "Reverse the direction of the gradient"
-msgstr "Redigera stopp i gradient"
+msgstr "Byt riktning på gradient"
 
 #: ../src/widgets/gradient-toolbar.cpp:1221
-#, fuzzy
 msgid "Link gradients"
-msgstr "Linjär gradient"
+msgstr "Koppla gradienter"
 
 #: ../src/widgets/gradient-toolbar.cpp:1222
 msgid "Link gradients to change all related gradients"
@@ -31722,9 +31644,8 @@ msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #: ../src/widgets/image-menu-item.c:167
-#, fuzzy
 msgid "Use stock"
-msgstr "Klistra in linje:"
+msgstr ""
 
 #: ../src/widgets/image-menu-item.c:168
 msgid "Whether to use the label text to create a stock menu item"
@@ -31755,32 +31676,28 @@ msgid "Open end"
 msgstr "Sluta en grupp"
 
 #: ../src/widgets/lpe-toolbar.cpp:232
-#, fuzzy
 msgid "Open both"
-msgstr "kan inte öppna %s"
+msgstr "Öppna bägge"
 
 #: ../src/widgets/lpe-toolbar.cpp:294
-#, fuzzy
 msgid "All inactive"
-msgstr "Lösenordet inaktivt"
+msgstr ""
 
 #: ../src/widgets/lpe-toolbar.cpp:295
 msgid "No geometric tool is active"
 msgstr ""
 
 #: ../src/widgets/lpe-toolbar.cpp:328
-#, fuzzy
 msgid "Show limiting bounding box"
-msgstr "mittpunkt på begränsningslådas sida"
+msgstr ""
 
 #: ../src/widgets/lpe-toolbar.cpp:329
 msgid "Show bounding box (used to cut infinite lines)"
-msgstr "Visa begränsningslåda (avnänd för att beskära oändliga linjer)"
+msgstr "Visa begränsningslåda (använd för att beskära oändliga linjer)"
 
 #: ../src/widgets/lpe-toolbar.cpp:340
-#, fuzzy
 msgid "Get limiting bounding box from selection"
-msgstr "Ta bort klippväg från markering"
+msgstr ""
 
 #: ../src/widgets/lpe-toolbar.cpp:341
 #, fuzzy
@@ -31792,12 +31709,10 @@ msgstr ""
 "begränsningslådan för aktuell markering"
 
 #: ../src/widgets/lpe-toolbar.cpp:353
-#, fuzzy
 msgid "Choose a line segment type"
 msgstr "Välj en linjesegmenttyp"
 
 #: ../src/widgets/lpe-toolbar.cpp:369
-#, fuzzy
 msgid "Display measuring info"
 msgstr "Visa mätinformation"
 
@@ -31859,14 +31774,12 @@ msgid "Compute max length."
 msgstr "Slinglängd"
 
 #: ../src/widgets/measure-toolbar.cpp:274 ../src/widgets/text-toolbar.cpp:1705
-#, fuzzy
 msgid "Font Size"
 msgstr "Typsnittsstorlek"
 
 #: ../src/widgets/measure-toolbar.cpp:274
-#, fuzzy
 msgid "Font Size:"
-msgstr "Typsnittsstorlek"
+msgstr "Typsnittsstorlek:"
 
 #: ../src/widgets/measure-toolbar.cpp:275
 msgid "The font size to be used in the measurement labels"
@@ -31887,18 +31800,16 @@ msgid "Decimal precision of measure"
 msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:315
-#, fuzzy
 msgid "Scale %"
-msgstr "Skala"
+msgstr "Skala %"
 
 #: ../src/widgets/measure-toolbar.cpp:315
-#, fuzzy
 msgid "Scale %:"
-msgstr "Skala:"
+msgstr "Skala %:"
 
 #: ../src/widgets/measure-toolbar.cpp:316
 msgid "Scale the results"
-msgstr ""
+msgstr "Skala resultaten"
 
 #: ../src/widgets/measure-toolbar.cpp:329
 #, fuzzy
@@ -31907,27 +31818,23 @@ msgstr "Förskjutning av mönster"
 
 #: ../src/widgets/measure-toolbar.cpp:341
 #: ../src/widgets/measure-toolbar.cpp:342
-#, fuzzy
 msgid "Ignore first and last"
-msgstr "Ignorera gömda objekt och lager"
+msgstr "Ignorera första och sista"
 
 #: ../src/widgets/measure-toolbar.cpp:352
 #: ../src/widgets/measure-toolbar.cpp:353
-#, fuzzy
 msgid "Show hidden intersections"
-msgstr "stödlinjers skärning"
+msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:363
 #: ../src/widgets/measure-toolbar.cpp:364
-#, fuzzy
 msgid "Show measures between items"
-msgstr "Utrymme mellan kopior:"
+msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:374
 #: ../src/widgets/measure-toolbar.cpp:375
-#, fuzzy
 msgid "Measure all layers"
-msgstr "Markera i alla lager"
+msgstr "Mät alla lager"
 
 #: ../src/widgets/measure-toolbar.cpp:385
 #: ../src/widgets/measure-toolbar.cpp:386
@@ -31954,14 +31861,12 @@ msgstr "Dimensioner"
 
 #: ../src/widgets/measure-toolbar.cpp:425
 #: ../src/widgets/measure-toolbar.cpp:426
-#, fuzzy
 msgid "Convert to item"
-msgstr "Konvertera till Brailleskrift"
+msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:284
-#, fuzzy
 msgid "Set mesh type"
-msgstr "Ange textstil"
+msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:357
 msgid ""
@@ -31974,9 +31879,8 @@ msgid ""
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:389
-#, fuzzy
 msgid "normal"
-msgstr "Normal"
+msgstr "normal"
 
 #: ../src/widgets/mesh-toolbar.cpp:389
 #, fuzzy
@@ -31985,45 +31889,39 @@ msgstr "Skapa linjär gradient"
 
 #: ../src/widgets/mesh-toolbar.cpp:393
 msgid "conical"
-msgstr ""
+msgstr "konisk"
 
 #: ../src/widgets/mesh-toolbar.cpp:393
 #, fuzzy
 msgid "Create conical gradient"
-msgstr "Skapa linjär gradient"
+msgstr "Skapa konisk gradient"
 
 #: ../src/widgets/mesh-toolbar.cpp:448
-#, fuzzy
 msgid "Rows"
 msgstr "Rader"
 
 #: ../src/widgets/mesh-toolbar.cpp:448
 #: ../share/extensions/guides_creator.inx.h:5
 #: ../share/extensions/layout_nup.inx.h:12
-#, fuzzy
 msgid "Rows:"
 msgstr "Rader:"
 
 #: ../src/widgets/mesh-toolbar.cpp:448
-#, fuzzy
 msgid "Number of rows in new mesh"
-msgstr "Antal rader"
+msgstr "Antal rader i nytt rutnät"
 
 #: ../src/widgets/mesh-toolbar.cpp:464
-#, fuzzy
 msgid "Columns"
-msgstr "Kolumner:"
+msgstr "Kolumner"
 
 #: ../src/widgets/mesh-toolbar.cpp:464
 #: ../share/extensions/guides_creator.inx.h:4
-#, fuzzy
 msgid "Columns:"
 msgstr "Kolumner:"
 
 #: ../src/widgets/mesh-toolbar.cpp:464
-#, fuzzy
 msgid "Number of columns in new mesh"
-msgstr "Antal kolumner"
+msgstr "Antal kolumner i nytt rutnät"
 
 #: ../src/widgets/mesh-toolbar.cpp:478
 #, fuzzy
@@ -32075,23 +31973,20 @@ msgid "Smoothing:"
 msgstr "Utjämning:"
 
 #: ../src/widgets/mesh-toolbar.cpp:554
-#, fuzzy
 msgid "Toggle Sides"
-msgstr "Växla Fetstil"
+msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:555
 msgid "Toggle selected sides between Beziers and lines."
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:558
-#, fuzzy
 msgid "Toggle side:"
-msgstr "Växla Fetstil"
+msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:565
-#, fuzzy
 msgid "Make elliptical"
-msgstr "Gör Kursiv"
+msgstr "Gör elliptisk"
 
 #: ../src/widgets/mesh-toolbar.cpp:566
 msgid ""
@@ -32100,23 +31995,20 @@ msgid ""
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:569
-#, fuzzy
 msgid "Make elliptical:"
-msgstr "Gör Kursiv"
+msgstr "Gör elliptisk:"
 
 #: ../src/widgets/mesh-toolbar.cpp:576
-#, fuzzy
 msgid "Pick colors:"
-msgstr "Månadernas färg"
+msgstr "Välj färger:"
 
 #: ../src/widgets/mesh-toolbar.cpp:577
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:580
-#, fuzzy
 msgid "Pick Color"
-msgstr "Fyllningsfärg"
+msgstr "Välj färg"
 
 #: ../src/widgets/mesh-toolbar.cpp:588
 #, fuzzy
@@ -32129,12 +32021,10 @@ msgid "Scale mesh to fit inside bounding box."
 msgstr "mittpunkt på begränsningslådas sida"
 
 #: ../src/widgets/mesh-toolbar.cpp:592
-#, fuzzy
 msgid "Fit mesh"
-msgstr "Redigera fyllning..."
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:339
-#, fuzzy
 msgid "Insert node"
 msgstr "Infoga nod"
 
@@ -32147,73 +32037,60 @@ msgid "Insert"
 msgstr "Infoga"
 
 #: ../src/widgets/node-toolbar.cpp:354
-#, fuzzy
 msgid "Insert node at min X"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:355
-#, fuzzy
 msgid "Insert new nodes at min X into selected segments"
-msgstr "Infoga nya noder i markerade segment"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:358
-#, fuzzy
 msgid "Insert min X"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:364
-#, fuzzy
 msgid "Insert node at max X"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:365
-#, fuzzy
 msgid "Insert new nodes at max X into selected segments"
-msgstr "Infoga nya noder i markerade segment"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:368
-#, fuzzy
 msgid "Insert max X"
-msgstr "Infoga"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:374
-#, fuzzy
 msgid "Insert node at min Y"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:375
-#, fuzzy
 msgid "Insert new nodes at min Y into selected segments"
-msgstr "Infoga nya noder i markerade segment"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:378
-#, fuzzy
 msgid "Insert min Y"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:384
-#, fuzzy
 msgid "Insert node at max Y"
-msgstr "Infoga nod"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:385
-#, fuzzy
 msgid "Insert new nodes at max Y into selected segments"
-msgstr "Infoga nya noder i markerade segment"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:388
-#, fuzzy
 msgid "Insert max Y"
-msgstr "Infoga"
+msgstr ""
 
 #: ../src/widgets/node-toolbar.cpp:396
 msgid "Delete selected nodes"
 msgstr "Radera markerade noder"
 
 #: ../src/widgets/node-toolbar.cpp:407
-#, fuzzy
 msgid "Join selected nodes"
-msgstr "Anslut markerade ändnoder"
+msgstr "Anslut markerade noder"
 
 #: ../src/widgets/node-toolbar.cpp:410
 msgid "Join"
@@ -32224,7 +32101,6 @@ msgid "Break path at selected nodes"
 msgstr "Dela slinga vid markerade noder"
 
 #: ../src/widgets/node-toolbar.cpp:428
-#, fuzzy
 msgid "Join with segment"
 msgstr "Anslut med segment"
 
@@ -32310,9 +32186,8 @@ msgid "Show Bezier handles of selected nodes"
 msgstr "Visa Bezier-handtagen för markerade noder"
 
 #: ../src/widgets/node-toolbar.cpp:530
-#, fuzzy
 msgid "Show Outline"
-msgstr "Visa Kontur"
+msgstr "Visa kontur"
 
 #: ../src/widgets/node-toolbar.cpp:531
 #, fuzzy
@@ -32372,9 +32247,8 @@ msgid "Radial gradient"
 msgstr "Radiell gradient"
 
 #: ../src/widgets/paint-selector.cpp:217
-#, fuzzy
 msgid "Mesh gradient"
-msgstr "Flytta gradienter"
+msgstr ""
 
 #: ../src/widgets/paint-selector.cpp:224
 msgid "Unset paint (make it undefined so it can be inherited)"
@@ -32402,44 +32276,38 @@ msgid "<b>No objects</b>"
 msgstr "<b>Inga objekt</b>"
 
 #: ../src/widgets/paint-selector.cpp:601
-#, fuzzy
 msgid "<b>Multiple styles</b>"
-msgstr "Flera stilar"
+msgstr "<b>Flera stilar</b>"
 
 #: ../src/widgets/paint-selector.cpp:612
-#, fuzzy
 msgid "<b>Paint is undefined</b>"
-msgstr "Odefinerad färg"
+msgstr "<b>Odefinerad färg</b>"
 
 #: ../src/widgets/paint-selector.cpp:623
-#, fuzzy
 msgid "<b>No paint</b>"
-msgstr "Opacitet:"
+msgstr "<b>Ingen färg</b>"
 
 #: ../src/widgets/paint-selector.cpp:703
-#, fuzzy
 msgid "<b>Flat color</b>"
-msgstr "Enfärgad"
+msgstr "<b>Enfärgad</b>"
 
 #. sp_gradient_selector_set_mode(SP_GRADIENT_SELECTOR(gsel), SP_GRADIENT_SELECTOR_MODE_LINEAR);
 #: ../src/widgets/paint-selector.cpp:767
-#, fuzzy
 msgid "<b>Linear gradient</b>"
-msgstr "Linjär gradient"
+msgstr "<b>Linjär gradient</b>"
 
 #: ../src/widgets/paint-selector.cpp:770
 #, fuzzy
 msgid "<b>Radial gradient</b>"
-msgstr "Radiell gradient"
+msgstr "<b>Radiell gradient</b>"
 
 #: ../src/widgets/paint-selector.cpp:1039
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
 
 #: ../src/widgets/paint-selector.cpp:1052
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "Färgprov-fyllning"
+msgstr ""
 
 #: ../src/widgets/paint-selector.cpp:1391
 msgid ""
@@ -32452,9 +32320,8 @@ msgstr ""
 "skapa ett nytt mönster från markeringen."
 
 #: ../src/widgets/paint-selector.cpp:1404
-#, fuzzy
 msgid "<b>Pattern fill</b>"
-msgstr "Mönsterfyllning"
+msgstr "<b>Mönsterfyllning</b>"
 
 #: ../src/widgets/paint-selector.cpp:1498
 #, fuzzy
@@ -32462,7 +32329,6 @@ msgid "<b>Swatch fill</b>"
 msgstr "Färgprov-fyllning"
 
 #: ../src/widgets/paintbucket-toolbar.cpp:133
-#, fuzzy
 msgid "Fill by"
 msgstr "Fyll med"
 
@@ -32484,7 +32350,6 @@ msgstr ""
 "närliggande bildpunkterna som skall räknas in i fyllningen"
 
 #: ../src/widgets/paintbucket-toolbar.cpp:174
-#, fuzzy
 msgid "Grow/shrink by"
 msgstr "Öka/minska med"
 
@@ -32500,7 +32365,6 @@ msgstr ""
 "fyllningsslingan"
 
 #: ../src/widgets/paintbucket-toolbar.cpp:198
-#, fuzzy
 msgid "Close gaps"
 msgstr "Slut öppningar"
 
@@ -32535,9 +32399,8 @@ msgid "Create Spiro path"
 msgstr "Skapa en Spiroslinga"
 
 #: ../src/widgets/pencil-toolbar.cpp:116
-#, fuzzy
 msgid "Create BSpline path"
-msgstr "Skapa en Spiroslinga"
+msgstr ""
 
 #: ../src/widgets/pencil-toolbar.cpp:122
 msgid "Zigzag"
@@ -32548,9 +32411,8 @@ msgid "Create a sequence of straight line segments"
 msgstr "Skapa en sekvens med raka linjesegment"
 
 #: ../src/widgets/pencil-toolbar.cpp:129
-#, fuzzy
 msgid "Paraxial"
-msgstr "delvis"
+msgstr "Vinkelrät"
 
 #: ../src/widgets/pencil-toolbar.cpp:130
 msgid "Create a sequence of paraxial line segments"
@@ -32584,9 +32446,8 @@ msgid "Bend from clipboard"
 msgstr "Från urklipp"
 
 #: ../src/widgets/pencil-toolbar.cpp:179
-#, fuzzy
 msgid "Last applied"
-msgstr "Sista sida:"
+msgstr ""
 
 #: ../src/widgets/pencil-toolbar.cpp:204 ../src/widgets/pencil-toolbar.cpp:205
 msgid "Shape:"
@@ -32744,63 +32605,54 @@ msgstr ""
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:434
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "X position"
-msgstr "Position"
+msgstr "X-position"
 
 #. label
 #: ../src/widgets/select-toolbar.cpp:435
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:436
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "Markeringens horisontella koordinat"
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:453
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Y position"
-msgstr "Position"
+msgstr "Y-position"
 
 #. label
 #: ../src/widgets/select-toolbar.cpp:454
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:455
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "Markeringens vertikala koordinat"
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:472
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Width"
 msgstr "Bredd"
 
 #. label
 #: ../src/widgets/select-toolbar.cpp:473
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "W:"
 msgstr "B:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:474
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "Markeringens bredd"
@@ -32815,37 +32667,31 @@ msgstr "Ändra både bredd och höjd enligt samma proprotioner när låst"
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:504
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "Höjd"
 
 #. label
 #: ../src/widgets/select-toolbar.cpp:505
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "H:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:506
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "Markeringens höjd"
 
 #: ../src/widgets/select-toolbar.cpp:568
-#, fuzzy
 msgid "Scale rounded corners"
 msgstr "Skala rundade hörn"
 
 #: ../src/widgets/select-toolbar.cpp:579
-#, fuzzy
 msgid "Move gradients"
 msgstr "Flytta gradienter"
 
 #: ../src/widgets/select-toolbar.cpp:590
-#, fuzzy
 msgid "Move patterns"
 msgstr "Flytta mönster"
 
@@ -32862,7 +32708,6 @@ msgid "Value"
 msgstr "Värde"
 
 #: ../src/widgets/sp-xmlview-content.cpp:134
-#, fuzzy
 msgid "Type text in a text node"
 msgstr "Skriv text i en textnod"
 
@@ -32988,7 +32833,6 @@ msgid "(maximum mean)"
 msgstr "(maximal median)"
 
 #: ../src/widgets/spray-toolbar.cpp:326
-#, fuzzy
 msgid "Focus"
 msgstr "Fokus"
 
@@ -33023,7 +32867,7 @@ msgstr "Sprid ut"
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scatter:"
-msgstr "Sprid ut"
+msgstr "Sprid ut:"
 
 #: ../src/widgets/spray-toolbar.cpp:342
 #, fuzzy
@@ -33065,7 +32909,6 @@ msgid "(low population)"
 msgstr "(låg population)"
 
 #: ../src/widgets/spray-toolbar.cpp:408
-#, fuzzy
 msgid "(high population)"
 msgstr "(hög population)"
 
@@ -33086,17 +32929,14 @@ msgstr ""
 "Använd trycket på inmatningsenheten för att påverka mängden målade objekt."
 
 #: ../src/widgets/spray-toolbar.cpp:438
-#, fuzzy
 msgid "(high rotation variation)"
 msgstr "(hög rotationsvariation)"
 
 #: ../src/widgets/spray-toolbar.cpp:441
-#, fuzzy
 msgid "Rotation"
 msgstr "Rotation"
 
 #: ../src/widgets/spray-toolbar.cpp:441
-#, fuzzy
 msgid "Rotation:"
 msgstr "Rotation:"
 
