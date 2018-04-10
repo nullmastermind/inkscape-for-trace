@@ -24,7 +24,6 @@
 
 #include <glibmm/i18n.h>
 
-#include "ui/widget/registered-widget.h"
 #include "desktop.h"
 #include "sp-canvas-util.h"
 #include "helper/mathfns.h"
@@ -301,20 +300,20 @@ CanvasGrid::newWidget()
     namelabel->set_markup(str);
     vbox->pack_start(*namelabel, true, true);
 
-    Inkscape::UI::Widget::RegisteredCheckButton * _rcb_enabled = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredCheckButton( _("_Enabled"),
-                        _("Determines whether to snap to this grid or not. Can be 'on' for invisible grids."),
-                         "enabled", _wr, false, repr, doc) );
+    _rcb_enabled = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+            _("_Enabled"),
+            _("Determines whether to snap to this grid or not. Can be 'on' for invisible grids."),
+            "enabled", _wr, false, repr, doc) );
 
-    Inkscape::UI::Widget::RegisteredCheckButton * _rcb_snap_visible_only = Gtk::manage(
-            new Inkscape::UI::Widget::RegisteredCheckButton( _("Snap to visible _grid lines only"),
-                            _("When zoomed out, not all grid lines will be displayed. Only the visible ones will be snapped to"),
-                             "snapvisiblegridlinesonly", _wr, true, repr, doc) );
+    _rcb_snap_visible_only = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+            _("Snap to visible _grid lines only"),
+            _("When zoomed out, not all grid lines will be displayed. Only the visible ones will be snapped to"),
+            "snapvisiblegridlinesonly", _wr, true, repr, doc) );
 
-    Inkscape::UI::Widget::RegisteredCheckButton * _rcb_visible = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredCheckButton( _("_Visible"),
-                        _("Determines whether the grid is displayed or not. Objects are still snapped to invisible grids."),
-                         "visible", _wr, true, repr, doc) );
+    _rcb_visible = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+            _("_Visible"),
+            _("Determines whether the grid is displayed or not. Objects are still snapped to invisible grids."),
+            "visible", _wr, true, repr, doc) );
 
     vbox->pack_start(*_rcb_enabled, true, true);
     vbox->pack_start(*_rcb_visible, true, true);
@@ -661,12 +660,8 @@ void
 CanvasXYGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const */*key*/, gchar const */*oldval*/, gchar const */*newval*/, bool /*is_interactive*/)
 {
     readRepr();
-
-    if ( ! (_wr.isUpdating()) )
-        updateWidgets();
+    updateWidgets();
 }
-
-
 
 
 Gtk::Widget *
@@ -676,33 +671,31 @@ CanvasXYGrid::newSpecificWidget()
     table->set_row_spacing(2);
     table->set_column_spacing(2);
 
-    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
+    _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("_Origin X:"), _("X coordinate of grid origin"), "originx",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("O_rigin Y:"), _("Y coordinate of grid origin"), "originy",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sx = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_sx = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("Spacing _X:"), _("Distance between vertical grid lines"), "spacingx",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("Spacing _Y:"), _("Distance between horizontal grid lines"), "spacingy",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
 
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Minor grid line _color:"), _("Minor grid line color"), _("Color of the minor grid lines"),
-            "color", "opacity", _wr, repr, doc));
+            "color", "opacity", _wr, repr, doc) );
 
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gmcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Ma_jor grid line color:"), _("Major grid line color"),
             _("Color of the major (highlighted) grid lines"), "empcolor", "empopacity",
-            _wr, repr, doc));
+            _wr, repr, doc) );
 
-    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
+    _rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
             _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc) );
 
     _wr.setUpdating (true);
@@ -719,10 +712,9 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
-    Inkscape::UI::Widget::RegisteredCheckButton * _rcb_dotted = Gtk::manage(
-                new Inkscape::UI::Widget::RegisteredCheckButton( _("_Show dots instead of lines"),
-                       _("If set, displays dots at gridpoints instead of gridlines"),
-                        "dotted", _wr, false, repr, doc) );
+    _rcb_dotted = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+            _("_Show dots instead of lines"), _("If set, displays dots at gridpoints instead of gridlines"),
+            "dotted", _wr, false, repr, doc) );
 
     Gtk::Widget const *const widget_array[] = {
         0,                  _rumg,
@@ -730,9 +722,9 @@ CanvasXYGrid::newSpecificWidget()
         0,                  _rsu_oy,
         0,                  _rsu_sx,
         0,                  _rsu_sy,
-        _rcp_gcol->_label,   _rcp_gcol,
+        _rcp_gcol->_label,  _rcp_gcol,
         0,                  0,
-        _rcp_gmcol->_label,  _rcp_gmcol,
+        _rcp_gmcol->_label, _rcp_gmcol,
         0,                  _rsi,
         0,                  _rcb_dotted,
     };
@@ -779,42 +771,47 @@ CanvasXYGrid::newSpecificWidget()
 void
 CanvasXYGrid::updateWidgets()
 {
-/*
     if (_wr.isUpdating()) return;
 
     _wr.setUpdating (true);
 
-    _rcb_visible.setActive(visible);
+    _rcb_visible->setActive(visible);
     if (snapper != NULL) {
-        _rcb_enabled.setActive(snapper->getEnabled());
+        _rcb_enabled->setActive(snapper->getEnabled());
+        _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
 
-    _rumg.setUnit (gridunit->abbr);
+    _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
+
     val = origin[Geom::X];
-    val = Inkscape::Quantity::convert(val, "px", *gridunit);
-    _rsu_ox.setValue (val);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_ox->setValue (val);
+
     val = origin[Geom::Y];
-    val = Inkscape::Quantity::convert(val, "px", *gridunit);
-    _rsu_oy.setValue (val);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_oy->setValue (val);
+
     val = spacing[Geom::X];
-    double gridx = Inkscape::Quantity::convert(val, "px", *gridunit);
-    _rsu_sx.setValue (gridx);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_sx->setValue (val);
+
     val = spacing[Geom::Y];
-    double gridy = Inkscape::Quantity::convert(val, "px", *gridunit);
-    _rsu_sy.setValue (gridy);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_sy->setValue (val);
 
-    _rcp_gcol.setRgba32 (color);
-    _rcp_gmcol.setRgba32 (empcolor);
-    _rsi.setValue (empspacing);
+    _rsu_ox->setProgrammatically = false;
+    _rsu_oy->setProgrammatically = false;
+    _rsu_sx->setProgrammatically = false;
+    _rsu_sy->setProgrammatically = false;
 
-    _rcb_dotted.setActive(render_dotted);
+    _rcp_gcol->setRgba32 (color);
+    _rcp_gmcol->setRgba32 (empcolor);
+    _rsi->setValue (empspacing);
+    _rcb_dotted->setActive (render_dotted);
 
     _wr.setUpdating (false);
-
-    return;
-*/
 }
 
 // For correcting old SVG Inkscape files

@@ -321,34 +321,32 @@ CanvasAxonomGrid::newSpecificWidget()
 
 _wr.setUpdating (true);
 
-    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
+    _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("_Origin X:"), _("X coordinate of grid origin"), "originx",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_x) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_oy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("O_rigin Y:"), _("Y coordinate of grid origin"), "originy",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
+    _rsu_sy = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
             _("Spacing _Y:"), _("Base length of z-axis"), "spacingy",
             *_rumg, _wr, repr, doc, Inkscape::UI::Widget::RSU_y) );
-    Inkscape::UI::Widget::RegisteredScalar *_rsu_ax = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
+    _rsu_ax = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             _("Angle X:"), _("Angle of x-axis"), "gridanglex", _wr, repr, doc ) );
-    Inkscape::UI::Widget::RegisteredScalar *_rsu_az = Gtk::manage(  new Inkscape::UI::Widget::RegisteredScalar(
+    _rsu_az = Gtk::manage(  new Inkscape::UI::Widget::RegisteredScalar(
             _("Angle Z:"), _("Angle of z-axis"), "gridanglez", _wr, repr, doc ) );
 
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Minor grid line _color:"), _("Minor grid line color"), _("Color of the minor grid lines"),
             "color", "opacity", _wr, repr, doc));
 
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredColorPicker(
+    _rcp_gmcol = Gtk::manage( new Inkscape::UI::Widget::RegisteredColorPicker(
             _("Ma_jor grid line color:"), _("Major grid line color"),
             _("Color of the major (highlighted) grid lines"),
             "empcolor", "empopacity", _wr, repr, doc));
 
-    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
+    _rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
             _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc ) );
 
     _rsu_ox->setDigits(5);
@@ -411,39 +409,46 @@ _wr.setUpdating (false);
 void
 CanvasAxonomGrid::updateWidgets()
 {
-/*    if (_wr.isUpdating()) return;
+    if (_wr.isUpdating()) return;
 
     _wr.setUpdating (true);
 
-    _rcb_visible.setActive(visible);
+    _rcb_visible->setActive(visible);
     if (snapper != NULL) {
-        _rcb_enabled.setActive(snapper->getEnabled());
+        _rcb_enabled->setActive(snapper->getEnabled());
+        _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
 
-    _rumg.setUnit (gridunit->abbr);
+    _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
+
     val = origin[Geom::X];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
-    _rsu_ox.setValue (val);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_ox->setValue (val);
+
     val = origin[Geom::Y];
-    val = Inkscape::Util::Quantity::convert(val, &px, gridunit);
-    _rsu_oy.setValue (val);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_oy->setValue (val);
+
     val = lengthy;
-    double gridy = Inkscape::Util::Quantity::convert(val, &px, gridunit);
-    _rsu_sy.setValue (gridy);
+    val = Inkscape::Util::Quantity::convert(val, "px", gridunit);
+    _rsu_sy->setValue (val);
 
-    _rsu_ax.setValue(angle_deg[X]);
-    _rsu_az.setValue(angle_deg[Z]);
+    _rsu_ax->setValue(angle_deg[X]);
+    _rsu_az->setValue(angle_deg[Z]);
 
-    _rcp_gcol.setRgba32 (color);
-    _rcp_gmcol.setRgba32 (empcolor);
-    _rsi.setValue (empspacing);
+    _rsu_ox->setProgrammatically = false;
+    _rsu_oy->setProgrammatically = false;
+    _rsu_sy->setProgrammatically = false;
+    _rsu_ax->setProgrammatically = false;
+    _rsu_az->setProgrammatically = false;
+
+    _rcp_gcol->setRgba32 (color);
+    _rcp_gmcol->setRgba32 (empcolor);
+    _rsi->setValue (empspacing);
 
     _wr.setUpdating (false);
-
-    return;
-    */
 }
 
 
