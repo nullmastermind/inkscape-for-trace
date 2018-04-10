@@ -15434,7 +15434,7 @@ msgstr "Programmes incorporés"
 
 #: ../src/ui/dialog/document-properties.cpp:743
 msgid "<b>External script files:</b>"
-msgstr "<b>Fichier de programmation externe :</b>"
+msgstr "<b>Fichiers de programmation externes :</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:745
 msgid "Add the current file name or browse for a file"
@@ -15452,7 +15452,7 @@ msgstr "Nom du fichier"
 
 #: ../src/ui/dialog/document-properties.cpp:801
 msgid "<b>Embedded script files:</b>"
-msgstr "<b>Fichier de programmation incorporés :</b>"
+msgstr "<b>Fichiers de programmation incorporés :</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:803
 #: ../src/ui/dialog/objects.cpp:1881
@@ -18377,7 +18377,7 @@ msgid ""
 "If on, pen width is in absolute units (px) independent of zoom; otherwise "
 "pen width depends on zoom so that it looks the same at any zoom"
 msgstr ""
-"Si coché, la largeur de la plume est en unités absolues (px) indépendemment "
+"Si coché, la largeur de la plume est en unités absolues (px) indépendamment "
 "du zoom; sinon, la largeur de plume dépend du zoom afin de paraître la même "
 "quel que soit le zoom"
 
@@ -19115,7 +19115,7 @@ msgstr "Ancrables"
 #: ../src/ui/dialog/inkscape-preferences.cpp:675
 #: ../src/ui/dialog/inkscape-preferences.cpp:718
 msgid "Floating"
-msgstr "Flottants"
+msgstr "Flottantes"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:678
 msgid "Native open/save dialogs"
@@ -19569,7 +19569,7 @@ msgid ""
 "relative coordinates, or optimized for string length (mixed absolute and "
 "relative coordinates)"
 msgstr ""
-"Les données de chemin doivent être écrite : seulement avec des coordonnées "
+"Les données de chemin doivent être écrites : seulement avec des coordonnées "
 "absolues, seulement avec des coordonnées relatives, ou optimisées en "
 "fonction de la longueur de la chaîne (mélange de coordonnées relatives et "
 "absolues)"
@@ -20056,7 +20056,7 @@ msgid ""
 "themselves or by being in a hidden layer)"
 msgstr ""
 "Si décoché, la sélection des objets cachés est possible (objets cachés "
-"isolés ou appartenant à calque caché)"
+"isolés ou appartenant à un calque caché)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1190
 msgid ""
@@ -20068,7 +20068,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgid "Wrap when cycling objects in z-order"
-msgstr "Cycler lors de la sélection des objets par ordre d'empilement"
+msgstr "Boucler lors de la sélection des objets par ordre d'empilement"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgid "Alt+Scroll Wheel"
@@ -20077,7 +20077,7 @@ msgstr "Alt+molette"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1196
 msgid "Wrap around at start and end when cycling objects in z-order"
 msgstr ""
-"Passer au premier après le dernier et au dernier avant le premier lors de la "
+"Boucler du premier au dernier et inversement lors de la "
 "sélection des objets par ordre d'empilement"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1198
@@ -20592,7 +20592,7 @@ msgid ""
 "Stroke color same as object, fill color either object fill color or marker "
 "fill color"
 msgstr ""
-"Couleur de contour identique à celle l'objet, couleur de fond identique à "
+"Couleur de contour identique à celle de l'objet, couleur de fond identique à "
 "celle de l'objet ou à la couleur de fond du marqueur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1389
@@ -20748,7 +20748,7 @@ msgstr "Exporter"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1474
 msgid "Default export _resolution:"
-msgstr "_Résolution par défaut d'exportation :"
+msgstr "_Résolution d'exportation par défaut :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1475
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
@@ -27237,7 +27237,7 @@ msgstr "Crée quatre guides alignés sur les bords de la page"
 
 #: ../src/verbs.cpp:2587
 msgid "Next path effect parameter"
-msgstr "Paramètre de l'effect de chemin suivant"
+msgstr "Paramètre de l'effet de chemin suivant"
 
 #: ../src/verbs.cpp:2588
 msgid "Show next editable path effect parameter"
@@ -27538,8 +27538,8 @@ msgstr "Vec_toriser du pixel art..."
 #: ../src/verbs.cpp:2685
 msgid "Create paths using Kopf-Lischinski algorithm to vectorize pixel art"
 msgstr ""
-"Créer des chemins en utilisant l'algorithme de Kopt-Lischinski  pour "
-"vectoriser en pixel art"
+"Créer des chemins en utilisant l'algorithme de Kopt-Lischinski pour "
+"vectoriser du pixel art"
 
 #: ../src/verbs.cpp:2686
 msgid "Make a _Bitmap Copy"
