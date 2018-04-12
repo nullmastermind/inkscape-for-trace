@@ -596,8 +596,10 @@ static void arc_toolbox_check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBa
         changed = desktop->getSelection()->connectChanged(sigc::bind(sigc::ptr_fun(sp_arc_toolbox_selection_changed), holder));
         sp_arc_toolbox_selection_changed(desktop->getSelection(), holder);
     } else {
-        if (changed)
+        if (changed) {
             changed.disconnect();
+            purge_repr_listener(NULL, holder);
+        }
     }
 }
 
