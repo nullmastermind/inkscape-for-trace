@@ -85,8 +85,6 @@ FontLister::FontLister()
     current_family_row = 0;
     current_family = "sans-serif";
     current_style = "Normal";
-    current_fontspec = "sans-serif"; // Empty style -> Normal
-    current_fontspec_system = "Sans";
 
     font_list_store->thaw_notify();
 
@@ -459,20 +457,12 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
         //std::cout << "   fontspec from thin air   :" << fontspec << ":" << std::endl;
     }
 
-    // Do we really need? Removes spaces between font-families.
-    //current_fontspec = canonize_fontspec( fontspec );
-    current_fontspec = fontspec; // Ignore for now
-
-    current_fontspec_system = system_fontspec(current_fontspec);
-
-    std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(current_fontspec);
+    std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(fontspec);
     set_font_family(ui.first);
     set_font_style(ui.second);
 
 #ifdef DEBUG_FONT
     std::cout << "   family_row:           :" << current_family_row << ":" << std::endl;
-    std::cout << "   canonized:            :" << current_fontspec << ":" << std::endl;
-    std::cout << "   system:               :" << current_fontspec_system << ":" << std::endl;
     std::cout << "   family:               :" << current_family << ":" << std::endl;
     std::cout << "   style:                :" << current_style << ":" << std::endl;
     std::cout << "FontLister::selection_update: exit" << std::endl;
@@ -579,13 +569,9 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustrin
     std::pair<Glib::ustring, Glib::ustring> ui = new_font_family(new_family, check_style);
     current_family = ui.first;
     current_style = ui.second;
-    current_fontspec = canonize_fontspec(current_family + ", " + current_style);
-    current_fontspec_system = system_fontspec(current_fontspec);
 
 #ifdef DEBUG_FONT
     std::cout << "   family_row:           :" << current_family_row << ":" << std::endl;
-    std::cout << "   canonized:            :" << current_fontspec << ":" << std::endl;
-    std::cout << "   system:               :" << current_fontspec_system << ":" << std::endl;
     std::cout << "   family:               :" << current_family << ":" << std::endl;
     std::cout << "   style:                :" << current_style << ":" << std::endl;
     std::cout << "FontLister::set_font_family: end" << std::endl;
@@ -633,12 +619,8 @@ void FontLister::set_font_style(Glib::ustring new_style)
     std::cout << "FontLister:set_font_style: " << new_style << std::endl;
 #endif
     current_style = new_style;
-    current_fontspec = canonize_fontspec(current_family + ", " + current_style);
-    current_fontspec_system = system_fontspec(current_fontspec);
 
 #ifdef DEBUG_FONT
-    std::cout << "   canonized:            :" << current_fontspec << ":" << std::endl;
-    std::cout << "   system:               :" << current_fontspec_system << ":" << std::endl;
     std::cout << "   family:                " << current_family << std::endl;
     std::cout << "   style:                 " << current_style << std::endl;
     std::cout << "FontLister::set_font_style: end" << std::endl;
@@ -650,10 +632,10 @@ void FontLister::set_font_style(Glib::ustring new_style)
 // We do this ourselves as we can't rely on FontFactory.
 void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
 {
-
     if (fontspec.empty()) {
-        fontspec = current_fontspec;
+        fontspec = get_fontspec();
     }
+
     std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(fontspec);
 
     Glib::ustring family = ui.first;

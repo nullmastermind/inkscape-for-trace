@@ -183,10 +183,7 @@ public:
      */
     void set_fontspec(Glib::ustring fontspec, bool check = true);
 
-    Glib::ustring get_fontspec()
-    {
-        return current_fontspec;
-    }
+    Glib::ustring get_fontspec() { return (canonize_fontspec(current_family + ", " + current_style)); }
 
     /**
      * Changes font-family, updating style list and attempting to find
@@ -241,7 +238,7 @@ public:
     Glib::ustring fontspec_from_style(SPStyle *style);
 
     /**
-     * Fill css using current_fontspec.
+     * Fill css using given fontspec (doesn't need to be member function).
      */
     void fill_css(SPCSSAttr *css, Glib::ustring fontspec = "");
 
@@ -259,7 +256,10 @@ public:
      * Return best style match for new font given style for old font.
      */
     Glib::ustring get_best_style_match(Glib::ustring family, Glib::ustring style);
-    
+
+    /**
+     * Makes sure style ListStore is filled.
+     */
     void ensureRowStyles(GtkTreeModel* model, GtkTreeIter const* iter);
 
 private:
@@ -277,13 +277,6 @@ private:
     int current_family_row;
     Glib::ustring current_family;
     Glib::ustring current_style;
-    Glib::ustring current_fontspec;
-
-    /**
-     * fontspec of system font closest to current_fontspec.
-     *  (What the system will use to display current_fontspec.)
-     */
-    Glib::ustring current_fontspec_system;
 
     /**
      * If a font-family is not on system, this list of styles is used.
