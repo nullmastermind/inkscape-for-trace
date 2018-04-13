@@ -19,15 +19,21 @@
 #include <map>
 #include <set>
 
+#include <glibmm/ustring.h>
+#include <glibmm/stringutils.h> // For strescape()
+
 #include <gtkmm/liststore.h>
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treepath.h>
-#include <glibmm/ustring.h>
 
 class SPObject;
 class SPDocument;
 class SPCSSAttr;
 class SPStyle;
+
+namespace Gtk {
+class CellRenderer;
+}
 
 namespace Inkscape {
 
@@ -52,6 +58,10 @@ namespace Inkscape {
  *  then a generic font-family should be used (sans-serif -> Sans).
  *
  *  This class is used by the UI interface (text-toolbar, font-select, etc.).
+ *
+ *  This class is a singleton (one instance per Inkscape session). Since fonts
+ *  used in a document are added to the list, there really should be one
+ *  instance per document.
  *
  *  "Font" includes family and style. It should not be used when one
  *  means font-family.
@@ -258,9 +268,21 @@ public:
     Glib::ustring get_best_style_match(Glib::ustring family, Glib::ustring style);
 
     /**
-     * Makes sure style ListStore is filled.
+     * Ensures the style list for a particular family has been created.
      */
-    void ensureRowStyles(GtkTreeModel* model, GtkTreeIter const* iter);
+    void ensureRowStyles(Glib::RefPtr<Gtk::TreeModel> model, Gtk::TreeModel::iterator const iter);
+
+    /**
+     * Let users of FontLister know to update GUI.
+     * This is to allow synchronization of changes across multiple widgets.
+     * Handlers should block signals.
+     * Input is fontspec to set.
+     */
+    sigc::connection connectUpdate(sigc::slot<void, Glib::ustring> slot) {
+        return update_signal.connect(slot);
+    }
+
+    bool blocked() { return block; }
 
 private:
     FontLister();
@@ -282,20 +304,31 @@ private:
      * If a font-family is not on system, this list of styles is used.
      */
     GList *default_styles;
+
+    bool block;
+    void emit_update();
+    sigc::signal<void, Glib::ustring> update_signal;
 };
 
 } // namespace Inkscape
 
 // Helper functions
-gboolean font_lister_separator_func(GtkTreeModel *model,
+bool font_lister_separator_func (const Glib::RefPtr<Gtk::TreeModel>& model,
+                                 const Gtk::TreeModel::iterator& iter);
+
+gboolean font_lister_separator_func2(GtkTreeModel *model,
                                     GtkTreeIter *iter,
                                     gpointer /*data*/);
 
-void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
+void font_lister_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter const &iter);
+
+void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
                                 GtkCellRenderer *cell,
                                 GtkTreeModel *model,
                                 GtkTreeIter *iter,
                                 gpointer /*data*/);
+
+void font_lister_style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter const &iter);
 
 #endif
 

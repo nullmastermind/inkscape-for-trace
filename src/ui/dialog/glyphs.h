@@ -20,12 +20,12 @@ class Label;
 class ListStore;
 }
 
-struct SPFontSelector;
-class font_instance;
-
-
 namespace Inkscape {
 namespace UI {
+
+namespace Widget {
+class FontSelector;
+}
 
 namespace Dialog {
 
@@ -52,8 +52,6 @@ private:
 
     static GlyphColumns *getColumns();
 
-    static void fontChangeCB(SPFontSelector *fontsel, Glib::ustring fontspec, GlyphsPanel *self);
-
     void rebuild();
 
     void glyphActivated(Gtk::TreeModel::Path const & path);
@@ -72,7 +70,7 @@ private:
     Gtk::Button *insertBtn;
     Gtk::ComboBoxText *scriptCombo;
     Gtk::ComboBoxText *rangeCombo;
-    SPFontSelector *fsel;
+    Inkscape::UI::Widget::FontSelector *fontSelector;
     SPDesktop *targetDesktop;
     DesktopTracker deskTrack;
 

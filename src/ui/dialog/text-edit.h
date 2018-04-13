@@ -30,6 +30,8 @@
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 #include "ui/dialog/desktop-tracker.h"
+
+#include "ui/widget/font-selector.h"
 #include "ui/widget/font-variants.h"
 
 class SPItem;
@@ -101,19 +103,15 @@ protected:
      *
      * onFontChange updates the dialog UI. The subfunction setPreviewText updates the preview label.
      *
-     * @param fontsel pointer to SPFontSelector (currently not used).
      * @param fontspec for the text to be previewed.
-     * @param self pointer to the current instance of the dialog.
      */
-    static void onFontChange (SPFontSelector *fontsel, gchar* fontspec, TextEdit *self);
+    void onFontChange (Glib::ustring fontspec);
 
     /**
      * Callback invoked when the user modifies the font variant through the dialog.
      *
      * onFontChange updates the dialog UI. The subfunction setPreviewText updates the preview label.
      *
-     * @param fontsel pointer to FontVariant (currently not used).
-     * @param fontspec for the text to be previewed.
      * @param self pointer to the current instance of the dialog.
      */
     static void onFontVariantChange (TextEdit *self);
@@ -166,8 +164,7 @@ private:
     Gtk::VBox font_vbox;
     Gtk::Label font_label;
 
-    Gtk::Box fontsel_hbox;
-    SPFontSelector *fsel;
+    Inkscape::UI::Widget::FontSelector font_selector;
     Gtk::Label preview_label;  // Share with variants tab?
 
     // Tab 2: Text ---------------------- //
@@ -195,6 +192,7 @@ private:
     sigc::connection selectChangedConn;
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
+    sigc::connection fontChangedConn;
     sigc::connection fontVariantChangedConn;
 
     // Other

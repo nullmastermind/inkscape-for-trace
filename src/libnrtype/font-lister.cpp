@@ -2,8 +2,9 @@
 #include <config.h>
 #endif
 
-#include <gtkmm/liststore.h>
-#include <gtkmm/treemodel.h>
+#include <glibmm/regex.h>
+
+#include <gtkmm/cellrenderertext.h>
 
 #include <libnrtype/font-instance.h>
 
@@ -15,12 +16,13 @@
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
+
 #include "object/sp-object.h"
 #include "object/sp-root.h"
 #include "object/sp-namedview.h"
+
 #include "xml/repr.h"
 
-#include <glibmm/regex.h>
 
 //#define DEBUG_FONT
 
@@ -46,6 +48,10 @@ static const char* sp_font_family_get_name(PangoFontFamily* family)
 namespace Inkscape {
 
 FontLister::FontLister()
+    : current_family_row (0)
+    , current_family ("sans-serif")
+    , current_style ("Normal")
+    , block (false)
 {
     font_list_store = Gtk::ListStore::create(FontList);
     font_list_store->freeze_notify();
@@ -81,10 +87,6 @@ FontLister::FontLister()
             (*treeModelIter)[FontList.onSystem] = true;
         }
     }
-
-    current_family_row = 0;
-    current_family = "sans-serif";
-    current_style = "Normal";
 
     font_list_store->thaw_notify();
 
@@ -126,9 +128,10 @@ FontLister *FontLister::get_instance()
     return instance;
 }
 
-void FontLister::ensureRowStyles(GtkTreeModel* model, GtkTreeIter const* iterator)
+// To do: remove model (not needed for C++ version).
+// Ensures the style list for a particular family has been created.
+void FontLister::ensureRowStyles(Glib::RefPtr<Gtk::TreeModel> model, Gtk::TreeModel::iterator const iter)
 {
-    Gtk::TreeIter iter(model, iterator);
     Gtk::TreeModel::Row row = *iter;
     if (!row[FontList.styles]) {
         if (row[FontList.pango_family]) {
@@ -178,6 +181,12 @@ void FontLister::insert_font_family(Glib::ustring new_family)
     (*treeModelIter)[FontList.styles] = styles;
     (*treeModelIter)[FontList.onSystem] = false;
     (*treeModelIter)[FontList.pango_family] = NULL;
+
+    current_family = new_family;
+    current_family_row = 0;
+    current_style = "Normal";
+
+    emit_update();
 }
 
 void FontLister::update_font_list(SPDocument *document)
@@ -304,6 +313,7 @@ void FontLister::update_font_list(SPDocument *document)
     // std::cout << "  Out: row: " << current_family_row << "  " << current_family << std::endl;
 
     font_list_store->thaw_notify();
+    emit_update();
 }
 
 void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring, std::set<Glib::ustring>> &font_data)
@@ -334,6 +344,16 @@ void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring,
         update_font_data_recursive(child, font_data);
     }
 }
+
+void FontLister::emit_update()
+{
+    if (block) return;
+
+    block = true;
+    update_signal.emit (get_fontspec());
+    block = false;
+}
+
 
 Glib::ustring FontLister::canonize_fontspec(Glib::ustring fontspec)
 {
@@ -468,6 +488,9 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
     std::cout << "FontLister::selection_update: exit" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
+
+    emit_update();
+
     return std::make_pair(current_family, current_style);
 }
 
@@ -486,10 +509,13 @@ void FontLister::set_fontspec(Glib::ustring new_fontspec, bool /*check*/)
 
     set_font_family(new_family, false);
     set_font_style(new_style);
+
+    emit_update();
 }
 
 
 // TODO: use to determine font-selector best style
+// TODO: create new function new_font_family(Gtk::TreeModel::iterator iter)
 std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family(Glib::ustring new_family, bool /*check_style*/)
 {
 #ifdef DEBUG_FONT
@@ -577,6 +603,9 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustrin
     std::cout << "FontLister::set_font_family: end" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
+
+    emit_update();
+
     return ui;
 }
 
@@ -626,6 +655,8 @@ void FontLister::set_font_style(Glib::ustring new_style)
     std::cout << "FontLister::set_font_style: end" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
+
+    emit_update();
 }
 
 
@@ -799,7 +830,6 @@ Glib::ustring FontLister::fontspec_from_style(SPStyle *style)
 
 Gtk::TreeModel::Row FontLister::get_row_for_font(Glib::ustring family)
 {
-    Gtk::TreePath path;
 
     Gtk::TreeModel::iterator iter = font_list_store->get_iter("0");
     while (iter != font_list_store->children().end()) {
@@ -823,7 +853,6 @@ Gtk::TreePath FontLister::get_path_for_font(Glib::ustring family)
 
 Gtk::TreeModel::Row FontLister::get_row_for_style(Glib::ustring style)
 {
-    Gtk::TreePath path;
 
     Gtk::TreeModel::iterator iter = style_list_store->get_iter("0");
     while (iter != style_list_store->children().end()) {
@@ -980,14 +1009,97 @@ const Glib::RefPtr<Gtk::ListStore> FontLister::get_style_list() const
 // Helper functions
 
 // Separator function (if true, a separator will be drawn)
-gboolean font_lister_separator_func(GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/)
+bool font_lister_separator_func(const Glib::RefPtr<Gtk::TreeModel>& model,
+                                const Gtk::TreeModel::iterator& iter) {
+
+    // Of what use is 'model', can we avoid using font_lister?
+    Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
+    Gtk::TreeModel::Row row = *iter;
+    Glib::ustring entry = row[font_lister->FontList.family];
+    return entry == "#";
+}
+
+// Needed until Text toolbar updated
+gboolean font_lister_separator_func2(GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/)
 {
     gchar *text = 0;
     gtk_tree_model_get(model, iter, 0, &text, -1); // Column 0: FontList.family
     return (text && strcmp(text, "#") == 0);
 }
 
-void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
+// Draw system fonts in dark blue, missing fonts with red strikeout.
+// Used by both FontSelector and Text toolbar.
+void font_lister_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter const &iter)
+{
+    Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
+    Gtk::TreeModel::Row row = *iter;
+
+    Glib::ustring family = row[font_lister->FontList.family];
+    bool onSystem        = row[font_lister->FontList.onSystem];
+
+    Glib::ustring family_escaped = Glib::strescape( family );
+    Glib::ustring markup;
+
+    if (!onSystem) {
+        markup = "<span foreground='darkblue'>";
+
+        // See if font-family is on system (separately for each family in font stack).
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
+
+        for (auto token: tokens) {
+            bool found = false;
+            Gtk::TreeModel::Children children = font_lister->get_font_list()->children();
+            for (auto iter2: children) {
+                Gtk::TreeModel::Row row2 = *iter2;
+                Glib::ustring family2 = row2[font_lister->FontList.family];
+                bool onSystem2        = row2[font_lister->FontList.onSystem];
+                if (onSystem2 && familyNamesAreEqual(token, family)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                markup += Glib::strescape (token);
+                markup += ", ";
+            } else {
+                markup += "<span strikethrough=\"true\" strikethrough_color=\"red\">";
+                markup += Glib::strescape (token);
+                markup += "</span>";
+                markup += ", ";
+            }
+        }
+
+        // Remove extra comma and space from end.
+        if (markup.size() >= 2) {
+            markup.resize(markup.size() - 2);
+        }
+        markup += "</span>";
+
+    } else {
+        markup = family_escaped;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_sample = prefs->getInt("/tools/text/show_sample_in_list", 1);
+    if (show_sample) {
+
+        Glib::ustring sample = prefs->getString("/tools/text/font_sample");
+
+        markup += "  <span foreground='gray' font_family='";
+        markup += family_escaped;
+        markup += "'>";
+        markup += sample;
+        markup += "</span>";
+    }
+
+    // std::cout << "Markup: " << markup << std::endl;
+
+    renderer->set_property("markup", markup);
+}
+
+// Needed until Text toolbar updated
+void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
                                 GtkCellRenderer *cell,
                                 GtkTreeModel *model,
                                 GtkTreeIter *iter,
@@ -1061,6 +1173,25 @@ void font_lister_cell_data_func(GtkCellLayout * /*cell_layout*/,
 
     g_object_set(G_OBJECT(cell), "markup", markup.c_str(), NULL);
     g_free(family_escaped);
+}
+
+// Draw Face name with face style.
+void font_lister_style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter const &iter)
+{
+    Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
+    Gtk::TreeModel::Row row = *iter;
+
+    Glib::ustring family = font_lister->get_font_family();
+    Glib::ustring style  = row[font_lister->FontStyleList.cssStyle];
+
+    Glib::ustring style_escaped  = Glib::strescape( style );
+    Glib::ustring font_desc = family + ", " + style;
+    Glib::ustring markup;
+
+    markup = "<span font='" + font_desc + "'>" + style_escaped + "</span>";
+    std::cout << "  markup: " << markup << std::endl;
+
+    renderer->set_property("markup", markup);
 }
 
 /*

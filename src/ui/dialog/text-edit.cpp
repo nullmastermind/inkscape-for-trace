@@ -52,10 +52,9 @@ extern "C" {
 
 #include "ui/icon-names.h"
 #include "ui/interface.h"
+#include "ui/widget/font-selector.h"
 
 #include "util/units.h"
-
-#include "widgets/font-selector.h"
 
 
 namespace Inkscape {
@@ -87,19 +86,15 @@ TextEdit::TextEdit()
     /* Font tab -------------------------------- */
 
     /* Font selector */
-    GtkWidget *fontsel = sp_font_selector_new ();
-    gtk_widget_set_size_request (fontsel, 0, 150);
-    fsel = SP_FONT_SELECTOR(fontsel);
-    fontsel_hbox.pack_start(*Gtk::manage(Glib::wrap(fontsel)), true, true);
-    fontsel_hbox.set_name("Font Selector HBox");
+    // Do nothing.
 
     /* Font preview */
-    preview_label.set_ellipsize(Pango::ELLIPSIZE_END);
-    preview_label.set_justify(Gtk::JUSTIFY_CENTER);
-    preview_label.set_line_wrap(FALSE);
+    preview_label.set_ellipsize (Pango::ELLIPSIZE_END);
+    preview_label.set_justify (Gtk::JUSTIFY_CENTER);
+    preview_label.set_line_wrap (false);
 
-    font_vbox.pack_start(fontsel_hbox, true, true);
-    font_vbox.pack_start(preview_label, true, true, VB_MARGIN);
+    font_vbox.pack_start(font_selector, true, true);
+    font_vbox.pack_start(preview_label, false, false, 5);
 
     /* Text tab -------------------------------- */
     scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
@@ -133,8 +128,8 @@ TextEdit::TextEdit()
     notebook.append_page(font_vbox, font_label);
     notebook.append_page(text_vbox, text_label);
     notebook.append_page(vari_vbox, vari_label);
-    
-    /* Buttons (under notebook) ------------------ */
+
+    /* Buttons (below notebook) ------------------ */
     setasdefault_button.set_use_underline(true);
     apply_button.set_can_default();
     button_row.pack_start(setasdefault_button, false, false, 0);
@@ -148,15 +143,17 @@ TextEdit::TextEdit()
     contents->pack_start(button_row, false, false, VB_MARGIN);
 
     /* Signal handlers */
-    g_signal_connect ( G_OBJECT (fontsel), "font_set", G_CALLBACK (onFontChange), this );
     g_signal_connect ( G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this );
     setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
+    fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontVariantChangedConn = vari_vbox.connectChanged(sigc::bind(sigc::ptr_fun(&onFontVariantChange),  this));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
+
+    font_selector.set_name ("TextEdit");
 
     show_all_children();
 }
@@ -168,6 +165,7 @@ TextEdit::~TextEdit()
     selectChangedConn.disconnect();
     desktopChangeConn.disconnect();
     deskTrack.disconnect();
+    fontChangedConn.disconnect();
     fontVariantChangedConn.disconnect();
 }
 
@@ -239,34 +237,29 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         // Query style from desktop into it. This returns a result flag and fills query with the
         // style of subselection, if any, or selection
 
-        //int result_fontspec = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONT_SPECIFICATION);
-        int result_family = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFAMILY);
-        int result_style = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
         int result_numbers = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
 
-        // If querying returned nothing, read the style from the text tool prefs (default style for new texts)
-        // (Ok to not get a font specification - must just rely on the family and style in that case)
-        if (result_family == QUERY_STYLE_NOTHING ||
-            result_style  == QUERY_STYLE_NOTHING ||
-            result_numbers == QUERY_STYLE_NOTHING) {
+        // If querying returned nothing, read the style from the text tool prefs (default style for new texts).
+        if (result_numbers == QUERY_STYLE_NOTHING) {
             query.readFromPrefs("/tools/text");
         }
 
-        // FIXME: process result_family/style == QUERY_STYLE_MULTIPLE_DIFFERENT by showing "Many" in the lists
+        Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
 
-        Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
+        // Update family/style based on selection.
+        font_lister->selection_update();
 
-        // This is normally done for us by text-toolbar but only when we are in text editing context
-        fontlister->update_font_list(this->desktop->getDocument());
-        fontlister->selection_update();
+        // Get fontspec for selection.
+        Glib::ustring fontspec = font_lister->get_fontspec();
+        font_selector.set_fontspec (fontspec);
 
-        Glib::ustring fontspec = fontlister->get_fontspec();
-
+        // Update Size.
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
-        sp_font_selector_set_fontspec(fsel, fontspec, size );
+        font_selector.set_size (size);
 
+        // Update Preview
         setPreviewText (fontspec, phrase);
 
         // Update font variant widget
@@ -293,15 +286,16 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-    double pt_size = Inkscape::Util::Quantity::convert(sp_style_css_size_units_to_px(sp_font_selector_get_size(fsel), unit), "px", "pt");
+    double pt_size =
+        Inkscape::Util::Quantity::convert(
+            sp_style_css_size_units_to_px(font_selector.get_fontsize(), unit), "px", "pt");
     pt_size = std::min(pt_size, 100.0);
 
     // Pango font size is in 1024ths of a point
     Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
     Glib::ustring markup = "<span font=\'" + font_spec_escaped +
-        "\' size=\'" + size + "\'>" + phrase_escaped + "</span>";
-
-    preview_label.set_markup(markup.c_str());
+        "\' size=\'" + size + "\'>" + phrase + "</span>";
+    preview_label.set_markup (markup);
 }
 
 
@@ -361,7 +355,7 @@ SPCSSAttr *TextEdit::fillTextStyle ()
 {
         SPCSSAttr *css = sp_repr_css_attr_new ();
 
-        Glib::ustring fontspec = sp_font_selector_get_fontspec (fsel);
+        Glib::ustring fontspec = font_selector.get_fontspec();
 
         if( !fontspec.empty() ) {
 
@@ -373,9 +367,10 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
             if (prefs->getBool("/options/font/textOutputPx", true)) {
-                os << sp_style_css_size_units_to_px(sp_font_selector_get_size (fsel), unit) << sp_style_get_css_unit_string(SP_CSS_UNIT_PX);
+                os << sp_style_css_size_units_to_px(font_selector.get_fontsize(), unit)
+                   << sp_style_get_css_unit_string(SP_CSS_UNIT_PX);
             } else {
-                os << sp_font_selector_get_size (fsel) << sp_style_get_css_unit_string(unit);
+                os << font_selector.get_fontsize() << sp_style_get_css_unit_string(unit);
             }
             sp_repr_css_set_property (css, "font-size", os.str().c_str());
         }
@@ -433,7 +428,7 @@ void TextEdit::onApply()
     }
 
     // Update FontLister
-    Glib::ustring fontspec = sp_font_selector_get_fontspec (fsel);
+    Glib::ustring fontspec = font_selector.get_fontspec();
     if( !fontspec.empty() ) {
         Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
         fontlister->set_fontspec( fontspec, false );
@@ -461,7 +456,7 @@ void TextEdit::onChange()
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     gchar *str = gtk_text_buffer_get_text(text_buffer, &start, &end, TRUE);
 
-    Glib::ustring fontspec = sp_font_selector_get_fontspec(fsel);
+    Glib::ustring fontspec = font_selector.get_fontspec();
     const gchar *phrase = str && *str ? str : samplephrase.c_str();
     setPreviewText(fontspec, phrase);
     g_free (str);
@@ -477,9 +472,9 @@ void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
     self->onChange();
 }
 
-void TextEdit::onFontChange(SPFontSelector * /*fontsel*/, gchar* fontspec, TextEdit *self)
+void TextEdit::onFontChange(Glib::ustring fontspec)
 {
-    self->onChange();
+    onChange();
 }
 
 void TextEdit::onFontVariantChange(TextEdit *self)

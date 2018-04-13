@@ -26,11 +26,12 @@
 #include "verbs.h"
 
 #include "libnrtype/font-instance.h"
+#include "libnrtype/font-lister.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-text.h"
 
-#include "widgets/font-selector.h"
+#include "ui/widget/font-selector.h"
 
 namespace Inkscape {
 namespace UI {
@@ -323,13 +324,6 @@ GlyphColumns *GlyphsPanel::getColumns()
 GlyphsPanel::GlyphsPanel() :
     Inkscape::UI::Widget::Panel("/dialogs/glyphs", SP_VERB_DIALOG_GLYPHS),
     store(Gtk::ListStore::create(*getColumns())),
-    iconView(0),
-    entry(0),
-    label(0),
-    insertBtn(0),
-    scriptCombo(0),
-    fsel(0),
-    targetDesktop(0),
     deskTrack(),
     instanceConns(),
     desktopConns()
@@ -340,16 +334,19 @@ GlyphsPanel::GlyphsPanel() :
 
 // -------------------------------
 
-    GtkWidget *fontsel = sp_font_selector_new();
-    fsel = SP_FONT_SELECTOR(fontsel);
-    sp_font_selector_set_fontspec( fsel, sp_font_selector_get_fontspec(fsel), 12.0 );
+    {
+        fontSelector = new Inkscape::UI::Widget::FontSelector (false);
+        fontSelector->set_fontsize_visible (false);
+        fontSelector->set_size (12.0);
+        fontSelector->set_name ("Glyphs");
 
-    gtk_widget_set_size_request (fontsel, 0, 150);
-    g_signal_connect( G_OBJECT(fontsel), "font_set", G_CALLBACK(fontChangeCB), this );
+        sigc::connection conn =
+            fontSelector->connectChanged(sigc::hide(sigc::mem_fun(*this, &GlyphsPanel::rebuild)));
+        instanceConns.push_back(conn);
 
-    table->attach(*Gtk::manage(Glib::wrap(fontsel)), 0, row, 3, 1);
-    row++;
-
+        table->attach(*Gtk::manage(fontSelector), 0, row, 3, 1);
+        row++;
+    }
 
 // -------------------------------
 
@@ -597,13 +594,6 @@ void GlyphsPanel::glyphSelectionChanged()
     calcCanInsert();
 }
 
-void GlyphsPanel::fontChangeCB(SPFontSelector * /*fontsel*/, Glib::ustring /*fontspec*/, GlyphsPanel *self)
-{
-    if (self) {
-        self->rebuild();
-    }
-}
-
 void GlyphsPanel::selectionModifiedCB(guint flags)
 {
     bool style = ((flags & ( SP_OBJECT_CHILD_MODIFIED_FLAG |
@@ -636,24 +626,28 @@ void GlyphsPanel::calcCanInsert()
     }
 }
 
-void GlyphsPanel::readSelection( bool updateStyle, bool /*updateContent*/ )
+void GlyphsPanel::readSelection( bool updateStyle, bool updateContent )
 {
     calcCanInsert();
 
-    if (targetDesktop && updateStyle) {
-        //SPStyle query(SP_ACTIVE_DOCUMENT);
+    if (updateStyle) {
+        Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
-        //int result_family = sp_desktop_query_style(targetDesktop, &query, QUERY_STYLE_PROPERTY_FONTFAMILY);
-        //int result_style = sp_desktop_query_style(targetDesktop, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
-        //int result_numbers = sp_desktop_query_style(targetDesktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        // Update family/style based on selection.
+        fontlister->selection_update();
 
+        // Get fontspec for selection.
+        Glib::ustring fontspec = fontlister->get_fontspec();
+
+        // Update GUI.
+        fontSelector->set_fontspec (fontspec);
     }
 }
 
 
 void GlyphsPanel::rebuild()
 {
-    Glib::ustring fontspec = fsel ? sp_font_selector_get_fontspec(fsel) : "";
+    Glib::ustring fontspec = fontSelector->get_fontspec();
 
     font_instance* font = 0;
     if( !fontspec.empty() ) {
@@ -661,7 +655,6 @@ void GlyphsPanel::rebuild()
     }
 
     if (font) {
-        //double  sp_font_selector_get_size (SPFontSelector *fsel);
 
         GUnicodeScript script = G_UNICODE_SCRIPT_INVALID_CODE;
         Glib::ustring scriptName = scriptCombo->get_active_text();
