@@ -1437,6 +1437,7 @@ static void sp_text_set_sizes(GtkListStore* model_size, int unit)
  */
 static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/, GObject *tbl, bool subselection) // don't bother to update font list if subsel changed
 {
+
 #ifdef DEBUG_TEXT
     static int count = 0;
     ++count;
@@ -1451,8 +1452,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         std::cout << "    " << id << std::endl;
     }
     Glib::ustring selected_text = sp_text_get_selected_text((SP_ACTIVE_DESKTOP)->event_context);
-    std::cout << "  Selected text:" << std::endl;
-    std::cout << selected_text << std::endl;
+    std::cout << "  Selected text: |" << selected_text << "|" << std::endl;
 #endif
 
     // quit if run by the _changed callbacks
@@ -1473,6 +1473,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontStyleAction"  ) );
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
+    fontlister->update_font_list (SP_ACTIVE_DESKTOP->getDocument());
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
@@ -1998,8 +1999,8 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                           GTK_TREE_MODEL(model),
                                           -1,                // Entry width
                                           50,                // Extra list width
-                                          (gpointer)font_lister_cell_data_func, // Cell layout
-                                          (gpointer)font_lister_separator_func,
+                                          (gpointer)font_lister_cell_data_func2, // Cell layout
+                                          (gpointer)font_lister_separator_func2,
                                           GTK_WIDGET(desktop->canvas)); // Focus widget
         ink_comboboxentry_action_popup_enable( act ); // Enable entry completion
 
@@ -2577,8 +2578,10 @@ static void text_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
 
     if (SP_IS_TEXT_CONTEXT(ec)) {
         // Watch selection
-        c_selection_changed = desktop->getSelection()->connectChanged(bind(ptr_fun(sp_text_toolbox_selection_changed), holder, false));
-        c_selection_modified = desktop->getSelection()->connectModified(bind(ptr_fun(sp_text_toolbox_selection_modified), holder));
+
+        // Ensure FontLister is updated here first.................. VVVVV
+        c_selection_changed = desktop->getSelection()->connectChangedFirst(bind(ptr_fun(sp_text_toolbox_selection_changed), holder, false));
+        c_selection_modified = desktop->getSelection()->connectModifiedFirst(bind(ptr_fun(sp_text_toolbox_selection_modified), holder));
         c_subselection_changed = desktop->connectToolSubselectionChanged(bind(ptr_fun(sp_text_toolbox_subselection_changed), holder));
     } else {
         if (c_selection_changed)

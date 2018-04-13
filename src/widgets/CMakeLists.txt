@@ -15,7 +15,6 @@ set(widgets_SRC
 	ege-paint-def.cpp
 	eraser-toolbar.cpp
 	fill-style.cpp
-	font-selector.cpp
 	gradient-image.cpp
 	gradient-selector.cpp
 	gradient-toolbar.cpp
@@ -70,7 +69,6 @@ set(widgets_SRC
 	eraser-toolbar.h
 	fill-n-stroke-factory.h
 	fill-style.h
-	font-selector.h
 	gradient-image.h
 	gradient-selector.h
 	gradient-toolbar.h
