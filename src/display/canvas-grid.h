@@ -9,7 +9,7 @@
 #define INKSCAPE_CANVAS_GRID_H
 
 #include "sp-canvas-item.h"
-#include "ui/widget/anchor-selector.h"
+#include "ui/widget/alignment-selector.h"
 #include "ui/widget/registered-widget.h"
 #include "ui/widget/registry.h"
 #include "line-snapper.h"
@@ -109,7 +109,7 @@ public:
     bool isVisible() const { return (isEnabled() &&visible); };
     bool isEnabled() const;
 
-    void align_changed();
+    void align_clicked(int align);
 
 protected:
     CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument *in_doc, GridType type);
@@ -132,7 +132,7 @@ protected:
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_enabled;
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_snap_visible_only;
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_visible;
-    Inkscape::UI::Widget::AnchorSelector *alignment;
+    Inkscape::UI::Widget::AlignmentSelector     *_as_alignment;
 
 private:
     CanvasGrid(const CanvasGrid&);

@@ -319,13 +319,12 @@ CanvasGrid::newWidget()
     vbox->pack_start(*_rcb_visible, true, true);
     vbox->pack_start(*_rcb_snap_visible_only, true, true);
 
-    alignment = Gtk::manage( new Inkscape::UI::Widget::AnchorSelector() );
-    alignment->setAlignment(0, 2);
-    alignment->on_selectionChanged().connect(sigc::mem_fun(*this, &CanvasGrid::align_changed));
+    _as_alignment = Gtk::manage( new Inkscape::UI::Widget::AlignmentSelector() );
+    _as_alignment->on_alignmentClicked().connect(sigc::mem_fun(*this, &CanvasGrid::align_clicked));
 
     Gtk::VBox *left = new Gtk::VBox();
     left->pack_start(*Gtk::manage(new Gtk::Label(_("Align to page:"))), false, false);
-    left->pack_start(*alignment, false, false);
+    left->pack_start(*_as_alignment, false, false);
 
     Gtk::HBox *outer = new Gtk::HBox();
     outer->pack_start(*left, true, true);
@@ -386,11 +385,11 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
     repr->setAttribute("originy", os_y.str().c_str());
 }
 
-void CanvasGrid::align_changed()
+void CanvasGrid::align_clicked(int align)
 {
     Geom::Point dimensions = doc->getDimensions();
-    dimensions[Geom::X] *= alignment->getHorizontalAlignment() * 0.5;
-    dimensions[Geom::Y] *= 1 - (alignment->getVerticalAlignment() * 0.5);
+    dimensions[Geom::X] *= align % 3 * 0.5;
+    dimensions[Geom::Y] *= 1 - (align / 3 * 0.5);
     setOrigin(dimensions);
 }
 

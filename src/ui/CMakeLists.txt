@@ -120,6 +120,7 @@ set(ui_SRC
     dialog/save-template-dialog.cpp
 
 	widget/addtoicon.cpp
+	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/button.cpp
 	widget/clipmaskicon.cpp
@@ -315,6 +316,7 @@ set(ui_SRC
 	tools/zoom-tool.h
 
 	widget/addtoicon.h
+	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
 	widget/button.h
