@@ -143,7 +143,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
-    star_ellipse_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     message.param_set_min_height(85);
     previous_size = 0;
@@ -640,12 +639,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         c->unref();
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-        if (star_ellipse_fix != Geom::identity()) {
-            pathvector *= star_ellipse_fix;
-            star_ellipse_fix = Geom::identity();
-        } else {
-            pathvector *= writed_transform;
-        }
+        pathvector *= writed_transform;
         gchar * format_str = format.param_getSVGValue();
         if (Glib::ustring(format_str).empty()) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
@@ -947,17 +941,6 @@ LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
         return;
     }
     processObjects(LPE_ERASE);
-}
-
-void
-LPEMeasureSegments::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    SPStar * star = dynamic_cast<SPStar *>(sp_lpe_item);
-    SPSpiral * spiral = dynamic_cast<SPSpiral *>(sp_lpe_item);
-    if((spiral || star) && !postmul.withoutTranslation().isUniformScale()) {
-        star_ellipse_fix = postmul;
-        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-    }
 }
 
 }; //namespace LivePathEffect

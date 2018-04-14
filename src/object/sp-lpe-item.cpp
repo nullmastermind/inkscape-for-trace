@@ -420,6 +420,9 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
             }
             repr->setAttribute("inkscape:original-d", NULL);
             path->setCurveBeforeLPE(NULL);
+            if (!(shape->getCurve()->get_segment_count())) {
+                repr->parent()->removeChild(repr);
+            }
         } else {
             if (!keep_paths) {
                 sp_lpe_item_update_patheffect(lpeitem, true, true);
@@ -530,17 +533,17 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
         effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
-    }
-    PathEffectList new_list = *this->path_effect_list;
-    new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-    this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
-    if (!keep_paths) {
-        // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
-        if( SP_IS_GENERICELLIPSE(this)) {
-            SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
+        PathEffectList new_list = *this->path_effect_list;
+        new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
+        this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+        if (!keep_paths) {
+            // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
+            if( SP_IS_GENERICELLIPSE(this)) {
+                SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
+            }
         }
+        sp_lpe_item_cleanup_original_path_recursive(this, keep_paths);
     }
-    sp_lpe_item_cleanup_original_path_recursive(this, keep_paths);
 }
 
 /**

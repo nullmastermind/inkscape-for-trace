@@ -8,6 +8,7 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/message.h"
 #include "live_effects/parameter/hidden.h"
 
 namespace Inkscape {
@@ -34,6 +35,7 @@ private:
     BoolParam inverse;
     BoolParam flatten;
     BoolParam hide_clip;
+    MessageParam message;
     Geom::Path clip_box;
     Geom::Affine base;
     bool convert_shapes;

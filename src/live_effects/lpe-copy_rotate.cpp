@@ -373,7 +373,6 @@ LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
             param->param_transform_multiply(postmul, set);
         }
     }
-    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
 
 void

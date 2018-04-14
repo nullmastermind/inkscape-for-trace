@@ -128,35 +128,28 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
             } else {
                 linked_path = (*iter)->_pathvector.front();
             }
-            
+            if (obj) {
+                linked_path *= SP_ITEM(obj)->transform;
+            }
+
             if (!res_pathv.empty() && join) {
                 if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.01) || !fuse) {
                     res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
                 } else {
                     linked_path.setInitial(res_pathv.front().finalPoint());
                 }
-                if(!allow_transforms) {
-                    Geom::Affine affine = Geom::identity();
-                    sp_svg_transform_read(SP_ITEM(obj)->getAttribute("transform"), &affine);
-                    linked_path *= affine;
-                }
                 res_pathv.front().append(linked_path);
             } else {
                 if (close && !join) {
                     linked_path.close();
-                }
-                if(!allow_transforms) {
-                    Geom::Affine affine = Geom::identity();
-                    sp_svg_transform_read(SP_ITEM(obj)->getAttribute("transform"), &affine);
-                    linked_path *= affine;
                 }
                 res_pathv.push_back(linked_path);
             }
         }
     }
     
-    if(!allow_transforms && sp_lpe_item) {
-        SP_ITEM(sp_lpe_item)->transform = Geom::identity();
+    if(!allow_transforms) {
+        SP_ITEM(sp_lpe_item)->setAttribute("transform", NULL);
     }
     
     if (!res_pathv.empty() && close) {
@@ -168,14 +161,6 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     }
 
     curve->set_pathvector(res_pathv);
-}
-
-void
-LPEFillBetweenMany::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    if(!allow_transforms && sp_lpe_item) {
-        SP_ITEM(sp_lpe_item)->transform *= postmul.inverse();
-    }
 }
 
 } // namespace LivePathEffect

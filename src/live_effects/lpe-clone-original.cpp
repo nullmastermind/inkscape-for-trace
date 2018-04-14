@@ -52,21 +52,20 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     };
     is_updating = false;
     listening = false;
-    linked = g_strdup(this->getRepr()->attribute("linkeditem"));
+    linked = this->getRepr()->attribute("linkeditem");
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&allow_transforms);
-    prev_allow_trans = allow_transforms;
     previus_method = method;
-    prev_affine = g_strdup("");
+    position_diff = Geom::Point(0,0);
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
 }
 
 void
-LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * attributes, const char * style_attributes) 
+LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document || !origin || !dest) {
@@ -83,11 +82,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
         }
     }
     //Attributes
-    SPShape * shape_origin =  SP_SHAPE(origin);
-    SPPath * path_origin =  SP_PATH(origin);
-    SPShape * shape_dest =  SP_SHAPE(dest);
-    SPMask *mask_origin = SP_ITEM(origin)->mask_ref->getObject();
-    SPMask *mask_dest = SP_ITEM(dest)->mask_ref->getObject();
+    SPShape * shape_origin = SP_SHAPE(origin);
+    SPPath  * path_origin  = SP_PATH(origin);
+    SPShape * shape_dest   = SP_SHAPE(dest);
+    SPPath  * path_dest    = SP_PATH(dest);
+    SPMask  * mask_origin  = SP_ITEM(origin)->mask_ref->getObject();
+    SPMask  * mask_dest    = SP_ITEM(dest)->mask_ref->getObject();
     if(mask_origin && mask_dest) {
         std::vector<SPObject*> mask_list = mask_origin->childList(true);
         std::vector<SPObject*> mask_list_dest = mask_dest->childList(true);
@@ -141,23 +141,28 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
                             }
                         }
                     }
-                } else if(method == CLM_ORIGINALD) {
+                } else if (method == CLM_ORIGINALD) {
                     c = shape_origin->getCurveForEdit();
+                } else if (method == CLM_NONE) {
+                    c = shape_dest->getCurve();
                 } else {
                     c = shape_origin->getCurve();
                 }
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
-                    c_pv *= i2anc_affine(dest, sp_lpe_item);
-                    c->set_pathvector(c_pv);
-                    if (!path_origin) {
-                        shape_dest->setCurveBeforeLPE(c);
-                        gchar *str = sp_svg_write_path(c_pv);
-                        dest->getRepr()->setAttribute(attribute, str);
-                        g_free(str);
-                    } else {
-                        shape_dest->setCurveBeforeLPE(c);
+                    if (method != CLM_NONE) {
+                        c_pv *= SP_ITEM(origin)->transform;
+                        if (allow_transforms) {
+                            c_pv *= Geom::Translate(position_diff);
+                        } else {
+                            c_pv *= SP_ITEM(dest)->transform.inverse();
+                        }
                     }
+                    c->set_pathvector(c_pv);
+                    shape_dest->setCurveInsync(c);
+                    gchar *str = sp_svg_write_path(c_pv);
+                    dest->getRepr()->setAttribute("d", str);
+                    g_free(str);
                     c->unref();
                 } else {
                     dest->getRepr()->setAttribute(attribute, NULL);
@@ -190,16 +195,17 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
     g_strfreev (styleattarray);
     Glib::ustring css_str;
     sp_repr_css_write_string(css_dest,css_str);
-    dest->getRepr()->setAttribute("style", g_strdup(css_str.c_str()));
+    dest->getRepr()->setAttribute("style", css_str.c_str());
 }
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     start_listening();
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     if (linkeditem.linksToItem()) {
-        Glib::ustring attr = "";
-        if (method != CLM_NONE) {
-            attr += Glib::ustring("d,");
-        }
+        Glib::ustring attr = "d,";
         gchar * attributes_str = attributes.param_getSVGValue();
         attr += Glib::ustring(attributes_str) + Glib::ustring(",");
         if (attr.size()  && !Glib::ustring(attributes_str).size()) {
@@ -217,59 +223,18 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             return;
         }
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
-        Geom::OptRect o_bbox = orig->geometricBounds();
-        Geom::OptRect d_bbox = dest->geometricBounds();
-        gchar * id = g_strdup(orig->getId());
-        if (allow_transforms && 
-            !linkeditem.last_transform.isIdentity() && 
-            linkeditem.last_transform.isTranslation() &&
-            method != CLM_NONE) 
-        {
-            Geom::Point expansion_dest = dest->transform.expansion();
-            Geom::Point expansion_orig = orig->transform.expansion();
-            dest->transform *= Geom::Scale(expansion_dest).inverse();
-            dest->transform *= Geom::Scale(expansion_orig);
-            dest->transform *= linkeditem.last_transform.inverse();
-            dest->transform *= Geom::Scale(expansion_orig).inverse();
-            dest->transform *= Geom::Scale(expansion_dest);
+        Geom::OptRect o_bbox = orig->geometricBounds(orig->transform);
+        Geom::OptRect d_bbox = dest->geometricBounds(dest->transform);
+        const gchar * id = orig->getId();
+        if (linked != id) {
+            position_diff = (*d_bbox).corner(0) - (*o_bbox).corner(0);
         }
-        if ((strcmp(id, linked) != 0 || (previus_method != method && previus_method == CLM_NONE )) &&
-             allow_transforms && 
-             o_bbox && 
-             d_bbox) 
-        {
-            dest->transform *= Geom::Translate((*o_bbox).corner(0) - (*d_bbox).corner(0)).inverse();
-        }
-        cloneAttrbutes(orig, dest, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()));
-        if (allow_transforms &&
-            previus_method != method &&
-            method == CLM_NONE) 
-        {
-            dest->transform *= Geom::Translate((*d_bbox).corner(0) - (*o_bbox).corner(0)).inverse();
-        }
-
-        if (!allow_transforms) {
-            SP_ITEM(dest)->getRepr()->setAttribute("transform", SP_ITEM(orig)->getAttribute("transform"));
-        } else {
-            SP_ITEM(dest)->getRepr()->setAttribute("transform", sp_svg_transform_write(dest->transform));
-            if (prev_allow_trans == allow_transforms) {
-                prev_affine = g_strdup(SP_ITEM(dest)->getAttribute("transform"));
-            }
-        }
-
-        if (prev_allow_trans != allow_transforms && allow_transforms) {
-            SP_ITEM(dest)->getRepr()->setAttribute("transform", prev_affine);
-        }
-
-        linked = g_strdup(id);
-        g_free(style_attributes_str);
-        g_free(attributes_str);
-        g_free(id);
+        cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str());
+        linked = id;
     } else {
-        linked = g_strdup("");
+        linked = "";
     }
     previus_method = method;
-    prev_allow_trans = allow_transforms;
 }
 
 void
@@ -304,45 +269,12 @@ LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
 LPECloneOriginal::~LPECloneOriginal()
 {
     quit_listening();
-    g_free(linked);
-    g_free(prev_affine);
-}
-
-void
-LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    if (!allow_transforms && linkeditem.linksToItem()) {
-        sp_lpe_item->transform *= postmul.inverse();
-    }
-}
-
-void LPECloneOriginal::doOnRemove(SPLPEItem const* lpeitem)
-{
-   if (linkeditem.linksToItem() && lpeitem->path_effect_list->size() == 1 && !keep_paths) {
-        SPDesktop * dt = SP_ACTIVE_DESKTOP;
-        SPObject * obj = dynamic_cast<SPObject*>(sp_lpe_item);
-        SPItem * orig  = SP_ITEM(linkeditem.getObject());
-        if(!orig) {
-            return;
-        }
-        const gchar * transform = lpeitem->getRepr()->attribute("transform");
-        dt->selection->clear();
-        dt->selection->add(orig, true);
-        dt->selection->clone();
-        dt->selection->singleItem()->setAttribute("transform" , transform);
-        //TODO: get a way to realy delete current LPEItem
-        obj->getRepr()->setAttribute("original-d", NULL);
-        obj->getRepr()->setAttribute("d", "0,0");   
-        obj->getRepr()->setAttribute("inkscape:label", "SAFE TO REMOVE");   
-        obj->getRepr()->setAttribute("inkscape:connector-curvature", NULL);
-        obj->getRepr()->setAttribute("transform", NULL);
-        obj->getRepr()->setAttribute("style", "opacity:0");
-    }
 }
 
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
+    curve->set_pathvector(current_shape->getCurve()->get_pathvector());
 }
 
 } // namespace LivePathEffect

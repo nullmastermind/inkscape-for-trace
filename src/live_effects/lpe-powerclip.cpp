@@ -29,13 +29,16 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false),
     uri("Store the uri of clip", "", "uri", &wr, this, "false", false),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
-    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false)
+    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
+    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result after convert clip to paths."))
 {
     registerParameter(&uri);
     registerParameter(&inverse);
     registerParameter(&flatten);
     registerParameter(&hide_clip);
     registerParameter(&is_inverse);
+    registerParameter(&message);
+    message.param_set_min_height(55);
     convert_shapes = false;
 }
 

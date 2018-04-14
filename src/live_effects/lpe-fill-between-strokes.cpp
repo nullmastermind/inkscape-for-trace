@@ -31,7 +31,6 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     registerParameter(&allow_transforms);
     registerParameter(&join);
     registerParameter(&close);
-    transformmultiply = false;
 }
 
 LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
@@ -43,26 +42,29 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
 {
     if (curve) {
         Geom::Affine affine = Geom::identity();
-        if(!allow_transforms && !transformmultiply) {
-            sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &affine);
-        }
-        if(transformmultiply) {
-            transformmultiply = false;
+        if(!allow_transforms) {
+            SP_ITEM(sp_lpe_item)->setAttribute("transform", NULL);
         }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
+            SPItem * linked1 = linked_path.getObject();
+            if (linked1) {
+                linked_pathv *= linked1->transform;
+            }
             Geom::PathVector second_pathv = second_path.get_pathvector();
+            SPItem * linked2 = second_path.getObject();
+            if (linked2) {
+                second_pathv*= linked2->transform;
+            }
             Geom::PathVector result_linked_pathv;
             Geom::PathVector result_second_pathv;
-            Geom::Affine second_transform = second_path.getObject()->getRelativeTransform(linked_path.getObject());
-
             for (Geom::PathVector::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
             {
                 result_linked_pathv.push_back((*iter));
             }
             for (Geom::PathVector::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
             {
-                result_second_pathv.push_back((*iter) * second_transform);
+                result_second_pathv.push_back((*iter));
             }
 
             if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
@@ -128,16 +130,6 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                 curve->set_pathvector(result_pathv);
             }
         }
-    }
-}
-
-void
-LPEFillBetweenStrokes::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    if(!allow_transforms && sp_lpe_item) {
-        SP_ITEM(sp_lpe_item)->transform *= postmul.inverse();
-        transformmultiply = true;
-        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
     }
 }
 

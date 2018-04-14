@@ -458,6 +458,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         to->_pathvector = curve->get_pathvector();
         curve->unref();
     }
+    
 }
 
 void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, PathAndDirectionAndVisible* to)

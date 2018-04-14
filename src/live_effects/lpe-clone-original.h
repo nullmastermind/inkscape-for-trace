@@ -33,9 +33,7 @@ public:
     virtual ~LPECloneOriginal();
     virtual void doEffect (SPCurve * curve);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* lpeitem);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, const char * attributes, const char * style_attributes);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes);
     void modified(SPObject */*obj*/, guint /*flags*/);
     void start_listening();
     void quit_listening();
@@ -46,12 +44,11 @@ private:
     TextParam attributes;
     TextParam style_attributes;
     BoolParam allow_transforms;
-    gchar * linked;
+    const gchar * linked;
     Clonelpemethod previus_method;
     bool listening;
     bool is_updating;
-    bool prev_allow_trans;
-    gchar * prev_affine;
+    Geom::Point position_diff;
     sigc::connection modified_connection;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);

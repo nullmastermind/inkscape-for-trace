@@ -29,7 +29,6 @@ public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
     virtual ~LPEFillBetweenMany();
     virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual void doEffect (SPCurve * curve);
 
 private:

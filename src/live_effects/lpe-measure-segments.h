@@ -41,7 +41,6 @@ public:
     virtual void doOnRemove(SPLPEItem const* /*lpeitem*/);
     virtual void doEffect(SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);
@@ -77,7 +76,6 @@ private:
     unsigned rgb24;
     double arrow_gap;
     gchar const* locale_base;
-    Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 

@@ -1536,13 +1536,16 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
     }
     set_item_transform(transform_attr);
 
-
-
     // Note: updateRepr comes before emitting the transformed signal since
     // it causes clone SPUse's copy of the original object to brought up to
     // date with the original.  Otherwise, sp_use_bbox returns incorrect
     // values if called in code handling the transformed signal.
     updateRepr();
+
+    SPLPEItem * lpeitem = SP_LPE_ITEM(this);
+    if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+        sp_lpe_item_update_patheffect(lpeitem, false, false);
+    }
 
     // send the relative transform with a _transformed_signal
     _transformed_signal.emit(&advertized_transform, this);
