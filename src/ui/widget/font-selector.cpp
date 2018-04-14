@@ -61,13 +61,12 @@ FontSelector::FontSelector (bool with_size)
     // Style
     style_treecolumn.pack_start (style_cell, false);
     style_treecolumn.add_attribute (style_cell, "text", 0);
-    //style_treecolumn.set_cell_data_func (style_cell, &font_lister_style_cell_data_func);
     style_treecolumn.set_cell_data_func (style_cell, sigc::mem_fun(*this, &FontSelector::style_cell_data_func));
+    style_treecolumn.set_title ("Face");
 
     style_treeview.set_model (font_lister->get_style_list());
     style_treeview.set_name ("FontSelector: Style");
     style_treeview.append_column ("CSS", font_lister->FontStyleList.cssStyle);
-    //style_treeview.append_column ("Face",font_lister->FontStyleList.displayStyle);
     style_treeview.append_column (style_treecolumn);
 
     style_scroll.set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
@@ -243,7 +242,7 @@ FontSelector::style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter c
     }
 
     Glib::ustring style = "Normal";
-    (*iter).get_value(0, style);
+    (*iter).get_value(1, style);
 
     Glib::ustring style_escaped  = Glib::strescape( style );
     Glib::ustring font_desc = family + ", " + style;
