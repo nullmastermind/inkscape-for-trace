@@ -27,6 +27,7 @@
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
+#include "object/sp-ellipse.h"
 #include "object/sp-star.h"
 #include "object/sp-spiral.h"
 #include "svg/stringstream.h"
@@ -81,6 +82,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
     blacklist(_("Blacklist"), _("Optional segment index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
     whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
+    showindex(_("Show meassure number"), _("Show meassure number in text label for blacklisting"), "showindex", &wr, this, false),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
     scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
@@ -92,9 +94,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     linked_items(_("Linked items:"), _("Items that generate a measured projection with his nodes"), "linked_items", &wr, this),
     distance_projection(_("Distance"), _("Distance away nearest point"), "distance_projection", &wr, this, 20.0),
     angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
-    blacklist_nodes(_("Blacklist nodes"), _("Optional node index that be excluded from measure, node index is refreshed by each value"), "blacklist_nodes", &wr, this,""),
     active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
-    //whitelist_nodes(_("Inverse blacklist nodes"), _("Blacklist as whitelist"), "whitelist_nodes", &wr, this, false),
     avoid_overlapping(_("Avoid overlap measures"), _("Turn not fit measures"), "avoid_overlapping", &wr, this, true),
     onbbox(_("Measure bounding box"), _("Measure Geometric bounding box"), "onbbox", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
@@ -119,6 +119,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&blacklist);
     registerParameter(&active_projection);
     registerParameter(&whitelist);
+    registerParameter(&showindex);
     registerParameter(&arrows_outside);
     registerParameter(&flip_side);
     registerParameter(&scale_sensitive);
@@ -130,9 +131,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&linked_items);
     registerParameter(&distance_projection);
     registerParameter(&angle_projection);
-    registerParameter(&blacklist_nodes);
     registerParameter(&avoid_overlapping);
-    //registerParameter(&whitelist_nodes);
     registerParameter(&onbbox);
     registerParameter(&general);
     registerParameter(&projection);
@@ -148,7 +147,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
 
     format.param_hide_canvas_text();
     blacklist.param_hide_canvas_text();
-    blacklist_nodes.param_hide_canvas_text();
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
@@ -182,10 +180,11 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     angle_projection.param_set_range(0.0, 360.0);
     angle_projection.param_set_increments(90.0, 90.0);
     angle_projection.param_set_digits(2);
-    star_ellipse_fix = Geom::identity();
+    spiral_star_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
+    transformed = false;
     general.param_update_default(_("Base of the lpe, focus on measure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
@@ -236,8 +235,6 @@ LPEMeasureSegments::newWidget()
                 } else if (param->param_key == "active_projection"   ||
                            param->param_key == "distance_projection" ||
                            param->param_key == "angle_projection"    ||
-                           param->param_key == "blacklist_nodes"     ||
-                        // param->param_key == "whitelist_nodes"     ||
                            param->param_key == "onbbox"                )
                 {
                     vbox1->pack_start(*widg, false, true, 2);
@@ -248,6 +245,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "format"        ||
                            param->param_key == "blacklist"     ||
                            param->param_key == "whitelist"     ||
+                           param->param_key == "showindex"     ||
                            param->param_key == "local_locale"  ||
                            param->param_key == "smallx100"     ||
                            param->param_key == "hide_arrows"     )
@@ -275,10 +273,6 @@ LPEMeasureSegments::newWidget()
         ++it;
     }
 
-    //Move the notebook outside because this widget usualy are destroyed and recreated
-    //And the signal that fire page change is called on destroy, making imposible to
-    //retain last used page with this signal.
-    //https://mail.gnome.org/archives/gtkmm-list/2013-June/msg00020.html
     Gtk::Notebook * notebook = Gtk::manage(new Gtk::Notebook());
     notebook->append_page (*vbox0, Glib::ustring(_("General")));
     notebook->append_page (*vbox1, Glib::ustring(_("Projection")));
@@ -486,6 +480,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         } else {
             label_value.replace(s,s+6,unit.get_abbreviation());
         }
+    }
+    if (showindex) {
+        label_value = Glib::ustring("[") + Glib::ustring::format(counter) + Glib::ustring("] ") + label_value;
     }
     if ( !valid ) {
         label_value = Glib::ustring(_("Non Uniform Scale"));
@@ -819,10 +816,10 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox)
     if (onbbox) {
         Geom::OptRect bbox = item->geometricBounds();
         if (bbox) {
-            current_nodes.push_back((*bbox).corner(0) * transform);
-            current_nodes.push_back((*bbox).corner(1) * transform);
-            current_nodes.push_back((*bbox).corner(2) * transform);
-            current_nodes.push_back((*bbox).corner(3) * transform);
+            current_nodes.push_back((*bbox).corner(0));
+            current_nodes.push_back((*bbox).corner(1));
+            current_nodes.push_back((*bbox).corner(2));
+            current_nodes.push_back((*bbox).corner(3));
         }
     }
     return current_nodes;
@@ -857,12 +854,17 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             double angle = Geom::rad_from_deg(angle_projection);
             Geom::Affine writed_transform = Geom::identity();
             sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-            if (star_ellipse_fix != Geom::identity()) {
-                writed_transform = star_ellipse_fix;
+            if (spiral_star_fix != Geom::identity()) {
+                writed_transform = spiral_star_fix;
             }
             Geom::Affine transform = writed_transform;
-            transform *= Geom::Translate(-mid);
-            transform *= Geom::Rotate(angle).inverse();
+            if (transformed) {
+                writed_transform = writed_transform.inverse();
+                std::cout << "OKKKKKKKKKKKS" << std::endl;
+            }
+            std::cout << writed_transform << "writed_transform " << std::endl;
+            transform *= Geom::Translate(mid).inverse();
+            //transform *= Geom::Rotate(angle).inverse();
             transform *= Geom::Translate(mid);
             std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox);
             nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
@@ -872,7 +874,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             double maxdistance = -std::numeric_limits<double>::max();
             for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
                 Geom::Point point = (*iter);
-                point *= Geom::Translate(-mid);
+                point *= Geom::Translate(mid).inverse();
                 point *= Geom::Rotate(angle).inverse();
                 point *= Geom::Translate(mid);
                 if (point[Geom::X] > maxdistance) {
@@ -907,44 +909,18 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Point prevpoint(0,0);
             size_t counter = 0;
             bool started = false;
-            gchar * blacklist_nodes_str = blacklist_nodes.param_getSVGValue();
-            std::vector<Geom::Point> points;
             for ( std::vector<Point>::iterator iter = result.begin(); iter != result.end(); ++iter ) {
                 Geom::Point point = (*iter);
                 if (Geom::are_near(prevpoint, point)){
                     continue;
                 }
-                points.push_back(point);
-                prevpoint = point;
-            }
-            char * token = strtok(blacklist_nodes_str,",");
-//            std::vector<Geom::Point> white_points;
-//            white_points.insert(white_points.begin(),points.begin(),points.end());
-            while(token != NULL){
-                if (points.size() >= std::stoi(token)) {
-                    points.erase(points.begin()+std::stoi(token)-1);
-                }
-                token = strtok(NULL, ",");
-            }
-//            if (whitelist_nodes) {
-//                for ( std::vector<Geom::Point>::iterator iter = white_points.begin(); iter != white_points.end(); ++iter ) {
-//                    Geom::Point point = (*iter);
-//                    if (points.size() && Geom::are_near(point,points[0])) {
-//                        points.erase(points.begin());
-//                    } else {
-//                        points.push_back(point);
-//                    }
-//                }
-//            }
-            free(blacklist_nodes_str);
-            for ( std::vector<Geom::Point>::iterator iter = points.begin(); iter != points.end(); ++iter ) {
-                Geom::Point point = (*iter);
                 if (!started) {
                     path.setInitial(point);
                     started = true;
                 } else {
                     path.appendNew<Geom::LineSegment>(point);
                 }
+                prevpoint = point;
             }
             pathvector.push_back(path);
             pathvector *= Geom::Translate(-mid);
@@ -995,13 +971,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             Geom::Affine writed_transform = Geom::identity();
             sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-            if (star_ellipse_fix != Geom::identity()) {
-                pathvector *= star_ellipse_fix;
-                star_ellipse_fix = Geom::identity();
+            if (spiral_star_fix != Geom::identity()) {
+                pathvector *= spiral_star_fix;
             } else {
                 pathvector *= writed_transform;
             }
         }
+        spiral_star_fix = Geom::identity();
+        transformed = false;
         c->unref();
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
@@ -1047,7 +1024,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 std::string listsegments(std::string(blacklist_str) + std::string(","));
                 listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
                 g_free(blacklist_str);
-                if (isWhitelist(counter + 1, listsegments, (bool)whitelist) && !Geom::are_near(start, end)) {
+                if (isWhitelist(counter, listsegments, (bool)whitelist) && !Geom::are_near(start, end)) {
                     Glib::ustring idprev = Glib::ustring("infoline-on-start-");
                     idprev += Glib::ustring::format(counter-1);
                     idprev += "-";
@@ -1257,9 +1234,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                     if ((anotation_width/2) > Geom::distance(hstart,hend)/2.0) {
                         if (avoid_overlapping) {
+                            pos = pos - Point::polar(angle_cross, position + (anotation_width/2.0));
                             angle += Geom::rad_from_deg(90);
                         } else {
-                            pos = pos - Point::polar(angle_cross, position);
+                            pos = pos - Point::polar(angle_cross, position);                        
                         }
                     }
                     if (scale_sensitive && !affinetransform.preservesAngles()) {
@@ -1287,7 +1265,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         hstart = hstart + Point::polar(angle, arrow_gap);
                         hend = hend - Point::polar(angle, arrow_gap );
                     }
-                    if ((anotation_width/2.0) + arrow_gap < Geom::distance(hstart,hend)/2.0) {
+                    if ((Geom::distance(hstart,hend)/2.0) > (anotation_width/1.9) + arrow_gap)  {
                         createLine(hstart, hend, Glib::ustring("infoline-"), counter, true, false, true);
                     } else {
                         createLine(hstart, hend, Glib::ustring("infoline-"), counter, true, true, true);

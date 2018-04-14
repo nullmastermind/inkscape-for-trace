@@ -41,7 +41,6 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);
@@ -64,6 +63,7 @@ private:
     TextParam blacklist;
     BoolParam active_projection;
     BoolParam whitelist;
+    BoolParam showindex;
     BoolParam arrows_outside;
     BoolParam flip_side;
     BoolParam scale_sensitive;
@@ -76,8 +76,6 @@ private:
     OriginalItemArrayParam linked_items;
     ScalarParam distance_projection;
     ScalarParam angle_projection;
-    TextParam blacklist_nodes;
-    //BoolParam whitelist_nodes;
     BoolParam avoid_overlapping;
     MessageParam general;
     MessageParam projection;
@@ -94,7 +92,6 @@ private:
     double arrow_gap;
     guint pagenumber;
     gchar const* locale_base;
-    Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 

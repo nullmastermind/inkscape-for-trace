@@ -489,19 +489,6 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
-    // Allow live effects
-    if (hasPathEffect() && pathEffectsEnabled() && 
-        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) ||
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
-    {
-        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-        this->adjust_livepatheffect(xform);
-        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-        return xform;
-    }
-
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
         // Adjust livepatheffect
