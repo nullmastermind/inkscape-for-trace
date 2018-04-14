@@ -28,6 +28,9 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
 
+#include <gdkmm/seat.h>
+#include <gdkmm/types.h>
+
 #include <2geom/rect.h>
 
 #include "attributes.h"
@@ -237,20 +240,21 @@ SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 Geom::Point
 SPDesktopWidget::window_get_pointer()
 {
-    gint x,y;
-    auto window = gtk_widget_get_window(GTK_WIDGET(canvas));
-    auto display = gdk_window_get_display(window);
+    int x, y;
+    auto window = Glib::wrap(GTK_WIDGET(canvas))->get_window();
+    auto display = window->get_display();
 
 #if GTK_CHECK_VERSION(3,20,0)
-    auto seat = gdk_display_get_default_seat(display);
-    auto device = gdk_seat_get_pointer(seat);
+    auto seat = display->get_default_seat();
+    auto device = seat->get_pointer();
 #else
-    auto dm = gdk_display_get_device_manager(display);
-    auto device = gdk_device_manager_get_client_pointer(dm);
+    auto dm = display->get_device_manager();
+    auto device = dm->get_client_pointer();
 #endif
-    gdk_window_get_device_position(window, device, &x, &y, NULL);
+    Gdk::ModifierType m;
+    window->get_device_position(device, x, y, m);
 
-    return Geom::Point(x,y);
+    return Geom::Point(x, y);
 }
 
 static GTimer *overallTimer = 0;
