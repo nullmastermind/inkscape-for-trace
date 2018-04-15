@@ -468,7 +468,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
 }
 
 void 
-Effect::processObjects(LpeAction lpe_action)
+Effect::processObjects(LPEAction lpe_action)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -499,6 +499,7 @@ Effect::processObjects(LpeAction lpe_action)
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
                     }
                     elemnode->setAttribute("sodipodi:insensitive", NULL);
+                    SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
                 }
                 break;
 

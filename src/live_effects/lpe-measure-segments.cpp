@@ -27,9 +27,6 @@
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
-#include "object/sp-ellipse.h"
-#include "object/sp-star.h"
-#include "object/sp-spiral.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -96,7 +93,10 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
     active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
     avoid_overlapping(_("Avoid overlap measures"), _("Turn not fit measures"), "avoid_overlapping", &wr, this, true),
-    onbbox(_("Measure bounding box"), _("Measure Geometric bounding box"), "onbbox", &wr, this, false),
+    onbbox(_("Measure bounding box"), _("Measure geometric bounding box"), "onbbox", &wr, this, false),
+    bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
+    centers(_("Project center"), _("Use centers as measure"), "centers", &wr, this, false),
+    maxmin(_("Only max and min"), _("Compute only max min projection values"), "maxmin", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
     projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
     options(_("Options"), _("Options"), "options", &wr, this, ""),
@@ -133,6 +133,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&angle_projection);
     registerParameter(&avoid_overlapping);
     registerParameter(&onbbox);
+    registerParameter(&bboxonly);
+    registerParameter(&centers);
+    registerParameter(&maxmin);
     registerParameter(&general);
     registerParameter(&projection);
     registerParameter(&options);
@@ -173,18 +176,15 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
-
     distance_projection.param_set_range(-999999.0, 999999.0);
     distance_projection.param_set_increments(1, 1);
     distance_projection.param_set_digits(5);
     angle_projection.param_set_range(0.0, 360.0);
     angle_projection.param_set_increments(90.0, 90.0);
     angle_projection.param_set_digits(2);
-    spiral_star_fix = Geom::identity();
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    transformed = false;
     general.param_update_default(_("Base of the lpe, focus on measure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
@@ -235,6 +235,9 @@ LPEMeasureSegments::newWidget()
                 } else if (param->param_key == "active_projection"   ||
                            param->param_key == "distance_projection" ||
                            param->param_key == "angle_projection"    ||
+                           param->param_key == "maxmin"              ||
+                           param->param_key == "centers"              ||
+                           param->param_key == "bboxonly"            ||
                            param->param_key == "onbbox"                )
                 {
                     vbox1->pack_start(*widg, false, true, 2);
@@ -394,7 +397,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     SPObject *elemref = NULL;
     Inkscape::XML::Node *rtspan = NULL;
     elemref = document->getObjectById(id.c_str());
-
     if (elemref) {
         rtext = elemref->getRepr();
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
@@ -497,18 +499,9 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rstring->setContent(label_value.c_str());
     }
     if (!elemref) {
-        elemref = sp_lpe_item->parent->appendChildRepr(rtext);
+        elemref = document->getRoot()->appendChildRepr(rtext);
         Inkscape::GC::release(rtext);
-    } else if (elemref->parent != sp_lpe_item->parent) {
-        Inkscape::XML::Node *old_repr = elemref->getRepr();
-        Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-        SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
-        Inkscape::GC::release(copy);
-        elemref->deleteObject(true);
-        copy->setAttribute("id", id.c_str());
-        elemref = elemref_copy;
-    }
-    SP_ITEM(elemref)->updateRepr();
+    } 
     Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
     if (bounds) {
         anotation_width = bounds->width() * 1.15;
@@ -580,7 +573,6 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     }
     if (elemref) {
         line = elemref->getRepr();
-       
         gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
         line->setAttribute("transform", NULL);
@@ -646,15 +638,8 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     sp_repr_css_write_string(css,css_str);
     line->setAttribute("style", css_str.c_str());
     if (!elemref) {
-        elemref = sp_lpe_item->parent->appendChildRepr(line);
+        elemref = document->getRoot()->appendChildRepr(line);
         Inkscape::GC::release(line);
-    } else if (elemref->parent != sp_lpe_item->parent) {
-        Inkscape::XML::Node *old_repr = elemref->getRepr();
-        Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-        sp_lpe_item->parent->appendChildRepr(copy);
-        Inkscape::GC::release(copy);
-        elemref->deleteObject(true);
-        copy->setAttribute("id", id.c_str());
     }
 }
 
@@ -767,7 +752,7 @@ transformNodes(std::vector< Point > nodes, Geom::Affine transform)
 }
 
 std::vector< Point > 
-getNodes(SPItem * item, Geom::Affine transform, bool onbbox)
+getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool bboxonly)
 {
     std::vector< Point > current_nodes;
     SPShape    * shape    = dynamic_cast<SPShape     *> (item);
@@ -779,14 +764,14 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox)
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *sub_item = *iter;
-            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox), transform);
+            std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox, centers, bboxonly), transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
-    } else if (shape) {
+    } else if (shape && !bboxonly) {
         SPCurve * c = shape->getCurve();
         current_nodes = transformNodes(c->get_pathvector().nodes(), transform);
         c->unref();
-    } else if (text || flowtext) {
+    } else if ((text || flowtext) && !bboxonly) {
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
         do {
             Inkscape::Text::Layout::iterator iter_next = iter;
@@ -813,13 +798,16 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox)
     } else {
         onbbox = true;
     }
-    if (onbbox) {
-        Geom::OptRect bbox = item->geometricBounds();
-        if (bbox) {
-            current_nodes.push_back((*bbox).corner(0));
-            current_nodes.push_back((*bbox).corner(1));
-            current_nodes.push_back((*bbox).corner(2));
-            current_nodes.push_back((*bbox).corner(3));
+    if (onbbox || centers) {
+        Geom::OptRect bbox = item->geometricBounds(item->transform);
+        if (bbox && onbbox) {
+            current_nodes.push_back((*bbox).corner(0) * transform);
+            current_nodes.push_back((*bbox).corner(1) * transform);
+            current_nodes.push_back((*bbox).corner(2) * transform);
+            current_nodes.push_back((*bbox).corner(3) * transform);
+        }
+        if (bbox && centers) {
+            current_nodes.push_back((*bbox).midpoint() * transform);
         }
     }
     return current_nodes;
@@ -838,11 +826,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (!document) {
         return;
     }
+    //Avoid crashes on previews
     Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
     Inkscape::XML::Node *root_origin = document->getReprRoot();
     if (root_origin != root) {
         return;
     }
+    Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
+    Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
     //Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
@@ -852,24 +843,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         if (bbox) {
             Geom::Point mid =  bbox->midpoint();
             double angle = Geom::rad_from_deg(angle_projection);
-            Geom::Affine writed_transform = Geom::identity();
-            sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-            if (spiral_star_fix != Geom::identity()) {
-                writed_transform = spiral_star_fix;
-            }
-            Geom::Affine transform = writed_transform;
-            if (transformed) {
-                writed_transform = writed_transform.inverse();
-                std::cout << "OKKKKKKKKKKKS" << std::endl;
-            }
-            std::cout << writed_transform << "writed_transform " << std::endl;
+            Geom::Affine transform = affinetransform;
             transform *= Geom::Translate(mid).inverse();
-            //transform *= Geom::Rotate(angle).inverse();
+            transform *= Geom::Rotate(angle).inverse();
             transform *= Geom::Translate(mid);
-            std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox);
+            std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox, centers, bboxonly);
             nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
             std::vector<Point> result;
-            Geom::OptRect bbox = sp_lpe_item->geometricBounds();
+            Geom::OptRect bbox = sp_lpe_item->geometricBounds(sp_lpe_item->transform);
             Geom::Point pojpoint = Geom::Point();
             double maxdistance = -std::numeric_limits<double>::max();
             for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
@@ -886,13 +867,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
-                        Geom::Affine writed_transform = Geom::identity();
-                        sp_svg_transform_read(item->getAttribute("transform"), &writed_transform );
-                        Geom::Affine transform = writed_transform;
+                        Geom::Affine affinetransform_sub = i2anc_affine(SP_OBJECT(item), SP_OBJECT(document->getRoot()));
+                        Geom::Affine transform = affinetransform_sub ;
                         transform *= Geom::Translate(-mid);
                         transform *= Geom::Rotate(angle).inverse();
                         transform *= Geom::Translate(mid);
-                        std::vector< Point > current_nodes = getNodes(item, transform, onbbox);
+                        std::vector< Point > current_nodes = getNodes(item, transform, onbbox, centers, bboxonly);
                         nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
                     }
                 }
@@ -918,9 +898,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     path.setInitial(point);
                     started = true;
                 } else {
-                    path.appendNew<Geom::LineSegment>(point);
+                    if (!maxmin) {
+                        path.appendNew<Geom::LineSegment>(point);
+                    }
                 }
                 prevpoint = point;
+            }
+            if (maxmin) {
+                path.appendNew<Geom::LineSegment>(result[result.size()-1]);
             }
             pathvector.push_back(path);
             pathvector *= Geom::Translate(-mid);
@@ -966,23 +951,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Point start_stored = Geom::Point(0,0);
         Geom::Point end_stored = Geom::Point(0,0); 
         Geom::Point next_stored = Geom::Point(0,0);
-        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
         if (!active_projection) {
             pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-            Geom::Affine writed_transform = Geom::identity();
-            sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-            if (spiral_star_fix != Geom::identity()) {
-                pathvector *= spiral_star_fix;
-            } else {
-                pathvector *= writed_transform;
-            }
+            pathvector *= affinetransform;
         }
-        spiral_star_fix = Geom::identity();
-        transformed = false;
         c->unref();
-        Geom::Affine writed_transform = Geom::identity();
-        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-        pathvector *= writed_transform;
         gchar * format_str = format.param_getSVGValue();
         if (Glib::ustring(format_str).empty()) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
@@ -1089,21 +1062,24 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     infoline_on_start += Glib::ustring::format(counter);
                     infoline_on_start += "-";
                     infoline_on_start += lpobjid;
-                    items.push_back(infoline_on_start);
+                    
                     Glib::ustring infoline_on_end = "infoline-on-end-";
                     infoline_on_end += Glib::ustring::format(counter);
                     infoline_on_end += "-";
                     infoline_on_end += lpobjid;
-                    items.push_back(infoline_on_end);
+                    
                     Glib::ustring infoline = "infoline-";
                     infoline += Glib::ustring::format(counter);
                     infoline += "-";
                     infoline += lpobjid;
-                    items.push_back(infoline);
+                    
                     Glib::ustring texton = "text-on-";
                     texton += Glib::ustring::format(counter);
                     texton += "-";
                     texton += lpobjid;
+                    items.push_back(infoline_on_start);
+                    items.push_back(infoline_on_end);
+                    items.push_back(infoline);
                     items.push_back(texton);
                     if (!hide_arrows) {
                         if (arrows_outside) {
@@ -1228,19 +1204,19 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else {
                         pos = pos + Point::polar(angle_cross, text_top_bottom + (fontsize/2.5));
                     }
-                    double parents_scale = (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
-                    if (scale_sensitive) {
-                        length *= parents_scale;
+                    double parents_scale = (parentaffinetransform.expansionX() + parentaffinetransform.expansionY()) / 2.0;
+                    if (!scale_sensitive) {
+                        length /= parents_scale;
                     }
                     if ((anotation_width/2) > Geom::distance(hstart,hend)/2.0) {
                         if (avoid_overlapping) {
                             pos = pos - Point::polar(angle_cross, position + (anotation_width/2.0));
                             angle += Geom::rad_from_deg(90);
                         } else {
-                            pos = pos - Point::polar(angle_cross, position);                        
+                            pos = pos - Point::polar(angle_cross, position);
                         }
                     }
-                    if (scale_sensitive && !affinetransform.preservesAngles()) {
+                    if (!scale_sensitive && !parentaffinetransform.preservesAngles()) {
                         createTextLabel(pos, counter, length, angle, remove, false);
                     } else {
                         createTextLabel(pos, counter, length, angle, remove, true);

@@ -170,11 +170,10 @@ void SPLPEItem::update(SPCtx* ctx, unsigned int flags) {
 }
 
 void SPLPEItem::modified(unsigned int flags) {
-    //TODO: remove if no regressions
     //stop update when modified and make the effect update on the LPE transform method if the effect require it
-    //if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
-    //    sp_lpe_item_update_patheffect(this, true, true);
-    //}
+    if (SP_IS_GROUP(this) && (flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_USER_MODIFIED_FLAG_B)) {
+        this->update_patheffect(false);
+    }
 }
 
 Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {

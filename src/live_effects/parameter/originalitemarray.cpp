@@ -340,10 +340,9 @@ void OriginalItemArrayParam::remove_link(ItemAndActive* to)
     }
 }
 
-void OriginalItemArrayParam::linked_delete(SPObject */*deleted*/, ItemAndActive* /*to*/)
+void OriginalItemArrayParam::linked_delete(SPObject */*deleted*/, ItemAndActive* to)
 {
-    //remove_link(to);
-    
+    remove_link(to);
     gchar * full = param_getSVGValue();
     param_write_to_repr(full);
     g_free(full);

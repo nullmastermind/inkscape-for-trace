@@ -72,6 +72,9 @@ private:
     BoolParam hide_back;
     BoolParam hide_arrows;
     BoolParam onbbox;
+    BoolParam bboxonly;
+    BoolParam centers;
+    BoolParam maxmin;
     BoolParam smallx100;
     OriginalItemArrayParam linked_items;
     ScalarParam distance_projection;

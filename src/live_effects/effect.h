@@ -45,7 +45,7 @@ enum LPEPathFlashType {
     DEFAULT
 };
 
-enum LpeAction {
+enum LPEAction {
     LPE_ERASE = 0,
     LPE_TO_OBJECTS,
     LPE_VISIBILITY
@@ -82,7 +82,7 @@ public:
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
     SPShape * getCurrentShape() const { return current_shape; };
     void setCurrentShape(SPShape * shape) { current_shape = shape; }
-    void processObjects(LpeAction lpe_action);
+    void processObjects(LPEAction lpe_action);
 
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,

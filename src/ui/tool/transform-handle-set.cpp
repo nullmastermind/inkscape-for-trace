@@ -258,7 +258,6 @@ protected:
     virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) {
         Geom::Point scc = held_shift(*event) ? _sc_center : _sc_opposite;
         Geom::Point vold = _origin - scc, vnew = new_pos - scc;
-
         // avoid exploding the selection
         if (Geom::are_near(vold[Geom::X], 0) || Geom::are_near(vold[Geom::Y], 0))
             return Geom::identity();
@@ -286,7 +285,6 @@ protected:
             }
             m.snapTransformed(_snap_points, _origin, (*ptr));
             m.unSetup();
-
             if (ptr->best_snapped_point.getSnapped()) {
                 scale = ptr->getScaleSnapped();
             }

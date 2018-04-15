@@ -736,7 +736,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             }
         }
     }
-
+    
     gchar *c = sp_svg_transform_write(item->transform);
     repr->setAttribute("transform", c);
     g_free(c);
@@ -1503,7 +1503,7 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
     // CPPIFY: check this code.
     // If onSetTransform is not overridden, CItem::onSetTransform will return the transform it was given as a parameter.
     // onSetTransform cannot be pure due to the fact that not all visible Items are transformable.
-
+    SPLPEItem * lpeitem = SP_LPE_ITEM(this);
     if ( // run the object's set_transform (i.e. embed transform) only if:
         (dynamic_cast<SPText *>(this) && firstChild() && dynamic_cast<SPTextPath *>(firstChild())) ||
              (!preserve && // user did not chose to preserve all transforms
@@ -1518,7 +1518,6 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
             freeze_stroke_width_recursive(false);
         }
     } else {
-        SPLPEItem * lpeitem = SP_LPE_ITEM(this);
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             lpeitem->adjust_livepatheffect(transform_attr);
         }
@@ -1542,7 +1541,6 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
     // values if called in code handling the transformed signal.
     updateRepr();
 
-    SPLPEItem * lpeitem = SP_LPE_ITEM(this);
     if (lpeitem && lpeitem->hasPathEffectRecursive()) {
         sp_lpe_item_update_patheffect(lpeitem, false, false);
     }
