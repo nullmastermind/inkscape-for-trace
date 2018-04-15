@@ -207,9 +207,9 @@ protected:
 
 private:
     /** no copy. */
-    Selection(Selection const &);
+    Selection(Selection const &) = delete;
     /** no assign. */
-    void operator=(Selection const &);
+    void operator=(Selection const &) = delete;
 
     /** Issues modification notification signals. */
     static int _emit_modified(Selection *selection);

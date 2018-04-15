@@ -39,8 +39,8 @@ protected:
     void _item_timeout (TemporaryItem * tempitem);
 
 private:
-    TemporaryItemList(const TemporaryItemList&);
-    TemporaryItemList& operator=(const TemporaryItemList&);
+    TemporaryItemList(const TemporaryItemList&) = delete;
+    TemporaryItemList& operator=(const TemporaryItemList&) = delete;
 };
 
 } //namespace Display

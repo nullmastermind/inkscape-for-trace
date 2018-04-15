@@ -30,8 +30,8 @@ public:
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
 private:
-    LPEPathLength(const LPEPathLength&);
-    LPEPathLength& operator=(const LPEPathLength&);
+    LPEPathLength(const LPEPathLength&) = delete;
+    LPEPathLength& operator=(const LPEPathLength&) = delete;
     ScalarParam scale;
     TextParamInternal info_text;
     UnitParam unit;

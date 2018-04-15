@@ -30,8 +30,8 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 
 private:
-    LPECircle3Pts(const LPECircle3Pts&);
-    LPECircle3Pts& operator=(const LPECircle3Pts&);
+    LPECircle3Pts(const LPECircle3Pts&) = delete;
+    LPECircle3Pts& operator=(const LPECircle3Pts&) = delete;
 };
 
 } //namespace LivePathEffect

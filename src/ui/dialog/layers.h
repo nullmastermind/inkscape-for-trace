@@ -53,8 +53,8 @@ private:
     class ModelColumns;
     class InternalUIBounce;
 
-    LayersPanel(LayersPanel const &); // no copy
-    LayersPanel &operator=(LayersPanel const &); // no assign
+    LayersPanel(LayersPanel const &) = delete; // no copy
+    LayersPanel &operator=(LayersPanel const &) = delete; // no assign
 
     void _styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback );
     void _fireAction( unsigned int code );

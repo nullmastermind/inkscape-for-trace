@@ -57,8 +57,8 @@ private:
     ScalarParam max_curvature;
 #endif
 #endif
-    LPESketch(const LPESketch&);
-    LPESketch& operator=(const LPESketch&);
+    LPESketch(const LPESketch&) = delete;
+    LPESketch& operator=(const LPESketch&) = delete;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > computePerturbation (double s0, double s1);
 

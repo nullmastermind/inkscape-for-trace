@@ -52,8 +52,8 @@ public:
 private:
     // No default constructor, noncopyable, nonassignable
     StyleDialog();
-    StyleDialog(StyleDialog const &d);
-    StyleDialog operator=(StyleDialog const &d);
+    StyleDialog(StyleDialog const &d) = delete;
+    StyleDialog operator=(StyleDialog const &d) = delete;
 
     // Monitor <style> element for changes.
     class NodeObserver;

@@ -55,8 +55,8 @@ public:
     virtual void param_update_default(const gchar * default_value);
 
 private:
-    ToggleButtonParam(const ToggleButtonParam&);
-    ToggleButtonParam& operator=(const ToggleButtonParam&);
+    ToggleButtonParam(const ToggleButtonParam&) = delete;
+    ToggleButtonParam& operator=(const ToggleButtonParam&) = delete;
 
     void refresh_button();
     bool value;

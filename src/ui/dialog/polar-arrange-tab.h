@@ -51,8 +51,8 @@ public:
     void on_arrange_radio_changed();
 
 private:
-    PolarArrangeTab(PolarArrangeTab const &d); // no copy
-    void operator=(PolarArrangeTab const &d); // no assign
+    PolarArrangeTab(PolarArrangeTab const &d) = delete; // no copy
+    void operator=(PolarArrangeTab const &d) = delete; // no assign
 
     ArrangeDialog         *parent;
 

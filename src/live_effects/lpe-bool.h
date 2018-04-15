@@ -46,8 +46,8 @@ public:
     }
 
 private:
-    LPEBool(const LPEBool &);
-    LPEBool &operator=(const LPEBool &);
+    LPEBool(const LPEBool &) = delete;
+    LPEBool &operator=(const LPEBool &) = delete;
 
     OriginalPathParam operand_path;
     EnumParam<bool_op_ex> bool_operation;

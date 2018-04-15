@@ -78,8 +78,8 @@ private:
     double previous_num_copies;
     bool reset;
     SPObject * container;
-    LPECopyRotate(const LPECopyRotate&);
-    LPECopyRotate& operator=(const LPECopyRotate&);
+    LPECopyRotate(const LPECopyRotate&) = delete;
+    LPECopyRotate& operator=(const LPECopyRotate&) = delete;
 };
 
 } //namespace LivePathEffect

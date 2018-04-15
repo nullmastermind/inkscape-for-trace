@@ -35,8 +35,8 @@ public:
 private:
     SPCurve &_curve;
 
-    ConverterSPCurve(const ConverterSPCurve&);
-    ConverterSPCurve& operator=(const ConverterSPCurve&);
+    ConverterSPCurve(const ConverterSPCurve&) = delete;
+    ConverterSPCurve& operator=(const ConverterSPCurve&) = delete;
 };
 
 
@@ -55,8 +55,8 @@ public:
 private:
     Geom::Path &_path;
 
-    ConverterPath(const ConverterPath&);
-    ConverterPath& operator=(const ConverterPath&);
+    ConverterPath(const ConverterPath&) = delete;
+    ConverterPath& operator=(const ConverterPath&) = delete;
 };
 
 

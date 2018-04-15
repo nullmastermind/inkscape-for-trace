@@ -31,8 +31,8 @@ private:
     ScalarParam nr_x;
     ScalarParam nr_y;
 
-    LPEConstructGrid(const LPEConstructGrid&);
-    LPEConstructGrid& operator=(const LPEConstructGrid&);
+    LPEConstructGrid(const LPEConstructGrid&) = delete;
+    LPEConstructGrid& operator=(const LPEConstructGrid&) = delete;
 };
 
 } //namespace LivePathEffect

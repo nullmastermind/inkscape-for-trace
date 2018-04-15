@@ -39,8 +39,8 @@ public:
 private:
     Gtk::Label * _label;
     int _min_height;
-    MessageParam(const MessageParam&);
-    MessageParam& operator=(const MessageParam&);
+    MessageParam(const MessageParam&) = delete;
+    MessageParam& operator=(const MessageParam&) = delete;
     const gchar *  message;
     const gchar *  defmessage;
 };

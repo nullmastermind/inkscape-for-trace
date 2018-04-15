@@ -38,8 +38,8 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 
 private:
-    LPEPts2Ellipse(const LPEPts2Ellipse&);
-    LPEPts2Ellipse& operator=(const LPEPts2Ellipse&);
+    LPEPts2Ellipse(const LPEPts2Ellipse&) = delete;
+    LPEPts2Ellipse& operator=(const LPEPts2Ellipse&) = delete;
 
 
     int genIsometricEllipse (std::vector<Geom::Point> const & points_in,

@@ -111,8 +111,8 @@ private:
     bool _from_original_d;
     bool _allow_only_bspline_spiro;
     void update();
-    OriginalPathArrayParam(const OriginalPathArrayParam&);
-    OriginalPathArrayParam& operator=(const OriginalPathArrayParam&);
+    OriginalPathArrayParam(const OriginalPathArrayParam&) = delete;
+    OriginalPathArrayParam& operator=(const OriginalPathArrayParam&) = delete;
 };
 
 } //namespace LivePathEffect

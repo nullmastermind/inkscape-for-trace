@@ -27,8 +27,8 @@ private:
     BoolParam visual_bounds;
 
 private:
-    LPEBoundingBox(const LPEBoundingBox&);
-    LPEBoundingBox& operator=(const LPEBoundingBox&);
+    LPEBoundingBox(const LPEBoundingBox&) = delete;
+    LPEBoundingBox& operator=(const LPEBoundingBox&) = delete;
 };
 
 }; //namespace LivePathEffect

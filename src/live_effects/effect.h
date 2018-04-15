@@ -189,8 +189,8 @@ private:
     bool is_ready;
     bool defaultsopen;
 
-    Effect(const Effect&);
-    Effect& operator=(const Effect&);
+    Effect(const Effect&) = delete;
+    Effect& operator=(const Effect&) = delete;
 };
 
 } //namespace LivePathEffect

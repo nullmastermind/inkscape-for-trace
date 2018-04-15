@@ -87,9 +87,9 @@ public:
 private:
     inline void _presentDialog();
 
-    PanelDialog();
-    PanelDialog(PanelDialog<Behavior> const &d);                      // no copy
-    PanelDialog<Behavior>& operator=(PanelDialog<Behavior> const &d); // no assign
+    PanelDialog() = delete;
+    PanelDialog(PanelDialog<Behavior> const &d) = delete;                      // no copy
+    PanelDialog<Behavior>& operator=(PanelDialog<Behavior> const &d) = delete; // no assign
 };
 
 
@@ -108,10 +108,10 @@ public:
     inline virtual void present();
 
 private:
-    PanelDialog();
-    PanelDialog(PanelDialog<Behavior::FloatingBehavior> const &d); // no copy
+    PanelDialog() = delete;
+    PanelDialog(PanelDialog<Behavior::FloatingBehavior> const &d) = delete; // no copy
     PanelDialog<Behavior::FloatingBehavior>&
-    operator=(PanelDialog<Behavior::FloatingBehavior> const &d);   // no assign
+    operator=(PanelDialog<Behavior::FloatingBehavior> const &d) = delete;   // no assign
 };
 
 

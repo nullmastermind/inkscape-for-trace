@@ -94,8 +94,8 @@ private:
     bool expanded;
     Gtk::Expander * expander;
 
-    LPELattice2(const LPELattice2&);
-    LPELattice2& operator=(const LPELattice2&);
+    LPELattice2(const LPELattice2&) = delete;
+    LPELattice2& operator=(const LPELattice2&) = delete;
 };
 
 } //namespace LivePathEffect

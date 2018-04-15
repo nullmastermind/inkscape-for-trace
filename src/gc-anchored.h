@@ -73,8 +73,8 @@ private:
     Anchor *_new_anchor() const;
     void _free_anchor(Anchor *anchor) const;
 
-    Anchored(Anchored const &); // no copy
-    void operator=(Anchored const &); // no assign
+    Anchored(Anchored const &) = delete; // no copy
+    void operator=(Anchored const &) = delete; // no assign
 };
 
 /**

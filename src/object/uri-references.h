@@ -138,7 +138,7 @@ private:
     void _setObject(SPObject *object);
     void _release(SPObject *object);
 
-    void operator=(URIReference const& ref);
+    void operator=(URIReference const& ref) = delete;
     /* Private and definition-less to prevent accidental use. */
 };
 

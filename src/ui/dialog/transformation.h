@@ -218,12 +218,12 @@ private:
     /**
      * Copy constructor
      */
-    Transformation(Transformation const &d);
+    Transformation(Transformation const &d) = delete;
 
     /**
      * Assignment operator
      */
-    Transformation operator=(Transformation const &d);
+    Transformation operator=(Transformation const &d) = delete;
 
     Gtk::Button *applyButton;
     Gtk::Button *resetButton;

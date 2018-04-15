@@ -46,8 +46,8 @@ protected:
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorSelector( const ColorSelector& obj );
-    ColorSelector& operator=( const ColorSelector& obj );
+    ColorSelector( const ColorSelector& obj ) = delete;
+    ColorSelector& operator=( const ColorSelector& obj ) = delete;
 
     gboolean _held;
 

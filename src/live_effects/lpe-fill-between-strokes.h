@@ -31,8 +31,8 @@ private:
     BoolParam close;
 
 private:
-    LPEFillBetweenStrokes(const LPEFillBetweenStrokes&);
-    LPEFillBetweenStrokes& operator=(const LPEFillBetweenStrokes&);
+    LPEFillBetweenStrokes(const LPEFillBetweenStrokes&) = delete;
+    LPEFillBetweenStrokes& operator=(const LPEFillBetweenStrokes&) = delete;
 };
 
 }; //namespace LivePathEffect

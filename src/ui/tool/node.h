@@ -233,7 +233,7 @@ protected:
 
 private:
 
-    Node(Node const &);
+    Node(Node const &) = delete;
     void _fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos);
     void _updateAutoHandles();
 
@@ -436,8 +436,8 @@ public:
     static NodeList &get(iterator const &i);
 private:
     // no copy or assign
-    NodeList(NodeList const &);
-    void operator=(NodeList const &);
+    NodeList(NodeList const &) = delete;
+    void operator=(NodeList const &) = delete;
 
     SubpathList &_list;
     bool _closed;

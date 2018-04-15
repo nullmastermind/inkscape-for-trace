@@ -49,8 +49,8 @@ public:
 
 private:
     // noncopyable, nonassignable
-    SignalBlocker(SignalBlocker const &other);
-    SignalBlocker& operator=(SignalBlocker const &other);
+    SignalBlocker(SignalBlocker const &other) = delete;
+    SignalBlocker& operator=(SignalBlocker const &other) = delete;
     
     sigc::connection *_connection;
     bool _wasBlocked;

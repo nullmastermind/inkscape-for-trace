@@ -29,8 +29,8 @@ public:
 private:
     ScalarParam iterations;
 
-    LPERecursiveSkeleton(const LPERecursiveSkeleton&);
-    LPERecursiveSkeleton& operator=(const LPERecursiveSkeleton&);
+    LPERecursiveSkeleton(const LPERecursiveSkeleton&) = delete;
+    LPERecursiveSkeleton& operator=(const LPERecursiveSkeleton&) = delete;
 };
 
 } //namespace LivePathEffect

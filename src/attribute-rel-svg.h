@@ -27,8 +27,8 @@ public:
 
 private:
     SPAttributeRelSVG();
-    SPAttributeRelSVG(const SPAttributeRelSVG&);
-    SPAttributeRelSVG& operator= (const SPAttributeRelSVG&);
+    SPAttributeRelSVG(const SPAttributeRelSVG&) = delete;
+    SPAttributeRelSVG& operator= (const SPAttributeRelSVG&) = delete;
 
 private:
     static SPAttributeRelSVG *instance;

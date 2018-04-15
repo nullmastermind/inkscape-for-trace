@@ -1063,8 +1063,8 @@ public:
     sigc::connection defsModified;
 
 private:
-    DocTrack(DocTrack const &); // no copy
-    DocTrack &operator=(DocTrack const &); // no assign
+    DocTrack(DocTrack const &) = delete; // no copy
+    DocTrack &operator=(DocTrack const &) = delete; // no assign
 };
 
 Glib::Timer *DocTrack::timer = 0;

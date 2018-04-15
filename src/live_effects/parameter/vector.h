@@ -58,8 +58,8 @@ public:
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
 
 private:
-    VectorParam(const VectorParam&);
-    VectorParam& operator=(const VectorParam&);
+    VectorParam(const VectorParam&) = delete;
+    VectorParam& operator=(const VectorParam&) = delete;
 
     Geom::Point defvalue;
 

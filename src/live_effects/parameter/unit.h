@@ -44,8 +44,8 @@ private:
     Inkscape::Util::Unit const *unit;
     Inkscape::Util::Unit const *defunit;
 
-    UnitParam(const UnitParam&);
-    UnitParam& operator=(const UnitParam&);
+    UnitParam(const UnitParam&) = delete;
+    UnitParam& operator=(const UnitParam&) = delete;
 };
 
 } //namespace LivePathEffect

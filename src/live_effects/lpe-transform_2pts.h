@@ -70,8 +70,8 @@ private:
     Geom::Angle previous_angle;
     Geom::Point previous_start;
     double previous_lenght;
-    LPETransform2Pts(const LPETransform2Pts&);
-    LPETransform2Pts& operator=(const LPETransform2Pts&);
+    LPETransform2Pts(const LPETransform2Pts&) = delete;
+    LPETransform2Pts& operator=(const LPETransform2Pts&) = delete;
 };
 
 } //namespace LivePathEffect

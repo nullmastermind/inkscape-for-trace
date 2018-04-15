@@ -51,8 +51,8 @@ private:
 
     Geom::PathVector outline_path;
 
-    LPEShowHandles(const LPEShowHandles &);
-    LPEShowHandles &operator=(const LPEShowHandles &);
+    LPEShowHandles(const LPEShowHandles &) = delete;
+    LPEShowHandles &operator=(const LPEShowHandles &) = delete;
 
 };
 

@@ -54,8 +54,8 @@ private:
     // there are all kinds of parameters. Check the /live_effects/parameter directory which types exist!
     Geom::Point orig;
 
-    LPEPerspectivePath(const LPEPerspectivePath&);
-    LPEPerspectivePath& operator=(const LPEPerspectivePath&);
+    LPEPerspectivePath(const LPEPerspectivePath&) = delete;
+    LPEPerspectivePath& operator=(const LPEPerspectivePath&) = delete;
 
     std::vector<Geom::Point> handles;
     double tmat[3][4];

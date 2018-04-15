@@ -199,8 +199,8 @@ protected:
     void onSelectionChange(void);
 
 private:
-    Find(Find const &d);
-    Find& operator=(Find const &d);
+    Find(Find const &d) = delete;
+    Find& operator=(Find const &d) = delete;
 
     /*
      * Find and replace combo box widgets

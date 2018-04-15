@@ -37,8 +37,8 @@ public:
     const Glib::ustring get_value() const { return defvalue; };
 
 private:
-    FontButtonParam(const FontButtonParam&);
-    FontButtonParam& operator=(const FontButtonParam&);
+    FontButtonParam(const FontButtonParam&) = delete;
+    FontButtonParam& operator=(const FontButtonParam&) = delete;
     Glib::ustring value;
     Glib::ustring defvalue;
 

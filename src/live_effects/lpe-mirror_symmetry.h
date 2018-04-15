@@ -74,8 +74,8 @@ private:
     bool reset;
     bool center_vert;
     bool center_horiz;
-    LPEMirrorSymmetry(const LPEMirrorSymmetry&);
-    LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
+    LPEMirrorSymmetry(const LPEMirrorSymmetry&) = delete;
+    LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&) = delete;
 };
 
 } //namespace LivePathEffect

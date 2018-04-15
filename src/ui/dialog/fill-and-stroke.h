@@ -67,8 +67,8 @@ protected:
     void _onSwitchPage(Gtk::Widget *page, guint pagenum);
 
 private:
-    FillAndStroke(FillAndStroke const &d);
-    FillAndStroke& operator=(FillAndStroke const &d);
+    FillAndStroke(FillAndStroke const &d) = delete;
+    FillAndStroke& operator=(FillAndStroke const &d) = delete;
 
     void setTargetDesktop(SPDesktop *desktop);
 

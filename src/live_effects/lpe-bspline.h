@@ -43,8 +43,8 @@ private:
     BoolParam only_selected;
     ScalarParam weight;
 
-    LPEBSpline(const LPEBSpline &);
-    LPEBSpline &operator=(const LPEBSpline &);
+    LPEBSpline(const LPEBSpline &) = delete;
+    LPEBSpline &operator=(const LPEBSpline &) = delete;
 
 };
 void sp_bspline_do_effect(SPCurve *curve, double helper_size);

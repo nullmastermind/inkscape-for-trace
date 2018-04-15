@@ -30,8 +30,8 @@ public:
 private:
     EnumParam<unsigned> interpolator_type;
 
-    LPEInterpolatePoints(const LPEInterpolatePoints&);
-    LPEInterpolatePoints& operator=(const LPEInterpolatePoints&);
+    LPEInterpolatePoints(const LPEInterpolatePoints&) = delete;
+    LPEInterpolatePoints& operator=(const LPEInterpolatePoints&) = delete;
 };
 
 } //namespace LivePathEffect

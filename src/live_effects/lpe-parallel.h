@@ -54,8 +54,8 @@ private:
     Geom::Point N;
     Geom::Point dir;
 
-    LPEParallel(const LPEParallel&);
-    LPEParallel& operator=(const LPEParallel&);
+    LPEParallel(const LPEParallel&) = delete;
+    LPEParallel& operator=(const LPEParallel&) = delete;
 };
 
 } //namespace LivePathEffect

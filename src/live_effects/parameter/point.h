@@ -56,8 +56,8 @@ public:
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
     friend class PointParamKnotHolderEntity;
 private:
-    PointParam(const PointParam&);
-    PointParam& operator=(const PointParam&);
+    PointParam(const PointParam&) = delete;
+    PointParam& operator=(const PointParam&) = delete;
     bool on_button_release(GdkEventButton* button_event);
     Geom::Point defvalue;
     bool liveupdate;

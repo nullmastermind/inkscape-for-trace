@@ -68,8 +68,8 @@ protected:
     gchar * defvalue;
 
 private:
-    ItemParam(const ItemParam&);
-    ItemParam& operator=(const ItemParam&);
+    ItemParam(const ItemParam&) = delete;
+    ItemParam& operator=(const ItemParam&) = delete;
 };
 
 

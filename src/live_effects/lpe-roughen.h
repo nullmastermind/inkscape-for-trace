@@ -64,8 +64,8 @@ private:
     BoolParam fixed_displacement;
     BoolParam spray_tool_friendly;
     long seed;
-    LPERoughen(const LPERoughen &);
-    LPERoughen &operator=(const LPERoughen &);
+    LPERoughen(const LPERoughen &) = delete;
+    LPERoughen &operator=(const LPERoughen &) = delete;
 
 };
 

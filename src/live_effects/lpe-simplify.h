@@ -48,8 +48,8 @@ private:
     Geom::PathVector hp;
     Geom::OptRect bbox;
 
-    LPESimplify(const LPESimplify &);
-    LPESimplify &operator=(const LPESimplify &);
+    LPESimplify(const LPESimplify &) = delete;
+    LPESimplify &operator=(const LPESimplify &) = delete;
 
 };
 

@@ -29,8 +29,8 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 
 private:
-    LPEEllipse5Pts(const LPEEllipse5Pts&);
-    LPEEllipse5Pts& operator=(const LPEEllipse5Pts&);
+    LPEEllipse5Pts(const LPEEllipse5Pts&) = delete;
+    LPEEllipse5Pts& operator=(const LPEEllipse5Pts&) = delete;
 };
 
 } //namespace LivePathEffect

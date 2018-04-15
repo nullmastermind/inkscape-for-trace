@@ -41,8 +41,8 @@ protected:
     UXManager();
 
 private:
-    UXManager( UXManager const & );
-    UXManager & operator=( UXManager const & );
+    UXManager( UXManager const & ) = delete;
+    UXManager & operator=( UXManager const & ) = delete;
 };
 
 } // namespace UI

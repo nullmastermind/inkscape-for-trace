@@ -60,8 +60,8 @@ protected:
     void _modeChanged();
 
 private:
-    GuidelinePropertiesDialog(GuidelinePropertiesDialog const &); // no copy
-    GuidelinePropertiesDialog &operator=(GuidelinePropertiesDialog const &); // no assign
+    GuidelinePropertiesDialog(GuidelinePropertiesDialog const &) = delete; // no copy
+    GuidelinePropertiesDialog &operator=(GuidelinePropertiesDialog const &) = delete; // no assign
 
     SPDesktop *_desktop;
     SPGuide *_guide;

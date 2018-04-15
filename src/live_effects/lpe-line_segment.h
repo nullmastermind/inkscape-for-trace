@@ -43,8 +43,8 @@ private:
     Geom::Point A, B; // intersections of the line segment with the limiting bounding box
     Geom::Point bboxA, bboxB; // upper left and lower right corner of limiting bounding box
 
-    LPELineSegment(const LPELineSegment&);
-    LPELineSegment& operator=(const LPELineSegment&);
+    LPELineSegment(const LPELineSegment&) = delete;
+    LPELineSegment& operator=(const LPELineSegment&) = delete;
 };
 
 } //namespace LivePathEffect

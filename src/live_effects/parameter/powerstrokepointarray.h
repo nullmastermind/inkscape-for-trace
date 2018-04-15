@@ -53,8 +53,8 @@ public:
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:
-    PowerStrokePointArrayParam(const PowerStrokePointArrayParam&);
-    PowerStrokePointArrayParam& operator=(const PowerStrokePointArrayParam&);
+    PowerStrokePointArrayParam(const PowerStrokePointArrayParam&) = delete;
+    PowerStrokePointArrayParam& operator=(const PowerStrokePointArrayParam&) = delete;
 
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;

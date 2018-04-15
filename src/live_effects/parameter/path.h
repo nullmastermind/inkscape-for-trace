@@ -98,8 +98,8 @@ private:
     bool _copy_button;
     bool _paste_button;
     bool _link_button;
-    PathParam(const PathParam&);
-    PathParam& operator=(const PathParam&);
+    PathParam(const PathParam&) = delete;
+    PathParam& operator=(const PathParam&) = delete;
 };
 
 

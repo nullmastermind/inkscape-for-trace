@@ -35,8 +35,8 @@ protected:
     std::vector<SPItem*> getFontReplacedItems(SPDocument* doc, Glib::ustring *out);
 
 private:
-    FontSubstitution(FontSubstitution const &d);
-    FontSubstitution& operator=(FontSubstitution const &d);
+    FontSubstitution(FontSubstitution const &d) = delete;
+    FontSubstitution& operator=(FontSubstitution const &d) = delete;
 };
 
 } // namespace Dialog

@@ -42,8 +42,8 @@ public:
     virtual Geom::Path interpolateToPath(std::vector<Point> const &points) const = 0;
 
 private:
-    Interpolator(const Interpolator&);
-    Interpolator& operator=(const Interpolator&);
+    Interpolator(const Interpolator&) = delete;
+    Interpolator& operator=(const Interpolator&) = delete;
 };
 
 class Linear : public Interpolator {
@@ -61,8 +61,8 @@ public:
     };
 
 private:
-    Linear(const Linear&);
-    Linear& operator=(const Linear&);
+    Linear(const Linear&) = delete;
+    Linear& operator=(const Linear&) = delete;
 };
 
 // this class is terrible
@@ -100,8 +100,8 @@ public:
     };
 
 private:
-    CubicBezierFit(const CubicBezierFit&);
-    CubicBezierFit& operator=(const CubicBezierFit&);
+    CubicBezierFit(const CubicBezierFit&) = delete;
+    CubicBezierFit& operator=(const CubicBezierFit&) = delete;
 };
 
 /// @todo invent name for this class
@@ -131,8 +131,8 @@ public:
     double _beta;
 
 private:
-    CubicBezierJohan(const CubicBezierJohan&);
-    CubicBezierJohan& operator=(const CubicBezierJohan&);
+    CubicBezierJohan(const CubicBezierJohan&) = delete;
+    CubicBezierJohan& operator=(const CubicBezierJohan&) = delete;
 };
 
 /// @todo invent name for this class
@@ -169,8 +169,8 @@ public:
     double _beta;
 
 private:
-    CubicBezierSmooth(const CubicBezierSmooth&);
-    CubicBezierSmooth& operator=(const CubicBezierSmooth&);
+    CubicBezierSmooth(const CubicBezierSmooth&) = delete;
+    CubicBezierSmooth& operator=(const CubicBezierSmooth&) = delete;
 };
 
 class SpiroInterpolator : public Interpolator {
@@ -202,8 +202,8 @@ public:
     };
 
 private:
-    SpiroInterpolator(const SpiroInterpolator&);
-    SpiroInterpolator& operator=(const SpiroInterpolator&);
+    SpiroInterpolator(const SpiroInterpolator&) = delete;
+    SpiroInterpolator& operator=(const SpiroInterpolator&) = delete;
 };
 
 // Quick mockup for testing the behavior for powerstroke controlpoint interpolation
@@ -282,8 +282,8 @@ private:
         return CubicBezier(b0, b1, b2, b3);
     }
 
-    CentripetalCatmullRomInterpolator(const CentripetalCatmullRomInterpolator&);
-    CentripetalCatmullRomInterpolator& operator=(const CentripetalCatmullRomInterpolator&);
+    CentripetalCatmullRomInterpolator(const CentripetalCatmullRomInterpolator&) = delete;
+    CentripetalCatmullRomInterpolator& operator=(const CentripetalCatmullRomInterpolator&) = delete;
 };
 
 

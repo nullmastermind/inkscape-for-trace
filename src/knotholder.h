@@ -89,7 +89,7 @@ protected:
     Geom::Affine _edit_transform;
 
 private:
-    KnotHolder(); // declared but not defined
+    KnotHolder() = delete; // declared but not defined
 };
 
 /**

@@ -135,8 +135,8 @@ protected:
     Inkscape::UI::Widget::AlignmentSelector     *_as_alignment;
 
 private:
-    CanvasGrid(const CanvasGrid&);
-    CanvasGrid& operator=(const CanvasGrid&);
+    CanvasGrid(const CanvasGrid&) = delete;
+    CanvasGrid& operator=(const CanvasGrid&) = delete;
 };
 
 
@@ -163,8 +163,8 @@ protected:
     virtual Gtk::Widget * newSpecificWidget();
 
 private:
-    CanvasXYGrid(const CanvasXYGrid&);
-    CanvasXYGrid& operator=(const CanvasXYGrid&);
+    CanvasXYGrid(const CanvasXYGrid&) = delete;
+    CanvasXYGrid& operator=(const CanvasXYGrid&) = delete;
 
     void updateWidgets();
 

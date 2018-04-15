@@ -43,8 +43,8 @@ private:
 
     // No default constructor, noncopyable, nonassignable
     Prototype();
-    Prototype(Prototype const &d);
-    Prototype operator=(Prototype const &d);
+    Prototype(Prototype const &d) = delete;
+    Prototype operator=(Prototype const &d) = delete;
 
     // Signals and handlers
     sigc::connection connectionDocumentReplaced;

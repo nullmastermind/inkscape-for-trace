@@ -227,8 +227,8 @@ protected:
     bool sp_event_context_knot_mouseover() const;
 
 private:
-	ToolBase(const ToolBase&);
-	ToolBase& operator=(const ToolBase&);
+	ToolBase(const ToolBase&) = delete;
+	ToolBase& operator=(const ToolBase&) = delete;
         bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
 
         

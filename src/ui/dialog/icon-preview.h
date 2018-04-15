@@ -53,8 +53,8 @@ public:
     void modeToggled();
 
 private:
-    IconPreviewPanel(IconPreviewPanel const &); // no copy
-    IconPreviewPanel &operator=(IconPreviewPanel const &); // no assign
+    IconPreviewPanel(IconPreviewPanel const &) = delete; // no copy
+    IconPreviewPanel &operator=(IconPreviewPanel const &) = delete; // no assign
 
 
     DesktopTracker deskTrack;

@@ -71,8 +71,8 @@ protected:
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorScales(ColorScales const &obj);
-    ColorScales &operator=(ColorScales const &obj);
+    ColorScales(ColorScales const &obj) = delete;
+    ColorScales &operator=(ColorScales const &obj) = delete;
 };
 
 class ColorScalesFactory : public Inkscape::UI::ColorSelectorFactory

@@ -34,8 +34,8 @@ protected:
     virtual ~InputDevice();
 
 private:
-    InputDevice(InputDevice const &); // no copy
-    void operator=(InputDevice const &); // no assign
+    InputDevice(InputDevice const &) = delete; // no copy
+    void operator=(InputDevice const &) = delete; // no assign
 };
 
 class DeviceManager : public Glib::Object {
@@ -65,8 +65,8 @@ protected:
     virtual ~DeviceManager();
 
 private:
-    DeviceManager(DeviceManager const &); // no copy
-    void operator=(DeviceManager const &); // no assign
+    DeviceManager(DeviceManager const &) = delete; // no copy
+    void operator=(DeviceManager const &) = delete; // no assign
 };
 
 
