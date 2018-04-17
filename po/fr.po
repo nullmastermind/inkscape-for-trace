@@ -1595,7 +1595,7 @@ msgstr "Rend fluorescentes les couleurs les plus saturées"
 
 #: ../share/filters/filters.svg.h:590
 msgid "Pixellize"
-msgstr "Pixelizer"
+msgstr "Pixéliser"
 
 #: ../share/filters/filters.svg.h:591
 msgid "Pixel tools"
@@ -20222,8 +20222,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1242
 msgid "Mouse move pans when Space is pressed"
 msgstr ""
-"Le bouton gauche de la souris fait défiler quand la touche Espace est "
-"enfoncée"
+"La souris fait défiler quand la touche Espace est enfoncée"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1244
 msgid "When on, pressing and holding Space and dragging pans canvas"
@@ -27221,7 +27220,7 @@ msgstr "Supprimer tous les guides du document"
 
 #: ../src/verbs.cpp:2584
 msgid "Lock All Guides"
-msgstr "Verrouiller tout les guides"
+msgstr "Verrouiller tous les guides"
 
 #: ../src/verbs.cpp:2584 ../src/widgets/desktop-widget.cpp:372
 msgid "Toggle lock of all guides in the document"
@@ -28594,7 +28593,7 @@ msgstr "Options pour l'aérographe"
 
 #: ../src/verbs.cpp:2972
 msgid "Undo _History..."
-msgstr "_Historique des annulations"
+msgstr "_Historique des annulations..."
 
 #: ../src/verbs.cpp:2973
 msgid "Undo History"
@@ -37294,7 +37293,7 @@ msgstr "Guide de marge"
 
 #: ../share/extensions/layout_nup.inx.h:22
 msgid "Padding box"
-msgstr "Boîte de marge interieure"
+msgstr "Boîte de marge intérieure"
 
 #: ../share/extensions/layout_nup.inx.h:23
 msgid "Margin box"
