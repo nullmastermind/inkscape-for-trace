@@ -1030,7 +1030,6 @@ SPINumeric::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
 
 void
 SPIString::read( gchar const *str ) {
-
     if( !str ) return;
 
     if (!strcmp(str, "inherit")) {
@@ -1042,6 +1041,9 @@ SPIString::read( gchar const *str ) {
         inherit = false;
 
         Glib::ustring str_temp(str);
+        if( name.compare( "d" ) == 0 && style_src == SP_STYLE_SRC_ATTRIBUTE) {
+            set = false;
+        }
         if( name.compare( "font-family" ) == 0 ) {
             // Family names may be quoted in CSS, internally we use unquoted names.
             css_font_family_unquote( str_temp );
