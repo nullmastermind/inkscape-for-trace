@@ -732,8 +732,6 @@ Geom::Affine SPFlowtext::set_transform (Geom::Affine const &xform)
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-
     return Geom::Affine();
 }
 

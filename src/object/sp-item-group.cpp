@@ -925,7 +925,6 @@ void SPGroup::update_patheffect(bool write) {
             }
         }
     }
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void

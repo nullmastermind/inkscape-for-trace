@@ -358,8 +358,6 @@ Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-
     return ret;
 }
 

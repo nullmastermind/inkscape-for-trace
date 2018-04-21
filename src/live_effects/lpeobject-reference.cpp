@@ -115,7 +115,7 @@ lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObj
         lpeobjref->start_listening(refobj);
     }
 
-     lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void

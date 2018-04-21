@@ -330,7 +330,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
             // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
             // also if the effect is type BEND PATH to fix bug #179842
             this->adjust_livepatheffect(transform);
-            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             return transform;
         } else {
             _curve_before_lpe->transform(transform);
@@ -350,8 +349,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Adjust LPE
     this->adjust_livepatheffect(transform);
-
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();

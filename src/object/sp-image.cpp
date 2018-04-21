@@ -690,8 +690,6 @@ Geom::Affine SPImage::set_transform(Geom::Affine const &xform) {
     this->x = pos[Geom::X];
     this->y = pos[Geom::Y];
 
-    this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-
     return ret;
 }
 
