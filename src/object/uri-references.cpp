@@ -17,7 +17,7 @@
 #include <cstring>
 
 #include <glibmm/miscutils.h>
-
+#include "live_effects/lpeobject.h"
 #include "bad-uri-exception.h"
 #include "document.h"
 #include "sp-object.h"
@@ -69,7 +69,8 @@ bool URIReference::_acceptObject(SPObject *obj) const
     // we go back following hrefList and parent to find if the object already references ourselves indirectly
     std::set<SPObject *> done;
     SPObject *owner = getOwner();
-    if (!owner)
+    //allow LPE as owner has any URI atached
+    if (!owner || IS_LIVEPATHEFFECT(owner))
         return true;
     
     while (owner->cloned) {

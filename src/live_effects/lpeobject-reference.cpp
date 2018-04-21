@@ -115,7 +115,7 @@ lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObj
         lpeobjref->start_listening(refobj);
     }
 
-    lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+     lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -131,10 +131,12 @@ lpeobjectreference_delete_self(SPObject */*deleted*/, LPEObjectReference *lpeobj
 static void
 lpeobjectreference_source_modified(SPObject */*iSource*/, guint /*flags*/, LPEObjectReference *lpeobjref)
 {
-    SPObject *owner_obj = lpeobjref->owner;
-    if (owner_obj) {
-        lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    }
+//    We dont need to request update when LPE XML is updated
+//    Retain it temporary, drop if no regression
+//    SPObject *owner_obj = lpeobjref->owner;
+//    if (owner_obj) {
+//        lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+//    }
 }
 
 } //namespace LivePathEffect
