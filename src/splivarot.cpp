@@ -1213,9 +1213,13 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         gchar const *opacity;
         gchar const *filter;
 
+        // Copying stroke style to fill will fail for properties not defined by style attribute
+        // (i.e., properties defined in style sheet or by attributes).
+
+        // Stroke
         SPCSSAttr *ncss = 0;
         {
-            ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
+            ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
             gchar const *s_val = sp_repr_css_property(ncss, "stroke", NULL);
             gchar const *s_opac = sp_repr_css_property(ncss, "stroke-opacity", NULL);
             opacity = sp_repr_css_property(ncss, "opacity", NULL);
@@ -1234,10 +1238,11 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
             sp_repr_css_unset_property(ncss, "marker-mid");
             sp_repr_css_unset_property(ncss, "marker-end");
         }
-        //fill
+
+        // Fill
         SPCSSAttr *ncsf = 0;
         {
-            ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
+            ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
             sp_repr_css_set_property(ncsf, "stroke", "none");
             sp_repr_css_set_property(ncsf, "stroke-opacity", "1.0");
             sp_repr_css_set_property(ncsf, "filter", NULL);
@@ -1334,7 +1339,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 delete theRes;
 
             } else {
-
                 orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
                 orig->Coalesce(0.5 * o_width);
@@ -1523,6 +1527,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                             markers->setAttribute("clip-path", clip_path);
                     }
                 }
+
                 gchar const *paint_order = sp_repr_css_property(ncss, "paint-order", NULL);
                 SPIPaintOrder temp;
                 temp.read( paint_order );
@@ -1625,10 +1630,12 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 } else if(did) {
                     out = g_repr;
                 }
+
                 SPCSSAttr *r_style = sp_repr_css_attr_new();
                 sp_repr_css_set_property(r_style, "opacity", opacity);
                 sp_repr_css_set_property(r_style, "filter", filter);
                 sp_repr_css_change(out, r_style, "style");
+
                 sp_repr_css_attr_unref(r_style);
                 if (unique) {
                     parent->appendChild(out);

@@ -97,6 +97,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     //   font-family
     //   font-specification
 
+
+    // SVG 2 attributes promoted to properties. (When geometry properties are added, move after font.)
+    d(                "d"                                    ),  // SPIString Not inherited!
+
     // Font related properties and 'font' shorthand
     font_style(       "font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL   ),
     font_variant(     "font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL ),
@@ -281,6 +285,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // This might be too resource hungary... but for now it possible to loop over properties
+
+    // SVG 2: Attributes promoted to properties
+    _properties.push_back( &d );
 
     // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
     _properties.push_back( &color );
@@ -702,6 +709,9 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
     g_return_if_fail(val != NULL);
 
     switch (id) {
+        case SP_ATTR_D:
+            d.readIfUnset( val, source );
+            break;
         case SP_PROP_INKSCAPE_FONT_SPEC:
             font_specification.readIfUnset( val, source );
             break;
@@ -1782,13 +1792,14 @@ sp_style_unset_property_attrs(SPObject *o)
 /**
  * \pre style != NULL.
  * \pre flags in {IFSET, ALWAYS}.
+ * Only used by sp_css_attr_from_object() and in splivarot.cpp - sp_item_path_outline().
  */
 SPCSSAttr *
 sp_css_attr_from_style(SPStyle const *const style, guint const flags)
 {
     g_return_val_if_fail(style != NULL, NULL);
-    g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
-                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
+    g_return_val_if_fail(((flags & SP_STYLE_FLAG_IFSET) ||
+                          (flags & SP_STYLE_FLAG_ALWAYS)),
                          NULL);
     Glib::ustring style_str = style->write(flags);
     SPCSSAttr *css = sp_repr_css_attr_new();

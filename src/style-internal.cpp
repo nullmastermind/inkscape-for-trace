@@ -59,7 +59,7 @@ using Inkscape::CSSOStringStream;
 inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
 
     bool should_write = false;
-    if ( ((flags & SP_STYLE_FLAG_ALWAYS))                  ||
+    if ( ((flags & SP_STYLE_FLAG_ALWAYS)        && src)    ||
          ((flags & SP_STYLE_FLAG_IFSET)  && set && src)    ||
          ((flags & SP_STYLE_FLAG_IFDIFF) && set && src && dfp)) {
         should_write = true;
@@ -799,14 +799,12 @@ void
 SPIEnumBits::read( gchar const *str ) {
 
     if( !str ) return;
-    std::cout << "SPIEnumBits: " << name << ": " << str << std::endl;
     if( !strcmp(str, "inherit") ) {
         set = true;
         inherit = true;
     } else {
         for (unsigned i = 0; enums[i].key; i++) {
             if (!strcmp(str, enums[i].key)) {
-                std::cout << "  found: " << enums[i].key << std::endl;
                 set = true;
                 inherit = false;
                 value += enums[i].value;
