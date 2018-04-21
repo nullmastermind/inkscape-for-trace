@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2018-03-30 01:18+0200\n"
+"POT-Creation-Date: 2018-04-21 11:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4442,31 +4442,31 @@ msgstr ""
 msgid "No next transform."
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:325 ../src/display/canvas-grid.cpp:680
+#: ../src/display/canvas-axonomgrid.cpp:325 ../src/display/canvas-grid.cpp:675
 msgid "Grid _units:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:327 ../src/display/canvas-grid.cpp:682
+#: ../src/display/canvas-axonomgrid.cpp:327 ../src/display/canvas-grid.cpp:677
 msgid "_Origin X:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:327 ../src/display/canvas-grid.cpp:682
+#: ../src/display/canvas-axonomgrid.cpp:327 ../src/display/canvas-grid.cpp:677
 #: ../src/ui/dialog/inkscape-preferences.cpp:837
 #: ../src/ui/dialog/inkscape-preferences.cpp:862
 msgid "X coordinate of grid origin"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:330 ../src/display/canvas-grid.cpp:685
+#: ../src/display/canvas-axonomgrid.cpp:330 ../src/display/canvas-grid.cpp:680
 msgid "O_rigin Y:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:330 ../src/display/canvas-grid.cpp:685
+#: ../src/display/canvas-axonomgrid.cpp:330 ../src/display/canvas-grid.cpp:680
 #: ../src/ui/dialog/inkscape-preferences.cpp:838
 #: ../src/ui/dialog/inkscape-preferences.cpp:863
 msgid "Y coordinate of grid origin"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:333 ../src/display/canvas-grid.cpp:691
+#: ../src/display/canvas-axonomgrid.cpp:333 ../src/display/canvas-grid.cpp:686
 msgid "Spacing _Y:"
 msgstr ""
 
@@ -4497,101 +4497,101 @@ msgstr ""
 msgid "Angle of z-axis"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:342 ../src/display/canvas-grid.cpp:696
+#: ../src/display/canvas-axonomgrid.cpp:341 ../src/display/canvas-grid.cpp:690
 msgid "Minor grid line _color:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:342 ../src/display/canvas-grid.cpp:696
+#: ../src/display/canvas-axonomgrid.cpp:341 ../src/display/canvas-grid.cpp:690
 #: ../src/ui/dialog/inkscape-preferences.cpp:821
 msgid "Minor grid line color"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:342 ../src/display/canvas-grid.cpp:696
+#: ../src/display/canvas-axonomgrid.cpp:341 ../src/display/canvas-grid.cpp:690
 msgid "Color of the minor grid lines"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:347 ../src/display/canvas-grid.cpp:701
+#: ../src/display/canvas-axonomgrid.cpp:345 ../src/display/canvas-grid.cpp:694
 msgid "Ma_jor grid line color:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:347 ../src/display/canvas-grid.cpp:701
+#: ../src/display/canvas-axonomgrid.cpp:345 ../src/display/canvas-grid.cpp:694
 #: ../src/ui/dialog/inkscape-preferences.cpp:823
 msgid "Major grid line color"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:348 ../src/display/canvas-grid.cpp:702
+#: ../src/display/canvas-axonomgrid.cpp:346 ../src/display/canvas-grid.cpp:695
 msgid "Color of the major (highlighted) grid lines"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:352 ../src/display/canvas-grid.cpp:706
+#: ../src/display/canvas-axonomgrid.cpp:350 ../src/display/canvas-grid.cpp:699
 msgid "_Major grid line every:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:352 ../src/display/canvas-grid.cpp:706
+#: ../src/display/canvas-axonomgrid.cpp:350 ../src/display/canvas-grid.cpp:699
 msgid "lines"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:56
+#: ../src/display/canvas-grid.cpp:55
 msgid "Rectangular grid"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:57
+#: ../src/display/canvas-grid.cpp:56
 msgid "Axonometric grid"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:239
+#: ../src/display/canvas-grid.cpp:238
 msgid "Create new grid"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:305
+#: ../src/display/canvas-grid.cpp:304
 msgid "_Enabled"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:306
+#: ../src/display/canvas-grid.cpp:305
 msgid ""
 "Determines whether to snap to this grid or not. Can be 'on' for invisible "
 "grids."
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:310
+#: ../src/display/canvas-grid.cpp:309
 msgid "Snap to visible _grid lines only"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:311
+#: ../src/display/canvas-grid.cpp:310
 msgid ""
 "When zoomed out, not all grid lines will be displayed. Only the visible ones "
 "will be snapped to"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:315
+#: ../src/display/canvas-grid.cpp:314
 msgid "_Visible"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:316
+#: ../src/display/canvas-grid.cpp:315
 msgid ""
 "Determines whether the grid is displayed or not. Objects are still snapped "
 "to invisible grids."
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:688
+#: ../src/display/canvas-grid.cpp:683
 msgid "Spacing _X:"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:688
+#: ../src/display/canvas-grid.cpp:683
 #: ../src/ui/dialog/inkscape-preferences.cpp:843
 msgid "Distance between vertical grid lines"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:691
+#: ../src/display/canvas-grid.cpp:686
 #: ../src/ui/dialog/inkscape-preferences.cpp:844
 msgid "Distance between horizontal grid lines"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:723
+#: ../src/display/canvas-grid.cpp:716
 msgid "_Show dots instead of lines"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:724
+#: ../src/display/canvas-grid.cpp:716
 msgid "If set, displays dots at gridpoints instead of gridlines"
 msgstr ""
 
@@ -8276,11 +8276,11 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr ""
 
 #: ../src/extension/prefdialog.cpp:74 ../src/ui/dialog/knot-properties.cpp:44
-#: ../src/ui/dialog/text-edit.cpp:71 ../src/verbs.cpp:2623
+#: ../src/ui/dialog/text-edit.cpp:70 ../src/verbs.cpp:2623
 msgid "_Close"
 msgstr ""
 
-#: ../src/extension/prefdialog.cpp:75 ../src/ui/dialog/text-edit.cpp:72
+#: ../src/extension/prefdialog.cpp:75 ../src/ui/dialog/text-edit.cpp:71
 #: ../src/ui/dialog/transformation.cpp:145
 msgid "_Apply"
 msgstr ""
@@ -8841,6 +8841,38 @@ msgstr ""
 msgid "Automatic backup of the following documents failed:\n"
 msgstr ""
 
+#: ../src/inkview-options-group.cpp:6
+msgid "Inkscape Options"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:7
+msgid "Default program options"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:13
+msgid "Launch in fullscreen mode"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:20
+msgid "Search folders recursively"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:27 ../src/inkview-options-group.cpp:35
+msgid "NUM"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:28
+msgid "Change image every NUM seconds"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:36
+msgid "Scale image by factor NUM"
+msgstr ""
+
+#: ../src/inkview-options-group.cpp:42
+msgid "FILES/FOLDERS…"
+msgstr ""
+
 #: ../src/inkview.cpp:71
 msgid "File or folder does not exist"
 msgstr ""
@@ -9057,7 +9089,7 @@ msgid "Ellipse from points"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:146
-msgid "Dash"
+msgid "Dash Stroke"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:148
@@ -9702,32 +9734,48 @@ msgstr ""
 msgid "Scale the width of the stitch path relative to its length"
 msgstr ""
 
-#: ../src/live_effects/lpe-dash.cpp:15
-msgid "Node Dash"
+#: ../src/live_effects/lpe-dash-stroke.cpp:17
+msgid "Number of dashes"
 msgstr ""
 
-#: ../src/live_effects/lpe-dash.cpp:15
-msgid "Node dash percent"
+#: ../src/live_effects/lpe-dash-stroke.cpp:18
+msgid "Hole factor"
 msgstr ""
 
-#: ../src/live_effects/lpe-dash.cpp:16
-msgid "Path Dash"
-msgstr ""
-
-#: ../src/live_effects/lpe-dash.cpp:16
-msgid "Path dash percent"
-msgstr ""
-
-#: ../src/live_effects/lpe-dash.cpp:17 ../share/extensions/scour.inx.h:41
-msgid "Space"
-msgstr ""
-
-#: ../src/live_effects/lpe-dash.cpp:17
-msgid "Space percent"
-msgstr ""
-
-#: ../src/live_effects/lpe-dash.cpp:18
+#: ../src/live_effects/lpe-dash-stroke.cpp:19
 msgid "Use segments"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:20
+msgid "Half start/end"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:20
+msgid "Start and end of each segment has half size"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:21
+msgid "Unify dashes"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:21
+msgid "Aprox unify the dashes lenght using the min with segment"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:22
+#: ../src/live_effects/lpe-measure-segments.cpp:85
+#: ../src/live_effects/lpe-powerclip.cpp:33
+msgid "Info Box"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:22
+#: ../src/live_effects/lpe-measure-segments.cpp:85
+#: ../src/live_effects/lpe-powerclip.cpp:33
+msgid "Important messages"
+msgstr ""
+
+#: ../src/live_effects/lpe-dash-stroke.cpp:22
+msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
 msgstr ""
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
@@ -9961,7 +10009,7 @@ msgid "Reverses the second path order"
 msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:31
-#: ../src/widgets/text-toolbar.cpp:2213
+#: ../src/widgets/text-toolbar.cpp:2211
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 msgid "Auto"
 msgstr ""
@@ -10545,7 +10593,7 @@ msgid "Hide Points"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:55
-#: ../src/widgets/text-toolbar.cpp:2170
+#: ../src/widgets/text-toolbar.cpp:2168
 msgid "Horizontal"
 msgstr ""
 
@@ -10683,20 +10731,12 @@ msgid "Hide DIN line if label over"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:85
-msgid "Info Box"
-msgstr ""
-
-#: ../src/live_effects/lpe-measure-segments.cpp:85
-msgid "Important messages"
-msgstr ""
-
-#: ../src/live_effects/lpe-measure-segments.cpp:85
 msgid ""
 "Use <b>\"Style Dialog\"</b> to more styling. Each measure element has extra "
 "selectors. Use !important to override defaults..."
 msgstr ""
 
-#: ../src/live_effects/lpe-measure-segments.cpp:322
+#: ../src/live_effects/lpe-measure-segments.cpp:321
 msgid "Non Uniform Scale"
 msgstr ""
 
@@ -10951,7 +10991,13 @@ msgstr ""
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr ""
 
-#: ../src/live_effects/lpe-powerclip.cpp:302
+#: ../src/live_effects/lpe-powerclip.cpp:33
+msgid ""
+"Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result "
+"after convert clip to paths."
+msgstr ""
+
+#: ../src/live_effects/lpe-powerclip.cpp:305
 msgid "Convert clips to paths, undoable"
 msgstr ""
 
@@ -12595,7 +12641,7 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: ../src/object/sp-lpe-item.cpp:262 ../src/object/sp-lpe-item.cpp:908
+#: ../src/object/sp-lpe-item.cpp:262 ../src/object/sp-lpe-item.cpp:911
 msgid "An exception occurred during execution of the Path Effect."
 msgstr ""
 
@@ -16813,7 +16859,7 @@ msgstr ""
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:72 ../src/ui/dialog/text-edit.cpp:68
+#: ../src/ui/dialog/find.cpp:72 ../src/ui/dialog/text-edit.cpp:67
 #: ../share/ui/menus.xml.h:18
 msgid "_Text"
 msgstr ""
@@ -17106,728 +17152,728 @@ msgstr ""
 msgid "Font '%1' substituted with '%2'"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:52 ../src/ui/dialog/glyphs.cpp:144
+#: ../src/ui/dialog/glyphs.cpp:53 ../src/ui/dialog/glyphs.cpp:145
 msgid "all"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:53
+#: ../src/ui/dialog/glyphs.cpp:54
 msgid "common"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:54
+#: ../src/ui/dialog/glyphs.cpp:55
 msgid "inherited"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:55 ../src/ui/dialog/glyphs.cpp:157
+#: ../src/ui/dialog/glyphs.cpp:56 ../src/ui/dialog/glyphs.cpp:158
 msgid "Arabic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:56 ../src/ui/dialog/glyphs.cpp:155
+#: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:156
 msgid "Armenian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:164
+#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:165
 msgid "Bengali"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:246
+#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:247
 msgid "Bopomofo"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:181
+#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:182
 msgid "Cherokee"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:234
+#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:235
 msgid "Coptic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:153
+#: ../src/ui/dialog/glyphs.cpp:62 ../src/ui/dialog/glyphs.cpp:154
 #: ../share/extensions/hershey.inx.h:22
 msgid "Cyrillic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:62
+#: ../src/ui/dialog/glyphs.cpp:63
 msgid "Deseret"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:63 ../src/ui/dialog/glyphs.cpp:163
+#: ../src/ui/dialog/glyphs.cpp:64 ../src/ui/dialog/glyphs.cpp:164
 msgid "Devanagari"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:64 ../src/ui/dialog/glyphs.cpp:179
+#: ../src/ui/dialog/glyphs.cpp:65 ../src/ui/dialog/glyphs.cpp:180
 msgid "Ethiopic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:65 ../src/ui/dialog/glyphs.cpp:177
+#: ../src/ui/dialog/glyphs.cpp:66 ../src/ui/dialog/glyphs.cpp:178
 msgid "Georgian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:66
+#: ../src/ui/dialog/glyphs.cpp:67
 msgid "Gothic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:67
+#: ../src/ui/dialog/glyphs.cpp:68
 msgid "Greek"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:68 ../src/ui/dialog/glyphs.cpp:166
+#: ../src/ui/dialog/glyphs.cpp:69 ../src/ui/dialog/glyphs.cpp:167
 msgid "Gujarati"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:69 ../src/ui/dialog/glyphs.cpp:165
+#: ../src/ui/dialog/glyphs.cpp:70 ../src/ui/dialog/glyphs.cpp:166
 msgid "Gurmukhi"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:70
+#: ../src/ui/dialog/glyphs.cpp:71
 msgid "Han"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:71
+#: ../src/ui/dialog/glyphs.cpp:72
 msgid "Hangul"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:72 ../src/ui/dialog/glyphs.cpp:156
+#: ../src/ui/dialog/glyphs.cpp:73 ../src/ui/dialog/glyphs.cpp:157
 msgid "Hebrew"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:73 ../src/ui/dialog/glyphs.cpp:244
+#: ../src/ui/dialog/glyphs.cpp:74 ../src/ui/dialog/glyphs.cpp:245
 msgid "Hiragana"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:74 ../src/ui/dialog/glyphs.cpp:170
+#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:171
 msgid "Kannada"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:245
+#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:246
 msgid "Katakana"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:189
+#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:190
 msgid "Khmer"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:174
+#: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:175
 msgid "Lao"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:78
+#: ../src/ui/dialog/glyphs.cpp:79
 msgid "Latin"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:171
+#: ../src/ui/dialog/glyphs.cpp:80 ../src/ui/dialog/glyphs.cpp:172
 msgid "Malayalam"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:80 ../src/ui/dialog/glyphs.cpp:190
+#: ../src/ui/dialog/glyphs.cpp:81 ../src/ui/dialog/glyphs.cpp:191
 msgid "Mongolian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:81 ../src/ui/dialog/glyphs.cpp:176
+#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:177
 msgid "Myanmar"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:183
+#: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:184
 msgid "Ogham"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:83
+#: ../src/ui/dialog/glyphs.cpp:84
 msgid "Old Italic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:84 ../src/ui/dialog/glyphs.cpp:167
+#: ../src/ui/dialog/glyphs.cpp:85 ../src/ui/dialog/glyphs.cpp:168
 msgid "Oriya"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:85 ../src/ui/dialog/glyphs.cpp:184
+#: ../src/ui/dialog/glyphs.cpp:86 ../src/ui/dialog/glyphs.cpp:185
 msgid "Runic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:86 ../src/ui/dialog/glyphs.cpp:172
+#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:173
 msgid "Sinhala"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:158
+#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:159
 msgid "Syriac"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:168
+#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:169
 msgid "Tamil"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:169
+#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:170
 msgid "Telugu"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:160
+#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:161
 msgid "Thaana"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:173
+#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:174
 msgid "Thai"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:175
+#: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:176
 msgid "Tibetan"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:93
+#: ../src/ui/dialog/glyphs.cpp:94
 msgid "Canadian Aboriginal"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:94
+#: ../src/ui/dialog/glyphs.cpp:95
 msgid "Yi"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:95 ../src/ui/dialog/glyphs.cpp:185
+#: ../src/ui/dialog/glyphs.cpp:96 ../src/ui/dialog/glyphs.cpp:186
 msgid "Tagalog"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:96 ../src/ui/dialog/glyphs.cpp:186
+#: ../src/ui/dialog/glyphs.cpp:97 ../src/ui/dialog/glyphs.cpp:187
 msgid "Hanunoo"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:97 ../src/ui/dialog/glyphs.cpp:187
+#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:188
 msgid "Buhid"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:188
+#: ../src/ui/dialog/glyphs.cpp:99 ../src/ui/dialog/glyphs.cpp:189
 msgid "Tagbanwa"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:99
+#: ../src/ui/dialog/glyphs.cpp:100
 msgid "Braille"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:100
+#: ../src/ui/dialog/glyphs.cpp:101
 msgid "Cypriot"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:101 ../src/ui/dialog/glyphs.cpp:192
+#: ../src/ui/dialog/glyphs.cpp:102 ../src/ui/dialog/glyphs.cpp:193
 msgid "Limbu"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:102
+#: ../src/ui/dialog/glyphs.cpp:103
 msgid "Osmanya"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:103
+#: ../src/ui/dialog/glyphs.cpp:104
 msgid "Shavian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:104
+#: ../src/ui/dialog/glyphs.cpp:105
 msgid "Linear B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:105 ../src/ui/dialog/glyphs.cpp:193
+#: ../src/ui/dialog/glyphs.cpp:106 ../src/ui/dialog/glyphs.cpp:194
 msgid "Tai Le"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:106
+#: ../src/ui/dialog/glyphs.cpp:107
 msgid "Ugaritic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:107 ../src/ui/dialog/glyphs.cpp:194
+#: ../src/ui/dialog/glyphs.cpp:108 ../src/ui/dialog/glyphs.cpp:195
 msgid "New Tai Lue"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:108 ../src/ui/dialog/glyphs.cpp:196
+#: ../src/ui/dialog/glyphs.cpp:109 ../src/ui/dialog/glyphs.cpp:197
 msgid "Buginese"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:109 ../src/ui/dialog/glyphs.cpp:232
+#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:233
 msgid "Glagolitic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:236
+#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:237
 msgid "Tifinagh"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:265
+#: ../src/ui/dialog/glyphs.cpp:112 ../src/ui/dialog/glyphs.cpp:266
 msgid "Syloti Nagri"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:112
+#: ../src/ui/dialog/glyphs.cpp:113
 msgid "Old Persian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:113
+#: ../src/ui/dialog/glyphs.cpp:114
 msgid "Kharoshthi"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:114
+#: ../src/ui/dialog/glyphs.cpp:115
 msgid "unassigned"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:115 ../src/ui/dialog/glyphs.cpp:198
+#: ../src/ui/dialog/glyphs.cpp:116 ../src/ui/dialog/glyphs.cpp:199
 msgid "Balinese"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:116
+#: ../src/ui/dialog/glyphs.cpp:117
 msgid "Cuneiform"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:117
+#: ../src/ui/dialog/glyphs.cpp:118
 msgid "Phoenician"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:118 ../src/ui/dialog/glyphs.cpp:267
+#: ../src/ui/dialog/glyphs.cpp:119 ../src/ui/dialog/glyphs.cpp:268
 msgid "Phags-pa"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:119
+#: ../src/ui/dialog/glyphs.cpp:120
 msgid "N'Ko"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:120 ../src/ui/dialog/glyphs.cpp:270
+#: ../src/ui/dialog/glyphs.cpp:121 ../src/ui/dialog/glyphs.cpp:271
 msgid "Kayah Li"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:121 ../src/ui/dialog/glyphs.cpp:200
+#: ../src/ui/dialog/glyphs.cpp:122 ../src/ui/dialog/glyphs.cpp:201
 msgid "Lepcha"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:122 ../src/ui/dialog/glyphs.cpp:271
+#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:272
 msgid "Rejang"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:199
+#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:200
 msgid "Sundanese"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:268
+#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:269
 msgid "Saurashtra"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:274
+#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:275
 msgid "Cham"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:201
+#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:202
 msgid "Ol Chiki"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:260
+#: ../src/ui/dialog/glyphs.cpp:128 ../src/ui/dialog/glyphs.cpp:261
 msgid "Vai"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:128
+#: ../src/ui/dialog/glyphs.cpp:129
 msgid "Carian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:129
+#: ../src/ui/dialog/glyphs.cpp:130
 msgid "Lycian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:130
+#: ../src/ui/dialog/glyphs.cpp:131
 msgid "Lydian"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:145
+#: ../src/ui/dialog/glyphs.cpp:146
 msgid "Basic Latin"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:146
+#: ../src/ui/dialog/glyphs.cpp:147
 msgid "Latin-1 Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:147
+#: ../src/ui/dialog/glyphs.cpp:148
 msgid "Latin Extended-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:148
+#: ../src/ui/dialog/glyphs.cpp:149
 msgid "Latin Extended-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:149
+#: ../src/ui/dialog/glyphs.cpp:150
 msgid "IPA Extensions"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:150
+#: ../src/ui/dialog/glyphs.cpp:151
 msgid "Spacing Modifier Letters"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:151
+#: ../src/ui/dialog/glyphs.cpp:152
 msgid "Combining Diacritical Marks"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:152
+#: ../src/ui/dialog/glyphs.cpp:153
 msgid "Greek and Coptic"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:154
+#: ../src/ui/dialog/glyphs.cpp:155
 msgid "Cyrillic Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:159
+#: ../src/ui/dialog/glyphs.cpp:160
 msgid "Arabic Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:161
+#: ../src/ui/dialog/glyphs.cpp:162
 msgid "NKo"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:162
+#: ../src/ui/dialog/glyphs.cpp:163
 msgid "Samaritan"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:178
+#: ../src/ui/dialog/glyphs.cpp:179
 msgid "Hangul Jamo"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:180
+#: ../src/ui/dialog/glyphs.cpp:181
 msgid "Ethiopic Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:182
+#: ../src/ui/dialog/glyphs.cpp:183
 msgid "Unified Canadian Aboriginal Syllabics"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:191
+#: ../src/ui/dialog/glyphs.cpp:192
 msgid "Unified Canadian Aboriginal Syllabics Extended"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:195
+#: ../src/ui/dialog/glyphs.cpp:196
 msgid "Khmer Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:197
+#: ../src/ui/dialog/glyphs.cpp:198
 msgid "Tai Tham"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:202
+#: ../src/ui/dialog/glyphs.cpp:203
 msgid "Vedic Extensions"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:203
+#: ../src/ui/dialog/glyphs.cpp:204
 msgid "Phonetic Extensions"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:204
+#: ../src/ui/dialog/glyphs.cpp:205
 msgid "Phonetic Extensions Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:205
+#: ../src/ui/dialog/glyphs.cpp:206
 msgid "Combining Diacritical Marks Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:206
+#: ../src/ui/dialog/glyphs.cpp:207
 msgid "Latin Extended Additional"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:207
+#: ../src/ui/dialog/glyphs.cpp:208
 msgid "Greek Extended"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:208
+#: ../src/ui/dialog/glyphs.cpp:209
 msgid "General Punctuation"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:209
+#: ../src/ui/dialog/glyphs.cpp:210
 msgid "Superscripts and Subscripts"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:210
+#: ../src/ui/dialog/glyphs.cpp:211
 msgid "Currency Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:211
+#: ../src/ui/dialog/glyphs.cpp:212
 msgid "Combining Diacritical Marks for Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:212
+#: ../src/ui/dialog/glyphs.cpp:213
 msgid "Letterlike Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:213
+#: ../src/ui/dialog/glyphs.cpp:214
 msgid "Number Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:214
+#: ../src/ui/dialog/glyphs.cpp:215
 msgid "Arrows"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:215
+#: ../src/ui/dialog/glyphs.cpp:216
 msgid "Mathematical Operators"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:216
+#: ../src/ui/dialog/glyphs.cpp:217
 msgid "Miscellaneous Technical"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:217
+#: ../src/ui/dialog/glyphs.cpp:218
 msgid "Control Pictures"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:218
+#: ../src/ui/dialog/glyphs.cpp:219
 msgid "Optical Character Recognition"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:219
+#: ../src/ui/dialog/glyphs.cpp:220
 msgid "Enclosed Alphanumerics"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:220
+#: ../src/ui/dialog/glyphs.cpp:221
 msgid "Box Drawing"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:221
+#: ../src/ui/dialog/glyphs.cpp:222
 msgid "Block Elements"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:222
+#: ../src/ui/dialog/glyphs.cpp:223
 msgid "Geometric Shapes"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:223
+#: ../src/ui/dialog/glyphs.cpp:224
 msgid "Miscellaneous Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:224
+#: ../src/ui/dialog/glyphs.cpp:225
 msgid "Dingbats"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:225
+#: ../src/ui/dialog/glyphs.cpp:226
 msgid "Miscellaneous Mathematical Symbols-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:226
+#: ../src/ui/dialog/glyphs.cpp:227
 msgid "Supplemental Arrows-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:227
+#: ../src/ui/dialog/glyphs.cpp:228
 msgid "Braille Patterns"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:228
+#: ../src/ui/dialog/glyphs.cpp:229
 msgid "Supplemental Arrows-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:229
+#: ../src/ui/dialog/glyphs.cpp:230
 msgid "Miscellaneous Mathematical Symbols-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:230
+#: ../src/ui/dialog/glyphs.cpp:231
 msgid "Supplemental Mathematical Operators"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:231
+#: ../src/ui/dialog/glyphs.cpp:232
 msgid "Miscellaneous Symbols and Arrows"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:233
+#: ../src/ui/dialog/glyphs.cpp:234
 msgid "Latin Extended-C"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:235
+#: ../src/ui/dialog/glyphs.cpp:236
 msgid "Georgian Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:237
+#: ../src/ui/dialog/glyphs.cpp:238
 msgid "Ethiopic Extended"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:238
+#: ../src/ui/dialog/glyphs.cpp:239
 msgid "Cyrillic Extended-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:239
+#: ../src/ui/dialog/glyphs.cpp:240
 msgid "Supplemental Punctuation"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:240
+#: ../src/ui/dialog/glyphs.cpp:241
 msgid "CJK Radicals Supplement"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:241
+#: ../src/ui/dialog/glyphs.cpp:242
 msgid "Kangxi Radicals"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:242
+#: ../src/ui/dialog/glyphs.cpp:243
 msgid "Ideographic Description Characters"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:243
+#: ../src/ui/dialog/glyphs.cpp:244
 msgid "CJK Symbols and Punctuation"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:247
+#: ../src/ui/dialog/glyphs.cpp:248
 msgid "Hangul Compatibility Jamo"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:248
+#: ../src/ui/dialog/glyphs.cpp:249
 msgid "Kanbun"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:249
+#: ../src/ui/dialog/glyphs.cpp:250
 msgid "Bopomofo Extended"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:250
+#: ../src/ui/dialog/glyphs.cpp:251
 msgid "CJK Strokes"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:251
+#: ../src/ui/dialog/glyphs.cpp:252
 msgid "Katakana Phonetic Extensions"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:252
+#: ../src/ui/dialog/glyphs.cpp:253
 msgid "Enclosed CJK Letters and Months"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:253
+#: ../src/ui/dialog/glyphs.cpp:254
 msgid "CJK Compatibility"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:254
+#: ../src/ui/dialog/glyphs.cpp:255
 msgid "CJK Unified Ideographs Extension A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:255
+#: ../src/ui/dialog/glyphs.cpp:256
 msgid "Yijing Hexagram Symbols"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:256
+#: ../src/ui/dialog/glyphs.cpp:257
 msgid "CJK Unified Ideographs"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:257
+#: ../src/ui/dialog/glyphs.cpp:258
 msgid "Yi Syllables"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:258
+#: ../src/ui/dialog/glyphs.cpp:259
 msgid "Yi Radicals"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:259
+#: ../src/ui/dialog/glyphs.cpp:260
 msgid "Lisu"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:261
+#: ../src/ui/dialog/glyphs.cpp:262
 msgid "Cyrillic Extended-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:262
+#: ../src/ui/dialog/glyphs.cpp:263
 msgid "Bamum"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:263
+#: ../src/ui/dialog/glyphs.cpp:264
 msgid "Modifier Tone Letters"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:264
+#: ../src/ui/dialog/glyphs.cpp:265
 msgid "Latin Extended-D"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:266
+#: ../src/ui/dialog/glyphs.cpp:267
 msgid "Common Indic Number Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:269
+#: ../src/ui/dialog/glyphs.cpp:270
 msgid "Devanagari Extended"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:272
+#: ../src/ui/dialog/glyphs.cpp:273
 msgid "Hangul Jamo Extended-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:273
+#: ../src/ui/dialog/glyphs.cpp:274
 msgid "Javanese"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:275
+#: ../src/ui/dialog/glyphs.cpp:276
 msgid "Myanmar Extended-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:276
+#: ../src/ui/dialog/glyphs.cpp:277
 msgid "Tai Viet"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:277
+#: ../src/ui/dialog/glyphs.cpp:278
 msgid "Meetei Mayek"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:278
+#: ../src/ui/dialog/glyphs.cpp:279
 msgid "Hangul Syllables"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:279
+#: ../src/ui/dialog/glyphs.cpp:280
 msgid "Hangul Jamo Extended-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:280
+#: ../src/ui/dialog/glyphs.cpp:281
 msgid "High Surrogates"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:281
+#: ../src/ui/dialog/glyphs.cpp:282
 msgid "High Private Use Surrogates"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:282
+#: ../src/ui/dialog/glyphs.cpp:283
 msgid "Low Surrogates"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:283
+#: ../src/ui/dialog/glyphs.cpp:284
 msgid "Private Use Area"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:284
+#: ../src/ui/dialog/glyphs.cpp:285
 msgid "CJK Compatibility Ideographs"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:285
+#: ../src/ui/dialog/glyphs.cpp:286
 msgid "Alphabetic Presentation Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:286
+#: ../src/ui/dialog/glyphs.cpp:287
 msgid "Arabic Presentation Forms-A"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:287
+#: ../src/ui/dialog/glyphs.cpp:288
 msgid "Variation Selectors"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:288
+#: ../src/ui/dialog/glyphs.cpp:289
 msgid "Vertical Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:289
+#: ../src/ui/dialog/glyphs.cpp:290
 msgid "Combining Half Marks"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:290
+#: ../src/ui/dialog/glyphs.cpp:291
 msgid "CJK Compatibility Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:291
+#: ../src/ui/dialog/glyphs.cpp:292
 msgid "Small Form Variants"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:292
+#: ../src/ui/dialog/glyphs.cpp:293
 msgid "Arabic Presentation Forms-B"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:293
+#: ../src/ui/dialog/glyphs.cpp:294
 msgid "Halfwidth and Fullwidth Forms"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:294
+#: ../src/ui/dialog/glyphs.cpp:295
 msgid "Specials"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:357
+#: ../src/ui/dialog/glyphs.cpp:354
 msgid "Script: "
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:382
+#: ../src/ui/dialog/glyphs.cpp:379
 msgid "Range: "
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:445
+#: ../src/ui/dialog/glyphs.cpp:442
 msgid "Append"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:553
+#: ../src/ui/dialog/glyphs.cpp:550
 msgid "Append text"
 msgstr ""
 
@@ -22157,7 +22203,7 @@ msgstr ""
 msgid "Add font"
 msgstr ""
 
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1018 ../src/ui/dialog/text-edit.cpp:67
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1018 ../src/ui/dialog/text-edit.cpp:66
 msgid "_Font"
 msgstr ""
 
@@ -22443,53 +22489,19 @@ msgstr ""
 msgid "By: "
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:69
+#: ../src/ui/dialog/text-edit.cpp:68
 msgid "_Variants"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:70
+#: ../src/ui/dialog/text-edit.cpp:69
 msgid "Set as _default"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:84
+#: ../src/ui/dialog/text-edit.cpp:83
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr ""
 
-#. Align buttons
-#: ../src/ui/dialog/text-edit.cpp:94 ../src/widgets/text-toolbar.cpp:2121
-#: ../src/widgets/text-toolbar.cpp:2122
-msgid "Align left"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:95 ../src/widgets/text-toolbar.cpp:2127
-#: ../src/widgets/text-toolbar.cpp:2128
-msgid "Align center"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:96 ../src/widgets/text-toolbar.cpp:2133
-#: ../src/widgets/text-toolbar.cpp:2134
-msgid "Align right"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:97 ../src/widgets/text-toolbar.cpp:2140
-msgid "Justify (only flowed text)"
-msgstr ""
-
-#. Direction buttons
-#: ../src/ui/dialog/text-edit.cpp:104 ../src/widgets/text-toolbar.cpp:2171
-msgid "Horizontal text"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:105
-msgid "Vertical text"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:122
-msgid "Text path offset"
-msgstr ""
-
-#: ../src/ui/dialog/text-edit.cpp:559 ../src/ui/dialog/text-edit.cpp:646
-#: ../src/ui/tools/text-tool.cpp:1493
+#: ../src/ui/dialog/text-edit.cpp:439 ../src/ui/tools/text-tool.cpp:1493
 msgid "Set text style"
 msgstr ""
 
@@ -24957,6 +24969,20 @@ msgstr ""
 msgid "Opacity (%)"
 msgstr ""
 
+#: ../src/ui/widget/font-selector.cpp:32
+msgid "Font family"
+msgstr ""
+
+#: ../src/ui/widget/font-selector.cpp:33
+msgctxt "Font selector"
+msgid "Style"
+msgstr ""
+
+#: ../src/ui/widget/font-selector.cpp:34 ../src/ui/widget/font-selector.cpp:134
+#: ../src/widgets/text-toolbar.cpp:1587 ../src/widgets/text-toolbar.cpp:2044
+msgid "Font size"
+msgstr ""
+
 #: ../src/ui/widget/font-variants.cpp:31
 msgctxt "Font variant"
 msgid "Ligatures"
@@ -25125,49 +25151,49 @@ msgstr ""
 
 #. Position ----------------------------------
 #. Add tooltips
-#: ../src/ui/widget/font-variants.cpp:105
+#: ../src/ui/widget/font-variants.cpp:109
 msgid "Normal position."
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:106
+#: ../src/ui/widget/font-variants.cpp:110
 msgid "Subscript. OpenType table: 'subs'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:107
+#: ../src/ui/widget/font-variants.cpp:111
 msgid "Superscript. OpenType table: 'sups'"
 msgstr ""
 
 #. Caps ----------------------------------
 #. Add tooltips
-#: ../src/ui/widget/font-variants.cpp:131
+#: ../src/ui/widget/font-variants.cpp:135
 msgid "Normal capitalization."
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:132
+#: ../src/ui/widget/font-variants.cpp:136
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:133
+#: ../src/ui/widget/font-variants.cpp:137
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:134
+#: ../src/ui/widget/font-variants.cpp:138
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:135
+#: ../src/ui/widget/font-variants.cpp:139
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:136
+#: ../src/ui/widget/font-variants.cpp:140
 msgid ""
 "Unicase (small caps for uppercase, normal for lowercase). OpenType table: "
 "'unic'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:137
+#: ../src/ui/widget/font-variants.cpp:141
 msgid ""
 "Titling caps (lighter-weight uppercase for use in titles). OpenType table: "
 "'titl'"
@@ -25175,53 +25201,53 @@ msgstr ""
 
 #. Numeric ------------------------------
 #. Add tooltips
-#: ../src/ui/widget/font-variants.cpp:173
+#: ../src/ui/widget/font-variants.cpp:177
 msgid "Normal style."
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:174
+#: ../src/ui/widget/font-variants.cpp:178
 msgid "Lining numerals. OpenType table: 'lnum'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:175
+#: ../src/ui/widget/font-variants.cpp:179
 msgid "Old style numerals. OpenType table: 'onum'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:176
+#: ../src/ui/widget/font-variants.cpp:180
 msgid "Normal widths."
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:177
+#: ../src/ui/widget/font-variants.cpp:181
 msgid "Proportional width numerals. OpenType table: 'pnum'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:178
+#: ../src/ui/widget/font-variants.cpp:182
 msgid "Same width numerals. OpenType table: 'tnum'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:179
+#: ../src/ui/widget/font-variants.cpp:183
 msgid "Normal fractions."
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:180
+#: ../src/ui/widget/font-variants.cpp:184
 msgid "Diagonal fractions. OpenType table: 'frac'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:181
+#: ../src/ui/widget/font-variants.cpp:185
 msgid "Stacked fractions. OpenType table: 'afrc'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:182
+#: ../src/ui/widget/font-variants.cpp:186
 msgid "Ordinals (raised 'th', etc.). OpenType table: 'ordn'"
 msgstr ""
 
-#: ../src/ui/widget/font-variants.cpp:183
+#: ../src/ui/widget/font-variants.cpp:187
 msgid "Slashed zeros. OpenType table: 'zero'"
 msgstr ""
 
 #. Feature settings ---------------------
 #. Add tooltips
-#: ../src/ui/widget/font-variants.cpp:233
+#: ../src/ui/widget/font-variants.cpp:237
 msgid "Feature settings in CSS form. No sanity checking is performed."
 msgstr ""
 
@@ -28402,7 +28428,7 @@ msgstr ""
 #: ../src/widgets/node-toolbar.cpp:614
 #: ../src/widgets/paintbucket-toolbar.cpp:184
 #: ../src/widgets/rect-toolbar.cpp:382 ../src/widgets/select-toolbar.cpp:528
-#: ../src/widgets/text-toolbar.cpp:2328
+#: ../src/widgets/text-toolbar.cpp:2326
 msgid "Units"
 msgstr ""
 
@@ -29114,33 +29140,6 @@ msgstr ""
 msgid "Set pattern on stroke"
 msgstr ""
 
-#: ../src/widgets/font-selector.cpp:101 ../src/widgets/text-toolbar.cpp:1589
-#: ../src/widgets/text-toolbar.cpp:2046
-msgid "Font size"
-msgstr ""
-
-#. gtk_box_set_homogeneous(GTK_BOX(fsel), TRUE);
-#. gtk_box_set_spacing(GTK_BOX(fsel), 4);
-#. Family frame
-#: ../src/widgets/font-selector.cpp:115
-msgid "Font family"
-msgstr ""
-
-#. Style frame
-#: ../src/widgets/font-selector.cpp:164
-msgctxt "Font selector"
-msgid "Style"
-msgstr ""
-
-#: ../src/widgets/font-selector.cpp:192
-msgid "Face"
-msgstr ""
-
-#: ../src/widgets/font-selector.cpp:217 ../share/extensions/dots.inx.h:3
-#: ../share/extensions/nicechart.inx.h:17
-msgid "Font size:"
-msgstr ""
-
 #: ../src/widgets/gimp/ruler.cpp:188
 msgid "The orientation of the ruler"
 msgstr ""
@@ -29483,7 +29482,7 @@ msgstr ""
 msgid "Compute max length."
 msgstr ""
 
-#: ../src/widgets/measure-toolbar.cpp:295 ../src/widgets/text-toolbar.cpp:2049
+#: ../src/widgets/measure-toolbar.cpp:295 ../src/widgets/text-toolbar.cpp:2047
 msgid "Font Size"
 msgstr ""
 
@@ -31043,218 +31042,238 @@ msgstr ""
 msgid "Text: Change direction"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:1998
+#: ../src/widgets/text-toolbar.cpp:1996
 msgid "Font Family"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:1999
+#: ../src/widgets/text-toolbar.cpp:1997
 msgid "Select Font Family (Alt-X to access)"
 msgstr ""
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/widgets/text-toolbar.cpp:2009
+#: ../src/widgets/text-toolbar.cpp:2007
 msgid "Select all text with this font-family"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2013
+#: ../src/widgets/text-toolbar.cpp:2011
 msgid "Font not found on system"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2071
+#: ../src/widgets/text-toolbar.cpp:2069
 msgid "Font Style"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2072
+#: ../src/widgets/text-toolbar.cpp:2070
 msgid "Font style"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2089
+#: ../src/widgets/text-toolbar.cpp:2087
 msgid "Toggle Superscript"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2090
+#: ../src/widgets/text-toolbar.cpp:2088
 msgid "Toggle superscript"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2102
+#: ../src/widgets/text-toolbar.cpp:2100
 msgid "Toggle Subscript"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2103
+#: ../src/widgets/text-toolbar.cpp:2101
 msgid "Toggle subscript"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2139
+#: ../src/widgets/text-toolbar.cpp:2119 ../src/widgets/text-toolbar.cpp:2120
+msgid "Align left"
+msgstr ""
+
+#: ../src/widgets/text-toolbar.cpp:2125 ../src/widgets/text-toolbar.cpp:2126
+msgid "Align center"
+msgstr ""
+
+#: ../src/widgets/text-toolbar.cpp:2131 ../src/widgets/text-toolbar.cpp:2132
+msgid "Align right"
+msgstr ""
+
+#: ../src/widgets/text-toolbar.cpp:2137
 msgid "Justify"
 msgstr ""
 
+#: ../src/widgets/text-toolbar.cpp:2138
+msgid "Justify (only flowed text)"
+msgstr ""
+
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2146
+#: ../src/widgets/text-toolbar.cpp:2144
 msgid "Alignment"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2147
+#: ../src/widgets/text-toolbar.cpp:2145
 msgid "Text alignment"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2176
+#: ../src/widgets/text-toolbar.cpp:2169
+msgid "Horizontal text"
+msgstr ""
+
+#: ../src/widgets/text-toolbar.cpp:2174
 msgid "Vertical — RL"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2177
+#: ../src/widgets/text-toolbar.cpp:2175
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2182
+#: ../src/widgets/text-toolbar.cpp:2180
 msgid "Vertical — LR"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2183
+#: ../src/widgets/text-toolbar.cpp:2181
 msgid "Vertical text — lines: left to right"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2189
+#: ../src/widgets/text-toolbar.cpp:2187
 msgid "Writing mode"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2190
+#: ../src/widgets/text-toolbar.cpp:2188
 msgid "Block progression"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2214
+#: ../src/widgets/text-toolbar.cpp:2212
 msgid "Auto glyph orientation"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2219
+#: ../src/widgets/text-toolbar.cpp:2217
 msgid "Upright"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2220
+#: ../src/widgets/text-toolbar.cpp:2218
 msgid "Upright glyph orientation"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2225
+#: ../src/widgets/text-toolbar.cpp:2223
 msgid "Sideways"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2226
+#: ../src/widgets/text-toolbar.cpp:2224
 msgid "Sideways glyph orientation"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2232
+#: ../src/widgets/text-toolbar.cpp:2230
 msgid "Text orientation"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2233
+#: ../src/widgets/text-toolbar.cpp:2231
 msgid "Text (glyph) orientation in vertical text."
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2257
+#: ../src/widgets/text-toolbar.cpp:2255
 msgid "LTR"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2258
+#: ../src/widgets/text-toolbar.cpp:2256
 msgid "Left to right text"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2263
+#: ../src/widgets/text-toolbar.cpp:2261
 msgid "RTL"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2264
+#: ../src/widgets/text-toolbar.cpp:2262
 msgid "Right to left text"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2270
+#: ../src/widgets/text-toolbar.cpp:2268
 msgid "Text direction"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2271
+#: ../src/widgets/text-toolbar.cpp:2269
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
 #. Drop down menu
-#: ../src/widgets/text-toolbar.cpp:2297
+#: ../src/widgets/text-toolbar.cpp:2295
 msgid "Smaller spacing"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2297 ../src/widgets/text-toolbar.cpp:2385
-#: ../src/widgets/text-toolbar.cpp:2416
+#: ../src/widgets/text-toolbar.cpp:2295 ../src/widgets/text-toolbar.cpp:2383
+#: ../src/widgets/text-toolbar.cpp:2414
 msgctxt "Text tool"
 msgid "Normal"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2297
+#: ../src/widgets/text-toolbar.cpp:2295
 msgid "Larger spacing"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2302
+#: ../src/widgets/text-toolbar.cpp:2300
 msgid "Line Height"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2303
+#: ../src/widgets/text-toolbar.cpp:2301
 msgid "Line:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2304
+#: ../src/widgets/text-toolbar.cpp:2302
 msgid "Spacing between baselines"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2343
+#: ../src/widgets/text-toolbar.cpp:2341
 msgid "Adaptive"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2344
+#: ../src/widgets/text-toolbar.cpp:2342
 msgid "Line spacing adapts to font size."
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2349
+#: ../src/widgets/text-toolbar.cpp:2347
 #: ../share/extensions/polyhedron_3d.inx.h:54
 msgid "Minimum"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2350
+#: ../src/widgets/text-toolbar.cpp:2348
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2354
+#: ../src/widgets/text-toolbar.cpp:2352
 msgid "Even"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2355
+#: ../src/widgets/text-toolbar.cpp:2353
 msgid "Lines evenly spaced."
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2360
+#: ../src/widgets/text-toolbar.cpp:2358
 msgid "Adjustable ☠"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2361
+#: ../src/widgets/text-toolbar.cpp:2359
 msgid "Line spacing fully adjustable"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2367
+#: ../src/widgets/text-toolbar.cpp:2365
 msgid "Line Spacing Mode"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2368
+#: ../src/widgets/text-toolbar.cpp:2366
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -31264,106 +31283,106 @@ msgid ""
 msgstr ""
 
 #. Drop down menu
-#: ../src/widgets/text-toolbar.cpp:2385 ../src/widgets/text-toolbar.cpp:2416
+#: ../src/widgets/text-toolbar.cpp:2383 ../src/widgets/text-toolbar.cpp:2414
 msgid "Negative spacing"
 msgstr ""
 
-#: ../src/widgets/text-toolbar.cpp:2385 ../src/widgets/text-toolbar.cpp:2416
+#: ../src/widgets/text-toolbar.cpp:2383 ../src/widgets/text-toolbar.cpp:2414
 msgid "Positive spacing"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2390
+#: ../src/widgets/text-toolbar.cpp:2388
 msgid "Word spacing"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2391
+#: ../src/widgets/text-toolbar.cpp:2389
 msgid "Word:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2392
+#: ../src/widgets/text-toolbar.cpp:2390
 msgid "Spacing between words (px)"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2421
+#: ../src/widgets/text-toolbar.cpp:2419
 msgid "Letter spacing"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2422
+#: ../src/widgets/text-toolbar.cpp:2420
 msgid "Letter:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2423
+#: ../src/widgets/text-toolbar.cpp:2421
 msgid "Spacing between letters (px)"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2452
+#: ../src/widgets/text-toolbar.cpp:2450
 msgid "Kerning"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2453
+#: ../src/widgets/text-toolbar.cpp:2451
 msgid "Kern:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2454
+#: ../src/widgets/text-toolbar.cpp:2452
 msgid "Horizontal kerning (px)"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2483
+#: ../src/widgets/text-toolbar.cpp:2481
 msgid "Vertical Shift"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2484
+#: ../src/widgets/text-toolbar.cpp:2482
 msgid "Vert:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2485
+#: ../src/widgets/text-toolbar.cpp:2483
 msgid "Vertical shift (px)"
 msgstr ""
 
 #. name
-#: ../src/widgets/text-toolbar.cpp:2514
+#: ../src/widgets/text-toolbar.cpp:2512
 msgid "Letter rotation"
 msgstr ""
 
 #. label
-#: ../src/widgets/text-toolbar.cpp:2515
+#: ../src/widgets/text-toolbar.cpp:2513
 msgid "Rot:"
 msgstr ""
 
 #. short label
-#: ../src/widgets/text-toolbar.cpp:2516
+#: ../src/widgets/text-toolbar.cpp:2514
 msgid "Character rotation (degrees)"
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2540
+#: ../src/widgets/text-toolbar.cpp:2538
 msgid "Unset line height"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2541
+#: ../src/widgets/text-toolbar.cpp:2539
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 
 #. Name
-#: ../src/widgets/text-toolbar.cpp:2553
+#: ../src/widgets/text-toolbar.cpp:2551
 msgid "Show outer style"
 msgstr ""
 
 #. Label
-#: ../src/widgets/text-toolbar.cpp:2554
+#: ../src/widgets/text-toolbar.cpp:2552
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
@@ -33079,6 +33098,10 @@ msgstr ""
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
+msgstr ""
+
+#: ../share/extensions/dots.inx.h:3 ../share/extensions/nicechart.inx.h:17
+msgid "Font size:"
 msgstr ""
 
 #: ../share/extensions/dots.inx.h:4
@@ -37800,6 +37823,10 @@ msgstr ""
 
 #: ../share/extensions/scour.inx.h:40
 msgid "Pretty-printing"
+msgstr ""
+
+#: ../share/extensions/scour.inx.h:41
+msgid "Space"
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:42
