@@ -69,7 +69,7 @@ public:
 	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
     virtual const char* displayName() const;
 	virtual char* description() const;
-
+    virtual void update_patheffect(bool write);
 	virtual void set_shape();
 
 private:

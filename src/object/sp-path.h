@@ -42,6 +42,7 @@ public:
     virtual void update(SPCtx* ctx, unsigned int flags);
 
     virtual void set(unsigned int key, char const* value);
+    virtual void update_patheffect(bool write);
     virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
 
     virtual const char* displayName() const;

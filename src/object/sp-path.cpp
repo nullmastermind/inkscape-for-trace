@@ -246,8 +246,6 @@ void SPPath::set(unsigned int key, const gchar* value) {
             } else {
                 this->setCurve(NULL);
             }
-
-            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
         case SP_PROP_MARKER:
@@ -305,6 +303,10 @@ g_message("sp_path_write writes 'd' attribute");
     SPShape::write(xml_doc, repr, flags);
 
     return repr;
+}
+
+void SPPath::update_patheffect(bool write) {
+    SPShape::update_patheffect(write);
 }
 
 void SPPath::update(SPCtx *ctx, guint flags) {

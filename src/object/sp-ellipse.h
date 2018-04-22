@@ -65,6 +65,7 @@ public:
     virtual const char *displayName() const;
 
     virtual void set_shape();
+    virtual void update_patheffect(bool write);
     virtual Geom::Affine set_transform(Geom::Affine const &xform);
 
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;

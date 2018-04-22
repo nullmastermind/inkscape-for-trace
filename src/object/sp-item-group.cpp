@@ -970,9 +970,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
                 // only run LPEs when the shape has a curve defined
                 if (c) {
                     lpe->pathvector_before_effect = c->get_pathvector();
-                    c->transform(i2anc_affine(sub_item, top_group));
+                    c->transform(i2anc_affine(sub_shape, top_group));
                     success = top_group->performOnePathEffect(c, sub_shape, lpe);
-                    c->transform(i2anc_affine(sub_item, top_group).inverse());
+                    c->transform(i2anc_affine(sub_shape, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
                         sub_shape->setCurveInsync(c);

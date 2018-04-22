@@ -349,12 +349,7 @@ void SPSpiral::set_shape() {
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
     if (before || this->hasPathEffectRecursive()) {
-        if (!before || before->get_pathvector() != c->get_pathvector()){
-            this->setCurveBeforeLPE(c);
-            sp_lpe_item_update_patheffect(this, true, false);
-        } else {
-            this->setCurveBeforeLPE(c);
-        }
+        this->setCurveBeforeLPE(c);
     } else {
         this->setCurveInsync(c);
     }
@@ -455,6 +450,10 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
     this->adjust_livepatheffect(xform);
 
     return ret;
+}
+
+void SPSpiral::update_patheffect(bool write) {
+    SPShape::update_patheffect(write);
 }
 
 /**
