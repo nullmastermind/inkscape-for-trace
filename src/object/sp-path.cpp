@@ -280,7 +280,7 @@ Inkscape::XML::Node* SPPath::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 g_message("sp_path_write writes 'd' attribute");
 #endif
 
-    if ( this->_curve != NULL ) {
+    if (this->_curve) {
         gchar *str = sp_svg_write_path(this->_curve->get_pathvector());
         repr->setAttribute("d", str);
         g_free(str);

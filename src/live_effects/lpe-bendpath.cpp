@@ -166,7 +166,11 @@ LPEBendPath::resetDefaults(SPItem const* item)
     bend_path.set_new_value( path.toPwSb(), true );
 }
 
-
+void
+LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    //block parameters be transformed because shapes with bend store transform in the element
+}
 
 void
 LPEBendPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)

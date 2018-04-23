@@ -412,6 +412,9 @@ void SPShape::modified(unsigned int flags) {
             }
         }
     }
+    if (!this->getCurve()) {
+        sp_lpe_item_update_patheffect(this, true, false);
+    }
 }
 
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {

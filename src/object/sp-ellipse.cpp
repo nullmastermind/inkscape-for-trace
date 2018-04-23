@@ -481,10 +481,16 @@ void SPGenericEllipse::set_shape()
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
     if (before || this->hasPathEffectRecursive()) {
-        this->setCurveBeforeLPE(c);
+        if (c && before && before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            sp_lpe_item_update_patheffect(this, true, false);
+        } else {
+            this->setCurveBeforeLPE(c);
+        }
     } else {
         this->setCurveInsync(c);
     }
+
     if (before) {
         before->unref();
     }
@@ -555,7 +561,7 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 
     // Adjust livepatheffect
     this->adjust_livepatheffect(xform);
-
+    
     return ret;
 }
 
@@ -650,7 +656,7 @@ bool SPGenericEllipse::set_elliptical_path_attribute(Inkscape::XML::Node *repr)
     // Make sure our pathvector is up to date.
     this->set_shape();
 
-    if (_curve != NULL) {
+    if (_curve) {
         gchar* d = sp_svg_write_path(_curve->get_pathvector());
 
         repr->setAttribute("d", d);

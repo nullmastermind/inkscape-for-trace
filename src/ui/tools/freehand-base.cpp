@@ -588,10 +588,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             sp_repr_css_attr_unref(css);
             return;
         }
-        SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(item);
-        if (!lpeitem->hasPathEffect() && lpeitem->hasPathEffectRecursive()) {
-            sp_lpe_item_update_patheffect (lpeitem, true, false);
-        }
         if (dc->waiting_LPE_type != INVALID_LPE) {
             Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
             dc->waiting_LPE_type = INVALID_LPE;
