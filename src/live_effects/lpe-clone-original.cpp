@@ -100,6 +100,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             }
         }
     }
+    
     SPClipPath *clippath_origin = SP_ITEM(origin)->clip_ref->getObject();
     SPClipPath *clippath_dest = SP_ITEM(dest)->clip_ref->getObject();
     if(clippath_origin && clippath_dest) {
