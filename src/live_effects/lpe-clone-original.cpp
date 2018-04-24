@@ -150,7 +150,6 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                 }
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
-                    if (method != CLM_NONE) {
                     c->set_pathvector(c_pv);
                     shape_dest->setCurveInsync(c);
                     gchar *str = sp_svg_write_path(c_pv);
