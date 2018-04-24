@@ -59,7 +59,6 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     registerParameter(&style_attributes);
     registerParameter(&allow_transforms);
     previus_method = method;
-    position_diff = Geom::Point(0,0);
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
 }
@@ -151,13 +150,6 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
                     if (method != CLM_NONE) {
-                        c_pv *= SP_ITEM(origin)->transform;
-                        if (allow_transforms) {
-                            c_pv *= Geom::Translate(position_diff);
-                        } else {
-                            c_pv *= SP_ITEM(dest)->transform.inverse();
-                        }
-                    }
                     c->set_pathvector(c_pv);
                     shape_dest->setCurveInsync(c);
                     gchar *str = sp_svg_write_path(c_pv);
@@ -206,6 +198,9 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     }
     if (linkeditem.linksToItem()) {
         Glib::ustring attr = "d,";
+        if (!allow_transforms) {
+           attr += Glib::ustring("transform") + Glib::ustring(",");
+        }
         gchar * attributes_str = attributes.param_getSVGValue();
         attr += Glib::ustring(attributes_str) + Glib::ustring(",");
         if (attr.size()  && !Glib::ustring(attributes_str).size()) {
@@ -226,9 +221,6 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         Geom::OptRect o_bbox = orig->geometricBounds(orig->transform);
         Geom::OptRect d_bbox = dest->geometricBounds(dest->transform);
         const gchar * id = orig->getId();
-        if (linked != id) {
-            position_diff = (*d_bbox).corner(0) - (*o_bbox).corner(0);
-        }
         cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str());
         linked = id;
     } else {

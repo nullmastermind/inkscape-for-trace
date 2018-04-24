@@ -48,7 +48,6 @@ private:
     Clonelpemethod previus_method;
     bool listening;
     bool is_updating;
-    Geom::Point position_diff;
     sigc::connection modified_connection;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);
