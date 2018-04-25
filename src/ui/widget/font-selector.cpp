@@ -99,7 +99,7 @@ FontSelector::FontSelector (bool with_size)
     // Initialize font family lists. (May already be done.) Should be done on document change.
     font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
 
-    font_lister->connectUpdate(sigc::mem_fun(*this, &FontSelector::set_fontspec));
+    font_lister->connectUpdate(sigc::mem_fun(*this, &FontSelector::update_font));
 }
 
 void
@@ -135,60 +135,62 @@ FontSelector::set_fontsize_tooltip()
     size_combobox.set_tooltip_text (tooltip);
 }
 
-// Update GUI. TODO: Rename function
+// Update GUI.
+// We keep a private copy of the style list as the font-family in widget is only temporary
+// until the "Apply" button is set so the style list can be different from that in
+// FontLister.
 void
-FontSelector::set_fontspec (const Glib::ustring& fontspec)
+FontSelector::update_font ()
 {
     signal_block = true;
 
-    if (!fontspec.empty()) {
-        Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
-        std::pair<Glib::ustring, Glib::ustring> ui = font_lister->ui_from_fontspec( fontspec );
-        Glib::ustring family = ui.first;
-        Glib::ustring style = ui.second;
-        Gtk::TreePath path;
+    Inkscape::FontLister *font_lister = Inkscape::FontLister::get_instance();
+    Gtk::TreePath path;
+    Glib::ustring family = font_lister->get_font_family();
+    Glib::ustring style  = font_lister->get_font_style();
 
-        // Set font family
-        try {
-            path = font_lister->get_row_for_font (family);
-        } catch (...) {
-            g_warning( "Couldn't find row for font-family: %s", family.c_str() );
-            path.clear();
-            path.push_back(0);
+    // Set font family
+    try {
+        path = font_lister->get_row_for_font (family);
+    } catch (...) {
+        std::cerr << "FontSelector::update_font: Couldn't find row for font-family: "
+                  << family << std::endl;
+        path.clear();
+        path.push_back(0);
+    }
+
+    family_treeview.set_cursor (path);
+    family_treeview.scroll_to_row (path);
+
+    // Get font-lister style list for selected family
+    Gtk::TreeModel::Row row = *(family_treeview.get_model()->get_iter (path));
+    GList *styles;
+    row.get_value(1, styles);
+
+    // Copy font-lister style list to private list store, searching for match.
+    Gtk::TreeModel::iterator match;
+    FontLister::FontStyleListClass FontStyleList;
+    Glib::RefPtr<Gtk::ListStore> local_style_list_store = Gtk::ListStore::create(FontStyleList);
+    for ( ; styles; styles = styles->next ) {
+        Gtk::TreeModel::iterator treeModelIter = local_style_list_store->append();
+        (*treeModelIter)[FontStyleList.cssStyle] = ((StyleNames *)styles->data)->CssName;
+        (*treeModelIter)[FontStyleList.displayStyle] = ((StyleNames *)styles->data)->DisplayName;
+        if (style == ((StyleNames*)styles->data)->CssName) {
+            match = treeModelIter;
         }
-        family_treeview.set_cursor (path);
-        family_treeview.scroll_to_row (path);
+    }
 
-        // Get font-lister style list for selected family
-        Gtk::TreeModel::Row row = font_lister->get_row_for_font (family);
-        GList *styles;
-        row.get_value(1, styles);
-
-        // Copy font-lister style list to private list store, searching for match.
-        Gtk::TreeModel::iterator match;
-        FontLister::FontStyleListClass FontStyleList;
-        Glib::RefPtr<Gtk::ListStore> local_style_list_store = Gtk::ListStore::create(FontStyleList);
-        for ( ; styles; styles = styles->next ) {
-            Gtk::TreeModel::iterator treeModelIter = local_style_list_store->append();
-            (*treeModelIter)[FontStyleList.cssStyle] = ((StyleNames *)styles->data)->CssName;
-            (*treeModelIter)[FontStyleList.displayStyle] = ((StyleNames *)styles->data)->DisplayName;
-            if (style == ((StyleNames*)styles->data)->CssName) {
-                match = treeModelIter;
-            }
-        }
-
-        // Attach store to tree view and select row.
-        style_treeview.set_model (local_style_list_store);
-        if (match) {
-            style_treeview.get_selection()->select (match);
-        }
+    // Attach store to tree view and select row.
+    style_treeview.set_model (local_style_list_store);
+    if (match) {
+        style_treeview.get_selection()->select (match);
     }
 
     signal_block = false;
 }
 
 void
-FontSelector::set_size (double size)
+FontSelector::update_size (double size)
 {
     signal_block = true;
 

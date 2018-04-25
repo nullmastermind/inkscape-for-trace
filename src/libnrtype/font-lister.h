@@ -58,6 +58,9 @@ namespace Inkscape {
  *  then a generic font-family should be used (sans-serif -> Sans).
  *
  *  This class is used by the UI interface (text-toolbar, font-select, etc.).
+ *  Those items can change the selected font family and style here. When that
+ *  happens. this class emits a signal for those items to update their displayed
+ *  values.
  *
  *  This class is a singleton (one instance per Inkscape session). Since fonts
  *  used in a document are added to the list, there really should be one
@@ -252,9 +255,13 @@ public:
      */
     void fill_css(SPCSSAttr *css, Glib::ustring fontspec = "");
 
+    Gtk::TreeModel::Row get_row_for_font() { return get_row_for_font (current_family); }
+
     Gtk::TreeModel::Row get_row_for_font(Glib::ustring family);
 
     Gtk::TreePath get_path_for_font(Glib::ustring family);
+
+    Gtk::TreeModel::Row get_row_for_style() { return get_row_for_style (current_style); }
 
     Gtk::TreeModel::Row get_row_for_style(Glib::ustring style);
 
@@ -273,12 +280,17 @@ public:
     void ensureRowStyles(Glib::RefPtr<Gtk::TreeModel> model, Gtk::TreeModel::iterator const iter);
 
     /**
+     * Get markup for font-family.
+     */
+    Glib::ustring get_font_family_markup(Gtk::TreeIter const &iter);
+
+    /**
      * Let users of FontLister know to update GUI.
      * This is to allow synchronization of changes across multiple widgets.
      * Handlers should block signals.
      * Input is fontspec to set.
      */
-    sigc::connection connectUpdate(sigc::slot<void, Glib::ustring> slot) {
+    sigc::connection connectUpdate(sigc::slot<void> slot) {
         return update_signal.connect(slot);
     }
 
@@ -307,7 +319,7 @@ private:
 
     bool block;
     void emit_update();
-    sigc::signal<void, Glib::ustring> update_signal;
+    sigc::signal<void> update_signal;
 };
 
 } // namespace Inkscape

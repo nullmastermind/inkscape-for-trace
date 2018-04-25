@@ -248,16 +248,16 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
         // Update family/style based on selection.
         font_lister->selection_update();
-
-        // Get fontspec for selection.
         Glib::ustring fontspec = font_lister->get_fontspec();
-        font_selector.set_fontspec (fontspec);
+
+        // Update Font Face.
+        font_selector.update_font ();
 
         // Update Size.
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
-        font_selector.set_size (size);
+        font_selector.update_size (size);
 
         // Update Preview
         setPreviewText (fontspec, phrase);

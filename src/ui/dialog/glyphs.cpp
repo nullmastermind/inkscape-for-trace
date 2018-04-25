@@ -336,9 +336,9 @@ GlyphsPanel::GlyphsPanel() :
 
     {
         fontSelector = new Inkscape::UI::Widget::FontSelector (false);
-        fontSelector->set_fontsize_visible (false);
-        fontSelector->set_size (12.0);
         fontSelector->set_name ("Glyphs");
+        fontSelector->set_fontsize_visible (false);
+        fontSelector->update_size (12.0);
 
         sigc::connection conn =
             fontSelector->connectChanged(sigc::hide(sigc::mem_fun(*this, &GlyphsPanel::rebuild)));
@@ -636,11 +636,8 @@ void GlyphsPanel::readSelection( bool updateStyle, bool updateContent )
         // Update family/style based on selection.
         fontlister->selection_update();
 
-        // Get fontspec for selection.
-        Glib::ustring fontspec = fontlister->get_fontspec();
-
-        // Update GUI.
-        fontSelector->set_fontspec (fontspec);
+        // Update GUI (based on fontlister values).
+        fontSelector->update_font ();
     }
 }
 

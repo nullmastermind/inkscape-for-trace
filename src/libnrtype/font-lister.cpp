@@ -142,6 +142,73 @@ void FontLister::ensureRowStyles(Glib::RefPtr<Gtk::TreeModel> model, Gtk::TreeMo
     }
 }
 
+Glib::ustring FontLister::get_font_family_markup(Gtk::TreeIter const &iter)
+{
+    Gtk::TreeModel::Row row = *iter;
+
+    Glib::ustring family = row[FontList.family];
+    bool onSystem        = row[FontList.onSystem];
+
+    Glib::ustring family_escaped = Glib::strescape( family );
+    Glib::ustring markup;
+
+    if (!onSystem) {
+        markup = "<span foreground='darkblue'>";
+
+        // See if font-family is on system (separately for each family in font stack).
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
+
+        for (auto token: tokens) {
+            bool found = false;
+            Gtk::TreeModel::Children children = get_font_list()->children();
+            for (auto iter2: children) {
+                Gtk::TreeModel::Row row2 = *iter2;
+                Glib::ustring family2 = row2[FontList.family];
+                bool onSystem2        = row2[FontList.onSystem];
+                if (onSystem2 && familyNamesAreEqual(token, family2)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                markup += Glib::strescape (token);
+                markup += ", ";
+            } else {
+                markup += "<span strikethrough=\"true\" strikethrough_color=\"red\">";
+                markup += Glib::strescape (token);
+                markup += "</span>";
+                markup += ", ";
+            }
+        }
+
+        // Remove extra comma and space from end.
+        if (markup.size() >= 2) {
+            markup.resize(markup.size() - 2);
+        }
+        markup += "</span>";
+
+    } else {
+        markup = family_escaped;
+    }
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_sample = prefs->getInt("/tools/text/show_sample_in_list", 1);
+    if (show_sample) {
+
+        Glib::ustring sample = prefs->getString("/tools/text/font_sample");
+
+        markup += "  <span foreground='gray' font_family='";
+        markup += family_escaped;
+        markup += "'>";
+        markup += sample;
+        markup += "</span>";
+    }
+
+    // std::cout << "Markup: " << markup << std::endl;
+    return markup;
+}
+
 // Example of how to use "foreach_iter"
 // bool
 // FontLister::print_document_font( const Gtk::TreeModel::iterator &iter ) {
@@ -350,7 +417,7 @@ void FontLister::emit_update()
     if (block) return;
 
     block = true;
-    update_signal.emit (get_fontspec());
+    update_signal.emit ();
     block = false;
 }
 
@@ -1032,69 +1099,7 @@ gboolean font_lister_separator_func2(GtkTreeModel *model, GtkTreeIter *iter, gpo
 void font_lister_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter const &iter)
 {
     Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
-    Gtk::TreeModel::Row row = *iter;
-
-    Glib::ustring family = row[font_lister->FontList.family];
-    bool onSystem        = row[font_lister->FontList.onSystem];
-
-    Glib::ustring family_escaped = Glib::strescape( family );
-    Glib::ustring markup;
-
-    if (!onSystem) {
-        markup = "<span foreground='darkblue'>";
-
-        // See if font-family is on system (separately for each family in font stack).
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
-
-        for (auto token: tokens) {
-            bool found = false;
-            Gtk::TreeModel::Children children = font_lister->get_font_list()->children();
-            for (auto iter2: children) {
-                Gtk::TreeModel::Row row2 = *iter2;
-                Glib::ustring family2 = row2[font_lister->FontList.family];
-                bool onSystem2        = row2[font_lister->FontList.onSystem];
-                if (onSystem2 && familyNamesAreEqual(token, family)) {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (found) {
-                markup += Glib::strescape (token);
-                markup += ", ";
-            } else {
-                markup += "<span strikethrough=\"true\" strikethrough_color=\"red\">";
-                markup += Glib::strescape (token);
-                markup += "</span>";
-                markup += ", ";
-            }
-        }
-
-        // Remove extra comma and space from end.
-        if (markup.size() >= 2) {
-            markup.resize(markup.size() - 2);
-        }
-        markup += "</span>";
-
-    } else {
-        markup = family_escaped;
-    }
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int show_sample = prefs->getInt("/tools/text/show_sample_in_list", 1);
-    if (show_sample) {
-
-        Glib::ustring sample = prefs->getString("/tools/text/font_sample");
-
-        markup += "  <span foreground='gray' font_family='";
-        markup += family_escaped;
-        markup += "'>";
-        markup += sample;
-        markup += "</span>";
-    }
-
-    // std::cout << "Markup: " << markup << std::endl;
-
+    Glib::ustring markup = font_lister->get_font_family_markup(iter);
     renderer->set_property("markup", markup);
 }
 

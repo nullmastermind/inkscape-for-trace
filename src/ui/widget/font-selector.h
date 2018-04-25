@@ -35,11 +35,6 @@
 #include <gtkmm/label.h>
 #include <gtkmm/comboboxtext.h>
 
-// class SPDesktop;
-// class SPObject;
-class SPStyle;
-class SPCSSAttr;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -116,8 +111,8 @@ public:
     /**
      * Update GUI based on fontspec
      */
-    void set_fontspec (const Glib::ustring& fontspec);
-    void set_size (double size);
+    void update_font ();
+    void update_size (double size);
 
     /**
      * Get fontspec based on current settings. (Does not handle size, yet.)
