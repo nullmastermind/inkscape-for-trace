@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8.2)
 
+cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
+cmake_policy(SET CMP0005 NEW) # proper define quoting
+cmake_policy(SET CMP0009 NEW) # don't follow symbolic links when using GLOB
+
 message("------------------------------")
 message("Building Makefile for Inkscape")
 message("------------------------------")
@@ -42,10 +46,6 @@ if(APPLE)
 else()
     SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib/inkscape")
 endif()
-
-cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
-cmake_policy(SET CMP0005 NEW) # proper define quoting
-cmake_policy(SET CMP0009 NEW) # don't follow symbolic links when using GLOB
 
 # this can be removed if/when cmake 3.1 is made the minimum required version
 set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
