@@ -6,10 +6,6 @@ message("------------------------------")
 message("Source Dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 
-include(CMakeScripts/HelperFunctions.cmake)
-include(CMakeScripts/ConfigEnv.cmake)
-include(CMakeScripts/ConfigPaths.cmake)
-
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
@@ -17,6 +13,10 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
 # avoid having empty buildtype
 set(CMAKE_BUILD_TYPE_INIT "Release")
+
+include(CMakeScripts/HelperFunctions.cmake)
+include(CMakeScripts/ConfigEnv.cmake)
+include(CMakeScripts/ConfigPaths.cmake)
 
 project(inkscape)
 set(PROJECT_NAME inkscape)
