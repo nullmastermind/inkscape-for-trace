@@ -380,19 +380,6 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             continue;
         }
 
-        SPPath *path = dynamic_cast<SPPath *>(item);
-        if (path && !path->hasPathEffect()) {
-            // remove connector attributes
-            if (item->getAttribute("inkscape:connector-type") != NULL) {
-                item->removeAttribute("inkscape:connection-start");
-                item->removeAttribute("inkscape:connection-end");
-                item->removeAttribute("inkscape:connector-type");
-                item->removeAttribute("inkscape:connector-curvature");
-                did = true;
-            }
-            continue; // already a path, and no path effect
-        }
-
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             // convert 3D box to ordinary group of paths; replace the old element in 'selected' with the new group
@@ -410,6 +397,19 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem) {
             lpeitem->removeAllPathEffects(true);
+        }
+
+        SPPath *path = dynamic_cast<SPPath *>(item);
+        if (path) {
+            // remove connector attributes
+            if (item->getAttribute("inkscape:connector-type") != NULL) {
+                item->removeAttribute("inkscape:connection-start");
+                item->removeAttribute("inkscape:connection-end");
+                item->removeAttribute("inkscape:connector-type");
+                item->removeAttribute("inkscape:connector-curvature");
+                did = true;
+            }
+            continue; // already a path, and no path effect
         }
 
         if (group) {

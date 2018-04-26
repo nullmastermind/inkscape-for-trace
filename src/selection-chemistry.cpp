@@ -2694,15 +2694,21 @@ bool ObjectSet::unlink(const bool skip_undo)
         Inkscape::URIReference *clip = item->clip_ref;
         Inkscape::URIReference *mask = item->mask_ref;
         if ((NULL != clip) && (NULL != clip->getObject())) {
-            tmp_set.unsetMask(true,true);
-            unlinked = tmp_set.unlink(true) || unlinked;
-            tmp_set.setMask(true,false,true);
+            SPUse * clipuse = dynamic_cast<SPUse *>(clip->getObject());
+            if (clipuse) {
+                tmp_set.unsetMask(true,true);
+                unlinked = tmp_set.unlink(true) || unlinked;
+                tmp_set.setMask(true,false,true);
+            }
             new_select.push_back(tmp_set.singleItem());
         }
         else if ((NULL != mask) && (NULL != mask->getObject())) {
-            tmp_set.unsetMask(false,true);
-            unlinked = tmp_set.unlink(true) || unlinked;
-            tmp_set.setMask(false,false,true);
+            SPUse * maskuse = dynamic_cast<SPUse *>(mask->getObject());
+            if (maskuse) {
+                tmp_set.unsetMask(false,true);
+                unlinked = tmp_set.unlink(true) || unlinked;
+                tmp_set.setMask(false,false,true);
+            }
             new_select.push_back(tmp_set.singleItem());
         }
         else {
