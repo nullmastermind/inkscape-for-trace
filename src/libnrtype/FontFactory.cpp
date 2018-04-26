@@ -707,8 +707,8 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
         if (res) {
             readOpenTypeGsubTable( res->theFace, res->openTypeTables, res->openTypeStylistic, res->openTypeLigatures );
             std::map<Glib::ustring, OTVarAxis> axes;
-            std::map<Glib::ustring, OTVarNamed> named;
-            readOpenTypeFvarTable( res->theFace, axes, named );
+            std::map<Glib::ustring, OTVarInstance> named;
+            readOpenTypeFvarAxes( res->theFace, res->openTypeVarAxes );
         }
 #endif
 

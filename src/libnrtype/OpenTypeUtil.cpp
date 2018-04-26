@@ -222,9 +222,10 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     hb_face_destroy (hb_face);
 }
 
-void readOpenTypeFvarTable(const FT_Face ft_face,
-                           std::map<Glib::ustring, OTVarAxis>& axes,
-                           std::map<Glib::ustring, OTVarNamed>& named) {
+// Make a list of all Variaration axes with ranges.
+// Make a list of all Named instances with axis values.
+void readOpenTypeFvarAxes(const FT_Face ft_face,
+                          std::map<Glib::ustring, OTVarAxis>& axes) {
 
 #if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
     FT_MM_Var* mmvar = NULL;
@@ -232,9 +233,6 @@ void readOpenTypeFvarTable(const FT_Face ft_face,
     if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
         FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
         FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
-
-        std::cout << "  Multiple Masters: variables: " << mmvar->num_axis
-                  << "  named styles: " << mmvar->num_namedstyles << std::endl;
 
         FT_Fixed coords[mmvar->num_axis];
         FT_Get_Var_Design_Coordinates( ft_face, mmvar->num_axis, coords );
@@ -246,12 +244,32 @@ void readOpenTypeFvarTable(const FT_Face ft_face,
                                           FTFixedToDouble(coords[i]));
         }
 
-        for (auto a: axes) {
-            std::cout << " " << a.first
-                      << " min: " << a.second.minimum
-                      << " max: " << a.second.maximum
-                      << " set: " << a.second.set_val << std::endl;
-        }
+        // for (auto a: axes) {
+        //     std::cout << " " << a.first
+        //               << " min: " << a.second.minimum
+        //               << " max: " << a.second.maximum
+        //               << " set: " << a.second.set_val << std::endl;
+        // }
+
+    }
+
+#endif /* FREETYPE Version */
+}
+
+
+// Make a list of all Named instances with axis values.
+void readOpenTypeFvarNamed(const FT_Face ft_face,
+                           std::map<Glib::ustring, OTVarInstance>& named) {
+
+#if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
+    FT_MM_Var* mmvar = NULL;
+    FT_Multi_Master mmtype;
+    if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
+        FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
+        FT_Get_Multi_Master( ft_face, &mmtype) !=0) {  // It's not an Adobe MM font
+
+        std::cout << "  Multiple Masters: variables: " << mmvar->num_axis
+                  << "  named styles: " << mmvar->num_namedstyles << std::endl;
 
     //     const FT_UInt numNames = FT_Get_Sfnt_Name_Count(ft_face);
     //     std::cout << "  number of names: " << numNames << std::endl;

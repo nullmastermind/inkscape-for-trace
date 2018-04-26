@@ -2,12 +2,16 @@
 #define SEEN_LIBNRTYPE_FONT_INSTANCE_H
 
 #include <map>
+
 #include <pango/pango-types.h>
 #include <pango/pango-font.h>
-#include "FontFactory.h"
 
-#include <libnrtype/font-style.h>
 #include <2geom/d2.h>
+
+#include "FontFactory.h"
+#include "font-style.h"
+#include "OpenTypeUtil.h"
+
 
 class font_factory;
 struct font_glyph;
@@ -41,6 +45,9 @@ public:
     // Map of substitutions indexed by table
     std::map<Glib::ustring, Glib::ustring> openTypeStylistic;
     std::map<Glib::ustring, Glib::ustring> openTypeLigatures;
+
+    // Maps for font variations.
+    std::map<Glib::ustring, OTVarAxis> openTypeVarAxes;      // Axes with ranges
 
     font_instance(void);
     virtual ~font_instance(void);

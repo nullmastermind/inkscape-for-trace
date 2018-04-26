@@ -140,6 +140,7 @@ set(ui_SRC
         widget/font-selector.cpp
         widget/font-selector-toolbar.cpp
 	widget/font-variants.cpp
+	widget/font-variations.cpp
 	widget/frame.cpp
 	widget/highlight-picker.cpp
 	widget/imageicon.cpp
@@ -336,6 +337,7 @@ set(ui_SRC
         widget/font-selector.h
         widget/font-selector-toolbar.h
 	widget/font-variants.h
+        widget/font-variations.h
 	widget/frame.h
 	widget/highlight-picker.h
 	widget/insertordericon.h

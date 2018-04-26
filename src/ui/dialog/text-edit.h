@@ -33,6 +33,7 @@
 
 #include "ui/widget/font-selector.h"
 #include "ui/widget/font-variants.h"
+#include "ui/widget/font-variations.h"
 
 class SPItem;
 struct SPFontSelector;
@@ -165,6 +166,7 @@ private:
     Gtk::Label font_label;
 
     Inkscape::UI::Widget::FontSelector font_selector;
+    Inkscape::UI::Widget::FontVariations font_variations;
     Gtk::Label preview_label;  // Share with variants tab?
 
     // Tab 2: Text ---------------------- //

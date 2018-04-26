@@ -18,7 +18,7 @@
  * All three provide variable amounts of access to data.
  */
 
-// An OpenType fvar axis
+// An OpenType fvar axis.
 class OTVarAxis {
  public:
   OTVarAxis()
@@ -36,7 +36,9 @@ class OTVarAxis {
   double set_val;
 };
 
-class OTVarNamed {
+// A particular instance of a variable font.
+// A map indexed by axis name with value.
+class OTVarInstance {
   std::map<Glib::ustring, double> axes;
 };
 
@@ -53,9 +55,11 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, Glib::ustring>& stylistic,
                             std::map<Glib::ustring, Glib::ustring>& ligatures);
 
-void readOpenTypeFvarTable (const FT_Face ft_face,
-                            std::map<Glib::ustring, OTVarAxis>& axes,
-                            std::map<Glib::ustring, OTVarNamed>& named);
+void readOpenTypeFvarAxes  (const FT_Face ft_face,
+                            std::map<Glib::ustring, OTVarAxis>& axes);
+
+void readOpenTypeFvarNamed (const FT_Face ft_face,
+                            std::map<Glib::ustring, OTVarInstance>& named);
 
 #endif /* !USE_PANGO_WIND32    */
 #endif /* !SEEN_OPENTYPEUTIL_H */
