@@ -35,6 +35,8 @@
 #include <gtkmm/label.h>
 #include <gtkmm/comboboxtext.h>
 
+#include "ui/widget/font-variations.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -84,6 +86,9 @@ protected:
     Gtk::Label          size_label;
     Gtk::ComboBoxText   size_combobox;
 
+    // Font variations
+    FontVariations      font_variations;
+
 private:
 
     // Set sizes in font size combobox.
@@ -97,9 +102,10 @@ private:
     void on_family_changed();
     void on_style_changed();
     void on_size_changed();
+    void on_variations_changed();
 
     // Signals
-    sigc::signal<void, Glib::ustring> changed_signal;
+    sigc::signal<void, Glib::ustring> signal_changed;
     void changed_emit();
     bool signal_block;
 
@@ -137,7 +143,7 @@ public:
      * (Used to enable 'Apply' and 'Default' buttons.)
      */
     sigc::connection connectChanged(sigc::slot<void, Glib::ustring> slot) {
-        return changed_signal.connect(slot);
+        return signal_changed.connect(slot);
     }
 };
 

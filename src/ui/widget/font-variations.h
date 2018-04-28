@@ -18,13 +18,15 @@
 
 #include "libnrtype/OpenTypeUtil.h"
 
+#include "style.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
 
 /**
- * A widget for a single axis.
+ * A widget for a single axis: Label and Slider
  */
 class FontVariationAxis : public Gtk::Grid
 {
@@ -34,16 +36,19 @@ public:
     Gtk::Label* get_label() { return label; }
     double get_value() { return scale->get_value(); }
     int get_precision() { return precision; }
+    Gtk::Scale* get_scale() { return scale; }
 
 private:
 
+    // Widgets
     Glib::ustring name;
     Gtk::Label* label;
     Gtk::Scale* scale;
+
     int precision;
-    sigc::connection _changed_connection;
 
-
+    // Signals
+    sigc::signal<void> signal_changed;
 };
 
 /**
@@ -64,9 +69,9 @@ protected:
 public:
 
     /**
-     * Update GUI based on query results.
+     * Update GUI.
      */
-    void update( const SPStyle& query, bool different_features, Glib::ustring& font_spec );
+    void update( Glib::ustring& font_spec );
 
     /**
      * Fill SPCSSAttr based on settings of buttons.
@@ -78,9 +83,24 @@ public:
      */
     Glib::ustring get_css_string();
 
+    Glib::ustring get_pango_string();
+
+    void on_variations_change();
+
+    /**
+     * Let others know that user has changed GUI settings.
+     * (Used to enable 'Apply' and 'Default' buttons.)
+     */
+    sigc::connection connectChanged(sigc::slot<void> slot) {
+        return signal_changed.connect(slot);
+    }
+
 private:
+
     std::vector<FontVariationAxis*> axes;
     Glib::RefPtr<Gtk::SizeGroup> size_group;
+
+    sigc::signal<void> signal_changed;
 };
 
  
@@ -90,13 +110,13 @@ private:
 
 #endif // INKSCAPE_UI_WIDGET_FONT_VARIATIONS_H
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

@@ -80,6 +80,9 @@ FontSelector::FontSelector (bool with_size)
     set_sizes();
     size_combobox.set_active_text( "18" );
 
+    // Font Variations
+    // Do nothing.
+
     // Grid
     set_name ("FontSelector: Grid");
     attach (family_frame,  0, 0, 1, 2);
@@ -88,12 +91,14 @@ FontSelector::FontSelector (bool with_size)
         attach (size_label,    1, 1, 1, 1);
         attach (size_combobox, 2, 1, 1, 1);
     }
+    attach (font_variations, 0, 2, 3, 1);
 
     // Add signals
     family_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_family_changed));
     style_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_style_changed));
     size_combobox.signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_size_changed));
-    
+    font_variations.connectChanged(sigc::mem_fun(*this, &FontSelector::on_variations_changed));
+
     show_all_children();
 
     // Initialize font family lists. (May already be done.) Should be done on document change.
@@ -186,6 +191,9 @@ FontSelector::update_font ()
         style_treeview.get_selection()->select (match);
     }
 
+    Glib::ustring fontspec = font_lister->get_fontspec();
+    font_variations.update( fontspec );
+
     signal_block = false;
 }
 
@@ -229,7 +237,14 @@ FontSelector::get_fontspec() {
         std::cerr << "FontSelector::get_fontspec: empty style!" << std::endl;
     }
 
-    Glib::ustring fontspec = family + ", " + style;
+    // Clip any font_variation data in 'style' as we'll replace it.
+    if (auto pos = style.find('@') != Glib::ustring::npos) {
+        style.erase (pos, style.length()-1);
+    }
+
+    Glib::ustring variations = font_variations.get_pango_string();
+
+    Glib::ustring fontspec = family + ", " + style + " " + variations;
 
     return fontspec;
 }
@@ -364,9 +379,18 @@ FontSelector::on_size_changed() {
 }
 
 void
+FontSelector::on_variations_changed() {
+
+    if (signal_block) return;
+
+    // Let world know
+    changed_emit();
+}
+
+void
 FontSelector::changed_emit() {
     signal_block = true;
-    changed_signal.emit (get_fontspec());
+    signal_changed.emit (get_fontspec());
     signal_block = false;
 }
 

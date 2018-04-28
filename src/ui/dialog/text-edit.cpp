@@ -94,7 +94,6 @@ TextEdit::TextEdit()
     preview_label.set_line_wrap (false);
 
     font_vbox.pack_start(font_selector, true, true);
-    font_vbox.pack_start(font_variations, false, false);
     font_vbox.pack_start(preview_label, false, false, 5);
 
 
@@ -270,7 +269,6 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         int result_features =
             sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
         vari_vbox.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
-        font_variations.update ( query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
     }
 
     blocked = false;
