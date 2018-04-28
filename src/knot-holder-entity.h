@@ -130,6 +130,16 @@ private:
     bool _fill;
 };
 
+/* Filter manipulation */
+class FilterKnotHolderEntity : public KnotHolderEntity {
+public: 
+    FilterKnotHolderEntity(bool topleft) : KnotHolderEntity(), _topleft(topleft) {}
+    virtual Geom::Point knot_get() const;
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+private:
+    bool _topleft; // true for topleft point, false for bottomright
+};
+
 #endif /* !SEEN_KNOT_HOLDER_ENTITY_H */
 
 /*

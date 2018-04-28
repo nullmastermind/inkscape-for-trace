@@ -58,6 +58,7 @@ public:
     void add(KnotHolderEntity *e);
 
     void add_pattern_knotholder();
+    void add_filter_knotholder();
 
     void setEditTransform(Geom::Affine edit_transform);
     Geom::Affine getEditTransform() const { return _edit_transform; }

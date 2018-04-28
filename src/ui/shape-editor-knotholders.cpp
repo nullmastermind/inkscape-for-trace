@@ -129,6 +129,8 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
             knotholder->add_pattern_knotholder();
         }
     }
+    if (!knotholder) knotholder = new KnotHolder(desktop, item, NULL);
+    knotholder->add_filter_knotholder();
 
     return knotholder;
 }

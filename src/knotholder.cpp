@@ -387,6 +387,18 @@ void KnotHolder::add_pattern_knotholder()
     updateControlSizes();
 }
 
+void KnotHolder::add_filter_knotholder() {
+    FilterKnotHolderEntity *entity_tl = new FilterKnotHolderEntity(true);
+    FilterKnotHolderEntity *entity_br = new FilterKnotHolderEntity(false);
+    entity_tl->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+        _("<b>Resize</b> the filter effect region"), SP_KNOT_SHAPE_DIAMOND);
+    entity_br->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+        _("<b>Resize</b> the filter effect region"), SP_KNOT_SHAPE_DIAMOND);
+    entity.push_back(entity_tl);
+    entity.push_back(entity_br);
+    updateControlSizes();
+}
+
 /*
   Local Variables:
   mode:c++

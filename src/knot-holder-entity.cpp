@@ -282,6 +282,58 @@ PatternKnotHolderEntityScale::knot_get() const
     return delta;
 }
 
+/* Filter manipulation */
+void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
+{
+    // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
+    Geom::Point p_snapped = snap_knot_position(p, state);
+
+    if ( state & GDK_CONTROL_MASK ) {
+        if (fabs((p - origin)[Geom::X]) > fabs((p - origin)[Geom::Y])) {
+            p_snapped[Geom::Y] = origin[Geom::Y];
+        } else {
+            p_snapped[Geom::X] = origin[Geom::X];
+        }
+    }
+
+    if (state)  {
+        SPFilter *filter = (item->style && item->style->filter.href) ? dynamic_cast<SPFilter *>(item->style->getFilter()) : NULL;
+        if(!filter) return;
+        Geom::OptRect orig_bbox = item->visualBounds();
+        Geom::Rect *new_bbox = _topleft ? new Geom::Rect(p,orig_bbox->max()) : new Geom::Rect(orig_bbox->min(), p);
+        if(_topleft) {
+            float x_a = filter->width.computed;
+            float y_a = filter->height.computed;
+            filter->height.scale(new_bbox->height()/orig_bbox->height());
+            filter->width.scale(new_bbox->width()/orig_bbox->width());
+            float x_b = filter->width.computed;
+            float y_b = filter->height.computed;
+            filter->x.set(filter->x.unit, filter->x.computed + x_a - x_b);
+            filter->y.set(filter->y.unit, filter->y.computed + y_a - y_b);
+        } else {
+            filter->height.scale(new_bbox->height()/orig_bbox->height());
+            filter->width.scale(new_bbox->width()/orig_bbox->width());
+        }
+        filter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+        //filter->
+
+        //item-> //adjust FER
+    }
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    
+}
+
+Geom::Point FilterKnotHolderEntity::knot_get() const
+{
+    SPFilter *filter = (item->style && item->style->filter.href) ? dynamic_cast<SPFilter *>(item->style->getFilter()) : NULL;
+    if(!filter) return Geom::Point(Geom::infinity(), Geom::infinity());
+    Geom::OptRect r = item->visualBounds();
+    if (_topleft) return Geom::Point(r->min());
+    else return Geom::Point(r->max());
+}
+
 /*
   Local Variables:
   mode:c++
