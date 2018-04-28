@@ -309,7 +309,7 @@ static void canvas_tbl_size_allocate(GtkWidget    * widget,
                                      GdkRectangle * /*allocation*/,
                                      gpointer      data)
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data); 
+    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
     sp_desktop_widget_update_rulers(dtw);
 }
 
@@ -560,8 +560,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), GTK_WIDGET(ss_), FALSE, FALSE, 0);
 
     // Separator
-    gtk_box_pack_start(GTK_BOX(dtw->statusbar), 
-		    gtk_separator_new(GTK_ORIENTATION_VERTICAL), 
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar),
+		    gtk_separator_new(GTK_ORIENTATION_VERTICAL),
 		    FALSE, FALSE, 0);
 
     // Layer Selector
@@ -613,7 +613,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     zoomstat->set_name("ZoomStatus");
     auto context_zoom = zoomstat->get_style_context();
     context_zoom->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    
+
     // Rotate status spinbutton ---------------
     dtw->rotation_status = gtk_spin_button_new_with_range (-360.0,360.0, 1.0);
     g_object_set_data (G_OBJECT (dtw->rotation_status), "dtw", dtw->canvas);
@@ -647,7 +647,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_grid_set_column_spacing(GTK_GRID(dtw->coord_status), 2);
     auto sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
     gtk_widget_set_name(sep, "CoordinateSeparator");
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), 
+    gtk_grid_attach(GTK_GRID(dtw->coord_status),
 		    GTK_WIDGET(sep),
 		    0, 0, 1, 2);
 
@@ -711,7 +711,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         }
         overallTimer = 0;
     }
-    
+
     // Ensure that ruler ranges are updated correctly whenever the canvas table
     // is resized
     g_signal_connect (G_OBJECT (dtw->canvas_tbl),
@@ -730,7 +730,7 @@ static void sp_desktop_widget_dispose(GObject *object)
     if (dtw == NULL) {
         return;
     }
-    
+
     UXManager::getInstance()->delTrack(dtw);
 
     if (dtw->desktop) {
@@ -1010,7 +1010,7 @@ void sp_update_guides_lock( GtkWidget */*button*/, gpointer data )
     SPDocument *doc = dtw->desktop->getDocument();
     SPNamedView *nv = dtw->desktop->getNamedView();
     Inkscape::XML::Node *repr = nv->getRepr();
-    
+
     if ( down != nv->lockguides ) {
         nv->lockguides = down;
         sp_namedview_guides_toggle_lock(doc, nv);
@@ -1030,7 +1030,7 @@ void cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
     bool down = SP_BUTTON_IS_DOWN(dtw->cms_adjust);
     if ( down != dtw->canvas->_enable_cms_display_adj ) {
         dtw->canvas->_enable_cms_display_adj = down;
-        dtw->requestCanvasUpdate();
+        dtw->desktop->redrawDesktop();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool("/options/displayprofile/enable", down);
         if (down) {
@@ -1484,7 +1484,7 @@ void SPDesktopWidget::layoutWidgets()
     } else {
         gtk_widget_show_all (dtw->menubar);
     }
-    
+
     if (!prefs->getBool(pref_root + "commands/state", true)) {
         gtk_widget_hide (dtw->commands_toolbox);
     } else {
@@ -1798,7 +1798,7 @@ sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWid
     dtw->update = 1;
 
     // Do not call canvas->scrollTo directly... messes up 'offset'.
-    dtw->desktop->scroll_absolute( Geom::Point(gtk_adjustment_get_value(dtw->hadj), 
+    dtw->desktop->scroll_absolute( Geom::Point(gtk_adjustment_get_value(dtw->hadj),
                                                gtk_adjustment_get_value(dtw->vadj)), false);
 
     dtw->update = 0;
@@ -2051,7 +2051,7 @@ sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
     setlocale (LC_NUMERIC, oldlocale);
     g_free (oldlocale);
     g_free (b);
-    
+
     *new_val = new_value;
     return TRUE;
 }
