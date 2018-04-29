@@ -25,10 +25,10 @@
 #include "graphlayout.h"
 #include "inkscape.h"
 
-#include "libavoid/router.h"
+#include "3rdparty/adaptagrams/libavoid/router.h"
 
-#include "libcola/cola.h"
-#include "libcola/connected_components.h"
+#include "3rdparty/adaptagrams/libcola/cola.h"
+#include "3rdparty/adaptagrams/libcola/connected_components.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"

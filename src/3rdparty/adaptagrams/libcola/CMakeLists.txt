@@ -26,4 +26,5 @@ set(libcola_SRC
 	straightener.h
 )
 
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
 add_inkscape_lib(cola_LIB "${libcola_SRC}")

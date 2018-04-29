@@ -54,5 +54,5 @@ set(libavoid_SRC
 	visibility.h
 	vpsc.h
 )
-
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/..")
 add_inkscape_lib(avoid_LIB "${libavoid_SRC}")

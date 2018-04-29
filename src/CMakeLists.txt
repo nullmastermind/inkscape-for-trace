@@ -276,11 +276,7 @@ add_subdirectory(3rdparty)
 add_subdirectory(inkgc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
-
-#these are independent from inkscape and should be packaged as a separate project.
-add_subdirectory(libcola)
-add_subdirectory(libavoid)
-add_subdirectory(libvpsc)
+include_directories("3rdparty/adaptagrams")
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)
 

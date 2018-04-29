@@ -89,7 +89,7 @@
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 
-#include "libavoid/router.h"
+#include "3rdparty/adaptagrams/libavoid/router.h"
 
 #include "object/sp-conn-end.h"
 #include "object/sp-flowtext.h"

@@ -21,7 +21,7 @@
 #include "display/curve.h"
 #include "xml/repr.h"
 #include "sp-path.h"
-#include "libavoid/router.h"
+#include "3rdparty/adaptagrams/libavoid/router.h"
 #include "document.h"
 #include "sp-item-group.h"
 

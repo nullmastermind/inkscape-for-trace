@@ -58,7 +58,7 @@
 
 #include "display/drawing.h"
 
-#include "libavoid/router.h"
+#include "3rdparty/adaptagrams/libavoid/router.h"
 
 #include "3rdparty/libcroco/cr-parser.h"
 #include "3rdparty/libcroco/cr-sel-eng.h"

@@ -15,7 +15,7 @@
 #include <cstddef>
 #include <sigc++/sigc++.h>
 
-#include "libavoid/connector.h"
+#include "3rdparty/adaptagrams/libavoid/connector.h"
 
 
 class SPConnEnd;
