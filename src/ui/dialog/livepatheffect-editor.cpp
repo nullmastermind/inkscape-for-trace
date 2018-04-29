@@ -38,8 +38,8 @@
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
-#include "object/sp-use.h"
 #include "object/sp-text.h"
+#include "object/sp-use.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"

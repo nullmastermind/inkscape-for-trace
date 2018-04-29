@@ -9,12 +9,12 @@
 #include "livarot/Shape.h"
 #include "livarot/Path.h"
 #include "livarot/path-description.h"
-#include <glib.h>
+#include <2geom/affine.h>
+#include <2geom/point.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <2geom/point.h>
-#include <2geom/affine.h>
+#include <glib.h>
 
 /*
  * polygon offset and polyline to path reassembling (when using back data)

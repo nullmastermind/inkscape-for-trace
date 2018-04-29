@@ -18,8 +18,8 @@
 #include <string>
 
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/label.h>
 
 #include "selection.h"
 

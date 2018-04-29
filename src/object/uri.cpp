@@ -10,8 +10,8 @@
 
 #include "uri.h"
 
-#include <glibmm/ustring.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/ustring.h>
 
 #include "bad-uri-exception.h"
 

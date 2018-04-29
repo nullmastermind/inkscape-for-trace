@@ -12,8 +12,8 @@
 
 #include <sigc++/sigc++.h>
 
-#include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
+#include <glibmm/refptr.h>
 
 #include <cairomm/surface.h>
 

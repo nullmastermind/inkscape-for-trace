@@ -15,8 +15,8 @@
 
 #include "xml/repr.h"
 #include "attributes.h"
-#include "sp-glyph.h"
 #include "document.h"
+#include "sp-glyph.h"
 
 SPGlyph::SPGlyph()
     : SPObject() 

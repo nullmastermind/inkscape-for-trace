@@ -8,16 +8,16 @@
  */
 
 #include "prefdialog.h"
+#include <glibmm/i18n.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
-#include <glibmm/i18n.h>
 
 #include "ui/dialog-events.h"
 #include "xml/repr.h"
 
 // Used to get SP_ACTIVE_DESKTOP
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 
 #include "effect.h"
 #include "implementation/implementation.h"

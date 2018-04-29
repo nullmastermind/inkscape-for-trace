@@ -6,27 +6,27 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include <glibmm/i18n.h>
 #include <math.h>
 #include <string.h>
-#include <algorithm>
 
 #include "live_effects/lpe-bool.h"
 
 #include "display/curve.h"
 
-#include "2geom/path.h"
+#include "2geom/affine.h"
 #include "2geom/bezier-curve.h"
 #include "2geom/path-sink.h"
-#include "2geom/affine.h"
+#include "2geom/path.h"
 #include "2geom/svg-path-parser.h"
 
 #include "helper/geom.h"
 
-#include "splivarot.h"
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/path-description.h"
+#include "splivarot.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

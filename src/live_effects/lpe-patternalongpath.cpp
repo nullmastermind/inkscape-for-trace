@@ -4,14 +4,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 #include <2geom/bezier-to-sbasis.h>
 
+#include "display/curve.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
-#include "display/curve.h"
 
 #include "object/sp-shape.h"
 

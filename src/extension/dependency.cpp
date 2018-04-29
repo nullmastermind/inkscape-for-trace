@@ -12,13 +12,13 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/miscutils.h>
-#include "dependency.h"
 #include "db.h"
+#include "dependency.h"
 #include "extension.h"
 #include "io/resource.h"
+#include <glibmm/fileutils.h>
+#include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
 
 namespace Inkscape {
 namespace Extension {

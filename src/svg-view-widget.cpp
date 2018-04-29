@@ -15,11 +15,11 @@
  */
 
 #include "display/sp-canvas.h"
-#include "display/sp-canvas-group.h"
 #include "display/canvas-arena.h"
+#include "display/sp-canvas-group.h"
 #include "document.h"
-#include "svg-view.h"
 #include "svg-view-widget.h"
+#include "svg-view.h"
 #include "util/units.h"
 
 static void sp_svg_view_widget_dispose(GObject *object);

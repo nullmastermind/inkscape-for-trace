@@ -16,8 +16,8 @@
 
 #include "display/canvas-temporary-item.h"
 
-#include <glib.h>
 #include "display/sp-canvas-item.h"
+#include <glib.h>
 
 namespace Inkscape {
 namespace Display {

@@ -19,34 +19,34 @@
 
 #ifdef HAVE_POPPLER
 
-#include "svg-builder.h"
 #include "pdf-parser.h"
+#include "svg-builder.h"
 
 #include <png.h>
 
+#include "color.h"
+#include "display/nr-filter-utils.h"
 #include "document-private.h"
+#include "io/base64stream.h"
+#include "io/stringstream.h"
+#include "libnrtype/font-instance.h"
+#include "object/sp-defs.h"
+#include "svg/css-ostringstream.h"
+#include "svg/path-string.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+#include "util/units.h"
 #include "xml/document.h"
 #include "xml/node.h"
 #include "xml/repr.h"
-#include "svg/svg.h"
-#include "svg/path-string.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
-#include "color.h"
-#include "util/units.h"
-#include "io/stringstream.h"
-#include "io/base64stream.h"
-#include "display/nr-filter-utils.h"
-#include "libnrtype/font-instance.h"
-#include "object/sp-defs.h"
 
 #include "Function.h"
-#include "GfxState.h"
 #include "GfxFont.h"
-#include "Stream.h"
-#include "Page.h"
-#include "UnicodeMap.h"
+#include "GfxState.h"
 #include "GlobalParams.h"
+#include "Page.h"
+#include "Stream.h"
+#include "UnicodeMap.h"
 
 namespace Inkscape {
 namespace Extension {

@@ -12,8 +12,8 @@
 
 #include "prefdialog.h"
 #include "implementation/implementation.h"
-#include "timer.h"
 #include "input.h"
+#include "timer.h"
 
 /* Inkscape::Extension::Input */
 

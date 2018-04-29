@@ -8,14 +8,14 @@
 #include "ui/widget/registered-widget.h"
 #include <glibmm/i18n.h>
 
-#include "live_effects/parameter/togglebutton.h"
-#include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "selection.h"
-#include "inkscape.h"
-#include "verbs.h"
 #include "helper-fns.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/parameter/togglebutton.h"
+#include "selection.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "verbs.h"
 
 namespace Inkscape {
 

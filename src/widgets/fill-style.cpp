@@ -22,8 +22,8 @@
 #include <config.h>
 #endif
 
-#include <gtkmm/box.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/box.h>
 
 #include "desktop-style.h"
 #include "desktop.h"

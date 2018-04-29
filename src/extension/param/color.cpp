@@ -23,9 +23,9 @@
 #include "../extension.h"
 #include "color.h"
 
-#include <color.h>
-#include "ui/widget/color-notebook.h"
 #include "preferences.h"
+#include "ui/widget/color-notebook.h"
+#include <color.h>
 
 namespace Inkscape {
 namespace Extension {

@@ -14,11 +14,11 @@
 
 #include "ui/dialog/extensions.h"
 
-#include <glibmm/i18n.h>
-#include "inkscape.h"
-#include "preferences.h"
 #include "extension/extension.h"
+#include "inkscape.h"
 #include "io/resource.h"
+#include "preferences.h"
+#include <glibmm/i18n.h>
 
 #include "error-file.h"
 

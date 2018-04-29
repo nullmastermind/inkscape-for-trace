@@ -11,18 +11,18 @@
  *
  */
 
+#include "desktop.h"
 #include <sstream>
 #include <string.h>
-#include "desktop.h"
 
 #include "color.h"
-#include "display/sp-canvas-group.h"
-#include "display/sp-canvas-util.h"
+#include "display/cairo-utils.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/cairo-utils.h"
-#include "helper/geom.h"
+#include "display/sp-canvas-group.h"
+#include "display/sp-canvas-util.h"
 #include "display/sp-canvas.h"
+#include "helper/geom.h"
 
 static void sp_canvas_bpath_destroy(SPCanvasItem *object);
 

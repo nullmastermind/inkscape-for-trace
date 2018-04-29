@@ -12,11 +12,11 @@
  */
 
 #include "styledialog.h"
-#include "verbs.h"
-#include "selection.h"
 #include "attribute-rel-svg.h"
-#include "inkscape.h"
 #include "document-undo.h"
+#include "inkscape.h"
+#include "selection.h"
+#include "verbs.h"
 
 
 #include "ui/widget/addtoicon.h"

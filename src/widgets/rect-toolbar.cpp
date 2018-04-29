@@ -28,8 +28,8 @@
 #include <config.h>
 #endif
 
-#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
+#include <gtk/gtk.h>
 
 #include "rect-toolbar.h"
 

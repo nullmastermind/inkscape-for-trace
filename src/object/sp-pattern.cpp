@@ -18,20 +18,20 @@
 
 #include "sp-pattern.h"
 
-#include <cstring>
-#include <string>
-#include <glibmm.h>
 #include <2geom/transforms.h>
+#include <cstring>
+#include <glibmm.h>
+#include <string>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
+#include "display/drawing-group.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
-#include "display/drawing-group.h"
-#include "attributes.h"
 #include "document-private.h"
+#include "svg/svg.h"
 
 #include "sp-factory.h"
 

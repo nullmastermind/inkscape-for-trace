@@ -16,13 +16,13 @@
 
 #include <string>
 
-#include <gtkmm.h>
 #include <gdkmm/display.h>
 #include <glibmm/convert.h>
 #include <glibmm/error.h>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/stringutils.h>
+#include <gtkmm.h>
 
 #if GTK_CHECK_VERSION(3, 20, 0)
 # include <gdkmm/seat.h>
@@ -42,13 +42,13 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
-#include "io/sys.h"
 #include "io/resource.h"
+#include "io/sys.h"
 
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
-#include "object/filters/componenttransfer.h"
 #include "object/filters/componenttransfer-funcnode.h"
+#include "object/filters/componenttransfer.h"
 #include "object/filters/convolvematrix.h"
 #include "object/filters/distantlight.h"
 #include "object/filters/merge.h"

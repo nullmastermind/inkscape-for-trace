@@ -18,17 +18,17 @@
 
 #include "desktop-style.h"
 
+#include "display/curve.h"
 #include "helper/geom-nodetype.h"
 #include "helper/geom-pathstroke.h"
-#include "display/curve.h"
-#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
 #include "svg/svg.h"
 
 #include "knotholder.h"
 
-#include "object/sp-shape.h"
 #include "object/sp-object-group.h"
+#include "object/sp-shape.h"
 #include "style.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:

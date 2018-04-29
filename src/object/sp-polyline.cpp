@@ -12,11 +12,11 @@
  */
 
 #include "attributes.h"
-#include "sp-polyline.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
-#include "xml/repr.h"
 #include "document.h"
+#include "sp-polyline.h"
+#include "xml/repr.h"
+#include <glibmm/i18n.h>
 
 SPPolyLine::SPPolyLine() : SPShape() {
 }

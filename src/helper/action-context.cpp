@@ -11,9 +11,9 @@
 
 #include "desktop.h"
 #include "document.h"
+#include "helper/action-context.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "helper/action-context.h"
 
 namespace Inkscape {
 

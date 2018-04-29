@@ -13,14 +13,14 @@
  *
  */
 
+#include "xml/simple-document.h"
 #include <glib.h> // g_assert()
 
-#include "xml/simple-document.h"
-#include "xml/event-fns.h"
-#include "xml/element-node.h"
-#include "xml/text-node.h"
 #include "xml/comment-node.h"
+#include "xml/element-node.h"
+#include "xml/event-fns.h"
 #include "xml/pi-node.h"
+#include "xml/text-node.h"
 
 namespace Inkscape {
 

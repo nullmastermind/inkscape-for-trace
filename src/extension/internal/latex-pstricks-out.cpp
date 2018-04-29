@@ -13,12 +13,12 @@
 # include <config.h>
 #endif
 #include "latex-pstricks-out.h"
-#include <print.h>
-#include "extension/system.h"
-#include "extension/print.h"
-#include "extension/db.h"
 #include "display/drawing.h"
+#include "extension/db.h"
+#include "extension/print.h"
+#include "extension/system.h"
 #include "object/sp-root.h"
+#include <print.h>
 
 
 #include "document.h"

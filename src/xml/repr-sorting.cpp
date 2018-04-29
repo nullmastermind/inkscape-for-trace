@@ -1,8 +1,8 @@
 
 #include "util/longest-common-suffix.h"
-#include "xml/repr.h"
-#include "xml/node-iterators.h"
 #include "repr-sorting.h"
+#include "xml/node-iterators.h"
+#include "xml/repr.h"
 
 static bool same_repr(Inkscape::XML::Node const &a, Inkscape::XML::Node const &b)
 {

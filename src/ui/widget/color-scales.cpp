@@ -6,8 +6,8 @@
 #include <config.h>
 #endif
 
-#include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/adjustment.h>
 
 #include "ui/dialog-events.h"
 #include "ui/widget/color-scales.h"

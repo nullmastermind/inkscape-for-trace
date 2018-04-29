@@ -12,12 +12,12 @@
 
 #include <gtkmm.h>
 
-#include "live_effects/lpe-transform_2pts.h"
 #include "display/curve.h"
-#include "ui/icon-names.h"
-#include "svg/svg.h"
-#include "verbs.h"
+#include "live_effects/lpe-transform_2pts.h"
 #include "object/sp-path.h"
+#include "svg/svg.h"
+#include "ui/icon-names.h"
+#include "verbs.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

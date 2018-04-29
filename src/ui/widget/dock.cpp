@@ -11,9 +11,9 @@
  */
 
 #include "dock.h"
+#include "desktop.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "desktop.h"
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/paned.h>

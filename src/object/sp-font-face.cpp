@@ -20,8 +20,8 @@
 
 #include "xml/repr.h"
 #include "attributes.h"
-#include "sp-font-face.h"
 #include "document.h"
+#include "sp-font-face.h"
 
 #include <cstring>
 

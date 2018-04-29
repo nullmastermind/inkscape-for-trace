@@ -8,19 +8,19 @@
     * This code is in public domain
     */
 
-#include <helper/geom-satellite.h>
 #include <2geom/curve.h>
 #include <2geom/nearest-time.h>
 #include <2geom/path-intersection.h>
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
+#include <2geom/sbasis-to-bezier.h>
 #include <boost/optional.hpp>
+#include <helper/geom-satellite.h>
 //log cache
 #ifdef _WIN32
 #include <Windows.h>
 #else
-#include <sys/time.h>
 #include <ctime>
+#include <sys/time.h>
 #endif
 
 ///@brief Satellite a per node holder of data.

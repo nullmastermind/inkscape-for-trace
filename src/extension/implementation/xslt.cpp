@@ -16,17 +16,17 @@
 #include <config.h>
 #endif
 
-#include <glibmm/fileutils.h>
-#include "file.h"
-#include "xslt.h"
 #include "../extension.h"
 #include "../output.h"
 #include "extension/input.h"
+#include "file.h"
+#include "xslt.h"
+#include <glibmm/fileutils.h>
 
-#include "io/resource.h"
-#include <unistd.h>
-#include <cstring>
 #include "document.h"
+#include "io/resource.h"
+#include <cstring>
+#include <unistd.h>
 
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>

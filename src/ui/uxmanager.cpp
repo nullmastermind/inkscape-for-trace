@@ -15,10 +15,10 @@
 
 #include "widgets/desktop-widget.h"
 
-#include "uxmanager.h"
 #include "desktop.h"
 #include "ui/monitor.h"
 #include "util/ege-tags.h"
+#include "uxmanager.h"
 #include "widgets/toolbox.h"
 
 

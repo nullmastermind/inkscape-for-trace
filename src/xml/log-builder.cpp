@@ -14,8 +14,8 @@
  */
 
 #include "xml/log-builder.h"
-#include "xml/event.h"
 #include "xml/event-fns.h"
+#include "xml/event.h"
 
 namespace Inkscape {
 namespace XML {

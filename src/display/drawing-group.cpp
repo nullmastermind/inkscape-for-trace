@@ -10,8 +10,8 @@
  */
 
 #include "display/drawing.h"
-#include "display/drawing-item.h"
 #include "display/drawing-group.h"
+#include "display/drawing-item.h"
 
 
 namespace Inkscape {

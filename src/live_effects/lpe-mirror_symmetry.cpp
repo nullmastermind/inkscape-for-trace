@@ -14,21 +14,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include "live_effects/lpe-mirror_symmetry.h"
-#include "display/curve.h"
-#include "svg/path-string.h"
-#include "svg/svg.h"
-#include "helper/geom.h"
+#include "2geom/affine.h"
 #include "2geom/intersection-graph.h"
 #include "2geom/path-intersection.h"
-#include "2geom/affine.h"
+#include "display/curve.h"
 #include "helper/geom.h"
+#include "helper/geom.h"
+#include "live_effects/lpe-mirror_symmetry.h"
 #include "path-chemistry.h"
+#include "svg/path-string.h"
+#include "svg/svg.h"
+#include <gtkmm.h>
 
 #include "object/sp-defs.h"
-#include "object/sp-path.h"
 #include "object/sp-lpe-item.h"
+#include "object/sp-path.h"
 #include "style.h"
 
 #include "xml/sp-css-attr.h"

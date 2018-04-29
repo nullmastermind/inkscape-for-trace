@@ -29,18 +29,18 @@
 #endif
 
 #include "ui/dialog/calligraphic-profile-rename.h"
-#include <glibmm/i18n.h>
 #include "calligraphy-toolbar.h"
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ink-action.h"
-#include "widgets/ink-toggle-action.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-toggle-action.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;

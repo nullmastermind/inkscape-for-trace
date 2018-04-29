@@ -8,11 +8,11 @@
 #include "live_effects/parameter/transformedpoint.h"
 
 #include "knotholder.h"
-#include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "svg/svg.h"
 
-#include "live_effects/effect.h"
 #include "desktop.h"
+#include "live_effects/effect.h"
 #include "verbs.h"
 
 #include <glibmm/i18n.h>

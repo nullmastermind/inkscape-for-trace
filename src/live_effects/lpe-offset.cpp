@@ -14,22 +14,22 @@
  */
 
 #include "live_effects/parameter/enum.h"
-#include "live_effects/lpe-offset.h"
 #include "display/curve.h"
-#include "inkscape.h"
-#include "helper/geom.h"
 #include "helper/geom-pathstroke.h"
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/piecewise.h>
-#include <2geom/path-intersection.h>
-#include <2geom/intersection-graph.h>
-#include <2geom/elliptical-arc.h>
+#include "helper/geom.h"
+#include "inkscape.h"
+#include "knot-holder-entity.h"
+#include "knot.h"
+#include "knotholder.h"
+#include "live_effects/lpe-offset.h"
+#include "object/sp-shape.h"
 #include <2geom/angle.h>
 #include <2geom/curve.h>
-#include "object/sp-shape.h"
-#include "knot-holder-entity.h"
-#include "knotholder.h"
-#include "knot.h"
+#include <2geom/elliptical-arc.h>
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
+#include <2geom/piecewise.h>
+#include <2geom/sbasis-to-bezier.h>
 #include <algorithm>
 //this is only to flatten nonzero fillrule
 #include "livarot/Path.h"

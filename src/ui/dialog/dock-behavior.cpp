@@ -15,14 +15,14 @@
 #include "config.h"
 #endif
 
+#include "desktop.h"
+#include "dialog.h"
 #include "dock-behavior.h"
 #include "inkscape.h"
-#include "desktop.h"
+#include "ui/dialog-events.h"
 #include "ui/interface.h"
 #include "ui/widget/dock.h"
 #include "verbs.h"
-#include "dialog.h"
-#include "ui/dialog-events.h"
 
 namespace Inkscape {
 namespace UI {

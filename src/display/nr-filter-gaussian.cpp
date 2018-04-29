@@ -24,14 +24,14 @@
 #endif //HAVE_OPENMP
 
 #include "display/cairo-utils.h"
-#include "display/nr-filter-primitive.h"
 #include "display/nr-filter-gaussian.h"
+#include "display/nr-filter-primitive.h"
+#include "display/nr-filter-slot.h"
 #include "display/nr-filter-types.h"
 #include "display/nr-filter-units.h"
-#include "display/nr-filter-slot.h"
-#include <2geom/affine.h>
-#include "util/fixed_point.h"
 #include "preferences.h"
+#include "util/fixed_point.h"
+#include <2geom/affine.h>
 
 #ifndef INK_UNUSED
 #define INK_UNUSED(x) ((void)(x))

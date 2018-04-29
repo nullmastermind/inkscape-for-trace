@@ -22,13 +22,13 @@
 
 #include <2geom/transforms.h>
 
-#include "verbs.h"
-#include "preferences.h"
 #include "inkscape.h"
+#include "preferences.h"
+#include "verbs.h"
 
-#include "document.h"
-#include "document-undo.h"
 #include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
     //#include "sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 

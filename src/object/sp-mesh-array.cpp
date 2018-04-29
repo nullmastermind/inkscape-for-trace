@@ -41,18 +41,18 @@
 #include <set>
 
 // For color picking
-#include "display/drawing.h"
-#include "display/drawing-context.h"
 #include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing.h"
 #include "document.h"
 #include "sp-root.h"
 
-#include "sp-mesh-gradient.h"
-#include "sp-mesh-array.h"
-#include "sp-mesh-row.h"
-#include "sp-mesh-patch.h"
-#include "sp-stop.h"
 #include "display/curve.h"
+#include "sp-mesh-array.h"
+#include "sp-mesh-gradient.h"
+#include "sp-mesh-patch.h"
+#include "sp-mesh-row.h"
+#include "sp-stop.h"
 
 // For new mesh creation
 #include "preferences.h"
@@ -71,8 +71,8 @@
 #include "2geom/line.h"
 
 #include "xml/repr.h"
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 enum { ROW, COL };
 

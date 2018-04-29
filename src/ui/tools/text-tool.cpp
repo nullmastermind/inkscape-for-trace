@@ -18,11 +18,11 @@
 #endif
 
 #include <gdk/gdkkeysyms.h>
-#include <gtkmm/clipboard.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/clipboard.h>
 
-#include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
+#include <display/sp-ctrlline.h>
 #include <display/sp-ctrlquadr.h>
 
 #include "context-fns.h"

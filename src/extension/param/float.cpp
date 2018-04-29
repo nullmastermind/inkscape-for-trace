@@ -10,16 +10,16 @@
 # include "config.h"
 #endif
 
+#include "ui/widget/spin-scale.h"
+#include "ui/widget/spinbutton.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
-#include "ui/widget/spinbutton.h"
-#include "ui/widget/spin-scale.h"
 
-#include "xml/node.h"
 #include "extension/extension.h"
-#include "preferences.h"
 #include "float.h"
+#include "preferences.h"
+#include "xml/node.h"
 
 namespace Inkscape {
 namespace Extension {

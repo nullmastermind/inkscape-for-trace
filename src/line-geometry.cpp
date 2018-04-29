@@ -10,12 +10,12 @@
  */
 
 #include "line-geometry.h"
-#include "desktop.h"
 #include "desktop-style.h"
+#include "desktop.h"
 
+#include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas.h"
 #include "display/sp-ctrlline.h"
-#include "display/sodipodi-ctrl.h"
 #include "ui/control-manager.h"
 
 using Inkscape::ControlManager;

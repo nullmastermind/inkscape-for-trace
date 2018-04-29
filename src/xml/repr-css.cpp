@@ -19,8 +19,8 @@
 #define SP_REPR_CSS_C
 
 #include <cstring>
-#include <string>
 #include <sstream>
+#include <string>
 
 #include <glibmm/ustring.h>
 

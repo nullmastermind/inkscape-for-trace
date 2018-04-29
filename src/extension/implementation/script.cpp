@@ -13,12 +13,12 @@
  */
 
 #include <glibmm.h>
-#include <gtkmm/messagedialog.h>
+#include <glibmm/convert.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
-#include <glibmm/miscutils.h>
-#include <glibmm/convert.h>
 #include <unistd.h>
 
 #include <errno.h>
@@ -26,27 +26,27 @@
 
 
 #include "desktop.h"
-#include "ui/dialog-events.h"
+#include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/execution-env.h"
-#include "extension/output.h"
 #include "extension/input.h"
-#include "extension/db.h"
+#include "extension/output.h"
+#include "extension/system.h"
 #include "inkscape.h"
 #include "io/resource.h"
+#include "object/sp-namedview.h"
+#include "object/sp-path.h"
 #include "preferences.h"
 #include "script.h"
 #include "selection.h"
-#include "object/sp-namedview.h"
-#include "object/sp-path.h"
-#include "extension/system.h"
-#include "ui/view/view.h"
-#include "xml/node.h"
-#include "xml/attribute-record.h"
-#include "ui/tools/node-tool.h"
+#include "ui/dialog-events.h"
+#include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
-#include "ui/tool/control-point-selection.h"
+#include "ui/tools/node-tool.h"
+#include "ui/view/view.h"
+#include "xml/attribute-record.h"
+#include "xml/node.h"
 
 
 #include "path-prefix.h"

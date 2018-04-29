@@ -6,14 +6,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include "live_effects/lpe-show_handles.h"
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-path-parser.h>
-#include "helper/geom.h"
 #include "desktop-style.h"
 #include "display/curve.h"
+#include "helper/geom.h"
+#include "live_effects/lpe-show_handles.h"
 #include "svg/svg.h"
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/svg-path-parser.h>
+#include <gtkmm.h>
 
 #include "object/sp-shape.h"
 #include "style.h"

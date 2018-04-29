@@ -2,21 +2,21 @@
 #include <gdkmm/pixbuf.h>
 #include <gdkmm/pixbufformat.h>
 
-#include <glib/gprintf.h>
-#include <glibmm/i18n.h>
 #include "dir-util.h"
 #include "display/cairo-utils.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "extension/input.h"
 #include "extension/system.h"
-#include "image-resolution.h"
 #include "gdkpixbuf-input.h"
-#include "preferences.h"
-#include "selection-chemistry.h"
+#include "image-resolution.h"
 #include "object/sp-image.h"
 #include "object/sp-root.h"
+#include "preferences.h"
+#include "selection-chemistry.h"
 #include "util/units.h"
+#include <glib/gprintf.h>
+#include <glibmm/i18n.h>
 #include <set>
 
 namespace Inkscape {

@@ -12,9 +12,9 @@
 #include <glib.h>
 
 #include "display/nr-3dutils.h"
-#include <cmath>
-#include <2geom/point.h>
 #include <2geom/affine.h>
+#include <2geom/point.h>
+#include <cmath>
 
 namespace NR {
 

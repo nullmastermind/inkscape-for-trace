@@ -8,8 +8,8 @@
 # include "config.h"
 #endif
 
-#include <gtkmm/box.h>
 #include "live_effects/parameter/originalpath.h"
+#include <gtkmm/box.h>
 
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
@@ -18,12 +18,12 @@
 #include "display/curve.h"
 #include "live_effects/effect.h"
 
-#include "object/uri.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+#include "object/uri.h"
 
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 #include "selection.h"
 #include "ui/icon-names.h"
 

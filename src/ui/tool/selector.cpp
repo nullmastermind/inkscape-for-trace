@@ -13,9 +13,9 @@
 #include "desktop.h"
 
 #include "display/sodipodi-ctrlrect.h"
-#include "ui/tools/tool-base.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/selector.h"
+#include "ui/tools/tool-base.h"
 
 #include <gdk/gdkkeysyms.h>
 

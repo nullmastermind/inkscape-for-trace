@@ -15,9 +15,9 @@
  */
 
 #include "attributes.h"
+#include "helper-fns.h"
 #include "svg/svg.h"
 #include "turbulence.h"
-#include "helper-fns.h"
 #include "xml/repr.h"
 
 #include "display/nr-filter.h"

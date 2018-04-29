@@ -28,27 +28,27 @@
 #include <glibmm/i18n.h>
 #include <glibmm/ustring.h>
 
-#include "system.h"
 #include "db.h"
-#include "internal/svgz.h"
-# include "internal/emf-inout.h"
-# include "internal/emf-print.h"
+#include "internal/emf-inout.h"
+#include "internal/emf-print.h"
+# include "internal/svgz.h"
 # include "internal/wmf-inout.h"
 # include "internal/wmf-print.h"
+# include "system.h"
 #ifdef HAVE_CAIRO_PDF
-# include "internal/cairo-renderer-pdf-out.h"
 # include "internal/cairo-png-out.h"
 # include "internal/cairo-ps-out.h"
+# include "internal/cairo-renderer-pdf-out.h"
 #endif
-#include "internal/pov-out.h"
-#include "internal/javafx-out.h"
-#include "internal/odf.h"
-#include "internal/latex-pstricks-out.h"
-#include "internal/latex-pstricks.h"
-#include "internal/gdkpixbuf-input.h"
 #include "internal/bluredge.h"
+#include "internal/gdkpixbuf-input.h"
 #include "internal/gimpgrad.h"
 #include "internal/grid.h"
+#include "internal/javafx-out.h"
+#include "internal/latex-pstricks-out.h"
+#include "internal/latex-pstricks.h"
+#include "internal/odf.h"
+#include "internal/pov-out.h"
 #ifdef WITH_LIBWPG
 #include "internal/wpg-input.h"
 #endif
@@ -58,15 +58,14 @@
 #ifdef WITH_LIBCDR
 #include "internal/cdr-input.h"
 #endif
-#include "preferences.h"
-#include "io/sys.h"
 #include "io/resource.h"
+#include "io/sys.h"
+#include "preferences.h"
 #ifdef WITH_DBUS
 #include "dbus/dbus-init.h"
 #endif
 
 #ifdef WITH_IMAGE_MAGICK
-#include <Magick++.h>
 #include "internal/bitmap/adaptiveThreshold.h"
 #include "internal/bitmap/addNoise.h"
 #include "internal/bitmap/blur.h"
@@ -99,6 +98,7 @@
 #include "internal/bitmap/solarize.h"
 #include "internal/bitmap/spread.h"
 #include "internal/bitmap/swirl.h"
+#include <Magick++.h>
 //#include "internal/bitmap/threshold.h"
 #include "internal/bitmap/unsharpmask.h"
 #include "internal/bitmap/wave.h"

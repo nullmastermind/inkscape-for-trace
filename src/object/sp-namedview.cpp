@@ -14,28 +14,28 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstring>
-#include <string>
 #include "event-log.h"
 #include <2geom/transforms.h>
+#include <cstring>
+#include <string>
 
-#include "display/canvas-grid.h"
-#include "util/units.h"
-#include "svg/svg-color.h"
-#include "xml/repr.h"
 #include "attributes.h"
-#include "document.h"
-#include "document-undo.h"
 #include "desktop-events.h"
+#include "display/canvas-grid.h"
+#include "document-undo.h"
+#include "document.h"
 #include "enums.h"
+#include "svg/svg-color.h"
 #include "ui/monitor.h"
+#include "util/units.h"
+#include "xml/repr.h"
 
+#include "conn-avoid-ref.h" // for defaultConnSpacing.
+#include "desktop.h"
+#include "preferences.h"
 #include "sp-guide.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
-#include "preferences.h"
-#include "desktop.h"
-#include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include "sp-root.h"
 #include <gtkmm/window.h>
 

@@ -21,12 +21,12 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/radiobutton.h>
 
+#include "document-private.h"
+#include "document-undo.h"
+#include "inkscape.h"
+#include "rdf.h"
 #include "ui/widget/entity-entry.h"
 #include "ui/widget/registry.h"
-#include "rdf.h"
-#include "inkscape.h"
-#include "document-undo.h"
-#include "document-private.h"
 #include "verbs.h"
 
 

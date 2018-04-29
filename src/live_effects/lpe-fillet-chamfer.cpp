@@ -10,13 +10,13 @@
 
 #include "live_effects/lpe-fillet-chamfer.h"
 
-#include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include "helper/geom-satellite.h"
+#include "helper/geom.h"
 
-#include <2geom/elliptical-arc.h>
-#include "knotholder.h"
 #include "display/curve.h"
+#include "knotholder.h"
+#include <2geom/elliptical-arc.h>
 #include <boost/optional.hpp>
 
 #include "object/sp-shape.h"

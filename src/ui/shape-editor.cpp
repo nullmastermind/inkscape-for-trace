@@ -11,13 +11,13 @@
 #include <config.h>
 #endif
 
-#include <string.h>
 #include <glibmm/i18n.h>
+#include <string.h>
 
 #include "desktop.h"
 #include "document.h"
-#include "knotholder.h"
 #include "inkscape.h"
+#include "knotholder.h"
 
 #include "object/sp-path.h"
 

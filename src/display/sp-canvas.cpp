@@ -21,25 +21,25 @@
 # include <config.h>
 #endif
 
+#include <cairomm/region.h>
 #include <gdkmm/devicemanager.h>
 #include <gdkmm/display.h>
 #include <gdkmm/rectangle.h>
-#include <cairomm/region.h>
 
-#include "helper/sp-marshal.h"
-#include <2geom/rect.h>
-#include <2geom/affine.h>
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-group.h"
-#include "display/rendermode.h"
-#include "display/cairo-utils.h"
-#include "preferences.h"
-#include "inkscape.h"
-#include "sodipodi-ctrlrect.h"
 #include "cms-system.h"
+#include "color.h"
 #include "debug/gdk-event-latency-tracker.h"
 #include "desktop.h"
-#include "color.h"
+#include "display/cairo-utils.h"
+#include "display/rendermode.h"
+#include "display/sp-canvas-group.h"
+#include "display/sp-canvas.h"
+#include "helper/sp-marshal.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "sodipodi-ctrlrect.h"
+#include <2geom/affine.h>
+#include <2geom/rect.h>
 
 #if GTK_CHECK_VERSION(3,20,0)
 # include <gdkmm/seat.h>

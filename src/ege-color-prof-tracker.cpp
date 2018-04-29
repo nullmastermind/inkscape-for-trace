@@ -39,9 +39,9 @@
 
 /* Note: this file should be kept compilable as both .cpp and .c */
 
+#include <algorithm>
 #include <string.h>
 #include <vector>
-#include <algorithm>
 
 #include <gtk/gtk.h>
 

@@ -6,21 +6,21 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
 
-#include <gtkmm/recentmanager.h>
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
-#include <glibmm/fileutils.h>
 #include <glibmm/uriutils.h>
-#include <glibmm/convert.h>
+#include <gtkmm/recentmanager.h>
 
 #include "resource-manager.h"
 
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "verbs.h"
 
 #include "object/sp-object.h"

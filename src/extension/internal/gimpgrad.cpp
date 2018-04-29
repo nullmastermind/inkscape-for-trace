@@ -16,17 +16,17 @@
 # include <config.h>
 #endif
 
-#include <color-rgba.h>
 #include "io/sys.h"
 #include "extension/system.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
+#include <color-rgba.h>
 
+#include "document.h"
+#include "extension/extension.h"
 #include "gimpgrad.h"
 #include "streq.h"
 #include "strneq.h"
-#include "document.h"
-#include "extension/extension.h"
 
 namespace Inkscape {
 namespace Extension {

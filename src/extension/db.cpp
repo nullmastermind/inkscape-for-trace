@@ -16,9 +16,9 @@
 #include <config.h>
 #endif
 #include "db.h"
+#include "effect.h"
 #include "input.h"
 #include "output.h"
-#include "effect.h"
 
 /* Globals */
 

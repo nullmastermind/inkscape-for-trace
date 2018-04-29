@@ -4,14 +4,14 @@
 
 #include "color-wheel-selector.h"
 
-#include <glibmm/i18n.h>
-#include <gtkmm/adjustment.h>
-#include <gtkmm/label.h>
-#include <gtkmm/spinbutton.h>
 #include "ui/dialog-events.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 #include "widgets/gimp/gimpcolorwheel.h"
+#include <glibmm/i18n.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
 
 namespace Inkscape {
 namespace UI {

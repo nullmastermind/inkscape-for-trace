@@ -15,14 +15,14 @@
 #include "config.h"
 #endif
 
-#include <cstring>
-#include <string>
-#include <cstdlib>
-#include <cstdio>
-#include <glib.h>
-#include <2geom/transforms.h>
-#include "svg.h"
 #include "preferences.h"
+#include "svg.h"
+#include <2geom/transforms.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <glib.h>
+#include <string>
 
 bool
 sp_svg_transform_read(gchar const *str, Geom::Affine *transform)

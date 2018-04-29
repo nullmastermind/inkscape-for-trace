@@ -22,26 +22,26 @@
 # include <config.h>
 #endif
 #include "pov-out.h"
-#include <inkscape.h>
-#include <inkscape-version.h>
-#include <display/curve.h>
-#include <extension/system.h>
+#include "helper/geom-curves.h"
+#include "helper/geom.h"
+#include <2geom/curves.h>
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
-#include <2geom/curves.h>
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
+#include <display/curve.h>
+#include <extension/system.h>
+#include <inkscape-version.h>
+#include <inkscape.h>
 #include <io/sys.h>
 
-#include "object/sp-root.h"
 #include "object/sp-path.h"
+#include "object/sp-root.h"
 #include "style.h"
 
-#include <string>
-#include <stdio.h>
-#include <stdarg.h>
 #include "document.h"
 #include "extension/extension.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <string>
 
 
 namespace Inkscape

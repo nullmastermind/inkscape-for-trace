@@ -11,19 +11,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include <gdk/gdk.h>
-#include <2geom/path-intersection.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/intersection-graph.h>
+#include "display/curve.h"
+#include "helper/geom.h"
 #include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpeobject.h"
-#include "display/curve.h"
+#include "path-chemistry.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "helper/geom.h"
 #include "xml/sp-css-attr.h"
-#include "path-chemistry.h"
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <gdk/gdk.h>
+#include <gtkmm.h>
 
 #include "object/sp-path.h"
 #include "object/sp-shape.h"

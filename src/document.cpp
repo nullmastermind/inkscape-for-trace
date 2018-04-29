@@ -40,8 +40,8 @@
 #include <config.h>
 #endif
 
-#include <string>
 #include <cstring>
+#include <string>
 
 #include <2geom/transforms.h>
 
@@ -65,10 +65,10 @@
 #include "3rdparty/libcroco/cr-selector.h"
 
 #include "object/persp3d.h"
-#include "object/sp-factory.h"
 #include "object/sp-defs.h"
-#include "object/sp-root.h"
+#include "object/sp-factory.h"
 #include "object/sp-namedview.h"
+#include "object/sp-root.h"
 #include "object/sp-symbol.h"
 
 #include "widgets/desktop-widget.h"

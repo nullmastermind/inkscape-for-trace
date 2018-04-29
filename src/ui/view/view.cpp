@@ -14,13 +14,13 @@
 # include "config.h"
 #endif
 
-#include <2geom/point.h>
 #include "document.h"
-#include "view.h"
-#include "message-stack.h"
-#include "message-context.h"
-#include "verbs.h"
 #include "inkscape.h"
+#include "message-context.h"
+#include "message-stack.h"
+#include "verbs.h"
+#include "view.h"
+#include <2geom/point.h>
 
 namespace Inkscape {
 namespace UI {

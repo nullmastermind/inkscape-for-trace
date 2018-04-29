@@ -14,9 +14,9 @@
  */
 
 #include "svg/path-string.h"
+#include "preferences.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
-#include "preferences.h"
 
 // 1<=numericprecision<=16, doubles are only accurate upto (slightly less than) 16 digits (and less than one digit doesn't make sense)
 // Please note that these constants are used to allocate sufficient space to hold serialized numbers

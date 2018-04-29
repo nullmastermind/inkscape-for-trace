@@ -12,12 +12,12 @@
  */
 
 #include "transf_mat_3x4.h"
-#include <gtk/gtk.h>
-#include <2geom/affine.h>
-#include "svg/stringstream.h"
-#include "syseq.h"
 #include "document.h"
 #include "inkscape.h"
+#include "svg/stringstream.h"
+#include "syseq.h"
+#include <2geom/affine.h>
+#include <gtk/gtk.h>
 
 namespace Proj {
 

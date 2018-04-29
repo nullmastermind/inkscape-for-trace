@@ -13,20 +13,20 @@
 # include <config.h>
 #endif
 
-#include <cmath>
 #include <cerrno>
-#include <iomanip>
-#include <iostream>
+#include <cmath>
 #include <glib.h>
-#include <glibmm/regex.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/markup.h>
+#include <glibmm/regex.h>
+#include <iomanip>
+#include <iostream>
 
 #include <2geom/coord.h>
 
-#include "util/units.h"
 #include "path-prefix.h"
 #include "streq.h"
+#include "util/units.h"
 
 using Inkscape::Util::UNIT_TYPE_DIMENSIONLESS;
 using Inkscape::Util::UNIT_TYPE_LINEAR;

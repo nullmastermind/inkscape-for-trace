@@ -17,38 +17,38 @@
 
 #include "live_effects/effect.h"
 #include "svg/svg.h"
-#include <2geom/svg-path-parser.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/pathvector.h>
 #include <2geom/d2.h>
+#include <2geom/pathvector.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/svg-path-parser.h>
 
-#include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
 #include "inkscape.h"
 #include "message-stack.h"
+#include "selection-chemistry.h"
 #include "verbs.h"
-#include "document.h"
-#include "document-undo.h"
+#include "xml/repr.h"
 
 // needed for on-canvas editing:
-#include "ui/tools-switch.h"
 #include "ui/shape-editor.h"
+#include "ui/tools-switch.h"
 
 #include "selection.h"
 // clipboard support
 #include "ui/clipboard.h"
 // required for linking to other paths
 
-#include "object/uri.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+#include "object/uri.h"
 
 #include "display/curve.h"
 
-#include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
+#include "ui/tools/node-tool.h"
 
 #include "ui/icon-names.h"
 

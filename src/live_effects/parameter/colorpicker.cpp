@@ -4,19 +4,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/colorpicker.h"
-#include "live_effects/effect.h"
-#include "ui/widget/color-picker.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
 #include "color.h"
-#include "inkscape.h"
-#include "svg/stringstream.h"
-#include "verbs.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/parameter/colorpicker.h"
+#include "svg/stringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+#include "ui/widget/color-picker.h"
+#include "ui/widget/registered-widget.h"
+#include "verbs.h"
+#include <gtkmm.h>
 
 #include <glibmm/i18n.h>
 

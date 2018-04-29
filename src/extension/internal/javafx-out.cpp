@@ -21,31 +21,31 @@
 # include <config.h>
 #endif
 
-#include <glibmm/miscutils.h>
+#include "helper/geom-curves.h"
+#include "helper/geom.h"
 #include "javafx-out.h"
-#include <inkscape.h>
-#include <inkscape-version.h>
-#include <display/curve.h>
-#include <display/canvas-bpath.h>
-#include <svg/svg.h>
-#include <extension/system.h>
+#include <2geom/curves.h>
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
-#include <2geom/curves.h>
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
+#include <display/canvas-bpath.h>
+#include <display/curve.h>
+#include <extension/system.h>
+#include <glibmm/miscutils.h>
+#include <inkscape-version.h>
+#include <inkscape.h>
 #include <io/sys.h>
+#include <svg/svg.h>
 
-#include "object/sp-root.h"
-#include "object/sp-path.h"
 #include "object/sp-linear-gradient.h"
+#include "object/sp-path.h"
 #include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
 #include "style.h"
 
-#include <string>
-#include <stdio.h>
-#include <stdarg.h>
 #include "extension/extension.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <string>
 
 
 namespace Inkscape

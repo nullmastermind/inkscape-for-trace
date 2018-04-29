@@ -12,22 +12,22 @@
 # include "config.h"
 #endif
 
+#include <2geom/curves.h>
+#include <2geom/rect.h>
+#include <2geom/svg-path-parser.h>
 #include <cstring>
 #include <fstream>
 #include <glib.h>
 #include <glibmm/miscutils.h>
-#include <2geom/rect.h>
-#include <2geom/curves.h>
-#include <2geom/svg-path-parser.h>
 
 #include "extension/internal/metafile-print.h"
 #include "extension/print.h"
-#include "path-prefix.h"
 #include "object/sp-gradient.h"
 #include "object/sp-image.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-pattern.h"
 #include "object/sp-radial-gradient.h"
+#include "path-prefix.h"
 #include "style.h"
 
 namespace Inkscape {

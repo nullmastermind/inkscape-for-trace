@@ -10,13 +10,13 @@
  */
 
 #include "inkgc/gc-core.h"
-#include <stdexcept>
-#include <cstring>
-#include <string>
-#include <glib.h>
-#include <sigc++/functors/ptr_fun.h>
-#include <glibmm/main.h>
 #include <cstddef>
+#include <cstring>
+#include <glib.h>
+#include <glibmm/main.h>
+#include <sigc++/functors/ptr_fun.h>
+#include <stdexcept>
+#include <string>
 
 namespace Inkscape {
 namespace GC {

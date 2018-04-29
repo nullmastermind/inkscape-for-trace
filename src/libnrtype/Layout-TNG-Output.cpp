@@ -8,19 +8,19 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <glib.h>
 #include "Layout-TNG.h"
-#include "display/drawing-text.h"
-#include "style.h"
-#include "print.h"
-#include "extension/print.h"
-#include "livarot/Path.h"
-#include "font-instance.h"
-#include "svg/svg-length.h"
-#include "extension/internal/cairo-render-context.h"
 #include "display/curve.h"
+#include "display/drawing-text.h"
+#include "extension/internal/cairo-render-context.h"
+#include "extension/print.h"
+#include "font-instance.h"
+#include "livarot/Path.h"
+#include "print.h"
+#include "style.h"
+#include "svg/svg-length.h"
 #include <2geom/pathvector.h>
 #include <3rdparty/libuemf/symbol_convert.h>
+#include <glib.h>
 
 
 namespace Inkscape {

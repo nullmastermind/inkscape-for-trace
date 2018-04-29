@@ -15,15 +15,15 @@
 
 #include "desktop.h"
 
+#include "display/canvas-text.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sodipodi-ctrlrect.h"
-#include "display/canvas-text.h"
 #include "display/sp-canvas-util.h"
+#include "enums.h"
 #include "knot.h"
 #include "preferences.h"
-#include <glibmm/i18n.h>
 #include "ui/tools-switch.h"
-#include "enums.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Display {

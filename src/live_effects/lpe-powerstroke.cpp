@@ -13,16 +13,16 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
 
-#include "svg/svg-color.h"
 #include "desktop-style.h"
-#include "svg/css-ostringstream.h"
 #include "display/curve.h"
+#include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
 
-#include <2geom/elliptical-arc.h>
-#include <2geom/path-sink.h>
-#include <2geom/path-intersection.h>
-#include <2geom/circle.h>
 #include "helper/geom.h"
+#include <2geom/circle.h>
+#include <2geom/elliptical-arc.h>
+#include <2geom/path-intersection.h>
+#include <2geom/path-sink.h>
 
 #include "object/sp-shape.h"
 #include "style.h"

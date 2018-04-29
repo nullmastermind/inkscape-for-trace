@@ -22,8 +22,8 @@
 
 #include "filedialogimpl-gtkmm.h"
 
-#include "ui/dialog-events.h"
 #include "extension/output.h"
+#include "ui/dialog-events.h"
 
 #include <glibmm/convert.h>
 

@@ -22,22 +22,22 @@
 
 #include "ui/interface.h"
 
-#include "system.h"
-#include "preferences.h"
-#include "extension.h"
 #include "db.h"
-#include "input.h"
-#include "output.h"
+#include "document-undo.h"
 #include "effect.h"
-#include "patheffect.h"
-#include "print.h"
+#include "extension.h"
 #include "implementation/script.h"
 #include "implementation/xslt.h"
-#include "xml/rebase-hrefs.h"
-#include "io/sys.h"
 #include "inkscape.h"
-#include "document-undo.h"
+#include "input.h"
+#include "io/sys.h"
 #include "loader.h"
+#include "output.h"
+#include "patheffect.h"
+#include "preferences.h"
+#include "print.h"
+#include "system.h"
+#include "xml/rebase-hrefs.h"
 
 #include <glibmm/miscutils.h>
 

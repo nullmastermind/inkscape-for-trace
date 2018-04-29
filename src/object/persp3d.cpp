@@ -13,21 +13,21 @@
 
 #include "persp3d.h"
 #include "perspective-line.h"
-#include "sp-root.h"
 #include "sp-defs.h"
+#include "sp-root.h"
 
 #include "attributes.h"
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "vanishing-point.h"
-#include "ui/tools/box3d-tool.h"
 #include "svg/stringstream.h"
+#include "ui/tools/box3d-tool.h"
+#include "vanishing-point.h"
 #include "xml/node-event-vector.h"
-#include "desktop.h"
 
-#include <glibmm/i18n.h>
-#include "verbs.h"
 #include "util/units.h"
+#include "verbs.h"
+#include <glibmm/i18n.h>
 
 using Inkscape::DocumentUndo;
 

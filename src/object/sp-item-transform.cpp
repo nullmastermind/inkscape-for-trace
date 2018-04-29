@@ -14,9 +14,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <2geom/transforms.h>
-#include "sp-item.h"
 #include "sp-item-transform.h"
+#include "sp-item.h"
+#include <2geom/transforms.h>
 
 #include <glib.h>
 

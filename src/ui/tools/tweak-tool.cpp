@@ -13,9 +13,9 @@
 
 #include <numeric>
 
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
+#include <gtk/gtk.h>
 
 #include <2geom/circle.h>
 

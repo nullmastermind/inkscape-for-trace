@@ -9,9 +9,9 @@
  *  Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
-#include "snapped-point.h"
 #include "preferences.h"
+#include "snapped-point.h"
+#include <gtk/gtk.h>
 
 // overloaded constructor
 Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const &source, long source_num, SnapTargetType const &target, Geom::Coord const &d, Geom::Coord const &t, bool const &a, bool const &constrained_snap, bool const &fully_constrained, Geom::OptRect target_bbox) :

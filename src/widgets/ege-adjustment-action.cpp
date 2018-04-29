@@ -39,19 +39,19 @@
 
 /* Note: this file should be kept compilable as both .cpp and .c */
 
+#include <algorithm>
 #include <cmath>
 #include <string.h>
 #include <vector>
-#include <algorithm>
 
+#include <gdk/gdkkeysyms.h>
+#include <gtkmm/adjustment.h>
 #include <gtkmm/container.h>
 #include <gtkmm/radiomenuitem.h>
-#include <gtkmm/adjustment.h>
-#include <gdk/gdkkeysyms.h>
 
-#include "widgets/ege-adjustment-action.h"
 #include "ui/icon-names.h"
 #include "ui/widget/ink-spinscale.h"
+#include "widgets/ege-adjustment-action.h"
 
 static void ege_adjustment_action_finalize( GObject* object );
 static void ege_adjustment_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );

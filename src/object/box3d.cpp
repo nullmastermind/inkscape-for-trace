@@ -17,20 +17,20 @@
 
 #include "box3d.h"
 
-#include <glibmm/i18n.h>
 #include "attributes.h"
 #include "xml/document.h"
 #include "xml/repr.h"
+#include <glibmm/i18n.h>
 
 #include "bad-uri-exception.h"
 #include "box3d-side.h"
-#include "ui/tools/box3d-tool.h"
-#include "perspective-line.h"
 #include "persp3d-reference.h"
-#include "uri.h"
-#include <2geom/line.h>
+#include "perspective-line.h"
 #include "sp-guide.h"
 #include "sp-namedview.h"
+#include "ui/tools/box3d-tool.h"
+#include "uri.h"
+#include <2geom/line.h>
 
 #include "desktop.h"
 

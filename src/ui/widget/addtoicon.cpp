@@ -16,9 +16,9 @@
 
 #include <gtkmm/icontheme.h>
 
-#include "widgets/toolbox.h"
-#include "ui/icon-names.h"
 #include "layertypeicon.h"
+#include "ui/icon-names.h"
+#include "widgets/toolbox.h"
 
 namespace Inkscape {
 namespace UI {

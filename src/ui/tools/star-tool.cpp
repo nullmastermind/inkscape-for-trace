@@ -34,8 +34,8 @@
 #include "selection.h"
 #include "verbs.h"
 
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-star.h"

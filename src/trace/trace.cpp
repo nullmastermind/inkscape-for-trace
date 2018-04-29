@@ -14,30 +14,30 @@
 
 #include "trace/potrace/inkscape-potrace.h"
 
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "message-stack.h"
+#include "selection.h"
+#include "verbs.h"
+#include "xml/attribute-record.h"
+#include "xml/repr.h"
+#include <2geom/transforms.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/main.h>
-#include "selection.h"
-#include "xml/repr.h"
-#include "xml/attribute-record.h"
-#include <2geom/transforms.h>
-#include "verbs.h"
 
 #include "display/cairo-utils.h"
-#include "display/drawing.h"
 #include "display/drawing-shape.h"
+#include "display/drawing.h"
 
+#include "object/sp-image.h"
 #include "object/sp-item.h"
 #include "object/sp-shape.h"
-#include "object/sp-image.h"
 
-#include "siox.h"
 #include "imagemap-gdk.h"
+#include "siox.h"
 
 namespace Inkscape {
 namespace Trace {

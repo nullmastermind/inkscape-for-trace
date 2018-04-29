@@ -5,13 +5,13 @@
  */
 
 #include "ui/widget/registered-widget.h"
-#include "live_effects/parameter/bool.h"
-#include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "inkscape.h"
-#include "verbs.h"
 #include "helper-fns.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/parameter/bool.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "verbs.h"
 #include <glibmm/i18n.h>
 
 namespace Inkscape {

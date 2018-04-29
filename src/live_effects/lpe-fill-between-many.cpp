@@ -6,11 +6,11 @@
 
 
 #include "live_effects/lpe-fill-between-many.h"
-#include "live_effects/lpeobject.h"
-#include "xml/node.h"
 #include "display/curve.h"
 #include "inkscape.h"
+#include "live_effects/lpeobject.h"
 #include "selection.h"
+#include "xml/node.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-shape.h"

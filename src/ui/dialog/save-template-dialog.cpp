@@ -2,8 +2,8 @@
 #include "config.h"
 #endif
 
-#include "save-template-dialog.h"
 #include "file.h"
+#include "save-template-dialog.h"
 
 #include <glibmm/i18n.h>
 

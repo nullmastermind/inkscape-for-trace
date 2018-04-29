@@ -25,26 +25,26 @@
 #endif
 
 
-#include <signal.h>
-#include <errno.h>
 #include <2geom/pathvector.h>
+#include <errno.h>
+#include <signal.h>
 
 #include <glib.h>
 
-#include <glibmm/i18n.h>
-#include "display/drawing.h"
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+#include "display/drawing.h"
+#include "object/sp-clippath.h"
 #include "object/sp-hatch.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
 #include "object/sp-linear-gradient.h"
-#include "object/sp-radial-gradient.h"
+#include "object/sp-mask.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-pattern.h"
-#include "object/sp-mask.h"
-#include "object/sp-clippath.h"
+#include "object/sp-radial-gradient.h"
+#include <glibmm/i18n.h>
 
 #include "util/units.h"
 #ifdef WIN32

@@ -23,14 +23,14 @@
 #include "attributes.h"
 #include "strneq.h"
 
-#include "display/nr-filter.h"
 #include "display/nr-filter-specularlighting.h"
+#include "display/nr-filter.h"
 
 #include "object/sp-object.h"
 
-#include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/svg-icc-color.h"
+#include "svg/svg.h"
 
 #include "xml/repr.h"
 

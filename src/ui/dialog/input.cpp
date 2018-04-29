@@ -9,11 +9,11 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#include "ui/widget/frame.h"
+#include "ui/widget/panel.h"
+#include <list>
 #include <map>
 #include <set>
-#include <list>
-#include "ui/widget/panel.h"
-#include "ui/widget/frame.h"
 
 #include <glibmm/i18n.h>
 
@@ -21,6 +21,7 @@
 #include <gtkmm/cellrenderercombo.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/menubar.h>
@@ -29,7 +30,6 @@
 #include <gtkmm/progressbar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treestore.h>
-#include <gtkmm/eventbox.h>
 
 #include "device-manager.h"
 #include "preferences.h"

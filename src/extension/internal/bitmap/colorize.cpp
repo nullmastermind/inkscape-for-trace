@@ -15,8 +15,8 @@
 
 #include "color.h"
 
-#include <iostream>
 #include <Magick++.h>
+#include <iostream>
 
 namespace Inkscape {
 namespace Extension {

@@ -37,9 +37,9 @@
 #include <string>
 #include <time.h>
 
-#include "io/sys.h"
 #include "io/http.h"
 #include "io/resource.h"
+#include "io/sys.h"
 
 typedef std::function<void(Glib::ustring)> callback;
 

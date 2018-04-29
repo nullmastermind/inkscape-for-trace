@@ -1,6 +1,6 @@
 
-#include <algorithm>
 #include <2geom/coord.h>
+#include <algorithm>
 
 #include "remove-last.h"
 #include "sp-guide.h"

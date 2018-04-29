@@ -15,10 +15,10 @@
 #include "svg/svg.h"
 #include "xml/repr.h"
 
+#include "display/nr-filter-merge.h"
+#include "display/nr-filter.h"
 #include "merge.h"
 #include "mergenode.h"
-#include "display/nr-filter.h"
-#include "display/nr-filter-merge.h"
 
 SPFeMerge::SPFeMerge() : SPFilterPrimitive() {
 }

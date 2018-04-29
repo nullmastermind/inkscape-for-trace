@@ -29,9 +29,9 @@
 #include "message-stack.h"
 #include "selection.h"
 
-#include "display/curve.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-text.h"
+#include "display/curve.h"
 
 #include "object/sp-path.h"
 
@@ -39,8 +39,8 @@
 
 #include "util/units.h"
 
-#include "ui/tools/lpe-tool.h"
 #include "ui/shape-editor.h"
+#include "ui/tools/lpe-tool.h"
 
 using Inkscape::Util::unit_table;
 using Inkscape::UI::Tools::PenTool;

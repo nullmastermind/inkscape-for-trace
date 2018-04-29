@@ -19,8 +19,8 @@
 
 #include "libvpsc/rectangle.h"
 
-#include "object/sp-item.h"
 #include "object/sp-item-transform.h"
+#include "object/sp-item.h"
 
 
 using vpsc::Rectangle;

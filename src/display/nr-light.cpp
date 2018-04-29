@@ -12,11 +12,11 @@
 #include <cmath>
 
 #include "display/nr-light.h"
+#include "color.h"
 #include "display/nr-3dutils.h"
 #include "object/filters/distantlight.h"
 #include "object/filters/pointlight.h"
 #include "object/filters/spotlight.h"
-#include "color.h"
 
 namespace Inkscape {
 namespace Filters {

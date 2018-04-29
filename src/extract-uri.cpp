@@ -1,5 +1,5 @@
-#include <string.h>
 #include <glib.h>
+#include <string.h>
 
 #include "extract-uri.h"
 

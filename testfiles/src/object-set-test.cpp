@@ -8,17 +8,17 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <gtest/gtest.h>
 #include <doc-per-case-test.h>
-#include <src/object/sp-factory.h>
-#include <src/object/sp-rect.h>
-#include <src/object/sp-path.h>
-#include <src/object/sp-use.h>
-#include <src/object/sp-root.h>
+#include <gtest/gtest.h>
 #include <src/object/object-set.h>
-#include <xml/node.h>
-#include <src/xml/text-node.h>
+#include <src/object/sp-factory.h>
+#include <src/object/sp-path.h>
+#include <src/object/sp-rect.h>
+#include <src/object/sp-root.h>
+#include <src/object/sp-use.h>
 #include <src/xml/simple-document.h>
+#include <src/xml/text-node.h>
+#include <xml/node.h>
 //#include <unistd.h>
 #include <2geom/transforms.h>
 using namespace Inkscape;

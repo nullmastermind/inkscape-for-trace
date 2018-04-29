@@ -15,8 +15,8 @@
 #include "display/nr-filter-types.h"
 #include "svg/svg-length.h"
 
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 
 #include "document.h"
 #include "style.h"

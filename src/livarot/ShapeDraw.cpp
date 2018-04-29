@@ -6,10 +6,10 @@
  *
  */
 
+#include "Shape.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "Shape.h"
 //#include <ApplicationServices/ApplicationServices.h>
 
 // debug routine for vizualizing the polygons

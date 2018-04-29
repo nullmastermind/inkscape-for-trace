@@ -37,8 +37,8 @@
 #include "sp-cursor.h"
 
 #include "display/drawing-item.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
+#include "display/sp-canvas.h"
 
 #include "object/box3d.h"
 #include "style.h"

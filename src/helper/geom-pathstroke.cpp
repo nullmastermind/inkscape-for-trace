@@ -8,11 +8,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <iomanip>
+#include <2geom/circle.h>
+#include <2geom/path-intersection.h>
 #include <2geom/path-sink.h>
 #include <2geom/sbasis-to-bezier.h> // cubicbezierpath_from_sbasis
-#include <2geom/path-intersection.h>
-#include <2geom/circle.h>
+#include <iomanip>
 
 #include "helper/geom-pathstroke.h"
 

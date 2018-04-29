@@ -13,14 +13,14 @@
 
 #include <gtkmm.h>
 
+#include "display/cairo-utils.h"
+#include "display/canvas-arena.h"
+#include "display/drawing-context.h"
+#include "display/drawing-group.h"
+#include "display/drawing-item.h"
+#include "display/drawing-surface.h"
 #include "display/sp-canvas-util.h"
 #include "helper/sp-marshal.h"
-#include "display/canvas-arena.h"
-#include "display/cairo-utils.h"
-#include "display/drawing-context.h"
-#include "display/drawing-item.h"
-#include "display/drawing-group.h"
-#include "display/drawing-surface.h"
 #include "preferences.h"
 
 using namespace Inkscape;

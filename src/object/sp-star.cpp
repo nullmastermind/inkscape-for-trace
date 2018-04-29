@@ -17,16 +17,16 @@
 #include <config.h>
 #endif
 
-#include <cstring>
-#include <string>
-#include <glib.h>
 #include "live_effects/effect.h"
+#include <cstring>
+#include <glib.h>
+#include <string>
 
-#include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
-#include "xml/repr.h"
 #include "document.h"
+#include "svg/svg.h"
+#include "xml/repr.h"
 
 #include "sp-star.h"
 #include <glibmm/i18n.h>

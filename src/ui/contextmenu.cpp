@@ -29,15 +29,15 @@
 #include <gtkmm/separatormenuitem.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
-#include "helper/action.h"
+#include "document.h"
 #include "helper/action-context.h"
+#include "helper/action.h"
 #include "inkscape.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "selection.h"
 #include "selection-chemistry.h"
+#include "selection.h"
 #include "shortcuts.h"
 
 #include "object/sp-anchor.h"

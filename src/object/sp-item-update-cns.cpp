@@ -2,8 +2,8 @@
 
 #include "satisfied-guide-cns.h"
 
-#include "sp-item-update-cns.h"
 #include "sp-guide.h"
+#include "sp-item-update-cns.h"
 
 using std::find;
 using std::vector;

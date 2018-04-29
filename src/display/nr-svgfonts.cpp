@@ -17,23 +17,23 @@
 #include <cairo.h>
 #include <vector>
 
-#include "svg/svg.h"
 #include "display/cairo-utils.h"
-#include "display/nr-svgfonts.h"
-#include "display/nr-svgfonts.h"
 #include "display/curve.h"
+#include "display/nr-svgfonts.h"
+#include "display/nr-svgfonts.h"
+#include "svg/svg.h"
 
 #include "xml/repr.h"
 
-#include "object/sp-path.h"
-#include "object/sp-object-group.h"
-#include "object/sp-use.h"
-#include "object/sp-use-reference.h"
 #include "object/sp-font-face.h"
-#include "object/sp-glyph.h"
-#include "object/sp-missing-glyph.h"
 #include "object/sp-font.h"
 #include "object/sp-glyph-kerning.h"
+#include "object/sp-glyph.h"
+#include "object/sp-missing-glyph.h"
+#include "object/sp-object-group.h"
+#include "object/sp-path.h"
+#include "object/sp-use-reference.h"
+#include "object/sp-use.h"
 
 // ************************//
 // UserFont Implementation //

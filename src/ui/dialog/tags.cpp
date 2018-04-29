@@ -14,31 +14,31 @@
 #endif
 
 #include "tags.h"
+#include <glibmm/main.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
-#include <glibmm/main.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
+#include "document.h"
 #include "helper/action.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 
 #include "svg/css-ostringstream.h"
-#include "ui/widget/layertypeicon.h"
+#include "ui/tools/tool-base.h" //"event-context.h"
 #include "ui/widget/addtoicon.h"
+#include "ui/widget/layertypeicon.h"
 #include "verbs.h"
 #include "xml/node-observer.h"
-#include "ui/tools/tool-base.h" //"event-context.h"
 //#include "dialogs/dialog-events.h"
-#include "ui/widget/color-notebook.h"
 #include "filter-chemistry.h"
+#include "ui/widget/color-notebook.h"
 
-#include "object/sp-item.h"
 #include "object/sp-defs.h"
+#include "object/sp-item.h"
 #include "object/sp-object-group.h"
 
 //#define DUMP_LAYERS 1

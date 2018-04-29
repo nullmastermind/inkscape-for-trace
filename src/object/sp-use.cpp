@@ -20,28 +20,28 @@
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
 #include "display/drawing-group.h"
-#include "attributes.h"
 #include "document.h"
+#include "preferences.h"
+#include "print.h"
 #include "sp-clippath.h"
-#include "sp-mask.h"
 #include "sp-factory.h"
 #include "sp-flowregion.h"
-#include "uri.h"
-#include "print.h"
-#include "xml/repr.h"
-#include "svg/svg.h"
-#include "preferences.h"
+#include "sp-mask.h"
 #include "style.h"
+#include "svg/svg.h"
+#include "uri.h"
+#include "xml/repr.h"
 
-#include "sp-use.h"
-#include "sp-symbol.h"
-#include "sp-root.h"
-#include "sp-use-reference.h"
-#include "sp-shape.h"
-#include "sp-text.h"
 #include "sp-flowtext.h"
+#include "sp-root.h"
+#include "sp-shape.h"
+#include "sp-symbol.h"
+#include "sp-text.h"
+#include "sp-use-reference.h"
+#include "sp-use.h"
 
 SPUse::SPUse()
     : SPItem(),

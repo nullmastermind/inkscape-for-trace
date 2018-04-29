@@ -10,19 +10,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include <cmath>
+#include <glib.h>
 
 #include "display/cairo-templates.h"
 #include "display/cairo-utils.h"
 #include "display/nr-3dutils.h"
-#include "display/nr-filter-specularlighting.h"
 #include "display/nr-filter-slot.h"
+#include "display/nr-filter-specularlighting.h"
 #include "display/nr-filter-units.h"
 #include "display/nr-filter-utils.h"
 #include "display/nr-light.h"
-#include "svg/svg-icc-color.h"
 #include "svg/svg-color.h"
+#include "svg/svg-icc-color.h"
 
 namespace Inkscape {
 namespace Filters {

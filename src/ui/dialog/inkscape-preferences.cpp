@@ -20,11 +20,11 @@
 #include "inkscape-preferences.h"
 
 #include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
-#include <gtkmm/recentmanager.h>
 #include <gtkmm/recentinfo.h>
+#include <gtkmm/recentmanager.h>
 
 #include "cms-system.h"
 #include "document.h"

@@ -10,22 +10,22 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <sstream>
-#include <glibmm/fileutils.h>
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include "preferences.h"
-#include "preferences-skeleton.h"
-#include "inkscape.h"
-#include "xml/node-observer.h"
-#include "xml/node-iterators.h"
-#include "xml/attribute-record.h"
-#include "util/units.h"
 #include "attribute-rel-util.h"
+#include "inkscape.h"
 #include "io/resource.h"
+#include "preferences-skeleton.h"
+#include "preferences.h"
+#include "util/units.h"
+#include "xml/attribute-record.h"
+#include "xml/node-iterators.h"
+#include "xml/node-observer.h"
+#include <cstring>
+#include <glib/gstdio.h>
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/i18n.h>
+#include <gtk/gtk.h>
+#include <sstream>
 
 #define PREFERENCES_FILE_NAME "preferences.xml"
 

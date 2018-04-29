@@ -17,13 +17,13 @@
 #include "config.h"
 #endif
 
+#include "desktop.h"
+#include "document-undo.h"
+#include "inkscape.h"
+#include "layer-manager.h"
 #include "lpe-powerstroke-properties.h"
 #include <boost/lexical_cast.hpp>
 #include <glibmm/i18n.h>
-#include "inkscape.h"
-#include "desktop.h"
-#include "document-undo.h"
-#include "layer-manager.h"
 
 #include "selection-chemistry.h"
 //#include "event-context.h"

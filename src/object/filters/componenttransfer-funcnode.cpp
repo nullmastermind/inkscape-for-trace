@@ -16,11 +16,11 @@
 #include <glib.h>
 
 #include "attributes.h"
-#include "document.h"
-#include "componenttransfer.h"
 #include "componenttransfer-funcnode.h"
-#include "xml/repr.h"
+#include "componenttransfer.h"
+#include "document.h"
 #include "helper-fns.h"
+#include "xml/repr.h"
 
 #define SP_MACROS_SILENT
 

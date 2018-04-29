@@ -6,12 +6,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <boost/utility.hpp>
 #include <iostream>
 #include <stdexcept>
-#include <boost/utility.hpp>
 
-#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 #include <2geom/bezier-utils.h>
 
@@ -19,16 +19,16 @@
 #include "multi-path-manipulator.h"
 #include "snap.h"
 
-#include "display/sp-ctrlline.h"
-#include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
+#include "display/sp-canvas.h"
+#include "display/sp-ctrlline.h"
 
 #include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/path-manipulator.h"
-#include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
+#include "ui/tools/node-tool.h"
 
 namespace {
 

@@ -57,11 +57,11 @@
 
 #include "pixmaps/cursor-spray.xpm"
 
-#include "svg/svg.h"
 #include "svg/svg-color.h"
+#include "svg/svg.h"
 
-#include "ui/tools/spray-tool.h"
 #include "ui/dialog/dialog-manager.h"
+#include "ui/tools/spray-tool.h"
 
 
 using Inkscape::DocumentUndo;

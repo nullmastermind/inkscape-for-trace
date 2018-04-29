@@ -16,8 +16,8 @@
 #endif
 
 #include <cstring>
-#include <string>
 #include <glibmm/i18n.h>
+#include <string>
 
 
 #include "desktop.h"

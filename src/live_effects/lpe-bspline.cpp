@@ -1,17 +1,18 @@
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <gtkmm.h>
-#include "live_effects/lpe-bspline.h"
-#include "ui/widget/scalar.h"
 #include "display/curve.h"
-#include "helper/geom-curves.h"
-#include "object/sp-path.h"
-#include "svg/svg.h"
-#include "xml/repr.h"
-#include "preferences.h"
 #include "document-undo.h"
+#include "helper/geom-curves.h"
+#include "live_effects/lpe-bspline.h"
+#include "object/sp-path.h"
+#include "preferences.h"
+#include "svg/svg.h"
+#include "ui/widget/scalar.h"
 #include "verbs.h"
+#include "xml/repr.h"
+#include <glib.h>
+#include <gtkmm.h>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

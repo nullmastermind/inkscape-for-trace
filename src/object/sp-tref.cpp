@@ -20,8 +20,8 @@
 
 #include <glibmm/i18n.h>
 
-#include "bad-uri-exception.h"
 #include "attributes.h"
+#include "bad-uri-exception.h"
 #include "document.h"
 #include "sp-factory.h"
 #include "sp-text.h"

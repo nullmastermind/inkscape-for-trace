@@ -19,13 +19,13 @@
 #include "preferences.h"
 #include "print.h"
 
+#include "document.h"
 #include "extension/internal/cairo-render-context.h"
 #include "extension/internal/cairo-renderer.h"
-#include "document.h"
 
-#include "util/units.h"
 #include "helper/png-write.h"
 #include "svg/svg-color.h"
+#include "util/units.h"
 
 #include <glibmm/i18n.h>
 

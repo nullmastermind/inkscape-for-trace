@@ -16,6 +16,7 @@
 #include "live_effects/lpe-angle_bisector.h"
 #include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-bendpath.h"
+#include "live_effects/lpe-bool.h"
 #include "live_effects/lpe-bounding-box.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-circle_3pts.h"
@@ -27,6 +28,7 @@
 #include "live_effects/lpe-dash-stroke.h"
 #include "live_effects/lpe-dynastroke.h"
 #include "live_effects/lpe-ellipse_5pts.h"
+#include "live_effects/lpe-embrodery-stitch.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-extrude.h"
 #include "live_effects/lpe-fill-between-many.h"
@@ -37,8 +39,8 @@
 #include "live_effects/lpe-interpolate_points.h"
 #include "live_effects/lpe-jointype.h"
 #include "live_effects/lpe-knot.h"
-#include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-lattice.h"
+#include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-line_segment.h"
 #include "live_effects/lpe-measure-segments.h"
 #include "live_effects/lpe-mirror_symmetry.h"
@@ -51,45 +53,43 @@
 #include "live_effects/lpe-powerclip.h"
 #include "live_effects/lpe-powermask.h"
 #include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-pts2ellipse.h"
 #include "live_effects/lpe-recursiveskeleton.h"
-#include "live_effects/lpe-roughen.h"
 #include "live_effects/lpe-rough-hatches.h"
+#include "live_effects/lpe-roughen.h"
 #include "live_effects/lpe-ruler.h"
 #include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-sketch.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-tangent_to_curve.h"
-#include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-taperstroke.h"
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
+#include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-vonkoch.h"
-#include "live_effects/lpe-embrodery-stitch.h"
-#include "live_effects/lpe-bool.h"
-#include "live_effects/lpe-pts2ellipse.h"
 
 #include "live_effects/lpeobject.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/sp-css-attr.h"
 
-#include "message-stack.h"
-#include "document-private.h"
-#include "ui/tools/pen-tool.h"
-#include "ui/tools/node-tool.h"
-#include "ui/tools-switch.h"
-#include "knotholder.h"
-#include "path-chemistry.h"
 #include "display/curve.h"
+#include "document-private.h"
+#include "knotholder.h"
+#include "message-stack.h"
+#include "path-chemistry.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tools/pen-tool.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-shape.h"
 
+#include <gtkmm/expander.h>
+#include <pangomm/layout.h>
 #include <stdio.h>
 #include <string.h>
-#include <pangomm/layout.h>
-#include <gtkmm/expander.h>
 
 namespace Inkscape {
 

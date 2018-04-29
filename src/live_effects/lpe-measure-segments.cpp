@@ -10,36 +10,36 @@
  */
 
 #include "live_effects/lpeobject.h"
-#include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpe-measure-segments.h"
 #include "2geom/affine.h"
 #include "2geom/angle.h"
 #include "2geom/point.h"
 #include "2geom/ray.h"
 #include "display/curve.h"
+#include "document-undo.h"
+#include "document.h"
 #include "helper/geom.h"
-#include "text-editing.h"
+#include "inkscape.h"
+#include "libnrtype/Layout-TNG.h"
+#include "live_effects/lpe-measure-segments.h"
+#include "live_effects/lpeobject-reference.h"
 #include "object/sp-defs.h"
-#include "object/sp-text.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-item-group.h"
 #include "object/sp-item.h"
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
+#include "object/sp-text.h"
+#include "path-chemistry.h"
+#include "preferences.h"
 #include "svg/stringstream.h"
-#include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/svg-length.h"
+#include "svg/svg.h"
+#include "text-editing.h"
 #include "util/units.h"
 #include "xml/node.h"
 #include "xml/sp-css-attr.h"
-#include "libnrtype/Layout-TNG.h"
-#include "document.h"
-#include "document-undo.h"
-#include "inkscape.h"
-#include "preferences.h"
-#include "path-chemistry.h"
 
 #include <cmath>
 #include <iomanip>
@@ -428,7 +428,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     font_size <<  fontsize << "pt";
     setlocale (LC_NUMERIC, locale_base);
     gchar c[32];
-    sprintf(c, "#%06x", rgb24);
+    sprintf(c, "#%06lx", rgb24);
     sp_repr_css_set_property (css, "fill",c);
     Inkscape::SVGOStringStream os;
     os << SP_RGBA32_A_F(coloropacity.get_value());
@@ -626,7 +626,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     style  += "stroke-width:";
     style  += stroke_w.str();
     gchar c[32];
-    sprintf(c, "#%06x", rgb24);
+    sprintf(c, "#%06lx", rgb24);
     style += ";stroke:";
     style += Glib::ustring(c);
     Inkscape::SVGOStringStream os;

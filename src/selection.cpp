@@ -22,12 +22,12 @@
 #endif
 
 #include "inkscape.h"
-#include "preferences.h"
 #include "desktop.h"
 #include "document.h"
+#include "preferences.h"
 
-#include "object/sp-shape.h"
 #include "object/sp-path.h"
+#include "object/sp-shape.h"
 
 #include "xml/repr.h"
 

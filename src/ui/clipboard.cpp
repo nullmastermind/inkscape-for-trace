@@ -21,42 +21,42 @@
  * See the file COPYING for details.
  */
 
-#include <gtkmm/clipboard.h>
 #include "ui/clipboard.h"
+#include <gtkmm/clipboard.h>
 
 // TODO: reduce header bloat if possible
 
+#include "desktop.h"
 #include "file.h" // for file_import, used in _pasteImage
-#include <glibmm/i18n.h>
-#include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
 #include "inkgc/gc-core.h"
-#include "xml/repr.h"
 #include "inkscape.h"
 #include "io/stringstream.h"
-#include "desktop.h"
+#include "xml/repr.h"
+#include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
+#include <glibmm/i18n.h>
 
-#include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
-#include "document.h"
-#include "document-private.h"
-#include "message-stack.h"
 #include "context-fns.h"
-#include "ui/tools/dropper-tool.h" // used in copy()
+#include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
+#include "document-private.h"
+#include "document.h"
 #include "extension/db.h" // extension database
+#include "extension/find_extension_by_mime.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "selection-chemistry.h"
-#include <2geom/transforms.h>
 #include "gradient-drag.h"
-#include "live_effects/lpeobject.h"
+#include "helper/png-write.h"
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
 #include "live_effects/parameter/path.h"
-#include "ui/tools/text-tool.h"
+#include "message-stack.h"
+#include "path-chemistry.h"
+#include "selection-chemistry.h"
 #include "text-editing.h"
 #include "ui/tools-switch.h"
-#include "path-chemistry.h"
+#include "ui/tools/dropper-tool.h" // used in copy()
+#include "ui/tools/text-tool.h"
 #include "util/units.h"
-#include "helper/png-write.h"
-#include "extension/find_extension_by_mime.h"
+#include <2geom/transforms.h>
 
 #include "object/box3d.h"
 #include "object/persp3d.h"
@@ -72,13 +72,13 @@
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
-#include "object/sp-use.h"
 #include "object/sp-textpath.h"
+#include "object/sp-use.h"
 #include "style.h"
 
-#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
 #include "svg/css-ostringstream.h" // used in copy
 #include "svg/svg-color.h"
+#include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"

@@ -1,16 +1,16 @@
-#include <3rdparty/libcroco/cr-parser.h>
+#include "attributes.h"
+#include "document.h"
+#include "sp-root.h"
+#include "sp-style-elem.h"
+#include "style.h"
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
-#include "document.h"
-#include "sp-style-elem.h"
-#include "sp-root.h"
-#include "attributes.h"
-#include "style.h"
+#include <3rdparty/libcroco/cr-parser.h>
 
 // For external style sheets
 #include "io/resource.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 // For font-rule
 #include "libnrtype/FontFactory.h"

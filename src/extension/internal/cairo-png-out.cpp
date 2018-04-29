@@ -22,20 +22,20 @@
 #include "cairo-png-out.h"
 #include "cairo-render-context.h"
 #include "cairo-renderer.h"
-#include <print.h>
-#include "extension/system.h"
-#include "extension/print.h"
+#include "display/drawing.h"
 #include "extension/db.h"
 #include "extension/output.h"
-#include "display/drawing.h"
+#include "extension/print.h"
+#include "extension/system.h"
+#include <print.h>
 
-#include "display/curve.h"
 #include "display/canvas-bpath.h"
+#include "display/curve.h"
 #include "object/sp-item.h"
 #include "object/sp-root.h"
 
-#include "io/sys.h"
 #include "document.h"
+#include "io/sys.h"
 
 namespace Inkscape {
 namespace Extension {

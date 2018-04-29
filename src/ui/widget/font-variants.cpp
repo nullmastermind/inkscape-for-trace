@@ -11,8 +11,8 @@
 #include <config.h>
 #endif
 
-#include <gtkmm.h>
 #include <glibmm/i18n.h>
+#include <gtkmm.h>
 
 #include <libnrtype/font-instance.h>
 

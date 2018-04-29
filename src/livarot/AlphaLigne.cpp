@@ -9,10 +9,10 @@
 
 #include "AlphaLigne.h"
 
+#include <glib.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib.h>
 
 AlphaLigne::AlphaLigne(int iMin,int iMax)
 {

@@ -21,21 +21,21 @@
 
 #include "latex-text-renderer.h"
 
-#include <signal.h>
 #include <errno.h>
+#include <signal.h>
 
 #include "libnrtype/Layout-TNG.h"
-#include <2geom/transforms.h>
 #include <2geom/rect.h>
+#include <2geom/transforms.h>
 #include <glibmm/i18n.h>
 
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
-#include "object/sp-root.h"
-#include "object/sp-use.h"
-#include "object/sp-text.h"
 #include "object/sp-flowtext.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
 #include "object/sp-rect.h"
+#include "object/sp-root.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
 #include "style.h"
 
 #include "text-editing.h"
@@ -45,9 +45,9 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
+#include "document.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
-#include "document.h"
 
 namespace Inkscape {
 namespace Extension {

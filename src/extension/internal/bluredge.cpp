@@ -12,15 +12,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <vector>
 #include "desktop.h"
 #include "document.h"
-#include "selection.h"
-#include "helper/action.h"
 #include "helper/action-context.h"
-#include "preferences.h"
-#include "path-chemistry.h"
+#include "helper/action.h"
 #include "object/sp-item.h"
+#include "path-chemistry.h"
+#include "preferences.h"
+#include "selection.h"
+#include <vector>
 
 #include "extension/effect.h"
 #include "extension/system.h"

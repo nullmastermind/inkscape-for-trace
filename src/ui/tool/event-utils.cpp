@@ -8,11 +8,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "display/sp-canvas.h"
+#include "ui/tool/event-utils.h"
 #include <cstring>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
-#include "display/sp-canvas.h"
-#include "ui/tool/event-utils.h"
 
 namespace Inkscape {
 namespace UI {

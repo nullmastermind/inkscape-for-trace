@@ -29,42 +29,42 @@
 #endif
 
 
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/elliptical-arc.h>
+#include <2geom/sbasis-to-bezier.h>
 
+#include "helper/geom-curves.h"
+#include "helper/geom.h"
+#include <2geom/curves.h>
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
 #include <2geom/rect.h>
-#include <2geom/curves.h>
-#include "helper/geom.h"
-#include "helper/geom-curves.h"
 
 #include "inkscape-version.h"
 
 #include "util/units.h"
 
-#include "extension/system.h"
-#include "extension/print.h"
 #include "document.h"
+#include "extension/print.h"
+#include "extension/system.h"
 #include "path-prefix.h"
 
-#include "object/sp-pattern.h"
-#include "object/sp-image.h"
 #include "object/sp-gradient.h"
-#include "object/sp-radial-gradient.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-root.h"
+#include "object/sp-image.h"
 #include "object/sp-item.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
 
+#include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
+#include "display/canvas-bpath.h"  // for SPWindRule
 #include "splivarot.h"             // pieces for union on shapes
 #include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
-#include "display/canvas-bpath.h"  // for SPWindRule
-#include "display/cairo-utils.h"   // for Inkscape::Pixbuf::PF_CAIRO
 
 #include "wmf-print.h"
 
-#include <string.h>
 #include <3rdparty/libuemf/symbol_convert.h>
+#include <string.h>
 
 namespace Inkscape {
 namespace Extension {

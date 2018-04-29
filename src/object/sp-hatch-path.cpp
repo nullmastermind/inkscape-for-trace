@@ -12,22 +12,22 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string>
 #include <2geom/path.h>
+#include <string>
 
-#include "svg/svg.h"
+#include "attributes.h"
 #include "display/cairo-utils.h"
 #include "display/curve.h"
 #include "display/drawing-context.h"
+#include "display/drawing-shape.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
-#include "display/drawing-shape.h"
-#include "helper/geom.h"
-#include "attributes.h"
 #include "document-private.h"
-#include "sp-item.h"
+#include "helper/geom.h"
 #include "sp-hatch-path.h"
+#include "sp-item.h"
 #include "svg/css-ostringstream.h"
+#include "svg/svg.h"
 
 SPHatchPath::SPHatchPath()
     : offset(),

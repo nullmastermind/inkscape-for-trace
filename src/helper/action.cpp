@@ -10,13 +10,13 @@
  */
 
 #include "debug/logger.h"
-#include "debug/timestamp.h"
-#include "debug/simple-event.h"
 #include "debug/event-tracker.h"
-#include "ui/view/view.h"
+#include "debug/simple-event.h"
+#include "debug/timestamp.h"
 #include "desktop.h"
 #include "document.h"
 #include "helper/action.h"
+#include "ui/view/view.h"
 
 static void sp_action_finalize (GObject *object);
 

@@ -13,10 +13,10 @@
 
 #include "spinbutton.h"
 
+#include "ui/tools/tool-base.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
-#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {

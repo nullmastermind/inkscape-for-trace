@@ -20,15 +20,15 @@
 #include "pointlight.h"
 #include "spotlight.h"
 
-#include "strneq.h"
 #include "attributes.h"
+#include "strneq.h"
 
-#include "display/nr-filter.h"
 #include "display/nr-filter-diffuselighting.h"
+#include "display/nr-filter.h"
 
-#include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/svg-icc-color.h"
+#include "svg/svg.h"
 
 #include "xml/repr.h"
 

@@ -19,8 +19,8 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 #include "color.h"
-#include "svg/svg-icc-color.h"
 #include "svg/svg-color.h"
+#include "svg/svg-icc-color.h"
 
 #include "svg/css-ostringstream.h"
 

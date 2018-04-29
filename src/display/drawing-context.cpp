@@ -10,8 +10,8 @@
  */
 
 #include "display/drawing-context.h"
-#include "display/drawing-surface.h"
 #include "display/cairo-utils.h"
+#include "display/drawing-surface.h"
 
 namespace Inkscape {
 

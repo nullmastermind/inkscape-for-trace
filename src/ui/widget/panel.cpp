@@ -19,8 +19,8 @@
 
 #include <glibmm/i18n.h>
 
-#include "panel.h"
 #include "desktop.h"
+#include "panel.h"
 
 #include "inkscape.h"
 #include "widgets/eek-preview.h"

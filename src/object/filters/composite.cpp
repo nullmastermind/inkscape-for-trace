@@ -17,8 +17,8 @@
 #include "attributes.h"
 #include "helper-fns.h"
 
-#include "display/nr-filter.h"
 #include "display/nr-filter-composite.h"
+#include "display/nr-filter.h"
 
 #include "object/sp-filter.h"
 

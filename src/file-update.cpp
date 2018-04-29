@@ -30,8 +30,8 @@
 
 #include "display/canvas-grid.h"
 
-#include "extension/effect.h"
 #include "extension/db.h"
+#include "extension/effect.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/system.h"

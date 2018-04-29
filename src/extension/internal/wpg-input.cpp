@@ -39,17 +39,17 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
 #include "config.h"
+#include <stdio.h>
 
 #ifdef WITH_LIBWPG
 
-#include "wpg-input.h"
-#include "extension/system.h"
-#include "extension/input.h"
 #include "document.h"
+#include "extension/input.h"
+#include "extension/system.h"
 #include "object/sp-root.h"
 #include "util/units.h"
+#include "wpg-input.h"
 #include <cstring>
 
 // Take a guess and fallback to 0.2.x if no configure has run

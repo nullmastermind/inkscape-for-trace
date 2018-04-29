@@ -11,10 +11,10 @@
  */
 
 #include "color-picker.h"
-#include "inkscape.h"
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
+#include "inkscape.h"
 #include "ui/dialog-events.h"
 
 #include "ui/widget/color-notebook.h"

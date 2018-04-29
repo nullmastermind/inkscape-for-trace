@@ -19,8 +19,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/bezier-utils.h>
+#include <2geom/sbasis-to-bezier.h>
 
 #include "ui/tools/pencil-tool.h"
 
@@ -40,8 +40,8 @@
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 
-#include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
+#include "live_effects/lpe-powerstroke.h"
 
 #include "object/sp-path.h"
 #include "style.h"

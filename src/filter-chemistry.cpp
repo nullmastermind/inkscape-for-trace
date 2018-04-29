@@ -17,17 +17,17 @@
 #include <cstring>
 #include <glibmm.h>
 
-#include "document-private.h"
 #include "desktop-style.h"
+#include "document-private.h"
 
 #include "filter-chemistry.h"
 #include "filter-enums.h"
 
+#include "object/filters/blend.h"
+#include "object/filters/gaussian-blur.h"
 #include "object/sp-defs.h"
 #include "object/sp-item.h"
 #include "style.h"
-#include "object/filters/blend.h"
-#include "object/filters/gaussian-blur.h"
 
 /**
  * Count how many times the filter is used by the styles of o and its

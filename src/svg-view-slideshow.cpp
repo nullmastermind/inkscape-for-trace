@@ -40,9 +40,9 @@
 #include "ui/monitor.h"
 #include "util/units.h"
 
-#include "svg-view.h"
 #include "svg-view-slideshow.h"
 #include "svg-view-widget.h"
+#include "svg-view.h"
 
 
 SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_screen, int timer, double scale)

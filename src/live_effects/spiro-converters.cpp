@@ -7,8 +7,8 @@
  */
 
 #include "spiro-converters.h"
-#include <2geom/path.h>
 #include "display/curve.h"
+#include <2geom/path.h>
 #include <glib.h>
 
 #define SPIRO_SHOW_INFINITE_COORDINATE_CALLS

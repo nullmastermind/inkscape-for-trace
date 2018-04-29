@@ -1,10 +1,10 @@
 
 #include "ui/tools/dynamic-base.h"
 
-#include "message-context.h"
-#include "display/sp-canvas-item.h"
 #include "desktop.h"
 #include "display/curve.h"
+#include "display/sp-canvas-item.h"
+#include "message-context.h"
 
 #define MIN_PRESSURE      0.0
 #define MAX_PRESSURE      1.0

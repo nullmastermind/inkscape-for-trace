@@ -12,14 +12,14 @@
  */
 
 #include "attributes.h"
-#include "sp-polygon.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
-#include <2geom/curves.h>
+#include "document.h"
 #include "helper/geom-curves.h"
+#include "sp-polygon.h"
 #include "svg/stringstream.h"
 #include "xml/repr.h"
-#include "document.h"
+#include <2geom/curves.h>
+#include <glibmm/i18n.h>
 
 SPPolygon::SPPolygon() : SPShape() {
 }

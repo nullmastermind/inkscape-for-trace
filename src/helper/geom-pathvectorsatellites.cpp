@@ -14,8 +14,8 @@
     * This code is in public domain
     */
 
-#include <helper/geom-pathvectorsatellites.h>
 #include "util/units.h"
+#include <helper/geom-pathvectorsatellites.h>
 
 Geom::PathVector PathVectorSatellites::getPathVector() const
 {

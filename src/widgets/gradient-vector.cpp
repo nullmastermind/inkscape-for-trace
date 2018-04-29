@@ -31,15 +31,15 @@
 
 
 
-#include "document-private.h"
-#include "gradient-chemistry.h"
-#include "inkscape.h"
-#include "preferences.h"
 #include "desktop.h"
+#include "document-private.h"
 #include "document-undo.h"
+#include "gradient-chemistry.h"
 #include "gradient-vector.h"
+#include "inkscape.h"
 #include "layer-manager.h"
 #include "macros.h"
+#include "preferences.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
@@ -439,9 +439,9 @@ void SPGradientVectorSelector::setSwatched()
   ###                 Vector Editing Widget
   ##################################################################*/
 
+#include "svg/svg-color.h"
 #include "widgets/widget-sizes.h"
 #include "xml/node-event-vector.h"
-#include "svg/svg-color.h"
 
 #define PAD 4
 

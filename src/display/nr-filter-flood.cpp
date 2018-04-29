@@ -14,12 +14,12 @@
 # include "config.h"
 #endif
 
+#include "color.h"
 #include "display/cairo-utils.h"
 #include "display/nr-filter-flood.h"
 #include "display/nr-filter-slot.h"
-#include "svg/svg-icc-color.h"
 #include "svg/svg-color.h"
-#include "color.h"
+#include "svg/svg-icc-color.h"
 
 namespace Inkscape {
 namespace Filters {

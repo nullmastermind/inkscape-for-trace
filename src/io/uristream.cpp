@@ -13,8 +13,8 @@
 
 #include "uristream.h"
 #include "sys.h"
-#include <string>
 #include <cstring>
+#include <string>
 
 
 namespace Inkscape

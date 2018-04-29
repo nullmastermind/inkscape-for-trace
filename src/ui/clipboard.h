@@ -20,6 +20,7 @@
  */
 
 #include <glibmm/ustring.h>
+#include <vector>
 
 // forward declarations
 class SPDesktop;

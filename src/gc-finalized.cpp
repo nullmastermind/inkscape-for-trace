@@ -13,11 +13,11 @@
  *
  */
 
-#include <typeinfo>
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
-#include "util/format.h"
 #include "gc-finalized.h"
+#include "util/format.h"
+#include <typeinfo>
 
 namespace Inkscape {
 

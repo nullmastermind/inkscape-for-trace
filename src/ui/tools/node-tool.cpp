@@ -10,8 +10,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 
 

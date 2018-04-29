@@ -8,15 +8,15 @@
  */
 
 #include "desktop.h"
-#include "selection.h"
 #include "document-private.h"
-#include "extension/extension.h"
 #include "extension/effect.h"
+#include "extension/extension.h"
 #include "extension/system.h"
+#include "object/sp-defs.h"
+#include "selection.h"
+#include "xml/attribute-record.h"
 #include "xml/repr.h"
 #include "xml/simple-node.h"
-#include "xml/attribute-record.h"
-#include "object/sp-defs.h"
 
 #include "filter.h"
 

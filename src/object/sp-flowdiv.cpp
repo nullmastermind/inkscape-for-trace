@@ -2,9 +2,9 @@
  */
 
 #include "xml/repr.h"
+#include "document.h"
 #include "sp-flowdiv.h"
 #include "sp-string.h"
-#include "document.h"
 
 SPFlowdiv::SPFlowdiv() : SPItem() {
 }

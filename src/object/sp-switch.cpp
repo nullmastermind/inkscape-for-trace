@@ -14,9 +14,9 @@
 
 #include <glibmm/i18n.h>
 
-#include "sp-switch.h"
-#include "display/drawing-group.h"
 #include "conditions.h"
+#include "display/drawing-group.h"
+#include "sp-switch.h"
 
 #include <sigc++/adaptors/bind.h>
 

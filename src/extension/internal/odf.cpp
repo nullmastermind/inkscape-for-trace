@@ -44,48 +44,48 @@
 #include "odf.h"
 
 //# System includes
+#include <math.h>
 #include <stdio.h>
 #include <time.h>
 #include <vector>
-#include <math.h>
 
 //# Inkscape includes
 #include "clear-n_.h"
-#include "inkscape.h"
 #include "display/curve.h"
-#include <2geom/pathvector.h>
+#include "extension/system.h"
+#include "helper/geom-curves.h"
+#include "inkscape.h"
 #include <2geom/curves.h>
+#include <2geom/pathvector.h>
 #include <2geom/transforms.h>
 #include <helper/geom.h>
-#include "helper/geom-curves.h"
-#include "extension/system.h"
 
-#include "xml/repr.h"
-#include "xml/attribute-record.h"
-#include "object/sp-image.h"
-#include "object/sp-gradient.h"
-#include "object/sp-stop.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-radial-gradient.h"
-#include "object/sp-path.h"
-#include "object/sp-text.h"
 #include "object/sp-flowtext.h"
+#include "object/sp-gradient.h"
+#include "object/sp-image.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-path.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-stop.h"
+#include "object/sp-text.h"
 #include "object/uri.h"
 #include "style.h"
+#include "xml/attribute-record.h"
+#include "xml/repr.h"
 
 #include "svg/svg.h"
 #include "text-editing.h"
 #include "util/units.h"
 
 
-#include "inkscape-version.h"
 #include "document.h"
 #include "extension/extension.h"
+#include "inkscape-version.h"
 
-#include "io/inkscapestream.h"
 #include "io/bufferstream.h"
-#include <util/ziptool.h>
+#include "io/inkscapestream.h"
 #include <iomanip>
+#include <util/ziptool.h>
 namespace Inkscape
 {
 namespace Extension

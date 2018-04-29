@@ -30,9 +30,9 @@
 
 #include <glibmm/i18n.h>
 
-#include "paintbucket-toolbar.h"
 #include "desktop.h"
 #include "document-undo.h"
+#include "paintbucket-toolbar.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
@@ -40,8 +40,8 @@
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ink-action.h"
 #include "widgets/ege-adjustment-action.h"
+#include "widgets/ink-action.h"
 #include "widgets/toolbox.h"
 
 using Inkscape::UI::Widget::UnitTracker;

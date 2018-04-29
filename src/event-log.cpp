@@ -14,9 +14,9 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
+#include "document.h"
 #include "inkscape.h"
 #include "util/ucompose.hpp"
-#include "document.h"
 
 namespace
 {

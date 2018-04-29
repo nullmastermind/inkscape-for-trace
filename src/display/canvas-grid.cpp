@@ -19,32 +19,32 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/label.h>
 
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "sp-canvas-util.h"
 #include "helper/mathfns.h"
+#include "sp-canvas-util.h"
 
 #include "display/cairo-utils.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-group.h"
+#include "display/sp-canvas.h"
 #include "document.h"
-#include "util/units.h"
+#include "helper/mathfns.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "object/sp-namedview.h"
 #include "object/sp-object.h"
 #include "object/sp-root.h"
-#include "svg/svg-color.h"
+#include "preferences.h"
 #include "svg/stringstream.h"
-#include "helper/mathfns.h"
-#include "xml/node-event-vector.h"
+#include "svg/svg-color.h"
+#include "util/units.h"
 #include "verbs.h"
-#include "display/sp-canvas.h"
+#include "xml/node-event-vector.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;

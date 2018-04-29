@@ -15,14 +15,14 @@
  */
 
 #include "live_effects/effect.h"
-#include "svg/svg.h"
 #include "attributes.h"
+#include "display/curve.h"
+#include "document.h"
+#include "svg/svg.h"
+#include "xml/repr.h"
 #include <2geom/bezier-utils.h>
 #include <2geom/pathvector.h>
-#include "display/curve.h"
 #include <glibmm/i18n.h>
-#include "xml/repr.h"
-#include "document.h"
 
 #include "sp-spiral.h"
 

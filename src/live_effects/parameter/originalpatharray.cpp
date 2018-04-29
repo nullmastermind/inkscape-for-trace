@@ -8,26 +8,26 @@
 # include "config.h"
 #endif
 
-#include "live_effects/parameter/originalpatharray.h"
-#include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-bspline.h"
-#include "live_effects/lpeobject.h"
+#include "live_effects/lpe-spiro.h"
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/parameter/originalpatharray.h"
 
-#include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
-#include <gtkmm/separatormenuitem.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/widget.h>
 
 #include <glibmm/i18n.h>
 
-#include "inkscape.h"
-#include "ui/clipboard.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "originalpath.h"
 #include "display/curve.h"
+#include "inkscape.h"
+#include "originalpath.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "ui/clipboard.h"
 
 #include <2geom/coord.h>
 #include <2geom/point.h>
@@ -38,9 +38,9 @@
 
 #include "live_effects/effect.h"
 
-#include "verbs.h"
 #include "document-undo.h"
 #include "document.h"
+#include "verbs.h"
 
 namespace Inkscape {
 

@@ -1,14 +1,14 @@
 #ifdef HAVE_CONFIG_H
 #endif
 
-#include <map>
 #include <cstring>
-#include <string>
 #include <glib.h> // g_assert()
+#include <map>
+#include <string>
 
-#include "xml/node-iterators.h"
-#include "util/find-if-before.h"
 #include "node-fns.h"
+#include "util/find-if-before.h"
+#include "xml/node-iterators.h"
 
 namespace Inkscape {
 namespace XML {

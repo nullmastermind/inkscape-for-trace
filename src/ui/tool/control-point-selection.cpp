@@ -9,14 +9,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <boost/none.hpp>
-#include "ui/tool/selectable-control-point.h"
-#include <2geom/transforms.h>
 #include "desktop.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
-#include "ui/tool/transform-handle-set.h"
 #include "ui/tool/node.h"
+#include "ui/tool/selectable-control-point.h"
+#include "ui/tool/transform-handle-set.h"
+#include <2geom/transforms.h>
+#include <boost/none.hpp>
 
 
 

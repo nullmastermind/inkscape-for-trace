@@ -28,19 +28,19 @@
 #endif
 
 #include <cstring>
-#include <string>
 #include <glibmm/i18n.h>
+#include <string>
 
-#include <livarot/Path.h>
-#include "svg/stringstream.h"
 #include "attributes.h"
-#include "sp-use-reference.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "sp-textpath.h"
-#include "text-editing.h"
-#include "style.h"
 #include "document.h"
+#include "sp-textpath.h"
+#include "sp-tref.h"
+#include "sp-tspan.h"
+#include "sp-use-reference.h"
+#include "style.h"
+#include "svg/stringstream.h"
+#include "text-editing.h"
+#include <livarot/Path.h>
 
 /*#####################################################
 #  SPTSPAN

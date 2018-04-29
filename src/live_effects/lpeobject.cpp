@@ -9,11 +9,11 @@
 
 #include "live_effects/effect.h"
 
-#include "xml/repr.h"
-#include "xml/node-event-vector.h"
 #include "attributes.h"
-#include "document.h"
 #include "document-private.h"
+#include "document.h"
+#include "xml/node-event-vector.h"
+#include "xml/repr.h"
 
 #include "object/sp-defs.h"
 

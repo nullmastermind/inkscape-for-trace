@@ -9,11 +9,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <vector>
 #include "display/cairo-utils.h"
 #include "display/nr-filter-merge.h"
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-utils.h"
+#include <vector>
 
 namespace Inkscape {
 namespace Filters {

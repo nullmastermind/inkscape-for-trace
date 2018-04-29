@@ -6,9 +6,9 @@
  */
 
 #include "live_effects/lpe-bendpath.h"
+#include "display/curve.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
-#include "display/curve.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

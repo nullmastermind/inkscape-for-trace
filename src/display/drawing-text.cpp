@@ -12,13 +12,13 @@
 //#include "display/cairo-utils.h"
 //#include "display/canvas-bpath.h" // for SPWindRule (WTF!)
 #include "display/drawing.h"
+#include "2geom/pathvector.h"
 #include "display/drawing-context.h"
 #include "display/drawing-surface.h"
 #include "display/drawing-text.h"
 #include "helper/geom.h"
 #include "libnrtype/font-instance.h"
 #include "style.h"
-#include "2geom/pathvector.h"
 
 #include "display/cairo-utils.h"
 #include "display/canvas-bpath.h"

@@ -50,8 +50,8 @@
 #include "ui/tools/pen-tool.h"
 
 // we include the necessary files for BSpline & Spiro
-#include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpeobject.h"
 #include "live_effects/parameter/path.h"
 
 #define INKSCAPE_LPE_SPIRO_C

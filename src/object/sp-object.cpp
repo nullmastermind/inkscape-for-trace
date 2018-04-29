@@ -20,28 +20,28 @@
 
 #include <boost/range/adaptor/transformed.hpp>
 
-#include "helper/sp-marshal.h"
-#include "xml/node-event-vector.h"
-#include "attributes.h"
 #include "attribute-rel-util.h"
+#include "attributes.h"
 #include "color-profile.h"
+#include "debug/demangle.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 #include "document.h"
-#include "preferences.h"
-#include "style.h"
+#include "helper/sp-marshal.h"
 #include "live_effects/lpeobject.h"
+#include "preferences.h"
 #include "sp-factory.h"
 #include "sp-paint-server.h"
 #include "sp-root.h"
-#include "sp-style-elem.h"
 #include "sp-script.h"
+#include "sp-style-elem.h"
 #include "streq.h"
 #include "strneq.h"
-#include "xml/node-fns.h"
-#include "debug/event-tracker.h"
-#include "debug/simple-event.h"
-#include "debug/demangle.h"
+#include "style.h"
 #include "util/format.h"
 #include "util/longest-common-suffix.h"
+#include "xml/node-event-vector.h"
+#include "xml/node-fns.h"
 
 using std::memcpy;
 using std::strchr;

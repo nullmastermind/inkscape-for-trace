@@ -25,48 +25,48 @@
 #endif
 
 
-#include <signal.h>
 #include <errno.h>
+#include <signal.h>
 
 #include "libnrtype/Layout-TNG.h"
-#include <2geom/transforms.h>
 #include <2geom/pathvector.h>
+#include <2geom/transforms.h>
 
 #include <glib.h>
 
-#include <glibmm/i18n.h>
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
-#include "object/sp-marker.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-radial-gradient.h"
-#include "object/sp-root.h"
-#include "object/sp-shape.h"
-#include "object/sp-use.h"
-#include "object/sp-text.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+#include "object/sp-clippath.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-hatch-path.h"
 #include "object/sp-image.h"
-#include "object/sp-symbol.h"
-#include "object/sp-pattern.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-marker.h"
 #include "object/sp-mask.h"
-#include "object/sp-clippath.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-symbol.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
+#include <glibmm/i18n.h>
 
-#include "util/units.h"
-#include "helper/png-write.h"
 #include "helper/pixbuf-ops.h"
+#include "helper/png-write.h"
+#include "util/units.h"
 
-#include "cairo-renderer.h"
 #include "cairo-render-context.h"
+#include "cairo-renderer.h"
 #include "extension/system.h"
 
 #include "io/sys.h"
 
-#include <cairo.h>
 #include "document.h"
+#include <cairo.h>
 
 // include support for only the compiled-in surface types
 #ifdef CAIRO_HAS_PDF_SURFACE

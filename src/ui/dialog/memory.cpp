@@ -18,12 +18,12 @@
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 
+#include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/dialog.h>
 
-#include "inkgc/gc-core.h"
 #include "debug/heap.h"
+#include "inkgc/gc-core.h"
 #include "verbs.h"
 
 namespace Inkscape {

@@ -44,9 +44,9 @@
 #define _(s) gettext(s)
 #endif // !defined(_)
 
-#include <set>
 #include <algorithm>
 #include <functional>
+#include <set>
 
 #include "ege-tags.h"
 

@@ -18,8 +18,8 @@
 #include "attributes.h"
 #include "helper-fns.h"
 
-#include "display/nr-filter.h"
 #include "display/nr-filter-offset.h"
+#include "display/nr-filter.h"
 
 #include "svg/svg.h"
 

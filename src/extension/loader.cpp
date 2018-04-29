@@ -13,10 +13,10 @@
 
 #include <gmodule.h>
 
-#include "system.h"
-#include <string.h>
 #include "dependency.h"
 #include "inkscape-version.h"
+#include "system.h"
+#include <string.h>
 
 namespace Inkscape {
 namespace Extension {

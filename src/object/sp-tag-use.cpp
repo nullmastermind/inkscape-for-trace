@@ -17,17 +17,17 @@
 
 #include <glibmm/i18n.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
 #include "display/drawing-group.h"
-#include "attributes.h"
 #include "document.h"
-#include "uri.h"
-#include "xml/repr.h"
 #include "preferences.h"
-#include "style.h"
 #include "sp-factory.h"
 #include "sp-symbol.h"
 #include "sp-tag-use-reference.h"
+#include "style.h"
+#include "uri.h"
+#include "xml/repr.h"
 
 SPTagUse::SPTagUse()
 {

@@ -29,14 +29,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstring>
 #include <cmath>
 #include <cstdio>
+#include <cstring>
 #include <set>
 
 #include "ruler.h"
-#include <glibmm/i18n.h>
 #include "util/units.h"
+#include <glibmm/i18n.h>
 
 #define ROUND(x) ((int) round(x))
 

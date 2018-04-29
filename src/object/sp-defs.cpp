@@ -17,8 +17,8 @@
  */
 
 #include "sp-defs.h"
-#include "xml/repr.h"
 #include "document.h"
+#include "xml/repr.h"
 
 SPDefs::SPDefs() : SPObject() {
 }

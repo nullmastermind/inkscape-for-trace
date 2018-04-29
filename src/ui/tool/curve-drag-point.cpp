@@ -7,12 +7,12 @@
  */
 
 #include "ui/tool/curve-drag-point.h"
-#include <glib/gi18n.h>
 #include "desktop.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
+#include <glib/gi18n.h>
 
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"

@@ -14,14 +14,14 @@
 #include "config.h"
 #endif
 
-#include <gtkmm/dialog.h>
 #include <glibmm/main.h>
+#include <gtkmm/dialog.h>
 
-#include "floating-behavior.h"
 #include "dialog.h"
+#include "floating-behavior.h"
 
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
 #include "verbs.h"

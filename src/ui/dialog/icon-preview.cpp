@@ -18,8 +18,8 @@
 #endif
 
 #include <glibmm/i18n.h>
-#include <glibmm/timer.h>
 #include <glibmm/main.h>
+#include <glibmm/timer.h>
 
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/checkbutton.h>
@@ -31,8 +31,8 @@
 #include "verbs.h"
 
 #include "display/cairo-utils.h"
-#include "display/drawing.h"
 #include "display/drawing-context.h"
+#include "display/drawing.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"

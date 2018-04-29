@@ -9,28 +9,28 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include <cairo.h>
 #include <cmath>
 #include <cstring>
+#include <glib.h>
 #include <string>
-#include <cairo.h>
 
-#include "display/nr-filter.h"
 #include "display/nr-filter-primitive.h"
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-types.h"
 #include "display/nr-filter-units.h"
+#include "display/nr-filter.h"
 
 #include "display/nr-filter-blend.h"
-#include "display/nr-filter-composite.h"
-#include "display/nr-filter-convolve-matrix.h"
 #include "display/nr-filter-colormatrix.h"
 #include "display/nr-filter-component-transfer.h"
+#include "display/nr-filter-composite.h"
+#include "display/nr-filter-convolve-matrix.h"
 #include "display/nr-filter-diffuselighting.h"
 #include "display/nr-filter-displacement-map.h"
-#include "display/nr-filter-image.h"
 #include "display/nr-filter-flood.h"
 #include "display/nr-filter-gaussian.h"
+#include "display/nr-filter-image.h"
 #include "display/nr-filter-merge.h"
 #include "display/nr-filter-morphology.h"
 #include "display/nr-filter-offset.h"
@@ -39,13 +39,13 @@
 #include "display/nr-filter-turbulence.h"
 
 #include "display/cairo-utils.h"
-#include "display/drawing.h"
-#include "display/drawing-item.h"
 #include "display/drawing-context.h"
+#include "display/drawing-item.h"
 #include "display/drawing-surface.h"
+#include "display/drawing.h"
+#include "svg/svg-length.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
-#include "svg/svg-length.h"
 //#include "sp-filter-units.h"
 #include "preferences.h"
 

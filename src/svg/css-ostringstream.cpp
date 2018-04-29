@@ -1,6 +1,6 @@
 #include "svg/css-ostringstream.h"
-#include "svg/strip-trailing-zeros.h"
 #include "preferences.h"
+#include "svg/strip-trailing-zeros.h"
 
 Inkscape::CSSOStringStream::CSSOStringStream()
 {

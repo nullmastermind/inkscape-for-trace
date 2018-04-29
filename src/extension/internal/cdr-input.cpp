@@ -13,15 +13,15 @@
  *
  */
 
-#include <stdio.h>
 #include "config.h"
+#include <stdio.h>
 
 #include "cdr-input.h"
 
 #ifdef WITH_LIBCDR
 
-#include <string>
 #include <cstring>
+#include <string>
 
 #include <libcdr/libcdr.h>
 
@@ -43,11 +43,11 @@
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 
-#include "extension/system.h"
 #include "extension/input.h"
+#include "extension/system.h"
 
-#include "document.h"
 #include "document-private.h"
+#include "document.h"
 #include "inkscape.h"
 
 #include "ui/dialog-events.h"

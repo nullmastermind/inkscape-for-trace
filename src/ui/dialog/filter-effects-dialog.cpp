@@ -33,10 +33,10 @@
 #endif
 
 
-#include <glibmm/i18n.h>
-#include <glibmm/stringutils.h>
-#include <glibmm/main.h>
 #include <glibmm/convert.h>
+#include <glibmm/i18n.h>
+#include <glibmm/main.h>
+#include <glibmm/stringutils.h>
 
 #include "desktop.h"
 #include "dialog-manager.h"
@@ -51,8 +51,8 @@
 
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
-#include "object/filters/componenttransfer.h"
 #include "object/filters/componenttransfer-funcnode.h"
+#include "object/filters/componenttransfer.h"
 #include "object/filters/convolvematrix.h"
 #include "object/filters/distantlight.h"
 #include "object/filters/merge.h"

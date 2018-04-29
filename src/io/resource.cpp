@@ -24,13 +24,13 @@
 #include <shlobj.h> // for SHGetSpecialFolderLocation
 #endif
 
+#include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
-#include <glibmm/fileutils.h>
 
-#include "path-prefix.h"
-#include "io/sys.h"
 #include "io/resource.h"
+#include "io/sys.h"
+#include "path-prefix.h"
 
 using Inkscape::IO::file_test;
 

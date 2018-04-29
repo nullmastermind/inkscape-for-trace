@@ -13,8 +13,8 @@
 
 #include "live_effects/parameter/hidden.h"
 #include "live_effects/effect.h"
-#include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "svg/svg.h"
 
 namespace Inkscape {
 

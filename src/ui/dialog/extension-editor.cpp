@@ -21,9 +21,9 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
 
-#include "verbs.h"
 #include "preferences.h"
 #include "ui/interface.h"
+#include "verbs.h"
 
 #include "extension/db.h"
 

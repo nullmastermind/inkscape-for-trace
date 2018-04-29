@@ -12,13 +12,13 @@
  */
 
 #include "attributes.h"
-#include "style.h"
-#include "sp-line.h"
-#include "sp-guide.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
 #include "document.h"
 #include "inkscape.h"
+#include "sp-guide.h"
+#include "sp-line.h"
+#include "style.h"
+#include <glibmm/i18n.h>
 
 SPLine::SPLine() : SPShape() {
     this->x1.unset();

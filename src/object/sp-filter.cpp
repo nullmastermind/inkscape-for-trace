@@ -24,12 +24,12 @@
 
 #include <glibmm.h>
 
-#include "bad-uri-exception.h"
 #include "attributes.h"
+#include "bad-uri-exception.h"
 #include "display/nr-filter.h"
 #include "document.h"
-#include "sp-filter-reference.h"
 #include "filters/sp-filter-primitive.h"
+#include "sp-filter-reference.h"
 #include "uri.h"
 #include "xml/repr.h"
 

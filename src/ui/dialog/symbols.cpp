@@ -12,20 +12,20 @@
 # include "config.h"
 #endif
 
-#include <iostream>
 #include <algorithm>
-#include <locale>
-#include <sstream>
 #include <fstream>
+#include <iostream>
+#include <locale>
 #include <regex>
+#include <sstream>
 
+#include <glibmm/markup.h>
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
-#include <glibmm/markup.h>
 
-#include "path-prefix.h"
-#include "io/sys.h"
 #include "io/resource.h"
+#include "io/sys.h"
+#include "path-prefix.h"
 
 #include "display/cairo-utils.h"
 #include "ui/cache/svg_preview_cache.h"
@@ -34,16 +34,16 @@
 
 #include "symbols.h"
 
-#include "selection.h"
 #include "desktop.h"
+#include "selection.h"
 
 #include "document.h"
 #include "inkscape.h"
 
-#include "object/sp-root.h"
-#include "object/sp-use.h"
 #include "object/sp-defs.h"
+#include "object/sp-root.h"
 #include "object/sp-symbol.h"
+#include "object/sp-use.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -65,8 +65,8 @@
   #endif
 #endif
 
-#include "verbs.h"
 #include "helper/action.h"
+#include "verbs.h"
 #include <glibmm/i18n.h>
 
 namespace Inkscape {

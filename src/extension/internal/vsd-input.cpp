@@ -13,15 +13,15 @@
  *
  */
 
-#include <stdio.h>
 #include "config.h"
+#include <stdio.h>
 
 #include "vsd-input.h"
 
 #ifdef WITH_LIBVISIO
 
-#include <string>
 #include <cstring>
+#include <string>
 
 #include <libvisio/libvisio.h>
 
@@ -42,11 +42,11 @@
 
 #include <gtkmm/spinbutton.h>
 
-#include "extension/system.h"
 #include "extension/input.h"
+#include "extension/system.h"
 
-#include "document.h"
 #include "document-private.h"
+#include "document.h"
 #include "inkscape.h"
 
 #include "ui/dialog-events.h"

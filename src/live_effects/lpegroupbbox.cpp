@@ -8,11 +8,11 @@
 #include "document.h"
 #include "live_effects/lpegroupbbox.h"
 #include "object/sp-clippath.h"
+#include "object/sp-item-group.h"
+#include "object/sp-lpe-item.h"
 #include "object/sp-mask.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
-#include "object/sp-item-group.h"
-#include "object/sp-lpe-item.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

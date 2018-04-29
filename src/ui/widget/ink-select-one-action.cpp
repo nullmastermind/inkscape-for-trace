@@ -19,16 +19,16 @@
 
 #include "ink-select-one-action.h"
 
-#include <iostream>
-#include <gtkmm/toolitem.h>
+#include <gtkmm/box.h>
+#include <gtkmm/combobox.h>
+#include <gtkmm/image.h>
+#include <gtkmm/label.h>
+#include <gtkmm/menu.h>
 #include <gtkmm/menuitem.h>
 #include <gtkmm/radioaction.h>
 #include <gtkmm/radiomenuitem.h>
-#include <gtkmm/combobox.h>
-#include <gtkmm/menu.h>
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/image.h>
+#include <gtkmm/toolitem.h>
+#include <iostream>
 
 InkSelectOneAction* InkSelectOneAction::create(const Glib::ustring &name,
                                                const Glib::ustring &group_label,

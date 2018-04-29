@@ -8,15 +8,15 @@
 #include "config.h"
 #endif
 
-#include <gtkmm.h>
-#include "lpe-fillet-chamfer-properties.h"
-#include <boost/lexical_cast.hpp>
-#include <glibmm/i18n.h>
-#include "inkscape.h"
 #include "desktop.h"
 #include "document-undo.h"
+#include "inkscape.h"
 #include "layer-manager.h"
+#include "lpe-fillet-chamfer-properties.h"
 #include "message-stack.h"
+#include <boost/lexical_cast.hpp>
+#include <glibmm/i18n.h>
+#include <gtkmm.h>
 
 #include "selection-chemistry.h"
 

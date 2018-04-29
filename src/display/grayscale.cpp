@@ -15,9 +15,9 @@
 #include "color.h"
 
 // for activeDesktopIsGrayscale:
+#include "desktop.h"
 #include "display/rendermode.h"
 #include "inkscape.h"
-#include "desktop.h"
 
 namespace Grayscale {
 

@@ -13,20 +13,20 @@
 
 #include <gtkmm.h> // prevents deprecation warnings
 
-#include "inkscape.h"
 #include "desktop.h"
+#include "inkscape.h"
 
 #include <glibmm/i18n.h>
 
 #include "ui/tools-switch.h"
 
-#include "object/sp-rect.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-flowtext.h"
 #include "object/sp-offset.h"
 #include "object/sp-path.h"
-#include "object/sp-star.h"
+#include "object/sp-rect.h"
 #include "object/sp-spiral.h"
+#include "object/sp-star.h"
 #include "object/sp-text.h"
 
 // TODO: How many of these are actually needed?

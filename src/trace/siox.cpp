@@ -7,11 +7,11 @@
  */
 #include "siox.h"
 
-#include <math.h>
-#include <stdarg.h>
-#include <map>
 #include <algorithm>
 #include <cstdlib>
+#include <map>
+#include <math.h>
+#include <stdarg.h>
 
 
 namespace org

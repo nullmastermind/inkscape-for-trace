@@ -9,9 +9,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include "message-context.h"
 #include "message-stack.h"
+#include <glib.h>
 
 namespace Inkscape {
 

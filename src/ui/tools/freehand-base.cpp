@@ -30,8 +30,8 @@
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
-#include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-simplify.h"
 
 #include "svg/svg.h"
 

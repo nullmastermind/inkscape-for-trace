@@ -2,23 +2,23 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/lpe-powermask.h"
-#include <2geom/path-intersection.h>
-#include <2geom/intersection-graph.h>
 #include "display/curve.h"
-#include "helper/geom.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "svg/stringstream.h"
-#include "ui/tools-switch.h"
-#include "path-chemistry.h"
 #include "extract-uri.h"
+#include "helper/geom.h"
+#include "path-chemistry.h"
+#include "svg/stringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
+#include "ui/tools-switch.h"
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
 #include <bad-uri-exception.h>
 
+#include "object/sp-defs.h"
+#include "object/sp-item-group.h"
 #include "object/sp-mask.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
-#include "object/sp-defs.h"
-#include "object/sp-item-group.h"
 #include "object/uri.h"
 
 

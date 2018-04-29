@@ -15,12 +15,12 @@
 #endif
 #include "implementation.h"
 
-#include <extension/output.h>
-#include <extension/input.h>
 #include <extension/effect.h>
+#include <extension/input.h>
+#include <extension/output.h>
 
-#include "selection.h"
 #include "desktop.h"
+#include "selection.h"
 
 
 namespace Inkscape {

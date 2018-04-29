@@ -14,8 +14,8 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
 #include "message-stack.h"
 #include "node.h"
 #include "verbs.h"

@@ -10,9 +10,9 @@
 #include "extension/system.h"
 
 #include "crop.h"
-#include "selection-chemistry.h"
-#include "object/sp-item.h"
 #include "object/sp-item-transform.h"
+#include "object/sp-item.h"
+#include "selection-chemistry.h"
 #include <Magick++.h>
 
 namespace Inkscape {

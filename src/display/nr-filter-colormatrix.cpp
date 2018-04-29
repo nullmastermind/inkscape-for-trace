@@ -10,13 +10,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
-#include <algorithm>
 #include "display/cairo-templates.h"
 #include "display/cairo-utils.h"
 #include "display/nr-filter-colormatrix.h"
 #include "display/nr-filter-slot.h"
 #include <2geom/math-utils.h>
+#include <algorithm>
+#include <math.h>
 
 namespace Inkscape {
 namespace Filters {

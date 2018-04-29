@@ -4,20 +4,20 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <glibmm/i18n.h>
 #include <cstring>
+#include <glibmm/i18n.h>
 #include <string>
 
 #include "attributes.h"
-#include "xml/repr.h"
-#include "style.h"
-#include "inkscape.h"
 #include "document.h"
+#include "inkscape.h"
+#include "style.h"
+#include "xml/repr.h"
 
 #include "desktop.h"
 
-#include "text-tag-attributes.h"
 #include "text-editing.h"
+#include "text-tag-attributes.h"
 
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"

@@ -20,9 +20,9 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/stylecontext.h>
 
+#include "preferences.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
-#include "preferences.h"
 
 static const gint SLIDER_WIDTH = 96;
 static const gint SLIDER_HEIGHT = 8;

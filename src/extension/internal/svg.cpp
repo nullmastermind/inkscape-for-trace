@@ -18,17 +18,17 @@
 # include <config.h>
 #endif
 
-#include <vector>
 #include <giomm/file.h>
+#include <vector>
 
 
-#include "svg.h"
-#include "file.h"
-#include "extension/system.h"
+#include "document.h"
 #include "extension/output.h"
+#include "extension/system.h"
+#include "file.h"
+#include "svg.h"
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
-#include "document.h"
 
 namespace Inkscape {
 namespace Extension {

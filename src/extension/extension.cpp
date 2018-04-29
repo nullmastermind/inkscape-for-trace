@@ -20,20 +20,20 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/label.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
+#include <gtkmm/label.h>
 
-#include <glibmm/i18n.h>
-#include "inkscape.h"
-#include "extension/implementation/implementation.h"
 #include "extension.h"
+#include "extension/implementation/implementation.h"
+#include "inkscape.h"
+#include <glibmm/i18n.h>
 
 #include "db.h"
 #include "dependency.h"
-#include "timer.h"
-#include "param/parameter.h"
 #include "io/resource.h"
+#include "param/parameter.h"
+#include "timer.h"
 
 namespace Inkscape {
 namespace Extension {

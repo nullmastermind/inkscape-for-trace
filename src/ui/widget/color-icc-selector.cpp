@@ -4,8 +4,8 @@
 
 #include <set>
 
-#include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
+#include <gtkmm/adjustment.h>
 
 #include "colorspace.h"
 #include "document.h"
@@ -23,9 +23,9 @@
 #define noDEBUG_LCMS
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-#include "object/color-profile.h"
 #include "cms-system.h"
 #include "color-profile-cms-fns.h"
+#include "object/color-profile.h"
 
 #ifdef DEBUG_LCMS
 #include "preferences.h"

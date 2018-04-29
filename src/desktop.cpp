@@ -26,8 +26,8 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <2geom/transforms.h>
+#include <glibmm/i18n.h>
 
 #include <2geom/rect.h>
 
@@ -72,8 +72,8 @@
 #include "widgets/desktop-widget.h"
 
 // TODO those includes are only for node tool quick zoom. Remove them after fixing it.
-#include "ui/tools/node-tool.h"
 #include "ui/tool/control-point-selection.h"
+#include "ui/tools/node-tool.h"
 
 namespace Inkscape { namespace XML { class Node; }}
 

@@ -13,8 +13,8 @@
  */
 
 #include "sp-object-group.h"
-#include "xml/repr.h"
 #include "document.h"
+#include "xml/repr.h"
 
 SPObjectGroup::SPObjectGroup() : SPObject() {
 }

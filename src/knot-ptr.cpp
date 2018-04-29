@@ -1,7 +1,7 @@
+#include "knot-ptr.h"
 #include <algorithm>
 #include <glib.h>
 #include <list>
-#include "knot-ptr.h"
 
 static std::list<void*> deleted_knots;
 

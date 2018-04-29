@@ -6,12 +6,12 @@
  *
  */
 
-#include <cstdio>
-#include <cstdlib>
-#include <glib.h>
 #include "Shape.h"
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"
+#include <cstdio>
+#include <cstdlib>
+#include <glib.h>
 
 /*
  * Shape instances handling.

@@ -23,10 +23,10 @@
 #include <config.h>
 #endif
 
+#include <glibmm/miscutils.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-#include <glibmm/miscutils.h>
 
 #include "desktop-style.h"
 #include "desktop.h"

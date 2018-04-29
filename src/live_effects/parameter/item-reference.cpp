@@ -8,9 +8,9 @@
 
 #include "live_effects/parameter/item-reference.h"
 
+#include "object/sp-item-group.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
-#include "object/sp-item-group.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
