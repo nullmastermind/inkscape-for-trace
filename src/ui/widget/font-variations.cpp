@@ -33,11 +33,18 @@ namespace Widget {
 FontVariationAxis::FontVariationAxis (Glib::ustring name, OTVarAxis& axis)
     : name (name)
 {
-    // std::cout << "FontVariationAxis::FontVariationAxis:: name: " << name << std::endl;
+
+    // std::cout << "FontVariationAxis::FontVariationAxis:: "
+    //           << " name: " << name
+    //           << " min:  " << axis.minimum
+    //           << " max:  " << axis.maximum
+    //           << " val:  " << axis.set_val << std::endl;
+
     label = Gtk::manage( new Gtk::Label( name ) );
     add( *label );
 
-    precision = 2 - int( log10(axis.maximum - axis.minimum)); 
+    precision = 2 - int( log10(axis.maximum - axis.minimum));
+    if (precision < 0) precision = 0;
 
     scale = Gtk::manage( new Gtk::Scale() );
     scale->set_range (axis.minimum, axis.maximum);
@@ -129,7 +136,7 @@ FontVariations::get_pango_string() {
         pango_string += "@";
 
         for (auto axis: axes) {
-            if (axis->get_value() == 0) continue;  // TEMP *************
+            if (axis->get_value() == 0) continue;  // TEMP: Should check against default value.
             Glib::ustring name = axis->get_name();
 
             // Translate the "named" axes. (Additional names in 'stat' table, may need to handle them.)

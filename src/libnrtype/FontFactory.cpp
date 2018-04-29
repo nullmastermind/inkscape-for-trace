@@ -703,15 +703,6 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             }
         }
 
-#ifndef USE_PANGO_WIN32
-        if (res) {
-            readOpenTypeGsubTable( res->theFace, res->openTypeTables, res->openTypeStylistic, res->openTypeLigatures );
-            std::map<Glib::ustring, OTVarAxis> axes;
-            std::map<Glib::ustring, OTVarInstance> named;
-            readOpenTypeFvarAxes( res->theFace, res->openTypeVarAxes );
-        }
-#endif
-
     } else {
         // already here
         res = loadedFaces[descr];

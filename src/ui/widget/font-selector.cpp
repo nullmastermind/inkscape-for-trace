@@ -244,7 +244,12 @@ FontSelector::get_fontspec() {
 
     Glib::ustring variations = font_variations.get_pango_string();
 
-    Glib::ustring fontspec = family + ", " + style + " " + variations;
+    Glib::ustring fontspec = family + " ";
+    if (variations.empty()) {
+        fontspec += style;
+    } else {
+        fontspec += variations;
+    }
 
     return fontspec;
 }
@@ -262,7 +267,7 @@ FontSelector::style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter c
     (*iter).get_value(1, style);
 
     Glib::ustring style_escaped  = Glib::strescape( style );
-    Glib::ustring font_desc = family + ", " + style;
+    Glib::ustring font_desc = family + " " + style;
     Glib::ustring markup;
 
     markup = "<span font='" + font_desc + "'>" + style_escaped + "</span>";

@@ -222,8 +222,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     hb_face_destroy (hb_face);
 }
 
-// Make a list of all Variaration axes with ranges.
-// Make a list of all Named instances with axis values.
+// Make a list of all Variation axes with ranges.
 void readOpenTypeFvarAxes(const FT_Face ft_face,
                           std::map<Glib::ustring, OTVarAxis>& axes) {
 
@@ -241,7 +240,8 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
             FT_Var_Axis* axis = &mmvar->axis[i];
             axes[axis->name] =  OTVarAxis(FTFixedToDouble(axis->minimum),
                                           FTFixedToDouble(axis->maximum),
-                                          FTFixedToDouble(coords[i]));
+                                          FTFixedToDouble(coords[i]),
+                                          i);
         }
 
         // for (auto a: axes) {
