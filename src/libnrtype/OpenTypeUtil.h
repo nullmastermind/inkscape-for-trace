@@ -20,20 +20,23 @@
 
 // An OpenType fvar axis.
 class OTVarAxis {
- public:
-  OTVarAxis()
-    : minimum(0)
-    , maximum(1000)
-    , set_val(500) {};
+public:
+    OTVarAxis()
+        : minimum(0)
+        , maximum(1000)
+        , set_val(500)
+        , index(-1) {};
 
-  OTVarAxis(double _minimum, double _maximum, double _set_val)
-    : minimum(_minimum)
-    , maximum(_maximum)
-    , set_val(_set_val) {};
+    OTVarAxis(double _minimum, double _maximum, double _set_val, int _index)
+        : minimum(_minimum)
+        , maximum(_maximum)
+        , set_val(_set_val)
+        , index  (_index) {};
 
-  double minimum;
-  double maximum;
-  double set_val;
+    double minimum;
+    double maximum;
+    double set_val;
+    int    index;  // Index in OpenType file (since we use a map).
 };
 
 // A particular instance of a variable font.
