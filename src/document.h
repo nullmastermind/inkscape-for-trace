@@ -19,7 +19,7 @@
 
 #include <stddef.h>
 #include <sigc++/sigc++.h>
-#include "libcroco/cr-cascade.h"
+#include "3rdparty/libcroco/cr-cascade.h"
 #include <2geom/forward.h>
 #include "inkgc/gc-managed.h"
 #include "gc-finalized.h"

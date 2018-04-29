@@ -1,4 +1,4 @@
-#include <libcroco/cr-parser.h>
+#include <3rdparty/libcroco/cr-parser.h>
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include "document.h"

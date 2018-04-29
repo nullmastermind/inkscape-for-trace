@@ -60,9 +60,9 @@
 
 #include "libavoid/router.h"
 
-#include "libcroco/cr-parser.h"
-#include "libcroco/cr-sel-eng.h"
-#include "libcroco/cr-selector.h"
+#include "3rdparty/libcroco/cr-parser.h"
+#include "3rdparty/libcroco/cr-sel-eng.h"
+#include "3rdparty/libcroco/cr-selector.h"
 
 #include "object/persp3d.h"
 #include "object/sp-factory.h"

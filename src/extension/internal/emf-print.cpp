@@ -28,7 +28,7 @@
 
 #include <string.h>
 #include <glibmm/miscutils.h>
-#include <libuemf/symbol_convert.h>
+#include <3rdparty/libuemf/symbol_convert.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
 #include <2geom/pathvector.h>

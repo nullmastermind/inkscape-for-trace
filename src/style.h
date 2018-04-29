@@ -23,6 +23,8 @@
 #include <sigc++/connection.h>
 #include <iostream>
 #include <vector>
+#include "3rdparty/libcroco/cr-declaration.h"
+#include "3rdparty/libcroco/cr-prop-list.h"
 
 // Define SPIBasePtr, a Pointer to a data member of SPStyle of type SPIBase;
 typedef SPIBase SPStyle::*SPIBasePtr;
@@ -36,8 +38,6 @@ class Node;
 }
 }
 
-#include "libcroco/cr-declaration.h"
-#include "libcroco/cr-prop-list.h"
 
 /// An SVG style object.
 class SPStyle {

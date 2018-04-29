@@ -24,7 +24,7 @@
 
 #include <glibmm/ustring.h>
 
-#include "libcroco/cr-declaration.h"
+#include "3rdparty/libcroco/cr-declaration.h"
 
 #include "svg/css-ostringstream.h"
 

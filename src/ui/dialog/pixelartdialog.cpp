@@ -40,7 +40,7 @@
 
 #include "display/cairo-utils.h"
 
-#include "libdepixelize/kopftracer2011.h"
+#include "3rdparty/libdepixelize/kopftracer2011.h"
 
 #include "object/sp-image.h"
 

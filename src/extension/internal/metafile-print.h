@@ -18,7 +18,7 @@
 #include <map>
 #include <stack>
 #include <glibmm/ustring.h>
-#include <libuemf/uemf.h>
+#include <3rdparty/libuemf/uemf.h>
 #include <2geom/affine.h>
 #include <2geom/pathvector.h>
 

@@ -38,7 +38,7 @@
 
 #include "display/canvas-bpath.h"
 
-#include "libcroco/cr-sel-eng.h"
+#include "3rdparty/libcroco/cr-sel-eng.h"
 
 #include "object/sp-paint-server.h"
 #include "object/uri-references.h"

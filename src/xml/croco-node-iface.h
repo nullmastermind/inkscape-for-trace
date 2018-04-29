@@ -1,7 +1,7 @@
 #ifndef INKSCAPE_SP_REPR_NODE_IFACE_H
 #define INKSCAPE_SP_REPR_NODE_IFACE_H
 
-#include <libcroco/cr-node-iface.h>
+#include <3rdparty/libcroco/cr-node-iface.h>
 
 namespace Inkscape {
 namespace XML {

@@ -20,7 +20,7 @@
 #include "extension/internal/cairo-render-context.h"
 #include "display/curve.h"
 #include <2geom/pathvector.h>
-#include <libuemf/symbol_convert.h>
+#include <3rdparty/libuemf/symbol_convert.h>
 
 
 namespace Inkscape {

@@ -64,7 +64,7 @@
 #include "wmf-print.h"
 
 #include <string.h>
-#include <libuemf/symbol_convert.h>
+#include <3rdparty/libuemf/symbol_convert.h>
 
 namespace Inkscape {
 namespace Extension {

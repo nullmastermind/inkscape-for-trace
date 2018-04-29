@@ -16,7 +16,7 @@
 # include "config.h"
 #endif
 
-#include <libuemf/uemf.h>
+#include <3rdparty/libuemf/uemf.h>
 #include "extension/internal/metafile-print.h"
 
 #include "splivarot.h"             // pieces for union on shapes

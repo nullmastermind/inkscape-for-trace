@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <libuemf/symbol_convert.h>
+#include <3rdparty/libuemf/symbol_convert.h>
 
 #include "document.h"
 #include "object/sp-root.h" // even though it is included indirectly by wmf-inout.h

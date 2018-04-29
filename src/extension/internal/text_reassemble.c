@@ -79,7 +79,7 @@ extern "C" {
 #endif
 
 #include "text_reassemble.h"
-#include <libuemf/uemf_utf.h>  /* For a couple of text functions.  Exact copy from libUEMF. */
+#include <3rdparty/libuemf/uemf_utf.h>  /* For a couple of text functions.  Exact copy from libUEMF. */
 #include <locale.h>
 #include <float.h>
 
