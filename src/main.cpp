@@ -156,6 +156,7 @@ enum {
     SP_ARG_EXPORT_LATEX,
     SP_ARG_EXPORT_EMF,
     SP_ARG_EXPORT_WMF,
+    SP_ARG_EXPORT_XAML,
     SP_ARG_EXPORT_TEXT_TO_PATH,
     SP_ARG_EXPORT_IGNORE_FILTERS,
     SP_ARG_EXTENSIONDIR,
@@ -187,6 +188,7 @@ static int do_export_svg(SPDocument* doc);
 static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_emf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_wmf(SPDocument* doc, gchar const* uri, char const *mime);
+static int do_export_xaml(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_win_metafile_common(SPDocument* doc, gchar const* uri, char const *mime);
 static void do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const axis, const gchar *id);
 static void do_query_all (SPDocument *doc);
@@ -217,6 +219,7 @@ static gchar *sp_export_pdf = NULL;
 static gchar *sp_export_pdf_version = NULL;
 static gchar *sp_export_emf = NULL;
 static gchar *sp_export_wmf = NULL;
+static gchar *sp_export_xaml = NULL;
 static gboolean sp_export_text_to_path = FALSE;
 static gboolean sp_export_ignore_filters = FALSE;
 static gboolean sp_export_font = FALSE;
@@ -271,6 +274,7 @@ static void resetCommandlineGlobals() {
         sp_export_pdf_version = NULL;
         sp_export_emf = NULL;
         sp_export_wmf = NULL;
+        sp_export_xaml = NULL;
         sp_export_text_to_path = FALSE;
         sp_export_ignore_filters = FALSE;
         sp_export_font = FALSE;
@@ -450,6 +454,11 @@ struct poptOption options[] = {
     {"export-wmf", 'm',
      POPT_ARG_STRING, &sp_export_wmf, SP_ARG_EXPORT_WMF,
      N_("Export document to a Windows Metafile (WMF) File"),
+     N_("FILENAME")},
+
+    {"export-xaml", 0,
+     POPT_ARG_STRING, &sp_export_xaml, SP_ARG_EXPORT_XAML,
+     N_("Export document to a eXtensible Application Markup Language (XAML) File"),
      N_("FILENAME")},
 
     {"export-text-to-path", 'T',
@@ -705,6 +714,7 @@ main(int argc, char **argv)
             || !strncmp(argv[i], "--export-emf", 12)
             || !strcmp(argv[i], "-m")
             || !strncmp(argv[i], "--export-wmf", 12)
+            || !strncmp(argv[i], "--export-xaml", 13)
             || !strcmp(argv[i], "-W")
             || !strncmp(argv[i], "--query-width", 13)
             || !strcmp(argv[i], "-H")
@@ -1071,6 +1081,9 @@ static int sp_process_file_list(std::vector<gchar*> fl)
             }
             if (sp_export_wmf) {
                 retVal |= do_export_wmf(doc, sp_export_wmf, "image/x-wmf");
+            }
+            if (sp_export_xaml) {
+                retVal |= do_export_xaml(doc, sp_export_xaml, "text/xml+xaml");
             }
             if (sp_query_all) {
                 do_query_all (doc);
@@ -1819,6 +1832,23 @@ static int do_export_wmf(SPDocument* doc, gchar const* uri, char const* mime)
 {
     if(!uri || uri[0] == '\0') {
         g_warning("No filename provided for wmf export.");
+        return 0;
+    }
+    return do_export_win_metafile_common(doc, uri, mime);
+}
+
+/**
+ *  Export a document to XAML
+ *
+ *  \param doc Document to export.
+ *  \param uri URI to export to.
+ *  \param mime MIME type to export as (should be "text/xml+xaml)
+ */
+
+static int do_export_xaml(SPDocument* doc, gchar const* uri, char const* mime)
+{
+    if(!uri || uri[0] == '\0') {
+        g_warning("No filename provided for xaml export.");
         return 0;
     }
     return do_export_win_metafile_common(doc, uri, mime);
