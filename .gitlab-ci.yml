@@ -87,7 +87,7 @@ clang:
   only:
     - schedules
   script:
-    - apt-get update -yqq && apt-get install -y clang-3.8 clang
+    - apt-get update -yqq && apt-get install -y clang
     - mkdir -p clang-build
     - cd clang-build
     - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
