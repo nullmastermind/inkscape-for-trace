@@ -27,7 +27,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-FontSelector::FontSelector (bool with_size)
+FontSelector::FontSelector (bool with_size, bool with_variations)
     : Gtk::Grid ()
     , family_frame (_("Font family"))
     , style_frame (C_("Font selector", "Style"))
@@ -91,7 +91,9 @@ FontSelector::FontSelector (bool with_size)
         attach (size_label,    1, 1, 1, 1);
         attach (size_combobox, 2, 1, 1, 1);
     }
-    attach (font_variations, 0, 2, 3, 1);
+    if (with_variations) { // Glyphs panel does not use variations.
+        attach (font_variations, 0, 2, 3, 1);
+    }
 
     // Add signals
     family_treeview.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FontSelector::on_family_changed));

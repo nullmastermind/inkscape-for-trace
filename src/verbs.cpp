@@ -3120,8 +3120,9 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke..."),
                    N_("Edit objects' colors, gradients, arrowheads, and other fill and stroke properties..."), INKSCAPE_ICON("dialog-fill-and-stroke")),
     // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-font" icon
-    new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("Gl_yphs..."),
-                   N_("Select characters from a glyphs palette"), INKSCAPE_ICON("gtk-select-font")),
+    // Technically what we show are unicode code points and not glyphs. The actual glyphs shown are determined by the shaping engines.
+    new DialogVerb(SP_VERB_DIALOG_GLYPHS, "DialogGlyphs", N_("_Unicode Characters..."),
+                   N_("Select Unicode characters from a palette"), INKSCAPE_ICON("gtk-select-font")),
     // FIXME: Probably better to either use something from the icon naming spec or ship our own "select-color" icon
     // TRANSLATORS: "Swatches" means: color samples
     new DialogVerb(SP_VERB_DIALOG_SWATCHES, "DialogSwatches", N_("S_watches..."),

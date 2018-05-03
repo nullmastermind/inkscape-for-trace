@@ -65,7 +65,7 @@ TextEdit::TextEdit()
     : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
       text_label(_("_Text"), true),
-      vari_label(_("_Variants"), true),
+      vari_label(_("_Features"), true),
       setasdefault_button(_("Set as _default")),
       close_button(_("_Close"), true),
       apply_button(_("_Apply"), true),
@@ -127,8 +127,8 @@ TextEdit::TextEdit()
     /* Notebook -----------------------------------*/
     notebook.set_name( "TextEdit Notebook" );
     notebook.append_page(font_vbox, font_label);
-    notebook.append_page(text_vbox, text_label);
     notebook.append_page(vari_vbox, vari_label);
+    notebook.append_page(text_vbox, text_label);
 
     /* Buttons (below notebook) ------------------ */
     setasdefault_button.set_use_underline(true);
@@ -376,7 +376,7 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             sp_repr_css_set_property (css, "font-size", os.str().c_str());
         }
 
-        // Font variants
+        // Font variants (Font features)
         vari_vbox.fill_css( css );
 
         return css;

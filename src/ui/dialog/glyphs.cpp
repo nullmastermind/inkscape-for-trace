@@ -335,10 +335,8 @@ GlyphsPanel::GlyphsPanel() :
 // -------------------------------
 
     {
-        fontSelector = new Inkscape::UI::Widget::FontSelector (false);
-        fontSelector->set_name ("Glyphs");
-        fontSelector->set_fontsize_visible (false);
-        fontSelector->update_size (12.0);
+        fontSelector = new Inkscape::UI::Widget::FontSelector (false, false);
+        fontSelector->set_name ("UnicodeCharacters");
 
         sigc::connection conn =
             fontSelector->connectChanged(sigc::hide(sigc::mem_fun(*this, &GlyphsPanel::rebuild)));

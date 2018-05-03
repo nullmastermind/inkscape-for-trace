@@ -64,7 +64,7 @@ public:
     /**
      * Constructor
      */
-    FontSelector (bool with_size = true);
+    FontSelector (bool with_size = true, bool with_variations = true);
 
 protected:
 
@@ -129,14 +129,6 @@ public:
      * Get font size. Could be merged with fontspec.
      */
     double get_fontsize() { return font_size; };
-
-    /**
-     * Shoe/hide size widgets
-     */
-    void set_fontsize_visible( bool visible = true ) {
-        size_label.set_visible (visible);
-        size_combobox.set_visible (visible);
-    }
 
     /**
      * Let others know that user has changed GUI settings.
