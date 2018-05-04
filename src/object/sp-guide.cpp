@@ -222,6 +222,9 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
 
     SPNamedView *namedview = sp_document_namedview(doc, NULL);
     if (namedview) {
+        if (namedview->lockguides) {
+            repr->setAttribute("inkscape:locked", "true");
+        }
         namedview->appendChild(repr);
     }
     Inkscape::GC::release(repr);
