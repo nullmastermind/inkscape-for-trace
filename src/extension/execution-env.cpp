@@ -16,15 +16,15 @@
 #include <gtkmm/messagedialog.h>
 
 #include "execution-env.h"
-#include "implementation/implementation.h"
 #include "prefdialog.h"
+#include "implementation/implementation.h"
 
-#include "desktop.h"
-#include "document-undo.h"
-#include "document.h"
-#include "effect.h"
-#include "object/sp-namedview.h"
 #include "selection.h"
+#include "effect.h"
+#include "document.h"
+#include "document-undo.h"
+#include "desktop.h"
+#include "object/sp-namedview.h"
 
 #include "display/sp-canvas.h"
 

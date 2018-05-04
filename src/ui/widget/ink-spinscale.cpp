@@ -16,9 +16,9 @@
 */
 
 #include "ink-spinscale.h"
+#include <gdkmm/general.h>
 #include <gdkmm/cursor.h>
 #include <gdkmm/event.h>
-#include <gdkmm/general.h>
 
 #include <gtkmm/spinbutton.h>
 

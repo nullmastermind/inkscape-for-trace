@@ -15,28 +15,28 @@
 #include "config.h"
 #endif
 
-#include "desktop.h"
+#include "svg-fonts-dialog.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "selection.h"
-#include "svg-fonts-dialog.h"
-#include "svg/svg.h"
-#include "xml/repr.h"
-#include <gtkmm/imagemenuitem.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/scale.h>
+#include <gtkmm/imagemenuitem.h>
 #include <message-stack.h>
+#include "selection.h"
+#include "svg/svg.h"
+#include "xml/repr.h"
+#include "desktop.h"
 
+#include <sstream>
 #include "display/nr-svgfonts.h"
 #include "verbs.h"
-#include <sstream>
 
-#include "object/sp-defs.h"
 #include "object/sp-font-face.h"
-#include "object/sp-font.h"
-#include "object/sp-glyph-kerning.h"
 #include "object/sp-glyph.h"
 #include "object/sp-missing-glyph.h"
+#include "object/sp-font.h"
+#include "object/sp-glyph-kerning.h"
+#include "object/sp-defs.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>

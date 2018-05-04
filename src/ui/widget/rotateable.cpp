@@ -11,11 +11,11 @@
 #include <config.h>
 #endif
 
-#include "rotateable.h"
-#include "ui/tools/tool-base.h"
-#include <2geom/point.h>
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
+#include <2geom/point.h>
+#include "ui/tools/tool-base.h"
+#include "rotateable.h"
 
 namespace Inkscape {
 namespace UI {

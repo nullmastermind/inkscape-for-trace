@@ -25,8 +25,8 @@
 
 #include "object/sp-root.h"
 
-#include "svg/stringstream.h"
 #include "svg/svg-color.h"
+#include "svg/stringstream.h"
 
 #include "widgets/spinbutton-events.h"
 

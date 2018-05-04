@@ -12,8 +12,8 @@
 #include "config.h"
 #endif
 
-#include "file.h"
 #include "new-from-template.h"
+#include "file.h"
 
 namespace Inkscape {
 namespace UI {

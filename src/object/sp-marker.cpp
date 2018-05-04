@@ -17,18 +17,18 @@
 #include <cstring>
 #include <string>
 
-#include "attributes.h"
-#include "display/drawing-group.h"
-#include "document-private.h"
-#include "document.h"
-#include "preferences.h"
-#include "svg/svg.h"
-#include "xml/repr.h"
 #include <2geom/affine.h>
 #include <2geom/transforms.h>
+#include "svg/svg.h"
+#include "display/drawing-group.h"
+#include "xml/repr.h"
+#include "attributes.h"
+#include "document.h"
+#include "document-private.h"
+#include "preferences.h"
 
-#include "sp-defs.h"
 #include "sp-marker.h"
+#include "sp-defs.h"
 
 class SPMarkerView {
 

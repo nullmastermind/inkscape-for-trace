@@ -32,8 +32,8 @@
 #include "object-hierarchy.h"
 
 #include "object/sp-defs.h"
-#include "object/sp-item-group.h"
 #include "object/sp-item.h"
+#include "object/sp-item-group.h"
 #include "object/sp-root.h"
 
 // Callbacks

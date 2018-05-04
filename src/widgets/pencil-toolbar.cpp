@@ -28,8 +28,8 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm.h>
+#include <glibmm/i18n.h>
 
 #include "pencil-toolbar.h"
 

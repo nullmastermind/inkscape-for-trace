@@ -16,14 +16,14 @@
 
 #include "font-selector-toolbar.h"
 
-#include "libnrtype/font-instance.h"
 #include "libnrtype/font-lister.h"
+#include "libnrtype/font-instance.h"
 
 #include "ui/icon-names.h"
 
 // For updating from selection
-#include "desktop.h"
 #include "inkscape.h"
+#include "desktop.h"
 #include "object/sp-text.h"
 
 // TEMP TEMP TEMP

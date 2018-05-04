@@ -16,8 +16,8 @@
 
 #include "xml/repr.h"
 #include "attributes.h"
-#include "document.h"
 #include "sp-font.h"
+#include "document.h"
 
 #include "display/nr-svgfonts.h"
 

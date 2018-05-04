@@ -18,24 +18,24 @@
 
 #include "ocaldialogs.h"
 
+#include "path-prefix.h"
 #include "filedialogimpl-gtkmm.h"
+#include "ui/interface.h"
 #include "inkgc/gc-core.h"
 #include "io/sys.h"
-#include "path-prefix.h"
 #include "preferences.h"
-#include "ui/interface.h"
 
-#include <gdkmm/general.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/spinner.h>
+#include <gdkmm/general.h>
 #include <libxml/tree.h>
 
+#include <glibmm/i18n.h>
+#include <glibmm/miscutils.h>
+#include <glibmm/markup.h>
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
-#include <glibmm/i18n.h>
 #include <glibmm/main.h>
-#include <glibmm/markup.h>
-#include <glibmm/miscutils.h>
 
 #include "ui/icon-names.h"
 

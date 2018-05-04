@@ -22,8 +22,8 @@
 #  include <glibmm/dispatcher.h>
 #  define GLIBMM_DISABLE_DEPRECATED 1
 #else // GLIBMM_DISABLE_DEPRECATED
-#  include <glibmm/dispatcher.h>
 #  include <glibmm/thread.h>
+#  include <glibmm/dispatcher.h>
 #endif // GLIBMM_DISABLE_DEPRECATED
 
 #include <glibmm/i18n.h>

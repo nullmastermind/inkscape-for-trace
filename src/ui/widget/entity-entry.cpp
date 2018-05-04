@@ -19,8 +19,8 @@
 
 #include "entity-entry.h"
 
-#include <gtkmm/entry.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/entry.h>
 
 #include "document-private.h"
 #include "document-undo.h"

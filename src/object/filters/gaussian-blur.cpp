@@ -21,8 +21,8 @@
 
 #include "attributes.h"
 
-#include "display/nr-filter-gaussian.h"
 #include "display/nr-filter.h"
+#include "display/nr-filter-gaussian.h"
 
 #include "svg/svg.h"
 

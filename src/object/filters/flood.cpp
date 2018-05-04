@@ -14,14 +14,14 @@
 
 #include "flood.h"
 
-#include "attributes.h"
 #include "strneq.h"
+#include "attributes.h"
 
-#include "svg/svg-color.h"
 #include "svg/svg.h"
+#include "svg/svg-color.h"
 
-#include "display/nr-filter-flood.h"
 #include "display/nr-filter.h"
+#include "display/nr-filter-flood.h"
 
 #include "xml/repr.h"
 

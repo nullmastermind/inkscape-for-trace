@@ -10,8 +10,8 @@
 
 #include <set>
 
-#include <sigc++/adaptors/hide.h>
 #include <sigc++/functors/mem_fun.h>
+#include <sigc++/adaptors/hide.h>
 
 
 #include "desktop.h"

@@ -17,10 +17,10 @@
 
 #include "objects.h"
 
-#include <glibmm/main.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
+#include <glibmm/main.h>
 
 #include "desktop-style.h"
 #include "desktop.h"

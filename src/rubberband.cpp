@@ -13,10 +13,10 @@
 #include "display/sodipodi-ctrlrect.h"
 #include "desktop.h"
 
+#include "rubberband.h"
+#include "display/sp-canvas.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
-#include "rubberband.h"
 
 Inkscape::Rubberband *Inkscape::Rubberband::_instance = NULL;
 

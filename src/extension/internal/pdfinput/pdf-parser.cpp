@@ -23,36 +23,36 @@
 
 extern "C" {
         
-#include <math.h>
-#include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
 #include <string.h>
+#include <math.h>
 
 }
 
+#include "svg-builder.h"
 #include "Gfx.h"
 #include "pdf-parser.h"
-#include "svg-builder.h"
 #include "util/units.h"
 
-#include "Annot.h"
-#include "Array.h"
+#include "goo/gmem.h"
+#include "goo/GooTimer.h"
+#include "goo/GooHash.h"
+#include "GlobalParams.h"
 #include "CharTypes.h"
+#include "Object.h"
+#include "Array.h"
 #include "Dict.h"
-#include "Error.h"
+#include "Stream.h"
+#include "Lexer.h"
+#include "Parser.h"
 #include "GfxFont.h"
 #include "GfxState.h"
-#include "GlobalParams.h"
-#include "Lexer.h"
-#include "Object.h"
 #include "OutputDev.h"
 #include "Page.h"
-#include "Parser.h"
-#include "Stream.h"
-#include "goo/GooHash.h"
-#include "goo/GooTimer.h"
-#include "goo/gmem.h"
+#include "Annot.h"
+#include "Error.h"
 
 // the MSVC math.h doesn't define this
 #ifndef M_PI

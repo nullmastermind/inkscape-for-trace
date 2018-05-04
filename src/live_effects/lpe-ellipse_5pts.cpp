@@ -12,12 +12,12 @@
  */
 
 #include "live_effects/lpe-ellipse_5pts.h"
-#include "desktop.h"
-#include "inkscape.h"
-#include "message-stack.h"
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
 #include <2geom/path-sink.h>
+#include "inkscape.h"
+#include "desktop.h"
+#include "message-stack.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

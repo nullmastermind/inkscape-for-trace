@@ -18,9 +18,9 @@
 
 #include "sp-attribute-widget.h"
 
-#include "document-undo.h"
-#include "document.h"
 #include "macros.h"
+#include "document.h"
+#include "document-undo.h"
 #include "verbs.h"
 
 #include "object/sp-object.h"

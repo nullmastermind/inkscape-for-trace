@@ -66,12 +66,12 @@
  *
  */
 
-#include <cstring>
 #include <string>
+#include <cstring>
 
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "context-fns.h"
 #include "desktop-style.h"

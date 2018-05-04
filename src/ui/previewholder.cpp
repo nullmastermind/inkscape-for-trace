@@ -13,11 +13,11 @@
 #include "previewable.h"
 #include "previewholder.h"
 
-#include <gtkmm/adjustment.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/scrollbar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/sizegroup.h>
+#include <gtkmm/scrollbar.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/grid.h>
 
 #define COLUMNS_FOR_SMALL 16
 #define COLUMNS_FOR_LARGE 8

@@ -6,18 +6,18 @@
 
 #include <gdkmm/rgba.h>
 
+#include <glib/gstdio.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
-#include <glib/gstdio.h>
 
 #ifdef DEBUG_LCMS
 #include <gtk/gtk.h>
 #endif // DEBUG_LCMS
 
-#include <cstring>
-#include <io/resource.h>
-#include <io/sys.h>
 #include <unistd.h>
+#include <cstring>
+#include <io/sys.h>
+#include <io/resource.h>
 
 #ifdef WIN32
 #ifndef _WIN32_WINDOWS         // Allow use of features specific to Windows 98 or later. Required for correctly including icm.h
@@ -32,18 +32,18 @@
 #  include <lcms.h>
 #endif // HAVE_LIBLCMS2
 
-#include "attributes.h"
+#include "xml/repr.h"
+#include "color.h"
+#include "color-profile.h"
 #include "cms-system.h"
 #include "color-profile-cms-fns.h"
-#include "color-profile.h"
-#include "color.h"
-#include "document.h"
+#include "attributes.h"
 #include "inkscape.h"
+#include "document.h"
 #include "preferences.h"
-#include "uri.h"
-#include "xml/repr.h"
 #include <glibmm/checksum.h>
 #include <glibmm/convert.h>
+#include "uri.h"
 
 #ifdef WIN32
 #include <icm.h>

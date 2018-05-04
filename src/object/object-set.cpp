@@ -9,14 +9,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "box3d.h"
+#include <sigc++/sigc++.h>
+#include <glib.h>
 #include "object-set.h"
+#include "box3d.h"
 #include "persp3d.h"
 #include "preferences.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/transformed.hpp>
-#include <glib.h>
-#include <sigc++/sigc++.h>
 
 namespace Inkscape {
 

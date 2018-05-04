@@ -14,12 +14,12 @@
 # include "config.h"
 #endif
 
-#include "color.h"
-#include "display/cairo-utils.h"
 #include "sp-canvas-item.h"
-#include "sp-canvas-util.h"
 #include "sp-canvas.h"
+#include "sp-canvas-util.h"
 #include "sp-ctrlquadr.h"
+#include "display/cairo-utils.h"
+#include "color.h"
 
 struct SPCtrlQuadr : public SPCanvasItem{
     guint32 rgba;

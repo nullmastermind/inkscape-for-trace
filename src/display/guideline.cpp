@@ -16,14 +16,14 @@
  */
 
 #include <2geom/coord.h>
-#include <2geom/line.h>
 #include <2geom/transforms.h>
+#include <2geom/line.h>
 
-#include "display/cairo-utils.h"
-#include "display/sodipodi-ctrl.h"
-#include "display/sp-canvas.h"
-#include "guideline.h"
 #include "sp-canvas-util.h"
+#include "guideline.h"
+#include "display/cairo-utils.h"
+#include "display/sp-canvas.h"
+#include "display/sodipodi-ctrl.h"
 
 static void sp_guideline_destroy(SPCanvasItem *object);
 

@@ -13,17 +13,17 @@
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
 
-#include "display/canvas-bpath.h"
-#include "display/curve.h"
-#include "display/sp-canvas-util.h"
 #include "display/sp-canvas.h"
+#include "display/sp-canvas-util.h"
+#include "display/curve.h"
+#include "display/canvas-bpath.h"
 
 #include "helper/geom.h"
 
-#include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/parameter/path.h"
 
 #include "object/sp-path.h"

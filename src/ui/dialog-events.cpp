@@ -15,12 +15,12 @@
 #include <config.h>
 #endif
 
-#include "desktop.h"
-#include "inkscape.h"
-#include "macros.h"
-#include "ui/tools/tool-base.h"
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
+#include "macros.h"
+#include "desktop.h"
+#include "inkscape.h"
+#include "ui/tools/tool-base.h"
 
 #include "ui/dialog-events.h"
 

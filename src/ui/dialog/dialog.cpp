@@ -22,15 +22,15 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "desktop.h"
 #include "inkscape.h"
 #include "ui/monitor.h"
 #include "ui/tools/tool-base.h"
+#include "desktop.h"
 
 #include "shortcuts.h"
 #include "ui/interface.h"
-#include "ui/tool/event-utils.h"
 #include "verbs.h"
+#include "ui/tool/event-utils.h"
 
 #define MIN_ONSCREEN_DISTANCE 50
 

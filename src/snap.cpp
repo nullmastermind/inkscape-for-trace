@@ -30,8 +30,8 @@
 
 #include "helper/mathfns.h"
 
-#include "object/sp-guide.h"
 #include "object/sp-namedview.h"
+#include "object/sp-guide.h"
 
 #include "ui/tools/tool-base.h"
 

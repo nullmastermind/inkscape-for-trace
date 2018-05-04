@@ -17,15 +17,15 @@
 
 #include <2geom/transforms.h>
 
-#include "display/cairo-utils.h"
-#include "display/drawing-context.h"
-#include "display/drawing.h"
-#include "document.h"
-#include "helper/png-write.h"
-#include "object/sp-defs.h"
-#include "object/sp-root.h"
-#include "object/sp-use.h"
 #include "ui/interface.h"
+#include "helper/png-write.h"
+#include "display/cairo-utils.h"
+#include "display/drawing.h"
+#include "display/drawing-context.h"
+#include "document.h"
+#include "object/sp-root.h"
+#include "object/sp-defs.h"
+#include "object/sp-use.h"
 #include "util/units.h"
 
 #include "helper/pixbuf-ops.h"

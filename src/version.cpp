@@ -12,9 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "version.h"
 #include <glib.h>
 #include <sstream>
+#include "version.h"
 
 bool sp_version_from_string(const char *string, Inkscape::Version *version)
 {

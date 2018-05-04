@@ -15,11 +15,11 @@
 
 #include "ui/draw-anchor.h"
 #include "desktop.h"
-#include "display/curve.h"
-#include "display/sodipodi-ctrl.h"
-#include "ui/control-manager.h"
-#include "ui/tools/lpe-tool.h"
 #include "ui/tools/tool-base.h"
+#include "ui/tools/lpe-tool.h"
+#include "display/sodipodi-ctrl.h"
+#include "display/curve.h"
+#include "ui/control-manager.h"
 
 using Inkscape::ControlManager;
 

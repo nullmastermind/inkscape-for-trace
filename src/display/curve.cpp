@@ -13,11 +13,11 @@
 
 #include "display/curve.h"
 
+#include <glib.h>
 #include <2geom/pathvector.h>
-#include <2geom/point.h>
 #include <2geom/sbasis-geometric.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <glib.h>
+#include <2geom/point.h>
 
 /**
  * Routines for SPCurve and for its Geom::PathVector

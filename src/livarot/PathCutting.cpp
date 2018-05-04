@@ -13,20 +13,20 @@
  *  Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "Path.h"
-#include "helper/geom-curves.h"
-#include "helper/geom.h"
-#include "livarot/path-description.h"
-#include "style.h"
-#include <2geom/affine.h>
-#include <2geom/curves.h>
-#include <2geom/pathvector.h>
-#include <2geom/point.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <cstdio>
 #include <cstring>
 #include <string>
+#include <cstdio>
 #include <typeinfo>
+#include "Path.h"
+#include "style.h"
+#include "livarot/path-description.h"
+#include <2geom/pathvector.h>
+#include <2geom/point.h>
+#include <2geom/affine.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/curves.h>
+#include "helper/geom-curves.h"
+#include "helper/geom.h"
 
 #include "svg/svg.h"
 

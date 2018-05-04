@@ -15,21 +15,21 @@
 #endif
 
 
-#include "helper/geom-curves.h"
-#include "util/units.h"
-#include <2geom/curves.h>
 #include <2geom/pathvector.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/curves.h>
 #include <errno.h>
 #include <signal.h>
+#include "util/units.h"
+#include "helper/geom-curves.h"
 
-#include "document.h"
 #include "extension/print.h"
 #include "extension/system.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "latex-pstricks.h"
 #include "style.h"
+#include "document.h"
 #include <cstring>
 
 namespace Inkscape {

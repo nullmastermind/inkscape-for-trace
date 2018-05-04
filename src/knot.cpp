@@ -14,17 +14,17 @@
 
 #ifdef HAVE_CONFIG_H
 #endif
-#include "desktop.h"
-#include "display/sodipodi-ctrl.h"
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
+#include "display/sodipodi-ctrl.h"
+#include "desktop.h"
 
-#include "document-undo.h"
-#include "document.h"
-#include "knot-ptr.h"
 #include "knot.h"
-#include "message-context.h"
+#include "knot-ptr.h"
+#include "document.h"
+#include "document-undo.h"
 #include "message-stack.h"
+#include "message-context.h"
 #include "ui/tools/node-tool.h"
 #include <gtk/gtk.h>
 

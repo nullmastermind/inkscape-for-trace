@@ -55,35 +55,35 @@
 #undef AND
 #endif
 
-#include "color.h"
-#include "document.h"
 #include "file.h"
+#include "document.h"
 #include "layer-model.h"
-#include "print.h"
-#include "selection-chemistry.h"
 #include "selection.h"
+#include "selection-chemistry.h"
 #include "ui/interface.h"
+#include "print.h"
+#include "color.h"
 
-#include "svg/stringstream.h"
-#include "svg/svg-color.h"
 #include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/stringstream.h"
 
-#include "inkscape-version.h"
 #include "inkscape.h"
+#include "inkscape-version.h"
 
 #include "object/object-set.h"
-#include "object/sp-flowtext.h"
 #include "object/sp-guide.h"
-#include "object/sp-namedview.h"
 #include "object/sp-root.h"
+#include "object/sp-namedview.h"
 #include "object/sp-text.h"
+#include "object/sp-flowtext.h"
 
 #include "xml/repr.h"
 
 #include "io/sys.h"
 
-#include "debug/log-display-config.h"
 #include "debug/logger.h"
+#include "debug/log-display-config.h"
 
 #include "helper/action-context.h"
 #include "helper/png-write.h"
@@ -91,10 +91,10 @@
 #include "helper/gettext.h"
 #endif
 
-#include <extension/db.h>
 #include <extension/extension.h>
-#include <extension/input.h>
+#include <extension/db.h>
 #include <extension/output.h>
+#include <extension/input.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -108,19 +108,19 @@
 #include "extension/dbus/dbus-init.h"
 #endif // WITH_DBUS
 
+#include <glibmm/i18n.h>
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
-#include <glibmm/i18n.h>
-#include <glibmm/main.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/main.h>
 #include <gtkmm/main.h>
 #include <gtkmm/window.h>
 
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
 
-#include "verbs.h"
 #include <errno.h>
+#include "verbs.h"
 
 #include "path-chemistry.h"
 #include "text-editing.h"

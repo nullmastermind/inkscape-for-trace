@@ -22,10 +22,10 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/scale.h>
 
-#include "desktop.h"
-#include "document-undo.h"
-#include "document.h"
 #include "inkscape.h"
+#include "document.h"
+#include "document-undo.h"
+#include "desktop.h"
 
 #include "object/sp-namedview.h"
 

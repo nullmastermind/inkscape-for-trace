@@ -12,10 +12,10 @@
  */
 
 
-#include "sp-canvas-item.h"
-#include "sp-canvas-util.h"
-#include "sp-canvas.h"
 #include <2geom/affine.h>
+#include "sp-canvas-util.h"
+#include "sp-canvas-item.h"
+#include "sp-canvas.h"
 
 void sp_canvas_update_bbox(SPCanvasItem *item, int x1, int y1, int x2, int y2)
 {

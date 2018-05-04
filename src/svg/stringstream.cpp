@@ -1,6 +1,6 @@
 #include "svg/stringstream.h"
-#include "preferences.h"
 #include "svg/strip-trailing-zeros.h"
+#include "preferences.h"
 #include <2geom/point.h>
 
 Inkscape::SVGOStringStream::SVGOStringStream()

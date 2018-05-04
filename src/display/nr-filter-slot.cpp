@@ -14,13 +14,13 @@
 #include <assert.h>
 #include <string.h>
 
+#include <2geom/transforms.h>
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
+#include "display/nr-filter-types.h"
 #include "display/nr-filter-gaussian.h"
 #include "display/nr-filter-slot.h"
-#include "display/nr-filter-types.h"
 #include "display/nr-filter-units.h"
-#include <2geom/transforms.h>
 
 namespace Inkscape {
 namespace Filters {

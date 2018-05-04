@@ -14,9 +14,9 @@
 
 #include <2geom/transforms.h>
 
+#include "viewbox.h"
 #include "enums.h"
 #include "sp-item.h"
-#include "viewbox.h"
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)

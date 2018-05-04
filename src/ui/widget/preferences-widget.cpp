@@ -14,8 +14,8 @@
 #include <config.h>
 #endif
 
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/convert.h>
 #include <glibmm/regex.h>
 
 #include <gtkmm/box.h>

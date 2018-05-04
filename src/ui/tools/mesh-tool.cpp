@@ -29,8 +29,8 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "gradient-chemistry.h"
 #include "gradient-drag.h"
+#include "gradient-chemistry.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
@@ -39,8 +39,8 @@
 #include "snap.h"
 #include "verbs.h"
 
-#include "display/curve.h"
 #include "display/sp-ctrlcurve.h"
+#include "display/curve.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-mesh-gradient.h"
@@ -48,8 +48,8 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "pixmaps/cursor-gradient-add.xpm"
 #include "pixmaps/cursor-gradient.xpm"
+#include "pixmaps/cursor-gradient-add.xpm"
 
 #include "ui/control-manager.h"
 #include "ui/tools/mesh-tool.h"

@@ -17,13 +17,13 @@
 
 #include <string>
 
-#include "attributes.h"
+#include <2geom/transforms.h>
 #include "display/drawing-group.h"
-#include "document.h"
+#include "xml/repr.h"
+#include "attributes.h"
 #include "print.h"
 #include "sp-symbol.h"
-#include "xml/repr.h"
-#include <2geom/transforms.h>
+#include "document.h"
 
 SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 }

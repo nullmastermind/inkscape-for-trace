@@ -22,14 +22,14 @@
 # include <cstdlib>
 
 
-#include "svg/css-ostringstream.h"
-#include "svg/stringstream.h"
-#include "svg/svg-length.h"
-#include <2geom/point.h>
 #include <glib.h>
+#include <2geom/point.h>
+#include "svg/stringstream.h"
+#include "svg/css-ostringstream.h"
+#include "svg/svg-length.h"
 
-#include "xml/repr-sorting.h"
 #include "xml/repr.h"
+#include "xml/repr-sorting.h"
 
 
 #define OSB_NS_URI "http://www.openswatchbook.org/uri/2009/osb"

@@ -24,11 +24,12 @@
 #include "ui/widget/color-notebook.h"
 #include <xml/node.h>
 
+#include <extension/extension.h>
 #include "document-private.h"
 #include "object/sp-defs.h"
 #include <color.h>
-#include <extension/extension.h>
 
+#include "parameter.h"
 #include "bool.h"
 #include "color.h"
 #include "description.h"
@@ -36,7 +37,6 @@
 #include "float.h"
 #include "int.h"
 #include "notebook.h"
-#include "parameter.h"
 #include "radiobutton.h"
 #include "string.h"
 

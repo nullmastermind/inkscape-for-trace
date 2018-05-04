@@ -17,8 +17,8 @@
 
 #include "undo-history.h"
 
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "inkscape.h"
 
 #include "util/signal-blocker.h"

@@ -18,17 +18,17 @@
 #include "pdf-input.h"
 
 #ifdef HAVE_POPPLER
-#include <poppler/Catalog.h>
+#include <poppler/goo/GooString.h>
 #include <poppler/ErrorCodes.h>
 #include <poppler/GlobalParams.h>
 #include <poppler/PDFDoc.h>
 #include <poppler/Page.h>
-#include <poppler/goo/GooString.h>
+#include <poppler/Catalog.h>
 
 #ifdef HAVE_POPPLER_CAIRO
+#include <poppler/glib/poppler.h>
 #include <poppler/glib/poppler-document.h>
 #include <poppler/glib/poppler-page.h>
-#include <poppler/glib/poppler.h>
 #endif
 
 #include <gtkmm/checkbutton.h>
@@ -39,18 +39,18 @@
 #include <gtkmm/scale.h>
 
 #include <glibmm/convert.h>
-#include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <gtk/gtk.h>
+#include <glibmm/i18n.h>
 
 #include "ui/dialog-events.h"
-#include "ui/widget/frame.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/frame.h"
 
-#include "extension/input.h"
 #include "extension/system.h"
-#include "pdf-parser.h"
+#include "extension/input.h"
 #include "svg-builder.h"
+#include "pdf-parser.h"
 
 #include "document-private.h"
 #include "document-undo.h"

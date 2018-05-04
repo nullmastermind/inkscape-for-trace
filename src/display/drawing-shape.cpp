@@ -9,20 +9,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <2geom/curves.h>
-#include <2geom/path-sink.h>
-#include <2geom/pathvector.h>
-#include <2geom/svg-path-parser.h>
 #include <glibmm.h>
+#include <2geom/curves.h>
+#include <2geom/pathvector.h>
+#include <2geom/path-sink.h>
+#include <2geom/svg-path-parser.h>
 
 #include "display/cairo-utils.h"
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+#include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-group.h"
 #include "display/drawing-shape.h"
-#include "display/drawing.h"
 #include "helper/geom-curves.h"
 #include "helper/geom.h"
 #include "preferences.h"

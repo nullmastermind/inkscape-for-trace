@@ -10,8 +10,8 @@
  */
 
 #include "canvas-debug.h"
-#include "cairo-utils.h"
 #include "sp-canvas.h"
+#include "cairo-utils.h"
 #include "ui/event-debug.h"
 
 namespace {

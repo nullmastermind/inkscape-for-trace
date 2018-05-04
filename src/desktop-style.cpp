@@ -12,8 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstring>
 #include <string>
+#include <cstring>
 
 #include <glibmm.h>
 
@@ -25,8 +25,6 @@
 #include "selection.h"
 
 #include "object/box3d-side.h"
-#include "object/filters/blend.h"
-#include "object/filters/gaussian-blur.h"
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
 #include "object/sp-flowtext.h"
@@ -39,6 +37,8 @@
 #include "object/sp-tspan.h"
 #include "object/sp-use.h"
 #include "style.h"
+#include "object/filters/blend.h"
+#include "object/filters/gaussian-blur.h"
 
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"

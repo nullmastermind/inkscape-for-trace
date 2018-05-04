@@ -25,9 +25,9 @@
 
 #include "style.h"
 
-#include <algorithm>
 #include <cstring>
 #include <string>
+#include <algorithm>
 
 #include <glibmm/regex.h>
 

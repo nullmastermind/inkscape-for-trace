@@ -13,15 +13,15 @@
 # include "config.h"
 #endif
 
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/regex.h>
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
 
-#include "description.h"
-#include "extension/extension.h"
 #include "xml/node.h"
+#include "extension/extension.h"
+#include "description.h"
 
 namespace Inkscape {
 namespace Extension {

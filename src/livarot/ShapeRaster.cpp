@@ -8,9 +8,9 @@
 
 #include "Shape.h"
 
+#include "livarot/float-line.h"
 #include "AlphaLigne.h"
 #include "BitLigne.h"
-#include "livarot/float-line.h"
 
 #include "livarot/sweep-event-queue.h"
 #include "livarot/sweep-tree-list.h"

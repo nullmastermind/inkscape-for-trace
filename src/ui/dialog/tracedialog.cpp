@@ -16,20 +16,20 @@
 #endif
 
 #include "tracedialog.h"
-#include "ui/widget/frame.h"
-#include "ui/widget/spinbutton.h"
-#include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/radiobutton.h>
+#include "ui/widget/spinbutton.h"
+#include "ui/widget/frame.h"
 
 #include <glibmm/i18n.h>
 
-#include "desktop-tracker.h"
 #include "desktop.h"
+#include "desktop-tracker.h"
 #include "selection.h"
 
-#include "inkscape.h"
 #include "trace/potrace/inkscape-potrace.h"
+#include "inkscape.h"
 
 
 namespace Inkscape {

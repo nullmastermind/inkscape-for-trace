@@ -11,9 +11,9 @@
 
 #include <2geom/bezier-curve.h>
 
+#include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
-#include "display/drawing.h"
 #include "preferences.h"
 
 #include "display/cairo-utils.h"

@@ -5,11 +5,11 @@
  */
 
 #include "ui/widget/registered-widget.h"
-#include "live_effects/effect.h"
 #include "live_effects/parameter/random.h"
+#include "live_effects/effect.h"
+#include <glibmm/i18n.h>
 #include "svg/svg.h"
 #include "ui/widget/random.h"
-#include <glibmm/i18n.h>
 
 #include "svg/stringstream.h"
 

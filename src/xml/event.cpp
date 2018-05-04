@@ -13,16 +13,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstdio>
 #include <glib.h> // g_assert()
+#include <cstdio>
 
-#include "debug/event-tracker.h"
-#include "debug/simple-event.h"
-#include "event-fns.h"
 #include "event.h"
+#include "event-fns.h"
 #include "util/reverse-list.h"
 #include "xml/document.h"
 #include "xml/node-observer.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 
 using Inkscape::Util::List;
 using Inkscape::Util::reverse_list;

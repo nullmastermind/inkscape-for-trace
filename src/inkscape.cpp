@@ -25,16 +25,16 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/regex.h>
 
-#include "debug/event-tracker.h"
-#include "debug/simple-event.h"
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
+#include "debug/simple-event.h"
+#include "debug/event-tracker.h"
 
 #include <glib/gstdio.h>
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/convert.h>
 
 #include "desktop.h"
 
@@ -46,14 +46,14 @@
 #include "extension/system.h"
 #include "helper/action-context.h"
 #include "inkscape.h"
-#include "io/resource.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "libnrtype/FontFactory.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "resource-manager.h"
-#include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
+#include "ui/dialog/debug.h"
 
 /* Backbones of configuration xml data */
 #include "menus-skeleton.h"

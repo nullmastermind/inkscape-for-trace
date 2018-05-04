@@ -16,9 +16,9 @@
 #define SEEN_INKSCAPE_XML_SIMPLE_DOCUMENT_H
 
 #include "xml/document.h"
+#include "xml/simple-node.h"
 #include "xml/node-observer.h"
 #include "xml/log-builder.h"
-#include "xml/simple-node.h"
 
 namespace Inkscape {
 

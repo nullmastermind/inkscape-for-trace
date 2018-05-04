@@ -12,11 +12,11 @@
 #include <config.h>
 #endif
 
-#include <iomanip>
 #include <iostream>
+#include <iomanip>
 
-#include <glibmm/i18n.h>
 #include <gtkmm.h>
+#include <glibmm/i18n.h>
 
 #include <libnrtype/font-instance.h>
 

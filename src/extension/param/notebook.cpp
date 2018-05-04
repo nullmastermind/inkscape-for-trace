@@ -18,16 +18,16 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/spinbutton.h>
+#include <gtkmm/notebook.h>
 
 #include <glibmm/i18n.h>
 
 #include <xml/node.h>
 
-#include "document-private.h"
-#include "preferences.h"
 #include <extension/extension.h>
+#include "preferences.h"
+#include "document-private.h"
 
 #include "notebook.h"
 

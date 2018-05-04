@@ -3,11 +3,11 @@
  * Utility functions for filenames.
  */
 
-#include "dir-util.h"
-#include <cstring>
 #include <errno.h>
-#include <glib.h>
 #include <string>
+#include <cstring>
+#include <glib.h>
+#include "dir-util.h"
 
 std::string sp_relative_path_from_path( std::string const &path, std::string const &base)
 {

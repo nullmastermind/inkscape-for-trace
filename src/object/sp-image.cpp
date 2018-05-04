@@ -17,28 +17,28 @@
 # include "config.h"
 #endif
 
+#include <cstring>
+#include <algorithm>
+#include <string>
+#include <glibmm.h>
+#include <glib/gstdio.h>
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
-#include <algorithm>
-#include <cstring>
-#include <glib/gstdio.h>
-#include <glibmm.h>
 #include <glibmm/i18n.h>
-#include <string>
 
+#include "display/drawing-image.h"
 #include "display/cairo-utils.h"
 #include "display/curve.h"
-#include "display/drawing-image.h"
 //Added for preserveAspectRatio support -- EAF
 #include "attributes.h"
+#include "print.h"
 #include "brokenimage.xpm"
 #include "document.h"
-#include "io/sys.h"
-#include "preferences.h"
-#include "print.h"
-#include "sp-clippath.h"
 #include "sp-image.h"
+#include "sp-clippath.h"
 #include "xml/quote.h"
+#include "preferences.h"
+#include "io/sys.h"
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 #include "cms-system.h"

@@ -9,8 +9,8 @@
 
 #include "document-private.h"
 
-#include "db.h"
 #include "patheffect.h"
+#include "db.h"
 
 #include "object/sp-defs.h"
 

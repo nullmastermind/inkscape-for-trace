@@ -42,9 +42,9 @@
 #include "helper/gettext.h"
 #endif
 #include "inkgc/gc-core.h"
-#include "inkview-options-group.h"
 #include "io/sys.h"
 #include "svg-view-slideshow.h"
+#include "inkview-options-group.h"
 
 /**
  * @brief Get a list of valid SVG files from a list of strings

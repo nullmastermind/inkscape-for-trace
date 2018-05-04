@@ -13,8 +13,8 @@
 #include "inkscape.h"
 #include "ui/icon-names.h"
 
-#include <glibmm/exceptionhandler.h>
 #include <gtkmm/icontheme.h>
+#include <glibmm/exceptionhandler.h>
 
 namespace Inkscape {
 namespace UI {

@@ -21,17 +21,17 @@
 #include <iomanip>
 
 #include "trace/filterset.h"
-#include "trace/imagemap-gdk.h"
 #include "trace/quantize.h"
+#include "trace/imagemap-gdk.h"
 
+#include <inkscape.h>
 #include "desktop.h"
 #include "message-stack.h"
-#include <inkscape.h>
 
 #include "object/sp-path.h"
 
-#include "bitmap.h"
 #include <svg/path-string.h>
+#include "bitmap.h"
 
 using Glib::ustring;
 

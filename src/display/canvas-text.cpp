@@ -15,11 +15,11 @@
 #include <sstream>
 #include <string.h>
 
-#include "canvas-text.h"
-#include "desktop.h"
-#include "display/cairo-utils.h"
-#include "display/sp-canvas.h"
 #include "sp-canvas-util.h"
+#include "canvas-text.h"
+#include "display/cairo-utils.h"
+#include "desktop.h"
+#include "display/sp-canvas.h"
 
 static void sp_canvastext_destroy(SPCanvasItem *object);
 

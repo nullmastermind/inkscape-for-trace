@@ -16,8 +16,8 @@
 #include "document.h"
 
 // In same directory
-#include "componenttransfer-funcnode.h"
 #include "componenttransfer.h"
+#include "componenttransfer-funcnode.h"
 
 #include "display/nr-filter.h"
 

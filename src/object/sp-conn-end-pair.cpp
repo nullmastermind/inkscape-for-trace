@@ -12,18 +12,18 @@
  */
 
 #include <cstring>
-#include <glibmm/stringutils.h>
 #include <string>
+#include <glibmm/stringutils.h>
 
-#include "3rdparty/adaptagrams/libavoid/router.h"
 #include "attributes.h"
-#include "display/curve.h"
-#include "document.h"
 #include "sp-conn-end.h"
-#include "sp-item-group.h"
-#include "sp-path.h"
 #include "uri.h"
+#include "display/curve.h"
 #include "xml/repr.h"
+#include "sp-path.h"
+#include "3rdparty/adaptagrams/libavoid/router.h"
+#include "document.h"
+#include "sp-item-group.h"
 
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)

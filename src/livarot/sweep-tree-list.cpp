@@ -1,6 +1,6 @@
-#include "livarot/sweep-tree-list.h"
-#include "livarot/sweep-tree.h"
 #include <glib.h>
+#include "livarot/sweep-tree.h"
+#include "livarot/sweep-tree-list.h"
 
 
 SweepTreeList::SweepTreeList(int s) :

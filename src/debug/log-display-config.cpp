@@ -9,13 +9,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <iostream>
+#include <gtk/gtk.h>
+#include <gdk/gdk.h>
 #include "debug/event-tracker.h"
-#include "debug/log-display-config.h"
 #include "debug/logger.h"
 #include "debug/simple-event.h"
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
-#include <iostream>
+#include "debug/log-display-config.h"
 
 namespace Inkscape {
 

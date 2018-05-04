@@ -9,8 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "axis-manip.h"
 #include <glib.h>
+#include "axis-manip.h"
 
 namespace Proj {
 

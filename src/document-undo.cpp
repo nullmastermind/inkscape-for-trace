@@ -44,15 +44,15 @@
  * (Lauris Kaplinski)
  */
 
+#include <string>
+#include "xml/repr.h"
+#include "document-private.h"
+#include "inkscape.h"
+#include "document-undo.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
 #include "debug/timestamp.h"
-#include "document-private.h"
-#include "document-undo.h"
 #include "event.h"
-#include "inkscape.h"
-#include "xml/repr.h"
-#include <string>
 
 
 /*

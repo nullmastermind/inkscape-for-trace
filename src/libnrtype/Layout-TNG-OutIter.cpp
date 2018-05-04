@@ -9,12 +9,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "Layout-TNG.h"
-#include "font-instance.h"
 #include "livarot/Path.h"
-#include "style.h"
+#include "font-instance.h"
 #include "svg/svg-length.h"
-#include <2geom/line.h>
 #include <2geom/transforms.h>
+#include <2geom/line.h>
+#include "style.h"
 
 namespace Inkscape {
 namespace Text {

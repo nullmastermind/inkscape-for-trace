@@ -15,8 +15,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 
@@ -28,11 +28,11 @@
 #include "selection-chemistry.h"
 #include "text-editing.h"
 
-#include "object/sp-flowdiv.h"
-#include "object/sp-flowtext.h"
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "object/sp-textpath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-flowdiv.h"
 #include "object/sp-tspan.h"
 
 #include "libnrtype/FontFactory.h"

@@ -12,11 +12,11 @@
  */
 
 #include "imageicon.h"
+#include "svg-view-widget.h"
 #include "document.h"
 #include "inkscape.h"
-#include "svg-view-widget.h"
-#include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
+#include <glibmm/convert.h>
 
 namespace Inkscape
 {

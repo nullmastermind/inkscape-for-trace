@@ -15,15 +15,15 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
+#include <gtkmm/adjustment.h>
 #include <gtkmm/spinbutton.h>
 
 #include "desktop.h"
 
-#include "2geom/geom.h"
 #include "document.h"
 #include "selection.h"
+#include "2geom/geom.h"
 
 #include "svg/path-string.h"
 

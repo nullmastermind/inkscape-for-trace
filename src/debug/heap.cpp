@@ -13,9 +13,9 @@
 # include "config.h"
 #endif
 
+#include "inkgc/gc-alloc.h"
 #include "debug/gc-heap.h"
 #include "debug/sysv-heap.h"
-#include "inkgc/gc-alloc.h"
 #include <vector>
 
 namespace Inkscape {

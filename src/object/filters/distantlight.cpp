@@ -16,8 +16,8 @@
 #include <glib.h>
 
 // In same dirctory
-#include "diffuselighting.h"
 #include "distantlight.h"
+#include "diffuselighting.h"
 #include "specularlighting.h"
 
 #include "attributes.h"

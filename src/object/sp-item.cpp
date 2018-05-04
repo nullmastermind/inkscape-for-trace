@@ -20,19 +20,19 @@
 
 #include <glibmm/i18n.h>
 
-#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "display/drawing-item.h"
-#include "document.h"
-#include "print.h"
 #include "svg/svg.h"
+#include "print.h"
+#include "display/drawing-item.h"
+#include "attributes.h"
+#include "document.h"
 
-#include "conditions.h"
-#include "conn-avoid-ref.h"
-#include "desktop.h"
-#include "filter-chemistry.h"
-#include "gradient-chemistry.h"
 #include "inkscape.h"
+#include "desktop.h"
+#include "gradient-chemistry.h"
+#include "conn-avoid-ref.h"
+#include "conditions.h"
+#include "filter-chemistry.h"
 
 #include "sp-clippath.h"
 #include "sp-desc.h"
@@ -40,8 +40,8 @@
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "sp-mask.h"
 #include "sp-pattern.h"
-#include "sp-rect.h"
 #include "sp-root.h"
+#include "sp-rect.h"
 #include "sp-switch.h"
 #include "sp-text.h"
 #include "sp-textpath.h"
@@ -57,9 +57,9 @@
 
 #include "extract-uri.h"
 
+#include "live_effects/lpeobject.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpeobject.h"
 
 #include "util/units.h"
 

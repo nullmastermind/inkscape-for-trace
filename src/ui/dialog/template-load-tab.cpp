@@ -11,18 +11,18 @@
 #include "template-widget.h"
 #include "new-from-template.h"
 
-#include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
+#include <glibmm/fileutils.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <iostream>
 
 #include "extension/db.h"
-#include "file.h"
 #include "inkscape.h"
-#include "path-prefix.h"
 #include "ui/interface.h"
+#include "file.h"
+#include "path-prefix.h"
 
 using namespace Inkscape::IO::Resource;
 

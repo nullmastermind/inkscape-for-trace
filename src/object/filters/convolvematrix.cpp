@@ -13,8 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
 #include <string.h>
+#include <math.h>
 #include <vector>
 
 #include "convolvematrix.h"

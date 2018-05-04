@@ -9,11 +9,11 @@
  * Released under GNU GPL
  */
 
-#include "helper/geom-curves.h"
+#include <algorithm>
 #include "helper/geom.h"
+#include "helper/geom-curves.h"
 #include <2geom/curves.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <algorithm>
 
 using Geom::X;
 using Geom::Y;

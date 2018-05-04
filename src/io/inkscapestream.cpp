@@ -11,8 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "inkscapestream.h"
 #include <cstdlib>
+#include "inkscapestream.h"
 
 namespace Inkscape
 {

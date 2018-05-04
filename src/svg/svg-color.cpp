@@ -15,19 +15,19 @@
 # include "config.h"
 #endif
 
-#include <cstdio> // sprintf
 #include <cstdlib>
+#include <cstdio> // sprintf
 #include <cstring>
-#include <errno.h>
-#include <glib.h> // g_assert
-#include <math.h>
 #include <string>
+#include <math.h>
+#include <glib.h> // g_assert
+#include <errno.h>
 
 #include <map>
 
 #include "colorspace.h"
-#include "preferences.h"
 #include "strneq.h"
+#include "preferences.h"
 #include "svg-color.h"
 #include "svg-icc-color.h"
 

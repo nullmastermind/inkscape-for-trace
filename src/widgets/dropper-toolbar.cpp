@@ -30,11 +30,11 @@
 
 #include <glibmm/i18n.h>
 
-#include "document-undo.h"
 #include "dropper-toolbar.h"
+#include "document-undo.h"
+#include "widgets/ege-output-action.h"
 #include "ink-toggle-action.h"
 #include "preferences.h"
-#include "widgets/ege-output-action.h"
 #include "widgets/spinbutton-events.h"
 
 using Inkscape::DocumentUndo;

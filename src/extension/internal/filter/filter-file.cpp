@@ -7,21 +7,21 @@
 
 #include "filter.h"
 
-#include "io/inkscapestream.h"
-#include "io/resource.h"
 #include "io/sys.h"
+#include "io/resource.h"
+#include "io/inkscapestream.h"
 
 /* Directory includes */
-#include "inkscape.h"
 #include "path-prefix.h"
+#include "inkscape.h"
 
 /* Extension */
 #include "extension/extension.h"
 #include "extension/system.h"
 
 /* System includes */
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <glibmm/fileutils.h>
 
 using namespace Inkscape::IO::Resource;
 

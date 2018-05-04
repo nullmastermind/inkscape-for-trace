@@ -1,17 +1,17 @@
 #include "sp-conn-end.h"
 
 #include <cstring>
-#include <limits>
 #include <string>
+#include <limits>
 
-#include "2geom/path-intersection.h"
 #include "bad-uri-exception.h"
 #include "display/curve.h"
-#include "document.h"
-#include "sp-item-group.h"
+#include "xml/repr.h"
 #include "sp-path.h"
 #include "uri.h"
-#include "xml/repr.h"
+#include "document.h"
+#include "sp-item-group.h"
+#include "2geom/path-intersection.h"
 
 
 static void change_endpts(SPCurve *const curve, double const endPos[2]);

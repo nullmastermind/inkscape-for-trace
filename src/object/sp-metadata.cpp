@@ -14,8 +14,8 @@
 #endif
 
 #include "sp-metadata.h"
-#include "document.h"
 #include "xml/node-iterators.h"
+#include "document.h"
 
 #include "sp-item-group.h"
 #include "sp-root.h"

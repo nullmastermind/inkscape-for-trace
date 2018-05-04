@@ -22,28 +22,28 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 #include "sp-lpe-item.h"
 
 #include "display/curve.h"
-#include "helper/geom-curves.h"
 #include <2geom/curves.h>
+#include "helper/geom-curves.h"
 
-#include "attributes.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
+#include "attributes.h"
 
-#include "sp-guide.h"
 #include "sp-path.h"
+#include "sp-guide.h"
 
-#include "desktop.h"
 #include "document.h"
+#include "desktop.h"
 
 #include "desktop-style.h"
+#include "ui/tools/tool-base.h"
 #include "inkscape.h"
 #include "style.h"
-#include "ui/tools/tool-base.h"
 
 #define noPATH_VERBOSE
 

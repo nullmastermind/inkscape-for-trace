@@ -13,17 +13,17 @@
 
 #include "uri-references.h"
 
-#include <cstring>
 #include <iostream>
+#include <cstring>
 
+#include <glibmm/miscutils.h>
+#include "live_effects/lpeobject.h"
 #include "bad-uri-exception.h"
 #include "document.h"
-#include "extract-uri.h"
-#include "live_effects/lpeobject.h"
 #include "sp-object.h"
-#include "sp-tag-use.h"
 #include "uri.h"
-#include <glibmm/miscutils.h>
+#include "extract-uri.h"
+#include "sp-tag-use.h"
 
 namespace Inkscape {
 

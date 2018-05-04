@@ -31,8 +31,8 @@
 
 #include <glibmm/i18n.h>
 
-#include <2geom/angle.h>
 #include <2geom/line.h>
+#include <2geom/angle.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -58,8 +58,8 @@
 #include "object/sp-root.h"
 
 #include "ui/dialog-events.h"
-#include "ui/dialog/guides.h"
 #include "ui/tools-switch.h"
+#include "ui/dialog/guides.h"
 #include "ui/tools/tool-base.h"
 
 #include "widgets/desktop-widget.h"

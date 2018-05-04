@@ -20,16 +20,16 @@
 
 #include <fontconfig/fontconfig.h>
 
-#include <pango/pango-ot.h>
 #include <pango/pangofc-fontmap.h>
 #include <pango/pangoft2.h>
+#include <pango/pango-ot.h>
 
 #include "io/sys.h"
 #include "util/unordered-containers.h"
 
 #include "libnrtype/FontFactory.h"
-#include "libnrtype/OpenTypeUtil.h"
 #include "libnrtype/font-instance.h"
+#include "libnrtype/OpenTypeUtil.h"
 
 typedef INK_UNORDERED_MAP<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 

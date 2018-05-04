@@ -17,11 +17,11 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
-#include "FontFactory.h"
+#include <gtk/gtk.h>
 #include "Layout-TNG.h"
 #include "style.h"
 #include "svg/svg-length.h"
-#include <gtk/gtk.h>
+#include "FontFactory.h"
 
 
 namespace Inkscape {

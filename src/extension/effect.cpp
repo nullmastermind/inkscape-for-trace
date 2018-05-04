@@ -9,14 +9,14 @@
  */
 
 #include "prefdialog.h"
-#include "helper/action.h"
 #include "inkscape.h"
+#include "helper/action.h"
 #include "ui/view/view.h"
 
 #include "desktop.h"
+#include "implementation/implementation.h"
 #include "effect.h"
 #include "execution-env.h"
-#include "implementation/implementation.h"
 #include "timer.h"
 
 

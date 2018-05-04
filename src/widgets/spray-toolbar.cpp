@@ -31,18 +31,18 @@
 
 #include <gtkmm.h>
 
+#include "spray-toolbar.h"
 #include "desktop.h"
+#include "inkscape.h"
+#include "widgets/ege-adjustment-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
-#include "inkscape.h"
-#include "spray-toolbar.h"
 #include "toolbox.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/panel-dialog.h"
-#include "ui/icon-names.h"
 #include "ui/widget/ink-select-one-action.h"
-#include "widgets/ege-adjustment-action.h"
+#include "ui/icon-names.h"
 
 #include <glibmm/i18n.h>
 

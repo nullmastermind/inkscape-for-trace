@@ -21,9 +21,9 @@
 
 #include "selection-describer.h"
 
-#include "desktop.h"
 #include "layer-model.h"
 #include "selection.h"
+#include "desktop.h"
 
 #include "object/sp-flowtext.h"
 #include "object/sp-image.h"

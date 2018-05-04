@@ -9,10 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "message-stack.h"
-#include <cstring>
-#include <glib.h>
 #include <string.h>
+#include <glib.h>
+#include <cstring>
+#include "message-stack.h"
 
 namespace Inkscape {
 

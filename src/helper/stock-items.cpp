@@ -24,18 +24,18 @@
 
 #include "path-prefix.h"
 
-#include "desktop.h"
-#include "document-private.h"
-#include "inkscape.h"
 #include <xml/repr.h>
+#include "document-private.h"
+#include "desktop.h"
+#include "inkscape.h"
 
 #include "io/sys.h"
 #include "stock-items.h"
 
-#include "object/sp-defs.h"
 #include "object/sp-gradient.h"
-#include "object/sp-marker.h"
 #include "object/sp-pattern.h"
+#include "object/sp-marker.h"
+#include "object/sp-defs.h"
 
 static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc);
 static SPObject *sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc);

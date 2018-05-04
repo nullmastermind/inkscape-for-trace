@@ -10,27 +10,27 @@
 
 #include "live_effects/parameter/originalitemarray.h"
 
+#include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separatormenuitem.h>
-#include <gtkmm/widget.h>
+#include <gtkmm/scrolledwindow.h>
 
 #include <glibmm/i18n.h>
 
 #include "inkscape.h"
-#include "originalitem.h"
-#include "svg/stringstream.h"
-#include "svg/svg.h"
 #include "ui/clipboard.h"
+#include "svg/svg.h"
+#include "svg/stringstream.h"
+#include "originalitem.h"
 
 #include "object/uri.h"
 
 #include "live_effects/effect.h"
 
+#include "verbs.h"
 #include "document-undo.h"
 #include "document.h"
-#include "verbs.h"
 
 namespace Inkscape {
 

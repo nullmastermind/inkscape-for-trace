@@ -9,12 +9,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <typeinfo>
 #include "gc-anchored.h"
-#include "debug/demangle.h"
 #include "debug/event-tracker.h"
 #include "debug/simple-event.h"
+#include "debug/demangle.h"
 #include "util/format.h"
-#include <typeinfo>
 
 namespace Inkscape {
 

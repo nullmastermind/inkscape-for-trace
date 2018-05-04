@@ -14,9 +14,9 @@
  */
 
 #include "document.h"
-#include "helper/sp-marshal.h"
 #include "inkscape.h"
 #include "sp-widget.h"
+#include "helper/sp-marshal.h"
 
 using Inkscape::SPWidgetImpl;
 

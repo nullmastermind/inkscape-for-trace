@@ -13,8 +13,8 @@
 
 #include "cssdialog.h"
 
-#include "selection.h"
 #include "verbs.h"
+#include "selection.h"
 
 #include "ui/widget/addtoicon.h"
 

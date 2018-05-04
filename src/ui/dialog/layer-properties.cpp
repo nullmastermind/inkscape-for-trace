@@ -17,18 +17,18 @@
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 
-#include "desktop.h"
-#include "document-undo.h"
-#include "document.h"
 #include "inkscape.h"
+#include "desktop.h"
+#include "document.h"
+#include "document-undo.h"
 #include "layer-manager.h"
 #include "message-stack.h"
 
+#include "verbs.h"
 #include "selection-chemistry.h"
 #include "ui/icon-names.h"
-#include "ui/tools/tool-base.h"
 #include "ui/widget/imagetoggler.h"
-#include "verbs.h"
+#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {

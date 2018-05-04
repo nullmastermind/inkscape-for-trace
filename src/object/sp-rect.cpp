@@ -17,14 +17,14 @@
 
 #include "display/curve.h"
 
-#include "attributes.h"
-#include "document.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "sp-guide.h"
-#include "sp-rect.h"
+#include "document.h"
+#include "attributes.h"
 #include "style.h"
+#include "sp-rect.h"
 #include <glibmm/i18n.h>
+#include "sp-guide.h"
+#include "preferences.h"
 
 #define noRECT_VERBOSE
 

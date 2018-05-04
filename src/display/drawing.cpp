@@ -10,10 +10,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <algorithm>
 #include "display/drawing.h"
 #include "nr-filter-gaussian.h"
 #include "nr-filter-types.h"
-#include <algorithm>
 
 //grayscale colormode:
 #include "cairo-templates.h"

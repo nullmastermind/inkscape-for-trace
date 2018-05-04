@@ -1,7 +1,7 @@
 
 #include <cstring>
-#include <glib.h>
 #include <string>
+#include <glib.h>
 
 #include "svg/strip-trailing-zeros.h"
 

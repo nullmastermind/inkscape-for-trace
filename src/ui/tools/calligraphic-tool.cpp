@@ -23,16 +23,16 @@
 
 #define noDYNA_DRAW_VERBOSE
 
-#include <cstring>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <gtk/gtk.h>
-#include <numeric>
 #include <string>
+#include <cstring>
+#include <numeric>
 
+#include <2geom/pathvector.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
-#include <2geom/pathvector.h>
 
 #include "context-fns.h"
 #include "desktop-events.h"

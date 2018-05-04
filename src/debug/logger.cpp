@@ -9,13 +9,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <fstream>
+#include <vector>
+#include <glib.h>
+#include "inkscape-version.h"
 #include "debug/logger.h"
 #include "debug/simple-event.h"
 #include "inkgc/gc-alloc.h"
-#include "inkscape-version.h"
-#include <fstream>
-#include <glib.h>
-#include <vector>
 
 namespace Inkscape {
 

@@ -6,12 +6,12 @@
  *
  */
 
+#include <2geom/transforms.h>
+#include <2geom/line.h>
+#include "sp-canvas-util.h"
+#include "sodipodi-ctrl.h"
 #include "display/cairo-utils.h"
 #include "display/sp-canvas.h"
-#include "sodipodi-ctrl.h"
-#include "sp-canvas-util.h"
-#include <2geom/line.h>
-#include <2geom/transforms.h>
 
 enum {
     ARG_0,

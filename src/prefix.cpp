@@ -31,11 +31,11 @@
 #endif
 
 
-#include "prefix.h"
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <glib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include "prefix.h"
 
 
 #ifdef __cplusplus

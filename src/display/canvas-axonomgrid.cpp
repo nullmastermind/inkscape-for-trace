@@ -18,30 +18,30 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
+#include <gtkmm/grid.h>
 
 #include <glibmm/i18n.h>
 
 #include "display/canvas-axonomgrid.h"
 
-#include "desktop.h"
 #include "ui/widget/registered-widget.h"
+#include "desktop.h"
 
-#include "2geom/angle.h"
-#include "2geom/line.h"
 #include "display/cairo-utils.h"
 #include "display/canvas-grid.h"
 #include "display/sp-canvas-util.h"
 #include "display/sp-canvas.h"
 #include "document.h"
-#include "helper/mathfns.h"
 #include "inkscape.h"
+#include "preferences.h"
 #include "object/sp-namedview.h"
 #include "object/sp-object.h"
 #include "object/sp-root.h"
-#include "preferences.h"
 #include "svg/svg-color.h"
+#include "2geom/line.h"
+#include "2geom/angle.h"
+#include "helper/mathfns.h"
 #include "util/units.h"
 
 using Inkscape::Util::unit_table;

@@ -13,20 +13,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <2geom/transforms.h>
 #include <string>
+#include <2geom/transforms.h>
 
 #include "attributes.h"
-#include "display/drawing-group.h"
+#include "print.h"
 #include "document.h"
 #include "inkscape-version.h"
-#include "print.h"
 #include "sp-defs.h"
 #include "sp-root.h"
+#include "display/drawing-group.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
-#include "util/units.h"
 #include "xml/repr.h"
+#include "util/units.h"
 
 SPRoot::SPRoot() : SPGroup(), SPViewBox()
 {

@@ -9,13 +9,13 @@
 
 #include "BitLigne.h"
 
+#include <math.h>
+#include <cstring>
+#include <cstdlib>
+#include <string>
 #include <cmath>
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <glib.h>
-#include <math.h>
-#include <string>
 
 BitLigne::BitLigne(int ist,int ien,float iScale)
 {

@@ -23,24 +23,24 @@
 #include <cstring>
 #include <string>
 
-#include "attributes.h"
-#include "desktop.h"
-#include "display/guideline.h"
 #include "display/sp-canvas.h"
-#include "document-undo.h"
-#include "helper-fns.h"
-#include "inkscape.h"
+#include "display/guideline.h"
+#include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/stringstream.h"
+#include "attributes.h"
 #include "sp-guide.h"
 #include "sp-item-notify-moveto.h"
-#include "sp-namedview.h"
-#include "sp-root.h"
-#include "svg/stringstream.h"
-#include "svg/svg-color.h"
-#include "svg/svg.h"
-#include "verbs.h"
 #include <glibmm/i18n.h>
-#include <remove-last.h>
 #include <xml/repr.h>
+#include <remove-last.h>
+#include "inkscape.h"
+#include "desktop.h"
+#include "sp-root.h"
+#include "sp-namedview.h"
+#include "document-undo.h"
+#include "helper-fns.h"
+#include "verbs.h"
 
 using Inkscape::DocumentUndo;
 using std::vector;

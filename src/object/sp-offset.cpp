@@ -25,10 +25,10 @@
 
 #include <glibmm/i18n.h>
 
-#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "display/curve.h"
 #include "svg/svg.h"
+#include "attributes.h"
+#include "display/curve.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"

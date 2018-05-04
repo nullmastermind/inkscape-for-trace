@@ -20,16 +20,16 @@
 #include <2geom/transforms.h>
 #include <sigc++/functors/mem_fun.h>
 
-#include "attributes.h"
 #include "bad-uri-exception.h"
+#include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
-#include "display/drawing-pattern.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
+#include "display/drawing-pattern.h"
+#include "attributes.h"
 #include "document-private.h"
 #include "sp-hatch-path.h"
-#include "svg/svg.h"
 
 SPHatch::SPHatch()
     : SPPaintServer(),

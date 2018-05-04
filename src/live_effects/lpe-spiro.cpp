@@ -7,15 +7,15 @@
 #include "live_effects/lpe-spiro.h"
 
 #include "display/curve.h"
-#include "helper/geom-curves.h"
-#include "helper/geom-nodetype.h"
 #include <2geom/curves.h>
+#include "helper/geom-nodetype.h"
+#include "helper/geom-curves.h"
 
 #include "live_effects/spiro.h"
 
 // For handling un-continuous paths:
-#include "inkscape.h"
 #include "message-stack.h"
+#include "inkscape.h"
 
 namespace Inkscape {
 namespace LivePathEffect {

@@ -24,8 +24,8 @@
 #include "bad-uri-exception.h"
 
 #include "object/sp-image.h"
-#include "object/uri-references.h"
 #include "object/uri.h"
+#include "object/uri-references.h"
 
 #include "display/nr-filter-image.h"
 #include "display/nr-filter.h"

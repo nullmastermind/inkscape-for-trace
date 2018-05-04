@@ -7,10 +7,10 @@
 #include "ui/widget/registered-widget.h"
 #include <glibmm/i18n.h>
 
-#include "live_effects/effect.h"
 #include "live_effects/parameter/unit.h"
-#include "util/units.h"
+#include "live_effects/effect.h"
 #include "verbs.h"
+#include "util/units.h"
 
 using Inkscape::Util::unit_table;
 

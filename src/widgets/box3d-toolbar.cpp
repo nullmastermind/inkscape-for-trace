@@ -28,8 +28,8 @@
 #include <config.h>
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtk/gtk.h>
+#include <glibmm/i18n.h>
 
 #include "box3d-toolbar.h"
 

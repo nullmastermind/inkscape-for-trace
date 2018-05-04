@@ -18,14 +18,14 @@
 #include <string>
 
 #include "ui/dialog/layer-properties.h"
+#include <glibmm/i18n.h>
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/reversed.hpp>
-#include <glibmm/i18n.h>
 
 #include "desktop.h"
 
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "layer-manager.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"

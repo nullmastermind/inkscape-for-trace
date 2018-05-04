@@ -9,12 +9,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "debug/demangle.h"
-#include "inkgc/gc-alloc.h"
-#include "util/format.h"
-#include <map>
 #include <stdio.h>
 #include <string.h>
+#include <map>
+#include "debug/demangle.h"
+#include "util/format.h"
+#include "inkgc/gc-alloc.h"
 
 namespace Inkscape {
 

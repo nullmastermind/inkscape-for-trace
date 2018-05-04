@@ -19,15 +19,15 @@
 
 #include "ui/dialog/knot-properties.h"
 
-#include "desktop.h"
-#include "document-undo.h"
-#include "document.h"
-#include "inkscape.h"
-#include "layer-manager.h"
-#include "util/units.h"
 #include <boost/lexical_cast.hpp>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
+#include "inkscape.h"
+#include "util/units.h"
+#include "desktop.h"
+#include "document.h"
+#include "document-undo.h"
+#include "layer-manager.h"
 
 #include "selection-chemistry.h"
 

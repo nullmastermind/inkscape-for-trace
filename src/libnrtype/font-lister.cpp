@@ -8,18 +8,18 @@
 
 #include <libnrtype/font-instance.h>
 
-#include "FontFactory.h"
 #include "font-lister.h"
+#include "FontFactory.h"
 
-#include "desktop-style.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "document.h"
 #include "inkscape.h"
 #include "preferences.h"
 
-#include "object/sp-namedview.h"
 #include "object/sp-object.h"
 #include "object/sp-root.h"
+#include "object/sp-namedview.h"
 
 #include "xml/repr.h"
 

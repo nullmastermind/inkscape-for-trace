@@ -15,12 +15,12 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
-#include "desktop.h"
+#include "rubberband.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"
-#include "pixmaps/cursor-zoom-out.xpm"
+#include "desktop.h"
 #include "pixmaps/cursor-zoom.xpm"
-#include "rubberband.h"
+#include "pixmaps/cursor-zoom-out.xpm"
 #include "selection-chemistry.h"
 
 #include "ui/tools/zoom-tool.h"

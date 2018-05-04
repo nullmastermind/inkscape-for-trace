@@ -23,8 +23,8 @@
 #endif
 
 
-#include "path-prefix.h"
 #include <glib.h>
+#include "path-prefix.h"
 
 
 /**

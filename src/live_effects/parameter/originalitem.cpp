@@ -8,8 +8,8 @@
 # include "config.h"
 #endif
 
-#include "live_effects/parameter/originalitem.h"
 #include <gtkmm/box.h>
+#include "live_effects/parameter/originalitem.h"
 
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
@@ -18,8 +18,8 @@
 #include "display/curve.h"
 #include "live_effects/effect.h"
 
-#include "desktop.h"
 #include "inkscape.h"
+#include "desktop.h"
 #include "selection.h"
 
 #include "object/uri.h"

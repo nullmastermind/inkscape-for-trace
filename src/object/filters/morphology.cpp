@@ -16,10 +16,10 @@
 #include <string.h>
 
 #include "attributes.h"
-#include "display/nr-filter.h"
-#include "morphology.h"
 #include "svg/svg.h"
+#include "morphology.h"
 #include "xml/repr.h"
+#include "display/nr-filter.h"
 
 SPFeMorphology::SPFeMorphology() : SPFilterPrimitive() {
 	this->Operator = Inkscape::Filters::MORPHOLOGY_OPERATOR_ERODE;

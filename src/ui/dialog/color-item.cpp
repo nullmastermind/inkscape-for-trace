@@ -17,8 +17,8 @@
 
 #include <errno.h>
 
-#include <glibmm/i18n.h>
 #include <gtkmm/label.h>
+#include <glibmm/i18n.h>
 
 #include "color-item.h"
 
@@ -26,8 +26,8 @@
 
 #include "desktop-style.h"
 #include "display/cairo-utils.h"
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "inkscape.h" // for SP_ACTIVE_DESKTOP
 #include "io/resource.h"
 #include "io/sys.h"

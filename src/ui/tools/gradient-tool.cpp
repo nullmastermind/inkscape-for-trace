@@ -16,8 +16,8 @@
 #include <config.h>
 #endif
 
-#include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "desktop.h"
 #include "document-undo.h"

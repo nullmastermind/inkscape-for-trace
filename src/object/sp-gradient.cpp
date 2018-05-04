@@ -33,23 +33,23 @@
 
 #include <cairo.h>
 
-#include <sigc++/adaptors/bind.h>
 #include <sigc++/functors/ptr_fun.h>
+#include <sigc++/adaptors/bind.h>
 
-#include "attributes.h"
 #include "bad-uri-exception.h"
 #include "display/cairo-utils.h"
+#include "svg/svg.h"
+#include "svg/css-ostringstream.h"
+#include "attributes.h"
 #include "document-private.h"
 #include "gradient-chemistry.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
-#include "sp-mesh-gradient.h"
-#include "sp-mesh-patch.h"
-#include "sp-mesh-row.h"
 #include "sp-radial-gradient.h"
+#include "sp-mesh-gradient.h"
+#include "sp-mesh-row.h"
+#include "sp-mesh-patch.h"
 #include "sp-stop.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg.h"
 
 /// Has to be power of 2   Seems to be unused.
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH

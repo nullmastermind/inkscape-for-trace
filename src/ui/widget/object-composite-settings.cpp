@@ -17,15 +17,15 @@
 #include "desktop.h"
 
 #include "desktop-style.h"
-#include "display/sp-canvas.h"
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
-#include "ui/widget/style-subject.h"
 #include "verbs.h"
+#include "display/sp-canvas.h"
+#include "ui/widget/style-subject.h"
 
 namespace Inkscape {
 namespace UI {

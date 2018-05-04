@@ -14,8 +14,8 @@
 #include <config.h>
 #endif
 
-#include <cmath>
 #include <glibmm/ustring.h>
+#include <cmath>
 
 #include "svg/svg-icc-color.h"
 #include "ui/selected-color.h"

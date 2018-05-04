@@ -15,11 +15,11 @@
 #include <cstring>
 #include <glib.h>
 
-#include "debug/event-tracker.h"
-#include "debug/simple-event.h"
 #include "util/find-if-before.h"
 #include "xml/composite-node-observer.h"
 #include "xml/node-event-vector.h"
+#include "debug/event-tracker.h"
+#include "debug/simple-event.h"
 
 namespace Inkscape {
 

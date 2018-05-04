@@ -5,13 +5,13 @@
  */
 
 #include "live_effects/parameter/point.h"
-#include "inkscape.h"
-#include "knotholder.h"
 #include "live_effects/effect.h"
-#include "svg/stringstream.h"
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 #include "ui/widget/point.h"
+#include "inkscape.h"
 #include "verbs.h"
+#include "knotholder.h"
 #include <glibmm/i18n.h>
 
 namespace Inkscape {

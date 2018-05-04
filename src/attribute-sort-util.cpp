@@ -9,17 +9,17 @@
  * Utility functions for sorting attributes by name.
  */
 
-#include <algorithm>    // std::sort
 #include <fstream>
-#include <iostream>
 #include <sstream>
-#include <utility>      // std::pair
+#include <iostream>
 #include <vector>
+#include <utility>      // std::pair
+#include <algorithm>    // std::sort
 
 #include "attribute-sort-util.h"
 
-#include "xml/attribute-record.h"
 #include "xml/repr.h"
+#include "xml/attribute-record.h"
 
 #include "attributes.h"
 

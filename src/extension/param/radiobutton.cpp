@@ -18,15 +18,15 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>
+#include <glibmm/i18n.h>
 
-#include "document-private.h"
+#include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include "xml/node.h"
+#include "document-private.h"
 
 #include "radiobutton.h"
 

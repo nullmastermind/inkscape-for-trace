@@ -15,9 +15,9 @@
 
 #include "button.h"
 #include "helper/action-context.h"
-#include "helper/action.h"
-#include "shortcuts.h"
 #include "ui/interface.h"
+#include "shortcuts.h"
+#include "helper/action.h"
 
 static void sp_button_dispose(GObject *object);
 static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width);

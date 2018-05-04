@@ -12,8 +12,8 @@
 #include <glib.h>
 
 #include "display/cairo-utils.h"
-#include "display/nr-filter-slot.h"
 #include "display/nr-filter-tile.h"
+#include "display/nr-filter-slot.h"
 #include "display/nr-filter-units.h"
 
 namespace Inkscape {

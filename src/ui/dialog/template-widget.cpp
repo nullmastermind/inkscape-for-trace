@@ -14,8 +14,8 @@
 #include <gtkmm/messagedialog.h>
 
 #include "desktop.h"
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "file.h"
 #include "inkscape.h"
 

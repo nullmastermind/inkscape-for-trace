@@ -15,21 +15,21 @@
 #endif
 
 #include <cstring>
-#include <stdexcept>
 #include <string>
+#include <stdexcept>
 
 #include <libxml/parser.h>
 
+#include "xml/repr.h"
 #include "xml/attribute-record.h"
 #include "xml/rebase-hrefs.h"
-#include "xml/repr.h"
 #include "xml/simple-document.h"
 #include "xml/text-node.h"
 
-#include "io/gzipstream.h"
-#include "io/stringstream.h"
 #include "io/sys.h"
 #include "io/uristream.h"
+#include "io/stringstream.h"
+#include "io/gzipstream.h"
 
 #include "extension/extension.h"
 

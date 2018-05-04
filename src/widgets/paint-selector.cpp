@@ -684,7 +684,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);
 
-    if (psel->mode = SPPaintSelector::MODE_SOLID_COLOR) {
+    if ((psel->mode == SPPaintSelector::MODE_SOLID_COLOR)) {
         /* Already have color selector */
         // Do nothing
     } else {

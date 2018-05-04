@@ -13,25 +13,25 @@
  */
 
 #include "display/curve.h"
+#include "live_effects/lpe-knot.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
-#include "live_effects/lpe-knot.h"
 
 #include <gdk/gdk.h>
 
-#include "helper/geom.h"
-#include <2geom/basic-intersection.h>
-#include <2geom/bezier-to-sbasis.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/bezier-to-sbasis.h>
+#include <2geom/basic-intersection.h>
+#include "helper/geom.h"
 
-#include "object/sp-path.h"
 #include "object/sp-shape.h"
+#include "object/sp-path.h"
 #include "style.h"
 
 // for change crossing undo
-#include "document-undo.h"
-#include "document.h"
 #include "verbs.h"
+#include "document.h"
+#include "document-undo.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>

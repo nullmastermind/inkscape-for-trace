@@ -10,8 +10,8 @@
  */
 
 #include <fstream>
-#include <iostream>
 #include <sstream>
+#include <iostream>
 
 #include "preferences.h"
 

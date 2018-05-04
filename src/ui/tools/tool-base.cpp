@@ -21,8 +21,8 @@
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
-#include "file.h"
 #include "shortcuts.h"
+#include "file.h"
 
 
 
@@ -38,24 +38,24 @@
 #include "selection.h"
 #include "sp-cursor.h"
 
-#include "display/canvas-rotate.h"
-#include "display/sp-canvas-group.h"
 #include "display/sp-canvas.h"
+#include "display/sp-canvas-group.h"
+#include "display/canvas-rotate.h"
 
 #include "object/sp-guide.h"
 
 #include "ui/contextmenu.h"
-#include "ui/event-debug.h"
 #include "ui/interface.h"
-#include "ui/shape-editor.h"
-#include "ui/tool/commit-events.h"
+#include "ui/event-debug.h"
 #include "ui/tool/control-point.h"
-#include "ui/tool/event-utils.h"
-#include "ui/tool/shape-record.h"
+#include "ui/shape-editor.h"
+#include "ui/tools/tool-base.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
+#include "ui/tool/commit-events.h"
+#include "ui/tool/event-utils.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
+#include "ui/tool/shape-record.h"
 
 #include "widgets/desktop-widget.h"
 

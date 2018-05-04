@@ -16,8 +16,8 @@
 
 #include "xml/repr.h"
 #include "attributes.h"
-#include "document.h"
 #include "sp-missing-glyph.h"
+#include "document.h"
 
 SPMissingGlyph::SPMissingGlyph() : SPObject() {
 //TODO: correct these values:

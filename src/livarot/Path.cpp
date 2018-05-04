@@ -6,9 +6,9 @@
  *
  */
 
+#include <glib.h>
 #include "Path.h"
 #include "livarot/path-description.h"
-#include <glib.h>
 
 /*
  * manipulation of the path data: path description and polyline

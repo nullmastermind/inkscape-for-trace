@@ -4,14 +4,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "live_effects/effect.h"
-#include "live_effects/parameter/fontbutton.h"
-#include "svg/stringstream.h"
-#include "svg/svg.h"
-#include "ui/widget/font-button.h"
-#include "ui/widget/registered-widget.h"
-#include "verbs.h"
 #include <gtkmm.h>
+#include "ui/widget/registered-widget.h"
+#include "live_effects/parameter/fontbutton.h"
+#include "live_effects/effect.h"
+#include "ui/widget/font-button.h"
+#include "svg/svg.h"
+#include "svg/stringstream.h"
+#include "verbs.h"
 
 #include <glibmm/i18n.h>
 

@@ -16,16 +16,16 @@
 #include "desktop.h"
 #include "message-context.h"
 
-#include "display/snap-indicator.h"
 #include "display/sp-canvas.h"
+#include "display/snap-indicator.h"
 
 #include "object/sp-namedview.h"
 
+#include "ui/tools/tool-base.h"
 #include "ui/control-manager.h"
 #include "ui/tool/control-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/transform-handle-set.h"
-#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {

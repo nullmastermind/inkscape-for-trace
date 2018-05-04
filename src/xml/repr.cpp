@@ -23,10 +23,10 @@
 #include <cstring>
 
 #include "xml/repr.h"
-#include "xml/comment-node.h"
-#include "xml/element-node.h"
-#include "xml/simple-document.h"
 #include "xml/text-node.h"
+#include "xml/element-node.h"
+#include "xml/comment-node.h"
+#include "xml/simple-document.h"
 
 using Inkscape::Util::share_string;
 

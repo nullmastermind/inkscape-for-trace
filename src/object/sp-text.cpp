@@ -27,22 +27,22 @@
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 
-#include "attributes.h"
-#include "desktop.h"
-#include "display/drawing-text.h"
-#include "document.h"
-#include "inkscape.h"
-#include "mod360.h"
-#include "preferences.h"
-#include "sp-namedview.h"
-#include "svg/svg.h"
-#include "xml/quote.h"
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
+#include "svg/svg.h"
+#include "display/drawing-text.h"
+#include "attributes.h"
+#include "document.h"
+#include "preferences.h"
+#include "desktop.h"
+#include "sp-namedview.h"
+#include "inkscape.h"
+#include "xml/quote.h"
+#include "mod360.h"
 
+#include "sp-title.h"
 #include "sp-desc.h"
 #include "sp-text.h"
-#include "sp-title.h"
 
 #include "sp-shape.h"
 #include "sp-textpath.h"
@@ -52,8 +52,8 @@
 #include "text-editing.h"
 
 // For SVG 2 text flow
-#include "display/curve.h"
 #include "livarot/Shape.h"
+#include "display/curve.h"
 
 /*#####################################################
 #  SPTEXT

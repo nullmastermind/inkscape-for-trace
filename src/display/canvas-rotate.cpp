@@ -12,9 +12,9 @@
 #include "inkscape.h"
 #include "desktop.h"
 
-#include "cairo-utils.h"
 #include "canvas-rotate.h"
 #include "sp-canvas.h"
+#include "cairo-utils.h"
 #include "ui/event-debug.h"
 
 #include "2geom/point.h"

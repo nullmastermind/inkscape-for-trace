@@ -15,11 +15,11 @@
 # include "config.h"
 #endif
 
-#include "color.h"
-#include "display/cairo-utils.h"
-#include "display/sp-canvas-util.h"
-#include "display/sp-canvas.h"
 #include "display/sp-ctrlcurve.h"
+#include "display/sp-canvas-util.h"
+#include "display/cairo-utils.h"
+#include "color.h"
+#include "display/sp-canvas.h"
 
 namespace {
 

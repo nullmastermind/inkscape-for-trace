@@ -16,9 +16,9 @@
 
 #include "find.h"
 
+#include <gtkmm/entry.h>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
-#include <gtkmm/entry.h>
 
 #include "desktop.h"
 #include "document-undo.h"

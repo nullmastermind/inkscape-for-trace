@@ -14,13 +14,13 @@
 
 #define noSP_ANCHOR_VERBOSE
 
-#include "attributes.h"
-#include "document.h"
-#include "sp-anchor.h"
-#include "ui/view/view.h"
+#include <glibmm/i18n.h>
 #include "xml/quote.h"
 #include "xml/repr.h"
-#include <glibmm/i18n.h>
+#include "attributes.h"
+#include "sp-anchor.h"
+#include "ui/view/view.h"
+#include "document.h"
 
 SPAnchor::SPAnchor() : SPGroup() {
     this->href = NULL;

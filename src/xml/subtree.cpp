@@ -13,8 +13,8 @@
  */
 
 #include "xml/node.h"
-#include "xml/node-iterators.h"
 #include "xml/subtree.h"
+#include "xml/node-iterators.h"
 
 namespace Inkscape {
 namespace XML {

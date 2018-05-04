@@ -18,11 +18,11 @@
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 
+#include "selection-chemistry.h"
+#include "xml/repr.h"
 #include "desktop.h"
 #include "inkscape.h"
 #include "message-stack.h"
-#include "selection-chemistry.h"
-#include "xml/repr.h"
 
 // clipboard support
 #include "ui/clipboard.h"

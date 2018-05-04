@@ -7,8 +7,8 @@
 
 #include "style-subject.h"
 
-#include "desktop-style.h"
 #include "desktop.h"
+#include "desktop-style.h"
 #include "selection.h"
 
 #include "xml/sp-css-attr.h"

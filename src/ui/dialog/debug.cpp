@@ -13,12 +13,12 @@
 #include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
+#include <glibmm/i18n.h>
 
 #include "debug.h"
 

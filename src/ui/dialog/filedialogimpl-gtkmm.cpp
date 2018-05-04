@@ -24,12 +24,12 @@
 #include <iostream>
 
 #include "filedialogimpl-gtkmm.h"
-#include "io/resource.h"
-#include "io/sys.h"
-#include "path-prefix.h"
-#include "preferences.h"
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
+#include "io/sys.h"
+#include "io/resource.h"
+#include "path-prefix.h"
+#include "preferences.h"
 
 #include <gtkmm/expander.h>
 
@@ -41,11 +41,11 @@
 #include <glibmm/regex.h>
 
 #include "document.h"
-#include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "inkscape.h"
+#include "extension/db.h"
 #include "svg-view-widget.h"
+#include "inkscape.h"
 
 // Routines from file.cpp
 #undef INK_DUMP_FILENAME_CONV

@@ -17,8 +17,8 @@
 #endif
 
 #include <cstring>
-#include <glib.h>
 #include <string>
+#include <glib.h>
 
 #include "svg/svg-angle.h"
 #include "util/units.h"

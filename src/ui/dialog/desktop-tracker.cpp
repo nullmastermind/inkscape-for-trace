@@ -9,8 +9,8 @@
 
 #include "desktop-tracker.h"
 
-#include "desktop.h"
 #include "inkscape.h"
+#include "desktop.h"
 
 namespace Inkscape {
 namespace UI {

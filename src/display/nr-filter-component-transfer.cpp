@@ -10,11 +10,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <math.h>
 #include "display/cairo-templates.h"
 #include "display/cairo-utils.h"
 #include "display/nr-filter-component-transfer.h"
 #include "display/nr-filter-slot.h"
-#include <math.h>
 
 namespace Inkscape {
 namespace Filters {

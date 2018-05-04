@@ -34,8 +34,8 @@
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
 
-#include "object/sp-namedview.h"
 #include "object/sp-rect.h"
+#include "object/sp-namedview.h"
 
 #include "pixmaps/cursor-rect.xpm"
 

@@ -18,18 +18,18 @@
 #include <glibmm/miscutils.h>
 
 #include "display/curve.h"
-#include "document-undo.h"
-#include "document.h"
 #include "extension/internal/metafile-inout.h" // picks up PNG
 #include "extension/print.h"
-#include "inkscape.h"
 #include "path-prefix.h"
-#include "preferences.h"
-#include "ui/shape-editor.h"
+#include "document.h"
 #include "util/units.h"
+#include "ui/shape-editor.h"
+#include "document-undo.h"
+#include "inkscape.h"
+#include "preferences.h"
 
-#include "object/sp-namedview.h"
 #include "object/sp-root.h"
+#include "object/sp-namedview.h"
 #include "svg/stringstream.h"
 
 namespace Inkscape {

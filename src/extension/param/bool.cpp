@@ -12,13 +12,13 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/checkbutton.h>
 #include <gtkmm/spinbutton.h>
+#include <gtkmm/checkbutton.h>
 
+#include "xml/node.h"
 #include "../extension.h"
 #include "bool.h"
 #include "preferences.h"
-#include "xml/node.h"
 
 namespace Inkscape {
 namespace Extension {

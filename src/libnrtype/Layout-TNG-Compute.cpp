@@ -9,11 +9,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "Layout-TNG.h"
-#include "Layout-TNG-Scanline-Maker.h"
-#include "font-instance.h"
-#include "object/sp-object.h"
 #include "style.h"
+#include "font-instance.h"
 #include "svg/svg-length.h"
+#include "object/sp-object.h"
+#include "Layout-TNG-Scanline-Maker.h"
 #include <limits>
 
 namespace Inkscape {

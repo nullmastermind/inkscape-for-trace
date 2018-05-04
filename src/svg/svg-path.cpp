@@ -16,17 +16,17 @@
  */
 
 #include <cstring>
-#include <glib.h> // g_assert()
 #include <string>
+#include <glib.h> // g_assert()
 
-#include <2geom/curves.h>
-#include <2geom/path-sink.h>
 #include <2geom/pathvector.h>
+#include <2geom/curves.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/path-sink.h>
 #include <2geom/svg-path-parser.h>
 
-#include "svg/path-string.h"
 #include "svg/svg.h"
+#include "svg/path-string.h"
 
 /*
  * Parses the path in str. When an error is found in the pathstring, this method

@@ -9,8 +9,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <algorithm>
 #include <math.h>
+#include <algorithm>
 
 #include <glib/gi18n.h>
 

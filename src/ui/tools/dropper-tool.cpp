@@ -15,12 +15,12 @@
 #include <config.h>
 #endif
 
+#include <glibmm/i18n.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
 
-#include <2geom/circle.h>
 #include <2geom/transforms.h>
+#include <2geom/circle.h>
 
 #include "color-rgba.h"
 #include "desktop-style.h"
@@ -33,10 +33,10 @@
 #include "sp-cursor.h"
 #include "verbs.h"
 
-#include "display/cairo-utils.h"
-#include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
+#include "display/canvas-arena.h"
 #include "display/curve.h"
+#include "display/cairo-utils.h"
 
 #include "object/sp-namedview.h"
 

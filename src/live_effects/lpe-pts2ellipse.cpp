@@ -13,18 +13,18 @@
 
 #include "live_effects/lpe-pts2ellipse.h"
 
-#include <display/curve.h>
-#include <object/sp-item-group.h>
+#include <object/sp-shape.h>
 #include <object/sp-item.h>
 #include <object/sp-path.h>
-#include <object/sp-shape.h>
+#include <object/sp-item-group.h>
 #include <svg/svg.h>
+#include <display/curve.h>
 
+#include <2geom/path.h>
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
-#include <2geom/elliptical-arc.h>
-#include <2geom/path.h>
 #include <2geom/pathvector.h>
+#include <2geom/elliptical-arc.h>
 
 #include <glib/gi18n.h>
 

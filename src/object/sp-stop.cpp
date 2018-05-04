@@ -19,9 +19,9 @@
 
 #include "attributes.h"
 #include "streq.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
 #include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/css-ostringstream.h"
 
 SPStop::SPStop() : SPObject() {
 	this->path_string = NULL;

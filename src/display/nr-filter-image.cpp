@@ -11,16 +11,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "display/nr-filter-image.h"
+#include "document.h"
+#include "object/sp-item.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
-#include "display/drawing-item.h"
 #include "display/drawing.h"
+#include "display/drawing-item.h"
+#include "display/nr-filter.h"
 #include "display/nr-filter-slot.h"
 #include "display/nr-filter-units.h"
-#include "display/nr-filter.h"
-#include "document.h"
 #include "enums.h"
-#include "object/sp-item.h"
 #include <glibmm/fileutils.h>
 
 namespace Inkscape {

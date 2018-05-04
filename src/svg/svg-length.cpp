@@ -12,12 +12,12 @@
 
 #include <cmath>
 #include <cstring>
+#include <string>
 #include <glib.h>
 #include <iostream>
-#include <string>
 
-#include "stringstream.h"
 #include "svg.h"
+#include "stringstream.h"
 #include "util/units.h"
 
 static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next);

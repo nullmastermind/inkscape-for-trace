@@ -12,8 +12,8 @@
 # include "config.h"
 #endif
 
-#include "attributes.h"
 #include <glib.h> // g_assert()
+#include "attributes.h"
 
 typedef struct {
     gint code;

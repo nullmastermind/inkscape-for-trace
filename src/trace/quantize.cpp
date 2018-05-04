@@ -11,11 +11,11 @@
 
 #include <cassert>
 #include <cstdio>
-#include <new>
 #include <stdlib.h>
+#include <new>
 
-#include "imagemap.h"
 #include "pool.h"
+#include "imagemap.h"
 #include "quantize.h"
 
 typedef struct Ocnode_def Ocnode;

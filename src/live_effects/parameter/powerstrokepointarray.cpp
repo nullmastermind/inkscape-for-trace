@@ -7,8 +7,8 @@
 #include "ui/dialog/lpe-powerstroke-properties.h"
 #include "live_effects/parameter/powerstrokepointarray.h"
 
-#include "knotholder.h"
 #include "live_effects/effect.h"
+#include "knotholder.h"
 
 
 #include <2geom/piecewise.h>

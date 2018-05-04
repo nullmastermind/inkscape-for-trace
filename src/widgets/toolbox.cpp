@@ -30,11 +30,11 @@
 #include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
+#include <gtkmm/box.h>
 #include <gtkmm/action.h>
 #include <gtkmm/actiongroup.h>
-#include <gtkmm/box.h>
 #include <gtkmm/toolitem.h>
+#include <glibmm/i18n.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
@@ -77,8 +77,8 @@
 #include "eraser-toolbar.h"
 #include "gradient-toolbar.h"
 #include "lpe-toolbar.h"
-#include "measure-toolbar.h"
 #include "mesh-toolbar.h"
+#include "measure-toolbar.h"
 #include "node-toolbar.h"
 #include "rect-toolbar.h"
 
@@ -88,11 +88,11 @@
 
 #include "pencil-toolbar.h"
 #include "select-toolbar.h"
-#include "spiral-toolbar.h"
 #include "spray-toolbar.h"
+#include "spiral-toolbar.h"
 #include "star-toolbar.h"
-#include "text-toolbar.h"
 #include "tweak-toolbar.h"
+#include "text-toolbar.h"
 #include "zoom-toolbar.h"
 
 #include "toolbox.h"

@@ -18,42 +18,42 @@
 #include <config.h>
 #endif
 
-#include <cstring>
 #include <glibmm/i18n.h>
+#include <cstring>
 #include <string>
 
 #include "attributes.h"
-#include "document-undo.h"
 #include "document.h"
+#include "document-undo.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
-#include "display/curve.h"
 #include "display/drawing-group.h"
+#include "display/curve.h"
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
-#include "svg/css-ostringstream.h"
+#include "live_effects/lpeobject-reference.h"
 #include "svg/svg.h"
+#include "svg/css-ostringstream.h"
 #include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 
 #include "box3d.h"
 #include "persp3d.h"
-#include "sp-clippath.h"
 #include "sp-defs.h"
-#include "sp-desc.h"
-#include "sp-flowtext.h"
 #include "sp-item-transform.h"
-#include "sp-mask.h"
-#include "sp-offset.h"
-#include "sp-path.h"
-#include "sp-rect.h"
 #include "sp-root.h"
+#include "sp-rect.h"
+#include "sp-offset.h"
+#include "sp-clippath.h"
+#include "sp-mask.h"
+#include "sp-path.h"
+#include "sp-use.h"
+#include "sp-title.h"
+#include "sp-desc.h"
 #include "sp-switch.h"
 #include "sp-textpath.h"
-#include "sp-title.h"
-#include "sp-use.h"
+#include "sp-flowtext.h"
 #include "style.h"
 
 using Inkscape::DocumentUndo;

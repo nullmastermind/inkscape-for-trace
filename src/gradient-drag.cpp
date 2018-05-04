@@ -2117,10 +2117,10 @@ void GrDrag::addCurve(SPItem *item, Geom::Point p0, Geom::Point p1, Geom::Point 
     GrDragger* dragger1 = getDraggerFor(item, POINT_MG_CORNER, corner1, fill_or_stroke);
     GrDragger* dragger2 = getDraggerFor(item, POINT_MG_HANDLE, handle0, fill_or_stroke);
     GrDragger* dragger3 = getDraggerFor(item, POINT_MG_HANDLE, handle1, fill_or_stroke);
-    if ((dragger0->knot && (dragger0->knot->flags & SP_KNOT_MOUSEOVER)) ||
-        (dragger1->knot && (dragger1->knot->flags & SP_KNOT_MOUSEOVER)) ||
-        (dragger2->knot && (dragger2->knot->flags & SP_KNOT_MOUSEOVER)) ||
-        (dragger3->knot && (dragger3->knot->flags & SP_KNOT_MOUSEOVER)) ) {
+    if (dragger0->knot && (dragger0->knot->flags & SP_KNOT_MOUSEOVER) ||
+        dragger1->knot && (dragger1->knot->flags & SP_KNOT_MOUSEOVER) ||
+        dragger2->knot && (dragger2->knot->flags & SP_KNOT_MOUSEOVER) ||
+        dragger3->knot && (dragger3->knot->flags & SP_KNOT_MOUSEOVER) ) {
         highlight = true;
     }
 
@@ -2215,9 +2215,9 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
     // Show/hide mesh on fill/stroke. This doesn't work at the moment... and prevents node color updating.
     
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool show_handles = (prefs->getBool("/tools/mesh/show_handles", true));
-    bool edit_fill    = (prefs->getBool("/tools/mesh/edit_fill",    true));
-    bool edit_stroke  = (prefs->getBool("/tools/mesh/edit_stroke",  true));
+    bool show_handles = abs(prefs->getBool("/tools/mesh/show_handles", true));
+    bool edit_fill    = abs(prefs->getBool("/tools/mesh/edit_fill",    true));
+    bool edit_stroke  = abs(prefs->getBool("/tools/mesh/edit_stroke",  true));
 
     // Make sure we have at least one patch defined.
     if( mg->array.patch_rows() == 0 || mg->array.patch_columns() == 0 ) {
@@ -2301,7 +2301,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
     std::vector< std::vector< SPMeshNode* > > nodes = mg->array.nodes;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool show_handles = (prefs->getBool("/tools/mesh/show_handles", true));
+    bool show_handles = abs(prefs->getBool("/tools/mesh/show_handles", true));
 
     // Make sure we have at least one patch defined.
     if( mg->array.patch_rows() == 0 || mg->array.patch_columns() == 0 ) {
@@ -2539,7 +2539,7 @@ void GrDrag::updateLines()
                 } else if ( SP_IS_MESHGRADIENT(server) ) {
 
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    bool edit_fill    = (prefs->getBool("/tools/mesh/edit_fill",    true));
+                    bool edit_fill    = abs(prefs->getBool("/tools/mesh/edit_fill",    true));
 
                     SPMeshGradient *mg = SP_MESHGRADIENT(server);
 
@@ -2621,7 +2621,7 @@ void GrDrag::updateLines()
                 } else if ( SP_IS_MESHGRADIENT(server) ) {
 
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    bool edit_stroke   = (prefs->getBool("/tools/mesh/edit_stroke",   true));
+                    bool edit_stroke   = abs(prefs->getBool("/tools/mesh/edit_stroke",   true));
 
                     if (edit_stroke) {
 

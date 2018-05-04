@@ -15,21 +15,21 @@
 #include <cstring>
 #include <string>
 
-#include "display/drawing-group.h"
 #include "display/drawing.h"
+#include "display/drawing-group.h"
 #include "xml/repr.h"
 
-#include "attributes.h"
-#include "document-private.h"
-#include "document.h"
 #include "enums.h"
+#include "attributes.h"
+#include "document.h"
+#include "document-private.h"
 #include "style.h"
 
 #include <2geom/transforms.h>
 
 #include "sp-clippath.h"
-#include "sp-defs.h"
 #include "sp-item.h"
+#include "sp-defs.h"
 
 struct SPClipPathView {
     SPClipPathView *next;

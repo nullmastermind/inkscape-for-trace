@@ -5,11 +5,11 @@
  */
 
 #include "live_effects/lpe-clone-original.h"
-#include "display/curve.h"
-#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-spiro.h"
-#include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
+#include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
 

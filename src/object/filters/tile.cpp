@@ -15,8 +15,8 @@
 
 #include "attributes.h"
 
-#include "display/nr-filter-tile.h"
 #include "display/nr-filter.h"
+#include "display/nr-filter-tile.h"
 
 #include "svg/svg.h"
 

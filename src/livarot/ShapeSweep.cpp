@@ -6,15 +6,15 @@
  *
  */
 
-#include "Shape.h"
-#include "livarot/sweep-event-queue.h"
-#include "livarot/sweep-tree-list.h"
-#include "livarot/sweep-tree.h"
-#include <2geom/affine.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <glib.h>
+#include <2geom/affine.h>
+#include "Shape.h"
+#include "livarot/sweep-event-queue.h"
+#include "livarot/sweep-tree-list.h"
+#include "livarot/sweep-tree.h"
 
 //int   doDebug=0;
 

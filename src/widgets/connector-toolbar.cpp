@@ -30,8 +30,8 @@
 
 #include <glibmm/i18n.h>
 
-#include "conn-avoid-ref.h"
 #include "connector-toolbar.h"
+#include "conn-avoid-ref.h"
 
 #include "desktop.h"
 #include "document-undo.h"

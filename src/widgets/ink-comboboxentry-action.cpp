@@ -23,15 +23,15 @@
  * we must keep track of things like active entry ourselves.
  */
 
-#include <glibmm/ustring.h>
 #include <iostream>
 #include <string.h>
+#include <glibmm/ustring.h>
 
-#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 
-#include "ui/icon-names.h"
 #include "widgets/ink-comboboxentry-action.h"
+#include "ui/icon-names.h"
 
 // Must handle both tool and menu items!
 static GtkWidget* create_tool_item( GtkAction* action );

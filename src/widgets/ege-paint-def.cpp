@@ -38,14 +38,14 @@
 
 #include <libintl.h>
 
-#include <glibmm/i18n.h>
-#include <glibmm/stringutils.h>
+#include <stdint.h>
+#include <string>
 #include <iostream>
 #include <sstream>
-#include <stdint.h>
-#include <stdio.h>
-#include <string>
 #include <string.h>
+#include <stdio.h>
+#include <glibmm/i18n.h>
+#include <glibmm/stringutils.h>
 
 #if !defined(_)
 #define _(s) gettext(s)

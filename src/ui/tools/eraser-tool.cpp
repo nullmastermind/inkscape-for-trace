@@ -24,13 +24,13 @@
 
 #define noERASER_VERBOSE
 
+#include <string>
 #include <cstring>
 #include <numeric>
-#include <string>
 
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <gtk/gtk.h>
 
 #include <2geom/bezier-utils.h>
 #include <2geom/pathvector.h>
@@ -52,10 +52,10 @@
 #include "splivarot.h"
 #include "verbs.h"
 
+#include "display/sp-canvas.h"
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
-#include "display/sp-canvas.h"
 
 #include "object/sp-clippath.h"
 #include "object/sp-item-group.h"

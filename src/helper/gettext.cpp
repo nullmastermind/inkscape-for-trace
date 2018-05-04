@@ -35,9 +35,9 @@
 #include "prefix.h"
 #endif
 
+#include <string>
 #include <glibmm.h>
 #include <glibmm/i18n.h>
-#include <string>
 
 namespace Inkscape {
 

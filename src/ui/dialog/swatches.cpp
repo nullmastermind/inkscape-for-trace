@@ -9,52 +9,52 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <map>
 #include <algorithm>
 #include <iomanip>
-#include <map>
 #include <set>
 
 #include "swatches.h"
 #include <gtkmm/radiomenuitem.h>
 
-#include <gtkmm/checkmenuitem.h>
 #include <gtkmm/menu.h>
-#include <gtkmm/menubutton.h>
+#include <gtkmm/checkmenuitem.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
+#include <gtkmm/menubutton.h>
 
-#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
-#include <glibmm/miscutils.h>
 #include <glibmm/timer.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 
 #include "color-item.h"
 #include "desktop.h"
 
 #include "desktop-style.h"
+#include "document.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "document.h"
 #include "extension/db.h"
 #include "inkscape.h"
-#include "io/resource.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "message-context.h"
 #include "path-prefix.h"
 
-#include "display/cairo-utils.h"
 #include "ui/previewholder.h"
 #include "widgets/desktop-widget.h"
 #include "widgets/gradient-vector.h"
+#include "display/cairo-utils.h"
 
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
 
 #include "dialog-manager.h"
+#include "verbs.h"
 #include "gradient-chemistry.h"
 #include "helper/action.h"
-#include "verbs.h"
 
 namespace Inkscape {
 namespace UI {

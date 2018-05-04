@@ -18,8 +18,8 @@
 #include <glibmm/i18n.h>
 
 #include "live_effects/effect.h"
-#include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 
 #include <2geom/angle.h>
 #include <2geom/circle.h>
@@ -33,8 +33,8 @@
 #include "snap-candidate.h"
 #include "sp-ellipse.h"
 #include "style.h"
-#include "svg/path-string.h"
 #include "svg/svg.h"
+#include "svg/path-string.h"
 
 #define SP_2PI (2 * M_PI)
 

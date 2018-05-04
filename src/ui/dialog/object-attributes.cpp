@@ -29,8 +29,8 @@
 #include "object/sp-anchor.h"
 #include "object/sp-image.h"
 
-#include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/object-attributes.h"
+#include "ui/dialog/dialog-manager.h"
 
 #include "widgets/sp-attribute-widget.h"
 

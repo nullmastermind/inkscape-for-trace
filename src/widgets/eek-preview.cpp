@@ -40,9 +40,9 @@
 #include <algorithm>
 using std::min;
 
+#include <gtk/gtk.h>
 #include "eek-preview.h"
 #include "preferences.h"
-#include <gtk/gtk.h>
 
 #define PRIME_BUTTON_MAGIC_NUMBER 1
 

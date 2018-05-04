@@ -20,32 +20,32 @@
 # include "config.h"
 #endif
 
-#include <cstring>
-#include <map>
-#include <string>
 #include <vector>
+#include <cstring>
+#include <string>
+#include <map>
 
 #include "shortcuts.h"
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
-#include <glibmm/convert.h>
 #include <glibmm/i18n.h>
+#include <glibmm/convert.h>
 #include <glibmm/miscutils.h>
 
-#include "desktop.h"
-#include "document.h"
 #include "helper/action.h"
-#include "inkscape.h"
-#include "io/resource.h"
 #include "io/sys.h"
-#include "path-prefix.h"
-#include "preferences.h"
-#include "ui/dialog/filedialog.h"
-#include "ui/tools/tool-base.h"
+#include "io/resource.h"
 #include "verbs.h"
 #include "xml/node-iterators.h"
 #include "xml/repr.h"
+#include "document.h"
+#include "preferences.h"
+#include "ui/tools/tool-base.h"
+#include "inkscape.h"
+#include "desktop.h"
+#include "path-prefix.h"
+#include "ui/dialog/filedialog.h"
 
 using namespace Inkscape;
 using namespace Inkscape::IO::Resource;

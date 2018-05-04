@@ -17,10 +17,10 @@
 
 #include <glibmm/i18n.h>
 
-#include "desktop.h"
-#include "knot-holder-entity.h"
-#include "knotholder.h"
 #include "preferences.h"
+#include "desktop.h"
+#include "knotholder.h"
+#include "knot-holder-entity.h"
 
 #include "live_effects/effect.h"
 

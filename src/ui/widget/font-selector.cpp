@@ -15,12 +15,12 @@
 
 #include "font-selector.h"
 
-#include "libnrtype/font-instance.h"
 #include "libnrtype/font-lister.h"
+#include "libnrtype/font-instance.h"
 
 // For updating from selection
-#include "desktop.h"
 #include "inkscape.h"
+#include "desktop.h"
 #include "object/sp-text.h"
 
 namespace Inkscape {

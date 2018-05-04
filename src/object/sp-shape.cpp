@@ -18,28 +18,28 @@
 #include <config.h>
 #endif
 
-#include "helper/geom-nodetype.h"
-#include "helper/geom.h"
-#include <2geom/path-intersection.h>
-#include <2geom/pathvector.h>
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
+#include <2geom/pathvector.h>
+#include <2geom/path-intersection.h>
+#include "helper/geom.h"
+#include "helper/geom-nodetype.h"
 
-#include <sigc++/adaptors/bind.h>
 #include <sigc++/functors/ptr_fun.h>
+#include <sigc++/adaptors/bind.h>
 
-#include "attributes.h"
-#include "display/curve.h"
 #include "display/drawing-shape.h"
-#include "document.h"
-#include "live_effects/lpeobject.h"
-#include "preferences.h"
+#include "display/curve.h"
 #include "print.h"
+#include "document.h"
+#include "style.h"
 #include "sp-marker.h"
 #include "sp-path.h"
-#include "style.h"
-#include "svg/path-string.h"
+#include "preferences.h"
+#include "attributes.h"
 #include "svg/svg.h"
+#include "svg/path-string.h"
+#include "live_effects/lpeobject.h"
 
 #include "helper/mathfns.h" // for triangle_area()
 

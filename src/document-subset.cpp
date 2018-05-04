@@ -10,9 +10,9 @@
 
 #include <map>
 
+#include "gc-finalized.h"
 #include "document-subset.h"
 #include "document.h"
-#include "gc-finalized.h"
 
 #include "object/sp-object.h"
 

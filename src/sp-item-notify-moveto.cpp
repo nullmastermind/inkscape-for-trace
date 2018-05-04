@@ -7,8 +7,8 @@
 #include "sp-item-notify-moveto.h"
 
 #include "object/sp-guide.h"
-#include "object/sp-item-rm-unsatisfied-cns.h"
 #include "object/sp-item.h"
+#include "object/sp-item-rm-unsatisfied-cns.h"
 
 using std::vector;
 

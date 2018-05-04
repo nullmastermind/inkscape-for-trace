@@ -17,8 +17,8 @@
 #include <glib-object.h>
 
 #include "display/sodipodi-ctrl.h" // for SP_TYPE_CTRL
-#include "display/sp-ctrlcurve.h"
 #include "display/sp-ctrlline.h"
+#include "display/sp-ctrlcurve.h"
 #include "preferences.h"
 
 using Inkscape::ControlFlags;

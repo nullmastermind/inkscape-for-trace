@@ -16,8 +16,8 @@
 #endif
 
 #include <cstring>
-#include <glibmm/i18n.h>
 #include <string>
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document.h"
@@ -25,11 +25,11 @@
 #include "message-stack.h"
 #include "text-editing.h"
 
+#include "object/sp-textpath.h"
+#include "object/sp-flowtext.h"
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
-#include "object/sp-flowtext.h"
 #include "object/sp-item-group.h"
-#include "object/sp-textpath.h"
 #include "object/sp-tref.h"
 #include "object/sp-tspan.h"
 #include "style.h"
@@ -1240,7 +1240,7 @@ sp_te_adjust_line_height (SPObject *object, double amount, double average, bool 
     // Always set if top level true.
     // Also set if line_height is set to a non-zero value.
     if (top_level ||
-        (style->line_height.set && !style->line_height.inherit && (!(style->line_height.computed) == 0))){
+        (style->line_height.set && !style->line_height.inherit && !style->line_height.computed == 0)){
 
         // Scale default values
         if (!style->line_height.set || style->line_height.inherit || style->line_height.normal) {

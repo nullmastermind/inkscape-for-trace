@@ -20,10 +20,10 @@
 
 #include <glibmm/i18n.h>
 
+#include <2geom/transforms.h>
 #include <2geom/bezier-curve.h>
 #include <2geom/crossing.h>
 #include <2geom/line.h>
-#include <2geom/transforms.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
@@ -44,9 +44,9 @@
 #include "object/sp-tspan.h"
 #include "style.h"
 
-#include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
 #include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/css-ostringstream.h"
 
 #include "ui/tools/tool-base.h"
 

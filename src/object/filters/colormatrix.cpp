@@ -17,10 +17,10 @@
 #include <string.h>
 
 #include "attributes.h"
-#include "colormatrix.h"
-#include "helper-fns.h"
 #include "svg/svg.h"
+#include "colormatrix.h"
 #include "xml/repr.h"
+#include "helper-fns.h"
 
 #include "display/nr-filter.h"
 

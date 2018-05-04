@@ -18,8 +18,8 @@
 #include "config.h"
 #endif
 
-#include "desktop.h"
 #include "document-metadata.h"
+#include "desktop.h"
 #include "rdf.h"
 #include "verbs.h"
 
