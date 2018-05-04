@@ -18,17 +18,32 @@
 # include <config.h>
 #endif
 
+#include <gtkmm.h>
+
+#include <giomm/file.h>
 #include <vector>
 #include <giomm/file.h>
 
-
+#include "document.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "extension/output.h"
+#include "extension/system.h"
+#include "file.h"
 #include "svg.h"
 #include "file.h"
 #include "extension/system.h"
 #include "extension/output.h"
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
-#include "document.h"
+
+#include "object/sp-namedview.h"
+#include "object/sp-root.h"
+#include "util/units.h"
+#include "selection-chemistry.h"
+
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -173,7 +188,93 @@ Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
 {
     auto file = Gio::File::create_for_uri(uri);
     const auto path = file->get_path();
+    bool link = false;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool is_import = false;
+    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
+        is_import = true;
+    }
+    if (INKSCAPE.use_gui() && is_import) {
+        Gtk::Dialog svg_open_dialog(_("Select how to import your SVG"));
+        svg_open_dialog.set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
+        svg_open_dialog.set_border_width(10);
+        svg_open_dialog.set_resizable(false);
+        Gtk::Label explanation;
+        explanation.set_markup(Glib::ustring("How you want the SVG become imported?"));
+        explanation.set_line_wrap(true);
+        explanation.set_size_request(600,-1);
+        Gtk::RadioButton::Group c1, c2;
+        Gtk::Label choice1_label;
+        choice1_label.set_markup(
+                _("The SVG is incrusted inside document, you could edit it"));
+        Gtk::RadioButton choice1(c1);
+        choice1.add(choice1_label);
+        Gtk::RadioButton choice2(c1, _("The SVG is linked from outside document as a image, you can edit only original file"));
+        Gtk::Box *content = svg_open_dialog.get_content_area();
+        content->pack_start(explanation, false, false, 5);
+        content->pack_start(choice1, false, false, 5);
+        content->pack_start(choice2, false, false, 5);
+        Gtk::Button *ok_button = svg_open_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);
+        svg_open_dialog.show_all_children();
+        ok_button->grab_focus();
+        int status = svg_open_dialog.run();
+        if ( status == GTK_RESPONSE_ACCEPT ) {
+            link = choice2.get_active();
+        }
+    }
 
+    
+    SPDocument * doc = SPDocument::createNewDoc (NULL, TRUE, TRUE);
+    if (link) {
+        
+        SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
+        SPNamedView *nv = sp_document_namedview(doc, NULL);
+        Glib::ustring display_unit = nv->display_units->abbr;
+        if (display_unit.empty()) {
+            display_unit = "px";
+        }
+        double width  = ret->getWidth().value(display_unit);
+        double height = ret->getHeight().value(display_unit);
+        // Create image node
+        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+        Inkscape::XML::Node *image_node = xml_doc->createElement("svg:image");
+
+        // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
+        // what Inkscaper's expect.
+        image_node->setAttribute("preserveAspectRatio", "none");
+        image_node->setAttribute("width", Glib::ustring::format(width));
+        image_node->setAttribute("height", Glib::ustring::format(height));
+        Glib::ustring scale = prefs->getString("/dialogs/import/scale");
+        if( scale.compare( "auto" ) != 0 ) {
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_set_property(css, "image-rendering", scale.c_str());
+            sp_repr_css_set(image_node, css, "style");
+            sp_repr_css_attr_unref( css );
+        }
+        // convert filename to uri
+        gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
+        if(_uri) {
+            image_node->setAttribute("xlink:href", _uri);
+            g_free(_uri);
+        } else {
+            image_node->setAttribute("xlink:href", uri);
+        }
+        // Add it to the current layer
+        Inkscape::XML::Node *layer_node = xml_doc->createElement("svg:g");
+        layer_node->setAttribute("inkscape:groupmode", "layer");
+        layer_node->setAttribute("inkscape:label", "Image");
+        doc->getRoot()->appendChildRepr(layer_node);
+        layer_node->appendChild(image_node);
+        Inkscape::GC::release(image_node);
+        Inkscape::GC::release(layer_node);
+        fit_canvas_to_drawing(doc);
+        
+        // Set viewBox if it doesn't exist
+        if (!doc->getRoot()->viewBox_set) {
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
+        }
+        return doc;
+    }
     if (!file->get_uri_scheme().empty()) {
         if (path.empty()) {
             try {

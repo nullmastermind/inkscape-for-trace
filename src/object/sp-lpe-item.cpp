@@ -391,7 +391,9 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPLPEItem* clip_data = dynamic_cast<SPLPEItem*>(*iter);
-            sp_lpe_item_cleanup_original_path_recursive(clip_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
+            if (clip_data) {
+                sp_lpe_item_cleanup_original_path_recursive(clip_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
+            }
         }
     }
 
@@ -400,7 +402,9 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         std::vector<SPObject*> mask_path_list = mask_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter = mask_path_list.begin(); iter != mask_path_list.end();++iter) {
             SPLPEItem* mask_data = dynamic_cast<SPLPEItem*>(*iter);
-            sp_lpe_item_cleanup_original_path_recursive(mask_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
+            if (mask_data) {
+                sp_lpe_item_cleanup_original_path_recursive(mask_data, keep_paths, lpeitem && !lpeitem->hasPathEffectRecursive(), true);
+            }
         }
     }
 
@@ -408,8 +412,9 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPLPEItem* subitem = dynamic_cast<SPLPEItem*>(*iter);
-            sp_lpe_item_cleanup_original_path_recursive(subitem, keep_paths);
-
+            if (subitem) {
+                sp_lpe_item_cleanup_original_path_recursive(subitem, keep_paths);
+            }
         }
     } else if (path) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();

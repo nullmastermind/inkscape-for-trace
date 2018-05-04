@@ -877,7 +877,7 @@ void FileVerb::perform(SPAction *action, void *data)
     if (handled) {
         return;
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *desktop = sp_action_get_desktop(action);
 
@@ -889,6 +889,7 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_new_default();
             break;
         case SP_VERB_FILE_OPEN:
+            prefs->setString("/options/openmethod/value", "open");
             sp_file_open_dialog(*parent, NULL, NULL);
             break;
         case SP_VERB_FILE_REVERT:
@@ -910,12 +911,14 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_print(*parent);
             break;
         case SP_VERB_FILE_IMPORT:
+            prefs->setString("/options/openmethod/value","import");
             sp_file_import(*parent);
             break;
 //        case SP_VERB_FILE_EXPORT:
 //            sp_file_export_dialog(*parent);
 //            break;
         case SP_VERB_FILE_IMPORT_FROM_OCAL:
+            prefs->setString("/options/openmethod/value", "ocal");
             sp_file_import_from_ocal(*parent);
             break;
 //        case SP_VERB_FILE_EXPORT_TO_OCAL:

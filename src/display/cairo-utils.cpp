@@ -28,11 +28,17 @@
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/operators.hpp>
 #include <boost/optional/optional.hpp>
 
 #include "color.h"
 #include "cairo-templates.h"
+#include "document.h"
+#include "preferences.h"
+#include "util/units.h"
+#include "helper/pixbuf-ops.h"
+
 
 /**
  * Key for cairo_surface_t to keep track of current color interpolation value
@@ -312,37 +318,81 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             std::cerr << "   (" << fn << ")" << std::endl;
             return NULL;
         }
+        GdkPixbuf *buf = NULL;
+        GdkPixbufLoader *loader = NULL;
+        std::string::size_type idx;
+        idx = fn.rfind('.');
+        bool is_svg = false;    
+        if(idx != std::string::npos)
+        {
+            if (boost::iequals(fn.substr(idx+1).c_str(), "svg")) {
+                SPDocument *svgDoc = SPDocument::createNewDoc(fn.c_str(), TRUE);
+               // Check the document loaded properly
+                if (svgDoc == NULL) {
+                    return NULL;
+                }
+                if (svgDoc->getRoot() == NULL)
+                {
+                    svgDoc->doUnref();
+                    return NULL;
+                }
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+                // Get the size of the document
+                Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
+                Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
+                const double svgWidth_px = svgWidth.value("px");
+                const double svgHeight_px = svgHeight.value("px");
 
-        GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
-        gdk_pixbuf_loader_write(loader, (guchar *) data, len, &error);
-        if (error != NULL) {
-            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
-            std::cerr << "   (" << fn << ")" << std::endl;
-            g_free(data);
-            g_object_unref(loader);
-            return NULL;
+                // Now get the resized values
+                const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
+                const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
+
+                buf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL)->getPixbufRaw();
+
+                // Tidy up
+                svgDoc->doUnref();
+                if (buf == NULL) {
+                    return NULL;
+                }
+                is_svg = true;
+            }
         }
+        if (!is_svg) {
+            loader = gdk_pixbuf_loader_new();
+            gdk_pixbuf_loader_write(loader, (guchar *) data, len, &error);
+            if (error != NULL) {
+                std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+                std::cerr << "   (" << fn << ")" << std::endl;
+                g_free(data);
+                g_object_unref(loader);
+                return NULL;
+            }
 
-        gdk_pixbuf_loader_close(loader, &error);
-        if (error != NULL) {
-            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
-            std::cerr << "   (" << fn << ")" << std::endl;
-            g_free(data);
-            g_object_unref(loader);
-            return NULL;
+            gdk_pixbuf_loader_close(loader, &error);
+            if (error != NULL) {
+                std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+                std::cerr << "   (" << fn << ")" << std::endl;
+                g_free(data);
+                g_object_unref(loader);
+                return NULL;
+            }
+            
+            buf = gdk_pixbuf_loader_get_pixbuf(loader);
         }
-
-        GdkPixbuf *buf = gdk_pixbuf_loader_get_pixbuf(loader);
         if (buf) {
             g_object_ref(buf);
             pb = new Pixbuf(buf);
             pb->_mod_time = stdir.st_mtime;
             pb->_path = fn;
-
-            GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
-            gchar *fmt_name = gdk_pixbuf_format_get_name(fmt);
-            pb->_setMimeData((guchar *) data, len, fmt_name);
-            g_free(fmt_name);
+            if (!is_svg) {
+                GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
+                gchar *fmt_name = gdk_pixbuf_format_get_name(fmt);
+                pb->_setMimeData((guchar *) data, len, fmt_name);
+                g_free(fmt_name);
+            } else {
+                pb->_setMimeData((guchar *) data, len, "svg");
+            }
         } else {
             std::cerr << "Pixbuf::create_from_file: failed to load contents: " << fn << std::endl;
             g_free(data);
