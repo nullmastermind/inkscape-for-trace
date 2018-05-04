@@ -590,6 +590,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
     }
     case SP_ATTR_INKSCAPE_LOCKGUIDES:
             this->lockguides = value ? sp_str_to_bool(value) : FALSE;
+            this->lockGuides();
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     default:
@@ -1098,6 +1099,12 @@ bool SPNamedView::getGuides()
 
     return v;
 }
+
+void SPNamedView::lockGuides()
+{
+    sp_namedview_lock_guides(this);
+}
+
 /**
  * Gets page fitting margin information from the namedview node in the XML.
  * \param nv_repr reference to this document's namedview

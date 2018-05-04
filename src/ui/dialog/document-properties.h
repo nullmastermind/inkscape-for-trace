@@ -58,6 +58,9 @@ protected:
     void  build_guides();
     void  build_snap();
     void  build_gridspage();
+
+    void  create_guides_around_page();
+    void  delete_all_guides();
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     void  build_cms();
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -132,8 +135,11 @@ protected:
     UI::Widget::PageSizer             _page_sizer;
     //---------------------------------------------------------------
     UI::Widget::RegisteredCheckButton _rcb_sgui;
+    UI::Widget::RegisteredCheckButton _rcb_lgui;
     UI::Widget::RegisteredColorPicker _rcp_gui;
     UI::Widget::RegisteredColorPicker _rcp_hgui;
+    Gtk::Button                       _create_guides_btn;
+    Gtk::Button                       _delete_guides_btn;
     //---------------------------------------------------------------
     UI::Widget::ToleranceSlider       _rsu_sno;
     UI::Widget::ToleranceSlider       _rsu_sn;

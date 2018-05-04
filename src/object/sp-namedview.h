@@ -98,6 +98,7 @@ public:
     void setSnapGlobal(bool v);
     void setGuides(bool v);
     bool getGuides();
+    void lockGuides();
 
 private:
     double getMarginLength(gchar const * const key,Inkscape::Util::Unit const * const margin_units,Inkscape::Util::Unit const * const return_units,double const width,double const height,bool const use_width);

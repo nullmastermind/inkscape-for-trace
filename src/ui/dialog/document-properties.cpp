@@ -26,6 +26,7 @@
 #include "document-properties.h"
 #include "rdf.h"
 #include "verbs.h"
+#include "helper/action.h"
 
 #include "io/sys.h"
 
@@ -112,8 +113,11 @@ DocumentProperties::DocumentProperties()
     //---------------------------------------------------------------
       //General snap options
       _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr),
+      _rcb_lgui(_("Lock all guides"), _("Toggle lock of all guides in the document"), "inkscape:lockguides", _wr),
       _rcp_gui(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", _wr),
       _rcp_hgui(_("_Highlight color:"), _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"), "guidehicolor", "guidehiopacity", _wr),
+      _create_guides_btn(_("Create guides around the page")),
+      _delete_guides_btn(_("Delete all guides")),
     //---------------------------------------------------------------
     _rsu_sno(_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
                   _("Snapping distance, in screen pixels, for snapping to objects"), _("Always snap to objects, regardless of their distance"),
@@ -363,11 +367,17 @@ void DocumentProperties::build_guides()
     {
         label_gui,        0,
         0,                &_rcb_sgui,
+        0,                &_rcb_lgui,
         _rcp_gui._label,  &_rcp_gui,
-        _rcp_hgui._label, &_rcp_hgui
+        _rcp_hgui._label, &_rcp_hgui,
+        0,                &_create_guides_btn,
+        0,                &_delete_guides_btn
     };
 
     attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
+
+    _create_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::create_guides_around_page));
+    _delete_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::delete_all_guides));
 }
 
 void DocumentProperties::build_snap()
@@ -462,6 +472,30 @@ static void sanitizeName( Glib::ustring& str )
                 && (val != '.')) {
                 str.replace(i, 1, "-");
             }
+        }
+    }
+}
+
+void DocumentProperties::create_guides_around_page()
+{
+    SPDesktop *dt = getDesktop();
+    Verb *verb = Verb::get( SP_VERB_EDIT_GUIDES_AROUND_PAGE );
+    if (verb) {
+        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
+        if (action) {
+            sp_action_perform(action, NULL);
+        }
+    }
+}
+
+void DocumentProperties::delete_all_guides()
+{
+    SPDesktop *dt = getDesktop();
+    Verb *verb = Verb::get( SP_VERB_EDIT_DELETE_ALL_GUIDES );
+    if (verb) {
+        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
+        if (action) {
+            sp_action_perform(action, NULL);
         }
     }
 }
@@ -1438,6 +1472,7 @@ void DocumentProperties::update()
     //-----------------------------------------------------------guide page
 
     _rcb_sgui.setActive (nv->showguides);
+    _rcb_lgui.setActive (nv->lockguides);
     _rcp_gui.setRgba32 (nv->guidecolor);
     _rcp_hgui.setRgba32 (nv->guidehicolor);
 
