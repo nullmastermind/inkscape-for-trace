@@ -188,9 +188,9 @@ public:
     unsigned int interaction_disabled_counter;
     bool waiting_cursor;
     bool showing_dialogs;
-
     /// \todo fixme: This has to be implemented in different way */
     guint guides_active : 1;
+    bool on_live_extension;
 
     // storage for selected dragger used by GrDrag as it's
     // created and deleted by tools

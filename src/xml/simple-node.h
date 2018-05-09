@@ -91,7 +91,9 @@ public:
     char const *content() const;
     void setContent(char const *value);
 
-    void mergeFrom(Node const *src, char const *key);
+    void cleanOriginal(Node *src, gchar const *key);
+    bool equal(Node const *other, bool recursive);
+    void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false);
 
     Inkscape::Util::List<AttributeRecord const> attributeList() const {
         return _attributes;

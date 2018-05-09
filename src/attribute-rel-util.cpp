@@ -34,11 +34,14 @@ unsigned int sp_attribute_clean_get_prefs() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     unsigned int flags = 0;
     if( prefs->getBool("/options/svgoutput/incorrect_attributes_warn") )          flags += SP_ATTR_CLEAN_ATTR_WARN;
-    if( prefs->getBool("/options/svgoutput/incorrect_attributes_remove") )        flags += SP_ATTR_CLEAN_ATTR_REMOVE;
+    if( prefs->getBool("/options/svgoutput/incorrect_attributes_remove") &&
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_ATTR_REMOVE;
     if( prefs->getBool("/options/svgoutput/incorrect_style_properties_warn") )    flags += SP_ATTR_CLEAN_STYLE_WARN;
-    if( prefs->getBool("/options/svgoutput/incorrect_style_properties_remove" ) ) flags += SP_ATTR_CLEAN_STYLE_REMOVE;
+    if( prefs->getBool("/options/svgoutput/incorrect_style_properties_remove" ) &&
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_STYLE_REMOVE;
     if( prefs->getBool("/options/svgoutput/style_defaults_warn") )                flags += SP_ATTR_CLEAN_DEFAULT_WARN;
-    if( prefs->getBool("/options/svgoutput/style_defaults_remove") )              flags += SP_ATTR_CLEAN_DEFAULT_REMOVE;
+    if( prefs->getBool("/options/svgoutput/style_defaults_remove") &&
+       !prefs->getBool("/options/svgoutput/disable_optimizations" ) )             flags += SP_ATTR_CLEAN_DEFAULT_REMOVE;
 
     return flags;
 }
