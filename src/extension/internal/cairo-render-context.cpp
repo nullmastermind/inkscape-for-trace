@@ -845,8 +845,8 @@ CairoRenderContext::setupSurface(double width, double height)
                 cairo_pdf_surface_set_metadata (surface,
                                                 CAIRO_PDF_METADATA_CREATE_DATE,
                                                 buffer);
-#endif
             }
+#endif
             break;
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
