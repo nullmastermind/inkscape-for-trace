@@ -72,7 +72,7 @@ Prototype::~Prototype()
 
 /*
  * Called when a dialog is displayed, including when a dialog is reopened.
- * (When a dialog is closed, it is not destroyed so the contructor is not called.
+ * (When a dialog is closed, it is not destroyed so the constructor is not called.
  * This function can handle any reinitialization needed.)
  */
 void

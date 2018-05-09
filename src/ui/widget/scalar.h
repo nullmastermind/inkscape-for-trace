@@ -80,7 +80,7 @@ public:
            bool mnemonic = true);
 
     /**
-     * Fetches the precision of the spin buton.
+     * Fetches the precision of the spin button.
      */
     unsigned getDigits() const;
 

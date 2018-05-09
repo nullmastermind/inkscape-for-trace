@@ -759,7 +759,7 @@ void DocumentProperties::build_cms()
     _unlink_btn.set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(_unlink_btn, 2, row, 1, 1);
 
-    // Set up the Avialable Profiles combo box
+    // Set up the Available Profiles combo box
     _AvailableProfilesListStore = Gtk::ListStore::create(_AvailableProfilesListColumns);
     _AvailableProfilesList.set_model(_AvailableProfilesListStore);
     _AvailableProfilesList.pack_start(_AvailableProfilesListColumns.nameColumn);

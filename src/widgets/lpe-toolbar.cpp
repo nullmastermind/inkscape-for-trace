@@ -372,7 +372,7 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
         InkSelectOneAction* act =
             InkSelectOneAction::create( "LPELineSegmentAction", // Name
                                         (""),                   // Label
-                                        _("Choose a line segement type"), // Tooltip
+                                        _("Choose a line segment type"), // Tooltip
                                         "Not Used",             // Icon
                                         store );                // Tree store
 

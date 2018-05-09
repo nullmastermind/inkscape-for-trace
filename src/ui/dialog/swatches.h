@@ -33,7 +33,7 @@ class DocTrack;
  * A panel that displays paint swatches.
  *
  * It comes in two flavors, depending on the prefsPath argument passed to
- * the construtor: the default "/dialog/swatches" is just a regular panel;
+ * the constructor: the default "/dialog/swatches" is just a regular panel;
  * the "/embedded/swatches/" is the horizontal color swatches at the bottom
  * of window.
  */

@@ -69,7 +69,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
     // we go back following hrefList and parent to find if the object already references ourselves indirectly
     std::set<SPObject *> done;
     SPObject *owner = getOwner();
-    //allow LPE as owner has any URI atached
+    //allow LPE as owner has any URI attached
     if (!owner || IS_LIVEPATHEFFECT(owner))
         return true;
     

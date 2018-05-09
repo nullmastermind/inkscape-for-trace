@@ -335,7 +335,7 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
 #endif
         Point m_t = m(t), v_t = v(t), a_t = a(t);
         //Compute tgt length according to curvature (not exceeding tgtlength) so that
-        //  dist to origninal curve ~ 4 * (parallel_offset+tremble_size).
+        //  dist to original curve ~ 4 * (parallel_offset+tremble_size).
         //TODO: put this 4 as a parameter in the UI...
         //TODO: what if with v=0?
         double l = tgtlength*(1-tgtlength_rdm)/v_t.length();

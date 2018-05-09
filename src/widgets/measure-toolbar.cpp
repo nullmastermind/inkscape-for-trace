@@ -412,7 +412,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_all_layers), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    /* toogle start end */
+    /* toggle start end */
     {
         InkAction* act = ink_action_new( "MeasureReverse",
                                           _("Reverse measure"),

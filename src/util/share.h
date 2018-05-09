@@ -80,7 +80,7 @@ private:
         return ptr_shared(string);
     }
 
-    //This class (and code usign it) assumes that it never has to free this
+    //This class (and code using it) assumes that it never has to free this
     //pointer, and that the memory it points to will not be freed as long as a
     //ptr_shared pointing to it exists.
     char const *_string;

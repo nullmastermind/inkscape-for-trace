@@ -443,7 +443,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             GTK_WIDGET(desktop->canvas),          /* focusTarget */ 
             G_OBJECT(spw),                        /* dataKludge */ 
             TRUE, "altx",                         /* altx, altx_mark */ 
-            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, uppper, step, page */ 
+            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
             0, 0, 0,                              /* descrLabels, descrValues, descrCount */ 
             sp_object_layout_any_value_changed,   /* callback */ 
             tracker,                              /* unit_tracker */ 
@@ -462,7 +462,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
-            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, uppper, step, page */
+            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
             0, 0, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */
@@ -481,7 +481,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
-            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, uppper, step, page */
+            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             0, 0, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */
@@ -513,7 +513,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
-            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, uppper, step, page */
+            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             0, 0, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */

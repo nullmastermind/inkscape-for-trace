@@ -98,7 +98,7 @@ class Effect : public Extension {
     EffectVerb _verb_nopref;
     /** \brief  Menu node created for this effect */
     Inkscape::XML::Node * _menu_node;
-    /** \brief  Whehter a working dialog should be shown */
+    /** \brief  Whether a working dialog should be shown */
     bool _workingDialog;
 
     /** \brief  The preference dialog if it is shown */

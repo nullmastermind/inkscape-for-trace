@@ -1190,7 +1190,7 @@ refresh_offset_source(SPOffset* offset)
         delete orig;
 
         // TODO fix:
-        //XML Tree being used diectly here while it shouldn't be.
+        //XML Tree being used directly here while it shouldn't be.
         offset->getRepr()->setAttribute("inkscape:original", res_d);
 
         free (res_d);

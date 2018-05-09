@@ -76,7 +76,7 @@ public:
     std::list<SPCurve *> white_curves;
     std::vector<SPDrawAnchor*> white_anchors;
 
-    // Temporary modiffied curve when start anchor
+    // Temporary modified curve when start anchor
     SPCurve *sa_overwrited;
 
     // Start anchor

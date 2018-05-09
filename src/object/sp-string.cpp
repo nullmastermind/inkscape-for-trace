@@ -65,7 +65,7 @@ void SPString::read_content() {
     // See: http://dev.w3.org/csswg/css-text/#white-space
     //            |  New Lines |  Spaces/Tabs | Text Wrapping
     //   ---------|------------|--------------|--------------
-    //   normal   |  Collapes  |   Collapse   |     Wrap
+    //   normal   |  Collapse  |   Collapse   |     Wrap
     //   pre      |  Preserve  |   Preserve   |   No Wrap
     //   nowrap   |  Collapse  |   Collapse   |   No Wrap
     //   pre-wrap |  Preserve  |   Preserve   |     Wrap

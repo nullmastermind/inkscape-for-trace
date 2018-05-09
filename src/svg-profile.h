@@ -95,7 +95,7 @@ private:
         /** \brief The size of the array which is being used. */
         #define  ARRAY_SIZE  (((PROFILE_UNIQUE_CNT - 1) / BITS_IN_INT) + 1)
 
-            /** \brief The actuall array holding the bitfield. */
+            /** \brief The actual array holding the bitfield. */
             unsigned int bits[ARRAY_SIZE];
 
         public:

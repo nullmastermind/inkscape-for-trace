@@ -137,7 +137,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
             //we add the last satellite on open path because _pathvector_satellites is related to nodes, not curves
             //so maybe in the future we can need this last satellite in other effects
-            //don't remove for this effect because _pathvector_satellites class has methods when the path is modiffied
+            //don't remove for this effect because _pathvector_satellites class has methods when the path is modified
             //and we want one method for all uses
             if (!path_it->closed()) {
                 Satellite satellite(satellite_type);
@@ -331,7 +331,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //mandatory call
         satellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(pathvector_before_effect);
-        //if are diferent sizes call to recalculate
+        //if are different sizes call to recalculate
         //TODO: Update the satellite data in paths modified,
         Satellites satellites = satellites_param.data();
         if (satellites.empty()) {

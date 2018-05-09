@@ -54,7 +54,7 @@ enum SPStyleSrc {
  * This code is derived from the original C style code in style.cpp.
  *
  * Overview:
- *   Style can be obtained (in order of precidence) [CHECK]
+ *   Style can be obtained (in order of precedence) [CHECK]
  *     1. "style" property in an element (style="fill:red").
  *     2. Style sheet, internal or external (<style> rect {fill:red;}</style>). 
  *     3. Attributes in an element (fill="red").

@@ -66,7 +66,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     if (text == NULL) {
         text = in_repr->attribute("_gui-text");
         if (text == NULL) {
-            // text = ""; // propably better to require devs to explicitly set an empty gui-text if this is what they want
+            // text = ""; // probably better to require devs to explicitly set an empty gui-text if this is what they want
         } else {
             const char *context = in_repr->attribute("msgctxt");
             if (context != NULL) {

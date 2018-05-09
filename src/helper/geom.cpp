@@ -549,7 +549,7 @@ pathv_to_linear( Geom::PathVector const &pathv, double /*maxdisp*/)
  * Converts all segments in all paths to Geom Cubic bezier.
  * This is used in lattice2 LPE, maybe is better move the function to the effect
  * But maybe could be usable by others, so i put here.
- * The straight curve part is needed as it for the effect to work apropiately
+ * The straight curve part is needed as is for the effect to work appropriately
  */
 Geom::PathVector
 pathv_to_cubicbezier( Geom::PathVector const &pathv)

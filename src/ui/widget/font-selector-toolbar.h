@@ -10,7 +10,7 @@
  * The routines here create and manage a font selector widget with two parts,
  * one each for font-family and font-style.
  *
- * This is esentially a toolbar version of the 'FontSelector' widget. Someday
+ * This is essentially a toolbar version of the 'FontSelector' widget. Someday
  * this may be merged with it.
  *
  * The main functions are:

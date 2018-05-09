@@ -5,7 +5,7 @@
 /* Authors:
  *   Jabier Arraiza Cenoz <jabier.arraiza@marker.es>
  *
- * Thanks to all people involved specialy to Josh Andler for the idea and to the
+ * Thanks to all people involved specially to Josh Andler for the idea and to the
  * original extensions authors.
  *
  * Copyright (C) 2014 Authors

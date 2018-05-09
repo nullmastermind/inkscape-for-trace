@@ -301,7 +301,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     /* The next three have a problem in that they are phase dependent.  The bits of a line are not
     necessarily passing through this routine in order, so we have to use the xphase information
     to figure where in each of their cycles to start.  Only accurate to 1 part in 16.
-    Huge possitive offset should keep the phase calculation from ever being negative.
+    Huge positive offset should keep the phase calculation from ever being negative.
     */
     else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DOTTED){
         // FIXME: Per spec, this should produce round dots.

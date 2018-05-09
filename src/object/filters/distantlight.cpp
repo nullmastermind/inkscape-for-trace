@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-// In same dirctory
+// In same directory
 #include "distantlight.h"
 #include "diffuselighting.h"
 #include "specularlighting.h"

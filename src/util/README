@@ -4,6 +4,6 @@ This directory contains a variety of utility code.
 
 To do:
 
-* Merge with 'helper' into this direcotry.
+* Merge with 'helper' into this directory.
 * Move individual files to more appropriate directories.
 * Split into three sub-directories: numeric, color, svg.

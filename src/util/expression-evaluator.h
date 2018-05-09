@@ -40,7 +40,7 @@
  * expression as it goes along, and does not create a parse tree or
  * anything, and will not optimize anything. It uses doubles for
  * precision, with the given use case, that's enough to combat any
- * rounding errors (as opposed to optimizing the evalutation).
+ * rounding errors (as opposed to optimizing the evaluation).
  *
  * It relies on external unit resolving through a callback and does
  * elementary dimensionality constraint check (e.g. "2 mm + 3 px * 4

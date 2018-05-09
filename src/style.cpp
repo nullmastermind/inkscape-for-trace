@@ -268,7 +268,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     text_decoration_color.setStylePointer( this );
     fill.setStylePointer(                  this );
     stroke.setStylePointer(                this );
-    // color.setStylePointer( this ); // Doen't need reference to self
+    // color.setStylePointer( this ); // Doesn't need reference to self
 
     // 'text_decoration' shorthand requires access to included properties.
     text_decoration.setStylePointer( this );
