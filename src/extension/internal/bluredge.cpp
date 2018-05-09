@@ -53,7 +53,6 @@ BlurEdge::load (Inkscape::Extension::Extension */*module*/)
 void
 BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *desktop, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    
     Inkscape::Selection * selection     = static_cast<SPDesktop *>(desktop)->selection;
 
     float width = module->get_param_float("blur-width");

@@ -117,7 +117,6 @@ SPDesktop::SPDesktop() :
     waiting_cursor( false ),
     showing_dialogs ( false ),
     guides_active( false ),
-    on_live_extension(false),
     gr_item( NULL ),
     gr_point_type( POINT_LG_BEGIN ),
     gr_point_i( 0 ),

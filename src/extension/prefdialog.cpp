@@ -18,8 +18,6 @@
 // Used to get SP_ACTIVE_DESKTOP
 #include "inkscape.h"
 #include "desktop.h"
-#include "document.h"
-#include "document-undo.h"
 
 #include "effect.h"
 #include "implementation/implementation.h"
@@ -62,13 +60,6 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         }
         controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, NULL);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
-    }
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
-        if (selection) {
-            selection->emptyBackup();
-        }
     }
     hbox->pack_start(*controls, true, true, 0);
     hbox->show();
@@ -179,29 +170,12 @@ PrefDialog::run (void) {
 
 void
 PrefDialog::preview_toggle (void) {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::Selection * selection = NULL;
-    bool modified = document->isModifiedSinceSave();
-    if(desktop) {
-        selection = desktop->getSelection();
-        if (!selection->isEmpty()) {
-            selection->setBackup();
-        }
-    }
     if(_param_preview->get_bool(NULL, NULL)) {
+        set_modal(true);
         if (_exEnv == NULL) {
-            set_modal(true);
-            if (desktop && selection) {
-                desktop->on_live_extension = true;
-                
-            }
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, NULL, false, false);
             _effect->set_execution_env(_exEnv);
             _exEnv->run();
-            if (desktop && selection) {
-                selection->clear();
-            }
         }
     } else {
         set_modal(false);
@@ -211,13 +185,8 @@ PrefDialog::preview_toggle (void) {
             delete _exEnv;
             _exEnv = NULL;
             _effect->set_execution_env(_exEnv);
-            if (desktop && selection) {
-                selection->restoreBackup();
-                desktop->on_live_extension = false;
-            }
         }
     }
-    document->setModifiedSinceSave(modified);
 }
 
 void

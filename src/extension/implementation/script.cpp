@@ -417,12 +417,11 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
 
     SPDesktop *desktop = (SPDesktop *) view;
     sp_namedview_document_from_window(desktop);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/svgoutput/disable_optimizations", true);
+
     Inkscape::Extension::save(
               Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE),
               view->doc(), _filename.c_str(), false, false, false, Inkscape::Extension::FILE_SAVE_METHOD_TEMPORARY);
-    prefs->setBool("/options/svgoutput/disable_optimizations", false);
+
     return;
 }
 
@@ -687,14 +686,57 @@ void Script::effect(Inkscape::Extension::Effect *module,
         return;
     }
 
-    if (desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
-        if (!selection->isEmpty()) {
-            selection->setBackup();
-        }
-        params = selection->params;
-        module->paramListString(params);
+    auto selected =
+            desktop->getSelection()->items(); //desktop should not be NULL since doc was checked and desktop is a casted pointer
+    for(auto x = selected.begin(); x != selected.end(); ++x){
+        Glib::ustring selected_id;
+        selected_id += "--id=";
+        selected_id += (*x)->getId();
+        params.push_front(selected_id);
     }
+
+    {//add selected nodes
+    Inkscape::UI::Tools::NodeTool *tool = 0;
+    if (SP_ACTIVE_DESKTOP ) {
+        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        if (INK_IS_NODE_TOOL(ec)) {
+            tool = static_cast<Inkscape::UI::Tools::NodeTool*>(ec);
+        }
+    }
+    
+    if(tool){
+        Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
+        for (Inkscape::UI::ControlPointSelection::iterator i = cps->begin(); i != cps->end(); ++i) {
+            Inkscape::UI::Node *node = dynamic_cast<Inkscape::UI::Node*>(*i);
+            if (node) { 
+                std::string id = node->nodeList().subpathList().pm().item()->getId(); 
+
+                int sp = 0;
+                bool found_sp = false;
+                for(Inkscape::UI::SubpathList::iterator i = node->nodeList().subpathList().begin(); i != node->nodeList().subpathList().end(); ++i,++sp){
+                    if(&**i == &(node->nodeList())){
+                        found_sp = true;
+                        break;
+                    }
+                }
+                int nl=0;
+                bool found_nl = false;
+                for (Inkscape::UI::NodeList::iterator j = node->nodeList().begin(); j != node->nodeList().end(); ++j, ++nl){
+                    if(&*j==node){
+                        found_nl = true;
+                        break;
+                    }
+                }
+                std::ostringstream ss;
+                ss<< "--selected-nodes=" << id << ":" << sp << ":" << nl;
+                Glib::ustring selected = ss.str();
+
+                if(found_nl && found_sp)params.push_front(selected);
+                else g_warning("Something went wrong while trying to pass selected nodes to extension. Please report a bug.");
+            }
+        }
+    }
+    }//end add selected nodes
 
     file_listener fileout;
     int data_read = execute(command, params, dc->_filename, fileout);
@@ -748,7 +790,6 @@ void Script::effect(Inkscape::Extension::Effect *module,
                         layer = document->getObjectById(g_quark_to_string(nv->default_layer_id));
                     }
                 }
-                desktop->showGrids(nv->grids_visible);
             }
             
             sp_namedview_update_layers_from_document(desktop);
@@ -756,14 +797,6 @@ void Script::effect(Inkscape::Extension::Effect *module,
             if (layer) {
                 //set the current layer
                 desktop->setCurrentLayer(layer);
-            }
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-            if (desktop) {
-                Inkscape::Selection * selection = desktop->getSelection();
-                if (selection && selection->isEmpty() && !desktop->on_live_extension) {
-                    selection->restoreBackup();
-                    selection->emptyBackup();
-                }
             }
         }
         mydoc->release();
@@ -800,10 +833,12 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
         g_warning("Error on copy_doc: NULL pointer input.");
         return;
     }
+
     // For copying attributes in root and in namedview
     using Inkscape::Util::List;
     using Inkscape::XML::AttributeRecord;
     std::vector<gchar const *> attribs;
+
     // Must explicitly copy root attributes. This must be done first since
     // copying grid lines calls "SPGuide::set()" which needs to know the
     // width, height, and viewBox of the root element.
@@ -824,33 +859,80 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
         oldroot->setAttribute(name, newroot->attribute(name));
     }
 
+
     // Question: Why is the "sodipodi:namedview" special? Treating it as a normal
     // elmement results in crashes.
     // Seems to be a bug:
     // http://inkscape.13.x6.nabble.com/Effect-that-modifies-the-document-properties-tt2822126.html
 
     std::vector<Inkscape::XML::Node *> delete_list;
+    Inkscape::XML::Node * oldroot_namedview = NULL;
+    Inkscape::XML::Node * newroot_namedview = NULL;
 
     // Make list
     for (Inkscape::XML::Node * child = oldroot->firstChild();
             child != NULL;
             child = child->next()) {
         if (!strcmp("sodipodi:namedview", child->name())) {
+            oldroot_namedview = child;
             for (Inkscape::XML::Node * oldroot_namedview_child = child->firstChild();
                     oldroot_namedview_child != NULL;
                     oldroot_namedview_child = oldroot_namedview_child->next()) {
                 delete_list.push_back(oldroot_namedview_child);
             }
-            break;
+        } else {
+            delete_list.push_back(child);
         }
+    }
+
+    if(!oldroot_namedview)
+    {
+        g_warning("Error on copy_doc: No namedview on destination document.");
+        return;
     }
 
     // Unparent (delete)
     for (unsigned int i = 0; i < delete_list.size(); i++) {
         sp_repr_unparent(delete_list[i]);
     }
+
+    // Copy
+    for (Inkscape::XML::Node * child = newroot->firstChild();
+            child != NULL;
+            child = child->next()) {
+        if (!strcmp("sodipodi:namedview", child->name())) {
+            newroot_namedview = child;
+            for (Inkscape::XML::Node * newroot_namedview_child = child->firstChild();
+                    newroot_namedview_child != NULL;
+                    newroot_namedview_child = newroot_namedview_child->next()) {
+                oldroot_namedview->appendChild(newroot_namedview_child->duplicate(oldroot->document()));
+            }
+        } else {
+            oldroot->appendChild(child->duplicate(oldroot->document()));
+        }
+    }
+
     attribs.clear();
-    oldroot->mergeFrom(newroot, "id", true, true);
+
+    // Must explicitly copy namedview attributes.
+    // Make a list of all attributes of the old namedview node.
+    for (List<AttributeRecord const> iter = oldroot_namedview->attributeList(); iter; ++iter) {
+        attribs.push_back(g_quark_to_string(iter->key));
+    }
+
+    // Delete the attributes of the old namedview node.
+    for (std::vector<gchar const *>::const_iterator it = attribs.begin(); it != attribs.end(); ++it) {
+        oldroot_namedview->setAttribute(*it, NULL);
+    }
+
+    // Set the new attributes.
+    for (List<AttributeRecord const> iter = newroot_namedview->attributeList(); iter; ++iter) {
+        gchar const *name = g_quark_to_string(iter->key);
+        oldroot_namedview->setAttribute(name, newroot_namedview->attribute(name));
+    }
+
+    /** \todo  Restore correct layer */
+    /** \todo  Restore correct selection */
 }
 
 /**  \brief  This function checks the stderr file, and if it has data,

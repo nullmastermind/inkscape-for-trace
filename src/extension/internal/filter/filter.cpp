@@ -120,6 +120,7 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 	if (filterdoc == NULL) {
 		return; // could not parse the XML source of the filter; typically parser will stderr a warning
 	}
+
 	//printf("Calling filter effect\n");
     Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
 

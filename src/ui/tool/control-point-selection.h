@@ -117,8 +117,6 @@ public:
     void getOriginalPoints(std::vector<Inkscape::SnapCandidatePoint> &pts);
     void getUnselectedPoints(std::vector<Inkscape::SnapCandidatePoint> &pts);
     void setOriginalPoints();
-    //the purpose of this list is to keep track of first and last selected
-    std::list<SelectableControlPoint *> _points_list;
 
 private:
     // The functions below are invoked from SelectableControlPoint.
@@ -142,7 +140,8 @@ private:
     double _rotationRadius(Geom::Point const &);
 
     set_type _points;
-
+    //the purpose of this list is to keep track of first and last selected
+    std::list<SelectableControlPoint *> _points_list;
     set_type _all_points;
     INK_UNORDERED_MAP<SelectableControlPoint *, Geom::Point> _original_positions;
     INK_UNORDERED_MAP<SelectableControlPoint *, Geom::Affine> _last_trans;

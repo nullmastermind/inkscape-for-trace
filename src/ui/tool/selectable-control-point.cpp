@@ -87,15 +87,6 @@ bool SelectableControlPoint::clicked(GdkEventButton *event)
     return true;
 }
 
-void SelectableControlPoint::select(bool toselect)
-{
-    if (toselect) {
-        _selection.insert(this);
-    } else {
-        _selection.erase(this);
-    }
-}
-
 void SelectableControlPoint::_takeSelection()
 {
     _selection.clear();

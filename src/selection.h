@@ -183,23 +183,6 @@ public:
         return _modified_signal.slots().insert(_modified_signal.slots().begin(), slot);
     }
 
-    /**
-     * Set a backup of current selection and store it also to be command line readable by extension system
-     */
-    void setBackup();
-    /**
-     * Clear backup of current selection
-     */
-    void emptyBackup();
-    /**
-     * Restore a selection from a existing backup
-     */
-    void restoreBackup();
-    /**
-     * Here store a paramlist when set backup
-     */
-    std::list<std::string> params;
-
 protected:
     void _emitSignals();
     void _connectSignals(SPObject* object);
@@ -229,8 +212,7 @@ private:
     SPObject* _selection_context;
     unsigned int _flags;
     unsigned int _idle;
-    std::vector<std::pair<std::string, std::pair<int, int> > > _seldata;
-    std::vector<std::string> _selected_ids;
+
     std::map<SPObject *, sigc::connection> _modified_connections;
     sigc::connection _context_release_connection;
 

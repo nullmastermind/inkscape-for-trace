@@ -315,7 +315,7 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
 
     // Check usefulness of attributes on elements in the svg namespace, optionally don't add them to tree.
     Glib::ustring element = g_quark_to_string(_name);
-    //g_message("setAttribute:  %s: %s: %s", element.c_str(), name, value);
+    // g_message("setAttribute:  %s: %s: %s", element.c_str(), name, value);
     gchar* cleaned_value = g_strdup( value );
 
     // Only check elements in SVG name space and don't block setting attribute to NULL.
@@ -645,112 +645,28 @@ Node *SimpleNode::root() {
     }
 }
 
-void SimpleNode::cleanOriginal(Node *src, gchar const *key){
-    std::vector<Node *> to_delete;
-    for ( Node *child = this->firstChild() ; child != NULL ; child = child->next() )
-    {
-        gchar const *id = child->attribute(key);
-        if (id) {
-            Node *rch = sp_repr_lookup_child(src, key, id);
-            if (rch) {
-                child->cleanOriginal(rch, key);
-            } else {
-                to_delete.push_back(child);
-            }
-        } else {
-            to_delete.push_back(child);
-        }
-    }
-    for ( std::vector<Node *>::iterator i = to_delete.begin(); i != to_delete.end(); ++i) {
-        removeChild(*i);
-    }
-}
-
-bool SimpleNode::equal(Node const *other, bool recursive) {
-    if(strcmp(name(),other->name())!= 0){
-        return false;
-    }
-    if (!(strcmp("sodipodi:namedview", name()))) {
-        return true;
-    }
-    guint orig_length = 0;
-    guint other_length = 0;
-
-    if(content() && other->content() && strcmp(content(), other->content()) != 0){
-        return false;
-    }
-    for (List<AttributeRecord const> orig_attr = attributeList(); orig_attr; ++orig_attr) {
-        for (List<AttributeRecord const> other_attr = other->attributeList(); other_attr; ++other_attr) {
-            const gchar * key_orig = g_quark_to_string(orig_attr->key);
-            const gchar * key_other = g_quark_to_string(other_attr->key);
-            if (!strcmp(key_orig, key_other) && 
-                !strcmp(orig_attr->value, other_attr->value)) 
-            {
-                other_length++;
-                break;
-            }
-        }
-        orig_length++;
-    }
-    if (orig_length != other_length) {
-        return false;
-    }
-    if (recursive) {
-        //NOTE: for faster the childs need to be in the same order
-        Node const *other_child = other->firstChild();
-        for ( Node *child = firstChild();
-              child; 
-              child = child->next())
-        {
-            if (!child->equal(other_child, recursive)) {
-                return false;
-            }
-            other_child = other_child->next();
-            if(!other_child) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bool clean) {
+void SimpleNode::mergeFrom(Node const *src, gchar const *key) {
     g_return_if_fail(src != NULL);
     g_return_if_fail(key != NULL);
     g_assert(src != this);
 
     setContent(src->content());
-    if(_parent) {
-        setPosition(src->position());
-    }
-
-    if (clean) {
-        Node * srcp = const_cast<Node *>(src);
-        cleanOriginal(srcp, key);
-    }
 
     for ( Node const *child = src->firstChild() ; child != NULL ; child = child->next() )
     {
         gchar const *id = child->attribute(key);
         if (id) {
             Node *rch=sp_repr_lookup_child(this, key, id);
-            if (rch && (!extension || rch->equal(child, false))) {
-                rch->mergeFrom(child, key, extension);
+            if (rch) {
+                rch->mergeFrom(child, key);
             } else {
-                if(rch) {
-                    removeChild(rch);
-                }
-                guint pos = child->position();
                 rch = child->duplicate(_document);
                 appendChild(rch);
-                rch->setPosition(pos);
                 rch->release();
             }
         } else {
-            guint pos = child->position();
             Node *rch=child->duplicate(_document);
             appendChild(rch);
-            rch->setPosition(pos);
             rch->release();
         }
     }
