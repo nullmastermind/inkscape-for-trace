@@ -28,7 +28,6 @@
 
 #include "object/sp-shape.h"
 #include "object/sp-path.h"
-#include "object/sp-defs.h"
 
 #include "xml/repr.h"
 
