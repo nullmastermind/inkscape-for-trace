@@ -2252,14 +2252,6 @@ void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw )
     }
 }
 
-void sp_desktop_widget_toggle_guides_lock( SPDesktopWidget *dtw )
-{
-    if ( SP_BUTTON_IS_DOWN(dtw->guides_lock) ) {
-        sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), FALSE );
-    } else {
-        sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), TRUE );
-    }
-}
 /* Unused
 void
 sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
