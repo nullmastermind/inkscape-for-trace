@@ -5,7 +5,7 @@
 #
 # Arpad Biro <biro.arpad gmail>, 2004-2006, 2007, 2008, 2009, 2010.
 # Peter Bojtos <ptr@ulx.hu>, 2015.
-# Gyuris Gellért <bubu@ujevangelizacio.hu>, 2017.
+# Gyuris Gellért <bubu@ujevangelizacio.hu>, 2017, 2018.
 # Meskó Balázs <mesko.balazs@fsf.hu>, 2018.
 msgid ""
 msgstr ""
@@ -871,7 +871,7 @@ msgstr "Az összes belső alakzat durvábbá tevése"
 
 #: ../share/filters/filters.svg.h:322
 msgid "Evanescent"
-msgstr "Tűnékeny"
+msgstr "Tünékeny"
 
 #: ../share/filters/filters.svg.h:324
 msgid ""
@@ -1693,7 +1693,7 @@ msgstr "Keresztzajos plakát"
 
 #: ../share/filters/filters.svg.h:668
 msgid "Overlay with a small scale screen like noise"
-msgstr "Átfedés zajszerű, kisméretű rácsokkal"
+msgstr "Átfedés zajszerű, kis méretű rácsokkal"
 
 #: ../share/filters/filters.svg.h:670
 msgid "Cross Noise Poster B"
@@ -1701,7 +1701,7 @@ msgstr "Keresztzajos plakát B"
 
 #: ../share/filters/filters.svg.h:672
 msgid "Adds a small scale screen like noise locally"
-msgstr "Zajszerű, kisméretű rácsot ad hozzá helyileg"
+msgstr "Zajszerű, kis méretű rácsot ad hozzá helyileg"
 
 #: ../share/filters/filters.svg.h:674
 msgid "Poster Color Fun"
@@ -1910,7 +1910,7 @@ msgstr "Alumínium domborítás"
 
 #: ../share/filters/filters.svg.h:788
 msgid "Satiny aluminium effect with embossing"
-msgstr "Fényes alumínium effektus domborításal"
+msgstr "Fényes alumínium effektus domborítással"
 
 #: ../share/filters/filters.svg.h:790
 msgid "Refractive Glass"
@@ -5120,7 +5120,7 @@ msgstr "Raszter"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:49
 msgid "Apply adaptive thresholding to selected bitmap(s)"
-msgstr "Igazodó küszöb alkalmazása a kijelölt bitkép(ek)re"
+msgstr "Igazodó küszöb alkalmazása a kijelölt bitképekre"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:45
 msgid "Add Noise"
@@ -5169,7 +5169,7 @@ msgstr "Poisson-zaj"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:60
 msgid "Add random noise to selected bitmap(s)"
-msgstr "Véletlenszerű zaj hozzáadása a kijelölt bitkép(ek)hez"
+msgstr "Véletlenszerű zaj hozzáadása a kijelölt bitképekhez"
 
 #: ../src/extension/internal/bitmap/blur.cpp:38
 #: ../src/extension/internal/filter/blurs.h:54
@@ -5201,7 +5201,7 @@ msgstr "Szigma:"
 
 #: ../src/extension/internal/bitmap/blur.cpp:47
 msgid "Blur selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) elmosása"
+msgstr "A kijelölt bitképek elmosása"
 
 #: ../src/extension/internal/bitmap/channel.cpp:48
 msgid "Channel"
@@ -5266,7 +5266,7 @@ msgstr "Rajzszén"
 
 #: ../src/extension/internal/bitmap/charcoal.cpp:47
 msgid "Apply charcoal stylization to selected bitmap(s)"
-msgstr "Rajzszenes stilizálás alkalmazása a kijelölt bitkép(ek)re"
+msgstr "Rajzszenes stilizálás alkalmazása a kijelölt bitképekre"
 
 #: ../src/extension/internal/bitmap/colorize.cpp:50
 #: ../src/extension/internal/filter/color.h:393
@@ -5276,7 +5276,7 @@ msgstr "Színezés"
 #: ../src/extension/internal/bitmap/colorize.cpp:58
 msgid "Colorize selected bitmap(s) with specified color, using given opacity"
 msgstr ""
-"A kijelölt bitkép(ek) színezése a megadott színnel és átlátszatlansággal"
+"A kijelölt bitképek színezése a megadott színnel és átlátszatlansággal"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:40
 #: ../src/extension/internal/filter/color.h:1190
@@ -5290,7 +5290,7 @@ msgstr "Igazítás:"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:48
 msgid "Increase or decrease contrast in bitmap(s)"
-msgstr "Bitkép(ek) kontrasztjának növelése vagy csökkentése"
+msgstr "Bitképek kontrasztjának növelése vagy csökkentése"
 
 #: ../src/extension/internal/bitmap/crop.cpp:67
 #: ../src/extension/internal/filter/bumps.h:86
@@ -5316,7 +5316,7 @@ msgstr "Jobb oldali (px):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:78
 msgid "Crop selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) kivágása"
+msgstr "A kijelölt bitképek kivágása"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:37
 msgid "Cycle Colormap"
@@ -5331,7 +5331,7 @@ msgstr "Mennyiség:"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:45
 msgid "Cycle colormap(s) of selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) színtérképének, illetve színtérképeinek eltolása"
+msgstr "A kijelölt bitképek színtérképének, illetve színtérképeinek eltolása"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:36
 msgid "Despeckle"
@@ -5339,7 +5339,7 @@ msgstr "Folttalanítás"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:43
 msgid "Reduce speckle noise of selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) folt-zajának csökkentése"
+msgstr "A kijelölt bitképek folt-zajának csökkentése"
 
 #: ../src/extension/internal/bitmap/edge.cpp:37
 msgid "Edge"
@@ -5347,7 +5347,7 @@ msgstr "Él"
 
 #: ../src/extension/internal/bitmap/edge.cpp:45
 msgid "Highlight edges of selected bitmap(s)"
-msgstr "Élek kiemelése a kijelölt bitkép(ek)en"
+msgstr "Élek kiemelése a kijelölt bitképeken"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:38
 msgid "Emboss"
@@ -5356,7 +5356,7 @@ msgstr "Domborítás"
 #: ../src/extension/internal/bitmap/emboss.cpp:47
 msgid "Emboss selected bitmap(s); highlight edges with 3D effect"
 msgstr ""
-"A kijelölt bitkép(ek) domborítása - élek kiemelése háromdimenziós effektussal"
+"A kijelölt bitképek domborítása - élek kiemelése háromdimenziós effektussal"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:35
 msgid "Enhance"
@@ -5364,7 +5364,7 @@ msgstr "Javítás"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:42
 msgid "Enhance selected bitmap(s); minimize noise"
-msgstr "A kijelölt bitkép(ek) javítása - a zaj minimalizálása"
+msgstr "A kijelölt bitképek javítása - a zaj minimalizálása"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:35
 msgid "Equalize"
@@ -5372,7 +5372,7 @@ msgstr "Kiegyenlítés"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:42
 msgid "Equalize selected bitmap(s); histogram equalization"
-msgstr "A kijelölt bitkép(ek) kiegyenlítése - hisztogram-ekvalizálás"
+msgstr "A kijelölt bitképek kiegyenlítése - hisztogram-ekvalizálás"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:38
 #: ../src/filter-enums.cpp:29
@@ -5387,7 +5387,7 @@ msgstr "Faktor:"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:47
 msgid "Gaussian blur selected bitmap(s)"
-msgstr "Gauss-elmosás alkalmazása a kijelölt bitkép(ek)re"
+msgstr "Gauss-elmosás alkalmazása a kijelölt bitképekre"
 
 #: ../src/extension/internal/bitmap/implode.cpp:37
 msgid "Implode"
@@ -5395,7 +5395,7 @@ msgstr "Összeroppantás"
 
 #: ../src/extension/internal/bitmap/implode.cpp:45
 msgid "Implode selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) összeroppantása"
+msgstr "A kijelölt bitképek összeroppantása"
 
 #: ../src/extension/internal/bitmap/level.cpp:41
 #: ../src/extension/internal/filter/color.h:818
@@ -5425,7 +5425,7 @@ msgid ""
 "Level selected bitmap(s) by scaling values falling between the given ranges "
 "to the full color range"
 msgstr ""
-"A kijelölt bitkép(ek) szintbeállítása az adott tartományokba eső értékeknek a "
+"A kijelölt bitképek szintbeállítása az adott tartományokba eső értékeknek a "
 "teljes színtartományra való méretezésével"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:52
@@ -5442,7 +5442,7 @@ msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
 "between the given ranges to the full color range"
 msgstr ""
-"A kijelölt bitkép(ek) megadott csatornájának szintbeállítása az adott "
+"A kijelölt bitképek megadott csatornájának szintbeállítása az adott "
 "tartományokba eső értékeknek a teljes színtartományra való méretezésével"
 
 #: ../src/extension/internal/bitmap/medianFilter.cpp:37
@@ -5476,7 +5476,7 @@ msgstr "Fényerő:"
 msgid ""
 "Adjust the amount of hue, saturation, and brightness in selected bitmap(s)"
 msgstr ""
-"A kijelölt bitkép(ek) árnyalatának, telítettségének és fényességének "
+"A kijelölt bitképek árnyalatának, telítettségének és fényességének "
 "szabályzása"
 
 #: ../src/extension/internal/bitmap/negate.cpp:36
@@ -5485,7 +5485,7 @@ msgstr "Negálás"
 
 #: ../src/extension/internal/bitmap/negate.cpp:43
 msgid "Negate (take inverse) selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) negálása (invertálása)"
+msgstr "A kijelölt bitképek negálása (invertálása)"
 
 #: ../src/extension/internal/bitmap/normalize.cpp:36
 msgid "Normalize"
@@ -5496,7 +5496,7 @@ msgid ""
 "Normalize selected bitmap(s), expanding color range to the full possible "
 "range of color"
 msgstr ""
-"A kijelölt bitkép(ek) normalizálása. A színtartományt kiterjeszti a színek "
+"A kijelölt bitképek normalizálása. A színtartományt kiterjeszti a színek "
 "teljes lehetséges tartományára."
 
 #: ../src/extension/internal/bitmap/oilPaint.cpp:37
@@ -5505,7 +5505,7 @@ msgstr "Olajfestés"
 
 #: ../src/extension/internal/bitmap/oilPaint.cpp:45
 msgid "Stylize selected bitmap(s) so that they appear to be painted with oils"
-msgstr "A kijelölt bitkép(ek) stilizálása úgy, hogy olajjal festettnek tűnjenek"
+msgstr "A kijelölt bitképek stilizálása úgy, hogy olajjal festettnek tűnjenek"
 
 #: ../src/extension/internal/bitmap/opacity.cpp:38
 #: ../src/extension/internal/filter/blurs.h:333
@@ -5525,7 +5525,7 @@ msgstr "Átlátszatlanság:"
 #: ../src/extension/internal/bitmap/opacity.cpp:46
 msgid "Modify opacity channel(s) of selected bitmap(s)"
 msgstr ""
-"A kijelölt bitkép(ek) átlátszatlansági csatornájának, illetve csatornáinak "
+"A kijelölt bitképek átlátszatlansági csatornájának, illetve csatornáinak "
 "módosítása"
 
 #: ../src/extension/internal/bitmap/raise.cpp:40
@@ -5540,7 +5540,7 @@ msgstr "Felemelve"
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised appearance"
 msgstr ""
-"A kijelölt bitkép(ek) szélei fényességének módosítása, hogy azok feljebb "
+"A kijelölt bitképek szélei fényességének módosítása, hogy azok feljebb "
 "emeltnek tűnjenek"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:40
@@ -5560,7 +5560,7 @@ msgstr "Sorrend:"
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:48
 msgid "Reduce noise in selected bitmap(s) using a noise peak elimination filter"
 msgstr ""
-"Zaj csökkentése a kijelölt bitkép(ek)ben egy zajcsúcs-eltávolítási szűrővel"
+"Zaj csökkentése a kijelölt bitképekben egy zajcsúcs-eltávolítási szűrővel"
 
 #: ../src/extension/internal/bitmap/sample.cpp:39
 msgid "Resample"
@@ -5591,11 +5591,11 @@ msgstr "Színes árnyalás"
 
 #: ../src/extension/internal/bitmap/shade.cpp:50
 msgid "Shade selected bitmap(s) simulating distant light source"
-msgstr "A kijelölt bitkép(ek) árnyalása távoli fényforrást szimulálva"
+msgstr "A kijelölt bitképek árnyalása távoli fényforrást szimulálva"
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:47
 msgid "Sharpen selected bitmap(s)"
-msgstr "A kijelölt bitkép(ek) élesítése"
+msgstr "A kijelölt bitképek élesítése"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:39
 #: ../src/extension/internal/filter/color.h:1653
@@ -5617,7 +5617,7 @@ msgid ""
 "Randomly scatter pixels in selected bitmap(s), within the given radius of the "
 "original position"
 msgstr ""
-"A kijelölt bitkép(ek) képpontjainak véletlenszerű szétszórása az eredeti "
+"A kijelölt bitképek képpontjainak véletlenszerű szétszórása az eredeti "
 "pozíció megadott sugarú környezetében"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:39
@@ -5626,7 +5626,7 @@ msgstr "Fok:"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:45
 msgid "Swirl selected bitmap(s) around center point"
-msgstr "A kijelölt bitkép(ek) örvényszerű, középpont körüli elcsavarása"
+msgstr "A kijelölt bitképek örvényszerű, középpont körüli elcsavarása"
 
 #. TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
 #: ../src/extension/internal/bitmap/threshold.cpp:38
@@ -5641,7 +5641,7 @@ msgstr "Küszöb:"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:46
 msgid "Threshold selected bitmap(s)"
-msgstr "Küszöbérték szerinti színezés alkalmazása a kijelölt bitkép(ek)re"
+msgstr "Küszöbérték szerinti színezés alkalmazása a kijelölt bitképekre"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:41
 msgid "Unsharp Mask"
@@ -5649,7 +5649,7 @@ msgstr "Életlen maszk"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:52
 msgid "Sharpen selected bitmap(s) using unsharp mask algorithms"
-msgstr "A kijelölt bitkép(ek) élesítése az „életlen maszk” eljárásokkal"
+msgstr "A kijelölt bitképek élesítése az „életlen maszk” eljárásokkal"
 
 #: ../src/extension/internal/bitmap/wave.cpp:38
 msgid "Wave"
@@ -5665,7 +5665,7 @@ msgstr "Hullámhossz:"
 
 #: ../src/extension/internal/bitmap/wave.cpp:47
 msgid "Alter selected bitmap(s) along sine wave"
-msgstr "A kijelölt bitkép(ek) módosítása szinuszhullám mentén"
+msgstr "A kijelölt bitképek módosítása szinuszhullám mentén"
 
 #: ../src/extension/internal/bluredge.cpp:132
 msgid "Inset/Outset Halo"
@@ -6594,7 +6594,7 @@ msgstr "Invertált"
 
 #: ../src/extension/internal/filter/color.h:87
 msgid "Brightness filter"
-msgstr "Fényerűszűrő"
+msgstr "Fényerőszűrő"
 
 #: ../src/extension/internal/filter/color.h:154
 msgid "Channel Painting"
@@ -7511,7 +7511,7 @@ msgstr "Szemcsekeverés:"
 
 #: ../src/extension/internal/filter/paint.h:116
 msgid "Chromo effect with customizable edge drawing and graininess"
-msgstr "Krómeffektus testre szabható rajzélekkel és szemcsézettségel"
+msgstr "Krómeffektus testre szabható rajzélekkel és szemcsézettséggel"
 
 #: ../src/extension/internal/filter/paint.h:232
 msgid "Cross Engraving"
@@ -8123,7 +8123,7 @@ msgid ""
 "<b>Note</b>: setting the precision too high may result in a large SVG file "
 "and slow performance."
 msgstr ""
-"<b>Megjegyzés</b>: a pontosság túl magasra állítása nagyméretű SVG-fájlt és "
+"<b>Megjegyzés</b>: a pontosság túl magasra állítása nagy méretű SVG-fájlt és "
 "lassú működést eredményezhet."
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:128
@@ -8964,7 +8964,7 @@ msgstr[1] ""
 # TODO: ellenőrizni
 #: ../src/gradient-drag.cpp:2785
 msgid "Move gradient handle(s)"
-msgstr "Színátmenet-vezérlőelem(ek) áthelyezése"
+msgstr "Színátmenet-vezérlőelemek áthelyezése"
 
 #: ../src/gradient-drag.cpp:2819
 msgid "Move gradient mid stop(s)"
@@ -9326,7 +9326,7 @@ msgstr "Nincs effektus"
 #, c-format
 msgid "Please specify a parameter path for the LPE '%s' with %d mouse clicks"
 msgstr ""
-"Adjon meg paraméterútvonalt a(z) \"%s\" élő útvonaleffektushoz %d "
+"Adjon meg paraméter-útvonalt a(z) \"%s\" élő útvonaleffektushoz %d "
 "egérkattintással"
 
 #: ../src/live_effects/effect.cpp:833 ../src/live_effects/effect.cpp:911
@@ -10427,7 +10427,7 @@ msgstr "Vonalvég"
 
 #: ../src/live_effects/lpe-jointype.cpp:59
 msgid "The end shape of the stroke"
-msgstr "A körvonal végalazata"
+msgstr "A körvonal végalakzata"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
@@ -11388,7 +11388,7 @@ msgstr "_Keret (izometrikus téglalap)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:47
 msgid "Draw Parallelogram around the ellipse"
-msgstr "Parallelogramma rajzolása az ellipszis körül"
+msgstr "Paralelogramma rajzolása az ellipszis körül"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:49
 msgid "_Arc"
@@ -12512,7 +12512,7 @@ msgstr ""
 
 #: ../src/main.cpp:319
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr "A megadott dokumentum(ok) megnyitása (az opciók elhagyhatók)"
+msgstr "A megadott dokumentumok megnyitása (az opciók elhagyhatók)"
 
 #: ../src/main.cpp:320 ../src/main.cpp:330 ../src/main.cpp:335
 #: ../src/main.cpp:407 ../src/main.cpp:411 ../src/main.cpp:416
@@ -12532,7 +12532,7 @@ msgstr "XVERBS_FÁJLNÉV"
 #: ../src/main.cpp:329
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
-"A dokumentum(ok) nyomtatása egy adott fájlba (program számára való átadás: "
+"A dokumentumok nyomtatása egy adott fájlba (program számára való átadás: "
 "\"| programnév\")"
 
 #: ../src/main.cpp:334
@@ -13206,7 +13206,7 @@ msgstr "ebből: %s"
 
 #: ../src/path-chemistry.cpp:70
 msgid "Select <b>object(s)</b> to combine."
-msgstr "Jelölje ki az összevonandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki az összevonandó <b>objektumokat</b>."
 
 #: ../src/path-chemistry.cpp:75
 msgid "Combining paths..."
@@ -13222,7 +13222,7 @@ msgstr "A kijelölésben <b>nincs összevonható útvonal</b>."
 
 #: ../src/path-chemistry.cpp:206
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Jelölje ki a szétbontandó <b>útvonala(ka)t</b>."
+msgstr "Jelölje ki a szétbontandó <b>útvonalakat</b>."
 
 # node-ok és szakaszok száma nem változik
 #: ../src/path-chemistry.cpp:210
@@ -13240,7 +13240,7 @@ msgstr "A kijelölésben <b>nincs szétbontható útvonal</b>."
 
 #: ../src/path-chemistry.cpp:306
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Jelölje ki az útvonallá alakítandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki az útvonallá alakítandó <b>objektumokat</b>."
 
 #: ../src/path-chemistry.cpp:312
 msgid "Converting objects to paths..."
@@ -13516,7 +13516,7 @@ msgstr "URI:"
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
 #: ../src/rdf.cpp:293
 msgid "URI to this document's license's namespace definition"
-msgstr "A dokumentum licencének névtérdefiníciójára utaló URI"
+msgstr "A dokumentum licencének névtér-definíciójára utaló URI"
 
 #. TRANSLATORS: fragment of XML representing the license of the document
 #: ../src/rdf.cpp:297
@@ -13549,7 +13549,7 @@ msgstr "Törlés"
 
 #: ../src/selection-chemistry.cpp:455
 msgid "Select <b>object(s)</b> to duplicate."
-msgstr "Jelölje ki a kettőzendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a kettőzendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:560
 #, c-format
@@ -13591,7 +13591,7 @@ msgstr "A kijelölésben <b>nincs szétbontható csoport</b>."
 
 #: ../src/selection-chemistry.cpp:977 ../src/selection-chemistry.cpp:1029
 msgid "Select <b>object(s)</b> to raise."
-msgstr "Jelölje ki a feljebb helyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a feljebb helyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:984 ../src/selection-chemistry.cpp:1035
 #: ../src/selection-chemistry.cpp:1061 ../src/selection-chemistry.cpp:1118
@@ -13613,7 +13613,7 @@ msgstr "Felülre helyezés"
 
 #: ../src/selection-chemistry.cpp:1055
 msgid "Select <b>object(s)</b> to lower."
-msgstr "Jelölje ki a lejjebb helyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a lejjebb helyezendő <b>objektumokat</b>."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1104
@@ -13623,7 +13623,7 @@ msgstr "Lejjebb"
 
 #: ../src/selection-chemistry.cpp:1112
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "Jelölje ki az alulra helyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki az alulra helyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1142
 msgid "Lower to bottom"
@@ -13631,7 +13631,7 @@ msgstr "Alulra helyezés"
 
 #: ../src/selection-chemistry.cpp:1148
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "Jelölje ki a veremben feljebb helyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a veremben feljebb helyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1159
 msgid "We hit top."
@@ -13645,7 +13645,7 @@ msgstr "feljebb a veremben"
 
 #: ../src/selection-chemistry.cpp:1172
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "Jelölje ki a veremben lejjebb helyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a veremben lejjebb helyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1183
 msgid "We hit bottom."
@@ -13680,7 +13680,7 @@ msgstr "Élő útvonaleffektus beillesztése"
 #: ../src/selection-chemistry.cpp:1321
 msgid "Select <b>object(s)</b> to remove live path effects from."
 msgstr ""
-"Jelölje ki az <b>objektumo(ka)t</b>, amely(ek)ről az élő útvonaleffektusok "
+"Jelölje ki az <b>objektumokat</b>, amelyekről az élő útvonaleffektusok "
 "eltávolítandók."
 
 #: ../src/selection-chemistry.cpp:1334
@@ -13690,7 +13690,7 @@ msgstr "Élő útvonaleffektus eltávolítása"
 #: ../src/selection-chemistry.cpp:1343
 msgid "Select <b>object(s)</b> to remove filters from."
 msgstr ""
-"Jelölje ki az <b>objektumo(ka)t</b>, amely(ek)ről a szűrők eltávolítandók."
+"Jelölje ki az <b>objektumokat</b>, amelyekről a szűrők eltávolítandók."
 
 #: ../src/selection-chemistry.cpp:1353
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1686
@@ -13707,7 +13707,7 @@ msgstr "Méret beillesztése egyenként"
 
 #: ../src/selection-chemistry.cpp:1401
 msgid "Select <b>object(s)</b> to move to the layer above."
-msgstr "Jelölje ki a feljebb levő rétegbe áthelyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a feljebb levő rétegbe áthelyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1427
 msgid "Raise to next layer"
@@ -13719,7 +13719,7 @@ msgstr "Nincs feljebb levő réteg."
 
 #: ../src/selection-chemistry.cpp:1447
 msgid "Select <b>object(s)</b> to move to the layer below."
-msgstr "Jelölje ki a lejjebb levő rétegbe áthelyezendő <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a lejjebb levő rétegbe áthelyezendő <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1473
 msgid "Lower to previous layer"
@@ -13731,7 +13731,7 @@ msgstr "Nincs lejjebb levő réteg."
 
 #: ../src/selection-chemistry.cpp:1493
 msgid "Select <b>object(s)</b> to move."
-msgstr "Jelölje ki a mozgatandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a mozgatandó <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:1511 ../src/verbs.cpp:2854
 msgid "Move selection to layer"
@@ -13861,11 +13861,11 @@ msgstr "A kijelölendő objektum <b>nem látható</b> (&lt;defs&gt;-ben szerepel
 
 #: ../src/selection-chemistry.cpp:2944
 msgid "Select path(s) to fill."
-msgstr "Jelölje ki a kitöltendő útvonala(ka)t."
+msgstr "Jelölje ki a kitöltendő útvonalakat."
 
 #: ../src/selection-chemistry.cpp:2961
 msgid "Select <b>object(s)</b> to convert to marker."
-msgstr "Jelölje ki a jelölőelemmé alakítandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a jelölőelemmé alakítandó <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:3033
 msgid "Objects to marker"
@@ -13873,7 +13873,7 @@ msgstr "Objektumok átalakítása jelölőelemmé"
 
 #: ../src/selection-chemistry.cpp:3056
 msgid "Select <b>object(s)</b> to convert to guides."
-msgstr "Jelölje ki a segédvonalakká alakítandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a segédvonalakká alakítandó <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:3077
 msgid "Objects to guides"
@@ -13904,7 +13904,7 @@ msgstr "Szimbólumból csoport"
 
 #: ../src/selection-chemistry.cpp:3350
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Jelölje ki a mintává alakítandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a mintává alakítandó <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:3446
 msgid "Objects to pattern"
@@ -13926,7 +13926,7 @@ msgstr "Minta átalakítása objektumokká"
 
 #: ../src/selection-chemistry.cpp:3603
 msgid "Select <b>object(s)</b> to make a bitmap copy."
-msgstr "Jelölje ki a bitképbe másolandó <b>objektumo(ka)t</b>."
+msgstr "Jelölje ki a bitképbe másolandó <b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:3607
 msgid "Rendering bitmap..."
@@ -13940,7 +13940,7 @@ msgstr "Bitkép létrehozása"
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr ""
 "Jelölje ki a vágóútvonal illetve a maszk létrehozásához használandó "
-"<b>objektumo(ka)t</b>."
+"<b>objektumokat</b>."
 
 #: ../src/selection-chemistry.cpp:3901 ../src/ui/dialog/objects.cpp:1915
 msgid "Create Clip Group"
@@ -13949,7 +13949,7 @@ msgstr "Vágócsoport létrehozása"
 #: ../src/selection-chemistry.cpp:3929
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr ""
-"Jelölje ki a maszkobjektumot és azon <b>objektumo(ka)t</b>, amely(ek)re a "
+"Jelölje ki a maszkobjektumot és azon <b>objektumokat</b>, amelyekre a "
 "vágóútvonal illetve a maszk alkalmazandó."
 
 #: ../src/selection-chemistry.cpp:4079
@@ -13963,7 +13963,7 @@ msgstr "Maszk beállítása"
 #: ../src/selection-chemistry.cpp:4093
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr ""
-"Jelölje ki azon <b>objektumo(ka)t</b>, amely(ek)ről eltávolítandó a "
+"Jelölje ki azon <b>objektumokat</b>, amelyekről eltávolítandó a "
 "vágóútvonal illetve a maszk."
 
 #: ../src/selection-chemistry.cpp:4210
@@ -13977,7 +13977,7 @@ msgstr "Maszk eltávolítása"
 #: ../src/selection-chemistry.cpp:4228
 msgid "Select <b>object(s)</b> to fit canvas to."
 msgstr ""
-"Jelölje ki az <b>objektumo(ka)t</b>, amely(ek)hez a rajzvászon illesztendő."
+"Jelölje ki az <b>objektumokat</b>, amelyekhez a rajzvászon illesztendő."
 
 #. Fit Page
 #: ../src/selection-chemistry.cpp:4236 ../src/verbs.cpp:3225
@@ -14234,7 +14234,7 @@ msgstr ""
 #: ../src/splivarot.cpp:1683
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
 msgstr ""
-"Körvonal útvonallá való alakításához jelöljön ki <b>megrajzolt útvonala(ka)t</"
+"Körvonal útvonallá való alakításához jelöljön ki <b>megrajzolt útvonalakat</"
 "b>."
 
 #: ../src/splivarot.cpp:1699
@@ -14262,7 +14262,7 @@ msgstr "Dinamikus perem létrehozása"
 
 #: ../src/splivarot.cpp:1957
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr "Jelölje ki a zsugorítandó illetve nyújtandó <b>útvonala(ka)t</b>."
+msgstr "Jelölje ki a zsugorítandó illetve nyújtandó <b>útvonalakat</b>."
 
 #: ../src/splivarot.cpp:2142
 msgid "Outset path"
@@ -14296,7 +14296,7 @@ msgstr "<b>%d</b> útvonal egyszerűsítve."
 
 #: ../src/splivarot.cpp:2372
 msgid "Select <b>path(s)</b> to simplify."
-msgstr "Jelölje ki az egyszerűsítendő <b>útvonala(ka)t</b>."
+msgstr "Jelölje ki az egyszerűsítendő <b>útvonalakat</b>."
 
 #: ../src/splivarot.cpp:2388
 msgid "<b>No paths</b> to simplify in the selection."
@@ -14328,7 +14328,7 @@ msgstr ""
 #: ../src/text-chemistry.cpp:113
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
 msgstr ""
-"A tördelt szöveg(ek)nek <b>láthatónak</b> kell lenni ahhoz, hogy útvonalra "
+"A tördelt szövegeknek <b>láthatónak</b> kell lenni ahhoz, hogy útvonalra "
 "lehessen illeszteni az(oka)t."
 
 #: ../src/text-chemistry.cpp:183 ../src/verbs.cpp:2751
@@ -14380,12 +14380,12 @@ msgstr "Szöveg tördelésének megszüntetése"
 
 #: ../src/text-chemistry.cpp:475
 msgid "Select <b>flowed text(s)</b> to convert."
-msgstr "Jelölje ki az átalakítandó <b>tördelt szövege(ke)t</b>."
+msgstr "Jelölje ki az átalakítandó <b>tördelt szövegeket</b>."
 
 #: ../src/text-chemistry.cpp:493
 msgid "The flowed text(s) must be <b>visible</b> in order to be converted."
 msgstr ""
-"A tördelt szöveg(ek)nek <b>láthatónak</b> kell lenni ahhoz, hogy át lehessen "
+"A tördelt szövegeknek <b>láthatónak</b> kell lenni ahhoz, hogy át lehessen "
 "alakítani az(oka)t."
 
 #: ../src/text-chemistry.cpp:520
@@ -14462,7 +14462,7 @@ msgstr "A vágólap üres."
 
 #: ../src/ui/clipboard.cpp:450
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Jelöljön ki <b>objektumo(ka)t</b> a stílus beillesztéséhez."
+msgstr "Jelöljön ki <b>objektumokat</b> a stílus beillesztéséhez."
 
 #: ../src/ui/clipboard.cpp:461 ../src/ui/clipboard.cpp:478
 msgid "No style on the clipboard."
@@ -14470,7 +14470,7 @@ msgstr "Nincs stílus a vágólapon."
 
 #: ../src/ui/clipboard.cpp:504
 msgid "Select <b>object(s)</b> to paste size to."
-msgstr "Jelöljön ki <b>objektumo(ka)t</b> a méret beillesztéséhez."
+msgstr "Jelöljön ki <b>objektumokat</b> a méret beillesztéséhez."
 
 #: ../src/ui/clipboard.cpp:512
 msgid "No size on the clipboard."
@@ -14479,7 +14479,7 @@ msgstr "Nincs méret a vágólapon."
 #: ../src/ui/clipboard.cpp:569
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr ""
-"Jelöljön ki <b>objektumo(ka)t</b> az élő útvonaleffektus beillesztéséhez."
+"Jelöljön ki <b>objektumokat</b> az élő útvonaleffektus beillesztéséhez."
 
 #. no_effect:
 #: ../src/ui/clipboard.cpp:595
@@ -16970,7 +16970,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2767
 msgid "Value(s):"
-msgstr "Érték(ek):"
+msgstr "Értékek:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2771
 #: ../src/widgets/desktop-widget.cpp:668
@@ -17789,7 +17789,7 @@ msgstr ""
 
 #: ../src/ui/dialog/font-substitution.cpp:75
 msgid "Font substitution"
-msgstr "Betűkészlet-helyetesítés"
+msgstr "Betűkészlet-helyettesítés"
 
 #: ../src/ui/dialog/font-substitution.cpp:94
 msgid "Select all the affected items"
@@ -18069,7 +18069,7 @@ msgstr "Ékírás"
 
 #: ../src/ui/dialog/glyphs.cpp:117
 msgid "Phoenician"
-msgstr "Főníciai"
+msgstr "Föníciai"
 
 #: ../src/ui/dialog/glyphs.cpp:118 ../src/ui/dialog/glyphs.cpp:267
 msgid "Phags-pa"
@@ -18425,7 +18425,7 @@ msgstr "Elterjedt indikus számformák"
 
 #: ../src/ui/dialog/glyphs.cpp:269
 msgid "Devanagari Extended"
-msgstr "Devanagari (kiterjesztett)"
+msgstr "Dévanágari (kiterjesztett)"
 
 #: ../src/ui/dialog/glyphs.cpp:272
 msgid "Hangul Jamo Extended-A"
@@ -20529,7 +20529,7 @@ msgstr "(Megjegyzés: ebben a programváltozatban ki van kapcsolva a színkezel�
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1044
 msgid "Display adjustment"
-msgstr "Képernyőbeállítás"
+msgstr "Képernyő-beállítás"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1053
 #, c-format
@@ -20649,7 +20649,7 @@ msgid ""
 "Automatically save the current document(s) at a given interval, thus "
 "minimizing loss in case of a crash"
 msgstr ""
-"Az aktuális dokumentum(ok) automatikus mentése megadott időközönként, ezzel "
+"Az aktuális dokumentumok automatikus mentése megadott időközönként, ezzel "
 "minimalizálva egy esetleges leállás által okozott adatvesztést"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1179
@@ -21125,7 +21125,7 @@ msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance"
 msgstr ""
 "Egy nyílbillentyű lenyomása ekkora távolságra mozdítja el a kijelölt "
-"objektumo(ka)t illetve csomóponto(ka)t"
+"objektumokat illetve csomópontokat"
 
 #. defaultscale is limited to 1000 in select-context.cpp: use the same limit here
 #: ../src/ui/dialog/inkscape-preferences.cpp:1349
@@ -22629,7 +22629,7 @@ msgstr "Vágás beállítása"
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
 #: ../src/ui/dialog/objects.cpp:1919
 msgid "Unset Clip"
-msgstr "Vágás megszütetése"
+msgstr "Vágás megszüntetése"
 
 #: ../src/ui/dialog/objects.cpp:1924
 msgid "Unset Mask"
@@ -23723,7 +23723,7 @@ msgstr "_Foltok eltávolítása"
 
 #: ../src/ui/dialog/tracedialog.cpp:690
 msgid "Ignore small spots (speckles) in the bitmap"
-msgstr "A bitképen levő kisméretű foltok kihagyása"
+msgstr "A bitképen levő kis méretű foltok kihagyása"
 
 #: ../src/ui/dialog/tracedialog.cpp:698
 msgid "Speckles of up to this many pixels will be suppressed"
@@ -24239,7 +24239,7 @@ msgid ""
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"A körív illetve -cikk <b>kezdőpontjának</b> elhelyezése. </b>Végpontokkal</b> "
+"A körív illetve -cikk <b>kezdőpontjának</b> elhelyezése. <b>Végpontokkal</b> "
 "való mozgatás: <b>Shift</b>; Szöghöz való illesztés: <b>Ctrl</b>; ív: az "
 "ellipszisen <b>belül</b> való húzás; cikk: <b>kívül</b> való húzás."
 
@@ -26739,7 +26739,7 @@ msgstr "Oldalméretezés beállítása"
 
 #: ../src/ui/widget/page-sizer.cpp:903
 msgid "Set 'viewBox'"
-msgstr "„viewBox” beálítása"
+msgstr "„viewBox” beállítása"
 
 #: ../src/ui/widget/preferences-widget.cpp:713
 msgid "_Browse..."
@@ -27231,10 +27231,10 @@ msgid ""
 msgid_plural ""
 "shared by <b>%d</b> boxes; drag with <b>Shift</b> to separate selected box(es)"
 msgstr[0] ""
-"<b>%d</b> téglatesthez. A kijelölt téglatest(ek) különválasztása: <b>Shift</b>"
+"<b>%d</b> téglatesthez. A kijelölt téglatestek különválasztása: <b>Shift</b>"
 "+húzás."
 msgstr[1] ""
-"<b>%d</b> téglatesthez. A kijelölt téglatest(ek) különválasztása: <b>Shift</b>"
+"<b>%d</b> téglatesthez. A kijelölt téglatestek különválasztása: <b>Shift</b>"
 "+húzás."
 
 #: ../src/verbs.cpp:142
@@ -29113,11 +29113,11 @@ msgstr "Vászon függőleges tükrözése"
 
 #: ../src/verbs.cpp:3059
 msgid "Reset Flip"
-msgstr "Tükrözés visszállítása"
+msgstr "Tükrözés visszaállítása"
 
 #: ../src/verbs.cpp:3059
 msgid "Undo any flip"
-msgstr "Minden tükrözés visszállítása"
+msgstr "Minden tükrözés visszaállítása"
 
 #. WHY ARE THE FOLLOWING ZoomVerbs???
 #. View
@@ -29217,7 +29217,7 @@ msgstr "A dokumentumablak teljes képernyősre való méretezése"
 
 #: ../src/verbs.cpp:3079
 msgid "Fullscreen & Focus Mode"
-msgstr "Teljesképernyős és fókusz mód"
+msgstr "Teljes képernyős és fókusz mód"
 
 #: ../src/verbs.cpp:3081
 msgid "Toggle _Focus Mode"
@@ -29302,7 +29302,7 @@ msgstr "Színkezelési nézet"
 #: ../src/verbs.cpp:3106
 msgid "Toggle color-managed display for this document window"
 msgstr ""
-"Színkezelési képernyőbeállítás bekapcsolása/kikapcsolása ezen "
+"Színkezelési képernyő-beállítás bekapcsolása/kikapcsolása ezen "
 "dokumentumablakra"
 
 #: ../src/verbs.cpp:3108
@@ -30437,12 +30437,12 @@ msgstr "Összes segédvonal zárolása feloldva"
 #: ../src/widgets/desktop-widget.cpp:1037
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr ""
-"A színkezelési képernyőbeállítás <b>be van kapcsolva</b> ebben az ablakban"
+"A színkezelési képernyő-beállítás <b>be van kapcsolva</b> ebben az ablakban"
 
 #: ../src/widgets/desktop-widget.cpp:1039
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr ""
-"A színkezelési képernyőbeállítás <b>ki van kapcsolva</b> ebben az ablakban"
+"A színkezelési képernyő-beállítás <b>ki van kapcsolva</b> ebben az ablakban"
 
 #: ../src/widgets/desktop-widget.cpp:1094
 #, c-format
@@ -31402,7 +31402,7 @@ msgstr "Vágóútvonalak szerkesztése"
 #: ../src/widgets/node-toolbar.cpp:559
 msgid "Show clipping path(s) of selected object(s)"
 msgstr ""
-"A kijelölt objektum(ok) vágóútvonalának, illetve vágóútvonalainak "
+"A kijelölt objektumok vágóútvonalának, illetve vágóútvonalainak "
 "megjelenítése"
 
 #: ../src/widgets/node-toolbar.cpp:569
@@ -31411,7 +31411,7 @@ msgstr "Maszkok szerkesztése"
 
 #: ../src/widgets/node-toolbar.cpp:570
 msgid "Show mask(s) of selected object(s)"
-msgstr "A kijelölt objektum(ok) maszkjának, illetve maszkjainak megjelenítése"
+msgstr "A kijelölt objektumok maszkjának, illetve maszkjainak megjelenítése"
 
 #: ../src/widgets/node-toolbar.cpp:584
 msgid "X coordinate:"
@@ -31419,7 +31419,7 @@ msgstr "X koordináta:"
 
 #: ../src/widgets/node-toolbar.cpp:584
 msgid "X coordinate of selected node(s)"
-msgstr "A kijelölt csomópont(ok) X koordinátája"
+msgstr "A kijelölt csomópontok X koordinátája"
 
 #: ../src/widgets/node-toolbar.cpp:601
 msgid "Y coordinate:"
@@ -31427,7 +31427,7 @@ msgstr "Y koordináta:"
 
 #: ../src/widgets/node-toolbar.cpp:601
 msgid "Y coordinate of selected node(s)"
-msgstr "A kijelölt csomópont(ok) Y koordinátája"
+msgstr "A kijelölt csomópontok Y koordinátája"
 
 #: ../src/widgets/paint-selector.cpp:215
 msgid "No paint"
@@ -32946,7 +32946,7 @@ msgstr ""
 #. Name
 #: ../src/widgets/text-toolbar.cpp:2553
 msgid "Show outer style"
-msgstr "Külső stílus mejelenítése"
+msgstr "Külső stílus megjelenítése"
 
 #. Label
 #: ../src/widgets/text-toolbar.cpp:2554
@@ -33706,7 +33706,7 @@ msgstr "Hiba: csp_normalised_normal. Lásd a naplót."
 
 #: ../share/extensions/gcodetools.py:5808
 msgid "No need to engrave sharp angles."
-msgstr "Nincs szükség éles szögek gravirozására."
+msgstr "Nincs szükség éles szögek gravírozására."
 
 #: ../share/extensions/gcodetools.py:5852
 msgid ""
@@ -34033,7 +34033,7 @@ msgid ""
 "{0}Initial effect (order number {1}):"
 msgstr ""
 "\n"
-"{0}kedző effektus ({1} sorszám):"
+"{0}kezdő effektus ({1} sorszám):"
 
 #: ../share/extensions/jessyInk_summary.py:169
 msgid ""
@@ -34385,7 +34385,7 @@ msgid ""
 "name=Products&product=uniconvertor&op=download\n"
 "and install into your Inkscape's Python location\n"
 msgstr ""
-"Telepíteni kell az UniConvertor szpftvert.\n"
+"Telepíteni kell az UniConvertor szoftvert.\n"
 "GNU/Linux alatt: telepítse a python-uniconvertor csomagot.\n"
 "Windows alatt: töltse le a https://sk1project.net/modules.php?"
 "name=Products&product=uniconvertor&op=download címről\n"
@@ -35960,7 +35960,7 @@ msgstr "Útvonalról útvonalra"
 #: ../share/extensions/gcodetools_lathe.inx.h:22
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:9
 msgid "Pass by Pass"
-msgstr "Illesztésről illesztlésre"
+msgstr "Illesztésről illesztésre"
 
 #: ../share/extensions/gcodetools_area.inx.h:40
 #: ../share/extensions/gcodetools_lathe.inx.h:23
@@ -37135,7 +37135,7 @@ msgid ""
 msgstr ""
 "Ne feledje, hogy csak az Inkscape által létrehozott HPGL-fájl nyitható meg. "
 "Egyéb HPGL-fájlok megnyitásához előbb nevezze át a fájlt .plt állománnyá, "
-"majd meggyőzpdve arról, hogy az UniConverter telepítve van, nyissa meg újra a "
+"majd meggyőződve arról, hogy az UniConverter telepítve van, nyissa meg újra a "
 "fájlt."
 
 #: ../share/extensions/hpgl_input.inx.h:3
@@ -37428,7 +37428,7 @@ msgstr "Hatókör:"
 
 #: ../share/extensions/image_attributes.inx.h:20
 msgid "Change only selected image(s)"
-msgstr "Csak a kijelölt kép(ek) módosítása"
+msgstr "Csak a kijelölt képek módosítása"
 
 #: ../share/extensions/image_attributes.inx.h:21
 msgid "Change all images in selection"
@@ -37556,7 +37556,7 @@ msgstr "Z-sorrend alkalmazása"
 
 #: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:13
 msgid "Workaround for reversed selection order in Live Preview cycles"
-msgstr "Fordított kijelölési sorrend megkerülése az élő előnéze ciklusaiban"
+msgstr "Fordított kijelölési sorrend megkerülése az élő előnézet ciklusaiban"
 
 #: ../share/extensions/interp_att_g.inx.h:1
 msgid "Interpolate Attribute in a group"
@@ -37725,7 +37725,7 @@ msgstr "Áttűnés másodpercben:"
 
 #: ../share/extensions/jessyInk_effects.inx.h:6
 msgid "Build-in effect"
-msgstr "Továbblépő effetus"
+msgstr "Továbblépő effektus"
 
 #: ../share/extensions/jessyInk_effects.inx.h:7
 msgid "None (default)"
@@ -38091,7 +38091,7 @@ msgstr "Effektusok eltávolítása"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:5
 msgid "Remove master slide assignment"
-msgstr "Mesterdia-kijelölés eltávolílítása"
+msgstr "Mesterdia-kijelölés eltávolítása"
 
 #: ../share/extensions/jessyInk_uninstall.inx.h:6
 msgid "Remove transitions"
@@ -38509,7 +38509,7 @@ msgstr "Fix szöveg"
 
 #: ../share/extensions/measure.inx.h:11
 msgid "Angle (°):"
-msgstr "Stzög (°):"
+msgstr "Szög (°):"
 
 #: ../share/extensions/measure.inx.h:12
 msgid "Font size (px):"
@@ -38607,7 +38607,7 @@ msgstr ""
 "  * Átméretezett rajzokon a méretezési tényező használatával lehet méréseket "
 "végezni. Ha például a rajz 1 centimétere a valós világban 2,5 méternek felel "
 "meg, akkor méretezési tényezőnek 250 adandó meg.\n"
-"  * Területszámításnál az eredménynek pontosnak kell lennie  sökszögek és "
+"  * Területszámításnál az eredménynek pontosnak kell lennie sokszögek és "
 "Bézier-görbék esetén, de körök esetén az eredmény lehet hogy több lesz kb. "
 "0,03%-kal."
 
@@ -38845,7 +38845,7 @@ msgid ""
 "scales.\n"
 "First derivatives are always determined numerically."
 msgstr ""
-"A kiterjesztés használata előtt jelöljön ki egy téglalapot.cA téglalap fogja "
+"A kiterjesztés használata előtt jelöljön ki egy téglalapot. A téglalap fogja "
 "megadni az X és Y irányú méretezést.\n"
 "Az első deriváltak mindig numerikus módon vannak meghatározva."
 
