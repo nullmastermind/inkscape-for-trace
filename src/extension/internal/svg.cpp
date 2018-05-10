@@ -188,39 +188,39 @@ Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
 {
     auto file = Gio::File::create_for_uri(uri);
     const auto path = file->get_path();
-    bool link = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool link = prefs->getBool("/dialogs/import/link_svg", false);
+    bool ask = prefs->getBool("/dialogs/import/ask");
     bool is_import = false;
     if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
         is_import = true;
     }
-    if (INKSCAPE.use_gui() && is_import) {
-        Gtk::Dialog svg_open_dialog(_("Select how to import your SVG"));
+    if (INKSCAPE.use_gui() && is_import && ask) {
+        Gtk::Dialog svg_open_dialog(_("Import SVG image"));
         svg_open_dialog.set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
         svg_open_dialog.set_border_width(10);
         svg_open_dialog.set_resizable(false);
-        Gtk::Label explanation;
-        explanation.set_markup(Glib::ustring("How you want the SVG become imported?"));
-        explanation.set_line_wrap(true);
-        explanation.set_size_request(600,-1);
         Gtk::RadioButton::Group c1, c2;
         Gtk::Label choice1_label;
-        choice1_label.set_markup(
-                _("The SVG is incrusted inside document, you could edit it"));
+        choice1_label.set_markup(_("Include SVG image as editable object(s) in the current file"));
         Gtk::RadioButton choice1(c1);
         choice1.add(choice1_label);
-        Gtk::RadioButton choice2(c1, _("The SVG is linked from outside document as a image, you can edit only original file"));
+        Gtk::RadioButton choice2(c1, _("Only add a link to the SVG file (not editable in this document)"));
+        Gtk::CheckButton notask(_("Don't ask again"));
         Gtk::Box *content = svg_open_dialog.get_content_area();
-        content->pack_start(explanation, false, false, 5);
         content->pack_start(choice1, false, false, 5);
         content->pack_start(choice2, false, false, 5);
+        content->pack_start(notask, false, false, 5);
         Gtk::Button *ok_button = svg_open_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);
         svg_open_dialog.show_all_children();
         ok_button->grab_focus();
         int status = svg_open_dialog.run();
         if ( status == GTK_RESPONSE_ACCEPT ) {
             link = choice2.get_active();
+            prefs->setBool("/dialogs/import/ask", !notask.get_active());
+            
         }
+        prefs->setBool("/dialogs/import/link_svg", link );
     }
 
     

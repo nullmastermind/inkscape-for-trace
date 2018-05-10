@@ -891,6 +891,7 @@ void FileVerb::perform(SPAction *action, void *data)
         case SP_VERB_FILE_OPEN:
             prefs->setString("/options/openmethod/value", "open");
             sp_file_open_dialog(*parent, NULL, NULL);
+            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_REVERT:
             sp_file_revert_dialog();
@@ -913,6 +914,7 @@ void FileVerb::perform(SPAction *action, void *data)
         case SP_VERB_FILE_IMPORT:
             prefs->setString("/options/openmethod/value","import");
             sp_file_import(*parent);
+            prefs->setString("/options/openmethod/value", "done");
             break;
 //        case SP_VERB_FILE_EXPORT:
 //            sp_file_export_dialog(*parent);
@@ -920,6 +922,7 @@ void FileVerb::perform(SPAction *action, void *data)
         case SP_VERB_FILE_IMPORT_FROM_OCAL:
             prefs->setString("/options/openmethod/value", "ocal");
             sp_file_import_from_ocal(*parent);
+            prefs->setString("/options/openmethod/value", "done");
             break;
 //        case SP_VERB_FILE_EXPORT_TO_OCAL:
 //            sp_file_export_to_ocal(*parent);
