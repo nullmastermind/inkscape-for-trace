@@ -68,7 +68,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     coloropacity(_("Color and opacity"), _("Set color and opacity of the measurements"), "coloropacity", &wr, this, 0x000000ff),
     fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
-    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 0),
+    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° not fixed"), "fix_overlaps", &wr, this, 0),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
     helpline_distance(_("Helpline distance"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
@@ -77,12 +77,12 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
-    blacklist(_("Blacklist"), _("Optional segment index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
+    blacklist(_("Blacklist"), _("Optional segment index that exclude measurement, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
     whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
-    showindex(_("Show measure number"), _("Show measure number in text label for blacklisting"), "showindex", &wr, this, false),
+    showindex(_("Show measure number"), _("Show measurement number in text label for blacklisting"), "showindex", &wr, this, false),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
-    scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
+    scale_sensitive(_("Scale sensitive"), _("Constrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
     local_locale(_("Local Number Format"), _("Local number format"), "local_locale", &wr, this, true),
     rotate_anotation(_("Rotate Annotation"), _("Rotate Annotation"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
@@ -92,11 +92,11 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     distance_projection(_("Distance"), _("Distance away from nearest point"), "distance_projection", &wr, this, 20.0),
     angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
     active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
-    avoid_overlapping(_("Avoid overlap measures"), _("Turn doesn't fit measures"), "avoid_overlapping", &wr, this, true),
+    avoid_overlapping(_("Avoid overlap measurements"), _("Turn doesn't fit measurements"), "avoid_overlapping", &wr, this, true),
     onbbox(_("Measure bounding box"), _("Measure geometric bounding box"), "onbbox", &wr, this, false),
     bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
-    centers(_("Project center"), _("Use centers as measure"), "centers", &wr, this, false),
-    maxmin(_("Only max and min"), _("Compute only max min projection values"), "maxmin", &wr, this, false),
+    centers(_("Project center"), _("Use centers as measurement"), "centers", &wr, this, false),
+    maxmin(_("Only max and min"), _("Compute only max/min projection values"), "maxmin", &wr, this, false),
     general(_("General"), _("General"), "general", &wr, this, ""),
     projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
     options(_("Options"), _("Options"), "options", &wr, this, ""),
@@ -187,10 +187,10 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     pagenumber = 0;
     general.param_update_default(_("Base of the LPE, focus on measure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
-    " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
-    options.param_update_default(_("Here we show measure settings that usually don't change much"));
+    " to set the elements on clipboard, the element is converted to a line with measurements based on the selected items"));
+    options.param_update_default(_("Here we show measurement settings that usually don't change much"));
     tips.param_update_default(_("<b>Style Dialog</b> styling using XML editor to find appropriate classes or ID's\n"
-    "<b>Default Parameters</b> In all LPE, at the bottom, possible to change these for future uses\n"
+    "<b>Default Parameters</b> In all LPE, at the bottom, it's possible to change these for future uses\n"
     "<b>Blacklists...</b> This allow to hide some segments or projection steps to measure"));
 }
 
