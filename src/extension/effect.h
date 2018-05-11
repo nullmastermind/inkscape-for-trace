@@ -42,7 +42,7 @@ class Effect : public Extension {
     static Inkscape::XML::Node * _effects_list;
     static Inkscape::XML::Node * _filters_list;
     Inkscape::XML::Node *find_menu (Inkscape::XML::Node * menustruct, const gchar *name);
-    void merge_menu (Inkscape::XML::Node * base, Inkscape::XML::Node * start, Inkscape::XML::Node * patern, Inkscape::XML::Node * mergee);
+    void merge_menu (Inkscape::XML::Node * base, Inkscape::XML::Node * start, Inkscape::XML::Node * pattern, Inkscape::XML::Node * merge);
 
     /** \brief  This is the verb type that is used for all effect's verbs.
                 It provides convenience functions and maintains a pointer

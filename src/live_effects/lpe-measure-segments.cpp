@@ -79,7 +79,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
     blacklist(_("Blacklist"), _("Optional segment index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
     whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
-    showindex(_("Show meassure number"), _("Show meassure number in text label for blacklisting"), "showindex", &wr, this, false),
+    showindex(_("Show measure number"), _("Show measure number in text label for blacklisting"), "showindex", &wr, this, false),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
     scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
@@ -88,11 +88,11 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
     hide_arrows(_("Hide arrows"), _("Hide arrows"), "hide_arrows", &wr, this, false),
     smallx100(_("Multiply lower 1"), _("Multiply by 100 less than 1"), "smallx100", &wr, this, false),
-    linked_items(_("Linked items:"), _("Items that generate a measured projection with his nodes"), "linked_items", &wr, this),
-    distance_projection(_("Distance"), _("Distance away nearest point"), "distance_projection", &wr, this, 20.0),
+    linked_items(_("Linked items:"), _("Items that generate a measured projection with its nodes"), "linked_items", &wr, this),
+    distance_projection(_("Distance"), _("Distance away from nearest point"), "distance_projection", &wr, this, 20.0),
     angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
     active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
-    avoid_overlapping(_("Avoid overlap measures"), _("Turn not fit measures"), "avoid_overlapping", &wr, this, true),
+    avoid_overlapping(_("Avoid overlap measures"), _("Turn doesn't fit measures"), "avoid_overlapping", &wr, this, true),
     onbbox(_("Measure bounding box"), _("Measure geometric bounding box"), "onbbox", &wr, this, false),
     bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
     centers(_("Project center"), _("Use centers as measure"), "centers", &wr, this, false),
@@ -185,13 +185,13 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, NULL));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Base of the lpe, focus on measure display and positioning"));
+    general.param_update_default(_("Base of the LPE, focus on measure display and positioning"));
     projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
     " to set the elements on clipboard, the element is converted to a line with measures based on the selected items"));
-    options.param_update_default(_("Here we show measure settings that usualy dont change too much"));
-    tips.param_update_default(_("<b>Style Dialog</b> Use to more styling using XML editor to find apropiate classes"
-    " or ID's\n<b>Default Parameters</b> In all LPE, at the bottom, can change them for future uses\n"
-    "<b>Blacklists...</b> This allow hide some segments or projection steps to measure"));
+    options.param_update_default(_("Here we show measure settings that usually don't change much"));
+    tips.param_update_default(_("<b>Style Dialog</b> styling using XML editor to find appropriate classes or ID's\n"
+    "<b>Default Parameters</b> In all LPE, at the bottom, possible to change these for future uses\n"
+    "<b>Blacklists...</b> This allow to hide some segments or projection steps to measure"));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {

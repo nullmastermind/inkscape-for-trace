@@ -120,24 +120,24 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
 void
 Effect::merge_menu (Inkscape::XML::Node * base,
                     Inkscape::XML::Node * start,
-                    Inkscape::XML::Node * patern,
-                    Inkscape::XML::Node * mergee) {
+                    Inkscape::XML::Node * pattern,
+                    Inkscape::XML::Node * merge) {
     Glib::ustring mergename;
     Inkscape::XML::Node * tomerge = NULL;
     Inkscape::XML::Node * submenu = NULL;
 
     /* printf("Merge menu with '%s' '%s' '%s'\n",
             base != NULL ? base->name() : "NULL",
-            patern != NULL ? patern->name() : "NULL",
-            mergee != NULL ? mergee->name() : "NULL"); */
+            pattern != NULL ? pattern->name() : "NULL",
+            merge != NULL ? merge->name() : "NULL"); */
 
-    if (patern == NULL) {
+    if (pattern == NULL) {
         // Merge the verb name
-        tomerge = mergee;
+        tomerge = merge;
         mergename = _(this->get_name());
     } else {
-        gchar const * menuname = patern->attribute("name");
-        if (menuname == NULL) menuname = patern->attribute("_name");
+        gchar const * menuname = pattern->attribute("name");
+        if (menuname == NULL) menuname = pattern->attribute("_name");
         if (menuname == NULL) return;
         
         Inkscape::XML::Document *xml_doc;
@@ -198,10 +198,10 @@ Effect::merge_menu (Inkscape::XML::Node * base,
             tomerge->setPosition(position);
     }
 
-    if (patern != NULL) {
+    if (pattern != NULL) {
         if (submenu == NULL)
             submenu = tomerge;
-        merge_menu(submenu, submenu->firstChild(), patern->firstChild(), mergee);
+        merge_menu(submenu, submenu->firstChild(), pattern->firstChild(), merge);
     }
 
     return;

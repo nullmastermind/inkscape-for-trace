@@ -503,9 +503,9 @@ void SPOffset::set_shape() {
                     // raffiner si besoin
                     double  bL,bT,bR,bB;
                     parts[i]->PolylineBoundingBox(bL,bT,bR,bB);
-                    double  mesure=((bR-bL)+(bB-bT))*0.5;
-                    if ( mesure < 10.0 ) {
-                        parts[i]->Convert(0.02*mesure);
+                    double  measure=((bR-bL)+(bB-bT))*0.5;
+                    if ( measure < 10.0 ) {
+                        parts[i]->Convert(0.02*measure);
                     }
                 }
 

@@ -475,12 +475,12 @@ Gtk::Widget *Script::prefs_output(Inkscape::Extension::Output *module)
     \param   filename File to open.
 
     First things first, this function needs a temporary file name.  To
-    create on of those the function Glib::file_open_tmp is used with
+    create one of those the function Glib::file_open_tmp is used with
     the header of ink_ext_.
 
     The extension is then executed using the 'execute' function
-    with the filname coming in, and the temporary filename.  After
-    That executing, the SVG should be in the temporary file.
+    with the filename assigned and then the temporary filename.  
+    After execution the SVG should be in the temporary file.
 
     Finally, the temporary file is opened using the SVG input module and
     a document is returned.  That document has its filename set to
@@ -549,7 +549,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
     Well, at some point people need to save - it is really what makes
     the entire application useful.  And, it is possible that someone
     would want to use an extension for this, so we need a function to
-    do that eh?
+    do that, eh?
 
     First things first, the document is saved to a temporary file that
     is an SVG file.  To get the temporary filename Glib::file_open_tmp is used with
@@ -621,7 +621,7 @@ void Script::save(Inkscape::Extension::Output *module,
     \param     doc      Document to run through the effect.
 
     This function is a little bit trickier than the previous two.  It
-    needs two temporary files to get it's work done.  Both of these
+    needs two temporary files to get its work done.  Both of these
     files have random names created for them using the Glib::file_open_temp function
     with the ink_ext_ prefix in the temporary directory.  Like the other
     functions, the temporary files are deleted at the end.
@@ -786,9 +786,9 @@ void Script::effect(Inkscape::Extension::Effect *module,
     by copying all the root attributes from the new document to the old document.
 
     It then deletes all the elements in the old document by
-    making two pass, the first to create a list of the old elements and
+    making two passes, the first to create a list of the old elements and
     the second to actually delete them. This two pass approach removes issues
-    with the list being change while parsing through it... lots of nasty bugs.
+    with the list being changed while parsing through it... lots of nasty bugs.
 
     Then, it copies all the element in the new document into the old document.
 
@@ -921,16 +921,16 @@ bool Script::cancelProcessing (void) {
     the filename for input (filein).  This file is put on the command
     line.
 
-    The next thing is that this function does is open a pipe to the
+    The next thing that this function does is open a pipe to the
     command and get the file handle in the ppipe variable.  It then
     opens the output file with the output file handle.  Both of these
     operations are checked extensively for errors.
 
     After both are opened, then the data is copied from the output
-    of the pipe into the file out using fread and fwrite.  These two
-    functions are used because of their primitive nature they make
+    of the pipe into the file out using \a fread and \a fwrite.  These two
+    functions are used because of their primitive nature - they make
     no assumptions about the data.  A buffer is used in the transfer,
-    but the output of fread is stored so the exact number of bytes
+    but the output of \a fread is stored so the exact number of bytes
     is handled gracefully.
 
     At the very end (after the data has been copied) both of the files

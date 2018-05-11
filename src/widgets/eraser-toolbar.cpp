@@ -127,7 +127,7 @@ static void sp_erasertb_mode_changed( GObject *tbl, int mode )
     }
 }
 
-static void sp_toogle_break_apart( GtkToggleAction* act, gpointer data )
+static void sp_toggle_break_apart( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
@@ -301,7 +301,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/eraser/break_apart", false) );
         g_object_set_data( holder, "split", act );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toogle_break_apart), holder) ;
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_break_apart), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 
