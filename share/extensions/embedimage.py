@@ -100,6 +100,8 @@ class Embedder(inkex.Effect):
                 #ico files lack any magic... therefore we check the filename instead
                 elif(path.endswith('.ico')):
                     type='image/x-icon' #official IANA registered MIME is 'image/vnd.microsoft.icon' tho
+                elif(path.endswith('.svg')):
+                    type='image/svg+xml'
                 else:
                     embed=False
                 if (embed):
@@ -107,7 +109,7 @@ class Embedder(inkex.Effect):
                     if (absref != None):
                         del node.attrib[inkex.addNS('absref',u'sodipodi')]
                 else:
-                    inkex.errormsg(_("%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, or image/x-icon") % path)
+                    inkex.errormsg(_("%s is not of type image/svg, image/png, image/jpeg, image/bmp, image/gif, image/tiff, or image/x-icon") % path)
 
 if __name__ == '__main__':
     e = Embedder()

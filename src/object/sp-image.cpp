@@ -125,6 +125,7 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->color_profile = 0;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     this->pixbuf = 0;
+    this->on_construct = true;
 }
 
 SPImage::~SPImage() {
@@ -327,7 +328,8 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 
     SPItem::update(ctx, flags);
 
-    if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
+    if ((flags & SP_IMAGE_HREF_MODIFIED_FLAG) || this->on_construct) {
+        this->on_construct = false;
         delete this->pixbuf;
         this->pixbuf = NULL;
 
@@ -510,24 +512,24 @@ gchar* SPImage::description() const {
                                     this->pixbuf->height(),
                                     href_desc) );
                                     
-    if (this->pixbuf == NULL && 
-        this->document) 
-    {
-        Inkscape::Pixbuf * pb = NULL;
-        pb = sp_image_repr_read_image (
-                this->getRepr()->attribute("xlink:href"),
-                this->getRepr()->attribute("sodipodi:absref"),
-                this->document->getBase());
+//    if (this->pixbuf == NULL && 
+//        this->document) 
+//    {
+//        Inkscape::Pixbuf * pb = NULL;
+//        pb = sp_image_repr_read_image (
+//                this->getRepr()->attribute("xlink:href"),
+//                this->getRepr()->attribute("sodipodi:absref"),
+//                this->document->getBase());
 
-        if (pb) {
-            ret = ( pb == NULL ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
-                               : g_strdup_printf(_("%d &#215; %d: %s"),
-                                        pb->width(),
-                                        pb->height(),
-                                        href_desc));
-            delete pb;
-        }
-    }
+//        if (pb) {
+//            ret = ( pb == NULL ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
+//                               : g_strdup_printf(_("%d &#215; %d: %s"),
+//                                        pb->width(),
+//                                        pb->height(),
+//                                        href_desc));
+//            delete pb;
+//        }
+//    }
 
     g_free(href_desc);
     return ret;

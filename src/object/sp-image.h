@@ -63,6 +63,7 @@ public:
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     void apply_profile(Inkscape::Pixbuf *pixbuf);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    bool on_construct;
 };
 
 /* Return duplicate of curve or NULL */

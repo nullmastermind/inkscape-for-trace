@@ -28,16 +28,19 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "extension/output.h"
+#include "extension/input.h"
 #include "extension/system.h"
 #include "file.h"
 #include "svg.h"
 #include "file.h"
+#include "display/cairo-utils.h"
 #include "extension/system.h"
 #include "extension/output.h"
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
 
 #include "object/sp-namedview.h"
+#include "object/sp-image.h"
 #include "object/sp-root.h"
 #include "util/units.h"
 #include "selection-chemistry.h"
@@ -134,6 +137,19 @@ Svg::init(void)
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("SVG Input") "</name>\n"
             "<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
+            "<param name='method' type='optiongroup' appearance='full' _gui-text='" N_("Method to import SVG:") "' _gui-description='" N_("Select the way the SVG is imported.") "' >\n"
+                    "<_option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</_option>\n"
+                    "<_option value='link' >" N_("Link the SVG file in a image tag (not editable in this document") "</_option>\n"
+                    "<_option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document") "</_option>\n"
+                  "</param>\n"
+
+            "<param name='scale' appearance='minimal' type='optiongroup' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
+                    "<_option value='auto' >" N_("None (auto)") "</_option>\n"
+                    "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
+                    "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"
+                  "</param>\n"
+
+            "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
             "<input>\n"
                 "<extension>.svg</extension>\n"
                 "<mimetype>image/svg+xml</mimetype>\n"
@@ -184,48 +200,35 @@ Svg::init(void)
     This function is really simple, it just calls sp_document_new...
 */
 SPDocument *
-Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
+Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
     auto file = Gio::File::create_for_uri(uri);
     const auto path = file->get_path();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool link = prefs->getBool("/dialogs/import/link_svg", false);
     bool ask = prefs->getBool("/dialogs/import/ask");
+    Glib::ustring method  = prefs->getString("/dialogs/import/method");
+    Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
     if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
         is_import = true;
     }
-    if (INKSCAPE.use_gui() && is_import && ask) {
-        Gtk::Dialog svg_open_dialog(_("Import SVG image"));
-        svg_open_dialog.set_transient_for( *(INKSCAPE.active_desktop()->getToplevel()) );
-        svg_open_dialog.set_border_width(10);
-        svg_open_dialog.set_resizable(false);
-        Gtk::RadioButton::Group c1, c2;
-        Gtk::Label choice1_label;
-        choice1_label.set_markup(_("Include SVG image as editable object(s) in the current file"));
-        Gtk::RadioButton choice1(c1);
-        choice1.add(choice1_label);
-        Gtk::RadioButton choice2(c1, _("Only add a link to the SVG file (not editable in this document)"));
-        Gtk::CheckButton notask(_("Don't ask again"));
-        Gtk::Box *content = svg_open_dialog.get_content_area();
-        content->pack_start(choice1, false, false, 5);
-        content->pack_start(choice2, false, false, 5);
-        content->pack_start(notask, false, false, 5);
-        Gtk::Button *ok_button = svg_open_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);
-        svg_open_dialog.show_all_children();
-        ok_button->grab_focus();
-        int status = svg_open_dialog.run();
-        if ( status == GTK_RESPONSE_ACCEPT ) {
-            link = choice2.get_active();
-            prefs->setBool("/dialogs/import/ask", !notask.get_active());
-            
+    if(INKSCAPE.use_gui() && is_import && ask) {
+        Glib::ustring mod_method = mod->get_param_optiongroup("method");
+        Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
+        if( method.compare( mod_method) != 0 ) {
+            method = mod_method;
         }
-        prefs->setBool("/dialogs/import/link_svg", link );
+        prefs->setString("/dialogs/import/method", method );
+        if( scale.compare( mod_scale ) != 0 ) {
+            scale = mod_scale;
+        }
+        prefs->setString("/dialogs/import/scale", scale );
+        prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
     }
-
     
     SPDocument * doc = SPDocument::createNewDoc (NULL, TRUE, TRUE);
-    if (link && is_import) {
+    if (method.compare("include") != 0 && is_import) {
+        bool embed = ( method.compare( "embed" ) == 0 );
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
         SPNamedView *nv = sp_document_namedview(doc, NULL);
         Glib::ustring display_unit = nv->display_units->abbr;
@@ -251,12 +254,19 @@ Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
             sp_repr_css_attr_unref( css );
         }
         // convert filename to uri
-        gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
-        if(_uri) {
-            image_node->setAttribute("xlink:href", _uri);
-            g_free(_uri);
+        if (embed) {
+            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
+            if(pb) {
+                sp_embed_image(image_node, pb.get());
+            }
         } else {
-            image_node->setAttribute("xlink:href", uri);
+            gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
+            if(_uri) {
+                image_node->setAttribute("xlink:href", _uri);
+                g_free(_uri);
+            } else {
+                image_node->setAttribute("xlink:href", uri);
+            }
         }
         // Add it to the current layer
         Inkscape::XML::Node *layer_node = xml_doc->createElement("svg:g");
