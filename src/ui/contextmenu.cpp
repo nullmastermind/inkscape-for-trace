@@ -719,15 +719,25 @@ void ContextMenu::ImageProperties(void)
     _desktop->_dlg_mgr->showDialog("ObjectAttributes");
 }
 
-Glib::ustring ContextMenu::getImageEditorName() {
+Glib::ustring ContextMenu::getImageEditorName(bool is_svg) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring value;
-    Glib::ustring choices = prefs->getString("/options/bitmapeditor/value");
-    if (!choices.empty()) {
-        value = choices;
-    }
-    else {
-        value = "gimp";
+    if (!is_svg) {
+        Glib::ustring choices = prefs->getString("/options/bitmapeditor/value");
+        if (!choices.empty()) {
+            value = choices;
+        }
+        else {
+            value = "gimp";
+        }
+    } else {
+        Glib::ustring choices = prefs->getString("/options/svgeditor/value");
+        if (!choices.empty()) {
+            value = choices;
+        }
+        else {
+            value = "inkscape";
+        }
     }
     return value;
 }
@@ -739,7 +749,8 @@ void ContextMenu::ImageEdit(void)
     }
 
     GError* errThing = 0;
-    Glib::ustring cmdline = getImageEditorName();
+    Glib::ustring bmpeditor = getImageEditorName();
+    Glib::ustring cmdline = bmpeditor;
     Glib::ustring name;
     Glib::ustring fullname;
 
@@ -783,7 +794,13 @@ void ContextMenu::ImageEdit(void)
         } else {
             fullname = Glib::build_filename(Glib::get_current_dir(), name);
         }
-
+        if (name.substr(name.find_last_of(".") + 1) == "SVG" ||
+            name.substr(name.find_last_of(".") + 1) == "svg"   ) 
+        {
+            cmdline.erase(0, bmpeditor.length());
+            Glib::ustring svgeditor = getImageEditorName(true);
+            cmdline = svgeditor.append(cmdline);
+        }
         cmdline.append(" '");
         cmdline.append(fullname.c_str());
         cmdline.append("'");

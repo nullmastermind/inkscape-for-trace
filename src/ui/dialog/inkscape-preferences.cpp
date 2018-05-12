@@ -1533,16 +1533,18 @@ void InkscapePreferences::initPageBitmaps()
 {
     /* Note: /options/bitmapoversample removed with Cairo renderer */
     _page_bitmaps.add_group_header( _("Edit"));
-    _misc_bitmap_autoreload.init(_("Automatically reload bitmaps"), "/options/bitmapautoreload/value", true);
+    _misc_bitmap_autoreload.init(_("Automatically reload images"), "/options/bitmapautoreload/value", true);
     _page_bitmaps.add_line( false, "", _misc_bitmap_autoreload, "",
                            _("Automatically reload linked images when file is changed on disk"));
     _misc_bitmap_editor.init("/options/bitmapeditor/value", true);
     _page_bitmaps.add_line( false, _("_Bitmap editor:"), _misc_bitmap_editor, "", "", true);
+    _misc_svg_editor.init("/options/svgeditor/value", true);
+    _page_bitmaps.add_line( false, _("_SVG editor:"), _misc_svg_editor, "", "", true);
 
     _page_bitmaps.add_group_header( _("Export"));
     _importexport_export_res.init("/dialogs/export/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Default export _resolution:"), _importexport_export_res, _("dpi"),
-                            _("Default bitmap resolution (in dots per inch) in the Export dialog"), false);
+                            _("Default image resolution (in dots per inch) in the Export dialog"), false);
     _page_bitmaps.add_group_header( _("Create"));
     _bitmap_copy_res.init("/options/createbitmap/resolution", 1.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Resolution for Create Bitmap _Copy:"), _bitmap_copy_res, _("dpi"),
@@ -1564,13 +1566,13 @@ void InkscapePreferences::initPageBitmaps()
         Glib::ustring labels[] = {_("None (auto)"), _("Smooth (optimizeQuality)"), _("Blocky (optimizeSpeed)") };
         Glib::ustring values[] = {"auto", "optimizeQuality", "optimizeSpeed"};
         _bitmap_scale.init("/dialogs/import/scale", labels, values, G_N_ELEMENTS(values), "scale");
-        _page_bitmaps.add_line( false, _("Bitmap scale (image-rendering):"), _bitmap_scale, "", "", false);
+        _page_bitmaps.add_line( false, _("Image scale (image-rendering):"), _bitmap_scale, "", "", false);
     }
 
     /* Note: /dialogs/import/quality removed use of in r12542 */
     _importexport_import_res.init("/dialogs/import/defaultxdpi/value", 0.0, 6000.0, 1.0, 1.0, Inkscape::Util::Quantity::convert(1, "in", "px"), true, false);
     _page_bitmaps.add_line( false, _("Default _import resolution:"), _importexport_import_res, _("dpi"),
-                            _("Default bitmap resolution (in dots per inch) for bitmap and SVG import"), false);
+                            _("Default import resolution (in dots per inch) for bitmap and SVG import"), false);
     _importexport_import_res_override.init(_("Override file resolution"), "/dialogs/import/forcexdpi", false);
     _page_bitmaps.add_line( false, "", _importexport_import_res_override, "",
                             _("Use default bitmap resolution in favor of information from file"));
@@ -1580,7 +1582,7 @@ void InkscapePreferences::initPageBitmaps()
     _rendering_image_outline.init( _("Images in Outline Mode"), "/options/rendering/imageinoutlinemode", false);
     _page_bitmaps.add_line(false, "", _rendering_image_outline, "", _("When active will render images while in outline mode instead of a red box with an x. This is useful for manual tracing."));
 
-    this->AddPage(_page_bitmaps, _("Bitmaps"), PREFS_PAGE_BITMAPS);
+    this->AddPage(_page_bitmaps, _("Imported Images"), PREFS_PAGE_BITMAPS);
 }
 
 void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui)

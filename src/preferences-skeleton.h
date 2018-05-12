@@ -280,6 +280,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"autoscrolldistance\" value=\"-10\"/>\n"
 "    <group id=\"simplifythreshold\" value=\"0.002\"/>\n"
 "    <group id=\"bitmapeditor\" value=\"gimp\"/>\n"
+"    <group id=\"svgeditor\" value=\"inkscape\"/>\n"
 "    <group id=\"bitmapautoreload\" value=\"1\"/>\n"
 "    <group id=\"dialogtype\" value=\"1\"/>\n"
 #ifdef WIN32

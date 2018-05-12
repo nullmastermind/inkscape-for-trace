@@ -165,7 +165,7 @@ class ContextMenu : public Gtk::Menu
         /**
          * auxiliary function that loads the external image editor name from the settings.
          */
-        Glib::ustring getImageEditorName();
+        Glib::ustring getImageEditorName(bool is_svg = false);
         
         /**
          * callback, is executed on clicking the "Embed Image" menu entry

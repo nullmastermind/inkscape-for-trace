@@ -225,8 +225,7 @@ Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
 
     
     SPDocument * doc = SPDocument::createNewDoc (NULL, TRUE, TRUE);
-    if (link) {
-        
+    if (link && is_import) {
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
         SPNamedView *nv = sp_document_namedview(doc, NULL);
         Glib::ustring display_unit = nv->display_units->abbr;

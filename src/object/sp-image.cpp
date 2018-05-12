@@ -509,6 +509,26 @@ gchar* SPImage::description() const {
                                     this->pixbuf->width(),
                                     this->pixbuf->height(),
                                     href_desc) );
+                                    
+    if (this->pixbuf == NULL && 
+        this->document) 
+    {
+        Inkscape::Pixbuf * pb = NULL;
+        pb = sp_image_repr_read_image (
+                this->getRepr()->attribute("xlink:href"),
+                this->getRepr()->attribute("sodipodi:absref"),
+                this->document->getBase());
+
+        if (pb) {
+            ret = ( pb == NULL ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
+                               : g_strdup_printf(_("%d &#215; %d: %s"),
+                                        pb->width(),
+                                        pb->height(),
+                                        href_desc));
+            delete pb;
+        }
+    }
+
     g_free(href_desc);
     return ret;
 }

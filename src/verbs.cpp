@@ -894,7 +894,9 @@ void FileVerb::perform(SPAction *action, void *data)
             prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_REVERT:
+            prefs->setString("/options/openmethod/value", "revert");
             sp_file_revert_dialog();
+            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_SAVE:
             sp_file_save(*parent, NULL, NULL);
@@ -937,7 +939,9 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_ui_close_view(NULL);
             break;
         case SP_VERB_FILE_TEMPLATES:
+            prefs->setString("/options/openmethod/value", "template");
             Inkscape::UI::NewFromTemplate::load_new_from_template();
+            prefs->setString("/options/openmethod/value", "done");
             break;
         default:
             break;
