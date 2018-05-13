@@ -611,6 +611,10 @@ SPHatch::RenderInfo SPHatch::_calculateRenderInfo(View const &view) const
             tile_x *= view.bbox->width();
             tile_y *= view.bbox->height();
             tile_width *= view.bbox->width();
+        }
+
+        // Extent calculated using content units, need to correct.
+        if (view.bbox && (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX)) {
             tile_height *= view.bbox->height();
             tile_render_y *= view.bbox->height();
         }
@@ -634,6 +638,14 @@ SPHatch::RenderInfo SPHatch::_calculateRenderInfo(View const &view) const
         if (style->overflow.computed == SP_CSS_OVERFLOW_VISIBLE) {
             Geom::Interval bounds = this->bounds();
             gdouble pitch = this->pitch();
+            if (view.bbox) {
+                if (hatchUnits() == UNITS_OBJECTBOUNDINGBOX) {
+                    pitch *= view.bbox->width();
+                }
+                if (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX) {
+                    bounds *= view.bbox->width();
+                }
+            }
             gdouble overflow_right_strip = floor(bounds.max() / pitch) * pitch;
             info.overflow_steps = ceil((overflow_right_strip - bounds.min()) / pitch) + 1;
             info.overflow_step_transform = Geom::Translate(pitch, 0.0);
@@ -671,7 +683,7 @@ Geom::OptInterval SPHatch::_calculateStripExtents(Geom::OptRect const &bbox) con
             }
         }
 
-        if (hatchUnits() == UNITS_OBJECTBOUNDINGBOX) {
+        if (hatchContentUnits() == UNITS_OBJECTBOUNDINGBOX) {
             extents /= bbox->height();
         }
 
