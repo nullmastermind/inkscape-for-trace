@@ -45,6 +45,7 @@ public:
     // Map of substitutions indexed by table
     std::map<Glib::ustring, Glib::ustring> openTypeStylistic;
     std::map<Glib::ustring, Glib::ustring> openTypeLigatures;
+    std::map<Glib::ustring, Glib::ustring> openTypeNumeric;
 
     // Maps for font variations.
     std::map<Glib::ustring, OTVarAxis> openTypeVarAxes;      // Axes with ranges

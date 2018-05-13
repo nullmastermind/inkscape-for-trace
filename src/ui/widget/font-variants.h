@@ -39,7 +39,7 @@ public:
     FontVariants();
 
 protected:
-    // To start, use four check buttons.
+    // Ligatures: To start, use four check buttons.
     Gtk::Expander       _ligatures_frame;
     Gtk::Grid           _ligatures_grid;
     Gtk::CheckButton    _ligatures_common;
@@ -51,14 +51,14 @@ protected:
     Gtk::Label          _ligatures_label_historical;
     Gtk::Label          _ligatures_label_contextual;
 
-    // Exclusive options
+    // Position: Exclusive options
     Gtk::Expander       _position_frame;
     Gtk::VBox           _position_vbox;
     Gtk::RadioButton    _position_normal;
     Gtk::RadioButton    _position_sub;
     Gtk::RadioButton    _position_super;
     
-    // Exclusive options (maybe a dropdown menu to save space?)
+    // Caps: Exclusive options (maybe a dropdown menu to save space?)
     Gtk::Expander       _caps_frame;
     Gtk::VBox           _caps_vbox;
     Gtk::RadioButton    _caps_normal;
@@ -69,23 +69,34 @@ protected:
     Gtk::RadioButton    _caps_unicase;
     Gtk::RadioButton    _caps_titling;
 
-    // Complicated!
+    // Numeric: Complicated!
     Gtk::Expander       _numeric_frame;
-    Gtk::VBox           _numeric_vbox;
-    Gtk::HBox           _numeric_stylebox;
-    Gtk::RadioButton    _numeric_lining;
-    Gtk::RadioButton    _numeric_old_style;
+    Gtk::Grid           _numeric_grid;
+
     Gtk::RadioButton    _numeric_default_style;
-    Gtk::HBox           _numeric_widthbox;
-    Gtk::RadioButton    _numeric_proportional;
-    Gtk::RadioButton    _numeric_tabular;
+    Gtk::RadioButton    _numeric_lining;
+    Gtk::Label          _numeric_lining_label;
+    Gtk::RadioButton    _numeric_old_style;
+    Gtk::Label          _numeric_old_style_label;
+
     Gtk::RadioButton    _numeric_default_width;
-    Gtk::HBox           _numeric_fractionbox;
-    Gtk::RadioButton    _numeric_diagonal;
-    Gtk::RadioButton    _numeric_stacked;
+    Gtk::RadioButton    _numeric_proportional;
+    Gtk::Label          _numeric_proportional_label;
+    Gtk::RadioButton    _numeric_tabular;
+    Gtk::Label          _numeric_tabular_label;
+
     Gtk::RadioButton    _numeric_default_fractions;
+    Gtk::RadioButton    _numeric_diagonal;
+    Gtk::Label          _numeric_diagonal_label;
+    Gtk::RadioButton    _numeric_stacked;
+    Gtk::Label          _numeric_stacked_label;
+
     Gtk::CheckButton    _numeric_ordinal;
+    Gtk::Label          _numeric_ordinal_label;
+
     Gtk::CheckButton    _numeric_slashed_zero;
+    Gtk::Label          _numeric_slashed_zero_label;
+
 
     Gtk::Expander       _feature_frame;
     Gtk::VBox           _feature_vbox;

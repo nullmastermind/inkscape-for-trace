@@ -44,12 +44,14 @@ Glib::ustring extract_tag( guint32 *tag ) {
 void readOpenTypeGsubTable (const FT_Face ft_face,
                             std::map<Glib::ustring, int>& tables,
                             std::map<Glib::ustring, Glib::ustring>& stylistic,
-                            std::map<Glib::ustring, Glib::ustring>& ligatures
+                            std::map<Glib::ustring, Glib::ustring>& ligatures,
+                            std::map<Glib::ustring, Glib::ustring>& numerical
     ) {
 
     tables.clear();
     stylistic.clear();
     ligatures.clear();
+    numerical.clear();
 
     // Use Harfbuzz, Pango's equivalent calls are deprecated.
     auto const hb_face = hb_ft_face_create(ft_face, NULL);
@@ -121,7 +123,16 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                           table.first == "hlig" ||  // Historical ligatures
                           table.first == "calt" );  // Contextual alternatives
 
-        if (style || ligature ) {
+        bool numeric  = ( table.first == "lnum" ||  // Lining numerals
+                          table.first == "onum" ||  // Old style
+                          table.first == "pnum" ||  // Proportional
+                          table.first == "tnum" ||  // Tabular
+                          table.first == "frac" ||  // Diagonal fractions
+                          table.first == "afrc" ||  // Stacked fractions
+                          table.first == "ordn" ||  // Ordinal fractions
+                          table.first == "zero" );  // Slashed zero
+
+        if (style || ligature || numeric) {
 
             unsigned int feature_index;
             if (  hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB,
@@ -199,6 +210,23 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
                             }
                         }
                         ligatures[table.first] = unicode_characters;
+                    }
+
+                    if (numeric) {
+                        while (hb_set_next (glyphs_output, &codepoint)) {
+
+                            // There is a unicode to glyph mapping function but not the inverse!
+                            for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
+                                hb_codepoint_t glyph = 0;
+                                hb_font_get_nominal_glyph (hb_font, unicode_i, &glyph);
+                                if ( glyph == codepoint) {
+                                    unicode_characters += (gunichar)unicode_i;
+                                    unicode_characters += " "; // Add space
+                                    continue;
+                                }
+                            }
+                        }
+                        numerical[table.first] = unicode_characters;
                     }
 
                     hb_set_destroy (glyphs_input);

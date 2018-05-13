@@ -28,41 +28,41 @@ namespace Widget {
 
   FontVariants::FontVariants () :
     Gtk::VBox (),
-    _ligatures_frame          ( Glib::ustring(C_("Font variant", "Ligatures"    )) ),
-    _ligatures_common         ( Glib::ustring(C_("Font variant", "Common"       )) ),
-    _ligatures_discretionary  ( Glib::ustring(C_("Font variant", "Discretionary")) ),
-    _ligatures_historical     ( Glib::ustring(C_("Font variant", "Historical"   )) ),
-    _ligatures_contextual     ( Glib::ustring(C_("Font variant", "Contextual"   )) ),
+    _ligatures_frame          ( Glib::ustring(C_("Font feature", "Ligatures"    )) ),
+    _ligatures_common         ( Glib::ustring(C_("Font feature", "Common"       )) ),
+    _ligatures_discretionary  ( Glib::ustring(C_("Font feature", "Discretionary")) ),
+    _ligatures_historical     ( Glib::ustring(C_("Font feature", "Historical"   )) ),
+    _ligatures_contextual     ( Glib::ustring(C_("Font feature", "Contextual"   )) ),
 
-    _position_frame           ( Glib::ustring(C_("Font variant", "Position"     )) ),
-    _position_normal          ( Glib::ustring(C_("Font variant", "Normal"       )) ),
-    _position_sub             ( Glib::ustring(C_("Font variant", "Subscript"    )) ),
-    _position_super           ( Glib::ustring(C_("Font variant", "Superscript"  )) ),
+    _position_frame           ( Glib::ustring(C_("Font feature", "Position"     )) ),
+    _position_normal          ( Glib::ustring(C_("Font feature", "Normal"       )) ),
+    _position_sub             ( Glib::ustring(C_("Font feature", "Subscript"    )) ),
+    _position_super           ( Glib::ustring(C_("Font feature", "Superscript"  )) ),
 
-    _caps_frame               ( Glib::ustring(C_("Font variant", "Capitals"     )) ),
-    _caps_normal              ( Glib::ustring(C_("Font variant", "Normal"       )) ),
-    _caps_small               ( Glib::ustring(C_("Font variant", "Small"        )) ),
-    _caps_all_small           ( Glib::ustring(C_("Font variant", "All small"    )) ),
-    _caps_petite              ( Glib::ustring(C_("Font variant", "Petite"       )) ),
-    _caps_all_petite          ( Glib::ustring(C_("Font variant", "All petite"   )) ),
-    _caps_unicase             ( Glib::ustring(C_("Font variant", "Unicase"      )) ),
-    _caps_titling             ( Glib::ustring(C_("Font variant", "Titling"      )) ),
+    _caps_frame               ( Glib::ustring(C_("Font feature", "Capitals"     )) ),
+    _caps_normal              ( Glib::ustring(C_("Font feature", "Normal"       )) ),
+    _caps_small               ( Glib::ustring(C_("Font feature", "Small"        )) ),
+    _caps_all_small           ( Glib::ustring(C_("Font feature", "All small"    )) ),
+    _caps_petite              ( Glib::ustring(C_("Font feature", "Petite"       )) ),
+    _caps_all_petite          ( Glib::ustring(C_("Font feature", "All petite"   )) ),
+    _caps_unicase             ( Glib::ustring(C_("Font feature", "Unicase"      )) ),
+    _caps_titling             ( Glib::ustring(C_("Font feature", "Titling"      )) ),
 
-    _numeric_frame            ( Glib::ustring(C_("Font variant", "Numeric"      )) ),
-    _numeric_lining           ( Glib::ustring(C_("Font variant", "Lining"       )) ),
-    _numeric_old_style        ( Glib::ustring(C_("Font variant", "Old Style"    )) ),
-    _numeric_default_style    ( Glib::ustring(C_("Font variant", "Default Style")) ),
-    _numeric_proportional     ( Glib::ustring(C_("Font variant", "Proportional" )) ),
-    _numeric_tabular          ( Glib::ustring(C_("Font variant", "Tabular"      )) ),
-    _numeric_default_width    ( Glib::ustring(C_("Font variant", "Default Width")) ),
-    _numeric_diagonal         ( Glib::ustring(C_("Font variant", "Diagonal"     )) ),
-    _numeric_stacked          ( Glib::ustring(C_("Font variant", "Stacked"      )) ),
-    _numeric_default_fractions( Glib::ustring(C_("Font variant", "Default Fractions")) ),
-    _numeric_ordinal          ( Glib::ustring(C_("Font variant", "Ordinal"      )) ),
-    _numeric_slashed_zero     ( Glib::ustring(C_("Font variant", "Slashed Zero" )) ),
+    _numeric_frame            ( Glib::ustring(C_("Font feature", "Numeric"      )) ),
+    _numeric_lining           ( Glib::ustring(C_("Font feature", "Lining"       )) ),
+    _numeric_old_style        ( Glib::ustring(C_("Font feature", "Old Style"    )) ),
+    _numeric_default_style    ( Glib::ustring(C_("Font feature", "Default Style")) ),
+    _numeric_proportional     ( Glib::ustring(C_("Font feature", "Proportional" )) ),
+    _numeric_tabular          ( Glib::ustring(C_("Font feature", "Tabular"      )) ),
+    _numeric_default_width    ( Glib::ustring(C_("Font feature", "Default Width")) ),
+    _numeric_diagonal         ( Glib::ustring(C_("Font feature", "Diagonal"     )) ),
+    _numeric_stacked          ( Glib::ustring(C_("Font feature", "Stacked"      )) ),
+    _numeric_default_fractions( Glib::ustring(C_("Font feature", "Default Fractions")) ),
+    _numeric_ordinal          ( Glib::ustring(C_("Font feature", "Ordinal"      )) ),
+    _numeric_slashed_zero     ( Glib::ustring(C_("Font feature", "Slashed Zero" )) ),
 
-    _feature_frame            ( Glib::ustring(C_("Font variant", "Feature Settings")) ),
-    _feature_label            ( Glib::ustring(C_("Font variant", "Selection has different Feature Settings!")) ),
+    _feature_frame            ( Glib::ustring(C_("Font feature", "Feature Settings")) ),
+    _feature_label            ( Glib::ustring(C_("Font feature", "Selection has different Feature Settings!")) ),
     
     _ligatures_changed( false ),
     _position_changed( false ),
@@ -213,21 +213,31 @@ namespace Widget {
     _numeric_slashed_zero.signal_clicked().connect (  sigc::mem_fun(*this, &FontVariants::numeric_callback) );
 
     // Add to frame
-    _numeric_stylebox.pack_start( _numeric_default_style );
-    _numeric_stylebox.pack_start( _numeric_lining );
-    _numeric_stylebox.pack_start( _numeric_old_style );
-    _numeric_vbox.pack_start( _numeric_stylebox );
-    _numeric_widthbox.pack_start( _numeric_default_width );
-    _numeric_widthbox.pack_start( _numeric_proportional );
-    _numeric_widthbox.pack_start( _numeric_tabular );
-    _numeric_vbox.pack_start( _numeric_widthbox );
-    _numeric_fractionbox.pack_start( _numeric_default_fractions );
-    _numeric_fractionbox.pack_start( _numeric_diagonal );
-    _numeric_fractionbox.pack_start( _numeric_stacked );
-    _numeric_vbox.pack_start( _numeric_fractionbox );
-    _numeric_vbox.pack_start( _numeric_ordinal );
-    _numeric_vbox.pack_start( _numeric_slashed_zero );
-    _numeric_frame.add( _numeric_vbox );
+    _numeric_grid.attach (_numeric_default_style,        0, 0, 1, 1);
+    _numeric_grid.attach (_numeric_lining,               1, 0, 1, 1);
+    _numeric_grid.attach (_numeric_lining_label,         2, 0, 1, 1);
+    _numeric_grid.attach (_numeric_old_style,            3, 0, 1, 1);
+    _numeric_grid.attach (_numeric_old_style_label,      4, 0, 1, 1);
+
+    _numeric_grid.attach (_numeric_default_width,        0, 1, 1, 1);
+    _numeric_grid.attach (_numeric_proportional,         1, 1, 1, 1);
+    _numeric_grid.attach (_numeric_proportional_label,   2, 1, 1, 1);
+    _numeric_grid.attach (_numeric_tabular,              3, 1, 1, 1);
+    _numeric_grid.attach (_numeric_tabular_label,        4, 1, 1, 1);
+
+    _numeric_grid.attach (_numeric_default_fractions,    0, 2, 1, 1);
+    _numeric_grid.attach (_numeric_diagonal,             1, 2, 1, 1);
+    _numeric_grid.attach (_numeric_diagonal_label,       2, 2, 1, 1);
+    _numeric_grid.attach (_numeric_stacked,              3, 2, 1, 1);
+    _numeric_grid.attach (_numeric_stacked_label,        4, 2, 1, 1);
+
+    _numeric_grid.attach (_numeric_ordinal,              0, 3, 1, 1);
+    _numeric_grid.attach (_numeric_ordinal_label,        1, 3, 1, 1);
+
+    _numeric_grid.attach (_numeric_slashed_zero,         0, 4, 1, 1);
+    _numeric_grid.attach (_numeric_slashed_zero_label,   1, 4, 1, 1);
+
+    _numeric_frame.add( _numeric_grid );
     pack_start( _numeric_frame, Gtk::PACK_SHRINK );
     
 
@@ -569,6 +579,52 @@ namespace Widget {
           _ligatures_label_discretionary.set_markup ( markup_dlig.c_str() );
           _ligatures_label_historical.set_markup    ( markup_hlig.c_str() );
           _ligatures_label_contextual.set_markup    ( markup_calt.c_str() );
+
+          // List available numeric variants
+          Glib::ustring markup_lnum;
+          Glib::ustring markup_onum;
+          Glib::ustring markup_pnum;
+          Glib::ustring markup_tnum;
+          Glib::ustring markup_frac;
+          Glib::ustring markup_afrc;
+          Glib::ustring markup_ordn;
+          Glib::ustring markup_zero;
+          for (auto table: res->openTypeNumeric) {
+
+              Glib::ustring markup;
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "' font_features='";
+              markup += table.first;
+              markup += "'>";
+              if (table.first == "lnum" ||
+                  table.first == "onum" ||
+                  table.first == "pnum" ||
+                  table.first == "tnum") markup += "0123456789";
+              if (table.first == "zero") markup += "0";
+              if (table.first == "ordn") markup += table.second;
+              if (table.first == "frac" ||
+                  table.first == "afrc" ) markup += "1/2 2/3 3/4 4/5 5/6"; // Can we do better?
+              markup += "</span>";
+
+              if (table.first == "lnum") markup_lnum += markup;
+              if (table.first == "onum") markup_onum += markup;
+              if (table.first == "pnum") markup_pnum += markup;
+              if (table.first == "tnum") markup_tnum += markup;
+              if (table.first == "frac") markup_frac += markup;
+              if (table.first == "afrc") markup_afrc += markup;
+              if (table.first == "ordn") markup_ordn += markup;
+              if (table.first == "zero") markup_zero += markup;
+          }
+
+          _numeric_lining_label.set_markup       ( markup_lnum.c_str() );
+          _numeric_old_style_label.set_markup    ( markup_onum.c_str() );
+          _numeric_proportional_label.set_markup ( markup_pnum.c_str() );
+          _numeric_tabular_label.set_markup      ( markup_tnum.c_str() );
+          _numeric_diagonal_label.set_markup     ( markup_frac.c_str() );
+          _numeric_stacked_label.set_markup      ( markup_afrc.c_str() );
+          _numeric_ordinal_label.set_markup      ( markup_ordn.c_str() );
+          _numeric_slashed_zero_label.set_markup ( markup_zero.c_str() );
 
           // Make list of tables not handled above... eventually add Gtk::Label with
           // this info.

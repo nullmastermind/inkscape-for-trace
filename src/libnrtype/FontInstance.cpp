@@ -211,7 +211,8 @@ void font_instance::InitTheFace()
 
 #ifndef USE_PANGO_WIN32
 
-        readOpenTypeGsubTable( theFace, openTypeTables, openTypeStylistic, openTypeLigatures );
+        readOpenTypeGsubTable( theFace, openTypeTables, openTypeStylistic,
+                               openTypeLigatures, openTypeNumeric );
         readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
 
 #if PANGO_VERSION_CHECK(1,41,1)
