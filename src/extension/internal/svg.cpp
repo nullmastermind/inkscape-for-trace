@@ -137,12 +137,11 @@ Svg::init(void)
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("SVG Input") "</name>\n"
             "<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
-            "<param name='method' type='optiongroup' appearance='full' _gui-text='" N_("Method to import SVG:") "' _gui-description='" N_("Select the way the SVG is imported.") "' >\n"
-                    "<_option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</_option>\n"
-                    "<_option value='link' >" N_("Link the SVG file in a image tag (not editable in this document") "</_option>\n"
-                    "<_option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document") "</_option>\n"
+            "<param name='link_svg' type='optiongroup' appearance='full' _gui-text='" N_("SVG Image Import Type:") "' _gui-description='" N_("Include SVG image as editable object(s) in the current file, Embed the SVG file in a image tag (not editable in this document) or Link the SVG file in a image tag (not editable in this document).") "' >\n"
+                    "<_option value='include' >" N_("Include") "</_option>\n"
+                    "<_option value='embed' >" N_("Embed") "</_option>\n"
+                    "<_option value='link' >" N_("Link") "</_option>\n"
                   "</param>\n"
-
             "<param name='scale' appearance='minimal' type='optiongroup' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
                     "<_option value='auto' >" N_("None (auto)") "</_option>\n"
                     "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
@@ -206,19 +205,19 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     const auto path = file->get_path();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool ask = prefs->getBool("/dialogs/import/ask");
-    Glib::ustring method  = prefs->getString("/dialogs/import/method");
+    Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
     if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
         is_import = true;
     }
     if(INKSCAPE.use_gui() && is_import && ask) {
-        Glib::ustring mod_method = mod->get_param_optiongroup("method");
+        Glib::ustring mod_link_svg = mod->get_param_optiongroup("link_svg");
         Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
-        if( method.compare( mod_method) != 0 ) {
-            method = mod_method;
+        if( link_svg.compare( mod_link_svg) != 0 ) {
+            link_svg = mod_link_svg;
         }
-        prefs->setString("/dialogs/import/method", method );
+        prefs->setString("/dialogs/import/link_svg", link_svg );
         if( scale.compare( mod_scale ) != 0 ) {
             scale = mod_scale;
         }
@@ -227,8 +226,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     }
     
     SPDocument * doc = SPDocument::createNewDoc (NULL, TRUE, TRUE);
-    if (method.compare("include") != 0 && is_import) {
-        bool embed = ( method.compare( "embed" ) == 0 );
+    if (link_svg.compare("include") != 0 && is_import) {
+        bool embed = ( link_svg.compare( "embed" ) == 0 );
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
         SPNamedView *nv = sp_document_namedview(doc, NULL);
         Glib::ustring display_unit = nv->display_units->abbr;
@@ -257,7 +256,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         if (embed) {
             std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
             if(pb) {
-                sp_embed_image(image_node, pb.get());
+                sp_embed_svg(image_node, uri);
             }
         } else {
             gchar* _uri = g_filename_to_uri(uri, NULL, NULL);

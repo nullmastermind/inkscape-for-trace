@@ -63,12 +63,12 @@ public:
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     void apply_profile(Inkscape::Pixbuf *pixbuf);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    bool on_construct;
 };
 
 /* Return duplicate of curve or NULL */
 SPCurve *sp_image_get_curve (SPImage *image);
 void sp_embed_image(Inkscape::XML::Node *imgnode, Inkscape::Pixbuf *pb);
+void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn);
 void sp_image_refresh_if_outdated( SPImage* image );
 
 #endif

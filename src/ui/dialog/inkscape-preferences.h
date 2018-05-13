@@ -380,6 +380,7 @@ protected:
     UI::Widget::PrefSpinButton  _bitmap_copy_res;
     UI::Widget::PrefCheckButton _bitmap_ask;
     UI::Widget::PrefCombo       _bitmap_link;
+    UI::Widget::PrefCombo       _svg_link;
     UI::Widget::PrefCombo       _bitmap_scale;
     UI::Widget::PrefSpinButton  _bitmap_import_quality;
 

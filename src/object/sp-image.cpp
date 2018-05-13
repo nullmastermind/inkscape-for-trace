@@ -125,7 +125,6 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->color_profile = 0;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     this->pixbuf = 0;
-    this->on_construct = true;
 }
 
 SPImage::~SPImage() {
@@ -327,12 +326,9 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     SPDocument *doc = this->document;
 
     SPItem::update(ctx, flags);
-
-    if ((flags & SP_IMAGE_HREF_MODIFIED_FLAG) || this->on_construct) {
-        this->on_construct = false;
+    if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
         delete this->pixbuf;
         this->pixbuf = NULL;
-
         if (this->href) {
             Inkscape::Pixbuf *pixbuf = NULL;
             pixbuf = sp_image_repr_read_image (
@@ -512,24 +508,23 @@ gchar* SPImage::description() const {
                                     this->pixbuf->height(),
                                     href_desc) );
                                     
-//    if (this->pixbuf == NULL && 
-//        this->document) 
-//    {
-//        Inkscape::Pixbuf * pb = NULL;
-//        pb = sp_image_repr_read_image (
-//                this->getRepr()->attribute("xlink:href"),
-//                this->getRepr()->attribute("sodipodi:absref"),
-//                this->document->getBase());
+    if (this->pixbuf == NULL && 
+        this->document) 
+    {
+        Inkscape::Pixbuf * pb = NULL;
+        pb = sp_image_repr_read_image (
+                this->getRepr()->attribute("xlink:href"),
+                this->getRepr()->attribute("sodipodi:absref"),
+                this->document->getBase());
 
-//        if (pb) {
-//            ret = ( pb == NULL ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
-//                               : g_strdup_printf(_("%d &#215; %d: %s"),
-//                                        pb->width(),
-//                                        pb->height(),
-//                                        href_desc));
-//            delete pb;
-//        }
-//    }
+        if (pb) {
+            ret = g_strdup_printf(_("%d &#215; %d: %s"),
+                                        pb->width(),
+                                        pb->height(),
+                                        href_desc);
+            delete pb;
+        }
+    }
 
     g_free(href_desc);
     return ret;
@@ -791,6 +786,60 @@ void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
 
     g_free(buffer);
     if (free_data) g_free(data);
+}
+
+void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
+{
+    if (!g_file_test(fn.c_str(), G_FILE_TEST_EXISTS)) { 
+        return;
+    }
+    GStatBuf stdir;
+    int val = g_stat(fn.c_str(), &stdir);
+    if (val == 0 && stdir.st_mode & S_IFDIR){
+        return;
+    }
+
+    // we need to load the entire file into memory,
+    // since we'll store it as MIME data
+    gchar *data = NULL;
+    gsize len = 0;
+    GError *error = NULL;
+
+    if (g_file_get_contents(fn.c_str(), &data, &len, &error)) {
+
+        if (error != NULL) {
+            std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
+            std::cerr << "   (" << fn << ")" << std::endl;
+            return;
+        }
+
+        std::string data_mimetype = "image/svg+xml";
+
+
+        // Save base64 encoded data in image node
+        // this formula taken from Glib docs
+        gsize needed_size = len * 4 / 3 + len * 4 / (3 * 72) + 7;
+        needed_size += 5 + 8 + data_mimetype.size(); // 5 bytes for data: + 8 for ;base64,
+
+        gchar *buffer = (gchar *) g_malloc(needed_size);
+        gchar *buf_work = buffer;
+        buf_work += g_sprintf(buffer, "data:%s;base64,", data_mimetype.c_str());
+
+        gint state = 0;
+        gint save = 0;
+        gsize written = 0;
+        written += g_base64_encode_step(reinterpret_cast<guchar *>(data), len, TRUE, buf_work, &state, &save);
+        written += g_base64_encode_close(TRUE, buf_work + written, &state, &save);
+        buf_work[written] = 0; // null terminate
+
+        // TODO: this is very wasteful memory-wise.
+        // It would be better to only keep the binary data around,
+        // and base64 encode on the fly when saving the XML.
+        image_node->setAttribute("xlink:href", buffer);
+
+        g_free(buffer);
+        g_free(data);
+    }
 }
 
 void sp_image_refresh_if_outdated( SPImage* image )

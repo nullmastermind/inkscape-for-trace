@@ -1563,6 +1563,13 @@ void InkscapePreferences::initPageBitmaps()
     }
 
     {
+        Glib::ustring labels[] = {_("Include"), _("Embed"), _("Link")};
+        Glib::ustring values[] = {"include", "embed", "link"};
+        _svg_link.init("/dialogs/import/link_svg", labels, values, G_N_ELEMENTS(values), "include");
+        _page_bitmaps.add_line( false, _("SVG link:"), _svg_link, "", "", false);
+    }
+
+    {
         Glib::ustring labels[] = {_("None (auto)"), _("Smooth (optimizeQuality)"), _("Blocky (optimizeSpeed)") };
         Glib::ustring values[] = {"auto", "optimizeQuality", "optimizeSpeed"};
         _bitmap_scale.init("/dialogs/import/scale", labels, values, G_N_ELEMENTS(values), "scale");

@@ -21,6 +21,7 @@ import base64
 import os
 # local library
 import inkex
+import imghdr
 
 class MyEffect(inkex.Effect):
     def __init__(self):
@@ -32,12 +33,13 @@ class MyEffect(inkex.Effect):
                         help="")
     def effect(self):
         mimesubext={
-            'png' :'.png',
-            'bmp' :'.bmp',
-            'jpeg':'.jpg',
-            'jpg' :'.jpg', #bogus mime
-            'icon':'.ico',
-            'gif' :'.gif'
+            'png'     : '.png',
+            'svg+xml' : '.svg',
+            'bmp'     : '.bmp',
+            'jpeg'    : '.jpg',
+            'jpg'     : '.jpg', #bogus mime
+            'icon'    : '.ico',
+            'gif'     : '.gif'
         }
         
         # exbed the first embedded image
@@ -63,11 +65,14 @@ class MyEffect(inkex.Effect):
                                                     path = os.path.join(os.environ['USERPROFILE'],path)
                                                 else:
                                                     path = os.path.join(os.path.expanduser("~"),path)
-                                            inkex.errormsg(_('Image extracted to: %s') % path)
                                             break 
                                 #save
                                 data = base64.decodestring(xlink[comma:])
                                 open(path,'wb').write(data)
+                                if fileext == '.png' and imghdr.what(path) != 'png':
+                                    os.rename(path, path.replace(".png",".svg"))
+                                    path.replace(".png",".svg");
+                                inkex.errormsg(_('Image extracted to: %s') % path)
                                 node.set(inkex.addNS('href','xlink'),os.path.realpath(path)) #absolute for making in-mem cycles work
                             else:
                                 inkex.errormsg(_('Unable to find image data.'))

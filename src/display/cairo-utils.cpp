@@ -212,6 +212,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
     Pixbuf *pixbuf = NULL;
 
     bool data_is_image = false;
+    bool data_is_svg = false;
     bool data_is_base64 = false;
 
     gchar const *data = uri_data;
@@ -243,6 +244,12 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
             data_is_image = true;
             data += 9;
         }
+        else if (strncmp(data,"image/svg+xml",13) == 0) {
+            /* JPEG2000 image */
+            data_is_svg = true;
+            data_is_image = true;
+            data += 13;
+        }
         else { /* unrecognized option; skip it */
             while (*data) {
                 if (((*data) == ';') || ((*data) == ',')) {
@@ -261,7 +268,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
         }
     }
 
-    if ((*data) && data_is_image && data_is_base64) {
+    if ((*data) && data_is_image && !data_is_svg && data_is_base64) {
         GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
 
         if (!loader) return NULL;
@@ -287,6 +294,45 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
             g_free(decoded);
         }
         g_object_unref(loader);
+    }
+    
+    if ((*data) && data_is_image && data_is_svg && data_is_base64) {
+        gsize decoded_len = 0;
+        guchar *decoded = g_base64_decode(data, &decoded_len);
+        SPDocument *svgDoc = SPDocument::createNewDocFromMem (reinterpret_cast<gchar const *>(decoded), decoded_len, false);
+        // Check the document loaded properly
+        if (svgDoc == NULL) {
+            return NULL;
+        }
+        if (svgDoc->getRoot() == NULL)
+        {
+            svgDoc->doUnref();
+            return NULL;
+        }
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+        // Get the size of the document
+        Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
+        Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
+        const double svgWidth_px = svgWidth.value("px");
+        const double svgHeight_px = svgHeight.value("px");
+
+        // Now get the resized values
+        const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
+        const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
+
+        GdkPixbuf *buf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL)->getPixbufRaw();
+        // Tidy up
+        svgDoc->doUnref();
+        if (buf == NULL) {
+            std::cerr << "Pixbuf::create_from_data: failed to load contents: " << std::endl;
+            g_free(decoded);
+            return NULL;
+        } else {
+            g_object_ref(buf);
+            pixbuf = new Pixbuf(buf);
+            pixbuf->_setMimeData(decoded, decoded_len, "svg+xml");
+        }
     }
 
     return pixbuf;
