@@ -21,17 +21,43 @@ import base64
 import os
 # local library
 import inkex
-import imghdr
 
 class MyEffect(inkex.Effect):
     def __init__(self):
         inkex.Effect.__init__(self)
         self.OptionParser.add_option("--desc")
+        self.OptionParser.add_option("-s", "--selectedonly",
+            action="store", type="inkbool", 
+            dest="selectedonly", default=True,
+            help="extract only selected images")
         self.OptionParser.add_option("--filepath",
                         action="store", type="string", 
                         dest="filepath", default=None,
                         help="")
+
     def effect(self):
+        # if slectedonly is enabled and there is a selection only extractselected
+        # images. otherwise extract all images
+        if (self.options.selectedonly):
+            self.extractSelected(self.document, self.selected)
+        else:
+            self.extractAll(self.document)
+
+    def extractSelected(self, document, selected):
+        self.document=document
+        self.selected=selected
+        if (self.options.ids):
+            for id, node in selected.iteritems():
+                if node.tag == inkex.addNS('image','svg'):
+                    self.extractImage(node)
+
+    def extractAll(self, document):
+        self.document=document #not that nice... oh well
+        path = '//svg:image'
+        for node in self.document.getroot().xpath(path, namespaces=inkex.NSS):
+            self.extractImage(node)
+    
+    def extractImage(self, node):
         mimesubext={
             'png'     : '.png',
             'svg+xml' : '.svg',
@@ -45,38 +71,34 @@ class MyEffect(inkex.Effect):
         # exbed the first embedded image
         path = self.options.filepath
         if (path != ''):
-            if (self.options.ids):
-                for id, node in self.selected.iteritems():
-                    if node.tag == inkex.addNS('image','svg'):
-                        xlink = node.get(inkex.addNS('href','xlink'))
-                        if (xlink[:4]=='data'):
-                            comma = xlink.find(',')
-                            if comma>0:
-                                #get extension
-                                fileext=''
-                                semicolon = xlink.find(';')
-                                if semicolon>0:
-                                    for sub in mimesubext.keys():
-                                        if sub in xlink[5:semicolon].lower():
-                                            fileext=mimesubext[sub]
-                                            path=path+fileext;
-                                            if (not os.path.isabs(path)):
-                                                if os.name == 'nt':
-                                                    path = os.path.join(os.environ['USERPROFILE'],path)
-                                                else:
-                                                    path = os.path.join(os.path.expanduser("~"),path)
-                                            break 
-                                #save
-                                data = base64.decodestring(xlink[comma:])
-                                open(path,'wb').write(data)
-                                if fileext == '.png' and imghdr.what(path) != 'png':
-                                    os.rename(path, path.replace(".png",".svg"))
-                                    path.replace(".png",".svg");
-                                inkex.errormsg(_('Image extracted to: %s') % path)
-                                node.set(inkex.addNS('href','xlink'),os.path.realpath(path)) #absolute for making in-mem cycles work
-                            else:
-                                inkex.errormsg(_('Unable to find image data.'))
-                            break
+            if node.tag == inkex.addNS('image','svg'):
+                xlink = node.get(inkex.addNS('href','xlink'))
+                if (xlink[:4]=='data'):
+                    comma = xlink.find(',')
+                    if comma>0:
+                        #get extension
+                        fileext=''
+                        semicolon = xlink.find(';')
+                        if semicolon>0:
+                            for sub in mimesubext.keys():
+                                if sub in xlink[5:semicolon].lower():
+                                    fileext=mimesubext[sub]
+                                    pathwext=path+fileext
+                                    if os.path.isfile(pathwext):
+                                        pathwext=path + "_" + node.get("id") +fileext
+                                    if (not os.path.isabs(pathwext)):
+                                        if os.name == 'nt':
+                                            pathwext = os.path.join(os.environ['USERPROFILE'],pathwext)
+                                        else:
+                                            pathwext = os.path.join(os.path.expanduser("~"),pathwext)
+                                    inkex.errormsg(_('Image extracted to: %s') % pathwext)
+                                    break 
+                        #save
+                        data = base64.decodestring(xlink[comma:])
+                        open(pathwext,'wb').write(data)
+                        node.set(inkex.addNS('href','xlink'),os.path.realpath(pathwext)) #absolute for making in-mem cycles work
+                    else:
+                        inkex.errormsg(_('Unable to find image data.'))
 
 if __name__ == '__main__':
     e = MyEffect()
