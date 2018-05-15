@@ -32,6 +32,14 @@ inkscape:linux:
     paths:
       - build/
 
+inkscape:codequality:
+    stage: build
+    script:
+        - git fetch https://gitlab.com/inkscape/inkscape.git
+        - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
+        - if [[ -s clang_format_diff ]]; then false; fi
+    allow_failure: true
+
 inkscape:mac:
   stage: build
   tags:
