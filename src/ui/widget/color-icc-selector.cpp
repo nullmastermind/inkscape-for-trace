@@ -108,15 +108,6 @@ icSigCmyData
 #define SPACE_ID_CMYK 2
 
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-static cmsUInt16Number *getScratch()
-{
-    // bytes per pixel * input channels * width
-    static cmsUInt16Number *scritch = static_cast<cmsUInt16Number *>(g_new(cmsUInt16Number, 4 * 1024));
-
-    return scritch;
-}
-
 colorspace::Component::Component()
     : name()
     , tip()
@@ -129,6 +120,15 @@ colorspace::Component::Component(std::string const &name, std::string const &tip
     , tip(tip)
     , scale(scale)
 {
+}
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+static cmsUInt16Number *getScratch()
+{
+    // bytes per pixel * input channels * width
+    static cmsUInt16Number *scritch = static_cast<cmsUInt16Number *>(g_new(cmsUInt16Number, 4 * 1024));
+
+    return scritch;
 }
 
 std::vector<colorspace::Component> colorspace::getColorSpaceInfo(uint32_t space)
