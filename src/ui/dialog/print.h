@@ -45,12 +45,16 @@ public:
 protected:
 
 private:
-    GtkPrintOperation *_printop;
+    Glib::RefPtr<Gtk::PrintOperation> _printop;
     SPDocument *_doc;
     SPItem     *_base;
     Inkscape::UI::Widget::RenderingOptions _tab;
 
     struct workaround_gtkmm _workaround;
+
+    void draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page_nr*/);
+    Gtk::Widget *create_custom_widget();
+    void begin_print(const Glib::RefPtr<Gtk::PrintContext>&);
 };
 
 } // namespace Dialog
