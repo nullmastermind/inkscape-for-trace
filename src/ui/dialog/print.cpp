@@ -5,14 +5,18 @@
 /* Authors:
  *   Kees Cook <kees@outflux.net>
  *   Abhishek Sharma
+ *   Patrick McDermott
  *
  * Copyright (C) 2007 Kees Cook
+ * Copyright (C) 2017 Patrick McDermott
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <cmath>
 
 #include <gtkmm.h>
 
@@ -50,18 +54,38 @@ Print::Print(SPDocument *doc, SPItem *base) :
     title += jobname;
     _printop->set_job_name(title);
 
-    // set up paper size to match the document size
     _printop->set_unit(Gtk::UNIT_POINTS);
     Glib::RefPtr<Gtk::PageSetup> page_setup = Gtk::PageSetup::create();
-    gdouble doc_width = _doc->getWidth().value("pt");
-    gdouble doc_height = _doc->getHeight().value("pt");
-    Gtk::PaperSize paper_size;
-    if (doc_width > doc_height) {
-        page_setup->set_orientation(Gtk::PAGE_ORIENTATION_PORTRAIT);
-        paper_size = Gtk::PaperSize("custom", "custom", doc_height, doc_width, Gtk::UNIT_POINTS);
+
+    // get document width, height, and orientation
+    // height must be larger than width, as in GTK+'s known paper sizes
+    gdouble doc_width;
+    gdouble doc_height;
+    if (_doc->getWidth().value("pt") > _doc->getHeight().value("pt")) {
+        page_setup->set_orientation(Gtk::PAGE_ORIENTATION_LANDSCAPE);
+        doc_width = _doc->getHeight().value("pt");
+        doc_height = _doc->getWidth().value("pt");
     } else {
         page_setup->set_orientation(Gtk::PAGE_ORIENTATION_PORTRAIT);
-        paper_size = Gtk::PaperSize("custom", "custom", doc_width, doc_height, Gtk::UNIT_POINTS);
+        doc_width = _doc->getWidth().value("pt");
+        doc_height = _doc->getHeight().value("pt");
+    }
+
+    // attempt to match document size against known paper sizes
+    Gtk::PaperSize paper_size("custom", "custom", doc_width, doc_height, Gtk::UNIT_POINTS);
+    std::vector<Gtk::PaperSize> known_sizes = Gtk::PaperSize::get_paper_sizes(false);
+    for (auto& size : known_sizes) {
+        if (fabs(size.get_width(Gtk::UNIT_POINTS) - doc_width) >= 1.0) {
+            // width (short edge) doesn't match
+            continue;
+        }
+        if (fabs(size.get_height(Gtk::UNIT_POINTS) - doc_height) >= 1.0) {
+            // height (short edge) doesn't match
+            continue;
+        }
+        // size matches
+        paper_size = size;
+        break;
     }
 
     page_setup->set_paper_size(paper_size);
