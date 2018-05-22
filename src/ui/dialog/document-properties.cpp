@@ -410,6 +410,30 @@ void DocumentProperties::build_snap()
     attach_all(_page_snap->table(), array, G_N_ELEMENTS(array));
  }
 
+void DocumentProperties::create_guides_around_page()
+{
+    SPDesktop *dt = getDesktop();
+    Verb *verb = Verb::get( SP_VERB_EDIT_GUIDES_AROUND_PAGE );
+    if (verb) {
+        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
+        if (action) {
+            sp_action_perform(action, NULL);
+        }
+    }
+}
+
+void DocumentProperties::delete_all_guides()
+{
+    SPDesktop *dt = getDesktop();
+    Verb *verb = Verb::get( SP_VERB_EDIT_DELETE_ALL_GUIDES );
+    if (verb) {
+        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
+        if (action) {
+            sp_action_perform(action, NULL);
+        }
+    }
+}
+
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 /// Populates the available color profiles combo box
 void DocumentProperties::populate_available_profiles(){
@@ -468,30 +492,6 @@ static void sanitizeName( Glib::ustring& str )
                 && (val != '.')) {
                 str.replace(i, 1, "-");
             }
-        }
-    }
-}
-
-void DocumentProperties::create_guides_around_page()
-{
-    SPDesktop *dt = getDesktop();
-    Verb *verb = Verb::get( SP_VERB_EDIT_GUIDES_AROUND_PAGE );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
-        if (action) {
-            sp_action_perform(action, NULL);
-        }
-    }
-}
-
-void DocumentProperties::delete_all_guides()
-{
-    SPDesktop *dt = getDesktop();
-    Verb *verb = Verb::get( SP_VERB_EDIT_DELETE_ALL_GUIDES );
-    if (verb) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
-        if (action) {
-            sp_action_perform(action, NULL);
         }
     }
 }
