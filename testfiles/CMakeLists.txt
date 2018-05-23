@@ -3,9 +3,11 @@
 # -----------------------------------------------------------------------------
 if(NOT GTEST_FOUND) # not required for gtest 1.8.0 and later
     add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
+    set(GTEST_INCLUDE_DIR ${GMOCK_DIR}/../googletest/include)
 
     include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
                                ${GMOCK_DIR}/include
+			       ${GTEST_INCLUDE_DIR}
                                ${CMAKE_SOURCE_DIR}/gtest/gtest/include)
 endif()
 include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams")
