@@ -37,8 +37,7 @@ extern "C" {
 #include "util/units.h"
 
 #include "goo/gmem.h"
-#include "goo/GooTimer.h"
-#include "goo/GooHash.h"
+#include "goo/GooString.h"
 #include "GlobalParams.h"
 #include "CharTypes.h"
 #include "Object.h"
