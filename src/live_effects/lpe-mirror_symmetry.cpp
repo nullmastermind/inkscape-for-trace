@@ -79,6 +79,8 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     previous_center = Geom::Point(0,0);
     center_point.param_widget_is_visible(false);
     reset = false;
+    center_horiz = false;
+    center_vert = false;
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -142,15 +144,37 @@ LPEMirrorSymmetry::newWidget()
         ++it;
     }
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button * center_vert_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Vertical center"))));
+    center_vert_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEMirrorSymmetry::centerVert));
+    center_vert_button->set_size_request(110,20);
+    Gtk::Button * center_horiz_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Horizontal center"))));
+    center_horiz_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEMirrorSymmetry::centerHoriz));
+    center_horiz_button->set_size_request(110,20);
     Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
     reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEMirrorSymmetry::resetStyles));
     reset_button->set_size_request(110,20);
     vbox->pack_start(*hbox, true,true,2);
+    vbox->pack_start(*hbox2, true,true,2);
     hbox->pack_start(*reset_button, false, false,2);
+    hbox2->pack_start(*center_vert_button, false, false,2);
+    hbox2->pack_start(*center_horiz_button, false, false,2);
     if(Gtk::Widget* widg = defaultParamSet()) {
         vbox->pack_start(*widg, true, true, 2);
     }
     return dynamic_cast<Gtk::Widget *>(vbox);
+}
+
+void
+LPEMirrorSymmetry::centerVert(){
+    center_vert = true;
+    sp_lpe_item_update_patheffect(sp_lpe_item, true, false);
+}
+
+void
+LPEMirrorSymmetry::centerHoriz(){
+    center_horiz = true;
+    sp_lpe_item_update_patheffect(sp_lpe_item, true, false);
 }
 
 void
@@ -160,72 +184,88 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem, false, true);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
-    if (mode == MT_Y) {
-        point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
-        point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
-    }
-    if (mode == MT_X) {
-        point_a = Geom::Point(center_point[X],boundingbox_Y.min());
-        point_b = Geom::Point(center_point[X],boundingbox_Y.max());
-    }
-    if ((Geom::Point)start_point == (Geom::Point)end_point) {
-        start_point.param_setValue(point_a);
-        end_point.param_setValue(point_b);
-        previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-        center_point.param_setValue(previous_center);
-        return;
-    }
-    if ( mode == MT_X || mode == MT_Y ) {
-        if (!are_near(previous_center, (Geom::Point)center_point, 0.01)) {
-            center_point.param_setValue(Geom::middle_point(point_a, point_b));
-            end_point.param_setValue(point_b);
+    Point point_c(boundingbox_X.middle(), boundingbox_Y.middle());
+    if (center_vert) {
+        center_point.param_setValue(point_c);
+        end_point.param_setValue(Geom::Point(boundingbox_X.middle(), boundingbox_Y.min()));
+        //force update
+        start_point.param_setValue(Geom::Point(boundingbox_X.middle(), boundingbox_Y.max()),true);
+        center_vert = false;
+    } else if (center_horiz) {
+        center_point.param_setValue(point_c);
+        end_point.param_setValue(Geom::Point(boundingbox_X.max(), boundingbox_Y.middle()));
+        start_point.param_setValue(Geom::Point(boundingbox_X.min(), boundingbox_Y.middle()),true);
+        //force update
+        center_horiz = false;
+    } else {
+    
+        if (mode == MT_Y) {
+            point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
+            point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
+        }
+        if (mode == MT_X) {
+            point_a = Geom::Point(center_point[X],boundingbox_Y.min());
+            point_b = Geom::Point(center_point[X],boundingbox_Y.max());
+        }
+        if ((Geom::Point)start_point == (Geom::Point)end_point) {
             start_point.param_setValue(point_a);
-        } else {
-            if ( mode == MT_X ) {
-                if (!are_near(start_point[X], point_a[X], 0.01)) {
-                    start_point.param_setValue(point_a);
-                }
-                if (!are_near(end_point[X], point_b[X], 0.01)) {
-                    end_point.param_setValue(point_b);
-                }
-            } else {  //MT_Y
-                if (!are_near(start_point[Y], point_a[Y], 0.01)) {
-                    start_point.param_setValue(point_a);
-                }
-                if (!are_near(end_point[Y], point_b[Y], 0.01)) {
-                    end_point.param_setValue(point_b);
+            end_point.param_setValue(point_b);
+            previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
+            center_point.param_setValue(previous_center);
+            return;
+        }
+        if ( mode == MT_X || mode == MT_Y ) {
+            if (!are_near(previous_center, (Geom::Point)center_point, 0.01)) {
+                center_point.param_setValue(Geom::middle_point(point_a, point_b));
+                end_point.param_setValue(point_b);
+                start_point.param_setValue(point_a);
+            } else {
+                if ( mode == MT_X ) {
+                    if (!are_near(start_point[X], point_a[X], 0.01)) {
+                        start_point.param_setValue(point_a);
+                    }
+                    if (!are_near(end_point[X], point_b[X], 0.01)) {
+                        end_point.param_setValue(point_b);
+                    }
+                } else {  //MT_Y
+                    if (!are_near(start_point[Y], point_a[Y], 0.01)) {
+                        start_point.param_setValue(point_a);
+                    }
+                    if (!are_near(end_point[Y], point_b[Y], 0.01)) {
+                        end_point.param_setValue(point_b);
+                    }
                 }
             }
-        }
-    } else if ( mode == MT_FREE) {
-        if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
-            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+        } else if ( mode == MT_FREE) {
+            if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
+                center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
 
-        } else {
-            Geom::Point trans = center_point - Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-            start_point.param_setValue(start_point * trans);
-            end_point.param_setValue(end_point * trans);
-           
-        }
-    } else if ( mode == MT_V){
-        SPDocument * document = SP_ACTIVE_DOCUMENT;
-        if (document) {
-            Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
-            Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
-            start_point.param_setValue(sp);
-            Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
-            end_point.param_setValue(ep);
-            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
-        }
-    } else { //horizontal page
-        SPDocument * document = SP_ACTIVE_DOCUMENT;
-        if (document) {
-            Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
-            Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
-            start_point.param_setValue(sp);
-            Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
-            end_point.param_setValue(ep);
-            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+            } else {
+                Geom::Point trans = center_point - Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
+                start_point.param_setValue(start_point * trans);
+                end_point.param_setValue(end_point * trans);
+               
+            }
+        } else if ( mode == MT_V){
+            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            if (document) {
+                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+                Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
+                start_point.param_setValue(sp);
+                Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
+                end_point.param_setValue(ep);
+                center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+            }
+        } else { //horizontal page
+            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            if (document) {
+                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+                Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
+                start_point.param_setValue(sp);
+                Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
+                end_point.param_setValue(ep);
+                center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
+            }
         }
     }
     previous_center = center_point;
@@ -339,6 +379,7 @@ LPEMirrorSymmetry::resetStyles(){
     reset = true;
     doAfterEffect(sp_lpe_item);
 }
+
 
 //TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
@@ -510,7 +551,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             if (!oposite_fuse) {
                 position *= -1;
             }
-            if (cs.size()!=0 && position == 1) {
+            if (cs.size()!=0 && (position == 1)) {
                 if (time_start != original.size() && original.size() - time_start > Geom::EPSILON) {
                     Geom::Path portion = original.portion(time_start, original.size());
                     if (!portion.empty()) {

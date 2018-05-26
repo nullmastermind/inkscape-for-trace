@@ -53,6 +53,8 @@ public:
     void cloneD(SPObject *orig, SPObject *dest, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
+    void centerVert();
+    void centerHoriz();
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -70,6 +72,8 @@ private:
     Geom::Point previous_center;
     SPObject * container;
     bool reset;
+    bool center_vert;
+    bool center_horiz;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
 };

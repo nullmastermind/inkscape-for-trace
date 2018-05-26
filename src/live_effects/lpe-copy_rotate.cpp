@@ -489,118 +489,118 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
     path_on = tmp_path;
 }
 
-void
-LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double size_divider)
-{
-    split(path_on,divider);
-    Geom::PathVector tmp_path;
-    Geom::Affine pre = Geom::Translate(-origin);
-    for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
-        Geom::Path original = *path_it;
-        if (path_it->empty()) {
-            continue;
-        }
-        Geom::PathVector tmp_path_helper;
-        Geom::Path append_path = original;
-        Geom::Point previous = original.finalPoint();
-        for (int i = 0; i < num_copies; ++i) {
-            Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * (i)));
-            Geom::Affine m = pre * rot * Geom::Translate(origin);
-            if (i%2 != 0 && mirror_copies) {
-                Geom::Point point_a = (Geom::Point)origin;
-                Geom::Point point_b = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
-                Geom::Line ls(point_a, point_b);
-                m = Geom::reflection (ls.vector(), point_a);
-                append_path *= m;
-            } else {
-                append_path = original;
-                append_path *= m;
-            }
-            previous = append_path.finalPoint();
-            if (tmp_path_helper.size() > 0) {
-                if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.finalPoint())) {
-                    Geom::Path tmp_append = append_path.reversed();
-                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.initialPoint())) {
-                    Geom::Path tmp_append = append_path;
-                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
-                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.initialPoint())) {
-                    Geom::Path tmp_append = append_path;
-                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.finalPoint())) {
-                    Geom::Path tmp_append = append_path.reversed();
-                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
-                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                } else if (Geom::are_near(tmp_path_helper[0].finalPoint(), append_path.finalPoint())) {
-                    Geom::Path tmp_append = append_path.reversed();
-                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
-                    tmp_path_helper[0].append(tmp_append);
-                } else if (Geom::are_near(tmp_path_helper[0].initialPoint(), append_path.initialPoint())) {
-                    Geom::Path tmp_append = append_path;
-                    tmp_path_helper[0] = tmp_path_helper[0].reversed();
-                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
-                    tmp_path_helper[0].append(tmp_append);
-                } else {
-                    tmp_path_helper.push_back(append_path);
-                }
-                if ( Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
-                    tmp_path_helper[tmp_path_helper.size()-1].close();
-                }
-            } else {
-                tmp_path_helper.push_back(append_path);
-            }
-        }
-        if (tmp_path_helper.size() > 0) {
-            tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1];
-            tmp_path_helper[0] = tmp_path_helper[0];
-            if (rotation_angle * num_copies != 360) {
-                Geom::Ray base_a(divider.pointAt(1),divider.pointAt(0));
-                double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-                Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-                double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
-                Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle * num_copies) + starting_angle)) * size_divider;
-                Geom::Ray base_b(divider.pointAt(1), base_point);
-                if (Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
-                    Geom::are_near(tmp_path_helper[0].finalPoint(),base_a)) 
-                {
-                    tmp_path_helper[0].close();
-                    if (tmp_path_helper.size() > 1) {
-                        tmp_path_helper[tmp_path_helper.size()-1].close();
-                    }
-                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),base_b) && 
-                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) 
-                {
-                    tmp_path_helper[0].close();
-                    if (tmp_path_helper.size() > 1) {
-                        tmp_path_helper[tmp_path_helper.size()-1].close();
-                    }
-                } else if ((Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
-                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) ||
-                           (Geom::are_near(tmp_path_helper[0].initialPoint(),base_b) && 
-                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_a))) 
-                {
-                    Geom::Path close_path = Geom::Path(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
-                    close_path.appendNew<Geom::LineSegment>((Geom::Point)origin);
-                    close_path.appendNew<Geom::LineSegment>(tmp_path_helper[0].initialPoint());
-                    tmp_path_helper[0].append(close_path);
-                }
-            }
+//void
+//LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double size_divider)
+//{
+//    split(path_on,divider);
+//    Geom::PathVector tmp_path;
+//    Geom::Affine pre = Geom::Translate(-origin);
+//    for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
+//        Geom::Path original = *path_it;
+//        if (path_it->empty()) {
+//            continue;
+//        }
+//        Geom::PathVector tmp_path_helper;
+//        Geom::Path append_path = original;
+//        Geom::Point previous = original.finalPoint();
+//        for (int i = 0; i < num_copies; ++i) {
+//            Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * (i)));
+//            Geom::Affine m = pre * rot * Geom::Translate(origin);
+//            if (i%2 != 0 && mirror_copies) {
+//                Geom::Point point_a = (Geom::Point)origin;
+//                Geom::Point point_b = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
+//                Geom::Line ls(point_a, point_b);
+//                m = Geom::reflection (ls.vector(), point_a);
+//                append_path *= m;
+//            } else {
+//                append_path = original;
+//                append_path *= m;
+//            }
+//            previous = append_path.finalPoint();
+//            if (tmp_path_helper.size() > 0) {
+//                if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.finalPoint())) {
+//                    Geom::Path tmp_append = append_path.reversed();
+//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
+//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.initialPoint())) {
+//                    Geom::Path tmp_append = append_path;
+//                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
+//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
+//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.initialPoint())) {
+//                    Geom::Path tmp_append = append_path;
+//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
+//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(), append_path.finalPoint())) {
+//                    Geom::Path tmp_append = append_path.reversed();
+//                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
+//                    tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+//                    tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
+//                } else if (Geom::are_near(tmp_path_helper[0].finalPoint(), append_path.finalPoint())) {
+//                    Geom::Path tmp_append = append_path.reversed();
+//                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
+//                    tmp_path_helper[0].append(tmp_append);
+//                } else if (Geom::are_near(tmp_path_helper[0].initialPoint(), append_path.initialPoint())) {
+//                    Geom::Path tmp_append = append_path;
+//                    tmp_path_helper[0] = tmp_path_helper[0].reversed();
+//                    tmp_append.setInitial(tmp_path_helper[0].finalPoint());
+//                    tmp_path_helper[0].append(tmp_append);
+//                } else {
+//                    tmp_path_helper.push_back(append_path);
+//                }
+//                if ( Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
+//                    tmp_path_helper[tmp_path_helper.size()-1].close();
+//                }
+//            } else {
+//                tmp_path_helper.push_back(append_path);
+//            }
+//        }
+//        if (tmp_path_helper.size() > 0) {
+//            tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1];
+//            tmp_path_helper[0] = tmp_path_helper[0];
+//            if (rotation_angle * num_copies != 360) {
+//                Geom::Ray base_a(divider.pointAt(1),divider.pointAt(0));
+//                double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+//                Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+//                double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
+//                Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle * num_copies) + starting_angle)) * size_divider;
+//                Geom::Ray base_b(divider.pointAt(1), base_point);
+//                if (Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
+//                    Geom::are_near(tmp_path_helper[0].finalPoint(),base_a)) 
+//                {
+//                    tmp_path_helper[0].close();
+//                    if (tmp_path_helper.size() > 1) {
+//                        tmp_path_helper[tmp_path_helper.size()-1].close();
+//                    }
+//                } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),base_b) && 
+//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) 
+//                {
+//                    tmp_path_helper[0].close();
+//                    if (tmp_path_helper.size() > 1) {
+//                        tmp_path_helper[tmp_path_helper.size()-1].close();
+//                    }
+//                } else if ((Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && 
+//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) ||
+//                           (Geom::are_near(tmp_path_helper[0].initialPoint(),base_b) && 
+//                           Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_a))) 
+//                {
+//                    Geom::Path close_path = Geom::Path(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+//                    close_path.appendNew<Geom::LineSegment>((Geom::Point)origin);
+//                    close_path.appendNew<Geom::LineSegment>(tmp_path_helper[0].initialPoint());
+//                    tmp_path_helper[0].append(close_path);
+//                }
+//            }
 
-            if (Geom::are_near(tmp_path_helper[0].finalPoint(),tmp_path_helper[0].initialPoint())) {
-                tmp_path_helper[0].close();
-            }
-        }
-        tmp_path.insert(tmp_path.end(), tmp_path_helper.begin(), tmp_path_helper.end());
-        tmp_path_helper.clear();
-    }
-    path_on = tmp_path;
-    tmp_path.clear();
-}
+//            if (Geom::are_near(tmp_path_helper[0].finalPoint(),tmp_path_helper[0].initialPoint())) {
+//                tmp_path_helper[0].close();
+//            }
+//        }
+//        tmp_path.insert(tmp_path.end(), tmp_path_helper.begin(), tmp_path_helper.end());
+//        tmp_path_helper.clear();
+//    }
+//    path_on = tmp_path;
+//    tmp_path.clear();
+//}
 
 Geom::PathVector
 LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)

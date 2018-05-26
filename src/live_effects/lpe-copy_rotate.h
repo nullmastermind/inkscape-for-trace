@@ -37,20 +37,20 @@ public:
     virtual ~LPECopyRotate();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
-    virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
-    virtual void split(Geom::PathVector &path_in, Geom::Path const &divider);
+    void split(Geom::PathVector &path_in, Geom::Path const &divider);
     virtual void resetDefaults(SPItem const* item);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
+    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
     void resetStyles();
+    //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
