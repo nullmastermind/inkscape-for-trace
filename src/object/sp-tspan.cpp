@@ -283,6 +283,7 @@ void SPTextPath::release() {
 }
 
 void SPTextPath::set(unsigned int key, const gchar* value) {
+
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
@@ -291,6 +292,10 @@ void SPTextPath::set(unsigned int key, const gchar* value) {
                 this->sourcePath->link((char*)value);
                 break;
             case SP_ATTR_SIDE:
+                if (!value) {
+                    return;
+                }
+
                 if      (strncmp(value, "left",  4) == 0)
                     side = SP_TEXT_PATH_SIDE_LEFT;
                 else if (strncmp(value, "right", 5) == 0)
