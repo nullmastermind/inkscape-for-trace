@@ -11,24 +11,30 @@ class Path;
 #define SP_TEXTPATH(obj) (dynamic_cast<SPTextPath*>((SPObject*)obj))
 #define SP_IS_TEXTPATH(obj) (dynamic_cast<const SPTextPath*>((SPObject*)obj) != NULL)
 
+enum TextPathSide {
+    SP_TEXT_PATH_SIDE_LEFT,
+    SP_TEXT_PATH_SIDE_RIGHT
+};
+
 class SPTextPath : public SPItem {
 public:
-	SPTextPath();
-	virtual ~SPTextPath();
+    SPTextPath();
+    virtual ~SPTextPath();
 
     TextTagAttributes attributes;
     SVGLength startOffset;
+    TextPathSide side;
 
     Path *originalPath;
     bool isUpdating;
     SPUsePath *sourcePath;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void set(unsigned int key, const char* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+    virtual void release();
+    virtual void set(unsigned int key, const char* value);
+    virtual void update(SPCtx* ctx, unsigned int flags);
+    virtual void modified(unsigned int flags);
+    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
 };
 
 #define SP_IS_TEXT_TEXTPATH(obj) (SP_IS_TEXT(obj) && obj->firstChild() && SP_IS_TEXTPATH(obj->firstChild()))

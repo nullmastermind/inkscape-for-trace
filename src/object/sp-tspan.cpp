@@ -222,6 +222,7 @@ void   refresh_textpath_source(SPTextPath* offset);
 
 SPTextPath::SPTextPath() : SPItem() {
     this->startOffset._set = false;
+    this->side = SP_TEXT_PATH_SIDE_LEFT;
     this->originalPath = NULL;
     this->isUpdating=false;
 
@@ -241,6 +242,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "dy" );
     this->readAttr( "rotate" );
     this->readAttr( "startOffset" );
+    this->readAttr( "side" );
     this->readAttr( "xlink:href" );
 
     bool  no_content = true;
@@ -281,6 +283,16 @@ void SPTextPath::set(unsigned int key, const gchar* value) {
         switch (key) {
             case SP_ATTR_XLINK_HREF:
                 this->sourcePath->link((char*)value);
+                break;
+            case SP_ATTR_SIDE:
+                if      (strncmp(value, "left",  4) == 0)
+                    side = SP_TEXT_PATH_SIDE_LEFT;
+                else if (strncmp(value, "right", 5) == 0)
+                    side = SP_TEXT_PATH_SIDE_RIGHT;
+                else {
+                    std::cerr << "SPTextPath: Bad side value: " << (value?value:"null") << std::endl;
+                    side = SP_TEXT_PATH_SIDE_LEFT;
+                }
                 break;
             case SP_ATTR_STARTOFFSET:
                 this->startOffset.readOrUnset(value);
@@ -347,8 +359,6 @@ void refresh_textpath_source(SPTextPath* tp)
             delete tp->originalPath;
         }
 
-        tp->originalPath = NULL;
-
         tp->originalPath = new Path;
         tp->originalPath->Copy(tp->sourcePath->originalPath);
         tp->originalPath->ConvertWithBackData(0.01);
@@ -377,6 +387,11 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     this->attributes.writeTo(repr);
+
+    if (this->side == SP_TEXT_PATH_SIDE_RIGHT) {
+        this->getRepr()->setAttribute("side", "right");
+    }
+
     if (this->startOffset._set) {
         if (this->startOffset.unit == SVGLength::PERCENT) {
 	        Inkscape::SVGOStringStream os;
