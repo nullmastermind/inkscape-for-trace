@@ -74,12 +74,12 @@ TextEdit::TextEdit()
       selectChangedConn(),
       subselChangedConn(),
       selectModifiedConn(),
+      blocked(false),
       /*
            TRANSLATORS: Test string used in text and font dialog (when no
            * text has been entered) to get a preview of the font.  Choose
            * some representative characters that users of your locale will be
            * interested in.*/
-      blocked(false),
       samplephrase(_("AaBbCcIiPpQq12369$\342\202\254\302\242?.;/()"))
 {
 
@@ -441,6 +441,10 @@ void TextEdit::onApply()
     apply_button.set_sensitive ( false );
 
     sp_repr_css_attr_unref (css);
+
+    Inkscape::FontLister* font_lister = Inkscape::FontLister::get_instance();
+    font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
+
     blocked = false;
 }
 

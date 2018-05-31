@@ -918,6 +918,16 @@ Gtk::TreePath FontLister::get_path_for_font(Glib::ustring family)
     return font_list_store->get_path(get_row_for_font(family));
 }
 
+bool FontLister::is_path_for_font(Gtk::TreePath path, Glib::ustring family)
+{
+    Gtk::TreeModel::iterator iter = font_list_store->get_iter(path);
+    if (iter) {
+        return familyNamesAreEqual(family, (*iter)[FontList.family]);
+    }
+
+    return false;
+}
+
 Gtk::TreeModel::Row FontLister::get_row_for_style(Glib::ustring style)
 {
 
