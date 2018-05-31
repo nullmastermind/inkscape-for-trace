@@ -31,16 +31,22 @@
 #include <string>
 #include <glibmm/i18n.h>
 
-#include <livarot/Path.h>
-#include "svg/stringstream.h"
 #include "attributes.h"
-#include "sp-use-reference.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "sp-textpath.h"
-#include "text-editing.h"
-#include "style.h"
 #include "document.h"
+#include "text-editing.h"
+
+#include "sp-textpath.h"
+#include "sp-tref.h"
+#include "sp-tspan.h"
+#include "sp-use-reference.h"
+#include "style.h"
+
+#include "display/curve.h"
+
+#include "livarot/Path.h"
+
+#include "svg/stringstream.h"
+
 
 /*#####################################################
 #  SPTSPAN
@@ -353,15 +359,24 @@ void refresh_textpath_source(SPTextPath* tp)
     tp->sourcePath->refresh_source();
     tp->sourcePath->sourceDirty=false;
 
-    // finalisons
     if ( tp->sourcePath->originalPath ) {
         if (tp->originalPath) {
             delete tp->originalPath;
         }
 
+        SPCurve* curve_copy;
+        if (tp->side == SP_TEXT_PATH_SIDE_LEFT) {
+            curve_copy = tp->sourcePath->originalPath->copy();
+        } else {
+            curve_copy = tp->sourcePath->originalPath->create_reverse();
+        }
+
+        SPItem *item = SP_ITEM(tp->sourcePath->sourceObject);
         tp->originalPath = new Path;
-        tp->originalPath->Copy(tp->sourcePath->originalPath);
+        tp->originalPath->LoadPathVector(curve_copy->get_pathvector(), item->transform, true);
         tp->originalPath->ConvertWithBackData(0.01);
+
+        curve_copy->unref();
     }
 }
 

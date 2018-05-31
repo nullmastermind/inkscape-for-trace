@@ -36,7 +36,7 @@ static void sp_usepath_source_modified(SPObject *iSource, guint flags, SPUsePath
 SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
 {
     owner=i_owner;
-    originalPath = NULL;
+    originalPath = nullptr;
     sourceDirty=false;
     sourceHref = NULL;
     sourceRepr = NULL;
@@ -48,8 +48,9 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
 
 SPUsePath::~SPUsePath(void)
 {
-    delete originalPath;
-    originalPath = NULL;
+    if (originalPath != nullptr) {
+        originalPath->unref();
+    }
 
     _changed_connection.disconnect(); // to do before unlinking
 
@@ -196,36 +197,28 @@ sp_usepath_source_modified(SPObject */*iSource*/, guint /*flags*/, SPUsePath *of
 void SPUsePath::refresh_source()
 {
     sourceDirty = false;
-    delete originalPath;
-    originalPath = NULL;
 
-    // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
-    // [tr: The bad case: no d attribute.  Must check that it's a SPShape and then take the outline.]
+    if (originalPath != nullptr) {
+        originalPath->unref();
+    }
+
     SPObject *refobj = sourceObject;
     if ( refobj == NULL ) return;
     
     SPItem *item = SP_ITEM(refobj);
-    SPCurve *curve = NULL;
 
     if (SP_IS_SHAPE(item))
     {
-        curve = SP_SHAPE(item)->getCurve();
+        originalPath = SP_SHAPE(item)->getCurve()->copy();
     }
     else if (SP_IS_TEXT(item))
     {
-        curve = SP_TEXT(item)->getNormalizedBpath();
+        originalPath = SP_TEXT(item)->getNormalizedBpath()->copy();
     }
     else
     {
         return;
     }
-        
-    if (curve == NULL)
-        return;
-
-    originalPath = new Path;
-    originalPath->LoadPathVector(curve->get_pathvector(), item->transform, true);
-    curve->unref();
 }
 
 

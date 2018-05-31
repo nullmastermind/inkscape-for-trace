@@ -14,7 +14,7 @@
 #include "sp-item.h"
 #include "uri-references.h"
 
-class Path;
+class SPCurve;
 
 namespace Inkscape {
 namespace XML {
@@ -39,7 +39,7 @@ protected:
 
 class SPUsePath : public SPUseReference {
 public:
-    Path *originalPath;
+    SPCurve *originalPath;
     bool sourceDirty;
 
     SPObject            *owner;
