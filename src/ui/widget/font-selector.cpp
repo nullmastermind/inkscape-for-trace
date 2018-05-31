@@ -12,6 +12,7 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 
 #include "font-selector.h"
 
@@ -268,8 +269,8 @@ FontSelector::style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIter c
     Glib::ustring style = "Normal";
     (*iter).get_value(1, style);
 
-    Glib::ustring style_escaped  = Glib::strescape( style );
-    Glib::ustring font_desc = family + " " + style;
+    Glib::ustring style_escaped  = Glib::Markup::escape_text( style );
+    Glib::ustring font_desc = Glib::Markup::escape_text( family + " " + style );
     Glib::ustring markup;
 
     markup = "<span font='" + font_desc + "'>" + style_escaped + "</span>";
