@@ -84,6 +84,7 @@ push @{$attributes{ "style" }->{elements}}, "flowRoot","flowPara","flowSpan","fl
 push @{$attributes{ "xml:space" }->{elements}}, "flowRoot","flowPara","flowSpan";
 push @{$attributes{ "transform" }->{elements}}, "flowRoot","flowPara","flowSpan";
 push @{$attributes{ "fr" }->{elements}}, "radialGradient";
+push @{$attributes{ "side" }->{elements}}, "textPath";
 
 # Mesh gradients
 push @{$attributes{ "id"    }->{elements}}, "meshgradient","mesh","meshrow","meshpatch";

@@ -212,6 +212,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_SODIPODI_LINESPACING, "sodipodi:linespacing"},
     /* SPTextPath */
     {SP_ATTR_STARTOFFSET, "startOffset"},
+    {SP_ATTR_SIDE, "side"},
     /* SPStop */
     {SP_ATTR_OFFSET, "offset"},
     /* SPFilter */

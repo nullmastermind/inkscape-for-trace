@@ -278,6 +278,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("shape-subtract", true),
         AttributeInfo("shape-padding", true),
         AttributeInfo("shape-rendering", true),
+        AttributeInfo("side", true),
         AttributeInfo("slope", true),
         AttributeInfo("solid-color", true), // SVG 2.0
         AttributeInfo("solid-opacity", true), // SVG 2.0

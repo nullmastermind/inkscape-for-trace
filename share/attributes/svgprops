@@ -304,6 +304,8 @@
 
 "seed" - "feTurbulence"
 
+"side" - "textPath"
+
 "slope" - "font-face","feFuncA","feFuncB","feFuncG","feFuncR"
 
 "spacing" - "textPath"

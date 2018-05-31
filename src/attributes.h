@@ -220,6 +220,7 @@ enum SPAttributeEnum {
     SP_ATTR_SODIPODI_LINESPACING,
     /* SPTextPath */
     SP_ATTR_STARTOFFSET,
+    SP_ATTR_SIDE,
     /* SPStop */
     SP_ATTR_OFFSET,
     /* SPFilter */
