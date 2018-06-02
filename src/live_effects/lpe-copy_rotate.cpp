@@ -211,18 +211,21 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     }
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
-    if (shape && !path) {   
-        const char * id = dest->getId();
-        shape->removeAllPathEffects(true);
-        Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
-        dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
-        dest->getRepr()->setAttribute("d", id);
-        path =  SP_PATH(dest);
-    }
-    if (path && shape) {
+    if (shape) {
         SPCurve *c = shape->getCurve();
         if (c) {
             gchar *str = sp_svg_write_path(c->get_pathvector());
+            if (shape && !path) {   
+                const char * id = dest->getRepr()->attribute("id");
+                const char * style = dest->getRepr()->attribute("style");
+                Inkscape::XML::Document *xml_doc = dest->document->getReprDoc();
+                Inkscape::XML::Node *dest_node = xml_doc->createElement("svg:path");;
+                dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
+                dest_node->setAttribute("id", id);
+                dest_node->setAttribute("inkscape:connector-curvature", "0");
+                dest_node->setAttribute("style", style);
+                path =  SP_PATH(dest);
+            }
             path->getRepr()->setAttribute("d", str);
             g_free(str);
             c->unref();

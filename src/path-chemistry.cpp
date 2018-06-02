@@ -393,12 +393,22 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
 
             continue;
         }
-
+        // remember id
+        char const *id = item->getRepr()->attribute("id");
+        
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if (lpeitem) {
+            selected.erase(remove(selected.begin(), selected.end(), item), selected.end());
             lpeitem->removeAllPathEffects(true);
+            SPObject *elemref = NULL;
+            if (elemref = document->getObjectById(id)) {
+                //If the LPE item is a shape is converted to a path so we need to reupdate the item
+                
+                item = dynamic_cast<SPItem *>(elemref);
+                selected.push_back(item);
+            }
         }
-
+        
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (path) {
             // remove connector attributes
@@ -436,10 +446,8 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         gint pos = item->getRepr()->position();
         // remember parent
         Inkscape::XML::Node *parent = item->getRepr()->parent();
-        // remember id
-        char const *id = item->getRepr()->attribute("id");
         // remember class
-        char const *class_attr = item->getRepr()->attribute("class");        
+        char const *class_attr = item->getRepr()->attribute("class");
         // remember title
         gchar *title = item->title();
         // remember description

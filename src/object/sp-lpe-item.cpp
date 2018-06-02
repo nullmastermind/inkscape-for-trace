@@ -450,13 +450,54 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                         repr->setAttribute("d", NULL);
                         shape->setCurveBeforeLPE(NULL);
                     } else {
-                        repr->setAttribute("d", NULL);
-                        Inkscape::XML::Node *parent = repr->parent();
-                        Inkscape::XML::Node *spnew = sp_selected_item_to_curved_repr(lpeitem, 0);
-                        sp_repr_unparent(repr);
-                        parent->appendChild(spnew);
-                        Inkscape::GC::release(spnew);
-                        spnew->setAttribute("d", d_str);
+                        const char * id = repr->attribute("id");
+                        const char * style = repr->attribute("style");
+                        // remember the position of the item
+                        gint pos = shape->getRepr()->position();
+                        // remember parent
+                        Inkscape::XML::Node *parent = shape->getRepr()->parent();
+                        // remember class
+                        char const *class_attr = shape->getRepr()->attribute("class");        
+                        // remember title
+                        gchar *title = shape->title();
+                        // remember description
+                        gchar *desc = shape->desc();
+                        // remember highlight color
+                        guint32 highlight_color = 0;
+                        if (shape->isHighlightSet())
+                            highlight_color = shape->highlight_color();
+
+                        // It's going to resurrect, so we delete without notifying listeners.
+                        SPDocument * doc = shape->document;
+                        shape->deleteObject(false);
+                        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+                        Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+                        // restore id
+                        repr->setAttribute("id", id);
+                        // restore class
+                        repr->setAttribute("class", class_attr);
+                        //restore d
+                        repr->setAttribute("d", d_str);
+                        //restore style
+                        repr->setAttribute("style", style);
+                        // add the new repr to the parent
+                        parent->appendChild(repr);
+                        SPObject* newObj = doc->getObjectByRepr(repr);
+                        if (title && newObj) {
+                            newObj->setTitle(title);
+                            g_free(title);
+                        }
+                        if (desc && newObj) {
+                            newObj->setDesc(desc);
+                            g_free(desc);
+                        }
+                        if (highlight_color && newObj) {
+                            SP_ITEM(newObj)->setHighlightColor( highlight_color );
+                        }
+                        // move to the saved position
+                        repr->setPosition(pos > 0 ? pos : 0);
+                        Inkscape::GC::release(repr);
+                        lpeitem = dynamic_cast<SPLPEItem *>(newObj);
                     }
                 } else {
                     if (!keep_paths) {
@@ -597,6 +638,7 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
         }
     }
     sp_lpe_item_cleanup_original_path_recursive(this, keep_paths);
+
 }
 
 void SPLPEItem::downCurrentPathEffect()
