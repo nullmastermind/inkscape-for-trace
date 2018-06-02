@@ -65,7 +65,7 @@ TextEdit::TextEdit()
     : UI::Widget::Panel("/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
       text_label(_("_Text"), true),
-      vari_label(_("_Features"), true),
+      feat_label(_("_Features"), true),
       setasdefault_button(_("Set as _default")),
       close_button(_("_Close"), true),
       apply_button(_("_Apply"), true),
@@ -96,6 +96,15 @@ TextEdit::TextEdit()
     font_vbox.pack_start(font_selector, true, true);
     font_vbox.pack_start(preview_label, false, false, 5);
 
+    /* Features tab ---------------------------- */
+
+    /* Features preview */
+    preview_label2.set_ellipsize (Pango::ELLIPSIZE_END);
+    preview_label2.set_justify (Gtk::JUSTIFY_CENTER);
+    preview_label2.set_line_wrap (false);
+
+    feat_vbox.pack_start(font_features, true, true);
+    feat_vbox.pack_start(preview_label2, false, false, 5);
 
     /* Text tab -------------------------------- */
     scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
@@ -127,7 +136,7 @@ TextEdit::TextEdit()
     /* Notebook -----------------------------------*/
     notebook.set_name( "TextEdit Notebook" );
     notebook.append_page(font_vbox, font_label);
-    notebook.append_page(vari_vbox, vari_label);
+    notebook.append_page(feat_vbox, feat_label);
     notebook.append_page(text_vbox, text_label);
 
     /* Buttons (below notebook) ------------------ */
@@ -149,7 +158,7 @@ TextEdit::TextEdit()
     apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
-    fontVariantChangedConn = vari_vbox.connectChanged(sigc::bind(sigc::ptr_fun(&onFontVariantChange),  this));
+    fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -167,7 +176,7 @@ TextEdit::~TextEdit()
     desktopChangeConn.disconnect();
     deskTrack.disconnect();
     fontChangedConn.disconnect();
-    fontVariantChangedConn.disconnect();
+    fontFeaturesChangedConn.disconnect();
 }
 
 void TextEdit::onSelectionModified(guint flags )
@@ -260,25 +269,27 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
         font_selector.update_size (size);
 
-        // Update Preview
-        setPreviewText (fontspec, phrase);
-
-        // Update font variant widget
-        //int result_variants =
+        // Update font features (variant) widget
+        //int result_features =
         sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
         int result_features =
             sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS);
-        vari_vbox.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
+        font_features.update( &query, result_features == QUERY_STYLE_MULTIPLE_DIFFERENT, fontspec );
+        Glib::ustring features = font_features.get_markup();
+
+        // Update Preview
+        setPreviewText (fontspec, features, phrase);
     }
 
     blocked = false;
 }
 
 
-void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
+void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_features, Glib::ustring phrase)
 {
     if (font_spec.empty()) {
         preview_label.set_markup("");
+        preview_label2.set_markup("");
         return;
     }
 
@@ -295,8 +306,14 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     // Pango font size is in 1024ths of a point
     Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
     Glib::ustring markup = "<span font=\'" + font_spec_escaped +
-        "\' size=\'" + size + "\'>" + phrase + "</span>";
+        "\' size=\'" + size + "\'";
+    if (!font_features.empty()) {
+        markup += " font_features=\'" + font_features + "\'";
+    }
+    markup += ">" + phrase_escaped + "</span>";
+
     preview_label.set_markup (markup);
+    preview_label2.set_markup (markup);
 }
 
 
@@ -376,8 +393,8 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             sp_repr_css_set_property (css, "font-size", os.str().c_str());
         }
 
-        // Font variants (Font features)
-        vari_vbox.fill_css( css );
+        // Font features
+        font_features.fill_css( css );
 
         return css;
 }
@@ -450,21 +467,22 @@ void TextEdit::onChange()
         return;
     }
 
-    SPItem *text = getSelectedTextItem();
-
     GtkTextIter start;
     GtkTextIter end;
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     gchar *str = gtk_text_buffer_get_text(text_buffer, &start, &end, TRUE);
 
     Glib::ustring fontspec = font_selector.get_fontspec();
+    Glib::ustring features = font_features.get_markup();
     const gchar *phrase = str && *str ? str : samplephrase.c_str();
-    setPreviewText(fontspec, phrase);
+    setPreviewText(fontspec, features, phrase);
     g_free (str);
 
+    SPItem *text = getSelectedTextItem();
     if (text) {
         apply_button.set_sensitive ( true );
     }
+
     setasdefault_button.set_sensitive ( true);
 }
 
@@ -476,19 +494,6 @@ void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
 void TextEdit::onFontChange(Glib::ustring fontspec)
 {
     onChange();
-}
-
-void TextEdit::onFontVariantChange(TextEdit *self)
-{
-    if( self->blocked )
-        return;
-
-    SPItem *text = self->getSelectedTextItem ();
-
-    if (text) {
-        self->apply_button.set_sensitive ( true );
-    }
-    self->setasdefault_button.set_sensitive ( true );
 }
 
 void TextEdit::setDesktop(SPDesktop *desktop)

@@ -116,9 +116,9 @@ namespace Widget {
     _position_super.set_group(position_group);
 
     // Add signals
-    _position_normal.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
-    _position_sub.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
-    _position_super.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_normal.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_sub.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_super.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
 
     // Add to frame
     _position_vbox.pack_start( _position_normal);
@@ -285,12 +285,11 @@ namespace Widget {
       // std::cout << "FontVariants::position_init()" << std::endl;
   }
   
-  bool
-  FontVariants::position_callback(GdkEventButton * /*event*/) {
+  void
+  FontVariants::position_callback() {
       // std::cout << "FontVariants::position_callback()" << std::endl;
       _position_changed = true;
       _changed_signal.emit();
-      return true;
   }
 
   void
@@ -828,6 +827,69 @@ namespace Widget {
       }
   }
    
+  Glib::ustring
+  FontVariants::get_markup() {
+
+      Glib::ustring markup;
+
+      // Ligatures
+      bool common        = _ligatures_common.get_active();
+      bool discretionary = _ligatures_discretionary.get_active();
+      bool historical    = _ligatures_historical.get_active();
+      bool contextual    = _ligatures_contextual.get_active();
+
+      if (!common)         markup += "liga=0,clig=0,"; // On by default.
+      if (discretionary)   markup += "dlig=1,";
+      if (historical)      markup += "hlig=1,";
+      if (contextual)      markup += "calt=1,";
+
+      // Position
+      if (      _position_sub.get_active()    ) markup += "subs=1,";
+      else if ( _position_super.get_active()  ) markup += "sups=1,";
+
+      // Caps
+      if (      _caps_small.get_active()      ) markup += "smcp=1,";
+      else if ( _caps_all_small.get_active()  ) markup += "c2sc=1,smcp=1,";
+      else if ( _caps_petite.get_active()     ) markup += "pcap=1,";
+      else if ( _caps_all_petite.get_active() ) markup += "c2pc=1,pcap=1,";
+      else if ( _caps_unicase.get_active()    ) markup += "unic=1,";
+      else if ( _caps_titling.get_active()    ) markup += "titl=1,";
+
+      // Numeric
+      bool default_style = _numeric_default_style.get_active();
+      bool lining        = _numeric_lining.get_active();
+      bool old_style     = _numeric_old_style.get_active();
+
+      bool default_width = _numeric_default_width.get_active();
+      bool proportional  = _numeric_proportional.get_active();
+      bool tabular       = _numeric_tabular.get_active();
+
+      bool default_fractions = _numeric_default_fractions.get_active();
+      bool diagonal          = _numeric_diagonal.get_active();
+      bool stacked           = _numeric_stacked.get_active();
+
+      bool ordinal           = _numeric_ordinal.get_active();
+      bool slashed_zero      = _numeric_slashed_zero.get_active();
+
+      if (lining)          markup += "lnum=1,";
+      if (old_style)       markup += "onum=1,";
+      if (proportional)    markup += "pnum=1,";
+      if (tabular)         markup += "tnum=1,";
+      if (diagonal)        markup += "frac=1,";
+      if (stacked)         markup += "afrc=1,";
+      if (ordinal)         markup += "ordn=1,";
+      if (slashed_zero)    markup += "zero=1,";
+
+      // Feature settings
+      Glib::ustring feature_string = _feature_entry.get_text();
+      if( !feature_string.empty() && feature_string.compare( "normal" ) != 0 ) {
+          markup += feature_string;
+      }
+
+      // std::cout << "|" << markup << "|" << std::endl;
+      return markup;
+  }
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

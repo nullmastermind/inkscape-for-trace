@@ -110,7 +110,7 @@ private:
     void ligatures_callback();
 
     void position_init();
-    bool position_callback(GdkEventButton *event);
+    void position_callback();
 
     void caps_init();
     void caps_callback();
@@ -151,6 +151,11 @@ public:
      * Fill SPCSSAttr based on settings of buttons.
      */
     void fill_css( SPCSSAttr* css );
+
+    /**
+     * Get CSS string for markup.
+     */
+    Glib::ustring get_markup();
 
     /**
      * Let others know that user has changed GUI settings.

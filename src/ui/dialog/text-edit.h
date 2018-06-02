@@ -108,15 +108,6 @@ protected:
     void onFontChange (Glib::ustring fontspec);
 
     /**
-     * Callback invoked when the user modifies the font variant through the dialog.
-     *
-     * onFontChange updates the dialog UI. The subfunction setPreviewText updates the preview label.
-     *
-     * @param self pointer to the current instance of the dialog.
-     */
-    static void onFontVariantChange (TextEdit *self);
-
-    /**
      * Get the selected text off the main canvas.
      *
      * @return SPItem pointer to the selected text object
@@ -131,10 +122,11 @@ protected:
     /**
      * Helper function to create markup from a fontspec and display in the preview label.
      * 
-     * @param fontspec for the text to be previewed
-     * @param phrase text to be shown
+     * @param fontspec for the text to be previewed.
+     * @param font_features for text to be previewed (in CSS format).
+     * @param phrase text to be shown.
      */
-    void setPreviewText (Glib::ustring font_spec, Glib::ustring phrase);
+    void setPreviewText (Glib::ustring font_spec, Glib::ustring font_features, Glib::ustring phrase);
 
     void updateObjectText ( SPItem *text );
     SPCSSAttr *fillTextStyle ();
@@ -176,9 +168,11 @@ private:
     GtkWidget *text_view; // TODO - Convert this to a Gtk::TextView, but GtkSpell doesn't seem to work with it
     GtkTextBuffer *text_buffer;
 
-    // Tab 3: Variants ----------------- //
-    Inkscape::UI::Widget::FontVariants vari_vbox;
-    Gtk::Label vari_label;
+    // Tab 3: Features  ----------------- //
+    Gtk::VBox feat_vbox;
+    Inkscape::UI::Widget::FontVariants font_features;
+    Gtk::Label feat_label;
+    Gtk::Label preview_label2; // Could reparent preview_label but having a second label is probably easier.
 
     // Shared ------- ------------------ //
     Gtk::HBox button_row;
@@ -194,7 +188,7 @@ private:
     sigc::connection subselChangedConn;
     sigc::connection selectModifiedConn;
     sigc::connection fontChangedConn;
-    sigc::connection fontVariantChangedConn;
+    sigc::connection fontFeaturesChangedConn;
 
     // Other
     bool blocked;
