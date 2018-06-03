@@ -148,6 +148,11 @@ public:
     void update( SPStyle const *query, bool different_features, Glib::ustring& font_spec );
 
     /**
+     * Update GUI based on OpenType features of selected font.
+     */
+    void update_opentype( Glib::ustring& font_spec );
+
+    /**
      * Fill SPCSSAttr based on settings of buttons.
      */
     void fill_css( SPCSSAttr* css );

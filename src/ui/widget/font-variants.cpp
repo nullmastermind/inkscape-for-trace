@@ -423,6 +423,12 @@ namespace Widget {
           _feature_label.hide();
       }
 
+      update_opentype( font_spec );
+  }
+
+  // Update GUI based on OpenType tables of selected font (which may be changed in font selector tab).
+  void
+  FontVariants::update_opentype (Glib::ustring& font_spec) {
 
       // Disable/Enable based on available OpenType tables.
       font_instance* res = font_factory::Default()->FaceFromFontSpecification( font_spec.c_str() );

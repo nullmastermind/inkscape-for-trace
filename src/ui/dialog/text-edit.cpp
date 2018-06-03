@@ -493,6 +493,7 @@ void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
 
 void TextEdit::onFontChange(Glib::ustring fontspec)
 {
+    font_features.update_opentype ( fontspec );
     onChange();
 }
 
