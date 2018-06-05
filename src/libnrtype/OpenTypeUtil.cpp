@@ -114,8 +114,10 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     for (auto table: tables) {
 
         // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
+        // Also look at charcter substitution tables ('cv01', etc.).
         bool style    = table.first == "salt" ||
-            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't'));
+            (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't')) ||
+            (table.first[0] == 'c' && table.first[1] == 'v');
 
         bool ligature = ( table.first == "liga" ||  // Standard ligatures
                           table.first == "clig" ||  // Common ligatures
