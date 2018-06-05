@@ -256,7 +256,7 @@ namespace Widget {
     _numeric_grid.attach (_numeric_stacked_label,        4, 2, 1, 1);
 
     _numeric_grid.attach (_numeric_ordinal,              0, 3, 1, 1);
-    _numeric_grid.attach (_numeric_ordinal_label,        1, 3, 1, 1);
+    _numeric_grid.attach (_numeric_ordinal_label,        1, 3, 4, 1);
 
     _numeric_grid.attach (_numeric_slashed_zero,         0, 4, 1, 1);
     _numeric_grid.attach (_numeric_slashed_zero_label,   1, 4, 1, 1);
