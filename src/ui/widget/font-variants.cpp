@@ -669,6 +669,7 @@ namespace Widget {
           if( (it = table_copy.find("smcp")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("c2sc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("pcap")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("c2pc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("unic")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("titl")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("lnum")) != table_copy.end() ) table_copy.erase( it );
@@ -679,6 +680,24 @@ namespace Widget {
           if( (it = table_copy.find("afrc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("ordn")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
+
+          // An incomplete list of tables that should not be exposed to the user:
+          if( (it = table_copy.find("abvs")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("akhn")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("blwf")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("fina")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("half")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("haln")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("init")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("locl")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("medi")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pres")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pstf")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("psts")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("rlig")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("ssty")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("vatu")) != table_copy.end() ) table_copy.erase( it );
+
           std::string ott_list = "OpenType tables not included above: ";
           for(it = table_copy.begin(); it != table_copy.end(); ++it) {
               // std::cout << "Other: " << it->first << "  Occurrences: " << it->second << std::endl;
