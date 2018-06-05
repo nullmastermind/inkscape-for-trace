@@ -71,6 +71,8 @@ namespace Widget {
 
   {
 
+    set_name ( "FontVariants" );
+
     // Ligatures --------------------------
 
     // Add tooltips
@@ -88,6 +90,28 @@ namespace Widget {
     _ligatures_discretionary.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
     _ligatures_historical.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
     _ligatures_contextual.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::ligatures_callback) );
+
+    // Restrict label widths (some fonts have lots of ligatures). Must also set ellipsize mode.
+    _ligatures_label_common.set_max_width_chars(        60 );
+    _ligatures_label_discretionary.set_max_width_chars( 60 );
+    _ligatures_label_historical.set_max_width_chars(    60 );
+    _ligatures_label_contextual.set_max_width_chars(    60 );
+
+    _ligatures_label_common.set_ellipsize(        Pango::ELLIPSIZE_END );
+    _ligatures_label_discretionary.set_ellipsize( Pango::ELLIPSIZE_END );
+    _ligatures_label_historical.set_ellipsize(    Pango::ELLIPSIZE_END );
+    _ligatures_label_contextual.set_ellipsize(    Pango::ELLIPSIZE_END );
+
+    _ligatures_label_common.set_lines(        5 );
+    _ligatures_label_discretionary.set_lines( 5 );
+    _ligatures_label_historical.set_lines(    5 );
+    _ligatures_label_contextual.set_lines(    5 );
+
+    // Allow user to select characters. Not useful as this selects the ligatures.
+    // _ligatures_label_common.set_selectable(        true );
+    // _ligatures_label_discretionary.set_selectable( true );
+    // _ligatures_label_historical.set_selectable(    true );
+    // _ligatures_label_contextual.set_selectable(    true );
 
     // Add to frame
     _ligatures_grid.attach( _ligatures_common,              0, 0, 1, 1);
@@ -121,10 +145,10 @@ namespace Widget {
     _position_super.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
 
     // Add to frame
-    _position_vbox.pack_start( _position_normal);
-    _position_vbox.pack_start( _position_sub   );
-    _position_vbox.pack_start( _position_super );
-    _position_frame.add( _position_vbox );
+    _position_grid.attach( _position_normal, 0, 0, 1, 1);
+    _position_grid.attach( _position_sub,    1, 0, 1, 1);
+    _position_grid.attach( _position_super,  2, 0, 1, 1);
+    _position_frame.add( _position_grid );
     pack_start( _position_frame, Gtk::PACK_SHRINK );
 
     position_init();
@@ -159,14 +183,14 @@ namespace Widget {
     _caps_titling.signal_clicked().connect ( sigc::mem_fun(*this, &FontVariants::caps_callback) );
 
     // Add to frame
-    _caps_vbox.pack_start( _caps_normal    );
-    _caps_vbox.pack_start( _caps_small     );
-    _caps_vbox.pack_start( _caps_all_small );
-    _caps_vbox.pack_start( _caps_petite    );
-    _caps_vbox.pack_start( _caps_all_petite);
-    _caps_vbox.pack_start( _caps_unicase   );
-    _caps_vbox.pack_start( _caps_titling   );
-    _caps_frame.add( _caps_vbox );
+    _caps_grid.attach( _caps_normal,     0, 0, 1, 1);
+    _caps_grid.attach( _caps_unicase,    1, 0, 1, 1);
+    _caps_grid.attach( _caps_titling,    2, 0, 1, 1);
+    _caps_grid.attach( _caps_small,      0, 1, 1, 1);
+    _caps_grid.attach( _caps_all_small,  1, 1, 1, 1);
+    _caps_grid.attach( _caps_petite,     2, 1, 1, 1);
+    _caps_grid.attach( _caps_all_petite, 3, 1, 1, 1);
+    _caps_frame.add( _caps_grid );
     pack_start( _caps_frame, Gtk::PACK_SHRINK );
 
     caps_init();
@@ -251,6 +275,7 @@ namespace Widget {
 
     _feature_substitutions.set_justify( Gtk::JUSTIFY_LEFT );
     _feature_substitutions.set_line_wrap( true );
+    _feature_substitutions.set_line_wrap_mode( Pango::WRAP_WORD_CHAR );
 
     // Add to frame
     _feature_vbox.pack_start( _feature_entry );
@@ -668,7 +693,9 @@ namespace Widget {
 
           for (auto table: res->openTypeStylistic) {
 
+              markup += "<span font_weight='bold'>";
               markup += table.first;
+              markup += "</span>";
               markup += ": ";
 
               markup += "<span font_family='";

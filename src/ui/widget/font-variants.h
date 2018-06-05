@@ -53,14 +53,14 @@ protected:
 
     // Position: Exclusive options
     Gtk::Expander       _position_frame;
-    Gtk::VBox           _position_vbox;
+    Gtk::Grid           _position_grid;
     Gtk::RadioButton    _position_normal;
     Gtk::RadioButton    _position_sub;
     Gtk::RadioButton    _position_super;
     
     // Caps: Exclusive options (maybe a dropdown menu to save space?)
     Gtk::Expander       _caps_frame;
-    Gtk::VBox           _caps_vbox;
+    Gtk::Grid           _caps_grid;
     Gtk::RadioButton    _caps_normal;
     Gtk::RadioButton    _caps_small;
     Gtk::RadioButton    _caps_all_small;
