@@ -94,6 +94,7 @@ public:
     void undo (void);
     /** \brief Wait for the effect to complete if it hasn't. */
     bool wait (void);
+    void reselect (void);
 
     /** \brief Return reference to working dialog (if any) */
     Gtk::Dialog *get_working_dialog (void) { return _visibleDialog; };
@@ -102,7 +103,6 @@ private:
     void runComplete (void);
     void createWorkingDialog (void);
     void workingCanceled (const int resp);
-    void reselect (void);
     void genDocCache (void);
     void killDocCache (void);
 };

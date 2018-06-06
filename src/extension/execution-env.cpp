@@ -163,7 +163,6 @@ ExecutionEnv::cancel (void) {
 void
 ExecutionEnv::undo (void) {
     DocumentUndo::cancel(_doc->doc());
-    reselect();
     return;
 }
 
@@ -179,10 +178,9 @@ ExecutionEnv::commit (void) {
 void
 ExecutionEnv::reselect (void) {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::Selection * selection = NULL;
     if(desktop) {
-        selection = desktop->getSelection();
-        if (!desktop->on_live_extension) {
+        Inkscape::Selection * selection = desktop->getSelection();
+        if (selection) {
             selection->restoreBackup();
         }
     }

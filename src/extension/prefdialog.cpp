@@ -63,13 +63,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, NULL);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
     }
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
-        if (selection) {
-            selection->emptyBackup();
-        }
-    }
+
     hbox->pack_start(*controls, true, true, 0);
     hbox->show();
 
@@ -181,40 +175,23 @@ void
 PrefDialog::preview_toggle (void) {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::Selection * selection = NULL;
     bool modified = document->isModifiedSinceSave();
-    if(desktop) {
-        selection = desktop->getSelection();
-        if (!selection->isEmpty()) {
-            selection->setBackup();
-        }
-    }
     if(_param_preview->get_bool(NULL, NULL)) {
         if (_exEnv == NULL) {
             set_modal(true);
-            if (desktop && selection) {
-                desktop->on_live_extension = true;
-                
-            }
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, NULL, false, false);
             _effect->set_execution_env(_exEnv);
             _exEnv->run();
-            if (desktop && selection) {
-                selection->clear();
-            }
         }
     } else {
         set_modal(false);
         if (_exEnv != NULL) {
             _exEnv->cancel();
             _exEnv->undo();
+            _exEnv->reselect();
             delete _exEnv;
             _exEnv = NULL;
             _effect->set_execution_env(_exEnv);
-            if (desktop && selection) {
-                selection->restoreBackup();
-                desktop->on_live_extension = false;
-            }
         }
     }
     document->setModifiedSinceSave(modified);
@@ -261,6 +238,7 @@ PrefDialog::on_response (int signal) {
                 _exEnv->commit();
             } else {
                 _exEnv->undo();
+                _exEnv->reselect();
             }
             delete _exEnv;
             _exEnv = NULL;
@@ -275,7 +253,6 @@ PrefDialog::on_response (int signal) {
     if ((signal == Gtk::RESPONSE_CANCEL || signal == Gtk::RESPONSE_DELETE_EVENT) && _effect != NULL) {
         delete this;
     }
-
     return;
 }
 
