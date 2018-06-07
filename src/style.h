@@ -129,7 +129,7 @@ public:
     /** Font variant alternates (alternates/swatches) */
     SPIEnum font_variant_alternates;
     /** Font variant East Asian */
-    SPIEnum font_variant_east_asian;
+    SPIEastAsian font_variant_east_asian;
     /** Font feature settings (Low level access to TrueType tables) */
     SPIString font_feature_settings;
 

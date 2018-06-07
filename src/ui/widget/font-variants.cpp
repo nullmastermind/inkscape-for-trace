@@ -61,13 +61,27 @@ namespace Widget {
     _numeric_ordinal          ( Glib::ustring(C_("Font feature", "Ordinal"      )) ),
     _numeric_slashed_zero     ( Glib::ustring(C_("Font feature", "Slashed Zero" )) ),
 
+    _asian_frame              ( Glib::ustring(C_("Font feature", "East Asian"   )) ),
+    _asian_default_variant    ( Glib::ustring(C_("Font feature", "Default"      )) ),
+    _asian_jis78              ( Glib::ustring(C_("Font feature", "JIS78"        )) ),
+    _asian_jis83              ( Glib::ustring(C_("Font feature", "JIS83"        )) ),
+    _asian_jis90              ( Glib::ustring(C_("Font feature", "JIS90"        )) ),
+    _asian_jis04              ( Glib::ustring(C_("Font feature", "JIS04"        )) ),
+    _asian_simplified         ( Glib::ustring(C_("Font feature", "Simplified"   )) ),
+    _asian_traditional        ( Glib::ustring(C_("Font feature", "Traditional"  )) ),
+    _asian_default_width      ( Glib::ustring(C_("Font feature", "Default"      )) ),
+    _asian_full_width         ( Glib::ustring(C_("Font feature", "Full Width"   )) ),
+    _asian_proportional_width ( Glib::ustring(C_("Font feature", "Proportional" )) ),
+    _asian_ruby               ( Glib::ustring(C_("Font feature", "Ruby"         )) ),
+
     _feature_frame            ( Glib::ustring(C_("Font feature", "Feature Settings")) ),
     _feature_label            ( Glib::ustring(C_("Font feature", "Selection has different Feature Settings!")) ),
     
     _ligatures_changed( false ),
     _position_changed( false ),
     _caps_changed( false ),
-    _numeric_changed( false )
+    _numeric_changed( false ),
+    _asian_changed( false )
 
   {
 
@@ -264,6 +278,62 @@ namespace Widget {
     _numeric_frame.add( _numeric_grid );
     pack_start( _numeric_frame, Gtk::PACK_SHRINK );
     
+    // East Asian
+
+    // Add tooltips
+    _asian_default_variant.set_tooltip_text (  _("Default variant."));
+    _asian_jis78.set_tooltip_text(             _("JIS78 forms. OpenType table: 'jp78'."));
+    _asian_jis83.set_tooltip_text(             _("JIS83 forms. OpenType table: 'jp83'."));
+    _asian_jis90.set_tooltip_text(             _("JIS90 forms. OpenType table: 'jp90'."));
+    _asian_jis04.set_tooltip_text(             _("JIS2004 forms. OpenType table: 'jp04'."));
+    _asian_simplified.set_tooltip_text(        _("Simplified forms. OpenType table: 'smpl'."));
+    _asian_traditional.set_tooltip_text(       _("Traditional forms. OpenType table: 'trad'."));
+    _asian_default_width.set_tooltip_text (    _("Default width."));
+    _asian_full_width.set_tooltip_text(        _("Full width variants. OpenType table: 'fwid'."));
+    _asian_proportional_width.set_tooltip_text(_("Proportional width variants. OpenType table: 'pwid'."));
+    _asian_ruby.set_tooltip_text(              _("Ruby variants. OpenType table: 'ruby'."));
+
+    // Add signals
+    _asian_default_variant.signal_clicked().connect (   sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_jis78.signal_clicked().connect (             sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_jis83.signal_clicked().connect (             sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_jis90.signal_clicked().connect (             sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_jis04.signal_clicked().connect (             sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_simplified.signal_clicked().connect (        sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_traditional.signal_clicked().connect (       sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_default_width.signal_clicked().connect (     sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_full_width.signal_clicked().connect (        sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_proportional_width.signal_clicked().connect (sigc::mem_fun(*this, &FontVariants::asian_callback) );
+    _asian_ruby.signal_clicked().connect(               sigc::mem_fun(*this, &FontVariants::asian_callback) );
+
+    // Add to frame
+    _asian_grid.attach (_asian_default_variant,         0, 0, 1, 1);
+    _asian_grid.attach (_asian_jis78,                   1, 0, 1, 1);
+    _asian_grid.attach (_asian_jis83,                   2, 0, 1, 1);
+    _asian_grid.attach (_asian_jis90,                   3, 0, 1, 1);
+    _asian_grid.attach (_asian_jis04,                   4, 0, 1, 1);
+    _asian_grid.attach (_asian_simplified,              5, 0, 1, 1);
+    _asian_grid.attach (_asian_traditional,             6, 0, 1, 1);
+    _asian_grid.attach (_asian_default_width,           0, 1, 1, 1);
+    _asian_grid.attach (_asian_full_width,              1, 1, 1, 1);
+    _asian_grid.attach (_asian_proportional_width,      2, 1, 1, 1);
+    _asian_grid.attach (_asian_ruby,                    0, 2, 1, 1);
+
+    _asian_frame.add( _asian_grid );
+    pack_start( _asian_frame, Gtk::PACK_SHRINK );
+
+    // Group Buttons
+    Gtk::RadioButton::Group asian_variant_group = _asian_default_variant.get_group();
+    _asian_jis78.set_group(asian_variant_group);
+    _asian_jis83.set_group(asian_variant_group);
+    _asian_jis90.set_group(asian_variant_group);
+    _asian_jis04.set_group(asian_variant_group);
+    _asian_simplified.set_group(asian_variant_group);
+    _asian_traditional.set_group(asian_variant_group);
+
+    Gtk::RadioButton::Group asian_width_group = _asian_default_width.get_group();
+    _asian_full_width.set_group (asian_width_group);
+    _asian_proportional_width.set_group (asian_width_group);
 
     // Feature settings ---------------------
 
@@ -338,6 +408,18 @@ namespace Widget {
   FontVariants::numeric_callback() {
       // std::cout << "FontVariants::numeric_callback()" << std::endl;
       _numeric_changed = true;
+      _changed_signal.emit();
+  }
+
+  void
+  FontVariants::asian_init() {
+      // std::cout << "FontVariants::asian_init()" << std::endl;
+  }
+
+  void
+  FontVariants::asian_callback() {
+      // std::cout << "FontVariants::asian_callback()" << std::endl;
+      _asian_changed = true;
       _changed_signal.emit();
   }
 
@@ -439,6 +521,47 @@ namespace Widget {
       _numeric_stacked.set_inconsistent(      _numeric_mix & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS );
       _numeric_ordinal.set_inconsistent(      _numeric_mix & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL );
       _numeric_slashed_zero.set_inconsistent( _numeric_mix & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO );
+
+      _asian_all = query->font_variant_east_asian.computed;
+      _asian_mix = query->font_variant_east_asian.value;
+
+      if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78) {
+          _asian_jis78.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83) {
+          _asian_jis83.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90) {
+          _asian_jis90.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04) {
+          _asian_jis04.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED) {
+          _asian_simplified.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL) {
+          _asian_traditional.set_active();
+      } else {
+          _asian_default_variant.set_active();
+      }
+
+      if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH) {
+          _asian_full_width.set_active();
+      } else if (_asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH) {
+          _asian_proportional_width.set_active();
+      } else {
+          _asian_default_width.set_active();
+      }
+
+      _asian_ruby.set_active ( _asian_all & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY );
+
+      _asian_jis78.set_inconsistent(             _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78);
+      _asian_jis83.set_inconsistent(             _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83);
+      _asian_jis90.set_inconsistent(             _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90);
+      _asian_jis04.set_inconsistent(             _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04);
+      _asian_simplified.set_inconsistent(        _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED);
+      _asian_traditional.set_inconsistent(       _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL);
+      _asian_full_width.set_inconsistent(        _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH);
+      _asian_proportional_width.set_inconsistent(_asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH);
+      _asian_ruby.set_inconsistent(              _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY);
+
+
 
       if( query->font_feature_settings.value )
           _feature_entry.set_text( query->font_feature_settings.value );
@@ -584,6 +707,61 @@ namespace Widget {
               _numeric_slashed_zero.set_sensitive( false );
           }
 
+          // East-Asian
+          if((it = res->openTypeTables.find("jp78"))!= res->openTypeTables.end()) {
+              _asian_jis78.set_sensitive();
+          } else {
+              _asian_jis78.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("jp83"))!= res->openTypeTables.end()) {
+              _asian_jis83.set_sensitive();
+          } else {
+              _asian_jis83.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("jp90"))!= res->openTypeTables.end()) {
+              _asian_jis90.set_sensitive();
+          } else {
+              _asian_jis90.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("jp04"))!= res->openTypeTables.end()) {
+              _asian_jis04.set_sensitive();
+          } else {
+              _asian_jis04.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("smpl"))!= res->openTypeTables.end()) {
+              _asian_simplified.set_sensitive();
+          } else {
+              _asian_simplified.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("trad"))!= res->openTypeTables.end()) {
+              _asian_traditional.set_sensitive();
+          } else {
+              _asian_traditional.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("fwid"))!= res->openTypeTables.end()) {
+              _asian_full_width.set_sensitive();
+          } else {
+              _asian_full_width.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("pwid"))!= res->openTypeTables.end()) {
+              _asian_proportional_width.set_sensitive();
+          } else {
+              _asian_proportional_width.set_sensitive( false );
+          }
+
+          if((it = res->openTypeTables.find("ruby"))!= res->openTypeTables.end()) {
+              _asian_ruby.set_sensitive();
+          } else {
+              _asian_ruby.set_sensitive( false );
+          }
+
           // List available ligatures
           Glib::ustring markup_liga;
           Glib::ustring markup_dlig;
@@ -680,6 +858,15 @@ namespace Widget {
           if( (it = table_copy.find("afrc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("ordn")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("jp78")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("jp83")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("jp90")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("jp04")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("smpl")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("trad")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("fwid")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pwid")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("ruby")) != table_copy.end() ) table_copy.erase( it );
 
           // An incomplete list of tables that should not be exposed to the user:
           if( (it = table_copy.find("abvs")) != table_copy.end() ) table_copy.erase( it );
@@ -872,6 +1059,38 @@ namespace Widget {
           sp_repr_css_set_property(css, "font-variant-numeric", css_string.c_str() );
       }
 
+      // East Asian
+      bool default_variant = _asian_default_variant.get_active();
+      bool jis78           = _asian_jis78.get_active();
+      bool jis83           = _asian_jis83.get_active();
+      bool jis90           = _asian_jis90.get_active();
+      bool jis04           = _asian_jis04.get_active();
+      bool simplified      = _asian_simplified.get_active();
+      bool traditional     = _asian_traditional.get_active();
+      bool asian_width     = _asian_default_width.get_active();
+      bool fwid            = _asian_full_width.get_active();
+      bool pwid            = _asian_proportional_width.get_active();
+      bool ruby            = _asian_ruby.get_active();
+
+      if (default_style & asian_width & !ruby) {
+          sp_repr_css_set_property(css, "font-variant-east-asian", "normal");
+      } else {
+          Glib::ustring css_string;
+          if (jis78)          css_string += "jis78 ";
+          if (jis83)          css_string += "jis83 ";
+          if (jis90)          css_string += "jis90 ";
+          if (jis04)          css_string += "jis04 ";
+          if (simplified)     css_string += "simplfied ";
+          if (traditional)    css_string += "traditional ";
+
+          if (fwid)           css_string += "fwid ";
+          if (pwid)           css_string += "pwid ";
+
+          if (ruby)           css_string += "ruby ";
+
+          sp_repr_css_set_property(css, "font-variant-east-asian", css_string.c_str() );
+      }
+
       // Feature settings
       Glib::ustring feature_string = _feature_entry.get_text();
       if( !feature_string.empty() || feature_string.compare( "normal" ) ) {
@@ -931,6 +1150,31 @@ namespace Widget {
       if (stacked)         markup += "afrc=1,";
       if (ordinal)         markup += "ordn=1,";
       if (slashed_zero)    markup += "zero=1,";
+
+      // East Asian
+      bool default_variant = _asian_default_variant.get_active();
+      bool jis78           = _asian_jis78.get_active();
+      bool jis83           = _asian_jis83.get_active();
+      bool jis90           = _asian_jis90.get_active();
+      bool jis04           = _asian_jis04.get_active();
+      bool simplified      = _asian_simplified.get_active();
+      bool traditional     = _asian_traditional.get_active();
+      bool asian_width     = _asian_default_width.get_active();
+      bool fwid            = _asian_full_width.get_active();
+      bool pwid            = _asian_proportional_width.get_active();
+      bool ruby            = _asian_ruby.get_active();
+
+      if (jis78          )   markup += "jp78=1,";
+      if (jis83          )   markup += "jp83=1,";
+      if (jis90          )   markup += "jp90=1,";
+      if (jis04          )   markup += "jp04=1,";
+      if (simplified     )   markup += "smpl=1,";
+      if (traditional    )   markup += "trad=1,";
+
+      if (fwid           )   markup += "fwid=1,";
+      if (pwid           )   markup += "pwid=1,";
+
+      if (ruby           )   markup += "ruby=1,";
 
       // Feature settings
       Glib::ustring feature_string = _feature_entry.get_text();

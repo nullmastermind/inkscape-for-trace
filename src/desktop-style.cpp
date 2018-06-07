@@ -1296,19 +1296,22 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
     SPIEnum* position_res       = &(style_res->font_variant_position);
     SPIEnum* caps_res           = &(style_res->font_variant_caps);
     SPINumeric* numeric_res     = &(style_res->font_variant_numeric);
+    SPIEastAsian* asian_res     = &(style_res->font_variant_east_asian);
 
     // Stores 'and' of all values
     ligatures_res->computed = SP_CSS_FONT_VARIANT_LIGATURES_NORMAL;
     position_res->computed  = SP_CSS_FONT_VARIANT_POSITION_NORMAL;
     caps_res->computed      = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
     numeric_res->computed   = SP_CSS_FONT_VARIANT_NUMERIC_NORMAL;
+    asian_res->computed     = SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL;
 
     // Stores only differences
     ligatures_res->value = 0;
     position_res->value  = 0;
     caps_res->value      = 0;
     numeric_res->value   = 0;
-    
+    asian_res->value     = 0;
+
     for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
         SPObject *obj = *i;
 
@@ -1327,6 +1330,8 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
         SPIEnum*      position_in  = &(style->font_variant_position);
         SPIEnum*      caps_in      = &(style->font_variant_caps);
         SPINumeric*   numeric_in   = &(style->font_variant_numeric);
+        SPIEastAsian* asian_in     = &(style->font_variant_east_asian);
+
         // computed stores which bits are on/off, only valid if same between all selected objects.
         // value stores which bits are different between objects. This is a bit of an abuse of
         // the values but then we don't need to add new variables to class.
@@ -1343,20 +1348,25 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
             numeric_res->value  |= (numeric_res->computed ^ numeric_in->computed );
             numeric_res->computed &= numeric_in->computed;
 
+            asian_res->value  |= (asian_res->computed ^ asian_in->computed );
+            asian_res->computed &= asian_in->computed;
+
         } else {
             ligatures_res->computed  = ligatures_in->computed;
             position_res->computed   = position_in->computed;
             caps_res->computed       = caps_in->computed;
             numeric_res->computed    = numeric_in->computed;
+            asian_res->computed      = asian_in->computed;
         }
 
         set = true;
     }
 
-    bool different = (style_res->font_variant_ligatures.value != 0 || 
-                      style_res->font_variant_position.value  != 0 ||
-                      style_res->font_variant_caps.value      != 0 ||
-                      style_res->font_variant_numeric.value   != 0 );
+    bool different = (style_res->font_variant_ligatures.value  != 0 ||
+                      style_res->font_variant_position.value   != 0 ||
+                      style_res->font_variant_caps.value       != 0 ||
+                      style_res->font_variant_numeric.value    != 0 ||
+                      style_res->font_variant_east_asian.value != 0);
 
     if (texts == 0 || !set)
         return QUERY_STYLE_NOTHING;

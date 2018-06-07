@@ -112,13 +112,13 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font(),                                                      // SPIFont
     font_specification( "-inkscape-font-specification"       ),  // SPIString
 
-    // Font variants
+    // Font variants (Features)
     font_variant_ligatures( "font-variant-ligatures",  enum_font_variant_ligatures ),
     font_variant_position(  "font-variant-position",   enum_font_variant_position,   SP_CSS_FONT_VARIANT_POSITION_NORMAL   ),
     font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
     font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
     font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
-    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
+    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian ),
     font_feature_settings(  "font-feature-settings",   "normal" ),
 
     // Variable Fonts

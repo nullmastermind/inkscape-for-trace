@@ -9,7 +9,7 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *   Tavmjong Bah <tavmjong@free.fr>
  *
- * Copyright (C) 2014 Tavmjong Bah
+ * Copyright (C) 2014, 2018 Tavmjong Bah
  * Copyright (C) 2010 Jon A. Cruz
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
@@ -680,6 +680,30 @@ public:
     {}
 
     virtual ~SPINumeric()
+    {}
+
+    virtual void read( gchar const *str );
+    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                       SPIBase const *const base = NULL ) const;
+};
+
+
+/// SPIEnum w/ extra bits. The 'font-variants-east-asian' property is a complete mess that needs
+/// special handling. Multiple key words can be specified, some exclusive of others.
+class SPIEastAsian : public SPIEnum
+{
+
+public:
+    SPIEastAsian() :
+        SPIEnum( "anonymous_enumeastasian", NULL )
+    {}
+
+    SPIEastAsian( Glib::ustring const &name, SPStyleEnum const *enums) :
+        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
+    {}
+
+    virtual ~SPIEastAsian()
     {}
 
     virtual void read( gchar const *str );

@@ -97,7 +97,25 @@ protected:
     Gtk::CheckButton    _numeric_slashed_zero;
     Gtk::Label          _numeric_slashed_zero_label;
 
+    // East Asian: Complicated!
+    Gtk::Expander       _asian_frame;
+    Gtk::Grid           _asian_grid;
 
+    Gtk::RadioButton    _asian_default_variant;
+    Gtk::RadioButton    _asian_jis78;
+    Gtk::RadioButton    _asian_jis83;
+    Gtk::RadioButton    _asian_jis90;
+    Gtk::RadioButton    _asian_jis04;
+    Gtk::RadioButton    _asian_simplified;
+    Gtk::RadioButton    _asian_traditional;
+
+    Gtk::RadioButton    _asian_default_width;
+    Gtk::RadioButton    _asian_full_width;
+    Gtk::RadioButton    _asian_proportional_width;
+
+    Gtk::CheckButton    _asian_ruby;
+
+    // -----
     Gtk::Expander       _feature_frame;
     Gtk::VBox           _feature_vbox;
     Gtk::Entry          _feature_entry;
@@ -118,6 +136,9 @@ private:
     void numeric_init();
     void numeric_callback();
 
+    void asian_init();
+    void asian_callback();
+
     void feature_init();
     void feature_callback();
 
@@ -126,17 +147,20 @@ private:
     unsigned _position_all;
     unsigned _caps_all;
     unsigned _numeric_all;
-    
+    unsigned _asian_all;
+
     unsigned _ligatures_mix;
     unsigned _position_mix;
     unsigned _caps_mix;
     unsigned _numeric_mix;
+    unsigned _asian_mix;
 
     bool _ligatures_changed;
     bool _position_changed;
     bool _caps_changed;
     bool _numeric_changed;
     bool _feature_changed;
+    bool _asian_changed;
 
     sigc::signal<void> _changed_signal;
 

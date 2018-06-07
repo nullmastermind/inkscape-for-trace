@@ -17,7 +17,7 @@
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2005 Monash University
  * Copyright (C) 2012 Kris De Gussem
- * Copyright (C) 2014 Tavmjong Bah
+ * Copyright (C) 2014, 2018 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -1017,6 +1017,113 @@ SPINumeric::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase c
             return_string += "ordinal ";
         if ( value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
             return_string += "slashed-zero ";
+        return_string.erase( return_string.size() - 1 );
+        return_string += important_str();
+        return_string += ";";
+        return return_string;
+    }
+    return Glib::ustring("");
+}
+
+
+// SPIEastAsian ---------------------------------------------------
+// Used for 'font-variant-east-asian'
+void
+SPIEastAsian::read( gchar const *str ) {
+
+    if( !str ) return;
+
+    value = SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL;
+    if( !strcmp(str, "inherit") ) {
+        set = true;
+        inherit = true;
+    } else if (!strcmp(str, "normal" )) {
+        // Defaults for TrueType
+        inherit = false;
+        set = true;
+    } else {
+        // We need to parse in order
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
+        for( unsigned i = 0; i < tokens.size(); ++i ) {
+            for (unsigned j = 0; enums[j].key; ++j ) {
+                if (tokens[i].compare( enums[j].key ) == 0 ) {
+                    set = true;
+                    inherit = false;
+
+                    // Must switch off incompatible value (turn on correct one below)
+                    switch (enums[j].value ) {
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL:
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78;
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83;
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90;
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04;
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED;
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL;
+                            break;
+
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH:
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH;
+                            break;
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH:
+                            value &= ~SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH;
+                            break;
+
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL:
+                        case SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY:
+                            // Do nothing
+                            break;
+
+                        default:
+                            std::cerr << "SPIEastasian::read(): Invalid value." << std::endl;
+                            break;
+                    }
+
+                    value |=  enums[j].value;
+                }
+            }
+        }
+    }
+    computed = value;
+}
+
+const Glib::ustring
+SPIEastAsian::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
+
+    SPIEnum const *const my_base = dynamic_cast<const SPIEnum*>(base);
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
+        if (this->inherit) {
+            return (name + ":inherit" + important_str() + ";");
+        }
+        if (value == SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ) {
+            return (name + ":normal" + important_str() + ";");
+        }
+
+        Glib::ustring return_string = name + ":";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 )
+            return_string += "jis78 ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 )
+            return_string += "jis83 ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 )
+            return_string += "jis90 ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 )
+            return_string += "jis04 ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED )
+            return_string += "simplified ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL )
+            return_string += "traditional ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH )
+            return_string += "full-width ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH )
+            return_string += "proportional-width ";
+        if ( value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
+            return_string += "ruby ";
         return_string.erase( return_string.size() - 1 );
         return_string += important_str();
         return_string += ";";
