@@ -114,8 +114,14 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     for (auto table: tables) {
 
         // Only look at style substitution tables ('salt', 'ss01', etc. but not 'ssty').
-        // Also look at charcter substitution tables ('cv01', etc.).
-        bool style    = table.first == "salt" ||
+        // Also look at character substitution tables ('cv01', etc.).
+        bool style    =
+            table.first == "salt"  /* Stylistic Alternatives */                          ||
+            table.first == "swsh"  /* Swash                  */                          ||
+            table.first == "cwsh"  /* Contextual Swash       */                          ||
+            table.first == "ornm"  /* Ornaments              */                          ||
+            table.first == "nalt"  /* Alternative Annotation */                          ||
+            table.first == "hist"  /* Historical Forms       */                          ||
             (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't')) ||
             (table.first[0] == 'c' && table.first[1] == 'v');
 
