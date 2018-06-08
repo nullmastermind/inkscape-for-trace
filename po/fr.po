@@ -4499,7 +4499,7 @@ msgstr "Sans calque"
 
 #: ../share/templates/templates.h:1
 msgid "Empty sheet with no layers"
-msgstr "Feuille vide sans calques"
+msgstr "Feuille vide sans calque."
 
 #: ../share/templates/templates.h:1
 msgid "no layers empty"
@@ -8484,7 +8484,7 @@ msgstr "Enregistrer le document"
 #: ../src/file.cpp:787 ../src/main-cmdlinexact.cpp:177
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
-"Les liens brisés ont été modifiés pour pointer vers des fichiers existant."
+"Les liens brisés ont été modifiés pour pointer vers des fichiers existants."
 
 #: ../src/file.cpp:798 ../src/file.cpp:1754
 #, c-format
@@ -9284,8 +9284,8 @@ msgstr "Édition du paramètre <b>%s</b>."
 #: ../src/live_effects/effect.cpp:773
 msgid "None of the applied path effect's parameters can be edited on-canvas."
 msgstr ""
-"Aucun des paramètres d'effet de chemin ne peuvent être modifiés sur la zone "
-"de travail."
+"Aucun des paramètres d'effet de chemin ne peut être modifié sur la zone de "
+"travail."
 
 #: ../src/live_effects/lpe-attach-path.cpp:21
 msgid "Start path:"
@@ -9555,7 +9555,7 @@ msgstr "Fondre les chemins"
 #: ../src/live_effects/lpe-copy_rotate.cpp:48
 msgid "Fuse paths by helper line, use fill-rule: evenodd for best result"
 msgstr ""
-"Fondre les chemins selon une ligne adjointe ; utilisez fill-rule: evenodd "
+"Fondre les chemins selon une ligne adjointe ; utiliser fill-rule: evenodd "
 "pour obtenir le meilleur résultat"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:34
@@ -9686,7 +9686,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-envelope.cpp:23
 msgid "_Enable left & right paths"
-msgstr "Utilis_er les chemins gauche & droit"
+msgstr "Utilis_er les chemins gauche et droit"
 
 #: ../src/live_effects/lpe-envelope.cpp:23
 msgid "Enable the left and right deformation paths"
@@ -9694,7 +9694,7 @@ msgstr "Utiliser les chemins gauche et droit de l'enveloppe"
 
 #: ../src/live_effects/lpe-envelope.cpp:24
 msgid "_Enable top & bottom paths"
-msgstr "Utilis_er les chemins supérieur & inférieur"
+msgstr "Utilis_er les chemins supérieur et inférieur"
 
 #: ../src/live_effects/lpe-envelope.cpp:24
 msgid "Enable the top and bottom deformation paths"
@@ -10652,11 +10652,11 @@ msgstr "Mode de déplacement par symétrie"
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 #, fuzzy
 msgid "Discard original path"
-msgstr "Retirer le chemin original ?"
+msgstr "Retirer le chemin original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
 msgid "Check this to only keep the mirrored part of the path"
-msgstr "Cochez cette case pour ne conserver que la version reflétée du chemin"
+msgstr "Cocher cette case pour ne conserver que la version reflétée du chemin"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
 msgid "Fuse original and the reflection into a single path"
@@ -10668,7 +10668,7 @@ msgstr "Fondu opposé"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
 msgid "Picks the other side of the mirror as the original"
-msgstr "Prend l'autre côté du miroir comme original"
+msgstr "Prendre l'autre côté du miroir comme original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
 msgid "Start mirror line"
@@ -12169,18 +12169,18 @@ msgstr "Lister le dossier d'extensions, puis sortir"
 
 #: ../src/main.cpp:493
 msgid "Remove unused definitions from the defs section(s) of the document"
-msgstr "Supprimer les éléments inutiles des section(s) defs du document"
+msgstr "Supprimer les éléments inutiles des sections defs du document"
 
 #: ../src/main.cpp:499
 msgid "Enter a listening loop for D-Bus messages in console mode"
-msgstr "Saisissez une boucle d'écoute pour les messages D-Bus en mode console"
+msgstr "Saisir une boucle d'écoute pour les messages D-Bus en mode console"
 
 #: ../src/main.cpp:504
 msgid ""
 "Specify the D-Bus bus name to listen for messages on (default is org."
 "inkscape)"
 msgstr ""
-"Spécifie le nom du bus D-Bus sur lequel écouter les messages (org.inkscape "
+"Spécifier le nom du bus D-Bus sur lequel écouter les messages (org.inkscape "
 "par défaut)"
 
 #: ../src/main.cpp:505
@@ -14151,7 +14151,7 @@ msgstr ""
 #: ../src/ui/dialog/align-and-distribute.cpp:1011
 #: ../src/widgets/connector-toolbar.cpp:366
 msgid "Nicely arrange selected connector network"
-msgstr "Dispose le réseau de connecteurs sélectionnés de façon agréable"
+msgstr "Disposer le réseau de connecteurs sélectionnés de façon agréable"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1014
 msgid "Exchange positions of selected objects - selection order"
@@ -15102,8 +15102,8 @@ msgid ""
 "If set, use checkerboard for background, otherwise use background color at "
 "full opacity."
 msgstr ""
-"Si défini, utiliser un damier comme arrière-plan, sinon utiliser la couleur "
-"de fond avec opacité complète."
+"Si coché, utiliser un damier comme arrière-plan, sinon utiliser la couleur de "
+"fond avec opacité complète"
 
 #: ../src/ui/dialog/document-properties.cpp:108
 msgid "Show page _border"
@@ -15216,7 +15216,7 @@ msgstr "Distance d'attraction, en pixels d'écran, pour aimanter aux objets"
 #: ../src/ui/dialog/document-properties.cpp:122
 msgid "Always snap to objects, regardless of their distance"
 msgstr ""
-"Toujours adhérer aux objets les plus proche, sans tenir compte de la distance"
+"Toujours adhérer aux objets les plus proches, sans tenir compte de la distance"
 
 #: ../src/ui/dialog/document-properties.cpp:123
 msgid ""
@@ -15434,7 +15434,7 @@ msgstr "Programmes incorporés"
 
 #: ../src/ui/dialog/document-properties.cpp:743
 msgid "<b>External script files:</b>"
-msgstr "<b>Fichiers de programmation externes :</b>"
+msgstr "<b>Fichiers des programmes externes :</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:745
 msgid "Add the current file name or browse for a file"
@@ -15452,12 +15452,12 @@ msgstr "Nom du fichier"
 
 #: ../src/ui/dialog/document-properties.cpp:801
 msgid "<b>Embedded script files:</b>"
-msgstr "<b>Fichiers de programmation incorporés :</b>"
+msgstr "<b>Fichiers des programmes incorporés :</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:803
 #: ../src/ui/dialog/objects.cpp:1881
 msgid "New"
-msgstr "Nouvelle"
+msgstr "Nouveau"
 
 #: ../src/ui/dialog/document-properties.cpp:846
 msgid "Script id"
@@ -15490,7 +15490,7 @@ msgstr "Ajouter un programme externe..."
 
 #: ../src/ui/dialog/document-properties.cpp:1051
 msgid "Select a script to load"
-msgstr "Sélectionnez un script à charger"
+msgstr "Sélectionner un script à charger"
 
 #. inform the document, so we can undo
 #: ../src/ui/dialog/document-properties.cpp:1079
@@ -18279,7 +18279,7 @@ msgid ""
 "path"
 msgstr ""
 "Définit combien de temps le contour sera visible après son survol par la "
-"souris (en millisecondes) ; choisissez 0 pour garder le contour visible "
+"souris (en millisecondes) ; choisir 0 pour garder le contour visible "
 "jusqu'à ce que la souris quitte le chemin."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:369
@@ -19766,7 +19766,7 @@ msgstr "Profil d'affichage :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1002
 msgid "Retrieve profile from display"
-msgstr "Utiliser le profil proposé par le périphérique d'affichage."
+msgstr "Utiliser le profil proposé par le périphérique d'affichage"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1005
 msgid "Retrieve profiles from those attached to displays via XICC"
@@ -20646,7 +20646,7 @@ msgid ""
 msgstr ""
 "Configure la quantité de mémoire par document pouvant être utilisée pour "
 "stocker les parties affichées du dessin pour une réutilisation ultérieure ; "
-"positionnez cette valeur à zéro pour désactiver le cache"
+"positionner cette valeur à zéro pour désactiver le cache"
 
 #. blur quality
 #. filter quality
@@ -21862,8 +21862,8 @@ msgid ""
 "Please make sure all keywords are spelled correctly, or try again with "
 "different keywords."
 msgstr ""
-"Veuillez vous assurer que les mots clé ont été correctement épelé, ou "
-"essayez avec des mots clé différents."
+"Veuillez vous assurer que les mots clés ont été correctement épelés, ou "
+"essayez avec des mots clés différents."
 
 #: ../src/ui/dialog/ocaldialogs.cpp:1082
 msgid "Search"
@@ -21879,7 +21879,7 @@ msgstr "_Courbes (multiplicateur) :"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:187
 msgid "Favors connections that are part of a long curve"
-msgstr "Favorise les connexion faisant partie d'une longue courbe"
+msgstr "Favorise les connexions faisant partie d'une longue courbe"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:198
 msgid "_Islands (weight):"
@@ -21907,7 +21907,7 @@ msgstr "Pixels clairsemés (_multiplicateur) :"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:234
 msgid "Favors connections that are part of foreground color"
-msgstr "Favorise les connexion faisant partie d'une couleur de fond"
+msgstr "Favorise les connexions faisant partie d'une couleur de fond"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:240
 msgid "The heuristic computed vote will be multiplied by this value"
@@ -22443,7 +22443,7 @@ msgstr "Rendre les icônes plus petites en dézoomant"
 
 #: ../src/ui/dialog/symbols.cpp:240
 msgid "Make symbols bigger by zooming in."
-msgstr "Rendre les icônes plus petites en zoomant"
+msgstr "Rendre les icônes plus grandes en zoomant"
 
 #: ../src/ui/dialog/symbols.cpp:588
 msgid "Unnamed Symbols"
@@ -26890,7 +26890,7 @@ msgstr "Coller la _largeur"
 #: ../src/verbs.cpp:2511
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr ""
-"Redimensionne horizontalement la sélection afin d'avoir la largeur de "
+"Redimensionner horizontalement la sélection afin d'avoir la largeur de "
 "l'objet copié"
 
 #: ../src/verbs.cpp:2512
@@ -26900,7 +26900,7 @@ msgstr "Coller la _hauteur"
 #: ../src/verbs.cpp:2513
 msgid "Scale selection vertically to match the height of the copied object"
 msgstr ""
-"Redimensionne verticalement la sélection afin d'avoir la hauteur de l'objet "
+"Redimensionner verticalement la sélection afin d'avoir la hauteur de l'objet "
 "copié"
 
 #: ../src/verbs.cpp:2514
@@ -27232,7 +27232,7 @@ msgstr "Créer des _guides autour de la page"
 
 #: ../src/verbs.cpp:2586
 msgid "Create four guides aligned with the page borders"
-msgstr "Crée quatre guides alignés sur les bords de la page"
+msgstr "Créer quatre guides alignés sur les bords de la page"
 
 #: ../src/verbs.cpp:2587
 msgid "Next path effect parameter"
@@ -28565,7 +28565,7 @@ msgstr "S_ymboles..."
 
 #: ../src/verbs.cpp:2965
 msgid "Select symbol from a symbols palette"
-msgstr "Sélectionnez un symbole depuis une palette"
+msgstr "Sélectionner un symbole depuis une palette"
 
 #: ../src/verbs.cpp:2966
 msgid "Transfor_m..."
@@ -28639,7 +28639,7 @@ msgstr "_Messages..."
 
 #: ../src/verbs.cpp:2985
 msgid "View debug messages"
-msgstr "Voir les messages de débuggage"
+msgstr "Voir les messages de débogage"
 
 #: ../src/verbs.cpp:2986
 msgid "Show/Hide D_ialogs"
@@ -36233,7 +36233,8 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command; most plotters "
 "ignore this command (Default: 0)"
 msgstr ""
-"La force d'appui du stylo, en grammes, ignorée lorsque la valeur est à 0 ; "
+"La vitesse du stylo, en centimètres ou millimètres par seconde (suivant le "
+"modèle de traceur), ignorée lorsque la valeur est à 0 ; "
 "la plupart des traceurs ignorent cette commande (par défaut : 0)"
 
 #: ../share/extensions/hpgl_output.inx.h:14
@@ -42299,7 +42300,7 @@ msgstr "Entrée XAML"
 
 #~ msgid "<b>Connection point</b>: click or drag to create a new connector"
 #~ msgstr ""
-#~ "<b>Point de connnection</b> : cliquer ou déplacer pour créer un nouveau "
+#~ "<b>Point de connexion</b> : cliquer ou déplacer pour créer un nouveau "
 #~ "connecteur"
 
 #~ msgid "<b>Connection point</b>: click to select, drag to move"
