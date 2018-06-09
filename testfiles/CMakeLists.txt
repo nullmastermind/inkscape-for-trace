@@ -18,7 +18,9 @@ set(TEST_SOURCES
 	dir-util-test
 	sp-object-test
 	object-set-test
-	style-test)
+	style-test
+	sp-gradient-test
+	object-test)
 
 set(TEST_LIBS
     ${GTEST_LIBRARIES}
