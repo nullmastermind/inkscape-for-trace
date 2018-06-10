@@ -20,9 +20,6 @@
 #include "Path.h"
 #include "style.h"
 #include "livarot/path-description.h"
-#include "object/sp-namedview.h"
-#include "util/units.h"
-#include "inkscape.h"
 #include <2geom/pathvector.h>
 #include <2geom/point.h>
 #include <2geom/affine.h>
@@ -65,42 +62,16 @@ void  Path::DashPolylineFromStyle(SPStyle *style, float scale, float min_len)
 
         double dlen = 0.0;
         // Find total length
-        SPDocument * document = SP_ACTIVE_DOCUMENT;
-        SPNamedView *nv = sp_document_namedview(document, NULL);
-        Geom::Rect vbox = document->getViewBox();
-        Glib::ustring display_unit = "px";
-        if (nv) {
-            display_unit = nv->display_units->abbr;
-        }
         for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
-            if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
-                dlen += style->stroke_dasharray.values[i].value * scale;
-            } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
-                dlen += vbox.width() * style->stroke_dasharray.values[i].value * scale;
-            } else {
-                dlen += Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str()) * scale;
-            }
+            dlen += style->stroke_dasharray.values[i] * scale;
         }
         if (dlen >= min_len) {
             // Extract out dash pattern (relative positions)
-            double dash_offset = 0;
-            if (style->stroke_dashoffset.unit == SVGLength::NONE) {
-                dash_offset = style->stroke_dashoffset.value * scale;
-            } else if (style->stroke_dashoffset.unit == SVGLength::PERCENT) {
-                dash_offset = vbox.width() * style->stroke_dashoffset.value * scale;
-            } else {
-                dash_offset = Inkscape::Util::Quantity::convert(style->stroke_dashoffset.computed * scale, "px", display_unit.c_str());
-            }
+            double dash_offset = style->stroke_dashoffset.value * scale;
             size_t n_dash = style->stroke_dasharray.values.size();
             double *dash = g_new(double, n_dash);
             for (unsigned i = 0; i < n_dash; i++) {
-                if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
-                    dash[i] = style->stroke_dasharray.values[i].value;
-                } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
-                    dash[i] = vbox.width() * style->stroke_dasharray.values[i].value;
-                } else {
-                    dash[i] = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
-                }
+                dash[i] = style->stroke_dasharray.values[i] * scale;
             }
 
             // Convert relative positions to absolute postions

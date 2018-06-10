@@ -27,9 +27,7 @@
 #include "preferences.h"
 
 #include "display/cairo-utils.h"
-#include "util/units.h"
-#include "inkscape.h"
-#include "object/sp-namedview.h"
+
 #include "style.h"
 
 #include "ui/dialog-events.h"
@@ -113,12 +111,7 @@ void SPDashSelector::init_dashes() {
         if (!dash_prefs.empty()) {
             SPStyle style;
             dashes = g_new (double *, dash_prefs.size() + 2); // +1 for custom slot, +1 for terminator slot
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
-            SPNamedView *nv = sp_document_namedview(document, NULL);
-            Glib::ustring display_unit = "px";
-            if (nv) {
-                display_unit = nv->display_units->abbr;
-            }
+            
             for (std::vector<Glib::ustring>::iterator i = dash_prefs.begin(); i != dash_prefs.end(); ++i) {
                 style.readFromPrefs( *i );
                 
@@ -127,7 +120,7 @@ void SPDashSelector::init_dashes() {
                     double *d = dashes[pos];
                     unsigned i = 0;
                     for (; i < style.stroke_dasharray.values.size(); i++) {
-                        d[i] = Inkscape::Util::Quantity::convert(style.stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+                        d[i] = style.stroke_dasharray.values[i];
                     }
                     d[i] = -1;
                 } else {

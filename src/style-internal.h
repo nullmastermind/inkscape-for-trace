@@ -32,7 +32,7 @@
 #include "object/uri.h"
 
 #include "svg/svg-icc-color.h"
-#include "svg/svg-length.h"
+
 #include "xml/repr.h"
 
 
@@ -1010,9 +1010,9 @@ public:
     }
 
 
-  // To do: make private
+  // To do: make private, change double to SVGLength
 public:
-    std::vector<SVGLength> values;
+    std::vector<double> values;
 };
 
 /// Filter type internal to SPStyle

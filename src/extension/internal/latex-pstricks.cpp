@@ -23,10 +23,8 @@
 #include "util/units.h"
 #include "helper/geom-curves.h"
 
-#include "object/sp-namedview.h"
 #include "extension/print.h"
 #include "extension/system.h"
-#include "inkscape.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "latex-pstricks.h"
@@ -242,17 +240,11 @@ unsigned int PrintLatex::stroke(Inkscape::Extension::Print * /*mod*/,
 
         if (style->stroke_dasharray.set &&  !style->stroke_dasharray.values.empty()) {
             os << ",linestyle=dashed,dash=";
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
-            SPNamedView *nv = sp_document_namedview(document, NULL);
-            Glib::ustring display_unit = "px";
-            if (nv) {
-                display_unit = nv->display_units->abbr;
-            }
             for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
                 if ((i)) {
                     os << " ";
                 }
-                os << Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+                os << style->stroke_dasharray.values[i];
             }
         }
 
