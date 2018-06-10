@@ -25,6 +25,8 @@
 #include "object/sp-rect.h"
 #include "object/sp-stop.h"
 #include "object/sp-text.h"
+#include "util/units.h"
+#include "inkscape.h"
 
 #include "svg/svg-color.h"
 
@@ -741,15 +743,38 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
     if (!style->stroke_dasharray.values.empty()) {
         double d[64];
         size_t len = MIN(style->stroke_dasharray.values.size(), 64);
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPNamedView *nv = sp_document_namedview(document, NULL);
+        Geom::Rect vbox = document->getViewBox();
+        Glib::ustring display_unit = "px";
+        if (nv) {
+            display_unit = nv->display_units->abbr;
+        }
         for (unsigned i = 0; i < len; i++) {
+            double dash = 0;
+            if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
+                dash = style->stroke_dasharray.values[i].value;
+            } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
+                dash = vbox.width() * style->stroke_dasharray.values[i].value;
+            } else {
+                dash = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+            }
             if (style->stroke_width.computed != 0)
-                d[i] = style->stroke_dasharray.values[i] / style->stroke_width.computed;
+                d[i] = dash / style->stroke_width.computed;
             else
-                d[i] = style->stroke_dasharray.values[i]; // is there a better thing to do for stroke_width==0?
+                d[i] = dash; // is there a better thing to do for stroke_width==0?
+        }
+        double dash_offset = 0;
+        if (style->stroke_dashoffset.unit == SVGLength::NONE) {
+            dash_offset = style->stroke_dashoffset.value;
+        } else if (style->stroke_dashoffset.unit == SVGLength::PERCENT) {
+            dash_offset = vbox.width() * style->stroke_dashoffset.value;
+        } else {
+            dash_offset = Inkscape::Util::Quantity::convert(style->stroke_dashoffset.computed, "px", display_unit.c_str());
         }
         dsel->set_dash(len, d, style->stroke_width.computed != 0 ?
-                       style->stroke_dashoffset.value / style->stroke_width.computed  :
-                       style->stroke_dashoffset.value);
+                       dash_offset / style->stroke_width.computed  :
+                       dash_offset);
     } else {
         dsel->set_dash(0, nullptr, 0.0);
     }
@@ -1042,8 +1067,11 @@ StrokeStyle::scaleLine()
             }
 
             /* Set dash */
-            setScaledDash(css, ndash, dash, offset, width);
-
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            gboolean scale = prefs->getBool("/options/dash/scale", true);
+            if (scale) {
+                setScaledDash(css, ndash, dash, offset, width);
+            }
             sp_desktop_apply_css_recursive ((*i), css, true);
         }
 

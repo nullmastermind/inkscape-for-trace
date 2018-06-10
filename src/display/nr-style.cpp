@@ -11,6 +11,9 @@
 
 #include "display/nr-style.h"
 #include "style.h"
+#include "util/units.h"
+#include "inkscape.h"
+#include "object/sp-namedview.h"
 #include "object/sp-paint-server.h"
 #include "display/canvas-bpath.h" // contains SPStrokeJoinType, SPStrokeCapType etc. (WTF!)
 #include "display/drawing-context.h"
@@ -218,10 +221,29 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
 
     n_dash = style->stroke_dasharray.values.size();
     if (n_dash != 0) {
-        dash_offset = style->stroke_dashoffset.value;
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPNamedView *nv = sp_document_namedview(document, NULL);
+        Glib::ustring display_unit = "px";
+        if (nv) {
+            display_unit = nv->display_units->abbr;
+        }
+        Geom::Rect vbox = document->getViewBox();
+        if (style->stroke_dashoffset.unit == SVGLength::NONE) {
+            dash_offset = style->stroke_dashoffset.value;
+        } else if (style->stroke_dashoffset.unit == SVGLength::PERCENT) {
+            dash_offset = vbox.width() * style->stroke_dashoffset.value;
+        } else {
+            dash_offset = Inkscape::Util::Quantity::convert(style->stroke_dashoffset.computed, "px", display_unit.c_str());
+        }
         dash = new double[n_dash];
         for (unsigned int i = 0; i < n_dash; ++i) {
-            dash[i] = style->stroke_dasharray.values[i];
+            if (style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
+                dash[i] = style->stroke_dasharray.values[i].value;
+            } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
+                dash[i] = vbox.width() * style->stroke_dasharray.values[i].value;
+            } else {
+                dash[i] = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+            }
         }
     } else {
         dash_offset = 0.0;

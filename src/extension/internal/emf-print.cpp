@@ -38,7 +38,7 @@
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include "util/units.h"
-
+#include "inkscape.h"
 #include "inkscape-version.h"
 
 #include "extension/system.h"
@@ -55,6 +55,7 @@
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
 #include "object/sp-clippath.h"
+#include "object/sp-namedview.h"
 #include "style.h"
 #include "display/cairo-utils.h"
 
@@ -695,17 +696,32 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             } else {
                 unsigned i = 0;
                 while ((linestyle != U_PS_USERSTYLE) && (i < style->stroke_dasharray.values.size())) {
-                    if (style->stroke_dasharray.values[i] > 0.00000001) {
+                    if (style->stroke_dasharray.values[i].computed > 0.00000001) {
                         linestyle = U_PS_USERSTYLE;
                     }
                     i++;
                 }
-
+                
                 if (linestyle == U_PS_USERSTYLE) {
+                    SPDocument * document = SP_ACTIVE_DOCUMENT;
+                    SPNamedView *nv = sp_document_namedview(document, NULL);
+                    Geom::Rect vbox = document->getViewBox();
+                    Glib::ustring display_unit = "px";
+                    if (nv) {
+                        display_unit = nv->display_units->abbr;
+                    }
                     n_dash = style->stroke_dasharray.values.size();
                     dash = new uint32_t[n_dash];
                     for (i = 0; i < n_dash; i++) {
-                        dash[i] = MAX(1, (uint32_t) round(scale * style->stroke_dasharray.values[i] * PX2WORLD));
+                       double dashval = 0;
+                       if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
+                           dashval = style->stroke_dasharray.values[i].value;
+                       } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
+                           dashval = vbox.width() * style->stroke_dasharray.values[i].value;
+                       } else {
+                           dashval = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+                       }
+                       dash[i] = MAX(1, (uint32_t) round(scale * dashval * PX2WORLD));
                     }
                 }
             }
@@ -1455,10 +1471,25 @@ unsigned int PrintEmf::stroke(
         }
         tlength = length(tmp_pathpw, 0.1);
         tmp_pathpw2 = arc_length_parametrization(tmp_pathpw);
-
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPNamedView *nv = sp_document_namedview(document, NULL);
+        Geom::Rect vbox = document->getViewBox();
+        Glib::ustring display_unit = "px";
+        if (nv) {
+            display_unit = nv->display_units->abbr;
+        }
         // go around the dash array repeatedly until the entire path is consumed (but not beyond).
         while (slength < tlength) {
-            elength = slength + style->stroke_dasharray.values[i++];
+            SVGLength i1 = style->stroke_dasharray.values[i++];
+            double dashval = 0;
+            if(i1.unit == SVGLength::NONE) {
+                dashval = i1.value;
+            } else if (i1.unit == SVGLength::PERCENT) {
+                dashval = vbox.width() * i1.value;
+            } else {
+                dashval = Inkscape::Util::Quantity::convert(i1.computed, "px", display_unit.c_str());
+            }
+            elength = slength + dashval;
             if (elength > tlength) {
                 elength = tlength;
             }
@@ -1469,7 +1500,15 @@ unsigned int PrintEmf::stroke(
                 first_frag = fragment;
             }
             slength = elength;
-            slength += style->stroke_dasharray.values[i++];  // the gap
+            SVGLength i2 = style->stroke_dasharray.values[i++];
+            if(i2.unit == SVGLength::NONE) {
+                dashval = i2.value;
+            } else if (i2.unit == SVGLength::PERCENT) {
+                dashval = vbox.width() * i2.value;
+            } else {
+                dashval = Inkscape::Util::Quantity::convert(i2.computed, "px", display_unit.c_str());
+            }
+            slength += dashval;  // the gap
             if (i >= n_dash) {
                 i = 0;
             }

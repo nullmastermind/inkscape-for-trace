@@ -48,7 +48,8 @@
 #include "object/sp-pattern.h"
 #include "object/sp-mask.h"
 #include "object/sp-clippath.h"
-
+#include "object/sp-namedview.h"
+#include "inkscape.h"
 #include "util/units.h"
 #ifdef WIN32
 #include "libnrtype/FontFactory.h" // USE_PANGO_WIN32
@@ -1435,10 +1436,31 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
     {
         size_t ndashes = style->stroke_dasharray.values.size();
         double* dashes =(double*)malloc(ndashes*sizeof(double));
-        for( unsigned i = 0; i < ndashes; ++i ) {
-            dashes[i] = style->stroke_dasharray.values[i];
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPNamedView *nv = sp_document_namedview(document, NULL);
+        Geom::Rect vbox = document->getViewBox();
+        Glib::ustring display_unit = "px";
+        if (nv) {
+            display_unit = nv->display_units->abbr;
         }
-        cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
+        for( unsigned i = 0; i < ndashes; ++i ) {
+            if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
+               dashes[i] = style->stroke_dasharray.values[i].value;
+            } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
+               dashes[i] = vbox.width() * style->stroke_dasharray.values[i].value;
+            } else {
+               dashes[i] = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+            }
+        }
+        double dash_offset = 0;
+        if (style->stroke_dashoffset.unit == SVGLength::NONE) {
+            dash_offset = style->stroke_dashoffset.value;
+        } else if (style->stroke_dashoffset.unit == SVGLength::PERCENT) {
+            dash_offset = vbox.width() * style->stroke_dashoffset.value ;
+        } else {
+            dash_offset = Inkscape::Util::Quantity::convert(style->stroke_dashoffset.computed, "px", display_unit.c_str());
+        }
+        cairo_set_dash(_cr, dashes, ndashes, dash_offset);
         free(dashes);
     } else {
         cairo_set_dash(_cr, nullptr, 0, 0.0);  // disable dashing

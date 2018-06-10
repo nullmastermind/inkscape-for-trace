@@ -40,7 +40,9 @@
 #include "object/sp-path.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-radial-gradient.h"
+#include "object/sp-namedview.h"
 #include "style.h"
+#include "util/units.h"
 
 #include <string>
 #include <cstdio>
@@ -435,15 +437,38 @@ bool JavaFXOutput::doStyle(SPStyle *style)
         out("            strokeLineJoin: %s\n",   getStrokeLineJoin(linejoin).c_str());
         out("            strokeMiterLimit: %s\n", DSTR(style->stroke_miterlimit.value));
         if (style->stroke_dasharray.set) {
+           SPDocument * document = SP_ACTIVE_DOCUMENT;
+           SPNamedView *nv = sp_document_namedview(document, NULL);
+           Geom::Rect vbox = document->getViewBox();
+           Glib::ustring display_unit = "px";
+           if (nv) {
+                display_unit = nv->display_units->abbr;
+           }
+           double dash_offset = 0;
+           if (style->stroke_dashoffset.unit == SVGLength::NONE) {
+               dash_offset = style->stroke_dashoffset.value;
+           } else if (style->stroke_dashoffset.unit == SVGLength::PERCENT) {
+               dash_offset = vbox.width() * style->stroke_dashoffset.value;
+           } else {
+               dash_offset = Inkscape::Util::Quantity::convert(style->stroke_dashoffset.computed, "px", display_unit.c_str());
+           }
            if (style->stroke_dashoffset.set) {
-               out("            strokeDashOffset: %s\n", DSTR(style->stroke_dashoffset.value));
+               out("            strokeDashOffset: %s\n", DSTR(dash_offset));
            }
            out("            strokeDashArray: [ ");
            for(unsigned i = 0; i < style->stroke_dasharray.values.size(); i++ ) {
+               double dash = 0;
+               if(style->stroke_dasharray.values[i].unit == SVGLength::NONE) {
+                   dash = style->stroke_dasharray.values[i].value;
+               } else if (style->stroke_dasharray.values[i].unit == SVGLength::PERCENT) {
+                   dash = vbox.width() * style->stroke_dasharray.values[i].value;
+               } else {
+                   dash = Inkscape::Util::Quantity::convert(style->stroke_dasharray.values[i].computed, "px", display_unit.c_str());
+               }
                if (i > 0) {
-                   out(", %.2lf", style->stroke_dasharray.values[i]);
+                   out(", %.2lf", dash);
                }else {
-                   out(" %.2lf", style->stroke_dasharray.values[i]);
+                   out(" %.2lf", dash);
                }
            }
            out(" ]\n");

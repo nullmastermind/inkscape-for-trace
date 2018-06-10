@@ -2034,20 +2034,17 @@ SPIDashArray::read( gchar const *str ) {
         return;
     }
 
-    // std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
 
-    gchar *e = nullptr;
     bool LineSolid = true;
-    while (e != str && *str != '\0') {
-        /* TODO: Should allow <length> rather than just a unitless (px) number. */
-        double number = g_ascii_strtod(str, (char **) &e);
-        values.push_back( number );
-        if (number > 0.00000001)
+    for (auto token:tokens) {
+        SVGLength svglength;
+        double value = atof(token.c_str());
+        if(value > 0.00000001) {
             LineSolid = false;
-        if (e != str) {
-            str = e;
         }
-        while (str && *str && !(isalnum(*str) || *str=='.')) str += 1;
+        svglength.read(token.c_str());
+        values.push_back(svglength);
     }
 
     if (LineSolid) {
@@ -2074,7 +2071,7 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 if (i) {
                     os << ", ";
                 }
-                os << this->values[i];
+                os << this->values[i].write().c_str();
             }
             os << important_str();
             os << ";";
@@ -2088,7 +2085,9 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
 void
 SPIDashArray::cascade( const SPIBase* const parent ) {
     if( const SPIDashArray* p = dynamic_cast<const SPIDashArray*>(parent) ) {
-        if( !set || inherit ) values = p->values;  // Always inherits
+        if( !set || inherit ) {
+            values = p->values;  // Always inherits
+        }
     } else {
         std::cerr << "SPIDashArray::cascade(): Incorrect parent type" << std::endl;
     }
@@ -2112,10 +2111,13 @@ SPIDashArray::merge( const SPIBase* const parent ) {
 bool
 SPIDashArray::operator==(const SPIBase& rhs) {
     if( const SPIDashArray* r = dynamic_cast<const SPIDashArray*>(&rhs) ) {
-        return values == r->values && SPIBase::operator==(rhs);
-    } else {
-        return false;
+        for (int i = 0;i < values.size(); i++) {
+            if (values[i] != r->values[i]) { 
+                return false;
+            }
+        }
     }
+    return SPIBase::operator==(rhs);
 }
 
 

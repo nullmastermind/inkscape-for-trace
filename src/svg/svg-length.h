@@ -53,6 +53,13 @@ public:
         value = computed = v;
         return v;
     }
+    // Check apples being compared to apples
+    virtual bool operator==(const SVGLength& svglength) const {
+        return (unit == svglength.unit) && (value == svglength.value);
+    }
+    virtual bool operator!=(const SVGLength& svglength) const {
+        return !(*this == svglength);
+    }
 
     bool read(char const *str);
     void readOrUnset(char const *str, Unit u = NONE, float v = 0, float c = 0);
