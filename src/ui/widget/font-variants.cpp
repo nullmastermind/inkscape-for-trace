@@ -340,18 +340,19 @@ namespace Widget {
     // Add tooltips
     _feature_entry.set_tooltip_text( _("Feature settings in CSS form. No sanity checking is performed."));
 
-    _feature_list.set_justify( Gtk::JUSTIFY_LEFT );
-    _feature_list.set_line_wrap( true );
-
     _feature_substitutions.set_justify( Gtk::JUSTIFY_LEFT );
     _feature_substitutions.set_line_wrap( true );
     _feature_substitutions.set_line_wrap_mode( Pango::WRAP_WORD_CHAR );
 
+    _feature_list.set_justify( Gtk::JUSTIFY_LEFT );
+    _feature_list.set_line_wrap( true );
+
     // Add to frame
     _feature_vbox.pack_start( _feature_entry );
     _feature_vbox.pack_start( _feature_label );
-    _feature_vbox.pack_start( _feature_list  );
     _feature_vbox.pack_start( _feature_substitutions );
+    _feature_vbox.pack_start( _feature_list  );
+
     _feature_frame.add( _feature_vbox );
     pack_start( _feature_frame, Gtk::PACK_SHRINK  );
 
@@ -582,7 +583,7 @@ namespace Widget {
       font_instance* res = font_factory::Default()->FaceFromFontSpecification( font_spec.c_str() );
       if( res ) {
 
-          std::map<Glib::ustring,int>::iterator it;
+          std::map<Glib::ustring, OTSubstitution>::iterator it;
 
           if((it = res->openTypeTables.find("liga"))!= res->openTypeTables.end() ||
              (it = res->openTypeTables.find("clig"))!= res->openTypeTables.end()) {
@@ -767,20 +768,28 @@ namespace Widget {
           Glib::ustring markup_dlig;
           Glib::ustring markup_hlig;
           Glib::ustring markup_calt;
-          for (auto table: res->openTypeLigatures) {
 
-              Glib::ustring markup;
-              markup += "<span font_family='";
-              markup += sp_font_description_get_family(res->descr);
-              markup += "'>";
-              markup += Glib::Markup::escape_text(table.second);
-              markup += "</span>";
+          for (auto table: res->openTypeTables) {
 
-              if (table.first == "liga") markup_liga += markup;
-              if (table.first == "clig") markup_liga += markup;
-              if (table.first == "dlig") markup_dlig += markup;
-              if (table.first == "hlig") markup_hlig += markup;
-              if (table.first == "calt") markup_calt += markup;
+              if (table.first == "liga" ||
+                  table.first == "dlig" ||
+                  table.first == "dlig" ||
+                  table.first == "hgli" ||
+                  table.first == "calt") {
+
+                  Glib::ustring markup;
+                  markup += "<span font_family='";
+                  markup += sp_font_description_get_family(res->descr);
+                  markup += "'>";
+                  markup += Glib::Markup::escape_text(table.second.output);
+                  markup += "</span>";
+
+                  if (table.first == "liga") markup_liga += markup;
+                  if (table.first == "clig") markup_liga += markup;
+                  if (table.first == "dlig") markup_dlig += markup;
+                  if (table.first == "hlig") markup_hlig += markup;
+                  if (table.first == "calt") markup_calt += markup;
+              }
           }
 
           _ligatures_label_common.set_markup        ( markup_liga.c_str() );
@@ -797,7 +806,8 @@ namespace Widget {
           Glib::ustring markup_afrc;
           Glib::ustring markup_ordn;
           Glib::ustring markup_zero;
-          for (auto table: res->openTypeNumeric) {
+
+          for (auto table: res->openTypeTables) {
 
               Glib::ustring markup;
               markup += "<span font_family='";
@@ -810,7 +820,7 @@ namespace Widget {
                   table.first == "pnum" ||
                   table.first == "tnum") markup += "0123456789";
               if (table.first == "zero") markup += "0";
-              if (table.first == "ordn") markup += table.second;
+              if (table.first == "ordn") markup += "[" + table.second.before + "]" + table.second.output;
               if (table.first == "frac" ||
                   table.first == "afrc" ) markup += "1/2 2/3 3/4 4/5 5/6"; // Can we do better?
               markup += "</span>";
@@ -834,22 +844,24 @@ namespace Widget {
           _numeric_ordinal_label.set_markup      ( markup_ordn.c_str() );
           _numeric_slashed_zero_label.set_markup ( markup_zero.c_str() );
 
-          // Make list of tables not handled above... eventually add Gtk::Label with
-          // this info.
-          std::map<Glib::ustring,int> table_copy = res->openTypeTables;
+          // Make list of tables not handled above.
+          std::map<Glib::ustring, OTSubstitution> table_copy = res->openTypeTables;
           if( (it = table_copy.find("liga")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("clig")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("dlig")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("hlig")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("calt")) != table_copy.end() ) table_copy.erase( it );
+
           if( (it = table_copy.find("subs")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("sups")) != table_copy.end() ) table_copy.erase( it );
+
           if( (it = table_copy.find("smcp")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("c2sc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("pcap")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("c2pc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("unic")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("titl")) != table_copy.end() ) table_copy.erase( it );
+
           if( (it = table_copy.find("lnum")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("onum")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("pnum")) != table_copy.end() ) table_copy.erase( it );
@@ -858,6 +870,7 @@ namespace Widget {
           if( (it = table_copy.find("afrc")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("ordn")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
+
           if( (it = table_copy.find("jp78")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("jp83")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("jp90")) != table_copy.end() ) table_copy.erase( it );
@@ -869,62 +882,141 @@ namespace Widget {
           if( (it = table_copy.find("ruby")) != table_copy.end() ) table_copy.erase( it );
 
           // An incomplete list of tables that should not be exposed to the user:
+          if( (it = table_copy.find("abvf")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("abvs")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("akhn")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("blwf")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("blws")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("ccmp")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("cjct")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("dnom")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("dtls")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("fina")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("half")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("haln")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("init")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("isol")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("locl")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("medi")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("nukt")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("numr")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pref")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("pres")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("pstf")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("psts")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("rlig")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("rkrf")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("rphf")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("rtlm")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("ssty")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("vatu")) != table_copy.end() ) table_copy.erase( it );
 
+          std::string markup;
+
+          // GSUB lookup type 1 (1 to 1 mapping).
+          for (auto table: res->openTypeTables) {
+              if (table.first == "case" ||
+                  table.first == "hist" ||
+                  table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't')) {
+
+                  if( (it = table_copy.find(table.first)) != table_copy.end() ) table_copy.erase( it );
+
+                  markup += "<span font_weight='bold'>";
+                  markup += table.first;
+                  markup += "</span>";
+                  markup += ": ";
+
+                  markup += "<span font_family='";
+                  markup += sp_font_description_get_family(res->descr);
+                  markup += "'>";
+                  markup += Glib::Markup::escape_text(table.second.input);
+                  markup += "</span>";
+
+                  markup += " <span font_weight='bold'>→</span> ";
+
+                  markup += "<span font_family='";
+                  markup += sp_font_description_get_family(res->descr);
+                  markup += "'>";
+                  markup += "<span font_features='";
+                  markup += table.first;
+                  markup += "'>";
+                  markup += Glib::Markup::escape_text(table.second.input);
+                  markup += "</span>";
+                  markup += "</span>\n";
+              }
+          }
+
+          // GSUB lookup type 3 (1 to many mapping). Optionally type 1.
+          for (auto table: res->openTypeTables) {
+              if (table.first == "salt" ||
+                  table.first == "swsh" ||
+                  table.first == "cwsh" ||
+                  table.first == "ornm" ||
+                  table.first == "nalt" ||
+                  table.first[0] == 'c' && table.first[1] == 'v') {
+
+                  if (table.second.input.length() == 0) {
+                      // This can happen if a table is not in the 'DFLT' script and 'dflt' language.
+                      // We should be using the 'lang' attribute to find the correct tables.
+                      // std::cerr << "FontVariants::open_type_update: "
+                      //           << table.first << " has no entries!" << std::endl;
+                      continue;
+                  }
+
+                  if( (it = table_copy.find(table.first)) != table_copy.end() ) table_copy.erase( it );
+
+                  // Our lame attempt at determining number of alternative glyphs for one glyph:
+                  int number = table.second.output.length() / table.second.input.length();
+
+                  for (int i = 0; i < number; ++i) {
+                      markup += "<span font_weight='bold'>";
+                      markup += table.first;
+                      if (i != 0) {
+                          markup += " ";
+                          markup += std::to_string (i + 1);
+                      }
+                      markup += "</span>";
+                      markup += ": ";
+
+                      markup += "<span font_family='";
+                      markup += sp_font_description_get_family(res->descr);
+                      markup += "'>";
+                      markup += Glib::Markup::escape_text(table.second.input);
+                      markup += "</span>";
+
+                      markup += " <span font_weight='bold'>→</span> ";
+
+                      markup += "<span font_family='";
+                      markup += sp_font_description_get_family(res->descr);
+                      markup += "'>";
+                      markup += "<span font_features='";
+                      markup += table.first;
+                      markup += " ";
+                      markup += std::to_string (i + 1);
+                      markup += "'>";
+                      markup += Glib::Markup::escape_text(table.second.input);
+                      markup += "</span>";
+                      markup += "</span>\n";
+                  }
+              }
+          }
+
+          _feature_substitutions.set_markup ( markup.c_str() );
+
           std::string ott_list = "OpenType tables not included above: ";
           for(it = table_copy.begin(); it != table_copy.end(); ++it) {
-              // std::cout << "Other: " << it->first << "  Occurrences: " << it->second << std::endl;
               ott_list += it->first;
               ott_list += ", ";
           }
 
-          _feature_list.set_text( ott_list.c_str() );
-
-          // "<span foreground='darkblue'>";
-          Glib::ustring markup;
-
-          for (auto table: res->openTypeStylistic) {
-
-              markup += "<span font_weight='bold'>";
-              markup += table.first;
-              markup += "</span>";
-              markup += ": ";
-
-              markup += "<span font_family='";
-              markup += sp_font_description_get_family(res->descr);
-              markup += "'>";
-              markup += Glib::Markup::escape_text(table.second);
-              markup += "</span>";
-
-              markup += " → ";
-
-              markup += "<span font_family='";
-              markup += sp_font_description_get_family(res->descr);
-              markup += "'>";
-              markup += "<span font_features='";
-              markup += table.first;
-              markup += "'>";
-              markup += Glib::Markup::escape_text(table.second);
-              markup += "</span>";
-              markup += "</span>\n";
-
+          if (table_copy.size() > 0) {
+              ott_list.pop_back();
+              ott_list.pop_back();
+              _feature_list.set_text( ott_list.c_str() );
+          } else {
+              _feature_list.set_text( "" );
           }
 
-          _feature_substitutions.set_markup ( markup.c_str() );
 
       } else {
           std::cerr << "FontVariants::update(): Couldn't find font_instance for: "
