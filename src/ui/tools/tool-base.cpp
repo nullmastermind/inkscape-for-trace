@@ -19,6 +19,7 @@
 #endif
 
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/display.h>
 #include <glibmm/i18n.h>
 
 #include "shortcuts.h"
@@ -1170,7 +1171,7 @@ static void update_latin_keys_group() {
     gint n_keys;
 
     latin_keys_group_valid = FALSE;
-    if (gdk_keymap_get_entries_for_keyval(gdk_keymap_get_default(), GDK_KEY_a, &keys, &n_keys)) {
+    if (gdk_keymap_get_entries_for_keyval(Gdk::Display::get_default()->get_keymap(), GDK_KEY_a, &keys, &n_keys)) {
         for (gint i = 0; i < n_keys; i++) {
             if (!latin_keys_group_valid || keys[i].group < latin_keys_group) {
                 latin_keys_group = keys[i].group;
@@ -1185,7 +1186,7 @@ static void update_latin_keys_group() {
  * Initialize Latin keys group handling.
  */
 void init_latin_keys_group() {
-    g_signal_connect(G_OBJECT(gdk_keymap_get_default()),
+    g_signal_connect(G_OBJECT(Gdk::Display::get_default()->get_keymap()),
             "keys-changed", G_CALLBACK(update_latin_keys_group), NULL);
     update_latin_keys_group();
 }
@@ -1202,7 +1203,7 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
     gint group = latin_keys_group_valid ? latin_keys_group : event->group;
 
     gdk_keymap_translate_keyboard_state(
-            gdk_keymap_get_for_display(gdk_display_get_default()),
+            Gdk::Display::get_default()->get_keymap(),
             event->hardware_keycode, (GdkModifierType) event->state, group,
             &keyval, NULL, NULL, &modifiers);
 

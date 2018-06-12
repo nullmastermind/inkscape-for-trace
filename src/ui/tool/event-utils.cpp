@@ -11,6 +11,7 @@
 #include <cstring>
 #include <gdk/gdk.h>
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/display.h>
 #include "display/sp-canvas.h"
 #include "ui/tool/event-utils.h"
 
@@ -22,7 +23,7 @@ guint shortcut_key(GdkEventKey const &event)
 {
     guint shortcut_key = 0;
     gdk_keymap_translate_keyboard_state(
-            gdk_keymap_get_for_display(gdk_display_get_default()),
+            Gdk::Display::get_default()->get_keymap(),
             event.hardware_keycode,
             (GdkModifierType) event.state,
             0   /*event->key.group*/,

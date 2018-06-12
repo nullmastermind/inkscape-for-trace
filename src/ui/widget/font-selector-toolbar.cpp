@@ -13,6 +13,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
+#include <gdkmm/display.h>
 
 #include "font-selector-toolbar.h"
 
@@ -259,7 +260,7 @@ FontSelectorToolbar::on_key_press_event (GdkEventKey* key_event)
     bool consumed = false;
 
     unsigned int key = 0;
-    gdk_keymap_translate_keyboard_state( gdk_keymap_get_for_display( gdk_display_get_default() ),
+    gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          key_event->hardware_keycode,
                                          (GdkModifierType)key_event->state,
                                          0, &key, 0, 0, 0 );
