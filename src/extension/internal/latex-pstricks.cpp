@@ -244,7 +244,7 @@ unsigned int PrintLatex::stroke(Inkscape::Extension::Print * /*mod*/,
                 if ((i)) {
                     os << " ";
                 }
-                os << style->stroke_dasharray.values[i];
+                os << style->stroke_dasharray.values[i].value;
             }
         }
 

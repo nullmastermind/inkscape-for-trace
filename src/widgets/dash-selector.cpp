@@ -120,7 +120,7 @@ void SPDashSelector::init_dashes() {
                     double *d = dashes[pos];
                     unsigned i = 0;
                     for (; i < style.stroke_dasharray.values.size(); i++) {
-                        d[i] = style.stroke_dasharray.values[i];
+                        d[i] = style.stroke_dasharray.values[i].value;
                     }
                     d[i] = -1;
                 } else {

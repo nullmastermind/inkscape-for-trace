@@ -1436,7 +1436,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
         size_t ndashes = style->stroke_dasharray.values.size();
         double* dashes =(double*)malloc(ndashes*sizeof(double));
         for( unsigned i = 0; i < ndashes; ++i ) {
-            dashes[i] = style->stroke_dasharray.values[i];
+            dashes[i] = style->stroke_dasharray.values[i].value;
         }
         cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
         free(dashes);

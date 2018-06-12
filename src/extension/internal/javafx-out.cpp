@@ -441,9 +441,9 @@ bool JavaFXOutput::doStyle(SPStyle *style)
            out("            strokeDashArray: [ ");
            for(unsigned i = 0; i < style->stroke_dasharray.values.size(); i++ ) {
                if (i > 0) {
-                   out(", %.2lf", style->stroke_dasharray.values[i]);
+                   out(", %.2lf", style->stroke_dasharray.values[i].value);
                }else {
-                   out(" %.2lf", style->stroke_dasharray.values[i]);
+                   out(" %.2lf", style->stroke_dasharray.values[i].value);
                }
            }
            out(" ]\n");

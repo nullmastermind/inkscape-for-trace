@@ -695,7 +695,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
             } else {
                 unsigned i = 0;
                 while ((linestyle != U_PS_USERSTYLE) && (i < style->stroke_dasharray.values.size())) {
-                    if (style->stroke_dasharray.values[i] > 0.00000001) {
+                    if (style->stroke_dasharray.values[i].value > 0.00000001) {
                         linestyle = U_PS_USERSTYLE;
                     }
                     i++;
@@ -705,7 +705,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                     n_dash = style->stroke_dasharray.values.size();
                     dash = new uint32_t[n_dash];
                     for (i = 0; i < n_dash; i++) {
-                        dash[i] = MAX(1, (uint32_t) round(scale * style->stroke_dasharray.values[i] * PX2WORLD));
+                        dash[i] = MAX(1, (uint32_t) round(scale * style->stroke_dasharray.values[i].value * PX2WORLD));
                     }
                 }
             }
@@ -1458,7 +1458,7 @@ unsigned int PrintEmf::stroke(
 
         // go around the dash array repeatedly until the entire path is consumed (but not beyond).
         while (slength < tlength) {
-            elength = slength + style->stroke_dasharray.values[i++];
+            elength = slength + style->stroke_dasharray.values[i++].value;
             if (elength > tlength) {
                 elength = tlength;
             }
@@ -1469,7 +1469,7 @@ unsigned int PrintEmf::stroke(
                 first_frag = fragment;
             }
             slength = elength;
-            slength += style->stroke_dasharray.values[i++];  // the gap
+            slength += style->stroke_dasharray.values[i++].value;  // the gap
             if (i >= n_dash) {
                 i = 0;
             }

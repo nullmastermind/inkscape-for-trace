@@ -892,7 +892,7 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
             for (unsigned i=0; i<d->dc[d->level].style.stroke_dasharray.values.size(); i++) {
                 if (i)
                     tmp_style << ",";
-                tmp_style << d->dc[d->level].style.stroke_dasharray.values[i];
+                tmp_style << d->dc[d->level].style.stroke_dasharray.values[i].value;
             }
             tmp_style << ";";
             tmp_style << "stroke-dashoffset:0;";
@@ -985,19 +985,23 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             int penstyle = (up.Style & U_PS_STYLE_MASK);
+            SPILength spilength;
+            spilength.read("1");
             if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 3 );
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 1 );
+                spilength.read("3");
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
+                spilength.read("1");
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 1 );
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 1 );
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
             }
             if (penstyle==U_PS_DASHDOTDOT) {
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 1 );
-                d->dc[d->level].style.stroke_dasharray.values.push_back( 1 );
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
+                d->dc[d->level].style.stroke_dasharray.values.push_back( spilength );
             }
 
             d->dc[d->level].style.stroke_dasharray.set = 1;

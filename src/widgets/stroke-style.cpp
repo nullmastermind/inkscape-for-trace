@@ -741,14 +741,21 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
     if (!style->stroke_dasharray.values.empty()) {
         double d[64];
         size_t len = MIN(style->stroke_dasharray.values.size(), 64);
+        /* Set dash */
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        gboolean scale = prefs->getBool("/options/dash/scale", true);
+        double scaledash = 1.0;
+        if (scale) {
+            scaledash = style->stroke_width.computed;
+        }
         for (unsigned i = 0; i < len; i++) {
             if (style->stroke_width.computed != 0)
-                d[i] = style->stroke_dasharray.values[i] / style->stroke_width.computed;
+                d[i] = style->stroke_dasharray.values[i].value / scaledash;
             else
-                d[i] = style->stroke_dasharray.values[i]; // is there a better thing to do for stroke_width==0?
+                d[i] = style->stroke_dasharray.values[i].value; // is there a better thing to do for stroke_width==0?
         }
         dsel->set_dash(len, d, style->stroke_width.computed != 0 ?
-                       style->stroke_dashoffset.value / style->stroke_width.computed  :
+                       style->stroke_dashoffset.value / scaledash  :
                        style->stroke_dashoffset.value);
     } else {
         dsel->set_dash(0, nullptr, 0.0);
@@ -1042,8 +1049,13 @@ StrokeStyle::scaleLine()
             }
 
             /* Set dash */
-            setScaledDash(css, ndash, dash, offset, width);
-
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            gboolean scale = prefs->getBool("/options/dash/scale", true);
+            if (scale) {
+                setScaledDash(css, ndash, dash, offset, width);
+            } else {
+                setScaledDash(css, ndash, dash, offset, document->getDocumentScale()[0]);
+            }
             sp_desktop_apply_css_recursive ((*i), css, true);
         }
 

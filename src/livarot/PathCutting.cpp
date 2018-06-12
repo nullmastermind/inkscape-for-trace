@@ -63,7 +63,7 @@ void  Path::DashPolylineFromStyle(SPStyle *style, float scale, float min_len)
         double dlen = 0.0;
         // Find total length
         for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
-            dlen += style->stroke_dasharray.values[i] * scale;
+            dlen += style->stroke_dasharray.values[i].value * scale;
         }
         if (dlen >= min_len) {
             // Extract out dash pattern (relative positions)
@@ -71,7 +71,7 @@ void  Path::DashPolylineFromStyle(SPStyle *style, float scale, float min_len)
             size_t n_dash = style->stroke_dasharray.values.size();
             double *dash = g_new(double, n_dash);
             for (unsigned i = 0; i < n_dash; i++) {
-                dash[i] = style->stroke_dasharray.values[i] * scale;
+                dash[i] = style->stroke_dasharray.values[i].value * scale;
             }
 
             // Convert relative positions to absolute postions

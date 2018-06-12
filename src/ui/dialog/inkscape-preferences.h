@@ -77,6 +77,7 @@ enum {
     PREFS_PAGE_BEHAVIOR,
     PREFS_PAGE_BEHAVIOR_SELECTING,
     PREFS_PAGE_BEHAVIOR_TRANSFORMS,
+    PREFS_PAGE_BEHAVIOR_DASHES,
     PREFS_PAGE_BEHAVIOR_SCROLLING,
     PREFS_PAGE_BEHAVIOR_SNAPPING,
     PREFS_PAGE_BEHAVIOR_STEPS,
@@ -168,6 +169,7 @@ protected:
     UI::Widget::DialogPage _page_behavior;
     UI::Widget::DialogPage _page_select;
     UI::Widget::DialogPage _page_transforms;
+    UI::Widget::DialogPage _page_dashes;
     UI::Widget::DialogPage _page_scrolling;
     UI::Widget::DialogPage _page_snapping;
     UI::Widget::DialogPage _page_steps;
@@ -316,6 +318,8 @@ protected:
     UI::Widget::PrefCheckButton _trans_pattern;
     UI::Widget::PrefRadioButton _trans_optimized;
     UI::Widget::PrefRadioButton _trans_preserved;
+
+    UI::Widget::PrefCheckButton _dash_scale;
 
     UI::Widget::PrefRadioButton _sel_all;
     UI::Widget::PrefRadioButton _sel_current;

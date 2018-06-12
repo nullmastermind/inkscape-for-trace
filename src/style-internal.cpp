@@ -36,7 +36,7 @@
 #include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
-
+#include "inkscape.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
@@ -430,8 +430,60 @@ SPILength::merge( const SPIBase* const parent ) {
     }
 }
 
+// Generate a string useful for passing dasharray without name, etc.
+const Glib::ustring
+SPILength::toString( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
+    SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
+        if (this->inherit) {
+            return ("inherit");
+        } else {
+            Inkscape::CSSOStringStream os;
+            switch (this->unit) {
+                case SP_CSS_UNIT_NONE:
+                    os << this->computed;
+                    break;
+                case SP_CSS_UNIT_PX:
+                    os << this->computed << "px";
+                    break;
+                case SP_CSS_UNIT_PT:
+                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
+                    break;
+                case SP_CSS_UNIT_PC:
+                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
+                    break;
+                case SP_CSS_UNIT_MM:
+                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
+                    break;
+                case SP_CSS_UNIT_CM:
+                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
+                    break;
+                case SP_CSS_UNIT_IN:
+                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
+                    break;
+                case SP_CSS_UNIT_EM:
+                    os << this->value << "em";
+                    break;
+                case SP_CSS_UNIT_EX:
+                    os << this->value << "ex";
+                    break;
+                case SP_CSS_UNIT_PERCENT:
+                    os << (this->value * 100.0) << "%";
+                    break;
+                default:
+                    /* Invalid */
+                    break;
+            }
+            return os.str();
+        }
+    }
+    return Glib::ustring("");
+}
+
 bool
-SPILength::operator==(const SPIBase& rhs) {
+SPILength::operator==(const SPIBase& rhs) const {
     if( const SPILength* r = dynamic_cast<const SPILength*>(&rhs) ) {
 
         if( unit != r->unit ) return false;
@@ -449,8 +501,6 @@ SPILength::operator==(const SPIBase& rhs) {
         return false;
     }
 }
-
-
 
 // SPILengthOrNormal ----------------------------------------------------
 
@@ -2033,23 +2083,30 @@ SPIDashArray::read( gchar const *str ) {
     if( strcmp(str, "none") == 0) {
         return;
     }
-
-    // std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
 
     gchar *e = NULL;
     bool LineSolid = true;
-    while (e != str && *str != '\0') {
-        /* TODO: Should allow <length> rather than just a unitless (px) number. */
-        double number = g_ascii_strtod(str, (char **) &e);
-        values.push_back( number );
-        if (number > 0.00000001)
-            LineSolid = false;
-        if (e != str) {
-            str = e;
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Geom::Rect vbox = document->getViewBox();
+    for (auto token:tokens) {
+        SPILength spilength;
+        spilength.read(token.c_str());
+        if(spilength.value > 0.00000001)
+             LineSolid = false;
+        double dash = 0;
+        if(spilength.unit == SPCSSUnit::SP_CSS_UNIT_NONE) {
+            dash = spilength.value;
+        } else if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
+            dash = vbox.width() * spilength.value;
+        } else {
+            dash = spilength.computed / document->getDocumentScale()[0];
         }
-        while (str && *str && !(isalnum(*str) || *str=='.')) str += 1;
+        Inkscape::CSSOStringStream osarray;
+        osarray << dash;
+        spilength.read(osarray.str().c_str());
+        values.push_back(spilength);
     }
-
     if (LineSolid) {
         values.clear();
     }
@@ -2074,7 +2131,7 @@ SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase
                 if (i) {
                     os << ", ";
                 }
-                os << this->values[i];
+                os << this->values[i].toString().c_str();
             }
             os << important_str();
             os << ";";
@@ -2111,13 +2168,15 @@ SPIDashArray::merge( const SPIBase* const parent ) {
 
 bool
 SPIDashArray::operator==(const SPIBase& rhs) {
-    if( const SPIDashArray* r = dynamic_cast<const SPIDashArray*>(&rhs) ) {
-        return values == r->values && SPIBase::operator==(rhs);
-    } else {
-        return false;
+     if( const SPIDashArray* r = dynamic_cast<const SPIDashArray*>(&rhs) ) {
+        for (int i = 0;i < values.size(); i++) {
+            if (values[i] != r->values[i]) { 
+                return false;
+            }
+        }
     }
+    return SPIBase::operator==(rhs);
 }
-
 
 
 // SPIFontSize ----------------------------------------------------------
