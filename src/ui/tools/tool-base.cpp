@@ -123,11 +123,6 @@ ToolBase::~ToolBase() {
         delete this->message_context;
     }
 
-    if (this->cursor != NULL) {
-        g_object_unref(this->cursor);
-        this->cursor = NULL;
-    }
-
     if (this->desktop) {
         this->desktop = NULL;
     }
@@ -161,27 +156,23 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
  * Recreates and draws cursor on desktop related to ToolBase.
  */
 void ToolBase::sp_event_context_update_cursor() {
-    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-    if (gtk_widget_get_window (w)) {
+    Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+    if (w->get_window()) {
         if (this->cursor_shape) {
-            if(this->cursor) {
-                g_object_unref(this->cursor);
-            }
-
 	    bool fillHasColor=false, strokeHasColor=false;
 	    guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
 	    guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
 	    double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 0;
 	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
 
-            this->cursor = sp_cursor_from_xpm(
+            this->cursor = Glib::wrap(sp_cursor_from_xpm(
 		this->cursor_shape,
                 SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
                 SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
-            );
+            ));
         }
-        gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
-        gdk_flush();
+        w->get_window()->set_cursor(cursor);
+        w->get_display()->flush();
     }
     this->desktop->waiting_cursor = false;
 }
@@ -546,8 +537,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+            w->get_window()->set_cursor(cursor);
         }
 
         if (within_tolerance && (panning || zoom_rb)) {
@@ -755,8 +746,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+            w->get_window()->set_cursor(cursor);
         }
 
         switch (get_latin_keyval(&event->key)) {

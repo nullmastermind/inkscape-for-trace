@@ -563,7 +563,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             sp_guideline_set_color(SP_GUIDELINE(item), guide->getColor());
 
             // restore event context's cursor
-            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), desktop->event_context->cursor);
+            Glib::wrap(GTK_WIDGET(desktop->getCanvas()))->get_window()->set_cursor(desktop->event_context->cursor);
 
             desktop->guidesMessageContext()->clear();
             break;
