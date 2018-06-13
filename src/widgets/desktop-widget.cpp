@@ -1370,19 +1370,14 @@ SPDesktopWidget::presentWindow()
 bool SPDesktopWidget::showInfoDialog( Glib::ustring const &message )
 {
     bool result = false;
-    GtkWindow *window = GTK_WINDOW( gtk_widget_get_toplevel( GTK_WIDGET(this) ) );
+    Gtk::Window *window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
     if (window)
     {
-        GtkWidget *dialog = gtk_message_dialog_new(
-                window,
-                GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_INFO,
-                GTK_BUTTONS_OK,
-                "%s", message.c_str());
-        gtk_widget_set_name(dialog, "InfoDialog");
-        gtk_window_set_title( GTK_WINDOW(dialog), _("Note:")); // probably want to take this as a parameter.
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        Gtk::MessageDialog dialog(*window, message, false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+        dialog.property_destroy_with_parent() = true;
+        dialog.set_name("InfoDialog");
+        dialog.set_title(_("Note:")); // probably want to take this as a parameter.
+        dialog.run();
     }
     return result;
 }
