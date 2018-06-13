@@ -5200,9 +5200,8 @@ msgstr "Images matricielles"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:49
 msgid "Apply adaptive thresholding to selected bitmap(s)"
-msgstr ""
-"Appliquer un effet de seuil adaptatif au(x) objet(s) matriciel(s) "
-"sélectionné(s)"
+msgstr "Appliquer un effet de seuil adaptatif aux objets matriciels "
+"sélectionnés"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:45
 msgid "Add Noise"
@@ -5251,7 +5250,7 @@ msgstr "Bruit de Poisson"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:60
 msgid "Add random noise to selected bitmap(s)"
-msgstr "Ajouter du bruit aléatoire au(x) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Ajouter du bruit aléatoire aux objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/blur.cpp:38
 #: ../src/extension/internal/filter/blurs.h:54
@@ -5283,7 +5282,7 @@ msgstr "Sigma :"
 
 #: ../src/extension/internal/bitmap/blur.cpp:47
 msgid "Blur selected bitmap(s)"
-msgstr "Flouter le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Flouter les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/channel.cpp:48
 msgid "Channel"
@@ -5348,8 +5347,7 @@ msgstr "Fusain"
 
 #: ../src/extension/internal/bitmap/charcoal.cpp:47
 msgid "Apply charcoal stylization to selected bitmap(s)"
-msgstr ""
-"Transformer le(s) objet(s) matriciel(s) sélectionné(s) en dessins au fusain"
+msgstr "Transformer les objets matriciels sélectionnés en dessins au fusain"
 
 #: ../src/extension/internal/bitmap/colorize.cpp:50
 #: ../src/extension/internal/filter/color.h:392
@@ -5359,8 +5357,8 @@ msgstr "Colorer"
 #: ../src/extension/internal/bitmap/colorize.cpp:58
 msgid "Colorize selected bitmap(s) with specified color, using given opacity"
 msgstr ""
-"Colorer le(s) objet(s) matriciel(s) sélectionné(s) avec la couleur et "
-"l'opacité spécifiées"
+"Colorer les objets matriciels sélectionnés avec la couleur et l'opacité "
+"spécifiées"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:40
 #: ../src/extension/internal/filter/color.h:1189
@@ -5400,7 +5398,7 @@ msgstr "Droite (px) :"
 
 #: ../src/extension/internal/bitmap/crop.cpp:77
 msgid "Crop selected bitmap(s)"
-msgstr "Rogner le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Rogner les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:37
 msgid "Cycle Colormap"
@@ -5416,8 +5414,7 @@ msgstr "Quantité :"
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:45
 msgid "Cycle colormap(s) of selected bitmap(s)"
 msgstr ""
-"Permuter cycliquement les couleurs dans le(s) objet(s) matriciel(s) "
-"sélectionné(s)"
+"Permuter cycliquement les couleurs dans les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:36
 msgid "Despeckle"
@@ -5426,7 +5423,7 @@ msgstr "Adoucir les parasites"
 #: ../src/extension/internal/bitmap/despeckle.cpp:43
 msgid "Reduce speckle noise of selected bitmap(s)"
 msgstr ""
-"Adoucir le bruit parasite sur le(s) objet(s) matriciel(s) sélectionné(s)"
+"Adoucir le bruit parasite sur les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/edge.cpp:37
 msgid "Edge"
@@ -5435,8 +5432,7 @@ msgstr "Contours"
 #: ../src/extension/internal/bitmap/edge.cpp:45
 msgid "Highlight edges of selected bitmap(s)"
 msgstr ""
-"Afficher les bords du/des objet(s) matriciel(s) sélectionné(s) en "
-"surbrillance"
+"Afficher les bords des objets matriciels sélectionnés en surbrillance"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:38
 msgid "Emboss"
@@ -5445,7 +5441,7 @@ msgstr "Embosser"
 #: ../src/extension/internal/bitmap/emboss.cpp:47
 msgid "Emboss selected bitmap(s); highlight edges with 3D effect"
 msgstr ""
-"Gaufrer le(s) objet(s) matriciel(s) sélectionné(s) ; surligner les contours "
+"Gaufrer les objets matriciels sélectionnés ; surligner les contours "
 "avec un effet 3D"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:35
@@ -5455,7 +5451,7 @@ msgstr "Améliorer"
 #: ../src/extension/internal/bitmap/enhance.cpp:42
 msgid "Enhance selected bitmap(s); minimize noise"
 msgstr ""
-"Améliorer le(s) objet(s) matriciel(s) sélectionné(s) ; minimiser le bruit"
+"Améliorer les objets matriciels sélectionnés ; minimiser le bruit"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:35
 msgid "Equalize"
@@ -5463,7 +5459,7 @@ msgstr "Égaliser"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:42
 msgid "Equalize selected bitmap(s); histogram equalization"
-msgstr "Égaliser l'histogramme du/des objet(s) matriciel(s) sélectionné(s)"
+msgstr "Égaliser l'histogramme des objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:38
 #: ../src/filter-enums.cpp:29
@@ -5478,7 +5474,7 @@ msgstr "Facteur :"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:47
 msgid "Gaussian blur selected bitmap(s)"
-msgstr "Appliquer un flou gaussien au(x) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Appliquer un flou gaussien aux objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/implode.cpp:37
 msgid "Implode"
@@ -5486,7 +5482,7 @@ msgstr "Imploser"
 
 #: ../src/extension/internal/bitmap/implode.cpp:45
 msgid "Implode selected bitmap(s)"
-msgstr "Imploser le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Imploser les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/level.cpp:41
 #: ../src/extension/internal/filter/color.h:817
@@ -5516,7 +5512,7 @@ msgid ""
 "Level selected bitmap(s) by scaling values falling between the given ranges "
 "to the full color range"
 msgstr ""
-"Niveler le(s) objet(s) matriciel(s) sélectionné(s) en mettant à l'échelle "
+"Niveler les objets matriciels sélectionnés en mettant à l'échelle "
 "les valeurs se situant dans l'intervalle donné pour les élargir à la gamme "
 "complète de couleur"
 
@@ -5534,7 +5530,7 @@ msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
 "between the given ranges to the full color range"
 msgstr ""
-"Niveler la composante spécifiée du/des objet(s) matriciel(s) sélectionné(s) "
+"Niveler la composante spécifiée des objets matriciels sélectionnés "
 "en mettant à l'échelle les valeurs se situant dans l'intervalle donné pour "
 "les élargir à la gamme complète de couleur"
 
@@ -5569,8 +5565,8 @@ msgstr "Brillance :"
 msgid ""
 "Adjust the amount of hue, saturation, and brightness in selected bitmap(s)"
 msgstr ""
-"Moduler la teinte, la saturation et la luminosité du/des objet(s) "
-"matriciel(s) sélectionné(s)"
+"Moduler la teinte, la saturation et la luminosité des objets matriciels "
+"sélectionnés"
 
 #: ../src/extension/internal/bitmap/negate.cpp:36
 msgid "Negate"
@@ -5578,7 +5574,7 @@ msgstr "Inverser"
 
 #: ../src/extension/internal/bitmap/negate.cpp:43
 msgid "Negate (take inverse) selected bitmap(s)"
-msgstr "Inverser les couleurs dans le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Inverser les couleurs dans les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/normalize.cpp:36
 msgid "Normalize"
@@ -5589,7 +5585,7 @@ msgid ""
 "Normalize selected bitmap(s), expanding color range to the full possible "
 "range of color"
 msgstr ""
-"Normaliser le(s) objet(s) matriciel(s) sélectionné(s), en étendant la gamme "
+"Normaliser les objets matriciels sélectionnés, en étendant la gamme "
 "des couleurs présente à la gamme complète de couleur"
 
 #: ../src/extension/internal/bitmap/oilPaint.cpp:37
@@ -5599,7 +5595,7 @@ msgstr "Peinture à l'huile"
 #: ../src/extension/internal/bitmap/oilPaint.cpp:45
 msgid "Stylize selected bitmap(s) so that they appear to be painted with oils"
 msgstr ""
-"Styliser le(s) objet(s) matriciel(s) sélectionné(s) en leur donnant "
+"Styliser les objets matriciels sélectionnés en leur donnant "
 "l'apparence d'une peinture à l'huile"
 
 #: ../src/extension/internal/bitmap/opacity.cpp:38
@@ -5620,8 +5616,7 @@ msgstr "Opacité :"
 #: ../src/extension/internal/bitmap/opacity.cpp:46
 msgid "Modify opacity channel(s) of selected bitmap(s)"
 msgstr ""
-"Modifier le(s) canal/aux d'opacité du/des objet(s) matriciel(s) "
-"sélectionné(s)"
+"Modifier les canaux d'opacité des objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/raise.cpp:40
 msgid "Raise"
@@ -5635,7 +5630,7 @@ msgstr "En relief"
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised appearance"
 msgstr ""
-"Changer la luminosité du/des objet(s) matriciel(s) sélectionné(s) pour les "
+"Changer la luminosité des objets matriciels sélectionnés pour les "
 "faire apparaître « en relief »"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:40
@@ -5656,7 +5651,7 @@ msgstr "Ordre :"
 msgid ""
 "Reduce noise in selected bitmap(s) using a noise peak elimination filter"
 msgstr ""
-"Réduire le bruit dans le(s) objet(s) matriciel(s) sélectionné(s) en "
+"Réduire le bruit dans les objets matriciels sélectionnés en "
 "éliminant les pics de bruit"
 
 #: ../src/extension/internal/bitmap/sample.cpp:39
@@ -5689,12 +5684,12 @@ msgstr "Ombrage coloré"
 #: ../src/extension/internal/bitmap/shade.cpp:50
 msgid "Shade selected bitmap(s) simulating distant light source"
 msgstr ""
-"Ombrer le(s) objet(s) matriciel(s) sélectionné(s), simulant une source "
+"Ombrer les objets matriciels sélectionnés, simulant une source "
 "lumineuse lointaine"
 
 #: ../src/extension/internal/bitmap/sharpen.cpp:47
 msgid "Sharpen selected bitmap(s)"
-msgstr "Rendre plus nets le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Rendre plus nets les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/solarize.cpp:39
 #: ../src/extension/internal/filter/color.h:1569
@@ -5705,7 +5700,7 @@ msgstr "Solariser"
 #: ../src/extension/internal/bitmap/solarize.cpp:47
 msgid "Solarize selected bitmap(s), like overexposing photographic film"
 msgstr ""
-"Solariser le(s) objet(s) matriciel(s) sélectionné(s), comme un effet de "
+"Solariser les objets matriciels sélectionnés, comme un effet de "
 "pellicule surexposée"
 
 #: ../src/extension/internal/bitmap/spread.cpp:37
@@ -5717,8 +5712,8 @@ msgid ""
 "Randomly scatter pixels in selected bitmap(s), within the given radius of "
 "the original position"
 msgstr ""
-"Disperser aléatoirement les pixels dans le(s) objet(s) matriciel(s) "
-"sélectionné(s), dans le rayon donné par rapport à la position originale"
+"Disperser aléatoirement les pixels dans les objets matriciels "
+"sélectionnés, dans le rayon donné par rapport à la position originale"
 
 #: ../src/extension/internal/bitmap/swirl.cpp:39
 msgid "Degrees:"
@@ -5727,7 +5722,7 @@ msgstr "Degrés :"
 #: ../src/extension/internal/bitmap/swirl.cpp:45
 msgid "Swirl selected bitmap(s) around center point"
 msgstr ""
-"Faire tourbillonner le(s) objet(s) matriciel(s) sélectionné(s) autour d'un "
+"Faire tourbillonner les objets matriciels sélectionnés autour d'un "
 "point central"
 
 #. TRANSLATORS: see http://docs.gimp.org/en/gimp-tool-threshold.html
@@ -5743,7 +5738,7 @@ msgstr "Seuil :"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:46
 msgid "Threshold selected bitmap(s)"
-msgstr "Appliquer un seuil sur le(s) objet(s) matriciel(s) sélectionné(s)"
+msgstr "Appliquer un seuil sur les objets matriciels sélectionnés"
 
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:41
 msgid "Unsharp Mask"
@@ -5752,7 +5747,7 @@ msgstr "Masque de netteté"
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:52
 msgid "Sharpen selected bitmap(s) using unsharp mask algorithms"
 msgstr ""
-"Rendre plus nets le(s) objet(s) matriciel(s) sélectionné(s) en utilisant des "
+"Rendre plus nets les objets matriciels sélectionnés en utilisant des "
 "algorithmes de type « unsharp mask »"
 
 #: ../src/extension/internal/bitmap/wave.cpp:38
@@ -5770,7 +5765,7 @@ msgstr "Longueur d'onde :"
 #: ../src/extension/internal/bitmap/wave.cpp:47
 msgid "Alter selected bitmap(s) along sine wave"
 msgstr ""
-"Altérer le(s) objet(s) matriciel(s) sélectionné(s) suivant une onde "
+"Altérer les objets matriciels sélectionnés suivant une onde "
 "sinusoïdale"
 
 #: ../src/extension/internal/bluredge.cpp:132
@@ -11910,7 +11905,7 @@ msgstr "Essayer d'utiliser le serveur X (même si $DISPLAY n'est pas défini)"
 
 #: ../src/main.cpp:309
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr "Ouvrir les document(s) spécifiés (la chaîne d'option peut être exclue)"
+msgstr "Ouvrir les documents spécifiés (la chaîne d'option peut être exclue)"
 
 #: ../src/main.cpp:310 ../src/main.cpp:320 ../src/main.cpp:325
 #: ../src/main.cpp:397 ../src/main.cpp:402 ../src/main.cpp:407
@@ -11930,7 +11925,7 @@ msgstr "NOM_DE_FICHIER"
 #: ../src/main.cpp:319
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
-"Imprimer les document(s) dans le fichier de sortie spécifié (utilisez '| "
+"Imprimer les documents dans le fichier de sortie spécifié (utilisez '| "
 "programme ' pour envoyer la sortie à un programme)"
 
 #: ../src/main.cpp:324
@@ -12319,7 +12314,7 @@ msgstr "_Didacticiels"
 
 #: ../src/path-chemistry.cpp:63
 msgid "Select <b>object(s)</b> to combine."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à combiner."
+msgstr "Sélectionner des <b>objets</b> à combiner."
 
 #: ../src/path-chemistry.cpp:68
 msgid "Combining paths..."
@@ -12335,7 +12330,7 @@ msgstr "<b>Aucun chemin</b> à combiner dans la sélection."
 
 #: ../src/path-chemistry.cpp:199
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Sélectionner des <b>chemin(s)</b> à séparer."
+msgstr "Sélectionner des <b>chemins</b> à séparer."
 
 #: ../src/path-chemistry.cpp:203
 msgid "Breaking apart paths..."
@@ -12351,7 +12346,7 @@ msgstr "<b>Aucun chemin</b> à séparer dans la sélection."
 
 #: ../src/path-chemistry.cpp:300
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Sélectionner les <b>objet(s)</b> à convertir en chemin."
+msgstr "Sélectionner des <b>objets</b> à convertir en chemin."
 
 #: ../src/path-chemistry.cpp:306
 msgid "Converting objects to paths..."
@@ -12367,7 +12362,7 @@ msgstr "<b>Aucun objet</b> à convertir en chemin dans la sélection."
 
 #: ../src/path-chemistry.cpp:613
 msgid "Select <b>path(s)</b> to reverse."
-msgstr "Sélectionner les <b>chemin(s)</b> à inverser."
+msgstr "Sélectionner des <b>chemins</b> à inverser."
 
 #: ../src/path-chemistry.cpp:621
 msgid "Reversing paths..."
@@ -12670,7 +12665,7 @@ msgstr "Supprimer"
 
 #: ../src/selection-chemistry.cpp:443
 msgid "Select <b>object(s)</b> to duplicate."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à dupliquer."
+msgstr "Sélectionner des <b>objets</b> à dupliquer."
 
 #: ../src/selection-chemistry.cpp:548
 #, c-format
@@ -12717,7 +12712,7 @@ msgstr "Dégrouper"
 
 #: ../src/selection-chemistry.cpp:973 ../src/selection-chemistry.cpp:1025
 msgid "Select <b>object(s)</b> to raise."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à monter."
+msgstr "Sélectionner des <b>objets</b> à monter."
 
 #: ../src/selection-chemistry.cpp:980 ../src/selection-chemistry.cpp:1031
 #: ../src/selection-chemistry.cpp:1057 ../src/selection-chemistry.cpp:1114
@@ -12739,7 +12734,7 @@ msgstr "Monter au premier plan"
 
 #: ../src/selection-chemistry.cpp:1051
 msgid "Select <b>object(s)</b> to lower."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à descendre."
+msgstr "Sélectionner des <b>objets</b> à descendre."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1100
@@ -12749,7 +12744,7 @@ msgstr "Descendre"
 
 #: ../src/selection-chemistry.cpp:1108
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à descendre à l'arrière-plan."
+msgstr "Sélectionner des <b>objets</b> à descendre à l'arrière-plan."
 
 #: ../src/selection-chemistry.cpp:1138
 msgid "Lower to bottom"
@@ -12778,7 +12773,7 @@ msgstr "Coller l'effet de chemin interactif"
 #: ../src/selection-chemistry.cpp:1271
 msgid "Select <b>object(s)</b> to remove live path effects from."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> sur lesquels supprimer des effets de "
+"Sélectionner des <b>objets</b> sur lesquels supprimer des effets de "
 "chemin."
 
 #: ../src/selection-chemistry.cpp:1284
@@ -12787,7 +12782,7 @@ msgstr "Supprimer l'effet de chemin interactif"
 
 #: ../src/selection-chemistry.cpp:1293
 msgid "Select <b>object(s)</b> to remove filters from."
-msgstr "Sélectionner les <b>objets</b> pour en retirer les filtres."
+msgstr "Sélectionner des <b>objets</b> pour en retirer les filtres."
 
 #: ../src/selection-chemistry.cpp:1303
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1672
@@ -12804,7 +12799,7 @@ msgstr "Coller les dimensions séparément"
 
 #: ../src/selection-chemistry.cpp:1351
 msgid "Select <b>object(s)</b> to move to the layer above."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à déplacer au calque du dessus."
+msgstr "Sélectionner des <b>objets</b> à déplacer au calque du dessus."
 
 #: ../src/selection-chemistry.cpp:1377
 msgid "Raise to next layer"
@@ -12817,7 +12812,7 @@ msgstr "Plus de calque au-dessus."
 #: ../src/selection-chemistry.cpp:1397
 msgid "Select <b>object(s)</b> to move to the layer below."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> à déplacer au calque du dessous."
+"Sélectionner des <b>objets</b> à déplacer au calque du dessous."
 
 #: ../src/selection-chemistry.cpp:1423
 msgid "Lower to previous layer"
@@ -12829,7 +12824,7 @@ msgstr "Plus de calque en-dessous."
 
 #: ../src/selection-chemistry.cpp:1443
 msgid "Select <b>object(s)</b> to move."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à déplacer."
+msgstr "Sélectionner des <b>objets</b> à déplacer."
 
 #: ../src/selection-chemistry.cpp:1461 ../src/verbs.cpp:2710
 msgid "Move selection to layer"
@@ -12966,11 +12961,11 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:2924
 msgid "Select path(s) to fill."
-msgstr "Sélectionner le(s) chemin(s) à colorer."
+msgstr "Sélectionner des chemins à colorer."
 
 #: ../src/selection-chemistry.cpp:2941
 msgid "Select <b>object(s)</b> to convert to marker."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à convertir en marqueur."
+msgstr "Sélectionner des <b>objets</b> à convertir en marqueur."
 
 #: ../src/selection-chemistry.cpp:3013
 msgid "Objects to marker"
@@ -12978,7 +12973,7 @@ msgstr "Objets en marqueur"
 
 #: ../src/selection-chemistry.cpp:3036
 msgid "Select <b>object(s)</b> to convert to guides."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à convertir en guides."
+msgstr "Sélectionner des <b>objets</b> à convertir en guides."
 
 #: ../src/selection-chemistry.cpp:3057
 msgid "Objects to guides"
@@ -13008,7 +13003,7 @@ msgstr "Groupe à partir d'un symbole"
 
 #: ../src/selection-chemistry.cpp:3285
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Sélectionner un ou des <b>objet(s)</b> à convertir en motif."
+msgstr "Sélectionner des <b>objets</b> à convertir en motif."
 
 #: ../src/selection-chemistry.cpp:3381
 msgid "Objects to pattern"
@@ -13031,7 +13026,7 @@ msgstr "Motif en objets"
 #: ../src/selection-chemistry.cpp:3538
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> pour en créer une copie matricielle."
+"Sélectionner des <b>objets</b> pour en créer une copie matricielle."
 
 #: ../src/selection-chemistry.cpp:3542
 msgid "Rendering bitmap..."
@@ -13044,7 +13039,7 @@ msgstr "Créer un objet matriciel"
 #: ../src/selection-chemistry.cpp:3751 ../src/selection-chemistry.cpp:3861
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> à partir desquels un chemin de "
+"Sélectionner des <b>objets</b> à partir desquels un chemin de "
 "découpe ou un masque sera créé."
 
 #: ../src/selection-chemistry.cpp:3837 ../src/ui/dialog/objects.cpp:1909
@@ -13054,7 +13049,7 @@ msgstr "Créer un groupe de découpe"
 #: ../src/selection-chemistry.cpp:3865
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr ""
-"Sélectionner un objet masque et un ou des <b>objet(s)</b> auxquels appliquer "
+"Sélectionner un objet masque et des <b>objets</b> auxquels appliquer "
 "ce chemin de découpe ou masque."
 
 #: ../src/selection-chemistry.cpp:4008
@@ -13068,7 +13063,7 @@ msgstr "Définir un masque"
 #: ../src/selection-chemistry.cpp:4022
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> pour en retirer le chemin de découpe "
+"Sélectionner des <b>objets</b> pour en retirer le chemin de découpe "
 "ou le masque."
 
 #: ../src/selection-chemistry.cpp:4139
@@ -13082,8 +13077,7 @@ msgstr "Retirer le masque"
 #: ../src/selection-chemistry.cpp:4157
 msgid "Select <b>object(s)</b> to fit canvas to."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> pour y ajuster la taille de la zone "
-"de travail."
+"Sélectionner des <b>objets</b> pour y ajuster la taille de la zone de travail."
 
 #. Fit Page
 #: ../src/selection-chemistry.cpp:4165 ../src/verbs.cpp:3056
@@ -13657,8 +13651,8 @@ msgstr ""
 #: ../src/splivarot.cpp:1644
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
 msgstr ""
-"Sélectionner des <b>chemin(s) avec contour</b> pour convertir les contours "
-"en chemins."
+"Sélectionner des <b>chemins avec contour</b> pour convertir les contours en "
+"chemins."
 
 #: ../src/splivarot.cpp:1660
 msgid "Convert stroke to path"
@@ -13685,7 +13679,7 @@ msgstr "Créer un décalage dynamique"
 
 #: ../src/splivarot.cpp:1918
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr "Sélectionner des <b>chemin(s)</b> pour les éroder/dilater."
+msgstr "Sélectionner des <b>chemins</b> pour les éroder/dilater."
 
 #: ../src/splivarot.cpp:2114
 msgid "Outset path"
@@ -13719,7 +13713,7 @@ msgstr "Fait — <b>%d</b> chemins simplifiés."
 
 #: ../src/splivarot.cpp:2344
 msgid "Select <b>path(s)</b> to simplify."
-msgstr "Sélectionner un ou des <b>chemin(s)</b> à simplifier."
+msgstr "Sélectionner des <b>chemins</b> à simplifier."
 
 #: ../src/splivarot.cpp:2360
 msgid "<b>No paths</b> to simplify in the selection."
@@ -13772,7 +13766,7 @@ msgstr "Retirer le texte du chemin"
 
 #: ../src/text-chemistry.cpp:257 ../src/text-chemistry.cpp:277
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Sélectionner des <b>texte(s)</b> pour en retirer les crénages."
+msgstr "Sélectionner des <b>textes</b> pour en retirer les crénages."
 
 #: ../src/text-chemistry.cpp:280
 msgid "Remove manual kerns"
@@ -13880,7 +13874,7 @@ msgstr "Rien dans le presse-papiers."
 
 #: ../src/ui/clipboard.cpp:437
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Sélectionner un ou des <b>objets</b> sur lesquels coller un style."
+msgstr "Sélectionner des <b>objets</b> sur lesquels coller un style."
 
 #: ../src/ui/clipboard.cpp:448 ../src/ui/clipboard.cpp:465
 msgid "No style on the clipboard."
@@ -13889,7 +13883,7 @@ msgstr "Pas de style dans le presse-papiers."
 #: ../src/ui/clipboard.cpp:491
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr ""
-"Sélectionner un ou des <b>objets</b> sur lesquels coller des dimensions."
+"Sélectionner des <b>objets</b> sur lesquels coller des dimensions."
 
 #: ../src/ui/clipboard.cpp:499
 msgid "No size on the clipboard."
@@ -13898,8 +13892,7 @@ msgstr "Pas de dimension dans le presse-papiers."
 #: ../src/ui/clipboard.cpp:556
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr ""
-"Sélectionner un ou des <b>objet(s)</b> sur lesquels coller un effet de "
-"chemin."
+"Sélectionner des <b>objets</b> sur lesquels coller un effet de chemin."
 
 #. no_effect:
 #: ../src/ui/clipboard.cpp:582
@@ -22234,7 +22227,7 @@ msgstr "Ajouter un glyphe"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:601
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:643
 msgid "Select a <b>path</b> to define the curves of a glyph"
-msgstr "Sélectionner un <b>chemin(s)</b> pour définir les courbes du glyphe"
+msgstr "Sélectionner un <b>chemin</b> pour définir les courbes du glyphe"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:609
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:651
@@ -36437,7 +36430,7 @@ msgstr "Indéfini"
 
 #: ../share/extensions/image_attributes.inx.h:20
 msgid "Change only selected image(s)"
-msgstr "Modifier la/les image(s) sélectionnée(s) seulement"
+msgstr "Modifier les images sélectionnées seulement"
 
 #: ../share/extensions/image_attributes.inx.h:21
 msgid "Change all images in selection"
