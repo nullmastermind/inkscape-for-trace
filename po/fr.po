@@ -14167,7 +14167,7 @@ msgstr "Échanger les positions des objets sélectionnés par rotation horaire"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1025
 msgid "Randomize centers in both dimensions"
-msgstr "Eparpiller aléatoirement les centres dans toutes les directions"
+msgstr "Éparpiller aléatoirement les centres dans toutes les directions"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1028
 msgid "Unclump objects: try to equalize edge-to-edge distances"
@@ -15461,7 +15461,7 @@ msgstr "Nouveau"
 
 #: ../src/ui/dialog/document-properties.cpp:846
 msgid "Script id"
-msgstr "Identifiant du script"
+msgstr "Identifiant du programme"
 
 #: ../src/ui/dialog/document-properties.cpp:852
 msgid "<b>Content:</b>"
@@ -15490,7 +15490,7 @@ msgstr "Ajouter un programme externe..."
 
 #: ../src/ui/dialog/document-properties.cpp:1051
 msgid "Select a script to load"
-msgstr "Sélectionner un script à charger"
+msgstr "Sélectionner un programme à charger"
 
 #. inform the document, so we can undo
 #: ../src/ui/dialog/document-properties.cpp:1079
@@ -15500,18 +15500,18 @@ msgstr "Ajouter un programme incorporé..."
 #. inform the document, so we can undo
 #: ../src/ui/dialog/document-properties.cpp:1110
 msgid "Remove external script"
-msgstr "Supprimer un programme externe"
+msgstr "Retirer le programme externe"
 
 #. inform the document, so we can undo
 #: ../src/ui/dialog/document-properties.cpp:1139
 msgid "Remove embedded script"
-msgstr "Retirer le programme incorporé"
+msgstr "Supprimer le programme incorporé"
 
 #. TODO repr->set_content(_EmbeddedContent.get_buffer()->get_text());
 #. inform the document, so we can undo
 #: ../src/ui/dialog/document-properties.cpp:1233
 msgid "Edit embedded script"
-msgstr "Retirer le programme incorporé"
+msgstr "Modifier le programme incorporé"
 
 #: ../src/ui/dialog/document-properties.cpp:1317
 msgid "<b>Creation</b>"
@@ -18740,11 +18740,11 @@ msgstr "Kannada (kn)"
 #: ../src/ui/dialog/inkscape-preferences.cpp:537
 #, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
-msgstr "Kashmiri, script Perso-Arabique (ks@aran)"
+msgstr "Kashmiri, écriture Perso-Arabique (ks@aran)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:537
 msgid "Kashmiri in Devanagari script (ks@deva)"
-msgstr "Kashmiri, script Devanagari (ks@deva)"
+msgstr "Kashmiri, écriture Devanagari (ks@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:537
 msgid "Khmer (km)"
@@ -18792,7 +18792,7 @@ msgstr "Manipuri (mni)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:539
 msgid "Manipuri in Bengali script (mni@beng)"
-msgstr "Manipuri, script Bengali (mni@beng)"
+msgstr "Manipuri, écriture Bengali (mni@beng)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:539
 msgid "Marathi (mr)"
@@ -18852,7 +18852,7 @@ msgstr "Santali (sat)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:544
 msgid "Santali in Devanagari script (sat@deva)"
-msgstr "Santali en script Devanagari (sat@deva)"
+msgstr "Santali, écriture Devanagari (sat@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:544
 msgid "Serbian (sr)"
@@ -18868,7 +18868,7 @@ msgstr "Sindhi (sd)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "Sindhi in Devanagari script (sd@deva)"
-msgstr "Sindhi en script Devanagari (sd@deva)"
+msgstr "Sindhi, écriture Devanagari (sd@deva)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:545
 msgid "Slovak (sk)"
@@ -20342,7 +20342,7 @@ msgstr "Les _flèches déplacent de :"
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance"
 msgstr ""
-"Appuyer sur une flèche déplace les objet(s) ou les nœud(s) sélectionnés de "
+"Appuyer sur une flèche déplace les objets ou les nœuds sélectionnés de "
 "cette distance"
 
 #. defaultscale is limited to 1000 in select-context.cpp: use the same limit here
@@ -20441,7 +20441,7 @@ msgstr "Ne bougent pas"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1320
 msgid "Move according to transform"
-msgstr "Sont déplacés en fonction leurs transformations"
+msgstr "Sont déplacés en fonction de leurs transformations"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1322
 msgid "Are unlinked"
@@ -22875,27 +22875,27 @@ msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:80
 msgid "Transformation matrix element A"
-msgstr "Elément A de la matrice de transformation"
+msgstr "Élément A de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:81
 msgid "Transformation matrix element B"
-msgstr "Elément B de la matrice de transformation"
+msgstr "Élément B de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:82
 msgid "Transformation matrix element C"
-msgstr "Elément C de la matrice de transformation"
+msgstr "Élément C de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:83
 msgid "Transformation matrix element D"
-msgstr "Elément D de la matrice de transformation"
+msgstr "Élément D de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:84
 msgid "Transformation matrix element E"
-msgstr "Elément E de la matrice de transformation"
+msgstr "Élément E de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:85
 msgid "Transformation matrix element F"
-msgstr "Elément F de la matrice de transformation"
+msgstr "Élément F de la matrice de transformation"
 
 #: ../src/ui/dialog/transformation.cpp:90
 msgid "Rela_tive move"
@@ -22931,7 +22931,7 @@ msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:93
 msgid "Edit c_urrent matrix"
-msgstr "Editer la matrice co_urante"
+msgstr "Éditer la matrice co_urante"
 
 #: ../src/ui/dialog/transformation.cpp:93
 msgid ""
@@ -27078,7 +27078,7 @@ msgstr "Motif en _objets"
 
 #: ../src/verbs.cpp:2551
 msgid "Extract objects from a tiled pattern fill"
-msgstr "Extraire des objet(s) d'un fond en motif pavé"
+msgstr "Extraire des objets d'un fond en motif pavé"
 
 #: ../src/verbs.cpp:2552
 msgid "Group to Symbol"
@@ -28948,19 +28948,19 @@ msgstr "Éditer un programme incorporé"
 
 #: ../src/verbs.cpp:3084
 msgid "Remove External Script"
-msgstr "Supprimer un programme externe"
+msgstr "Retirer un programme externe"
 
 #: ../src/verbs.cpp:3084
 msgid "Remove an external script"
-msgstr "Supprimer un programme externe"
+msgstr "Retirer un programme externe"
 
 #: ../src/verbs.cpp:3086
 msgid "Remove Embedded Script"
-msgstr "Retirer un programme incorporé"
+msgstr "Supprimer un programme incorporé"
 
 #: ../src/verbs.cpp:3086
 msgid "Remove an embedded script"
-msgstr "Retirer un programme incorporé"
+msgstr "Supprimer un programme incorporé"
 
 #: ../src/verbs.cpp:3108 ../src/verbs.cpp:3109
 msgid "Center on horizontal and vertical axis"
@@ -29445,7 +29445,7 @@ msgstr "Othogonal"
 
 #: ../src/widgets/connector-toolbar.cpp:328
 msgid "Make connector orthogonal or polyline"
-msgstr "Rend les connecteurs orthogonaux ou polylignes"
+msgstr "Rendre les connecteurs orthogonaux ou polylignes"
 
 #: ../src/widgets/connector-toolbar.cpp:342
 msgid "Connector Curvature"
