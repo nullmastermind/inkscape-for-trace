@@ -1084,38 +1084,28 @@ SPDesktopWidget::shutdown()
     if (INKSCAPE.sole_desktop_for_document(*desktop)) {
         SPDocument *doc = desktop->doc();
         if (doc->isModifiedSinceSave()) {
-            GtkWidget *dialog;
-
-            /** \todo
-             * FIXME !!! obviously this will have problems if the document
-             * name contains markup characters
-             */
-            dialog = gtk_message_dialog_new_with_markup(
-                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))),
-                GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_WARNING,
-                GTK_BUTTONS_NONE,
+            Gtk::Window *toplevel_window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
+            Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n"
                   "If you close without saving, your changes will be discarded."),
                 doc->getName());
+            Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
+            dialog.property_destroy_with_parent() = true;
+
             // fix for bug lp:168809
-	    GtkWidget *ma = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-            std::vector<Gtk::Widget*> ma_labels = Glib::wrap(GTK_CONTAINER(ma))->get_children();
-	    GtkWidget *label = GTK_WIDGET(ma_labels[0]->gobj());
-	    gtk_widget_set_can_focus(label, FALSE);
+            Gtk::Container *ma = dialog.get_message_area();
+            std::vector<Gtk::Widget*> ma_labels = ma->get_children();
+            ma_labels[0]->set_can_focus(false);
 
-            GtkWidget *close_button;
-            close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
-            gtk_widget_show(close_button);
-            gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
+            Gtk::Button close_button(_("Close _without saving"), true);
+            close_button.show();
+            dialog.add_action_widget(close_button, Gtk::RESPONSE_NO);
 
-            gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
-            gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Save"),   GTK_RESPONSE_YES);
-            gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+            dialog.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+            dialog.add_button(_("_Save"), Gtk::RESPONSE_YES);
+            dialog.set_default_response(Gtk::RESPONSE_YES);
 
-            gint response;
-            response = gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
+            gint response = dialog.run();
 
             switch (response) {
             case GTK_RESPONSE_YES:
@@ -1143,41 +1133,32 @@ SPDesktopWidget::shutdown()
         /* Code to check data loss */
         bool allow_data_loss = FALSE;
         while (doc->getReprRoot()->attribute("inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
-            GtkWidget *dialog;
-
-            /** \todo
-             * FIXME !!! obviously this will have problems if the document
-             * name contains markup characters
-             */
-            dialog = gtk_message_dialog_new_with_markup(
-                GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))),
-                GTK_DIALOG_DESTROY_WITH_PARENT,
-                GTK_MESSAGE_WARNING,
-                GTK_BUTTONS_NONE,
+            Gtk::Window *toplevel_window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
+            Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
                   "Do you want to save this file as Inkscape SVG?"),
                 doc->getName() ? doc->getName() : "Unnamed");
+            Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
+            dialog.property_destroy_with_parent() = true;
+
             // fix for bug lp:168809
-	    GtkWidget *ma = gtk_message_dialog_get_message_area(GTK_MESSAGE_DIALOG(dialog));
-            std::vector<Gtk::Widget*> ma_labels = Glib::wrap(GTK_CONTAINER(ma))->get_children();
-	    GtkWidget *label = GTK_WIDGET(ma_labels[0]->gobj());
-	    gtk_widget_set_can_focus(label, FALSE);
+            Gtk::Container *ma = dialog.get_message_area();
+            std::vector<Gtk::Widget*> ma_labels = ma->get_children();
+            ma_labels[0]->set_can_focus(false);
 
-            GtkWidget *close_button;
-            close_button = gtk_button_new_with_mnemonic(_("Close _without saving"));
-            gtk_widget_show(close_button);
-            GtkWidget *save_button = gtk_button_new_with_mnemonic(_("_Save as Inkscape SVG"));
-	    gtk_widget_set_can_default(save_button, TRUE);
-            gtk_widget_show(save_button);
-            gtk_dialog_add_action_widget(GTK_DIALOG(dialog), close_button, GTK_RESPONSE_NO);
+            Gtk::Button close_button(_("Close _without saving"), true);
+            close_button.show();
+            dialog.add_action_widget(close_button, Gtk::RESPONSE_NO);
 
-            gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
-            gtk_dialog_add_action_widget(GTK_DIALOG(dialog), save_button, GTK_RESPONSE_YES);
-            gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+            dialog.add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
 
-            gint response;
-            response = gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
+            Gtk::Button save_button(_("_Save as Inkscape SVG"), true);
+            save_button.set_can_default(true);
+            save_button.show();
+            dialog.add_action_widget(save_button, Gtk::RESPONSE_YES);
+            dialog.set_default_response(Gtk::RESPONSE_YES);
+
+            gint response = dialog.run();
 
             switch (response) {
             case GTK_RESPONSE_YES:
