@@ -60,8 +60,8 @@ protected:
     virtual std::vector<SwatchPage*> _getSwatchSets() const;
 
 private:
-    SwatchesPanel(SwatchesPanel const &); // no copy
-    SwatchesPanel &operator=(SwatchesPanel const &); // no assign
+    SwatchesPanel(SwatchesPanel const &) = delete; // no copy
+    SwatchesPanel &operator=(SwatchesPanel const &) = delete; // no assign
 
     void _build_menu();
 

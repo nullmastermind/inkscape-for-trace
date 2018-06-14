@@ -58,8 +58,8 @@ private:
     PointParam grid_point13;
     PointParam grid_point14;
     PointParam grid_point15;
-    LPELattice(const LPELattice&);
-    LPELattice& operator=(const LPELattice&);
+    LPELattice(const LPELattice&) = delete;
+    LPELattice& operator=(const LPELattice&) = delete;
 };
 
 } //namespace LivePathEffect

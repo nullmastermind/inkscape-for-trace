@@ -152,8 +152,8 @@ public:
     Geom::Point position() const;
 
 private:
-    SPKnot(SPKnot const&);
-    SPKnot& operator=(SPKnot const&);
+    SPKnot(SPKnot const&) = delete;
+    SPKnot& operator=(SPKnot const&) = delete;
 
     /**
      * Set knot control state (dragging/mouseover/normal).

@@ -541,8 +541,8 @@ private:
     XML::Node *_findObserverNode(Glib::ustring const &pref_path, Glib::ustring &node_key, Glib::ustring &attr_key, bool create);
 
     // disable copying
-    Preferences(Preferences const &);
-    Preferences operator=(Preferences const &);
+    Preferences(Preferences const &) = delete;
+    Preferences operator=(Preferences const &) = delete;
 
     std::string _prefs_filename; ///< Full filename (with directory) of the prefs file
     Glib::ustring _lastErrPrimary; ///< Last primary error message, if any.

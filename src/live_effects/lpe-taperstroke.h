@@ -51,8 +51,8 @@ private:
     Geom::Point start_attach_point;
     Geom::Point end_attach_point;
 
-    LPETaperStroke(const LPETaperStroke&);
-    LPETaperStroke& operator=(const LPETaperStroke&);
+    LPETaperStroke(const LPETaperStroke&) = delete;
+    LPETaperStroke& operator=(const LPETaperStroke&) = delete;
 };
 
 } //namespace LivePathEffect

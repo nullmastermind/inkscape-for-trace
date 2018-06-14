@@ -148,8 +148,8 @@ private:
     UndoHistory();
   
     // no default constructor, noncopyable, nonassignable
-    UndoHistory(UndoHistory const &d);
-    UndoHistory operator=(UndoHistory const &d);
+    UndoHistory(UndoHistory const &d) = delete;
+    UndoHistory operator=(UndoHistory const &d) = delete;
 
     struct GreaterThan : CellRendererInt::Filter {
         GreaterThan(int _i) : i (_i) {}

@@ -164,8 +164,8 @@ private:
         guint timeout_id;
     };
 
-    MessageStack(MessageStack const &); // no copy
-    void operator=(MessageStack const &); // no assign
+    MessageStack(MessageStack const &) = delete; // no copy
+    void operator=(MessageStack const &) = delete; // no assign
 
     /// pushes a message onto the stack with an optional timeout
     MessageId _push(MessageType type, unsigned int lifetime, char const *message);

@@ -35,8 +35,8 @@ private:
     ScalarParam number_of_steps;
     BoolParam   equidistant_spacing;
 
-    LPEInterpolate(const LPEInterpolate&);
-    LPEInterpolate& operator=(const LPEInterpolate&);
+    LPEInterpolate(const LPEInterpolate&) = delete;
+    LPEInterpolate& operator=(const LPEInterpolate&) = delete;
 };
 
 } //namespace LivePathEffect

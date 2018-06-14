@@ -188,8 +188,8 @@ public:
     virtual Glib::RefPtr<Gdk::Device> getDevice() {return device;}
 
 private:
-    InputDeviceImpl(InputDeviceImpl const &); // no copy
-    void operator=(InputDeviceImpl const &); // no assign
+    InputDeviceImpl(InputDeviceImpl const &) = delete; // no copy
+    void operator=(InputDeviceImpl const &) = delete; // no assign
 
     static Glib::ustring createId(Glib::ustring const &id, Gdk::InputSource source, std::set<Glib::ustring> &knownIDs);
 

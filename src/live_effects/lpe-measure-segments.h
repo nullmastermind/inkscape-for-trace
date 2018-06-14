@@ -95,8 +95,8 @@ private:
     double arrow_gap;
     guint pagenumber;
     gchar const* locale_base;
-    LPEMeasureSegments(const LPEMeasureSegments &);
-    LPEMeasureSegments &operator=(const LPEMeasureSegments &);
+    LPEMeasureSegments(const LPEMeasureSegments &) = delete;
+    LPEMeasureSegments &operator=(const LPEMeasureSegments &) = delete;
 
 };
 

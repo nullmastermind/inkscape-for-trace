@@ -67,8 +67,8 @@ private:
     PointParam down_left_point;
     PointParam down_right_point;
     std::vector<Geom::Point> handles;
-    LPEPerspectiveEnvelope(const LPEPerspectiveEnvelope&);
-    LPEPerspectiveEnvelope& operator=(const LPEPerspectiveEnvelope&);
+    LPEPerspectiveEnvelope(const LPEPerspectiveEnvelope&) = delete;
+    LPEPerspectiveEnvelope& operator=(const LPEPerspectiveEnvelope&) = delete;
 };
 
 } //namespace LivePathEffect

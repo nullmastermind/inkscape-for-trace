@@ -52,8 +52,8 @@ protected:
     virtual Gtk::Widget * newSpecificWidget();
 
 private:
-    CanvasAxonomGrid(const CanvasAxonomGrid&);
-    CanvasAxonomGrid& operator=(const CanvasAxonomGrid&);
+    CanvasAxonomGrid(const CanvasAxonomGrid&) = delete;
+    CanvasAxonomGrid& operator=(const CanvasAxonomGrid&) = delete;
 
     void updateWidgets();
 

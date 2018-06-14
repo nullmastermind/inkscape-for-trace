@@ -70,8 +70,8 @@ protected:
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorNotebook(const ColorNotebook &obj);
-    ColorNotebook &operator=(const ColorNotebook &obj);
+    ColorNotebook(const ColorNotebook &obj) = delete;
+    ColorNotebook &operator=(const ColorNotebook &obj) = delete;
 };
 }
 }

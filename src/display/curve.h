@@ -88,8 +88,8 @@ protected:
 
 private:
     // Don't implement these:
-    SPCurve(const SPCurve&);
-    SPCurve& operator=(const SPCurve&);
+    SPCurve(const SPCurve&) = delete;
+    SPCurve& operator=(const SPCurve&) = delete;
 };
 
 #endif // !SEEN_DISPLAY_CURVE_H

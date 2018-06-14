@@ -89,8 +89,8 @@ protected:
 
 private:
   // noncopyable
-  SpinButton(const SpinButton&);
-  SpinButton& operator=(const SpinButton&);
+  SpinButton(const SpinButton&) = delete;
+  SpinButton& operator=(const SpinButton&) = delete;
 };
 
 } // namespace Widget

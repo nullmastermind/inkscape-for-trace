@@ -97,8 +97,8 @@ public:
     }
 
 private:
-    MessageCleaner(MessageCleaner const &other);
-    MessageCleaner &operator=(MessageCleaner const &other);
+    MessageCleaner(MessageCleaner const &other) = delete;
+    MessageCleaner &operator=(MessageCleaner const &other) = delete;
 
     SPDesktop *_desktop;
     Inkscape::MessageId _messageId;

@@ -48,8 +48,8 @@ private:
     ScalarParam number;
     // there are all kinds of parameters. Check the /live_effects/parameter directory which types exist!
 
-    LPESkeleton(const LPESkeleton&);
-    LPESkeleton& operator=(const LPESkeleton&);
+    LPESkeleton(const LPESkeleton&) = delete;
+    LPESkeleton& operator=(const LPESkeleton&) = delete;
 };
 
 } //namespace LivePathEffect

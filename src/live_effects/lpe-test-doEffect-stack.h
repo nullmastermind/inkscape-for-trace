@@ -35,8 +35,8 @@ private:
     PointParam point;
     PathParam path;
 
-    LPEdoEffectStackTest(const LPEdoEffectStackTest&);
-    LPEdoEffectStackTest& operator=(const LPEdoEffectStackTest&);
+    LPEdoEffectStackTest(const LPEdoEffectStackTest&) = delete;
+    LPEdoEffectStackTest& operator=(const LPEdoEffectStackTest&) = delete;
 };
 
 }; //namespace LivePathEffect

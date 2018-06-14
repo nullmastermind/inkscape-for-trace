@@ -45,8 +45,8 @@ private:
     BoolParam scale_y_rel;
     bool transformed;
 
-    LPECurveStitch(const LPECurveStitch&);
-    LPECurveStitch& operator=(const LPECurveStitch&);
+    LPECurveStitch(const LPECurveStitch&) = delete;
+    LPECurveStitch& operator=(const LPECurveStitch&) = delete;
 };
 
 } //namespace LivePathEffect

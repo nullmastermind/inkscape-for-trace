@@ -60,8 +60,8 @@ private:
     Geom::Point D; // right end of bisector
     Geom::Point perp_dir;
 
-    LPEPerpBisector(const LPEPerpBisector&);
-    LPEPerpBisector& operator=(const LPEPerpBisector&);
+    LPEPerpBisector(const LPEPerpBisector&) = delete;
+    LPEPerpBisector& operator=(const LPEPerpBisector&) = delete;
 };
 
 } //namespace LivePathEffect

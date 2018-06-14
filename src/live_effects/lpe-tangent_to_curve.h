@@ -56,8 +56,8 @@ private:
     Geom::Point C; // left end of tangent
     Geom::Point D; // right end of tangent
 
-    LPETangentToCurve(const LPETangentToCurve&);
-    LPETangentToCurve& operator=(const LPETangentToCurve&);
+    LPETangentToCurve(const LPETangentToCurve&) = delete;
+    LPETangentToCurve& operator=(const LPETangentToCurve&) = delete;
 };
 
 } //namespace LivePathEffect

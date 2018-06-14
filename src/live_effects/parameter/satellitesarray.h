@@ -65,8 +65,8 @@ protected:
     KnotHolder *_knoth;
 
 private:
-    SatellitesArrayParam(const SatellitesArrayParam &);
-    SatellitesArrayParam &operator=(const SatellitesArrayParam &);
+    SatellitesArrayParam(const SatellitesArrayParam &) = delete;
+    SatellitesArrayParam &operator=(const SatellitesArrayParam &) = delete;
 
     SPKnotShapeType _knot_shape;
     SPKnotModeType _knot_mode;

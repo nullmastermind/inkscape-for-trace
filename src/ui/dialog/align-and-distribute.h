@@ -118,8 +118,8 @@ protected:
     sigc::connection _toolChangeConn;
     sigc::connection _selChangeConn;
 private:
-    AlignAndDistribute(AlignAndDistribute const &d);
-    AlignAndDistribute& operator=(AlignAndDistribute const &d);
+    AlignAndDistribute(AlignAndDistribute const &d) = delete;
+    AlignAndDistribute& operator=(AlignAndDistribute const &d) = delete;
 };
 
 

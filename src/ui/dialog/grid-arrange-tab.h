@@ -65,8 +65,8 @@ public:
 
 
 private:
-    GridArrangeTab(GridArrangeTab const &d); // no copy
-    void operator=(GridArrangeTab const &d); // no assign
+    GridArrangeTab(GridArrangeTab const &d) = delete; // no copy
+    void operator=(GridArrangeTab const &d) = delete; // no assign
 
     ArrangeDialog         *Parent;
 

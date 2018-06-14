@@ -30,8 +30,8 @@ public:
 private:
     TextParam label;
 
-    LPETextLabel(const LPETextLabel&);
-    LPETextLabel& operator=(const LPETextLabel&);
+    LPETextLabel(const LPETextLabel&) = delete;
+    LPETextLabel& operator=(const LPETextLabel&) = delete;
 };
 
 } //namespace LivePathEffect

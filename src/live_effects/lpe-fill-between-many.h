@@ -41,8 +41,8 @@ private:
     HiddenParam applied;
     Filllpemethod previous_method;
 private:
-    LPEFillBetweenMany(const LPEFillBetweenMany&);
-    LPEFillBetweenMany& operator=(const LPEFillBetweenMany&);
+    LPEFillBetweenMany(const LPEFillBetweenMany&) = delete;
+    LPEFillBetweenMany& operator=(const LPEFillBetweenMany&) = delete;
 };
 
 }; //namespace LivePathEffect

@@ -49,8 +49,8 @@ protected:
     SPDesktop *_desktop;
 
 private:
-    SnapIndicator(const SnapIndicator&);
-    SnapIndicator& operator=(const SnapIndicator&);
+    SnapIndicator(const SnapIndicator&) = delete;
+    SnapIndicator& operator=(const SnapIndicator&) = delete;
 };
 
 } //namespace Display

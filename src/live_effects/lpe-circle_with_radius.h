@@ -33,8 +33,8 @@ private:
     //ScalarParam radius;
     // there are all kinds of parameters. Check the /live_effects/parameter directory which types exist!
 
-    LPECircleWithRadius(const LPECircleWithRadius&);
-    LPECircleWithRadius& operator=(const LPECircleWithRadius&);
+    LPECircleWithRadius(const LPECircleWithRadius&) = delete;
+    LPECircleWithRadius& operator=(const LPECircleWithRadius&) = delete;
 };
 
 } //namespace LivePathEffect

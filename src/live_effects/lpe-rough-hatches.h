@@ -66,8 +66,8 @@ private:
   VectorParam direction;
   VectorParam bender;
 
-  LPERoughHatches(const LPERoughHatches&);
-  LPERoughHatches& operator=(const LPERoughHatches&);
+  LPERoughHatches(const LPERoughHatches&) = delete;
+  LPERoughHatches& operator=(const LPERoughHatches&) = delete;
 };
 
 } //namespace LivePathEffect

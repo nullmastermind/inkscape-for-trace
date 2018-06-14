@@ -38,8 +38,8 @@ public:
     void set_full(bool full);
 
 private:
-    ExtensionsPanel(ExtensionsPanel const &); // no copy
-    ExtensionsPanel &operator=(ExtensionsPanel const &); // no assign
+    ExtensionsPanel(ExtensionsPanel const &) = delete; // no copy
+    ExtensionsPanel &operator=(ExtensionsPanel const &) = delete; // no assign
 
     static void listCB(Inkscape::Extension::Extension *in_plug, gpointer in_data);
 

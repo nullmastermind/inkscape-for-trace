@@ -59,8 +59,8 @@ protected:
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorWheelSelector(const ColorWheelSelector &obj);
-    ColorWheelSelector &operator=(const ColorWheelSelector &obj);
+    ColorWheelSelector(const ColorWheelSelector &obj) = delete;
+    ColorWheelSelector &operator=(const ColorWheelSelector &obj) = delete;
 
     sigc::connection _color_changed_connection;
     sigc::connection _color_dragged_connection;

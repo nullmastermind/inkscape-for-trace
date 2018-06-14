@@ -147,10 +147,10 @@ protected:
 private:
     Behavior::Behavior* _behavior;
 
-    Dialog(); // no constructor without params
+    Dialog() = delete; // no constructor without params
 
-    Dialog(Dialog const &d);            // no copy
-    Dialog& operator=(Dialog const &d); // no assign
+    Dialog(Dialog const &d) = delete;            // no copy
+    Dialog& operator=(Dialog const &d) = delete; // no assign
 
     friend class Behavior::FloatingBehavior;
     friend class Behavior::DockBehavior;

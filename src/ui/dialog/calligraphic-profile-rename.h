@@ -68,8 +68,8 @@ private:
         static CalligraphicProfileRename instance_;
         return instance_;
     }
-    CalligraphicProfileRename(CalligraphicProfileRename const &); // no copy
-    CalligraphicProfileRename &operator=(CalligraphicProfileRename const &); // no assign
+    CalligraphicProfileRename(CalligraphicProfileRename const &) = delete; // no copy
+    CalligraphicProfileRename &operator=(CalligraphicProfileRename const &) = delete; // no assign
 };
  
 } // namespace Dialog

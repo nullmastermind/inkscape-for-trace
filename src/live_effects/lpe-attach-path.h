@@ -29,8 +29,8 @@ public:
     virtual void resetDefaults(SPItem const * item);
 
 private:
-    LPEAttachPath(const LPEAttachPath&);
-    LPEAttachPath& operator=(const LPEAttachPath&);
+    LPEAttachPath(const LPEAttachPath&) = delete;
+    LPEAttachPath& operator=(const LPEAttachPath&) = delete;
 
     Geom::Point curve_start_previous_origin;
     Geom::Point curve_end_previous_origin;

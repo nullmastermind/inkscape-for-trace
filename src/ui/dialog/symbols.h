@@ -61,8 +61,8 @@ public:
     static SymbolsDialog& getInstance();
 
 private:
-    SymbolsDialog(SymbolsDialog const &); // no copy
-    SymbolsDialog &operator=(SymbolsDialog const &); // no assign
+    SymbolsDialog(SymbolsDialog const &) = delete; // no copy
+    SymbolsDialog &operator=(SymbolsDialog const &) = delete; // no assign
 
     static SymbolColumns *getColumns();
 

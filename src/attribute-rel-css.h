@@ -30,8 +30,8 @@ public:
 
 private:
     SPAttributeRelCSS();
-    SPAttributeRelCSS(const SPAttributeRelCSS&);
-    SPAttributeRelCSS& operator= (const SPAttributeRelCSS&);
+    SPAttributeRelCSS(const SPAttributeRelCSS&) = delete;
+    SPAttributeRelCSS& operator= (const SPAttributeRelCSS&) = delete;
 
 private:
     /* 

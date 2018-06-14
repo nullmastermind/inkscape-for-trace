@@ -45,8 +45,8 @@ private:
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
-    LPEPowerStroke(const LPEPowerStroke&);
-    LPEPowerStroke& operator=(const LPEPowerStroke&);
+    LPEPowerStroke(const LPEPowerStroke&) = delete;
+    LPEPowerStroke& operator=(const LPEPowerStroke&) = delete;
 };
 
 } //namespace LivePathEffect

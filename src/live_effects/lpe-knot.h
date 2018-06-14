@@ -88,8 +88,8 @@ private:
   unsigned selectedCrossing;//the selected crossing
   Geom::Point switcher;//where to put the "switcher" helper
   
-  LPEKnot(const LPEKnot&);
-  LPEKnot& operator=(const LPEKnot&);
+  LPEKnot(const LPEKnot&) = delete;
+  LPEKnot& operator=(const LPEKnot&) = delete;
   
 };
   

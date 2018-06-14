@@ -61,8 +61,8 @@ private:
     long setup_seed(long);
     gdouble rand();
 
-    RandomParam(const RandomParam&);
-    RandomParam& operator=(const RandomParam&);
+    RandomParam(const RandomParam&) = delete;
+    RandomParam& operator=(const RandomParam&) = delete;
 };
 
 } //namespace LivePathEffect

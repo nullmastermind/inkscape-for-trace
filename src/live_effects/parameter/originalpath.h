@@ -42,8 +42,8 @@ protected:
 
 private:
     bool _from_original_d;
-    OriginalPathParam(const OriginalPathParam&);
-    OriginalPathParam& operator=(const OriginalPathParam&);
+    OriginalPathParam(const OriginalPathParam&) = delete;
+    OriginalPathParam& operator=(const OriginalPathParam&) = delete;
 };
 
 

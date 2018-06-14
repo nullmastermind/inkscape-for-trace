@@ -226,8 +226,8 @@ public:
     void setModifiedSinceSave(bool const modified = true);
 
 private:
-    SPDocument(SPDocument const &); // no copy
-    void operator=(SPDocument const &); // no assign
+    SPDocument(SPDocument const &) = delete; // no copy
+    void operator=(SPDocument const &) = delete; // no assign
 
     Persp3D *current_persp3d; /**< Currently 'active' perspective (to which, e.g., newly created boxes are attached) */
     Persp3DImpl *current_persp3d_impl;

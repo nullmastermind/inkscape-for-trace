@@ -32,8 +32,8 @@ protected:
     virtual bool _acceptObject(SPObject * const obj) const;
 
 private:
-    PathReference(const PathReference&);
-    PathReference& operator=(const PathReference&);
+    PathReference(const PathReference&) = delete;
+    PathReference& operator=(const PathReference&) = delete;
 };
 
 } // namespace LivePathEffect

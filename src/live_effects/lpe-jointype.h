@@ -27,8 +27,8 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 
 private:
-    LPEJoinType(const LPEJoinType&);
-    LPEJoinType& operator=(const LPEJoinType&);
+    LPEJoinType(const LPEJoinType&) = delete;
+    LPEJoinType& operator=(const LPEJoinType&) = delete;
 
     ScalarParam line_width;
     EnumParam<unsigned> linecap_type;

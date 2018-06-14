@@ -157,8 +157,8 @@ protected:
     void _handleButtonEvent(GdkEventButton* event);
 
 private:
-    LayerPropertiesDialog(LayerPropertiesDialog const &); // no copy
-    LayerPropertiesDialog &operator=(LayerPropertiesDialog const &); // no assign
+    LayerPropertiesDialog(LayerPropertiesDialog const &) = delete; // no copy
+    LayerPropertiesDialog &operator=(LayerPropertiesDialog const &) = delete; // no assign
 };
 
 } // namespace

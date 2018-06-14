@@ -96,8 +96,8 @@ public:
     }
 
 private:
-    EnumParam(const EnumParam&);
-    EnumParam& operator=(const EnumParam&);
+    EnumParam(const EnumParam&) = delete;
+    EnumParam& operator=(const EnumParam&) = delete;
 
     E value;
     E defvalue;

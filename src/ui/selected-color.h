@@ -51,8 +51,8 @@ public:
     sigc::signal<void> signal_changed;
 private:
     // By default, disallow copy constructor and assignment operator
-    SelectedColor(SelectedColor const &obj);
-    SelectedColor& operator=(SelectedColor const &obj);
+    SelectedColor(SelectedColor const &obj) = delete;
+    SelectedColor& operator=(SelectedColor const &obj) = delete;
 
     SPColor _color;
     /**

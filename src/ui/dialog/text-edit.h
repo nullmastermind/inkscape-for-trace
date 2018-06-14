@@ -195,8 +195,8 @@ private:
     const Glib::ustring samplephrase;
 
 
-    TextEdit(TextEdit const &d);
-    TextEdit operator=(TextEdit const &d);
+    TextEdit(TextEdit const &d) = delete;
+    TextEdit operator=(TextEdit const &d) = delete;
 };
 
 

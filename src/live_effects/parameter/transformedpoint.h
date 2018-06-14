@@ -59,8 +59,8 @@ public:
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 private:
-    TransformedPointParam(const TransformedPointParam&);
-    TransformedPointParam& operator=(const TransformedPointParam&);
+    TransformedPointParam(const TransformedPointParam&) = delete;
+    TransformedPointParam& operator=(const TransformedPointParam&) = delete;
 
     Geom::Point defvalue;
 

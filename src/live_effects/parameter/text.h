@@ -53,8 +53,8 @@ public:
     const Glib::ustring get_value() const { return value; };
 
 private:
-    TextParam(const TextParam&);
-    TextParam& operator=(const TextParam&);
+    TextParam(const TextParam&) = delete;
+    TextParam& operator=(const TextParam&) = delete;
     double anchor_x;
     double anchor_y;
     bool _hide_canvas_text;

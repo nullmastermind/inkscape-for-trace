@@ -33,8 +33,8 @@ public:
 
 
 private:
-    SPConnEnd(SPConnEnd const &); // no copy
-    SPConnEnd &operator=(SPConnEnd const &); // no assign
+    SPConnEnd(SPConnEnd const &) = delete; // no copy
+    SPConnEnd &operator=(SPConnEnd const &) = delete; // no assign
 };
 
 void sp_conn_end_href_changed(SPObject *old_ref, SPObject *ref,

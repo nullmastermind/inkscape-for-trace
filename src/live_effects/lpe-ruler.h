@@ -62,8 +62,8 @@ private:
 
     static Geom::Point n_major, n_minor; // used for internal computations
 
-    LPERuler(const LPERuler&);
-    LPERuler& operator=(const LPERuler&);
+    LPERuler(const LPERuler&) = delete;
+    LPERuler& operator=(const LPERuler&) = delete;
 };
 
 } //namespace LivePathEffect

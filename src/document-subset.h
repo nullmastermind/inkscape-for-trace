@@ -46,8 +46,8 @@ protected:
     void _clear();
 
 private:
-    DocumentSubset(DocumentSubset const &); // no copy
-    void operator=(DocumentSubset const &); // no assign
+    DocumentSubset(DocumentSubset const &) = delete; // no copy
+    void operator=(DocumentSubset const &) = delete; // no assign
 
     void _remove(SPObject *obj, bool subtree);
 

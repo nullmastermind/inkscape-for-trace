@@ -46,8 +46,8 @@ public:
     const Glib::ustring get_value() const { return value; };
 
 private:
-    HiddenParam(const HiddenParam&);
-    HiddenParam& operator=(const HiddenParam&);
+    HiddenParam(const HiddenParam&) = delete;
+    HiddenParam& operator=(const HiddenParam&) = delete;
     Glib::ustring value;
     Glib::ustring defvalue;
 };

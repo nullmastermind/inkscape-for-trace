@@ -31,8 +31,8 @@ public:
 private:
     VectorParam extrude_vector;
 
-    LPEExtrude(const LPEExtrude&);
-    LPEExtrude& operator=(const LPEExtrude&);
+    LPEExtrude(const LPEExtrude&) = delete;
+    LPEExtrude& operator=(const LPEExtrude&) = delete;
 };
 
 } //namespace LivePathEffect

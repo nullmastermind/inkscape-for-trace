@@ -29,8 +29,8 @@ private:
     ScalarParam phi;
     ScalarParam min_radius;
 
-    LPEGears(const LPEGears&);
-    LPEGears& operator=(const LPEGears&);
+    LPEGears(const LPEGears&) = delete;
+    LPEGears& operator=(const LPEGears&) = delete;
 };
 
 }; //namespace LivePathEffect

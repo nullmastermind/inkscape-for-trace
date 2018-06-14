@@ -136,8 +136,8 @@ protected:
     EventTrackerBase(bool active) : _active(active) {}
 
 private:
-    EventTrackerBase(EventTrackerBase const &); // no copy
-    void operator=(EventTrackerBase const &); // no assign
+    EventTrackerBase(EventTrackerBase const &) = delete; // no copy
+    void operator=(EventTrackerBase const &) = delete; // no assign
     bool _active;
 };
 

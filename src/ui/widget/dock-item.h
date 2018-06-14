@@ -141,7 +141,7 @@ private:
 
     sigc::signal<void, State, State> _signal_state_changed;
 
-    DockItem();
+    DockItem() = delete;
 };
 
 } // namespace Widget

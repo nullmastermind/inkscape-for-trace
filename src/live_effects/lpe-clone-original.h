@@ -49,8 +49,8 @@ private:
     bool listening;
     bool is_updating;
     sigc::connection modified_connection;
-    LPECloneOriginal(const LPECloneOriginal&);
-    LPECloneOriginal& operator=(const LPECloneOriginal&);
+    LPECloneOriginal(const LPECloneOriginal&) = delete;
+    LPECloneOriginal& operator=(const LPECloneOriginal&) = delete;
 };
 
 }; //namespace LivePathEffect

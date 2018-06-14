@@ -30,8 +30,8 @@ public:
     ColorProfile* find(char const* name);
 
 private:
-    ProfileManager(ProfileManager const &); // no copy
-    void operator=(ProfileManager const &); // no assign
+    ProfileManager(ProfileManager const &) = delete; // no copy
+    void operator=(ProfileManager const &) = delete; // no assign
 
     void _resourcesChanged();
 

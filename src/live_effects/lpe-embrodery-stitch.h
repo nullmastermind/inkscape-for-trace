@@ -62,8 +62,8 @@ private:
     ScalarParam show_stitch_gap;
     ScalarParam jump_if_longer;
 
-    LPEEmbroderyStitch(const LPEEmbroderyStitch &);
-    LPEEmbroderyStitch &operator=(const LPEEmbroderyStitch &);
+    LPEEmbroderyStitch(const LPEEmbroderyStitch &) = delete;
+    LPEEmbroderyStitch &operator=(const LPEEmbroderyStitch &) = delete;
 
     double GetPatternInitialStep(int pattern, int line);
     Geom::Point GetStartPointInterpolAfterRev(std::vector<OrderingInfo> const &info, unsigned i);

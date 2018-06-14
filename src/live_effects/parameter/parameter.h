@@ -93,8 +93,8 @@ protected:
     void param_write_to_repr(const char * svgd);
 
 private:
-    Parameter(const Parameter&);
-    Parameter& operator=(const Parameter&);
+    Parameter(const Parameter&) = delete;
+    Parameter& operator=(const Parameter&) = delete;
 };
 
 
@@ -143,8 +143,8 @@ protected:
 private:
     bool on_button_release(GdkEventButton* button_event);
 
-    ScalarParam(const ScalarParam&);
-    ScalarParam& operator=(const ScalarParam&);
+    ScalarParam(const ScalarParam&) = delete;
+    ScalarParam& operator=(const ScalarParam&) = delete;
 };
 
 } //namespace LivePathEffect

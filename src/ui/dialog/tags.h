@@ -55,8 +55,8 @@ private:
     class InternalUIBounce;
     class ObjectWatcher;
 
-    TagsPanel(TagsPanel const &); // no copy
-    TagsPanel &operator=(TagsPanel const &); // no assign
+    TagsPanel(TagsPanel const &) = delete; // no copy
+    TagsPanel &operator=(TagsPanel const &) = delete; // no assign
 
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
     void _fireAction( unsigned int code );

@@ -47,8 +47,8 @@ public:
 protected:
 
 private:
-    GlyphsPanel(GlyphsPanel const &); // no copy
-    GlyphsPanel &operator=(GlyphsPanel const &); // no assign
+    GlyphsPanel(GlyphsPanel const &) = delete; // no copy
+    GlyphsPanel &operator=(GlyphsPanel const &) = delete; // no assign
 
     static GlyphColumns *getColumns();
 

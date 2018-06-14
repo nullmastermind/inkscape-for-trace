@@ -27,8 +27,8 @@ protected:
     virtual ~ResourceManager();
 
 private:
-    ResourceManager(ResourceManager const &); // no copy
-    void operator=(ResourceManager const &); // no assign
+    ResourceManager(ResourceManager const &) = delete; // no copy
+    void operator=(ResourceManager const &) = delete; // no assign
 };
 
 

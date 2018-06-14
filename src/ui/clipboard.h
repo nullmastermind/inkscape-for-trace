@@ -59,8 +59,8 @@ protected:
     ClipboardManager(); // singleton
     virtual ~ClipboardManager();
 private:
-    ClipboardManager(const ClipboardManager &); ///< no copy
-    ClipboardManager &operator=(const ClipboardManager &); ///< no assign
+    ClipboardManager(const ClipboardManager &) = delete; ///< no copy
+    ClipboardManager &operator=(const ClipboardManager &) = delete; ///< no assign
 
     static ClipboardManager *_instance;
 };

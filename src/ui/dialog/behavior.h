@@ -78,9 +78,9 @@ protected:
     Dialog& _dialog;  //< reference to the owner
 
 private:
-    Behavior(); // no constructor without params
-    Behavior(const Behavior &);            // no copy
-    Behavior &operator=(const Behavior &); // no assign
+    Behavior() = delete; // no constructor without params
+    Behavior(const Behavior &) = delete;            // no copy
+    Behavior &operator=(const Behavior &) = delete; // no assign
 };
 
 } // namespace Behavior

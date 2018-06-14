@@ -42,8 +42,8 @@ public:
     inline operator bool() const { return value; };
 
 private:
-    BoolParam(const BoolParam&);
-    BoolParam& operator=(const BoolParam&);
+    BoolParam(const BoolParam&) = delete;
+    BoolParam& operator=(const BoolParam&) = delete;
 
     bool value;
     bool defvalue;

@@ -23,8 +23,8 @@ public:
     virtual void doEffect(SPCurve * curve);
 
 private:
-    LPESpiro(const LPESpiro&);
-    LPESpiro& operator=(const LPESpiro&);
+    LPESpiro(const LPESpiro&) = delete;
+    LPESpiro& operator=(const LPESpiro&) = delete;
 };
 
 void sp_spiro_do_effect(SPCurve *curve);

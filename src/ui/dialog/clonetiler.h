@@ -143,8 +143,8 @@ protected:
 
 
 private:
-    CloneTiler(CloneTiler const &d);
-    CloneTiler& operator=(CloneTiler const &d);
+    CloneTiler(CloneTiler const &d) = delete;
+    CloneTiler& operator=(CloneTiler const &d) = delete;
 
     Gtk::CheckButton *_b;
     Gtk::CheckButton *_cb_keep_bbox;

@@ -28,8 +28,8 @@ protected:
     void _apply();
 
 private:
-    Memory(Memory const &d); // no copy
-    void operator=(Memory const &d); // no assign
+    Memory(Memory const &d) = delete; // no copy
+    void operator=(Memory const &d) = delete; // no assign
 
     struct Private;
     Private &_private;

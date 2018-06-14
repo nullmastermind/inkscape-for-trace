@@ -141,8 +141,8 @@ private:
     void checkForVirginity(); //< marks the document as untouched if undo/redo reaches a previously saved state
 
     // noncopyable, nonassignable
-    EventLog(EventLog const &other);
-    EventLog& operator=(EventLog const &other);
+    EventLog(EventLog const &other) = delete;
+    EventLog& operator=(EventLog const &other) = delete;
 };
 
 } // namespace Inkscape

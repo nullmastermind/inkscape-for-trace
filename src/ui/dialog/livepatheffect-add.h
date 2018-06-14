@@ -106,8 +106,8 @@ private:
         static LivePathEffectAdd instance_;
         return instance_;
     }
-    LivePathEffectAdd(LivePathEffectAdd const &); // no copy
-    LivePathEffectAdd &operator=(LivePathEffectAdd const &); // no assign
+    LivePathEffectAdd(LivePathEffectAdd const &) = delete; // no copy
+    LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
 };
  
 } // namespace Dialog

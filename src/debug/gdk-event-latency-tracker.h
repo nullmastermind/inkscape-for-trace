@@ -29,8 +29,8 @@ public:
     static GdkEventLatencyTracker &default_tracker();
 
 private:
-    GdkEventLatencyTracker(GdkEventLatencyTracker const &); // no copy
-    void operator=(GdkEventLatencyTracker const &); // no assign
+    GdkEventLatencyTracker(GdkEventLatencyTracker const &) = delete; // no copy
+    void operator=(GdkEventLatencyTracker const &) = delete; // no assign
 
     double start_seconds;
     double max_latency;

@@ -37,8 +37,8 @@ public:
     const guint32 get_value() const { return value; };
 
 private:
-    ColorPickerParam(const ColorPickerParam&);
-    ColorPickerParam& operator=(const ColorPickerParam&);
+    ColorPickerParam(const ColorPickerParam&) = delete;
+    ColorPickerParam& operator=(const ColorPickerParam&) = delete;
     guint32 value;
     guint32 defvalue;
 };

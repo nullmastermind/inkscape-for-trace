@@ -63,7 +63,7 @@ public:
     static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
 
 private:
-    ToolboxFactory();
+    ToolboxFactory() = delete;
 };
 
 /**

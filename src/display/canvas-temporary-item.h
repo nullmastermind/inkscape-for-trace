@@ -38,8 +38,8 @@ protected:
     static int _timeout(void* data); ///< callback for when lifetime expired
 
 private:
-    TemporaryItem(const TemporaryItem&);
-    TemporaryItem& operator=(const TemporaryItem&);
+    TemporaryItem(const TemporaryItem&) = delete;
+    TemporaryItem& operator=(const TemporaryItem&) = delete;
 };
 
 } //namespace Display

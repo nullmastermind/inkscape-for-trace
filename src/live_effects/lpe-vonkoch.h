@@ -71,8 +71,8 @@ private:
     //    PointParam   refB;
     ScalarParam  maxComplexity;
 
-    LPEVonKoch(const LPEVonKoch&);
-    LPEVonKoch& operator=(const LPEVonKoch&);
+    LPEVonKoch(const LPEVonKoch&) = delete;
+    LPEVonKoch& operator=(const LPEVonKoch&) = delete;
 };
 
 }; //namespace LivePathEffect

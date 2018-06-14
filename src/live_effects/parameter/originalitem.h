@@ -35,8 +35,8 @@ protected:
     void on_select_original_button_click();
 
 private:
-    OriginalItemParam(const OriginalItemParam&);
-    OriginalItemParam& operator=(const OriginalItemParam&);
+    OriginalItemParam(const OriginalItemParam&) = delete;
+    OriginalItemParam& operator=(const OriginalItemParam&) = delete;
 };
 
 

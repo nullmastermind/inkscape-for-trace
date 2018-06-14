@@ -79,8 +79,8 @@ protected:
     guint handlerGtkmm;
 
 private:
-    Messages(Messages const &d);
-    Messages operator=(Messages const &d);
+    Messages(Messages const &d) = delete;
+    Messages operator=(Messages const &d) = delete;
 };
 
 

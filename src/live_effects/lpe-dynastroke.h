@@ -57,8 +57,8 @@ private:
     BoolParam round_ends;
     PathParam  capping;
 
-    LPEDynastroke(const LPEDynastroke&);
-    LPEDynastroke& operator=(const LPEDynastroke&);
+    LPEDynastroke(const LPEDynastroke&) = delete;
+    LPEDynastroke& operator=(const LPEDynastroke&) = delete;
 };
 
 } //namespace LivePathEffect
