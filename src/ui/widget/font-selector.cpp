@@ -106,8 +106,6 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
 
     // Initialize font family lists. (May already be done.) Should be done on document change.
     font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
-
-    font_lister->connectUpdate(sigc::mem_fun(*this, &FontSelector::update_font));
 }
 
 void
@@ -167,8 +165,13 @@ FontSelector::update_font ()
         path.push_back(0);
     }
 
-    family_treeview.set_cursor (path);
-    family_treeview.scroll_to_row (path);
+    Gtk::TreePath currentPath;
+    Gtk::TreeViewColumn *currentColumn;
+    family_treeview.get_cursor(currentPath, currentColumn);
+    if (currentPath.empty() || !font_lister->is_path_for_font(currentPath, family)) {
+        family_treeview.set_cursor (path);
+        family_treeview.scroll_to_row (path);
+    }
 
     // Get font-lister style list for selected family
     Gtk::TreeModel::Row row = *(family_treeview.get_model()->get_iter (path));

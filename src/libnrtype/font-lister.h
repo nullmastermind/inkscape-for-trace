@@ -261,6 +261,8 @@ public:
 
     Gtk::TreePath get_path_for_font(Glib::ustring family);
 
+    bool is_path_for_font(Gtk::TreePath path, Glib::ustring family);
+
     Gtk::TreeModel::Row get_row_for_style() { return get_row_for_style (current_style); }
 
     Gtk::TreeModel::Row get_row_for_style(Glib::ustring style);
