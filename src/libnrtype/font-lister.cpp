@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 
+#include <glibmm/markup.h>
 #include <glibmm/regex.h>
 
 #include <gtkmm/cellrenderertext.h>
@@ -149,7 +150,7 @@ Glib::ustring FontLister::get_font_family_markup(Gtk::TreeIter const &iter)
     Glib::ustring family = row[FontList.family];
     bool onSystem        = row[FontList.onSystem];
 
-    Glib::ustring family_escaped = Glib::strescape( family );
+    Glib::ustring family_escaped = Glib::Markup::escape_text( family );
     Glib::ustring markup;
 
     if (!onSystem) {
@@ -172,11 +173,11 @@ Glib::ustring FontLister::get_font_family_markup(Gtk::TreeIter const &iter)
             }
 
             if (found) {
-                markup += Glib::strescape (token);
+                markup += Glib::Markup::escape_text (token);
                 markup += ", ";
             } else {
                 markup += "<span strikethrough=\"true\" strikethrough_color=\"red\">";
-                markup += Glib::strescape (token);
+                markup += Glib::Markup::escape_text (token);
                 markup += "</span>";
                 markup += ", ";
             }
@@ -1189,7 +1190,7 @@ void font_lister_style_cell_data_func (Gtk::CellRenderer *renderer, Gtk::TreeIte
     Glib::ustring family = font_lister->get_font_family();
     Glib::ustring style  = row[font_lister->FontStyleList.cssStyle];
 
-    Glib::ustring style_escaped  = Glib::strescape( style );
+    Glib::ustring style_escaped  = Glib::Markup::escape_text( style );
     Glib::ustring font_desc = family + ", " + style;
     Glib::ustring markup;
 
