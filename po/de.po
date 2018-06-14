@@ -18,6 +18,7 @@
 # Sönke Roggatz <s.roggatz@mailing-werkstatt.de>, 2015.
 # Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016.
 # Eduard Braun <eduard.braun2@gmx.de>, 2015-2016.
+# Michael Rack <miohna@freenet.de>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
@@ -26825,7 +26826,7 @@ msgstr "Objekte aus der Zwischenablage an ihrer Originalposition einfügen"
 
 #: ../src/verbs.cpp:2522
 msgid "Paste Path _Effect"
-msgstr "Pfad-_Effekt einfügen"
+msgstr "Pfad_effekt einfügen"
 
 #: ../src/verbs.cpp:2523
 msgid "Apply the path effect of the copied object to selection"
