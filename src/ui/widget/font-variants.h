@@ -25,6 +25,8 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+class Feature;
+
 /**
  * A container for selecting font variants (OpenType Features).
  */
@@ -117,6 +119,7 @@ protected:
 
     // -----
     Gtk::Expander       _feature_frame;
+    Gtk::Grid           _feature_grid;
     Gtk::VBox           _feature_vbox;
     Gtk::Entry          _feature_entry;
     Gtk::Label          _feature_label;
@@ -140,8 +143,10 @@ private:
     void asian_callback();
 
     void feature_init();
+public:
     void feature_callback();
 
+private:
     // To determine if we need to write out property (may not be necessary)
     unsigned _ligatures_all;
     unsigned _position_all;
@@ -161,6 +166,8 @@ private:
     bool _numeric_changed;
     bool _feature_changed;
     bool _asian_changed;
+
+    std::map<std::string, Feature*> _features;
 
     sigc::signal<void> _changed_signal;
 

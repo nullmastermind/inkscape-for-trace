@@ -26,6 +26,86 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
+  // A simple class to handle UI for one feature. We could of derived this from Gtk::HBox but by
+  // attaching widgets directly to Gtk::Grid, we keep columns lined up (which may or may not be a
+  // good thing).
+  class Feature
+  {
+  public:
+      Feature( const Glib::ustring& name, OTSubstitution& glyphs, int options, Glib::ustring family, Gtk::Grid& grid, int row, FontVariants* parent)
+          : _name (name)
+          , _options (options)
+      {
+          Gtk::Label* table_name = Gtk::manage (new Gtk::Label());
+          table_name->set_markup ("\"" + name + "\" ");
+
+          grid.attach (*table_name, 0, row, 1, 1);
+
+          Gtk::RadioButton::Group group;
+          for (int i = 0; i < options; ++i) {
+
+              Gtk::RadioButton* button = Gtk::manage (new Gtk::RadioButton());
+              if (i == 0) {
+                  group = button->get_group();
+              } else {
+                  button->set_group (group);
+              }
+              button->signal_clicked().connect ( sigc::mem_fun(*parent, &FontVariants::feature_callback) );
+              grid.attach (*button, 2*i+1, row, 1, 1);
+              buttons.push_back (button);
+
+              Gtk::Label* label = Gtk::manage (new Gtk::Label());
+              Glib::ustring markup;
+              markup += "<span font_family='";
+              markup += family;
+              markup += "' font_features='";
+              markup += name;
+              markup += " ";
+              markup += std::to_string (i);
+              markup += "'>";
+              markup += Glib::Markup::escape_text (glyphs.input);
+              markup += "</span>";
+              label->set_markup (markup);
+              grid.attach (*label, 2*i+2, row, 1, 1);
+          }
+      }
+
+      Glib::ustring
+      get_css()
+      {
+          int i = 0;
+          for (auto b: buttons) {
+              if (b->get_active()) {
+                  if (i == 0) {
+                      // Features are always off by default (for those handled here).
+                      return "";
+                  } else if (i == 1) {
+                      // Feature without value has implied value of 1.
+                      return ("\"" + _name + "\", ");
+                  } else {
+                      // Feature with value greater than 1 must be explicitly set.
+                      return ("\"" + _name + "\" " + std::to_string (i) + ", ");
+                  }
+              }
+              ++i;
+          }
+          return "";
+      }
+
+      void
+      set_active(int i)
+      {
+          if (i < buttons.size()) {
+              buttons[i]->set_active();
+          }
+      }
+
+  private:
+      Glib::ustring _name;
+      int _options;
+      std::vector <Gtk::RadioButton*> buttons;
+  };
+
   FontVariants::FontVariants () :
     Gtk::VBox (),
     _ligatures_frame          ( Glib::ustring(C_("Font feature", "Ligatures"    )) ),
@@ -338,7 +418,7 @@ namespace Widget {
     // Feature settings ---------------------
 
     // Add tooltips
-    _feature_entry.set_tooltip_text( _("Feature settings in CSS form. No sanity checking is performed."));
+    _feature_entry.set_tooltip_text( _("Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."));
 
     _feature_substitutions.set_justify( Gtk::JUSTIFY_LEFT );
     _feature_substitutions.set_line_wrap( true );
@@ -348,6 +428,7 @@ namespace Widget {
     _feature_list.set_line_wrap( true );
 
     // Add to frame
+    _feature_vbox.pack_start( _feature_grid  );
     _feature_vbox.pack_start( _feature_entry );
     _feature_vbox.pack_start( _feature_label );
     _feature_vbox.pack_start( _feature_substitutions );
@@ -439,6 +520,8 @@ namespace Widget {
   // Update GUI based on query.
   void
   FontVariants::update( SPStyle const *query, bool different_features, Glib::ustring& font_spec ) {
+
+      update_opentype( font_spec );
 
       _ligatures_all = query->font_variant_ligatures.computed;
       _ligatures_mix = query->font_variant_ligatures.value;
@@ -562,17 +645,51 @@ namespace Widget {
       _asian_proportional_width.set_inconsistent(_asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH);
       _asian_ruby.set_inconsistent(              _asian_mix & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY);
 
+      // Fix me: Should match a space if second part matches.            ---,
+      //       : Add boundary to 'on' and 'off'.                            v
+      Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s*([0-9]|on|off|)");
+      Glib::MatchInfo matchInfo;
+      std::string setting;
 
+      // Set feature radiobutton (if it exists) or add to _feature_entry string.
+      if (query->font_feature_settings.value) {
 
-      if( query->font_feature_settings.value )
-          _feature_entry.set_text( query->font_feature_settings.value );
+          std::vector<Glib::ustring> tokens =
+              Glib::Regex::split_simple("\\s*,\\s*", query->font_feature_settings.value);
+
+          for (auto token: tokens) {
+              regex->match(token, matchInfo);
+              if (matchInfo.matches()) {
+                  Glib::ustring table = matchInfo.fetch(1);
+                  Glib::ustring value = matchInfo.fetch(2);
+
+                  if (_features.find(table) != _features.end()) {
+                      int v = 0;
+                      if (value == "0" || value == "off") v = 0;
+                      else if (value == "1" || value == "on" || value.empty() ) v = 1;
+                      else v = std::stoi(value);
+                      _features[table]->set_active(v);
+                  } else {
+                      setting += token + ", ";
+                  }
+              }
+          }
+      }
+
+      // Remove final ", "
+      if (setting.length() > 1) {
+          setting.pop_back();
+          setting.pop_back();
+      }
+
+      // Tables without radiobuttons.
+      _feature_entry.set_text( setting );
+
       if( different_features ) {
           _feature_label.show();
       } else {
           _feature_label.hide();
       }
-
-      update_opentype( font_spec );
   }
 
   // Update GUI based on OpenType tables of selected font (which may be changed in font selector tab).
@@ -911,7 +1028,15 @@ namespace Widget {
           if( (it = table_copy.find("ssty")) != table_copy.end() ) table_copy.erase( it );
           if( (it = table_copy.find("vatu")) != table_copy.end() ) table_copy.erase( it );
 
+          // Clear out old features
+          auto children = _feature_grid.get_children();
+          for (auto child: children) {
+              _feature_grid.remove (*child);
+          }
+          _features.clear();
+
           std::string markup;
+          int grid_row = 0;
 
           // GSUB lookup type 1 (1 to 1 mapping).
           for (auto table: res->openTypeTables) {
@@ -921,28 +1046,9 @@ namespace Widget {
 
                   if( (it = table_copy.find(table.first)) != table_copy.end() ) table_copy.erase( it );
 
-                  markup += "<span font_weight='bold'>";
-                  markup += table.first;
-                  markup += "</span>";
-                  markup += ": ";
-
-                  markup += "<span font_family='";
-                  markup += sp_font_description_get_family(res->descr);
-                  markup += "'>";
-                  markup += Glib::Markup::escape_text(table.second.input);
-                  markup += "</span>";
-
-                  markup += " <span font_weight='bold'>→</span> ";
-
-                  markup += "<span font_family='";
-                  markup += sp_font_description_get_family(res->descr);
-                  markup += "'>";
-                  markup += "<span font_features='";
-                  markup += table.first;
-                  markup += "'>";
-                  markup += Glib::Markup::escape_text(table.second.input);
-                  markup += "</span>";
-                  markup += "</span>\n";
+                  _features[table.first] = new Feature (table.first, table.second, 2,
+                                                        sp_font_description_get_family(res->descr),
+                                                        _feature_grid, grid_row++, this);
               }
           }
 
@@ -968,38 +1074,13 @@ namespace Widget {
                   // Our lame attempt at determining number of alternative glyphs for one glyph:
                   int number = table.second.output.length() / table.second.input.length();
 
-                  for (int i = 0; i < number; ++i) {
-                      markup += "<span font_weight='bold'>";
-                      markup += table.first;
-                      if (i != 0) {
-                          markup += " ";
-                          markup += std::to_string (i + 1);
-                      }
-                      markup += "</span>";
-                      markup += ": ";
-
-                      markup += "<span font_family='";
-                      markup += sp_font_description_get_family(res->descr);
-                      markup += "'>";
-                      markup += Glib::Markup::escape_text(table.second.input);
-                      markup += "</span>";
-
-                      markup += " <span font_weight='bold'>→</span> ";
-
-                      markup += "<span font_family='";
-                      markup += sp_font_description_get_family(res->descr);
-                      markup += "'>";
-                      markup += "<span font_features='";
-                      markup += table.first;
-                      markup += " ";
-                      markup += std::to_string (i + 1);
-                      markup += "'>";
-                      markup += Glib::Markup::escape_text(table.second.input);
-                      markup += "</span>";
-                      markup += "</span>\n";
-                  }
+                  _features[table.first] = new Feature (table.first, table.second, number+1,
+                                                        sp_font_description_get_family(res->descr),
+                                                        _feature_grid, grid_row++, this);
               }
           }
+
+          _feature_grid.show_all();
 
           _feature_substitutions.set_markup ( markup.c_str() );
 
@@ -1017,12 +1098,10 @@ namespace Widget {
               _feature_list.set_text( "" );
           }
 
-
       } else {
           std::cerr << "FontVariants::update(): Couldn't find font_instance for: "
                     << font_spec << std::endl;
       }
-
 
       _ligatures_changed = false;
       _position_changed  = false;
@@ -1184,9 +1263,18 @@ namespace Widget {
       }
 
       // Feature settings
-      Glib::ustring feature_string = _feature_entry.get_text();
-      if( !feature_string.empty() || feature_string.compare( "normal" ) ) {
+      Glib::ustring feature_string;
+      for (auto i: _features) {
+          feature_string += i.second->get_css();
+      }
+
+      feature_string += _feature_entry.get_text();
+      // std::cout << "feature_string: " << feature_string << std::endl;
+
+      if (!feature_string.empty()) {
           sp_repr_css_set_property(css, "font-feature-settings", feature_string.c_str());
+      } else {
+          sp_repr_css_unset_property(css, "font-feature-settings");
       }
   }
    
@@ -1269,8 +1357,13 @@ namespace Widget {
       if (ruby           )   markup += "ruby=1,";
 
       // Feature settings
-      Glib::ustring feature_string = _feature_entry.get_text();
-      if( !feature_string.empty() && feature_string.compare( "normal" ) != 0 ) {
+      Glib::ustring feature_string;
+      for (auto i: _features) {
+          feature_string += i.second->get_css();
+      }
+
+      feature_string += _feature_entry.get_text();
+      if (!feature_string.empty()) {
           markup += feature_string;
       }
 
