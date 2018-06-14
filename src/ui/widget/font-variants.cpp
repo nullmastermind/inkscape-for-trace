@@ -55,6 +55,13 @@ namespace Widget {
               buttons.push_back (button);
 
               Gtk::Label* label = Gtk::manage (new Gtk::Label());
+
+              // Restrict label width (some fonts have lots of alternatives).
+              label->set_line_wrap( true );
+              label->set_line_wrap_mode( Pango::WRAP_WORD_CHAR );
+              label->set_ellipsize( Pango::ELLIPSIZE_END );
+              label->set_lines(2);
+
               Glib::ustring markup;
               markup += "<span font_family='";
               markup += family;
