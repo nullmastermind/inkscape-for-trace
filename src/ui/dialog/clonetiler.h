@@ -41,7 +41,7 @@ namespace Dialog {
 class CloneTiler : public Widget::Panel {
 public:
     CloneTiler();
-    virtual ~CloneTiler();
+    ~CloneTiler() override;
 
     static CloneTiler &getInstance() { return *new CloneTiler(); }
     void show_page_trace();
@@ -169,7 +169,7 @@ private:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
     /**
      * Is invoked by the desktop tracker when the desktop changes.

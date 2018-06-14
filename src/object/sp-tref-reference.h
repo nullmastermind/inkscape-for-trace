@@ -31,7 +31,7 @@ public:
         updateObserver();
     }
     
-    virtual ~SPTRefReference() {
+    ~SPTRefReference() override {
         if (subtreeObserved) {
             subtreeObserved->removeObserver(*this);
             delete subtreeObserved;
@@ -47,20 +47,20 @@ public:
     /////////////////////////////////////////////////////////////////////
     // Node Observer Functions
     // -----------------------
-    virtual void notifyChildAdded(Inkscape::XML::Node &node, Inkscape::XML::Node &child, Inkscape::XML::Node *prev);
-    virtual void notifyChildRemoved(Inkscape::XML::Node &node, Inkscape::XML::Node &child, Inkscape::XML::Node *prev);
-    virtual void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
-                                         Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev);
-    virtual void notifyContentChanged(Inkscape::XML::Node &node,
+    void notifyChildAdded(Inkscape::XML::Node &node, Inkscape::XML::Node &child, Inkscape::XML::Node *prev) override;
+    void notifyChildRemoved(Inkscape::XML::Node &node, Inkscape::XML::Node &child, Inkscape::XML::Node *prev) override;
+    void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
+                                         Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev) override;
+    void notifyContentChanged(Inkscape::XML::Node &node,
                                       Inkscape::Util::ptr_shared old_content,
-                                      Inkscape::Util::ptr_shared new_content);
-    virtual void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
+                                      Inkscape::Util::ptr_shared new_content) override;
+    void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
                                         Inkscape::Util::ptr_shared old_value,
-                                        Inkscape::Util::ptr_shared new_value);
+                                        Inkscape::Util::ptr_shared new_value) override;
     /////////////////////////////////////////////////////////////////////
 
 protected:
-    virtual bool _acceptObject(SPObject * obj) const; 
+    bool _acceptObject(SPObject * obj) const override; 
     
     Inkscape::XML::Subtree *subtreeObserved; 
 };

@@ -25,9 +25,9 @@ namespace LivePathEffect {
 class LPEPathLength : public Effect {
 public:
     LPEPathLength(LivePathEffectObject *lpeobject);
-    virtual ~LPEPathLength();
+    ~LPEPathLength() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     LPEPathLength(const LPEPathLength&) = delete;

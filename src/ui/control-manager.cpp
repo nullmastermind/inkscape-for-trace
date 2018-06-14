@@ -92,9 +92,9 @@ private:
     {
     public:
         PrefListener(ControlManagerImpl &manager) : Inkscape::Preferences::Observer("/options/grabsize/value"), _mgr(manager) {}
-        virtual ~PrefListener() {}
+        ~PrefListener() override {}
 
-        virtual void notify(Inkscape::Preferences::Entry const &val) {
+        void notify(Inkscape::Preferences::Entry const &val) override {
             int size = val.getIntLimited(3, 1, 7);
             _mgr.setControlSize(size);
         }

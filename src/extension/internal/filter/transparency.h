@@ -41,11 +41,11 @@ namespace Filter {
 
 class Blend : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Blend ( ) : Filter() { };
-    virtual ~Blend ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Blend ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -118,11 +118,11 @@ Blend::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class ChannelTransparency : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ChannelTransparency ( ) : Filter() { };
-    virtual ~ChannelTransparency ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ChannelTransparency ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -193,11 +193,11 @@ ChannelTransparency::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class LightEraser : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     LightEraser ( ) : Filter() { };
-    virtual ~LightEraser ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~LightEraser ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -267,11 +267,11 @@ LightEraser::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class Opacity : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Opacity ( ) : Filter() { };
-    virtual ~Opacity ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Opacity ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -329,11 +329,11 @@ Opacity::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Silhouette : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Silhouette ( ) : Filter() { };
-    virtual ~Silhouette ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Silhouette ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

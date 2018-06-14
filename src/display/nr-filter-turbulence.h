@@ -42,11 +42,11 @@ class FilterTurbulence : public FilterPrimitive {
 public:
     FilterTurbulence();
     static FilterPrimitive *create();
-    virtual ~FilterTurbulence();
+    ~FilterTurbulence() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual double complexity(Geom::Affine const &ctm);
-    virtual bool uses_background() { return false; }
+    void render_cairo(FilterSlot &slot) override;
+    double complexity(Geom::Affine const &ctm) override;
+    bool uses_background() override { return false; }
 
     void set_baseFrequency(int axis, double freq);
     void set_numOctaves(int num);
@@ -55,7 +55,7 @@ public:
     void set_type(FilterTurbulenceType t);
     void set_updated(bool u);
 
-    virtual Glib::ustring name() { return Glib::ustring("Turbulence"); }
+    Glib::ustring name() override { return Glib::ustring("Turbulence"); }
 
 private:
 

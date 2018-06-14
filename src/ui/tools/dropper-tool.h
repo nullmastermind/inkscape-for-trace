@@ -38,18 +38,18 @@ namespace Tools {
 class DropperTool : public ToolBase {
 public:
 	DropperTool();
-	virtual ~DropperTool();
+	~DropperTool() override;
 
 	static const std::string prefsPath;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 	guint32 get_color(bool invert=false);
 
 protected:
-	virtual void setup();
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	bool root_handler(GdkEvent* event) override;
 
 private:
     double        R;

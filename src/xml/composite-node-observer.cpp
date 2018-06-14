@@ -115,31 +115,31 @@ public:
     NodeEventVector const &vector;
     void * const data;
 
-    void notifyChildAdded(Node &node, Node &child, Node *prev) {
+    void notifyChildAdded(Node &node, Node &child, Node *prev) override {
         if (vector.child_added) {
             vector.child_added(&node, &child, prev, data);
         }
     }
 
-    void notifyChildRemoved(Node &node, Node &child, Node *prev) {
+    void notifyChildRemoved(Node &node, Node &child, Node *prev) override {
         if (vector.child_removed) {
             vector.child_removed(&node, &child, prev, data);
         }
     }
 
-    void notifyChildOrderChanged(Node &node, Node &child, Node *old_prev, Node *new_prev) {
+    void notifyChildOrderChanged(Node &node, Node &child, Node *old_prev, Node *new_prev) override {
         if (vector.order_changed) {
             vector.order_changed(&node, &child, old_prev, new_prev, data);
         }
     }
 
-    void notifyContentChanged(Node &node, Util::ptr_shared old_content, Util::ptr_shared new_content) {
+    void notifyContentChanged(Node &node, Util::ptr_shared old_content, Util::ptr_shared new_content) override {
         if (vector.content_changed) {
             vector.content_changed(&node, old_content, new_content, data);
         }
     }
 
-    void notifyAttributeChanged(Node &node, GQuark name, Util::ptr_shared old_value, Util::ptr_shared new_value) {
+    void notifyAttributeChanged(Node &node, GQuark name, Util::ptr_shared old_value, Util::ptr_shared new_value) override {
         if (vector.attr_changed) {
             vector.attr_changed(&node, g_quark_to_string(name), old_value, new_value, false, data);
         }

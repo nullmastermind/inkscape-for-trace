@@ -55,12 +55,12 @@ private:
                       bool hidden,
                       Inkscape::Extension::Extension * ext,
                       Inkscape::XML::Node * xml);
-        ~ParamNotebookPage(void);
+        ~ParamNotebookPage(void) override;
 
-        Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+        Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
         void paramString (std::list <std::string> &list);
         gchar * get_text (void) {return _text;};
-        Parameter * get_param (const gchar * name);
+        Parameter * get_param (const gchar * name) override;
     }; /* class ParamNotebookPage */
 
 
@@ -75,21 +75,21 @@ public:
                   int indent,
                   Inkscape::Extension::Extension * ext,
                   Inkscape::XML::Node * xml);
-    virtual ~ParamNotebook(void);
+    ~ParamNotebook(void) override;
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
     /**
      * A function to get the currentpage and the parameters in a string form.
      * @return A string with the 'value' and all the parameters on all pages as command line arguments.
      */
-    virtual void string (std::list <std::string> &list) const;
+    void string (std::list <std::string> &list) const override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    virtual void string(std::string &string) const {return Parameter::string(string);}
+    void string(std::string &string) const override {return Parameter::string(string);}
 
 
-    Parameter * get_param (const gchar * name);
+    Parameter * get_param (const gchar * name) override;
 
     const gchar * get (const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) { return _value; }
     const gchar * set (const int in, SPDocument * doc, Inkscape::XML::Node * node);

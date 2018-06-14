@@ -35,12 +35,12 @@ public:
     static const gchar *MODE_NAME;
 
     ColorWheelSelector(SelectedColor &color);
-    virtual ~ColorWheelSelector();
+    ~ColorWheelSelector() override;
 
 protected:
     void _initUI();
 
-    void on_show();
+    void on_show() override;
 
     void _colorChanged();
     void _adjustmentChanged();
@@ -68,8 +68,8 @@ private:
 
 class ColorWheelSelectorFactory : public ColorSelectorFactory {
 public:
-    Gtk::Widget *createWidget(SelectedColor &color) const;
-    Glib::ustring modeName() const;
+    Gtk::Widget *createWidget(SelectedColor &color) const override;
+    Glib::ustring modeName() const override;
 };
 }
 }

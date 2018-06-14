@@ -38,7 +38,7 @@ class Adjustment;
 class MarkerComboBox : public Gtk::ComboBox {
 public:
     MarkerComboBox(gchar const *id, int loc);
-    ~MarkerComboBox();
+    ~MarkerComboBox() override;
 
     void setDesktop(SPDesktop *desktop);
 

@@ -55,7 +55,7 @@ public:
     sigc::signal<void, bool> changed_signal;
 protected:
     Glib::ustring _prefs_path;
-    void on_toggled();
+    void on_toggled() override;
 };
 
 class PrefRadioButton : public Gtk::RadioButton
@@ -76,7 +76,7 @@ protected:
         VAL_STRING
     };
     int _int_value;
-    void on_toggled();
+    void on_toggled() override;
 };
 
 class PrefSpinButton : public SpinButton
@@ -89,7 +89,7 @@ protected:
     Glib::ustring _prefs_path;
     bool _is_int;
     bool _is_percent;
-    void on_value_changed();
+    void on_value_changed() override;
 };
 
 class PrefSpinUnit : public ScalarUnit
@@ -119,7 +119,7 @@ public:
     static const double textpadding;
 
 private:
-    bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
 
     void draw_marks(Cairo::RefPtr<Cairo::Context> cr, double dist, int major_interval);
 
@@ -140,7 +140,7 @@ private:
     void on_slider_value_changed();
     void on_spinbutton_value_changed();
     void on_unit_changed();
-    virtual bool on_mnemonic_activate( bool group_cycling );
+    bool on_mnemonic_activate( bool group_cycling ) override;
 
     Inkscape::UI::Widget::SpinButton _sb;
     UnitMenu        _unit;
@@ -158,7 +158,7 @@ public:
 private:
     void on_slider_value_changed();
     void on_spinbutton_value_changed();
-    virtual bool on_mnemonic_activate( bool group_cycling );
+    bool on_mnemonic_activate( bool group_cycling ) override;
 
     Glib::ustring _prefs_path;
     Inkscape::UI::Widget::SpinButton _sb;
@@ -185,7 +185,7 @@ protected:
     Glib::ustring _prefs_path;
     std::vector<int> _values;
     std::vector<Glib::ustring> _ustr_values;    ///< string key values used optionally instead of numeric _values
-    void on_changed();
+    void on_changed() override;
 };
 
 class PrefEntry : public Gtk::Entry
@@ -194,7 +194,7 @@ public:
     void init(Glib::ustring const &prefs_path, bool mask);
 protected:
     Glib::ustring _prefs_path;
-    void on_changed();
+    void on_changed() override;
 };
 
 class PrefMultiEntry : public Gtk::ScrolledWindow
@@ -220,7 +220,7 @@ protected:
     Gtk::Entry *relatedEntry;
     void onRelatedEntryChangedCallback();
     void onRelatedButtonClickedCallback();
-    virtual bool on_mnemonic_activate( bool group_cycling );
+    bool on_mnemonic_activate( bool group_cycling ) override;
 };
 
 class PrefEntryFileButtonHBox : public Gtk::HBox
@@ -234,7 +234,7 @@ protected:
     Gtk::Entry *relatedEntry;
     void onRelatedEntryChangedCallback();
     void onRelatedButtonClickedCallback();
-    virtual bool on_mnemonic_activate( bool group_cycling );
+    bool on_mnemonic_activate( bool group_cycling ) override;
 };
 
 class PrefFileButton : public Gtk::FileChooserButton
@@ -251,14 +251,14 @@ class PrefColorPicker : public ColorPicker
 {
 public:
     PrefColorPicker() : ColorPicker("", "", 0, false) {};
-    virtual ~PrefColorPicker() {};
+    ~PrefColorPicker() override {};
 
     void init(Glib::ustring const &abel, Glib::ustring const &prefs_path,
               guint32 default_rgba);
 
 protected:
     Glib::ustring _prefs_path;
-    virtual void on_changed (guint32 rgba);
+    void on_changed (guint32 rgba) override;
 };
 
 class PrefUnit : public UnitMenu
@@ -267,7 +267,7 @@ public:
     void init(Glib::ustring const &prefs_path);
 protected:
     Glib::ustring _prefs_path;
-    void on_changed();
+    void on_changed() override;
 };
 
 class DialogPage : public Gtk::Grid

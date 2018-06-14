@@ -29,7 +29,7 @@ class Registry;
 class Licensor : public Gtk::VBox {
 public:
     Licensor();
-    virtual ~Licensor();
+    ~Licensor() override;
     void init (Registry&);
     void update (SPDocument *doc);
 

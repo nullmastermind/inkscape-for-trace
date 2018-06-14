@@ -37,7 +37,7 @@ public:
 
     }
 
-    virtual ~ArrayParam() {
+    ~ArrayParam() override {
 
     };
 
@@ -45,11 +45,11 @@ public:
         return _vector;
     }
 
-    virtual Gtk::Widget * param_newWidget() {
+    Gtk::Widget * param_newWidget() override {
         return NULL;
     }
 
-    virtual bool param_readSVGValue(const gchar * strvalue) {
+    bool param_readSVGValue(const gchar * strvalue) override {
         _vector.clear();
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         gchar ** iter = strarray;
@@ -60,14 +60,14 @@ public:
         g_strfreev (strarray);
         return true;
     }
-    virtual void param_update_default(const gchar * default_value){};
-    virtual gchar * param_getSVGValue() const {
+    void param_update_default(const gchar * default_value) override{};
+    gchar * param_getSVGValue() const override {
         Inkscape::SVGOStringStream os;
         writesvg(os, _vector);
         return g_strdup(os.str().c_str());
     }
     
-    virtual gchar * param_getDefaultSVGValue() const {
+    gchar * param_getDefaultSVGValue() const override {
         return g_strdup("");
     }
 
@@ -75,7 +75,7 @@ public:
         _vector = new_vector;
     }
 
-    void param_set_default() {
+    void param_set_default() override {
         param_setValue( std::vector<StorageType>(_default_size) );
     }
 

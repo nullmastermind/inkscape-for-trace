@@ -25,15 +25,15 @@ namespace LivePathEffect {
 class LPETransform2Pts : public Effect, GroupBBoxEffect {
 public:
     LPETransform2Pts(LivePathEffectObject *lpeobject);
-    virtual ~LPETransform2Pts();
+    ~LPETransform2Pts() override;
 
-    virtual void doOnApply (SPLPEItem const* lpeitem);
+    void doOnApply (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
-    virtual Gtk::Widget *newWidget();
+    Gtk::Widget *newWidget() override;
 
     void updateIndex();
 
@@ -46,7 +46,7 @@ public:
     void reset();
 
 protected:
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     ToggleButtonParam elastic;

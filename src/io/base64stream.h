@@ -43,13 +43,13 @@ public:
 
     Base64InputStream(InputStream &sourceStream);
     
-    virtual ~Base64InputStream();
+    ~Base64InputStream() override;
     
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual int get();
+    int get() override;
     
 private:
 
@@ -82,13 +82,13 @@ public:
 
     Base64OutputStream(OutputStream &destinationStream);
     
-    virtual ~Base64OutputStream();
+    ~Base64OutputStream() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
     /**
      * Sets the maximum line length for base64 output.  If

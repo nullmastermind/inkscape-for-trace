@@ -94,12 +94,12 @@ public:
         }
     }
 
-    virtual Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return get_active_data()->key;
     }
 
-    virtual void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         setProgrammatically = true;
         const gchar* val = attribute_value(o);

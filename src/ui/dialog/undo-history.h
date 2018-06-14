@@ -49,11 +49,11 @@ public:
     property_event_type() { return _property_event_type.get_proxy(); }
 
 protected:
-    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
+    void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                               Gtk::Widget& widget,
                               const Gdk::Rectangle& background_area,
                               const Gdk::Rectangle& cell_area,
-                              Gtk::CellRendererState flags);
+                              Gtk::CellRendererState flags) override;
 private:
 
     Glib::Property<Glib::RefPtr<Gdk::Pixbuf> > _property_icon;
@@ -85,18 +85,18 @@ public:
     static const Filter& no_filter;
 
 protected:
-    virtual void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
+    void render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                               Gtk::Widget& widget,
                               const Gdk::Rectangle& background_area,
                               const Gdk::Rectangle& cell_area,
-                              Gtk::CellRendererState flags);
+                              Gtk::CellRendererState flags) override;
 
 private:
 
     Glib::Property<int> _property_number;
     const Filter& _filter;
 
-    struct NoFilter : Filter { bool operator() (const int& /*x*/) const { return true; } };
+    struct NoFilter : Filter { bool operator() (const int& /*x*/) const override { return true; } };
 };
 
 /**
@@ -107,10 +107,10 @@ private:
  */
 class UndoHistory : public Widget::Panel {
 public:
-    virtual ~UndoHistory();
+    ~UndoHistory() override;
 
     static UndoHistory &getInstance();
-    void setDesktop(SPDesktop* desktop);
+    void setDesktop(SPDesktop* desktop) override;
 
     sigc::connection _document_replaced_connection;
 
@@ -153,7 +153,7 @@ private:
 
     struct GreaterThan : CellRendererInt::Filter {
         GreaterThan(int _i) : i (_i) {}
-        bool operator() (const int& x) const { return x > i; }
+        bool operator() (const int& x) const override { return x > i; }
         int i;
     };
 

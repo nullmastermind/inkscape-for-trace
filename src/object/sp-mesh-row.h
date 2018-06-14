@@ -20,16 +20,16 @@
 class SPMeshrow : public SPObject {
 public:
     SPMeshrow();
-    virtual ~SPMeshrow();
+    ~SPMeshrow() override;
 
     SPMeshrow* getNextMeshrow();
     SPMeshrow* getPrevMeshrow();
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void set(unsigned int key, const char* value);
-    virtual void modified(unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void set(unsigned int key, const char* value) override;
+    void modified(unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif /* !SEEN_SP_MESHROW_H */

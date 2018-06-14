@@ -62,18 +62,18 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
 
-    virtual ~OriginalPathArrayParam();
+    ~OriginalPathArrayParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
-    virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value){};
+    Gtk::Widget * param_newWidget() override;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
+    void param_set_default() override;
+    void param_update_default(const gchar * default_value) override{};
     /** Disable the canvas indicators of parent class by overriding this method */
-    virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
+    void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) override {};
     /** Disable the canvas indicators of parent class by overriding this method */
-    virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
+    void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) override {};
     void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; update();};
     void allowOnlyBsplineSpiro(bool allow_only_bspline_spiro){ _allow_only_bspline_spiro = allow_only_bspline_spiro; update();};
 

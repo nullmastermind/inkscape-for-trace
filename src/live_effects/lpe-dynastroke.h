@@ -40,9 +40,9 @@ enum DynastrokeCappingType {
 class LPEDynastroke : public Effect {
 public:
     LPEDynastroke(LivePathEffectObject *lpeobject);
-    virtual ~LPEDynastroke();
+    ~LPEDynastroke() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     EnumParam<DynastrokeMethod> method;

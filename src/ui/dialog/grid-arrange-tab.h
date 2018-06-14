@@ -39,12 +39,12 @@ class ArrangeDialog;
 class GridArrangeTab : public ArrangeTab {
 public:
     GridArrangeTab(ArrangeDialog *parent);
-    virtual ~GridArrangeTab() {};
+    ~GridArrangeTab() override {};
 
     /**
      * Do the actual work
      */
-    virtual void arrange();
+    void arrange() override;
 
     /**
      * Respond to selection change

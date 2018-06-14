@@ -70,7 +70,7 @@ enum FontFaceUnicodeRangeType{
 class SPFontFace : public SPObject {
 public:
 	SPFontFace();
-	virtual ~SPFontFace();
+	~SPFontFace() override;
 
     char* font_family;
     std::vector<FontFaceStyleType> font_style;
@@ -107,17 +107,17 @@ public:
     double overline_thickness;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node* child);
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node* child) override;
 
-	virtual void set(unsigned int key, const char* value);
+	void set(unsigned int key, const char* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif //#ifndef __SP_FONTFACE_H__

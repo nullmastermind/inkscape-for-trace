@@ -145,7 +145,7 @@ public:
         }
     }
     
-    virtual bool event(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) {
+    bool event(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override {
         for (typename MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
             if ((*i).second->event(event_context, event)) return true;
         }

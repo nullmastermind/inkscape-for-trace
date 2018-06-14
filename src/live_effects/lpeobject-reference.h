@@ -29,7 +29,7 @@ namespace LivePathEffect {
 class LPEObjectReference : public Inkscape::URIReference {
 public:
     LPEObjectReference(SPObject *owner);
-    virtual ~LPEObjectReference();
+    ~LPEObjectReference() override;
 
     SPObject       *owner;
 
@@ -50,7 +50,7 @@ public:
     void (*user_unlink) (LPEObjectReference *me, SPObject *user);
 
 protected:
-    bool _acceptObject(SPObject * const obj) const;
+    bool _acceptObject(SPObject * const obj) const override;
 
 };
 

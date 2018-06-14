@@ -17,15 +17,15 @@ class LPESimplify : public Effect , GroupBBoxEffect {
 
 public:
     LPESimplify(LivePathEffectObject *lpeobject);
-    virtual ~LPESimplify();
+    ~LPESimplify() override;
 
-    virtual void doEffect(SPCurve *curve);
+    void doEffect(SPCurve *curve) override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
     virtual void generateHelperPathAndSmooth(Geom::PathVector &result);
 
-    virtual Gtk::Widget * newWidget();
+    Gtk::Widget * newWidget() override;
 
     virtual void drawNode(Geom::Point p);
 
@@ -34,7 +34,7 @@ public:
     virtual void drawHandleLine(Geom::Point p,Geom::Point p2);
 
 protected:
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     ScalarParam steps;

@@ -45,7 +45,7 @@ private:
     public:
         BoundingBoxPrefsObserver(SelCue &sel_cue);
 
-        void notify(Preferences::Entry const &val);
+        void notify(Preferences::Entry const &val) override;
 
     private:
         SelCue &_sel_cue;

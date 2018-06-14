@@ -21,7 +21,7 @@ namespace Dialogs {
 class FilletChamferPropertiesDialog : public Gtk::Dialog {
 public:
     FilletChamferPropertiesDialog();
-    virtual ~FilletChamferPropertiesDialog();
+    ~FilletChamferPropertiesDialog() override;
 
     Glib::ustring getName() const
     {

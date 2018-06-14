@@ -26,8 +26,8 @@ public:
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
 		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
-    virtual ~VonKochPathParam(){}
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);  
+    ~VonKochPathParam() override{}
+    void param_setup_nodepath(Inkscape::NodePath::Path *np) override;  
   };
 
   //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
@@ -39,21 +39,21 @@ public:
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
 		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
-    virtual ~VonKochRefPathParam(){}
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);  
-    virtual bool param_readSVGValue(const gchar * strvalue);  
+    ~VonKochRefPathParam() override{}
+    void param_setup_nodepath(Inkscape::NodePath::Path *np) override;  
+    bool param_readSVGValue(const gchar * strvalue) override;  
   };
  
 class LPEVonKoch : public Effect, GroupBBoxEffect {
 public:
     LPEVonKoch(LivePathEffectObject *lpeobject);
-    virtual ~LPEVonKoch();
+    ~LPEVonKoch() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
-    virtual void doBeforeEffect(SPLPEItem const* item);
+    void doBeforeEffect(SPLPEItem const* item) override;
 
     //Useful??
     //    protected: 

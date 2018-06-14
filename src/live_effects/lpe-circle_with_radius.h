@@ -23,10 +23,10 @@ namespace LivePathEffect {
 class LPECircleWithRadius : public Effect {
 public:
     LPECircleWithRadius(LivePathEffectObject *lpeobject);
-    virtual ~LPECircleWithRadius();
+    ~LPECircleWithRadius() override;
 
 //  Choose to implement one of the doEffect functions. You can delete or comment out the others.
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     // add the parameters for your effect here:

@@ -58,7 +58,7 @@ struct CachePrefObserver : public Inkscape::Preferences::Observer {
         }
         prefs->addObserver(*this);
     }
-    void notify(Preferences::Entry const &v) {
+    void notify(Preferences::Entry const &v) override {
         Glib::ustring name = v.getEntryName();
         if (name == "size") {
             _arena->drawing.setCacheBudget((1 << 20) * v.getIntLimited(64, 0, 4096));

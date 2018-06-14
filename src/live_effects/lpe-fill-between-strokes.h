@@ -18,8 +18,8 @@ namespace LivePathEffect {
 class LPEFillBetweenStrokes : public Effect {
 public:
     LPEFillBetweenStrokes(LivePathEffectObject *lpeobject);
-    virtual ~LPEFillBetweenStrokes();
-    virtual void doEffect (SPCurve * curve);
+    ~LPEFillBetweenStrokes() override;
+    void doEffect (SPCurve * curve) override;
 
 private:
     OriginalPathParam  linked_path;

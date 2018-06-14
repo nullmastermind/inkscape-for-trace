@@ -26,7 +26,7 @@ class ArrangeTab : public Gtk::VBox
 {
 public:
 	ArrangeTab() {};
-	virtual ~ArrangeTab() {};
+	~ArrangeTab() override {};
 
 	/**
 	 * Do the actual work! This method is invoked to actually arrange the

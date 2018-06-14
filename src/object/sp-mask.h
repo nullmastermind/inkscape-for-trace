@@ -34,7 +34,7 @@ class DrawingItem;
 class SPMask : public SPObjectGroup {
 public:
 	SPMask();
-	virtual ~SPMask();
+	~SPMask() override;
 
 	unsigned int maskUnits_set : 1;
 	unsigned int maskUnits : 1;
@@ -54,17 +54,17 @@ public:
 	void sp_mask_set_bbox(unsigned int key, Geom::OptRect const &bbox);
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 
-	virtual void set(unsigned int key, const char* value);
+	void set(unsigned int key, const char* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 class SPMaskReference : public Inkscape::URIReference {
@@ -80,7 +80,7 @@ protected:
      * \return false if obj is not a mask or if obj is a parent of this
      *         reference's owner element.  True otherwise.
      */
-	virtual bool _acceptObject(SPObject *obj) const {
+	bool _acceptObject(SPObject *obj) const override {
 		if (!SP_IS_MASK(obj)) {
 		    return false;
 	    }

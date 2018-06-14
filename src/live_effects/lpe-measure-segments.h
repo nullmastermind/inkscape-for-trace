@@ -34,13 +34,13 @@ enum OrientationMethod {
 class LPEMeasureSegments : public Effect {
 public:
     LPEMeasureSegments(LivePathEffectObject *lpeobject);
-    virtual ~LPEMeasureSegments();
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* /*lpeitem*/);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget * newWidget();
+    ~LPEMeasureSegments() override;
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doOnRemove(SPLPEItem const* /*lpeitem*/) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    Gtk::Widget * newWidget() override;
     void createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(Glib::ustring mode);

@@ -39,91 +39,91 @@ class SimpleNode
 : virtual public Node, public Inkscape::GC::Managed<>
 {
 public:
-    char const *name() const;
-    int code() const { return _name; }
-    void setCodeUnsafe(int code) {
+    char const *name() const override;
+    int code() const override { return _name; }
+    void setCodeUnsafe(int code) override {
         _name = code;
     }
 
-    Document *document() { return _document; }
-    Document const *document() const {
+    Document *document() override { return _document; }
+    Document const *document() const override {
         return const_cast<SimpleNode *>(this)->document();
     }
 
-    Node *duplicate(Document* doc) const { return _duplicate(doc); }
+    Node *duplicate(Document* doc) const override { return _duplicate(doc); }
 
-    Node *root();
-    Node const *root() const {
+    Node *root() override;
+    Node const *root() const override {
         return const_cast<SimpleNode *>(this)->root();
     }
 
-    Node *parent() { return _parent; }
-    Node const *parent() const { return _parent; }
+    Node *parent() override { return _parent; }
+    Node const *parent() const override { return _parent; }
 
-    Node *next() { return _next; }
-    Node const *next() const { return _next; }
+    Node *next() override { return _next; }
+    Node const *next() const override { return _next; }
 
-    Node *firstChild() { return _first_child; }
-    Node const *firstChild() const { return _first_child; }
-    Node *lastChild() { return _last_child; }
-    Node const *lastChild() const { return _last_child; }
+    Node *firstChild() override { return _first_child; }
+    Node const *firstChild() const override { return _first_child; }
+    Node *lastChild() override { return _last_child; }
+    Node const *lastChild() const override { return _last_child; }
 
-    unsigned childCount() const { return _child_count; }
-    Node *nthChild(unsigned index);
-    Node const *nthChild(unsigned index) const {
+    unsigned childCount() const override { return _child_count; }
+    Node *nthChild(unsigned index) override;
+    Node const *nthChild(unsigned index) const override {
         return const_cast<SimpleNode *>(this)->nthChild(index);
     }
 
-    void addChild(Node *child, Node *ref);
-    void appendChild(Node *child) {
+    void addChild(Node *child, Node *ref) override;
+    void appendChild(Node *child) override {
         SimpleNode::addChild(child, _last_child);
     }
-    void removeChild(Node *child);
-    void changeOrder(Node *child, Node *ref);
+    void removeChild(Node *child) override;
+    void changeOrder(Node *child, Node *ref) override;
 
-    unsigned position() const;
-    void setPosition(int pos);
+    unsigned position() const override;
+    void setPosition(int pos) override;
 
-    char const *attribute(char const *key) const;
-    void setAttribute(char const *key, char const *value, bool is_interactive=false);
-    bool matchAttributeName(char const *partial_name) const;
+    char const *attribute(char const *key) const override;
+    void setAttribute(char const *key, char const *value, bool is_interactive=false) override;
+    bool matchAttributeName(char const *partial_name) const override;
 
-    char const *content() const;
-    void setContent(char const *value);
+    char const *content() const override;
+    void setContent(char const *value) override;
 
-    void cleanOriginal(Node *src, gchar const *key);
-    bool equal(Node const *other, bool recursive);
-    void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false);
+    void cleanOriginal(Node *src, gchar const *key) override;
+    bool equal(Node const *other, bool recursive) override;
+    void mergeFrom(Node const *src, char const *key, bool extension = false, bool clean = false) override;
 
-    Inkscape::Util::List<AttributeRecord const> attributeList() const {
+    Inkscape::Util::List<AttributeRecord const> attributeList() const override {
         return _attributes;
     }
 
-    void synthesizeEvents(NodeEventVector const *vector, void *data);
-    void synthesizeEvents(NodeObserver &observer);
+    void synthesizeEvents(NodeEventVector const *vector, void *data) override;
+    void synthesizeEvents(NodeObserver &observer) override;
 
-    void addListener(NodeEventVector const *vector, void *data) {
+    void addListener(NodeEventVector const *vector, void *data) override {
         assert(vector != NULL);
         _observers.addListener(*vector, data);
     }
-    void addObserver(NodeObserver &observer) {
+    void addObserver(NodeObserver &observer) override {
         _observers.add(observer);
     }
-    void removeListenerByData(void *data) {
+    void removeListenerByData(void *data) override {
         _observers.removeListenerByData(data);
     }
-    void removeObserver(NodeObserver &observer) {
+    void removeObserver(NodeObserver &observer) override {
         _observers.remove(observer);
     }
 
-    void addSubtreeObserver(NodeObserver &observer) {
+    void addSubtreeObserver(NodeObserver &observer) override {
         _subtree_observers.add(observer);
     }
-    void removeSubtreeObserver(NodeObserver &observer) {
+    void removeSubtreeObserver(NodeObserver &observer) override {
         _subtree_observers.remove(observer);
     }
 
-    void recursivePrintTree(unsigned level = 0);
+    void recursivePrintTree(unsigned level = 0) override;
 
 protected:
     SimpleNode(int code, Document *document);

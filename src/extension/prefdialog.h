@@ -66,14 +66,14 @@ class PrefDialog : public Gtk::Dialog {
     void preview_toggle(void);
     void param_change(void);
     bool param_timer_expire(void);
-    void on_response (int signal);
+    void on_response (int signal) override;
 
 public:
     PrefDialog (Glib::ustring name,
                 gchar const * help,
                 Gtk::Widget * controls = NULL,
                 Effect * effect = NULL);
-    virtual ~PrefDialog ();
+    ~PrefDialog () override;
 };
 
 

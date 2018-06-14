@@ -34,7 +34,7 @@ class ColorNotebook
 {
 public:
     ColorNotebook(SelectedColor &color);
-    virtual ~ColorNotebook();
+    ~ColorNotebook() override;
 
 protected:
     struct Page {

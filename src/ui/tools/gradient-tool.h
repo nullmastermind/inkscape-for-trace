@@ -29,7 +29,7 @@ namespace Tools {
 class GradientTool : public ToolBase {
 public:
 	GradientTool();
-	virtual ~GradientTool();
+	~GradientTool() override;
 
     Geom::Point origin;
 
@@ -44,10 +44,10 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual bool root_handler(GdkEvent* event);
+	void setup() override;
+	bool root_handler(GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	void selection_changed(Inkscape::Selection*);

@@ -38,7 +38,7 @@ namespace Dialog {
 class ObjectAttributes : public Widget::Panel {
 public:
     ObjectAttributes ();
-    ~ObjectAttributes ();
+    ~ObjectAttributes () override;
     
     /**
      * Returns a new instance of the object attributes dialog.

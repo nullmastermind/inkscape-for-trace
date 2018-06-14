@@ -42,9 +42,9 @@ namespace LivePathEffect {
 class KnotHolderEntityCrossingSwitcher : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityCrossingSwitcher(LPEKnot *effect) : LPEKnotHolderEntity(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
-    virtual void knot_click(guint state);
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
+    void knot_click(guint state) override;
 };
 
 

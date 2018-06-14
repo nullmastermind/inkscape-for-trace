@@ -92,30 +92,30 @@ public:
         return singleton;
     }
 
-    void notifyChildAdded(Node &parent, Node &child, Node *ref) {
+    void notifyChildAdded(Node &parent, Node &child, Node *ref) override {
         parent.addChild(&child, ref);
     }
 
-    void notifyChildRemoved(Node &parent, Node &child, Node */*old_ref*/) {
+    void notifyChildRemoved(Node &parent, Node &child, Node */*old_ref*/) override {
         parent.removeChild(&child);
     }
 
     void notifyChildOrderChanged(Node &parent, Node &child,
-                         Node */*old_ref*/, Node *new_ref)
+                         Node */*old_ref*/, Node *new_ref) override
     {
         parent.changeOrder(&child, new_ref);
     }
 
     void notifyAttributeChanged(Node &node, GQuark name,
                         Inkscape::Util::ptr_shared /*old_value*/,
-                    Inkscape::Util::ptr_shared new_value)
+                    Inkscape::Util::ptr_shared new_value) override
     {
         node.setAttribute(g_quark_to_string(name), new_value);
     }
 
     void notifyContentChanged(Node &node,
                       Inkscape::Util::ptr_shared /*old_value*/,
-                  Inkscape::Util::ptr_shared new_value)
+                  Inkscape::Util::ptr_shared new_value) override
     {
         node.setContent(new_value);
     }
@@ -446,23 +446,23 @@ public:
         }
     }
 
-    void notifyChildAdded(Node &parent, Node &child, Node *ref) {
+    void notifyChildAdded(Node &parent, Node &child, Node *ref) override {
         g_warning("Event: Added %s to %s after %s", node_to_string(parent).c_str(), node_to_string(child).c_str(), ref_to_string(ref).c_str());
     }
 
-    void notifyChildRemoved(Node &parent, Node &child, Node */*ref*/) {
+    void notifyChildRemoved(Node &parent, Node &child, Node */*ref*/) override {
         g_warning("Event: Removed %s from %s", node_to_string(parent).c_str(), node_to_string(child).c_str());
     }
 
     void notifyChildOrderChanged(Node &parent, Node &child,
-                                 Node */*old_ref*/, Node *new_ref)
+                                 Node */*old_ref*/, Node *new_ref) override
     {
         g_warning("Event: Moved %s after %s in %s", node_to_string(child).c_str(), ref_to_string(new_ref).c_str(), node_to_string(parent).c_str());
     }
 
     void notifyAttributeChanged(Node &node, GQuark name,
                                 Inkscape::Util::ptr_shared /*old_value*/,
-                    Inkscape::Util::ptr_shared new_value)
+                    Inkscape::Util::ptr_shared new_value) override
     {
         if (new_value) {
             g_warning("Event: Set attribute %s to \"%s\" on %s", g_quark_to_string(name), new_value.pointer(), node_to_string(node).c_str());
@@ -473,7 +473,7 @@ public:
 
     void notifyContentChanged(Node &node,
                       Inkscape::Util::ptr_shared /*old_value*/,
-                  Inkscape::Util::ptr_shared new_value)
+                  Inkscape::Util::ptr_shared new_value) override
     {
         if (new_value) {
             g_warning("Event: Set content of %s to \"%s\"", node_to_string(node).c_str(), new_value.pointer());

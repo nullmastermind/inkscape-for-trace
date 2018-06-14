@@ -68,7 +68,7 @@ class FillNStroke : public Gtk::VBox
 {
 public:
     FillNStroke( FillOrStroke k );
-    ~FillNStroke();
+    ~FillNStroke() override;
 
     void setFillrule( SPPaintSelector::FillRule mode );
 

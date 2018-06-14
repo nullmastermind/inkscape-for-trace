@@ -63,7 +63,7 @@ class PdfImportDialog : public Gtk::Dialog
 {
 public:
     PdfImportDialog(PDFDoc *doc, const gchar *uri);
-    virtual ~PdfImportDialog();
+    ~PdfImportDialog() override;
 
     bool showDialog();
     int getSelectedPage();
@@ -135,9 +135,9 @@ class PdfInput: public Inkscape::Extension::Implementation::Implementation {
     PdfInput () { };
 public:
     SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri );
+                                const gchar *uri ) override;
     static void         init( void );
-    virtual bool wasCancelled();
+    bool wasCancelled() override;
 private:
     bool _cancelled;
 };

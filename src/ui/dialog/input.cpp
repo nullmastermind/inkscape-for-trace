@@ -377,21 +377,21 @@ static std::map<Glib::ustring, Gdk::InputMode> &getStringToMode()
 class InputDialogImpl : public InputDialog {
 public:
     InputDialogImpl();
-    virtual ~InputDialogImpl() {}
+    ~InputDialogImpl() override {}
 
 private:
     class ConfPanel : public Gtk::VBox
     {
     public:
         ConfPanel();
-        ~ConfPanel();
+        ~ConfPanel() override;
 
         class Blink : public Preferences::Observer
         {
         public:
             Blink(ConfPanel &parent);
-            virtual ~Blink();
-            virtual void notify(Preferences::Entry const &new_val);
+            ~Blink() override;
+            void notify(Preferences::Entry const &new_val) override;
 
             ConfPanel &parent;
         };
@@ -436,7 +436,7 @@ private:
                 add(name);
                 add(value);
             }
-            virtual ~KeysColumns() {}
+            ~KeysColumns() override {}
 
             Gtk::TreeModelColumn<Glib::ustring> name;
             Gtk::TreeModelColumn<Glib::ustring> value;

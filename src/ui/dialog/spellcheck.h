@@ -56,7 +56,7 @@ namespace Dialog {
 class SpellCheck : public Widget::Panel {
 public:
     SpellCheck ();
-    ~SpellCheck ();
+    ~SpellCheck () override;
 
     static SpellCheck &getInstance() { return *new SpellCheck(); }
 
@@ -154,7 +154,7 @@ private:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
     /**
      * Is invoked by the desktop tracker when the desktop changes.
@@ -262,7 +262,7 @@ private:
         {
             add(suggestions);
         }
-        virtual ~TreeColumns() {}
+        ~TreeColumns() override {}
         Gtk::TreeModelColumn<Glib::ustring> suggestions;
     };
     TreeColumns tree_columns;

@@ -31,17 +31,17 @@ class KnotHolderEntityOffsetPoint;
 class LPEOffset : public Effect, GroupBBoxEffect {
 public:
     LPEOffset(LivePathEffectObject *lpeobject);
-    virtual ~LPEOffset();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual Gtk::Widget *newWidget();
+    ~LPEOffset() override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    Gtk::Widget *newWidget() override;
     void calculateOffset (Geom::PathVector const & path_in);
     void drawHandle(Geom::Point p);
-    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item);
+    void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
     friend class OfS::KnotHolderEntityOffsetPoint;
 protected:
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     ScalarParam offset;

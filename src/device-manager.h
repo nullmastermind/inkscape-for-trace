@@ -31,7 +31,7 @@ public:
 
 protected:
     InputDevice();
-    virtual ~InputDevice();
+    ~InputDevice() override;
 
 private:
     InputDevice(InputDevice const &) = delete; // no copy
@@ -62,7 +62,7 @@ public:
 
 protected:
     DeviceManager();
-    virtual ~DeviceManager();
+    ~DeviceManager() override;
 
 private:
     DeviceManager(DeviceManager const &) = delete; // no copy

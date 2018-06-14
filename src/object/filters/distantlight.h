@@ -24,7 +24,7 @@
 class SPFeDistantLight : public SPObject {
 public:
 	SPFeDistantLight();
-	virtual ~SPFeDistantLight();
+	~SPFeDistantLight() override;
 
     /** azimuth attribute */
     float azimuth;
@@ -34,14 +34,14 @@ public:
     unsigned int elevation_set : 1;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void set(unsigned int key, char const* value);
+	void set(unsigned int key, char const* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif /* !SP_FEDISTANTLIGHT_H_SEEN */

@@ -20,10 +20,10 @@
 class SPDesc : public SPObject {
 public:
 	SPDesc();
-	virtual ~SPDesc();
+	~SPDesc() override;
 
 protected:
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif

@@ -31,7 +31,7 @@ public:
      */
     UnitMenu();
 
-    virtual ~UnitMenu();
+    ~UnitMenu() override;
 
     /**
      * Adds the unit type to the widget.  This extracts the corresponding

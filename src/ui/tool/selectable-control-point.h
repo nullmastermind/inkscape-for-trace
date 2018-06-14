@@ -22,7 +22,7 @@ class ControlPointSelection;
 class SelectableControlPoint : public ControlPoint {
 public:
 
-    ~SelectableControlPoint();
+    ~SelectableControlPoint() override;
     bool selected() const;
     void updateState() { _setState(_state); }
     virtual Geom::Rect bounds() const {
@@ -44,12 +44,12 @@ protected:
                            ControlPointSelection &sel,
                            ColorSet const &cset = _default_scp_color_set, SPCanvasGroup *group = 0);
 
-    virtual void _setState(State state);
+    void _setState(State state) override;
 
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
-    virtual bool grabbed(GdkEventMotion *event);
-    virtual void ungrabbed(GdkEventButton *event);
-    virtual bool clicked(GdkEventButton *event);
+    void dragged(Geom::Point &new_pos, GdkEventMotion *event) override;
+    bool grabbed(GdkEventMotion *event) override;
+    void ungrabbed(GdkEventButton *event) override;
+    bool clicked(GdkEventButton *event) override;
 
     ControlPointSelection &_selection;
 

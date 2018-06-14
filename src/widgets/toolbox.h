@@ -87,12 +87,12 @@ public:
     /**
      * Destructor that unregisters the preference callback.
      */
-    virtual ~PrefPusher();
+    ~PrefPusher() override;
 
     /**
      * Callback method invoked when the preference setting changes.
      */
-    virtual void notify(Inkscape::Preferences::Entry const &new_val);
+    void notify(Inkscape::Preferences::Entry const &new_val) override;
 
 
 private:

@@ -27,13 +27,13 @@ public:
 
     StringInputStream(Glib::ustring &sourceString);
     
-    virtual ~StringInputStream();
+    ~StringInputStream() override;
     
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual int get();
+    int get() override;
     
 private:
 
@@ -61,13 +61,13 @@ public:
 
     StringOutputStream();
     
-    virtual ~StringOutputStream();
+    ~StringOutputStream() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
     virtual Glib::ustring &getString()
         { return buffer; }

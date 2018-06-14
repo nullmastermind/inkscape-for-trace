@@ -27,16 +27,16 @@ public:
 		  Inkscape::UI::Widget::Registry* wr,
 		  Effect* effect,
 		  Glib::ustring default_unit = "px");
-    virtual ~UnitParam();
+    ~UnitParam() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
-    virtual void param_set_default();
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
+    void param_set_default() override;
     void param_set_value(Inkscape::Util::Unit const &val);
-    virtual void param_update_default(const gchar * default_unit);
+    void param_update_default(const gchar * default_unit) override;
     const gchar *get_abbreviation() const;
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
     
     operator Inkscape::Util::Unit const *() const { return unit; }
 

@@ -59,7 +59,7 @@ struct CacheRecord
 typedef std::list<CacheRecord> CacheList;
 
 class InvalidItemException : public std::exception {
-    virtual const char *what() const throw() {
+    const char *what() const throw() override {
         return "Invalid item in drawing";
     }
 };

@@ -25,15 +25,15 @@ namespace Tools {
 class ZoomTool : public ToolBase {
 public:
 	ZoomTool();
-	virtual ~ZoomTool();
+	~ZoomTool() override;
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	bool root_handler(GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	SPCanvasItem *grabbed;

@@ -35,12 +35,12 @@ class ArrangeDialog;
 class PolarArrangeTab : public ArrangeTab {
 public:
 	PolarArrangeTab(ArrangeDialog *parent_);
-    virtual ~PolarArrangeTab() {};
+    ~PolarArrangeTab() override {};
 
     /**
      * Do the actual arrangement
      */
-    virtual void arrange();
+    void arrange() override;
 
     /**
      * Respond to selection change

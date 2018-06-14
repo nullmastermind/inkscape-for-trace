@@ -48,8 +48,8 @@ namespace OfS {
     class KnotHolderEntityOffsetPoint : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityOffsetPoint(LPEOffset * effect) : LPEKnotHolderEntity(effect) {inset = false; previous = Geom::Point(Geom::infinity(),Geom::infinity());}
-        virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-        virtual Geom::Point knot_get() const;
+        void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        Geom::Point knot_get() const override;
     private:
         bool inset;
         Geom::Point previous;

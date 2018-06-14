@@ -39,16 +39,16 @@ namespace Tools {
 class ArcTool : public ToolBase {
 public:
 	ArcTool();
-	virtual ~ArcTool();
+	~ArcTool() override;
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	SPGenericEllipse *arc;

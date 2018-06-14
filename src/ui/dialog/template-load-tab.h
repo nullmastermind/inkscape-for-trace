@@ -50,7 +50,7 @@ public:
     };
     
     TemplateLoadTab(NewFromTemplate* parent);
-    virtual ~TemplateLoadTab();
+    ~TemplateLoadTab() override;
     virtual void createTemplate();
 
 protected:    

@@ -84,26 +84,26 @@ public:
         _labelAttr(g_quark_from_string("inkscape:label"))
     {}
         
-    virtual void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ )
+    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ )
+    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ )
+    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) {}
-    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) {
+    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
+    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
         if ( _pnl && _obj ) {
             if ( name == _labelAttr ) {
                 _pnl->_updateObject( _obj);
@@ -279,7 +279,7 @@ public:
         add(_colAddRemove);
         add(_colAllowAddRemove);
     }
-    virtual ~ModelColumns() {}
+    ~ModelColumns() override {}
 
     Gtk::TreeModelColumn<SPObject*> _colParentObject;
     Gtk::TreeModelColumn<SPObject*> _colObject;

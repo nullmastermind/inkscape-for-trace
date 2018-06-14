@@ -37,7 +37,7 @@ namespace Inkscape { class DrawingItem; }
 class SPShape : public SPLPEItem {
 public:
 	SPShape();
-	virtual ~SPShape();
+	~SPShape() override;
 
     SPCurve * getCurve (unsigned int owner = FALSE) const;
     SPCurve * getCurveBeforeLPE (unsigned int owner = FALSE) const;
@@ -58,24 +58,24 @@ public:
     sigc::connection _release_connect [SP_MARKER_LOC_QTY];
     sigc::connection _modified_connect [SP_MARKER_LOC_QTY];
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
 
-	virtual void set(unsigned int key, char const* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void set(unsigned int key, char const* value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const;
-	virtual void print(SPPrintContext* ctx);
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
+	void print(SPPrintContext* ctx) override;
 
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void hide(unsigned int key);
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+	void hide(unsigned int key) override;
 
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 
 	virtual void set_shape();
-	virtual void update_patheffect(bool write);
+	void update_patheffect(bool write) override;
 };
 
 

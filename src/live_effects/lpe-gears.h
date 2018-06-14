@@ -20,9 +20,9 @@ namespace LivePathEffect {
 class LPEGears : public Effect {
 public:
     LPEGears(LivePathEffectObject *lpeobject);
-    virtual ~LPEGears();
+    ~LPEGears() override;
 
-    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
+    Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
 
 private:
     ScalarParam teeth;

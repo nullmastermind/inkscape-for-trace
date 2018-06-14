@@ -31,7 +31,7 @@ class CdrInput : public Inkscape::Extension::Implementation::Implementation {
      CdrInput () { };
 public:
      SPDocument *open( Inkscape::Extension::Input *mod,
-                       const gchar *uri );
+                       const gchar *uri ) override;
      static void         init( void );
 
 };

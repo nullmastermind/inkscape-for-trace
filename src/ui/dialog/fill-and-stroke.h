@@ -34,12 +34,12 @@ namespace Dialog {
 class FillAndStroke : public UI::Widget::Panel {
 public:
     FillAndStroke();
-    virtual ~FillAndStroke();
+    ~FillAndStroke() override;
 
     static FillAndStroke &getInstance() { return *new FillAndStroke(); }
 
 
-    virtual void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
     //void selectionChanged(Inkscape::Selection *selection);
 

@@ -19,7 +19,7 @@ enum TextPathSide {
 class SPTextPath : public SPItem {
 public:
     SPTextPath();
-    virtual ~SPTextPath();
+    ~SPTextPath() override;
 
     TextTagAttributes attributes;
     SVGLength startOffset;
@@ -29,12 +29,12 @@ public:
     bool isUpdating;
     SPUsePath *sourcePath;
 
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void set(unsigned int key, const char* value);
-    virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual void modified(unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void set(unsigned int key, const char* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #define SP_IS_TEXT_TEXTPATH(obj) (SP_IS_TEXT(obj) && obj->firstChild() && SP_IS_TEXTPATH(obj->firstChild()))

@@ -35,7 +35,7 @@ private:
 class SPGlyphKerning : public SPObject {
 public:
     SPGlyphKerning();
-    virtual ~SPGlyphKerning() {}
+    ~SPGlyphKerning() override {}
 
     // FIXME encapsulation
     UnicodeRange* u1;
@@ -45,19 +45,19 @@ public:
     double k;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void set(unsigned int key, char const* value);
-    virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void set(unsigned int key, char const* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 class SPHkern : public SPGlyphKerning {
-    virtual ~SPHkern() {}
+    ~SPHkern() override {}
 };
 
 class SPVkern : public SPGlyphKerning {
-    virtual ~SPVkern() {}
+    ~SPVkern() override {}
 };
 
 #endif // !SEEN_SP_GLYPH_KERNING_H

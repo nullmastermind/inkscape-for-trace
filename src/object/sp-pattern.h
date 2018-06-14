@@ -41,7 +41,7 @@ public:
     enum PatternUnits { UNITS_USERSPACEONUSE, UNITS_OBJECTBOUNDINGBOX };
 
     SPPattern();
-    virtual ~SPPattern();
+    ~SPPattern() override;
 
     /* Reference (href) */
     Glib::ustring href;
@@ -67,16 +67,16 @@ public:
     static const gchar *produce(const std::vector<Inkscape::XML::Node *> &reprs, Geom::Rect bounds,
                                 SPDocument *document, Geom::Affine transform, Geom::Affine move);
 
-    bool isValid() const;
+    bool isValid() const override;
 
-    virtual cairo_pattern_t *pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    cairo_pattern_t *pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-    virtual void build(SPDocument *doc, Inkscape::XML::Node *repr);
-    virtual void release();
-    virtual void set(unsigned int key, const gchar *value);
-    virtual void update(SPCtx *ctx, unsigned int flags);
-    virtual void modified(unsigned int flags);
+    void build(SPDocument *doc, Inkscape::XML::Node *repr) override;
+    void release() override;
+    void set(unsigned int key, const gchar *value) override;
+    void update(SPCtx *ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
 
 private:
     bool _hasItemChildren() const;
@@ -129,7 +129,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const {
+    bool _acceptObject(SPObject *obj) const override {
         return SP_IS_PATTERN (obj)&& URIReference::_acceptObject(obj);
     }
 };

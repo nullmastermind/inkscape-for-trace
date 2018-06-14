@@ -23,9 +23,9 @@ namespace LivePathEffect {
 class LPETextLabel : public Effect {
 public:
     LPETextLabel(LivePathEffectObject *lpeobject);
-    virtual ~LPETextLabel();
+    ~LPETextLabel() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     TextParam label;

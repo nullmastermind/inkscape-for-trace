@@ -85,7 +85,7 @@ public:
 
     SVGPreview();
 
-    ~SVGPreview();
+    ~SVGPreview() override;
 
     bool setDocument(SPDocument *doc);
 
@@ -169,7 +169,7 @@ public:
     /**
      *
      */
-    virtual ~FileDialogBaseGtk()
+    ~FileDialogBaseGtk() override
         {}
 
 protected:
@@ -224,23 +224,23 @@ public:
                        FileDialogType fileTypes,
                        const Glib::ustring &title);
 
-    virtual ~FileOpenDialogImplGtk();
+    ~FileOpenDialogImplGtk() override;
 
-    bool show();
+    bool show() override;
 
-    Inkscape::Extension::Extension *getSelectionType();
+    Inkscape::Extension::Extension *getSelectionType() override;
 
     Glib::ustring getFilename();
 
-    std::vector<Glib::ustring> getFilenames();
+    std::vector<Glib::ustring> getFilenames() override;
 
-	Glib::ustring getCurrentDirectory();
+	Glib::ustring getCurrentDirectory() override;
 
     /// Add a custom file filter menu item
     /// @param name - Name of the filter (such as "Javscript")
     /// @param pattern - File filtering patter (such as "*.js")
     /// Use the FileDialogType::CUSTOM_TYPE in constructor to not include other file types
-    void addFilterMenu(Glib::ustring name, Glib::ustring pattern);
+    void addFilterMenu(Glib::ustring name, Glib::ustring pattern) override;
 
 private:
 
@@ -283,15 +283,15 @@ public:
                           const gchar* docTitle,
                           const Inkscape::Extension::FileSaveMethod save_method);
 
-    virtual ~FileSaveDialogImplGtk();
+    ~FileSaveDialogImplGtk() override;
 
-    bool show();
+    bool show() override;
 
-    Inkscape::Extension::Extension *getSelectionType();
-    virtual void setSelectionType( Inkscape::Extension::Extension * key );
+    Inkscape::Extension::Extension *getSelectionType() override;
+    void setSelectionType( Inkscape::Extension::Extension * key ) override;
 
-	Glib::ustring getCurrentDirectory();
-	void addFileType(Glib::ustring name, Glib::ustring pattern);
+	Glib::ustring getCurrentDirectory() override;
+	void addFileType(Glib::ustring name, Glib::ustring pattern) override;
 
 private:
     //void change_title(const Glib::ustring& title);

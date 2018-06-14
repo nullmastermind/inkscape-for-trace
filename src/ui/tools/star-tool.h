@@ -28,16 +28,16 @@ namespace Tools {
 class StarTool : public ToolBase {
 public:
 	StarTool();
-	virtual ~StarTool();
+	~StarTool() override;
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	void set(const Inkscape::Preferences::Entry& val) override;
+	bool root_handler(GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	SPStar* star;

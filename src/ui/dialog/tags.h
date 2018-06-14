@@ -41,11 +41,11 @@ class TagsPanel : public UI::Widget::Panel
 {
 public:
     TagsPanel();
-    virtual ~TagsPanel();
+    ~TagsPanel() override;
 
     static TagsPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop );
+    void setDesktop( SPDesktop* desktop ) override;
     void setDocument( SPDesktop* desktop, SPDocument* document);
 
 protected:

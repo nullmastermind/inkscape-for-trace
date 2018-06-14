@@ -106,15 +106,15 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 gdouble default_value = 1.0);
-    virtual ~ScalarParam();
+    ~ScalarParam() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
-    virtual void param_set_default();
+    void param_set_default() override;
     void param_update_default(gdouble default_value);
-    virtual void param_update_default(const gchar * default_value);
+    void param_update_default(const gchar * default_value) override;
     void param_set_value(gdouble val);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);
@@ -124,7 +124,7 @@ public:
     double param_get_max() { return max; };
     double param_get_min() { return min; };
     void param_set_undo(bool set_undo);
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
     inline operator gdouble() const { return value; };
 

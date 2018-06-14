@@ -42,7 +42,7 @@ public:
         sp_canvas_item_hide(_rubber);
     }
 
-    ~SelectorPoint() {
+    ~SelectorPoint() override {
         sp_canvas_item_destroy(_rubber);
     }
 
@@ -53,7 +53,7 @@ public:
     }
 
 protected:
-    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) {
+    bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override {
         if (event->type == GDK_KEY_PRESS && shortcut_key(event->key) == GDK_KEY_Escape &&
             sp_canvas_item_is_visible(_rubber))
         {
@@ -65,27 +65,27 @@ protected:
     }
 
 private:
-    virtual bool grabbed(GdkEventMotion *) {
+    bool grabbed(GdkEventMotion *) override {
         _cancel = false;
         _start = position();
         sp_canvas_item_show(_rubber);
         return false;
     }
 
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *) {
+    void dragged(Geom::Point &new_pos, GdkEventMotion *) override {
         if (_cancel) return;
         Geom::Rect sel(_start, new_pos);
         _rubber->setRectangle(sel);
     }
 
-    virtual void ungrabbed(GdkEventButton *event) {
+    void ungrabbed(GdkEventButton *event) override {
         if (_cancel) return;
         sp_canvas_item_hide(_rubber);
         Geom::Rect sel(_start, position());
         _selector->signal_area.emit(sel, event);
     }
 
-    virtual bool clicked(GdkEventButton *event) {
+    bool clicked(GdkEventButton *event) override {
         if (event->button != 1) return false;
         _selector->signal_point.emit(position(), event);
         return true;

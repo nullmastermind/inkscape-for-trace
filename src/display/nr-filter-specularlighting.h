@@ -31,12 +31,12 @@ class FilterSpecularLighting : public FilterPrimitive {
 public:
     FilterSpecularLighting();
     static FilterPrimitive *create();
-    virtual ~FilterSpecularLighting();
+    ~FilterSpecularLighting() override;
 
-    virtual void render_cairo(FilterSlot &slot);
+    void render_cairo(FilterSlot &slot) override;
     virtual void set_icc(SVGICCColor *icc_color);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     union {
         SPFeDistantLight *distant;
@@ -49,7 +49,7 @@ public:
     double specularExponent;
     guint32 lighting_color;
 
-    virtual Glib::ustring name() { return Glib::ustring("Specular Lighting"); }
+    Glib::ustring name() override { return Glib::ustring("Specular Lighting"); }
 
 private:
     SVGICCColor *icc;

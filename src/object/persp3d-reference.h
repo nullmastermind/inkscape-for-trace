@@ -27,7 +27,7 @@ class Node;
 class Persp3DReference : public Inkscape::URIReference {
 public:
     Persp3DReference(SPObject *obj);
-    ~Persp3DReference();
+    ~Persp3DReference() override;
 
     Persp3D *getObject() const {
         return SP_PERSP3D(URIReference::getObject());
@@ -50,7 +50,7 @@ public:
     void quit_listening(void);
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const;
+    bool _acceptObject(SPObject *obj) const override;
 };
 
 

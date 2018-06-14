@@ -143,7 +143,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~PageSizer();
+    ~PageSizer() override;
 
     /**
      * Set up or reset this widget

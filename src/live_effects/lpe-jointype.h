@@ -20,11 +20,11 @@ namespace LivePathEffect {
 class LPEJoinType : public Effect {
 public:
     LPEJoinType(LivePathEffectObject *lpeobject);
-    virtual ~LPEJoinType();
+    ~LPEJoinType() override;
 
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    void doOnRemove(SPLPEItem const* lpeitem) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     LPEJoinType(const LPEJoinType&) = delete;

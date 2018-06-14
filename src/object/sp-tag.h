@@ -24,14 +24,14 @@ class SPTag;
 class SPTag : public SPObject {
 public:
     SPTag() {}
-    virtual ~SPTag() {}
+    ~SPTag() override {}
 
-    virtual void build(SPDocument * doc, Inkscape::XML::Node *repr);
+    void build(SPDocument * doc, Inkscape::XML::Node *repr) override;
     //virtual void release();
-    virtual void set(unsigned key, const gchar* value);
-    virtual void update(SPCtx * ctx, unsigned flags);
+    void set(unsigned key, const gchar* value) override;
+    void update(SPCtx * ctx, unsigned flags) override;
 
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;
 
     bool expanded() const { return _expanded; }
     void setExpanded(bool isexpanded);

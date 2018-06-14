@@ -41,7 +41,7 @@ enum {
 class SPNamedView : public SPObjectGroup {
 public:
 	SPNamedView();
-	virtual ~SPNamedView();
+	~SPNamedView() override;
 
     unsigned int editable : 1;
     unsigned int showguides : 1;
@@ -105,14 +105,14 @@ private:
     friend class SPDocument;
 
 protected:
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node* child);
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node* child) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 

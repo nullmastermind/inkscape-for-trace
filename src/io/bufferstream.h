@@ -54,10 +54,10 @@ class BufferInputStream : public InputStream
 public:
 
     BufferInputStream(const std::vector<unsigned char> &sourceBuffer);
-    virtual ~BufferInputStream();
-    virtual int available();
-    virtual void close();
-    virtual int get();
+    ~BufferInputStream() override;
+    int available() override;
+    void close() override;
+    int get() override;
 
 private:
     const std::vector<unsigned char> &buffer;
@@ -83,10 +83,10 @@ class BufferOutputStream : public OutputStream
 public:
 
     BufferOutputStream();
-    virtual ~BufferOutputStream();
-    virtual void close();
-    virtual void flush();
-    virtual int put(gunichar ch);
+    ~BufferOutputStream() override;
+    void close() override;
+    void flush() override;
+    int put(gunichar ch) override;
     virtual std::vector<unsigned char> &getBuffer()
         { return buffer; }
 

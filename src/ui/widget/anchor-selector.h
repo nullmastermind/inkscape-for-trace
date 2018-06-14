@@ -44,7 +44,7 @@ public:
 	void setAlignment(int horizontal, int vertical);
 
 	AnchorSelector();
-	virtual ~AnchorSelector();
+	~AnchorSelector() override;
 };
 
 } // namespace Widget

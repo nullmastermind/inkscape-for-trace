@@ -35,7 +35,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject * const obj) const;
+    bool _acceptObject(SPObject * const obj) const override;
 
 };
 
@@ -54,7 +54,7 @@ public:
     sigc::connection _changed_connection;
 
     SPTagUsePath(SPObject* i_owner);
-    ~SPTagUsePath(void);
+    ~SPTagUsePath(void) override;
 
     void link(char* to);
     void unlink(void);

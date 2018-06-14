@@ -76,7 +76,7 @@ public:
     /**
      * Deletes and nulls all View message stacks and disconnects it from signals.
      */
-    virtual ~View();
+    ~View() override;
 
     void close() { _close(); }
 

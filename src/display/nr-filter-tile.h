@@ -23,13 +23,13 @@ class FilterTile : public FilterPrimitive {
 public:
     FilterTile();
     static FilterPrimitive *create();
-    virtual ~FilterTile();
+    ~FilterTile() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
-    virtual Glib::ustring name() { return Glib::ustring("Tile"); }
+    Glib::ustring name() override { return Glib::ustring("Tile"); }
 };
 
 } /* namespace Filters */

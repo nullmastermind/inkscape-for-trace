@@ -28,15 +28,15 @@ class KnotHolderEntityAttachEnd;
 class LPETaperStroke : public Effect {
 public:
     LPETaperStroke(LivePathEffectObject *lpeobject);
-    virtual ~LPETaperStroke() {}
+    ~LPETaperStroke() override {}
 
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* lpeitem);
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    void doOnRemove(SPLPEItem const* lpeitem) override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const& path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const& path_in) override;
     Geom::PathVector doEffect_simplePath(Geom::PathVector const& path_in);
 
-    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item);
+    void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
 
     friend class TpS::KnotHolderEntityAttachBegin;
     friend class TpS::KnotHolderEntityAttachEnd;

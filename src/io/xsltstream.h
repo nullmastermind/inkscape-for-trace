@@ -76,13 +76,13 @@ public:
 
     XsltInputStream(InputStream &xmlSource, XsltStyleSheet &stylesheet);
     
-    virtual ~XsltInputStream();
+    ~XsltInputStream() override;
     
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual int get();
+    int get() override;
     
 
 private:
@@ -112,13 +112,13 @@ public:
 
     XsltOutputStream(OutputStream &destination, XsltStyleSheet &stylesheet);
     
-    virtual ~XsltOutputStream();
+    ~XsltOutputStream() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
 private:
 

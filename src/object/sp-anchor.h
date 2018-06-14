@@ -21,22 +21,22 @@
 class SPAnchor : public SPGroup {
 public:
 	SPAnchor();
-	virtual ~SPAnchor();
+	~SPAnchor() override;
 
 	char *href;
 	char *type;
 	char *title;
         SPDocument *page;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
         virtual void updatePageAnchor();
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-    virtual const char* displayName() const;
-	virtual char* description() const;
-	virtual int event(SPEvent *event);
+    const char* displayName() const override;
+	char* description() const override;
+	int event(SPEvent *event) override;
 };
 
 #endif

@@ -41,13 +41,13 @@ public:
 
     GzipInputStream(InputStream &sourceStream);
     
-    virtual ~GzipInputStream();
+    ~GzipInputStream() override;
     
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual int get();
+    int get() override;
     
 private:
 
@@ -92,13 +92,13 @@ public:
 
     GzipOutputStream(OutputStream &destinationStream);
     
-    virtual ~GzipOutputStream();
+    ~GzipOutputStream() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
 private:
 

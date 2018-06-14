@@ -107,9 +107,9 @@ static std::string convertPathToRelative( std::string const &path, std::string c
 class ResourceManagerImpl : public ResourceManager {
 public:
     ResourceManagerImpl();
-    virtual ~ResourceManagerImpl();
+    ~ResourceManagerImpl() override;
 
-    virtual bool fixupBrokenLinks(SPDocument *doc);
+    bool fixupBrokenLinks(SPDocument *doc) override;
     
 
     /**

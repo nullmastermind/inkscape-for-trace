@@ -67,7 +67,7 @@ namespace Internal {
 class CdrImportDialog : public Gtk::Dialog {
 public:
      CdrImportDialog(const std::vector<RVNGString> &vec);
-     virtual ~CdrImportDialog();
+     ~CdrImportDialog() override;
 
      bool showDialog();
      unsigned getSelectedPage();

@@ -77,12 +77,12 @@ public:
      */
     PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num);
 
-    virtual ~PanelDialog() {}
+    ~PanelDialog() override {}
 
     template <typename T>
     static PanelDialog<Behavior> *create();
 
-    inline virtual void present();
+    inline void present() override;
 
 private:
     inline void _presentDialog();
@@ -100,12 +100,12 @@ class PanelDialog<Behavior::FloatingBehavior> :
 public:
     inline PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num);
 
-    virtual ~PanelDialog() {}
+    ~PanelDialog() override {}
 
     template <typename T>
     static PanelDialog<Behavior::FloatingBehavior> *create();
 
-    inline virtual void present();
+    inline void present() override;
 
 private:
     PanelDialog() = delete;

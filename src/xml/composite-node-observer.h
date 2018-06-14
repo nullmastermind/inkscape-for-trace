@@ -67,20 +67,20 @@ public:
      */
     void removeListenerByData(void *data);
     
-    void notifyChildAdded(Node &node, Node &child, Node *prev);
+    void notifyChildAdded(Node &node, Node &child, Node *prev) override;
 
-    void notifyChildRemoved(Node &node, Node &child, Node *prev);
+    void notifyChildRemoved(Node &node, Node &child, Node *prev) override;
 
     void notifyChildOrderChanged(Node &node, Node &child,
-                                 Node *old_prev, Node *new_prev);
+                                 Node *old_prev, Node *new_prev) override;
 
     void notifyContentChanged(Node &node,
                               Util::ptr_shared old_content,
-                              Util::ptr_shared new_content);
+                              Util::ptr_shared new_content) override;
 
     void notifyAttributeChanged(Node &node, GQuark name,
                                 Util::ptr_shared old_value,
-                                Util::ptr_shared new_value);
+                                Util::ptr_shared new_value) override;
 
 private:
     unsigned _iterating;

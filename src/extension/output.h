@@ -39,8 +39,8 @@ public:
 
                  Output (Inkscape::XML::Node * in_repr,
                          Implementation::Implementation * in_imp);
-    virtual     ~Output (void);
-    virtual bool check                (void);
+        ~Output (void) override;
+    bool check                (void) override;
     void         save (SPDocument *doc,
                        gchar const *uri);
     bool         prefs (void);

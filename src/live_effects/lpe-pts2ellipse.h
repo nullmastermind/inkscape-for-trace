@@ -33,9 +33,9 @@ enum EllipseMethod {
 class LPEPts2Ellipse : public Effect {
 public:
     LPEPts2Ellipse(LivePathEffectObject *lpeobject);
-    virtual ~LPEPts2Ellipse();
+    ~LPEPts2Ellipse() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     LPEPts2Ellipse(const LPEPts2Ellipse&) = delete;

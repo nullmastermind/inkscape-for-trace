@@ -28,7 +28,7 @@ namespace Dialog {
 class ExtensionEditor : public UI::Widget::Panel {
 public:
     ExtensionEditor();
-    virtual ~ExtensionEditor();
+    ~ExtensionEditor() override;
 
     static ExtensionEditor &getInstance() { return *new ExtensionEditor(); }
 

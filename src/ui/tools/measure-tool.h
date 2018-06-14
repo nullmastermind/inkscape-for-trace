@@ -37,12 +37,12 @@ namespace Tools {
 class MeasureTool : public ToolBase {
 public:
     MeasureTool();
-    virtual ~MeasureTool();
+    ~MeasureTool() override;
 
     static const std::string prefsPath;
 
-    virtual void finish();
-    virtual bool root_handler(GdkEvent* event);
+    void finish() override;
+    bool root_handler(GdkEvent* event) override;
     virtual void showCanvasItems(bool to_guides = false, bool to_item = false, bool to_phantom = false, Inkscape::XML::Node *measure_repr = NULL);
     virtual void reverseKnots();
     virtual void toGuides();
@@ -52,7 +52,7 @@ public:
     virtual void reset();
     virtual void setMarkers();
     virtual void setMarker(bool isStart);
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
     Geom::Point readMeasurePoint(bool is_start);
     void showInfoBox(Geom::Point cursor, bool into_groups);
     void showItemInfoText(Geom::Point pos, gchar *measure_str, double fontsize);

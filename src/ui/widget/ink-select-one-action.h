@@ -80,8 +80,8 @@ public:
 
 protected:
 
-    virtual Gtk::Widget* create_menu_item_vfunc();
-    virtual Gtk::Widget* create_tool_item_vfunc();
+    Gtk::Widget* create_menu_item_vfunc() override;
+    Gtk::Widget* create_tool_item_vfunc() override;
 
     /* Signals */
     sigc::signal<void, int> _changed;

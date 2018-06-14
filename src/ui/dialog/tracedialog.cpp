@@ -58,7 +58,7 @@ class TraceDialogImpl : public TraceDialog
     /**
      * Destructor
      */
-    ~TraceDialogImpl();
+    ~TraceDialogImpl() override;
 
     /**
      * Callback from OK or Cancel
@@ -89,7 +89,7 @@ class TraceDialogImpl : public TraceDialog
     void onSelectionModified( guint flags );
     void onSetDefaults();
 
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
     void setTargetDesktop(SPDesktop *desktop);
 
     //############ General items

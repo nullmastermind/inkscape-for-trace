@@ -38,19 +38,19 @@ public:
                int indent,
                Inkscape::Extension::Extension * ext,
                Inkscape::XML::Node * xml);
-    virtual ~ParamColor(void);
+    ~ParamColor(void) override;
 
     /** Returns \c _value, with a \i const to protect it. */
     guint32 get( SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
 
     guint32 set (guint32 in, SPDocument * doc, Inkscape::XML::Node * node);
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    virtual void string(std::list <std::string> &list) const { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
 
-    virtual void string (std::string &string) const;
+    void string (std::string &string) const override;
 
     sigc::signal<void> * _changeSignal;
 

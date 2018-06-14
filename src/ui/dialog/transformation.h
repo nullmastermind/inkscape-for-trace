@@ -64,7 +64,7 @@ public:
     /**
      * Cleanup
      */
-    virtual ~Transformation();
+    ~Transformation() override;
 
     /**
      * Factory method.  Create an instance of this class/interface
@@ -166,7 +166,7 @@ protected:
     void layoutPageSkew();
     void layoutPageTransform();
 
-    virtual void _apply();
+    void _apply() override;
     void presentPage(PageType page);
 
     void onSwitchPage(Gtk::Widget *page, guint pagenum);

@@ -35,7 +35,7 @@ class DrawingItem;
 class SPClipPath : public SPObjectGroup {
 public:
 	SPClipPath();
-	virtual ~SPClipPath();
+	~SPClipPath() override;
 
     class Reference;
 
@@ -53,17 +53,17 @@ public:
     Geom::OptRect geometricBounds(Geom::Affine const &transform);
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 
-	virtual void set(unsigned int key, char const* value);
+	void set(unsigned int key, char const* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 
@@ -81,7 +81,7 @@ protected:
      * \return false if obj is not a clippath or if obj is a parent of this
      *         reference's owner element.  True otherwise.
      */
-    virtual bool _acceptObject(SPObject *obj) const {
+    bool _acceptObject(SPObject *obj) const override {
         if (!SP_IS_CLIPPATH(obj)) {
             return false;
         }

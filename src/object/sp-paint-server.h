@@ -33,7 +33,7 @@ class DrawingPattern;
 class SPPaintServer : public SPObject {
 public:
 	SPPaintServer();
-	virtual ~SPPaintServer();
+	~SPPaintServer() override;
 
     bool isSwatch() const;
     bool isSolid() const;

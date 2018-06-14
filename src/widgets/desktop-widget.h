@@ -127,93 +127,93 @@ struct SPDesktopWidget {
         SPDesktopWidget *_dtw;
         WidgetStub (SPDesktopWidget* dtw) : _dtw(dtw) {}
 
-        virtual void setTitle (gchar const *uri)
+        void setTitle (gchar const *uri) override
             { _dtw->updateTitle (uri); }
-        virtual Gtk::Window* getWindow()
+        Gtk::Window* getWindow() override
             { return _dtw->window; }
 
-        virtual void layout() {
+        void layout() override {
             _dtw->layoutWidgets();
         }
 
-        virtual void present()
+        void present() override
             { _dtw->presentWindow(); }
-        virtual void getGeometry (gint &x, gint &y, gint &w, gint &h)
+        void getGeometry (gint &x, gint &y, gint &w, gint &h) override
             { _dtw->getWindowGeometry (x, y, w, h); }
-        virtual void setSize (gint w, gint h)
+        void setSize (gint w, gint h) override
             { _dtw->setWindowSize (w, h); }
-        virtual void setPosition (Geom::Point p)
+        void setPosition (Geom::Point p) override
             { _dtw->setWindowPosition (p); }
-        virtual void setTransient (void* p, int transient_policy)
+        void setTransient (void* p, int transient_policy) override
             { _dtw->setWindowTransient (p, transient_policy); }
-        virtual Geom::Point getPointer()
+        Geom::Point getPointer() override
             { return _dtw->window_get_pointer(); }
-        virtual void setIconified()
+        void setIconified() override
             { sp_desktop_widget_iconify (_dtw); }
-        virtual void setMaximized()
+        void setMaximized() override
             { sp_desktop_widget_maximize (_dtw); }
-        virtual void setFullscreen()
+        void setFullscreen() override
             { sp_desktop_widget_fullscreen (_dtw); }
-        virtual bool shutdown()
+        bool shutdown() override
             { return _dtw->shutdown(); }
-        virtual void destroy()
+        void destroy() override
             {
                 if(_dtw->window != NULL)
                     delete _dtw->window;
                 _dtw->window = NULL;
             }
 
-        virtual void requestCanvasUpdate()
+        void requestCanvasUpdate() override
             { _dtw->requestCanvasUpdate(); }
-        virtual void requestCanvasUpdateAndWait()
+        void requestCanvasUpdateAndWait() override
             { _dtw->requestCanvasUpdateAndWait(); }
-        virtual void enableInteraction()
+        void enableInteraction() override
             { _dtw->enableInteraction(); }
-        virtual void disableInteraction()
+        void disableInteraction() override
             { _dtw->disableInteraction(); }
-        virtual void activateDesktop()
+        void activateDesktop() override
             { sp_dtw_desktop_activate (_dtw); }
-        virtual void deactivateDesktop()
+        void deactivateDesktop() override
             { sp_dtw_desktop_deactivate (_dtw); }
-        virtual void updateRulers()
+        void updateRulers() override
             { sp_desktop_widget_update_rulers (_dtw); }
-        virtual void updateScrollbars (double scale)
+        void updateScrollbars (double scale) override
             { sp_desktop_widget_update_scrollbars (_dtw, scale); }
-        virtual void toggleRulers()
+        void toggleRulers() override
             { sp_desktop_widget_toggle_rulers (_dtw); }
-        virtual void toggleScrollbars()
+        void toggleScrollbars() override
             { sp_desktop_widget_toggle_scrollbars (_dtw); }
-        virtual void toggleColorProfAdjust()
+        void toggleColorProfAdjust() override
             { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
-        virtual bool colorProfAdjustEnabled()
+        bool colorProfAdjustEnabled() override
             { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
-        virtual void updateZoom()
+        void updateZoom() override
             { sp_desktop_widget_update_zoom (_dtw); }
-        virtual void letZoomGrabFocus()
+        void letZoomGrabFocus() override
             { _dtw->letZoomGrabFocus(); }
-        virtual void updateRotation()
+        void updateRotation() override
             { sp_desktop_widget_update_rotation (_dtw); }
-        virtual void setToolboxFocusTo (const gchar * id)
+        void setToolboxFocusTo (const gchar * id) override
             { _dtw->setToolboxFocusTo (id); }
-        virtual void setToolboxAdjustmentValue (const gchar *id, double val)
+        void setToolboxAdjustmentValue (const gchar *id, double val) override
             { _dtw->setToolboxAdjustmentValue (id, val); }
-        virtual void setToolboxSelectOneValue (gchar const *id, int val)
+        void setToolboxSelectOneValue (gchar const *id, int val) override
             { _dtw->setToolboxSelectOneValue (id, val); }
-        virtual bool isToolboxButtonActive (gchar const* id)
+        bool isToolboxButtonActive (gchar const* id) override
             { return _dtw->isToolboxButtonActive (id); }
-        virtual void setCoordinateStatus (Geom::Point p)
+        void setCoordinateStatus (Geom::Point p) override
             { _dtw->setCoordinateStatus (p); }
-        virtual void setMessage (Inkscape::MessageType type, gchar const* msg)
+        void setMessage (Inkscape::MessageType type, gchar const* msg) override
             { _dtw->setMessage (type, msg); }
 
-        virtual bool showInfoDialog( Glib::ustring const &message ) {
+        bool showInfoDialog( Glib::ustring const &message ) override {
             return _dtw->showInfoDialog( message );
         }
 
-        virtual bool warnDialog (Glib::ustring const &text)
+        bool warnDialog (Glib::ustring const &text) override
             { return _dtw->warnDialog (text); }
 
-        virtual Inkscape::UI::Widget::Dock* getDock ()
+        Inkscape::UI::Widget::Dock* getDock () override
             { return _dtw->getDock(); }
     };
 

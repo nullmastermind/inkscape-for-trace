@@ -98,20 +98,20 @@ namespace UI {
  */
 class ClipboardManagerImpl : public ClipboardManager {
 public:
-    virtual void copy(ObjectSet *set);
-    virtual void copyPathParameter(Inkscape::LivePathEffect::PathParam *);
-    virtual void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, bool user_symbol);
-    virtual bool paste(SPDesktop *desktop, bool in_place);
-    virtual bool pasteStyle(ObjectSet *set);
-    virtual bool pasteSize(ObjectSet *set, bool separately, bool apply_x, bool apply_y);
-    virtual bool pastePathEffect(ObjectSet *set);
-    virtual Glib::ustring getPathParameter(SPDesktop* desktop);
-    virtual Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop);
-    virtual std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*", gint maxdepth = -1);
-    virtual const gchar *getFirstObjectID();
+    void copy(ObjectSet *set) override;
+    void copyPathParameter(Inkscape::LivePathEffect::PathParam *) override;
+    void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, bool user_symbol) override;
+    bool paste(SPDesktop *desktop, bool in_place) override;
+    bool pasteStyle(ObjectSet *set) override;
+    bool pasteSize(ObjectSet *set, bool separately, bool apply_x, bool apply_y) override;
+    bool pastePathEffect(ObjectSet *set) override;
+    Glib::ustring getPathParameter(SPDesktop* desktop) override;
+    Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop) override;
+    std::vector<Glib::ustring> getElementsOfType(SPDesktop *desktop, gchar const* type = "*", gint maxdepth = -1) override;
+    const gchar *getFirstObjectID() override;
 
     ClipboardManagerImpl();
-    ~ClipboardManagerImpl();
+    ~ClipboardManagerImpl() override;
 
 private:
     void _copySelection(ObjectSet *);

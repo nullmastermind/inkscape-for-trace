@@ -25,10 +25,10 @@ namespace Internal {
 class CairoRendererOutput : Inkscape::Extension::Implementation::Implementation {
 
 public:
-    bool check(Inkscape::Extension::Extension *module);
+    bool check(Inkscape::Extension::Extension *module) override;
     void save(Inkscape::Extension::Output *mod,
               SPDocument *doc,
-              gchar const *filename);
+              gchar const *filename) override;
     static void init();
 };
 

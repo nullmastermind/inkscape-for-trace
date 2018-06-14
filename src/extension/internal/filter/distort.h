@@ -55,11 +55,11 @@ namespace Filter {
 
 class FeltFeather : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     FeltFeather ( ) : Filter() { };
-    virtual ~FeltFeather ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~FeltFeather ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -178,11 +178,11 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Roughen : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Roughen ( ) : Filter() { };
-    virtual ~Roughen ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Roughen ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

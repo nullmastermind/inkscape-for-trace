@@ -38,28 +38,28 @@ class PrintLatex : public Inkscape::Extension::Implementation::Implementation {
 
 public:
         PrintLatex (void);
-        virtual ~PrintLatex (void);
+        ~PrintLatex (void) override;
 
         /* Print functions */
-        virtual unsigned int setup (Inkscape::Extension::Print * module);
+        unsigned int setup (Inkscape::Extension::Print * module) override;
 
-        virtual unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc);
-        virtual unsigned int finish (Inkscape::Extension::Print * module);
+        unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc) override;
+        unsigned int finish (Inkscape::Extension::Print * module) override;
 
         /* Rendering methods */
-        virtual unsigned int bind(Inkscape::Extension::Print *module, Geom::Affine const &transform, float opacity);
-        virtual unsigned int release(Inkscape::Extension::Print *module);
+        unsigned int bind(Inkscape::Extension::Print *module, Geom::Affine const &transform, float opacity) override;
+        unsigned int release(Inkscape::Extension::Print *module) override;
 
-        virtual unsigned int fill (Inkscape::Extension::Print *module, Geom::PathVector const &pathv,
+        unsigned int fill (Inkscape::Extension::Print *module, Geom::PathVector const &pathv,
                                    Geom::Affine const &ctm, SPStyle const *style,
                                    Geom::OptRect const &pbox, Geom::OptRect const &dbox,
-                                   Geom::OptRect const &bbox);
-        virtual unsigned int stroke (Inkscape::Extension::Print *module, Geom::PathVector const &pathv,
+                                   Geom::OptRect const &bbox) override;
+        unsigned int stroke (Inkscape::Extension::Print *module, Geom::PathVector const &pathv,
                                      Geom::Affine const &ctm, SPStyle const *style,
                                      Geom::OptRect const &pbox, Geom::OptRect const &dbox,
-                                     Geom::OptRect const &bbox);
-        virtual unsigned int comment(Inkscape::Extension::Print *module, const char * comment);
-        bool textToPath (Inkscape::Extension::Print * ext);
+                                     Geom::OptRect const &bbox) override;
+        unsigned int comment(Inkscape::Extension::Print *module, const char * comment) override;
+        bool textToPath (Inkscape::Extension::Print * ext) override;
 
         static void init (void);
 };

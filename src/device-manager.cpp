@@ -168,20 +168,20 @@ InputDevice::~InputDevice() {}
 class InputDeviceImpl : public InputDevice {
 public:
     InputDeviceImpl(Glib::RefPtr<Gdk::Device> device, std::set<Glib::ustring> &knownIDs);
-    virtual ~InputDeviceImpl() {}
+    ~InputDeviceImpl() override {}
 
-    virtual Glib::ustring getId() const {return id;}
-    virtual Glib::ustring getName() const {return name;}
-    virtual Gdk::InputSource getSource() const {return source;}
-    virtual Gdk::InputMode getMode() const {return (device->get_mode());}
-    virtual gint getNumAxes() const {return device->get_n_axes();}
-    virtual bool hasCursor() const {return device->get_has_cursor();}
-    virtual int getNumKeys() const {return device->get_n_keys();}
-    virtual Glib::ustring getLink() const {return link;}
+    Glib::ustring getId() const override {return id;}
+    Glib::ustring getName() const override {return name;}
+    Gdk::InputSource getSource() const override {return source;}
+    Gdk::InputMode getMode() const override {return (device->get_mode());}
+    gint getNumAxes() const override {return device->get_n_axes();}
+    bool hasCursor() const override {return device->get_has_cursor();}
+    int getNumKeys() const override {return device->get_n_keys();}
+    Glib::ustring getLink() const override {return link;}
     virtual void setLink( Glib::ustring const& link ) {this->link = link;}
-    virtual gint getLiveAxes() const {return liveAxes;}
+    gint getLiveAxes() const override {return liveAxes;}
     virtual void setLiveAxes(gint axes) {liveAxes = axes;}
-    virtual gint getLiveButtons() const {return liveButtons;}
+    gint getLiveButtons() const override {return liveButtons;}
     virtual void setLiveButtons(gint buttons) {liveButtons = buttons;}
 
     // internal methods not on public superclass:
@@ -287,23 +287,23 @@ class DeviceManagerImpl : public DeviceManager {
 public:
     DeviceManagerImpl();
 
-    virtual void loadConfig();
-    virtual void saveConfig();
+    void loadConfig() override;
+    void saveConfig() override;
 
-    virtual std::list<Glib::RefPtr<InputDevice const> > getDevices();
+    std::list<Glib::RefPtr<InputDevice const> > getDevices() override;
 
-    virtual sigc::signal<void, Glib::RefPtr<InputDevice const> > signalDeviceChanged();
-    virtual sigc::signal<void, Glib::RefPtr<InputDevice const> > signalAxesChanged();
-    virtual sigc::signal<void, Glib::RefPtr<InputDevice const> > signalButtonsChanged();
-    virtual sigc::signal<void, Glib::RefPtr<InputDevice const> > signalLinkChanged();
+    sigc::signal<void, Glib::RefPtr<InputDevice const> > signalDeviceChanged() override;
+    sigc::signal<void, Glib::RefPtr<InputDevice const> > signalAxesChanged() override;
+    sigc::signal<void, Glib::RefPtr<InputDevice const> > signalButtonsChanged() override;
+    sigc::signal<void, Glib::RefPtr<InputDevice const> > signalLinkChanged() override;
 
-    virtual void addAxis(Glib::ustring const & id, gint axis);
-    virtual void addButton(Glib::ustring const & id, gint button);
-    virtual void setLinkedTo(Glib::ustring const & id, Glib::ustring const& link);
+    void addAxis(Glib::ustring const & id, gint axis) override;
+    void addButton(Glib::ustring const & id, gint button) override;
+    void setLinkedTo(Glib::ustring const & id, Glib::ustring const& link) override;
 
-    virtual void setMode( Glib::ustring const & id, Gdk::InputMode mode );
-    virtual void setAxisUse( Glib::ustring const & id, guint index, Gdk::AxisUse use );
-    virtual void setKey( Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods );
+    void setMode( Glib::ustring const & id, Gdk::InputMode mode ) override;
+    void setAxisUse( Glib::ustring const & id, guint index, Gdk::AxisUse use ) override;
+    void setKey( Glib::ustring const & id, guint index, guint keyval, Gdk::ModifierType mods ) override;
 
 protected:
     std::list<Glib::RefPtr<InputDeviceImpl> > devices;

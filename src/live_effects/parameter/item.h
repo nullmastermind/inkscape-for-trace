@@ -29,16 +29,16 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 const gchar * default_value = "");
-    virtual ~ItemParam();
-    virtual Gtk::Widget * param_newWidget();
+    ~ItemParam() override;
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
-    virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value);
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
+    void param_set_default() override;
+    void param_update_default(const gchar * default_value) override;
     void param_set_and_write_default();
-    virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     sigc::signal <void> signal_item_pasted;
     sigc::signal <void> signal_item_changed;
     Geom::Affine last_transform;

@@ -68,11 +68,11 @@ namespace Filter {
 
 class Bump : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Bump ( ) : Filter() { };
-    virtual ~Bump ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Bump ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -297,11 +297,11 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class WaxBump : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     WaxBump ( ) : Filter() { };
-    virtual ~WaxBump ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~WaxBump ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

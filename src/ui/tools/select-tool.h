@@ -32,7 +32,7 @@ namespace Tools {
 class SelectTool : public ToolBase {
 public:
 	SelectTool();
-	virtual ~SelectTool();
+	~SelectTool() override;
 
 	bool dragging;
 	bool moved;
@@ -52,12 +52,12 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	void set(const Inkscape::Preferences::Entry& val) override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	bool sp_select_context_abort();

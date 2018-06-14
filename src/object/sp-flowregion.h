@@ -20,35 +20,35 @@ class FloatLigne;
 class SPFlowregion : public SPItem {
 public:
 	SPFlowregion();
-	virtual ~SPFlowregion();
+	~SPFlowregion() override;
 
 	std::vector<Shape*>     computed;
 	
 	void             UpdateComputed(void);
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node *child);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual void modified(guint flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual const char* displayName() const;
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node *child) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	void modified(guint flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	const char* displayName() const override;
 };
 
 class SPFlowregionExclude : public SPItem {
 public:
 	SPFlowregionExclude();
-	virtual ~SPFlowregionExclude();
+	~SPFlowregionExclude() override;
 
 	Shape            *computed;
 	
 	void             UpdateComputed(void);
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node *child);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual void modified(guint flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual const char* displayName() const;
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node *child) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	void modified(guint flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	const char* displayName() const override;
 };
 
 #endif

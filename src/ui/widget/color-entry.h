@@ -22,10 +22,10 @@ class ColorEntry : public Gtk::Entry
 {
 public:
     ColorEntry(SelectedColor &color);
-    virtual ~ColorEntry();
+    ~ColorEntry() override;
 
 protected:
-    void on_changed();
+    void on_changed() override;
 
 private:
     void _onColorChanged();

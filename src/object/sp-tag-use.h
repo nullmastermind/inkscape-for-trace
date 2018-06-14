@@ -35,12 +35,12 @@ public:
     gchar *href;
 public:
     SPTagUse();
-    virtual ~SPTagUse();
+    ~SPTagUse() override;
     
-    virtual void build(SPDocument *doc, Inkscape::XML::Node *repr);
-    virtual void set(unsigned key, gchar const *value);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-    virtual void release();
+    void build(SPDocument *doc, Inkscape::XML::Node *repr) override;
+    void set(unsigned key, gchar const *value) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;
+    void release() override;
     
     virtual void href_changed(SPObject* old_ref, SPObject* ref);
     

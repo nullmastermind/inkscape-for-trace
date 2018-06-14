@@ -44,7 +44,7 @@ namespace Dialogs {
 class GuidelinePropertiesDialog : public Gtk::Dialog {
 public:
     GuidelinePropertiesDialog(SPGuide *guide, SPDesktop *desktop);
-    virtual ~GuidelinePropertiesDialog();
+    ~GuidelinePropertiesDialog() override;
 
     Glib::ustring     getName() const { return "GuidelinePropertiesDialog"; }
 

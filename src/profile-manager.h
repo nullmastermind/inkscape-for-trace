@@ -25,7 +25,7 @@ class ProfileManager : public DocumentSubset,
 {
 public:
     ProfileManager(SPDocument *document);
-    ~ProfileManager();
+    ~ProfileManager() override;
 
     ColorProfile* find(char const* name);
 

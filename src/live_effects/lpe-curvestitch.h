@@ -26,13 +26,13 @@ namespace LivePathEffect {
 class LPECurveStitch : public Effect {
 public:
     LPECurveStitch(LivePathEffectObject *lpeobject);
-    virtual ~LPECurveStitch();
+    ~LPECurveStitch() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+    void transform_multiply(Geom::Affine const& postmul, bool set) override;
 
 private:
     PathParam strokepath;

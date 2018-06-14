@@ -24,14 +24,14 @@ typedef struct _cairo_pattern cairo_pattern_t;
 class SPSolidColor : public SPPaintServer {
 public:
     SPSolidColor();
-    virtual ~SPSolidColor();
+    ~SPSolidColor() override;
 
-    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void set(unsigned int key, char const* value);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void set(unsigned int key, char const* value) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif /* !SEEN_SP_SOLIDCOLOR_H */

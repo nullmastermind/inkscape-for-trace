@@ -37,11 +37,11 @@ namespace Filter {
 */
 class EdgeDetect : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     EdgeDetect ( ) : Filter() { };
-    virtual ~EdgeDetect ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~EdgeDetect ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

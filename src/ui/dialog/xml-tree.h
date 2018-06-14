@@ -54,7 +54,7 @@ namespace Dialog {
 class XmlTree : public Widget::Panel {
 public:
     XmlTree ();
-    ~XmlTree ();
+    ~XmlTree () override;
 
     static XmlTree &getInstance() { return *new XmlTree(); }
 
@@ -170,7 +170,7 @@ private:
 
     void cmd_delete_attr();
     void cmd_set_attr();
-    virtual void present();
+    void present() override;
 
     bool sp_xml_tree_key_press(GdkEventKey *event);
 
@@ -179,7 +179,7 @@ private:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
     /**
      * Flag to ensure only one operation is performed at once

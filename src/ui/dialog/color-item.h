@@ -47,14 +47,14 @@ public:
     ColorItem( ege::PaintDef::ColorType type );
     ColorItem( unsigned int r, unsigned int g, unsigned int b,
                Glib::ustring& name );
-    virtual ~ColorItem();
+    ~ColorItem() override;
     ColorItem(ColorItem const &other);
     virtual ColorItem &operator=(ColorItem const &other);
-    virtual Gtk::Widget* getPreview(PreviewStyle style,
+    Gtk::Widget* getPreview(PreviewStyle style,
                                     ViewType view,
                                     ::PreviewSize size,
                                     guint ratio,
-                                    guint border);
+                                    guint border) override;
     void buttonClicked(bool secondary = false);
 
     void setGradient(SPGradient *grad);

@@ -52,7 +52,7 @@ class SPUseReference;
 class SPOffset : public SPShape {
 public:
 	SPOffset();
-	virtual ~SPOffset();
+	~SPOffset() override;
 
     void *originalPath; ///< will be a livarot Path, just don't declare it here to please the gcc linker FIXME what?
     char *original;     ///< SVG description of the source path
@@ -75,17 +75,17 @@ public:
     sigc::connection _changed_connection;
     sigc::connection _transformed_connection;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned flags);
-	virtual void release();
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned flags) override;
+	void release() override;
 
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
-        virtual const char* displayName() const;
-	virtual char* description() const;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+        const char* displayName() const override;
+	char* description() const override;
 
-	virtual void set_shape();
+	void set_shape() override;
 };
 
 double sp_offset_distance_to_original (SPOffset * offset, Geom::Point px);

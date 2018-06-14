@@ -26,7 +26,7 @@ class DrawingImage
 {
 public:
     DrawingImage(Drawing &drawing);
-    ~DrawingImage();
+    ~DrawingImage() override;
 
     void setPixbuf(Inkscape::Pixbuf *pb);
     void setScale(double sx, double sy);
@@ -35,11 +35,11 @@ public:
     Geom::Rect bounds() const;
 
 protected:
-    virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
-                                 unsigned flags, unsigned reset);
-    virtual unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
-                                 DrawingItem *stop_at);
-    virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
+    unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
+                                 unsigned flags, unsigned reset) override;
+    unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
+                                 DrawingItem *stop_at) override;
+    DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags) override;
 
     Inkscape::Pixbuf *_pixbuf;
 

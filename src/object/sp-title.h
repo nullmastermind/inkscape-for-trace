@@ -20,9 +20,9 @@
 class SPTitle : public SPObject {
 public:
 	SPTitle();
-	virtual ~SPTitle();
+	~SPTitle() override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif

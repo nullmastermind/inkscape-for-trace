@@ -38,11 +38,11 @@ class GlyphsPanel : public Inkscape::UI::Widget::Panel
 {
 public:
     GlyphsPanel();
-    virtual ~GlyphsPanel();
+    ~GlyphsPanel() override;
 
     static GlyphsPanel& getInstance();
 
-    virtual void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
 protected:
 

@@ -28,7 +28,7 @@ friend class TemplateLoadTab;
 public:
     static void load_new_from_template();
     void setCreateButtonSensitive(bool value);
-    virtual ~NewFromTemplate();
+    ~NewFromTemplate() override;
 
 private:
     NewFromTemplate();

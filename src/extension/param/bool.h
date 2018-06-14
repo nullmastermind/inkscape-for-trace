@@ -61,16 +61,16 @@ public:
      * Creates a bool check button for a bool parameter.
      * Builds a hbox with a label and a check button in it.
      */
-    Gtk::Widget *get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget *get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    virtual void string(std::list <std::string> &list) const { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
 
     /**
      * Appends 'true' or 'false'.
      * @todo investigate. Returning a value that can then be appended would probably work better/safer.
      */
-    virtual void string(std::string &string) const;
+    void string(std::string &string) const override;
 
 private:
     /** Internal value. */

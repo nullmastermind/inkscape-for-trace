@@ -68,13 +68,13 @@ public:
         _node->addObserver(*this);
     }
 
-    ~PathManipulatorObserver() {
+    ~PathManipulatorObserver() override {
         _node->removeObserver(*this);
         Inkscape::GC::release(_node);
     }
 
-    virtual void notifyAttributeChanged(Inkscape::XML::Node &/*node*/, GQuark attr,
-        Util::ptr_shared, Util::ptr_shared)
+    void notifyAttributeChanged(Inkscape::XML::Node &/*node*/, GQuark attr,
+        Util::ptr_shared, Util::ptr_shared) override
     {
         // do nothing if blocked
         if (_blocked) return;

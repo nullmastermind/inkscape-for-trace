@@ -20,19 +20,19 @@ namespace Debug {
 
 class GCHeap : public Debug::Heap {
 public:
-    int features() const {
+    int features() const override {
         return SIZE_AVAILABLE | USED_AVAILABLE | GARBAGE_COLLECTED;
     }
-    Util::ptr_shared name() const {
+    Util::ptr_shared name() const override {
         return Util::share_static_string("libgc");
     }
-    Heap::Stats stats() const {
+    Heap::Stats stats() const override {
         Stats stats;
         stats.size = GC::Core::get_heap_size();
         stats.bytes_used = stats.size - GC::Core::get_free_bytes();
         return stats;
     }
-    void force_collect() { GC::Core::gcollect(); }
+    void force_collect() override { GC::Core::gcollect(); }
 };
 
 }

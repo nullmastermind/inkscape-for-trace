@@ -28,15 +28,15 @@ namespace Pl {
 class KnotHolderEntityLeftEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityLeftEnd(LPEParallel *effect) : LPEKnotHolderEntity(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
 };
 
 class KnotHolderEntityRightEnd : public LPEKnotHolderEntity {
 public:
     KnotHolderEntityRightEnd(LPEParallel *effect) : LPEKnotHolderEntity(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
 };
 
 } // namespace Pl

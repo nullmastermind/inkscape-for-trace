@@ -25,7 +25,7 @@ namespace Widget {
 class InsertOrderIcon : public Gtk::CellRendererPixbuf {
 public:
     InsertOrderIcon();
-    virtual ~InsertOrderIcon() {};
+    ~InsertOrderIcon() override {};
 
     Glib::PropertyProxy<int> property_active() { return _property_active.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();
@@ -33,26 +33,26 @@ public:
 
 protected:
 
-    virtual void render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+    void render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget,
                                const Gdk::Rectangle& background_area,
                                const Gdk::Rectangle& cell_area,
-                               Gtk::CellRendererState flags );
+                               Gtk::CellRendererState flags ) override;
 
-    virtual void get_preferred_width_vfunc(Gtk::Widget& widget,
+    void get_preferred_width_vfunc(Gtk::Widget& widget,
                                            int& min_w,
-                                           int& nat_w) const;
+                                           int& nat_w) const override;
     
-    virtual void get_preferred_height_vfunc(Gtk::Widget& widget,
+    void get_preferred_height_vfunc(Gtk::Widget& widget,
                                             int& min_h,
-                                            int& nat_h) const;
+                                            int& nat_h) const override;
 
-    virtual bool activate_vfunc(GdkEvent *event,
+    bool activate_vfunc(GdkEvent *event,
                                 Gtk::Widget &widget,
                                 const Glib::ustring &path,
                                 const Gdk::Rectangle &background_area,
                                 const Gdk::Rectangle &cell_area,
-                                Gtk::CellRendererState flags);
+                                Gtk::CellRendererState flags) override;
 
 
 private:

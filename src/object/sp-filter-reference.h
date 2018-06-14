@@ -17,7 +17,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const;
+    bool _acceptObject(SPObject *obj) const override;
 };
 
 #endif /* !SEEN_SP_FILTER_REFERENCE_H */

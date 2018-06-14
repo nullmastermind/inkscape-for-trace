@@ -36,7 +36,7 @@ class PreviewHolder : public Gtk::Bin
 {
 public:
     PreviewHolder();
-    virtual ~PreviewHolder();
+    ~PreviewHolder() override;
 
     virtual void clear();
     virtual void addPreview( Previewable* preview );
@@ -54,7 +54,7 @@ public:
     virtual bool getWrap() const { return _wrap; }
 
 protected:
-    virtual bool on_scroll_event(GdkEventScroll*);
+    bool on_scroll_event(GdkEventScroll*) override;
 
 private:
     void rebuildUI();

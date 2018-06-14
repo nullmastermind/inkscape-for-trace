@@ -66,15 +66,15 @@ private:
 class StyleSubject::Selection : public StyleSubject {
 public:
     Selection();
-    ~Selection();
+    ~Selection() override;
 
-    virtual Geom::OptRect getBounds(SPItem::BBoxType type);
-    virtual int queryStyle(SPStyle *query, int property);
-    virtual void setCSS(SPCSSAttr *css);
-    virtual std::vector<SPObject*> list();
+    Geom::OptRect getBounds(SPItem::BBoxType type) override;
+    int queryStyle(SPStyle *query, int property) override;
+    void setCSS(SPCSSAttr *css) override;
+    std::vector<SPObject*> list() override;
 
 protected:
-    virtual void _afterDesktopSwitch(SPDesktop *desktop);
+    void _afterDesktopSwitch(SPDesktop *desktop) override;
 
 private:
     Inkscape::Selection *_getSelection() const;
@@ -87,15 +87,15 @@ private:
 class StyleSubject::CurrentLayer : public StyleSubject {
 public:
     CurrentLayer();
-    ~CurrentLayer();
+    ~CurrentLayer() override;
 
-    virtual Geom::OptRect getBounds(SPItem::BBoxType type);
-    virtual int queryStyle(SPStyle *query, int property);
-    virtual void setCSS(SPCSSAttr *css);
-    virtual std::vector<SPObject*> list();
+    Geom::OptRect getBounds(SPItem::BBoxType type) override;
+    int queryStyle(SPStyle *query, int property) override;
+    void setCSS(SPCSSAttr *css) override;
+    std::vector<SPObject*> list() override;
 
 protected:
-    virtual void _afterDesktopSwitch(SPDesktop *desktop);
+    void _afterDesktopSwitch(SPDesktop *desktop) override;
 
 private:
     SPObject *_getLayer() const;

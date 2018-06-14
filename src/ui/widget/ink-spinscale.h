@@ -31,7 +31,7 @@ class InkScale : public Gtk::Scale
 {
  public:
   InkScale(Glib::RefPtr<Gtk::Adjustment>, Gtk::SpinButton* spinbutton);
-  ~InkScale() {};
+  ~InkScale() override {};
 
   void set_label(Glib::ustring label);
 
@@ -71,7 +71,7 @@ class InkSpinScale : public Gtk::Box
   // Create an InkSpinScale with a preexisting adjustment.
   InkSpinScale(Glib::RefPtr<Gtk::Adjustment>);
 
-  virtual ~InkSpinScale() {};
+  ~InkSpinScale() override {};
 
   void set_label(Glib::ustring label);
   void set_digits(int digits);

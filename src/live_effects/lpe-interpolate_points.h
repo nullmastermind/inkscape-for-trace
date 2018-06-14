@@ -23,9 +23,9 @@ namespace LivePathEffect {
 class LPEInterpolatePoints : public Effect {
 public:
     LPEInterpolatePoints(LivePathEffectObject *lpeobject);
-    virtual ~LPEInterpolatePoints();
+    ~LPEInterpolatePoints() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     EnumParam<unsigned> interpolator_type;

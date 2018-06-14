@@ -27,24 +27,24 @@ namespace Internal {
 class CairoPsOutput : Inkscape::Extension::Implementation::Implementation {
 
 public:
-    bool check(Inkscape::Extension::Extension *module);
+    bool check(Inkscape::Extension::Extension *module) override;
     void save(Inkscape::Extension::Output *mod,
               SPDocument *doc,
-              gchar const *filename);
+              gchar const *filename) override;
     static void init();
-    bool textToPath(Inkscape::Extension::Print *ext);
+    bool textToPath(Inkscape::Extension::Print *ext) override;
 
 };
 
 class CairoEpsOutput : Inkscape::Extension::Implementation::Implementation {
 
 public:
-    bool check(Inkscape::Extension::Extension *module);
+    bool check(Inkscape::Extension::Extension *module) override;
     void save(Inkscape::Extension::Output *mod,
               SPDocument *doc,
-              gchar const *uri);
+              gchar const *uri) override;
     static void init();
-    bool textToPath(Inkscape::Extension::Print *ext);
+    bool textToPath(Inkscape::Extension::Print *ext) override;
 
 };
 

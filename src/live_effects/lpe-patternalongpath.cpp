@@ -50,13 +50,13 @@ namespace WPAP {
     class KnotHolderEntityWidthPatternAlongPath : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityWidthPatternAlongPath(LPEPatternAlongPath * effect) : LPEKnotHolderEntity(effect) {}
-        virtual ~KnotHolderEntityWidthPatternAlongPath()
+        ~KnotHolderEntityWidthPatternAlongPath() override
         {
             LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
             lpe->_knot_entity = NULL;
         }
-        virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-        virtual Geom::Point knot_get() const;
+        void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        Geom::Point knot_get() const override;
     };
 } // WPAP
 

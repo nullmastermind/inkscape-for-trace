@@ -92,27 +92,27 @@ class Layout::InfiniteScanlineMaker : public Layout::ScanlineMaker
 {
 public:
     InfiniteScanlineMaker(double initial_x, double initial_y, Layout::Direction block_progression);
-    virtual ~InfiniteScanlineMaker();
+    ~InfiniteScanlineMaker() override;
 
     /** Returns a single infinite run at the current location */
-    virtual std::vector<ScanRun> makeScanline(Layout::FontMetrics const &line_height);
+    std::vector<ScanRun> makeScanline(Layout::FontMetrics const &line_height) override;
 
     /** Increments the current y by the current line height */
-    virtual void completeLine();
+    void completeLine() override;
 
-    virtual double yCoordinate()
+    double yCoordinate() override
         {return _y;}
 
     /** Just changes y */
-    virtual void setNewYCoordinate(double new_y);
+    void setNewYCoordinate(double new_y) override;
 
     /** Always true, but has to save the new height */
-    virtual bool canExtendCurrentScanline(Layout::FontMetrics const &line_height);
+    bool canExtendCurrentScanline(Layout::FontMetrics const &line_height) override;
 
     /** Sets current line block height. Call before completeLine() to correct for
     actually used line height (in case some chunks with larger font-size rolled back).
     */
-    virtual void setLineHeight(Layout::FontMetrics const &line_height);
+    void setLineHeight(Layout::FontMetrics const &line_height) override;
 
 private:
     double _x, _y;
@@ -130,23 +130,23 @@ class Layout::ShapeScanlineMaker : public Layout::ScanlineMaker
 {
 public:
     ShapeScanlineMaker(Shape const *shape, Layout::Direction block_progression);
-    virtual ~ShapeScanlineMaker();
+    ~ShapeScanlineMaker() override;
 
-    virtual std::vector<ScanRun> makeScanline(Layout::FontMetrics const &line_height);
+    std::vector<ScanRun> makeScanline(Layout::FontMetrics const &line_height) override;
 
-    virtual void completeLine();
+    void completeLine() override;
 
-    virtual double yCoordinate();
+    double yCoordinate() override;
 
-    virtual void setNewYCoordinate(double new_y);
+    void setNewYCoordinate(double new_y) override;
 
     /** never true */
-    virtual bool canExtendCurrentScanline(Layout::FontMetrics const &line_height);
+    bool canExtendCurrentScanline(Layout::FontMetrics const &line_height) override;
 
     /** Sets current line block height. Call before completeLine() to correct for
     actually used line height (in case some chunks with larger font-size rolled back).
     */
-    virtual void setLineHeight(Layout::FontMetrics const &line_height);
+    void setLineHeight(Layout::FontMetrics const &line_height) override;
 
 private:
     /** To generate scanlines for top-to-bottom text it is easiest if we

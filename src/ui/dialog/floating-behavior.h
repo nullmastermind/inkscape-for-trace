@@ -30,36 +30,36 @@ class FloatingBehavior : public Behavior {
 public:
     static Behavior *create(Dialog &dialog);
 
-    ~FloatingBehavior();
+    ~FloatingBehavior() override;
 
     /** Gtk::Dialog methods */
-    operator Gtk::Widget &();
-    GtkWidget *gobj();
-    void present();
-    Gtk::Box *get_vbox();
-    void show();
-    void hide();
-    void show_all_children();
-    void resize(int width, int height);
-    void move(int x, int y);
-    void set_position(Gtk::WindowPosition);
-    void set_size_request(int width, int height);
-    void size_request(Gtk::Requisition &requisition);
-    void get_position(int &x, int &y);
-    void get_size(int& width, int &height);
-    void set_title(Glib::ustring title);
-    void set_sensitive(bool sensitive);
+    operator Gtk::Widget &() override;
+    GtkWidget *gobj() override;
+    void present() override;
+    Gtk::Box *get_vbox() override;
+    void show() override;
+    void hide() override;
+    void show_all_children() override;
+    void resize(int width, int height) override;
+    void move(int x, int y) override;
+    void set_position(Gtk::WindowPosition) override;
+    void set_size_request(int width, int height) override;
+    void size_request(Gtk::Requisition &requisition) override;
+    void get_position(int &x, int &y) override;
+    void get_size(int& width, int &height) override;
+    void set_title(Glib::ustring title) override;
+    void set_sensitive(bool sensitive) override;
 
     /** Gtk::Dialog signal proxies */
-    Glib::SignalProxy0<void> signal_show();
-    Glib::SignalProxy0<void> signal_hide();
-    Glib::SignalProxy1<bool, GdkEventAny *> signal_delete_event();
+    Glib::SignalProxy0<void> signal_show() override;
+    Glib::SignalProxy0<void> signal_hide() override;
+    Glib::SignalProxy1<bool, GdkEventAny *> signal_delete_event() override;
 
     /** Custom signal handlers */
-    void onHideF12();
-    void onShowF12();
-    void onDesktopActivated(SPDesktop *desktop);
-    void onShutdown();
+    void onHideF12() override;
+    void onShowF12() override;
+    void onDesktopActivated(SPDesktop *desktop) override;
+    void onShutdown() override;
 
 private:
     FloatingBehavior(Dialog& dialog);

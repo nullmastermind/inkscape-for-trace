@@ -72,7 +72,7 @@ private:
 class Display : public ConfigurationEvent {
 public:
     Display() : ConfigurationEvent("display") {}
-    void generateChildEvents() const {
+    void generateChildEvents() const override {
         GdkDisplay *display=gdk_display_get_default();
 
 #if GTK_CHECK_VERSION(3,22,0)

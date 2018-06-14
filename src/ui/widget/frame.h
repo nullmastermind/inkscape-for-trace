@@ -40,7 +40,7 @@ public:
     /**
      * Add a widget to this frame
      */
-    virtual void add(Widget& widget);
+    void add(Widget& widget) override;
 
     /**
      * Set the frame label text and if bold or not

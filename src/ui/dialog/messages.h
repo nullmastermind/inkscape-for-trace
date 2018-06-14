@@ -35,7 +35,7 @@ namespace Dialog {
 class Messages : public UI::Widget::Panel {
 public:
     Messages();
-    virtual ~Messages();
+    ~Messages() override;
 
     static Messages &getInstance() { return *new Messages(); }
 

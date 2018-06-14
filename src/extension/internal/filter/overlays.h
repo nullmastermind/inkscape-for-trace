@@ -44,11 +44,11 @@ namespace Filter {
 
 class NoiseFill : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     NoiseFill ( ) : Filter() { };
-    virtual ~NoiseFill ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NoiseFill ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

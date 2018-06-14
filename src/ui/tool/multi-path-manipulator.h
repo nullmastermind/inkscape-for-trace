@@ -35,8 +35,8 @@ struct PathSharedData;
 class MultiPathManipulator : public PointManipulator {
 public:
     MultiPathManipulator(PathSharedData &data, sigc::connection &chg);
-    virtual ~MultiPathManipulator();
-    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *event);
+    ~MultiPathManipulator() override;
+    bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *event) override;
 
     bool empty() { return _mmap.empty(); }
     unsigned size() { return _mmap.size(); }

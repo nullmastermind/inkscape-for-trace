@@ -33,7 +33,7 @@
 class SPText : public SPItem {
 public:
 	SPText();
-	virtual ~SPText();
+	~SPText() override;
 
     /** Converts the text object to its component curves */
     SPCurve *getNormalizedBpath() const
@@ -76,23 +76,23 @@ public:
     void optimizeTextpathText()
         {_optimizeTextpathText = true;}
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node* child);
-	virtual void set(unsigned int key, const char* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node* child) override;
+	void set(unsigned int key, const char* value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
-	virtual void print(SPPrintContext *ctx);
-        virtual const char* displayName() const;
-	virtual char* description() const;
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void hide(unsigned int key);
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
-	virtual Geom::Affine set_transform(Geom::Affine const &transform);
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+	void print(SPPrintContext *ctx) override;
+        const char* displayName() const override;
+	char* description() const override;
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+	void hide(unsigned int key) override;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+	Geom::Affine set_transform(Geom::Affine const &transform) override;
 };
 
 #endif

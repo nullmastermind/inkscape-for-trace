@@ -32,16 +32,16 @@ namespace PP {
 class LPEPerspectivePath : public Effect, GroupBBoxEffect {
 public:
     LPEPerspectivePath(LivePathEffectObject *lpeobject);
-    virtual ~LPEPerspectivePath();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    ~LPEPerspectivePath() override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
     virtual void refresh(Gtk::Entry* perspective);
-    virtual Gtk::Widget * newWidget();
+    Gtk::Widget * newWidget() override;
     /* the knotholder entity classes must be declared friends */
     friend class PP::KnotHolderEntityOffset;
-    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
 
 private:
     // add the parameters for your effect here:

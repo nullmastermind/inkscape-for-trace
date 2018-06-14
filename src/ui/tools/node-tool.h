@@ -45,7 +45,7 @@ namespace Tools {
 class NodeTool : public ToolBase {
 public:
     NodeTool();
-    virtual ~NodeTool();
+    ~NodeTool() override;
 
     Inkscape::UI::ControlPointSelection* _selected_nodes;
     Inkscape::UI::MultiPathManipulator* _multipath;
@@ -56,11 +56,11 @@ public:
 
     static const std::string prefsPath;
 
-    virtual void setup();
-    virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent* event);
+    void setup() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
 
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
     boost::ptr_map<SPItem*, ShapeEditor> _shape_editors;
 
 private:

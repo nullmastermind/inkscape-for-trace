@@ -18,9 +18,9 @@ namespace LivePathEffect {
 class LPEBoundingBox : public Effect {
 public:
     LPEBoundingBox(LivePathEffectObject *lpeobject);
-    virtual ~LPEBoundingBox();
+    ~LPEBoundingBox() override;
 
-    virtual void doEffect (SPCurve * curve);
+    void doEffect (SPCurve * curve) override;
 
 private:
     OriginalPathParam  linked_path;

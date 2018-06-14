@@ -24,7 +24,7 @@ class ustring;
 class SPStop : public SPObject {
 public:
 	SPStop();
-	virtual ~SPStop();
+	~SPStop() override;
 
     /// \todo fixme: Should be SPSVGPercentage
     float offset;
@@ -53,9 +53,9 @@ public:
     guint32 get_rgba32() const;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void set(unsigned int key, const char* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void set(unsigned int key, const char* value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 

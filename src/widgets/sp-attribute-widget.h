@@ -65,7 +65,7 @@ public:
      */
     SPAttributeTable (SPObject *object, std::vector<Glib::ustring> &labels, std::vector<Glib::ustring> &attributes, GtkWidget* parent);
     
-    ~SPAttributeTable ();
+    ~SPAttributeTable () override;
     
     /**
      * Sets class properties and creates child widgets

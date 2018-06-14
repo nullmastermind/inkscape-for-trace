@@ -20,21 +20,21 @@
 class SPFeOffset : public SPFilterPrimitive {
 public:
 	SPFeOffset();
-	virtual ~SPFeOffset();
+	~SPFeOffset() override;
 
     double dx, dy;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void set(unsigned int key, const gchar* value);
+	void set(unsigned int key, const gchar* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;
 
-	virtual void build_renderer(Inkscape::Filters::Filter* filter);
+	void build_renderer(Inkscape::Filters::Filter* filter) override;
 };
 
 #endif /* !SP_FEOFFSET_H_SEEN */

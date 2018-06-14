@@ -245,18 +245,18 @@ public:
           value_default(value_default)
     {}
 
-    virtual ~SPIFloat() {}
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    ~SPIFloat() override {}
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         value = value_default;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIFloat& operator=(const SPIFloat& rhs) {
         SPIBase::operator=(rhs);
@@ -265,8 +265,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -325,20 +325,20 @@ public:
           value_default(value)
     {}
 
-    virtual ~SPIScale24()
+    ~SPIScale24() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         value = value_default;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIScale24& operator=(const SPIScale24& rhs) {
         SPIBase::operator=(rhs);
@@ -347,8 +347,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -398,21 +398,21 @@ public:
           value_default(value)
     {}
 
-    virtual ~SPILength()
+    ~SPILength() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         unit = SP_CSS_UNIT_NONE, value = value_default;
         computed = value_default;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPILength& operator=(const SPILength& rhs) {
         SPIBase::operator=(rhs);
@@ -423,8 +423,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -455,20 +455,20 @@ public:
           normal(true)
     {}
 
-    virtual ~SPILengthOrNormal()
+    ~SPILengthOrNormal() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPILength::clear();
         normal = true;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPILengthOrNormal& operator=(const SPILengthOrNormal& rhs) {
         SPILength::operator=(rhs);
@@ -476,8 +476,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -503,21 +503,21 @@ public:
           normal(true)
     {}
 
-    virtual ~SPIFontVariationSettings()
+    ~SPIFontVariationSettings() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         axes.clear();
         normal = true;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
         SPIBase::operator=(rhs);
@@ -526,8 +526,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -573,20 +573,20 @@ public:
         computed_default(computed)
     {}
 
-    virtual ~SPIEnum()
+    ~SPIEnum() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         value = value_default, computed = computed_default;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIEnum& operator=(const SPIEnum& rhs) {
         SPIBase::operator=(rhs);
@@ -597,8 +597,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -628,13 +628,13 @@ public:
         SPIEnum( name, enums, value, inherits )
     {}
 
-    virtual ~SPIEnumBits()
+    ~SPIEnumBits() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
+                                       SPIBase const *const base = NULL ) const override;
 
 };
 
@@ -655,13 +655,13 @@ public:
         SPIEnum( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
     {}
 
-    virtual ~SPILigatures()
+    ~SPILigatures() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
+                                       SPIBase const *const base = NULL ) const override;
 };
 
 
@@ -679,13 +679,13 @@ public:
         SPIEnum( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
     {}
 
-    virtual ~SPINumeric()
+    ~SPINumeric() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
+                                       SPIBase const *const base = NULL ) const override;
 };
 
 
@@ -703,13 +703,13 @@ public:
         SPIEnum( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
     {}
 
-    virtual ~SPIEastAsian()
+    ~SPIEastAsian() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
+                                       SPIBase const *const base = NULL ) const override;
 };
 
 
@@ -731,18 +731,18 @@ public:
           value_default(value_default_in ? g_strdup(value_default_in) : NULL)
     {}
 
-    virtual ~SPIString() {
+    ~SPIString() override {
         g_free(value);
         g_free(value_default);
     }
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear(); // TODO check about value and value_default
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override; // TODO check about value and value_default
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIString& operator=(const SPIString& rhs) {
         SPIBase::operator=(rhs);
@@ -753,8 +753,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -781,20 +781,20 @@ public:
         value.color.set(0);
     }
 
-    virtual ~SPIColor()
+    ~SPIColor() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         value.color.set(0);
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIColor& operator=(const SPIColor& rhs) {
         SPIBase::operator=(rhs);
@@ -803,8 +803,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -864,16 +864,16 @@ public:
         clear();  // Sets defaults
     }
 
-    virtual ~SPIPaint();  // Clear and delete href.
-    virtual void read( gchar const *str );
+    ~SPIPaint() override;  // Clear and delete href.
+    void read( gchar const *str ) override;
     virtual void read( gchar const *str, SPStyle &style, SPDocument *document = 0);
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear();
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override;
     virtual void reset( bool init ); // Used internally when reading or cascading
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIPaint& operator=(const SPIPaint& rhs) {
         SPIBase::operator=(rhs);
@@ -885,8 +885,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -962,15 +962,15 @@ public:
         this->clear();
     }
 
-    virtual ~SPIPaintOrder() {
+    ~SPIPaintOrder() override {
         g_free( value );
     }
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
             layer[i]     = SP_CSS_PAINT_ORDER_NORMAL;
@@ -979,8 +979,8 @@ public:
         g_free(value);
         value = NULL;
     }
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIPaintOrder& operator=(const SPIPaintOrder& rhs) {
         SPIBase::operator=(rhs);
@@ -993,8 +993,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1016,20 +1016,20 @@ public:
         : SPIBase( "stroke-dasharray" )
     {}  // Only one instance of SPIDashArray
 
-    virtual ~SPIDashArray()
+    ~SPIDashArray() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         values.clear();
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIDashArray& operator=(const SPIDashArray& rhs) {
         SPIBase::operator=(rhs);
@@ -1037,8 +1037,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1058,14 +1058,14 @@ public:
           href(NULL)
     {}
 
-    virtual ~SPIFilter();
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    ~SPIFilter() override;
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear();
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override;
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIFilter& operator=(const SPIFilter& rhs) {
         SPIBase::operator=(rhs);
@@ -1073,8 +1073,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1101,21 +1101,21 @@ public:
         this->clear();
     }
 
-    virtual ~SPIFontSize()
+    ~SPIFontSize() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         type = SP_FONT_SIZE_LITERAL, unit = SP_CSS_UNIT_NONE,
             literal = SP_CSS_FONT_SIZE_MEDIUM, value = 12.0, computed = 12.0;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIFontSize& operator=(const SPIFontSize& rhs) {
         SPIBase::operator=(rhs);
@@ -1127,8 +1127,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1158,21 +1158,21 @@ public:
         : SPIBase( "font" )
     {}
 
-    virtual ~SPIFont()
+    ~SPIFont() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
     }
 
-    virtual void cascade( const SPIBase* const /*parent*/ )
+    void cascade( const SPIBase* const /*parent*/ ) override
     {} // Done in dependent properties
 
-    virtual void merge(   const SPIBase* const /*parent*/ )
+    void merge(   const SPIBase* const /*parent*/ ) override
     {}
 
     SPIFont& operator=(const SPIFont& rhs) {
@@ -1180,8 +1180,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 };
@@ -1203,21 +1203,21 @@ public:
         this->clear();
     }
 
-    virtual ~SPIBaselineShift()
+    ~SPIBaselineShift() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         type=SP_BASELINE_SHIFT_LITERAL, unit=SP_CSS_UNIT_NONE,
             literal = SP_CSS_BASELINE_SHIFT_BASELINE, value = 0.0, computed = 0.0;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPIBaselineShift& operator=(const SPIBaselineShift& rhs) {
         SPIBase::operator=(rhs);
@@ -1230,8 +1230,8 @@ public:
     }
 
     // This is not used but we have it for completeness, it has not been tested.
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1260,20 +1260,20 @@ public:
         this->clear();
     }
 
-    virtual ~SPITextDecorationLine()
+    ~SPITextDecorationLine() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         underline = false, overline = false, line_through = false, blink = false;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPITextDecorationLine& operator=(const SPITextDecorationLine& rhs) {
         SPIBase::operator=(rhs);
@@ -1284,8 +1284,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1308,20 +1308,20 @@ public:
         this->clear();
     }
 
-    virtual ~SPITextDecorationStyle()
+    ~SPITextDecorationStyle() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         solid = true, isdouble = false, dotted = false, dashed = false, wavy = false;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPITextDecorationStyle& operator=(const SPITextDecorationStyle& rhs) {
         SPIBase::operator=(rhs);
@@ -1333,8 +1333,8 @@ public:
         return *this;
     }
 
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 
@@ -1365,20 +1365,20 @@ public:
           style_td( NULL )
     {}
 
-    virtual ~SPITextDecoration()
+    ~SPITextDecoration() override
     {}
 
-    virtual void read( gchar const *str );
-    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+    void read( gchar const *str ) override;
+    const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL ) const;
-    virtual void clear() {
+                                       SPIBase const *const base = NULL ) const override;
+    void clear() override {
         SPIBase::clear();
         style_td = NULL;
     }
 
-    virtual void cascade( const SPIBase* const parent );
-    virtual void merge(   const SPIBase* const parent );
+    void cascade( const SPIBase* const parent ) override;
+    void merge(   const SPIBase* const parent ) override;
 
     SPITextDecoration& operator=(const SPITextDecoration& rhs) {
         SPIBase::operator=(rhs);
@@ -1386,8 +1386,8 @@ public:
     }
 
     // Use CSS2 value
-    virtual bool operator==(const SPIBase& rhs);
-    virtual bool operator!=(const SPIBase& rhs) {
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
 

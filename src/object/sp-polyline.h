@@ -9,13 +9,13 @@
 class SPPolyLine : public SPShape {
 public:
 	SPPolyLine();
-	virtual ~SPPolyLine();
+	~SPPolyLine() override;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void set(unsigned int key, char const* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void set(unsigned int key, char const* value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-	virtual char* description() const;
+	char* description() const override;
 };
 
 #endif // SEEN_SP_POLYLINE_H

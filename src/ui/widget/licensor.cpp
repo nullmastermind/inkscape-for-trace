@@ -46,7 +46,7 @@ class LicenseItem : public Gtk::RadioButton {
 public:
     LicenseItem (struct rdf_license_t const* license, EntityEntry* entity, Registry &wr, Gtk::RadioButtonGroup *group);
 protected:
-    void on_toggled();
+    void on_toggled() override;
     struct rdf_license_t const *_lic;
     EntityEntry                *_eep;
     Registry                   &_wr;

@@ -30,8 +30,8 @@ class CmdLineXAction : public CmdLineAction {
 public:
     CmdLineXAction (gchar const * arg, xaction_args_values_map_t &values_map);
 
-    virtual void doItX (ActionContext const & context);
-    virtual bool isExtended();
+    void doItX (ActionContext const & context) override;
+    bool isExtended() override;
 
     static void createActionsFromYAML( gchar const *filename );
 };

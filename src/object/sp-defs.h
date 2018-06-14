@@ -21,13 +21,13 @@
 class SPDefs : public SPObject {
 public:
 	SPDefs();
-	virtual ~SPDefs();
+	~SPDefs() override;
 
 protected:
-	virtual void release();
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void release() override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif // !SEEN_SP_DEFS_H

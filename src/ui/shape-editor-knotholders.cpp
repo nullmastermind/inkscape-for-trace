@@ -41,49 +41,49 @@
 class RectKnotHolder : public KnotHolder {
 public:
     RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~RectKnotHolder() {};
+    ~RectKnotHolder() override {};
 };
 
 class Box3DKnotHolder : public KnotHolder {
 public:
     Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~Box3DKnotHolder() {};
+    ~Box3DKnotHolder() override {};
 };
 
 class ArcKnotHolder : public KnotHolder {
 public:
     ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~ArcKnotHolder() {};
+    ~ArcKnotHolder() override {};
 };
 
 class StarKnotHolder : public KnotHolder {
 public:
     StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~StarKnotHolder() {};
+    ~StarKnotHolder() override {};
 };
 
 class SpiralKnotHolder : public KnotHolder {
 public:
     SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~SpiralKnotHolder() {};
+    ~SpiralKnotHolder() override {};
 };
 
 class OffsetKnotHolder : public KnotHolder {
 public:
     OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~OffsetKnotHolder() {};
+    ~OffsetKnotHolder() override {};
 };
 
 class FlowtextKnotHolder : public KnotHolder {
 public:
     FlowtextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~FlowtextKnotHolder() {};
+    ~FlowtextKnotHolder() override {};
 };
 
 class MiscKnotHolder : public KnotHolder {
 public:
     MiscKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    virtual ~MiscKnotHolder() {};
+    ~MiscKnotHolder() override {};
 };
 
 namespace {
@@ -157,24 +157,24 @@ KnotHolder *createLPEKnotHolder(SPItem *item, SPDesktop *desktop)
 /* handle for horizontal rounding radius */
 class RectKnotHolderEntityRX : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 /* handle for vertical rounding radius */
 class RectKnotHolderEntityRY : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 /* handle for width/height adjustment */
 class RectKnotHolderEntityWH : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 
 protected:
     void set_internal(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
@@ -183,15 +183,15 @@ protected:
 /* handle for x/y adjustment */
 class RectKnotHolderEntityXY : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 /* handle for position */
 class RectKnotHolderEntityCenter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 Geom::Point
@@ -572,8 +572,8 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
 
 class Box3DKnotHolderEntity : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const = 0;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
+    Geom::Point knot_get() const override = 0;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override = 0;
 
     Geom::Point knot_get_generic(SPItem *item, unsigned int knot_id) const;
     void knot_set_generic(SPItem *item, unsigned int knot_id, Geom::Point const &p, unsigned int state);
@@ -614,56 +614,56 @@ Box3DKnotHolderEntity::knot_set_generic(SPItem *item, unsigned int knot_id, Geom
 
 class Box3DKnotHolderEntity0 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity1 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity2 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity3 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity4 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity5 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity6 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity7 : public Box3DKnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntityCenter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 Geom::Point
@@ -855,36 +855,36 @@ Box3DKnotHolder::Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderR
 
 class ArcKnotHolderEntityStart : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class ArcKnotHolderEntityEnd : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class ArcKnotHolderEntityRX : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class ArcKnotHolderEntityRY : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class ArcKnotHolderEntityCenter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 /*
@@ -1158,22 +1158,22 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
 
 class StarKnotHolderEntity1 : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class StarKnotHolderEntity2 : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class StarKnotHolderEntityCenter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 void
@@ -1342,21 +1342,21 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
 
 class SpiralKnotHolderEntityInner : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
-    virtual void knot_click(unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
 };
 
 class SpiralKnotHolderEntityOuter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class SpiralKnotHolderEntityCenter : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 
@@ -1589,8 +1589,8 @@ SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
 
 class OffsetKnotHolderEntity : public KnotHolderEntity {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 void
@@ -1636,8 +1636,8 @@ OffsetKnotHolder::OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
 // sense logically.
 class FlowtextKnotHolderEntity : public RectKnotHolderEntityWH {
 public:
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 Geom::Point

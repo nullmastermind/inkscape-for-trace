@@ -24,7 +24,7 @@ class PenTool : public FreehandBase {
 public:
     PenTool();
     PenTool(gchar const *const *cursor_shape);
-    virtual ~PenTool();
+    ~PenTool() override;
 
     enum Mode {
         MODE_CLICK,
@@ -68,7 +68,7 @@ public:
 
     static const std::string prefsPath;
 
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
 
     int nextParaxialDirection(Geom::Point const &pt, Geom::Point const &origin, guint state) const;
     void setPolylineMode();
@@ -76,11 +76,11 @@ public:
     void waitForLPEMouseClicks(Inkscape::LivePathEffect::EffectType effect_type, unsigned int num_clicks, bool use_polylines = true);
 
 protected:
-    virtual void setup();
-    virtual void finish();
-    virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent* event);
-    virtual bool item_handler(SPItem* item, GdkEvent* event);
+    void setup() override;
+    void finish() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
+    bool item_handler(SPItem* item, GdkEvent* event) override;
 
 private:
     bool _handleButtonPress(GdkEventButton const &bevent);

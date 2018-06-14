@@ -63,7 +63,7 @@ public:
 class SvgFontsDialog : public UI::Widget::Panel {
 public:
     SvgFontsDialog();
-    ~SvgFontsDialog();
+    ~SvgFontsDialog() override;
 
     static SvgFontsDialog &getInstance() { return *new SvgFontsDialog(); }
 

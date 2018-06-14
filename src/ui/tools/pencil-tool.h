@@ -37,7 +37,7 @@ enum PencilState {
 class PencilTool : public FreehandBase {
 public:
     PencilTool();
-    virtual ~PencilTool();
+    ~PencilTool() override;
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
@@ -47,12 +47,12 @@ public:
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
     static const std::string prefsPath;
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
 
 protected:
 
-    virtual void setup();
-    virtual bool root_handler(GdkEvent* event);
+    void setup() override;
+    bool root_handler(GdkEvent* event) override;
 
 private:
     bool _handleButtonPress(GdkEventButton const &bevent);

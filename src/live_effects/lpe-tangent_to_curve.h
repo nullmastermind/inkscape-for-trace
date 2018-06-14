@@ -33,15 +33,15 @@ namespace TtC {
 class LPETangentToCurve : public Effect {
 public:
     LPETangentToCurve(LivePathEffectObject *lpeobject);
-    virtual ~LPETangentToCurve();
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> >
-      doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    ~LPETangentToCurve() override;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> >
+      doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
     /* the knotholder entity classes must be declared friends */
     friend class TtC::KnotHolderEntityLeftEnd;
     friend class TtC::KnotHolderEntityRightEnd;
     friend class TtC::KnotHolderEntityAttachPt;
-    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item);
+    void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
 
 private:
     ScalarParam angle;

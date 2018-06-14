@@ -42,7 +42,7 @@
 class SPSpiral : public SPShape {
 public:
 	SPSpiral();
-	virtual ~SPSpiral();
+	~SPSpiral() override;
 
 	float cx, cy;
 	float exp;  ///< Spiral expansion factor
@@ -53,7 +53,7 @@ public:
 
 	/* Lowlevel interface */
 	void setPosition(double cx, double cy, double exp, double revo, double rad, double arg, double t0);
-	virtual Geom::Affine set_transform(Geom::Affine const& xform);
+	Geom::Affine set_transform(Geom::Affine const& xform) override;
 
 	Geom::Point getXY(double t) const;
 
@@ -61,16 +61,16 @@ public:
 
 	bool isInvalid() const;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual void set(unsigned int key, char const* value);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	void set(unsigned int key, char const* value) override;
 
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
-    virtual const char* displayName() const;
-	virtual char* description() const;
-    virtual void update_patheffect(bool write);
-	virtual void set_shape();
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+    const char* displayName() const override;
+	char* description() const override;
+    void update_patheffect(bool write) override;
+	void set_shape() override;
 
 private:
 	Geom::Point getTangent(double t) const;

@@ -40,15 +40,15 @@ enum ModeType {
 class LPEMirrorSymmetry : public Effect, GroupBBoxEffect {
 public:
     LPEMirrorSymmetry(LivePathEffectObject *lpeobject);
-    virtual ~LPEMirrorSymmetry();
-    virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
-    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget * newWidget();
+    ~LPEMirrorSymmetry() override;
+    void doOnApply (SPLPEItem const* lpeitem) override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doAfterEffect (SPLPEItem const* lpeitem) override;
+    void transform_multiply(Geom::Affine const& postmul, bool set) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
+    void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    Gtk::Widget * newWidget() override;
     void toMirror(Geom::Affine transform, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
@@ -57,7 +57,7 @@ public:
     void centerHoriz();
 
 protected:
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     EnumParam<ModeType> mode;

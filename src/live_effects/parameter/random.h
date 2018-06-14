@@ -27,20 +27,20 @@ public:
                 Effect* effect,
                 gdouble default_value = 1.0,
                 long default_seed = 0);
-    virtual ~RandomParam();
+    ~RandomParam() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
-    virtual void param_set_default();
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
+    void param_set_default() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
     void param_set_value(gdouble val, long newseed);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);
     void param_update_default(gdouble default_value);
-    virtual void param_update_default(const gchar * default_value);
+    void param_update_default(const gchar * default_value) override;
     void resetRandomizer();
     operator gdouble();
     inline gdouble get_value() { return value; } ;

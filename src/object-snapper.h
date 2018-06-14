@@ -30,32 +30,32 @@ class ObjectSnapper : public Snapper
 
 public:
     ObjectSnapper(SnapManager *sm, Geom::Coord const d);
-    ~ObjectSnapper();
+    ~ObjectSnapper() override;
 
     /**
      * @return true if this Snapper will snap at least one kind of point.
      */
-    bool ThisSnapperMightSnap() const;
+    bool ThisSnapperMightSnap() const override;
 
     /**
      * @return Snap tolerance (desktop coordinates); depends on current zoom so that it's always the same in screen pixels.
      */
-    Geom::Coord getSnapperTolerance() const; //returns the tolerance of the snapper in screen pixels (i.e. independent of zoom)
+    Geom::Coord getSnapperTolerance() const override; //returns the tolerance of the snapper in screen pixels (i.e. independent of zoom)
 
-    bool getSnapperAlwaysSnap() const; //if true, then the snapper will always snap, regardless of its tolerance
+    bool getSnapperAlwaysSnap() const override; //if true, then the snapper will always snap, regardless of its tolerance
 
     void freeSnap(IntermSnapResults &isr,
                   Inkscape::SnapCandidatePoint const &p,
                   Geom::OptRect const &bbox_to_snap,
                   std::vector<SPItem const *> const *it,
-                  std::vector<SnapCandidatePoint> *unselected_nodes) const;
+                  std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
     void constrainedSnap(IntermSnapResults &isr,
                   Inkscape::SnapCandidatePoint const &p,
                   Geom::OptRect const &bbox_to_snap,
                   SnapConstraint const &c,
                   std::vector<SPItem const *> const *it,
-                  std::vector<SnapCandidatePoint> *unselected_nodes) const;
+                  std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 private:
     //store some lists of candidates, points and paths, so we don't have to rebuild them for each point we want to snap

@@ -23,10 +23,10 @@ namespace LivePathEffect {
 class LPEAttachPath : public Effect {
 public:
     LPEAttachPath(LivePathEffectObject *lpeobject);
-    virtual ~LPEAttachPath();
+    ~LPEAttachPath() override;
 
-    virtual void doEffect (SPCurve * curve);
-    virtual void resetDefaults(SPItem const * item);
+    void doEffect (SPCurve * curve) override;
+    void resetDefaults(SPItem const * item) override;
 
 private:
     LPEAttachPath(const LPEAttachPath&) = delete;

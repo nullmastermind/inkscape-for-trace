@@ -57,7 +57,7 @@ public:
         add(_colReverse);
         add(_colVisible);
     }
-    virtual ~ModelColumns() {}
+    ~ModelColumns() override {}
 
     Gtk::TreeModelColumn<PathAndDirectionAndVisible*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;

@@ -41,14 +41,14 @@ namespace Dialog {
 class LivePathEffectEditor : public UI::Widget::Panel {
 public:
     LivePathEffectEditor();
-    virtual ~LivePathEffectEditor();
+    ~LivePathEffectEditor() override;
 
     static LivePathEffectEditor &getInstance() { return *new LivePathEffectEditor(); }
 
     void onSelectionChanged(Inkscape::Selection *sel);
     void onSelectionModified(Inkscape::Selection *sel);
     virtual void on_effect_selection_changed();
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
 private:
 
@@ -88,7 +88,7 @@ private:
             add(lperef);
             add(col_visible);
         }
-        virtual ~ModelColumns() {}
+        ~ModelColumns() override {}
 
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<LivePathEffect::LPEObjectReference *> lperef;

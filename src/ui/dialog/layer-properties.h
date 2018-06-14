@@ -39,7 +39,7 @@ namespace Dialogs {
 class LayerPropertiesDialog : public Gtk::Dialog {
  public:
     LayerPropertiesDialog();
-    virtual ~LayerPropertiesDialog();
+    ~LayerPropertiesDialog() override;
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 
@@ -61,18 +61,18 @@ protected:
     };
     struct Rename : public Strategy {
         static Rename &instance() { static Rename instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog);
-        void perform(LayerPropertiesDialog &dialog);
+        void setup(LayerPropertiesDialog &dialog) override;
+        void perform(LayerPropertiesDialog &dialog) override;
     };
     struct Create : public Strategy {
         static Create &instance() { static Create instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog);
-        void perform(LayerPropertiesDialog &dialog);
+        void setup(LayerPropertiesDialog &dialog) override;
+        void perform(LayerPropertiesDialog &dialog) override;
     };
     struct Move : public Strategy {
         static Move &instance() { static Move instance; return instance; }
-        void setup(LayerPropertiesDialog &dialog);
-        void perform(LayerPropertiesDialog &dialog);
+        void setup(LayerPropertiesDialog &dialog) override;
+        void perform(LayerPropertiesDialog &dialog) override;
     };
 
     friend struct Rename;
@@ -112,7 +112,7 @@ protected:
             add(_colLocked);
             add(_colLabel);
         }
-        virtual ~ModelColumns() {}
+        ~ModelColumns() override {}
 
         Gtk::TreeModelColumn<SPObject*> _colObject;
         Gtk::TreeModelColumn<Glib::ustring> _colLabel;

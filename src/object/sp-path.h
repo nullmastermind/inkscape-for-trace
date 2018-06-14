@@ -31,24 +31,24 @@ class SPCurve;
 class SPPath : public SPShape {
 public:
     SPPath();
-    virtual ~SPPath();
+    ~SPPath() override;
 
     int nodesInPath() const;
     friend class SPConnEndPair;
     SPConnEndPair connEndPair;
 
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-    virtual void release();
-    virtual void update(SPCtx* ctx, unsigned int flags);
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+    void release() override;
+    void update(SPCtx* ctx, unsigned int flags) override;
 
-    virtual void set(unsigned int key, char const* value);
-    virtual void update_patheffect(bool write);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    void set(unsigned int key, char const* value) override;
+    void update_patheffect(bool write) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-    virtual const char* displayName() const;
-    virtual char* description() const;
-    virtual Geom::Affine set_transform(Geom::Affine const &transform);
-    virtual void convert_to_guides() const;
+    const char* displayName() const override;
+    char* description() const override;
+    Geom::Affine set_transform(Geom::Affine const &transform) override;
+    void convert_to_guides() const override;
 private:
     SPStyleSrc d_source;  // Source of 'd' value, saved for output.
 };

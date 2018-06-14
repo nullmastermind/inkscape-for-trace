@@ -27,10 +27,10 @@ public:
         : _curve(curve)
     {}
 
-    virtual void moveto(double x, double y);
-    virtual void lineto(double x, double y, bool close_last);
-    virtual void quadto(double x1, double y1, double x2, double y2, bool close_last);
-    virtual void curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last);
+    void moveto(double x, double y) override;
+    void lineto(double x, double y, bool close_last) override;
+    void quadto(double x1, double y1, double x2, double y2, bool close_last) override;
+    void curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last) override;
 
 private:
     SPCurve &_curve;
@@ -47,10 +47,10 @@ class ConverterPath : public ConverterBase {
 public:
     ConverterPath(Geom::Path &path);
 
-    virtual void moveto(double x, double y);
-    virtual void lineto(double x, double y, bool close_last);
-    virtual void quadto(double x1, double y1, double x2, double y2, bool close_last);
-    virtual void curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last);
+    void moveto(double x, double y) override;
+    void lineto(double x, double y, bool close_last) override;
+    void quadto(double x1, double y1, double x2, double y2, bool close_last) override;
+    void curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last) override;
 
 private:
     Geom::Path &_path;

@@ -52,14 +52,14 @@ private:
 
 public:
 	ArrangeDialog();
-	virtual ~ArrangeDialog() {};
+	~ArrangeDialog() override {};
 
     /**
      * Callback from Apply
      */
-    virtual void _apply();
+    void _apply() override;
 
-    virtual void on_show();
+    void on_show() override;
 
 	static ArrangeDialog& getInstance() { return *new ArrangeDialog(); }
 };

@@ -22,15 +22,15 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
-    virtual ~OriginalItemParam();
+    ~OriginalItemParam() override;
     bool linksToItem() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
 protected:
-    virtual void linked_modified_callback(SPObject *linked_obj, guint flags);
-    virtual void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item);
+    void linked_modified_callback(SPObject *linked_obj, guint flags) override;
+    void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item) override;
 
     void on_select_original_button_click();
 

@@ -25,7 +25,7 @@ namespace Dialogs {
 class PowerstrokePropertiesDialog : public Gtk::Dialog {
  public:
 	PowerstrokePropertiesDialog();
-    virtual ~PowerstrokePropertiesDialog();
+    ~PowerstrokePropertiesDialog() override;
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 

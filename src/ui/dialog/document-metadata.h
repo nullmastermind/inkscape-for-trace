@@ -67,7 +67,7 @@ protected:
     UI::Widget::Registry _wr;
 
 private:
-    virtual ~DocumentMetadata();
+    ~DocumentMetadata() override;
     DocumentMetadata();
 };
 

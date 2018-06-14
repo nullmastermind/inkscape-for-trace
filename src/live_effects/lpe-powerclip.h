@@ -17,14 +17,14 @@ namespace LivePathEffect {
 class LPEPowerClip : public Effect {
 public:
     LPEPowerClip(LivePathEffectObject *lpeobject);
-    virtual ~LPEPowerClip();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget * newWidget();
+    ~LPEPowerClip() override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
+    Gtk::Widget * newWidget() override;
     //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
+    void doAfterEffect (SPLPEItem const* lpeitem) override;
     void addInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);

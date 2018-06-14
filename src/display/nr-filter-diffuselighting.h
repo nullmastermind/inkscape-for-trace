@@ -31,11 +31,11 @@ class FilterDiffuseLighting : public FilterPrimitive {
 public:
     FilterDiffuseLighting();
     static FilterPrimitive *create();
-    virtual ~FilterDiffuseLighting();
-    virtual void render_cairo(FilterSlot &slot);
+    ~FilterDiffuseLighting() override;
+    void render_cairo(FilterSlot &slot) override;
     virtual void set_icc(SVGICCColor *icc_color);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     union {
         SPFeDistantLight *distant;
@@ -47,7 +47,7 @@ public:
     double surfaceScale;
     guint32 lighting_color;
 
-    virtual Glib::ustring name() { return Glib::ustring("Diffuse Lighting"); }
+    Glib::ustring name() override { return Glib::ustring("Diffuse Lighting"); }
 
 private:
     SVGICCColor *icc;

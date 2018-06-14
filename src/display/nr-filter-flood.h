@@ -24,18 +24,18 @@ class FilterFlood : public FilterPrimitive {
 public:
     FilterFlood();
     static FilterPrimitive *create();
-    virtual ~FilterFlood();
+    ~FilterFlood() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
-    virtual bool uses_background() { return false; }
+    void render_cairo(FilterSlot &slot) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
+    bool uses_background() override { return false; }
     
     virtual void set_opacity(double o);
     virtual void set_color(guint32 c);
     virtual void set_icc(SVGICCColor *icc_color);
 
-    virtual Glib::ustring name() { return Glib::ustring("Flood"); }
+    Glib::ustring name() override { return Glib::ustring("Flood"); }
 
 private:
     double opacity;

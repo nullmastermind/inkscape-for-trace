@@ -49,9 +49,9 @@ private:
 class Linear : public Interpolator {
 public:
     Linear() {};
-    virtual ~Linear() {};
+    ~Linear() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         Path path;
         path.start( points.at(0) );
         for (unsigned int i = 1 ; i < points.size(); ++i) {
@@ -69,9 +69,9 @@ private:
 class CubicBezierFit : public Interpolator {
 public:
     CubicBezierFit() {};
-    virtual ~CubicBezierFit() {};
+    ~CubicBezierFit() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         unsigned int n_points = points.size();
         // worst case gives us 2 segment per point
         int max_segs = 8*n_points;
@@ -110,9 +110,9 @@ public:
     CubicBezierJohan(double beta = 0.2) {
         _beta = beta;
     };
-    virtual ~CubicBezierJohan() {};
+    ~CubicBezierJohan() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
         fit.start(points.at(0));
         for (unsigned int i = 1; i < points.size(); ++i) {
@@ -141,9 +141,9 @@ public:
     CubicBezierSmooth(double beta = 0.2) {
         _beta = beta;
     };
-    virtual ~CubicBezierSmooth() {};
+    ~CubicBezierSmooth() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
         fit.start(points.at(0));
         unsigned int num_points = points.size();
@@ -176,9 +176,9 @@ private:
 class SpiroInterpolator : public Interpolator {
 public:
     SpiroInterpolator() {};
-    virtual ~SpiroInterpolator() {};
+    ~SpiroInterpolator() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
 
         Coord scale_y = 100.;
@@ -210,9 +210,9 @@ private:
 class CentripetalCatmullRomInterpolator : public Interpolator {
 public:
     CentripetalCatmullRomInterpolator() {};
-    virtual ~CentripetalCatmullRomInterpolator() {};
+    ~CentripetalCatmullRomInterpolator() override {};
 
-    virtual Path interpolateToPath(std::vector<Point> const &points) const {
+    Path interpolateToPath(std::vector<Point> const &points) const override {
         unsigned int n_points = points.size();
 
         Geom::Path fit(points.front());

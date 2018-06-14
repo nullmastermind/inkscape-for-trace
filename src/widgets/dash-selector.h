@@ -27,7 +27,7 @@
 class SPDashSelector : public Gtk::HBox {
 public:
     SPDashSelector();
-    ~SPDashSelector();
+    ~SPDashSelector() override;
 
     /**
      * Get and set methods for dashes

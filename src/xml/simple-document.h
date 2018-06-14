@@ -33,35 +33,35 @@ public:
     : SimpleNode(g_quark_from_static_string("xml"), this),
       _in_transaction(false), _is_CData(false) {}
 
-    NodeType type() const { return Inkscape::XML::DOCUMENT_NODE; }
+    NodeType type() const override { return Inkscape::XML::DOCUMENT_NODE; }
 
-    bool inTransaction() { return _in_transaction; }
+    bool inTransaction() override { return _in_transaction; }
 
-    void beginTransaction();
-    void rollback();
-    void commit();
-    Inkscape::XML::Event *commitUndoable();
+    void beginTransaction() override;
+    void rollback() override;
+    void commit() override;
+    Inkscape::XML::Event *commitUndoable() override;
 
-    Node *createElement(char const *name);
-    Node *createTextNode(char const *content);
-    Node *createTextNode(char const *content, bool const is_CData);
-    Node *createComment(char const *content);
-    Node *createPI(char const *target, char const *content);
+    Node *createElement(char const *name) override;
+    Node *createTextNode(char const *content) override;
+    Node *createTextNode(char const *content, bool const is_CData) override;
+    Node *createComment(char const *content) override;
+    Node *createPI(char const *target, char const *content) override;
 
-    void notifyChildAdded(Node &parent, Node &child, Node *prev);
+    void notifyChildAdded(Node &parent, Node &child, Node *prev) override;
 
-    void notifyChildRemoved(Node &parent, Node &child, Node *prev);
+    void notifyChildRemoved(Node &parent, Node &child, Node *prev) override;
 
     void notifyChildOrderChanged(Node &parent, Node &child,
-                                 Node *old_prev, Node *new_prev);
+                                 Node *old_prev, Node *new_prev) override;
 
     void notifyContentChanged(Node &node,
                               Util::ptr_shared old_content,
-                              Util::ptr_shared new_content);
+                              Util::ptr_shared new_content) override;
 
     void notifyAttributeChanged(Node &node, GQuark name,
                                 Util::ptr_shared old_value,
-                                Util::ptr_shared new_value);
+                                Util::ptr_shared new_value) override;
 
 protected:
     SimpleDocument(SimpleDocument const &doc)
@@ -69,11 +69,11 @@ protected:
       _in_transaction(false),
       _is_CData(false){}
 
-    SimpleNode *_duplicate(Document* /*doc*/) const
+    SimpleNode *_duplicate(Document* /*doc*/) const override
     {
         return new SimpleDocument(*this);
     }
-    NodeObserver *logger() { return this; }
+    NodeObserver *logger() override { return this; }
 
 private:
     bool _in_transaction;

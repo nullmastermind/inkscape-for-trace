@@ -58,7 +58,7 @@ struct CheckProgress: TestConvergence {
         , rs(rs)
         , nodelookup(nodelookup)
     {}
-    bool operator()(const double new_stress, valarray<double> & X, valarray<double> & Y) {
+    bool operator()(const double new_stress, valarray<double> & X, valarray<double> & Y) override {
         /* This is where, if we wanted to animate the layout, we would need to update
          * the positions of all objects and redraw the canvas and maybe sleep a bit
          cout << "stress="<<new_stress<<endl;

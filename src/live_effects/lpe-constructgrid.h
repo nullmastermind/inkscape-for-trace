@@ -23,9 +23,9 @@ namespace LivePathEffect {
 class LPEConstructGrid : public Effect {
 public:
     LPEConstructGrid(LivePathEffectObject *lpeobject);
-    virtual ~LPEConstructGrid();
+    ~LPEConstructGrid() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     ScalarParam nr_x;

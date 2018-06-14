@@ -30,11 +30,11 @@ namespace Pl {
 class LPEParallel : public Effect {
 public:
     LPEParallel(LivePathEffectObject *lpeobject);
-    virtual ~LPEParallel();
+    ~LPEParallel() override;
 
-    virtual void doOnApply (SPLPEItem const* lpeitem);
+    void doOnApply (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
     /* the knotholder entity classes must be declared friends */
     friend class Pl::KnotHolderEntityLeftEnd;

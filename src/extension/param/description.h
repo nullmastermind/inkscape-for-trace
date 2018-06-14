@@ -38,7 +38,7 @@ public:
                      Inkscape::XML::Node * xml,
                      AppearanceMode mode);
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 private:
     /** \brief  Internal value. */
     gchar * _value;

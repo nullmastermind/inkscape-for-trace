@@ -69,13 +69,13 @@ class RotateableSwatch: public Rotateable
 {
 public:
     RotateableSwatch(SelectedStyle *parent, guint mode);
-    ~RotateableSwatch();
+    ~RotateableSwatch() override;
 
     double color_adjust (float *hsl, double by, guint32 cc, guint state);
 
-    virtual void do_motion (double by, guint state);
-    virtual void do_release (double by, guint state);
-    virtual void do_scroll (double by, guint state);
+    void do_motion (double by, guint state) override;
+    void do_release (double by, guint state) override;
+    void do_scroll (double by, guint state) override;
 
 private:
     guint fillstroke;
@@ -95,12 +95,12 @@ class RotateableStrokeWidth: public Rotateable
 {
 public:
     RotateableStrokeWidth(SelectedStyle *parent);
-    ~RotateableStrokeWidth();
+    ~RotateableStrokeWidth() override;
 
     double value_adjust(double current, double by, guint modifier, bool final);
-    virtual void do_motion (double by, guint state);
-    virtual void do_release (double by, guint state);
-    virtual void do_scroll (double by, guint state);
+    void do_motion (double by, guint state) override;
+    void do_release (double by, guint state) override;
+    void do_scroll (double by, guint state) override;
 
 private:
     SelectedStyle *parent;
@@ -119,7 +119,7 @@ class SelectedStyle : public Gtk::HBox
 public:
     SelectedStyle(bool layout = true);
 
-    ~SelectedStyle();
+    ~SelectedStyle() override;
 
     void setDesktop(SPDesktop *desktop);
     SPDesktop *getDesktop() {return _desktop;}

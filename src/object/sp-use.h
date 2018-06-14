@@ -28,7 +28,7 @@ class SPUseReference;
 class SPUse : public SPItem, public SPDimensions {
 public:
 	SPUse();
-	virtual ~SPUse();
+	~SPUse() override;
 
     // item built from the original's repr (the visible clone)
     // relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
@@ -47,20 +47,20 @@ public:
     // a sigc connection for transformed signal, used to do move compensation
     sigc::connection _transformed_connection;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void set(unsigned key, char const *value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
+	void set(unsigned key, char const *value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const;
-    virtual const char* displayName() const;
-	virtual char* description() const;
-	virtual void print(SPPrintContext *ctx);
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void hide(unsigned int key);
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
+    const char* displayName() const override;
+	char* description() const override;
+	void print(SPPrintContext *ctx) override;
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+	void hide(unsigned int key) override;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 
 	SPItem *root();
 	SPItem const *root() const;

@@ -28,14 +28,14 @@ public:
                    Inkscape::SnapCandidatePoint const &p,
                    Geom::OptRect const &bbox_to_snap,
                    std::vector<SPItem const *> const *it,
-                   std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes) const;
+                   std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes) const override;
 
   void constrainedSnap(IntermSnapResults &isr,
                           Inkscape::SnapCandidatePoint const &p,
                           Geom::OptRect const &bbox_to_snap,
                           SnapConstraint const &c,
                           std::vector<SPItem const *> const *it,
-                          std::vector<SnapCandidatePoint> *unselected_nodes) const;
+                          std::vector<SnapCandidatePoint> *unselected_nodes) const override;
 
 protected:
   typedef std::list<std::pair<Geom::Point, Geom::Point> > LineList;

@@ -35,10 +35,10 @@ struct CommentNode : public SimpleNode {
     CommentNode(CommentNode const &other, Document *doc)
     : SimpleNode(other, doc) {}
 
-    Inkscape::XML::NodeType type() const { return Inkscape::XML::COMMENT_NODE; }
+    Inkscape::XML::NodeType type() const override { return Inkscape::XML::COMMENT_NODE; }
 
 protected:
-    SimpleNode *_duplicate(Document* doc) const { return new CommentNode(*this, doc); }
+    SimpleNode *_duplicate(Document* doc) const override { return new CommentNode(*this, doc); }
 };
 
 }

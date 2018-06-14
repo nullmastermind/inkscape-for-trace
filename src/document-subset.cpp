@@ -128,7 +128,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
 
     Relations() { records[NULL]; }
 
-    ~Relations() {
+    ~Relations() override {
         for ( Map::iterator iter=records.begin()
             ; iter != records.end() ; ++iter )
         {

@@ -42,11 +42,11 @@ namespace Filter {
 
 class Blur : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Blur ( ) : Filter() { };
-    virtual ~Blur ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Blur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -113,11 +113,11 @@ Blur::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class CleanEdges : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     CleanEdges ( ) : Filter() { };
-    virtual ~CleanEdges ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CleanEdges ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -173,11 +173,11 @@ CleanEdges::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class CrossBlur : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     CrossBlur ( ) : Filter() { };
-    virtual ~CrossBlur ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CrossBlur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -248,11 +248,11 @@ CrossBlur::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Feather : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Feather ( ) : Filter() { };
-    virtual ~Feather ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Feather ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -313,11 +313,11 @@ Feather::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class ImageBlur : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ImageBlur ( ) : Filter() { };
-    virtual ~ImageBlur ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ImageBlur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

@@ -44,7 +44,7 @@ enum markerOrient {
 class SPMarker : public SPGroup, public SPViewBox {
 public:
 	SPMarker();
-	virtual ~SPMarker();
+	~SPMarker() override;
 
 	/* units */
 	unsigned int markerUnits_set : 1;
@@ -71,18 +71,18 @@ public:
 	 */
 	std::map<unsigned int, SPMarkerView> views_map;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, gchar const* value);
-	virtual void update(SPCtx *ctx, guint flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, gchar const* value) override;
+	void update(SPCtx *ctx, guint flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) override;
 
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
 	virtual Inkscape::DrawingItem* private_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void hide(unsigned int key);
+	void hide(unsigned int key) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
-	virtual void print(SPPrintContext *ctx);
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+	void print(SPPrintContext *ctx) override;
 };
 
 class SPMarkerReference : public Inkscape::URIReference {
@@ -91,7 +91,7 @@ class SPMarkerReference : public Inkscape::URIReference {
 		return static_cast<SPMarker *>(URIReference::getObject());
 	}
 protected:
-	virtual bool _acceptObject(SPObject *obj) const {
+	bool _acceptObject(SPObject *obj) const override {
 		return SP_IS_MARKER(obj) && URIReference::_acceptObject(obj);
 	}
 };

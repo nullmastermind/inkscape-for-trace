@@ -53,7 +53,7 @@ class ContextMenu : public Gtk::Menu
          * @param item SPItem pointer to the object selected at the time the ContextMenu is created.
          */
         ContextMenu(SPDesktop *desktop, SPItem *item);
-        ~ContextMenu(void);
+        ~ContextMenu(void) override;
         
     private:
         SPItem *_item; // pointer to the object selected at the time the ContextMenu is created

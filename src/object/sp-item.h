@@ -134,7 +134,7 @@ public:
     };
 
     SPItem();
-    virtual ~SPItem();
+    ~SPItem() override;
 
     unsigned int sensitive : 1;
     unsigned int stop_paint: 1;
@@ -386,12 +386,12 @@ private:
     static void stroke_ps_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item);
 
 public:
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-        virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+        void modified(unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
 	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
 	virtual void print(SPPrintContext *ctx);

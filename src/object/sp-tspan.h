@@ -20,20 +20,20 @@ enum {
 class SPTSpan : public SPItem {
 public:
 	SPTSpan();
-	virtual ~SPTSpan();
+	~SPTSpan() override;
 
     unsigned int role : 2;
     TextTagAttributes attributes;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void set(unsigned int key, const char* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
+	void set(unsigned int key, const char* value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
-        virtual const char* displayName() const;
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+        const char* displayName() const override;
 };
 
 #endif /* !INKSCAPE_SP_TSPAN_H */

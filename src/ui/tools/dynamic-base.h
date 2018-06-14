@@ -40,9 +40,9 @@ namespace Tools {
 class DynamicBase : public ToolBase {
 public:
 	DynamicBase(gchar const *const *cursor_shape);
-	virtual ~DynamicBase();
+	~DynamicBase() override;
 
-	virtual void set(const Inkscape::Preferences::Entry& val);
+	void set(const Inkscape::Preferences::Entry& val) override;
 
 protected:
     /** accumulated shape which ultimately goes in svg:path */

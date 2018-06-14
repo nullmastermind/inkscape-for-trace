@@ -33,11 +33,11 @@ namespace Dialog {
 class Prototype : public UI::Widget::Panel
 {
 public:
-    virtual ~Prototype();
+    ~Prototype() override;
 
     static Prototype& getInstance() { return *new Prototype(); };
 
-    virtual void present();
+    void present() override;
 
 private:
 

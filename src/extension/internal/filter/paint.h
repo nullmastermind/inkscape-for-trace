@@ -59,11 +59,11 @@ namespace Filter {
 */
 class Chromolitho : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Chromolitho ( ) : Filter() { };
-    virtual ~Chromolitho ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Chromolitho ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -220,11 +220,11 @@ Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class CrossEngraving : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     CrossEngraving ( ) : Filter() { };
-    virtual ~CrossEngraving ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CrossEngraving ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -319,11 +319,11 @@ CrossEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Drawing : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Drawing ( ) : Filter() { };
-    virtual ~Drawing ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Drawing ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -482,11 +482,11 @@ Drawing::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class Electrize : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Electrize ( ) : Filter() { };
-    virtual ~Electrize ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Electrize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -572,11 +572,11 @@ Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class NeonDraw : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     NeonDraw ( ) : Filter() { };
-    virtual ~NeonDraw ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NeonDraw ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -675,11 +675,11 @@ NeonDraw::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class PointEngraving : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     PointEngraving ( ) : Filter() { };
-    virtual ~PointEngraving ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~PointEngraving ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -838,11 +838,11 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class Posterize : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Posterize ( ) : Filter() { };
-    virtual ~Posterize ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Posterize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -961,11 +961,11 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class PosterizeBasic : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     PosterizeBasic ( ) : Filter() { };
-    virtual ~PosterizeBasic ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~PosterizeBasic ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

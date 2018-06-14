@@ -32,7 +32,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject * const obj) const;
+    bool _acceptObject(SPObject * const obj) const override;
 
 };
 
@@ -53,7 +53,7 @@ public:
     sigc::connection _transformed_connection;
 
     SPUsePath(SPObject* i_owner);
-    ~SPUsePath(void);
+    ~SPUsePath(void) override;
 
     void link(char* to);
     void unlink(void);

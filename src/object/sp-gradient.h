@@ -86,7 +86,7 @@ std::vector<PaintTarget> const &allPaintTargets();
 class SPGradient : public SPPaintServer {
 public:
 	SPGradient();
-	virtual ~SPGradient();
+	~SPGradient() override;
 
 private:
     /** gradientUnits attribute */
@@ -192,15 +192,15 @@ private:
     void rebuildArray();
 
 protected:
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-    virtual void release();
-    virtual void modified(unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+    void release() override;
+    void modified(unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-    virtual void child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-    virtual void remove_child(Inkscape::XML::Node *child);
+    void child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) override;
+    void remove_child(Inkscape::XML::Node *child) override;
 
-    virtual void set(unsigned key, char const *value);
+    void set(unsigned key, char const *value) override;
 };
 
 void

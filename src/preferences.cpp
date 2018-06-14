@@ -75,8 +75,8 @@ public:
         _observer(o),
         _filter(filter)
     {}
-    virtual ~PrefNodeObserver() {}
-    virtual void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared);
+    ~PrefNodeObserver() override {}
+    void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared) override;
 private:
     Observer &_observer;
     Glib::ustring const _filter;

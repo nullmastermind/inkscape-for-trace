@@ -20,7 +20,7 @@
 class SPFont : public SPObject {
 public:
 	SPFont();
-	virtual ~SPFont();
+	~SPFont() override;
 
     double horiz_origin_x;
     double horiz_origin_y;
@@ -30,17 +30,17 @@ public:
     double vert_adv_y;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node* child);
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node* child) override;
 
-	virtual void set(unsigned int key, char const* value);
+	void set(unsigned int key, char const* value) override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif //#ifndef SP_FONT_H_SEEN

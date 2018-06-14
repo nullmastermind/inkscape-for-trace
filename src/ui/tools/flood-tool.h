@@ -30,7 +30,7 @@ namespace Tools {
 class FloodTool : public ToolBase {
 public:
 	FloodTool();
-	virtual ~FloodTool();
+	~FloodTool() override;
 
 	SPItem *item;
 
@@ -38,11 +38,11 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 	static void set_channels(gint channels);
 	static const std::vector<Glib::ustring> channel_list;

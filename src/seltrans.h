@@ -105,7 +105,7 @@ private:
     public:
         BoundingBoxPrefsObserver(SelTrans &sel_trans);
 
-        void notify(Preferences::Entry const &val);
+        void notify(Preferences::Entry const &val) override;
 
     private:
         SelTrans &_sel_trans;

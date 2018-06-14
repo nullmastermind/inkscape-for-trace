@@ -66,7 +66,7 @@ namespace Dialog {
 class ObjectProperties : public Widget::Panel {
 public:
     ObjectProperties();
-    ~ObjectProperties();
+    ~ObjectProperties() override;
     
     static ObjectProperties &getInstance() { return *new ObjectProperties(); }
     

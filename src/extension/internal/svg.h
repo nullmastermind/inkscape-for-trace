@@ -24,11 +24,11 @@ namespace Internal {
 class Svg : public Inkscape::Extension::Implementation::Implementation {
 
 public:
-    virtual void        save( Inkscape::Extension::Output *mod,
+    void        save( Inkscape::Extension::Output *mod,
                                SPDocument *doc,
-                               gchar const *filename );
-    virtual SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri );
+                               gchar const *filename ) override;
+    SPDocument *open( Inkscape::Extension::Input *mod,
+                                const gchar *uri ) override;
     static void         init( void );
 
 };

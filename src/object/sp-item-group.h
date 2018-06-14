@@ -31,7 +31,7 @@ class DrawingItem;
 class SPGroup : public SPLPEItem {
 public:
 	SPGroup();
-	virtual ~SPGroup();
+	~SPGroup() override;
 
     enum LayerMode { GROUP, LAYER, MASK_HELPER };
 
@@ -69,29 +69,29 @@ private:
     void _updateLayerMode(unsigned int display_key=0);
 
 public:
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-   	virtual void release();
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+   	void release() override;
 
-    virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-    virtual void remove_child(Inkscape::XML::Node *child);
-    virtual void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void remove_child(Inkscape::XML::Node *child) override;
+    void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) override;
 
-    virtual void update(SPCtx *ctx, unsigned int flags);
-    virtual void modified(unsigned int flags);
-    virtual void set(unsigned int key, char const* value);
+    void update(SPCtx *ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
+    void set(unsigned int key, char const* value) override;
 
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-    virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const;
-    virtual void print(SPPrintContext *ctx);
-    virtual const char* displayName() const;
-    virtual char *description() const;
-    virtual Inkscape::DrawingItem *show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-    virtual void hide (unsigned int key);
+    Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const override;
+    void print(SPPrintContext *ctx) override;
+    const char* displayName() const override;
+    char *description() const override;
+    Inkscape::DrawingItem *show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+    void hide (unsigned int key) override;
 
-    virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
+    void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 
-    virtual void update_patheffect(bool write);
+    void update_patheffect(bool write) override;
 };
 
 

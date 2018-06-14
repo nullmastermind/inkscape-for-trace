@@ -24,18 +24,18 @@ class FilterDisplacementMap : public FilterPrimitive {
 public:
     FilterDisplacementMap();
     static FilterPrimitive *create();
-    virtual ~FilterDisplacementMap();
+    ~FilterDisplacementMap() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
-    virtual void set_input(int slot);
-    virtual void set_input(int input, int slot);
+    void set_input(int slot) override;
+    void set_input(int input, int slot) override;
     virtual void set_scale(double s);
     virtual void set_channel_selector(int s, FilterDisplacementMapChannelSelector channel);
 
-    virtual Glib::ustring name() { return Glib::ustring("Displacement Map"); }
+    Glib::ustring name() override { return Glib::ustring("Displacement Map"); }
 
 private:
     double scale;

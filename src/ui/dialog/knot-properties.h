@@ -30,7 +30,7 @@ namespace Dialogs {
 class KnotPropertiesDialog : public Gtk::Dialog {
  public:
 	KnotPropertiesDialog();
-    virtual ~KnotPropertiesDialog();
+    ~KnotPropertiesDialog() override;
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 

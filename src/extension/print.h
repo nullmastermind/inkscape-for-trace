@@ -34,8 +34,8 @@ public: /* TODO: These are public for the short term, but this should be fixed *
 public:
                   Print       (Inkscape::XML::Node * in_repr,
                                Implementation::Implementation * in_imp);
-    virtual      ~Print       (void);
-    virtual bool  check       (void);
+         ~Print       (void) override;
+    bool  check       (void) override;
 
     /* FALSE means user hit cancel */
     unsigned int  setup       (void);

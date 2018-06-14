@@ -25,15 +25,15 @@ class DrawingGlyphs
 {
 public:
     DrawingGlyphs(Drawing &drawing);
-    ~DrawingGlyphs();
+    ~DrawingGlyphs() override;
 
     void setGlyph(font_instance *font, int glyph, Geom::Affine const &trans);
-    virtual void setStyle(SPStyle *style, SPStyle *context_style = NULL); // Not to be used
+    void setStyle(SPStyle *style, SPStyle *context_style = NULL) override; // Not to be used
 
 protected:
     unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
-                                 unsigned flags, unsigned reset);
-    virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
+                                 unsigned flags, unsigned reset) override;
+    DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags) override;
 
     font_instance *_font;
     int            _glyph;
@@ -52,22 +52,22 @@ class DrawingText
 {
 public:
     DrawingText(Drawing &drawing);
-    ~DrawingText();
+    ~DrawingText() override;
 
     void clear();
     bool addComponent(font_instance *font, int glyph, Geom::Affine const &trans, 
         float width, float ascent, float descent, float phase_length);
-    virtual void setStyle(SPStyle *style, SPStyle *context_style = NULL);
-    virtual void setChildrenStyle(SPStyle *context_style);
+    void setStyle(SPStyle *style, SPStyle *context_style = NULL) override;
+    void setChildrenStyle(SPStyle *context_style) override;
 
 protected:
-    virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
-                                 unsigned flags, unsigned reset);
-    virtual unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
-                                 DrawingItem *stop_at);
-    virtual void _clipItem(DrawingContext &dc, Geom::IntRect const &area);
-    virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
-    virtual bool _canClip();
+    unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
+                                 unsigned flags, unsigned reset) override;
+    unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
+                                 DrawingItem *stop_at) override;
+    void _clipItem(DrawingContext &dc, Geom::IntRect const &area) override;
+    DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags) override;
+    bool _canClip() override;
 
     void decorateItem(DrawingContext &dc, double phase_length, bool under);
     void decorateStyle(DrawingContext &dc, double vextent, double xphase, Geom::Point const &p1, Geom::Point const &p2, double thickness);

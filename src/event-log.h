@@ -45,7 +45,7 @@ public:
     typedef Gtk::TreeModel::const_iterator const_iterator;
 
     EventLog(SPDocument* document);
-    virtual ~EventLog();
+    ~EventLog() override;
 
     /**
      * Event datatype
@@ -68,11 +68,11 @@ public:
     /**
      * Modifies the log's entries and the view's selection when triggered.
      */
-    void notifyUndoEvent(Event *log);
-    void notifyRedoEvent(Event *log);
-    void notifyUndoCommitEvent(Event *log);
-    void notifyClearUndoEvent();
-    void notifyClearRedoEvent();
+    void notifyUndoEvent(Event *log) override;
+    void notifyRedoEvent(Event *log) override;
+    void notifyUndoCommitEvent(Event *log) override;
+    void notifyClearUndoEvent() override;
+    void notifyClearRedoEvent() override;
 
     // Accessor functions
 

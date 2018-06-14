@@ -56,7 +56,7 @@ enum {
 class SprayTool : public ToolBase {
 public:
     SprayTool();
-    virtual ~SprayTool();
+    ~SprayTool() override;
 
     //ToolBase event_context;
     //Inkscape::UI::Dialog::Dialog *dialog_option;//Attribut de type SprayOptionClass, localisé dans scr/ui/dialog    
@@ -114,12 +114,12 @@ public:
 
     static const std::string prefsPath;
 
-    virtual void setup();
-    virtual void set(const Inkscape::Preferences::Entry& val);
+    void setup() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
     virtual void setCloneTilerPrefs();
-    virtual bool root_handler(GdkEvent* event);
+    bool root_handler(GdkEvent* event) override;
 
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
 
     void update_cursor(bool /*with_shift*/);
 

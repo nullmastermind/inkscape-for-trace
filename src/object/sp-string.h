@@ -16,16 +16,16 @@
 class SPString : public SPObject {
 public:
 	SPString();
-	virtual ~SPString();
+	~SPString() override;
 
     Glib::ustring  string;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void read_content();
+	void read_content() override;
 
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void update(SPCtx* ctx, unsigned int flags) override;
 };
 
 #endif

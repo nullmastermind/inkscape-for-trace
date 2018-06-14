@@ -16,9 +16,9 @@ namespace LivePathEffect {
 class LPEDashStroke : public Effect {
 public:
     LPEDashStroke(LivePathEffectObject *lpeobject);
-    virtual ~LPEDashStroke();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    ~LPEDashStroke() override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     double timeAtLength(double const A, Geom::Path const &segment);
     double timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2);
 private:

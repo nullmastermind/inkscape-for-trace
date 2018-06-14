@@ -56,7 +56,7 @@ public:
     /**
      * Destructor
      */
-    ~ImageIcon();
+    ~ImageIcon() override;
 
     /**
      *

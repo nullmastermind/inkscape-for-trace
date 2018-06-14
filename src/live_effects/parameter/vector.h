@@ -29,33 +29,33 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 Geom::Point default_vector = Geom::Point(1,0) );
-    virtual ~VectorParam();
+    ~VectorParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
     inline const gchar *handleTip() const { return param_tooltip.c_str(); }
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
     Geom::Point getVector() const { return vector; };
     Geom::Point getOrigin() const { return origin; };
     void setValues(Geom::Point const &new_origin, Geom::Point const &new_vector) { setVector(new_vector); setOrigin(new_origin); };
     void setVector(Geom::Point const &new_vector) { vector = new_vector; };
     void setOrigin(Geom::Point const &new_origin) { origin = new_origin; };
-    virtual void param_set_default();
+    void param_set_default() override;
 
     void set_and_write_new_values(Geom::Point const &new_origin, Geom::Point const &new_vector);
 
-    virtual void param_transform_multiply(Geom::Affine const &postmul, bool set);
+    void param_transform_multiply(Geom::Affine const &postmul, bool set) override;
 
     void set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
     void set_origin_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
     void set_oncanvas_color(guint32 color);
     void param_update_default(Geom::Point default_point);
-    virtual void param_update_default(const gchar * default_point);
-    virtual bool providesKnotHolderEntities() const { return true; }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    void param_update_default(const gchar * default_point) override;
+    bool providesKnotHolderEntities() const override { return true; }
+    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
 
 private:
     VectorParam(const VectorParam&) = delete;

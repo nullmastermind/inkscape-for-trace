@@ -45,7 +45,7 @@ public:
       connect_signals();
   };
 
-  virtual ~SpinButton() {};
+  ~SpinButton() override {};
 
   void setUnitMenu(UnitMenu* unit_menu) { _unit_menu = unit_menu; };
   
@@ -65,7 +65,7 @@ protected:
      * @retval false No conversion done, continue with default handler.
      * @retval true  Conversion successful, don't call default handler. 
      */
-    int on_input(double* newvalue);
+    int on_input(double* newvalue) override;
 
     /**
      * When focus is obtained, save the value to enable undo later.

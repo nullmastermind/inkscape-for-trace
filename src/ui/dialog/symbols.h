@@ -56,7 +56,7 @@ class SymbolsDialog : public UI::Widget::Panel {
 
 public:
     SymbolsDialog( gchar const* prefsPath = "/dialogs/symbols" );
-    virtual ~SymbolsDialog();
+    ~SymbolsDialog() override;
 
     static SymbolsDialog& getInstance();
 

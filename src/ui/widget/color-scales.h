@@ -33,7 +33,7 @@ public:
     static void setScaled(GtkAdjustment *a, gfloat v, bool constrained = false);
 
     ColorScales(SelectedColor &color, SPColorScalesMode mode);
-    virtual ~ColorScales();
+    ~ColorScales() override;
 
     virtual void _initUI(SPColorScalesMode mode);
 
@@ -42,7 +42,7 @@ public:
 
 protected:
     void _onColorChanged();
-    void on_show();
+    void on_show() override;
 
     static void _adjustmentAnyChanged(GtkAdjustment *adjustment, ColorScales *cs);
     void _sliderAnyGrabbed();
@@ -79,10 +79,10 @@ class ColorScalesFactory : public Inkscape::UI::ColorSelectorFactory
 {
 public:
     ColorScalesFactory(SPColorScalesMode submode);
-    ~ColorScalesFactory();
+    ~ColorScalesFactory() override;
 
-    Gtk::Widget *createWidget(Inkscape::UI::SelectedColor &color) const;
-    Glib::ustring modeName() const;
+    Gtk::Widget *createWidget(Inkscape::UI::SelectedColor &color) const override;
+    Glib::ustring modeName() const override;
 
 private:
     SPColorScalesMode _submode;

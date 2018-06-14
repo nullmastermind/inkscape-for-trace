@@ -23,13 +23,13 @@ namespace XML {
 class CanvasAxonomGrid : public CanvasGrid {
 public:
     CanvasAxonomGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument * in_doc);
-    virtual ~CanvasAxonomGrid();
+    ~CanvasAxonomGrid() override;
 
-    virtual void Update (Geom::Affine const &affine, unsigned int flags);
-    virtual void Render (SPCanvasBuf *buf);
+    void Update (Geom::Affine const &affine, unsigned int flags) override;
+    void Render (SPCanvasBuf *buf) override;
 
-    virtual void readRepr();
-    virtual void onReprAttrChanged (Inkscape::XML::Node * repr, char const *key, char const *oldval, char const *newval, bool is_interactive);
+    void readRepr() override;
+    void onReprAttrChanged (Inkscape::XML::Node * repr, char const *key, char const *oldval, char const *newval, bool is_interactive) override;
 
     double lengthy;       /**< The lengths of the primary y-axis */
     double angle_deg[3];  /**< Angle of each axis (note that angle[2] == 0) */
@@ -49,7 +49,7 @@ protected:
 
     Geom::Point sw;          /**< the scaling factors of the affine transform */
 
-    virtual Gtk::Widget * newSpecificWidget();
+    Gtk::Widget * newSpecificWidget() override;
 
 private:
     CanvasAxonomGrid(const CanvasAxonomGrid&) = delete;
@@ -74,16 +74,16 @@ class CanvasAxonomGridSnapper : public LineSnapper
 {
 public:
     CanvasAxonomGridSnapper(CanvasAxonomGrid *grid, SnapManager *sm, Geom::Coord const d);
-    bool ThisSnapperMightSnap() const;
+    bool ThisSnapperMightSnap() const override;
 
-    Geom::Coord getSnapperTolerance() const; //returns the tolerance of the snapper in screen pixels (i.e. independent of zoom)
-    bool getSnapperAlwaysSnap() const; //if true, then the snapper will always snap, regardless of its tolerance
+    Geom::Coord getSnapperTolerance() const override; //returns the tolerance of the snapper in screen pixels (i.e. independent of zoom)
+    bool getSnapperAlwaysSnap() const override; //if true, then the snapper will always snap, regardless of its tolerance
 
 private:
-    LineList _getSnapLines(Geom::Point const &p) const;
-    void _addSnappedLine(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, Geom::Point const &normal_to_line, const Geom::Point &point_on_line) const;
-    void _addSnappedPoint(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
-    void _addSnappedLinePerpendicularly(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const;
+    LineList _getSnapLines(Geom::Point const &p) const override;
+    void _addSnappedLine(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, Geom::Point const &normal_to_line, const Geom::Point &point_on_line) const override;
+    void _addSnappedPoint(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const override;
+    void _addSnappedLinePerpendicularly(IntermSnapResults &isr, Geom::Point const &snapped_point, Geom::Coord const &snapped_distance, SnapSourceType const &source, long source_num, bool constrained_snap) const override;
 
     CanvasAxonomGrid *grid;
 };

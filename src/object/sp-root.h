@@ -29,7 +29,7 @@ class SPDefs;
 class SPRoot : public SPGroup, public SPViewBox, public SPDimensions {
 public:
 	SPRoot();
-	virtual ~SPRoot();
+	~SPRoot() override;
 
     struct {
         Inkscape::Version svg;
@@ -46,19 +46,19 @@ public:
      */
     SPDefs *defs;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-	virtual void modified(unsigned int flags);
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-	virtual void remove_child(Inkscape::XML::Node* child);
+	void modified(unsigned int flags) override;
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+	void remove_child(Inkscape::XML::Node* child) override;
 
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void print(SPPrintContext *ctx);
-    virtual const char* displayName() const;
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+	void print(SPPrintContext *ctx) override;
+    const char* displayName() const override;
 private:
     void unset_x_and_y();
     void setRootDimensions();

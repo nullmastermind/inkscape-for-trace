@@ -26,18 +26,18 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                bool default_value = false);
-    virtual ~BoolParam();
+    ~BoolParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
     void param_setValue(bool newvalue);
-    virtual void param_set_default();
+    void param_set_default() override;
     void param_update_default(bool const default_value);
-    virtual void param_update_default(const gchar * default_value);
+    void param_update_default(const gchar * default_value) override;
     bool get_value() const { return value; };
     inline operator bool() const { return value; };
 

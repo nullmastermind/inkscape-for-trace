@@ -30,7 +30,7 @@ namespace Inkscape {
 class LivePathEffectObject : public SPObject {
 public:
 	LivePathEffectObject();
-	virtual ~LivePathEffectObject();
+	~LivePathEffectObject() override;
 
     Inkscape::LivePathEffect::EffectType effecttype;
 
@@ -50,12 +50,12 @@ public:
     Inkscape::LivePathEffect::Effect *lpe; // this can be NULL in a valid LivePathEffectObject
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void set(unsigned int key, char const* value);
+	void set(unsigned int key, char const* value) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif

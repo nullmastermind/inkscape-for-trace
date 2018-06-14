@@ -58,7 +58,7 @@ class Effect : public Extension {
             /** \brief  Name with elipses if that makes sense */
             gchar * _elip_name;
         protected:
-            virtual SPAction * make_action (Inkscape::ActionContext const & context);
+            SPAction * make_action (Inkscape::ActionContext const & context) override;
         public:
             /** \brief Use the Verb initializer with the same parameters. */
             EffectVerb(gchar const * id,
@@ -80,7 +80,7 @@ class Effect : public Extension {
             }
             
             /** \brief  Destructor */
-            ~EffectVerb() {
+            ~EffectVerb() override {
                 if (_elip_name != NULL) {
                     g_free(_elip_name);
                 }
@@ -106,8 +106,8 @@ class Effect : public Extension {
 public:
                  Effect  (Inkscape::XML::Node * in_repr,
                           Implementation::Implementation * in_imp);
-    virtual     ~Effect  (void);
-    virtual bool check                (void);
+        ~Effect  (void) override;
+    bool check                (void) override;
     bool         prefs   (Inkscape::UI::View::View * doc);
     void         effect  (Inkscape::UI::View::View * doc);
     /** \brief  Accessor function for a pointer to the verb */

@@ -15,7 +15,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const;
+    bool _acceptObject(SPObject *obj) const override;
 };
 
 

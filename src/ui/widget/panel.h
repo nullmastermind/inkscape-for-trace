@@ -60,7 +60,7 @@ public:
      * @param verb_num the dialog verb.
      */
     Panel(gchar const *prefs_path = 0, int verb_num = 0);
-    virtual ~Panel();
+    ~Panel() override;
 
     gchar const *getPrefsPath() const;
     

@@ -62,11 +62,11 @@ namespace Filter {
 */
 class Brilliance : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Brilliance ( ) : Filter() { };
-    virtual ~Brilliance ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Brilliance ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -142,11 +142,11 @@ Brilliance::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class ChannelPaint : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ChannelPaint ( ) : Filter() { };
-    virtual ~ChannelPaint ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ChannelPaint ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -243,11 +243,11 @@ ChannelPaint::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class ColorBlindness : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ColorBlindness ( ) : Filter() { };
-    virtual ~ColorBlindness ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ColorBlindness ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -318,11 +318,11 @@ ColorBlindness::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class ColorShift : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ColorShift ( ) : Filter() { };
-    virtual ~ColorShift ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ColorShift ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -381,11 +381,11 @@ ColorShift::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Colorize : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Colorize ( ) : Filter() { };
-    virtual ~Colorize ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Colorize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -488,11 +488,11 @@ Colorize::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class ComponentTransfer : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ComponentTransfer ( ) : Filter() { };
-    virtual ~ComponentTransfer ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ComponentTransfer ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -573,11 +573,11 @@ ComponentTransfer::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Duochrome : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Duochrome ( ) : Filter() { };
-    virtual ~Duochrome ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Duochrome ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -698,11 +698,11 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class ExtractChannel : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     ExtractChannel ( ) : Filter() { };
-    virtual ~ExtractChannel ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ExtractChannel ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -804,11 +804,11 @@ ExtractChannel::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class FadeToBW : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     FadeToBW ( ) : Filter() { };
-    virtual ~FadeToBW ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~FadeToBW ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -883,11 +883,11 @@ FadeToBW::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class Greyscale : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Greyscale ( ) : Filter() { };
-    virtual ~Greyscale ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Greyscale ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -969,11 +969,11 @@ Greyscale::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Invert : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Invert ( ) : Filter() { };
-    virtual ~Invert ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Invert ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1104,11 +1104,11 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class Lighting : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Lighting ( ) : Filter() { };
-    virtual ~Lighting ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Lighting ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1175,11 +1175,11 @@ Lighting::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class LightnessContrast : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     LightnessContrast ( ) : Filter() { };
-    virtual ~LightnessContrast ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~LightnessContrast ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1254,11 +1254,11 @@ LightnessContrast::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class NudgeRGB : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     NudgeRGB ( ) : Filter() { };
-    virtual ~NudgeRGB ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NudgeRGB ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1366,11 +1366,11 @@ NudgeRGB::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class NudgeCMY : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     NudgeCMY ( ) : Filter() { };
-    virtual ~NudgeCMY ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NudgeCMY ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1472,11 +1472,11 @@ NudgeCMY::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Quadritone : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Quadritone ( ) : Filter() { };
-    virtual ~Quadritone ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Quadritone ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1555,11 +1555,11 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
 */
 class SimpleBlend : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     SimpleBlend ( ) : Filter() { };
-    virtual ~SimpleBlend ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~SimpleBlend ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1641,11 +1641,11 @@ SimpleBlend::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Solarize : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Solarize ( ) : Filter() { };
-    virtual ~Solarize ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Solarize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -1728,11 +1728,11 @@ Solarize::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Tritone : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Tritone ( ) : Filter() { };
-    virtual ~Tritone ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Tritone ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

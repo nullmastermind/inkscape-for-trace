@@ -33,11 +33,11 @@ class FilterComponentTransfer : public FilterPrimitive {
 public:
     FilterComponentTransfer();
     static FilterPrimitive *create();
-    virtual ~FilterComponentTransfer();
+    ~FilterComponentTransfer() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     FilterComponentTransferType type[4];
     std::vector<double> tableValues[4];
@@ -47,7 +47,7 @@ public:
     double exponent[4];
     double offset[4];
 
-    virtual Glib::ustring name() { return Glib::ustring("Component Transfer"); }
+    Glib::ustring name() override { return Glib::ustring("Component Transfer"); }
 };
 
 } /* namespace Filters */

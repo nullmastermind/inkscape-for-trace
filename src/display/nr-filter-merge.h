@@ -22,17 +22,17 @@ class FilterMerge : public FilterPrimitive {
 public:
     FilterMerge();
     static FilterPrimitive *create();
-    virtual ~FilterMerge();
+    ~FilterMerge() override;
 
-    virtual void render_cairo(FilterSlot &);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
-    virtual bool uses_background();
+    void render_cairo(FilterSlot &) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
+    bool uses_background() override;
 
-    virtual void set_input(int input);
-    virtual void set_input(int input, int slot);
+    void set_input(int input) override;
+    void set_input(int input, int slot) override;
 
-    virtual Glib::ustring name() { return Glib::ustring("Merge"); }
+    Glib::ustring name() override { return Glib::ustring("Merge"); }
 
 private:
     std::vector<int> _input_image;

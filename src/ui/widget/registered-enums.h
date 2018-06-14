@@ -23,7 +23,7 @@ namespace Widget {
 template<typename E> class RegisteredEnum : public RegisteredWidget< LabelledComboBoxEnum<E> >
 {
 public:
-    virtual ~RegisteredEnum() {
+    ~RegisteredEnum() override {
         _changed_connection.disconnect();
     }
 

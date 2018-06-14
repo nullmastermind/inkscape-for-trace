@@ -51,10 +51,10 @@ struct PathDescrMoveTo : public PathDescr
   PathDescrMoveTo(Geom::Point const &pp)
       : PathDescr(descr_moveto), p(pp) {}
 
-  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const;
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;
 };
@@ -64,10 +64,10 @@ struct PathDescrLineTo : public PathDescr
   PathDescrLineTo(Geom::Point const &pp)
     : PathDescr(descr_lineto), p(pp) {}
 
-  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const;
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;
 };
@@ -78,9 +78,9 @@ struct PathDescrBezierTo : public PathDescr
   PathDescrBezierTo(Geom::Point const &pp, int n)
     : PathDescr(descr_bezierto), p(pp), nb(n) {}
 
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;        // the endpoint's coordinates
   int nb;             // number of control points, stored in the next path description commands
@@ -94,9 +94,9 @@ struct PathDescrIntermBezierTo : public PathDescr
   PathDescrIntermBezierTo(Geom::Point const &pp)
     : PathDescr(descr_interm_bezier), p(pp) {}
 
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;                  // control point coordinates
 };
@@ -107,10 +107,10 @@ struct PathDescrCubicTo : public PathDescr
   PathDescrCubicTo(Geom::Point const &pp, Geom::Point const &s, Geom::Point const& e)
     : PathDescr(descr_cubicto), p(pp), start(s), end(e) {}
 
-  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const;
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;
   Geom::Point start;
@@ -123,10 +123,10 @@ struct PathDescrArcTo : public PathDescr
   PathDescrArcTo(Geom::Point const &pp, double x, double y, double a, bool l, bool c)
     : PathDescr(descr_arcto), p(pp), rx(x), ry(y), angle(a), large(l), clockwise(c) {}
 
-  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const;
-  PathDescr *clone() const;
-  void transform(Geom::Affine const &t);
-  void dump(std::ostream &s) const;
+  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
+  PathDescr *clone() const override;
+  void transform(Geom::Affine const &t) override;
+  void dump(std::ostream &s) const override;
 
   Geom::Point p;
   double rx;
@@ -140,7 +140,7 @@ struct PathDescrForced : public PathDescr
 {
   PathDescrForced() : PathDescr(descr_forced), p(0, 0) {}
 
-  PathDescr *clone() const;
+  PathDescr *clone() const override;
 
   /* FIXME: not sure whether _forced should have a point associated with it;
   ** Path::ConvertForcedToMoveTo suggests that maybe it should.
@@ -152,8 +152,8 @@ struct PathDescrClose : public PathDescr
 {
   PathDescrClose() : PathDescr(descr_close) {}
 
-  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const;
-  PathDescr *clone() const;
+  void dumpSVG(Inkscape::SVGOStringStream &s, Geom::Point const &last) const override;
+  PathDescr *clone() const override;
 
   /* FIXME: not sure whether _forced should have a point associated with it;
   ** Path::ConvertForcedToMoveTo suggests that maybe it should.

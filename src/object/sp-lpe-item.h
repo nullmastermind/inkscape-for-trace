@@ -41,7 +41,7 @@ typedef std::list<Inkscape::LivePathEffect::LPEObjectReference *> PathEffectList
 class SPLPEItem : public SPItem {
 public:
     SPLPEItem();
-    virtual ~SPLPEItem();
+    ~SPLPEItem() override;
 
     int path_effects_enabled;
 
@@ -55,18 +55,18 @@ public:
                              std::vector<LivePathEffectObject const *> const &new_lpeobjs );
 
 
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
 
-    virtual void set(unsigned int key, char const* value);
+    void set(unsigned int key, char const* value) override;
 
-    virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual void modified(unsigned int flags);
+    void update(SPCtx* ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
 
-    virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-    virtual void remove_child(Inkscape::XML::Node* child);
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void remove_child(Inkscape::XML::Node* child) override;
 
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
     virtual void update_patheffect(bool write);
 

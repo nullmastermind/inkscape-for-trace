@@ -45,7 +45,7 @@ namespace Dialog {
 class StyleDialog : public Widget::Panel {
 
 public:
-    ~StyleDialog();
+    ~StyleDialog() override;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
 

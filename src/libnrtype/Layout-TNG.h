@@ -703,8 +703,8 @@ private:
     Most of the members are copies of the values passed to appendText(). */
     class InputStreamTextSource : public InputStreamItem {
     public:
-        virtual InputStreamItemType Type() {return TEXT_SOURCE;}
-        virtual ~InputStreamTextSource();
+        InputStreamItemType Type() override {return TEXT_SOURCE;}
+        ~InputStreamTextSource() override;
         Glib::ustring const *text;    /// owned by the caller
         Glib::ustring::const_iterator text_begin, text_end;
         int text_length;    /// in characters, from text_start to text_end only
@@ -734,7 +734,7 @@ private:
     appendControlCode(). */
     class InputStreamControlCode : public InputStreamItem {
     public:
-        virtual InputStreamItemType Type() {return CONTROL_CODE;}
+        InputStreamItemType Type() override {return CONTROL_CODE;}
         TextControlCode code;
         double ascent;
         double descent;

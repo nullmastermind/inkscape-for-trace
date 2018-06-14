@@ -25,7 +25,7 @@ namespace Widget {
 class ColorSlider : public Gtk::Widget {
 public:
     ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment);
-    ~ColorSlider();
+    ~ColorSlider() override;
 
     void setAdjustment(Glib::RefPtr<Gtk::Adjustment> adjustment);
 
@@ -41,17 +41,17 @@ public:
     sigc::signal<void> signal_value_changed;
 
 protected:
-    void on_size_allocate(Gtk::Allocation &allocation);
-    void on_realize();
-    void on_unrealize();
-    bool on_button_press_event(GdkEventButton *event);
-    bool on_button_release_event(GdkEventButton *event);
-    bool on_motion_notify_event(GdkEventMotion *event);
-    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr);
-    void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const;
-    void get_preferred_width_for_height_vfunc(int height, int &minimum_width, int &natural_width) const;
-    void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const;
-    void get_preferred_height_for_width_vfunc(int width, int &minimum_height, int &natural_height) const;
+    void on_size_allocate(Gtk::Allocation &allocation) override;
+    void on_realize() override;
+    void on_unrealize() override;
+    bool on_button_press_event(GdkEventButton *event) override;
+    bool on_button_release_event(GdkEventButton *event) override;
+    bool on_motion_notify_event(GdkEventMotion *event) override;
+    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
+    void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const override;
+    void get_preferred_width_for_height_vfunc(int height, int &minimum_width, int &natural_width) const override;
+    void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const override;
+    void get_preferred_height_for_width_vfunc(int width, int &minimum_height, int &natural_height) const override;
 
 private:
     void _onAdjustmentChanged();

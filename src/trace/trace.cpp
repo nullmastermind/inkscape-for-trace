@@ -164,14 +164,14 @@ public:
     /**
      *
      */
-    virtual ~TraceSioxObserver ()
+    ~TraceSioxObserver () override
         { }
 
     /**
      *  Informs the observer how much has been completed.
      *  Return false if the processing should be aborted.
      */
-    virtual bool progress(float /*percentCompleted*/)
+    bool progress(float /*percentCompleted*/) override
         {
         //Tracer *tracer = (Tracer *)context;
         //## Allow the GUI to update
@@ -185,7 +185,7 @@ public:
      *  Send an error string to the Observer.  Processing will
      *  be halted.
      */
-    virtual void error(const std::string &/*msg*/)
+    void error(const std::string &/*msg*/) override
         {
         //Tracer *tracer = (Tracer *)context;
         }

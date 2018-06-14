@@ -21,12 +21,12 @@
 class SPPolygon : public SPShape {
 public:
 	SPPolygon();
-	virtual ~SPPolygon();
+	~SPPolygon() override;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void set(unsigned int key, char const* value);
-	virtual char* description() const;
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void set(unsigned int key, char const* value) override;
+	char* description() const override;
 };
 
 // made 'public' so that SPCurve can set it as friend:

@@ -35,7 +35,7 @@ class FilterEditorDialog : public UI::Widget::Panel {
 public:
 
     FilterEditorDialog();
-    ~FilterEditorDialog();
+    ~FilterEditorDialog() override;
 
     static FilterEditorDialog &getInstance()
     { return *new FilterEditorDialog(); }

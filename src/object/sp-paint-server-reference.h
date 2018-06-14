@@ -28,7 +28,7 @@ public:
     SPPaintServer *getObject() const;
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const;
+    bool _acceptObject(SPObject *obj) const override;
 };
 
 #endif // SEEN_SP_PAINT_SERVER_REFERENCE_H

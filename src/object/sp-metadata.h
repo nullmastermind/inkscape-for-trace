@@ -22,15 +22,15 @@
 class SPMetadata : public SPObject {
 public:
 	SPMetadata();
-	virtual ~SPMetadata();
+	~SPMetadata() override;
 
 protected:
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
 
-	virtual void set(unsigned int key, const char* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	void set(unsigned int key, const char* value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 SPMetadata * sp_document_metadata (SPDocument *document);

@@ -58,7 +58,7 @@ namespace Tools {
 class ConnectorTool : public ToolBase {
 public:
     ConnectorTool();
-    virtual ~ConnectorTool();
+    ~ConnectorTool() override;
 
     Inkscape::Selection *selection;
     Geom::Point p[5];
@@ -109,13 +109,13 @@ public:
 
     static std::string const prefsPath;
 
-    virtual void setup();
-    virtual void finish();
-    virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent* event);
-    virtual bool item_handler(SPItem* item, GdkEvent* event);
+    void setup() override;
+    void finish() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
+    bool item_handler(SPItem* item, GdkEvent* event) override;
 
-    virtual std::string const& getPrefsPath();
+    std::string const& getPrefsPath() override;
 
     void cc_clear_active_shape();
     void cc_set_active_conn(SPItem *item);

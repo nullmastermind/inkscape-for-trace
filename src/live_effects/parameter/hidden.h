@@ -31,17 +31,17 @@ public:
                Effect* effect,
                const Glib::ustring default_value = "",
                bool widget_is_visible = false);
-    virtual ~HiddenParam() {}
+    ~HiddenParam() override {}
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
     void param_setValue(Glib::ustring newvalue, bool write = false);
-    virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value);
+    void param_set_default() override;
+    void param_update_default(const gchar * default_value) override;
 
     const Glib::ustring get_value() const { return value; };
 

@@ -44,7 +44,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~TraceDialog() {};
+    ~TraceDialog() override {};
 
 
 };

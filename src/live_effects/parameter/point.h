@@ -32,28 +32,28 @@ public:
                 const gchar *handle_tip = NULL,// tip for automatically associated on-canvas handle
                 Geom::Point default_value = Geom::Point(0,0), 
                 bool live_update = true );
-    virtual ~PointParam();
+    ~PointParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    bool param_readSVGValue(const gchar * strvalue);
-    gchar * param_getSVGValue() const;
-    gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
     inline const gchar *handleTip() const { return handle_tip ? handle_tip : param_tooltip.c_str(); }
     void param_setValue(Geom::Point newpoint, bool write = false);
-    void param_set_default();
+    void param_set_default() override;
     void param_hide_knot(bool hide);
     Geom::Point param_get_default() const;
     void param_set_liveupdate(bool live_update);
     void param_update_default(Geom::Point default_point);
 
-    virtual void param_update_default(const gchar * default_point);
-    virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    void param_update_default(const gchar * default_point) override;
+    void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) override;
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
-    virtual bool providesKnotHolderEntities() const { return true; }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    bool providesKnotHolderEntities() const override { return true; }
+    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
     friend class PointParamKnotHolderEntity;
 private:
     PointParam(const PointParam&) = delete;

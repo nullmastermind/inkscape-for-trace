@@ -43,9 +43,9 @@ enum BorderMarkType {
 class LPERuler : public Effect {
 public:
     LPERuler(LivePathEffectObject *lpeobject);
-    virtual ~LPERuler();
+    ~LPERuler() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     Geom::Piecewise<Geom::D2<Geom::SBasis> > ruler_mark(Geom::Point const &A, Geom::Point const &n, MarkType const &marktype);

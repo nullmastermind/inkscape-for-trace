@@ -39,7 +39,7 @@ enum GenericEllipseArcType {
 class SPGenericEllipse : public SPShape {
 public:
     SPGenericEllipse();
-    virtual ~SPGenericEllipse();
+    ~SPGenericEllipse() override;
 
     // Regardless of type, the ellipse/circle/arc is stored
     // internally with these variables. (Circle radius is rx).
@@ -56,21 +56,21 @@ public:
     GenericEllipseType type;
     GenericEllipseArcType arc_type;
 
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 
-    virtual void set(unsigned int key, char const *value);
-    virtual void update(SPCtx *ctx, unsigned int flags);
+    void set(unsigned int key, char const *value) override;
+    void update(SPCtx *ctx, unsigned int flags) override;
 
-    virtual Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-    virtual const char *displayName() const;
+    Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+    const char *displayName() const override;
 
-    virtual void set_shape();
-    virtual void update_patheffect(bool write);
-    virtual Geom::Affine set_transform(Geom::Affine const &xform);
+    void set_shape() override;
+    void update_patheffect(bool write) override;
+    Geom::Affine set_transform(Geom::Affine const &xform) override;
 
-    virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
+    void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
 
-    virtual void modified(unsigned int flags);
+    void modified(unsigned int flags) override;
 
     /**
      * @brief Makes sure that start and end lie between 0 and 2 * PI.

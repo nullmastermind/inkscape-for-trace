@@ -66,7 +66,7 @@ namespace Internal {
 class VsdImportDialog : public Gtk::Dialog {
 public:
      VsdImportDialog(const std::vector<RVNGString> &vec);
-     virtual ~VsdImportDialog();
+     ~VsdImportDialog() override;
 
      bool showDialog();
      unsigned getSelectedPage();

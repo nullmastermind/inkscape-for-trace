@@ -18,15 +18,15 @@ class Node;
 class SignalObserver : public NodeObserver {
 public:
     SignalObserver();
-    ~SignalObserver();
+    ~SignalObserver() override;
 
     // Add this observer to the SPObject and remove it from any previous object
     void set(SPObject* o);
-    void notifyChildAdded(Node&, Node&, Node*);
-    void notifyChildRemoved(Node&, Node&, Node*);
-    void notifyChildOrderChanged(Node&, Node&, Node*, Node*);
-    void notifyContentChanged(Node&, Util::ptr_shared, Util::ptr_shared);
-    void notifyAttributeChanged(Node&, GQuark, Util::ptr_shared, Util::ptr_shared);
+    void notifyChildAdded(Node&, Node&, Node*) override;
+    void notifyChildRemoved(Node&, Node&, Node*) override;
+    void notifyChildOrderChanged(Node&, Node&, Node*, Node*) override;
+    void notifyContentChanged(Node&, Util::ptr_shared, Util::ptr_shared) override;
+    void notifyAttributeChanged(Node&, GQuark, Util::ptr_shared, Util::ptr_shared) override;
     sigc::signal<void>& signal_changed();
 private:
     sigc::signal<void> _signal_changed;

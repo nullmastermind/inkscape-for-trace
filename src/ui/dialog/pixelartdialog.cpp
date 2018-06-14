@@ -67,7 +67,7 @@ class PixelArtDialogImpl : public PixelArtDialog
 public:
     PixelArtDialogImpl();
 
-    ~PixelArtDialogImpl();
+    ~PixelArtDialogImpl() override;
 
 private:
     struct Input
@@ -87,7 +87,7 @@ private:
         SVGLength y;
     };
 
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
     void setTargetDesktop(SPDesktop *desktop);
 
     //############ Events

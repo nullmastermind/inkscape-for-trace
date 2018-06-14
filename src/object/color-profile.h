@@ -31,7 +31,7 @@ class ColorProfileImpl;
 class ColorProfile : public SPObject {
 public:
     ColorProfile();
-    virtual ~ColorProfile();
+    ~ColorProfile() override;
 
     bool operator<(ColorProfile const &other) const;
 
@@ -82,12 +82,12 @@ public:
 protected:
     ColorProfileImpl *impl;
 
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
 
-    virtual void set(unsigned int key, char const* value);
+    void set(unsigned int key, char const* value) override;
 
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 } // namespace Inkscape

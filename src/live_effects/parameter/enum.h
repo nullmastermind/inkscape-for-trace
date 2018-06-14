@@ -37,9 +37,9 @@ public:
         sorted = sort;
     };
 
-    virtual ~EnumParam() { };
+    ~EnumParam() override { };
 
-    virtual Gtk::Widget * param_newWidget() {
+    Gtk::Widget * param_newWidget() override {
         Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage ( 
             new Inkscape::UI::Widget::RegisteredEnum<E>( param_label, param_tooltip,
                        param_key, *enumdataconv, *param_wr, param_effect->getRepr(), param_effect->getSPDoc(), sorted ) );
@@ -50,7 +50,7 @@ public:
         return dynamic_cast<Gtk::Widget *> (regenum);
     };
 
-    bool param_readSVGValue(const gchar * strvalue) {
+    bool param_readSVGValue(const gchar * strvalue) override {
         if (!strvalue) {
             param_set_default();
             return true;
@@ -60,11 +60,11 @@ public:
 
         return true;
     };
-    gchar * param_getSVGValue() const {
+    gchar * param_getSVGValue() const override {
         return g_strdup( enumdataconv->get_key(value).c_str() );
     };
     
-    gchar * param_getDefaultSVGValue() const {
+    gchar * param_getDefaultSVGValue() const override {
         return g_strdup( enumdataconv->get_key(defvalue).c_str() );
     };
     
@@ -76,7 +76,7 @@ public:
         return value;
     };
 
-    void param_set_default() {
+    void param_set_default() override {
         param_set_value(defvalue);
     }
     
@@ -84,7 +84,7 @@ public:
         defvalue = default_value;
     }
     
-    virtual void param_update_default(const gchar * default_value) {
+    void param_update_default(const gchar * default_value) override {
         param_update_default(enumdataconv->get_id_from_key(Glib::ustring(default_value)));
     }
     

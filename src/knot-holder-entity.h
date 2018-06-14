@@ -105,8 +105,8 @@ protected:
 class PatternKnotHolderEntityXY : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityXY(bool fill) : KnotHolderEntity(), _fill(fill) {}
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     // true if the entity tracks fill, false for stroke 
     bool _fill;
@@ -115,8 +115,8 @@ private:
 class PatternKnotHolderEntityAngle : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityAngle(bool fill) : KnotHolderEntity(), _fill(fill) {}
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _fill;
 };
@@ -124,8 +124,8 @@ private:
 class PatternKnotHolderEntityScale : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityScale(bool fill) : KnotHolderEntity(), _fill(fill) {}
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _fill;
 };
@@ -134,8 +134,8 @@ private:
 class FilterKnotHolderEntity : public KnotHolderEntity {
 public: 
     FilterKnotHolderEntity(bool topleft) : KnotHolderEntity(), _topleft(topleft) {}
-    virtual Geom::Point knot_get() const;
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _topleft; // true for topleft point, false for bottomright
 };

@@ -28,21 +28,21 @@
 class SPSymbol : public SPGroup, public SPViewBox {
 public:
 	SPSymbol();
-	virtual ~SPSymbol();
+	~SPSymbol() override;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
-	virtual void modified(unsigned int flags);
-	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
+	void modified(unsigned int flags) override;
+	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 
-	virtual Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
-	virtual void print(SPPrintContext *ctx);
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
-	virtual void hide (unsigned int key);
+	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+	void print(SPPrintContext *ctx) override;
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+	void hide (unsigned int key) override;
 };
 
 #endif

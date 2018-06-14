@@ -51,13 +51,13 @@ public:
     /**
      * Check whether we can actually output using this module
      */
-	virtual bool check (Inkscape::Extension::Extension * module);
+	bool check (Inkscape::Extension::Extension * module) override;
 
     /**
      * API call to perform the output to a file
      */
-    virtual void save(Inkscape::Extension::Output *mod,
-                      SPDocument *doc, gchar const *filename);
+    void save(Inkscape::Extension::Output *mod,
+                      SPDocument *doc, gchar const *filename) override;
 
     /**
      * Inkscape runtime startup call.

@@ -27,9 +27,9 @@ enum Filllpemethod {
 class LPEFillBetweenMany : public Effect {
 public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
-    virtual ~LPEFillBetweenMany();
-    virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual void doEffect (SPCurve * curve);
+    ~LPEFillBetweenMany() override;
+    void doOnApply (SPLPEItem const* lpeitem) override;
+    void doEffect (SPCurve * curve) override;
 
 private:
     OriginalPathArrayParam linked_paths;

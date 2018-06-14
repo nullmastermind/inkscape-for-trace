@@ -26,14 +26,14 @@ namespace LivePathEffect {
 class LPERoughHatches : public Effect {
 public:
     LPERoughHatches(LivePathEffectObject *lpeobject);
-    virtual ~LPERoughHatches();
+    ~LPERoughHatches() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> >
-    doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> >
+    doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
-    virtual void doBeforeEffect(SPLPEItem const* item);
+    void doBeforeEffect(SPLPEItem const* item) override;
 
   std::vector<double>
     generateLevels(Geom::Interval const &domain, double x_org);

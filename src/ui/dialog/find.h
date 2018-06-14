@@ -50,7 +50,7 @@ namespace Dialog {
 class Find : public UI::Widget::Panel {
 public:
     Find();
-    virtual ~Find();
+    ~Find() override;
 
     /**
      * Helper function which returns a new instance of the dialog.
@@ -187,7 +187,7 @@ protected:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void        setDesktop(SPDesktop *desktop);
+    void        setDesktop(SPDesktop *desktop) override;
     /**
      * Is invoked by the desktop tracker when the desktop changes.
      */

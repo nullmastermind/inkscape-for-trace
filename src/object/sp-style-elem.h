@@ -7,15 +7,15 @@
 class SPStyleElem : public SPObject {
 public:
 	SPStyleElem();
-	virtual ~SPStyleElem();
+	~SPStyleElem() override;
 
     Media media;
     bool is_css;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void set(unsigned int key, char const* value);
-	virtual void read_content();
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void set(unsigned int key, char const* value) override;
+	void read_content() override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 

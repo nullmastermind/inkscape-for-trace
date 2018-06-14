@@ -286,7 +286,7 @@ public :
     {}
 
 private :
-    virtual void on_button_click() {
+    void on_button_click() override {
         //Retrieve selected objects
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;
@@ -411,7 +411,7 @@ private :
     Geom::Dim2 _orientation;
     bool _distribute;
 
-    virtual void on_button_click() {
+    void on_button_click() override {
         if (!_dialog.getDesktop()) {
         	return;
         }
@@ -477,7 +477,7 @@ public:
     }
 
 private :
-    virtual void on_button_click()
+    void on_button_click() override
     {
         if (!_dialog.getDesktop()) return;
 
@@ -513,7 +513,7 @@ public:
     {}
 
 private :
-    virtual void on_button_click()
+    void on_button_click() override
     {
         if (!_dialog.getDesktop()) return;
 
@@ -575,7 +575,7 @@ private :
         return sp_item_repr_compare_position(a,b)<0;
     }
 
-    virtual void on_button_click()
+    void on_button_click() override
     {
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;
@@ -641,7 +641,7 @@ public :
     {}
 
 private :
-    virtual void on_button_click()
+    void on_button_click() override
     {
         if (!_dialog.getDesktop()) return;
 
@@ -673,7 +673,7 @@ public :
     {}
 
 private :
-    virtual void on_button_click()
+    void on_button_click() override
     {
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;
@@ -767,7 +767,7 @@ public :
 private :
     Geom::Dim2 _orientation;
     bool _distribute;
-    virtual void on_button_click()
+    void on_button_click() override
     {
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;

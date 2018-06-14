@@ -106,7 +106,7 @@ namespace Dialog {
 
 class InkscapePreferences : public UI::Widget::Panel {
 public:
-    virtual ~InkscapePreferences();
+    ~InkscapePreferences() override;
 
     static InkscapePreferences &getInstance() { return *new InkscapePreferences(); }
 
@@ -468,7 +468,7 @@ protected:
             add(shortcutid);
             add(user_set);
         }
-        virtual ~ModelColumns() {
+        ~ModelColumns() override {
         }
 
         Gtk::TreeModelColumn<Glib::ustring> name;
@@ -491,19 +491,19 @@ protected:
     int _natural_width;
     int _natural_height;
     bool GetSizeRequest(const Gtk::TreeModel::iterator& iter);
-    void get_preferred_width_vfunc (int& minimum_width, int& natural_width) const {
+    void get_preferred_width_vfunc (int& minimum_width, int& natural_width) const override {
         minimum_width = _minimum_width;
         natural_width = _natural_width;
     }
-    void get_preferred_width_for_height_vfunc (int height, int& minimum_width, int& natural_width) const {
+    void get_preferred_width_for_height_vfunc (int height, int& minimum_width, int& natural_width) const override {
         minimum_width = _minimum_width;
         natural_width = _natural_width;
     }
-    void get_preferred_height_vfunc (int& minimum_height, int& natural_height) const {
+    void get_preferred_height_vfunc (int& minimum_height, int& natural_height) const override {
         minimum_height = _minimum_height;
         natural_height = _natural_height;
     }
-    void get_preferred_height_for_width_vfunc (int width, int& minimum_height, int& natural_height) const {
+    void get_preferred_height_for_width_vfunc (int width, int& minimum_height, int& natural_height) const override {
         minimum_height = _minimum_height;
         natural_height = _natural_height;
     }

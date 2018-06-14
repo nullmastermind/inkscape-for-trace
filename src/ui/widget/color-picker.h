@@ -41,7 +41,7 @@ public:
                  const guint32 rgba,
                  bool undo);
 
-    virtual ~ColorPicker();
+    ~ColorPicker() override;
 
     void setRgba32 (guint32 rgba);
 
@@ -53,7 +53,7 @@ public:
 protected:
 
     void _onSelectedColorChanged();
-    virtual void on_clicked();
+    void on_clicked() override;
     virtual void on_changed (guint32);
 
     ColorPreview        _preview;
@@ -82,7 +82,7 @@ public:
                          const guint32 rgba,
                          bool undo) : Labelled(label, tip, new ColorPicker(title, tip, rgba, undo)) {}
 
-    ~LabelledColorPicker()
+    ~LabelledColorPicker() override
         { static_cast<ColorPicker*>(_widget)->~ColorPicker(); }
 
     void setRgba32 (guint32 rgba)

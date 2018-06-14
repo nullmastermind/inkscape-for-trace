@@ -63,7 +63,7 @@ class Metafile
 {
 public:
     Metafile() {}
-    ~Metafile();
+    ~Metafile() override;
 
 protected:
     static uint32_t    sethexcolor(U_COLORREF color);

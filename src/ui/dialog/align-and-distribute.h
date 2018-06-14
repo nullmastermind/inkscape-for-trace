@@ -43,7 +43,7 @@ class Action;
 class AlignAndDistribute : public Widget::Panel {
 public:
     AlignAndDistribute();
-    virtual ~AlignAndDistribute();
+    ~AlignAndDistribute() override;
 
     static AlignAndDistribute &getInstance() { return *new AlignAndDistribute(); }
 
@@ -184,7 +184,7 @@ public :
 private :
 
 
-    virtual void on_button_click() {
+    void on_button_click() override {
         //Retrieve selected objects
         SPDesktop *desktop = _dialog.getDesktop();
         if (!desktop) return;

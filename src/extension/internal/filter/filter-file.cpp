@@ -78,9 +78,9 @@ void Filter::filters_all_files(void)
 class mywriter : public Inkscape::IO::BasicWriter {
 	Glib::ustring _str;
 public:
-	void close(void);
-	void flush(void);
-	void put (gunichar ch);
+	void close(void) override;
+	void flush(void) override;
+	void put (gunichar ch) override;
 	gchar const * c_str (void) { return _str.c_str(); }
 };
 

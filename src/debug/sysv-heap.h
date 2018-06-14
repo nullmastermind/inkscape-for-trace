@@ -21,13 +21,13 @@ class SysVHeap : public Heap {
 public:
     SysVHeap() {}
     
-    int features() const;
+    int features() const override;
 
-    Util::ptr_shared name() const {
+    Util::ptr_shared name() const override {
         return Util::share_static_string("standard malloc()");
     }
-    Stats stats() const;
-    void force_collect() {}
+    Stats stats() const override;
+    void force_collect() override {}
 };
 
 }

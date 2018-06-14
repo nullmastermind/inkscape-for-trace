@@ -23,17 +23,17 @@ class FilterOffset : public FilterPrimitive {
 public:
     FilterOffset();
     static FilterPrimitive *create();
-    virtual ~FilterOffset();
+    ~FilterOffset() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     void set_dx(double amount);
     void set_dy(double amount);
 
-    virtual Glib::ustring name() { return Glib::ustring("Offset"); }
+    Glib::ustring name() override { return Glib::ustring("Offset"); }
 
 private:
     double dx, dy;

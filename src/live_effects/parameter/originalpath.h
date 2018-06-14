@@ -22,21 +22,21 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
-    virtual ~OriginalPathParam();
+    ~OriginalPathParam() override;
 
     bool linksToPath() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
     /** Disable the canvas indicators of parent class by overriding this method */
-    virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
+    void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) override {};
     /** Disable the canvas indicators of parent class by overriding this method */
-    virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
+    void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) override {};
     void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; };
 
 protected:
-    virtual void linked_modified_callback(SPObject *linked_obj, guint flags);
-    virtual void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item);
+    void linked_modified_callback(SPObject *linked_obj, guint flags) override;
+    void linked_transformed_callback(Geom::Affine const *rel_transf, SPItem *moved_item) override;
 
     void on_select_original_button_click();
 

@@ -42,8 +42,8 @@ public:
               Glib::RefPtr<Gtk::Adjustment> adjustment, int digits,
               const SPAttributeEnum a = SP_ATTR_INVALID, const Glib::ustring tip_text = "");
 
-    virtual Glib::ustring get_as_attribute() const;
-    virtual void set_from_attribute(SPObject*);
+    Glib::ustring get_as_attribute() const override;
+    void set_from_attribute(SPObject*) override;
 
     // Shortcuts to _adjustment
     Glib::SignalProxy0<void> signal_value_changed();
@@ -75,8 +75,8 @@ public:
                   const SPAttributeEnum a,
                   const Glib::ustring tip_text1, const Glib::ustring tip_text2);
 
-    virtual Glib::ustring get_as_attribute() const;
-    virtual void set_from_attribute(SPObject*);
+    Glib::ustring get_as_attribute() const override;
+    void set_from_attribute(SPObject*) override;
 
     sigc::signal<void>& signal_value_changed();
 

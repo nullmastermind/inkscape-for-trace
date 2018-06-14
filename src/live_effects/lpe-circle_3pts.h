@@ -25,9 +25,9 @@ namespace LivePathEffect {
 class LPECircle3Pts : public Effect {
 public:
     LPECircle3Pts(LivePathEffectObject *lpeobject);
-    virtual ~LPECircle3Pts();
+    ~LPECircle3Pts() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     LPECircle3Pts(const LPECircle3Pts&) = delete;

@@ -56,17 +56,17 @@ public:
 class LPEKnot : public Effect, GroupBBoxEffect {
 public:
   LPEKnot(LivePathEffectObject *lpeobject);
-  virtual ~LPEKnot();
+  ~LPEKnot() override;
   
-  virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-  virtual Geom::PathVector doEffect_path (Geom::PathVector const & input_path);
+  void doBeforeEffect (SPLPEItem const* lpeitem) override;
+  Geom::PathVector doEffect_path (Geom::PathVector const & input_path) override;
   
   /* the knotholder entity classes must be declared friends */
   friend class KnotHolderEntityCrossingSwitcher;
-  void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+  void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
 
 protected:
-  virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+  void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
   Geom::PathVector supplied_path; //for knotholder business
   
 private:

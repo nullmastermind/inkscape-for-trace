@@ -44,13 +44,13 @@ public:
 
     UriInputStream(Inkscape::URI &source);
 
-    virtual ~UriInputStream();
+    ~UriInputStream() override;
 
-    virtual int available();
+    int available() override;
 
-    virtual void close();
+    void close() override;
 
-    virtual int get();
+    int get() override;
 
 private:
     Inkscape::URI &uri;
@@ -78,13 +78,13 @@ public:
 
     UriReader(Inkscape::URI &source);
 
-    virtual ~UriReader();
+    ~UriReader() override;
 
-    virtual int available();
+    int available() override;
 
-    virtual void close();
+    void close() override;
 
-    virtual gunichar get();
+    gunichar get() override;
 
 private:
 
@@ -112,13 +112,13 @@ public:
 
     UriOutputStream(Inkscape::URI &destination);
 
-    virtual ~UriOutputStream();
+    ~UriOutputStream() override;
 
-    virtual void close();
+    void close() override;
 
-    virtual void flush();
+    void flush() override;
 
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
 private:
 
@@ -149,13 +149,13 @@ public:
 
     UriWriter(Inkscape::URI &source);
 
-    virtual ~UriWriter();
+    ~UriWriter() override;
 
-    virtual void close();
+    void close() override;
 
-    virtual void flush();
+    void flush() override;
 
-    virtual void put(gunichar ch);
+    void put(gunichar ch) override;
 
 private:
 

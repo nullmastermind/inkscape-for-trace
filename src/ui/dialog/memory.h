@@ -20,12 +20,12 @@ namespace Dialog {
 class Memory : public UI::Widget::Panel {
 public:
     Memory();
-    ~Memory();
+    ~Memory() override;
 
     static Memory &getInstance() { return *new Memory(); }
 
 protected:
-    void _apply();
+    void _apply() override;
 
 private:
     Memory(Memory const &d) = delete; // no copy

@@ -152,7 +152,7 @@ private:
     class DisplayProfileWatcher : public Inkscape::Preferences::Observer {
     public:
         DisplayProfileWatcher(CMSPrefWatcher &pw) : Observer("/options/displayprofile"), _pw(pw) {}
-        virtual void notify(Inkscape::Preferences::Entry const &/*val*/) {
+        void notify(Inkscape::Preferences::Entry const &/*val*/) override {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             _pw._setCmsSensitive(!prefs->getString("/options/displayprofile/uri").empty());
             _pw._refreshAll();
@@ -166,7 +166,7 @@ private:
     class SoftProofWatcher : public Inkscape::Preferences::Observer {
     public:
         SoftProofWatcher(CMSPrefWatcher &pw) : Observer("/options/softproof"), _pw(pw) {}
-        virtual void notify(Inkscape::Preferences::Entry const &) {
+        void notify(Inkscape::Preferences::Entry const &) override {
             _pw._refreshAll();
         }
     private:

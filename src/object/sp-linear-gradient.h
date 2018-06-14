@@ -15,19 +15,19 @@
 class SPLinearGradient : public SPGradient {
 public:
 	SPLinearGradient();
-	virtual ~SPLinearGradient();
+	~SPLinearGradient() override;
 
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
 
-	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+	cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void set(unsigned key, char const *value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void set(unsigned key, char const *value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif /* !SP_LINEAR_GRADIENT_H */

@@ -25,11 +25,11 @@ namespace LivePathEffect {
 class LPEInterpolate : public Effect {
 public:
     LPEInterpolate(LivePathEffectObject *lpeobject);
-    virtual ~LPEInterpolate();
+    ~LPEInterpolate() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 private:
     PathParam   trajectory_path;
     ScalarParam number_of_steps;

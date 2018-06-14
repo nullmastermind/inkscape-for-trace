@@ -770,7 +770,7 @@ public:
         Observer("/options/maxrecentdocuments/value"),
         _rm(recent_menu)
     {}
-    virtual void notify(Inkscape::Preferences::Entry const &e) {
+    void notify(Inkscape::Preferences::Entry const &e) override {
         gtk_recent_chooser_set_limit(GTK_RECENT_CHOOSER(_rm), e.getInt());
         // hack: the recent menu doesn't repopulate after changing the limit, so we force it
         g_signal_emit_by_name((gpointer) gtk_recent_manager_get_default(), "changed");

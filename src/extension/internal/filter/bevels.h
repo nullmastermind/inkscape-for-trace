@@ -41,11 +41,11 @@ namespace Filter {
 
 class DiffuseLight : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     DiffuseLight ( ) : Filter() { };
-    virtual ~DiffuseLight ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~DiffuseLight ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -121,11 +121,11 @@ DiffuseLight::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class MatteJelly : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     MatteJelly ( ) : Filter() { };
-    virtual ~MatteJelly ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~MatteJelly ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -205,11 +205,11 @@ MatteJelly::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class SpecularLight : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     SpecularLight ( ) : Filter() { };
-    virtual ~SpecularLight ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~SpecularLight ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

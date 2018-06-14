@@ -37,7 +37,7 @@ class CssDialog : public UI::Widget::Panel
 {
 public:
     CssDialog();
-    ~CssDialog();
+    ~CssDialog() override;
 
     static CssDialog &getInstance() { return *new CssDialog(); }
 
@@ -78,7 +78,7 @@ public:
     SPDesktop* _desktop;
 
     // Helper functions
-    void setDesktop(SPDesktop* desktop);
+    void setDesktop(SPDesktop* desktop) override;
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
 
     // Signal handlers

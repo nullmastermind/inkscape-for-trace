@@ -137,9 +137,9 @@ public:
     Node *ref;
 
 private:
-    Event *_optimizeOne();
-    void _undoOne(NodeObserver &observer) const;
-    void _replayOne(NodeObserver &observer) const;
+    Event *_optimizeOne() override;
+    void _undoOne(NodeObserver &observer) const override;
+    void _replayOne(NodeObserver &observer) const override;
 };
 
 /**
@@ -156,9 +156,9 @@ public:
     Node *ref;
 
 private:
-    Event *_optimizeOne();
-    void _undoOne(NodeObserver &observer) const;
-    void _replayOne(NodeObserver &observer) const;
+    Event *_optimizeOne() override;
+    void _undoOne(NodeObserver &observer) const override;
+    void _replayOne(NodeObserver &observer) const override;
 };
 
 /**
@@ -181,9 +181,9 @@ public:
     Inkscape::Util::ptr_shared newval;
 
 private:
-    Event *_optimizeOne();
-    void _undoOne(NodeObserver &observer) const;
-    void _replayOne(NodeObserver &observer) const;
+    Event *_optimizeOne() override;
+    void _undoOne(NodeObserver &observer) const override;
+    void _replayOne(NodeObserver &observer) const override;
 };
 
 /**
@@ -203,9 +203,9 @@ public:
     Inkscape::Util::ptr_shared newval;
 
 private:
-    Event *_optimizeOne();
-    void _undoOne(NodeObserver &observer) const;
-    void _replayOne(NodeObserver &observer) const;
+    Event *_optimizeOne() override;
+    void _undoOne(NodeObserver &observer) const override;
+    void _replayOne(NodeObserver &observer) const override;
 };
 
 /**
@@ -225,9 +225,9 @@ public:
     Node *newref;
 
 private:
-    Event *_optimizeOne();
-    void _undoOne(NodeObserver &observer) const;
-    void _replayOne(NodeObserver &observer) const;
+    Event *_optimizeOne() override;
+    void _undoOne(NodeObserver &observer) const override;
+    void _replayOne(NodeObserver &observer) const override;
 };
 
 }

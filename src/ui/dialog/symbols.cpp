@@ -697,7 +697,7 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
       , _titles(titles)
     {}
 
-    void startPage(const RVNGPropertyList &propList)
+    void startPage(const RVNGPropertyList &propList) override
     {
       RVNGSVGDrawingGenerator::startPage(propList);
       if (propList["draw:name"]) {

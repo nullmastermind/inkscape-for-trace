@@ -31,11 +31,11 @@ class FilterConvolveMatrix : public FilterPrimitive {
 public:
     FilterConvolveMatrix();
     static FilterPrimitive *create();
-    virtual ~FilterConvolveMatrix();
+    ~FilterConvolveMatrix() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     void set_targetY(int coord);
     void set_targetX(int coord);
@@ -47,7 +47,7 @@ public:
     void set_edgeMode(FilterConvolveMatrixEdgeMode mode);    
     void set_preserveAlpha(bool pa);
 
-    virtual Glib::ustring name() { return Glib::ustring("Convolve Matrix"); }
+    Glib::ustring name() override { return Glib::ustring("Convolve Matrix"); }
 
 private:
     std::vector<double> kernelMatrix;

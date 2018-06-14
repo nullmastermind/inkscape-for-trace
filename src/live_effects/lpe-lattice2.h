@@ -35,15 +35,15 @@ class LPELattice2 : public Effect, GroupBBoxEffect {
 public:
 
     LPELattice2(LivePathEffectObject *lpeobject);
-    virtual ~LPELattice2();
+    ~LPELattice2() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
-    virtual void doBeforeEffect(SPLPEItem const* lpeitem);
+    void doBeforeEffect(SPLPEItem const* lpeitem) override;
 
-    virtual Gtk::Widget * newWidget();
+    Gtk::Widget * newWidget() override;
 
     void calculateCurve(Geom::Point a,Geom::Point b, SPCurve *c, bool horizontal, bool move);
 
@@ -58,7 +58,7 @@ public:
     void resetGrid();
 
 protected:
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 private:
 
     BoolParam horizontal_mirror;

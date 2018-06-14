@@ -29,13 +29,13 @@ class LPELattice : public Effect, GroupBBoxEffect {
 public:
 
     LPELattice(LivePathEffectObject *lpeobject);
-    virtual ~LPELattice();
+    ~LPELattice() override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
     
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
 protected:
     //virtual void addHelperPathsImpl(SPLPEItem *lpeitem, SPDesktop *desktop);

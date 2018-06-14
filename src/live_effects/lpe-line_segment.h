@@ -30,11 +30,11 @@ enum EndType {
 class LPELineSegment : public Effect {
 public:
     LPELineSegment(LivePathEffectObject *lpeobject);
-    virtual ~LPELineSegment();
+    ~LPELineSegment() override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 //private:
     EnumParam<EndType> end_type;

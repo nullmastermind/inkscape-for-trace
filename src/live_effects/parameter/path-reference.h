@@ -29,7 +29,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject * const obj) const;
+    bool _acceptObject(SPObject * const obj) const override;
 
 private:
     PathReference(const PathReference&) = delete;

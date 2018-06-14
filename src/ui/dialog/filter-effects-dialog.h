@@ -45,21 +45,21 @@ class FilterEffectsDialog : public UI::Widget::Panel {
 public:
 
     FilterEffectsDialog();
-    ~FilterEffectsDialog();
+    ~FilterEffectsDialog() override;
 
     static FilterEffectsDialog &getInstance()
     { return *new FilterEffectsDialog(); }
 
     void set_attrs_locked(const bool);
 protected:
-    virtual void show_all_vfunc();
+    void show_all_vfunc() override;
 private:
 
     class FilterModifier : public Gtk::VBox
     {
     public:
         FilterModifier(FilterEffectsDialog&);
-        ~FilterModifier();
+        ~FilterModifier() override;
 
         SPFilter* get_selected_filter();
         void select_filter(const SPFilter*);
@@ -163,23 +163,23 @@ private:
         static const int size = 24;
         
     protected:
-        virtual void get_preferred_width_vfunc(Gtk::Widget& widget,
+        void get_preferred_width_vfunc(Gtk::Widget& widget,
                                                int& minimum_width,
-                                               int& natural_width) const;
+                                               int& natural_width) const override;
         
-        virtual void get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
+        void get_preferred_width_for_height_vfunc(Gtk::Widget& widget,
                                                           int height,
                                                           int& minimum_width,
-                                                          int& natural_width) const;
+                                                          int& natural_width) const override;
 
-        virtual void get_preferred_height_vfunc(Gtk::Widget& widget,
+        void get_preferred_height_vfunc(Gtk::Widget& widget,
                                                 int& minimum_height,
-                                                int& natural_height) const;
+                                                int& natural_height) const override;
         
-        virtual void get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
+        void get_preferred_height_for_width_vfunc(Gtk::Widget& widget,
                                                           int width,
                                                           int& minimum_height,
-                                                          int& natural_height) const;
+                                                          int& natural_height) const override;
     private:
         // void* should be SPFilterPrimitive*, some weirdness with properties prevents this
         Glib::Property<void*> _primitive;
@@ -209,10 +209,10 @@ private:
         bool on_draw_signal(const Cairo::RefPtr<Cairo::Context> &cr);
 
 
-        bool on_button_press_event(GdkEventButton*);
-        bool on_motion_notify_event(GdkEventMotion*);
-        bool on_button_release_event(GdkEventButton*);
-        void on_drag_end(const Glib::RefPtr<Gdk::DragContext>&);
+        bool on_button_press_event(GdkEventButton*) override;
+        bool on_motion_notify_event(GdkEventMotion*) override;
+        bool on_button_release_event(GdkEventButton*) override;
+        void on_drag_end(const Glib::RefPtr<Gdk::DragContext>&) override;
     private:
         void init_text();
 

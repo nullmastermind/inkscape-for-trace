@@ -26,7 +26,7 @@ class Rotateable: public Gtk::EventBox
 public:
     Rotateable();
 
-    ~Rotateable();
+    ~Rotateable() override;
 
     bool on_click(GdkEventButton *event);
     bool on_motion(GdkEventMotion *event);

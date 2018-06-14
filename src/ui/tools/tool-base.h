@@ -205,7 +205,7 @@ public:
 	    {
 	    }
 
-	    virtual void notify(Inkscape::Preferences::Entry const &val) {
+	    void notify(Inkscape::Preferences::Entry const &val) override {
 	    	ec->set(val);
 	    }
 

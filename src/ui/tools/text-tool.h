@@ -34,7 +34,7 @@ namespace Tools {
 class TextTool : public ToolBase {
 public:
 	TextTool();
-	virtual ~TextTool();
+	~TextTool() override;
 
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
@@ -77,12 +77,12 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
     void _selectionChanged(Inkscape::Selection *selection);

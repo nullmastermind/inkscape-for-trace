@@ -84,7 +84,7 @@ public:
     /*
      * Destructor
      */
-    virtual ~FileDialogBase()
+    ~FileDialogBase() override
     {}
 
 protected:
@@ -403,7 +403,7 @@ public:
      * Destructor.
      * Perform any necessary cleanups.
      */
-    ~ImportDialog();
+    ~ImportDialog() override;
 
     /**
      * Show an OpenFile file selector.

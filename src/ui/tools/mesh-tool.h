@@ -33,7 +33,7 @@ namespace Tools {
 class MeshTool : public ToolBase {
 public:
     MeshTool();
-    virtual ~MeshTool();
+    ~MeshTool() override;
 
     Geom::Point origin;
 
@@ -44,11 +44,11 @@ public:
 
     static const std::string prefsPath;
 
-    virtual void setup();
-    virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent* event);
+    void setup() override;
+    void set(const Inkscape::Preferences::Entry& val) override;
+    bool root_handler(GdkEvent* event) override;
 
-    virtual const std::string& getPrefsPath();
+    const std::string& getPrefsPath() override;
 
 private:
     void selection_changed(Inkscape::Selection* sel);

@@ -51,11 +51,11 @@ class ObjectsPanel : public UI::Widget::Panel
 {
 public:
     ObjectsPanel();
-    virtual ~ObjectsPanel();
+    ~ObjectsPanel() override;
 
     static ObjectsPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop );
+    void setDesktop( SPDesktop* desktop ) override;
     void setDocument( SPDesktop* desktop, SPDocument* document);
 
 private:

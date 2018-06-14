@@ -33,14 +33,14 @@ class DebugDialogImpl : public DebugDialog, public Gtk::Dialog
 {
 public:
     DebugDialogImpl();
-    ~DebugDialogImpl();
+    ~DebugDialogImpl() override;
 
-    void show();
-    void hide();
-    void clear();
-    void message(char const *msg);
-    void captureLogMessages();
-    void releaseLogMessages();
+    void show() override;
+    void hide() override;
+    void clear() override;
+    void message(char const *msg) override;
+    void captureLogMessages() override;
+    void releaseLogMessages() override;
 
 private:
     Gtk::MenuBar menuBar;

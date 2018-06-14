@@ -204,7 +204,7 @@ public:
         : TransformHandle(th, anchor, pb)
     {}
 protected:
-    virtual Glib::ustring _getTip(unsigned state) const {
+    Glib::ustring _getTip(unsigned state) const override {
         if (state_held_control(state)) {
             if (state_held_shift(state)) {
                 return C_("Transform handle tip",
@@ -225,12 +225,12 @@ protected:
         return C_("Transform handle tip", "<b>Scale handle</b>: drag to scale the selection");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
+    Glib::ustring _getDragTip(GdkEventMotion */*event*/) const override {
         return format_tip(C_("Transform handle tip",
             "Scale by %.2f%% x %.2f%%"), _last_scale_x * 100, _last_scale_y * 100);
     }
 
-    virtual bool _hasDragTips() const { return true; }
+    bool _hasDragTips() const override { return true; }
 
     static double _last_scale_x, _last_scale_y;
 };
@@ -249,13 +249,13 @@ public:
     {}
 
 protected:
-    virtual void startTransform() {
+    void startTransform() override {
         _sc_center = _th.rotationCenter();
         _sc_opposite = _th.bounds().corner(_corner + 2);
         _last_scale_x = _last_scale_y = 1.0;
     }
 
-    virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) {
+    Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) override {
         Geom::Point scc = held_shift(*event) ? _sc_center : _sc_opposite;
         Geom::Point vold = _origin - scc, vnew = new_pos - scc;
         // avoid exploding the selection
@@ -300,7 +300,7 @@ protected:
         return t;
     }
 
-    virtual CommitEvent getCommitEvent() {
+    CommitEvent getCommitEvent() override {
         return _last_transform.isUniformScale()
             ? COMMIT_MOUSE_SCALE_UNIFORM
             : COMMIT_MOUSE_SCALE;
@@ -335,13 +335,13 @@ public:
         , _side(side)
     {}
 protected:
-    virtual void startTransform() {
+    void startTransform() override {
         _sc_center = _th.rotationCenter();
         Geom::Rect b = _th.bounds();
         _sc_opposite = Geom::middle_point(b.corner(_side + 2), b.corner(_side + 3));
         _last_scale_x = _last_scale_y = 1.0;
     }
-    virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) {
+    Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) override {
         Geom::Point scc = held_shift(*event) ? _sc_center : _sc_opposite;
         Geom::Point vs;
         Geom::Dim2 d1 = static_cast<Geom::Dim2>((_side + 1) % 2);
@@ -386,7 +386,7 @@ protected:
             * Geom::Translate(scc);
         return t;
     }
-    virtual CommitEvent getCommitEvent() {
+    CommitEvent getCommitEvent() override {
         return _last_transform.isUniformScale()
             ? COMMIT_MOUSE_SCALE_UNIFORM
             : COMMIT_MOUSE_SCALE;
@@ -415,13 +415,13 @@ public:
     {}
 protected:
 
-    virtual void startTransform() {
+    void startTransform() override {
         _rot_center = _th.rotationCenter();
         _rot_opposite = _th.bounds().corner(_corner + 2);
         _last_angle = 0;
     }
 
-    virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event)
+    Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) override
     {
         Geom::Point rotc = held_shift(*event) ? _rot_opposite : _rot_center;
         double angle = Geom::angle_between(_origin - rotc, new_pos - rotc);
@@ -446,9 +446,9 @@ protected:
         return t;
     }
 
-    virtual CommitEvent getCommitEvent() { return COMMIT_MOUSE_ROTATE; }
+    CommitEvent getCommitEvent() override { return COMMIT_MOUSE_ROTATE; }
 
-    virtual Glib::ustring _getTip(unsigned state) const {
+    Glib::ustring _getTip(unsigned state) const override {
         if (state_held_shift(state)) {
             if (state_held_control(state)) {
                 return format_tip(C_("Transform handle tip",
@@ -465,12 +465,12 @@ protected:
             "the selection around the rotation center");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
+    Glib::ustring _getDragTip(GdkEventMotion */*event*/) const override {
         return format_tip(C_("Transform handle tip", "Rotate by %.2f°"),
             _last_angle * 180.0 / M_PI);
     }
 
-    virtual bool _hasDragTips() const { return true; }
+    bool _hasDragTips() const override { return true; }
 
 private:
     static Glib::RefPtr<Gdk::Pixbuf> _corner_to_pixbuf(unsigned c) {
@@ -498,7 +498,7 @@ public:
 
 protected:
 
-    virtual void startTransform() {
+    void startTransform() override {
         _skew_center = _th.rotationCenter();
         Geom::Rect b = _th.bounds();
         _skew_opposite = Geom::middle_point(b.corner(_side + 2), b.corner(_side + 3));
@@ -506,7 +506,7 @@ protected:
         _last_horizontal = _side % 2;
     }
 
-    virtual Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event)
+    Geom::Affine computeTransform(Geom::Point const &new_pos, GdkEventMotion *event) override
     {
         Geom::Point scc = held_shift(*event) ? _skew_center : _skew_opposite;
         Geom::Dim2 d1 = static_cast<Geom::Dim2>((_side + 1) % 2);
@@ -581,13 +581,13 @@ protected:
         return t;
     }
 
-    virtual CommitEvent getCommitEvent() {
+    CommitEvent getCommitEvent() override {
         return (_side % 2)
             ? COMMIT_MOUSE_SKEW_Y
             : COMMIT_MOUSE_SKEW_X;
     }
 
-    virtual Glib::ustring _getTip(unsigned state) const {
+    Glib::ustring _getTip(unsigned state) const override {
         if (state_held_shift(state)) {
             if (state_held_control(state)) {
                 return format_tip(C_("Transform handle tip",
@@ -605,7 +605,7 @@ protected:
             "the opposite handle");
     }
 
-    virtual Glib::ustring _getDragTip(GdkEventMotion */*event*/) const {
+    Glib::ustring _getDragTip(GdkEventMotion */*event*/) const override {
         if (_last_horizontal) {
             return format_tip(C_("Transform handle tip", "Skew horizontally by %.2f°"),
                 _last_angle * 360.0);
@@ -615,7 +615,7 @@ protected:
         }
     }
 
-    virtual bool _hasDragTips() const { return true; }
+    bool _hasDragTips() const override { return true; }
 
 private:
 
@@ -650,7 +650,7 @@ public:
     }
 
 protected:
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event) {
+    void dragged(Geom::Point &new_pos, GdkEventMotion *event) override {
         SnapManager &sm = _th._desktop->namedview->snap_manager;
         sm.setup(_th._desktop);
         bool snap = !held_shift(*event) && sm.someSnapperMightSnap();
@@ -667,7 +667,7 @@ protected:
         }
         sm.unSetup();
     }
-    virtual Glib::ustring _getTip(unsigned /*state*/) const {
+    Glib::ustring _getTip(unsigned /*state*/) const override {
         return C_("Transform handle tip",
             "<b>Rotation center</b>: drag to change the origin of transforms");
     }

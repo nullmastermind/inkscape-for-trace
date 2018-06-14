@@ -53,7 +53,7 @@ class MessageStack : public GC::Managed<>,
 {
 public:
     MessageStack();
-    ~MessageStack();
+    ~MessageStack() override;
 
     /** @brief returns the type of message currently at the top of the stack */
     MessageType currentMessageType() {

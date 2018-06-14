@@ -35,7 +35,7 @@ public:
     sigc::signal<void, int> &on_alignmentClicked() { return _alignmentClicked; }
 
     AlignmentSelector();
-    virtual ~AlignmentSelector();
+    ~AlignmentSelector() override;
 };
 
 } // namespace Widget

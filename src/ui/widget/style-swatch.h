@@ -46,7 +46,7 @@ class StyleSwatch : public Gtk::HBox
 public:
     StyleSwatch (SPCSSAttr *attr, gchar const *main_tip);
 
-    ~StyleSwatch();
+    ~StyleSwatch() override;
 
     void setStyle(SPStyle *style);
     void setStyle(SPCSSAttr *attr);

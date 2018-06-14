@@ -34,16 +34,16 @@ public:
                char const * icon_active = NULL,
                char const * icon_inactive = NULL,
                GtkIconSize icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR);
-    virtual ~ToggleButtonParam();
+    ~ToggleButtonParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
     void param_setValue(bool newvalue);
-    virtual void param_set_default();
+    void param_set_default() override;
 
     bool get_value() const { return value; };
 
@@ -52,7 +52,7 @@ public:
     sigc::signal<void>& signal_toggled() { return _signal_toggled; }
     virtual void toggled();
     void param_update_default(bool default_value);
-    virtual void param_update_default(const gchar * default_value);
+    void param_update_default(const gchar * default_value) override;
 
 private:
     ToggleButtonParam(const ToggleButtonParam&) = delete;

@@ -78,7 +78,7 @@ enum NodeType {
 class Node : public Inkscape::GC::Anchored {
 public:
     Node() {}
-    virtual ~Node() {}
+    ~Node() override {}
 
     /**
      * @name Retrieve information about the node

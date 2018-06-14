@@ -24,11 +24,11 @@ namespace LivePathEffect {
 class LPEdoEffectStackTest : public Effect {
 public:
     LPEdoEffectStackTest(LivePathEffectObject *lpeobject);
-    virtual ~LPEdoEffectStackTest();
+    ~LPEdoEffectStackTest() override;
 
-    virtual void                                     doEffect (SPCurve * curve);
-    virtual Geom::PathVector                  doEffect_path (Geom::PathVector const & path_in);
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    void                                     doEffect (SPCurve * curve) override;
+    Geom::PathVector                  doEffect_path (Geom::PathVector const & path_in) override;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     ScalarParam step;

@@ -41,11 +41,11 @@ class SwatchesPanel : public Inkscape::UI::Widget::Panel
 {
 public:
     SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches");
-    virtual ~SwatchesPanel();
+    ~SwatchesPanel() override;
 
     static SwatchesPanel& getInstance();
 
-    virtual void setDesktop( SPDesktop* desktop );
+    void setDesktop( SPDesktop* desktop ) override;
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary

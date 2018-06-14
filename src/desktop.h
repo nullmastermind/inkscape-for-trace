@@ -248,7 +248,7 @@ public:
     SPDesktop();
 
     void init (SPNamedView* nv, SPCanvas* canvas, Inkscape::UI::View::EditWidgetInterface *widget);
-    virtual ~SPDesktop();
+    ~SPDesktop() override;
     void destroy();
 
     Inkscape::MessageContext *guidesMessageContext() const {
@@ -425,10 +425,10 @@ public:
     Geom::Point doc2dt(Geom::Point const &p) const;
     Geom::Point dt2doc(Geom::Point const &p) const;
 
-    virtual void setDocument (SPDocument* doc);
-    virtual bool shutdown();
-    virtual void mouseover() {}
-    virtual void mouseout() {}
+    void setDocument (SPDocument* doc) override;
+    bool shutdown() override;
+    void mouseover() override {}
+    void mouseout() override {}
 
 
     virtual bool onDeleteUI (GdkEventAny*);
@@ -550,7 +550,7 @@ private:
             prefs->addObserver(*this);
         }
       private:
-        void notify(Inkscape::Preferences::Entry const &) {
+        void notify(Inkscape::Preferences::Entry const &) override {
             _desktop->redrawDesktop();
         }
         SPDesktop *_desktop;
@@ -577,11 +577,11 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    virtual void onResized (double, double);
-    virtual void onRedrawRequested();
-    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message);
-    virtual void onDocumentURISet (gchar const* uri);
-    virtual void onDocumentResized (double, double);
+    void onResized (double, double) override;
+    void onRedrawRequested() override;
+    void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
+    void onDocumentURISet (gchar const* uri) override;
+    void onDocumentResized (double, double) override;
 
     static void _onActivate (SPDesktop* dt);
     static void _onDeactivate (SPDesktop* dt);

@@ -39,8 +39,8 @@ public:
     };
 
     TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group);
-    virtual ~TransformHandleSet();
-    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *);
+    ~TransformHandleSet() override;
+    bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *) override;
 
     bool visible() const { return _visible; }
     Mode mode() const { return _mode; }
@@ -117,9 +117,9 @@ protected:
     std::vector<Inkscape::SnapCandidatePoint>::iterator _all_snap_sources_iter;
 
 private:
-    virtual bool grabbed(GdkEventMotion *);
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
-    virtual void ungrabbed(GdkEventButton *);
+    bool grabbed(GdkEventMotion *) override;
+    void dragged(Geom::Point &new_pos, GdkEventMotion *event) override;
+    void ungrabbed(GdkEventButton *) override;
 
     static ColorSet thandle_cset;
 };

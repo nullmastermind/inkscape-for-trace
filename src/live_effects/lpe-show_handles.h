@@ -20,11 +20,11 @@ class LPEShowHandles : public Effect , GroupBBoxEffect {
 
 public:
     LPEShowHandles(LivePathEffectObject *lpeobject);
-    virtual ~LPEShowHandles() {}
+    ~LPEShowHandles() override {}
 
-    virtual void doOnApply(SPLPEItem const* lpeitem);
+    void doOnApply(SPLPEItem const* lpeitem) override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
     virtual void generateHelperPath(Geom::PathVector result);
 
@@ -36,7 +36,7 @@ public:
 
 protected:
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
 

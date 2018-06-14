@@ -44,11 +44,11 @@ class IconPreviewPanel : public UI::Widget::Panel
 public:
     IconPreviewPanel();
     //IconPreviewPanel(Glib::ustring const &label);
-    ~IconPreviewPanel();
+    ~IconPreviewPanel() override;
 
     static IconPreviewPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop );
+    void setDesktop( SPDesktop* desktop ) override;
     void refreshPreview();
     void modeToggled();
 

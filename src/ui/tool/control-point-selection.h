@@ -41,7 +41,7 @@ namespace UI {
 class ControlPointSelection : public Manipulator, public sigc::trackable {
 public:
     ControlPointSelection(SPDesktop *d, SPCanvasGroup *th_group);
-    ~ControlPointSelection();
+    ~ControlPointSelection() override;
     typedef INK_UNORDERED_SET<SelectableControlPoint *> set_type;
     typedef set_type Set; // convenience alias
 
@@ -91,7 +91,7 @@ public:
     void invertSelection();
     void spatialGrow(SelectableControlPoint *origin, int dir);
 
-    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *);
+    bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *) override;
 
     void transform(Geom::Affine const &m);
     void align(Geom::Dim2 d);

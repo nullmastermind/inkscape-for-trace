@@ -32,7 +32,7 @@ class DrawingShape;
 class SPHatchPath : public SPObject {
 public:
     SPHatchPath();
-    virtual ~SPHatchPath();
+    ~SPHatchPath() override;
 
     SVGLength offset;
 
@@ -49,10 +49,10 @@ public:
     SPCurve *calculateRenderCurve(unsigned key) const;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void set(unsigned int key, const gchar* value);
-    virtual void update(SPCtx* ctx, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void set(unsigned int key, const gchar* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
 
 private:
     class View {

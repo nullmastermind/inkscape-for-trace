@@ -46,11 +46,11 @@ namespace Filter {
 
 class Crosssmooth : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Crosssmooth ( ) : Filter() { };
-    virtual ~Crosssmooth ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Crosssmooth ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -154,11 +154,11 @@ Crosssmooth::get_filter_text (Inkscape::Extension::Extension * ext)
 
 class Outline : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-    virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+    gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
     Outline ( ) : Filter() { };
-    virtual ~Outline ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Outline ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(

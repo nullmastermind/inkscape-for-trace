@@ -102,7 +102,7 @@ public:
     typedef sigc::signal<void> CommitSignal;
 
     SPDocument();
-    virtual ~SPDocument();
+    ~SPDocument() override;
 
     sigc::connection connectDestroy(sigc::signal<void>::slot_type slot);
 

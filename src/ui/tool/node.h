@@ -79,15 +79,15 @@ struct NodeSharedData {
 class Handle : public ControlPoint {
 public:
 
-    virtual ~Handle();
+    ~Handle() override;
     inline Geom::Point relativePos() const;
     inline double length() const;
     bool isDegenerate() const { return _degenerate; } // True if the handle is retracted, i.e. has zero length.
 
-    virtual void setVisible(bool);
-    virtual void move(Geom::Point const &p);
+    void setVisible(bool) override;
+    void move(Geom::Point const &p) override;
 
-    virtual void setPosition(Geom::Point const &p);
+    void setPosition(Geom::Point const &p) override;
     inline void setRelativePos(Geom::Point const &p);
     void setLength(double len);
     void retract();
@@ -103,15 +103,15 @@ protected:
 
     Handle(NodeSharedData const &data, Geom::Point const &initial_pos, Node *parent);
     virtual void handle_2button_press();
-    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
-    virtual bool grabbed(GdkEventMotion *event);
-    virtual void ungrabbed(GdkEventButton *event);
-    virtual bool clicked(GdkEventButton *event);
+    bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override;
+    void dragged(Geom::Point &new_pos, GdkEventMotion *event) override;
+    bool grabbed(GdkEventMotion *event) override;
+    void ungrabbed(GdkEventButton *event) override;
+    bool clicked(GdkEventButton *event) override;
 
-    virtual Glib::ustring _getTip(unsigned state) const;
-    virtual Glib::ustring _getDragTip(GdkEventMotion *event) const;
-    virtual bool _hasDragTips() const { return true; }
+    Glib::ustring _getTip(unsigned state) const override;
+    Glib::ustring _getDragTip(GdkEventMotion *event) const override;
+    bool _hasDragTips() const override { return true; }
 
 private:
 
@@ -146,9 +146,9 @@ public:
      */
     Node(NodeSharedData const &data, Geom::Point const &pos);
 
-    virtual void move(Geom::Point const &p);
-    virtual void transform(Geom::Affine const &m);
-    virtual Geom::Rect bounds() const;
+    void move(Geom::Point const &p) override;
+    void transform(Geom::Affine const &m) override;
+    Geom::Rect bounds() const override;
 
     NodeType type() const { return _type; }
 
@@ -216,20 +216,20 @@ public:
 
     // temporarily public
     /** Customized event handler to catch scroll events needed for selection grow/shrink. */
-    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
+    bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override;
 
     Inkscape::SnapCandidatePoint snapCandidatePoint();
 
 protected:
 
-    virtual void dragged(Geom::Point &new_pos, GdkEventMotion *event);
-    virtual bool grabbed(GdkEventMotion *event);
-    virtual bool clicked(GdkEventButton *event);
+    void dragged(Geom::Point &new_pos, GdkEventMotion *event) override;
+    bool grabbed(GdkEventMotion *event) override;
+    bool clicked(GdkEventButton *event) override;
 
-    virtual void _setState(State state);
-    virtual Glib::ustring _getTip(unsigned state) const;
-    virtual Glib::ustring _getDragTip(GdkEventMotion *event) const;
-    virtual bool _hasDragTips() const { return true; }
+    void _setState(State state) override;
+    Glib::ustring _getTip(unsigned state) const override;
+    Glib::ustring _getDragTip(GdkEventMotion *event) const override;
+    bool _hasDragTips() const override { return true; }
 
 private:
 

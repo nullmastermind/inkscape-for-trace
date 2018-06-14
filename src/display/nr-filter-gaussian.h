@@ -32,12 +32,12 @@ class FilterGaussian : public FilterPrimitive {
 public:
     FilterGaussian();
     static FilterPrimitive *create();
-    virtual ~FilterGaussian();
+    ~FilterGaussian() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &m);
-    virtual bool can_handle_affine(Geom::Affine const &m);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &m) override;
+    bool can_handle_affine(Geom::Affine const &m) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     /**
      * Set the standard deviation value for gaussian blur. Deviation along
@@ -56,7 +56,7 @@ public:
      */
     void set_deviation(double x, double y);
 
-    virtual Glib::ustring name() { return Glib::ustring("Gaussian Blur"); }
+    Glib::ustring name() override { return Glib::ustring("Gaussian Blur"); }
 
 private:
     double _deviation_x;

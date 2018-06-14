@@ -35,15 +35,15 @@ public:
 class KnotHolderEntityLeftEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityLeftEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
 };
 
 class KnotHolderEntityRightEnd : public KnotHolderEntityEnd {
 public:
     KnotHolderEntityRightEnd(LPEPerpBisector *effect) : KnotHolderEntityEnd(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
 };
 
 Geom::Point

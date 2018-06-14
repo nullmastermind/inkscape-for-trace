@@ -99,9 +99,9 @@ public:
     InkErrorHandler(bool useGui) : Inkscape::ErrorReporter(),
                                    _useGui(useGui)
     {}
-    virtual ~InkErrorHandler() {}
+    ~InkErrorHandler() override {}
 
-    virtual void handleError( Glib::ustring const& primary, Glib::ustring const& secondary ) const
+    void handleError( Glib::ustring const& primary, Glib::ustring const& secondary ) const override
     {
         if (_useGui) {
             Gtk::MessageDialog err(primary, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);

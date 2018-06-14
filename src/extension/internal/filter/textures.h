@@ -49,11 +49,11 @@ namespace Filter {
 */
 class InkBlot : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-	virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+	gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
 	InkBlot ( ) : Filter() { };
-	virtual ~InkBlot ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+	~InkBlot ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
 public:
 	static void init (void) {

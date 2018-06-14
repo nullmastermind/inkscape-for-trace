@@ -27,20 +27,20 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
-    virtual ~PowerStrokePointArrayParam();
+    ~PowerStrokePointArrayParam() override;
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/);
+    void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/) override;
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     
     float median_width();
 
-    virtual bool providesKnotHolderEntities() const { return true; }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
-    virtual void param_update_default(const gchar * default_value){};
+    bool providesKnotHolderEntities() const override { return true; }
+    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
+    void param_update_default(const gchar * default_value) override{};
 
     void set_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in, Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_normal_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2() const { return last_pwd2; }
@@ -67,12 +67,12 @@ private:
 class PowerStrokePointArrayParamKnotHolderEntity : public KnotHolderEntity {
 public:
     PowerStrokePointArrayParamKnotHolderEntity(PowerStrokePointArrayParam *p, unsigned int index);
-    virtual ~PowerStrokePointArrayParamKnotHolderEntity() {}
+    ~PowerStrokePointArrayParamKnotHolderEntity() override {}
 
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    Geom::Point knot_get() const override;
     virtual void knot_set_offset(Geom::Point offset);
-    virtual void knot_click(guint state);
+    void knot_click(guint state) override;
 
     /** Checks whether the index falls within the size of the parameter's vector */
     bool valid_index(unsigned int index) const {

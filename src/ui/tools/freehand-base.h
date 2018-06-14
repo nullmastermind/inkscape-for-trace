@@ -45,7 +45,7 @@ namespace Tools {
 class FreehandBase : public ToolBase {
 public:
     FreehandBase(gchar const *const *cursor_shape);
-    virtual ~FreehandBase();
+    ~FreehandBase() override;
 
     Inkscape::Selection *selection;
     SPCanvasItem *grab;
@@ -101,13 +101,13 @@ public:
     bool is_tablet;
 
     gdouble pressure;
-    virtual void set(const Inkscape::Preferences::Entry& val);
+    void set(const Inkscape::Preferences::Entry& val) override;
 
 protected:
 
-    virtual void setup();
-    virtual void finish();
-    virtual bool root_handler(GdkEvent* event);
+    void setup() override;
+    void finish() override;
+    bool root_handler(GdkEvent* event) override;
 };
 
 /**

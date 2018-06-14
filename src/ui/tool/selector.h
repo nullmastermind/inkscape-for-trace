@@ -27,8 +27,8 @@ class SelectorPoint;
 class Selector : public Manipulator {
 public:
     Selector(SPDesktop *d);
-    virtual ~Selector();
-    virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *);
+    ~Selector() override;
+    bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *) override;
     virtual bool doubleClicked();
     
     sigc::signal<void, Geom::Rect const &, GdkEventButton*> signal_area;

@@ -229,7 +229,7 @@ protected:
 
 private:
     DocumentProperties();
-    virtual ~DocumentProperties();
+    ~DocumentProperties() override;
 
     // callback methods for buttons on grids page.
     void onNewGrid();

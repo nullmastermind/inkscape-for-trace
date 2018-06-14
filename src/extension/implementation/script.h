@@ -35,19 +35,19 @@ class Script : public Implementation {
 public:
 
     Script(void);
-    virtual ~Script();
-    virtual bool load(Inkscape::Extension::Extension *module);
-    virtual void unload(Inkscape::Extension::Extension *module);
-    virtual bool check(Inkscape::Extension::Extension *module);
+    ~Script() override;
+    bool load(Inkscape::Extension::Extension *module) override;
+    void unload(Inkscape::Extension::Extension *module) override;
+    bool check(Inkscape::Extension::Extension *module) override;
 
-    ImplementationDocumentCache * newDocCache(Inkscape::Extension::Extension * ext, Inkscape::UI::View::View * view);
+    ImplementationDocumentCache * newDocCache(Inkscape::Extension::Extension * ext, Inkscape::UI::View::View * view) override;
 
-    virtual Gtk::Widget *prefs_input(Inkscape::Extension::Input *module, gchar const *filename);
-    virtual SPDocument *open(Inkscape::Extension::Input *module, gchar const *filename);
-    virtual Gtk::Widget *prefs_output(Inkscape::Extension::Output *module);
-    virtual void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename);
-    virtual void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc, ImplementationDocumentCache * docCache);
-    virtual bool cancelProcessing (void);
+    Gtk::Widget *prefs_input(Inkscape::Extension::Input *module, gchar const *filename) override;
+    SPDocument *open(Inkscape::Extension::Input *module, gchar const *filename) override;
+    Gtk::Widget *prefs_output(Inkscape::Extension::Output *module) override;
+    void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
+    void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc, ImplementationDocumentCache * docCache) override;
+    bool cancelProcessing (void) override;
 
 private:
     bool _canceled;

@@ -18,7 +18,7 @@ class SwatchSelector : public Gtk::VBox
 {
 public:
     SwatchSelector();
-    virtual ~SwatchSelector();
+    ~SwatchSelector() override;
 
     void connectGrabbedHandler( GCallback handler, void *data );
     void connectDraggedHandler( GCallback handler, void *data );

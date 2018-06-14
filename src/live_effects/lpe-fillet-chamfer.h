@@ -33,13 +33,13 @@ enum Filletmethod {
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
-    virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-    virtual void doOnApply(SPLPEItem const *lpeItem);
-    virtual Gtk::Widget *newWidget();
+    void doBeforeEffect(SPLPEItem const *lpeItem) override;
+    Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
+    void doOnApply(SPLPEItem const *lpeItem) override;
+    Gtk::Widget *newWidget() override;
     Geom::Ray getRay(Geom::Point start, Geom::Point end, Geom::Curve *curve, bool reverse);
     void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps);
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
     void updateSatelliteType(SatelliteType satellitetype);
     void setSelected(PathVectorSatellites *_pathvector_satellites);
     //void convertUnit();

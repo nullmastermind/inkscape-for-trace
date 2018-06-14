@@ -24,9 +24,9 @@ namespace LivePathEffect {
 class LPEEllipse5Pts : public Effect {
 public:
     LPEEllipse5Pts(LivePathEffectObject *lpeobject);
-    virtual ~LPEEllipse5Pts();
+    ~LPEEllipse5Pts() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
 private:
     LPEEllipse5Pts(const LPEEllipse5Pts&) = delete;

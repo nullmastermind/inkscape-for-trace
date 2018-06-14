@@ -58,7 +58,7 @@ public:
     void setTooltipText(const Glib::ustring &tooltip);
 
 private:
-    virtual bool on_mnemonic_activate( bool group_cycling );
+    bool on_mnemonic_activate( bool group_cycling ) override;
 
 protected:
 

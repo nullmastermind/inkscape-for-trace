@@ -20,15 +20,15 @@
 class SPMissingGlyph : public SPObject {
 public:
 	SPMissingGlyph();
-	virtual ~SPMissingGlyph();
+	~SPMissingGlyph() override;
 
 	char* d;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
 private:
     double horiz_adv_x;

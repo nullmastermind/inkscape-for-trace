@@ -24,19 +24,19 @@ class FilterComposite : public FilterPrimitive {
 public:
     FilterComposite();
     static FilterPrimitive *create();
-    virtual ~FilterComposite();
+    ~FilterComposite() override;
 
-    virtual void render_cairo(FilterSlot &);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
 
-    virtual void set_input(int input);
-    virtual void set_input(int input, int slot);
+    void set_input(int input) override;
+    void set_input(int input, int slot) override;
 
     void set_operator(FeCompositeOperator op);
     void set_arithmetic(double k1, double k2, double k3, double k4);
 
-    virtual Glib::ustring name() { return Glib::ustring("Composite"); }
+    Glib::ustring name() override { return Glib::ustring("Composite"); }
 
 private:
     FeCompositeOperator op;

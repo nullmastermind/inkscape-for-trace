@@ -21,7 +21,7 @@ class DrawingGroup
 {
 public:
     DrawingGroup(Drawing &drawing);
-    ~DrawingGroup();
+    ~DrawingGroup() override;
 
     bool pickChildren() { return _pick_children; }
     void setPickChildren(bool p);
@@ -29,13 +29,13 @@ public:
     void setChildTransform(Geom::Affine const &new_trans);
 
 protected:
-    virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
-                                 unsigned flags, unsigned reset);
-    virtual unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
-                                 DrawingItem *stop_at);
-    virtual void _clipItem(DrawingContext &dc, Geom::IntRect const &area);
-    virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
-    virtual bool _canClip();
+    unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
+                                 unsigned flags, unsigned reset) override;
+    unsigned _renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
+                                 DrawingItem *stop_at) override;
+    void _clipItem(DrawingContext &dc, Geom::IntRect const &area) override;
+    DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags) override;
+    bool _canClip() override;
 
     Geom::Affine *_child_transform;
 };

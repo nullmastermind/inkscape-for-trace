@@ -24,12 +24,12 @@
 class SPSwitch : public SPGroup {
 public:
 	SPSwitch();
-	virtual ~SPSwitch();
+	~SPSwitch() override;
 
     void resetChildEvaluated() { _reevaluate(); }
 
     std::vector<SPObject*> _childList(bool add_ref, SPObject::Action action);
-    virtual void _showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags);
+    void _showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) override;
 
     SPObject *_evaluateFirst();
     void _reevaluate(bool add_to_arena = false);
@@ -39,11 +39,11 @@ public:
     SPObject *_cached_item;
     sigc::connection _release_connection;
 
-    virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-    virtual void remove_child(Inkscape::XML::Node *child);
-    virtual void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref);
-    virtual const char* displayName() const;
-    virtual gchar *description() const;
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void remove_child(Inkscape::XML::Node *child) override;
+    void order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node *old_ref, Inkscape::XML::Node *new_ref) override;
+    const char* displayName() const override;
+    gchar *description() const override;
 };
 
 #endif

@@ -23,23 +23,23 @@
 class SPLine : public SPShape {
 public:
 	SPLine();
-	virtual ~SPLine();
+	~SPLine() override;
 
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void set(unsigned int key, char const* value);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void set(unsigned int key, char const* value) override;
 
-	virtual const char* displayName() const;
-	virtual Geom::Affine set_transform(Geom::Affine const &transform);
-	virtual void convert_to_guides() const;
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	const char* displayName() const override;
+	Geom::Affine set_transform(Geom::Affine const &transform) override;
+	void convert_to_guides() const override;
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual void set_shape();
+	void set_shape() override;
 };
 
 #endif // SEEN_SP_LINE_H

@@ -25,9 +25,9 @@ public:
         { reason = theReason; }
     StreamException(Glib::ustring &theReason) throw()
         { reason = theReason; }
-    virtual ~StreamException() throw()
+    ~StreamException() throw() override
         {  }
-    char const *what() const throw()
+    char const *what() const throw() override
         { return reason.c_str(); }
         
 private:
@@ -102,13 +102,13 @@ public:
 
     BasicInputStream(InputStream &sourceStream);
     
-    virtual ~BasicInputStream() {}
+    ~BasicInputStream() override {}
     
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual int get();
+    int get() override;
     
 protected:
 
@@ -130,13 +130,13 @@ class StdInputStream : public InputStream
 {
 public:
 
-    int available()
+    int available() override
         { return 0; }
     
-    void close()
+    void close() override
         { /* do nothing */ }
     
-    int get()
+    int get() override
         {  return getchar(); }
 
 };
@@ -206,13 +206,13 @@ public:
 
     BasicOutputStream(OutputStream &destinationStream);
     
-    virtual ~BasicOutputStream() {}
+    ~BasicOutputStream() override {}
 
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual int put(gunichar ch);
+    int put(gunichar ch) override;
 
 protected:
 
@@ -232,13 +232,13 @@ class StdOutputStream : public OutputStream
 {
 public:
 
-    void close()
+    void close() override
         { }
     
-    void flush()
+    void flush() override
         { }
     
-    int put(gunichar ch)
+    int put(gunichar ch) override
         {return  putchar(ch); }
 
 };
@@ -324,53 +324,53 @@ public:
 
     BasicReader(Reader &sourceStream);
     
-    virtual ~BasicReader() {}
+    ~BasicReader() override {}
 
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual gunichar get();
+    gunichar get() override;
     
-    virtual Glib::ustring readLine();
+    Glib::ustring readLine() override;
     
-    virtual Glib::ustring readWord();
+    Glib::ustring readWord() override;
     
     /* Input formatting */
-    virtual const Reader& readBool (bool& val );
-    virtual const Reader& operator>> (bool& val )
+    const Reader& readBool (bool& val ) override;
+    const Reader& operator>> (bool& val ) override
         { return readBool(val); }
         
-    virtual const Reader& readShort (short &val);
-    virtual const Reader& operator>> (short &val)
+    const Reader& readShort (short &val) override;
+    const Reader& operator>> (short &val) override
         { return readShort(val); }
         
-    virtual const Reader& readUnsignedShort (unsigned short &val);
-    virtual const Reader& operator>> (unsigned short &val)
+    const Reader& readUnsignedShort (unsigned short &val) override;
+    const Reader& operator>> (unsigned short &val) override
         { return readUnsignedShort(val); }
         
-    virtual const Reader& readInt (int &val);
-    virtual const Reader& operator>> (int &val)
+    const Reader& readInt (int &val) override;
+    const Reader& operator>> (int &val) override
         { return readInt(val); }
         
-    virtual const Reader& readUnsignedInt (unsigned int &val);
-    virtual const Reader& operator>> (unsigned int &val)
+    const Reader& readUnsignedInt (unsigned int &val) override;
+    const Reader& operator>> (unsigned int &val) override
         { return readUnsignedInt(val); }
         
-    virtual const Reader& readLong (long &val);
-    virtual const Reader& operator>> (long &val)
+    const Reader& readLong (long &val) override;
+    const Reader& operator>> (long &val) override
         { return readLong(val); }
         
-    virtual const Reader& readUnsignedLong (unsigned long &val);
-    virtual const Reader& operator>> (unsigned long &val)
+    const Reader& readUnsignedLong (unsigned long &val) override;
+    const Reader& operator>> (unsigned long &val) override
         { return readUnsignedLong(val); }
         
-    virtual const Reader& readFloat (float &val);
-    virtual const Reader& operator>> (float &val)
+    const Reader& readFloat (float &val) override;
+    const Reader& operator>> (float &val) override
         { return readFloat(val); }
         
-    virtual const Reader& readDouble (double &val);
-    virtual const Reader& operator>> (double &val)
+    const Reader& readDouble (double &val) override;
+    const Reader& operator>> (double &val) override
         { return readDouble(val); }
  
 
@@ -398,11 +398,11 @@ public:
     InputStreamReader(InputStream &inputStreamSource);
     
     /*Overload these 3 for your implementation*/
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual gunichar get();
+    gunichar get() override;
 
 
 private:
@@ -422,14 +422,14 @@ public:
 
     StdReader();
 
-    virtual ~StdReader();
+    ~StdReader() override;
     
     /*Overload these 3 for your implementation*/
-    virtual int available();
+    int available() override;
     
-    virtual void close();
+    void close() override;
     
-    virtual gunichar get();
+    gunichar get() override;
 
 
 private:
@@ -517,45 +517,45 @@ public:
 
     BasicWriter(Writer &destinationWriter);
 
-    virtual ~BasicWriter() {}
+    ~BasicWriter() override {}
 
     /*Overload these 3 for your implementation*/
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual void put(gunichar ch);
+    void put(gunichar ch) override;
     
     
     
     /* Formatted output */
-    virtual Writer &printf(char const *fmt, ...) G_GNUC_PRINTF(2,3);
+    Writer &printf(char const *fmt, ...) override G_GNUC_PRINTF(2,3);
 
-    virtual Writer& writeChar(char val);
+    Writer& writeChar(char val) override;
 
-    virtual Writer& writeUString(Glib::ustring &val);
+    Writer& writeUString(Glib::ustring &val) override;
 
-    virtual Writer& writeStdString(std::string &val);
+    Writer& writeStdString(std::string &val) override;
 
-    virtual Writer& writeString(const char *str);
+    Writer& writeString(const char *str) override;
 
-    virtual Writer& writeBool (bool val );
+    Writer& writeBool (bool val ) override;
 
-    virtual Writer& writeShort (short val );
+    Writer& writeShort (short val ) override;
 
-    virtual Writer& writeUnsignedShort (unsigned short val );
+    Writer& writeUnsignedShort (unsigned short val ) override;
 
-    virtual Writer& writeInt (int val );
+    Writer& writeInt (int val ) override;
 
-    virtual Writer& writeUnsignedInt (unsigned int val );
+    Writer& writeUnsignedInt (unsigned int val ) override;
 
-    virtual Writer& writeLong (long val );
+    Writer& writeLong (long val ) override;
 
-    virtual Writer& writeUnsignedLong (unsigned long val );
+    Writer& writeUnsignedLong (unsigned long val ) override;
 
-    virtual Writer& writeFloat (float val );
+    Writer& writeFloat (float val ) override;
 
-    virtual Writer& writeDouble (double val );
+    Writer& writeDouble (double val ) override;
 
  
 protected:
@@ -611,11 +611,11 @@ public:
     OutputStreamWriter(OutputStream &outputStreamDest);
     
     /*Overload these 3 for your implementation*/
-    virtual void close();
+    void close() override;
     
-    virtual void flush();
+    void flush() override;
     
-    virtual void put(gunichar ch);
+    void put(gunichar ch) override;
 
 
 private:
@@ -634,16 +634,16 @@ class StdWriter : public BasicWriter
 public:
     StdWriter();
 
-    virtual ~StdWriter();
+    ~StdWriter() override;
 
 
-    virtual void close();
-
-    
-    virtual void flush();
+    void close() override;
 
     
-    virtual void put(gunichar ch);
+    void flush() override;
+
+    
+    void put(gunichar ch) override;
 
 
 private:

@@ -32,19 +32,19 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const Glib::ustring default_value = "");
-    virtual ~TextParam() {}
+    ~TextParam() override {}
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
     void param_setValue(Glib::ustring newvalue);
     void param_hide_canvas_text();
     void setTextParam(Inkscape::UI::Widget::RegisteredText *rsu);
-    virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value);
+    void param_set_default() override;
+    void param_update_default(const gchar * default_value) override;
     void setPos(Geom::Point pos);
     void setPosAndAnchor(const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
 			 const double t, const double length, bool use_curvature = false);
@@ -75,7 +75,7 @@ public:
     TextParamInternal(Effect* effect) :
         TextParam("", "", "", NULL, effect) {}
 
-    virtual Gtk::Widget * param_newWidget() { return NULL; }
+    Gtk::Widget * param_newWidget() override { return NULL; }
 };
 
 } //namespace LivePathEffect

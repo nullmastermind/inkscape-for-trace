@@ -22,9 +22,9 @@ namespace LivePathEffect {
 class LPERecursiveSkeleton : public Effect {
 public:
     LPERecursiveSkeleton(LivePathEffectObject *lpeobject);
-    virtual ~LPERecursiveSkeleton();
+    ~LPERecursiveSkeleton() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
 private:
     ScalarParam iterations;

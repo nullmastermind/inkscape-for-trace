@@ -137,26 +137,26 @@ public:
         _maskAttr(g_quark_from_string("mask"))
     {}
 
-    virtual void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ )
+    void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ )
+    void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ )
+    void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override
     {
         if ( _pnl && _obj ) {
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) {}
-    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) {
+    void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
+    void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) override {
         if ( _pnl && _obj ) {
             if ( name == _lockedAttr || name == _labelAttr || name == _highlightAttr || name == _groupAttr || name == _styleAttr || name == _clipAttr || name == _maskAttr ) {
                 _pnl->_updateObject(_obj, name == _highlightAttr);
@@ -213,7 +213,7 @@ public:
         add(_colClipMask);
         //add(_colInsertOrder);
     }
-    virtual ~ModelColumns() {}
+    ~ModelColumns() override {}
 
     Gtk::TreeModelColumn<SPItem*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;

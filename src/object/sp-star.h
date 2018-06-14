@@ -28,7 +28,7 @@ typedef enum {
 class SPStar : public SPPolygon {
 public:
 	SPStar();
-	virtual ~SPStar();
+	~SPStar() override;
 
 	int sides;
 
@@ -45,17 +45,17 @@ public:
 // So shouldn't star be derived from shape instead of polygon?
 // What does polygon have that shape doesn't?
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-    virtual const char* displayName() const;
-	virtual char* description() const;
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
-    virtual void update_patheffect(bool write);
-	virtual void set_shape();
-	virtual Geom::Affine set_transform(Geom::Affine const& xform);
+    const char* displayName() const override;
+	char* description() const override;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+    void update_patheffect(bool write) override;
+	void set_shape() override;
+	Geom::Affine set_transform(Geom::Affine const& xform) override;
 };
 
 void sp_star_position_set (SPStar *star, int sides, Geom::Point center, double r1, double r2, double arg1, double arg2, bool isflat, double rounded, double randomized);

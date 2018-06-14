@@ -29,17 +29,17 @@ class FilterMorphology : public FilterPrimitive {
 public:
     FilterMorphology();
     static FilterPrimitive *create();
-    virtual ~FilterMorphology();
+    ~FilterMorphology() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    void area_enlarge(Geom::IntRect &area, Geom::Affine const &trans) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     void set_operator(FilterMorphologyOperator &o);
     void set_xradius(double x);
     void set_yradius(double y);
 
-    virtual Glib::ustring name() { return Glib::ustring("Morphology"); }
+    Glib::ustring name() override { return Glib::ustring("Morphology"); }
 
 private:
     FilterMorphologyOperator Operator;

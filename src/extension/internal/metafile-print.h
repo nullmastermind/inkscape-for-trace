@@ -49,11 +49,11 @@ class PrintMetafile
 {
 public:
     PrintMetafile() {}
-    ~PrintMetafile();
+    ~PrintMetafile() override;
 
-    bool textToPath (Inkscape::Extension::Print * ext);
-    unsigned int bind(Inkscape::Extension::Print *module, Geom::Affine const &transform, float opacity);
-    unsigned int release(Inkscape::Extension::Print *module);
+    bool textToPath (Inkscape::Extension::Print * ext) override;
+    unsigned int bind(Inkscape::Extension::Print *module, Geom::Affine const &transform, float opacity) override;
+    unsigned int release(Inkscape::Extension::Print *module) override;
 
 protected:
     struct GRADVALUES {

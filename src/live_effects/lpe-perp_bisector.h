@@ -33,14 +33,14 @@ namespace PB {
 class LPEPerpBisector : public Effect {
 public:
     LPEPerpBisector(LivePathEffectObject *lpeobject);
-    virtual ~LPEPerpBisector();
+    ~LPEPerpBisector() override;
 
     virtual EffectType effectType () { return PERP_BISECTOR; }
 
-    void doOnApply (SPLPEItem const* lpeitem);
+    void doOnApply (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> >
-      doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> >
+      doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
     /* the knotholder entity functions must be declared friends */
     friend class PB::KnotHolderEntityEnd;

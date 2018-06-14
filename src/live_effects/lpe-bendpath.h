@@ -35,19 +35,19 @@ class KnotHolderEntityWidthBendPath;
 class LPEBendPath : public Effect, GroupBBoxEffect {
 public:
     LPEBendPath(LivePathEffectObject *lpeobject);
-    virtual ~LPEBendPath();
+    ~LPEBendPath() override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
     
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+    void transform_multiply(Geom::Affine const& postmul, bool set) override;
     
-    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item);
+    void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
 
     PathParam bend_path;
 

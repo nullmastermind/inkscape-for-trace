@@ -63,7 +63,7 @@ public:
     };
 
     SPHatch();
-    virtual ~SPHatch();
+    ~SPHatch() override;
 
     // Reference (href)
     Glib::ustring href;
@@ -81,23 +81,23 @@ public:
     std::vector<SPHatchPath *> hatchPaths();
     std::vector<SPHatchPath const *> hatchPaths() const;
 
-    bool isValid() const;
+    bool isValid() const override;
 
-    Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptRect bbox);
-    void hide(unsigned int key);
-    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptRect bbox) override;
+    void hide(unsigned int key) override;
+    cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
     RenderInfo calculateRenderInfo(unsigned key) const;
     Geom::Interval bounds() const;
-    void setBBox(unsigned int key, Geom::OptRect const &bbox);
+    void setBBox(unsigned int key, Geom::OptRect const &bbox) override;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
-    virtual void set(unsigned int key, const gchar* value);
-    virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual void modified(unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void set(unsigned int key, const gchar* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
 
 private:
     class View {
@@ -167,7 +167,7 @@ public:
     }
 
 protected:
-    virtual bool _acceptObject(SPObject *obj) const {
+    bool _acceptObject(SPObject *obj) const override {
         return dynamic_cast<SPHatch *>(obj) != NULL && URIReference::_acceptObject(obj);
     }
 };

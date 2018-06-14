@@ -400,7 +400,7 @@ protected:
     int _tempfd;
 public:
     ScriptDocCache (Inkscape::UI::View::View * view);
-    ~ScriptDocCache ( );
+    ~ScriptDocCache ( ) override;
 };
 
 ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :

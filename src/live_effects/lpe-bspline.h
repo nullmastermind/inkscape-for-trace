@@ -16,18 +16,18 @@ namespace LivePathEffect {
 class LPEBSpline : public Effect {
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
-    virtual ~LPEBSpline();
+    ~LPEBSpline() override;
 
-    virtual LPEPathFlashType pathFlashType() const
+    LPEPathFlashType pathFlashType() const override
     {
         return SUPPRESS_FLASH;
     }
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doEffect(SPCurve *curve);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    void doEffect(SPCurve *curve) override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doBSplineFromWidget(SPCurve *curve, double value);
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
-    virtual Gtk::Widget *newWidget();
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
+    Gtk::Widget *newWidget() override;
     void changeWeight(double weightValue);
     void toDefaultWeight();
     void toMakeCusp();

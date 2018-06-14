@@ -52,7 +52,7 @@ public:
         Observer(path),
         _style_swatch(ss)
     {}
-    virtual void notify(Inkscape::Preferences::Entry const &val);
+    void notify(Inkscape::Preferences::Entry const &val) override;
 private:
     StyleSwatch &_style_swatch;
 };
@@ -69,7 +69,7 @@ public:
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         this->notify(prefs->getEntry(path));
     }
-    virtual void notify(Inkscape::Preferences::Entry const &val) {
+    void notify(Inkscape::Preferences::Entry const &val) override {
         SPCSSAttr *css = val.getInheritedStyle();
         _style_swatch.setStyle(css);
         sp_repr_css_attr_unref(css);

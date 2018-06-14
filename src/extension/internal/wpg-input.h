@@ -25,7 +25,7 @@ class WpgInput : public Inkscape::Extension::Implementation::Implementation {
     WpgInput () { };
 public:
     SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri );
+                                const gchar *uri ) override;
     static void         init( void );
 
 };

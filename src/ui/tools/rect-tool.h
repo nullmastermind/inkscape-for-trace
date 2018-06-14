@@ -29,17 +29,17 @@ namespace Tools {
 class RectTool : public ToolBase {
 public:
 	RectTool();
-	virtual ~RectTool();
+	~RectTool() override;
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void finish();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	void finish() override;
+	void set(const Inkscape::Preferences::Entry& val) override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 private:
 	SPRect *rect;

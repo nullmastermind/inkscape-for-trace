@@ -31,22 +31,22 @@ public: /* this is a hack for this release, this will be private shortly */
 
 public:
     struct open_failed : public std::exception {
-        virtual ~open_failed() throw() {}
-        const char *what() const throw() { return "Open failed"; }
+        ~open_failed() throw() override {}
+        const char *what() const throw() override { return "Open failed"; }
     };
     struct no_extension_found : public std::exception {
-        virtual ~no_extension_found() throw() {}
-        const char *what() const throw() { return "No suitable input extension found"; }
+        ~no_extension_found() throw() override {}
+        const char *what() const throw() override { return "No suitable input extension found"; }
     };
     struct open_cancelled : public std::exception {
-        virtual ~open_cancelled() throw() {}
-        const char *what() const throw() { return "Open was cancelled"; }
+        ~open_cancelled() throw() override {}
+        const char *what() const throw() override { return "Open was cancelled"; }
     };
 
                   Input                (Inkscape::XML::Node * in_repr,
                                         Implementation::Implementation * in_imp);
-    virtual      ~Input                (void);
-    virtual bool  check                (void);
+         ~Input                (void) override;
+    bool  check                (void) override;
     SPDocument *  open                 (gchar const *uri);
     gchar *       get_mimetype         (void);
     gchar *       get_extension        (void);

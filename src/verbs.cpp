@@ -131,7 +131,7 @@ class FileVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     FileVerb(unsigned int const code,
@@ -150,7 +150,7 @@ class EditVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     EditVerb(unsigned int const code,
@@ -169,7 +169,7 @@ class SelectionVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     SelectionVerb(unsigned int const code,
@@ -188,7 +188,7 @@ class LayerVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     LayerVerb(unsigned int const code,
@@ -207,7 +207,7 @@ class ObjectVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     ObjectVerb(unsigned int const code,
@@ -226,7 +226,7 @@ class TagVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     TagVerb(unsigned int const code,
@@ -245,7 +245,7 @@ class ContextVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     ContextVerb(unsigned int const code,
@@ -264,7 +264,7 @@ class ZoomVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     ZoomVerb(unsigned int const code,
@@ -284,7 +284,7 @@ class DialogVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     DialogVerb(unsigned int const code,
@@ -303,7 +303,7 @@ class HelpVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     HelpVerb(unsigned int const code,
@@ -322,7 +322,7 @@ class TutorialVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     TutorialVerb(unsigned int const code,
@@ -341,7 +341,7 @@ class TextVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     TextVerb(unsigned int const code,
@@ -2401,7 +2401,7 @@ class EffectLastVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     EffectLastVerb(unsigned int const code,
@@ -2464,7 +2464,7 @@ class FitCanvasVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     FitCanvasVerb(unsigned int const code,
@@ -2530,7 +2530,7 @@ class LockAndHideVerb : public Verb {
 private:
     static void perform(SPAction *action, void *mydata);
 protected:
-    virtual SPAction *make_action(Inkscape::ActionContext const & context);
+    SPAction *make_action(Inkscape::ActionContext const & context) override;
 public:
     /** Use the Verb initializer with the same parameters. */
     LockAndHideVerb(unsigned int const code,

@@ -26,9 +26,9 @@ namespace AB {
 class LPEAngleBisector : public Effect {
 public:
     LPEAngleBisector(LivePathEffectObject *lpeobject);
-    virtual ~LPEAngleBisector();
+    ~LPEAngleBisector() override;
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
 
     friend class AB::KnotHolderEntityLeftEnd;
     friend class AB::KnotHolderEntityRightEnd;

@@ -22,11 +22,11 @@ namespace LivePathEffect {
 class LPEExtrude : public Effect {
 public:
     LPEExtrude(LivePathEffectObject *lpeobject);
-    virtual ~LPEExtrude();
+    ~LPEExtrude() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
 private:
     VectorParam extrude_vector;

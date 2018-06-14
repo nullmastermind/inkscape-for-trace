@@ -48,7 +48,7 @@ namespace Tools {
 class LpeTool : public PenTool {
 public:
 	LpeTool();
-	virtual ~LpeTool();
+	~LpeTool() override;
 
     ShapeEditor* shape_editor;
     SPCanvasItem *canvas_bbox;
@@ -61,13 +61,13 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 protected:
-	virtual void setup();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+	void setup() override;
+	void set(const Inkscape::Preferences::Entry& val) override;
+	bool root_handler(GdkEvent* event) override;
+	bool item_handler(SPItem* item, GdkEvent* event) override;
 };
 
 int lpetool_mode_to_index(Inkscape::LivePathEffect::EffectType const type);

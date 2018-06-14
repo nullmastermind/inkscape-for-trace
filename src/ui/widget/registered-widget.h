@@ -83,7 +83,7 @@ protected:
     template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
     RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
 
-    virtual ~RegisteredWidget() {};
+    ~RegisteredWidget() override {};
 
     void init_parent(const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
     {
@@ -147,7 +147,7 @@ private:
 
 class RegisteredCheckButton : public RegisteredWidget<Gtk::CheckButton> {
 public:
-    virtual ~RegisteredCheckButton();
+    ~RegisteredCheckButton() override;
     RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *active_str = "true", char const *inactive_str = "false");
 
     void setActive (bool);
@@ -167,12 +167,12 @@ public:
 protected:
     char const *_active_str, *_inactive_str;
     sigc::connection  _toggled_connection;
-    void on_toggled();
+    void on_toggled() override;
 };
 
 class RegisteredToggleButton : public RegisteredWidget<Gtk::ToggleButton> {
 public:
-    virtual ~RegisteredToggleButton();
+    ~RegisteredToggleButton() override;
     RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *icon_active = "true", char const *icon_inactive = "false");
 
     void setActive (bool);
@@ -191,12 +191,12 @@ public:
 
 protected:
     sigc::connection  _toggled_connection;
-    void on_toggled();
+    void on_toggled() override;
 };
 
 class RegisteredUnitMenu : public RegisteredWidget<Labelled> {
 public:
-    ~RegisteredUnitMenu();
+    ~RegisteredUnitMenu() override;
     RegisteredUnitMenu ( const Glib::ustring& label,
                          const Glib::ustring& key,
                          Registry& wr,
@@ -222,7 +222,7 @@ enum RSU_UserUnits {
 
 class RegisteredScalarUnit : public RegisteredWidget<ScalarUnit> {
 public:
-    ~RegisteredScalarUnit();
+    ~RegisteredScalarUnit() override;
     RegisteredScalarUnit ( const Glib::ustring& label,
                            const Glib::ustring& tip,
                            const Glib::ustring& key,
@@ -241,7 +241,7 @@ protected:
 
 class RegisteredScalar : public RegisteredWidget<Scalar> {
 public:
-    virtual ~RegisteredScalar();
+    ~RegisteredScalar() override;
     RegisteredScalar (const Glib::ustring& label,
             const Glib::ustring& tip,
             const Glib::ustring& key,
@@ -255,7 +255,7 @@ protected:
 
 class RegisteredText : public RegisteredWidget<Text> {
 public:
-    virtual ~RegisteredText();
+    ~RegisteredText() override;
     RegisteredText (const Glib::ustring& label,
             const Glib::ustring& tip,
             const Glib::ustring& key,
@@ -270,7 +270,7 @@ protected:
 
 class RegisteredColorPicker : public RegisteredWidget<LabelledColorPicker> {
 public:
-    virtual ~RegisteredColorPicker();
+    ~RegisteredColorPicker() override;
 
     RegisteredColorPicker (const Glib::ustring& label,
                            const Glib::ustring& title,
@@ -292,7 +292,7 @@ protected:
 
 class RegisteredSuffixedInteger : public RegisteredWidget<Scalar> {
 public:
-    virtual ~RegisteredSuffixedInteger();
+    ~RegisteredSuffixedInteger() override;
     RegisteredSuffixedInteger ( const Glib::ustring& label,
                                 const Glib::ustring& tip, 
                                 const Glib::ustring& suffix,
@@ -311,7 +311,7 @@ protected:
 
 class RegisteredRadioButtonPair : public RegisteredWidget<Gtk::HBox> {
 public:
-    virtual ~RegisteredRadioButtonPair();
+    ~RegisteredRadioButtonPair() override;
     RegisteredRadioButtonPair ( const Glib::ustring& label,
                                 const Glib::ustring& label1,
                                 const Glib::ustring& label2,
@@ -334,7 +334,7 @@ protected:
 
 class RegisteredPoint : public RegisteredWidget<Point> {
 public:
-    virtual ~RegisteredPoint();
+    ~RegisteredPoint() override;
     RegisteredPoint ( const Glib::ustring& label,
                       const Glib::ustring& tip,
                       const Glib::ustring& key,
@@ -351,7 +351,7 @@ protected:
 
 class RegisteredTransformedPoint : public RegisteredWidget<Point> {
 public:
-    virtual ~RegisteredTransformedPoint();
+    ~RegisteredTransformedPoint() override;
     RegisteredTransformedPoint (  const Glib::ustring& label,
                                   const Glib::ustring& tip,
                                   const Glib::ustring& key,
@@ -375,7 +375,7 @@ protected:
 
 class RegisteredVector : public RegisteredWidget<Point> {
 public:
-    virtual ~RegisteredVector();
+    ~RegisteredVector() override;
     RegisteredVector (const Glib::ustring& label,
                       const Glib::ustring& tip,
                       const Glib::ustring& key,
@@ -406,7 +406,7 @@ protected:
 
 class RegisteredRandom : public RegisteredWidget<Random> {
 public:
-    virtual ~RegisteredRandom();
+    ~RegisteredRandom() override;
     RegisteredRandom ( const Glib::ustring& label,
                        const Glib::ustring& tip,
                        const Glib::ustring& key,
@@ -424,7 +424,7 @@ protected:
 
 class RegisteredFontButton : public RegisteredWidget<FontButton> {
 public:
-    virtual ~RegisteredFontButton();
+    ~RegisteredFontButton() override;
     RegisteredFontButton ( const Glib::ustring& label,
                              const Glib::ustring& tip,
                              const Glib::ustring& key,

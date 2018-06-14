@@ -25,7 +25,7 @@
 class SPRect : public SPShape {
 public:
 	SPRect();
-	virtual ~SPRect();
+	~SPRect() override;
 
 	void setPosition(double x, double y, double width, double height);
 
@@ -49,19 +49,19 @@ public:
 
 	void compensateRxRy(Geom::Affine xform);
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 
-	virtual void set(unsigned key, char const *value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
+	void set(unsigned key, char const *value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-        virtual const char* displayName() const;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+        const char* displayName() const override;
 
-	virtual void set_shape();
-	virtual Geom::Affine set_transform(Geom::Affine const& xform);
+	void set_shape() override;
+	Geom::Affine set_transform(Geom::Affine const& xform) override;
 
-	virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
-	virtual void convert_to_guides() const;
+	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+	void convert_to_guides() const override;
 
 	SVGLength x;
 	SVGLength y;

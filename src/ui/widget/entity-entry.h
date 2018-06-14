@@ -46,23 +46,23 @@ protected:
 class EntityLineEntry : public EntityEntry {
 public:
     EntityLineEntry (rdf_work_entity_t* ent, Registry& wr);
-    ~EntityLineEntry();
-    void update (SPDocument *doc);
-    void load_from_preferences();
+    ~EntityLineEntry() override;
+    void update (SPDocument *doc) override;
+    void load_from_preferences() override;
 
 protected:
-    virtual void on_changed();
+    void on_changed() override;
 };
 
 class EntityMultiLineEntry : public EntityEntry {
 public:
     EntityMultiLineEntry (rdf_work_entity_t* ent, Registry& wr);
-    ~EntityMultiLineEntry();
-    void update (SPDocument *doc);
-    void load_from_preferences();
+    ~EntityMultiLineEntry() override;
+    void update (SPDocument *doc) override;
+    void load_from_preferences() override;
 
 protected: 
-    virtual void on_changed();
+    void on_changed() override;
     Gtk::TextView _v;
 };
 

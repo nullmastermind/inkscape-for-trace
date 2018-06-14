@@ -29,28 +29,28 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 const gchar * default_value = "M0,0 L1,1");
-    virtual ~PathParam();
+    ~PathParam() override;
 
     Geom::PathVector const & get_pathvector() const;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2();
 
-    virtual Gtk::Widget * param_newWidget();
+    Gtk::Widget * param_newWidget() override;
 
-    virtual bool param_readSVGValue(const gchar * strvalue);
-    virtual gchar * param_getSVGValue() const;
-    virtual gchar * param_getDefaultSVGValue() const;
+    bool param_readSVGValue(const gchar * strvalue) override;
+    gchar * param_getSVGValue() const override;
+    gchar * param_getDefaultSVGValue() const override;
 
-    virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value);
+    void param_set_default() override;
+    void param_update_default(const gchar * default_value) override;
     void param_set_and_write_default();
     void set_new_value (Geom::PathVector const &newpath, bool write_to_svg);
     void set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &newpath, bool write_to_svg);
     void set_buttons(bool edit_button, bool copy_button, bool paste_button, bool link_button);
-    virtual void param_editOncanvas(SPItem * item, SPDesktop * dt);
-    virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);
-    virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void param_editOncanvas(SPItem * item, SPDesktop * dt) override;
+    void param_setup_nodepath(Inkscape::NodePath::Path *np) override;
+    void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
-    virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) override;
     void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; };
 
     sigc::signal <void> signal_path_pasted;

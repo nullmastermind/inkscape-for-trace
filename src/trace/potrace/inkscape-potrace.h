@@ -53,7 +53,7 @@ class PotraceTracingEngine : public TracingEngine
     /**
      *
      */
-    ~PotraceTracingEngine();
+    ~PotraceTracingEngine() override;
 
 
     /**
@@ -219,13 +219,13 @@ class PotraceTracingEngine : public TracingEngine
      *  return the path data that is compatible with the d="" attribute
      *  of an SVG <path> element.
      */
-    virtual std::vector<TracingEngineResult> trace(
-                        Glib::RefPtr<Gdk::Pixbuf> pixbuf);
+    std::vector<TracingEngineResult> trace(
+                        Glib::RefPtr<Gdk::Pixbuf> pixbuf) override;
 
     /**
      *  Abort the thread that is executing getPathDataFromPixbuf()
      */
-    virtual void abort();
+    void abort() override;
 
     /**
      *

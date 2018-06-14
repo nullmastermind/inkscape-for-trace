@@ -27,11 +27,11 @@ class FilterImage : public FilterPrimitive {
 public:
     FilterImage();
     static FilterPrimitive *create();
-    virtual ~FilterImage();
+    ~FilterImage() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     void set_document( SPDocument *document );
     void set_href(char const *href);
@@ -40,7 +40,7 @@ public:
     bool from_element;
     SPItem* SVGElem;
 
-    virtual Glib::ustring name() { return Glib::ustring("Image"); }
+    Glib::ustring name() override { return Glib::ustring("Image"); }
 
 private:
     SPDocument *document;

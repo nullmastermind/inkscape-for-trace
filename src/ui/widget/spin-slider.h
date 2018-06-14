@@ -34,8 +34,8 @@ public:
     SpinSlider(double value, double lower, double upper, double step_inc,
 	       double climb_rate, int digits, const SPAttributeEnum a = SP_ATTR_INVALID, const char* tip_text = NULL);
 
-    virtual Glib::ustring get_as_attribute() const;
-    virtual void set_from_attribute(SPObject*);
+    Glib::ustring get_as_attribute() const override;
+    void set_from_attribute(SPObject*) override;
 
     // Shortcuts to _adjustment
     Glib::SignalProxy0<void> signal_value_changed();
@@ -71,8 +71,8 @@ public:
     DualSpinSlider(double value, double lower, double upper, double step_inc,
                    double climb_rate, int digits, const SPAttributeEnum, char* tip_text1, char* tip_text2);
 
-    virtual Glib::ustring get_as_attribute() const;
-    virtual void set_from_attribute(SPObject*);
+    Glib::ustring get_as_attribute() const override;
+    void set_from_attribute(SPObject*) override;
 
     sigc::signal<void>& signal_value_changed();
 

@@ -48,7 +48,7 @@ enum selection_type {
 class Export : public Widget::Panel {
 public:
     Export ();
-    ~Export ();
+    ~Export () override;
 
     static Export &getInstance() {
         return *new Export();
@@ -206,7 +206,7 @@ private:
     /**
      * Can be invoked for setting the desktop. Currently not used.
      */
-    void setDesktop(SPDesktop *desktop);
+    void setDesktop(SPDesktop *desktop) override;
 
     /**
      * Is invoked by the desktop tracker when the desktop changes.

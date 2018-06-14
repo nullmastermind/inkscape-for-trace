@@ -35,11 +35,11 @@ namespace Filter {
 */
 class Snow : public Inkscape::Extension::Internal::Filter::Filter {
 protected:
-	virtual gchar const * get_filter_text (Inkscape::Extension::Extension * ext);
+	gchar const * get_filter_text (Inkscape::Extension::Extension * ext) override;
 
 public:
 	Snow ( ) : Filter() { };
-	virtual ~Snow ( ) { if (_filter != NULL) g_free((void *)_filter); return; }
+	~Snow ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
 
 public:
 	static void init (void) {

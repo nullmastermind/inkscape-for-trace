@@ -28,7 +28,7 @@
 class SPTRef : public SPItem {
 public:
 	SPTRef();
-	virtual ~SPTRef();
+	~SPTRef() override;
 
     // Attributes that are used in the same way they would be in a tspan
     TextTagAttributes attributes;
@@ -51,16 +51,16 @@ public:
     SPObject * getObjectReferredTo();
     SPObject const *getObjectReferredTo() const;
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx* ctx, unsigned int flags);
-	virtual void modified(unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx* ctx, unsigned int flags) override;
+	void modified(unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;
 
-	virtual Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const;
-        virtual const char* displayName() const;
-	virtual char* description() const;
+	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+        const char* displayName() const override;
+	char* description() const override;
 };
 
 void sp_tref_update_text(SPTRef *tref);

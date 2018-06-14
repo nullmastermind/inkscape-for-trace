@@ -37,16 +37,16 @@ public:
     double getTimeValue() { return _t; }
     void setIterator(NodeList::iterator i) { first = i; }
     NodeList::iterator getIterator() { return first; }
-    virtual bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event);
+    bool _eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event) override;
 
 protected:
 
-    virtual Glib::ustring _getTip(unsigned state) const;
-    virtual void dragged(Geom::Point &, GdkEventMotion *);
-    virtual bool grabbed(GdkEventMotion *);
-    virtual void ungrabbed(GdkEventButton *);
-    virtual bool clicked(GdkEventButton *);
-    virtual bool doubleclicked(GdkEventButton *);
+    Glib::ustring _getTip(unsigned state) const override;
+    void dragged(Geom::Point &, GdkEventMotion *) override;
+    bool grabbed(GdkEventMotion *) override;
+    void ungrabbed(GdkEventButton *) override;
+    bool clicked(GdkEventButton *) override;
+    bool doubleclicked(GdkEventButton *) override;
 
 private:
     double _t;

@@ -30,9 +30,9 @@ public:
 
     LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject);
 
-    virtual ~LPEPerspectiveEnvelope();
+    ~LPEPerspectiveEnvelope() override;
 
-    virtual void doEffect(SPCurve *curve);
+    void doEffect(SPCurve *curve) override;
 
     virtual Geom::Point projectPoint(Geom::Point p);
 
@@ -40,22 +40,22 @@ public:
 
     virtual Geom::Point pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B);
 
-    virtual void resetDefaults(SPItem const* item);
+    void resetDefaults(SPItem const* item) override;
 
     virtual void vertical(PointParam &paramA,PointParam &paramB, Geom::Line vert);
 
     virtual void horizontal(PointParam &paramA,PointParam &paramB,Geom::Line horiz);
 
-    virtual void doBeforeEffect(SPLPEItem const* lpeitem);
+    void doBeforeEffect(SPLPEItem const* lpeitem) override;
 
-    virtual Gtk::Widget * newWidget();
+    Gtk::Widget * newWidget() override;
 
     virtual void setDefaults();
 
     virtual void resetGrid();
 
 protected:
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 private:
 
     BoolParam horizontal_mirror;

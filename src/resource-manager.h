@@ -24,7 +24,7 @@ public:
 
 protected:
     ResourceManager();
-    virtual ~ResourceManager();
+    ~ResourceManager() override;
 
 private:
     ResourceManager(ResourceManager const &) = delete; // no copy

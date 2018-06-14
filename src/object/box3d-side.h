@@ -25,7 +25,7 @@ class Persp3D;
 class Box3DSide : public SPPolygon {
 public:
 	Box3DSide();
-	virtual ~Box3DSide();
+	~Box3DSide() override;
 
     Box3D::Axis dir1;
     Box3D::Axis dir2;
@@ -33,12 +33,12 @@ public:
     int getFaceId();
     static Box3DSide * createBox3DSide(SPBox3D *box);
 
-	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-	virtual void set(unsigned int key, char const* value);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
-	virtual void update(SPCtx *ctx, unsigned int flags);
+	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+	void set(unsigned int key, char const* value) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
 
-	virtual void set_shape();
+	void set_shape() override;
 };
 
 void box3d_side_position_set (Box3DSide *side); // FIXME: Replace this by box3d_side_set_shape??

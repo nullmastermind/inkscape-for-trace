@@ -112,12 +112,12 @@ public:
         }
     }
 
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return get_active() ? _true_val : _false_val;
     }
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         if(val) {
@@ -150,7 +150,7 @@ public:
         signal_value_changed().connect(signal_attr_changed().make_slot());
     }
 
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         const double val = get_value();
 
@@ -160,7 +160,7 @@ public:
             return Glib::Ascii::dtostr(val);
     }
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         if(val){
@@ -184,7 +184,7 @@ public:
         show_all();
     }
 
-    ~ComboWithTooltip()
+    ~ComboWithTooltip() override
     {
         delete combo;
     }
@@ -212,7 +212,7 @@ public:
         }
     }
 
-    ~MultiSpinButton()
+    ~MultiSpinButton() override
     {
         for(unsigned i = 0; i < _spins.size(); ++i)
             delete _spins[i];
@@ -263,7 +263,7 @@ public:
         return _s2;
     }
 
-    virtual Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         double v1 = _s1.get_value();
         double v2 = _s2.get_value();
@@ -276,7 +276,7 @@ public:
         return Glib::Ascii::dtostr(v1) + " " + Glib::Ascii::dtostr(v2);
     }
 
-    virtual void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         NumberOptNumber n;
@@ -310,7 +310,7 @@ public:
     }
 
     // Returns the color in 'rgb(r,g,b)' form.
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         // no doubles here, so we can use the standard string stream.
         std::ostringstream os;
@@ -322,7 +322,7 @@ public:
     }
 
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         guint32 i = 0;
@@ -353,12 +353,12 @@ public:
     }
 
     // No validity checking is done
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return get_text();
     }
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         if(val) {
@@ -412,7 +412,7 @@ public:
         }
     }
 
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         // use SVGOStringStream to output SVG-compatible doubles
         Inkscape::SVGOStringStream os;
@@ -427,7 +427,7 @@ public:
         return os.str();
     }
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         if(o) {
             if(SP_IS_FECONVOLVEMATRIX(o)) {
@@ -534,7 +534,7 @@ public:
         set_shadow_type(Gtk::SHADOW_NONE);
     }
 
-    virtual void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         if(SP_IS_FECOLORMATRIX(o)) {
             SPFeColorMatrix* col = SP_FECOLORMATRIX(o);
@@ -570,7 +570,7 @@ public:
         }
     }
 
-    virtual Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         const Widget* w = get_child();
         if(w == &_label)
@@ -635,13 +635,13 @@ public:
     }
 
     // Returns the element in xlink:href form.
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return _entry.get_text();
     }
 
 
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         const gchar* val = attribute_value(o);
         if(val) {
@@ -1065,7 +1065,7 @@ public:
     }
 
     // Set new type and update widget visibility
-    virtual void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         // See componenttransfer.cpp
         if(SP_IS_FECOMPONENTTRANSFER(o)) {
@@ -1138,7 +1138,7 @@ private:
     }
 
 public:
-    virtual Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return "";
     }
@@ -1200,11 +1200,11 @@ public:
         return _box;
     }
 protected:
-    Glib::ustring get_as_attribute() const
+    Glib::ustring get_as_attribute() const override
     {
         return "";
     }
-    void set_from_attribute(SPObject* o)
+    void set_from_attribute(SPObject* o) override
     {
         if(_locked)
             return;

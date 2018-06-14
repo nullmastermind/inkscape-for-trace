@@ -34,17 +34,17 @@ enum RotateMethod {
 class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
-    virtual ~LPECopyRotate();
-    virtual void doOnApply (SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    ~LPECopyRotate() override;
+    void doOnApply (SPLPEItem const* lpeitem) override;
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doAfterEffect (SPLPEItem const* lpeitem) override;
     void split(Geom::PathVector &path_in, Geom::Path const &divider);
-    virtual void resetDefaults(SPItem const* item);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
-    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget * newWidget();
+    void resetDefaults(SPItem const* item) override;
+    void transform_multiply(Geom::Affine const& postmul, bool set) override;
+    void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
+    void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
+    Gtk::Widget * newWidget() override;
     Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);
@@ -52,7 +52,7 @@ public:
     void resetStyles();
     //virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
 protected:
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     EnumParam<RotateMethod> method;

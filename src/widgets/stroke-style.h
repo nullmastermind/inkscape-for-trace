@@ -111,7 +111,7 @@ class StrokeStyle : public Gtk::VBox
 {
 public:
     StrokeStyle();
-    ~StrokeStyle();
+    ~StrokeStyle() override;
     void setDesktop(SPDesktop *desktop);
 
 private:

@@ -258,17 +258,17 @@ class VerbAction : public Gtk::Action {
 public:
     static Glib::RefPtr<VerbAction> create(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view);
 
-    virtual ~VerbAction();
+    ~VerbAction() override;
     virtual void set_active(bool active = true);
 
 protected:
-    virtual Gtk::Widget* create_menu_item_vfunc();
-    virtual Gtk::Widget* create_tool_item_vfunc();
+    Gtk::Widget* create_menu_item_vfunc() override;
+    Gtk::Widget* create_tool_item_vfunc() override;
 
-    virtual void connect_proxy_vfunc(Gtk::Widget* proxy);
-    virtual void disconnect_proxy_vfunc(Gtk::Widget* proxy);
+    void connect_proxy_vfunc(Gtk::Widget* proxy) override;
+    void disconnect_proxy_vfunc(Gtk::Widget* proxy) override;
 
-    virtual void on_activate();
+    void on_activate() override;
 
 private:
     Inkscape::Verb* verb;

@@ -22,10 +22,10 @@ namespace LivePathEffect {
 class LPEBool : public Effect {
 public:
     LPEBool(LivePathEffectObject *lpeobject);
-    virtual ~LPEBool();
+    ~LPEBool() override;
 
-    void doEffect(SPCurve *curve);
-    virtual void resetDefaults(SPItem const *item);
+    void doEffect(SPCurve *curve) override;
+    void resetDefaults(SPItem const *item) override;
 
     enum bool_op_ex {
         bool_op_ex_union     = bool_op_union,

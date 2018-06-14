@@ -15,18 +15,18 @@
 class SPMeshGradient : public SPGradient {
 public:
     SPMeshGradient();
-    virtual ~SPMeshGradient();
+    ~SPMeshGradient() override;
 
     SVGLength x;  // Upper left corner of meshgradient
     SVGLength y;  // Upper right corner of mesh
     SPMeshType type;
     bool type_set;
-    virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
+    cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-    virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-    virtual void set(unsigned key, char const *value);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+    void set(unsigned key, char const *value) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif /* !SP_MESH_GRADIENT_H */

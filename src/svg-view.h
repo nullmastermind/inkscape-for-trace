@@ -37,7 +37,7 @@ public:
      */
     SPSVGView(SPCanvasGroup* parent);
 
-    virtual ~SPSVGView();
+    ~SPSVGView() override;
         
     /**
      * Rescales SPSVGView to given proportions.
@@ -57,25 +57,25 @@ public:
     /**
      * Callback connected with set_document signal.
      */
-    virtual void setDocument(SPDocument *document);
+    void setDocument(SPDocument *document) override;
 
-    virtual void mouseover();
+    void mouseover() override;
 
-    virtual void mouseout();
+    void mouseout() override;
 
-    virtual bool shutdown() { return true; }
+    bool shutdown() override { return true; }
 
 private:
     virtual void onPositionSet(double, double) {}
-    virtual void onResized(double, double) {}
-    virtual void onRedrawRequested() {}
-    virtual void onStatusMessage(Inkscape::MessageType /*type*/, gchar const */*message*/) {}
-    virtual void onDocumentURISet(gchar const* /*uri*/) {}
+    void onResized(double, double) override {}
+    void onRedrawRequested() override {}
+    void onStatusMessage(Inkscape::MessageType /*type*/, gchar const */*message*/) override {}
+    void onDocumentURISet(gchar const* /*uri*/) override {}
 
     /**
      * Callback connected with document_resized signal.
      */
-    virtual void onDocumentResized(double, double);
+    void onDocumentResized(double, double) override;
 };
 
 #endif // SEEN_SP_SVG_VIEW_H

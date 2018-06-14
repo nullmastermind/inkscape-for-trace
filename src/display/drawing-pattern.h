@@ -31,7 +31,7 @@ class DrawingPattern
 {
 public:
     DrawingPattern(Drawing &drawing, bool debug = false);
-    ~DrawingPattern();
+    ~DrawingPattern() override;
 
     /**
      * Set the transformation from pattern to user coordinate systems.
@@ -56,8 +56,8 @@ public:
      */
     cairo_pattern_t *renderPattern(float opacity);
 protected:
-    virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
-                                     unsigned flags, unsigned reset);
+    unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
+                                     unsigned flags, unsigned reset) override;
 
     Geom::Affine *_pattern_to_user;
     Geom::Affine _overflow_initial_transform;

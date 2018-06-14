@@ -129,12 +129,12 @@ public:
     typedef Glib::Markup::ParseContext Ctx;
 
     UnitParser(UnitTable *table);
-    virtual ~UnitParser() {}
+    ~UnitParser() override {}
 
 protected:
-    virtual void on_start_element(Ctx &ctx, Glib::ustring const &name, AttrMap const &attrs);
-    virtual void on_end_element(Ctx &ctx, Glib::ustring const &name);
-    virtual void on_text(Ctx &ctx, Glib::ustring const &text);
+    void on_start_element(Ctx &ctx, Glib::ustring const &name, AttrMap const &attrs) override;
+    void on_end_element(Ctx &ctx, Glib::ustring const &name) override;
+    void on_text(Ctx &ctx, Glib::ustring const &text) override;
 
 public:
     UnitTable *tbl;

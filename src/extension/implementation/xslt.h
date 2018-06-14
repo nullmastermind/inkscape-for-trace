@@ -39,14 +39,14 @@ private:
 public:
     XSLT (void);
 
-    bool load(Inkscape::Extension::Extension *module);
-    void unload(Inkscape::Extension::Extension *module);
+    bool load(Inkscape::Extension::Extension *module) override;
+    void unload(Inkscape::Extension::Extension *module) override;
 
-    bool check(Inkscape::Extension::Extension *module);
+    bool check(Inkscape::Extension::Extension *module) override;
 
     SPDocument *open(Inkscape::Extension::Input *module,
-                     gchar const *filename);
-    void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename);
+                     gchar const *filename) override;
+    void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
 };
 
 }  /* Inkscape  */

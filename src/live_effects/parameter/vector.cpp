@@ -172,17 +172,17 @@ VectorParam::set_oncanvas_color(guint32 color)
 class VectorParamKnotHolderEntity_Origin : public KnotHolderEntity {
 public:
     VectorParamKnotHolderEntity_Origin(VectorParam *p) : param(p) { }
-    virtual ~VectorParamKnotHolderEntity_Origin() {}
+    ~VectorParamKnotHolderEntity_Origin() override {}
 
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) {
+    void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) override {
         Geom::Point const s = snap_knot_position(p, state);
         param->setOrigin(s);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
-    virtual Geom::Point knot_get() const {
+    Geom::Point knot_get() const override {
         return param->origin;
     };
-    virtual void knot_click(guint /*state*/){
+    void knot_click(guint /*state*/) override{
         g_print ("This is the origin handle associated to parameter '%s'\n", param->param_key.c_str());
     };
 
@@ -193,18 +193,18 @@ private:
 class VectorParamKnotHolderEntity_Vector : public KnotHolderEntity {
 public:
     VectorParamKnotHolderEntity_Vector(VectorParam *p) : param(p) { }
-    virtual ~VectorParamKnotHolderEntity_Vector() {}
+    ~VectorParamKnotHolderEntity_Vector() override {}
 
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) {
+    void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
         Geom::Point const s = p - param->origin;
         /// @todo implement angle snapping when holding CTRL
         param->setVector(s);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
-    virtual Geom::Point knot_get() const {
+    Geom::Point knot_get() const override {
         return param->origin + param->vector;
     };
-    virtual void knot_click(guint /*state*/){
+    void knot_click(guint /*state*/) override{
         g_print ("This is the vector handle associated to parameter '%s'\n", param->param_key.c_str());
     };
 

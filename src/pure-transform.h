@@ -46,14 +46,14 @@ protected:
     Geom::Point _vector;
     Geom::Point _vector_snapped;
 
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
-    virtual Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const;
-    virtual void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point);
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
+    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const override;
+    void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
 //    PureTranslate();                        // Default constructor
 //    PureTranslate(PureTranslate const &);   // Copy constructor
-    virtual ~PureTranslate() {};
+    ~PureTranslate() override {};
     PureTranslate(Geom::Point vector = Geom::Point()) : _vector(vector), _vector_snapped(vector) {}
 
     Geom::Point getTranslationSnapped() {return _vector_snapped;}
@@ -65,10 +65,10 @@ class PureTranslateConstrained: public PureTranslate {
 
 protected:
     Geom::Dim2 _direction;
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    virtual ~PureTranslateConstrained() {};
+    ~PureTranslateConstrained() override {};
     PureTranslateConstrained(Geom::Coord displacement, Geom::Dim2 direction):
         PureTranslate() {
             _vector[direction] = displacement;
@@ -88,14 +88,14 @@ protected:
     Geom::Point _origin;
     bool        _uniform;
 
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
-    virtual Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const;
-    virtual void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point);
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
+    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const override;
+    void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
 //    PureScale();                    // Default constructor
 //    PureScale(PureScale const &);   // Copy constructor
-    virtual ~PureScale() {};
+    ~PureScale() override {};
 
     PureScale(Geom::Scale scale, Geom::Point origin, bool uniform) : 
         _scale (scale),
@@ -111,10 +111,10 @@ public:
 class PureScaleConstrained: public PureScale {
 //Magnitude of the scale components will be the same, but the sign could still be different ()
 protected:
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    virtual ~PureScaleConstrained() {};
+    ~PureScaleConstrained() override {};
     PureScaleConstrained(Geom::Scale scale, Geom::Point origin):
         PureScale(scale, origin, true) {}; // Non-uniform constrained scaling is not supported
 
@@ -133,12 +133,12 @@ protected:
     Geom::Dim2  _direction;
     bool        _uniform;
 
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
-    virtual Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const;
-    virtual void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point);
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
+    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const override;
+    void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
-    virtual ~PureStretchConstrained() {};
+    ~PureStretchConstrained() override {};
     PureStretchConstrained(Geom::Coord magnitude, Geom::Point origin, Geom::Dim2 direction, bool uniform) :
         _magnitude (magnitude),
         _stretch_snapped (Geom::Scale(magnitude, magnitude)),
@@ -170,12 +170,12 @@ protected:
     Geom::Point _origin;
     Geom::Dim2  _direction;
 
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
-    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const;
-    virtual void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point);
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
+    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const override;
+    void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
-    virtual ~PureSkewConstrained() {};
+    ~PureSkewConstrained() override {};
     PureSkewConstrained(Geom::Coord skew, Geom::Coord scale, Geom::Point origin, Geom::Dim2 direction) :
         _skew (skew),
         _skew_snapped (skew),
@@ -201,14 +201,14 @@ protected:
     Geom::Point _origin;
     bool        _uniform;
 
-    virtual SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const;
-    virtual Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const;
-    virtual void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point);
+    SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
+    Geom::Point getTransformedPoint(SnapCandidatePoint const &p) const override;
+    void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
 //    PureRotate();                        // Default constructor
 //    PureRotate(PureRotate const &);   // Copy constructor
-    virtual ~PureRotateConstrained() {};
+    ~PureRotateConstrained() override {};
 
     PureRotateConstrained(double angle, Geom::Point origin) :
         _angle (angle), // in radians!

@@ -18,11 +18,11 @@ namespace LivePathEffect {
 class LPEPowerMask : public Effect {
 public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
-    virtual ~LPEPowerMask();
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doEffect (SPCurve * curve);
-    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
-    virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
+    ~LPEPowerMask() override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
+    void doEffect (SPCurve * curve) override;
+    void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
+    void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void toggleMaskVisibility();
     void setMask();
 private:

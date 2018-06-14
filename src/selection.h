@@ -67,7 +67,7 @@ public:
      * @param desktop the desktop associated with the layer model, or NULL if in console mode
      */
     Selection(LayerModel *layers, SPDesktop *desktop);
-    ~Selection();
+    ~Selection() override;
 
     /**
      * Returns the layer model the selection is bound to (works in console or GUI mode)
@@ -201,9 +201,9 @@ public:
     std::list<std::string> params;
 
 protected:
-    void _emitSignals();
-    void _connectSignals(SPObject* object);
-    void _releaseSignals(SPObject* object);
+    void _emitSignals() override;
+    void _connectSignals(SPObject* object) override;
+    void _releaseSignals(SPObject* object) override;
 
 private:
     /** no copy. */

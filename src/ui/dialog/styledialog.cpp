@@ -57,9 +57,9 @@ public:
 #endif
     };
 
-    virtual void notifyContentChanged(Inkscape::XML::Node &node,
+    void notifyContentChanged(Inkscape::XML::Node &node,
                                       Inkscape::Util::ptr_shared old_content,
-                                      Inkscape::Util::ptr_shared new_content);
+                                      Inkscape::Util::ptr_shared new_content) override;
 
     StyleDialog * _styleDialog;
 };
@@ -93,28 +93,28 @@ public:
 #endif
     };
 
-    virtual void notifyChildAdded( Inkscape::XML::Node &/*node*/,
+    void notifyChildAdded( Inkscape::XML::Node &/*node*/,
                                    Inkscape::XML::Node &child,
-                                   Inkscape::XML::Node */*prev*/ )
+                                   Inkscape::XML::Node */*prev*/ ) override
     {
         if ( _styleDialog && _repr ) {
             _styleDialog->_nodeAdded( child );
         }
     }
 
-    virtual void notifyChildRemoved( Inkscape::XML::Node &/*node*/,
+    void notifyChildRemoved( Inkscape::XML::Node &/*node*/,
                                      Inkscape::XML::Node &child,
-                                     Inkscape::XML::Node */*prev*/ )
+                                     Inkscape::XML::Node */*prev*/ ) override
     {
         if ( _styleDialog && _repr ) {
             _styleDialog->_nodeRemoved( child );
         }
     }
 
-    virtual void notifyAttributeChanged( Inkscape::XML::Node &node,
+    void notifyAttributeChanged( Inkscape::XML::Node &node,
                                          GQuark qname,
                                          Util::ptr_shared /*old_value*/,
-                                         Util::ptr_shared /*new_value*/ ) {
+                                         Util::ptr_shared /*new_value*/ ) override {
         if ( _styleDialog && _repr ) {
 
             // For the moment only care about attributes that are directly used in selectors.

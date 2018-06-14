@@ -44,7 +44,7 @@ enum {
 class TweakTool : public ToolBase {
 public:
 	TweakTool();
-	virtual ~TweakTool();
+	~TweakTool() override;
 
     /* extended input data */
     gdouble pressure;
@@ -76,11 +76,11 @@ public:
 
 	static const std::string prefsPath;
 
-	virtual void setup();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
+	void setup() override;
+	void set(const Inkscape::Preferences::Entry& val) override;
+	bool root_handler(GdkEvent* event) override;
 
-	virtual const std::string& getPrefsPath();
+	const std::string& getPrefsPath() override;
 
 	void update_cursor(bool with_shift);
 

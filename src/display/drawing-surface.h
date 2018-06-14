@@ -65,7 +65,7 @@ class DrawingCache
 {
 public:
     explicit DrawingCache(Geom::IntRect const &area, int device_scale = 1);
-    ~DrawingCache();
+    ~DrawingCache() override;
 
     void markDirty(Geom::IntRect const &area = Geom::IntRect::infinite());
     void markClean(Geom::IntRect const &area = Geom::IntRect::infinite());

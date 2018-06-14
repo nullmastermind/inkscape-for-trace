@@ -43,11 +43,11 @@ struct TextNode : public SimpleNode {
       _is_CData = other._is_CData;
     }
 
-    Inkscape::XML::NodeType type() const { return Inkscape::XML::TEXT_NODE; }
+    Inkscape::XML::NodeType type() const override { return Inkscape::XML::TEXT_NODE; }
     bool is_CData() const { return _is_CData; }
 
 protected:
-    SimpleNode *_duplicate(Document* doc) const { return new TextNode(*this, doc); }
+    SimpleNode *_duplicate(Document* doc) const override { return new TextNode(*this, doc); }
     bool _is_CData;
 };
 

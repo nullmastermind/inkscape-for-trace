@@ -80,17 +80,17 @@ class UXManagerImpl : public UXManager
 {
 public:
     UXManagerImpl();
-    virtual ~UXManagerImpl();
+    ~UXManagerImpl() override;
 
-    virtual void addTrack( SPDesktopWidget* dtw );
-    virtual void delTrack( SPDesktopWidget* dtw );
+    void addTrack( SPDesktopWidget* dtw ) override;
+    void delTrack( SPDesktopWidget* dtw ) override;
 
-    virtual void connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop );
+    void connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) override;
 
-    virtual gint getDefaultTask( SPDesktop *desktop );
-    virtual void setTask(SPDesktop* dt, gint val);
+    gint getDefaultTask( SPDesktop *desktop ) override;
+    void setTask(SPDesktop* dt, gint val) override;
 
-    virtual bool isWidescreen() const;
+    bool isWidescreen() const override;
 
 private:
     bool _widescreen;

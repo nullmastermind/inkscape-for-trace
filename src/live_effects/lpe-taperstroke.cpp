@@ -46,15 +46,15 @@ namespace TpS {
     class KnotHolderEntityAttachBegin : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityAttachBegin(LPETaperStroke * effect) : LPEKnotHolderEntity(effect) {}
-        virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-        virtual Geom::Point knot_get() const;
+        void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        Geom::Point knot_get() const override;
     };
     
     class KnotHolderEntityAttachEnd : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityAttachEnd(LPETaperStroke * effect) : LPEKnotHolderEntity(effect) {}
-        virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-        virtual Geom::Point knot_get() const;
+        void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        Geom::Point knot_get() const override;
     };
 } // TpS
 

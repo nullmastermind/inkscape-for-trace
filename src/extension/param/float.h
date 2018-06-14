@@ -49,12 +49,12 @@ public:
 
     float precision (void) { return _precision; }
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    virtual void string(std::list <std::string> &list) const { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
 
-    virtual void string(std::string &string) const;
+    void string(std::string &string) const override;
 
 private:
     /** Internal value. */

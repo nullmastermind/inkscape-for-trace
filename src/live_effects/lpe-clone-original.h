@@ -30,9 +30,9 @@ enum Clonelpemethod {
 class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
     LPECloneOriginal(LivePathEffectObject *lpeobject);
-    virtual ~LPECloneOriginal();
-    virtual void doEffect (SPCurve * curve);
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    ~LPECloneOriginal() override;
+    void doEffect (SPCurve * curve) override;
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes);
     void modified(SPObject */*obj*/, guint /*flags*/);
     void start_listening();

@@ -78,7 +78,7 @@ private:
     void on_style_changed();
     void on_icon_pressed (Gtk::EntryIconPosition icon_position, const GdkEventButton* event);
     // bool on_match_selected (const Gtk::TreeModel::iterator& iter);
-    bool on_key_press_event (GdkEventKey* key_event);
+    bool on_key_press_event (GdkEventKey* key_event) override;
 
     // Signals
     sigc::signal<void> changed_signal;

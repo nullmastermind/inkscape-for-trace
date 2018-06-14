@@ -30,19 +30,19 @@ public:
                 int indent,
                 Inkscape::Extension::Extension * ext,
                 Inkscape::XML::Node * xml);
-    virtual ~ParamString(void);
+    ~ParamString(void) override;
 
     /** \brief  Returns \c _value, with a \i const to protect it. */
     const gchar *get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _value; }
 
     const gchar * set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node);
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    virtual void string(std::list <std::string> &list) const { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
 
-    virtual void string(std::string &string) const;
+    void string(std::string &string) const override;
 
     void setMaxLength(int maxLenght) { _max_length = maxLenght; }
     int getMaxLength(void) { return _max_length; }

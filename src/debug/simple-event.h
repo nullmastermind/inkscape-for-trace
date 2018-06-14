@@ -34,13 +34,13 @@ public:
 
     static Category category() { return C; }
 
-    Util::ptr_shared name() const { return _name; }
-    unsigned propertyCount() const { return _properties.size(); }
-    PropertyPair property(unsigned property) const {
+    Util::ptr_shared name() const override { return _name; }
+    unsigned propertyCount() const override { return _properties.size(); }
+    PropertyPair property(unsigned property) const override {
         return _properties[property];
     }
 
-    void generateChildEvents() const {}
+    void generateChildEvents() const override {}
 
 protected:
     void _addProperty(Util::ptr_shared name,

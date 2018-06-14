@@ -35,7 +35,7 @@ enum glyphOrientation {
 class SPGlyph : public SPObject {
 public:
     SPGlyph();
-    virtual ~SPGlyph() {}
+    ~SPGlyph() override {}
 
     // FIXME encapsulation
     Glib::ustring unicode;
@@ -50,11 +50,11 @@ public:
     double vert_adv_y;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void set(unsigned int key, const char* value);
-    virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void set(unsigned int key, const char* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
 };
 

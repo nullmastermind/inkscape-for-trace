@@ -43,13 +43,13 @@ namespace BeP {
 class KnotHolderEntityWidthBendPath : public LPEKnotHolderEntity {
     public:
         KnotHolderEntityWidthBendPath(LPEBendPath * effect) : LPEKnotHolderEntity(effect) {}
-        virtual ~KnotHolderEntityWidthBendPath()
+        ~KnotHolderEntityWidthBendPath() override
         {
             LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
             lpe->_knot_entity = NULL;
         }
-        virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-        virtual Geom::Point knot_get() const;
+        void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        Geom::Point knot_get() const override;
     };
 } // BeP
 

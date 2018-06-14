@@ -179,16 +179,16 @@ public:
 
     Emf(); // Empty constructor
 
-    virtual ~Emf();//Destructor
+    ~Emf() override;//Destructor
 
-    bool check(Inkscape::Extension::Extension *module); //Can this module load (always yes for now)
+    bool check(Inkscape::Extension::Extension *module) override; //Can this module load (always yes for now)
 
     void save(Inkscape::Extension::Output *mod, // Save the given document to the given filename
               SPDocument *doc,
-              gchar const *filename);
+              gchar const *filename) override;
 
-    virtual SPDocument *open( Inkscape::Extension::Input *mod,
-                                const gchar *uri );
+    SPDocument *open( Inkscape::Extension::Input *mod,
+                                const gchar *uri ) override;
 
     static void init(void);//Initialize the class
 

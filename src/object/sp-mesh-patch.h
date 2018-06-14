@@ -22,7 +22,7 @@
 class SPMeshpatch : public SPObject {
 public:
     SPMeshpatch();
-    virtual ~SPMeshpatch();
+    ~SPMeshpatch() override;
 
     SPMeshpatch* getNextMeshpatch();
     SPMeshpatch* getPrevMeshpatch();
@@ -31,10 +31,10 @@ public:
     //SVGLength ty[4];  // Tensor points
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void set(unsigned int key, const char* value);
-    virtual void modified(unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void set(unsigned int key, const char* value) override;
+    void modified(unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 #endif /* !SEEN_SP_MESHPATCH_H */

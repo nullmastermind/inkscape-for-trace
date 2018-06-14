@@ -35,7 +35,7 @@ class StyleSubject;
 class ObjectCompositeSettings : public Gtk::VBox {
 public:
     ObjectCompositeSettings(unsigned int verb_code, char const *history_prefix, int flags);
-    ~ObjectCompositeSettings();
+    ~ObjectCompositeSettings() override;
 
     void setSubject(StyleSubject *subject);
 

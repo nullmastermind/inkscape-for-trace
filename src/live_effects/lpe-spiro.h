@@ -16,11 +16,11 @@ namespace LivePathEffect {
 class LPESpiro : public Effect {
 public:
     LPESpiro(LivePathEffectObject *lpeobject);
-    virtual ~LPESpiro();
+    ~LPESpiro() override;
 
-    virtual LPEPathFlashType pathFlashType() const { return SUPPRESS_FLASH; }
+    LPEPathFlashType pathFlashType() const override { return SUPPRESS_FLASH; }
 
-    virtual void doEffect(SPCurve * curve);
+    void doEffect(SPCurve * curve) override;
 
 private:
     LPESpiro(const LPESpiro&) = delete;

@@ -35,7 +35,7 @@ struct SPGuideLine;
 class SPGuide : public SPObject {
 public:
     SPGuide();
-    virtual ~SPGuide() {}
+    ~SPGuide() override {}
 
     void set_color(const unsigned r, const unsigned g, const unsigned b, bool const commit);
     void setColor(guint32 c);
@@ -74,9 +74,9 @@ public:
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
 
 protected:
-    virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
-    virtual void release();
-    virtual void set(unsigned int key, const char* value);
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void set(unsigned int key, const char* value) override;
 
     char* label;
     std::vector<SPGuideLine *> views; // contains an object of type SPGuideline (see display/guideline.cpp for definition)

@@ -177,9 +177,9 @@ public:
         msgstr = os.str();
     }
 
-    virtual ~EvaluatorException() throw() {} // necessary to destroy the string object!!!
+    ~EvaluatorException() throw() override {} // necessary to destroy the string object!!!
 
-    virtual const char *what() const throw () {
+    const char *what() const throw () override {
         return msgstr.c_str();
     }
 protected:

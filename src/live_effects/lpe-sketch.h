@@ -27,11 +27,11 @@ namespace LivePathEffect {
 class LPESketch : public Effect {
 public:
     LPESketch(LivePathEffectObject *lpeobject);
-    virtual ~LPESketch();
+    ~LPESketch() override;
 
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    void doBeforeEffect (SPLPEItem const* lpeitem) override;
 
 private:
     // add the parameters for your effect here:

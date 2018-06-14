@@ -43,11 +43,11 @@ class LayersPanel : public UI::Widget::Panel
 {
 public:
     LayersPanel();
-    virtual ~LayersPanel();
+    ~LayersPanel() override;
 
     static LayersPanel& getInstance();
 
-    void setDesktop( SPDesktop* desktop );
+    void setDesktop( SPDesktop* desktop ) override;
 
 private:
     class ModelColumns;

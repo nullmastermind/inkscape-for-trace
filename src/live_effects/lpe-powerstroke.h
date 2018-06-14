@@ -23,13 +23,13 @@ namespace LivePathEffect {
 class LPEPowerStroke : public Effect {
 public:
     LPEPowerStroke(LivePathEffectObject *lpeobject);
-    virtual ~LPEPowerStroke();
+    ~LPEPowerStroke() override;
 
     
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doOnRemove(SPLPEItem const* lpeitem);
+    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    void doBeforeEffect(SPLPEItem const *lpeItem) override;
+    void doOnApply(SPLPEItem const* lpeitem) override;
+    void doOnRemove(SPLPEItem const* lpeitem) override;
 
     // methods called by path-manipulator upon edits
     void adjustForNewPath(Geom::PathVector const & path_in);

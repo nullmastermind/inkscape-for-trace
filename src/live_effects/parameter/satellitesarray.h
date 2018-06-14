@@ -36,21 +36,21 @@ public:
                         const Glib::ustring &key,
                         Inkscape::UI::Widget::Registry *wr, Effect *effect);
 
-    virtual Gtk::Widget *param_newWidget()
+    Gtk::Widget *param_newWidget() override
     {
         return NULL;
     }
     virtual void setHelperSize(int hs);
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item, bool mirror);
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+    void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     virtual void updateCanvasIndicators();
     virtual void updateCanvasIndicators(bool mirror);
-    virtual bool providesKnotHolderEntities() const
+    bool providesKnotHolderEntities() const override
     {
         return true;
     }
-    void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
+    void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/) override;
     void setUseDistance(bool use_knot_distance);
     void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);
@@ -85,15 +85,15 @@ private:
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
     FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index);
-    virtual ~FilletChamferKnotHolderEntity()
+    ~FilletChamferKnotHolderEntity() override
     {
         _pparam->_knoth = NULL;
     }
 
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin,
-                          guint state);
-    virtual Geom::Point knot_get() const;
-    virtual void knot_click(guint state);
+    void knot_set(Geom::Point const &p, Geom::Point const &origin,
+                          guint state) override;
+    Geom::Point knot_get() const override;
+    void knot_click(guint state) override;
     void knot_set_offset(Satellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */

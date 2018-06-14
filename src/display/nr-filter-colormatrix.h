@@ -36,17 +36,17 @@ class FilterColorMatrix : public FilterPrimitive {
 public:
     FilterColorMatrix();
     static FilterPrimitive *create();
-    virtual ~FilterColorMatrix();
+    ~FilterColorMatrix() override;
 
-    virtual void render_cairo(FilterSlot &slot);
-    virtual bool can_handle_affine(Geom::Affine const &);
-    virtual double complexity(Geom::Affine const &ctm);
+    void render_cairo(FilterSlot &slot) override;
+    bool can_handle_affine(Geom::Affine const &) override;
+    double complexity(Geom::Affine const &ctm) override;
 
     virtual void set_type(FilterColorMatrixType type);
     virtual void set_value(double value);
     virtual void set_values(std::vector<double> const &values);
 
-    virtual Glib::ustring name() { return Glib::ustring("Color Matrix"); }
+    Glib::ustring name() override { return Glib::ustring("Color Matrix"); }
 
 public:
     struct ColorMatrixMatrix {

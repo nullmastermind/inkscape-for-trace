@@ -29,7 +29,7 @@ class Persp3DReference;
 class SPBox3D : public SPGroup {
 public:
 	SPBox3D();
-	virtual ~SPBox3D();
+	~SPBox3D() override;
 
     int z_orders[6]; // z_orders[i] holds the ID of the face at position #i in the group (from top to bottom)
 
@@ -51,17 +51,17 @@ public:
      */
     static SPBox3D * createBox3D(SPItem * parent);
 
-	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
-	virtual void release();
-	virtual void set(unsigned int key, char const* value);
-	virtual void update(SPCtx *ctx, unsigned int flags);
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
+	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+	void release() override;
+	void set(unsigned int key, char const* value) override;
+	void update(SPCtx *ctx, unsigned int flags) override;
+	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 
         virtual const char* display_name();
-	virtual Geom::Affine set_transform(Geom::Affine const &transform);
-    virtual void convert_to_guides() const;
-    virtual const char* displayName() const;
-    virtual char *description() const;
+	Geom::Affine set_transform(Geom::Affine const &transform) override;
+    void convert_to_guides() const override;
+    const char* displayName() const override;
+    char *description() const override;
 };
 
 void box3d_position_set (SPBox3D *box);
