@@ -1080,6 +1080,13 @@ namespace Widget {
 
                   // Our lame attempt at determining number of alternative glyphs for one glyph:
                   int number = table.second.output.length() / table.second.input.length();
+                  if (number < 1) {
+                      number = 1; // Must have at least on/off, see comment above about 'lang' attribute.
+                      // std::cout << table.first << " "
+                      //           << table.second.output.length() << "/"
+                      //           << table.second.input.length() << "="
+                      //           << number << std::endl;
+                  }
 
                   _features[table.first] = new Feature (table.first, table.second, number+1,
                                                         sp_font_description_get_family(res->descr),
