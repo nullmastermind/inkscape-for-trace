@@ -18,6 +18,7 @@
 #include "knotholder.h"
 #include <2geom/point.h>
 #include <gdk/gdk.h>
+#include <gdkmm/cursor.h>
 #include <glib-object.h>
 #include <sigc++/trackable.h>
 
@@ -150,7 +151,7 @@ public:
     virtual ~ToolBase();
 
     Inkscape::Preferences::Observer *pref_observer;
-    GdkCursor *cursor;
+    Glib::RefPtr<Gdk::Cursor> cursor;
 
     gint xp, yp;           ///< where drag started
     gint tolerance;

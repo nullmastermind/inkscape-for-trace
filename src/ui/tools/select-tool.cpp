@@ -21,6 +21,7 @@
 #include <cstring>
 #include <string>
 
+#include <gtkmm/widget.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
@@ -344,9 +345,9 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
         }
         case GDK_LEAVE_NOTIFY:
             if (!desktop->isWaitingCursor() && !this->dragging) {
-                GdkWindow* window = gtk_widget_get_window (GTK_WIDGET (desktop->getCanvas()));
+                Glib::RefPtr<Gdk::Window> window = Glib::wrap(GTK_WIDGET(desktop->getCanvas()))->get_window();
 
-                gdk_window_set_cursor(window, this->cursor);
+                window->set_cursor(this->cursor);
             }
             break;
 

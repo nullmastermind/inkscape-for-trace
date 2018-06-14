@@ -19,6 +19,7 @@
 #endif
 
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/display.h>
 #include <glibmm/i18n.h>
 
 #include "shortcuts.h"
@@ -123,11 +124,6 @@ ToolBase::~ToolBase() {
         delete this->message_context;
     }
 
-    if (this->cursor != NULL) {
-        g_object_unref(this->cursor);
-        this->cursor = NULL;
-    }
-
     if (this->desktop) {
         this->desktop = NULL;
     }
@@ -161,27 +157,23 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
  * Recreates and draws cursor on desktop related to ToolBase.
  */
 void ToolBase::sp_event_context_update_cursor() {
-    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-    if (gtk_widget_get_window (w)) {
+    Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+    if (w->get_window()) {
         if (this->cursor_shape) {
-            if(this->cursor) {
-                g_object_unref(this->cursor);
-            }
-
 	    bool fillHasColor=false, strokeHasColor=false;
 	    guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
 	    guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
 	    double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 0;
 	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
 
-            this->cursor = sp_cursor_from_xpm(
+            this->cursor = Glib::wrap(sp_cursor_from_xpm(
 		this->cursor_shape,
                 SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
                 SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
-            );
+            ));
         }
-        gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
-        gdk_flush();
+        w->get_window()->set_cursor(cursor);
+        w->get_display()->flush();
     }
     this->desktop->waiting_cursor = false;
 }
@@ -546,8 +538,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+            w->get_window()->set_cursor(cursor);
         }
 
         if (within_tolerance && (panning || zoom_rb)) {
@@ -755,8 +747,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         if (panning_cursor == 1) {
             panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+            Gtk::Widget* w = Glib::wrap(GTK_WIDGET(desktop->getCanvas()));
+            w->get_window()->set_cursor(cursor);
         }
 
         switch (get_latin_keyval(&event->key)) {
@@ -1179,7 +1171,7 @@ static void update_latin_keys_group() {
     gint n_keys;
 
     latin_keys_group_valid = FALSE;
-    if (gdk_keymap_get_entries_for_keyval(gdk_keymap_get_default(), GDK_KEY_a, &keys, &n_keys)) {
+    if (gdk_keymap_get_entries_for_keyval(Gdk::Display::get_default()->get_keymap(), GDK_KEY_a, &keys, &n_keys)) {
         for (gint i = 0; i < n_keys; i++) {
             if (!latin_keys_group_valid || keys[i].group < latin_keys_group) {
                 latin_keys_group = keys[i].group;
@@ -1194,7 +1186,7 @@ static void update_latin_keys_group() {
  * Initialize Latin keys group handling.
  */
 void init_latin_keys_group() {
-    g_signal_connect(G_OBJECT(gdk_keymap_get_default()),
+    g_signal_connect(G_OBJECT(Gdk::Display::get_default()->get_keymap()),
             "keys-changed", G_CALLBACK(update_latin_keys_group), NULL);
     update_latin_keys_group();
 }
@@ -1211,7 +1203,7 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
     gint group = latin_keys_group_valid ? latin_keys_group : event->group;
 
     gdk_keymap_translate_keyboard_state(
-            gdk_keymap_get_for_display(gdk_display_get_default()),
+            Gdk::Display::get_default()->get_keymap(),
             event->hardware_keycode, (GdkModifierType) event->state, group,
             &keyval, NULL, NULL, &modifiers);
 

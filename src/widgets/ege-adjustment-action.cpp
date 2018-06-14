@@ -48,6 +48,7 @@
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/adjustment.h>
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/display.h>
 
 #include "widgets/ege-adjustment-action.h"
 #include "ui/icon-names.h"
@@ -1014,7 +1015,7 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
     gboolean wasConsumed = FALSE; /* default to report event not consumed */
     EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION(data);
     guint key = 0;
-    gdk_keymap_translate_keyboard_state( gdk_keymap_get_for_display( gdk_display_get_default() ),
+    gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          event->hardware_keycode, (GdkModifierType)event->state,
                                          0, &key, 0, 0, 0 );
 
