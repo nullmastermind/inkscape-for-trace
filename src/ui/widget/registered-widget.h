@@ -135,9 +135,9 @@ protected:
 
 private:
     void construct() {
-        _wr = NULL;
-        repr = NULL;
-        doc = NULL;
+        _wr = nullptr;
+        repr = nullptr;
+        doc = nullptr;
         write_undo = false;
         event_type = 0; //SP_VERB_INVALID
     }
@@ -148,7 +148,7 @@ private:
 class RegisteredCheckButton : public RegisteredWidget<Gtk::CheckButton> {
 public:
     ~RegisteredCheckButton() override;
-    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *active_str = "true", char const *inactive_str = "false");
+    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=nullptr, SPDocument *doc_in=nullptr, char const *active_str = "true", char const *inactive_str = "false");
 
     void setActive (bool);
 
@@ -173,7 +173,7 @@ protected:
 class RegisteredToggleButton : public RegisteredWidget<Gtk::ToggleButton> {
 public:
     ~RegisteredToggleButton() override;
-    RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *icon_active = "true", char const *icon_inactive = "false");
+    RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=nullptr, SPDocument *doc_in=nullptr, char const *icon_active = "true", char const *icon_inactive = "false");
 
     void setActive (bool);
 
@@ -200,8 +200,8 @@ public:
     RegisteredUnitMenu ( const Glib::ustring& label,
                          const Glib::ustring& key,
                          Registry& wr,
-                         Inkscape::XML::Node* repr_in = NULL,
-                         SPDocument *doc_in = NULL );
+                         Inkscape::XML::Node* repr_in = nullptr,
+                         SPDocument *doc_in = nullptr );
 
     void setUnit (const Glib::ustring);
     Unit const * getUnit() const { return static_cast<UnitMenu*>(_widget)->getUnit(); };
@@ -228,8 +228,8 @@ public:
                            const Glib::ustring& key,
                            const RegisteredUnitMenu &rum,
                            Registry& wr,
-                           Inkscape::XML::Node* repr_in = NULL,
-                           SPDocument *doc_in = NULL,
+                           Inkscape::XML::Node* repr_in = nullptr,
+                           SPDocument *doc_in = nullptr,
                            RSU_UserUnits _user_units = RSU_none );
 
 protected:
@@ -246,8 +246,8 @@ public:
             const Glib::ustring& tip,
             const Glib::ustring& key,
             Registry& wr,
-            Inkscape::XML::Node* repr_in = NULL,
-            SPDocument *doc_in = NULL );
+            Inkscape::XML::Node* repr_in = nullptr,
+            SPDocument *doc_in = nullptr );
 protected:
     sigc::connection _value_changed_connection;
     void on_value_changed();
@@ -260,8 +260,8 @@ public:
             const Glib::ustring& tip,
             const Glib::ustring& key,
             Registry& wr,
-            Inkscape::XML::Node* repr_in = NULL,
-            SPDocument *doc_in = NULL );
+            Inkscape::XML::Node* repr_in = nullptr,
+            SPDocument *doc_in = nullptr );
 
 protected:
     sigc::connection  _activate_connection;
@@ -278,8 +278,8 @@ public:
                            const Glib::ustring& ckey,
                            const Glib::ustring& akey,
                            Registry& wr,
-                           Inkscape::XML::Node* repr_in = NULL,
-                           SPDocument *doc_in = NULL);
+                           Inkscape::XML::Node* repr_in = nullptr,
+                           SPDocument *doc_in = nullptr);
 
     void setRgba32 (guint32);
     void closeWindow();
@@ -298,8 +298,8 @@ public:
                                 const Glib::ustring& suffix,
                                 const Glib::ustring& key,
                                 Registry& wr,
-                                Inkscape::XML::Node* repr_in = NULL,
-                                SPDocument *doc_in = NULL );
+                                Inkscape::XML::Node* repr_in = nullptr,
+                                SPDocument *doc_in = nullptr );
 
     bool setProgrammatically; // true if the value was set by setValue, not changed by the user;
                                 // if a callback checks it, it must reset it back to false
@@ -319,8 +319,8 @@ public:
                                 const Glib::ustring& tip2,
                                 const Glib::ustring& key,
                                 Registry& wr,
-                                Inkscape::XML::Node* repr_in = NULL,
-                                SPDocument *doc_in = NULL );
+                                Inkscape::XML::Node* repr_in = nullptr,
+                                SPDocument *doc_in = nullptr );
 
     void setValue (bool second);
 
@@ -339,8 +339,8 @@ public:
                       const Glib::ustring& tip,
                       const Glib::ustring& key,
                       Registry& wr,
-                      Inkscape::XML::Node* repr_in = NULL,
-                      SPDocument *doc_in = NULL );
+                      Inkscape::XML::Node* repr_in = nullptr,
+                      SPDocument *doc_in = nullptr );
 
 protected:
     sigc::connection  _value_x_changed_connection;
@@ -356,8 +356,8 @@ public:
                                   const Glib::ustring& tip,
                                   const Glib::ustring& key,
                                   Registry& wr,
-                                  Inkscape::XML::Node* repr_in = NULL,
-                                  SPDocument *doc_in = NULL );
+                                  Inkscape::XML::Node* repr_in = nullptr,
+                                  SPDocument *doc_in = nullptr );
 
     // redefine setValue, because transform must be applied
     void setValue(Geom::Point const & p);
@@ -380,8 +380,8 @@ public:
                       const Glib::ustring& tip,
                       const Glib::ustring& key,
                       Registry& wr,
-                      Inkscape::XML::Node* repr_in = NULL,
-                      SPDocument *doc_in = NULL );
+                      Inkscape::XML::Node* repr_in = nullptr,
+                      SPDocument *doc_in = nullptr );
 
     // redefine setValue, because transform must be applied
     void setValue(Geom::Point const & p);
@@ -411,8 +411,8 @@ public:
                        const Glib::ustring& tip,
                        const Glib::ustring& key,
                        Registry& wr,
-                       Inkscape::XML::Node* repr_in = NULL,
-                       SPDocument *doc_in = NULL);
+                       Inkscape::XML::Node* repr_in = nullptr,
+                       SPDocument *doc_in = nullptr);
 
     void setValue (double val, long startseed);
 
@@ -429,8 +429,8 @@ public:
                              const Glib::ustring& tip,
                              const Glib::ustring& key,
                              Registry& wr,
-                             Inkscape::XML::Node* repr_in = NULL,
-                             SPDocument *doc_in = NULL);
+                             Inkscape::XML::Node* repr_in = nullptr,
+                             SPDocument *doc_in = nullptr);
 
     void setValue (Glib::ustring fontspec);
 

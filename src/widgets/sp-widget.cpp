@@ -81,7 +81,7 @@ sp_widget_class_init(SPWidgetClass *klass)
                                               G_TYPE_FROM_CLASS(object_class),
                                               G_SIGNAL_RUN_FIRST,
                                               G_STRUCT_OFFSET(SPWidgetClass, construct),
-                                              NULL, NULL,
+                                              nullptr, nullptr,
                                               g_cclosure_marshal_VOID__VOID,
                                               G_TYPE_NONE, 0);
 
@@ -89,7 +89,7 @@ sp_widget_class_init(SPWidgetClass *klass)
                                               G_TYPE_FROM_CLASS(object_class),
                                               G_SIGNAL_RUN_FIRST,
                                               G_STRUCT_OFFSET(SPWidgetClass, change_selection),
-                                              NULL, NULL,
+                                              nullptr, nullptr,
                                               g_cclosure_marshal_VOID__POINTER,
                                               G_TYPE_NONE, 1,
                                               G_TYPE_POINTER);
@@ -98,7 +98,7 @@ sp_widget_class_init(SPWidgetClass *klass)
                                               G_TYPE_FROM_CLASS(object_class),
                                               G_SIGNAL_RUN_FIRST,
                                               G_STRUCT_OFFSET(SPWidgetClass, modify_selection),
-                                              NULL, NULL,
+                                              nullptr, nullptr,
                                               sp_marshal_VOID__POINTER_UINT,
                                               G_TYPE_NONE, 2,
                                               G_TYPE_POINTER, G_TYPE_UINT);
@@ -107,7 +107,7 @@ sp_widget_class_init(SPWidgetClass *klass)
                                               G_TYPE_FROM_CLASS(object_class),
                                               G_SIGNAL_RUN_FIRST,
                                               G_STRUCT_OFFSET(SPWidgetClass, set_selection),
-                                              NULL, NULL,
+                                              nullptr, nullptr,
                                               g_cclosure_marshal_VOID__POINTER,
                                               G_TYPE_NONE, 1,
                                               G_TYPE_POINTER);
@@ -148,7 +148,7 @@ void SPWidgetImpl::dispose(GObject *object)
     }            
 
     delete spw->_impl;
-    spw->_impl = 0;
+    spw->_impl = nullptr;
 
     if (G_OBJECT_CLASS(sp_widget_parent_class)->dispose) {
         G_OBJECT_CLASS(sp_widget_parent_class)->dispose(object);
@@ -300,11 +300,11 @@ void SPWidgetImpl::setSelection(Selection *selection)
 
 GtkWidget *sp_widget_new_global()
 {
-    SPWidget *spw = reinterpret_cast<SPWidget*>(g_object_new(SP_TYPE_WIDGET, NULL));
+    SPWidget *spw = reinterpret_cast<SPWidget*>(g_object_new(SP_TYPE_WIDGET, nullptr));
 
     if (!SPWidgetImpl::constructGlobal(spw)) {
         g_object_unref(spw);
-        spw = 0;
+        spw = nullptr;
     }
 
     return reinterpret_cast<GtkWidget *>(spw);

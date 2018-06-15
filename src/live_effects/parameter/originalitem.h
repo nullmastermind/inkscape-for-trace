@@ -23,7 +23,7 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
     ~OriginalItemParam() override;
-    bool linksToItem() const { return (href != NULL); }
+    bool linksToItem() const { return (href != nullptr); }
     SPItem * getObject() const { return ref.getObject(); }
 
     Gtk::Widget * param_newWidget() override;

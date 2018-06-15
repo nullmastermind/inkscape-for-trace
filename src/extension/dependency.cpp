@@ -51,20 +51,20 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
     _type = TYPE_FILE;
     _location = LOCATION_PATH;
     _repr = in_repr;
-    _string = NULL;
-    _description = NULL;
+    _string = nullptr;
+    _description = nullptr;
 
     Inkscape::GC::anchor(_repr);
 
     if (const gchar * location = _repr->attribute("location")) {
-        for (int i = 0; i < LOCATION_CNT && location != NULL; i++) {
+        for (int i = 0; i < LOCATION_CNT && location != nullptr; i++) {
             if (!strcmp(location, _location_str[i])) {
                 _location = (location_t)i;
                 break;
             }
         }
     } else if (const gchar * location = _repr->attribute("reldir")) {
-        for (int i = 0; i < LOCATION_CNT && location != NULL; i++) {
+        for (int i = 0; i < LOCATION_CNT && location != nullptr; i++) {
             if (!strcmp(location, _location_str[i])) {
                 _location = (location_t)i;
                 break;
@@ -73,7 +73,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
     }
     
     const gchar * type = _repr->attribute("type");
-    for (int i = 0; i < TYPE_CNT && type != NULL; i++) {
+    for (int i = 0; i < TYPE_CNT && type != nullptr; i++) {
         if (!strcmp(type, _type_str[i])) {
             _type = (type_t)i;
             break;
@@ -83,7 +83,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
     _string = _repr->firstChild()->content();
 
     _description = _repr->attribute("description");
-    if (_description == NULL)
+    if (_description == nullptr)
         _description = _repr->attribute("_description");
 
     return;
@@ -133,12 +133,12 @@ bool Dependency::check (void) const
 {
     // std::cout << "Checking: " << *this << std::endl;
 
-    if (_string == NULL) return FALSE;
+    if (_string == nullptr) return FALSE;
 
     switch (_type) {
         case TYPE_EXTENSION: {
             Extension * myext = db.get(_string);
-            if (myext == NULL) return FALSE;
+            if (myext == nullptr) return FALSE;
             if (myext->deactivated()) return FALSE;
             break;
         }
@@ -171,7 +171,7 @@ bool Dependency::check (void) const
                 default: {
                     gchar * path = g_strdup(g_getenv("PATH"));
 
-                    if (path == NULL) {
+                    if (path == nullptr) {
                         /* There is no `PATH' in the environment.
                            The default search path is the current directory */
                         path = g_strdup(G_SEARCHPATH_SEPARATOR_S);
@@ -179,7 +179,7 @@ bool Dependency::check (void) const
 
                     gchar * orig_path = path;
 
-                    for (; path != NULL;) {
+                    for (; path != nullptr;) {
                         gchar * local_path; // to have the path after detection of the separator
                         Glib::ustring final_name;
 
@@ -188,7 +188,7 @@ bool Dependency::check (void) const
                         /* Not sure whether this is UTF8 happy, but it would seem
                            like it considering that I'm searching (and finding)
                            the ':' character */
-                        if (path != NULL) {
+                        if (path != nullptr) {
                             path[0] = '\0';
                             path++;
                         }
@@ -255,7 +255,7 @@ operator<< (std::ostream &out_file, const Dependency & in_dep)
     out_file << _("  location: ") << _(in_dep._location_str[in_dep._location]) << '\n';
     out_file << _("  string: ") << in_dep._string << '\n';
 
-    if (in_dep._description != NULL) {
+    if (in_dep._description != nullptr) {
         out_file << _("  description: ") << _(in_dep._description) << '\n';
     }
 

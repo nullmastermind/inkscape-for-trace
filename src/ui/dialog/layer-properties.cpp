@@ -35,9 +35,9 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
-    : _strategy(NULL),
-      _desktop(NULL),
-      _layer(NULL),
+    : _strategy(nullptr),
+      _desktop(nullptr),
+      _layer(nullptr),
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
@@ -90,8 +90,8 @@ LayerPropertiesDialog::LayerPropertiesDialog()
 
 LayerPropertiesDialog::~LayerPropertiesDialog() {
 
-    _setDesktop(NULL);
-    _setLayer(NULL);
+    _setDesktop(nullptr);
+    _setLayer(nullptr);
 }
 
 void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strategy,
@@ -116,7 +116,7 @@ void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strateg
 void
 LayerPropertiesDialog::_apply()
 {
-    g_assert(_strategy != NULL);
+    g_assert(_strategy != nullptr);
 
     _strategy->perform(*this);
     DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_NONE,
@@ -128,8 +128,8 @@ LayerPropertiesDialog::_apply()
 void
 LayerPropertiesDialog::_close()
 {
-    _setLayer(NULL);
-    _setDesktop(NULL);
+    _setLayer(nullptr);
+    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -141,7 +141,7 @@ LayerPropertiesDialog::_close()
 
 void
 LayerPropertiesDialog::_setup_position_controls() {
-    if ( NULL == _layer || _desktop->currentRoot() == _layer ) {
+    if ( nullptr == _layer || _desktop->currentRoot() == _layer ) {
         // no layers yet, so option above/below/sublayer is useless
         return;
     }
@@ -225,7 +225,7 @@ LayerPropertiesDialog::_setup_layers_controls() {
     if ( root ) {
         SPObject* target = _desktop->currentLayer();
         _store->clear();
-        _addLayer( document, SP_OBJECT(root), 0, target, 0 );
+        _addLayer( document, SP_OBJECT(root), nullptr, target, 0 );
     }
 
     _layout_table.remove(_layer_name_entry);
@@ -276,7 +276,7 @@ void LayerPropertiesDialog::_addLayer( SPDocument* doc, SPObject* layer, Gtk::Tr
 
 SPObject* LayerPropertiesDialog::_selectedLayer()
 {
-    SPObject* obj = 0;
+    SPObject* obj = nullptr;
 
     Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
     if ( iter ) {
@@ -347,7 +347,7 @@ void LayerPropertiesDialog::Create::setup(LayerPropertiesDialog &dialog) {
 
     // Set the initial name to the "next available" layer name
     LayerManager *mgr = dialog._desktop->layer_manager;
-    Glib::ustring newName = mgr->getNextLayerName(NULL, dialog._desktop->currentLayer()->label());
+    Glib::ustring newName = mgr->getNextLayerName(nullptr, dialog._desktop->currentLayer()->label());
     dialog._layer_name_entry.set_text(newName.c_str());
     dialog._apply_button.set_label(_("_Add"));
     dialog._setup_position_controls();
@@ -402,10 +402,10 @@ void LayerPropertiesDialog::_setDesktop(SPDesktop *desktop) {
 
 void LayerPropertiesDialog::_setLayer(SPObject *layer) {
     if (layer) {
-        sp_object_ref(layer, NULL);
+        sp_object_ref(layer, nullptr);
     }
     if (_layer) {
-        sp_object_unref(_layer, NULL);
+        sp_object_unref(_layer, nullptr);
     }
     _layer = layer;
 }

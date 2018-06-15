@@ -81,7 +81,7 @@ AppearTimeTracker::~AppearTimeTracker()
 {
     if ( _timer ) {
         g_timer_destroy(_timer);
-        _timer = 0;
+        _timer = nullptr;
     }
 
     unhookHandler( _mapId, _topMost );

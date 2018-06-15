@@ -163,7 +163,7 @@ public:
 
   friend class SPMeshPatchI;
 
-  SPMeshNodeArray() { built = false; mg = NULL; draggers_valid = false; };
+  SPMeshNodeArray() { built = false; mg = nullptr; draggers_valid = false; };
   SPMeshNodeArray( SPMeshGradient *mg );
   SPMeshNodeArray( const SPMeshNodeArray& rhs );
   SPMeshNodeArray& operator=(const SPMeshNodeArray& rhs);

@@ -30,7 +30,7 @@
 
 SPRoot::SPRoot() : SPGroup(), SPViewBox()
 {
-    this->onload = NULL;
+    this->onload = nullptr;
 
     static Inkscape::Version const zero_version(0, 0);
 
@@ -44,7 +44,7 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
     this->width.unset(SVGLength::PERCENT, 1.0, 1.0);
     this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
 
-    this->defs = NULL;
+    this->defs = nullptr;
 }
 
 SPRoot::~SPRoot()
@@ -91,7 +91,7 @@ void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
 
 void SPRoot::release()
 {
-    this->defs = NULL;
+    this->defs = nullptr;
 
     SPGroup::release();
 }
@@ -191,7 +191,7 @@ void SPRoot::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 void SPRoot::remove_child(Inkscape::XML::Node *child)
 {
     if (this->defs && (this->defs->getRepr() == child)) {
-        SPObject *iter = 0;
+        SPObject *iter = nullptr;
 
         // We search for first remaining <defs> node - it is not beautiful, but works
         for (auto& child: children) {
@@ -204,7 +204,7 @@ void SPRoot::remove_child(Inkscape::XML::Node *child)
 
         if (!iter) {
             /* we should probably create a new <defs> here? */
-            this->defs = NULL;
+            this->defs = nullptr;
         }
     }
 
@@ -285,7 +285,7 @@ void SPRoot::update(SPCtx *ctx, guint flags)
     SPGroup::update((SPCtx *) &rctx, flags);
 
     /* As last step set additional transform of drawing group */
-    for (SPItemView *v = this->display; v != NULL; v = v->next) {
+    for (SPItemView *v = this->display; v != nullptr; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
         g->setChildTransform(this->c2p);
     }

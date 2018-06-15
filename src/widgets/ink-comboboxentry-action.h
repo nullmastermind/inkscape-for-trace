@@ -79,9 +79,9 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new ( const gchar  *name,
 							 GtkTreeModel *model,
 							 gint          entry_width = -1,
 							 gint          extra_width = -1,
-							 gpointer cell_data_func = NULL,
-							 gpointer separator_func = NULL,
-							 GtkWidget* focusWidget = NULL);
+							 gpointer cell_data_func = nullptr,
+							 gpointer separator_func = nullptr,
+							 GtkWidget* focusWidget = nullptr);
 
 GtkTreeModel     *ink_comboboxentry_action_get_model( Ink_ComboBoxEntry_Action* action );
 GtkComboBox      *ink_comboboxentry_action_get_comboboxentry( Ink_ComboBoxEntry_Action* action );

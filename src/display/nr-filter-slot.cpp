@@ -29,7 +29,7 @@ FilterSlot::FilterSlot(DrawingItem *item, DrawingContext *bgdc,
         DrawingContext &graphic, FilterUnits const &u)
     : _item(item)
     , _source_graphic(graphic.rawTarget())
-    , _background_ct(bgdc ? bgdc->raw() : NULL)
+    , _background_ct(bgdc ? bgdc->raw() : nullptr)
     , _source_graphic_area(graphic.targetLogicalBounds().roundOutwards()) // fixme
     , _background_area(bgdc ? bgdc->targetLogicalBounds().roundOutwards() : Geom::IntRect()) // fixme
     , _units(u)
@@ -223,7 +223,7 @@ void FilterSlot::_set_internal(int slot_nr, cairo_surface_t *surface)
 
 void FilterSlot::set(int slot_nr, cairo_surface_t *surface)
 {
-    g_return_if_fail(surface != NULL);
+    g_return_if_fail(surface != nullptr);
 
     if (slot_nr == NR_FILTER_SLOT_NOT_SET)
         slot_nr = NR_FILTER_UNNAMED_SLOT;

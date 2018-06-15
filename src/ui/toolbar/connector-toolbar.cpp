@@ -105,7 +105,7 @@ static void sp_connector_orthogonal_toggled( GtkToggleAction* act, GObject *tbl 
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             item->setAttribute( "inkscape:connector-type",
-                    value, NULL);
+                    value, nullptr);
             item->avoidRef->handleSettingChange();
             modmade = true;
         }
@@ -152,7 +152,7 @@ static void connector_curvature_changed(GtkAdjustment *adj, GObject* tbl)
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             item->setAttribute( "inkscape:connector-curvature",
-                    value, NULL);
+                    value, nullptr);
             item->avoidRef->handleSettingChange();
             modmade = true;
         }
@@ -282,11 +282,11 @@ static void connector_tb_event_attr_changed(Inkscape::XML::Node *repr,
 }
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     connector_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 static void sp_connector_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
@@ -344,7 +344,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_connector_orthogonal_toggled), holder );
     }
 
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     // Curvature spinbox
     eact = create_adjustment_action( "ConnectorCurvatureAction",
                                     _("Connector Curvature"), _("Curvature:"),
@@ -352,8 +352,8 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     "/tools/connector/curvature", defaultConnCurvature,
                                     GTK_WIDGET(desktop->canvas), holder, TRUE, "inkscape:connector-curvature",
                                     0, 100, 1.0, 10.0,
-                                    0, 0, 0,
-                                    connector_curvature_changed, NULL /*unit tracker*/, 1, 0 );
+                                    nullptr, nullptr, 0,
+                                    connector_curvature_changed, nullptr /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
 
     // Spacing spinbox
@@ -363,8 +363,8 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                     "/tools/connector/spacing", defaultConnSpacing,
                                     GTK_WIDGET(desktop->canvas), holder, TRUE, "inkscape:connector-spacing",
                                     0, 100, 1.0, 10.0,
-                                    0, 0, 0,
-                                    connector_spacing_changed, NULL /*unit tracker*/, 1, 0 );
+                                    nullptr, nullptr, 0,
+                                    connector_spacing_changed, nullptr /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
 
     // Graph (connector network) layout
@@ -385,8 +385,8 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
                                      "/tools/connector/length", 100,
                                      GTK_WIDGET(desktop->canvas), holder, TRUE, "inkscape:connector-length",
                                      10, 1000, 10.0, 100.0,
-                                     0, 0, 0,
-                                     connector_length_changed, NULL /*unit tracker*/, 1, 0 );
+                                     nullptr, nullptr, 0,
+                                     connector_length_changed, nullptr /*unit tracker*/, 1, 0 );
     gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
 
 
@@ -425,7 +425,7 @@ void sp_connector_toolbox_prep( SPDesktop *desktop, GtkActionGroup* mainActions,
     // Code to watch for changes to the connector-spacing attribute in
     // the XML.
     Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
 
     purge_repr_listener( holder, holder );
 

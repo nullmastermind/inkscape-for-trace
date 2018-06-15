@@ -55,7 +55,7 @@ struct OrderingPoint {
         infoex(infoexIn),
         begin(beginIn)
     {
-        nearest[0] = nearest[1] = 0;
+        nearest[0] = nearest[1] = nullptr;
     }
 
     // Check if both nearest values are valid
@@ -137,7 +137,7 @@ struct OrderingGroupPoint {
         point(pointIn),
         group(groupIn),
         indexInGroup(indexIn),
-        connection(0),
+        connection(nullptr),
         indexInConnection(0),
         begin(beginIn),
         front(frontIn),
@@ -189,8 +189,8 @@ struct OrderingGroupConnection {
     {
         assert(fromIn->connection == 0);
         assert(toIn->connection == 0);
-        points[0] = 0;
-        points[1] = 0;
+        points[0] = nullptr;
+        points[1] = nullptr;
         Connect(0, fromIn);
         Connect(1, toIn);
     }
@@ -227,7 +227,7 @@ struct OrderingGroup {
         index(indexIn)
     {
         for (int i = 0; i < sizeof(endpoints) / sizeof(*endpoints); i++) {
-            endpoints[i] = 0;
+            endpoints[i] = nullptr;
         }
     }
 

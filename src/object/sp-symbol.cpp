@@ -77,7 +77,7 @@ void SPSymbol::update(SPCtx *ctx, guint flags) {
         SPGroup::update((SPCtx *) &rctx, flags);
 
         // As last step set additional transform of drawing group
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
         	Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
         	g->setChildTransform(this->c2p);
         }
@@ -109,7 +109,7 @@ Inkscape::XML::Node* SPSymbol::write(Inkscape::XML::Document *xml_doc, Inkscape:
 }
 
 Inkscape::DrawingItem* SPSymbol::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
-    Inkscape::DrawingItem *ai = 0;
+    Inkscape::DrawingItem *ai = nullptr;
 
     if (this->cloned) {
         // Cloned <symbol> is actually renderable

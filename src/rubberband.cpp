@@ -18,10 +18,10 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 
-Inkscape::Rubberband *Inkscape::Rubberband::_instance = NULL;
+Inkscape::Rubberband *Inkscape::Rubberband::_instance = nullptr;
 
 Inkscape::Rubberband::Rubberband(SPDesktop *dt)
-    : _desktop(dt), _rect(NULL), _touchpath(NULL), _started(false)
+    : _desktop(dt), _rect(nullptr), _touchpath(nullptr), _started(false)
 {
     _points.clear();
     _mode = RUBBERBAND_MODE_RECT;
@@ -32,12 +32,12 @@ void Inkscape::Rubberband::delete_canvas_items()
 {
     if (_rect) {
         SPCanvasItem *temp = _rect;
-        _rect = NULL;
+        _rect = nullptr;
         sp_canvas_item_destroy(temp);
     }
     if (_touchpath) {
         SPCanvasItem *temp = _touchpath;
-        _touchpath = NULL;
+        _touchpath = nullptr;
         sp_canvas_item_destroy(temp);
     }
 }
@@ -96,8 +96,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
     }
 
     if (_mode == RUBBERBAND_MODE_RECT) {
-        if (_rect == NULL) {
-            _rect = static_cast<CtrlRect *>(sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRLRECT, NULL));
+        if (_rect == nullptr) {
+            _rect = static_cast<CtrlRect *>(sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRLRECT, nullptr));
             _rect->setShadow(1, 0xffffffff);
         }
         _rect->setRectangle(Geom::Rect(_start, _end));
@@ -107,8 +107,8 @@ void Inkscape::Rubberband::move(Geom::Point const &p)
             sp_canvas_item_hide(_touchpath);
 
     } else if (_mode == RUBBERBAND_MODE_TOUCHPATH) {
-        if (_touchpath == NULL) {
-            _touchpath = sp_canvas_bpath_new(_desktop->getSketch(), NULL);
+        if (_touchpath == nullptr) {
+            _touchpath = sp_canvas_bpath_new(_desktop->getSketch(), nullptr);
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(_touchpath), 0xff0000ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(_touchpath), 0, SP_WIND_RULE_NONZERO);
         }
@@ -136,7 +136,7 @@ Geom::OptRect Inkscape::Rubberband::getRectangle() const
 
 Inkscape::Rubberband *Inkscape::Rubberband::get(SPDesktop *desktop)
 {
-    if (_instance == NULL) {
+    if (_instance == nullptr) {
         _instance = new Inkscape::Rubberband(desktop);
     }
 

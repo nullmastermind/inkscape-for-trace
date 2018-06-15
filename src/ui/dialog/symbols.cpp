@@ -107,11 +107,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_SYMBOLS),
   store(Gtk::ListStore::create(*getColumns())),
   all_docs_processed(0),
-  icon_view(0),
-  current_desktop(0),
+  icon_view(nullptr),
+  current_desktop(nullptr),
   desk_track(),
-  current_document(0),
-  preview_document(0),
+  current_document(nullptr),
+  preview_document(nullptr),
   instanceConns()
 {
 
@@ -527,13 +527,13 @@ void SymbolsDialog::hideOverlay() {
 void SymbolsDialog::insertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
     SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop) );
-    sp_action_perform (action, NULL);
+    sp_action_perform (action, nullptr);
 }
 
 void SymbolsDialog::revertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_UNSYMBOL );
     SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop ) );
-    sp_action_perform (action, NULL);
+    sp_action_perform (action, nullptr);
 }
 
 void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*context*/, Gtk::SelectionData& data, guint /*info*/, guint /*time*/)
@@ -589,7 +589,7 @@ SPDocument* SymbolsDialog::selectedSymbols() {
   /* OK, we know symbol name... now we need to copy it to clipboard, bon chance! */
   Glib::ustring doc_title = symbol_set->get_active_text();
   if (doc_title == ALLDOCS) {
-    return NULL;
+    return nullptr;
   }
   SPDocument* symbol_document = symbol_sets[doc_title];
   if( !symbol_document ) {
@@ -728,7 +728,7 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   g_free(fullname);
 
   if (!libvisio::VisioDocument::isSupported(&input)) {
-    return NULL;
+    return nullptr;
   }
   RVNGStringVector output;
   RVNGStringVector titles;
@@ -739,10 +739,10 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 #else
   if (!libvisio::VisioDocument::generateSVGStencils(&input, output)) {
 #endif
-    return NULL;
+    return nullptr;
   }
   if (output.empty()) {
-    return NULL;
+    return nullptr;
   }
 
   // prepare a valid title for the symbol file
@@ -816,7 +816,7 @@ void SymbolsDialog::getSymbolsTitle() {
           if(title.empty()) {
             title = _("Unnamed Symbols");
           }
-          symbol_sets[title]= NULL;
+          symbol_sets[title]= nullptr;
           ++number_docs;
         } else {
           std::ifstream infile(filename);
@@ -824,7 +824,7 @@ void SymbolsDialog::getSymbolsTitle() {
           while (std::getline(infile, line)) {
               std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
               if (!title_res.empty()) {
-                  symbol_sets[ellipsize(Glib::ustring(title_res), 33)]= NULL;
+                  symbol_sets[ellipsize(Glib::ustring(title_res), 33)]= nullptr;
                   ++number_docs;
                   break;
               }
@@ -836,7 +836,7 @@ void SymbolsDialog::getSymbolsTitle() {
                   if(title.empty()) {
                     title = _("Unnamed Symbols");
                   }
-                  symbol_sets[title]= NULL;
+                  symbol_sets[title]= nullptr;
                   ++number_docs;
                   break;
               }
@@ -852,7 +852,7 @@ void SymbolsDialog::getSymbolsTitle() {
 std::pair<Glib::ustring, SPDocument*>
 SymbolsDialog::getSymbolsSet(Glib::ustring title) 
 {
-    SPDocument* symbol_doc = NULL;
+    SPDocument* symbol_doc = nullptr;
     Glib::ustring current = symbol_set->get_active_text();
     if (current == CURRENTDOC) {
       return std::make_pair(CURRENTDOC, symbol_doc);
@@ -995,7 +995,7 @@ std::vector<SPUse*> SymbolsDialog::useInDoc( SPDocument* useDocument) {
 // This is a last ditch effort to find a style.
 gchar const* SymbolsDialog::styleFromUse( gchar const* id, SPDocument* document) {
 
-  gchar const* style = 0;
+  gchar const* style = nullptr;
   std::vector<SPUse*> l = useInDoc( document );
   for( auto use:l ) {
     if ( use ) {
@@ -1231,8 +1231,8 @@ void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
     (*row)[columns->symbol_id]        = Glib::ustring( id );
-    (*row)[columns->symbol_title]     = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", symbol_title.c_str()) ));
-    (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "SymbolDoc", doc_title.c_str()) ));
+    (*row)[columns->symbol_title]     = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", symbol_title.c_str()) ));
+    (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "SymbolDoc", doc_title.c_str()) ));
     (*row)[columns->symbol_image]     = pixbuf;
   }
   g_free(title);
@@ -1301,10 +1301,10 @@ SymbolsDialog::drawSymbol(SPObject *symbol)
   preview_document->ensureUpToDate();
 
   SPItem *item = dynamic_cast<SPItem *>(object_temp);
-  g_assert(item != NULL);
+  g_assert(item != nullptr);
   unsigned psize = SYMBOL_ICON_SIZES[pack_size];
 
-  Glib::RefPtr<Gdk::Pixbuf> pixbuf(NULL);
+  Glib::RefPtr<Gdk::Pixbuf> pixbuf(nullptr);
   // We could use cache here, but it doesn't really work with the structure
   // of this user interface and we've already cached the pixbuf in the gtklist
 

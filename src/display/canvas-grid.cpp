@@ -81,12 +81,12 @@ static void grid_canvasitem_class_init(GridCanvasItemClass *klass)
 static void
 grid_canvasitem_init (GridCanvasItem *griditem)
 {
-    griditem->grid = NULL;
+    griditem->grid = nullptr;
 }
 
 static void grid_canvasitem_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (INKSCAPE_IS_GRID_CANVASITEM (object));
 
     if (SP_CANVAS_ITEM_CLASS(grid_canvasitem_parent_class)->destroy)
@@ -131,11 +131,11 @@ grid_canvasitem_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned
 //   CanvasGrid
 
     static Inkscape::XML::NodeEventVector const _repr_events = {
-        NULL, /* child_added */
-        NULL, /* child_removed */
+        nullptr, /* child_added */
+        nullptr, /* child_removed */
         CanvasGrid::on_repr_attr_changed,
-        NULL, /* content_changed */
-        NULL  /* order_changed */
+        nullptr, /* content_changed */
+        nullptr  /* order_changed */
     };
 
 CanvasGrid::CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument *in_doc, GridType type)
@@ -244,10 +244,10 @@ CanvasGrid::writeNewGridToRepr(Inkscape::XML::Node * repr, SPDocument * doc, Gri
 CanvasGrid*
 CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * doc, GridType gridtype)
 {
-    if (!repr) return NULL;
+    if (!repr) return nullptr;
     if (!doc) {
         g_error("CanvasGrid::NewGrid - doc==NULL");
-        return NULL;
+        return nullptr;
     }
 
     switch (gridtype) {
@@ -257,7 +257,7 @@ CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * d
             return dynamic_cast<CanvasGrid*>(new CanvasAxonomGrid(nv, repr, doc));
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -267,18 +267,18 @@ CanvasGrid::NewGrid(SPNamedView * nv, Inkscape::XML::Node * repr, SPDocument * d
 GridCanvasItem *
 CanvasGrid::createCanvasItem(SPDesktop * desktop)
 {
-    if (!desktop) return NULL;
+    if (!desktop) return nullptr;
 //    Johan: I think for multiple desktops it is best if each has their own canvasitem,
 //           but share the same CanvasGrid object; that is what this function is for.
 
     // check if there is already a canvasitem on this desktop linking to this grid
     for (auto i:canvasitems) {
         if ( desktop->getGridGroup() == SP_CANVAS_GROUP(i->parent) ) {
-            return NULL;
+            return nullptr;
         }
     }
 
-    GridCanvasItem * item = INKSCAPE_GRID_CANVASITEM( sp_canvas_item_new(desktop->getGridGroup(), INKSCAPE_TYPE_GRID_CANVASITEM, NULL) );
+    GridCanvasItem * item = INKSCAPE_GRID_CANVASITEM( sp_canvas_item_new(desktop->getGridGroup(), INKSCAPE_TYPE_GRID_CANVASITEM, nullptr) );
     item->grid = this;
     sp_canvas_item_show(SP_CANVAS_ITEM(item));
 
@@ -340,7 +340,7 @@ CanvasGrid::newWidget()
     // set widget values
     _wr.setUpdating (true);
     _rcb_visible->setActive(visible);
-    if (snapper != NULL) {
+    if (snapper != nullptr) {
         _rcb_enabled->setActive(snapper->getEnabled());
         _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
@@ -359,7 +359,7 @@ CanvasGrid::on_repr_attr_changed(Inkscape::XML::Node *repr, gchar const *key, gc
 
 bool CanvasGrid::isEnabled() const
 {
-    if (snapper == NULL) {
+    if (snapper == nullptr) {
        return false;
     }
 
@@ -454,7 +454,7 @@ static void validateInt(gint oldVal,
                         gint* pTarget)
 {
     // Avoid nullness.
-    if ( pTarget == NULL )
+    if ( pTarget == nullptr )
         return;
 
     // Invalid new value?
@@ -600,12 +600,12 @@ CanvasXYGrid::readRepr()
     }
 
     if ( (value = repr->attribute("enabled")) ) {
-        g_assert(snapper != NULL);
+        g_assert(snapper != nullptr);
         snapper->setEnabled(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
     if ( (value = repr->attribute("snapvisiblegridlinesonly")) ) {
-        g_assert(snapper != NULL);
+        g_assert(snapper != nullptr);
         snapper->setSnapVisibleOnly(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
@@ -735,7 +735,7 @@ CanvasXYGrid::updateWidgets()
     _wr.setUpdating (true);
 
     _rcb_visible->setActive(visible);
-    if (snapper != NULL) {
+    if (snapper != nullptr) {
         _rcb_enabled->setActive(snapper->getEnabled());
         _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
@@ -1022,7 +1022,7 @@ CanvasXYGridSnapper::_getSnapLines(Geom::Point const &p) const
 {
     LineList s;
 
-    if ( grid == NULL ) {
+    if ( grid == nullptr ) {
         return s;
     }
 

@@ -63,12 +63,12 @@ static inline potrace_bitmap_t *bm_new(int w, int h) {
   /* check for overflow error */
   if (size < 0 || (h != 0 && dy != 0 && size / h / dy != BM_WORDSIZE)) {
     errno = ENOMEM;
-    return NULL;
+    return nullptr;
   }
 
   bm = (potrace_bitmap_t *) malloc(sizeof(potrace_bitmap_t));
   if (!bm) {
-    return NULL;
+    return nullptr;
   }
   bm->w = w;
   bm->h = h;
@@ -76,7 +76,7 @@ static inline potrace_bitmap_t *bm_new(int w, int h) {
   bm->map = (potrace_word *) malloc(size);
   if (!bm->map) {
     free(bm);
-    return NULL;
+    return nullptr;
   }
   return bm;
 }
@@ -94,7 +94,7 @@ static inline potrace_bitmap_t *bm_dup(const potrace_bitmap_t *bm) {
   potrace_bitmap_t *bm1 = bm_new(bm->w, bm->h);
   ptrdiff_t size = (ptrdiff_t)bm->dy * (ptrdiff_t)bm->h * (ptrdiff_t)BM_WORDSIZE;
   if (!bm1) {
-    return NULL;
+    return nullptr;
   }
   memcpy(bm1->map, bm->map, size);
   return bm1;

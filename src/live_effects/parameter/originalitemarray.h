@@ -32,7 +32,7 @@ namespace LivePathEffect {
 class ItemAndActive {
 public:
     ItemAndActive(SPObject *owner)
-    : href(NULL),
+    : href(nullptr),
     ref(owner),
     actived(true)
     {

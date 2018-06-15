@@ -19,7 +19,7 @@ AlphaLigne::AlphaLigne(int iMin,int iMax)
 	min=iMin;
 	max=iMax;
 	if ( max < min+1 ) max=min+1;
-	steps=NULL;
+	steps=nullptr;
 	nbStep=maxStep=0;
 	before.x=min-1;
 	before.delta=0;
@@ -29,7 +29,7 @@ AlphaLigne::AlphaLigne(int iMin,int iMax)
 AlphaLigne::~AlphaLigne(void)
 {
 	g_free(steps);
-	steps=NULL;
+	steps=nullptr;
 	nbStep=maxStep=0;
 }
 void						 AlphaLigne::Affiche(void)

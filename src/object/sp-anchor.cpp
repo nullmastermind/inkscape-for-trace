@@ -23,10 +23,10 @@
 #include "document.h"
 
 SPAnchor::SPAnchor() : SPGroup() {
-    this->href = NULL;
-    this->type = NULL;
-    this->title = NULL;
-    this->page = NULL;
+    this->href = nullptr;
+    this->type = nullptr;
+    this->title = nullptr;
+    this->page = nullptr;
 }
 
 SPAnchor::~SPAnchor() {
@@ -48,19 +48,19 @@ void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPAnchor::release() {
     if (this->href) {
         g_free(this->href);
-        this->href = NULL;
+        this->href = nullptr;
     }
     if (this->type) {
         g_free(this->type);
-        this->type = NULL;
+        this->type = nullptr;
     }
     if (this->title) {
         g_free(this->title);
-        this->title = NULL;
+        this->title = nullptr;
     }
     if (this->page) {
         g_free(this->page);
-        this->page = NULL;
+        this->page = nullptr;
     }
 
     SPGroup::release();

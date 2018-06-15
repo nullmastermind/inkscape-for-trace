@@ -196,7 +196,7 @@ ScalarParam::param_newWidget()
         }
         return dynamic_cast<Gtk::Widget *> (rsu);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 

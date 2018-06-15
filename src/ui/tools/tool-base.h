@@ -68,7 +68,7 @@ public:
 
     DelayedSnapEvent(ToolBase *event_context, gpointer const dse_item, gpointer dse_item2, GdkEventMotion const *event, DelayedSnapEvent::DelayedSnapEventOrigin const origin)
         : _timer_id(0)
-        , _event(NULL)
+        , _event(nullptr)
         , _item(dse_item)
         , _item2(dse_item2)
         , _origin(origin)
@@ -90,7 +90,7 @@ public:
 
     ~DelayedSnapEvent()    {
         if (_timer_id > 0) g_source_remove(_timer_id); // Kill the watchdog
-        if (_event != NULL) gdk_event_free(_event); // Remove the copy of the original event
+        if (_event != nullptr) gdk_event_free(_event); // Remove the copy of the original event
     }
 
     ToolBase* getEventContext() {
@@ -253,7 +253,7 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEv
                                 gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
 
 void init_latin_keys_group();
-guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers = NULL);
+guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers = nullptr);
 
 SPItem *sp_event_context_find_item (SPDesktop *desktop, Geom::Point const &p, bool select_under, bool into_groups);
 SPItem *sp_event_context_over_item (SPDesktop *desktop, SPItem *item, Geom::Point const &p);

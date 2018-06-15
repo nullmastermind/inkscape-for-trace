@@ -47,7 +47,7 @@ using std::vector;
 
 SPGuide::SPGuide()
     : SPObject()
-    , label(NULL)
+    , label(nullptr)
     , locked(0)
     , normal_to_line(Geom::Point(0.,1.))
     , point_on_line(Geom::Point(0.,0.))
@@ -106,7 +106,7 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         if (value) {
             this->label = g_strdup(value);
         } else {
-            this->label = NULL;
+            this->label = nullptr;
         }
 
         this->set_label(this->label, false);
@@ -220,7 +220,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
     sp_repr_set_point(repr, "orientation", n);
 
-    SPNamedView *namedview = sp_document_namedview(doc, NULL);
+    SPNamedView *namedview = sp_document_namedview(doc, nullptr);
     if (namedview) {
         if (namedview->lockguides) {
             repr->setAttribute("inkscape:locked", "true");
@@ -299,7 +299,7 @@ void SPGuide::showSPGuide()
 
 void SPGuide::hideSPGuide(SPCanvas *canvas)
 {
-    g_assert(canvas != NULL);
+    g_assert(canvas != nullptr);
     g_assert(SP_IS_CANVAS(canvas));
     for(std::vector<SPGuideLine *>::iterator it = this->views.begin(); it != this->views.end(); ++it) {
         if (canvas == SP_CANVAS_ITEM(*it)->canvas) {
@@ -324,7 +324,7 @@ void SPGuide::hideSPGuide()
 
 void SPGuide::sensitize(SPCanvas *canvas, bool sensitive)
 {
-    g_assert(canvas != NULL);
+    g_assert(canvas != nullptr);
     g_assert(SP_IS_CANVAS(canvas));
 
     for(std::vector<SPGuideLine *>::const_iterator it = this->views.begin(); it != this->views.end(); ++it) {
@@ -479,12 +479,12 @@ char* SPGuide::description(bool const verbose) const
     using Geom::X;
     using Geom::Y;
 
-    char *descr = NULL;
+    char *descr = nullptr;
     if ( !this->document ) {
         // Guide has probably been deleted and no longer has an attached namedview.
         descr = g_strdup(_("Deleted"));
     } else {
-        SPNamedView *namedview = sp_document_namedview(this->document, NULL);
+        SPNamedView *namedview = sp_document_namedview(this->document, nullptr);
 
         Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(this->point_on_line[X], "px");
         Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(this->point_on_line[Y], "px");

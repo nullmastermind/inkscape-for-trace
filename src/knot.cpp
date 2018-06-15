@@ -63,9 +63,9 @@ static int sp_knot_handler(SPCanvasItem *item, GdkEvent *event, SPKnot *knot);
 SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     : ref_count(1)
 {
-    this->desktop = NULL;
-    this->item = NULL;
-    this->owner = NULL;
+    this->desktop = nullptr;
+    this->item = nullptr;
+    this->owner = nullptr;
     this->flags = 0;
 
     this->size = 8;
@@ -75,7 +75,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->anchor = SP_ANCHOR_CENTER;
     this->shape = SP_KNOT_SHAPE_SQUARE;
     this->mode = SP_KNOT_MODE_XOR;
-    this->tip = NULL;
+    this->tip = nullptr;
     this->_event_handler_id = 0;
     this->pressure = 0;
 
@@ -89,18 +89,18 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->stroke[SP_KNOT_STATE_DRAGGING] = 0x01000000;
     this->stroke[SP_KNOT_STATE_SELECTED] = 0x01000000;
 
-    this->image[SP_KNOT_STATE_NORMAL] = NULL;
-    this->image[SP_KNOT_STATE_MOUSEOVER] = NULL;
-    this->image[SP_KNOT_STATE_DRAGGING] = NULL;
-    this->image[SP_KNOT_STATE_SELECTED] = NULL;
+    this->image[SP_KNOT_STATE_NORMAL] = nullptr;
+    this->image[SP_KNOT_STATE_MOUSEOVER] = nullptr;
+    this->image[SP_KNOT_STATE_DRAGGING] = nullptr;
+    this->image[SP_KNOT_STATE_SELECTED] = nullptr;
     
-    this->cursor[SP_KNOT_STATE_NORMAL] = NULL;
-    this->cursor[SP_KNOT_STATE_MOUSEOVER] = NULL;
-    this->cursor[SP_KNOT_STATE_DRAGGING] = NULL;
-    this->cursor[SP_KNOT_STATE_SELECTED] = NULL;
+    this->cursor[SP_KNOT_STATE_NORMAL] = nullptr;
+    this->cursor[SP_KNOT_STATE_MOUSEOVER] = nullptr;
+    this->cursor[SP_KNOT_STATE_DRAGGING] = nullptr;
+    this->cursor[SP_KNOT_STATE_SELECTED] = nullptr;
 
-    this->saved_cursor = NULL;
-    this->pixbuf = NULL;
+    this->saved_cursor = nullptr;
+    this->pixbuf = nullptr;
 
 
     this->desktop = desktop;
@@ -155,19 +155,19 @@ SPKnot::~SPKnot() {
 
     if (this->item) {
         sp_canvas_item_destroy(this->item);
-        this->item = NULL;
+        this->item = nullptr;
     }
 
     for (gint i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
         if (this->cursor[i]) {
             g_object_unref(this->cursor[i]);
-            this->cursor[i] = NULL;
+            this->cursor[i] = nullptr;
         }
     }
 
     if (this->tip) {
         g_free(this->tip);
-        this->tip = NULL;
+        this->tip = nullptr;
     }
 
     // FIXME: cannot snap to destroyed knot (lp:1309050)
@@ -201,7 +201,7 @@ void SPKnot::selectKnot(bool select){
  */
 static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot)
 {
-    g_assert(knot != NULL);
+    g_assert(knot != nullptr);
     g_assert(SP_IS_KNOT(knot));
 
     /* Run client universal event handler, if present */
@@ -295,7 +295,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 knot->grabbed_signal.emit(knot, event->button.state);
             }
 
-            sp_event_context_snap_delay_handler(knot->desktop->event_context, NULL, knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);
+            sp_event_context_snap_delay_handler(knot->desktop->event_context, nullptr, knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);
             sp_knot_handler_request_position(event, knot);
             moved = TRUE;
         }

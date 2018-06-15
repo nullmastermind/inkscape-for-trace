@@ -69,7 +69,7 @@ Inkscape::XML::Node* SPPolygon::write(Inkscape::XML::Document *xml_doc, Inkscape
 
     /* We can safely write points here, because all subclasses require it too (Lauris) */
     /* While saving polygon element without points attribute _curve is NULL (see bug 1202753) */
-    if (this->_curve != NULL) {
+    if (this->_curve != nullptr) {
         gchar *str = sp_svg_write_polygon(this->_curve->get_pathvector());
         repr->setAttribute("points", str);
         g_free(str);
@@ -91,7 +91,7 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
         return false;
     }
 
-    gchar *e = NULL;
+    gchar *e = nullptr;
     *v = g_ascii_strtod(*p, &e);
 
     if (e == *p) {

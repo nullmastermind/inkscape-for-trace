@@ -276,7 +276,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
             std::string new_href = sp_relative_path_from_path(abs_href, new_abs_base);
             ir->setAttribute("sodipodi:absref", ( spns
                                                   ? abs_href.c_str()
-                                                  : NULL ));
+                                                  : nullptr ));
             if (!Glib::path_is_absolute(new_href)) {
 #ifdef WIN32
                 /* Native Windows path separators are replaced with / so that the href
@@ -285,7 +285,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
 #endif
                 ir->setAttribute("xlink:href", new_href.c_str());
             } else {
-                ir->setAttribute("xlink:href", g_filename_to_uri(new_href.c_str(), NULL, NULL));
+                ir->setAttribute("xlink:href", g_filename_to_uri(new_href.c_str(), nullptr, nullptr));
             }
 
             /* impl: I assume that if !spns then any existing sodipodi:absref is about to get

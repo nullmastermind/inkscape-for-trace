@@ -72,7 +72,7 @@ static void ege_adjustment_action_defocus( EgeAdjustmentAction* action );
 static void egeAct_free_description( gpointer data, gpointer user_data );
 static void egeAct_free_all_descriptions( EgeAdjustmentAction* action );
 
-static EgeCreateAdjWidgetCB gFactoryCb = 0;
+static EgeCreateAdjWidgetCB gFactoryCb = nullptr;
 static GQuark gDataName = 0;
 
 enum {
@@ -90,7 +90,7 @@ static const gchar *floogles[] = {
     INKSCAPE_ICON("go-down"),
     INKSCAPE_ICON("help-about"),
     INKSCAPE_ICON("go-up"),
-    0};
+    nullptr};
 
 typedef struct _EgeAdjustmentDescr EgeAdjustmentDescr;
 
@@ -204,7 +204,7 @@ static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass )
                                          g_param_spec_string( "self-id",
                                                               "Self ID",
                                                               "Marker for self pointer",
-                                                              0,
+                                                              nullptr,
                                                               (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
 
         g_object_class_install_property( objClass,
@@ -259,30 +259,30 @@ void ege_adjustment_action_set_compact_tool_factory( EgeCreateAdjWidgetCB factor
 static void ege_adjustment_action_init( EgeAdjustmentAction* action )
 {
     action->private_data = EGE_ADJUSTMENT_ACTION_GET_PRIVATE( action );
-    action->private_data->adj = 0;
-    action->private_data->focusWidget = 0;
+    action->private_data->adj = nullptr;
+    action->private_data->focusWidget = nullptr;
     action->private_data->climbRate = 0.0;
     action->private_data->digits = 2;
     action->private_data->epsilon = 0.009;
     action->private_data->format = g_strdup_printf("%%0.%df%%s%%s", action->private_data->digits);
-    action->private_data->selfId = 0;
-    action->private_data->toolPost = 0;
+    action->private_data->selfId = nullptr;
+    action->private_data->toolPost = nullptr;
     action->private_data->lastVal = 0.0;
     action->private_data->step = 0.0;
     action->private_data->page = 0.0;
     action->private_data->appearanceMode = APPEARANCE_NONE;
     action->private_data->transferFocus = FALSE;
     //action->private_data->descriptions = 0;
-    action->private_data->appearance = 0;
-    action->private_data->iconId = 0;
+    action->private_data->appearance = nullptr;
+    action->private_data->iconId = nullptr;
     action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
-    action->private_data->unitTracker = NULL;
+    action->private_data->unitTracker = nullptr;
 }
 
 static void ege_adjustment_action_finalize( GObject* object )
 {
-    EgeAdjustmentAction* action = 0;
-    g_return_if_fail( object != NULL );
+    EgeAdjustmentAction* action = nullptr;
+    g_return_if_fail( object != nullptr );
     g_return_if_fail( IS_EGE_ADJUSTMENT_ACTION(object) );
 
     action = EGE_ADJUSTMENT_ACTION( object );
@@ -510,7 +510,7 @@ static void egeAct_free_description( gpointer data, gpointer user_data ) {
         EgeAdjustmentDescr* descr = (EgeAdjustmentDescr*)data;
         if ( descr->descr ) {
             g_free( descr->descr );
-            descr->descr = 0;
+            descr->descr = nullptr;
         }
         g_free( descr );
     }
@@ -519,7 +519,7 @@ static void egeAct_free_description( gpointer data, gpointer user_data ) {
 static void egeAct_free_all_descriptions( EgeAdjustmentAction* action )
 {
     for(auto i:action->private_data->descriptions) {
-        egeAct_free_description(i,0);
+        egeAct_free_description(i,nullptr);
     }
     for(auto i:action->private_data->descriptions) {
         g_free(i);
@@ -555,7 +555,7 @@ void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar 
         guint i = 0;
         for ( i = 0; i < count; i++ ) {
             EgeAdjustmentDescr* descr = g_new0( EgeAdjustmentDescr, 1 );
-            descr->descr = descriptions[i] ? g_strdup( descriptions[i] ) : 0;
+            descr->descr = descriptions[i] ? g_strdup( descriptions[i] ) : nullptr;
             descr->value = values[i];
             action->private_data->descriptions.push_back(descr);
             std::sort(action->private_data->descriptions.begin(),action->private_data->descriptions.end());
@@ -629,8 +629,8 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
 
 static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, Gtk::RadioMenuItem::Group *group, gdouble num, gboolean active )
 {
-    char* str = 0;
-    EgeAdjustmentDescr* marker = 0;
+    char* str = nullptr;
+    EgeAdjustmentDescr* marker = nullptr;
     std::vector<EgeAdjustmentDescr*> cur = act->private_data->descriptions;
 
     for (auto descr:cur) {
@@ -682,7 +682,7 @@ static int flush_explicit_items( std::vector<EgeAdjustmentDescr*> descriptions,
             create_single_menu_item( toggleCb, val + ( std::find(act->private_data->descriptions.begin(),act->private_data->descriptions.end(),descr) - act->private_data->descriptions.begin() ) , menu, act, dst, group, descr->value, FALSE );
         }
         pos--;
-        descr = (pos<0) ? descriptions[pos] : NULL;
+        descr = (pos<0) ? descriptions[pos] : nullptr;
     }
 
     return pos;
@@ -693,7 +693,7 @@ static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
     GtkWidget* menu = gtk_menu_new();
 
     Gtk::RadioMenuItem::Group group;
-    GtkWidget* single = 0;
+    GtkWidget* single = nullptr;
     std::vector<EgeAdjustmentDescr*> list = act->private_data->descriptions;
     int addOns = list.size() - 1;
 
@@ -749,12 +749,12 @@ static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
 
 static GtkWidget* create_menu_item( GtkAction* action )
 {
-    GtkWidget* item = 0;
+    GtkWidget* item = nullptr;
 
     if ( IS_EGE_ADJUSTMENT_ACTION(action) ) {
         EgeAdjustmentAction* act = EGE_ADJUSTMENT_ACTION( action );
         GValue value;
-        GtkWidget*  subby = 0;
+        GtkWidget*  subby = nullptr;
 
         memset( &value, 0, sizeof(value) );
         g_value_init( &value, G_TYPE_STRING );
@@ -811,11 +811,11 @@ static gboolean event_cb( EgeAdjustmentAction* act, GdkEvent* evt )
 
 static GtkWidget* create_tool_item( GtkAction* action )
 {
-    GtkWidget* item = 0;
+    GtkWidget* item = nullptr;
 
     if ( IS_EGE_ADJUSTMENT_ACTION(action) ) {
         EgeAdjustmentAction* act = EGE_ADJUSTMENT_ACTION( action );
-        GtkWidget* spinbutton = 0;
+        GtkWidget* spinbutton = nullptr;
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
         GValue value;
@@ -833,7 +833,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
             gtk_widget_set_size_request(spinbutton, 100, -1);
 
         } else if ( act->private_data->appearanceMode == APPEARANCE_MINIMAL ) {
-            spinbutton = gtk_scale_button_new( GTK_ICON_SIZE_MENU, 0, 100, 2, 0 );
+            spinbutton = gtk_scale_button_new( GTK_ICON_SIZE_MENU, 0, 100, 2, nullptr );
             gtk_scale_button_set_adjustment( GTK_SCALE_BUTTON(spinbutton), act->private_data->adj );
             gtk_scale_button_set_icons( GTK_SCALE_BUTTON(spinbutton), floogles );
         } else {
@@ -969,8 +969,8 @@ static gboolean process_tab( GtkWidget* widget, int direction )
 {
     gboolean handled = FALSE;
     GtkWidget* parent = gtk_widget_get_parent(widget);
-    GtkWidget* gp = parent ? gtk_widget_get_parent(parent) : 0;
-    GtkWidget* ggp = gp ? gtk_widget_get_parent(gp) : 0;
+    GtkWidget* gp = parent ? gtk_widget_get_parent(parent) : nullptr;
+    GtkWidget* ggp = gp ? gtk_widget_get_parent(gp) : nullptr;
 
     if ( ggp && GTK_IS_TOOLBAR(ggp) ) {
         std::vector<Gtk::Widget*> kids = Glib::wrap(GTK_CONTAINER(ggp))->get_children();
@@ -1017,7 +1017,7 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
     guint key = 0;
     gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          event->hardware_keycode, (GdkModifierType)event->state,
-                                         0, &key, 0, 0, 0 );
+                                         0, &key, nullptr, nullptr, nullptr );
 
     switch ( key ) {
         case GDK_KEY_Escape:

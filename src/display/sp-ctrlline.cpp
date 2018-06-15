@@ -51,19 +51,19 @@ static void sp_ctrlline_init(SPCtrlLine *ctrlline)
 {
     ctrlline->rgba = 0x0000ff7f;
     ctrlline->s[Geom::X] = ctrlline->s[Geom::Y] = ctrlline->e[Geom::X] = ctrlline->e[Geom::Y] = 0.0;
-    ctrlline->item=NULL;
+    ctrlline->item=nullptr;
     ctrlline->is_fill = true;
 }
 
 namespace {
 void sp_ctrlline_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_CTRLLINE(object));
 
     SPCtrlLine *ctrlline = SP_CTRLLINE(object);
 
-    ctrlline->item = NULL;
+    ctrlline->item = nullptr;
 
     if(SP_CANVAS_ITEM_CLASS (sp_ctrlline_parent_class)->destroy) {
        SP_CANVAS_ITEM_CLASS (sp_ctrlline_parent_class)->destroy(object);

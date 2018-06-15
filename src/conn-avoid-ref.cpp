@@ -45,7 +45,7 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item);
 
 
 SPAvoidRef::SPAvoidRef(SPItem *spitem)
-    : shapeRef(NULL)
+    : shapeRef(nullptr)
     , item(spitem)
     , setting(false)
     , new_setting(false)
@@ -65,7 +65,7 @@ SPAvoidRef::~SPAvoidRef()
     if (shapeRef && router) {
         router->deleteShape(shapeRef);
     }
-    shapeRef = NULL;
+    shapeRef = nullptr;
 }
 
 
@@ -83,7 +83,7 @@ void SPAvoidRef::setAvoid(char const *value)
 void SPAvoidRef::handleSettingChange(void)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL) {
+    if (desktop == nullptr) {
         return;
     }
     if (desktop->getDocument() != item->document) {
@@ -112,7 +112,7 @@ void SPAvoidRef::handleSettingChange(void)
                     sigc::ptr_fun(&avoid_item_move));
 
             char const *id = item->getAttribute("id");
-            g_assert(id != NULL);
+            g_assert(id != nullptr);
 
             // Get a unique ID for the item.
             GQuark itemID = g_quark_from_string(id);
@@ -125,7 +125,7 @@ void SPAvoidRef::handleSettingChange(void)
         g_assert(shapeRef);
 
         router->deleteShape(shapeRef);
-        shapeRef = NULL;
+        shapeRef = nullptr;
     }
 }
 
@@ -142,7 +142,7 @@ std::vector<SPItem *> SPAvoidRef::getAttachedShapes(const unsigned int type)
     for (Avoid::IntList::iterator i = shapes.begin(); i != finish; ++i) {
         const gchar *connId = g_quark_to_string(*i);
         SPObject *obj = item->document->getObjectById(connId);
-        if (obj == NULL) {
+        if (obj == nullptr) {
             g_warning("getAttachedShapes: Object with id=\"%s\" is not "
                     "found. Skipping.", connId);
             continue;
@@ -166,7 +166,7 @@ std::vector<SPItem *> SPAvoidRef::getAttachedConnectors(const unsigned int type)
     for (Avoid::IntList::iterator i = conns.begin(); i != finish; ++i) {
         const gchar *connId = g_quark_to_string(*i);
         SPObject *obj = item->document->getObjectById(connId);
-        if (obj == NULL) {
+        if (obj == nullptr) {
             g_warning("getAttachedConnectors: Object with id=\"%s\" is not "
                     "found. Skipping.", connId);
             continue;
@@ -270,7 +270,7 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
 static Avoid::Polygon avoid_item_poly(SPItem const *item)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    g_assert(desktop != NULL);
+    g_assert(desktop != nullptr);
     double spacing = desktop->namedview->connector_spacing;
 
     Geom::Affine itd_mat = item->i2doc_affine();

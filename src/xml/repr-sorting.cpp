@@ -14,7 +14,7 @@ Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node
 {
     using Inkscape::Algorithms::longest_common_suffix;
     Inkscape::XML::Node const *ancestor = longest_common_suffix<Inkscape::XML::NodeConstParentIterator>(
-        a, b, NULL, &same_repr);
+        a, b, nullptr, &same_repr);
     bool OK = false;
     if (ancestor) {
         if (ancestor->type() != Inkscape::XML::DOCUMENT_NODE) {
@@ -24,7 +24,7 @@ Inkscape::XML::Node const *LCA(Inkscape::XML::Node const *a, Inkscape::XML::Node
     if ( OK ) {
         return ancestor;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -36,7 +36,7 @@ Inkscape::XML::Node *LCA(Inkscape::XML::Node *a, Inkscape::XML::Node *b)
 
 Inkscape::XML::Node const *AncetreFils(Inkscape::XML::Node const *descendent, Inkscape::XML::Node const *ancestor)
 {
-    Inkscape::XML::Node const *result = 0;
+    Inkscape::XML::Node const *result = nullptr;
     if ( descendent && ancestor ) {
         if (descendent->parent() == ancestor) {
             result = descendent;

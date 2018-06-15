@@ -125,12 +125,12 @@ GdkCursor *sp_cursor_from_xpm(char const *const *xpm, guint32 fill, guint32 stro
         }
 #endif
 
-        pixbuf = gdk_pixbuf_new_from_data(reinterpret_cast<guchar*>(pixmap_buffer), GDK_COLORSPACE_RGB, TRUE, 8, width, height, width * sizeof(guint32), free_cursor_data, NULL);
+        pixbuf = gdk_pixbuf_new_from_data(reinterpret_cast<guchar*>(pixmap_buffer), GDK_COLORSPACE_RGB, TRUE, 8, width, height, width * sizeof(guint32), free_cursor_data, nullptr);
     } else {
 	pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
     }
 
-    if (pixbuf != NULL) {
+    if (pixbuf != nullptr) {
 	cursor = gdk_cursor_new_from_pixbuf(display, pixbuf, hot_x, hot_y);
         g_object_unref(pixbuf);
     } else {

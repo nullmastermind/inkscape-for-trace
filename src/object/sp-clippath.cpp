@@ -45,7 +45,7 @@ SPClipPath::SPClipPath() : SPObjectGroup() {
     this->clipPathUnits_set = FALSE;
     this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 
-    this->display = NULL;
+    this->display = nullptr;
 }
 
 SPClipPath::~SPClipPath() {
@@ -111,7 +111,7 @@ void SPClipPath::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* re
     SPObject *ochild = this->document->getObjectByRepr(child);
 
     if (SP_IS_ITEM(ochild)) {
-        for (SPClipPathView *v = this->display; v != NULL; v = v->next) {
+        for (SPClipPathView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingItem *ac = SP_ITEM(ochild)->invoke_show(v->arenaitem->drawing(), v->key, SP_ITEM_REFERENCE_FLAGS);
 
             if (ac) {
@@ -142,7 +142,7 @@ void SPClipPath::update(SPCtx* ctx, unsigned int flags) {
         sp_object_unref(child);
     }
 
-    for (SPClipPathView *v = this->display; v != NULL; v = v->next) {
+    for (SPClipPathView *v = this->display; v != nullptr; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
 
         if (this->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && v->bbox) {
@@ -218,7 +218,7 @@ void SPClipPath::hide(unsigned int key) {
             SP_ITEM(&child)->invoke_hide(key);
         }
     }
-    for (SPClipPathView *v = display; v != NULL; v = v->next) {
+    for (SPClipPathView *v = display; v != nullptr; v = v->next) {
         if (v->key == key) {
             /* We simply unref and let item to manage this in handler */
             display = sp_clippath_view_list_remove(display, v);
@@ -228,7 +228,7 @@ void SPClipPath::hide(unsigned int key) {
 }
 
 void SPClipPath::setBBox(unsigned int key, Geom::OptRect const &bbox) {
-    for (SPClipPathView *v = display; v != NULL; v = v->next) {
+    for (SPClipPathView *v = display; v != nullptr; v = v->next) {
         if (v->key == key) {
             v->bbox = bbox;
             break;

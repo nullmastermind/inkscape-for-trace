@@ -219,7 +219,7 @@ Glib::ustring GrDrag::makeStopSafeColor( gchar const *str, bool &isNull )
                     if (firstStop) {
                         Glib::ustring stopColorStr;
                         if (firstStop->currentColor) {
-                            stopColorStr = firstStop->getStyleProperty("color", NULL);
+                            stopColorStr = firstStop->getStyleProperty("color", nullptr);
                         } else {
                             stopColorStr = firstStop->specified_color.toString();
                         }
@@ -360,7 +360,7 @@ guint32 GrDrag::getColor()
 SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double tolerance)
 {
     gfloat new_stop_offset = 0; // type of SPStop.offset = gfloat
-    SPGradient *gradient = 0;
+    SPGradient *gradient = nullptr;
     //bool r1_knot = false;
 
     // For Mesh
@@ -532,7 +532,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
             }
             if (!next_stop) {
                 // logical error: the endstop should have offset 1 and should always be more than this offset here
-                return NULL;
+                return nullptr;
             }
 
 
@@ -569,7 +569,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
         } // Mesh
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -585,7 +585,7 @@ bool GrDrag::dropColor(SPItem */*item*/, gchar const *c, Geom::Point p)
 
         if (Geom::L2(p - d->point)*desktop->current_zoom() < 5) {
            SPCSSAttr *stop = sp_repr_css_attr_new ();
-           sp_repr_css_set_property( stop, "stop-color", stopIsNull ? 0 : toUse.c_str() );
+           sp_repr_css_set_property( stop, "stop-color", stopIsNull ? nullptr : toUse.c_str() );
            sp_repr_css_set_property( stop, "stop-opacity", "1" );
            for(std::vector<GrDraggable *>::const_iterator j = d->draggables.begin(); j != d->draggables.end(); ++j) { //for all draggables of dragger
                GrDraggable *draggable = *j;
@@ -609,7 +609,7 @@ bool GrDrag::dropColor(SPItem */*item*/, gchar const *c, Geom::Point p)
                 SPStop *stop = addStopNearPoint(line->item, p, 5/desktop->current_zoom());
                 if (stop) {
                     SPCSSAttr *css = sp_repr_css_attr_new();
-                    sp_repr_css_set_property( css, "stop-color", stopIsNull ? 0 : toUse.c_str() );
+                    sp_repr_css_set_property( css, "stop-color", stopIsNull ? nullptr : toUse.c_str() );
                     sp_repr_css_set_property( css, "stop-opacity", "1" );
                     sp_repr_css_change(stop->getRepr(), css, "style");
                     return true;
@@ -682,7 +682,7 @@ GrDrag::~GrDrag()
         desktop->gr_point_i = draggable->point_i;
         desktop->gr_fill_or_stroke = draggable->fill_or_stroke;
     } else {
-        desktop->gr_item = NULL;
+        desktop->gr_item = nullptr;
         desktop->gr_point_type = POINT_LG_BEGIN;
         desktop->gr_point_i = 0;
         desktop->gr_fill_or_stroke = Inkscape::FOR_FILL;
@@ -720,7 +720,7 @@ GrDraggable::~GrDraggable()
 
 SPObject *GrDraggable::getServer()
 {
-    SPObject *server = 0;
+    SPObject *server = nullptr;
     if (item) {
         switch (fill_or_stroke) {
             case Inkscape::FOR_FILL:
@@ -760,7 +760,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
         // with Shift; unsnap if we carry more than one draggable
         if (dragger->draggables.size()>1) {
             // create a new dragger
-            GrDragger *dr_new = new GrDragger (dragger->parent, dragger->point, NULL);
+            GrDragger *dr_new = new GrDragger (dragger->parent, dragger->point, nullptr);
             dragger->parent->draggers.insert(dragger->parent->draggers.begin(), dr_new);
             // relink to it all but the first draggable in the list
             std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin();
@@ -978,7 +978,7 @@ static void gr_midpoint_limits(GrDragger *dragger, SPObject *server, Geom::Point
             *begin = d_temp->point;
 
         d_temp = drag->getDraggerFor (draggable->item, POINT_LG_MID, highest_i + 1, draggable->fill_or_stroke);
-        if (d_temp == NULL) {
+        if (d_temp == nullptr) {
             d_temp = drag->getDraggerFor (draggable->item, POINT_LG_END, num-1, draggable->fill_or_stroke);
         }
         if (d_temp)
@@ -995,7 +995,7 @@ static void gr_midpoint_limits(GrDragger *dragger, SPObject *server, Geom::Point
             *begin = d_temp->point;
 
         d_temp = drag->getDraggerFor (draggable->item, draggable->point_type, highest_i + 1, draggable->fill_or_stroke);
-        if (d_temp == NULL) {
+        if (d_temp == nullptr) {
             d_temp = drag->getDraggerFor (draggable->item, (draggable->point_type==POINT_RG_MID1) ? POINT_RG_R1 : POINT_RG_R2, num-1, draggable->fill_or_stroke);
         }
         if (d_temp)
@@ -1142,7 +1142,7 @@ static void gr_knot_clicked_handler(SPKnot */*knot*/, guint state, gpointer data
         SPGradient *gradient = getGradient(draggable->item, draggable->fill_or_stroke);
         gradient = gradient->getVector();
         if (gradient->vector.stops.size() > 2) { // 2 is the minimum
-            SPStop *stop = NULL;
+            SPStop *stop = nullptr;
             switch (draggable->point_type) {  // if we delete first or last stop, move the next/previous to the edge
 
                 case POINT_LG_BEGIN:
@@ -1463,7 +1463,7 @@ void GrDragger::updateTip()
 {
     if (this->knot && this->knot->tip) {
         g_free (this->knot->tip);
-        this->knot->tip = NULL;
+        this->knot->tip = nullptr;
     }
 
     if (this->draggables.size() == 1) {
@@ -1662,7 +1662,7 @@ GrDragger::GrDragger(GrDrag *parent, Geom::Point p, GrDraggable *draggable)
     this->parent = parent;
 
     // create the knot
-    this->knot = new SPKnot(parent->desktop, NULL);
+    this->knot = new SPKnot(parent->desktop, nullptr);
     this->knot->setMode(SP_KNOT_MODE_XOR);
     guint32 fill_color = GR_KNOT_COLOR_NORMAL;
     if (draggable && draggable->point_type == POINT_MG_CORNER) {
@@ -1741,7 +1741,7 @@ GrDragger *GrDrag::getDraggerFor(GrDraggable *d) {
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -1761,7 +1761,7 @@ GrDragger *GrDrag::getDraggerFor(SPItem *item, GrPointType point_type, gint poin
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -1816,7 +1816,7 @@ GrDragger* GrDragger::getMgCorner(){
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -1963,7 +1963,7 @@ void GrDrag::deselect_all()
 void GrDrag::deselectAll()
 {
     deselect_all();
-    this->desktop->emitToolSubselectionChanged(NULL);
+    this->desktop->emitToolSubselectionChanged(nullptr);
 }
 
 /**
@@ -2034,7 +2034,7 @@ void GrDrag::selectRect(Geom::Rect const &r)
 */
 void GrDrag::setSelected(GrDragger *dragger, bool add_to_selection, bool override)
 {
-    GrDragger *seldragger = NULL;
+    GrDragger *seldragger = nullptr;
 
     // Don't allow selecting a mesh handle or mesh tensor.
     // We might want to rethink since a dragger can have draggables of different types.
@@ -2406,7 +2406,7 @@ void GrDrag::updateDraggers()
     }
     this->draggers.clear();
 
-    g_return_if_fail(this->selection != NULL);
+    g_return_if_fail(this->selection != nullptr);
     auto list = this->selection->items();
     for (auto i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
@@ -2455,7 +2455,7 @@ void GrDrag::updateDraggers()
 void GrDrag::refreshDraggers()
 {
 
-    g_return_if_fail(this->selection != NULL);
+    g_return_if_fail(this->selection != nullptr);
     auto list = this->selection->items();
     for (auto i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
@@ -2516,7 +2516,7 @@ void GrDrag::updateLines()
     }
     this->lines.clear();
 
-    g_return_if_fail(this->selection != NULL);
+    g_return_if_fail(this->selection != nullptr);
 
     auto list = this->selection->items();
     for (auto i = list.begin(); i != list.end(); ++i) {
@@ -2701,7 +2701,7 @@ void GrDrag::updateLevels()
     hor_levels.clear();
     vert_levels.clear();
 
-    g_return_if_fail (this->selection != NULL);
+    g_return_if_fail (this->selection != nullptr);
 
     auto list = this->selection->items();
     for (auto i = list.begin(); i != list.end(); ++i) {
@@ -2835,7 +2835,7 @@ void GrDrag::selected_move_screen(double x, double y)
  */
 GrDragger *GrDrag::select_next()
 {
-    GrDragger *d = NULL;
+    GrDragger *d = nullptr;
     if (selected.empty() || (++find(draggers.begin(),draggers.end(),*(selected.begin())))==draggers.end()) {
         if (!draggers.empty())
             d = draggers[0];
@@ -2852,7 +2852,7 @@ GrDragger *GrDrag::select_next()
  */
 GrDragger *GrDrag::select_prev()
 {
-    GrDragger *d = NULL;
+    GrDragger *d = nullptr;
     if (selected.empty() || draggers[0] == (*(selected.begin()))) {
         if (!draggers.empty())
             d = draggers[draggers.size()-1];
@@ -2870,7 +2870,7 @@ void GrDrag::deleteSelected(bool just_one)
 {
     if (selected.empty()) return;
 
-    SPDocument *document = NULL;
+    SPDocument *document = nullptr;
 
     struct StructStopInfo {
         SPStop * spstop;
@@ -2913,7 +2913,7 @@ void GrDrag::deleteSelected(bool just_one)
                 case POINT_RG_R1:
                 case POINT_RG_R2:
                     {
-                        SPStop *stop = NULL;
+                        SPStop *stop = nullptr;
                         if ( (draggable->point_type == POINT_LG_BEGIN) || (draggable->point_type == POINT_RG_CENTER) ) {
                             stop = vector->getFirstStop();
                         } else {
@@ -3077,7 +3077,7 @@ void GrDrag::deleteSelected(bool just_one)
                 unselectedrepr = unselectedrepr->next();
             }
 
-            if (unselectedrepr == NULL) {
+            if (unselectedrepr == nullptr) {
                 if (stopinfo->draggable->fill_or_stroke == Inkscape::FOR_FILL) {
                     sp_repr_css_unset_property (css, "fill");
                 } else {

@@ -46,7 +46,7 @@ sp_ctrlcurve_init(SPCtrlCurve *ctrlcurve)
 {
     // Points are initialized to 0,0
     ctrlcurve->rgba = 0x0000ff7f;
-    ctrlcurve->item=NULL;
+    ctrlcurve->item=nullptr;
     ctrlcurve->corner0 = -1;
     ctrlcurve->corner1 = -1;
 }
@@ -55,12 +55,12 @@ namespace {
 static void
 sp_ctrlcurve_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CTRLCURVE (object));
 
     SPCtrlCurve *ctrlcurve = SP_CTRLCURVE (object);
 
-    ctrlcurve->item=NULL;
+    ctrlcurve->item=nullptr;
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrlcurve_parent_class)->destroy)
         SP_CANVAS_ITEM_CLASS(sp_ctrlcurve_parent_class)->destroy(object);

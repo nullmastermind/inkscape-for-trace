@@ -59,7 +59,7 @@ static void sp_repr_css_add_components(SPCSSAttr *css, Node *repr, gchar const *
  */
 SPCSSAttr *sp_repr_css_attr_new()
 {
-    static Inkscape::XML::Document *attr_doc=NULL;
+    static Inkscape::XML::Document *attr_doc=nullptr;
     if (!attr_doc) {
         attr_doc = new Inkscape::XML::SimpleDocument();
     }
@@ -71,7 +71,7 @@ SPCSSAttr *sp_repr_css_attr_new()
  */
 void sp_repr_css_attr_unref(SPCSSAttr *css)
 {
-    g_assert(css != NULL);
+    g_assert(css != nullptr);
     Inkscape::GC::release((Node *) css);
 }
 
@@ -83,8 +83,8 @@ void sp_repr_css_attr_unref(SPCSSAttr *css)
  */
 SPCSSAttr *sp_repr_css_attr(Node *repr, gchar const *attr)
 {
-    g_assert(repr != NULL);
-    g_assert(attr != NULL);
+    g_assert(repr != nullptr);
+    g_assert(attr != nullptr);
 
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_add_components(css, repr, attr);
@@ -104,21 +104,21 @@ SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text)
     char *str = const_cast<char *>(text.data());
     bool attempt_alpha = false;
     if ( !str || ( *str == '\0' ) ) {
-        return NULL; // this is OK due to boolean short-circuit
+        return nullptr; // this is OK due to boolean short-circuit
     }
 
     // those conditionals guard against parsing e.g. the string "fab" as "fab000"
     // (incomplete color) and "45fab71" as "45fab710" (incomplete alpha)
     if ( *str == '#' ) {
         if ( len < 7 ) {
-            return NULL;
+            return nullptr;
         }
         if ( len >= 9 ) {
             attempt_alpha = true;
         }
     } else {
         if ( len < 6 ) {
-            return NULL;
+            return nullptr;
         }
         if ( len >= 8 ) {
             attempt_alpha = true;
@@ -158,7 +158,7 @@ SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text)
         sp_repr_css_set_property(color_css, "fill-opacity", opcss.str().data());
         return color_css;
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -181,8 +181,8 @@ static void sp_repr_css_attr_inherited_recursive(SPCSSAttr *css, Node *repr, gch
  */
 SPCSSAttr *sp_repr_css_attr_inherited(Node *repr, gchar const *attr)
 {
-    g_assert(repr != NULL);
-    g_assert(attr != NULL);
+    g_assert(repr != nullptr);
+    g_assert(attr != nullptr);
 
     SPCSSAttr *css = sp_repr_css_attr_new();
 
@@ -198,9 +198,9 @@ SPCSSAttr *sp_repr_css_attr_inherited(Node *repr, gchar const *attr)
  */
 static void sp_repr_css_add_components(SPCSSAttr *css, Node *repr, gchar const *attr)
 {
-    g_assert(css != NULL);
-    g_assert(repr != NULL);
-    g_assert(attr != NULL);
+    g_assert(css != nullptr);
+    g_assert(repr != nullptr);
+    g_assert(attr != nullptr);
 
     char const *data = repr->attribute(attr);
     sp_repr_css_attr_add_from_string(css, data);
@@ -212,11 +212,11 @@ static void sp_repr_css_add_components(SPCSSAttr *css, Node *repr, gchar const *
  */
 char const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const *defval)
 {
-    g_assert(css != NULL);
-    g_assert(name != NULL);
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
 
     char const *attr = ((Node *)css)->attribute(name);
-    return ( attr == NULL
+    return ( attr == nullptr
              ? defval
              : attr );
 }
@@ -226,8 +226,8 @@ char const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const 
  */
 bool sp_repr_css_property_is_unset(SPCSSAttr *css, gchar const *name)
 {
-    g_assert(css != NULL);
-    g_assert(name != NULL);
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
 
     char const *attr = ((Node *)css)->attribute(name);
     return (attr && !strcmp(attr, "inkscape:unset"));
@@ -239,8 +239,8 @@ bool sp_repr_css_property_is_unset(SPCSSAttr *css, gchar const *name)
  */
 void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *value)
 {
-    g_assert(css != NULL);
-    g_assert(name != NULL);
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
 
     ((Node *) css)->setAttribute(name, value, false);
 }
@@ -250,8 +250,8 @@ void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *va
  */
 void sp_repr_css_unset_property(SPCSSAttr *css, gchar const *name)
 {
-    g_assert(css != NULL);
-    g_assert(name != NULL);
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
 
     ((Node *) css)->setAttribute(name, "inkscape:unset", false);
 }
@@ -261,8 +261,8 @@ void sp_repr_css_unset_property(SPCSSAttr *css, gchar const *name)
  */
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval)
 {
-    g_assert(css != NULL);
-    g_assert(name != NULL);
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
     
     double val = defval;
     sp_repr_get_double((Node *) css, name, &val);
@@ -297,9 +297,9 @@ void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
  */
 void sp_repr_css_set(Node *repr, SPCSSAttr *css, gchar const *attr)
 {
-    g_assert(repr != NULL);
-    g_assert(css != NULL);
-    g_assert(attr != NULL);
+    g_assert(repr != nullptr);
+    g_assert(css != nullptr);
+    g_assert(attr != nullptr);
 
     Glib::ustring value;
     sp_repr_css_write_string(css, value);
@@ -332,8 +332,8 @@ void sp_repr_css_print(SPCSSAttr *css)
  */
 void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src)
 {
-    g_assert(dst != NULL);
-    g_assert(src != NULL);
+    g_assert(dst != nullptr);
+    g_assert(src != nullptr);
 
     dst->mergeFrom(src, "");
 }
@@ -428,7 +428,7 @@ static void sp_repr_css_merge_from_decl_list(SPCSSAttr *css, CRDeclaration const
  */
 void sp_repr_css_attr_add_from_string(SPCSSAttr *css, gchar const *p)
 {
-    if (p != NULL) {
+    if (p != nullptr) {
         CRDeclaration *const decl_list
             = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
         if (decl_list) {
@@ -445,9 +445,9 @@ void sp_repr_css_attr_add_from_string(SPCSSAttr *css, gchar const *p)
  */
 void sp_repr_css_change(Node *repr, SPCSSAttr *css, gchar const *attr)
 {
-    g_assert(repr != NULL);
-    g_assert(css != NULL);
-    g_assert(attr != NULL);
+    g_assert(repr != nullptr);
+    g_assert(css != nullptr);
+    g_assert(attr != nullptr);
 
     SPCSSAttr *current = sp_repr_css_attr(repr, attr);
     sp_repr_css_merge(current, css);
@@ -458,13 +458,13 @@ void sp_repr_css_change(Node *repr, SPCSSAttr *css, gchar const *attr)
 
 void sp_repr_css_change_recursive(Node *repr, SPCSSAttr *css, gchar const *attr)
 {
-    g_assert(repr != NULL);
-    g_assert(css != NULL);
-    g_assert(attr != NULL);
+    g_assert(repr != nullptr);
+    g_assert(css != nullptr);
+    g_assert(attr != nullptr);
 
     sp_repr_css_change(repr, css, attr);
 
-    for (Node *child = repr->firstChild(); child != NULL; child = child->next()) {
+    for (Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
         sp_repr_css_change_recursive(child, css, attr);
     }
 }

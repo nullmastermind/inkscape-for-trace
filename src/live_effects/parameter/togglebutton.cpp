@@ -29,7 +29,7 @@ ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::us
     : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
       inactive_label(inactive_label), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
 {
-    checkwdg = NULL;
+    checkwdg = nullptr;
 }
 
 ToggleButtonParam::~ToggleButtonParam()
@@ -107,7 +107,7 @@ ToggleButtonParam::param_newWidget()
             _icon_inactive = _icon_active;
         }
         gtk_widget_show(box_button);
-        GtkWidget *icon_button = NULL;
+        GtkWidget *icon_button = nullptr;
         if(!value){ 
             icon_button = gtk_image_new_from_icon_name(_icon_inactive, _icon_size);
         } else {
@@ -156,7 +156,7 @@ ToggleButtonParam::refresh_button()
         }
     }
     if ( _icon_active ) {
-        GdkPixbuf * icon_pixbuf = NULL;
+        GdkPixbuf * icon_pixbuf = nullptr;
         Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
         Gtk::IconSize is(_icon_size);
         if (!im) return;

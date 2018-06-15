@@ -22,7 +22,7 @@
  */
 void SPTag::moveTo(SPObject *target, gboolean intoafter) {
 
-    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : NULL );
+    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : nullptr );
     Inkscape::XML::Node *our_ref = getRepr();
     gboolean first = FALSE;
 
@@ -43,7 +43,7 @@ void SPTag::moveTo(SPObject *target, gboolean intoafter) {
     if (intoafter) {
         // Move this inside of the target at the end
         our_ref->parent()->removeChild(our_ref);
-        target_ref->addChild(our_ref, NULL);
+        target_ref->addChild(our_ref, nullptr);
     } else if (target_ref->parent() != our_ref->parent()) {
         // Change in parent, need to remove and add
         our_ref->parent()->removeChild(our_ref);
@@ -122,7 +122,7 @@ SPTag::write(Inkscape::XML::Document *doc, Inkscape::XML::Node *repr, guint flag
         if (_expanded) {
             repr->setAttribute("inkscape:expanded", "true");
         } else {
-            repr->setAttribute("inkscape:expanded", NULL);
+            repr->setAttribute("inkscape:expanded", nullptr);
         }
     }
     SPObject::write(doc, repr, flags);

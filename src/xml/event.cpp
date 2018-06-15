@@ -38,7 +38,7 @@ sp_repr_begin_transaction (Inkscape::XML::Document *doc)
 
     EventTracker<SimpleEvent<Event::XML> > tracker("begin-transaction");
 
-    g_assert(doc != NULL);
+    g_assert(doc != nullptr);
     doc->beginTransaction();
 }
 
@@ -51,7 +51,7 @@ sp_repr_rollback (Inkscape::XML::Document *doc)
 
     EventTracker<SimpleEvent<Event::XML> > tracker("rollback");
 
-    g_assert(doc != NULL);
+    g_assert(doc != nullptr);
     doc->rollback();
 }
 
@@ -64,7 +64,7 @@ sp_repr_commit (Inkscape::XML::Document *doc)
 
     EventTracker<SimpleEvent<Event::XML> > tracker("commit");
 
-    g_assert(doc != NULL);
+    g_assert(doc != nullptr);
     doc->commit();
 }
 
@@ -77,7 +77,7 @@ sp_repr_commit_undoable (Inkscape::XML::Document *doc)
 
     EventTracker<SimpleEvent<Event::XML> > tracker("commit");
 
-    g_assert(doc != NULL);
+    g_assert(doc != nullptr);
     return doc->commitUndoable();
 }
 
@@ -184,7 +184,7 @@ void Inkscape::XML::replay_log_to_observer(
     Inkscape::XML::NodeObserver &observer
 ) {
     List<Inkscape::XML::Event const &> reversed =
-      reverse_list<Inkscape::XML::Event::ConstIterator>(log, NULL);
+      reverse_list<Inkscape::XML::Event::ConstIterator>(log, nullptr);
     for ( ; reversed ; ++reversed ) {
         reversed->replayOne(observer);
     }
@@ -410,7 +410,7 @@ public:
 
     static Glib::ustring node_to_string(Node const &node) {
         Glib::ustring result;
-        char const *type_name=NULL;
+        char const *type_name=nullptr;
         switch (node.type()) {
         case Inkscape::XML::DOCUMENT_NODE:
             type_name = "Document";

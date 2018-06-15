@@ -34,7 +34,7 @@ public:
     class export_id_not_found {  /**< The object ID requested for export could not be found in the document */
         public:
             const gchar * const id;
-            export_id_not_found(const gchar * const id = NULL) : id{id} {};
+            export_id_not_found(const gchar * const id = nullptr) : id{id} {};
     };
 
                  Output (Inkscape::XML::Node * in_repr,

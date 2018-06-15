@@ -15,7 +15,7 @@
 #include "attributes.h"
 
 SPScript::SPScript() : SPObject() {
-	this->xlinkhref = NULL;
+	this->xlinkhref = nullptr;
 }
 
 SPScript::~SPScript() {

@@ -61,8 +61,8 @@
 
 void Inkscape::DocumentUndo::setUndoSensitive(SPDocument *doc, bool sensitive)
 {
-	g_assert (doc != NULL);
-	g_assert (doc->priv != NULL);
+	g_assert (doc != nullptr);
+	g_assert (doc->priv != nullptr);
 
 	if ( sensitive == doc->priv->sensitive )
 		return;
@@ -87,15 +87,15 @@ void Inkscape::DocumentUndo::setUndoSensitive(SPDocument *doc, bool sensitive)
  */
 
 bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
-	g_assert(document != NULL);
-	g_assert(document->priv != NULL);
+	g_assert(document != nullptr);
+	g_assert(document->priv != nullptr);
 
 	return document->priv->sensitive;
 }
 
 void Inkscape::DocumentUndo::done(SPDocument *doc, const unsigned int event_type, Glib::ustring const &event_description)
 {
-    maybeDone(doc, NULL, event_type, event_description);
+    maybeDone(doc, nullptr, event_type, event_description);
 }
 
 void Inkscape::DocumentUndo::resetKey( SPDocument *doc )
@@ -138,8 +138,8 @@ public:
 void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const unsigned int event_type,
                                        Glib::ustring const &event_description)
 {
-	g_assert (doc != NULL);
-	g_assert (doc->priv != NULL);
+	g_assert (doc != nullptr);
+	g_assert (doc->priv != nullptr);
         g_assert (doc->priv->sensitive);
         if ( key && !*key ) {
             g_warning("Blank undo key specified.");
@@ -154,7 +154,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 	DocumentUndo::clearRedo(doc);
 
 	Inkscape::XML::Event *log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
-	doc->priv->partial = NULL;
+	doc->priv->partial = nullptr;
 
 	if (!log) {
 		sp_repr_begin_transaction (doc->rdoc);
@@ -187,8 +187,8 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 
 void Inkscape::DocumentUndo::cancel(SPDocument *doc)
 {
-	g_assert (doc != NULL);
-	g_assert (doc->priv != NULL);
+	g_assert (doc != nullptr);
+	g_assert (doc->priv != nullptr);
         g_assert (doc->priv->sensitive);
 
 	sp_repr_rollback (doc->rdoc);
@@ -197,7 +197,7 @@ void Inkscape::DocumentUndo::cancel(SPDocument *doc)
 		sp_repr_undo_log (doc->priv->partial);
                 doc->emitReconstructionFinish();
 		sp_repr_free_log (doc->priv->partial);
-		doc->priv->partial = NULL;
+		doc->priv->partial = nullptr;
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
@@ -213,7 +213,7 @@ static void finish_incomplete_transaction(SPDocument &doc) {
                 Inkscape::Event *event = new Inkscape::Event(priv.partial);
 		priv.undo.push_back(event);
                 priv.undoStackObservers.notifyUndoCommitEvent(event);
-		priv.partial = NULL;
+		priv.partial = nullptr;
 	}
 }
 
@@ -224,7 +224,7 @@ static void perform_document_update(SPDocument &doc) {
     Inkscape::XML::Event *update_log=sp_repr_commit_undoable(doc.rdoc);
     doc.emitReconstructionFinish();
 
-    if (update_log != NULL) {
+    if (update_log != nullptr) {
         g_warning("Document was modified while being updated after undo operation");
         sp_repr_debug_print_log(update_log);
 
@@ -247,8 +247,8 @@ gboolean Inkscape::DocumentUndo::undo(SPDocument *doc)
 
     EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("undo");
 
-    g_assert (doc != NULL);
-    g_assert (doc->priv != NULL);
+    g_assert (doc != nullptr);
+    g_assert (doc->priv != nullptr);
     g_assert (doc->priv->sensitive);
 
     doc->priv->sensitive = FALSE;
@@ -293,8 +293,8 @@ gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
 
 	EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("redo");
 
-	g_assert (doc != NULL);
-	g_assert (doc->priv != NULL);
+	g_assert (doc != nullptr);
+	g_assert (doc->priv != nullptr);
         g_assert (doc->priv->sensitive);
 
 	doc->priv->sensitive = FALSE;

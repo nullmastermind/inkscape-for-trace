@@ -103,14 +103,14 @@ static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT
  */
 
 font_instance::font_instance(void) :
-    pFont(0),
-    descr(0),
+    pFont(nullptr),
+    descr(nullptr),
     refCount(0),
-    parent(0),
+    parent(nullptr),
     nbGlyph(0),
     maxGlyph(0),
-    glyphs(0),
-    theFace(0)
+    glyphs(nullptr),
+    theFace(nullptr)
 {
     //printf("font instance born\n");
     _ascent  = _ascent_max  = 0.8;
@@ -133,23 +133,23 @@ font_instance::~font_instance(void)
 {
     if ( parent ) {
         parent->UnrefFace(this);
-        parent = 0;
+        parent = nullptr;
     }
 
     //printf("font instance death\n");
     if ( pFont ) {
         FreeTheFace();
         g_object_unref(pFont);
-        pFont = 0;
+        pFont = nullptr;
     }
 
     if ( descr ) {
         pango_font_description_free(descr);
-        descr = 0;
+        descr = nullptr;
     }
 
     //    if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
-    theFace = 0;
+    theFace = nullptr;
 
     for (int i=0;i<nbGlyph;i++) {
         if ( glyphs[i].pathvector ) {
@@ -158,7 +158,7 @@ font_instance::~font_instance(void)
     }
     if ( glyphs ) {
         free(glyphs);
-        glyphs = 0;
+        glyphs = nullptr;
     }
     nbGlyph = 0;
     maxGlyph = 0;
@@ -185,7 +185,7 @@ void font_instance::Unref(void)
 
 void font_instance::InitTheFace()
 {
-    if (theFace == NULL && pFont != NULL) {
+    if (theFace == nullptr && pFont != nullptr) {
 
 #ifdef USE_PANGO_WIN32
 
@@ -229,7 +229,7 @@ void font_instance::InitTheFace()
 
             Glib::ustring variations(var);
 
-            FT_MM_Var* mmvar = NULL;
+            FT_MM_Var* mmvar = nullptr;
             FT_Multi_Master mmtype;
             if (FT_HAS_MULTIPLE_MASTERS( theFace )    &&    // Font has variables
                 FT_Get_MM_Var(theFace, &mmvar) == 0   &&    // We found the data
@@ -298,7 +298,7 @@ void font_instance::FreeTheFace()
 #else
     pango_fc_font_unlock_face(PANGO_FC_FONT(pFont));
 #endif
-    theFace=NULL;
+    theFace=nullptr;
 }
 
 void font_instance::InstallFace(PangoFont* iFace)
@@ -307,7 +307,7 @@ void font_instance::InstallFace(PangoFont* iFace)
         return;
     }
     pFont=iFace;
-    iFace = NULL;
+    iFace = nullptr;
 
     InitTheFace();
 
@@ -316,13 +316,13 @@ void font_instance::InstallFace(PangoFont* iFace)
         if ( pFont ) {
             g_object_unref(pFont);
         }
-        pFont=NULL;
+        pFont=nullptr;
     }
 }
 
 bool font_instance::IsOutlineFont(void)
 {
-    if ( pFont == NULL ) {
+    if ( pFont == nullptr ) {
         return false;
     }
     InitTheFace();
@@ -364,7 +364,7 @@ static inline Geom::Point pointfx_to_nrpoint(const POINTFX &p, double scale)
 
 void font_instance::LoadGlyph(int glyph_id)
 {
-    if ( pFont == NULL ) {
+    if ( pFont == nullptr ) {
         return;
     }
     InitTheFace();
@@ -382,7 +382,7 @@ void font_instance::LoadGlyph(int glyph_id)
             glyphs=(font_glyph*)realloc(glyphs,maxGlyph*sizeof(font_glyph));
         }
         font_glyph  n_g;
-        n_g.pathvector=NULL;
+        n_g.pathvector=nullptr;
         n_g.bbox[0]=n_g.bbox[1]=n_g.bbox[2]=n_g.bbox[3]=0;
         n_g.h_advance = 0;
         n_g.v_advance = 0;
@@ -537,11 +537,11 @@ void font_instance::LoadGlyph(int glyph_id)
 
 bool font_instance::FontMetrics(double &ascent,double &descent,double &xheight)
 {
-    if ( pFont == NULL ) {
+    if ( pFont == nullptr ) {
         return false;
     }
     InitTheFace();
-    if ( theFace == NULL ) {
+    if ( theFace == nullptr ) {
         return false;
     }
 
@@ -555,11 +555,11 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &xheight)
 bool font_instance::FontDecoration( double &underline_position,   double &underline_thickness,
                                     double &linethrough_position, double &linethrough_thickness)
 {
-    if ( pFont == NULL ) {
+    if ( pFont == nullptr ) {
         return false;
     }
     InitTheFace();
-    if ( theFace == NULL ) {
+    if ( theFace == nullptr ) {
         return false;
     }
 #ifdef USE_PANGO_WIN32
@@ -591,11 +591,11 @@ bool font_instance::FontSlope(double &run, double &rise)
     run = 0.0;
     rise = 1.0;
 
-    if ( pFont == NULL ) {
+    if ( pFont == nullptr ) {
         return false;
     }
     InitTheFace();
-    if ( theFace == NULL ) {
+    if ( theFace == nullptr ) {
         return false;
     }
 
@@ -610,7 +610,7 @@ bool font_instance::FontSlope(double &run, double &rise)
     }
 
     TT_HoriHeader *hhea = (TT_HoriHeader*)FT_Get_Sfnt_Table(theFace, ft_sfnt_hhea);
-    if (hhea == NULL) {
+    if (hhea == nullptr) {
         return false;
     }
     run = hhea->caret_Slope_Run;
@@ -654,7 +654,7 @@ Geom::PathVector* font_instance::PathVector(int glyph_id)
     } else {
         no = id_to_no[glyph_id];
     }
-    if ( no < 0 ) return NULL;
+    if ( no < 0 ) return nullptr;
     return glyphs[no].pathvector;
 }
 

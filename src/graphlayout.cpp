@@ -43,7 +43,7 @@ using namespace vpsc;
  * Returns true if item is a connector
  */
 bool isConnector(SPItem const * const item) {
-    SPPath * path = NULL;
+    SPPath * path = nullptr;
     if (SP_IS_PATH(item)) {
         path = SP_PATH(item);
     }
@@ -163,7 +163,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
                 iv = items[0];
             }
 
-            if (iv == NULL) {
+            if (iv == nullptr) {
                 // The connector is not attached to anything at the
                 // other end so we should just ignore it.
                 continue;
@@ -191,7 +191,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
     for (Component * c: cs) {
         if (c->edges.size() < 2) continue;
         CheckProgress test(0.0001, 100, selected, rs, nodelookup);
-        ConstrainedMajorizationLayout alg(c->rects, c->edges, NULL, ideal_connector_length, elengths, &test);
+        ConstrainedMajorizationLayout alg(c->rects, c->edges, nullptr, ideal_connector_length, elengths, &test);
         if (avoid_overlaps) alg.setAvoidOverlaps();
         alg.setConstraints(&constraints);
         alg.run();

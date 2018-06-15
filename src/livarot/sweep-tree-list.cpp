@@ -7,7 +7,7 @@ SweepTreeList::SweepTreeList(int s) :
     nbTree(0),
     maxTree(s),
     trees((SweepTree *) g_malloc(s * sizeof(SweepTree))),
-    racine(NULL)
+    racine(nullptr)
 {
     /* FIXME: Use new[] for trees initializer above, but watch out for bad things happening when
      * SweepTree::~SweepTree is called.
@@ -18,14 +18,14 @@ SweepTreeList::SweepTreeList(int s) :
 SweepTreeList::~SweepTreeList()
 {
     g_free(trees);
-    trees = NULL;
+    trees = nullptr;
 }
 
 
 SweepTree *SweepTreeList::add(Shape *iSrc, int iBord, int iWeight, int iStartPoint, Shape */*iDst*/)
 {
     if (nbTree >= maxTree) {
-        return NULL;
+        return nullptr;
     }
 
     int const n = nbTree++;

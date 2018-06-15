@@ -37,15 +37,15 @@ ParamDescription::ParamDescription(const gchar * name,
                                    Inkscape::XML::Node * xml,
                                    AppearanceMode mode)
     : Parameter(name, text, description, hidden, indent, ext)
-    , _value(NULL)
+    , _value(nullptr)
     , _mode(mode)
 {
     // construct the text content by concatenating all (non-empty) text nodes,
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
     Glib::ustring value;
     Inkscape::XML::Node * cur_child = xml->firstChild();
-    while (cur_child != NULL) {
-        if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != NULL) {
+    while (cur_child != nullptr) {
+        if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != nullptr) {
             value += cur_child->content();
         } else if (cur_child->type() == XML::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
             value += "<br/>";
@@ -71,8 +71,8 @@ ParamDescription::ParamDescription(const gchar * name,
     // translate if underscored version (_param) was used
     if (g_str_has_prefix(xml->name(), "extension:_")) {
         const gchar * context = xml->attribute("msgctxt");
-        if (context != NULL) {
-            value = g_dpgettext2(NULL, context, value.c_str());
+        if (context != nullptr) {
+            value = g_dpgettext2(nullptr, context, value.c_str());
         } else {
             value = _(value.c_str());
         }
@@ -91,10 +91,10 @@ Gtk::Widget *
 ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
-    if (_value == NULL) {
-        return NULL;
+    if (_value == nullptr) {
+        return nullptr;
     }
 
     Glib::ustring newtext = _value;

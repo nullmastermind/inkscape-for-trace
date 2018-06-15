@@ -37,10 +37,10 @@ namespace Widget {
 //===================================================
 
 const struct rdf_license_t _proprietary_license = 
-  {_("Proprietary"), "", 0};
+  {_("Proprietary"), "", nullptr};
 
 const struct rdf_license_t _other_license = 
-  {Q_("MetadataLicence|Other"), "", 0};
+  {Q_("MetadataLicence|Other"), "", nullptr};
 
 class LicenseItem : public Gtk::RadioButton {
 public:
@@ -67,7 +67,7 @@ void LicenseItem::on_toggled()
 
     _wr.setUpdating (true);
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    rdf_set_license (doc, _lic->details ? _lic : 0);
+    rdf_set_license (doc, _lic->details ? _lic : nullptr);
     if (doc->priv->sensitive) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Document license updated"));
     }
@@ -80,7 +80,7 @@ void LicenseItem::on_toggled()
 
 Licensor::Licensor()
 : Gtk::VBox(false,4),
-  _eentry (NULL)
+  _eentry (nullptr)
 {
 }
 
@@ -97,7 +97,7 @@ void Licensor::init (Registry& wr)
 
     LicenseItem *i;
     wr.setUpdating (true);
-    i = Gtk::manage (new LicenseItem (&_proprietary_license, _eentry, wr, NULL));
+    i = Gtk::manage (new LicenseItem (&_proprietary_license, _eentry, wr, nullptr));
     Gtk::RadioButtonGroup group = i->get_group();
     add (*i);
     LicenseItem *pd = i;

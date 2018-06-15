@@ -208,13 +208,13 @@ public:
 
     void setAttribute(char const *key, Glib::ustring const &value, bool is_interactive=false)
     {
-        setAttribute(key, value.empty() ? NULL : value.c_str(), is_interactive);
+        setAttribute(key, value.empty() ? nullptr : value.c_str(), is_interactive);
     }
 
     void setAttribute(Glib::ustring const &key, Glib::ustring const &value, bool is_interactive=false)
     {
-        setAttribute( key.empty()   ? NULL : key.c_str(),
-                      value.empty() ? NULL : value.c_str(), is_interactive);
+        setAttribute( key.empty()   ? nullptr : key.c_str(),
+                      value.empty() ? nullptr : value.c_str(), is_interactive);
     }
     //@}
 

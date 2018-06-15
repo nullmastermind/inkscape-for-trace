@@ -144,7 +144,7 @@ void SelectedColor::setHeld(bool held) {
 }
 
 void SelectedColor::preserveICC() {
-    _color.icc = _color.icc ? new SVGICCColor(*_color.icc) : 0;
+    _color.icc = _color.icc ? new SVGICCColor(*_color.icc) : nullptr;
 }
 
 }

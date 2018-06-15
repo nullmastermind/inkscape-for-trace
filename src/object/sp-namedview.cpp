@@ -65,12 +65,12 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->guidehicolor = 0;
     this->views.clear();
     this->borderlayer = 0;
-    this->page_size_units = NULL;
+    this->page_size_units = nullptr;
     this->window_x = 0;
     this->cy = 0;
     this->window_y = 0;
-    this->display_units = NULL;
-    this->page_size_units = NULL;
+    this->display_units = nullptr;
+    this->page_size_units = nullptr;
     this->pagecolor = 0;
     this->cx = 0;
     this->pageshadow = 0;
@@ -113,7 +113,7 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
     const char* gridopacity     = "0.15";
     const char* gridempopacity  = "0.38";
 
-    const char* value = NULL;
+    const char* value = nullptr;
     if ((value = repr->attribute("gridoriginx"))) {
         gridoriginx = value;
         old_grid_settings_present = true;
@@ -173,15 +173,15 @@ static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *doc
         Inkscape::GC::release(newnode);
 
         // remove all old settings
-        repr->setAttribute("gridoriginx", NULL);
-        repr->setAttribute("gridoriginy", NULL);
-        repr->setAttribute("gridspacingx", NULL);
-        repr->setAttribute("gridspacingy", NULL);
-        repr->setAttribute("gridcolor", NULL);
-        repr->setAttribute("gridempcolor", NULL);
-        repr->setAttribute("gridopacity", NULL);
-        repr->setAttribute("gridempopacity", NULL);
-        repr->setAttribute("gridempspacing", NULL);
+        repr->setAttribute("gridoriginx", nullptr);
+        repr->setAttribute("gridoriginy", nullptr);
+        repr->setAttribute("gridspacingx", nullptr);
+        repr->setAttribute("gridspacingy", nullptr);
+        repr->setAttribute("gridcolor", nullptr);
+        repr->setAttribute("gridempcolor", nullptr);
+        repr->setAttribute("gridopacity", nullptr);
+        repr->setAttribute("gridempopacity", nullptr);
+        repr->setAttribute("gridempspacing", nullptr);
 
 //        SPDocumentUndo::done(doc, SP_VERB_DIALOG_NAMEDVIEW, _("Create new grid from pre0.46 grid settings"));
     }
@@ -297,15 +297,15 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GRIDTOLERANCE:
-            this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, NULL) : 10000);
+            this->snap_manager.snapprefs.setGridTolerance(value ? g_ascii_strtod(value, nullptr) : 10000);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GUIDETOLERANCE:
-            this->snap_manager.snapprefs.setGuideTolerance(value ? g_ascii_strtod(value, NULL) : 20);
+            this->snap_manager.snapprefs.setGuideTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_OBJECTTOLERANCE:
-            this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, NULL) : 20);
+            this->snap_manager.snapprefs.setObjectTolerance(value ? g_ascii_strtod(value, nullptr) : 20);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_GUIDECOLOR:
@@ -400,15 +400,15 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_ZOOM:
-            this->zoom = value ? g_ascii_strtod(value, NULL) : 0; // zero means not set
+            this->zoom = value ? g_ascii_strtod(value, nullptr) : 0; // zero means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_CX:
-            this->cx = value ? g_ascii_strtod(value, NULL) : HUGE_VAL; // HUGE_VAL means not set
+            this->cx = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_CY:
-            this->cy = value ? g_ascii_strtod(value, NULL) : HUGE_VAL; // HUGE_VAL means not set
+            this->cy = value ? g_ascii_strtod(value, nullptr) : HUGE_VAL; // HUGE_VAL means not set
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
@@ -528,7 +528,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_CONNECTOR_SPACING:
-            this->connector_spacing = value ? g_ascii_strtod(value, NULL) :
+            this->connector_spacing = value ? g_ascii_strtod(value, nullptr) :
                     defaultConnSpacing;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
@@ -566,7 +566,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
     }
     case SP_ATTR_UNITS: {
         // Only used in "Custom size" section of Document Properties dialog
-            Inkscape::Util::Unit const *new_unit = NULL;
+            Inkscape::Util::Unit const *new_unit = nullptr;
 
             if (value) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
@@ -605,7 +605,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
 */
 static Inkscape::CanvasGrid*
 sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *desktop) {
-    Inkscape::CanvasGrid* grid = NULL;
+    Inkscape::CanvasGrid* grid = nullptr;
     //check if namedview already has an object for this grid
     for(std::vector<Inkscape::CanvasGrid *>::const_iterator it=nv->grids.begin();it!=nv->grids.end();++it ) {
         if (repr == (*it)->repr) {
@@ -619,7 +619,7 @@ sp_namedview_add_grid(SPNamedView *nv, Inkscape::XML::Node *repr, SPDesktop *des
         Inkscape::GridType gridtype = Inkscape::CanvasGrid::getGridTypeFromSVGName(repr->attribute("type"));
         if (!nv->document) {
             g_warning("sp_namedview_add_grid - how come doc is null here?!");
-            return NULL;
+            return nullptr;
         }
         grid = Inkscape::CanvasGrid::NewGrid(nv, repr, nv->document, gridtype);
         nv->grids.push_back(grid);
@@ -642,7 +642,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
     SPObjectGroup::child_added(child, ref);
 
     if (!strcmp(child->name(), "inkscape:grid")) {
-        sp_namedview_add_grid(this, child, NULL);
+        sp_namedview_add_grid(this, child, nullptr);
     } else {
         SPObject *no = this->document->getObjectByRepr(child);
         if ( !SP_IS_OBJECT(no) ) {
@@ -723,7 +723,7 @@ void SPNamedView::show(SPDesktop *desktop)
     // generate grids specified in SVG:
     Inkscape::XML::Node *repr = this->getRepr();
     if (repr) {
-        for (Inkscape::XML::Node * child = repr->firstChild() ; child != NULL; child = child->next() ) {
+        for (Inkscape::XML::Node * child = repr->firstChild() ; child != nullptr; child = child->next() ) {
             if (!strcmp(child->name(), "inkscape:grid")) {
                 sp_namedview_add_grid(this, child, desktop);
             }
@@ -824,7 +824,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 
 void SPNamedView::writeNewGrid(SPDocument *document,int gridtype)
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     Inkscape::CanvasGrid::writeNewGridToRepr(this->getRepr(),document,static_cast<Inkscape::GridType>(gridtype));
 }
 
@@ -835,13 +835,13 @@ bool SPNamedView::getSnapGlobal() const
 
 void SPNamedView::setSnapGlobal(bool v)
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     sp_repr_set_boolean(this->getRepr(), "inkscape:snap-global", v);
 }
 
 void sp_namedview_update_layers_from_document (SPDesktop *desktop)
 {
-    SPObject *layer = NULL;
+    SPObject *layer = nullptr;
     SPDocument *document = desktop->doc();
     SPNamedView *nv = desktop->namedview;
     if ( nv->default_layer_id != 0 ) {
@@ -849,7 +849,7 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     }
     // don't use that object if it's not at least group
     if ( !layer || !SP_IS_GROUP(layer) ) {
-        layer = NULL;
+        layer = nullptr;
     }
     // if that didn't work out, look for the topmost layer
     if (!layer) {
@@ -904,7 +904,7 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
 
 void SPNamedView::hide(SPDesktop const *desktop)
 {
-    g_assert(desktop != NULL);
+    g_assert(desktop != nullptr);
     g_assert(std::find(views.begin(),views.end(),desktop)!=views.end());
     for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
         (*it)->hideSPGuide(desktop->getCanvas());
@@ -914,7 +914,7 @@ void SPNamedView::hide(SPDesktop const *desktop)
 
 void SPNamedView::activateGuides(void* desktop, bool active)
 {
-    g_assert(desktop != NULL);
+    g_assert(desktop != nullptr);
     g_assert(std::find(views.begin(),views.end(),desktop)!=views.end());
 
     SPDesktop *dt = static_cast<SPDesktop*>(desktop);
@@ -1060,12 +1060,12 @@ static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color)
 
 SPNamedView *sp_document_namedview(SPDocument *document, const gchar *id)
 {
-    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document != nullptr, NULL);
 
-    SPObject *nv = sp_item_group_get_child_by_name(document->getRoot(), NULL, "sodipodi:namedview");
-    g_assert(nv != NULL);
+    SPObject *nv = sp_item_group_get_child_by_name(document->getRoot(), nullptr, "sodipodi:namedview");
+    g_assert(nv != nullptr);
 
-    if (id == NULL) {
+    if (id == nullptr) {
         return (SPNamedView *) nv;
     }
 
@@ -1083,14 +1083,14 @@ SPNamedView const *sp_document_namedview(SPDocument const *document, const gchar
 
 void SPNamedView::setGuides(bool v)
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     sp_repr_set_boolean(this->getRepr(), "showguides", v);
     sp_repr_set_boolean(this->getRepr(), "inkscape:guide-bbox", v);
 }
 
 bool SPNamedView::getGuides()
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     unsigned int v;
     unsigned int set = sp_repr_get_boolean(this->getRepr(), "showguides", &v);
     if (!set) { // hide guides if not specified, for backwards compatibility
@@ -1158,7 +1158,7 @@ Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedvie
             return (*it);
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void SPNamedView::translateGuides(Geom::Translate const &tr) {

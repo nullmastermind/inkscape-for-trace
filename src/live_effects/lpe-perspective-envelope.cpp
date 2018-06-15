@@ -235,7 +235,7 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve->get_pathvector());
     curve->reset();
-    Geom::CubicBezier const *cubic = NULL;
+    Geom::CubicBezier const *cubic = nullptr;
     Geom::Point point_at1(0, 0);
     Geom::Point point_at2(0, 0);
     Geom::Point point_at3(0, 0);

@@ -351,7 +351,7 @@ draw_text(cairo_t *cr, Geom::Point loc, const char* txt, bool bottom = false,
     pango_font_description_free (font_desc);
 
     PangoRectangle logical_extent;
-    pango_layout_get_pixel_extents(layout, NULL, &logical_extent);
+    pango_layout_get_pixel_extents(layout, nullptr, &logical_extent);
     cairo_move_to(cr, loc[Geom::X], loc[Geom::Y] - (bottom ? logical_extent.height : 0));
     pango_cairo_show_layout(cr, layout);
 }
@@ -732,7 +732,7 @@ void PrefEntryFileButtonHBox::onRelatedEntryChangedCallback()
     }
 }
 
-static Inkscape::UI::Dialog::FileOpenDialog * selectPrefsFileInstance = NULL;
+static Inkscape::UI::Dialog::FileOpenDialog * selectPrefsFileInstance = nullptr;
 
 void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
 {

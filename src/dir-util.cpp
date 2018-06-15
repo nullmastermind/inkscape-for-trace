@@ -41,15 +41,15 @@ std::string sp_relative_path_from_path( std::string const &path, std::string con
 
 char const *sp_extension_from_path(char const *const path)
 {
-	if (path == NULL) {
-		return NULL;
+	if (path == nullptr) {
+		return nullptr;
 	}
 
 	char const *p = path;
 	while (*p != '\0') p++;
 
 	while ((p >= path) && (*p != G_DIR_SEPARATOR) && (*p != '.')) p--;
-	if (* p != '.') return NULL;
+	if (* p != '.') return nullptr;
 	p++;
 
 	return p;
@@ -78,7 +78,7 @@ char *inkscape_rel2abs(const char *path, const char *base, char *result, const s
   else if (*base != G_DIR_SEPARATOR || !size)
     {
       errno = EINVAL;
-      return (NULL);
+      return (nullptr);
     }
   else if (size == 1)
     goto erange;
@@ -144,7 +144,7 @@ finish:
   return result;
 erange:
   errno = ERANGE;
-  return (NULL);
+  return (nullptr);
 }
 
 char *inkscape_abs2rel(const char *path, const char *base, char *result, const size_t size)
@@ -164,7 +164,7 @@ char *inkscape_abs2rel(const char *path, const char *base, char *result, const s
     else if (*base != G_DIR_SEPARATOR || !size)
     {
         errno = EINVAL;
-        return (NULL);
+        return (nullptr);
     }
     else if (size == 1)
         goto erange;
@@ -214,13 +214,13 @@ finish:
     return result;
 erange:
     errno = ERANGE;
-    return (NULL);
+    return (nullptr);
 }
 
 char *prepend_current_dir_if_relative(gchar const *uri)
 {
 	if (!uri) {
-		return NULL;
+		return nullptr;
 	}
 
 	gchar *full_path = (gchar *) g_malloc (1001);
@@ -228,7 +228,7 @@ char *prepend_current_dir_if_relative(gchar const *uri)
 
 	gsize bytesRead = 0;
 	gsize bytesWritten = 0;
-	GError* error = NULL;
+	GError* error = nullptr;
 	gchar* cwd_utf8 = g_filename_to_utf8 ( cwd,
                                                   -1,
                                                   &bytesRead,

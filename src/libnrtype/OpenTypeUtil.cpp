@@ -71,10 +71,10 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     tables.clear();
 
     // Use Harfbuzz, Pango's equivalent calls are deprecated.
-    auto const hb_face = hb_ft_face_create(ft_face, NULL);
+    auto const hb_face = hb_ft_face_create(ft_face, nullptr);
 
     // First time to get size of array
-    auto script_count = hb_ot_layout_table_get_script_tags(hb_face, HB_OT_TAG_GSUB, 0, NULL, NULL);
+    auto script_count = hb_ot_layout_table_get_script_tags(hb_face, HB_OT_TAG_GSUB, 0, nullptr, nullptr);
     auto const hb_scripts = g_new(hb_tag_t, script_count + 1);
 
     // Second time to fill array (this two step process was not necessary with Pango).
@@ -82,7 +82,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
 
     for(unsigned int i = 0; i < script_count; ++i) {
         // std::cout << " Script: " << extract_tag(&hb_scripts[i]) << std::endl;
-        auto language_count = hb_ot_layout_script_get_language_tags(hb_face, HB_OT_TAG_GSUB, i, 0, NULL, NULL);
+        auto language_count = hb_ot_layout_script_get_language_tags(hb_face, HB_OT_TAG_GSUB, i, 0, nullptr, nullptr);
 
         if(language_count > 0) {
             auto const hb_languages = g_new(hb_tag_t, language_count + 1);
@@ -90,7 +90,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
 
             for(unsigned int j = 0; j < language_count; ++j) {
                 // std::cout << "  Language: " << extract_tag(&hb_languages[j]) << std::endl;
-                auto feature_count = hb_ot_layout_language_get_feature_tags(hb_face, HB_OT_TAG_GSUB, i, j, 0, NULL, NULL);
+                auto feature_count = hb_ot_layout_language_get_feature_tags(hb_face, HB_OT_TAG_GSUB, i, j, 0, nullptr, nullptr);
                 auto const hb_features = g_new(hb_tag_t, feature_count + 1);
                 hb_ot_layout_language_get_feature_tags(hb_face, HB_OT_TAG_GSUB, i, j, 0, &feature_count, hb_features);
 
@@ -110,7 +110,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
             // std::cout << "  Language: " << " (dflt)" << std::endl;
             auto feature_count = hb_ot_layout_language_get_feature_tags(hb_face, HB_OT_TAG_GSUB, i,
                                                                         HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
-                                                                        0, NULL, NULL);
+                                                                        0, nullptr, nullptr);
             auto const hb_features = g_new(hb_tag_t, feature_count + 1); 
             hb_ot_layout_language_get_feature_tags(hb_face, HB_OT_TAG_GSUB, i,
                                                    HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX,
@@ -250,7 +250,7 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
                           std::map<Glib::ustring, OTVarAxis>& axes) {
 
 #if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
-    FT_MM_Var* mmvar = NULL;
+    FT_MM_Var* mmvar = nullptr;
     FT_Multi_Master mmtype;
     if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
         FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data
@@ -285,7 +285,7 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
                            std::map<Glib::ustring, OTVarInstance>& named) {
 
 #if FREETYPE_MAJOR *10000 + FREETYPE_MINOR*100 + FREETYPE_MICRO >= 20701
-    FT_MM_Var* mmvar = NULL;
+    FT_MM_Var* mmvar = nullptr;
     FT_Multi_Master mmtype;
     if (FT_HAS_MULTIPLE_MASTERS( ft_face )    &&    // Font has variables
         FT_Get_MM_Var( ft_face, &mmvar) == 0   &&    // We found the data

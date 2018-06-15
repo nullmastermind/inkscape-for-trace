@@ -36,9 +36,9 @@ private:
         to find the different extensions in the hash map. */
     struct ltstr {
         bool operator()(const char* s1, const char* s2) const {
-            if ( (s1 == NULL) && (s2 != NULL) ) {
+            if ( (s1 == nullptr) && (s2 != nullptr) ) {
                 return true;
-            } else if (s1 == NULL || s2 == NULL) {
+            } else if (s1 == nullptr || s2 == nullptr) {
                 return false;
             } else {
                 return strcmp(s1, s2) < 0;

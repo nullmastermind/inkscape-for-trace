@@ -125,7 +125,7 @@ bool FloatingBehavior::_trans_timer (void) {
 FloatingBehavior::~FloatingBehavior()
 {
     delete _d;
-    _d = 0;
+    _d = nullptr;
 }
 
 Behavior *

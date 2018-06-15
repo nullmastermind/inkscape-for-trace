@@ -133,7 +133,7 @@ public:
 class ExpressionEvaluator
 {
 public:
-    ExpressionEvaluator(const char *string, Unit const *unit = NULL);
+    ExpressionEvaluator(const char *string, Unit const *unit = nullptr);
     
     EvaluatorQuantity evaluate();
 

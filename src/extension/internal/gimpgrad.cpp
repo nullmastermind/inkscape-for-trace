@@ -133,13 +133,13 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
 {
     Inkscape::IO::dump_fopen_call(filename, "I");
     FILE *gradient = Inkscape::IO::fopen_utf8name(filename, "r");
-    if (gradient == NULL) {
-        return NULL;
+    if (gradient == nullptr) {
+        return nullptr;
     }
 
     {
         char tempstr[1024];
-        if (fgets(tempstr, 1024, gradient) == 0) {
+        if (fgets(tempstr, 1024, gradient) == nullptr) {
             // std::cout << "Seems that the read failed" << std::endl;
             goto error;
         }
@@ -149,7 +149,7 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
         }
 
         /* Name field. */
-        if (fgets(tempstr, 1024, gradient) == 0) {
+        if (fgets(tempstr, 1024, gradient) == nullptr) {
             // std::cout << "Seems that the second read failed" << std::endl;
             goto error;
         }
@@ -157,18 +157,18 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
             goto error;
         }
         /* Handle very long names.  (And also handle nul bytes gracefully: don't use strlen.) */
-        while (memchr(tempstr, '\n', sizeof(tempstr) - 1) == NULL) {
-            if (fgets(tempstr, sizeof(tempstr), gradient) == 0) {
+        while (memchr(tempstr, '\n', sizeof(tempstr) - 1) == nullptr) {
+            if (fgets(tempstr, sizeof(tempstr), gradient) == nullptr) {
                 goto error;
             }
         }
 
         /* n. segments */
-        if (fgets(tempstr, 1024, gradient) == 0) {
+        if (fgets(tempstr, 1024, gradient) == nullptr) {
             // std::cout << "Seems that the third read failed" << std::endl;
             goto error;
         }
-        char *endptr = NULL;
+        char *endptr = nullptr;
         long const n_segs = strtol(tempstr, &endptr, 10);
         if ((*endptr != '\n')
             || n_segs < 1) {
@@ -183,11 +183,11 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
         Glib::ustring outsvg("<svg><defs><linearGradient>\n");
         long n_segs_found = 0;
         double prev_right = 0.0;
-        while (fgets(tempstr, 1024, gradient) != 0) {
+        while (fgets(tempstr, 1024, gradient) != nullptr) {
             double dbls[3 + 4 + 4];
             gchar *p = tempstr;
             for (unsigned i = 0; i < G_N_ELEMENTS(dbls); ++i) {
-                gchar *end = NULL;
+                gchar *end = nullptr;
                 double const xi = g_ascii_strtod(p, &end);
                 if (!end || end == p || !g_ascii_isspace(*end)) {
                     goto error;
@@ -260,7 +260,7 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
 
 error:
     fclose(gradient);
-    return NULL;
+    return nullptr;
 }
 
 #include "clear-n_.h"

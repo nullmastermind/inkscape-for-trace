@@ -58,7 +58,7 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
     desktop(desktop),
     item(item),
     //XML Tree being used directly for item->getRepr() while it shouldn't be...
-    repr(item ? item->getRepr() : 0),
+    repr(item ? item->getRepr() : nullptr),
     entity(),
     sizeUpdatedConn(),
     released(relhandler),

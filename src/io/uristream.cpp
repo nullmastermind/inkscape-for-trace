@@ -39,18 +39,18 @@ namespace IO
 
 static FILE *fopen_utf8name( char const *utf8name, int mode )
 {
-    FILE *fp = NULL;
+    FILE *fp = nullptr;
     if (!utf8name)
         {
-        return NULL;
+        return nullptr;
         }
     if (mode!=FILE_READ && mode!=FILE_WRITE)
         {
-        return NULL;
+        return nullptr;
         }
 
 #ifndef WIN32
-    gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
+    gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
     if ( filename ) {
         if (mode == FILE_READ)
             fp = std::fopen(filename, "rb");
@@ -99,7 +99,7 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
     else if (strncmp("data", schemestr, 4)==0)
         scheme = SCHEME_DATA;
 
-    gchar *cpath = NULL;
+    gchar *cpath = nullptr;
     switch (scheme) {
 
         case SCHEME_FILE:
@@ -132,7 +132,7 @@ UriInputStream::UriInputStream(Inkscape::URI &source)
 UriInputStream::UriInputStream(FILE *source, Inkscape::URI &uri)
                            : uri(uri),
                              inf(source),
-                             data(0),
+                             data(nullptr),
                              dataPos(0),
                              dataLen(0),
                              closed(false)
@@ -179,7 +179,7 @@ void UriInputStream::close()
                 return;
             fflush(inf);
             fclose(inf);
-            inf=NULL;
+            inf=nullptr;
         break;
 
         case SCHEME_DATA:
@@ -301,7 +301,7 @@ UriOutputStream::UriOutputStream(FILE* fp, Inkscape::URI &destination)
 UriOutputStream::UriOutputStream(Inkscape::URI &destination)
                                            : closed(false),
                                              ownsFile(true),
-                                             outf(NULL),
+                                             outf(nullptr),
                                              uri(destination),
                                              scheme(SCHEME_FILE)
 {
@@ -312,7 +312,7 @@ UriOutputStream::UriOutputStream(Inkscape::URI &destination)
     else if (strncmp("data", schemestr, 4)==0)
         scheme = SCHEME_DATA;
     //printf("out schemestr:'%s' scheme:'%d'\n", schemestr, scheme);
-    gchar *cpath = NULL;
+    gchar *cpath = nullptr;
 
     switch (scheme) {
 
@@ -362,7 +362,7 @@ void UriOutputStream::close()
             fflush(outf);
             if ( ownsFile )
                 fclose(outf);
-            outf=NULL;
+            outf=nullptr;
         break;
 
         case SCHEME_DATA:

@@ -73,7 +73,7 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
 
     gchar c[32];
     g_snprintf(c, 32, "%f", quality);
-    gboolean saved = gdk_pixbuf_save(pixbuf->getPixbufRaw(), filename, "jpeg", NULL, "quality", c, NULL);
+    gboolean saved = gdk_pixbuf_save(pixbuf->getPixbufRaw(), filename, "jpeg", nullptr, "quality", c, NULL);
  
     return saved;
 }
@@ -99,9 +99,9 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
                                        SPItem *item_only)
 
 {
-    if (width == 0 || height == 0) return NULL;
+    if (width == 0 || height == 0) return nullptr;
 
-    Inkscape::Pixbuf *inkpb = NULL;
+    Inkscape::Pixbuf *inkpb = nullptr;
     /* Create new drawing for offscreen rendering*/
     Inkscape::Drawing drawing;
     drawing.setExact(true);

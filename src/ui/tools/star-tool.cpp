@@ -61,7 +61,7 @@ const std::string StarTool::prefsPath = "/tools/shapes/star";
 
 StarTool::StarTool()
     : ToolBase(cursor_star_xpm)
-    , star(NULL)
+    , star(nullptr)
     , magnitude(5)
     , proportion(0.5)
     , isflatsided(false)
@@ -85,7 +85,7 @@ StarTool::~StarTool() {
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->star) {
@@ -100,7 +100,7 @@ StarTool::~StarTool() {
  * @param  selection Should not be NULL.
  */
 void StarTool::selection_changed(Inkscape::Selection* selection) {
-    g_assert (selection != NULL);
+    g_assert (selection != nullptr);
 
     this->shape_editor->unset_item();
     this->shape_editor->set_item(selection->singleItem());
@@ -183,7 +183,7 @@ bool StarTool::root_handler(GdkEvent* event) {
                                 GDK_POINTER_MOTION_MASK |
                                 GDK_POINTER_MOTION_HINT_MASK |
                                 GDK_BUTTON_PRESS_MASK,
-                                NULL, event->button.time);
+                                nullptr, event->button.time);
             ret = TRUE;
         }
         break;
@@ -242,7 +242,7 @@ bool StarTool::root_handler(GdkEvent* event) {
                 selection->clear();
             }
 
-            this->item_to_select = NULL;
+            this->item_to_select = nullptr;
             ret = TRUE;
             sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate), event->button.time);
         }
@@ -259,8 +259,8 @@ bool StarTool::root_handler(GdkEvent* event) {
         case GDK_KEY_Meta_R:
             sp_event_show_modifier_tip(this->defaultMessageContext(), event,
                                        _("<b>Ctrl</b>: snap angle; keep rays radial"),
-                                       NULL,
-                                       NULL);
+                                       nullptr,
+                                       nullptr);
             break;
 
         case GDK_KEY_x:
@@ -403,7 +403,7 @@ void StarTool::drag(Geom::Point p, guint state)
 void StarTool::finishItem() {
     this->message_context->clear();
 
-    if (this->star != NULL) {
+    if (this->star != nullptr) {
         if (this->star->r[1] == 0) {
         	// Don't allow the creating of zero sized arc, for example
         	// when the start and and point snap to the snap grid point
@@ -416,14 +416,14 @@ void StarTool::finishItem() {
         this->star->setCenter(this->center);
         this->star->set_shape();
         this->star->updateRepr(SP_OBJECT_WRITE_EXT);
-        this->star->doWriteTransform(this->star->transform, NULL, true);
+        this->star->doWriteTransform(this->star->transform, nullptr, true);
         desktop->canvas->endForcedFullRedraws();
 
         desktop->getSelection()->set(this->star);
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_STAR,
                            _("Create star"));
 
-        this->star = NULL;
+        this->star = nullptr;
     }
 }
 
@@ -431,15 +431,15 @@ void StarTool::cancel() {
     desktop->getSelection()->clear();
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
 
-    if (this->star != NULL) {
+    if (this->star != nullptr) {
         this->star->deleteObject();
-        this->star = NULL;
+        this->star = nullptr;
     }
 
     this->within_tolerance = false;
     this->xp = 0;
     this->yp = 0;
-    this->item_to_select = NULL;
+    this->item_to_select = nullptr;
 
     desktop->canvas->endForcedFullRedraws();
 

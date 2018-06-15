@@ -40,7 +40,7 @@ Inkscape::GuideSnapper::LineList Inkscape::GuideSnapper::_getSnapLines(Geom::Poi
 {
     LineList s;
 
-    if ( NULL == _snapmanager->getNamedView() || ThisSnapperMightSnap() == false) {
+    if ( nullptr == _snapmanager->getNamedView() || ThisSnapperMightSnap() == false) {
         return s;
     }
 
@@ -60,7 +60,7 @@ Inkscape::GuideSnapper::LineList Inkscape::GuideSnapper::_getSnapLines(Geom::Poi
  */
 bool Inkscape::GuideSnapper::ThisSnapperMightSnap() const
 {
-    if (_snapmanager->getNamedView() == NULL) {
+    if (_snapmanager->getNamedView() == nullptr) {
         return false;
     }
 

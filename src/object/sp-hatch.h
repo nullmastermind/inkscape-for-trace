@@ -168,7 +168,7 @@ public:
 
 protected:
     bool _acceptObject(SPObject *obj) const override {
-        return dynamic_cast<SPHatch *>(obj) != NULL && URIReference::_acceptObject(obj);
+        return dynamic_cast<SPHatch *>(obj) != nullptr && URIReference::_acceptObject(obj);
     }
 };
 

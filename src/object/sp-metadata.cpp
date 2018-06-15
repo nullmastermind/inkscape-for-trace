@@ -44,7 +44,7 @@ namespace {
 void strip_ids_recursively(Inkscape::XML::Node *node) {
     using Inkscape::XML::NodeSiblingIterator;
     if ( node->type() == Inkscape::XML::ELEMENT_NODE ) {
-        node->setAttribute("id", NULL);
+        node->setAttribute("id", nullptr);
     }
     for ( NodeSiblingIterator iter=node->firstChild() ; iter ; ++iter ) {
         strip_ids_recursively(iter);
@@ -125,11 +125,11 @@ SPMetadata *sp_document_metadata(SPDocument *document)
 {
     SPObject *nv;
 
-    g_return_val_if_fail (document != NULL, NULL);
+    g_return_val_if_fail (document != nullptr, NULL);
 
-    nv = sp_item_group_get_child_by_name( document->getRoot(), NULL,
+    nv = sp_item_group_get_child_by_name( document->getRoot(), nullptr,
                                         "metadata");
-    g_assert (nv != NULL);
+    g_assert (nv != nullptr);
 
     return (SPMetadata *)nv;
 }

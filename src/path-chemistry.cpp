@@ -97,14 +97,14 @@ ObjectSet::combine(bool skip_undo)
 
     // remember the position, id, transform and style of the topmost path, they will be assigned to the combined one
     gint position = 0;
-    char const *id = NULL;
-    char const *transform = NULL;
-    char const *style = NULL;
-    char const *path_effect = NULL;
+    char const *id = nullptr;
+    char const *transform = nullptr;
+    char const *style = nullptr;
+    char const *path_effect = nullptr;
 
-    SPCurve* curve = NULL;
-    SPItem *first = NULL;
-    Inkscape::XML::Node *parent = NULL; 
+    SPCurve* curve = nullptr;
+    SPItem *first = nullptr;
+    Inkscape::XML::Node *parent = nullptr; 
 
     if (did) {
         clear();
@@ -124,7 +124,7 @@ ObjectSet::combine(bool skip_undo)
         }
 
         SPCurve *c = path->getCurveForEdit();
-        if (first == NULL) {  // this is the topmost path
+        if (first == nullptr) {  // this is the topmost path
             first = item;
             parent = first->getRepr()->parent();
             position = first->getRepr()->position();
@@ -226,7 +226,7 @@ ObjectSet::breakApart(bool skip_undo)
         }
 
         SPCurve *curve = path->getCurveForEdit();
-        if (curve == NULL) {
+        if (curve == nullptr) {
             continue;
         }
         did = true;
@@ -369,7 +369,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
     bool did = false;
     for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i){
         SPItem *item = *i;
-        g_assert(item != NULL);
+        g_assert(item != nullptr);
         SPDocument *document = item->document;
 
         SPGroup *group = dynamic_cast<SPGroup *>(item);
@@ -400,7 +400,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         if (lpeitem) {
             selected.erase(remove(selected.begin(), selected.end(), item), selected.end());
             lpeitem->removeAllPathEffects(true);
-            SPObject *elemref = NULL;
+            SPObject *elemref = nullptr;
             if (elemref = document->getObjectById(id)) {
                 //If the LPE item is a shape is converted to a path so we need to reupdate the item
                 
@@ -412,7 +412,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (path) {
             // remove connector attributes
-            if (item->getAttribute("inkscape:connector-type") != NULL) {
+            if (item->getAttribute("inkscape:connector-type") != nullptr) {
                 item->removeAttribute("inkscape:connection-start");
                 item->removeAttribute("inkscape:connection-end");
                 item->removeAttribute("inkscape:connector-type");
@@ -495,7 +495,7 @@ Inkscape::XML::Node *
 sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 {
     if (!item)
-        return NULL;
+        return nullptr;
 
     Inkscape::XML::Document *xml_doc = item->getRepr()->document();
 
@@ -526,7 +526,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         /* Whole text's style */
         Glib::ustring style_str =
-            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate possibility
+            item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
         g_repr->setAttribute("style", style_str.c_str());
 
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
@@ -537,8 +537,8 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                 break;
 
             /* This glyph's style */
-            SPObject const *pos_obj = 0;
-            void *rawptr = 0;
+            SPObject const *pos_obj = nullptr;
+            void *rawptr = nullptr;
             te_get_layout(item)->getSourceOfCharacter(iter, &rawptr);
             if (!rawptr || !SP_IS_OBJECT(rawptr)) // no source for glyph, abort
                 break;
@@ -547,7 +547,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
             Glib::ustring style_str =
-                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : NULL); // TODO investigate possibility
+                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, pos_obj->parent ? pos_obj->parent->style : nullptr); // TODO investigate possibility
 
             // get path from iter to iter_next:
             SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
@@ -580,7 +580,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
         return g_repr;
     }
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     {
         SPShape *shape = dynamic_cast<SPShape *>(item);
         if (shape) {
@@ -589,14 +589,14 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     }
 
     if (!curve)
-        return NULL;
+        return nullptr;
 
     // Prevent empty paths from being added to the document
     // otherwise we end up with zomby markup in the SVG file
     if(curve->is_empty())
     {
         curve->unref();
-        return NULL;
+        return nullptr;
     }
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
@@ -605,7 +605,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 
     /* Style */
     Glib::ustring style_str =
-        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : NULL); // TODO investigate possibility
+        item->style->write( SP_STYLE_FLAG_IFDIFF, SP_STYLE_SRC_UNSET, item->parent ? item->parent->style : nullptr); // TODO investigate possibility
     repr->setAttribute("style", style_str.c_str());
 
     /* Mask */

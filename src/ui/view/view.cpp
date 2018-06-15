@@ -58,7 +58,7 @@ _onDocumentResized (double x, double y, View* v)
 
 //--------------------------------------------------------------------
 View::View()
-:  _doc(0)
+:  _doc(nullptr)
 {
     _message_stack = GC::release(new Inkscape::MessageStack());
     _tips_message_context = new Inkscape::MessageContext(_message_stack);
@@ -78,9 +78,9 @@ void View::_close() {
     _message_changed_connection.disconnect();
 
     delete _tips_message_context;
-    _tips_message_context = 0;
+    _tips_message_context = nullptr;
 
-    _message_stack = 0;
+    _message_stack = nullptr;
 
     if (_doc) {
         _document_uri_set_connection.disconnect();
@@ -89,7 +89,7 @@ void View::_close() {
             // this was the last view of this document, so delete it
             delete _doc;
         }
-        _doc = NULL;
+        _doc = nullptr;
     }
     
    Inkscape::Verb::delete_all_view (this);
@@ -106,7 +106,7 @@ void View::requestRedraw()
 }
 
 void View::setDocument(SPDocument *doc) {
-    g_return_if_fail(doc != NULL);
+    g_return_if_fail(doc != nullptr);
 
     if (_doc) {
         _document_uri_set_connection.disconnect();

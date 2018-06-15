@@ -31,7 +31,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
         sigc::connection release_connection;
         sigc::connection position_changed_connection;
 
-        Record() : parent(NULL) {}
+        Record() : parent(nullptr) {}
 
         unsigned childIndex(SPObject *obj) {
             Siblings::iterator found;
@@ -126,7 +126,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
     sigc::signal<void, SPObject *> added_signal;
     sigc::signal<void, SPObject *> removed_signal;
 
-    Relations() { records[NULL]; }
+    Relations() { records[nullptr]; }
 
     ~Relations() override {
         for ( Map::iterator iter=records.begin()
@@ -146,7 +146,7 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
         if ( found != records.end() ) {
             return &(*found).second;
         } else {
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -177,8 +177,8 @@ private:
     void _doRemove(SPObject *obj) {
         Record &record=records[obj];
 
-        if ( record.parent == NULL ) {
-            Record &root = records[NULL];
+        if ( record.parent == nullptr ) {
+            Record &root = records[nullptr];
             for ( Siblings::iterator it = root.children.begin(); it != root.children.end(); ++it ) {
                 if ( *it == obj ) {
                     root.children.erase( it );
@@ -220,13 +220,13 @@ DocumentSubset::DocumentSubset()
 }
 
 void DocumentSubset::Relations::addOne(SPObject *obj) {
-    g_return_if_fail( obj != NULL );
-    g_return_if_fail( get(obj) == NULL );
+    g_return_if_fail( obj != nullptr );
+    g_return_if_fail( get(obj) == nullptr );
 
     Record &record=_doAdd(obj);
 
     /* find the nearest ancestor in the subset */
-    Record *parent_record=NULL;
+    Record *parent_record=nullptr;
     for ( SPObject::ParentIterator parent_iter=obj->parent
         ; !parent_record && parent_iter ; ++parent_iter )
     {
@@ -236,8 +236,8 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
         }
     }
     if (!parent_record) {
-        parent_record = get(NULL);
-        g_assert( parent_record != NULL );
+        parent_record = get(nullptr);
+        g_assert( parent_record != nullptr );
     }
 
     Siblings &children=record.children;
@@ -251,7 +251,7 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
         ; iter != children.end() ; ++iter )
     {
         Record *child_record=get(*iter);
-        g_assert( child_record != NULL );
+        g_assert( child_record != nullptr );
         child_record->parent = obj;
     }
 
@@ -263,13 +263,13 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
 }
 
 void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
-    g_return_if_fail( obj != NULL );
+    g_return_if_fail( obj != nullptr );
 
     Record *record=get(obj);
-    g_return_if_fail( record != NULL );
+    g_return_if_fail( record != nullptr );
 
     Record *parent_record=get(record->parent);
-    g_assert( parent_record != NULL );
+    g_assert( parent_record != nullptr );
 
     unsigned index=parent_record->removeChild(obj);
 
@@ -286,7 +286,7 @@ void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
             ; iter != children.end() ; ++iter)
         {
             Record *child_record=get(*iter);
-            g_assert( child_record != NULL );
+            g_assert( child_record != nullptr );
             child_record->parent = record->parent;
         }
 
@@ -298,7 +298,7 @@ void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
 }
 
 void DocumentSubset::Relations::clear() {
-    Record &root=records[NULL];
+    Record &root=records[nullptr];
 
     while (!root.children.empty()) {
         _doRemoveSubtree(root.children.front());
@@ -311,7 +311,7 @@ void DocumentSubset::Relations::reorder(SPObject *obj) {
     SPObject::ParentIterator parent=obj;
 
     /* find nearest ancestor in the subset */
-    Record *parent_record=NULL;
+    Record *parent_record=nullptr;
     while (!parent_record) {
         parent_record = get(++parent);
     }
@@ -356,7 +356,7 @@ bool DocumentSubset::includes(SPObject *obj) const {
 
 SPObject *DocumentSubset::parentOf(SPObject *obj) const {
     Relations::Record *record=_relations->get(obj);
-    return ( record ? record->parent : NULL );
+    return ( record ? record->parent : nullptr );
 }
 
 unsigned DocumentSubset::childCount(SPObject *obj) const {
@@ -372,7 +372,7 @@ unsigned DocumentSubset::indexOf(SPObject *obj) const {
 
 SPObject *DocumentSubset::nthChildOf(SPObject *obj, unsigned n) const {
     Relations::Record *record=_relations->get(obj);
-    return ( record ? record->children[n] : NULL );
+    return ( record ? record->children[n] : nullptr );
 }
 
 sigc::connection DocumentSubset::connectChanged(sigc::slot<void> slot) const {

@@ -88,7 +88,7 @@ ColorNotebook::~ColorNotebook()
 {
     if (_buttons) {
         delete[] _buttons;
-        _buttons = 0;
+        _buttons = nullptr;
     }
 }
 
@@ -271,7 +271,7 @@ void ColorNotebook::_updateICCButtons()
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     /* update color management icon*/
-    gtk_widget_set_sensitive(_box_colormanaged, color.icc != NULL);
+    gtk_widget_set_sensitive(_box_colormanaged, color.icc != nullptr);
 
     /* update out-of-gamut icon */
     gtk_widget_set_sensitive(_box_outofgamut, false);
@@ -330,7 +330,7 @@ void ColorNotebook::_addPage(Page &page)
         tab_label->set_name("ColorModeLabel");
         gint page_num = gtk_notebook_append_page(GTK_NOTEBOOK(_book), selector_widget->gobj(), tab_label->gobj());
 
-        _buttons[page_num] = gtk_radio_button_new_with_label(NULL, mode_name.c_str());
+        _buttons[page_num] = gtk_radio_button_new_with_label(nullptr, mode_name.c_str());
         gtk_widget_set_name(_buttons[page_num], "ColorModeButton");
         gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
         if (page_num > 0) {

@@ -255,7 +255,7 @@ public:
                   to process.
     */
     void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes, unsigned optional_attributes_offset, Glib::ustring::const_iterator text_begin, Glib::ustring::const_iterator text_end);
-    inline void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes = NULL, unsigned optional_attributes_offset = 0)
+    inline void appendText(Glib::ustring const &text, SPStyle *style, void *source_cookie, OptionalTextTagAttrs const *optional_attributes = nullptr, unsigned optional_attributes_offset = 0)
         {appendText(text, style, source_cookie, optional_attributes, optional_attributes_offset, text.begin(), text.end());}
 
     /** Control codes are metadata in the text stream to signify items
@@ -532,7 +532,7 @@ public:
     parameter is set to point to the actual character, otherwise
     \a text_iterator is unaltered. */
     // TODO FIXME a void* cookie is a very unsafe design, and C++ makes it unnecessary.  
-    void getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator = NULL) const;
+    void getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator = nullptr) const;
 
     /** For latin text, the left side of the character, on the baseline */
     Geom::Point characterAnchorPoint(iterator const &it) const;
@@ -550,7 +550,7 @@ public:
     /** Returns the box extents (not ink extents) of the given character.
     The centre of rotation is at the horizontal centre of the box on the
     text baseline. */
-    Geom::Rect characterBoundingBox(iterator const &it, double *rotation = NULL) const;
+    Geom::Rect characterBoundingBox(iterator const &it, double *rotation = nullptr) const;
 
     /** Basically uses characterBoundingBox() on all the characters from
     \a start to \a end and returns the union of these boxes. The return value
@@ -951,7 +951,7 @@ public:
     friend class Layout;
     // this is just so you can create uninitialised iterators - don't actually try to use one
     iterator() :
-        _parent_layout(NULL),
+        _parent_layout(nullptr),
         _glyph_index(-1),
         _char_index(0),
         _cursor_moving_vertically(false),

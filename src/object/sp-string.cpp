@@ -139,7 +139,7 @@ void SPString::read_content() {
                 }
                 break;
             default:
-                if( white_space && (!string.empty() || (getPrev() != NULL))) {
+                if( white_space && (!string.empty() || (getPrev() != nullptr))) {
                     string += ' ';
                 }
                 string += c;
@@ -149,7 +149,7 @@ void SPString::read_content() {
     } // End loop
 
     // Insert white space at end if more text follows
-    if (white_space && getRepr()->next() != NULL) { // can't use SPObject::getNext() when the SPObject tree is still being built
+    if (white_space && getRepr()->next() != nullptr) { // can't use SPObject::getNext() when the SPObject tree is still being built
         string += ' ';
     }
 

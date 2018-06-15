@@ -31,8 +31,8 @@ public:
                Effect* effect,
                bool default_value = false,
                const Glib::ustring& inactive_label = "",
-               char const * icon_active = NULL,
-               char const * icon_inactive = NULL,
+               char const * icon_active = nullptr,
+               char const * icon_inactive = nullptr,
                GtkIconSize icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR);
     ~ToggleButtonParam() override;
 

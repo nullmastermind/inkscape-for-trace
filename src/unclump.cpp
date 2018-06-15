@@ -196,7 +196,7 @@ Closest to item among others
 static SPItem *unclump_closest (SPItem *item, std::list<SPItem*> &others)
 {
     double min = HUGE_VAL;
-    SPItem *closest = NULL;
+    SPItem *closest = nullptr;
 
     for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();++i) {
     	SPItem *other = *i;
@@ -220,7 +220,7 @@ Most distant from item among others
 static SPItem *unclump_farest (SPItem *item, std::list<SPItem*> &others)
 {
     double max = -HUGE_VAL;
-    SPItem *farest = NULL;
+    SPItem *farest = nullptr;
     for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();++i) {
         SPItem *other = *i;
 

@@ -73,9 +73,9 @@ private:
 class TextParamInternal : public TextParam {
 public:
     TextParamInternal(Effect* effect) :
-        TextParam("", "", "", NULL, effect) {}
+        TextParam("", "", "", nullptr, effect) {}
 
-    Gtk::Widget * param_newWidget() override { return NULL; }
+    Gtk::Widget * param_newWidget() override { return nullptr; }
 };
 
 } //namespace LivePathEffect

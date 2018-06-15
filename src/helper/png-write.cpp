@@ -70,7 +70,7 @@ typedef struct SPPNGBD {
  */
 class PngTextList {
 public:
-    PngTextList() : count(0), textItems(0) {}
+    PngTextList() : count(0), textItems(nullptr) {}
     ~PngTextList();
 
     void add(gchar const* key, gchar const* text);
@@ -97,7 +97,7 @@ void PngTextList::add(gchar const* key, gchar const* text)
 {
     if (count < 0) {
         count = 0;
-        textItems = 0;
+        textItems = nullptr;
     }
     png_text* tmp = (count > 0) ? g_try_renew(png_text, textItems, count + 1): g_try_new(png_text, 1);
     if (tmp) {
@@ -111,12 +111,12 @@ void PngTextList::add(gchar const* key, gchar const* text)
         item->text_length = 0;
 #ifdef PNG_iTXt_SUPPORTED
         item->itxt_length = 0;
-        item->lang = 0;
-        item->lang_key = 0;
+        item->lang = nullptr;
+        item->lang_key = nullptr;
 #endif // PNG_iTXt_SUPPORTED
     } else {
         g_warning("Unable to allocate arrary for %d PNG text data.", count);
-        textItems = 0;
+        textItems = nullptr;
         count = 0;
     }
 }
@@ -127,8 +127,8 @@ sp_png_write_rgba_striped(SPDocument *doc,
                           int (* get_rows)(guchar const **rows, void **to_free, int row, int num_rows, void *data, int color_type, int bit_depth, int antialias),
                           void *data, bool interlace, int color_type, int bit_depth, int zlib, int antialiasing)
 {
-    g_return_val_if_fail(filename != NULL, false);
-    g_return_val_if_fail(data != NULL, false);
+    g_return_val_if_fail(filename != nullptr, false);
+    g_return_val_if_fail(data != nullptr, false);
 
     struct SPEBP *ebp = (struct SPEBP *) data;
     FILE *fp;
@@ -141,7 +141,7 @@ sp_png_write_rgba_striped(SPDocument *doc,
 
     Inkscape::IO::dump_fopen_call(filename, "M");
     fp = Inkscape::IO::fopen_utf8name(filename, "wb");
-    if(fp == NULL) return false;
+    if(fp == nullptr) return false;
 
     /* Create and initialize the png_struct with the desired error handler
      * functions.  If you want to use the default stderr and longjump method,
@@ -149,18 +149,18 @@ sp_png_write_rgba_striped(SPDocument *doc,
      * the library version is compatible with the one used at compile time,
      * in case we are using dynamically linked libraries.  REQUIRED.
      */
-    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
-    if (png_ptr == NULL) {
+    if (png_ptr == nullptr) {
         fclose(fp);
         return false;
     }
 
     /* Allocate/initialize the image information data.  REQUIRED */
     info_ptr = png_create_info_struct(png_ptr);
-    if (info_ptr == NULL) {
+    if (info_ptr == nullptr) {
         fclose(fp);
-        png_destroy_write_struct(&png_ptr, NULL);
+        png_destroy_write_struct(&png_ptr, nullptr);
         return false;
     }
 
@@ -411,8 +411,8 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 void *data, bool force_overwrite,
                                 const std::vector<SPItem*> &items_only, bool interlace, int color_type, int bit_depth, int zlib, int antialiasing)
 {
-    g_return_val_if_fail(doc != NULL, EXPORT_ERROR);
-    g_return_val_if_fail(filename != NULL, EXPORT_ERROR);
+    g_return_val_if_fail(doc != nullptr, EXPORT_ERROR);
+    g_return_val_if_fail(filename != nullptr, EXPORT_ERROR);
     g_return_val_if_fail(width >= 1, EXPORT_ERROR);
     g_return_val_if_fail(height >= 1, EXPORT_ERROR);
     g_return_val_if_fail(!area.hasZeroArea(), EXPORT_ERROR);

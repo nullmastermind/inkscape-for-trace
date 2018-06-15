@@ -263,7 +263,7 @@ FontSelectorToolbar::on_key_press_event (GdkEventKey* key_event)
     gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          key_event->hardware_keycode,
                                          (GdkModifierType)key_event->state,
-                                         0, &key, 0, 0, 0 );
+                                         0, &key, nullptr, nullptr, nullptr );
 
     switch ( key ) {
 

@@ -266,7 +266,7 @@ void PolarArrangeTab::arrange()
 {
 	Inkscape::Selection *selection = parent->getDesktop()->getSelection();
 	const std::vector<SPItem*> tmp(selection->items().begin(), selection->items().end());
-	SPGenericEllipse *referenceEllipse = NULL; // Last ellipse in selection
+	SPGenericEllipse *referenceEllipse = nullptr; // Last ellipse in selection
 
 	bool arrangeOnEllipse = !arrangeOnParametersRadio.get_active();
 	bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
@@ -285,7 +285,7 @@ void PolarArrangeTab::arrange()
 					referenceEllipse = SP_GENERICELLIPSE(item);
 			} else {
 				// The last selected ellipse is actually the first in list
-				if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == NULL)
+				if(SP_IS_GENERICELLIPSE(item) && referenceEllipse == nullptr)
 					referenceEllipse = SP_GENERICELLIPSE(item);
 			}
 		}
@@ -299,7 +299,7 @@ void PolarArrangeTab::arrange()
 
 	if(arrangeOnEllipse)
 	{
-		if(referenceEllipse == NULL)
+		if(referenceEllipse == nullptr)
 		{
 			Gtk::MessageDialog dialog(_("Couldn't find an ellipse in selection"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE, true);
 			dialog.run();
@@ -328,7 +328,7 @@ void PolarArrangeTab::arrange()
 		arcBeg = angleX.getValue("rad");
 		arcEnd = angleY.getValue("rad");
 		transformation.setIdentity();
-		referenceEllipse = NULL;
+		referenceEllipse = nullptr;
 	}
 
 	int anchor = 9;

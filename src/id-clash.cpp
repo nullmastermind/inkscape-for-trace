@@ -104,7 +104,7 @@ find_references(SPObject *elem, refmap_type &refmap)
         if (css) {
             for (unsigned i = 0; i < NUM_CLIPBOARD_PROPERTIES; ++i) {
                 const char *attr = clipboard_properties[i];
-                const gchar *value = sp_repr_css_property(css, attr, NULL);
+                const gchar *value = sp_repr_css_property(css, attr, nullptr);
                 if (value) {
                     gchar *uri = extract_uri(value);
                     if (uri && uri[0] == '#') {
@@ -227,8 +227,8 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
             for (;;) {
                 new_id += "0123456789"[std::rand() % 10];
                 const char *str = new_id.c_str();
-                if (current_doc->getObjectById(str) == NULL &&
-                    imported_doc->getObjectById(str) == NULL) break;
+                if (current_doc->getObjectById(str) == nullptr &&
+                    imported_doc->getObjectById(str) == nullptr) break;
             }
             // Change to the new ID
 
@@ -393,7 +393,7 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
         new_name2 += '-';
         for (;;) {
             new_name2 += "0123456789"[std::rand() % 10];
-            if (current_doc->getObjectById(new_name2) == NULL)
+            if (current_doc->getObjectById(new_name2) == nullptr)
                 break;
         }
     }

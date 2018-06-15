@@ -79,7 +79,7 @@ UserFont::UserFont(SvgFont* instance){
     cairo_user_font_face_set_render_glyph_func  (this->face, font_render_glyph_cb);
     cairo_user_font_face_set_text_to_glyphs_func(this->face, font_text_to_glyphs_cb);
 
-    cairo_font_face_set_user_data (this->face, &key, (void*)instance, (cairo_destroy_func_t) NULL);
+    cairo_font_face_set_user_data (this->face, &key, (void*)instance, (cairo_destroy_func_t) nullptr);
 }
 
 //******************************//
@@ -87,8 +87,8 @@ UserFont::UserFont(SvgFont* instance){
 //******************************//
 SvgFont::SvgFont(SPFont* spfont){
     this->font = spfont;
-    this->missingglyph = NULL;
-    this->userfont = NULL;
+    this->missingglyph = nullptr;
+    this->userfont = nullptr;
 }
 
 cairo_status_t
@@ -191,8 +191,8 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
     //We use that info to allocate memory for the glyphs
     *glyphs = (cairo_glyph_t*) malloc(count*sizeof(cairo_glyph_t));
 
-    char* previous_unicode = NULL; //This is used for kerning
-    gchar* previous_glyph_name = NULL; //This is used for kerning
+    char* previous_unicode = nullptr; //This is used for kerning
+    gchar* previous_glyph_name = nullptr; //This is used for kerning
 
     count=0;
     double x=0, y=0;//These vars store the position of the glyph within the rendered string
@@ -312,7 +312,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
 
     if (glyph > this->glyphs.size())     return CAIRO_STATUS_SUCCESS;//TODO: this is an error!
 
-    SPObject *node = NULL;
+    SPObject *node = nullptr;
     if (glyph == glyphs.size()){
         if (!missingglyph) {
             return CAIRO_STATUS_SUCCESS;
@@ -370,7 +370,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
                 SPPath *path = dynamic_cast<SPPath *>(item);
                 if (path) {
                     SPShape *shape = dynamic_cast<SPShape *>(item);
-                    g_assert(shape != NULL);
+                    g_assert(shape != nullptr);
                     pathv = shape->_curve->get_pathvector();
                     pathv = flip_coordinate_system(spfont, pathv);
                     this->render_glyph_path(cr, &pathv);
@@ -405,7 +405,7 @@ SvgFont::get_font_face(){
 void SvgFont::refresh(){
     this->glyphs.clear();
     delete this->userfont;
-    this->userfont = NULL;
+    this->userfont = nullptr;
 }
 
 double SvgFont::units_per_em() {

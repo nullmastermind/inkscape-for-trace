@@ -44,7 +44,7 @@
 SvgFontDrawingArea::SvgFontDrawingArea():
     _x(0),
     _y(0),
-    _svgfont(0),
+    _svgfont(nullptr),
     _text()
 {
 }
@@ -122,7 +122,7 @@ void SvgFontsDialog::AttrEntry::set_text(char* t){
 // 'font-family' has a problem as it is also a presentation attribute for <text>
 void SvgFontsDialog::AttrEntry::on_attr_changed(){
 
-    SPObject* o = NULL;
+    SPObject* o = nullptr;
     for (auto& node: dialog->get_selected_spfont()->children) {
         switch(this->attr){
             case SP_PROP_FONT_FAMILY:
@@ -132,7 +132,7 @@ void SvgFontsDialog::AttrEntry::on_attr_changed(){
                 }
                 break;
             default:
-                o = NULL;
+                o = nullptr;
         }
     }
 
@@ -171,7 +171,7 @@ void SvgFontsDialog::AttrSpin::set_value(double v){
 
 void SvgFontsDialog::AttrSpin::on_attr_changed(){
 
-    SPObject* o = NULL;
+    SPObject* o = nullptr;
     switch (this->attr) {
 
         // <font> attributes
@@ -199,7 +199,7 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
             break;
 
         default:
-            o = NULL;
+            o = nullptr;
     }
 
     const gchar* name = (const gchar*)sp_attribute_name(this->attr);
@@ -435,7 +435,7 @@ SPGlyphKerning* SvgFontsDialog::get_selected_kerning_pair()
     Gtk::TreeModel::iterator i = _KerningPairsList.get_selection()->get_selected();
     if(i)
         return (*i)[_KerningPairsListColumns.spnode];
-    return NULL;
+    return nullptr;
 }
 
 SvgFont* SvgFontsDialog::get_selected_svgfont()
@@ -443,7 +443,7 @@ SvgFont* SvgFontsDialog::get_selected_svgfont()
     Gtk::TreeModel::iterator i = _FontsList.get_selection()->get_selected();
     if(i)
         return (*i)[_columns.svgfont];
-    return NULL;
+    return nullptr;
 }
 
 SPFont* SvgFontsDialog::get_selected_spfont()
@@ -451,7 +451,7 @@ SPFont* SvgFontsDialog::get_selected_spfont()
     Gtk::TreeModel::iterator i = _FontsList.get_selection()->get_selected();
     if(i)
         return (*i)[_columns.spfont];
-    return NULL;
+    return nullptr;
 }
 
 SPGlyph* SvgFontsDialog::get_selected_glyph()
@@ -459,7 +459,7 @@ SPGlyph* SvgFontsDialog::get_selected_glyph()
     Gtk::TreeModel::iterator i = _GlyphsList.get_selection()->get_selected();
     if(i)
         return (*i)[_GlyphsListColumns.glyph_node];
-    return NULL;
+    return nullptr;
 }
 
 Gtk::VBox* SvgFontsDialog::global_settings_tab(){
@@ -538,7 +538,7 @@ SvgFontsDialog::populate_kerning_pairs_box()
 
 SPGlyph *new_glyph(SPDocument* document, SPFont *font, const int count)
 {
-    g_return_val_if_fail(font != NULL, NULL);
+    g_return_val_if_fail(font != nullptr, NULL);
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
 
     // create a new glyph
@@ -556,7 +556,7 @@ SPGlyph *new_glyph(SPDocument* document, SPFont *font, const int count)
     // get corresponding object
     SPGlyph *g = SP_GLYPH( document->getObjectByRepr(repr) );
 
-    g_assert(g != NULL);
+    g_assert(g != nullptr);
     g_assert(SP_IS_GLYPH(g));
 
     return g;
@@ -848,7 +848,7 @@ void SvgFontsDialog::add_kerning_pair(){
         second_glyph.get_active_text() == "") return;
 
     //look for this kerning pair on the currently selected font
-    this->kerning_pair = NULL;
+    this->kerning_pair = nullptr;
     for (auto& node: get_selected_spfont()->children) {
         //TODO: It is not really correct to get only the first byte of each string.
         //TODO: We should also support vertical kerning
@@ -924,7 +924,7 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
 
 SPFont *new_font(SPDocument *document)
 {
-    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document != nullptr, NULL);
 
     SPDefs *defs = document->getDefs();
 
@@ -954,7 +954,7 @@ SPFont *new_font(SPDocument *document)
     // get corresponding object
     SPFont *f = SP_FONT( document->getObjectByRepr(repr) );
 
-    g_assert(f != NULL);
+    g_assert(f != nullptr);
     g_assert(SP_IS_FONT(f));
     Inkscape::GC::release(mg);
     Inkscape::GC::release(repr);

@@ -90,7 +90,7 @@ OriginalPathParam::param_newWidget()
 void
 OriginalPathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(linked_obj)) {
         if (_from_original_d) {
             curve = SP_SHAPE(linked_obj)->getCurveForEdit();
@@ -102,7 +102,7 @@ OriginalPathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();
     }
 
-    if (curve == NULL) {
+    if (curve == nullptr) {
         // curve invalid, set empty pathvector
         _pathvector = Geom::PathVector();
     } else {
@@ -128,7 +128,7 @@ OriginalPathParam::on_select_original_button_click()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPItem *original = ref.getObject();
-    if (desktop == NULL || original == NULL) {
+    if (desktop == nullptr || original == nullptr) {
         return;
     }
     Inkscape::Selection *selection = desktop->getSelection();

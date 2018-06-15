@@ -49,10 +49,10 @@ static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *curren
 
 static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = NULL;
+    static SPDocument *doc = nullptr;
     static unsigned int edoc = FALSE;
     if (!current_doc) {
-        return NULL;
+        return nullptr;
     }
     /* Try to load from document */
     if (!edoc && !doc) {
@@ -74,23 +74,23 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
             SPDefs *defs = current_doc->getDefs();
             Inkscape::XML::Document *xml_doc = current_doc->getReprDoc();
             Inkscape::XML::Node *mark_repr = object->getRepr()->duplicate(xml_doc);
-            defs->getRepr()->addChild(mark_repr, NULL);
+            defs->getRepr()->addChild(mark_repr, nullptr);
             SPObject *cloned_item = current_doc->getObjectByRepr(mark_repr);
             Inkscape::GC::release(mark_repr);
             return cloned_item;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
 static SPObject *
 sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = NULL;
+    static SPDocument *doc = nullptr;
     static unsigned int edoc = FALSE;
     if (!current_doc) {
-        return NULL;
+        return nullptr;
     }
     /* Try to load from document */
     if (!edoc && !doc) {
@@ -118,22 +118,22 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
             SPDefs *defs = current_doc->getDefs();
             Inkscape::XML::Document *xml_doc = current_doc->getReprDoc();
             Inkscape::XML::Node *pat_repr = object->getRepr()->duplicate(xml_doc);
-            defs->getRepr()->addChild(pat_repr, NULL);
+            defs->getRepr()->addChild(pat_repr, nullptr);
             Inkscape::GC::release(pat_repr);
             return object;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
 static SPObject *
 sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
-    static SPDocument *doc = NULL;
+    static SPDocument *doc = nullptr;
     static unsigned int edoc = FALSE;
     if (!current_doc) {
-        return NULL;
+        return nullptr;
     }
     /* Try to load from document */
     if (!edoc && !doc) {
@@ -161,12 +161,12 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
             SPDefs *defs = current_doc->getDefs();
             Inkscape::XML::Document *xml_doc = current_doc->getReprDoc();
             Inkscape::XML::Node *pat_repr = object->getRepr()->duplicate(xml_doc);
-            defs->getRepr()->addChild(pat_repr, NULL);
+            defs->getRepr()->addChild(pat_repr, nullptr);
             Inkscape::GC::release(pat_repr);
             return object;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 // get_stock_item returns a pointer to an instance of the desired stock object in the current doc
@@ -175,7 +175,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 
 SPObject *get_stock_item(gchar const *urn, gboolean stock)
 {
-    g_assert(urn != NULL);
+    g_assert(urn != nullptr);
     
     /* check its an inkscape URN */
     if (!strncmp (urn, "urn:inkscape:", 13)) {
@@ -200,9 +200,9 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         SPDefs *defs = doc->getDefs();
         if (!defs) {
             g_free(base);
-            return NULL;
+            return nullptr;
         }
-        SPObject *object = NULL;
+        SPObject *object = nullptr;
         if (!strcmp(base, "marker") && !stock) {
             for (auto& child: defs->children)
             {
@@ -240,7 +240,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
             
         }
         
-        if (object == NULL) {
+        if (object == nullptr) {
             
             if (!strcmp(base, "marker"))  {
                 object = sp_marker_load_from_svg(name_p, doc);

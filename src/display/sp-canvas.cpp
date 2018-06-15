@@ -49,7 +49,7 @@ using Inkscape::Debug::GdkEventLatencyTracker;
 
 // gtk_check_version returns non-NULL on failure
 static bool const HAS_BROKEN_MOTION_HINTS =
-  true || gtk_check_version(2, 12, 0) != NULL;
+  true || gtk_check_version(2, 12, 0) != nullptr;
 
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
@@ -209,7 +209,7 @@ sp_canvas_item_class_init(SPCanvasItemClass *klass)
                                              G_TYPE_FROM_CLASS (klass),
                                              G_SIGNAL_RUN_LAST,
                                              ((glong)((guint8*)&(klass->event) - (guint8*)klass)),
-                                             NULL, NULL,
+                                             nullptr, nullptr,
                                              sp_marshal_BOOLEAN__POINTER,
                                              G_TYPE_BOOLEAN, 1,
                                              GDK_TYPE_EVENT);
@@ -223,7 +223,7 @@ sp_canvas_item_class_init(SPCanvasItemClass *klass)
                     G_TYPE_FROM_CLASS (gobject_class),
                     (GSignalFlags)(G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS),
 		    G_STRUCT_OFFSET (SPCanvasItemClass, destroy),
-		    NULL, NULL,
+		    nullptr, nullptr,
 		    g_cclosure_marshal_VOID__VOID,
 		    G_TYPE_NONE, 0);
 }
@@ -248,11 +248,11 @@ SPCanvasItem *sp_canvas_item_new(SPCanvasGroup *parent, GType type, gchar const 
 {
     va_list args;
 
-    g_return_val_if_fail(parent != NULL, NULL);
+    g_return_val_if_fail(parent != nullptr, NULL);
     g_return_val_if_fail(SP_IS_CANVAS_GROUP(parent), NULL);
     g_return_val_if_fail(g_type_is_a(type, SP_TYPE_CANVAS_ITEM), NULL);
 
-    SPCanvasItem *item = SP_CANVAS_ITEM(g_object_new(type, NULL));
+    SPCanvasItem *item = SP_CANVAS_ITEM(g_object_new(type, nullptr));
 
     va_start(args, first_arg_name);
     sp_canvas_item_construct(item, parent, first_arg_name, args);
@@ -329,22 +329,22 @@ void sp_canvas_item_dispose(GObject *object)
       item->visible = FALSE;
 
       if (item == item->canvas->_current_item) {
-          item->canvas->_current_item = NULL;
+          item->canvas->_current_item = nullptr;
           item->canvas->_need_repick = TRUE;
       }
 
       if (item == item->canvas->_new_current_item) {
-          item->canvas->_new_current_item = NULL;
+          item->canvas->_new_current_item = nullptr;
           item->canvas->_need_repick = TRUE;
       }
 
       if (item == item->canvas->_grabbed_item) {
-          item->canvas->_grabbed_item = NULL;
+          item->canvas->_grabbed_item = nullptr;
           ungrab_default_client_pointer();
       }
 
       if (item == item->canvas->_focused_item) {
-          item->canvas->_focused_item = NULL;
+          item->canvas->_focused_item = nullptr;
       }
 
       if (item->parent) {
@@ -439,7 +439,7 @@ void sp_canvas_item_affine_absolute(SPCanvasItem *item, Geom::Affine const &affi
 
     if (!item->need_affine) {
         item->need_affine = TRUE;
-        if (item->parent != NULL) {
+        if (item->parent != nullptr) {
             sp_canvas_item_request_update (item->parent);
         } else {
             item->canvas->requestUpdate();
@@ -460,7 +460,7 @@ void sp_canvas_item_affine_absolute(SPCanvasItem *item, Geom::Affine const &affi
  */
 void sp_canvas_item_raise(SPCanvasItem *item, int positions)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
     g_return_if_fail (positions >= 0);
 
@@ -484,7 +484,7 @@ void sp_canvas_item_raise(SPCanvasItem *item, int positions)
 
 void sp_canvas_item_raise_to_top(SPCanvasItem *item)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
     if (!item->parent)
         return;
@@ -508,7 +508,7 @@ void sp_canvas_item_raise_to_top(SPCanvasItem *item)
  */
 void sp_canvas_item_lower(SPCanvasItem *item, int positions)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
     g_return_if_fail (positions >= 1);
 
@@ -533,7 +533,7 @@ void sp_canvas_item_lower(SPCanvasItem *item, int positions)
 
 void sp_canvas_item_lower_to_bottom(SPCanvasItem *item)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
     if (!item->parent)
         return;
@@ -554,7 +554,7 @@ bool sp_canvas_item_is_visible(SPCanvasItem *item)
  */
 void sp_canvas_item_show(SPCanvasItem *item)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
     if (item->visible) {
@@ -579,7 +579,7 @@ void sp_canvas_item_show(SPCanvasItem *item)
  */
 void sp_canvas_item_hide(SPCanvasItem *item)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
     if (!item->visible) {
@@ -606,7 +606,7 @@ void sp_canvas_item_hide(SPCanvasItem *item)
  */
 int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor, guint32 etime)
 {
-    g_return_val_if_fail (item != NULL, -1);
+    g_return_val_if_fail (item != nullptr, -1);
     g_return_val_if_fail (SP_IS_CANVAS_ITEM (item), -1);
     g_return_val_if_fail (gtk_widget_get_mapped (GTK_WIDGET (item->canvas)), -1);
 
@@ -637,9 +637,9 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
                   GDK_SEAT_CAPABILITY_ALL_POINTING,
                   FALSE,
                   cursor,
-                  NULL,
-                  NULL,
-                  NULL);
+                  nullptr,
+                  nullptr,
+                  nullptr);
 #else
     auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
@@ -669,14 +669,14 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
  */
 void sp_canvas_item_ungrab(SPCanvasItem *item, guint32 etime)
 {
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
 
     if (item->canvas->_grabbed_item != item) {
         return;
     }
 
-    item->canvas->_grabbed_item = NULL;
+    item->canvas->_grabbed_item = nullptr;
     ungrab_default_client_pointer(etime);
 }
 
@@ -726,7 +726,7 @@ void sp_canvas_item_request_update(SPCanvasItem *item)
 
     item->need_update = TRUE;
 
-    if (item->parent != NULL) {
+    if (item->parent != nullptr) {
         // Recurse up the tree
         sp_canvas_item_request_update (item->parent);
     } else {
@@ -772,7 +772,7 @@ static void sp_canvas_group_init(SPCanvasGroup * group)
 
 void SPCanvasGroup::destroy(SPCanvasItem *object)
 {
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_CANVAS_GROUP(object));
 
     SPCanvasGroup *group = SP_CANVAS_GROUP(object);
@@ -827,14 +827,14 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
     int y2 = (int)(y + item->canvas->_close_enough);
 
     double best = 0.0;
-    *actual_item = NULL;
+    *actual_item = nullptr;
 
     double dist = 0.0;
     for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
         SPCanvasItem *child = *it;
 
         if ((child->x1 <= x2) && (child->y1 <= y2) && (child->x2 >= x1) && (child->y2 >= y1)) {
-            SPCanvasItem *point_item = NULL; // cater for incomplete item implementations
+            SPCanvasItem *point_item = nullptr; // cater for incomplete item implementations
 
             int pickable;
             if (child->visible && child->pickable && SP_CANVAS_ITEM_GET_CLASS(child)->point) {
@@ -905,7 +905,7 @@ void SPCanvasGroup::add(SPCanvasItem *item)
 
 void SPCanvasGroup::remove(SPCanvasItem *item)
 {
-    g_return_if_fail(item != NULL);
+    g_return_if_fail(item != nullptr);
 
     auto position = std::find(items.begin(), items.end(), item);
     if (position != items.end()) {
@@ -913,7 +913,7 @@ void SPCanvasGroup::remove(SPCanvasItem *item)
     }
 
     // Unparent the child
-    item->parent = NULL;
+    item->parent = nullptr;
     g_object_unref(item);
 
 }
@@ -955,7 +955,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_pick_event.crossing.y = 0;
 
     // Create the root item as a special case
-    canvas->_root = SP_CANVAS_ITEM(g_object_new(SP_TYPE_CANVAS_GROUP, NULL));
+    canvas->_root = SP_CANVAS_ITEM(g_object_new(SP_TYPE_CANVAS_GROUP, nullptr));
     canvas->_root->canvas = canvas;
 
     g_object_ref (canvas->_root);
@@ -968,9 +968,9 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_drawing_disabled = false;
 
-    canvas->_backing_store = NULL;
+    canvas->_backing_store = nullptr;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    canvas->_surface_for_similar = NULL;
+    canvas->_surface_for_similar = nullptr;
 #endif
     canvas->_clean_region = cairo_region_create();
     canvas->_background = cairo_pattern_create_rgb(1, 1, 1);
@@ -991,7 +991,7 @@ void SPCanvas::shutdownTransients()
     dirtyAll();
 
     if (_grabbed_item) {
-        _grabbed_item = NULL;
+        _grabbed_item = nullptr;
         ungrab_default_client_pointer();
     }
     removeIdle();
@@ -1003,25 +1003,25 @@ void SPCanvas::dispose(GObject *object)
 
     if (canvas->_root) {
         g_object_unref (canvas->_root);
-        canvas->_root = NULL;
+        canvas->_root = nullptr;
     }
     if (canvas->_backing_store) {
         cairo_surface_destroy(canvas->_backing_store);
-        canvas->_backing_store = NULL;
+        canvas->_backing_store = nullptr;
     }
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar) {
         cairo_surface_destroy(canvas->_surface_for_similar);
-        canvas->_surface_for_similar = NULL;
+        canvas->_surface_for_similar = nullptr;
     }
 #endif
     if (canvas->_clean_region) {
         cairo_region_destroy(canvas->_clean_region);
-        canvas->_clean_region = NULL;
+        canvas->_clean_region = nullptr;
     }
     if (canvas->_background) {
         cairo_pattern_destroy(canvas->_background);
-        canvas->_background = NULL;
+        canvas->_background = nullptr;
     }
 
     canvas->shutdownTransients();
@@ -1048,7 +1048,7 @@ void trackLatency(GdkEvent const *event)
 
 GtkWidget *SPCanvas::createAA()
 {
-    SPCanvas *canvas = SP_CANVAS(g_object_new(SP_TYPE_CANVAS, NULL));
+    SPCanvas *canvas = SP_CANVAS(g_object_new(SP_TYPE_CANVAS, nullptr));
     return GTK_WIDGET(canvas);
 }
 
@@ -1099,9 +1099,9 @@ void SPCanvas::handle_unrealize(GtkWidget *widget)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
 
-    canvas->_current_item = NULL;
-    canvas->_grabbed_item = NULL;
-    canvas->_focused_item = NULL;
+    canvas->_current_item = nullptr;
+    canvas->_grabbed_item = nullptr;
+    canvas->_focused_item = nullptr;
 
     canvas->shutdownTransients();
 
@@ -1138,9 +1138,9 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
         allocation->width, allocation->height);
 
     // Resize backing store.
-    cairo_surface_t *new_backing_store = NULL;
+    cairo_surface_t *new_backing_store = nullptr;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    if (canvas->_surface_for_similar != NULL) {
+    if (canvas->_surface_for_similar != nullptr) {
 
         // Size in device pixels. Does not set device scale.
         new_backing_store =
@@ -1150,7 +1150,7 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
                                                allocation->height * canvas->_device_scale);
     }
 #endif
-    if (new_backing_store == NULL) {
+    if (new_backing_store == nullptr) {
 
         // Size in device pixels. Does not set device scale.
         new_backing_store =
@@ -1268,7 +1268,7 @@ int SPCanvas::emitEvent(GdkEvent *event)
     // (e.g. if the pointer leaves the window).  So this is a hack that
     // Lauris applied to SP to get around the problem.
     //
-    SPCanvasItem* item = NULL;
+    SPCanvasItem* item = nullptr;
     if (_grabbed_item && !is_descendant(_current_item, _grabbed_item)) {
         item = _grabbed_item;
     } else {
@@ -1333,7 +1333,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
             _pick_event.crossing.type       = GDK_ENTER_NOTIFY;
             _pick_event.crossing.window     = event->motion.window;
             _pick_event.crossing.send_event = event->motion.send_event;
-            _pick_event.crossing.subwindow  = NULL;
+            _pick_event.crossing.subwindow  = nullptr;
             _pick_event.crossing.x          = event->motion.x;
             _pick_event.crossing.y          = event->motion.y;
             _pick_event.crossing.mode       = GDK_CROSSING_NORMAL;
@@ -1381,10 +1381,10 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
         if (_root->visible) {
             sp_canvas_item_invoke_point (_root, Geom::Point(x, y), &_new_current_item);
         } else {
-            _new_current_item = NULL;
+            _new_current_item = nullptr;
         }
     } else {
-        _new_current_item = NULL;
+        _new_current_item = nullptr;
     }
 
     if ((_new_current_item == _current_item) && !_left_grabbed_item) {
@@ -1394,7 +1394,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
     // Synthesize events for old and new current items
 
     if ((_new_current_item != _current_item) &&
-        _current_item != NULL && !_left_grabbed_item)
+        _current_item != nullptr && !_left_grabbed_item)
     {
         GdkEvent new_event;
 
@@ -1402,7 +1402,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
         new_event.type = GDK_LEAVE_NOTIFY;
 
         new_event.crossing.detail = GDK_NOTIFY_ANCESTOR;
-        new_event.crossing.subwindow = NULL;
+        new_event.crossing.subwindow = nullptr;
         _in_repick = TRUE;
         retval = emitEvent(&new_event);
         _in_repick = FALSE;
@@ -1421,13 +1421,13 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
     _left_grabbed_item = FALSE;
     _current_item = _new_current_item;
 
-    if (_current_item != NULL) {
+    if (_current_item != nullptr) {
         GdkEvent new_event;
 
         new_event = _pick_event;
         new_event.type = GDK_ENTER_NOTIFY;
         new_event.crossing.detail = GDK_NOTIFY_ANCESTOR;
-        new_event.crossing.subwindow = NULL;
+        new_event.crossing.subwindow = nullptr;
         retval = emitEvent(&new_event);
     }
 
@@ -1508,7 +1508,7 @@ gint SPCanvas::handle_scroll(GtkWidget *widget, GdkEventScroll *event)
 static inline void request_motions(GdkWindow *w, GdkEventMotion *event) {
     gdk_window_get_device_position(w,
                                    gdk_event_get_device((GdkEvent *)(event)),
-                                   NULL, NULL, NULL);
+                                   nullptr, nullptr, nullptr);
     gdk_event_request_motions(event);
 }
 
@@ -1523,7 +1523,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         return FALSE;
     }
 
-    if (canvas->_root == NULL) // canvas being deleted
+    if (canvas->_root == nullptr) // canvas being deleted
         return FALSE;
 
     canvas->_state = event->state;
@@ -1541,11 +1541,11 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     // Prevent crash if paintSingleBuffer is called before _backing_store is
     // initialized.
-    if (_backing_store == NULL)
+    if (_backing_store == nullptr)
         return;
 
     SPCanvasBuf buf;
-    buf.buf = NULL;
+    buf.buf = nullptr;
     buf.buf_rowstride = 0;
     buf.rect = paint_rect;
     buf.canvas_rect = canvas_rect;
@@ -1604,7 +1604,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     if (_enable_cms_display_adj) {
-        cmsHTRANSFORM transf = 0;
+        cmsHTRANSFORM transf = nullptr;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
         if ( fromDisplay ) {
@@ -1788,7 +1788,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     gdk_window_get_device_position(gtk_widget_get_window(GTK_WIDGET(this)),
                                    device->gobj(),
-                                   &x, &y, NULL);
+                                   &x, &y, nullptr);
 
     setup.mouse_loc = sp_canvas_window_to_world(this, Geom::Point(x,y));
 
@@ -1828,7 +1828,7 @@ gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
     SPCanvas *canvas = SP_CANVAS(widget);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    if (canvas->_surface_for_similar == NULL && canvas->_backing_store != NULL) {
+    if (canvas->_surface_for_similar == nullptr && canvas->_backing_store != nullptr) {
 
         // Device scale is copied but since this is only created one time, we'll
         // need to check/set device scale anytime it is used in case window moved
@@ -2011,7 +2011,7 @@ gint SPCanvas::idle_handler(gpointer data)
 void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
-        _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, NULL);
+        _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
 }
 void SPCanvas::removeIdle()
@@ -2055,9 +2055,9 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     // Adjust backing store contents
     assert(_backing_store);
 
-    cairo_surface_t *new_backing_store = NULL;
+    cairo_surface_t *new_backing_store = nullptr;
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-    if (_surface_for_similar != NULL)
+    if (_surface_for_similar != nullptr)
 
         // Size in device pixels. Does not set device scale.
         new_backing_store =
@@ -2066,7 +2066,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                                                allocation.width  * _device_scale,
                                                allocation.height * _device_scale);
 #endif
-    if (new_backing_store == NULL)
+    if (new_backing_store == nullptr)
 
         // Size in device pixels. Does not set device scale.
         new_backing_store =
@@ -2158,7 +2158,7 @@ void SPCanvas::setBackgroundColor(guint32 rgba) {
     double new_b = SP_RGBA32_B_F(rgba);
     if (!_background_is_checkerboard) {
         double old_r, old_g, old_b;
-        cairo_pattern_get_rgba(_background, &old_r, &old_g, &old_b, NULL);
+        cairo_pattern_get_rgba(_background, &old_r, &old_g, &old_b, nullptr);
         if (new_r == old_r && new_g == old_g && new_b == old_b) return;
     }
     if (_background) {
@@ -2186,7 +2186,7 @@ void SPCanvas::setBackgroundCheckerboard() {
  */
 void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy)
 {
-    g_return_if_fail (canvas != NULL);
+    g_return_if_fail (canvas != nullptr);
     g_return_if_fail (SP_IS_CANVAS (canvas));
 
     if (worldx) *worldx = canvas->_x0 + winx;
@@ -2198,7 +2198,7 @@ void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy,
  */
 void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double worldy, double *winx, double *winy)
 {
-    g_return_if_fail (canvas != NULL);
+    g_return_if_fail (canvas != nullptr);
     g_return_if_fail (SP_IS_CANVAS (canvas));
 
     if (winx) *winx = worldx - canvas->_x0;
@@ -2210,7 +2210,7 @@ void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double wor
  */
 Geom::Point sp_canvas_window_to_world(SPCanvas const *canvas, Geom::Point const win)
 {
-    g_assert (canvas != NULL);
+    g_assert (canvas != nullptr);
     g_assert (SP_IS_CANVAS (canvas));
 
     return Geom::Point(canvas->_x0 + win[0], canvas->_y0 + win[1]);
@@ -2221,7 +2221,7 @@ Geom::Point sp_canvas_window_to_world(SPCanvas const *canvas, Geom::Point const 
  */
 Geom::Point sp_canvas_world_to_window(SPCanvas const *canvas, Geom::Point const world)
 {
-    g_assert (canvas != NULL);
+    g_assert (canvas != nullptr);
     g_assert (SP_IS_CANVAS (canvas));
 
     return Geom::Point(world[0] - canvas->_x0, world[1] - canvas->_y0);
@@ -2234,7 +2234,7 @@ bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const 
 {
     GtkAllocation allocation;
 
-    g_assert( canvas != NULL );
+    g_assert( canvas != nullptr );
     g_assert(SP_IS_CANVAS(canvas));
 
     GtkWidget *w = GTK_WIDGET(canvas);

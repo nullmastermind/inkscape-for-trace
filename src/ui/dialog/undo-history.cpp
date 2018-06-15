@@ -97,9 +97,9 @@ UndoHistory::UndoHistory()
     : UI::Widget::Panel("/dialogs/undo-history", SP_VERB_DIALOG_UNDO_HISTORY),
       _document_replaced_connection(),
       _desktop(getDesktop()),
-      _document(_desktop ? _desktop->doc() : NULL),
-      _event_log(_desktop ? _desktop->event_log : NULL),
-      _columns(_event_log ? &_event_log->getColumns() : NULL),
+      _document(_desktop ? _desktop->doc() : nullptr),
+      _event_log(_desktop ? _desktop->event_log : nullptr),
+      _columns(_event_log ? &_event_log->getColumns() : nullptr),
       _scrolled_window(),
       _event_list_store(),
       _event_list_selection(_event_list_view.get_selection()),
@@ -184,13 +184,13 @@ void UndoHistory::setDesktop(SPDesktop* desktop)
 {
     Panel::setDesktop(desktop);
 
-    EventLog *newEventLog = desktop ? desktop->event_log : NULL;
+    EventLog *newEventLog = desktop ? desktop->event_log : nullptr;
     if ((_desktop == desktop) && (_event_log == newEventLog)) {
         // same desktop set
     }
     else
     {
-        _connectDocument(desktop, desktop ? desktop->doc() : NULL);
+        _connectDocument(desktop, desktop ? desktop->doc() : nullptr);
     }
 }
 
@@ -207,8 +207,8 @@ void UndoHistory::_connectDocument(SPDesktop* desktop, SPDocument * /*document*/
 
     // connect to new EventLog/Desktop
     _desktop = desktop;
-    _event_log = desktop ? desktop->event_log : NULL;
-    _document = desktop ? desktop->doc() : NULL;
+    _event_log = desktop ? desktop->event_log : nullptr;
+    _document = desktop ? desktop->doc() : nullptr;
     _connectEventLog();
 }
 
@@ -234,7 +234,7 @@ void UndoHistory::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *docume
 
 void *UndoHistory::_handleEventLogDestroyCB(void *data)
 {
-    void *result = NULL;
+    void *result = nullptr;
     if (data) {
         UndoHistory *self = reinterpret_cast<UndoHistory*>(data);
         result = self->_handleEventLogDestroy();
@@ -250,10 +250,10 @@ void *UndoHistory::_handleEventLogDestroy()
 
         _event_list_view.unset_model();
         _event_list_store.reset();
-        _event_log = NULL;
+        _event_log = nullptr;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void
@@ -316,7 +316,7 @@ UndoHistory::_onListSelectionChange()
                      last_selected == last_selected->parent()->children().begin() )
                 {
                     last_selected = last_selected->parent();
-                    _event_log->setCurrEventParent((EventLog::iterator)NULL);
+                    _event_log->setCurrEventParent((EventLog::iterator)nullptr);
                 } else {
                     --last_selected;
                     if ( !last_selected->children().empty() ) {
@@ -347,7 +347,7 @@ UndoHistory::_onListSelectionChange()
                     {
                         last_selected = last_selected->parent();
                         ++last_selected;
-                        _event_log->setCurrEventParent((EventLog::iterator)NULL);
+                        _event_log->setCurrEventParent((EventLog::iterator)nullptr);
                     }
                 }
             }

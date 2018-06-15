@@ -106,13 +106,13 @@ void StyleSwatch::ToolObserver::notify(Inkscape::Preferences::Entry const &val)
 
 StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     :
-      _desktop(NULL),
+      _desktop(nullptr),
       _verb_t(0),
-      _css(NULL),
-      _tool_obs(NULL),
-      _style_obs(NULL),
+      _css(nullptr),
+      _tool_obs(nullptr),
+      _style_obs(nullptr),
       _table(Gtk::manage(new Gtk::Grid())),
-      _sw_unit(NULL)
+      _sw_unit(nullptr)
 {
     set_name("StyleSwatch");
     
@@ -201,7 +201,7 @@ StyleSwatch::on_click(GdkEventButton */*event*/)
     if (this->_desktop && this->_verb_t != SP_VERB_NONE) {
         Inkscape::Verb *verb = Inkscape::Verb::get(this->_verb_t);
         SPAction *action = verb->get_action(Inkscape::ActionContext((Inkscape::UI::View::View *) this->_desktop));
-        sp_action_perform (action, NULL);
+        sp_action_perform (action, nullptr);
         return true;
     }
     return false;
@@ -227,7 +227,7 @@ StyleSwatch::setWatchedTool(const char *path, bool synthesize)
     
     if (_tool_obs) {
         delete _tool_obs;
-        _tool_obs = NULL;
+        _tool_obs = nullptr;
     }
 
     if (path) {

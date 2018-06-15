@@ -280,7 +280,7 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
             comp_op = "lighter"; break;
 #endif
         default:
-            comp_op = 0;
+            comp_op = nullptr;
     }
 
     repr->setAttribute("operator", comp_op);
@@ -291,10 +291,10 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
         sp_repr_set_svg_double(repr, "k3", this->k3);
         sp_repr_set_svg_double(repr, "k4", this->k4);
     } else {
-        repr->setAttribute("k1", 0);
-        repr->setAttribute("k2", 0);
-        repr->setAttribute("k3", 0);
-        repr->setAttribute("k4", 0);
+        repr->setAttribute("k1", nullptr);
+        repr->setAttribute("k2", nullptr);
+        repr->setAttribute("k3", nullptr);
+        repr->setAttribute("k4", nullptr);
     }
 
     SPFilterPrimitive::write(doc, repr, flags);
@@ -303,13 +303,13 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
 }
 
 void SPFeComposite::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COMPOSITE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterComposite *nr_composite = dynamic_cast<Inkscape::Filters::FilterComposite*>(nr_primitive);
-    g_assert(nr_composite != NULL);
+    g_assert(nr_composite != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

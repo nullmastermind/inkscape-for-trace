@@ -39,33 +39,33 @@ void
 PathEffect::processPathEffects (SPDocument * doc, Inkscape::XML::Node * path)
 {
     gchar const * patheffectlist = path->attribute("inkscape:path-effects");
-    if (patheffectlist == NULL)
+    if (patheffectlist == nullptr)
         return;
 
     gchar ** patheffects = g_strsplit(patheffectlist, ";", 128);
     Inkscape::XML::Node * defs = doc->getDefs()->getRepr();
 
-    for (int i = 0; (i < 128) && (patheffects[i] != NULL); i++) {
+    for (int i = 0; (i < 128) && (patheffects[i] != nullptr); i++) {
         gchar * patheffect = patheffects[i];
 
         // This is weird, they should all be references... but anyway
         if (patheffect[0] != '#') continue;
 
         Inkscape::XML::Node * prefs = sp_repr_lookup_child(defs, "id", &(patheffect[1]));
-        if (prefs == NULL) {
+        if (prefs == nullptr) {
 
             continue;
         }
 
         gchar const * ext_id = prefs->attribute("extension");
-        if (ext_id == NULL) {
+        if (ext_id == nullptr) {
 
             continue;
         }
 
         Inkscape::Extension::PathEffect * peffect;
         peffect = dynamic_cast<Inkscape::Extension::PathEffect *>(Inkscape::Extension::db.get(ext_id));
-        if (peffect != NULL) {
+        if (peffect != nullptr) {
             peffect->processPath(doc, path, prefs);
         }
     }

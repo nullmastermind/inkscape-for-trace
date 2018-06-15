@@ -53,12 +53,12 @@ void ShapeEditor::unset_item(bool keep_knotholder) {
         if (old_repr && old_repr == knotholder_listener_attached_for) {
             sp_repr_remove_listener_by_data(old_repr, this);
             Inkscape::GC::release(old_repr);
-            knotholder_listener_attached_for = NULL;
+            knotholder_listener_attached_for = nullptr;
         }
 
         if (!keep_knotholder) {
             delete this->knotholder;
-            this->knotholder = NULL;
+            this->knotholder = nullptr;
         }
     }
     if (this->lpeknotholder) {
@@ -66,18 +66,18 @@ void ShapeEditor::unset_item(bool keep_knotholder) {
         if (old_repr && old_repr == lpeknotholder_listener_attached_for) {
             sp_repr_remove_listener_by_data(old_repr, this);
             Inkscape::GC::release(old_repr);
-            lpeknotholder_listener_attached_for = NULL;
+            lpeknotholder_listener_attached_for = nullptr;
         }
 
         if (!keep_knotholder) {
             delete this->lpeknotholder;
-            this->lpeknotholder = NULL;
+            this->lpeknotholder = nullptr;
         }
     }
 }
 
 bool ShapeEditor::has_knotholder() {
-    return this->knotholder != NULL || this->lpeknotholder != NULL;
+    return this->knotholder != nullptr || this->lpeknotholder != nullptr;
 }
 
 void ShapeEditor::update_knotholder() {
@@ -121,11 +121,11 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *na
 }
 
 static Inkscape::XML::NodeEventVector shapeeditor_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     ShapeEditor::event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 

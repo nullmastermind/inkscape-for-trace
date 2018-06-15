@@ -341,7 +341,7 @@ static void sp_text_outer_style_changed( InkToggleAction*act, GObject *tbl )
     prefs->setInt("/tools/text/outer_style", outer);
 
     // Update widgets to reflect new state of Text Outer Style button.
-    sp_text_toolbox_selection_changed( NULL, tbl );
+    sp_text_toolbox_selection_changed( nullptr, tbl );
 }
 
 // Unset line height on selection's inner text objects (tspan, etc.).
@@ -663,7 +663,7 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     // Get user selected unit and save as preference
     UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
 
@@ -746,7 +746,7 @@ static void sp_text_lineheight_unit_changed( GObject *tbl, int /* Not Used */ )
     // Get user selected unit and save as preference
     UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
@@ -1476,7 +1476,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
-    if( fontFamilyAction->combobox != NULL ) {
+    if( fontFamilyAction->combobox != nullptr ) {
         ink_comboboxentry_action_set_active_text( fontFamilyAction, fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
         ink_comboboxentry_action_set_active_text( fontStyleAction,  fontlister->get_font_style().c_str()  );
     }
@@ -1553,7 +1553,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
 
         // To ensure the value of the combobox is properly set on start-up, only mark
         // the prefs set if the combobox has already been constructed.
-        if( fontFamilyAction->combobox != NULL ) {
+        if( fontFamilyAction->combobox != nullptr ) {
             g_object_set_data(tbl, "text_style_from_prefs", GINT_TO_POINTER(TRUE));
         }
     } else {
@@ -1928,7 +1928,7 @@ static void sp_text_toolbox_selection_modified(Inkscape::Selection *selection, g
 static void
 sp_text_toolbox_subselection_changed (gpointer /*tc*/, GObject *tbl)
 {
-    sp_text_toolbox_selection_changed (NULL, tbl, true);
+    sp_text_toolbox_selection_changed (nullptr, tbl, true);
 }
 
 // TODO: possibly share with font-selector by moving most code to font-lister (passing family name)
@@ -1994,7 +1994,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             ink_comboboxentry_action_new( "TextFontFamilyAction",
                                           _("Font Family"),
                                           _("Select Font Family (Alt-X to access)"),
-                                          NULL,
+                                          nullptr,
                                           GTK_TREE_MODEL(model),
                                           -1,                // Entry width
                                           50,                // Extra list width
@@ -2023,7 +2023,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                         "#TextFontFamilyAction_combobox {\n"
                                         "  -GtkComboBox-appears-as-list: true;\n"
                                         "}\n",
-                                        -1, NULL);
+                                        -1, nullptr);
 
         auto screen = gdk_screen_get_default();
         gtk_style_context_add_provider_for_screen(screen,
@@ -2045,12 +2045,12 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         Ink_ComboBoxEntry_Action* act = ink_comboboxentry_action_new( "TextFontSizeAction",
                                                                       _("Font Size"),
                                                                       _(tooltip.c_str()),
-                                                                      NULL,
+                                                                      nullptr,
                                                                       GTK_TREE_MODEL(model_size),
                                                                       8,      // Width in characters
                                                                       0,      // Extra list width
-                                                                      NULL,   // Cell layout
-                                                                      NULL,   // Separator
+                                                                      nullptr,   // Cell layout
+                                                                      nullptr,   // Separator
                                                                       GTK_WIDGET(desktop->canvas)); // Focus widget
 
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontsize_value_changed), holder );
@@ -2067,12 +2067,12 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         Ink_ComboBoxEntry_Action* act = ink_comboboxentry_action_new( "TextFontStyleAction",
                                                                       _("Font Style"),
                                                                       _("Font style"),
-                                                                      NULL,
+                                                                      nullptr,
                                                                       GTK_TREE_MODEL(model_style),
                                                                       12,     // Width in characters
                                                                       0,      // Extra list width
-                                                                      NULL,   // Cell layout
-                                                                      NULL,   // Separator
+                                                                      nullptr,   // Cell layout
+                                                                      nullptr,   // Separator
                                                                       GTK_WIDGET(desktop->canvas)); // Focus widget
 
         g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(sp_text_fontstyle_value_changed), holder );
@@ -2291,7 +2291,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Line height */
     {
         // Drop down menu
-        gchar const* labels[] = {_("Smaller spacing"), 0, 0, 0, 0, C_("Text tool", "Normal"), 0, 0, 0, 0, 0, _("Larger spacing")};
+        gchar const* labels[] = {_("Smaller spacing"), nullptr, nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, _("Larger spacing")};
         gdouble values[] = { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1,2, 1.3, 1.4, 1.5, 2.0};
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2304,11 +2304,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             0.0, 1000.0, 0.1, 1.0,                /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_lineheight_value_changed,     /* callback */
-            NULL, // tracker,                     /* unit tracker */
+            nullptr, // tracker,                     /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
@@ -2379,7 +2379,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Word spacing */
     {
         // Drop down menu
-        gchar const* labels[] = {_("Negative spacing"), 0, 0, 0, C_("Text tool", "Normal"), 0, 0, 0, 0, 0, 0, 0, _("Positive spacing")};
+        gchar const* labels[] = {_("Negative spacing"), nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("Positive spacing")};
         gdouble values[] = {-2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0};
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2392,11 +2392,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_wordspacing_value_changed,    /* callback */
-            NULL,                                 /* unit tracker */
+            nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
@@ -2410,7 +2410,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Letter spacing */
     {
         // Drop down menu
-        gchar const* labels[] = {_("Negative spacing"), 0, 0, 0, C_("Text tool", "Normal"), 0, 0, 0, 0, 0, 0, 0, _("Positive spacing")};
+        gchar const* labels[] = {_("Negative spacing"), nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("Positive spacing")};
         gdouble values[] = {-2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0};
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2423,11 +2423,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_letterspacing_value_changed,  /* callback */
-            NULL,                                 /* unit tracker */
+            nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
@@ -2441,7 +2441,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Character kerning (horizontal shift) */
     {
         // Drop down menu
-        gchar const* labels[] = {   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 };
+        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
         gdouble values[]      = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2454,11 +2454,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_dx_value_changed,             /* callback */
-            NULL,                                 /* unit tracker */
+            nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
@@ -2472,7 +2472,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Character vertical shift */
     {
         // Drop down menu
-        gchar const* labels[] = {   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 };
+        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
         gdouble values[]      = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2485,11 +2485,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_dy_value_changed,             /* callback */
-            NULL,                                 /* unit tracker */
+            nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
@@ -2503,7 +2503,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Character rotation */
     {
         // Drop down menu
-        gchar const* labels[] = {   0,   0,   0,   0,   0,   0,   0,   0,   0,   0 };
+        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
         gdouble values[]      = { -90, -45, -30, -15,   0,  15,  30,  45,  90, 180 };
 
         EgeAdjustmentAction *eact = create_adjustment_action(
@@ -2516,11 +2516,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
-            NULL,                                 /* altx_mark */
+            nullptr,                                 /* altx_mark */
             -180.0, 180.0, 0.1, 1.0,              /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_rotation_value_changed,       /* callback */
-            NULL,                                 /* unit tracker */
+            nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */

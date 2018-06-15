@@ -25,11 +25,11 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     _dock(dock),
     _prev_state(state),
     _prev_position(0),
-    _window(0),
+    _window(nullptr),
     _x(0),
     _y(0),
     _grab_focus_on_realize(false),
-    _gdl_dock_item(0)
+    _gdl_dock_item(nullptr)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GdlDockItemBehavior gdl_dock_behavior =
@@ -437,8 +437,8 @@ DockItem::getWindow()
 {
     g_return_val_if_fail(_gdl_dock_item, 0);
     Gtk::Container *parent = getWidget().get_parent();
-    parent = (parent ? parent->get_parent() : 0);
-    return (parent ? dynamic_cast<Gtk::Window *>(parent) : 0);
+    parent = (parent ? parent->get_parent() : nullptr);
+    return (parent ? dynamic_cast<Gtk::Window *>(parent) : nullptr);
 }
 
 const Glib::SignalProxyInfo

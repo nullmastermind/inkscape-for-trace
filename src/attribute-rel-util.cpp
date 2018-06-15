@@ -52,7 +52,7 @@ unsigned int sp_attribute_clean_get_prefs() {
  */
 void sp_attribute_clean_tree(Node *repr) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
 
   unsigned int flags = sp_attribute_clean_get_prefs();
  
@@ -66,7 +66,7 @@ void sp_attribute_clean_tree(Node *repr) {
  */
 void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
 
   if( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
     Glib::ustring element = repr->name();
@@ -94,11 +94,11 @@ void sp_attribute_clean_recursive(Node *repr, unsigned int flags) {
  */
 void sp_attribute_clean_element(Node *repr, unsigned int flags) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
 
   Glib::ustring element = repr->name();
-  Glib::ustring id = (repr->attribute( "id" )==NULL ? "" : repr->attribute( "id" ));
+  Glib::ustring id = (repr->attribute( "id" )==nullptr ? "" : repr->attribute( "id" ));
 
   // Clean style: this attribute is unique in that normally we want to change it and not simply
   // delete it.
@@ -122,7 +122,7 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
   // Do actual deleting (done after so as not to perturb List iterator).
   for( std::set<Glib::ustring>::const_iterator iter_d = attributesToDelete.begin();
        iter_d != attributesToDelete.end(); ++iter_d ) {
-    repr->setAttribute( (*iter_d).c_str(), NULL, false );
+    repr->setAttribute( (*iter_d).c_str(), nullptr, false );
   }
 }
 
@@ -132,7 +132,7 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
  */
 void sp_attribute_clean_style(Node *repr, unsigned int flags) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
 
   // Find element's style
@@ -144,7 +144,7 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags) {
   Glib::ustring value;
   sp_repr_css_write_string(css, value);
   if( value.empty() ) {
-      repr->setAttribute("style", NULL );
+      repr->setAttribute("style", nullptr );
   } else {
       repr->setAttribute("style", value.c_str());
   }
@@ -158,7 +158,7 @@ void sp_attribute_clean_style(Node *repr, unsigned int flags) {
  */
 Glib::ustring sp_attribute_clean_style(Node *repr, gchar const *string, unsigned int flags) {
 
-  g_return_val_if_fail (repr != NULL, NULL);
+  g_return_val_if_fail (repr != nullptr, NULL);
   g_return_val_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE, NULL);
 
   SPCSSAttr *css = sp_repr_css_attr_new();
@@ -184,15 +184,15 @@ Glib::ustring sp_attribute_clean_style(Node *repr, gchar const *string, unsigned
  */
 void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
 
-  g_return_if_fail (repr != NULL);
-  g_return_if_fail (css != NULL);
+  g_return_if_fail (repr != nullptr);
+  g_return_if_fail (css != nullptr);
 
   Glib::ustring element = repr->name();
-  Glib::ustring id = (repr->attribute( "id" )==NULL ? "" : repr->attribute( "id" ));
+  Glib::ustring id = (repr->attribute( "id" )==nullptr ? "" : repr->attribute( "id" ));
 
   // Find parent's style, including properties that are inherited.
   // Note, a node may not have a parent if it has not yet been added to tree.
-  SPCSSAttr *css_parent = NULL;
+  SPCSSAttr *css_parent = nullptr;
   if( repr->parent() ) css_parent = sp_repr_css_attr_inherited( repr->parent(), "style" );
 
   // Loop over all properties in "style" node, keeping track of which to delete.
@@ -215,8 +215,8 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     }
 
     // Find parent value for same property (property)
-    gchar const * value_p = NULL;
-    if( css_parent != NULL ) {
+    gchar const * value_p = nullptr;
+    if( css_parent != nullptr ) {
         for ( List<AttributeRecord const> iter_p = css_parent->attributeList() ; iter_p ; ++iter_p ) {
 
             gchar const * property_p = g_quark_to_string(iter_p->key);
@@ -244,7 +244,7 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
     // If property value is same as default and the parent value not set or property is not inherited,
     // mark for deletion.
     if ( SPAttributeRelCSS::findIfDefault( property, value ) &&
-         ( (css_parent != NULL && value_p == NULL) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
+         ( (css_parent != nullptr && value_p == nullptr) || !SPAttributeRelCSS::findIfInherit( property ) ) ) {
 
         if ( flags & SP_ATTR_CLEAN_DEFAULT_WARN ) {
             g_warning( "<%s id=\"%s\">: CSS Style property: \"%s\" with default value (%s) not needed.",
@@ -260,7 +260,7 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
 
   // Delete unneeded style properties. Do this at the end so as to not perturb List iterator.
   for( std::set<Glib::ustring>::const_iterator iter_d = toDelete.begin(); iter_d != toDelete.end(); ++iter_d ) {
-    sp_repr_css_set_property( css, (*iter_d).c_str(), NULL );
+    sp_repr_css_set_property( css, (*iter_d).c_str(), nullptr );
   }
 
 }
@@ -270,7 +270,7 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
  */
 void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags) {
 
-  g_return_if_fail (css != NULL);
+  g_return_if_fail (css != nullptr);
 
   // Loop over all properties in "style" node, keeping track of which to delete.
   std::set<Glib::ustring> toDelete;
@@ -296,7 +296,7 @@ void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags) {
 
   // Delete unneeded style properties. Do this at the end so as to not perturb List iterator.
   for( std::set<Glib::ustring>::const_iterator iter_d = toDelete.begin(); iter_d != toDelete.end(); ++iter_d ) {
-    sp_repr_css_set_property( css, (*iter_d).c_str(), NULL );
+    sp_repr_css_set_property( css, (*iter_d).c_str(), nullptr );
   }
 
 }

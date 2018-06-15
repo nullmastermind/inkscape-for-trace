@@ -119,15 +119,15 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _is_omittext(FALSE),
     _is_filtertobitmap(FALSE),
     _bitmapresolution(72),
-    _stream(NULL),
+    _stream(nullptr),
     _is_valid(FALSE),
     _vector_based_target(FALSE),
-    _cr(NULL), // Cairo context
-    _surface(NULL),
+    _cr(nullptr), // Cairo context
+    _surface(nullptr),
     _target(CAIRO_SURFACE_TYPE_IMAGE),
     _target_format(CAIRO_FORMAT_ARGB32),
-    _layout(NULL),
-    _state(NULL),
+    _layout(nullptr),
+    _state(nullptr),
     _renderer(parent),
     _render_mode(RENDER_MODE_NORMAL),
     _clip_mode(CLIP_MODE_MASK),
@@ -251,12 +251,12 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
     _vector_based_target = TRUE;
 #endif
 
-    FILE *osf = NULL;
-    FILE *osp = NULL;
+    FILE *osf = nullptr;
+    FILE *osp = nullptr;
 
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError *error = NULL;
+    GError *error = nullptr;
     gchar *local_fn = g_filename_from_utf8(utf8_fn,
                                            -1,  &bytesRead,  &bytesWritten, &error);
     gchar const *fn = local_fn;
@@ -266,7 +266,7 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
     * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
     * return code.
     */
-    if (fn != NULL) {
+    if (fn != nullptr) {
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
@@ -333,12 +333,12 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
     _vector_based_target = TRUE;
 #endif
 
-    FILE *osf = NULL;
-    FILE *osp = NULL;
+    FILE *osf = nullptr;
+    FILE *osp = nullptr;
 
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError *error = NULL;
+    GError *error = nullptr;
     gchar *local_fn = g_filename_from_utf8(utf8_fn,
                                            -1,  &bytesRead,  &bytesWritten, &error);
     gchar const *fn = local_fn;
@@ -348,7 +348,7 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
     * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
     * return code.
     */
-    if (fn != NULL) {
+    if (fn != nullptr) {
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
@@ -522,7 +522,7 @@ CairoRenderContext::getClipMode(void) const
 CairoRenderState* CairoRenderContext::_createState(void)
 {
     CairoRenderState *state = static_cast<CairoRenderState*>(g_try_malloc(sizeof(CairoRenderState)));
-    g_assert( state != NULL );
+    g_assert( state != nullptr );
 
     state->has_filtereffect = FALSE;
     state->merge_opacity = TRUE;
@@ -530,8 +530,8 @@ CairoRenderState* CairoRenderContext::_createState(void)
     state->need_layer = FALSE;
     state->has_overflow = FALSE;
     state->parent_has_userspace = FALSE;
-    state->clip_path = NULL;
-    state->mask = NULL;
+    state->clip_path = nullptr;
+    state->mask = nullptr;
 
     return state;
 }
@@ -579,14 +579,14 @@ CairoRenderContext::popLayer(void)
     SPMask *mask = _state->mask;
     if (clip_path || mask) {
 
-        CairoRenderContext *clip_ctx = 0;
-        cairo_surface_t *clip_mask = 0;
+        CairoRenderContext *clip_ctx = nullptr;
+        cairo_surface_t *clip_mask = nullptr;
 
         // Apply any clip path first
         if (clip_path) {
             TRACE(("  Applying clip\n"));
             if (_render_mode == RENDER_MODE_CLIP)
-                mask = NULL;    // disable mask when performing nested clipping
+                mask = nullptr;    // disable mask when performing nested clipping
 
             if (_vector_based_target) {
                 setClipMode(CLIP_MODE_PATH); // Vector
@@ -783,7 +783,7 @@ CairoRenderContext::setupSurface(double width, double height)
     if (_is_valid)
         return true;
 
-    if (_vector_based_target && _stream == NULL)
+    if (_vector_based_target && _stream == nullptr)
         return false;
 
     _width = width;
@@ -796,7 +796,7 @@ CairoRenderContext::setupSurface(double width, double height)
     os_bbox << "%%BoundingBox: 0 0 " << (int)ceil(width) << (int)ceil(height);  // apparently, the numbers should be integers. (see bug 380501)
     os_pagebbox << "%%PageBoundingBox: 0 0 " << (int)ceil(width) << (int)ceil(height);
 
-    cairo_surface_t *surface = NULL;
+    cairo_surface_t *surface = nullptr;
     cairo_matrix_t ctm;
     cairo_matrix_init_identity (&ctm);
     char buffer[25];
@@ -889,7 +889,7 @@ CairoRenderContext::setSurfaceTarget(cairo_surface_t *surface, bool is_vector, c
 bool
 CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t *ctm)
 {
-    if(surface == NULL) {
+    if(surface == nullptr) {
         return false;
     }
     if(CAIRO_STATUS_SUCCESS != cairo_surface_status(surface)) {
@@ -932,13 +932,13 @@ CairoRenderContext::finish(bool finish_surface)
         g_critical("error while rendering output: %s", cairo_status_to_string(status));
 
     cairo_destroy(_cr);
-    _cr = NULL;
+    _cr = nullptr;
     
     if (finish_surface)
         cairo_surface_finish(_surface);
     status = cairo_surface_status(_surface);
     cairo_surface_destroy(_surface);
-    _surface = NULL;
+    _surface = nullptr;
 
     if (_layout)
         g_object_unref(_layout);
@@ -950,7 +950,7 @@ CairoRenderContext::finish(bool finish_surface)
         (void) fflush(_stream);
 
         fclose(_stream);
-        _stream = NULL;
+        _stream = nullptr;
     }
 
     if (status == CAIRO_STATUS_SUCCESS)
@@ -1133,7 +1133,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     unsigned dkey = SPItem::display_key_new(1);
 
     // show items and render them
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = pat; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
             for (auto& child: pat_i->children) {
                 if (SP_IS_ITEM(&child)) {
@@ -1162,7 +1162,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     delete pattern_ctx;
 
     // hide all items
-    for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = pat; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
             for (auto& child: pat_i->children) {
                 if (SP_IS_ITEM(&child)) {
@@ -1257,7 +1257,7 @@ cairo_pattern_t*
 CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const paintserver,
                                                  Geom::OptRect const &pbox, float alpha)
 {
-    cairo_pattern_t *pattern = NULL;
+    cairo_pattern_t *pattern = nullptr;
     bool apply_bbox2user = FALSE;
 
     if (SP_IS_LINEARGRADIENT (paintserver)) {
@@ -1315,7 +1315,7 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
     } else if ( dynamic_cast<SPHatch const *>(paintserver) ) {
         pattern = _createHatchPainter(paintserver, pbox);
     } else {
-        return NULL;
+        return nullptr;
     }
 
     if (pattern && SP_IS_GRADIENT(paintserver)) {
@@ -1441,7 +1441,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
         cairo_set_dash(_cr, dashes, ndashes, style->stroke_dashoffset.value);
         free(dashes);
     } else {
-        cairo_set_dash(_cr, NULL, 0, 0.0);  // disable dashing
+        cairo_set_dash(_cr, nullptr, 0, 0.0);  // disable dashing
     }
 
     cairo_set_line_width(_cr, style->stroke_width.computed);
@@ -1567,7 +1567,7 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
         return true;
 
     bool need_layer = ( !_state->merge_opacity && !_state->need_layer &&
-                        ( _state->opacity != 1.0 || _state->clip_path != NULL || _state->mask != NULL ) );
+                        ( _state->opacity != 1.0 || _state->clip_path != nullptr || _state->mask != nullptr ) );
 
     if (!need_layer)
         cairo_save(_cr);
@@ -1689,7 +1689,7 @@ unsigned int CairoRenderContext::_showGlyphs(cairo_t *cr, PangoFont * /*font*/, 
     unsigned int num_glyphs = glyphtext.size();
     if (num_glyphs > GLYPH_ARRAY_SIZE) {
         glyphs = (cairo_glyph_t*)g_try_malloc(sizeof(cairo_glyph_t) * num_glyphs);
-        if(glyphs == NULL) {
+        if(glyphs == nullptr) {
             g_warning("CairorenderContext::_showGlyphs: can not allocate memory for %d glyphs.", num_glyphs);
             return 0;
         }
@@ -1737,11 +1737,11 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
     // create a cairo_font_face from PangoFont
     // double size = style->font_size.computed; /// \fixme why is this variable never used?
     gpointer fonthash = (gpointer)font;
-    cairo_font_face_t *font_face = NULL;
+    cairo_font_face_t *font_face = nullptr;
     if(font_table.find(fonthash)!=font_table.end())
         font_face = font_table[fonthash];
 
-    FcPattern *fc_pattern = NULL;
+    FcPattern *fc_pattern = nullptr;
 
 #ifdef USE_PANGO_WIN32
 # ifdef CAIRO_HAS_WIN32_FONT
@@ -1761,7 +1761,7 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
 # ifdef CAIRO_HAS_FT_FONT
     PangoFcFont *fc_font = PANGO_FC_FONT(font);
     fc_pattern = fc_font->font_pattern;
-    if(font_face == NULL) {
+    if(font_face == nullptr) {
         font_face = cairo_ft_font_face_create_for_pattern(fc_pattern);
         font_table[fonthash] = font_face;
     }

@@ -199,7 +199,7 @@ static PaperSizeRec const inkscape_papers[] = {
      * September 2009 - DAK
      */
 
-    { NULL,                     0,    0, "px" },
+    { nullptr,                     0,    0, "px" },
 };
 
 
@@ -216,7 +216,7 @@ PageSizer::PageSizer(Registry & _wr)
       _dimensionUnits( _("U_nits:"), "units", _wr ),
       _dimensionWidth( _("_Width:"), _("Width of paper"), "width", _dimensionUnits, _wr ),
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),
-      _marginLock( _("Loc_k margins"), _("Lock margins"), "lock-margins", _wr, false, NULL, NULL),
+      _marginLock( _("Loc_k margins"), _("Lock margins"), "lock-margins", _wr, false, nullptr, nullptr),
       _lock_icon(),
       _marginTop( _("T_op margin:"), _("Top margin"), "fit-margin-top", _wr ),
       _marginLeft( _("L_eft:"), _("Left margin"), "fit-margin-left", _wr),
@@ -655,7 +655,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     Inkscape::XML::Node *nv_repr;
   
     if ((doc = SP_ACTIVE_DESKTOP->getDocument())
-        && (nv = sp_document_namedview(doc, 0))
+        && (nv = sp_document_namedview(doc, nullptr))
         && (nv_repr = nv->getRepr())) {
         _lockMarginUpdate = true;
         sp_repr_set_svg_double(nv_repr, "fit-margin-top", _marginTop.getValue());
@@ -669,7 +669,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }

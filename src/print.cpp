@@ -121,8 +121,8 @@ void sp_print_document_to_file(SPDocument *doc, gchar const *filename)
     mod->finish();
     /* Release drawing items */
     (mod->base)->invoke_hide(mod->dkey);
-    mod->base = NULL;
-    mod->root = NULL; // should be deleted by invoke_hide
+    mod->base = nullptr;
+    mod->root = nullptr; // should be deleted by invoke_hide
 /* end */
 
     mod->set_param_string("destination", oldoutput);

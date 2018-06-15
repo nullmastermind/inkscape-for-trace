@@ -18,7 +18,7 @@ namespace Inkscape {
 
 DrawingGroup::DrawingGroup(Drawing &drawing)
     : DrawingItem(drawing)
-    , _child_transform(NULL)
+    , _child_transform(nullptr)
 {}
 
 DrawingGroup::~DrawingGroup()
@@ -54,7 +54,7 @@ DrawingGroup::setChildTransform(Geom::Affine const &new_trans)
         _markForRendering();
         if (new_trans.isIdentity()) {
             delete _child_transform; // delete NULL; is safe
-            _child_transform = NULL;
+            _child_transform = nullptr;
         } else {
             _child_transform = new Geom::Affine(new_trans);
         }
@@ -89,7 +89,7 @@ DrawingGroup::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
 unsigned
 DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
-    if (stop_at == NULL) {
+    if (stop_at == nullptr) {
         // normal rendering
         for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
             i->setAntialiasing(_antialias);
@@ -131,7 +131,7 @@ DrawingGroup::_pickItem(Geom::Point const &p, double delta, unsigned flags)
             return _pick_children ? picked : this;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 bool
@@ -142,7 +142,7 @@ DrawingGroup::_canClip()
 
 bool is_drawing_group(DrawingItem *item)
 {
-    return dynamic_cast<DrawingGroup *>(item) != NULL;
+    return dynamic_cast<DrawingGroup *>(item) != nullptr;
 }
 
 } // end namespace Inkscape

@@ -549,17 +549,17 @@ SPStyle::clear() {
     fill_ps_modified_connection.disconnect();
     if (fill.value.href) {
         delete fill.value.href;
-        fill.value.href = NULL;
+        fill.value.href = nullptr;
     }
     stroke_ps_modified_connection.disconnect();
     if (stroke.value.href) {
         delete stroke.value.href;
-        stroke.value.href = NULL;
+        stroke.value.href = nullptr;
     }
     filter_modified_connection.disconnect();
     if (filter.href) {
         delete filter.href;
-        filter.href = NULL;
+        filter.href = nullptr;
     }
 
     if (document) {
@@ -585,7 +585,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     //           << (object?(object->getId()?object->getId():"id null"):"object null") << " "
     //           << (repr?(repr->name()?repr->name():"no name"):"repr null")
     //           << std::endl;
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
     g_assert(!object || (object->getRepr() == repr));
 
     // // Uncomment to verify that we don't need to call clear.
@@ -603,7 +603,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     /* 1. Style attribute */
     // std::cout << " MERGING STYLE ATTRIBUTE" << std::endl;
     gchar const *val = repr->attribute("style");
-    if( val != NULL && *val ) {
+    if( val != nullptr && *val ) {
         _mergeString( val );
     }
 
@@ -643,7 +643,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
         // std::cout << "SPStyle::read(): reading via repr->parent()" << std::endl;
         if( repr->parent() ) {
             SPStyle *parent = new SPStyle();
-            parent->read( NULL, repr->parent() );
+            parent->read( nullptr, repr->parent() );
             cascade( parent );
             delete parent;
         }
@@ -662,11 +662,11 @@ SPStyle::readFromObject( SPObject *object ) {
 
     // std::cout << "SPStyle::readFromObject: "<< (object->getId()?object->getId():"null")<< std::endl;
 
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_OBJECT(object));
 
     Inkscape::XML::Node *repr = object->getRepr();
-    g_return_if_fail(repr != NULL);
+    g_return_if_fail(repr != nullptr);
 
     read( object, repr );
 }
@@ -692,7 +692,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
         tempnode->setAttribute(i->getEntryName().data(), i->getString().data());
     }
 
-    read( NULL, tempnode );
+    read( nullptr, tempnode );
 
     Inkscape::GC::release(tempnode);
     Inkscape::GC::release(tempdoc);
@@ -706,7 +706,7 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
     // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
     // (looking up SP_PROP_xxxx already uses a hash).
-    g_return_if_fail(val != NULL);
+    g_return_if_fail(val != nullptr);
 
     switch (id) {
         case SP_ATTR_D:
@@ -1044,10 +1044,10 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
 
     Glib::ustring style_string;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-        if( base != NULL ) {
+        if( base != nullptr ) {
             style_string += _properties[i]->write( flags, style_src_req, base->_properties[i] );
         } else {
-            style_string += _properties[i]->write( flags, style_src_req, NULL );
+            style_string += _properties[i]->write( flags, style_src_req, nullptr );
         }
     }
     // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
@@ -1203,7 +1203,7 @@ SPStyle::_mergeProps( CRPropList *const props ) {
     // In reverse order, as later declarations to take precedence over earlier ones.
     if (props) {
         _mergeProps( cr_prop_list_get_next( props ) );
-        CRDeclaration *decl = NULL;
+        CRDeclaration *decl = nullptr;
         cr_prop_list_get_decl(props, &decl);
         _mergeDecl( decl, SP_STYLE_SRC_STYLE_SHEET );
     }
@@ -1214,12 +1214,12 @@ SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
 
     // std::cout << "SPStyle::_mergeObjectStylesheet: " << (object->getId()?object->getId():"null") << std::endl;
 
-    static CRSelEng *sel_eng = NULL;
+    static CRSelEng *sel_eng = nullptr;
     if (!sel_eng) {
         sel_eng = sp_repr_sel_eng();
     }
 
-    CRPropList *props = NULL;
+    CRPropList *props = nullptr;
 
     //XML Tree being directly used here while it shouldn't be.
     CRStatus status = cr_sel_eng_get_matched_properties_from_cascade(sel_eng,
@@ -1328,7 +1328,7 @@ static void
 sp_style_object_release(SPObject *object, SPStyle *style)
 {
     (void)object; // TODO
-    style->object = NULL;
+    style->object = nullptr;
 }
 
 // Internal
@@ -1448,7 +1448,7 @@ sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, SPSty
 SPStyle *
 sp_style_ref(SPStyle *style)
 {
-    g_return_val_if_fail(style != NULL, NULL);
+    g_return_val_if_fail(style != nullptr, NULL);
 
     style->style_ref(); // Increase ref count
 
@@ -1462,10 +1462,10 @@ sp_style_ref(SPStyle *style)
 SPStyle *
 sp_style_unref(SPStyle *style)
 {
-    g_return_val_if_fail(style != NULL, NULL);
+    g_return_val_if_fail(style != nullptr, NULL);
     if (style->style_unref() < 1) {
         delete style;
-        return NULL;
+        return nullptr;
     }
     return style;
 }
@@ -1627,7 +1627,7 @@ sp_style_set_property_url (SPObject *item, gchar const *property, SPObject *link
 {
     Inkscape::XML::Node *repr = item->getRepr();
 
-    if (repr == NULL) return;
+    if (repr == nullptr) return;
 
     SPCSSAttr *css = sp_repr_css_attr_new();
     if (linked) {
@@ -1668,124 +1668,124 @@ sp_style_unset_property_attrs(SPObject *o)
     }
 
     if (style->opacity.set) {
-        repr->setAttribute("opacity", NULL);
+        repr->setAttribute("opacity", nullptr);
     }
     if (style->color.set) {
-        repr->setAttribute("color", NULL);
+        repr->setAttribute("color", nullptr);
     }
     if (style->color_interpolation.set) {
-        repr->setAttribute("color-interpolation", NULL);
+        repr->setAttribute("color-interpolation", nullptr);
     }
     if (style->color_interpolation_filters.set) {
-        repr->setAttribute("color-interpolation-filters", NULL);
+        repr->setAttribute("color-interpolation-filters", nullptr);
     }
     if (style->solid_color.set) {
-        repr->setAttribute("solid-color", NULL);
+        repr->setAttribute("solid-color", nullptr);
     }
     if (style->solid_opacity.set) {
-        repr->setAttribute("solid-opacity", NULL);
+        repr->setAttribute("solid-opacity", nullptr);
     }
     if (style->vector_effect.set) {
-        repr->setAttribute("vector-effect", NULL);
+        repr->setAttribute("vector-effect", nullptr);
     }
     if (style->fill.set) {
-        repr->setAttribute("fill", NULL);
+        repr->setAttribute("fill", nullptr);
     }
     if (style->fill_opacity.set) {
-        repr->setAttribute("fill-opacity", NULL);
+        repr->setAttribute("fill-opacity", nullptr);
     }
     if (style->fill_rule.set) {
-        repr->setAttribute("fill-rule", NULL);
+        repr->setAttribute("fill-rule", nullptr);
     }
     if (style->stroke.set) {
-        repr->setAttribute("stroke", NULL);
+        repr->setAttribute("stroke", nullptr);
     }
     if (style->stroke_width.set) {
-        repr->setAttribute("stroke-width", NULL);
+        repr->setAttribute("stroke-width", nullptr);
     }
     if (style->stroke_linecap.set) {
-        repr->setAttribute("stroke-linecap", NULL);
+        repr->setAttribute("stroke-linecap", nullptr);
     }
     if (style->stroke_linejoin.set) {
-        repr->setAttribute("stroke-linejoin", NULL);
+        repr->setAttribute("stroke-linejoin", nullptr);
     }
     if (style->marker.set) {
-        repr->setAttribute("marker", NULL);
+        repr->setAttribute("marker", nullptr);
     }
     if (style->marker_start.set) {
-        repr->setAttribute("marker-start", NULL);
+        repr->setAttribute("marker-start", nullptr);
     }
     if (style->marker_mid.set) {
-        repr->setAttribute("marker-mid", NULL);
+        repr->setAttribute("marker-mid", nullptr);
     }
     if (style->marker_end.set) {
-        repr->setAttribute("marker-end", NULL);
+        repr->setAttribute("marker-end", nullptr);
     }
     if (style->stroke_opacity.set) {
-        repr->setAttribute("stroke-opacity", NULL);
+        repr->setAttribute("stroke-opacity", nullptr);
     }
     if (style->stroke_dasharray.set) {
-        repr->setAttribute("stroke-dasharray", NULL);
+        repr->setAttribute("stroke-dasharray", nullptr);
     }
     if (style->stroke_dashoffset.set) {
-        repr->setAttribute("stroke-dashoffset", NULL);
+        repr->setAttribute("stroke-dashoffset", nullptr);
     }
     if (style->paint_order.set) {
-        repr->setAttribute("paint-order", NULL);
+        repr->setAttribute("paint-order", nullptr);
     }
     if (style->font_specification.set) {
-        repr->setAttribute("-inkscape-font-specification", NULL);
+        repr->setAttribute("-inkscape-font-specification", nullptr);
     }
     if (style->font_family.set) {
-        repr->setAttribute("font-family", NULL);
+        repr->setAttribute("font-family", nullptr);
     }
     if (style->text_anchor.set) {
-        repr->setAttribute("text-anchor", NULL);
+        repr->setAttribute("text-anchor", nullptr);
     }
     if (style->white_space.set) {
-        repr->setAttribute("white-space", NULL);
+        repr->setAttribute("white-space", nullptr);
     }
     if (style->shape_inside.set) {
-        repr->setAttribute("shape-inside", NULL);
+        repr->setAttribute("shape-inside", nullptr);
     }
     if (style->shape_subtract.set) {
-        repr->setAttribute("shape-subtract", NULL);
+        repr->setAttribute("shape-subtract", nullptr);
     }
     if (style->shape_padding.set) {
-        repr->setAttribute("shape-padding", NULL);
+        repr->setAttribute("shape-padding", nullptr);
     }
     if (style->shape_margin.set) {
-        repr->setAttribute("shape-margin", NULL);
+        repr->setAttribute("shape-margin", nullptr);
     }
     if (style->inline_size.set) {
-        repr->setAttribute("inline-size", NULL);
+        repr->setAttribute("inline-size", nullptr);
     }
     if (style->writing_mode.set) {
-        repr->setAttribute("writing-mode", NULL);
+        repr->setAttribute("writing-mode", nullptr);
     }
     if (style->text_orientation.set) {
-        repr->setAttribute("text-orientation", NULL);
+        repr->setAttribute("text-orientation", nullptr);
     }
     if (style->filter.set) {
-        repr->setAttribute("filter", NULL);
+        repr->setAttribute("filter", nullptr);
     }
     if (style->enable_background.set) {
-        repr->setAttribute("enable-background", NULL);
+        repr->setAttribute("enable-background", nullptr);
     }
     if (style->clip_rule.set) {
-        repr->setAttribute("clip-rule", NULL);
+        repr->setAttribute("clip-rule", nullptr);
     }
     if (style->color_rendering.set) {
-        repr->setAttribute("color-rendering", NULL);
+        repr->setAttribute("color-rendering", nullptr);
     }
     if (style->image_rendering.set) {
-        repr->setAttribute("image-rendering", NULL);
+        repr->setAttribute("image-rendering", nullptr);
     }
     if (style->shape_rendering.set) {
-        repr->setAttribute("shape-rendering", NULL);
+        repr->setAttribute("shape-rendering", nullptr);
     }
     if (style->text_rendering.set) {
-        repr->setAttribute("text-rendering", NULL);
+        repr->setAttribute("text-rendering", nullptr);
     }
 }
 
@@ -1797,7 +1797,7 @@ sp_style_unset_property_attrs(SPObject *o)
 SPCSSAttr *
 sp_css_attr_from_style(SPStyle const *const style, guint const flags)
 {
-    g_return_val_if_fail(style != NULL, NULL);
+    g_return_val_if_fail(style != nullptr, NULL);
     g_return_val_if_fail(((flags & SP_STYLE_FLAG_IFSET) ||
                           (flags & SP_STYLE_FLAG_ALWAYS)),
                          NULL);
@@ -1818,7 +1818,7 @@ SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint const flags)
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
-    SPCSSAttr * result = 0;    
+    SPCSSAttr * result = nullptr;    
     if (object->style) {
         result = sp_css_attr_from_style(object->style, flags);
     }
@@ -1832,48 +1832,48 @@ SPCSSAttr *sp_css_attr_from_object(SPObject *object, guint const flags)
 SPCSSAttr *
 sp_css_attr_unset_text(SPCSSAttr *css)
 {
-    sp_repr_css_set_property(css, "font", NULL);
-    sp_repr_css_set_property(css, "-inkscape-font-specification", NULL);
-    sp_repr_css_set_property(css, "font-size", NULL);
-    sp_repr_css_set_property(css, "font-size-adjust", NULL); // not implemented yet
-    sp_repr_css_set_property(css, "font-style", NULL);
-    sp_repr_css_set_property(css, "font-variant", NULL);
-    sp_repr_css_set_property(css, "font-weight", NULL);
-    sp_repr_css_set_property(css, "font-stretch", NULL);
-    sp_repr_css_set_property(css, "font-family", NULL);
-    sp_repr_css_set_property(css, "text-indent", NULL);
-    sp_repr_css_set_property(css, "text-align", NULL);
-    sp_repr_css_set_property(css, "line-height", NULL);
-    sp_repr_css_set_property(css, "letter-spacing", NULL);
-    sp_repr_css_set_property(css, "word-spacing", NULL);
-    sp_repr_css_set_property(css, "text-transform", NULL);
-    sp_repr_css_set_property(css, "direction", NULL);
-    sp_repr_css_set_property(css, "writing-mode", NULL);
-    sp_repr_css_set_property(css, "text-orientation", NULL);
-    sp_repr_css_set_property(css, "text-anchor", NULL);
-    sp_repr_css_set_property(css, "white-space", NULL);
-    sp_repr_css_set_property(css, "shape-inside", NULL);
-    sp_repr_css_set_property(css, "shape-subtract", NULL);
-    sp_repr_css_set_property(css, "shape-padding", NULL);
-    sp_repr_css_set_property(css, "shape-margin", NULL);
-    sp_repr_css_set_property(css, "inline-size", NULL);
-    sp_repr_css_set_property(css, "kerning", NULL); // not implemented yet
-    sp_repr_css_set_property(css, "dominant-baseline", NULL); // not implemented yet
-    sp_repr_css_set_property(css, "alignment-baseline", NULL); // not implemented yet
-    sp_repr_css_set_property(css, "baseline-shift", NULL);
+    sp_repr_css_set_property(css, "font", nullptr);
+    sp_repr_css_set_property(css, "-inkscape-font-specification", nullptr);
+    sp_repr_css_set_property(css, "font-size", nullptr);
+    sp_repr_css_set_property(css, "font-size-adjust", nullptr); // not implemented yet
+    sp_repr_css_set_property(css, "font-style", nullptr);
+    sp_repr_css_set_property(css, "font-variant", nullptr);
+    sp_repr_css_set_property(css, "font-weight", nullptr);
+    sp_repr_css_set_property(css, "font-stretch", nullptr);
+    sp_repr_css_set_property(css, "font-family", nullptr);
+    sp_repr_css_set_property(css, "text-indent", nullptr);
+    sp_repr_css_set_property(css, "text-align", nullptr);
+    sp_repr_css_set_property(css, "line-height", nullptr);
+    sp_repr_css_set_property(css, "letter-spacing", nullptr);
+    sp_repr_css_set_property(css, "word-spacing", nullptr);
+    sp_repr_css_set_property(css, "text-transform", nullptr);
+    sp_repr_css_set_property(css, "direction", nullptr);
+    sp_repr_css_set_property(css, "writing-mode", nullptr);
+    sp_repr_css_set_property(css, "text-orientation", nullptr);
+    sp_repr_css_set_property(css, "text-anchor", nullptr);
+    sp_repr_css_set_property(css, "white-space", nullptr);
+    sp_repr_css_set_property(css, "shape-inside", nullptr);
+    sp_repr_css_set_property(css, "shape-subtract", nullptr);
+    sp_repr_css_set_property(css, "shape-padding", nullptr);
+    sp_repr_css_set_property(css, "shape-margin", nullptr);
+    sp_repr_css_set_property(css, "inline-size", nullptr);
+    sp_repr_css_set_property(css, "kerning", nullptr); // not implemented yet
+    sp_repr_css_set_property(css, "dominant-baseline", nullptr); // not implemented yet
+    sp_repr_css_set_property(css, "alignment-baseline", nullptr); // not implemented yet
+    sp_repr_css_set_property(css, "baseline-shift", nullptr);
 
-    sp_repr_css_set_property(css, "text-decoration", NULL);
-    sp_repr_css_set_property(css, "text-decoration-line", NULL);
-    sp_repr_css_set_property(css, "text-decoration-color", NULL);
-    sp_repr_css_set_property(css, "text-decoration-style", NULL);
+    sp_repr_css_set_property(css, "text-decoration", nullptr);
+    sp_repr_css_set_property(css, "text-decoration-line", nullptr);
+    sp_repr_css_set_property(css, "text-decoration-color", nullptr);
+    sp_repr_css_set_property(css, "text-decoration-style", nullptr);
 
-    sp_repr_css_set_property(css, "font-variant-ligatures", NULL);
-    sp_repr_css_set_property(css, "font-variant-position", NULL);
-    sp_repr_css_set_property(css, "font-variant-caps", NULL);
-    sp_repr_css_set_property(css, "font-variant-numeric", NULL);
-    sp_repr_css_set_property(css, "font-variant-alternates", NULL);
-    sp_repr_css_set_property(css, "font-variant-east-asian", NULL);
-    sp_repr_css_set_property(css, "font-feature-settings", NULL);
+    sp_repr_css_set_property(css, "font-variant-ligatures", nullptr);
+    sp_repr_css_set_property(css, "font-variant-position", nullptr);
+    sp_repr_css_set_property(css, "font-variant-caps", nullptr);
+    sp_repr_css_set_property(css, "font-variant-numeric", nullptr);
+    sp_repr_css_set_property(css, "font-variant-alternates", nullptr);
+    sp_repr_css_set_property(css, "font-variant-east-asian", nullptr);
+    sp_repr_css_set_property(css, "font-feature-settings", nullptr);
 
     return css;
 }
@@ -1886,26 +1886,26 @@ sp_css_attr_unset_text(SPCSSAttr *css)
 SPCSSAttr *
 sp_css_attr_unset_blacklist(SPCSSAttr *css)
 {
-    sp_repr_css_set_property(css, "color",               NULL);
-    sp_repr_css_set_property(css, "clip-rule",           NULL);
-    sp_repr_css_set_property(css, "d",                   NULL);
-    sp_repr_css_set_property(css, "display",             NULL);
-    sp_repr_css_set_property(css, "overflow",            NULL);
-    sp_repr_css_set_property(css, "visibility",          NULL);
-    sp_repr_css_set_property(css, "isolation",           NULL);
-    sp_repr_css_set_property(css, "mix-blend-mode",      NULL);
-    sp_repr_css_set_property(css, "color-interpolation", NULL);
-    sp_repr_css_set_property(css, "color-interpolation-filters", NULL);
-    sp_repr_css_set_property(css, "solid-color",         NULL);
-    sp_repr_css_set_property(css, "solid-opacity",       NULL);
-    sp_repr_css_set_property(css, "fill-rule",           NULL);
-    sp_repr_css_set_property(css, "filter-blend-mode",   NULL);
-    sp_repr_css_set_property(css, "filter-gaussianBlur-deviation", NULL);
-    sp_repr_css_set_property(css, "color-rendering",     NULL);
-    sp_repr_css_set_property(css, "image-rendering",     NULL);
-    sp_repr_css_set_property(css, "shape-rendering",     NULL);
-    sp_repr_css_set_property(css, "text-rendering",      NULL);
-    sp_repr_css_set_property(css, "enable-background",   NULL);
+    sp_repr_css_set_property(css, "color",               nullptr);
+    sp_repr_css_set_property(css, "clip-rule",           nullptr);
+    sp_repr_css_set_property(css, "d",                   nullptr);
+    sp_repr_css_set_property(css, "display",             nullptr);
+    sp_repr_css_set_property(css, "overflow",            nullptr);
+    sp_repr_css_set_property(css, "visibility",          nullptr);
+    sp_repr_css_set_property(css, "isolation",           nullptr);
+    sp_repr_css_set_property(css, "mix-blend-mode",      nullptr);
+    sp_repr_css_set_property(css, "color-interpolation", nullptr);
+    sp_repr_css_set_property(css, "color-interpolation-filters", nullptr);
+    sp_repr_css_set_property(css, "solid-color",         nullptr);
+    sp_repr_css_set_property(css, "solid-opacity",       nullptr);
+    sp_repr_css_set_property(css, "fill-rule",           nullptr);
+    sp_repr_css_set_property(css, "filter-blend-mode",   nullptr);
+    sp_repr_css_set_property(css, "filter-gaussianBlur-deviation", nullptr);
+    sp_repr_css_set_property(css, "color-rendering",     nullptr);
+    sp_repr_css_set_property(css, "image-rendering",     nullptr);
+    sp_repr_css_set_property(css, "shape-rendering",     nullptr);
+    sp_repr_css_set_property(css, "text-rendering",      nullptr);
+    sp_repr_css_set_property(css, "enable-background",   nullptr);
 
     return css;
 }
@@ -1914,7 +1914,7 @@ sp_css_attr_unset_blacklist(SPCSSAttr *css)
 static bool
 is_url(char const *p)
 {
-    if (p == NULL)
+    if (p == nullptr)
         return false;
 /** \todo
  * FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs
@@ -1934,17 +1934,17 @@ SPCSSAttr *
 sp_css_attr_unset_uris(SPCSSAttr *css)
 {
 // All properties that may hold <uri> or <paint> according to SVG 1.1
-    if (is_url(sp_repr_css_property(css, "clip-path", NULL))) sp_repr_css_set_property(css, "clip-path", NULL);
-    if (is_url(sp_repr_css_property(css, "color-profile", NULL))) sp_repr_css_set_property(css, "color-profile", NULL);
-    if (is_url(sp_repr_css_property(css, "cursor", NULL))) sp_repr_css_set_property(css, "cursor", NULL);
-    if (is_url(sp_repr_css_property(css, "filter", NULL))) sp_repr_css_set_property(css, "filter", NULL);
-    if (is_url(sp_repr_css_property(css, "marker", NULL))) sp_repr_css_set_property(css, "marker", NULL);
-    if (is_url(sp_repr_css_property(css, "marker-start", NULL))) sp_repr_css_set_property(css, "marker-start", NULL);
-    if (is_url(sp_repr_css_property(css, "marker-mid", NULL))) sp_repr_css_set_property(css, "marker-mid", NULL);
-    if (is_url(sp_repr_css_property(css, "marker-end", NULL))) sp_repr_css_set_property(css, "marker-end", NULL);
-    if (is_url(sp_repr_css_property(css, "mask", NULL))) sp_repr_css_set_property(css, "mask", NULL);
-    if (is_url(sp_repr_css_property(css, "fill", NULL))) sp_repr_css_set_property(css, "fill", NULL);
-    if (is_url(sp_repr_css_property(css, "stroke", NULL))) sp_repr_css_set_property(css, "stroke", NULL);
+    if (is_url(sp_repr_css_property(css, "clip-path", nullptr))) sp_repr_css_set_property(css, "clip-path", nullptr);
+    if (is_url(sp_repr_css_property(css, "color-profile", nullptr))) sp_repr_css_set_property(css, "color-profile", nullptr);
+    if (is_url(sp_repr_css_property(css, "cursor", nullptr))) sp_repr_css_set_property(css, "cursor", nullptr);
+    if (is_url(sp_repr_css_property(css, "filter", nullptr))) sp_repr_css_set_property(css, "filter", nullptr);
+    if (is_url(sp_repr_css_property(css, "marker", nullptr))) sp_repr_css_set_property(css, "marker", nullptr);
+    if (is_url(sp_repr_css_property(css, "marker-start", nullptr))) sp_repr_css_set_property(css, "marker-start", nullptr);
+    if (is_url(sp_repr_css_property(css, "marker-mid", nullptr))) sp_repr_css_set_property(css, "marker-mid", nullptr);
+    if (is_url(sp_repr_css_property(css, "marker-end", nullptr))) sp_repr_css_set_property(css, "marker-end", nullptr);
+    if (is_url(sp_repr_css_property(css, "mask", nullptr))) sp_repr_css_set_property(css, "mask", nullptr);
+    if (is_url(sp_repr_css_property(css, "fill", nullptr))) sp_repr_css_set_property(css, "fill", nullptr);
+    if (is_url(sp_repr_css_property(css, "stroke", nullptr))) sp_repr_css_set_property(css, "stroke", nullptr);
 
     return css;
 }
@@ -1957,14 +1957,14 @@ static void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
                                   double ex, bool only_with_units = false)
 {
-    gchar const *w = sp_repr_css_property(css, property, NULL);
+    gchar const *w = sp_repr_css_property(css, property, nullptr);
     if (w) {
-        gchar *units = NULL;
+        gchar *units = nullptr;
         double wd = g_ascii_strtod(w, &units) * ex;
         if (w == units) {// nothing converted, non-numeric value
             return;
         }
-        if (only_with_units && (units == NULL || *units == '\0' || *units == '%' || *units == 'e')) {
+        if (only_with_units && (units == nullptr || *units == '\0' || *units == '%' || *units == 'e')) {
             // only_with_units, but no units found, so do nothing.
             // 'e' matches 'em' or 'ex'
             return;
@@ -1982,16 +1982,16 @@ sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
 static void
 sp_css_attr_scale_property_list(SPCSSAttr *css, gchar const *property, double ex)
 {
-    gchar const *string = sp_repr_css_property(css, property, NULL);
+    gchar const *string = sp_repr_css_property(css, property, nullptr);
     if (string) {
         Inkscape::CSSOStringStream os;
         gchar **a = g_strsplit(string, ",", 10000);
         bool first = true;
-        for (gchar **i = a; i != NULL; i++) {
+        for (gchar **i = a; i != nullptr; i++) {
             gchar *w = *i;
-            if (w == NULL)
+            if (w == nullptr)
                 break;
-            gchar *units = NULL;
+            gchar *units = nullptr;
             double wd = g_ascii_strtod(w, &units) * ex;
             if (w == units) {// nothing converted, non-numeric value ("none" or "inherit"); do nothing
                 g_strfreev(a);

@@ -86,8 +86,8 @@ void ImageIcon::init()
     //  \FIXME Why?
     if (!Inkscape::Application::exists())
         Inkscape::Application::create("", false);
-    document = NULL;
-    viewerGtkmm = NULL;
+    document = nullptr;
+    viewerGtkmm = nullptr;
     //set_size_request(150,150);
     showingBrokenImage = false;
 }

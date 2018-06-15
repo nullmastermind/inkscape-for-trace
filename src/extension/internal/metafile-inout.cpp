@@ -93,32 +93,32 @@ Metafile::my_png_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
 void Metafile::toPNG(PMEMPNG accum, int width, int height, const char *px){
     bitmap_t bmStore;
     bitmap_t *bitmap = &bmStore;
-    accum->buffer=NULL;  // PNG constructed in memory will end up here, caller must free().
+    accum->buffer=nullptr;  // PNG constructed in memory will end up here, caller must free().
     accum->size=0;
     bitmap->pixels=(pixel_t *)px;
     bitmap->width  = width;
     bitmap->height = height;
 
-    png_structp png_ptr = NULL;
-    png_infop info_ptr = NULL;
+    png_structp png_ptr = nullptr;
+    png_infop info_ptr = nullptr;
     size_t x, y;
-    png_byte ** row_pointers = NULL;
+    png_byte ** row_pointers = nullptr;
     /*  The following number is set by trial and error only. I cannot
         see where it it is documented in the libpng manual.
     */
     int pixel_size = 3;
     int depth = 8;
 
-    png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (png_ptr == NULL){
-        accum->buffer=NULL;
+    png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    if (png_ptr == nullptr){
+        accum->buffer=nullptr;
         return;
     }
 
     info_ptr = png_create_info_struct (png_ptr);
-    if (info_ptr == NULL){
+    if (info_ptr == nullptr){
         png_destroy_write_struct (&png_ptr, &info_ptr);
-        accum->buffer=NULL;
+        accum->buffer=nullptr;
         return;
     }
 
@@ -126,7 +126,7 @@ void Metafile::toPNG(PMEMPNG accum, int width, int height, const char *px){
 
     if (setjmp (png_jmpbuf (png_ptr))) {
         png_destroy_write_struct (&png_ptr, &info_ptr);
-        accum->buffer=NULL;
+        accum->buffer=nullptr;
         return;
     }
 
@@ -163,9 +163,9 @@ void Metafile::toPNG(PMEMPNG accum, int width, int height, const char *px){
 
     png_set_rows (png_ptr, info_ptr, row_pointers);
 
-    png_set_write_fn(png_ptr, accum, my_png_write_data, NULL);
+    png_set_write_fn(png_ptr, accum, my_png_write_data, nullptr);
 
-    png_write_png (png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    png_write_png (png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, nullptr);
 
     for (y = 0; y < bitmap->height; y++) {
         png_free (png_ptr, row_pointers[y]);
@@ -186,7 +186,7 @@ void Metafile::setViewBoxIfMissing(SPDocument *doc) {
         doc->ensureUpToDate();
         
         // Set document unit
-        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
+        Inkscape::XML::Node *repr = sp_document_namedview(doc, nullptr)->getRepr();
         Inkscape::SVGOStringStream os;
         Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
         os << doc_unit->abbr;

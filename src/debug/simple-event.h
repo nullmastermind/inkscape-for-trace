@@ -73,7 +73,7 @@ private:
         va_list args;
         va_start(args, format);
         gchar *value=g_strdup_vprintf(format, args);
-        g_assert(value != NULL);
+        g_assert(value != nullptr);
         va_end(args);
         _addProperty(name, value);
         g_free(value);

@@ -44,8 +44,8 @@ static void _layer_changed(SPObject *top, SPObject *bottom, Inkscape::LayerModel
 namespace Inkscape {
 
 LayerModel::LayerModel()
-    : _doc( 0 )
-    , _layer_hierarchy( 0 )
+    : _doc( nullptr )
+    , _layer_hierarchy( nullptr )
     , _display_key( 0 )
 {
 }
@@ -65,7 +65,7 @@ void LayerModel::setDocument(SPDocument *doc)
         _layer_hierarchy->clear();
         delete _layer_hierarchy;
     }
-    _layer_hierarchy = new Inkscape::ObjectHierarchy(NULL);
+    _layer_hierarchy = new Inkscape::ObjectHierarchy(nullptr);
     _layer_hierarchy->connectAdded(sigc::bind(sigc::ptr_fun(_layer_activated), this));
     _layer_hierarchy->connectRemoved(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
     _layer_hierarchy->connectChanged(sigc::bind(sigc::ptr_fun(_layer_changed), this));
@@ -87,7 +87,7 @@ SPDocument *LayerModel::getDocument()
  */
 SPObject *LayerModel::currentRoot() const
 {
-    return _layer_hierarchy ? _layer_hierarchy->top() : NULL;
+    return _layer_hierarchy ? _layer_hierarchy->top() : nullptr;
 }
 
 /**
@@ -95,7 +95,7 @@ SPObject *LayerModel::currentRoot() const
  */
 SPObject *LayerModel::currentLayer() const
 {
-    return _layer_hierarchy ? _layer_hierarchy->bottom() : NULL;
+    return _layer_hierarchy ? _layer_hierarchy->bottom() : nullptr;
 }
 
 /** 
@@ -199,14 +199,14 @@ void LayerModel::toggleLayerSolo(SPObject *object) {
  * Return layer that contains \a object.
  */
 SPObject *LayerModel::layerForObject(SPObject *object) {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
 
     SPObject *root=currentRoot();
     object = object->parent;
     while ( object && object != root && !isLayer(object) ) {
         // Objects in defs have no layer and are NOT in the root layer
         if(SP_IS_DEFS(object))
-            return NULL;
+            return nullptr;
         object = object->parent;
     }
     return object;

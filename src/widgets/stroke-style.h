@@ -84,7 +84,7 @@ struct { gchar const *key; gint value; } const SPMarkerNames[] = {
     {"marker-mid", SP_MARKER_LOC_MID},
     {"marker-end", SP_MARKER_LOC_END},
     {"", SP_MARKER_LOC_QTY},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 /**

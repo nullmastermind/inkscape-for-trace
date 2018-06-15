@@ -112,7 +112,7 @@ void ms_read_selection( Inkscape::Selection *selection,
                         SPMeshType &ms_type,
                         bool &ms_type_multi )
 {
-    ms_selected = NULL;
+    ms_selected = nullptr;
     ms_selected_multi = false;
     ms_type = SP_MESH_TYPE_COONS;
     ms_type_multi = false;
@@ -162,7 +162,7 @@ static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
         //     // Hide/show handles?
         // }
 
-        SPMeshGradient *ms_selected = 0;
+        SPMeshGradient *ms_selected = nullptr;
         SPMeshType ms_type = SP_MESH_TYPE_COONS;
         bool ms_selected_multi = false;
         bool ms_type_multi = false; 
@@ -187,18 +187,18 @@ static void ms_tb_selection_modified(Inkscape::Selection *selection, guint /*fla
 
 static void ms_drag_selection_changed(gpointer /*dragger*/, gpointer data)
 {
-    ms_tb_selection_changed(NULL, data);
+    ms_tb_selection_changed(nullptr, data);
 
 }
 
 static void ms_defs_release(SPObject * /*defs*/, GObject *widget)
 {
-    ms_tb_selection_changed(NULL, widget);
+    ms_tb_selection_changed(nullptr, widget);
 }
 
 static void ms_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject *widget)
 {
-    ms_tb_selection_changed(NULL, widget);
+    ms_tb_selection_changed(nullptr, widget);
 }
 
 /*
@@ -279,7 +279,7 @@ static void ms_type_changed( GObject *tbl, int mode )
  * Will go away during tool refactoring. */
 static MeshTool *get_mesh_tool()
 {
-    MeshTool *tool = 0;
+    MeshTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (SP_IS_MESH_CONTEXT(ec)) {
@@ -338,7 +338,7 @@ static void ms_toggle_fill_stroke(InkToggleAction * /*act*/, gpointer data)
         drag->updateDraggers();
         drag->updateLines();
         drag->updateLevels();
-        ms_tb_selection_changed(NULL, data); // Need to update Type widget
+        ms_tb_selection_changed(nullptr, data); // Need to update Type widget
     }
 }
 
@@ -367,7 +367,7 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 {
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -449,15 +449,15 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
     /* Number of mesh rows */
     {
-        gchar const** labels = NULL;
+        gchar const** labels = nullptr;
         gdouble values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         eact = create_adjustment_action( "MeshRowAction",
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         ms_row_changed, NULL /*unit tracker*/,
+                                         ms_row_changed, nullptr /*unit tracker*/,
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -465,15 +465,15 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
 
     /* Number of mesh columns */
     {
-        gchar const** labels = NULL;
+        gchar const** labels = nullptr;
         gdouble values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         eact = create_adjustment_action( "MeshColumnAction",
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         ms_col_changed, NULL /*unit tracker*/,
+                                         ms_col_changed, nullptr /*unit tracker*/,
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );

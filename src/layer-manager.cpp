@@ -123,7 +123,7 @@ public:
 */
 
 LayerManager::LayerManager(SPDesktop *desktop)
-: _desktop(desktop), _document(NULL)
+: _desktop(desktop), _document(nullptr)
 {
     _layer_connection = desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &LayerManager::_selectedLayerChanged) );
 
@@ -143,7 +143,7 @@ LayerManager::~LayerManager()
     _layer_connection.disconnect();
     _document_connection.disconnect();
     _resource_connection.disconnect();
-    _document = NULL;
+    _document = nullptr;
 }
 
 void LayerManager::setCurrentLayer( SPObject* obj )
@@ -179,7 +179,7 @@ Glib::ustring LayerManager::getNextLayerName( SPObject* obj, gchar const *label)
 
     gchar* numpart = g_strdup(base.substr(pos+1).c_str());
     if ( numpart ) {
-        gchar* endPtr = NULL;
+        gchar* endPtr = nullptr;
         guint64 val = g_ascii_strtoull( numpart, &endPtr, 10);
         if ( ((val > 0) || (endPtr != numpart)) && (val < 65536) ) {
             base.erase( pos+1);
@@ -322,7 +322,7 @@ void LayerManager::_rebuild() {
             while ( higher && (higher->parent != root) ) {
                 higher = higher->parent;
             }
-            Node const* node = higher ? higher->getRepr() : NULL;
+            Node const* node = higher ? higher->getRepr() : nullptr;
             if ( node && node->parent() ) {
 //                 Debug::EventTracker<DebugAddLayer> tracker(*layer);
 

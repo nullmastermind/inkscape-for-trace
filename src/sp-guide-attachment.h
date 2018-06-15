@@ -10,7 +10,7 @@ public:
 
 public:
     SPGuideAttachment() :
-        item(static_cast<SPItem *>(0)),
+        item(static_cast<SPItem *>(nullptr)),
         snappoint_ix(0)
     { }
 

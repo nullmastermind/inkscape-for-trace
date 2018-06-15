@@ -76,7 +76,7 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
         if ( bbox ) {
             UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(G_OBJECT(spw), "tracker"));
             Unit const *unit = tracker->getActiveUnit();
-            g_return_if_fail(unit != NULL);
+            g_return_if_fail(unit != nullptr);
 
             struct { char const *key; double val; } const keyval[] = {
                 { "X", bbox->min()[X] },
@@ -182,7 +182,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, GObject *tbl)
     gdouble xrel = 0;
     gdouble yrel = 0;
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     GtkAdjustment* a_x = GTK_ADJUSTMENT( g_object_get_data( tbl, "X" ) );
     GtkAdjustment* a_y = GTK_ADJUSTMENT( g_object_get_data( tbl, "Y" ) );
@@ -239,9 +239,9 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, GObject *tbl)
     char const * const actionkey = ( mh > 5e-4 ? "selector:toolbar:move:horizontal" :
                                      sh > 5e-4 ? "selector:toolbar:scale:horizontal" :
                                      mv > 5e-4 ? "selector:toolbar:move:vertical" :
-                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : NULL );
+                                     sv > 5e-4 ? "selector:toolbar:scale:vertical" : nullptr );
 
-    if (actionkey != NULL) {
+    if (actionkey != nullptr) {
 
         // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed
         desktop->getCanvas()->forceFullRedrawAfterInterruptions(0);
@@ -339,7 +339,7 @@ static void destroy_tracker( GObject* obj, gpointer /*user_data*/ )
     UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(obj, "tracker"));
     if ( tracker ) {
         delete tracker;
-        g_object_set_data( obj, "tracker", 0 );
+        g_object_set_data( obj, "tracker", nullptr );
     }
 }
 
@@ -347,13 +347,13 @@ static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
 {
     SPAction* targetAction = SP_ACTION(user_data);
     if ( targetAction ) {
-        sp_action_perform( targetAction, NULL );
+        sp_action_perform( targetAction, nullptr );
     }
 }
 
 static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
 {
-    GtkAction* act = 0;
+    GtkAction* act = nullptr;
 
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
     InkAction* inky = ink_action_new( verb->get_id(), verb->get_name(), verb->get_tip(), verb->get_image(), size  );
@@ -370,7 +370,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     GtkIconSize secondarySize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    GtkAction* act = 0;
+    GtkAction* act = nullptr;
 
     GtkActionGroup* selectionActions = mainActions; // temporary
     std::vector<GtkAction*>* contextActions = new std::vector<GtkAction*>();
@@ -429,7 +429,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     g_object_set_data( G_OBJECT(spw), "tracker", tracker );
     g_signal_connect( G_OBJECT(spw), "destroy", G_CALLBACK(destroy_tracker), spw );
 
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
 
     // four spinbuttons
 
@@ -444,7 +444,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             G_OBJECT(spw),                        /* dataKludge */ 
             TRUE, "altx",                         /* altx, altx_mark */ 
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
-            0, 0, 0,                              /* descrLabels, descrValues, descrCount */ 
+            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */ 
             sp_object_layout_any_value_changed,   /* callback */ 
             tracker,                              /* unit_tracker */ 
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
@@ -463,7 +463,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
-            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
@@ -482,7 +482,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
-            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
@@ -514,7 +514,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             G_OBJECT(spw),                        /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
-            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             sp_object_layout_any_value_changed,   /* callback */
             tracker,                              /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
@@ -537,7 +537,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     g_signal_connect(G_OBJECT(spw), "change_selection", G_CALLBACK(sp_selection_layout_widget_change_selection), desktop);
 
     // Update now.
-    sp_selection_layout_widget_update(SP_WIDGET(spw), SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : NULL);
+    sp_selection_layout_widget_update(SP_WIDGET(spw), SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
 
     for ( std::vector<GtkAction*>::iterator iter = contextActions->begin();
           iter != contextActions->end(); ++iter) {

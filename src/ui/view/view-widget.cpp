@@ -34,7 +34,7 @@ static void sp_view_widget_class_init(SPViewWidgetClass *vwc)
  */
 static void sp_view_widget_init(SPViewWidget *vw)
 {
-    vw->view = NULL;
+    vw->view = nullptr;
 }
 
 /**
@@ -49,7 +49,7 @@ static void sp_view_widget_dispose(GObject *object)
     if (vw->view) {
         vw->view->close();
         Inkscape::GC::release(vw->view);
-        vw->view = NULL;
+        vw->view = nullptr;
     }
 
     if (G_OBJECT_CLASS(sp_view_widget_parent_class)->dispose) {
@@ -61,11 +61,11 @@ static void sp_view_widget_dispose(GObject *object)
 
 void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view)
 {
-    g_return_if_fail(vw != NULL);
+    g_return_if_fail(vw != nullptr);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
-    g_return_if_fail(view != NULL);
+    g_return_if_fail(view != nullptr);
     
-    g_return_if_fail(vw->view == NULL);
+    g_return_if_fail(vw->view == nullptr);
     
     vw->view = view;
     Inkscape::GC::anchor(view);
@@ -77,7 +77,7 @@ void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view)
 
 bool sp_view_widget_shutdown(SPViewWidget *vw)
 {
-    g_return_val_if_fail(vw != NULL, TRUE);
+    g_return_val_if_fail(vw != nullptr, TRUE);
     g_return_val_if_fail(SP_IS_VIEW_WIDGET(vw), TRUE);
 
     if (((SPViewWidgetClass *) G_OBJECT_GET_CLASS(vw))->shutdown) {

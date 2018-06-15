@@ -379,7 +379,7 @@ protected:
     Reader *source;
 
     BasicReader()
-        { source = NULL; }
+        { source = nullptr; }
 
 private:
 
@@ -563,7 +563,7 @@ protected:
     Writer *destination;
 
     BasicWriter()
-        { destination = NULL; }
+        { destination = nullptr; }
     
 private:
 

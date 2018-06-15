@@ -60,7 +60,7 @@
 using Inkscape::UI::Tools::ToolBase;
 
 static char const *const tool_names[] = {
-    NULL,
+    nullptr,
     "/tools/select",
     "/tools/nodes",
     "/tools/tweak",
@@ -85,12 +85,12 @@ static char const *const tool_names[] = {
 #endif
     "/tools/eraser",
     "/tools/lpetool",
-    NULL
+    nullptr
 };
 
 // TODO: HEY! these belong to the tools themselves!
 static char const *const tool_msg[] = {
-    NULL,
+    nullptr,
     N_("<b>Click</b> to Select and Transform objects, <b>Drag</b> to select many objects."),
     N_("Modify selected path points (nodes) directly."),
     N_("To tweak a path by pushing, select it and drag over it."),

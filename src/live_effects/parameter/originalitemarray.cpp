@@ -323,7 +323,7 @@ void OriginalItemArrayParam::unlink(ItemAndActive* to)
     to->ref.detach();
     if (to->href) {
         g_free(to->href);
-        to->href = NULL;
+        to->href = nullptr;
     }    
 }
 
@@ -398,12 +398,12 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
         _store->clear();
 
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
-        for (gchar ** iter = strarray; *iter != NULL; iter++) {
+        for (gchar ** iter = strarray; *iter != nullptr; iter++) {
             if ((*iter)[0] == '#') {
                 gchar ** substrarray = g_strsplit(*iter, ",", 0);
                 ItemAndActive* w = new ItemAndActive((SPObject *)param_effect->getLPEObj());
                 w->href = g_strdup(*substrarray);
-                w->actived = *(substrarray+1) != NULL && (*(substrarray+1))[0] == '1';
+                w->actived = *(substrarray+1) != nullptr && (*(substrarray+1))[0] == '1';
                 w->linked_changed_connection = w->ref.changedSignal().connect(sigc::bind<ItemAndActive *>(sigc::mem_fun(*this, &OriginalItemArrayParam::linked_changed), w));
                 w->ref.attach(URI(w->href));
 

@@ -28,7 +28,7 @@ public:
     ~DrawingGlyphs() override;
 
     void setGlyph(font_instance *font, int glyph, Geom::Affine const &trans);
-    void setStyle(SPStyle *style, SPStyle *context_style = NULL) override; // Not to be used
+    void setStyle(SPStyle *style, SPStyle *context_style = nullptr) override; // Not to be used
 
 protected:
     unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
@@ -57,7 +57,7 @@ public:
     void clear();
     bool addComponent(font_instance *font, int glyph, Geom::Affine const &trans, 
         float width, float ascent, float descent, float phase_length);
-    void setStyle(SPStyle *style, SPStyle *context_style = NULL) override;
+    void setStyle(SPStyle *style, SPStyle *context_style = nullptr) override;
     void setChildrenStyle(SPStyle *context_style) override;
 
 protected:

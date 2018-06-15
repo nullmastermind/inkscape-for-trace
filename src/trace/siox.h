@@ -388,7 +388,7 @@ public:
      *  used to point to a C++ object or C state object, to delegate
      *  callback processing to something else.  Use NULL to ignore.
      */
-    SioxObserver(void *contextArg) : context(NULL)
+    SioxObserver(void *contextArg) : context(nullptr)
         { context = contextArg; }
 
     /**

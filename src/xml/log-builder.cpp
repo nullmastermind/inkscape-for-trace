@@ -22,12 +22,12 @@ namespace XML {
 
 void LogBuilder::discard() {
     sp_repr_free_log(_log);
-    _log = NULL;
+    _log = nullptr;
 }
 
 Event *LogBuilder::detach() {
     Event *log=_log;
-    _log = NULL;
+    _log = nullptr;
     return log;
 }
 

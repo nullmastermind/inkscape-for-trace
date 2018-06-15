@@ -30,7 +30,7 @@ namespace Extension {
 ParamString::~ParamString(void)
 {
     g_free(_value);
-    _value = 0;
+    _value = nullptr;
 }
 
 /**
@@ -50,11 +50,11 @@ ParamString::~ParamString(void)
  */
 const gchar * ParamString::set(const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    if (in == NULL) {
-        return NULL; /* Can't have NULL string */
+    if (in == nullptr) {
+        return nullptr; /* Can't have NULL string */
     }
 
-    if (_value != NULL) {
+    if (_value != nullptr) {
         g_free(_value);
     }
 
@@ -84,10 +84,10 @@ ParamString::ParamString(const gchar * name,
                          Inkscape::Extension::Extension * ext,
                          Inkscape::XML::Node * xml)
     : Parameter(name, text, description, hidden, indent, ext)
-    , _value(NULL)
+    , _value(nullptr)
 {
-    const char * defaultval = NULL;
-    if (xml->firstChild() != NULL) {
+    const char * defaultval = nullptr;
+    if (xml->firstChild() != nullptr) {
         defaultval = xml->firstChild()->content();
     }
 
@@ -99,11 +99,11 @@ ParamString::ParamString(const gchar * name,
     if (!paramval.empty()) {
         defaultval = paramval.data();
     }
-    if (defaultval != NULL) {
+    if (defaultval != nullptr) {
         char const * chname = xml->name();
         if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_param")) {
-            if (xml->attribute("msgctxt") != NULL) {
-                _value =  g_strdup(g_dpgettext2(NULL, xml->attribute("msgctxt"), defaultval));
+            if (xml->attribute("msgctxt") != nullptr) {
+                _value =  g_strdup(g_dpgettext2(nullptr, xml->attribute("msgctxt"), defaultval));
             } else {
                 _value = g_strdup(_(defaultval));
             }
@@ -130,8 +130,8 @@ public:
      */
     ParamStringEntry (ParamString * pref, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
         Gtk::Entry(), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        if (_pref->get(NULL, NULL) != NULL) {
-            this->set_text(Glib::ustring(_pref->get(NULL, NULL)));
+        if (_pref->get(nullptr, nullptr) != nullptr) {
+            this->set_text(Glib::ustring(_pref->get(nullptr, nullptr)));
         }
         this->set_max_length(_pref->getMaxLength()); //Set the max length - default zero means no maximum
         this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
@@ -150,7 +150,7 @@ void ParamStringEntry::changed_text(void)
 {
     Glib::ustring data = this->get_text();
     _pref->set(data.c_str(), _doc, _node);
-    if (_changeSignal != NULL) {
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
 }
@@ -163,7 +163,7 @@ void ParamStringEntry::changed_text(void)
 Gtk::Widget * ParamString::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));

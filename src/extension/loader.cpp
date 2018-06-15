@@ -26,9 +26,9 @@ typedef const gchar *(*_getInkscapeVersion)(void);
 
 bool Loader::load_dependency(Dependency *dep)
 {
-    GModule *module = NULL;
+    GModule *module = nullptr;
     module = g_module_open(dep->get_name(), (GModuleFlags)0);
-    if (module == NULL) {
+    if (module == nullptr) {
         return false;
     }
     return true;
@@ -47,7 +47,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
         Inkscape::XML::Node *child_repr = repr->firstChild();
         
         // Iterate over the xml content
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             char const *chname = child_repr->name();
             if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
                 chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -62,7 +62,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                     // Could not load dependency, we abort
                     const char *res = g_module_error();
                     g_warning("Unable to load dependency %s of plugin %s.\nDetails: %s\n", dep.get_name(), "<todo>", res);
-                    return NULL;
+                    return nullptr;
                 }
             } 
 
@@ -71,20 +71,20 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                 
                 // The name of the plugin is actually the library file we want to load
                 if (const gchar *name = child_repr->attribute("name")) {
-                    GModule *module = NULL;
-                    _getImplementation GetImplementation = NULL;
-                    _getInkscapeVersion GetInkscapeVersion = NULL;
+                    GModule *module = nullptr;
+                    _getImplementation GetImplementation = nullptr;
+                    _getInkscapeVersion GetInkscapeVersion = nullptr;
                     
                     // build the path where to look for the plugin
-                    gchar *path = g_build_filename(_baseDirectory.c_str(), name, (char *) NULL);
+                    gchar *path = g_build_filename(_baseDirectory.c_str(), name, (char *) nullptr);
                     module = g_module_open(path, G_MODULE_BIND_LOCAL);
                     g_free(path);
                     
-                    if (module == NULL) {
+                    if (module == nullptr) {
                         // we were not able to load the plugin, write warning and abort
                         const char *res = g_module_error();
                         g_warning("Unable to load extension %s.\nDetails: %s\n", name, res);
-                        return NULL;
+                        return nullptr;
                     }
 
                     // Get a handle to the version function of the module
@@ -92,7 +92,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                         // This didn't work, write warning and abort
                         const char *res = g_module_error();
                         g_warning("Unable to load extension %s.\nDetails: %s\n", name, res);
-                        return NULL;
+                        return nullptr;
                     }
                     
                     // Get a handle to the function that delivers the implementation
@@ -100,7 +100,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
                         // This didn't work, write warning and abort
                         const char *res = g_module_error();
                         g_warning("Unable to load extension %s.\nDetails: %s\n", name, res);
-                        return NULL;
+                        return nullptr;
                     }
                     
                     // Get version and test against this version
@@ -121,7 +121,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
     } catch (std::exception &e) {
         g_warning("Unable to load extension.");
     }
-    return NULL;
+    return nullptr;
 }
 
 } // namespace Extension

@@ -41,14 +41,14 @@ namespace Inkscape {
 Selection::Selection(LayerModel *layers, SPDesktop *desktop):
     ObjectSet(desktop),
     _layers(layers),
-    _selection_context(NULL),
+    _selection_context(nullptr),
     _flags(0),
     _idle(0)
 {
 }
 
 Selection::~Selection() {
-    _layers = NULL;
+    _layers = nullptr;
     if (_idle) {
         g_source_remove(_idle);
         _idle = 0;
@@ -60,7 +60,7 @@ Selection::~Selection() {
 void Selection::_schedule_modified(SPObject */*obj*/, guint flags) {
     if (!this->_idle) {
         /* Request handling to be run in _idle loop */
-        this->_idle = g_idle_add_full(SP_SELECTION_UPDATE_PRIORITY, GSourceFunc(&Selection::_emit_modified), this, NULL);
+        this->_idle = g_idle_add_full(SP_SELECTION_UPDATE_PRIORITY, GSourceFunc(&Selection::_emit_modified), this, nullptr);
     }
 
     /* Collect all flags */
@@ -87,9 +87,9 @@ void Selection::_emitModified(guint flags) {
 
 void Selection::_emitChanged(bool persist_selection_context/* = false */) {
     if (persist_selection_context) {
-        if (NULL == _selection_context) {
+        if (nullptr == _selection_context) {
             _selection_context = _layers->currentLayer();
-            sp_object_ref(_selection_context, NULL);
+            sp_object_ref(_selection_context, nullptr);
             _context_release_connection = _selection_context->connectRelease(sigc::mem_fun(*this, &Selection::_releaseContext));
         }
     } else {
@@ -102,17 +102,17 @@ void Selection::_emitChanged(bool persist_selection_context/* = false */) {
 
 void Selection::_releaseContext(SPObject *obj)
 {
-    if (NULL == _selection_context || _selection_context != obj)
+    if (nullptr == _selection_context || _selection_context != obj)
         return;
 
     _context_release_connection.disconnect();
 
-    sp_object_unref(_selection_context, NULL);
-    _selection_context = NULL;
+    sp_object_unref(_selection_context, nullptr);
+    _selection_context = nullptr;
 }
 
 SPObject *Selection::activeContext() {
-    if (NULL != _selection_context)
+    if (nullptr != _selection_context)
         return _selection_context;
     return _layers->currentLayer();
 }
@@ -120,7 +120,7 @@ SPObject *Selection::activeContext() {
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
     std::vector<Inkscape::SnapCandidatePoint> p;
 
-    if (snapprefs != NULL){
+    if (snapprefs != nullptr){
         SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
         snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
         auto items = const_cast<Selection *>(this)->items();
@@ -140,11 +140,11 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 }
 
 SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
-    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(repr != nullptr, NULL);
     gchar const *id = repr->attribute("id");
-    g_return_val_if_fail(id != NULL, NULL);
+    g_return_val_if_fail(id != nullptr, NULL);
     SPObject *object=_layers->getDocument()->getObjectById(id);
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
     return object;
 }
 
@@ -194,7 +194,7 @@ Selection::setBackup ()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::UI::Tools::NodeTool *tool = 0;
+    Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {
         Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
@@ -257,7 +257,7 @@ Selection::restoreBackup()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::UI::Tools::NodeTool *tool = 0;
+    Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {
         Inkscape::UI::Tools::ToolBase *ec = desktop->event_context;
         if (INK_IS_NODE_TOOL(ec)) {

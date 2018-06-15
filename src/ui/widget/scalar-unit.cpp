@@ -34,7 +34,7 @@ ScalarUnit::ScalarUnit(Glib::ustring const &label, Glib::ustring const &tooltip,
       _absolute_is_increment(false),
       _percentage_is_increment(false)
 {
-    if (_unit_menu == NULL) {
+    if (_unit_menu == nullptr) {
         _unit_menu = new UnitMenu();
         g_assert(_unit_menu);
         _unit_menu->setUnitType(unit_type);
@@ -70,7 +70,7 @@ ScalarUnit::ScalarUnit(Glib::ustring const &label, Glib::ustring const &tooltip,
 
 void ScalarUnit::initScalar(double min_value, double max_value)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     Scalar::setDigits(_unit_menu->getDefaultDigits());
     Scalar::setIncrements(_unit_menu->getDefaultStep(),
                           _unit_menu->getDefaultPage());
@@ -79,7 +79,7 @@ void ScalarUnit::initScalar(double min_value, double max_value)
 
 bool ScalarUnit::setUnit(Glib::ustring const &unit)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     // First set the unit
     if (!_unit_menu->setUnit(unit)) {
         return false;
@@ -90,21 +90,21 @@ bool ScalarUnit::setUnit(Glib::ustring const &unit)
 
 void ScalarUnit::setUnitType(UnitType unit_type)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     _unit_menu->setUnitType(unit_type);
     lastUnits = _unit_menu->getUnitAbbr();
 }
 
 void ScalarUnit::resetUnitType(UnitType unit_type)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     _unit_menu->resetUnitType(unit_type);
     lastUnits = _unit_menu->getUnitAbbr();
 }
 
 Unit const * ScalarUnit::getUnit() const
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     return _unit_menu->getUnit();
 }
 
@@ -116,14 +116,14 @@ UnitType ScalarUnit::getUnitType() const
 
 void ScalarUnit::setValue(double number, Glib::ustring const &units)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     _unit_menu->setUnit(units);
     Scalar::setValue(number);
 }
 
 void ScalarUnit::setValueKeepUnit(double number, Glib::ustring const &units)
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     if (units == "") {
         // set the value in the default units
         Scalar::setValue(number);
@@ -140,7 +140,7 @@ void ScalarUnit::setValue(double number)
 
 double ScalarUnit::getValue(Glib::ustring const &unit_name) const
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
     if (unit_name == "") {
         // Return the value in the default units
         return Scalar::getValue();
@@ -223,7 +223,7 @@ void  ScalarUnit::setFromPercentage(double value)
 
 void ScalarUnit::on_unit_changed()
 {
-    g_assert(_unit_menu != NULL);
+    g_assert(_unit_menu != nullptr);
 
     Glib::ustring abbr = _unit_menu->getUnitAbbr();
     _suffix->set_label(abbr);

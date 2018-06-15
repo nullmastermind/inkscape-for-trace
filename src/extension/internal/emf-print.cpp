@@ -75,8 +75,8 @@ namespace Internal {
 /* globals */
 static double       PX2WORLD;
 static bool         FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTLinGrad, FixPPTPatternAsHatch, FixImageRot;
-static EMFTRACK    *et               = NULL;
-static EMFHANDLES  *eht              = NULL;
+static EMFTRACK    *et               = nullptr;
+static EMFHANDLES  *eht              = nullptr;
 
 void PrintEmf::smuggle_adxkyrtl_out(const char *string, uint32_t **adx, double *ky, int *rtl, int *ndx, float scale)
 {
@@ -85,7 +85,7 @@ void PrintEmf::smuggle_adxkyrtl_out(const char *string, uint32_t **adx, double *
     uint32_t   *ladx;
     const char *cptr = &string[strlen(string) + 1]; // this works because of the first fake terminator
 
-    *adx = NULL;
+    *adx = nullptr;
     *ky  = 0.0;       // set a default value
     sscanf(cptr, "%7d", ndx);
     if (!*ndx) {
@@ -207,12 +207,12 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         p = ansi_uri;
     }
     snprintf(buff, sizeof(buff) - 1, "Inkscape %s \1%s\1", Inkscape::version_string, p);
-    uint16_t *Description = U_Utf8ToUtf16le(buff, 0, NULL);
+    uint16_t *Description = U_Utf8ToUtf16le(buff, 0, nullptr);
     int cbDesc = 2 + wchar16len(Description);      // also count the final terminator
     (void) U_Utf16leEdit(Description, '\1', '\0'); // swap the temporary \1 characters for nulls
 
     // construct the EMRHEADER record and append it to the EMF in memory
-    rec = U_EMRHEADER_set(rclBounds,  rclFrame,  NULL, cbDesc, Description, szlDev, szlMm, 0);
+    rec = U_EMRHEADER_set(rclBounds,  rclFrame,  nullptr, cbDesc, Description, szlDev, szlMm, 0);
     free(Description);
     if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
         g_error("Fatal programming error in PrintEmf::begin at EMRHEADER");
@@ -301,7 +301,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 
 unsigned int PrintEmf::finish(Inkscape::Extension::Print * /*mod*/)
 {
-    do_clip_if_present(NULL);  // Terminate any open clip.
+    do_clip_if_present(nullptr);  // Terminate any open clip.
     char *rec;
     if (!et) {
         return 0;
@@ -310,7 +310,7 @@ unsigned int PrintEmf::finish(Inkscape::Extension::Print * /*mod*/)
 
     // earlier versions had flush of fill here, but it never executed and was removed
 
-    rec = U_EMREOF_set(0, NULL, et); // generate the EOF record
+    rec = U_EMREOF_set(0, nullptr, et); // generate the EOF record
     if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
         g_error("Fatal programming error in PrintEmf::finish");
     }
@@ -410,8 +410,8 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
         } else if (SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style))) { // must be a gradient
             // currently we do not do anything with gradients, the code below just sets the color to the average of the stops
             SPPaintServer *paintserver = style->fill.value.href->getObject();
-            SPLinearGradient *lg = NULL;
-            SPRadialGradient *rg = NULL;
+            SPLinearGradient *lg = nullptr;
+            SPRadialGradient *rg = nullptr;
 
             if (SP_IS_LINEARGRADIENT(paintserver)) {
                 lg = SP_LINEARGRADIENT(paintserver);
@@ -533,8 +533,8 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 {
     U_EXTLOGPEN         *elp;
     U_NUM_STYLEENTRY     n_dash    = 0;
-    U_STYLEENTRY        *dash      = NULL;
-    char                *rec       = NULL;
+    U_STYLEENTRY        *dash      = nullptr;
+    char                *rec       = nullptr;
     int                  linestyle = U_PS_SOLID;
     int                  linecap   = 0;
     int                  linejoin  = 0;
@@ -545,14 +545,14 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
     U_COLORREF           hatchColor;
     U_COLORREF           bkColor;
     uint32_t             width, height;
-    char                *px = NULL;
+    char                *px = nullptr;
     char                *rgba_px;
     uint32_t             cbPx = 0;
     uint32_t             colortype;
-    PU_RGBQUAD           ct = NULL;
+    PU_RGBQUAD           ct = nullptr;
     int                  numCt = 0;
     U_BITMAPINFOHEADER   Bmih;
-    PU_BITMAPINFO        Bmi = NULL;
+    PU_BITMAPINFO        Bmi = nullptr;
 
     if (!et) {
         return 0;
@@ -729,7 +729,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                   U_RGB(0, 0, 0),
                   U_HS_HORIZONTAL,
                   0,
-                  NULL);
+                  nullptr);
     }
 
     rec = extcreatepen_set(&pen, eht,  Bmi, cbPx, px, elp);
@@ -772,7 +772,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 // set the current pen to the stock object NULL_PEN and then delete the defined pen object, if there is one.
 void PrintEmf::destroy_pen()
 {
-    char *rec = NULL;
+    char *rec = nullptr;
     // before an object may be safely deleted it must no longer be selected
     // select in a stock object to deselect this one, the stock object should
     // never be used because we always select in a new one before drawing anythingrestore previous brush, necessary??? Would using a default stock object not work?
@@ -987,14 +987,14 @@ U_TRIVERTEX PrintEmf::make_trivertex(Geom::Point Pt, U_COLORREF uc){
 */
 void  PrintEmf::do_clip_if_present(SPStyle const *style){
     char *rec;
-    static SPClipPath *scpActive = NULL;
+    static SPClipPath *scpActive = nullptr;
     if(!style){
         if(scpActive){  // clear the existing clip
             rec = U_EMRRESTOREDC_set(-1);
             if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                 g_error("Fatal programming error in PrintEmf::fill at U_EMRRESTOREDC_set");
             }
-            scpActive=NULL;
+            scpActive=nullptr;
         }
     } else {
         /* The current implementation converts only one level of clipping.  If there were more
@@ -1005,10 +1005,10 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
            Note, to debug this section of code use print statements on sp_svg_write_path(combined_pathvector).
         */
         /*  find the first clip_ref at object or up the stack.  There may not be one. */
-        SPClipPath *scp = NULL;
+        SPClipPath *scp = nullptr;
         SPItem *item = SP_ITEM(style->object);
         while(1) {
-            scp = (item->clip_ref ? item->clip_ref->getObject() : NULL);
+            scp = (item->clip_ref ? item->clip_ref->getObject() : nullptr);
             if(scp)break;
             item = SP_ITEM(item->parent);
             if(!item || SP_IS_ROOT(item))break; // this will never be a clipping path
@@ -1020,7 +1020,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                 if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                     g_error("Fatal programming error in PrintEmf::fill at U_EMRRESTOREDC_set");
                 }
-                scpActive = NULL;
+                scpActive = nullptr;
             }
 
             if (scp) {  // set the new clip
@@ -1067,7 +1067,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                     }
                 }
                 else {
-                    scpActive = NULL; // no valid path available to draw, so no DC was saved, so no signal to restore
+                    scpActive = nullptr; // no valid path available to draw, so no DC was saved, so no signal to restore
                 }
             } // change or remove clipping
         } // scp exists
@@ -1133,7 +1133,7 @@ unsigned int PrintEmf::fill(
 
     fill_transform = tf;
     
-    int brush_stat = create_brush(style, NULL);
+    int brush_stat = create_brush(style, nullptr);
     
     /* native linear gradients are only used if the object is a rectangle AND the gradient is parallel to the sides of the object */
     bool is_Rect = false;
@@ -1428,7 +1428,7 @@ unsigned int PrintEmf::stroke(
     Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
 
-    char *rec = NULL;
+    char *rec = nullptr;
     Geom::Affine tf = m_tr_stack.top();
     do_clip_if_present(style);  // If clipping is needed set it up
 
@@ -1508,7 +1508,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     int moves  = 0;
     int lines  = 0;
     int curves = 0;
-    char *rec  = NULL;
+    char *rec  = nullptr;
 
     for (Geom::PathVector::iterator pit = pv.begin(); pit != pv.end(); ++pit) {
         moves++;
@@ -1718,7 +1718,7 @@ unsigned int PrintEmf::image(
     SPStyle const *style)  /** provides indirect link to image object */
 {
     double x1, y1, dw, dh;
-    char *rec = NULL;
+    char *rec = nullptr;
     Geom::Affine tf = m_tr_stack.top();
 
     do_clip_if_present(style);  // If clipping is needed set it up
@@ -1923,7 +1923,7 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
 unsigned int PrintEmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
     Geom::Affine tf = transform;
-    char *rec = NULL;
+    char *rec = nullptr;
 
     simple_shape = print_simple_shape(pathv, tf);
     if (simple_shape || pathv.empty()) {
@@ -1976,7 +1976,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     }
 
     do_clip_if_present(style);  // If clipping is needed set it up
-    char *rec = NULL;
+    char *rec = nullptr;
     int ccount, newfont;
     int fix90n = 0;
     uint32_t hfont = 0;
@@ -2006,7 +2006,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     }
 
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
-    uint16_t *unicode_text = U_Utf8ToUtf16le(text2, 0, NULL);
+    uint16_t *unicode_text = U_Utf8ToUtf16le(text2, 0, nullptr);
     free(text2);
     //translates Unicode to NonUnicode, if possible.  If any translate, all will, and all to
     //the same font, because of code in Layout::print
@@ -2058,9 +2058,9 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         // of the special fonts.
         uint16_t *wfacename;
         if (!newfont) {
-            wfacename = U_Utf8ToUtf16le(style->font_family.value, 0, NULL);
+            wfacename = U_Utf8ToUtf16le(style->font_family.value, 0, nullptr);
         } else {
-            wfacename = U_Utf8ToUtf16le(FontName(newfont), 0, NULL);
+            wfacename = U_Utf8ToUtf16le(FontName(newfont), 0, nullptr);
         }
 
         // Scale the text to the minimum stretch. (It tends to stay within bounding rectangles even if
@@ -2084,7 +2084,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
                            wfacename);
         free(wfacename);
 
-        rec  = extcreatefontindirectw_set(&hfont, eht, (char *) &lf, NULL);
+        rec  = extcreatefontindirectw_set(&hfont, eht, (char *) &lf, nullptr);
         if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
             g_error("Fatal programming error in PrintEmf::text at extcreatefontindirectw_set");
         }

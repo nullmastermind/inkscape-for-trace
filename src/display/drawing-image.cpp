@@ -22,7 +22,7 @@ namespace Inkscape {
 
 DrawingImage::DrawingImage(Drawing &drawing)
     : DrawingItem(drawing)
-    , _pixbuf(NULL)
+    , _pixbuf(nullptr)
 {}
 
 DrawingImage::~DrawingImage()
@@ -184,7 +184,7 @@ distance_to_segment (Geom::Point const &p, Geom::Point const &a1, Geom::Point co
 DrawingItem *
 DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
 {
-    if (!_pixbuf) return NULL;
+    if (!_pixbuf) return nullptr;
 
     bool outline = _drawing.outline();
 
@@ -201,7 +201,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
                 }
             }
         }
-        return NULL;
+        return nullptr;
 
     } else {
         unsigned char *const pixels = _pixbuf->pixels();
@@ -213,7 +213,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
         Geom::Rect r = bounds();
 
         if (!r.contains(tp))
-            return NULL;
+            return nullptr;
 
         double vw = width * _scale[Geom::X];
         double vh = height * _scale[Geom::Y];
@@ -221,7 +221,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
         int iy = floor((tp[Geom::Y] - _origin[Geom::Y]) / vh * height);
 
         if ((ix < 0) || (iy < 0) || (ix >= width) || (iy >= height))
-            return NULL;
+            return nullptr;
 
         unsigned char *pix_ptr = pixels + iy * rowstride + ix * 4;
         // pick if the image is less than 99% transparent
@@ -235,7 +235,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
             throw std::runtime_error("Unrecognized pixel format");
         }
         float alpha_f = (alpha / 255.0f) * _opacity;
-        return alpha_f > 0.01 ? this : NULL;
+        return alpha_f > 0.01 ? this : nullptr;
     }
 }
 

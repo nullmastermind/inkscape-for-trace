@@ -22,17 +22,17 @@
 static void livepatheffect_on_repr_attr_changed (Inkscape::XML::Node * repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, void * data);
 
 static Inkscape::XML::NodeEventVector const livepatheffect_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     livepatheffect_on_repr_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 
 LivePathEffectObject::LivePathEffectObject()
     : SPObject(), effecttype(Inkscape::LivePathEffect::INVALID_LPE), effecttype_set(false),
-      lpe(NULL)
+      lpe(nullptr)
 {
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_message("Init livepatheffectobject");
@@ -46,7 +46,7 @@ LivePathEffectObject::~LivePathEffectObject() {
  * Virtual build: set livepatheffect attributes from its associated XML node.
  */
 void LivePathEffectObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
-    g_assert(this != NULL);
+    g_assert(this != nullptr);
     g_assert(SP_IS_OBJECT(this));
 
     SPObject::build(document, repr);
@@ -85,7 +85,7 @@ void LivePathEffectObject::release() {
 
     if (this->lpe) {
         delete this->lpe;
-        this->lpe = NULL;
+        this->lpe = nullptr;
     }
 
     this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
@@ -105,7 +105,7 @@ void LivePathEffectObject::set(unsigned key, gchar const *value) {
         case SP_PROP_PATH_EFFECT:
             if (this->lpe) {
                 delete this->lpe;
-                this->lpe = NULL;
+                this->lpe = nullptr;
             }
 
             if ( value && Inkscape::LivePathEffect::LPETypeConverter.is_valid_key(value) ) {
@@ -114,7 +114,7 @@ void LivePathEffectObject::set(unsigned key, gchar const *value) {
                 this->effecttype_set = true;
             } else {
                 this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
-                this->lpe = NULL;
+                this->lpe = nullptr;
                 this->effecttype_set = false;
             }
 
@@ -180,7 +180,7 @@ LivePathEffectObject *LivePathEffectObject::fork_private_if_necessary(unsigned i
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *dup_repr = this->getRepr()->duplicate(xml_doc);
 
-        doc->getDefs()->getRepr()->addChild(dup_repr, NULL);
+        doc->getDefs()->getRepr()->addChild(dup_repr, nullptr);
         LivePathEffectObject *lpeobj_new = LIVEPATHEFFECT( doc->getObjectByRepr(dup_repr) );
 
         Inkscape::GC::release(dup_repr);

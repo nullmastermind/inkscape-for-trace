@@ -363,7 +363,7 @@ void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)
     to->_pathvector = Geom::PathVector();
     if (to->href) {
         g_free(to->href);
-        to->href = NULL;
+        to->href = nullptr;
     }
 }
 
@@ -424,7 +424,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     if (!to) {
         return;
     }
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(linked_obj)) {
         SPLPEItem * lpe_item = SP_LPE_ITEM(linked_obj);
         if (_from_original_d) {
@@ -451,7 +451,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();
     }
 
-    if (curve == NULL) {
+    if (curve == nullptr) {
         // curve invalid, set empty pathvector
         to->_pathvector = Geom::PathVector();
     } else {
@@ -483,14 +483,14 @@ bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
         _store->clear();
 
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
-        for (gchar ** iter = strarray; *iter != NULL; iter++) {
+        for (gchar ** iter = strarray; *iter != nullptr; iter++) {
             if ((*iter)[0] == '#') {
                 gchar ** substrarray = g_strsplit(*iter, ",", 0);
                 PathAndDirectionAndVisible* w = new PathAndDirectionAndVisible((SPObject *)param_effect->getLPEObj());
                 w->href = g_strdup(*substrarray);
-                w->reversed = *(substrarray+1) != NULL && (*(substrarray+1))[0] == '1';
+                w->reversed = *(substrarray+1) != nullptr && (*(substrarray+1))[0] == '1';
                 //Like this to make backwards compatible, new value added in 0.93
-                w->visibled = *(substrarray+2) == NULL || (*(substrarray+2))[0] == '1';
+                w->visibled = *(substrarray+2) == nullptr || (*(substrarray+2))[0] == '1';
                 w->linked_changed_connection = w->ref.changedSignal().connect(sigc::bind<PathAndDirectionAndVisible *>(sigc::mem_fun(*this, &OriginalPathArrayParam::linked_changed), w));
                 w->ref.attach(URI(w->href));
 

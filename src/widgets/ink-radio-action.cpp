@@ -61,7 +61,7 @@ static void ink_radio_action_class_init( InkRadioActionClass* klass )
 static void ink_radio_action_init( InkRadioAction* action )
 {
     action->private_data = INK_RADIO_ACTION_GET_PRIVATE( action );
-    action->private_data->iconId = 0;
+    action->private_data->iconId = nullptr;
     action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 

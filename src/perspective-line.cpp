@@ -16,7 +16,7 @@ namespace Box3D {
 PerspectiveLine::PerspectiveLine (Geom::Point const &pt, Proj::Axis const axis, Persp3D *persp) :
         Line (pt, persp3d_get_VP(persp, axis).affine(), true)
 {
-    g_assert (persp != NULL);
+    g_assert (persp != nullptr);
 
     if (!persp3d_get_VP(persp, axis).is_finite()) {
         Proj::Pt2 vp(persp3d_get_VP(persp, axis));

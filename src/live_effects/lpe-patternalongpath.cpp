@@ -53,7 +53,7 @@ namespace WPAP {
         ~KnotHolderEntityWidthPatternAlongPath() override
         {
             LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-            lpe->_knot_entity = NULL;
+            lpe->_knot_entity = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
@@ -106,7 +106,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     registerParameter(&fuse_tolerance);
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
-    _knot_entity = NULL;
+    _knot_entity = nullptr;
     _provides_knotholder_entities = true;
 
 }
@@ -298,7 +298,7 @@ void
 LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
-    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(_knot_entity);
     if (hide_knot) {
         _knot_entity->knot->hide();

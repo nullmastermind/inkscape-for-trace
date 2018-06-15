@@ -40,7 +40,7 @@ using namespace Inkscape::UI::Tools;
 
 ToolBase *ToolFactory::createObject(std::string const& id)
 {
-    ToolBase *tool = NULL;
+    ToolBase *tool = nullptr;
 
     if (id == "/tools/shapes/arc")
         tool = new ArcTool;

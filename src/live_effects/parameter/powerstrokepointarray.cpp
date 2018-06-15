@@ -39,7 +39,7 @@ PowerStrokePointArrayParam::~PowerStrokePointArrayParam()
 Gtk::Widget *
 PowerStrokePointArrayParam::param_newWidget()
 {
-    return NULL;
+    return nullptr;
 }
 
 void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &postmul, bool /*set*/)
@@ -280,7 +280,7 @@ void PowerStrokePointArrayParam::addKnotHolderEntities(KnotHolder *knotholder, S
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
         PowerStrokePointArrayParamKnotHolderEntity *e = new PowerStrokePointArrayParamKnotHolderEntity(this, i);
-        e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+        e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                    _("<b>Stroke width control point</b>: drag to alter the stroke width. <b>Ctrl+click</b> adds a control point, <b>Ctrl+Alt+click</b> deletes it, <b>Shift+click</b> launches width dialog."),
                    knot_shape, knot_mode, knot_color);
         knotholder->add(e);

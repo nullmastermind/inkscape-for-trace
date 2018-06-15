@@ -20,15 +20,15 @@ namespace Tools {
 
 DynamicBase::DynamicBase(gchar const *const *cursor_shape)
     : ToolBase(cursor_shape)
-    , accumulated(NULL)
-    , currentshape(NULL)
-    , currentcurve(NULL)
-    , cal1(NULL)
-    , cal2(NULL)
+    , accumulated(nullptr)
+    , currentshape(nullptr)
+    , currentcurve(nullptr)
+    , cal1(nullptr)
+    , cal2(nullptr)
     , point1()
     , point2()
     , npoints(0)
-    , repr(NULL)
+    , repr(nullptr)
     , cur(0, 0)
     , vel(0, 0)
     , vel_max(0)
@@ -58,7 +58,7 @@ DynamicBase::DynamicBase(gchar const *const *cursor_shape)
 DynamicBase::~DynamicBase() {
     if (this->accumulated) {
         this->accumulated = this->accumulated->unref();
-        this->accumulated = 0;
+        this->accumulated = nullptr;
     }
 
     for (auto i:segments) {
@@ -68,22 +68,22 @@ DynamicBase::~DynamicBase() {
 
     if (this->currentcurve) {
         this->currentcurve = this->currentcurve->unref();
-        this->currentcurve = 0;
+        this->currentcurve = nullptr;
     }
 
     if (this->cal1) {
         this->cal1 = this->cal1->unref();
-        this->cal1 = 0;
+        this->cal1 = nullptr;
     }
 
     if (this->cal2) {
         this->cal2 = this->cal2->unref();
-        this->cal2 = 0;
+        this->cal2 = nullptr;
     }
 
     if (this->currentshape) {
         sp_canvas_item_destroy(this->currentshape);
-        this->currentshape = 0;
+        this->currentshape = nullptr;
     }
 }
 

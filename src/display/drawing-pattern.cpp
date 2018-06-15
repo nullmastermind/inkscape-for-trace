@@ -18,7 +18,7 @@ namespace Inkscape {
 
 DrawingPattern::DrawingPattern(Drawing &drawing, bool debug)
     : DrawingGroup(drawing)
-    , _pattern_to_user(NULL)
+    , _pattern_to_user(nullptr)
     , _overflow_steps(1)
     , _debug(debug)
 {
@@ -41,7 +41,7 @@ DrawingPattern::setPatternToUserTransform(Geom::Affine const &new_trans) {
         _markForRendering();
         if (new_trans.isIdentity()) {
             delete _pattern_to_user; // delete NULL; is safe
-            _pattern_to_user = NULL;
+            _pattern_to_user = nullptr;
         } else {
             _pattern_to_user = new Geom::Affine(new_trans);
         }
@@ -67,11 +67,11 @@ DrawingPattern::renderPattern(float opacity) {
     bool visible = opacity >= 1e-3;
 
     if (!visible) {
-        return NULL;
+        return nullptr;
     }
 
     if (!_tile_rect || (_tile_rect->area() == 0)) {
-        return NULL;
+        return nullptr;
     }
     Geom::Rect pattern_tile = *_tile_rect;
 

@@ -69,8 +69,8 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
     on_child_added, // child_added
     on_child_removed, // child_removed
     on_repr_attr_changed,
-    NULL, // content_changed
-    NULL  // order_changed
+    nullptr, // content_changed
+    nullptr  // order_changed
 };
 
 static void docprops_style_button(Gtk::Button& btn, char const* iconName)
@@ -101,7 +101,7 @@ DocumentProperties::DocumentProperties()
       _page_metadata1(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
       _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
     //---------------------------------------------------------------
-      _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, NULL, NULL, NULL, "crispEdges"),
+      _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, nullptr, nullptr, nullptr, "crispEdges"),
       _rcb_checkerboard(_("Checkerboard background"), _("If set, use checkerboard for background, otherwise use background color at full opacity."), "inkscape:pagecheckerboard", _wr, false),
       _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
       _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
@@ -310,35 +310,35 @@ void DocumentProperties::build_page()
 
     Gtk::Widget *const widget_array[] =
     {
-        label_gen,            0,
-        0,                    &_rum_deflt,
+        label_gen,            nullptr,
+        nullptr,                    &_rum_deflt,
         //label_col,          0,
         //_rcp_bg._label,     &_rcp_bg,
-        0,                    0,
-        label_for,            0,
-        0,                    &_page_sizer,
-        0,                    0,
+        nullptr,                    nullptr,
+        label_for,            nullptr,
+        nullptr,                    &_page_sizer,
+        nullptr,                    nullptr,
         &_rcb_doc_props_left, &_rcb_doc_props_right,
     };
 
     attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
     Gtk::Widget *const widget_array_left[] =
     {
-        label_bkg,        0,
-        0,                &_rcb_checkerboard,
-        0,                &_rcp_bg,
-        label_dsp,        0,
-        0,                &_rcb_antialias,
+        label_bkg,        nullptr,
+        nullptr,                &_rcb_checkerboard,
+        nullptr,                &_rcp_bg,
+        label_dsp,        nullptr,
+        nullptr,                &_rcb_antialias,
     };
 
     attach_all(_rcb_doc_props_left, widget_array_left, G_N_ELEMENTS(widget_array_left),0,1);
     Gtk::Widget *const widget_array_right[] =
     {
-        label_bdr,        0,
-        0,                &_rcb_canb,
-        0,                &_rcb_bord,
-        0,                &_rcb_shad,
-        0,                &_rcp_bord,
+        label_bdr,        nullptr,
+        nullptr,                &_rcb_canb,
+        nullptr,                &_rcb_bord,
+        nullptr,                &_rcb_shad,
+        nullptr,                &_rcp_bord,
     };
     
     attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right),0,1, true);
@@ -361,13 +361,13 @@ void DocumentProperties::build_guides()
 
     Gtk::Widget *const widget_array[] =
     {
-        label_gui,        0,
-        0,                &_rcb_sgui,
-        0,                &_rcb_lgui,
-        0,                &_rcp_gui,
-        0,                &_rcp_hgui,
-        0,                &_create_guides_btn,
-        0,                &_delete_guides_btn
+        label_gui,        nullptr,
+        nullptr,                &_rcb_sgui,
+        nullptr,                &_rcb_lgui,
+        nullptr,                &_rcp_gui,
+        nullptr,                &_rcp_hgui,
+        nullptr,                &_create_guides_btn,
+        nullptr,                &_delete_guides_btn
     };
 
     attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
@@ -391,20 +391,20 @@ void DocumentProperties::build_snap()
 
     Gtk::Widget *const array[] =
     {
-        label_o,            0,
-        0,                  _rsu_sno._vbox,
-        0,                  &_rcb_snclp,
-        0,                  &_rcb_snmsk,
-        0,                  0,
-        label_gr,           0,
-        0,                  _rsu_sn._vbox,
-        0,                  0,
-        label_gu,           0,
-        0,                  _rsu_gusn._vbox,
-        0,                  0,
-        label_m,           0,
-        0,                  &_rcb_perp,
-        0,                  &_rcb_tang
+        label_o,            nullptr,
+        nullptr,                  _rsu_sno._vbox,
+        nullptr,                  &_rcb_snclp,
+        nullptr,                  &_rcb_snmsk,
+        nullptr,                  nullptr,
+        label_gr,           nullptr,
+        nullptr,                  _rsu_sn._vbox,
+        nullptr,                  nullptr,
+        label_gu,           nullptr,
+        nullptr,                  _rsu_gusn._vbox,
+        nullptr,                  nullptr,
+        label_m,           nullptr,
+        nullptr,                  &_rcb_perp,
+        nullptr,                  &_rcb_tang
     };
 
     attach_all(_page_snap->table(), array, G_N_ELEMENTS(array));
@@ -417,7 +417,7 @@ void DocumentProperties::create_guides_around_page()
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }
@@ -429,7 +429,7 @@ void DocumentProperties::delete_all_guides()
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(dt));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }
@@ -538,11 +538,11 @@ void DocumentProperties::linkSelectedProfile()
         Inkscape::XML::Node *defsRepr = sp_repr_lookup_name(xml_doc, "svg:defs");
         if (!defsRepr) {
             defsRepr = xml_doc->createElement("svg:defs");
-            xml_doc->root()->addChild(defsRepr, NULL);
+            xml_doc->root()->addChild(defsRepr, nullptr);
         }
 
         g_assert(desktop->doc()->getDefs());
-        defsRepr->addChild(cprofRepr, NULL);
+        defsRepr->addChild(cprofRepr, nullptr);
 
         // TODO check if this next line was sometimes needed. It being there caused an assertion.
         //Inkscape::GC::release(defsRepr);
@@ -1083,7 +1083,7 @@ void DocumentProperties::addExternalScript(){
         scriptRepr->setAttribute("xlink:href", (gchar*) _script_entry.get_text().c_str());
         _script_entry.set_text("");
 
-        xml_doc->root()->addChild(scriptRepr, NULL);
+        xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
         DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT, _("Add external script..."));
@@ -1093,7 +1093,7 @@ void DocumentProperties::addExternalScript(){
 
 }
 
-static Inkscape::UI::Dialog::FileOpenDialog * selectPrefsFileInstance = NULL;
+static Inkscape::UI::Dialog::FileOpenDialog * selectPrefsFileInstance = nullptr;
 
 void  DocumentProperties::browseExternalScript() {
 
@@ -1150,7 +1150,7 @@ void DocumentProperties::addEmbeddedScript(){
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *scriptRepr = xml_doc->createElement("svg:script");
 
-        xml_doc->root()->addChild(scriptRepr, NULL);
+        xml_doc->root()->addChild(scriptRepr, nullptr);
 
         // inform the document, so we can undo
         DocumentUndo::done(desktop->doc(), SP_VERB_EDIT_ADD_EMBEDDED_SCRIPT, _("Add embedded script..."));
@@ -1319,13 +1319,13 @@ void DocumentProperties::populate_script_lists(){
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
     if (!current.empty()) {
         SPObject *obj = *(current.begin());
-        g_assert(obj != NULL);
+        g_assert(obj != nullptr);
         _scripts_observer.set(obj->parent);
     }
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         SPScript* script = dynamic_cast<SPScript *>(obj);
-        g_assert(script != NULL);
+        g_assert(script != nullptr);
         if (script->xlinkhref)
         {
             Gtk::TreeModel::Row row = *(_ExternalScriptsListStore->append());
@@ -1357,7 +1357,7 @@ void DocumentProperties::update_gridspage()
     for(std::vector<Inkscape::CanvasGrid *>::const_iterator it = nv->grids.begin(); it != nv->grids.end(); ++it) {
         if (!(*it)->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
         Glib::ustring name((*it)->repr->attribute("id"));
-        const char *icon = NULL;
+        const char *icon = nullptr;
         switch ((*it)->getGridType()) {
             case GRID_RECTANGULAR:
                 icon = "grid-rectangular";
@@ -1631,7 +1631,7 @@ void DocumentProperties::onRemoveGrid()
 
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = dt->getNamedView();
-    Inkscape::CanvasGrid * found_grid = NULL;
+    Inkscape::CanvasGrid * found_grid = nullptr;
     if( pagenum < (gint)nv->grids.size())
         found_grid = nv->grids[pagenum];
 

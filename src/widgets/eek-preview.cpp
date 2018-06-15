@@ -87,7 +87,7 @@ static gboolean eek_preview_draw(GtkWidget* widget, cairo_t* cr);
 
 G_DEFINE_TYPE(EekPreview, eek_preview, GTK_TYPE_DRAWING_AREA);
 
-static GtkWidgetClass* parent_class = 0;
+static GtkWidgetClass* parent_class = nullptr;
 
 void eek_preview_set_color( EekPreview* preview, int r, int g, int b )
 {
@@ -114,7 +114,7 @@ eek_preview_set_pixbuf(EekPreview *preview,
     if (priv->scaled)
     {
         g_object_unref(priv->scaled);
-        priv->scaled = NULL;
+        priv->scaled = nullptr;
     }
 
     priv->scaledW = gdk_pixbuf_get_width(priv->previewPixbuf);
@@ -567,7 +567,7 @@ static void eek_preview_class_init( EekPreviewClass *klass )
                       G_TYPE_FROM_CLASS( klass ),
                       (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
                       G_STRUCT_OFFSET( EekPreviewClass, clicked ),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0 );
 
     eek_preview_signals[ALTCLICKED_SIGNAL] =
@@ -575,7 +575,7 @@ static void eek_preview_class_init( EekPreviewClass *klass )
                       G_TYPE_FROM_CLASS( klass ),
                       (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
                       G_STRUCT_OFFSET( EekPreviewClass, clicked ),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__INT, G_TYPE_NONE,
                       1, G_TYPE_INT );
 
@@ -584,7 +584,7 @@ static void eek_preview_class_init( EekPreviewClass *klass )
                                      PROP_FOCUS,
                                      g_param_spec_boolean(
                                          "focus-on-click",
-                                         NULL,
+                                         nullptr,
                                          "flag to grab focus when clicked",
                                          TRUE,
                                          (GParamFlags)(G_PARAM_READWRITE | G_PARAM_CONSTRUCT)
@@ -704,14 +704,14 @@ eek_preview_init(EekPreview *preview)
     priv->size          = PREVIEW_SIZE_SMALL;
     priv->ratio         = 100;
     priv->border        = BORDER_NONE;
-    priv->previewPixbuf = 0;
-    priv->scaled        = 0;
+    priv->previewPixbuf = nullptr;
+    priv->scaled        = nullptr;
 }
 
 
 GtkWidget* eek_preview_new(void)
 {
-    return GTK_WIDGET( g_object_new( EEK_PREVIEW_TYPE, NULL ) );
+    return GTK_WIDGET( g_object_new( EEK_PREVIEW_TYPE, nullptr ) );
 }
 
 /*

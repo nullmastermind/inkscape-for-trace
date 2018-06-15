@@ -163,14 +163,14 @@ void ege_output_action_set_property( GObject* obj, guint propId, const GValue *v
 
 GtkWidget* create_tool_item( GtkAction* action )
 {
-    GtkWidget* item = 0;
+    GtkWidget* item = nullptr;
 
     if ( IS_EGE_OUTPUT_ACTION(action) )
     {
         GValue value;
         auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
-        GtkWidget* lbl = 0;
+        GtkWidget* lbl = nullptr;
         memset( &value, 0, sizeof(value) );
 
         g_value_init( &value, G_TYPE_STRING );
@@ -183,7 +183,7 @@ GtkWidget* create_tool_item( GtkAction* action )
         gtk_container_add( GTK_CONTAINER(hb), lbl );
 
         if ( EGE_OUTPUT_ACTION(action)->private_data->useMarkup ) {
-            lbl = gtk_label_new(NULL);
+            lbl = gtk_label_new(nullptr);
             gtk_label_set_markup( GTK_LABEL(lbl), sss ? sss : " " );
         } else {
             lbl = gtk_label_new( sss ? sss : " " );
@@ -211,7 +211,7 @@ void fixup_labels( GObject *gobject, GParamSpec *arg1, gpointer user_data )
 
     if ( arg1 && arg1->name && (strcmp("label", arg1->name) == 0) ) {
         GSList* proxies = gtk_action_get_proxies( GTK_ACTION(gobject) );
-        gchar* str = 0;
+        gchar* str = nullptr;
         g_object_get( gobject, "label", &str, NULL );
         Glib::ustring str2(str);
         (void)user_data;

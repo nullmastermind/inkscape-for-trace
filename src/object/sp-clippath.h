@@ -95,11 +95,11 @@ protected:
             char const * owner_clippath = "";
             char const * obj_name = "";
             char const * obj_id = "";
-            if (owner_repr != NULL) {
+            if (owner_repr != nullptr) {
                 owner_name = owner_repr->name();
                 owner_clippath = owner_repr->attribute("clippath");
             }
-            if (obj_repr != NULL) {
+            if (obj_repr != nullptr) {
                 obj_name = obj_repr->name();
                 obj_id = obj_repr->attribute("id");
             }

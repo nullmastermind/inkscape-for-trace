@@ -124,7 +124,7 @@ LPEShowHandles::generateHelperPath(Geom::PathVector result)
         return;
     }
 
-    Geom::CubicBezier const *cubic = NULL;
+    Geom::CubicBezier const *cubic = nullptr;
     for (Geom::PathVector::iterator path_it = result.begin(); path_it != result.end(); ++path_it) {
         //Si está vacío...
         if (path_it->empty()) {

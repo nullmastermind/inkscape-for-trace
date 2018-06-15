@@ -59,7 +59,7 @@ public:
      * @param prefs_path characteristic path to load/save dialog position.
      * @param verb_num the dialog verb.
      */
-    Panel(gchar const *prefs_path = 0, int verb_num = 0);
+    Panel(gchar const *prefs_path = nullptr, int verb_num = 0);
     ~Panel() override;
 
     gchar const *getPrefsPath() const;

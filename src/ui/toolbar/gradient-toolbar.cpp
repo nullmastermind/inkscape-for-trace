@@ -157,7 +157,7 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
 
     } else {
 
-        if (gr_selected == NULL) {
+        if (gr_selected == nullptr) {
             row = *(store->append());
             row[columns.col_label    ] = _("No gradient");
             row[columns.col_tooltip  ] = "";
@@ -210,13 +210,13 @@ int gr_vector_list(Glib::RefPtr<Gtk::ListStore> store, SPDesktop *desktop,
  */
 void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr_selected)
 {
-    SPGradient *gradient = 0;
+    SPGradient *gradient = nullptr;
 
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;// get the items gradient, not the getVector() version
          SPStyle *style = item->style;
-         SPPaintServer *server = 0;
+         SPPaintServer *server = nullptr;
 
          if (style && (style->fill.isPaintserver())) {
              server = item->style->getFillPaintServer();
@@ -231,7 +231,7 @@ void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr
     }
 
     if (gradient && gradient->isSolid()) {
-        gradient = 0;
+        gradient = nullptr;
     }
 
     if (gradient) {
@@ -258,7 +258,7 @@ void gr_read_selection( Inkscape::Selection *selection,
             SPGradientSpread spread = sp_item_gradient_get_spread(draggable->item, draggable->fill_or_stroke);
 
             if (gradient && gradient->isSolid()) {
-                gradient = 0;
+                gradient = nullptr;
             }
 
             if (gradient && (gradient != gr_selected)) {
@@ -292,7 +292,7 @@ void gr_read_selection( Inkscape::Selection *selection,
                 SPGradientSpread spread = SP_GRADIENT(server)->fetchSpread();
 
                 if (gradient && gradient->isSolid()) {
-                    gradient = 0;
+                    gradient = nullptr;
                 }
 
                 if (gradient && (gradient != gr_selected)) {
@@ -318,7 +318,7 @@ void gr_read_selection( Inkscape::Selection *selection,
                 SPGradientSpread spread = SP_GRADIENT(server)->fetchSpread();
 
                 if (gradient && gradient->isSolid()) {
-                    gradient = 0;
+                    gradient = nullptr;
                 }
 
                 if (gradient && (gradient != gr_selected)) {
@@ -394,7 +394,7 @@ static void gr_remove_stop(GtkWidget * /*button*/, GObject *data)
     }
 
     ToolBase *ev = desktop->getEventContext();
-    GrDrag *drag = NULL;
+    GrDrag *drag = nullptr;
     if (ev) {
         drag = ev->get_drag();
     }
@@ -450,18 +450,18 @@ static void gr_stop_set_offset (GObject *data)
 
     bool isEndStop = false;
 
-    SPStop *prev = NULL;
+    SPStop *prev = nullptr;
     prev = stop->getPrevStop();
-    if (prev != NULL )  {
+    if (prev != nullptr )  {
         gtk_adjustment_set_lower(adj, prev->offset);
     } else {
         isEndStop = true;
         gtk_adjustment_set_lower(adj, 0);
     }
 
-    SPStop *next = NULL;
+    SPStop *next = nullptr;
     next = stop->getNextStop();
-    if (next != NULL ) {
+    if (next != nullptr ) {
         gtk_adjustment_set_upper(adj, next->offset);
     } else {
         isEndStop = true;
@@ -739,7 +739,7 @@ static void gr_gradient_changed( GObject *data, int active )
         Inkscape::Selection *selection = desktop->getSelection();
         ToolBase *ev = desktop->getEventContext();
 
-        gr_apply_gradient(selection, ev ? ev->get_drag() : NULL, gr);
+        gr_apply_gradient(selection, ev ? ev->get_drag() : nullptr, gr);
 
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
                    _("Assign gradient to object"));
@@ -761,7 +761,7 @@ static void gr_spread_changed( GObject *data, int active )
 
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(data, "desktop"));
     Inkscape::Selection *selection = desktop->getSelection();
-    SPGradient *gradient = 0;
+    SPGradient *gradient = nullptr;
     gr_get_dt_selected_gradient(selection, gradient);
 
     if (gradient) {
@@ -1047,15 +1047,15 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
     /* Offset */
     {
-        EgeAdjustmentAction* eact = 0;
+        EgeAdjustmentAction* eact = nullptr;
         eact = create_adjustment_action( "GradientEditOffsetAction",
                                          _("Offset"), C_("Gradient", "Offset:"), _("Offset of selected stop"),
                                          "/tools/gradient/stopoffset", 0,
-                                         GTK_WIDGET(desktop->canvas), data, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), data, FALSE, nullptr,
                                          0.0, 1.0, 0.01, 0.1,
-                                         0, 0, 0,
+                                         nullptr, nullptr, 0,
                                          gr_stop_offset_adjustment_changed,
-                                         NULL /*unit tracker*/,
+                                         nullptr /*unit tracker*/,
                                          0.01, 2, 1.0);
 
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -1149,12 +1149,12 @@ static void gr_tb_selection_changed(Inkscape::Selection * /*selection*/, GObject
     if (selection) {
 
         ToolBase *ev = desktop->getEventContext();
-        GrDrag *drag = NULL;
+        GrDrag *drag = nullptr;
         if (ev) {
             drag = ev->get_drag();
         }
 
-        SPGradient *gr_selected = 0;
+        SPGradient *gr_selected = nullptr;
         SPGradientSpread spr_selected = SP_GRADIENT_SPREAD_UNDEFINED;
         bool gr_multi = false;
         bool spr_multi = false;
@@ -1188,7 +1188,7 @@ static void gr_tb_selection_changed(Inkscape::Selection * /*selection*/, GObject
         gtk_action_set_sensitive(GTK_ACTION(del), (gr_selected && !gr_multi && drag && !drag->selected.empty()));
 
         InkAction *reverse = (InkAction *) g_object_get_data(data, "gradient_stops_reverse_action");
-        gtk_action_set_sensitive(GTK_ACTION(reverse), (gr_selected!= NULL));
+        gtk_action_set_sensitive(GTK_ACTION(reverse), (gr_selected!= nullptr));
 
         InkSelectOneAction *stops_action = (InkSelectOneAction *) g_object_get_data(data, "gradient_stop_action");
         stops_action->set_sensitive( gr_selected && !gr_multi);
@@ -1207,17 +1207,17 @@ static void gr_tb_selection_modified(Inkscape::Selection *selection, guint /*fla
 
 static void gr_drag_selection_changed(gpointer /*dragger*/, GObject* data)
 {
-    gr_tb_selection_changed(NULL, data);
+    gr_tb_selection_changed(nullptr, data);
 }
 
 static void gr_defs_release(SPObject * /*defs*/, GObject* data)
 {
-    gr_tb_selection_changed(NULL, data);
+    gr_tb_selection_changed(nullptr, data);
 }
 
 static void gr_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject* data)
 {
-    gr_tb_selection_changed(NULL, data);
+    gr_tb_selection_changed(nullptr, data);
 }
 
 // lp:1327267

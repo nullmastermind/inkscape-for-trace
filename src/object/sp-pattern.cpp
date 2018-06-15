@@ -92,7 +92,7 @@ void SPPattern::release()
         this->_modified_connection.disconnect();
         this->ref->detach();
         delete this->ref;
-        this->ref = NULL;
+        this->ref = nullptr;
     }
 
     SPPaintServer::release();
@@ -222,7 +222,7 @@ void SPPattern::set(unsigned int key, const gchar *value)
 
 void SPPattern::_getChildren(std::list<SPObject *> &l)
 {
-    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->firstChild()) { // find the first one with children
             for (auto& child: pat_i->children) {
                 l.push_back(&child);
@@ -248,13 +248,13 @@ void SPPattern::update(SPCtx *ctx, unsigned int flags)
     for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
         SPObject *child = *it;
 
-        sp_object_ref(child, NULL);
+        sp_object_ref(child, nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->updateDisplay(ctx, flags);
         }
 
-        sp_object_unref(child, NULL);
+        sp_object_unref(child, nullptr);
     }
 }
 
@@ -274,13 +274,13 @@ void SPPattern::modified(unsigned int flags)
     for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
         SPObject *child = *it;
 
-        sp_object_ref(child, NULL);
+        sp_object_ref(child, nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
 
-        sp_object_unref(child, NULL);
+        sp_object_unref(child, nullptr);
     }
 }
 
@@ -337,7 +337,7 @@ SPPattern *SPPattern::_chain() const
     Glib::ustring parent_ref = Glib::ustring::compose("#%1", getRepr()->attribute("id"));
     repr->setAttribute("xlink:href", parent_ref);
 
-    defsrepr->addChild(repr, NULL);
+    defsrepr->addChild(repr, nullptr);
     const gchar *child_id = repr->attribute("id");
     SPObject *child = document->getObjectById(child_id);
     g_assert(SP_IS_PATTERN(child));
@@ -411,7 +411,7 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
             dup_transform = Geom::identity();
         dup_transform *= move;
 
-        copy->doWriteTransform(dup_transform, NULL, false);
+        copy->doWriteTransform(dup_transform, nullptr, false);
     }
 
     Inkscape::GC::release(repr);
@@ -420,7 +420,7 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
 
 SPPattern *SPPattern::rootPattern()
 {
-    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->firstChild()) { // find the first one with children
             return pat_i;
         }
@@ -436,7 +436,7 @@ SPPattern *SPPattern::rootPattern()
 
 SPPattern::PatternUnits SPPattern::patternUnits() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_pattern_units_set)
             return pat_i->_pattern_units;
     }
@@ -445,7 +445,7 @@ SPPattern::PatternUnits SPPattern::patternUnits() const
 
 SPPattern::PatternUnits SPPattern::patternContentUnits() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_pattern_content_units_set)
             return pat_i->_pattern_content_units;
     }
@@ -454,7 +454,7 @@ SPPattern::PatternUnits SPPattern::patternContentUnits() const
 
 Geom::Affine const &SPPattern::getTransform() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_pattern_transform_set)
             return pat_i->_pattern_transform;
     }
@@ -463,7 +463,7 @@ Geom::Affine const &SPPattern::getTransform() const
 
 gdouble SPPattern::x() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_x._set)
             return pat_i->_x.computed;
     }
@@ -472,7 +472,7 @@ gdouble SPPattern::x() const
 
 gdouble SPPattern::y() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_y._set)
             return pat_i->_y.computed;
     }
@@ -481,7 +481,7 @@ gdouble SPPattern::y() const
 
 gdouble SPPattern::width() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_width._set)
             return pat_i->_width.computed;
     }
@@ -490,7 +490,7 @@ gdouble SPPattern::width() const
 
 gdouble SPPattern::height() const
 {
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_height._set)
             return pat_i->_height.computed;
     }
@@ -500,7 +500,7 @@ gdouble SPPattern::height() const
 Geom::OptRect SPPattern::viewbox() const
 {
     Geom::OptRect viewbox;
-    for (SPPattern const *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern const *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->viewBox_set) {
             viewbox = pat_i->viewBox;
             break;
@@ -537,13 +537,13 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     bool visible = opacity >= 1e-3;
 
     if (!visible) {
-        return NULL;
+        return nullptr;
     }
 
     /* Show items */
-    SPPattern *shown = NULL;
+    SPPattern *shown = nullptr;
 
-    for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+    for (SPPattern *pat_i = this; pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
         // find the first one with item children
         if (pat_i && SP_IS_OBJECT(pat_i) && pat_i->_hasItemChildren()) {
             shown = pat_i;

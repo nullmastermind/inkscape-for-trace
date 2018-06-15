@@ -165,10 +165,10 @@ inline int childIndex(RGB rgb)
 inline Ocnode *ocnodeNew(pool<Ocnode> *pool)
 {
     Ocnode *node = pool->draw();
-    node->ref = NULL;
-    node->parent = NULL;
+    node->ref = nullptr;
+    node->parent = nullptr;
     node->nchild = 0;
-    for (int i = 0; i < 8; i++) node->child[i] = NULL;
+    for (int i = 0; i < 8; i++) node->child[i] = nullptr;
     node->mi = 0;
     return node;
 }
@@ -363,7 +363,7 @@ static void ocnodeStrip(pool<Ocnode> *pool, Ocnode **ref, int *count, unsigned l
         if (!node->mi) ocnodeMi(node); //mi generation may be required
 	if (node->mi > lvl) return; //leaf is above strip level
         ocnodeFree(pool, node);
-        *ref = NULL;
+        *ref = nullptr;
         (*count)--;
         }
     else
@@ -373,7 +373,7 @@ static void ocnodeStrip(pool<Ocnode> *pool, Ocnode **ref, int *count, unsigned l
         node->nchild = 0;
         node->nleaf = 0;
         node->mi = 0;
-        Ocnode **lonelychild = NULL;
+        Ocnode **lonelychild = nullptr;
         for (int i = 0; i < 8; i++) if (node->child[i])
             {
             ocnodeStrip(pool, &node->child[i], count, lvl);
@@ -402,7 +402,7 @@ static void ocnodeStrip(pool<Ocnode> *pool, Ocnode **ref, int *count, unsigned l
                 node->nleaf = 1;
 		ocnodeMi(node);
                 ocnodeFree(pool, *lonelychild);
-                *lonelychild = NULL;
+                *lonelychild = nullptr;
                 }
             else
                 {
@@ -444,21 +444,21 @@ static void octreeBuildArea(pool<Ocnode> *pool, RgbMap *rgbmap, Ocnode **ref,
 {
     int dx = x2 - x1, dy = y2 - y1;
     int xm = x1 + dx/2, ym = y1 + dy/2;
-    Ocnode *ref1 = NULL;
-    Ocnode *ref2 = NULL;
+    Ocnode *ref1 = nullptr;
+    Ocnode *ref2 = nullptr;
     if (dx == 1 && dy == 1)
         ocnodeLeaf(pool, ref, rgbmap->getPixel(rgbmap, x1, y1));
     else if (dx > dy)
         {
 	octreeBuildArea(pool, rgbmap, &ref1, x1, y1, xm, y2, ncolor);
 	octreeBuildArea(pool, rgbmap, &ref2, xm, y1, x2, y2, ncolor);
-	octreeMerge(pool, NULL, ref, ref1, ref2);
+	octreeMerge(pool, nullptr, ref, ref1, ref2);
 	}
     else
         {
 	octreeBuildArea(pool, rgbmap, &ref1, x1, y1, x2, ym, ncolor);
 	octreeBuildArea(pool, rgbmap, &ref2, x1, ym, x2, y2, ncolor);
-	octreeMerge(pool, NULL, ref, ref1, ref2);
+	octreeMerge(pool, nullptr, ref, ref1, ref2);
 	}
 
     //octreePrune(ref, 2*ncolor);
@@ -472,7 +472,7 @@ static void octreeBuildArea(pool<Ocnode> *pool, RgbMap *rgbmap, Ocnode **ref,
 static Ocnode *octreeBuild(pool<Ocnode> *pool, RgbMap *rgbmap, int ncolor)
 {
     //create the octree
-    Ocnode *node = NULL;
+    Ocnode *node = nullptr;
     octreeBuildArea(pool,
                     rgbmap, &node,
                     0, 0, rgbmap->width, rgbmap->height, ncolor
@@ -549,11 +549,11 @@ IndexedMap *rgbMapQuantize(RgbMap *rgbmap, int ncolor)
     assert(rgbmap);
     assert(ncolor > 0);
 
-    IndexedMap *newmap = 0;
+    IndexedMap *newmap = nullptr;
 
     pool<Ocnode> pool;
 
-    Ocnode *tree = 0;
+    Ocnode *tree = nullptr;
     try {
         tree = octreeBuild(&pool, rgbmap, ncolor);
     }

@@ -408,7 +408,7 @@ SPILength::merge( const SPIBase* const parent ) {
                 switch (p->unit) {
                     case SP_CSS_UNIT_EM:
                     case SP_CSS_UNIT_EX:
-                        g_assert( &style->font_size != NULL && &p->style->font_size != NULL );
+                        g_assert( &style->font_size != nullptr && &p->style->font_size != nullptr );
                         value *= p->style->font_size.computed / style->font_size.computed;
                         /** \todo
                          * FIXME: Have separate ex ratio parameter.
@@ -1142,7 +1142,7 @@ SPIString::read( gchar const *str ) {
     if (!strcmp(str, "inherit")) {
         set = true;
         inherit = true;
-        value = NULL;
+        value = nullptr;
     } else {
         set = true;
         inherit = false;
@@ -1197,7 +1197,7 @@ void
 SPIString::clear() {
     SPIBase::clear();
     g_free( value );
-    value = NULL;
+    value = nullptr;
     if( value_default ) value = strdup( value_default );
 }
 
@@ -1230,8 +1230,8 @@ SPIString::merge( const SPIBase* const parent ) {
 bool
 SPIString::operator==(const SPIBase& rhs) {
     if( const SPIString* r = dynamic_cast<const SPIString*>(&rhs) ) {
-        if( value == NULL && r->value == NULL ) return (SPIBase::operator==(rhs));
-        if( value == NULL || r->value == NULL ) return false;
+        if( value == nullptr && r->value == nullptr ) return (SPIBase::operator==(rhs));
+        if( value == nullptr || r->value == nullptr ) return false;
 
         return (strcmp(value, r->value) == 0 && SPIBase::operator==(rhs));
     } else {
@@ -1378,7 +1378,7 @@ SPIPaint::~SPIPaint() {
     if( value.href ) {
         clear();
         delete value.href;
-        value.href = NULL;
+        value.href = nullptr;
     }
 }
 
@@ -1418,13 +1418,13 @@ SPIPaint::read( gchar const *str ) {
 
             // FIXME: THE FOLLOWING CODE SHOULD BE PUT IN A PRIVATE FUNCTION FOR REUSE
             gchar *uri = extract_uri( str, &str );
-            if(uri == NULL || uri[0] == '\0') {
+            if(uri == nullptr || uri[0] == '\0') {
                 std::cerr << "SPIPaint::read: url is empty or invalid" << std::endl;
             } else if (!style ) {
                 std::cerr << "SPIPaint::read: url with empty SPStyle pointer" << std::endl;
             } else {
                 set = true;
-                SPDocument *document = (style->object) ? style->object->document : NULL;
+                SPDocument *document = (style->object) ? style->object->document : nullptr;
 
                 // Create href if not done already
                 if (!value.href && document) {
@@ -1483,7 +1483,7 @@ SPIPaint::read( gchar const *str ) {
                     SVGICCColor* tmp = new SVGICCColor();
                     if ( ! sp_svg_read_icc_color( str, &str, tmp ) ) {
                         delete tmp;
-                        tmp = 0;
+                        tmp = nullptr;
                     }
                     value.color.icc = tmp;
                 }
@@ -1676,7 +1676,7 @@ SPIPaint::operator==(const SPIBase& rhs) {
         }
 
         if ( this->isPaintserver() ) {
-            if( this->value.href == NULL || r->value.href == NULL ||
+            if( this->value.href == nullptr || r->value.href == nullptr ||
                 this->value.href->getObject() != r->value.href->getObject() ) {
                 return false;
             }
@@ -1863,7 +1863,7 @@ SPIFilter::~SPIFilter() {
     if( href ) {
         clear();
         delete href;
-        href = NULL;
+        href = nullptr;
     }
 }
 
@@ -1881,7 +1881,7 @@ SPIFilter::read( gchar const *str ) {
         set = true;
     } else if (strneq(str, "url", 3)) {
         gchar *uri = extract_uri(str);
-        if(uri == NULL || uri[0] == '\0') {
+        if(uri == nullptr || uri[0] == '\0') {
             std::cerr << "SPIFilter::read: url is empty or invalid" << std::endl;
             return;
         } else if (!style) {
@@ -2036,7 +2036,7 @@ SPIDashArray::read( gchar const *str ) {
 
     // std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
 
-    gchar *e = NULL;
+    gchar *e = nullptr;
     bool LineSolid = true;
     while (e != str && *str != '\0') {
         /* TODO: Should allow <length> rather than just a unitless (px) number. */
@@ -2576,7 +2576,7 @@ void
 SPIBaselineShift::cascade( const SPIBase* const parent ) {
     if( const SPIBaselineShift* p = dynamic_cast<const SPIBaselineShift*>(parent) ) {
         SPIFontSize *pfont_size = &(p->style->font_size);
-        g_assert( pfont_size != NULL );
+        g_assert( pfont_size != nullptr );
 
         if( !set || inherit ) {
             computed = p->computed;  // Shift relative to parent shift, corrected below
@@ -3050,7 +3050,7 @@ SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SP
 void
 SPITextDecoration::cascade( const SPIBase* const parent ) {
     if( const SPITextDecoration* p = dynamic_cast<const SPITextDecoration*>(parent) ) {
-        if( style_td == NULL ) {
+        if( style_td == nullptr ) {
             style_td = p->style_td;
         }
     } else {
@@ -3062,7 +3062,7 @@ SPITextDecoration::cascade( const SPIBase* const parent ) {
 void
 SPITextDecoration::merge( const SPIBase* const parent ) {
     if( const SPITextDecoration* p = dynamic_cast<const SPITextDecoration*>(parent) ) {
-        if( style_td == NULL ) {
+        if( style_td == nullptr ) {
             style_td = p->style_td;
         }
     } else {

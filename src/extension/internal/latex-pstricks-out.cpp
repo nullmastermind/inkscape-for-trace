@@ -40,7 +40,7 @@ LatexOutput::~LatexOutput (void) //The destructor
 
 bool LatexOutput::check(Inkscape::Extension::Extension * /*module*/)
 {
-    bool result = Inkscape::Extension::db.get("org.inkscape.print.latex") != NULL;
+    bool result = Inkscape::Extension::db.get("org.inkscape.print.latex") != nullptr;
     return result;
 }
 
@@ -69,8 +69,8 @@ void LatexOutput::save(Inkscape::Extension::Output * /*mod2*/, SPDocument *doc, 
     mod->finish();
     // Release things
     (mod->base)->invoke_hide(mod->dkey);
-    mod->base = NULL;
-    mod->root = NULL; // should have been deleted by invoke_hide
+    mod->base = nullptr;
+    mod->root = nullptr; // should have been deleted by invoke_hide
     // end
 
     mod->set_param_string("destination", oldoutput);

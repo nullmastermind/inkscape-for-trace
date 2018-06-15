@@ -78,7 +78,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
     // Nulls might be possible if this called iteratively
     if (!this->_curve) {
             //g_warning("sp_spiral_write(): No path to copy\n");
-            return NULL;
+            return nullptr;
     }
 
     char *d = sp_svg_write_path(this->_curve->get_pathvector());
@@ -118,7 +118,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
                          * N.B. atof/sscanf/strtod consider "nan" and "inf"
                          * to be valid numbers.
                          */
-        	this->exp = g_ascii_strtod (value, NULL);
+        	this->exp = g_ascii_strtod (value, nullptr);
             this->exp = CLAMP (this->exp, 0.0, 1000.0);
         } else {
         	this->exp = 1.0;
@@ -129,7 +129,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
 
     case SP_ATTR_SODIPODI_REVOLUTION:
         if (value) {
-        	this->revo = g_ascii_strtod (value, NULL);
+        	this->revo = g_ascii_strtod (value, nullptr);
             this->revo = CLAMP (this->revo, 0.05, 1024.0);
         } else {
         	this->revo = 3.0;
@@ -148,7 +148,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
 
     case SP_ATTR_SODIPODI_ARGUMENT:
         if (value) {
-        	this->arg = g_ascii_strtod (value, NULL);
+        	this->arg = g_ascii_strtod (value, nullptr);
             /** \todo
                          * FIXME: We still need some bounds on arg, for
                          * numerical reasons. E.g., we don't want inf or NaN,
@@ -166,7 +166,7 @@ void SPSpiral::set(unsigned int key, gchar const* value) {
 
     case SP_ATTR_SODIPODI_T0:
         if (value) {
-        	this->t0 = g_ascii_strtod (value, NULL);
+        	this->t0 = g_ascii_strtod (value, nullptr);
         	this->t0 = CLAMP (this->t0, 0.0, 0.999);
             /** \todo
                          * Have shared constants for the allowable bounds for
@@ -260,7 +260,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
     /** \todo
          * We should use better algorithm to specify maximum error.
          */
-    depth = Geom::bezier_fit_cubic_full (bezier, NULL, darray, SAMPLE_SIZE,
+    depth = Geom::bezier_fit_cubic_full (bezier, nullptr, darray, SAMPLE_SIZE,
                       hat1, hat2,
                       SPIRAL_TOLERANCE*SPIRAL_TOLERANCE,
                       FITTING_MAX_BEZIERS);
@@ -576,14 +576,14 @@ void SPSpiral::getPolar(gdouble t, gdouble* rad, gdouble* arg) const {
 bool SPSpiral::isInvalid() const {
     gdouble rad;
 
-    this->getPolar(0.0, &rad, NULL);
+    this->getPolar(0.0, &rad, nullptr);
 
     if (rad < 0.0 || rad > SP_HUGE) {
         g_print("rad(t=0)=%g\n", rad);
         return true;
     }
 
-    this->getPolar(1.0, &rad, NULL);
+    this->getPolar(1.0, &rad, nullptr);
 
     if (rad < 0.0 || rad > SP_HUGE) {
         g_print("rad(t=1)=%g\n", rad);

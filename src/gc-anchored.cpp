@@ -74,7 +74,7 @@ void Anchored::release() const {
     g_return_if_fail(_anchor);
     if (!--_anchor->refcount) {
         _free_anchor(_anchor);
-        _anchor = NULL;
+        _anchor = nullptr;
     }
 }
 

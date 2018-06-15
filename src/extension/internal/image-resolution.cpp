@@ -110,18 +110,18 @@ void ImageResolution::readpng(char const *fn) {
         return;
     }
 
-    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
+    png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (!png_ptr) 
         return;
     
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr) {
-        png_destroy_read_struct(&png_ptr, 0, 0);
+        png_destroy_read_struct(&png_ptr, nullptr, nullptr);
         return;
     }
     
     if (setjmp(png_jmpbuf(png_ptr))) {
-        png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+        png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
         fclose(fp);
         return;
     }
@@ -153,7 +153,7 @@ void ImageResolution::readpng(char const *fn) {
     }
 #endif
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, 0);
+    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
     fclose(fp);
 
     if (ok_) {

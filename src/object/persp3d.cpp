@@ -39,17 +39,17 @@ static int global_counter = 0;
 
 Persp3DImpl::Persp3DImpl() :
     tmat (Proj::TransfMat3x4 ()),
-    document (NULL)
+    document (nullptr)
 {
     my_counter = global_counter++;
 }
 
 static Inkscape::XML::NodeEventVector const persp3d_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     persp3d_on_repr_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 
@@ -192,7 +192,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
         proj_origin = dup->tmat.column (Proj::W);
     }
 
-    gchar *str = NULL;
+    gchar *str = nullptr;
     str = proj_vp_x.coord_string();
     repr->setAttribute("inkscape:vp_x", str);
     g_free (str);
@@ -207,7 +207,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
     g_free (str);
 
     /* Append the new persp3d to defs */
-    defs->getRepr()->addChild(repr, NULL);
+    defs->getRepr()->addChild(repr, nullptr);
     Inkscape::GC::release(repr);
 
     return reinterpret_cast<Persp3D *>( defs->get_child_by_repr(repr) );
@@ -215,7 +215,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
 
 Persp3D *persp3d_document_first_persp(SPDocument *document)
 {
-    Persp3D *first = 0;
+    Persp3D *first = nullptr;
     for (auto& child: document->getDefs()->children) {
         if (SP_IS_PERSP3D(&child)) {
             first = SP_PERSP3D(&child);

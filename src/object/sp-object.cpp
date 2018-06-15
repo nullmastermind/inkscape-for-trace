@@ -91,7 +91,7 @@ public:
  */
     static void setIdNull( SPObject* obj ) {
         if (obj) {
-            obj->id = 0;
+            obj->id = nullptr;
         }
     }
 
@@ -105,7 +105,7 @@ public:
         if (obj && (id != obj->id) ) {
             if (obj->id) {
                 g_free(obj->id);
-                obj->id = 0;
+                obj->id = nullptr;
             }
             if (id) {
                 obj->id = g_strdup(id);
@@ -118,10 +118,10 @@ public:
  * Constructor, sets all attributes to default values.
  */
 SPObject::SPObject()
-    : cloned(0), clone_original(NULL), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
-      document(NULL), parent(NULL), id(NULL), repr(NULL), refCount(1), hrefList(std::list<SPObject*>()),
-      _successor(NULL), _collection_policy(SPObject::COLLECT_WITH_PARENT),
-      _label(NULL), _default_label(NULL)
+    : cloned(0), clone_original(nullptr), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
+      document(nullptr), parent(nullptr), id(nullptr), repr(nullptr), refCount(1), hrefList(std::list<SPObject*>()),
+      _successor(nullptr), _collection_policy(SPObject::COLLECT_WITH_PARENT),
+      _label(nullptr), _default_label(nullptr)
 {
     debug("id=%p, typename=%s",this, g_type_name_from_instance((GTypeInstance*)this));
 
@@ -134,8 +134,8 @@ SPObject::SPObject()
     // vg, g, defs, desc, title, symbol, use, image, switch, path, rect, circle, ellipse, line, polyline,
     // polygon, text, tspan, tref, textPath, altGlyph, glyphRef, marker, linearGradient, radialGradient,
     // stop, pattern, clipPath, mask, filter, feImage, a, font, glyph, missing-glyph, foreignObject
-    this->style = new SPStyle( NULL, this ); // Is it necessary to call with "this"?
-    this->context_style = NULL;
+    this->style = new SPStyle( nullptr, this ); // Is it necessary to call with "this"?
+    this->context_style = nullptr;
 }
 
 /**
@@ -145,18 +145,18 @@ SPObject::~SPObject() {
     g_free(this->_label);
     g_free(this->_default_label);
 
-    this->_label = NULL;
-    this->_default_label = NULL;
+    this->_label = nullptr;
+    this->_default_label = nullptr;
 
     if (this->_successor) {
-        sp_object_unref(this->_successor, NULL);
-        this->_successor = NULL;
+        sp_object_unref(this->_successor, nullptr);
+        this->_successor = nullptr;
     }
     if (parent) {
         parent->children.erase(parent->children.iterator_to(*this));
     }
 
-    if( style == NULL ) {
+    if( style == nullptr ) {
         // style pointer could be NULL if unreffed too many times.
         // Conjecture: style pointer is never NULL.
         std::cerr << "SPObject::~SPObject(): style pointer is NULL" << std::endl;
@@ -241,7 +241,7 @@ Inkscape::XML::Node const* SPObject::getRepr() const{
 
 SPObject *sp_object_ref(SPObject *object, SPObject *owner)
 {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
@@ -253,7 +253,7 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner)
 
 SPObject *sp_object_unref(SPObject *object, SPObject *owner)
 {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
@@ -265,12 +265,12 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
         delete object;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 SPObject *sp_object_href(SPObject *object, SPObject* owner)
 {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
 
     object->hrefcount++;
@@ -284,7 +284,7 @@ SPObject *sp_object_href(SPObject *object, SPObject* owner)
 
 SPObject *sp_object_hunref(SPObject *object, SPObject* owner)
 {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
     g_return_val_if_fail(object->hrefcount > 0, NULL);
 
@@ -294,11 +294,11 @@ SPObject *sp_object_hunref(SPObject *object, SPObject* owner)
     if(owner)
         object->hrefList.remove(owner);
 
-    return NULL;
+    return nullptr;
 }
 
 void SPObject::_updateTotalHRefCount(int increment) {
-    SPObject *topmost_collectable = NULL;
+    SPObject *topmost_collectable = nullptr;
     for ( SPObject *iter = this ; iter ; iter = iter->parent ) {
         iter->_total_hrefcount += increment;
         if ( iter->_total_hrefcount < iter->hrefcount ) {
@@ -316,7 +316,7 @@ void SPObject::_updateTotalHRefCount(int increment) {
 }
 
 bool SPObject::isAncestorOf(SPObject const *object) const {
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     object = object->parent;
     while (object) {
         if ( object == this ) {
@@ -336,14 +336,14 @@ bool same_objects(SPObject const &a, SPObject const &b) {
 }
 
 SPObject const *SPObject::nearestCommonAncestor(SPObject const *object) const {
-    g_return_val_if_fail(object != NULL, NULL);
+    g_return_val_if_fail(object != nullptr, NULL);
 
     using Inkscape::Algorithms::longest_common_suffix;
-    return longest_common_suffix<SPObject::ConstParentIterator>(this, object, NULL, &same_objects);
+    return longest_common_suffix<SPObject::ConstParentIterator>(this, object, nullptr, &same_objects);
 }
 
 static SPObject const *AncestorSon(SPObject const *obj, SPObject const *ancestor) {
-    SPObject const *result = 0;
+    SPObject const *result = nullptr;
     if ( obj && ancestor ) {
         if (obj->parent == ancestor) {
             result = obj;
@@ -390,19 +390,19 @@ SPObject *SPObject::appendChildRepr(Inkscape::XML::Node *repr) {
         return document->getObjectByRepr(repr);
     } else {
         g_critical("Attempt to append repr as child of cloned object");
-        return NULL;
+        return nullptr;
     }
 }
 
 void SPObject::setCSS(SPCSSAttr *css, gchar const *attr)
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     sp_repr_css_set(this->getRepr(), css, attr);
 }
 
 void SPObject::changeCSS(SPCSSAttr *css, gchar const *attr)
 {
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
     sp_repr_css_change(this->getRepr(), css, attr);
 }
 
@@ -443,7 +443,7 @@ void SPObject::setLabel(gchar const *label)
 
 
 void SPObject::requestOrphanCollection() {
-    g_return_if_fail(document != NULL);
+    g_return_if_fail(document != nullptr);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // do not remove style or script elements (Bug #276244)
@@ -484,7 +484,7 @@ void SPObject::_sendDeleteSignalRecursive() {
 
 void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 {
-    sp_object_ref(this, NULL);
+    sp_object_ref(this, nullptr);
     if ( SP_IS_LPE_ITEM(this) && SP_LPE_ITEM(this)->hasPathEffect()) {
         SP_LPE_ITEM(this)->removeAllPathEffects(false);
     }
@@ -503,7 +503,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
     if (_successor) {
         _successor->deleteObject(propagate, propagate_descendants);
     }
-    sp_object_unref(this, NULL);
+    sp_object_unref(this, nullptr);
 }
 
 void SPObject::cropToObject(SPObject *except)
@@ -527,7 +527,7 @@ void SPObject::attach(SPObject *object, SPObject *prev)
 {
     //g_return_if_fail(parent != NULL);
     //g_return_if_fail(SP_IS_OBJECT(parent));
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_OBJECT(object));
     g_return_if_fail(!prev || SP_IS_OBJECT(prev));
     g_return_if_fail(!prev || prev->parent == this);
@@ -566,14 +566,14 @@ void SPObject::detach(SPObject *object)
 {
     //g_return_if_fail(parent != NULL);
     //g_return_if_fail(SP_IS_OBJECT(parent));
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(SP_IS_OBJECT(object));
     g_return_if_fail(object->parent == this);
 
     children.erase(children.iterator_to(*object));
     object->releaseReferences();
 
-    object->parent = NULL;
+    object->parent = nullptr;
 
     this->_updateTotalHRefCount(-object->_total_hrefcount);
     sp_object_unref(object, this);
@@ -581,7 +581,7 @@ void SPObject::detach(SPObject *object)
 
 SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 {
-    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(repr != nullptr, NULL);
     SPObject *result = nullptr;
 
     if (children.size() > 0 && children.back().getRepr() == repr) {
@@ -603,7 +603,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
     const std::string type_string = NodeTraits::get_type_string(*child);
 
     SPObject* ochild = SPFactory::createObject(type_string);
-    if (ochild == NULL) {
+    if (ochild == nullptr) {
         // Currenty, there are many node types that do not have
         // corresponding classes in the SPObject tree.
         // (rdf:RDF, inkscape:clipboard, ...)
@@ -611,9 +611,9 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
         return;
     }
 
-    SPObject *prev = ref ? object->get_child_by_repr(ref) : NULL;
+    SPObject *prev = ref ? object->get_child_by_repr(ref) : nullptr;
     object->attach(ochild, prev);
-    sp_object_unref(ochild, NULL);
+    sp_object_unref(ochild, nullptr);
 
     ochild->invoke_build(object->document, child, object->cloned);
 }
@@ -644,8 +644,8 @@ void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * /
     SPObject* object = this;
 
     SPObject *ochild = object->get_child_by_repr(child);
-    g_return_if_fail(ochild != NULL);
-    SPObject *prev = new_ref ? object->get_child_by_repr(new_ref) : NULL;
+    g_return_if_fail(ochild != nullptr);
+    SPObject *prev = new_ref ? object->get_child_by_repr(new_ref) : nullptr;
     object->reorder(ochild, prev);
     ochild->_position_changed_signal.emit(ochild);
 }
@@ -668,11 +668,11 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
                                                    // stuff externally modified to have no id. 
         object->clone_original = document->getObjectById(repr->attribute("id"));
 
-    for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
+    for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != nullptr; rchild = rchild->next()) {
         const std::string typeString = NodeTraits::get_type_string(*rchild);
 
         SPObject* child = SPFactory::createObject(typeString);
-        if (child == NULL) {
+        if (child == nullptr) {
             // Currenty, there are many node types that do not have
             // corresponding classes in the SPObject tree.
             // (rdf:RDF, inkscape:clipboard, ...)
@@ -681,7 +681,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
         }
 
         object->attach(child, object->lastChild());
-        sp_object_unref(child, NULL);
+        sp_object_unref(child, nullptr);
         child->invoke_build(document, rchild, object->cloned);
     }
 
@@ -699,12 +699,12 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
 
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
-    g_assert(document != NULL);
-    g_assert(repr != NULL);
+    g_assert(document != nullptr);
+    g_assert(repr != nullptr);
 
-    g_assert(this->document == NULL);
-    g_assert(this->repr == NULL);
-    g_assert(this->getId() == NULL);
+    g_assert(this->document == nullptr);
+    g_assert(this->repr == nullptr);
+    g_assert(this->getId() == nullptr);
 
     /* Bookkeeping */
 
@@ -727,7 +727,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
             if (!document->isSeeking()) {
                 {
                     gchar *realid = sp_object_get_unique_id(this, id);
-                    g_assert(realid != NULL);
+                    g_assert(realid != nullptr);
 
                     this->document->bindObjectToId(realid, this);
                     SPObjectImpl::setId(this, realid);
@@ -735,7 +735,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
                 }
 
                 /* Redefine ID, if required */
-                if ((id == NULL) || (strcmp(id, this->getId()) != 0)) {
+                if ((id == nullptr) || (strcmp(id, this->getId()) != 0)) {
                     this->repr->setAttribute("id", this->getId());
                 }
             } else if (id) {
@@ -748,7 +748,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
             }
         }
     } else {
-        g_assert(this->getId() == NULL);
+        g_assert(this->getId() == nullptr);
     }
 
 
@@ -790,7 +790,7 @@ SPObject* SPObject::nthChild(unsigned index) {
             counter++;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void SPObject::addChild(Inkscape::XML::Node *child, Inkscape::XML::Node * prev)
@@ -815,15 +815,15 @@ void SPObject::releaseReferences() {
 
     if (!cloned) {
         if (this->id) {
-            this->document->bindObjectToId(this->id, NULL);
+            this->document->bindObjectToId(this->id, nullptr);
         }
         g_free(this->id);
-        this->id = NULL;
+        this->id = nullptr;
 
         g_free(this->_default_label);
-        this->_default_label = NULL;
+        this->_default_label = nullptr;
 
-        this->document->bindObjectToRepr(this->repr, NULL);
+        this->document->bindObjectToRepr(this->repr, nullptr);
 
         Inkscape::GC::release(this->repr);
     } else {
@@ -835,8 +835,8 @@ void SPObject::releaseReferences() {
     //     this->style = sp_style_unref(this->style);
     // }
 
-    this->document = NULL;
-    this->repr = NULL;
+    this->document = nullptr;
+    this->repr = nullptr;
 }
 
 
@@ -897,7 +897,7 @@ void SPObject::set(unsigned int key, gchar const* value) {
             //XML Tree being used here.
             if ( !object->cloned && object->getRepr()->type() == Inkscape::XML::ELEMENT_NODE ) {
                 SPDocument *document=object->document;
-                SPObject *conflict=NULL;
+                SPObject *conflict=nullptr;
 
                 gchar const *new_id = value;
 
@@ -907,20 +907,20 @@ void SPObject::set(unsigned int key, gchar const* value) {
 
                 if ( conflict && conflict != object ) {
                     if (!document->isSeeking()) {
-                        sp_object_ref(conflict, NULL);
+                        sp_object_ref(conflict, nullptr);
                         // give the conflicting object a new ID
-                        gchar *new_conflict_id = sp_object_get_unique_id(conflict, NULL);
+                        gchar *new_conflict_id = sp_object_get_unique_id(conflict, nullptr);
                         conflict->getRepr()->setAttribute("id", new_conflict_id);
                         g_free(new_conflict_id);
-                        sp_object_unref(conflict, NULL);
+                        sp_object_unref(conflict, nullptr);
                     } else {
-                        new_id = NULL;
+                        new_id = nullptr;
                     }
                 }
 
                 if (object->getId()) {
-                    document->bindObjectToId(object->getId(), NULL);
-                    SPObjectImpl::setId(object, 0);
+                    document->bindObjectToId(object->getId(), nullptr);
+                    SPObjectImpl::setId(object, nullptr);
                 }
 
                 if (new_id) {
@@ -929,7 +929,7 @@ void SPObject::set(unsigned int key, gchar const* value) {
                 }
 
                 g_free(object->_default_label);
-                object->_default_label = NULL;
+                object->_default_label = nullptr;
             }
             break;
         case SP_ATTR_INKSCAPE_LABEL:
@@ -937,10 +937,10 @@ void SPObject::set(unsigned int key, gchar const* value) {
             if (value) {
                 object->_label = g_strdup(value);
             } else {
-                object->_label = NULL;
+                object->_label = nullptr;
             }
             g_free(object->_default_label);
-            object->_default_label = NULL;
+            object->_default_label = nullptr;
             break;
         case SP_ATTR_INKSCAPE_COLLECT:
             if ( value && !strcmp(value, "always") ) {
@@ -987,10 +987,10 @@ void SPObject::readAttr(gchar const *key)
 {
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
-    g_assert(key != NULL);
+    g_assert(key != nullptr);
 
     //XML Tree being used here.
-    g_assert(this->getRepr() != NULL);
+    g_assert(this->getRepr() != nullptr);
 
     unsigned int keyid = sp_attribute_lookup(key);
     if (keyid != SP_ATTR_INVALID) {
@@ -1032,7 +1032,7 @@ static gchar const *sp_xml_get_space_string(unsigned int space)
         case SP_XML_SPACE_PRESERVE:
             return "preserve";
         default:
-            return NULL;
+            return nullptr;
     }
 }
 
@@ -1044,7 +1044,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
     if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
         repr = this->getRepr()->duplicate(doc);
         if (!( flags & SP_OBJECT_WRITE_EXT )) {
-            repr->setAttribute("inkscape:collect", NULL);
+            repr->setAttribute("inkscape:collect", nullptr);
         }
     } else if (repr) {
         repr->setAttribute("id", this->getId());
@@ -1060,7 +1060,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         {
             repr->setAttribute("inkscape:collect", "always");
         } else {
-            repr->setAttribute("inkscape:collect", NULL);
+            repr->setAttribute("inkscape:collect", nullptr);
         }
 
         if (style) {
@@ -1078,7 +1078,7 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             }
 
             if( s.empty() ) {
-                repr->setAttribute("style", NULL);
+                repr->setAttribute("style", nullptr);
             } else {
                 repr->setAttribute("style", s.c_str());
             }
@@ -1138,14 +1138,14 @@ Inkscape::XML::Node * SPObject::updateRepr(unsigned int flags)
 #ifdef OBJECT_TRACE
             objectTrace( "SPObject::updateRepr 1", false );
 #endif
-            return NULL;
+            return nullptr;
         }
     } else {
         /* cloned objects have no repr */
 #ifdef OBJECT_TRACE
         objectTrace( "SPObject::updateRepr 1", false );
 #endif
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1155,14 +1155,14 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
     objectTrace( "SPObject::updateRepr 2" );
 #endif
 
-    g_assert(doc != NULL);
+    g_assert(doc != nullptr);
 
     if (cloned) {
         /* cloned objects have no repr */
 #ifdef OBJECT_TRACE
         objectTrace( "SPObject::updateRepr 2", false );
 #endif
-        return NULL;
+        return nullptr;
     }
 
     if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
@@ -1183,7 +1183,7 @@ Inkscape::XML::Node * SPObject::updateRepr(Inkscape::XML::Document *doc, Inkscap
 
 void SPObject::requestDisplayUpdate(unsigned int flags)
 {
-    g_return_if_fail( this->document != NULL );
+    g_return_if_fail( this->document != nullptr );
 
     if (update_in_progress) {
         g_print("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
@@ -1276,7 +1276,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 
 void SPObject::requestModified(unsigned int flags)
 {
-    g_return_if_fail( this->document != NULL );
+    g_return_if_fail( this->document != nullptr );
 
     /* requestModified must be used only to set one of SP_OBJECT_MODIFIED_FLAG or
      * SP_OBJECT_CHILD_MODIFIED_FLAG */
@@ -1340,10 +1340,10 @@ void SPObject::emitModified(unsigned int flags)
 
 gchar const *SPObject::getTagName(SPException *ex) const
 {
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
     /* If exception is not clear, return */
     if (!SP_EXCEPTION_IS_OK(ex)) {
-        return NULL;
+        return nullptr;
     }
 
     /// \todo fixme: Exception if object is NULL? */
@@ -1353,10 +1353,10 @@ gchar const *SPObject::getTagName(SPException *ex) const
 
 gchar const *SPObject::getAttribute(gchar const *key, SPException *ex) const
 {
-    g_assert(this->repr != NULL);
+    g_assert(this->repr != nullptr);
     /* If exception is not clear, return */
     if (!SP_EXCEPTION_IS_OK(ex)) {
-        return NULL;
+        return nullptr;
     }
 
     /// \todo fixme: Exception if object is NULL? */
@@ -1366,7 +1366,7 @@ gchar const *SPObject::getAttribute(gchar const *key, SPException *ex) const
 
 void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *ex)
 {
-    g_assert(this->repr != NULL);
+    g_assert(this->repr != nullptr);
     /* If exception is not clear, return */
     g_return_if_fail(SP_EXCEPTION_IS_OK(ex));
 
@@ -1377,13 +1377,13 @@ void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *e
 
 void SPObject::setAttribute(char const *key, Glib::ustring const &value, SPException *ex)
 {
-    setAttribute(key, value.empty() ? NULL : value.c_str(), ex);
+    setAttribute(key, value.empty() ? nullptr : value.c_str(), ex);
 }
 
 void SPObject::setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex)
 {
-    setAttribute( key.empty()   ? NULL : key.c_str(),
-                  value.empty() ? NULL : value.c_str(), ex);
+    setAttribute( key.empty()   ? nullptr : key.c_str(),
+                  value.empty() ? nullptr : value.c_str(), ex);
 }
 
 
@@ -1394,12 +1394,12 @@ void SPObject::removeAttribute(gchar const *key, SPException *ex)
 
     /// \todo fixme: Exception if object is NULL? */
     //XML Tree being used here.
-    getRepr()->setAttribute(key, NULL, false);
+    getRepr()->setAttribute(key, nullptr, false);
 }
 
 bool SPObject::storeAsDouble( gchar const *key, double *val ) const
 {
-    g_assert(this->getRepr()!= NULL);
+    g_assert(this->getRepr()!= nullptr);
     return sp_repr_get_double(((Inkscape::XML::Node *)(this->getRepr())),key,val);
 }
 
@@ -1416,15 +1416,15 @@ sp_object_get_unique_id(SPObject    *object,
 
     //XML Tree being used here.
     gchar const *name = object->getRepr()->name();
-    g_assert(name != NULL);
+    g_assert(name != nullptr);
 
     gchar const *local = strchr(name, ':');
     if (local) {
         name = local + 1;
     }
 
-    if (id != NULL) {
-        if (object->document->getObjectById(id) == NULL) {
+    if (id != nullptr) {
+        if (object->document->getObjectById(id) == nullptr) {
             return g_strdup(id);
         }
     }
@@ -1438,7 +1438,7 @@ sp_object_get_unique_id(SPObject    *object,
     do {
         ++count;
         g_snprintf(count_buf, count_buflen, "%lu", count);
-    } while ( object->document->getObjectById(buf) != NULL );
+    } while ( object->document->getObjectById(buf) != nullptr );
     return buf;
 }
 
@@ -1448,7 +1448,7 @@ gchar const * SPObject::getStyleProperty(gchar const *key, gchar const *def) con
 {
     //g_return_val_if_fail(object != NULL, NULL);
     //g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-    g_return_val_if_fail(key != NULL, NULL);
+    g_return_val_if_fail(key != nullptr, NULL);
 
     //XML Tree being used here.
     gchar const *style = getRepr()->attribute("style");
@@ -1456,7 +1456,7 @@ gchar const * SPObject::getStyleProperty(gchar const *key, gchar const *def) con
         size_t const len = strlen(key);
         char const *p;
         while ( (p = strstr(style, key))
-                != NULL )
+                != nullptr )
         {
             p += len;
             while ((*p <= ' ') && *p) {
@@ -1540,7 +1540,7 @@ bool SPObject::setDesc(gchar const *desc, bool verbatim)
 
 char * SPObject::getTitleOrDesc(gchar const *svg_tagname) const
 {
-    char *result = NULL;
+    char *result = nullptr;
     SPObject *elem = findFirstChild(svg_tagname);
     if ( elem ) {
         //This string copy could be avoided by changing 
@@ -1565,7 +1565,7 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
                 }
             }
             if (just_whitespace) {
-                value = NULL;
+                value = nullptr;
             }
         }
         // Don't stomp on mark-up if there is no real change.
@@ -1583,8 +1583,8 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
 
     SPObject *elem = findFirstChild(svg_tagname);
 
-    if (value == NULL) {
-        if (elem == NULL) {
+    if (value == nullptr) {
+        if (elem == nullptr) {
             return false;
         }
         // delete the title/description(s)
@@ -1597,11 +1597,11 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
 
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
 
-    if (elem == NULL) {
+    if (elem == nullptr) {
         // create a new 'title' or 'desc' element, putting it at the
         // beginning (in accordance with the spec's recommendations)
         Inkscape::XML::Node *xml_elem = xml_doc->createElement(svg_tagname);
-        repr->addChild(xml_elem, NULL);
+        repr->addChild(xml_elem, nullptr);
         elem = document->getObjectByRepr(xml_elem);
         Inkscape::GC::release(xml_elem);
     }

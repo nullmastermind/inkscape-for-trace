@@ -170,7 +170,7 @@ static bool popVal( guint64& numVal, std::string& str )
     if ( endPos != std::string::npos && endPos > 0 ) {
         std::string xxx = str.substr( 0, endPos );
         const gchar* ptr = xxx.c_str();
-        gchar* endPtr = 0;
+        gchar* endPtr = nullptr;
         numVal = g_ascii_strtoull( ptr, &endPtr, 10 );
         if ( (numVal == G_MAXUINT64) && (ERANGE == errno) ) {
             // overflow
@@ -200,7 +200,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
         int height = 24;
 
         if (item->def.getType() != ege::PaintDef::RGB){
-            GError *error = NULL;
+            GError *error = nullptr;
             gsize bytesRead = 0;
             gsize bytesWritten = 0;
             gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, ICONS, "remove-color.png"),
@@ -212,7 +212,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
             g_free(localFilename);
             gtk_drag_set_icon_pixbuf( dc, pixbuf, 0, 0 );
         } else {
-            GdkPixbuf* pixbuf = 0;
+            GdkPixbuf* pixbuf = nullptr;
             if ( item->getGradient() ){
                 cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
                 cairo_pattern_t *gradient = sp_gradient_create_preview_pattern(item->getGradient(), width);
@@ -271,9 +271,9 @@ ColorItem::ColorItem(ege::PaintDef::ColorType type) :
     _linkIsTone(false),
     _linkPercent(0),
     _linkGray(0),
-    _linkSrc(0),
-    _grad(0),
-    _pattern(0)
+    _linkSrc(nullptr),
+    _grad(nullptr),
+    _pattern(nullptr)
 {
 }
 
@@ -285,15 +285,15 @@ ColorItem::ColorItem( unsigned int r, unsigned int g, unsigned int b, Glib::ustr
     _linkIsTone(false),
     _linkPercent(0),
     _linkGray(0),
-    _linkSrc(0),
-    _grad(0),
-    _pattern(0)
+    _linkSrc(nullptr),
+    _grad(nullptr),
+    _pattern(nullptr)
 {
 }
 
 ColorItem::~ColorItem()
 {
-    if (_pattern != NULL) {
+    if (_pattern != nullptr) {
         cairo_pattern_destroy(_pattern);
     }
 }
@@ -397,7 +397,7 @@ void ColorItem::_dragGetColorData( GtkWidget */*widget*/,
     }
 
     if ( !key.empty() ) {
-        char* tmp = 0;
+        char* tmp = nullptr;
         int len = 0;
         int format = 0;
         item->def.getMIMEData(key, tmp, len, format);
@@ -510,7 +510,7 @@ void ColorItem::_regenPreview(EekPreview * preview)
         using Inkscape::IO::Resource::get_path;
         using Inkscape::IO::Resource::ICONS;
         using Inkscape::IO::Resource::SYSTEM;
-        GError *error = NULL;
+        GError *error = nullptr;
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, ICONS, "remove-color.png"),
@@ -556,7 +556,7 @@ void ColorItem::_regenPreview(EekPreview * preview)
 
 Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio, guint border)
 {
-    Gtk::Widget* widget = 0;
+    Gtk::Widget* widget = nullptr;
     if ( style == PREVIEW_STYLE_BLURB) {
         Gtk::Label *lbl = new Gtk::Label(def.descr);
         lbl->set_halign(Gtk::ALIGN_START);

@@ -30,13 +30,13 @@ Text::Text(Glib::ustring const &label, Glib::ustring const &tooltip,
 
 Glib::ustring const Text::getText() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<Gtk::Entry*>(_widget)->get_text();
 }
 
 void Text::setText(Glib::ustring const text)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     setProgrammatically = true; // callback is supposed to reset back, if it cares
     static_cast<Gtk::Entry*>(_widget)->set_text(text); // FIXME: set correctly
 }

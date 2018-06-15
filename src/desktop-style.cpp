@@ -163,12 +163,12 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
     }
 
     for (auto& child: o->children) {
-        if (sp_repr_css_property(css, "opacity", NULL) != NULL) {
+        if (sp_repr_css_property(css, "opacity", nullptr) != nullptr) {
             // Unset properties which are accumulating and thus should not be set recursively.
             // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
             SPCSSAttr *css_recurse = sp_repr_css_attr_new();
             sp_repr_css_merge(css_recurse, css);
-            sp_repr_css_set_property(css_recurse, "opacity", NULL);
+            sp_repr_css_set_property(css_recurse, "opacity", nullptr);
             sp_desktop_apply_css_recursive(&child, css_recurse, skip_lines);
             sp_repr_css_attr_unref(css_recurse);
         } else {
@@ -270,7 +270,7 @@ sp_desktop_get_style(SPDesktop *desktop, bool with_text)
     sp_repr_css_merge(css, desktop->current);
     if (!css->attributeList()) {
         sp_repr_css_attr_unref(css);
-        return NULL;
+        return nullptr;
     } else {
         if (!with_text) {
             css = sp_css_attr_unset_text(css);
@@ -304,7 +304,7 @@ double
 sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool *has_opacity)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPCSSAttr *css = NULL;
+    SPCSSAttr *css = nullptr;
     gfloat value = 1.0; // default if nothing else found
     if (has_opacity)
         *has_opacity = false;
@@ -315,7 +315,7 @@ sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool
     }
 
     if (css) {
-        gchar const *property = css ? sp_repr_css_property(css, "opacity", "1.000") : 0;
+        gchar const *property = css ? sp_repr_css_property(css, "opacity", "1.000") : nullptr;
 
         if (desktop->current && property) { // if there is style and the property in it,
             if ( !sp_svg_number_read_f(property, &value) ) {
@@ -335,7 +335,7 @@ double
 sp_desktop_get_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPCSSAttr *css = NULL;
+    SPCSSAttr *css = nullptr;
     gfloat value = 1.0; // default if nothing else found
     if (prefs->getBool(tool + "/usecurrent")) {
         css = sp_desktop_get_style(desktop, true);
@@ -344,7 +344,7 @@ sp_desktop_get_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool 
     }
 
     if (css) {
-        gchar const *property = css ? sp_repr_css_property(css, is_fill ? "fill-opacity": "stroke-opacity", "1.000") : 0;
+        gchar const *property = css ? sp_repr_css_property(css, is_fill ? "fill-opacity": "stroke-opacity", "1.000") : nullptr;
 
         if (desktop->current && property) { // if there is style and the property in it,
             if ( !sp_svg_number_read_f(property, &value) ) {
@@ -362,7 +362,7 @@ guint32
 sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill, bool *has_color)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPCSSAttr *css = NULL;
+    SPCSSAttr *css = nullptr;
     guint32 r = 0; // if there's no color, return black
     if (has_color)
         *has_color = false;
@@ -503,7 +503,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
     bool paintImpossible = true;
     paint_res->set = true;
 
-    SVGICCColor* iccColor = 0;
+    SVGICCColor* iccColor = nullptr;
 
     bool iccSeen = false;
     gfloat c[4];
@@ -547,8 +547,8 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             SPPaintServer *server = isfill ? style->getFillPaintServer() : style->getStrokePaintServer();
 
             SPLinearGradient *linear_res = dynamic_cast<SPLinearGradient *>(server_res);
-            SPRadialGradient *radial_res = linear_res ? NULL : dynamic_cast<SPRadialGradient *>(server_res);
-            SPPattern *pattern_res = (linear_res || radial_res) ? NULL : dynamic_cast<SPPattern *>(server_res);
+            SPRadialGradient *radial_res = linear_res ? nullptr : dynamic_cast<SPRadialGradient *>(server_res);
+            SPPattern *pattern_res = (linear_res || radial_res) ? nullptr : dynamic_cast<SPPattern *>(server_res);
             if (linear_res) {
                 SPLinearGradient *linear = dynamic_cast<SPLinearGradient *>(server);
                 if (!linear) {
@@ -602,14 +602,14 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             } else {
                 if (same_color && (prev[0] != d[0] || prev[1] != d[1] || prev[2] != d[2])) {
                     same_color = false;
-                    iccColor = 0;
+                    iccColor = nullptr;
                 }
                 if ( iccSeen && iccColor ) {
                     if ( !paint->value.color.icc
                          || (iccColor->colorProfile != paint->value.color.icc->colorProfile)
                          || !vectorsClose(iccColor->colors, paint->value.color.icc->colors) ) {
                         same_color = false;
-                        iccColor = 0;
+                        iccColor = nullptr;
                     }
                 }
             }
@@ -627,7 +627,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
        paint_res->colorSet = paint->colorSet;
        paint_res->paintOrigin = paint->paintOrigin;
        if (paint_res->set && paint_effectively_set && paint->isPaintserver()) { // copy the server
-           gchar const *string = NULL; // memory leak results if style->get* called inside sp_style_set_to_uri_string.
+           gchar const *string = nullptr; // memory leak results if style->get* called inside sp_style_set_to_uri_string.
            if (isfill) {
                string = style->getFillURI();
                sp_style_set_to_uri_string (style_res, true, string);
@@ -1074,7 +1074,7 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
 
         texts ++;
         SPItem *item = dynamic_cast<SPItem *>(obj);
-        g_assert(item != NULL);
+        g_assert(item != nullptr);
 
         // Quick way of getting document scale. Should be same as:
         // item->document->getDocumentScale().Affine().descrim()
@@ -1443,7 +1443,7 @@ objects_query_fontfeaturesettings (const std::vector<SPItem*> &objects, SPStyle 
 
     if (style_res->font_feature_settings.value) {
         g_free(style_res->font_feature_settings.value);
-        style_res->font_feature_settings.value = NULL;
+        style_res->font_feature_settings.value = nullptr;
     }
     style_res->font_feature_settings.set = FALSE;
 
@@ -1469,7 +1469,7 @@ objects_query_fontfeaturesettings (const std::vector<SPItem*> &objects, SPStyle 
 
         if (style_res->font_feature_settings.value) {
             g_free(style_res->font_feature_settings.value);
-            style_res->font_feature_settings.value = NULL;
+            style_res->font_feature_settings.value = nullptr;
         }
 
         style_res->font_feature_settings.set = true;
@@ -1599,7 +1599,7 @@ objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_re
 
     if (style_res->font_family.value) {
         g_free(style_res->font_family.value);
-        style_res->font_family.value = NULL;
+        style_res->font_family.value = nullptr;
     }
     style_res->font_family.set = FALSE;
 
@@ -1625,7 +1625,7 @@ objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_re
 
         if (style_res->font_family.value) {
             g_free(style_res->font_family.value);
-            style_res->font_family.value = NULL;
+            style_res->font_family.value = nullptr;
         }
 
         style_res->font_family.set = true;
@@ -1655,7 +1655,7 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
 
     if (style_res->font_specification.value) {
         g_free(style_res->font_specification.value);
-        style_res->font_specification.value = NULL;
+        style_res->font_specification.value = nullptr;
     }
     style_res->font_specification.set = FALSE;
 
@@ -1684,7 +1684,7 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
 
             if (style_res->font_specification.value) {
                 g_free(style_res->font_specification.value);
-                style_res->font_specification.value = NULL;
+                style_res->font_specification.value = nullptr;
             }
 
             style_res->font_specification.set = true;
@@ -1938,7 +1938,7 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
         return ret; // subselection returned a style, pass it on
 
     // otherwise, do querying and averaging over selection
-    if (desktop->selection != NULL) {
+    if (desktop->selection != nullptr) {
         std::vector<SPItem *> vec(desktop->selection->items().begin(), desktop->selection->items().end());
         return sp_desktop_query_style_from_list (vec, style, property);
     }

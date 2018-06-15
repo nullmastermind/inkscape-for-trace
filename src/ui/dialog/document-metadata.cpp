@@ -43,11 +43,11 @@ namespace Dialog {
 static void on_repr_attr_changed (Inkscape::XML::Node *, gchar const *, gchar const *, gchar const *, bool, gpointer);
 
 static Inkscape::XML::NodeEventVector const _repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     on_repr_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 

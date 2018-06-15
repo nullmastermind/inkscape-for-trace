@@ -73,7 +73,7 @@ void
 LPEPerspectivePath::doOnApply(SPLPEItem const* lpeitem)
 {
     Persp3D *persp = persp3d_document_first_persp(lpeitem->document);
-    if(persp == 0 ){
+    if(persp == nullptr ){
         char *msg = _("You need a BOX 3D object");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_INFO,
                                   Gtk::BUTTONS_OK, true);
@@ -88,7 +88,7 @@ LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem, true);
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
     Persp3D *persp = persp3d_document_first_persp(lpeitem->document);
-    if(persp == 0 ){
+    if(persp == nullptr ){
         char *msg = _("You need a BOX 3D object");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_INFO,
                                   Gtk::BUTTONS_OK, true);
@@ -103,10 +103,10 @@ LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem)
 
 void LPEPerspectivePath::refresh(Gtk::Entry* perspective) {
     perspectiveID = perspective->get_text();
-    Persp3D *first = 0;
-    Persp3D *persp = 0;
+    Persp3D *first = nullptr;
+    Persp3D *persp = nullptr;
     for (auto& child: lpeobj->document->getDefs()->children) {
-        if (SP_IS_PERSP3D(&child) && first == 0) {
+        if (SP_IS_PERSP3D(&child) && first == nullptr) {
             first = SP_PERSP3D(&child);
         }
         if (SP_IS_PERSP3D(&child) && strcmp(child.getId(), const_cast<const gchar *>(perspectiveID.c_str())) == 0) {
@@ -114,14 +114,14 @@ void LPEPerspectivePath::refresh(Gtk::Entry* perspective) {
             break;
         }
     }
-    if(first == 0 ){
+    if(first == nullptr ){
         char *msg = _("You need a BOX 3D object");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_INFO,
                                   Gtk::BUTTONS_OK, true);
         dialog.run();
         return;
     }
-    if(persp == 0){
+    if(persp == nullptr){
         persp = first;
         char *msg = _("First perspective selected");
         Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_INFO,
@@ -263,7 +263,7 @@ LPEPerspectivePath::newWidget()
 
 void LPEPerspectivePath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) {
     KnotHolderEntity *e = new PP::KnotHolderEntityOffset(this);
-    e->create( NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+    e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                _("Adjust the origin") );
     knotholder->add(e);
 };

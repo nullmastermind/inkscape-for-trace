@@ -300,7 +300,7 @@ static void star_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
     // in turn, prevent callbacks from responding
     g_object_set_data(dataKludge, "freeze", GINT_TO_POINTER(TRUE));
 
-    GtkAdjustment *adj = 0;
+    GtkAdjustment *adj = nullptr;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
@@ -361,11 +361,11 @@ static void star_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
 
 static Inkscape::XML::NodeEventVector star_tb_repr_events =
 {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     star_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 
@@ -376,7 +376,7 @@ static void
 sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GObject *dataKludge)
 {
     int n_selected = 0;
-    Inkscape::XML::Node *repr = NULL;
+    Inkscape::XML::Node *repr = nullptr;
 
     purge_repr_listener( dataKludge, dataKludge );
 
@@ -415,7 +415,7 @@ static void sp_star_defaults( GtkWidget * /*widget*/, GObject *dataKludge )
     // FIXME: in this and all other _default functions, set some flag telling the value_changed
     // callbacks to lump all the changes for all selected objects in one undo step
 
-    GtkAdjustment *adj = 0;
+    GtkAdjustment *adj = nullptr;
 
     // fixme: make settable in prefs!
     gint mag = 5;
@@ -469,10 +469,10 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
 
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
 
     {
-        EgeOutputAction* act = ege_output_action_new( "StarStateAction", _("<b>New:</b>"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "StarStateAction", _("<b>New:</b>"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( dataKludge, "mode_action", act );
@@ -516,15 +516,15 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* Magnitude */
     {
-        gchar const* labels[] = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), 0, 0, 0, 0, 0};
+        gchar const* labels[] = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {3, 4, 5, 6, 7, 8, 10, 12, 20};
         eact = create_adjustment_action( "MagnitudeAction",
                                          _("Corners"), _("Corners:"), _("Number of corners of a polygon or star"),
                                          "/tools/shapes/star/magnitude", 3,
-                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, nullptr,
                                          3, 1024, 1, 5,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_star_magnitude_value_changed, NULL /*unit tracker*/,
+                                         sp_star_magnitude_value_changed, nullptr /*unit tracker*/,
                                          1.0, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -532,7 +532,7 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* Spoke ratio */
     {
-        gchar const* labels[] = {_("thin-ray star"), 0, _("pentagram"), _("hexagram"), _("heptagram"), _("octagram"), _("regular polygon")};
+        gchar const* labels[] = {_("thin-ray star"), nullptr, _("pentagram"), _("hexagram"), _("heptagram"), _("octagram"), _("regular polygon")};
         gdouble values[] = {0.01, 0.2, 0.382, 0.577, 0.692, 0.765, 1};
         eact = create_adjustment_action( "SpokeAction",
                                          _("Spoke ratio"), _("Spoke ratio:"),
@@ -540,7 +540,7 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                          // Base radius is the same for the closest handle.
                                          _("Base radius to tip radius ratio"),
                                          "/tools/shapes/star/proportion", 0.5,
-                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, nullptr,
                                          0.01, 1.0, 0.01, 0.1,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_star_proportion_value_changed );
@@ -557,12 +557,12 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     /* Roundedness */
     {
         gchar const* labels[] = {_("stretched"), _("twisted"), _("slightly pinched"), _("NOT rounded"), _("slightly rounded"),
-                                 _("visibly rounded"), _("well rounded"), _("amply rounded"), 0, _("stretched"), _("blown up")};
+                                 _("visibly rounded"), _("well rounded"), _("amply rounded"), nullptr, _("stretched"), _("blown up")};
         gdouble values[] = {-1, -0.2, -0.03, 0, 0.05, 0.1, 0.2, 0.3, 0.5, 1, 10};
         eact = create_adjustment_action( "RoundednessAction",
                                          _("Rounded"), _("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
                                          "/tools/shapes/star/rounded", 0.0,
-                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, nullptr,
                                          -10.0, 10.0, 0.01, 0.1,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_star_rounded_value_changed );
@@ -577,10 +577,10 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         eact = create_adjustment_action( "RandomizationAction",
                                          _("Randomized"), _("Randomized:"), _("Scatter randomly the corners and angles"),
                                          "/tools/shapes/star/randomized", 0.0,
-                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), dataKludge, FALSE, nullptr,
                                          -10.0, 10.0, 0.001, 0.01,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_star_randomized_value_changed, NULL /*unit tracker*/, 0.1, 3 );
+                                         sp_star_randomized_value_changed, nullptr /*unit tracker*/, 0.1, 3 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
@@ -605,7 +605,7 @@ static void star_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
 {
     static sigc::connection changed;
 
-    if (dynamic_cast<Inkscape::UI::Tools::StarTool const*>(ec) != NULL) {
+    if (dynamic_cast<Inkscape::UI::Tools::StarTool const*>(ec) != nullptr) {
         changed = desktop->getSelection()->connectChanged(sigc::bind(sigc::ptr_fun(sp_star_toolbox_selection_changed), dataKludge));
         sp_star_toolbox_selection_changed(desktop->getSelection(), dataKludge);
     } else {

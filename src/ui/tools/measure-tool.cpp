@@ -244,11 +244,11 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     sp_repr_css_write_string(css,css_str);
     repr->setAttribute("style", css_str.c_str());
     sp_repr_css_attr_unref (css);
-    g_assert( str != NULL );
+    g_assert( str != nullptr );
     repr->setAttribute("d", str);
     g_free(str);
     if(measure_repr) {
-        measure_repr->addChild(repr, NULL);
+        measure_repr->addChild(repr, nullptr);
         Inkscape::GC::release(repr);
     } else {
         SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
@@ -269,7 +269,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
  * @param angle the angle of the arc segment to draw.
  * @param measure_rpr the container of the curve if converted to items.
  */
-void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom::Point const &end, Geom::Point const &anchor, double angle, bool to_phantom, std::vector<SPCanvasItem *> &measure_phantom_items , std::vector<SPCanvasItem *> &measure_tmp_items , Inkscape::XML::Node *measure_repr = NULL)
+void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom::Point const &end, Geom::Point const &anchor, double angle, bool to_phantom, std::vector<SPCanvasItem *> &measure_phantom_items , std::vector<SPCanvasItem *> &measure_tmp_items , Inkscape::XML::Node *measure_repr = nullptr)
 {
     // Given that we have a point on the arc's edge and the angle of the arc, we need to get the two endpoints.
 
@@ -333,7 +333,7 @@ boost::optional<Geom::Point> explicit_base_tmp = boost::none;
 
 MeasureTool::MeasureTool()
     : ToolBase(cursor_measure_xpm)
-    , grabbed(NULL)
+    , grabbed(nullptr)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     start_p = readMeasurePoint(true);
@@ -519,7 +519,7 @@ void MeasureTool::finish()
 
     if (this->grabbed) {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-        this->grabbed = NULL;
+        this->grabbed = nullptr;
     }
 
     ToolBase::finish();
@@ -540,9 +540,9 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
         if (!show_hidden) {
             double eps = 0.0001;
             if (((*m).ta > eps &&
-             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta - eps))), true, NULL)) ||
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta - eps))), true, nullptr)) ||
             ((*m).ta + eps < 1 &&
-             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta + eps))), true, NULL))) {
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta + eps))), true, nullptr))) {
                 intersections.push_back((*m).ta);
             }
         } else {
@@ -579,7 +579,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
 
         sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                             GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                            NULL, event->button.time);
+                            nullptr, event->button.time);
         this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
         break;
     }
@@ -676,7 +676,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
 
         if (this->grabbed) {
             sp_canvas_item_ungrab(this->grabbed, event->button.time);
-            this->grabbed = NULL;
+            this->grabbed = nullptr;
         }
         break;
     }
@@ -969,11 +969,11 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
     sp_repr_css_write_string(css,css_str);
     rtspan->setAttribute("style", css_str.c_str());
     sp_repr_css_attr_unref (css);
-    rtext->addChild(rtspan, NULL);
+    rtext->addChild(rtspan, nullptr);
     Inkscape::GC::release(rtspan);
     /* Create TEXT */
     Inkscape::XML::Node *rstring = xml_doc->createTextNode(value);
-    rtspan->addChild(rstring, NULL);
+    rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
     SPItem *text_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rtext));
     Inkscape::GC::release(rtext);
@@ -1007,9 +1007,9 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         sp_repr_set_svg_double(rrect, "height", bbox->height() + 6);
         Inkscape::XML::Node *rtextitem = text_item->getRepr();
         text_item->deleteObject();
-        rgroup->addChild(rtextitem, NULL);
+        rgroup->addChild(rtextitem, nullptr);
         Inkscape::GC::release(rtextitem);
-        rgroup->addChild(rrect, NULL);
+        rgroup->addChild(rrect, nullptr);
         Inkscape::GC::release(rrect);
         SPItem *text_item_box = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
         Geom::Scale scale = Geom::Scale(desktop->current_zoom()).inverse();
@@ -1021,16 +1021,16 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         text_item_box->transform *= Geom::Translate(pos);
         text_item_box->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         text_item_box->updateRepr();
-        text_item_box->doWriteTransform(text_item_box->transform, NULL, true);
+        text_item_box->doWriteTransform(text_item_box->transform, nullptr, true);
         Inkscape::XML::Node *rlabel = text_item_box->getRepr();
         text_item_box->deleteObject();
-        measure_repr->addChild(rlabel, NULL);
+        measure_repr->addChild(rlabel, nullptr);
         Inkscape::GC::release(rlabel);
     } else {
         text_item->transform *= Geom::Rotate(angle);
         text_item->transform *= Geom::Translate(pos);
         text_item->transform *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-        text_item->doWriteTransform(text_item->transform, NULL, true);
+        text_item->doWriteTransform(text_item->transform, nullptr, true);
     }
 }
 
@@ -1195,7 +1195,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
                 }
             }
         }
-        gchar *measure_str = NULL;
+        gchar *measure_str = nullptr;
         std::stringstream precision_str;
         precision_str.imbue(std::locale::classic());
         double origin = Inkscape::Util::Quantity::convert(14, "px", unit->abbr);
@@ -1285,8 +1285,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     SPDocument *doc = desktop->getDocument();
     Geom::Rect rect(start_p, end_p);
     items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, true);
-    Inkscape::LayerModel *layer_model = NULL;
-    SPObject *current_layer = NULL;
+    Inkscape::LayerModel *layer_model = nullptr;
+    SPObject *current_layer = nullptr;
     if(desktop){
         layer_model = desktop->layers;
         current_layer = desktop->currentLayer();

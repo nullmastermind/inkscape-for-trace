@@ -27,20 +27,20 @@ FontButton::FontButton(Glib::ustring const &label, Glib::ustring const &tooltip,
 
 Glib::ustring FontButton::getValue() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<Gtk::FontButton*>(_widget)->get_font_name();
 }
 
 
 void FontButton::setValue (Glib::ustring fontspec)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     static_cast<Gtk::FontButton*>(_widget)->set_font_name(fontspec);
 }
 
 Glib::SignalProxy0<void> FontButton::signal_font_value_changed()
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<Gtk::FontButton*>(_widget)->signal_font_set();
 }
 

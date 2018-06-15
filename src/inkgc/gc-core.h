@@ -131,8 +131,8 @@ void request_early_collection();
 inline void *operator new(std::size_t size,
                           Inkscape::GC::ScanPolicy scan,
                           Inkscape::GC::CollectionPolicy collect,
-                          Inkscape::GC::CleanupFunc cleanup=NULL,
-                          void *data=NULL)
+                          Inkscape::GC::CleanupFunc cleanup=nullptr,
+                          void *data=nullptr)
 {
     using namespace Inkscape::GC;
 
@@ -154,15 +154,15 @@ inline void *operator new(std::size_t size,
         throw std::bad_alloc();
     }
     if (cleanup) {
-        Core::register_finalizer_ignore_self(mem, cleanup, data, NULL, NULL);
+        Core::register_finalizer_ignore_self(mem, cleanup, data, nullptr, nullptr);
     }
     return mem;
 }
 
 inline void *operator new(std::size_t size,
                           Inkscape::GC::ScanPolicy scan,
-                          Inkscape::GC::CleanupFunc cleanup=NULL,
-                          void *data=NULL)
+                          Inkscape::GC::CleanupFunc cleanup=nullptr,
+                          void *data=nullptr)
 {
     return operator new(size, scan, Inkscape::GC::AUTO, cleanup, data);
 }
@@ -170,16 +170,16 @@ inline void *operator new(std::size_t size,
 inline void *operator new[](std::size_t size,
                             Inkscape::GC::ScanPolicy scan,
                             Inkscape::GC::CollectionPolicy collect,
-                            Inkscape::GC::CleanupFunc cleanup=NULL,
-                            void *data=NULL)
+                            Inkscape::GC::CleanupFunc cleanup=nullptr,
+                            void *data=nullptr)
 {
     return operator new(size, scan, collect, cleanup, data);
 }
 
 inline void *operator new[](std::size_t size,
                             Inkscape::GC::ScanPolicy scan,
-                            Inkscape::GC::CleanupFunc cleanup=NULL,
-                            void *data=NULL)
+                            Inkscape::GC::CleanupFunc cleanup=nullptr,
+                            void *data=nullptr)
 {
     return operator new[](size, scan, Inkscape::GC::AUTO, cleanup, data);
 }

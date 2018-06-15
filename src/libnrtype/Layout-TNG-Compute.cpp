@@ -83,7 +83,7 @@ class Layout::Calculator
         bool in_sub_flow;
         Layout *sub_flow;    // this is only set for the first input item in a sub-flow
 
-        InputItemInfo() : in_sub_flow(false), sub_flow(NULL) {}
+        InputItemInfo() : in_sub_flow(false), sub_flow(nullptr) {}
 
         /* fixme: I don't like the fact that InputItemInfo etc. use the default copy constructor and
          * operator= (and thus don't involve incrementing reference counts), yet they provide a free method
@@ -95,7 +95,7 @@ class Layout::Calculator
         {
             if (sub_flow) {
                 delete sub_flow;
-                sub_flow = NULL;
+                sub_flow = nullptr;
             }
         }
     };
@@ -106,7 +106,7 @@ class Layout::Calculator
         PangoItem *item;
         font_instance *font;
 
-        PangoItemInfo() : item(NULL), font(NULL) {}
+        PangoItemInfo() : item(nullptr), font(nullptr) {}
 
         /* fixme: I don't like the fact that InputItemInfo etc. use the default copy constructor and
          * operator= (and thus don't involve incrementing reference counts), yet they provide a free method
@@ -118,11 +118,11 @@ class Layout::Calculator
         {
             if (item) {
                 pango_item_free(item);
-                item = NULL;
+                item = nullptr;
             }
             if (font) {
                 font->Unref();
-                font = NULL;
+                font = nullptr;
             }
         }
     };
@@ -151,12 +151,12 @@ class Layout::Calculator
         unsigned char_index_in_para;    /// the index of the first character in this span in the paragraph, for looking up char_attributes
         SVGLength x, y, dx, dy, rotate;  // these are reoriented copies of the <tspan> attributes. We change span when we encounter one.
 
-        UnbrokenSpan() : glyph_string(NULL) {}
+        UnbrokenSpan() : glyph_string(nullptr) {}
         void free()
         {
             if (glyph_string)
                 pango_glyph_string_free(glyph_string);
-            glyph_string = NULL;
+            glyph_string = nullptr;
         }
     };
 
@@ -691,7 +691,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 new_span.direction = para.pango_items[unbroken_span.pango_item_index].item->analysis.level & 1 ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
                 new_span.input_stream_first_character = Glib::ustring::const_iterator(unbroken_span.input_stream_first_character.base() + it_span->start.char_byte);
             } else {  // a control code
-                new_span.font = NULL;
+                new_span.font = nullptr;
                 new_span.font_size = new_span.line_height.emSize();
                 new_span.direction = para.direction;
             }
@@ -1091,7 +1091,7 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 
             // create the font_instance
             font_instance *font = text_source->styleGetFontInstance();
-            if (font == NULL)
+            if (font == nullptr)
                 continue;  // bad news: we'll have to ignore all this text because we know of no font to render it
 
             PangoAttribute *attribute_font_description = pango_attr_font_desc_new(font->descr);
@@ -1119,19 +1119,19 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     TRACE(("whole para: \"%s\"\n", para_text.data()));
     TRACE(("%d input sources used\n", input_index - para->first_input_index));
     // do the pango_itemize()
-    GList *pango_items_glist = NULL;
+    GList *pango_items_glist = nullptr;
     para->direction = LEFT_TO_RIGHT; // CSS default
     if (_flow._input_stream[para->first_input_index]->Type() == TEXT_SOURCE) {
         Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[para->first_input_index]);
 
         para->direction =                (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? LEFT_TO_RIGHT : RIGHT_TO_LEFT;
         PangoDirection pango_direction = (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
-        pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
+        pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, nullptr);
     }
 
-    if( pango_items_glist == NULL ) {
+    if( pango_items_glist == nullptr ) {
         // Type wasn't TEXT_SOURCE or direction was not set.
-        pango_items_glist = pango_itemize(_pango_context, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
+        pango_items_glist = pango_itemize(_pango_context, para_text.data(), 0, para_text.bytes(), attributes_list, nullptr);
     }
 
     pango_attr_list_unref(attributes_list);
@@ -1139,7 +1139,7 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     // convert the GList to our vector<> and make the font_instance for each PangoItem at the same time
     para->pango_items.reserve(g_list_length(pango_items_glist));
     TRACE(("para itemizes to %d sections\n", g_list_length(pango_items_glist)));
-    for (GList *current_pango_item = pango_items_glist ; current_pango_item != NULL ; current_pango_item = current_pango_item->next) {
+    for (GList *current_pango_item = pango_items_glist ; current_pango_item != nullptr ; current_pango_item = current_pango_item->next) {
         PangoItemInfo new_item;
         new_item.item = (PangoItem*)current_pango_item->data;
         PangoFontDescription *font_description = pango_font_describe(new_item.item->analysis.font);
@@ -1151,7 +1151,7 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 
     // and get the character attributes on everything
     para->char_attributes.resize(para_text.length() + 1);
-    pango_get_log_attrs(para_text.data(), para_text.bytes(), -1, NULL, &*para->char_attributes.begin(), para->char_attributes.size());
+    pango_get_log_attrs(para_text.data(), para_text.bytes(), -1, nullptr, &*para->char_attributes.begin(), para->char_attributes.size());
 
     TRACE(("end para itemize, direction = %d\n", para->direction));
 }
@@ -1325,7 +1325,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     g_assert( span_start_byte_in_source < text_source->text->bytes() );
                     g_assert( span_start_byte_in_source + new_span.text_bytes <= text_source->text->bytes() );
                     g_assert( memchr(text_source->text->data() + span_start_byte_in_source, '\0', static_cast<size_t>(new_span.text_bytes))
-                              == NULL );
+                              == nullptr );
 
                     /* Notes as of 4/29/13.  Pango_shape is not generating English language ligatures, but it is generating
                     them for Hebrew (and probably other similar languages).  In the case observed 3 unicode characters (a base
@@ -1470,7 +1470,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
 bool Layout::Calculator::_goToNextWrapShape()
 {
     delete _scanline_maker;
-    _scanline_maker = NULL;
+    _scanline_maker = nullptr;
     _current_shape_index++;
     if (_current_shape_index == _flow._input_wrap_shapes.size()) return false;
     _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
@@ -1811,7 +1811,7 @@ bool Layout::Calculator::calculate()
                 continue;
             }
         }
-        if (_scanline_maker == NULL)
+        if (_scanline_maker == nullptr)
             break;       // we're trying to flow past the last wrap shape
 
         // Break things up into little pango units with unique direction, gravity, etc.
@@ -1865,7 +1865,7 @@ bool Layout::Calculator::calculate()
                 // we need a span just for the para if it's either an empty last para or a break in the middle
                 Layout::Span new_span;
                 if (_flow._spans.empty()) {
-                    new_span.font = NULL;
+                    new_span.font = nullptr;
                     new_span.font_size = line_box_height.emSize();
                     new_span.line_height = line_box_height;
                     new_span.x_end = 0.0;

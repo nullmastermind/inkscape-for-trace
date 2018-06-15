@@ -88,27 +88,27 @@ static void _reconstruction_finish(SPDesktop * desktop);
 static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop);
 
 SPDesktop::SPDesktop() :
-    _dlg_mgr( NULL ),
-    namedview( NULL ),
-    canvas( NULL ),
-    layers( NULL ),
-    selection( NULL ),
-    event_context( NULL ),
-    layer_manager( NULL ),
-    event_log( NULL ),
-    temporary_item_list( NULL ),
-    snapindicator( NULL ),
-    acetate( NULL ),
-    main( NULL ),
-    gridgroup( NULL ),
-    guides( NULL ),
-    drawing( NULL ),
-    sketch( NULL ),
-    controls( NULL ),
-    tempgroup ( NULL ),
-    page( NULL ),
-    page_border( NULL ),
-    current( NULL ),
+    _dlg_mgr( nullptr ),
+    namedview( nullptr ),
+    canvas( nullptr ),
+    layers( nullptr ),
+    selection( nullptr ),
+    event_context( nullptr ),
+    layer_manager( nullptr ),
+    event_log( nullptr ),
+    temporary_item_list( nullptr ),
+    snapindicator( nullptr ),
+    acetate( nullptr ),
+    main( nullptr ),
+    gridgroup( nullptr ),
+    guides( nullptr ),
+    drawing( nullptr ),
+    sketch( nullptr ),
+    controls( nullptr ),
+    tempgroup ( nullptr ),
+    page( nullptr ),
+    page_border( nullptr ),
+    current( nullptr ),
     _focusMode(false),
     dkey( 0 ),
     number( 0 ),
@@ -117,15 +117,15 @@ SPDesktop::SPDesktop() :
     waiting_cursor( false ),
     showing_dialogs ( false ),
     guides_active( false ),
-    gr_item( NULL ),
+    gr_item( nullptr ),
     gr_point_type( POINT_LG_BEGIN ),
     gr_point_i( 0 ),
     gr_fill_or_stroke( Inkscape::FOR_FILL ),
     _reconstruction_old_layer_id(), // an id attribute is not allowed to be the empty string
     _display_mode(Inkscape::RENDERMODE_NORMAL),
     _display_color_mode(Inkscape::COLORMODE_NORMAL),
-    _widget( NULL ),
-    _guides_message_context( NULL ),
+    _widget( nullptr ),
+    _guides_message_context( nullptr ),
     _active( false ),
     _doc2dt( Geom::Scale(1, -1) ),
     _image_render_observer(this, "/options/rendering/imageinoutlinemode"),
@@ -194,19 +194,19 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     SPCanvasGroup *root = canvas->getRoot();
 
     /* Setup administrative layers */
-    acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, NULL);
+    acetate = sp_canvas_item_new (root, GNOME_TYPE_CANVAS_ACETATE, nullptr);
     g_signal_connect (G_OBJECT (acetate), "event", G_CALLBACK (sp_desktop_root_handler), this);
-    main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
+    main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, nullptr);
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
     /* This is the background the page sits on. */
     canvas->setBackgroundColor(0xffffff00);
 
-    page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
+    page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
     ((CtrlRect *) page)->setColor(0x00000000, FALSE, 0x00000000);
-    page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
+    page_border = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, nullptr);
 
-    drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, NULL);
+    drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, nullptr);
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
 
     SP_CANVAS_ARENA (drawing)->drawing.delta = prefs->getDouble("/options/cursortolerance/value", 1.0); // default is 1 px
@@ -226,11 +226,11 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     // will not work (the snap indicator is on top of the node handler; is the snapindicator
     // being selected? or does it intercept some of the events that should have gone to the
     // node handler? see bug https://bugs.launchpad.net/inkscape/+bug/414142)
-    gridgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    guides    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    sketch    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    tempgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    gridgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
+    guides    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
+    sketch    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
+    tempgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
+    controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, nullptr);
 
     // Set the select tool as the active tool.
     setEventContext("/tools/select");
@@ -322,7 +322,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     temporary_item_list = new Inkscape::Display::TemporaryItemList( this );
     snapindicator = new Inkscape::Display::SnapIndicator ( this );
 
-    canvas_rotate = sp_canvas_item_new (root, SP_TYPE_CANVAS_ROTATE, NULL);
+    canvas_rotate = sp_canvas_item_new (root, SP_TYPE_CANVAS_ROTATE, nullptr);
     sp_canvas_item_hide( canvas_rotate );
     // canvas_debug = sp_canvas_item_new (main, SP_TYPE_CANVAS_DEBUG, NULL);
 }
@@ -333,17 +333,17 @@ void SPDesktop::destroy()
 
     if (snapindicator) {
         delete snapindicator;
-        snapindicator = NULL;
+        snapindicator = nullptr;
     }
 
     if (temporary_item_list) {
         delete temporary_item_list;
-        temporary_item_list = NULL;
+        temporary_item_list = nullptr;
     }
 
     if (selection) {
         delete selection;
-        selection = NULL;
+        selection = nullptr;
     }
 
     namedview->hide(this);
@@ -365,17 +365,17 @@ void SPDesktop::destroy()
 
     if (layer_manager) {
         delete layer_manager;
-        layer_manager = NULL;
+        layer_manager = nullptr;
     }
 
     if (drawing) {
         doc()->getRoot()->invoke_hide(dkey);
         g_object_unref(drawing);
-        drawing = NULL;
+        drawing = nullptr;
     }
 
     delete _guides_message_context;
-    _guides_message_context = NULL;
+    _guides_message_context = nullptr;
 }
 
 SPDesktop::~SPDesktop()
@@ -633,7 +633,7 @@ SPDesktop::activate_guides(bool activate)
 void
 SPDesktop::change_document (SPDocument *theDocument)
 {
-    g_return_if_fail (theDocument != NULL);
+    g_return_if_fail (theDocument != nullptr);
 
     /* unselect everything before switching documents */
     selection->clear();
@@ -643,7 +643,7 @@ SPDesktop::change_document (SPDocument *theDocument)
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
        (this can probably be done in a better way) */
     Gtk::Window *parent = this->getToplevel();
-    g_assert(parent != NULL);
+    g_assert(parent != nullptr);
     SPDesktopWidget *dtw = (SPDesktopWidget *) parent->get_data("desktopwidget");
     if (dtw) {
         dtw->desktop = this;
@@ -704,7 +704,7 @@ Inkscape::UI::Widget::Dock* SPDesktop::getDock() {
  */
 SPItem *SPDesktop::getItemFromListAtPointBottom(const std::vector<SPItem*> &list, Geom::Point const &p) const
 {
-    g_return_val_if_fail (doc() != NULL, NULL);
+    g_return_val_if_fail (doc() != nullptr, NULL);
     return SPDocument::getItemFromListAtPointBottom(dkey, doc()->getRoot(), list, p);
 }
 
@@ -713,7 +713,7 @@ SPItem *SPDesktop::getItemFromListAtPointBottom(const std::vector<SPItem*> &list
  */
 SPItem *SPDesktop::getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem *upto) const
 {
-    g_return_val_if_fail (doc() != NULL, NULL);
+    g_return_val_if_fail (doc() != nullptr, NULL);
     return doc()->getItemAtPoint( dkey, p, into_groups, upto);
 }
 
@@ -722,7 +722,7 @@ SPItem *SPDesktop::getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem
  */
 SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
 {
-    g_return_val_if_fail (doc() != NULL, NULL);
+    g_return_val_if_fail (doc() != nullptr, NULL);
     return doc()->getGroupAtPoint(dkey, p);
 }
 
@@ -993,9 +993,9 @@ SPDesktop::zoom_page_width()
 void
 SPDesktop::zoom_drawing()
 {
-    g_return_if_fail (doc() != NULL);
+    g_return_if_fail (doc() != nullptr);
     SPItem *docitem = doc()->getRoot();
-    g_return_if_fail (docitem != NULL);
+    g_return_if_fail (docitem != nullptr);
 
     docitem->bbox_valid = FALSE;
     Geom::OptRect d = docitem->desktopVisualBounds();
@@ -1612,7 +1612,7 @@ SPDesktop::setDocument (SPDocument *doc)
             this->doc()->removeUndoObserver(*event_log);
         }
         delete event_log;
-        event_log = 0;
+        event_log = nullptr;
     }
 
     /* setup EventLog */
@@ -1627,9 +1627,9 @@ SPDesktop::setDocument (SPDocument *doc)
     /// are surely more safe methods to accomplish this.
     // TODO since the comment had reversed logic, check the intent of this block of code:
     if (drawing) {
-        Inkscape::DrawingItem *ai = 0;
+        Inkscape::DrawingItem *ai = nullptr;
 
-        namedview = sp_document_namedview (doc, NULL);
+        namedview = sp_document_namedview (doc, nullptr);
         _modified_connection = namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
         number = namedview->getViewCount();
 
@@ -1773,7 +1773,7 @@ static void _reconstruction_finish(SPDesktop * desktop)
     g_debug("Desktop, finishing reconstruction\n");
     if ( !desktop->_reconstruction_old_layer_id.empty() ) {
         SPObject * newLayer = desktop->namedview->document->getObjectById(desktop->_reconstruction_old_layer_id);
-        if (newLayer != NULL) {
+        if (newLayer != nullptr) {
             desktop->layers->setCurrentLayer(newLayer);
         }
 
@@ -1880,7 +1880,7 @@ SPDesktop::show_dialogs()
 {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs == NULL) {
+    if (prefs == nullptr) {
         return;
     }
 

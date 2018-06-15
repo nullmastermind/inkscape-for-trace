@@ -79,7 +79,7 @@ void LPEFillBetweenMany::doOnApply (SPLPEItem const* lpeitem)
                     lpe_repr->setAttribute("applied", "true");
                     lpe_repr->setAttribute("method", "partial");
                     lpe_repr->setAttribute("allow_transforms", "false");
-                    document->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
+                    document->getDefs()->getRepr()->addChild(lpe_repr, nullptr); // adds to <defs> and assigns the 'id' attribute
                 }
                 std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
                 Inkscape::GC::release(lpe_repr);
@@ -149,7 +149,7 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     }
     
     if(!allow_transforms) {
-        SP_ITEM(sp_lpe_item)->setAttribute("transform", NULL);
+        SP_ITEM(sp_lpe_item)->setAttribute("transform", nullptr);
     }
     
     if (!res_pathv.empty() && close) {

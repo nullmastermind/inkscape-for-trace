@@ -74,7 +74,7 @@ static Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
 namespace Inkscape {
 namespace UI {
 
-UXManager* instance = 0;
+UXManager* instance = nullptr;
 
 class UXManagerImpl : public UXManager
 {

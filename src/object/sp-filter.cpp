@@ -46,7 +46,7 @@ SPFilter::SPFilter()
     : SPObject(), filterUnits(SP_FILTER_UNITS_OBJECTBOUNDINGBOX), filterUnits_set(FALSE),
       primitiveUnits(SP_FILTER_UNITS_USERSPACEONUSE), primitiveUnits_set(FALSE),
       filterRes(NumberOptNumber()),
-      _renderer(NULL), _image_name(new std::map<gchar *, int, ltstr>), _image_number_next(0)
+      _renderer(nullptr), _image_name(new std::map<gchar *, int, ltstr>), _image_number_next(0)
 {
     this->href = new SPFilterReference(this);
     this->href->changedSignal().connect(sigc::bind(sigc::ptr_fun(filter_ref_changed), this));
@@ -103,7 +103,7 @@ void SPFilter::release() {
         this->modified_connection.disconnect();
         this->href->detach();
         delete this->href;
-        this->href = NULL;
+        this->href = nullptr;
     }
 
     for (map<gchar *, int, ltstr>::const_iterator i = this->_image_name->begin() ; i != this->_image_name->end() ; ++i) {
@@ -251,7 +251,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
 
         std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
-            Inkscape::XML::Node *crepr = child.updateRepr(doc, NULL, flags);
+            Inkscape::XML::Node *crepr = child.updateRepr(doc, nullptr, flags);
 
             if (crepr) {
                 l.push_back(crepr);
@@ -259,7 +259,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         for (auto i=l.rbegin();i!=l.rend();++i) {
-           repr->addChild(*i, NULL);
+           repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
@@ -293,25 +293,25 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
     if (this->x._set) {
         sp_repr_set_svg_double(repr, "x", this->x.computed);
     } else {
-        repr->setAttribute("x", NULL);
+        repr->setAttribute("x", nullptr);
     }
 
     if (this->y._set) {
         sp_repr_set_svg_double(repr, "y", this->y.computed);
     } else {
-        repr->setAttribute("y", NULL);
+        repr->setAttribute("y", nullptr);
     }
 
     if (this->width._set) {
         sp_repr_set_svg_double(repr, "width", this->width.computed);
     } else {
-        repr->setAttribute("width", NULL);
+        repr->setAttribute("width", nullptr);
     }
 
     if (this->height._set) {
         sp_repr_set_svg_double(repr, "height", this->height.computed);
     } else {
-        repr->setAttribute("height", NULL);
+        repr->setAttribute("height", nullptr);
     }
 
     if (this->filterRes.getNumber()>=0) {
@@ -319,7 +319,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         repr->setAttribute("filterRes", tmp);
         g_free(tmp);
     } else {
-        repr->setAttribute("filterRes", NULL);
+        repr->setAttribute("filterRes", nullptr);
     }
 
     if (this->href->getURI()) {
@@ -379,8 +379,8 @@ void SPFilter::remove_child(Inkscape::XML::Node *child) {
 
 void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr_filter)
 {
-    g_assert(sp_filter != NULL);
-    g_assert(nr_filter != NULL);
+    g_assert(sp_filter != nullptr);
+    g_assert(nr_filter != nullptr);
 
     sp_filter->_renderer = nr_filter;
 
@@ -404,7 +404,7 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
     for(auto& primitive_obj: sp_filter->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             SPFilterPrimitive *primitive = SP_FILTER_PRIMITIVE(&primitive_obj);
-            g_assert(primitive != NULL);
+            g_assert(primitive != nullptr);
 
 //            if (((SPFilterPrimitiveClass*) G_OBJECT_GET_CLASS(primitive))->build_renderer) {
 //                ((SPFilterPrimitiveClass *) G_OBJECT_GET_CLASS(primitive))->build_renderer(primitive, nr_filter);
@@ -417,7 +417,7 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
 }
 
 int sp_filter_primitive_count(SPFilter *filter) {
-    g_assert(filter != NULL);
+    g_assert(filter != nullptr);
     int count = 0;
 
     for(auto& primitive_obj: filter->children) {
@@ -475,7 +475,7 @@ gchar const *sp_filter_name_for_image(SPFilter const *filter, int const image) {
             break;
         case Inkscape::Filters::NR_FILTER_SLOT_NOT_SET:
         case Inkscape::Filters::NR_FILTER_UNNAMED_SLOT:
-            return 0;
+            return nullptr;
             break;
         default:
             for (map<gchar *, int, ltstr>::const_iterator i
@@ -486,11 +486,11 @@ gchar const *sp_filter_name_for_image(SPFilter const *filter, int const image) {
                 }
             }
     }
-    return 0;
+    return nullptr;
 }
 
 Glib::ustring sp_filter_get_new_result_name(SPFilter *filter) {
-    g_assert(filter != NULL);
+    g_assert(filter != nullptr);
     int largest = 0;
 
     for(auto& primitive_obj: filter->children) {

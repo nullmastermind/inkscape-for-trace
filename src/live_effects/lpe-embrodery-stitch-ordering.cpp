@@ -256,8 +256,8 @@ void OrderingPoint::FindNearest2(const std::vector<OrderingInfoEx *> &infos)
 
     Coord dist0 = infinity();
     Coord dist1 = infinity();
-    nearest[0] = 0;
-    nearest[1] = 0;
+    nearest[0] = nullptr;
+    nearest[1] = nullptr;
 
     for (std::vector<OrderingInfoEx *>::const_iterator it = infos.begin(); it != infos.end(); ++it) {
         Coord dist = distance(point, (*it)->beg.point);
@@ -297,16 +297,16 @@ void OrderingPoint::FindNearest2(const std::vector<OrderingInfoEx *> &infos)
 void OrderingPoint::EnforceMutual(void)
 {
     if (nearest[0] && !(this == nearest[0]->nearest[0] || this == nearest[0]->nearest[1])) {
-        nearest[0] = 0;
+        nearest[0] = nullptr;
     }
 
     if (nearest[1] && !(this == nearest[1]->nearest[0] || this == nearest[1]->nearest[1])) {
-        nearest[1] = 0;
+        nearest[1] = nullptr;
     }
 
     if (nearest[1] && !nearest[0]) {
         nearest[0] = nearest[1];
-        nearest[1] = 0;
+        nearest[1] = nullptr;
     }
 }
 
@@ -318,19 +318,19 @@ void OrderingPoint::EnforceSymmetric(const OrderingPoint &other)
                 (other.nearest[0] && nearest[0]->infoex == other.nearest[0]->infoex) ||
                 (other.nearest[1] && nearest[0]->infoex == other.nearest[1]->infoex)
             )) {
-        nearest[0] = 0;
+        nearest[0] = nullptr;
     }
 
     if (nearest[1] && !(
                 (other.nearest[0] && nearest[1]->infoex == other.nearest[0]->infoex) ||
                 (other.nearest[1] && nearest[1]->infoex == other.nearest[1]->infoex)
             )) {
-        nearest[1] = 0;
+        nearest[1] = nullptr;
     }
 
     if (nearest[1] && !nearest[0]) {
         nearest[0] = nearest[1];
-        nearest[1] = 0;
+        nearest[1] = nullptr;
     }
 }
 
@@ -415,7 +415,7 @@ OrderingGroupNeighbor *OrderingGroupPoint::FindNearestUnused(void)
 
     // it shouldn't happen that we can't find any point at all
     assert(0);
-    return 0;
+    return nullptr;
 }
 
 // Return the other end in the group of the point
@@ -430,11 +430,11 @@ OrderingGroupPoint *OrderingGroupPoint::GetOtherEndGroup(void)
 OrderingGroupPoint *OrderingGroupPoint::GetAltPointGroup(void)
 {
     if (group->nEndPoints < 4) {
-        return 0;
+        return nullptr;
     }
 
     OrderingGroupPoint *alt = group->endpoints[ indexInGroup ^ 2 ];
-    return alt->used ? 0 : alt;
+    return alt->used ? nullptr : alt;
 }
 
 
@@ -635,7 +635,7 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
 {
     // Find the longest connection outside of the active set
     // The longest segment is then the longest of this longest outside segment and all inside segments
-    OrderingGroupConnection *longestOutside = 0;
+    OrderingGroupConnection *longestOutside = nullptr;
 
     if (contains(connections, *longestConnect)) {
         // The longest connection is inside the active set, so we need to search for the longest outside
@@ -905,7 +905,7 @@ void OrderGroups(std::vector<OrderingGroup *> *groups, const int nDims)
     OrderingGroupPoint *crnt = groups->front()->endpoints[0];
 
     // The longest connection is ignored (we don't want cycles)
-    OrderingGroupConnection *longestConnect = 0;
+    OrderingGroupConnection *longestConnect = nullptr;
 
     for (unsigned int nConnected = 0; nConnected < groups->size(); nConnected++) {
         // Mark both end points of the current segment as used

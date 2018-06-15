@@ -40,21 +40,21 @@ ParamInt::ParamInt(const gchar * name,
     , _min(0)
     , _max(10)
 {
-    const char * defaultval = NULL;
-    if (xml->firstChild() != NULL) {
+    const char * defaultval = nullptr;
+    if (xml->firstChild() != nullptr) {
         defaultval = xml->firstChild()->content();
     }
-    if (defaultval != NULL) {
+    if (defaultval != nullptr) {
         _value = atoi(defaultval);
     }
 
     const char * maxval = xml->attribute("max");
-    if (maxval != NULL) {
+    if (maxval != nullptr) {
         _max = atoi(maxval);
     }
 
     const char * minval = xml->attribute("min");
-    if (minval != NULL) {
+    if (minval != nullptr) {
         _min = atoi(minval);
     }
     /* We're handling this by just killing both values */
@@ -118,7 +118,7 @@ public:
         describing the parameter. */
     ParamIntAdjustment (ParamInt * param, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
             Gtk::Adjustment(0.0, param->min(), param->max(), 1.0, 10.0, 0), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        this->set_value(_pref->get(NULL, NULL) /* \todo fix */);
+        this->set_value(_pref->get(nullptr, nullptr) /* \todo fix */);
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamIntAdjustment::val_changed));
     };
 
@@ -135,7 +135,7 @@ void ParamIntAdjustment::val_changed(void)
 {
     //std::cout << "Value Changed to: " << this->get_value() << std::endl;
     _pref->set((int)this->get_value(), _doc, _node);
-    if (_changeSignal != NULL) {
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
 }
@@ -149,7 +149,7 @@ Gtk::Widget *
 ParamInt::get_widget (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
@@ -160,7 +160,7 @@ ParamInt::get_widget (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal
     if (_mode == FULL) {
 
         Glib::ustring text;
-        if (_text != NULL)
+        if (_text != nullptr)
             text = _text;
         UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(text, fadjust, 0);
         scale->set_size_request(400, -1);

@@ -81,14 +81,14 @@ const std::string TextTool::prefsPath = "/tools/text";
 
 TextTool::TextTool()
     : ToolBase(cursor_text_xpm)
-    , imc(NULL)
-    , text(NULL)
+    , imc(nullptr)
+    , text(nullptr)
     , pdoc(0, 0)
     , unimode(false)
     , unipos(0)
-    , cursor(NULL)
-    , indicator(NULL)
-    , frame(NULL)
+    , cursor(nullptr)
+    , indicator(nullptr)
+    , frame(nullptr)
     , timeout(0)
     , show(false)
     , phase(false)
@@ -96,18 +96,18 @@ TextTool::TextTool()
     , over_text(false)
     , dragging(0)
     , creating(false)
-    , grabbed(NULL)
-    , preedit_string(NULL)
+    , grabbed(nullptr)
+    , preedit_string(nullptr)
 {
 }
 
 TextTool::~TextTool() {
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     if (this->grabbed) {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-        this->grabbed = NULL;
+        this->grabbed = nullptr;
     }
 
     Inkscape::Rubberband::get(this->desktop)->stop();
@@ -128,13 +128,13 @@ void TextTool::setup() {
     this->cursor->setRgba32(0x000000ff);
     sp_canvas_item_hide(this->cursor);
 
-    this->indicator = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, NULL);
+    this->indicator = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->indicator)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
     SP_CTRLRECT(this->indicator)->setShadow(1, 0xffffff7f);
     sp_canvas_item_hide(this->indicator);
 
-    this->frame = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, NULL);
+    this->frame = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->frame)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->frame)->setColor(0x0000ff7f, false, 0);
     sp_canvas_item_hide(this->frame);
@@ -160,7 +160,7 @@ void TextTool::setup() {
         g_signal_connect(G_OBJECT(this->imc), "commit", G_CALLBACK(sptc_commit), this);
 
         if (gtk_widget_has_focus(canvas)) {
-            sptc_focus_in(canvas, NULL, this);
+            sptc_focus_in(canvas, nullptr, this);
         }
     }
 
@@ -213,7 +213,7 @@ void TextTool::finish() {
 
     if (this->imc) {
         g_object_unref(G_OBJECT(this->imc));
-        this->imc = NULL;
+        this->imc = nullptr;
     }
 
     if (this->timeout) {
@@ -223,17 +223,17 @@ void TextTool::finish() {
 
     if (this->cursor) {
         sp_canvas_item_destroy(this->cursor);
-        this->cursor = NULL;
+        this->cursor = nullptr;
     }
 
     if (this->indicator) {
         sp_canvas_item_destroy(this->indicator);
-        this->indicator = NULL;
+        this->indicator = nullptr;
     }
 
     if (this->frame) {
         sp_canvas_item_destroy(this->frame);
-        this->frame = NULL;
+        this->frame = nullptr;
     }
 
     for (std::vector<SPCanvasItem*>::iterator it = this->text_selection_quads.begin() ;
@@ -406,12 +406,12 @@ static void sp_text_context_setup_text(TextTool *tc)
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
     rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
-    rtext->addChild(rtspan, NULL);
+    rtext->addChild(rtspan, nullptr);
     Inkscape::GC::release(rtspan);
 
     /* Create TEXT */
     Inkscape::XML::Node *rstring = xml_doc->createTextNode("");
-    rtspan->addChild(rstring, NULL);
+    rtspan->addChild(rstring, nullptr);
     Inkscape::GC::release(rstring);
     SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
     /* fixme: Is selection::changed really immediate? */
@@ -421,7 +421,7 @@ static void sp_text_context_setup_text(TextTool *tc)
     text_item->transform = SP_ITEM(ec->desktop->currentLayer())->i2doc_affine().inverse();
 
     text_item->updateRepr();
-    text_item->doWriteTransform(text_item->transform, NULL, true);
+    text_item->doWriteTransform(text_item->transform, nullptr, true);
     DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                _("Create text"));
 }
@@ -537,7 +537,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 Inkscape::Rubberband::get(desktop)->start(desktop, this->p0);
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                    NULL, event->button.time);
+                                    nullptr, event->button.time);
                 this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
                 this->creating = 1;
 
@@ -605,7 +605,7 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-                    this->grabbed = NULL;
+                    this->grabbed = nullptr;
                 }
 
                 Inkscape::Rubberband::get(desktop)->stop();
@@ -1098,7 +1098,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     this->creating = 0;
                                     if (this->grabbed) {
                                         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-                                        this->grabbed = NULL;
+                                        this->grabbed = nullptr;
                                     }
                                     Inkscape::Rubberband::get(desktop)->stop();
                                 } else {
@@ -1220,7 +1220,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                         this->creating = 0;
                         if (this->grabbed) {
                             sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-                            this->grabbed = NULL;
+                            this->grabbed = nullptr;
                         }
                         Inkscape::Rubberband::get(desktop)->stop();
                     }
@@ -1332,7 +1332,7 @@ Glib::ustring sp_text_get_selected_text(ToolBase const *ec)
     if (!SP_IS_TEXT_CONTEXT(ec))
         return "";
     TextTool const *tc = SP_TEXT_CONTEXT(ec);
-    if (tc->text == NULL)
+    if (tc->text == nullptr)
         return "";
 
     return sp_te_get_string_multiline(tc->text, tc->text_sel_start, tc->text_sel_end);
@@ -1341,10 +1341,10 @@ Glib::ustring sp_text_get_selected_text(ToolBase const *ec)
 SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 {
     if (!SP_IS_TEXT_CONTEXT(ec))
-        return NULL;
+        return nullptr;
     TextTool const *tc = SP_TEXT_CONTEXT(ec);
-    if (tc->text == NULL)
-        return NULL;
+    if (tc->text == nullptr)
+        return nullptr;
 
     SPObject const *obj = sp_te_object_at_position(tc->text, tc->text_sel_end);
 
@@ -1352,7 +1352,7 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
         return take_style_from_item(const_cast<SPObject*>(obj));
     }
 
-    return NULL;
+    return nullptr;
 }
 
 static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
@@ -1360,13 +1360,13 @@ static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
     Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
     for ( ; attrs ; attrs++) {
         gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
     }
     attrs = second->attributeList();
     for ( ; attrs ; attrs++) {
         gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
-        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+        if (other_attr == nullptr || strcmp(attrs->value, other_attr))
             return false;
     }
     return true;
@@ -1417,7 +1417,7 @@ bool sp_text_delete_selection(ToolBase *ec)
     if (!SP_IS_TEXT_CONTEXT(ec))
         return false;
     TextTool *tc = SP_TEXT_CONTEXT(ec);
-    if (tc->text == NULL)
+    if (tc->text == nullptr)
         return false;
 
     if (tc->text_sel_start == tc->text_sel_end)
@@ -1445,7 +1445,7 @@ bool sp_text_delete_selection(ToolBase *ec)
  */
 void TextTool::_selectionChanged(Inkscape::Selection *selection)
 {
-    g_assert(selection != NULL);
+    g_assert(selection != nullptr);
 
     ToolBase *ec = SP_EVENT_CONTEXT(this);
 
@@ -1458,7 +1458,7 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
     if (this->text && (item != this->text)) {
         sp_text_context_forget_text(this);
     }
-    this->text = NULL;
+    this->text = nullptr;
 
     if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
         this->text = item;
@@ -1466,7 +1466,7 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
         if (layout)
             this->text_sel_start = this->text_sel_end = layout->end();
     } else {
-        this->text = NULL;
+        this->text = nullptr;
     }
 
     // we update cursor without scrolling, because this position may not be final;
@@ -1483,7 +1483,7 @@ void TextTool::_selectionModified(Inkscape::Selection */*selection*/, guint /*fl
 
 bool TextTool::_styleSet(SPCSSAttr const *css)
 {
-    if (this->text == NULL)
+    if (this->text == nullptr)
         return false;
     if (this->text_sel_start == this->text_sel_end)
         return false;    // will get picked up by the parent and applied to the whole text object
@@ -1498,11 +1498,11 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
 
 int TextTool::_styleQueried(SPStyle *style, int property)
 {
-    if (this->text == NULL) {
+    if (this->text == nullptr) {
         return QUERY_STYLE_NOTHING;
     }
     const Inkscape::Text::Layout *layout = te_get_layout(this->text);
-    if (layout == NULL) {
+    if (layout == nullptr) {
         return QUERY_STYLE_NOTHING;
     }
     sp_text_context_validate_cursor_iterators(this);
@@ -1523,8 +1523,8 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         }
     }
     for (Inkscape::Text::Layout::iterator it = begin_it ; it < end_it ; it.nextStartOfSpan()) {
-        SPObject *pos_obj = 0;
-        void *rawptr = 0;
+        SPObject *pos_obj = nullptr;
+        void *rawptr = nullptr;
         layout->getSourceOfCharacter(it, &rawptr);
         if (!rawptr || !SP_IS_OBJECT(rawptr)) {
             continue;
@@ -1543,7 +1543,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
 
 static void sp_text_context_validate_cursor_iterators(TextTool *tc)
 {
-    if (tc->text == NULL)
+    if (tc->text == nullptr)
         return;
     Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
     if (layout) {     // undo can change the text length without us knowing it
@@ -1602,7 +1602,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             trunc = _(" [truncated]");
         }
         if (SP_IS_FLOWTEXT(tc->text)) {
-            SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (NULL); // first frame only
+            SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             if (frame) {
                 if (truncated) {
                     SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
@@ -1646,11 +1646,11 @@ static void sp_text_context_update_text_selection(TextTool *tc)
     tc->text_selection_quads.clear();
 
     std::vector<Geom::Point> quads;
-    if (tc->text != NULL)
+    if (tc->text != nullptr)
         quads = sp_te_create_selection_quads(tc->text, tc->text_sel_start, tc->text_sel_end, (tc->text)->i2dt_affine());
     for (unsigned i = 0 ; i < quads.size() ; i += 4) {
         SPCanvasItem *quad_canvasitem;
-        quad_canvasitem = sp_canvas_item_new(tc->desktop->getControls(), SP_TYPE_CTRLQUADR, NULL);
+        quad_canvasitem = sp_canvas_item_new(tc->desktop->getControls(), SP_TYPE_CTRLQUADR, nullptr);
         // FIXME: make the color settable in prefs
         // for now, use semitrasparent blue, as cairo cannot do inversion :(
         sp_ctrlquadr_set_rgba32(SP_CTRLQUADR(quad_canvasitem), 0x00777777);
@@ -1683,7 +1683,7 @@ static void sp_text_context_forget_text(TextTool *tc)
     (void)ti;
     /* We have to set it to zero,
      * or selection changed signal messes everything up */
-    tc->text = NULL;
+    tc->text = nullptr;
 
 /* FIXME: this automatic deletion when nothing is inputted crashes the XML edittor and also crashes when duplicating an empty flowtext.
     So don't create an empty flowtext in the first place? Create it when first character is typed.
@@ -1748,7 +1748,7 @@ void sp_text_context_place_cursor_at (TextTool *tc, SPObject *text, Geom::Point 
 Inkscape::Text::Layout::iterator *sp_text_context_get_cursor_position(TextTool *tc, SPObject *text)
 {
     if (text != tc->text)
-        return NULL;
+        return nullptr;
     return &(tc->text_sel_end);
 }
 

@@ -77,8 +77,8 @@ namespace Internal {
 /* globals */
 static double       PX2WORLD;   // value set in begin()
 static bool         FixPPTCharPos, FixPPTDashLine, FixPPTGrad2Polys, FixPPTPatternAsHatch;
-static WMFTRACK    *wt               = NULL;
-static WMFHANDLES  *wht              = NULL;
+static WMFTRACK    *wt               = nullptr;
+static WMFHANDLES  *wht              = nullptr;
 
 void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *rtl, int *ndx, float scale)
 {
@@ -87,7 +87,7 @@ void PrintWmf::smuggle_adxky_out(const char *string, int16_t **adx, double *ky, 
     int16_t   *ladx;
     const char *cptr = &string[strlen(string) + 1]; // this works because of the first fake terminator
 
-    *adx = NULL;
+    *adx = nullptr;
     *ky  = 0.0;       // set a default value
     sscanf(cptr, "%7d", ndx);
     if (!*ndx) {
@@ -403,8 +403,8 @@ int PrintWmf::create_brush(SPStyle const *style, U_COLORREF *fcolor)
         } else if (SP_IS_GRADIENT(SP_STYLE_FILL_SERVER(style))) { // must be a gradient
             // currently we do not do anything with gradients, the code below just sets the color to the average of the stops
             SPPaintServer *paintserver = style->fill.value.href->getObject();
-            SPLinearGradient *lg = NULL;
-            SPRadialGradient *rg = NULL;
+            SPLinearGradient *lg = nullptr;
+            SPRadialGradient *rg = nullptr;
 
             if (SP_IS_LINEARGRADIENT(paintserver)) {
                 lg = SP_LINEARGRADIENT(paintserver);
@@ -524,7 +524,7 @@ void PrintWmf::destroy_brush()
 
 int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 {
-    char                *rec       = NULL;
+    char                *rec       = nullptr;
     uint32_t             pen;
     uint32_t             penstyle;
     U_COLORREF           penColor;
@@ -642,7 +642,7 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 //  delete the defined pen object
 void PrintWmf::destroy_pen()
 {
-    char *rec = NULL;
+    char *rec = nullptr;
     // WMF lets any object be deleted whenever, and the chips fall where they may...
     if (hpen) {
         rec = wdeleteobject_set(&hpen, wht);
@@ -676,7 +676,7 @@ unsigned int PrintWmf::fill(
 
     fill_transform = tf;
 
-    if (create_brush(style, NULL)) {
+    if (create_brush(style, nullptr)) {
         /*
             Handle gradients.  Uses modified livarot as 2geom boolops is currently broken.
             Can handle gradients with multiple stops.
@@ -861,7 +861,7 @@ unsigned int PrintWmf::stroke(
     Geom::OptRect const &/*pbox*/, Geom::OptRect const &/*dbox*/, Geom::OptRect const &/*bbox*/)
 {
 
-    char *rec = NULL;
+    char *rec = nullptr;
     Geom::Affine tf = m_tr_stack.top();
 
     use_stroke = true;
@@ -940,7 +940,7 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     int moves  = 0;
     int lines  = 0;
     int curves = 0;
-    char *rec  = NULL;
+    char *rec  = nullptr;
 
     for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
         moves++;
@@ -1126,7 +1126,7 @@ unsigned int PrintWmf::image(
     SPStyle const * /*style*/)  /** provides indirect link to image object */
 {
     double x1, y1, dw, dh;
-    char *rec = NULL;
+    char *rec = nullptr;
     Geom::Affine tf = m_tr_stack.top();
 
     rec = U_WMRSETSTRETCHBLTMODE_set(U_COLORONCOLOR);
@@ -1189,7 +1189,7 @@ unsigned int PrintWmf::image(
 // may also be called with a simple_shape or an empty path, whereupon it just returns without doing anything
 unsigned int PrintWmf::print_pathv(Geom::PathVector const &pathv, const Geom::Affine &transform)
 {
-    char       *rec = NULL;
+    char       *rec = nullptr;
     U_POINT16  *pt16hold, *pt16ptr;
     uint16_t   *n16hold;
     uint16_t   *n16ptr;
@@ -1349,7 +1349,7 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         return 0;
     }
 
-    char *rec = NULL;
+    char *rec = nullptr;
     int ccount, newfont;
     int fix90n = 0;
     uint32_t hfont = 0;
@@ -1379,14 +1379,14 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     }
 
     char *text2 = strdup(text);  // because U_Utf8ToUtf16le calls iconv which does not like a const char *
-    uint16_t *unicode_text = U_Utf8ToUtf16le(text2, 0, NULL);
+    uint16_t *unicode_text = U_Utf8ToUtf16le(text2, 0, nullptr);
     free(text2);
     //translates Unicode  as Utf16le to NonUnicode, if possible.  If any translate, all will, and all to
     //the same font, because of code in Layout::print
     UnicodeToNon(unicode_text, &ccount, &newfont);
     // The preceding hopefully handled conversions to symbol, wingdings or zapf dingbats.  Now slam everything
     // else down into latin1, which is all WMF can handle.  If the language isn't English expect terrible results.
-    char *latin1_text = U_Utf16leToLatin1(unicode_text, 0, NULL);
+    char *latin1_text = U_Utf16leToLatin1(unicode_text, 0, nullptr);
     free(unicode_text);
 
     // in some cases a UTF string may reduce to NO latin1 characters, which returns NULL
@@ -1439,9 +1439,9 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
         // of the special fonts.
         char *facename;
         if (!newfont) {
-            facename = U_Utf8ToLatin1(style->font_family.value, 0, NULL);
+            facename = U_Utf8ToLatin1(style->font_family.value, 0, nullptr);
         } else {
-            facename = U_Utf8ToLatin1(FontName(newfont), 0, NULL);
+            facename = U_Utf8ToLatin1(FontName(newfont), 0, nullptr);
         }
 
         // Scale the text to the minimum stretch. (It tends to stay within bounding rectangles even if

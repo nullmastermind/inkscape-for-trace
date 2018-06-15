@@ -51,7 +51,7 @@ EvaluatorToken::EvaluatorToken()
 }
 
 ExpressionEvaluator::ExpressionEvaluator(const char *string, Unit const *unit) :
-    string(g_locale_to_utf8(string,-1,0,0,0)),
+    string(g_locale_to_utf8(string,-1,nullptr,nullptr,nullptr)),
     unit(unit)
 {
     current_token.type  = TOKEN_END;
@@ -76,24 +76,24 @@ ExpressionEvaluator::ExpressionEvaluator(const char *string, Unit const *unit) :
  **/
 EvaluatorQuantity ExpressionEvaluator::evaluate()
 {
-    if (!g_utf8_validate(string, -1, NULL)) {
-        throw EvaluatorException("Invalid UTF8 string", NULL);
+    if (!g_utf8_validate(string, -1, nullptr)) {
+        throw EvaluatorException("Invalid UTF8 string", nullptr);
     }
     
     EvaluatorQuantity result = EvaluatorQuantity();
     EvaluatorQuantity default_unit_factor;
     
     // Empty expression evaluates to 0
-    if (acceptToken(TOKEN_END, NULL)) {
+    if (acceptToken(TOKEN_END, nullptr)) {
         return result;
     }
     
     result = evaluateExpression();
     
     // There should be nothing left to parse by now
-    isExpected(TOKEN_END, 0);
+    isExpected(TOKEN_END, nullptr);
     
-    resolveUnit(NULL, &default_unit_factor, unit);
+    resolveUnit(nullptr, &default_unit_factor, unit);
     
     // Entire expression is dimensionless, apply default unit if applicable
     if ( result.dimension == 0 && default_unit_factor.dimension != 0 ) {
@@ -112,7 +112,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
     
     // Continue evaluating terms, chained with + or -.
     for (subtract = FALSE;
-        acceptToken('+', NULL) || (subtract = acceptToken('-', NULL));
+        acceptToken('+', nullptr) || (subtract = acceptToken('-', nullptr));
         subtract = FALSE)
     {
         EvaluatorQuantity new_term = evaluateTerm();
@@ -121,7 +121,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
         if ( new_term.dimension != evaluated_terms.dimension ) {
             EvaluatorQuantity default_unit_factor;
             
-            resolveUnit(NULL, &default_unit_factor, unit);
+            resolveUnit(nullptr, &default_unit_factor, unit);
             
             if ( new_term.dimension == 0
                 && evaluated_terms.dimension == default_unit_factor.dimension )
@@ -150,7 +150,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateTerm()
     EvaluatorQuantity evaluated_exp_terms = evaluateExpTerm();
     
     for ( division = false;
-        acceptToken('*', NULL) || (division = acceptToken('/', NULL));
+        acceptToken('*', nullptr) || (division = acceptToken('/', nullptr));
         division = false )
     {
         EvaluatorQuantity new_exp_term = evaluateExpTerm();
@@ -171,7 +171,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpTerm()
 {
     EvaluatorQuantity evaluated_signed_factors = evaluateSignedFactor();
     
-    while(acceptToken('^', NULL)) {
+    while(acceptToken('^', nullptr)) {
         EvaluatorQuantity new_signed_factor = evaluateSignedFactor();
         
         if (new_signed_factor.dimension == 0) {
@@ -191,8 +191,8 @@ EvaluatorQuantity ExpressionEvaluator::evaluateSignedFactor()
     EvaluatorQuantity result;
     bool negate = FALSE;
     
-    if (!acceptToken('+', NULL)) {
-        negate = acceptToken ('-', NULL);
+    if (!acceptToken('+', nullptr)) {
+        negate = acceptToken ('-', nullptr);
     }
     
     result = evaluateFactor();
@@ -214,9 +214,9 @@ EvaluatorQuantity ExpressionEvaluator::evaluateFactor()
     }
     else if (acceptToken(TOKEN_NUM, &consumed_token)) {
         evaluated_factor.value = consumed_token.value.fl;
-    } else if (acceptToken('(', NULL)) {
+    } else if (acceptToken('(', nullptr)) {
         evaluated_factor = evaluateExpression();
-        isExpected(')', 0);
+        isExpected(')', nullptr);
     } else {
         throwError("Expected number or '('");
     }
@@ -279,7 +279,7 @@ void ExpressionEvaluator::parseNextToken()
         acceptTokenCount(1, s[0]);
     } else {
         // Attempt to parse a numeric value
-        char *endptr = NULL;
+        char *endptr = nullptr;
         gdouble value = g_strtod(s, &endptr);
         
         if ( endptr && endptr != s ) {

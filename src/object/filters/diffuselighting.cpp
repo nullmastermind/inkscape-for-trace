@@ -39,10 +39,10 @@ SPFeDiffuseLighting::SPFeDiffuseLighting() : SPFilterPrimitive() {
     this->surfaceScale = 1;
     this->diffuseConstant = 1;
     this->lighting_color = 0xffffffff;
-    this->icc = NULL;
+    this->icc = nullptr;
 
     //TODO kernelUnit
-    this->renderer = NULL;
+    this->renderer = nullptr;
 
     this->surfaceScale_set = FALSE;
     this->diffuseConstant_set = FALSE;
@@ -78,14 +78,14 @@ void SPFeDiffuseLighting::release() {
  * Sets a specific value in the SPFeDiffuseLighting.
  */
 void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
-    gchar const *cend_ptr = NULL;
-    gchar *end_ptr = NULL;
+    gchar const *cend_ptr = nullptr;
+    gchar *end_ptr = nullptr;
     
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
     //TODO test forbidden values
         case SP_ATTR_SURFACESCALE:
-            end_ptr = NULL;
+            end_ptr = nullptr;
 
             if (value) {
                 this->surfaceScale = g_ascii_strtod(value, &end_ptr);
@@ -107,7 +107,7 @@ void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_DIFFUSECONSTANT:
-            end_ptr = NULL;
+            end_ptr = nullptr;
 
             if (value) {
                 this->diffuseConstant = g_ascii_strtod(value, &end_ptr);
@@ -115,7 +115,7 @@ void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
                 if (end_ptr && this->diffuseConstant >= 0) {
                     this->diffuseConstant_set = TRUE;
                 } else {
-                    end_ptr = NULL;
+                    end_ptr = nullptr;
                     g_warning("this: diffuseConstant should be a positive number ... defaulting to 1");
                 }
             } 
@@ -141,7 +141,7 @@ void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_PROP_LIGHTING_COLOR:
-            cend_ptr = NULL;
+            cend_ptr = nullptr;
             this->lighting_color = sp_svg_read_color(value, &cend_ptr, 0xffffffff);
 
             //if a value was read
@@ -157,7 +157,7 @@ void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
 
                     if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
                         delete this->icc;
-                        this->icc = NULL;
+                        this->icc = nullptr;
                     }
                 }
 
@@ -207,13 +207,13 @@ Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, In
     if (this->surfaceScale_set) {
         sp_repr_set_css_double(repr, "surfaceScale", this->surfaceScale);
     } else {
-        repr->setAttribute("surfaceScale", NULL);
+        repr->setAttribute("surfaceScale", nullptr);
     }
 
     if (this->diffuseConstant_set) {
         sp_repr_set_css_double(repr, "diffuseConstant", this->diffuseConstant);
     } else {
-        repr->setAttribute("diffuseConstant", NULL);
+        repr->setAttribute("diffuseConstant", nullptr);
     }
 
     /*TODO kernelUnits */
@@ -222,7 +222,7 @@ Inkscape::XML::Node* SPFeDiffuseLighting::write(Inkscape::XML::Document *doc, In
         sp_svg_write_color(c, sizeof(c), this->lighting_color);
         repr->setAttribute("lighting-color", c);
     } else {
-        repr->setAttribute("lighting-color", NULL);
+        repr->setAttribute("lighting-color", nullptr);
     }
         
     SPFilterPrimitive::write(doc, repr, flags);
@@ -277,13 +277,13 @@ static void sp_feDiffuseLighting_children_modified(SPFeDiffuseLighting *sp_diffu
 }
 
 void SPFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_DIFFUSELIGHTING);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterDiffuseLighting *nr_diffuselighting = dynamic_cast<Inkscape::Filters::FilterDiffuseLighting*>(nr_primitive);
-    g_assert(nr_diffuselighting != NULL);
+    g_assert(nr_diffuselighting != nullptr);
 
     this->renderer = nr_diffuselighting;
     sp_filter_primitive_renderer_common(this, nr_primitive);

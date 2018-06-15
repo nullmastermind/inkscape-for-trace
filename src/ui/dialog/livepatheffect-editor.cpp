@@ -92,16 +92,16 @@ LivePathEffectEditor::LivePathEffectEditor()
       deskTrack(),
       lpe_list_locked(false),
       lpe_changed(true),
-      effectwidget(NULL),
+      effectwidget(nullptr),
       status_label("", Gtk::ALIGN_CENTER),
       effectcontrol_frame(""),
       button_add(),
       button_remove(),
       button_up(),
       button_down(),
-      current_desktop(NULL),
-      current_lpeitem(NULL),
-      current_lperef(NULL)
+      current_desktop(nullptr),
+      current_lpeitem(nullptr),
+      current_lperef(nullptr)
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(4);
@@ -190,7 +190,7 @@ LivePathEffectEditor::~LivePathEffectEditor()
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
-        effectwidget = NULL;
+        effectwidget = nullptr;
     }
 
     if (current_desktop) {
@@ -209,7 +209,7 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
-        effectwidget = NULL;
+        effectwidget = nullptr;
     }
     effectwidget = effect.newWidget();
     effectcontrol_frame.set_label(effect.getName());
@@ -241,7 +241,7 @@ LivePathEffectEditor::showText(Glib::ustring const &str)
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
-        effectwidget = NULL;
+        effectwidget = nullptr;
     }
 
     status_label.show();
@@ -271,7 +271,7 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
         lpe_list_locked = false;
         return;
     }
-    current_lpeitem = NULL;
+    current_lpeitem = nullptr;
     effectlist_store->clear();
 
     if ( sel && !sel->isEmpty() ) {
@@ -388,7 +388,7 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
 
         onSelectionChanged(selection);
     } else {
-        onSelectionChanged(NULL);
+        onSelectionChanged(nullptr);
     }
 }
 
@@ -453,7 +453,7 @@ LivePathEffectEditor::onAdd()
                         gchar *id = g_strdup(item->getRepr()->attribute("id"));
                         gchar *transform = g_strdup(item->getRepr()->attribute("transform"));
                         item->deleteObject(false);
-                        item = NULL;
+                        item = nullptr;
 
                         // run sp_selection_clone_original_path_lpe 
                         sel->cloneOriginalPathLPE(true);
@@ -491,7 +491,7 @@ LivePathEffectEditor::onRemove()
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
             lpeitem->removeCurrentPathEffect(false);
-            current_lperef = NULL;
+            current_lperef = nullptr;
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
             lpe_list_locked = false;

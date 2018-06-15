@@ -27,8 +27,8 @@ namespace UI {
 namespace Dialogs {
 
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
-    : _desktop(NULL),
-      _knotpoint(NULL),
+    : _desktop(nullptr),
+      _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
@@ -104,7 +104,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
 
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
 }
 
 void FilletChamferPropertiesDialog::showDialog(
@@ -169,7 +169,7 @@ void FilletChamferPropertiesDialog::_apply()
 
 void FilletChamferPropertiesDialog::_close()
 {
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(

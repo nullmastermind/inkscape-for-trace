@@ -148,12 +148,12 @@ Geom::OptRect SPTSpan::bbox(Geom::Affine const &transform, SPItem::BBoxType type
         parent_text = parent_text->parent;
     }
     
-    if (parent_text == NULL) {
+    if (parent_text == nullptr) {
         return bbox;
     }
 
     // get the bbox of our portion of the layout
-    bbox = SP_TEXT(parent_text)->layout.bounds(transform, sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, NULL) - 1);
+    bbox = SP_TEXT(parent_text)->layout.bounds(transform, sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, nullptr) - 1);
     
     if (!bbox) {
     	return bbox;
@@ -180,10 +180,10 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
         std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
-            Inkscape::XML::Node* c_repr=NULL;
+            Inkscape::XML::Node* c_repr=nullptr;
 
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
-                c_repr = child.updateRepr(xml_doc, NULL, flags);
+                c_repr = child.updateRepr(xml_doc, nullptr, flags);
             } else if ( SP_IS_TEXTPATH(&child) ) {
                 //c_repr = child.updateRepr(xml_doc, NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(&child) ) {
@@ -196,7 +196,7 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
         }
 
         for (auto i = l.rbegin(); i!= l.rend(); ++i) {
-            repr->addChild((*i), NULL);
+            repr->addChild((*i), nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
@@ -229,7 +229,7 @@ void   refresh_textpath_source(SPTextPath* offset);
 SPTextPath::SPTextPath() : SPItem() {
     this->startOffset._set = false;
     this->side = SP_TEXT_PATH_SIDE_LEFT;
-    this->originalPath = NULL;
+    this->originalPath = nullptr;
     this->isUpdating=false;
 
     // set up the uri reference
@@ -253,7 +253,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 
     bool  no_content = true;
 
-    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
+    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != nullptr; rch = rch->next()) {
         if ( rch->type() == Inkscape::XML::TEXT_NODE )
         {
             no_content = false;
@@ -264,7 +264,7 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     if ( no_content ) {
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node* rch = xml_doc->createTextNode("");
-        repr->addChild(rch, NULL);
+        repr->addChild(rch, nullptr);
     }
 
     SPItem::build(doc, repr);
@@ -277,7 +277,7 @@ void SPTextPath::release() {
     	delete this->originalPath;
     }
 
-    this->originalPath = NULL;
+    this->originalPath = nullptr;
 
     SPItem::release();
 }
@@ -357,7 +357,7 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
 
 void refresh_textpath_source(SPTextPath* tp)
 {
-    if ( tp == NULL ) {
+    if ( tp == nullptr ) {
     	return;
     }
 
@@ -432,10 +432,10 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
         std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
-            Inkscape::XML::Node* c_repr=NULL;
+            Inkscape::XML::Node* c_repr=nullptr;
 
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
-                c_repr = child.updateRepr(xml_doc, NULL, flags);
+                c_repr = child.updateRepr(xml_doc, nullptr, flags);
             } else if ( SP_IS_TEXTPATH(&child) ) {
                 //c_repr = child->updateRepr(xml_doc, NULL, flags); // shouldn't happen
             } else if ( SP_IS_STRING(&child) ) {
@@ -448,7 +448,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
         }
 
         for( auto i = l.rbegin(); i != l.rend(); ++i ) {
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
@@ -478,7 +478,7 @@ SPItem *sp_textpath_get_path_item(SPTextPath *tp)
             return refobj;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void sp_textpath_to_text(SPObject *tp)
@@ -507,7 +507,7 @@ void sp_textpath_to_text(SPObject *tp)
         // remove the old repr from under textpath
         tp->getRepr()->removeChild(*i);
         // put its copy under text
-        text->getRepr()->addChild(copy, NULL); // fixme: copy id
+        text->getRepr()->addChild(copy, nullptr); // fixme: copy id
     }
 
     //remove textpath

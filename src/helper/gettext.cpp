@@ -68,7 +68,7 @@ void initialize_gettext() {
     // Allow the user to override the locale directory by setting
     // the environment variable INKSCAPE_LOCALEDIR.
     char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
-    if (inkscape_localedir != NULL) {
+    if (inkscape_localedir != nullptr) {
         bindtextdomain(GETTEXT_PACKAGE, inkscape_localedir);
     }
 

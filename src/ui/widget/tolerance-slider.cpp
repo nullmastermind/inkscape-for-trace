@@ -46,7 +46,7 @@ namespace Widget {
 //====================================================
 
 ToleranceSlider::ToleranceSlider(const Glib::ustring& label1, const Glib::ustring& label2, const Glib::ustring& label3, const Glib::ustring& tip1, const Glib::ustring& tip2, const Glib::ustring& tip3, const Glib::ustring& key, Registry& wr)
-: _vbox(0)
+: _vbox(nullptr)
 {
     init(label1, label2, label3, tip1, tip2, tip3, key, wr);
 }

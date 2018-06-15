@@ -41,7 +41,7 @@ protected:
 
 public:
     EdgeDetect ( ) : Filter() { };
-    ~EdgeDetect ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~EdgeDetect ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -72,7 +72,7 @@ public:
 gchar const *
 EdgeDetect::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream matrix;
     std::ostringstream inverted;

@@ -42,10 +42,10 @@ SPFeSpecularLighting::SPFeSpecularLighting() : SPFilterPrimitive() {
     this->specularConstant = 1;
     this->specularExponent = 1;
     this->lighting_color = 0xffffffff;
-    this->icc = NULL;
+    this->icc = nullptr;
 
     //TODO kernelUnit
-    this->renderer = NULL;
+    this->renderer = nullptr;
     
     this->surfaceScale_set = FALSE;
     this->specularConstant_set = FALSE;
@@ -83,14 +83,14 @@ void SPFeSpecularLighting::release() {
  * Sets a specific value in the SPFeSpecularLighting.
  */
 void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
-    gchar const *cend_ptr = NULL;
-    gchar *end_ptr = NULL;
+    gchar const *cend_ptr = nullptr;
+    gchar *end_ptr = nullptr;
 
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
 //TODO test forbidden values
         case SP_ATTR_SURFACESCALE:
-            end_ptr = NULL;
+            end_ptr = nullptr;
             if (value) {
                 this->surfaceScale = g_ascii_strtod(value, &end_ptr);
                 if (end_ptr) {
@@ -111,13 +111,13 @@ void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_SPECULARCONSTANT:
-            end_ptr = NULL;
+            end_ptr = nullptr;
             if (value) {
                 this->specularConstant = g_ascii_strtod(value, &end_ptr);
                 if (end_ptr && this->specularConstant >= 0) {
                     this->specularConstant_set = TRUE;
                 } else {
-                    end_ptr = NULL;
+                    end_ptr = nullptr;
                     g_warning("this: specularConstant should be a positive number ... defaulting to 1");
                 }
             }
@@ -131,13 +131,13 @@ void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_SPECULAREXPONENT:
-            end_ptr = NULL;
+            end_ptr = nullptr;
             if (value) {
                 this->specularExponent = g_ascii_strtod(value, &end_ptr);
                 if (this->specularExponent >= 1 && this->specularExponent <= 128) {
                     this->specularExponent_set = TRUE;
                 } else {
-                    end_ptr = NULL;
+                    end_ptr = nullptr;
                     g_warning("this: specularExponent should be a number in range [1, 128] ... defaulting to 1");
                 }
             } 
@@ -160,7 +160,7 @@ void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
             this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_PROP_LIGHTING_COLOR:
-            cend_ptr = NULL;
+            cend_ptr = nullptr;
             this->lighting_color = sp_svg_read_color(value, &cend_ptr, 0xffffffff);
             //if a value was read
             if (cend_ptr) {
@@ -171,7 +171,7 @@ void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
                     if (!this->icc) this->icc = new SVGICCColor();
                     if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
                         delete this->icc;
-                        this->icc = NULL;
+                        this->icc = nullptr;
                     }
                 }
                 this->lighting_color_set = TRUE;
@@ -289,13 +289,13 @@ static void sp_feSpecularLighting_children_modified(SPFeSpecularLighting *sp_spe
 }
 
 void SPFeSpecularLighting::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_SPECULARLIGHTING);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterSpecularLighting *nr_specularlighting = dynamic_cast<Inkscape::Filters::FilterSpecularLighting*>(nr_primitive);
-    g_assert(nr_specularlighting != NULL);
+    g_assert(nr_specularlighting != nullptr);
 
     this->renderer = nr_specularlighting;
     sp_filter_primitive_renderer_common(this, nr_primitive);

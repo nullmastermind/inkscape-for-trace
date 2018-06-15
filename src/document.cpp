@@ -101,24 +101,24 @@ SPDocument::SPDocument() :
     keepalive(FALSE),
     virgin(TRUE),
     modified_since_save(FALSE),
-    rdoc(NULL),
-    rroot(NULL),
-    root(NULL),
-    style_cascade(cr_cascade_new(NULL, NULL, NULL)),
-    style_sheet(NULL),
-    uri(NULL),
-    base(NULL),
-    name(NULL),
-    priv(NULL), // reset in ctor
+    rdoc(nullptr),
+    rroot(nullptr),
+    root(nullptr),
+    style_cascade(cr_cascade_new(nullptr, nullptr, nullptr)),
+    style_sheet(nullptr),
+    uri(nullptr),
+    base(nullptr),
+    name(nullptr),
+    priv(nullptr), // reset in ctor
     actionkey(),
     modified_id(0),
     rerouting_handler_id(0),
-    profileManager(NULL), // deferred until after other initialization
+    profileManager(nullptr), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
     oldSignalsConnected(false),
-    current_persp3d(NULL),
-    current_persp3d_impl(NULL),
-    _parent_document(NULL),
+    current_persp3d(nullptr),
+    current_persp3d_impl(nullptr),
+    _parent_document(nullptr),
     _node_cache_valid(false)
 {
     // Penalise libavoid for choosing paths with needless extra segments.
@@ -130,7 +130,7 @@ SPDocument::SPDocument() :
     p->serial = next_serial++;
 
     p->sensitive = false;
-    p->partial = NULL;
+    p->partial = nullptr;
     p->history_size = 0;
     p->seeking = false;
 
@@ -150,12 +150,12 @@ SPDocument::~SPDocument() {
     // kill/unhook this first
     if ( profileManager ) {
         delete profileManager;
-        profileManager = 0;
+        profileManager = nullptr;
     }
 
     if (router) {
         delete router;
-        router = NULL;
+        router = nullptr;
     }
 
     if (oldSignalsConnected) {
@@ -169,7 +169,7 @@ SPDocument::~SPDocument() {
     if (priv) {
         if (priv->partial) {
             sp_repr_free_log(priv->partial);
-            priv->partial = NULL;
+            priv->partial = nullptr;
         }
 
         DocumentUndo::clearRedo(this);
@@ -178,7 +178,7 @@ SPDocument::~SPDocument() {
         if (root) {
             root->releaseReferences();
             sp_object_unref(root);
-            root = NULL;
+            root = nullptr;
         }
 
         if (rdoc) Inkscape::GC::release(rdoc);
@@ -189,19 +189,19 @@ SPDocument::~SPDocument() {
 
     // This also destroys all attached stylesheets
     cr_cascade_unref(style_cascade);
-    style_cascade = NULL;
+    style_cascade = nullptr;
 
     if (name) {
         g_free(name);
-        name = NULL;
+        name = nullptr;
     }
     if (base) {
         g_free(base);
-        base = NULL;
+        base = nullptr;
     }
     if (uri) {
         g_free(uri);
-        uri = NULL;
+        uri = nullptr;
     }
 
     if (modified_id) {
@@ -221,7 +221,7 @@ SPDocument::~SPDocument() {
 
     if (this->current_persp3d_impl) 
         delete this->current_persp3d_impl;
-    this->current_persp3d_impl = NULL;
+    this->current_persp3d_impl = nullptr;
 
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
@@ -236,7 +236,7 @@ sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
 SPDefs *SPDocument::getDefs()
 {
     if (!root) {
-        return NULL;
+        return nullptr;
     }
     return root->defs;
 }
@@ -289,10 +289,10 @@ unsigned long SPDocument::serial() const {
 }
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
-    g_return_if_fail(object != NULL);
+    g_return_if_fail(object != nullptr);
     g_return_if_fail(object->document == this);
 
-    sp_object_ref(object, NULL);
+    sp_object_ref(object, nullptr);
     _collection_queue.push_back(object);
 }
 
@@ -303,7 +303,7 @@ void SPDocument::collectOrphans() {
         for (std::vector<SPObject *>::const_iterator iter = objects.begin(); iter != objects.end(); ++iter) {
             SPObject *object = *iter;
             object->collectOrphan();
-            sp_object_unref(object, NULL);
+            sp_object_unref(object, nullptr);
         }
     }
 }
@@ -336,15 +336,15 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     if (document->uri){
         g_free(document->uri);
-        document->uri = 0;
+        document->uri = nullptr;
     }
     if (document->base){
         g_free(document->base);
-        document->base = 0;
+        document->base = nullptr;
     }
     if (document->name){
         g_free(document->name);
-        document->name = 0;
+        document->name = nullptr;
     }
 #ifndef WIN32
     document->uri = prepend_current_dir_if_relative(uri);
@@ -359,7 +359,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     if (base) {
         document->base = g_strdup(base);
     } else {
-        document->base = NULL;
+        document->base = nullptr;
     }
     document->name = g_strdup(name);
 
@@ -368,7 +368,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     SPObject* rootObj = SPFactory::createObject(typeString);
     document->root = dynamic_cast<SPRoot*>(rootObj);
 
-    if (document->root == 0) {
+    if (document->root == nullptr) {
     	// Node is not a valid root element
     	delete rootObj;
 
@@ -380,15 +380,15 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     document->root->invoke_build(document, rroot, false);
 
     /* Eliminate obsolete sodipodi:docbase, for privacy reasons */
-    rroot->setAttribute("sodipodi:docbase", NULL);
+    rroot->setAttribute("sodipodi:docbase", nullptr);
 
     /* Eliminate any claim to adhere to a profile, as we don't try to */
-    rroot->setAttribute("baseProfile", NULL);
+    rroot->setAttribute("baseProfile", nullptr);
 
     // creating namedview
-    if (!sp_item_group_get_child_by_name(document->root, NULL, "sodipodi:namedview")) {
+    if (!sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")) {
         // if there's none in the document already,
-        Inkscape::XML::Node *rnew = NULL;
+        Inkscape::XML::Node *rnew = nullptr;
 
         rnew = rdoc->createElement("sodipodi:namedview");
         //rnew->setAttribute("id", "base");
@@ -422,11 +422,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
             prefs->getInt("/template/base/inkscape:window-height", 480));
 
         // insert into the document
-        rroot->addChild(rnew, NULL);
+        rroot->addChild(rnew, nullptr);
         // clean up
         Inkscape::GC::release(rnew);
     } else {
-        Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(document->root, NULL, "sodipodi:namedview")->getRepr();
+        Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(document->root, nullptr, "sodipodi:namedview")->getRepr();
         if (!nv_repr->attribute("inkscape:document-rotation")) {
             sp_repr_set_svg_double(nv_repr, "inkscape:document-rotation", 0.);
         }
@@ -435,7 +435,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     // Defs
     if (!document->root->defs) {
         Inkscape::XML::Node *r = rdoc->createElement("svg:defs");
-        rroot->addChild(r, NULL);
+        rroot->addChild(r, nullptr);
         Inkscape::GC::release(r);
         g_assert(document->root->defs);
     }
@@ -494,9 +494,9 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 SPDocument *SPDocument::createChildDoc(std::string const &uri)
 {
     SPDocument *parent = this;
-    SPDocument *document = NULL;
+    SPDocument *document = nullptr;
 
-    while(parent != NULL && parent->getURI() != NULL && document == NULL) {
+    while(parent != nullptr && parent->getURI() != nullptr && document == nullptr) {
         // Check myself and any parents in the chain
         if(uri == parent->getURI()) {
             document = parent;
@@ -533,9 +533,9 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
  */
 SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, bool make_new, SPDocument *parent)
 {
-    Inkscape::XML::Document *rdoc = NULL;
-    gchar *base = NULL;
-    gchar *name = NULL;
+    Inkscape::XML::Document *rdoc = nullptr;
+    gchar *base = nullptr;
+    gchar *name = nullptr;
 
     if (uri) {
         Inkscape::XML::Node *rroot;
@@ -543,11 +543,11 @@ SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, b
         /* Try to fetch repr from file */
         rdoc = sp_repr_read_file(uri, SP_SVG_NS_URI);
         /* If file cannot be loaded, return NULL without warning */
-        if (rdoc == NULL) return NULL;
+        if (rdoc == nullptr) return nullptr;
         rroot = rdoc->root();
         /* If xml file is not svg, return NULL without warning */
         /* fixme: destroy document */
-        if (strcmp(rroot->name(), "svg:svg") != 0) return NULL;
+        if (strcmp(rroot->name(), "svg:svg") != 0) return nullptr;
         s = g_strdup(uri);
         p = strrchr(s, '/');
         if (p) {
@@ -555,12 +555,12 @@ SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, b
             p[1] = '\0';
             base = g_strdup(s);
         } else {
-            base = NULL;
+            base = nullptr;
             name = g_strdup(uri);
         }
         if (make_new) {
-            base = NULL;
-            uri = NULL;
+            base = nullptr;
+            uri = nullptr;
             name = g_strdup_printf(_("New document %d"), ++doc_count);
         }
         g_free(s);
@@ -585,7 +585,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *uri, unsigned int keepalive, b
 
 SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, unsigned int keepalive)
 {
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
 
     Inkscape::XML::Document *rdoc = sp_repr_read_mem(buffer, length, SP_SVG_NS_URI);
     if ( rdoc ) {
@@ -596,7 +596,7 @@ SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, un
             // TODO fixme: destroy document
         } else {
             Glib::ustring name = Glib::ustring::compose( _("Memory document %1"), ++doc_mem_count );
-            doc = createDoc(rdoc, NULL, NULL, name.c_str(), keepalive, NULL);
+            doc = createDoc(rdoc, nullptr, nullptr, name.c_str(), keepalive, nullptr);
         }
     }
 
@@ -612,13 +612,13 @@ SPDocument *SPDocument::doRef()
 SPDocument *SPDocument::doUnref()
 {
     Inkscape::GC::release(this);
-    return NULL;
+    return nullptr;
 }
 
 /// guaranteed not to return nullptr
 Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 {
-    SPNamedView const* nv = sp_document_namedview(this, NULL);
+    SPNamedView const* nv = sp_document_namedview(this, nullptr);
     return nv ? nv->getDisplayUnit() : unit_table.getUnit("px");
 }
 
@@ -700,8 +700,8 @@ void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const 
 
 Inkscape::Util::Quantity SPDocument::getWidth() const
 {
-    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
-    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
+    g_return_val_if_fail(this->priv != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
+    g_return_val_if_fail(this->root != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
 
     gdouble result = root->width.value;
     SVGLength::Unit u = root->width.unit;
@@ -739,8 +739,8 @@ void SPDocument::setWidth(const Inkscape::Util::Quantity &width, bool changeSize
 
 Inkscape::Util::Quantity SPDocument::getHeight() const
 {
-    g_return_val_if_fail(this->priv != NULL, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
-    g_return_val_if_fail(this->root != NULL, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
+    g_return_val_if_fail(this->priv != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
+    g_return_val_if_fail(this->root != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
 
     gdouble result = root->height.value;
     SVGLength::Unit u = root->height.unit;
@@ -821,7 +821,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     Inkscape::Util::Unit const *nv_units = unit_table.getUnit("px");
     if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
-    SPNamedView *nv = sp_document_namedview(this, NULL);
+    SPNamedView *nv = sp_document_namedview(this, nullptr);
     
     /* in px */
     double margin_top = 0.0;
@@ -830,7 +830,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double margin_bottom = 0.0;
     
     if (with_margins && nv) {
-        if (nv != NULL) {
+        if (nv != nullptr) {
             margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
             margin_left = nv->getMarginLength("fit-margin-left", nv_units, unit_table.getUnit("px"), w, h, true);
             margin_right = nv->getMarginLength("fit-margin-right", nv_units, unit_table.getUnit("px"), w, h, true);
@@ -870,7 +870,7 @@ void SPDocument::setBase( gchar const* base )
 {
     if (this->base) {
         g_free(this->base);
-        this->base = NULL;
+        this->base = nullptr;
     }
     if (base) {
         this->base = g_strdup(base);
@@ -879,9 +879,9 @@ void SPDocument::setBase( gchar const* base )
 
 void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
 {
-    gchar *new_base = NULL;
-    gchar *new_name = NULL;
-    gchar *new_uri = NULL;
+    gchar *new_base = nullptr;
+    gchar *new_name = nullptr;
+    gchar *new_uri = nullptr;
     if (filename) {
 
 #ifndef WIN32
@@ -895,7 +895,7 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
         new_name = g_path_get_basename(new_uri);
     } else {
         new_uri = g_strdup_printf(_("Unnamed document %d"), ++doc_count);
-        new_base = NULL;
+        new_base = nullptr;
         new_name = g_strdup(this->uri);
     }
 
@@ -1068,9 +1068,9 @@ SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 
 SPObject *SPDocument::getObjectById(gchar const *id) const
 {
-    g_return_val_if_fail(id != NULL, NULL);
+    g_return_val_if_fail(id != nullptr, NULL);
     if (!priv || priv->iddef.empty()) {
-    	return NULL;
+    	return nullptr;
     }
 
     // GQuark idq = g_quark_from_string(id);
@@ -1082,7 +1082,7 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     }
     else
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1171,7 +1171,7 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
     std::vector<SPObject *> objects;
     g_return_val_if_fail(!selector.empty(), objects);
 
-    static CRSelEng *sel_eng = NULL;
+    static CRSelEng *sel_eng = nullptr;
     if (!sel_eng) {
         sel_eng = cr_sel_eng_new();
         cr_sel_eng_set_node_iface(sel_eng, &Inkscape::XML::croco_node_iface);
@@ -1181,7 +1181,7 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
     CRSelector *cr_selector = cr_selector_parse_from_buf ((guchar*)my_selector.c_str(), CR_UTF_8);
     // char * cr_string = (char*)cr_selector_to_string( cr_selector );
     // std::cout << "  selector: |" << (cr_string?cr_string:"Empty") << "|" << std::endl;
-    CRSelector const *cur = NULL;
+    CRSelector const *cur = nullptr;
     for (cur = cr_selector; cur; cur = cur->next) {
         if (cur->simple_sel ) {
             _getObjectsBySelectorRecursive(root, sel_eng, cur->simple_sel, objects);
@@ -1203,12 +1203,12 @@ void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object)
 
 SPObject *SPDocument::getObjectByRepr(Inkscape::XML::Node *repr) const
 {
-    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(repr != nullptr, NULL);
     std::map<Inkscape::XML::Node *, SPObject *>::iterator rv = priv->reprdef.find(repr);
     if(rv != priv->reprdef.end())
         return (rv->second);
     else
-        return NULL;
+        return nullptr;
 }
 
 Glib::ustring SPDocument::getLanguage() const
@@ -1221,25 +1221,25 @@ Glib::ustring SPDocument::getLanguage() const
     if ( !document_language || 0 == *document_language) {
         // retrieve system language
         document_language = getenv("LC_ALL");
-        if ( NULL == document_language || *document_language == 0 ) {
+        if ( nullptr == document_language || *document_language == 0 ) {
             document_language = getenv ("LC_MESSAGES");
         }
-        if ( NULL == document_language || *document_language == 0 ) {
+        if ( nullptr == document_language || *document_language == 0 ) {
             document_language = getenv ("LANG");
         }
-        if ( NULL == document_language || *document_language == 0 ) {
+        if ( nullptr == document_language || *document_language == 0 ) {
             document_language = getenv ("LANGUAGE");
         }
         
-        if ( NULL != document_language ) {
+        if ( nullptr != document_language ) {
             const char *pos = strchr(document_language, '_');
-            if ( NULL != pos ) {
+            if ( nullptr != pos ) {
                 return Glib::ustring(document_language, pos - document_language);
             }
         }
     }
 
-    if ( NULL == document_language )
+    if ( nullptr == document_language )
         return Glib::ustring();
     return document_language;
 }
@@ -1250,11 +1250,11 @@ void SPDocument::requestModified()
 {
     if (!modified_id) {
         modified_id = g_idle_add_full(SP_DOCUMENT_UPDATE_PRIORITY, 
-                sp_document_idle_handler, this, NULL);
+                sp_document_idle_handler, this, nullptr);
     }
     if (!rerouting_handler_id) {
         rerouting_handler_id = g_idle_add_full(SP_DOCUMENT_REROUTING_PRIORITY, 
-                sp_document_rerouting_handler, this, NULL);
+                sp_document_rerouting_handler, this, nullptr);
     }
 }
 
@@ -1433,7 +1433,7 @@ static bool item_is_in_group(SPItem *item, SPGroup *group)
 SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, std::vector<SPItem*> const &list,Geom::Point const &p, bool take_insensitive)
 {
     g_return_val_if_fail(group, NULL);
-    SPItem *bottomMost = 0;
+    SPItem *bottomMost = nullptr;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
@@ -1446,7 +1446,7 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
             SPItem *item = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(dkey);
             arenaitem->drawing().update();
-            if (arenaitem && arenaitem->pick(p, delta, 1) != NULL
+            if (arenaitem && arenaitem->pick(p, delta, 1) != nullptr
                 && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
                 if (find(list.begin(), list.end(), item) != list.end()) {
                     bottomMost = item;
@@ -1494,12 +1494,12 @@ upwards in z-order and returns what it has found so far (i.e. the found item is
 guaranteed to be lower than upto). Requires a list of nodes built by
 build_flat_item_list.
  */
-static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey, Geom::Point const &p, SPItem* upto=NULL)
+static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey, Geom::Point const &p, SPItem* upto=nullptr)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    SPItem *seen = NULL;
+    SPItem *seen = nullptr;
     SPItem *child;
     bool seen_upto = (!upto);
     for (std::deque<SPItem*>::const_iterator i = nodes->begin(); i != nodes->end(); ++i) {
@@ -1512,7 +1512,7 @@ static SPItem *find_item_at_point(std::deque<SPItem*> *nodes, unsigned int dkey,
         Inkscape::DrawingItem *arenaitem = child->get_arenaitem(dkey);
         if (arenaitem) {
             arenaitem->drawing().update();
-            if (arenaitem->pick(p, delta, 1) != NULL) {
+            if (arenaitem->pick(p, delta, 1) != nullptr) {
                 seen = child;
                 break;
             }
@@ -1528,7 +1528,7 @@ p, or NULL if none. Recurses into layers but not into groups.
  */
 static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Point const &p)
 {
-    SPItem *seen = NULL;
+    SPItem *seen = nullptr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
@@ -1550,7 +1550,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
             }
 
             // seen remembers the last (topmost) of groups pickable at this point
-            if (arenaitem && arenaitem->pick(p, delta, 1) != NULL) {
+            if (arenaitem && arenaitem->pick(p, delta, 1) != nullptr) {
                 seen = child;
             }
         }
@@ -1567,7 +1567,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
 std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
-    g_return_val_if_fail(this->priv != NULL, x);
+    g_return_val_if_fail(this->priv != nullptr, x);
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_insensitive, into_groups);
 }
 
@@ -1581,7 +1581,7 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
 std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
-    g_return_val_if_fail(this->priv != NULL, x);
+    g_return_val_if_fail(this->priv != nullptr, x);
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_insensitive, into_groups);
 }
 
@@ -1604,7 +1604,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     }
     SPObject *current_layer = SP_ACTIVE_DESKTOP->currentLayer();
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::LayerModel *layer_model = NULL;
+    Inkscape::LayerModel *layer_model = nullptr;
     if(desktop){
         layer_model = desktop->layers;
     }
@@ -1632,7 +1632,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
                                     bool const into_groups, SPItem *upto) const 
 {
-    g_return_val_if_fail(this->priv != NULL, NULL);
+    g_return_val_if_fail(this->priv != nullptr, NULL);
 
     // Build a flattened SVG DOM for find_item_at_point.
     std::deque<SPItem*> bak(_node_cache);
@@ -1654,7 +1654,7 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
 
 SPItem *SPDocument::getGroupAtPoint(unsigned int key, Geom::Point const &p) const
 {
-    g_return_val_if_fail(this->priv != NULL, NULL);
+    g_return_val_if_fail(this->priv != nullptr, NULL);
 
     return find_group_at_point(key, SP_GROUP(this->root), p);
 }
@@ -1663,9 +1663,9 @@ SPItem *SPDocument::getGroupAtPoint(unsigned int key, Geom::Point const &p) cons
 
 bool SPDocument::addResource(gchar const *key, SPObject *object)
 {
-    g_return_val_if_fail(key != NULL, false);
+    g_return_val_if_fail(key != nullptr, false);
     g_return_val_if_fail(*key != '\0', false);
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
     bool result = false;
@@ -1694,9 +1694,9 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
 
 bool SPDocument::removeResource(gchar const *key, SPObject *object)
 {
-    g_return_val_if_fail(key != NULL, false);
+    g_return_val_if_fail(key != nullptr, false);
     g_return_val_if_fail(*key != '\0', false);
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
     bool result = false;
@@ -1720,7 +1720,7 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
 std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key) const
 {
     std::vector<SPObject *> emptyset;
-    g_return_val_if_fail(key != NULL, emptyset);
+    g_return_val_if_fail(key != nullptr, emptyset);
     g_return_val_if_fail(*key != '\0', emptyset);
 
     return this->priv->resources[key];

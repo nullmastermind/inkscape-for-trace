@@ -68,9 +68,9 @@ void sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAtt
 void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change = true, bool write_current = true);
 SPCSSAttr *sp_desktop_get_style(SPDesktop *desktop, bool with_text);
 guint32 sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
-double sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool* has_opacity = NULL);
+double sp_desktop_get_master_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool* has_opacity = nullptr);
 double sp_desktop_get_opacity_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill);
-guint32 sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill, bool* has_color = NULL);
+guint32 sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is_fill, bool* has_color = nullptr);
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, Glib::ustring const &tool, bool with_text);
 

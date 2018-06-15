@@ -287,7 +287,7 @@ ink_comboboxentry_action_class_init (Ink_ComboBoxEntry_ActionClass *klass)
                                    G_TYPE_FROM_CLASS(klass),
                                    G_SIGNAL_RUN_FIRST,
                                    G_STRUCT_OFFSET(Ink_ComboBoxEntry_ActionClass, changed),
-                                   NULL, NULL,
+                                   nullptr, nullptr,
                                    g_cclosure_marshal_VOID__VOID,
                                    G_TYPE_NONE, 0);
 
@@ -296,7 +296,7 @@ ink_comboboxentry_action_class_init (Ink_ComboBoxEntry_ActionClass *klass)
                                    G_TYPE_FROM_CLASS(klass),
                                    G_SIGNAL_RUN_FIRST,
                                    G_STRUCT_OFFSET(Ink_ComboBoxEntry_ActionClass, activated),
-                                   NULL, NULL,
+                                   nullptr, nullptr,
                                    g_cclosure_marshal_VOID__VOID,
                                    G_TYPE_NONE, 0);
 
@@ -306,19 +306,19 @@ static void ink_comboboxentry_action_init (Ink_ComboBoxEntry_Action *action)
 {
   action->active = -1;
   action->text = strdup("");
-  action->entry_completion = NULL;
-  action->indicator = NULL;
+  action->entry_completion = nullptr;
+  action->indicator = nullptr;
   action->popup = false;
-  action->info = NULL;
-  action->info_cb = NULL;
+  action->info = nullptr;
+  action->info_cb = nullptr;
   action->info_cb_id = 0;
   action->info_cb_blocked = false;
-  action->warning = NULL;
-  action->warning_cb = NULL;
+  action->warning = nullptr;
+  action->warning_cb = nullptr;
   action->warning_cb_id = 0;
   action->warning_cb_blocked = false;
-  action->altx_name = NULL;
-  action->focusWidget = NULL;
+  action->altx_name = nullptr;
+  action->focusWidget = nullptr;
 }
 
 Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar   *name,
@@ -332,7 +332,7 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar   *name,
                                                         void          *separator_func,
                                                         GtkWidget      *focusWidget)
 {
-  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (name != nullptr, NULL);
 
   return (Ink_ComboBoxEntry_Action*)g_object_new (INK_COMBOBOXENTRY_TYPE_ACTION,
                                                   "name",           name,
@@ -351,15 +351,15 @@ Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new (const gchar   *name,
 // Create a widget for a toolbar.
 GtkWidget* create_tool_item( GtkAction* action )
 {
-  GtkWidget* item = 0;
+  GtkWidget* item = nullptr;
 
   if ( INK_COMBOBOXENTRY_IS_ACTION( action ) && INK_COMBOBOXENTRY_ACTION(action)->model ) {
 
     Ink_ComboBoxEntry_Action* ink_comboboxentry_action = INK_COMBOBOXENTRY_ACTION( action );
 
     gchar *action_name = g_strdup( gtk_action_get_name( action ) );
-    gchar *combobox_name = g_strjoin( NULL, action_name, "_combobox", NULL );
-    gchar *entry_name =    g_strjoin( NULL, action_name, "_entry", NULL );
+    gchar *combobox_name = g_strjoin( nullptr, action_name, "_combobox", NULL );
+    gchar *entry_name =    g_strjoin( nullptr, action_name, "_entry", NULL );
     g_free( action_name );
 
     item = GTK_WIDGET( gtk_tool_item_new() );
@@ -386,10 +386,10 @@ GtkWidget* create_tool_item( GtkAction* action )
     g_signal_connect( G_OBJECT(comboBoxEntry), "changed", G_CALLBACK(combo_box_changed_cb), action );
 
     // Optionally add separator function...
-    if( ink_comboboxentry_action->separator_func != NULL ) {
+    if( ink_comboboxentry_action->separator_func != nullptr ) {
        gtk_combo_box_set_row_separator_func( ink_comboboxentry_action->combobox,
 					    GtkTreeViewRowSeparatorFunc (ink_comboboxentry_action->separator_func),
-      					    NULL, NULL );
+      					    nullptr, nullptr );
     }
 
     // FIXME: once gtk3 migration is done this can be removed
@@ -397,19 +397,19 @@ GtkWidget* create_tool_item( GtkAction* action )
     gtk_widget_show_all (comboBoxEntry);
 
     // Optionally add formatting...
-    if( ink_comboboxentry_action->cell_data_func != NULL ) {
+    if( ink_comboboxentry_action->cell_data_func != nullptr ) {
       GtkCellRenderer *cell = gtk_cell_renderer_text_new();
       gtk_cell_layout_clear( GTK_CELL_LAYOUT( comboBoxEntry ) );
       gtk_cell_layout_pack_start( GTK_CELL_LAYOUT( comboBoxEntry ), cell, true );
       gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT( comboBoxEntry ), cell,
                                           GtkCellLayoutDataFunc (ink_comboboxentry_action->cell_data_func),
-                                          NULL, NULL );
+                                          nullptr, nullptr );
     }
 
     // Optionally widen the combobox width... which widens the drop-down list in list mode.
     if( ink_comboboxentry_action->extra_width > 0 ) {
       GtkRequisition req;
-      gtk_widget_get_preferred_size(GTK_WIDGET(ink_comboboxentry_action->combobox), &req, NULL);
+      gtk_widget_get_preferred_size(GTK_WIDGET(ink_comboboxentry_action->combobox), &req, nullptr);
       gtk_widget_set_size_request( GTK_WIDGET( ink_comboboxentry_action->combobox ),
 				   req.width + ink_comboboxentry_action->extra_width, -1 );
     }
@@ -460,7 +460,7 @@ GtkWidget* create_tool_item( GtkAction* action )
 // Create a drop-down menu.
 GtkWidget* create_menu_item( GtkAction* action )
 {
-  GtkWidget* item = 0;
+  GtkWidget* item = nullptr;
 
     item = GTK_ACTION_CLASS(ink_comboboxentry_action_parent_class)->create_menu_item( action );
     g_warning( "ink_comboboxentry_action: create_menu_item not implemented" );
@@ -535,7 +535,7 @@ gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* act
     }
 
     bool set = false;
-    if( action->warning != NULL ) {
+    if( action->warning != nullptr ) {
       Glib::ustring missing = check_comma_separated_text( action );
       if( !missing.empty() ) {
 	  gtk_entry_set_icon_from_icon_name( action->entry,
@@ -570,7 +570,7 @@ gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* act
       }
     }
  
-    if( !set && action->info != NULL ) {
+    if( !set && action->info != nullptr ) {
       gtk_entry_set_icon_from_icon_name( GTK_ENTRY(action->entry),
 					 GTK_ENTRY_ICON_SECONDARY,
 					 INKSCAPE_ICON("edit-select-all") );
@@ -600,7 +600,7 @@ gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* act
     if( !set ) {
       gtk_entry_set_icon_from_icon_name( GTK_ENTRY(action->entry),
 					 GTK_ENTRY_ICON_SECONDARY,
-					 NULL );
+					 nullptr );
     }
   }
 
@@ -626,7 +626,7 @@ void ink_comboboxentry_action_set_extra_width( Ink_ComboBoxEntry_Action* action,
   // Widget may not have been created....
   if( action->combobox ) {
     GtkRequisition req;
-    gtk_widget_get_preferred_size(GTK_WIDGET(action->combobox), &req, NULL);
+    gtk_widget_get_preferred_size(GTK_WIDGET(action->combobox), &req, nullptr);
     gtk_widget_set_size_request( GTK_WIDGET( action->combobox ), req.width + action->extra_width, -1 );
   }
 }
@@ -662,7 +662,7 @@ void ink_comboboxentry_action_popup_disable( Ink_ComboBoxEntry_Action* action ) 
 
   if( action->entry_completion ) {
     gtk_widget_destroy(GTK_WIDGET(action->entry_completion));
-    action->entry_completion = 0;
+    action->entry_completion = nullptr;
   }
 }
 void     ink_comboboxentry_action_set_tooltip( Ink_ComboBoxEntry_Action* action, const gchar* tooltip ) {
@@ -748,7 +748,7 @@ gint get_active_row_from_text( Ink_ComboBoxEntry_Action* action, const gchar* ta
 
     if( check ) {
       // Get text from list entry
-      gchar* text = 0;
+      gchar* text = nullptr;
       gtk_tree_model_get( action->model, &iter, 0, &text, -1 ); // Column 0
 
       if( !ignore_case ) {
@@ -801,7 +801,7 @@ static Glib::ustring check_comma_separated_text( Ink_ComboBoxEntry_Action* actio
   gchar** tokens = g_strsplit( action->text, ",", 0 );
 
   gint i = 0;
-  while( tokens[i] != NULL ) {
+  while( tokens[i] != nullptr ) {
 
     // Remove any surrounding white space.
     g_strstrip( tokens[i] );
@@ -842,7 +842,7 @@ static void combo_box_changed_cb( GtkComboBox* widget, gpointer data ) {
     GtkTreeIter iter;
     if( gtk_combo_box_get_active_iter( GTK_COMBO_BOX( action->combobox ), &iter ) ) {
 
-      gchar* text = 0;
+      gchar* text = nullptr;
       gtk_tree_model_get( action->model, &iter, 0, &text, -1 );
       gtk_entry_set_text( action->entry, text );
 
@@ -885,7 +885,7 @@ static gboolean match_selected_cb( GtkEntryCompletion* /*widget*/, GtkTreeModel*
   GtkEntry *entry = action->entry;
 
   if( entry) {
-    gchar *family = 0;
+    gchar *family = nullptr;
     gtk_tree_model_get(model, iter, 0, &family, -1);
 
     // Set text in GtkEntry
@@ -924,7 +924,7 @@ gboolean keypress_cb( GtkWidget * /*widget*/, GdkEventKey *event, gpointer data 
     Ink_ComboBoxEntry_Action* action = INK_COMBOBOXENTRY_ACTION( data );
     gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          event->hardware_keycode, (GdkModifierType)event->state,
-                                         0, &key, 0, 0, 0 );
+                                         0, &key, nullptr, nullptr, nullptr );
 
     switch ( key ) {
 

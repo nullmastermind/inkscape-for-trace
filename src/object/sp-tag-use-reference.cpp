@@ -35,20 +35,20 @@ static void sp_usepath_delete_self(SPObject *deleted, SPTagUsePath *offset);
 SPTagUsePath::SPTagUsePath(SPObject* i_owner):SPTagUseReference(i_owner)
 {
     owner=i_owner;
-    originalPath = NULL;
+    originalPath = nullptr;
     sourceDirty=false;
-    sourceHref = NULL;
-    sourceRepr = NULL;
-    sourceObject = NULL;
+    sourceHref = nullptr;
+    sourceRepr = nullptr;
+    sourceObject = nullptr;
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_usepath_href_changed), this)); // listening to myself, this should be virtual instead
 
-    user_unlink = NULL;
+    user_unlink = nullptr;
 }
 
 SPTagUsePath::~SPTagUsePath(void)
 {
     delete originalPath;
-    originalPath = NULL;
+    originalPath = nullptr;
 
     _changed_connection.disconnect(); // to do before unlinking
 
@@ -59,7 +59,7 @@ SPTagUsePath::~SPTagUsePath(void)
 void
 SPTagUsePath::link(char *to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         quit_listening();
         unlink();
     } else {
@@ -83,14 +83,14 @@ void
 SPTagUsePath::unlink(void)
 {
     g_free(sourceHref);
-    sourceHref = NULL;
+    sourceHref = nullptr;
     detach();
 }
 
 void
 SPTagUsePath::start_listening(SPObject* to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     sourceObject = to;
@@ -101,12 +101,12 @@ SPTagUsePath::start_listening(SPObject* to)
 void
 SPTagUsePath::quit_listening(void)
 {
-    if ( sourceObject == NULL ) {
+    if ( sourceObject == nullptr ) {
         return;
     }
     _delete_connection.disconnect();
-    sourceRepr = NULL;
-    sourceObject = NULL;
+    sourceRepr = nullptr;
+    sourceObject = nullptr;
 }
 
 static void

@@ -74,8 +74,8 @@ const std::string MeshTool::prefsPath = "/tools/mesh";
 MeshTool::MeshTool()
     : ToolBase(cursor_gradient_xpm)
 // TODO: Why are these connections stored as pointers?
-    , selcon(NULL)
-    , subselcon(NULL)
+    , selcon(nullptr)
+    , subselcon(nullptr)
     , cursor_addnode(false)
     , node_added(false)
     , show_handles(true)
@@ -118,7 +118,7 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
     GrDrag *drag = this->_grdrag;
     Inkscape::Selection *selection = this->desktop->getSelection();
 
-    if (selection == NULL) {
+    if (selection == nullptr) {
         return;
     }
 
@@ -190,7 +190,7 @@ void MeshTool::setup() {
     this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
     	sigc::hide(sigc::bind(
     		sigc::mem_fun(*this, &MeshTool::selection_changed),
-    		(Inkscape::Selection*)NULL)
+    		(Inkscape::Selection*)nullptr)
     	)
     ));
 
@@ -310,7 +310,7 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
     std::cout << "sp_mesh_corner_operation: entrance: " << operation << std::endl;
 #endif
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     GrDrag *drag = rc->_grdrag;
 
     std::map<SPMeshGradient*, std::vector<guint> > points;
@@ -442,7 +442,7 @@ sp_mesh_context_fit_mesh_in_bbox (MeshTool *rc)
     SPDesktop *desktop = SP_EVENT_CONTEXT (rc)->desktop;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    if (selection == NULL) {
+    if (selection == nullptr) {
         return;
     }
 
@@ -805,7 +805,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                     }
                 }
 
-                this->item_to_select = NULL;
+                this->item_to_select = nullptr;
                 ret = TRUE;
             }
 
@@ -1115,7 +1115,7 @@ static void sp_mesh_new_default(MeshTool &rc) {
 
         if (css) {
             sp_repr_css_attr_unref(css);
-            css = 0;
+            css = nullptr;
         }
 
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH, _("Create mesh"));

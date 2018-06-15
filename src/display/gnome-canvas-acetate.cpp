@@ -41,7 +41,7 @@ static void sp_canvas_acetate_init (SPCanvasAcetate */*acetate*/)
 
 static void sp_canvas_acetate_destroy(SPCanvasItem *object)
 {
-	g_return_if_fail (object != NULL);
+	g_return_if_fail (object != nullptr);
 	g_return_if_fail (GNOME_IS_CANVAS_ACETATE (object));
 
 	if (SP_CANVAS_ITEM_CLASS(sp_canvas_acetate_parent_class)->destroy)

@@ -138,7 +138,7 @@ LivePathEffectAdd::getActiveData()
         return row[instance()._columns.data];
     }
 
-    return 0;
+    return nullptr;
 }
 
 

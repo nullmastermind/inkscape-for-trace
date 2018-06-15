@@ -126,7 +126,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     {
         /* Width */
-        gchar const* labels[] = {_("(pinch tweak)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad tweak)")};
+        gchar const* labels[] = {_("(pinch tweak)"), nullptr, nullptr, nullptr, _("(default)"), nullptr, nullptr, nullptr, nullptr, _("(broad tweak)")};
         gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
@@ -134,7 +134,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-tweak",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_width_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
+                                                              sp_tweak_width_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -143,7 +143,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     {
         /* Force */
-        gchar const* labels[] = {_("(minimum force)"), 0, 0, _("(default)"), 0, 0, 0, _("(maximum force)")};
+        gchar const* labels[] = {_("(minimum force)"), nullptr, nullptr, _("(default)"), nullptr, nullptr, nullptr, _("(maximum force)")};
         gdouble values[] = {1, 5, 10, 20, 30, 50, 70, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakForceAction",
                                                               _("Force"), _("Force:"), _("The force of the tweak action"),
@@ -151,7 +151,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-force",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_force_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
+                                                              sp_tweak_force_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -266,7 +266,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     guint mode = prefs->getInt("/tools/tweak/mode", 0);
 
     {
-        EgeOutputAction* act = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
@@ -279,7 +279,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         InkToggleAction* act = ink_toggle_action_new( "TweakDoH",
                                                       _("Hue"),
                                                       _("In color mode, act on objects' hue"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         //TRANSLATORS:  "H" here stands for hue
         g_object_set( act, "short_label", C_("Hue", "H"), NULL );
@@ -295,7 +295,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         InkToggleAction* act = ink_toggle_action_new( "TweakDoS",
                                                       _("Saturation"),
                                                       _("In color mode, act on objects' saturation"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "S" here stands for Saturation
         g_object_set( act, "short_label", C_("Saturation", "S"), NULL );
@@ -311,7 +311,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         InkToggleAction* act = ink_toggle_action_new( "TweakDoL",
                                                       _("Lightness"),
                                                       _("In color mode, act on objects' lightness"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "L" here stands for Lightness
         g_object_set( act, "short_label", C_("Lightness", "L"), NULL );
@@ -327,7 +327,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         InkToggleAction* act = ink_toggle_action_new( "TweakDoO",
                                                       _("Opacity"),
                                                       _("In color mode, act on objects' opacity"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "O" here stands for Opacity
         g_object_set( act, "short_label", C_("Opacity", "O"), NULL );
@@ -341,7 +341,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
 
     {   /* Fidelity */
-        gchar const* labels[] = {_("(rough, simplified)"), 0, 0, _("(default)"), 0, 0, _("(fine, but many nodes)")};
+        gchar const* labels[] = {_("(rough, simplified)"), nullptr, nullptr, _("(default)"), nullptr, nullptr, _("(fine, but many nodes)")};
         gdouble values[] = {10, 25, 35, 50, 60, 80, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakFidelityAction",
                                                               _("Fidelity"), _("Fidelity:"),
@@ -350,7 +350,7 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-fidelity",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_fidelity_value_changed, NULL /*unit tracker*/, 0.01, 0, 100 );
+                                                              sp_tweak_fidelity_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_visible( GTK_ACTION(eact), TRUE );
         if (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {

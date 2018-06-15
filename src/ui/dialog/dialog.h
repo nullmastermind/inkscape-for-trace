@@ -63,7 +63,7 @@ public:
      * @param prefs_path characteristic path for loading/saving dialog position.
      * @param verb_num the dialog verb.
      */
-    Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_path = NULL,
+    Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_path = nullptr,
            int verb_num = 0, Glib::ustring const &apply_label = "");
 
     virtual ~Dialog();

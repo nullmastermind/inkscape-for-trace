@@ -40,7 +40,7 @@ ItemParam::ItemParam( const Glib::ustring& label, const Glib::ustring& tip,
                       Effect* effect, const gchar * default_value)
     : Parameter(label, tip, key, wr, effect),
       changed(true),
-      href(NULL),
+      href(nullptr),
       ref( (SPObject*)effect->getLPEObj() )
 {
     last_transform = Geom::identity();
@@ -154,7 +154,7 @@ ItemParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::Pa
 void
 ItemParam::start_listening(SPObject * to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &ItemParam::linked_delete));
@@ -188,7 +188,7 @@ ItemParam::remove_link()
     if (href) {
         ref.detach();
         g_free(href);
-        href = NULL;
+        href = nullptr;
     }
 }
 

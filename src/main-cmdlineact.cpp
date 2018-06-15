@@ -28,8 +28,8 @@ namespace Inkscape {
 
 std::list <CmdLineAction *> CmdLineAction::_list;
 
-CmdLineAction::CmdLineAction (bool isVerb, gchar const * arg) : _isVerb(isVerb), _arg(NULL) {
-    if (arg != NULL) {
+CmdLineAction::CmdLineAction (bool isVerb, gchar const * arg) : _isVerb(isVerb), _arg(nullptr) {
+    if (arg != nullptr) {
         _arg = g_strdup(arg);
     }
 
@@ -39,7 +39,7 @@ CmdLineAction::CmdLineAction (bool isVerb, gchar const * arg) : _isVerb(isVerb),
 }
 
 CmdLineAction::~CmdLineAction () {
-    if (_arg != NULL) {
+    if (_arg != nullptr) {
         g_free(_arg);
     }
 }
@@ -66,18 +66,18 @@ CmdLineAction::doIt (ActionContext const & context) {
         }
 
         Inkscape::Verb * verb = Inkscape::Verb::getbyid(_arg);
-        if (verb == NULL) {
+        if (verb == nullptr) {
             printf(_("Unable to find verb ID '%s' specified on the command line.\n"), _arg);
             return;
         }
         SPAction * action = verb->get_action(context);
-        sp_action_perform(action, NULL);
+        sp_action_perform(action, nullptr);
     } else {
-        if (context.getDocument() == NULL || context.getSelection() == NULL) { return; }
+        if (context.getDocument() == nullptr || context.getSelection() == nullptr) { return; }
 
         SPDocument * doc = context.getDocument();
         SPObject * obj = doc->getObjectById(_arg);
-        if (obj == NULL) {
+        if (obj == nullptr) {
             printf(_("Unable to find node ID: '%s'\n"), _arg);
             return;
         }

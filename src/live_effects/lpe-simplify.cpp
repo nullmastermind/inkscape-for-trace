@@ -153,7 +153,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
         return;
     }
     Geom::PathVector tmp_path;
-    Geom::CubicBezier const *cubic = NULL;
+    Geom::CubicBezier const *cubic = nullptr;
     for (Geom::PathVector::iterator path_it = result.begin(); path_it != result.end(); ++path_it) {
         if (path_it->empty()) {
             continue;

@@ -79,7 +79,7 @@ sp_ctrl_set_property(GObject *object, guint prop_id, const GValue *value, GParam
 
     SPCanvasItem *item;
     SPCtrl *ctrl;
-    GdkPixbuf * pixbuf = NULL;
+    GdkPixbuf * pixbuf = nullptr;
 
     item = SP_CANVAS_ITEM (object);
     ctrl = SP_CTRL (object);
@@ -206,22 +206,22 @@ sp_ctrl_init (SPCtrl *ctrl)
     ctrl->angle = 0.0;
 
     new (&ctrl->box) Geom::IntRect(0,0,0,0);
-    ctrl->cache = NULL;
-    ctrl->pixbuf = NULL;
+    ctrl->cache = nullptr;
+    ctrl->pixbuf = nullptr;
 
     ctrl->_point = Geom::Point(0,0);
 }
 
 static void sp_ctrl_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CTRL (object));
 
     SPCtrl *ctrl = SP_CTRL (object);
 
     if (ctrl->cache) {
         delete[] ctrl->cache;
-        ctrl->cache = NULL;
+        ctrl->cache = nullptr;
     }
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrl_parent_class)->destroy)

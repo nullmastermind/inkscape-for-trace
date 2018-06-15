@@ -209,21 +209,21 @@ class ComponentUI {
   public:
     ComponentUI()
         : _component()
-        , _adj(0)
-        , _slider(0)
-        , _btn(0)
-        , _label(0)
-        , _map(0)
+        , _adj(nullptr)
+        , _slider(nullptr)
+        , _btn(nullptr)
+        , _label(nullptr)
+        , _map(nullptr)
     {
     }
 
     ComponentUI(colorspace::Component const &component)
         : _component(component)
-        , _adj(0)
-        , _slider(0)
-        , _btn(0)
-        , _label(0)
-        , _map(0)
+        , _adj(nullptr)
+        , _slider(nullptr)
+        , _btn(nullptr)
+        , _label(nullptr)
+        , _map(nullptr)
     {
     }
 
@@ -290,7 +290,7 @@ class ColorICCSelectorImpl {
 const gchar *ColorICCSelector::MODE_NAME = N_("CMS");
 
 ColorICCSelector::ColorICCSelector(SelectedColor &color)
-    : _impl(NULL)
+    : _impl(nullptr)
 {
     _impl = new ColorICCSelectorImpl(this, color);
     init();
@@ -302,7 +302,7 @@ ColorICCSelector::~ColorICCSelector()
 {
     if (_impl) {
         delete _impl;
-        _impl = 0;
+        _impl = nullptr;
     }
 }
 
@@ -314,16 +314,16 @@ ColorICCSelectorImpl::ColorICCSelectorImpl(ColorICCSelector *owner, SelectedColo
     , _updating(FALSE)
     , _dragging(FALSE)
     , _fixupNeeded(0)
-    , _fixupBtn(0)
-    , _profileSel(0)
+    , _fixupBtn(nullptr)
+    , _profileSel(nullptr)
     , _compUI()
-    , _adj(0)
-    , _slider(0)
-    , _sbtn(0)
-    , _label(0)
+    , _adj(nullptr)
+    , _slider(nullptr)
+    , _sbtn(nullptr)
+    , _label(nullptr)
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     , _profileName()
-    , _prof(0)
+    , _prof(nullptr)
     , _profChannelCount(0)
     , _profChangedID(0)
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -332,9 +332,9 @@ ColorICCSelectorImpl::ColorICCSelectorImpl(ColorICCSelector *owner, SelectedColo
 
 ColorICCSelectorImpl::~ColorICCSelectorImpl()
 {
-    _adj = 0;
-    _sbtn = 0;
-    _label = 0;
+    _adj = nullptr;
+    _sbtn = nullptr;
+    _label = nullptr;
 }
 
 void ColorICCSelector::init()
@@ -524,7 +524,7 @@ void ColorICCSelectorImpl::_profileSelected(GtkWidget * /*src*/, gpointer data)
     GtkTreeIter iter;
     if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(self->_profileSel), &iter)) {
         GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(self->_profileSel));
-        gchar *name = 0;
+        gchar *name = nullptr;
 
         gtk_tree_model_get(store, &iter, 1, &name, -1);
         self->_switchToProfile(name);
@@ -615,9 +615,9 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
 #endif // DEBUG_LCMS
         if (tmp.icc) {
             delete tmp.icc;
-            tmp.icc = 0;
+            tmp.icc = nullptr;
             dirty = true;
-            _fixupHit(0, this);
+            _fixupHit(nullptr, this);
         }
         else {
 #ifdef DEBUG_LCMS
@@ -789,7 +789,7 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
         // Need to clear out the prior one
         profChanged = true;
         _profileName.clear();
-        _prof = 0;
+        _prof = nullptr;
         _profChannelCount = 0;
     }
     else if (profile && !_prof) {
@@ -855,7 +855,7 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
         }
         else {
             // Give up for now on named colors
-            _prof = 0;
+            _prof = nullptr;
         }
     }
 

@@ -462,7 +462,7 @@ void UnitParser::on_text(Ctx &ctx, Glib::ustring const &text)
         unit.abbr = text;
     } else if (element == "factor") {
         // TODO make sure we use the right conversion
-        unit.factor = g_ascii_strtod(text.c_str(), NULL);
+        unit.factor = g_ascii_strtod(text.c_str(), nullptr);
     } else if (element == "description") {
         unit.description = text;
     }

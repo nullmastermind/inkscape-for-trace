@@ -24,7 +24,7 @@ using Geom::Y;
  */
 
 DrawingContext::Save::Save()
-    : _dc(NULL)
+    : _dc(nullptr)
 {}
 DrawingContext::Save::Save(DrawingContext &dc)
     : _dc(&dc)
@@ -70,7 +70,7 @@ DrawingContext::DrawingContext(cairo_t *ct, Geom::Point const &origin)
 }
 
 DrawingContext::DrawingContext(cairo_surface_t *surface, Geom::Point const &origin)
-    : _ct(NULL)
+    : _ct(nullptr)
     , _surface(new DrawingSurface(surface, origin))
     , _delete_surface(true)
     , _restore_context(false)

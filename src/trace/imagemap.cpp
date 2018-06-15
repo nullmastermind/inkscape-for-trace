@@ -65,7 +65,7 @@ GrayMap *GrayMapCreate(int width, int height)
 
     GrayMap *me = (GrayMap *)malloc(sizeof(GrayMap));
     if (!me)
-        return NULL;
+        return nullptr;
 
     /** methods **/
     me->setPixel    = gSetPixel;
@@ -81,7 +81,7 @@ GrayMap *GrayMapCreate(int width, int height)
     if (!me->pixels)
         {
         free(me);
-        return NULL;
+        return nullptr;
         }
     me->rows = (unsigned long **)
               malloc(sizeof(unsigned long *) *  height);
@@ -89,7 +89,7 @@ GrayMap *GrayMapCreate(int width, int height)
         {
         free(me->pixels);
         free(me);
-        return NULL;
+        return nullptr;
         }
 
     unsigned long *row = me->pixels;
@@ -179,7 +179,7 @@ PackedPixelMap *PackedPixelMapCreate(int width, int height)
 
     PackedPixelMap *me = (PackedPixelMap *)malloc(sizeof(PackedPixelMap));
     if (!me)
-        return NULL;
+        return nullptr;
 
     /** methods **/
     me->setPixel     = ppSetPixel;
@@ -195,13 +195,13 @@ PackedPixelMap *PackedPixelMapCreate(int width, int height)
     me->pixels = (unsigned long *) malloc(sizeof(unsigned long) * width * height);
     if (!me->pixels){
         free(me);
-        return NULL;
+        return nullptr;
     }
     me->rows = (unsigned long **) malloc(sizeof(unsigned long *) * height);
     if (!me->rows){
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
-        return NULL;
+        return nullptr;
     }
     
     unsigned long *row = me->pixels;
@@ -288,7 +288,7 @@ RgbMap *RgbMapCreate(int width, int height)
 
     RgbMap *me = (RgbMap *)malloc(sizeof(RgbMap));
     if (!me){
-        return NULL;
+        return nullptr;
     }
     
     /** methods **/
@@ -305,13 +305,13 @@ RgbMap *RgbMapCreate(int width, int height)
     me->pixels = (RGB *) malloc(sizeof(RGB) * width * height);
     if (!me->pixels){
         free(me);
-        return NULL;
+        return nullptr;
     }
     me->rows = (RGB **) malloc(sizeof(RGB *) * height);
     if (!me->rows){
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
-        return NULL;
+        return nullptr;
     }
 
     RGB *row = me->pixels;
@@ -398,7 +398,7 @@ IndexedMap *IndexedMapCreate(int width, int height)
 
     IndexedMap *me = (IndexedMap *)malloc(sizeof(IndexedMap));
     if (!me)
-        return NULL;
+        return nullptr;
 
     /** methods **/
     me->setPixel      = iSetPixel;
@@ -414,13 +414,13 @@ IndexedMap *IndexedMapCreate(int width, int height)
     me->pixels = (unsigned int *) malloc(sizeof(unsigned int) * width * height);
     if (!me->pixels){
         free(me);
-        return NULL;
+        return nullptr;
     }
     me->rows = (unsigned int **) malloc(sizeof(unsigned int *) * height);
     if (!me->rows){
         free(me->pixels); //allocated as me->pixels is not NULL here: see previous check
         free(me);
-        return NULL;
+        return nullptr;
     }
 
     unsigned int *row = me->pixels;

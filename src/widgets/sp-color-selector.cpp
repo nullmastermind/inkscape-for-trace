@@ -36,7 +36,7 @@ G_DEFINE_TYPE(SPColorSelector, sp_color_selector, GTK_TYPE_BOX);
 
 void sp_color_selector_class_init( SPColorSelectorClass *klass )
 {
-    static const gchar* nameset[] = {N_("Unnamed"), 0};
+    static const gchar* nameset[] = {N_("Unnamed"), nullptr};
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class;
     widget_class = GTK_WIDGET_CLASS(klass);
@@ -45,28 +45,28 @@ void sp_color_selector_class_init( SPColorSelectorClass *klass )
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPColorSelectorClass, grabbed),
-					    NULL, NULL,
+					    nullptr, nullptr,
 					    g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0 );
     csel_signals[DRAGGED] = g_signal_new( "dragged",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPColorSelectorClass, dragged),
-					    NULL, NULL,
+					    nullptr, nullptr,
 					    g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0 );
     csel_signals[RELEASED] = g_signal_new( "released",
                                              G_TYPE_FROM_CLASS(object_class),
                                              (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                              G_STRUCT_OFFSET(SPColorSelectorClass, released),
-					     NULL, NULL,
+					     nullptr, nullptr,
 					     g_cclosure_marshal_VOID__VOID,
                                              G_TYPE_NONE, 0 );
     csel_signals[CHANGED] = g_signal_new( "changed",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPColorSelectorClass, changed),
-					    NULL, NULL,
+					    nullptr, nullptr,
 					    g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0 );
 
@@ -97,7 +97,7 @@ void sp_color_selector_dispose(GObject *object)
     if ( csel->base )
         {
             delete csel->base;
-            csel->base = 0;
+            csel->base = nullptr;
         }
 
     if ((G_OBJECT_CLASS(sp_color_selector_parent_class))->dispose ) {
@@ -119,7 +119,7 @@ GtkWidget *sp_color_selector_new( GType selector_type )
 {
     g_return_val_if_fail( g_type_is_a( selector_type, SP_TYPE_COLOR_SELECTOR ), NULL );
 
-    SPColorSelector *csel = SP_COLOR_SELECTOR( g_object_new( selector_type, NULL ) );
+    SPColorSelector *csel = SP_COLOR_SELECTOR( g_object_new( selector_type, nullptr ) );
 
     return GTK_WIDGET( csel );
 }
@@ -183,7 +183,7 @@ void ColorSelector::setColorAlpha( const SPColor& color, gfloat alpha, bool emit
 #ifdef DUMP_CHANGE_INFO
     g_message("ColorSelector::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s) in %s", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit?"YES":"no"), FOO_NAME(_csel));
 #endif
-    g_return_if_fail( _csel != NULL );
+    g_return_if_fail( _csel != nullptr );
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
 #ifdef DUMP_CHANGE_INFO

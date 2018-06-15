@@ -31,7 +31,7 @@ TemplateWidget::TemplateWidget()
     : _more_info_button(_("More info"))
     , _short_description_label(" ")
     , _template_name_label(_("no template selected"))
-    , _effect_prefs(NULL)
+    , _effect_prefs(nullptr)
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_preview_box, Gtk::PACK_SHRINK, 0);
@@ -97,7 +97,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     }
 
     if (data.is_procedural){
-        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, NULL, NULL); 
+        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, nullptr, nullptr); 
         pack_start(*_effect_prefs);
     }
     _more_info_button.set_sensitive(true);
@@ -109,9 +109,9 @@ void TemplateWidget::clear()
     _short_description_label.set_text("");
     _preview_render.hide();
     _preview_image.hide();
-    if (_effect_prefs != NULL){
+    if (_effect_prefs != nullptr){
         remove (*_effect_prefs);
-        _effect_prefs = NULL;
+        _effect_prefs = nullptr;
     }
     _more_info_button.set_sensitive(false);
 }

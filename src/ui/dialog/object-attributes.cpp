@@ -58,7 +58,7 @@ static const SPAttrDesc anchor_desc[] = {
     { N_("Show:"), "xlink:show"},
     // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
     { N_("Actuate:"), "xlink:actuate"},
-    { NULL, NULL}
+    { nullptr, nullptr}
 };
 
 static const SPAttrDesc image_desc[] = {
@@ -68,7 +68,7 @@ static const SPAttrDesc image_desc[] = {
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
     { N_("Image Rendering:"), "image-rendering"},
-    { NULL, NULL}
+    { nullptr, nullptr}
 };
 
 static const SPAttrDesc image_nohref_desc[] = {
@@ -76,15 +76,15 @@ static const SPAttrDesc image_nohref_desc[] = {
     { N_("Y:"), "y"},
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
-    { NULL, NULL}
+    { nullptr, nullptr}
 };
 
 ObjectAttributes::ObjectAttributes (void) :
     UI::Widget::Panel("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
     blocked (false),
-    CurrentItem(NULL),
+    CurrentItem(nullptr),
     attrTable(Gtk::manage(new SPAttributeTable())),
-    desktop(NULL),
+    desktop(nullptr),
     deskTrack(),
     selectChangedConn(),
     subselChangedConn(),
@@ -118,7 +118,7 @@ void ObjectAttributes::widget_setup (void)
     if (!item)
     {
         set_sensitive (false);
-        CurrentItem = NULL;
+        CurrentItem = nullptr;
         //no selection anymore or multiple objects selected, means that we need
         //to close the connections to the previously selected object
         return;

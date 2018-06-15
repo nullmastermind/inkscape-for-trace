@@ -186,7 +186,7 @@ void fix_update(SPObject *o) {
 
 void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 {
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC,"C");
     sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());

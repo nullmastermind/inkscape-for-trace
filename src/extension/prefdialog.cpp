@@ -45,22 +45,22 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     Gtk::Dialog(_(name.c_str()), true),
     _help(help),
     _name(name),
-    _button_ok(NULL),
-    _button_cancel(NULL),
-    _button_preview(NULL),
-    _param_preview(NULL),
+    _button_ok(nullptr),
+    _button_cancel(nullptr),
+    _button_preview(nullptr),
+    _param_preview(nullptr),
     _effect(effect),
-    _exEnv(NULL)
+    _exEnv(nullptr)
 {
     this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
-    if (controls == NULL) {
-        if (_effect == NULL) {
+    if (controls == nullptr) {
+        if (_effect == nullptr) {
             std::cout << "AH!!!  No controls and no effect!!!" << std::endl;
             return;
         }
-        controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, NULL);
+        controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, nullptr);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
     }
 
@@ -74,15 +74,15 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     if (_help == NULL)
         help_button->set_sensitive(false);
     */
-    _button_cancel = add_button(_effect == NULL ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
-    _button_ok     = add_button(_effect == NULL ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
+    _button_cancel = add_button(_effect == nullptr ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
+    _button_ok     = add_button(_effect == nullptr ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
     _button_ok->grab_focus();
 
-    if (_effect != NULL && !_effect->no_live_preview) {
-        if (_param_preview == NULL) {
-            XML::Document * doc = sp_repr_read_mem(live_param_xml, strlen(live_param_xml), NULL);
-            if (doc == NULL) {
+    if (_effect != nullptr && !_effect->no_live_preview) {
+        if (_param_preview == nullptr) {
+            XML::Document * doc = sp_repr_read_mem(live_param_xml, strlen(live_param_xml), nullptr);
+            if (doc == nullptr) {
                 std::cout << "Error encountered loading live parameter XML !!!" << std::endl;
                 return;
             }
@@ -96,7 +96,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 
         hbox = Gtk::manage(new Gtk::HBox());
         hbox->set_border_width(Parameter::GUI_BOX_MARGIN);
-        _button_preview = _param_preview->get_widget(NULL, NULL, &_signal_preview);
+        _button_preview = _param_preview->get_widget(nullptr, nullptr, &_signal_preview);
         _button_preview->show();
         hbox->pack_start(*_button_preview, true, true, 0);
         hbox->show();
@@ -104,7 +104,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         this->get_content_area()->pack_start(*hbox, false, false, 0);
 
         Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
-        if (hbox != NULL) {
+        if (hbox != nullptr) {
             _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
         }
 
@@ -113,7 +113,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     }
 
     // Set window modality for effects that don't use live preview
-    if (_effect != NULL && _effect->no_live_preview) {
+    if (_effect != nullptr && _effect->no_live_preview) {
         set_modal(false);
     }
 
@@ -125,20 +125,20 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 
 PrefDialog::~PrefDialog ( )
 {
-    if (_param_preview != NULL) {
+    if (_param_preview != nullptr) {
         delete _param_preview;
-        _param_preview = NULL;
+        _param_preview = nullptr;
     }
 
-    if (_exEnv != NULL) {
+    if (_exEnv != nullptr) {
         _exEnv->cancel();
         delete _exEnv;
-        _exEnv = NULL;
+        _exEnv = nullptr;
         _effect->set_execution_env(_exEnv);
     }
 
-    if (_effect != NULL) {
-        _effect->set_pref_dialog(NULL);
+    if (_effect != nullptr) {
+        _effect->set_pref_dialog(nullptr);
     }
 
     return;
@@ -176,21 +176,21 @@ PrefDialog::preview_toggle (void) {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool modified = document->isModifiedSinceSave();
-    if(_param_preview->get_bool(NULL, NULL)) {
-        if (_exEnv == NULL) {
+    if(_param_preview->get_bool(nullptr, nullptr)) {
+        if (_exEnv == nullptr) {
             set_modal(true);
-            _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, NULL, false, false);
+            _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, nullptr, false, false);
             _effect->set_execution_env(_exEnv);
             _exEnv->run();
         }
     } else {
         set_modal(false);
-        if (_exEnv != NULL) {
+        if (_exEnv != nullptr) {
             _exEnv->cancel();
             _exEnv->undo();
             _exEnv->reselect();
             delete _exEnv;
-            _exEnv = NULL;
+            _exEnv = nullptr;
             _effect->set_execution_env(_exEnv);
         }
     }
@@ -199,7 +199,7 @@ PrefDialog::preview_toggle (void) {
 
 void
 PrefDialog::param_change (void) {
-    if (_exEnv != NULL) {
+    if (_exEnv != nullptr) {
         if (!_effect->loaded()) {
             _effect->set_state(Extension::STATE_LOADED);
         }
@@ -214,7 +214,7 @@ PrefDialog::param_change (void) {
 
 bool
 PrefDialog::param_timer_expire (void) {
-    if (_exEnv != NULL) {
+    if (_exEnv != nullptr) {
         _exEnv->cancel();
         _exEnv->undo();
         _exEnv->run();
@@ -226,8 +226,8 @@ PrefDialog::param_timer_expire (void) {
 void
 PrefDialog::on_response (int signal) {
     if (signal == Gtk::RESPONSE_OK) {
-        if (_exEnv == NULL) {
-			if (_effect != NULL) {
+        if (_exEnv == nullptr) {
+			if (_effect != nullptr) {
 				_effect->effect(SP_ACTIVE_DESKTOP);
 			} else {
 				// Shutdown run()
@@ -241,16 +241,16 @@ PrefDialog::on_response (int signal) {
                 _exEnv->reselect();
             }
             delete _exEnv;
-            _exEnv = NULL;
+            _exEnv = nullptr;
             _effect->set_execution_env(_exEnv);
         }
     }
 
-    if (_param_preview != NULL) {
+    if (_param_preview != nullptr) {
         _checkbox_preview->set_active(false);
     }
 
-    if ((signal == Gtk::RESPONSE_CANCEL || signal == Gtk::RESPONSE_DELETE_EVENT) && _effect != NULL) {
+    if ((signal == Gtk::RESPONSE_CANCEL || signal == Gtk::RESPONSE_DELETE_EVENT) && _effect != nullptr) {
         delete this;
     }
     return;

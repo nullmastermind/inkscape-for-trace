@@ -60,10 +60,10 @@ ParamColor::ParamColor(const gchar * name,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml)
     : Parameter(name, text, description, hidden, indent, ext)
-    , _changeSignal(0)
+    , _changeSignal(nullptr)
 {
-    const char * defaulthex = NULL;
-    if (xml->firstChild() != NULL)
+    const char * defaulthex = nullptr;
+    if (xml->firstChild() != nullptr)
         defaulthex = xml->firstChild()->content();
 
     gchar * pref_name = this->pref_name();
@@ -92,7 +92,7 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    if (_hidden) return NULL;
+    if (_hidden) return nullptr;
 
     if (changeSignal) {
         _changeSignal = new sigc::signal<void>(*changeSignal);

@@ -162,7 +162,7 @@ Pixbuf::Pixbuf(cairo_surface_t *s)
     : _pixbuf(gdk_pixbuf_new_from_data(
         cairo_image_surface_get_data(s), GDK_COLORSPACE_RGB, TRUE, 8,
         cairo_image_surface_get_width(s), cairo_image_surface_get_height(s),
-        cairo_image_surface_get_stride(s), NULL, NULL))
+        cairo_image_surface_get_stride(s), nullptr, nullptr))
     , _surface(s)
     , _mod_time(0)
     , _pixel_format(PF_CAIRO)
@@ -174,7 +174,7 @@ Pixbuf::Pixbuf(cairo_surface_t *s)
  * so it should not be unrefed. */
 Pixbuf::Pixbuf(GdkPixbuf *pb)
     : _pixbuf(pb)
-    , _surface(0)
+    , _surface(nullptr)
     , _mod_time(0)
     , _pixel_format(PF_GDK)
     , _cairo_store(false)
@@ -209,7 +209,7 @@ Pixbuf::~Pixbuf()
 
 Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
 {
-    Pixbuf *pixbuf = NULL;
+    Pixbuf *pixbuf = nullptr;
 
     bool data_is_image = false;
     bool data_is_svg = false;
@@ -271,13 +271,13 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
     if ((*data) && data_is_image && !data_is_svg && data_is_base64) {
         GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
 
-        if (!loader) return NULL;
+        if (!loader) return nullptr;
 
         gsize decoded_len = 0;
         guchar *decoded = g_base64_decode(data, &decoded_len);
 
-        if (gdk_pixbuf_loader_write(loader, decoded, decoded_len, NULL)) {
-            gdk_pixbuf_loader_close(loader, NULL);
+        if (gdk_pixbuf_loader_write(loader, decoded, decoded_len, nullptr)) {
+            gdk_pixbuf_loader_close(loader, nullptr);
             GdkPixbuf *buf = gdk_pixbuf_loader_get_pixbuf(loader);
             if (buf) {
                 g_object_ref(buf);
@@ -301,13 +301,13 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
         guchar *decoded = g_base64_decode(data, &decoded_len);
         SPDocument *svgDoc = SPDocument::createNewDocFromMem (reinterpret_cast<gchar const *>(decoded), decoded_len, false);
         // Check the document loaded properly
-        if (svgDoc == NULL) {
-            return NULL;
+        if (svgDoc == nullptr) {
+            return nullptr;
         }
-        if (svgDoc->getRoot() == NULL)
+        if (svgDoc->getRoot() == nullptr)
         {
             svgDoc->doUnref();
-            return NULL;
+            return nullptr;
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
@@ -321,13 +321,13 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
         const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
         const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
 
-        GdkPixbuf *buf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL)->getPixbufRaw();
+        GdkPixbuf *buf = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, nullptr)->getPixbufRaw();
         // Tidy up
         svgDoc->doUnref();
-        if (buf == NULL) {
+        if (buf == nullptr) {
             std::cerr << "Pixbuf::create_from_data: failed to load contents: " << std::endl;
             g_free(decoded);
-            return NULL;
+            return nullptr;
         } else {
             g_object_ref(buf);
             pixbuf = new Pixbuf(buf);
@@ -340,32 +340,32 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
 
 Pixbuf *Pixbuf::create_from_file(std::string const &fn)
 {
-    Pixbuf *pb = NULL;
+    Pixbuf *pb = nullptr;
     // test correctness of filename
     if (!g_file_test(fn.c_str(), G_FILE_TEST_EXISTS)) { 
-        return NULL;
+        return nullptr;
     }
     GStatBuf stdir;
     int val = g_stat(fn.c_str(), &stdir);
     if (val == 0 && stdir.st_mode & S_IFDIR){
-        return NULL;
+        return nullptr;
     }
 
     // we need to load the entire file into memory,
     // since we'll store it as MIME data
-    gchar *data = NULL;
+    gchar *data = nullptr;
     gsize len = 0;
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (g_file_get_contents(fn.c_str(), &data, &len, &error)) {
 
-        if (error != NULL) {
+        if (error != nullptr) {
             std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
             std::cerr << "   (" << fn << ")" << std::endl;
-            return NULL;
+            return nullptr;
         }
-        GdkPixbuf *buf = NULL;
-        GdkPixbufLoader *loader = NULL;
+        GdkPixbuf *buf = nullptr;
+        GdkPixbufLoader *loader = nullptr;
         std::string::size_type idx;
         idx = fn.rfind('.');
         bool is_svg = false;    
@@ -374,13 +374,13 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
             if (boost::iequals(fn.substr(idx+1).c_str(), "svg")) {
                 SPDocument *svgDoc = SPDocument::createNewDoc(fn.c_str(), TRUE);
                // Check the document loaded properly
-                if (svgDoc == NULL) {
-                    return NULL;
+                if (svgDoc == nullptr) {
+                    return nullptr;
                 }
-                if (svgDoc->getRoot() == NULL)
+                if (svgDoc->getRoot() == nullptr)
                 {
                     svgDoc->doUnref();
-                    return NULL;
+                    return nullptr;
                 }
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                 const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
@@ -394,12 +394,12 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
                 const int scaledSvgWidth  = round(svgWidth_px/(96.0/dpi));
                 const int scaledSvgHeight = round(svgHeight_px/(96.0/dpi));
 
-                buf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL)->getPixbufRaw();
+                buf = sp_generate_internal_bitmap(svgDoc, nullptr, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, nullptr)->getPixbufRaw();
 
                 // Tidy up
                 svgDoc->doUnref();
-                if (buf == NULL) {
-                    return NULL;
+                if (buf == nullptr) {
+                    return nullptr;
                 }
                 is_svg = true;
             }
@@ -407,21 +407,21 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
         if (!is_svg) {
             loader = gdk_pixbuf_loader_new();
             gdk_pixbuf_loader_write(loader, (guchar *) data, len, &error);
-            if (error != NULL) {
+            if (error != nullptr) {
                 std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
                 std::cerr << "   (" << fn << ")" << std::endl;
                 g_free(data);
                 g_object_unref(loader);
-                return NULL;
+                return nullptr;
             }
 
             gdk_pixbuf_loader_close(loader, &error);
-            if (error != NULL) {
+            if (error != nullptr) {
                 std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
                 std::cerr << "   (" << fn << ")" << std::endl;
                 g_free(data);
                 g_object_unref(loader);
-                return NULL;
+                return nullptr;
             }
             
             buf = gdk_pixbuf_loader_get_pixbuf(loader);
@@ -449,7 +449,7 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
         // from the file. This can be done by using format-specific libraries e.g. libpng.
     } else {
         std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
-        return NULL;
+        return nullptr;
     }
 
     return pb;
@@ -512,15 +512,15 @@ Cairo::RefPtr<Cairo::Surface> Pixbuf::getSurface(bool convert_format)
 guchar const *Pixbuf::getMimeData(gsize &len, std::string &mimetype) const
 {
     static gchar const *mimetypes[] = {
-        CAIRO_MIME_TYPE_JPEG, CAIRO_MIME_TYPE_JP2, CAIRO_MIME_TYPE_PNG, NULL };
+        CAIRO_MIME_TYPE_JPEG, CAIRO_MIME_TYPE_JP2, CAIRO_MIME_TYPE_PNG, nullptr };
     static guint mimetypes_len = g_strv_length(const_cast<gchar**>(mimetypes));
 
-    guchar const *data = NULL;
+    guchar const *data = nullptr;
 
     for (guint i = 0; i < mimetypes_len; ++i) {
         unsigned long len_long = 0;
         cairo_surface_get_mime_data(const_cast<cairo_surface_t*>(_surface), mimetypes[i], &data, &len_long);
-        if (data != NULL) {
+        if (data != nullptr) {
 			len = len_long;
             mimetype = mimetypes[i];
             break;
@@ -560,7 +560,7 @@ void Pixbuf::_forceAlpha()
 
 void Pixbuf::_setMimeData(guchar *data, gsize len, Glib::ustring const &format)
 {
-    gchar const *mimetype = NULL;
+    gchar const *mimetype = nullptr;
 
     if (format == "jpeg") {
         mimetype = CAIRO_MIME_TYPE_JPEG;
@@ -570,7 +570,7 @@ void Pixbuf::_setMimeData(guchar *data, gsize len, Glib::ustring const &format)
         mimetype = CAIRO_MIME_TYPE_PNG;
     }
 
-    if (mimetype != NULL) {
+    if (mimetype != nullptr) {
         cairo_surface_set_mime_data(_surface, mimetype, data, len, g_free, data);
         //g_message("Setting Cairo MIME data: %s", mimetype);
     } else {
@@ -837,7 +837,7 @@ feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv)
 SPColorInterpolation
 get_cairo_surface_ci(cairo_surface_t *surface) {
     void* data = cairo_surface_get_user_data( surface, &ink_color_interpolation_key );
-    if( data != NULL ) {
+    if( data != nullptr ) {
         return (SPColorInterpolation)GPOINTER_TO_INT( data );
     } else {
         return SP_CSS_COLOR_INTERPOLATION_AUTO;
@@ -862,13 +862,13 @@ set_cairo_surface_ci(cairo_surface_t *surface, SPColorInterpolation ci) {
             ink_cairo_surface_linear_to_srgb( surface );
         }
 
-        cairo_surface_set_user_data(surface, &ink_color_interpolation_key, GINT_TO_POINTER (ci), NULL);
+        cairo_surface_set_user_data(surface, &ink_color_interpolation_key, GINT_TO_POINTER (ci), nullptr);
     }
 }
 
 void
 copy_cairo_surface_ci(cairo_surface_t *in, cairo_surface_t *out) {
-    cairo_surface_set_user_data(out, &ink_color_interpolation_key, cairo_surface_get_user_data(in, &ink_color_interpolation_key), NULL);
+    cairo_surface_set_user_data(out, &ink_color_interpolation_key, cairo_surface_get_user_data(in, &ink_color_interpolation_key), nullptr);
 }
 
 void
@@ -957,7 +957,7 @@ cairo_surface_t *
 ink_cairo_surface_create_identical(cairo_surface_t *s)
 {
     cairo_surface_t *ns = ink_cairo_surface_create_same_size(s, cairo_surface_get_content(s));
-    cairo_surface_set_user_data(ns, &ink_color_interpolation_key, cairo_surface_get_user_data(s, &ink_color_interpolation_key), NULL);
+    cairo_surface_set_user_data(ns, &ink_color_interpolation_key, cairo_surface_get_user_data(s, &ink_color_interpolation_key), nullptr);
     return ns;
 }
 
@@ -1004,7 +1004,7 @@ ink_cairo_surface_create_output(cairo_surface_t *image, cairo_surface_t *bg)
 {
     cairo_content_t imgt = cairo_surface_get_content(image);
     cairo_content_t bgt = cairo_surface_get_content(bg);
-    cairo_surface_t *out = NULL;
+    cairo_surface_t *out = nullptr;
 
     if (bgt == CAIRO_CONTENT_ALPHA && imgt == CAIRO_CONTENT_ALPHA) {
         out = ink_cairo_surface_create_identical(bg);
@@ -1416,7 +1416,7 @@ void
 ink_pixbuf_ensure_argb32(GdkPixbuf *pb)
 {
     gchar *pixel_format = reinterpret_cast<gchar*>(g_object_get_data(G_OBJECT(pb), "pixel_format"));
-    if (pixel_format != NULL && strcmp(pixel_format, "argb32") == 0) {
+    if (pixel_format != nullptr && strcmp(pixel_format, "argb32") == 0) {
         // nothing to do
         return;
     }
@@ -1437,7 +1437,7 @@ void
 ink_pixbuf_ensure_normal(GdkPixbuf *pb)
 {
     gchar *pixel_format = reinterpret_cast<gchar*>(g_object_get_data(G_OBJECT(pb), "pixel_format"));
-    if (pixel_format == NULL || strcmp(pixel_format, "pixbuf") == 0) {
+    if (pixel_format == nullptr || strcmp(pixel_format, "pixbuf") == 0) {
         // nothing to do
         return;
     }

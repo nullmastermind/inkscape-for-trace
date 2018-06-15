@@ -21,7 +21,7 @@
 
 SPMissingGlyph::SPMissingGlyph() : SPObject() {
 //TODO: correct these values:
-    this->d = NULL;
+    this->d = nullptr;
     this->horiz_adv_x = 0;
     this->vert_origin_x = 0;
     this->vert_origin_y = 0;
@@ -59,7 +59,7 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
         }
         case SP_ATTR_HORIZ_ADV_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             if (number != this->horiz_adv_x){
                 this->horiz_adv_x = number;
                 this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -68,7 +68,7 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
         }
         case SP_ATTR_VERT_ORIGIN_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             if (number != this->vert_origin_x){
                 this->vert_origin_x = number;
                 this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -77,7 +77,7 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
         }
         case SP_ATTR_VERT_ORIGIN_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             if (number != this->vert_origin_y){
                 this->vert_origin_y = number;
                 this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -86,7 +86,7 @@ void SPMissingGlyph::set(unsigned int key, const gchar* value) {
         }
         case SP_ATTR_VERT_ADV_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             if (number != this->vert_adv_y){
                 this->vert_adv_y = number;
                 this->requestModified(SP_OBJECT_MODIFIED_FLAG);

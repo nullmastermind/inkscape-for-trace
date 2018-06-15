@@ -29,8 +29,8 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
     _pixOffName(off),
     _property_active(*this, "active", false),
     _property_activatable(*this, "activatable", true),
-    _property_pixbuf_on(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_off(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_on(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_off(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(nullptr))
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
 

@@ -46,7 +46,7 @@ protected:
 
 public:
     Blur ( ) : Filter() { };
-    ~Blur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Blur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -73,7 +73,7 @@ public:
 gchar const *
 Blur::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream bbox;
     std::ostringstream hblur;
@@ -117,7 +117,7 @@ protected:
 
 public:
     CleanEdges ( ) : Filter() { };
-    ~CleanEdges ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CleanEdges ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -142,7 +142,7 @@ public:
 gchar const *
 CleanEdges::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream blur;
 
@@ -177,7 +177,7 @@ protected:
 
 public:
     CrossBlur ( ) : Filter() { };
-    ~CrossBlur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CrossBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -211,7 +211,7 @@ public:
 gchar const *
 CrossBlur::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream bright;
     std::ostringstream fade;
@@ -252,7 +252,7 @@ protected:
 
 public:
     Feather ( ) : Filter() { };
-    ~Feather ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Feather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -277,7 +277,7 @@ public:
 gchar const *
 Feather::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream blur;
 
@@ -317,7 +317,7 @@ protected:
 
 public:
     ImageBlur ( ) : Filter() { };
-    ~ImageBlur ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ImageBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -361,7 +361,7 @@ public:
 gchar const *
 ImageBlur::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream hblur;
     std::ostringstream vblur;

@@ -69,7 +69,7 @@ TextEdit::TextEdit()
       setasdefault_button(_("Set as _default")),
       close_button(_("_Close"), true),
       apply_button(_("_Apply"), true),
-      desktop(NULL),
+      desktop(nullptr),
       deskTrack(),
       selectChangedConn(),
       subselChangedConn(),
@@ -110,7 +110,7 @@ TextEdit::TextEdit()
     scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     scroller.set_shadow_type(Gtk::SHADOW_IN);
 
-    text_buffer = gtk_text_buffer_new (NULL);
+    text_buffer = gtk_text_buffer_new (nullptr);
     text_view = gtk_text_view_new_with_buffer (text_buffer);
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
@@ -320,7 +320,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
 SPItem *TextEdit::getSelectedTextItem (void)
 {
     if (!SP_ACTIVE_DESKTOP)
-        return NULL;
+        return nullptr;
 
     auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
 	for(auto i=tmp.begin();i!=tmp.end();++i)
@@ -329,7 +329,7 @@ SPItem *TextEdit::getSelectedTextItem (void)
             return *i;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

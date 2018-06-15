@@ -156,10 +156,10 @@ Export::Export (void) :
     closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
     button_box(false, 3),
     _prog(),
-    prog_dlg(NULL),
+    prog_dlg(nullptr),
     interrupted(false),
-    prefs(NULL),
-    desktop(NULL),
+    prefs(nullptr),
+    desktop(nullptr),
     deskTrack(),
     selectChangedConn(),
     subselChangedConn(),
@@ -270,7 +270,7 @@ Export::Export (void) :
          */
         ydpi_adj = createSpinbutton ( "ydpi", prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE),
                                       0.01, 100000.0, 0.1, 1.0, t, 3, 1,
-                                      "", _("dpi"), 2, 0, NULL );
+                                      "", _("dpi"), 2, 0, nullptr );
 
         singleexport_box.pack_start(size_box);
     }
@@ -442,13 +442,13 @@ void Export::set_default_filename () {
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         const gchar *uri = doc->getURI();
         const gchar *text_extension = get_file_save_extension (Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS).c_str();
-        Inkscape::Extension::Output * oextension = NULL;
+        Inkscape::Extension::Output * oextension = nullptr;
 
-        if (text_extension != NULL) {
+        if (text_extension != nullptr) {
             oextension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(text_extension));
         }
 
-        if (oextension != NULL) {
+        if (oextension != nullptr) {
             gchar * old_extension = oextension->get_extension();
             if (g_str_has_suffix(uri, old_extension)) {
                 gchar * uri_copy;
@@ -496,7 +496,7 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
     auto adj = Gtk::Adjustment::create(val, min, max, step, page, 0);
 
     int pos = 0;
-    Gtk::Label *l = NULL;
+    Gtk::Label *l = nullptr;
 
     if (!ll.empty()) {
         l = new Gtk::Label(ll,true);
@@ -564,7 +564,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
     }
 
     if (directory.empty()) {
-        directory = Inkscape::IO::Resource::homedir_path(NULL);
+        directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
 
     Glib::ustring filename = Glib::build_filename(directory, id+".png");
@@ -1086,7 +1086,7 @@ void Export::onExport ()
 
         setExporting(false);
         delete prog_dlg;
-        prog_dlg = NULL;
+        prog_dlg = nullptr;
         interrupted = false;
         exportSuccessful = (export_count > 0);
     } else {
@@ -1184,7 +1184,7 @@ void Export::onExport ()
 
         setExporting(false);
         delete prog_dlg;
-        prog_dlg = NULL;
+        prog_dlg = nullptr;
         interrupted = false;
 
         /* Setup the values in the document */
@@ -1199,17 +1199,17 @@ void Export::onExport ()
             DocumentUndo::setUndoSensitive(doc, false);
 
             gchar const *temp_string = repr->attribute("inkscape:export-filename");
-            if (temp_string == NULL || (filename_ext != temp_string)) {
+            if (temp_string == nullptr || (filename_ext != temp_string)) {
                 repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-xdpi");
-            if (temp_string == NULL || xdpi != atof(temp_string)) {
+            if (temp_string == nullptr || xdpi != atof(temp_string)) {
                 sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                 modified = true;
             }
             temp_string = repr->attribute("inkscape:export-ydpi");
-            if (temp_string == NULL || ydpi != atof(temp_string)) {
+            if (temp_string == nullptr || ydpi != atof(temp_string)) {
                 sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                 modified = true;
             }
@@ -1238,23 +1238,23 @@ void Export::onExport ()
                 {
                     docdir = Glib::path_get_dirname(docURI);
                 }
-                if (repr->attribute("id") == NULL ||
+                if (repr->attribute("id") == nullptr ||
                         !(filename_ext.find_last_of(repr->attribute("id")) &&
                           ( !docURI ||
                             (dir == docdir)))) {
                     temp_string = repr->attribute("inkscape:export-filename");
-                    if (temp_string == NULL || (filename_ext != temp_string)) {
+                    if (temp_string == nullptr || (filename_ext != temp_string)) {
                         repr->setAttribute("inkscape:export-filename", filename_ext.c_str());
                         modified = true;
                     }
                 }
                 temp_string = repr->attribute("inkscape:export-xdpi");
-                if (temp_string == NULL || xdpi != atof(temp_string)) {
+                if (temp_string == nullptr || xdpi != atof(temp_string)) {
                     sp_repr_set_svg_double(repr, "inkscape:export-xdpi", xdpi);
                     modified = true;
                 }
                 temp_string = repr->attribute("inkscape:export-ydpi");
-                if (temp_string == NULL || ydpi != atof(temp_string)) {
+                if (temp_string == nullptr || ydpi != atof(temp_string)) {
                     sp_repr_set_svg_double(repr, "inkscape:export-ydpi", ydpi);
                     modified = true;
                 }
@@ -1379,7 +1379,7 @@ void Export::onBrowse ()
 
         file = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fs));
 
-        gchar * utf8file = g_filename_to_utf8( file, -1, NULL, NULL, NULL );
+        gchar * utf8file = g_filename_to_utf8( file, -1, nullptr, nullptr, nullptr );
         filename_entry.set_text (utf8file);
         filename_entry.set_position(strlen(utf8file));
 
@@ -1446,7 +1446,7 @@ void Export::detectSize() {
     for (int i = 0;
             i < SELECTION_NUMBER_OF + 1 &&
             key == SELECTION_NUMBER_OF &&
-            SP_ACTIVE_DESKTOP != NULL;
+            SP_ACTIVE_DESKTOP != nullptr;
             i++) {
         switch (this_test[i]) {
         case SELECTION_SELECTION:

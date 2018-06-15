@@ -73,8 +73,8 @@ const std::string LpeTool::prefsPath = "/tools/lpetool";
 
 LpeTool::LpeTool()
     : PenTool(cursor_crosshairs_xpm)
-    , shape_editor(NULL)
-    , canvas_bbox(NULL)
+    , shape_editor(nullptr)
+    , canvas_bbox(nullptr)
     , mode(Inkscape::LivePathEffect::BEND_PATH)
 // TODO: pointer?
     , measuring_items(new std::map<SPPath *, SPCanvasItem*>)
@@ -83,16 +83,16 @@ LpeTool::LpeTool()
 
 LpeTool::~LpeTool() {
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     if (this->canvas_bbox) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(this->canvas_bbox));
-        this->canvas_bbox = NULL;
+        this->canvas_bbox = nullptr;
     }
 
     lpetool_delete_measuring_items(this);
     delete this->measuring_items;
-    this->measuring_items = NULL;
+    this->measuring_items = nullptr;
 
     this->sel_changed_connection.disconnect();
 }
@@ -343,7 +343,7 @@ lpetool_context_reset_limiting_bbox(LpeTool *lc)
 {
     if (lc->canvas_bbox) {
         sp_canvas_item_destroy(lc->canvas_bbox);
-        lc->canvas_bbox = NULL;
+        lc->canvas_bbox = nullptr;
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -407,7 +407,7 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
             if (!show)
                 sp_canvas_item_hide(SP_CANVAS_ITEM(canvas_text));
 
-            Inkscape::Util::Unit const * unit = NULL;
+            Inkscape::Util::Unit const * unit = nullptr;
             if (prefs->getString("/tools/lpetool/unit").compare("")) {
                 unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
             } else {
@@ -446,7 +446,7 @@ lpetool_update_measuring_items(LpeTool *lc)
         SPPath *path = i->first;
         SPCurve *curve = path->getCurve();
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = Geom::paths_to_pw(curve->get_pathvector());
-        Inkscape::Util::Unit const * unit = NULL;
+        Inkscape::Util::Unit const * unit = nullptr;
         if (prefs->getString("/tools/lpetool/unit").compare("")) {
             unit = unit_table.getUnit(prefs->getString("/tools/lpetool/unit"));
         } else {

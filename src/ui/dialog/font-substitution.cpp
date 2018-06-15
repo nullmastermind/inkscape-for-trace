@@ -155,7 +155,7 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
         }
         else if (SP_IS_TEXTPATH(item)) {
             SPTextPath const *textpath = SP_TEXTPATH(item);
-            if (textpath->originalPath != NULL) {
+            if (textpath->originalPath != nullptr) {
                 family = SP_TEXT(item->parent)->layout.getFontFamily(0);
                 setFontSpans.insert(family);
             }
@@ -167,7 +167,7 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
              while (parent_text && !SP_IS_TEXT(parent_text)) {
                  parent_text = parent_text->parent;
              }
-             if (parent_text != NULL) {
+             if (parent_text != nullptr) {
                  family = SP_TEXT(parent_text)->layout.getFontFamily(0);
                  // Add all the spans fonts to the set
                  for (unsigned int f=0; f < parent_text->children.size(); f++) {
@@ -178,7 +178,7 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
         }
 
         if (style) {
-            gchar const *style_font = NULL;
+            gchar const *style_font = nullptr;
             if (style->font_family.set)
                 style_font = style->font_family.value;
             else if (style->font_specification.set)

@@ -218,7 +218,7 @@ private:
     virtual void init()
         {
         badval = 0.0;
-        d      = NULL;
+        d      = nullptr;
         rows   = 0;
         cols   = 0;
         size   = 0;
@@ -229,7 +229,7 @@ private:
         if (d)
             {
             delete[] d;
-            d = 0;
+            d = nullptr;
             }
         rows = other.rows;
         cols = other.cols;
@@ -289,7 +289,7 @@ public:
     SingularValueDecomposition (const SVDMatrix &mat) :
         A (mat),
         U (),
-        s (NULL),
+        s (nullptr),
         s_size (0),
         V ()
         {
@@ -1010,7 +1010,7 @@ static void gatherText(Inkscape::XML::Node *node, Glib::ustring &buf)
         }
 
     for (Inkscape::XML::Node *child = node->firstChild() ;
-                child != NULL; child = child->next())
+                child != nullptr; child = child->next())
         {
         gatherText(child, buf);
         }
@@ -1466,7 +1466,7 @@ bool OdfOutput::processGradient(SPItem *item,
     //## Gradient
     SPGradient *gradient = SP_GRADIENT((checkFillGradient?(SP_STYLE_FILL_SERVER(style)) :(SP_STYLE_STROKE_SERVER(style))));
 
-    if (gradient == NULL)
+    if (gradient == nullptr)
     {
         return false;
     }
@@ -1644,7 +1644,7 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
     analyzeTransform(tf, rotate, xskew, yskew, xscale, yscale);
 
     //# Do our stuff
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
 
     if (nodeName == "svg" || nodeName == "svg:svg")
     {
@@ -2038,7 +2038,7 @@ bool OdfOutput::writeContent(ZipFile &zf, Inkscape::XML::Node *node)
 
     //# Descend into the tree, doing all of our conversions
     //# to both files at the same time
-    char *oldlocale = g_strdup (setlocale (LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup (setlocale (LC_NUMERIC, nullptr));
     setlocale (LC_NUMERIC, "C");
     if (!writeTree(couts, souts, node))
     {

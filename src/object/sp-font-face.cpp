@@ -275,13 +275,13 @@ SPFontFace::SPFontFace() : SPObject() {
     std::vector<FontFaceStretchType> stretch;
     stretch.push_back(SP_FONTFACE_STRETCH_NORMAL);
     this->font_stretch = stretch;
-    this->font_family = NULL;
+    this->font_family = nullptr;
 
     //this->font_style = ;
     //this->font_variant = ;
     //this->font_weight = ;
     //this->font_stretch = ;
-    this->font_size = NULL;
+    this->font_size = nullptr;
     //this->unicode_range = ;
     this->units_per_em = 1000;
     //this->panose_1 = ;
@@ -293,8 +293,8 @@ SPFontFace::SPFontFace() : SPObject() {
     this->accent_height = 0;
     this->ascent = 0;
     this->descent = 0;
-    this->widths = NULL;
-    this->bbox = NULL;
+    this->widths = nullptr;
+    this->bbox = nullptr;
     this->ideographic = 0;
     this->alphabetic = 0;
     this->mathematical = 0;
@@ -456,7 +456,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
             break;
         case SP_ATTR_UNITS_PER_EM:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->units_per_em){
                 this->units_per_em = number;
@@ -466,7 +466,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_STEMV:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->stemv){
                 this->stemv = number;
@@ -476,7 +476,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_STEMH:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->stemh){
                 this->stemh = number;
@@ -486,7 +486,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_SLOPE:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->slope){
                 this->slope = number;
@@ -496,7 +496,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_CAP_HEIGHT:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->cap_height){
                 this->cap_height = number;
@@ -506,7 +506,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_X_HEIGHT:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->x_height){
                 this->x_height = number;
@@ -516,7 +516,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_ACCENT_HEIGHT:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->accent_height){
                 this->accent_height = number;
@@ -526,7 +526,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_ASCENT:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->ascent){
                 this->ascent = number;
@@ -536,7 +536,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_DESCENT:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->descent){
                 this->descent = number;
@@ -546,7 +546,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_IDEOGRAPHIC:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->ideographic){
                 this->ideographic = number;
@@ -556,7 +556,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_ALPHABETIC:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->alphabetic){
                 this->alphabetic = number;
@@ -566,7 +566,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_MATHEMATICAL:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->mathematical){
                 this->mathematical = number;
@@ -576,7 +576,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_HANGING:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->hanging){
                 this->hanging = number;
@@ -586,7 +586,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_V_IDEOGRAPHIC:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->v_ideographic){
                 this->v_ideographic = number;
@@ -596,7 +596,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_V_ALPHABETIC:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->v_alphabetic){
                 this->v_alphabetic = number;
@@ -606,7 +606,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_V_MATHEMATICAL:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->v_mathematical){
                 this->v_mathematical = number;
@@ -616,7 +616,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_V_HANGING:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->v_hanging){
                 this->v_hanging = number;
@@ -626,7 +626,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_UNDERLINE_POSITION:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->underline_position){
                 this->underline_position = number;
@@ -636,7 +636,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_UNDERLINE_THICKNESS:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->underline_thickness){
                 this->underline_thickness = number;
@@ -646,7 +646,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_STRIKETHROUGH_POSITION:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->strikethrough_position){
                 this->strikethrough_position = number;
@@ -656,7 +656,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_STRIKETHROUGH_THICKNESS:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->strikethrough_thickness){
                 this->strikethrough_thickness = number;
@@ -666,7 +666,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_OVERLINE_POSITION:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->overline_position){
                 this->overline_position = number;
@@ -676,7 +676,7 @@ void SPFontFace::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_OVERLINE_THICKNESS:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->overline_thickness){
                 this->overline_thickness = number;

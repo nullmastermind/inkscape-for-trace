@@ -25,7 +25,7 @@ typedef struct {
  */
 
 static SPStyleProp const props[] = {
-    {SP_ATTR_INVALID, NULL},
+    {SP_ATTR_INVALID, nullptr},
     /* SPObject */
     {SP_ATTR_ID, "id"},
     {SP_ATTR_STYLE, "style"},
@@ -579,7 +579,7 @@ unsigned char const *
 sp_attribute_name(unsigned int id)
 {
     if (id >= n_attrs) {
-        return NULL;
+        return nullptr;
     }
 
     return (unsigned char*)props[id].name;

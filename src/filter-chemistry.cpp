@@ -87,7 +87,7 @@ static void set_filter_area(Inkscape::XML::Node *repr, gdouble radius,
 
 SPFilter *new_filter(SPDocument *document)
 {
-    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document != nullptr, NULL);
 
     SPDefs *defs = document->getDefs();
 
@@ -114,7 +114,7 @@ SPFilter *new_filter(SPDocument *document)
     SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
     
     
-    g_assert(f != NULL);
+    g_assert(f != nullptr);
     g_assert(SP_IS_FILTER(f));
 
     return f;
@@ -181,7 +181,7 @@ filter_add_primitive(SPFilter *filter, const Inkscape::Filters::FilterPrimitiveT
     // get corresponding object
     SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE( filter->document->getObjectByRepr(repr) );
  
-    g_assert(prim != NULL);
+    g_assert(prim != nullptr);
     g_assert(SP_IS_FILTER_PRIMITIVE(prim));
 
     return prim;
@@ -193,7 +193,7 @@ filter_add_primitive(SPFilter *filter, const Inkscape::Filters::FilterPrimitiveT
 SPFilter *
 new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion, double expansionX, double expansionY, double width, double height)
 {
-    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document != nullptr, NULL);
 
     SPDefs *defs = document->getDefs();
 
@@ -240,9 +240,9 @@ new_filter_gaussian_blur (SPDocument *document, gdouble radius, double expansion
     SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
     SPGaussianBlur *b = SP_GAUSSIANBLUR( document->getObjectByRepr(b_repr) );
     
-    g_assert(f != NULL);
+    g_assert(f != nullptr);
     g_assert(SP_IS_FILTER(f));
-    g_assert(b != NULL);
+    g_assert(b != nullptr);
     g_assert(SP_IS_GAUSSIANBLUR(b));
 
     return f;
@@ -257,7 +257,7 @@ static SPFilter *
 new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdouble radius, double expansion,
                                 double expansionX, double expansionY, double width, double height)
 {
-    g_return_val_if_fail(document != NULL, NULL);
+    g_return_val_if_fail(document != nullptr, NULL);
 
     SPDefs *defs = document->getDefs();
 
@@ -305,7 +305,7 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
         Inkscape::GC::release(b_repr);
 
         SPGaussianBlur *b = SP_GAUSSIANBLUR( document->getObjectByRepr(b_repr) );
-        g_assert(b != NULL);
+        g_assert(b != nullptr);
         g_assert(SP_IS_GAUSSIANBLUR(b));
     }
     // Blend primitive
@@ -327,11 +327,11 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
         }
 
         SPFeBlend *b = SP_FEBLEND(document->getObjectByRepr(b_repr));
-        g_assert(b != NULL);
+        g_assert(b != nullptr);
         g_assert(SP_IS_FEBLEND(b));
     }
     
-    g_assert(f != NULL);
+    g_assert(f != nullptr);
     g_assert(SP_IS_FILTER(f));
  
     return f;

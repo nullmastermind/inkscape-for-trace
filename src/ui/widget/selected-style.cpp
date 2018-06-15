@@ -74,7 +74,7 @@ ss_selection_modified( Inkscape::Selection *selection, guint /*flags*/, gpointer
 static void
 ss_subselection_changed( gpointer /*dragger*/, gpointer data )
 {
-    ss_selection_changed (NULL, data);
+    ss_selection_changed (nullptr, data);
 }
 
 namespace {
@@ -121,9 +121,9 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     :
       current_stroke_width(0),
 
-      _sw_unit(NULL),
+      _sw_unit(nullptr),
 
-      _desktop (NULL),
+      _desktop (nullptr),
       _table(),
       _fill_label (_("Fill:")),
       _stroke_label (_("Stroke:")),
@@ -146,7 +146,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
       _opacity_blocked (false)
 {
     set_name("SelectedStyle");
-    _drop[0] = _drop[1] = 0;
+    _drop[0] = _drop[1] = nullptr;
     _dropEnabled[0] = _dropEnabled[1] = false;
 
     _fill_label.set_halign(Gtk::ALIGN_START);
@@ -207,7 +207,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _lgradient[i].show_all();
         __lgradient[i] = (i == SS_FILL)? (_("Linear gradient fill")) : (_("Linear gradient stroke"));
 
-        _gradient_preview_l[i] =  GTK_WIDGET(sp_gradient_image_new (NULL));
+        _gradient_preview_l[i] =  GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_l[i].pack_start(_lgradient[i]);
         _gradient_box_l[i].pack_start(*(Glib::wrap(_gradient_preview_l[i])));
         _gradient_box_l[i].show_all();
@@ -217,7 +217,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _rgradient[i].show_all();
         __rgradient[i] = (i == SS_FILL)? (_("Radial gradient fill")) : (_("Radial gradient stroke"));
 
-        _gradient_preview_r[i] = GTK_WIDGET(sp_gradient_image_new (NULL));
+        _gradient_preview_r[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_r[i].pack_start(_rgradient[i]);
         _gradient_box_r[i].pack_start(*(Glib::wrap(_gradient_preview_r[i])));
         _gradient_box_r[i].show_all();
@@ -228,7 +228,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _mgradient[i].show_all();
         __mgradient[i] = (i == SS_FILL)? (_("Mesh gradient fill")) : (_("Mesh gradient stroke"));
 
-        _gradient_preview_m[i] = GTK_WIDGET(sp_gradient_image_new (NULL));
+        _gradient_preview_m[i] = GTK_WIDGET(sp_gradient_image_new (nullptr));
         _gradient_box_m[i].pack_start(_mgradient[i]);
         _gradient_box_m[i].pack_start(*(Glib::wrap(_gradient_preview_m[i])));
         _gradient_box_m[i].show_all();
@@ -925,7 +925,7 @@ void SelectedStyle::on_popup_preset(int i) {
 void
 SelectedStyle::update()
 {
-    if (_desktop == NULL)
+    if (_desktop == nullptr)
         return;
 
     // create temporary style
@@ -1201,7 +1201,7 @@ RotateableSwatch::RotateableSwatch(SelectedStyle *parent, guint mode) :
     startcolor(0),
     startcolor_set(false),
     undokey("ssrot1"),
-    cr(0),
+    cr(nullptr),
     cr_set(false)
 
 {
@@ -1285,7 +1285,7 @@ RotateableSwatch::do_motion(double by, guint modifier) {
 
     if (!scrolling && !cr_set) {
         GtkWidget *w = GTK_WIDGET(gobj());
-        GdkPixbuf *pixbuf = NULL;
+        GdkPixbuf *pixbuf = nullptr;
 
         if (modifier == 2) { // saturation
             pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_s_xpm);
@@ -1297,13 +1297,13 @@ RotateableSwatch::do_motion(double by, guint modifier) {
             pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)cursor_adj_h_xpm);
         }
 
-	if (pixbuf != NULL) {
+	if (pixbuf != nullptr) {
 	    cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
 
             g_object_unref(pixbuf);	    
             gdk_window_set_cursor(gtk_widget_get_window(w), cr);
 	    g_object_unref(cr);
-	    cr = NULL;
+	    cr = nullptr;
             cr_set = true;
         }
     }
@@ -1364,10 +1364,10 @@ RotateableSwatch::do_release(double by, guint modifier) {
 
     if (cr_set) {
         GtkWidget *w = GTK_WIDGET(gobj());
-        gdk_window_set_cursor(gtk_widget_get_window(w), NULL);
+        gdk_window_set_cursor(gtk_widget_get_window(w), nullptr);
         if (cr) {
            g_object_unref(cr);
-           cr = NULL;
+           cr = nullptr;
         }
         cr_set = false;
     }
@@ -1495,7 +1495,7 @@ Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop)
         } catch (std::exception &e) { }
     }
 
-    return 0;
+    return nullptr;
 }
 
 } // namespace Widget

@@ -34,10 +34,10 @@
 
 
 SPFeImage::SPFeImage() : SPFilterPrimitive() {
-	this->href = NULL;
+	this->href = nullptr;
 	this->from_element = 0;
-	this->SVGElemRef = NULL;
-	this->SVGElem = NULL;
+	this->SVGElemRef = nullptr;
+	this->SVGElem = nullptr;
 
     this->aspect_align = SP_ASPECT_XMID_YMID; // Default
     this->aspect_clip = SP_ASPECT_MEET; // Default
@@ -88,7 +88,7 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
         feImage->SVGElem = SP_ITEM(new_elem);
         feImage->_image_modified_connection = ((SPObject*) feImage->SVGElem)->connectModified(sigc::bind(sigc::ptr_fun(&sp_feImage_elem_modified), obj));
     } else {
-        feImage->SVGElem = 0;
+        feImage->SVGElem = nullptr;
     }
 
     obj->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -104,11 +104,11 @@ void SPFeImage::set(unsigned int key, gchar const *value) {
             if (this->href) {
                 g_free(this->href);
             }
-            this->href = (value) ? g_strdup (value) : NULL;
+            this->href = (value) ? g_strdup (value) : nullptr;
             if (!this->href) return;
             delete this->SVGElemRef;
-            this->SVGElemRef = 0;
-            this->SVGElem = 0;
+            this->SVGElemRef = nullptr;
+            this->SVGElem = nullptr;
             this->_image_modified_connection.disconnect();
             this->_href_modified_connection.disconnect();
             try{
@@ -232,13 +232,13 @@ Inkscape::XML::Node* SPFeImage::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_IMAGE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterImage *nr_image = dynamic_cast<Inkscape::Filters::FilterImage*>(nr_primitive);
-    g_assert(nr_image != NULL);
+    g_assert(nr_image != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

@@ -1271,7 +1271,7 @@ void Path::RecBezierTo(Geom::Point const &iP, Geom::Point const &iS,Geom::Point 
 
 void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool invert)
 {
-    if ( dest == NULL ) {
+    if ( dest == nullptr ) {
         return;
     }
 

@@ -38,7 +38,7 @@ public:
 
     Gtk::Widget *param_newWidget() override
     {
-        return NULL;
+        return nullptr;
     }
     virtual void setHelperSize(int hs);
     void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
@@ -87,7 +87,7 @@ public:
     FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index);
     ~FilletChamferKnotHolderEntity() override
     {
-        _pparam->_knoth = NULL;
+        _pparam->_knoth = nullptr;
     }
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin,

@@ -79,7 +79,7 @@ LPERuler::ruler_mark(Geom::Point const &A, Geom::Point const &n, MarkType const 
 
     double real_mark_length = mark_length;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    SPNamedView *nv = sp_document_namedview(document, NULL);
+    SPNamedView *nv = sp_document_namedview(document, nullptr);
     Glib::ustring display_unit = nv->display_units->abbr;
     real_mark_length = Inkscape::Util::Quantity::convert(real_mark_length, unit.get_abbreviation(), display_unit.c_str());
     double real_minor_mark_length = minor_mark_length;
@@ -134,7 +134,7 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
 
     double real_mark_distance = mark_distance;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    SPNamedView *nv = sp_document_namedview(document, NULL);
+    SPNamedView *nv = sp_document_namedview(document, nullptr);
     Glib::ustring display_unit = nv->display_units->abbr;
     real_mark_distance = Inkscape::Util::Quantity::convert(real_mark_distance, unit.get_abbreviation(), display_unit.c_str());
 

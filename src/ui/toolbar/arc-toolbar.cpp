@@ -96,7 +96,7 @@ static void sp_arctb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     SPDocument* document = desktop->getDocument();
     Geom::Scale scale = document->getDocumentScale();
@@ -265,7 +265,7 @@ static void sp_arctb_type_changed( GObject *tbl, int type )
         SPItem *item = *i;
         if (SP_IS_GENERICELLIPSE(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
-            repr->setAttribute("sodipodi:open", (open?"true":NULL) );
+            repr->setAttribute("sodipodi:open", (open?"true":nullptr) );
             repr->setAttribute("sodipodi:arc-type", arc_type.c_str());
             item->updateRepr();
             modmade = true;
@@ -321,7 +321,7 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
 
         UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
         Unit const *unit = tracker->getActiveUnit();
-        g_return_if_fail(unit != NULL);
+        g_return_if_fail(unit != nullptr);
 
         GtkAdjustment *adj;
         adj = GTK_ADJUSTMENT( g_object_get_data(tbl, "rx") );
@@ -354,10 +354,10 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
 
     sp_arctb_sensitivize( tbl, gtk_adjustment_get_value(adj1), gtk_adjustment_get_value(adj2) );
 
-    char const *arctypestr = NULL;
+    char const *arctypestr = nullptr;
     arctypestr = repr->attribute("sodipodi:arc-type");
     if (!arctypestr) { // For old files.
-        char const *openstr = NULL;
+        char const *openstr = nullptr;
         openstr = repr->attribute("sodipodi:open");
         arctypestr = (openstr ? "arc" : "slice");
     }
@@ -377,22 +377,22 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
 }
 
 static Inkscape::XML::NodeEventVector arc_tb_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     arc_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 
 static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
 {
     int n_selected = 0;
-    Inkscape::XML::Node *repr = NULL;
-    SPItem *item = NULL;
+    Inkscape::XML::Node *repr = nullptr;
+    SPItem *item = nullptr;
 
     if ( g_object_get_data( tbl, "repr" ) ) {
-        g_object_set_data( tbl, "item", NULL );
+        g_object_set_data( tbl, "item", nullptr );
     }
     purge_repr_listener( tbl, tbl );
 
@@ -440,7 +440,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -448,7 +448,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
     g_object_set_data( holder, "tracker", tracker );
 
     {
-        EgeOutputAction* act = ege_output_action_new( "ArcStateAction", _("<b>New:</b>"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "ArcStateAction", _("<b>New:</b>"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "mode_action", act );
@@ -456,7 +456,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
 
     /* Radius X */
     {
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "ArcRadiusXAction",
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of the circle, ellipse, or arc"),
@@ -472,12 +472,12 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
 
     /* Radius Y */
     {
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "ArcRadiusYAction",
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of the circle, ellipse, or arc"),
                                          "/tools/shapes/arc/ry", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_arctb_ry_value_changed, tracker);
@@ -500,7 +500,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          "/tools/shapes/arc/start", 0.0,
                                          GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-arc",
                                          -360.0, 360.0, 1.0, 10.0,
-                                         0, 0, 0,
+                                         nullptr, nullptr, 0,
                                          sp_arctb_start_value_changed);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
@@ -511,9 +511,9 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
                                          _("End"), _("End:"),
                                          _("The angle (in degrees) from the horizontal to the arc's end point"),
                                          "/tools/shapes/arc/end", 0.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
-                                         0, 0, 0,
+                                         nullptr, nullptr, 0,
                                          sp_arctb_end_value_changed);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
@@ -597,7 +597,7 @@ static void arc_toolbox_check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBa
     } else {
         if (changed) {
             changed.disconnect();
-            purge_repr_listener(NULL, holder);
+            purge_repr_listener(nullptr, holder);
         }
     }
 }

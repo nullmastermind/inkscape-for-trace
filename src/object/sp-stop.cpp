@@ -24,7 +24,7 @@
 #include "svg/css-ostringstream.h"
 
 SPStop::SPStop() : SPObject() {
-	this->path_string = NULL;
+	this->path_string = nullptr;
 
     this->offset = 0.0;
     this->currentColor = false;
@@ -152,8 +152,8 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
     }
     os << ";stop-opacity:" << opacity;
     repr->setAttribute("style", os.str().c_str());
-    repr->setAttribute("stop-color", NULL);
-    repr->setAttribute("stop-opacity", NULL);
+    repr->setAttribute("stop-color", nullptr);
+    repr->setAttribute("stop-opacity", nullptr);
     sp_repr_set_css_double(repr, "offset", this->offset);
     /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
      * for offset proportions. */
@@ -167,7 +167,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
 
 // A stop might have some non-stop siblings
 SPStop* SPStop::getNextStop() {
-    SPStop *result = 0;
+    SPStop *result = nullptr;
 
     for (SPObject* obj = getNext(); obj && !result; obj = obj->getNext()) {
         if (SP_IS_STOP(obj)) {
@@ -179,7 +179,7 @@ SPStop* SPStop::getNextStop() {
 }
 
 SPStop* SPStop::getPrevStop() {
-    SPStop *result = 0;
+    SPStop *result = nullptr;
 
     for (SPObject* obj = getPrev(); obj; obj = obj->getPrev()) {
         // The closest previous SPObject that is an SPStop *should* be ourself.
@@ -215,7 +215,7 @@ SPColor SPStop::getEffectiveColor() const {
     SPColor ret;
 
     if (currentColor) {
-        char const *str = getStyleProperty("color", NULL);
+        char const *str = getStyleProperty("color", nullptr);
         /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
          * value depends on user agent, and don't give any further restrictions that I can
          * see.) */
@@ -237,7 +237,7 @@ guint32 SPStop::get_rgba32() const {
      * value depends on user agent, and don't give any further restrictions that I can
      * see.) */
     if (this->currentColor) {
-        char const *str = this->getStyleProperty("color", NULL);
+        char const *str = this->getStyleProperty("color", nullptr);
 
         if (str) {
             rgb0 = sp_svg_read_color(str, rgb0);

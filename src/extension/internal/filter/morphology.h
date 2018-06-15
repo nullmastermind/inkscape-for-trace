@@ -50,7 +50,7 @@ protected:
 
 public:
     Crosssmooth ( ) : Filter() { };
-    ~Crosssmooth ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Crosssmooth ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -86,7 +86,7 @@ public:
 gchar const *
 Crosssmooth::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream type;
     std::ostringstream width;
@@ -158,7 +158,7 @@ protected:
 
 public:
     Outline ( ) : Filter() { };
-    ~Outline ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Outline ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -213,7 +213,7 @@ public:
 gchar const *
 Outline::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream width1;
     std::ostringstream dilat1;

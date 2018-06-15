@@ -127,16 +127,16 @@ SPCanvasGroup *create_control_group(SPDesktop *d);
 
 NodeTool::NodeTool()
     : ToolBase(cursor_node_xpm)
-    , _selected_nodes(NULL)
-    , _multipath(NULL)
+    , _selected_nodes(nullptr)
+    , _multipath(nullptr)
     , edit_clipping_paths(false)
     , edit_masks(false)
-    , flashed_item(NULL)
-    , flash_tempitem(NULL)
-    , _selector(NULL)
-    , _path_data(NULL)
-    , _transform_handle_group(NULL)
-    , _last_over(NULL)
+    , flashed_item(nullptr)
+    , flash_tempitem(nullptr)
+    , _selector(nullptr)
+    , _path_data(nullptr)
+    , _transform_handle_group(nullptr)
+    , _last_over(nullptr)
     , cursor_drag(false)
     , show_handles(false)
     , show_outline(false)
@@ -151,7 +151,7 @@ NodeTool::NodeTool()
 SPCanvasGroup *create_control_group(SPDesktop *d)
 {
     return reinterpret_cast<SPCanvasGroup*>(sp_canvas_item_new(
-        d->getControls(), SP_TYPE_CANVAS_GROUP, NULL));
+        d->getControls(), SP_TYPE_CANVAS_GROUP, nullptr));
 }
 
 void destroy_group(SPCanvasGroup *g)
@@ -219,7 +219,7 @@ void NodeTool::setup() {
     this->_sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(
             sigc::mem_fun(this, &NodeTool::handleControlUiStyleChange)
     );
-    this->helperpath_tmpitem = NULL;
+    this->helperpath_tmpitem = nullptr;
     this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
 
     data.node_data.selection = this->_selected_nodes;
@@ -232,7 +232,7 @@ void NodeTool::setup() {
     this->_multipath->signal_coords_changed.connect(
         sigc::bind(
             sigc::mem_fun(*this->desktop, &SPDesktop::emitToolSubselectionChanged),
-            (void*)NULL
+            (void*)nullptr
         )
     );
 
@@ -243,16 +243,16 @@ void NodeTool::setup() {
         // void update_tip(GdkEvent *event)
         sigc::hide(sigc::hide(sigc::bind(
                 sigc::mem_fun(this, &NodeTool::update_tip),
-                (GdkEvent*)NULL
+                (GdkEvent*)nullptr
         )))
     );
 
     this->cursor_drag = false;
     this->show_transform_handles = true;
     this->single_node_transform_handles = false;
-    this->flash_tempitem = NULL;
-    this->flashed_item = NULL;
-    this->_last_over = NULL;
+    this->flash_tempitem = nullptr;
+    this->flashed_item = nullptr;
+    this->_last_over = nullptr;
 
     // read prefs before adding items to selection to prevent momentarily showing the outline
     sp_event_context_read(this, "show_handles");
@@ -266,7 +266,7 @@ void NodeTool::setup() {
     sp_event_context_read(this, "edit_masks");
 
     this->selection_changed(selection);
-    this->update_tip(NULL);
+    this->update_tip(nullptr);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -278,7 +278,7 @@ void NodeTool::setup() {
         this->enableGrDrag();
     }
 
-    this->desktop->emitToolSubselectionChanged(NULL); // sets the coord entry fields to inactive
+    this->desktop->emitToolSubselectionChanged(nullptr); // sets the coord entry fields to inactive
     sp_update_helperpath();
 }
 
@@ -292,7 +292,7 @@ void sp_update_helperpath() {
     Inkscape::Selection *selection = desktop->getSelection();
     if (nt->helperpath_tmpitem) {
         desktop->remove_temporary_canvasitem(nt->helperpath_tmpitem);
-        nt->helperpath_tmpitem = NULL;
+        nt->helperpath_tmpitem = nullptr;
     }
 
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
@@ -378,7 +378,7 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
 
     //XML Tree being used directly here while it shouldn't be.
     if (SP_IS_PATH(obj) && 
-        obj->getRepr()->attribute("inkscape:original-d") != NULL &&
+        obj->getRepr()->attribute("inkscape:original-d") != nullptr &&
         !SP_LPE_ITEM(obj)->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP)) 
     {
         ShapeRecord r;
@@ -421,7 +421,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         SPObject *obj = *i;
 
         if (SP_IS_ITEM(obj)) {
-            gather_items(this, NULL, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);
+            gather_items(this, nullptr, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);
         }
     }
 
@@ -457,7 +457,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
     _current_selection = vec;
 
     this->_multipath->setItems(shapes);
-    this->update_tip(NULL);
+    this->update_tip(nullptr);
     this->desktop->updateNow();
 }
 
@@ -524,8 +524,8 @@ bool NodeTool::root_handler(GdkEvent* event) {
 
             if (this->flash_tempitem) {
                 desktop->remove_temporary_canvasitem(this->flash_tempitem);
-                this->flash_tempitem = NULL;
-                this->flashed_item = NULL;
+                this->flash_tempitem = nullptr;
+                this->flashed_item = nullptr;
             }
 
             if (!SP_IS_SHAPE(over_item)) {
@@ -756,7 +756,7 @@ void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
     SPItem *item_clicked = sp_event_context_find_item (this->desktop, event_point(*event),
                     (event->state & GDK_MOD1_MASK) && !(event->state & GDK_CONTROL_MASK), TRUE);
 
-    if (item_clicked == NULL) { // nothing under cursor
+    if (item_clicked == nullptr) { // nothing under cursor
         // if no Shift, deselect
         // if there are nodes selected, the first click should deselect the nodes
         // and the second should deselect the items

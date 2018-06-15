@@ -47,8 +47,8 @@ static void sp_button_class_init(SPButtonClass *klass)
 
 static void sp_button_init(SPButton *button)
 {
-    button->action = NULL;
-    button->doubleclick_action = NULL;
+    button->action = nullptr;
+    button->doubleclick_action = nullptr;
     new (&button->c_set_active) sigc::connection();
     new (&button->c_set_sensitive) sigc::connection();
 
@@ -66,10 +66,10 @@ static void sp_button_dispose(GObject *object)
     SPButton *button = SP_BUTTON(object);
 
     if (button->action) {
-        sp_button_set_action(button, NULL);
+        sp_button_set_action(button, nullptr);
     }
     if (button->doubleclick_action) {
-        sp_button_set_doubleclick_action(button, NULL);
+        sp_button_set_doubleclick_action(button, nullptr);
     }
 
     button->c_set_active.~connection();
@@ -136,7 +136,7 @@ static gint sp_button_process_event(SPButton *button, GdkEvent *event)
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
         if (button->doubleclick_action) {
-            sp_action_perform(button->doubleclick_action, NULL);
+            sp_action_perform(button->doubleclick_action, nullptr);
         }
         return TRUE;
         break;
@@ -150,13 +150,13 @@ static gint sp_button_process_event(SPButton *button, GdkEvent *event)
 static void sp_button_perform_action(SPButton *button, gpointer /*data*/)
 {
     if (button->action) {
-        sp_action_perform(button->action, NULL);
+        sp_action_perform(button->action, nullptr);
     }
 }
 
 GtkWidget *sp_button_new(GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action)
 {
-    SPButton *button = SP_BUTTON(g_object_new(SP_TYPE_BUTTON, NULL));
+    SPButton *button = SP_BUTTON(g_object_new(SP_TYPE_BUTTON, nullptr));
 
     button->type = type;
     button->lsize = CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG);
@@ -251,15 +251,15 @@ static void sp_button_set_composed_tooltip(GtkWidget *widget, SPAction *action)
         }
     } else {
         // no action
-        gtk_widget_set_tooltip_text(widget, NULL);
+        gtk_widget_set_tooltip_text(widget, nullptr);
     }
 }
 
 GtkWidget *sp_button_new_from_data(GtkIconSize size, SPButtonType type, Inkscape::UI::View::View *view,
                                    const gchar *name, const gchar *tip)
 {
-    SPAction *action = sp_action_new(Inkscape::ActionContext(view), name, name, tip, name, 0);
-    GtkWidget *button = sp_button_new(size, type, action, NULL);
+    SPAction *action = sp_action_new(Inkscape::ActionContext(view), name, name, tip, name, nullptr);
+    GtkWidget *button = sp_button_new(size, type, action, nullptr);
     g_object_unref(action);
     return button;
 }

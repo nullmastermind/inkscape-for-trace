@@ -96,12 +96,12 @@ PenTool::PenTool()
     , polylines_paraxial(false)
     , num_clicks(0)
     , expecting_clicks_for_LPE(0)
-    , waiting_LPE(NULL)
-    , waiting_item(NULL)
-    , c0(NULL)
-    , c1(NULL)
-    , cl0(NULL)
-    , cl1(NULL)
+    , waiting_LPE(nullptr)
+    , waiting_item(nullptr)
+    , c0(nullptr)
+    , c1(nullptr)
+    , cl0(nullptr)
+    , cl1(nullptr)
     , events_disabled(false)
 {
     tablet_enabled = false;
@@ -118,12 +118,12 @@ PenTool::PenTool(gchar const *const *cursor_shape)
     , polylines_paraxial(false)
     , num_clicks(0)
     , expecting_clicks_for_LPE(0)
-    , waiting_LPE(NULL)
-    , waiting_item(NULL)
-    , c0(NULL)
-    , c1(NULL)
-    , cl0(NULL)
-    , cl1(NULL)
+    , waiting_LPE(nullptr)
+    , waiting_item(nullptr)
+    , c0(nullptr)
+    , c1(nullptr)
+    , cl0(nullptr)
+    , cl1(nullptr)
     , events_disabled(false)
 {
 }
@@ -131,19 +131,19 @@ PenTool::PenTool(gchar const *const *cursor_shape)
 PenTool::~PenTool() {
     if (this->c0) {
         sp_canvas_item_destroy(this->c0);
-        this->c0 = NULL;
+        this->c0 = nullptr;
     }
     if (this->c1) {
         sp_canvas_item_destroy(this->c1);
-        this->c1 = NULL;
+        this->c1 = nullptr;
     }
     if (this->cl0) {
         sp_canvas_item_destroy(this->cl0);
-        this->cl0 = NULL;
+        this->cl0 = nullptr;
     }
     if (this->cl1) {
         sp_canvas_item_destroy(this->cl1);
-        this->cl1 = NULL;
+        this->cl1 = nullptr;
     }
 
     if (this->expecting_clicks_for_LPE > 0) {
@@ -229,7 +229,7 @@ void PenTool::finish() {
 
     if (this->npoints != 0) {
         // switching context - finish path
-        this->ea = NULL; // unset end anchor if set (otherwise crashes)
+        this->ea = nullptr; // unset end anchor if set (otherwise crashes)
         this->_finish(false);
     }
 
@@ -253,7 +253,7 @@ void PenTool::set(const Inkscape::Preferences::Entry& val) {
 
 bool PenTool::hasWaitingLPE() {
     // note: waiting_LPE_type is defined in SPDrawContext
-    return (this->waiting_LPE != NULL ||
+    return (this->waiting_LPE != nullptr ||
             this->waiting_LPE_type != Inkscape::LivePathEffect::INVALID_LPE);
 }
 
@@ -399,7 +399,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
             sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                             GDK_BUTTON_RELEASE_MASK |
                                             GDK_POINTER_MOTION_MASK  ),
-                                NULL, bevent.time);
+                                nullptr, bevent.time);
         }
 
         pen_drag_origin_w = event_w;
@@ -539,7 +539,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         ret = true;
     } else if (bevent.button == 3 && this->npoints != 0) {
         // right click - finish path
-        this->ea = NULL; // unset end anchor if set (otherwise crashes)
+        this->ea = nullptr; // unset end anchor if set (otherwise crashes)
         this->_finish(false);
         ret = true;
     }
@@ -814,7 +814,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
         if (this->grab) {
             // Release grab now
             sp_canvas_item_ungrab(this->grab, revent.time);
-            this->grab = NULL;
+            this->grab = nullptr;
         }
 
         ret = true;
@@ -833,7 +833,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
             // we have an already created LPE waiting for a path
             this->waiting_LPE->acceptParamPath(SP_PATH(selection->singleItem()));
             selection->add(this->waiting_item);
-            this->waiting_LPE = NULL;
+            this->waiting_LPE = nullptr;
         } else {
             // the case that we need to create a new LPE and apply it to the just-drawn path is
             // handled in spdc_check_for_and_apply_waiting_LPE() in draw-context.cpp
@@ -1199,7 +1199,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
             if (this->npoints != 0) {
-                this->ea = NULL; // unset end anchor if set (otherwise crashes)
+                this->ea = nullptr; // unset end anchor if set (otherwise crashes)
                 if(MOD__SHIFT_ONLY(event)) {
                     // All this is needed to stop the last control
                     // point dispeating and stop making an n-1 shape.
@@ -1243,10 +1243,10 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
 void PenTool::_resetColors() {
     // Red
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr, true);
     // Blue
     this->blue_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), NULL, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), nullptr, true);
     // Green
     for (auto i:this->green_bpaths) {
         sp_canvas_item_destroy(i);
@@ -1256,8 +1256,8 @@ void PenTool::_resetColors() {
     if (this->green_anchor) {
         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
     }
-    this->sa = NULL;
-    this->ea = NULL;
+    this->sa = nullptr;
+    this->ea = nullptr;
     this->sa_overwrited->reset();
 
     this->npoints = 0;
@@ -1271,7 +1271,7 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
     this->p[0] = p;
     this->p[1] = p;
     this->npoints = 2;
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL, true);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr, true);
 
     this->desktop->canvas->forceFullRedrawAfterInterruptions(5);
 }
@@ -1282,9 +1282,9 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
  * two parameters ("angle %3.2f&#176;, distance %s").
  */
 void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_to_compare, gchar const *message) {
-    g_assert(this != NULL);
+    g_assert(this != nullptr);
     g_assert((pc_point_to_compare == 0) || (pc_point_to_compare == 3)); // exclude control handles
-    g_assert(message != NULL);
+    g_assert(message != nullptr);
 
     Geom::Point rel = p - this->p[pc_point_to_compare];
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
@@ -1384,7 +1384,7 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
         return;
     }
 
-    LivePathEffect::LPEBSpline *lpe_bsp = NULL;
+    LivePathEffect::LPEBSpline *lpe_bsp = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
         Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
@@ -1397,7 +1397,7 @@ void PenTool::_bsplineSpiroStartAnchor(bool shift)
     }else{
         this->bspline = false;
     }
-    LivePathEffect::LPESpiro *lpe_spi = NULL;
+    LivePathEffect::LPESpiro *lpe_spi = nullptr;
 
     if (SP_IS_LPE_ITEM(this->white_item) && SP_LPE_ITEM(this->white_item)->hasPathEffect()){
         Inkscape::LivePathEffect::Effect* thisEffect = SP_LPE_ITEM(this->white_item)->getPathEffectOfType(Inkscape::LivePathEffect::SPIRO);
@@ -1902,7 +1902,7 @@ void PenTool::_finishSegment(Geom::Point const p, guint const state) {
 bool PenTool::_undoLastPoint() {
     bool ret = false;
 
-    if ( this->green_curve->is_unset() || (this->green_curve->last_segment() == NULL) ) {
+    if ( this->green_curve->is_unset() || (this->green_curve->last_segment() == nullptr) ) {
         if (!this->red_curve->is_unset()) {
             this->_cancel ();
             ret = true;
@@ -1997,8 +1997,8 @@ void PenTool::_finish(gboolean const closed) {
     // cancelate line without a created segment
     this->red_curve->reset();
     spdc_concat_colors_and_flush(this, closed);
-    this->sa = NULL;
-    this->ea = NULL;
+    this->sa = nullptr;
+    this->ea = nullptr;
 
     this->npoints = 0;
     this->state = PenTool::POINT;

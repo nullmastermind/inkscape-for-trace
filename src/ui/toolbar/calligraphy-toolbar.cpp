@@ -382,7 +382,7 @@ static void sp_ddc_change_profile(GObject* tbl, int mode)
 
 static void sp_ddc_edit_profile(GtkAction * /*act*/, GObject* tbl)
 {
-    sp_dcc_save_profile(NULL, tbl);
+    sp_dcc_save_profile(nullptr, tbl);
 }
 
 void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -391,11 +391,11 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
     {
         g_object_set_data(holder, "presets_blocked", GINT_TO_POINTER(TRUE));
 
-        EgeAdjustmentAction* calligraphy_angle = 0;
+        EgeAdjustmentAction* calligraphy_angle = nullptr;
 
         {
         /* Width */
-        gchar const* labels[] = {_("(hairline)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad stroke)")};
+        gchar const* labels[] = {_("(hairline)"), nullptr, nullptr, nullptr, _("(default)"), nullptr, nullptr, nullptr, nullptr, _("(broad stroke)")};
         gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "CalligraphyWidthAction",
                                                               _("Pen Width"), _("Width:"),
@@ -404,7 +404,7 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-calligraphy",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_width_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_ddc_width_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -412,23 +412,23 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
         {
         /* Thinning */
-            gchar const* labels[] = {_("(speed blows up stroke)"), 0, 0, _("(slight widening)"), _("(constant width)"), _("(slight thinning, default)"), 0, 0, _("(speed deflates stroke)")};
+            gchar const* labels[] = {_("(speed blows up stroke)"), nullptr, nullptr, _("(slight widening)"), _("(constant width)"), _("(slight thinning, default)"), nullptr, nullptr, _("(speed deflates stroke)")};
             gdouble values[] = {-100, -40, -20, -10, 0, 10, 20, 40, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "ThinningAction",
                                                               _("Stroke Thinning"), _("Thinning:"),
                                                               _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"),
                                                               "/tools/calligraphic/thinning", 10,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               -100, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_velthin_value_changed, NULL /*unit tracker*/, 1, 0);
+                                                              sp_ddc_velthin_value_changed, nullptr /*unit tracker*/, 1, 0);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         }
 
         {
         /* Angle */
-        gchar const* labels[] = {_("(left edge up)"), 0, 0, _("(horizontal)"), _("(default)"), 0, _("(right edge up)")};
+        gchar const* labels[] = {_("(left edge up)"), nullptr, nullptr, _("(horizontal)"), _("(default)"), nullptr, _("(right edge up)")};
         gdouble values[] = {-90, -60, -30, 0, 30, 60, 90};
         EgeAdjustmentAction* eact = create_adjustment_action( "AngleAction",
                                                               _("Pen Angle"), _("Angle:"),
@@ -437,7 +437,7 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "calligraphy-angle",
                                                               -90.0, 90.0, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_angle_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_ddc_angle_value_changed, nullptr /*unit tracker*/, 1, 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "angle_action", eact );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -446,49 +446,49 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
         {
         /* Fixation */
-            gchar const* labels[] = {_("(perpendicular to stroke, \"brush\")"), 0, 0, 0, _("(almost fixed, default)"), _("(fixed by Angle, \"pen\")")};
+            gchar const* labels[] = {_("(perpendicular to stroke, \"brush\")"), nullptr, nullptr, nullptr, _("(almost fixed, default)"), _("(fixed by Angle, \"pen\")")};
         gdouble values[] = {0, 20, 40, 60, 90, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "FixationAction",
                                                               _("Fixation"), _("Fixation:"),
                                                               _("Angle behavior (0 = nib always perpendicular to stroke direction, 100 = fixed angle)"),
                                                               "/tools/calligraphic/flatness", 90,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               0.0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_flatness_value_changed, NULL /*unit tracker*/, 1, 0);
+                                                              sp_ddc_flatness_value_changed, nullptr /*unit tracker*/, 1, 0);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         }
 
         {
         /* Cap Rounding */
-            gchar const* labels[] = {_("(blunt caps, default)"), _("(slightly bulging)"), 0, 0, _("(approximately round)"), _("(long protruding caps)")};
+            gchar const* labels[] = {_("(blunt caps, default)"), _("(slightly bulging)"), nullptr, nullptr, _("(approximately round)"), _("(long protruding caps)")};
         gdouble values[] = {0, 0.3, 0.5, 1.0, 1.4, 5.0};
         // TRANSLATORS: "cap" means "end" (both start and finish) here
         EgeAdjustmentAction* eact = create_adjustment_action( "CapRoundingAction",
                                                               _("Cap rounding"), _("Caps:"),
                                                               _("Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = round caps)"),
                                                               "/tools/calligraphic/cap_rounding", 0.0,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               0.0, 5.0, 0.01, 0.1,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_cap_rounding_value_changed, NULL /*unit tracker*/, 0.01, 2 );
+                                                              sp_ddc_cap_rounding_value_changed, nullptr /*unit tracker*/, 0.01, 2 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         }
 
         {
         /* Tremor */
-            gchar const* labels[] = {_("(smooth line)"), _("(slight tremor)"), _("(noticeable tremor)"), 0, 0, _("(maximum tremor)")};
+            gchar const* labels[] = {_("(smooth line)"), _("(slight tremor)"), _("(noticeable tremor)"), nullptr, nullptr, _("(maximum tremor)")};
         gdouble values[] = {0, 10, 20, 40, 60, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "TremorAction",
                                                               _("Stroke Tremor"), _("Tremor:"),
                                                               _("Increase to make strokes rugged and trembling"),
                                                               "/tools/calligraphic/tremor", 0.0,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_tremor_value_changed, NULL /*unit tracker*/, 1, 0);
+                                                              sp_ddc_tremor_value_changed, nullptr /*unit tracker*/, 1, 0);
 
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -497,16 +497,16 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
         {
         /* Wiggle */
-        gchar const* labels[] = {_("(no wiggle)"), _("(slight deviation)"), 0, 0, _("(wild waves and curls)")};
+        gchar const* labels[] = {_("(no wiggle)"), _("(slight deviation)"), nullptr, nullptr, _("(wild waves and curls)")};
         gdouble values[] = {0, 20, 40, 60, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "WiggleAction",
                                                               _("Pen Wiggle"), _("Wiggle:"),
                                                               _("Increase to make the pen waver and wiggle"),
                                                               "/tools/calligraphic/wiggle", 0.0,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_wiggle_value_changed, NULL /*unit tracker*/, 1, 0);
+                                                              sp_ddc_wiggle_value_changed, nullptr /*unit tracker*/, 1, 0);
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -514,16 +514,16 @@ void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
         {
         /* Mass */
-            gchar const* labels[] = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), 0, 0, _("(maximum inertia)")};
+            gchar const* labels[] = {_("(no inertia)"), _("(slight smoothing, default)"), _("(noticeable lagging)"), nullptr, nullptr, _("(maximum inertia)")};
         gdouble values[] = {0.0, 2, 10, 20, 50, 100};
         EgeAdjustmentAction* eact = create_adjustment_action( "MassAction",
                                                               _("Pen Mass"), _("Mass:"),
                                                               _("Increase to make the pen drag behind, as if slowed by inertia"),
                                                               "/tools/calligraphic/mass", 2.0,
-                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                                              GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_ddc_mass_value_changed, NULL /*unit tracker*/, 1, 0);
+                                                              sp_ddc_mass_value_changed, nullptr /*unit tracker*/, 1, 0);
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );

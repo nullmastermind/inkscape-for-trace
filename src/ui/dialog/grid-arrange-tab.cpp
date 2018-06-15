@@ -358,7 +358,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
 
-    Inkscape::Selection *selection = desktop ? desktop->selection : 0;
+    Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
     g_return_if_fail( selection );
 
     int selcount = (int) boost::distance(selection->items());
@@ -383,7 +383,7 @@ void GridArrangeTab::on_col_spinbutton_changed()
     // in turn, prevent listener from responding
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
-    Inkscape::Selection *selection = desktop ? desktop->selection : 0;
+    Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
     g_return_if_fail(selection);
 
     int selcount = (int) boost::distance(selection->items());
@@ -522,7 +522,7 @@ void GridArrangeTab::updateSelection()
     // in turn, prevent listener from responding
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
-    Inkscape::Selection *selection = desktop ? desktop->selection : 0;
+    Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
     std::vector<SPItem*> items;
     if (selection) {
         items.insert(items.end(), selection->items().begin(), selection->items().end());
@@ -589,7 +589,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     SPDesktop *desktop = Parent->getDesktop();
 
-    Inkscape::Selection *selection = desktop ? desktop->selection : 0;
+    Inkscape::Selection *selection = desktop ? desktop->selection : nullptr;
     g_return_if_fail( selection );
     int selcount = 1;
     if (!selection->isEmpty()) {

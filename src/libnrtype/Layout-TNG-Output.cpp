@@ -90,12 +90,12 @@ void Layout::_clearOutputObjects()
     _spans.clear();
     _characters.clear();
     _glyphs.clear();
-    _path_fitted = NULL;
+    _path_fitted = nullptr;
 }
 
 void Layout::FontMetrics::set(font_instance *font)
 {
-    if( font != NULL ) {
+    if( font != nullptr ) {
         ascent      = font->GetTypoAscent();  
         descent     = font->GetTypoDescent();
         xheight     = font->GetXHeight();
@@ -487,7 +487,7 @@ void Layout::showGlyphs(CairoRenderContext *ctx) const
                 glyph_index++;
             }
         } while (glyph_index < _glyphs.size()
-                 && _path_fitted == NULL
+                 && _path_fitted == nullptr
                  && (font_matrix * glyph_matrix.inverse()).isIdentity()
                  && _characters[_glyphs[glyph_index].in_character].in_span == this_span_index);
 
@@ -689,7 +689,7 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
     if (_characters.empty()) {
         int unused = 0;
         Path::cut_position *point_otp = const_cast<Path&>(path).CurvilignToPosition(1, &offset, unused);
-        if (offset >= 0.0 && point_otp != NULL && point_otp[0].piece >= 0) {
+        if (offset >= 0.0 && point_otp != nullptr && point_otp[0].piece >= 0) {
             Geom::Point point;
             Geom::Point tangent;
             const_cast<Path&>(path).PointAndTangentAt(point_otp[0].piece, point_otp[0].t, point, tangent);
@@ -738,16 +738,16 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         double midpoint_offset = (start_offset + end_offset) * 0.5;
         // as far as I know these functions are const, they're just not marked as such
         Path::cut_position *midpoint_otp = const_cast<Path&>(path).CurvilignToPosition(1, &midpoint_offset, unused);
-        if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
+        if (midpoint_offset >= 0.0 && midpoint_otp != nullptr && midpoint_otp[0].piece >= 0) {
             Geom::Point midpoint;
             Geom::Point tangent;
             const_cast<Path&>(path).PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
 
             if (start_offset >= 0.0 && end_offset >= 0.0) {
                 Path::cut_position *start_otp = const_cast<Path&>(path).CurvilignToPosition(1, &start_offset, unused);
-                if (start_otp != NULL && start_otp[0].piece >= 0) {
+                if (start_otp != nullptr && start_otp[0].piece >= 0) {
                     Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
-                    if (end_otp != NULL && end_otp[0].piece >= 0) {
+                    if (end_otp != nullptr && end_otp[0].piece >= 0) {
                         bool on_same_subpath = true;
                         for (size_t i = 0 ; i < path.pts.size() ; i++) {
                             if (path.pts[i].piece <= start_otp[0].piece) continue;

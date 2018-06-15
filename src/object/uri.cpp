@@ -61,7 +61,7 @@ URI::Impl::Impl(xmlURIPtr uri)
 URI::Impl::~Impl() {
     if (_uri) {
         xmlFreeURI(_uri);
-        _uri = NULL;
+        _uri = nullptr;
     }
 }
 
@@ -76,7 +76,7 @@ void URI::Impl::unreference() {
 }
 
 bool URI::Impl::isOpaque() const {
-    bool opq = !isRelative() && (getOpaque() != NULL);
+    bool opq = !isRelative() && (getOpaque() != nullptr);
     return opq;
 }
 
@@ -136,7 +136,7 @@ const gchar *URI::Impl::getOpaque() const {
 
 gchar *URI::to_native_filename(gchar const* uri)
 {
-    gchar *filename = NULL;
+    gchar *filename = nullptr;
     URI tmp(uri);
     filename = tmp.toNativeFilename();
     return filename;
@@ -173,7 +173,7 @@ gchar *URI::toNativeFilename() const {
     if (isRelativePath()) {
         return uriString;
     } else {
-        gchar *filename = g_filename_from_uri(uriString, NULL, NULL);
+        gchar *filename = g_filename_from_uri(uriString, nullptr, nullptr);
         g_free(uriString);
         if (filename) {
             return filename;
@@ -216,7 +216,7 @@ URI URI::fromUtf8( gchar const* path ) {
 
 /* TODO !!! proper error handling */
 URI URI::from_native_filename(gchar const *path) {
-    gchar *uri = g_filename_to_uri(path, NULL, NULL);
+    gchar *uri = g_filename_to_uri(path, nullptr, nullptr);
     URI result(uri);
     g_free( uri );
     return result;
@@ -230,7 +230,7 @@ gchar *URI::Impl::toString() const {
         xmlFree(string);
         return glib_string;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 

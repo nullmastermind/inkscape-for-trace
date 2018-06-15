@@ -114,7 +114,7 @@ public:
         Gtk::TreeModel::iterator i = this->get_active();
         if(i)
             return (*i)[_columns.data];
-        return 0;
+        return nullptr;
     }
 
     void add_row(const Glib::ustring& s)

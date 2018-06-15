@@ -34,7 +34,7 @@ void
 filters_load_file (Glib::ustring filename, gchar * menuname)
 {
     Inkscape::XML::Document *doc = sp_repr_read_file(filename.c_str(), INKSCAPE_EXTENSION_URI);
-	if (doc == NULL) {
+	if (doc == nullptr) {
 		g_warning("File (%s) is not parseable as XML.  Ignored.", filename.c_str());
 		return;
 	}
@@ -47,10 +47,10 @@ filters_load_file (Glib::ustring filename, gchar * menuname)
 	}
 
 	for (Inkscape::XML::Node * child = root->firstChild();
-			child != NULL; child = child->next()) {
+			child != nullptr; child = child->next()) {
 		if (!strcmp(child->name(), "svg:defs")) {
 			for (Inkscape::XML::Node * defs = child->firstChild();
-					defs != NULL; defs = defs->next()) {
+					defs != nullptr; defs = defs->next()) {
 				if (!strcmp(defs->name(), "svg:filter")) {
                                     Filter::filters_load_node(defs, menuname);
 				} // oh!  a filter
@@ -97,7 +97,7 @@ Filter::filters_load_node (Inkscape::XML::Node * node, gchar * menuname)
 	gchar const * menu_tooltip = node->attribute("inkscape:menu-tooltip");
 	gchar const * id = node->attribute("id");
 
-	if (label == NULL) {
+	if (label == nullptr) {
 		label = id;
 	}
 

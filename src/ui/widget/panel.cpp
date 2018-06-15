@@ -45,7 +45,7 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
     _prefs_path(prefs_path),
     _desktop(SP_ACTIVE_DESKTOP),
     _verb_num(verb_num),
-    _action_area(0)
+    _action_area(nullptr)
 {
     set_name("InkscapePanel");
     set_orientation(Gtk::ORIENTATION_VERTICAL);

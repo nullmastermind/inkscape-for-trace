@@ -249,7 +249,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else if ( mode == MT_V){
             SPDocument * document = SP_ACTIVE_DOCUMENT;
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
@@ -259,7 +259,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         } else { //horizontal page
             SPDocument * document = SP_ACTIVE_DOCUMENT;
             if (document) {
-                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+                Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
                 start_point.param_setValue(sp);
                 Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
@@ -300,7 +300,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
             g_free(str);
             c->unref();
         } else {
-            dest->getRepr()->setAttribute("d", NULL);
+            dest->getRepr()->setAttribute("d", nullptr);
         }
         if (reset) {
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
@@ -312,7 +312,7 @@ Inkscape::XML::Node *
 LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
-        return NULL;
+        return nullptr;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *prev = elemref->getRepr();
@@ -321,7 +321,7 @@ LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
         Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
         container->setAttribute("transform", prev->attribute("transform"));
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-        Inkscape::XML::Node *previous = NULL;
+        Inkscape::XML::Node *previous = nullptr;
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPObject *sub_item = *iter;
             Inkscape::XML::Node *resultnode = createPathBase(sub_item);
@@ -347,8 +347,8 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
     elemref_id += this->lpeobj->getId();
     items.clear();
     items.push_back(elemref_id);
-    SPObject *elemref = NULL;
-    Inkscape::XML::Node *phantom = NULL;
+    SPObject *elemref = nullptr;
+    Inkscape::XML::Node *phantom = nullptr;
     if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {

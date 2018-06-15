@@ -29,10 +29,10 @@ namespace Inkscape {
 namespace Display {
 
 SnapIndicator::SnapIndicator(SPDesktop * desktop)
-    :   _snaptarget(NULL),
-        _snaptarget_tooltip(NULL),
-        _snaptarget_bbox(NULL),
-        _snapsource(NULL),
+    :   _snaptarget(nullptr),
+        _snaptarget_tooltip(nullptr),
+        _snaptarget_bbox(nullptr),
+        _snapsource(nullptr),
         _snaptarget_is_presnap(false),
         _desktop(desktop)
 {
@@ -50,7 +50,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
 {
     remove_snaptarget(); //only display one snaptarget at a time
 
-    g_assert(_desktop != NULL);
+    g_assert(_desktop != nullptr);
 
     if (!p.getSnapped()) {
         return; // If we haven't snapped, then it is of no use to draw a snapindicator
@@ -245,7 +245,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         remove_snapsource(); // Don't set both the source and target indicators, as these will overlap
 
         // Display the snap indicator (i.e. the cross)
-        SPCanvasItem * canvasitem = NULL;
+        SPCanvasItem * canvasitem = nullptr;
         canvasitem = sp_canvas_item_new(_desktop->getTempGroup(),
                                         SP_TYPE_CTRL,
                                         "anchor", SP_ANCHOR_CENTER,
@@ -281,7 +281,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         _snaptarget_is_presnap = pre_snap;
 
         // Display the tooltip, which reveals the type of snap source and the type of snap target
-        gchar *tooltip_str = NULL;
+        gchar *tooltip_str = nullptr;
         if ( (p.getSource() != SNAPSOURCE_GRID_PITCH) && (p.getTarget() != SNAPTARGET_UNDEFINED) ) {
             tooltip_str = g_strconcat(source_name, _(" to "), target_name, NULL);
         } else if (p.getSource() != SNAPSOURCE_UNDEFINED) {
@@ -320,7 +320,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         if (bbox) {
             SPCanvasItem* box = sp_canvas_item_new(_desktop->getTempGroup(),
                                                      SP_TYPE_CTRLRECT,
-                                                     NULL);
+                                                     nullptr);
 
             SP_CTRLRECT(box)->setRectangle(*bbox);
             SP_CTRLRECT(box)->setColor(pre_snap ? 0x7f7f7fff : 0xff0000ff, 0, 0);
@@ -341,18 +341,18 @@ SnapIndicator::remove_snaptarget(bool only_if_presnap)
 
     if (_snaptarget) {
         _desktop->remove_temporary_canvasitem(_snaptarget);
-        _snaptarget = NULL;
+        _snaptarget = nullptr;
         _snaptarget_is_presnap = false;
     }
 
     if (_snaptarget_tooltip) {
         _desktop->remove_temporary_canvasitem(_snaptarget_tooltip);
-        _snaptarget_tooltip = NULL;
+        _snaptarget_tooltip = nullptr;
     }
 
     if (_snaptarget_bbox) {
         _desktop->remove_temporary_canvasitem(_snaptarget_bbox);
-        _snaptarget_bbox = NULL;
+        _snaptarget_bbox = nullptr;
     }
 
 }
@@ -362,7 +362,7 @@ SnapIndicator::set_new_snapsource(Inkscape::SnapCandidatePoint const &p)
 {
     remove_snapsource();
 
-    g_assert(_desktop != NULL); // If this fails, then likely setup() has not been called on the snap manager (see snap.cpp -> setup())
+    g_assert(_desktop != nullptr); // If this fails, then likely setup() has not been called on the snap manager (see snap.cpp -> setup())
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool value = prefs->getBool("/options/snapindicator/value", true);
@@ -386,7 +386,7 @@ SnapIndicator::set_new_snapsource(Inkscape::SnapCandidatePoint const &p)
 void
 SnapIndicator::set_new_debugging_point(Geom::Point const &p)
 {
-    g_assert(_desktop != NULL);
+    g_assert(_desktop != nullptr);
     SPCanvasItem * canvasitem = sp_canvas_item_new( _desktop->getTempGroup(),
                                                     SP_TYPE_CTRL,
                                                     "anchor", SP_ANCHOR_CENTER,
@@ -407,7 +407,7 @@ SnapIndicator::remove_snapsource()
 {
     if (_snapsource) {
         _desktop->remove_temporary_canvasitem(_snapsource);
-        _snapsource = NULL;
+        _snapsource = nullptr;
     }
 }
 

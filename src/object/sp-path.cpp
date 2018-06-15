@@ -196,15 +196,15 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "d" );
 
     /* d is a required attribute */
-    char const *d = this->getAttribute("d", NULL);
+    char const *d = this->getAttribute("d", nullptr);
 
-    if (d == NULL) {
+    if (d == nullptr) {
         // First see if calculating the path effect will generate "d":
         this->update_patheffect(true);
-        d = this->getAttribute("d", NULL);
+        d = this->getAttribute("d", nullptr);
 
         // I guess that didn't work, now we have nothing useful to write ("")
-        if (d == NULL) {
+        if (d == nullptr) {
             this->setKeyValue( sp_attribute_lookup("d"), "");
         }
     }
@@ -228,7 +228,7 @@ void SPPath::set(unsigned int key, const gchar* value) {
                     curve->unref();
                 }
             } else {
-                this->setCurveBeforeLPE(NULL);
+                this->setCurveBeforeLPE(nullptr);
                 
             }
             sp_lpe_item_update_patheffect(this, true, true);
@@ -244,7 +244,7 @@ void SPPath::set(unsigned int key, const gchar* value) {
                     curve->unref();
                 }
             } else {
-                this->setCurve(NULL);
+                this->setCurve(nullptr);
             }
             break;
 
@@ -285,16 +285,16 @@ g_message("sp_path_write writes 'd' attribute");
         repr->setAttribute("d", str);
         g_free(str);
     } else {
-        repr->setAttribute("d", NULL);
+        repr->setAttribute("d", nullptr);
     }
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        if ( this->_curve_before_lpe != NULL ) {
+        if ( this->_curve_before_lpe != nullptr ) {
             gchar *str = sp_svg_write_path(this->_curve_before_lpe->get_pathvector());
             repr->setAttribute("inkscape:original-d", str);
             g_free(str);
         } else {
-            repr->setAttribute("inkscape:original-d", NULL);
+            repr->setAttribute("inkscape:original-d", nullptr);
         }
     }
 

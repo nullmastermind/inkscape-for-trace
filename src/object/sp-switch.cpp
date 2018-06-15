@@ -21,7 +21,7 @@
 #include <sigc++/adaptors/bind.h>
 
 SPSwitch::SPSwitch() : SPGroup() {
-    this->_cached_item = 0;
+    this->_cached_item = nullptr;
 }
 
 SPSwitch::~SPSwitch() {
@@ -29,7 +29,7 @@ SPSwitch::~SPSwitch() {
 }
 
 SPObject *SPSwitch::_evaluateFirst() {
-    SPObject *first = 0;
+    SPObject *first = nullptr;
 
     for (auto& child: children) {
         if (SP_IS_ITEM(&child) && sp_item_evaluate(SP_ITEM(&child))) {
@@ -48,7 +48,7 @@ std::vector<SPObject*> SPSwitch::_childList(bool add_ref, SPObject::Action actio
 
     SPObject *child = _evaluateFirst();
     std::vector<SPObject*> x;
-    if (NULL == child)
+    if (nullptr == child)
         return x;
 
     if (add_ref) {
@@ -120,11 +120,11 @@ void SPSwitch::_releaseItem(SPObject *obj, SPSwitch *selection)
 
 void SPSwitch::_releaseLastItem(SPObject *obj)
 {
-    if (NULL == this->_cached_item || this->_cached_item != obj)
+    if (nullptr == this->_cached_item || this->_cached_item != obj)
         return;
 
     this->_release_connection.disconnect();
-    this->_cached_item = NULL;
+    this->_cached_item = nullptr;
 }
 
 void SPSwitch::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {

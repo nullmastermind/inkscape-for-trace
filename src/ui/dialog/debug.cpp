@@ -145,7 +145,7 @@ void DebugDialogImpl::message(char const *msg)
 }
 
 /* static instance, to reduce dependencies */
-static DebugDialog *debugDialogInstance = NULL;
+static DebugDialog *debugDialogInstance = nullptr;
 
 DebugDialog *DebugDialog::getInstance()
 {
@@ -189,7 +189,7 @@ void DebugDialogImpl::captureLogMessages()
                              G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
                              G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG);
     if ( !handlerDefault ) {
-        handlerDefault = g_log_set_handler(NULL, flags,
+        handlerDefault = g_log_set_handler(nullptr, flags,
               dialogLoggingFunction, (gpointer)this);
     }
     if ( !handlerGlibmm ) {
@@ -218,7 +218,7 @@ void DebugDialogImpl::captureLogMessages()
 void DebugDialogImpl::releaseLogMessages()
 {
     if ( handlerDefault ) {
-        g_log_remove_handler(NULL, handlerDefault);
+        g_log_remove_handler(nullptr, handlerDefault);
         handlerDefault = 0;
     }
     if ( handlerGlibmm ) {

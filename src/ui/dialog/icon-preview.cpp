@@ -91,15 +91,15 @@ void IconPreviewPanel::on_button_clicked(int which)
 IconPreviewPanel::IconPreviewPanel() :
     UI::Widget::Panel("/dialogs/iconpreview", SP_VERB_VIEW_ICON_PREVIEW),
     deskTrack(),
-    desktop(0),
-    document(0),
-    timer(0),
-    renderTimer(0),
+    desktop(nullptr),
+    document(nullptr),
+    timer(nullptr),
+    renderTimer(nullptr),
     pending(false),
     minDelay(0.1),
     targetId(),
     hot(1),
-    selectionButton(0),
+    selectionButton(nullptr),
     desktopChangeConn(),
     docReplacedConn(),
     docModConn(),
@@ -152,8 +152,8 @@ IconPreviewPanel::IconPreviewPanel() :
         char *label = g_strdup_printf(_("%d x %d"), sizes[i], sizes[i]);
         labels[i] = new Glib::ustring(label);
         g_free(label);
-        pixMem[i] = 0;
-        images[i] = 0;
+        pixMem[i] = nullptr;
+        images[i] = nullptr;
     }
 
 
@@ -169,7 +169,7 @@ IconPreviewPanel::IconPreviewPanel() :
 
 
     Gtk::VBox *verts = new Gtk::VBox();
-    Gtk::HBox *horiz = 0;
+    Gtk::HBox *horiz = nullptr;
     int previous = 0;
     int avail = 0;
     for ( int i = numEntries - 1; i >= 0; --i ) {
@@ -177,7 +177,7 @@ IconPreviewPanel::IconPreviewPanel() :
         pixMem[i] = new guchar[sizes[i] * stride];
         memset( pixMem[i], 0x00, sizes[i] * stride );
 
-        GdkPixbuf *pb = gdk_pixbuf_new_from_data( pixMem[i], GDK_COLORSPACE_RGB, TRUE, 8, sizes[i], sizes[i], stride, /*(GdkPixbufDestroyNotify)g_free*/NULL, NULL );
+        GdkPixbuf *pb = gdk_pixbuf_new_from_data( pixMem[i], GDK_COLORSPACE_RGB, TRUE, 8, sizes[i], sizes[i], stride, /*(GdkPixbufDestroyNotify)g_free*/nullptr, nullptr );
         GtkImage* img = GTK_IMAGE( gtk_image_new_from_pixbuf( pb ) );
         images[i] = Glib::wrap(img);
         Glib::ustring label(*labels[i]);
@@ -206,9 +206,9 @@ IconPreviewPanel::IconPreviewPanel() :
         } else {
             int pad = 12;
             if ((avail < pad) || ((sizes[i] > avail) && (sizes[i] < previous))) {
-                horiz = 0;
+                horiz = nullptr;
             }
-            if ((horiz == 0) && (sizes[i] <= previous)) {
+            if ((horiz == nullptr) && (sizes[i] <= previous)) {
                 avail = previous;
             }
             if (sizes[i] <= avail) {
@@ -221,7 +221,7 @@ IconPreviewPanel::IconPreviewPanel() :
                 avail -= sizes[i];
                 avail -= pad; // a little extra for padding
             } else {
-                horiz = 0;
+                horiz = nullptr;
                 verts->pack_end(*(buttons[i]), Gtk::PACK_SHRINK);
             }
         }
@@ -254,16 +254,16 @@ IconPreviewPanel::IconPreviewPanel() :
 
 IconPreviewPanel::~IconPreviewPanel()
 {
-    setDesktop(0);
+    setDesktop(nullptr);
     if (timer) {
         timer->stop();
         delete timer;
-        timer = 0;
+        timer = nullptr;
     }
     if ( renderTimer ) {
         renderTimer->stop();
         delete renderTimer;
-        renderTimer = 0;
+        renderTimer = nullptr;
     }
 
     selChangedConn.disconnect();
@@ -298,7 +298,7 @@ void IconPreviewPanel::setDesktop( SPDesktop* desktop )
 {
     Panel::setDesktop(desktop);
 
-    SPDocument *newDoc = (desktop) ? desktop->doc() : 0;
+    SPDocument *newDoc = (desktop) ? desktop->doc() : nullptr;
 
     if ( desktop != this->desktop ) {
         docReplacedConn.disconnect();
@@ -348,10 +348,10 @@ void IconPreviewPanel::refreshPreview()
         g_message( "%s Refreshing preview.", getTimestr().c_str() );
 #endif // ICON_VERBOSE
         bool hold = Inkscape::Preferences::get()->getBool("/iconpreview/selectionHold", true);
-        SPObject *target = 0;
+        SPObject *target = nullptr;
         if ( selectionButton && selectionButton->get_active() )
         {
-            target = (hold && !targetId.empty()) ? desktop->doc()->getObjectById( targetId.c_str() ) : 0;
+            target = (hold && !targetId.empty()) ? desktop->doc()->getObjectById( targetId.c_str() ) : nullptr;
             if ( !target ) {
                 targetId.clear();
                 Inkscape::Selection * sel = desktop->getSelection();
@@ -492,7 +492,7 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                   unsigned &stride)
 {
     bool const dump = Inkscape::Preferences::get()->getBool("/debug/icons/dumpSvg");
-    guchar *px = NULL;
+    guchar *px = nullptr;
 
     if (doc) {
         SPObject *object = doc->getObjectById(name);
@@ -501,7 +501,7 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
             // Find bbox in document
             Geom::OptRect dbox = item->documentVisualBounds();
 
-            if ( object->parent == NULL )
+            if ( object->parent == nullptr )
             {
                 dbox = Geom::Rect(Geom::Point(0, 0),
                                 Geom::Point(doc->getWidth().value("px"), doc->getHeight().value("px")));
@@ -582,7 +582,7 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
                 Inkscape::DrawingContext dc(s, ua.min());
 
-                SPNamedView *nv = sp_document_namedview(doc, NULL);
+                SPNamedView *nv = sp_document_namedview(doc, nullptr);
                 float bg_r = SP_RGBA32_R_F(nv->pagecolor);
                 float bg_g = SP_RGBA32_G_F(nv->pagecolor);
                 float bg_b = SP_RGBA32_B_F(nv->pagecolor);
@@ -639,7 +639,7 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
         if ( px ) {
             memcpy( pixMem[i], px, sizes[i] * stride );
             g_free( px );
-            px = 0;
+            px = nullptr;
         } else {
             memset( pixMem[i], 0, sizes[i] * stride );
         }

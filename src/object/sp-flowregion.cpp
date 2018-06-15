@@ -67,7 +67,7 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
     }
 
     for (auto child:l) {
-        g_assert(child != NULL);
+        g_assert(child != nullptr);
         SPItem *item = dynamic_cast<SPItem *>(child);
 
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -97,7 +97,7 @@ void SPFlowregion::UpdateComputed(void)
     computed.clear();
 
     for (auto& child: children) {
-        Shape *shape = 0;
+        Shape *shape = nullptr;
         GetDest(&child, &shape);
         computed.push_back(shape);
     }
@@ -118,7 +118,7 @@ void SPFlowregion::modified(guint flags) {
     }
 
     for (auto child:l) {
-        g_assert(child != NULL);
+        g_assert(child != nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
@@ -130,14 +130,14 @@ void SPFlowregion::modified(guint flags) {
 
 Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        if ( repr == NULL ) {
+        if ( repr == nullptr ) {
             repr = xml_doc->createElement("svg:flowRegion");
         }
 
         std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
             if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
-                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
+                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
 
                 if (crepr) {
                     l.push_back(crepr);
@@ -146,7 +146,7 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
         }
 
         for (auto i = l.rbegin(); i != l.rend(); ++i) {
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
 
@@ -170,13 +170,13 @@ const char* SPFlowregion::displayName() const {
 }
 
 SPFlowregionExclude::SPFlowregionExclude() : SPItem() {
-	this->computed = NULL;
+	this->computed = nullptr;
 }
 
 SPFlowregionExclude::~SPFlowregionExclude() {
     if (this->computed) {
         delete this->computed;
-        this->computed = NULL;
+        this->computed = nullptr;
     }
 }
 
@@ -215,7 +215,7 @@ void SPFlowregionExclude::update(SPCtx *ctx, unsigned int flags) {
     }
 
     for(auto child:l) {
-        g_assert(child != NULL);
+        g_assert(child != nullptr);
 
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem *item = dynamic_cast<SPItem *>(child);
@@ -240,7 +240,7 @@ void SPFlowregionExclude::UpdateComputed(void)
 {
     if (computed) {
         delete computed;
-        computed = NULL;
+        computed = nullptr;
     }
 
     for (auto& child: children) {
@@ -263,7 +263,7 @@ void SPFlowregionExclude::modified(guint flags) {
     }
 
     for (auto child:l) {
-        g_assert(child != NULL);
+        g_assert(child != nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
@@ -275,14 +275,14 @@ void SPFlowregionExclude::modified(guint flags) {
 
 Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        if ( repr == NULL ) {
+        if ( repr == nullptr ) {
             repr = xml_doc->createElement("svg:flowRegionExclude");
         }
 
         std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
-            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
+            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
 
             if (crepr) {
                 l.push_back(crepr);
@@ -290,7 +290,7 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
         }
 
         for (auto i = l.rbegin(); i != l.rend(); ++i) { 
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
 
@@ -315,7 +315,7 @@ const char* SPFlowregionExclude::displayName() const {
 
 static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 {
-    if (*base_shape == NULL)
+    if (*base_shape == nullptr)
         *base_shape = new Shape;
 	if ( (*base_shape)->hasEdges() == false ) {
 		(*base_shape)->Copy(const_cast<Shape*>(add_shape));
@@ -329,14 +329,14 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 
 static void         GetDest(SPObject* child,Shape **computed)
 {
-	if ( child == NULL ) return;
+	if ( child == nullptr ) return;
 
-	SPCurve *curve=NULL;
+	SPCurve *curve=nullptr;
 	Geom::Affine tr_mat;
 
     SPObject* u_child = child;
     SPItem *item = dynamic_cast<SPItem *>(u_child);
-    g_assert(item != NULL);
+    g_assert(item != nullptr);
     SPUse *use = dynamic_cast<SPUse *>(item);
     if ( use ) {
         u_child = use->child;

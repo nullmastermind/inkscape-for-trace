@@ -31,8 +31,8 @@ namespace UI {
 
 PreviewHolder::PreviewHolder() :
     Bin(),
-    _scroller(0),
-    _insides(0),
+    _scroller(nullptr),
+    _insides(nullptr),
     _prefCols(0),
     _updatesFrozen(false),
     _anchor(SP_ANCHOR_CENTER),
@@ -278,7 +278,7 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& n
 
         auto hs = _scroller->get_hscrollbar();
 
-        if (_wrap && item != NULL) {
+        if (_wrap && item != nullptr) {
 
             // Get width of bar.
             int width_scroller = _scroller->get_width();

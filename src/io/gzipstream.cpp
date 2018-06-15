@@ -51,8 +51,8 @@ GzipInputStream::GzipInputStream(InputStream &sourceStream)
                       loaded(false),
                       totalIn(0),
                       totalOut(0),
-                      outputBuf(NULL),
-                      srcBuf(NULL),
+                      outputBuf(nullptr),
+                      srcBuf(nullptr),
                       crc(0),
                       srcCrc(0),
                       srcSiz(0),
@@ -72,11 +72,11 @@ GzipInputStream::~GzipInputStream()
     close();
     if ( srcBuf ) {
       delete[] srcBuf;
-      srcBuf = NULL;
+      srcBuf = nullptr;
     }
     if ( outputBuf ) {
         delete[] outputBuf;
-        outputBuf = NULL;
+        outputBuf = nullptr;
     }
 }
 
@@ -109,11 +109,11 @@ void GzipInputStream::close()
 
     if ( srcBuf ) {
       delete[] srcBuf;
-      srcBuf = NULL;
+      srcBuf = nullptr;
     }
     if ( outputBuf ) {
         delete[] outputBuf;
-        outputBuf = NULL;
+        outputBuf = nullptr;
     }
     closed = true;
 }
@@ -179,7 +179,7 @@ bool GzipInputStream::load()
     outputBuf = new (std::nothrow) unsigned char [OUT_SIZE];
     if ( !outputBuf ) {
         delete[] srcBuf;
-        srcBuf = NULL;
+        srcBuf = nullptr;
         return false;
     }
     outputBufLen = 0; // Not filled in yet
@@ -251,9 +251,9 @@ bool GzipInputStream::load()
     unsigned long dataLen = srcLen - (headerLen + 8);
     //printf("%x %x\n", data[0], data[dataLen-1]);
     
-    d_stream.zalloc    = (alloc_func)0;
-    d_stream.zfree     = (free_func)0;
-    d_stream.opaque    = (voidpf)0;
+    d_stream.zalloc    = (alloc_func)nullptr;
+    d_stream.zfree     = (free_func)nullptr;
+    d_stream.opaque    = (voidpf)nullptr;
     d_stream.next_in   = data;
     d_stream.avail_in  = dataLen;
     d_stream.next_out  = outputBuf;

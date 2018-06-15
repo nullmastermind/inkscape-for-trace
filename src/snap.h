@@ -112,9 +112,9 @@ public:
      */
     void setup(SPDesktop const *desktop,
             bool snapindicator = true,
-            SPItem const *item_to_ignore = NULL,
-            std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = NULL,
-            SPGuide *guide_to_ignore = NULL);
+            SPItem const *item_to_ignore = nullptr,
+            std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
+            SPGuide *guide_to_ignore = nullptr);
 
     /**
      * Prepare the snap manager for the actual snapping, which includes building a list of snap targets
@@ -134,18 +134,18 @@ public:
     void setup(SPDesktop const *desktop,
                bool snapindicator,
                std::vector<SPItem const *> &items_to_ignore,
-               std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = NULL,
-               SPGuide *guide_to_ignore = NULL);
+               std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
+               SPGuide *guide_to_ignore = nullptr);
 
     void setupIgnoreSelection(SPDesktop const *desktop,
                               bool snapindicator = true,
-                              std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = NULL,
-                              SPGuide *guide_to_ignore = NULL);
+                              std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes = nullptr,
+                              SPGuide *guide_to_ignore = nullptr);
 
     void unSetup() {_rotation_center_source_items.clear();
-                    _guide_to_ignore = NULL;
-                    _desktop = NULL;
-                    _unselected_nodes = NULL;}
+                    _guide_to_ignore = nullptr;
+                    _desktop = nullptr;
+                    _unselected_nodes = nullptr;}
 
     // If we're dragging a rotation center, then setRotationCenterSource() stores the parent item
     // of this rotation center; this reference is used to make sure that we do not snap a rotation

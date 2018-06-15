@@ -42,7 +42,7 @@ ControlPoint::ColorSet ControlPoint::_default_color_set = {
     {0xff000000, 0x000000ff}  // clicked fill, stroke when selected
 };
 
-ControlPoint *ControlPoint::mouseovered_point = 0;
+ControlPoint *ControlPoint::mouseovered_point = nullptr;
 
 sigc::signal<void, ControlPoint*> ControlPoint::signal_mouseover_change;
 
@@ -70,7 +70,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
                            Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                            ColorSet const &cset, SPCanvasGroup *group) :
     _desktop(d),
-    _canvas_item(NULL),
+    _canvas_item(nullptr),
     _cset(cset),
     _state(STATE_NORMAL),
     _position(initial_pos),
@@ -92,7 +92,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
                            ControlType type,
                            ColorSet const &cset, SPCanvasGroup *group) :
     _desktop(d),
-    _canvas_item(NULL),
+    _canvas_item(nullptr),
     _cset(cset),
     _state(STATE_NORMAL),
     _position(initial_pos),
@@ -217,7 +217,7 @@ void ControlPoint::_setPixbuf(Glib::RefPtr<Gdk::Pixbuf> p)
 // re-routes events into the virtual function
 int ControlPoint::_event_handler(SPCanvasItem */*item*/, GdkEvent *event, ControlPoint *point)
 {
-    if ((point == NULL) || (point->_desktop == NULL)) {
+    if ((point == nullptr) || (point->_desktop == nullptr)) {
         return FALSE;
     }
     return point->_eventHandler(point->_desktop->event_context, event) ? TRUE : FALSE;
@@ -229,16 +229,16 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
     // NOTE the static variables below are shared for all points!
     // TODO handle clicks and drags from other buttons too
 
-    if (event == NULL)
+    if (event == nullptr)
     {
         return false;
     }
     
-    if (event_context == NULL)
+    if (event_context == nullptr)
     {
         return false;
     }
-    if (_desktop == NULL)
+    if (_desktop == nullptr)
     {
         return false;
     }
@@ -269,7 +269,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             pointer_offset = _position - _desktop->w2d(_drag_event_origin);
             _drag_initiated = false;
             // route all events to this handler
-            sp_canvas_item_grab(_canvas_item, _grab_event_mask, NULL, event->button.time);
+            sp_canvas_item_grab(_canvas_item, _grab_event_mask, nullptr, event->button.time);
             _event_grab = true;
             _setState(STATE_CLICKED);
             return true;
@@ -317,7 +317,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
 
                 _desktop->scroll_to_point(new_pos);
                 _desktop->set_coordinate_status(_position);
-                sp_event_context_snap_delay_handler(event_context, NULL,
+                sp_event_context_snap_delay_handler(event_context, nullptr,
                     (gpointer) this, &event->motion,
                     Inkscape::UI::Tools::DelayedSnapEvent::CONTROL_POINT_HANDLER);
             }
@@ -370,7 +370,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
     case GDK_GRAB_BROKEN:
         if (_event_grab && !event->grab_broken.keyboard) {
             {
-                ungrabbed(NULL);
+                ungrabbed(nullptr);
                 if (_drag_initiated) {
                     _desktop->canvas->endForcedFullRedraws();
                 }
@@ -409,10 +409,10 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             fake.time = event->key.time;
             fake.x = _drag_event_origin[Geom::X]; // these two are normally not used in handlers
             fake.y = _drag_event_origin[Geom::Y]; // (and shouldn't be)
-            fake.axes = NULL;
+            fake.axes = nullptr;
             fake.state = 0; // unconstrained drag
             fake.is_hint = FALSE;
-            fake.device = NULL;
+            fake.device = nullptr;
             fake.x_root = -1; // not used in handlers (and shouldn't be)
             fake.y_root = -1; // can be used as a flag to check for cancelled drag
             
@@ -424,7 +424,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             _event_grab = false;
             _drag_initiated = false;
 
-            ungrabbed(NULL); // ungrabbed handlers can handle a NULL event
+            ungrabbed(nullptr); // ungrabbed handlers can handle a NULL event
             snapprefs.setSnapEnabledGlobally(snap_save);
             }
             return true;
@@ -524,7 +524,7 @@ void ControlPoint::_clearMouseover()
     if (mouseovered_point) {
         mouseovered_point->_desktop->event_context->defaultMessageContext()->clear();
         mouseovered_point->_setState(STATE_NORMAL);
-        mouseovered_point = 0;
+        mouseovered_point = nullptr;
         signal_mouseover_change.emit(mouseovered_point);
     }
 }
@@ -535,7 +535,7 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
 
     grabbed(event);
     sp_canvas_item_ungrab(prev_point->_canvas_item, event->time);
-    sp_canvas_item_grab(_canvas_item, _grab_event_mask, NULL, event->time);
+    sp_canvas_item_grab(_canvas_item, _grab_event_mask, nullptr, event->time);
 
     if (!_drag_initiated) {
         _desktop->canvas->forceFullRedrawAfterInterruptions(5);

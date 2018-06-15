@@ -59,7 +59,7 @@ protected:
 
 public:
     FeltFeather ( ) : Filter() { };
-    ~FeltFeather ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~FeltFeather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -106,7 +106,7 @@ public:
 gchar const *
 FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
 
     std::ostringstream hblur;
@@ -182,7 +182,7 @@ protected:
 
 public:
     Roughen ( ) : Filter() { };
-    ~Roughen ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Roughen ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -215,7 +215,7 @@ public:
 gchar const *
 Roughen::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
   
     std::ostringstream type;
     std::ostringstream hfreq;

@@ -169,7 +169,7 @@ void SelectionHelper::selectAllInAll(SPDesktop *dt)
 
 void SelectionHelper::selectNone(SPDesktop *dt)
 {
-    NodeTool *nt = NULL;
+    NodeTool *nt = nullptr;
     if (tools_isactive(dt, TOOLS_NODES)) {
         nt = static_cast<NodeTool*>(dt->event_context);
     }
@@ -345,7 +345,7 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     SPItem *parentItem = dynamic_cast<SPItem *>(parent);
-    g_assert(parentItem != NULL);
+    g_assert(parentItem != nullptr);
 
     std::vector<Inkscape::XML::Node*> copied;
     // add objects to document
@@ -377,12 +377,12 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
 static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool propagate = true, bool propagate_descendants = true)
 {
     for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i) {
-        sp_object_ref(*i, NULL);
+        sp_object_ref(*i, nullptr);
     }
     for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i) {
         SPItem *item = *i;
         item->deleteObject(propagate, propagate_descendants);
-        sp_object_unref(item, NULL);
+        sp_object_unref(item, nullptr);
     }
 }
 
@@ -572,7 +572,7 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
     selection->clear();
 
     SPGroup *group = dynamic_cast<SPGroup *>(selection->layers()->currentLayer());
-    g_return_if_fail(group != NULL);
+    g_return_if_fail(group != nullptr);
     std::vector<SPItem*> items = sp_item_group_item_list(group);
 
     for(unsigned int i = 0; i < items.size(); i++){
@@ -800,7 +800,7 @@ void ObjectSet::popFromGroup(){
         selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Selection <b>not in a group</b>."));
         return;
     }
-    if (parent_group->firstChild()->getNext() == NULL) {
+    if (parent_group->firstChild()->getNext() == nullptr) {
         std::vector<SPItem*> children;
         sp_item_group_ungroup(static_cast<SPGroup*>(parent_group), children, false);
     }
@@ -925,17 +925,17 @@ static SPGroup *
 sp_item_list_common_parent_group(const SPItemRange &items)
 {
     if (items.empty()) {
-        return NULL;
+        return nullptr;
     }
     SPObject *parent = items.front()->parent;
     // Strictly speaking this CAN happen, if user selects <svg> from Inkscape::XML editor
     if (!dynamic_cast<SPGroup *>(parent)) {
-        return NULL;
+        return nullptr;
     }
     for (auto item=items.begin();item!=items.end();++item) {
         if((*item)==items.front())continue;
         if ((*item)->parent != parent) {
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -958,7 +958,7 @@ enclose_items(std::vector<SPItem*> const &items)
 // TODO determine if this is intentionally different from SPObject::getPrev()
 static SPObject *prev_sibling(SPObject *child)
 {
-    SPObject *prev = 0;
+    SPObject *prev = nullptr;
     if ( child && dynamic_cast<SPGroup *>(child->parent) ) {
         prev = child->getPrev();
     }
@@ -1230,11 +1230,11 @@ take_style_from_item(SPObject *object)
 
     // write the complete cascaded style, context-free
     SPCSSAttr *css = sp_css_attr_from_object(object, SP_STYLE_FLAG_ALWAYS);
-    if (css == NULL)
-        return NULL;
+    if (css == nullptr)
+        return nullptr;
 
     if ((dynamic_cast<SPGroup *>(object) && object->firstChild()) ||
-        (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == NULL)) {
+        (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == nullptr)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
         auto list = object->children | boost::adaptors::reversed;
@@ -1621,7 +1621,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                                              && includes( sp_textpath_get_path_item(dynamic_cast<SPTextPath *>(item->firstChild())) ));
 
         // ...both a flowtext and its frame?
-        bool transform_flowtext_with_frame = (dynamic_cast<SPFlowtext *>(item) && includes( dynamic_cast<SPFlowtext *>(item)->get_frame(NULL))); // (only the first frame is checked so far)
+        bool transform_flowtext_with_frame = (dynamic_cast<SPFlowtext *>(item) && includes( dynamic_cast<SPFlowtext *>(item)->get_frame(nullptr))); // (only the first frame is checked so far)
 
         // ...both an offset and its source?
         bool transform_offset_with_source = (dynamic_cast<SPOffset *>(item) && dynamic_cast<SPOffset *>(item)->sourceHref) && includes( sp_offset_get_source(dynamic_cast<SPOffset *>(item)) );
@@ -1632,7 +1632,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
             SPPath *path = dynamic_cast<SPPath *>(item);
             if (path) {
-                SPItem *attItem[2] = {0, 0};
+                SPItem *attItem[2] = {nullptr, nullptr};
                 path->connEndPair.getAttachedItems(attItem);
                 for (int n = 0; n < 2; ++n) {
                     if (!includes(attItem[n])) {
@@ -1668,7 +1668,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
-                            use->doWriteTransform(item->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(item->transform.inverse(), nullptr, compensate);
                         }
                     }
                 }
@@ -1743,7 +1743,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             if (set_i2d) {
                 item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
             }
-            item->doWriteTransform(item->transform, NULL, compensate);
+            item->doWriteTransform(item->transform, nullptr, compensate);
         }
 
         if (adjust_transf_center) { // The transformation center should not be touched in case of pasting or importing, which is allowed by this if clause
@@ -1761,7 +1761,7 @@ void ObjectSet::removeTransform()
 {
     auto items = xmlNodes();
     for (auto l=items.begin();l!=items.end() ;++l) {
-        (*l)->setAttribute("transform", NULL, false);
+        (*l)->setAttribute("transform", nullptr, false);
     }
 
     if(document())
@@ -2126,7 +2126,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
      * to get the transformed stroke width
      */
     std::vector<SPItem*> objects;
-    SPStyle *sel_style_for_width = NULL;
+    SPStyle *sel_style_for_width = nullptr;
     if (type == SP_STROKE_STYLE_WIDTH || type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL ) {
         objects.push_back(sel);
         sel_style_for_width = new SPStyle(SP_ACTIVE_DOCUMENT);
@@ -2183,7 +2183,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
         }
     }
 
-    if( sel_style_for_width != NULL ) delete sel_style_for_width;
+    if( sel_style_for_width != nullptr ) delete sel_style_for_width;
     return matches;
 }
 
@@ -2350,7 +2350,7 @@ typedef struct ListReverse {
     typedef std::list<SPObject *> *Iterator;
 
     static Iterator children(SPObject *o) {
-        return make_list(o, NULL);
+        return make_list(o, nullptr);
     }
     static Iterator siblings_after(SPObject *o) {
         return make_list(o->parent, o);
@@ -2388,7 +2388,7 @@ SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *r
     typename D::Iterator children;
     typename D::Iterator iter;
 
-    SPItem *found=NULL;
+    SPItem *found=nullptr;
 
     if (!path.empty()) {
         SPObject *object=path.back();
@@ -2465,7 +2465,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
 void
 sp_selection_item_next(SPDesktop *desktop)
 {
-    g_return_if_fail(desktop != NULL);
+    g_return_if_fail(desktop != nullptr);
     Inkscape::Selection *selection = desktop->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -2495,8 +2495,8 @@ void
 sp_selection_item_prev(SPDesktop *desktop)
 {
     SPDocument *document = desktop->getDocument();
-    g_return_if_fail(document != NULL);
-    g_return_if_fail(desktop != NULL);
+    g_return_if_fail(document != nullptr);
+    g_return_if_fail(desktop != nullptr);
     Inkscape::Selection *selection = desktop->getSelection();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -2582,7 +2582,7 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 
 void ObjectSet::clone()
 {
-    if (document() == NULL) {
+    if (document() == nullptr) {
         return;
     }
 
@@ -2693,7 +2693,7 @@ bool ObjectSet::unlink(const bool skip_undo)
         tmp_set.set(item);
         Inkscape::URIReference *clip = item->clip_ref;
         Inkscape::URIReference *mask = item->mask_ref;
-        if ((NULL != clip) && (NULL != clip->getObject())) {
+        if ((nullptr != clip) && (nullptr != clip->getObject())) {
             SPUse * clipuse = dynamic_cast<SPUse *>(clip->getObject());
             if (clipuse) {
                 tmp_set.unsetMask(true,true);
@@ -2702,7 +2702,7 @@ bool ObjectSet::unlink(const bool skip_undo)
             }
             new_select.push_back(tmp_set.singleItem());
         }
-        else if ((NULL != mask) && (NULL != mask->getObject())) {
+        else if ((nullptr != mask) && (nullptr != mask->getObject())) {
             SPUse * maskuse = dynamic_cast<SPUse *>(mask->getObject());
             if (maskuse) {
                 tmp_set.unsetMask(false,true);
@@ -2730,7 +2730,7 @@ bool ObjectSet::unlink(const bool skip_undo)
                 continue;
             }
 
-            SPItem *unlink = NULL;
+            SPItem *unlink = nullptr;
             SPUse *use = dynamic_cast<SPUse *>(item);
             if (use) {
                 unlink = use->unlink();
@@ -2741,7 +2741,7 @@ bool ObjectSet::unlink(const bool skip_undo)
                 }
             } else /*if (SP_IS_TREF(use))*/ {
                 unlink = dynamic_cast<SPItem *>(sp_tref_convert_to_tspan(item));
-                g_assert(unlink != NULL);
+                g_assert(unlink != nullptr);
             }
 
             unlinked = true;
@@ -2812,7 +2812,7 @@ void ObjectSet::cloneOriginal()
         return;
     }
 
-    SPItem *original = NULL;
+    SPItem *original = nullptr;
     SPUse *use = dynamic_cast<SPUse *>(item);
     if (use) {
         original = use->get_original();
@@ -2822,19 +2822,19 @@ void ObjectSet::cloneOriginal()
             original = sp_offset_get_source(offset);
         } else {
             SPText *text = dynamic_cast<SPText *>(item);
-            SPTextPath *textpath = (text) ? dynamic_cast<SPTextPath *>(text->firstChild()) : NULL;
+            SPTextPath *textpath = (text) ? dynamic_cast<SPTextPath *>(text->firstChild()) : nullptr;
             if (text && textpath) {
                 original = sp_textpath_get_path_item(textpath);
             } else {
                 SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
                 if (flowtext) {
-                    original = flowtext->get_frame(NULL); // first frame only
+                    original = flowtext->get_frame(nullptr); // first frame only
                 }
             }
         }
     }
 
-    if (original == NULL) { // it's an object that we don't know what to do with
+    if (original == nullptr) { // it's an object that we don't know what to do with
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, error);
         return;
@@ -2889,7 +2889,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 {
 
     Inkscape::SVGOStringStream os;
-    SPObject * firstItem = NULL;
+    SPObject * firstItem = nullptr;
     auto items_= items();
     bool multiple = false;
     for (auto i=items_.begin();i!=items_.end();++i){
@@ -2920,7 +2920,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
         lpe_repr->setAttribute("method", method_str);
         gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
         lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
-        document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
+        document()->getDefs()->getRepr()->addChild(lpe_repr, nullptr); // adds to <defs> and assigns the 'id' attribute
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
         Inkscape::GC::release(lpe_repr);
 
@@ -2954,7 +2954,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 void ObjectSet::toMarker(bool apply)
 {
     // sp_selection_tile has similar code
-    if (desktop() == NULL) { // TODO: We should not need desktop for that. 
+    if (desktop() == nullptr) { // TODO: We should not need desktop for that. 
                              //       Someone get rid of the dt2doc() call.
         return;
     }
@@ -3126,7 +3126,7 @@ void ObjectSet::toSymbol()
 
     // Find out if we have a single group
     bool single_group = false;
-    SPGroup *the_group = NULL;
+    SPGroup *the_group = nullptr;
     Geom::Affine transform;
     if( items_.size() == 1 ) {
         SPObject *object = items_[0];
@@ -3200,7 +3200,7 @@ void ObjectSet::toSymbol()
         symbol_repr->setAttribute("inkscape:transform-center-y",
                                   the_group->getAttribute("inkscape:transform-center-y"));
 
-        the_group->setAttribute("style", NULL);
+        the_group->setAttribute("style", nullptr);
 
     }
 
@@ -3226,7 +3226,7 @@ void ObjectSet::toSymbol()
         g_free(title);
         Inkscape::XML::Node *repr = (*i)->getRepr();
         repr->parent()->removeChild(repr);
-        symbol_repr->addChild(repr, NULL);
+        symbol_repr->addChild(repr, nullptr);
     }
 
     if( single_group && transform.isTranslation() ) {
@@ -3275,7 +3275,7 @@ void ObjectSet::unSymbol()
  
     // Make sure we have only one object in selection.
     // Require that we really have a <symbol>.
-    if( symbol == NULL || !dynamic_cast<SPSymbol *>( symbol ))  {
+    if( symbol == nullptr || !dynamic_cast<SPSymbol *>( symbol ))  {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select only one <b>symbol</b> in Symbol dialog to convert to group."));
         return;
@@ -3300,8 +3300,8 @@ void ObjectSet::unSymbol()
     if( children.size() == 1 ) {
         SPObject *object = children[0];
         if ( dynamic_cast<SPGroup *>( object ) ) {
-            if( object->getAttribute("style") == NULL ||
-                object->getAttribute("class") == NULL ) {
+            if( object->getAttribute("style") == nullptr ||
+                object->getAttribute("class") == nullptr ) {
 
                 group->setAttribute("transform", object->getAttribute("transform"));
                 children = object->childList(false);
@@ -3312,7 +3312,7 @@ void ObjectSet::unSymbol()
     for (std::vector<SPObject*>::const_reverse_iterator i=children.rbegin();i!=children.rend();++i){
         Inkscape::XML::Node *repr = (*i)->getRepr();
         repr->parent()->removeChild(repr);
-        group->addChild(repr,NULL);
+        group->addChild(repr,nullptr);
     }
 
     // Copy relevant attributes
@@ -3344,7 +3344,7 @@ void ObjectSet::unSymbol()
 void ObjectSet::tile(bool apply)
 {
     // toMarker has similar code
-    if (desktop() == NULL) { //same remark as in toMarker: no good reason to have this.
+    if (desktop() == nullptr) { //same remark as in toMarker: no good reason to have this.
         return;
     }
 
@@ -3557,7 +3557,7 @@ void ObjectSet::getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi
 
         if (xdpi_search) {
             dpi_string = repr->attribute("inkscape:export-xdpi");
-            if (dpi_string != NULL) {
+            if (dpi_string != nullptr) {
                 *xdpi = atof(dpi_string);
                 xdpi_search = FALSE;
             }
@@ -3565,7 +3565,7 @@ void ObjectSet::getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi
 
         if (ydpi_search) {
             dpi_string = repr->attribute("inkscape:export-ydpi");
-            if (dpi_string != NULL) {
+            if (dpi_string != nullptr) {
                 *ydpi = atof(dpi_string);
                 ydpi_search = FALSE;
             }
@@ -3587,12 +3587,12 @@ void sp_document_get_export_hints(SPDocument *doc, Glib::ustring &filename, floa
         filename.clear();
     }
     gchar const *dpi_string = repr->attribute("inkscape:export-xdpi");
-    if (dpi_string != NULL) {
+    if (dpi_string != nullptr) {
         *xdpi = atof(dpi_string);
     }
 
     dpi_string = repr->attribute("inkscape:export-ydpi");
-    if (dpi_string != NULL) {
+    if (dpi_string != nullptr) {
         *ydpi = atof(dpi_string);
     }
 }
@@ -3646,12 +3646,12 @@ void ObjectSet::createBitmapCopy()
     g_strcanon(basename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');
 
     // Build the complete path by adding document base dir, if set, otherwise home dir
-    gchar *directory = NULL;
+    gchar *directory = nullptr;
     if ( doc->getURI() ) {
         directory = g_path_get_dirname( doc->getURI() );
     }
-    if (directory == NULL) {
-        directory = Inkscape::IO::Resource::homedir_path(NULL);
+    if (directory == nullptr) {
+        directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
     gchar *filepath = g_build_filename(directory, basename, NULL);
     g_free(directory);
@@ -3698,7 +3698,7 @@ void ObjectSet::createBitmapCopy()
     unsigned height =(unsigned) floor(bbox->height() * Inkscape::Util::Quantity::convert(res, "px", "in"));
 
     // Find out if we have to run an external filter
-    gchar const *run = NULL;
+    gchar const *run = nullptr;
     Glib::ustring filter = prefs->getString("/options/createbitmap/filter");
     if (!filter.empty()) {
         // filter command is given;
@@ -3708,7 +3708,7 @@ void ObjectSet::createBitmapCopy()
             if (param1[param1.length() - 1] == '%') {
                 // if the param string ends with %, interpret it as a percentage of the image's max dimension
                 gchar p1[256];
-                g_ascii_dtostr(p1, 256, ceil(g_ascii_strtod(param1.data(), NULL) * MAX(width, height) / 100));
+                g_ascii_dtostr(p1, 256, ceil(g_ascii_strtod(param1.data(), nullptr) * MAX(width, height) / 100));
                 // the first param is always the image filename, the second is param1
                 run = g_strdup_printf("%s \"%s\" %s", filter.data(), filepath, p1);
             } else {
@@ -3748,7 +3748,7 @@ void ObjectSet::createBitmapCopy()
                        bbox->max()[Geom::X], bbox->max()[Geom::Y],
                        width, height, res, res,
                        (guint32) 0xffffff00,
-                       NULL, NULL,
+                       nullptr, nullptr,
                        true,  /*bool force_overwrite,*/
                        items_);
 
@@ -4054,7 +4054,7 @@ void ObjectSet::setClipGroup()
             Inkscape::GC::release(group);
         }
 
-        gchar const *mask_id = NULL;
+        gchar const *mask_id = nullptr;
         if (apply_clip_path) {
             mask_id = SPClipPath::create(mask_items_dup, doc);
         } else {
@@ -4121,7 +4121,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         if (remove_original) {
             // remember referenced mask/clippath, so orphaned masks can be moved back to document
             SPItem *item = *i;
-            Inkscape::URIReference *uri_ref = NULL;
+            Inkscape::URIReference *uri_ref = nullptr;
 
             if (apply_clip_path) {
                 uri_ref = item->clip_ref;
@@ -4130,7 +4130,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             }
 
             // collect distinct mask object (and associate with item to apply transform)
-            if ((NULL != uri_ref) && (NULL != uri_ref->getObject())) {
+            if ((nullptr != uri_ref) && (nullptr != uri_ref->getObject())) {
                 referenced_objects[uri_ref->getObject()] = item;
             }
         }
@@ -4161,10 +4161,10 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
             } else if (copy->attribute("inkscape:original-d")) {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
-                copy->setAttribute("inkscape:original-d", NULL);
+                copy->setAttribute("inkscape:original-d", nullptr);
             } else if (!copy->attribute("inkscape:path-effect") && !SP_IS_PATH(&child)) {
-                copy->setAttribute("d", NULL);
-                copy->setAttribute("inkscape:original-d", NULL);
+                copy->setAttribute("d", nullptr);
+                copy->setAttribute("inkscape:original-d", nullptr);
             }
             items_to_move.push_back(copy);
         }
@@ -4227,7 +4227,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
  */
 bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
 {
-    g_return_val_if_fail(document() != NULL, false);
+    g_return_val_if_fail(document() != nullptr, false);
 
     if (isEmpty()) {
         if(desktop())
@@ -4248,7 +4248,7 @@ bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
 
 void ObjectSet::swapFillStroke()
 {
-    if (desktop() == NULL) {
+    if (desktop() == nullptr) {
         return;
     }
 
@@ -4323,7 +4323,7 @@ void ObjectSet::swapFillStroke()
 bool
 fit_canvas_to_drawing(SPDocument *doc, bool with_margins)
 {
-    g_return_val_if_fail(doc != NULL, false);
+    g_return_val_if_fail(doc != nullptr, false);
 
     doc->ensureUpToDate();
     SPItem const *const root = doc->getRoot();
@@ -4351,11 +4351,11 @@ verb_fit_canvas_to_drawing(SPDesktop *desktop)
  * ui/dialog/page-sizer.
  */
 void fit_canvas_to_selection_or_drawing(SPDesktop *desktop) {
-    g_return_if_fail(desktop != NULL);
+    g_return_if_fail(desktop != nullptr);
     SPDocument *doc = desktop->getDocument();
 
-    g_return_if_fail(doc != NULL);
-    g_return_if_fail(desktop->selection != NULL);
+    g_return_if_fail(doc != nullptr);
+    g_return_if_fail(desktop->selection != nullptr);
 
     bool const changed = ( desktop->selection->isEmpty()
                            ? fit_canvas_to_drawing(doc, true)

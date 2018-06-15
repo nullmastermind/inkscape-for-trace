@@ -136,8 +136,8 @@ void Handle::move(Geom::Point const &new_pos)
     Handle *other = this->other();
     Node *node_towards = _parent->nodeToward(this); // node in direction of this handle
     Node *node_away = _parent->nodeAwayFrom(this); // node in the opposite direction
-    Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : NULL;
-    Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : NULL;
+    Handle *towards = node_towards ? node_towards->handleAwayFrom(_parent) : nullptr;
+    Handle *towards_second = node_towards ? node_towards->handleToward(_parent) : nullptr;
     double bspline_weight = 0.0;
 
     if (Geom::are_near(new_pos, _parent->position())) {
@@ -595,7 +595,7 @@ Node *Node::_next()
     if (n) {
         return n.ptr();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -610,7 +610,7 @@ Node *Node::_prev()
     if (p) {
         return p.ptr();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1359,7 +1359,7 @@ Handle *Node::handleToward(Node *to)
         return back();
     }
     g_error("Node::handleToward(): second node is not adjacent!");
-    return NULL;
+    return nullptr;
 }
 
 Node *Node::nodeToward(Handle *dir)
@@ -1371,7 +1371,7 @@ Node *Node::nodeToward(Handle *dir)
         return _prev();
     }
     g_error("Node::nodeToward(): handle is not a child of this node!");
-    return NULL;
+    return nullptr;
 }
 
 Handle *Node::handleAwayFrom(Node *to)
@@ -1383,7 +1383,7 @@ Handle *Node::handleAwayFrom(Node *to)
         return front();
     }
     g_error("Node::handleAwayFrom(): second node is not adjacent!");
-    return NULL;
+    return nullptr;
 }
 
 Node *Node::nodeAwayFrom(Handle *h)
@@ -1395,7 +1395,7 @@ Node *Node::nodeAwayFrom(Handle *h)
         return _next();
     }
     g_error("Node::nodeAwayFrom(): handle is not a child of this node!");
-    return NULL;
+    return nullptr;
 }
 
 Glib::ustring Node::_getTip(unsigned state) const

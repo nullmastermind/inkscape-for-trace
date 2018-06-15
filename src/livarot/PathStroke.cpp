@@ -41,7 +41,7 @@ static Geom::Point StrokeNormalize(const Geom::Point value, double length) {
 void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
         ButtType butt, double miter, bool justAdd)
 {
-    if (dest == NULL) {
+    if (dest == nullptr) {
         return;
     }
 

@@ -37,21 +37,21 @@ namespace Extension {
 */
 Output::Output (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
-    mimetype = NULL;
-    extension = NULL;
-    filetypename = NULL;
-    filetypetooltip = NULL;
+    mimetype = nullptr;
+    extension = nullptr;
+    filetypename = nullptr;
+    filetypetooltip = nullptr;
 	dataloss = TRUE;
 
-    if (repr != NULL) {
+    if (repr != nullptr) {
         Inkscape::XML::Node * child_repr;
 
         child_repr = repr->firstChild();
 
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "output")) {
                 child_repr = child_repr->firstChild();
-                while (child_repr != NULL) {
+                while (child_repr != nullptr) {
                     char const * chname = child_repr->name();
 					if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
 						chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -115,9 +115,9 @@ Output::~Output (void)
 bool
 Output::check (void)
 {
-	if (extension == NULL)
+	if (extension == nullptr)
 		return FALSE;
-	if (mimetype == NULL)
+	if (mimetype == nullptr)
 		return FALSE;
 
 	return Extension::check();
@@ -150,7 +150,7 @@ Output::get_extension(void)
 gchar *
 Output::get_filetypename(void)
 {
-    if (filetypename != NULL)
+    if (filetypename != nullptr)
         return filetypename;
     else
         return get_name();
@@ -181,7 +181,7 @@ Output::prefs (void)
 
     Gtk::Widget * controls;
     controls = imp->prefs_output(this);
-    if (controls == NULL) {
+    if (controls == nullptr) {
         // std::cout << "No preferences for Output" << std::endl;
         return true;
     }

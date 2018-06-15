@@ -93,7 +93,7 @@
 
 SPObject *SPFactory::createObject(std::string const& id)
 {
-    SPObject *ret = NULL;
+    SPObject *ret = nullptr;
 
     if (id == "inkscape:box3d")
         ret = new SPBox3D;

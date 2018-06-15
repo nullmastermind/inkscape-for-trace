@@ -72,7 +72,7 @@ protected:
 
 public:
     Bump ( ) : Filter() { };
-    ~Bump ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Bump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -152,7 +152,7 @@ public:
 gchar const *
 Bump::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream simplifyImage;
     std::ostringstream simplifyBump;
@@ -301,7 +301,7 @@ protected:
 
 public:
     WaxBump ( ) : Filter() { };
-    ~WaxBump ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~WaxBump ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -372,7 +372,7 @@ public:
 gchar const *
 WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream simplifyImage;
     std::ostringstream simplifyBump;

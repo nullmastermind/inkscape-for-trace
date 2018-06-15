@@ -295,10 +295,10 @@ private:
   void doForm(Object *str);
   void doForm1(Object *str, Dict *resDict, double *matrix, double *bbox,
 	       GBool transpGroup = gFalse, GBool softMask = gFalse,
-	       GfxColorSpace *blendingColorSpace = NULL,
+	       GfxColorSpace *blendingColorSpace = nullptr,
 	       GBool isolated = gFalse, GBool knockout = gFalse,
-	       GBool alpha = gFalse, Function *transferFunc = NULL,
-	       GfxColor *backdropColor = NULL);
+	       GBool alpha = gFalse, Function *transferFunc = nullptr,
+	       GfxColor *backdropColor = nullptr);
 
   // in-line image operators
   void opBeginImage(Object args[], int numArgs);

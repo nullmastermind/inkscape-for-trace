@@ -28,8 +28,8 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
     : Gtk::Grid()
     , _color(color)
     , _updating(false)
-    , _wheel(0)
-    , _slider(0)
+    , _wheel(nullptr)
+    , _slider(nullptr)
 {
     set_name("ColorWheelSelector");
 
@@ -40,7 +40,7 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
 
 ColorWheelSelector::~ColorWheelSelector()
 {
-    _wheel = 0;
+    _wheel = nullptr;
 
     _color_changed_connection.disconnect();
     _color_dragged_connection.disconnect();

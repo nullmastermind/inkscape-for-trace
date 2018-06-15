@@ -191,7 +191,7 @@ CanvasAxonomGrid::readRepr()
     }
 
     if ( (value = repr->attribute("gridanglex")) ) {
-        angle_deg[X] = g_ascii_strtod(value, NULL);
+        angle_deg[X] = g_ascii_strtod(value, nullptr);
         if (angle_deg[X] < 0.) angle_deg[X] = 0.;
         if (angle_deg[X] > 89.0) angle_deg[X] = 89.0;
         angle_rad[X] = Geom::rad_from_deg(angle_deg[X]);
@@ -199,7 +199,7 @@ CanvasAxonomGrid::readRepr()
     }
 
     if ( (value = repr->attribute("gridanglez")) ) {
-        angle_deg[Z] = g_ascii_strtod(value, NULL);
+        angle_deg[Z] = g_ascii_strtod(value, nullptr);
         if (angle_deg[Z] < 0.) angle_deg[Z] = 0.;
         if (angle_deg[Z] > 89.0) angle_deg[Z] = 89.0;
         angle_rad[Z] = Geom::rad_from_deg(angle_deg[Z]);
@@ -230,12 +230,12 @@ CanvasAxonomGrid::readRepr()
     }
 
     if ( (value = repr->attribute("enabled")) ) {
-        g_assert(snapper != NULL);
+        g_assert(snapper != nullptr);
         snapper->setEnabled(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
     if ( (value = repr->attribute("snapvisiblegridlinesonly")) ) {
-        g_assert(snapper != NULL);
+        g_assert(snapper != nullptr);
         snapper->setSnapVisibleOnly(strcmp(value,"false") != 0 && strcmp(value, "0") != 0);
     }
 
@@ -358,7 +358,7 @@ CanvasAxonomGrid::updateWidgets()
     _wr.setUpdating (true);
 
     _rcb_visible->setActive(visible);
-    if (snapper != NULL) {
+    if (snapper != nullptr) {
         _rcb_enabled->setActive(snapper->getEnabled());
         _rcb_snap_visible_only->setActive(snapper->getSnapVisibleOnly());
     }
@@ -590,7 +590,7 @@ CanvasAxonomGridSnapper::_getSnapLines(Geom::Point const &p) const
 {
     LineList s;
 
-    if ( grid == NULL ) {
+    if ( grid == nullptr ) {
         return s;
     }
 

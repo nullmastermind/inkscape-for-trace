@@ -66,7 +66,7 @@ png_render_document_to_file(SPDocument *doc, gchar const *filename)
     ctx = renderer->createContext();
 
     /* Render document */
-    bool ret = renderer->setupDocument(ctx, doc, TRUE, 0., NULL);
+    bool ret = renderer->setupDocument(ctx, doc, TRUE, 0., nullptr);
     if (ret) {
         renderer->renderItem(ctx, base);
         ctx->saveAsPng(filename);

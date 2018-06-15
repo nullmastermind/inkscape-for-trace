@@ -47,9 +47,9 @@ static void sp_tref_href_changed(SPObject *old_ref, SPObject *ref, SPTRef *tref)
 static void sp_tref_delete_self(SPObject *deleted, SPTRef *self);
 
 SPTRef::SPTRef() : SPItem() {
-	this->stringChild = NULL;
+	this->stringChild = nullptr;
 
-    this->href = NULL;
+    this->href = nullptr;
     this->uriOriginalRef = new SPTRefReference(this);
 
     this->_changed_connection =
@@ -78,7 +78,7 @@ void SPTRef::release() {
     this->_changed_connection.disconnect();
 
     g_free(this->href);
-    this->href = NULL;
+    this->href = nullptr;
 
     this->uriOriginalRef->detach();
 
@@ -95,14 +95,14 @@ void SPTRef::set(unsigned int key, const gchar* value) {
         if ( !value ) {
             // No value
             g_free(this->href);
-            this->href = NULL;
+            this->href = nullptr;
             this->uriOriginalRef->detach();
         } else if ((this->href && strcmp(value, this->href) != 0) || (!this->href)) {
             // Value has changed
 
             if ( this->href ) {
                 g_free(this->href);
-                this->href = NULL;
+                this->href = nullptr;
             }
 
             this->href = g_strdup(value);
@@ -193,13 +193,13 @@ Geom::OptRect SPTRef::bbox(Geom::Affine const &transform, SPItem::BBoxType type)
         parent_text = parent_text->parent;
     }
 
-    if (parent_text == NULL) {
+    if (parent_text == nullptr) {
         return bbox;
     }
 
     // get the bbox of our portion of the layout
     bbox = SP_TEXT(parent_text)->layout.bounds(transform,
-        sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, NULL) - 1);
+        sp_text_get_length_upto(parent_text, this), sp_text_get_length_upto(this, nullptr) - 1);
 
     // Add stroke width
     // FIXME this code is incorrect
@@ -251,7 +251,7 @@ sp_tref_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPTRef *tref)
 
         if (tref->stringChild) {
             tref->detach(tref->stringChild);
-            tref->stringChild = NULL;
+            tref->stringChild = nullptr;
         }
 
         // Ensure that we are referring to a legitimate object
@@ -282,7 +282,7 @@ sp_tref_delete_self(SPObject */*deleted*/, SPTRef *self)
  */
 SPObject * SPTRef::getObjectReferredTo(void)
 {
-    SPObject *referredObject = NULL;
+    SPObject *referredObject = nullptr;
 
     if (uriOriginalRef) {
         referredObject = uriOriginalRef->getObject();
@@ -295,7 +295,7 @@ SPObject * SPTRef::getObjectReferredTo(void)
  * Return the object referred to via the URI reference
  */
 SPObject const *SPTRef::getObjectReferredTo() const {
-    SPObject *referredObject = NULL;
+    SPObject *referredObject = nullptr;
 
     if (uriOriginalRef) {
         referredObject = uriOriginalRef->getObject();
@@ -391,7 +391,7 @@ void sp_tref_update_text(SPTRef *tref)
 
         if (tref->stringChild) {
             tref->detach(tref->stringChild);
-            tref->stringChild = NULL;
+            tref->stringChild = nullptr;
         }
 
         // Create the node and SPString to be the tref's child
@@ -402,7 +402,7 @@ void sp_tref_update_text(SPTRef *tref)
 
         // Add this SPString as a child of the tref
         tref->attach(tref->stringChild, tref->lastChild());
-        sp_object_unref(tref->stringChild, NULL);
+        sp_object_unref(tref->stringChild, nullptr);
         (tref->stringChild)->invoke_build(tref->document, newStringRepr, TRUE);
 
         Inkscape::GC::release(newStringRepr);
@@ -446,7 +446,7 @@ build_string_from_root(Inkscape::XML::Node *root, Glib::ustring *retString)
 SPObject *
 sp_tref_convert_to_tspan(SPObject *obj)
 {
-    SPObject * new_tspan = NULL;
+    SPObject * new_tspan = nullptr;
 
     ////////////////////
     // BASE CASE
@@ -472,7 +472,7 @@ sp_tref_convert_to_tspan(SPObject *obj)
 
             // Create a new string child for the tspan
             Inkscape::XML::Node *new_string_repr = tref->stringChild->getRepr()->duplicate(xml_doc);
-            new_tspan_repr->addChild(new_string_repr, NULL);
+            new_tspan_repr->addChild(new_string_repr, nullptr);
 
             //SPObject * new_string_child = document->getObjectByRepr(new_string_repr);
 

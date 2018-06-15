@@ -48,9 +48,9 @@ FillAndStroke::FillAndStroke()
                           UI::Widget::SimpleFilterModifier::BLUR |
                           UI::Widget::SimpleFilterModifier::OPACITY ),
       deskTrack(),
-      targetDesktop(0),
-      fillWdgt(0),
-      strokeWdgt(0),
+      targetDesktop(nullptr),
+      fillWdgt(nullptr),
+      strokeWdgt(nullptr),
       desktopChangeConn()
 {
     Gtk::Box *contents = _getContents();
@@ -81,7 +81,7 @@ FillAndStroke::FillAndStroke()
 
 FillAndStroke::~FillAndStroke()
 {
-    _composite_settings.setSubject(NULL);
+    _composite_settings.setSubject(nullptr);
 
     desktopChangeConn.disconnect();
     deskTrack.disconnect();

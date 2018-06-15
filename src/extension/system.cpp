@@ -70,9 +70,9 @@ static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementatio
  */
 SPDocument *open(Extension *key, gchar const *filename)
 {
-    Input *imod = NULL;
+    Input *imod = nullptr;
 
-    if (key == NULL) {
+    if (key == nullptr) {
         gpointer parray[2];
         parray[0] = (gpointer)filename;
         parray[1] = (gpointer)&imod;
@@ -82,12 +82,12 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     bool last_chance_svg = false;
-    if (key == NULL && imod == NULL) {
+    if (key == nullptr && imod == nullptr) {
         last_chance_svg = true;
         imod = dynamic_cast<Input *>(db.get(SP_MODULE_KEY_INPUT_SVG));
     }
 
-    if (imod == NULL) {
+    if (imod == nullptr) {
         throw Input::no_extension_found();
     }
 
@@ -119,7 +119,7 @@ SPDocument *open(Extension *key, gchar const *filename)
     }
 
     if (!imod->prefs(filename)) {
-        return NULL;
+        return nullptr;
     }
 
     SPDocument *doc = imod->open(filename);
@@ -219,21 +219,21 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
     Inkscape::Extension::FileSaveMethod save_method)
 {
     Output *omod;
-    if (key == NULL) {
+    if (key == nullptr) {
         gpointer parray[2];
         parray[0] = (gpointer)filename;
         parray[1] = (gpointer)&omod;
-        omod = NULL;
+        omod = nullptr;
         db.foreach(save_internal, (gpointer)&parray);
 
         /* This is a nasty hack, but it is required to ensure that
            autodetect will always save with the Inkscape extensions
            if they are available. */
-        if (omod != NULL && !strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
+        if (omod != nullptr && !strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
             omod = dynamic_cast<Output *>(db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
         }
         /* If autodetect fails, save as Inkscape SVG */
-        if (omod == NULL) {
+        if (omod == nullptr) {
             // omod = dynamic_cast<Output *>(db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)); use exception and let user choose
         }
     } else {
@@ -254,7 +254,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
         throw Output::save_cancelled();
     }
 
-    gchar *fileName = NULL;
+    gchar *fileName = nullptr;
     if (setextension) {
         gchar *lowerfile = g_utf8_strdown(filename, -1);
         gchar *lowerext = g_utf8_strdown(omod->get_extension(), -1);
@@ -267,7 +267,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
         g_free(lowerext);
     }
 
-    if (fileName == NULL) {
+    if (fileName == nullptr) {
         fileName = g_strdup(filename);
     }
 
@@ -288,8 +288,8 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
 
     // remember attributes in case this is an unofficial save and/or overwrite fails
     gchar *saved_uri = g_strdup(doc->getURI());
-    gchar *saved_output_extension = NULL;
-    gchar *saved_dataloss = NULL;
+    gchar *saved_output_extension = nullptr;
+    gchar *saved_dataloss = nullptr;
     bool saved_modified = doc->isModifiedSinceSave();
     saved_output_extension = g_strdup(get_file_save_extension(save_method).c_str());
     saved_dataloss = g_strdup(repr->attribute("inkscape:dataloss"));
@@ -306,7 +306,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
             // also save the extension for next use
             store_file_extension_in_prefs (omod->get_id(), save_method);
             // set the "dataloss" attribute if the chosen extension is lossy
-            repr->setAttribute("inkscape:dataloss", NULL);
+            repr->setAttribute("inkscape:dataloss", nullptr);
             if (omod->causes_dataloss()) {
                 repr->setAttribute("inkscape:dataloss", "true");
             }
@@ -446,17 +446,17 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         MODULE_UNKNOWN_FUNC
     } module_functional_type = MODULE_UNKNOWN_FUNC;
 
-    g_return_val_if_fail(doc != NULL, NULL);
+    g_return_val_if_fail(doc != nullptr, NULL);
 
     Inkscape::XML::Node *repr = doc->root();
 
     if (strcmp(repr->name(), INKSCAPE_EXTENSION_NS "inkscape-extension")) {
         g_warning("Extension definition started with <%s> instead of <" INKSCAPE_EXTENSION_NS "inkscape-extension>.  Extension will not be created. See http://wiki.inkscape.org/wiki/index.php/Extensions for reference.\n", repr->name());
-        return NULL;
+        return nullptr;
     }
 
     Inkscape::XML::Node *child_repr = repr->firstChild();
-    while (child_repr != NULL) {
+    while (child_repr != nullptr) {
         char const *element_name = child_repr->name();
         /* printf("Child: %s\n", child_repr->name()); */
         if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "input")) {
@@ -483,7 +483,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
     }
 
     Implementation::Implementation *imp;
-    if (in_imp == NULL) {
+    if (in_imp == nullptr) {
         switch (module_implementation_type) {
             case MODULE_EXTENSION: {
                 Implementation::Script *script = new Implementation::Script();
@@ -497,14 +497,14 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             }
             case MODULE_PLUGIN: {
                 Inkscape::Extension::Loader loader = Inkscape::Extension::Loader();
-                if( baseDir != NULL){
+                if( baseDir != nullptr){
                     loader.set_base_directory ( *baseDir );
                 }
                 imp = loader.load_implementation(doc);
                 break;
             }
             default: {
-                imp = NULL;
+                imp = nullptr;
                 break;
             }
         }
@@ -512,7 +512,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         imp = in_imp;
     }
 
-    Extension *module = NULL;
+    Extension *module = nullptr;
     switch (module_functional_type) {
         case MODULE_INPUT: {
             module = new Input(repr, imp);
@@ -556,8 +556,8 @@ build_from_file(gchar const *filename)
 {
     Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
     std::string dir = Glib::path_get_dirname(filename);
-    Extension *ext = build_from_reprdoc(doc, NULL, &dir);
-    if (ext != NULL)
+    Extension *ext = build_from_reprdoc(doc, nullptr, &dir);
+    if (ext != nullptr)
         Inkscape::GC::release(doc);
     else
         g_warning("Unable to create extension from definition file %s.\n", filename);
@@ -577,8 +577,8 @@ Extension *
 build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
 {
     Inkscape::XML::Document *doc = sp_repr_read_mem(buffer, strlen(buffer), INKSCAPE_EXTENSION_URI);
-    g_return_val_if_fail(doc != NULL, NULL);
-    Extension *ext = build_from_reprdoc(doc, in_imp, NULL);
+    g_return_val_if_fail(doc != nullptr, NULL);
+    Extension *ext = build_from_reprdoc(doc, in_imp, nullptr);
     Inkscape::GC::release(doc);
     return ext;
 }

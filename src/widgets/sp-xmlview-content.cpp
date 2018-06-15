@@ -30,17 +30,17 @@ void sp_xmlview_content_changed (GtkTextBuffer *tb, SPXMLViewContent *text);
 static void event_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 
 static Inkscape::XML::NodeEventVector repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
-    NULL, /* attr_changed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
+    nullptr, /* attr_changed */
     event_content_changed,
-    NULL  /* order_changed */
+    nullptr  /* order_changed */
 };
 
 GtkWidget *sp_xmlview_content_new(Inkscape::XML::Node * repr)
 {
-    GtkTextBuffer *tb = gtk_text_buffer_new(NULL);
-    SPXMLViewContent *text = SP_XMLVIEW_CONTENT(g_object_new(SP_TYPE_XMLVIEW_CONTENT, NULL));
+    GtkTextBuffer *tb = gtk_text_buffer_new(nullptr);
+    SPXMLViewContent *text = SP_XMLVIEW_CONTENT(g_object_new(SP_TYPE_XMLVIEW_CONTENT, nullptr));
     gtk_text_view_set_buffer (GTK_TEXT_VIEW (text), tb);
     gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text), GTK_WRAP_CHAR);
 
@@ -83,7 +83,7 @@ void sp_xmlview_content_class_init(SPXMLViewContentClass * klass)
 void
 sp_xmlview_content_init (SPXMLViewContent *text)
 {
-    text->repr = NULL;
+    text->repr = nullptr;
     text->blocked = FALSE;
 }
 
@@ -91,7 +91,7 @@ void sp_xmlview_content_destroy(GtkWidget * object)
 {
     SPXMLViewContent * text = SP_XMLVIEW_CONTENT (object);
 
-    sp_xmlview_content_set_repr (text, NULL);
+    sp_xmlview_content_set_repr (text, nullptr);
 
     GTK_WIDGET_CLASS (sp_xmlview_content_parent_class)->destroy (object);
 }
@@ -111,7 +111,7 @@ event_content_changed (Inkscape::XML::Node * /*repr*/, const gchar * /*old_conte
     } else {
         gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text)), "", 0);
     }
-    gtk_text_view_set_editable (GTK_TEXT_VIEW (text), new_content != NULL);
+    gtk_text_view_set_editable (GTK_TEXT_VIEW (text), new_content != nullptr);
 
     text->blocked = FALSE;
 }

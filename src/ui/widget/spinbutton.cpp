@@ -35,7 +35,7 @@ int SpinButton::on_input(double* newvalue)
     try {
         Inkscape::Util::EvaluatorQuantity result;
         if (_unit_menu || _unit_tracker) {
-            Unit const *unit = NULL;
+            Unit const *unit = nullptr;
             if (_unit_menu) {
                 unit = _unit_menu->getUnit();
             } else {
@@ -48,7 +48,7 @@ int SpinButton::on_input(double* newvalue)
                 throw Inkscape::Util::EvaluatorException("Input dimensions do not match with parameter dimensions.","");
             }
         } else {
-            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), NULL);
+            Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), nullptr);
             result = eval.evaluate();
         }
 

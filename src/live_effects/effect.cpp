@@ -181,7 +181,7 @@ Effect::acceptsNumClicks(EffectType type) {
 Effect*
 Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
 {
-    Effect* neweffect = NULL;
+    Effect* neweffect = nullptr;
     switch (lpenr) {
         case EMBRODERY_STITCH:
             neweffect = static_cast<Effect*> ( new LPEEmbroderyStitch(lpeobj) );
@@ -353,7 +353,7 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
-            neweffect = NULL;
+            neweffect = nullptr;
             break;
     }
 
@@ -371,7 +371,7 @@ void Effect::createAndApply(const char* name, SPDocument *doc, SPItem *item)
     Inkscape::XML::Node *repr = xml_doc->createElement("inkscape:path-effect");
     repr->setAttribute("effect", name);
 
-    doc->getDefs()->getRepr()->addChild(repr, NULL); // adds to <defs> and assigns the 'id' attribute
+    doc->getDefs()->getRepr()->addChild(repr, nullptr); // adds to <defs> and assigns the 'id' attribute
     const gchar * repr_id = repr->attribute("id");
     Inkscape::GC::release(repr);
 
@@ -396,10 +396,10 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       is_load(true),
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
-      sp_lpe_item(NULL),
+      sp_lpe_item(nullptr),
       current_zoom(1),
       upd_params(true),
-      current_shape(NULL),
+      current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -480,7 +480,7 @@ Effect::processObjects(LPEAction lpe_action)
         if (id.empty()) {
             return;
         }
-        SPObject *elemref = NULL;
+        SPObject *elemref = nullptr;
         if ((elemref = document->getObjectById(id.c_str()))) {
             Inkscape::XML::Node * elemnode = elemref->getRepr();
             std::vector<SPItem*> item_list;
@@ -498,7 +498,7 @@ Effect::processObjects(LPEAction lpe_action)
                     if (elemnode->attribute("inkscape:path-effect")) {
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
                     }
-                    elemnode->setAttribute("sodipodi:insensitive", NULL);
+                    elemnode->setAttribute("sodipodi:insensitive", nullptr);
                     SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
                 }
                 break;
@@ -513,7 +513,7 @@ Effect::processObjects(LPEAction lpe_action)
                 if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
                     css->setAttribute("display", "none");
                 } else {
-                    css->setAttribute("display", NULL);
+                    css->setAttribute("display", nullptr);
                 }
                 sp_repr_css_write_string(css,css_str);
                 elemnode->setAttribute("style", css_str.c_str());
@@ -876,7 +876,7 @@ Effect::defaultParamSet()
         vboxwidg->set_margin_top(5);
         return vboxwidg;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -921,7 +921,7 @@ Inkscape::XML::Node *Effect::getRepr()
 
 SPDocument *Effect::getSPDoc()
 {
-    if (lpeobj->document == NULL) {
+    if (lpeobj->document == nullptr) {
         g_message("Effect::getSPDoc() returns NULL");
     }
     return lpeobj->document;
@@ -932,7 +932,7 @@ Effect::getParameter(const char * key)
 {
     Glib::ustring stringkey(key);
 
-    if (param_vector.empty()) return NULL;
+    if (param_vector.empty()) return nullptr;
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         Parameter * param = *it;
@@ -943,14 +943,14 @@ Effect::getParameter(const char * key)
         ++it;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Parameter *
 Effect::getNextOncanvasEditableParam()
 {
     if (param_vector.size() == 0) // no parameters
-        return NULL;
+        return nullptr;
 
     oncanvasedit_it++;
     if (oncanvasedit_it >= static_cast<int>(param_vector.size())) {
@@ -970,7 +970,7 @@ Effect::getNextOncanvasEditableParam()
         }
     } while (oncanvasedit_it != old_it); // iterate until complete loop through map has been made
 
-    return NULL;
+    return nullptr;
 }
 
 void

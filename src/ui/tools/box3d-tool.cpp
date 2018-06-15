@@ -61,8 +61,8 @@ const std::string Box3dTool::prefsPath = "/tools/shapes/3dbox";
 
 Box3dTool::Box3dTool()
     : ToolBase(cursor_3dbox_xpm)
-    , _vpdrag(NULL)
-    , box3d(NULL)
+    , _vpdrag(nullptr)
+    , box3d(nullptr)
     , ctrl_dragged(false)
     , extruded(false)
 {
@@ -81,12 +81,12 @@ Box3dTool::~Box3dTool() {
     this->enableGrDrag(false);
 
     delete (this->_vpdrag);
-    this->_vpdrag = NULL;
+    this->_vpdrag = nullptr;
 
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->box3d) {
@@ -236,7 +236,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
                                   GDK_BUTTON_RELEASE_MASK       |
                                   GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK       |
                                   GDK_BUTTON_PRESS_MASK ),
-                                NULL, event->button.time);
+                                nullptr, event->button.time);
             ret = TRUE;
         }
         break;
@@ -333,7 +333,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
                 selection->clear();
             }
 
-            this->item_to_select = NULL;
+            this->item_to_select = nullptr;
             ret = TRUE;
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
                                   event->button.time);
@@ -575,7 +575,7 @@ void Box3dTool::finishItem() {
     this->ctrl_dragged = false;
     this->extruded = false;
 
-    if (this->box3d != NULL) {
+    if (this->box3d != nullptr) {
         SPDocument *doc = this->desktop->getDocument();
 
         if (!doc || !doc->getCurrentPersp3D()) {
@@ -595,7 +595,7 @@ void Box3dTool::finishItem() {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_3DBOX,
                          _("Create 3D box"));
 
-        this->box3d = NULL;
+        this->box3d = nullptr;
     }
 }
 

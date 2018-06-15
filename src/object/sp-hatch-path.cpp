@@ -32,7 +32,7 @@
 SPHatchPath::SPHatchPath()
     : offset(),
       _display(),
-      _curve(NULL),
+      _curve(nullptr),
       _continuous(false)
 {
     offset.unset();
@@ -74,7 +74,7 @@ void SPHatchPath::release()
 {
     for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
         delete iter->arenaitem;
-        iter->arenaitem = NULL;
+        iter->arenaitem = nullptr;
     }
 
     SPObject::release();
@@ -94,7 +94,7 @@ void SPHatchPath::set(unsigned int key, const gchar* value)
                 curve->unref();
             }
         } else {
-            setCurve(NULL, true);
+            setCurve(nullptr, true);
         }
 
         requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -216,7 +216,7 @@ SPCurve *SPHatchPath::calculateRenderCurve(unsigned key) const
         }
     }
     g_assert_not_reached();
-    return NULL;
+    return nullptr;
 }
 
 gdouble SPHatchPath::_repeatLength() const
@@ -324,7 +324,7 @@ SPHatchPath::View::View(Inkscape::DrawingShape *arenaitem, int key)
 SPHatchPath::View::~View()
 {
     // remember, do not delete arenaitem here
-    arenaitem = NULL;
+    arenaitem = nullptr;
 }
 
 

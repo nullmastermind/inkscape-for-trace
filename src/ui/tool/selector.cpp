@@ -37,7 +37,7 @@ public:
     {
         setVisible(false);
         _rubber = static_cast<CtrlRect*>(sp_canvas_item_new(_desktop->getControls(),
-        SP_TYPE_CTRLRECT, NULL));
+        SP_TYPE_CTRLRECT, nullptr));
         _rubber->setShadow(1, 0xffffffff);
         sp_canvas_item_hide(_rubber);
     }

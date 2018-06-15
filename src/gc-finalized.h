@@ -98,7 +98,7 @@ public:
                 if ( old_cleanup != _invoke_dtor ) {
                     Core::register_finalizer_ignore_self(base,
                                                          old_cleanup, old_data,
-                                                         NULL, NULL);
+                                                         nullptr, nullptr);
                 }
             }
         }
@@ -107,7 +107,7 @@ public:
     virtual ~Finalized() {
         // make sure the destructor won't get invoked twice
         Core::register_finalizer_ignore_self(Core::base(this),
-                                             NULL, NULL, NULL, NULL);
+                                             nullptr, nullptr, nullptr, nullptr);
     }
 
 private:

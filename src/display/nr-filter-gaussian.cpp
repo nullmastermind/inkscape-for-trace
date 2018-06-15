@@ -637,7 +637,7 @@ void FilterGaussian::render_cairo(FilterSlot &slot)
         }
     }
 
-    cairo_surface_t *downsampled = NULL;
+    cairo_surface_t *downsampled = nullptr;
     if (resampling) {
         // Divide by device scale as w_downsampled is in pixels while
         // cairo_surface_create_similar() uses device units.

@@ -38,8 +38,8 @@ namespace UI {
 namespace Dialogs {
 
 KnotPropertiesDialog::KnotPropertiesDialog()
-    : _desktop(NULL),
-      _knotpoint(NULL),
+    : _desktop(nullptr),
+      _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Close"), true)
 {
@@ -104,7 +104,7 @@ KnotPropertiesDialog::KnotPropertiesDialog()
 
 KnotPropertiesDialog::~KnotPropertiesDialog() {
 
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
 }
 
 void KnotPropertiesDialog::showDialog(SPDesktop *desktop, const SPKnot *pt, Glib::ustring const unit_name)
@@ -138,7 +138,7 @@ KnotPropertiesDialog::_apply()
 void
 KnotPropertiesDialog::_close()
 {
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(

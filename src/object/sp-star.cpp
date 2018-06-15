@@ -87,7 +87,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         repr->setAttribute("d", d);
         g_free(d);
     } else {
-        repr->setAttribute("d", NULL);
+        repr->setAttribute("d", nullptr);
     }
     // CPPIFY: see header file
     SPShape::write(xml_doc, repr, flags);
@@ -112,7 +112,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
         break;
 
     case SP_ATTR_SODIPODI_CX:
-        if (!sp_svg_length_read_ldd (value, &unit, NULL, &this->center[Geom::X]) ||
+        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::X]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
             (unit == SVGLength::PERCENT)) {
@@ -123,7 +123,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
         break;
 
     case SP_ATTR_SODIPODI_CY:
-        if (!sp_svg_length_read_ldd (value, &unit, NULL, &this->center[Geom::Y]) ||
+        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->center[Geom::Y]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
             (unit == SVGLength::PERCENT)) {
@@ -134,7 +134,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
         break;
 
     case SP_ATTR_SODIPODI_R1:
-        if (!sp_svg_length_read_ldd (value, &unit, NULL, &this->r[0]) ||
+        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[0]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
             (unit == SVGLength::PERCENT)) {
@@ -146,7 +146,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
         break;
 
     case SP_ATTR_SODIPODI_R2:
-        if (!sp_svg_length_read_ldd (value, &unit, NULL, &this->r[1]) ||
+        if (!sp_svg_length_read_ldd (value, &unit, nullptr, &this->r[1]) ||
             (unit == SVGLength::EM) ||
             (unit == SVGLength::EX) ||
             (unit == SVGLength::PERCENT)) {
@@ -158,7 +158,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
 
     case SP_ATTR_SODIPODI_ARG1:
         if (value) {
-            this->arg[0] = g_ascii_strtod (value, NULL);
+            this->arg[0] = g_ascii_strtod (value, nullptr);
         } else {
             this->arg[0] = 0.0;
         }
@@ -168,7 +168,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
 
     case SP_ATTR_SODIPODI_ARG2:
         if (value) {
-            this->arg[1] = g_ascii_strtod (value, NULL);
+            this->arg[1] = g_ascii_strtod (value, nullptr);
         } else {
             this->arg[1] = 0.0;
         }
@@ -188,7 +188,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
 
     case SP_ATTR_INKSCAPE_ROUNDED:
         if (value) {
-            this->rounded = g_ascii_strtod (value, NULL);
+            this->rounded = g_ascii_strtod (value, nullptr);
         } else {
             this->rounded = 0.0;
         }
@@ -198,7 +198,7 @@ void SPStar::set(unsigned int key, const gchar* value) {
 
     case SP_ATTR_INKSCAPE_RANDOMIZED:
         if (value) {
-            this->randomized = g_ascii_strtod (value, NULL);
+            this->randomized = g_ascii_strtod (value, nullptr);
         } else {
             this->randomized = 0.0;
         }
@@ -452,7 +452,7 @@ void SPStar::set_shape() {
 void
 sp_star_position_set (SPStar *star, gint sides, Geom::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2, bool isflat, double rounded, double randomized)
 {
-    g_return_if_fail (star != NULL);
+    g_return_if_fail (star != nullptr);
     g_return_if_fail (SP_IS_STAR (star));
 
     star->sides = CLAMP(sides, 3, 1024);

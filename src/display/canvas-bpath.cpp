@@ -172,7 +172,7 @@ sp_canvas_bpath_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
     Geom::Rect viewbox = item->canvas->getViewbox();
     viewbox.expandBy (width);
     double dist = Geom::infinity();
-    pathv_matrix_point_bbox_wind_distance(cbp->curve->get_pathvector(), cbp->affine, p, NULL, NULL, &dist, 0.5, &viewbox);
+    pathv_matrix_point_bbox_wind_distance(cbp->curve->get_pathvector(), cbp->affine, p, nullptr, nullptr, &dist, 0.5, &viewbox);
 
     if (dist <= 1.0) {
         *actual_item = item;
@@ -184,10 +184,10 @@ sp_canvas_bpath_point (SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_
 SPCanvasItem *
 sp_canvas_bpath_new (SPCanvasGroup *parent, SPCurve *curve, bool phantom_line)
 {
-    g_return_val_if_fail (parent != NULL, NULL);
+    g_return_val_if_fail (parent != nullptr, NULL);
     g_return_val_if_fail (SP_IS_CANVAS_GROUP (parent), NULL);
 
-    SPCanvasItem *item = sp_canvas_item_new (parent, SP_TYPE_CANVAS_BPATH, NULL);
+    SPCanvasItem *item = sp_canvas_item_new (parent, SP_TYPE_CANVAS_BPATH, nullptr);
 
     sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (item), curve, phantom_line);
 
@@ -197,7 +197,7 @@ sp_canvas_bpath_new (SPCanvasGroup *parent, SPCurve *curve, bool phantom_line)
 void
 sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve, bool phantom_line)
 {
-    g_return_if_fail (cbp != NULL);
+    g_return_if_fail (cbp != nullptr);
     g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
 
     cbp->phantom_line = phantom_line;
@@ -215,7 +215,7 @@ sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve, bool phantom_line
 void
 sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, SPWindRule rule)
 {
-    g_return_if_fail (cbp != NULL);
+    g_return_if_fail (cbp != nullptr);
     g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
 
     cbp->fill_rgba = rgba;
@@ -227,7 +227,7 @@ sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, SPWindRule rule)
 void
 sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, SPStrokeJoinType join, SPStrokeCapType cap, double dash, double gap)
 {
-    g_return_if_fail (cbp != NULL);
+    g_return_if_fail (cbp != nullptr);
     g_return_if_fail (SP_IS_CANVAS_BPATH (cbp));
 
     cbp->stroke_rgba = rgba;

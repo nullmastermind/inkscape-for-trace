@@ -25,16 +25,16 @@ static void sp_xmlview_attr_list_destroy(GtkWidget * object);
 static void event_attr_changed (Inkscape::XML::Node * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 
 static Inkscape::XML::NodeEventVector repr_events = {
-	NULL, /* child_added */
-	NULL, /* child_removed */
+	nullptr, /* child_added */
+	nullptr, /* child_removed */
 	event_attr_changed,
-	NULL, /* content_changed */
-	NULL  /* order_changed */
+	nullptr, /* content_changed */
+	nullptr  /* order_changed */
 };
 
 GtkWidget *sp_xmlview_attr_list_new (Inkscape::XML::Node * repr)
 {
-    SPXMLViewAttrList * attr_list = SP_XMLVIEW_ATTR_LIST(g_object_new(SP_TYPE_XMLVIEW_ATTR_LIST, NULL));
+    SPXMLViewAttrList * attr_list = SP_XMLVIEW_ATTR_LIST(g_object_new(SP_TYPE_XMLVIEW_ATTR_LIST, nullptr));
 
     attr_list->store = gtk_list_store_new (ATTR_N_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING );
     gtk_tree_view_set_model (GTK_TREE_VIEW(attr_list), GTK_TREE_MODEL(attr_list->store));
@@ -90,7 +90,7 @@ void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass)
                       G_TYPE_FROM_CLASS(klass),
                       G_SIGNAL_RUN_FIRST,
                       G_STRUCT_OFFSET (SPXMLViewAttrListClass, row_changed),
-                      NULL, NULL,
+                      nullptr, nullptr,
                       g_cclosure_marshal_VOID__STRING,
                       G_TYPE_NONE, 1,
                       G_TYPE_STRING);
@@ -99,8 +99,8 @@ void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass)
 void
 sp_xmlview_attr_list_init (SPXMLViewAttrList * list)
 {
-    list->store = NULL;
-	list->repr = NULL;
+    list->store = nullptr;
+	list->repr = nullptr;
 }
 
 void sp_xmlview_attr_list_destroy(GtkWidget * object)
@@ -110,7 +110,7 @@ void sp_xmlview_attr_list_destroy(GtkWidget * object)
 	list = SP_XMLVIEW_ATTR_LIST (object);
 
 	g_object_unref(list->store);
-	sp_xmlview_attr_list_set_repr (list, NULL);
+	sp_xmlview_attr_list_set_repr (list, nullptr);
 
 	GTK_WIDGET_CLASS(sp_xmlview_attr_list_parent_class)->destroy (object);
 }
@@ -121,7 +121,7 @@ void sp_xmlview_attr_list_select_row_by_key(SPXMLViewAttrList * list, const gcha
     gboolean match = false;
     gboolean valid = gtk_tree_model_get_iter_first( GTK_TREE_MODEL(list->store), &iter );
     while ( valid ) {
-        gchar *n = 0;
+        gchar *n = nullptr;
         gtk_tree_model_get (GTK_TREE_MODEL(list->store), &iter, ATTR_COL_NAME, &n, -1);
         if (!strcmp(n, name)) {
             match = true;
@@ -157,7 +157,7 @@ event_attr_changed (Inkscape::XML::Node * /*repr*/,
     gboolean valid = gtk_tree_model_get_iter_first( GTK_TREE_MODEL(list->store), &iter );
     gboolean match = false;
     while ( valid ) {
-        gchar *n = 0;
+        gchar *n = nullptr;
         gtk_tree_model_get (GTK_TREE_MODEL(list->store), &iter, ATTR_COL_NAME, &n, -1);
         if (!strcmp(n, name)) {
             match = true;
@@ -177,7 +177,7 @@ event_attr_changed (Inkscape::XML::Node * /*repr*/,
 		} else {
 			gtk_list_store_remove  (list->store, &iter);
 		}
-	} else if (new_value != NULL) {
+	} else if (new_value != nullptr) {
 	    gtk_list_store_append (list->store, &iter);
         gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), -1);
 	}

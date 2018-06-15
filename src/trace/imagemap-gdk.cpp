@@ -10,7 +10,7 @@
 GrayMap *gdkPixbufToGrayMap(GdkPixbuf *buf)
 {
     if (!buf)
-        return NULL;
+        return nullptr;
 
     int width       = gdk_pixbuf_get_width(buf);
     int height      = gdk_pixbuf_get_height(buf);
@@ -20,7 +20,7 @@ GrayMap *gdkPixbufToGrayMap(GdkPixbuf *buf)
 
     GrayMap *grayMap = GrayMapCreate(width, height);
     if (!grayMap)
-        return NULL;
+        return nullptr;
 
     //### Fill in the odd cells with RGB values
     int x,y;
@@ -46,19 +46,19 @@ GrayMap *gdkPixbufToGrayMap(GdkPixbuf *buf)
 GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap)
 {
     if (!grayMap)
-        return NULL;
+        return nullptr;
 
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * grayMap->width * grayMap->height * 3);
     if (!pixdata)
-        return NULL;
+        return nullptr;
 
     int n_channels = 3;
     int rowstride  = grayMap->width * 3;
 
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
                         0, 8, grayMap->width, grayMap->height,
-                        rowstride, (GdkPixbufDestroyNotify)g_free, NULL);
+                        rowstride, (GdkPixbufDestroyNotify)g_free, nullptr);
 
     //### Fill in the odd cells with RGB values
     int x,y;
@@ -87,7 +87,7 @@ GdkPixbuf *grayMapToGdkPixbuf(GrayMap *grayMap)
 PackedPixelMap *gdkPixbufToPackedPixelMap(GdkPixbuf *buf)
 {
     if (!buf)
-        return NULL;
+        return nullptr;
 
     int width       = gdk_pixbuf_get_width(buf);
     int height      = gdk_pixbuf_get_height(buf);
@@ -97,7 +97,7 @@ PackedPixelMap *gdkPixbufToPackedPixelMap(GdkPixbuf *buf)
 
     PackedPixelMap *ppMap = PackedPixelMapCreate(width, height);
     if (!ppMap)
-        return NULL;
+        return nullptr;
 
     //### Fill in the cells with RGB values
     int x,y;
@@ -130,7 +130,7 @@ PackedPixelMap *gdkPixbufToPackedPixelMap(GdkPixbuf *buf)
 RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
 {
     if (!buf)
-        return NULL;
+        return nullptr;
 
     int width       = gdk_pixbuf_get_width(buf);
     int height      = gdk_pixbuf_get_height(buf);
@@ -140,7 +140,7 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
 
     RgbMap *rgbMap = RgbMapCreate(width, height);
     if (!rgbMap)
-        return NULL;
+        return nullptr;
 
     //### Fill in the cells with RGB values
     int x,y;
@@ -175,19 +175,19 @@ RgbMap *gdkPixbufToRgbMap(GdkPixbuf *buf)
 GdkPixbuf *indexedMapToGdkPixbuf(IndexedMap *iMap)
 {
     if (!iMap)
-        return NULL;
+        return nullptr;
 
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * iMap->width * iMap->height * 3);
     if (!pixdata)
-        return NULL;
+        return nullptr;
 
     int n_channels = 3;
     int rowstride  = iMap->width * 3;
 
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata, GDK_COLORSPACE_RGB,
                         0, 8, iMap->width, iMap->height,
-                        rowstride, (GdkPixbufDestroyNotify)g_free, NULL);
+                        rowstride, (GdkPixbufDestroyNotify)g_free, nullptr);
 
     //### Fill in the cells with RGB values
     int x,y;

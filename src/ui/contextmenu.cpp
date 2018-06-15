@@ -74,7 +74,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
     /* Item menu */
-    if (item!=NULL) {
+    if (item!=nullptr) {
         AddSeparator();
         MakeObjectMenu();
     }
@@ -126,7 +126,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
     /* layer menu */
-    SPGroup *group=NULL;
+    SPGroup *group=nullptr;
     if (item) {
         if (SP_IS_GROUP(item)) {
             group = SP_GROUP(item);
@@ -236,7 +236,7 @@ static void
 context_menu_item_on_my_activate(void */*object*/, SPAction *action)
 {
     if (!temporarily_block_actions) {
-        sp_action_perform(action, NULL);
+        sp_action_perform(action, nullptr);
     }
 }
 
@@ -535,7 +535,7 @@ void ContextMenu::ItemCreateLink(void)
     const char *id = _item->getRepr()->attribute("id");
     Inkscape::XML::Node *child = _item->getRepr()->duplicate(xml_doc);
     _item->deleteObject(false);
-    repr->addChild(child, NULL);
+    repr->addChild(child, nullptr);
     child->setAttribute("id", id);
 
     Inkscape::GC::release(repr);
@@ -640,7 +640,7 @@ void ContextMenu::AnchorLinkFollow(void)
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }
@@ -748,7 +748,7 @@ void ContextMenu::ImageEdit(void)
         _desktop->selection->set(_item);
     }
 
-    GError* errThing = 0;
+    GError* errThing = nullptr;
     Glib::ustring bmpeditor = getImageEditorName();
     Glib::ustring cmdline = bmpeditor;
     Glib::ustring name;
@@ -782,7 +782,7 @@ void ContextMenu::ImageEdit(void)
         
         if (strncmp (href,"file:",5) == 0) {
         // URI to filename conversion
-          name = g_filename_from_uri(href, NULL, NULL);
+          name = g_filename_from_uri(href, nullptr, nullptr);
         } else {
           name.append(href);
         }
@@ -814,7 +814,7 @@ void ContextMenu::ImageEdit(void)
         g_warning("Problem launching editor (%d). %s", errThing->code, errThing->message);
         (_desktop->messageStack())->flash(Inkscape::ERROR_MESSAGE, errThing->message);
         g_error_free(errThing);
-        errThing = 0;
+        errThing = nullptr;
     }
 }
 
@@ -840,7 +840,7 @@ void ContextMenu::ImageEmbed(void)
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }
@@ -855,7 +855,7 @@ void ContextMenu::ImageExtract(void)
     if (verb) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
         if (action) {
-            sp_action_perform(action, NULL);
+            sp_action_perform(action, nullptr);
         }
     }
 }

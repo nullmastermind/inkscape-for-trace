@@ -194,32 +194,32 @@ static void do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const a
 static void do_query_all (SPDocument *doc);
 static void do_query_all_recurse (SPObject *o);
 
-static gchar *sp_global_printer = NULL;
-static gchar *sp_export_png = NULL;
-static gchar *sp_export_dpi = NULL;
-static gchar *sp_export_area = NULL;
+static gchar *sp_global_printer = nullptr;
+static gchar *sp_export_png = nullptr;
+static gchar *sp_export_dpi = nullptr;
+static gchar *sp_export_area = nullptr;
 static gboolean sp_export_area_drawing = FALSE;
 static gboolean sp_export_area_page = FALSE;
-static gchar *sp_export_margin = NULL;
+static gchar *sp_export_margin = nullptr;
 static gboolean sp_export_latex = FALSE;
-static gchar *sp_export_width = NULL;
-static gchar *sp_export_height = NULL;
-static gchar *sp_export_id = NULL;
-static gchar *sp_export_background = NULL;
-static gchar *sp_export_background_opacity = NULL;
+static gchar *sp_export_width = nullptr;
+static gchar *sp_export_height = nullptr;
+static gchar *sp_export_id = nullptr;
+static gchar *sp_export_background = nullptr;
+static gchar *sp_export_background_opacity = nullptr;
 static gboolean sp_export_area_snap = FALSE;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
-static gchar *sp_export_svg = NULL;
-static gchar *sp_export_inkscape_svg = NULL;
-static gchar *sp_export_ps = NULL;
-static gchar *sp_export_eps = NULL;
+static gchar *sp_export_svg = nullptr;
+static gchar *sp_export_inkscape_svg = nullptr;
+static gchar *sp_export_ps = nullptr;
+static gchar *sp_export_eps = nullptr;
 static gint sp_export_ps_level = 3;
-static gchar *sp_export_pdf = NULL;
-static gchar *sp_export_pdf_version = NULL;
-static gchar *sp_export_emf = NULL;
-static gchar *sp_export_wmf = NULL;
-static gchar *sp_export_xaml = NULL;
+static gchar *sp_export_pdf = nullptr;
+static gchar *sp_export_pdf_version = nullptr;
+static gchar *sp_export_emf = nullptr;
+static gchar *sp_export_wmf = nullptr;
+static gchar *sp_export_xaml = nullptr;
 static gboolean sp_export_text_to_path = FALSE;
 static gboolean sp_export_ignore_filters = FALSE;
 static gboolean sp_export_font = FALSE;
@@ -228,53 +228,53 @@ static gboolean sp_query_y = FALSE;
 static gboolean sp_query_width = FALSE;
 static gboolean sp_query_height = FALSE;
 static gboolean sp_query_all = FALSE;
-static gchar *sp_query_id = NULL;
+static gchar *sp_query_id = nullptr;
 static gboolean sp_shell = FALSE;
 static gboolean sp_vacuum_defs = FALSE;
 #ifdef WITH_DBUS
 static gboolean sp_dbus_listen = FALSE;
 static gchar *sp_dbus_name = NULL;
 #endif // WITH_DBUS
-static gchar *sp_export_png_utf8 = NULL;
-static gchar *sp_export_svg_utf8 = NULL;
-static gchar *sp_export_inkscape_svg_utf8 = NULL;
-static gchar *sp_global_printer_utf8 = NULL;
+static gchar *sp_export_png_utf8 = nullptr;
+static gchar *sp_export_svg_utf8 = nullptr;
+static gchar *sp_export_inkscape_svg_utf8 = nullptr;
+static gchar *sp_global_printer_utf8 = nullptr;
 
 #ifdef WITH_YAML
-static gchar *sp_xverbs_yaml_utf8 = NULL;
-static gchar *sp_xverbs_yaml = NULL;
+static gchar *sp_xverbs_yaml_utf8 = nullptr;
+static gchar *sp_xverbs_yaml = nullptr;
 #endif // WITH_YAML
 
 /**
  *  Reset variables to default values.
  */
 static void resetCommandlineGlobals() {
-        sp_global_printer = NULL;
-        sp_export_png = NULL;
-        sp_export_dpi = NULL;
-        sp_export_area = NULL;
+        sp_global_printer = nullptr;
+        sp_export_png = nullptr;
+        sp_export_dpi = nullptr;
+        sp_export_area = nullptr;
         sp_export_area_drawing = FALSE;
         sp_export_area_page = FALSE;
-        sp_export_margin = NULL;
+        sp_export_margin = nullptr;
         sp_export_latex = FALSE;
-        sp_export_width = NULL;
-        sp_export_height = NULL;
-        sp_export_id = NULL;
-        sp_export_background = NULL;
-        sp_export_background_opacity = NULL;
+        sp_export_width = nullptr;
+        sp_export_height = nullptr;
+        sp_export_id = nullptr;
+        sp_export_background = nullptr;
+        sp_export_background_opacity = nullptr;
         sp_export_area_snap = FALSE;
         sp_export_use_hints = FALSE;
         sp_export_id_only = FALSE;
-        sp_export_svg = NULL;
-        sp_export_inkscape_svg = NULL;
-        sp_export_ps = NULL;
-        sp_export_eps = NULL;
+        sp_export_svg = nullptr;
+        sp_export_inkscape_svg = nullptr;
+        sp_export_ps = nullptr;
+        sp_export_eps = nullptr;
         sp_export_ps_level = 3;
-        sp_export_pdf = NULL;
-        sp_export_pdf_version = NULL;
-        sp_export_emf = NULL;
-        sp_export_wmf = NULL;
-        sp_export_xaml = NULL;
+        sp_export_pdf = nullptr;
+        sp_export_pdf_version = nullptr;
+        sp_export_emf = nullptr;
+        sp_export_wmf = nullptr;
+        sp_export_xaml = nullptr;
         sp_export_text_to_path = FALSE;
         sp_export_ignore_filters = FALSE;
         sp_export_font = FALSE;
@@ -283,7 +283,7 @@ static void resetCommandlineGlobals() {
         sp_query_width = FALSE;
         sp_query_height = FALSE;
         sp_query_all = FALSE;
-        sp_query_id = NULL;
+        sp_query_id = nullptr;
         sp_vacuum_defs = FALSE;
         sp_no_convert_text_baseline_spacing = FALSE;
         sp_file_convert_dpi_method_commandline = -1;
@@ -292,10 +292,10 @@ static void resetCommandlineGlobals() {
         sp_dbus_name = NULL;
 #endif // WITH_DBUS
 
-        sp_export_png_utf8 = NULL;
-        sp_export_svg_utf8 = NULL;
-        sp_export_inkscape_svg_utf8 = NULL;
-        sp_global_printer_utf8 = NULL;
+        sp_export_png_utf8 = nullptr;
+        sp_export_svg_utf8 = nullptr;
+        sp_export_inkscape_svg_utf8 = nullptr;
+        sp_global_printer_utf8 = nullptr;
 }
 
 #ifdef WIN32
@@ -304,22 +304,22 @@ static bool replaceArgs( int& argc, char**& argv );
 static std::vector<gchar *> sp_process_args(poptContext ctx);
 struct poptOption options[] = {
     {"version", 'V',
-     POPT_ARG_NONE, NULL, SP_ARG_VERSION,
+     POPT_ARG_NONE, nullptr, SP_ARG_VERSION,
      N_("Print the Inkscape version number"),
-     NULL},
+     nullptr},
 
     {"without-gui", 'z',
-     POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
+     POPT_ARG_NONE, nullptr, SP_ARG_NOGUI,
      N_("Do not use X server (only process files from console)"),
-     NULL},
+     nullptr},
 
     {"with-gui", 'g',
-     POPT_ARG_NONE, NULL, SP_ARG_GUI,
+     POPT_ARG_NONE, nullptr, SP_ARG_GUI,
      N_("Try to use X server (even if $DISPLAY is not set)"),
-     NULL},
+     nullptr},
 
     {"file", 'f',
-     POPT_ARG_STRING, NULL, SP_ARG_FILE,
+     POPT_ARG_STRING, nullptr, SP_ARG_FILE,
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
 #ifdef WITH_YAML
@@ -351,12 +351,12 @@ struct poptOption options[] = {
     {"export-area-drawing", 'D',
      POPT_ARG_NONE, &sp_export_area_drawing, SP_ARG_EXPORT_AREA_DRAWING,
      N_("Exported area is the entire drawing (not page)"),
-     NULL},
+     nullptr},
 
     {"export-area-page", 'C',
      POPT_ARG_NONE, &sp_export_area_page, SP_ARG_EXPORT_AREA_PAGE,
      N_("Exported area is the entire page"),
-     NULL},
+     nullptr},
 
     {"export-margin", 0,
      POPT_ARG_STRING, &sp_export_margin, SP_ARG_EXPORT_MARGIN,
@@ -366,7 +366,7 @@ struct poptOption options[] = {
     {"export-area-snap", 0,
      POPT_ARG_NONE, &sp_export_area_snap, SP_ARG_EXPORT_AREA_SNAP,
      N_("Snap the bitmap export area outwards to the nearest integer values (in SVG user units)"),
-     NULL},
+     nullptr},
 
     {"export-width", 'w',
      POPT_ARG_STRING, &sp_export_width, SP_ARG_EXPORT_WIDTH,
@@ -388,12 +388,12 @@ struct poptOption options[] = {
      // TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
      //  See "man inkscape" for details.
      N_("Export just the object with export-id, hide all others (only with export-id)"),
-     NULL},
+     nullptr},
 
     {"export-use-hints", 't',
      POPT_ARG_NONE, &sp_export_use_hints, SP_ARG_EXPORT_USE_HINTS,
      N_("Use stored filename and DPI hints when exporting (only with export-id)"),
-     NULL},
+     nullptr},
 
     {"export-background", 'b',
      POPT_ARG_STRING, &sp_export_background, SP_ARG_EXPORT_BACKGROUND,
@@ -444,7 +444,7 @@ struct poptOption options[] = {
     {"export-latex", 0,
      POPT_ARG_NONE, &sp_export_latex, SP_ARG_EXPORT_LATEX,
      N_("Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is exported, putting the text on top of the PDF/PS/EPS file. Include the result in LaTeX like: \\input{latexfile.tex}"),
-     NULL},
+     nullptr},
 
     {"export-emf", 'M',
      POPT_ARG_STRING, &sp_export_emf, SP_ARG_EXPORT_EMF,
@@ -464,41 +464,41 @@ struct poptOption options[] = {
     {"export-text-to-path", 'T',
      POPT_ARG_NONE, &sp_export_text_to_path, SP_ARG_EXPORT_TEXT_TO_PATH,
      N_("Convert text object to paths on export (PS, EPS, PDF, SVG)"),
-     NULL},
+     nullptr},
 
     {"export-ignore-filters", 0,
      POPT_ARG_NONE, &sp_export_ignore_filters, SP_ARG_EXPORT_IGNORE_FILTERS,
      N_("Render filtered objects without filters, instead of rasterizing (PS, EPS, PDF)"),
-     NULL},
+     nullptr},
 
     {"query-x", 'X',
      POPT_ARG_NONE, &sp_query_x, SP_ARG_QUERY_X,
      // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the X coordinate of the drawing or, if specified, of the object with --query-id"),
-     NULL},
+     nullptr},
 
     {"query-y", 'Y',
      POPT_ARG_NONE, &sp_query_y, SP_ARG_QUERY_Y,
      // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the Y coordinate of the drawing or, if specified, of the object with --query-id"),
-     NULL},
+     nullptr},
 
     {"query-width", 'W',
      POPT_ARG_NONE, &sp_query_width, SP_ARG_QUERY_WIDTH,
      // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the width of the drawing or, if specified, of the object with --query-id"),
-     NULL},
+     nullptr},
 
     {"query-height", 'H',
      POPT_ARG_NONE, &sp_query_height, SP_ARG_QUERY_HEIGHT,
      // TRANSLATORS: "--query-id" is an Inkscape command line option; see "inkscape --help"
      N_("Query the height of the drawing or, if specified, of the object with --query-id"),
-     NULL},
+     nullptr},
 
     {"query-all", 'S',
      POPT_ARG_NONE, &sp_query_all, SP_ARG_QUERY_ALL,
      N_("List id,x,y,w,h for all objects"),
-     NULL},
+     nullptr},
 
     {"query-id", 'I',
      POPT_ARG_STRING, &sp_query_id, SP_ARG_QUERY_ID,
@@ -506,15 +506,15 @@ struct poptOption options[] = {
      N_("ID")},
 
     {"extension-directory", 'x',
-     POPT_ARG_NONE, NULL, SP_ARG_EXTENSIONDIR,
+     POPT_ARG_NONE, nullptr, SP_ARG_EXTENSIONDIR,
      // TRANSLATORS: this option makes Inkscape print the name (path) of the extension directory
      N_("Print out the extension directory and exit"),
-     NULL},
+     nullptr},
 
     {"vacuum-defs", 0,
      POPT_ARG_NONE, &sp_vacuum_defs, SP_ARG_VACUUM_DEFS,
      N_("Remove unused definitions from the defs section(s) of the document"),
-     NULL},
+     nullptr},
 
 #ifdef WITH_DBUS
     {"dbus-listen", 0,
@@ -529,32 +529,32 @@ struct poptOption options[] = {
 #endif // WITH_DBUS
 
     {"verb-list", 0,
-     POPT_ARG_NONE, NULL, SP_ARG_VERB_LIST,
+     POPT_ARG_NONE, nullptr, SP_ARG_VERB_LIST,
      N_("List the IDs of all the verbs in Inkscape"),
-     NULL},
+     nullptr},
 
     {"verb", 0,
-     POPT_ARG_STRING, NULL, SP_ARG_VERB,
+     POPT_ARG_STRING, nullptr, SP_ARG_VERB,
      N_("Verb to call when Inkscape opens."),
      N_("VERB-ID")},
 
     {"select", 0,
-     POPT_ARG_STRING, NULL, SP_ARG_SELECT,
+     POPT_ARG_STRING, nullptr, SP_ARG_SELECT,
      N_("Object ID to select when Inkscape opens."),
      N_("OBJECT-ID")},
 
     {"shell", 0,
      POPT_ARG_NONE, &sp_shell, SP_ARG_SHELL,
      N_("Start Inkscape in interactive shell mode."),
-     NULL},
+     nullptr},
 
     {"no-convert-text-baseline-spacing", 0,
     POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
     N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
-    NULL},
+    nullptr},
 
     {"convert-dpi-method", 0,
-    POPT_ARG_STRING, NULL, SP_ARG_CONVERT_DPI_METHOD,
+    POPT_ARG_STRING, nullptr, SP_ARG_CONVERT_DPI_METHOD,
     N_("Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|scale-document])"),
     "[...]"},
 
@@ -682,7 +682,7 @@ main(int argc, char **argv)
     gboolean use_gui;
 
 #if !defined(WIN32) && !defined(GDK_WINDOWING_QUARTZ)
-    use_gui = (g_getenv("DISPLAY") != NULL);
+    use_gui = (g_getenv("DISPLAY") != nullptr);
 #else
     use_gui = TRUE;
 #endif
@@ -765,8 +765,8 @@ main(int argc, char **argv)
 static void fixupSingleFilename( gchar **orig, gchar **spare )
 {
     if ( orig && *orig && **orig ) {
-        GError *error = NULL;
-        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(*orig, -1, NULL, NULL, &error);
+        GError *error = nullptr;
+        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(*orig, -1, nullptr, nullptr, &error);
         if ( newFileName )
         {
             *orig = newFileName;
@@ -784,7 +784,7 @@ static void fixupFilenameEncoding( std::vector<gchar*> &filenames)
 {
     for (unsigned int i=0; i<filenames.size(); ++i) {
         gchar *fn = filenames[i];
-        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
+        gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, nullptr, nullptr, nullptr);
         if ( newFileName ) {
             g_free( fn );
             filenames[i] = newFileName;
@@ -799,9 +799,9 @@ static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flD
     Inkscape::bind_textdomain_codeset_console();
 #endif
 
-    poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
+    poptContext ctx = poptGetContext(nullptr, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
-    g_return_val_if_fail(ctx != NULL, 1);
+    g_return_val_if_fail(ctx != nullptr, 1);
 
     /* Collect own arguments */
     std::vector<gchar*> fl = sp_process_args(ctx);
@@ -867,7 +867,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-guint get_latin_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
+guint get_latin_keyval(GdkEventKey const* event, guint *consumed_modifiers = nullptr);
 
 }
 }
@@ -960,7 +960,7 @@ sp_main_gui(int argc, char const **argv)
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    gdk_event_handler_set((GdkEventFunc)snooper, NULL, NULL);
+    gdk_event_handler_set((GdkEventFunc)snooper, nullptr, nullptr);
     Inkscape::Debug::log_display_config();
 
     // Set default window icon. Obeys the theme.
@@ -973,7 +973,7 @@ sp_main_gui(int argc, char const **argv)
     Inkscape::Application::create(argv[0], true);
 
     for (auto i:fl) {
-        if (sp_file_open(i,NULL)) {
+        if (sp_file_open(i,nullptr)) {
             create_new=false;
         }
     }
@@ -1011,25 +1011,25 @@ static int sp_process_file_list(std::vector<gchar*> fl)
 
     for (auto filename:fl) {
 
-        SPDocument *doc = NULL;
+        SPDocument *doc = nullptr;
         try {
-            doc = Inkscape::Extension::open(NULL, filename);
+            doc = Inkscape::Extension::open(nullptr, filename);
         } catch (Inkscape::Extension::Input::no_extension_found &e) {
-            doc = NULL;
+            doc = nullptr;
         } catch (Inkscape::Extension::Input::open_failed &e) {
-            doc = NULL;
+            doc = nullptr;
         }
 
-        if (doc == NULL) {
+        if (doc == nullptr) {
             try {
                 doc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), filename);
             } catch (Inkscape::Extension::Input::no_extension_found &e) {
-                doc = NULL;
+                doc = nullptr;
             } catch (Inkscape::Extension::Input::open_failed &e) {
-                doc = NULL;
+                doc = nullptr;
             }
         }
-        if (doc == NULL) {
+        if (doc == nullptr) {
             g_warning("Specified document %s cannot be opened (does not exist or not a valid SVG file)", filename);
             retVal++;
         } else {
@@ -1118,7 +1118,7 @@ static int sp_main_shell(char const* command_name)
 
     fprintf(stdout, "Inkscape %s interactive shell mode. Type 'quit' to quit.\n", Inkscape::version_string);
     fflush(stdout);
-    char* linedata = 0;
+    char* linedata = nullptr;
     do {
         fprintf(stdout, ">");
         fflush(stdout);
@@ -1142,15 +1142,15 @@ static int sp_main_shell(char const* command_name)
                 if ( strcmp(useme, "quit") == 0 ) {
                     // Time to quit
                     fflush(stdout);
-                    linedata = 0; // mark for exit
+                    linedata = nullptr; // mark for exit
                 } else if ( len < 1 ) {
                     // blank string. Do nothing.
                 } else {
-                    GError* parseError = 0;
-                    gchar** argv = 0;
+                    GError* parseError = nullptr;
+                    gchar** argv = nullptr;
                     gint argc = 0;
                     if ( g_shell_parse_argv(command_line, &argc, &argv, &parseError) ) {
-                        poptContext ctx = poptGetContext(NULL, argc, const_cast<const gchar**>(argv), options, 0);
+                        poptContext ctx = poptGetContext(nullptr, argc, const_cast<const gchar**>(argv), options, 0);
                         poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
                         if ( ctx ) {
                             std::vector<gchar *> fl = sp_process_args(ctx);
@@ -1223,7 +1223,7 @@ int sp_main_console(int argc, char const **argv)
 static void
 do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const axis, const gchar *id)
 {
-    SPObject *o = NULL;
+    SPObject *o = nullptr;
 
     if (id) {
         o = doc->getObjectById(id);
@@ -1313,8 +1313,8 @@ static int do_export_png(SPDocument *doc)
     Geom::Rect area;
     if (sp_export_id || sp_export_area_drawing) {
 
-        SPObject *o = NULL;
-        SPObject *o_area = NULL;
+        SPObject *o = nullptr;
+        SPObject *o_area = nullptr;
         if (sp_export_id && sp_export_area_drawing) {
             o = doc->getObjectById(sp_export_id);
             o_area = doc->getRoot();
@@ -1431,7 +1431,7 @@ static int do_export_png(SPDocument *doc)
 
     if (sp_export_width) {
         errno=0;
-        width = strtoul(sp_export_width, NULL, 0);
+        width = strtoul(sp_export_width, nullptr, 0);
         if ((width < 1) || (width > PNG_UINT_31_MAX) || (errno == ERANGE) ) {
             g_warning("Export width %lu out of range (1 - %lu). Nothing exported.", width, (unsigned long int)PNG_UINT_31_MAX);
             return 1;
@@ -1441,7 +1441,7 @@ static int do_export_png(SPDocument *doc)
 
     if (sp_export_height) {
         errno=0;
-        height = strtoul(sp_export_height, NULL, 0);
+        height = strtoul(sp_export_height, nullptr, 0);
         if ((height < 1) || (height > PNG_UINT_31_MAX)) {
             g_warning("Export height %lu out of range (1 - %lu). Nothing exported.", height, (unsigned long int)PNG_UINT_31_MAX);
             return 1;
@@ -1520,7 +1520,7 @@ static int do_export_png(SPDocument *doc)
 
         if ((width >= 1) && (height >= 1) && (width <= PNG_UINT_31_MAX) && (height <= PNG_UINT_31_MAX)) {
             if( sp_export_png_file(doc, path.c_str(), area, width, height, dpi,
-              dpi, bgcolor, NULL, NULL, true, sp_export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
+              dpi, bgcolor, nullptr, nullptr, true, sp_export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
                 g_print("Bitmap saved as: %s\n", filename.c_str());
             } else {
                 g_warning("Bitmap failed to save to: %s", filename.c_str());
@@ -1564,11 +1564,11 @@ static int do_export_svg(SPDocument* doc)
 
     }
     if (sp_export_margin) {
-        gdouble margin = g_ascii_strtod(sp_export_margin, NULL);
+        gdouble margin = g_ascii_strtod(sp_export_margin, nullptr);
         doc->ensureUpToDate();
         SPNamedView *nv;
         Inkscape::XML::Node *nv_repr;
-        if ((nv = sp_document_namedview(doc, 0)) && (nv_repr = nv->getRepr())) {
+        if ((nv = sp_document_namedview(doc, nullptr)) && (nv_repr = nv->getRepr())) {
             sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
             sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
             sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
@@ -1642,7 +1642,7 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
 
     if (sp_export_id) {
         SPObject *o = doc->getObjectById(sp_export_id);
-        if (o == NULL) {
+        if (o == nullptr) {
             g_warning("Object with id=\"%s\" was not found in the document. Nothing exported.", sp_export_id);
             return 1;
         }
@@ -1704,7 +1704,7 @@ static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const* mime)
     // if no bleed/margin is given, set to 0  (otherwise it takes the value last used from the UI)
     float margin = 0.;
     if (sp_export_margin) {
-        margin = g_ascii_strtod(sp_export_margin, NULL);
+        margin = g_ascii_strtod(sp_export_margin, nullptr);
     }
     (*i)->set_param_float("bleed", margin);
 
@@ -2140,7 +2140,7 @@ sp_process_args(poptContext ctx)
         switch (a) {
             case SP_ARG_FILE: {
                 gchar const *fn = poptGetOptArg(ctx);
-                if (fn != NULL) {
+                if (fn != nullptr) {
                     fl.push_back(g_strdup(fn));
                 }
                 break;
@@ -2148,7 +2148,7 @@ sp_process_args(poptContext ctx)
 #ifdef WITH_YAML
             case SP_ARG_XVERBS: {
                 gchar const *fn = poptGetOptArg(ctx);
-                if (fn != NULL) {
+                if (fn != nullptr) {
                     sp_xverbs_yaml = g_strdup(fn);
                     Inkscape::CmdLineXAction::createActionsFromYAML((const char *)sp_xverbs_yaml);
                 }
@@ -2178,7 +2178,7 @@ sp_process_args(poptContext ctx)
             case SP_ARG_VERB:
             case SP_ARG_SELECT: {
                 gchar const *arg = poptGetOptArg(ctx);
-                if (arg != NULL) {
+                if (arg != nullptr) {
                     // printf("Adding in: %s\n", arg);
                     new Inkscape::CmdLineAction((a == SP_ARG_VERB), arg);
                 }
@@ -2186,7 +2186,7 @@ sp_process_args(poptContext ctx)
             }
             case SP_ARG_CONVERT_DPI_METHOD: {
                 gchar const *arg = poptGetOptArg(ctx);
-                if (arg != NULL) {
+                if (arg != nullptr) {
                     if (!strcmp(arg,"none")) {
                         sp_file_convert_dpi_method_commandline = FILE_DPI_UNCHANGED;
                     } else if (!strcmp(arg,"scale-viewbox")) {
@@ -2211,8 +2211,8 @@ sp_process_args(poptContext ctx)
     }
 
     gchar const ** const args = poptGetArgs(ctx);
-    if (args != NULL) {
-        for (unsigned i = 0; args[i] != NULL; i++) {
+    if (args != nullptr) {
+        for (unsigned i = 0; args[i] != nullptr; i++) {
             fl.push_back(g_strdup(args[i]));
         }
     }

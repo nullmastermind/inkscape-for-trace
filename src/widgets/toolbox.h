@@ -82,7 +82,7 @@ public:
      * @param callback function to invoke when changes are pushed.
      * @param cbData data to be passed on to the callback function.
      */
-    PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*) = 0, GObject *cbData = 0 );
+    PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*) = nullptr, GObject *cbData = nullptr );
 
     /**
      * Destructor that unregisters the preference callback.
@@ -135,7 +135,7 @@ void delete_connection(GObject * /*obj*/, sigc::connection *connection);
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
                                                        void (*callback)(GtkAdjustment *, GObject *),
-                                                       Inkscape::UI::Widget::UnitTracker *unit_tracker = NULL,
+                                                       Inkscape::UI::Widget::UnitTracker *unit_tracker = nullptr,
                                                        gdouble climb = 0.1, guint digits = 3, double factor = 1.0 );
 
 #endif /* !SEEN_TOOLBOX_H */

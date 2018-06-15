@@ -51,25 +51,25 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
                                    Inkscape::XML::Node * xml,
                                    AppearanceMode mode)
     : Parameter(name, text, description, hidden, indent, ext)
-    , _value(0)
+    , _value(nullptr)
     , _mode(mode)
 {
     // Read XML tree to add enumeration items:
     // printf("Extension Constructor: ");
-    if (xml != NULL) {
+    if (xml != nullptr) {
         Inkscape::XML::Node *child_repr = xml->firstChild();
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             char const * chname = child_repr->name();
             if (!strcmp(chname, INKSCAPE_EXTENSION_NS "option") || !strcmp(chname, INKSCAPE_EXTENSION_NS "_option")) {
-                Glib::ustring * newtext = NULL;
-                Glib::ustring * newvalue = NULL;
+                Glib::ustring * newtext = nullptr;
+                Glib::ustring * newvalue = nullptr;
                 const char * contents = child_repr->firstChild()->content();
 
-                if (contents != NULL) {
+                if (contents != nullptr) {
                     // don't translate when 'item' but do translate when '_option'
                     if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_option")) {
-                        if (child_repr->attribute("msgctxt") != NULL) {
-                            newtext =  new Glib::ustring(g_dpgettext2(NULL, child_repr->attribute("msgctxt"), contents));
+                        if (child_repr->attribute("msgctxt") != nullptr) {
+                            newtext =  new Glib::ustring(g_dpgettext2(nullptr, child_repr->attribute("msgctxt"), contents));
                         } else {
                             newtext =  new Glib::ustring(_(contents));
                         }
@@ -82,7 +82,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
 
 
                 const char * val = child_repr->attribute("value");
-                if (val != NULL) {
+                if (val != nullptr) {
                     newvalue = new Glib::ustring(val);
                 } else {
                     newvalue = new Glib::ustring(contents);
@@ -98,7 +98,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
 
     // Initialize _value with the default value from xml
     // for simplicity : default to the contents of the first xml-child
-    const char * defaultval = NULL;
+    const char * defaultval = nullptr;
     if (!choices.empty()) {
         defaultval = (static_cast<optionentry*> (choices[0]))->value->c_str();
     }
@@ -111,7 +111,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
     if (!paramval.empty()) {
         defaultval = paramval.data();
     }
-    if (defaultval != NULL) {
+    if (defaultval != nullptr) {
         _value = g_strdup(defaultval);  // allocate space for _value
     }
 }
@@ -143,11 +143,11 @@ ParamRadioButton::~ParamRadioButton (void)
  */
 const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    if (in == NULL) {
-        return NULL; /* Can't have NULL string */
+    if (in == nullptr) {
+        return nullptr; /* Can't have NULL string */
     }
 
-    Glib::ustring * settext = NULL;
+    Glib::ustring * settext = nullptr;
     for (auto entr:choices) {
         if ( !entr->value->compare(in) ) {
             settext = entr->value;
@@ -155,7 +155,7 @@ const gchar *ParamRadioButton::set(const gchar * in, SPDocument * /*doc*/, Inksc
         }
     }
     if (settext) {
-        if (_value != NULL) {
+        if (_value != nullptr) {
             g_free(_value);
         }
         _value = g_strdup(settext->c_str());
@@ -215,7 +215,7 @@ void ParamRadioButtonWdg::changed(void)
         Glib::ustring value = _pref->value_from_label(this->get_label());
         _pref->set(value.c_str(), _doc, _node);
     }
-    if (_changeSignal != NULL) {
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
 }
@@ -247,7 +247,7 @@ void ComboWdg::changed(void)
             Glib::ustring value = _base->value_from_label(get_active_text());
             _base->set(value.c_str(), _doc, _node);
     }
-    if (_changeSignal != NULL) {
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
 }
@@ -276,7 +276,7 @@ Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
 Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
@@ -288,7 +288,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     label->show();
     hbox->pack_start(*label, false, false);
 
-    Gtk::ComboBoxText* cbt = 0;
+    Gtk::ComboBoxText* cbt = nullptr;
     bool comboSet = false;
     if (_mode == MINIMAL) {
         cbt = Gtk::manage(new ComboWdg(this, doc, node, changeSignal));

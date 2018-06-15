@@ -322,28 +322,28 @@ struct SPStyleEnum {
 static SPStyleEnum const enum_fill_rule[] = {
     {"nonzero", SP_WIND_RULE_NONZERO},
     {"evenodd", SP_WIND_RULE_EVENODD},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_stroke_linecap[] = {
     {"butt", SP_STROKE_LINECAP_BUTT},
     {"round", SP_STROKE_LINECAP_ROUND},
     {"square", SP_STROKE_LINECAP_SQUARE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_stroke_linejoin[] = {
     {"miter", SP_STROKE_LINEJOIN_MITER},
     {"round", SP_STROKE_LINEJOIN_ROUND},
     {"bevel", SP_STROKE_LINEJOIN_BEVEL},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_style[] = {
     {"normal", SP_CSS_FONT_STYLE_NORMAL},
     {"italic", SP_CSS_FONT_STYLE_ITALIC},
     {"oblique", SP_CSS_FONT_STYLE_OBLIQUE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_size[] = {
@@ -356,13 +356,13 @@ static SPStyleEnum const enum_font_size[] = {
     {"xx-large", SP_CSS_FONT_SIZE_XX_LARGE},
     {"smaller", SP_CSS_FONT_SIZE_SMALLER},
     {"larger", SP_CSS_FONT_SIZE_LARGER},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_variant[] = {
     {"normal", SP_CSS_FONT_VARIANT_NORMAL},
     {"small-caps", SP_CSS_FONT_VARIANT_SMALL_CAPS},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_weight[] = {
@@ -379,7 +379,7 @@ static SPStyleEnum const enum_font_weight[] = {
     {"bold", SP_CSS_FONT_WEIGHT_BOLD},
     {"lighter", SP_CSS_FONT_WEIGHT_LIGHTER},
     {"bolder", SP_CSS_FONT_WEIGHT_BOLDER},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_stretch[] = {
@@ -394,7 +394,7 @@ static SPStyleEnum const enum_font_stretch[] = {
     {"ultra-expanded", SP_CSS_FONT_STRETCH_ULTRA_EXPANDED},
     {"narrower", SP_CSS_FONT_STRETCH_NARROWER},
     {"wider", SP_CSS_FONT_STRETCH_WIDER},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_variant_ligatures[] = {
@@ -408,14 +408,14 @@ static SPStyleEnum const enum_font_variant_ligatures[] = {
     {"no-discretionary-ligatures",   SP_CSS_FONT_VARIANT_LIGATURES_NODISCRETIONARY},
     {"no-historical-ligatures",      SP_CSS_FONT_VARIANT_LIGATURES_NOHISTORICAL},
     {"no-contextual",                SP_CSS_FONT_VARIANT_LIGATURES_NOCONTEXTUAL},
-    {NULL, -1}
+    {nullptr, -1}
 };
     
 static SPStyleEnum const enum_font_variant_position[] = {
     {"normal", SP_CSS_FONT_VARIANT_POSITION_NORMAL},
     {"sub", SP_CSS_FONT_VARIANT_POSITION_SUB},
     {"super", SP_CSS_FONT_VARIANT_POSITION_SUPER},
-    {NULL, -1}
+    {nullptr, -1}
 };
     
 static SPStyleEnum const enum_font_variant_caps[] = {
@@ -426,7 +426,7 @@ static SPStyleEnum const enum_font_variant_caps[] = {
     {"all-petite-caps", SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE},
     {"unicase", SP_CSS_FONT_VARIANT_CAPS_UNICASE},
     {"titling", SP_CSS_FONT_VARIANT_CAPS_TITLING},
-    {NULL, -1}
+    {nullptr, -1}
 };
     
 static SPStyleEnum const enum_font_variant_numeric[] = {
@@ -439,7 +439,7 @@ static SPStyleEnum const enum_font_variant_numeric[] = {
     {"stacked-fractions", SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS},
     {"ordinal", SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL},
     {"slashed-zero", SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO},
-    {NULL, -1}
+    {nullptr, -1}
 };
     
 static SPStyleEnum const enum_font_variant_alternates[] = {
@@ -451,7 +451,7 @@ static SPStyleEnum const enum_font_variant_alternates[] = {
     {"swash", SP_CSS_FONT_VARIANT_ALTERNATES_SWASH},
     {"ornaments", SP_CSS_FONT_VARIANT_ALTERNATES_ORNAMENTS},
     {"annotation", SP_CSS_FONT_VARIANT_ALTERNATES_ANNOTATION},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_font_variant_east_asian[] = {
@@ -465,7 +465,7 @@ static SPStyleEnum const enum_font_variant_east_asian[] = {
     {"full-width", SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH},
     {"proportional-width", SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH},
     {"ruby", SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_text_align[] = {
@@ -475,7 +475,7 @@ static SPStyleEnum const enum_text_align[] = {
     {"right", SP_CSS_TEXT_ALIGN_RIGHT},
     {"center", SP_CSS_TEXT_ALIGN_CENTER},
     {"justify", SP_CSS_TEXT_ALIGN_JUSTIFY},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_text_transform[] = {
@@ -483,14 +483,14 @@ static SPStyleEnum const enum_text_transform[] = {
     {"uppercase", SP_CSS_TEXT_TRANSFORM_UPPERCASE},
     {"lowercase", SP_CSS_TEXT_TRANSFORM_LOWERCASE},
     {"none", SP_CSS_TEXT_TRANSFORM_NONE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_text_anchor[] = {
     {"start", SP_CSS_TEXT_ANCHOR_START},
     {"middle", SP_CSS_TEXT_ANCHOR_MIDDLE},
     {"end", SP_CSS_TEXT_ANCHOR_END},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_white_space[] = {
@@ -499,13 +499,13 @@ static SPStyleEnum const enum_white_space[] = {
     {"nowrap",   SP_CSS_WHITE_SPACE_NOWRAP },
     {"pre-wrap", SP_CSS_WHITE_SPACE_PREWRAP},
     {"pre-line", SP_CSS_WHITE_SPACE_PRELINE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_direction[] = {
     {"ltr", SP_CSS_DIRECTION_LTR},
     {"rtl", SP_CSS_DIRECTION_RTL},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_writing_mode[] = {
@@ -527,7 +527,7 @@ static SPStyleEnum const enum_writing_mode[] = {
     {"horizontal-tb", SP_CSS_WRITING_MODE_LR_TB}, // This is correct, 'direction' distinguishes between 'lr' and 'rl'.
     {"vertical-rl", SP_CSS_WRITING_MODE_TB_RL},
     {"vertical-lr", SP_CSS_WRITING_MODE_TB_LR},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 // CSS WRITING MODES 3
@@ -535,7 +535,7 @@ static SPStyleEnum const enum_text_orientation[] = {
     {"mixed",                 SP_CSS_TEXT_ORIENTATION_MIXED}, // Default
     {"upright",               SP_CSS_TEXT_ORIENTATION_UPRIGHT},
     {"sideways",              SP_CSS_TEXT_ORIENTATION_SIDEWAYS},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_baseline[] = {
@@ -548,21 +548,21 @@ static SPStyleEnum const enum_baseline[] = {
     {"middle",                SP_CSS_BASELINE_MIDDLE},
     {"text-before-edge",      SP_CSS_BASELINE_TEXT_BEFORE_EDGE},
     {"text-after-edge",       SP_CSS_BASELINE_TEXT_AFTER_EDGE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_baseline_shift[] = {
     {"baseline", SP_CSS_BASELINE_SHIFT_BASELINE},
     {"sub",      SP_CSS_BASELINE_SHIFT_SUB},
     {"super",    SP_CSS_BASELINE_SHIFT_SUPER},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_visibility[] = {
     {"hidden", SP_CSS_VISIBILITY_HIDDEN},
     {"collapse", SP_CSS_VISIBILITY_COLLAPSE},
     {"visible", SP_CSS_VISIBILITY_VISIBLE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_overflow[] = {
@@ -570,14 +570,14 @@ static SPStyleEnum const enum_overflow[] = {
     {"hidden", SP_CSS_OVERFLOW_HIDDEN},
     {"scroll", SP_CSS_OVERFLOW_SCROLL},
     {"auto", SP_CSS_OVERFLOW_AUTO},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 // CSS Compositing and Blending Level 1
 static SPStyleEnum const enum_isolation[] = {
     {"auto",             SP_CSS_ISOLATION_AUTO},
     {"isolate",          SP_CSS_ISOLATION_ISOLATE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_blend_mode[] = {
@@ -597,7 +597,7 @@ static SPStyleEnum const enum_blend_mode[] = {
     {"saturation",       SP_CSS_BLEND_SATURATION},
     {"color",            SP_CSS_BLEND_COLOR},
     {"luminosity",       SP_CSS_BLEND_LUMINOSITY},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_display[] = {
@@ -618,7 +618,7 @@ static SPStyleEnum const enum_display[] = {
     {"table-column",  SP_CSS_DISPLAY_TABLE_COLUMN},
     {"table-cell",    SP_CSS_DISPLAY_TABLE_CELL},
     {"table-caption", SP_CSS_DISPLAY_TABLE_CAPTION},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_shape_rendering[] = {
@@ -626,14 +626,14 @@ static SPStyleEnum const enum_shape_rendering[] = {
     {"optimizeSpeed",       SP_CSS_SHAPE_RENDERING_OPTIMIZESPEED},
     {"crispEdges",          SP_CSS_SHAPE_RENDERING_CRISPEDGES},
     {"geometricPrecision",  SP_CSS_SHAPE_RENDERING_GEOMETRICPRECISION},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_color_rendering[] = {
     {"auto",            SP_CSS_COLOR_RENDERING_AUTO},
     {"optimizeSpeed",   SP_CSS_COLOR_RENDERING_OPTIMIZESPEED},
     {"optimizeQuality", SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_image_rendering[] = {
@@ -642,7 +642,7 @@ static SPStyleEnum const enum_image_rendering[] = {
     {"optimizeQuality",       SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY},
     {"crisp-edges",           SP_CSS_IMAGE_RENDERING_CRISPEDGES},
     {"pixelated",             SP_CSS_IMAGE_RENDERING_PIXELATED},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_text_rendering[] = {
@@ -650,32 +650,32 @@ static SPStyleEnum const enum_text_rendering[] = {
     {"optimizeSpeed",      SP_CSS_TEXT_RENDERING_OPTIMIZESPEED},
     {"optimizeLegibility", SP_CSS_TEXT_RENDERING_OPTIMIZELEGIBILITY},
     {"geometricPrecision", SP_CSS_TEXT_RENDERING_GEOMETRICPRECISION},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_enable_background[] = {
     {"accumulate", SP_CSS_BACKGROUND_ACCUMULATE},
     {"new", SP_CSS_BACKGROUND_NEW},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_clip_rule[] = {
     {"nonzero", SP_WIND_RULE_NONZERO},
     {"evenodd", SP_WIND_RULE_EVENODD},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_color_interpolation[] = {
     {"auto", SP_CSS_COLOR_INTERPOLATION_AUTO},
     {"sRGB", SP_CSS_COLOR_INTERPOLATION_SRGB},
     {"linearRGB", SP_CSS_COLOR_INTERPOLATION_LINEARRGB},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 static SPStyleEnum const enum_vector_effect[] = {
     {"none",               SP_VECTOR_EFFECT_NONE},
     {"non-scaling-stroke", SP_VECTOR_EFFECT_NON_SCALING_STROKE},
-    {NULL, -1}
+    {nullptr, -1}
 };
 
 

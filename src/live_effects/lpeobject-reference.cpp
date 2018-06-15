@@ -25,12 +25,12 @@ static void lpeobjectreference_source_modified(SPObject *iSource, guint flags, L
 LPEObjectReference::LPEObjectReference(SPObject* i_owner) : URIReference(i_owner)
 {
     owner=i_owner;
-    lpeobject_href = NULL;
-    lpeobject_repr = NULL;
-    lpeobject = NULL;
+    lpeobject_href = nullptr;
+    lpeobject_repr = nullptr;
+    lpeobject = nullptr;
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(lpeobjectreference_href_changed), this)); // listening to myself, this should be virtual instead
 
-    user_unlink = NULL;
+    user_unlink = nullptr;
 }
 
 LPEObjectReference::~LPEObjectReference(void)
@@ -80,7 +80,7 @@ LPEObjectReference::unlink(void)
 {
     if (lpeobject_href) {
         g_free(lpeobject_href);
-        lpeobject_href = NULL;
+        lpeobject_href = nullptr;
     }
     detach();
 }
@@ -88,7 +88,7 @@ LPEObjectReference::unlink(void)
 void
 LPEObjectReference::start_listening(LivePathEffectObject* to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     lpeobject = to;
@@ -102,8 +102,8 @@ LPEObjectReference::quit_listening(void)
 {
     _modified_connection.disconnect();
     _delete_connection.disconnect();
-    lpeobject_repr = NULL;
-    lpeobject = NULL;
+    lpeobject_repr = nullptr;
+    lpeobject = nullptr;
 }
 
 static void

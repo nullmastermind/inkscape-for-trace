@@ -26,7 +26,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
         const Glib::ustring &key,
         Inkscape::UI::Widget::Registry *wr,
         Effect *effect)
-    : ArrayParam<std::vector<Satellite> >(label, tip, key, wr, effect, 0), _knoth(NULL)
+    : ArrayParam<std::vector<Satellite> >(label, tip, key, wr, effect, 0), _knoth(nullptr)
 {
     _knot_shape = SP_KNOT_SHAPE_DIAMOND;
     _knot_mode = SP_KNOT_MODE_XOR;
@@ -36,7 +36,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _global_knot_hide = false;
     _current_zoom = 0;
     _effectType = FILLET_CHAMFER;
-    _last_pathvector_satellites = NULL;
+    _last_pathvector_satellites = nullptr;
     param_widget_is_visible(false);
 }
 
@@ -269,7 +269,7 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                             "<b>Ctrl+Alt+Click</b> reset");
                 }
                 FilletChamferKnotHolderEntity *e = new FilletChamferKnotHolderEntity(this, index);
-                e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),_knot_shape, _knot_mode, _knot_color);
+                e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),_knot_shape, _knot_mode, _knot_color);
                 knotholder->add(e);
             }
             index++;

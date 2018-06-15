@@ -151,7 +151,7 @@ struct ColorMatrixLuminanceToAlpha {
 void FilterColorMatrix::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *input = slot.getcairo(_input);
-    cairo_surface_t *out = NULL;
+    cairo_surface_t *out = nullptr;
 
     // We may need to transform input surface to correct color interpolation space. The input surface
     // might be used as input to another primitive but it is likely that all the primitives in a given

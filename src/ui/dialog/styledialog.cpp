@@ -240,7 +240,7 @@ Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog 
 StyleDialog::StyleDialog() :
     UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE),
     _updating(false),
-    _textNode(NULL),
+    _textNode(nullptr),
     _desktopTracker()
 {
 #ifdef DEBUG_STYLEDIALOG
@@ -377,8 +377,8 @@ StyleDialog::~StyleDialog()
 Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
 {
 
-    Inkscape::XML::Node *styleNode = NULL;
-    Inkscape::XML::Node *textNode = NULL;
+    Inkscape::XML::Node *styleNode = nullptr;
+    Inkscape::XML::Node *textNode = nullptr;
 
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
@@ -392,7 +392,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
                 }
             }
 
-            if (textNode == NULL) {
+            if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
                 textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
@@ -402,7 +402,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
         }
     }
 
-    if (styleNode == NULL) {
+    if (styleNode == nullptr) {
         // Style element not found, create one
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
@@ -410,7 +410,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
 
-        root->addChild(styleNode, NULL);
+        root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
     }
 
@@ -439,7 +439,7 @@ void StyleDialog::_readStyleElement()
     _store->clear();
 
     Inkscape::XML::Node * textNode = _getStyleTextNode();
-    if (textNode == NULL) {
+    if (textNode == nullptr) {
         std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
     }
 
@@ -1015,7 +1015,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
     std::cout << "StyleDialog::_handleButtonEvent: Entrance" << std::endl;
 #endif
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
-        Gtk::TreeViewColumn *col = 0;
+        Gtk::TreeViewColumn *col = nullptr;
         Gtk::TreeModel::Path path;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
@@ -1093,7 +1093,7 @@ void StyleDialog::_updateCSSPanel()
 
             properties = row[_mColumns._colProperties];
             sheet = row[_mColumns._colProperties];
-            _objObserver.set( NULL );
+            _objObserver.set( nullptr );
         } else {
             _cssPane->_propRenderer->property_editable() = false;
             _cssPane->_sheetRenderer->property_editable() = false;
@@ -1108,7 +1108,7 @@ void StyleDialog::_updateCSSPanel()
                 sheet = prow[_mColumns._colProperties];
             }
             _objObserver.set( objects[0] );
-            if (objects[0] && objects[0]->getAttribute("style") != NULL) {
+            if (objects[0] && objects[0]->getAttribute("style") != nullptr) {
                 properties =  objects[0]->getAttribute("style");
                 attr =  objects[0]->getAttribute("style");
             }
@@ -1422,7 +1422,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 #endif
 
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
-        Gtk::TreeViewColumn *col = 0;
+        Gtk::TreeViewColumn *col = nullptr;
         Gtk::TreeModel::Path path;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
@@ -1490,7 +1490,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 
                             if (objects[0]) {
                                 if (properties.empty()) {
-                                    objects[0]->setAttribute("style", NULL);
+                                    objects[0]->setAttribute("style", nullptr);
                                 } else {
                                     objects[0]->setAttribute("style", properties);
                                 }

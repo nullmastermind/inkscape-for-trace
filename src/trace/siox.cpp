@@ -344,8 +344,8 @@ SioxImage::SioxImage(unsigned int widthArg, unsigned int heightArg)
  */
 SioxImage::SioxImage(const SioxImage &other)
 {
-    pixdata = NULL;
-    cmdata  = NULL;
+    pixdata = nullptr;
+    cmdata  = nullptr;
     assign(other);
 }
 
@@ -654,14 +654,14 @@ GdkPixbuf *SioxImage::getGdkPixbuf()
     guchar *pixdata = (guchar *)
           malloc(sizeof(guchar) * width * height * n_channels);
     if (!pixdata)
-        return NULL;
+        return nullptr;
 
     int rowstride  = width * n_channels;
 
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata,
                         GDK_COLORSPACE_RGB,
                         has_alpha, 8, width, height,
-                        rowstride, NULL, NULL);
+                        rowstride, nullptr, nullptr);
 
     //### Fill in the cells with RGB values
     int row  = 0;
@@ -728,14 +728,14 @@ const float Siox::CERTAIN_BACKGROUND_CONFIDENCE=0.0f;
  *  Construct a Siox engine
  */
 Siox::Siox() :
-    sioxObserver(0),
+    sioxObserver(nullptr),
     keepGoing(true),
     width(0),
     height(0),
     pixelCount(0),
-    image(0),
-    cm(0),
-    labelField(0)
+    image(nullptr),
+    cm(nullptr),
+    labelField(nullptr)
 {
     init();
 }
@@ -749,9 +749,9 @@ Siox::Siox(SioxObserver *observer) :
     width(0),
     height(0),
     pixelCount(0),
-    image(0),
-    cm(0),
-    labelField(0)
+    image(nullptr),
+    cm(nullptr),
+    labelField(nullptr)
 {
     init();
 }

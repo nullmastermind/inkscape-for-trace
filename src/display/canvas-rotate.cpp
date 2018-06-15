@@ -48,14 +48,14 @@ static void sp_canvas_rotate_init (SPCanvasRotate *rotate)
     rotate->pickable = true; // So we can receive events.
     rotate->angle = 0.0;
     rotate->start_angle = -1000;
-    rotate->surface_copy = NULL;
-    rotate->surface_rotated = NULL;
+    rotate->surface_copy = nullptr;
+    rotate->surface_rotated = nullptr;
 }
 
 namespace {
 static void sp_canvas_rotate_destroy (SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ROTATE (object));
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_rotate_parent_class)->destroy) {
@@ -68,15 +68,15 @@ static void sp_canvas_rotate_update( SPCanvasItem *item, Geom::Affine const &/*a
 {
     SPCanvasRotate *cr = SP_CANVAS_ROTATE(item);
 
-    if (cr->surface_copy == NULL) {
+    if (cr->surface_copy == nullptr) {
         // std::cout << "sp_canvas_rotate_update: surface_copy is NULL" << std::endl;
         return;
     }
 
     // Destroy surface_rotated if it already exists.
-    if (cr->surface_rotated != NULL) {
+    if (cr->surface_rotated != nullptr) {
         cairo_surface_destroy (cr->surface_rotated);
-        cr->surface_rotated = NULL;
+        cr->surface_rotated = nullptr;
     }
 
     // Create rotated surface
@@ -114,7 +114,7 @@ static void sp_canvas_rotate_render( SPCanvasItem *item, SPCanvasBuf *buf)
         return;
     }
 
-    if (cr->surface_rotated == NULL ) {
+    if (cr->surface_rotated == nullptr ) {
         // std::cout << "  surface_rotated is NULL" << std::endl;
         return;
     }
@@ -206,13 +206,13 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
             sp_canvas_item_hide (item);
 
             cr->start_angle = -1000;
-            if (cr->surface_copy != NULL) {
+            if (cr->surface_copy != nullptr) {
                 cairo_surface_destroy( cr->surface_copy );
-                cr->surface_copy = NULL;
+                cr->surface_copy = nullptr;
             }
-            if (cr->surface_rotated != NULL) {
+            if (cr->surface_rotated != nullptr) {
                 cairo_surface_destroy( cr->surface_rotated );
-                cr->surface_rotated = NULL;
+                cr->surface_rotated = nullptr;
             }
             // sp_canvas_item_show (desktop->drawing);
 
@@ -237,7 +237,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
 
 void sp_canvas_rotate_start (SPCanvasRotate *canvas_rotate, cairo_surface_t *background)
 {
-    if (background == NULL) {
+    if (background == nullptr) {
         std::cerr << "sp_canvas_rotate_start: background is NULL!" << std::endl;
         return;
     }
@@ -254,7 +254,7 @@ void sp_canvas_rotate_start (SPCanvasRotate *canvas_rotate, cairo_surface_t *bac
 // Paint the canvas ourselves for speed....
 void sp_canvas_rotate_paint (SPCanvasRotate *canvas_rotate, cairo_surface_t *background)
 {
-    if (background == NULL) {
+    if (background == nullptr) {
         std::cerr << "sp_canvas_rotate_paint: background is NULL!" << std::endl;
         return;
     }

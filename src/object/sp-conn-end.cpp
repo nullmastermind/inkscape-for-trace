@@ -18,7 +18,7 @@ static void change_endpts(SPCurve *const curve, double const endPos[2]);
 
 SPConnEnd::SPConnEnd(SPObject *const owner)
     : ref(owner)
-    , href(NULL)
+    , href(nullptr)
     // Default to center connection endpoint
     , _changed_connection()
     , _delete_connection()
@@ -31,7 +31,7 @@ static SPObject const *get_nearest_common_ancestor(SPObject const *const obj, SP
 {
     SPObject const *anc_sofar = obj;
     for (unsigned i = 0; i < 2; ++i) {
-        if ( objs[i] != NULL ) {
+        if ( objs[i] != nullptr ) {
             anc_sofar = anc_sofar->nearestCommonAncestor(objs[i]);
         }
     }
@@ -141,7 +141,7 @@ static void sp_conn_get_route_and_redraw(SPPath *const path, const bool updatePa
         return;
     }
 
-    SPItem *h2attItem[2] = {0};
+    SPItem *h2attItem[2] = {nullptr};
     path->connEndPair.getAttachedItems(h2attItem);
 
     SPObject const *const ancestor = get_nearest_common_ancestor(path, h2attItem);
@@ -221,13 +221,13 @@ static void sp_conn_end_deleted(SPObject *, SPObject *const owner, unsigned cons
 {
     char const * const attrs[] = {
         "inkscape:connection-start", "inkscape:connection-end"};
-    owner->getRepr()->setAttribute(attrs[handle_ix], NULL);
+    owner->getRepr()->setAttribute(attrs[handle_ix], nullptr);
     /* I believe this will trigger sp_conn_end_href_changed. */
 }
 
 void sp_conn_end_detach(SPObject *const owner, unsigned const handle_ix)
 {
-    sp_conn_end_deleted(NULL, owner, handle_ix);
+    sp_conn_end_deleted(nullptr, owner, handle_ix);
 }
 
 void SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
@@ -255,7 +255,7 @@ void SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
     if (!validRef) {
         ref.detach();
         g_free(href);
-        href = NULL;
+        href = nullptr;
     }
 }
 
@@ -263,7 +263,7 @@ void SPConnEnd::setAttacherHref(gchar const *value, SPPath* /*path*/)
 void sp_conn_end_href_changed(SPObject */*old_ref*/, SPObject */*ref*/,
         SPConnEnd *connEndPtr, SPPath *const path, unsigned const handle_ix)
 {
-    g_return_if_fail(connEndPtr != NULL);
+    g_return_if_fail(connEndPtr != nullptr);
     SPConnEnd &connEnd = *connEndPtr;
     connEnd._delete_connection.disconnect();
     connEnd._transformed_connection.disconnect();

@@ -72,16 +72,16 @@ class XmlSource
 {
 public:
     XmlSource()
-        : filename(0),
-          encoding(0),
-          fp(NULL),
+        : filename(nullptr),
+          encoding(nullptr),
+          fp(nullptr),
           firstFewLen(0),
           LoadEntities(false),
           cachedData(),
           cachedPos(0),
           dummy("x"),
-          instr(NULL),
-          gzin(NULL)
+          instr(nullptr),
+          gzin(nullptr)
     {
         for (int k=0;k<4;k++)
         {
@@ -93,7 +93,7 @@ public:
         close();
         if ( encoding ) {
             g_free(encoding);
-            encoding = 0;
+            encoding = nullptr;
         }
     }
 
@@ -138,7 +138,7 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
             if ( (some >= 2) && (firstFew[0] == 0x1f) && (firstFew[1] == 0x8b) ) {
                 //g_message(" the file being read is gzip'd. extract it");
                 fclose(fp);
-                fp = 0;
+                fp = nullptr;
                 fp = Inkscape::IO::fopen_utf8name(filename, "r");
                 instr = new Inkscape::IO::UriInputStream(fp, dummy);
                 gzin = new Inkscape::IO::GzipInputStream(*instr);
@@ -198,14 +198,14 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
 
         GRegex *regex = g_regex_new(
             "<!ENTITY\\s+[^>\\s]+\\s+(SYSTEM|PUBLIC\\s+\"[^>\"]+\")\\s+\"[^>\"]+\"\\s*>",
-            G_REGEX_CASELESS, G_REGEX_MATCH_NEWLINE_ANY, NULL);
+            G_REGEX_CASELESS, G_REGEX_MATCH_NEWLINE_ANY, nullptr);
 
         g_regex_match (regex, this->cachedData.c_str(), G_REGEX_MATCH_NEWLINE_ANY, &info);
 
         while (g_match_info_matches (info)) {
             if (g_match_info_fetch_pos (info, 1, &start, &end))
                 this->cachedData.erase(start, end - start);
-            g_match_info_next (info, NULL);
+            g_match_info_next (info, nullptr);
         }
         g_match_info_free(info);
         g_regex_unref(regex);
@@ -302,17 +302,17 @@ int XmlSource::close()
     if ( gzin ) {
         gzin->close();
         delete gzin;
-        gzin = 0;
+        gzin = nullptr;
     }
     if ( instr ) {
         instr->close();
-        fp = 0;
+        fp = nullptr;
         delete instr;
-        instr = 0;
+        instr = nullptr;
     }
     if ( fp ) {
         fclose(fp);
-        fp = 0;
+        fp = nullptr;
     }
     return 0;
 }
@@ -323,15 +323,15 @@ int XmlSource::close()
  */
 Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 {
-    xmlDocPtr doc = 0;
-    Document * rdoc = 0;
+    xmlDocPtr doc = nullptr;
+    Document * rdoc = nullptr;
 
     xmlSubstituteEntitiesDefault(1);
 
-    g_return_val_if_fail(filename != NULL, NULL);
+    g_return_val_if_fail(filename != nullptr, NULL);
     if (!Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS)) {
         g_warning("Can't open file: %s (doesn't exist)", filename);
-        return NULL;
+        return nullptr;
     }
     /* fixme: A file can disappear at any time, including between now and when we actually try to
      * open it.  Get rid of the above test once we're sure that we correctly handle
@@ -340,10 +340,10 @@ Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     // TODO: bulia, please look over
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError* error = NULL;
+    GError* error = nullptr;
     // TODO: need to replace with our own fopen and reading
     gchar* localFilename = g_filename_from_utf8(filename, -1, &bytesRead, &bytesWritten, &error);
-    g_return_val_if_fail(localFilename != NULL, NULL);
+    g_return_val_if_fail(localFilename != nullptr, NULL);
 
     Inkscape::IO::dump_fopen_call(filename, "N");
 
@@ -383,14 +383,14 @@ Document *sp_repr_read_mem (const gchar * buffer, gint length, const gchar *defa
 
     xmlSubstituteEntitiesDefault(1);
 
-    g_return_val_if_fail (buffer != NULL, NULL);
+    g_return_val_if_fail (buffer != nullptr, NULL);
 
     int parser_options = XML_PARSE_HUGE | XML_PARSE_RECOVER;
     parser_options |= XML_PARSE_NONET; // TODO: should we allow network access?
                                        // proper solution would be to check the preference "/options/externalresources/xml/allow_net_access"
                                        // as done in XmlSource::readXml which gets called by the analogous sp_repr_read_file()
                                        // but sp_repr_read_mem() seems to be called in locations where Inkscape::Preferences::get() fails badly
-    doc = xmlReadMemory (const_cast<gchar *>(buffer), length, NULL, NULL, parser_options);
+    doc = xmlReadMemory (const_cast<gchar *>(buffer), length, nullptr, nullptr, parser_options);
 
     rdoc = sp_repr_do_read (doc, default_ns);
     if (doc) {
@@ -465,20 +465,20 @@ void promote_to_namespace(Node *repr, const gchar *prefix) {
  */
 Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 {
-    if (doc == NULL) {
-        return NULL;
+    if (doc == nullptr) {
+        return nullptr;
     }
     xmlNodePtr node=xmlDocGetRootElement (doc);
-    if (node == NULL) {
-        return NULL;
+    if (node == nullptr) {
+        return nullptr;
     }
 
     std::map<std::string, std::string> prefix_map;
 
     Document *rdoc = new Inkscape::XML::SimpleDocument();
 
-    Node *root=NULL;
-    for ( node = doc->children ; node != NULL ; node = node->next ) {
+    Node *root=nullptr;
+    for ( node = doc->children ; node != nullptr ; node = node->next ) {
         if (node->type == XML_ELEMENT_NODE) {
             Node *repr=sp_repr_svg_read_node(rdoc, node, default_ns, prefix_map);
             rdoc->appendChild(repr);
@@ -487,7 +487,7 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
             if (!root) {
                 root = repr;
             } else {
-                root = NULL;
+                root = nullptr;
                 break;
             }
         } else if ( node->type == XML_COMMENT_NODE || node->type == XML_PI_NODE ) {
@@ -497,7 +497,7 @@ Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
         }
     }
 
-    if (root != NULL) {
+    if (root != nullptr) {
         /* promote elements of some XML documents that don't use namespaces
          * into their default namespace */
         if ( default_ns && !strchr(root->name(), ':') ) {
@@ -535,11 +535,11 @@ gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *nam
             prefix_map[reinterpret_cast<const char*>(prefix)] = reinterpret_cast<const char*>(ns->href);
         }
         else {
-            prefix = NULL;
+            prefix = nullptr;
         }
     }
     else {
-        prefix = NULL;
+        prefix = nullptr;
     }
 
     if (prefix) {
@@ -557,8 +557,8 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
 
     if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE) {
 
-        if (node->content == NULL || *(node->content) == '\0') {
-            return NULL; // empty text node
+        if (node->content == nullptr || *(node->content) == '\0') {
+            return nullptr; // empty text node
         }
 
         // Since libxml2 2.9.0, only element nodes are checked, thus check parent.
@@ -571,7 +571,7 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
             ; // skip all whitespace
 
         if (!(*p)) { // this is an all-whitespace node, and preserve == default
-            return NULL; // we do not preserve all-whitespace nodes unless we are asked to
+            return nullptr; // we do not preserve all-whitespace nodes unless we are asked to
         }
 
         // We keep track of original node type so that CDATA sections are preserved on output.
@@ -589,14 +589,14 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
     }
 
     if (node->type == XML_ENTITY_DECL) {
-        return NULL;
+        return nullptr;
     }
 
     sp_repr_qualified_name (c, 256, node->ns, node->name, default_ns, prefix_map);
     Node *repr = xml_doc->createElement(c);
     /* TODO remember node->ns->prefix if node->ns != NULL */
 
-    for (prop = node->properties; prop != NULL; prop = prop->next) {
+    for (prop = node->properties; prop != nullptr; prop = prop->next) {
         if (prop->children) {
             sp_repr_qualified_name (c, 256, prop->ns, prop->name, default_ns, prefix_map);
             repr->setAttribute(c, reinterpret_cast<gchar*>(prop->children->content));
@@ -608,7 +608,7 @@ static Node *sp_repr_svg_read_node (Document *xml_doc, xmlNodePtr node, const gc
         repr->setContent(reinterpret_cast<gchar*>(node->content));
     }
 
-    for (child = node->xmlChildrenNode; child != NULL; child = child->next) {
+    for (child = node->xmlChildrenNode; child != nullptr; child = child->next) {
         Node *crepr = sp_repr_svg_read_node (xml_doc, child, default_ns, prefix_map);
         if (crepr) {
             repr->appendChild(crepr);
@@ -660,7 +660,7 @@ Glib::ustring sp_repr_save_buf(Document *doc)
     Inkscape::IO::StringOutputStream souts;
     Inkscape::IO::OutputStreamWriter outs(souts);
 
-    sp_repr_save_writer(doc, &outs, SP_INKSCAPE_NS_URI, 0, 0);
+    sp_repr_save_writer(doc, &outs, SP_INKSCAPE_NS_URI, nullptr, nullptr);
 
     outs.close();
     Glib::ustring buf = souts.getString();
@@ -675,7 +675,7 @@ void sp_repr_save_stream(Document *doc, FILE *fp, gchar const *default_ns, bool 
 {
     Inkscape::URI dummy("x");
     Inkscape::IO::UriOutputStream bout(fp, dummy);
-    Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : NULL;
+    Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : nullptr;
     Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter( *gout ) : new Inkscape::IO::OutputStreamWriter( bout );
 
     sp_repr_save_writer(doc, out, default_ns, old_href_abs_base, new_href_abs_base);
@@ -710,7 +710,7 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
 
     Inkscape::IO::dump_fopen_call( filename, "B" );
     FILE *file = Inkscape::IO::fopen_utf8name(filename, "w");
-    if (file == NULL) {
+    if (file == nullptr) {
         return false;
     }
 
@@ -744,7 +744,7 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
  */
 bool sp_repr_save_file(Document *doc, gchar const *const filename, gchar const *default_ns)
 {
-    return sp_repr_save_rebased_file(doc, filename, default_ns, NULL, NULL);
+    return sp_repr_save_rebased_file(doc, filename, default_ns, nullptr, nullptr);
 }
 
 
@@ -864,7 +864,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
 {
     using Inkscape::Util::ptr_shared;
 
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
 
     // Clean unnecessary attributes and stype properties. (Controlled by preferences.)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -882,7 +882,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
 
     Glib::QueryQuark elide_prefix=GQuark(0);
     if ( default_ns && ns_map.find(GQuark(0)) == ns_map.end() ) {
-        elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, NULL));
+        elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, nullptr));
     }
 
     List<AttributeRecord const> attributes=repr->attributeList();
@@ -964,10 +964,10 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
                                    gchar const *old_href_base,
                                    gchar const *new_href_base )
 {
-    Node *child = 0;
+    Node *child = nullptr;
     bool loose = false;
 
-    g_return_if_fail (repr != NULL);
+    g_return_if_fail (repr != nullptr);
 
     if ( indent_level > 16 ) {
         indent_level = 16;
@@ -993,7 +993,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
     gchar const *xml_space_attr = repr->attribute("xml:space");
-    if (xml_space_attr != NULL && !strcmp(xml_space_attr, "preserve")) {
+    if (xml_space_attr != nullptr && !strcmp(xml_space_attr, "preserve")) {
         add_whitespace = false;
     }
 
@@ -1017,7 +1017,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     }
 
     loose = TRUE;
-    for (child = repr->firstChild() ; child != NULL; child = child->next()) {
+    for (child = repr->firstChild() ; child != nullptr; child = child->next()) {
         if (child->type() == Inkscape::XML::TEXT_NODE) {
             loose = FALSE;
             break;
@@ -1028,7 +1028,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         if (loose && add_whitespace) {
             out.writeString( "\n" );
         }
-        for (child = repr->firstChild(); child != NULL; child = child->next()) {
+        for (child = repr->firstChild(); child != nullptr; child = child->next()) {
             sp_repr_write_stream(child, out, ( loose ? indent_level + 1 : 0 ),
                                  add_whitespace, elide_prefix, inlineattrs, indent,
                                  old_href_base, new_href_base);

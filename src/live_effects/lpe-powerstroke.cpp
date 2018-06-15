@@ -450,12 +450,12 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                         if (arc0) {
                             build_from_sbasis(pb,arc0->toSBasis(), tol, false);
                             delete arc0;
-                            arc0 = NULL;
+                            arc0 = nullptr;
                         }
                         if (arc1) {
                             build_from_sbasis(pb,arc1->toSBasis(), tol, false);
                             delete arc1;
-                            arc1 = NULL;
+                            arc1 = nullptr;
                         }
 
                         break;

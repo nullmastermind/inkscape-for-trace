@@ -29,21 +29,21 @@ namespace Inkscape {
 
 URIReference::URIReference(SPObject *owner)
     : _owner(owner)
-    , _owner_document(NULL)
-    , _obj(NULL)
-    , _uri(NULL)
+    , _owner_document(nullptr)
+    , _obj(nullptr)
+    , _uri(nullptr)
 {
-    g_assert(_owner != NULL);
+    g_assert(_owner != nullptr);
     /* FIXME !!! attach to owner's destroy signal to clean up in case */
 }
 
 URIReference::URIReference(SPDocument *owner_document)
-    : _owner(NULL)
+    : _owner(nullptr)
     , _owner_document(owner_document)
-    , _obj(NULL)
-    , _uri(NULL)
+    , _obj(nullptr)
+    , _uri(nullptr)
 {
-    g_assert(_owner_document != NULL);
+    g_assert(_owner_document != nullptr);
 }
 
 URIReference::~URIReference() { detach(); }
@@ -109,7 +109,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
 
 void URIReference::attach(const URI &uri)
 {
-    SPDocument *document = NULL;
+    SPDocument *document = nullptr;
 
     // Attempt to get the document that contains the URI
     if (_owner) {
@@ -134,7 +134,7 @@ void URIReference::attach(const URI &uri)
         if (!path.empty()) {
             document = document->createChildDoc(path);
         } else {
-            document = NULL;
+            document = nullptr;
         }
     }
     if (!document) {
@@ -153,7 +153,7 @@ void URIReference::attach(const URI &uri)
     /* for now this handles the minimal xpointer form that SVG 1.0
      * requires of us
      */
-    gchar *id = NULL;
+    gchar *id = nullptr;
     if (!strncmp(fragment, "xpointer(", 9)) {
         /* FIXME !!! this is wasteful */
         /* FIXME: It looks as though this is including "))" in the id.  I suggest moving
@@ -189,14 +189,14 @@ void URIReference::detach()
 {
     _connection.disconnect();
     delete _uri;
-    _uri = NULL;
-    _setObject(NULL);
+    _uri = nullptr;
+    _setObject(nullptr);
 }
 
 void URIReference::_setObject(SPObject *obj)
 {
     if (obj && !_acceptObject(obj)) {
-        obj = NULL;
+        obj = nullptr;
     }
 
     if (obj == _obj)
@@ -224,7 +224,7 @@ void URIReference::_setObject(SPObject *obj)
 void URIReference::_release(SPObject *obj)
 {
     g_assert(_obj == obj);
-    _setObject(NULL);
+    _setObject(nullptr);
 }
 
 } /* namespace Inkscape */
@@ -233,7 +233,7 @@ void URIReference::_release(SPObject *obj)
 
 SPObject *sp_css_uri_reference_resolve(SPDocument *document, const gchar *uri)
 {
-    SPObject *ref = NULL;
+    SPObject *ref = nullptr;
 
     if (document && uri && (strncmp(uri, "url(", 4) == 0)) {
         gchar *trimmed = extract_uri(uri);
@@ -248,7 +248,7 @@ SPObject *sp_css_uri_reference_resolve(SPDocument *document, const gchar *uri)
 
 SPObject *sp_uri_reference_resolve(SPDocument *document, const gchar *uri)
 {
-    SPObject *ref = NULL;
+    SPObject *ref = nullptr;
 
     if (uri && (*uri == '#')) {
         ref = document->getObjectById(uri + 1);

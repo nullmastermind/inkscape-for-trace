@@ -52,8 +52,8 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_scr
     , _fullscreen(full_screen)
     , _timer(timer)
     , _scale(scale)
-    , _view(NULL)
-    , _ctrlwin(NULL)
+    , _view(nullptr)
+    , _ctrlwin(nullptr)
 {
     // setup initial document
     Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_primary(); // TODO: is inkview always launched on primary monitor?
@@ -184,7 +184,7 @@ void SPSlideShow::show_next()
 {
     waiting_cursor();
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     while (!doc && (_current < _slides.size() - 1)) {
         doc = SPDocument::createNewDoc ((_slides[++_current]).c_str(), TRUE, false);
     }
@@ -200,7 +200,7 @@ void SPSlideShow::show_prev()
 {
     waiting_cursor();
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     while (!doc && (_current > 0)) {
         doc = SPDocument::createNewDoc ((_slides[--_current]).c_str(), TRUE, false);
     }
@@ -216,7 +216,7 @@ void SPSlideShow::goto_first()
 {
     waiting_cursor();
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     int current = 0;
     while ( !doc && (current < _slides.size() - 1)) {
         doc = SPDocument::createNewDoc((_slides[current++]).c_str(), TRUE, false);
@@ -234,7 +234,7 @@ void SPSlideShow::goto_last()
 {
     waiting_cursor();
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     int current = _slides.size() - 1;
     while (!doc && (current >= 0)) {
         doc = SPDocument::createNewDoc((_slides[current--]).c_str(), TRUE, false);
@@ -260,7 +260,7 @@ bool SPSlideShow::timer_callback()
 bool SPSlideShow::ctrlwin_delete (GdkEventAny */*event*/)
 {
     if(_ctrlwin) delete _ctrlwin;
-    _ctrlwin = NULL;
+    _ctrlwin = nullptr;
     return true;
 }
 

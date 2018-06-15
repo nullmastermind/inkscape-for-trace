@@ -334,7 +334,7 @@ public:
      * Returns a list of all 3D boxes in the current selection which are associated to @c
      * persp. If @c pers is @c NULL, return all selected boxes.
      */
-    std::list<SPBox3D *> const box3DList(Persp3D *persp = NULL);
+    std::list<SPBox3D *> const box3DList(Persp3D *persp = nullptr);
 
     /**
      * Returns the desktop the selection is bound to

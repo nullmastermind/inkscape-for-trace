@@ -770,8 +770,8 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
  * by sub-manipulators, for example TransformHandleSet and ControlPointSelection. */
 void MultiPathManipulator::_commit(CommitEvent cps)
 {
-    gchar const *reason = NULL;
-    gchar const *key = NULL;
+    gchar const *reason = nullptr;
+    gchar const *key = nullptr;
     switch(cps) {
     case COMMIT_MOUSE_MOVE:
         reason = _("Move nodes");

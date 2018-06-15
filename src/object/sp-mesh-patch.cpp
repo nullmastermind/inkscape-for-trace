@@ -21,7 +21,7 @@
 
 SPMeshpatch* SPMeshpatch::getNextMeshpatch()
 {
-    SPMeshpatch *result = 0;
+    SPMeshpatch *result = nullptr;
 
     for (SPObject* obj = getNext(); obj && !result; obj = obj->getNext()) {
         if (SP_IS_MESHPATCH(obj)) {
@@ -34,7 +34,7 @@ SPMeshpatch* SPMeshpatch::getNextMeshpatch()
 
 SPMeshpatch* SPMeshpatch::getPrevMeshpatch()
 {
-    SPMeshpatch *result = 0;
+    SPMeshpatch *result = nullptr;
 
     for (SPObject* obj = getPrev(); obj; obj = obj->getPrev()) {
         // The closest previous SPObject that is an SPMeshpatch *should* be ourself.
@@ -58,7 +58,7 @@ SPMeshpatch* SPMeshpatch::getPrevMeshpatch()
  * Mesh Patch
  */
 SPMeshpatch::SPMeshpatch() : SPObject() {
-    this->tensor_string = NULL;
+    this->tensor_string = nullptr;
 }
 
 SPMeshpatch::~SPMeshpatch() {

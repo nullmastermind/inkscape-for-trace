@@ -22,10 +22,10 @@
 IntLigne::IntLigne()
 {
     nbBord = maxBord = 0;
-    bords = NULL;
+    bords = nullptr;
 
     nbRun = maxRun = 0;
-    runs = NULL;
+    runs = nullptr;
 
     firstAc = lastAc = -1;
 }
@@ -36,12 +36,12 @@ IntLigne::~IntLigne()
     if ( maxBord > 0 ) {
         g_free(bords);
         nbBord = maxBord = 0;
-        bords = NULL;
+        bords = nullptr;
     }
     if ( maxRun > 0 ) {
         g_free(runs);
         nbRun = maxRun = 0;
-        runs = NULL;
+        runs = nullptr;
     }
 }
 

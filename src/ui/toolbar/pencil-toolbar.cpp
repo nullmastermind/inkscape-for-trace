@@ -304,7 +304,7 @@ static void sp_flatten_spiro_bspline(GtkWidget * /*widget*/, GObject *obj)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
     auto selected = desktop->getSelection()->items();
-    SPLPEItem* lpeitem = NULL;
+    SPLPEItem* lpeitem = nullptr;
     for (auto it(selected.begin()); it != selected.end(); ++it){
         lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
@@ -347,7 +347,7 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
     auto selected = desktop->getSelection()->items();
-    SPLPEItem* lpeitem = NULL;
+    SPLPEItem* lpeitem = nullptr;
     for (auto it(selected.begin()); it != selected.end(); ++it){
         lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
@@ -497,7 +497,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 {
     sp_add_freehand_mode_toggle(mainActions, holder, true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
 
     
     /* min pressure */
@@ -505,10 +505,10 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         eact = create_adjustment_action( "MinPressureAction",
                                          _("Min pressure"), _("Min:"), _("Min percent of pressure"),
                                          "/tools/freehand/pencil/minpressure", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 100, 1, 0,
-                                         0, 0, 0,
-                                         sp_minpressure_value_changed, NULL, 0 ,0);
+                                         nullptr, nullptr, 0,
+                                         sp_minpressure_value_changed, nullptr, 0 ,0);
                                          
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "minpressure", eact );
@@ -523,10 +523,10 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         eact = create_adjustment_action( "MaxPressureAction",
                                          _("Max pressure"), _("Max:"), _("Max percent of pressure"),
                                          "/tools/freehand/pencil/maxpressure", 100,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 100, 1, 0,
-                                         0, 0, 0,
-                                         sp_maxpressure_value_changed, NULL, 0 ,0);
+                                         nullptr, nullptr, 0,
+                                         sp_maxpressure_value_changed, nullptr, 0 ,0);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         g_object_set_data( holder, "maxpressure", eact );
         if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
@@ -556,7 +556,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     }
     /* Tolerance */
     {
-        gchar const* labels[] = {_("(many nodes, rough)"), _("(default)"), 0, 0, 0, 0, _("(few nodes, smooth)")};
+        gchar const* labels[] = {_("(many nodes, rough)"), _("(default)"), nullptr, nullptr, nullptr, nullptr, _("(few nodes, smooth)")};
         gdouble values[] = {1, 10, 20, 30, 50, 75, 100};
         eact = create_adjustment_action( "PencilToleranceAction",
                                          _("Smoothing:"), _("Smoothing: "),
@@ -568,7 +568,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                          1, 100.0, 0.5, 1.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_pencil_tb_tolerance_value_changed,
-                                         NULL /*unit tracker*/,
+                                         nullptr /*unit tracker*/,
                                          1, 2);
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

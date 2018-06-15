@@ -288,13 +288,13 @@ Inkscape::XML::Node* SPFeConvolveMatrix::write(Inkscape::XML::Document *doc, Ink
 }
 
 void SPFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_CONVOLVEMATRIX);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterConvolveMatrix *nr_convolve = dynamic_cast<Inkscape::Filters::FilterConvolveMatrix*>(nr_primitive);
-    g_assert(nr_convolve != NULL);
+    g_assert(nr_convolve != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

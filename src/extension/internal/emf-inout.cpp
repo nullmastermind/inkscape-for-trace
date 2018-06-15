@@ -80,7 +80,7 @@ Emf::~Emf (void) //The destructor
 bool
 Emf::check (Inkscape::Extension::Extension * /*module*/)
 {
-    if (NULL == Inkscape::Extension::db.get(PRINT_EMF))
+    if (nullptr == Inkscape::Extension::db.get(PRINT_EMF))
         return FALSE;
     return TRUE;
 }
@@ -121,8 +121,8 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
     (void) mod->finish();
     /* Release arena */
     mod->base->invoke_hide(mod->dkey);
-    mod->base = NULL;
-    mod->root = NULL; // deleted by invoke_hide
+    mod->base = nullptr;
+    mod->root = nullptr; // deleted by invoke_hide
 /* end */
 
     mod->set_param_string("destination", oldoutput);
@@ -138,7 +138,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     Inkscape::Extension::Extension * ext;
 
     ext = Inkscape::Extension::db.get(PRINT_EMF);
-    if (ext == NULL)
+    if (ext == nullptr)
         return;
 
     bool new_val                  = mod->get_param_bool("textToPath");
@@ -166,7 +166,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("textToPath", new_val);
 
     // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
     print_document_to_file(doc, filename);
@@ -479,11 +479,11 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
     int  dibparams = U_BI_UNKNOWN;  // type of image not yet determined
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char            *rgba_px = NULL;     // RGBA pixels
-    const char      *px      = NULL;     // DIB pixels
-    const U_RGBQUAD *ct      = NULL;     // DIB color table
+    char            *rgba_px = nullptr;     // RGBA pixels
+    const char      *px      = nullptr;     // DIB pixels
+    const U_RGBQUAD *ct      = nullptr;     // DIB color table
     U_RGBQUAD        ct2[2];
     uint32_t width, height, colortype, numCt, invert; // if needed these values will be set in get_DIB_params
     if(cbBits && cbBmi  && (iUsage == U_DIB_RGB_COLORS)){
@@ -524,7 +524,7 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
         }
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG || dibparams==U_BI_PNG){  // image was binary png or jpg in source file
         base64String = g_base64_encode((guchar*) px, numCt );
     }
@@ -749,7 +749,7 @@ int Emf::in_clips(PEMF_CALLBACK_DATA d, const char *test){
 void Emf::add_clips(PEMF_CALLBACK_DATA d, const char *clippath, unsigned int logic){
     int op = combine_ops_to_livarot(logic);
     Geom::PathVector combined_vect;
-    char *combined = NULL;
+    char *combined = nullptr;
     if (op >= 0 && d->dc[d->level].clip_id) {
         unsigned int real_idx = d->dc[d->level].clip_id - 1;
         Geom::PathVector old_vect = sp_svg_read_pathv(d->clips.strings[real_idx]);
@@ -1080,7 +1080,7 @@ std::string Emf::pix_to_xy(PEMF_CALLBACK_DATA d, double x, double y){
 void
 Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
 {
-    PU_EMRCREATEPEN pEmr = NULL;
+    PU_EMRCREATEPEN pEmr = nullptr;
 
     if (index >= 0 && index < d->n_obj){
         pEmr = (PU_EMRCREATEPEN) d->emf_obj[index].lpEMFR;
@@ -1167,7 +1167,7 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
 void
 Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
 {
-    PU_EMREXTCREATEPEN pEmr = NULL;
+    PU_EMREXTCREATEPEN pEmr = nullptr;
 
     if (index >= 0 && index < d->n_obj)
         pEmr = (PU_EMREXTCREATEPEN) d->emf_obj[index].lpEMFR;
@@ -1379,7 +1379,7 @@ Emf::select_brush(PEMF_CALLBACK_DATA d, int index)
 void
 Emf::select_font(PEMF_CALLBACK_DATA d, int index)
 {
-    PU_EMREXTCREATEFONTINDIRECTW pEmr = NULL;
+    PU_EMREXTCREATEFONTINDIRECTW pEmr = nullptr;
 
     if (index >= 0 && index < d->n_obj)
         pEmr = (PU_EMREXTCREATEFONTINDIRECTW) d->emf_obj[index].lpEMFR;
@@ -1423,7 +1423,7 @@ Emf::select_font(PEMF_CALLBACK_DATA d, int index)
     d->dc[d->level].style.text_decoration_line.set          = true;
     d->dc[d->level].style.text_decoration_line.inherit      = false;
     // malformed  EMF with empty filename may exist, ignore font change if encountered
-    char *ctmp = U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, NULL);
+    char *ctmp = U_Utf16leToUtf8((uint16_t *) (pEmr->elfw.elfLogFont.lfFaceName), U_LF_FACESIZE, nullptr);
     if(ctmp){
         if (d->dc[d->level].font_name){ free(d->dc[d->level].font_name); }
         if(*ctmp){
@@ -1448,7 +1448,7 @@ Emf::delete_object(PEMF_CALLBACK_DATA d, int index)
 // files too big to fit into memory.
         if (d->emf_obj[index].lpEMFR)
             free(d->emf_obj[index].lpEMFR);
-        d->emf_obj[index].lpEMFR = NULL;
+        d->emf_obj[index].lpEMFR = nullptr;
     }
 }
 
@@ -1472,8 +1472,8 @@ int Emf::AI_hack(PU_EMRHEADER pEmr){
   char *ptr;
   ptr = (char *)pEmr;
   PU_EMRSETMAPMODE nEmr = (PU_EMRSETMAPMODE) (ptr + pEmr->emr.nSize);
-  char *string = NULL;
-  if(pEmr->nDescription)string = U_Utf16leToUtf8((uint16_t *)((char *) pEmr + pEmr->offDescription), pEmr->nDescription, NULL);
+  char *string = nullptr;
+  if(pEmr->nDescription)string = U_Utf16leToUtf8((uint16_t *)((char *) pEmr + pEmr->offDescription), pEmr->nDescription, nullptr);
   if(string){
      if((pEmr->nDescription >= 13) &&
         (0==strcmp("Adobe Systems",string)) &&
@@ -1526,12 +1526,12 @@ void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
     tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char             *rgba_px = NULL;     // RGBA pixels
-    char             *sub_px  = NULL;     // RGBA pixels, subarray
-    const char       *px      = NULL;     // DIB pixels
-    const U_RGBQUAD  *ct      = NULL;     // DIB color table
+    char             *rgba_px = nullptr;     // RGBA pixels
+    char             *sub_px  = nullptr;     // RGBA pixels, subarray
+    const char       *px      = nullptr;     // DIB pixels
+    const U_RGBQUAD  *ct      = nullptr;     // DIB color table
     uint32_t width, height, colortype, numCt, invert; // if needed these values will be set in get_DIB_params
     if(cbBits && cbBmi && (iUsage == U_DIB_RGB_COLORS)){
         // next call returns pointers and values, but allocates no memory
@@ -1573,7 +1573,7 @@ void Emf::common_image_extraction(PEMF_CALLBACK_DATA d, void *pEmr,
         }
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG){    // image was binary jpg in source file
         tmp_image << " xlink:href=\"data:image/jpeg;base64,";
         base64String = g_base64_encode((guchar*) px, numCt );
@@ -1630,14 +1630,14 @@ int Emf::myEnhMetaFileProc(char *contents, unsigned int length, PEMF_CALLBACK_DA
     int  eDbgComment=0;
     int  eDbgFinal=0;
     char const* eDbgString = getenv( "INKSCAPE_DBG_EMF" );
-    if ( eDbgString != NULL ) {
+    if ( eDbgString != nullptr ) {
         if(strstr(eDbgString,"RECORD")){  eDbgRecord  = 1; }
         if(strstr(eDbgString,"COMMENT")){ eDbgComment = 1; }
         if(strstr(eDbgString,"FINAL")){   eDbgFinal   = 1; }
     }
 
     /* initialize the tsp for text reassembly */
-    tsp.string     = NULL;
+    tsp.string     = nullptr;
     tsp.ori        = 0.0;  /* degrees */
     tsp.fs         = 12.0; /* font size */
     tsp.x          = 0.0;
@@ -1874,14 +1874,14 @@ std::cout << "BEFORE DRAW"
 
                 // Init the new emf_obj list elements to null, provided the
                 // dynamic allocation succeeded.
-                if ( d->emf_obj != NULL )
+                if ( d->emf_obj != nullptr )
                 {
                     for( int i=0; i < d->n_obj; ++i )
-                        d->emf_obj[i].lpEMFR = NULL;
+                        d->emf_obj[i].lpEMFR = nullptr;
                 } //if
 
             } else {
-                d->emf_obj = NULL;
+                d->emf_obj = nullptr;
             }
 
             break;
@@ -2352,7 +2352,7 @@ std::cout << "BEFORE DRAW"
                 }
                 if(d->dc[old_level].font_name){
                     free(d->dc[old_level].font_name); // else memory leak
-                    d->dc[old_level].font_name = NULL;
+                    d->dc[old_level].font_name = nullptr;
                 }
                 old_level--;
             }
@@ -3095,7 +3095,7 @@ std::cout << "BEFORE DRAW"
 
             /* Rotation issues are handled entirely in libTERE now */
 
-            uint32_t *dup_wt = NULL;
+            uint32_t *dup_wt = nullptr;
 
             if(       lpEMFR->iType==U_EMR_EXTTEXTOUTA){
                 /*  These should be JUST ASCII, but they might not be...
@@ -3103,20 +3103,20 @@ std::cout << "BEFORE DRAW"
                     If not, assume that it holds Latin1.
                     If that fails then something is really screwed up!
                 */
-                dup_wt = U_Utf8ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, NULL);
-                if(!dup_wt)dup_wt = U_Latin1ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, NULL);
+                dup_wt = U_Utf8ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, nullptr);
+                if(!dup_wt)dup_wt = U_Latin1ToUtf32le((char *) pEmr + pEmr->emrtext.offString, pEmr->emrtext.nChars, nullptr);
                 if(!dup_wt)dup_wt = unknown_chars(pEmr->emrtext.nChars);
             }
             else if(  lpEMFR->iType==U_EMR_EXTTEXTOUTW){
-                dup_wt = U_Utf16leToUtf32le((uint16_t *)((char *) pEmr + pEmr->emrtext.offString), pEmr->emrtext.nChars, NULL);
+                dup_wt = U_Utf16leToUtf32le((uint16_t *)((char *) pEmr + pEmr->emrtext.offString), pEmr->emrtext.nChars, nullptr);
                 if(!dup_wt)dup_wt = unknown_chars(pEmr->emrtext.nChars);
             }
             else { // U_EMR_SMALLTEXTOUT
                 if(pEmrS->fuOptions & U_ETO_SMALL_CHARS){
-                    dup_wt = U_Utf8ToUtf32le((char *) pEmrS + roff, cChars, NULL);
+                    dup_wt = U_Utf8ToUtf32le((char *) pEmrS + roff, cChars, nullptr);
                 }
                 else {
-                    dup_wt = U_Utf16leToUtf32le((uint16_t *)((char *) pEmrS + roff), cChars, NULL);
+                    dup_wt = U_Utf16leToUtf32le((uint16_t *)((char *) pEmrS + roff), cChars, nullptr);
                 }
                 if(!dup_wt)dup_wt = unknown_chars(cChars);
             }
@@ -3129,12 +3129,12 @@ std::cout << "BEFORE DRAW"
             }
 
             char *ansi_text;
-            ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, NULL);
+            ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, nullptr);
             free(dup_wt);
             // Empty string or starts with an invalid escape/control sequence, which is bogus text.  Throw it out before g_markup_escape_text can make things worse
             if(*((uint8_t *)ansi_text) <= 0x1F){
                 free(ansi_text);
-                ansi_text=NULL;
+                ansi_text=nullptr;
             }
 
             if (ansi_text) {
@@ -3528,18 +3528,18 @@ void Emf::free_emf_strings(EMF_STRINGS name){
 SPDocument *
 Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 {
-    if (uri == NULL) {
-        return NULL;
+    if (uri == nullptr) {
+        return nullptr;
     }
 
     // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
     EMF_CALLBACK_DATA d;
 
     d.n_obj   = 0;     //these might not be set otherwise if the input file is corrupt
-    d.emf_obj = NULL; 
+    d.emf_obj = nullptr; 
     d.dc[0].font_name = strdup("Arial"); // Default font, set only on lowest level, it copies up from there EMF spec says device can pick whatever it wants
 
     // set up the size default for patterns in defs.  This might not be referenced if there are no patterns defined in the drawing.
@@ -3556,12 +3556,12 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     size_t length;
     char *contents;
-    if(emf_readdata(uri, &contents, &length))return(NULL);
+    if(emf_readdata(uri, &contents, &length))return(nullptr);
 
-    d.pDesc = NULL;
+    d.pDesc = nullptr;
 
     // set up the text reassembly system
-    if(!(d.tri = trinfo_init(NULL)))return(NULL);
+    if(!(d.tri = trinfo_init(nullptr)))return(nullptr);
     (void) trinfo_load_ft_opts(d.tri, 1,
       FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING  | FT_LOAD_NO_BITMAP,
       FT_KERNING_UNSCALED);
@@ -3573,7 +3573,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
 //    std::cout << "SVG Output: " << std::endl << d.outsvg << std::endl;
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     if (good) {
         doc = SPDocument::createNewDocFromMem(d.outsvg.c_str(), strlen(d.outsvg.c_str()), TRUE);
     }

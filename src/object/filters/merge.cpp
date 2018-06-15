@@ -82,13 +82,13 @@ Inkscape::XML::Node* SPFeMerge::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_MERGE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterMerge *nr_merge = dynamic_cast<Inkscape::Filters::FilterMerge*>(nr_primitive);
-    g_assert(nr_merge != NULL);
+    g_assert(nr_merge != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

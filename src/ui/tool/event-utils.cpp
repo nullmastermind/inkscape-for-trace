@@ -27,7 +27,7 @@ guint shortcut_key(GdkEventKey const &event)
             event.hardware_keycode,
             (GdkModifierType) event.state,
             0   /*event->key.group*/,
-            &shortcut_key, NULL, NULL, NULL);
+            &shortcut_key, nullptr, nullptr, nullptr);
     return shortcut_key;
 }
 
@@ -56,7 +56,7 @@ unsigned combine_key_events(guint keyval, gint mask)
 
 unsigned combine_motion_events(SPCanvas *canvas, GdkEventMotion &event, gint mask)
 {
-    if (canvas == NULL) {
+    if (canvas == nullptr) {
         return false;
     }
     GdkEvent *event_next;

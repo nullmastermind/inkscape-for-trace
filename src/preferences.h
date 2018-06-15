@@ -122,7 +122,7 @@ public:
     friend class Preferences; // Preferences class has to access _value
     public:
         ~Entry() {}
-        Entry() : _pref_path(""), _value(NULL) {} // needed to enable use in maps
+        Entry() : _pref_path(""), _value(nullptr) {} // needed to enable use in maps
         Entry(Entry const &other) : _pref_path(other._pref_path), _value(other._value) {}
 
         /**
@@ -130,7 +130,7 @@ public:
          *
          * @return If false, the default value will be returned by the getters.
          */
-        bool isValid() const { return _value != NULL; }
+        bool isValid() const { return _value != nullptr; }
 
         /**
          * Interpret the preference as a Boolean value.

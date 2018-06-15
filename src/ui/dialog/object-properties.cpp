@@ -49,7 +49,7 @@ namespace Dialog {
 ObjectProperties::ObjectProperties()
     : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
     , _blocked (false)
-    , _current_item(NULL)
+    , _current_item(nullptr)
     , _label_id(_("_ID:"), 1)
     , _label_label(_("_Label:"), 1)
     , _label_title(_("_Title:"), 1)
@@ -57,7 +57,7 @@ ObjectProperties::ObjectProperties()
     , _cb_hide(_("_Hide"), 1)
     , _cb_lock(_("L_ock"), 1)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
-    , _desktop(NULL)
+    , _desktop(nullptr)
 {
     //initialize labels for the table at the bottom of the dialog
     _int_attrs.push_back("onclick");
@@ -267,7 +267,7 @@ void ObjectProperties::update()
 
     if (!selection->singleItem()) {
         contents->set_sensitive (false);
-        _current_item = NULL;
+        _current_item = nullptr;
         //no selection anymore or multiple objects selected, means that we need
         //to close the connections to the previously selected object
         _attr_table->clear();
@@ -350,7 +350,7 @@ void ObjectProperties::update()
         }
         _ft_description.set_sensitive(TRUE);
         
-        if (_current_item == NULL) {
+        if (_current_item == nullptr) {
             _attr_table->set_object(obj, _int_labels, _int_attrs, (GtkWidget*) _exp_interactivity.gobj());
         } else {
             _attr_table->change_object(obj);
@@ -368,7 +368,7 @@ void ObjectProperties::_labelChanged()
     }
     
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
 
     _blocked = true;
 
@@ -379,7 +379,7 @@ void ObjectProperties::_labelChanged()
         _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
     } else if (!*id || !isalnum (*id)) {
         _label_id.set_text(_("Id invalid! "));
-    } else if (SP_ACTIVE_DOCUMENT->getObjectById(id) != NULL) {
+    } else if (SP_ACTIVE_DOCUMENT->getObjectById(id) != nullptr) {
         _label_id.set_text(_("Id exists! "));
     } else {
         SPException ex;
@@ -428,7 +428,7 @@ void ObjectProperties::_imageRenderingChanged()
     }
     
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-    g_return_if_fail (item != NULL);
+    g_return_if_fail (item != nullptr);
 
     _blocked = true;
 
@@ -455,7 +455,7 @@ void ObjectProperties::_sensitivityToggled()
     }
 
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-    g_return_if_fail(item != NULL);
+    g_return_if_fail(item != nullptr);
 
     _blocked = true;
     item->setLocked(_cb_lock.get_active());
@@ -471,7 +471,7 @@ void ObjectProperties::_hiddenToggled()
     }
 
     SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-    g_return_if_fail(item != NULL);
+    g_return_if_fail(item != nullptr);
 
     _blocked = true;
     item->setExplicitlyHidden(_cb_hide.get_active());

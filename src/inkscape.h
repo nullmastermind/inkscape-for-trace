@@ -63,7 +63,7 @@ public:
         // TODO: is this really how we should manage the lifetime of the selection?
         // I just copied this from the initialization of the Selection in SPDesktop.
         // When and how is it actually released?
-        _selection = Inkscape::GC::release(new Inkscape::Selection(&_layer_model, NULL));
+        _selection = Inkscape::GC::release(new Inkscape::Selection(&_layer_model, nullptr));
     }
 
     Inkscape::Selection *getSelection() const { return _selection; }

@@ -25,7 +25,7 @@ namespace Widgets
 
 SwatchSelector::SwatchSelector() :
     Gtk::VBox(),
-    _gsel(0),
+    _gsel(nullptr),
     _updating_color(false)
 {
     using Inkscape::UI::Widget::ColorNotebook;
@@ -52,7 +52,7 @@ SwatchSelector::SwatchSelector() :
 
 SwatchSelector::~SwatchSelector()
 {
-    _gsel = 0;
+    _gsel = nullptr;
 }
 
 SPGradientSelector *SwatchSelector::getGradientSelector()
@@ -124,7 +124,7 @@ void SwatchSelector::connectchangedHandler( GCallback handler, void *data )
 void SwatchSelector::setVector(SPDocument */*doc*/, SPGradient *vector)
 {
     //GtkVBox * box = gobj();
-    _gsel->setVector((vector) ? vector->document : 0, vector);
+    _gsel->setVector((vector) ? vector->document : nullptr, vector);
 
     if ( vector && vector->isSolid() ) {
         SPStop* stop = vector->getFirstStop();

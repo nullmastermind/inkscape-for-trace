@@ -42,7 +42,7 @@ ColorSlider::ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment)
     , _value(0.0)
     , _oldvalue(0.0)
     , _mapsize(0)
-    , _map(NULL)
+    , _map(nullptr)
 {
     _c0[0] = 0x00;
     _c0[1] = 0x00;
@@ -170,10 +170,10 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
                       window,
                       GDK_SEAT_CAPABILITY_ALL_POINTING,
                       FALSE,
-                      NULL,
+                      nullptr,
                       reinterpret_cast<GdkEvent *>(event),
-                      NULL,
-                      NULL);
+                      nullptr,
+                      nullptr);
 #else
 	auto device = gdk_event_get_device(reinterpret_cast<GdkEvent *>(event));
         gdk_device_grab(device,
@@ -286,7 +286,7 @@ void ColorSlider::_onAdjustmentValueChanged()
 void ColorSlider::setColors(guint32 start, guint32 mid, guint32 end)
 {
     // Remove any map, if set
-    _map = 0;
+    _map = nullptr;
 
     _c0[0] = start >> 24;
     _c0[1] = (start >> 16) & 0xff;
@@ -354,7 +354,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
         const guchar *b =
             sp_color_slider_render_map(0, 0, carea.get_width(), carea.get_height(), _map, s, d, _b0, _b1, _bmask);
 
-        if (b != NULL && carea.get_width() > 0) {
+        if (b != nullptr && carea.get_width() > 0) {
             Glib::RefPtr<Gdk::Pixbuf> pb = Gdk::Pixbuf::create_from_data(
                 b, Gdk::COLORSPACE_RGB, false, 8, carea.get_width(), carea.get_height(), carea.get_width() * 3);
 
@@ -377,7 +377,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             const guchar *b = sp_color_slider_render_gradient(0, 0, wi, carea.get_height(), c, dc, _b0, _b1, _bmask);
 
             /* Draw pixelstore 1 */
-            if (b != NULL && wi > 0) {
+            if (b != nullptr && wi > 0) {
                 Glib::RefPtr<Gdk::Pixbuf> pb =
                     Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB, false, 8, wi, carea.get_height(), wi * 3);
 
@@ -397,7 +397,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
                                                               _b0, _b1, _bmask);
 
             /* Draw pixelstore 2 */
-            if (b != NULL && wi > 0) {
+            if (b != nullptr && wi > 0) {
                 Glib::RefPtr<Gdk::Pixbuf> pb =
                     Gdk::Pixbuf::create_from_data(b, Gdk::COLORSPACE_RGB, false, 8, wi, carea.get_height(), wi * 3);
 
@@ -448,7 +448,7 @@ bool ColorSlider::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 static const guchar *sp_color_slider_render_gradient(gint x0, gint y0, gint width, gint height, gint c[], gint dc[],
                                                      guint b0, guint b1, guint mask)
 {
-    static guchar *buf = NULL;
+    static guchar *buf = nullptr;
     static gint bs = 0;
     guchar *dp;
     gint x, y;
@@ -456,7 +456,7 @@ static const guchar *sp_color_slider_render_gradient(gint x0, gint y0, gint widt
 
     if (buf && (bs < width * height)) {
         g_free(buf);
-        buf = NULL;
+        buf = nullptr;
     }
     if (!buf) {
         buf = g_new(guchar, width * height * 3);
@@ -503,14 +503,14 @@ static const guchar *sp_color_slider_render_gradient(gint x0, gint y0, gint widt
 static const guchar *sp_color_slider_render_map(gint x0, gint y0, gint width, gint height, guchar *map, gint start,
                                                 gint step, guint b0, guint b1, guint mask)
 {
-    static guchar *buf = NULL;
+    static guchar *buf = nullptr;
     static gint bs = 0;
     guchar *dp;
     gint x, y;
 
     if (buf && (bs < width * height)) {
         g_free(buf);
-        buf = NULL;
+        buf = nullptr;
     }
     if (!buf) {
         buf = g_new(guchar, width * height * 3);

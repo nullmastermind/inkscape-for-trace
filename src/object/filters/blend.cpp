@@ -254,7 +254,7 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
         case Inkscape::Filters::BLEND_LUMINOSITY:
             mode = "luminosity";  break;
         default:
-            mode = 0;
+            mode = nullptr;
     }
 
     repr->setAttribute("mode", mode);
@@ -265,13 +265,13 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeBlend::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_BLEND);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterBlend *nr_blend = dynamic_cast<Inkscape::Filters::FilterBlend*>(nr_primitive);
-    g_assert(nr_blend != NULL);
+    g_assert(nr_blend != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

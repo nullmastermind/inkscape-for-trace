@@ -87,9 +87,9 @@ SvgPreview::~SvgPreview()
 
 Glib::ustring SvgPreview::cache_key(gchar const *uri, gchar const *name, unsigned psize) const {
     Glib::ustring key;
-    key += (uri!=NULL)  ? uri  : "";
+    key += (uri!=nullptr)  ? uri  : "";
     key += ":";
-    key += (name!=NULL) ? name : "unknown";
+    key += (name!=nullptr) ? name : "unknown";
     key += ":";
     key += psize;
     return key;
@@ -100,7 +100,7 @@ GdkPixbuf* SvgPreview::get_preview_from_cache(const Glib::ustring& key) {
     if ( found != _pixmap_cache.end() ) {
         return found->second;
     }
-    return NULL;
+    return nullptr;
 }
 
 void SvgPreview::set_preview_in_cache(const Glib::ustring& key, GdkPixbuf* px) {
@@ -114,7 +114,7 @@ GdkPixbuf* SvgPreview::get_preview(const gchar* uri, const gchar* id, Inkscape::
     Glib::ustring key = cache_key(uri, id, psize);
     GdkPixbuf* px = get_preview_from_cache(key);
 
-    if (px == NULL) {
+    if (px == nullptr) {
         /*
             px = render_pixbuf(root, scale_factor, dbox, psize);
             set_preview_in_cache(key, px);

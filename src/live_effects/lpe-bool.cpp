@@ -344,7 +344,7 @@ sp_pathvector_boolop_remove_inner(Geom::PathVector const &pathva, fill_typ fra)
 static fill_typ GetFillTyp(SPItem *item)
 {
     SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
-    gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+    gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
     if (val && strcmp(val, "nonzero") == 0) {
         return fill_nonZero;
     } else if (val && strcmp(val, "evenodd") == 0) {

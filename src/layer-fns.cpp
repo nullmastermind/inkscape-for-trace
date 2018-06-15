@@ -112,7 +112,7 @@ static SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
 SPObject *next_layer(SPObject *root, SPObject *layer) {
     using std::find_if;
 
-    g_return_val_if_fail(layer != NULL, NULL);
+    g_return_val_if_fail(layer != nullptr, NULL);
     SPObject *result = nullptr;
 
     SPObject *sibling = next_sibling_layer(layer);
@@ -134,7 +134,7 @@ SPObject *next_layer(SPObject *root, SPObject *layer) {
 SPObject *previous_layer(SPObject *root, SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
-    g_return_val_if_fail(layer != NULL, NULL);
+    g_return_val_if_fail(layer != nullptr, NULL);
     SPObject *result = nullptr;
 
     SPObject *child = last_child_layer(layer);
@@ -164,7 +164,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition po
     SPDocument *document = root->document;
 
     static int layer_suffix=1;
-    gchar *id=NULL;
+    gchar *id=nullptr;
     do {
         g_free(id);
         id = g_strdup_printf("layer%d", layer_suffix++);
@@ -179,7 +179,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition po
     if ( LPOS_CHILD == position ) {
         root = layer;
         SPObject *child_layer = Inkscape::last_child_layer(layer);
-        if ( NULL != child_layer ) {
+        if ( nullptr != child_layer ) {
             layer = child_layer;
         }
     }

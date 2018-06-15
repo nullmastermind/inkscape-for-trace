@@ -127,7 +127,7 @@ static bool isPaintModeGradient(SPPaintSelector::Mode mode)
 
 static SPGradientSelector *getGradientFromData(SPPaintSelector const *psel)
 {
-    SPGradientSelector *grad = 0;
+    SPGradientSelector *grad = nullptr;
     if (psel->mode == SPPaintSelector::MODE_SWATCH) {
         SwatchSelector *swatchsel = static_cast<SwatchSelector*>(g_object_get_data(G_OBJECT(psel->selector), "swatch-selector"));
         if (swatchsel) {
@@ -150,42 +150,42 @@ sp_paint_selector_class_init(SPPaintSelectorClass *klass)
                                                 G_TYPE_FROM_CLASS(object_class),
                                                 (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                                 G_STRUCT_OFFSET(SPPaintSelectorClass, mode_changed),
-                                                NULL, NULL,
+                                                nullptr, nullptr,
                                                 g_cclosure_marshal_VOID__UINT,
                                                 G_TYPE_NONE, 1, G_TYPE_UINT);
     psel_signals[GRABBED] =  g_signal_new("grabbed",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPPaintSelectorClass, grabbed),
-                                            NULL, NULL,
+                                            nullptr, nullptr,
                                             g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0);
     psel_signals[DRAGGED] =  g_signal_new("dragged",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPPaintSelectorClass, dragged),
-                                            NULL, NULL,
+                                            nullptr, nullptr,
                                             g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0);
     psel_signals[RELEASED] = g_signal_new("released",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPPaintSelectorClass, released),
-                                            NULL, NULL,
+                                            nullptr, nullptr,
                                             g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0);
     psel_signals[CHANGED] =  g_signal_new("changed",
                                             G_TYPE_FROM_CLASS(object_class),
                                             (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                             G_STRUCT_OFFSET(SPPaintSelectorClass, changed),
-                                            NULL, NULL,
+                                            nullptr, nullptr,
                                             g_cclosure_marshal_VOID__VOID,
                                             G_TYPE_NONE, 0);
     psel_signals[FILLRULE_CHANGED] = g_signal_new("fillrule_changed",
                                                     G_TYPE_FROM_CLASS(object_class),
                                                     (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                                     G_STRUCT_OFFSET(SPPaintSelectorClass, fillrule_changed),
-                                                    NULL, NULL,
+                                                    nullptr, nullptr,
                                                     g_cclosure_marshal_VOID__UINT,
                                                     G_TYPE_NONE, 1, G_TYPE_UINT);
 
@@ -237,7 +237,7 @@ sp_paint_selector_init(SPPaintSelector *psel)
         gtk_box_pack_end(GTK_BOX(psel->style), psel->fillrulebox, FALSE, FALSE, 0);
 
         GtkWidget *w;
-        psel->evenodd = gtk_radio_button_new(NULL);
+        psel->evenodd = gtk_radio_button_new(nullptr);
         gtk_button_set_relief(GTK_BUTTON(psel->evenodd), GTK_RELIEF_NONE);
         gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(psel->evenodd), FALSE);
         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
@@ -290,16 +290,16 @@ static void sp_paint_selector_dispose(GObject *object)
     SPPaintSelector *psel = SP_PAINT_SELECTOR(object);
 
     // clean up our long-living pattern menu
-    g_object_set_data(G_OBJECT(psel),"patternmenu",NULL);
+    g_object_set_data(G_OBJECT(psel),"patternmenu",nullptr);
 
 #ifdef WITH_MESH
     // clean up our long-living mesh menu
-    g_object_set_data(G_OBJECT(psel),"meshmenu",NULL);
+    g_object_set_data(G_OBJECT(psel),"meshmenu",nullptr);
 #endif
 
     if (psel->selected_color) {
         delete psel->selected_color;
-        psel->selected_color = NULL;
+        psel->selected_color = nullptr;
     }
 
     if ((G_OBJECT_CLASS(sp_paint_selector_parent_class))->dispose)
@@ -358,7 +358,7 @@ sp_paint_selector_show_fillrule(SPPaintSelector *psel, bool is_fill)
             gtk_widget_show_all(psel->fillrulebox);
         } else {
             gtk_widget_destroy(psel->fillrulebox);
-            psel->fillrulebox = NULL;
+            psel->fillrulebox = nullptr;
         }
     }
 }
@@ -366,7 +366,7 @@ sp_paint_selector_show_fillrule(SPPaintSelector *psel, bool is_fill)
 
 SPPaintSelector *sp_paint_selector_new(FillOrStroke kind)
 {
-    SPPaintSelector *psel = static_cast<SPPaintSelector*>(g_object_new(SP_TYPE_PAINT_SELECTOR, NULL));
+    SPPaintSelector *psel = static_cast<SPPaintSelector*>(g_object_new(SP_TYPE_PAINT_SELECTOR, nullptr));
 
     psel->setMode(SPPaintSelector::MODE_MULTIPLE);
 
@@ -472,7 +472,7 @@ void SPPaintSelector::setSwatch(SPGradient *vector )
 
     SwatchSelector *swatchsel = static_cast<SwatchSelector*>(g_object_get_data(G_OBJECT(selector), "swatch-selector"));
     if (swatchsel) {
-        swatchsel->setVector( (vector) ? vector->document : 0, vector );
+        swatchsel->setVector( (vector) ? vector->document : nullptr, vector );
     }
 }
 
@@ -486,7 +486,7 @@ void SPPaintSelector::setGradientLinear(SPGradient *vector)
     SPGradientSelector *gsel = getGradientFromData(this);
 
     gsel->setMode(SPGradientSelector::MODE_LINEAR);
-    gsel->setVector((vector) ? vector->document : 0, vector);
+    gsel->setVector((vector) ? vector->document : nullptr, vector);
 }
 
 void SPPaintSelector::setGradientRadial(SPGradient *vector)
@@ -500,7 +500,7 @@ void SPPaintSelector::setGradientRadial(SPGradient *vector)
 
     gsel->setMode(SPGradientSelector::MODE_RADIAL);
 
-    gsel->setVector((vector) ? vector->document : 0, vector);
+    gsel->setVector((vector) ? vector->document : nullptr, vector);
 }
 
 #ifdef WITH_MESH
@@ -550,7 +550,7 @@ void SPPaintSelector::getColorAlpha(SPColor &color, gfloat &alpha) const
 
 SPGradient *SPPaintSelector::getGradientVector()
 {
-    SPGradient* vect = 0;
+    SPGradient* vect = nullptr;
 
     if (isPaintModeGradient(mode)) {
         SPGradientSelector *gsel = getGradientFromData(this);
@@ -574,7 +574,7 @@ void SPPaintSelector::pushAttrsToGradient( SPGradient *gr ) const
 static void
 sp_paint_selector_clear_frame(SPPaintSelector *psel)
 {
-    g_return_if_fail( psel != NULL);
+    g_return_if_fail( psel != nullptr);
 
     if (psel->selector) {
 
@@ -582,14 +582,14 @@ sp_paint_selector_clear_frame(SPPaintSelector *psel)
         //The widget is hidden first so it can recognize that it should not process signals from notebook child
         gtk_widget_set_visible(psel->selector, false);
         gtk_widget_destroy(psel->selector);
-        psel->selector = NULL;
+        psel->selector = nullptr;
     }
 }
 
 static void
 sp_paint_selector_set_mode_empty(SPPaintSelector *psel)
 {
-    sp_paint_selector_set_style_buttons(psel, NULL);
+    sp_paint_selector_set_style_buttons(psel, nullptr);
     gtk_widget_set_sensitive(psel->style, FALSE);
 
     sp_paint_selector_clear_frame(psel);
@@ -600,7 +600,7 @@ sp_paint_selector_set_mode_empty(SPPaintSelector *psel)
 static void
 sp_paint_selector_set_mode_multiple(SPPaintSelector *psel)
 {
-    sp_paint_selector_set_style_buttons(psel, NULL);
+    sp_paint_selector_set_style_buttons(psel, nullptr);
     gtk_widget_set_sensitive(psel->style, TRUE);
 
     sp_paint_selector_clear_frame(psel);
@@ -803,7 +803,7 @@ static std::vector<SPMeshGradient *>
 ink_mesh_list_get (SPDocument *source)
 {
     std::vector<SPMeshGradient *> pl;
-    if (source == NULL)
+    if (source == nullptr)
         return pl;
 
 
@@ -861,7 +861,7 @@ static void sp_mesh_list_from_doc(GtkWidget *combo, SPDocument * /*current_doc*/
 static void
 ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
 {
-    static SPDocument *meshes_doc = NULL;
+    static SPDocument *meshes_doc = nullptr;
 
     // If we ever add a list of canned mesh gradients, uncomment following:
 
@@ -875,7 +875,7 @@ ink_mesh_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // }
 
     // suck in from current doc
-    sp_mesh_list_from_doc ( combo, NULL, doc, meshes_doc );
+    sp_mesh_list_from_doc ( combo, nullptr, doc, meshes_doc );
 
     // add separator
     // {
@@ -939,7 +939,7 @@ void SPPaintSelector::updateMeshList( SPMeshGradient *mesh )
     }
 
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "meshmenu"));
-    g_assert( combo != NULL );
+    g_assert( combo != nullptr );
 
     /* Clear existing menu if any */
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -956,7 +956,7 @@ void SPPaintSelector::updateMeshList( SPMeshGradient *mesh )
 
         // Find this mesh and set it active in the combo_box
         GtkTreeIter iter ;
-        gchar *meshid = NULL;
+        gchar *meshid = nullptr;
         bool valid = gtk_tree_model_get_iter_first (store, &iter);
         if (!valid) {
             return;
@@ -982,7 +982,7 @@ static void sp_paint_selector_set_mode_mesh(SPPaintSelector *psel, SPPaintSelect
     }
     gtk_widget_set_sensitive(psel->style, TRUE);
 
-    GtkWidget *tbl = NULL;
+    GtkWidget *tbl = nullptr;
 
     if (psel->mode == SPPaintSelector::MODE_GRADIENT_MESH) {
         /* Already have mesh menu */
@@ -1005,7 +1005,7 @@ static void sp_paint_selector_set_mode_mesh(SPPaintSelector *psel, SPPaintSelect
              */
             GtkListStore *store = gtk_list_store_new (COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
             GtkWidget *combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), SPPaintSelector::isSeparator, NULL, NULL);
+            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), SPPaintSelector::isSeparator, nullptr, nullptr);
 
             GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
             gtk_cell_renderer_set_padding (renderer, 2, 0);
@@ -1027,7 +1027,7 @@ static void sp_paint_selector_set_mode_mesh(SPPaintSelector *psel, SPPaintSelect
         {
             auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
             gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
-            auto l = gtk_label_new(NULL);
+            auto l = gtk_label_new(nullptr);
             gtk_label_set_markup(GTK_LABEL(l), _("Use the <b>Mesh tool</b> to modify the mesh."));
             gtk_label_set_line_wrap(GTK_LABEL(l), true);
             gtk_widget_set_size_request(l, 180, -1);
@@ -1055,8 +1055,8 @@ SPMeshGradient *SPPaintSelector::getMeshGradient()
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "meshmenu"));
 
     /* no mesh menu if we were just selected */
-    if ( combo == NULL ) {
-        return NULL;
+    if ( combo == nullptr ) {
+        return nullptr;
     }
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 
@@ -1064,19 +1064,19 @@ SPMeshGradient *SPPaintSelector::getMeshGradient()
     GtkTreeIter  iter;
     if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(combo), &iter) ||
             !gtk_list_store_iter_is_valid(GTK_LIST_STORE(store), &iter)) {
-        return NULL;
+        return nullptr;
     }
 
-    gchar *meshid = NULL;
+    gchar *meshid = nullptr;
     gboolean stockid = FALSE;
-    gchar *label = NULL;
+    gchar *label = nullptr;
     gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid,  -1);
     // std::cout << "  .. meshid: " << (meshid?meshid:"null") << "   label: " << (label?label:"null") << std::endl;
-    if (meshid == NULL) {
-        return NULL;
+    if (meshid == nullptr) {
+        return nullptr;
     }
 
-    SPMeshGradient *mesh = 0;
+    SPMeshGradient *mesh = nullptr;
     if (strcmp(meshid, "none")){
 
         gchar *mesh_name;
@@ -1137,7 +1137,7 @@ static std::vector<SPPattern*>
 ink_pattern_list_get (SPDocument *source)
 {
     std::vector<SPPattern *> pl;
-    if (source == NULL)
+    if (source == nullptr)
         return pl;
 
     std::vector<SPObject *> patterns = source->getResourceList("pattern");
@@ -1199,10 +1199,10 @@ static void sp_pattern_list_from_doc(GtkWidget *combo, SPDocument * /*current_do
 static void
 ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
 {
-    static SPDocument *patterns_doc = NULL;
+    static SPDocument *patterns_doc = nullptr;
 
     // find and load patterns.svg
-    if (patterns_doc == NULL) {
+    if (patterns_doc == nullptr) {
         char *patterns_source = g_build_filename(INKSCAPE_PATTERNSDIR, "patterns.svg", NULL);
         if (Inkscape::IO::file_test(patterns_source, G_FILE_TEST_IS_REGULAR)) {
             patterns_doc = SPDocument::createNewDoc(patterns_source, FALSE);
@@ -1211,7 +1211,7 @@ ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     }
 
     // suck in from current doc
-    sp_pattern_list_from_doc ( combo, NULL, doc, patterns_doc );
+    sp_pattern_list_from_doc ( combo, nullptr, doc, patterns_doc );
 
     // add separator
     {
@@ -1225,7 +1225,7 @@ ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
     // suck in from patterns.svg
     if (patterns_doc) {
         doc->ensureUpToDate();
-        sp_pattern_list_from_doc ( combo, doc, patterns_doc, NULL );
+        sp_pattern_list_from_doc ( combo, doc, patterns_doc, nullptr );
     }
 
 }
@@ -1274,7 +1274,7 @@ void SPPaintSelector::updatePatternList( SPPattern *pattern )
         return;
     }
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "patternmenu"));
-    g_assert( combo != NULL );
+    g_assert( combo != nullptr );
 
     /* Clear existing menu if any */
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -1291,7 +1291,7 @@ void SPPaintSelector::updatePatternList( SPPattern *pattern )
 
         // Find this pattern and set it active in the combo_box
         GtkTreeIter iter ;
-        gchar *patid = NULL;
+        gchar *patid = nullptr;
         bool valid = gtk_tree_model_get_iter_first (store, &iter);
         if (!valid) {
             return;
@@ -1318,7 +1318,7 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
 
     gtk_widget_set_sensitive(psel->style, TRUE);
 
-    GtkWidget *tbl = NULL;
+    GtkWidget *tbl = nullptr;
 
     if (psel->mode == SPPaintSelector::MODE_PATTERN) {
         /* Already have pattern menu */
@@ -1341,7 +1341,7 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
              */
             GtkListStore *store = gtk_list_store_new (COMBO_N_COLS, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_BOOLEAN);
             GtkWidget *combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), SPPaintSelector::isSeparator, NULL, NULL);
+            gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(combo), SPPaintSelector::isSeparator, nullptr, nullptr);
 
             GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
             gtk_cell_renderer_set_padding (renderer, 2, 0);
@@ -1363,7 +1363,7 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
         {
             auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
             gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
-            auto l = gtk_label_new(NULL);
+            auto l = gtk_label_new(nullptr);
             gtk_label_set_markup(GTK_LABEL(l), _("Use the <b>Node tool</b> to adjust position, scale, and rotation of the pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to create a new pattern from selection."));
             gtk_label_set_line_wrap(GTK_LABEL(l), true);
             gtk_widget_set_size_request(l, 180, -1);
@@ -1393,14 +1393,14 @@ gboolean SPPaintSelector::isSeparator (GtkTreeModel *model, GtkTreeIter *iter, g
 
 SPPattern *SPPaintSelector::getPattern()
 {
-    SPPattern *pat = 0;
+    SPPattern *pat = nullptr;
     g_return_val_if_fail((mode == MODE_PATTERN) , NULL);
 
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "patternmenu"));
 
     /* no pattern menu if we were just selected */
-    if ( combo == NULL ) {
-        return NULL;
+    if ( combo == nullptr ) {
+        return nullptr;
     }
 
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
@@ -1409,15 +1409,15 @@ SPPattern *SPPaintSelector::getPattern()
     GtkTreeIter  iter;
     if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(combo), &iter) ||
             !gtk_list_store_iter_is_valid(GTK_LIST_STORE(store), &iter)) {
-        return NULL;
+        return nullptr;
     }
 
-    gchar *patid = NULL;
+    gchar *patid = nullptr;
     gboolean stockid = FALSE;
-    gchar *label = NULL;
+    gchar *label = nullptr;
     gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_PATTERN, &patid,  -1);
-    if (patid == NULL) {
-        return NULL;
+    if (patid == nullptr) {
+        return nullptr;
     }
 
     if (strcmp(patid, "none")){
@@ -1439,7 +1439,7 @@ SPPattern *SPPaintSelector::getPattern()
     }
 
     if (pat && !SP_IS_PATTERN(pat)) {
-        pat = 0;
+        pat = nullptr;
     }
 
     return pat;

@@ -41,7 +41,7 @@ static void sp_canvas_debug_init (SPCanvasDebug *debug)
 namespace {
 static void sp_canvas_debug_destroy (SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CANVAS_DEBUG (object));
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_debug_parent_class)->destroy) {

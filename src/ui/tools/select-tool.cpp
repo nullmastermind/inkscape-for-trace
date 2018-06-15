@@ -64,8 +64,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static GdkCursor *CursorSelectMouseover = NULL;
-static GdkCursor *CursorSelectDragging = NULL;
+static GdkCursor *CursorSelectMouseover = nullptr;
+static GdkCursor *CursorSelectDragging = nullptr;
 
 static gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 static gint drag_escaped = 0; // if non-zero, drag was canceled by esc
@@ -89,17 +89,17 @@ sp_load_handles(int start, int count, char const **xpm) {
 
 SelectTool::SelectTool()
     // Don't load a default cursor
-    : ToolBase(NULL)
+    : ToolBase(nullptr)
     , dragging(false)
     , moved(false)
     , button_press_shift(false)
     , button_press_ctrl(false)
     , button_press_alt(false)
     , cycling_wrap(true)
-    , item(NULL)
-    , grabbed(NULL)
-    , _seltrans(NULL)
-    , _describer(NULL)
+    , item(nullptr)
+    , grabbed(nullptr)
+    , _seltrans(nullptr)
+    , _describer(nullptr)
 {
     // cursors in select context
     CursorSelectMouseover = sp_cursor_from_xpm(cursor_select_m_xpm);
@@ -124,23 +124,23 @@ SelectTool::~SelectTool() {
 
     if (this->grabbed) {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-        this->grabbed = NULL;
+        this->grabbed = nullptr;
     }
 
     delete this->_seltrans;
-    this->_seltrans = NULL;
+    this->_seltrans = nullptr;
 
     delete this->_describer;
-    this->_describer = NULL;
+    this->_describer = nullptr;
 
     if (CursorSelectDragging) {
         g_object_unref(CursorSelectDragging);
-        CursorSelectDragging = NULL;
+        CursorSelectDragging = nullptr;
     }
     
     if (CursorSelectMouseover) {
         g_object_unref(CursorSelectMouseover);
-        CursorSelectMouseover = NULL;
+        CursorSelectMouseover = nullptr;
     }
 }
 
@@ -195,14 +195,14 @@ bool SelectTool::sp_select_context_abort() {
                     DocumentUndo::undo(desktop->getDocument());
                 }
 
-                sp_object_unref( this->item, NULL);
+                sp_object_unref( this->item, nullptr);
             } else if (this->button_press_ctrl) {
                 // NOTE:  This is a workaround to a bug.
                 // When the ctrl key is held, sc->item is not defined
                 // so in this case (only), we skip the object doc check
                 DocumentUndo::undo(desktop->getDocument());
             }
-            this->item = NULL;
+            this->item = nullptr;
 
             SP_EVENT_CONTEXT(this)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
             return true;
@@ -269,7 +269,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
 
     // make sure we still have valid objects to move around
-    if (this->item && this->item->document == NULL) {
+    if (this->item && this->item->document == nullptr) {
         this->sp_select_context_abort();
     }
 
@@ -303,25 +303,25 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                     // remember the clicked item in this->item:
                     if (this->item) {
-                        sp_object_unref(this->item, NULL);
-                        this->item = NULL;
+                        sp_object_unref(this->item, nullptr);
+                        this->item = nullptr;
                     }
 
                     this->item = sp_event_context_find_item (desktop,
                                               Geom::Point(event->button.x, event->button.y), event->button.state & GDK_MOD1_MASK, FALSE);
-                    sp_object_ref(this->item, NULL);
+                    sp_object_ref(this->item, nullptr);
 
                     rb_escaped = drag_escaped = 0;
 
                     if (this->grabbed) {
                         sp_canvas_item_ungrab(this->grabbed, event->button.time);
-                        this->grabbed = NULL;
+                        this->grabbed = nullptr;
                     }
 
                     sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->drawing),
                                         GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
                                         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                        NULL, event->button.time);
+                                        nullptr, event->button.time);
 
                     this->grabbed = SP_CANVAS_ITEM(desktop->drawing);
 
@@ -433,7 +433,7 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
 
     this->cycling_cur_item = *next;
     g_assert(next != cycling_items.end());
-    g_assert(cycling_cur_item != NULL);
+    g_assert(cycling_cur_item != nullptr);
 
     arenaitem = cycling_cur_item->get_arenaitem(desktop->dkey);
     arenaitem->setOpacity(1.0);
@@ -457,19 +457,19 @@ void SelectTool::sp_select_context_reset_opacities() {
     }
 
     this->cycling_items_cmp.clear();
-    this->cycling_cur_item = NULL;
+    this->cycling_cur_item = nullptr;
 }
 
 bool SelectTool::root_handler(GdkEvent* event) {
-    SPItem *item = NULL;
-    SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
+    SPItem *item = nullptr;
+    SPItem *item_at_point = nullptr, *group_at_point = nullptr, *item_in_group = nullptr;
     gint ret = FALSE;
 
     Inkscape::Selection *selection = desktop->getSelection();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // make sure we still have valid objects to move around
-    if (this->item && this->item->document == NULL) {
+    if (this->item && this->item->document == nullptr) {
         this->sp_select_context_abort();
     }
 
@@ -517,12 +517,12 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed, event->button.time);
-                    this->grabbed = NULL;
+                    this->grabbed = nullptr;
                 }
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                                    NULL, event->button.time);
+                                    nullptr, event->button.time);
 
                 this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
 
@@ -605,7 +605,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                             if (group_at_point != item_in_group &&
                                 !(group_at_point && item_at_point &&
                                   group_at_point->isAncestorOf(item_at_point))) {
-                                group_at_point = NULL;
+                                group_at_point = nullptr;
                             }
 
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
@@ -703,10 +703,10 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     desktop->canvas->endForcedFullRedraws();
 
                     if (this->item) {
-                        sp_object_unref( this->item, NULL);
+                        sp_object_unref( this->item, nullptr);
                     }
 
-                    this->item = NULL;
+                    this->item = nullptr;
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
 
@@ -753,7 +753,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                             if (item) {
                                 selection->toggle(item);
-                                item = NULL;
+                                item = nullptr;
                             }
 
                         } else if ((this->button_press_ctrl || this->button_press_alt) && !rb_escaped && !drag_escaped) { // ctrl+click, alt+click
@@ -771,7 +771,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                                     selection->set(item);
                                 }
 
-                                item = NULL;
+                                item = nullptr;
                             }
                         } else { // click without shift, simply deselect, unless with Alt or something was cancelled
                             if (!selection->isEmpty()) {
@@ -789,7 +789,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed, event->button.time);
-                    this->grabbed = NULL;
+                    this->grabbed = nullptr;
                 }
 
                 desktop->updateNow();
@@ -816,11 +816,11 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
             /* Rebuild list of items underneath the mouse pointer */
             Geom::Point p = desktop->d2w(desktop->point()); 
-            SPItem *item = desktop->getItemAtPoint(p, true, NULL);
+            SPItem *item = desktop->getItemAtPoint(p, true, nullptr);
             this->cycling_items.clear();
 
-            SPItem *tmp = NULL;
-            while(item != NULL) {
+            SPItem *tmp = nullptr;
+            while(item != nullptr) {
                 this->cycling_items.push_back(item);
                 item = desktop->getItemAtPoint(p, true, item);
                 if (selection->includes(item)) tmp = item;

@@ -33,7 +33,7 @@ sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
     int n_args;
     size_t key_len;
 
-    if (str == NULL) return false;
+    if (str == nullptr) return false;
 
     Geom::Affine a(Geom::identity());
 
@@ -173,7 +173,7 @@ sp_svg_transform_write(Geom::Affine const &transform)
 
     if (transform.isIdentity()) {
         // We are more or less identity, so no transform attribute needed:
-        return NULL;
+        return nullptr;
     } else if (transform.isScale()) {
         // We are more or less a uniform scale
         strcpy (c + p, "scale(");

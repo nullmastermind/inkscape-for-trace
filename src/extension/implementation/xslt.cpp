@@ -48,8 +48,8 @@ namespace Implementation {
 XSLT::XSLT(void) :
     Implementation(),
     _filename(""),
-    _parsedDoc(NULL),
-    _stylesheet(NULL)
+    _parsedDoc(nullptr),
+    _stylesheet(nullptr)
 {
 }
 
@@ -87,10 +87,10 @@ bool XSLT::load(Inkscape::Extension::Extension *module)
     if (module->loaded()) { return true; }
 
     Inkscape::XML::Node *child_repr = module->get_repr()->firstChild();
-    while (child_repr != NULL) {
+    while (child_repr != nullptr) {
         if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "xslt")) {
             child_repr = child_repr->firstChild();
-            while (child_repr != NULL) {
+            while (child_repr != nullptr) {
                 if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "file")) {
                     _filename = solve_reldir(child_repr);
                 }
@@ -103,7 +103,7 @@ bool XSLT::load(Inkscape::Extension::Extension *module)
     }
 
     _parsedDoc = xmlParseFile(_filename.c_str());
-    if (_parsedDoc == NULL) { return false; }
+    if (_parsedDoc == nullptr) { return false; }
 
     _stylesheet = xsltParseStylesheetDoc(_parsedDoc);
 
@@ -122,10 +122,10 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
                         gchar const *filename)
 {
     xmlDocPtr filein = xmlParseFile(filename);
-    if (filein == NULL) { return NULL; }
+    if (filein == nullptr) { return nullptr; }
 
     const char * params[1];
-    params[0] = NULL;
+    params[0] = nullptr;
 
     xmlDocPtr result = xsltApplyStylesheet(_stylesheet, filein, params);
     xmlFreeDoc(filein);
@@ -133,17 +133,17 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
     Inkscape::XML::Document * rdoc = sp_repr_do_read( result, SP_SVG_NS_URI);
     xmlFreeDoc(result);
 
-    if (rdoc == NULL) {
-        return NULL;
+    if (rdoc == nullptr) {
+        return nullptr;
     }
 
     if (strcmp(rdoc->root()->name(), "svg:svg") != 0) {
-        return NULL;
+        return nullptr;
     }
 
-    gchar * base = NULL;
-    gchar * name = NULL;
-    gchar * s = NULL, * p = NULL;
+    gchar * base = nullptr;
+    gchar * name = nullptr;
+    gchar * s = nullptr, * p = nullptr;
     s = g_strdup(filename);
     p = strrchr(s, '/');
     if (p) {
@@ -151,12 +151,12 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
         p[1] = '\0';
         base = g_strdup(s);
     } else {
-        base = NULL;
+        base = nullptr;
         name = g_strdup(filename);
     }
     g_free(s);
 
-    SPDocument * doc = SPDocument::createDoc(rdoc, filename, base, name, true, NULL);
+    SPDocument * doc = SPDocument::createDoc(rdoc, filename, base, name, true, nullptr);
 
     g_free(base); g_free(name);
 
@@ -167,8 +167,8 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar cons
 {
     /* TODO: Should we assume filename to be in utf8 or to be a raw filename?
      * See JavaFXOutput::save for discussion. */
-    g_return_if_fail(doc != NULL);
-    g_return_if_fail(filename != NULL);
+    g_return_if_fail(doc != nullptr);
+    g_return_if_fail(filename != nullptr);
 
     Inkscape::XML::Node *repr = doc->getReprRoot();
 
@@ -188,7 +188,7 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar cons
 
     xmlDocPtr svgdoc = xmlParseFile(tempfilename_out.c_str());
     close(tempfd_out);
-    if (svgdoc == NULL) {
+    if (svgdoc == nullptr) {
         return;
     }
 
@@ -207,7 +207,7 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar cons
         xslt_params[count++] = g_strdup_printf("%s", parameter.str().c_str());
         xslt_params[count++] = g_strdup_printf("'%s'", value.str().c_str());
     }
-    xslt_params[count] = NULL;
+    xslt_params[count] = nullptr;
 
     xmlDocPtr newdoc = xsltApplyStylesheet(_stylesheet, svgdoc, xslt_params);
     //xmlSaveFile(filename, newdoc);

@@ -182,7 +182,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     angle_projection.param_set_range(0.0, 360.0);
     angle_projection.param_set_increments(90.0, 90.0);
     angle_projection.param_set_digits(2);
-    locale_base = strdup(setlocale(LC_NUMERIC, NULL));
+    locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
     general.param_update_default(_("Base of the LPE, focus on measure display and positioning"));
@@ -195,7 +195,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
-    doOnRemove(NULL);
+    doOnRemove(nullptr);
 }
 
 Gtk::Widget *
@@ -324,16 +324,16 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
     style = style + Glib::ustring(";fill-opacity:") + Glib::ustring(os.str());
     style = style + Glib::ustring(";stroke:none");
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    SPObject *elemref = NULL;
-    Inkscape::XML::Node *arrow = NULL;
+    SPObject *elemref = nullptr;
+    Inkscape::XML::Node *arrow = nullptr;
     if ((elemref = document->getObjectById(mode.c_str()))) {
         Inkscape::XML::Node *arrow= elemref->getRepr();
         if (arrow) {
             arrow->setAttribute("sodipodi:insensitive", "true");
-            arrow->setAttribute("transform", NULL);
+            arrow->setAttribute("transform", nullptr);
             Inkscape::XML::Node *arrow_data = arrow->firstChild();
             if (arrow_data) {
-                arrow_data->setAttribute("transform", NULL);
+                arrow_data->setAttribute("transform", nullptr);
                 arrow_data->setAttribute("style", style.c_str());
             }
         }
@@ -370,7 +370,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
         Glib::ustring arrowpath = mode + Glib::ustring("_path");
         arrow_path->setAttribute("id", arrowpath.c_str());
         arrow_path->setAttribute("style", style.c_str());
-        arrow->addChild(arrow_path, NULL);
+        arrow->addChild(arrow_path, nullptr);
         Inkscape::GC::release(arrow_path);
         elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
         Inkscape::GC::release(arrow);
@@ -386,7 +386,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    Inkscape::XML::Node *rtext = NULL;
+    Inkscape::XML::Node *rtext = nullptr;
 
     Glib::ustring lpobjid = this->lpeobj->getId();
     Glib::ustring itemid  = sp_lpe_item->getId();
@@ -394,15 +394,15 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     id += Glib::ustring::format(counter);
     id += "-";
     id += lpobjid;
-    SPObject *elemref = NULL;
-    Inkscape::XML::Node *rtspan = NULL;
+    SPObject *elemref = nullptr;
+    Inkscape::XML::Node *rtspan = nullptr;
     elemref = document->getObjectById(id.c_str());
     if (elemref) {
         rtext = elemref->getRepr();
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
         rtext->setAttribute("sodipodi:insensitive", "true");
-        rtext->setAttribute("transform", NULL);
+        rtext->setAttribute("transform", nullptr);
     } else {
         rtext = xml_doc->createElement("svg:text");
         rtext->setAttribute("xml:space", "preserve");
@@ -445,10 +445,10 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     sp_repr_css_write_string(css,css_str);
     rtext->setAttribute("style", css_str.c_str());
     rtspan->setAttribute("style", css_str.c_str());
-    rtspan->setAttribute("transform", NULL);
+    rtspan->setAttribute("transform", nullptr);
     sp_repr_css_attr_unref (css);
     if (!elemref) {
-        rtext->addChild(rtspan, NULL);
+        rtext->addChild(rtspan, nullptr);
         Inkscape::GC::release(rtspan);
     }
     length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
@@ -489,10 +489,10 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     if ( !valid ) {
         label_value = Glib::ustring(_("Non Uniform Scale"));
     }
-    Inkscape::XML::Node *rstring = NULL;
+    Inkscape::XML::Node *rstring = nullptr;
     if (!elemref) {
         rstring = xml_doc->createTextNode(label_value.c_str());
-        rtspan->addChild(rstring, NULL);
+        rtspan->addChild(rstring, nullptr);
         Inkscape::GC::release(rstring);
     } else {
         rstring = rtspan->firstChild();
@@ -505,7 +505,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
     if (bounds) {
         anotation_width = bounds->width() * 1.15;
-        rtspan->setAttribute("style", NULL);
+        rtspan->setAttribute("style", nullptr);
     }
     gchar * transform;
     if (rotate_anotation) {
@@ -520,7 +520,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         affine *= Geom::Translate(pos);
         transform = sp_svg_transform_write(affine);
     } else {
-        transform = NULL;
+        transform = nullptr;
     }
     rtext->setAttribute("transform", transform);
     g_free(transform);
@@ -541,7 +541,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     id += lpobjid;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = document->getObjectById(id.c_str());
-    Inkscape::XML::Node *line = NULL;
+    Inkscape::XML::Node *line = nullptr;
     if (!main) {
         Geom::Ray ray(start, end);
         Geom::Coord angle = ray.angle();
@@ -575,7 +575,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
         line = elemref->getRepr();
         gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
-        line->setAttribute("transform", NULL);
+        line->setAttribute("transform", nullptr);
         g_free(line_str);
     } else {
         line = xml_doc->createElement("svg:path");
@@ -655,8 +655,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
-    Inkscape::XML::Node *styleNode = NULL;
-    Inkscape::XML::Node* textNode = NULL;
+    Inkscape::XML::Node *styleNode = nullptr;
+    Inkscape::XML::Node* textNode = nullptr;
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
@@ -669,7 +669,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
                 }
             }
 
-            if (textNode == NULL) {
+            if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
                 textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
@@ -679,7 +679,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         }
     }
 
-    if (styleNode == NULL) {
+    if (styleNode == nullptr) {
         // Style element not found, create one
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
@@ -687,7 +687,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
 
-        root->addChild(styleNode, NULL);
+        root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
     }
     Glib::ustring styleContent = Glib::ustring(textNode->content());
@@ -919,7 +919,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (shape) {
         //only check constrain viewbox on X
         Geom::Scale scaledoc = document->getDocumentScale();
-        SPNamedView *nv = sp_document_namedview(document, NULL);
+        SPNamedView *nv = sp_document_namedview(document, nullptr);
         display_unit = nv->display_units->abbr;
         if (display_unit.empty()) {
             display_unit = "px";
@@ -938,7 +938,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         rgb24 = color;
         rgb32 = color32;
-        SPCurve * c = NULL;
+        SPCurve * c = nullptr;
         gchar * fontbutton_str = fontbutton.param_getSVGValue();
         Glib::ustring fontdesc_ustring = Glib::ustring(fontbutton_str);
         Pango::FontDescription fontdesc(fontdesc_ustring);

@@ -111,7 +111,7 @@ SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
         // fprintf(stderr, "ERROR: Unsupported file format (unsupported version) or file is encrypted!\n");
         // printf("I'm giving up not supported\n");
         delete input;
-        return NULL;
+        return nullptr;
     }
 
 #if WITH_LIBWPG03
@@ -120,7 +120,7 @@ SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
     if (!libwpg::WPGraphics::parse(input, &generator) || vec.empty() || vec[0].empty()) {
         delete input;
-        return NULL;
+        return nullptr;
     }
 
     RVNGString output("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");

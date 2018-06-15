@@ -83,7 +83,7 @@ static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
     // unit and it'll be correctly handled on load.
     prefs->setDouble("/tools/paintbucket/offset", (gdouble)gtk_adjustment_get_value(adj));
 
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
     prefs->setString("/tools/paintbucket/offsetunits", unit->abbr);
 }
 
@@ -117,7 +117,7 @@ static void paintbucket_defaults(GtkWidget *, GObject *tbl)
 
 void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Channel
@@ -164,8 +164,8 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             _("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"),
             "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas), holder, TRUE,
             "inkscape:paintbucket-threshold", 0, 100.0, 1.0, 10.0,
-            0, 0, 0,
-            paintbucket_threshold_changed, NULL /*unit tracker*/, 1, 0 );
+            nullptr, nullptr, 0,
+            paintbucket_threshold_changed, nullptr /*unit tracker*/, 1, 0 );
 
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -193,7 +193,7 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             _("The amount to grow (positive) or shrink (negative) the created fill path"),
             "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas), holder, TRUE,
             "inkscape:paintbucket-offset", -1e4, 1e4, 0.1, 0.5,
-            0, 0, 0,
+            nullptr, nullptr, 0,
             paintbucket_offset_changed, tracker, 1, 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }

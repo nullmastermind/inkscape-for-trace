@@ -39,7 +39,7 @@ Inkscape::SnappedCurve::SnappedCurve()
     _distance = Geom::infinity();
     _tolerance = 1;
     _always_snap = false;
-    _curve = NULL;
+    _curve = nullptr;
     _second_distance = Geom::infinity();
     _second_tolerance = 1;
     _second_always_snap = false;

@@ -15,10 +15,10 @@
 
 SweepTree::SweepTree()
 {
-    src = NULL;
+    src = nullptr;
     bord = -1;
     startPoint = -1;
-    evt[LEFT] = evt[RIGHT] = NULL;
+    evt[LEFT] = evt[RIGHT] = nullptr;
     sens = true;
     //invDirLength=1;
 }
@@ -40,7 +40,7 @@ SweepTree::ConvertTo(Shape *iSrc, int iBord, int iWeight, int iStartPoint)
 {
     src = iSrc;
     bord = iBord;
-    evt[LEFT] = evt[RIGHT] = NULL;
+    evt[LEFT] = evt[RIGHT] = nullptr;
     startPoint = iStartPoint;
     if (src->getEdge(bord).st < src->getEdge(bord).en) {
         if (iWeight >= 0)
@@ -62,9 +62,9 @@ void SweepTree::MakeDelete()
 {
     for (int i = 0; i < 2; i++) {
         if (evt[i]) {
-            evt[i]->sweep[1 - i] = NULL;
+            evt[i]->sweep[1 - i] = nullptr;
         }
-        evt[i] = NULL;
+        evt[i] = nullptr;
     }
 
     AVLTree::MakeDelete();
@@ -243,7 +243,7 @@ void SweepTree::RemoveEvent(SweepEventQueue &queue, Side s)
 {
     if (evt[s]) {
         queue.remove(evt[s]);
-        evt[s] = NULL;
+        evt[s] = nullptr;
     }
 }
 
@@ -259,7 +259,7 @@ SweepTree::Remove(SweepTreeList &list, SweepEventQueue &queue,
   if (list.nbTree <= 1)
     {
       list.nbTree = 0;
-      list.racine = NULL;
+      list.racine = nullptr;
     }
   else
     {
@@ -274,13 +274,13 @@ int
 SweepTree::Insert(SweepTreeList &list, SweepEventQueue &queue,
                   Shape *iDst, int iAtPoint, bool rebalance, bool sweepSens)
 {
-  if (list.racine == NULL)
+  if (list.racine == nullptr)
     {
       list.racine = this;
       return avl_no_err;
     }
-  SweepTree *insertL = NULL;
-  SweepTree *insertR = NULL;
+  SweepTree *insertL = nullptr;
+  SweepTree *insertR = nullptr;
   int insertion =
     list.racine->Find(iDst->getPoint(iAtPoint).x, this,
 		       insertL, insertR, sweepSens);
@@ -316,7 +316,7 @@ SweepTree::InsertAt(SweepTreeList &list, SweepEventQueue &queue,
                     Shape */*iDst*/, SweepTree *insNode, int fromPt,
                     bool rebalance, bool sweepSens)
 {
-  if (list.racine == NULL)
+  if (list.racine == nullptr)
     {
       list.racine = this;
       return avl_no_err;
@@ -343,8 +343,8 @@ SweepTree::InsertAt(SweepTreeList &list, SweepEventQueue &queue,
       bNorm = -bNorm;
     }
 
-  SweepTree *insertL = NULL;
-  SweepTree *insertR = NULL;
+  SweepTree *insertL = nullptr;
+  SweepTree *insertR = nullptr;
   double ang = cross(bNorm, nNorm);
   if (ang == 0)
     {
@@ -438,10 +438,10 @@ SweepTree::InsertAt(SweepTreeList &list, SweepEventQueue &queue,
 
   int insertion = found_between;
 
-  if (insertL == NULL) {
+  if (insertL == nullptr) {
     insertion = found_on_left;
   }
-  if (insertR == NULL) {
+  if (insertR == nullptr) {
     insertion = found_on_right;
   }
   

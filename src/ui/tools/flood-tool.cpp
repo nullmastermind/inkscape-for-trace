@@ -109,7 +109,7 @@ const std::vector<Glib::ustring> FloodTool::gap_list( gap_init, gap_init+4 );
 
 FloodTool::FloodTool()
     : ToolBase(cursor_paintbucket_xpm)
-    , item(NULL)
+    , item(nullptr)
 {
     // TODO: Why does the flood tool use a hardcoded tolerance instead of a pref?
     this->tolerance = 4;
@@ -119,7 +119,7 @@ FloodTool::~FloodTool() {
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->item) {
@@ -450,7 +450,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
             g_free(str);
         }
 
-        desktop->currentLayer()->addChild(pathRepr,NULL);
+        desktop->currentLayer()->addChild(pathRepr,nullptr);
 
         SPObject *reprobj = document->getObjectByRepr(pathRepr);
         if (reprobj) {
@@ -1227,7 +1227,7 @@ bool FloodTool::root_handler(GdkEvent* event) {
 void FloodTool::finishItem() {
     this->message_context->clear();
 
-    if (this->item != NULL) {
+    if (this->item != nullptr) {
         this->item->updateRepr();
 
         desktop->canvas->endForcedFullRedraws();
@@ -1236,7 +1236,7 @@ void FloodTool::finishItem() {
 
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_PAINTBUCKET, _("Fill bounded area"));
 
-        this->item = NULL;
+        this->item = nullptr;
     }
 }
 

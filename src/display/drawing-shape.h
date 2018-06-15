@@ -28,7 +28,7 @@ public:
     ~DrawingShape() override;
 
     void setPath(SPCurve *curve);
-    void setStyle(SPStyle *style, SPStyle *context_style = NULL) override;
+    void setStyle(SPStyle *style, SPStyle *context_style = nullptr) override;
     void setChildrenStyle(SPStyle *context_style) override;
 
 protected:

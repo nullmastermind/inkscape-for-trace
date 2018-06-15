@@ -38,7 +38,7 @@ class DocumentTreeModel;
 
 class LayerSelector : public Gtk::HBox {
 public:
-    LayerSelector(SPDesktop *desktop = NULL);
+    LayerSelector(SPDesktop *desktop = nullptr);
     ~LayerSelector() override;
 
     SPDesktop *desktop() { return _desktop; }

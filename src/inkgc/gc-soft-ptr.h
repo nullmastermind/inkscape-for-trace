@@ -26,7 +26,7 @@ namespace GC {
 template <typename T>
 class soft_ptr {
 public:
-    soft_ptr(T *pointer=NULL) : _pointer(pointer) {
+    soft_ptr(T *pointer=nullptr) : _pointer(pointer) {
         _register();
     }
 

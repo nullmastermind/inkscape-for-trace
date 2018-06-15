@@ -74,7 +74,7 @@ void SPFePointLight::set(unsigned int key, gchar const *value) {
 
     switch (key) {
     case SP_ATTR_X:
-        end_ptr = NULL;
+        end_ptr = nullptr;
 
         if (value) {
             this->x = g_ascii_strtod(value, &end_ptr);
@@ -96,7 +96,7 @@ void SPFePointLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_Y:
-        end_ptr = NULL;
+        end_ptr = nullptr;
 
         if (value) {
             this->y = g_ascii_strtod(value, &end_ptr);
@@ -118,7 +118,7 @@ void SPFePointLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_Z:
-        end_ptr = NULL;
+        end_ptr = nullptr;
 
         if (value) {
             this->z = g_ascii_strtod(value, &end_ptr);

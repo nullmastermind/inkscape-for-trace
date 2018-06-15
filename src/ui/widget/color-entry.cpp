@@ -61,7 +61,7 @@ void ColorEntry::on_changed()
     }
 
     gchar *str = g_strdup(text.c_str());
-    gchar *end = 0;
+    gchar *end = nullptr;
     guint64 rgba = g_ascii_strtoull(str, &end, 16);
     if (end != str) {
         ptrdiff_t len = end - str;

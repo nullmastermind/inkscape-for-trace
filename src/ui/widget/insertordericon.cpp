@@ -25,8 +25,8 @@ InsertOrderIcon::InsertOrderIcon() :
     _pixTopName(INKSCAPE_ICON("insert-top")),
     _pixBottomName(INKSCAPE_ICON("insert-bottom")),
     _property_active(*this, "active", 0),
-    _property_pixbuf_top(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_bottom(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_top(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_bottom(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr))
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -39,7 +39,7 @@ InsertOrderIcon::InsertOrderIcon() :
     _property_pixbuf_top = icon_theme->load_icon(_pixTopName, phys, (Gtk::IconLookupFlags)0);
     _property_pixbuf_bottom = icon_theme->load_icon(_pixBottomName, phys, (Gtk::IconLookupFlags)0);
 
-    property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
+    property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 }
 
 
@@ -88,7 +88,7 @@ void InsertOrderIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
             property_pixbuf() = _property_pixbuf_bottom;
             break;
         default:
-            property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
+            property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
             break;
     }
     Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );

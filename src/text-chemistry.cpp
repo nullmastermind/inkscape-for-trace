@@ -49,7 +49,7 @@ flowtext_in_selection(Inkscape::Selection *selection)
         if (SP_IS_FLOWTEXT(*i))
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 static SPItem *
@@ -60,7 +60,7 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 static SPItem *
@@ -71,7 +71,7 @@ shape_in_selection(Inkscape::Selection *selection)
         if (SP_IS_SHAPE(*i))
             return *i;
     }
-    return NULL;
+    return nullptr;
 }
 
 void
@@ -139,7 +139,7 @@ text_put_on_path()
 
     // remove transform from text, but recursively scale text's fontsize by the expansion
     SP_TEXT(text)->_adjustFontsizeRecursive (text, text->transform.descrim());
-    text->getRepr()->setAttribute("transform", NULL);
+    text->getRepr()->setAttribute("transform", nullptr);
 
     // make a list of text children
     std::vector<Inkscape::XML::Node *> text_reprs;
@@ -158,26 +158,26 @@ text_put_on_path()
     } else if (text_alignment == Inkscape::Text::Layout::CENTER) {
         textpath->setAttribute("startOffset", "50%");
     }
-    text->getRepr()->addChild(textpath, NULL);
+    text->getRepr()->addChild(textpath, nullptr);
 
     for (auto i=text_reprs.rbegin();i!=text_reprs.rend();++i) {
         // Make a copy of each text child
         Inkscape::XML::Node *copy = (*i)->duplicate(xml_doc);
         // We cannot have multiline in textpath, so remove line attrs from tspans
         if (!strcmp(copy->name(), "svg:tspan")) {
-            copy->setAttribute("sodipodi:role", NULL);
-            copy->setAttribute("x", NULL);
-            copy->setAttribute("y", NULL);
+            copy->setAttribute("sodipodi:role", nullptr);
+            copy->setAttribute("x", nullptr);
+            copy->setAttribute("y", nullptr);
         }
         // remove the old repr from under text
         text->getRepr()->removeChild(*i);
         // put its copy into under textPath
-        textpath->addChild(copy, NULL); // fixme: copy id
+        textpath->addChild(copy, nullptr); // fixme: copy id
     }
 
     // x/y are useless with textpath, and confuse Batik 1.5
-    text->getRepr()->setAttribute("x", NULL);
-    text->getRepr()->setAttribute("y", NULL);
+    text->getRepr()->setAttribute("x", nullptr);
+    text->getRepr()->setAttribute("y", nullptr);
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
                        _("Put text on path"));
@@ -222,9 +222,9 @@ text_remove_from_path()
 static void
 text_remove_all_kerns_recursively(SPObject *o)
 {
-    o->getRepr()->setAttribute("dx", NULL);
-    o->getRepr()->setAttribute("dy", NULL);
-    o->getRepr()->setAttribute("rotate", NULL);
+    o->getRepr()->setAttribute("dx", nullptr);
+    o->getRepr()->setAttribute("dy", nullptr);
+    o->getRepr()->setAttribute("rotate", nullptr);
 
     // if x contains a list, leave only the first value
     gchar const *x = o->getRepr()->attribute("x");
@@ -305,7 +305,7 @@ text_flow_into_shape()
     if (SP_IS_TEXT(text)) {
       // remove transform from text, but recursively scale text's fontsize by the expansion
       SP_TEXT(text)->_adjustFontsizeRecursive(text, text->transform.descrim());
-      text->getRepr()->setAttribute("transform", NULL);
+      text->getRepr()->setAttribute("transform", nullptr);
     }
 
     Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");
@@ -409,7 +409,7 @@ text_unflow ()
         // font size multiplier
         double ex = (flowtext->transform).descrim();
 
-        if (sp_te_get_string_multiline(flowtext) == NULL) { // flowtext is empty
+        if (sp_te_get_string_multiline(flowtext) == nullptr) { // flowtext is empty
             continue;
         }
 
@@ -430,7 +430,7 @@ text_unflow ()
         /* Create <tspan> */
         Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
         rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
-        rtext->addChild(rtspan, NULL);
+        rtext->addChild(rtspan, nullptr);
 
         gchar *text_string = sp_te_get_string_multiline(flowtext);
         Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_string); // FIXME: transfer all formatting!!!

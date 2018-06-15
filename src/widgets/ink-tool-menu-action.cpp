@@ -23,7 +23,7 @@ ink_tool_menu_action_new (const gchar *name,
                           const gchar *inkId,
                           GtkIconSize  size )
 {
-    g_return_val_if_fail (name != NULL, NULL);
+    g_return_val_if_fail (name != nullptr, NULL);
 
     GObject* obj = (GObject*)g_object_new( INK_TOOL_MENU_ACTION_TYPE,
                                            "name", name,

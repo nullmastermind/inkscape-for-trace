@@ -20,7 +20,7 @@ MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip
       message(default_message),
       defmessage(default_message)
 {
-    _label  = NULL;
+    _label  = nullptr;
     _min_height = -1;
 }
 

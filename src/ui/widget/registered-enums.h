@@ -32,8 +32,8 @@ public:
                 const Glib::ustring& key,
                 const Util::EnumDataConverter<E>& c,
                 Registry& wr,
-                Inkscape::XML::Node* repr_in = NULL,
-                SPDocument *doc_in = NULL,
+                Inkscape::XML::Node* repr_in = nullptr,
+                SPDocument *doc_in = nullptr,
                 bool sorted = true )
         : RegisteredWidget< LabelledComboBoxEnum<E> >(label, tip, c, (const Glib::ustring &)"", (const Glib::ustring &)"", true, sorted)
     {

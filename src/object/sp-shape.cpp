@@ -51,11 +51,11 @@ static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *
 
 SPShape::SPShape() : SPLPEItem() {
     for ( int i = 0 ; i < SP_MARKER_LOC_QTY ; i++ ) {
-        this->_marker[i] = NULL;
+        this->_marker[i] = nullptr;
     }
 
-    this->_curve = NULL;
-    this->_curve_before_lpe = NULL;
+    this->_curve = nullptr;
+    this->_curve_before_lpe = nullptr;
 }
 
 SPShape::~SPShape() {
@@ -88,7 +88,7 @@ void SPShape::release() {
     for (int i = 0; i < SP_MARKER_LOC_QTY; i++) {
         if (this->_marker[i]) {
 
-            for (SPItemView *v = this->display; v != NULL; v = v->next) {
+            for (SPItemView *v = this->display; v != nullptr; v = v->next) {
                 sp_marker_hide(_marker[i], v->arenaitem->key() + i);
             }
 
@@ -138,7 +138,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
             double const aw = 1.0 / ictx->i2vp.descrim();
             this->style->stroke_width.computed = this->style->stroke_width.value * aw;
 
-            for (SPItemView *v = ((SPItem *) (this))->display; v != NULL; v = v->next) {
+            for (SPItemView *v = ((SPItem *) (this))->display; v != nullptr; v = v->next) {
                 Inkscape::DrawingShape *sh = dynamic_cast<Inkscape::DrawingShape *>(v->arenaitem);
                 if (hasMarkers()) {
                     this->context_style = this->style;
@@ -156,7 +156,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
         /* This is suboptimal, because changing parent style schedules recalculation */
         /* But on the other hand - how can we know that parent does not tie style and transform */
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingShape *sh = dynamic_cast<Inkscape::DrawingShape *>(v->arenaitem);
 
             if (flags & SP_OBJECT_MODIFIED_FLAG) {
@@ -168,7 +168,7 @@ void SPShape::update(SPCtx* ctx, guint flags) {
     if (this->hasMarkers ()) {
 
         /* Dimension marker views */
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new (SP_MARKER_LOC_QTY));
             }
@@ -183,12 +183,12 @@ void SPShape::update(SPCtx* ctx, guint flags) {
         }
 
         /* Update marker views */
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             sp_shape_update_marker_view (this, v->arenaitem);
         }
     
         // Marker selector needs this here or marker previews are not rendered.
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingShape *sh = dynamic_cast<Inkscape::DrawingShape *>(v->arenaitem);
 
             sh->setChildrenStyle(this->context_style); // Resolve 'context-xxx' in children.
@@ -397,7 +397,7 @@ void SPShape::modified(unsigned int flags) {
     SPLPEItem::modified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingShape *sh = dynamic_cast<Inkscape::DrawingShape *>(v->arenaitem);
             if (hasMarkers()) {
                 this->context_style = this->style;
@@ -760,12 +760,12 @@ void SPShape::update_patheffect(bool write)
         } 
         if (write && success) {
             Inkscape::XML::Node *repr = this->getRepr();
-            if (c_lpe != NULL) {
+            if (c_lpe != nullptr) {
                 gchar *str = sp_svg_write_path(c_lpe->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
-                repr->setAttribute("d", NULL);
+                repr->setAttribute("d", nullptr);
             }
         }
         c_lpe->unref();
@@ -823,7 +823,7 @@ Inkscape::DrawingItem* SPShape::show(Inkscape::Drawing &drawing, unsigned int /*
 void SPShape::hide(unsigned int key) {
     for (int i = 0; i < SP_MARKER_LOC_QTY; ++i) {
         if (_marker[i]) {
-            for (SPItemView* v = display; v != NULL; v = v->next) {
+            for (SPItemView* v = display; v != nullptr; v = v->next) {
                 if (key == v->key) {
                     sp_marker_hide(_marker[i], v->arenaitem->key() + i);
                 }
@@ -845,7 +845,7 @@ int SPShape::hasMarkers() const
        specified, then all three should appear. */
 
     // Ignore markers for objects which are inside markers themselves.
-    for (SPObject *parent = this->parent; parent != NULL; parent = parent->parent) {
+    for (SPObject *parent = this->parent; parent != nullptr; parent = parent->parent) {
       if (dynamic_cast<SPMarker *>(parent)) {
         return 0;
       }
@@ -925,13 +925,13 @@ static void
 sp_shape_marker_release (SPObject *marker, SPShape *shape)
 {
     SPItem *item = dynamic_cast<SPItem *>(shape);
-    g_return_if_fail(item != NULL);
+    g_return_if_fail(item != nullptr);
 
     for (int i = 0; i < SP_MARKER_LOC_QTY; i++) {
         if (marker == shape->_marker[i]) {
             SPItemView *v;
             /* Hide marker */
-            for (v = item->display; v != NULL; v = v->next) {
+            for (v = item->display; v != nullptr; v = v->next) {
                 sp_marker_hide(shape->_marker[i], v->arenaitem->key() + i);
             }
             /* Detach marker */
@@ -963,7 +963,7 @@ void
 sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 {
     SPShape *shape = dynamic_cast<SPShape *>(object);
-    g_return_if_fail(shape != NULL);
+    g_return_if_fail(shape != nullptr);
 
     if (key > SP_MARKER_LOC_END) {
         return;
@@ -980,7 +980,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
             shape->_modified_connect[key].disconnect();
 
             /* Hide marker */
-            for (v = shape->display; v != NULL; v = v->next) {
+            for (v = shape->display; v != nullptr; v = v->next) {
                 sp_marker_hide(shape->_marker[key],
                                v->arenaitem->key() + key);
             }
@@ -1082,7 +1082,7 @@ SPCurve * SPShape::getCurve(unsigned int owner) const
         return _curve->copy();
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -1097,7 +1097,7 @@ SPCurve * SPShape::getCurveBeforeLPE(unsigned int owner) const
         }
         return _curve_before_lpe->copy();
     } 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -1116,7 +1116,7 @@ SPCurve * SPShape::getCurveForEdit(unsigned int owner) const
 }
 
 void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const {
-    if (this->_curve == NULL) {
+    if (this->_curve == nullptr) {
         return;
     }
 

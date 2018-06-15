@@ -42,7 +42,7 @@ void sp_canvas_prepare_buffer(SPCanvasBuf *)
 
 Geom::Affine sp_canvas_item_i2p_affine (SPCanvasItem * item)
 {
-    g_assert (item != NULL); /* this may be overly zealous - it is
+    g_assert (item != nullptr); /* this may be overly zealous - it is
                               * plausible that this gets called
                               * with item == 0. */
 
@@ -51,22 +51,22 @@ Geom::Affine sp_canvas_item_i2p_affine (SPCanvasItem * item)
 
 Geom::Affine  sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to)
 {
-    g_assert (from != NULL);
-    g_assert (to != NULL);
+    g_assert (from != nullptr);
+    g_assert (to != nullptr);
 
     return sp_canvas_item_i2w_affine(from) * sp_canvas_item_i2w_affine(to).inverse();
 }
 
 void sp_canvas_item_set_i2w_affine (SPCanvasItem * item,  Geom::Affine const &i2w)
 {
-    g_assert (item != NULL);
+    g_assert (item != nullptr);
 
     sp_canvas_item_affine_absolute(item, i2w * sp_canvas_item_i2w_affine(item->parent).inverse());
 }
 
 void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z)
 {
-    g_assert (item != NULL);
+    g_assert (item != nullptr);
     
     if (z == 0)
         return sp_canvas_item_lower_to_bottom(item);

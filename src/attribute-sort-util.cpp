@@ -32,7 +32,7 @@ using Inkscape::Util::List;
  */
 void sp_attribute_sort_tree(Node *repr) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
 
   sp_attribute_sort_recursive( repr );
 }
@@ -42,7 +42,7 @@ void sp_attribute_sort_tree(Node *repr) {
  */
 void sp_attribute_sort_recursive(Node *repr) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
 
   if( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
     Glib::ustring element = repr->name();
@@ -75,7 +75,7 @@ bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
  */
 void sp_attribute_sort_element(Node *repr) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
 
   // Glib::ustring element = repr->name();
@@ -105,7 +105,7 @@ void sp_attribute_sort_element(Node *repr) {
                               it != my_list.end(); ++it) {
       // Removing "inkscape:label" results in crash when Layers dialog is open.
       if (it->first != "inkscape:label") {
-          repr->setAttribute( it->first.c_str(), NULL, false );
+          repr->setAttribute( it->first.c_str(), nullptr, false );
       }
   }
   // Insert all attributes in proper order
@@ -123,7 +123,7 @@ void sp_attribute_sort_element(Node *repr) {
  */
 void sp_attribute_sort_style(Node *repr) {
 
-  g_return_if_fail (repr != NULL);
+  g_return_if_fail (repr != nullptr);
   g_return_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE);
 
   // Find element's style
@@ -135,7 +135,7 @@ void sp_attribute_sort_style(Node *repr) {
   Glib::ustring value;
   sp_repr_css_write_string(css, value);
   if( value.empty() ) {
-      repr->setAttribute("style", NULL );
+      repr->setAttribute("style", nullptr );
   } else {
       repr->setAttribute("style", value.c_str());
   }
@@ -149,7 +149,7 @@ void sp_attribute_sort_style(Node *repr) {
  */
 Glib::ustring sp_attribute_sort_style(Node *repr, gchar const *string) {
 
-  g_return_val_if_fail (repr != NULL, NULL);
+  g_return_val_if_fail (repr != nullptr, NULL);
   g_return_val_if_fail (repr->type() == Inkscape::XML::ELEMENT_NODE, NULL);
 
   SPCSSAttr *css = sp_repr_css_attr_new();
@@ -169,11 +169,11 @@ Glib::ustring sp_attribute_sort_style(Node *repr, gchar const *string) {
  */
 void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
 
-  g_return_if_fail (repr != NULL);
-  g_return_if_fail (css != NULL);
+  g_return_if_fail (repr != nullptr);
+  g_return_if_fail (css != nullptr);
 
   Glib::ustring element = repr->name();
-  Glib::ustring id = (repr->attribute( "id" )==NULL ? "" : repr->attribute( "id" ));
+  Glib::ustring id = (repr->attribute( "id" )==nullptr ? "" : repr->attribute( "id" ));
 
   // Loop over all properties in "style" node.
   std::vector<std::pair< Glib::ustring, Glib::ustring > > my_list;
@@ -190,7 +190,7 @@ void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
   //for (auto it: my_list) {
   for (std::vector<std::pair< Glib::ustring, Glib::ustring > >::iterator it = my_list.begin();
                               it != my_list.end(); ++it) {
-      sp_repr_css_set_property( css, it->first.c_str(), NULL );
+      sp_repr_css_set_property( css, it->first.c_str(), nullptr );
   }
   // Insert all attributes in proper order
   for (std::vector<std::pair< Glib::ustring, Glib::ustring > >::iterator it = my_list.begin();

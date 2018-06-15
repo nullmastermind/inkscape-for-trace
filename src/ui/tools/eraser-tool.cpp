@@ -115,7 +115,7 @@ void EraserTool::setup() {
     this->cal1 = new SPCurve();
     this->cal2 = new SPCurve();
 
-    this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, NULL);
+    this->currentshape = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
 
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), ERC_RED_RGBA, SP_WIND_RULE_EVENODD);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
@@ -372,7 +372,7 @@ void EraserTool::cancel() {
             this->accumulated->reset();
             this->clear_current();
             if (this->repr) {
-                this->repr = NULL;
+                this->repr = nullptr;
             }
 }
 
@@ -397,7 +397,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                 this->accumulated->reset();
 
                 if (this->repr) {
-                    this->repr = NULL;
+                    this->repr = nullptr;
                 }
                 if ( eraser_mode == ERASER_MODE_DELETE ) {
                     Inkscape::Rubberband::get(desktop)->start(desktop, button_dt);
@@ -411,7 +411,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                                       GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
                                       GDK_BUTTON_PRESS_MASK ),
-                                    NULL,
+                                    nullptr,
                                     event->button.time);
 
                 ret = TRUE;
@@ -482,7 +482,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
             this->clear_current();
             if (this->repr) {
-                this->repr = NULL;
+                this->repr = nullptr;
             }
 
             this->message_context->clear();
@@ -625,7 +625,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
 void EraserTool::clear_current() {
     // reset bpath
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), NULL);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), nullptr);
 
     // reset curve
     this->currentcurve->reset();
@@ -657,7 +657,7 @@ void EraserTool::set_to_accumulated() {
         Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
         pathv *= item_repr->i2doc_affine().inverse();
         gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != NULL );
+        g_assert( str != nullptr );
         this->repr->setAttribute("d", str);
         g_free(str);
         Geom::OptRect eraserBbox;
@@ -723,7 +723,7 @@ void EraserTool::set_to_accumulated() {
                                     sp_repr_css_set_property(css, "fill-rule", "evenodd");
                                     sp_desktop_set_style(this->desktop, css);
                                     sp_repr_css_attr_unref(css);
-                                    css = 0;
+                                    css = nullptr;
                                 }
                                 if (this->nowidth) {
                                     selection->pathCut(true);
@@ -842,12 +842,12 @@ void EraserTool::set_to_accumulated() {
             }
             // Remove the eraser stroke itself:
             sp_repr_unparent( this->repr );
-            this->repr = 0;
+            this->repr = nullptr;
         }
     } else {
         if (this->repr) {
             sp_repr_unparent(this->repr);
-            this->repr = 0;
+            this->repr = nullptr;
         }
     }
     if ( workDone ) {
@@ -1047,7 +1047,7 @@ void EraserTool::fit_and_split(bool release) {
             gint eraser_mode = prefs->getInt("/tools/eraser/mode",2);
             g_assert(!this->currentcurve->is_empty());
 
-            SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, NULL);
+            SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
             SPCurve *curve = this->currentcurve->copy();
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
             curve->unref();

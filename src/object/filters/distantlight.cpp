@@ -71,7 +71,7 @@ void SPFeDistantLight::set(unsigned int key, gchar const *value) {
 
     switch (key) {
     case SP_ATTR_AZIMUTH:
-        end_ptr =NULL;
+        end_ptr =nullptr;
 
         if (value) {
             this->azimuth = g_ascii_strtod(value, &end_ptr);
@@ -93,7 +93,7 @@ void SPFeDistantLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_ELEVATION:
-        end_ptr =NULL;
+        end_ptr =nullptr;
 
         if (value) {
             this->elevation = g_ascii_strtod(value, &end_ptr);

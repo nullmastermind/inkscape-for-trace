@@ -46,7 +46,7 @@ namespace Internal {
 
 bool CairoPsOutput::check (Inkscape::Extension::Extension * /*module*/)
 {
-    if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_PS)) {
+    if (nullptr == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_PS)) {
         return FALSE;
     } else {
         return TRUE;
@@ -55,7 +55,7 @@ bool CairoPsOutput::check (Inkscape::Extension::Extension * /*module*/)
 
 bool CairoEpsOutput::check (Inkscape::Extension::Extension * /*module*/)
 {
-    if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_EPS)) {
+    if (nullptr == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_EPS)) {
         return FALSE;
     } else {
         return TRUE;
@@ -68,7 +68,7 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
 {
     doc->ensureUpToDate();
 
-    SPItem *base = NULL;
+    SPItem *base = nullptr;
 
     bool pageBoundingBox = TRUE;
     if (exportId && strcmp(exportId, "")) {
@@ -134,13 +134,13 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
     unsigned int ret;
 
     ext = Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_PS);
-    if (ext == NULL)
+    if (ext == nullptr)
         return;
 
     int level = CAIRO_PS_LEVEL_2;
     try {
         const gchar *new_level = mod->get_param_enum("PSlevel");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
+        if((new_level != nullptr) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
         }
     } catch(...) {}
@@ -180,7 +180,7 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
         bleedmargin_px = mod->get_param_float("bleed");
     } catch(...) {}
 
-    const gchar *new_exportId = NULL;
+    const gchar *new_exportId = nullptr;
     try {
         new_exportId = mod->get_param_string("exportId");
     } catch(...) {}
@@ -223,13 +223,13 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
     unsigned int ret;
 
     ext = Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_CAIRO_EPS);
-    if (ext == NULL)
+    if (ext == nullptr)
         return;
 
     int level = CAIRO_PS_LEVEL_2;
     try {
         const gchar *new_level = mod->get_param_enum("PSlevel");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
+        if((new_level != nullptr) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
         }
     } catch(...) {}
@@ -269,7 +269,7 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
         bleedmargin_px = mod->get_param_float("bleed");
     } catch(...) {}
 
-    const gchar *new_exportId = NULL;
+    const gchar *new_exportId = nullptr;
     try {
         new_exportId = mod->get_param_string("exportId");
     } catch(...) {}

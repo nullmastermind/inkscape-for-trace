@@ -72,8 +72,8 @@ DropperTool::DropperTool()
 	, stroke(false)
 	, dropping(false)
 	, dragging(false)
-	, grabbed(NULL)
-	, area(NULL)
+	, grabbed(nullptr)
+	, area(nullptr)
 	, centre(0, 0)
 {
 }
@@ -113,12 +113,12 @@ void DropperTool::finish() {
 	
     if (this->grabbed) {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-        this->grabbed = NULL;
+        this->grabbed = nullptr;
     }
 
     if (this->area) {
         sp_canvas_item_destroy(this->area);
-        this->area = NULL;
+        this->area = nullptr;
     }
 
     ToolBase::finish();
@@ -211,7 +211,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                 GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK |
                 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                NULL, event->button.time);
+                nullptr, event->button.time);
             this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
 
             break;
@@ -299,7 +299,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
 		if (this->grabbed) {
 		    sp_canvas_item_ungrab(this->grabbed, event->button.time);
-		    this->grabbed = NULL;
+		    this->grabbed = nullptr;
 		}
 
                 Inkscape::Selection *selection = desktop->getSelection();

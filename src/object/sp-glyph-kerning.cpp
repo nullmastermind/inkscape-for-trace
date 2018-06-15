@@ -22,10 +22,10 @@
 SPGlyphKerning::SPGlyphKerning() 
     : SPObject()
 //TODO: correct these values:
-    , u1(NULL)
-    , g1(NULL)
-    , u2(NULL)
-    , g2(NULL)
+    , u1(nullptr)
+    , g1(nullptr)
+    , u2(nullptr)
+    , g2(nullptr)
     , k(0)
 {
 }
@@ -124,7 +124,7 @@ void SPGlyphKerning::set(unsigned int key, const gchar *value)
         }
         case SP_ATTR_K:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->k){
                 this->k = number;

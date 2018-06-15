@@ -150,24 +150,24 @@ void ExtensionEditor::on_pagelist_selection_changed(void)
         Inkscape::Extension::Extension * ext = Inkscape::Extension::db.get(id.c_str());
 
         /* Make sure we have all the widges */
-        Gtk::Widget * info = NULL;
-        Gtk::Widget * help = NULL;
-        Gtk::Widget * params = NULL;
+        Gtk::Widget * info = nullptr;
+        Gtk::Widget * help = nullptr;
+        Gtk::Widget * params = nullptr;
 
-        if (ext != NULL) {
+        if (ext != nullptr) {
             info = ext->get_info_widget();
             help = ext->get_help_widget();
             params = ext->get_params_widget();
         }
 
         /* Place them in the pages */
-        if (info != NULL) {
+        if (info != nullptr) {
             _notebook_info.add(*info);
         }
-        if (help != NULL) {
+        if (help != nullptr) {
             _notebook_help.add(*help);
         }
-        if (params != NULL) {
+        if (params != nullptr) {
             _notebook_params.add(*params);
         }
 

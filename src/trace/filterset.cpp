@@ -48,7 +48,7 @@ GrayMap *grayMapGaussian(GrayMap *me)
 
     GrayMap *newGm = GrayMapCreate(width, height);
     if (!newGm)
-        return NULL;
+        return nullptr;
 
     for (int y = 0 ; y<height ; y++)
         {
@@ -98,7 +98,7 @@ RgbMap *rgbMapGaussian(RgbMap *me)
 
     RgbMap *newGm = RgbMapCreate(width, height);
     if (!newGm)
-        return NULL;
+        return nullptr;
 
     for (int y = 0 ; y<height ; y++)
         {
@@ -178,7 +178,7 @@ static GrayMap *grayMapSobel(GrayMap *gm,
 
     GrayMap *newGm = GrayMapCreate(width, height);
     if (!newGm)
-        return NULL;
+        return nullptr;
 
     for (int y = 0 ; y<height ; y++)
         {
@@ -353,11 +353,11 @@ GrayMap *
 grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 {
     if (!gm)
-        return NULL;
+        return nullptr;
 
     GrayMap *cannyGm = grayMapSobel(gm, lowThreshold, highThreshold);
     if (!cannyGm)
-        return NULL;
+        return nullptr;
     /*cannyGm->writePPM(cannyGm, "canny.ppm");*/
 
     return cannyGm;

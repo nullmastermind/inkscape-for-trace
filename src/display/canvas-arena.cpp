@@ -78,7 +78,7 @@ sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
                                            G_TYPE_FROM_CLASS(item_class),
                                            G_SIGNAL_RUN_LAST,
                                            ((glong)((guint8*)&(klass->arena_event) - (guint8*)klass)),
-					   NULL, NULL,
+					   nullptr, nullptr,
                                            sp_marshal_INT__POINTER_POINTER,
                                            G_TYPE_INT, 2, G_TYPE_POINTER, G_TYPE_POINTER);
 
@@ -116,7 +116,7 @@ sp_canvas_arena_init (SPCanvasArena *arena)
             sigc::ptr_fun(&sp_canvas_arena_item_deleted),
             arena));
 
-    arena->active = NULL;
+    arena->active = nullptr;
 }
 
 static void sp_canvas_arena_destroy(SPCanvasItem *object)
@@ -180,7 +180,7 @@ static void
 sp_canvas_arena_item_deleted(SPCanvasArena *arena, Inkscape::DrawingItem *item)
 {
     if (arena->active == item) {
-        arena->active = NULL;
+        arena->active = nullptr;
     }
 }
 
@@ -260,7 +260,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
         case GDK_LEAVE_NOTIFY:
             if (arena->cursor) {
                 ret = sp_canvas_arena_send_event (arena, event);
-                arena->active = NULL;
+                arena->active = nullptr;
                 arena->cursor = FALSE;
             }
             break;
@@ -342,7 +342,7 @@ static void sp_canvas_arena_request_render(SPCanvasArena *ca, Geom::IntRect cons
 void
 sp_canvas_arena_set_pick_delta (SPCanvasArena *ca, gdouble delta)
 {
-    g_return_if_fail (ca != NULL);
+    g_return_if_fail (ca != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ARENA (ca));
 
     /* fixme: repick? */
@@ -352,7 +352,7 @@ sp_canvas_arena_set_pick_delta (SPCanvasArena *ca, gdouble delta)
 void
 sp_canvas_arena_set_sticky (SPCanvasArena *ca, gboolean sticky)
 {
-    g_return_if_fail (ca != NULL);
+    g_return_if_fail (ca != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ARENA (ca));
 
     /* fixme: repick? */
@@ -362,7 +362,7 @@ sp_canvas_arena_set_sticky (SPCanvasArena *ca, gboolean sticky)
 void
 sp_canvas_arena_render_surface (SPCanvasArena *ca, cairo_surface_t *surface, Geom::IntRect const &r)
 {
-    g_return_if_fail (ca != NULL);
+    g_return_if_fail (ca != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ARENA (ca));
 
     Inkscape::DrawingContext dc(surface, r.min());

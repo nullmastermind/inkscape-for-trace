@@ -66,7 +66,7 @@ Shape::ConvertToForme (Path * dest)
   // suivParc: next in the stack
   for (int i = 0; i < numberOfEdges(); i++)
   {
-    swdData[i].misc = 0;
+    swdData[i].misc = nullptr;
     swdData[i].precParc = swdData[i].suivParc = -1;
   }
   
@@ -83,7 +83,7 @@ Shape::ConvertToForme (Path * dest)
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == nullptr)
           break;
       }
       lastPtUsed = fi + 1;
@@ -128,7 +128,7 @@ Shape::ConvertToForme (Path * dest)
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
+	      while (swdData[nb].misc != nullptr || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -211,7 +211,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   
   for (int i = 0; i < numberOfEdges(); i++)
   {
-    swdData[i].misc = 0;
+    swdData[i].misc = nullptr;
     swdData[i].precParc = swdData[i].suivParc = -1;
   }
   
@@ -225,7 +225,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == nullptr)
           break;
       }
       lastPtUsed = fi + 1;
@@ -268,7 +268,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
+	      while (swdData[nb].misc != nullptr || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -329,8 +329,8 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 void 
 Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*/,int &nbNest,int *&nesting,int *&contStart,bool splitWhenForced)
 {
-  nesting=NULL;
-  contStart=NULL;
+  nesting=nullptr;
+  contStart=nullptr;
   nbNest=0;
 
   if (numberOfPoints() <= 1 || numberOfEdges() <= 1)
@@ -364,7 +364,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
   
   for (int i = 0; i < numberOfEdges(); i++)
   {
-    swdData[i].misc = 0;
+    swdData[i].misc = nullptr;
     swdData[i].precParc = swdData[i].suivParc = -1;
   }
   
@@ -381,7 +381,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
       int fi = 0;
       for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
-        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == 0)
+        if (getPoint(fi).incidentEdge[FIRST] >= 0 && swdData[getPoint(fi).incidentEdge[FIRST]].misc == nullptr)
           break;
       }
       {
@@ -439,7 +439,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
+	      while (swdData[nb].misc != nullptr || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -896,7 +896,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
     int nPiece = ebData[bord].pieceID;
     int nPath = ebData[bord].pathID;
     
-    if (nPath < 0 || nPath >= nbP || orig[nPath] == NULL)
+    if (nPath < 0 || nPath >= nbP || orig[nPath] == nullptr)
     {
       // segment batard
       dest->LineTo (getPoint(getEdge(bord).en).x);
@@ -1159,7 +1159,7 @@ Shape::ReFormeBezierTo (int bord, int /*curBord*/, Path * dest, Path * from)
   int inBezier = -1, nbInterm = -1;
   int typ;
   typ = from->descr_cmd[nPiece]->getType();
-  PathDescrBezierTo *nBData = NULL;
+  PathDescrBezierTo *nBData = nullptr;
   if (typ == descr_bezierto)
   {
     nBData = dynamic_cast<PathDescrBezierTo *>(from->descr_cmd[nPiece]);
@@ -1220,7 +1220,7 @@ Shape::ReFormeBezierTo (int bord, int /*curBord*/, Path * dest, Path * from)
     bord = swdData[bord].suivParc;
   }
 
-  g_return_val_if_fail(nBData != NULL, 0);
+  g_return_val_if_fail(nBData != nullptr, 0);
   
   if (pe == ps)
   {

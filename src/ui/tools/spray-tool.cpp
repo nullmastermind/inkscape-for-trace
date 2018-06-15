@@ -154,7 +154,7 @@ SprayTool::SprayTool()
     , is_drawing(false)
     , is_dilating(false)
     , has_dilated(false)
-    , dilate_area(NULL)
+    , dilate_area(nullptr)
     , no_overlap(false)
     , picker(false)
     , pick_center(true)
@@ -184,13 +184,13 @@ SprayTool::~SprayTool() {
 
     if (this->dilate_area) {
         sp_canvas_item_destroy(this->dilate_area);
-        this->dilate_area = NULL;
+        this->dilate_area = nullptr;
     }
 }
 
 void SprayTool::update_cursor(bool /*with_shift*/) {
     guint num = 0;
-    gchar *sel_message = NULL;
+    gchar *sel_message = nullptr;
 
     if (!desktop->selection->isEmpty()) {
         num = (guint) boost::distance(desktop->selection->items());
@@ -418,7 +418,7 @@ static void random_position(double &radius, double &angle, double &a, double &s,
 }
 
 static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affine affine, Geom::Point center){
-    path *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
+    path *= i2anc_affine(static_cast<SPItem *>(item->parent), nullptr).inverse();
     path *= item->transform.inverse();
     Geom::Affine dt2p;
     if (item->parent) {
@@ -429,7 +429,7 @@ static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affin
     }
     Geom::Affine i2dt = item->i2dt_affine() * Geom::Translate(center).inverse() * affine * Geom::Translate(center);
     path *= i2dt * dt2p;
-    path *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL);
+    path *= i2anc_affine(static_cast<SPItem *>(item->parent), nullptr);
 }
 
 /**
@@ -1144,13 +1144,13 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
-            g_assert(item != NULL);
+            g_assert(item != nullptr);
             sp_object_ref(item);
         }
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
-            g_assert(item != NULL);
+            g_assert(item != nullptr);
             if (sp_spray_recursive(desktop
                                 , set
                                 , item
@@ -1194,7 +1194,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
-            g_assert(item != NULL);
+            g_assert(item != nullptr);
             sp_object_unref(item);
         }
     }

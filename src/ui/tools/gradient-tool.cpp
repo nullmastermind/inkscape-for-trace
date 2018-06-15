@@ -65,8 +65,8 @@ GradientTool::GradientTool()
     , cursor_addnode(false)
     , node_added(false)
 // TODO: Why are these connections stored as pointers?
-    , selcon(NULL)
-    , subselcon(NULL)
+    , selcon(nullptr)
+    , subselcon(nullptr)
 {
 	// TODO: This value is overwritten in the root handler
     this->tolerance = 6;
@@ -105,7 +105,7 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
 
     GrDrag *drag = rc->_grdrag;
     Inkscape::Selection *selection = this->desktop->getSelection();
-    if (selection == NULL) {
+    if (selection == nullptr) {
         return;
     }
     guint n_obj = (guint) boost::distance(selection->items());
@@ -168,7 +168,7 @@ void GradientTool::setup() {
     this->subselcon = new sigc::connection(this->desktop->connectToolSubselectionChanged(
     	sigc::hide(sigc::bind(
     		sigc::mem_fun(this, &GradientTool::selection_changed),
-    		(Inkscape::Selection*)NULL
+    		(Inkscape::Selection*)nullptr
     	))
     ));
 
@@ -259,7 +259,7 @@ sp_gradient_context_get_stop_intervals (GrDrag *drag, std::vector<SPStop *> &the
 
             // if there's a next stop,
             if (next_stop) {
-                GrDragger *dnext = NULL;
+                GrDragger *dnext = nullptr;
                 // find its dragger
                 // (complex because it may have different types, and because in radial,
                 // more than one dragger may correspond to a stop, so we must distinguish)
@@ -307,7 +307,7 @@ sp_gradient_context_get_stop_intervals (GrDrag *drag, std::vector<SPStop *> &the
 void
 sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
 {
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     GrDrag *drag = rc->_grdrag;
 
     std::vector<SPStop *> these_stops;
@@ -376,7 +376,7 @@ static double sqr(double x) {return x*x;}
 static void
 sp_gradient_simplify(GradientTool *rc, double tolerance)
 {
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     GrDrag *drag = rc->_grdrag;
 
     std::vector<SPStop *> these_stops;
@@ -471,7 +471,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
     case GDK_2BUTTON_PRESS:
         if ( event->button.button == 1 ) {
             bool over_line = false;
-            SPCtrlLine *line = NULL;
+            SPCtrlLine *line = nullptr;
 
             if (!drag->lines.empty()) {
                 for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
@@ -602,7 +602,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
 
         if ( event->button.button == 1 && !this->space_panning ) {
             bool over_line = false;
-            SPCtrlLine *line = NULL;
+            SPCtrlLine *line = nullptr;
 
             if (!drag->lines.empty()) {
                 for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
@@ -659,7 +659,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
                     }
                 }
 
-                this->item_to_select = NULL;
+                this->item_to_select = nullptr;
                 ret = TRUE;
             }
 
@@ -680,7 +680,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
             sp_event_show_modifier_tip (this->defaultMessageContext(), event,
                                         _("<b>Ctrl</b>: snap gradient angle"),
                                         _("<b>Shift</b>: draw gradient around the starting point"),
-                                        NULL);
+                                        nullptr);
             break;
 
         case GDK_KEY_x:

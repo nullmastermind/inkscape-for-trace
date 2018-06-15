@@ -51,9 +51,9 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(const gchar * name,
 {
 
     // Read XML to build page
-    if (xml != NULL) {
+    if (xml != nullptr) {
         Inkscape::XML::Node *child_repr = xml->firstChild();
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             char const * chname = child_repr->name();
             if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
                 chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -63,7 +63,7 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(const gchar * name,
             if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
                 Parameter * param;
                 param = Parameter::make(child_repr, ext);
-                if (param != NULL) parameters.push_back(param);
+                if (param != nullptr) parameters.push_back(param);
             }
             child_repr = child_repr->next();
         }
@@ -122,13 +122,13 @@ ParamNotebook::ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inksc
 
     name = in_repr->attribute("name");
     text = in_repr->attribute("gui-text");
-    if (text == NULL)
+    if (text == nullptr)
         text = in_repr->attribute("_gui-text");
     description = in_repr->attribute("gui-description");
-    if (description == NULL)
+    if (description == nullptr)
         description = in_repr->attribute("_gui-description");
     hide = in_repr->attribute("gui-hidden");
-    if (hide != NULL) {
+    if (hide != nullptr) {
         if (strcmp(hide, "1") == 0 ||
             strcmp(hide, "true") == 0) {
                 hidden = true;
@@ -137,8 +137,8 @@ ParamNotebook::ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inksc
     }
 
     /* In this case we just don't have enough information */
-    if (name == NULL) {
-        return NULL;
+    if (name == nullptr) {
+        return nullptr;
     }
 
     ParamNotebookPage * page = new ParamNotebookPage(name, text, description, hidden, in_ext, in_repr);
@@ -157,7 +157,7 @@ ParamNotebook::ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inksc
 Gtk::Widget * ParamNotebook::ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox);
@@ -194,7 +194,7 @@ Gtk::Widget * ParamNotebook::ParamNotebookPage::get_widget(SPDocument * doc, Ink
 /** Search the parameter's name in the page content. */
 Parameter *ParamNotebook::ParamNotebookPage::get_param(const gchar * name)
 {
-    if (name == NULL) {
+    if (name == nullptr) {
         throw Extension::param_not_exist();
     }
     if (this->parameters.empty()) {
@@ -208,7 +208,7 @@ Parameter *ParamNotebook::ParamNotebookPage::get_param(const gchar * name)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /** End ParamNotebookPage **/
@@ -224,9 +224,9 @@ ParamNotebook::ParamNotebook(const gchar * name,
     : Parameter(name, text, description, hidden, indent, ext)
 {
     // Read XML tree to add pages:
-    if (xml != NULL) {
+    if (xml != nullptr) {
         Inkscape::XML::Node *child_repr = xml->firstChild();
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             char const * chname = child_repr->name();
             if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
                 chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -236,14 +236,14 @@ ParamNotebook::ParamNotebook(const gchar * name,
             if (!strcmp(chname, "page")) {
                 ParamNotebookPage * page;
                 page = ParamNotebookPage::makepage(child_repr, ext);
-                if (page != NULL) pages.push_back(page);
+                if (page != nullptr) pages.push_back(page);
             }
             child_repr = child_repr->next();
         }
     }
 
     // Initialize _value with the current page
-    const char * defaultval = NULL;
+    const char * defaultval = nullptr;
     // set first page as default
     if (!pages.empty()) {
         defaultval = pages[0]->name();
@@ -256,7 +256,7 @@ ParamNotebook::ParamNotebook(const gchar * name,
 
     if (!paramval.empty())
         defaultval = paramval.data();
-    if (defaultval != NULL)
+    if (defaultval != nullptr)
         _value = g_strdup(defaultval);  // allocate space for _value
 }
 
@@ -290,9 +290,9 @@ const gchar *ParamNotebook::set(const int in, SPDocument * /*doc*/, Inkscape::XM
     int i = in < pages.size() ? in : pages.size()-1;
     ParamNotebookPage * page = pages[i];
 
-    if (page == NULL) return _value;
+    if (page == nullptr) return _value;
 
-    if (_value != NULL) g_free(_value);
+    if (_value != nullptr) g_free(_value);
     _value = g_strdup(page->name());
 
     gchar * prefname = this->pref_name();
@@ -359,7 +359,7 @@ void ParamNotebookWdg::changed_page(Gtk::Widget * /*page*/, guint pagenum)
 /** Search the parameter's name in the notebook content. */
 Parameter *ParamNotebook::get_param(const gchar * name)
 {
-    if (name == NULL) {
+    if (name == nullptr) {
         throw Extension::param_not_exist();
     }
     for (auto page:pages) {
@@ -369,7 +369,7 @@ Parameter *ParamNotebook::get_param(const gchar * name)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -381,7 +381,7 @@ Parameter *ParamNotebook::get_param(const gchar * name)
 Gtk::Widget * ParamNotebook::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     ParamNotebookWdg * nb = Gtk::manage(new ParamNotebookWdg(this, doc, node));

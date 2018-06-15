@@ -521,7 +521,7 @@ protected:
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddPencilPowerStrokePressureStep(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, gint def_value);
-    static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = NULL);
+    static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = nullptr);
 
     void on_pagelist_selection_changed();
     void on_reset_open_recent_clicked();

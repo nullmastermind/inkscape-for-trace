@@ -46,8 +46,8 @@ namespace Extension {
 */
 ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Implementation::ImplementationDocumentCache * docCache, bool show_working, bool show_errors) :
     _state(ExecutionEnv::INIT),
-    _visibleDialog(NULL),
-    _mainloop(NULL),
+    _visibleDialog(nullptr),
+    _mainloop(nullptr),
     _doc(doc),
     _docCache(docCache),
     _effect(effect),
@@ -64,10 +64,10 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
     Destroys the dialog if created and the document cache.
 */
 ExecutionEnv::~ExecutionEnv (void) {
-    if (_visibleDialog != NULL) {
+    if (_visibleDialog != nullptr) {
         _visibleDialog->hide();
         delete _visibleDialog;
-        _visibleDialog = NULL;
+        _visibleDialog = nullptr;
     }
     killDocCache();
     return;
@@ -80,7 +80,7 @@ ExecutionEnv::~ExecutionEnv (void) {
 */
 void
 ExecutionEnv::genDocCache (void) {
-    if (_docCache == NULL) {
+    if (_docCache == nullptr) {
         // printf("Gen Doc Cache\n");
         _docCache = _effect->get_imp()->newDocCache(_effect, _doc);
     }
@@ -93,10 +93,10 @@ ExecutionEnv::genDocCache (void) {
 */
 void
 ExecutionEnv::killDocCache (void) {
-    if (_docCache != NULL) {
+    if (_docCache != nullptr) {
         // printf("Killed Doc Cache\n");
         delete _docCache;
-        _docCache = NULL;
+        _docCache = nullptr;
     }
     return;
 }
@@ -108,10 +108,10 @@ ExecutionEnv::killDocCache (void) {
 */
 void
 ExecutionEnv::createWorkingDialog (void) {
-    if (_visibleDialog != NULL) {
+    if (_visibleDialog != nullptr) {
         _visibleDialog->hide();
         delete _visibleDialog;
-        _visibleDialog = NULL;
+        _visibleDialog = nullptr;
     }
 
     SPDesktop *desktop = (SPDesktop *)_doc;

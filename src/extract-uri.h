@@ -1,7 +1,7 @@
 #ifndef SEEN_EXTRACT_URI_H
 #define SEEN_EXTRACT_URI_H
 
-char *extract_uri(char const *s, char const** endptr = 0);
+char *extract_uri(char const *s, char const** endptr = nullptr);
 
 
 #endif /* !SEEN_EXTRACT_URI_H */

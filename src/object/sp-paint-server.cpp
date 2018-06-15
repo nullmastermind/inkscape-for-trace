@@ -66,7 +66,7 @@ bool SPPaintServer::isValid() const
 
 Inkscape::DrawingPattern *SPPaintServer::show(Inkscape::Drawing &/*drawing*/, unsigned int /*key*/, Geom::OptRect /*bbox*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 void SPPaintServer::hide(unsigned int /*key*/)
@@ -79,7 +79,7 @@ void SPPaintServer::setBBox(unsigned int /*key*/, Geom::OptRect const &/*bbox*/)
 
 cairo_pattern_t* SPPaintServer::pattern_new(cairo_t * /*ct*/, Geom::OptRect const &/*bbox*/, double /*opacity*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 /*

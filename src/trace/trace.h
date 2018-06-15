@@ -167,7 +167,7 @@ public:
      */
     Tracer()
         {
-        engine       = NULL;
+        engine       = nullptr;
         sioxEnabled  = false;
         }
 

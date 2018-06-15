@@ -137,7 +137,7 @@ Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
         } catch (std::exception &e) { }
     }
 
-    return 0;
+    return nullptr;
 }
 
 static void sp_spray_width_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
@@ -290,7 +290,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     {
         /* Width */
-        gchar const* labels[] = {_("(narrow spray)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad spray)")};
+        gchar const* labels[] = {_("(narrow spray)"), nullptr, nullptr, nullptr, _("(default)"), nullptr, nullptr, nullptr, nullptr, _("(broad spray)")};
         gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the spray area (relative to the visible canvas area)"),
@@ -298,7 +298,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "altx-spray",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_width_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_width_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -319,7 +319,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     
     {
         /* Mean */
-        gchar const* labels[] = {_("(default)"), 0, 0, 0, 0, 0, 0, _("(maximum mean)")};
+        gchar const* labels[] = {_("(default)"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("(maximum mean)")};
         gdouble values[] = {0, 5, 10, 20, 30, 50, 70, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayMeanAction",
                                                               _("Focus"), _("Focus:"), _("0 to spray a spot; increase to enlarge the ring radius"),
@@ -327,7 +327,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "spray-mean",
                                                               0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_mean_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_mean_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -335,7 +335,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     {
         /* Standard_deviation */
-        gchar const* labels[] = {_("(minimum scatter)"), 0, 0, 0, 0, 0, _("(default)"), _("(maximum scatter)")};
+        gchar const* labels[] = {_("(minimum scatter)"), nullptr, nullptr, nullptr, nullptr, nullptr, _("(default)"), _("(maximum scatter)")};
         gdouble values[] = {1, 5, 10, 20, 30, 50, 70, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayStandard_deviationAction",
                                                               C_("Spray tool", "Scatter"), C_("Spray tool", "Scatter:"), _("Increase to scatter sprayed objects"),
@@ -343,7 +343,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "spray-standard_deviation",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_standard_deviation_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_standard_deviation_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -402,7 +402,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
 
     {   /* Population */
-        gchar const* labels[] = {_("(low population)"), 0, 0, 0, _("(default)"), 0, _("(high population)")};
+        gchar const* labels[] = {_("(low population)"), nullptr, nullptr, nullptr, _("(default)"), nullptr, _("(high population)")};
         gdouble values[] = {5, 20, 35, 50, 70, 85, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayPopulationAction",
                                                               _("Amount"), _("Amount:"),
@@ -411,7 +411,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "spray-population",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_population_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_population_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -432,7 +432,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
 
     {   /* Rotation */
-        gchar const* labels[] = {_("(default)"), 0, 0, 0, 0, 0, 0, _("(high rotation variation)")};
+        gchar const* labels[] = {_("(default)"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("(high rotation variation)")};
         gdouble values[] = {0, 10, 25, 35, 50, 60, 80, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayRotationAction",
                                                               _("Rotation"), _("Rotation:"),
@@ -442,7 +442,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "spray-rotation",
                                                               0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_rotation_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_rotation_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -450,7 +450,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     }
 
     {   /* Scale */
-        gchar const* labels[] = {_("(default)"), 0, 0, 0, 0, 0, 0, _("(high scale variation)")};
+        gchar const* labels[] = {_("(default)"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("(high scale variation)")};
         gdouble values[] = {0, 10, 25, 35, 50, 60, 80, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayScaleAction",
                                                               C_("Spray tool", "Scale"), C_("Spray tool", "Scale:"),
@@ -460,7 +460,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                               GTK_WIDGET(desktop->canvas), holder, true, "spray-scale",
                                                               0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_spray_scale_value_changed, NULL /*unit tracker*/, 1, 0 );
+                                                              sp_spray_scale_value_changed, nullptr /*unit tracker*/, 1, 0 );
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), true );
@@ -599,16 +599,16 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     
     /* Offset */
     {
-        gchar const* labels[] = {_("(minimum offset)"), 0, 0, 0, _("(default)"), 0, 0, _("(maximum offset)")};
+        gchar const* labels[] = {_("(minimum offset)"), nullptr, nullptr, nullptr, _("(default)"), nullptr, nullptr, _("(maximum offset)")};
         gdouble values[] = {0, 25, 50, 75, 100, 150, 200, 1000};
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
                                          _("Offset %"), _("Offset %:"),
                                          _("Increase to segregate objects more (value in percent)"),
                                          "/tools/spray/offset", 100,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 1000, 1, 4,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_spray_offset_value_changed, NULL, 0 , 0);
+                                         sp_spray_offset_value_changed, nullptr, 0 , 0);
         g_object_set_data( holder, "offset", eact );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }

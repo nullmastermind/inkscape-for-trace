@@ -330,8 +330,8 @@ geom_cubic_bbox_wind_distance (Geom::Coord x000, Geom::Coord y000,
         y1tt = s * y01t + t * y11t;
         yttt = s * y0tt + t * y1tt;
 
-        geom_cubic_bbox_wind_distance (x000, y000, x00t, y00t, x0tt, y0tt, xttt, yttt, pt, NULL, wind, best, tolerance);
-        geom_cubic_bbox_wind_distance (xttt, yttt, x1tt, y1tt, x11t, y11t, x111, y111, pt, NULL, wind, best, tolerance);
+        geom_cubic_bbox_wind_distance (x000, y000, x00t, y00t, x0tt, y0tt, xttt, yttt, pt, nullptr, wind, best, tolerance);
+        geom_cubic_bbox_wind_distance (xttt, yttt, x1tt, y1tt, x11t, y11t, x111, y111, pt, nullptr, wind, best, tolerance);
     } else {
         geom_line_wind_distance (x000, y000, x111, y111, pt, wind, best);
     }

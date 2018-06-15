@@ -14,7 +14,7 @@ void sp_item_rm_unsatisfied_cns(SPItem &item)
         return;
     }
     std::vector<Inkscape::SnapCandidatePoint> snappoints;
-    item.getSnappoints(snappoints, NULL);
+    item.getSnappoints(snappoints, nullptr);
     for (unsigned i = item.constraints.size(); i--;) {
         g_assert( i < item.constraints.size() );
         SPGuideConstraint const &cn = item.constraints[i];

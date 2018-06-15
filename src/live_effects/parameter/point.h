@@ -29,7 +29,7 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                const gchar *handle_tip = NULL,// tip for automatically associated on-canvas handle
+                const gchar *handle_tip = nullptr,// tip for automatically associated on-canvas handle
                 Geom::Point default_value = Geom::Point(0,0), 
                 bool live_update = true );
     ~PointParam() override;

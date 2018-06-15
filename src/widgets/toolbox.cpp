@@ -171,7 +171,7 @@ static struct {
 	{ "/tools/gradient", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
 	{ "/tools/mesh",     "mesh_tool",      SP_VERB_CONTEXT_MESH, SP_VERB_CONTEXT_MESH_PREFS },
 	{ "/tools/dropper",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
-	{ NULL, NULL, 0, 0 }
+	{ nullptr, nullptr, 0, 0 }
 };
 
 static struct {
@@ -184,56 +184,56 @@ static struct {
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", 0, sp_select_toolbox_prep,            "SelectToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/nodes",   "node_toolbox",   0, sp_node_toolbox_prep,              "NodeToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/tweak",   "tweak_toolbox",   0, sp_tweak_toolbox_prep,              "TweakToolbar",
+    { "/tools/select", "select_toolbox", nullptr, sp_select_toolbox_prep,            "SelectToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/nodes",   "node_toolbox",   nullptr, sp_node_toolbox_prep,              "NodeToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/tweak",   "tweak_toolbox",   nullptr, sp_tweak_toolbox_prep,              "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
-    { "/tools/spray",   "spray_toolbox",   0, sp_spray_toolbox_prep,              "SprayToolbar",
-      SP_VERB_INVALID, 0, 0},
+    { "/tools/spray",   "spray_toolbox",   nullptr, sp_spray_toolbox_prep,              "SprayToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/zoom",   "zoom_toolbox",   Inkscape::UI::Toolbar::ZoomToolbar::create, nullptr, "ZoomToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/measure",   "measure_toolbox",   0, sp_measure_toolbox_prep,              "MeasureToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/shapes/star",   "star_toolbox",   0, sp_star_toolbox_prep,              "StarToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/measure",   "measure_toolbox",   nullptr, sp_measure_toolbox_prep,              "MeasureToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/shapes/star",   "star_toolbox",   nullptr, sp_star_toolbox_prep,              "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
-    { "/tools/shapes/rect",   "rect_toolbox",   0, sp_rect_toolbox_prep,              "RectToolbar",
+    { "/tools/shapes/rect",   "rect_toolbox",   nullptr, sp_rect_toolbox_prep,              "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},
-    { "/tools/shapes/3dbox",  "3dbox_toolbox",  0, box3d_toolbox_prep,             "3DBoxToolbar",
+    { "/tools/shapes/3dbox",  "3dbox_toolbox",  nullptr, box3d_toolbox_prep,             "3DBoxToolbar",
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
-    { "/tools/shapes/arc",    "arc_toolbox",    0, sp_arc_toolbox_prep,               "ArcToolbar",
+    { "/tools/shapes/arc",    "arc_toolbox",    nullptr, sp_arc_toolbox_prep,               "ArcToolbar",
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
-    { "/tools/shapes/spiral", "spiral_toolbox", 0, sp_spiral_toolbox_prep,            "SpiralToolbar",
+    { "/tools/shapes/spiral", "spiral_toolbox", nullptr, sp_spiral_toolbox_prep,            "SpiralToolbar",
       SP_VERB_CONTEXT_SPIRAL_PREFS, "/tools/shapes/spiral",   N_("Style of new spirals")},
-    { "/tools/freehand/pencil", "pencil_toolbox", 0, sp_pencil_toolbox_prep,            "PencilToolbar",
+    { "/tools/freehand/pencil", "pencil_toolbox", nullptr, sp_pencil_toolbox_prep,            "PencilToolbar",
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
-    { "/tools/freehand/pen", "pen_toolbox", 0, sp_pen_toolbox_prep,                     "PenToolbar",
+    { "/tools/freehand/pen", "pen_toolbox", nullptr, sp_pen_toolbox_prep,                     "PenToolbar",
       SP_VERB_CONTEXT_PEN_PREFS,    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
-    { "/tools/calligraphic", "calligraphy_toolbox", 0, sp_calligraphy_toolbox_prep,"CalligraphyToolbar",
+    { "/tools/calligraphic", "calligraphy_toolbox", nullptr, sp_calligraphy_toolbox_prep,"CalligraphyToolbar",
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
-    { "/tools/eraser", "eraser_toolbox", 0, sp_eraser_toolbox_prep,"EraserToolbar",
+    { "/tools/eraser", "eraser_toolbox", nullptr, sp_eraser_toolbox_prep,"EraserToolbar",
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
-    { "/tools/lpetool", "lpetool_toolbox", 0, sp_lpetool_toolbox_prep, "LPEToolToolbar",
+    { "/tools/lpetool", "lpetool_toolbox", nullptr, sp_lpetool_toolbox_prep, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
     // If you change TextToolbar here, change it also in desktop-widget.cpp
-    { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/connector", "connector_toolbox", 0, sp_connector_toolbox_prep,   "ConnectorToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/gradient", "gradient_toolbox", 0, sp_gradient_toolbox_prep, "GradientToolbar",
-      SP_VERB_INVALID, 0, 0},
-    { "/tools/mesh", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
-      SP_VERB_INVALID, 0, 0},
+    { "/tools/text",   "text_toolbox",   nullptr, sp_text_toolbox_prep, "TextToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/dropper", "dropper_toolbox", nullptr, sp_dropper_toolbox_prep,         "DropperToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/connector", "connector_toolbox", nullptr, sp_connector_toolbox_prep,   "ConnectorToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/gradient", "gradient_toolbox", nullptr, sp_gradient_toolbox_prep, "GradientToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
+    { "/tools/mesh", "mesh_toolbox", nullptr, sp_mesh_toolbox_prep, "MeshToolbar",
+      SP_VERB_INVALID, nullptr, nullptr},
 #if HAVE_POTRACE
-    { "/tools/paintbucket",  "paintbucket_toolbox",  0, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
+    { "/tools/paintbucket",  "paintbucket_toolbox",  nullptr, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
 #else
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
 #endif
-    { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
+    { nullptr, nullptr, nullptr, nullptr, nullptr, SP_VERB_INVALID, nullptr, nullptr }
 };
 
 
@@ -293,7 +293,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 }
 
 VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
+    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(nullptr, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
     verb(verb),
     verb2(verb2),
     view(view),
@@ -316,7 +316,7 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
 {
 //     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
-    GtkWidget* toolbox = 0;
+    GtkWidget* toolbox = nullptr;
     GtkToolItem *button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
                                                                                       SP_BUTTON_TYPE_TOGGLE,
                                                                                       verb,
@@ -369,7 +369,7 @@ void VerbAction::on_activate()
     if ( verb ) {
         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
         if ( action ) {
-            sp_action_perform(action, 0);
+            sp_action_perform(action, nullptr);
         }
     }
 }
@@ -391,8 +391,8 @@ void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
     if (oldrepr) { // remove old listener
         sp_repr_remove_listener_by_data(oldrepr, tbl);
         Inkscape::GC::release(oldrepr);
-        oldrepr = 0;
-        g_object_set_data( tbl, "repr", NULL );
+        oldrepr = nullptr;
+        g_object_set_data( tbl, "repr", nullptr );
     }
 }
 
@@ -459,14 +459,14 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
 {
     SPAction *action = verb->get_action(Inkscape::ActionContext(view));
     if (!action) {
-        return NULL;
+        return nullptr;
     }
 
     SPAction *doubleclick_action;
     if (doubleclick_verb) {
         doubleclick_action = doubleclick_verb->get_action(Inkscape::ActionContext(view));
     } else {
-        doubleclick_action = NULL;
+        doubleclick_action = nullptr;
     }
 
     /* fixme: Handle sensitive/unsensitive */
@@ -501,13 +501,13 @@ static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
 {
     SPAction* targetAction = SP_ACTION(user_data);
     if ( targetAction ) {
-        sp_action_perform( targetAction, NULL );
+        sp_action_perform( targetAction, nullptr );
     }
 }
 
 static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
 {
-    GtkAction* act = 0;
+    GtkAction* act = nullptr;
 
     SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
     InkAction* inky = ink_action_new( verb->get_id(), _(verb->get_name()), verb->get_tip(), verb->get_image(), size  );
@@ -587,7 +587,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
 
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
     Glib::RefPtr<Gtk::ActionGroup> mainActions;
-    if (desktop == NULL)
+    if (desktop == nullptr)
     {
         return mainActions;
     }
@@ -636,7 +636,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
 
 static GtkWidget* toolboxNewCommon( GtkWidget* tb, BarId id, GtkPositionType /*handlePos*/ )
 {
-    g_object_set_data(G_OBJECT(tb), "desktop", NULL);
+    g_object_set_data(G_OBJECT(tb), "desktop", nullptr);
 
     gtk_widget_set_sensitive(tb, FALSE);
 
@@ -729,7 +729,7 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
 
     g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 
-    EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, 0, climb, digits, unit_tracker );
+    EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, nullptr, climb, digits, unit_tracker );
     if ( shortLabel ) {
         g_object_set( act, "short_label", shortLabel, NULL );
     }
@@ -770,8 +770,8 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 
     BarId id = static_cast<BarId>( GPOINTER_TO_INT(g_object_get_data(G_OBJECT(toolbox), BAR_ID_KEY)) );
 
-    SetupFunction setup_func = 0;
-    UpdateFunction update_func = 0;
+    SetupFunction setup_func = nullptr;
+    UpdateFunction update_func = nullptr;
 
     switch (id) {
         case BAR_TOOL:
@@ -832,7 +832,7 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     GtkUIManager* mgr = gtk_ui_manager_new();
-    GError* err = 0;
+    GError* err = nullptr;
 
     GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
 
@@ -859,7 +859,7 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     gtk_orientable_set_orientation (GTK_ORIENTABLE(toolBar), orientation);
     gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolBar), TRUE);
 
-    g_object_set_data(G_OBJECT(toolBar), "desktop", NULL);
+    g_object_set_data(G_OBJECT(toolBar), "desktop", nullptr);
 
     GtkWidget* child = gtk_bin_get_child(GTK_BIN(toolbox));
     if ( child ) {
@@ -956,7 +956,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
 {
     gchar const *const tname = ( eventcontext
                                  ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
-                                 : NULL );
+                                 : nullptr );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
@@ -977,7 +977,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
     GtkUIManager* mgr = gtk_ui_manager_new();
-    GError *err = 0;
+    GError *err = nullptr;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
 
     Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
@@ -1002,8 +1002,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
         } else {
 
-            GtkWidget *sub_toolbox = 0;
-            if (aux_toolboxes[i].create_func == NULL) {
+            GtkWidget *sub_toolbox = nullptr;
+            if (aux_toolboxes[i].create_func == nullptr) {
                 sub_toolbox = sp_empty_toolbox_new(desktop);
             } else {
                 sub_toolbox = aux_toolboxes[i].create_func(desktop);
@@ -1029,7 +1029,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
             GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
             g_free( tmp );
-            tmp = 0;
+            tmp = nullptr;
 
             if ( prefs->getBool( "/toolbox/icononly", true) ) {
                 gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
@@ -1041,7 +1041,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
 
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
-                Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( NULL, _(aux_toolboxes[i].swatch_tip) );
+                Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( nullptr, _(aux_toolboxes[i].swatch_tip) );
                 swatch->setDesktop( desktop );
                 swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
                 swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
@@ -1081,7 +1081,7 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
 {
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
-                           : NULL );
+                           : nullptr );
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
         if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
@@ -1112,11 +1112,11 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
     }
 
     gpointer ptr = g_object_get_data(G_OBJECT(data), "desktop");
-    g_assert(ptr != NULL);
+    g_assert(ptr != nullptr);
 
     SPDesktop *dt = reinterpret_cast<SPDesktop*>(ptr);
     SPNamedView *nv = dt->getNamedView();
-    if (nv == NULL) {
+    if (nv == nullptr) {
         g_warning("No namedview specified (in toggle_snap_callback)!");
         return;
     }
@@ -1124,7 +1124,7 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
     SPDocument *doc = nv->document;
     Inkscape::XML::Node *repr = nv->getRepr();
 
-    if (repr == NULL) {
+    if (repr == nullptr) {
         g_warning("This namedview doesn't have a xml representation attached!");
         return;
     }
@@ -1442,11 +1442,11 @@ Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
 
 void ToolboxFactory::updateSnapToolbox(SPDesktop *desktop, ToolBase * /*eventcontext*/, GtkWidget *toolbox)
 {
-    g_assert(desktop != NULL);
-    g_assert(toolbox != NULL);
+    g_assert(desktop != nullptr);
+    g_assert(toolbox != nullptr);
 
     SPNamedView *nv = desktop->getNamedView();
-    if (nv == NULL) {
+    if (nv == nullptr) {
         g_warning("Namedview cannot be retrieved (in updateSnapToolbox)!");
         return;
     }

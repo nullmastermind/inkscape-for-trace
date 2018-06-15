@@ -27,10 +27,10 @@ namespace Inkscape {
 namespace Filters {
 
 FilterImage::FilterImage()
-    : SVGElem(0)
-    , document(0)
-    , feImageHref(0)
-    , image(0)
+    : SVGElem(nullptr)
+    , document(nullptr)
+    , feImageHref(nullptr)
+    , image(nullptr)
     , broken_ref(false)
 { }
 
@@ -309,10 +309,10 @@ double FilterImage::complexity(Geom::Affine const &)
 void FilterImage::set_href(const gchar *href){
 
     if (feImageHref) g_free (feImageHref);
-    feImageHref = (href) ? g_strdup (href) : NULL;
+    feImageHref = (href) ? g_strdup (href) : nullptr;
 
     delete image;
-    image = NULL;
+    image = nullptr;
     broken_ref = false;
 }
 

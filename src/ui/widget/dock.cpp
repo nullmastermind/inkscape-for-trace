@@ -27,7 +27,7 @@ namespace {
 
 void hideCallback(GObject * /*object*/, gpointer dock_ptr)
 {
-    g_return_if_fail( dock_ptr != NULL );
+    g_return_if_fail( dock_ptr != nullptr );
 
     Dock *dock = static_cast<Dock *>(dock_ptr);
     dock->hide();
@@ -35,7 +35,7 @@ void hideCallback(GObject * /*object*/, gpointer dock_ptr)
 
 void unhideCallback(GObject * /*object*/, gpointer dock_ptr)
 {
-    g_return_if_fail( dock_ptr != NULL );
+    g_return_if_fail( dock_ptr != nullptr );
 
     Dock *dock = static_cast<Dock *>(dock_ptr);
     dock->show();
@@ -89,7 +89,7 @@ Dock::Dock(Gtk::Orientation orientation)
         static_cast<GdlSwitcherStyle>(prefs->getIntLimited("/options/dock/switcherstyle",
                                                                       GDL_SWITCHER_STYLE_BOTH, 0, 4));
 
-    GdlDockMaster* master = NULL;
+    GdlDockMaster* master = nullptr;
     
     g_object_get(GDL_DOCK_OBJECT(_gdl_dock),
             "master", &master,
@@ -139,7 +139,7 @@ Gtk::Paned *Dock::getParentPaned()
 {
     g_return_val_if_fail(_dock_box, 0);
     Gtk::Container *parent = getWidget().get_parent();
-    return (parent != 0 ? dynamic_cast<Gtk::Paned *>(parent) : 0);
+    return (parent != nullptr ? dynamic_cast<Gtk::Paned *>(parent) : nullptr);
 }
 
 

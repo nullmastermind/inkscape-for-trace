@@ -63,7 +63,7 @@ child_add_rm_cb(Inkscape::XML::Node *, Inkscape::XML::Node *, Inkscape::XML::Nod
                 void *const data)
 {
     SPObject *obj = reinterpret_cast<SPObject *>(data);
-    g_assert(data != NULL);
+    g_assert(data != nullptr);
     obj->read_content();
 }
 
@@ -72,7 +72,7 @@ content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
                    void *const data)
 {
     SPObject *obj = reinterpret_cast<SPObject *>(data);
-    g_assert(data != NULL);
+    g_assert(data != nullptr);
     obj->read_content();
     obj->document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
 }
@@ -83,7 +83,7 @@ child_order_changed_cb(Inkscape::XML::Node *, Inkscape::XML::Node *,
                        void *const data)
 {
     SPObject *obj = reinterpret_cast<SPObject *>(data);
-    g_assert(data != NULL);
+    g_assert(data != nullptr);
     obj->read_content();
 }
 
@@ -114,7 +114,7 @@ concat_children(Inkscape::XML::Node const &repr)
 {
     Glib::ustring ret;
     // effic: Initialising ret to a reasonable starting size could speed things up.
-    for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != NULL; rch = rch->next()) {
+    for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != nullptr; rch = rch->next()) {
         if ( rch->type() == TEXT_NODE ) {
             ret += rch->content();
         }
@@ -140,7 +140,7 @@ struct ParseTmp
     ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document) :
         stylesheet(stylesheet),
         stmtType(NO_STMT),
-        currStmt(NULL),
+        currStmt(nullptr),
         document(document),
         magic(ParseTmp_magic)
     { }
@@ -170,7 +170,7 @@ import_style_cb (CRDocHandler *a_handler,
 
     // Get document
     g_return_if_fail(a_handler && a_uri);
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
 
@@ -193,7 +193,7 @@ import_style_cb (CRDocHandler *a_handler,
         Inkscape::IO::Resource::get_filename (document->getURI(), a_uri->stryng->str);
 
     // Parse file
-    CRStyleSheet *stylesheet = cr_stylesheet_new (NULL);
+    CRStyleSheet *stylesheet = cr_stylesheet_new (nullptr);
     CRParser *parser = parser_init(stylesheet, document);
     CRStatus const parse_status =
         cr_parser_parse_file (parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
@@ -205,7 +205,7 @@ import_style_cb (CRDocHandler *a_handler,
     }
 
     // Need to delete ParseTmp created by parser_init()
-    CRDocHandler *sac_handler = NULL;
+    CRDocHandler *sac_handler = nullptr;
     cr_parser_get_sac_handler (parser, &sac_handler);
     ParseTmp *parse_new = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
     cr_parser_destroy(parser);
@@ -231,16 +231,16 @@ start_selector_cb(CRDocHandler *a_handler,
                   CRSelector *a_sel_list)
 {
     g_return_if_fail(a_handler && a_sel_list);
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if ( (parse_tmp.currStmt != NULL)
+    if ( (parse_tmp.currStmt != nullptr)
          || (parse_tmp.stmtType != NO_STMT) ) {
         g_warning("Expecting currStmt==NULL and stmtType==0 (NO_STMT) at start of ruleset, but found currStmt=%p, stmtType=%u",
                   static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
         // fixme: Check whether we need to unref currStmt if non-NULL.
     }
-    CRStatement *ruleset = cr_statement_new_ruleset(parse_tmp.stylesheet, a_sel_list, NULL, NULL);
+    CRStatement *ruleset = cr_statement_new_ruleset(parse_tmp.stylesheet, a_sel_list, nullptr, nullptr);
     g_return_if_fail(ruleset && ruleset->type == RULESET_STMT);
     parse_tmp.stmtType = NORMAL_RULESET_STMT;
     parse_tmp.currStmt = ruleset;
@@ -251,7 +251,7 @@ end_selector_cb(CRDocHandler *a_handler,
                 CRSelector *a_sel_list)
 {
     g_return_if_fail(a_handler && a_sel_list);
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
     CRStatement *const ruleset = parse_tmp.currStmt;
@@ -270,7 +270,7 @@ end_selector_cb(CRDocHandler *a_handler,
                   ruleset->kind.ruleset->sel_list,
                   a_sel_list);
     }
-    parse_tmp.currStmt = NULL;
+    parse_tmp.currStmt = nullptr;
     parse_tmp.stmtType = NO_STMT;
 }
 
@@ -278,15 +278,15 @@ static void
 start_font_face_cb(CRDocHandler *a_handler,
                    CRParsingLocation *)
 {
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
-    if (parse_tmp.stmtType != NO_STMT || parse_tmp.currStmt != NULL) {
+    if (parse_tmp.stmtType != NO_STMT || parse_tmp.currStmt != nullptr) {
         g_warning("Expecting currStmt==NULL and stmtType==0 (NO_STMT) at start of @font-face, but found currStmt=%p, stmtType=%u",
                   static_cast<void *>(parse_tmp.currStmt), unsigned(parse_tmp.stmtType));
         // fixme: Check whether we need to unref currStmt if non-NULL.
     }
-    CRStatement *font_face_rule = cr_statement_new_at_font_face_rule (parse_tmp.stylesheet, NULL);
+    CRStatement *font_face_rule = cr_statement_new_at_font_face_rule (parse_tmp.stylesheet, nullptr);
     g_return_if_fail(font_face_rule && font_face_rule->type == AT_FONT_FACE_RULE_STMT);
     parse_tmp.stmtType = FONT_FACE_STMT;
     parse_tmp.currStmt = font_face_rule;
@@ -295,7 +295,7 @@ start_font_face_cb(CRDocHandler *a_handler,
 static void
 end_font_face_cb(CRDocHandler *a_handler)
 {
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
 
@@ -329,7 +329,7 @@ end_font_face_cb(CRDocHandler *a_handler)
     }
 
     // Add ttf or otf fonts.
-    CRDeclaration const *cur = NULL;
+    CRDeclaration const *cur = nullptr;
     for (cur = font_face_rule->kind.font_face_rule->decl_list; cur; cur = cur->next) {
         if (cur->property &&
             cur->property->stryng &&
@@ -364,7 +364,7 @@ end_font_face_cb(CRDocHandler *a_handler)
         }
     }
 
-    parse_tmp.currStmt = NULL;
+    parse_tmp.currStmt = nullptr;
     parse_tmp.stmtType = NO_STMT;
 
 }
@@ -376,7 +376,7 @@ property_cb(CRDocHandler *const a_handler,
 {
     // std::cout << "property_cb: Entrance: " << a_name->stryng->str << ": " << cr_term_to_string(a_value) << std::endl;
     g_return_if_fail(a_handler && a_name);
-    g_return_if_fail(a_handler->app_data != NULL);
+    g_return_if_fail(a_handler->app_data != nullptr);
     ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
     g_return_if_fail(parse_tmp.hasMagic());
 
@@ -422,7 +422,7 @@ parser_init(CRStyleSheet *const stylesheet, SPDocument *const document) {
     sac_handler->end_font_face = end_font_face_cb;
     sac_handler->property = property_cb;
 
-    CRParser *parser = cr_parser_new (NULL);
+    CRParser *parser = cr_parser_new (nullptr);
     cr_parser_set_sac_handler(parser, sac_handler);
 
     return parser;
@@ -449,10 +449,10 @@ void SPStyleElem::read_content() {
     // style element would correspond to document->style_sheet, while
     // laters ones are chained on using style_sheet->next).
 
-    document->style_sheet = cr_stylesheet_new (NULL);
+    document->style_sheet = cr_stylesheet_new (nullptr);
     CRParser *parser = parser_init(document->style_sheet, document);
 
-    CRDocHandler *sac_handler = NULL;
+    CRDocHandler *sac_handler = nullptr;
     cr_parser_get_sac_handler (parser, &sac_handler);
     ParseTmp *parse_tmp = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
 
@@ -470,7 +470,7 @@ void SPStyleElem::read_content() {
         cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
     } else {
         cr_stylesheet_destroy (document->style_sheet);
-        document->style_sheet = NULL;
+        document->style_sheet = nullptr;
         if (parse_status != CR_PARSING_ERROR) {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
             /* Better than nothing.  TODO: Improve libcroco's error handling.  At a minimum, add a
@@ -497,7 +497,7 @@ rec_add_listener(Inkscape::XML::Node &repr,
                  Inkscape::XML::NodeEventVector const *const fns, void *const data)
 {
     repr.addListener(fns, data);
-    for (Inkscape::XML::Node *child = repr.firstChild(); child != NULL; child = child->next()) {
+    for (Inkscape::XML::Node *child = repr.firstChild(); child != nullptr; child = child->next()) {
         rec_add_listener(*child, fns, data);
     }
 }
@@ -511,7 +511,7 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     static Inkscape::XML::NodeEventVector const nodeEventVector = {
         child_add_rm_cb,   // child_added
         child_add_rm_cb,   // child_removed
-        NULL,   // attr_changed
+        nullptr,   // attr_changed
         content_changed_cb,   // content_changed
         child_order_changed_cb,   // order_changed
     };

@@ -45,7 +45,7 @@ protected:
 
 public:
     Blend ( ) : Filter() { };
-    ~Blend ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Blend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -80,7 +80,7 @@ public:
 gchar const *
 Blend::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream source;
     std::ostringstream mode;
@@ -122,7 +122,7 @@ protected:
 
 public:
     ChannelTransparency ( ) : Filter() { };
-    ~ChannelTransparency ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~ChannelTransparency ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -150,7 +150,7 @@ public:
 gchar const *
 ChannelTransparency::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream red;
     std::ostringstream green;
@@ -197,7 +197,7 @@ protected:
 
 public:
     LightEraser ( ) : Filter() { };
-    ~LightEraser ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~LightEraser ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -224,7 +224,7 @@ public:
 gchar const *
 LightEraser::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream expand;
     std::ostringstream erode;
@@ -271,7 +271,7 @@ protected:
 
 public:
     Opacity ( ) : Filter() { };
-    ~Opacity ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Opacity ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -297,7 +297,7 @@ public:
 gchar const *
 Opacity::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream matrix;
     std::ostringstream opacity;
@@ -333,7 +333,7 @@ protected:
 
 public:
     Silhouette ( ) : Filter() { };
-    ~Silhouette ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Silhouette ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -360,7 +360,7 @@ public:
 gchar const *
 Silhouette::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream a;
     std::ostringstream r;

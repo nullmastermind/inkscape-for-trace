@@ -37,12 +37,12 @@ protected:
     SelectableControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                            Inkscape::ControlType type,
                            ControlPointSelection &sel,
-                           ColorSet const &cset = _default_scp_color_set, SPCanvasGroup *group = 0);
+                           ColorSet const &cset = _default_scp_color_set, SPCanvasGroup *group = nullptr);
 
     SelectableControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                            Glib::RefPtr<Gdk::Pixbuf> pixbuf,
                            ControlPointSelection &sel,
-                           ColorSet const &cset = _default_scp_color_set, SPCanvasGroup *group = 0);
+                           ColorSet const &cset = _default_scp_color_set, SPCanvasGroup *group = nullptr);
 
     void _setState(State state) override;
 

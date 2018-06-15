@@ -43,7 +43,7 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
     if (curve) {
         Geom::Affine affine = Geom::identity();
         if(!allow_transforms) {
-            SP_ITEM(sp_lpe_item)->setAttribute("transform", NULL);
+            SP_ITEM(sp_lpe_item)->setAttribute("transform", nullptr);
         }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             Geom::PathVector linked_pathv = linked_path.get_pathvector();

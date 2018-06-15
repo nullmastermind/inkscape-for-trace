@@ -119,13 +119,13 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
 
         objClass->get_property = ege_color_prof_tracker_get_property;
         objClass->set_property = ege_color_prof_tracker_set_property;
-        klass->changed = 0;
+        klass->changed = nullptr;
 
         signals[CHANGED] = g_signal_new( "changed",
                                          G_TYPE_FROM_CLASS(klass),
                                          G_SIGNAL_RUN_FIRST,
                                          G_STRUCT_OFFSET(EgeColorProfTrackerClass, changed),
-                                         NULL, NULL,
+                                         nullptr, nullptr,
                                          g_cclosure_marshal_VOID__VOID,
                                          G_TYPE_NONE, 0 );
 
@@ -133,7 +133,7 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                        G_TYPE_FROM_CLASS(klass),
                                        G_SIGNAL_RUN_FIRST,
                                        0,
-                                       NULL, NULL,
+                                       nullptr, nullptr,
                                        sp_marshal_VOID__INT_INT,
                                        G_TYPE_NONE, 2,
                                        G_TYPE_INT,
@@ -143,7 +143,7 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                          G_TYPE_FROM_CLASS(klass),
                                          G_SIGNAL_RUN_FIRST,
                                          0,
-                                         NULL, NULL,
+                                         nullptr, nullptr,
                                          sp_marshal_VOID__INT_INT,
                                          G_TYPE_NONE, 2,
                                          G_TYPE_INT,
@@ -153,7 +153,7 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                           G_TYPE_FROM_CLASS(klass),
                                           G_SIGNAL_RUN_FIRST,
                                           0,
-                                          NULL, NULL,
+                                          nullptr, nullptr,
                                           g_cclosure_marshal_VOID__INT,
                                           G_TYPE_NONE, 1,
                                           G_TYPE_INT);
@@ -166,14 +166,14 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
 void ege_color_prof_tracker_init( EgeColorProfTracker* tracker )
 {
     tracker->private_data = EGE_GET_PRIVATE( tracker );
-    tracker->private_data->_target = 0;
+    tracker->private_data->_target = nullptr;
     tracker->private_data->_monitor = 0;
 }
 
 EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
 {
     GObject* obj = (GObject*)g_object_new( EGE_COLOR_PROF_TRACKER_TYPE,
-                                           NULL );
+                                           nullptr );
 
     EgeColorProfTracker* tracker = EGE_COLOR_PROF_TRACKER( obj );
     tracker->private_data->_target = target;
@@ -184,8 +184,8 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
         g_signal_connect( G_OBJECT(target), "screen-changed",    G_CALLBACK( target_screen_changed_cb ),    obj );
 
         /* invoke the callbacks now to connect if the widget is already visible */
-        target_hierarchy_changed_cb( target, 0, obj );
-        target_screen_changed_cb( target, 0, obj );
+        target_hierarchy_changed_cb( target, nullptr, obj );
+        target_screen_changed_cb( target, nullptr, obj );
     } else {
         abstract_trackers.push_back(tracker);
 
@@ -202,7 +202,7 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
 
 void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gpointer* ptr, guint* len )
 {
-    gpointer dataPos = 0;
+    gpointer dataPos = nullptr;
     guint dataLen = 0;
     if (tracker) {
         if (tracker->private_data->_target ) {
@@ -230,7 +230,7 @@ void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gp
 
 void ege_color_prof_tracker_get_profile_for( guint monitor, gpointer* ptr, guint* len )
 {
-    gpointer dataPos = 0;
+    gpointer dataPos = nullptr;
     guint dataLen = 0;
     GdkDisplay *display = gdk_display_get_default();
     GdkScreen  *screen  = gdk_display_get_default_screen(display);
@@ -307,7 +307,7 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
         tracked_screen->trackers->push_back(tracker );
         tracked_screen->profiles = g_ptr_array_new();
         for ( int i = 0; i < numMonitors; i++ ) {
-            g_ptr_array_add( tracked_screen->profiles, 0 );
+            g_ptr_array_add( tracked_screen->profiles, nullptr );
         }
 
         g_signal_connect( G_OBJECT(screen), "size-changed", G_CALLBACK( screen_size_changed_cb ), tracker );
@@ -331,7 +331,7 @@ void target_finalized( gpointer data, GObject* where_the_object_was )
         for (auto i = tracked_screen->trackers->begin(); i != tracked_screen->trackers->end(); ++i) {
             if ( (void*)((*i)->private_data->_target) == (void*)where_the_object_was ) {
                 /* The tracked widget is now gone, remove it */
-                (*i)->private_data->_target = 0;
+                (*i)->private_data->_target = nullptr;
                 tracked_screen->trackers->erase(i);
                 break;
             }
@@ -418,7 +418,7 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
 
         if ( numMonitors > (gint)tracked_screen->profiles->len ) {
             for ( guint i = tracked_screen->profiles->len; i < (guint)numMonitors; i++ ) {
-                g_ptr_array_add( tracked_screen->profiles, 0 );
+                g_ptr_array_add( tracked_screen->profiles, nullptr );
 #ifdef GDK_WINDOWING_X11
                 if (GDK_IS_X11_DISPLAY (display) ) {
                     gchar* name = g_strdup_printf( "_ICC_PROFILE_%d", i );
@@ -453,7 +453,7 @@ GdkFilterReturn x11_win_filter(GdkXEvent *xevent,
             if ( stat ) {
                 GdkDisplay* display = gdk_x11_lookup_xdisplay(native->xproperty.display);
                 if ( display ) {
-                    GdkScreen* targetScreen = 0;
+                    GdkScreen* targetScreen = nullptr;
                     GdkScreen* sc = gdk_display_get_default_screen(display);
                     if ( tmp.screen == GDK_SCREEN_XSCREEN(sc) ) {
                         targetScreen = sc;
@@ -476,7 +476,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
     gint monitor = 0;
     Atom atom = XInternAtom(xdisplay, name, True);
     if ( strncmp("_ICC_PROFILE_", name, 13 ) == 0 ) {
-        gint64 tmp = g_ascii_strtoll(name + 13, NULL, 10);
+        gint64 tmp = g_ascii_strtoll(name + 13, nullptr, 10);
         if ( tmp != 0 && tmp != G_MAXINT64 && tmp != G_MININT64 ) {
             monitor = (gint)tmp;
         }
@@ -487,7 +487,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
         unsigned long size = 128 * 1042;
         unsigned long nitems = 0;
         unsigned long bytesAfter = 0;
-        unsigned char* prop = 0;
+        unsigned char* prop = nullptr;
 
         clear_profile( monitor );
 
@@ -500,7 +500,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
                 nitems = 0;
                 if ( prop ) {
                     XFree(prop);
-                    prop = 0;
+                    prop = nullptr;
                 }
                 if ( XGetWindowProperty( xdisplay, GDK_WINDOW_XID(gdk_screen_get_root_window(screen)),
                                          atom, 0, size, False, AnyPropertyType,
@@ -513,7 +513,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
                 }
             } else {
                 /* clear it */
-                set_profile( monitor, 0, 0 );
+                set_profile( monitor, nullptr, 0 );
             }
         } else {
             g_warning("error loading profile property");
@@ -572,7 +572,7 @@ void add_x11_tracking_for_screen(GdkScreen* screen)
                 g_free(name);
             }
             XFree(propArray);
-            propArray = 0;
+            propArray = nullptr;
         }
     }
 }
@@ -591,16 +591,16 @@ void fire(gint monitor)
 static void clear_profile( guint monitor )
 {
     if ( tracked_screen ) {
-        GByteArray* previous = 0;
+        GByteArray* previous = nullptr;
         for ( guint i = tracked_screen->profiles->len; i <= monitor; i++ ) {
-            g_ptr_array_add( tracked_screen->profiles, 0 );
+            g_ptr_array_add( tracked_screen->profiles, nullptr );
         }
         previous = (GByteArray*)g_ptr_array_index( tracked_screen->profiles, monitor );
         if ( previous ) {
             g_byte_array_free( previous, TRUE );
         }
 
-        tracked_screen->profiles->pdata[monitor] = 0;
+        tracked_screen->profiles->pdata[monitor] = nullptr;
     }
 }
 
@@ -608,7 +608,7 @@ static void set_profile( guint monitor, const guint8* data, guint len )
 {
     if ( tracked_screen ) {
         for ( guint i = tracked_screen->profiles->len; i <= monitor; i++ ) {
-            g_ptr_array_add( tracked_screen->profiles, 0 );
+            g_ptr_array_add( tracked_screen->profiles, nullptr );
         }
         GByteArray *previous = (GByteArray*)g_ptr_array_index( tracked_screen->profiles, monitor );
         if ( previous ) {
@@ -620,7 +620,7 @@ static void set_profile( guint monitor, const guint8* data, guint len )
             newBytes = g_byte_array_append( newBytes, data, len );
             tracked_screen->profiles->pdata[monitor] = newBytes;
         } else {
-            tracked_screen->profiles->pdata[monitor] = 0;
+            tracked_screen->profiles->pdata[monitor] = nullptr;
         }
 
         for (auto i:abstract_trackers) {

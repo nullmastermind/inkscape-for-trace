@@ -221,7 +221,7 @@ protected:
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                  ControlType type,
-                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = 0);
+                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = nullptr);
 
     /**
      * Create a control point with a pixbuf-based visual representation.
@@ -235,7 +235,7 @@ protected:
      */
     ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAnchorType anchor,
                  Glib::RefPtr<Gdk::Pixbuf> pixbuf,
-                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = 0);
+                 ColorSet const &cset = _default_color_set, SPCanvasGroup *group = nullptr);
 
     /// @name Handle control point events in subclasses
     /// @{

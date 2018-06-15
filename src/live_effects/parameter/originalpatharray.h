@@ -32,7 +32,7 @@ namespace LivePathEffect {
 class PathAndDirectionAndVisible {
 public:
     PathAndDirectionAndVisible(SPObject *owner)
-    : href(NULL),
+    : href(nullptr),
     ref(owner),
     _pathvector(Geom::PathVector()),
     reversed(false),

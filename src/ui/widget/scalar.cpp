@@ -54,13 +54,13 @@ Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
 
 unsigned Scalar::getDigits() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<SpinButton*>(_widget)->get_digits();
 }
 
 double Scalar::getStep() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     double step, page;
     static_cast<SpinButton*>(_widget)->get_increments(step, page);
     return step;
@@ -68,7 +68,7 @@ double Scalar::getStep() const
 
 double Scalar::getPage() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     double step, page;
     static_cast<SpinButton*>(_widget)->get_increments(step, page);
     return page;
@@ -76,7 +76,7 @@ double Scalar::getPage() const
 
 double Scalar::getRangeMin() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     double min, max;
     static_cast<SpinButton*>(_widget)->get_range(min, max);
     return min;
@@ -84,7 +84,7 @@ double Scalar::getRangeMin() const
 
 double Scalar::getRangeMax() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     double min, max;
     static_cast<SpinButton*>(_widget)->get_range(min, max);
     return max;
@@ -92,38 +92,38 @@ double Scalar::getRangeMax() const
 
 double Scalar::getValue() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<SpinButton*>(_widget)->get_value();
 }
 
 int Scalar::getValueAsInt() const
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     return static_cast<SpinButton*>(_widget)->get_value_as_int();
 }
 
 
 void Scalar::setDigits(unsigned digits)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     static_cast<SpinButton*>(_widget)->set_digits(digits);
 }
 
 void Scalar::setIncrements(double step, double /*page*/)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     static_cast<SpinButton*>(_widget)->set_increments(step, 0);
 }
 
 void Scalar::setRange(double min, double max)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     static_cast<SpinButton*>(_widget)->set_range(min, max);
 }
 
 void Scalar::setValue(double value, bool setProg)
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     if (setProg) {
         setProgrammatically = true; // callback is supposed to reset back, if it cares
     }
@@ -132,7 +132,7 @@ void Scalar::setValue(double value, bool setProg)
 
 void Scalar::update()
 {
-    g_assert(_widget != NULL);
+    g_assert(_widget != nullptr);
     static_cast<SpinButton*>(_widget)->update();
 }
 

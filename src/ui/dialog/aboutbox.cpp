@@ -49,7 +49,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-static AboutBox *window=NULL;
+static AboutBox *window=nullptr;
 
 void AboutBox::show_about() {
     if (!window)

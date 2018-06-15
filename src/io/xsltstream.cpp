@@ -31,7 +31,7 @@ namespace IO
  */
 XsltStyleSheet::XsltStyleSheet(InputStream &xsltSource)
               
-                   : stylesheet(NULL)
+                   : stylesheet(nullptr)
 {
     if (!read(xsltSource)) {
         throw StreamException("read failed");
@@ -42,7 +42,7 @@ XsltStyleSheet::XsltStyleSheet(InputStream &xsltSource)
  *
  */
 XsltStyleSheet::XsltStyleSheet()
-                    : stylesheet(NULL)
+                    : stylesheet(nullptr)
 {
 }
 
@@ -95,7 +95,7 @@ XsltInputStream::XsltInputStream(InputStream &xmlSource, XsltStyleSheet &sheet)
     
     //Do the processing
     const char *params[1];
-    params[0] = NULL;
+    params[0] = nullptr;
     xmlDocPtr srcDoc = xmlParseMemory(strBuf.c_str(), strBuf.size());
     xmlDocPtr resDoc = xsltApplyStylesheet(stylesheet.stylesheet, srcDoc, params);
     xmlDocDumpFormatMemory(resDoc, &outbuf, &outsize, 1);
@@ -199,7 +199,7 @@ void XsltOutputStream::flush()
     xmlChar *resbuf;
     int resSize;
     const char *params[1];
-    params[0] = NULL;
+    params[0] = nullptr;
     xmlDocPtr srcDoc = xmlParseMemory(outbuf.raw().c_str(), outbuf.size());
     xmlDocPtr resDoc = xsltApplyStylesheet(stylesheet.stylesheet, srcDoc, params);
     xmlDocDumpFormatMemory(resDoc, &resbuf, &resSize, 1);

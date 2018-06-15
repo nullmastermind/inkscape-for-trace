@@ -18,19 +18,19 @@
 namespace Inkscape {
 
 ActionContext::ActionContext()
-  : _selection(NULL)
-  , _view(NULL)
+  : _selection(nullptr)
+  , _view(nullptr)
 {
 }
 
 ActionContext::ActionContext(Selection *selection)
   : _selection(selection)
-  , _view(NULL)
+  , _view(nullptr)
 {
 }
 
 ActionContext::ActionContext(UI::View::View *view)
-  : _selection(NULL)
+  : _selection(nullptr)
   , _view(view)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(view);
@@ -41,8 +41,8 @@ ActionContext::ActionContext(UI::View::View *view)
 
 SPDocument *ActionContext::getDocument() const
 {
-    if (_selection == NULL) {
-        return NULL;
+    if (_selection == nullptr) {
+        return nullptr;
     }
 
     // Should be the same as the view's document, if view is non-NULL

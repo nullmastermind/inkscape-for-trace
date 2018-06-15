@@ -88,7 +88,7 @@ public:
      * @return A new document cache that is valid as long as the document
      *         is not changed.
      */
-    virtual ImplementationDocumentCache * newDocCache (Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * /*doc*/) { return NULL; }
+    virtual ImplementationDocumentCache * newDocCache (Inkscape::Extension::Extension * /*ext*/, Inkscape::UI::View::View * /*doc*/) { return nullptr; }
 
     /** Verify any dependencies. */
     virtual bool check(Inkscape::Extension::Extension * /*module*/) { return true; }
@@ -103,7 +103,7 @@ public:
                              gchar const *filename);
 
     virtual SPDocument *open(Inkscape::Extension::Input * /*module*/,
-                             gchar const * /*filename*/) { return NULL; }
+                             gchar const * /*filename*/) { return nullptr; }
 
     // ----- Output functions -----
     /** Find out information about the file. */

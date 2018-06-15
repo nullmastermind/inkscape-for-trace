@@ -51,15 +51,15 @@ namespace Dialog {
 XmlTree::XmlTree() :
     UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
     blocked (0),
-    _message_stack (NULL),
-    _message_context (NULL),
-    current_desktop (NULL),
-    current_document (NULL),
+    _message_stack (nullptr),
+    _message_context (nullptr),
+    current_desktop (nullptr),
+    current_document (nullptr),
     selected_attr (0),
-    selected_repr (NULL),
-    tree (NULL),
-    attributes (NULL),
-    content (NULL),
+    selected_repr (nullptr),
+    tree (nullptr),
+    attributes (nullptr),
+    content (nullptr),
     attr_name (),
     status (""),
     tree_toolbar(),
@@ -77,7 +77,7 @@ XmlTree::XmlTree() :
     attr_container (),
     attr_subpaned_container(Gtk::ORIENTATION_VERTICAL),
     set_attr (_("Set")),
-    new_window(NULL)
+    new_window(nullptr)
 {
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -108,7 +108,7 @@ XmlTree::XmlTree() :
     /* tree view */
     paned.pack1(left_box);
 
-    tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(NULL, NULL, NULL));
+    tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
 
     tree_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
@@ -200,7 +200,7 @@ XmlTree::XmlTree() :
     /* attributes */
     right_box.pack_start( attr_container, TRUE, TRUE, 0 );
 
-    attributes = SP_XMLVIEW_ATTR_LIST(sp_xmlview_attr_list_new(NULL));
+    attributes = SP_XMLVIEW_ATTR_LIST(sp_xmlview_attr_list_new(nullptr));
 
     attr_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
 
@@ -249,7 +249,7 @@ XmlTree::XmlTree() :
     text_container.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     right_box.pack_start(text_container, TRUE, TRUE, 0);
 
-    content = SP_XMLVIEW_CONTENT(sp_xmlview_content_new(NULL));
+    content = SP_XMLVIEW_CONTENT(sp_xmlview_content_new(nullptr));
     text_container.add(*Gtk::manage(Glib::wrap(GTK_WIDGET(content))));
 
     /* Signal handlers */
@@ -288,7 +288,7 @@ XmlTree::XmlTree() :
 
     tree_reset_context();
 
-    g_assert(desktop != NULL);
+    g_assert(desktop != nullptr);
     set_tree_desktop(desktop);
 
 }
@@ -305,13 +305,13 @@ void XmlTree::present()
 
 XmlTree::~XmlTree (void)
 {
-    set_tree_desktop(NULL);
+    set_tree_desktop(nullptr);
 
     _message_changed_connection.disconnect();
     delete _message_context;
-    _message_context = NULL;
+    _message_context = nullptr;
     Inkscape::GC::release(_message_stack);
-    _message_stack = NULL;
+    _message_stack = nullptr;
     _message_changed_connection.~connection();
 }
 
@@ -378,7 +378,7 @@ void XmlTree::set_tree_desktop(SPDesktop *desktop)
 
         set_tree_document(desktop->getDocument());
     } else {
-        set_tree_document(NULL);
+        set_tree_document(nullptr);
     }
 
 } // end of set_tree_desktop()
@@ -400,7 +400,7 @@ void XmlTree::set_tree_document(SPDocument *document)
         on_document_uri_set( current_document->getURI(), current_document );
         set_tree_repr(current_document->getReprRoot());
     } else {
-        set_tree_repr(NULL);
+        set_tree_repr(nullptr);
     }
 }
 
@@ -416,7 +416,7 @@ void XmlTree::set_tree_repr(Inkscape::XML::Node *repr)
     if (repr) {
         set_tree_select(get_dt_select());
     } else {
-        set_tree_select(NULL);
+        set_tree_select(nullptr);
     }
 
     propagate_tree_select(selected_repr);
@@ -444,7 +444,7 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 
             GtkTreePath* path = gtk_tree_model_get_path(GTK_TREE_MODEL(tree->store), &node);
             gtk_tree_view_expand_to_path (GTK_TREE_VIEW(tree), path);
-            gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, NULL, TRUE, 0.66, 0.0);
+            gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, nullptr, TRUE, 0.66, 0.0);
             gtk_tree_path_free(path);
 
             gtk_tree_selection_select_iter(selection, &node);
@@ -469,13 +469,13 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
     if (repr && (repr->type() == Inkscape::XML::ELEMENT_NODE)) {
         sp_xmlview_attr_list_set_repr(attributes, repr);
     } else {
-        sp_xmlview_attr_list_set_repr(attributes, NULL);
+        sp_xmlview_attr_list_set_repr(attributes, nullptr);
     }
 
     if (repr && ( repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE || repr->type() == Inkscape::XML::PI_NODE ) ) {
         sp_xmlview_content_set_repr(content, repr);
     } else {
-        sp_xmlview_content_set_repr(content, NULL);
+        sp_xmlview_content_set_repr(content, nullptr);
     }
 }
 
@@ -483,7 +483,7 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 Inkscape::XML::Node *XmlTree::get_dt_select()
 {
     if (!current_desktop) {
-        return NULL;
+        return nullptr;
     }
     return current_desktop->getSelection()->singleRepr();
 }
@@ -508,7 +508,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
 
         object = current_desktop->getDocument()->getObjectByRepr(repr);
     } else {
-        object = NULL;
+        object = nullptr;
     }
 
     blocked++;
@@ -538,14 +538,14 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
 
     if (self->selected_repr) {
         Inkscape::GC::release(self->selected_repr);
-        self->selected_repr = NULL;
+        self->selected_repr = nullptr;
     }
 
 
     if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
         // Nothing selected, update widgets
-        self->propagate_tree_select(NULL);
-        self->set_dt_select(NULL);
+        self->propagate_tree_select(nullptr);
+        self->set_dt_select(nullptr);
         self->on_tree_unselect_row_disable();
         self->on_tree_unselect_row_hide();
         self->on_attr_unselect_row_clear_text();
@@ -553,7 +553,7 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
     }
 
     Inkscape::XML::Node *repr = sp_xmlview_tree_node_get_repr(model, &iter);
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
 
 
     self->selected_repr = repr;
@@ -584,7 +584,7 @@ void XmlTree::after_tree_move(SPXMLViewTree * /*attributes*/, gpointer value, gp
          * data is probably not synchronized, so reload the tree
          */
         SPDocument *document = self->current_document;
-        self->set_tree_document(NULL);
+        self->set_tree_document(nullptr);
         self->set_tree_document(document);
     }
 }
@@ -757,8 +757,8 @@ void XmlTree::on_attr_select_row(GtkTreeSelection *selection, gpointer data)
         return;
     }
 
-    gchar *name = 0;
-    gchar *value = 0;
+    gchar *name = nullptr;
+    gchar *value = nullptr;
     guint attr = 0;
     gtk_tree_model_get (model, &iter, ATTR_COL_NAME, &name, ATTR_COL_VALUE, &value, ATTR_COL_ATTR, &attr, -1);
 
@@ -786,7 +786,7 @@ void XmlTree::on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * n
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(attributes));
     GtkTreeIter   iter;
     GtkTreeModel *model;
-    gchar *attr_name = 0;
+    gchar *attr_name = nullptr;
     if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
         gtk_tree_model_get (model, &iter, 0, &attr_name, -1);
         if (gtk_list_store_iter_is_valid(GTK_LIST_STORE(model), &iter) ) {
@@ -799,7 +799,7 @@ void XmlTree::on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * n
 
     if (attr_name) {
         g_free(attr_name);
-        attr_name = 0;
+        attr_name = nullptr;
     }
 }
 
@@ -875,9 +875,9 @@ void XmlTree::cmd_new_element_node()
 {
     GtkWidget *cancel, *vbox, *bbox, *sep;
 
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
-    new_window = sp_window_new(NULL, TRUE);
+    new_window = sp_window_new(nullptr, TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(new_window), 4);
     gtk_window_set_title(GTK_WINDOW(new_window), _("New element node..."));
     gtk_window_set_resizable(GTK_WINDOW(new_window), FALSE);
@@ -951,7 +951,7 @@ void XmlTree::cmd_new_element_node()
 
 void XmlTree::cmd_new_text_node()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
     Inkscape::XML::Document *xml_doc = current_document->getReprDoc();
     Inkscape::XML::Node *text = xml_doc->createTextNode("");
@@ -969,7 +969,7 @@ void XmlTree::cmd_new_text_node()
 
 void XmlTree::cmd_duplicate_node()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
     Inkscape::XML::Node *parent = selected_repr->parent();
     Inkscape::XML::Node *dup = selected_repr->duplicate(parent->document());
@@ -988,7 +988,7 @@ void XmlTree::cmd_duplicate_node()
 
 void XmlTree::cmd_delete_node()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
     sp_repr_unparent(selected_repr);
 
     reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -1000,10 +1000,10 @@ void XmlTree::cmd_delete_node()
 
 void XmlTree::cmd_delete_attr()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
     g_assert(selected_attr != 0);
 
-    selected_repr->setAttribute(g_quark_to_string(selected_attr), NULL);
+    selected_repr->setAttribute(g_quark_to_string(selected_attr), nullptr);
 
     SPObject *updated = current_document->getObjectByRepr(selected_repr);
     if (updated) {
@@ -1019,7 +1019,7 @@ void XmlTree::cmd_delete_attr()
 
 void XmlTree::cmd_set_attr()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
     gchar *name = g_strdup(attr_name.get_text().c_str());
     gchar *value = g_strdup(attr_value.get_buffer()->get_text().c_str());
@@ -1046,14 +1046,14 @@ void XmlTree::cmd_set_attr()
 
 void XmlTree::cmd_raise_node()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
 
     Inkscape::XML::Node *parent = selected_repr->parent();
-    g_return_if_fail(parent != NULL);
+    g_return_if_fail(parent != nullptr);
     g_return_if_fail(parent->firstChild() != selected_repr);
 
-    Inkscape::XML::Node *ref = NULL;
+    Inkscape::XML::Node *ref = nullptr;
     Inkscape::XML::Node *before = parent->firstChild();
     while (before && (before->next() != selected_repr)) {
         ref = before;
@@ -1073,9 +1073,9 @@ void XmlTree::cmd_raise_node()
 
 void XmlTree::cmd_lower_node()
 {
-    g_assert(selected_repr != NULL);
+    g_assert(selected_repr != nullptr);
 
-    g_return_if_fail(selected_repr->next() != NULL);
+    g_return_if_fail(selected_repr->next() != nullptr);
     Inkscape::XML::Node *parent = selected_repr->parent();
 
     parent->changeOrder(selected_repr, selected_repr->next());
@@ -1090,20 +1090,20 @@ void XmlTree::cmd_lower_node()
 void XmlTree::cmd_indent_node()
 {
     Inkscape::XML::Node *repr = selected_repr;
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
 
     Inkscape::XML::Node *parent = repr->parent();
-    g_return_if_fail(parent != NULL);
+    g_return_if_fail(parent != nullptr);
     g_return_if_fail(parent->firstChild() != repr);
 
     Inkscape::XML::Node* prev = parent->firstChild();
     while (prev && (prev->next() != repr)) {
         prev = prev->next();
     }
-    g_return_if_fail(prev != NULL);
+    g_return_if_fail(prev != nullptr);
     g_return_if_fail(prev->type() == Inkscape::XML::ELEMENT_NODE);
 
-    Inkscape::XML::Node* ref = NULL;
+    Inkscape::XML::Node* ref = nullptr;
     if (prev->firstChild()) {
         for( ref = prev->firstChild() ; ref->next() ; ref = ref->next() ){};
     }
@@ -1123,7 +1123,7 @@ void XmlTree::cmd_indent_node()
 void XmlTree::cmd_unindent_node()
 {
     Inkscape::XML::Node *repr = selected_repr;
-    g_assert(repr != NULL);
+    g_assert(repr != nullptr);
 
     Inkscape::XML::Node *parent = repr->parent();
     g_return_if_fail(parent);
@@ -1149,13 +1149,13 @@ bool XmlTree::in_dt_coordsys(SPObject const &item)
 {
     /* Definition based on sp_item_i2doc_affine. */
     SPObject const *child = &item;
-    g_return_val_if_fail(child != NULL, false);
+    g_return_val_if_fail(child != nullptr, false);
     for(;;) {
         if (!SP_IS_ITEM(child)) {
             return false;
         }
         SPObject const * const parent = child->parent;
-        if (parent == NULL) {
+        if (parent == nullptr) {
             break;
         }
         child = parent;

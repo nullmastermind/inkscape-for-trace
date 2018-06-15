@@ -96,10 +96,10 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
                 /* Doing an inset here folks */
                 offset *= -1.0;
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(desktop)), NULL);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_INSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
             } else if (offset > 0.0) {
                 prefs->setDoubleUnit("/options/defaultoffsetwidth/value", offset, "px");
-                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(desktop)), NULL);
+                sp_action_perform(Inkscape::Verb::get(SP_VERB_SELECTION_OFFSET)->get_action(Inkscape::ActionContext(desktop)), nullptr);
             }
 
             selection->clear();
@@ -119,7 +119,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 Gtk::Widget *
 BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, Inkscape::UI::View::View * /*view*/, sigc::signal<void> * changeSignal, Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-    return module->autogui(NULL, NULL, changeSignal);
+    return module->autogui(nullptr, nullptr, changeSignal);
 }
 
 #include "clear-n_.h"

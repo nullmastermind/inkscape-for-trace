@@ -76,7 +76,7 @@ SPItem::SPItem() : SPObject() {
     sensitive = TRUE;
     bbox_valid = FALSE;
 
-    _highlightColor = NULL;
+    _highlightColor = nullptr;
 
     transform_center_x = 0;
     transform_center_y = 0;
@@ -88,7 +88,7 @@ SPItem::SPItem() : SPObject() {
     transform = Geom::identity();
     // doc_bbox = Geom::OptRect();
 
-    display = NULL;
+    display = nullptr;
 
     clip_ref = new SPClipPathReference(this);
     clip_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(clip_ref_changed), this));
@@ -114,7 +114,7 @@ bool SPItem::isVisibleAndUnlocked(unsigned display_key) const {
 }
 
 bool SPItem::isLocked() const {
-    for (SPObject const *o = this; o != NULL; o = o->parent) {
+    for (SPObject const *o = this; o != nullptr; o = o->parent) {
         SPItem const *item = dynamic_cast<SPItem const *>(o);
         if (item && !(item->sensitive)) {
             return true;
@@ -125,7 +125,7 @@ bool SPItem::isLocked() const {
 
 void SPItem::setLocked(bool locked) {
     setAttribute("sodipodi:insensitive",
-                 ( locked ? "1" : NULL ));
+                 ( locked ? "1" : nullptr ));
     updateRepr();
     document->_emitModified();
 }
@@ -149,7 +149,7 @@ bool SPItem::isHidden(unsigned display_key) const {
         return true;
     for ( SPItemView *view(display) ; view ; view = view->next ) {
         if ( view->key == display_key ) {
-            g_assert(view->arenaitem != NULL);
+            g_assert(view->arenaitem != nullptr);
             for ( Inkscape::DrawingItem *arenaitem = view->arenaitem ;
                   arenaitem ; arenaitem = arenaitem->parent() )
             {
@@ -164,7 +164,7 @@ bool SPItem::isHidden(unsigned display_key) const {
 }
 
 bool SPItem::isHighlightSet() const {
-    return _highlightColor != NULL;
+    return _highlightColor != nullptr;
 }
 
 guint32 SPItem::highlight_color() const {
@@ -297,7 +297,7 @@ SPItem::scaleCenter(Geom::Scale const &sc) {
 namespace {
 
 bool is_item(SPObject const &object) {
-    return dynamic_cast<SPItem const *>(&object) != NULL;
+    return dynamic_cast<SPItem const *>(&object) != nullptr;
 }
 
 }
@@ -351,7 +351,7 @@ void SPItem::lowerToBottom() {
 
 void SPItem::moveTo(SPItem *target, bool intoafter) {
 
-    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : NULL );
+    Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : nullptr );
     Inkscape::XML::Node *our_ref = getRepr();
 
     if (!target_ref) {
@@ -372,7 +372,7 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
     if (intoafter) {
         // Move this inside of the target at the end
         our_ref->parent()->removeChild(our_ref);
-        target_ref->addChild(our_ref, NULL);
+        target_ref->addChild(our_ref, nullptr);
     } else if (target_ref->parent() != our_ref->parent()) {
         // Change in parent, need to remove and add
         our_ref->parent()->removeChild(our_ref);
@@ -480,7 +480,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
         case SP_ATTR_SODIPODI_INSENSITIVE:
         {
             item->sensitive = !value;
-            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            for (SPItemView *v = item->display; v != nullptr; v = v->next) {
                 v->arenaitem->setSensitive(item->sensitive);
             }
             break;
@@ -491,7 +491,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             if (value) {
                 item->_highlightColor = g_strdup(value);
             } else {
-                item->_highlightColor = NULL;
+                item->_highlightColor = nullptr;
             }
             break;
         }
@@ -500,7 +500,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             break;
         case SP_ATTR_TRANSFORM_CENTER_X:
             if (value) {
-                item->transform_center_x = g_strtod(value, NULL);
+                item->transform_center_x = g_strtod(value, nullptr);
             } else {
                 item->transform_center_x = 0;
             }
@@ -508,7 +508,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             break;
         case SP_ATTR_TRANSFORM_CENTER_Y:
             if (value) {
-                item->transform_center_y = g_strtod(value, NULL);
+                item->transform_center_y = g_strtod(value, nullptr);
             } else {
                 item->transform_center_y = 0;
             }
@@ -538,16 +538,16 @@ void SPItem::clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
     if (old_clip) {
         SPItemView *v;
         /* Hide clippath */
-        for (v = item->display; v != NULL; v = v->next) {
+        for (v = item->display; v != nullptr; v = v->next) {
             SPClipPath *oldPath = dynamic_cast<SPClipPath *>(old_clip);
-            g_assert(oldPath != NULL);
+            g_assert(oldPath != nullptr);
             oldPath->hide(v->arenaitem->key());
         }
     }
     SPClipPath *clipPath = dynamic_cast<SPClipPath *>(clip);
     if (clipPath) {
         Geom::OptRect bbox = item->geometricBounds();
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+        for (SPItemView *v = item->display; v != nullptr; v = v->next) {
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
@@ -566,16 +566,16 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 {
     if (old_mask) {
         /* Hide mask */
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+        for (SPItemView *v = item->display; v != nullptr; v = v->next) {
             SPMask *maskItem = dynamic_cast<SPMask *>(old_mask);
-            g_assert(maskItem != NULL);
+            g_assert(maskItem != nullptr);
             maskItem->sp_mask_hide(v->arenaitem->key());
         }
     }
     SPMask *maskItem = dynamic_cast<SPMask *>(mask);
     if (maskItem) {
         Geom::OptRect bbox = item->geometricBounds();
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+        for (SPItemView *v = item->display; v != nullptr; v = v->next) {
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
@@ -592,7 +592,7 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
     SPPaintServer *old_fill_ps = dynamic_cast<SPPaintServer *>(old_ps);
     if (old_fill_ps) {
-        for (SPItemView *v =item->display; v != NULL; v = v->next) {
+        for (SPItemView *v =item->display; v != nullptr; v = v->next) {
             old_fill_ps->hide(v->arenaitem->key());
         }
     }
@@ -600,7 +600,7 @@ void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
     SPPaintServer *new_fill_ps = dynamic_cast<SPPaintServer *>(ps);
     if (new_fill_ps) {
         Geom::OptRect bbox = item->geometricBounds();
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+        for (SPItemView *v = item->display; v != nullptr; v = v->next) {
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
@@ -617,7 +617,7 @@ void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
 void SPItem::stroke_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
     SPPaintServer *old_stroke_ps = dynamic_cast<SPPaintServer *>(old_ps);
     if (old_stroke_ps) {
-        for (SPItemView *v =item->display; v != NULL; v = v->next) {
+        for (SPItemView *v =item->display; v != nullptr; v = v->next) {
             old_stroke_ps->hide(v->arenaitem->key());
         }
     }
@@ -625,7 +625,7 @@ void SPItem::stroke_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item)
     SPPaintServer *new_stroke_ps = dynamic_cast<SPPaintServer *>(ps);
     if (new_stroke_ps) {
         Geom::OptRect bbox = item->geometricBounds();
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+        for (SPItemView *v = item->display; v != nullptr; v = v->next) {
             if (!v->arenaitem->key()) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
@@ -653,30 +653,30 @@ void SPItem::update(SPCtx* ctx, guint flags) {
                  SP_OBJECT_MODIFIED_FLAG |
                  SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
         if (flags & SP_OBJECT_MODIFIED_FLAG) {
-            for (SPItemView *v = display; v != NULL; v = v->next) {
+            for (SPItemView *v = display; v != nullptr; v = v->next) {
                 v->arenaitem->setTransform(transform);
             }
         }
 
-        SPClipPath *clip_path = clip_ref ? clip_ref->getObject() : NULL;
-        SPMask *mask = mask_ref ? mask_ref->getObject() : NULL;
+        SPClipPath *clip_path = clip_ref ? clip_ref->getObject() : nullptr;
+        SPMask *mask = mask_ref ? mask_ref->getObject() : nullptr;
 
         if ( clip_path || mask ) {
             Geom::OptRect bbox = geometricBounds();
             if (clip_path) {
-                for (SPItemView *v = display; v != NULL; v = v->next) {
+                for (SPItemView *v = display; v != nullptr; v = v->next) {
                     clip_path->setBBox(v->arenaitem->key(), bbox);
                 }
             }
             if (mask) {
-                for (SPItemView *v = display; v != NULL; v = v->next) {
+                for (SPItemView *v = display; v != nullptr; v = v->next) {
                     mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
             }
         }
 
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-            for (SPItemView *v = display; v != NULL; v = v->next) {
+            for (SPItemView *v = display; v != nullptr; v = v->next) {
                 v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(style->opacity.value));
                 v->arenaitem->setAntialiasing(style->shape_rendering.computed == SP_CSS_SHAPE_RENDERING_CRISPEDGES ? 0 : 2);
                 v->arenaitem->setIsolation( style->isolation.value );
@@ -719,14 +719,14 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         std::vector<Inkscape::XML::Node *>l;
         for (auto& child: object->children) {
             if (dynamic_cast<SPTitle *>(&child) || dynamic_cast<SPDesc *>(&child)) {
-                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
+                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
                 if (crepr) {
                     l.push_back(crepr);
                 }
             }
         }
         for (auto i = l.rbegin(); i!= l.rend(); ++i) {
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
@@ -742,15 +742,15 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     g_free(c);
 
     if (flags & SP_OBJECT_WRITE_EXT) {
-        repr->setAttribute("sodipodi:insensitive", ( item->sensitive ? NULL : "true" ));
+        repr->setAttribute("sodipodi:insensitive", ( item->sensitive ? nullptr : "true" ));
         if (item->transform_center_x != 0)
             sp_repr_set_svg_double (repr, "inkscape:transform-center-x", item->transform_center_x);
         else
-            repr->setAttribute ("inkscape:transform-center-x", NULL);
+            repr->setAttribute ("inkscape:transform-center-x", nullptr);
         if (item->transform_center_y != 0)
             sp_repr_set_svg_double (repr, "inkscape:transform-center-y", item->transform_center_y);
         else
-            repr->setAttribute ("inkscape:transform-center-y", NULL);
+            repr->setAttribute ("inkscape:transform-center-y", nullptr);
     }
 
     if (item->clip_ref){
@@ -774,7 +774,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     if (item->_highlightColor){
         repr->setAttribute("inkscape:highlight-color", item->_highlightColor);
     } else {
-        repr->setAttribute("inkscape:highlight-color", NULL);
+        repr->setAttribute("inkscape:highlight-color", nullptr);
     }
 
     SPObject::write(xml_doc, repr, flags);
@@ -808,7 +808,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     Geom::OptRect bbox;
 
 
-    SPFilter *filter = (style && style->filter.href) ? dynamic_cast<SPFilter *>(style->getFilter()) : NULL;
+    SPFilter *filter = (style && style->filter.href) ? dynamic_cast<SPFilter *>(style->getFilter()) : nullptr;
     if ( filter ) {
         // call the subclass method
     	// CPPIFY
@@ -862,7 +862,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     }
     if (clip_ref->getObject()) {
         SPItem *ownerItem = dynamic_cast<SPItem *>(clip_ref->getOwner());
-        g_assert(ownerItem != NULL);
+        g_assert(ownerItem != nullptr);
         ownerItem->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(clip_ref->getObject()->geometricBounds(transform));
     }
@@ -945,7 +945,7 @@ Geom::OptRect SPItem::desktopBounds(BBoxType type) const
 }
 
 unsigned int SPItem::pos_in_parent() const {
-    g_assert(parent != NULL);
+    g_assert(parent != nullptr);
     g_assert(SP_IS_OBJECT(parent));
 
     unsigned int pos = 0;
@@ -982,7 +982,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
 	const_cast<SPItem*>(this)->snappoints(p, snapprefs);
 
     // Get the snappoints at the item's center
-    if (snapprefs != NULL && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
+    if (snapprefs != nullptr && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
         p.push_back(Inkscape::SnapCandidatePoint(getCenter(), Inkscape::SNAPSOURCE_ROTATION_CENTER, Inkscape::SNAPTARGET_ROTATION_CENTER));
     }
 
@@ -1059,7 +1059,7 @@ gchar *SPItem::detailedDescription() const {
 
 	if ( style && style->filter.href && style->filter.href->getObject() ) {
 		const gchar *label = style->filter.href->getObject()->label();
-		gchar *snew = 0;
+		gchar *snew = nullptr;
 
 		if (label) {
 			snew = g_strdup_printf (_("%s; <i>filtered (%s)</i>"), s, _(label));
@@ -1107,16 +1107,16 @@ unsigned SPItem::display_key_new(unsigned numkeys)
 // CPPIFY: make pure virtual
 Inkscape::DrawingItem* SPItem::show(Inkscape::Drawing& /*drawing*/, unsigned int /*key*/, unsigned int /*flags*/) {
 	//throw;
-	return 0;
+	return nullptr;
 }
 
 Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned key, unsigned flags)
 {
-    Inkscape::DrawingItem *ai = NULL;
+    Inkscape::DrawingItem *ai = nullptr;
 
     ai = this->show(drawing, key, flags);
 
-    if (ai != NULL) {
+    if (ai != nullptr) {
         Geom::OptRect item_bbox = geometricBounds();
 
         display = sp_item_view_new_prepend(display, this, flags, key, ai);
@@ -1202,18 +1202,18 @@ void SPItem::invoke_hide(unsigned key)
 {
 	this->hide(key);
 
-    SPItemView *ref = NULL;
+    SPItemView *ref = nullptr;
     SPItemView *v = display;
-    while (v != NULL) {
+    while (v != nullptr) {
         SPItemView *next = v->next;
         if (v->key == key) {
             if (clip_ref->getObject()) {
                 (clip_ref->getObject())->hide(v->arenaitem->key());
-                v->arenaitem->setClip(NULL);
+                v->arenaitem->setClip(nullptr);
             }
             if (mask_ref->getObject()) {
                 mask_ref->getObject()->sp_mask_hide(v->arenaitem->key());
-                v->arenaitem->setMask(NULL);
+                v->arenaitem->setMask(nullptr);
             }
             SPPaintServer *fill_ps = style->getFillPaintServer();
             if (fill_ps) {
@@ -1449,7 +1449,7 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
 {
     // calculate the relative transform, if not given by the adv attribute
     Geom::Affine advertized_transform;
-    if (adv != NULL) {
+    if (adv != nullptr) {
         advertized_transform = *adv;
     } else {
         advertized_transform = sp_item_transform_repr (this).inverse() * transform;
@@ -1578,7 +1578,7 @@ void SPItem::set_item_transform(Geom::Affine const &transform_matrix)
 
 Geom::Affine i2anc_affine(SPObject const *object, SPObject const *const ancestor) {
     Geom::Affine ret(Geom::identity());
-    g_return_val_if_fail(object != NULL, ret);
+    g_return_val_if_fail(object != nullptr, ret);
 
     /* stop at first non-renderable ancestor */
     while ( object != ancestor && dynamic_cast<SPItem const *>(object) ) {
@@ -1587,7 +1587,7 @@ Geom::Affine i2anc_affine(SPObject const *object, SPObject const *const ancestor
             ret *= root->c2p;
         } else {
             SPItem const *item = dynamic_cast<SPItem const *>(object);
-            g_assert(item != NULL);
+            g_assert(item != nullptr);
             ret *= item->transform;
         }
         object = object->parent;
@@ -1597,7 +1597,7 @@ Geom::Affine i2anc_affine(SPObject const *object, SPObject const *const ancestor
 
 Geom::Affine
 i2i_affine(SPObject const *src, SPObject const *dest) {
-    g_return_val_if_fail(src != NULL && dest != NULL, Geom::identity());
+    g_return_val_if_fail(src != nullptr && dest != nullptr, Geom::identity());
     SPObject const *ancestor = src->nearestCommonAncestor(dest);
     return i2anc_affine(src, ancestor) * i2anc_affine(dest, ancestor).inverse();
 }
@@ -1608,7 +1608,7 @@ Geom::Affine SPItem::getRelativeTransform(SPObject const *dest) const {
 
 Geom::Affine SPItem::i2doc_affine() const
 {
-    return i2anc_affine(this, NULL);
+    return i2anc_affine(this, nullptr);
 }
 
 Geom::Affine SPItem::i2dt_affine() const
@@ -1651,9 +1651,9 @@ Geom::Affine SPItem::dt2i_affine() const
 
 SPItemView *SPItem::sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, Inkscape::DrawingItem *drawing_item)
 {
-    g_assert(item != NULL);
-    g_assert(dynamic_cast<SPItem *>(item) != NULL);
-    g_assert(drawing_item != NULL);
+    g_assert(item != nullptr);
+    g_assert(dynamic_cast<SPItem *>(item) != nullptr);
+    g_assert(drawing_item != nullptr);
 
     SPItemView *new_view = g_new(SPItemView, 1);
 
@@ -1692,7 +1692,7 @@ Inkscape::DrawingItem *SPItem::get_arenaitem(unsigned key)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 int sp_item_repr_compare_position(SPItem const *first, SPItem const *second)
@@ -1708,7 +1708,7 @@ SPItem const *sp_item_first_item_child(SPObject const *obj)
 
 SPItem *sp_item_first_item_child(SPObject *obj)
 {
-    SPItem *child = 0;
+    SPItem *child = nullptr;
     for (auto& iter: obj->children) {
         SPItem *tmp = dynamic_cast<SPItem *>(&iter);
         if ( tmp ) {

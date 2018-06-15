@@ -367,7 +367,7 @@ int Filter::replace_primitive(int target, FilterPrimitiveType type)
 }
 
 FilterPrimitive *Filter::get_primitive(int handle) {
-    if (handle < 0 || handle >= static_cast<int>(_primitive.size())) return NULL;
+    if (handle < 0 || handle >= static_cast<int>(_primitive.size())) return nullptr;
     return _primitive[handle];
 }
 

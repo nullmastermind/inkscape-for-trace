@@ -71,8 +71,8 @@ class PrefDialog : public Gtk::Dialog {
 public:
     PrefDialog (Glib::ustring name,
                 gchar const * help,
-                Gtk::Widget * controls = NULL,
-                Effect * effect = NULL);
+                Gtk::Widget * controls = nullptr,
+                Effect * effect = nullptr);
     ~PrefDialog () override;
 };
 

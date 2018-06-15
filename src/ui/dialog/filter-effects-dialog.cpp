@@ -174,7 +174,7 @@ public:
 template< typename T> class ComboWithTooltip : public Gtk::EventBox
 {
 public:
-    ComboWithTooltip<T>(T default_value, const Util::EnumDataConverter<T>& c, const SPAttributeEnum a = SP_ATTR_INVALID, char* tip_text = NULL)
+    ComboWithTooltip<T>(T default_value, const Util::EnumDataConverter<T>& c, const SPAttributeEnum a = SP_ATTR_INVALID, char* tip_text = nullptr)
     {
         if (tip_text) {
             set_tooltip_text(tip_text);
@@ -373,7 +373,7 @@ public:
 class FilterEffectsDialog::MatrixAttr : public Gtk::Frame, public AttrWidget
 {
 public:
-    MatrixAttr(const SPAttributeEnum a, char* tip_text = NULL)
+    MatrixAttr(const SPAttributeEnum a, char* tip_text = nullptr)
         : AttrWidget(a), _locked(false)
     {
         _model = Gtk::ListStore::create(_columns);
@@ -465,7 +465,7 @@ private:
 
         _tree.remove_all_columns();
 
-        std::vector<gdouble>* values = NULL;
+        std::vector<gdouble>* values = nullptr;
         if(SP_IS_FECOLORMATRIX(o))
             values = &SP_FECOLORMATRIX(o)->values;
         else if(SP_IS_FECONVOLVEMATRIX(o))
@@ -607,7 +607,7 @@ private:
     double _angle_store;
 };
 
-static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = NULL;
+static Inkscape::UI::Dialog::FileOpenDialog * selectFeImageFileInstance = nullptr;
 
 //Displays a chooser for feImage input
 //It may be a filename or the id for an SVG Element
@@ -805,7 +805,7 @@ public:
 
     // CheckButton
     CheckButtonAttr* add_checkbutton(bool def, const SPAttributeEnum attr, const Glib::ustring& label,
-                                     const Glib::ustring& tv, const Glib::ustring& fv, char* tip_text = NULL)
+                                     const Glib::ustring& tv, const Glib::ustring& fv, char* tip_text = nullptr)
     {
         CheckButtonAttr* cb = new CheckButtonAttr(def, label, tv, fv, attr, tip_text);
         add_widget(cb, "");
@@ -814,7 +814,7 @@ public:
     }
 
     // ColorButton
-    ColorButton* add_color(unsigned int def, const SPAttributeEnum attr, const Glib::ustring& label, char* tip_text = NULL)
+    ColorButton* add_color(unsigned int def, const SPAttributeEnum attr, const Glib::ustring& label, char* tip_text = nullptr)
     {
         ColorButton* col = new ColorButton(def, attr, tip_text);
         add_widget(col, label);
@@ -842,7 +842,7 @@ public:
 
     // SpinScale
     SpinScale* add_spinscale(double def, const SPAttributeEnum attr, const Glib::ustring& label,
-                         const double lo, const double hi, const double step_inc, const double climb, const int digits, char* tip_text = NULL)
+                         const double lo, const double hi, const double step_inc, const double climb, const int digits, char* tip_text = nullptr)
     {
         Glib::ustring tip_text2;
         if (tip_text)
@@ -869,7 +869,7 @@ public:
     // SpinButton
     SpinButtonAttr* add_spinbutton(double defalt_value, const SPAttributeEnum attr, const Glib::ustring& label,
                                        const double lo, const double hi, const double step_inc,
-                                       const double climb, const int digits, char* tip = NULL)
+                                       const double climb, const int digits, char* tip = nullptr)
     {
         SpinButtonAttr* sb = new SpinButtonAttr(lo, hi, step_inc, climb, digits, attr, defalt_value, tip);
         add_widget(sb, label);
@@ -880,7 +880,7 @@ public:
     // DualSpinButton
     DualSpinButton* add_dualspinbutton(char* defalt_value, const SPAttributeEnum attr, const Glib::ustring& label,
                                        const double lo, const double hi, const double step_inc,
-                                       const double climb, const int digits, char* tip1 = NULL, char* tip2 = NULL)
+                                       const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr)
     {
         DualSpinButton* dsb = new DualSpinButton(defalt_value, lo, hi, step_inc, climb, digits, attr, tip1, tip2);
         add_widget(dsb, label);
@@ -891,7 +891,7 @@ public:
     // MultiSpinButton
     MultiSpinButton* add_multispinbutton(double def1, double def2, const SPAttributeEnum attr1, const SPAttributeEnum attr2,
                                          const Glib::ustring& label, const double lo, const double hi,
-                                         const double step_inc, const double climb, const int digits, char* tip1 = NULL, char* tip2 = NULL)
+                                         const double step_inc, const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr)
     {
         std::vector<SPAttributeEnum> attrs;
         attrs.push_back(attr1);
@@ -913,7 +913,7 @@ public:
     }
     MultiSpinButton* add_multispinbutton(double def1, double def2, double def3, const SPAttributeEnum attr1, const SPAttributeEnum attr2,
                                          const SPAttributeEnum attr3, const Glib::ustring& label, const double lo,
-                                         const double hi, const double step_inc, const double climb, const int digits, char* tip1 = NULL, char* tip2 = NULL, char* tip3 = NULL)
+                                         const double hi, const double step_inc, const double climb, const int digits, char* tip1 = nullptr, char* tip2 = nullptr, char* tip3 = nullptr)
     {
         std::vector<SPAttributeEnum> attrs;
         attrs.push_back(attr1);
@@ -950,7 +950,7 @@ public:
     // ComboBoxEnum
     template<typename T> ComboBoxEnum<T>* add_combo(T default_value, const SPAttributeEnum attr,
                                   const Glib::ustring& label,
-                                  const Util::EnumDataConverter<T>& conv, char* tip_text = NULL)
+                                  const Util::EnumDataConverter<T>& conv, char* tip_text = nullptr)
     {
         ComboWithTooltip<T>* combo = new ComboWithTooltip<T>(default_value, conv, attr, tip_text);
         add_widget(combo, label);
@@ -961,7 +961,7 @@ public:
     // Entry
     EntryAttr* add_entry(const SPAttributeEnum attr,
                          const Glib::ustring& label,
-                         char* tip_text = NULL)
+                         char* tip_text = nullptr)
     {
         EntryAttr* entry = new EntryAttr(attr, tip_text);
         add_widget(entry, label);
@@ -1014,7 +1014,7 @@ public:
           _settings(d, _box, sigc::mem_fun(*this, &ComponentTransferValues::set_func_attr), COMPONENTTRANSFER_TYPE_ERROR),
           _type(ComponentTransferTypeConverter, SP_ATTR_TYPE, false),
           _channel(channel),
-          _funcNode(NULL)
+          _funcNode(nullptr)
     {
         set_shadow_type(Gtk::SHADOW_IN);
         add(_box);
@@ -1044,7 +1044,7 @@ public:
     // FuncNode can be in any order so we must search to find correct one.
     SPFeFuncNode* find_node(SPFeComponentTransfer* ct)
     {
-        SPFeFuncNode* funcNode = NULL;
+        SPFeFuncNode* funcNode = nullptr;
         bool found = false;
         for(auto& node: ct->children) {
             funcNode = SP_FEFUNCNODE(&node);
@@ -1054,7 +1054,7 @@ public:
             }
         }
         if( !found )
-            funcNode = NULL;
+            funcNode = nullptr;
 
         return funcNode;
     }
@@ -1079,7 +1079,7 @@ public:
                 SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
                 if(prim) {
                     Inkscape::XML::Document *xml_doc = prim->document->getReprDoc();
-                    Inkscape::XML::Node *repr = NULL;
+                    Inkscape::XML::Node *repr = nullptr;
                     switch(_channel) {
                         case SPFeFuncNode::R:
                             repr = xml_doc->createElement("svg:feFuncR");
@@ -1323,7 +1323,7 @@ static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
 
 /*** FilterModifier ***/
 FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
-    :    _desktop(NULL),
+    :    _desktop(nullptr),
          _deskTrack(),
          _dialog(d),
          _add(_("_New"), true),
@@ -1402,7 +1402,7 @@ void FilterEffectsDialog::FilterModifier::setTargetDesktop(SPDesktop *desktop)
             _selectModifiedConn.disconnect();
             _doc_replaced.disconnect();
             _resource_changed.disconnect();
-            _dialog.setDesktop(NULL);
+            _dialog.setDesktop(nullptr);
         }
         _desktop = desktop;
         if (desktop) {
@@ -1472,7 +1472,7 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
             SP_ITEM(obj)->bbox_valid = FALSE;
             used.insert(style->getFilter());
         } else {
-            used.insert(0);
+            used.insert(nullptr);
         }
     }
 
@@ -1539,13 +1539,13 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 
         /* If this filter is the only one used in the selection, unset it */
         if((*iter)[_columns.sel] == 1)
-            filter = 0;
+            filter = nullptr;
 
         auto itemlist= sel->items();
         for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             SPItem * item = *i;
             SPStyle *style = item->style;
-            g_assert(style != NULL);
+            g_assert(style != nullptr);
 
             if (filter) {
                 sp_style_set_property_url(item, "filter", filter, false);
@@ -1603,7 +1603,7 @@ SPFilter* FilterEffectsDialog::FilterModifier::get_selected_filter()
             return (*i)[_columns.filter];
     }
 
-    return 0;
+    return nullptr;
 }
 
 void FilterEffectsDialog::FilterModifier::select_filter(const SPFilter* filter)
@@ -1622,7 +1622,7 @@ void FilterEffectsDialog::FilterModifier::select_filter(const SPFilter* filter)
 void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-        const bool sensitive = get_selected_filter() != NULL;
+        const bool sensitive = get_selected_filter() != nullptr;
 	auto items = _menu->get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
@@ -1712,7 +1712,7 @@ void FilterEffectsDialog::FilterModifier::rename_filter()
 
 FilterEffectsDialog::CellRendererConnection::CellRendererConnection()
     : Glib::ObjectBase(typeid(CellRendererConnection)),
-      _primitive(*this, "primitive", 0),
+      _primitive(*this, "primitive", nullptr),
       _text_width(0)
 {}
 
@@ -1896,7 +1896,7 @@ SPFilterPrimitive* FilterEffectsDialog::PrimitiveList::get_selected()
             return (*i)[_columns.primitive];
     }
 
-    return 0;
+    return nullptr;
 }
 
 void FilterEffectsDialog::PrimitiveList::select(SPFilterPrimitive* prim)
@@ -1913,7 +1913,7 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
     SPFilterPrimitive* prim = get_selected();
 
     if(prim) {
-        _observer->set(0);
+        _observer->set(nullptr);
 
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(prim->getRepr());
@@ -2306,7 +2306,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_press_event(GdkEventButton* e
     const int x = (int)e->x, y = (int)e->y;
     int cx, cy;
 
-    _drag_prim = 0;
+    _drag_prim = nullptr;
 
     if(get_path_at_pos(x, y, path, col, cx, cy)) {
         Gtk::TreeIter iter = _model->get_iter(path);
@@ -2397,7 +2397,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
         int cx, cy;
 
         if(get_path_at_pos((int)e->x, (int)e->y, path, col, cx, cy)) {
-            const gchar *in_val = 0;
+            const gchar *in_val = nullptr;
             Glib::ustring result;
             Gtk::TreeIter target_iter = _model->get_iter(path);
             target = (*target_iter)[_columns.primitive];
@@ -2487,7 +2487,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
     }
 
     if((e->type == GDK_BUTTON_RELEASE) && (e->button == 3)) {
-        const bool sensitive = get_selected() != NULL;
+        const bool sensitive = get_selected() != nullptr;
 	auto items = _primitive_menu->get_children();
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
@@ -2509,20 +2509,20 @@ static void check_single_connection(SPFilterPrimitive* prim, const int result)
 {
     if (prim && (result >= 0)) {
         if (prim->image_in == result) {
-            prim->getRepr()->setAttribute("in", 0);
+            prim->getRepr()->setAttribute("in", nullptr);
         }
 
         if (SP_IS_FEBLEND(prim)) {
             if (SP_FEBLEND(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", 0);
+                prim->getRepr()->setAttribute("in2", nullptr);
             }
         } else if (SP_IS_FECOMPOSITE(prim)) {
             if (SP_FECOMPOSITE(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", 0);
+                prim->getRepr()->setAttribute("in2", nullptr);
             }
         } else if (SP_IS_FEDISPLACEMENTMAP(prim)) {
             if (SP_FEDISPLACEMENTMAP(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", 0);
+                prim->getRepr()->setAttribute("in2", nullptr);
             }
         }
     }

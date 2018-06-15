@@ -24,7 +24,7 @@ public:
                 Effect* effect);
     ~OriginalPathParam() override;
 
-    bool linksToPath() const { return (href != NULL); }
+    bool linksToPath() const { return (href != nullptr); }
     SPItem * getObject() const { return ref.getObject(); }
 
     Gtk::Widget * param_newWidget() override;

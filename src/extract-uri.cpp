@@ -10,18 +10,18 @@
 gchar *extract_uri( gchar const *s, gchar const** endptr )
 {
     if (!s)
-        return NULL;
+        return nullptr;
 
-    gchar* result = NULL;
+    gchar* result = nullptr;
     gchar const *sb = s;
     if ( strlen(sb) < 4 || strncmp(sb, "url", 3) != 0 ) {
-        return NULL;
+        return nullptr;
     }
 
     sb += 3;
 
     if ( endptr ) {
-        *endptr = 0;
+        *endptr = nullptr;
     }
 
     // This first whitespace technically is not allowed.

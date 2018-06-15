@@ -109,7 +109,7 @@ static void set_category_mask(bool * const mask, char const *filter) {
                 { "INTERACTION", Event::INTERACTION },
                 { "CONFIGURATION", Event::CONFIGURATION },
                 { "OTHER", Event::OTHER },
-                { NULL, Event::OTHER }
+                { nullptr, Event::OTHER }
             };
             CategoryName const *iter;
             for ( iter = category_names ; iter->name ; iter++ ) {

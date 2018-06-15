@@ -70,7 +70,7 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 	vw->maxheight = 400.0;
 
 	/* ScrolledWindow */
-	vw->sw = gtk_scrolled_window_new (NULL, NULL);
+	vw->sw = gtk_scrolled_window_new (nullptr, nullptr);
 	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(vw->sw), GTK_SHADOW_NONE);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (vw->sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add (GTK_CONTAINER (vw), vw->sw);
@@ -86,7 +86,7 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
                                         "SPCanvas {\n"
                                         " background-color: white;\n"
                                         "}\n",
-                                        -1, NULL);
+                                        -1, nullptr);
 
         gtk_style_context_add_provider(style_context,
                                        GTK_STYLE_PROVIDER(css_provider),
@@ -96,7 +96,7 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 	gtk_widget_show (vw->canvas);
 
 	/* View */
-	parent = sp_canvas_item_new(SP_CANVAS(vw->canvas)->getRoot(), SP_TYPE_CANVAS_GROUP, NULL);
+	parent = sp_canvas_item_new(SP_CANVAS(vw->canvas)->getRoot(), SP_TYPE_CANVAS_GROUP, nullptr);
 	Inkscape::UI::View::View *view = Inkscape::GC::release(new SPSVGView (SP_CANVAS_GROUP (parent)));
 	sp_view_widget_set_view (SP_VIEW_WIDGET (vw), view);
 }
@@ -108,7 +108,7 @@ static void sp_svg_view_widget_dispose(GObject *object)
 {
 	SPSVGSPViewWidget *vw = SP_SVG_VIEW_WIDGET (object);
 
-	vw->canvas = NULL;
+	vw->canvas = nullptr;
 
 	if (G_OBJECT_CLASS(sp_svg_view_widget_parent_class)->dispose) {
             G_OBJECT_CLASS(sp_svg_view_widget_parent_class)->dispose(object);
@@ -208,9 +208,9 @@ GtkWidget *sp_svg_view_widget_new(SPDocument *doc)
 {
 	GtkWidget *widget;
 
-	g_return_val_if_fail (doc != NULL, NULL);
+	g_return_val_if_fail (doc != nullptr, NULL);
 
-	widget = (GtkWidget*)g_object_new (SP_TYPE_SVG_VIEW_WIDGET, NULL);
+	widget = (GtkWidget*)g_object_new (SP_TYPE_SVG_VIEW_WIDGET, nullptr);
 
 	reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (widget))->setDocument (doc);
 

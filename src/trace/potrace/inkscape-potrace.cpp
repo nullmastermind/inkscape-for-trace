@@ -207,9 +207,9 @@ static long writePaths(PotraceTracingEngine *engine, potrace_path_t *plist,
 static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
-        return NULL;
+        return nullptr;
 
-    GrayMap *newGm = NULL;
+    GrayMap *newGm = nullptr;
 
     /*### Color quantization -- banding ###*/
     if (engine.getTraceType() == TRACE_QUANT)
@@ -281,9 +281,9 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 static IndexedMap *filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
-        return NULL;
+        return nullptr;
 
-    IndexedMap *newGm = NULL;
+    IndexedMap *newGm = nullptr;
 
     RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
     if (engine.getMultiScanSmooth())
@@ -326,7 +326,7 @@ PotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixbuf> thePixbuf)
         {
         IndexedMap *gm = filterIndexed(*this, pixbuf);
         if (!gm)
-            return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+            return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 
         Glib::RefPtr<Gdk::Pixbuf> newBuf =
              Glib::wrap(indexedMapToGdkPixbuf(gm), false);
@@ -339,7 +339,7 @@ PotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixbuf> thePixbuf)
         {
         GrayMap *gm = filter(*this, pixbuf);
         if (!gm)
-            return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+            return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 
         Glib::RefPtr<Gdk::Pixbuf> newBuf =
             Glib::wrap(grayMapToGdkPixbuf(gm), false);

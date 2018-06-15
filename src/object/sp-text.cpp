@@ -101,7 +101,7 @@ void SPText::set(unsigned int key, const gchar* value) {
                     this->style->line_height.value = this->style->line_height.computed = sp_svg_read_percentage (value, 1.0);
                 }
                 // Remove deprecated attribute
-                this->getRepr()->setAttribute("sodipodi:linespacing", NULL);
+                this->getRepr()->setAttribute("sodipodi:linespacing", nullptr);
 
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;
@@ -184,7 +184,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
 
         Geom::OptRect paintbox = this->geometricBounds();
 
-        for (SPItemView* v = this->display; v != NULL; v = v->next) {
+        for (SPItemView* v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
             this->_clearFlow(g);
             g->setStyle(this->style, this->parent->style);
@@ -210,7 +210,7 @@ void SPText::modified(guint flags) {
     if (flags & ( SP_OBJECT_STYLE_MODIFIED_FLAG )) {
         Geom::OptRect paintbox = this->geometricBounds();
 
-        for (SPItemView* v = this->display; v != NULL; v = v->next) {
+        for (SPItemView* v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
             this->_clearFlow(g);
             g->setStyle(this->style, this->parent->style);
@@ -246,12 +246,12 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
                 continue;
             }
 
-            Inkscape::XML::Node *crepr = NULL;
+            Inkscape::XML::Node *crepr = nullptr;
 
             if (SP_IS_STRING(&child)) {
                 crepr = xml_doc->createTextNode(SP_STRING(&child)->string.c_str());
             } else {
-                crepr = child.updateRepr(xml_doc, NULL, flags);
+                crepr = child.updateRepr(xml_doc, nullptr, flags);
             }
 
             if (crepr) {
@@ -260,7 +260,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
         }
 
         for (auto i=l.rbegin();i!=l.rend();++i) {
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {
@@ -310,7 +310,7 @@ Inkscape::DrawingItem* SPText::show(Inkscape::Drawing &drawing, unsigned /*key*/
 
 
 void SPText::hide(unsigned int key) {
-    for (SPItemView* v = this->display; v != NULL; v = v->next) {
+    for (SPItemView* v = this->display; v != nullptr; v = v->next) {
         if (v->key == key) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
             this->_clearFlow(g);
@@ -353,7 +353,7 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
         // of this point depending on the text alignment (left vs. right)
         Inkscape::Text::Layout const *layout = te_get_layout(this);
 
-        if (layout != NULL && layout->outputExists()) {
+        if (layout != nullptr && layout->outputExists()) {
             boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
 
             if (pt) {
@@ -440,7 +440,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     if (style->shape_inside.set ) {
 
         // Find union of all exclusion shapes
-        Shape *exclusion_shape = NULL;
+        Shape *exclusion_shape = nullptr;
         if(style->shape_subtract.set) {
             exclusion_shape = _buildExclusionShape();
         }
@@ -748,7 +748,7 @@ void SPText::rebuildLayout()
     for (auto& child: children) {
         if (SP_IS_TEXTPATH(&child)) {
             SPTextPath const *textpath = SP_TEXTPATH(&child);
-            if (textpath->originalPath != NULL) {
+            if (textpath->originalPath != nullptr) {
 #if DEBUG_TEXTLAYOUT_DUMPASTEXT
                 g_print("%s", layout.dumpAsText().c_str());
 #endif
@@ -874,7 +874,7 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value, SP
     // FIXME: sp_svg_length_list_read() amalgamates repeated separators. This prevents unset values.
     *attr_vector = sp_svg_length_list_read(value);
 
-    if( (update_x || update_y) && style != NULL && viewport != NULL ) {
+    if( (update_x || update_y) && style != nullptr && viewport != nullptr ) {
         double const w = viewport->width();
         double const h = viewport->height();
         double const em = style->font_size.computed;
@@ -929,13 +929,13 @@ void TextTagAttributes::writeSingleAttributeLength(Inkscape::XML::Node *node, gc
     if (length._set) {
         node->setAttribute(key, length.write().c_str());
     } else
-        node->setAttribute(key, NULL);
+        node->setAttribute(key, nullptr);
 }
 
 void TextTagAttributes::writeSingleAttributeVector(Inkscape::XML::Node *node, gchar const *key, std::vector<SVGLength> const &attr_vector)
 {
     if (attr_vector.empty())
-        node->setAttribute(key, NULL);
+        node->setAttribute(key, nullptr);
     else {
         Glib::ustring string;
 
@@ -983,11 +983,11 @@ void TextTagAttributes::setFirstXY(Geom::Point &point)
 
 void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *output, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_attrs, unsigned parent_attrs_offset, bool copy_xy, bool copy_dxdyrotate) const
 {
-    mergeSingleAttribute(&output->x,      parent_attrs.x,      parent_attrs_offset, copy_xy ? &attributes.x : NULL);
-    mergeSingleAttribute(&output->y,      parent_attrs.y,      parent_attrs_offset, copy_xy ? &attributes.y : NULL);
-    mergeSingleAttribute(&output->dx,     parent_attrs.dx,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dx : NULL);
-    mergeSingleAttribute(&output->dy,     parent_attrs.dy,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dy : NULL);
-    mergeSingleAttribute(&output->rotate, parent_attrs.rotate, parent_attrs_offset, copy_dxdyrotate ? &attributes.rotate : NULL);
+    mergeSingleAttribute(&output->x,      parent_attrs.x,      parent_attrs_offset, copy_xy ? &attributes.x : nullptr);
+    mergeSingleAttribute(&output->y,      parent_attrs.y,      parent_attrs_offset, copy_xy ? &attributes.y : nullptr);
+    mergeSingleAttribute(&output->dx,     parent_attrs.dx,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dx : nullptr);
+    mergeSingleAttribute(&output->dy,     parent_attrs.dy,     parent_attrs_offset, copy_dxdyrotate ? &attributes.dy : nullptr);
+    mergeSingleAttribute(&output->rotate, parent_attrs.rotate, parent_attrs_offset, copy_dxdyrotate ? &attributes.rotate : nullptr);
     if (attributes.textLength._set) { // only from current node, this is not inherited from parent
         output->textLength.value = attributes.textLength.value;
         output->textLength.computed = attributes.textLength.computed;
@@ -1000,7 +1000,7 @@ void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *
 void TextTagAttributes::mergeSingleAttribute(std::vector<SVGLength> *output_list, std::vector<SVGLength> const &parent_list, unsigned parent_offset, std::vector<SVGLength> const *overlay_list)
 {
     output_list->clear();
-    if (overlay_list == NULL) {
+    if (overlay_list == nullptr) {
         if (parent_list.size() > parent_offset)
         {
             output_list->reserve(parent_list.size() - parent_offset);

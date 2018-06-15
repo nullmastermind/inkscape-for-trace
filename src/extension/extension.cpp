@@ -54,29 +54,29 @@ std::ofstream Extension::error_file;
     a name and an ID the module will be left in an errored state.
 */
 Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : _help(NULL)
+    : _help(nullptr)
     , silent(false)
     , _gui(true)
-    , execution_env(NULL)
+    , execution_env(nullptr)
 {
     repr = in_repr;
     Inkscape::GC::anchor(in_repr);
 
-    id = NULL;
-    name = NULL;
+    id = nullptr;
+    name = nullptr;
     _state = STATE_UNLOADED;
 
-    if (in_imp == NULL) {
+    if (in_imp == nullptr) {
         imp = new Implementation::Implementation();
     } else {
         imp = in_imp;
     }
 
     // printf("Extension Constructor: ");
-    if (repr != NULL) {
+    if (repr != nullptr) {
         Inkscape::XML::Node *child_repr = repr->firstChild();
         /* TODO: Handle what happens if we don't have these two */
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             char const * chname = child_repr->name();
 			if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
 				chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -96,14 +96,14 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
             if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
                 Parameter * param;
                 param = Parameter::make(child_repr, this);
-                if (param != NULL)
+                if (param != nullptr)
                     parameters.push_back(param);
             } /* param || _param */
             if (!strcmp(chname, "dependency")) {
                 _deps.push_back(new Dependency(child_repr));
             } /* dependency */
             if (!strcmp(chname, "script")) {
-                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != NULL ; child = child->next()) {
+                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr ; child = child->next()) {
                     if (child->type() == Inkscape::XML::ELEMENT_NODE) {
                         _deps.push_back(new Dependency(child));
                         break;
@@ -119,7 +119,7 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
         db.register_ext (this);
     }
     // printf("%s\n", name);
-    timer = NULL;
+    timer = nullptr;
 
     return;
 }
@@ -142,7 +142,7 @@ Extension::~Extension (void)
     g_free(id);
     g_free(name);
     delete timer;
-    timer = NULL;
+    timer = nullptr;
     /** \todo Need to do parameters here */
 
     // delete parameters:
@@ -180,7 +180,7 @@ Extension::set_state (state_t in_state)
                 if (imp->load(this))
                     _state = STATE_LOADED;
 
-                if (timer != NULL) {
+                if (timer != nullptr) {
                     delete timer;
                 }
                 timer = new ExpirationTimer(this);
@@ -191,17 +191,17 @@ Extension::set_state (state_t in_state)
                 imp->unload(this);
                 _state = STATE_UNLOADED;
 
-                if (timer != NULL) {
+                if (timer != nullptr) {
                     delete timer;
-                    timer = NULL;
+                    timer = nullptr;
                 }
                 break;
             case STATE_DEACTIVATED:
                 _state = STATE_DEACTIVATED;
 
-                if (timer != NULL) {
+                if (timer != nullptr) {
                     delete timer;
-                    timer = NULL;
+                    timer = nullptr;
                 }
                 break;
             default:
@@ -270,19 +270,19 @@ Extension::check (void)
         retval = false;
     }
 #endif
-    if (id == NULL) {
+    if (id == nullptr) {
         printFailure(Glib::ustring(_("an ID was not defined for it.")) + inx_failure);
         retval = false;
     }
-    if (name == NULL) {
+    if (name == nullptr) {
         printFailure(Glib::ustring(_("there was no name defined for it.")) + inx_failure);
         retval = false;
     }
-    if (repr == NULL) {
+    if (repr == nullptr) {
         printFailure(Glib::ustring(_("the XML description of it got lost.")) + inx_failure);
         retval = false;
     }
-    if (imp == NULL) {
+    if (imp == nullptr) {
         printFailure(Glib::ustring(_("no implementation was defined for the extension.")) + inx_failure);
         retval = false;
     }
@@ -396,7 +396,7 @@ Extension::deactivated (void)
 
 Parameter *Extension::get_param(gchar const *name)
 {
-    if (name == NULL) {
+    if (name == nullptr) {
         throw Extension::param_not_exist();
     }
     if (this->parameters.empty()) {
@@ -653,7 +653,7 @@ void
 Extension::error_file_open (void)
 {
     gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
-    gchar * filename = g_filename_from_utf8( ext_error_file, -1, NULL, NULL, NULL );
+    gchar * filename = g_filename_from_utf8( ext_error_file, -1, nullptr, nullptr, nullptr );
     error_file.open(filename);
     if (!error_file.is_open()) {
         g_warning(_("Could not create extension error log file '%s'"),
@@ -717,7 +717,7 @@ public:
 Gtk::Widget *
 Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (!_gui || param_visible_count() == 0) return NULL;
+    if (!_gui || param_visible_count() == 0) return nullptr;
 
     AutoGUI * agui = Gtk::manage(new AutoGUI());
     agui->set_border_width(Parameter::GUI_BOX_MARGIN);
@@ -798,7 +798,7 @@ Extension::get_help_widget(void)
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
 
-    if (_help == NULL) {
+    if (_help == nullptr) {
         Gtk::Label * content = Gtk::manage(new Gtk::Label(_("Currently there is no help available for this Extension.  Please look on the Inkscape website or ask on the mailing lists if you have questions regarding this extension.")));
         retval->pack_start(*content, true, true, 5);
         content->set_line_wrap(true);

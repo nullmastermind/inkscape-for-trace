@@ -110,7 +110,7 @@ Glib::ustring get_file(Glib::ustring uri, unsigned int timeout, callback func) {
         GStatBuf st;
         if(g_stat(filename.c_str(), &st) != -1) {
 	    time_t changed = st.st_mtime;
-	    time_t now = time(0);
+	    time_t now = time(nullptr);
             // The cache hasn't timed out, so return the filename.
 	    if(now - changed < timeout) {
                 if(func) {

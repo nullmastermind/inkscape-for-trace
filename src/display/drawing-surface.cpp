@@ -42,7 +42,7 @@ using Geom::Y;
  * will cover the area under the given rectangle.
  */
 DrawingSurface::DrawingSurface(Geom::IntRect const &area, int device_scale)
-    : _surface(NULL)
+    : _surface(nullptr)
     , _origin(area.min())
     , _scale(1, 1)
     , _pixels(area.dimensions())
@@ -60,7 +60,7 @@ DrawingSurface::DrawingSurface(Geom::IntRect const &area, int device_scale)
  * @param pixdims Pixel dimensions of the surface.
  */
 DrawingSurface::DrawingSurface(Geom::Rect const &logbox, Geom::IntPoint const &pixdims, int device_scale)
-    : _surface(NULL)
+    : _surface(nullptr)
     , _origin(logbox.min())
     , _scale(pixdims[X] / logbox.width(), pixdims[Y] / logbox.height())
     , _pixels(pixdims)
@@ -163,7 +163,7 @@ DrawingSurface::dropContents()
 {
     if (_surface) {
         cairo_surface_destroy(_surface);
-        _surface = NULL;
+        _surface = nullptr;
     }
 }
 
@@ -263,7 +263,7 @@ DrawingCache::prepare()
     // the area has changed, so the cache content needs to be copied
     Geom::IntPoint old_origin = old_area.min();
     cairo_surface_t *old_surface = _surface;
-    _surface = NULL;
+    _surface = nullptr;
     _pixels = _pending_area.dimensions();
     _origin = _pending_area.min();
 

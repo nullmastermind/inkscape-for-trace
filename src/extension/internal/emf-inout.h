@@ -33,7 +33,7 @@ typedef struct emf_object {
     emf_object() :
         type(0),
         level(0),
-        lpEMFR(NULL)
+        lpEMFR(nullptr)
     {};
     int type;
     int level;
@@ -44,7 +44,7 @@ typedef struct emf_strings {
     emf_strings() :
         size(0),
         count(0),
-        strings(NULL)
+        strings(nullptr)
     {};
     int size;         // number of slots allocated in strings
     int count;        // number of slots used in strings
@@ -54,7 +54,7 @@ typedef struct emf_strings {
 typedef struct emf_device_context {
     emf_device_context() :
         // SPStyle: class with constructor
-        font_name(NULL),
+        font_name(nullptr),
         clip_id(0),
         stroke_set(false), stroke_mode(0), stroke_idx(0), stroke_recidx(0),
         fill_set(false),   fill_mode(0),   fill_idx(0),   fill_recidx(0),
@@ -67,7 +67,7 @@ typedef struct emf_device_context {
         textAlign(0)
         // worldTransform, cur
     {
-        font_name = NULL;
+        font_name = nullptr;
         sizeWnd  = sizel_set( 0.0, 0.0 );
         sizeView = sizel_set( 0.0, 0.0 );
         winorg  = point32_set( 0.0, 0.0 );
@@ -127,9 +127,9 @@ typedef struct emf_callback_data {
         dwRop2(U_R2_COPYPEN), dwRop3(0),
         MMX(0),MMY(0),
         drawtype(0),
-        pDesc(NULL),
+        pDesc(nullptr),
         // hatches, images, gradients,  struct w/ constructor
-        tri(NULL),
+        tri(nullptr),
         n_obj(0)
         // emf_obj;
     {};

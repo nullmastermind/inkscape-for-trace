@@ -35,7 +35,7 @@ static bool profileMatches( SVGICCColor const* first, SVGICCColor const* second 
 #define PROFILE_EPSILON 0.00000001
 
 SPColor::SPColor() :
-    icc(0)
+    icc(nullptr)
 {
     v.c[0] = 0;
     v.c[1] = 0;
@@ -43,19 +43,19 @@ SPColor::SPColor() :
 }
 
 SPColor::SPColor( SPColor const& other ) :
-    icc(0)
+    icc(nullptr)
 {
     *this = other;
 }
 
 SPColor::SPColor( float r, float g, float b ) :
-    icc(0)
+    icc(nullptr)
 {
     set( r, g, b );
 }
 
 SPColor::SPColor( guint32 value ) :
-    icc(0)
+    icc(nullptr)
 {
     set( value );
 }
@@ -63,7 +63,7 @@ SPColor::SPColor( guint32 value ) :
 SPColor::~SPColor()
 {
     delete icc;
-    icc = 0;
+    icc = nullptr;
 }
 
 
@@ -73,7 +73,7 @@ SPColor& SPColor::operator= (SPColor const& other)
         return *this;
     }
     
-    SVGICCColor* tmp_icc = other.icc ? new SVGICCColor(*other.icc) : 0;
+    SVGICCColor* tmp_icc = other.icc ? new SVGICCColor(*other.icc) : nullptr;
 
     v.c[0] = other.v.c[0];
     v.c[1] = other.v.c[1];
@@ -223,8 +223,8 @@ std::string SPColor::toString() const
 void
 sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
 {
-    return_if_fail (color != NULL);
-    return_if_fail (rgb != NULL);
+    return_if_fail (color != nullptr);
+    return_if_fail (rgb != nullptr);
 
     rgb[0] = color->v.c[0];
     rgb[1] = color->v.c[1];
@@ -238,8 +238,8 @@ sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
 void
 sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
 {
-    return_if_fail (color != NULL);
-    return_if_fail (cmyk != NULL);
+    return_if_fail (color != nullptr);
+    return_if_fail (cmyk != nullptr);
 
     sp_color_rgb_to_cmyk_floatv( cmyk,
                                  color->v.c[0],

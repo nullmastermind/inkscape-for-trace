@@ -52,7 +52,7 @@ public:
                UnitType unit_type = UNIT_TYPE_LINEAR,
                Glib::ustring const &suffix = "",
                Glib::ustring const &icon = "",
-               UnitMenu *unit_menu = NULL,
+               UnitMenu *unit_menu = nullptr,
                bool mnemonic = true);
 
     /**

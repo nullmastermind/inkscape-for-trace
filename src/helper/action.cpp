@@ -45,8 +45,8 @@ sp_action_init (SPAction *action)
     action->sensitive = 0;
     action->active = 0;
     action->context = Inkscape::ActionContext();
-    action->id = action->name = action->tip = NULL;
-    action->image = NULL;
+    action->id = action->name = action->tip = nullptr;
+    action->image = nullptr;
     
     new (&action->signal_perform) sigc::signal<void>();
     new (&action->signal_set_sensitive) sigc::signal<void, bool>();
@@ -86,7 +86,7 @@ sp_action_new(Inkscape::ActionContext const &context,
               const gchar *image,
               Inkscape::Verb * verb)
 {
-    SPAction *action = (SPAction *)g_object_new(SP_TYPE_ACTION, NULL);
+    SPAction *action = (SPAction *)g_object_new(SP_TYPE_ACTION, nullptr);
 
     action->context = context;
     action->sensitive = TRUE;
@@ -131,7 +131,7 @@ public:
  */
 void sp_action_perform(SPAction *action, void * /*data*/)
 {
-    g_return_if_fail (action != NULL);
+    g_return_if_fail (action != nullptr);
     g_return_if_fail (SP_IS_ACTION (action));
 
     Inkscape::Debug::EventTracker<ActionEvent> tracker(action);
@@ -144,7 +144,7 @@ void sp_action_perform(SPAction *action, void * /*data*/)
 void
 sp_action_set_active (SPAction *action, unsigned int active)
 {
-    g_return_if_fail (action != NULL);
+    g_return_if_fail (action != nullptr);
     g_return_if_fail (SP_IS_ACTION (action));
 
     action->signal_set_active.emit(active);
@@ -156,7 +156,7 @@ sp_action_set_active (SPAction *action, unsigned int active)
 void
 sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 {
-    g_return_if_fail (action != NULL);
+    g_return_if_fail (action != nullptr);
     g_return_if_fail (SP_IS_ACTION (action));
 
     action->signal_set_sensitive.emit(sensitive);
@@ -165,7 +165,7 @@ sp_action_set_sensitive (SPAction *action, unsigned int sensitive)
 void
 sp_action_set_name (SPAction *action, Glib::ustring const &name)
 {
-    g_return_if_fail (action != NULL);
+    g_return_if_fail (action != nullptr);
     g_return_if_fail (SP_IS_ACTION (action));
 
     g_free(action->name);

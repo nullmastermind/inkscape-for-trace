@@ -44,7 +44,7 @@ SPBox3D::SPBox3D() : SPGroup() {
     this->my_counter = 0;
     this->swapped = Box3D::NONE;
 
-    this->persp_href = NULL;
+    this->persp_href = nullptr;
     this->persp_ref = new Persp3DReference(this);
 
     /* we initialize the z-orders to zero so that they are updated during dragging */
@@ -93,7 +93,7 @@ void SPBox3D::release() {
     if (box->persp_ref) {
         box->persp_ref->detach();
         delete box->persp_ref;
-        box->persp_ref = NULL;
+        box->persp_ref = nullptr;
     }
 
     if (persp) {
@@ -126,7 +126,7 @@ void SPBox3D::set(unsigned int key, const gchar* value) {
             } else {
                 if (box->persp_href) {
                     g_free(box->persp_href);
-                    box->persp_href = NULL;
+                    box->persp_href = nullptr;
                 }
                 if (value) {
                     box->persp_href = g_strdup(value);
@@ -434,7 +434,7 @@ box3d_snap (SPBox3D *box, int id, Proj::Pt3 const &pt_proj, Proj::Pt3 const &sta
 
 SPBox3D * SPBox3D::createBox3D(SPItem * parent)
 {
-    SPBox3D *box3d = 0;
+    SPBox3D *box3d = nullptr;
     Inkscape::XML::Document *xml_doc = parent->document->rdoc;
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:g");
     repr->setAttribute("sodipodi:type", "inkscape:box3d");
@@ -1297,7 +1297,7 @@ SPGroup *box3d_convert_to_group(SPBox3D *box)
     grepr->setAttribute("id", id);
 
     SPGroup *group = dynamic_cast<SPGroup *>(doc->getObjectByRepr(grepr));
-    g_assert(group != NULL);
+    g_assert(group != nullptr);
     return group;
 }
 

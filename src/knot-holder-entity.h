@@ -40,10 +40,10 @@ typedef Geom::Point (* SPKnotHolderGetFunc) (SPItem *item);
 class KnotHolderEntity {
 public:
     KnotHolderEntity():
-        knot(NULL),
-        item(NULL),
-        desktop(NULL),
-        parent_holder(NULL),
+        knot(nullptr),
+        item(nullptr),
+        desktop(nullptr),
+        parent_holder(nullptr),
         my_counter(0),
         handler_id(0),
         _click_handler_id(0),

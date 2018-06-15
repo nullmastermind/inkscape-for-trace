@@ -37,7 +37,7 @@ SPSVGView::SPSVGView(SPCanvasGroup *parent)
     _height = 0.0;
 
     _dkey = 0;
-    _drawing = 0;
+    _drawing = nullptr;
     _parent = parent;
 }
 
@@ -46,7 +46,7 @@ SPSVGView::~SPSVGView()
     if (doc() && _drawing)
     {
         doc()->getRoot()->invoke_hide(_dkey);
-        _drawing = NULL;
+        _drawing = nullptr;
     }
 }
 
@@ -118,7 +118,7 @@ void SPSVGView::mouseover()
 void SPSVGView::mouseout()
 {
     GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas));
-    gdk_window_set_cursor(window, NULL);
+    gdk_window_set_cursor(window, nullptr);
 }
 
 //----------------------------------------------------------------
@@ -132,7 +132,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 	static gboolean active = FALSE;
 	SPEvent spev;
 
-	SPItem *spitem = (ai) ? (static_cast<SPItem*>(ai->data())) : 0;
+	SPItem *spitem = (ai) ? (static_cast<SPItem*>(ai->data())) : nullptr;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -147,7 +147,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 			if (active && (event->button.x == x) &&
                                       (event->button.y == y)) {
 				spev.type = SP_EVENT_ACTIVATE;
-                                if ( spitem != 0 )
+                                if ( spitem != nullptr )
 				{
 				  spitem->emitEvent (spev);
                                 }
@@ -161,7 +161,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 	case GDK_ENTER_NOTIFY:
 		spev.type = SP_EVENT_MOUSEOVER;
 		spev.data = svgview;
-                if ( spitem != 0 )
+                if ( spitem != nullptr )
 		{
 		  spitem->emitEvent (spev);
                 }
@@ -169,7 +169,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 	case GDK_LEAVE_NOTIFY:
 		spev.type = SP_EVENT_MOUSEOUT;
 		spev.data = svgview;
-                if ( spitem != 0 )
+                if ( spitem != nullptr )
 		{
 		  spitem->emitEvent (spev);
                 }
@@ -188,7 +188,7 @@ void SPSVGView::setDocument(SPDocument *document)
     }
 
     if (!_drawing) {
-        _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, NULL);
+        _drawing = sp_canvas_item_new (_parent, SP_TYPE_CANVAS_ARENA, nullptr);
         g_signal_connect (G_OBJECT (_drawing), "arena_event", G_CALLBACK (arena_handler), this);
     }
 

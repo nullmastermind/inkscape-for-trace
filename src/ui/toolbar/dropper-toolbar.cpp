@@ -80,7 +80,7 @@ void sp_dropper_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainAction
     gint pickAlpha = prefs->getInt( "/tools/dropper/pick", 1 );
 
     {
-        EgeOutputAction* act = ege_output_action_new( "DropperOpacityAction", _("Opacity:"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "DropperOpacityAction", _("Opacity:"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
     }
@@ -89,7 +89,7 @@ void sp_dropper_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainAction
         InkToggleAction* act = ink_toggle_action_new( "DropperPickAlphaAction",
                                                       _("Pick opacity"),
                                                       _("Pick both the color and the alpha (transparency) under cursor; otherwise, pick only the visible color premultiplied by alpha"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         g_object_set( act, "short_label", _("Pick"), NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
@@ -102,7 +102,7 @@ void sp_dropper_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainAction
         InkToggleAction* act = ink_toggle_action_new( "DropperSetAlphaAction",
                                                       _("Assign opacity"),
                                                       _("If alpha was picked, assign it to selection as fill or stroke transparency"),
-                                                      NULL,
+                                                      nullptr,
                                                       GTK_ICON_SIZE_MENU );
         g_object_set( act, "short_label", _("Assign"), NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );

@@ -149,7 +149,7 @@ private:
     /** Does mergeInto() for one member of #attributes. If \a overlay_list
     is NULL then it does a simple copy of parent elements, starting at
     \a parent_offset. */
-    static void mergeSingleAttribute(std::vector<SVGLength> *output_list, std::vector<SVGLength> const &parent_list, unsigned parent_offset, std::vector<SVGLength> const *overlay_list = NULL);
+    static void mergeSingleAttribute(std::vector<SVGLength> *output_list, std::vector<SVGLength> const &parent_list, unsigned parent_offset, std::vector<SVGLength> const *overlay_list = nullptr);
 
     /// Does the work for erase().
     static void eraseSingleAttribute(std::vector<SVGLength> *attr_vector, unsigned start_index, unsigned n);

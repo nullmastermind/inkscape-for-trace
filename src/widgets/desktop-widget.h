@@ -158,9 +158,9 @@ struct SPDesktopWidget {
             { return _dtw->shutdown(); }
         void destroy() override
             {
-                if(_dtw->window != NULL)
+                if(_dtw->window != nullptr)
                     delete _dtw->window;
-                _dtw->window = NULL;
+                _dtw->window = nullptr;
             }
 
         void requestCanvasUpdate() override

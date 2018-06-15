@@ -51,10 +51,10 @@ ColorScales::ColorScales(SelectedColor &color, SPColorScalesMode mode)
     , _mode(SP_COLOR_SCALES_MODE_NONE)
 {
     for (gint i = 0; i < 5; i++) {
-        _l[i] = 0;
-        _a[i] = 0;
-        _s[i] = 0;
-        _b[i] = 0;
+        _l[i] = nullptr;
+        _a[i] = nullptr;
+        _s[i] = nullptr;
+        _b[i] = nullptr;
     }
 
     _initUI(mode);
@@ -66,10 +66,10 @@ ColorScales::ColorScales(SelectedColor &color, SPColorScalesMode mode)
 ColorScales::~ColorScales()
 {
     for (gint i = 0; i < 5; i++) {
-        _l[i] = 0;
-        _a[i] = 0;
-        _s[i] = 0;
-        _b[i] = 0;
+        _l[i] = nullptr;
+        _a[i] = nullptr;
+        _s[i] = nullptr;
+        _b[i] = nullptr;
     }
 }
 
@@ -283,7 +283,7 @@ void ColorScales::on_show()
 
 void ColorScales::_getRgbaFloatv(gfloat *rgba)
 {
-    g_return_if_fail(rgba != NULL);
+    g_return_if_fail(rgba != nullptr);
 
     switch (_mode) {
         case SP_COLOR_SCALES_MODE_RGB:
@@ -314,7 +314,7 @@ void ColorScales::_getCmykaFloatv(gfloat *cmyka)
 {
     gfloat rgb[3];
 
-    g_return_if_fail(cmyka != NULL);
+    g_return_if_fail(cmyka != nullptr);
 
     switch (_mode) {
         case SP_COLOR_SCALES_MODE_RGB:
@@ -384,7 +384,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_A:"));
             _s[3]->set_tooltip_text(_("Alpha (opacity)"));
             gtk_widget_set_tooltip_text(_b[3], _("Alpha (opacity)"));
-            _s[0]->setMap(NULL);
+            _s[0]->setMap(nullptr);
             gtk_widget_hide(_l[4]);
             _s[4]->hide();
             gtk_widget_hide(_b[4]);
@@ -485,7 +485,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[4]), _("_A:"));
             _s[4]->set_tooltip_text(_("Alpha (opacity)"));
             gtk_widget_set_tooltip_text(_b[4], _("Alpha (opacity)"));
-            _s[0]->setMap(NULL);
+            _s[0]->setMap(nullptr);
             gtk_widget_show(_l[4]);
             _s[4]->show();
             gtk_widget_show(_b[4]);
@@ -704,7 +704,7 @@ void ColorScales::_updateSliders(guint channels)
 
 static const gchar *sp_color_scales_hue_map(void)
 {
-    static gchar *map = NULL;
+    static gchar *map = nullptr;
 
     if (!map) {
         gchar *p;

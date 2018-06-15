@@ -108,7 +108,7 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
 void
 LPEPowerMask::setMask(){
     SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
-    SPObject *elemref = NULL;
+    SPObject *elemref = nullptr;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document || !mask) {
         return;
@@ -119,8 +119,8 @@ LPEPowerMask::setMask(){
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    Inkscape::XML::Node *box = NULL;
-    Inkscape::XML::Node *filter = NULL;
+    Inkscape::XML::Node *box = nullptr;
+    Inkscape::XML::Node *filter = nullptr;
     SPDefs * defs = document->getDefs();
     Glib::ustring mask_id = (Glib::ustring)mask->getId();
     Glib::ustring box_id = mask_id + (Glib::ustring)"_box";
@@ -218,12 +218,12 @@ LPEPowerMask::setMask(){
         if(mask_node->attribute("style")) {
             sp_repr_css_attr_add_from_string(css, mask_node->attribute("style"));
         }
-        char const* filter = sp_repr_css_property (css, "filter", NULL);
+        char const* filter = sp_repr_css_property (css, "filter", nullptr);
         if(!filter || !strcmp(filter, filter_uri.c_str())) {
             if (invert && is_visible) {
                 sp_repr_css_set_property (css, "filter", filter_uri.c_str());
             } else {
-                sp_repr_css_set_property (css, "filter", NULL);
+                sp_repr_css_set_property (css, "filter", nullptr);
             }
             Glib::ustring css_str;
             sp_repr_css_write_string(css, css_str);
@@ -250,12 +250,12 @@ LPEPowerMask::setMask(){
         style = style + Glib::ustring(";fill-opacity:") + Glib::ustring(os.str());
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_attr_add_from_string(css, style.c_str());
-        char const* filter = sp_repr_css_property (css, "filter", NULL);
+        char const* filter = sp_repr_css_property (css, "filter", nullptr);
         if(!filter || !strcmp(filter, filter_uri.c_str())) {
             if (invert && is_visible) {
                 sp_repr_css_set_property (css, "filter", filter_uri.c_str());
             } else {
-                sp_repr_css_set_property (css, "filter", NULL);
+                sp_repr_css_set_property (css, "filter", nullptr);
             }
             
         }
@@ -297,7 +297,7 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
             //wrap.param_setValue(false);
             background.param_setValue(false);
             setMask();
-            SPObject *elemref = NULL;
+            SPObject *elemref = nullptr;
             SPDocument * document = SP_ACTIVE_DOCUMENT;
             Glib::ustring mask_id = (Glib::ustring)mask->getId();
             Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";

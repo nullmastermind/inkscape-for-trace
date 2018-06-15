@@ -63,7 +63,7 @@ static void ink_toggle_action_class_init( InkToggleActionClass* klass )
 static void ink_toggle_action_init( InkToggleAction* action )
 {
     action->private_data = INK_TOGGLE_ACTION_GET_PRIVATE( action );
-    action->private_data->iconId = 0;
+    action->private_data->iconId = nullptr;
     action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
@@ -169,11 +169,11 @@ static GtkWidget* ink_toggle_action_create_tool_item( GtkAction* action )
 	    gtk_widget_set_vexpand(child, FALSE);
 	    gtk_tool_button_set_icon_widget(button, child);
         } else {
-            gchar *label = 0;
+            gchar *label = nullptr;
             g_object_get( G_OBJECT(action), "short_label", &label, NULL );
             gtk_tool_button_set_label( button, label );
             g_free( label );
-            label = 0;
+            label = nullptr;
         }
     } else {
         // For now trigger a warning but don't do anything else

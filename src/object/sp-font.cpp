@@ -84,7 +84,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
     switch (key) {
         case SP_ATTR_HORIZ_ORIGIN_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
 
             if (number != this->horiz_origin_x){
                 this->horiz_origin_x = number;
@@ -94,7 +94,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_HORIZ_ORIGIN_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
 
             if (number != this->horiz_origin_y){
                 this->horiz_origin_y = number;
@@ -104,7 +104,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_HORIZ_ADV_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ADV;
+            double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ADV;
 
             if (number != this->horiz_adv_x){
                 this->horiz_adv_x = number;
@@ -114,7 +114,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_VERT_ORIGIN_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ADV / 2.0;
+            double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ADV / 2.0;
 
             if (number != this->vert_origin_x){
                 this->vert_origin_x = number;
@@ -124,7 +124,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_VERT_ORIGIN_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : FNT_DEFAULT_ASCENT;
+            double number = value ? g_ascii_strtod(value, nullptr) : FNT_DEFAULT_ASCENT;
 
             if (number != this->vert_origin_y){
                 this->vert_origin_y = number;
@@ -134,7 +134,7 @@ void SPFont::set(unsigned int key, const gchar *value) {
         }
         case SP_ATTR_VERT_ADV_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : FNT_UNITS_PER_EM;
+            double number = value ? g_ascii_strtod(value, nullptr) : FNT_UNITS_PER_EM;
 
             if (number != this->vert_adv_y){
                 this->vert_adv_y = number;

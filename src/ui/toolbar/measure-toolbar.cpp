@@ -63,7 +63,7 @@ using Inkscape::UI::Tools::MeasureTool;
  * Will go away during tool refactoring. */
 static MeasureTool *get_measure_tool()
 {
-    MeasureTool *tool = 0;
+    MeasureTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (SP_IS_MEASURE_CONTEXT(ec)) {
@@ -286,7 +286,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     
     g_object_set_data( holder, "tracker", tracker );
 
-    EgeAdjustmentAction *eact = 0;
+    EgeAdjustmentAction *eact = nullptr;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     /* Font Size */
@@ -295,16 +295,16 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
                                          "/tools/measure/fontsize", 10.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          1.0, 36.0, 1.0, 4.0,
-                                         0, 0, 0,
-                                         sp_measure_fontsize_value_changed, NULL, 0 , 2);
+                                         nullptr, nullptr, 0,
+                                         sp_measure_fontsize_value_changed, nullptr, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
     /* units label */
     {
-        EgeOutputAction* act = ege_output_action_new( "measure_units_label", _("Units:"), _("The units to be used for the measurements"), 0 );
+        EgeOutputAction* act = ege_output_action_new( "measure_units_label", _("Units:"), _("The units to be used for the measurements"), nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         g_object_set( act, "visible-overflown", FALSE, NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
@@ -323,10 +323,10 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Precision"), _("Precision:"),
                                          _("Decimal precision of measure"),
                                          "/tools/measure/precision", 2,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 10, 1, 0,
-                                         0, 0, 0,
-                                         sp_measure_precision_value_changed, NULL, 0 ,0);
+                                         nullptr, nullptr, 0,
+                                         sp_measure_precision_value_changed, nullptr, 0 ,0);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
@@ -336,10 +336,10 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Scale %"), _("Scale %:"),
                                          _("Scale the results"),
                                          "/tools/measure/scale", 100.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
-                                         0, 0, 0,
-                                         sp_measure_scale_value_changed, NULL, 0 , 3);
+                                         nullptr, nullptr, 0,
+                                         sp_measure_scale_value_changed, nullptr, 0 , 3);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
@@ -349,10 +349,10 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Offset"), _("Offset:"),
                                          _("Mark dimension offset"),
                                          "/tools/measure/offset", 5.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
-                                         0, 0, 0,
-                                         sp_measure_offset_value_changed, NULL, 0 , 2);
+                                         nullptr, nullptr, 0,
+                                         sp_measure_offset_value_changed, nullptr, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 

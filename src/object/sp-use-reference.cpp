@@ -38,12 +38,12 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
     owner=i_owner;
     originalPath = nullptr;
     sourceDirty=false;
-    sourceHref = NULL;
-    sourceRepr = NULL;
-    sourceObject = NULL;
+    sourceHref = nullptr;
+    sourceRepr = nullptr;
+    sourceObject = nullptr;
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_usepath_href_changed), this)); // listening to myself, this should be virtual instead
 
-    user_unlink = NULL;
+    user_unlink = nullptr;
 }
 
 SPUsePath::~SPUsePath(void)
@@ -61,7 +61,7 @@ SPUsePath::~SPUsePath(void)
 void
 SPUsePath::link(char *to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         quit_listening();
         unlink();
     } else {
@@ -85,14 +85,14 @@ void
 SPUsePath::unlink(void)
 {
     g_free(sourceHref);
-    sourceHref = NULL;
+    sourceHref = nullptr;
     detach();
 }
 
 void
 SPUsePath::start_listening(SPObject* to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     sourceObject = to;
@@ -105,14 +105,14 @@ SPUsePath::start_listening(SPObject* to)
 void
 SPUsePath::quit_listening(void)
 {
-    if ( sourceObject == NULL ) {
+    if ( sourceObject == nullptr ) {
         return;
     }
     _modified_connection.disconnect();
     _delete_connection.disconnect();
     _transformed_connection.disconnect();
-    sourceRepr = NULL;
-    sourceObject = NULL;
+    sourceRepr = nullptr;
+    sourceObject = nullptr;
 }
 
 static void
@@ -203,7 +203,7 @@ void SPUsePath::refresh_source()
     }
 
     SPObject *refobj = sourceObject;
-    if ( refobj == NULL ) return;
+    if ( refobj == nullptr ) return;
     
     SPItem *item = SP_ITEM(refobj);
 

@@ -87,15 +87,15 @@ static bool   use_slow_but_correct_offset_method = false;
 
 SPOffset::SPOffset() : SPShape() {
     this->rad = 1.0;
-    this->original = NULL;
-    this->originalPath = NULL;
+    this->original = nullptr;
+    this->originalPath = nullptr;
     this->knotSet = false;
     this->sourceDirty=false;
     this->isUpdating=false;
     // init various connections
-    this->sourceHref = NULL;
-    this->sourceRepr = NULL;
-    this->sourceObject = NULL;
+    this->sourceHref = nullptr;
+    this->sourceRepr = nullptr;
+    this->sourceObject = nullptr;
 
     // set up the uri reference
     this->sourceRef = new SPUseReference(this);
@@ -122,7 +122,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         //in all the below lines in the block while it shouldn't be.
         gchar const *oldA = this->getRepr()->attribute("sodipodi:radius");
         this->getRepr()->setAttribute("inkscape:radius",oldA);
-        this->getRepr()->setAttribute("sodipodi:radius",NULL);
+        this->getRepr()->setAttribute("sodipodi:radius",nullptr);
 
         this->readAttr( "inkscape:radius" );
     }
@@ -132,7 +132,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
         this->getRepr()->setAttribute("inkscape:original",oldA);
-        this->getRepr()->setAttribute("sodipodi:original",NULL);
+        this->getRepr()->setAttribute("sodipodi:original",nullptr);
 
         this->readAttr( "inkscape:original" );
     }
@@ -155,7 +155,7 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
             free(nA);
 
-            this->getRepr()->setAttribute("inkscape:href",NULL);
+            this->getRepr()->setAttribute("inkscape:href",nullptr);
         }
 
         this->readAttr( "xlink:href" );
@@ -182,7 +182,7 @@ Inkscape::XML::Node* SPOffset::write(Inkscape::XML::Document *xml_doc, Inkscape:
     // Make sure the offset has curve
     SPCurve *curve = SP_SHAPE (this)->getCurve();
 
-    if (curve == NULL) {
+    if (curve == nullptr) {
         this->set_shape();
     }
 
@@ -205,8 +205,8 @@ void SPOffset::release() {
     	delete ((Path *) this->originalPath);
     }
 
-    this->original = NULL;
-    this->originalPath = NULL;
+    this->original = nullptr;
+    this->originalPath = nullptr;
 
     sp_offset_quit_listening(this);
 
@@ -214,7 +214,7 @@ void SPOffset::release() {
 
     g_free(this->sourceHref);
 
-    this->sourceHref = NULL;
+    this->sourceHref = nullptr;
     this->sourceRef->detach();
 
     SPShape::release();
@@ -230,14 +230,14 @@ void SPOffset::set(unsigned int key, const gchar* value) {
     {
         case SP_ATTR_INKSCAPE_ORIGINAL:
         case SP_ATTR_SODIPODI_ORIGINAL:
-            if (value == NULL) {
+            if (value == nullptr) {
             } else {
                 if (this->original) {
                     free (this->original);
                     delete ((Path *) this->originalPath);
 
-                    this->original = NULL;
-                    this->originalPath = NULL;
+                    this->original = nullptr;
+                    this->originalPath = nullptr;
                 }
 
                 this->original = strdup (value);
@@ -272,13 +272,13 @@ void SPOffset::set(unsigned int key, const gchar* value) {
 
         case SP_ATTR_INKSCAPE_HREF:
         case SP_ATTR_XLINK_HREF:
-            if ( value == NULL ) {
+            if ( value == nullptr ) {
                 sp_offset_quit_listening(this);
                 if ( this->sourceHref ) {
                 	g_free(this->sourceHref);
                 }
 
-                this->sourceHref = NULL;
+                this->sourceHref = nullptr;
                 this->sourceRef->detach();
             } else {
                 if ( this->sourceHref && ( strcmp(value, this->sourceHref) == 0 ) ) {
@@ -339,7 +339,7 @@ gchar* SPOffset::description() const {
 }
 
 void SPOffset::set_shape() {
-    if ( this->originalPath == NULL ) {
+    if ( this->originalPath == nullptr ) {
         // oops : no path?! (the offset object should do harakiri)
         return;
     }
@@ -359,7 +359,7 @@ void SPOffset::set_shape() {
         if ( res_d ) {
             Geom::PathVector pv = sp_svg_read_pathv(res_d);
             SPCurve *c = new SPCurve(pv);
-            g_assert(c != NULL);
+            g_assert(c != nullptr);
 
             this->setCurveInsync (c);
             this->setCurveBeforeLPE(c);
@@ -539,7 +539,7 @@ void SPOffset::set_shape() {
                     if ( nPartSurf >= 0 ) {
                         // inversion de la surface -> disparait
                         delete parts[i];
-                        parts[i]=NULL;
+                        parts[i]=nullptr;
                     } else {
                     }
 
@@ -576,7 +576,7 @@ void SPOffset::set_shape() {
                     if ( nPartSurf >= 0 ) {
                         // inversion de la surface -> disparait
                         delete parts[i];
-                        parts[i]=NULL;
+                        parts[i]=nullptr;
                     } else {
                     }
 
@@ -649,7 +649,7 @@ void SPOffset::set_shape() {
         delete theRes;
     }
     {
-        char *res_d = NULL;
+        char *res_d = nullptr;
 
         if (orig->descr_cmd.size() <= 1)
         {
@@ -667,7 +667,7 @@ void SPOffset::set_shape() {
 
         Geom::PathVector pv = sp_svg_read_pathv(res_d);
         SPCurve *c = new SPCurve(pv);
-        g_assert(c != NULL);
+        g_assert(c != nullptr);
 
         this->setCurveInsync (c);
         this->setCurveBeforeLPE(c);
@@ -774,7 +774,7 @@ vectors_are_clockwise (Geom::Point A, Geom::Point B, Geom::Point C)
 double
 sp_offset_distance_to_original (SPOffset * offset, Geom::Point px)
 {
-    if (offset == NULL || offset->originalPath == NULL || ((Path *) offset->originalPath)->descr_cmd.size() <= 1) {
+    if (offset == nullptr || offset->originalPath == nullptr || ((Path *) offset->originalPath)->descr_cmd.size() <= 1) {
         return 1.0;
     }
 
@@ -936,7 +936,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 {
     (*px) = Geom::Point(0, 0);
 
-    if (offset == NULL) {
+    if (offset == nullptr) {
         return;
     }
 
@@ -948,7 +948,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 
     SPCurve *curve = SP_SHAPE (offset)->getCurve();
 
-    if (curve == NULL)
+    if (curve == nullptr)
     {
     	// CPPIFY
         //offset->set_shape();
@@ -956,7 +956,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 
         curve = SP_SHAPE (offset)->getCurve();
 
-        if (curve == NULL)
+        if (curve == nullptr)
             return;
     }
 
@@ -988,7 +988,7 @@ sp_offset_top_point (SPOffset const * offset, Geom::Point *px)
 // the listening functions
 static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
 
@@ -1002,7 +1002,7 @@ static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 
 static void sp_offset_quit_listening(SPOffset *offset)
 {
-    if ( offset->sourceObject == NULL ) {
+    if ( offset->sourceObject == nullptr ) {
         return;
     }
 
@@ -1010,8 +1010,8 @@ static void sp_offset_quit_listening(SPOffset *offset)
     offset->_delete_connection.disconnect();
     offset->_transformed_connection.disconnect();
 
-    offset->sourceRepr = NULL;
-    offset->sourceObject = NULL;
+    offset->sourceRepr = nullptr;
+    offset->sourceObject = nullptr;
 }
 
 static void
@@ -1083,7 +1083,7 @@ sp_offset_delete_self(SPObject */*deleted*/, SPOffset *offset)
         	g_free(offset->sourceHref);
         }
 
-        offset->sourceHref = NULL;
+        offset->sourceHref = nullptr;
         offset->sourceRef->detach();
     } else if (mode == SP_CLONE_ORPHANS_DELETE) {
         offset->deleteObject();
@@ -1104,7 +1104,7 @@ sp_offset_source_modified (SPObject */*iSource*/, guint flags, SPItem *item)
 static void
 refresh_offset_source(SPOffset* offset)
 {
-    if ( offset == NULL ) {
+    if ( offset == nullptr ) {
     	return;
     }
 
@@ -1114,12 +1114,12 @@ refresh_offset_source(SPOffset* offset)
     // The bad case: no d attribute.  Must check that it's an SPShape and then take the outline.
     SPObject *refobj=offset->sourceObject;
 
-    if ( refobj == NULL ) {
+    if ( refobj == nullptr ) {
     	return;
     }
 
     SPItem  *item  = SP_ITEM (refobj);
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
 
     if (SP_IS_SHAPE (item)) {
         curve = SP_SHAPE (item)->getCurve ();
@@ -1131,7 +1131,7 @@ refresh_offset_source(SPOffset* offset)
         return;
     }
 
-    if (curve == NULL) {
+    if (curve == nullptr) {
         return;
     }
 
@@ -1162,7 +1162,7 @@ refresh_offset_source(SPOffset* offset)
         orig->Fill (theShape, 0);
 
         css = sp_repr_css_attr (offset->sourceRepr , "style");
-        val = sp_repr_css_property (css, "fill-rule", NULL);
+        val = sp_repr_css_property (css, "fill-rule", nullptr);
 
         if (val && strcmp (val, "nonzero") == 0)
         {
@@ -1208,7 +1208,7 @@ sp_offset_get_source (SPOffset *offset)
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

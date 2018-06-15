@@ -86,13 +86,13 @@ Inkscape::XML::Node* SPFeTile::write(Inkscape::XML::Document *doc, Inkscape::XML
 }
 
 void SPFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_TILE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterTile *nr_tile = dynamic_cast<Inkscape::Filters::FilterTile*>(nr_primitive);
-    g_assert(nr_tile != NULL);
+    g_assert(nr_tile != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 }

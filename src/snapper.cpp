@@ -23,7 +23,7 @@ Inkscape::Snapper::Snapper(SnapManager *sm, Geom::Coord const /*t*/) :
     _snap_enabled(true),
     _snap_visible_only(true)
 {
-    g_assert(_snapmanager != NULL);
+    g_assert(_snapmanager != nullptr);
 }
 
 /**

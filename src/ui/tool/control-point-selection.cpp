@@ -179,7 +179,7 @@ void ControlPointSelection::spatialGrow(SelectableControlPoint *origin, int dir)
     bool grow = (dir > 0);
     Geom::Point p = origin->position();
     double best_dist = grow ? HUGE_VAL : 0;
-    SelectableControlPoint *match = NULL;
+    SelectableControlPoint *match = nullptr;
     for (set_type::iterator i = _all_points.begin(); i != _all_points.end(); ++i) {
         bool selected = (*i)->selected();
         if (grow && !selected) {
@@ -423,7 +423,7 @@ void ControlPointSelection::_pointUngrabbed()
     _original_positions.clear();
     _last_trans.clear();
     _dragging = false;
-    _grabbed_point = _farthest_point = NULL;
+    _grabbed_point = _farthest_point = nullptr;
     _updateBounds();
     restoreTransformHandles();
     signal_commit.emit(COMMIT_MOUSE_MOVE);

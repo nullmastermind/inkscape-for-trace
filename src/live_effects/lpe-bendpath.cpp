@@ -46,7 +46,7 @@ class KnotHolderEntityWidthBendPath : public LPEKnotHolderEntity {
         ~KnotHolderEntityWidthBendPath() override
         {
             LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
-            lpe->_knot_entity = NULL;
+            lpe->_knot_entity = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
         Geom::Point knot_get() const override;
@@ -71,7 +71,7 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
     
-    _knot_entity = NULL;
+    _knot_entity = nullptr;
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
     concatenate_before_pwd2 = true;
@@ -182,7 +182,7 @@ void
 LPEBendPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new BeP::KnotHolderEntityWidthBendPath(this);
-    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(_knot_entity);
     if (hide_knot) {
         _knot_entity->knot->hide();

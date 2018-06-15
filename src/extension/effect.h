@@ -70,10 +70,10 @@ class Effect : public Extension {
                     Verb(id, _(name), _(tip), image, _("Extensions")),
                     _effect(effect), 
                     _showPrefs(showPrefs),
-                    _elip_name(NULL) {
+                    _elip_name(nullptr) {
                 /* No clue why, but this is required */
                 this->set_default_sensitive(true);
-                if (_showPrefs && effect != NULL && effect->param_visible_count() != 0) {
+                if (_showPrefs && effect != nullptr && effect->param_visible_count() != 0) {
                     _elip_name = g_strdup_printf("%s...", _(name));
                     set_name(_elip_name);
                 }
@@ -81,7 +81,7 @@ class Effect : public Extension {
             
             /** \brief  Destructor */
             ~EffectVerb() override {
-                if (_elip_name != NULL) {
+                if (_elip_name != nullptr) {
                     g_free(_elip_name);
                 }
             }

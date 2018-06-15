@@ -52,9 +52,9 @@ sp_canvastext_init (SPCanvasText *canvastext)
     canvastext->s[Geom::X] = canvastext->s[Geom::Y] = 0.0;
     canvastext->affine = Geom::identity();
     canvastext->fontsize = 10.0;
-    canvastext->item = NULL;
-    canvastext->desktop = NULL;
-    canvastext->text = NULL;
+    canvastext->item = nullptr;
+    canvastext->desktop = nullptr;
+    canvastext->text = nullptr;
     canvastext->outline = false;
     canvastext->background = false;
     canvastext->border = 3; // must be a constant, and not proportional to any width, height, or fontsize to allow alignment with other text boxes
@@ -62,14 +62,14 @@ sp_canvastext_init (SPCanvasText *canvastext)
 
 static void sp_canvastext_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CANVASTEXT (object));
 
     SPCanvasText *canvastext = SP_CANVASTEXT (object);
 
     g_free(canvastext->text);
-    canvastext->text = NULL;
-    canvastext->item = NULL;
+    canvastext->text = nullptr;
+    canvastext->item = nullptr;
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvastext_parent_class)->destroy)
         SP_CANVAS_ITEM_CLASS(sp_canvastext_parent_class)->destroy(object);
@@ -227,7 +227,7 @@ SPCanvasText *sp_canvastext_new(SPCanvasGroup *parent, SPDesktop *desktop, Geom:
 {
     // Pos specifies the position of the anchor, which is at the bounding box of the text itself (i.e. not at the border of the filled background rectangle)
     // The relative position of the anchor can be set using e.g. anchor_position = TEXT_ANCHOR_LEFT
-    SPCanvasItem *item = sp_canvas_item_new(parent, SP_TYPE_CANVASTEXT, NULL);
+    SPCanvasItem *item = sp_canvas_item_new(parent, SP_TYPE_CANVASTEXT, nullptr);
 
     SPCanvasText *ct = SP_CANVASTEXT(item);
 
@@ -244,7 +244,7 @@ SPCanvasText *sp_canvastext_new(SPCanvasGroup *parent, SPDesktop *desktop, Geom:
 void
 sp_canvastext_set_rgba32 (SPCanvasText *ct, guint32 rgba, guint32 rgba_stroke)
 {
-    g_return_if_fail (ct != NULL);
+    g_return_if_fail (ct != nullptr);
     g_return_if_fail (SP_IS_CANVASTEXT (ct));
 
     if (rgba != ct->rgba || rgba_stroke != ct->rgba_stroke) {

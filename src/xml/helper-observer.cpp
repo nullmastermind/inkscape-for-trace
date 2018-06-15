@@ -8,12 +8,12 @@ namespace XML {
 
 // Very simple observer that just emits a signal if anything happens to a node
 SignalObserver::SignalObserver()
-    : _oldsel(NULL)
+    : _oldsel(nullptr)
 {}
 
 SignalObserver::~SignalObserver()
 {
-    set(NULL); // if _oldsel!=nullptr, remove observer and decrease refcount
+    set(nullptr); // if _oldsel!=nullptr, remove observer and decrease refcount
 }
 
 // Add this observer to the SPObject and remove it from any previous object
@@ -27,7 +27,7 @@ void SignalObserver::set(SPObject* o)
             _oldsel->getRepr()->removeObserver(*this);
         }
         sp_object_unref(_oldsel);
-        _oldsel = NULL;
+        _oldsel = nullptr;
     }
     if(o) {
         if (o->getRepr()) {

@@ -77,7 +77,7 @@ InkscapePreferences::InkscapePreferences()
       _minimum_height(0),
       _natural_width(0),
       _natural_height(0),
-      _current_page(0),
+      _current_page(nullptr),
       _init(true)
 {
     //get the width of a spinbutton
@@ -251,7 +251,7 @@ void InkscapePreferences::AddPencilPowerStrokePressureStep(DialogPage &p, Glib::
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL)
+    if (desktop == nullptr)
         return;
 
     Inkscape::Selection *selection = desktop->getSelection();
@@ -305,7 +305,7 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
     else
         p.add_group_header( _("Style of new objects"));
     PrefRadioButton* current = Gtk::manage( new PrefRadioButton);
-    current->init ( _("Last used style"), prefs_path + "/usecurrent", 1, true, 0);
+    current->init ( _("Last used style"), prefs_path + "/usecurrent", 1, true, nullptr);
     p.add_line( true, "", *current, "",
                 _("Apply the style you last set on an object"));
 
@@ -320,7 +320,7 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
 
     // style swatch
     Gtk::Button* button = Gtk::manage( new Gtk::Button(_("Take from selection"), true));
-    StyleSwatch *swatch = 0;
+    StyleSwatch *swatch = nullptr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (prefs->getInt(prefs_path + "/usecurrent")) {
@@ -344,7 +344,7 @@ void InkscapePreferences::initPageTools()
     _path_tools = _page_list.get_model()->get_path(iter_tools);
 
     _page_tools.add_group_header( _("Bounding box to use"));
-    _t_bbox_visual.init ( _("Visual bounding box"), "/tools/bounding_box", 0, false, 0); // 0 means visual
+    _t_bbox_visual.init ( _("Visual bounding box"), "/tools/bounding_box", 0, false, nullptr); // 0 means visual
     _page_tools.add_line( true, "", _t_bbox_visual, "",
                             _("This bounding box includes stroke width, markers, filter margins, etc."));
     _t_bbox_geometric.init ( _("Geometric bounding box"), "/tools/bounding_box", 1, true, &_t_bbox_visual); // 1 means geometric
@@ -371,14 +371,14 @@ void InkscapePreferences::initPageTools()
     AddSelcueCheckbox(_page_selector, "/tools/select", false);
     AddGradientCheckbox(_page_selector, "/tools/select", false);
     _page_selector.add_group_header( _("When transforming, show"));
-    _t_sel_trans_obj.init ( _("Objects"), "/tools/select/show", "content", true, 0);
+    _t_sel_trans_obj.init ( _("Objects"), "/tools/select/show", "content", true, nullptr);
     _page_selector.add_line( true, "", _t_sel_trans_obj, "",
                             _("Show the actual objects when moving or transforming"));
     _t_sel_trans_outl.init ( _("Box outline"), "/tools/select/show", "outline", false, &_t_sel_trans_obj);
     _page_selector.add_line( true, "", _t_sel_trans_outl, "",
                             _("Show only a box outline of the objects when moving or transforming"));
     _page_selector.add_group_header( _("Per-object selection cue"));
-    _t_sel_cue_none.init ( C_("Selection cue", "None"), "/options/selcue/value", Inkscape::SelCue::NONE, false, 0);
+    _t_sel_cue_none.init ( C_("Selection cue", "None"), "/options/selcue/value", Inkscape::SelCue::NONE, false, nullptr);
     _page_selector.add_line( true, "", _t_sel_cue_none, "",
                             _("No per-object selection indication"));
     _t_sel_cue_mark.init ( _("Mark"), "/options/selcue/value", Inkscape::SelCue::MARK, true, &_t_sel_cue_none);
@@ -719,24 +719,24 @@ void InkscapePreferences::initPageUI()
     }
 
     // Windows
-    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, 0);
+    _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
     _win_save_geom_off.init ( _("Don't save window geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE, false, &_win_save_geom);
 
-    _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", 1, true, 0);
+    _win_save_dialog_pos_on.init ( _("Save and restore dialogs status"), "/options/savedialogposition/value", 1, true, nullptr);
     _win_save_dialog_pos_off.init ( _("Don't save dialogs status"), "/options/savedialogposition/value", 0, false, &_win_save_dialog_pos_on);
 
-    _win_dockable.init ( _("Dockable"), "/options/dialogtype/value", 1, true, 0);
+    _win_dockable.init ( _("Dockable"), "/options/dialogtype/value", 1, true, nullptr);
     _win_floating.init ( _("Floating"), "/options/dialogtype/value", 0, false, &_win_dockable);
 
 
-    _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, 0);
+    _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, nullptr);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
 
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
-    _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", 0, false, 0);
+    _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", 0, false, nullptr);
     _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", 1, true, &_win_ontop_none);
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
@@ -818,7 +818,7 @@ void InkscapePreferences::initPageUI()
     // Grids
     _page_grids.add_group_header( _("Line color when zooming out"));
 
-    _grids_no_emphasize_on_zoom.init( _("Minor grid line color"), "/options/grids/no_emphasize_when_zoomedout", 1, true, 0);
+    _grids_no_emphasize_on_zoom.init( _("Minor grid line color"), "/options/grids/no_emphasize_when_zoomedout", 1, true, nullptr);
     _page_grids.add_line( true, "", _grids_no_emphasize_on_zoom, "", _("The gridlines will be shown in minor grid line color"), false);
     _grids_emphasize_on_zoom.init( _("Major grid line color"), "/options/grids/no_emphasize_when_zoomedout", 0, false, &_grids_no_emphasize_on_zoom);
     _page_grids.add_line( true, "", _grids_emphasize_on_zoom, "", _("The gridlines will be shown in major grid line color"), false);
@@ -1054,7 +1054,7 @@ void InkscapePreferences::initPageIO()
     _page_cms.add_line( true, _("Display profile:"), _cms_display_profile, "",
                         profileTip, false);
     g_free(profileTip);
-    profileTip = 0;
+    profileTip = nullptr;
 
     _cms_from_display.init( _("Retrieve profile from display"), "/options/displayprofile/from_display", false);
     _page_cms.add_line( true, "", _cms_from_display, "",
@@ -1224,7 +1224,7 @@ void InkscapePreferences::initPageBehavior()
     _markers_color_update.init ( _("Update marker color when object color changes"), "/options/markers/colorUpdateMarkers", true);
 
     // Selecting options
-    _sel_all.init ( _("Select in all layers"), "/options/kbselection/inlayer", PREFS_SELECTION_ALL, false, 0);
+    _sel_all.init ( _("Select in all layers"), "/options/kbselection/inlayer", PREFS_SELECTION_ALL, false, nullptr);
     _sel_current.init ( _("Select only within current layer"), "/options/kbselection/inlayer", PREFS_SELECTION_LAYER, true, &_sel_all);
     _sel_recursive.init ( _("Select in current layer and sublayers"), "/options/kbselection/inlayer", PREFS_SELECTION_LAYER_RECURSIVE, false, &_sel_all);
     _sel_hidden.init ( _("Ignore hidden objects and layers"), "/options/kbselection/onlyvisible", true);
@@ -1259,7 +1259,7 @@ void InkscapePreferences::initPageBehavior()
     _trans_scale_corner.init ( _("Scale rounded corners in rectangles"), "/options/transform/rectcorners", false);
     _trans_gradient.init ( _("Transform gradients"), "/options/transform/gradient", true);
     _trans_pattern.init ( _("Transform patterns"), "/options/transform/pattern", false);
-    _trans_optimized.init ( _("Optimized"), "/options/preservetransform/value", 0, true, 0);
+    _trans_optimized.init ( _("Optimized"), "/options/preservetransform/value", 0, true, nullptr);
     _trans_preserved.init ( _("Preserved"), "/options/preservetransform/value", 1, false, &_trans_optimized);
 
     _page_transforms.add_line( false, "", _trans_scale_stroke, "",
@@ -1374,13 +1374,13 @@ void InkscapePreferences::initPageBehavior()
 
     // Clones options
     _clone_option_parallel.init ( _("Move in parallel"), "/options/clonecompensation/value",
-                                  SP_CLONE_COMPENSATION_PARALLEL, true, 0);
+                                  SP_CLONE_COMPENSATION_PARALLEL, true, nullptr);
     _clone_option_stay.init ( _("Stay unmoved"), "/options/clonecompensation/value",
                                   SP_CLONE_COMPENSATION_UNMOVED, false, &_clone_option_parallel);
     _clone_option_transform.init ( _("Move according to transform"), "/options/clonecompensation/value",
                                   SP_CLONE_COMPENSATION_NONE, false, &_clone_option_parallel);
     _clone_option_unlink.init ( _("Are unlinked"), "/options/cloneorphans/value",
-                                  SP_CLONE_ORPHANS_UNLINK, true, 0);
+                                  SP_CLONE_ORPHANS_UNLINK, true, nullptr);
     _clone_option_delete.init ( _("Are deleted"), "/options/cloneorphans/value",
                                   SP_CLONE_ORPHANS_DELETE, false, &_clone_option_unlink);
 
@@ -1421,7 +1421,7 @@ void InkscapePreferences::initPageBehavior()
 
     _page_mask.add_group_header( _("Before applying"));
 
-    _mask_grouping_none.init( _("Do not group clipped/masked objects"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE, true, 0);
+    _mask_grouping_none.init( _("Do not group clipped/masked objects"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE, true, nullptr);
     _mask_grouping_separate.init( _("Put every clipped/masked object in its own group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_SEPARATE, false, &_mask_grouping_none);
     _mask_grouping_all.init( _("Put all clipped/masked objects into one group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_ALL, false, &_mask_grouping_none);
 
@@ -1480,7 +1480,7 @@ void InkscapePreferences::initPageRendering()
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
-                                  BLUR_QUALITY_BEST, false, 0);
+                                  BLUR_QUALITY_BEST, false, nullptr);
     _blur_quality_better.init ( _("Better quality (slower)"), "/options/blurquality/value",
                                   BLUR_QUALITY_BETTER, false, &_blur_quality_best);
     _blur_quality_normal.init ( _("Average quality"), "/options/blurquality/value",
@@ -1504,7 +1504,7 @@ void InkscapePreferences::initPageRendering()
 
     /* filter quality */
     _filter_quality_best.init ( _("Best quality (slowest)"), "/options/filterquality/value",
-                                  Inkscape::Filters::FILTER_QUALITY_BEST, false, 0);
+                                  Inkscape::Filters::FILTER_QUALITY_BEST, false, nullptr);
     _filter_quality_better.init ( _("Better quality (slower)"), "/options/filterquality/value",
                                   Inkscape::Filters::FILTER_QUALITY_BETTER, false, &_filter_quality_best);
     _filter_quality_normal.init ( _("Average quality"), "/options/filterquality/value",
@@ -1889,7 +1889,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
             if (str) {
                 shortcut_label = Glib::Markup::escape_text(str);
                 g_free(str);
-                str = 0;
+                str = nullptr;
             }
         }
         // Add the verb to the group
@@ -1955,7 +1955,7 @@ void InkscapePreferences::initPageSpellcheck()
     const AspellDictInfo *entry;
     int en_index = 0;
     int i = 0;
-    while ( (entry = aspell_dict_info_enumeration_next(dels)) != 0)
+    while ( (entry = aspell_dict_info_enumeration_next(dels)) != nullptr)
     {
         languages.push_back(Glib::ustring(entry->name));
         langValues.push_back(Glib::ustring(entry->name));
@@ -2057,7 +2057,7 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true,  _("System data: "), _sys_systemdata_scroll, "", _("Locations of system data"), true);
 
     tmp = "";
-    gchar** paths = 0;
+    gchar** paths = nullptr;
     gint count = 0;
     gtk_icon_theme_get_search_path(gtk_icon_theme_get_default(), &paths, &count);
     appendList( tmp, paths );

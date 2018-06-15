@@ -63,7 +63,7 @@ public:
       *        the stack
       */
     char const *currentMessage() {
-        return _messages ? _messages->message : NULL;
+        return _messages ? _messages->message : nullptr;
     }
 
     /** @brief connects to the "changed" signal which is emitted whenever

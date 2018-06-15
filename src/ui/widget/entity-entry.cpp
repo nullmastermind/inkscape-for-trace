@@ -45,7 +45,7 @@ EntityEntry*
 EntityEntry::create (rdf_work_entity_t* ent, Registry& wr)
 {
     g_assert (ent);
-    EntityEntry* obj = 0;
+    EntityEntry* obj = nullptr;
     switch (ent->format)
     {
         case RDF_FORMAT_LINE: 
@@ -65,7 +65,7 @@ EntityEntry::create (rdf_work_entity_t* ent, Registry& wr)
 
 EntityEntry::EntityEntry (rdf_work_entity_t* ent, Registry& wr)
     : _label(Glib::ustring(_(ent->title)), Gtk::ALIGN_END),
-      _packable(0),
+      _packable(nullptr),
       _entity(ent), _wr(&wr)
 {
 }

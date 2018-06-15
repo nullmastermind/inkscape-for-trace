@@ -74,7 +74,7 @@ SPObject* getMarkerObj(gchar const *n, SPDocument *doc)
     }
 
     if (*p == '\0' || p[1] == '\0') {
-        return NULL;
+        return nullptr;
     }
 
     p++;
@@ -84,7 +84,7 @@ SPObject* getMarkerObj(gchar const *n, SPDocument *doc)
     }
 
     if (p[c] == '\0') {
-        return NULL;
+        return nullptr;
     }
 
     gchar* b = g_strdup(p);
@@ -122,7 +122,7 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
 
     auto px = Gtk::manage(new Gtk::Image());
     px->set_from_icon_name(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR);
-    g_assert(px != NULL);
+    g_assert(px != nullptr);
     px->show();
     add(*px);
 }
@@ -150,13 +150,13 @@ StrokeStyle::StrokeStyle() :
     capSquare(),
     dashSelector(),
     update(false),
-    desktop(0),
+    desktop(nullptr),
     selectChangedConn(),
     selectModifiedConn(),
     startMarkerConn(),
     midMarkerConn(),
     endMarkerConn(),
-    _old_unit(NULL)
+    _old_unit(nullptr)
 {
     Gtk::HBox *hb;
     Gtk::HBox *f = new Gtk::HBox(false, 0);
@@ -210,7 +210,7 @@ StrokeStyle::StrokeStyle() :
     i++;
 
     /* Dash */
-    spw_label(table, _("Dashes:"), 0, i, NULL); //no mnemonic for now
+    spw_label(table, _("Dashes:"), 0, i, nullptr); //no mnemonic for now
                                             //decide what to do:
                                             //   implement a set_mnemonic_source function in the
                                             //   SPDashSelector class, so that we do not have to
@@ -230,7 +230,7 @@ StrokeStyle::StrokeStyle() :
     // TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
     // (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
 
-    spw_label(table, _("Markers:"), 0, i, NULL);
+    spw_label(table, _("Markers:"), 0, i, nullptr);
 
     hb = spw_hbox(table, 1, 1, i);
     i++;
@@ -267,7 +267,7 @@ StrokeStyle::StrokeStyle() :
     /* Join type */
     // TRANSLATORS: The line join style specifies the shape to be used at the
     //  corners of paths. It can be "miter", "round" or "bevel".
-    spw_label(table, _("Join:"), 0, i, NULL);
+    spw_label(table, _("Join:"), 0, i, nullptr);
 
     hb = spw_hbox(table, 3, 1, i);
 
@@ -318,7 +318,7 @@ StrokeStyle::StrokeStyle() :
     /* Cap type */
     // TRANSLATORS: cap type specifies the shape for the ends of lines
     //spw_label(t, _("_Cap:"), 0, i);
-    spw_label(table, _("Cap:"), 0, i, NULL);
+    spw_label(table, _("Cap:"), 0, i, nullptr);
 
     hb = spw_hbox(table, 3, 1, i);
 
@@ -349,7 +349,7 @@ StrokeStyle::StrokeStyle() :
 
     /* Paint order */
     // TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
-    spw_label(table, _("Order:"), 0, i, NULL);
+    spw_label(table, _("Order:"), 0, i, nullptr);
 
     hb = spw_hbox(table, 4, 1, i);
 
@@ -433,8 +433,8 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
                              StrokeStyleButtonType  button_type,
                              gchar const           *stroke_style)
 {
-    g_assert(icon != NULL);
-    g_assert(hb  != NULL);
+    g_assert(icon != nullptr);
+    g_assert(hb  != nullptr);
 
     StrokeStyleButton *tb = new StrokeStyleButton(grp, icon, button_type, stroke_style);
 
@@ -505,7 +505,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     }
 
     sp_repr_css_attr_unref(css);
-    css = 0;
+    css = nullptr;
 
     spw->update = false;
 };
@@ -579,7 +579,7 @@ SPObject *
 StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
 {
     if (!item || !marker) {
-        return NULL;
+        return nullptr;
     }
 
     gchar const *marker_id = SPMarkerNames[loc].key;
@@ -609,7 +609,7 @@ StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
     sp_repr_css_change_recursive(item->getRepr(), css_item, "style");
 
     sp_repr_css_attr_unref(css_item);
-    css_item = 0;
+    css_item = nullptr;
 
     return marker;
 }
@@ -692,7 +692,7 @@ StrokeStyle::setMarkerColor(SPObject *marker, int loc, SPItem *item)
     endMarkerCombo->update_marker_image(mid);
 
     sp_repr_css_attr_unref(css);
-    css = 0;
+    css = nullptr;
 
 
 }
@@ -751,7 +751,7 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
                        style->stroke_dashoffset.value / style->stroke_width.computed  :
                        style->stroke_dashoffset.value);
     } else {
-        dsel->set_dash(0, NULL, 0.0);
+        dsel->set_dash(0, nullptr, 0.0);
     }
 }
 
@@ -761,7 +761,7 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
 void
 StrokeStyle::setJoinType (unsigned const jointype)
 {
-    Gtk::RadioButton *tb = NULL;
+    Gtk::RadioButton *tb = nullptr;
     switch (jointype) {
         case SP_STROKE_LINEJOIN_MITER:
             tb = joinMiter;
@@ -787,7 +787,7 @@ StrokeStyle::setJoinType (unsigned const jointype)
 void
 StrokeStyle::setCapType (unsigned const captype)
 {
-    Gtk::RadioButton *tb = NULL;
+    Gtk::RadioButton *tb = nullptr;
     switch (captype) {
         case SP_STROKE_LINECAP_BUTT:
             tb = capButt;
@@ -857,7 +857,7 @@ StrokeStyle::updateLine()
 
     update = true;
 
-    Inkscape::Selection *sel = desktop ? desktop->getSelection() : NULL;
+    Inkscape::Selection *sel = desktop ? desktop->getSelection() : nullptr;
 
     FillOrStroke kind = GPOINTER_TO_INT(get_data("kind")) ? FILL : STROKE;
 
@@ -926,19 +926,19 @@ StrokeStyle::updateLine()
     if (! is_query_style_updateable(result_join)) {
         setJoinType(query.stroke_linejoin.value);
     } else {
-        setJoinButtons(NULL);
+        setJoinButtons(nullptr);
     }
 
     if (! is_query_style_updateable(result_cap)) {
         setCapType (query.stroke_linecap.value);
     } else {
-        setCapButtons(NULL);
+        setCapButtons(nullptr);
     }
 
     if (! is_query_style_updateable(result_order)) {
         setPaintOrder (query.paint_order.value);
     } else {
-        setPaintOrder (NULL);
+        setPaintOrder (nullptr);
     }
 
     if (!sel || sel->isEmpty())
@@ -982,7 +982,7 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
         sp_repr_css_set_property(css, "stroke-dashoffset", osoffset.str().c_str());
     } else {
         sp_repr_css_set_property(css, "stroke-dasharray", "none");
-        sp_repr_css_set_property(css, "stroke-dashoffset", NULL);
+        sp_repr_css_set_property(css, "stroke-dashoffset", nullptr);
     }
 }
 
@@ -1061,7 +1061,7 @@ StrokeStyle::scaleLine()
     sp_desktop_set_style (desktop, css, false);
 
     sp_repr_css_attr_unref(css);
-    css = 0;
+    css = nullptr;
 
     DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
                        _("Set stroke style"));
@@ -1151,7 +1151,7 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
         }
 
         sp_repr_css_attr_unref(css);
-        css = 0;
+        css = nullptr;
 
         DocumentUndo::done(spw->desktop->getDocument(), SP_VERB_DIALOG_FILL_STROKE, _("Set stroke style"));
     }
@@ -1240,7 +1240,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
 
         combo->setDesktop(desktop);
 
-        if (object->style->marker_ptrs[keyloc[i].loc]->value != NULL && !all_texts) {
+        if (object->style->marker_ptrs[keyloc[i].loc]->value != nullptr && !all_texts) {
             // If the object has this type of markers,
 
             // Extract the name of the marker that the object uses
@@ -1263,7 +1263,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_und
             }
 
         } else {
-            combo->set_current(NULL);
+            combo->set_current(nullptr);
         }
     }
 

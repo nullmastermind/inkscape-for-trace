@@ -21,10 +21,10 @@
 SPGlyph::SPGlyph()
     : SPObject() 
 //TODO: correct these values:
-    , d(NULL)
+    , d(nullptr)
     , orientation(GLYPH_ORIENTATION_BOTH)
     , arabic_form(GLYPH_ARABIC_FORM_INITIAL)
-    , lang(NULL)
+    , lang(nullptr)
     , horiz_adv_x(0)
     , vert_origin_x(0)
     , vert_origin_y(0)
@@ -168,7 +168,7 @@ void SPGlyph::set(unsigned int key, const gchar *value)
         }
         case SP_ATTR_HORIZ_ADV_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->horiz_adv_x){
                 this->horiz_adv_x = number;
@@ -178,7 +178,7 @@ void SPGlyph::set(unsigned int key, const gchar *value)
         }
         case SP_ATTR_VERT_ORIGIN_X:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->vert_origin_x){
                 this->vert_origin_x = number;
@@ -188,7 +188,7 @@ void SPGlyph::set(unsigned int key, const gchar *value)
         }
         case SP_ATTR_VERT_ORIGIN_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->vert_origin_y){
                 this->vert_origin_y = number;
@@ -198,7 +198,7 @@ void SPGlyph::set(unsigned int key, const gchar *value)
         }
         case SP_ATTR_VERT_ADV_Y:
         {
-            double number = value ? g_ascii_strtod(value, 0) : 0;
+            double number = value ? g_ascii_strtod(value, nullptr) : 0;
             
             if (number != this->vert_adv_y){
                 this->vert_adv_y = number;

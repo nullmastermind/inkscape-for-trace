@@ -28,7 +28,7 @@ namespace Inkscape {
 
 DrawingGlyphs::DrawingGlyphs(Drawing &drawing)
     : DrawingItem(drawing)
-    , _font(NULL)
+    , _font(nullptr)
     , _glyph(0)
 {}
 
@@ -36,7 +36,7 @@ DrawingGlyphs::~DrawingGlyphs()
 {
     if (_font) {
         _font->Unref();
-        _font = NULL;
+        _font = nullptr;
     }
 }
 
@@ -182,7 +182,7 @@ DrawingItem *DrawingGlyphs::_pickItem(Geom::Point const &p, double /*delta*/, un
     if (!ggroup) {
         throw InvalidItemException();
     }
-    DrawingItem *result = NULL;
+    DrawingItem *result = nullptr;
     bool invisible = (ggroup->_nrstyle.fill.type == NRStyle::PAINT_NONE) &&
         (ggroup->_nrstyle.stroke.type == NRStyle::PAINT_NONE);
 
@@ -684,7 +684,7 @@ void DrawingText::_clipItem(DrawingContext &dc, Geom::IntRect const &/*area*/)
 DrawingItem *
 DrawingText::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 {
-    return DrawingGroup::_pickItem(p, delta, flags) ? this : NULL;
+    return DrawingGroup::_pickItem(p, delta, flags) ? this : nullptr;
 }
 
 bool

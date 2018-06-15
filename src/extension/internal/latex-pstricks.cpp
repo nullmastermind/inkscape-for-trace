@@ -39,7 +39,7 @@ namespace Internal {
 PrintLatex::PrintLatex (void):
     _width(0),
     _height(0),
-    _stream(NULL)
+    _stream(nullptr)
 {
 }
 
@@ -63,11 +63,11 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
 {
     Inkscape::SVGOStringStream os;
     int res;
-    FILE *osf = NULL;
-    const gchar * fn = NULL;
+    FILE *osf = nullptr;
+    const gchar * fn = nullptr;
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError* error = NULL;
+    GError* error = nullptr;
 
     os.setf(std::ios::fixed);
     fn = mod->get_param_string("destination");
@@ -80,7 +80,7 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
      * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
      * return code.
      */
-    if (fn != NULL) {
+    if (fn != nullptr) {
         while (isspace(*fn)) fn += 1;
         Inkscape::IO::dump_fopen_call(fn, "K");
         osf = Inkscape::IO::fopen_utf8name(fn, "w+");
@@ -110,7 +110,7 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
         g_print("Printing failed\n");
         /* fixme: should use pclose() for pipes */
         fclose(_stream);
-        _stream = NULL;
+        _stream = nullptr;
         fflush(stdout);
         return 0;
     }
@@ -144,7 +144,7 @@ unsigned int PrintLatex::finish(Inkscape::Extension::Print * /*mod*/)
         fflush(_stream);
 
         fclose(_stream);
-        _stream = NULL;
+        _stream = nullptr;
     }
     return 0;
 }

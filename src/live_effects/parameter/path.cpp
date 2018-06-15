@@ -64,7 +64,7 @@ PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
       _pathvector(),
       _pwd2(),
       must_recalculate_pwd2(false),
-      href(NULL),
+      href(nullptr),
       ref( (SPObject*)effect->getLPEObj() )
 {
     defvalue = g_strdup(default_value);
@@ -198,8 +198,8 @@ PathParam::param_newWidget()
     Gtk::Label* pLabel = Gtk::manage(new Gtk::Label(param_label));
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);
     pLabel->set_tooltip_text(param_tooltip);
-    Gtk::Image * pIcon = NULL;
-    Gtk::Button * pButton = NULL;
+    Gtk::Image * pIcon = nullptr;
+    Gtk::Button * pButton = nullptr;
     if (_edit_button) {
         pIcon = Gtk::manage(new Gtk::Image());
         pIcon->set_from_icon_name( INKSCAPE_ICON("tool-node-editor"), Gtk::ICON_SIZE_BUTTON);
@@ -398,7 +398,7 @@ PathParam::emit_changed()
 void
 PathParam::start_listening(SPObject * to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &PathParam::linked_delete));
@@ -432,7 +432,7 @@ PathParam::remove_link()
     if (href) {
         ref.detach();
         g_free(href);
-        href = NULL;
+        href = nullptr;
     }
 }
 
@@ -457,7 +457,7 @@ void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved
 void
 PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(linked_obj)) {
         if (_from_original_d) {
             curve = SP_SHAPE(linked_obj)->getCurveForEdit();
@@ -469,7 +469,7 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();
     }
 
-    if (curve == NULL) {
+    if (curve == nullptr) {
         // curve invalid, set default value
         _pathvector = sp_svg_read_pathv(defvalue);
     } else {
@@ -492,7 +492,7 @@ void
 PathParam::on_edit_button_click()
 {
     SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-    if (item != NULL) {
+    if (item != nullptr) {
         param_editOncanvas(item, SP_ACTIVE_DESKTOP);
     }
 }
@@ -505,7 +505,7 @@ PathParam::paste_param_path(const char *svgd)
         // remove possible link to path
         remove_link();
         SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-        if (item != NULL) {
+        if (item != nullptr) {
             Geom::PathVector path_clipboard =  sp_svg_read_pathv(svgd);
             path_clipboard *= item->i2doc_affine().inverse();
             svgd = sp_svg_write_path( path_clipboard );

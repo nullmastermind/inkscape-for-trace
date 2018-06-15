@@ -64,7 +64,7 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
 {
     doc->ensureUpToDate();
 
-    SPItem *base = NULL;
+    SPItem *base = nullptr;
 
     bool pageBoundingBox = true;
     if (exportId && strcmp(exportId, "")) {
@@ -102,8 +102,8 @@ latex_render_document_text_to_file( SPDocument *doc, gchar const *filename,
 }
 
 LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex)
-  : _stream(NULL),
-    _filename(NULL),
+  : _stream(nullptr),
+    _filename(nullptr),
     _pdflatex(pdflatex),
     _omittext_state(EMPTY),
     _omittext_page(1)
@@ -136,7 +136,7 @@ LaTeXTextRenderer::~LaTeXTextRenderer(void)
  */
 bool
 LaTeXTextRenderer::setTargetFile(gchar const *filename) {
-    if (filename != NULL) {
+    if (filename != nullptr) {
         while (isspace(*filename)) filename += 1;
 
         _filename = g_path_get_basename(filename);
@@ -171,7 +171,7 @@ LaTeXTextRenderer::setTargetFile(gchar const *filename) {
         g_print("Output to LaTeX file failed\n");
         /* fixme: should use pclose() for pipes */
         fclose(_stream);
-        _stream = NULL;
+        _stream = nullptr;
         fflush(stdout);
         return false;
     }
@@ -281,8 +281,8 @@ void LaTeXTextRenderer::sp_text_render(SPText *textobj)
     // get position and alignment
     // Align vertically on the baseline of the font (retrieved from the anchor point)
     // Align horizontally on anchorpoint
-    gchar const *alignment = NULL;
-    gchar const *aligntabular = NULL;
+    gchar const *alignment = nullptr;
+    gchar const *aligntabular = nullptr;
     switch (style->text_anchor.computed) {
     case SP_CSS_TEXT_ANCHOR_START:
         alignment = "[lt]";
@@ -437,7 +437,7 @@ Flowing in rectangle is possible, not in arb shape.
 
     SPStyle *style = flowtext->style;
 
-    SPItem *frame_item = flowtext->get_frame(NULL);
+    SPItem *frame_item = flowtext->get_frame(nullptr);
     SPRect *frame = dynamic_cast<SPRect *>(frame_item);
     if (!frame_item || !frame) {
         g_warning("LaTeX export: non-rectangular flowed text shapes are not supported, skipping text.");

@@ -25,7 +25,7 @@ PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
     :   Parameter(label, tip, key, wr, effect), 
         defvalue(default_value),
         liveupdate(live_update),
-        _knot_entity(NULL)
+        _knot_entity(nullptr)
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode  = SP_KNOT_MODE_XOR;
@@ -185,7 +185,7 @@ PointParam::set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint
 class PointParamKnotHolderEntity : public KnotHolderEntity {
 public:
     PointParamKnotHolderEntity(PointParam *p) { this->pparam = p; }
-    ~PointParamKnotHolderEntity() override { this->pparam->_knot_entity = NULL;}
+    ~PointParamKnotHolderEntity() override { this->pparam->_knot_entity = nullptr;}
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;
@@ -239,7 +239,7 @@ PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new PointParamKnotHolderEntity(this);
     // TODO: can we ditch handleTip() etc. because we have access to handle_tip etc. itself???
-    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
     knotholder->add(_knot_entity);
 }
 

@@ -357,7 +357,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _preview_height = 300;
 
     // Init preview
-    _thumb_data = NULL;
+    _thumb_data = nullptr;
     _pageNumberSpin_adj->set_value(1.0);
     _current_page = 1;
     _setPreviewPage(_current_page);
@@ -594,7 +594,7 @@ void PdfImportDialog::_setPreviewPage(int page) {
     if (!_render_thumb) {
         if (_thumb_data) {
             gfree(_thumb_data);
-            _thumb_data = NULL;
+            _thumb_data = nullptr;
         }
         if (!_previewed_page->loadThumb(&_thumb_data,
              &_thumb_width, &_thumb_height, &_thumb_rowstride)) {
@@ -714,7 +714,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
     // poppler does not use glib g_open. So on win32 we must use unicode call. code was copied from
     // glib gstdio.c
     GooString *filename_goo = new GooString(uri);
-    PDFDoc *pdf_doc = new PDFDoc(filename_goo, NULL, NULL, NULL);   // TODO: Could ask for password
+    PDFDoc *pdf_doc = new PDFDoc(filename_goo, nullptr, nullptr, nullptr);   // TODO: Could ask for password
     //delete filename_goo;
 #else
     wchar_t *wfilename = reinterpret_cast<wchar_t*>(g_utf8_to_utf16 (uri, -1, NULL, NULL, NULL));
@@ -754,17 +754,17 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             g_message("Failed to load document from data (error %d)", error);
         }
 
-        return NULL;
+        return nullptr;
     }
 
-    PdfImportDialog *dlg = NULL;
+    PdfImportDialog *dlg = nullptr;
     if (INKSCAPE.use_gui()) {
         dlg = new PdfImportDialog(pdf_doc, uri);
         if (!dlg->showDialog()) {
             _cancelled = true;
             delete dlg;
             delete pdf_doc;
-            return NULL;
+            return nullptr;
         }
     }
 
@@ -779,12 +779,12 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 #endif
     }
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     bool saved = false;
     if(!is_importvia_poppler)
     {
         // native importer
-        doc = SPDocument::createNewDoc(NULL, TRUE, TRUE);
+        doc = SPDocument::createNewDoc(nullptr, TRUE, TRUE);
         saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // No need to undo in this temporary document
 
@@ -802,7 +802,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             dlg->getImportSettings(prefs);
 
         // Apply crop settings
-        PDFRectangle *clipToBox = NULL;
+        PDFRectangle *clipToBox = nullptr;
         double crop_setting;
         sp_repr_get_double(prefs, "cropTo", &crop_setting);
 

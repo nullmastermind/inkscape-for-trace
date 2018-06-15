@@ -40,7 +40,7 @@ public:
         guint32 images;
     };
 
-    Drawing(SPCanvasArena *arena = NULL);
+    Drawing(SPCanvasArena *arena = nullptr);
     ~Drawing();
 
     DrawingItem *root() { return _root; }

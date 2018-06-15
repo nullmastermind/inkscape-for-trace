@@ -121,7 +121,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _snap_bbox_type = !prefs_bbox ?
         SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
 
-    g_return_if_fail(desktop != NULL);
+    g_return_if_fail(desktop != nullptr);
 
     _updateVolatileState();
     _current_relative_affine.setIdentity();
@@ -187,26 +187,26 @@ Inkscape::SelTrans::~SelTrans()
 
     for (int i = 0; i < NUMHANDS; i++) {
         knot_unref(knots[i]);
-        knots[i] = NULL;
+        knots[i] = nullptr;
     }
 
     if (_norm) {
         sp_canvas_item_destroy(_norm);
-        _norm = NULL;
+        _norm = nullptr;
     }
     if (_grip) {
         sp_canvas_item_destroy(_grip);
-        _grip = NULL;
+        _grip = nullptr;
     }
     for (int i = 0; i < 4; i++) {
         if (_l[i]) {
             sp_canvas_item_destroy(_l[i]);
-            _l[i] = NULL;
+            _l[i] = nullptr;
         }
     }
 
     for (unsigned i = 0; i < _items.size(); i++) {
-        sp_object_unref(_items[i], NULL);
+        sp_object_unref(_items[i], nullptr);
     }
 
     _items.clear();
@@ -271,7 +271,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
 
     auto items= _desktop->selection->items();
     for (auto iter=items.begin();iter!=items.end(); ++iter) {
-        SPItem *it = static_cast<SPItem*>(sp_object_ref(*iter, NULL));
+        SPItem *it = static_cast<SPItem*>(sp_object_ref(*iter, nullptr));
         _items.push_back(it);
         _items_const.push_back(it);
         _items_affines.push_back(it->i2dt_affine());
@@ -424,7 +424,7 @@ void Inkscape::SelTrans::ungrab()
     _updateVolatileState();
 
     for (unsigned i = 0; i < _items.size(); i++) {
-        sp_object_unref(_items[i], NULL);
+        sp_object_unref(_items[i], nullptr);
     }
 
     sp_canvas_item_hide(_norm);

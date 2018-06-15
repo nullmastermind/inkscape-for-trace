@@ -27,7 +27,7 @@ typedef unsigned int GQuark;
 class SPTRefReference : public Inkscape::URIReference,
                         public Inkscape::XML::NodeObserver {
 public:
-    SPTRefReference(SPObject *owner) : URIReference(owner), subtreeObserved(NULL) {
+    SPTRefReference(SPObject *owner) : URIReference(owner), subtreeObserved(nullptr) {
         updateObserver();
     }
     

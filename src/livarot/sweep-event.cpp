@@ -22,7 +22,7 @@ SweepEventQueue::~SweepEventQueue()
 SweepEvent *SweepEventQueue::add(SweepTree *iLeft, SweepTree *iRight, Geom::Point &px, double itl, double itr)
 {
     if (nbEvt > maxEvt) {
-	return NULL;
+	return nullptr;
     }
     
     int const n = nbEvt++;
@@ -227,7 +227,7 @@ void SweepEventQueue::relocate(SweepEvent *e, int to)
  */
 SweepEvent::SweepEvent()
 {
-    MakeNew (NULL, NULL, Geom::Point(0, 0), 0, 0);
+    MakeNew (nullptr, nullptr, Geom::Point(0, 0), 0, 0);
 }
 
 SweepEvent::~SweepEvent()
@@ -257,8 +257,8 @@ void SweepEvent::MakeDelete()
 	    s->pData[n].pending--;
 	}
 
-	sweep[i]->evt[1 - i] = NULL;
-	sweep[i] = NULL;
+	sweep[i]->evt[1 - i] = nullptr;
+	sweep[i] = nullptr;
     }
 }
 

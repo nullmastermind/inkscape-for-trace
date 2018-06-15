@@ -46,7 +46,7 @@ void Layout::appendText(Glib::ustring const &text,
                         Glib::ustring::const_iterator text_begin,
                         Glib::ustring::const_iterator text_end)
 {
-    if (style == NULL) return;
+    if (style == nullptr) return;
 
     InputStreamTextSource *new_source = new InputStreamTextSource;
 
@@ -187,9 +187,9 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
         }
         if (this_style->text_anchor.set)
             return text_anchor_to_alignment(this_style->text_anchor.computed, para_direction);
-        if (this_style->object == NULL || this_style->object->parent == NULL) break;
+        if (this_style->object == nullptr || this_style->object->parent == nullptr) break;
         this_style = this_style->object->parent->style;
-        if (this_style == NULL) break;
+        if (this_style == nullptr) break;
     }
     return para_direction == LEFT_TO_RIGHT ? LEFT : RIGHT;
 }
@@ -197,7 +197,7 @@ Layout::Alignment Layout::InputStreamTextSource::styleGetAlignment(Layout::Direc
 font_instance *Layout::InputStreamTextSource::styleGetFontInstance() const
 {
     PangoFontDescription *descr = styleGetFontDescription();
-    if (descr == NULL) return NULL;
+    if (descr == nullptr) return nullptr;
     font_instance *res = (font_factory::Default())->Face(descr);
     pango_font_description_free(descr);
     return res;

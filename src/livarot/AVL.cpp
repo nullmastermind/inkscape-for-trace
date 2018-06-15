@@ -27,11 +27,11 @@ void AVLTree::MakeNew()
 {
     for (int i = 0; i < 2; i++)
     {
-        elem[i] = NULL;
-        child[i] = NULL;
+        elem[i] = nullptr;
+        child[i] = nullptr;
     }
 
-    parent = NULL;
+    parent = nullptr;
     balance = 0;
 }
 
@@ -41,13 +41,13 @@ void AVLTree::MakeDelete()
         if (elem[i]) {
             elem[i]->elem[1 - i] = elem[1 - i];
         }
-        elem[i] = NULL;
+        elem[i] = nullptr;
     }
 }
 
 AVLTree *AVLTree::Leftmost()
 {
-    return leafFromParent(NULL, LEFT);
+    return leafFromParent(nullptr, LEFT);
 }
 
 AVLTree *AVLTree::leaf(AVLTree *from, Side s)
@@ -66,7 +66,7 @@ AVLTree *AVLTree::leaf(AVLTree *from, Side s)
 	}
     }
 
-    return NULL;
+    return nullptr;
 }
 
 AVLTree *AVLTree::leafFromParent(AVLTree */*from*/, Side s)
@@ -81,7 +81,7 @@ AVLTree *AVLTree::leafFromParent(AVLTree */*from*/, Side s)
 int
 AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 {
-  if (from == NULL)
+  if (from == nullptr)
     {
       if (parent)
 	return parent->RestoreBalances (this, racine);
@@ -105,7 +105,7 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	      balance = 0;
 	      return avl_no_err;
 	    }
-	  if (child[LEFT] == NULL)
+	  if (child[LEFT] == nullptr)
 	    {
 //                              cout << "mierda\n";
 	      return avl_bal_err;
@@ -147,7 +147,7 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	    }
 	  else
 	    {
-	      if (child[LEFT]->child[RIGHT] == NULL)
+	      if (child[LEFT]->child[RIGHT] == nullptr)
 		{
 		  //                              cout << "mierda\n";
 		  return avl_bal_err;
@@ -211,7 +211,7 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	      balance = 0;
 	      return avl_no_err;
 	    }
-	  if (child[RIGHT] == NULL)
+	  if (child[RIGHT] == nullptr)
 	    {
 //                              cout << "mierda\n";
 	      return avl_bal_err;
@@ -252,7 +252,7 @@ AVLTree::RestoreBalances (AVLTree * from, AVLTree * &racine)
 	    }
 	  else
 	    {
-	      if (child[RIGHT]->child[LEFT] == NULL)
+	      if (child[RIGHT]->child[LEFT] == nullptr)
 		{
 //                                      cout << "mierda\n";
 		  return avl_bal_err;
@@ -333,7 +333,7 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	}
       else if (diff > 0)
 	{
-	  if (child[LEFT] == NULL)
+	  if (child[LEFT] == nullptr)
 	    {
 //                              cout << "un probleme\n";
 	      return avl_bal_err;
@@ -409,7 +409,7 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	    }
 	  else if (e->balance < 0)
 	    {
-	      if (child[LEFT]->child[RIGHT] == NULL)
+	      if (child[LEFT]->child[RIGHT] == nullptr)
 		{
 //                                      cout << "un probleme\n";
 		  return avl_bal_err;
@@ -492,7 +492,7 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
     {
       if (diff < 0)
 	{
-	  if (child[RIGHT] == NULL)
+	  if (child[RIGHT] == nullptr)
 	    {
 //                              cout << "un probleme\n";
 	      return avl_bal_err;
@@ -568,7 +568,7 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 	    }
 	  else if (e->balance > 0)
 	    {
-	      if (child[RIGHT]->child[LEFT] == NULL)
+	      if (child[RIGHT]->child[LEFT] == nullptr)
 		{
 //                                      cout << "un probleme\n";
 		  return avl_bal_err;
@@ -656,7 +656,7 @@ AVLTree::RestoreBalances (int diff, AVLTree * &racine)
 int
 AVLTree::Remove (AVLTree * &racine, bool rebalance)
 {
-  AVLTree *startNode = NULL;
+  AVLTree *startNode = nullptr;
   int remDiff = 0;
   int res = Remove (racine, startNode, remDiff);
   if (res == avl_no_err && rebalance && startNode)
@@ -671,12 +671,12 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
     elem[LEFT]->elem[RIGHT] = elem[RIGHT];
   if (elem[RIGHT])
     elem[RIGHT]->elem[LEFT] = elem[LEFT];
-  elem[LEFT] = elem[RIGHT] = NULL;
+  elem[LEFT] = elem[RIGHT] = nullptr;
 
   if (child[LEFT] && child[RIGHT])
     {
       AVLTree *newMe = child[LEFT]->leafFromParent(this, RIGHT);
-      if (newMe == NULL || newMe->child[RIGHT])
+      if (newMe == nullptr || newMe->child[RIGHT])
 	{
 //                      cout << "pas normal\n";
 	  return avl_rm_err;
@@ -785,14 +785,14 @@ AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
       if (parent)
 	{
 	  if (parent->child[LEFT] == this)
-	    parent->child[LEFT] = NULL;
+	    parent->child[LEFT] = nullptr;
 	  if (parent->child[RIGHT] == this)
-	    parent->child[RIGHT] = NULL;
+	    parent->child[RIGHT] = nullptr;
 	}
       if (racine == this)
-	racine = NULL;
+	racine = nullptr;
     }
-  parent = child[RIGHT] = child[LEFT] = NULL;
+  parent = child[RIGHT] = child[LEFT] = nullptr;
   balance = 0;
   return avl_no_err;
 }
@@ -806,7 +806,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 {
   int res = Insert (racine, insertType, insertL, insertR);
   if (res == avl_no_err && rebalance)
-    res = RestoreBalances ((AVLTree *) NULL, racine);
+    res = RestoreBalances ((AVLTree *) nullptr, racine);
   return res;
 }
 
@@ -814,7 +814,7 @@ int
 AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 		 AVLTree * insertR)
 {
-  if (racine == NULL)
+  if (racine == nullptr)
     {
       racine = this;
       return avl_no_err;
@@ -828,7 +828,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	}
       else if (insertType == found_on_left)
 	{
-	  if (insertR == NULL || insertR->child[LEFT])
+	  if (insertR == nullptr || insertR->child[LEFT])
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
@@ -839,7 +839,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	}
       else if (insertType == found_on_right)
 	{
-	  if (insertL == NULL || insertL->child[RIGHT])
+	  if (insertL == nullptr || insertL->child[RIGHT])
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
@@ -850,18 +850,18 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	}
       else if (insertType == found_between)
 	{
-	  if (insertR == NULL || insertL == NULL
-	      || (insertR->child[LEFT] != NULL && insertL->child[RIGHT] != NULL))
+	  if (insertR == nullptr || insertL == nullptr
+	      || (insertR->child[LEFT] != nullptr && insertL->child[RIGHT] != nullptr))
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;
 	    }
-	  if (insertR->child[LEFT] == NULL)
+	  if (insertR->child[LEFT] == nullptr)
 	    {
 	      insertR->child[LEFT] = this;
 	      parent = insertR;
 	    }
-	  else if (insertL->child[RIGHT] == NULL)
+	  else if (insertL->child[RIGHT] == nullptr)
 	    {
 	      insertL->child[RIGHT] = this;
 	      parent = insertL;
@@ -870,7 +870,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	}
       else if (insertType == found_exact)
 	{
-	  if (insertL == NULL)
+	  if (insertL == nullptr)
 	    {
 //                              cout << "ngou?\n";
 	      return avl_ins_err;

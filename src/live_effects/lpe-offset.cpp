@@ -90,7 +90,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     offset_pt = Geom::Point();
     origin = Geom::Point();
     evenodd = true;
-    _knot_entity = NULL;
+    _knot_entity = nullptr;
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
 }
@@ -204,7 +204,7 @@ LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
     SPCSSAttr *css;
     const gchar *val;
     css = sp_repr_css_attr (item->getRepr() , "style");
-    val = sp_repr_css_property (css, "fill-rule", NULL);
+    val = sp_repr_css_property (css, "fill-rule", nullptr);
     bool upd_fill_rule = false;
     if (val && strcmp (val, "nonzero") == 0)
     {
@@ -251,7 +251,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         Geom::Point winding_point = original[0].initialPoint();
         int wind = 0;
         double dist = Geom::infinity();
-        pathv_matrix_point_bbox_wind_distance(original_pathv, Geom::identity(), winding_point, NULL, &wind, &dist, 0.5, NULL);
+        pathv_matrix_point_bbox_wind_distance(original_pathv, Geom::identity(), winding_point, nullptr, &wind, &dist, 0.5, nullptr);
         bool path_inside = wind % 2 != 0;
         Geom::PathVector outline = Inkscape::outline(original, std::abs(offset) * 2 , 
                                (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
@@ -382,7 +382,7 @@ LPEOffset::drawHandle(Geom::Point p)
 void LPEOffset::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     _knot_entity = new OfS::KnotHolderEntityOffsetPoint(this);
-    _knot_entity->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Offset point"), SP_KNOT_SHAPE_CIRCLE);
+    _knot_entity->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Offset point"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(_knot_entity);
 }
 

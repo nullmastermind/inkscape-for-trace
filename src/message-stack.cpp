@@ -17,7 +17,7 @@
 namespace Inkscape {
 
 MessageStack::MessageStack()
-: _messages(NULL), _next_id(1)
+: _messages(nullptr), _next_id(1)
 {
 }
 
@@ -136,8 +136,8 @@ MessageStack::Message *MessageStack::_discard(MessageStack::Message *m)
         m->timeout_id = 0;
     }
     g_free(m->message);
-    m->message = NULL;
-    m->stack = NULL;
+    m->message = nullptr;
+    m->stack = nullptr;
     delete m;
     return next;
 }
@@ -146,7 +146,7 @@ void MessageStack::_emitChanged() {
     if (_messages) {
         _changed_signal.emit(_messages->type, _messages->message);
     } else {
-        _changed_signal.emit(NORMAL_MESSAGE, NULL);
+        _changed_signal.emit(NORMAL_MESSAGE, nullptr);
     }
 }
 

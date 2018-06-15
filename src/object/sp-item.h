@@ -307,7 +307,7 @@ public:
 
     Inkscape::DrawingItem *invoke_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
     void invoke_hide(unsigned int key);
-    void getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs=0) const;
+    void getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs=nullptr) const;
     void adjust_pattern(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false, PatternTransform = TRANSFORM_BOTH);
     void adjust_gradient(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false);
     void adjust_stroke(double ex);
@@ -334,7 +334,7 @@ public:
      * stored optimized. Send _transformed_signal. Invoke _write method so that
      * the repr is updated with the new transform.
      */
-    void doWriteTransform(Geom::Affine const &transform, Geom::Affine const *adv = NULL, bool compensate = true);
+    void doWriteTransform(Geom::Affine const &transform, Geom::Affine const *adv = nullptr, bool compensate = true);
 
     /**
      * Sets item private transform (not propagated to repr), without compensating stroke widths,

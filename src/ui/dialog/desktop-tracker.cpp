@@ -17,9 +17,9 @@ namespace UI {
 namespace Dialog {
 
 DesktopTracker::DesktopTracker() :
-    base(0),
-    desktop(0),
-    widget(0),
+    base(nullptr),
+    desktop(nullptr),
+    widget(nullptr),
     hierID(0),
     trackActive(false),
     desktopChangedSig()
@@ -111,7 +111,7 @@ bool DesktopTracker::hierarchyChangeCB(GtkWidget * /*widget*/, GtkWidget* /*prev
 void DesktopTracker::handleHierarchyChange()
 {
     GtkWidget *wdgt = gtk_widget_get_ancestor(widget, SP_TYPE_DESKTOP_WIDGET);
-    bool newFlag = (wdgt == 0); // true means not in an SPDesktopWidget, thus floating.
+    bool newFlag = (wdgt == nullptr); // true means not in an SPDesktopWidget, thus floating.
     if (wdgt && !base) {
         SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(wdgt);
         if (dtw && dtw->desktop) {

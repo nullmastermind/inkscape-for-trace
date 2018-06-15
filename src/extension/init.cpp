@@ -260,7 +260,7 @@ check_extensions_internal(Extension *in_plug, gpointer in_data)
 {
     int *count = (int *)in_data;
 
-    if (in_plug == NULL) return;
+    if (in_plug == nullptr) return;
     if (!in_plug->deactivated() && !in_plug->check()) {
          in_plug->deactivate();
         (*count)++;

@@ -995,8 +995,8 @@ void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result
     // Create the resulting xml document tree
     // Initialize libxml and test mistakes between compiled and shared library used
     LIBXML_TEST_VERSION
-    xmlDoc *doc = NULL;
-    xmlNode *root_element = NULL;
+    xmlDoc *doc = nullptr;
+    xmlNode *root_element = nullptr;
 
     int parse_options = XML_PARSE_RECOVER + XML_PARSE_NOWARNING + XML_PARSE_NOERROR;  // do not use XML_PARSE_NOENT ! see bug lp:1025185
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1005,9 +1005,9 @@ void ImportDialog::on_xml_file_read(const Glib::RefPtr<Gio::AsyncResult>& result
         parse_options |= XML_PARSE_NONET;
     }
 
-    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), NULL, parse_options);
+    doc = xmlReadMemory(data, (int) length, xml_uri.c_str(), nullptr, parse_options);
         
-    if (doc == NULL) {
+    if (doc == nullptr) {
         // If nothing is returned, no results could be found
         if (length == 0) {
             notebook_content->set_current_page(NOTEBOOK_PAGE_NOT_FOUND);
@@ -1065,7 +1065,7 @@ ImportDialog::ImportDialog(Gtk::Window& parent_window, FileDialogType file_types
     FileDialogBase(title, parent_window)
 {
     // Initialize to Autodetect
-    extension = NULL;
+    extension = nullptr;
     // No filename to start out with
     Glib::ustring search_keywords = "";
 

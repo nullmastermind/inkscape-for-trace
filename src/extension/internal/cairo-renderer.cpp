@@ -117,9 +117,9 @@ CairoRenderContext*
 CairoRenderer::createContext(void)
 {
     CairoRenderContext *new_context = new CairoRenderContext(this);
-    g_assert( new_context != NULL );
+    g_assert( new_context != nullptr );
 
-    new_context->_state = NULL;
+    new_context->_state = nullptr;
 
     // create initial render state
     CairoRenderState *state = new_context->_createState();
@@ -516,7 +516,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     SPDocument *document = item->document;
 
     std::unique_ptr<Inkscape::Pixbuf> pb(
-        sp_generate_internal_bitmap(document, NULL,
+        sp_generate_internal_bitmap(document, nullptr,
             bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
             width, height, res, res, (guint32) 0xffffff00, item ));
 
@@ -653,7 +653,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
 {
 // PLEASE note when making changes to the boundingbox and transform calculation, corresponding changes should be made to PDFLaTeXRenderer::setupDocument !!!
 
-    g_assert( ctx != NULL );
+    g_assert( ctx != nullptr );
 
     if (!base) {
         base = doc->getRoot();
@@ -710,9 +710,9 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
 void
 CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 {
-    g_assert( ctx != NULL && ctx->_is_valid );
+    g_assert( ctx != nullptr && ctx->_is_valid );
 
-    if (cp == NULL)
+    if (cp == nullptr)
         return;
 
     CairoRenderContext::CairoRenderMode saved_mode = ctx->getRenderMode();
@@ -766,9 +766,9 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 void
 CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
 {
-    g_assert( ctx != NULL && ctx->_is_valid );
+    g_assert( ctx != nullptr && ctx->_is_valid );
 
-    if (mask == NULL)
+    if (mask == nullptr)
         return;
 
     // FIXME: the access to the first mask view to obtain the bbox is completely bogus

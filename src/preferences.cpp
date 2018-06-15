@@ -36,7 +36,7 @@ namespace Inkscape {
 static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib::ustring & errMsg );
 static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Document *to );
 
-static Inkscape::XML::Document *migrateFromDoc = 0;
+static Inkscape::XML::Document *migrateFromDoc = nullptr;
 
 // TODO clean up. Function copied from file.cpp:
 // what gets passed here is not actually an URI... it is an UTF-8 encoded filename (!)
@@ -46,10 +46,10 @@ static void file_add_recent(gchar const *uri)
         g_warning("file_add_recent: uri == NULL");
     } else {
         GtkRecentManager *recent = gtk_recent_manager_get_default();
-        gchar *fn = g_filename_from_utf8(uri, -1, NULL, NULL, NULL);
+        gchar *fn = g_filename_from_utf8(uri, -1, nullptr, nullptr, nullptr);
         if (fn) {
             if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
-                gchar *uriToAdd = g_filename_to_uri(fn, NULL, NULL);
+                gchar *uriToAdd = g_filename_to_uri(fn, nullptr, nullptr);
                 if (uriToAdd) {
                     gtk_recent_manager_add_item(recent, uriToAdd);
                     g_free(uriToAdd);
@@ -84,8 +84,8 @@ private:
 
 Preferences::Preferences() :
     _prefs_filename(""),
-    _prefs_doc(0),
-    _errorHandler(0),
+    _prefs_doc(nullptr),
+    _errorHandler(nullptr),
     _writable(false),
     _hasError(false)
 {
@@ -115,7 +115,7 @@ Preferences::~Preferences()
  */
 void Preferences::_loadDefaults()
 {
-    _prefs_doc = sp_repr_read_mem(preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
+    _prefs_doc = sp_repr_read_mem(preferences_skeleton, PREFERENCES_SKELETON_SIZE, nullptr);
 }
 
 /**
@@ -132,7 +132,7 @@ void Preferences::_load()
 
     // 1. Does the file exist?
     if (!g_file_test(_prefs_filename.c_str(), G_FILE_TEST_EXISTS)) {
-        char *_prefs_dir = Inkscape::IO::Resource::profile_path(NULL);
+        char *_prefs_dir = Inkscape::IO::Resource::profile_path(nullptr);
         // No - we need to create one.
         // Does the profile directory exist?
         if (!g_file_test(_prefs_dir, G_FILE_TEST_EXISTS)) {
@@ -147,7 +147,7 @@ void Preferences::_load()
                 return;
             }
             // create some subdirectories for user stuff
-            char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", NULL};
+            char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", nullptr};
             for (int i=0; user_dirs[i]; ++i) {
                 // XXX Why are we doing this here? shouldn't this be an IO load item?
                 char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);
@@ -165,7 +165,7 @@ void Preferences::_load()
             return;
         }
         // The profile dir exists and is valid.
-        if (!g_file_set_contents(_prefs_filename.c_str(), preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL)) {
+        if (!g_file_set_contents(_prefs_filename.c_str(), preferences_skeleton, PREFERENCES_SKELETON_SIZE, nullptr)) {
             // The write failed.
             //_reportError(Glib::ustring::compose(_("Failed to create the preferences file %1."),
             //    Glib::filename_to_utf8(_prefs_filename)), not_saved);
@@ -209,28 +209,28 @@ static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib
             Glib::filename_to_utf8(prefsFilename).c_str());
         errMsg = msg;
         g_free(msg);
-        return 0;
+        return nullptr;
     }
 
     // 3. Is the file readable?
-    gchar *prefs_xml = NULL; gsize len = 0;
-    if (!g_file_get_contents(prefsFilename.c_str(), &prefs_xml, &len, NULL)) {
+    gchar *prefs_xml = nullptr; gsize len = 0;
+    if (!g_file_get_contents(prefsFilename.c_str(), &prefs_xml, &len, nullptr)) {
         gchar *msg = g_strdup_printf(_("The preferences file %s could not be read."),
             Glib::filename_to_utf8(prefsFilename).c_str());
         errMsg = msg;
         g_free(msg);
-        return 0;
+        return nullptr;
     }
 
     // 4. Is it valid XML?
-    Inkscape::XML::Document *prefs_read = sp_repr_read_mem(prefs_xml, len, NULL);
+    Inkscape::XML::Document *prefs_read = sp_repr_read_mem(prefs_xml, len, nullptr);
     g_free(prefs_xml);
     if (!prefs_read) {
         gchar *msg = g_strdup_printf(_("The preferences file %s is not a valid XML document."),
             Glib::filename_to_utf8(prefsFilename).c_str());
         errMsg = msg;
         g_free(msg);
-        return 0;
+        return nullptr;
     }
 
     // 5. Basic sanity check: does the root element have a correct name?
@@ -240,7 +240,7 @@ static Inkscape::XML::Document *loadImpl( std::string const& prefsFilename, Glib
         errMsg = msg;
         g_free(msg);
         Inkscape::GC::release(prefs_read);
-        return 0;
+        return nullptr;
     }
 
     return prefs_read;
@@ -319,8 +319,8 @@ void Preferences::migrate( std::string const& legacyDir, std::string const& pref
                 Glib::ustring docId("documents");
                 Glib::ustring recentId("recent");
                 Inkscape::XML::Node *node = oldPrefs->root();
-                Inkscape::XML::Node *child = 0;
-                Inkscape::XML::Node *recentNode = 0;
+                Inkscape::XML::Node *child = nullptr;
+                Inkscape::XML::Node *recentNode = nullptr;
                 if (node->attribute("version")) {
                     node->setAttribute("version", "1");
                 }
@@ -349,13 +349,13 @@ void Preferences::migrate( std::string const& legacyDir, std::string const& pref
                 }
                 migrateFromDoc = oldPrefs;
                 //Inkscape::GC::release(oldPrefs);
-                oldPrefs = 0;
+                oldPrefs = nullptr;
             } else {
                 g_warning( "%s", errMsg.c_str() );
             }
         }
         g_free(oldPrefFile);
-        oldPrefFile = 0;
+        oldPrefFile = nullptr;
     }
 }
 
@@ -393,7 +393,7 @@ std::vector<Glib::ustring> Preferences::getAllDirs(Glib::ustring const &path)
     Inkscape::XML::Node *node = _getNode(path, false);
     if (node) {
         for (Inkscape::XML::NodeSiblingIterator i = node->firstChild(); i; ++i) {
-            if (i->attribute("id") == NULL) {
+            if (i->attribute("id") == nullptr) {
                 continue;
             }
             temp.push_back(path + '/' + i->attribute("id"));
@@ -510,11 +510,11 @@ void Preferences::remove(Glib::ustring const &pref_path)
     } else { //Handle to remove also attributes in path not only the container node
         // verify path
         g_assert( pref_path.at(0) == '/' );
-        if (_prefs_doc == NULL){
+        if (_prefs_doc == nullptr){
             return;
         }
         node = _prefs_doc->root();
-        Inkscape::XML::Node *child = NULL;
+        Inkscape::XML::Node *child = nullptr;
         gchar **splits = g_strsplit(pref_path.c_str(), "/", 0);
         if ( splits ) {
             for (int part_i = 0; splits[part_i]; ++part_i) {
@@ -523,7 +523,7 @@ void Preferences::remove(Glib::ustring const &pref_path)
                     continue;
                 }
                 if (!node->firstChild()) {
-                    node->setAttribute(splits[part_i], NULL);
+                    node->setAttribute(splits[part_i], nullptr);
                     g_strfreev(splits);
                     return;
                 }
@@ -553,7 +553,7 @@ public:
 
 Preferences::Observer::Observer(Glib::ustring const &path) :
     observed_path(path),
-    _data(0)
+    _data(nullptr)
 {
 }
 
@@ -656,7 +656,7 @@ void Preferences::removeObserver(Observer &o)
     if ( _observer_map.find(&o) != _observer_map.end() ) {
         Inkscape::XML::Node *node = o._data->_node;
         _ObserverData *priv_data = o._data;
-        o._data = 0;
+        o._data = nullptr;
 
         if (priv_data->_is_attr) {
             node->removeObserver( *(_observer_map[&o]) );
@@ -665,7 +665,7 @@ void Preferences::removeObserver(Observer &o)
         }
 
         delete priv_data;
-        priv_data = 0;
+        priv_data = nullptr;
         delete _observer_map[&o];
         _observer_map.erase(&o);
     }
@@ -690,11 +690,11 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
     // No longer necessary, can cause problems with input devices which have a dot in the name
     // g_assert( pref_key.find('.') == Glib::ustring::npos );
 
-    if (_prefs_doc == NULL){
-        return NULL;
+    if (_prefs_doc == nullptr){
+        return nullptr;
     }
     Inkscape::XML::Node *node = _prefs_doc->root();
-    Inkscape::XML::Node *child = NULL;
+    Inkscape::XML::Node *child = nullptr;
     gchar **splits = g_strsplit(pref_key.c_str(), "/", 0);
 
     if ( splits ) {
@@ -705,7 +705,7 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
             }
 
             for (child = node->firstChild(); child; child = child->next()) {
-                if (child->attribute("id") == NULL) {
+                if (child->attribute("id") == nullptr) {
                     continue;
                 }
                 if (!strcmp(splits[part_i], child->attribute("id"))) {
@@ -727,12 +727,12 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
                         node = child;
                     }
                     g_strfreev(splits);
-                    splits = 0;
+                    splits = nullptr;
                     return node;
                 } else {
                     g_strfreev(splits);
-                    splits = 0;
-                    return NULL;
+                    splits = nullptr;
+                    return nullptr;
                 }
             }
 
@@ -751,12 +751,12 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 
     // retrieve the attribute
     Inkscape::XML::Node *node = _getNode(node_key, false);
-    if ( node == NULL ) {
-        result = NULL;
+    if ( node == nullptr ) {
+        result = nullptr;
     } else {
         gchar const *attr = node->attribute(attr_key.c_str());
-        if ( attr == NULL ) {
-            result = NULL;
+        if ( attr == nullptr ) {
+            result = nullptr;
         } else {
             result = attr;
         }
@@ -802,7 +802,7 @@ int Preferences::_extractInt(Entry const &v)
 double Preferences::_extractDouble(Entry const &v)
 {
     gchar const *s = static_cast<gchar const *>(v._value);
-    return g_ascii_strtod(s, NULL);
+    return g_ascii_strtod(s, nullptr);
 }
 
 double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requested_unit)
@@ -909,11 +909,11 @@ void Preferences::unload(bool save)
             _instance->save();
         }
         delete _instance;
-        _instance = NULL;
+        _instance = nullptr;
     }
 }
 
-Preferences *Preferences::_instance = NULL;
+Preferences *Preferences::_instance = nullptr;
 
 
 } // namespace Inkscape

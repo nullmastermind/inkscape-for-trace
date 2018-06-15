@@ -163,7 +163,7 @@ cairo_pattern_t* SPMeshGradient::pattern_new(cairo_t * /*ct*/,
 
   this->ensureArray();
 
-  cairo_pattern_t *cp = NULL;
+  cairo_pattern_t *cp = nullptr;
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 11, 4)
   SPMeshNodeArray* my_array = &array;

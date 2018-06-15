@@ -55,12 +55,12 @@ public:
     }
 
 protected:
-    Anchored() : _anchor(NULL) { anchor(); } // initial refcount of one
+    Anchored() : _anchor(nullptr) { anchor(); } // initial refcount of one
     virtual ~Anchored() {}
 
 private:
     struct Anchor : public Managed<SCANNED, MANUAL> {
-        Anchor() : refcount(0),base(NULL) {}
+        Anchor() : refcount(0),base(nullptr) {}
         Anchor(Anchored const *obj) : refcount(0) {
             base = Core::base(const_cast<Anchored *>(obj));
         }

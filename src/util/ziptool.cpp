@@ -1588,7 +1588,7 @@ bool GzipFile::write()
     putByte(   8); //compression method
     putByte(0x08); //flags.  say we have a crc and file name
 
-    unsigned long ltime = (unsigned long) time(NULL);
+    unsigned long ltime = (unsigned long) time(nullptr);
     putLong(ltime);
 
     //xfl
@@ -2235,7 +2235,7 @@ ZipEntry *ZipFile::addFile(const std::string &fileName,
     if (!ze->readFile(fileName, comment))
         {
         delete ze;
-        return NULL;
+        return nullptr;
         }
     entries.push_back(ze);
     return ze;

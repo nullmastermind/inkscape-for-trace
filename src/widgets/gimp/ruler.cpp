@@ -241,7 +241,7 @@ sp_ruler_class_init (SPRulerClass *klass)
 
   gtk_widget_class_install_style_property (widget_class,
 		                           g_param_spec_double ("font-scale",
-						                NULL, NULL,
+						                nullptr, nullptr,
 								0.0,
 								G_MAXDOUBLE,
 								DEFAULT_RULER_FONT_SCALE,
@@ -262,7 +262,7 @@ sp_ruler_init (SPRuler *ruler)
   priv->position             = 0;
   priv->max_size             = 0;
 
-  priv->backing_store        = NULL;
+  priv->backing_store        = nullptr;
   priv->backing_store_valid  = FALSE;
 
   priv->last_pos_rect.x      = 0;
@@ -498,7 +498,7 @@ sp_ruler_unrealize(GtkWidget *widget)
   if (priv->backing_store)
     {
       cairo_surface_destroy (priv->backing_store);
-      priv->backing_store = NULL;
+      priv->backing_store = nullptr;
     }
 
   priv->backing_store_valid = FALSE;
@@ -506,13 +506,13 @@ sp_ruler_unrealize(GtkWidget *widget)
   if (priv->layout)
     {
       g_object_unref (priv->layout);
-      priv->layout = NULL;
+      priv->layout = nullptr;
     }
 
   if (priv->input_window)
     {
       gdk_window_destroy (priv->input_window);
-      priv->input_window = NULL;
+      priv->input_window = nullptr;
     }
 
   GTK_WIDGET_CLASS (sp_ruler_parent_class)->unrealize (widget);
@@ -577,7 +577,7 @@ sp_ruler_size_request (GtkWidget      *widget,
   gint             size;
 
   layout = sp_ruler_get_layout (widget, "0123456789");
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  pango_layout_get_pixel_extents (layout, &ink_rect, nullptr);
 
   size = 2 + ink_rect.height * 1.7;
 
@@ -617,7 +617,7 @@ sp_ruler_style_updated (GtkWidget *widget)
   if (priv->layout)
     {
      g_object_unref (priv->layout);
-     priv->layout = NULL;
+     priv->layout = nullptr;
     }
 }
 
@@ -773,7 +773,7 @@ sp_ruler_update_position (SPRuler *ruler,
   gdouble         upper;
 
   gtk_widget_get_allocation (GTK_WIDGET (ruler), &allocation);
-  sp_ruler_get_range (ruler, &lower, &upper, NULL);
+  sp_ruler_get_range (ruler, &lower, &upper, nullptr);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -827,7 +827,7 @@ gtk_widget_get_translation_to_window (GtkWidget *widget,
       *y += px;
     }
 
-  if (w == NULL)
+  if (w == nullptr)
     {
       *x = 0;
       *y = 0;
@@ -1031,7 +1031,7 @@ sp_ruler_set_position (SPRuler *ruler,
           priv->pos_redraw_idle_id =
             g_idle_add_full (G_PRIORITY_LOW,
                              sp_ruler_idle_queue_pos_redraw,
-                             ruler, NULL);
+                             ruler, nullptr);
         }
     }
 }
@@ -1087,7 +1087,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
     gint             text_size;
     gint             pos;
     gdouble          max_size;
-    Inkscape::Util::Unit const *unit = NULL;
+    Inkscape::Util::Unit const *unit = nullptr;
     SPRulerMetric    ruler_metric = ruler_metric_general; /* The metric to use for this unit system */
     PangoLayout     *layout;
     PangoRectangle   logical_rect, ink_rect;
@@ -1251,7 +1251,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                 if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
                   {
                     pango_layout_set_text (layout, unit_str, -1);
-                    pango_layout_get_extents (layout, &logical_rect, NULL);
+                    pango_layout_get_extents (layout, &logical_rect, nullptr);
 
                     cairo_move_to (cr,
                                    pos + 2,
@@ -1267,7 +1267,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                       {
                         digit_str[0] = unit_str[j];
                         pango_layout_set_text (layout, digit_str, 1);
-                        pango_layout_get_extents (layout, NULL, &logical_rect);
+                        pango_layout_get_extents (layout, nullptr, &logical_rect);
 
                         cairo_move_to (cr,
                                        border.left + 1,
@@ -1337,7 +1337,7 @@ sp_ruler_get_pos_rect (SPRuler *ruler,
       rect.width = rect.height / 2 + 1;
     }
 
-  sp_ruler_get_range (ruler, &lower, &upper, NULL);
+  sp_ruler_get_range (ruler, &lower, &upper, nullptr);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {

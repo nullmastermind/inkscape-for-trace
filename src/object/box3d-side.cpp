@@ -60,7 +60,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
 
     //Nulls might be possible if this called iteratively
     if ( !curve ) {
-        return NULL;
+        return nullptr;
     }
 
     char *d = sp_svg_write_path ( curve->get_pathvector() );
@@ -121,7 +121,7 @@ void Box3DSide::update(SPCtx* ctx, guint flags) {
 /* Create a new Box3DSide and append it to the parent box */
 Box3DSide * Box3DSide::createBox3DSide(SPBox3D *box)
 {
-	Box3DSide *box3d_side = 0;
+	Box3DSide *box3d_side = nullptr;
 	Inkscape::XML::Document *xml_doc = box->document->rdoc;
 	Inkscape::XML::Node *repr_side = xml_doc->createElement("svg:path");
 	repr_side->setAttribute("sodipodi:type", "inkscape:box3dside");
@@ -247,8 +247,8 @@ box3d_side_compute_corner_ids(Box3DSide *side, unsigned int corners[4]) {
 
 Persp3D *
 box3d_side_perspective(Box3DSide *side) {
-    SPBox3D *box = side ? dynamic_cast<SPBox3D *>(side->parent) : NULL;
-    return box ? box->persp_ref->getObject() : NULL;
+    SPBox3D *box = side ? dynamic_cast<SPBox3D *>(side->parent) : nullptr;
+    return box ? box->persp_ref->getObject() : nullptr;
 }
 
 Inkscape::XML::Node *box3d_side_convert_to_path(Box3DSide *side) {

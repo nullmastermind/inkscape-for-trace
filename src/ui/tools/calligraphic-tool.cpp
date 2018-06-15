@@ -96,12 +96,12 @@ CalligraphicTool::CalligraphicTool()
     , keep_selected(true)
     , hatch_spacing(0)
     , hatch_spacing_step(0)
-    , hatch_item(NULL)
-    , hatch_livarot_path(NULL)
+    , hatch_item(nullptr)
+    , hatch_livarot_path(nullptr)
     , hatch_last_nearest(Geom::Point(0,0))
     , hatch_last_pointer(Geom::Point(0,0))
     , hatch_escaped(false)
-    , hatch_area(NULL)
+    , hatch_area(nullptr)
     , just_started_drawing(false)
     , trace_bg(false)
 {
@@ -114,7 +114,7 @@ CalligraphicTool::CalligraphicTool()
 CalligraphicTool::~CalligraphicTool() {
     if (this->hatch_area) {
         sp_canvas_item_destroy(this->hatch_area);
-        this->hatch_area = NULL;
+        this->hatch_area = nullptr;
     }
 }
 
@@ -127,7 +127,7 @@ void CalligraphicTool::setup() {
     this->cal1 = new SPCurve();
     this->cal2 = new SPCurve();
 
-    this->currentshape = sp_canvas_item_new(this->desktop->getSketch(), SP_TYPE_CANVAS_BPATH, NULL);
+    this->currentshape = sp_canvas_item_new(this->desktop->getSketch(), SP_TYPE_CANVAS_BPATH, nullptr);
     sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->currentshape), DDC_RED_RGBA, SP_WIND_RULE_EVENODD);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->currentshape), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
@@ -434,7 +434,7 @@ void CalligraphicTool::cancel() {
 	this->clear_current();
 
 	if (this->repr) {
-		this->repr = NULL;
+		this->repr = nullptr;
 	}
 }
 
@@ -451,7 +451,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->accumulated->reset();
 
                 if (this->repr) {
-                    this->repr = NULL;
+                    this->repr = nullptr;
                 }
 
                 /* initialize first point */
@@ -462,7 +462,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                                       GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
                                       GDK_BUTTON_PRESS_MASK ),
-                                    NULL,
+                                    nullptr,
                                     event->button.time);
 
                 ret = TRUE;
@@ -750,7 +750,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
             this->clear_current();
             if (this->repr) {
-                this->repr = NULL;
+                this->repr = nullptr;
             }
 
             if (!this->hatch_pointer_past.empty()) this->hatch_pointer_past.clear();
@@ -760,8 +760,8 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
             this->hatch_last_nearest = Geom::Point(0,0);
             this->hatch_last_pointer = Geom::Point(0,0);
             this->hatch_escaped = false;
-            this->hatch_item = NULL;
-            this->hatch_livarot_path = NULL;
+            this->hatch_item = nullptr;
+            this->hatch_livarot_path = nullptr;
             this->just_started_drawing = false;
 
             if (this->hatch_spacing != 0 && !this->keep_selected) {
@@ -891,7 +891,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
 void CalligraphicTool::clear_current() {
     /* reset bpath */
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), NULL);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), nullptr);
     /* reset curve */
     this->currentcurve->reset();
     this->cal1->reset();
@@ -920,7 +920,7 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 
         Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
         gchar *str = sp_svg_write_path(pathv);
-        g_assert( str != NULL );
+        g_assert( str != nullptr );
         this->repr->setAttribute("d", str);
         g_free(str);
 
@@ -942,19 +942,19 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
         // Either there was no boolean op or it failed.
         SPItem *result = SP_ITEM(desktop->doc()->getObjectByRepr(this->repr));
 
-        if (result == NULL) {
+        if (result == nullptr) {
             // The boolean operation succeeded.
             // Now we fetch the single item, that has been set as selected by the boolean op.
             // This is its result.
             result = desktop->getSelection()->singleItem();
         }
-        result->doWriteTransform(result->transform, NULL, true);
+        result->doWriteTransform(result->transform, nullptr, true);
     } else {
         if (this->repr) {
             sp_repr_unparent(this->repr);
         }
 
-        this->repr = NULL;
+        this->repr = nullptr;
     }
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_CALLIGRAPHIC,
@@ -1128,7 +1128,7 @@ void CalligraphicTool::fit_and_split(bool release) {
 
             SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(),
                                                    SP_TYPE_CANVAS_BPATH,
-                                                   NULL);
+                                                   nullptr);
             SPCurve *curve = this->currentcurve->copy();
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
             curve->unref();

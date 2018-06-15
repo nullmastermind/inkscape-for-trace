@@ -39,7 +39,7 @@ protected:
 
 public:
 	Snow ( ) : Filter() { };
-	~Snow ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+	~Snow ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
 public:
 	static void init (void) {
@@ -65,7 +65,7 @@ public:
 gchar const *
 Snow::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-	if (_filter != NULL) g_free((void *)_filter);
+	if (_filter != nullptr) g_free((void *)_filter);
 
         std::ostringstream drift;
         drift << ext->get_param_float("drift");

@@ -90,7 +90,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -114,7 +114,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
             if (gtk_adjustment_get_value(adj) != 0) {
                 (SP_RECT(*i)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
             } else {
-                (*i)->getRepr()->setAttribute(value_name, NULL);
+                (*i)->getRepr()->setAttribute(value_name, nullptr);
             }
             modmade = true;
         }
@@ -154,7 +154,7 @@ static void sp_rtb_height_value_changed(GtkAdjustment *adj, GObject *tbl)
 
 static void sp_rtb_defaults( GtkWidget * /*widget*/, GObject *obj)
 {
-    GtkAdjustment *adj = 0;
+    GtkAdjustment *adj = nullptr;
 
     adj = GTK_ADJUSTMENT( g_object_get_data(obj, "rx") );
     gtk_adjustment_set_value(adj, 0.0);
@@ -190,7 +190,7 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
 
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     gpointer item = g_object_get_data( tbl, "item" );
     if (item && SP_IS_RECT(item)) {
@@ -230,11 +230,11 @@ static void rect_tb_event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar con
 
 
 static Inkscape::XML::NodeEventVector rect_tb_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     rect_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 /**
@@ -243,11 +243,11 @@ static Inkscape::XML::NodeEventVector rect_tb_repr_events = {
 static void sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
 {
     int n_selected = 0;
-    Inkscape::XML::Node *repr = NULL;
-    SPItem *item = NULL;
+    Inkscape::XML::Node *repr = nullptr;
+    SPItem *item = nullptr;
 
     if ( g_object_get_data( tbl, "repr" ) ) {
-        g_object_set_data( tbl, "item", NULL );
+        g_object_set_data( tbl, "item", nullptr );
     }
     purge_repr_listener( tbl, tbl );
 
@@ -300,11 +300,11 @@ static void rect_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 
 void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
-        EgeOutputAction* act = ege_output_action_new( "RectStateAction", _("<b>New:</b>"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "RectStateAction", _("<b>New:</b>"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "mode_action", act );
@@ -319,7 +319,7 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* W */
     {
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "RectWidthAction",
                                          _("Width"), _("W:"), _("Width of rectangle"),
@@ -335,12 +335,12 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* H */
     {
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "RectHeightAction",
                                          _("Height"), _("H:"), _("Height of rectangle"),
                                          "/tools/shapes/rect/height", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_height_value_changed, tracker);
@@ -351,12 +351,12 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* rx */
     {
-        gchar const* labels[] = {_("not rounded"), 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
         eact = create_adjustment_action( "RadiusXAction",
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
                                          "/tools/shapes/rect/rx", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_rx_value_changed, tracker);
@@ -365,12 +365,12 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* ry */
     {
-        gchar const* labels[] = {_("not rounded"), 0, 0, 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
         eact = create_adjustment_action( "RadiusYAction",
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
                                          "/tools/shapes/rect/ry", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_rtb_ry_value_changed, tracker);
@@ -419,7 +419,7 @@ static void rect_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
     } else {
         if (changed) {
             changed.disconnect();
-            purge_repr_listener(NULL, holder);
+            purge_repr_listener(nullptr, holder);
         }
     }
 }

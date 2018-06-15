@@ -63,7 +63,7 @@ static void ink_action_class_init( InkActionClass* klass )
 static void ink_action_init( InkAction* action )
 {
     action->private_data = INK_ACTION_GET_PRIVATE( action );
-    action->private_data->iconId = 0;
+    action->private_data->iconId = nullptr;
     action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 

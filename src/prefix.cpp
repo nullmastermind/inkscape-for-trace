@@ -223,7 +223,7 @@ GPrivate* br_thread_key = (GPrivate *)NULL;
 
 #else /* !BR_THREADS */
 
-static char *br_last_value = (char*)NULL;
+static char *br_last_value = (char*)nullptr;
 
 static void
 br_free_last_value ()
@@ -316,10 +316,10 @@ br_strcat (const char *str1, const char *str2)
 static char *
 br_strndup (char *str, size_t size)
 {
-    char *result = (char*)NULL;
+    char *result = (char*)nullptr;
     size_t len;
 
-    br_return_val_if_fail (str != (char*)NULL, (char*)NULL);
+    br_return_val_if_fail (str != (char*)nullptr, (char*)nullptr);
 
     len = strlen (str);
     if (!len) return strdup ("");
@@ -348,7 +348,7 @@ br_extract_dir (const char *path)
     const char *end;
     char *result;
 
-    br_return_val_if_fail (path != (char*)NULL, (char*)NULL);
+    br_return_val_if_fail (path != (char*)nullptr, (char*)nullptr);
 
     end = strrchr (path, '/');
     if (!end) return strdup (".");
@@ -384,7 +384,7 @@ br_extract_prefix (const char *path)
     const char *end;
     char *tmp, *result;
 
-    br_return_val_if_fail (path != (char*)NULL, (char*)NULL);
+    br_return_val_if_fail (path != (char*)nullptr, (char*)nullptr);
 
     if (!*path) return strdup ("/");
     end = strrchr (path, '/');

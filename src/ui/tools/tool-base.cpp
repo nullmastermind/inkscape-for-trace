@@ -99,21 +99,21 @@ SPDesktop const& ToolBase::getDesktop() const {
 }
 
 ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
-    : pref_observer(NULL)
-    , cursor(NULL)
+    : pref_observer(nullptr)
+    , cursor(nullptr)
     , xp(0)
     , yp(0)
     , tolerance(0)
     , within_tolerance(false)
-    , item_to_select(NULL)
-    , message_context(NULL)
-    , _selcue(NULL)
-    , _grdrag(NULL)
-    , shape_editor(NULL)
+    , item_to_select(nullptr)
+    , message_context(nullptr)
+    , _selcue(nullptr)
+    , _grdrag(nullptr)
+    , shape_editor(nullptr)
     , space_panning(false)
-    , _delayed_snap_event(NULL)
+    , _delayed_snap_event(nullptr)
     , _dse_callback_in_process(false)
-    , desktop(NULL)
+    , desktop(nullptr)
     , _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
 {
@@ -125,7 +125,7 @@ ToolBase::~ToolBase() {
     }
 
     if (this->desktop) {
-        this->desktop = NULL;
+        this->desktop = nullptr;
     }
 
     if (this->pref_observer) {
@@ -388,7 +388,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
                                 | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
                         event->button.time - 1);
 
                 ret = TRUE;
@@ -408,7 +408,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                      GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
                                      GDK_BUTTON_RELEASE_MASK |
                                      GDK_POINTER_MOTION_MASK,
-                                     NULL, event->button.time );
+                                     nullptr, event->button.time );
                 // sp_canvas_item_hide (desktop->drawing);
 
             } else if (event->button.state & GDK_SHIFT_MASK) {
@@ -423,7 +423,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
                                     GDK_POINTER_MOTION_HINT_MASK,
-                                    NULL, event->button.time - 1);
+                                    nullptr, event->button.time - 1);
 
             }
 
@@ -440,12 +440,12 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
                         event->button.time);
 
                 ret = TRUE;
             } else {
-                sp_event_root_menu_popup(desktop, NULL, event);
+                sp_event_root_menu_popup(desktop, nullptr, event);
             }
             break;
 
@@ -465,7 +465,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                         GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
                                 | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                                | GDK_POINTER_MOTION_HINT_MASK, nullptr,
                         event->motion.time - 1);
             }
 
@@ -625,7 +625,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_F4:
             /* Close view */
             if (MOD__CTRL_ONLY(event)) {
-                sp_ui_close_view(NULL);
+                sp_ui_close_view(nullptr);
                 ret = TRUE;
             }
             break;
@@ -691,13 +691,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_Menu:
-            sp_event_root_menu_popup(desktop, NULL, event);
+            sp_event_root_menu_popup(desktop, nullptr, event);
             ret = TRUE;
             break;
 
         case GDK_KEY_F10:
             if (MOD__SHIFT_ONLY(event)) {
-                sp_event_root_menu_popup(desktop, NULL, event);
+                sp_event_root_menu_popup(desktop, nullptr, event);
                 ret = TRUE;
             }
             break;
@@ -935,7 +935,7 @@ void ToolBase::enableSelectionCue(bool enable) {
         }
     } else {
         delete _selcue;
-        _selcue = NULL;
+        _selcue = nullptr;
     }
 }
 
@@ -950,7 +950,7 @@ void ToolBase::enableGrDrag(bool enable) {
     } else {
         if (_grdrag) {
             delete _grdrag;
-            _grdrag = NULL;
+            _grdrag = nullptr;
         }
     }
 }
@@ -972,9 +972,9 @@ bool ToolBase::deleteSelectedDrag(bool just_one) {
  * Calls virtual set() function of ToolBase.
  */
 void sp_event_context_read(ToolBase *ec, gchar const *key) {
-    g_return_if_fail(ec != NULL);
+    g_return_if_fail(ec != nullptr);
     g_return_if_fail(SP_IS_EVENT_CONTEXT(ec));
-    g_return_if_fail(key != NULL);
+    g_return_if_fail(key != nullptr);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Inkscape::Preferences::Entry val = prefs->getEntry(ec->pref_observer->observed_path + '/' + key);
@@ -993,7 +993,7 @@ gint sp_event_context_root_handler(ToolBase * event_context,
 
     switch (event->type) {
     case GDK_MOTION_NOTIFY:
-        sp_event_context_snap_delay_handler(event_context, NULL, NULL,
+        sp_event_context_snap_delay_handler(event_context, nullptr, nullptr,
                 (GdkEventMotion *) event,
                 DelayedSnapEvent::EVENTCONTEXT_ROOT_HANDLER);
         break;
@@ -1048,7 +1048,7 @@ gint sp_event_context_item_handler(ToolBase * event_context,
 
     switch (event->type) {
     case GDK_MOTION_NOTIFY:
-        sp_event_context_snap_delay_handler(event_context, (gpointer) item, NULL, (GdkEventMotion *) event, DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER);
+        sp_event_context_snap_delay_handler(event_context, (gpointer) item, nullptr, (GdkEventMotion *) event, DelayedSnapEvent::EVENTCONTEXT_ITEM_HANDLER);
         break;
     case GDK_BUTTON_RELEASE:
         if (event_context && event_context->_delayed_snap_event) {
@@ -1205,7 +1205,7 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
     gdk_keymap_translate_keyboard_state(
             Gdk::Display::get_default()->get_keymap(),
             event->hardware_keycode, (GdkModifierType) event->state, group,
-            &keyval, NULL, NULL, &modifiers);
+            &keyval, nullptr, nullptr, &modifiers);
 
     if (consumed_modifiers) {
         *consumed_modifiers = modifiers;
@@ -1222,18 +1222,18 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
 SPItem *sp_event_context_find_item(SPDesktop *desktop, Geom::Point const &p,
                                    bool select_under, bool into_groups)
 {
-    SPItem *item = 0;
+    SPItem *item = nullptr;
 
     if (select_under) {
         auto tmp = desktop->selection->items();
         std::vector<SPItem *> vec(tmp.begin(), tmp.end());
         SPItem *selected_at_point = desktop->getItemFromListAtPointBottom(vec, p);
         item = desktop->getItemAtPoint(p, into_groups, selected_at_point);
-        if (item == NULL) { // we may have reached bottom, flip over to the top
-            item = desktop->getItemAtPoint(p, into_groups, NULL);
+        if (item == nullptr) { // we may have reached bottom, flip over to the top
+            item = desktop->getItemAtPoint(p, into_groups, nullptr);
         }
     } else {
-        item = desktop->getItemAtPoint(p, into_groups, NULL);
+        item = desktop->getItemAtPoint(p, into_groups, nullptr);
     }
 
     return item;
@@ -1327,14 +1327,14 @@ void sp_event_context_snap_delay_handler(ToolBase *ec,
                 // But if we're really standing still, then we should snap now. We could use some low-pass filtering,
                 // otherwise snapping occurs for each jitter movement. For this filtering we'll leave the watchdog to expire,
                 // snap, and set a new watchdog again.
-                if (ec->_delayed_snap_event == NULL) { // no watchdog has been set
+                if (ec->_delayed_snap_event == nullptr) { // no watchdog has been set
                     // it might have already expired, so we'll set a new one; the snapping frequency will be limited this way
                     ec->_delayed_snap_event = new DelayedSnapEvent(ec, dse_item, dse_item2, event, origin);
                 } // else: watchdog has been set before and we'll wait for it to expire
             }
         } else {
             // This is the first GDK_MOTION_NOTIFY event, so postpone snapping and set the watchdog
-            g_assert(ec->_delayed_snap_event == NULL);
+            g_assert(ec->_delayed_snap_event == nullptr);
             ec->_delayed_snap_event = new DelayedSnapEvent(ec, dse_item, dse_item2, event, origin);
         }
 
@@ -1351,19 +1351,19 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
     // Snap NOW! For this the "postponed" flag will be reset and the last motion event will be repeated
     DelayedSnapEvent *dse = reinterpret_cast<DelayedSnapEvent*> (data);
 
-    if (dse == NULL) {
+    if (dse == nullptr) {
         // This might occur when this method is called directly, i.e. not through the timer
         // E.g. on GDK_BUTTON_RELEASE in sp_event_context_root_handler()
         return FALSE;
     }
 
     ToolBase *ec = dse->getEventContext();
-    if (ec == NULL) {
+    if (ec == nullptr) {
         delete dse;
         return false;
     }
-    if (ec->desktop == NULL) {
-        ec->_delayed_snap_event = NULL;
+    if (ec->desktop == nullptr) {
+        ec->_delayed_snap_event = nullptr;
         delete dse;
         return false;
     }
@@ -1399,7 +1399,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         gpointer pitem2 = dse->getItem2();
         if (!pitem2)
         {
-            ec->_delayed_snap_event = NULL;
+            ec->_delayed_snap_event = nullptr;
             delete dse;
             return false;
         }
@@ -1448,7 +1448,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         break;
     }
 
-    ec->_delayed_snap_event = NULL;
+    ec->_delayed_snap_event = nullptr;
     delete dse;
 
     ec->_dse_callback_in_process = false;
@@ -1458,7 +1458,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
 
 void sp_event_context_discard_delayed_snap_event(ToolBase *ec) {
     delete ec->_delayed_snap_event;
-    ec->_delayed_snap_event = NULL;
+    ec->_delayed_snap_event = nullptr;
     ec->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
 }
 

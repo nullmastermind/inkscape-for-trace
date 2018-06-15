@@ -99,7 +99,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 {
     static bool clicked = false;
     static bool dragged = false;
-    static SPCanvasItem *guide = NULL;
+    static SPCanvasItem *guide = nullptr;
     static Geom::Point normal;
     int wx, wy;
     static gint xp = 0, yp = 0; // where drag started
@@ -110,8 +110,8 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
     gint width, height;
 
     auto device = gdk_event_get_device(event);
-    gdk_window_get_device_position(window, device, &wx, &wy, NULL);
-    gdk_window_get_geometry(window, NULL /*x*/, NULL /*y*/, &width, &height);
+    gdk_window_get_device_position(window, device, &wx, &wy, nullptr);
+    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
     
     Geom::Point const event_win(wx, wy);
 
@@ -164,7 +164,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     }
                 }
 
-                guide = sp_guideline_new(desktop->guides, NULL, event_dt, normal);
+                guide = sp_guideline_new(desktop->guides, nullptr, event_dt, normal);
                 sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
 
                 auto window = gtk_widget_get_window(widget);
@@ -175,10 +175,10 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                               window,
                               GDK_SEAT_CAPABILITY_ALL_POINTING,
                               FALSE,
-                              NULL,
+                              nullptr,
                               event,
-                              NULL,
-                              NULL);
+                              nullptr,
+                              nullptr);
 #else
                 gdk_device_grab(device,
                                 window,
@@ -237,7 +237,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 }
 
                 sp_canvas_item_destroy(guide);
-                guide = NULL;
+                guide = nullptr;
                 if ((horiz ? wy : wx) >= 0) {
                     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
                     Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
@@ -347,7 +347,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                         ( GDK_BUTTON_RELEASE_MASK  |
                                           GDK_BUTTON_PRESS_MASK    |
                                           GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK ),
-                                        NULL,
+                                        nullptr,
                                         event->button.time);
                 }
                 ret = TRUE;
@@ -364,7 +364,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 // This is for snapping while dragging existing guidelines. New guidelines,
                 // which are dragged off the ruler, are being snapped in sp_dt_ruler_event
                 SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop, true, NULL, NULL, guide);
+                m.setup(desktop, true, nullptr, nullptr, guide);
                 if (drag_type == SP_DRAG_MOVE_ORIGIN) {
                     // If we snap in guideConstrainedSnap() below, then motion_dt will
                     // be forced to be on the guide. If we don't snap however, then
@@ -445,7 +445,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     Geom::Point event_dt(desktop->w2d(event_w));
 
                     SnapManager &m = desktop->namedview->snap_manager;
-                    m.setup(desktop, true, NULL, NULL, guide);
+                    m.setup(desktop, true, nullptr, nullptr, guide);
                     if (drag_type == SP_DRAG_MOVE_ORIGIN) {
                         // If we snap in guideConstrainedSnap() below, then motion_dt will
                         // be forced to be on the guide. If we don't snap however, then

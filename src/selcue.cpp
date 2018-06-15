@@ -87,7 +87,7 @@ void Inkscape::SelCue::_updateItemBboxes(Inkscape::Preferences *prefs)
         return;
     }
 
-    g_return_if_fail(_selection != NULL);
+    g_return_if_fail(_selection != nullptr);
 
     int prefs_bbox = prefs->getBool("/tools/bounding_box");
 
@@ -142,7 +142,7 @@ void Inkscape::SelCue::_newItemBboxes()
         return;
     }
 
-    g_return_if_fail(_selection != NULL);
+    g_return_if_fail(_selection != nullptr);
 
     int prefs_bbox = prefs->getBool("/tools/bounding_box");
     
@@ -153,7 +153,7 @@ void Inkscape::SelCue::_newItemBboxes()
         Geom::OptRect const b = (prefs_bbox == 0) ?
             item->desktopVisualBounds() : item->desktopGeometricBounds();
 
-        SPCanvasItem* box = NULL;
+        SPCanvasItem* box = nullptr;
 
         if (b) {
             if (mode == MARK) {
@@ -175,7 +175,7 @@ void Inkscape::SelCue::_newItemBboxes()
             } else if (mode == BBOX) {
                 box = sp_canvas_item_new(_desktop->getControls(),
                                          SP_TYPE_CTRLRECT,
-                                         NULL);
+                                         nullptr);
 
                 SP_CTRLRECT(box)->setRectangle(*b);
                 SP_CTRLRECT(box)->setColor(0x000000a0, 0, 0);
@@ -205,10 +205,10 @@ void Inkscape::SelCue::_newTextBaselines()
     for (auto l=ll.begin();l!=ll.end();++l) {
         SPItem *item = *l;
 
-        SPCanvasItem* baseline_point = NULL;
+        SPCanvasItem* baseline_point = nullptr;
         if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline
             Inkscape::Text::Layout const *layout = te_get_layout(item);
-            if (layout != NULL && layout->outputExists()) {
+            if (layout != nullptr && layout->outputExists()) {
                 boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
                     baseline_point = sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRL,
@@ -240,7 +240,7 @@ void Inkscape::SelCue::_boundingBoxPrefsChanged(int prefs_bbox)
         return;
     }
 
-    g_return_if_fail(_selection != NULL);
+    g_return_if_fail(_selection != nullptr);
 
     _updateItemBboxes(mode, prefs_bbox);
 }

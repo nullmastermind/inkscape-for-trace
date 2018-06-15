@@ -70,7 +70,7 @@ using Inkscape::UI::Tools::NodeTool;
  * Will go away during tool refactoring. */
 static NodeTool *get_node_tool()
 {
-    NodeTool *tool = 0;
+    NodeTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
@@ -231,7 +231,7 @@ static void sp_node_toolbox_coord_changed(gpointer /*shape_editor*/, GObject *tb
         return;
     }
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     NodeTool *nt = get_node_tool();
     if (!nt || !(nt->_selected_nodes) ||nt->_selected_nodes->empty()) {
@@ -348,10 +348,10 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         g_object_set( INK_ACTION(inky), "short_label", _("Insert"), NULL );
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        GtkToolItem *menu_tool_button = gtk_menu_tool_button_new (NULL, NULL);
+        GtkToolItem *menu_tool_button = gtk_menu_tool_button_new (nullptr, nullptr);
         gtk_activatable_set_related_action (GTK_ACTIVATABLE (menu_tool_button), GTK_ACTION(inky));
         // also create dummy menu action:
-        gtk_action_group_add_action( mainActions, gtk_action_new("NodeInsertActionMenu", NULL, NULL, NULL) );
+        gtk_action_group_add_action( mainActions, gtk_action_new("NodeInsertActionMenu", nullptr, nullptr, nullptr) );
     }
 
     {
@@ -577,8 +577,8 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* X coord of selected node(s) */
     {
-        EgeAdjustmentAction* eact = 0;
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        EgeAdjustmentAction* eact = nullptr;
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "NodeXAction",
                                          _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
@@ -594,13 +594,13 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* Y coord of selected node(s) */
     {
-        EgeAdjustmentAction* eact = 0;
-        gchar const* labels[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        EgeAdjustmentAction* eact = nullptr;
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
         eact = create_adjustment_action( "NodeYAction",
                                          _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
                                          "/tools/nodes/Ycoord", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_node_path_y_value_changed, tracker );

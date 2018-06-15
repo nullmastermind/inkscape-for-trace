@@ -187,7 +187,7 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View
     SPDocument * current_document = view->doc();
 
     auto selected = ((SPDesktop *) view)->getSelection()->items();
-    Inkscape::XML::Node * first_select = NULL;
+    Inkscape::XML::Node * first_select = nullptr;
     if (!selected.empty()) {
         first_select = selected.front()->getRepr();
     }

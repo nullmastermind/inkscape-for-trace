@@ -89,7 +89,7 @@ bool PrintMetafile::_load_ppt_fontfix_data()   //this is not called by any other
         return (ppt_fontfix_available = false);
     }
 
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
     std::string instr;
@@ -271,7 +271,7 @@ void PrintMetafile::hatch_classify(char *name, int *hatchType, U_COLORREF *hatch
 void PrintMetafile::brush_classify(SPObject *parent, int depth, Inkscape::Pixbuf **epixbuf, int *hatchType, U_COLORREF *hatchColor, U_COLORREF *bkColor)
 {
     if (depth == 0) {
-        *epixbuf    = NULL;
+        *epixbuf    = nullptr;
         *hatchType  = -1;
         *hatchColor = U_RGB(0, 0, 0);
         *bkColor    = U_RGB(255, 255, 255);
@@ -279,7 +279,7 @@ void PrintMetafile::brush_classify(SPObject *parent, int depth, Inkscape::Pixbuf
     depth++;
     // first look along the pattern chain, if there is one
     if (SP_IS_PATTERN(parent)) {
-        for (SPPattern *pat_i = SP_PATTERN(parent); pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+        for (SPPattern *pat_i = SP_PATTERN(parent); pat_i != nullptr; pat_i = pat_i->ref ? pat_i->ref->getObject() : nullptr) {
             if (SP_IS_IMAGE(pat_i)) {
                 *epixbuf = ((SPImage *)pat_i)->pixbuf;
                 return;

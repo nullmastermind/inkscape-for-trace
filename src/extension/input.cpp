@@ -38,21 +38,21 @@ namespace Extension {
 */
 Input::Input (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
 {
-    mimetype = NULL;
-    extension = NULL;
-    filetypename = NULL;
-    filetypetooltip = NULL;
-    output_extension = NULL;
+    mimetype = nullptr;
+    extension = nullptr;
+    filetypename = nullptr;
+    filetypetooltip = nullptr;
+    output_extension = nullptr;
 
-    if (repr != NULL) {
+    if (repr != nullptr) {
         Inkscape::XML::Node * child_repr;
 
         child_repr = repr->firstChild();
 
-        while (child_repr != NULL) {
+        while (child_repr != nullptr) {
             if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "input")) {
                 child_repr = child_repr->firstChild();
-                while (child_repr != NULL) {
+                while (child_repr != nullptr) {
                     char const * chname = child_repr->name();
 					if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
 						chname += strlen(INKSCAPE_EXTENSION_NS);
@@ -119,9 +119,9 @@ Input::~Input (void)
 bool
 Input::check (void)
 {
-    if (extension == NULL)
+    if (extension == nullptr)
         return FALSE;
-    if (mimetype == NULL)
+    if (mimetype == nullptr)
         return FALSE;
 
     return Extension::check();
@@ -144,7 +144,7 @@ Input::open (const gchar *uri)
         set_state(Extension::STATE_LOADED);
     }
     if (!loaded()) {
-        return NULL;
+        return nullptr;
     }
     timer->touch();
 
@@ -184,7 +184,7 @@ Input::get_extension(void)
 gchar *
 Input::get_filetypename(void)
 {
-    if (filetypename != NULL)
+    if (filetypename != nullptr)
         return filetypename;
     else
         return get_name();
@@ -218,7 +218,7 @@ Input::prefs (const gchar *uri)
 
     Gtk::Widget * controls;
     controls = imp->prefs_input(this, uri);
-    if (controls == NULL) {
+    if (controls == nullptr) {
         // std::cout << "No preferences for Input" << std::endl;
         return true;
     }

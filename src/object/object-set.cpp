@@ -21,7 +21,7 @@
 namespace Inkscape {
 
 bool ObjectSet::add(SPObject* object, bool nosignal) {
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
     // any ancestor is in the set - do nothing
@@ -43,7 +43,7 @@ bool ObjectSet::add(SPObject* object, bool nosignal) {
 }
 
 bool ObjectSet::remove(SPObject* object) {
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
     // object is the top of subtree
@@ -65,7 +65,7 @@ bool ObjectSet::remove(SPObject* object) {
 }
 
 bool ObjectSet::includes(SPObject *object) {
-    g_return_val_if_fail(object != NULL, false);
+    g_return_val_if_fail(object != nullptr, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
     return _container.get<hashed>().find(object) != _container.get<hashed>().end();
@@ -206,7 +206,7 @@ SPItem *ObjectSet::largestItem(CompareSize compare) {
 SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
     auto items = this->items();
     gdouble max = sml ? 1e18 : 0;
-    SPItem *ist = NULL;
+    SPItem *ist = nullptr;
 
     for (auto i = items.begin(); i != items.end(); ++i) {
         Geom::OptRect obox = SP_ITEM(*i)->documentPreferredBounds();

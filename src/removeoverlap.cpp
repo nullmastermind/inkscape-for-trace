@@ -32,7 +32,7 @@ struct Record {
     Geom::Point midpoint;
     Rectangle * vspc_rect;
 
-    Record() : item(0), vspc_rect(0) {}
+    Record() : item(nullptr), vspc_rect(nullptr) {}
     Record(SPItem * i, Geom::Point m, Rectangle * r)
         : item(i), midpoint(m), vspc_rect(r) {}
 };

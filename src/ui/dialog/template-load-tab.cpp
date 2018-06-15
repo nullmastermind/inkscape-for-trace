@@ -184,7 +184,7 @@ void TemplateLoadTab::_refreshTemplatesList()
     }
 
     // reselect item
-    Gtk::TreeIter* item_to_select = NULL;
+    Gtk::TreeIter* item_to_select = nullptr;
     for (Gtk::TreeModel::Children::iterator it = _tlist_store->children().begin(); it != _tlist_store->children().end(); ++it) {
         Gtk::TreeModel::Row row = *it;
         if (_current_template == row[_columns.textValue]) {
@@ -244,7 +244,7 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::s
 
         myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
 
-        if (myRoot == NULL)    // No template info
+        if (myRoot == nullptr)    // No template info
             return result;
         _getDataFromNode(myRoot, result);
     }
@@ -281,20 +281,20 @@ void TemplateLoadTab::_getProceduralTemplates()
 void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateData &data)
 {
     Inkscape::XML::Node *currentData;
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != nullptr)
         data.display_name = _(currentData->firstChild()->content());
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != nullptr)
         data.author = currentData->firstChild()->content();
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != nullptr)
         data.short_description = _( currentData->firstChild()->content());
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_long") )!= nullptr)
         data.long_description = _(currentData->firstChild()->content());
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != nullptr)
         data.preview_name = currentData->firstChild()->content();
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != NULL)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != nullptr)
         data.creation_date = currentData->firstChild()->content();
 
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != NULL){
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != nullptr){
         Glib::ustring tplKeywords = _(currentData->firstChild()->content());
         while (!tplKeywords.empty()){
             std::size_t pos = tplKeywords.find_first_of(" ");

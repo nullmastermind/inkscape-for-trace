@@ -249,7 +249,7 @@ void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char con
 Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
 {
     Gtk::Image *iconWidget = nullptr;
-    const char* label = 0;
+    const char* label = nullptr;
 
     if ( iconName ) {
         iconWidget = Gtk::manage(new Gtk::Image());
@@ -327,7 +327,7 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
             //Clear the tree store
             _store->clear();
             //Add all items recursively
-            _addObject( root, 0 );
+            _addObject( root, nullptr );
             _selectedConnection.unblock();
             _documentChangedCurrentLayer.unblock();
             //Set the tree selection
@@ -350,7 +350,7 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
             if (SP_IS_ITEM(&child))
             {
                 SPItem * item = SP_ITEM(&child);
-                SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : 0;
+                SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : nullptr;
                 
                 //Add the item to the tree and set the column information
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
@@ -426,8 +426,8 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
     if ( obj == row[_model->_colObject] )
     {
         //We found our item in the tree!!  Update it!
-        SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : 0;
-        SPGroup * group = SP_IS_GROUP(obj) ? SP_GROUP(obj) : 0;
+        SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
+        SPGroup * group = SP_IS_GROUP(obj) ? SP_GROUP(obj) : nullptr;
         
         row[_model->_colLabel] = obj->label() ? obj->label() : obj->getId();
         row[_model->_colVisible] = item ? !item->isHidden() : false;
@@ -488,7 +488,7 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     bool setOpacity = true;
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
-    SPItem *item = NULL;
+    SPItem *item = nullptr;
     auto items = sel->items();
     for(auto i=items.begin(); i!=items.end(); ++i){
         item = *i;
@@ -526,8 +526,8 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     opacity *= 100; // Display in percent.
     _filter_modifier.set_opacity_value(opacity);
 
-    SPFeBlend *spblend = NULL;
-    SPGaussianBlur *spblur = NULL;
+    SPFeBlend *spblend = nullptr;
+    SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
 
         for (auto& primitive_obj: item->style->getFilter()->children) {
@@ -750,7 +750,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         case GDK_KEY_KP_Enter:
         {
             Gtk::TreeModel::Path path;
-            Gtk::TreeViewColumn *focus_column = 0;
+            Gtk::TreeViewColumn *focus_column = nullptr;
 
             _tree.get_cursor(path, focus_column);
             if (focus_column == _name_column && !_text_renderer->property_editable()) {
@@ -804,7 +804,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     if ( (event->type == GDK_BUTTON_PRESS) && (event->button == 1)) {
         overVisible = false;
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -839,7 +839,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     if ( (event->type == GDK_BUTTON_RELEASE) && (event->button == 1)) {
 
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -982,7 +982,7 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
     if ( event->type == GDK_BUTTON_RELEASE && doubleclick) {
         doubleclick = 0;
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -1023,7 +1023,7 @@ bool ObjectsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*conte
     
     //Set up our defaults and clear the source vector
     _dnd_into = false;
-    _dnd_target = NULL;
+    _dnd_target = nullptr;
     _dnd_source.clear();
     
     //Add all selected items to the source vector
@@ -1050,7 +1050,7 @@ bool ObjectsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*conte
                     _dnd_into = true;
                 } else {
                     // Drop into the top level
-                    _dnd_target = NULL;
+                    _dnd_target = nullptr;
                 }
             }
         }
@@ -1088,8 +1088,8 @@ void ObjectsPanel::_storeDragSource(const Gtk::TreeModel::iterator& iter)
  */
 void ObjectsPanel::_doTreeMove( )
 {
-    g_assert(_desktop != NULL);
-    g_assert(_document != NULL);
+    g_assert(_desktop != nullptr);
+    g_assert(_document != nullptr);
     
     std::vector<gchar *> idvector;
     
@@ -1142,7 +1142,7 @@ void ObjectsPanel::_fireAction( unsigned int code )
         if ( verb ) {
             SPAction *action = verb->get_action(_desktop);
             if ( action ) {
-                sp_action_perform( action, NULL );
+                sp_action_perform( action, nullptr );
             }
         }
     }
@@ -1336,7 +1336,7 @@ bool ObjectsPanel::_executeAction()
         }
 
         delete _pending;
-        _pending = 0;
+        _pending = nullptr;
     }
 
     return false;
@@ -1541,7 +1541,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
     {
         //Since blur and blend are both filters, we need to set both at the same time
         SPStyle *style = item->style;
-        g_assert(style != NULL);
+        g_assert(style != nullptr);
         
         if (blendmode != "normal") {
             gdouble radius = 0;
@@ -1652,13 +1652,13 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
  */
 ObjectsPanel::ObjectsPanel() :
     UI::Widget::Panel("/dialogs/objects", SP_VERB_DIALOG_OBJECTS),
-    _rootWatcher(0),
+    _rootWatcher(nullptr),
     _deskTrack(),
-    _desktop(0),
-    _document(0),
-    _model(0),
-    _pending(0),
-    _toggleEvent(0),
+    _desktop(nullptr),
+    _document(nullptr),
+    _model(nullptr),
+    _pending(nullptr),
+    _toggleEvent(nullptr),
     _defer_target(),
     _visibleHeader(C_("Visibility", "V")),
     _lockHeader(C_("Lock", "L")),
@@ -1882,21 +1882,21 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the pop-up menu
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, 0, _("Rename"), (int)BUTTON_RENAME ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, 0, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, 0, _("New"), (int)BUTTON_NEW ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, nullptr, _("Rename"), (int)BUTTON_RENAME ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, nullptr, _("New"), (int)BUTTON_NEW ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, 0, _("Solo"), (int)BUTTON_SOLO ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, 0, _("Show All"), (int)BUTTON_SHOW_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, 0, _("Hide All"), (int)BUTTON_HIDE_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, nullptr, _("Solo"), (int)BUTTON_SOLO ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, nullptr, _("Show All"), (int)BUTTON_SHOW_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, nullptr, _("Hide All"), (int)BUTTON_HIDE_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, 0, _("Lock Others"), (int)BUTTON_LOCK_OTHERS ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, 0, _("Lock All"), (int)BUTTON_LOCK_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, 0, _("Unlock All"), (int)BUTTON_UNLOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, nullptr, _("Lock Others"), (int)BUTTON_LOCK_OTHERS ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, nullptr, _("Lock All"), (int)BUTTON_LOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, nullptr, _("Unlock All"), (int)BUTTON_UNLOCK_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
@@ -1905,23 +1905,23 @@ ObjectsPanel::ObjectsPanel() :
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, 0, _("Group"), (int)BUTTON_GROUP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, 0, _("Ungroup"), (int)BUTTON_UNGROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, nullptr, _("Group"), (int)BUTTON_GROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, nullptr, _("Ungroup"), (int)BUTTON_UNGROUP ) );
         
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, 0, _("Set Clip"), (int)BUTTON_SETCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, nullptr, _("Set Clip"), (int)BUTTON_SETCLIP ) );
         
-	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, 0, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
+	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
         //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, 0, _("Unset Clip"), (int)BUTTON_UNSETCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, nullptr, _("Unset Clip"), (int)BUTTON_UNSETCLIP ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, 0, _("Set Mask"), (int)BUTTON_SETMASK ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, 0, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, nullptr, _("Set Mask"), (int)BUTTON_SETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, nullptr, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
         
         _popupMenu.show_all_children();
     }
@@ -1975,23 +1975,23 @@ ObjectsPanel::~ObjectsPanel()
     _colorSelectorDialog.hide();
     
     //Set the desktop to null, which will disconnect all object watchers
-    setDesktop(NULL);
+    setDesktop(nullptr);
 
     if ( _model )
     {
         delete _model;
-        _model = 0;
+        _model = nullptr;
     }
 
     if (_pending) {
         delete _pending;
-        _pending = 0;
+        _pending = nullptr;
     }
 
     if ( _toggleEvent )
     {
         gdk_event_free( _toggleEvent );
-        _toggleEvent = 0;
+        _toggleEvent = nullptr;
     }
 
     desktopChangeConn.disconnect();
@@ -2017,7 +2017,7 @@ void ObjectsPanel::setDocument(SPDesktop* /*desktop*/, SPDocument* document)
     {
         _rootWatcher->_repr->removeObserver(*_rootWatcher);
         delete _rootWatcher;
-        _rootWatcher = NULL;
+        _rootWatcher = nullptr;
     }
     
     _document = document;
@@ -2043,7 +2043,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
         _documentChangedCurrentLayer.disconnect();
         _selectionChangedConnection.disconnect();
         if ( _desktop ) {
-            _desktop = 0;
+            _desktop = nullptr;
         }
 
         _desktop = Panel::getDesktop();
@@ -2057,7 +2057,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
             
             setDocument(_desktop, _desktop->doc());
         } else {
-            setDocument(NULL, NULL);
+            setDocument(nullptr, nullptr);
         }
     }
     _deskTrack.setBase(desktop);
@@ -2078,10 +2078,10 @@ void SPItem::setHighlightColor(guint32 const color)
     }
     else
     {
-        _highlightColor = NULL;
+        _highlightColor = nullptr;
     }
     
-    NodeTool *tool = 0;
+    NodeTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {
@@ -2094,8 +2094,8 @@ void SPItem::setHighlightColor(guint32 const color)
 void SPItem::unsetHighlightColor()
 {
     g_free(_highlightColor);
-    _highlightColor = NULL;
-    NodeTool *tool = 0;
+    _highlightColor = nullptr;
+    NodeTool *tool = nullptr;
     if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
         if (INK_IS_NODE_TOOL(ec)) {

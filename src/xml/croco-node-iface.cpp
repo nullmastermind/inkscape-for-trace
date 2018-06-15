@@ -31,7 +31,7 @@ static CRXMLNodePtr get_prev(CRXMLNodePtr cn)
     if (n_pos) {
         return n->parent()->nthChild(n_pos - 1);
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 

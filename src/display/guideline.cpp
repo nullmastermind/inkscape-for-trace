@@ -53,13 +53,13 @@ static void sp_guideline_init(SPGuideLine *gl)
     gl->point_on_line = Geom::Point(0,0);
     gl->sensitive = 0;
 
-    gl->origin = NULL;
-    gl->label = NULL;
+    gl->origin = nullptr;
+    gl->label = nullptr;
 }
 
 static void sp_guideline_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_GUIDELINE (object));
 
     SPGuideLine *gl = SP_GUIDELINE(object);
@@ -200,7 +200,7 @@ static double sp_guideline_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem
 
 SPCanvasItem *sp_guideline_new(SPCanvasGroup *parent, char* label, Geom::Point point_on_line, Geom::Point normal)
 {
-    SPCanvasItem *item = sp_canvas_item_new(parent, SP_TYPE_GUIDELINE, NULL);
+    SPCanvasItem *item = sp_canvas_item_new(parent, SP_TYPE_GUIDELINE, nullptr);
     SPGuideLine *gl = SP_GUIDELINE(item);
 
     normal.normalize();

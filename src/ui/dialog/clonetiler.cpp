@@ -70,16 +70,16 @@ namespace Dialog {
 
 static Glib::ustring const prefs_path = "/dialogs/clonetiler/";
 
-static Inkscape::Drawing *trace_drawing = NULL;
+static Inkscape::Drawing *trace_drawing = nullptr;
 static unsigned trace_visionkey;
 static gdouble trace_zoom;
-static SPDocument *trace_doc = NULL;
+static SPDocument *trace_doc = nullptr;
 
 CloneTiler::CloneTiler () :
     UI::Widget::Panel("/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
-    desktop(NULL),
+    desktop(nullptr),
     deskTrack(),
-    table_row_labels(NULL)
+    table_row_labels(nullptr)
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -1845,7 +1845,7 @@ Geom::Affine CloneTiler::get_transform(
 bool CloneTiler::is_a_clone_of(SPObject *tile, SPObject *obj)
 {
     bool result = false;
-    char *id_href = NULL;
+    char *id_href = nullptr;
 
     if (obj) {
         Inkscape::XML::Node *obj_repr = obj->getRepr();
@@ -1864,7 +1864,7 @@ bool CloneTiler::is_a_clone_of(SPObject *tile, SPObject *obj)
     }
     if (id_href) {
         g_free(id_href);
-        id_href = 0;
+        id_href = nullptr;
     }
     return result;
 }
@@ -1876,7 +1876,7 @@ void CloneTiler::trace_hide_tiled_clones_recursively(SPObject *from)
 
     for (auto& o: from->children) {
         SPItem *item = dynamic_cast<SPItem *>(&o);
-        if (item && is_a_clone_of(&o, NULL)) {
+        if (item && is_a_clone_of(&o, nullptr)) {
             item->invoke_hide(trace_visionkey); // FIXME: hide each tiled clone's original too!
         }
         trace_hide_tiled_clones_recursively (&o);
@@ -1930,15 +1930,15 @@ void CloneTiler::trace_finish()
     if (trace_doc) {
         trace_doc->getRoot()->invoke_hide(trace_visionkey);
         delete trace_drawing;
-        trace_doc = NULL;
-        trace_drawing = NULL;
+        trace_doc = nullptr;
+        trace_drawing = nullptr;
     }
 }
 
 void CloneTiler::unclump()
 {
     auto desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL) {
+    if (desktop == nullptr) {
         return;
     }
 
@@ -1987,7 +1987,7 @@ guint CloneTiler::number_of_clones(SPObject *obj)
 void CloneTiler::remove(bool do_undo/* = true*/)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL) {
+    if (desktop == nullptr) {
         return;
     }
 
@@ -2010,7 +2010,7 @@ void CloneTiler::remove(bool do_undo/* = true*/)
         }
     }
     for (auto obj:to_delete) {
-        g_assert(obj != NULL);
+        g_assert(obj != nullptr);
         obj->deleteObject();
     }
 
@@ -2057,7 +2057,7 @@ double CloneTiler::randomize01(double val, double rand)
 void CloneTiler::apply()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop == NULL) {
+    if (desktop == nullptr) {
         return;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

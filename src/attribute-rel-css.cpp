@@ -25,7 +25,7 @@
 #include "path-prefix.h"
 #include "preferences.h"
 
-SPAttributeRelCSS * SPAttributeRelCSS::instance = NULL;
+SPAttributeRelCSS * SPAttributeRelCSS::instance = nullptr;
 bool SPAttributeRelCSS::foundFileProp = false;
 bool SPAttributeRelCSS::foundFileDefault = false;
 
@@ -35,7 +35,7 @@ bool SPAttributeRelCSS::foundFileDefault = false;
  */
 bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring element)
 {
-    if (SPAttributeRelCSS::instance == NULL) {
+    if (SPAttributeRelCSS::instance == nullptr) {
         SPAttributeRelCSS::instance = new SPAttributeRelCSS();
     }
     
@@ -75,7 +75,7 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
  */
 bool SPAttributeRelCSS::findIfDefault(Glib::ustring property, Glib::ustring value)
 {
-    if (SPAttributeRelCSS::instance == NULL) {
+    if (SPAttributeRelCSS::instance == nullptr) {
         SPAttributeRelCSS::instance = new SPAttributeRelCSS();
     }
 
@@ -94,7 +94,7 @@ bool SPAttributeRelCSS::findIfDefault(Glib::ustring property, Glib::ustring valu
  */
 bool SPAttributeRelCSS::findIfInherit(Glib::ustring property)
 {
-    if (SPAttributeRelCSS::instance == NULL) {
+    if (SPAttributeRelCSS::instance == nullptr) {
         SPAttributeRelCSS::instance = new SPAttributeRelCSS();
     }
 
@@ -109,7 +109,7 @@ bool SPAttributeRelCSS::findIfInherit(Glib::ustring property)
  */
 bool SPAttributeRelCSS::findIfProperty(Glib::ustring property)
 {
-    if (SPAttributeRelCSS::instance == NULL) {
+    if (SPAttributeRelCSS::instance == nullptr) {
         SPAttributeRelCSS::instance = new SPAttributeRelCSS();
     }
 

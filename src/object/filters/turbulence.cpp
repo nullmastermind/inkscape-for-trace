@@ -193,19 +193,19 @@ Inkscape::XML::Node* SPFeTurbulence::write(Inkscape::XML::Document *doc, Inkscap
     SPFilterPrimitive::write(doc, repr, flags);
 
     /* turbulence doesn't take input */
-    repr->setAttribute("in", 0);
+    repr->setAttribute("in", nullptr);
 
     return repr;
 }
 
 void SPFeTurbulence::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_TURBULENCE);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterTurbulence *nr_turbulence = dynamic_cast<Inkscape::Filters::FilterTurbulence*>(nr_primitive);
-    g_assert(nr_turbulence != NULL);
+    g_assert(nr_turbulence != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

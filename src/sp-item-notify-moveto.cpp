@@ -30,7 +30,7 @@ void sp_item_notify_moveto(SPItem &item, SPGuide const &mv_g, int const snappoin
     return_if_fail( dir_lensq != 0 );
 
     std::vector<Inkscape::SnapCandidatePoint> snappoints;
-    item.getSnappoints(snappoints, NULL);
+    item.getSnappoints(snappoints, nullptr);
     return_if_fail( snappoint_ix < int(snappoints.size()) );
 
     double const pos0 = dot(dir, snappoints[snappoint_ix].getPoint());

@@ -273,7 +273,7 @@ Geom::PathVector *
 Path::MakePathVector()
 {
     Geom::PathVector *pv = new Geom::PathVector();
-    Geom::Path * currentpath = NULL;
+    Geom::Path * currentpath = nullptr;
 
     Geom::Point   lastP,bezSt,bezEn;
     int         bezNb=0;
@@ -523,8 +523,8 @@ double Path::Surface()
 Path**      Path::SubPaths(int &outNb,bool killNoSurf)
 {
   int      nbRes=0;
-  Path**   res=NULL;
-  Path*    curAdd=NULL;
+  Path**   res=nullptr;
+  Path*    curAdd=nullptr;
   
   for (int i=0;i<int(descr_cmd.size());i++) {
     int const typ = descr_cmd[i]->getType();
@@ -543,7 +543,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
           } else {
             delete curAdd;
           }
-          curAdd=NULL;
+          curAdd=nullptr;
         }
         curAdd=new Path;
         curAdd->SetBackData(false);
@@ -605,7 +605,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
       delete curAdd;
     }
   }
-  curAdd=NULL;
+  curAdd=nullptr;
   
   outNb=nbRes;
   return res;
@@ -613,8 +613,8 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
 Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int* nesting,int* conts)
 {
   int      nbRes=0;
-  Path**   res=NULL;
-  Path*    curAdd=NULL;
+  Path**   res=nullptr;
+  Path*    curAdd=nullptr;
   bool     increment=false;
   
   for (int i=0;i<int(descr_cmd.size());i++) {
@@ -638,9 +638,9 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
           } else {
             delete curAdd;
           }
-          curAdd=NULL;
+          curAdd=nullptr;
         }
-        Path*  hasParent=NULL;
+        Path*  hasParent=nullptr;
         for (int j=0;j<nbNest;j++) {
           if ( conts[j] == i && nesting[j] >= 0 ) {
             int  parentMvt=conts[nesting[j]];
@@ -719,7 +719,7 @@ Path**      Path::SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int*
       delete curAdd;
     }
   }
-  curAdd=NULL;
+  curAdd=nullptr;
   
   outNb=nbRes;
   return res;
@@ -883,12 +883,12 @@ static int       CmpCurv(const void * p1, const void * p2) {
 Path::cut_position* Path::CurvilignToPosition(int nbCv, double *cvAbs, int &nbCut)
 {
     if ( nbCv <= 0 || pts.empty() || back == false ) {
-        return NULL;
+        return nullptr;
     }
   
     qsort(cvAbs, nbCv, sizeof(double), CmpCurv);
   
-    cut_position *res = NULL;
+    cut_position *res = nullptr;
     nbCut = 0;
     int curCv = 0;
   

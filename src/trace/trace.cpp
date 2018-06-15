@@ -49,7 +49,7 @@ SPImage *Tracer::getSelectedSPImage()
     if (!desktop)
         {
         g_warning("Trace: No active desktop");
-        return NULL;
+        return nullptr;
         }
 
     Inkscape::MessageStack *msgStack = desktop->getMessageStack();
@@ -60,12 +60,12 @@ SPImage *Tracer::getSelectedSPImage()
         char *msg = _("Select an <b>image</b> to trace");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
-        return NULL;
+        return nullptr;
         }
 
     if (sioxEnabled)
         {
-        SPImage *img = NULL;
+        SPImage *img = nullptr;
         auto list = sel->items();
         std::vector<SPItem *> items;
         sioxShapes.clear();
@@ -94,7 +94,7 @@ SPImage *Tracer::getSelectedSPImage()
                     {
                     char *msg = _("Select only one <b>image</b> to trace");
                     msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
-                    return NULL;
+                    return nullptr;
                     }
                 img = SP_IMAGE(item);
                 }
@@ -112,7 +112,7 @@ SPImage *Tracer::getSelectedSPImage()
             {
             char *msg = _("Select one image and one or more shapes above it");
             msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
-            return NULL;
+            return nullptr;
             }
         return img;
         }
@@ -125,7 +125,7 @@ SPImage *Tracer::getSelectedSPImage()
             char *msg = _("Select an <b>image</b> to trace");  //same as above
             msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
             //g_warning(msg);
-            return NULL;
+            return nullptr;
             }
 
         if (!SP_IS_IMAGE(item))
@@ -133,7 +133,7 @@ SPImage *Tracer::getSelectedSPImage()
             char *msg = _("Select an <b>image</b> to trace");
             msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
             //g_warning(msg);
-            return NULL;
+            return nullptr;
             }
 
         SPImage *img = SP_IMAGE(item);
@@ -215,7 +215,7 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
     if (!desktop)
         {
         g_warning("%s", _("Trace: No active desktop"));
-        return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+        return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
         }
 
     Inkscape::MessageStack *msgStack = desktop->getMessageStack();
@@ -226,7 +226,7 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
         char *msg = _("Select an <b>image</b> to trace");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
-        return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+        return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
         }
 
     Inkscape::DrawingItem *aImg = img->get_arenaitem(desktop->dkey);
@@ -313,7 +313,7 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::sioxProcessImage(SPImage *img, Glib::RefPtr<Gd
     if (!result.isValid())
         {
         g_warning("%s", _("Invalid SIOX result"));
-        return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+        return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
         }
 
     //result.writePPM("siox2.ppm");
@@ -334,10 +334,10 @@ Glib::RefPtr<Gdk::Pixbuf> Tracer::getSelectedImage()
 
     SPImage *img = getSelectedSPImage();
     if (!img)
-        return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+        return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 
     if (!img->pixbuf)
-        return Glib::RefPtr<Gdk::Pixbuf>(NULL);
+        return Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 
     GdkPixbuf *raw_pb = img->pixbuf->getPixbufRaw(false);
     GdkPixbuf *trace_pb = gdk_pixbuf_copy(raw_pb);
@@ -408,7 +408,7 @@ void Tracer::traceThread()
         char *msg = _("Trace: No active document");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
-        engine = NULL;
+        engine = nullptr;
         return;
         }
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
@@ -418,7 +418,7 @@ void Tracer::traceThread()
     SPImage *img = getSelectedSPImage();
     if (!img)
         {
-        engine = NULL;
+        engine = nullptr;
         return;
         }
 
@@ -440,7 +440,7 @@ void Tracer::traceThread()
         char *msg = _("Trace: Image has no bitmap data");
         msgStack->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
-        engine = NULL;
+        engine = nullptr;
         return;
         }
 
@@ -455,7 +455,7 @@ void Tracer::traceThread()
     //### Check if we should stop
     if (!keepGoing || nrPaths<1)
         {
-        engine = NULL;
+        engine = nullptr;
         return;
         }
 
@@ -498,7 +498,7 @@ void Tracer::traceThread()
     //#OK.  Now let's start making new nodes
 
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-    Inkscape::XML::Node *groupRepr = NULL;
+    Inkscape::XML::Node *groupRepr = nullptr;
 
     //# if more than 1, make a <g>roup of <path>s
     if (nrPaths > 1)
@@ -519,7 +519,7 @@ void Tracer::traceThread()
         pathRepr->setAttribute("d",     result.getPathData().c_str());
 
         if (nrPaths > 1)
-            groupRepr->addChild(pathRepr, NULL);
+            groupRepr->addChild(pathRepr, nullptr);
         else
             par->addChild(pathRepr, imgRepr);
 
@@ -549,7 +549,7 @@ void Tracer::traceThread()
     //## inform the document, so we can undo
     DocumentUndo::done(doc, SP_VERB_SELECTION_TRACE, _("Trace bitmap"));
 
-    engine = NULL;
+    engine = nullptr;
 
     char *msg = g_strdup_printf(_("Trace: Done. %ld nodes created"), totalNodeCount);
     msgStack->flash(Inkscape::NORMAL_MESSAGE, msg);

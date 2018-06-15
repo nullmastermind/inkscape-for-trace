@@ -33,12 +33,12 @@ ParamBool::ParamBool(const gchar * name,
     : Parameter(name, text, description, hidden, indent, ext)
     , _value(false)
 {
-    const char * defaultval = NULL;
-    if (xml->firstChild() != NULL) {
+    const char * defaultval = nullptr;
+    if (xml->firstChild() != nullptr) {
         defaultval = xml->firstChild()->content();
     }
 
-    if (defaultval != NULL && (!strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
+    if (defaultval != nullptr && (!strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
         _value = true;
     } else {
         _value = false;
@@ -85,7 +85,7 @@ public:
      */
     ParamBoolCheckButton (ParamBool * param, gchar * label, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
             Gtk::CheckButton(label), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        this->set_active(_pref->get(NULL, NULL) /**\todo fix */);
+        this->set_active(_pref->get(nullptr, nullptr) /**\todo fix */);
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));
         return;
     }
@@ -106,8 +106,8 @@ private:
 
 void ParamBoolCheckButton::on_toggle(void)
 {
-    _pref->set(this->get_active(), NULL /**\todo fix this */, NULL);
-    if (_changeSignal != NULL) {
+    _pref->set(this->get_active(), nullptr /**\todo fix this */, nullptr);
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
     return;
@@ -127,7 +127,7 @@ void ParamBool::string(std::string &string) const
 Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));

@@ -29,11 +29,11 @@ ObjectHierarchy::~ObjectHierarchy() {
 
 void ObjectHierarchy::clear() {
     _clear();
-    _changed_signal.emit(NULL, NULL);
+    _changed_signal.emit(nullptr, nullptr);
 }
 
 void ObjectHierarchy::setTop(SPObject *object) {
-    if (object == NULL) { printf("Assertion object != NULL failed\n"); return; }
+    if (object == nullptr) { printf("Assertion object != NULL failed\n"); return; }
 
     if ( top() == object ) {
         return;
@@ -74,16 +74,16 @@ void ObjectHierarchy::_trimAbove(SPObject *limit) {
     while ( !_hierarchy.empty() && _hierarchy.back().object != limit ) {
         SPObject *object=_hierarchy.back().object;
 
-        sp_object_ref(object, NULL);
+        sp_object_ref(object, nullptr);
         _detach(_hierarchy.back());
         _hierarchy.pop_back();
         _removed_signal.emit(object);
-        sp_object_unref(object, NULL);
+        sp_object_unref(object, nullptr);
     }
 }
 
 void ObjectHierarchy::setBottom(SPObject *object) {
-    if (object == NULL) { printf("assertion object != NULL failed\n"); return; }
+    if (object == nullptr) { printf("assertion object != NULL failed\n"); return; }
 
     if ( bottom() == object ) {
         return;
@@ -100,11 +100,11 @@ void ObjectHierarchy::setBottom(SPObject *object) {
             _trimBelow(object);
         } else { // object is a sibling or cousin of bottom()
             SPObject *saved_top=top();
-            sp_object_ref(saved_top, NULL);
+            sp_object_ref(saved_top, nullptr);
             _clear();
             _addBottom(saved_top);
             _addBottom(saved_top, object);
-            sp_object_unref(saved_top, NULL);
+            sp_object_unref(saved_top, nullptr);
         }
     } else {
         _clear();
@@ -117,11 +117,11 @@ void ObjectHierarchy::setBottom(SPObject *object) {
 void ObjectHierarchy::_trimBelow(SPObject *limit) {
     while ( !_hierarchy.empty() && _hierarchy.front().object != limit ) {
         SPObject *object=_hierarchy.front().object;
-        sp_object_ref(object, NULL);
+        sp_object_ref(object, nullptr);
         _detach(_hierarchy.front());
         _hierarchy.pop_front();
         _removed_signal.emit(object);
-        sp_object_unref(object, NULL);
+        sp_object_unref(object, nullptr);
     }
 }
 
@@ -146,17 +146,17 @@ void ObjectHierarchy::_trim_for_release(SPObject *object) {
     assert(!this->_hierarchy.empty());
     assert(this->_hierarchy.front().object == object);
 
-    sp_object_ref(object, NULL);
+    sp_object_ref(object, nullptr);
     this->_detach(this->_hierarchy.front());
     this->_hierarchy.pop_front();
     this->_removed_signal.emit(object);
-    sp_object_unref(object, NULL);
+    sp_object_unref(object, nullptr);
 
     this->_changed_signal.emit(this->top(), this->bottom());
 }
 
 ObjectHierarchy::Record ObjectHierarchy::_attach(SPObject *object) {
-    sp_object_ref(object, NULL);
+    sp_object_ref(object, nullptr);
     sigc::connection connection
       = object->connectRelease(
           sigc::mem_fun(*this, &ObjectHierarchy::_trim_for_release)
@@ -166,7 +166,7 @@ ObjectHierarchy::Record ObjectHierarchy::_attach(SPObject *object) {
 
 void ObjectHierarchy::_detach(ObjectHierarchy::Record &rec) {
     rec.connection.disconnect();
-    sp_object_unref(rec.object, NULL);
+    sp_object_unref(rec.object, nullptr);
 }
 
 }

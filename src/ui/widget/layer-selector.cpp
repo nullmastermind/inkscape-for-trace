@@ -42,7 +42,7 @@ namespace {
 class AlternateIcons : public Gtk::HBox {
 public:
     AlternateIcons(Gtk::IconSize size, Glib::ustring const &a, Glib::ustring const &b)
-    : _a(NULL), _b(NULL)
+    : _a(nullptr), _b(nullptr)
     {
         set_name("AlternateIcons");
         if (!a.empty()) {
@@ -94,7 +94,7 @@ private:
  *  selector is changed.
  */
 LayerSelector::LayerSelector(SPDesktop *desktop)
-: _desktop(NULL), _layer(NULL)
+: _desktop(nullptr), _layer(nullptr)
 {
     set_name("LayerSelector");
     AlternateIcons *label;
@@ -159,7 +159,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
 /**  Destructor - disconnects signal handler
  */
 LayerSelector::~LayerSelector() {
-    setDesktop(NULL);
+    setDesktop(nullptr);
     _selection_changed_connection.disconnect();
 }
 
@@ -258,8 +258,8 @@ void LayerSelector::_selectLayer(SPObject *layer) {
     SPObject *root=_desktop->currentRoot();
 
     if (_layer) {
-        sp_object_unref(_layer, NULL);
-        _layer = NULL;
+        sp_object_unref(_layer, nullptr);
+        _layer = nullptr;
     }
 
     if (layer) {
@@ -282,7 +282,7 @@ void LayerSelector::_selectLayer(SPObject *layer) {
         }
 
         _layer = layer;
-        sp_object_ref(_layer, NULL);
+        sp_object_ref(_layer, nullptr);
     }
 
     if ( !layer || layer == root ) {
@@ -353,7 +353,7 @@ void LayerSelector::_buildSiblingEntries(
 
     auto siblings = parent.children | boost::adaptors::filtered(is_layer(_desktop)) | boost::adaptors::reversed;
 
-    SPObject *layer( hierarchy ? &*hierarchy : NULL );
+    SPObject *layer( hierarchy ? &*hierarchy : nullptr );
 
     for (auto& sib: siblings) {
         _buildEntry(depth, sib);
@@ -435,7 +435,7 @@ void LayerSelector::_protectUpdate(sigc::slot<void> slot) {
     _lock_toggled_connection.block(true);
     slot();
 
-    SPObject *layer = _desktop ? _desktop->currentLayer() : 0;
+    SPObject *layer = _desktop ? _desktop->currentLayer() : nullptr;
     if ( layer ) {
         bool wantedValue = ( SP_IS_ITEM(layer) ? SP_ITEM(layer)->isLocked() : false );
         if ( _lock_toggle.get_active() != wantedValue ) {
@@ -480,18 +480,18 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
             &node_added,
             &node_removed,
             &attribute_changed,
-            NULL,
+            nullptr,
             &node_reordered
         };
 
         vector = new Inkscape::XML::NodeEventVector(events);
     } else {
         Inkscape::XML::NodeEventVector events = {
-            NULL,
-            NULL,
+            nullptr,
+            nullptr,
             &attribute_changed,
-            NULL,
-            NULL
+            nullptr,
+            nullptr
         };
 
         vector = new Inkscape::XML::NodeEventVector(events);
@@ -501,7 +501,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
 
     row->set_value(_model_columns.depth, depth);
 
-    sp_object_ref(&object, NULL);
+    sp_object_ref(&object, nullptr);
     row->set_value(_model_columns.object, &object);
 
     Inkscape::GC::anchor(object.getRepr());
@@ -519,7 +519,7 @@ void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
     Callbacks *callbacks=reinterpret_cast<Callbacks *>(row->get_value(_model_columns.callbacks));
     SPObject *object=row->get_value(_model_columns.object);
     if (object) {
-        sp_object_unref(object, NULL);
+        sp_object_unref(object, nullptr);
     }
     Inkscape::XML::Node *repr=row->get_value(_model_columns.repr);
     if (repr) {
@@ -543,8 +543,8 @@ void LayerSelector::_prepareLabelRenderer(
     //       "invent" an iterator with null data and try to render it;
     //       where does it come from, and how can we avoid it?
     if ( object && object->getRepr() ) {
-        SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
-        SPObject *root=( _desktop ? _desktop->currentRoot() : NULL );
+        SPObject *layer=( _desktop ? _desktop->currentLayer() : nullptr );
+        SPObject *root=( _desktop ? _desktop->currentRoot() : nullptr );
 
         bool isancestor = !( (layer && (object->parent == layer->parent)) || ((layer == root) && (object->parent == root)));
 

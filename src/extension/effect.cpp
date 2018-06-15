@@ -26,9 +26,9 @@
 namespace Inkscape {
 namespace Extension {
 
-Effect * Effect::_last_effect = NULL;
-Inkscape::XML::Node * Effect::_effects_list = NULL;
-Inkscape::XML::Node * Effect::_filters_list = NULL;
+Effect * Effect::_last_effect = nullptr;
+Inkscape::XML::Node * Effect::_effects_list = nullptr;
+Inkscape::XML::Node * Effect::_filters_list = nullptr;
 
 #define  EFFECTS_LIST  "effects-list"
 #define  FILTERS_LIST  "filters-list"
@@ -37,12 +37,12 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
     : Extension(in_repr, in_imp),
       _id_noprefs(Glib::ustring(get_id()) + ".noprefs"),
       _name_noprefs(Glib::ustring(_(get_name())) + _(" (No preferences)")),
-      _verb(get_id(), get_name(), NULL, NULL, this, true),
-      _verb_nopref(_id_noprefs.c_str(), _name_noprefs.c_str(), NULL, NULL, this, false),
-      _menu_node(NULL), _workingDialog(true),
-      _prefDialog(NULL)
+      _verb(get_id(), get_name(), nullptr, nullptr, this, true),
+      _verb_nopref(_id_noprefs.c_str(), _name_noprefs.c_str(), nullptr, nullptr, this, false),
+      _menu_node(nullptr), _workingDialog(true),
+      _prefDialog(nullptr)
 {
-    Inkscape::XML::Node * local_effects_menu = NULL;
+    Inkscape::XML::Node * local_effects_menu = nullptr;
 
     // This is a weird hack
     if (!strcmp(this->get_id(), "org.inkscape.filter.dropshadow"))
@@ -53,9 +53,9 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
     no_doc = false;
     no_live_preview = false;
 
-    if (repr != NULL) {
+    if (repr != nullptr) {
 
-        for (Inkscape::XML::Node *child = repr->firstChild(); child != NULL; child = child->next()) {
+        for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
             if (!strcmp(child->name(), INKSCAPE_EXTENSION_NS "effect")) {
                 if (child->attribute("needs-document") && !strcmp(child->attribute("needs-document"), "false")) {
                   no_doc = true;
@@ -63,7 +63,7 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
                 if (child->attribute("needs-live-preview") && !strcmp(child->attribute("needs-live-preview"), "false")) {
                   no_live_preview = true;
                 }
-                for (Inkscape::XML::Node *effect_child = child->firstChild(); effect_child != NULL; effect_child = effect_child->next()) {
+                for (Inkscape::XML::Node *effect_child = child->firstChild(); effect_child != nullptr; effect_child = effect_child->next()) {
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "effects-menu")) {
                         // printf("Found local effects menu in %s\n", this->get_name());
                         local_effects_menu = effect_child->firstChild();
@@ -90,13 +90,13 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
     // \TODO this gets called from the Inkscape::Application constructor, where it initializes the menus.
     // But in the constructor, our object isn't quite there yet!
     if (Inkscape::Application::exists() && INKSCAPE.use_gui()) {
-        if (_effects_list == NULL)
+        if (_effects_list == nullptr)
             _effects_list = find_menu(INKSCAPE.get_menus(), EFFECTS_LIST);
-        if (_filters_list == NULL)
+        if (_filters_list == nullptr)
             _filters_list = find_menu(INKSCAPE.get_menus(), FILTERS_LIST);
     }
 
-    if ((_effects_list != NULL || _filters_list != NULL)) {
+    if ((_effects_list != nullptr || _filters_list != nullptr)) {
         Inkscape::XML::Document *xml_doc;
         xml_doc = _effects_list->document();
         _menu_node = xml_doc->createElement("verb");
@@ -123,22 +123,22 @@ Effect::merge_menu (Inkscape::XML::Node * base,
                     Inkscape::XML::Node * pattern,
                     Inkscape::XML::Node * merge) {
     Glib::ustring mergename;
-    Inkscape::XML::Node * tomerge = NULL;
-    Inkscape::XML::Node * submenu = NULL;
+    Inkscape::XML::Node * tomerge = nullptr;
+    Inkscape::XML::Node * submenu = nullptr;
 
     /* printf("Merge menu with '%s' '%s' '%s'\n",
             base != NULL ? base->name() : "NULL",
             pattern != NULL ? pattern->name() : "NULL",
             merge != NULL ? merge->name() : "NULL"); */
 
-    if (pattern == NULL) {
+    if (pattern == nullptr) {
         // Merge the verb name
         tomerge = merge;
         mergename = _(this->get_name());
     } else {
         gchar const * menuname = pattern->attribute("name");
-        if (menuname == NULL) menuname = pattern->attribute("_name");
-        if (menuname == NULL) return;
+        if (menuname == nullptr) menuname = pattern->attribute("_name");
+        if (menuname == nullptr) return;
         
         Inkscape::XML::Document *xml_doc;
         xml_doc = base->document();
@@ -150,28 +150,28 @@ Effect::merge_menu (Inkscape::XML::Node * base,
 
     int position = -1;
 
-    if (start != NULL) {
+    if (start != nullptr) {
         Inkscape::XML::Node * menupass;
-        for (menupass = start; menupass != NULL && strcmp(menupass->name(), "separator"); menupass = menupass->next()) {
-            gchar const * compare_char = NULL;
+        for (menupass = start; menupass != nullptr && strcmp(menupass->name(), "separator"); menupass = menupass->next()) {
+            gchar const * compare_char = nullptr;
             if (!strcmp(menupass->name(), "verb")) {
                 gchar const * verbid = menupass->attribute("verb-id");
                 Inkscape::Verb * verb = Inkscape::Verb::getbyid(verbid);
-                if (verb == NULL) {
+                if (verb == nullptr) {
 					g_warning("Unable to find verb '%s' which is referred to in the menus.", verbid);
                     continue;
                 }
                 compare_char = verb->get_name();
             } else if (!strcmp(menupass->name(), "submenu")) {
                 compare_char = menupass->attribute("name");
-                if (compare_char == NULL)
+                if (compare_char == nullptr)
                     compare_char = menupass->attribute("_name");
             }
 
             position = menupass->position() + 1;
 
             /* This will cause us to skip tags we don't understand */
-            if (compare_char == NULL) {
+            if (compare_char == nullptr) {
                 continue;
             }
 
@@ -179,7 +179,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
 
             if (mergename == compare) {
                 Inkscape::GC::release(tomerge);
-                tomerge = NULL;
+                tomerge = nullptr;
                 submenu = menupass;
                 break;
             }
@@ -191,15 +191,15 @@ Effect::merge_menu (Inkscape::XML::Node * base,
         } // for menu items
     } // start != NULL
 
-    if (tomerge != NULL) {
+    if (tomerge != nullptr) {
         base->appendChild(tomerge);
         Inkscape::GC::release(tomerge);
         if (position != -1)
             tomerge->setPosition(position);
     }
 
-    if (pattern != NULL) {
-        if (submenu == NULL)
+    if (pattern != nullptr) {
+        if (submenu == nullptr)
             submenu = tomerge;
         merge_menu(submenu, submenu->firstChild(), pattern->firstChild(), merge);
     }
@@ -210,7 +210,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
 Effect::~Effect (void)
 {
     if (get_last_effect() == this)
-        set_last_effect(NULL);
+        set_last_effect(nullptr);
     if (_menu_node)
         Inkscape::GC::release(_menu_node);
     return;
@@ -222,9 +222,9 @@ Effect::check (void)
     if (!Extension::check()) {
         /** \todo  Check to see if parent has this as its only child,
                    if so, delete it too */
-        if (_menu_node != NULL)
+        if (_menu_node != nullptr)
             sp_repr_unparent(_menu_node);
-        _menu_node = NULL;
+        _menu_node = nullptr;
         return false;
     }
     return true;
@@ -233,7 +233,7 @@ Effect::check (void)
 bool
 Effect::prefs (Inkscape::UI::View::View * doc)
 {
-    if (_prefDialog != NULL) {
+    if (_prefDialog != nullptr) {
         _prefDialog->raise();
         return true;
     }
@@ -247,7 +247,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    _prefDialog = new PrefDialog(this->get_name(), this->get_help(), NULL, this);
+    _prefDialog = new PrefDialog(this->get_name(), this->get_help(), nullptr, this);
     _prefDialog->show();
 
     return true;
@@ -312,12 +312,12 @@ Effect::set_last_effect (Effect * in_effect)
         if (strncmp(verb_id, help_id_prefix, strlen(help_id_prefix)) == 0) return;
     }
 
-    if (in_effect == NULL) {
-        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(NULL, false);
-        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(NULL, false);
-    } else if (_last_effect == NULL) {
-        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(NULL, true);
-        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(NULL, true);
+    if (in_effect == nullptr) {
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(nullptr, false);
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(nullptr, false);
+    } else if (_last_effect == nullptr) {
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST)->sensitive(nullptr, true);
+        Inkscape::Verb::get(SP_VERB_EFFECT_LAST_PREF)->sensitive(nullptr, true);
     }
 
     _last_effect = in_effect;
@@ -327,21 +327,21 @@ Effect::set_last_effect (Effect * in_effect)
 Inkscape::XML::Node *
 Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
 {
-    if (menustruct == NULL) return NULL;
+    if (menustruct == nullptr) return nullptr;
     for (Inkscape::XML::Node * child = menustruct;
-            child != NULL;
+            child != nullptr;
             child = child->next()) {
         if (!strcmp(child->name(), name)) {
             return child;
         }
         Inkscape::XML::Node * firstchild = child->firstChild();
-        if (firstchild != NULL) {
+        if (firstchild != nullptr) {
             Inkscape::XML::Node *found = find_menu (firstchild, name);
             if (found)
                 return found;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -380,7 +380,7 @@ Effect::EffectVerb::perform( SPAction *action, void * data )
     Effect::EffectVerb * ev = reinterpret_cast<Effect::EffectVerb *>(data);
     Effect * effect = ev->_effect;
 
-    if (effect == NULL) return;
+    if (effect == nullptr) return;
 
     if (ev->_showPrefs) {
         effect->prefs(current_view);

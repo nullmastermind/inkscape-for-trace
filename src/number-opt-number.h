@@ -99,14 +99,14 @@ public:
 
         char **values = g_strsplit(str, " ", 2);
 
-        if( values[0] != NULL )
+        if( values[0] != nullptr )
         {
-            number = g_ascii_strtod(values[0], NULL);
+            number = g_ascii_strtod(values[0], nullptr);
             _set = TRUE;
 
-            if( values[1] != NULL )
+            if( values[1] != nullptr )
             {
-                optNumber = g_ascii_strtod(values[1], NULL);
+                optNumber = g_ascii_strtod(values[1], nullptr);
                 optNumber_set = TRUE;
             }
             else

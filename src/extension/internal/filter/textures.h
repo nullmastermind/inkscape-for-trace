@@ -53,7 +53,7 @@ protected:
 
 public:
 	InkBlot ( ) : Filter() { };
-	~InkBlot ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+	~InkBlot ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
 public:
 	static void init (void) {
@@ -101,7 +101,7 @@ public:
 gchar const *
 InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-	if (_filter != NULL) g_free((void *)_filter);
+	if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream type;
     std::ostringstream freq;

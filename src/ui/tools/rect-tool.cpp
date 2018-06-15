@@ -58,7 +58,7 @@ const std::string RectTool::prefsPath = "/tools/shapes/rect";
 
 RectTool::RectTool()
     : ToolBase(cursor_rect_xpm)
-    , rect(NULL)
+    , rect(nullptr)
     , rx(0)
     , ry(0)
 {
@@ -79,7 +79,7 @@ RectTool::~RectTool() {
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->rect) {
@@ -199,7 +199,7 @@ bool RectTool::root_handler(GdkEvent* event) {
                                   GDK_POINTER_MOTION_MASK       |
                                   GDK_POINTER_MOTION_HINT_MASK       |
                                   GDK_BUTTON_PRESS_MASK ),
-                                NULL, event->button.time);
+                                nullptr, event->button.time);
 
             ret = TRUE;
         }
@@ -256,7 +256,7 @@ bool RectTool::root_handler(GdkEvent* event) {
                 selection->clear();
             }
 
-            this->item_to_select = NULL;
+            this->item_to_select = nullptr;
             ret = TRUE;
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
                                   event->button.time);
@@ -276,7 +276,7 @@ bool RectTool::root_handler(GdkEvent* event) {
                 sp_event_show_modifier_tip (this->defaultMessageContext(), event,
                                             _("<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner circular"),
                                             _("<b>Shift</b>: draw around the starting point"),
-                                            NULL);
+                                            nullptr);
             }
             break;
         case GDK_KEY_x:
@@ -450,14 +450,14 @@ void RectTool::drag(Geom::Point const pt, guint state) {
 void RectTool::finishItem() {
     this->message_context->clear();
 
-    if (this->rect != NULL) {
+    if (this->rect != nullptr) {
         if (this->rect->width.computed == 0 || this->rect->height.computed == 0) {
             this->cancel(); // Don't allow the creating of zero sized rectangle, for example when the start and and point snap to the snap grid point
             return;
         }
 
         this->rect->updateRepr();
-        this->rect->doWriteTransform(this->rect->transform, NULL, true);
+        this->rect->doWriteTransform(this->rect->transform, nullptr, true);
 
         this->desktop->canvas->endForcedFullRedraws();
         
@@ -469,7 +469,7 @@ void RectTool::finishItem() {
 
         DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_RECT, _("Create rectangle"));
 
-        this->rect = NULL;
+        this->rect = nullptr;
     }
 }
 
@@ -477,15 +477,15 @@ void RectTool::cancel(){
     this->desktop->getSelection()->clear();
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(this->desktop->acetate), 0);
 
-    if (this->rect != NULL) {
+    if (this->rect != nullptr) {
         this->rect->deleteObject();
-        this->rect = NULL;
+        this->rect = nullptr;
     }
 
     this->within_tolerance = false;
     this->xp = 0;
     this->yp = 0;
-    this->item_to_select = NULL;
+    this->item_to_select = nullptr;
 
     this->desktop->canvas->endForcedFullRedraws();
 

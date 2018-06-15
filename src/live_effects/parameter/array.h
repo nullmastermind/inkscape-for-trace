@@ -46,14 +46,14 @@ public:
     }
 
     Gtk::Widget * param_newWidget() override {
-        return NULL;
+        return nullptr;
     }
 
     bool param_readSVGValue(const gchar * strvalue) override {
         _vector.clear();
         gchar ** strarray = g_strsplit(strvalue, "|", 0);
         gchar ** iter = strarray;
-        while (*iter != NULL) {
+        while (*iter != nullptr) {
             _vector.push_back( readsvg(*iter) );
             iter++;
         }

@@ -189,17 +189,17 @@ static void spiral_tb_event_attr_changed(Inkscape::XML::Node *repr,
 
 
 static Inkscape::XML::NodeEventVector spiral_tb_repr_events = {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     spiral_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 static void sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
 {
     int n_selected = 0;
-    Inkscape::XML::Node *repr = NULL;
+    Inkscape::XML::Node *repr = nullptr;
 
     purge_repr_listener( tbl, tbl );
 
@@ -235,11 +235,11 @@ static void sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, 
 
 void sp_spiral_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
-        EgeOutputAction* act = ege_output_action_new( "SpiralStateAction", _("<b>New:</b>"), "", 0 );
+        EgeOutputAction* act = ege_output_action_new( "SpiralStateAction", _("<b>New:</b>"), "", nullptr );
         ege_output_action_set_use_markup( act, TRUE );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "mode_action", act );
@@ -247,7 +247,7 @@ void sp_spiral_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
     /* Revolution */
     {
-        gchar const* labels[] = {_("just a curve"), 0, _("one full revolution"), 0, 0, 0, 0, 0, 0};
+        gchar const* labels[] = {_("just a curve"), nullptr, _("one full revolution"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {0.01, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
         eact = create_adjustment_action( "SpiralRevolutionAction",
                                          _("Number of turns"), _("Turns:"), _("Number of revolutions"),
@@ -255,18 +255,18 @@ void sp_spiral_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                          GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-spiral",
                                          0.01, 1024.0, 0.1, 1.0,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         sp_spl_tb_revolution_value_changed, NULL /*unit tracker*/, 1, 2);
+                                         sp_spl_tb_revolution_value_changed, nullptr /*unit tracker*/, 1, 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
     /* Expansion */
     {
-        gchar const* labels[] = {_("circle"), _("edge is much denser"), _("edge is denser"), _("even"), _("center is denser"), _("center is much denser"), 0};
+        gchar const* labels[] = {_("circle"), _("edge is much denser"), _("edge is denser"), _("even"), _("center is denser"), _("center is much denser"), nullptr};
         gdouble values[] = {0, 0.1, 0.5, 1, 1.5, 5, 20};
         eact = create_adjustment_action( "SpiralExpansionAction",
                                          _("Divergence"), _("Divergence:"), _("How much denser/sparser are outer revolutions; 1 = uniform"),
                                          "/tools/shapes/spiral/expansion", 1.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0.0, 1000.0, 0.01, 1.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_spl_tb_expansion_value_changed);
@@ -280,7 +280,7 @@ void sp_spiral_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         eact = create_adjustment_action( "SpiralT0Action",
                                          _("Inner radius"), _("Inner radius:"), _("Radius of the innermost revolution (relative to the spiral size)"),
                                          "/tools/shapes/spiral/t0", 0.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          0.0, 0.999, 0.01, 1.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          sp_spl_tb_t0_value_changed);

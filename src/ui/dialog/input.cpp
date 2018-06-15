@@ -1218,7 +1218,7 @@ void InputDialogImpl::updateDeviceAxes(Glib::RefPtr<InputDevice const> device)
             }
         }
     }
-    updateTestAxes( device->getId(), 0 );
+    updateTestAxes( device->getId(), nullptr );
 }
 
 void InputDialogImpl::updateDeviceButtons(Glib::RefPtr<InputDevice const> device)
@@ -1514,7 +1514,7 @@ void InputDialogImpl::updateTestAxes( Glib::ustring const& key, GdkDevice* dev )
             Glib::ustring val = row[getCols().description];
             Glib::RefPtr<InputDevice const> idev = row[getCols().device];
             if ( !idev || (idev->getId() != key) ) {
-                dev = 0;
+                dev = nullptr;
             }
         }
     }

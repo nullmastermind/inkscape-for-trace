@@ -29,7 +29,7 @@ ProfileManager::ProfileManager(SPDocument *document) :
 ProfileManager::~ProfileManager()
 {
     _resource_connection.disconnect();
-    _doc = 0;
+    _doc = nullptr;
 }
 
 void ProfileManager::_resourcesChanged()
@@ -71,11 +71,11 @@ void ProfileManager::_resourcesChanged()
 
 ColorProfile* ProfileManager::find(gchar const* name)
 {
-    ColorProfile* match = 0;
+    ColorProfile* match = nullptr;
     if ( name ) {
-        unsigned int howMany = childCount(NULL);
+        unsigned int howMany = childCount(nullptr);
         for ( unsigned int index = 0; index < howMany; index++ ) {
-            SPObject *obj = nthChildOf(NULL, index);
+            SPObject *obj = nthChildOf(nullptr, index);
             ColorProfile* prof = reinterpret_cast<ColorProfile*>(obj);
             if (prof && (prof->name && !strcmp(name, prof->name))) {
                 match = prof;

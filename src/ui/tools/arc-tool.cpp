@@ -64,7 +64,7 @@ const std::string ArcTool::prefsPath = "/tools/shapes/arc";
 
 ArcTool::ArcTool()
     : ToolBase(cursor_ellipse_xpm)
-    , arc(NULL)
+    , arc(nullptr)
 {
 }
 
@@ -82,7 +82,7 @@ ArcTool::~ArcTool() {
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->arc) {
@@ -166,7 +166,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                                     GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-                                    NULL, event->button.time);
+                                    nullptr, event->button.time);
                 handled = true;
                 m.unSetup();
             }
@@ -224,7 +224,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
 
                 this->xp = 0;
                 this->yp = 0;
-                this->item_to_select = NULL;
+                this->item_to_select = nullptr;
                 handled = true;
             }
             sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
@@ -244,7 +244,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
                         sp_event_show_modifier_tip(this->defaultMessageContext(), event,
                                                    _("<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"),
                                                    _("<b>Shift</b>: draw around the starting point"),
-                                                   NULL);
+                                                   nullptr);
                     }
                     break;
 
@@ -412,14 +412,14 @@ void ArcTool::drag(Geom::Point pt, guint state) {
 void ArcTool::finishItem() {
     this->message_context->clear();
 
-    if (this->arc != NULL) {
+    if (this->arc != nullptr) {
         if (this->arc->rx.computed == 0 || this->arc->ry.computed == 0) {
             this->cancel(); // Don't allow the creating of zero sized arc, for example when the start and and point snap to the snap grid point
             return;
         }
 
         this->arc->updateRepr();
-        this->arc->doWriteTransform(this->arc->transform, NULL, true);
+        this->arc->doWriteTransform(this->arc->transform, nullptr, true);
 
         desktop->canvas->endForcedFullRedraws();
 
@@ -427,7 +427,7 @@ void ArcTool::finishItem() {
 
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
 
-        this->arc = NULL;
+        this->arc = nullptr;
     }
 }
 
@@ -435,15 +435,15 @@ void ArcTool::cancel() {
     desktop->getSelection()->clear();
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
 
-    if (this->arc != NULL) {
+    if (this->arc != nullptr) {
         this->arc->deleteObject();
-        this->arc = NULL;
+        this->arc = nullptr;
     }
 
     this->within_tolerance = false;
     this->xp = 0;
     this->yp = 0;
-    this->item_to_select = NULL;
+    this->item_to_select = nullptr;
 
     desktop->canvas->endForcedFullRedraws();
 

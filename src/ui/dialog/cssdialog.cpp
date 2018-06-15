@@ -35,7 +35,7 @@ namespace Dialog {
  */
 CssDialog::CssDialog():
     UI::Widget::Panel("/dialogs/css", SP_VERB_DIALOG_CSS),
-    _desktop(0)
+    _desktop(nullptr)
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
@@ -98,7 +98,7 @@ CssDialog::CssDialog():
  */
 CssDialog::~CssDialog()
 {
-    setDesktop(NULL);
+    setDesktop(nullptr);
 }
 
 

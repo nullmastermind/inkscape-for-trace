@@ -129,7 +129,7 @@ public:
     CMSPrefWatcher() :
         _dpw(*this),
         _spw(*this),
-        _tracker(ege_color_prof_tracker_new(0))
+        _tracker(ege_color_prof_tracker_new(nullptr))
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         g_signal_connect( G_OBJECT(_tracker), "modified", G_CALLBACK(hook), this );
@@ -188,7 +188,7 @@ private:
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPrefWatcher * /*watcher*/)
 {
-    unsigned char* buf = 0;
+    unsigned char* buf = nullptr;
     guint len = 0;
 
     ege_color_prof_tracker_get_profile_for( monitor, reinterpret_cast<gpointer*>(&buf), &len );
@@ -225,7 +225,7 @@ void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 }
 
-static CMSPrefWatcher* watcher = NULL;
+static CMSPrefWatcher* watcher = nullptr;
 
 void
 SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
@@ -261,7 +261,7 @@ SPDesktopWidget::window_get_pointer()
     return Geom::Point(x, y);
 }
 
-static GTimer *overallTimer = 0;
+static GTimer *overallTimer = nullptr;
 
 /**
  * Registers SPDesktopWidget class and returns its type number.
@@ -272,15 +272,15 @@ GType SPDesktopWidget::getType(void)
     if (!type) {
         GTypeInfo info = {
             sizeof(SPDesktopWidgetClass),
-            0, // base_init
-            0, // base_finalize
+            nullptr, // base_init
+            nullptr, // base_finalize
             (GClassInitFunc)sp_desktop_widget_class_init,
-            0, // class_finalize
-            0, // class_data
+            nullptr, // class_finalize
+            nullptr, // class_data
             sizeof(SPDesktopWidget),
             0, // n_preallocs
             (GInstanceInitFunc)SPDesktopWidget::init,
-            0 // value_table
+            nullptr // value_table
         };
         type = g_type_register_static(SP_TYPE_VIEW_WIDGET, "SPDesktopWidget", &info, static_cast<GTypeFlags>(0));
         // Begin a timer to watch for the first desktop to appear on-screen
@@ -330,8 +330,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     new (&dtw->modified_connection) sigc::connection();
 
-    dtw->window = 0;
-    dtw->desktop = NULL;
+    dtw->window = nullptr;
+    dtw->desktop = nullptr;
     dtw->_interaction_disabled_counter = 0;
 
     /* Main table */
@@ -386,7 +386,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Lock guides button
     dtw->guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
-                                               NULL,
+                                               nullptr,
                                                INKSCAPE_ICON("object-locked"),
                                                _("Toggle lock of all guides in the document"));
     auto guides_lock_style_provider = Gtk::CssProvider::create();
@@ -446,7 +446,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Sticky zoom button
     dtw->sticky_zoom = sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
                                                  SP_BUTTON_TYPE_TOGGLE,
-                                                 NULL,
+                                                 nullptr,
                                                  INKSCAPE_ICON("zoom-original"),
                                                  _("Zoom drawing if window size changes"));
     gtk_widget_set_name(dtw->sticky_zoom, "StickyZoom");
@@ -470,7 +470,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     }
     dtw->cms_adjust = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
-                                               NULL,
+                                               nullptr,
                                                INKSCAPE_ICON("color-management"),
                                                tip );
     gtk_widget_set_name(dtw->cms_adjust, "CMS_Adjust");
@@ -516,7 +516,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                                     "SPCanvas {\n"
                                     " background-color: white;\n"
                                     "}\n",
-                                    -1, NULL);
+                                    -1, nullptr);
 
     gtk_style_context_add_provider(style_context,
                                    GTK_STYLE_PROVIDER(css_provider),
@@ -542,8 +542,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
         /* Prevent the paned from catching F6 and F8 by unsetting the default callbacks */
         if (GtkPanedClass *paned_class = GTK_PANED_CLASS (G_OBJECT_GET_CLASS (paned->gobj()))) {
-            paned_class->cycle_child_focus = NULL;
-            paned_class->cycle_handle_focus = NULL;
+            paned_class->cycle_child_focus = nullptr;
+            paned_class->cycle_handle_focus = nullptr;
         }
 
         paned->set_hexpand(true);
@@ -573,13 +573,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 		    FALSE, FALSE, 0);
 
     // Layer Selector
-    dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
+    dtw->layer_selector = new Inkscape::Widgets::LayerSelector(nullptr);
     // FIXME: need to unreference on container destruction to avoid leak
     dtw->layer_selector->reference();
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);
 
     // Select Status
-    dtw->select_status = gtk_label_new (NULL);
+    dtw->select_status = gtk_label_new (nullptr);
     gtk_widget_set_name( dtw->select_status, "SelectStatus");
     gtk_label_set_ellipsize (GTK_LABEL(dtw->select_status), PANGO_ELLIPSIZE_END);
 #if GTK_CHECK_VERSION(3,10,0)
@@ -666,8 +666,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_widget_set_halign(label_y, GTK_ALIGN_START);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), label_x, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), label_y, 1, 1, 1, 1);
-    dtw->coord_status_x = gtk_label_new(NULL);
-    dtw->coord_status_y = gtk_label_new(NULL);
+    dtw->coord_status_x = gtk_label_new(nullptr);
+    dtw->coord_status_y = gtk_label_new(nullptr);
     gtk_label_set_markup( GTK_LABEL(dtw->coord_status_x), "<tt>   0.00 </tt>" );
     gtk_label_set_markup( GTK_LABEL(dtw->coord_status_y), "<tt>   0.00 </tt>" );
 
@@ -717,7 +717,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         } else {
             g_timer_destroy(overallTimer);
         }
-        overallTimer = 0;
+        overallTimer = nullptr;
     }
 
     // Ensure that ruler ranges are updated correctly whenever the canvas table
@@ -735,7 +735,7 @@ static void sp_desktop_widget_dispose(GObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
 
-    if (dtw == NULL) {
+    if (dtw == nullptr) {
         return;
     }
 
@@ -749,14 +749,14 @@ static void sp_desktop_widget_dispose(GObject *object)
         // Zoom
         g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK(sp_dtw_zoom_input), dtw);
         g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK(sp_dtw_zoom_output), dtw);
-        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->zoom_status), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, dtw->zoom_status);
+        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->zoom_status), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->zoom_status);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
 
         // Rotation
         g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK(sp_dtw_rotation_input), dtw);
         g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK(sp_dtw_rotation_output), dtw);
-        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->rotation_status), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, dtw->rotation_status);
+        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->rotation_status), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->rotation_status);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_dtw_rotation_value_changed), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_dtw_rotation_populate_popup), dtw);
 
@@ -764,13 +764,13 @@ static void sp_desktop_widget_dispose(GObject *object)
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas), (gpointer) G_CALLBACK (sp_desktop_widget_event), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas_tbl), (gpointer) G_CALLBACK (canvas_tbl_size_allocate), dtw);
 
-        dtw->layer_selector->setDesktop(NULL);
+        dtw->layer_selector->setDesktop(nullptr);
         dtw->layer_selector->unreference();
         INKSCAPE.remove_desktop(dtw->desktop); // clears selection and event_context
         dtw->modified_connection.disconnect();
         dtw->desktop->destroy();
         Inkscape::GC::release (dtw->desktop);
-        dtw->desktop = NULL;
+        dtw->desktop = nullptr;
     }
 
     dtw->modified_connection.~connection();
@@ -962,7 +962,7 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
         // and passed on by the canvas acetate (I think). --bb
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
                 && !dtw->canvas->_current_item) {
-            return sp_desktop_root_handler (NULL, event, dtw->desktop);
+            return sp_desktop_root_handler (nullptr, event, dtw->desktop);
         }
     }
 
@@ -1083,7 +1083,7 @@ sp_dtw_desktop_deactivate (SPDesktopWidget */*dtw*/)
 bool
 SPDesktopWidget::shutdown()
 {
-    g_assert(desktop != NULL);
+    g_assert(desktop != nullptr);
 
     if (INKSCAPE.sole_desktop_for_document(*desktop)) {
         SPDocument *doc = desktop->doc();
@@ -1136,7 +1136,7 @@ SPDesktopWidget::shutdown()
         }
         /* Code to check data loss */
         bool allow_data_loss = FALSE;
-        while (doc->getReprRoot()->attribute("inkscape:dataloss") != NULL && allow_data_loss == FALSE) {
+        while (doc->getReprRoot()->attribute("inkscape:dataloss") != nullptr && allow_data_loss == FALSE) {
             Gtk::Window *toplevel_window = Glib::wrap(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(this))));
             Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
@@ -1222,8 +1222,8 @@ SPDesktopWidget::shutdown()
 void
 SPDesktopWidget::requestCanvasUpdate() {
     // ^^ also this->desktop != 0
-    g_return_if_fail(this->desktop != NULL);
-    g_return_if_fail(this->desktop->main != NULL);
+    g_return_if_fail(this->desktop != nullptr);
+    g_return_if_fail(this->desktop->main != nullptr);
     gtk_widget_queue_draw (GTK_WIDGET (SP_CANVAS_ITEM (this->desktop->main)->canvas));
 }
 
@@ -1541,7 +1541,7 @@ SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 void
 SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
 {
-    GtkAdjustment *a = NULL;
+    GtkAdjustment *a = nullptr;
     gpointer hb = sp_search_by_data_recursive (aux_toolbox, (gpointer) id);
     if (hb && GTK_IS_WIDGET(hb)) {
         if (GTK_IS_SPIN_BUTTON(hb))
@@ -1589,7 +1589,7 @@ SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionType pos)
 {
     // Note - later on these won't be individual member variables.
-    GtkWidget* toolbox = 0;
+    GtkWidget* toolbox = nullptr;
     if (id == "ToolToolbar") {
         toolbox = tool_toolbox;
     } else if (id == "AuxToolbar") {
@@ -1643,7 +1643,7 @@ SPViewWidget *sp_desktop_widget_new( SPNamedView *namedview )
 
 SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 {
-    SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, NULL));
+    SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, nullptr));
 
     dtw->dt2r = 1. / namedview->display_units->factor;
 
@@ -1752,11 +1752,11 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                             continue;
 
                         gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->gobj()), (gpointer) "tracker");
-                        if (t == NULL) // didn't find any tracker data
+                        if (t == nullptr) // didn't find any tracker data
                             continue;
 
                         UnitTracker *tracker = reinterpret_cast<UnitTracker*>( t );
-                        if (tracker == NULL) // it's null when inkscape is first opened
+                        if (tracker == nullptr) // it's null when inkscape is first opened
                             continue;
 
                         tracker->setActiveUnit( nv->display_units );
@@ -1769,7 +1769,7 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         gtk_widget_set_tooltip_text(this->vruler_box, gettext(nv->display_units->name_plural.c_str()));
 
         sp_desktop_widget_update_rulers(this);
-        ToolboxFactory::updateSnapToolbox(this->desktop, 0, this->snap_toolbox);
+        ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
     }
 }
 
@@ -1828,7 +1828,7 @@ sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
         *comma = '.';
     }
 
-    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, nullptr));
     setlocale (LC_NUMERIC, "C");
     gdouble new_typed = atof (b);
     setlocale (LC_NUMERIC, oldlocale);
@@ -2029,7 +2029,7 @@ sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
         *comma = '.';
     }
 
-    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, nullptr));
     setlocale (LC_NUMERIC, "C");
     gdouble new_value = atof (b);
     setlocale (LC_NUMERIC, oldlocale);

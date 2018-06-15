@@ -58,7 +58,7 @@ bool  font_descr_equal::operator()( PangoFontDescription *const&a, PangoFontDesc
     //if ( pango_font_description_equal(a,b) ) return true;
     char const *fa = sp_font_description_get_family(a);
     char const *fb = sp_font_description_get_family(b);
-    if ( ( fa && fb == NULL ) || ( fb && fa == NULL ) ) return false;
+    if ( ( fa && fb == nullptr ) || ( fb && fa == nullptr ) ) return false;
     if ( fa && fb && strcmp(fa,fb) != 0 ) return false;
     if ( pango_font_description_get_style(a) != pango_font_description_get_style(b) ) return false;
     if ( pango_font_description_get_variant(a) != pango_font_description_get_variant(b) ) return false;
@@ -227,11 +227,11 @@ static void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 #endif
 
 
-font_factory *font_factory::lUsine = NULL;
+font_factory *font_factory::lUsine = nullptr;
 
 font_factory *font_factory::Default(void)
 {
-    if ( lUsine == NULL ) lUsine = new font_factory;
+    if ( lUsine == nullptr ) lUsine = new font_factory;
     return lUsine;
 }
 
@@ -256,7 +256,7 @@ font_factory::font_factory(void) :
     pango_ft2_font_map_set_default_substitute(PANGO_FT2_FONT_MAP(fontServer),
                                               FactorySubstituteFunc,
                                               this,
-                                              NULL);
+                                              nullptr);
 #endif
 
 // TEMP
@@ -282,7 +282,7 @@ font_factory::~font_factory(void)
     if (loadedPtr) {
         FaceMapType* tmp = static_cast<FaceMapType*>(loadedPtr);
         delete tmp;
-        loadedPtr = 0;
+        loadedPtr = nullptr;
     }
 }
 
@@ -305,7 +305,7 @@ Glib::ustring font_factory::ConstructFontSpecification(PangoFontDescription *fon
         char * copyAsString = pango_font_description_to_string(copy);
         pangoString = copyAsString;
         g_free(copyAsString);
-        copyAsString = 0;
+        copyAsString = nullptr;
 
         pango_font_description_free(copy);
 
@@ -388,7 +388,7 @@ Glib::ustring font_factory::GetUIStyleString(PangoFontDescription const *fontDes
         char *fontDescrAsString = pango_font_description_to_string(fontDescrCopy);
         style = fontDescrAsString;
         g_free(fontDescrAsString);
-        fontDescrAsString = 0;
+        fontDescrAsString = nullptr;
         pango_font_description_free(fontDescrCopy);
     }
 
@@ -433,7 +433,7 @@ static bool ustringPairSort(std::pair<PangoFontFamily*, Glib::ustring> const& fi
 void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
 {
     // Gather the family names as listed by Pango
-    PangoFontFamily** families = NULL;
+    PangoFontFamily** families = nullptr;
     int numFamilies = 0;
     pango_font_map_list_families(fontServer, &families, &numFamilies);
     
@@ -443,11 +443,11 @@ void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
     for (int currentFamily = 0; currentFamily < numFamilies; ++currentFamily) {
         const char* displayName = pango_font_family_get_name(families[currentFamily]);
         
-        if (displayName == 0 || *displayName == '\0') {
+        if (displayName == nullptr || *displayName == '\0') {
             std::cerr << "font_factory::GetUIFamilies: Missing displayName! " << std::endl;
             continue;
         }
-        if (!g_utf8_validate(displayName, -1, 0)) {
+        if (!g_utf8_validate(displayName, -1, nullptr)) {
             // TODO: can can do anything about this or does it always indicate broken fonts that should not be used?
             std::cerr << "font_factory::GetUIFamilies: Illegal characters in displayName. ";
             std::cerr << "Ignoring font '" << displayName << "'" << std::endl;
@@ -465,11 +465,11 @@ void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
 
 GList* font_factory::GetUIStyles(PangoFontFamily * in)
 {
-    GList* ret = NULL;
+    GList* ret = nullptr;
     // Gather the styles for this family
-    PangoFontFace** faces = NULL;
+    PangoFontFace** faces = nullptr;
     int numFaces = 0;
-    if (in == NULL) {
+    if (in == nullptr) {
         std::cerr << "font_factory::GetUIStyles(): PangoFontFamily is NULL" << std::endl;
         return ret;
     }
@@ -482,7 +482,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         // description to get the UI family and face strings
         const gchar* displayName = pango_font_face_get_face_name(faces[currentFace]);
         // std::cout << "Display Name: " << displayName << std::endl;
-        if (displayName == NULL || *displayName == '\0') {
+        if (displayName == nullptr || *displayName == '\0') {
             std::cerr << "font_factory::GetUIStyles: Missing displayName! " << std::endl;
             continue;
         }
@@ -562,7 +562,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
 
 font_instance* font_factory::FaceFromStyle(SPStyle const *style)
 {
-    font_instance *font = NULL;
+    font_instance *font = nullptr;
 
     g_assert(style);
 
@@ -599,7 +599,7 @@ font_instance *font_factory::FaceFromDescr(char const *family, char const *style
 
 font_instance* font_factory::FaceFromPangoString(char const *pangoString)
 {
-    font_instance *fontInstance = NULL;
+    font_instance *fontInstance = nullptr;
 
     g_assert(pangoString);
 
@@ -610,7 +610,7 @@ font_instance* font_factory::FaceFromPangoString(char const *pangoString)
         PangoFontDescription *descr = pango_font_description_from_string(pangoString);
 
         if (descr) {
-            if (sp_font_description_get_family(descr) != NULL) {
+            if (sp_font_description_get_family(descr) != nullptr) {
                 fontInstance = Face(descr);
             }
             pango_font_description_free(descr);
@@ -622,7 +622,7 @@ font_instance* font_factory::FaceFromPangoString(char const *pangoString)
 
 font_instance* font_factory::FaceFromFontSpecification(char const *fontSpecification)
 {
-    font_instance *font = NULL;
+    font_instance *font = nullptr;
 
     g_assert(fontSpecification);
 
@@ -645,16 +645,16 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
     pango_font_description_set_size(descr, (int) (fontSize*PANGO_SCALE)); // mandatory huge size (hinting workaround)
 #endif
 
-    font_instance *res = NULL;
+    font_instance *res = nullptr;
 
     FaceMapType& loadedFaces = *static_cast<FaceMapType*>(loadedPtr);
     if ( loadedFaces.find(descr) == loadedFaces.end() ) {
         // not yet loaded
-        PangoFont *nFace = NULL;
+        PangoFont *nFace = nullptr;
 
         // workaround for bug #1025565.
         // fonts without families blow up Pango.
-        if (sp_font_description_get_family(descr) != NULL) {
+        if (sp_font_description_get_family(descr) != nullptr) {
             nFace = pango_font_map_load_font(fontServer,fontContext,descr);
         }
         else {
@@ -672,12 +672,12 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             res->descr = pango_font_description_copy(descr);
             res->parent = this;
             res->InstallFace(nFace);
-            if ( res->pFont == NULL ) {
+            if ( res->pFont == nullptr ) {
                 // failed to install face -> bitmap font
                 // printf("face failed\n");
-                res->parent = NULL;
+                res->parent = nullptr;
                 delete res;
-                res = NULL;
+                res = nullptr;
                 if ( canFail ) {
                     char *tc = pango_font_description_to_string(descr);
                     PANGO_DEBUG("falling back from %s to 'sans-serif' because InstallFace failed\n",tc);
@@ -749,7 +749,7 @@ void font_factory::UnrefFace(font_instance *who)
 
 void font_factory::AddInCache(font_instance *who)
 {
-    if ( who == NULL ) return;
+    if ( who == nullptr ) return;
     for (int i = 0;i < nbEnt;i++) ents[i].age *= 0.9;
     for (int i = 0;i < nbEnt;i++) {
         if ( ents[i].f == who ) {
@@ -794,10 +794,10 @@ void font_factory::AddFontsDir(char const *utf8dir)
 # ifdef WIN32
     dir = g_win32_locale_filename_from_utf8(utf8dir);
 # else
-    dir = g_filename_from_utf8(utf8dir, -1, NULL, NULL, NULL);
+    dir = g_filename_from_utf8(utf8dir, -1, nullptr, nullptr, nullptr);
 # endif
 
-    FcConfig *conf = NULL;
+    FcConfig *conf = nullptr;
 # if PANGO_VERSION_CHECK(1,38,0)
     conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
 # endif
@@ -826,10 +826,10 @@ void font_factory::AddFontFile(char const *utf8file)
 # ifdef WIN32
     file = g_win32_locale_filename_from_utf8(utf8file);
 # else
-    file = g_filename_from_utf8(utf8file, -1, NULL, NULL, NULL);
+    file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);
 # endif
 
-    FcConfig *conf = NULL;
+    FcConfig *conf = nullptr;
 # if PANGO_VERSION_CHECK(1,38,0)
     conf = pango_fc_font_map_get_config(PANGO_FC_FONT_MAP(fontServer));
 # endif

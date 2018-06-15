@@ -640,7 +640,7 @@ SPMeshNodeArray::SPMeshNodeArray( SPMeshGradient *mg ) {
 SPMeshNodeArray::SPMeshNodeArray( const SPMeshNodeArray& rhs ) {
 
     built = false;
-    mg = NULL;
+    mg = nullptr;
     draggers_valid = false;
 
     nodes = rhs.nodes; // This only copies the pointers but it does size the vector of vectors.
@@ -661,7 +661,7 @@ SPMeshNodeArray& SPMeshNodeArray::operator=( const SPMeshNodeArray& rhs ) {
     clear(); // Clear any existing array.
 
     built = false;
-    mg = NULL;
+    mg = nullptr;
     draggers_valid = false;
 
     nodes = rhs.nodes; // This only copies the pointers but it does size the vector of vectors.

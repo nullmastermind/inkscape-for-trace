@@ -30,9 +30,9 @@ ClipMaskIcon::ClipMaskIcon() :
     _pixMaskName(INKSCAPE_ICON("path-difference")),
     _pixBothName(INKSCAPE_ICON("bitmap-trace")),
     _property_active(*this, "active", 0),
-    _property_pixbuf_clip(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_both(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_clip(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_both(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr))
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -46,7 +46,7 @@ ClipMaskIcon::ClipMaskIcon() :
     _property_pixbuf_mask = icon_theme->load_icon(_pixMaskName, phys, (Gtk::IconLookupFlags)0);
     _property_pixbuf_both = icon_theme->load_icon(_pixBothName, phys, (Gtk::IconLookupFlags)0);
 
-    property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
+    property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 }
 
 void ClipMaskIcon::get_preferred_height_vfunc(Gtk::Widget& widget,
@@ -97,7 +97,7 @@ void ClipMaskIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
             property_pixbuf() = _property_pixbuf_both;
             break;
         default:
-            property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
+            property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
             break;
     }
     Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );

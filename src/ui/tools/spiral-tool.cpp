@@ -56,7 +56,7 @@ const std::string SpiralTool::prefsPath = "/tools/shapes/spiral";
 
 SpiralTool::SpiralTool()
     : ToolBase(cursor_spiral_xpm)
-    , spiral(NULL)
+    , spiral(nullptr)
     , revo(3)
     , exp(1)
     , t0(0)
@@ -80,7 +80,7 @@ SpiralTool::~SpiralTool() {
     this->sel_changed_connection.disconnect();
 
     delete this->shape_editor;
-    this->shape_editor = NULL;
+    this->shape_editor = nullptr;
 
     /* fixme: This is necessary because we do not grab */
     if (this->spiral) {
@@ -168,7 +168,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                                       GDK_POINTER_MOTION_MASK |
                                       GDK_POINTER_MOTION_HINT_MASK |
                                       GDK_BUTTON_PRESS_MASK    ),
-                                    NULL, event->button.time);
+                                    nullptr, event->button.time);
                 ret = TRUE;
             }
             break;
@@ -229,7 +229,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                     selection->clear();
                 }
 
-                this->item_to_select = NULL;
+                this->item_to_select = nullptr;
                 ret = TRUE;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
             }
@@ -246,7 +246,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_Meta_R:
                     sp_event_show_modifier_tip(this->defaultMessageContext(), event,
                                                _("<b>Ctrl</b>: snap angle"),
-                                               NULL,
+                                               nullptr,
                                                _("<b>Alt</b>: lock spiral radius"));
                     break;
 
@@ -385,7 +385,7 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
 void SpiralTool::finishItem() {
     this->message_context->clear();
 
-    if (this->spiral != NULL) {
+    if (this->spiral != nullptr) {
     	if (this->spiral->rad == 0) {
     		this->cancel(); // Don't allow the creating of zero sized spiral, for example when the start and and point snap to the snap grid point
     		return;
@@ -393,7 +393,7 @@ void SpiralTool::finishItem() {
 
         spiral->set_shape();
         spiral->updateRepr(SP_OBJECT_WRITE_EXT);
-        spiral->doWriteTransform(spiral->transform, NULL, true);
+        spiral->doWriteTransform(spiral->transform, nullptr, true);
 
         this->desktop->canvas->endForcedFullRedraws();
 
@@ -401,7 +401,7 @@ void SpiralTool::finishItem() {
         
         DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_SPIRAL, _("Create spiral"));
 
-        this->spiral = NULL;
+        this->spiral = nullptr;
     }
 }
 
@@ -409,15 +409,15 @@ void SpiralTool::cancel() {
 	this->desktop->getSelection()->clear();
 	sp_canvas_item_ungrab(SP_CANVAS_ITEM(this->desktop->acetate), 0);
 
-    if (this->spiral != NULL) {
+    if (this->spiral != nullptr) {
     	this->spiral->deleteObject();
-    	this->spiral = NULL;
+    	this->spiral = nullptr;
     }
 
     this->within_tolerance = false;
     this->xp = 0;
     this->yp = 0;
-    this->item_to_select = NULL;
+    this->item_to_select = nullptr;
 
     this->desktop->canvas->endForcedFullRedraws();
 

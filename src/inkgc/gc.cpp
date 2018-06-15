@@ -81,16 +81,16 @@ int debug_general_register_disappearing_link(void **p_ptr, void const *base) {
 
 void dummy_do_init() {}
 
-void *dummy_base(void *) { return NULL; }
+void *dummy_base(void *) { return nullptr; }
 
 void dummy_register_finalizer(void *, CleanupFunc, void *,
                                       CleanupFunc *old_func, void **old_data)
 {
     if (old_func) {
-        *old_func = NULL;
+        *old_func = nullptr;
     }
     if (old_data) {
-        *old_data = NULL;
+        *old_data = nullptr;
     }
 }
 
@@ -196,12 +196,12 @@ void die_because_not_initialized() {
 
 void *stub_malloc(std::size_t) {
     die_because_not_initialized();
-    return NULL;
+    return nullptr;
 }
 
 void *stub_base(void *) {
     die_because_not_initialized();
-    return NULL;
+    return nullptr;
 }
 
 void stub_register_finalizer_ignore_self(void *, CleanupFunc, void *,
@@ -249,7 +249,7 @@ void stub_free(void *) {
 }
 
 Ops Core::_ops = {
-    NULL,
+    nullptr,
     &stub_malloc,
     &stub_malloc,
     &stub_malloc,

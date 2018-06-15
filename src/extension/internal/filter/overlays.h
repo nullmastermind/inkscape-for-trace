@@ -48,7 +48,7 @@ protected:
 
 public:
     NoiseFill ( ) : Filter() { };
-    ~NoiseFill ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NoiseFill ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -90,7 +90,7 @@ public:
 gchar const *
 NoiseFill::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream type;
     std::ostringstream hfreq;

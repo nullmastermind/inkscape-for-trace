@@ -222,7 +222,7 @@ void LPERoughen::doEffect(SPCurve *curve)
           }
         }
         while (curve_it1 != curve_endit) {
-            Geom::CubicBezier const *cubic = NULL;
+            Geom::CubicBezier const *cubic = nullptr;
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
             if (cubic) {
                 nCurve->curveto((*cubic)[1] + last_move, (*cubic)[2], curve_it1->finalPoint());

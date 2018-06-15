@@ -32,7 +32,7 @@ class SpinSlider : public Gtk::HBox, public AttrWidget
 {
 public:
     SpinSlider(double value, double lower, double upper, double step_inc,
-	       double climb_rate, int digits, const SPAttributeEnum a = SP_ATTR_INVALID, const char* tip_text = NULL);
+	       double climb_rate, int digits, const SPAttributeEnum a = SP_ATTR_INVALID, const char* tip_text = nullptr);
 
     Glib::ustring get_as_attribute() const override;
     void set_from_attribute(SPObject*) override;

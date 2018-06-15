@@ -46,8 +46,8 @@
 SPUse::SPUse()
     : SPItem(),
       SPDimensions(),
-      child(NULL),
-      href(NULL),
+      child(nullptr),
+      href(nullptr),
       ref(new SPUseReference(this)),
       _delete_connection(),
       _changed_connection(),
@@ -66,12 +66,12 @@ SPUse::SPUse()
 SPUse::~SPUse() {
     if (this->child) {
         this->detach(this->child);
-        this->child = NULL;
+        this->child = nullptr;
     }
 
     this->ref->detach();
     delete this->ref;
-    this->ref = 0;
+    this->ref = nullptr;
 }
 
 void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
@@ -91,7 +91,7 @@ void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPUse::release() {
     if (this->child) {
         this->detach(this->child);
-        this->child = NULL;
+        this->child = nullptr;
     }
 
     this->_delete_connection.disconnect();
@@ -99,7 +99,7 @@ void SPUse::release() {
     this->_transformed_connection.disconnect();
 
     g_free(this->href);
-    this->href = NULL;
+    this->href = nullptr;
 
     this->ref->detach();
 
@@ -133,7 +133,7 @@ void SPUse::set(unsigned int key, const gchar* value) {
                 /* No change, do nothing. */
             } else {
                 g_free(this->href);
-                this->href = NULL;
+                this->href = nullptr;
 
                 if (value) {
                     // First, set the href field, because SPUse::href_changed will need it.
@@ -241,9 +241,9 @@ gchar* SPUse::description() const {
     if (child) {
         if ( dynamic_cast<SPSymbol *>(child) ) {
             if (child->title()) {
-                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->title()))).c_str());
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", child->title()))).c_str());
             } else if (child->getAttribute("id")) {
-                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->getAttribute("id")))).c_str());
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", child->getAttribute("id")))).c_str());
             } else {
                 return g_strdup_printf(_("called %s"), _("Unnamed Symbol"));
             }
@@ -506,7 +506,7 @@ void SPUse::href_changed() {
 
     if (this->child) {
         this->detach(this->child);
-        this->child = NULL;
+        this->child = nullptr;
     }
 
     if (this->href) {
@@ -526,7 +526,7 @@ void SPUse::href_changed() {
 
                 this->child->invoke_build(this->document, childrepr, TRUE);
 
-                for (SPItemView *v = this->display; v != NULL; v = v->next) {
+                for (SPItemView *v = this->display; v != nullptr; v = v->next) {
                     Inkscape::DrawingItem *ai = this->child->invoke_show(v->arenaitem->drawing(), v->key, v->flags);
 
                     if (ai) {
@@ -595,7 +595,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
         
         if (childflags || (this->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem const *chi = dynamic_cast<SPItem const *>(child);
-            g_assert(chi != NULL);
+            g_assert(chi != nullptr);
             cctx.i2doc = chi->transform * ictx->i2doc;
             cctx.i2vp = chi->transform * ictx->i2vp;
             this->child->updateDisplay((SPCtx *)&cctx, childflags);
@@ -607,7 +607,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     SPItem::update(ctx, flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
             this->context_style = this->style;
             g->setStyle(this->style, this->context_style);
@@ -615,7 +615,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     }
 
     /* As last step set additional transform of arena group */
-    for (SPItemView *v = this->display; v != NULL; v = v->next) {
+    for (SPItemView *v = this->display; v != nullptr; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
         Geom::Affine t(Geom::Translate(this->x.computed, this->y.computed));
         g->setChildTransform(t);
@@ -631,7 +631,7 @@ void SPUse::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-      for (SPItemView *v = this->display; v != NULL; v = v->next) {
+      for (SPItemView *v = this->display; v != nullptr; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
         this->context_style = this->style;
         g->setStyle(this->style, this->context_style);
@@ -653,7 +653,7 @@ SPItem *SPUse::unlink() {
     Inkscape::XML::Node *repr = this->getRepr();
 
     if (!repr) {
-        return NULL;
+        return nullptr;
     }
 
     Inkscape::XML::Node *parent = repr->parent();
@@ -664,18 +664,18 @@ SPItem *SPUse::unlink() {
     SPItem *orig = this->root();
 
     if (!orig) {
-        return NULL;
+        return nullptr;
     }
 
     // Calculate the accumulated transform, starting from the original.
     Geom::Affine t = this->get_root_transform();
 
-    Inkscape::XML::Node *copy = NULL;
+    Inkscape::XML::Node *copy = nullptr;
 
     if (dynamic_cast<SPSymbol *>(orig)) { // make a group, copy children
         copy = xml_doc->createElement("svg:g");
 
-        for (Inkscape::XML::Node *child = orig->getRepr()->firstChild() ; child != NULL; child = child->next()) {
+        for (Inkscape::XML::Node *child = orig->getRepr()->firstChild() ; child != nullptr; child = child->next()) {
                 Inkscape::XML::Node *newchild = child->duplicate(xml_doc);
                 copy->appendChild(newchild);
         }
@@ -706,17 +706,17 @@ SPItem *SPUse::unlink() {
     Inkscape::GC::release(repr);
 
     // Remove tiled clone attrs.
-    copy->setAttribute("inkscape:tiled-clone-of", NULL);
-    copy->setAttribute("inkscape:tile-w", NULL);
-    copy->setAttribute("inkscape:tile-h", NULL);
-    copy->setAttribute("inkscape:tile-cx", NULL);
-    copy->setAttribute("inkscape:tile-cy", NULL);
+    copy->setAttribute("inkscape:tiled-clone-of", nullptr);
+    copy->setAttribute("inkscape:tile-w", nullptr);
+    copy->setAttribute("inkscape:tile-h", nullptr);
+    copy->setAttribute("inkscape:tile-cx", nullptr);
+    copy->setAttribute("inkscape:tile-cy", nullptr);
 
     // Establish the succession and let go of our object.
     this->setSuccessor(unlinked);
 
     SPItem *item = dynamic_cast<SPItem *>(unlinked);
-    g_assert(item != NULL);
+    g_assert(item != nullptr);
 
     // Set the accummulated transform.
     {
@@ -729,7 +729,7 @@ SPItem *SPUse::unlink() {
 }
 
 SPItem *SPUse::get_original() {
-    SPItem *ref = NULL;
+    SPItem *ref = nullptr;
 
         if (this->ref){
             ref = this->ref->getObject();

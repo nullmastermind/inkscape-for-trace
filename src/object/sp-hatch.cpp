@@ -34,7 +34,7 @@
 SPHatch::SPHatch()
     : SPPaintServer(),
       href(),
-      ref(NULL), // avoiding 'this' in initializer list
+      ref(nullptr), // avoiding 'this' in initializer list
       _hatchUnits(UNITS_OBJECTBOUNDINGBOX),
       _hatchUnits_set(false),
       _hatchContentUnits(UNITS_USERSPACEONUSE),
@@ -93,14 +93,14 @@ void SPHatch::release()
             child->hide(view_iter->key);
         }
         delete view_iter->arenaitem;
-        view_iter->arenaitem = NULL;
+        view_iter->arenaitem = nullptr;
     }
 
     if (ref) {
         _modified_connection.disconnect();
         ref->detach();
         delete ref;
-        ref = NULL;
+        ref = nullptr;
     }
 
     SPPaintServer::release();
@@ -292,7 +292,7 @@ void SPHatch::update(SPCtx* ctx, unsigned int flags)
     for (ChildIterator iter = children.begin(); iter != children.end(); ++iter) {
         SPHatchPath* child = *iter;
 
-        sp_object_ref(child, NULL);
+        sp_object_ref(child, nullptr);
 
         for (ViewIterator view_iter = _display.begin(); view_iter != _display.end(); ++view_iter) {
             Geom::OptInterval strip_extents = _calculateStripExtents(view_iter->bbox);
@@ -304,7 +304,7 @@ void SPHatch::update(SPCtx* ctx, unsigned int flags)
             child->updateDisplay(ctx, flags);
         }
 
-        sp_object_unref(child, NULL);
+        sp_object_unref(child, nullptr);
     }
 
     for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
@@ -325,13 +325,13 @@ void SPHatch::modified(unsigned int flags)
     for (ChildIterator iter = children.begin(); iter != children.end(); ++iter) {
         SPObject *child = *iter;
 
-        sp_object_ref(child, NULL);
+        sp_object_ref(child, nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
 
-        sp_object_unref(child, NULL);
+        sp_object_unref(child, nullptr);
     }
 }
 
@@ -349,8 +349,8 @@ void SPHatch::_onRefChanged(SPObject *old_ref, SPObject *ref)
     }
 
     if (!_hasHatchPatchChildren(this)) {
-        SPHatch *old_shown = NULL;
-        SPHatch *new_shown = NULL;
+        SPHatch *old_shown = nullptr;
+        SPHatch *new_shown = nullptr;
         std::vector<SPHatchPath *> oldhatchPaths;
         std::vector<SPHatchPath *> newhatchPaths;
 
@@ -407,7 +407,7 @@ SPHatch *SPHatch::rootHatch()
 SPHatch::HatchUnits SPHatch::hatchUnits() const
 {
     HatchUnits units = _hatchUnits;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_hatchUnits_set) {
             units = pat_i->_hatchUnits;
             break;
@@ -419,7 +419,7 @@ SPHatch::HatchUnits SPHatch::hatchUnits() const
 SPHatch::HatchUnits SPHatch::hatchContentUnits() const
 {
     HatchUnits units = _hatchContentUnits;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_hatchContentUnits_set) {
             units = pat_i->_hatchContentUnits;
             break;
@@ -430,7 +430,7 @@ SPHatch::HatchUnits SPHatch::hatchContentUnits() const
 
 Geom::Affine const &SPHatch::hatchTransform() const
 {
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_hatchTransform_set) {
             return pat_i->_hatchTransform;
         }
@@ -441,7 +441,7 @@ Geom::Affine const &SPHatch::hatchTransform() const
 gdouble SPHatch::x() const
 {
     gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_x._set) {
             val = pat_i->_x.computed;
             break;
@@ -453,7 +453,7 @@ gdouble SPHatch::x() const
 gdouble SPHatch::y() const
 {
     gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_y._set) {
             val = pat_i->_y.computed;
             break;
@@ -465,7 +465,7 @@ gdouble SPHatch::y() const
 gdouble SPHatch::pitch() const
 {
     gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_pitch._set) {
             val = pat_i->_pitch.computed;
             break;
@@ -477,7 +477,7 @@ gdouble SPHatch::pitch() const
 gdouble SPHatch::rotate() const
 {
     gdouble val = 0;
-    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : NULL) {
+    for (SPHatch const *pat_i = this; pat_i; pat_i = (pat_i->ref) ? pat_i->ref->getObject() : nullptr) {
         if (pat_i->_rotate._set) {
             val = pat_i->_rotate.computed;
             break;
@@ -736,7 +736,7 @@ SPHatch::View::View(Inkscape::DrawingPattern *arenaitem, int key)
 SPHatch::View::~View()
 {
     // remember, do not delete arenaitem here
-    arenaitem = NULL;
+    arenaitem = nullptr;
 }
 
 /*

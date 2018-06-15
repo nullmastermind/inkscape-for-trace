@@ -129,7 +129,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
 
     _getGeometry();
 
-    _outline = sp_canvas_bpath_new(_multi_path_manipulator._path_data.outline_group, NULL);
+    _outline = sp_canvas_bpath_new(_multi_path_manipulator._path_data.outline_group, nullptr);
     sp_canvas_item_hide(_outline);
     sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(_outline), outline_color, 1.0,
         SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
@@ -201,7 +201,7 @@ void PathManipulator::writeXML()
         // this manipulator will have to be destroyed right after this call
         _getXMLNode()->removeObserver(*_observer);
         _path->deleteObject(true, true);
-        _path = NULL;
+        _path = nullptr;
     }
     _observer->unblock();
 }
@@ -1203,7 +1203,7 @@ void PathManipulator::_createControlPointsFromGeometry()
     // TODO move this into SPPath - do not manipulate directly
 
     //XML Tree being used here directly while it shouldn't be.
-    gchar const *nts_raw = _path ? _path->getRepr()->attribute(_nodetypesKey().data()) : 0;
+    gchar const *nts_raw = _path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr;
     std::string nodetype_string = nts_raw ? nts_raw : "";
     /* Calculate the needed length of the nodetype string.
      * For closed paths, the entry is duplicated for the starting node,
@@ -1236,7 +1236,7 @@ void PathManipulator::_createControlPointsFromGeometry()
 //determines if the trace has a bspline effect and the number of steps that it takes
 int PathManipulator::_bsplineGetSteps() const {
 
-    LivePathEffect::LPEBSpline const *lpe_bsp = NULL;
+    LivePathEffect::LPEBSpline const *lpe_bsp = nullptr;
 
     SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
     if (path){
@@ -1277,7 +1277,7 @@ double PathManipulator::_bsplineHandlePosition(Handle *h, bool check_other)
     using Geom::Y;
     double pos = NO_POWER;
     Node *n = h->parent();
-    Node * next_node = NULL;
+    Node * next_node = nullptr;
     next_node = n->nodeToward(h);
     if(next_node){
         SPCurve *line_inside_nodes = new SPCurve();
@@ -1308,7 +1308,7 @@ Geom::Point PathManipulator::_bsplineHandleReposition(Handle *h,double pos){
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > sbasis_inside_nodes;
     SPCurve *line_inside_nodes = new SPCurve();
-    Node * next_node = NULL;
+    Node * next_node = nullptr;
     next_node = n->nodeToward(h);
     if(next_node && pos != NO_POWER){
         line_inside_nodes->moveto(n->position());
@@ -1482,7 +1482,7 @@ void PathManipulator::_getGeometry()
         _spcurve->unref();
         _spcurve = _path->getCurveForEdit();
         // never allow NULL to sneak in here!
-        if (_spcurve == NULL) {
+        if (_spcurve == nullptr) {
             _spcurve = new SPCurve();
         }
     }

@@ -46,7 +46,7 @@ void SPPolyLine::set(unsigned int key, const gchar* value) {
             hascpt = FALSE;
 
             cptr = value;
-            eptr = NULL;
+            eptr = nullptr;
 
             while (TRUE) {
                 gdouble x, y;

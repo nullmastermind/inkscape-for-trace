@@ -65,9 +65,9 @@ static void sp_attribute_table_object_release (SPObject */*object*/, SPAttribute
 
 
 SPAttributeTable::SPAttributeTable () : 
-    _object(NULL),
+    _object(nullptr),
     blocked(false),
-    table(NULL),
+    table(nullptr),
     _attributes(),
     _entries(),
     modified_connection(),
@@ -76,9 +76,9 @@ SPAttributeTable::SPAttributeTable () :
 }
 
 SPAttributeTable::SPAttributeTable (SPObject *object, std::vector<Glib::ustring> &labels, std::vector<Glib::ustring> &attributes, GtkWidget* parent) : 
-    _object(NULL),
+    _object(nullptr),
     blocked(false),
-    table(NULL),
+    table(nullptr),
     _attributes(),
     _entries(),
     modified_connection(),
@@ -101,7 +101,7 @@ void SPAttributeTable::clear(void)
         {
             Gtk::Widget *w = ch[i];
             ch.pop_back();
-            if (w != NULL)
+            if (w != nullptr)
             {
                 try
                 {
@@ -118,14 +118,14 @@ void SPAttributeTable::clear(void)
         _entries.clear();
         
         delete table;
-        table = NULL;
+        table = nullptr;
     }
 
     if (_object)
     {
         modified_connection.disconnect();
         release_connection.disconnect();
-        _object = NULL;
+        _object = nullptr;
     }
 }
 
@@ -151,7 +151,7 @@ void SPAttributeTable::set_object(SPObject *object,
         // Create table
         table = new Gtk::Grid();
 
-        if (!(parent == NULL))
+        if (!(parent == nullptr))
             gtk_container_add(GTK_CONTAINER(parent), (GtkWidget*)table->gobj());
         
         // Fill rows
@@ -208,7 +208,7 @@ void SPAttributeTable::change_object(SPObject *object)
     {
         modified_connection.disconnect();
         release_connection.disconnect();
-        _object = NULL;
+        _object = nullptr;
     }
 
     _object = object;
@@ -295,7 +295,7 @@ static void sp_attribute_table_object_release (SPObject */*object*/, SPAttribute
 {
     std::vector<Glib::ustring> labels;
     std::vector<Glib::ustring> attributes;
-    spat->set_object (NULL, labels, attributes, NULL);
+    spat->set_object (nullptr, labels, attributes, nullptr);
 }
 
 /*

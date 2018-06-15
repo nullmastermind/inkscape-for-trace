@@ -291,7 +291,7 @@ public:
     // create a graph that is an offseted version of the graph "of"
     // the offset is dec, with joins between edges of type "join" (see LivarotDefs.h)
     // the result is NOT a polygon; you need a subsequent call to ConvertToShape to get a real polygon
-    int MakeOffset(Shape *of, double dec, JoinType join, double miter, bool do_profile=false, double cx = 0, double cy = 0, double radius = 0, Geom::Affine *i2doc = NULL);
+    int MakeOffset(Shape *of, double dec, JoinType join, double miter, bool do_profile=false, double cx = 0, double cy = 0, double radius = 0, Geom::Affine *i2doc = nullptr);
 
     int MakeTweak (int mode, Shape *a, double dec, JoinType join, double miter, bool do_profile, Geom::Point c, Geom::Point vector, double radius, Geom::Affine *i2doc);
   
@@ -498,7 +498,7 @@ private:
     void CheckEdges(int lastPointNo, int lastChgtPt, Shape *a, Shape *b, BooleanOp mod);
     void Avance(int lastPointNo, int lastChgtPt, Shape *iS, int iB, Shape *a, Shape *b, BooleanOp mod);
     void DoEdgeTo(Shape *iS, int iB, int iTo, bool direct, bool sens);
-    void GetWindings(Shape *a, Shape *b = NULL, BooleanOp mod = bool_op_union, bool brutal = false);
+    void GetWindings(Shape *a, Shape *b = nullptr, BooleanOp mod = bool_op_union, bool brutal = false);
 
     void Validate();
 

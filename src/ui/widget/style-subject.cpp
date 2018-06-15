@@ -17,11 +17,11 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-StyleSubject::StyleSubject() : _desktop(NULL) {
+StyleSubject::StyleSubject() : _desktop(nullptr) {
 }
 
 StyleSubject::~StyleSubject() {
-    setDesktop(NULL);
+    setDesktop(nullptr);
 }
 
 void StyleSubject::setDesktop(SPDesktop *desktop) {
@@ -49,7 +49,7 @@ Inkscape::Selection *StyleSubject::Selection::_getSelection() const {
     if (desktop) {
         return desktop->getSelection();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -102,7 +102,7 @@ void StyleSubject::Selection::setCSS(SPCSSAttr *css) {
 }
 
 StyleSubject::CurrentLayer::CurrentLayer() {
-    _element = NULL;
+    _element = nullptr;
 }
 
 StyleSubject::CurrentLayer::~CurrentLayer() {
@@ -112,12 +112,12 @@ void StyleSubject::CurrentLayer::_setLayer(SPObject *layer) {
     _layer_release.disconnect();
     _layer_modified.disconnect();
     if (_element) {
-        sp_object_unref(_element, NULL);
+        sp_object_unref(_element, nullptr);
     }
     _element = layer;
     if (layer) {
-        sp_object_ref(layer, NULL);
-        _layer_release = layer->connectRelease(sigc::hide(sigc::bind(sigc::mem_fun(*this, &CurrentLayer::_setLayer), (SPObject *)NULL)));
+        sp_object_ref(layer, nullptr);
+        _layer_release = layer->connectRelease(sigc::hide(sigc::bind(sigc::mem_fun(*this, &CurrentLayer::_setLayer), (SPObject *)nullptr)));
         _layer_modified = layer->connectModified(sigc::hide(sigc::hide(sigc::mem_fun(*this, &CurrentLayer::_emitChanged))));
     }
     _emitChanged();
@@ -171,7 +171,7 @@ void StyleSubject::CurrentLayer::_afterDesktopSwitch(SPDesktop *desktop) {
         _layer_switched = desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &CurrentLayer::_setLayer));
         _setLayer(desktop->currentLayer());
     } else {
-        _setLayer(NULL);
+        _setLayer(nullptr);
     }
 }
 

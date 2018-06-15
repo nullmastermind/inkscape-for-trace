@@ -76,7 +76,7 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
             }
             // Can't change the set we're interating over while we are iterating.
             for ( std::vector<gchar const*>::iterator it = attrsRemoved.begin(); it != attrsRemoved.end(); ++it ) {
-                repr->setAttribute(*it, 0);
+                repr->setAttribute(*it, nullptr);
             }
         }
 
@@ -225,11 +225,11 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
     }
     
-    SPDocument * doc = SPDocument::createNewDoc (NULL, TRUE, TRUE);
+    SPDocument * doc = SPDocument::createNewDoc (nullptr, TRUE, TRUE);
     if (link_svg.compare("include") != 0 && is_import) {
         bool embed = ( link_svg.compare( "embed" ) == 0 );
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
-        SPNamedView *nv = sp_document_namedview(doc, NULL);
+        SPNamedView *nv = sp_document_namedview(doc, nullptr);
         Glib::ustring display_unit = nv->display_units->abbr;
         if (display_unit.empty()) {
             display_unit = "px";
@@ -259,7 +259,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
                 sp_embed_svg(image_node, uri);
             }
         } else {
-            gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
+            gchar* _uri = g_filename_to_uri(uri, nullptr, nullptr);
             if(_uri) {
                 image_node->setAttribute("xlink:href", _uri);
                 g_free(_uri);
@@ -292,7 +292,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
                 return SPDocument::createNewDocFromMem(contents, length, 1);
             } catch (Gio::Error &e) {
                 g_warning("Could not load contents of non-local URI %s\n", uri);
-                return NULL;
+                return nullptr;
             }
         } else {
             uri = path.c_str();
@@ -329,8 +329,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 void
 Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filename)
 {
-    g_return_if_fail(doc != NULL);
-    g_return_if_fail(filename != NULL);
+    g_return_if_fail(doc != nullptr);
+    g_return_if_fail(filename != nullptr);
     Inkscape::XML::Document *rdoc = doc->rdoc;
 
     bool const exportExtensions = ( !mod->get_id()

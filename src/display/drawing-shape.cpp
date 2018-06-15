@@ -33,8 +33,8 @@ namespace Inkscape {
 
 DrawingShape::DrawingShape(Drawing &drawing)
     : DrawingItem(drawing)
-    , _curve(NULL)
-    , _last_pick(NULL)
+    , _curve(nullptr)
+    , _last_pick(nullptr)
     , _repick_after(0)
 {}
 
@@ -51,7 +51,7 @@ DrawingShape::setPath(SPCurve *curve)
 
     if (_curve) {
         _curve->unref();
-        _curve = NULL;
+        _curve = nullptr;
     }
     if (curve) {
         _curve = curve;
@@ -312,15 +312,15 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     if (_repick_after > 0) // we are a slow, huge path
         return _last_pick; // skip this pick, returning what was returned last time
 
-    if (!_curve) return NULL;
-    if (!_style) return NULL;
+    if (!_curve) return nullptr;
+    if (!_style) return nullptr;
 
     bool outline = _drawing.outline();
     bool pick_as_clip = flags & PICK_AS_CLIP;
 
     if (SP_SCALE24_TO_FLOAT(_style->opacity.value) == 0 && !outline && !pick_as_clip) 
         // fully transparent, no pick unless outline mode
-        return NULL;
+        return nullptr;
 
     GTimeVal tstart, tfinish;
     g_get_current_time (&tstart);
@@ -351,9 +351,9 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     if (_drawing.arena()) {
         Geom::Rect viewbox = _drawing.arena()->item.canvas->getViewbox();
         viewbox.expandBy (width);
-        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, NULL, needfill? &wind : NULL, &dist, 0.5, &viewbox);
+        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, &viewbox);
     } else {
-        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, NULL, needfill? &wind : NULL, &dist, 0.5, NULL);
+        pathv_matrix_point_bbox_wind_distance(_curve->get_pathvector(), _ctm, p, nullptr, needfill? &wind : nullptr, &dist, 0.5, nullptr);
     }
 
     g_get_current_time (&tfinish);
@@ -397,8 +397,8 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
         }
     }
 
-    _last_pick = NULL;
-    return NULL;
+    _last_pick = nullptr;
+    return nullptr;
 }
 
 bool

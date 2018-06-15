@@ -157,7 +157,7 @@ protected:
             const gchar* val = o->getRepr()->attribute(name);
             return val;
         }
-        return 0;
+        return nullptr;
     }
 
 private:

@@ -45,7 +45,7 @@ protected:
 
 public:
     DiffuseLight ( ) : Filter() { };
-    ~DiffuseLight ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~DiffuseLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -73,7 +73,7 @@ public:
 gchar const *
 DiffuseLight::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream smooth;
     std::ostringstream elevation;
@@ -125,7 +125,7 @@ protected:
 
 public:
     MatteJelly ( ) : Filter() { };
-    ~MatteJelly ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~MatteJelly ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -154,7 +154,7 @@ public:
 gchar const *
 MatteJelly::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream smooth;
     std::ostringstream bright;
@@ -209,7 +209,7 @@ protected:
 
 public:
     SpecularLight ( ) : Filter() { };
-    ~SpecularLight ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~SpecularLight ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -238,7 +238,7 @@ public:
 gchar const *
 SpecularLight::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream smooth;
     std::ostringstream bright;

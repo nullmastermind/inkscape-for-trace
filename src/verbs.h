@@ -431,9 +431,9 @@ private:
         to find the different verbs in the hash map. */
     struct ltstr {
         bool operator()(const char* s1, const char* s2) const {
-            if ( (s1 == NULL) && (s2 != NULL) ) {
+            if ( (s1 == nullptr) && (s2 != nullptr) ) {
                 return true;
-            } else if (s1 == NULL || s2 == NULL) {
+            } else if (s1 == nullptr || s2 == nullptr) {
                 return false;
             } else {
                 return strcmp(s1, s2) < 0;
@@ -532,7 +532,7 @@ public:
 
 
 protected:
-    SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = NULL);
+    SPAction *make_action_helper (Inkscape::ActionContext const & context, void (*perform_fun)(SPAction *, void *), void *in_pntr = nullptr);
     virtual SPAction *make_action (Inkscape::ActionContext const & context);
 
 public:
@@ -564,11 +564,11 @@ public:
          char const * tip,
          char const * image,
          char const * group) :
-        _actions(0),
+        _actions(nullptr),
         _id(id),
         _name(name),
         _tip(tip),
-        _full_tip(0),
+        _full_tip(nullptr),
         _shortcut(0),
         _image(image),
         _code(code),
@@ -616,8 +616,8 @@ public:
     static void delete_all_view (Inkscape::UI::View::View * view);
     void delete_view (Inkscape::UI::View::View * view);
 
-    void sensitive (SPDocument * in_doc = NULL, bool in_sensitive = true);
-    void name (SPDocument * in_doc = NULL, Glib::ustring in_name = "");
+    void sensitive (SPDocument * in_doc = nullptr, bool in_sensitive = true);
+    void name (SPDocument * in_doc = nullptr, Glib::ustring in_name = "");
 
 // Yes, multiple public, protected and private sections are bad. We'll clean that up later
 protected:

@@ -309,7 +309,7 @@ Geom::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) co
         double midpoint_offset = _characters[char_index].span(this).x_start + _characters[char_index].x + cluster_half_width;
         int unused = 0;
         Path::cut_position *midpoint_otp = const_cast<Path*>(_path_fitted)->CurvilignToPosition(1, &midpoint_offset, unused);
-        if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
+        if (midpoint_offset >= 0.0 && midpoint_otp != nullptr && midpoint_otp[0].piece >= 0) {
             Geom::Point midpoint;
             Geom::Point tangent;
             Span const &span = _characters[char_index].span(this);
@@ -461,7 +461,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
             // as far as I know these functions are const, they're just not marked as such
             Path::cut_position *path_parameter_list = const_cast<Path*>(_path_fitted)->CurvilignToPosition(1, &x_on_path, unused);
             Path::cut_position path_parameter;
-            if (path_parameter_list != NULL && path_parameter_list[0].piece >= 0)
+            if (path_parameter_list != nullptr && path_parameter_list[0].piece >= 0)
                 path_parameter = path_parameter_list[0];
             else {
                 path_parameter.piece = _path_fitted->descr_cmd.size() - 1;
@@ -534,7 +534,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
 void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator) const
 {
     if (it._char_index == _characters.size()) {
-        *source_cookie = NULL;
+        *source_cookie = nullptr;
         return;
     }
     InputStreamItem *stream_item = _input_stream[_spans[_characters[it._char_index].in_span].in_input_stream_item];

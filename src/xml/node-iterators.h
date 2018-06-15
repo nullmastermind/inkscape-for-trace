@@ -20,13 +20,13 @@ namespace XML {
 
 struct NodeSiblingIteratorStrategy {
     static Node const *next(Node const *node) {
-        return ( node ? node->next() : NULL );
+        return ( node ? node->next() : nullptr );
     }
 };
 
 struct NodeParentIteratorStrategy {
     static Node const *next(Node const *node) {
-        return ( node ? node->parent() : NULL );
+        return ( node ? node->parent() : nullptr );
     }
 };
 

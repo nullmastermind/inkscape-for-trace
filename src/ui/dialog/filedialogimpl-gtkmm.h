@@ -67,7 +67,7 @@ findExpanderWidgets(Gtk::Container *parent,
 class FileType
 {
     public:
-    FileType(): name(), pattern(),extension(0) {}
+    FileType(): name(), pattern(),extension(nullptr) {}
     ~FileType() {}
     Glib::ustring name;
     Glib::ustring pattern;

@@ -169,7 +169,7 @@ EventLog::EventLog(SPDocument* document) :
     _priv(new EventLogPrivate()),
     _document (document),
     _event_list_store (Gtk::TreeStore::create(_columns)),
-    _curr_event_parent (NULL),
+    _curr_event_parent (nullptr),
     _notifications_blocked (false)
 {
     // add initial pseudo event
@@ -185,7 +185,7 @@ EventLog::~EventLog() {
     _priv->clearEventList(_event_list_store);
 
     delete _priv;
-    _priv = 0;
+    _priv = nullptr;
 }
 
 void
@@ -202,7 +202,7 @@ EventLog::notifyUndoEvent(Event* log)
 	{
             // ...back up to the parent
             _curr_event = _curr_event->parent();
-            _curr_event_parent = (iterator)NULL;
+            _curr_event_parent = (iterator)nullptr;
 
 	} else {
 
@@ -263,7 +263,7 @@ EventLog::notifyRedoEvent(Event* log)
 
                 // ...and move to the next event at parent level
                 _curr_event = _curr_event->parent();
-                _curr_event_parent = (iterator)NULL;
+                _curr_event_parent = (iterator)nullptr;
 
                 ++_curr_event;
             }
@@ -309,7 +309,7 @@ EventLog::notifyUndoCommitEvent(Event* log)
             _priv->collapseRow(_event_list_store->get_path(_curr_event_parent));
         }
 
-        _curr_event_parent = (iterator)(NULL);
+        _curr_event_parent = (iterator)(nullptr);
     }      
 
     _curr_event = _last_event = curr_row;
@@ -388,7 +388,7 @@ EventLog::updateUndoVerbs()
 EventLog::const_iterator
 EventLog::_getUndoEvent() const
 {
-    const_iterator undo_event = (const_iterator)NULL;
+    const_iterator undo_event = (const_iterator)nullptr;
     if( _curr_event != _event_list_store->children().begin() )
         undo_event = _curr_event;
     return undo_event;
@@ -397,7 +397,7 @@ EventLog::_getUndoEvent() const
 EventLog::const_iterator
 EventLog::_getRedoEvent() const
 {
-    const_iterator redo_event = (const_iterator)NULL;
+    const_iterator redo_event = (const_iterator)nullptr;
 
     if ( _curr_event != _last_event ) {
 

@@ -40,7 +40,7 @@ public:
      * Create new object hierarchy.
      * @param top The first entry if non-NULL.
      */
-    ObjectHierarchy(SPObject *top=NULL);
+    ObjectHierarchy(SPObject *top=nullptr);
 
     ~ObjectHierarchy();
 
@@ -63,7 +63,7 @@ public:
     void clear();
 
     SPObject *top() {
-        return !_hierarchy.empty() ? _hierarchy.back().object : NULL;
+        return !_hierarchy.empty() ? _hierarchy.back().object : nullptr;
     }
 
     /**
@@ -72,7 +72,7 @@ public:
     void setTop(SPObject *object);
 
     SPObject *bottom() {
-        return !_hierarchy.empty() ? _hierarchy.front().object : NULL;
+        return !_hierarchy.empty() ? _hierarchy.front().object : nullptr;
     }
 
     /**
@@ -131,7 +131,7 @@ private:
 
     void _detach(Record &record);
 
-    void _clear() { _trimBelow(NULL); }
+    void _clear() { _trimBelow(nullptr); }
 
     void _trim_for_release(SPObject *released);
 

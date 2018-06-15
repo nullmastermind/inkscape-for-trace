@@ -23,7 +23,7 @@ namespace Util {
 class ptr_shared {
 public:
 
-    ptr_shared() : _string(NULL) {}
+    ptr_shared() : _string(nullptr) {}
         ptr_shared(ptr_shared const &other) : _string(other._string) {}
 
     operator char const *() const { return _string; }

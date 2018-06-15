@@ -37,7 +37,7 @@ protected:
 
 private:
 	Inkscape::XML::Document * get_filter (Inkscape::Extension::Extension * ext);
-	void merge_filters (Inkscape::XML::Node * to, Inkscape::XML::Node * from, Inkscape::XML::Document * doc, gchar const * srcGraphic = NULL, gchar const * srcGraphicAlpha = NULL);
+	void merge_filters (Inkscape::XML::Node * to, Inkscape::XML::Node * from, Inkscape::XML::Document * doc, gchar const * srcGraphic = nullptr, gchar const * srcGraphicAlpha = nullptr);
 
 public:
 	Filter();

@@ -238,7 +238,7 @@ LPELattice2::newWidget()
             Parameter * param = *it;
             Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             if(param->param_key == "grid") {
-                widg = NULL;
+                widg = nullptr;
             }
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {

@@ -198,7 +198,7 @@ void PaintDef::getMIMEData(std::string const & type, char*& dest, int& len, int&
         format = 8;
     } else {
         // nothing
-        dest = 0;
+        dest = nullptr;
         len = 0;
     }
 }

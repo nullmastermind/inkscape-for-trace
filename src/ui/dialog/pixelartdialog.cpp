@@ -548,7 +548,7 @@ void PixelArtDialogImpl::workerThread()
 void PixelArtDialogImpl::onWorkerThreadFinished()
 {
     thread->join();
-    thread = NULL;
+    thread = nullptr;
     for ( std::vector<Output>::const_iterator it = output.begin(),
               end = output.end() ; it != end ; ++it ) {
         importOutput(*it);

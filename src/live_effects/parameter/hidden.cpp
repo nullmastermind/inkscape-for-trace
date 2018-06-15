@@ -69,7 +69,7 @@ HiddenParam::param_getDefaultSVGValue() const
 Gtk::Widget *
 HiddenParam::param_newWidget()
 {
-    return NULL;
+    return nullptr;
 }
 
 void

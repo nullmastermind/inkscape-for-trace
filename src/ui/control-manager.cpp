@@ -216,7 +216,7 @@ void ControlManagerImpl::setControlSize(int size, bool force)
 
 SPCanvasItem *ControlManagerImpl::createControl(SPCanvasGroup *parent, ControlType type)
 {
-    SPCanvasItem *item = 0;
+    SPCanvasItem *item = nullptr;
     double targetSize = _sizeTable[type][_size - 1];
     switch (type)
     {
@@ -259,7 +259,7 @@ SPCanvasItem *ControlManagerImpl::createControl(SPCanvasGroup *parent, ControlTy
             break;
         case CTRL_TYPE_UNKNOWN:
         default:
-            item = sp_canvas_item_new(parent, SP_TYPE_CTRL, NULL);
+            item = sp_canvas_item_new(parent, SP_TYPE_CTRL, nullptr);
     }
     if (item) {
         item->ctrlType = type;
@@ -387,7 +387,7 @@ SPCanvasItem *ControlManager::createControl(SPCanvasGroup *parent, ControlType t
 
 SPCtrlLine *ControlManager::createControlLine(SPCanvasGroup *parent, CtrlLineType type)
 {
-    SPCtrlLine *line = SP_CTRLLINE(sp_canvas_item_new(parent, SP_TYPE_CTRLLINE, NULL));
+    SPCtrlLine *line = SP_CTRLLINE(sp_canvas_item_new(parent, SP_TYPE_CTRLLINE, nullptr));
     if (line) {
         line->ctrlType = CTRL_TYPE_LINE;
 
@@ -408,7 +408,7 @@ SPCtrlLine *ControlManager::createControlLine(SPCanvasGroup *parent, Geom::Point
 
 SPCtrlCurve *ControlManager::createControlCurve(SPCanvasGroup *parent, Geom::Point const &p0, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3, CtrlLineType type)
 {
-    SPCtrlCurve *line = SP_CTRLCURVE(sp_canvas_item_new(parent, SP_TYPE_CTRLCURVE, NULL));
+    SPCtrlCurve *line = SP_CTRLCURVE(sp_canvas_item_new(parent, SP_TYPE_CTRLCURVE, nullptr));
     if (line) {
         line->ctrlType = CTRL_TYPE_LINE;
 

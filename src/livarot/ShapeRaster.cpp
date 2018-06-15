@@ -34,10 +34,10 @@ void Shape::BeginRaster(float &pos, int &curPt)
     MakePointData(true);
     MakeEdgeData(true);
 
-    if (sTree == NULL) {
+    if (sTree == nullptr) {
         sTree = new SweepTreeList(numberOfEdges());
     }
-    if (sEvts == NULL) {
+    if (sEvts == nullptr) {
         sEvts = new SweepEventQueue(numberOfEdges());
     }
 
@@ -55,7 +55,7 @@ void Shape::BeginRaster(float &pos, int &curPt)
     }
 
     for (int i = 0;i < numberOfEdges(); i++) {
-        swrData[i].misc = NULL;
+        swrData[i].misc = nullptr;
         eData[i].rdx=pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
     }
 }
@@ -64,9 +64,9 @@ void Shape::BeginRaster(float &pos, int &curPt)
 void Shape::EndRaster()
 {
     delete sTree;
-    sTree = NULL;
+    sTree = nullptr;
     delete sEvts;
-    sEvts = NULL;
+    sEvts = nullptr;
     
     MakePointData(false);
     MakeEdgeData(false);
@@ -95,7 +95,7 @@ void Shape::BeginQuickRaster(float &pos, int &curPt)
     initialisePointData();
     
     for (int i=0;i<numberOfEdges();i++) {
-        swrData[i].misc = NULL;
+        swrData[i].misc = nullptr;
         qrsData[i].ind = -1;
         eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
     }
@@ -152,14 +152,14 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
 					if ( nbDn <= 0 ) {
             upNo = -1;
 					}
-					if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+					if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
 					}
 				} else {
 					if ( nbUp <= 0 ) {
             dnNo = -1;
 					}
-					if ( dnNo >= 0 && swrData[dnNo].misc == NULL ) {
+					if ( dnNo >= 0 && swrData[dnNo].misc == nullptr ) {
             dnNo = -1;
 					}
 				}
@@ -178,7 +178,7 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
                         // but the other edge don't have this chance
                         SweepTree *node = swrData[cb].misc;
                         if ( node ) {
-                            swrData[cb].misc = NULL;
+                            swrData[cb].misc = nullptr;
                             node->Remove(*sTree, *sEvts, true);
                         }
                     }
@@ -189,13 +189,13 @@ void Shape::Scan(float &pos, int &curP, float to, float step)
       
         // if there is one edge going down and one edge coming from above, we don't Insert() the new edge,
         // but replace the upNo edge by the new one (faster)
-        SweepTree* insertionNode = NULL;
+        SweepTree* insertionNode = nullptr;
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
 							int    rmNo=(d == DOWNWARDS) ? upNo:dnNo;
 							int    neNo=(d == DOWNWARDS) ? dnNo:upNo;
 							  SweepTree* node = swrData[rmNo].misc;
-                swrData[rmNo].misc = NULL;
+                swrData[rmNo].misc = nullptr;
 
                 int const P = (d == DOWNWARDS) ? nPt : Other(nPt, neNo);
                 node->ConvertTo(this, neNo, 1, P);
@@ -304,7 +304,7 @@ void Shape::QuickScan(float &pos,int &curP, float to, bool /*doSort*/, float ste
         if ( nbDn <= 0 ) {
             upNo = -1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
 
@@ -629,7 +629,7 @@ void Shape::DirectScan(float &pos, int &curP, float to, float step)
         for (int i=0;i<numberOfEdges();i++) {
             if ( swrData[i].misc ) {
                 SweepTree* node = swrData[i].misc;
-                swrData[i].misc = NULL;
+                swrData[i].misc = nullptr;
                 node->Remove(*sTree, *sEvts, true);
             }
         }
@@ -664,7 +664,7 @@ void Shape::DirectScan(float &pos, int &curP, float to, float step)
         for (int i = 0; i < numberOfEdges(); i++) {
             if ( swrData[i].misc ) {
                 SweepTree* node = swrData[i].misc;
-                swrData[i].misc = NULL;
+                swrData[i].misc = nullptr;
                 node->Remove(*sTree, *sEvts, true);
             }
         }
@@ -860,7 +860,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
         if ( nbDn <= 0 ) {
             upNo = -1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
 
@@ -885,7 +885,7 @@ void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, 
         }
 
         // traitement du "upNo devient dnNo"
-        SweepTree *insertionNode = NULL;
+        SweepTree *insertionNode = nullptr;
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
@@ -1037,7 +1037,7 @@ void Shape::Scan(float &pos, int &curP, float to, FillRule directed, BitLigne *l
         if ( nbDn <= 0 ) {
             upNo = -1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
         
@@ -1060,7 +1060,7 @@ void Shape::Scan(float &pos, int &curP, float to, FillRule directed, BitLigne *l
         }
         
         // traitement du "upNo devient dnNo"
-        SweepTree* insertionNode = NULL;
+        SweepTree* insertionNode = nullptr;
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
@@ -1146,7 +1146,7 @@ void Shape::Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, 
         if ( nbDn <= 0 ) {
             upNo=-1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo=-1;
         }
 
@@ -1170,7 +1170,7 @@ void Shape::Scan(float &pos, int &curP, float to, AlphaLigne *line, bool exact, 
         }
 
         // traitement du "upNo devient dnNo"
-        SweepTree* insertionNode = NULL;
+        SweepTree* insertionNode = nullptr;
         if ( dnNo >= 0 ) {
             if ( upNo >= 0 ) {
                 SweepTree* node = swrData[upNo].misc;
@@ -1298,7 +1298,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FloatLigne* line, float s
         if ( nbDn <= 0 ) {
             upNo = -1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
 
@@ -1450,7 +1450,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, FillRule directed, BitLig
             upNo = -1;
         }
         
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
 
@@ -1544,7 +1544,7 @@ void Shape::QuickScan(float &pos, int &curP, float to, AlphaLigne* line, float s
         if ( nbDn <= 0 ) {
             upNo = -1;
         }
-        if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+        if ( upNo >= 0 && swrData[upNo].misc == nullptr ) {
             upNo = -1;
         }
 
@@ -1990,7 +1990,7 @@ void Shape::_updateIntersection(int e, int p)
     swrData[e].lastY = swrData[e].curY;
     swrData[e].curX = getPoint(p).x[0];
     swrData[e].curY = getPoint(p).x[1];
-    swrData[e].misc = NULL;
+    swrData[e].misc = nullptr;
 }
 
 

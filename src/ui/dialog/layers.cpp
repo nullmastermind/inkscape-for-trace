@@ -118,7 +118,7 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
 Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
 {
     Gtk::Image *iconWidget = nullptr;
-    const char* label = 0;
+    const char* label = nullptr;
 
     if ( iconName ) {
         iconWidget = Gtk::manage(new Gtk::Image());
@@ -178,7 +178,7 @@ void LayersPanel::_fireAction( unsigned int code )
         if ( verb ) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(_desktop));
             if ( action ) {
-                sp_action_perform( action, NULL );
+                sp_action_perform( action, nullptr );
 //             } else {
 //                 g_message("no action");
             }
@@ -295,7 +295,7 @@ bool LayersPanel::_executeAction()
         }
 
         delete _pending;
-        _pending = 0;
+        _pending = nullptr;
     }
 
     return false;
@@ -393,7 +393,7 @@ void LayersPanel::_layersChanged()
     #if DUMP_LAYERS
                 g_message("root:%p  {%s}   [%s]", root, root->id, root->label() );
     #endif // DUMP_LAYERS
-                _addLayer( document, root, 0, target, 0 );
+                _addLayer( document, root, nullptr, target, 0 );
             }
             _selectedConnection.unblock();
         }
@@ -435,7 +435,7 @@ void LayersPanel::_addLayer( SPDocument* doc, SPObject* layer, Gtk::TreeModel::R
 
 SPObject* LayersPanel::_selectedLayer()
 {
-    SPObject* obj = 0;
+    SPObject* obj = nullptr;
 
     Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
     if ( iter ) {
@@ -473,8 +473,8 @@ void LayersPanel::_checkTreeSelection()
         SPObject* inTree = _selectedLayer();
         if ( inTree ) {
 
-            sensitiveNonTop = (Inkscape::next_layer(inTree->parent, inTree) != 0);
-            sensitiveNonBottom = (Inkscape::previous_layer(inTree->parent, inTree) != 0);
+            sensitiveNonTop = (Inkscape::next_layer(inTree->parent, inTree) != nullptr);
+            sensitiveNonBottom = (Inkscape::previous_layer(inTree->parent, inTree) != nullptr);
 
         }
     }
@@ -496,7 +496,7 @@ void LayersPanel::_preToggle( GdkEvent const *event )
 
     if ( _toggleEvent ) {
         gdk_event_free(_toggleEvent);
-        _toggleEvent = 0;
+        _toggleEvent = nullptr;
     }
 
     if ( event && (event->type == GDK_BUTTON_PRESS) ) {
@@ -507,7 +507,7 @@ void LayersPanel::_preToggle( GdkEvent const *event )
 
 void LayersPanel::_toggled( Glib::ustring const& str, int targetCol )
 {
-    g_return_if_fail(_desktop != NULL);
+    g_return_if_fail(_desktop != nullptr);
 
     Gtk::TreeModel::Children::iterator iter = _tree.get_model()->get_iter(str);
     Gtk::TreeModel::Row row = *iter;
@@ -515,7 +515,7 @@ void LayersPanel::_toggled( Glib::ustring const& str, int targetCol )
     Glib::ustring tmp = row[_model->_colLabel];
 
     SPObject* obj = row[_model->_colObject];
-    SPItem* item = ( obj && SP_IS_ITEM(obj) ) ? SP_ITEM(obj) : 0;
+    SPItem* item = ( obj && SP_IS_ITEM(obj) ) ? SP_ITEM(obj) : nullptr;
     if ( item ) {
         switch ( targetCol ) {
             case COL_VISIBLE:
@@ -590,7 +590,7 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
             && (event->state & GDK_MOD1_MASK)) {
         // Alt left click on the visible/lock columns - eat this event to keep row selection
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -608,7 +608,7 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
             && (event->state & (GDK_SHIFT_MASK | GDK_MOD1_MASK))) {
 
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -647,7 +647,7 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
     if ( event->type == GDK_BUTTON_RELEASE && doubleclick) {
         doubleclick = 0;
         Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = 0;
+        Gtk::TreeViewColumn* col = nullptr;
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         int x2 = 0;
@@ -675,8 +675,8 @@ bool LayersPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*contex
     SPObject *selected = _selectedLayer();
 
     _dnd_into = false;
-    _dnd_target = NULL;
-    _dnd_source = ( selected && SP_IS_ITEM(selected) ) ? SP_ITEM(selected) : 0;
+    _dnd_target = nullptr;
+    _dnd_source = ( selected && SP_IS_ITEM(selected) ) ? SP_ITEM(selected) : nullptr;
 
     if (_tree.get_path_at_pos (x, y, target_path, target_column, cell_x, cell_y)) {
         // Are we before, inside or after the drop layer
@@ -699,7 +699,7 @@ bool LayersPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*contex
                     _dnd_into = true;
                 } else {
                     // Drop into the top level
-                    _dnd_target = NULL;
+                    _dnd_target = nullptr;
                 }
             }
         }
@@ -707,7 +707,7 @@ bool LayersPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*contex
         if (_store->iter_is_valid(iter)) {
             Gtk::TreeModel::Row row = *iter;
             SPObject *obj = row[_model->_colObject];
-            _dnd_target = ( obj && SP_IS_ITEM(obj) ) ? SP_ITEM(obj) : 0;
+            _dnd_target = ( obj && SP_IS_ITEM(obj) ) ? SP_ITEM(obj) : nullptr;
         }
     }
 
@@ -733,7 +733,7 @@ void LayersPanel::_doTreeMove( )
         }
         _dnd_source->moveTo(_dnd_target, _dnd_into);
         _selectLayer(_dnd_source);
-        _dnd_source = NULL;
+        _dnd_source = nullptr;
         DocumentUndo::done( _desktop->doc() , SP_VERB_NONE,
                                             _("Move layer"));
     }
@@ -805,10 +805,10 @@ LayersPanel::LayersPanel() :
     UI::Widget::Panel("/dialogs/layers", SP_VERB_DIALOG_LAYERS),
     deskTrack(),
     _maxNestDepth(20),
-    _desktop(0),
-    _model(0),
-    _pending(0),
-    _toggleEvent(0),
+    _desktop(nullptr),
+    _model(nullptr),
+    _pending(nullptr),
+    _toggleEvent(nullptr),
     _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers",
                        UI::Widget::SimpleFilterModifier::BLEND |
                        UI::Widget::SimpleFilterModifier::OPACITY |
@@ -941,20 +941,20 @@ LayersPanel::LayersPanel() :
 
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, 0, "New", (int)BUTTON_NEW ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, 0, "Rename", (int)BUTTON_RENAME ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, nullptr, "New", (int)BUTTON_NEW ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, nullptr, "Rename", (int)BUTTON_RENAME ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, 0, "Solo", (int)BUTTON_SOLO ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, 0, "Show All", (int)BUTTON_SHOW_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, 0, "Hide All", (int)BUTTON_HIDE_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, nullptr, "Solo", (int)BUTTON_SOLO ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, nullptr, "Show All", (int)BUTTON_SHOW_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, nullptr, "Hide All", (int)BUTTON_HIDE_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, 0, "Lock Others", (int)BUTTON_LOCK_OTHERS ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, 0, "Lock All", (int)BUTTON_LOCK_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, 0, "Unlock All", (int)BUTTON_UNLOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, nullptr, "Lock Others", (int)BUTTON_LOCK_OTHERS ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, nullptr, "Lock All", (int)BUTTON_LOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, nullptr, "Unlock All", (int)BUTTON_UNLOCK_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
@@ -963,8 +963,8 @@ LayersPanel::LayersPanel() :
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DUPLICATE, 0, "Duplicate", (int)BUTTON_DUPLICATE ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DELETE, 0, "Delete", (int)BUTTON_DELETE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DUPLICATE, nullptr, "Duplicate", (int)BUTTON_DUPLICATE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DELETE, nullptr, "Delete", (int)BUTTON_DELETE ) );
         
         _popupMenu.show_all_children();
     }
@@ -995,25 +995,25 @@ LayersPanel::LayersPanel() :
 
 LayersPanel::~LayersPanel()
 {
-    setDesktop(NULL);
+    setDesktop(nullptr);
 
-    _compositeSettings.setSubject(NULL);
+    _compositeSettings.setSubject(nullptr);
 
     if ( _model )
     {
         delete _model;
-        _model = 0;
+        _model = nullptr;
     }
 
     if (_pending) {
         delete _pending;
-        _pending = 0;
+        _pending = nullptr;
     }
 
     if ( _toggleEvent )
     {
         gdk_event_free( _toggleEvent );
-        _toggleEvent = 0;
+        _toggleEvent = nullptr;
     }
 
     desktopChangeConn.disconnect();
@@ -1030,7 +1030,7 @@ void LayersPanel::setDesktop( SPDesktop* desktop )
         _layerUpdatedConnection.disconnect();
         _changedConnection.disconnect();
         if ( _desktop ) {
-            _desktop = 0;
+            _desktop = nullptr;
         }
 
         _desktop = Panel::getDesktop();

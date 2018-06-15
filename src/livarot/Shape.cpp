@@ -23,12 +23,12 @@ Shape::Shape()
   : nbQRas(0),
     firstQRas(-1),
     lastQRas(-1),
-    qrsData(NULL),
+    qrsData(nullptr),
     nbInc(0),
     maxInc(0),
-    iData(NULL),
-    sTree(NULL),
-    sEvts(NULL),
+    iData(nullptr),
+    sTree(nullptr),
+    sEvts(nullptr),
     _need_points_sorting(false),
     _need_edges_sorting(false),
     _has_points_data(false),
@@ -242,7 +242,7 @@ Shape::MakeVoronoiData (bool nVal)
 void
 Shape::Copy (Shape * who)
 {
-  if (who == NULL)
+  if (who == nullptr)
     {
       Reset (0, 0);
       return;
@@ -256,9 +256,9 @@ Shape::Copy (Shape * who)
   MakeBackData (false);
 
   delete sTree;
-  sTree = NULL;
+  sTree = nullptr;
   delete sEvts;
-  sEvts = NULL;
+  sEvts = nullptr;
 
   Reset (who->numberOfPoints(), who->numberOfEdges());
   type = who->type;
@@ -342,7 +342,7 @@ Shape::AddPoint (const Geom::Point x)
       pData[n].pending = 0;
       pData[n].edgeOnLeft = -1;
       pData[n].nextLinkedPoint = -1;
-      pData[n].askForWindingS = NULL;
+      pData[n].askForWindingS = nullptr;
       pData[n].askForWindingB = -1;
       pData[n].rx[0] = Round(p.x[0]);
       pData[n].rx[1] = Round(p.x[1]);
@@ -1163,7 +1163,7 @@ Shape::AddEdge (int st, int en)
     }
   if (_has_sweep_src_data)
     {
-      swsData[n].misc = NULL;
+      swsData[n].misc = nullptr;
       swsData[n].firstLinkedPoint = -1;
     }
   if (_has_back_data)
@@ -1238,7 +1238,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
     }
   if (_has_sweep_src_data)
     {
-      swsData[n].misc = NULL;
+      swsData[n].misc = nullptr;
       swsData[n].firstLinkedPoint = -1;
     }
   if (_has_back_data)
@@ -2151,11 +2151,11 @@ void Shape::initialiseEdgeData()
             eData[i].coEd = -eData[i].coEd;
         }
 
-        swsData[i].misc = NULL;
+        swsData[i].misc = nullptr;
         swsData[i].firstLinkedPoint = -1;
         swsData[i].stPt = swsData[i].enPt = -1;
         swsData[i].leftRnd = swsData[i].rightRnd = -1;
-        swsData[i].nextSh = NULL;
+        swsData[i].nextSh = nullptr;
         swsData[i].nextBo = -1;
         swsData[i].curPoint = -1;
         swsData[i].doneTo = -1;
@@ -2166,7 +2166,7 @@ void Shape::initialiseEdgeData()
 void Shape::clearIncidenceData()
 {
     g_free(iData);
-    iData = NULL;
+    iData = nullptr;
     nbInc = maxInc = 0;
 }
 

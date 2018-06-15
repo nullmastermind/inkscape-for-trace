@@ -43,7 +43,7 @@ ColorPickerParam::param_set_default()
 static guint32 sp_read_color_alpha(gchar const *str, guint32 def)
 {
     guint32 val = 0;
-    if (str == NULL) return def;
+    if (str == nullptr) return def;
     while ((*str <= ' ') && *str) str++;
     if (!*str) return def;
 

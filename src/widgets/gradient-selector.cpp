@@ -67,28 +67,28 @@ static void sp_gradient_selector_class_init(SPGradientSelectorClass *klass)
                                         G_TYPE_FROM_CLASS(object_class),
                                         (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                         G_STRUCT_OFFSET (SPGradientSelectorClass, grabbed),
-					NULL, NULL,
+					nullptr, nullptr,
                                         g_cclosure_marshal_VOID__VOID,
                                         G_TYPE_NONE, 0);
     signals[DRAGGED] =  g_signal_new ("dragged",
                                         G_TYPE_FROM_CLASS(object_class),
                                         (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                         G_STRUCT_OFFSET (SPGradientSelectorClass, dragged),
-					NULL, NULL,
+					nullptr, nullptr,
                                         g_cclosure_marshal_VOID__VOID,
                                         G_TYPE_NONE, 0);
     signals[RELEASED] = g_signal_new ("released",
                                         G_TYPE_FROM_CLASS(object_class),
                                         (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                         G_STRUCT_OFFSET (SPGradientSelectorClass, released),
-					NULL, NULL,
+					nullptr, nullptr,
                                         g_cclosure_marshal_VOID__VOID,
                                         G_TYPE_NONE, 0);
     signals[CHANGED] =  g_signal_new ("changed",
                                         G_TYPE_FROM_CLASS(object_class),
                                         (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE),
                                         G_STRUCT_OFFSET (SPGradientSelectorClass, changed),
-					NULL, NULL,
+					nullptr, nullptr,
                                         g_cclosure_marshal_VOID__VOID,
                                         G_TYPE_NONE, 0);
 
@@ -120,7 +120,7 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     sel->gradientSpread = SP_GRADIENT_SPREAD_PAD;
 
     /* Vectors */
-    sel->vectors = sp_gradient_vector_selector_new (NULL, NULL);
+    sel->vectors = sp_gradient_vector_selector_new (nullptr, nullptr);
     SPGradientVectorSelector *gvs = SP_GRADIENT_VECTOR_SELECTOR(sel->vectors);
     sel->store = gvs->store;
     sel->columns = gvs->columns;
@@ -223,11 +223,11 @@ static void sp_gradient_selector_dispose(GObject *object)
 
     if (sel->icon_renderer) {
         delete sel->icon_renderer;
-        sel->icon_renderer = NULL;
+        sel->icon_renderer = nullptr;
     }
     if (sel->text_renderer) {
         delete sel->text_renderer;
-        sel->text_renderer = NULL;
+        sel->text_renderer = nullptr;
     }
 
     if ((G_OBJECT_CLASS(sp_gradient_selector_parent_class))->dispose) {
@@ -244,7 +244,7 @@ void SPGradientSelector::setSpread(SPGradientSpread spread)
 
 GtkWidget *sp_gradient_selector_new()
 {
-    SPGradientSelector *sel = SP_GRADIENT_SELECTOR(g_object_new (SP_TYPE_GRADIENT_SELECTOR, NULL));
+    SPGradientSelector *sel = SP_GRADIENT_SELECTOR(g_object_new (SP_TYPE_GRADIENT_SELECTOR, nullptr));
 
     return GTK_WIDGET(sel);
 }
@@ -361,7 +361,7 @@ void SPGradientSelector::onTreeSelection()
         return;
     }
 
-    SPGradient *obj = NULL;
+    SPGradient *obj = nullptr;
     /* Single selection */
     Gtk::TreeModel::iterator iter = sel->get_selected();
     if ( iter ) {
@@ -370,7 +370,7 @@ void SPGradientSelector::onTreeSelection()
     }
 
     if (obj) {
-        sp_gradient_selector_vector_set (NULL, SP_GRADIENT(obj), this);
+        sp_gradient_selector_vector_set (nullptr, SP_GRADIENT(obj), this);
     }
 }
 
@@ -451,7 +451,7 @@ void SPGradientSelector::setVector(SPDocument *doc, SPGradient *vector)
             gtk_widget_set_sensitive(edit, FALSE);
         }
         if (add) {
-            gtk_widget_set_sensitive(add, (doc != NULL));
+            gtk_widget_set_sensitive(add, (doc != nullptr));
         }
         if (del) {
             gtk_widget_set_sensitive(del, FALSE);
@@ -472,7 +472,7 @@ static void sp_gradient_selector_vector_set(SPGradientVectorSelector * /*gvs*/, 
     if (!sel->blocked) {
         sel->blocked = TRUE;
         gr = sp_gradient_ensure_vector_normalized (gr);
-        sel->setVector((gr) ? gr->document : 0, gr);
+        sel->setVector((gr) ? gr->document : nullptr, gr);
         g_signal_emit (G_OBJECT (sel), signals[CHANGED], 0, gr);
         sel->blocked = FALSE;
     }
@@ -487,7 +487,7 @@ sp_gradient_selector_delete_vector_clicked (GtkWidget */*w*/, SPGradientSelector
         return;
     }
 
-    SPGradient *obj = NULL;
+    SPGradient *obj = nullptr;
     /* Single selection */
     Gtk::TreeModel::iterator iter = selection->get_selected();
     if ( iter ) {
@@ -516,7 +516,7 @@ sp_gradient_selector_edit_vector_clicked (GtkWidget */*w*/, SPGradientSelector *
         if ( verb ) {
             SPAction *action = verb->get_action( Inkscape::ActionContext( ( Inkscape::UI::View::View * ) SP_ACTIVE_DESKTOP ) );
             if ( action ) {
-                sp_action_perform( action, NULL );
+                sp_action_perform( action, nullptr );
             }
         }
     }
@@ -533,14 +533,14 @@ sp_gradient_selector_add_vector_clicked (GtkWidget */*w*/, SPGradientSelector *s
     SPGradient *gr = sp_gradient_vector_selector_get_gradient( SP_GRADIENT_VECTOR_SELECTOR (sel->vectors));
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
-    Inkscape::XML::Node *repr = NULL;
+    Inkscape::XML::Node *repr = nullptr;
 
     if (gr) {
         repr = gr->getRepr()->duplicate(xml_doc);
         // Rename the new gradients id to be similar to the cloned gradients
         Glib::ustring old_id = gr->getId();
         rename_id(gr, old_id);
-        doc->getDefs()->getRepr()->addChild(repr, NULL);
+        doc->getDefs()->getRepr()->addChild(repr, nullptr);
     } else {
         repr = xml_doc->createElement("svg:linearGradient");
         Inkscape::XML::Node *stop = xml_doc->createElement("svg:stop");
@@ -553,7 +553,7 @@ sp_gradient_selector_add_vector_clicked (GtkWidget */*w*/, SPGradientSelector *s
         stop->setAttribute("style", "stop-color:#fff;stop-opacity:1;");
         repr->appendChild(stop);
         Inkscape::GC::release(stop);
-        doc->getDefs()->getRepr()->addChild(repr, NULL);
+        doc->getDefs()->getRepr()->addChild(repr, nullptr);
         gr = SP_GRADIENT(doc->getObjectByRepr(repr));
     }
     

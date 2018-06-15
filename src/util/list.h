@@ -60,7 +60,7 @@ public:
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : _cell(NULL) {}
+    List() : _cell(nullptr) {}
     explicit List(const_reference value, List const &next=List())
     : _cell(new ListCell<T>(value, next._cell)) {}
 
@@ -157,7 +157,7 @@ public:
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : _cell(NULL) {}
+    List() : _cell(nullptr) {}
     List(const_reference value, List const &next=List())
     : _cell(new ListCell<T &>(value, next._cell)) {}
 

@@ -33,7 +33,7 @@ namespace Widget {
 UnitTracker::UnitTracker(UnitType unit_type) :
     _active(0),
     _isUpdating(false),
-    _activeUnit(NULL),
+    _activeUnit(nullptr),
     _activeUnitInitialized(false),
     _store(nullptr),
     _priorValues()

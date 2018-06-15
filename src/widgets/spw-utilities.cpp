@@ -32,8 +32,8 @@
 Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int row, Gtk::Widget* target)
 {
   Gtk::Label *label_widget = new Gtk::Label();
-  g_assert(label_widget != NULL);
-  if (target != NULL)
+  g_assert(label_widget != nullptr);
+  if (target != nullptr)
   {
     label_widget->set_text_with_mnemonic(label_text);
 	label_widget->set_mnemonic_widget(*target);
@@ -69,7 +69,7 @@ Gtk::HBox * spw_hbox(Gtk::Grid * table, int width, int col, int row)
 {
   /* Create a new hbox with a 4-pixel spacing between children */
   Gtk::HBox *hb = new Gtk::HBox(false, 4);
-  g_assert(hb != NULL);
+  g_assert(hb != nullptr);
   hb->show();
   hb->set_hexpand();
   hb->set_halign(Gtk::ALIGN_FILL);
@@ -94,7 +94,7 @@ sp_set_font_size_recursive (GtkWidget *w, gpointer font)
 
         gtk_css_provider_load_from_data(css_provider,
                                         css_data.str().c_str(),
-                                        -1, NULL);
+                                        -1, nullptr);
 
         auto style_context = gtk_widget_get_style_context(w);
         gtk_style_context_add_provider(style_context,
@@ -128,7 +128,7 @@ sp_set_font_size_smaller (GtkWidget *w)
  */
 gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 {
-	gpointer r = NULL;
+	gpointer r = nullptr;
 
 	if (w && G_IS_OBJECT(w)) {
 		r = g_object_get_data(G_OBJECT(w), (gchar *) key);
@@ -143,7 +143,7 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -151,7 +151,7 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
  */
 GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
 {
-	gchar *r = NULL;
+	gchar *r = nullptr;
 
 	if (w && G_IS_OBJECT(w)) {
 		r = (gchar *) g_object_get_data(G_OBJECT(w), key);
@@ -166,7 +166,7 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /*

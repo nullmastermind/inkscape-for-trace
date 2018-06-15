@@ -57,9 +57,9 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
       _verb_num(verb_num),
       _title(),
       _apply_label(apply_label),
-      _desktop(NULL),
+      _desktop(nullptr),
       _is_active_desktop(true),
-      _behavior(0)
+      _behavior(nullptr)
 {
     gchar title[500];
 
@@ -86,7 +86,7 @@ Dialog::~Dialog()
 {
     save_geometry();
     delete _behavior;
-    _behavior = 0;
+    _behavior = nullptr;
 }
 
 
@@ -205,7 +205,7 @@ Dialog::save_status(int visible, int state, int placement)
 {
    // Only save dialog status for dialogs on the "last document"
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop != NULL || !_is_active_desktop ) {
+    if (desktop != nullptr || !_is_active_desktop ) {
         return;
     }
 
@@ -284,7 +284,7 @@ void Dialog::_apply()
 void Dialog::_close()
 {
     _behavior->hide();
-    _onDeleteEvent(NULL);
+    _onDeleteEvent(nullptr);
 }
 
 void Dialog::_defocus()

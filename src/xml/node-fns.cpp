@@ -42,7 +42,7 @@ bool id_permitted_internal_memoized(GQuark qname) {
 }
 
 bool id_permitted(Node const *node) {
-    g_return_val_if_fail(node != NULL, false);
+    g_return_val_if_fail(node != nullptr, false);
 
     if ( node->type() != ELEMENT_NODE ) {
         return false;
@@ -62,14 +62,14 @@ Node *previous_node(Node *node) {
     using Inkscape::Algorithms::find_if_before;
 
     if ( !node || !node->parent() ) {
-        return NULL;
+        return nullptr;
     }
 
     Node *previous=find_if_before<NodeSiblingIterator>(
-        node->parent()->firstChild(), NULL, node_matches(*node)
+        node->parent()->firstChild(), nullptr, node_matches(*node)
     );
 
-    g_assert(previous == NULL
+    g_assert(previous == nullptr
              ? node->parent()->firstChild() == node
              : previous->next() == node);
 

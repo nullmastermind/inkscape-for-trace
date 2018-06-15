@@ -104,7 +104,7 @@ TweakTool::TweakTool()
     , is_drawing(false)
     , is_dilating(false)
     , has_dilated(false)
-    , dilate_area(NULL)
+    , dilate_area(nullptr)
     , do_h(true)
     , do_s(true)
     , do_l(true)
@@ -119,7 +119,7 @@ TweakTool::~TweakTool() {
 
     if (this->dilate_area) {
         sp_canvas_item_destroy(this->dilate_area);
-        this->dilate_area = NULL;
+        this->dilate_area = nullptr;
     }
 }
 
@@ -140,7 +140,7 @@ static bool is_color_mode (gint mode)
 
 void TweakTool::update_cursor (bool with_shift) {
     guint num = 0;
-    gchar *sel_message = NULL;
+    gchar *sel_message = nullptr;
 
     if (!desktop->selection->isEmpty()) {
         num = (guint) boost::distance(desktop->selection->items());
@@ -369,7 +369,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
         sp_item_list_to_curves (items, selected, to_select);
         SPObject* newObj = doc->getObjectByRepr(to_select[0]);
         item = dynamic_cast<SPItem *>(newObj);
-        g_assert(item != NULL);
+        g_assert(item != nullptr);
         selection->add(item);
     }
 
@@ -383,7 +383,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
         for (auto i = children.rbegin(); i!= children.rend(); ++i) {
             SPItem *child = *i; 
-            g_assert(child != NULL);
+            g_assert(child != nullptr);
             if (sp_tweak_dilate_recursive (selection, child, p, vector, mode, radius, force, fidelity, reverse)) {
                 did = true;
             }
@@ -490,10 +490,10 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
         } else if (dynamic_cast<SPPath *>(item) || dynamic_cast<SPShape *>(item)) {
 
-            Inkscape::XML::Node *newrepr = NULL;
+            Inkscape::XML::Node *newrepr = nullptr;
             gint pos = 0;
-            Inkscape::XML::Node *parent = NULL;
-            char const *id = NULL;
+            Inkscape::XML::Node *parent = nullptr;
+            char const *id = nullptr;
             if (!dynamic_cast<SPPath *>(item)) {
                 newrepr = sp_selected_item_to_curved_repr(item, 0);
                 if (!newrepr) {
@@ -518,7 +518,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
             }
 
             Path *orig = Path_for_item(item, false);
-            if (orig == NULL) {
+            if (orig == nullptr) {
                 return false;
             }
 
@@ -533,7 +533,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
             orig->Fill(theShape, 0);
 
             SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
-            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+            gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
             if (val && strcmp(val, "nonzero") == 0) {
                 theRes->ConvertToShape(theShape, fill_nonZero);
             } else if (val && strcmp(val, "evenodd") == 0) {
@@ -624,7 +624,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
                 if (newrepr) {
                     Inkscape::GC::release(newrepr);
-                    newrepr = NULL;
+                    newrepr = nullptr;
                 }
             }
 
@@ -818,7 +818,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
 
         double offset_l = 0;
         double offset_h = 0;
-        SPObject *child_prev = NULL;
+        SPObject *child_prev = nullptr;
         for (auto& child: vector->children) {
             SPStop *stop = dynamic_cast<SPStop *>(&child);
             if (!stop) {
@@ -829,7 +829,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
 
             if (child_prev) {
                 SPStop *prevStop = dynamic_cast<SPStop *>(child_prev);
-                g_assert(prevStop != NULL);
+                g_assert(prevStop != nullptr);
 
                 if (offset_h - offset_l > r && pos_e >= offset_l && pos_e <= offset_h) {
                     // the summit falls in this interstop, and the radius is small,

@@ -82,7 +82,7 @@ Wmf::~Wmf (void) //The destructor
 bool
 Wmf::check (Inkscape::Extension::Extension * /*module*/)
 {
-    if (NULL == Inkscape::Extension::db.get(PRINT_WMF))
+    if (nullptr == Inkscape::Extension::db.get(PRINT_WMF))
         return FALSE;
     return TRUE;
 }
@@ -121,8 +121,8 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     mod->finish();
     /* Release arena */
     mod->base->invoke_hide(mod->dkey);
-    mod->base = NULL;
-    mod->root = NULL; // deleted by invoke_hide
+    mod->base = nullptr;
+    mod->root = nullptr; // deleted by invoke_hide
 /* end */
 
     mod->set_param_string("destination", oldoutput);
@@ -138,7 +138,7 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     Inkscape::Extension::Extension * ext;
 
     ext = Inkscape::Extension::db.get(PRINT_WMF);
-    if (ext == NULL)
+    if (ext == nullptr)
         return;
 
     bool new_val         = mod->get_param_bool("textToPath");
@@ -162,7 +162,7 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("textToPath", new_val);
 
     // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
     print_document_to_file(doc, filename);
@@ -452,11 +452,11 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
     int  dibparams = U_BI_UNKNOWN;  // type of image not yet determined
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char            *rgba_px = NULL;     // RGBA pixels
-    const char      *px      = NULL;     // DIB pixels
-    const U_RGBQUAD *ct      = NULL;     // DIB color table
+    char            *rgba_px = nullptr;     // RGBA pixels
+    const char      *px      = nullptr;     // DIB pixels
+    const U_RGBQUAD *ct      = nullptr;     // DIB color table
     uint32_t numCt;
     int32_t  width, height, colortype, invert; // if needed these values will be set by wget_DIB_params
     if(iUsage == U_DIB_RGB_COLORS){
@@ -484,7 +484,7 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         }
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG || dibparams==U_BI_PNG){  // image was binary png or jpg in source file
         base64String = g_base64_encode((guchar*) px, numCt );
     }
@@ -551,10 +551,10 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
     char xywh[64]; // big enough
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char            *rgba_px = NULL;     // RGBA pixels
-    const U_RGBQUAD *ct      = NULL;     // color table, always NULL here
+    char            *rgba_px = nullptr;     // RGBA pixels
+    const U_RGBQUAD *ct      = nullptr;     // color table, always NULL here
     int32_t    width, height, colortype, numCt, invert;
     numCt     = 0;
     width     = Bm16.Width;              //  bitmap width in pixels.
@@ -582,7 +582,7 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
         free(rgba_px);
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(mempng.buffer){             // image was Bm16 in source file, converted to png in this routine
         base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
         free(mempng.buffer);
@@ -658,7 +658,7 @@ int Wmf::in_clips(PWMF_CALLBACK_DATA d, const char *test){
 void Wmf::add_clips(PWMF_CALLBACK_DATA d, const char *clippath, unsigned int logic){
     int op = combine_ops_to_livarot(logic);
     Geom::PathVector combined_vect;
-    char *combined = NULL;
+    char *combined = nullptr;
     if (op >= 0 && d->dc[d->level].clip_id) {
         unsigned int real_idx = d->dc[d->level].clip_id - 1;
         Geom::PathVector old_vect = sp_svg_read_pathv(d->clips.strings[real_idx]);
@@ -967,7 +967,7 @@ void
 Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
 {
     int width;
-    char *record = NULL;
+    char *record = nullptr;
     U_PEN up;
 
     if (index < 0 && index >= d->n_obj){ return; }
@@ -1153,7 +1153,7 @@ Wmf::select_brush(PWMF_CALLBACK_DATA d, int index)
 void
 Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
 {
-    char         *record = NULL;
+    char         *record = nullptr;
     const char   *memfont;
     const char   *facename;
     U_FONT        font;
@@ -1221,7 +1221,7 @@ Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
 int Wmf::insertable_object(PWMF_CALLBACK_DATA d)
 {
     int index = d->low_water;  // Start looking from here, it may already have been filled
-    while(index < d->n_obj &&  d->wmf_obj[index].record != NULL){ index++; }
+    while(index < d->n_obj &&  d->wmf_obj[index].record != nullptr){ index++; }
     if(index >= d->n_obj)return(-1);  // this is a big problem, percolate it back up so the program can get out of this gracefully
     d->low_water = index; // Could probably be index+1
     return(index);
@@ -1265,7 +1265,7 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
 // files too big to fit into memory.
         if (d->wmf_obj[index].record)
             free(d->wmf_obj[index].record);
-        d->wmf_obj[index].record = NULL;
+        d->wmf_obj[index].record = nullptr;
         if(index < d->low_water)d->low_water = index;
     }
 }
@@ -1321,12 +1321,12 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
     tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char            *rgba_px = NULL;        // RGBA pixels
-    char            *sub_px  = NULL;        // RGBA pixels, subarray
-    const char      *px      = NULL;        // DIB pixels
-    const U_RGBQUAD *ct      = NULL;        // color table
+    char            *rgba_px = nullptr;        // RGBA pixels
+    char            *sub_px  = nullptr;        // RGBA pixels, subarray
+    const char      *px      = nullptr;        // DIB pixels
+    const U_RGBQUAD *ct      = nullptr;        // color table
     uint32_t numCt;
     int32_t width, height, colortype, invert;  // if needed these values will be set in wget_DIB_params
     if(iUsage == U_DIB_RGB_COLORS){
@@ -1367,7 +1367,7 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
         }
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(dibparams == U_BI_JPEG){    // image was binary jpg in source file
         tmp_image << " xlink:href=\"data:image/jpeg;base64,";
         base64String = g_base64_encode((guchar*) px, numCt );
@@ -1422,11 +1422,11 @@ void Wmf::common_bm16_to_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char
     tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
     MEMPNG mempng; // PNG in memory comes back in this
-    mempng.buffer = NULL;
+    mempng.buffer = nullptr;
 
-    char            *rgba_px = NULL;        // RGBA pixels
-    char            *sub_px  = NULL;        // RGBA pixels, subarray
-    const U_RGBQUAD *ct      = NULL;        // color table
+    char            *rgba_px = nullptr;        // RGBA pixels
+    char            *sub_px  = nullptr;        // RGBA pixels, subarray
+    const U_RGBQUAD *ct      = nullptr;        // color table
     int32_t width, height, colortype, numCt, invert;
 
     numCt     = 0;
@@ -1470,7 +1470,7 @@ void Wmf::common_bm16_to_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char
         free(sub_px);
     }
 
-    gchar *base64String=NULL;
+    gchar *base64String=nullptr;
     if(mempng.buffer){             // image was Bm16 in source file, converted to png in this routine
         tmp_image << " xlink:href=\"data:image/png;base64,";
         base64String = g_base64_encode((guchar*) mempng.buffer, mempng.size );
@@ -1541,14 +1541,14 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
     int  wDbgComment=0;
     int  wDbgFinal=0;
     char const* wDbgString = getenv( "INKSCAPE_DBG_WMF" );
-    if ( wDbgString != NULL ) {
+    if ( wDbgString != nullptr ) {
         if(strstr(wDbgString,"RECORD")){  wDbgRecord  = 1; }
         if(strstr(wDbgString,"COMMENT")){ wDbgComment = 1; }
         if(strstr(wDbgString,"FINAL")){   wDbgFinal   = 1; }
     }
 
     /* initialize the tsp for text reassembly */
-    tsp.string     = NULL;
+    tsp.string     = nullptr;
     tsp.ori        = 0.0;  /* degrees */
     tsp.fs         = 12.0; /* font size */
     tsp.x          = 0.0;
@@ -1592,10 +1592,10 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
 
         // Init the new wmf_obj list elements to null, provided the
         // dynamic allocation succeeded.
-        if ( d->wmf_obj != NULL )
+        if ( d->wmf_obj != nullptr )
         {
             for( int i=0; i < d->n_obj; ++i )
-                d->wmf_obj[i].record = NULL;
+                d->wmf_obj[i].record = nullptr;
         } //if
 
         if(!Placeable.Inch){ Placeable.Inch= 1440; }
@@ -2445,7 +2445,7 @@ std::cout << "BEFORE DRAW"
                 }
                 if(d->dc[old_level].font_name){
                     free(d->dc[old_level].font_name); // else memory leak
-                    d->dc[old_level].font_name = NULL;
+                    d->dc[old_level].font_name = nullptr;
                 }
                 old_level--;
             }
@@ -2557,9 +2557,9 @@ std::cout << "BEFORE DRAW"
 
             /* Rotation issues are handled entirely in libTERE now */
 
-            uint32_t *dup_wt = NULL;
+            uint32_t *dup_wt = nullptr;
 
-            dup_wt = U_Latin1ToUtf32le(text, cChars, NULL);
+            dup_wt = U_Latin1ToUtf32le(text, cChars, nullptr);
             if(!dup_wt)dup_wt = unknown_chars(cChars);
 
             msdepua(dup_wt); //convert everything in Microsoft's private use area.  For Symbol, Wingdings, Dingbats
@@ -2570,12 +2570,12 @@ std::cout << "BEFORE DRAW"
             }
 
             char *ansi_text;
-            ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, NULL);
+            ansi_text = (char *) U_Utf32leToUtf8((uint32_t *)dup_wt, 0, nullptr);
             free(dup_wt);
             // Empty text or starts with an invalid escape/control sequence, which is bogus text.  Throw it out before g_markup_escape_text can make things worse
             if(*((uint8_t *)ansi_text) <= 0x1F){
                 free(ansi_text);
-                ansi_text=NULL;
+                ansi_text=nullptr;
             }
 
             if (ansi_text) {
@@ -3101,18 +3101,18 @@ SPDocument *
 Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 {
 
-    if (uri == NULL) {
-        return NULL;
+    if (uri == nullptr) {
+        return nullptr;
     }
 
     // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
     WMF_CALLBACK_DATA d;
     
     d.n_obj = 0;     //these might not be set otherwise if the input file is corrupt
-    d.wmf_obj=NULL; 
+    d.wmf_obj=nullptr; 
 
     // Default font, WMF spec says device can pick whatever it wants. 
     // WMF files that do not specify a  font are unlikely to look very good!
@@ -3150,10 +3150,10 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     size_t length;
     char *contents;
-    if(wmf_readdata(uri, &contents, &length))return(NULL);
+    if(wmf_readdata(uri, &contents, &length))return(nullptr);
 
     // set up the text reassembly system
-    if(!(d.tri = trinfo_init(NULL)))return(NULL);
+    if(!(d.tri = trinfo_init(nullptr)))return(nullptr);
     (void) trinfo_load_ft_opts(d.tri, 1,
       FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING  | FT_LOAD_NO_BITMAP,
       FT_KERNING_UNSCALED);
@@ -3163,7 +3163,7 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
 //    std::cout << "SVG Output: " << std::endl << d.outsvg << std::endl;
 
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     if (good) {
         doc = SPDocument::createNewDocFromMem(d.outsvg.c_str(), strlen(d.outsvg.c_str()), TRUE);
     }

@@ -131,14 +131,14 @@ static void sp_lpetool_toolbox_sel_changed(Inkscape::Selection *selection, GObje
             act->set_sensitive(true);
             act->set_active( lpels->end_type.get_value() );
         } else {
-            g_object_set_data(tbl, "currentlpe", NULL);
-            g_object_set_data(tbl, "currentlpeitem", NULL);
+            g_object_set_data(tbl, "currentlpe", nullptr);
+            g_object_set_data(tbl, "currentlpeitem", nullptr);
             act->set_sensitive(false);
         }
 
     } else {
-        g_object_set_data(tbl, "currentlpe", NULL);
-        g_object_set_data(tbl, "currentlpeitem", NULL);
+        g_object_set_data(tbl, "currentlpe", nullptr);
+        g_object_set_data(tbl, "currentlpeitem", nullptr);
         act->set_sensitive(false);
     }
 }
@@ -180,7 +180,7 @@ static void lpetool_unit_changed(GObject* tbl, int /* NotUsed */)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/lpetool/unit", unit->abbr);
 
@@ -247,7 +247,7 @@ static void lpetool_open_lpe_dialog(GtkToggleAction *act, gpointer data)
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
 
     if (tools_isactive(desktop, TOOLS_LPETOOL)) {
-        sp_action_perform(Inkscape::Verb::get(SP_VERB_DIALOG_LIVE_PATH_EFFECT)->get_action(Inkscape::ActionContext(desktop)), NULL);
+        sp_action_perform(Inkscape::Verb::get(SP_VERB_DIALOG_LIVE_PATH_EFFECT)->get_action(Inkscape::ActionContext(desktop)), nullptr);
     }
     gtk_toggle_action_set_active(act, false);
 }
@@ -260,7 +260,7 @@ void sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GO
     tracker->setActiveUnit(desktop->getNamedView()->display_units);
     g_object_set_data(holder, "tracker", tracker);
     Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != NULL);
+    g_return_if_fail(unit != nullptr);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/lpetool/unit", unit->abbr);

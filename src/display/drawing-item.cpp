@@ -107,19 +107,19 @@ void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
 
 DrawingItem::DrawingItem(Drawing &drawing)
     : _drawing(drawing)
-    , _parent(NULL)
+    , _parent(nullptr)
     , _key(0)
-    , _style(NULL)
-    , _context_style(NULL)
+    , _style(nullptr)
+    , _context_style(nullptr)
     , _opacity(1.0)
-    , _transform(NULL)
-    , _clip(NULL)
-    , _mask(NULL)
-    , _fill_pattern(NULL)
-    , _stroke_pattern(NULL)
-    , _filter(NULL)
-    , _user_data(NULL)
-    , _cache(NULL)
+    , _transform(nullptr)
+    , _clip(nullptr)
+    , _mask(nullptr)
+    , _fill_pattern(nullptr)
+    , _stroke_pattern(nullptr)
+    , _filter(nullptr)
+    , _user_data(nullptr)
+    , _cache(nullptr)
     , _state(0)
     , _child_type(CHILD_ORPHAN)
     , _background_new(0)
@@ -163,19 +163,19 @@ DrawingItem::~DrawingItem()
     case CHILD_CLIP:
         // we cannot call setClip(NULL) or setMask(NULL),
         // because that would be an endless loop
-        _parent->_clip = NULL;
+        _parent->_clip = nullptr;
         break;
     case CHILD_MASK:
-        _parent->_mask = NULL;
+        _parent->_mask = nullptr;
         break;
     case CHILD_ROOT:
-        _drawing._root = NULL;
+        _drawing._root = nullptr;
         break;
     case CHILD_FILL_PATTERN:
-        _parent->_fill_pattern = NULL;
+        _parent->_fill_pattern = nullptr;
         break;
     case CHILD_STROKE_PATTERN:
-        _parent->_stroke_pattern = NULL;
+        _parent->_stroke_pattern = nullptr;
         break;
     default: ;
     }
@@ -273,7 +273,7 @@ DrawingItem::setTransform(Geom::Affine const &new_trans)
         _markForRendering();
         if (new_trans.isIdentity()) {
             delete _transform; // delete NULL; is safe
-            _transform = NULL;
+            _transform = nullptr;
         } else {
             _transform = new Geom::Affine(new_trans);
         }
@@ -351,7 +351,7 @@ DrawingItem::setCached(bool cached, bool persistent)
     } else {
         _drawing._cached_items.erase(this);
         delete _cache;
-        _cache = NULL;
+        _cache = nullptr;
     }
 }
 
@@ -381,7 +381,7 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     } else {
         // no filter set for this group
         delete _filter;
-        _filter = NULL;
+        _filter = nullptr;
     }
 
     if (style && style->enable_background.set) {
@@ -394,9 +394,9 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
         }
     }
 
-    if (context_style != NULL) {
+    if (context_style != nullptr) {
         _context_style = context_style;
-    } else if (_parent != NULL) {
+    } else if (_parent != nullptr) {
         _context_style = _parent->_context_style;
     }
 
@@ -633,7 +633,7 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
                 // The opposite transition (invisible -> visible or object
                 // entering the canvas) is handled during the render phase
                 delete _cache;
-                _cache = NULL;
+                _cache = nullptr;
             }
         }
     }
@@ -748,11 +748,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool needs_opacity = (_opacity < 0.995);
 
     // this item needs an intermediate rendering if:
-    nir |= (_clip != NULL); // 1. it has a clipping path
-    nir |= (_mask != NULL); // 2. it has a mask
-    nir |= (_filter != NULL && render_filters); // 3. it has a filter
+    nir |= (_clip != nullptr); // 1. it has a clipping path
+    nir |= (_mask != nullptr); // 2. it has a mask
+    nir |= (_filter != nullptr && render_filters); // 3. it has a filter
     nir |= needs_opacity; // 4. it is non-opaque
-    nir |= (_cache != NULL); // 5. it is cached
+    nir |= (_cache != nullptr); // 5. it is cached
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 6. Blend mode not normal
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 7. Explicit isolatiom
 
@@ -843,7 +843,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             }
         }
         if (!rendered) {
-            _filter->render(this, ict, NULL);
+            _filter->render(this, ict, nullptr);
         }
         // Note that because the object was rendered to a group,
         // the internals of the filter need to use cairo_get_group_target()
@@ -884,7 +884,7 @@ DrawingItem::_renderOutline(DrawingContext &dc, Geom::IntRect const &area, unsig
 
     // just render everything: item, clip, mask
     // First, render the object itself
-    _renderItem(dc, *carea, flags, NULL);
+    _renderItem(dc, *carea, flags, nullptr);
 
     // render clip and mask, if any
     guint32 saved_rgba = _drawing.outlinecolor; // save current outline color
@@ -957,11 +957,11 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
     if (!(_state & STATE_BBOX) || !(_state & STATE_PICK)) {
         g_warning("Invalid state when picking: STATE_BBOX = %d, STATE_PICK = %d",
                   _state & STATE_BBOX, _state & STATE_PICK);
-        return NULL;
+        return nullptr;
     }
     // ignore invisible and insensitive items unless sticky
     if (!(flags & PICK_STICKY) && !(_visible && _sensitive))
-        return NULL;
+        return nullptr;
 
     bool outline = _drawing.outline();
 
@@ -969,18 +969,18 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
         // pick inside clipping path; if NULL, it means the object is clipped away there
         if (_clip) {
             DrawingItem *cpick = _clip->pick(p, delta, flags | PICK_AS_CLIP);
-            if (!cpick) return NULL;
+            if (!cpick) return nullptr;
         }
         // same for mask
         if (_mask) {
             DrawingItem *mpick = _mask->pick(p, delta, flags);
-            if (!mpick) return NULL;
+            if (!mpick) return nullptr;
         }
     }
 
     Geom::OptIntRect box = (outline || (flags & PICK_AS_CLIP)) ? _bbox : _drawbox;
     if (!box) {
-        return NULL;
+        return nullptr;
     }
 
     Geom::Rect expanded = *box;
@@ -989,7 +989,7 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
     if (expanded.contains(p)) {
         return _pickItem(p, delta, flags);
     }
-    return NULL;
+    return nullptr;
 }
 
 // For debugging
@@ -1042,7 +1042,7 @@ DrawingItem::_markForRendering()
     if (!dirty) return;
 
     // dirty the caches of all parents
-    DrawingItem *bkg_root = NULL;
+    DrawingItem *bkg_root = nullptr;
 
     for (DrawingItem *i = this; i; i = i->_parent) {
         if (i != this && i->_filter) {

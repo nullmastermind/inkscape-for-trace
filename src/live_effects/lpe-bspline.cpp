@@ -208,7 +208,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
         Geom::D2<Geom::SBasis> sbasis_in;
         Geom::D2<Geom::SBasis> sbasis_out;
         Geom::D2<Geom::SBasis> sbasis_helper;
-        Geom::CubicBezier const *cubic = NULL;
+        Geom::CubicBezier const *cubic = nullptr;
         curve_n->moveto(curve_it1->initialPoint());
         if (path_it->closed()) {
           const Geom::Curve &closingline = path_it->back_closed(); 
@@ -375,7 +375,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
         Geom::Point point_at3(0, 0);
         Geom::D2<Geom::SBasis> sbasis_in;
         Geom::D2<Geom::SBasis> sbasis_out;
-        Geom::CubicBezier const *cubic = NULL;
+        Geom::CubicBezier const *cubic = nullptr;
         curve_n->moveto(curve_it1->initialPoint());
         if (path_it->closed()) {
           const Geom::Curve &closingline = path_it->back_closed(); 

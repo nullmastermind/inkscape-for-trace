@@ -20,8 +20,8 @@ namespace Extension {
 
 #define TIMER_SCALE_VALUE  20
 
-ExpirationTimer * ExpirationTimer::timer_list = NULL;
-ExpirationTimer * ExpirationTimer::idle_start = NULL;
+ExpirationTimer * ExpirationTimer::timer_list = nullptr;
+ExpirationTimer * ExpirationTimer::idle_start = nullptr;
 long ExpirationTimer::timeout = 240;
 bool ExpirationTimer::timer_started = false;
 
@@ -38,7 +38,7 @@ ExpirationTimer::ExpirationTimer (Extension * in_extension):
     extension(in_extension)
 {
     /* Fix Me! */
-    if (timer_list == NULL) {
+    if (timer_list == nullptr) {
         next = this;
         timer_list = this;
     } else {
@@ -86,8 +86,8 @@ ExpirationTimer::~ExpirationTimer(void)
     } else {
         /* If we're the only entry in the list, the list needs to go
            to NULL */
-        timer_list = NULL;
-        idle_start = NULL;
+        timer_list = nullptr;
+        idle_start = nullptr;
     }
 
     return;
@@ -151,7 +151,7 @@ ExpirationTimer::idle_func (void)
     // std::cout << "Idle func pass: " << idle_cnt++ << "  timer list: " << timer_list << std::endl;
 
     /* see if this is the last */
-    if (timer_list == NULL) {
+    if (timer_list == nullptr) {
         timer_started = false;
         return false;
     }
@@ -162,7 +162,7 @@ ExpirationTimer::idle_func (void)
     }
 
     /* see if this is the last */
-    if (timer_list == NULL) {
+    if (timer_list == nullptr) {
         timer_started = false;
         return false;
     }

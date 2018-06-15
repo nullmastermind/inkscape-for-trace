@@ -37,7 +37,7 @@ const std::string ZoomTool::prefsPath = "/tools/zoom";
 
 ZoomTool::ZoomTool()
     : ToolBase(cursor_zoom_xpm)
-    , grabbed(NULL)
+    , grabbed(nullptr)
     , escaped(false)
 {
 }
@@ -50,7 +50,7 @@ void ZoomTool::finish() {
 	
     if (this->grabbed) {
         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
-        this->grabbed = NULL;
+        this->grabbed = nullptr;
     }
 
     ToolBase::finish();
@@ -108,7 +108,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
                                 GDK_KEY_PRESS_MASK      | GDK_KEY_RELEASE_MASK |
                                 GDK_BUTTON_PRESS_MASK   | GDK_BUTTON_RELEASE_MASK |
                                 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-                                NULL, event->button.time);
+                                nullptr, event->button.time);
 
             this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
             break;
@@ -160,7 +160,7 @@ bool ZoomTool::root_handler(GdkEvent* event) {
 			
             if (this->grabbed) {
                 sp_canvas_item_ungrab(this->grabbed, event->button.time);
-                this->grabbed = NULL;
+                this->grabbed = nullptr;
             }
 			
             xp = yp = 0;

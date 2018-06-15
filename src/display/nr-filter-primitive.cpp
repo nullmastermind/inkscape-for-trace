@@ -46,7 +46,7 @@ FilterPrimitive::FilterPrimitive()
     _subregion_width.unset(SVGLength::PERCENT, 1, 0);
     _subregion_height.unset(SVGLength::PERCENT, 1, 0);
 
-    _style = NULL;
+    _style = nullptr;
 }
 
 FilterPrimitive::~FilterPrimitive()

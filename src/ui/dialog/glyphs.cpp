@@ -511,7 +511,7 @@ void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
 // Append selected glyphs to selected text
 void GlyphsPanel::insertText()
 {
-    SPItem *textItem = 0;
+    SPItem *textItem = nullptr;
     auto itemlist= targetDesktop->selection->items();
         for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
@@ -541,7 +541,7 @@ void GlyphsPanel::insertText()
             if (str) {
                 combined = str;
                 g_free(str);
-                str = 0;
+                str = nullptr;
             }
             combined += glyphs;
             sp_te_set_repr_text_multiline(textItem, combined.c_str());
@@ -644,7 +644,7 @@ void GlyphsPanel::rebuild()
 {
     Glib::ustring fontspec = fontSelector->get_fontspec();
 
-    font_instance* font = 0;
+    font_instance* font = nullptr;
     if( !fontspec.empty() ) {
         font = font_factory::Default()->FaceFromFontSpecification( fontspec.c_str() );
     }

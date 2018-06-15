@@ -25,15 +25,15 @@ Pt2::Pt2(const char *coord_str) {
         return;
     }
     char **coords = g_strsplit(coord_str, ":", 0);
-    if (coords[0] == NULL || coords[1] == NULL || coords[2] == NULL) {
+    if (coords[0] == nullptr || coords[1] == nullptr || coords[2] == nullptr) {
         g_strfreev (coords);
         g_warning ("Malformed coordinate string.\n");
         return;
     }
 
-    pt[0] = g_ascii_strtod(coords[0], NULL);
-    pt[1] = g_ascii_strtod(coords[1], NULL);
-    pt[2] = g_ascii_strtod(coords[2], NULL);
+    pt[0] = g_ascii_strtod(coords[0], nullptr);
+    pt[1] = g_ascii_strtod(coords[1], nullptr);
+    pt[2] = g_ascii_strtod(coords[2], nullptr);
     g_strfreev (coords);
 }
 
@@ -73,17 +73,17 @@ Pt3::Pt3(const char *coord_str) {
         return;
     }
     char **coords = g_strsplit(coord_str, ":", 0);
-    if (coords[0] == NULL || coords[1] == NULL ||
-        coords[2] == NULL || coords[3] == NULL) {
+    if (coords[0] == nullptr || coords[1] == nullptr ||
+        coords[2] == nullptr || coords[3] == nullptr) {
         g_strfreev (coords);
         g_warning ("Malformed coordinate string.\n");
         return;
     }
 
-    pt[0] = g_ascii_strtod(coords[0], NULL);
-    pt[1] = g_ascii_strtod(coords[1], NULL);
-    pt[2] = g_ascii_strtod(coords[2], NULL);
-    pt[3] = g_ascii_strtod(coords[3], NULL);
+    pt[0] = g_ascii_strtod(coords[0], nullptr);
+    pt[1] = g_ascii_strtod(coords[1], nullptr);
+    pt[2] = g_ascii_strtod(coords[2], nullptr);
+    pt[3] = g_ascii_strtod(coords[3], nullptr);
 }
 
 void

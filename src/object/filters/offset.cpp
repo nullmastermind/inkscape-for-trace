@@ -111,13 +111,13 @@ Inkscape::XML::Node* SPFeOffset::write(Inkscape::XML::Document *doc, Inkscape::X
 }
 
 void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_OFFSET);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterOffset *nr_offset = dynamic_cast<Inkscape::Filters::FilterOffset*>(nr_primitive);
-    g_assert(nr_offset != NULL);
+    g_assert(nr_offset != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

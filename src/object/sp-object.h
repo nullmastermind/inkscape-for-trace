@@ -137,7 +137,7 @@ public:
  * \pre object points to real object
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_ref(SPObject *object, SPObject *owner=NULL);
+SPObject *sp_object_ref(SPObject *object, SPObject *owner=nullptr);
 
 /**
  * Decrease reference count of object, with possible debugging and
@@ -148,7 +148,7 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner=NULL);
  * \pre object points to real object
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_unref(SPObject *object, SPObject *owner=NULL);
+SPObject *sp_object_unref(SPObject *object, SPObject *owner=nullptr);
 
 /**
  * Increase weak refcount.
@@ -287,7 +287,7 @@ public:
     typedef Inkscape::Util::ForwardPointerIterator<SPObject const, ParentIteratorStrategy> ConstParentIterator;
 
     bool isSiblingOf(SPObject const *object) const {
-        if (object == NULL) return false;
+        if (object == nullptr) return false;
         return this->parent && this->parent == object->parent;
     }
 
@@ -510,7 +510,7 @@ public:
         assert(successor != NULL);
         assert(_successor == NULL);
         assert(successor->_successor == NULL);
-        sp_object_ref(successor, NULL);
+        sp_object_ref(successor, nullptr);
         _successor = successor;
     }
 
@@ -696,20 +696,20 @@ public:
 
     unsigned getPosition();
 
-    char const * getAttribute(char const *name,SPException *ex=NULL) const;
+    char const * getAttribute(char const *name,SPException *ex=nullptr) const;
 
     void appendChild(Inkscape::XML::Node *child);
 
-    void addChild(Inkscape::XML::Node *child,Inkscape::XML::Node *prev=NULL);
+    void addChild(Inkscape::XML::Node *child,Inkscape::XML::Node *prev=nullptr);
 
     /**
      * Call virtual set() function of object.
      */
     void setKeyValue(unsigned int key, char const *value);
 
-    void setAttribute(         char const *key,          char const *value, SPException *ex=NULL);
-    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=NULL);
-    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=NULL);
+    void setAttribute(         char const *key,          char const *value, SPException *ex=nullptr);
+    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=nullptr);
+    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=nullptr);
 
     /**
      * Read value of key attribute from XML node into object.
@@ -718,7 +718,7 @@ public:
 
     char const *getTagName(SPException *ex) const;
 
-    void removeAttribute(char const *key, SPException *ex=NULL);
+    void removeAttribute(char const *key, SPException *ex=nullptr);
 
     /**
      * Returns an object style property.

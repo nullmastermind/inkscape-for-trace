@@ -24,7 +24,7 @@
 #include "path-prefix.h"
 #include "preferences.h"
 
-SPAttributeRelSVG * SPAttributeRelSVG::instance = NULL;
+SPAttributeRelSVG * SPAttributeRelSVG::instance = nullptr;
 bool SPAttributeRelSVG::foundFile = false;
 
 /*
@@ -32,7 +32,7 @@ bool SPAttributeRelSVG::foundFile = false;
  */
 bool SPAttributeRelSVG::isSVGElement(Glib::ustring element)
 {
-    if (SPAttributeRelSVG::instance == NULL) {
+    if (SPAttributeRelSVG::instance == nullptr) {
         SPAttributeRelSVG::instance = new SPAttributeRelSVG();
     }
 
@@ -53,7 +53,7 @@ bool SPAttributeRelSVG::isSVGElement(Glib::ustring element)
  */
 bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring element)
 {
-    if (SPAttributeRelSVG::instance == NULL) {
+    if (SPAttributeRelSVG::instance == nullptr) {
         SPAttributeRelSVG::instance = new SPAttributeRelSVG();
     }
 

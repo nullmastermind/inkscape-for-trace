@@ -207,7 +207,7 @@ RegisteredScalarUnit::~RegisteredScalarUnit()
 
 RegisteredScalarUnit::RegisteredScalarUnit (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, const RegisteredUnitMenu &rum, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in, RSU_UserUnits user_units)
     : RegisteredWidget<ScalarUnit>(label, tip, UNIT_TYPE_LINEAR, "", "", rum.getUnitMenu()),
-      _um(0)
+      _um(nullptr)
 {
     init_parent(key, wr, repr_in, doc_in);
 
@@ -489,8 +489,8 @@ RegisteredRadioButtonPair::RegisteredRadioButtonPair (const Glib::ustring& label
         const Glib::ustring& tip1, const Glib::ustring& tip2,
         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
     : RegisteredWidget<Gtk::HBox>(),
-      _rb1(NULL),
-      _rb2(NULL)
+      _rb1(nullptr),
+      _rb2(nullptr)
 {
     init_parent(key, wr, repr_in, doc_in);
 

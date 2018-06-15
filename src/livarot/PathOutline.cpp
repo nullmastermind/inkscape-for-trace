@@ -32,7 +32,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
     if ( descr_cmd.size() <= 1 ) {
         return;
     }
-    if ( dest == NULL ) {
+    if ( dest == nullptr ) {
         return;
     }
 
@@ -210,7 +210,7 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		CloseSubpath();
 	}
 	if (int(descr_cmd.size()) <= 1) return;
-	if (dest == NULL) return;
+	if (dest == nullptr) return;
 	dest->Reset ();
 	dest->SetBackData (false);
 
@@ -235,7 +235,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		CloseSubpath();
 	}
 	if (int(descr_cmd.size()) <= 1) return;
-	if (dest == NULL) return;
+	if (dest == nullptr) return;
 	dest->Reset ();
 	dest->SetBackData (false);
 

@@ -94,7 +94,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
-            SPObject * clip_to_path = NULL;
+            SPObject * clip_to_path = nullptr;
             if (SP_IS_SHAPE(clip_data) && !SP_IS_PATH(clip_data) && convert_shapes) {
                 SPDocument * document = SP_ACTIVE_DOCUMENT;
                 if (!document) {
@@ -126,7 +126,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 clip_to_path = document->getObjectByRepr(clip_path_node);
 
                 // transform position
-                SPCurve * c = NULL;
+                SPCurve * c = nullptr;
                 c = SP_SHAPE(clip_to_path)->getCurve();
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
@@ -136,7 +136,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                     c->unref();
                 }
                 
-                clip_path_node->setAttribute("transform", NULL);
+                clip_path_node->setAttribute("transform", nullptr);
  
                 if (title && clip_to_path) {
                     clip_to_path->setTitle(title);
@@ -190,7 +190,7 @@ LPEPowerClip::addInverse (SPItem * clip_data){
                 addInverse(subitem);
             }
         } else if (SP_IS_PATH(clip_data)) {
-            SPCurve * c = NULL;
+            SPCurve * c = nullptr;
             c = SP_SHAPE(clip_data)->getCurve();
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
@@ -213,7 +213,7 @@ LPEPowerClip::addInverse (SPItem * clip_data){
                     if (tools_isactive(desktop, TOOLS_NODES)) {
                         Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
                         SPItem * item = sel->singleItem();
-                        if (item != NULL) {
+                        if (item != nullptr) {
                             sel->remove(item);
                             sel->add(item);
                         }
@@ -236,7 +236,7 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                  removeInverse(subitem);
              }
         } else if (SP_IS_PATH(clip_data)) {
-            SPCurve * c = NULL;
+            SPCurve * c = nullptr;
             c = SP_SHAPE(clip_data)->getCurve();
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
@@ -255,7 +255,7 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                     if (tools_isactive(desktop, TOOLS_NODES)) {
                         Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
                         SPItem * item = sel->singleItem();
-                        if (item != NULL) {
+                        if (item != nullptr) {
                             sel->remove(item);
                             sel->add(item);
                         }
@@ -413,7 +413,7 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
              flattenClip(subitem, path_in);
          }
     } else if (SP_IS_PATH(clip_data)) {
-        SPCurve * c = NULL;
+        SPCurve * c = nullptr;
         c = SP_SHAPE(clip_data)->getCurve();
         if (c) {
             Geom::PathVector c_pv = c->get_pathvector();

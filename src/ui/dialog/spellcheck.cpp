@@ -55,13 +55,13 @@ namespace Dialog {
 
 SpellCheck::SpellCheck (void) :
     UI::Widget::Panel("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
-    _text(NULL),
-    _layout(NULL),
+    _text(nullptr),
+    _layout(nullptr),
     _stops(0),
     _adds(0),
     _working(false),
     _local_change(false),
-    _prefs(NULL),
+    _prefs(nullptr),
     _lang("en"),
     _lang2(""),
     _lang3(""),
@@ -72,14 +72,14 @@ SpellCheck::SpellCheck (void) :
     dictionary_hbox(false, 0),
     stop_button(_("_Stop"), true),
     start_button(_("_Start"), true),
-    desktop(NULL),
+    desktop(nullptr),
     deskTrack()
 {
 
 #ifdef HAVE_ASPELL
-    _speller = NULL;
-    _speller2 = NULL;
-    _speller3 = NULL;
+    _speller = nullptr;
+    _speller2 = nullptr;
+    _speller3 = nullptr;
 #endif /* HAVE_ASPELL */
 
     _prefs = Inkscape::Preferences::get();
@@ -278,7 +278,7 @@ SPItem *SpellCheck::getText (SPObject *root)
         if(_seen_objects.insert(item).second)
             return item;
     }
-    return NULL;
+    return nullptr;
 }
 
 void
@@ -337,7 +337,7 @@ SpellCheck::init(SPDesktop *d)
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
         delete_aspell_config(config);
-        if (aspell_error(ret) != 0) {
+        if (aspell_error(ret) != nullptr) {
             g_warning("Error: %s\n", aspell_error_message(ret));
             delete_aspell_can_have_error(ret);
             return false;
@@ -354,7 +354,7 @@ SpellCheck::init(SPDesktop *d)
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
         delete_aspell_config(config);
-        if (aspell_error(ret) != 0) {
+        if (aspell_error(ret) != nullptr) {
             g_warning("Error: %s\n", aspell_error_message(ret));
             delete_aspell_can_have_error(ret);
             return false;
@@ -371,7 +371,7 @@ SpellCheck::init(SPDesktop *d)
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
         delete_aspell_config(config);
-        if (aspell_error(ret) != 0) {
+        if (aspell_error(ret) != nullptr) {
             g_warning("Error: %s\n", aspell_error_message(ret));
             delete_aspell_can_have_error(ret);
             return false;
@@ -399,16 +399,16 @@ SpellCheck::finished ()
 #ifdef HAVE_ASPELL
     aspell_speller_save_all_word_lists(_speller);
     delete_aspell_speller(_speller);
-    _speller = NULL;
+    _speller = nullptr;
     if (_speller2) {
         aspell_speller_save_all_word_lists(_speller2);
         delete_aspell_speller(_speller2);
-        _speller2 = NULL;
+        _speller2 = nullptr;
     }
     if (_speller3) {
         aspell_speller_save_all_word_lists(_speller3);
         delete_aspell_speller(_speller3);
-        _speller3 = NULL;
+        _speller3 = nullptr;
     }
 #endif  /* HAVE_ASPELL */
 
@@ -438,8 +438,8 @@ SpellCheck::finished ()
 
     _seen_objects.clear();
 
-    desktop = NULL;
-    _root = NULL;
+    desktop = nullptr;
+    _root = nullptr;
 
     _working = false;
 }
@@ -583,7 +583,7 @@ SpellCheck::nextWord()
             area.expandBy(MAX(0.05 * mindim, 1));
 
             // create canvas path rectangle, red stroke
-            SPCanvasItem *rect = sp_canvas_bpath_new(desktop->getSketch(), NULL);
+            SPCanvasItem *rect = sp_canvas_bpath_new(desktop->getSketch(), nullptr);
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(rect), 0xff0000ff, 3.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(rect), 0, SP_WIND_RULE_NONZERO);
             SPCurve *curve = new SPCurve();
@@ -636,7 +636,7 @@ SpellCheck::nextWord()
             const char *sugg;
             Gtk::TreeModel::iterator iter;
 
-            while ((sugg = aspell_string_enumeration_next(els)) != 0) {
+            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
                 iter = model->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[tree_columns.suggestions] = sugg;
@@ -649,7 +649,7 @@ SpellCheck::nextWord()
             AspellStringEnumeration * els = aspell_word_list_elements(wl);
             const char *sugg;
             Gtk::TreeModel::iterator iter;
-            while ((sugg = aspell_string_enumeration_next(els)) != 0) {
+            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
                 iter = model->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[tree_columns.suggestions] = sugg;
@@ -662,7 +662,7 @@ SpellCheck::nextWord()
             AspellStringEnumeration * els = aspell_word_list_elements(wl);
             const char *sugg;
             Gtk::TreeModel::iterator iter;
-            while ((sugg = aspell_string_enumeration_next(els)) != 0) {
+            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
                 iter = model->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[tree_columns.suggestions] = sugg;

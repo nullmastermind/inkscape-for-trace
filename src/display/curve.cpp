@@ -127,7 +127,7 @@ SPCurve::unref()
         delete this;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -341,7 +341,7 @@ SPCurve::is_closed() const
 bool
 SPCurve::is_equal(SPCurve * other) const
 {
-    if(other == NULL) {
+    if(other == nullptr) {
         return false;
     } else if(_pathv == other->get_pathvector()){
         return true;
@@ -357,10 +357,10 @@ Geom::Curve const *
 SPCurve::last_segment() const
 {
     if (is_empty()) {
-        return NULL;
+        return nullptr;
     }
     if (_pathv.back().empty()) {
-        return NULL;
+        return nullptr;
     }
 
     return &_pathv.back().back_default();
@@ -373,7 +373,7 @@ Geom::Path const *
 SPCurve::last_path() const
 {
     if (is_empty()) {
-        return NULL;
+        return nullptr;
     }
 
     return &_pathv.back();
@@ -387,10 +387,10 @@ Geom::Curve const *
 SPCurve::first_segment() const
 {
     if (is_empty()) {
-        return NULL;
+        return nullptr;
     }
     if (_pathv.front().empty()) {
-        return NULL;
+        return nullptr;
     }
 
     return &_pathv.front().front();
@@ -403,7 +403,7 @@ Geom::Path const *
 SPCurve::first_path() const
 {
     if (is_empty()) {
-        return NULL;
+        return nullptr;
     }
 
     return &_pathv.front();
@@ -545,9 +545,9 @@ SPCurve::append_continuous(SPCurve const *c1, double tolerance)
     using Geom::X;
     using Geom::Y;
 
-    g_return_val_if_fail(c1 != NULL, NULL);
+    g_return_val_if_fail(c1 != nullptr, NULL);
     if ( this->is_closed() || c1->is_closed() ) {
-        return NULL;
+        return nullptr;
     }
 
     if (c1->is_empty()) {

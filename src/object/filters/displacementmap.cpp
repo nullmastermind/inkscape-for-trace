@@ -179,7 +179,7 @@ static char const * get_channelselector_name(FilterDisplacementMapChannelSelecto
         case DISPLACEMENTMAP_CHANNEL_ALPHA:
             return "A";
         default:
-            return 0;
+            return nullptr;
     }
 }
 
@@ -229,13 +229,13 @@ Inkscape::XML::Node* SPFeDisplacementMap::write(Inkscape::XML::Document *doc, In
 }
 
 void SPFeDisplacementMap::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_DISPLACEMENTMAP);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterDisplacementMap *nr_displacement_map = dynamic_cast<Inkscape::Filters::FilterDisplacementMap*>(nr_primitive);
-    g_assert(nr_displacement_map != NULL);
+    g_assert(nr_displacement_map != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
 

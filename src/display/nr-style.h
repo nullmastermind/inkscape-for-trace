@@ -29,7 +29,7 @@ struct NRStyle {
     NRStyle();
     ~NRStyle();
 
-    void set(SPStyle *style, SPStyle *context_style = NULL);
+    void set(SPStyle *style, SPStyle *context_style = nullptr);
     bool prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
     bool prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
     bool prepareTextDecorationFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
@@ -47,7 +47,7 @@ struct NRStyle {
     };
 
     struct Paint {
-        Paint() : type(PAINT_NONE), color(0), server(NULL), opacity(1.0) {}
+        Paint() : type(PAINT_NONE), color(0), server(nullptr), opacity(1.0) {}
         ~Paint() { clear(); }
 
         PaintType type;

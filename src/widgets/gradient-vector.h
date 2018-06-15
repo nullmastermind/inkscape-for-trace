@@ -72,7 +72,7 @@ SPDocument *sp_gradient_vector_selector_get_document (SPGradientVectorSelector *
 SPGradient *sp_gradient_vector_selector_get_gradient (SPGradientVectorSelector *gvs);
 
 /* fixme: rethink this (Lauris) */
-GtkWidget *sp_gradient_vector_editor_new (SPGradient *gradient, SPStop *stop = NULL);
+GtkWidget *sp_gradient_vector_editor_new (SPGradient *gradient, SPStop *stop = nullptr);
 
 guint32 sp_average_color(guint32 c1, guint32 c2, gdouble p = 0.5);
 

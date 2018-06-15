@@ -245,7 +245,7 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
      #endif
 
      if (!libvisio::VisioDocument::isSupported(&input)) {
-          return NULL;
+          return nullptr;
      }
 
      RVNGStringVector output;
@@ -256,11 +256,11 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 #else
      if (!libvisio::VisioDocument::generateSVG(&input, output)) {
 #endif
-          return NULL;
+          return nullptr;
      }
 
      if (output.empty()) {
-          return NULL;
+          return nullptr;
      }
 
      std::vector<RVNGString> tmpSVGOutput;
@@ -274,12 +274,12 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
      // If only one page is present, import that one without bothering user
      if (tmpSVGOutput.size() > 1) {
-          VsdImportDialog *dlg = 0;
+          VsdImportDialog *dlg = nullptr;
           if (INKSCAPE.use_gui()) {
                dlg = new VsdImportDialog(tmpSVGOutput);
                if (!dlg->showDialog()) {
                     delete dlg;
-                    return NULL;
+                    return nullptr;
                }
           }
 

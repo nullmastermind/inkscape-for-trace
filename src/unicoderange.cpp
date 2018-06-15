@@ -54,7 +54,7 @@ int UnicodeRange::add_range(gchar* val){
             // val+=i;
             count+=i;
         } else {
-            r.end=NULL;
+            r.end=nullptr;
         }
         this->range.push_back(r);
         return count+1;

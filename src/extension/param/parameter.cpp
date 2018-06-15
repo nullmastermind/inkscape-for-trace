@@ -52,37 +52,37 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 
     // we can't create a parameter without type
     if (!type) {
-        return NULL;
+        return nullptr;
     }
     // also require name unless it's a pure UI element that does not store its value
     if (!name) {
         static std::vector<std::string> ui_elements = {"description"};
         if (std::find(ui_elements.begin(), ui_elements.end(), type) == ui_elements.end()) {
-            return NULL;
+            return nullptr;
         }
     }
 
     const char *text = in_repr->attribute("gui-text");
-    if (text == NULL) {
+    if (text == nullptr) {
         text = in_repr->attribute("_gui-text");
-        if (text == NULL) {
+        if (text == nullptr) {
             // text = ""; // probably better to require devs to explicitly set an empty gui-text if this is what they want
         } else {
             const char *context = in_repr->attribute("msgctxt");
-            if (context != NULL) {
-                text = g_dpgettext2(NULL, context, text);
+            if (context != nullptr) {
+                text = g_dpgettext2(nullptr, context, text);
             } else {
                 text = _(text);
             }
         }
     }
     const char *description = in_repr->attribute("gui-description");
-    if (description == NULL) {
+    if (description == nullptr) {
         description = in_repr->attribute("_gui-description");
-        if (description != NULL) {
+        if (description != nullptr) {
             const char *context = in_repr->attribute("msgctxt");
-            if (context != NULL) {
-                description = g_dpgettext2(NULL, context, description);
+            if (context != nullptr) {
+                description = g_dpgettext2(nullptr, context, description);
             } else {
                 description = _(description);
             }
@@ -91,7 +91,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     bool hidden = false;
     {
         const char *gui_hide = in_repr->attribute("gui-hidden");
-        if (gui_hide != NULL) {
+        if (gui_hide != nullptr) {
             if (strcmp(gui_hide, "1") == 0 ||
                 strcmp(gui_hide, "true") == 0) {
                 hidden = true;
@@ -102,7 +102,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     int indent = 0;
     {
         const char *indent_attr = in_repr->attribute("indent");
-        if (indent_attr != NULL) {
+        if (indent_attr != nullptr) {
             if (strcmp(indent_attr, "true") == 0) {
                 indent = 1;
             } else {
@@ -112,7 +112,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     }
     const gchar* appearance = in_repr->attribute("appearance");
 
-    Parameter * param = NULL;
+    Parameter * param = nullptr;
     if (!strcmp(type, "boolean")) {
         param = new ParamBool(name, text, description, hidden, indent, in_ext, in_repr);
     } else if (!strcmp(type, "int")) {
@@ -130,7 +130,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     } else if (!strcmp(type, "string")) {
         param = new ParamString(name, text, description, hidden, indent, in_ext, in_repr);
         gchar const * max_length = in_repr->attribute("max_length");
-        if (max_length != NULL) {
+        if (max_length != nullptr) {
             ParamString * ps = dynamic_cast<ParamString *>(param);
             ps->setMaxLength(atoi(max_length));
         }
@@ -237,7 +237,7 @@ guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *n
 bool Parameter::set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamBool * boolpntr = dynamic_cast<ParamBool *>(this);
-    if (boolpntr == NULL)
+    if (boolpntr == nullptr)
         throw Extension::param_not_bool_param();
     return boolpntr->set(in, doc, node);
 }
@@ -245,7 +245,7 @@ bool Parameter::set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node)
 int Parameter::set_int(int in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamInt * intpntr = dynamic_cast<ParamInt *>(this);
-    if (intpntr == NULL)
+    if (intpntr == nullptr)
         throw Extension::param_not_int_param();
     return intpntr->set(in, doc, node);
 }
@@ -256,7 +256,7 @@ Parameter::set_float (float in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);
-    if (floatpntr == NULL)
+    if (floatpntr == nullptr)
         throw Extension::param_not_float_param();
     return floatpntr->set(in, doc, node);
 }
@@ -266,7 +266,7 @@ gchar const *
 Parameter::set_string (gchar const * in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamString * stringpntr = dynamic_cast<ParamString *>(this);
-    if (stringpntr == NULL)
+    if (stringpntr == nullptr)
         throw Extension::param_not_string_param();
     return stringpntr->set(in, doc, node);
 }
@@ -295,7 +295,7 @@ guint32
 Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamColor* param = dynamic_cast<ParamColor *>(this);
-    if (param == NULL)
+    if (param == nullptr)
         throw Extension::param_not_color_param();
     return param->set(in, doc, node);
 }
@@ -303,22 +303,22 @@ Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
 
 /** Oop, now that we need a parameter, we need it's name. */
 Parameter::Parameter(gchar const * name, gchar const * text, gchar const * description, bool hidden, int indent, Inkscape::Extension::Extension * ext) :
-    _description(0),
-    _text(0),
+    _description(nullptr),
+    _text(nullptr),
     _hidden(hidden),
     _indent(indent),
     _extension(ext),
-    _name(0)
+    _name(nullptr)
 {
-    if (name != NULL) {
+    if (name != nullptr) {
         _name = g_strdup(name);
     }
 
-    if (description != NULL) {
+    if (description != nullptr) {
         _description = g_strdup(description);
     }
 
-    if (text != NULL) {
+    if (text != nullptr) {
         _text = g_strdup(text);
     } else {
         _text = g_strdup(name);
@@ -329,17 +329,17 @@ Parameter::Parameter(gchar const * name, gchar const * text, gchar const * descr
 
 /** Oop, now that we need a parameter, we need it's name. */
 Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extension::Extension * ext) :
-    _description(0),
-    _text(0),
+    _description(nullptr),
+    _text(nullptr),
     _hidden(false),
     _indent(0),
     _extension(ext),
-    _name(0)
+    _name(nullptr)
 {
-    if (name != NULL) {
+    if (name != nullptr) {
         _name = g_strdup(name);
     }
-    if (text != NULL) {
+    if (text != nullptr) {
         _text = g_strdup(text);
     } else {
         _text = g_strdup(name);
@@ -351,13 +351,13 @@ Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extensio
 Parameter::~Parameter(void)
 {
     g_free(_name);
-    _name = 0;
+    _name = nullptr;
 
     g_free(_text);
-    _text = 0;
+    _text = nullptr;
 
     g_free(_description);
-    _description = 0;
+    _description = nullptr;
 }
 
 gchar *Parameter::pref_name(void) const
@@ -387,12 +387,12 @@ Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
 {
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node * defs = doc->getDefs()->getRepr();
-    Inkscape::XML::Node * params = NULL;
+    Inkscape::XML::Node * params = nullptr;
 
     GQuark const name_quark = g_quark_from_string("inkscape:extension-params");
 
     for (Inkscape::XML::Node * child = defs->firstChild();
-            child != NULL;
+            child != nullptr;
             child = child->next()) {
         if ((GQuark)child->code() == name_quark &&
                 !strcmp(child->attribute("extension"), _extension->get_id())) {
@@ -401,7 +401,7 @@ Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
         }
     }
 
-    if (params == NULL) {
+    if (params == nullptr) {
         params = xml_doc->createElement("inkscape:extension-param");
         params->setAttribute("extension", _extension->get_id());
         defs->appendChild(params);
@@ -415,7 +415,7 @@ Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
 Gtk::Widget *
 Parameter::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 /** If I'm not sure which it is, just don't return a value. */
@@ -441,7 +441,7 @@ void Parameter::string(std::list <std::string> &list) const
 
 Parameter *Parameter::get_param(gchar const * /*name*/)
 {
-    return NULL;
+    return nullptr;
 }
 
 Glib::ustring const extension_pref_root = "/extensions/";

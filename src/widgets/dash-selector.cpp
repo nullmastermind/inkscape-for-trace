@@ -43,9 +43,9 @@ static double dash_1_2[] = {1.0, 2.0, -1.0};
 static double dash_1_4[] = {1.0, 4.0, -1.0};
 
 static size_t BD_LEN = 7;  // must correspond to the number of entries in the next line
-static double *builtin_dashes[] = {dash_0, dash_1_1, dash_2_1, dash_4_1, dash_1_2, dash_1_4, NULL};
+static double *builtin_dashes[] = {dash_0, dash_1_1, dash_2_1, dash_4_1, dash_1_2, dash_1_4, nullptr};
 
-static double **dashes = NULL;
+static double **dashes = nullptr;
 
 SPDashSelector::SPDashSelector()
     : preview_width(80),
@@ -143,7 +143,7 @@ void SPDashSelector::init_dashes() {
         for(i=0;i<15;i++){ d[i]=i; } // have to put something in there, this is a pattern hopefully nobody would choose
         d[15]=-1.0;
         // final terminator
-        dashes[++pos]   = NULL;
+        dashes[++pos]   = nullptr;
     }
 }
 
@@ -222,7 +222,7 @@ void SPDashSelector::get_dash(int *ndash, double **dash, double *off)
         if (ndash)
             *ndash = 0;
         if (dash)
-            *dash = NULL;
+            *dash = nullptr;
         if (off)
             *off = 0.0;
     }

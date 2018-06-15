@@ -58,8 +58,8 @@ bool sp_item_evaluate(SPItem const *item) {
 #define ISALNUM(c)    (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z') || ((c) >= '0' && (c) <= '9'))
 
 static gchar *preprocessLanguageCode(gchar *lngcode) {
-    if ( NULL == lngcode )
-        return NULL;
+    if ( nullptr == lngcode )
+        return nullptr;
 
     lngcode = g_strstrip(lngcode);
     if ( 0 == *lngcode )
@@ -80,11 +80,11 @@ static gchar *preprocessLanguageCode(gchar *lngcode) {
 }
 
 static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
-    if ( NULL == value )
+    if ( nullptr == value )
         return true;
 
     std::set<Glib::ustring> language_codes;
-    gchar *str = NULL;
+    gchar *str = nullptr;
     gchar **strlist = g_strsplit( value, ",", 0);
 
     for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
@@ -132,7 +132,7 @@ static bool evaluateSystemLanguage(SPItem const *item, gchar const *value) {
 
 static std::vector<Glib::ustring> splitByWhitespace(gchar const *value) {
     std::vector<Glib::ustring> parts;
-    gchar *str = NULL;
+    gchar *str = nullptr;
     gchar **strlist = g_strsplit( value, ",", 0);
 
     for ( int i = 0 ; (str = strlist[i]) ; i++ ) {
@@ -246,7 +246,7 @@ static bool evaluateSVG10Feature(gchar const *feature) {
 }
 
 static bool evaluateSingleFeature(gchar const *value) {
-    if ( NULL == value )
+    if ( nullptr == value )
         return false;
     gchar const *found;
     found = strstr(value, SVG11FEATURE);
@@ -259,7 +259,7 @@ static bool evaluateSingleFeature(gchar const *value) {
 }
 
 static bool evaluateRequiredFeatures(SPItem const */*item*/, gchar const *value) {
-    if ( NULL == value )
+    if ( nullptr == value )
         return true;
 
     std::vector<Glib::ustring> parts = splitByWhitespace(value);
@@ -278,7 +278,7 @@ static bool evaluateRequiredFeatures(SPItem const */*item*/, gchar const *value)
 }
 
 static bool evaluateRequiredExtensions(SPItem const */*item*/, gchar const *value) {
-    if ( NULL == value )
+    if ( nullptr == value )
         return true;
     return false;
 }

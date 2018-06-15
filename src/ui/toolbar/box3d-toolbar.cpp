@@ -103,9 +103,9 @@ static void box3d_resync_toolbar(Inkscape::XML::Node *persp_repr, GObject *data)
     }
 
     GtkWidget *tbl = GTK_WIDGET(data);
-    GtkAdjustment *adj = 0;
-    GtkAction *act = 0;
-    GtkToggleAction *tact = 0;
+    GtkAdjustment *adj = nullptr;
+    GtkAction *act = nullptr;
+    GtkToggleAction *tact = nullptr;
     Persp3D *persp = persp3d_get_from_repr(persp_repr);
     if (!persp) {
         // Hmm, is it an error if this happens?
@@ -165,11 +165,11 @@ static void box3d_persp_tb_event_attr_changed(Inkscape::XML::Node *repr,
 
 static Inkscape::XML::NodeEventVector box3d_persp_tb_repr_events =
 {
-    NULL, /* child_added */
-    NULL, /* child_removed */
+    nullptr, /* child_added */
+    nullptr, /* child_removed */
     box3d_persp_tb_event_attr_changed,
-    NULL, /* content_changed */
-    NULL  /* order_changed */
+    nullptr, /* content_changed */
+    nullptr  /* order_changed */
 };
 
 /**
@@ -183,7 +183,7 @@ static void box3d_toolbox_selection_changed(Inkscape::Selection *selection, GObj
     // disable the angle entry fields for this direction (otherwise entering a value in them should only
     // update the perspectives with infinite VPs and leave the other ones untouched).
 
-    Inkscape::XML::Node *persp_repr = NULL;
+    Inkscape::XML::Node *persp_repr = nullptr;
     purge_repr_listener(tbl, tbl);
 
     SPItem *item = selection->singleItem();
@@ -290,17 +290,17 @@ static void box3d_toolbox_check_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase*
 void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    EgeAdjustmentAction* eact = 0;
+    EgeAdjustmentAction* eact = nullptr;
     SPDocument *document = desktop->getDocument();
     Persp3DImpl *persp_impl = document->getCurrentPersp3DImpl();
 
-    EgeAdjustmentAction* box3d_angle_x = 0;
-    EgeAdjustmentAction* box3d_angle_y = 0;
-    EgeAdjustmentAction* box3d_angle_z = 0;
+    EgeAdjustmentAction* box3d_angle_x = nullptr;
+    EgeAdjustmentAction* box3d_angle_y = nullptr;
+    EgeAdjustmentAction* box3d_angle_z = nullptr;
 
     /* Angle X */
     {
-        gchar const* labels[] = { 0, 0, 0, 0, 0, 0, 0 };
+        gchar const* labels[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
         gdouble values[] = {-90, -60, -30, 0, 30, 60, 90};
         eact = create_adjustment_action( "3DBoxAngleXAction",
                                          _("Angle in X direction"), _("Angle X:"),
@@ -340,14 +340,14 @@ void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject
 
     /* Angle Y */
     {
-        gchar const* labels[] = { 0, 0, 0, 0, 0, 0, 0 };
+        gchar const* labels[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
         gdouble values[] = {-90, -60, -30, 0, 30, 60, 90};
         eact = create_adjustment_action( "3DBoxAngleYAction",
                                          _("Angle in Y direction"), _("Angle Y:"),
                                          // Translators: PL is short for 'perspective line'
                                          _("Angle of PLs in Y direction"),
                                          "/tools/shapes/3dbox/box3d_angle_y", 30,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          box3d_angle_y_value_changed );
@@ -379,14 +379,14 @@ void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject
 
     /* Angle Z */
     {
-        gchar const* labels[] = { 0, 0, 0, 0, 0, 0, 0 };
+        gchar const* labels[] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
         gdouble values[] = {-90, -60, -30, 0, 30, 60, 90};
         eact = create_adjustment_action( "3DBoxAngleZAction",
                                          _("Angle in Z direction"), _("Angle Z:"),
                                          // Translators: PL is short for 'perspective line'
                                          _("Angle of PLs in Z direction"),
                                          "/tools/shapes/3dbox/box3d_angle_z", 30,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          box3d_angle_z_value_changed );

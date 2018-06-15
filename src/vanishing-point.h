@@ -41,7 +41,7 @@ enum VPState {
 // FIXME: Don't store the box in the VP but rather the perspective (and link the box to it)!!
 class VanishingPoint {
 public:
-    VanishingPoint() : my_counter(VanishingPoint::global_counter++), _persp(NULL), _axis(Proj::NONE) {}
+    VanishingPoint() : my_counter(VanishingPoint::global_counter++), _persp(nullptr), _axis(Proj::NONE) {}
     VanishingPoint(Persp3D *persp, Proj::Axis axis) : my_counter(VanishingPoint::global_counter++), _persp(persp), _axis(axis) {}
     VanishingPoint(const VanishingPoint &other) : my_counter(VanishingPoint::global_counter++), _persp(other._persp), _axis(other._axis) {}
 

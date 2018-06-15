@@ -17,9 +17,9 @@ namespace Extension {
 
 Print::Print (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp)
     : Extension(in_repr, in_imp)
-    , base(NULL)
-    , drawing(NULL)
-    , root(NULL)
+    , base(nullptr)
+    , drawing(nullptr)
+    , root(nullptr)
     , dkey(0)
 {
 }

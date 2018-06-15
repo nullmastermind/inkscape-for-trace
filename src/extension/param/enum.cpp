@@ -39,27 +39,27 @@ ParamComboBox::ParamComboBox(const gchar * name,
                              Inkscape::Extension::Extension * ext,
                              Inkscape::XML::Node * xml)
     : Parameter(name, text, description, hidden, indent, ext)
-    , _value(NULL)
+    , _value(nullptr)
 {
-    const char *xmlval = NULL; // the value stored in XML
+    const char *xmlval = nullptr; // the value stored in XML
 
-    if (xml != NULL) {
+    if (xml != nullptr) {
         // Read XML tree to add enumeration items:
         for (Inkscape::XML::Node *node = xml->firstChild(); node; node = node->next()) {
             char const * chname = node->name();
             if (!strcmp(chname, INKSCAPE_EXTENSION_NS "item") || !strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) {
                 Glib::ustring newtext, newvalue;
-                const char * contents = NULL;
+                const char * contents = nullptr;
                 if (node->firstChild()) {
                     contents = node->firstChild()->content();
                 }
-                if (contents != NULL) {
+                if (contents != nullptr) {
                     // don't translate when 'item' but do translate when '_item'
                     // NOTE: internal extensions use build_from_mem and don't need _item but
                     //       still need to include if are to be localized
                     if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) {
-                        if (node->attribute("msgctxt") != NULL) {
-                            newtext =  g_dpgettext2(NULL, node->attribute("msgctxt"), contents);
+                        if (node->attribute("msgctxt") != nullptr) {
+                            newtext =  g_dpgettext2(nullptr, node->attribute("msgctxt"), contents);
                         } else {
                             newtext =  _(contents);
                         }
@@ -70,7 +70,7 @@ ParamComboBox::ParamComboBox(const gchar * name,
                     continue;
 
                 const char * val = node->attribute("value");
-                if (val != NULL) {
+                if (val != nullptr) {
                     newvalue = val;
                 } else {
                     newvalue = contents;
@@ -128,8 +128,8 @@ ParamComboBox::~ParamComboBox (void)
  */
 const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    if (in == NULL) {
-        return NULL; /* Can't have NULL string */
+    if (in == nullptr) {
+        return nullptr; /* Can't have NULL string */
     }
 
     Glib::ustring settext;
@@ -140,7 +140,7 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
         }
     }
     if (!settext.empty()) {
-        if (_value != NULL) {
+        if (_value != nullptr) {
             g_free(_value);
         }
         _value = g_strdup(settext.data());
@@ -158,7 +158,7 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
  */
 bool ParamComboBox::contains(const gchar * text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
 {
-    if (text == NULL) {
+    if (text == nullptr) {
         return false; /* Can't have NULL string */
     }
 
@@ -214,7 +214,7 @@ ParamComboBoxEntry::changed (void)
 {
     Glib::ustring data = this->get_active_text();
     _pref->set(data.c_str(), _doc, _node);
-    if (_changeSignal != NULL) {
+    if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
 }
@@ -225,7 +225,7 @@ ParamComboBoxEntry::changed (void)
 Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
     if (_hidden) {
-        return NULL;
+        return nullptr;
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));

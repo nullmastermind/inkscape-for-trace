@@ -360,7 +360,7 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
 
                     ir->setAttribute( "xlink:href", mapping[href].c_str() );
                     if ( ir->attribute( "sodipodi:absref" ) ) {
-                        ir->setAttribute( "sodipodi:absref", 0 ); // Remove this attribute
+                        ir->setAttribute( "sodipodi:absref", nullptr ); // Remove this attribute
                     }
 
                     SPObject *updated = doc->getObjectByRepr(ir);
@@ -414,7 +414,7 @@ bool ResourceManagerImpl::searchUpwards( std::string const &base, std::string co
 }
 
 
-static ResourceManagerImpl* theInstance = 0;
+static ResourceManagerImpl* theInstance = nullptr;
 
 ResourceManager::ResourceManager()
     : Glib::Object()

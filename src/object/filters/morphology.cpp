@@ -135,13 +135,13 @@ Inkscape::XML::Node* SPFeMorphology::write(Inkscape::XML::Document *doc, Inkscap
 }
 
 void SPFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_MORPHOLOGY);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterMorphology *nr_morphology = dynamic_cast<Inkscape::Filters::FilterMorphology*>(nr_primitive);
-    g_assert(nr_morphology != NULL);
+    g_assert(nr_morphology != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
     

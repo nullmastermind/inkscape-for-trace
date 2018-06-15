@@ -44,10 +44,10 @@ namespace Resource {
 
 gchar *_get_path(Domain domain, Type type, char const *filename)
 {
-    gchar *path=NULL;
+    gchar *path=nullptr;
     switch (domain) {
         case SYSTEM: {
-            gchar const* temp = 0;
+            gchar const* temp = nullptr;
             switch (type) {
                 case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
@@ -71,7 +71,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             path = g_strdup(temp);
         } break;
         case CREATE: {
-            gchar const* temp = 0;
+            gchar const* temp = nullptr;
             switch (type) {
                 case GRADIENTS: temp = CREATE_GRADIENTSDIR; break;
                 case PALETTES: temp = CREATE_PALETTESDIR; break;
@@ -84,7 +84,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             path = g_build_filename(g_get_user_cache_dir(), "inkscape", NULL);
         } break;
         case USER: {
-            char const *name=NULL;
+            char const *name=nullptr;
             switch (type) {
                 case EXTENSIONS: name = "extensions"; break;
                 case FILTERS: name = "filters"; break;
@@ -145,7 +145,7 @@ Glib::ustring get_filename(Type type, char const *filename, char const *locale)
 {
     Glib::ustring result;
 
-    if(locale != NULL) {
+    if(locale != nullptr) {
       char *user_locale = _get_path(USER, type, filename);
       char *sys_locale = _get_path(SYSTEM, type, filename);
 
@@ -288,7 +288,7 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
  */
 char *profile_path(const char *filename)
 {
-    static const gchar *prefdir = NULL;
+    static const gchar *prefdir = nullptr;
 
 
     if (!prefdir) {
@@ -356,7 +356,7 @@ char *profile_path(const char *filename)
                 int problem = errno;
                 g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
             } else {
-                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
+                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "palettes", nullptr};
                 for (gchar const** name = userDirs; *name; ++name) {
                     gchar *dir = g_build_filename(prefdir, *name, NULL);
                     g_mkdir_with_parents(dir, mode);
@@ -379,7 +379,7 @@ char *log_path(const char *filename)
 
 char *homedir_path(const char *filename)
 {
-    static const gchar *homedir = NULL;
+    static const gchar *homedir = nullptr;
     homedir = g_get_home_dir();
 
     // I suspect this is for handling inkscape app packages

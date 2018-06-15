@@ -158,9 +158,9 @@ void Path::DoSimplify(int off, int N, double treshhold)
     int curP = 0;
   
     fitting_tables data;
-    data.Xk = data.Yk = data.Qk = NULL;
-    data.tk = data.lk = NULL;
-    data.fk = NULL;
+    data.Xk = data.Yk = data.Qk = nullptr;
+    data.tk = data.lk = nullptr;
+    data.fk = nullptr;
     data.totLen = 0;
     data.nbPt = data.maxPt = data.inPt = 0;
   

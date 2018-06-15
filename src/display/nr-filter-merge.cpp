@@ -43,7 +43,7 @@ void FilterMerge::render_cairo(FilterSlot &slot)
 
     // output is RGBA if at least one input is RGBA
     bool rgba32 = false;
-    cairo_surface_t *out = NULL;
+    cairo_surface_t *out = nullptr;
     for (std::vector<int>::iterator i = _input_image.begin(); i != _input_image.end(); ++i) {
         cairo_surface_t *in = slot.getcairo(*i);
         if (cairo_surface_get_content(in) == CAIRO_CONTENT_COLOR_ALPHA) {

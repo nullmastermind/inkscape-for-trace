@@ -74,7 +74,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     _provides_knotholder_entities = true;
     //0.92 compatibility
     if (this->getRepr()->attribute("fuse_paths") && strcmp(this->getRepr()->attribute("fuse_paths"), "true") == 0){
-        this->getRepr()->setAttribute("fuse_paths", NULL);
+        this->getRepr()->setAttribute("fuse_paths", nullptr);
         this->getRepr()->setAttribute("method", "kaleidoskope");
         this->getRepr()->setAttribute("mirror_copies", "true");
     };
@@ -136,7 +136,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                     if (id.empty()) {
                         return;
                     }
-                    SPObject *elemref = NULL;
+                    SPObject *elemref = nullptr;
                     if (elemref = document->getObjectById(id.c_str())) {
                         SP_ITEM(elemref)->setHidden(true);
                     }
@@ -146,7 +146,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             }
             previous_num_copies = num_copies;
         }
-        SPObject *elemref = NULL;
+        SPObject *elemref = nullptr;
         guint counter = 0;
         Glib::ustring id = "rotated-0-";
         id += this->lpeobj->getId();
@@ -230,7 +230,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             g_free(str);
             c->unref();
         } else {
-            path->getRepr()->setAttribute("d", NULL);
+            path->getRepr()->setAttribute("d", nullptr);
         }
         if (reset) {
             dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
@@ -242,7 +242,7 @@ Inkscape::XML::Node *
 LPECopyRotate::createPathBase(SPObject *elemref) {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
-        return NULL;
+        return nullptr;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *prev = elemref->getRepr();
@@ -251,7 +251,7 @@ LPECopyRotate::createPathBase(SPObject *elemref) {
         Inkscape::XML::Node *container = xml_doc->createElement("svg:g");
         container->setAttribute("transform", prev->attribute("transform"));
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-        Inkscape::XML::Node *previous = NULL;
+        Inkscape::XML::Node *previous = nullptr;
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPObject *sub_item = *iter;
             Inkscape::XML::Node *resultnode = createPathBase(sub_item);
@@ -278,8 +278,8 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     elemref_id += "-";
     elemref_id += this->lpeobj->getId();
     items.push_back(elemref_id);
-    SPObject *elemref= NULL;
-    Inkscape::XML::Node *phantom = NULL;
+    SPObject *elemref= nullptr;
+    Inkscape::XML::Node *phantom = nullptr;
     if (elemref = document->getObjectById(elemref_id.c_str())) {
         phantom = elemref->getRepr();
     } else {

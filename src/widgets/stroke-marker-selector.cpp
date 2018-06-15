@@ -53,7 +53,7 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     set_model(marker_store);
     pack_start(image_renderer, false);
     set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
-    gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, NULL, NULL);
+    gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, nullptr, nullptr);
 
     empty_image = new Gtk::Image();
     empty_image->set_from_icon_name("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
@@ -138,7 +138,7 @@ MarkerComboBox::init_combo()
     if (updating)
         return;
 
-    const gchar *active = NULL;
+    const gchar *active = nullptr;
     if (get_active()) {
         active = get_active()->get_value(marker_columns.marker);
     }
@@ -152,11 +152,11 @@ MarkerComboBox::init_combo()
         row[marker_columns.history] = false;
         row[marker_columns.separator] = false;
         set_sensitive(false);
-        set_current(NULL);
+        set_current(nullptr);
         return;
     }
 
-    static SPDocument *markers_doc = NULL;
+    static SPDocument *markers_doc = nullptr;
 
     // add separator
     Gtk::TreeModel::Row row_sep = *(marker_store->append());
@@ -171,7 +171,7 @@ MarkerComboBox::init_combo()
     sp_marker_list_from_doc(doc, true);
 
     // find and load markers.svg
-    if (markers_doc == NULL) {
+    if (markers_doc == nullptr) {
         char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "markers.svg", NULL);
         if (Inkscape::IO::file_test(markers_source, G_FILE_TEST_IS_REGULAR)) {
             markers_doc = SPDocument::createNewDoc(markers_source, FALSE);
@@ -199,13 +199,13 @@ void MarkerComboBox::set_current(SPObject *marker)
 {
     updating = true;
 
-    if (marker != NULL) {
+    if (marker != nullptr) {
         gchar *markname = g_strdup(marker->getRepr()->attribute("id"));
         set_selected(markname);
         g_free (markname);
     }
     else {
-        set_selected(NULL);
+        set_selected(nullptr);
     }
 
     updating = false;
@@ -220,7 +220,7 @@ const gchar * MarkerComboBox::get_active_marker_uri()
     const gchar *markid = get_active()->get_value(marker_columns.marker);
     if (!markid)
     {
-        return NULL;
+        return nullptr;
     }
 
     gchar const *marker = "";
@@ -308,7 +308,7 @@ void MarkerComboBox::sp_marker_list_from_doc(SPDocument *source, gboolean histor
 std::vector<SPMarker *> MarkerComboBox::get_marker_list (SPDocument *source)
 {
     std::vector<SPMarker *> ml;
-    if (source == NULL)
+    if (source == nullptr)
         return ml;
 
     SPDefs *defs = source->getDefs();
@@ -446,8 +446,8 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
 {
     // Retrieve the marker named 'mname' from the source SVG document
     SPObject const *marker = source->getObjectById(mname);
-    if (marker == NULL) {
-        return NULL;
+    if (marker == nullptr) {
+        return nullptr;
     }
 
     // Create a copy repr of the marker with id="sample"
@@ -509,8 +509,8 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     sandbox->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     sandbox->ensureUpToDate();
 
-    if (object == NULL || !SP_IS_ITEM(object)) {
-        return NULL; // sandbox broken?
+    if (object == nullptr || !SP_IS_ITEM(object)) {
+        return nullptr; // sandbox broken?
     }
 
     SPItem *item = SP_ITEM(object);
@@ -518,7 +518,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     Geom::OptRect dbox = item->documentVisualBounds();
 
     if (!dbox) {
-        return NULL;
+        return nullptr;
     }
 
     /* Update to renderable state */

@@ -79,7 +79,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
 
     switch (key) {
     case SP_ATTR_X:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->x = g_ascii_strtod(value, &end_ptr);
@@ -101,7 +101,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_Y:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->y = g_ascii_strtod(value, &end_ptr);
@@ -123,7 +123,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_Z:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->z = g_ascii_strtod(value, &end_ptr);
@@ -145,7 +145,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_POINTSATX:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->pointsAtX = g_ascii_strtod(value, &end_ptr);
@@ -167,7 +167,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_POINTSATY:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->pointsAtY = g_ascii_strtod(value, &end_ptr);
@@ -189,7 +189,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_POINTSATZ:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->pointsAtZ = g_ascii_strtod(value, &end_ptr);
@@ -211,7 +211,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_SPECULAREXPONENT:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->specularExponent = g_ascii_strtod(value, &end_ptr);
@@ -233,7 +233,7 @@ void SPFeSpotLight::set(unsigned int key, gchar const *value) {
         }
         break;
     case SP_ATTR_LIMITINGCONEANGLE:
-        end_ptr = NULL;
+        end_ptr = nullptr;
         
         if (value) {
             this->limitingConeAngle = g_ascii_strtod(value, &end_ptr);

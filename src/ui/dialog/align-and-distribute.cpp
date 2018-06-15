@@ -128,7 +128,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     if (selected.empty()) return;
 
     const Coeffs &a = _allCoeffs[index];
-    SPItem *focus = NULL;
+    SPItem *focus = nullptr;
     Geom::OptRect b = Geom::OptRect();
     Selection::CompareSize horiz = (a.mx0 != 0.0) || (a.mx1 != 0.0)
         ? Selection::VERTICAL : Selection::HORIZONTAL;
@@ -557,8 +557,8 @@ private :
     static boost::optional<Geom::Point> center;
 
     static bool sort_compare(const SPItem * a,const SPItem * b) {
-        if (a == NULL) return false;
-        if (b == NULL) return true;
+        if (a == nullptr) return false;
+        if (b == nullptr) return true;
         if (center) {
             Geom::Point point_a = a->getCenter() - (*center);
             Geom::Point point_b = b->getCenter() - (*center);
@@ -830,7 +830,7 @@ private :
 
         } else { //align
             Geom::Point ref_point;
-            SPItem *focus = NULL;
+            SPItem *focus = nullptr;
             Geom::OptRect b = Geom::OptRect();
 
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();

@@ -47,7 +47,7 @@ public:
         return std::numeric_limits<std::size_t>::max() / sizeof(T);
     }
 
-    pointer allocate(size_type count, void const * =NULL) {
+    pointer allocate(size_type count, void const * =nullptr) {
         return static_cast<pointer>(::operator new(count * sizeof(T), SCANNED, collect));
     }
 

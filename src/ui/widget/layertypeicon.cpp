@@ -30,9 +30,9 @@ LayerTypeIcon::LayerTypeIcon() :
     _pixPathName(INKSCAPE_ICON("layer-rename")),
     _property_active(*this, "active", false),
     _property_activatable(*this, "activatable", true),
-    _property_pixbuf_layer(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_group(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_path(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_layer(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_group(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
+    _property_pixbuf_path(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(nullptr))
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;

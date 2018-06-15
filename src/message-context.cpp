@@ -24,7 +24,7 @@ MessageContext::MessageContext(MessageStack *stack)
 MessageContext::~MessageContext() {
     clear();
     GC::release(_stack);
-    _stack = NULL;
+    _stack = nullptr;
 }
 
 void MessageContext::set(MessageType type, gchar const *message) {

@@ -696,14 +696,14 @@ ControlPoint::ColorSet RotationCenter::_center_cset = {
 
 TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
     : Manipulator(d)
-    , _active(0)
+    , _active(nullptr)
     , _transform_handle_group(th_group)
     , _mode(MODE_SCALE)
     , _in_transform(false)
     , _visible(true)
 {
     _trans_outline = static_cast<CtrlRect*>(sp_canvas_item_new(_desktop->getControls(),
-        SP_TYPE_CTRLRECT, NULL));
+        SP_TYPE_CTRLRECT, nullptr));
     sp_canvas_item_hide(_trans_outline);
     _trans_outline->setDashed(true);
 
@@ -796,7 +796,7 @@ void TransformHandleSet::_clearActiveHandle()
 {
     // This can only be called from handles, so they had to be visible before _setActiveHandle
     sp_canvas_item_hide(_trans_outline);
-    _active = 0;
+    _active = nullptr;
     _in_transform = false;
     _updateVisibility(_visible);
 }

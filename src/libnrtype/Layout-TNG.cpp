@@ -18,7 +18,7 @@ const double Layout::LINE_HEIGHT_NORMAL = 1.25;
 
 Layout::Layout() :
     _input_truncated(0),
-    _path_fitted(NULL)
+    _path_fitted(nullptr)
 {
       textLength._set = false;
       textLengthMultiplier = 1;

@@ -46,7 +46,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");
     if (linkedpath && strcmp(linkedpath, "") != 0){
         this->getRepr()->setAttribute("linkeditem", linkedpath);
-        this->getRepr()->setAttribute("linkedpath", NULL);
+        this->getRepr()->setAttribute("linkedpath", nullptr);
         this->getRepr()->setAttribute("method", "bsplinespiro");
         this->getRepr()->setAttribute("allow_transforms", "false");
     };
@@ -118,11 +118,11 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     }
     gchar ** attarray = g_strsplit(attributes, ",", 0);
     gchar ** iter = attarray;
-    while (*iter != NULL) {
+    while (*iter != nullptr) {
         const char* attribute = (*iter);
         if (strlen(attribute)) {
             if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
-                SPCurve *c = NULL;
+                SPCurve *c = nullptr;
                 if (method == CLM_BSPLINESPIRO) {
                     c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
@@ -157,7 +157,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                     g_free(str);
                     c->unref();
                 } else {
-                    dest->getRepr()->setAttribute(attribute, NULL);
+                    dest->getRepr()->setAttribute(attribute, nullptr);
                 }
             } else {
                 dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
@@ -172,12 +172,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     sp_repr_css_attr_add_from_string(css_dest, dest->getRepr()->attribute("style"));
     gchar ** styleattarray = g_strsplit(style_attributes, ",", 0);
     gchar ** styleiter = styleattarray;
-    while (*styleiter != NULL) {
+    while (*styleiter != nullptr) {
         const char* attribute = (*styleiter);
         if (strlen(attribute)) {
             const char* origin_attribute = sp_repr_css_property(css_origin, attribute, "");
             if (!strlen(origin_attribute)) { //==0
-                sp_repr_css_set_property (css_dest, attribute, NULL);
+                sp_repr_css_set_property (css_dest, attribute, nullptr);
             } else {
                 sp_repr_css_set_property (css_dest, attribute, origin_attribute);
             }

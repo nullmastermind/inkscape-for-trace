@@ -45,10 +45,10 @@ SnapManager::SnapManager(SPNamedView const *v) :
     snapprefs(),
     _named_view(v),
     _rotation_center_source_items(std::vector<SPItem*>()),
-    _guide_to_ignore(NULL),
-    _desktop(NULL),
+    _guide_to_ignore(nullptr),
+    _desktop(nullptr),
     _snapindicator(true),
-    _unselected_nodes(NULL)
+    _unselected_nodes(nullptr)
 {
 }
 
@@ -145,7 +145,7 @@ void SnapManager::preSnap(Inkscape::SnapCandidatePoint const &p, bool to_paths_o
     if (_snapindicator) {
         _snapindicator = false; // prevent other methods from drawing a snap indicator; we want to control this here
         Inkscape::SnappedPoint s = freeSnap(p, Geom::OptRect(), to_paths_only);
-        g_assert(_desktop != NULL);
+        g_assert(_desktop != nullptr);
         if (s.getSnapped()) {
             _desktop->snapindicator->set_new_snaptarget(s, true);
         } else {
@@ -183,7 +183,7 @@ Geom::Point SnapManager::multipleOfGridPitch(Geom::Point const &t, Geom::Point c
                 Geom::Point const t_offset = t + grid->origin;
                 IntermSnapResults isr;
                 // Only the first three parameters are being used for grid snappers
-                snapper->freeSnap(isr, Inkscape::SnapCandidatePoint(t_offset, Inkscape::SNAPSOURCE_GRID_PITCH),Geom::OptRect(), NULL, NULL);
+                snapper->freeSnap(isr, Inkscape::SnapCandidatePoint(t_offset, Inkscape::SNAPSOURCE_GRID_PITCH),Geom::OptRect(), nullptr, nullptr);
                 // Find the best snap for this grid, including intersections of the grid-lines
                 bool old_val = _snapindicator;
                 _snapindicator = false;
@@ -407,7 +407,7 @@ void SnapManager::guideFreeSnap(Geom::Point &p, Geom::Point &origin_or_vector, b
     IntermSnapResults isr;
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-        (*i)->freeSnap(isr, candidate, Geom::OptRect(), NULL, NULL);
+        (*i)->freeSnap(isr, candidate, Geom::OptRect(), nullptr, nullptr);
     }
 
     Inkscape::SnappedPoint const s = findBestSnap(candidate, isr, false);
@@ -435,7 +435,7 @@ void SnapManager::guideConstrainedSnap(Geom::Point &p, SPGuide const &guideline)
 
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-        (*i)->constrainedSnap(isr, candidate, Geom::OptRect(), cl, NULL, NULL);
+        (*i)->constrainedSnap(isr, candidate, Geom::OptRect(), cl, nullptr, nullptr);
     }
 
     Inkscape::SnappedPoint const s = findBestSnap(candidate, isr, false);
@@ -488,7 +488,7 @@ Inkscape::SnappedPoint SnapManager::findBestSnap(Inkscape::SnapCandidatePoint co
                                                  bool allowOffScreen,
                                                  bool to_path_only) const
 {
-    g_assert(_desktop != NULL);
+    g_assert(_desktop != nullptr);
 
     /*
     std::cout << "Type and number of snapped constraints: " << std::endl;
@@ -658,8 +658,8 @@ void SnapManager::setup(SPDesktop const *desktop,
                         std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
                         SPGuide *guide_to_ignore)
 {
-    g_assert(desktop != NULL);
-    if (_desktop != NULL) {
+    g_assert(desktop != nullptr);
+    if (_desktop != nullptr) {
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
     _items_to_ignore.clear();
@@ -677,8 +677,8 @@ void SnapManager::setup(SPDesktop const *desktop,
                         std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
                         SPGuide *guide_to_ignore)
 {
-    g_assert(desktop != NULL);
-    if (_desktop != NULL) {
+    g_assert(desktop != nullptr);
+    if (_desktop != nullptr) {
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
     _items_to_ignore = items_to_ignore;
@@ -695,8 +695,8 @@ void SnapManager::setupIgnoreSelection(SPDesktop const *desktop,
                                       std::vector<Inkscape::SnapCandidatePoint> *unselected_nodes,
                                       SPGuide *guide_to_ignore)
 {
-    g_assert(desktop != NULL);
-    if (_desktop != NULL) {
+    g_assert(desktop != nullptr);
+    if (_desktop != nullptr) {
         // Someone has been naughty here! This is dangerous
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
@@ -779,7 +779,7 @@ void SnapManager::displaySnapsource(Inkscape::SnapCandidatePoint const &p) const
         bool p_is_a_bbox = t & Inkscape::SNAPSOURCE_BBOX_CATEGORY;
         bool p_is_other = (t & Inkscape::SNAPSOURCE_OTHERS_CATEGORY) || (t & Inkscape::SNAPSOURCE_DATUMS_CATEGORY);
 
-        g_assert(_desktop != NULL);
+        g_assert(_desktop != nullptr);
         if (snapprefs.getSnapEnabledGlobally() && (p_is_other || (p_is_a_node && snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_NODE_CATEGORY)) || (p_is_a_bbox && snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_BBOX_CATEGORY)))) {
             _desktop->snapindicator->set_new_snapsource(p);
         } else {

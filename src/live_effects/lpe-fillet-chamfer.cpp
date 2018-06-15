@@ -63,7 +63,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       apply_with_radius(_("Apply changes if radius > 0"), _("Apply changes if radius > 0"), "apply_with_radius", &wr, this, true),
       helper_size(_("Helper path size with direction to node:"),
                   _("Helper path size with direction to node"), "helper_size", &wr, this, 0),
-      _pathvector_satellites(NULL),
+      _pathvector_satellites(nullptr),
       _degenerate_hide(false)
 {
     registerParameter(&satellites_param);
@@ -104,7 +104,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         double power = radius;
         if (!flexible) {
             SPDocument * document = SP_ACTIVE_DOCUMENT;
-            SPNamedView *nv = sp_document_namedview(document, NULL);
+            SPNamedView *nv = sp_document_namedview(document, nullptr);
             Glib::ustring display_unit = nv->display_units->abbr;
             power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
         }
@@ -271,7 +271,7 @@ void LPEFilletChamfer::updateAmount()
     double power = radius;
     if (!flexible) {
         SPDocument * document = SP_ACTIVE_DOCUMENT;
-        SPNamedView *nv = sp_document_namedview(document, NULL);
+        SPNamedView *nv = sp_document_namedview(document, nullptr);
         Glib::ustring display_unit = nv->display_units->abbr;
         power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
     }
@@ -346,7 +346,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 double power = radius;
                 if (!flexible) {
                     SPDocument * document = SP_ACTIVE_DOCUMENT;
-                    SPNamedView *nv = sp_document_namedview(document, NULL);
+                    SPNamedView *nv = sp_document_namedview(document, nullptr);
                     Glib::ustring display_unit = nv->display_units->abbr;
                     power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
                 }

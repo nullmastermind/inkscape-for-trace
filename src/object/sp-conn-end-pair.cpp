@@ -28,7 +28,7 @@
 
 SPConnEndPair::SPConnEndPair(SPPath *const owner)
     : _path(owner)
-    , _connRef(NULL)
+    , _connRef(nullptr)
     , _connType(SP_CONNECTOR_NOAVOID)
     , _connCurvature(0.0)
     , _transformed_connection()
@@ -46,7 +46,7 @@ SPConnEndPair::~SPConnEndPair()
 {
     for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
         delete this->_connEnd[handle_ix];
-        this->_connEnd[handle_ix] = NULL;
+        this->_connEnd[handle_ix] = nullptr;
     }
 }
 
@@ -57,18 +57,18 @@ void SPConnEndPair::release()
         this->_connEnd[handle_ix]->_delete_connection.disconnect();
         this->_connEnd[handle_ix]->_transformed_connection.disconnect();
         g_free(this->_connEnd[handle_ix]->href);
-        this->_connEnd[handle_ix]->href = NULL;
+        this->_connEnd[handle_ix]->href = nullptr;
         this->_connEnd[handle_ix]->ref.detach();
     }
 
     // If the document is being destroyed then the router instance
     // and the ConnRefs will have been destroyed with it.
-    const bool routerInstanceExists = (_path->document->router != NULL);
+    const bool routerInstanceExists = (_path->document->router != nullptr);
 
     if (_connRef && routerInstanceExists) {
         _connRef->router()->deleteConnector(_connRef);
     }
-    _connRef = NULL;
+    _connRef = nullptr;
 
     _transformed_connection.disconnect();
 }
@@ -116,14 +116,14 @@ void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
 
             if (_connRef) {
                 _connRef->router()->deleteConnector(_connRef);
-                _connRef = NULL;
+                _connRef = nullptr;
                 _transformed_connection.disconnect();
             }
         }
         break;
     case SP_ATTR_CONNECTOR_CURVATURE:
         if (value) {
-            _connCurvature = g_strtod(value, NULL);
+            _connCurvature = g_strtod(value, nullptr);
             if (_connRef && _connRef->isInitialised()) {
                 // Redraw the connector, but only if it has been initialised.
                 sp_conn_reroute_path(_path);
@@ -167,7 +167,7 @@ void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
             if (SP_GROUP(h2attItem[h])->getItemCount() == 0) {
                 // This group is empty, so detach.
                 sp_conn_end_detach(_path, h);
-                h2attItem[h] = NULL;
+                h2attItem[h] = nullptr;
             }
         }
     }
@@ -176,7 +176,7 @@ void SPConnEndPair::getAttachedItems(SPItem *h2attItem[2]) const {
 void SPConnEndPair::getEndpoints(Geom::Point endPts[]) const
 {
     SPCurve const *curve = _path->getCurveForEdit(true);
-    SPItem *h2attItem[2] = {0};
+    SPItem *h2attItem[2] = {nullptr};
     getAttachedItems(h2attItem);
     Geom::Affine i2d = _path->i2doc_affine();
 
@@ -213,7 +213,7 @@ bool SPConnEndPair::isOrthogonal() const
 static void redrawConnectorCallback(void *ptr)
 {
     SPPath *path = SP_PATH(ptr);
-    if (path->document == NULL) {
+    if (path->document == nullptr) {
         // This can happen when the document is being destroyed.
         return;
     }
@@ -230,7 +230,7 @@ void SPConnEndPair::rerouteFromManipulation()
 void SPConnEndPair::update()
 {
     if (_connType != SP_CONNECTOR_NOAVOID) {
-        g_assert(_connRef != NULL);
+        g_assert(_connRef != nullptr);
         if (!_connRef->isInitialised()) {
             _updateEndPoints();
             _connRef->setCallback(&redrawConnectorCallback, _path);

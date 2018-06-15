@@ -30,16 +30,16 @@ class SpinButton : public Gtk::SpinButton
 public:
   SpinButton(double climb_rate = 0.0, guint digits = 0)
     : Gtk::SpinButton(climb_rate, digits),
-      _unit_menu(NULL),
-      _unit_tracker(NULL),
+      _unit_menu(nullptr),
+      _unit_tracker(nullptr),
       _on_focus_in_value(0.)
   {
       connect_signals();
   };
   explicit SpinButton(Glib::RefPtr<Gtk::Adjustment>& adjustment, double climb_rate = 0.0, guint digits = 0)
     : Gtk::SpinButton(adjustment, climb_rate, digits),
-      _unit_menu(NULL),
-      _unit_tracker(NULL),
+      _unit_menu(nullptr),
+      _unit_tracker(nullptr),
       _on_focus_in_value(0.)
   {
       connect_signals();

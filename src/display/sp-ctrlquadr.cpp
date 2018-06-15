@@ -58,7 +58,7 @@ sp_ctrlquadr_init (SPCtrlQuadr *ctrlquadr)
 
 static void sp_ctrlquadr_destroy(SPCanvasItem *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (SP_IS_CTRLQUADR (object));
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrlquadr_parent_class)->destroy)
@@ -139,7 +139,7 @@ static void sp_ctrlquadr_update(SPCanvasItem *item, Geom::Affine const &affine, 
 void
 sp_ctrlquadr_set_rgba32 (SPCtrlQuadr *cl, guint32 rgba)
 {
-    g_return_if_fail (cl != NULL);
+    g_return_if_fail (cl != nullptr);
     g_return_if_fail (SP_IS_CTRLQUADR (cl));
 
     if (rgba != cl->rgba) {
@@ -153,7 +153,7 @@ sp_ctrlquadr_set_rgba32 (SPCtrlQuadr *cl, guint32 rgba)
 void
 sp_ctrlquadr_set_coords (SPCtrlQuadr *cl, Geom::Point p1, Geom::Point p2, Geom::Point p3, Geom::Point p4)
 {
-    g_return_if_fail (cl != NULL);
+    g_return_if_fail (cl != nullptr);
     g_return_if_fail (SP_IS_CTRLQUADR (cl));
 
     if (p1 != cl->p1 || p2 != cl->p2 || p3 != cl->p3 || p4 != cl->p4) {

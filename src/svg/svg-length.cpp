@@ -187,7 +187,7 @@ bool SVGLength::read(gchar const *str)
     SVGLength::Unit u;
     float v;
     float c;
-    if (!sp_svg_length_read_lff(str, &u, &v, &c, NULL)) {
+    if (!sp_svg_length_read_lff(str, &u, &v, &c, nullptr)) {
         return false;
     }
 
@@ -213,7 +213,7 @@ bool SVGLength::readAbsolute(gchar const *str)
     SVGLength::Unit u;
     float v;
     float c;
-    if (!sp_svg_length_read_lff(str, &u, &v, &c, NULL)) {
+    if (!sp_svg_length_read_lff(str, &u, &v, &c, nullptr)) {
         return false;
     }
 
@@ -238,7 +238,7 @@ unsigned int sp_svg_length_read_computed_absolute(gchar const *str, float *lengt
 
     SVGLength::Unit unit;
     float computed;
-    if (!sp_svg_length_read_lff(str, &unit, NULL, &computed, NULL)) {
+    if (!sp_svg_length_read_lff(str, &unit, nullptr, &computed, nullptr)) {
         // failed to read
         return 0;
     }
@@ -316,7 +316,7 @@ So after the number, the string does not necessarily have a \0 or a unit, it mig
             *computed = v;
         }
         if (next) {
-            *next = NULL; // no more values
+            *next = nullptr; // no more values
         }
         return 1;
     } else if (!g_ascii_isalnum(e[0])) {
@@ -443,7 +443,7 @@ unsigned int sp_svg_length_read_ldd(gchar const *str, SVGLength::Unit *unit, dou
 {
     float a;
     float b;
-    unsigned int r = sp_svg_length_read_lff(str, unit, &a, &b, NULL);
+    unsigned int r = sp_svg_length_read_lff(str, unit, &a, &b, nullptr);
     if (r) {
         if (value) {
             *value = a;
@@ -529,7 +529,7 @@ void SVGLength::update(double em, double ex, double scale)
 
 double sp_svg_read_percentage(char const *str, double def)
 {
-    if (str == NULL) {
+    if (str == nullptr) {
         return def;
     }
 

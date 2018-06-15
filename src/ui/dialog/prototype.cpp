@@ -39,7 +39,7 @@ Prototype::Prototype() :
     // desktop is set by Panel constructor so this should never be NULL.
     // Note, we need to use getDesktop() since _desktop is private in Panel.h.
     // It should probably be protected instead... but need to verify in doesn't break anything.
-    if (getDesktop() == NULL) {
+    if (getDesktop() == nullptr) {
         std::cerr << "Prototype::Prototype: desktop is NULL!" << std::endl;
     }
 

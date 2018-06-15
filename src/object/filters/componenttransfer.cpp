@@ -24,7 +24,7 @@
 #include "xml/repr.h"
 
 SPFeComponentTransfer::SPFeComponentTransfer()
-    : SPFilterPrimitive(), renderer(NULL)
+    : SPFilterPrimitive(), renderer(nullptr)
 {
 }
 
@@ -160,13 +160,13 @@ Inkscape::XML::Node* SPFeComponentTransfer::write(Inkscape::XML::Document *doc, 
 }
 
 void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COMPONENTTRANSFER);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterComponentTransfer *nr_componenttransfer = dynamic_cast<Inkscape::Filters::FilterComponentTransfer*>(nr_primitive);
-    g_assert(nr_componenttransfer != NULL);
+    g_assert(nr_componenttransfer != nullptr);
 
     this->renderer = nr_componenttransfer;
     sp_filter_primitive_renderer_common(this, nr_primitive);

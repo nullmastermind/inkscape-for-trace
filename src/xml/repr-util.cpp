@@ -71,7 +71,7 @@ static char *sp_xml_ns_auto_prefix(char const *uri);
  * SPXMLNs
  */
 
-static SPXMLNs *namespaces=NULL;
+static SPXMLNs *namespaces=nullptr;
 
 /*
  * There are the prefixes to use for the XML namespaces defined
@@ -134,7 +134,7 @@ static void sp_xml_ns_register_defaults()
 
     defaults[10].uri = g_quark_from_static_string(SP_OLD_CC_NS_URI);
     defaults[10].prefix = g_quark_from_static_string("cc");
-    defaults[10].next = NULL;
+    defaults[10].next = nullptr;
 
     namespaces = &defaults[0];
 }
@@ -169,14 +169,14 @@ gchar const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
 {
     char const *prefix;
 
-    if (!uri) return NULL;
+    if (!uri) return nullptr;
 
     if (!namespaces) {
         sp_xml_ns_register_defaults();
     }
 
     GQuark const key = g_quark_from_string(uri);
-    prefix = NULL;
+    prefix = nullptr;
     for ( SPXMLNs *iter=namespaces ; iter ; iter = iter->next ) {
         if ( iter->uri == key ) {
             prefix = g_quark_to_string(iter->prefix);
@@ -210,7 +210,7 @@ gchar const *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested)
         }
 
         ns = g_new(SPXMLNs, 1);
-        g_assert( ns != NULL );
+        g_assert( ns != nullptr );
         ns->uri = g_quark_from_string(uri);
         ns->prefix = g_quark_from_string(new_prefix);
 
@@ -230,14 +230,14 @@ gchar const *sp_xml_ns_prefix_uri(gchar const *prefix)
     SPXMLNs *iter;
     char const *uri;
 
-    if (!prefix) return NULL;
+    if (!prefix) return nullptr;
 
     if (!namespaces) {
         sp_xml_ns_register_defaults();
     }
 
     GQuark const key = g_quark_from_string(prefix);
-    uri = NULL;
+    uri = nullptr;
     for ( iter = namespaces ; iter ; iter = iter->next ) {
         if ( iter->prefix == key ) {
             uri = g_quark_to_string(iter->uri);
@@ -268,7 +268,7 @@ int sp_repr_compare_position(Inkscape::XML::Node const *first, Inkscape::XML::No
 
         // Find the lowest common ancestor(LCA)
         Inkscape::XML::Node const *ancestor = LCA(first, second);
-        g_assert(ancestor != NULL);
+        g_assert(ancestor != nullptr);
 
         if (ancestor == first) {
             return 1;
@@ -324,7 +324,7 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           gchar const *key,
                                           gchar const *value)
 {
-    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(repr != nullptr, NULL);
     for ( Inkscape::XML::Node *child = repr->firstChild() ; child ; child = child->next() ) {
         gchar const *child_value = child->attribute(key);
         if ( (child_value == value) ||
@@ -333,14 +333,14 @@ Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
             return child;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 Inkscape::XML::Node const *sp_repr_lookup_name( Inkscape::XML::Node const *repr, gchar const *name, gint maxdepth )
 {
-    Inkscape::XML::Node const *found = 0;
-    g_return_val_if_fail(repr != NULL, NULL);
-    g_return_val_if_fail(name != NULL, NULL);
+    Inkscape::XML::Node const *found = nullptr;
+    g_return_val_if_fail(repr != nullptr, NULL);
+    g_return_val_if_fail(name != nullptr, NULL);
 
     GQuark const quark = g_quark_from_string(name);
 
@@ -369,8 +369,8 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML
 {
     std::vector<Inkscape::XML::Node const *> nodes;
     std::vector<Inkscape::XML::Node const *> found;
-    g_return_val_if_fail(repr != NULL, nodes);
-    g_return_val_if_fail(name != NULL, nodes);
+    g_return_val_if_fail(repr != nullptr, nodes);
+    g_return_val_if_fail(name != nullptr, nodes);
 
     GQuark const quark = g_quark_from_string(name);
 
@@ -398,10 +398,10 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many( Inkscape::XML
  */
 bool sp_repr_is_meta_element(const Inkscape::XML::Node *node)
 {
-    if (node == NULL) return false;
+    if (node == nullptr) return false;
     if (node->type() != Inkscape::XML::ELEMENT_NODE) return false;
     gchar const *name = node->name();
-    if (name == NULL) return false;
+    if (name == nullptr) return false;
     if (!std::strcmp(name, "svg:title")) return true;
     if (!std::strcmp(name, "svg:desc")) return true;
     if (!std::strcmp(name, "svg:metadata")) return true;
@@ -418,13 +418,13 @@ unsigned int sp_repr_get_boolean(Inkscape::XML::Node *repr, gchar const *key, un
 {
     gchar const *v;
 
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(val != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
+    g_return_val_if_fail(val != nullptr, FALSE);
 
     v = repr->attribute(key);
 
-    if (v != NULL) {
+    if (v != nullptr) {
         if (!g_ascii_strcasecmp(v, "true") ||
             !g_ascii_strcasecmp(v, "yes" ) ||
             !g_ascii_strcasecmp(v, "y"   ) ||
@@ -444,13 +444,13 @@ unsigned int sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *v
 {
     gchar const *v;
 
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(val != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
+    g_return_val_if_fail(val != nullptr, FALSE);
 
     v = repr->attribute(key);
 
-    if (v != NULL) {
+    if (v != nullptr) {
         *val = atoi(v);
         return TRUE;
     }
@@ -460,14 +460,14 @@ unsigned int sp_repr_get_int(Inkscape::XML::Node *repr, gchar const *key, int *v
 
 unsigned int sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, double *val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(val != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
+    g_return_val_if_fail(val != nullptr, FALSE);
 
     gchar const *v = repr->attribute(key);
 
-    if (v != NULL) {
-        *val = g_ascii_strtod(v, NULL);
+    if (v != nullptr) {
+        *val = g_ascii_strtod(v, nullptr);
         return TRUE;
     }
 
@@ -476,8 +476,8 @@ unsigned int sp_repr_get_double(Inkscape::XML::Node *repr, gchar const *key, dou
 
 unsigned int sp_repr_set_boolean(Inkscape::XML::Node *repr, gchar const *key, unsigned int val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
 
     repr->setAttribute(key, (val) ? "true" : "false");
     return true;
@@ -487,8 +487,8 @@ unsigned int sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int va
 {
     gchar c[32];
 
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
 
     g_snprintf(c, 32, "%d", val);
 
@@ -503,8 +503,8 @@ unsigned int sp_repr_set_int(Inkscape::XML::Node *repr, gchar const *key, int va
  */
 unsigned int sp_repr_set_css_double(Inkscape::XML::Node *repr, gchar const *key, double val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
 
     Inkscape::CSSOStringStream os;
     os << val;
@@ -520,8 +520,8 @@ unsigned int sp_repr_set_css_double(Inkscape::XML::Node *repr, gchar const *key,
  */
 unsigned int sp_repr_set_svg_double(Inkscape::XML::Node *repr, gchar const *key, double val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
     g_return_val_if_fail(val==val, FALSE);//tests for nan
 
     Inkscape::SVGOStringStream os;
@@ -538,8 +538,8 @@ unsigned int sp_repr_set_svg_double(Inkscape::XML::Node *repr, gchar const *key,
  */
 unsigned int sp_repr_set_svg_length(Inkscape::XML::Node *repr, gchar const *key, SVGLength &val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
 
     repr->setAttribute(key, val.write());
     return true;
@@ -547,8 +547,8 @@ unsigned int sp_repr_set_svg_length(Inkscape::XML::Node *repr, gchar const *key,
 
 unsigned sp_repr_set_point(Inkscape::XML::Node *repr, gchar const *key, Geom::Point const & val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
 
     Inkscape::SVGOStringStream os;
     os << val[Geom::X] << "," << val[Geom::Y];
@@ -559,20 +559,20 @@ unsigned sp_repr_set_point(Inkscape::XML::Node *repr, gchar const *key, Geom::Po
 
 unsigned int sp_repr_get_point(Inkscape::XML::Node *repr, gchar const *key, Geom::Point *val)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(val != NULL, FALSE);
+    g_return_val_if_fail(repr != nullptr, FALSE);
+    g_return_val_if_fail(key != nullptr, FALSE);
+    g_return_val_if_fail(val != nullptr, FALSE);
 
     gchar const *v = repr->attribute(key);
 
-    g_return_val_if_fail(v != NULL, FALSE);
+    g_return_val_if_fail(v != nullptr, FALSE);
 
     gchar ** strarray = g_strsplit(v, ",", 2);
 
     if (strarray && strarray[0] && strarray[1]) {
         double newx, newy;
-        newx = g_ascii_strtod(strarray[0], NULL);
-        newy = g_ascii_strtod(strarray[1], NULL);
+        newx = g_ascii_strtod(strarray[0], nullptr);
+        newy = g_ascii_strtod(strarray[1], nullptr);
         g_strfreev (strarray);
         *val = Geom::Point(newx, newy);
         return TRUE;

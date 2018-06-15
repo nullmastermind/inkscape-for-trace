@@ -57,7 +57,7 @@ sp_gradient_image_init (SPGradientImage *image)
 {
         gtk_widget_set_has_window (GTK_WIDGET(image), FALSE);
 
-        image->gradient = NULL;
+        image->gradient = nullptr;
 
         new (&image->release_connection) sigc::connection();
         new (&image->modified_connection) sigc::connection();
@@ -70,7 +70,7 @@ static void sp_gradient_image_destroy(GtkWidget *object)
         if (image->gradient) {
                 image->release_connection.disconnect();
                 image->modified_connection.disconnect();
-                image->gradient = NULL;
+                image->gradient = nullptr;
         }
 
         image->release_connection.~connection();
@@ -125,7 +125,7 @@ static gboolean sp_gradient_image_draw(GtkWidget *widget, cairo_t *ct)
 GtkWidget *
 sp_gradient_image_new (SPGradient *gradient)
 {
-        SPGradientImage *image = SP_GRADIENT_IMAGE(g_object_new(SP_TYPE_GRADIENT_IMAGE, NULL));
+        SPGradientImage *image = SP_GRADIENT_IMAGE(g_object_new(SP_TYPE_GRADIENT_IMAGE, nullptr));
 
         sp_gradient_image_set_gradient (image, gradient);
 
@@ -254,7 +254,7 @@ sp_gradient_image_gradient_release (SPObject *, SPGradientImage *image)
                 image->modified_connection.disconnect();
         }
 
-        image->gradient = NULL;
+        image->gradient = nullptr;
 
         sp_gradient_image_update (image);
 }

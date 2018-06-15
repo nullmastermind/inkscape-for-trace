@@ -49,7 +49,7 @@ bool CairoRendererPdfOutput::check(Inkscape::Extension::Extension * /*module*/)
 {
     bool result = true;
 
-    if (NULL == Inkscape::Extension::db.get("org.inkscape.output.pdf.cairorenderer")) {
+    if (nullptr == Inkscape::Extension::db.get("org.inkscape.output.pdf.cairorenderer")) {
         result = false;
     }
 
@@ -65,7 +65,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
 
 /* Start */
 
-    SPItem *base = NULL;
+    SPItem *base = nullptr;
 
     bool pageBoundingBox = TRUE;
     if (exportId && strcmp(exportId, "")) {
@@ -136,13 +136,13 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
     unsigned int ret;
 
     ext = Inkscape::Extension::db.get("org.inkscape.output.pdf.cairorenderer");
-    if (ext == NULL)
+    if (ext == nullptr)
         return;
 
     int level = 0;
     try {
         const gchar *new_level = mod->get_param_enum("PDFversion");
-        if((new_level != NULL) && (g_ascii_strcasecmp("PDF-1.5", new_level) == 0)) {
+        if((new_level != nullptr) && (g_ascii_strcasecmp("PDF-1.5", new_level) == 0)) {
             level = 1;
         }
     }
@@ -182,7 +182,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
         g_warning("Parameter <resolution> might not exist");
     }
 
-    const gchar *new_exportId = NULL;
+    const gchar *new_exportId = nullptr;
     try {
         new_exportId = mod->get_param_string("exportId");
     }

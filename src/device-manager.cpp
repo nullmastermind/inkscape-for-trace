@@ -604,7 +604,7 @@ void DeviceManagerImpl::setLinkedTo(Glib::ustring const & id, Glib::ustring cons
 
 
 
-static DeviceManagerImpl* theInstance = 0;
+static DeviceManagerImpl* theInstance = nullptr;
 
 DeviceManager::DeviceManager()
     : Glib::Object()

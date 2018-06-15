@@ -29,7 +29,7 @@ SPFeFlood::SPFeFlood() : SPFilterPrimitive() {
 	this->color = 0;
 
     this->opacity = 1;
-    this->icc = NULL;
+    this->icc = nullptr;
 }
 
 SPFeFlood::~SPFeFlood() {
@@ -59,8 +59,8 @@ void SPFeFlood::release() {
  * Sets a specific value in the SPFeFlood.
  */
 void SPFeFlood::set(unsigned int key, gchar const *value) {
-    gchar const *cend_ptr = NULL;
-    gchar *end_ptr = NULL;
+    gchar const *cend_ptr = nullptr;
+    gchar *end_ptr = nullptr;
     guint32 read_color;
     double read_num;
     bool dirty = false;
@@ -68,7 +68,7 @@ void SPFeFlood::set(unsigned int key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_PROP_FLOOD_COLOR:
-            cend_ptr = NULL;
+            cend_ptr = nullptr;
             read_color = sp_svg_read_color(value, &cend_ptr, 0xffffffff);
 
             if (cend_ptr && read_color != this->color){
@@ -88,7 +88,7 @@ void SPFeFlood::set(unsigned int key, gchar const *value) {
 
                     if ( ! sp_svg_read_icc_color( cend_ptr, this->icc ) ) {
                         delete this->icc;
-                        this->icc = NULL;
+                        this->icc = nullptr;
                     }
 
                     dirty = true;
@@ -103,7 +103,7 @@ void SPFeFlood::set(unsigned int key, gchar const *value) {
             if (value) {
                 read_num = g_ascii_strtod(value, &end_ptr);
 
-                if (end_ptr != NULL) {
+                if (end_ptr != nullptr) {
                     if (*end_ptr) {
                         g_warning("Unable to convert \"%s\" to number", value);
                         read_num = 1;
@@ -154,13 +154,13 @@ Inkscape::XML::Node* SPFeFlood::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeFlood::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != NULL);
-    g_assert(filter != NULL);
+    g_assert(this != nullptr);
+    g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_FLOOD);
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(primitive_n);
     Inkscape::Filters::FilterFlood *nr_flood = dynamic_cast<Inkscape::Filters::FilterFlood*>(nr_primitive);
-    g_assert(nr_flood != NULL);
+    g_assert(nr_flood != nullptr);
 
     sp_filter_primitive_renderer_common(this, nr_primitive);
     

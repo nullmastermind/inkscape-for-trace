@@ -17,9 +17,9 @@ static void persp3dreference_source_modified(SPObject *iSource, guint flags, Per
 Persp3DReference::Persp3DReference(SPObject* i_owner) : URIReference(i_owner)
 {
     owner=i_owner;
-    persp_href = NULL;
-    persp_repr = NULL;
-    persp = NULL;
+    persp_href = nullptr;
+    persp_repr = nullptr;
+    persp = nullptr;
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(persp3dreference_href_changed), this)); // listening to myself, this should be virtual instead
 }
 
@@ -44,14 +44,14 @@ void
 Persp3DReference::unlink(void)
 {
     g_free(persp_href);
-    persp_href = NULL;
+    persp_href = nullptr;
     detach();
 }
 
 void
 Persp3DReference::start_listening(Persp3D* to)
 {
-    if ( to == NULL ) {
+    if ( to == nullptr ) {
         return;
     }
     persp = to;
@@ -63,13 +63,13 @@ Persp3DReference::start_listening(Persp3D* to)
 void
 Persp3DReference::quit_listening(void)
 {
-    if ( persp == NULL ) {
+    if ( persp == nullptr ) {
         return;
     }
     _modified_connection.disconnect();
     _delete_connection.disconnect();
-    persp_repr = NULL;
-    persp = NULL;
+    persp_repr = nullptr;
+    persp = nullptr;
 }
 
 static void

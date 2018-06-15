@@ -33,7 +33,7 @@ SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve 
 {
     if (SP_IS_LPETOOL_CONTEXT(dc)) {
         // suppress all kinds of anchors in LPEToolContext
-        return NULL;
+        return nullptr;
     }
 
     SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
@@ -65,7 +65,7 @@ SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
         sp_canvas_item_destroy(anchor->ctrl);
     }
     g_free(anchor);
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -91,7 +91,7 @@ SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool acti
         anchor->active = FALSE;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 

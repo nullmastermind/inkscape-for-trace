@@ -64,14 +64,14 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
     }
     bool embed = ( link.compare( "embed" ) == 0 );
  
-    SPDocument *doc = NULL;
+    SPDocument *doc = nullptr;
     std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
 
     // TODO: the pixbuf is created again from the base64-encoded attribute in SPImage.
     // Find a way to create the pixbuf only once.
 
     if (pb) {
-        doc = SPDocument::createNewDoc(NULL, TRUE, TRUE);
+        doc = SPDocument::createNewDoc(nullptr, TRUE, TRUE);
         bool saved = DocumentUndo::getUndoSensitive(doc);
         DocumentUndo::setUndoSensitive(doc, false); // no need to undo in this temporary document
 
@@ -79,7 +79,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         double height = pb->height();
         double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", Inkscape::Util::Quantity::convert(1, "in", "px"));
         //bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
-        ImageResolution *ir = 0;
+        ImageResolution *ir = nullptr;
         double xscale = 1;
         double yscale = 1;
 
@@ -126,7 +126,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
             sp_embed_image(image_node, pb.get());
         } else {
             // convert filename to uri
-            gchar* _uri = g_filename_to_uri(uri, NULL, NULL);
+            gchar* _uri = g_filename_to_uri(uri, nullptr, nullptr);
             if(_uri) {
                 image_node->setAttribute("xlink:href", _uri);
                 g_free(_uri);
@@ -174,8 +174,8 @@ GdkpixbufInput::init(void)
         gchar **extensions =  gdk_pixbuf_format_get_extensions(pixformat);
         gchar **mimetypes =   gdk_pixbuf_format_get_mime_types(pixformat);
 
-        for (int i = 0; extensions[i] != NULL; i++) {
-        for (int j = 0; mimetypes[j] != NULL; j++) {
+        for (int i = 0; extensions[i] != nullptr; i++) {
+        for (int j = 0; mimetypes[j] != nullptr; j++) {
 
             /* thanks but no thanks, we'll handle SVG extensions... */
             if (strcmp(extensions[i], "svg") == 0) {

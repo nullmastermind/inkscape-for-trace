@@ -112,8 +112,8 @@ struct ModuleOutputCmp {
 void
 DB::register_ext (Extension *module)
 {
-	g_return_if_fail(module != NULL);
-	g_return_if_fail(module->get_id() != NULL);
+	g_return_if_fail(module != nullptr);
+	g_return_if_fail(module->get_id() != nullptr);
 
 	// only add to list if it's a never-before-seen module
         bool add_to_list = 
@@ -134,8 +134,8 @@ DB::register_ext (Extension *module)
 void
 DB::unregister_ext (Extension * module)
 {
-	g_return_if_fail(module != NULL);
-	g_return_if_fail(module->get_id() != NULL);
+	g_return_if_fail(module != nullptr);
+	g_return_if_fail(module->get_id() != nullptr);
 
 	// printf("Extension DB: removing %s\n", module->get_id());
 	moduledict.erase(moduledict.find(module->get_id()));
@@ -157,11 +157,11 @@ DB::unregister_ext (Extension * module)
 Extension *
 DB::get (const gchar *key)
 {
-        if (key == NULL) return NULL;
+        if (key == nullptr) return nullptr;
 
 	Extension *mod = moduledict[key];
 	if ( !mod || mod->deactivated() )
-		return NULL;
+		return nullptr;
 
 	return mod;
 }

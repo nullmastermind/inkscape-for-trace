@@ -78,7 +78,7 @@ public:
     */
     ExecutionEnv (Effect * effect,
                   Inkscape::UI::View::View * doc,
-                  Implementation::ImplementationDocumentCache * docCache = NULL,
+                  Implementation::ImplementationDocumentCache * docCache = nullptr,
                   bool show_working = true,
                   bool show_errors = true);
     virtual ~ExecutionEnv (void);

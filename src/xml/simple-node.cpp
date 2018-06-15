@@ -166,11 +166,11 @@ SimpleNode::SimpleNode(int code, Document *document)
 : Node(), _name(code), _attributes(), _child_count(0),
   _cached_positions_valid(false)
 {
-    g_assert(document != NULL);
+    g_assert(document != nullptr);
 
     this->_document = document;
-    this->_parent = this->_next = NULL;
-    this->_first_child = this->_last_child = NULL;
+    this->_parent = this->_next = nullptr;
+    this->_first_child = this->_last_child = nullptr;
 
     _observers.add(_subtree_observers);
 }
@@ -182,14 +182,14 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
   _child_count(node._child_count),
   _cached_positions_valid(node._cached_positions_valid)
 {
-    g_assert(document != NULL);
+    g_assert(document != nullptr);
 
     _document = document;
-    _parent = _next = NULL;
-    _first_child = _last_child = NULL;
+    _parent = _next = nullptr;
+    _first_child = _last_child = nullptr;
 
     for ( SimpleNode *child = node._first_child ;
-          child != NULL ; child = child->_next )
+          child != nullptr ; child = child->_next )
     {
         SimpleNode *child_copy=dynamic_cast<SimpleNode *>(child->duplicate(document));
 
@@ -222,7 +222,7 @@ gchar const *SimpleNode::content() const {
 }
 
 gchar const *SimpleNode::attribute(gchar const *name) const {
-    g_return_val_if_fail(name != NULL, NULL);
+    g_return_val_if_fail(name != nullptr, NULL);
 
     GQuark const key = g_quark_from_string(name);
 
@@ -234,11 +234,11 @@ gchar const *SimpleNode::attribute(gchar const *name) const {
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 unsigned SimpleNode::position() const {
-    g_return_val_if_fail(_parent != NULL, 0);
+    g_return_val_if_fail(_parent != nullptr, 0);
     return _parent->_childPosition(*this);
 }
 
@@ -265,7 +265,7 @@ Node *SimpleNode::nthChild(unsigned index) {
 }
 
 bool SimpleNode::matchAttributeName(gchar const *partial_name) const {
-    g_return_val_if_fail(partial_name != NULL, false);
+    g_return_val_if_fail(partial_name != nullptr, false);
 
     for ( List<AttributeRecord const> iter = _attributes ;
           iter ; ++iter )
@@ -319,19 +319,19 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
     gchar* cleaned_value = g_strdup( value );
 
     // Only check elements in SVG name space and don't block setting attribute to NULL.
-    if( element.substr(0,4) == "svg:" && value != NULL) {
+    if( element.substr(0,4) == "svg:" && value != nullptr) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
 
             gchar const *id_char = attribute("id");
-            Glib::ustring id = (id_char == NULL ? "" : id_char );
+            Glib::ustring id = (id_char == nullptr ? "" : id_char );
             unsigned int flags = sp_attribute_clean_get_prefs();
             bool attr_warn   = flags & SP_ATTR_CLEAN_ATTR_WARN;
             bool attr_remove = flags & SP_ATTR_CLEAN_ATTR_REMOVE;
 
             // Check attributes
-            if( (attr_warn || attr_remove) && value != NULL ) {
+            if( (attr_warn || attr_remove) && value != nullptr ) {
                 bool is_useful = sp_attribute_check_attribute( element, id, name, attr_warn );
                 if( !is_useful && attr_remove ) {
                     g_free( cleaned_value );
@@ -468,8 +468,8 @@ void SimpleNode::removeChild(Node *generic_child) {
         _cached_positions_valid = false;
     }
 
-    child->_next = NULL;
-    child->_setParent(NULL);
+    child->_next = nullptr;
+    child->_setParent(nullptr);
     _child_count--;
 
     _document->logger()->notifyChildRemoved(*this, *child, ref);
@@ -527,12 +527,12 @@ void SimpleNode::changeOrder(Node *generic_child, Node *generic_ref) {
 }
 
 void SimpleNode::setPosition(int pos) {
-    g_return_if_fail(_parent != NULL);
+    g_return_if_fail(_parent != nullptr);
 
     // a position beyond the end of the list means the end of the list;
     // a negative position is the same as an infinitely large position
 
-    SimpleNode *ref=NULL;
+    SimpleNode *ref=nullptr;
     for ( SimpleNode *sibling = _parent->_first_child ;
           sibling && pos ; sibling = sibling->_next )
     {
@@ -582,11 +582,11 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
         for ( List<AttributeRecord const> iter = _attributes ;
               iter ; ++iter )
         {
-            vector->attr_changed(this, g_quark_to_string(iter->key), NULL, iter->value, false, data);
+            vector->attr_changed(this, g_quark_to_string(iter->key), nullptr, iter->value, false, data);
         }
     }
     if (vector->child_added) {
-        SimpleNode *ref = NULL;
+        SimpleNode *ref = nullptr;
         for ( SimpleNode *child = this->_first_child ;
               child ; child = child->_next )
         {
@@ -595,7 +595,7 @@ void SimpleNode::synthesizeEvents(NodeEventVector const *vector, void *data) {
         }
     }
     if (vector->content_changed) {
-        vector->content_changed(this, NULL, this->_content, data);
+        vector->content_changed(this, nullptr, this->_content, data);
     }
 }
 
@@ -618,7 +618,7 @@ void SimpleNode::recursivePrintTree(unsigned level) {
     } else {
         std::cout << name() << std::endl;
     }
-    for (SimpleNode *child = _first_child; child != NULL; child = child->_next) {
+    for (SimpleNode *child = _first_child; child != nullptr; child = child->_next) {
         child->recursivePrintTree( level+1 );
     }
 }
@@ -637,17 +637,17 @@ Node *SimpleNode::root() {
                 return child;
             }
         }
-        return NULL;
+        return nullptr;
     } else if ( parent->type() == ELEMENT_NODE ) {
         return parent;
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 void SimpleNode::cleanOriginal(Node *src, gchar const *key){
     std::vector<Node *> to_delete;
-    for ( Node *child = this->firstChild() ; child != NULL ; child = child->next() )
+    for ( Node *child = this->firstChild() ; child != nullptr ; child = child->next() )
     {
         gchar const *id = child->attribute(key);
         if (id) {
@@ -715,8 +715,8 @@ bool SimpleNode::equal(Node const *other, bool recursive) {
 }
 
 void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bool clean) {
-    g_return_if_fail(src != NULL);
-    g_return_if_fail(key != NULL);
+    g_return_if_fail(src != nullptr);
+    g_return_if_fail(key != nullptr);
     g_assert(src != this);
 
     setContent(src->content());
@@ -729,7 +729,7 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
         cleanOriginal(srcp, key);
     }
 
-    for ( Node const *child = src->firstChild() ; child != NULL ; child = child->next() )
+    for ( Node const *child = src->firstChild() ; child != nullptr ; child = child->next() )
     {
         gchar const *id = child->attribute(key);
         if (id) {

@@ -304,16 +304,16 @@ class NodeIterator
 public:
     typedef NodeIterator self;
     NodeIterator()
-        : _node(0)
+        : _node(nullptr)
     {}
     // default copy, default assign
 
     self &operator++() {
-        _node = (_node?_node->ln_next:NULL);
+        _node = (_node?_node->ln_next:nullptr);
         return *this;
     }
     self &operator--() {
-        _node = (_node?_node->ln_prev:NULL);
+        _node = (_node?_node->ln_prev:nullptr);
         return *this;
     }
     bool operator==(self const &other) const { if(&other){return _node == other._node;} else{return false;} }
@@ -387,9 +387,9 @@ public:
     bool degenerate();
 
     void setClosed(bool c) { _closed = c; }
-    iterator before(double t, double *fracpart = NULL);
+    iterator before(double t, double *fracpart = nullptr);
     iterator before(Geom::PathTime const &pvp);
-    const_iterator before(double t, double *fracpart = NULL) const {
+    const_iterator before(double t, double *fracpart = nullptr) const {
         return const_iterator(before(t, fracpart)._node);
     }
     const_iterator before(Geom::PathTime const &pvp) const {

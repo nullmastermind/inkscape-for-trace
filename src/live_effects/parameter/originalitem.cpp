@@ -105,7 +105,7 @@ OriginalItemParam::on_select_original_button_click()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPItem *original = ref.getObject();
-    if (desktop == NULL || original == NULL) {
+    if (desktop == nullptr || original == nullptr) {
         return;
     }
     Inkscape::Selection *selection = desktop->getSelection();

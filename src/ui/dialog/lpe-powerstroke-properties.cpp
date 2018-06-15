@@ -33,8 +33,8 @@ namespace UI {
 namespace Dialogs {
 
 PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
-    : _desktop(NULL),
-      _knotpoint(NULL),
+    : _desktop(nullptr),
+      _knotpoint(nullptr),
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
@@ -99,7 +99,7 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
 
 PowerstrokePropertiesDialog::~PowerstrokePropertiesDialog() {
 
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
 }
 
 void PowerstrokePropertiesDialog::showDialog(SPDesktop *desktop, Geom::Point knotpoint, const Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity *pt)
@@ -133,7 +133,7 @@ PowerstrokePropertiesDialog::_apply()
 void
 PowerstrokePropertiesDialog::_close()
 {
-    _setDesktop(NULL);
+    _setDesktop(nullptr);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(

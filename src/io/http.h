@@ -27,7 +27,7 @@ namespace Inkscape {
 namespace IO {
 namespace HTTP {
 
-    Glib::ustring get_file(Glib::ustring uri, unsigned int timeout=0, std::function<void(Glib::ustring)> func=NULL);
+    Glib::ustring get_file(Glib::ustring uri, unsigned int timeout=0, std::function<void(Glib::ustring)> func=nullptr);
 
 }
 }

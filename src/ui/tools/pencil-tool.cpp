@@ -80,8 +80,8 @@ PencilTool::PencilTool()
     , _req_tangent(0, 0)
     , _is_drawing(false)
     , sketch_n(0)
-    , _powerpreview(NULL)
-    , _curve(NULL)
+    , _powerpreview(nullptr)
+    , _curve(nullptr)
     , _previous_pressure(0.0)
     , _last_point(Geom::Point())
 {
@@ -187,7 +187,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
             sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                             GDK_BUTTON_RELEASE_MASK |
                                             GDK_POINTER_MOTION_MASK  ),
-                                NULL, bevent.time);
+                                nullptr, bevent.time);
         }
 
         Geom::Point const button_w(bevent.x, bevent.y);
@@ -289,7 +289,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         sp_canvas_item_grab(this->grab, ( GDK_KEY_PRESS_MASK | GDK_BUTTON_PRESS_MASK   |
                                         GDK_BUTTON_RELEASE_MASK |
                                         GDK_POINTER_MOTION_MASK  ),
-                            NULL, mevent.time);
+                            nullptr, mevent.time);
     }
 
     /* Find desktop coordinates */
@@ -367,10 +367,10 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                 } else if (!anchor && this->anchor_statusbar) {
                     this->message_context->clear();
                     this->anchor_statusbar = false;
-                    this->ea = NULL;
+                    this->ea = nullptr;
                 } else if (!anchor) {
                     this->message_context->set(Inkscape::NORMAL_MESSAGE, _("Drawing a freehand path"));
-                    this->ea = NULL;
+                    this->ea = nullptr;
                 }
 
             } else {
@@ -481,8 +481,8 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->_interpolate();
                     spdc_concat_colors_and_flush(this, FALSE);
                     this->points.clear();
-                    this->sa = NULL;
-                    this->ea = NULL;
+                    this->sa = nullptr;
+                    this->ea = nullptr;
                     this->ps.clear();
                     this->_wps.clear();
                     this->_key_nodes.clear();
@@ -505,7 +505,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
         if (this->grab) {
             /* Release grab now */
             sp_canvas_item_ungrab(this->grab, revent.time);
-            this->grab = NULL;
+            this->grab = nullptr;
         }
 
         ret = true;
@@ -517,7 +517,7 @@ void PencilTool::_cancel() {
     if (this->grab) {
         /* Release grab now */
         sp_canvas_item_ungrab(this->grab, 0);
-        this->grab = NULL;
+        this->grab = nullptr;
     }
 
     this->_is_drawing = false;
@@ -525,7 +525,7 @@ void PencilTool::_cancel() {
     sp_event_context_discard_delayed_snap_event(this);
 
     this->red_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
     for (auto i:this->green_bpaths) {
         sp_canvas_item_destroy(i);
     }
@@ -605,8 +605,8 @@ bool PencilTool::_handleKeyRelease(GdkEventKey const &event) {
             if (this->_state == SP_PENCIL_CONTEXT_SKETCH) {
                 spdc_concat_colors_and_flush(this, FALSE);
                 this->sketch_n = 0;
-                this->sa = NULL;
-                this->ea = NULL;
+                this->sa = nullptr;
+                this->ea = nullptr;
                 if (this->green_anchor) {
                     this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
                 }
@@ -682,12 +682,12 @@ void PencilTool::_finishEndpoint() {
         this->red_curve->first_point() == this->red_curve->second_point())
     {
         this->red_curve->reset();
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
     } else {
         /* Write curves to object. */
         spdc_concat_colors_and_flush(this, FALSE);
-        this->sa = NULL;
-        this->ea = NULL;
+        this->sa = nullptr;
+        this->ea = nullptr;
     }
 }
 
@@ -703,7 +703,7 @@ PencilTool::_powerStrokePreview(Geom::Path const path)
     Geom::PathVector const pathv(path);
     SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(_powerpreview);
     if (!lpeitem) {
-        Inkscape::XML::Node *body = NULL;
+        Inkscape::XML::Node *body = nullptr;
         body = xml_doc->createElement("svg:path");
         body->setAttribute("sodipodi:insensitive", "true");
         sp_desktop_apply_style_tool(desktop, body, Glib::ustring("/tools/freehand/pencil").data(), false);
@@ -760,10 +760,10 @@ PencilTool::removePowerStrokePreview()
         LivePathEffectObject * lpeobj = lpe->getLPEObj();
         if (lpeobj) {
             SP_OBJECT(lpeobj)->deleteObject();
-            lpeobj = NULL;
+            lpeobj = nullptr;
         }
         _powerpreview->deleteObject();
-        _powerpreview = NULL;
+        _powerpreview = nullptr;
     }
 }
 void 
@@ -793,7 +793,7 @@ PencilTool::addPowerStrokePencil()
         }
     }
     if (!this->_curve || this->_curve->is_unset()) {
-        this->_curve = NULL;
+        this->_curve = nullptr;
     }
     double dezoomify_factor  = 0.05 * 1000/SP_EVENT_CONTEXT(this)->desktop->current_zoom();//\/100 we want 100% = 1;
     double last_pressure     = this->_wps.back();
@@ -836,7 +836,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
                 this->_wps.push_back(this->pressure);
                 this->addPowerStrokePencil();
             }
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
                 sp_canvas_item_destroy(i);
             }
@@ -870,7 +870,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
     this->_key_nodes.clear();
     std::vector<Geom::Point> sa_points;
-    SPItem *item = selection ? selection->singleItem() : NULL;
+    SPItem *item = selection ? selection->singleItem() : nullptr;
     if(sa && apply && item) {
         using namespace Inkscape::LivePathEffect;
         SPCurve * c = sa_overwrited->copy();
@@ -929,7 +929,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
     sa_points.insert(sa_points.end(),this->points.begin(),this->points.end());
     this->points = sa_points;
     sa_points.clear();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
     if (!path.empty()){
         this->_curve->set_pathvector(path);
         if( apply &&
@@ -1117,7 +1117,7 @@ void PencilTool::_fitAndSplit() {
              || is_unit_vector(this->_req_tangent));
     Geom::Point const tHatEnd(0, 0);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int const n_segs = Geom::bezier_fit_cubic_full(b, NULL, this->p, this->_npoints,
+    int const n_segs = Geom::bezier_fit_cubic_full(b, nullptr, this->p, this->_npoints,
                                                 this->_req_tangent, tHatEnd,
                                                 tolerance_sq, 1);
     if ( n_segs > 0

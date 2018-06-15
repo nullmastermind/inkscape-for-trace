@@ -41,7 +41,7 @@ public:
     CellRendererSPIcon() :
         Glib::ObjectBase(typeid(CellRendererPixbuf)),
         Gtk::CellRendererPixbuf(),
-        _property_icon(*this, "icon", Glib::RefPtr<Gdk::Pixbuf>(0)),
+        _property_icon(*this, "icon", Glib::RefPtr<Gdk::Pixbuf>(nullptr)),
         _property_event_type(*this, "event_type", 0)
     { }
     

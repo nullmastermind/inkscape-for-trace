@@ -19,8 +19,8 @@
 void NRStyle::Paint::clear()
 {
     if (server) {
-        sp_object_unref(server, NULL);
-        server = NULL;
+        sp_object_unref(server, nullptr);
+        server = nullptr;
     }
     type = PAINT_NONE;
 }
@@ -38,7 +38,7 @@ void NRStyle::Paint::set(SPPaintServer *ps)
     if (ps) {
         type = PAINT_SERVER;
         server = ps;
-        sp_object_ref(server, NULL);
+        sp_object_ref(server, nullptr);
     }
 }
 
@@ -48,15 +48,15 @@ NRStyle::NRStyle()
     , stroke_width(0.0)
     , miter_limit(0.0)
     , n_dash(0)
-    , dash(NULL)
+    , dash(nullptr)
     , dash_offset(0.0)
     , fill_rule(CAIRO_FILL_RULE_EVEN_ODD)
     , line_cap(CAIRO_LINE_CAP_BUTT)
     , line_join(CAIRO_LINE_JOIN_MITER)
-    , fill_pattern(NULL)
-    , stroke_pattern(NULL)
-    , text_decoration_fill_pattern(NULL)
-    , text_decoration_stroke_pattern(NULL)
+    , fill_pattern(nullptr)
+    , stroke_pattern(nullptr)
+    , text_decoration_fill_pattern(nullptr)
+    , text_decoration_stroke_pattern(nullptr)
     , text_decoration_line(TEXT_DECORATION_LINE_CLEAR)
     , text_decoration_style(TEXT_DECORATION_STYLE_CLEAR)
     , text_decoration_fill()
@@ -97,14 +97,14 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     // Handle 'context-fill' and 'context-stroke': Work in progress
     const SPIPaint *style_fill = &(style->fill);
     if( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        if( context_style != NULL ) {
+        if( context_style != nullptr ) {
             style_fill = &(context_style->fill);
         } else {
             // A marker in the defs section will result in ending up here.
             //std::cerr << "NRStyle::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
     } else if ( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        if( context_style != NULL ) {
+        if( context_style != nullptr ) {
             style_fill = &(context_style->stroke);
         } else {
             //std::cerr << "NRStyle::set: 'context-stroke': 'context_style' is NULL" << std::endl;
@@ -148,13 +148,13 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
 
     const SPIPaint *style_stroke = &(style->stroke);
     if( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        if( context_style != NULL ) {
+        if( context_style != nullptr ) {
             style_stroke = &(context_style->fill);
         } else {
             //std::cerr << "NRStyle::set: 'context-fill': 'context_style' is NULL" << std::endl;
         }
     } else if ( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        if( context_style != NULL ) {
+        if( context_style != nullptr ) {
             style_stroke = &(context_style->stroke);
         } else {
             //std::cerr << "NRStyle::set: 'context-stroke': 'context_style' is NULL" << std::endl;
@@ -225,7 +225,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
         }
     } else {
         dash_offset = 0.0;
-        dash = NULL;
+        dash = nullptr;
     }
 
 
@@ -472,7 +472,7 @@ void NRStyle::applyTextDecorationStroke(Inkscape::DrawingContext &dc)
     dc.setLineCap(CAIRO_LINE_CAP_BUTT);
     dc.setLineJoin(CAIRO_LINE_JOIN_MITER);
     dc.setMiterLimit(miter_limit);
-    cairo_set_dash(dc.raw(), 0, 0, 0.0); // fixme (no dash)
+    cairo_set_dash(dc.raw(), nullptr, 0, 0.0); // fixme (no dash)
 }
 
 void NRStyle::update()
@@ -482,10 +482,10 @@ void NRStyle::update()
     if (stroke_pattern) cairo_pattern_destroy(stroke_pattern);
     if (text_decoration_fill_pattern) cairo_pattern_destroy(text_decoration_fill_pattern);
     if (text_decoration_stroke_pattern) cairo_pattern_destroy(text_decoration_stroke_pattern);
-    fill_pattern = NULL;
-    stroke_pattern = NULL;
-    text_decoration_fill_pattern = NULL;
-    text_decoration_stroke_pattern = NULL;
+    fill_pattern = nullptr;
+    stroke_pattern = nullptr;
+    text_decoration_fill_pattern = nullptr;
+    text_decoration_stroke_pattern = nullptr;
 }
 
 /*

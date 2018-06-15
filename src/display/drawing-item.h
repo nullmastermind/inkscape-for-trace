@@ -112,7 +112,7 @@ public:
     bool cached() const { return _cached; }
     void setCached(bool c, bool persistent = false);
 
-    virtual void setStyle(SPStyle *style, SPStyle *context_style = NULL);
+    virtual void setStyle(SPStyle *style, SPStyle *context_style = nullptr);
     virtual void setChildrenStyle(SPStyle *context_style);
     void setOpacity(float opacity);
     void setAntialiasing(unsigned a);
@@ -133,7 +133,7 @@ public:
     void *data() const { return _user_data; }
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
-    unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = NULL);
+    unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = nullptr);
     void clip(DrawingContext &dc, Geom::IntRect const &area);
     DrawingItem *pick(Geom::Point const &p, double delta, unsigned flags = 0);
 
@@ -165,7 +165,7 @@ protected:
     virtual unsigned _renderItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/, unsigned /*flags*/,
                                  DrawingItem * /*stop_at*/) { return RENDER_OK; }
     virtual void _clipItem(DrawingContext &/*dc*/, Geom::IntRect const &/*area*/) {}
-    virtual DrawingItem *_pickItem(Geom::Point const &/*p*/, double /*delta*/, unsigned /*flags*/) { return NULL; }
+    virtual DrawingItem *_pickItem(Geom::Point const &/*p*/, double /*delta*/, unsigned /*flags*/) { return nullptr; }
     virtual bool _canClip() { return false; }
 
     // member variables start here

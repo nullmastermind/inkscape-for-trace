@@ -210,7 +210,7 @@ static std::map<string, unsigned long> sp_svg_create_color_hash();
 
 guint32 sp_svg_read_color(gchar const *str, guint32 const dfl)
 {
-    return sp_svg_read_color(str, NULL, dfl);
+    return sp_svg_read_color(str, nullptr, dfl);
 }
 
 static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 def)
@@ -218,7 +218,7 @@ static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_pt
     static std::map<string, unsigned long> colors;
     guint32 val = 0;
 
-    if (str == NULL) return def;
+    if (str == nullptr) return def;
     while ((*str <= ' ') && *str) str++;
     if (!*str) return def;
 
@@ -437,7 +437,7 @@ static void rgb24_to_css(char *const buf, unsigned const rgb24)
      * restricted set because the only component values are {00,80,ff}, other than silver 0xc0c0c0.
      */
 
-    char const *src = NULL;
+    char const *src = nullptr;
     switch (rgb24) {
         /* Extracted mechanically from the table at
          * http://www.w3.org/TR/REC-html40/types.html#h-6.5 .*/
@@ -598,7 +598,7 @@ bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor
         if ( good ) {
             while ( *str && *str != ')' ) {
                 if ( g_ascii_isdigit(*str) || *str == '.' || *str == '-' || *str == '+') {
-                    gchar* endPtr = 0;
+                    gchar* endPtr = nullptr;
                     gdouble dbl = g_ascii_strtod( str, &endPtr );
                     if ( !errno ) {
                         if ( dest ) {
@@ -645,7 +645,7 @@ bool sp_svg_read_icc_color( gchar const *str, gchar const **end_ptr, SVGICCColor
 
 bool sp_svg_read_icc_color( gchar const *str, SVGICCColor* dest )
 {
-    return sp_svg_read_icc_color(str, NULL, dest);
+    return sp_svg_read_icc_color(str, nullptr, dest);
 }
 
 

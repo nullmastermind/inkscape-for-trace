@@ -148,7 +148,7 @@ void Messages::captureLogMessages()
                              G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE  |
                              G_LOG_LEVEL_INFO    | G_LOG_LEVEL_DEBUG);
     if ( !handlerDefault ) {
-        handlerDefault = g_log_set_handler(NULL, flags,
+        handlerDefault = g_log_set_handler(nullptr, flags,
               dialogLoggingCallback, (gpointer)this);
     }
     if ( !handlerGlibmm ) {
@@ -177,7 +177,7 @@ void Messages::captureLogMessages()
 void Messages::releaseLogMessages()
 {
     if ( handlerDefault ) {
-        g_log_remove_handler(NULL, handlerDefault);
+        g_log_remove_handler(nullptr, handlerDefault);
         handlerDefault = 0;
     }
     if ( handlerGlibmm ) {

@@ -139,7 +139,7 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
     Shape *theShape = new Shape;
     Path *res = new Path;
     res->SetBackData(false);
-    Path::cut_position  *toCut=NULL;
+    Path::cut_position  *toCut=nullptr;
     int                  nbToCut=0;
 
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
@@ -269,8 +269,8 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
         }
     }
 
-    int*    nesting=NULL;
-    int*    conts=NULL;
+    int*    nesting=nullptr;
+    int*    conts=nullptr;
     int     nbNest=0;
     // pour compenser le swap juste avant
     if ( bop == bool_op_slice ) {
@@ -372,7 +372,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         Inkscape::XML::Node *a = il.front()->getRepr();
         Inkscape::XML::Node *b = il.back()->getRepr();
 
-        if (a == NULL || b == NULL) {
+        if (a == nullptr || b == nullptr) {
             return ERR_Z_ORDER;
         }
 
@@ -386,7 +386,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             // objects are not in parent/child relationship;
             // find their lowest common ancestor
             Inkscape::XML::Node *parent = LCA(a, b);
-            if (parent == NULL) {
+            if (parent == nullptr) {
                 return ERR_Z_ORDER;
             }
 
@@ -436,7 +436,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             }
 
             SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il[0])->getRepr(), "style");
-            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+            gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
             if (val && strcmp(val, "nonzero") == 0) {
                 origWind[curOrig]= fill_nonZero;
             } else if (val && strcmp(val, "evenodd") == 0) {
@@ -446,7 +446,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             }
 
             originaux[curOrig] = Path_for_item(*l, true, true);
-            if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
+            if (originaux[curOrig] == nullptr || originaux[curOrig]->descr_cmd.size() <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
                 return DONE_NO_ACTION;
@@ -469,7 +469,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     Shape *theShape = new Shape;
     Path *res = new Path;
     res->SetBackData(false);
-    Path::cut_position  *toCut=NULL;
+    Path::cut_position  *toCut=nullptr;
     int                  nbToCut=0;
 
     if ( bop == bool_op_inters || bop == bool_op_union || bop == bool_op_diff || bop == bool_op_symdiff ) {
@@ -650,8 +650,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
         }
     }
 
-    int*    nesting=NULL;
-    int*    conts=NULL;
+    int*    nesting=nullptr;
+    int*    conts=nullptr;
     int     nbNest=0;
     // pour compenser le swap juste avant
     if ( bop == bool_op_slice ) {
@@ -938,7 +938,7 @@ void item_outline_add_marker( SPObject const *marker_object, Geom::Affine marker
  */
 Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
 {
-    Geom::PathVector *ret_pathv = NULL;
+    Geom::PathVector *ret_pathv = nullptr;
 
     if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item)) {
         return ret_pathv;
@@ -949,13 +949,13 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
         return ret_pathv;
     }
 
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(item)) {
         curve = SP_SHAPE(item)->getCurve();
     } else if (SP_IS_TEXT(item)) {
         curve = SP_TEXT(item)->getNormalizedBpath();
     }
-    if (curve == NULL) {
+    if (curve == nullptr) {
         return ret_pathv;
     }
 
@@ -1183,19 +1183,19 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
             return did;
 
-        SPCurve *curve = NULL;
+        SPCurve *curve = nullptr;
         if (SP_IS_SHAPE(item)) {
             curve = SP_SHAPE(item)->getCurve();
-            if (curve == NULL)
+            if (curve == nullptr)
                 return did;
         }
         if (SP_IS_TEXT(item)) {
             curve = SP_TEXT(item)->getNormalizedBpath();
-            if (curve == NULL)
+            if (curve == nullptr)
                 return did;
         }
 
-        g_assert(curve != NULL);
+        g_assert(curve != nullptr);
 
         if (curve->get_pathvector().empty()) {
             return did;
@@ -1217,16 +1217,16 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         // (i.e., properties defined in style sheet or by attributes).
 
         // Stroke
-        SPCSSAttr *ncss = 0;
+        SPCSSAttr *ncss = nullptr;
         {
             ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
-            gchar const *s_val = sp_repr_css_property(ncss, "stroke", NULL);
-            gchar const *s_opac = sp_repr_css_property(ncss, "stroke-opacity", NULL);
-            opacity = sp_repr_css_property(ncss, "opacity", NULL);
-            filter = sp_repr_css_property(ncss, "filter", NULL);
+            gchar const *s_val = sp_repr_css_property(ncss, "stroke", nullptr);
+            gchar const *s_opac = sp_repr_css_property(ncss, "stroke-opacity", nullptr);
+            opacity = sp_repr_css_property(ncss, "opacity", nullptr);
+            filter = sp_repr_css_property(ncss, "filter", nullptr);
             sp_repr_css_set_property(ncss, "stroke", "none");
-            sp_repr_css_set_property(ncss, "filter", NULL);
-            sp_repr_css_set_property(ncss, "opacity", NULL);
+            sp_repr_css_set_property(ncss, "filter", nullptr);
+            sp_repr_css_set_property(ncss, "opacity", nullptr);
             sp_repr_css_set_property(ncss, "stroke-opacity", "1.0");
             sp_repr_css_set_property(ncss, "fill", s_val);
             if ( s_opac ) {
@@ -1240,13 +1240,13 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         }
 
         // Fill
-        SPCSSAttr *ncsf = 0;
+        SPCSSAttr *ncsf = nullptr;
         {
             ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
             sp_repr_css_set_property(ncsf, "stroke", "none");
             sp_repr_css_set_property(ncsf, "stroke-opacity", "1.0");
-            sp_repr_css_set_property(ncsf, "filter", NULL);
-            sp_repr_css_set_property(ncsf, "opacity", NULL);
+            sp_repr_css_set_property(ncsf, "filter", nullptr);
+            sp_repr_css_set_property(ncsf, "opacity", nullptr);
             sp_repr_css_unset_property(ncsf, "marker-start");
             sp_repr_css_unset_property(ncsf, "marker-mid");
             sp_repr_css_unset_property(ncsf, "marker-end");
@@ -1260,7 +1260,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         Path *orig = new Path;
         Path *res = new Path;
         SPCurve *curvetemp = curve_for_item(item);
-        if (curvetemp == NULL) {
+        if (curvetemp == nullptr) {
             curve->unref();
             return did;
         }
@@ -1379,7 +1379,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
             //The stroke
-            Inkscape::XML::Node *stroke = NULL;
+            Inkscape::XML::Node *stroke = nullptr;
             if( !item->style->stroke.noneSet ){
                 SPDocument * doc = desktop->getDocument();
                 Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -1409,7 +1409,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 g_repr->setPosition(pos > 0 ? pos : 0);
 
                 //The fill
-                Inkscape::XML::Node *fill = NULL;
+                Inkscape::XML::Node *fill = nullptr;
                 if (!legacy) {
 //                    gchar const *f_val = sp_repr_css_property(ncsf, "fill", NULL);
                     if( !item->style->fill.noneSet ){
@@ -1441,7 +1441,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 SPShape *shape = SP_SHAPE(item);
 
                 Geom::PathVector const & pathv = curve->get_pathvector();
-                Inkscape::XML::Node *markers = NULL;
+                Inkscape::XML::Node *markers = nullptr;
                 if(SP_SHAPE(item)->hasMarkers ()) {
                     if (!legacy) {
                         markers = xml_doc->createElement("svg:g");
@@ -1528,7 +1528,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                     }
                 }
 
-                gchar const *paint_order = sp_repr_css_property(ncss, "paint-order", NULL);
+                gchar const *paint_order = sp_repr_css_property(ncss, "paint-order", nullptr);
                 SPIPaintOrder temp;
                 temp.read( paint_order );
                 bool unique = false;
@@ -1620,7 +1620,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                     did = true;
                 }
                 
-                Inkscape::XML::Node *out = NULL;
+                Inkscape::XML::Node *out = nullptr;
                 if (!fill && !markers && did) {
                     out = stroke;
                 } else if (!fill && !stroke  && did) {
@@ -1661,11 +1661,11 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
 
         if (title) {
             g_free(title);
-            title = 0;
+            title = nullptr;
         }
         if (desc) {
             g_free(desc);
-            desc = 0;
+            desc = nullptr;
         }
 
         delete res;
@@ -1765,11 +1765,11 @@ void sp_selected_path_create_updating_inset(SPDesktop *desktop)
 
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating)
 {
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     Inkscape::Selection *selection = desktop->getSelection();
     SPItem *item = selection->singleItem();
 
-    if (item == NULL || ( !SP_IS_SHAPE(item) && !SP_IS_TEXT(item) ) ) {
+    if (item == nullptr || ( !SP_IS_SHAPE(item) && !SP_IS_TEXT(item) ) ) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Selected object is <b>not a path</b>, cannot inset/outset."));
         return;
     }
@@ -1782,7 +1782,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         curve = SP_TEXT(item)->getNormalizedBpath();
     }
         
-    if (curve == NULL) {
+    if (curve == nullptr) {
         return;
     }
 
@@ -1812,7 +1812,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     }
 
     Path *orig = Path_for_item(item, true, false);
-    if (orig == NULL)
+    if (orig == nullptr)
     {
         g_free(style);
         curve->unref();
@@ -1830,7 +1830,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         orig->Fill(theShape, 0);
 
         SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
-        gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+        gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
         if (val && strcmp(val, "nonzero") == 0)
         {
             theRes->ConvertToShape(theShape, fill_nonZero);
@@ -1884,7 +1884,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         gchar *str = res->svg_dump_path();
         repr->setAttribute("inkscape:original", str);
         g_free(str);
-        str = 0;
+        str = nullptr;
 
         if ( updating ) {
 
@@ -1895,7 +1895,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             repr->setAttribute("xlink:href", uri);
             g_free((void *) uri);
         } else {
-            repr->setAttribute("inkscape:href", NULL);
+            repr->setAttribute("inkscape:href", nullptr);
         }
 
         repr->setAttribute("style", style);
@@ -1962,7 +1962,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = *l;
-        SPCurve *curve = NULL;
+        SPCurve *curve = nullptr;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
             continue;
@@ -1976,7 +1976,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             curve = SP_TEXT(item)->getNormalizedBpath();
         }
 
-        if (curve == NULL)
+        if (curve == nullptr)
             continue;
 
         Geom::Affine const transform(item->transform);
@@ -2014,7 +2014,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         }
 
         Path *orig = Path_for_item(item, false);
-        if (orig == NULL) {
+        if (orig == nullptr) {
             g_free(style);
             curve->unref();
             continue;
@@ -2031,7 +2031,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             orig->Fill(theShape, 0);
 
             SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
-            gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
+            gchar const *val = sp_repr_css_property(css, "fill-rule", nullptr);
             if (val && strcmp(val, "nonzero") == 0)
             {
                 theRes->ConvertToShape(theShape, fill_nonZero);
@@ -2178,7 +2178,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
 
     // get path to simplify (note that the path *before* LPE calculation is needed)
     Path *orig = Path_for_item_before_LPE(item, false);
-    if (orig == NULL) {
+    if (orig == nullptr) {
         return false;
     }
 
@@ -2437,7 +2437,7 @@ sp_selected_path_simplify(SPDesktop *desktop)
 bool
 Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
 {
-    if (who == NULL || a == NULL)
+    if (who == nullptr || a == nullptr)
         return false;
     if (who == a)
         return true;
@@ -2464,8 +2464,8 @@ Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
 {
     SPCurve *curve = curve_for_item(item);
 
-    if (curve == NULL)
-        return NULL;
+    if (curve == nullptr)
+        return nullptr;
 
     Geom::PathVector *pathv = pathvector_for_curve(item, curve, doTransformation, transformFull, Geom::identity(), Geom::identity());
     curve->unref();
@@ -2497,8 +2497,8 @@ Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull
 {
     SPCurve *curve = curve_for_item_before_LPE(item);
 
-    if (curve == NULL)
-        return NULL;
+    if (curve == nullptr)
+        return nullptr;
     
     Geom::PathVector *pathv = pathvector_for_curve(item, curve, doTransformation, transformFull, Geom::identity(), Geom::identity());
     curve->unref();
@@ -2517,8 +2517,8 @@ Path_for_item_before_LPE(SPItem *item, bool doTransformation, bool transformFull
 Geom::PathVector*
 pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool transformFull, Geom::Affine extraPreAffine, Geom::Affine extraPostAffine)
 {
-    if (curve == NULL)
-        return NULL;
+    if (curve == nullptr)
+        return nullptr;
 
     Geom::PathVector *dest = new Geom::PathVector;    
     *dest = curve->get_pathvector(); // Make a copy; must be freed by the caller!
@@ -2543,9 +2543,9 @@ pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool t
 SPCurve* curve_for_item(SPItem *item)
 {
     if (!item) 
-        return NULL;
+        return nullptr;
     
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(item)) {
         if (SP_IS_PATH(item)) {
             curve = SP_PATH(item)->getCurveForEdit();
@@ -2572,9 +2572,9 @@ SPCurve* curve_for_item(SPItem *item)
 SPCurve* curve_for_item_before_LPE(SPItem *item)
 {
     if (!item) 
-        return NULL;
+        return nullptr;
     
-    SPCurve *curve = NULL;
+    SPCurve *curve = nullptr;
     if (SP_IS_SHAPE(item)) {
         curve = SP_SHAPE(item)->getCurveForEdit();
     }

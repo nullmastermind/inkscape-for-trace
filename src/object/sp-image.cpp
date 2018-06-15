@@ -118,13 +118,13 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->sx = this->sy = 1.0;
     this->ox = this->oy = 0.0;
 
-    this->curve = NULL;
+    this->curve = nullptr;
 
-    this->href = 0;
+    this->href = nullptr;
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    this->color_profile = 0;
+    this->color_profile = nullptr;
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    this->pixbuf = 0;
+    this->pixbuf = nullptr;
 }
 
 SPImage::~SPImage() {
@@ -153,16 +153,16 @@ void SPImage::release() {
 
     if (this->href) {
         g_free (this->href);
-        this->href = NULL;
+        this->href = nullptr;
     }
 
     delete this->pixbuf;
-    this->pixbuf = NULL;
+    this->pixbuf = nullptr;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     if (this->color_profile) {
         g_free (this->color_profile);
-        this->color_profile = NULL;
+        this->color_profile = nullptr;
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
@@ -177,7 +177,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_XLINK_HREF:
             g_free (this->href);
-            this->href = (value) ? g_strdup (value) : NULL;
+            this->href = (value) ? g_strdup (value) : nullptr;
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
@@ -228,7 +228,7 @@ void SPImage::set(unsigned int key, const gchar* value) {
                 g_free (this->color_profile);
             }
 
-            this->color_profile = (value) ? g_strdup (value) : NULL;
+            this->color_profile = (value) ? g_strdup (value) : nullptr;
 
             if ( value ) {
                 DEBUG_MESSAGE( lcmsFour, "<this> color-profile set to '%s'", value );
@@ -328,9 +328,9 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     SPItem::update(ctx, flags);
     if (flags & SP_IMAGE_HREF_MODIFIED_FLAG) {
         delete this->pixbuf;
-        this->pixbuf = NULL;
+        this->pixbuf = nullptr;
         if (this->href) {
-            Inkscape::Pixbuf *pixbuf = NULL;
+            Inkscape::Pixbuf *pixbuf = nullptr;
             pixbuf = sp_image_repr_read_image (
                 this->getRepr()->attribute("xlink:href"),
                 this->getRepr()->attribute("sodipodi:absref"),
@@ -407,7 +407,7 @@ void SPImage::modified(unsigned int flags) {
 //  SPItem::onModified(flags);
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        for (SPItemView *v = this->display; v != NULL; v = v->next) {
+        for (SPItemView *v = this->display; v != nullptr; v = v->next) {
             Inkscape::DrawingImage *img = dynamic_cast<Inkscape::DrawingImage *>(v->arenaitem);
             img->setStyle(this->style);
         }
@@ -501,17 +501,17 @@ gchar* SPImage::description() const {
         href_desc = g_strdup("(null_pointer)"); // we call g_free() on href_desc
     }
 
-    char *ret = ( this->pixbuf == NULL
+    char *ret = ( this->pixbuf == nullptr
                   ? g_strdup_printf(_("[bad reference]: %s"), href_desc)
                   : g_strdup_printf(_("%d &#215; %d: %s"),
                                     this->pixbuf->width(),
                                     this->pixbuf->height(),
                                     href_desc) );
                                     
-    if (this->pixbuf == NULL && 
+    if (this->pixbuf == nullptr && 
         this->document) 
     {
-        Inkscape::Pixbuf * pb = NULL;
+        Inkscape::Pixbuf * pb = nullptr;
         pb = sp_image_repr_read_image (
                 this->getRepr()->attribute("xlink:href"),
                 this->getRepr()->attribute("sodipodi:absref"),
@@ -540,17 +540,17 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
 
 Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base)
 {
-    Inkscape::Pixbuf *inkpb = 0;
+    Inkscape::Pixbuf *inkpb = nullptr;
 
     gchar const *filename = href;
     
-    if (filename != NULL) {
+    if (filename != nullptr) {
         if (strncmp (filename,"file:",5) == 0) {
-            gchar *fullname = g_filename_from_uri(filename, NULL, NULL);
+            gchar *fullname = g_filename_from_uri(filename, nullptr, nullptr);
             if (fullname) {
                 inkpb = Inkscape::Pixbuf::create_from_file(fullname);
                 g_free(fullname);
-                if (inkpb != NULL) {
+                if (inkpb != nullptr) {
                     return inkpb;
                 }
             }
@@ -558,7 +558,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             /* data URI - embedded image */
             filename += 5;
             inkpb = Inkscape::Pixbuf::create_from_data_uri(filename);
-            if (inkpb != NULL) {
+            if (inkpb != nullptr) {
                 return inkpb;
             }
         } else {
@@ -576,7 +576,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
                 // and if it fails, we also try to use bare href regardless of its g_path_is_absolute
                 if (g_file_test (fullname, G_FILE_TEST_EXISTS) && !g_file_test (fullname, G_FILE_TEST_IS_DIR)) {
                     inkpb = Inkscape::Pixbuf::create_from_file(fullname);
-                    if (inkpb != NULL) {
+                    if (inkpb != nullptr) {
                         g_free (fullname);
                         return inkpb;
                     }
@@ -587,7 +587,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             /* try filename as absolute */
             if (g_file_test (filename, G_FILE_TEST_EXISTS) && !g_file_test (filename, G_FILE_TEST_IS_DIR)) {
                 inkpb = Inkscape::Pixbuf::create_from_file(filename);
-                if (inkpb != NULL) {
+                if (inkpb != nullptr) {
                     return inkpb;
                 }
             }
@@ -596,16 +596,16 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
 
     /* at last try to load from sp absolute path name */
     filename = absref;
-    if (filename != NULL) {
+    if (filename != nullptr) {
         // using absref is outside of SVG rules, so we must at least warn the user
-        if ( base != NULL && href != NULL ) {
+        if ( base != nullptr && href != nullptr ) {
             g_warning ("<image xlink:href=\"%s\"> did not resolve to a valid image file (base dir is %s), now trying sodipodi:absref=\"%s\"", href, base, absref);
         } else {
             g_warning ("xlink:href did not resolve to a valid image file, now trying sodipodi:absref=\"%s\"", absref);
         }
 
         inkpb = Inkscape::Pixbuf::create_from_file(filename);
-        if (inkpb != NULL) {
+        if (inkpb != nullptr) {
             return inkpb;
         }
     }
@@ -615,7 +615,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
 
     /* It should be included xpm, so if it still does not does load, */
     /* our libraries are broken */
-    g_assert (inkpb != NULL);
+    g_assert (inkpb != nullptr);
 
     return inkpb;
 }
@@ -635,7 +635,7 @@ static void sp_image_update_canvas_image(SPImage *image)
 {
     SPItem *item = SP_ITEM(image);
 
-    for (SPItemView *v = item->display; v != NULL; v = v->next) {
+    for (SPItemView *v = item->display; v != nullptr; v = v->next) {
         sp_image_update_arenaitem(image, dynamic_cast<Inkscape::DrawingImage *>(v->arenaitem));
     }
 }
@@ -738,7 +738,7 @@ static void sp_image_set_curve( SPImage *image )
  */
 SPCurve *sp_image_get_curve( SPImage *image )
 {
-    SPCurve *result = 0;
+    SPCurve *result = nullptr;
     if (image->curve) {
         result = image->curve->copy();
     }
@@ -750,16 +750,16 @@ void sp_embed_image(Inkscape::XML::Node *image_node, Inkscape::Pixbuf *pb)
     bool free_data = false;
 
     // check whether the pixbuf has MIME data
-    guchar *data = NULL;
+    guchar *data = nullptr;
     gsize len = 0;
     std::string data_mimetype;
 
     data = const_cast<guchar *>(pb->getMimeData(len, data_mimetype));
 
-    if (data == NULL) {
+    if (data == nullptr) {
         // if there is no supported MIME data, embed as PNG
         data_mimetype = "image/png";
-        gdk_pixbuf_save_to_buffer(pb->getPixbufRaw(), reinterpret_cast<gchar**>(&data), &len, "png", NULL, NULL);
+        gdk_pixbuf_save_to_buffer(pb->getPixbufRaw(), reinterpret_cast<gchar**>(&data), &len, "png", nullptr, NULL);
         free_data = true;
     }
 
@@ -801,13 +801,13 @@ void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
 
     // we need to load the entire file into memory,
     // since we'll store it as MIME data
-    gchar *data = NULL;
+    gchar *data = nullptr;
     gsize len = 0;
-    GError *error = NULL;
+    GError *error = nullptr;
 
     if (g_file_get_contents(fn.c_str(), &data, &len, &error)) {
 
-        if (error != NULL) {
+        if (error != nullptr) {
             std::cerr << "Pixbuf::create_from_file: " << error->message << std::endl;
             std::cerr << "   (" << fn << ")" << std::endl;
             return;

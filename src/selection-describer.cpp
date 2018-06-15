@@ -112,7 +112,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);
     } else {
         SPItem *item = items[0];
-        g_assert(item != NULL);
+        g_assert(item != nullptr);
         SPObject *layer = selection->layers()->layerForObject(item);
         SPObject *root = selection->layers()->currentRoot();
 
@@ -143,7 +143,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         // Parent name
         SPObject *parent = item->parent;
         gchar const *parent_label = parent->getId();
-        gchar *parent_name = NULL;
+        gchar *parent_name = nullptr;
         if (parent_label) {
             char *quoted_parent_label = xml_quote_strdup(parent_label);
             parent_name = g_strdup_printf(_("<i>%s</i>"), quoted_parent_label);
@@ -175,7 +175,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
         if (items.size()==1) { // one item
             char *item_desc = item->detailedDescription();
 
-            bool isUse = dynamic_cast<SPUse *>(item) != NULL;
+            bool isUse = dynamic_cast<SPUse *>(item) != nullptr;
             if (isUse && dynamic_cast<SPSymbol *>(item->firstChild())) {
                 _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                               item_desc, in_phrase,
@@ -185,7 +185,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
                               item_desc, in_phrase,
                               _("Remove from symbols tray to edit symbol"));
             } else {
-                SPOffset *offset = (isUse) ? NULL : dynamic_cast<SPOffset *>(item);
+                SPOffset *offset = (isUse) ? nullptr : dynamic_cast<SPOffset *>(item);
                 if (isUse || (offset && offset->sourceHref)) {
                     _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s. %s. %s.",
                                   item_desc, in_phrase,
@@ -224,7 +224,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
             g_free(terms);
 
             // indicate all, some, or none filtered
-            gchar *filt_str = NULL;
+            gchar *filt_str = nullptr;
             int n_filt = count_filtered(items);  //all filtered
             if (n_filt) {
                 filt_str = g_strdup_printf(ngettext("; <i>%d filtered object</i> ",
@@ -236,11 +236,11 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
             _context.setF(Inkscape::NORMAL_MESSAGE, "%s%s%s. %s.", objects_str, filt_str, in_phrase, _when_selected);
             if (objects_str) {
                 g_free(objects_str);
-                objects_str = 0;
+                objects_str = nullptr;
             }
             if (filt_str) {
                 g_free(filt_str);
-                filt_str = 0;
+                filt_str = nullptr;
             }
         }
 

@@ -401,10 +401,10 @@ void extrapolate_join_internal(join_data jd, int alternative)
 
     std::vector<Geom::ShapeIntersection> points;
 
-    Geom::EllipticalArc *arc1 = NULL;
-    Geom::EllipticalArc *arc2 = NULL;
-    Geom::LineSegment *seg1 = NULL;
-    Geom::LineSegment *seg2 = NULL;
+    Geom::EllipticalArc *arc1 = nullptr;
+    Geom::EllipticalArc *arc2 = nullptr;
+    Geom::LineSegment *seg1 = nullptr;
+    Geom::LineSegment *seg2 = nullptr;
     Geom::Point sol;
     Geom::Point p1;
     Geom::Point p2;

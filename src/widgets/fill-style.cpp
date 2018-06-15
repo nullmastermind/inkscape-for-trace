@@ -127,8 +127,8 @@ Gtk::Widget *Inkscape::Widgets::createStyleWidget( FillOrStroke kind )
 FillNStroke::FillNStroke( FillOrStroke k ) :
     Gtk::VBox(),
     kind(k),
-    desktop(0),
-    psel(0),
+    desktop(nullptr),
+    psel(nullptr),
     lastDrag(0),
     dragId(0),
     update(false),
@@ -167,7 +167,7 @@ FillNStroke::~FillNStroke()
         g_source_remove(dragId);
         dragId = 0;
     }
-    psel = 0;
+    psel = nullptr;
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
     selectChangedConn.disconnect();
@@ -206,7 +206,7 @@ void FillNStroke::setDesktop(SPDesktop *desktop)
         if (desktop && desktop->selection) {
             selectChangedConn = desktop->selection->connectChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
             subselChangedConn = desktop->connectToolSubselectionChanged(sigc::hide(sigc::mem_fun(*this, &FillNStroke::performUpdate)));
-            eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &FillNStroke::eventContextCB), (Inkscape::UI::Tools::ToolBase *)NULL)));
+            eventContextConn = desktop->connectEventContextChanged(sigc::hide(sigc::bind(sigc::mem_fun(*this, &FillNStroke::eventContextCB), (Inkscape::UI::Tools::ToolBase *)nullptr)));
 
             // Must check flags, so can't call performUpdate() directly.
             selectModifiedConn = desktop->selection->connectModified(sigc::hide<0>(sigc::mem_fun(*this, &FillNStroke::selectionModifiedCB)));
@@ -358,7 +358,7 @@ void FillNStroke::setFillrule( SPPaintSelector::FillRule mode )
         sp_desktop_set_style(desktop, css);
 
         sp_repr_css_attr_unref(css);
-        css = 0;
+        css = nullptr;
 
         DocumentUndo::done(desktop->doc(), SP_VERB_DIALOG_FILL_STROKE,
                            _("Change fill rule"));
@@ -425,7 +425,7 @@ void FillNStroke::dragFromPaint()
     // Assume a base 15.625ms resolution on the timer.
     if (!dragId && lastDrag && when && ((when - lastDrag) < 32)) {
         // local change, do not update from selection
-        dragId = g_timeout_add_full(G_PRIORITY_DEFAULT, 33, dragDelayCB, this, 0);
+        dragId = g_timeout_add_full(G_PRIORITY_DEFAULT, 33, dragDelayCB, this, nullptr);
     }
 
     if (dragId) {
@@ -442,7 +442,7 @@ void FillNStroke::dragFromPaint()
         case SPPaintSelector::MODE_SOLID_COLOR:
         {
             // local change, do not update from selection
-            dragId = g_timeout_add_full(G_PRIORITY_DEFAULT, 100, dragDelayCB, this, 0);
+            dragId = g_timeout_add_full(G_PRIORITY_DEFAULT, 100, dragDelayCB, this, nullptr);
             psel->setFlatColor( desktop, (kind == FILL) ? "fill" : "stroke", (kind == FILL) ? "fill-opacity" : "stroke-opacity" );
             DocumentUndo::maybeDone(desktop->doc(), (kind == FILL) ? undo_F_label : undo_S_label, SP_VERB_DIALOG_FILL_STROKE,
                                     (kind == FILL) ? _("Set fill color") : _("Set stroke color"));
@@ -505,7 +505,7 @@ void FillNStroke::updateFromPaint()
             sp_desktop_set_style(desktop, css);
 
             sp_repr_css_attr_unref(css);
-            css = 0;
+            css = nullptr;
 
             DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
                                (kind == FILL) ? _("Remove fill") : _("Remove stroke"));
@@ -551,7 +551,7 @@ void FillNStroke::updateFromPaint()
                                                        : SP_GRADIENT_TYPE_RADIAL );
                 bool createSwatch = (psel->mode == SPPaintSelector::MODE_SWATCH);
 
-                SPCSSAttr *css = 0;
+                SPCSSAttr *css = nullptr;
                 if (kind == FILL) {
                     // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
                     css = sp_repr_css_attr_new();
@@ -617,7 +617,7 @@ void FillNStroke::updateFromPaint()
 
                 if (css) {
                     sp_repr_css_attr_unref(css);
-                    css = 0;
+                    css = nullptr;
                 }
 
                 DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
@@ -631,7 +631,7 @@ void FillNStroke::updateFromPaint()
             if (!items.empty()) {
                 SPGradientType const gradient_type = SP_GRADIENT_TYPE_MESH;
 
-                SPCSSAttr *css = 0;
+                SPCSSAttr *css = nullptr;
                 if (kind == FILL) {
                     // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
                     css = sp_repr_css_attr_new();
@@ -717,7 +717,7 @@ void FillNStroke::updateFromPaint()
 
                 if (css) {
                     sp_repr_css_attr_unref(css);
-                    css = 0;
+                    css = nullptr;
                 }
 
                 DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
@@ -776,7 +776,7 @@ void FillNStroke::updateFromPaint()
                     }
 
                     sp_repr_css_attr_unref(css);
-                    css = 0;
+                    css = nullptr;
                     g_free(urltext);
 
                 } // end if
@@ -806,7 +806,7 @@ void FillNStroke::updateFromPaint()
 
                 sp_desktop_set_style(desktop, css);
                 sp_repr_css_attr_unref(css);
-                css = 0;
+                css = nullptr;
 
                 DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
                                    (kind == FILL) ? _("Unset fill") : _("Unset stroke"));

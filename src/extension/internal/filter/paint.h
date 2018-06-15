@@ -63,7 +63,7 @@ protected:
 
 public:
     Chromolitho ( ) : Filter() { };
-    ~Chromolitho ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Chromolitho ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -122,7 +122,7 @@ public:
 gchar const *
 Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
     
     std::ostringstream b1in;
     std::ostringstream b2in;
@@ -224,7 +224,7 @@ protected:
 
 public:
     CrossEngraving ( ) : Filter() { };
-    ~CrossEngraving ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~CrossEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -253,7 +253,7 @@ public:
 gchar const *
 CrossEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream clean;
     std::ostringstream dilat;
@@ -323,7 +323,7 @@ protected:
 
 public:
     Drawing ( ) : Filter() { };
-    ~Drawing ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Drawing ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -372,7 +372,7 @@ public:
 gchar const *
 Drawing::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream simply;
     std::ostringstream clean;
@@ -486,7 +486,7 @@ protected:
 
 public:
     Electrize ( ) : Filter() { };
-    ~Electrize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Electrize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -516,7 +516,7 @@ public:
 gchar const *
 Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream blur;
     std::ostringstream type;
@@ -576,7 +576,7 @@ protected:
 
 public:
     NeonDraw ( ) : Filter() { };
-    ~NeonDraw ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~NeonDraw ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -611,7 +611,7 @@ public:
 gchar const *
 NeonDraw::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream blend;
     std::ostringstream simply;
@@ -679,7 +679,7 @@ protected:
 
 public:
     PointEngraving ( ) : Filter() { };
-    ~PointEngraving ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~PointEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -735,7 +735,7 @@ public:
 gchar const *
 PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
   
     std::ostringstream type;
     std::ostringstream hfreq;
@@ -842,7 +842,7 @@ protected:
 
 public:
     Posterize ( ) : Filter() { };
-    ~Posterize ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~Posterize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -886,7 +886,7 @@ public:
 gchar const *
 Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream table;
     std::ostringstream blendmode;
@@ -965,7 +965,7 @@ protected:
 
 public:
     PosterizeBasic ( ) : Filter() { };
-    ~PosterizeBasic ( ) override { if (_filter != NULL) g_free((void *)_filter); return; }
+    ~PosterizeBasic ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
     static void init (void) {
         Inkscape::Extension::build_from_mem(
@@ -990,7 +990,7 @@ public:
 gchar const *
 PosterizeBasic::get_filter_text (Inkscape::Extension::Extension * ext)
 {
-    if (_filter != NULL) g_free((void *)_filter);
+    if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream blur;
     std::ostringstream transf;

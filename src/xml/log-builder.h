@@ -32,7 +32,7 @@ class Node;
  */
 class LogBuilder {
 public:
-    LogBuilder() : _log(NULL) {}
+    LogBuilder() : _log(nullptr) {}
     ~LogBuilder() { discard(); }
 
     /** @name Manipulate the recorded event log

@@ -57,7 +57,7 @@ ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
     }
     gchar ** strarray = g_strsplit(str, "@", 0);
     gchar ** iter = strarray;
-    while (*iter != NULL) {
+    while (*iter != nullptr) {
         gchar ** strsubarray = g_strsplit(*iter, ",", 8);
         if (*strsubarray[7]) {//steps always > 0
             Satellite *satellite = new Satellite();

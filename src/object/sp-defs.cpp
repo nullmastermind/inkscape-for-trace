@@ -75,13 +75,13 @@ Inkscape::XML::Node* SPDefs::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
         std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
-            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
+            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, nullptr, flags);
             if (crepr) {
                 l.push_back(crepr);
             }
         }
         for (auto i=l.rbegin();i!=l.rend();++i) {
-            repr->addChild(*i, NULL);
+            repr->addChild(*i, nullptr);
             Inkscape::GC::release(*i);
         }
     } else {

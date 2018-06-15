@@ -58,7 +58,7 @@ FontLister::FontLister()
     font_list_store->freeze_notify();
     
     /* Create default styles for use when font-family is unknown on system. */
-    default_styles = g_list_append(NULL, new StyleNames("Normal"));
+    default_styles = g_list_append(nullptr, new StyleNames("Normal"));
     default_styles = g_list_append(default_styles, new StyleNames("Italic"));
     default_styles = g_list_append(default_styles, new StyleNames("Bold"));
     default_styles = g_list_append(default_styles, new StyleNames("Bold Italic"));
@@ -71,7 +71,7 @@ FontLister::FontLister()
     for (size_t i = 0; i < familyVector.size(); ++i) {
         const char* displayName = sp_font_family_get_name(familyVector[i]);
         
-        if (displayName == 0 || *displayName == '\0') {
+        if (displayName == nullptr || *displayName == '\0') {
             continue;
         }
         
@@ -605,7 +605,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family(Glib::ustrin
     // 2. Select best valid style match to old style.
 
     // For finding style list, use list of first family in font-family list.
-    GList *styles = NULL;
+    GList *styles = nullptr;
     Gtk::TreeModel::iterator iter = font_list_store->get_iter("0");
     while (iter != font_list_store->children().end()) {
 
@@ -624,7 +624,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family(Glib::ustrin
     // Newly typed in font-family may not yet be in list... use default list.
     // TODO: if font-family is list, check if first family in list is on system
     // and set style accordingly.
-    if (styles == NULL) {
+    if (styles == nullptr) {
         styles = default_styles;
     }
 
@@ -980,9 +980,9 @@ static gint compute_distance(const PangoFontDescription *a, const PangoFontDescr
 // to another font-family with Bold style.
 gboolean font_description_better_match(PangoFontDescription *target, PangoFontDescription *old_desc, PangoFontDescription *new_desc)
 {
-    if (old_desc == NULL)
+    if (old_desc == nullptr)
         return true;
-    if (new_desc == NULL)
+    if (new_desc == nullptr)
         return false;
 
     int old_distance = compute_distance(target, old_desc);
@@ -1027,7 +1027,7 @@ Glib::ustring FontLister::get_best_style_match(Glib::ustring family, Glib::ustri
     }
 
     PangoFontDescription *target = pango_font_description_from_string(fontspec.c_str());
-    PangoFontDescription *best = NULL;
+    PangoFontDescription *best = nullptr;
 
     //font_description_dump( target );
 
@@ -1100,7 +1100,7 @@ bool font_lister_separator_func(const Glib::RefPtr<Gtk::TreeModel>& model,
 // Needed until Text toolbar updated
 gboolean font_lister_separator_func2(GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/)
 {
-    gchar *text = 0;
+    gchar *text = nullptr;
     gtk_tree_model_get(model, iter, 0, &text, -1); // Column 0: FontList.family
     return (text && strcmp(text, "#") == 0);
 }
@@ -1139,7 +1139,7 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
 
             GtkTreeIter iter;
             gboolean valid;
-            gchar *family = 0;
+            gchar *family = nullptr;
             gboolean onSystem = true;
             gboolean found = false;
             for (valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);

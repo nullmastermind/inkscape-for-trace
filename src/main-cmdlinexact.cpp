@@ -143,12 +143,12 @@ void xFileOpen( const Glib::ustring &uri )
         Inkscape::DocumentUndo::clearUndo(old_document);
     }
 
-    SPDocument *doc = NULL;
-    Inkscape::Extension::Extension *key = NULL;
+    SPDocument *doc = nullptr;
+    Inkscape::Extension::Extension *key = nullptr;
     try {
         doc = Inkscape::Extension::open(key, document_filename.c_str());
     } catch (std::exception &e) {
-        doc = NULL;
+        doc = nullptr;
         std::string exeption_mgs = e.what();
         printf("Error: open %s:%s\n",document_filename.c_str(), exeption_mgs.c_str() );
         fflush(stdout);
@@ -240,12 +240,12 @@ void xFileExportPNG( Inkscape::ActionContext const & context, const Glib::ustrin
 
     ExportResult status = sp_export_png_file(doc, document_filename.c_str(),
                           Geom::Rect(Geom::Point(0,0), Geom::Point(width, height)), png_width, png_height, dpi, dpi,
-                          nv->pagecolor, 0, 0, TRUE);
+                          nv->pagecolor, nullptr, nullptr, TRUE);
 }
 
 void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustring &element_name )
 {
-    if (context.getDocument() == NULL || context.getSelection() == NULL) {
+    if (context.getDocument() == nullptr || context.getSelection() == nullptr) {
         return;
     }
 
@@ -257,7 +257,7 @@ void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustrin
     SPDocument * doc = context.getDocument();
     SPObject * obj = doc->getObjectById(element_name);
 
-    if (obj == NULL) {
+    if (obj == nullptr) {
         printf(_("Unable to find node ID: '%s'\n"), element_name.c_str());
         fflush(stdout);
         return;
@@ -326,7 +326,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
     verbs_list_t verbs_list;
 
     FILE *fh = g_fopen(yaml_filename, "r");
-    if(fh == NULL) {
+    if(fh == nullptr) {
         printf("Failed to read from file %s\n", yaml_filename);
         fflush(stdout);
 
@@ -555,7 +555,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
             ++undo_counter;
             new CmdLineAction(true, verb.args[0].c_str());
         }
-        else if( Verb::getbyid(verb.args[0].c_str()) != NULL )
+        else if( Verb::getbyid(verb.args[0].c_str()) != nullptr )
         {
             ++undo_counter;
             new CmdLineAction(true, verb.args[0].c_str());

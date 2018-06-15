@@ -31,7 +31,7 @@
 
 SPTagUse::SPTagUse()
 {
-    href = NULL;
+    href = nullptr;
     //new (_changed_connection) sigc::connection;
     ref = new SPTagUseReference(this);
     
@@ -43,12 +43,12 @@ SPTagUse::~SPTagUse()
 
     if (child) {
         detach(child);
-        child = NULL;
+        child = nullptr;
     }
 
     ref->detach();
     delete ref;
-    ref = 0;
+    ref = nullptr;
 
     _changed_connection.~connection(); //FIXME why?
 }
@@ -70,13 +70,13 @@ SPTagUse::release()
 
     if (child) {
         detach(child);
-        child = NULL;
+        child = nullptr;
     }
 
     _changed_connection.disconnect();
 
     g_free(href);
-    href = NULL;
+    href = nullptr;
 
     ref->detach();
 
@@ -93,7 +93,7 @@ SPTagUse::set(unsigned key, gchar const *value)
                 /* No change, do nothing. */
             } else {
                 g_free(href);
-                href = NULL;
+                href = nullptr;
                 if (value) {
                     // First, set the href field, because sp_tag_use_href_changed will need it.
                     href = g_strdup(value);
@@ -152,7 +152,7 @@ SPItem * SPTagUse::root()
         orig = SP_TAG_USE(orig)->child;
     }
     if (!orig || !SP_IS_ITEM(orig))
-        return NULL;
+        return nullptr;
     return SP_ITEM(orig);
 }
 
@@ -169,7 +169,7 @@ SPTagUse::href_changed(SPObject */*old_ref*/, SPObject */*ref*/)
             if (child_) {
                 child = child_;
                 attach(child_, lastChild());
-                sp_object_unref(child_, 0);
+                sp_object_unref(child_, nullptr);
                 child_->invoke_build(this->document, childrepr, TRUE);
 
             }
@@ -179,7 +179,7 @@ SPTagUse::href_changed(SPObject */*old_ref*/, SPObject */*ref*/)
 
 SPItem * SPTagUse::get_original()
 {
-    SPItem *ref_ = NULL;
+    SPItem *ref_ = nullptr;
     if (ref) {
         ref_ = ref->getObject();
     }

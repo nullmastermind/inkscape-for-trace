@@ -143,7 +143,7 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
                 width, height,
                 (unsigned long)(Inkscape::Util::Quantity::convert(width, "px", "in") * dpi),
                 (unsigned long)(Inkscape::Util::Quantity::convert(height, "px", "in") * dpi),
-                dpi, dpi, bgcolor, NULL, NULL, true, std::vector<SPItem*>());
+                dpi, dpi, bgcolor, nullptr, nullptr, true, std::vector<SPItem*>());
 
             // This doesn't seem to work:
             //context->set_cairo_context ( Cairo::Context::create (Cairo::ImageSurface::create_from_png (tmp_png) ), dpi, dpi );
@@ -191,7 +191,7 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
 
         bool ret = ctx->setSurfaceTarget (surface, true, &ctm);
         if (ret) {
-            ret = renderer.setupDocument (ctx, _workaround._doc, TRUE, 0., NULL);
+            ret = renderer.setupDocument (ctx, _workaround._doc, TRUE, 0., nullptr);
             if (ret) {
                 renderer.renderItem(ctx, _workaround._base);
                 ctx->finish(false);  // do not finish the cairo_surface_t - it's owned by our GtkPrintContext!

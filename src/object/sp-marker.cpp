@@ -240,31 +240,31 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
 			repr->setAttribute("markerUnits", "userSpaceOnUse");
 		}
 	} else {
-		repr->setAttribute("markerUnits", NULL);
+		repr->setAttribute("markerUnits", nullptr);
 	}
 
 	if (this->refX._set) {
 		sp_repr_set_svg_double(repr, "refX", this->refX.computed);
 	} else {
-		repr->setAttribute("refX", NULL);
+		repr->setAttribute("refX", nullptr);
 	}
 
 	if (this->refY._set) {
 		sp_repr_set_svg_double (repr, "refY", this->refY.computed);
 	} else {
-		repr->setAttribute("refY", NULL);
+		repr->setAttribute("refY", nullptr);
 	}
 
 	if (this->markerWidth._set) {
 		sp_repr_set_svg_double (repr, "markerWidth", this->markerWidth.computed);
 	} else {
-		repr->setAttribute("markerWidth", NULL);
+		repr->setAttribute("markerWidth", nullptr);
 	}
 
 	if (this->markerHeight._set) {
 		sp_repr_set_svg_double (repr, "markerHeight", this->markerHeight.computed);
 	} else {
-		repr->setAttribute("markerHeight", NULL);
+		repr->setAttribute("markerHeight", nullptr);
 	}
 
 	if (this->orient_set) {
@@ -276,7 +276,7 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
                 sp_repr_set_css_double(repr, "orient", this->orient.computed);
             }
 	} else {
-            repr->setAttribute("orient", NULL);
+            repr->setAttribute("orient", nullptr);
 	}
         
 	/* fixme: */
@@ -292,7 +292,7 @@ Inkscape::XML::Node* SPMarker::write(Inkscape::XML::Document *xml_doc, Inkscape:
 
 Inkscape::DrawingItem* SPMarker::show(Inkscape::Drawing &/*drawing*/, unsigned int /*key*/, unsigned int /*flags*/) {
     // Markers in tree are never shown directly even if outside of <defs>.
-    return  0;
+    return  nullptr;
 }
 
 Inkscape::DrawingItem* SPMarker::private_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
@@ -337,13 +337,13 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
             marker->hide(key);
             it->second.items.clear();
             for (unsigned int i = 0; i < size; ++i) {
-                it->second.items.push_back(NULL);
+                it->second.items.push_back(nullptr);
             }
         }
     } else {
         marker->views_map[key] = SPMarkerView();
         for (unsigned int i = 0; i < size; ++i) {
-            marker->views_map[key].items.push_back(NULL);
+            marker->views_map[key].items.push_back(nullptr);
         }
     }
 }
@@ -361,23 +361,23 @@ sp_marker_show_instance ( SPMarker *marker, Inkscape::DrawingItem *parent,
     // otherwise Cairo will fail to render anything on the tile
     // that contains the "degenerate" marker.
     if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH && linewidth == 0) {
-        return NULL;
+        return nullptr;
     }
 
     std::map<unsigned int, SPMarkerView>::iterator it = marker->views_map.find(key);
     if (it == marker->views_map.end()) {
         // Key not found
-        return NULL;
+        return nullptr;
     }
 
     SPMarkerView *view = &(it->second);
     if (pos >= view->items.size() ) {
         // Position index too large, doesn't exist.
-        return NULL;
+        return nullptr;
     }
 
     // If not already created
-    if (view->items[pos] == NULL) {
+    if (view->items[pos] == nullptr) {
 
         /* Parent class ::show method */
         view->items[pos] = marker->private_show(parent->drawing(), key, SP_ITEM_REFERENCE_FLAGS);
@@ -483,9 +483,9 @@ SPObject *sp_marker_fork_if_necessary(SPObject *marker)
     SPDocument *doc = marker->document;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     // Turn off garbage-collectable or it might be collected before we can use it
-    marker->getRepr()->setAttribute("inkscape:collect", NULL);
+    marker->getRepr()->setAttribute("inkscape:collect", nullptr);
     Inkscape::XML::Node *mark_repr = marker->getRepr()->duplicate(xml_doc);
-    doc->getDefs()->getRepr()->addChild(mark_repr, NULL);
+    doc->getDefs()->getRepr()->addChild(mark_repr, nullptr);
     if (!mark_repr->attribute("inkscape:stockid")) {
         mark_repr->setAttribute("inkscape:stockid", mark_repr->attribute("id"));
     }

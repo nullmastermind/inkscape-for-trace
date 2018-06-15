@@ -155,7 +155,7 @@ static void vp_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 drag->draggers.erase(std::remove(drag->draggers.begin(), drag->draggers.end(), dragger),
                                      drag->draggers.end());
                 delete dragger;
-                dragger = NULL;
+                dragger = nullptr;
 
                 // ... and merge any duplicate perspectives
                 d_new->mergePerspectives();
@@ -268,7 +268,7 @@ std::list<SPBox3D *> VanishingPoint::selectedBoxes(Inkscape::Selection *sel)
 
 VPDragger::VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp)
     : parent(parent)
-    , knot(NULL)
+    , knot(nullptr)
     , point(p)
     , point_original(p)
     , dragging_started(false)
@@ -276,7 +276,7 @@ VPDragger::VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp)
 {
     if (vp.is_finite()) {
         // create the knot
-        this->knot = new SPKnot(SP_ACTIVE_DESKTOP, NULL);
+        this->knot = new SPKnot(SP_ACTIVE_DESKTOP, nullptr);
         this->knot->setMode(SP_KNOT_MODE_XOR);
         this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
         this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
@@ -319,7 +319,7 @@ void VPDragger::updateTip()
 {
     if (this->knot && this->knot->tip) {
         g_free(this->knot->tip);
-        this->knot->tip = NULL;
+        this->knot->tip = nullptr;
     }
 
     guint num = this->numberOfBoxes();
@@ -389,7 +389,7 @@ VanishingPoint *VPDragger::findVPWithBox(SPBox3D *box)
             return &(*vp);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 std::set<VanishingPoint *, less_ptr> VPDragger::VPsOfSelectedBoxes()
@@ -534,7 +534,7 @@ VPDragger *VPDrag::getDraggerFor(VanishingPoint const &vp)
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 void VPDrag::printDraggers()
@@ -560,7 +560,7 @@ void VPDrag::updateDraggers()
     }
     this->draggers.clear();
 
-    g_return_if_fail(this->selection != NULL);
+    g_return_if_fail(this->selection != nullptr);
 
     auto itemlist = this->selection->items();
     for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
@@ -592,7 +592,7 @@ void VPDrag::updateLines()
     if (this->show_lines == 0)
         return;
 
-    g_return_if_fail(this->selection != NULL);
+    g_return_if_fail(this->selection != nullptr);
 
     auto itemlist = this->selection->items();
     for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
@@ -621,8 +621,8 @@ void VPDrag::updateBoxHandles()
     }
 
     Inkscape::UI::Tools::ToolBase *ec = INKSCAPE.active_event_context();
-    g_assert(ec != NULL);
-    if (ec->shape_editor != NULL) {
+    g_assert(ec != nullptr);
+    if (ec->shape_editor != nullptr) {
         ec->shape_editor->update_knotholder();
     }
 }

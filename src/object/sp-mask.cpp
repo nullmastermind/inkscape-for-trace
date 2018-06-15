@@ -47,7 +47,7 @@ SPMask::SPMask() : SPObjectGroup() {
 	this->maskContentUnits_set = FALSE;
 	this->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
 
-	this->display = NULL;
+	this->display = nullptr;
 }
 
 SPMask::~SPMask() {
@@ -150,7 +150,7 @@ void SPMask::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	SPObject *ochild = this->document->getObjectByRepr(child);
 	
 	if (SP_IS_ITEM (ochild)) {
-		for (SPMaskView *v = this->display; v != NULL; v = v->next) {
+		for (SPMaskView *v = this->display; v != nullptr; v = v->next) {
 			Inkscape::DrawingItem *ac = SP_ITEM (ochild)->invoke_show(v->arenaitem->drawing(), v->key, SP_ITEM_REFERENCE_FLAGS);
 			
 			if (ac) {
@@ -178,7 +178,7 @@ void SPMask::update(SPCtx* ctx, unsigned int flags) {
         sp_object_unref(*child);
     }
 
-    for (SPMaskView *v = this->display; v != NULL; v = v->next) {
+    for (SPMaskView *v = this->display; v != nullptr; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
         
         if (this->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && v->bbox) {
@@ -246,7 +246,7 @@ sp_mask_create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document)
 }
 
 Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned int key) {
-	g_return_val_if_fail (this != NULL, NULL);
+	g_return_val_if_fail (this != nullptr, NULL);
 	g_return_val_if_fail (SP_IS_MASK (this), NULL);
 
 	Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
@@ -272,7 +272,7 @@ Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned
 }
 
 void SPMask::sp_mask_hide(unsigned int key) {
-	g_return_if_fail (this != NULL);
+	g_return_if_fail (this != nullptr);
 	g_return_if_fail (SP_IS_MASK (this));
 
 	for (auto& child: children) {
@@ -281,7 +281,7 @@ void SPMask::sp_mask_hide(unsigned int key) {
 		}
 	}
 
-	for (SPMaskView *v = this->display; v != NULL; v = v->next) {
+	for (SPMaskView *v = this->display; v != nullptr; v = v->next) {
 		if (v->key == key) {
 			/* We simply unref and let item to manage this in handler */
 			this->display = sp_mask_view_list_remove (this->display, v);
@@ -293,7 +293,7 @@ void SPMask::sp_mask_hide(unsigned int key) {
 }
 
 void SPMask::sp_mask_set_bbox(unsigned int key, Geom::OptRect const &bbox) {
-	for (SPMaskView *v = this->display; v != NULL; v = v->next) {
+	for (SPMaskView *v = this->display; v != nullptr; v = v->next) {
 		if (v->key == key) {
 		    v->bbox = bbox;
 		    break;

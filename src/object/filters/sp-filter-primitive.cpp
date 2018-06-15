@@ -249,8 +249,8 @@ int sp_filter_primitive_name_previous_out(SPFilterPrimitive *prim) {
 /* Common initialization for filter primitives */
 void sp_filter_primitive_renderer_common(SPFilterPrimitive *sp_prim, Inkscape::Filters::FilterPrimitive *nr_prim)
 {
-    g_assert(sp_prim != NULL);
-    g_assert(nr_prim != NULL);
+    g_assert(sp_prim != nullptr);
+    g_assert(nr_prim != nullptr);
 
     
     nr_prim->set_input(sp_prim->image_in);

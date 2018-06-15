@@ -61,7 +61,7 @@ public:
         return old;
     }
 
-    operator bool() const { return _p != NULL; }
+    operator bool() const { return _p != nullptr; }
 
 private:
     pointer _p;

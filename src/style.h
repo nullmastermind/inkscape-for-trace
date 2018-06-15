@@ -44,7 +44,7 @@ class SPStyle {
 
 public:
     
-    SPStyle(SPDocument *document = NULL, SPObject *object = NULL);// document is ignored if valid object given
+    SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     void clear();
     void read(SPObject *object, Inkscape::XML::Node *repr);
@@ -53,7 +53,7 @@ public:
     void readIfUnset( int id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
                          SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                         SPStyle const *const base = NULL ) const;
+                         SPStyle const *const base = nullptr ) const;
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
     void mergeString( char const *const p );
@@ -307,17 +307,17 @@ public:
      */
     sigc::signal<void, SPObject *, SPObject *> signal_stroke_ps_changed;
 
-    SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : NULL; }
-    SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : NULL; }
-    char    const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : NULL; }
+    SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : nullptr; }
+    SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : nullptr; }
+    char    const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : nullptr; }
 
-    SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
-    SPPaintServer const *getFillPaintServer()   const { return (fill.value.href) ? fill.value.href->getObject() : NULL; }
-    char         const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI()->toString() : NULL; }
+    SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
+    SPPaintServer const *getFillPaintServer()   const { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
+    char         const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI()->toString() : nullptr; }
 
-    SPPaintServer       *getStrokePaintServer()       { return (stroke.value.href) ? stroke.value.href->getObject() : NULL; }
-    SPPaintServer const *getStrokePaintServer() const { return (stroke.value.href) ? stroke.value.href->getObject() : NULL; }
-    char        const  *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : NULL; }
+    SPPaintServer       *getStrokePaintServer()       { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
+    SPPaintServer const *getStrokePaintServer() const { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
+    char        const  *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : nullptr; }
 
     /**
      * Return a font feature string useful for Pango.

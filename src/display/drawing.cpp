@@ -31,7 +31,7 @@ static const gdouble grayscale_value_matrix[20] = {
 };
 
 Drawing::Drawing(SPCanvasArena *arena)
-    : _root(NULL)
+    : _root(nullptr)
     , outlinecolor(0x000000ff)
     , delta(0)
     , _exact(false)
@@ -198,7 +198,7 @@ Drawing::pick(Geom::Point const &p, double delta, unsigned flags)
     if (_root) {
         return _root->pick(p, delta, flags);
     }
-    return NULL;
+    return nullptr;
 }
 
 void
