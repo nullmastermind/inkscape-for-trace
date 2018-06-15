@@ -312,7 +312,7 @@ public:
         add(_colLocked);
         add(_colLabel);
     }
-    ~ModelColumns() override {}
+    ~ModelColumns() override = default;
 
     Gtk::TreeModelColumn<SPObject*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;

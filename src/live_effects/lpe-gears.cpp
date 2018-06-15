@@ -225,9 +225,7 @@ LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
 }
 
 LPEGears::~LPEGears()
-{
-
-}
+= default;
 
 Geom::PathVector
 LPEGears::doEffect_path (Geom::PathVector const &path_in)

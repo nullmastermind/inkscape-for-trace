@@ -25,8 +25,8 @@ namespace Dialog {
 class ArrangeTab : public Gtk::VBox
 {
 public:
-	ArrangeTab() {};
-	~ArrangeTab() override {};
+	ArrangeTab() = default;;
+	~ArrangeTab() override = default;;
 
 	/**
 	 * Do the actual work! This method is invoked to actually arrange the

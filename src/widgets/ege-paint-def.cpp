@@ -105,8 +105,7 @@ PaintDef::PaintDef( unsigned int r, unsigned int g, unsigned int b, const std::s
 }
 
 PaintDef::~PaintDef()
-{
-}
+= default;
 
 PaintDef::PaintDef( PaintDef const &other )
 {

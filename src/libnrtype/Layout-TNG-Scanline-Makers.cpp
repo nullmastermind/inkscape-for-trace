@@ -37,8 +37,7 @@ Layout::InfiniteScanlineMaker::InfiniteScanlineMaker(double initial_x, double in
 }
 
 Layout::InfiniteScanlineMaker::~InfiniteScanlineMaker()
-{
-}
+= default;
 
 std::vector<Layout::ScanlineMaker::ScanRun> Layout::InfiniteScanlineMaker::makeScanline(Layout::FontMetrics const &line_height)
 {

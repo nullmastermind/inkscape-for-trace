@@ -42,8 +42,7 @@ ZoomTool::ZoomTool()
 {
 }
 
-ZoomTool::~ZoomTool() {
-}
+ZoomTool::~ZoomTool() = default;
 
 void ZoomTool::finish() {
 	this->enableGrDrag(false);

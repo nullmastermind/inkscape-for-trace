@@ -37,9 +37,7 @@ StringInputStream::StringInputStream(Glib::ustring &sourceString)
  *
  */ 
 StringInputStream::~StringInputStream()
-{
-
-}
+= default;
 
 /**
  * Returns the number of bytes that can be read (or skipped over) from
@@ -82,15 +80,13 @@ int StringInputStream::get()
  *
  */ 
 StringOutputStream::StringOutputStream()
-{
-}
+= default;
 
 /**
  *
  */ 
 StringOutputStream::~StringOutputStream()
-{
-}
+= default;
 
 /**
  * Closes this output stream and releases any system resources

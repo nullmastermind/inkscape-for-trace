@@ -67,8 +67,7 @@ SPGroup::SPGroup() : SPLPEItem(),
 {
 }
 
-SPGroup::~SPGroup() {
-}
+SPGroup::~SPGroup() = default;
 
 void SPGroup::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:groupmode" );

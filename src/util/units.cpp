@@ -129,7 +129,7 @@ public:
     typedef Glib::Markup::ParseContext Ctx;
 
     UnitParser(UnitTable *table);
-    ~UnitParser() override {}
+    ~UnitParser() override = default;
 
 protected:
     void on_start_element(Ctx &ctx, Glib::ustring const &name, AttrMap const &attrs) override;

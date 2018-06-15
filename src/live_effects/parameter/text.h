@@ -32,7 +32,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const Glib::ustring default_value = "");
-    ~TextParam() override {}
+    ~TextParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
 

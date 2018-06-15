@@ -20,15 +20,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterComponentTransfer::FilterComponentTransfer()
-{
-}
+= default;
 
 FilterPrimitive * FilterComponentTransfer::create() {
     return new FilterComponentTransfer();
 }
 
 FilterComponentTransfer::~FilterComponentTransfer()
-{}
+= default;
 
 struct UnmultiplyAlpha {
     guint32 operator()(guint32 in) {

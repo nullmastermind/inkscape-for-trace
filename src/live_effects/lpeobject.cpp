@@ -39,8 +39,7 @@ LivePathEffectObject::LivePathEffectObject()
 #endif
 }
 
-LivePathEffectObject::~LivePathEffectObject() {
-}
+LivePathEffectObject::~LivePathEffectObject() = default;
 
 /**
  * Virtual build: set livepatheffect attributes from its associated XML node.

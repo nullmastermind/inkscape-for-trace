@@ -27,7 +27,7 @@ struct PathDescr
 {
   PathDescr() : flags(0), associated(-1), tSt(0), tEn(1) {}
   PathDescr(int f) : flags(f), associated(-1), tSt(0), tEn(1) {}
-  virtual ~PathDescr() {}
+  virtual ~PathDescr() = default;
 
   int getType() const { return flags & descr_type_mask; }
   void setType(int t) {

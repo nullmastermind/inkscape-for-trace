@@ -40,7 +40,7 @@ FilterPrimitive * FilterDiffuseLighting::create() {
 }
 
 FilterDiffuseLighting::~FilterDiffuseLighting()
-{}
+= default;
 
 struct DiffuseLight : public SurfaceSynth {
     DiffuseLight(cairo_surface_t *bumpmap, double scale, double kd)

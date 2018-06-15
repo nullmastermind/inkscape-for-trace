@@ -21,8 +21,7 @@
 SPPolyLine::SPPolyLine() : SPShape() {
 }
 
-SPPolyLine::~SPPolyLine() {
-}
+SPPolyLine::~SPPolyLine() = default;
 
 void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);

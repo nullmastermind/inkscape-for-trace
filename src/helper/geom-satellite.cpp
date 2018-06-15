@@ -24,7 +24,7 @@
 #endif
 
 ///@brief Satellite a per node holder of data.
-Satellite::Satellite() {}
+Satellite::Satellite() = default;
 
 
 Satellite::Satellite(SatelliteType satellite_type)
@@ -38,7 +38,7 @@ Satellite::Satellite(SatelliteType satellite_type)
       steps(0)
 {}
 
-Satellite::~Satellite() {}
+Satellite::~Satellite() = default;
 
 ///Calculate the time in curve_in with a size of A
 //TODO: find a better place to it

@@ -9,8 +9,7 @@
 SPFlowdiv::SPFlowdiv() : SPItem() {
 }
 
-SPFlowdiv::~SPFlowdiv() {
-}
+SPFlowdiv::~SPFlowdiv() = default;
 
 void SPFlowdiv::release() {
 	SPItem::release();
@@ -137,8 +136,7 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
 SPFlowtspan::SPFlowtspan() : SPItem() {
 }
 
-SPFlowtspan::~SPFlowtspan() {
-}
+SPFlowtspan::~SPFlowtspan() = default;
 
 void SPFlowtspan::release() {
 	SPItem::release();
@@ -259,8 +257,7 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
 SPFlowpara::SPFlowpara() : SPItem() {
 }
 
-SPFlowpara::~SPFlowpara() {
-}
+SPFlowpara::~SPFlowpara() = default;
 
 void SPFlowpara::release() {
 	SPItem::release();
@@ -384,8 +381,7 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
 SPFlowline::SPFlowline() : SPObject() {
 }
 
-SPFlowline::~SPFlowline() {
-}
+SPFlowline::~SPFlowline() = default;
 
 void SPFlowline::release() {
 	SPObject::release();
@@ -421,8 +417,7 @@ Inkscape::XML::Node *SPFlowline::write(Inkscape::XML::Document *xml_doc, Inkscap
 SPFlowregionbreak::SPFlowregionbreak() : SPObject() {
 }
 
-SPFlowregionbreak::~SPFlowregionbreak() {
-}
+SPFlowregionbreak::~SPFlowregionbreak() = default;
 
 void SPFlowregionbreak::release() {
 	SPObject::release();

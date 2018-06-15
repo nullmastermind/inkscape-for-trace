@@ -32,8 +32,7 @@ Box3DSide::Box3DSide() : SPPolygon() {
     this->front_or_rear = Box3D::FRONT;
 }
 
-Box3DSide::~Box3DSide() {
-}
+Box3DSide::~Box3DSide() = default;
 
 void Box3DSide::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPPolygon::build(document, repr);

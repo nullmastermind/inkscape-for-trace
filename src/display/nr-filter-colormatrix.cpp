@@ -22,15 +22,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterColorMatrix::FilterColorMatrix()
-{
-}
+= default;
 
 FilterPrimitive * FilterColorMatrix::create() {
     return new FilterColorMatrix();
 }
 
 FilterColorMatrix::~FilterColorMatrix()
-{}
+= default;
 
 FilterColorMatrix::ColorMatrixMatrix::ColorMatrixMatrix(std::vector<double> const &values) {
     unsigned limit = std::min(static_cast<size_t>(20), values.size());

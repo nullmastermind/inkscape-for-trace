@@ -41,49 +41,49 @@
 class RectKnotHolder : public KnotHolder {
 public:
     RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~RectKnotHolder() override {};
+    ~RectKnotHolder() override = default;;
 };
 
 class Box3DKnotHolder : public KnotHolder {
 public:
     Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~Box3DKnotHolder() override {};
+    ~Box3DKnotHolder() override = default;;
 };
 
 class ArcKnotHolder : public KnotHolder {
 public:
     ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~ArcKnotHolder() override {};
+    ~ArcKnotHolder() override = default;;
 };
 
 class StarKnotHolder : public KnotHolder {
 public:
     StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~StarKnotHolder() override {};
+    ~StarKnotHolder() override = default;;
 };
 
 class SpiralKnotHolder : public KnotHolder {
 public:
     SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~SpiralKnotHolder() override {};
+    ~SpiralKnotHolder() override = default;;
 };
 
 class OffsetKnotHolder : public KnotHolder {
 public:
     OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~OffsetKnotHolder() override {};
+    ~OffsetKnotHolder() override = default;;
 };
 
 class FlowtextKnotHolder : public KnotHolder {
 public:
     FlowtextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~FlowtextKnotHolder() override {};
+    ~FlowtextKnotHolder() override = default;;
 };
 
 class MiscKnotHolder : public KnotHolder {
 public:
     MiscKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
-    ~MiscKnotHolder() override {};
+    ~MiscKnotHolder() override = default;;
 };
 
 namespace {

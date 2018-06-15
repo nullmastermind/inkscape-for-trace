@@ -215,8 +215,7 @@ ColorProfile::ColorProfile() : SPObject() {
     this->rendering_intent = Inkscape::RENDERING_INTENT_UNKNOWN;
 }
 
-ColorProfile::~ColorProfile() {
-}
+ColorProfile::~ColorProfile() = default;
 
 bool ColorProfile::operator<(ColorProfile const &other) const {
     gchar *a_name_casefold = g_utf8_casefold(this->name, -1 );
@@ -1211,8 +1210,7 @@ MemProfile::MemProfile() :
 }
 
 MemProfile::~MemProfile()
-{
-}
+= default;
 
 static std::vector<MemProfile> perMonitorProfiles;
 

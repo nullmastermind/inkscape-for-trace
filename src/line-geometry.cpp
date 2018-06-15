@@ -38,22 +38,10 @@ Line::Line(Geom::Point const &start, Geom::Point const &vec, bool is_endpoint):
     d0 = Geom::dot(normal, pt);
 }
 
-Line::Line(Line const &line):
-    pt(line.pt),
-    v_dir(line.v_dir),
-    normal(line.normal),
-    d0(line.d0)
-{
-}
+Line::Line(Line const &line)
+= default;
 
-Line &Line::operator=(Line const &line) {
-    pt = line.pt;
-    v_dir = line.v_dir;
-    normal = line.normal;
-    d0 = line.d0;
-
-    return *this;
-}
+Line &Line::operator=(Line const &line) = default;
 
 boost::optional<Geom::Point> Line::intersect(Line const &line) {
     Geom::Coord denom = Geom::dot(v_dir, line.normal);

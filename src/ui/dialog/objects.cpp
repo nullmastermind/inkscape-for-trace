@@ -213,7 +213,7 @@ public:
         add(_colClipMask);
         //add(_colInsertOrder);
     }
-    ~ModelColumns() override {}
+    ~ModelColumns() override = default;
 
     Gtk::TreeModelColumn<SPItem*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;

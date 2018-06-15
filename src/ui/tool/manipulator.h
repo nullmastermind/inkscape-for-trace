@@ -36,7 +36,7 @@ public:
     Manipulator(SPDesktop *d)
         : _desktop(d)
     {}
-    virtual ~Manipulator() {}
+    virtual ~Manipulator() = default;
     
     /// Handle input event. Returns true if handled.
     virtual bool event(Inkscape::UI::Tools::ToolBase *, GdkEvent *)=0;

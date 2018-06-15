@@ -24,8 +24,7 @@ FloatLigne::FloatLigne()
 
 
 FloatLigne::~FloatLigne()
-{
-}
+= default;
 
 /// Reset the line to  empty (boundaries and runs).
 void FloatLigne::Reset()

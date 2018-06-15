@@ -24,7 +24,7 @@ namespace Widget {
 class ClipMaskIcon : public Gtk::CellRendererPixbuf {
 public:
     ClipMaskIcon();
-    ~ClipMaskIcon() override {};
+    ~ClipMaskIcon() override = default;;
 
     Glib::PropertyProxy<int> property_active() { return _property_active.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();

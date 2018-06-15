@@ -15,8 +15,7 @@
 SPDesc::SPDesc() : SPObject() {
 }
 
-SPDesc::~SPDesc() {
-}
+SPDesc::~SPDesc() = default;
 
 /**
  * Writes it's settings to an incoming repr object, if any.

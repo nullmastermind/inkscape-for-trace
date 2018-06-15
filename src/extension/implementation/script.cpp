@@ -164,8 +164,7 @@ Script::Script()
  *   \brief     Destructor
  */
 Script::~Script()
-{
-}
+= default;
 
 
 

@@ -73,8 +73,7 @@ private:
 
 class ColorSelectorFactory {
 public:
-    virtual ~ColorSelectorFactory() {
-    }
+    virtual ~ColorSelectorFactory() = default;
 
     virtual Gtk::Widget* createWidget(SelectedColor &color) const = 0;
     virtual Glib::ustring modeName() const = 0;

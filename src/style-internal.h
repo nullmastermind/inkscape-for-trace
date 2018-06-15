@@ -136,7 +136,7 @@ public:
     {}
 
     virtual ~SPIBase()
-    {}
+    = default;
 
     virtual void read( gchar const *str ) = 0;
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
@@ -195,16 +195,7 @@ public:
     }
 
     // Explicit assignment operator required due to templates.
-    SPIBase& operator=(const SPIBase& rhs) {
-        name        = rhs.name;
-        inherits    = rhs.inherits;
-        set         = rhs.set;
-        important   = rhs.important;
-        inherit     = rhs.inherit;
-        style_src   = rhs.style_src;
-        style       = rhs.style;
-        return *this;
-    }
+    SPIBase& operator=(const SPIBase& rhs) = default;
 
     // Check apples being compared to apples
     virtual bool operator==(const SPIBase& rhs) {
@@ -245,7 +236,7 @@ public:
           value_default(value_default)
     {}
 
-    ~SPIFloat() override {}
+    ~SPIFloat() override = default;
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
@@ -258,12 +249,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIFloat& operator=(const SPIFloat& rhs) {
-        SPIBase::operator=(rhs);
-        value         = rhs.value;
-        value_default = rhs.value_default;
-        return *this;
-    }
+    SPIFloat& operator=(const SPIFloat& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -326,7 +312,7 @@ public:
     {}
 
     ~SPIScale24() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -340,12 +326,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIScale24& operator=(const SPIScale24& rhs) {
-        SPIBase::operator=(rhs);
-        value         = rhs.value;
-        value_default = rhs.value_default;
-        return *this;
-    }
+    SPIScale24& operator=(const SPIScale24& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -399,7 +380,7 @@ public:
     {}
 
     ~SPILength() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -414,14 +395,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPILength& operator=(const SPILength& rhs) {
-        SPIBase::operator=(rhs);
-        unit          = rhs.unit;
-        value         = rhs.value;
-        computed      = rhs.computed;
-        value_default = rhs.value_default;
-        return *this;
-    }
+    SPILength& operator=(const SPILength& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -456,7 +430,7 @@ public:
     {}
 
     ~SPILengthOrNormal() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -470,11 +444,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPILengthOrNormal& operator=(const SPILengthOrNormal& rhs) {
-        SPILength::operator=(rhs);
-        normal = rhs.normal;
-        return *this;
-    }
+    SPILengthOrNormal& operator=(const SPILengthOrNormal& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -504,7 +474,7 @@ public:
     {}
 
     ~SPIFontVariationSettings() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -574,7 +544,7 @@ public:
     {}
 
     ~SPIEnum() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -629,7 +599,7 @@ public:
     {}
 
     ~SPIEnumBits() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -656,7 +626,7 @@ public:
     {}
 
     ~SPILigatures() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -680,7 +650,7 @@ public:
     {}
 
     ~SPINumeric() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -704,7 +674,7 @@ public:
     {}
 
     ~SPIEastAsian() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -782,7 +752,7 @@ public:
     }
 
     ~SPIColor() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1017,7 +987,7 @@ public:
     {}  // Only one instance of SPIDashArray
 
     ~SPIDashArray() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1031,11 +1001,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIDashArray& operator=(const SPIDashArray& rhs) {
-        SPIBase::operator=(rhs);
-        values = rhs.values;
-        return *this;
-    }
+    SPIDashArray& operator=(const SPIDashArray& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1067,11 +1033,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIFilter& operator=(const SPIFilter& rhs) {
-        SPIBase::operator=(rhs);
-        href = rhs.href;
-        return *this;
-    }
+    SPIFilter& operator=(const SPIFilter& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1102,7 +1064,7 @@ public:
     }
 
     ~SPIFontSize() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1117,15 +1079,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIFontSize& operator=(const SPIFontSize& rhs) {
-        SPIBase::operator=(rhs);
-        type      = rhs.type;
-        unit      = rhs.unit;
-        literal   = rhs.literal;
-        value     = rhs.value;
-        computed  = rhs.computed;
-        return *this;
-    }
+    SPIFontSize& operator=(const SPIFontSize& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1159,7 +1113,7 @@ public:
     {}
 
     ~SPIFont() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1175,10 +1129,7 @@ public:
     void merge(   const SPIBase* const /*parent*/ ) override
     {}
 
-    SPIFont& operator=(const SPIFont& rhs) {
-        SPIBase::operator=(rhs);
-        return *this;
-    }
+    SPIFont& operator=(const SPIFont& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1204,7 +1155,7 @@ public:
     }
 
     ~SPIBaselineShift() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1219,15 +1170,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPIBaselineShift& operator=(const SPIBaselineShift& rhs) {
-        SPIBase::operator=(rhs);
-        type      = rhs.type;
-        unit      = rhs.unit;
-        literal   = rhs.literal;
-        value     = rhs.value;
-        computed  = rhs.computed;
-        return *this;
-    }
+    SPIBaselineShift& operator=(const SPIBaselineShift& rhs) = default;
 
     // This is not used but we have it for completeness, it has not been tested.
     bool operator==(const SPIBase& rhs) override;
@@ -1261,7 +1204,7 @@ public:
     }
 
     ~SPITextDecorationLine() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1275,14 +1218,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPITextDecorationLine& operator=(const SPITextDecorationLine& rhs) {
-        SPIBase::operator=(rhs);
-        underline     = rhs.underline;
-        overline      = rhs.overline;
-        line_through  = rhs.line_through;
-        blink         = rhs.blink;
-        return *this;
-    }
+    SPITextDecorationLine& operator=(const SPITextDecorationLine& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1309,7 +1245,7 @@ public:
     }
 
     ~SPITextDecorationStyle() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
@@ -1323,15 +1259,7 @@ public:
     void cascade( const SPIBase* const parent ) override;
     void merge(   const SPIBase* const parent ) override;
 
-    SPITextDecorationStyle& operator=(const SPITextDecorationStyle& rhs) {
-        SPIBase::operator=(rhs);
-        solid     = rhs.solid;
-        isdouble  = rhs.isdouble;
-        dotted    = rhs.dotted;
-        dashed    = rhs.dashed;
-        wavy      = rhs.wavy;
-        return *this;
-    }
+    SPITextDecorationStyle& operator=(const SPITextDecorationStyle& rhs) = default;
 
     bool operator==(const SPIBase& rhs) override;
     bool operator!=(const SPIBase& rhs) override {
@@ -1366,7 +1294,7 @@ public:
     {}
 
     ~SPITextDecoration() override
-    {}
+    = default;
 
     void read( gchar const *str ) override;
     const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,

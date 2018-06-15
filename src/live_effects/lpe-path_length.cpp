@@ -33,9 +33,7 @@ LPEPathLength::LPEPathLength(LivePathEffectObject *lpeobject) :
 }
 
 LPEPathLength::~LPEPathLength()
-{
-
-}
+= default;
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPEPathLength::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)

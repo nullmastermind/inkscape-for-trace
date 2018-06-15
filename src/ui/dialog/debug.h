@@ -27,7 +27,7 @@ namespace Dialog {
 class DebugDialog
 {
 public:
-    DebugDialog() {};
+    DebugDialog() = default;;
     /**
      * Factory method
      */
@@ -36,7 +36,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~DebugDialog() {};
+    virtual ~DebugDialog() = default;;
 
 
     /**

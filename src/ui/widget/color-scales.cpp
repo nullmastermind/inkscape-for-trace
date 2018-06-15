@@ -729,7 +729,7 @@ ColorScalesFactory::ColorScalesFactory(SPColorScalesMode submode)
 {
 }
 
-ColorScalesFactory::~ColorScalesFactory() {}
+ColorScalesFactory::~ColorScalesFactory() = default;
 
 Gtk::Widget *ColorScalesFactory::createWidget(Inkscape::UI::SelectedColor &color) const
 {

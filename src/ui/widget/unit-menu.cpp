@@ -26,8 +26,7 @@ UnitMenu::UnitMenu() : _type(UNIT_TYPE_NONE)
     set_active(0);
 }
 
-UnitMenu::~UnitMenu() {
-}
+UnitMenu::~UnitMenu() = default;
 
 bool UnitMenu::setUnitType(UnitType unit_type) 
 {

@@ -34,7 +34,7 @@ class SPMarkerView {
 
 public:
 
-    SPMarkerView() {};
+    SPMarkerView() = default;;
     ~SPMarkerView() {
         for (unsigned int i = 0; i < items.size(); ++i) {
             delete items[i];
@@ -63,8 +63,7 @@ SPMarker::SPMarker() : SPGroup(), SPViewBox(),
  * not set and initializes the marker's c2p identity matrix.
  */
 
-SPMarker::~SPMarker() {
-}
+SPMarker::~SPMarker() = default;
 
 /**
  * Virtual build callback for SPMarker.

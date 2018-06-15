@@ -33,8 +33,7 @@ SPFeSpotLight::SPFeSpotLight()
 {
 }
 
-SPFeSpotLight::~SPFeSpotLight() {
-}
+SPFeSpotLight::~SPFeSpotLight() = default;
 
 
 /**

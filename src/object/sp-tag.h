@@ -23,8 +23,8 @@ class SPTag;
 
 class SPTag : public SPObject {
 public:
-    SPTag() {}
-    ~SPTag() override {}
+    SPTag() = default;
+    ~SPTag() override = default;
 
     void build(SPDocument * doc, Inkscape::XML::Node *repr) override;
     //virtual void release();

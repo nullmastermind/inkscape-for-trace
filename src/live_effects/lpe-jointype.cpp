@@ -80,8 +80,7 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
 }
 
 LPEJoinType::~LPEJoinType()
-{
-}
+= default;
 
 //from LPEPowerStroke -- sets fill if stroke color because we will
 //be converting to a fill to make the new join.

@@ -24,9 +24,7 @@ PathEffect::PathEffect (Inkscape::XML::Node * in_repr, Implementation::Implement
 }
 
 PathEffect::~PathEffect (void)
-{
-
-}
+= default;
 
 void
 PathEffect::processPath (SPDocument * /*doc*/, Inkscape::XML::Node * /*path*/, Inkscape::XML::Node * /*def*/)

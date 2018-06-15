@@ -53,9 +53,9 @@ class Node;
 class NodeObserver {
 protected:
     /* the constructor is protected to prevent instantiation */
-    NodeObserver() {}
+    NodeObserver() = default;
 public:
-    virtual ~NodeObserver() {}
+    virtual ~NodeObserver() = default;
 
     // FIXME: somebody needs to learn what "pure virtual" means
 

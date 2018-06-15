@@ -311,8 +311,7 @@ SPFontFace::SPFontFace() : SPObject() {
     this->overline_thickness = 0;
 }
 
-SPFontFace::~SPFontFace() {
-}
+SPFontFace::~SPFontFace() = default;
 
 void SPFontFace::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);

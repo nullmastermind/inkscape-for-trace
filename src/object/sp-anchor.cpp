@@ -29,8 +29,7 @@ SPAnchor::SPAnchor() : SPGroup() {
     this->page = nullptr;
 }
 
-SPAnchor::~SPAnchor() {
-}
+SPAnchor::~SPAnchor() = default;
 
 void SPAnchor::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGroup::build(document, repr);

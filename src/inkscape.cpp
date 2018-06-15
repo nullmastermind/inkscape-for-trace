@@ -99,7 +99,7 @@ public:
     InkErrorHandler(bool useGui) : Inkscape::ErrorReporter(),
                                    _useGui(useGui)
     {}
-    ~InkErrorHandler() override {}
+    ~InkErrorHandler() override = default;
 
     void handleError( Glib::ustring const& primary, Glib::ustring const& secondary ) const override
     {

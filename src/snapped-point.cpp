@@ -117,8 +117,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p):
 }
 
 Inkscape::SnappedPoint::~SnappedPoint()
-{
-}
+= default;
 
 void Inkscape::SnappedPoint::getPointIfSnapped(Geom::Point &p) const
 {

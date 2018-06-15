@@ -134,7 +134,7 @@ public:
     {}
 
     virtual ~AttrWidget()
-    {}
+    = default;
 
     virtual Glib::ustring get_as_attribute() const = 0;
     virtual void set_from_attribute(SPObject*) = 0;

@@ -22,7 +22,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const gchar * default_message = "Default message");
-    ~MessageParam() override {}
+    ~MessageParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
     bool param_readSVGValue(const gchar * strvalue) override;

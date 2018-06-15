@@ -69,8 +69,7 @@ LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject) :
 }
 
 LPEPts2Ellipse::~LPEPts2Ellipse()
-{
-}
+= default;
 
 // helper function, transforms a given value into range [0, 2pi]
 inline double

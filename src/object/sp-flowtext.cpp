@@ -39,8 +39,7 @@ SPFlowtext::SPFlowtext() : SPItem(),
 {
 }
 
-SPFlowtext::~SPFlowtext() {
-}
+SPFlowtext::~SPFlowtext() = default;
 
 void SPFlowtext::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) {
 	SPItem::child_added(child, ref);

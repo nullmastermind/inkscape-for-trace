@@ -28,7 +28,7 @@ namespace Inkscape {
 
 class ErrorReporter {
 public:
-    virtual ~ErrorReporter() {}
+    virtual ~ErrorReporter() = default;
     virtual void handleError(Glib::ustring const& primary, Glib::ustring const& secondary ) const = 0;
 };
 
@@ -121,9 +121,9 @@ public:
     class Entry {
     friend class Preferences; // Preferences class has to access _value
     public:
-        ~Entry() {}
+        ~Entry() = default;
         Entry() : _pref_path(""), _value(nullptr) {} // needed to enable use in maps
-        Entry(Entry const &other) : _pref_path(other._pref_path), _value(other._value) {}
+        Entry(Entry const &other) = default;
 
         /**
          * Check whether the received entry is valid.

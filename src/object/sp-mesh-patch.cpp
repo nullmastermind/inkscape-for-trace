@@ -61,8 +61,7 @@ SPMeshpatch::SPMeshpatch() : SPObject() {
     this->tensor_string = nullptr;
 }
 
-SPMeshpatch::~SPMeshpatch() {
-}
+SPMeshpatch::~SPMeshpatch() = default;
 
 void SPMeshpatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObject::build(doc, repr);

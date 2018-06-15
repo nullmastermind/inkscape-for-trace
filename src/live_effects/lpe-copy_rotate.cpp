@@ -104,9 +104,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
 }
 
 LPECopyRotate::~LPECopyRotate()
-{
-
-}
+= default;
 
 void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)

@@ -18,8 +18,7 @@ SPScript::SPScript() : SPObject() {
 	this->xlinkhref = nullptr;
 }
 
-SPScript::~SPScript() {
-}
+SPScript::~SPScript() = default;
 
 void SPScript::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);

@@ -29,7 +29,7 @@ FilterPrimitive * FilterOffset::create() {
 }
 
 FilterOffset::~FilterOffset()
-{}
+= default;
 
 void FilterOffset::render_cairo(FilterSlot &slot)
 {

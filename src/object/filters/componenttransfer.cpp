@@ -28,8 +28,7 @@ SPFeComponentTransfer::SPFeComponentTransfer()
 {
 }
 
-SPFeComponentTransfer::~SPFeComponentTransfer() {
-}
+SPFeComponentTransfer::~SPFeComponentTransfer() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeComponentTransfer variables.  For this to get called,

@@ -41,9 +41,7 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject) :
 }
 
 LPEInterpolate::~LPEInterpolate()
-{
-
-}
+= default;
 
 /*
  * interpolate path_in[0] to path_in[1]

@@ -34,9 +34,7 @@ LPEEnvelope::LPEEnvelope(LivePathEffectObject *lpeobject) :
 }
 
 LPEEnvelope::~LPEEnvelope()
-{
-
-}
+= default;
 
 void
 LPEEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)

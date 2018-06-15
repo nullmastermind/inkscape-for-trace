@@ -37,9 +37,7 @@ VectorParam::VectorParam( const Glib::ustring& label, const Glib::ustring& tip,
 }
 
 VectorParam::~VectorParam()
-{
-
-}
+= default;
 
 void
 VectorParam::param_set_default()
@@ -172,7 +170,7 @@ VectorParam::set_oncanvas_color(guint32 color)
 class VectorParamKnotHolderEntity_Origin : public KnotHolderEntity {
 public:
     VectorParamKnotHolderEntity_Origin(VectorParam *p) : param(p) { }
-    ~VectorParamKnotHolderEntity_Origin() override {}
+    ~VectorParamKnotHolderEntity_Origin() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) override {
         Geom::Point const s = snap_knot_position(p, state);
@@ -193,7 +191,7 @@ private:
 class VectorParamKnotHolderEntity_Vector : public KnotHolderEntity {
 public:
     VectorParamKnotHolderEntity_Vector(VectorParam *p) : param(p) { }
-    ~VectorParamKnotHolderEntity_Vector() override {}
+    ~VectorParamKnotHolderEntity_Vector() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
         Geom::Point const s = p - param->origin;

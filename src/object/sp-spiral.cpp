@@ -38,8 +38,7 @@ SPSpiral::SPSpiral()
 {
 }
 
-SPSpiral::~SPSpiral() {
-}
+SPSpiral::~SPSpiral() = default;
 
 void SPSpiral::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);

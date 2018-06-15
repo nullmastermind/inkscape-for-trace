@@ -257,8 +257,7 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
     this->vector.stops.clear();
 }
 
-SPGradient::~SPGradient() {
-}
+SPGradient::~SPGradient() = default;
 
 /**
  * Virtual build: set gradient attributes from its associated repr.

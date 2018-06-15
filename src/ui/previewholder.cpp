@@ -65,8 +65,7 @@ PreviewHolder::PreviewHolder() :
 }
 
 PreviewHolder::~PreviewHolder()
-{
-}
+= default;
 
 bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
 {

@@ -36,8 +36,7 @@ SPString::SPString() : SPObject() {
     // style = nullptr;
 }
 
-SPString::~SPString() {
-}
+SPString::~SPString() = default;
 
 void SPString::build(SPDocument *doc, Inkscape::XML::Node *repr) {
 

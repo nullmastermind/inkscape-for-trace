@@ -21,7 +21,7 @@
 // OpenType substitution
 class OTSubstitution {
 public:
-    OTSubstitution() {};
+    OTSubstitution() = default;;
     Glib::ustring before;
     Glib::ustring input;
     Glib::ustring after;

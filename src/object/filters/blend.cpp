@@ -32,8 +32,7 @@ SPFeBlend::SPFeBlend()
 {
 }
 
-SPFeBlend::~SPFeBlend() {
-}
+SPFeBlend::~SPFeBlend() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeBlend variables.  For this to get called,

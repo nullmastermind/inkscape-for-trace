@@ -32,8 +32,8 @@ struct Event;
  */
 class UndoStackObserver : public GC::Managed<> {
 public:
-	UndoStackObserver() { }
-	virtual ~UndoStackObserver() { }
+	UndoStackObserver() = default;
+	virtual ~UndoStackObserver() = default;
 
 	/**
 	 * Triggered when the user issues an undo command.

@@ -82,8 +82,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
 }
 
 LPETransform2Pts::~LPETransform2Pts()
-{
-}
+= default;
 
 void
 LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)

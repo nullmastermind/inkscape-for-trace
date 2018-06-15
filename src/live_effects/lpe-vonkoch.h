@@ -26,7 +26,7 @@ public:
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
 		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
-    ~VonKochPathParam() override{}
+    ~VonKochPathParam() override= default;
     void param_setup_nodepath(Inkscape::NodePath::Path *np) override;  
   };
 
@@ -39,7 +39,7 @@ public:
 		       Inkscape::UI::Widget::Registry* wr,
 		       Effect* effect,
 		       const gchar * default_value = "M0,0 L1,1"):PathParam(label,tip,key,wr,effect,default_value){}
-    ~VonKochRefPathParam() override{}
+    ~VonKochRefPathParam() override= default;
     void param_setup_nodepath(Inkscape::NodePath::Path *np) override;  
     bool param_readSVGValue(const gchar * strvalue) override;  
   };

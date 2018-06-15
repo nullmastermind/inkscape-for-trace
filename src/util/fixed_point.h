@@ -24,7 +24,7 @@ namespace Util {
 template <typename T, unsigned int precision>
 class FixedPoint {
 public:
-    FixedPoint() {}
+    FixedPoint() = default;
     FixedPoint(const FixedPoint& value) : v(value.v) {}
     FixedPoint(char value) : v(static_cast<T>(value)<<precision) {}
     FixedPoint(unsigned char value) : v(static_cast<T>(value)<<precision) {}

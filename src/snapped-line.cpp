@@ -45,8 +45,7 @@ Inkscape::SnappedLineSegment::SnappedLineSegment()
 
 
 Inkscape::SnappedLineSegment::~SnappedLineSegment()
-{
-}
+= default;
 
 Inkscape::SnappedPoint Inkscape::SnappedLineSegment::intersect(SnappedLineSegment const &line) const
 {
@@ -123,8 +122,7 @@ Inkscape::SnappedLine::SnappedLine()
 }
 
 Inkscape::SnappedLine::~SnappedLine()
-{
-}
+= default;
 
 Inkscape::SnappedPoint Inkscape::SnappedLine::intersect(SnappedLine const &line) const
 {

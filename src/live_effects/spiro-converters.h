@@ -8,8 +8,8 @@ namespace Spiro {
 
 class ConverterBase {
 public:
-    ConverterBase() {};
-    virtual ~ConverterBase() {};
+    ConverterBase() = default;;
+    virtual ~ConverterBase() = default;;
 
     virtual void moveto(double x, double y) = 0;
     virtual void lineto(double x, double y, bool close_last) = 0;

@@ -41,7 +41,7 @@ FilterPrimitive * FilterSpecularLighting::create() {
 }
 
 FilterSpecularLighting::~FilterSpecularLighting()
-{}
+= default;
 
 struct SpecularLight : public SurfaceSynth {
     SpecularLight(cairo_surface_t *bumpmap, double scale, double specular_constant,

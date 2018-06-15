@@ -70,9 +70,9 @@ public:
 class Implementation {
 public:
     // ----- Constructor / destructor -----
-    Implementation() {}
+    Implementation() = default;
     
-    virtual ~Implementation() {}
+    virtual ~Implementation() = default;
 
     // ----- Basic functions for all Extension -----
     virtual bool load(Inkscape::Extension::Extension * /*module*/) { return true; }

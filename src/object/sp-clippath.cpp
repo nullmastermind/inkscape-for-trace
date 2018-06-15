@@ -48,8 +48,7 @@ SPClipPath::SPClipPath() : SPObjectGroup() {
     this->display = nullptr;
 }
 
-SPClipPath::~SPClipPath() {
-}
+SPClipPath::~SPClipPath() = default;
 
 void SPClipPath::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObjectGroup::build(doc, repr);

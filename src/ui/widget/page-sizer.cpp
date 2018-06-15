@@ -464,8 +464,7 @@ PageSizer::PageSizer(Registry & _wr)
  * Destructor
  */
 PageSizer::~PageSizer()
-{
-}
+= default;
 
 
 

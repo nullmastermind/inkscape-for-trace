@@ -59,7 +59,7 @@ public:
      *
      */
     virtual ~TracingEngineResult()
-        { }
+        = default;
 
 
     /**
@@ -112,13 +112,13 @@ class TracingEngine
      *
      */
     TracingEngine()
-        {}
+        = default;
 
     /**
      *
      */
     virtual ~TracingEngine()
-        {}
+        = default;
 
     /**
      *  This is the working method of this interface, and all
@@ -177,7 +177,7 @@ public:
      *
      */
     ~Tracer()
-        {}
+        = default;
 
 
     /**

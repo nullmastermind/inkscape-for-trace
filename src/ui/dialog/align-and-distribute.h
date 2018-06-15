@@ -145,7 +145,7 @@ public :
 	   Gtk::Grid &parent,
            AlignAndDistribute &dialog);
 
-    virtual ~Action(){}
+    virtual ~Action()= default;
 
     AlignAndDistribute &_dialog;
 

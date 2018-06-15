@@ -69,8 +69,7 @@ LPETangentToCurve::LPETangentToCurve(LivePathEffectObject *lpeobject) :
 }
 
 LPETangentToCurve::~LPETangentToCurve()
-{
-}
+= default;
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPETangentToCurve::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)

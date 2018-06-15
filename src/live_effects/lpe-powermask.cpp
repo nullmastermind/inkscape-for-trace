@@ -46,7 +46,7 @@ LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     previous_color = background_color.get_value();
 }
 
-LPEPowerMask::~LPEPowerMask() {}
+LPEPowerMask::~LPEPowerMask() = default;
 
 void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){

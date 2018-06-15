@@ -67,7 +67,7 @@ private:
 class PowerStrokePointArrayParamKnotHolderEntity : public KnotHolderEntity {
 public:
     PowerStrokePointArrayParamKnotHolderEntity(PowerStrokePointArrayParam *p, unsigned int index);
-    ~PowerStrokePointArrayParamKnotHolderEntity() override {}
+    ~PowerStrokePointArrayParamKnotHolderEntity() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
     Geom::Point knot_get() const override;

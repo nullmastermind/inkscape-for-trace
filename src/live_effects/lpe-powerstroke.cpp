@@ -200,9 +200,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
 }
 
 LPEPowerStroke::~LPEPowerStroke()
-{
-
-}
+= default;
 void 
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {

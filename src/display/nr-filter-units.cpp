@@ -157,18 +157,7 @@ Geom::IntRect FilterUnits::get_pixblock_filterarea_paraller() const {
     return ir;
 }
 
-FilterUnits& FilterUnits::operator=(FilterUnits const &other) {
-    filterUnits = other.filterUnits;
-    primitiveUnits = other.primitiveUnits;
-    resolution_x = other.resolution_x;
-    resolution_y = other.resolution_y;
-    paraller_axis = other.paraller_axis;
-    automatic_resolution = other.automatic_resolution;
-    ctm = other.ctm;
-    item_bbox = other.item_bbox;
-    filter_area = other.filter_area;
-    return *this;
-}
+FilterUnits& FilterUnits::operator=(FilterUnits const &other) = default;
 
 } /* namespace Filters */
 } /* namespace Inkscape */

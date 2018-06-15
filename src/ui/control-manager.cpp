@@ -65,7 +65,7 @@ class ControlManagerImpl
 public:
     ControlManagerImpl(ControlManager &manager);
 
-    ~ControlManagerImpl() {}
+    ~ControlManagerImpl() = default;
 
     SPCanvasItem *createControl(SPCanvasGroup *parent, ControlType type);
 
@@ -92,7 +92,7 @@ private:
     {
     public:
         PrefListener(ControlManagerImpl &manager) : Inkscape::Preferences::Observer("/options/grabsize/value"), _mgr(manager) {}
-        ~PrefListener() override {}
+        ~PrefListener() override = default;
 
         void notify(Inkscape::Preferences::Entry const &val) override {
             int size = val.getIntLimited(3, 1, 7);
@@ -369,8 +369,7 @@ ControlManager::ControlManager() :
 }
 
 ControlManager::~ControlManager()
-{
-}
+= default;
 
 ControlManager &ControlManager::getManager()
 {

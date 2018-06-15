@@ -75,7 +75,7 @@ public:
         _observer(o),
         _filter(filter)
     {}
-    ~PrefNodeObserver() override {}
+    ~PrefNodeObserver() override = default;
     void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared) override;
 private:
     Observer &_observer;

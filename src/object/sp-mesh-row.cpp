@@ -58,8 +58,7 @@ SPMeshrow* SPMeshrow::getPrevMeshrow()
 SPMeshrow::SPMeshrow() : SPObject() {
 }
 
-SPMeshrow::~SPMeshrow() {
-}
+SPMeshrow::~SPMeshrow() = default;
 
 void SPMeshrow::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObject::build(doc, repr);

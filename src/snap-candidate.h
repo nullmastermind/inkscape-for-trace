@@ -28,7 +28,7 @@ namespace Inkscape {
 class SnapCandidatePoint
 {
 public:
-    SnapCandidatePoint() {}; // only needed / used for resizing() of a vector in seltrans.cpp; do not use uninitialized instances!
+    SnapCandidatePoint() = default;; // only needed / used for resizing() of a vector in seltrans.cpp; do not use uninitialized instances!
 
     SnapCandidatePoint(Geom::Point const &point, Inkscape::SnapSourceType const source, long const source_num, Inkscape::SnapTargetType const target, Geom::OptRect const &bbox)
         : _point(point),
@@ -113,7 +113,7 @@ class SnapCandidateItem
 public:
     SnapCandidateItem(SPItem* item, bool clip_or_mask, Geom::Affine additional_affine)
         : item(item), clip_or_mask(clip_or_mask), additional_affine(additional_affine) {}
-    ~SnapCandidateItem() {};
+    ~SnapCandidateItem() = default;;
 
     SPItem* item;        // An item that is to be considered for snapping to
     bool clip_or_mask;    // If true, then item refers to a clipping path or a mask
@@ -132,7 +132,7 @@ class SnapCandidatePath
 public:
     SnapCandidatePath(Geom::PathVector* path, SnapTargetType target, Geom::OptRect bbox, bool edited = false)
         : path_vector(path), target_type(target), target_bbox(bbox), currently_being_edited(edited) {};
-    ~SnapCandidatePath() {};
+    ~SnapCandidatePath() = default;;
 
     Geom::PathVector* path_vector;
     SnapTargetType target_type;

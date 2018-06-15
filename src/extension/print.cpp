@@ -25,7 +25,7 @@ Print::Print (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_i
 }
 
 Print::~Print ()
-{}
+= default;
 
 bool
 Print::check ()

@@ -30,7 +30,7 @@ namespace Dialog {
 class LivePathEffectAdd : public Gtk::Dialog {
 public:
     LivePathEffectAdd();
-    ~LivePathEffectAdd() override {}
+    ~LivePathEffectAdd() override = default;
 
     /**
      * Show the dialog
@@ -86,7 +86,7 @@ private:
             //add(desc);
             add(data);
         }
-        ~ModelColumns() override {}
+        ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<Glib::ustring> name;
         /**

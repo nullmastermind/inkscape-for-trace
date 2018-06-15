@@ -37,7 +37,7 @@ public:
         sorted = sort;
     };
 
-    ~EnumParam() override { };
+    ~EnumParam() override = default;;
 
     Gtk::Widget * param_newWidget() override {
         Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage ( 

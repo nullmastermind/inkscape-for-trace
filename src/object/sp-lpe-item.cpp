@@ -66,8 +66,7 @@ SPLPEItem::SPLPEItem()
 {
 }
 
-SPLPEItem::~SPLPEItem() {
-}
+SPLPEItem::~SPLPEItem() = default;
 
 void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:path-effect" );

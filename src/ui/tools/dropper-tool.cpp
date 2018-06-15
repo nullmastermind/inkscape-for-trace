@@ -78,8 +78,7 @@ DropperTool::DropperTool()
 {
 }
 
-DropperTool::~DropperTool() {
-}
+DropperTool::~DropperTool() = default;
 
 void DropperTool::setup() {
     ToolBase::setup();

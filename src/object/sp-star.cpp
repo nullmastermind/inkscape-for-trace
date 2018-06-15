@@ -43,8 +43,7 @@ SPStar::SPStar() : SPPolygon() ,
 	this->arg[0] = this->arg[1] = 0.0;
 }
 
-SPStar::~SPStar() {
-}
+SPStar::~SPStar() = default;
 
 void SPStar::build(SPDocument * document, Inkscape::XML::Node * repr) {
 	// CPPIFY: see header file

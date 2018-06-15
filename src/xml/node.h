@@ -77,8 +77,8 @@ enum NodeType {
  */
 class Node : public Inkscape::GC::Anchored {
 public:
-    Node() {}
-    ~Node() override {}
+    Node() = default;
+    ~Node() override = default;
 
     /**
      * @name Retrieve information about the node

@@ -108,7 +108,7 @@ public:
      *
      */
     virtual ~CieLab()
-        {}
+        = default;
 
     /**
      * Retrieve a CieLab value via index.
@@ -329,7 +329,7 @@ public:
 private:
 
     SioxImage()
-        {}
+        = default;
 
     /**
      * Assign values to that of another
@@ -395,7 +395,7 @@ public:
      *  Destructor
      */
     virtual ~SioxObserver()
-        { }
+        = default;
 
     /**
      *  Informs the observer how much has been completed.

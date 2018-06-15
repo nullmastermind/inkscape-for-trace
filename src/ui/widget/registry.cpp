@@ -23,7 +23,7 @@ namespace Widget {
 
 Registry::Registry() : _updating(false) {}
 
-Registry::~Registry() {}
+Registry::~Registry() = default;
 
 bool
 Registry::isUpdating()

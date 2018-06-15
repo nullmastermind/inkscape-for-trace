@@ -468,8 +468,7 @@ protected:
             add(shortcutid);
             add(user_set);
         }
-        ~ModelColumns() override {
-        }
+        ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<Glib::ustring> name;
         Gtk::TreeModelColumn<Glib::ustring> id;

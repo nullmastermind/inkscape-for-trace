@@ -179,8 +179,7 @@ InkscapePreferences::InkscapePreferences()
 }
 
 InkscapePreferences::~InkscapePreferences()
-{
-}
+= default;
 
 Gtk::TreeModel::iterator InkscapePreferences::AddPage(DialogPage& p, Glib::ustring title, int id)
 {

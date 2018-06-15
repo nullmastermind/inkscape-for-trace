@@ -25,14 +25,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterFlood::FilterFlood()
-{}
+= default;
 
 FilterPrimitive * FilterFlood::create() {
     return new FilterFlood();
 }
 
 FilterFlood::~FilterFlood()
-{}
+= default;
 
 void FilterFlood::render_cairo(FilterSlot &slot)
 {

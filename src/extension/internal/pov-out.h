@@ -139,13 +139,13 @@ private:
     {
     public:
         PovShapeInfo()
-            {}
+            = default;
         PovShapeInfo(const PovShapeInfo &other)
             { assign(other); }
         PovShapeInfo& operator=(const PovShapeInfo &other)
             { assign(other); return *this; }
         virtual ~PovShapeInfo()
-            {}
+            = default;
         String id;
         String color;
 

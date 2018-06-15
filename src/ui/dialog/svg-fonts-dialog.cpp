@@ -236,8 +236,7 @@ Gtk::HBox* SvgFontsDialog::AttrSpin(gchar* lbl){
 
 /*** SvgFontsDialog ***/
 
-GlyphComboBox::GlyphComboBox(){
-}
+GlyphComboBox::GlyphComboBox()= default;
 
 void GlyphComboBox::update(SPFont* spfont){
     if (!spfont) return;
@@ -1049,7 +1048,7 @@ SvgFontsDialog::SvgFontsDialog()
     _getContents()->show_all();
 }
 
-SvgFontsDialog::~SvgFontsDialog(){}
+SvgFontsDialog::~SvgFontsDialog()= default;
 
 } // namespace Dialog
 } // namespace UI

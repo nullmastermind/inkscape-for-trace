@@ -22,7 +22,7 @@ element.
 */
 class TextTagAttributes {
 public:
-    TextTagAttributes() {}
+    TextTagAttributes() = default;
     TextTagAttributes(Inkscape::Text::Layout::OptionalTextTagAttrs const &attrs)
         : attributes(attrs) {}
 

@@ -19,7 +19,7 @@ namespace Debug {
 
 class SysVHeap : public Heap {
 public:
-    SysVHeap() {}
+    SysVHeap() = default;
     
     int features() const override;
 

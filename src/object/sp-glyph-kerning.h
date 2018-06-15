@@ -35,7 +35,7 @@ private:
 class SPGlyphKerning : public SPObject {
 public:
     SPGlyphKerning();
-    ~SPGlyphKerning() override {}
+    ~SPGlyphKerning() override = default;
 
     // FIXME encapsulation
     UnicodeRange* u1;
@@ -53,11 +53,11 @@ protected:
 };
 
 class SPHkern : public SPGlyphKerning {
-    ~SPHkern() override {}
+    ~SPHkern() override = default;
 };
 
 class SPVkern : public SPGlyphKerning {
-    ~SPVkern() override {}
+    ~SPVkern() override = default;
 };
 
 #endif // !SEEN_SP_GLYPH_KERNING_H

@@ -28,8 +28,7 @@ HighlightPicker::HighlightPicker() :
 }
 
 HighlightPicker::~HighlightPicker()
-{
-}
+= default;
 
 void HighlightPicker::get_preferred_height_vfunc(Gtk::Widget& widget,
                                               int& min_h,

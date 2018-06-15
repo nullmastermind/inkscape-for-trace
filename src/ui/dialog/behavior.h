@@ -39,7 +39,7 @@ Behavior *create(Dialog &dialog)
 class Behavior {
 
 public:
-    virtual ~Behavior() { }
+    virtual ~Behavior() = default;
 
     /** Gtk::Dialog methods */
     virtual operator Gtk::Widget&() =0;

@@ -33,8 +33,7 @@ SPFePointLight::SPFePointLight()
     : SPObject(), x(0), x_set(FALSE), y(0), y_set(FALSE), z(0), z_set(FALSE) {
 }
 
-SPFePointLight::~SPFePointLight() {
-}
+SPFePointLight::~SPFePointLight() = default;
 
 
 /**

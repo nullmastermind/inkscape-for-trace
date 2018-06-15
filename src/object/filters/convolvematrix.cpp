@@ -44,8 +44,7 @@ SPFeConvolveMatrix::SPFeConvolveMatrix() : SPFilterPrimitive() {
     this->kernelMatrixIsSet = false;
 }
 
-SPFeConvolveMatrix::~SPFeConvolveMatrix() {
-}
+SPFeConvolveMatrix::~SPFeConvolveMatrix() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeConvolveMatrix variables.  For this to get called,

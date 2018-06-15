@@ -96,8 +96,7 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->connector_spacing = defaultConnSpacing;
 }
 
-SPNamedView::~SPNamedView() {
-}
+SPNamedView::~SPNamedView() = default;
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
     bool old_grid_settings_present = false;

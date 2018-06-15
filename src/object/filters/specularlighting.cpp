@@ -53,8 +53,7 @@ SPFeSpecularLighting::SPFeSpecularLighting() : SPFilterPrimitive() {
     this->lighting_color_set = FALSE;
 }
 
-SPFeSpecularLighting::~SPFeSpecularLighting() {
-}
+SPFeSpecularLighting::~SPFeSpecularLighting() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeSpecularLighting variables.  For this to get called,

@@ -29,8 +29,7 @@ SPFeColorMatrix::SPFeColorMatrix()
 {
 }
 
-SPFeColorMatrix::~SPFeColorMatrix() {
-}
+SPFeColorMatrix::~SPFeColorMatrix() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeColorMatrix variables.  For this to get called,

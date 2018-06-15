@@ -33,8 +33,7 @@ SPPaintServer::SPPaintServer() : SPObject() {
 	this->swatch = 0;
 }
 
-SPPaintServer::~SPPaintServer() {
-}
+SPPaintServer::~SPPaintServer() = default;
 
 bool SPPaintServer::isSwatch() const
 {

@@ -15,8 +15,7 @@ SPLinearGradient::SPLinearGradient() : SPGradient() {
     this->y2.unset(SVGLength::PERCENT, 0.0, 0.0);
 }
 
-SPLinearGradient::~SPLinearGradient() {
-}
+SPLinearGradient::~SPLinearGradient() = default;
 
 void SPLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGradient::build(document, repr);

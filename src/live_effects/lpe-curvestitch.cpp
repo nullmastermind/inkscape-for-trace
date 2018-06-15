@@ -60,9 +60,7 @@ LPECurveStitch::LPECurveStitch(LivePathEffectObject *lpeobject) :
 }
 
 LPECurveStitch::~LPECurveStitch()
-{
-
-}
+= default;
 
 Geom::PathVector
 LPECurveStitch::doEffect_path (Geom::PathVector const & path_in)

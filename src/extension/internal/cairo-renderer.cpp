@@ -101,7 +101,7 @@ namespace Extension {
 namespace Internal {
 
 CairoRenderer::CairoRenderer(void)
-{}
+= default;
 
 CairoRenderer::~CairoRenderer(void)
 {

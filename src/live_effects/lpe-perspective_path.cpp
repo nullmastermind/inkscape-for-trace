@@ -66,9 +66,7 @@ LPEPerspectivePath::LPEPerspectivePath(LivePathEffectObject *lpeobject) :
 }
 
 LPEPerspectivePath::~LPEPerspectivePath()
-{
-
-}
+= default;
 void
 LPEPerspectivePath::doOnApply(SPLPEItem const* lpeitem)
 {

@@ -55,7 +55,7 @@ class LayerPropertiesDialog : public Gtk::Dialog {
 
 protected:
     struct Strategy {
-        virtual ~Strategy() {}
+        virtual ~Strategy() = default;
         virtual void setup(LayerPropertiesDialog &)=0;
         virtual void perform(LayerPropertiesDialog &)=0;
     };
@@ -112,7 +112,7 @@ protected:
             add(_colLocked);
             add(_colLabel);
         }
-        ~ModelColumns() override {}
+        ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<SPObject*> _colObject;
         Gtk::TreeModelColumn<Glib::ustring> _colLabel;

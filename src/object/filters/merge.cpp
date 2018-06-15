@@ -23,8 +23,7 @@
 SPFeMerge::SPFeMerge() : SPFilterPrimitive() {
 }
 
-SPFeMerge::~SPFeMerge() {
-}
+SPFeMerge::~SPFeMerge() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeMerge variables.  For this to get called,

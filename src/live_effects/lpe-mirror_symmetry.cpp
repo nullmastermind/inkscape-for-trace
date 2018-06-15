@@ -84,8 +84,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
-{
-}
+= default;
 
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)

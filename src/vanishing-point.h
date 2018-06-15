@@ -45,12 +45,7 @@ public:
     VanishingPoint(Persp3D *persp, Proj::Axis axis) : my_counter(VanishingPoint::global_counter++), _persp(persp), _axis(axis) {}
     VanishingPoint(const VanishingPoint &other) : my_counter(VanishingPoint::global_counter++), _persp(other._persp), _axis(other._axis) {}
 
-    inline VanishingPoint &operator=(VanishingPoint const &rhs) {
-        _persp = rhs._persp;
-        _axis = rhs._axis;
-        my_counter = rhs.my_counter;
-        return *this;
-    }
+    inline VanishingPoint &operator=(VanishingPoint const &rhs) = default;
     inline bool operator==(VanishingPoint const &rhs) const {
         /* vanishing points coincide if they belong to the same perspective */
         return (_persp == rhs._persp && _axis == rhs._axis);

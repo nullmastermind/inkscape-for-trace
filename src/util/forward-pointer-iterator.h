@@ -37,7 +37,7 @@ public:
 
     typedef ForwardPointerIterator<BaseType const, Strategy> Self;
 
-    ForwardPointerIterator() : _p(NULL) {}
+    ForwardPointerIterator() = default;
     ForwardPointerIterator(pointer p) : _p(p) {}
 
     operator pointer() const { return _p; }

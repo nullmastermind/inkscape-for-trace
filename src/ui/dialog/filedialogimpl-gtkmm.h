@@ -68,7 +68,7 @@ class FileType
 {
     public:
     FileType(): name(), pattern(),extension(nullptr) {}
-    ~FileType() {}
+    ~FileType() = default;
     Glib::ustring name;
     Glib::ustring pattern;
     Inkscape::Extension::Extension *extension;
@@ -170,7 +170,7 @@ public:
      *
      */
     ~FileDialogBaseGtk() override
-        {}
+        = default;
 
 protected:
     void cleanup( bool showConfirmed );

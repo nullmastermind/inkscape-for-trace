@@ -188,7 +188,7 @@ ClipboardManagerImpl::ClipboardManagerImpl()
 }
 
 
-ClipboardManagerImpl::~ClipboardManagerImpl() {}
+ClipboardManagerImpl::~ClipboardManagerImpl() = default;
 
 
 /**
@@ -1533,8 +1533,8 @@ void ClipboardManagerImpl::_userWarn(SPDesktop *desktop, char const *msg)
 
 ClipboardManager *ClipboardManager::_instance = nullptr;
 
-ClipboardManager::ClipboardManager() {}
-ClipboardManager::~ClipboardManager() {}
+ClipboardManager::ClipboardManager() = default;
+ClipboardManager::~ClipboardManager() = default;
 ClipboardManager *ClipboardManager::get()
 {
     if ( _instance == nullptr ) {

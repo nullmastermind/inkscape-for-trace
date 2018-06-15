@@ -39,7 +39,7 @@ class Snapper
 public:
     //Snapper() {} //does not seem to be used somewhere
     Snapper(SnapManager *sm, ::Geom::Coord const t);
-    virtual ~Snapper() {}
+    virtual ~Snapper() = default;
 
     virtual Geom::Coord getSnapperTolerance() const = 0; //returns the tolerance of the snapper in screen pixels (i.e. independent of zoom)
     virtual bool getSnapperAlwaysSnap() const = 0; //if true, then the snapper will always snap, regardless of its tolerance

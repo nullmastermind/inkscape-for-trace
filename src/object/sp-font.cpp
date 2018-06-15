@@ -38,8 +38,7 @@ SPFont::SPFont() : SPObject() {
     this->vert_adv_y = FNT_UNITS_PER_EM;
 }
 
-SPFont::~SPFont() {
-}
+SPFont::~SPFont() = default;
 
 void SPFont::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPObject::build(document, repr);

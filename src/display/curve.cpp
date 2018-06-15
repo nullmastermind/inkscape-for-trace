@@ -73,8 +73,7 @@ SPCurve::new_from_rect(Geom::Rect const &rect, bool all_four_sides)
 }
 
 SPCurve::~SPCurve()
-{
-}
+= default;
 
 /* Methods */
 

@@ -49,8 +49,7 @@ SPFeDiffuseLighting::SPFeDiffuseLighting() : SPFilterPrimitive() {
     this->lighting_color_set = FALSE;
 }
 
-SPFeDiffuseLighting::~SPFeDiffuseLighting() {
-}
+SPFeDiffuseLighting::~SPFeDiffuseLighting() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeDiffuseLighting variables.  For this to get called,

@@ -70,9 +70,7 @@ LPEVonKoch::LPEVonKoch(LivePathEffectObject *lpeobject) :
 }
 
 LPEVonKoch::~LPEVonKoch()
-{
-
-}
+= default;
 
 Geom::PathVector
 LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)

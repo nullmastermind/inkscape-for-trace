@@ -23,15 +23,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterMorphology::FilterMorphology()
-{
-}
+= default;
 
 FilterPrimitive * FilterMorphology::create() {
     return new FilterMorphology();
 }
 
 FilterMorphology::~FilterMorphology()
-{}
+= default;
 
 enum MorphologyOp {
     ERODE,

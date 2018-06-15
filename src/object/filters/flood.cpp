@@ -32,8 +32,7 @@ SPFeFlood::SPFeFlood() : SPFilterPrimitive() {
     this->icc = nullptr;
 }
 
-SPFeFlood::~SPFeFlood() {
-}
+SPFeFlood::~SPFeFlood() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeFlood variables.  For this to get called,

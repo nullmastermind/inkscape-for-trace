@@ -237,7 +237,7 @@ public:
     {
         this->signal_changed().connect(sigc::mem_fun(this, &ComboWdg::changed));
     }
-    ~ComboWdg() override {}
+    ~ComboWdg() override = default;
     void changed (void);
 };
 

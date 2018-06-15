@@ -36,7 +36,7 @@ public:
 
     static PixelArtDialog &getInstance();
 
-    ~PixelArtDialog() override {};
+    ~PixelArtDialog() override = default;;
 };
 
 

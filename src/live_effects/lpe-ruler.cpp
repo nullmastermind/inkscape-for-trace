@@ -65,9 +65,7 @@ LPERuler::LPERuler(LivePathEffectObject *lpeobject) :
 }
 
 LPERuler::~LPERuler()
-{
-
-}
+= default;
 
 Geom::Point LPERuler::n_major;
 Geom::Point LPERuler::n_minor;

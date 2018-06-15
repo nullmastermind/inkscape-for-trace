@@ -85,7 +85,7 @@ public:
      * Destructor
      */
     ~FileDialogBase() override
-    {}
+    = default;
 
 protected:
     void cleanup( bool showConfirmed );

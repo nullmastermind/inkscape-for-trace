@@ -28,8 +28,7 @@ SPMissingGlyph::SPMissingGlyph() : SPObject() {
     this->vert_adv_y = 0;
 }
 
-SPMissingGlyph::~SPMissingGlyph() {
-}
+SPMissingGlyph::~SPMissingGlyph() = default;
 
 void SPMissingGlyph::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);

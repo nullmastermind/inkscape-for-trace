@@ -59,8 +59,7 @@ DockBehavior::DockBehavior(Dialog &dialog) :
 }
 
 DockBehavior::~DockBehavior()
-{
-}
+= default;
 
 
 Behavior *

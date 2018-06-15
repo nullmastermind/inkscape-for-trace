@@ -71,9 +71,7 @@ LPELattice::LPELattice(LivePathEffectObject *lpeobject) :
 }
 
 LPELattice::~LPELattice()
-{
-
-}
+= default;
 
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >

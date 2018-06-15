@@ -279,7 +279,7 @@ public:
         add(_colAddRemove);
         add(_colAllowAddRemove);
     }
-    ~ModelColumns() override {}
+    ~ModelColumns() override = default;
 
     Gtk::TreeModelColumn<SPObject*> _colParentObject;
     Gtk::TreeModelColumn<SPObject*> _colObject;

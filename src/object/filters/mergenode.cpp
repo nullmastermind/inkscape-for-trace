@@ -26,8 +26,7 @@ SPFeMergeNode::SPFeMergeNode()
     : SPObject(), input(Inkscape::Filters::NR_FILTER_SLOT_NOT_SET) {
 }
 
-SPFeMergeNode::~SPFeMergeNode() {
-}
+SPFeMergeNode::~SPFeMergeNode() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeMergeNode variables.  For this to get called,

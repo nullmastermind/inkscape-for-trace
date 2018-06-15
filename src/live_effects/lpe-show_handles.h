@@ -20,7 +20,7 @@ class LPEShowHandles : public Effect , GroupBBoxEffect {
 
 public:
     LPEShowHandles(LivePathEffectObject *lpeobject);
-    ~LPEShowHandles() override {}
+    ~LPEShowHandles() override = default;
 
     void doOnApply(SPLPEItem const* lpeitem) override;
 

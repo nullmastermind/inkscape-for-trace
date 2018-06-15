@@ -58,8 +58,7 @@ SPHatch::SPHatch()
     _rotate.unset();
 }
 
-SPHatch::~SPHatch() {
-}
+SPHatch::~SPHatch() = default;
 
 void SPHatch::build(SPDocument* doc, Inkscape::XML::Node* repr)
 {
@@ -721,8 +720,7 @@ SPHatch::RenderInfo::RenderInfo()
 }
 
 SPHatch::RenderInfo::~RenderInfo()
-{
-}
+= default;
 
 //
 

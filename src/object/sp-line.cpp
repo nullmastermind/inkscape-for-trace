@@ -27,8 +27,7 @@ SPLine::SPLine() : SPShape() {
     this->y2.unset();
 }
 
-SPLine::~SPLine() {
-}
+SPLine::~SPLine() = default;
 
 void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     SPShape::build(document, repr);

@@ -50,8 +50,7 @@ SPMask::SPMask() : SPObjectGroup() {
 	this->display = nullptr;
 }
 
-SPMask::~SPMask() {
-}
+SPMask::~SPMask() = default;
 
 void SPMask::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 	SPObjectGroup::build(doc, repr);

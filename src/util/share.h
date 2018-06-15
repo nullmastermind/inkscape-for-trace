@@ -24,7 +24,7 @@ class ptr_shared {
 public:
 
     ptr_shared() : _string(nullptr) {}
-        ptr_shared(ptr_shared const &other) : _string(other._string) {}
+        ptr_shared(ptr_shared const &other) = default;
 
     operator char const *() const { return _string; }
     operator bool() const { return _string; }
@@ -54,10 +54,7 @@ public:
         return _string - other._string;
     }
 
-    ptr_shared &operator=(ptr_shared const &other) {
-        _string = other._string;
-        return *this;
-    }
+    ptr_shared &operator=(ptr_shared const &other) = default;
 
     bool operator==(ptr_shared const &other) const {
         return _string == other._string;

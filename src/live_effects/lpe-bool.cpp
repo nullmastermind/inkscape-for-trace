@@ -86,9 +86,7 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject) :
 }
 
 LPEBool::~LPEBool()
-{
-
-}
+= default;
 
 void LPEBool::resetDefaults(SPItem const * /*item*/)
 {

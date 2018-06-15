@@ -106,12 +106,10 @@ UXManager* UXManager::getInstance()
 
 
 UXManager::UXManager()
-{
-}
+= default;
 
 UXManager::~UXManager()
-{
-}
+= default;
 
 UXManagerImpl::UXManagerImpl() :
     _widescreen(false)
@@ -136,8 +134,7 @@ UXManagerImpl::UXManagerImpl() :
 }
 
 UXManagerImpl::~UXManagerImpl()
-{
-}
+= default;
 
 bool UXManagerImpl::isWidescreen() const
 {

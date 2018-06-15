@@ -25,7 +25,7 @@ namespace Widget {
 class ImageToggler : public Gtk::CellRendererPixbuf {
 public:
     ImageToggler( char const *on, char const *off);
-    ~ImageToggler() override {};
+    ~ImageToggler() override = default;;
 
     sigc::signal<void, const Glib::ustring&> signal_toggled() { return _signal_toggled;}
     sigc::signal<void, GdkEvent const *> signal_pre_toggle()  { return _signal_pre_toggle; }

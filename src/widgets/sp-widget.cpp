@@ -133,8 +133,7 @@ SPWidgetImpl::SPWidgetImpl(SPWidget &target) :
 }
 
 SPWidgetImpl::~SPWidgetImpl()
-{
-}
+= default;
 
 void SPWidgetImpl::dispose(GObject *object)
 {

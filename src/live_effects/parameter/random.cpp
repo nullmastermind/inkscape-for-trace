@@ -39,8 +39,7 @@ RandomParam::RandomParam( const Glib::ustring& label, const Glib::ustring& tip,
 }
 
 RandomParam::~RandomParam()
-{
-}
+= default;
 
 bool
 RandomParam::param_readSVGValue(const gchar * strvalue)

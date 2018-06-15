@@ -113,9 +113,7 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
 }
 
 LPESketch::~LPESketch()
-{
-
-}
+= default;
 
 /*
 Geom::Piecewise<Geom::D2<Geom::SBasis> >

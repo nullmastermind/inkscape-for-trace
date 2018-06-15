@@ -1207,8 +1207,7 @@ RotateableSwatch::RotateableSwatch(SelectedStyle *parent, guint mode) :
 {
 }
 
-RotateableSwatch::~RotateableSwatch() {
-}
+RotateableSwatch::~RotateableSwatch() = default;
 
 double
 RotateableSwatch::color_adjust(float *hsla, double by, guint32 cc, guint modifier)
@@ -1408,8 +1407,7 @@ RotateableStrokeWidth::RotateableStrokeWidth(SelectedStyle *parent) :
 {
 }
 
-RotateableStrokeWidth::~RotateableStrokeWidth() {
-}
+RotateableStrokeWidth::~RotateableStrokeWidth() = default;
 
 double
 RotateableStrokeWidth::value_adjust(double current, double by, guint /*modifier*/, bool final)

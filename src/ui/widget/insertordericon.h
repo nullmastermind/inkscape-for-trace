@@ -25,7 +25,7 @@ namespace Widget {
 class InsertOrderIcon : public Gtk::CellRendererPixbuf {
 public:
     InsertOrderIcon();
-    ~InsertOrderIcon() override {};
+    ~InsertOrderIcon() override = default;;
 
     Glib::PropertyProxy<int> property_active() { return _property_active.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();

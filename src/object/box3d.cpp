@@ -53,8 +53,7 @@ SPBox3D::SPBox3D() : SPGroup() {
     }
 }
 
-SPBox3D::~SPBox3D() {
-}
+SPBox3D::~SPBox3D() = default;
 
 void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPGroup::build(document, repr);

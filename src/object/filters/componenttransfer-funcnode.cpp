@@ -31,8 +31,7 @@ SPFeFuncNode::SPFeFuncNode(SPFeFuncNode::Channel channel)
       slope(1), intercept(0), amplitude(1), exponent(1), offset(0), channel(channel) {
 }
 
-SPFeFuncNode::~SPFeFuncNode() {
-}
+SPFeFuncNode::~SPFeFuncNode() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPDistantLight variables.  For this to get called,

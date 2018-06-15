@@ -41,9 +41,7 @@ LPESkeleton::LPESkeleton(LivePathEffectObject *lpeobject) :
 }
 
 LPESkeleton::~LPESkeleton()
-{
-
-}
+= default;
 
 
 /* ########################

@@ -72,8 +72,7 @@ namespace UI {
 namespace Cache {
 
 SvgPreview::SvgPreview()
-{
-}
+= default;
 
 SvgPreview::~SvgPreview()
 {

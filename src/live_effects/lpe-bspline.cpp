@@ -56,7 +56,7 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     helper_size.param_set_digits(2);
 }
 
-LPEBSpline::~LPEBSpline() {}
+LPEBSpline::~LPEBSpline() = default;
 
 void LPEBSpline::doBeforeEffect (SPLPEItem const* /*lpeitem*/)
 {

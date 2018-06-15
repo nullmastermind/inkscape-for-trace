@@ -94,8 +94,7 @@ ExtensionEditor::ExtensionEditor()
  * Destroys the extension editor dialog.
  */
 ExtensionEditor::~ExtensionEditor()
-{
-}
+= default;
 
 void
 ExtensionEditor::setExtension(Glib::ustring extension_id) {

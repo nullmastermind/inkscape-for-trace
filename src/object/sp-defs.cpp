@@ -23,8 +23,7 @@
 SPDefs::SPDefs() : SPObject() {
 }
 
-SPDefs::~SPDefs() {
-}
+SPDefs::~SPDefs() = default;
 
 void SPDefs::release() {
 	SPObject::release();

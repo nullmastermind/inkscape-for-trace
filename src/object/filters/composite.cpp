@@ -32,8 +32,7 @@ SPFeComposite::SPFeComposite()
 {
 }
 
-SPFeComposite::~SPFeComposite() {
-}
+SPFeComposite::~SPFeComposite() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeComposite variables.  For this to get called,

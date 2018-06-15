@@ -88,7 +88,7 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     apply_to_clippath_and_mask = true;
 }
 
-LPERoughen::~LPERoughen() {}
+LPERoughen::~LPERoughen() = default;
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {

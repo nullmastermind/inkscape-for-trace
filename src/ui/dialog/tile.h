@@ -52,7 +52,7 @@ private:
 
 public:
 	ArrangeDialog();
-	~ArrangeDialog() override {};
+	~ArrangeDialog() override = default;;
 
     /**
      * Callback from Apply

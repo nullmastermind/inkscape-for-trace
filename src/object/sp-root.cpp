@@ -48,8 +48,7 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
 }
 
 SPRoot::~SPRoot()
-{
-}
+= default;
 
 void SPRoot::unset_x_and_y()
 {

@@ -83,7 +83,7 @@ protected:
     template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
     RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
 
-    ~RegisteredWidget() override {};
+    ~RegisteredWidget() override = default;;
 
     void init_parent(const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in, SPDocument *doc_in)
     {

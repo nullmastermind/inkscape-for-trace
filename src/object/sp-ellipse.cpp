@@ -48,8 +48,7 @@ SPGenericEllipse::SPGenericEllipse()
 }
 
 SPGenericEllipse::~SPGenericEllipse()
-{
-}
+= default;
 
 void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
 {

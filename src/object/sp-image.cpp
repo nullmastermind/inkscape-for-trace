@@ -127,8 +127,7 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->pixbuf = nullptr;
 }
 
-SPImage::~SPImage() {
-}
+SPImage::~SPImage() = default;
 
 void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPItem::build(document, repr);

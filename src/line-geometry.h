@@ -27,7 +27,7 @@ class Line {
 public:
     Line(Geom::Point const &start, Geom::Point const &vec, bool is_endpoint = true);
     Line(Line const &line);
-    virtual ~Line() {}
+    virtual ~Line() = default;
     Line &operator=(Line const &line);
     virtual boost::optional<Geom::Point> intersect(Line const &line);
     inline Geom::Point direction () { return v_dir; }

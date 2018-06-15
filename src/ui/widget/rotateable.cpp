@@ -160,8 +160,7 @@ bool Rotateable::on_scroll(GdkEventScroll* event)
     return TRUE;
 }
 
-Rotateable::~Rotateable() {
-}
+Rotateable::~Rotateable() = default;
 
 
 

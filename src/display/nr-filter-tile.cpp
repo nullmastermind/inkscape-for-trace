@@ -20,15 +20,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterTile::FilterTile()
-{
-}
+= default;
 
 FilterPrimitive * FilterTile::create() {
     return new FilterTile();
 }
 
 FilterTile::~FilterTile()
-{}
+= default;
 
 void FilterTile::render_cairo(FilterSlot &slot)
 {

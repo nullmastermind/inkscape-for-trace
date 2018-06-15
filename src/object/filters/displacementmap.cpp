@@ -33,8 +33,7 @@ SPFeDisplacementMap::SPFeDisplacementMap() : SPFilterPrimitive() {
     this->in2 = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
-SPFeDisplacementMap::~SPFeDisplacementMap() {
-}
+SPFeDisplacementMap::~SPFeDisplacementMap() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeDisplacementMap variables.  For this to get called,

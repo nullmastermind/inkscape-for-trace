@@ -31,8 +31,7 @@ LPEEllipse5Pts::LPEEllipse5Pts(LivePathEffectObject *lpeobject) :
 }
 
 LPEEllipse5Pts::~LPEEllipse5Pts()
-{
-}
+= default;
 
 static double _det3(double (*mat)[3])
 {

@@ -30,7 +30,7 @@ protected:
 
 public:
     //PureTransform();
-    virtual ~PureTransform() {};
+    virtual ~PureTransform() = default;;
 //    virtual PureTransform * clone () const = 0;  // https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Virtual_Constructor
 
     // Snap a group of points
@@ -53,7 +53,7 @@ protected:
 public:
 //    PureTranslate();                        // Default constructor
 //    PureTranslate(PureTranslate const &);   // Copy constructor
-    ~PureTranslate() override {};
+    ~PureTranslate() override = default;;
     PureTranslate(Geom::Point vector = Geom::Point()) : _vector(vector), _vector_snapped(vector) {}
 
     Geom::Point getTranslationSnapped() {return _vector_snapped;}
@@ -68,7 +68,7 @@ protected:
     SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    ~PureTranslateConstrained() override {};
+    ~PureTranslateConstrained() override = default;;
     PureTranslateConstrained(Geom::Coord displacement, Geom::Dim2 direction):
         PureTranslate() {
             _vector[direction] = displacement;
@@ -95,7 +95,7 @@ protected:
 public:
 //    PureScale();                    // Default constructor
 //    PureScale(PureScale const &);   // Copy constructor
-    ~PureScale() override {};
+    ~PureScale() override = default;;
 
     PureScale(Geom::Scale scale, Geom::Point origin, bool uniform) : 
         _scale (scale),
@@ -114,7 +114,7 @@ protected:
     SnappedPoint snap(::SnapManager *sm, SnapCandidatePoint const &p, Geom::Point pt_orig, Geom::OptRect const &bbox_to_snap) const override;
 
 public:
-    ~PureScaleConstrained() override {};
+    ~PureScaleConstrained() override = default;;
     PureScaleConstrained(Geom::Scale scale, Geom::Point origin):
         PureScale(scale, origin, true) {}; // Non-uniform constrained scaling is not supported
 
@@ -138,7 +138,7 @@ protected:
     void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
-    ~PureStretchConstrained() override {};
+    ~PureStretchConstrained() override = default;;
     PureStretchConstrained(Geom::Coord magnitude, Geom::Point origin, Geom::Dim2 direction, bool uniform) :
         _magnitude (magnitude),
         _stretch_snapped (Geom::Scale(magnitude, magnitude)),
@@ -175,7 +175,7 @@ protected:
     void storeTransform(SnapCandidatePoint const &original_point, SnappedPoint &snapped_point) override;
 
 public:
-    ~PureSkewConstrained() override {};
+    ~PureSkewConstrained() override = default;;
     PureSkewConstrained(Geom::Coord skew, Geom::Coord scale, Geom::Point origin, Geom::Dim2 direction) :
         _skew (skew),
         _skew_snapped (skew),
@@ -208,7 +208,7 @@ protected:
 public:
 //    PureRotate();                        // Default constructor
 //    PureRotate(PureRotate const &);   // Copy constructor
-    ~PureRotateConstrained() override {};
+    ~PureRotateConstrained() override = default;;
 
     PureRotateConstrained(double angle, Geom::Point origin) :
         _angle (angle), // in radians!

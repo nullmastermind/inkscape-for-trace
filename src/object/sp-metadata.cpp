@@ -36,8 +36,7 @@
 SPMetadata::SPMetadata() : SPObject() {
 }
 
-SPMetadata::~SPMetadata() {
-}
+SPMetadata::~SPMetadata() = default;
 
 namespace {
 

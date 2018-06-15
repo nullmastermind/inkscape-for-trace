@@ -82,7 +82,7 @@ struct SPGradientSelector {
             add(data);
             add(pixbuf);
         }
-        ~ModelColumns() override {}
+        ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<Glib::ustring> name;
         Gtk::TreeModelColumn<unsigned long> color;

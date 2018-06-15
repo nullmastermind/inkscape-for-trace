@@ -36,7 +36,7 @@ LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
     message.param_set_min_height(30);
 }
 
-LPEDashStroke::~LPEDashStroke() {}
+LPEDashStroke::~LPEDashStroke() = default;
 
 void
 LPEDashStroke::doBeforeEffect (SPLPEItem const* lpeitem){

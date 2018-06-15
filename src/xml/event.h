@@ -57,7 +57,7 @@ class Event
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
 {
 public:        
-    virtual ~Event() {}
+    virtual ~Event() = default;
 
     /**
      * @brief Pointer to the next event in the event chain

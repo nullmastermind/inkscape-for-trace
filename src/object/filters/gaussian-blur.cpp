@@ -31,8 +31,7 @@
 SPGaussianBlur::SPGaussianBlur() : SPFilterPrimitive() {
 }
 
-SPGaussianBlur::~SPGaussianBlur() {
-}
+SPGaussianBlur::~SPGaussianBlur() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPGaussianBlur variables.  For this to get called,

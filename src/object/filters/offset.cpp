@@ -30,8 +30,7 @@ SPFeOffset::SPFeOffset() : SPFilterPrimitive() {
     this->dy = 0;
 }
 
-SPFeOffset::~SPFeOffset() {
-}
+SPFeOffset::~SPFeOffset() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeOffset variables.  For this to get called,

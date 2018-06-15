@@ -22,14 +22,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterConvolveMatrix::FilterConvolveMatrix()
-{}
+= default;
 
 FilterPrimitive * FilterConvolveMatrix::create() {
     return new FilterConvolveMatrix();
 }
 
 FilterConvolveMatrix::~FilterConvolveMatrix()
-{}
+= default;
 
 enum PreserveAlphaMode {
     PRESERVE_ALPHA,

@@ -24,7 +24,7 @@ namespace Widget {
 class AddToIcon : public Gtk::CellRendererPixbuf {
 public:
     AddToIcon();
-    ~AddToIcon() override {};
+    ~AddToIcon() override = default;;
 
     Glib::PropertyProxy<bool> property_active() { return _property_active.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();

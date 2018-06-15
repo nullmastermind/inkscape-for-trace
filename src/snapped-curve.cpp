@@ -54,8 +54,7 @@ Inkscape::SnappedCurve::SnappedCurve()
 }
 
 Inkscape::SnappedCurve::~SnappedCurve()
-{
-}
+= default;
 
 Inkscape::SnappedPoint Inkscape::SnappedCurve::intersect(SnappedCurve const &curve, Geom::Point const &p, Geom::Affine dt2doc) const
 {

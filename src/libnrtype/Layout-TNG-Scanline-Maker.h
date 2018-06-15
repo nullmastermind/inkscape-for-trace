@@ -32,7 +32,7 @@ is a rectangle.
 class Layout::ScanlineMaker
 {
 public:
-    virtual ~ScanlineMaker() {}
+    virtual ~ScanlineMaker() = default;
 
     struct ScanRun {
         double y;  /// that's the top of the scan run, not the baseline

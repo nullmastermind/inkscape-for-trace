@@ -35,7 +35,7 @@ enum glyphOrientation {
 class SPGlyph : public SPObject {
 public:
     SPGlyph();
-    ~SPGlyph() override {}
+    ~SPGlyph() override = default;
 
     // FIXME encapsulation
     Glib::ustring unicode;

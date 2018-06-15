@@ -38,9 +38,7 @@ OriginalItemParam::OriginalItemParam( const Glib::ustring& label, const Glib::us
 }
 
 OriginalItemParam::~OriginalItemParam()
-{
-
-}
+= default;
 
 Gtk::Widget *
 OriginalItemParam::param_newWidget()

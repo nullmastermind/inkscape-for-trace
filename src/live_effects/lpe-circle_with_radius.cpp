@@ -35,9 +35,7 @@ LPECircleWithRadius::LPECircleWithRadius(LivePathEffectObject *lpeobject) :
 }
 
 LPECircleWithRadius::~LPECircleWithRadius()
-{
-
-}
+= default;
 
 Geom::PathVector
 LPECircleWithRadius::doEffect_path (Geom::PathVector const & path_in)

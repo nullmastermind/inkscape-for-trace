@@ -26,7 +26,7 @@ public:
     StreamException(Glib::ustring &theReason) throw()
         { reason = theReason; }
     ~StreamException() throw() override
-        {  }
+        = default;
     char const *what() const throw() override
         { return reason.c_str(); }
         
@@ -54,12 +54,12 @@ public:
     /**
      * Constructor.
      */
-    InputStream() {}
+    InputStream() = default;
 
     /**
      * Destructor
      */
-    virtual ~InputStream() {}
+    virtual ~InputStream() = default;
 
     /**
      * Return the number of bytes that are currently available
@@ -102,7 +102,7 @@ public:
 
     BasicInputStream(InputStream &sourceStream);
     
-    ~BasicInputStream() override {}
+    ~BasicInputStream() override = default;
     
     int available() override;
     
@@ -164,12 +164,12 @@ public:
     /**
      * Constructor.
      */
-    OutputStream() {}
+    OutputStream() = default;
 
     /**
      * Destructor
      */
-    virtual ~OutputStream() {}
+    virtual ~OutputStream() = default;
 
     /**
      * This call should
@@ -206,7 +206,7 @@ public:
 
     BasicOutputStream(OutputStream &destinationStream);
     
-    ~BasicOutputStream() override {}
+    ~BasicOutputStream() override = default;
 
     void close() override;
     
@@ -263,12 +263,12 @@ public:
     /**
      * Constructor.
      */
-    Reader() {}
+    Reader() = default;
 
     /**
      * Destructor
      */
-    virtual ~Reader() {}
+    virtual ~Reader() = default;
 
 
     virtual int available() = 0;
@@ -324,7 +324,7 @@ public:
 
     BasicReader(Reader &sourceStream);
     
-    ~BasicReader() override {}
+    ~BasicReader() override = default;
 
     int available() override;
     
@@ -459,12 +459,12 @@ public:
     /**
      * Constructor.
      */
-    Writer() {}
+    Writer() = default;
 
     /**
      * Destructor
      */
-    virtual ~Writer() {}
+    virtual ~Writer() = default;
 
     virtual void close() = 0;
     
@@ -517,7 +517,7 @@ public:
 
     BasicWriter(Writer &destinationWriter);
 
-    ~BasicWriter() override {}
+    ~BasicWriter() override = default;
 
     /*Overload these 3 for your implementation*/
     void close() override;

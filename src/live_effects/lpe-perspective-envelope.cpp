@@ -64,8 +64,7 @@ LPEPerspectiveEnvelope::LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject) 
 }
 
 LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
-{
-}
+= default;
 
 void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
 {

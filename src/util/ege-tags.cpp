@@ -62,14 +62,12 @@ Label::Label(std::string const& lang, std::string const& value) :
 }
 
 Label::~Label()
-{
-}
+= default;
 
 // =========================================================================
 
 Tag::~Tag()
-{
-}
+= default;
 
 Tag::Tag(std::string const& key) :
     key(key)
@@ -86,8 +84,7 @@ TagSet::TagSet() :
 }
 
 TagSet::~TagSet()
-{
-}
+= default;
 
 void TagSet::setLang(std::string const& lang)
 {

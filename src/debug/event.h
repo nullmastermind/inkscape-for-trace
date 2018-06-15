@@ -21,7 +21,7 @@ namespace Debug {
 
 class Event {
 public:
-    virtual ~Event() {}
+    virtual ~Event() = default;
 
     enum Category {
         CORE=0,
@@ -39,7 +39,7 @@ public:
 
     struct PropertyPair {
     public:
-        PropertyPair() {}
+        PropertyPair() = default;
         PropertyPair(Util::ptr_shared n, Util::ptr_shared v)
         : name(n), value(v) {}
         PropertyPair(char const *n, Util::ptr_shared v)

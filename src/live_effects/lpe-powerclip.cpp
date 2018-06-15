@@ -42,7 +42,7 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     convert_shapes = false;
 }
 
-LPEPowerClip::~LPEPowerClip() {}
+LPEPowerClip::~LPEPowerClip() = default;
 
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){

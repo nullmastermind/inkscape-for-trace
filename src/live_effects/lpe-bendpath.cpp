@@ -78,9 +78,7 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
 }
 
 LPEBendPath::~LPEBendPath()
-{
-
-}
+= default;
 
 void
 LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)

@@ -45,12 +45,10 @@ namespace UI {
 namespace Dialog {
 
 FontSubstitution::FontSubstitution()
-{
-}
+= default;
 
 FontSubstitution::~FontSubstitution()
-{
-}
+= default;
 
 void
 FontSubstitution::checkFontSubstitutions(SPDocument* doc)

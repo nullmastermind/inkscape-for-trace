@@ -81,7 +81,7 @@ public:
      * Destructor
      */	     
 	virtual ~PaperSize()
-	    {}
+	    = default;
 	    
     /**
      * Name of this paper specification

@@ -34,9 +34,7 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
 }
 
 LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
-{
-
-}
+= default;
 
 void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
 {

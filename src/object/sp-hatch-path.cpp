@@ -39,8 +39,7 @@ SPHatchPath::SPHatchPath()
 }
 
 SPHatchPath::~SPHatchPath()
-{
-}
+= default;
 
 void SPHatchPath::setCurve(SPCurve *new_curve, bool owner)
 {

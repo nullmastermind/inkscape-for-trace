@@ -45,7 +45,7 @@ public:
       connect_signals();
   };
 
-  ~SpinButton() override {};
+  ~SpinButton() override = default;;
 
   void setUnitMenu(UnitMenu* unit_menu) { _unit_menu = unit_menu; };
   

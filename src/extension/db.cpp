@@ -32,8 +32,7 @@ DB db;
 
 /* Types */
 
-DB::DB (void) {
-}
+DB::DB (void) = default;
 
 
 struct ModuleInputCmp {

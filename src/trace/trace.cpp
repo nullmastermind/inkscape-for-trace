@@ -165,7 +165,7 @@ public:
      *
      */
     ~TraceSioxObserver () override
-        { }
+        = default;
 
     /**
      *  Informs the observer how much has been completed.

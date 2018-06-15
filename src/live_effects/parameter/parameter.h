@@ -53,7 +53,7 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
-    virtual ~Parameter() {};
+    virtual ~Parameter() = default;;
 
     virtual bool param_readSVGValue(const gchar * strvalue) = 0;   // returns true if new value is valid / accepted.
     virtual gchar * param_getSVGValue() const = 0;

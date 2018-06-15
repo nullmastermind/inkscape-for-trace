@@ -22,8 +22,7 @@
 SPSolidColor::SPSolidColor() : SPPaintServer() {
 }
 
-SPSolidColor::~SPSolidColor() {
-}
+SPSolidColor::~SPSolidColor() = default;
 
 void SPSolidColor::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPPaintServer::build(doc, repr);

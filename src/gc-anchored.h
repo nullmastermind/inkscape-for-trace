@@ -56,7 +56,7 @@ public:
 
 protected:
     Anchored() : _anchor(nullptr) { anchor(); } // initial refcount of one
-    virtual ~Anchored() {}
+    virtual ~Anchored() = default;
 
 private:
     struct Anchor : public Managed<SCANNED, MANUAL> {

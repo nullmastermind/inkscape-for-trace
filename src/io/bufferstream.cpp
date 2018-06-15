@@ -56,9 +56,7 @@ BufferInputStream::BufferInputStream(
  *
  */
 BufferInputStream::~BufferInputStream()
-{
-
-}
+= default;
 
 /**
  * Returns the number of bytes that can be read (or skipped over) from
@@ -114,8 +112,7 @@ BufferOutputStream::BufferOutputStream()
  *
  */
 BufferOutputStream::~BufferOutputStream()
-{
-}
+= default;
 
 /**
  * Closes this output stream and releases any system resources

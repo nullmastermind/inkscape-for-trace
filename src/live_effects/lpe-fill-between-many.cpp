@@ -51,9 +51,7 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
 }
 
 LPEFillBetweenMany::~LPEFillBetweenMany()
-{
-
-}
+= default;
 
 void LPEFillBetweenMany::doOnApply (SPLPEItem const* lpeitem)
 {

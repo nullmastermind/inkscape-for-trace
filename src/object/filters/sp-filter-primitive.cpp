@@ -48,8 +48,7 @@ SPFilterPrimitive::SPFilterPrimitive() : SPObject() {
     this->height.unset(SVGLength::PERCENT, 1, 0);
 }
 
-SPFilterPrimitive::~SPFilterPrimitive() {
-}
+SPFilterPrimitive::~SPFilterPrimitive() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFilterPrimitive variables.  For this to get called,

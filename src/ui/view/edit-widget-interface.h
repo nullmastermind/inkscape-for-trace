@@ -34,8 +34,8 @@ namespace View {
  */
 struct EditWidgetInterface
 {
-    EditWidgetInterface() {}
-    virtual ~EditWidgetInterface() {}
+    EditWidgetInterface() = default;
+    virtual ~EditWidgetInterface() = default;
 
     /// Returns pointer to window UI object as void*
     virtual Gtk::Window *getWindow() = 0;

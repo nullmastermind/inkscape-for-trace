@@ -34,8 +34,8 @@ enum InterpolatorType {
 
 class Interpolator {
 public:
-    Interpolator() {};
-    virtual ~Interpolator() {};
+    Interpolator() = default;;
+    virtual ~Interpolator() = default;;
 
     static Interpolator* create(InterpolatorType type);
 
@@ -48,8 +48,8 @@ private:
 
 class Linear : public Interpolator {
 public:
-    Linear() {};
-    ~Linear() override {};
+    Linear() = default;;
+    ~Linear() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         Path path;
@@ -68,8 +68,8 @@ private:
 // this class is terrible
 class CubicBezierFit : public Interpolator {
 public:
-    CubicBezierFit() {};
-    ~CubicBezierFit() override {};
+    CubicBezierFit() = default;;
+    ~CubicBezierFit() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         unsigned int n_points = points.size();
@@ -110,7 +110,7 @@ public:
     CubicBezierJohan(double beta = 0.2) {
         _beta = beta;
     };
-    ~CubicBezierJohan() override {};
+    ~CubicBezierJohan() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
@@ -141,7 +141,7 @@ public:
     CubicBezierSmooth(double beta = 0.2) {
         _beta = beta;
     };
-    ~CubicBezierSmooth() override {};
+    ~CubicBezierSmooth() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
@@ -175,8 +175,8 @@ private:
 
 class SpiroInterpolator : public Interpolator {
 public:
-    SpiroInterpolator() {};
-    ~SpiroInterpolator() override {};
+    SpiroInterpolator() = default;;
+    ~SpiroInterpolator() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         Path fit;
@@ -209,8 +209,8 @@ private:
 // Quick mockup for testing the behavior for powerstroke controlpoint interpolation
 class CentripetalCatmullRomInterpolator : public Interpolator {
 public:
-    CentripetalCatmullRomInterpolator() {};
-    ~CentripetalCatmullRomInterpolator() override {};
+    CentripetalCatmullRomInterpolator() = default;;
+    ~CentripetalCatmullRomInterpolator() override = default;;
 
     Path interpolateToPath(std::vector<Point> const &points) const override {
         unsigned int n_points = points.size();

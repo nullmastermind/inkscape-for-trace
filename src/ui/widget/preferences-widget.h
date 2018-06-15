@@ -251,7 +251,7 @@ class PrefColorPicker : public ColorPicker
 {
 public:
     PrefColorPicker() : ColorPicker("", "", 0, false) {};
-    ~PrefColorPicker() override {};
+    ~PrefColorPicker() override = default;;
 
     void init(Glib::ustring const &abel, Glib::ustring const &prefs_path,
               guint32 default_rgba);

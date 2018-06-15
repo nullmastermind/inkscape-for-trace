@@ -377,7 +377,7 @@ static std::map<Glib::ustring, Gdk::InputMode> &getStringToMode()
 class InputDialogImpl : public InputDialog {
 public:
     InputDialogImpl();
-    ~InputDialogImpl() override {}
+    ~InputDialogImpl() override = default;
 
 private:
     class ConfPanel : public Gtk::VBox
@@ -436,7 +436,7 @@ private:
                 add(name);
                 add(value);
             }
-            ~KeysColumns() override {}
+            ~KeysColumns() override = default;
 
             Gtk::TreeModelColumn<Glib::ustring> name;
             Gtk::TreeModelColumn<Glib::ustring> value;
@@ -743,7 +743,7 @@ InputDialogImpl::InputDialogImpl() :
 
 class TabletTmp {
 public:
-    TabletTmp() {}
+    TabletTmp() = default;
 
     Glib::ustring name;
     std::list<Glib::RefPtr<InputDevice const> > devices;
@@ -1060,8 +1060,7 @@ InputDialogImpl::ConfPanel::ConfPanel() :
 }
 
 InputDialogImpl::ConfPanel::~ConfPanel()
-{
-}
+= default;
 
 void InputDialogImpl::ConfPanel::setModeCellString(Gtk::CellRenderer *rndr, Gtk::TreeIter const &iter)
 {

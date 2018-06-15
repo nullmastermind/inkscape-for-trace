@@ -163,12 +163,12 @@ InputDevice::InputDevice()
     : Glib::Object()
 {}
 
-InputDevice::~InputDevice() {}
+InputDevice::~InputDevice() = default;
 
 class InputDeviceImpl : public InputDevice {
 public:
     InputDeviceImpl(Glib::RefPtr<Gdk::Device> device, std::set<Glib::ustring> &knownIDs);
-    ~InputDeviceImpl() override {}
+    ~InputDeviceImpl() override = default;
 
     Glib::ustring getId() const override {return id;}
     Glib::ustring getName() const override {return name;}
@@ -611,8 +611,7 @@ DeviceManager::DeviceManager()
 {
 }
 
-DeviceManager::~DeviceManager() {
-}
+DeviceManager::~DeviceManager() = default;
 
 DeviceManager& DeviceManager::getManager() {
     if ( !theInstance ) {

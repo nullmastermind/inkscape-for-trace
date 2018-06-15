@@ -28,8 +28,7 @@ SPFeMorphology::SPFeMorphology() : SPFilterPrimitive() {
     this->radius.set("0");
 }
 
-SPFeMorphology::~SPFeMorphology() {
-}
+SPFeMorphology::~SPFeMorphology() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeMorphology variables.  For this to get called,

@@ -302,8 +302,7 @@ VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI
 }
 
 VerbAction::~VerbAction()
-{
-}
+= default;
 
 Gtk::Widget* VerbAction::create_menu_item_vfunc()
 {

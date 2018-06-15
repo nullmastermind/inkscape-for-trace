@@ -22,7 +22,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const guint32 default_color = 0x000000ff);
-    ~ColorPickerParam() override {}
+    ~ColorPickerParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
     bool param_readSVGValue(const gchar * strvalue) override;

@@ -42,9 +42,7 @@ LPEAttachPath::LPEAttachPath(LivePathEffectObject *lpeobject) :
 }
 
 LPEAttachPath::~LPEAttachPath()
-{
-
-}
+= default;
 
 void LPEAttachPath::resetDefaults(SPItem const * /*item*/)
 {

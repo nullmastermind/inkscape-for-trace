@@ -28,8 +28,7 @@
 SPSymbol::SPSymbol() : SPGroup(), SPViewBox() {
 }
 
-SPSymbol::~SPSymbol() {
-}
+SPSymbol::~SPSymbol() = default;
 
 void SPSymbol::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "viewBox" );

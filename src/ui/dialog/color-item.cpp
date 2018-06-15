@@ -259,8 +259,7 @@ SwatchPage::SwatchPage()
 }
 
 SwatchPage::~SwatchPage()
-{
-}
+= default;
 
 
 ColorItem::ColorItem(ege::PaintDef::ColorType type) :

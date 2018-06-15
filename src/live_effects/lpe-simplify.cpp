@@ -55,7 +55,7 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
     apply_to_clippath_and_mask = true;
 }
 
-LPESimplify::~LPESimplify() {}
+LPESimplify::~LPESimplify() = default;
 
 void
 LPESimplify::doBeforeEffect (SPLPEItem const* lpeitem)

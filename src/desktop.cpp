@@ -379,8 +379,7 @@ void SPDesktop::destroy()
 }
 
 SPDesktop::~SPDesktop()
-{
-}
+= default;
 
 
 Inkscape::UI::Tools::ToolBase* SPDesktop::getEventContext() const {

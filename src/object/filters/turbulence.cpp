@@ -31,8 +31,7 @@ SPFeTurbulence::SPFeTurbulence() : SPFilterPrimitive() {
     this->updated=false;
 }
 
-SPFeTurbulence::~SPFeTurbulence() {
-}
+SPFeTurbulence::~SPFeTurbulence() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeTurbulence variables.  For this to get called,

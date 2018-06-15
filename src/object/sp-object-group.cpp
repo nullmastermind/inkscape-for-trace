@@ -19,8 +19,7 @@
 SPObjectGroup::SPObjectGroup() : SPObject() {
 }
 
-SPObjectGroup::~SPObjectGroup() {
-}
+SPObjectGroup::~SPObjectGroup() = default;
 
 void SPObjectGroup::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref) {
 	SPObject::child_added(child, ref);

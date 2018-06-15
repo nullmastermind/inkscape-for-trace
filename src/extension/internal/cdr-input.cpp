@@ -164,7 +164,7 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      _setPreviewPage();
 }
 
-CdrImportDialog::~CdrImportDialog() {}
+CdrImportDialog::~CdrImportDialog() = default;
 
 bool CdrImportDialog::showDialog()
 {

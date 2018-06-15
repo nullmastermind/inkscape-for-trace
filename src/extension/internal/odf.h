@@ -91,7 +91,7 @@ public:
         }
 
     virtual ~StyleInfo()
-        {}
+        = default;
 
     //used for eliminating duplicates in the styleTable
     bool equals(const StyleInfo &other)
@@ -131,7 +131,7 @@ public:
     GradientStop(unsigned long rgbArg, double opacityArg)
         { rgb = rgbArg; opacity = opacityArg; }
     virtual ~GradientStop()
-        {}
+        = default;
     GradientStop(const GradientStop &other)
         {  assign(other); }
     virtual GradientStop& operator=(const GradientStop &other)
@@ -200,7 +200,7 @@ public:
         }
 
     virtual ~GradientInfo()
-        {}
+        = default;
 
     //used for eliminating duplicates in the styleTable
     bool equals(const GradientInfo &other)

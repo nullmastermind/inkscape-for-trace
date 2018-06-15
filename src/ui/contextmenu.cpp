@@ -165,8 +165,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
 }
 
 ContextMenu::~ContextMenu(void)
-{
-}
+= default;
 
 Gtk::SeparatorMenuItem* ContextMenu::AddSeparator(void)
 {

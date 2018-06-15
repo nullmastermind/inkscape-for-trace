@@ -60,7 +60,7 @@ SPPattern::SPPattern()
     this->_height.unset();
 }
 
-SPPattern::~SPPattern() {}
+SPPattern::~SPPattern() = default;
 
 void SPPattern::build(SPDocument *doc, Inkscape::XML::Node *repr)
 {

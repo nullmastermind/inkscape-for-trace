@@ -60,8 +60,7 @@ Adler32::Adler32()
  * Destructor
  */
 Adler32::~Adler32()
-{
-}
+= default;
 
 /**
  * Reset Adler-32 checksum to initial value.
@@ -117,8 +116,7 @@ Crc32::Crc32()
  * Destructor
  */
 Crc32::~Crc32()
-{
-}
+= default;
 
 static bool crc_table_ready = false;
 static unsigned long crc_table[256];
@@ -315,8 +313,7 @@ Inflater::Inflater() :
  *
  */
 Inflater::~Inflater()
-{
-}
+= default;
 
 /**
  *
@@ -915,9 +912,7 @@ Deflater::Deflater()
  *
  */
 Deflater::~Deflater()
-{
-
-}
+= default;
 
 /**
  *
@@ -1439,8 +1434,7 @@ GzipFile::GzipFile() :
  * Destructor
  */
 GzipFile::~GzipFile()
-{
-}
+= default;
 
 /**
  *  Print error messages
@@ -1925,8 +1919,7 @@ ZipEntry::ZipEntry(const std::string &fileNameArg,
  * Destructor
  */
 ZipEntry::~ZipEntry()
-{
-}
+= default;
 
 
 /**

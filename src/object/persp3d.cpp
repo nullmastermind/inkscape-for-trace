@@ -57,8 +57,7 @@ Persp3D::Persp3D() : SPObject() {
     this->perspective_impl = new Persp3DImpl();
 }
 
-Persp3D::~Persp3D() {
-}
+Persp3D::~Persp3D() = default;
 
 
 /**

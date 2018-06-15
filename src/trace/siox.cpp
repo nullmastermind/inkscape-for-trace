@@ -308,15 +308,9 @@ public:
         indexMinFg = other.indexMinFg;
         }
     Tupel &operator=(const Tupel &other)
-        {
-        minBgDist  = other.minBgDist;
-        indexMinBg = other.indexMinBg;
-        minFgDist  = other.minFgDist;
-        indexMinFg = other.indexMinFg;
-        return *this;
-        }
+        = default;
     virtual ~Tupel()
-        {}
+        = default;
 
     float minBgDist;
     long  indexMinBg;

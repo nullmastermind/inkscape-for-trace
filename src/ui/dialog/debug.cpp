@@ -117,8 +117,7 @@ DebugDialog *DebugDialog::create()
 }
 
 DebugDialogImpl::~DebugDialogImpl()
-{
-}
+= default;
 
 void DebugDialogImpl::show()
 {

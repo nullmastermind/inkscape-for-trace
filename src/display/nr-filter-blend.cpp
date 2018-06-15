@@ -53,7 +53,7 @@ FilterPrimitive * FilterBlend::create() {
 }
 
 FilterBlend::~FilterBlend()
-{}
+= default;
 
 static inline cairo_operator_t get_cairo_op(FilterBlendMode _blend_mode)
 {

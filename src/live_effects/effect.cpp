@@ -410,8 +410,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
 }
 
 Effect::~Effect()
-{
-}
+= default;
 
 Glib::ustring
 Effect::getName() const

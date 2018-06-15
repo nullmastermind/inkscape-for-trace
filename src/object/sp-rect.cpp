@@ -33,8 +33,7 @@
 SPRect::SPRect() : SPShape() {
 }
 
-SPRect::~SPRect() {
-}
+SPRect::~SPRect() = default;
 
 void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 #ifdef OBJECT_TRACE

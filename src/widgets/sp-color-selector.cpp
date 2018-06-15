@@ -145,8 +145,7 @@ ColorSelector::ColorSelector( SPColorSelector* csel )
 }
 
 ColorSelector::~ColorSelector()
-{
-}
+= default;
 
 void ColorSelector::init()
 {

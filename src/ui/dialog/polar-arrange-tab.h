@@ -35,7 +35,7 @@ class ArrangeDialog;
 class PolarArrangeTab : public ArrangeTab {
 public:
 	PolarArrangeTab(ArrangeDialog *parent_);
-    ~PolarArrangeTab() override {};
+    ~PolarArrangeTab() override = default;;
 
     /**
      * Do the actual arrangement

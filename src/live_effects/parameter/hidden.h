@@ -31,7 +31,7 @@ public:
                Effect* effect,
                const Glib::ustring default_value = "",
                bool widget_is_visible = false);
-    ~HiddenParam() override {}
+    ~HiddenParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
 

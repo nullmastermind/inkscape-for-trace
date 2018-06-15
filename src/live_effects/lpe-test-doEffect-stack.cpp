@@ -30,9 +30,7 @@ LPEdoEffectStackTest::LPEdoEffectStackTest(LivePathEffectObject *lpeobject) :
 }
 
 LPEdoEffectStackTest::~LPEdoEffectStackTest()
-{
-
-}
+= default;
 
 void
 LPEdoEffectStackTest::doEffect (SPCurve * curve)

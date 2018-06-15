@@ -112,9 +112,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
 }
 
 LPEPatternAlongPath::~LPEPatternAlongPath()
-{
-
-}
+= default;
 
 void
 LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)

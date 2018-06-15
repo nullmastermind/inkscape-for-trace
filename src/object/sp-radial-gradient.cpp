@@ -19,8 +19,7 @@ SPRadialGradient::SPRadialGradient() : SPGradient() {
     this->fr.unset(SVGLength::PERCENT, 0.5, 0.5);
 }
 
-SPRadialGradient::~SPRadialGradient() {
-}
+SPRadialGradient::~SPRadialGradient() = default;
 
 /**
  * Set radial gradient attributes from associated repr.

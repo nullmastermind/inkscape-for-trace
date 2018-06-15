@@ -25,8 +25,7 @@
 SPFeTile::SPFeTile() : SPFilterPrimitive() {
 }
 
-SPFeTile::~SPFeTile() {
-}
+SPFeTile::~SPFeTile() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeTile variables.  For this to get called,

@@ -103,8 +103,7 @@ EraserTool::EraserTool()
 {
 }
 
-EraserTool::~EraserTool() {
-}
+EraserTool::~EraserTool() = default;
 
 void EraserTool::setup() {
     DynamicBase::setup();

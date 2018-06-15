@@ -25,9 +25,7 @@ LPEBoundingBox::LPEBoundingBox(LivePathEffectObject *lpeobject) :
 }
 
 LPEBoundingBox::~LPEBoundingBox()
-{
-
-}
+= default;
 
 void LPEBoundingBox::doEffect (SPCurve * curve)
 {

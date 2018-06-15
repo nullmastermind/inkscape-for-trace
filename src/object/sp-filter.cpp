@@ -59,8 +59,7 @@ SPFilter::SPFilter()
     this->_image_name->clear();
 }
 
-SPFilter::~SPFilter() {
-}
+SPFilter::~SPFilter() = default;
 
 
 /**

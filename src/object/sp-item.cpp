@@ -102,8 +102,7 @@ SPItem::SPItem() : SPObject() {
     avoidRef = new SPAvoidRef(this);
 }
 
-SPItem::~SPItem() {
-}
+SPItem::~SPItem() = default;
 
 bool SPItem::isVisibleAndUnlocked() const {
     return (!isHidden() && !isLocked());

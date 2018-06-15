@@ -105,8 +105,7 @@ SvgBuilder::SvgBuilder(SvgBuilder *parent, Inkscape::XML::Node *root) {
     _init();
 }
 
-SvgBuilder::~SvgBuilder() {
-}
+SvgBuilder::~SvgBuilder() = default;
 
 void SvgBuilder::_init() {
     _font_style = nullptr;

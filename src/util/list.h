@@ -22,7 +22,7 @@ namespace Util {
 /// Generic ListCell for Inkscape::Util::List.
 template <typename T>
 struct ListCell : public GC::Managed<> {
-    ListCell() {}
+    ListCell() = default;
     ListCell(typename Traits::Reference<T>::RValue v, ListCell *n)
     : value(v), next(n) {}
 
@@ -205,7 +205,7 @@ protected:
 template <typename T>
 class MutableList : public List<T> {
 public:
-    MutableList() {}
+    MutableList() = default;
     explicit MutableList(typename List<T>::const_reference value,
                          MutableList const &next=MutableList())
     : List<T>(value, next) {}

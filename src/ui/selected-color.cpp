@@ -35,9 +35,7 @@ SelectedColor::SelectedColor()
 
 }
 
-SelectedColor::~SelectedColor() {
-
-}
+SelectedColor::~SelectedColor() = default;
 
 void SelectedColor::setColor(SPColor const &color)
 {

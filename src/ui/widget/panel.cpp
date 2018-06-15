@@ -59,8 +59,7 @@ Panel::Panel(gchar const *prefs_path, int verb_num) :
 }
 
 Panel::~Panel()
-{
-}
+= default;
 
 void Panel::present()
 {

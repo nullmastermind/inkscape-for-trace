@@ -50,8 +50,7 @@ LPEAngleBisector::LPEAngleBisector(LivePathEffectObject *lpeobject) :
 }
 
 LPEAngleBisector::~LPEAngleBisector()
-{
-}
+= default;
 
 Geom::PathVector
 LPEAngleBisector::doEffect_path (Geom::PathVector const & path_in)

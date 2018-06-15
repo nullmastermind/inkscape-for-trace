@@ -35,7 +35,7 @@ struct SPGuideLine;
 class SPGuide : public SPObject {
 public:
     SPGuide();
-    ~SPGuide() override {}
+    ~SPGuide() override = default;
 
     void set_color(const unsigned r, const unsigned g, const unsigned b, bool const commit);
     void setColor(guint32 c);

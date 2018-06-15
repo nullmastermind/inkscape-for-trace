@@ -205,7 +205,7 @@ DrawingText::DrawingText(Drawing &drawing)
 {}
 
 DrawingText::~DrawingText()
-{}
+= default;
 
 void
 DrawingText::clear()

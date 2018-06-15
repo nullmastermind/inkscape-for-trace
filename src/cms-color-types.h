@@ -58,7 +58,7 @@ namespace Inkscape {
  */
 class FourCCSig {
 public:
-    FourCCSig( FourCCSig const &other ) : value(other.value) {};
+    FourCCSig( FourCCSig const &other ) = default;
 
 protected:
     FourCCSig( guint32 value ) : value(value) {};
@@ -68,7 +68,7 @@ protected:
 
 class ColorSpaceSig : public FourCCSig {
 public:
-    ColorSpaceSig( ColorSpaceSig const &other ) : FourCCSig(other) {};
+    ColorSpaceSig( ColorSpaceSig const &other ) = default;
 
 protected:
     ColorSpaceSig( guint32 value ) : FourCCSig(value) {};
@@ -76,7 +76,7 @@ protected:
 
 class ColorProfileClassSig : public FourCCSig {
 public:
-     ColorProfileClassSig( ColorProfileClassSig const &other ) : FourCCSig(other) {};
+     ColorProfileClassSig( ColorProfileClassSig const &other ) = default;
 
 protected:
      ColorProfileClassSig( guint32 value ) : FourCCSig(value) {};

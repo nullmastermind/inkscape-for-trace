@@ -262,7 +262,7 @@ private:
         {
             add(suggestions);
         }
-        ~TreeColumns() override {}
+        ~TreeColumns() override = default;
         Gtk::TreeModelColumn<Glib::ustring> suggestions;
     };
     TreeColumns tree_columns;

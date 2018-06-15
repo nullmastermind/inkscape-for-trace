@@ -32,8 +32,7 @@ SPStop::SPStop() : SPObject() {
     this->opacity = 1.0;
 }
 
-SPStop::~SPStop() {
-}
+SPStop::~SPStop() = default;
 
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);

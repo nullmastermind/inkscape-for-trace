@@ -157,8 +157,7 @@ ResourceManagerImpl::ResourceManagerImpl()
 }
 
 ResourceManagerImpl::~ResourceManagerImpl()
-{
-}
+= default;
 
 bool ResourceManagerImpl::extractFilepath( Glib::ustring const &href, std::string &uri )
 {                    
@@ -421,8 +420,7 @@ ResourceManager::ResourceManager()
 {
 }
 
-ResourceManager::~ResourceManager() {
-}
+ResourceManager::~ResourceManager() = default;
 
 ResourceManager& ResourceManager::getManager() {
     if ( !theInstance ) {

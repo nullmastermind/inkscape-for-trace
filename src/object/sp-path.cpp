@@ -112,8 +112,7 @@ void SPPath::convert_to_guides() const {
 SPPath::SPPath() : SPShape(), connEndPair(this) {
 }
 
-SPPath::~SPPath() {
-}
+SPPath::~SPPath() = default;
 
 void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
     /* Are these calls actually necessary? */

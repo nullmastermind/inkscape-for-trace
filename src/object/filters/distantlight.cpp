@@ -32,8 +32,7 @@ SPFeDistantLight::SPFeDistantLight()
     : SPObject(), azimuth(0), azimuth_set(FALSE), elevation(0), elevation_set(FALSE) {
 }
 
-SPFeDistantLight::~SPFeDistantLight() {
-}
+SPFeDistantLight::~SPFeDistantLight() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPDistantLight variables.  For this to get called,

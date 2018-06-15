@@ -19,14 +19,14 @@ namespace Inkscape {
 namespace Filters {
 
 FilterDisplacementMap::FilterDisplacementMap()
-{}
+= default;
 
 FilterPrimitive * FilterDisplacementMap::create() {
     return new FilterDisplacementMap();
 }
 
 FilterDisplacementMap::~FilterDisplacementMap()
-{}
+= default;
 
 struct Displace {
     Displace(cairo_surface_t *texture, cairo_surface_t *map,

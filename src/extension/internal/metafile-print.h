@@ -48,7 +48,7 @@ class PrintMetafile
     : public Inkscape::Extension::Implementation::Implementation
 {
 public:
-    PrintMetafile() {}
+    PrintMetafile() = default;
     ~PrintMetafile() override;
 
     bool textToPath (Inkscape::Extension::Print * ext) override;

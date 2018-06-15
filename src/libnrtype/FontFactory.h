@@ -59,7 +59,7 @@ const char *sp_font_description_get_family(PangoFontDescription const *fontDescr
 class StyleNames {
 
 public:
-    StyleNames() {};
+    StyleNames() = default;;
     StyleNames( Glib::ustring name ) :
         CssName( name ), DisplayName( name ) {};
     StyleNames( Glib::ustring cssname, Glib::ustring displayname ) :

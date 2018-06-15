@@ -43,8 +43,7 @@ SPFeImage::SPFeImage() : SPFilterPrimitive() {
     this->aspect_clip = SP_ASPECT_MEET; // Default
 }
 
-SPFeImage::~SPFeImage() {
-}
+SPFeImage::~SPFeImage() = default;
 
 /**
  * Reads the Inkscape::XML::Node, and initializes SPFeImage variables.  For this to get called,

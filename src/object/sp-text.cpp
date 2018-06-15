@@ -61,8 +61,7 @@
 SPText::SPText() : SPItem() {
 }
 
-SPText::~SPText() {
-}
+SPText::~SPText() = default;
 
 void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "x" );

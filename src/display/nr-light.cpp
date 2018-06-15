@@ -27,7 +27,7 @@ DistantLight::DistantLight(SPFeDistantLight *light, guint32 lighting_color) {
     elevation = M_PI / 180 * light->elevation;
 }
 
-DistantLight::~DistantLight() {}
+DistantLight::~DistantLight() = default;
 
 void DistantLight::light_vector(NR::Fvector &v) {
     v[X_3D] = std::cos(azimuth)*std::cos(elevation);
@@ -49,7 +49,7 @@ PointLight::PointLight(SPFePointLight *light, guint32 lighting_color, const Geom
     NR::convert_coord(l_x, l_y, l_z, trans);
 }
 
-PointLight::~PointLight() {}
+PointLight::~PointLight() = default;
 
 void PointLight::light_vector(NR::Fvector &v, double x, double y, double z) {
     v[X_3D] = l_x - x;
@@ -84,7 +84,7 @@ SpotLight::SpotLight(SPFeSpotLight *light, guint32 lighting_color, const Geom::A
     
 }
 
-SpotLight::~SpotLight() {}
+SpotLight::~SpotLight() = default;
 
 void SpotLight::light_vector(NR::Fvector &v, double x, double y, double z) {
     v[X_3D] = l_x - x;

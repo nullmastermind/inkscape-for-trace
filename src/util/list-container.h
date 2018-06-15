@@ -24,7 +24,7 @@ template <typename T>
 class ListContainer {
 public:
     /* default constructible */
-    ListContainer() {}
+    ListContainer() = default;
 
     /* assignable */
     ListContainer(ListContainer const &other) {

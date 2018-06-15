@@ -30,7 +30,7 @@ FilterPrimitive * FilterComposite::create() {
 }
 
 FilterComposite::~FilterComposite()
-{}
+= default;
 
 struct ComposeArithmetic {
     ComposeArithmetic(double k1, double k2, double k3, double k4)

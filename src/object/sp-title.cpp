@@ -15,8 +15,7 @@
 SPTitle::SPTitle() : SPObject() {
 }
 
-SPTitle::~SPTitle() {
-}
+SPTitle::~SPTitle() = default;
 
 Inkscape::XML::Node* SPTitle::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
 	SPTitle* object = this;

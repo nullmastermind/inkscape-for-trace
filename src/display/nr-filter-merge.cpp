@@ -27,7 +27,7 @@ FilterPrimitive * FilterMerge::create() {
 }
 
 FilterMerge::~FilterMerge()
-{}
+= default;
 
 void FilterMerge::render_cairo(FilterSlot &slot)
 {

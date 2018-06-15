@@ -22,8 +22,7 @@ SPStyleElem::SPStyleElem() : SPObject() {
     this->is_css = false;
 }
 
-SPStyleElem::~SPStyleElem() {
-}
+SPStyleElem::~SPStyleElem() = default;
 
 void SPStyleElem::set(unsigned int key, const gchar* value) {
     switch (key) {

@@ -104,7 +104,7 @@ FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("/dialogs/filtereff
 
 
 }
-FilterEditorDialog::~FilterEditorDialog(){}
+FilterEditorDialog::~FilterEditorDialog()= default;
 
 
 

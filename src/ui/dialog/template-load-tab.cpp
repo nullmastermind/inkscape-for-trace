@@ -65,8 +65,7 @@ TemplateLoadTab::TemplateLoadTab(NewFromTemplate* parent)
 
 
 TemplateLoadTab::~TemplateLoadTab()
-{
-}
+= default;
 
 
 void TemplateLoadTab::createTemplate()

@@ -24,8 +24,7 @@
 SPPolygon::SPPolygon() : SPShape() {
 }
 
-SPPolygon::~SPPolygon() {
-}
+SPPolygon::~SPPolygon() = default;
 
 void SPPolygon::build(SPDocument *document, Inkscape::XML::Node *repr) {
 	SPPolygon* object = this;

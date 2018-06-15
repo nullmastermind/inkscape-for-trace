@@ -71,8 +71,7 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
 }
 
 ScalarParam::~ScalarParam()
-{
-}
+= default;
 
 bool
 ScalarParam::param_readSVGValue(const gchar * strvalue)

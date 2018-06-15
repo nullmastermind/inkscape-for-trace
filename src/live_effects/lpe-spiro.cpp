@@ -26,8 +26,7 @@ LPESpiro::LPESpiro(LivePathEffectObject *lpeobject) :
 }
 
 LPESpiro::~LPESpiro()
-{
-}
+= default;
 
 void
 LPESpiro::doEffect(SPCurve * curve)

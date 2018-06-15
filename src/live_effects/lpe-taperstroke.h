@@ -28,7 +28,7 @@ class KnotHolderEntityAttachEnd;
 class LPETaperStroke : public Effect {
 public:
     LPETaperStroke(LivePathEffectObject *lpeobject);
-    ~LPETaperStroke() override {}
+    ~LPETaperStroke() override = default;
 
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;

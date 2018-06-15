@@ -164,7 +164,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _setPreviewPage();
 }
 
-VsdImportDialog::~VsdImportDialog() {}
+VsdImportDialog::~VsdImportDialog() = default;
 
 bool VsdImportDialog::showDialog()
 {

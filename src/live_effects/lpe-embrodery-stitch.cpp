@@ -81,9 +81,7 @@ LPEEmbroderyStitch::LPEEmbroderyStitch(LivePathEffectObject *lpeobject) :
 }
 
 LPEEmbroderyStitch::~LPEEmbroderyStitch()
-{
-
-}
+= default;
 
 double LPEEmbroderyStitch::GetPatternInitialStep(int pattern, int line)
 {

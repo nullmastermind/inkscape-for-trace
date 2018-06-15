@@ -132,7 +132,7 @@ private:
 
     
 class PdfInput: public Inkscape::Extension::Implementation::Implementation {
-    PdfInput () { };
+    PdfInput () = default;;
 public:
     SPDocument *open( Inkscape::Extension::Input *mod,
                                 const gchar *uri ) override;

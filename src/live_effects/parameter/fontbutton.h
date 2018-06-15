@@ -22,7 +22,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const Glib::ustring default_value = "Sans 10");
-    ~FontButtonParam() override {}
+    ~FontButtonParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
     bool param_readSVGValue(const gchar * strvalue) override;

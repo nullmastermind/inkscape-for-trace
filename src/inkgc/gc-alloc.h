@@ -37,7 +37,7 @@ public:
     template <typename U>
     struct rebind { typedef Alloc<U, collect> other; };
 
-    Alloc() {}
+    Alloc() = default;
     template <typename U> Alloc(Alloc<U, collect> const &) {}
 
     pointer address(reference r) { return &r; }

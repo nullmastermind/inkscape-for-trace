@@ -37,9 +37,7 @@ TransformedPointParam::TransformedPointParam( const Glib::ustring& label, const 
 }
 
 TransformedPointParam::~TransformedPointParam()
-{
-
-}
+= default;
 
 void
 TransformedPointParam::param_set_default()
@@ -165,7 +163,7 @@ TransformedPointParam::set_oncanvas_color(guint32 color)
 class TransformedPointParamKnotHolderEntity_Vector : public KnotHolderEntity {
 public:
     TransformedPointParamKnotHolderEntity_Vector(TransformedPointParam *p) : param(p) { }
-    ~TransformedPointParamKnotHolderEntity_Vector() override {}
+    ~TransformedPointParamKnotHolderEntity_Vector() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
         Geom::Point const s = p - param->origin;

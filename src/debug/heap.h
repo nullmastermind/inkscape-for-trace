@@ -21,7 +21,7 @@ namespace Debug {
 
 class Heap {
 public:
-    virtual ~Heap() {}
+    virtual ~Heap() = default;
 
     struct Stats {
         std::size_t size;

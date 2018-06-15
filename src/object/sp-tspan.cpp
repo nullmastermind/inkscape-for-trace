@@ -55,8 +55,7 @@ SPTSpan::SPTSpan() : SPItem() {
     this->role = SP_TSPAN_ROLE_UNSPECIFIED;
 }
 
-SPTSpan::~SPTSpan() {
-}
+SPTSpan::~SPTSpan() = default;
 
 void SPTSpan::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "x" );

@@ -694,7 +694,7 @@ private:
 
     class InputStreamItem {
     public:
-        virtual ~InputStreamItem() {}
+        virtual ~InputStreamItem() = default;
         virtual InputStreamItemType Type() =0;
         void *source_cookie;
     };

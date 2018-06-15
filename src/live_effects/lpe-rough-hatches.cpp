@@ -282,9 +282,7 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
 }
 
 LPERoughHatches::~LPERoughHatches()
-{
-
-}
+= default;
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPERoughHatches::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in){

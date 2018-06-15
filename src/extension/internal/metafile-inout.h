@@ -62,7 +62,7 @@ class Metafile
     : public Inkscape::Extension::Implementation::Implementation
 {
 public:
-    Metafile() {}
+    Metafile() = default;
     ~Metafile() override;
 
 protected:

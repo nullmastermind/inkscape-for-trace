@@ -88,7 +88,7 @@ public:
      * @param title the title of the dialog
      */
     FileOpenDialog()
-        {};
+        = default;;
 
     /**
      * Factory.
@@ -106,7 +106,7 @@ public:
      * Destructor.
      * Perform any necessary cleanups.
      */
-    virtual ~FileOpenDialog() {};
+    virtual ~FileOpenDialog() = default;;
 
     /**
      * Show an OpenFile file selector.
@@ -158,7 +158,7 @@ public:
      * @param key a list of file types from which the user can select
      */
     FileSaveDialog ()
-        {};
+        = default;;
 
     /**
      * Factory.
@@ -180,7 +180,7 @@ public:
      * Destructor.
      * Perform any necessary cleanups.
      */
-    virtual ~FileSaveDialog() {};
+    virtual ~FileSaveDialog() = default;;
 
 
     /**

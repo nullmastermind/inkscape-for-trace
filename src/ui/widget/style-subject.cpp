@@ -38,11 +38,9 @@ void StyleSubject::setDesktop(SPDesktop *desktop) {
     }
 }
 
-StyleSubject::Selection::Selection() {
-}
+StyleSubject::Selection::Selection() = default;
 
-StyleSubject::Selection::~Selection() {
-}
+StyleSubject::Selection::~Selection() = default;
 
 Inkscape::Selection *StyleSubject::Selection::_getSelection() const {
     SPDesktop *desktop = getDesktop();
@@ -105,8 +103,7 @@ StyleSubject::CurrentLayer::CurrentLayer() {
     _element = nullptr;
 }
 
-StyleSubject::CurrentLayer::~CurrentLayer() {
-}
+StyleSubject::CurrentLayer::~CurrentLayer() = default;
 
 void StyleSubject::CurrentLayer::_setLayer(SPObject *layer) {
     _layer_release.disconnect();

@@ -98,8 +98,7 @@ LPELattice2::LPELattice2(LivePathEffectObject *lpeobject) :
 }
 
 LPELattice2::~LPELattice2()
-{
-}
+= default;
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPELattice2::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)

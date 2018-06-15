@@ -595,8 +595,7 @@ SVGPreview::SVGPreview()
 }
 
 SVGPreview::~SVGPreview()
-{
-}
+= default;
 
 
 /*#########################################################################
@@ -739,8 +738,7 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
  * Destructor
  */
 FileOpenDialogImplGtk::~FileOpenDialogImplGtk()
-{
-}
+= default;
 
 void FileOpenDialogImplGtk::addFilterMenu(Glib::ustring name, Glib::ustring pattern)
 {
@@ -1049,8 +1047,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
  * Destructor
  */
 FileSaveDialogImplGtk::~FileSaveDialogImplGtk()
-{
-}
+= default;
 
 /**
  * Callback for fileNameEntry widget

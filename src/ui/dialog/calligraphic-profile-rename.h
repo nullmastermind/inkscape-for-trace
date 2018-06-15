@@ -32,7 +32,7 @@ namespace Dialog {
 class CalligraphicProfileRename : public Gtk::Dialog {  
 public:
     CalligraphicProfileRename();
-    ~CalligraphicProfileRename() override {}
+    ~CalligraphicProfileRename() override = default;
     Glib::ustring getName() const {
         return "CalligraphicProfileRename";
     }

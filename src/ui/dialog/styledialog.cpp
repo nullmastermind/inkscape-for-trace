@@ -168,8 +168,7 @@ StyleDialog::_nodeChanged( Inkscape::XML::Node &object ) {
 }
 
 StyleDialog::TreeStore::TreeStore()
-{
-}
+= default;
 
 
 /**
@@ -1045,7 +1044,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 class PropertyData
 {
 public:
-    PropertyData() {};
+    PropertyData() = default;;
     PropertyData(Glib::ustring name) : _name(name) {};
 
     void _setSheetValue(Glib::ustring value) { _sheetValue = value; };

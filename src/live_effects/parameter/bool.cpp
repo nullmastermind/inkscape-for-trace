@@ -26,8 +26,7 @@ BoolParam::BoolParam( const Glib::ustring& label, const Glib::ustring& tip,
 }
 
 BoolParam::~BoolParam()
-{
-}
+= default;
 
 void
 BoolParam::param_set_default()

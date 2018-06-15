@@ -37,9 +37,7 @@ public:
 
     }
 
-    ~ArrayParam() override {
-
-    };
+    ~ArrayParam() override = default;;
 
     std::vector<StorageType> const & data() const {
         return _vector;

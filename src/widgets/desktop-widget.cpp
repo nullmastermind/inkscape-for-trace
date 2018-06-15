@@ -136,7 +136,7 @@ public:
         prefs->addObserver(_dpw);
         prefs->addObserver(_spw);
     }
-    virtual ~CMSPrefWatcher() {}
+    virtual ~CMSPrefWatcher() = default;
 
     //virtual void notify(PrefValue &);
     void add( SPDesktopWidget* dtw ) {

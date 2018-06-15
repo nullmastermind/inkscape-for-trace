@@ -88,7 +88,7 @@ private:
             add(lperef);
             add(col_visible);
         }
-        ~ModelColumns() override {}
+        ~ModelColumns() override = default;
 
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<LivePathEffect::LPEObjectReference *> lperef;

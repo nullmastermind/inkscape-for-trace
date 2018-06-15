@@ -96,8 +96,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
 }
 
 LPEOffset::~LPEOffset()
-{
-}
+= default;
 
 static void
 sp_flatten(Geom::PathVector &pathvector, bool evenodd)

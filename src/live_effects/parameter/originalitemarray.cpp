@@ -46,7 +46,7 @@ public:
         add(_colLabel);
         add(_colActive);
     }
-    ~ModelColumns() override {}
+    ~ModelColumns() override = default;
 
     Gtk::TreeModelColumn<ItemAndActive*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;

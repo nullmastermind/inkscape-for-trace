@@ -29,8 +29,7 @@ LPECircle3Pts::LPECircle3Pts(LivePathEffectObject *lpeobject) :
 }
 
 LPECircle3Pts::~LPECircle3Pts()
-{
-}
+= default;
 
 static void _circle3(Geom::Point const &A, Geom::Point const &B, Geom::Point const &C, Geom::PathVector &path_out) {
     using namespace Geom;
