@@ -810,6 +810,7 @@ private:
     struct Line;
     struct Paragraph;
 
+    // A glyph
     struct Glyph {
         int glyph;
         unsigned in_character;
@@ -819,21 +820,25 @@ private:
         Orientation orientation; /// Orientation of glyph in vertical text
         float width;
         float vertical_scale; /// to implement lengthAdjust="spacingAndGlyphs" that must scale glyphs only horizontally; instead we change font size and then undo that change vertically only
-        inline Span const & span(Layout const *l) const {return l->_spans[l->_characters[in_character].in_span];}
-        inline Chunk const & chunk(Layout const *l) const {return l->_chunks[l->_spans[l->_characters[in_character].in_span].in_chunk];}
-        inline Line const & line(Layout const *l) const {return l->_lines[l->_chunks[l->_spans[l->_characters[in_character].in_span].in_chunk].in_line];}
+        inline Span  const & span (Layout const *l) const {return                      l->_spans[l->_characters[in_character].in_span];}
+        inline Chunk const & chunk(Layout const *l) const {return           l->_chunks[l->_spans[l->_characters[in_character].in_span].in_chunk];}
+        inline Line  const & line (Layout const *l) const {return l->_lines[l->_chunks[l->_spans[l->_characters[in_character].in_span].in_chunk].in_line];}
     };
+
+    // A unicode character
     struct Character {
         unsigned in_span;
         float x;      /// relative to the start of the *span* (so we can do block-progression)
         PangoLogAttr char_attributes;
         int in_glyph;   /// will be -1 if this character has no visual representation
-        inline Span const & span(Layout const *l) const {return l->_spans[in_span];}
-        inline Chunk const & chunk(Layout const *l) const {return l->_chunks[l->_spans[in_span].in_chunk];}
-        inline Line const & line(Layout const *l) const {return l->_lines[l->_chunks[l->_spans[in_span].in_chunk].in_line];}
+        inline Span      const & span     (Layout const *l) const {return                                     l->_spans[in_span];}
+        inline Chunk     const & chunk    (Layout const *l) const {return                          l->_chunks[l->_spans[in_span].in_chunk];}
+        inline Line      const & line     (Layout const *l) const {return                l->_lines[l->_chunks[l->_spans[in_span].in_chunk].in_line];}
         inline Paragraph const & paragraph(Layout const *l) const {return l->_paragraphs[l->_lines[l->_chunks[l->_spans[in_span].in_chunk].in_line].in_paragraph];}
         // to get the advance width of a character, subtract the x values if it's in the middle of a span, or use span.x_end if it's at the end
     };
+
+    // A collection of characters that share the same style and position start (<text> or <tspan> x, y attributes).
     struct Span {
         unsigned in_chunk;
         font_instance *font;
@@ -848,23 +853,30 @@ private:
         Direction block_progression;  /// See CSS3 section 3.2. The direction in which lines go.
         unsigned in_input_stream_item;
         Glib::ustring::const_iterator input_stream_first_character;
-        inline Chunk const & chunk(Layout const *l) const {return l->_chunks[in_chunk];}
-        inline Line const & line(Layout const *l) const {return l->_lines[l->_chunks[in_chunk].in_line];}
+        inline Chunk     const & chunk    (Layout const *l) const {return                          l->_chunks[in_chunk];                       }
+        inline Line      const & line     (Layout const *l) const {return                l->_lines[l->_chunks[in_chunk].in_line];              }
         inline Paragraph const & paragraph(Layout const *l) const {return l->_paragraphs[l->_lines[l->_chunks[in_chunk].in_line].in_paragraph];}
     };
+
+    // A part of a line that is not broken.
     struct Chunk {
         unsigned in_line;
         double left_x;
     };
+
+    // A line of text. Depending on the shape, it may contain one or more chunks.
     struct Line {
         unsigned in_paragraph;
         double baseline_y;
         unsigned in_shape;
     };
+
+    // A paragraph. SVG 2 does not contain native paragraphs.
     struct Paragraph {
         Direction base_direction;    /// can be overridden by child Span objects
         Alignment alignment;
     };
+
     std::vector<Paragraph> _paragraphs;
     std::vector<Line> _lines;
     std::vector<Chunk> _chunks;
