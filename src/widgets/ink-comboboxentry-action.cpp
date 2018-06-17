@@ -24,7 +24,7 @@
  */
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <glibmm/ustring.h>
 
 #include <gtk/gtk.h>

@@ -27,9 +27,9 @@
 # include "config.h"
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
 #include <3rdparty/libuemf/symbol_convert.h>
 
 #include "document.h"

@@ -13,7 +13,7 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 
 #include "cdr-input.h"

@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "attributes.h"
 #include "svg/svg.h"

@@ -18,7 +18,7 @@
 #endif
 
 #include <list>
-#include <stddef.h>
+#include <cstddef>
 #include "ui/widget/panel.h"
 #include <gtkmm/notebook.h>
 #include <gtkmm/grid.h>

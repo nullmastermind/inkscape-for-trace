@@ -23,7 +23,7 @@
 #include "display/nr-filter-turbulence.h"
 #include "display/nr-filter-units.h"
 #include "display/nr-filter-utils.h"
-#include <math.h>
+#include <cmath>
 
 namespace Inkscape {
 namespace Filters{

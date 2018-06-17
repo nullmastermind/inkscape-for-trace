@@ -11,7 +11,7 @@
 
 #include <cassert>
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 #include <new>
 
 #include "pool.h"

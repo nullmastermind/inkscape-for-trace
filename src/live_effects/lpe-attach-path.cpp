@@ -4,7 +4,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
+#include <cmath>
 #include "live_effects/lpe-attach-path.h"
 #include "display/curve.h"
 #include "2geom/path-sink.h"

@@ -39,7 +39,7 @@
 
 /* Note: this file should be kept compilable as both .cpp and .c */
 
-#include <string.h>
+#include <cstring>
 
 #include <gtk/gtk.h>
 #include <gtkmm/container.h>

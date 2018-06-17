@@ -25,7 +25,7 @@
 #include "config.h"
 #endif
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 
 #include <2geom/affine.h>

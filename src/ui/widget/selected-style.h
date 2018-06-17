@@ -28,7 +28,7 @@
 #include <gtkmm/radiomenuitem.h>
 #include "ui/widget/spinbutton.h"
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 
 #include "rotateable.h"

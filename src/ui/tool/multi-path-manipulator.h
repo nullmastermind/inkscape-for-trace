@@ -11,7 +11,7 @@
 #ifndef SEEN_UI_TOOL_MULTI_PATH_MANIPULATOR_H
 #define SEEN_UI_TOOL_MULTI_PATH_MANIPULATOR_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include "node.h"
 #include "commit-events.h"

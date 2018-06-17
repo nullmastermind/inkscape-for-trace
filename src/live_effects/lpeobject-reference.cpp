@@ -8,7 +8,7 @@
 
 #include "live_effects/lpeobject-reference.h"
 
-#include <string.h>
+#include <cstring>
 
 #include "bad-uri-exception.h"
 #include "live_effects/lpeobject.h"

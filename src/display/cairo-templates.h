@@ -27,7 +27,7 @@ static const int OPENMP_THRESHOLD = 2048;
 
 #include <algorithm>
 #include <cairo.h>
-#include <math.h>
+#include <cmath>
 #include "display/nr-3dutils.h"
 #include "display/cairo-utils.h"
 

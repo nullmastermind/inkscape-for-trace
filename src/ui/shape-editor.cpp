@@ -11,7 +11,7 @@
 #include <config.h>
 #endif
 
-#include <string.h>
+#include <cstring>
 #include <glibmm/i18n.h>
 
 #include "desktop.h"

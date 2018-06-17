@@ -20,7 +20,7 @@
 #include "sp-filter.h"
 
 #include <map>
-#include <string.h>
+#include <cstring>
 
 #include <glibmm.h>
 

@@ -20,7 +20,7 @@
 #endif
 
 #include <gtkmm/widget.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 
 namespace Gtk {

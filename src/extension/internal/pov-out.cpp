@@ -38,8 +38,8 @@
 #include "style.h"
 
 #include <string>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 #include "document.h"
 #include "extension/extension.h"
 

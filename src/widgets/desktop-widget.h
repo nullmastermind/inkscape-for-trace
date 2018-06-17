@@ -17,7 +17,7 @@
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include <2geom/point.h>
 

@@ -12,7 +12,7 @@
  */
 
 #include <sstream>
-#include <string.h>
+#include <cstring>
 #include "desktop.h"
 
 #include "color.h"

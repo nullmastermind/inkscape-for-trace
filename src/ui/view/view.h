@@ -12,7 +12,7 @@
  */
 
 #include <gdk/gdk.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include "message.h"
 #include "inkgc/gc-managed.h"

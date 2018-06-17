@@ -16,7 +16,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include "math.h"
+#include <cmath>
 
 namespace SysEq {
 

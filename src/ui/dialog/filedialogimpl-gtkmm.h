@@ -26,7 +26,7 @@
 //General includes
 #include <unistd.h>
 #include <sys/stat.h>
-#include <errno.h>
+#include <cerrno>
 
 #include "filedialog.h"
 

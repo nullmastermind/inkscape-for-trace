@@ -43,8 +43,8 @@
 #include "style.h"
 
 #include <string>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 #include "extension/extension.h"
 
 

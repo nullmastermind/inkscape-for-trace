@@ -11,7 +11,7 @@
  */
 
 #include <cstdio>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "imagemap-gdk.h"
 #include "filterset.h"

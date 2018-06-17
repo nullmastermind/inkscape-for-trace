@@ -15,7 +15,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stddef.h>
+#include <cstddef>
 
 #include <2geom/point.h>
 #include <sigc++/connection.h>

@@ -21,8 +21,8 @@
 
 #include "latex-text-renderer.h"
 
-#include <signal.h>
-#include <errno.h>
+#include <csignal>
+#include <cerrno>
 
 #include "libnrtype/Layout-TNG.h"
 #include <2geom/transforms.h>

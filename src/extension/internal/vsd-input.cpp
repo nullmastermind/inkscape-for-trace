@@ -13,7 +13,7 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 
 #include "vsd-input.h"

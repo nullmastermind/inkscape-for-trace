@@ -13,7 +13,7 @@
 # include "config.h"
 #endif
 
-# include <string.h>
+# include <cstring>
 
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>

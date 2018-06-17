@@ -7,8 +7,8 @@
  */
 #include "siox.h"
 
-#include <math.h>
-#include <stdarg.h>
+#include <cmath>
+#include <cstdarg>
 #include <map>
 #include <algorithm>
 #include <cstdlib>

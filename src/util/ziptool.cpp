@@ -31,9 +31,9 @@
  */
 
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdarg>
+#include <ctime>
 
 #include <string>
 

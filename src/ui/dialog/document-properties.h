@@ -14,7 +14,7 @@
 #ifndef INKSCAPE_UI_DIALOG_DOCUMENT_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_DOCUMENT_PREFERENCES_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/liststore.h>

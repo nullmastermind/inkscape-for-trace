@@ -7,8 +7,8 @@
  */
 
 #include <glibmm/i18n.h>
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 #include <algorithm>
 
 #include "live_effects/lpe-bool.h"

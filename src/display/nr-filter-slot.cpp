@@ -11,8 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 #include <2geom/transforms.h>
 #include "display/cairo-utils.h"

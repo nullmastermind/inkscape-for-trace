@@ -3,7 +3,7 @@
  * Utility functions for filenames.
  */
 
-#include <errno.h>
+#include <cerrno>
 #include <string>
 #include <cstring>
 #include <glib.h>

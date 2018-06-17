@@ -15,7 +15,7 @@
 #endif
 
 #if HAVE_STDINT_H
-# include <stdint.h> // uint8_t, etc
+# include <cstdint> // uint8_t, etc
 #endif
 typedef unsigned int guint32;
 

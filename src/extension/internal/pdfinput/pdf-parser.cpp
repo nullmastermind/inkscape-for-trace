@@ -23,11 +23,11 @@
 
 extern "C" {
         
-#include <stdlib.h>
-#include <stdio.h>
-#include <stddef.h>
-#include <string.h>
-#include <math.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstddef>
+#include <cstring>
+#include <cmath>
 
 }
 

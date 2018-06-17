@@ -119,7 +119,7 @@
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
 
-#include <errno.h>
+#include <cerrno>
 #include "verbs.h"
 
 #include "path-chemistry.h"

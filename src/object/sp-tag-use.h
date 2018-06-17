@@ -13,7 +13,7 @@
  */
 
 #include <glib.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include "svg/svg-length.h"
 #include "sp-object.h"

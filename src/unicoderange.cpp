@@ -1,7 +1,7 @@
 #include "unicoderange.h"
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 static unsigned int hex2int(char* s){
     int res=0;

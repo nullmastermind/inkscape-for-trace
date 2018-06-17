@@ -35,7 +35,7 @@
 #include <glib/gstdio.h>
 #include <libsoup/soup.h>
 #include <string>
-#include <time.h>
+#include <ctime>
 
 #include "io/sys.h"
 #include "io/http.h"

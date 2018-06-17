@@ -12,7 +12,7 @@
 #ifndef SEEN_INKSCAPE_DEBUG_SIMPLE_EVENT_H
 #define SEEN_INKSCAPE_DEBUG_SIMPLE_EVENT_H
 
-#include <stdarg.h>
+#include <cstdarg>
 #include <vector>
 #include <glib.h> // g_assert()
 

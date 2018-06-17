@@ -14,7 +14,7 @@
 #include <gmodule.h>
 
 #include "system.h"
-#include <string.h>
+#include <cstring>
 #include "dependency.h"
 #include "inkscape-version.h"
 

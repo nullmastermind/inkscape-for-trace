@@ -12,7 +12,7 @@
 
 #include <boost/optional.hpp>
 #include <2geom/rect.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 
 #include "object/sp-item.h"

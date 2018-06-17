@@ -17,7 +17,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include "xml/event-fns.h"
 #include "document.h"

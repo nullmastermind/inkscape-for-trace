@@ -15,7 +15,7 @@
 
 #include "labelled.h"
 
-#include <stddef.h>
+#include <cstddef>
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/button.h>

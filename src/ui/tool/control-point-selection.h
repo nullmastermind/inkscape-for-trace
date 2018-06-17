@@ -15,7 +15,7 @@
 #include <list>
 #include <memory>
 #include <boost/optional.hpp>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <2geom/forward.h>
 #include <2geom/point.h>

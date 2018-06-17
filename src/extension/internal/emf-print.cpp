@@ -26,7 +26,7 @@
 # include "config.h"
 #endif
 
-#include <string.h>
+#include <cstring>
 #include <glibmm/miscutils.h>
 #include <3rdparty/libuemf/symbol_convert.h>
 #include <2geom/sbasis-to-bezier.h>

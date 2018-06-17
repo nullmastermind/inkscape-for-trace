@@ -17,7 +17,7 @@
  * Released under GNU GPL
  */
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
 

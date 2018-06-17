@@ -86,8 +86,8 @@
 #include "object/sp-defs.h"
 #include "object/sp-shape.h"
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <pangomm/layout.h>
 #include <gtkmm/expander.h>
 

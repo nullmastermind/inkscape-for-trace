@@ -1,4 +1,4 @@
-#include <string.h>
+#include <cstring>
 #include <glib.h>
 
 #include "extract-uri.h"

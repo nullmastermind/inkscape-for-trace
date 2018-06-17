@@ -18,8 +18,8 @@
 #include <2geom/pathvector.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/curves.h>
-#include <errno.h>
-#include <signal.h>
+#include <cerrno>
+#include <csignal>
 #include "util/units.h"
 #include "helper/geom-curves.h"
 

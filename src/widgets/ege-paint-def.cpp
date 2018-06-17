@@ -38,12 +38,12 @@
 
 #include <libintl.h>
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 

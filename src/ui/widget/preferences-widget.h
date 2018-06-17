@@ -24,7 +24,7 @@
 
 #include <gtkmm/filechooserbutton.h>
 #include "ui/widget/spinbutton.h"
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>

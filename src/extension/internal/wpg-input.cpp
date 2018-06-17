@@ -39,7 +39,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include "config.h"
 
 #ifdef WITH_LIBWPG

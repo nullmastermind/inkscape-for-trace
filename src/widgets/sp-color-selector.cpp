@@ -7,7 +7,7 @@
 #include <config.h>
 #endif
 
-#include <math.h>
+#include <cmath>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include "sp-color-selector.h"

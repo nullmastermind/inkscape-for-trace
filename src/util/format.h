@@ -12,7 +12,7 @@
 #ifndef SEEN_INKSCAPE_UTIL_FORMAT_H
 #define SEEN_INKSCAPE_UTIL_FORMAT_H
 
-#include <stdarg.h>
+#include <cstdarg>
 #include <glib.h>
 #include "util/share.h"
 

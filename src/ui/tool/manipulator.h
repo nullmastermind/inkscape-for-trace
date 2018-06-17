@@ -13,7 +13,7 @@
 
 #include <set>
 #include <map>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <glib.h>
 #include <gdk/gdk.h>

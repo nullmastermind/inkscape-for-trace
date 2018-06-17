@@ -15,7 +15,7 @@
  * Released under GNU GPL
  */
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include <2geom/point.h>
 #include "ui/tools/tool-base.h"

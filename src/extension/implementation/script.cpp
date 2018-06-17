@@ -21,7 +21,7 @@
 #include <glibmm/convert.h>
 #include <unistd.h>
 
-#include <errno.h>
+#include <cerrno>
 #include <glib/gstdio.h>
 
 

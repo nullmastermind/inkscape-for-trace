@@ -12,7 +12,7 @@
 
 #include <gdkmm/pixbuf.h>
 #include <boost/utility.hpp>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/signal.h>
 #include <sigc++/trackable.h>
 #include <2geom/point.h>

@@ -17,7 +17,7 @@
 
 #include <vector>
 #include <map>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 
 #include "inkgc/gc-managed.h"

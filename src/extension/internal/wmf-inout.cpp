@@ -28,9 +28,9 @@
 #endif
 
 //#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
 #include <3rdparty/libuemf/symbol_convert.h>
 
 #include "document.h"

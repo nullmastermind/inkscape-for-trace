@@ -17,9 +17,9 @@
 
 #define PNG_SKIP_SETJMP_CHECK // else any further png.h include blows up in the compiler
 #include <png.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
 #include <map>
 #include <stack>
 #include <glibmm/ustring.h>

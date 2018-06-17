@@ -44,10 +44,10 @@
 #include "odf.h"
 
 //# System includes
-#include <stdio.h>
-#include <time.h>
+#include <cstdio>
+#include <ctime>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 //# Inkscape includes
 #include "clear-n_.h"
@@ -101,7 +101,7 @@ typedef Inkscape::IO::StringOutputStream StringOutputStream;
 //########################################################################
 //# C L A S S    SingularValueDecomposition
 //########################################################################
-#include <math.h>
+#include <cmath>
 
 class SVDMatrix
 {

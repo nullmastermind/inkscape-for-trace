@@ -10,7 +10,7 @@
 #ifndef SEEN_INKSCAPE_DOCUMENT_SUBSET_H
 #define SEEN_INKSCAPE_DOCUMENT_SUBSET_H
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 

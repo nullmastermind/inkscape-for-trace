@@ -5,10 +5,10 @@
 #ifndef BITMAP_H
 #define BITMAP_H
 
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <stddef.h>
+#include <cstring>
+#include <cstdlib>
+#include <cerrno>
+#include <cstddef>
 
 /* The bitmap type is defined in potracelib.h */
 #include "potracelib.h"

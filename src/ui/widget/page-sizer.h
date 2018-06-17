@@ -14,7 +14,7 @@
 # include <config.h>
 #endif
 
-#include <stddef.h>
+#include <cstddef>
 #include "ui/widget/registered-widget.h"
 #include <sigc++/sigc++.h>
 

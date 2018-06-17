@@ -52,7 +52,7 @@ class SPObject;
 #define SP_OBJECT_WRITE_NO_CHILDREN (1 << 3)
 
 #include <cassert>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>

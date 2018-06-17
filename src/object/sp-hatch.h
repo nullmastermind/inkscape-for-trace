@@ -16,7 +16,7 @@
 #define SEEN_SP_HATCH_H
 
 #include <list>
-#include <stddef.h>
+#include <cstddef>
 #include <glibmm/ustring.h>
 #include <sigc++/connection.h>
 

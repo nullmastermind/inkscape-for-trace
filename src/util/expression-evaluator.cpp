@@ -30,8 +30,8 @@
 
 #include <glib/gconvert.h>
 
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 
 using Inkscape::Util::unit_table;
 

@@ -15,7 +15,7 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
+#include <cerrno>
 
 #include <gtkmm/label.h>
 #include <glibmm/i18n.h>

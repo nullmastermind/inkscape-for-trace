@@ -1,5 +1,5 @@
 #include <glib.h>
-#include <math.h>
+#include <cmath>
 
 #include "mod360.h"
 
@@ -9,7 +9,7 @@
 double mod360(double const x)
 {
     double const m = fmod(x, 360.0);
-    double const ret = ( isnan(m)
+    double const ret = ( std::isnan(m)
                          ? 0.0
                          : ( m < 0
                              ? m + 360

@@ -13,7 +13,7 @@
  */
 
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
 #include "sp-canvas-util.h"
 #include "canvas-text.h"

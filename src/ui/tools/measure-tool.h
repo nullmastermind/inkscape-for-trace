@@ -16,7 +16,7 @@
 # include <config.h>
 #endif
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
 #include <2geom/point.h>

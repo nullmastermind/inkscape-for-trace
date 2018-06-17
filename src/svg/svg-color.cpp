@@ -19,9 +19,9 @@
 #include <cstdio> // sprintf
 #include <cstring>
 #include <string>
-#include <math.h>
+#include <cmath>
 #include <glib.h> // g_assert
-#include <errno.h>
+#include <cerrno>
 
 #include <map>
 

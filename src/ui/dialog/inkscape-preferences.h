@@ -23,7 +23,7 @@
 #include <vector>
 #include "ui/widget/preferences-widget.h"
 #include "ui/widget/button.h"
-#include <stddef.h>
+#include <cstddef>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/treestore.h>

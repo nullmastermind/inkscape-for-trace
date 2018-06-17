@@ -14,7 +14,7 @@
  */
 
 #include <2geom/point.h>
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 
 class  SPDesktop;

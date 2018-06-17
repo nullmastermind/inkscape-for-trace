@@ -25,11 +25,11 @@
 #endif
 
 
-#include <signal.h>
-#include <limits.h>
-#include <errno.h>
-#include <time.h>
-#include <stdlib.h>
+#include <csignal>
+#include <climits>
+#include <cerrno>
+#include <ctime>
+#include <cstdlib>
 #include <2geom/pathvector.h>
 
 #include <glib.h>

@@ -27,7 +27,7 @@
 #ifdef HAVE_JPEG
 #define IR_TRY_JFIF 1
 #include <jpeglib.h>
-#include <setjmp.h>
+#include <csetjmp>
 #endif
 
 #ifdef WITH_IMAGE_MAGICK

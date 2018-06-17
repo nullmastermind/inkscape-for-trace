@@ -17,7 +17,7 @@
 #include <config.h>
 #endif
 
-#include <string.h>
+#include <cstring>
 
 #include "sp-filter-primitive.h"
 

@@ -9,7 +9,7 @@
 
 #include "BitLigne.h"
 
-#include <math.h>
+#include <cmath>
 #include <cstring>
 #include <cstdlib>
 #include <string>
