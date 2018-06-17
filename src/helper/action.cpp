@@ -9,6 +9,10 @@
  * This code is in public domain
  */
 
+#include "helper/action.h"
+
+#include <gtkmm/toolbutton.h>
+
 #include "debug/logger.h"
 #include "debug/timestamp.h"
 #include "debug/simple-event.h"
@@ -16,7 +20,7 @@
 #include "ui/view/view.h"
 #include "desktop.h"
 #include "document.h"
-#include "helper/action.h"
+#include "verbs.h"
 
 static void sp_action_finalize (GObject *object);
 
@@ -213,6 +217,36 @@ sp_action_get_desktop (SPAction *action)
       return static_cast<SPDesktop *>(sp_action_get_view(action));
 }
 
+/**
+ * \brief Create a toolbutton whose "clicked" signal performs an Inkscape verb
+ *
+ * \param[in] verb_code The code (e.g., SP_VERB_EDIT_SELECT_ALL) for the verb we want
+ *
+ * \todo This should really attach the toolbutton to an application action instead of
+ *       hooking up the "clicked" signal.  This should probably wait until we've
+ *       migrated to Gtk::Application
+ */
+Gtk::ToolButton *
+SPAction::create_toolbutton_for_verb(unsigned int             verb_code,
+                                     Inkscape::ActionContext &context)
+{
+    // Get display properties for the verb
+    auto verb = Inkscape::Verb::get(verb_code);
+    auto target_action = verb->get_action(context);
+    auto icon_name = verb->get_image();
+
+    // Create a button with the required display properties
+    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_name()));
+    button->set_icon_name(icon_name);
+    button->set_tooltip_text(verb->get_tip());
+
+    // Hook up signal handler
+    auto button_clicked_cb = sigc::bind(sigc::ptr_fun(&sp_action_perform),
+                                        target_action, nullptr);
+    button->signal_clicked().connect(button_clicked_cb);
+
+    return button;
+}
 /*
   Local Variables:
   mode:c++

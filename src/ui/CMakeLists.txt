@@ -48,6 +48,7 @@ set(ui_SRC
 	toolbar/spray-toolbar.cpp
 	toolbar/star-toolbar.cpp
 	toolbar/text-toolbar.cpp
+	toolbar/toolbar.cpp
 	toolbar/tweak-toolbar.cpp
 	toolbar/zoom-toolbar.cpp
 
@@ -328,6 +329,7 @@ set(ui_SRC
 	toolbar/spray-toolbar.h
 	toolbar/star-toolbar.h
 	toolbar/text-toolbar.h
+	toolbar/toolbar.h
 	toolbar/tweak-toolbar.h
 	toolbar/zoom-toolbar.h
 

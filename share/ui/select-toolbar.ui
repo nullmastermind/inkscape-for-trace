@@ -113,23 +113,6 @@
     <toolitem action='SprayPickCenterAction' />
   </toolbar>
 
-  <toolbar name='ZoomToolbar'>
-    <toolitem action='ZoomIn' />
-    <toolitem action='ZoomOut' />
-    <separator />
-    <toolitem action='Zoom1:0' />
-    <toolitem action='Zoom1:2' />
-    <toolitem action='Zoom2:1' />
-    <separator />
-    <toolitem action='ZoomSelection' />
-    <toolitem action='ZoomDrawing' />
-    <toolitem action='ZoomPage' />
-    <toolitem action='ZoomPageWidth' />
-    <separator />
-    <toolitem action='ZoomPrev' />
-    <toolitem action='ZoomNext' />
-  </toolbar>
-
   <toolbar name='MeasureToolbar'>
     <toolitem action='MeasureFontSizeAction' />
     <toolitem action='MeasurePrecisionAction' />

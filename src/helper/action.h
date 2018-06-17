@@ -12,6 +12,8 @@
 #ifndef SEEN_INKSCAPE_SP_ACTION_H
 #define SEEN_INKSCAPE_SP_ACTION_H
 
+#include <glib-object.h>
+
 #include "helper/action-context.h"
 #include <sigc++/signal.h>
 #include <glibmm/ustring.h>
@@ -20,6 +22,10 @@
 #define SP_ACTION(o) (G_TYPE_CHECK_INSTANCE_CAST((o), SP_TYPE_ACTION, SPAction))
 #define SP_ACTION_CLASS(o) (G_TYPE_CHECK_CLASS_CAST((o), SP_TYPE_ACTION, SPActionClass))
 #define SP_IS_ACTION(o) (G_TYPE_CHECK_INSTANCE_TYPE((o), SP_TYPE_ACTION))
+
+namespace Gtk {
+class ToolButton;
+}
 
 class SPDesktop;
 class SPDocument;
@@ -52,6 +58,9 @@ struct SPAction : public GObject {
     sigc::signal<void, bool> signal_set_sensitive;
     sigc::signal<void, bool> signal_set_active;
     sigc::signal<void, Glib::ustring const &> signal_set_name;
+
+    static Gtk::ToolButton * create_toolbutton_for_verb(unsigned int             verb_code,
+                                                        Inkscape::ActionContext &context);
 };
 
 /** The action class is the same as its parent. */

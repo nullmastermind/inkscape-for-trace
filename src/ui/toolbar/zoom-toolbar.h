@@ -27,11 +27,35 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-class SPDesktop;
+#include "toolbar.h"
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
 
-void       sp_zoom_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+/**
+ * \brief A toolbar for controlling the zoom
+ */
+class ZoomToolbar : public Toolbar {
+protected:
+    ZoomToolbar(SPDesktop *desktop);
+
+public:
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
 
 #endif /* !SEEN_ZOOM_TOOLBAR_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
