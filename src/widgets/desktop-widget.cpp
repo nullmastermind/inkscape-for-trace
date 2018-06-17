@@ -28,8 +28,12 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
 
-#include <gdkmm/seat.h>
 #include <gdkmm/types.h>
+#if GTK_CHECK_VERSION(3,20,0)
+#include <gdkmm/seat.h>
+#else
+#include <gdkmm/devicemanager.h>
+#endif
 
 #include <2geom/rect.h>
 
