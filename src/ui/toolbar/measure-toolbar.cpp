@@ -34,11 +34,11 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "ink-action.h"
-#include "ink-toggle-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-toggle-action.h"
+#include "widgets/toolbox.h"
 #include "inkscape.h"
 #include "message-stack.h"
-#include "toolbox.h"
 
 #include "ui/icon-names.h"
 #include "ui/tools/measure-tool.h"

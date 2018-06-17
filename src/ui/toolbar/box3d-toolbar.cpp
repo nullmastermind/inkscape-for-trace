@@ -37,7 +37,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/box3d.h"

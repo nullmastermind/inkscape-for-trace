@@ -33,12 +33,12 @@
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "ink-toggle-action.h"
-#include "ink-tool-menu-action.h"
+#include "widgets/ink-toggle-action.h"
+#include "widgets/ink-tool-menu-action.h"
+#include "widgets/toolbox.h"
 #include "inkscape.h"
 #include "node-toolbar.h"
 #include "selection-chemistry.h"
-#include "toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"

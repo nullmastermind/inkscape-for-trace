@@ -35,11 +35,10 @@
 
 #include "desktop.h"
 #include "selection.h"
-#include "toolbox.h"
 
-#include "ink-action.h"
-#include "ink-radio-action.h"
-#include "ink-toggle-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-toggle-action.h"
+#include "widgets/toolbox.h"
 
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-powerstroke.h"

@@ -33,7 +33,7 @@
 #include "dropper-toolbar.h"
 #include "document-undo.h"
 #include "widgets/ege-output-action.h"
-#include "ink-toggle-action.h"
+#include "widgets/ink-toggle-action.h"
 #include "preferences.h"
 #include "widgets/spinbutton-events.h"
 

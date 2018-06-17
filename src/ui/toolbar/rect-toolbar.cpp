@@ -36,7 +36,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "toolbox.h"
+#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"

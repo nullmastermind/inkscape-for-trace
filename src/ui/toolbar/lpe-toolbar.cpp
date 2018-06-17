@@ -34,8 +34,7 @@
 #include "helper/action-context.h"
 #include "helper/action.h"
 
-#include "ink-radio-action.h"
-#include "ink-toggle-action.h"
+#include "widgets/ink-toggle-action.h"
 
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"

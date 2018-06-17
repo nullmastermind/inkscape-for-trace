@@ -28,7 +28,7 @@
 #include "object/sp-text.h"
 
 // TEMP TEMP TEMP
-#include "widgets/text-toolbar.h"
+#include "ui/toolbar/text-toolbar.h"
 
 /* To do:
  *   Fix altx. Need to store

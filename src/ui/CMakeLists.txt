@@ -30,6 +30,27 @@ set(ui_SRC
 	tool/selector.cpp
 	tool/transform-handle-set.cpp
 
+	toolbar/arc-toolbar.cpp
+	toolbar/box3d-toolbar.cpp
+	toolbar/calligraphy-toolbar.cpp
+	toolbar/connector-toolbar.cpp
+	toolbar/dropper-toolbar.cpp
+	toolbar/eraser-toolbar.cpp
+	toolbar/gradient-toolbar.cpp
+	toolbar/lpe-toolbar.cpp
+	toolbar/measure-toolbar.cpp
+	toolbar/mesh-toolbar.cpp
+	toolbar/node-toolbar.cpp
+	toolbar/pencil-toolbar.cpp
+	toolbar/rect-toolbar.cpp
+	toolbar/select-toolbar.cpp
+	toolbar/spiral-toolbar.cpp
+	toolbar/spray-toolbar.cpp
+	toolbar/star-toolbar.cpp
+	toolbar/text-toolbar.cpp
+	toolbar/tweak-toolbar.cpp
+	toolbar/zoom-toolbar.cpp
+
 	tools/arc-tool.cpp
 	tools/box3d-tool.cpp
 	tools/calligraphic-tool.cpp
@@ -117,7 +138,7 @@ set(ui_SRC
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
-    dialog/save-template-dialog.cpp
+        dialog/save-template-dialog.cpp
 
 	widget/addtoicon.cpp
 	widget/alignment-selector.cpp
@@ -271,7 +292,7 @@ set(ui_SRC
 	dialog/transformation.h
 	dialog/undo-history.h
 	dialog/xml-tree.h
-    dialog/save-template-dialog.h
+	dialog/save-template-dialog.h
 
 	tool/commit-events.h
 	tool/control-point-selection.h
@@ -288,6 +309,27 @@ set(ui_SRC
 	tool/selector.h
 	tool/shape-record.h
 	tool/transform-handle-set.h
+
+	toolbar/arc-toolbar.h
+	toolbar/box3d-toolbar.h
+	toolbar/calligraphy-toolbar.h
+	toolbar/connector-toolbar.h
+	toolbar/dropper-toolbar.h
+	toolbar/eraser-toolbar.h
+	toolbar/gradient-toolbar.h
+	toolbar/lpe-toolbar.h
+	toolbar/measure-toolbar.h
+	toolbar/mesh-toolbar.h
+	toolbar/node-toolbar.h
+	toolbar/pencil-toolbar.h
+	toolbar/rect-toolbar.h
+	toolbar/select-toolbar.h
+	toolbar/spiral-toolbar.h
+	toolbar/spray-toolbar.h
+	toolbar/star-toolbar.h
+	toolbar/text-toolbar.h
+	toolbar/tweak-toolbar.h
+	toolbar/zoom-toolbar.h
 
 	tools/arc-tool.h
 	tools/box3d-tool.h
@@ -387,7 +429,6 @@ if(WIN32)
 	)
 endif()
 
-# add_inkscape_lib(ui_LIB "${ui_SRC}")
 add_inkscape_source("${ui_SRC}")
 
 set ( ui_flood_and_trace_SRC
@@ -395,6 +436,8 @@ set ( ui_flood_and_trace_SRC
 	tools/flood-tool.cpp
 	dialog/tracedialog.cpp
 	dialog/tracedialog.h
+	toolbar/paintbucket-toolbar.cpp
+	toolbar/paintbucket-toolbar.h
 )
 
 if ("${HAVE_POTRACE}")
