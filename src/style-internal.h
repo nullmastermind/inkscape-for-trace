@@ -455,7 +455,7 @@ public:
     bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
-
+  
   // To do: make private
 public:
     bool normal : 1;

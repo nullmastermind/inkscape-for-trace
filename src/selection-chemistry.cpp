@@ -2157,7 +2157,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
             if (type == SP_STROKE_STYLE_DASHES|| type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL) {
                 match = (sel_style->stroke_dasharray.set == iter_style->stroke_dasharray.set);
                 if (sel_style->stroke_dasharray.set && iter_style->stroke_dasharray.set) {
-                    match = (sel_style->stroke_dasharray.values == iter_style->stroke_dasharray.values);
+                    match = (sel_style->stroke_dasharray == iter_style->stroke_dasharray);
                 }
             }
             match_g = match_g && match;

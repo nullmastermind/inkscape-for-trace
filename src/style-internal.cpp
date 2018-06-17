@@ -483,7 +483,7 @@ SPILength::toString( guint const flags, SPStyleSrc const &style_src_req, SPIBase
 }
 
 bool
-SPILength::operator==(const SPIBase& rhs) const {
+SPILength::operator==(const SPIBase& rhs) {
     if( const SPILength* r = dynamic_cast<const SPILength*>(&rhs) ) {
 
         if( unit != r->unit ) return false;
@@ -2083,24 +2083,26 @@ SPIDashArray::read( gchar const *str ) {
     if( strcmp(str, "none") == 0) {
         return;
     }
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", str );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[(,\\s|\\s)]+", str );
 
     gchar *e = NULL;
     bool LineSolid = true;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
-    Geom::Rect vbox = document->getViewBox();
+    SPDocument *document = NULL;
+    if ( style) {
+        document = (style->object) ? style->object->document : NULL;
+    }
     for (auto token:tokens) {
         SPILength spilength;
         spilength.read(token.c_str());
         if(spilength.value > 0.00000001)
              LineSolid = false;
-        double dash = 0;
-        if(spilength.unit == SPCSSUnit::SP_CSS_UNIT_NONE) {
-            dash = spilength.value;
-        } else if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
-            dash = vbox.width() * spilength.value;
-        } else {
-            dash = spilength.computed / document->getDocumentScale()[0];
+        double dash = spilength.value;
+        if (document) {
+            if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
+                dash = document->getViewBox().width() * spilength.value;
+            } else if(spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
+                dash = spilength.computed / document->getDocumentScale()[0];
+            }
         }
         Inkscape::CSSOStringStream osarray;
         osarray << dash;

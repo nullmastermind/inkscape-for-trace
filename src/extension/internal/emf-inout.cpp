@@ -1098,7 +1098,7 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
             SPILength spilength;
             spilength.read("1");
             int penstyle = (pEmr->lopn.lopnStyle & U_PS_STYLE_MASK);
-            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
+            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray!=d->dc[d->level-1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.read("3");
@@ -1184,7 +1184,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
         case U_PS_USERSTYLE:
         {
             if (pEmr->elp.elpNumEntries) {
-                if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
+                if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray!=d->dc[d->level-1].style.stroke_dasharray)))
                     d->dc[d->level].style.stroke_dasharray.values.clear();
                 SPILength spilength;
                 for (unsigned int i=0; i<pEmr->elp.elpNumEntries; i++) {
@@ -1207,7 +1207,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             int penstyle = (pEmr->elp.elpPenStyle & U_PS_STYLE_MASK);
-            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
+            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray!=d->dc[d->level-1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             SPILength spilength;
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
@@ -2363,7 +2363,7 @@ std::cout << "BEFORE DRAW"
                     d->level = d->level + pEmr->iRelative;
             }
             while (old_level > d->level) {
-                if (!d->dc[old_level].style.stroke_dasharray.values.empty() && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dasharray.values!=d->dc[old_level-1].style.stroke_dasharray.values))){
+                if (!d->dc[old_level].style.stroke_dasharray.values.empty() && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dasharray!=d->dc[old_level-1].style.stroke_dasharray))){
                     d->dc[old_level].style.stroke_dasharray.values.clear();
                 }
                 if(d->dc[old_level].font_name){

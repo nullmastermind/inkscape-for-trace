@@ -987,7 +987,7 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
             int penstyle = (up.Style & U_PS_STYLE_MASK);
             SPILength spilength;
             spilength.read("1");
-            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray.values!=d->dc[d->level-1].style.stroke_dasharray.values)))
+            if (!d->dc[d->level].style.stroke_dasharray.values.empty() && (d->level==0 || (d->level>0 && d->dc[d->level].style.stroke_dasharray!=d->dc[d->level-1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.read("3");
@@ -2444,7 +2444,7 @@ std::cout << "BEFORE DRAW"
                     d->level = d->level + DC;
             }
             while (old_level > d->level) {
-                if (!d->dc[old_level].style.stroke_dasharray.values.empty() && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dasharray.values!=d->dc[old_level-1].style.stroke_dasharray.values))){
+                if (!d->dc[old_level].style.stroke_dasharray.values.empty() && (old_level==0 || (old_level>0 && d->dc[old_level].style.stroke_dasharray!=d->dc[old_level-1].style.stroke_dasharray))){
                     d->dc[old_level].style.stroke_dasharray.values.clear();
                 }
                 if(d->dc[old_level].font_name){
