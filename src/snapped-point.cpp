@@ -10,6 +10,8 @@
  */
 
 #include <gtk/gtk.h>
+
+#include <utility>
 #include "snapped-point.h"
 #include "preferences.h"
 
@@ -29,7 +31,7 @@ Inkscape::SnappedPoint::SnappedPoint(Geom::Point const &p, SnapSourceType const 
     _second_distance (Geom::infinity()),
     _second_tolerance (1),
     _second_always_snap (false),
-    _target_bbox(target_bbox),
+    _target_bbox(std::move(target_bbox)),
     _pointer_distance (Geom::infinity())
 {
 }

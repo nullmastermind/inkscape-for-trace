@@ -25,7 +25,7 @@ class SPCurve {
 public:
     /* Constructors */
     explicit SPCurve();
-    explicit SPCurve(Geom::PathVector const& pathv);
+    explicit SPCurve(Geom::PathVector  pathv);
     explicit SPCurve(std::list<SPCurve *> const& pathv);
     static SPCurve * new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
 

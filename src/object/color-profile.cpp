@@ -16,6 +16,7 @@
 
 #include <unistd.h>
 #include <cstring>
+#include <utility>
 #include <io/sys.h>
 #include <io/resource.h>
 
@@ -179,7 +180,7 @@ cmsHPROFILE ColorProfileImpl::getNULLProfile() {
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-ColorProfile::FilePlusHome::FilePlusHome(Glib::ustring filename, bool isInHome) : filename(filename), isInHome(isInHome) {
+ColorProfile::FilePlusHome::FilePlusHome(Glib::ustring filename, bool isInHome) : filename(std::move(filename)), isInHome(isInHome) {
 }
 
 ColorProfile::FilePlusHome::FilePlusHome(const ColorProfile::FilePlusHome &filePlusHome) : FilePlusHome(filePlusHome.filename, filePlusHome.isInHome) {
@@ -194,7 +195,7 @@ bool ColorProfile::FilePlusHome::operator<(FilePlusHome const &other) const {
 }
 
 ColorProfile::FilePlusHomeAndName::FilePlusHomeAndName(ColorProfile::FilePlusHome filePlusHome, Glib::ustring name)
-                                                      : FilePlusHome(filePlusHome), name(name) {
+                                                      : FilePlusHome(filePlusHome), name(std::move(name)) {
 }
 
 bool ColorProfile::FilePlusHomeAndName::operator<(ColorProfile::FilePlusHomeAndName const &other) const {
@@ -634,7 +635,7 @@ bool ColorProfile::GamutCheck(SPColor color)
 class ProfileInfo
 {
 public:
-    ProfileInfo( cmsHPROFILE prof, Glib::ustring const & path );
+    ProfileInfo( cmsHPROFILE prof, Glib::ustring  path );
 
     Glib::ustring const& getName() {return _name;}
     Glib::ustring const& getPath() {return _path;}
@@ -648,8 +649,8 @@ private:
     cmsProfileClassSignature _profileClass;
 };
 
-ProfileInfo::ProfileInfo( cmsHPROFILE prof, Glib::ustring const & path ) :
-    _path( path ),
+ProfileInfo::ProfileInfo( cmsHPROFILE prof, Glib::ustring  path ) :
+    _path(std::move( path )),
     _name( getNameFromProfile(prof) ),
     _profileSpace( cmsGetColorSpace( prof ) ),
     _profileClass( cmsGetDeviceClass( prof ) )

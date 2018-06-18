@@ -44,6 +44,7 @@
 #include <sstream>
 #include <cstring>
 #include <cstdio>
+#include <utility>
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 
@@ -93,8 +94,8 @@ PaintDef::PaintDef( ColorType type ) :
     }
 }
 
-PaintDef::PaintDef( unsigned int r, unsigned int g, unsigned int b, const std::string& description ) :
-    descr(description),
+PaintDef::PaintDef( unsigned int r, unsigned int g, unsigned int b, std::string  description ) :
+    descr(std::move(description)),
     type(RGB),
     r(r),
     g(g),

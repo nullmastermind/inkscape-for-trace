@@ -3,6 +3,7 @@
 #endif
 
 #include <set>
+#include <utility>
 
 #include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
@@ -115,9 +116,9 @@ colorspace::Component::Component()
 {
 }
 
-colorspace::Component::Component(std::string const &name, std::string const &tip, guint scale)
-    : name(name)
-    , tip(tip)
+colorspace::Component::Component(std::string name, std::string tip, guint scale)
+    : name(std::move(name))
+    , tip(std::move(tip))
     , scale(scale)
 {
 }
@@ -217,8 +218,8 @@ class ComponentUI {
     {
     }
 
-    ComponentUI(colorspace::Component const &component)
-        : _component(component)
+    ComponentUI(colorspace::Component component)
+        : _component(std::move(component))
         , _adj(nullptr)
         , _slider(nullptr)
         , _btn(nullptr)

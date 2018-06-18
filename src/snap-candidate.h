@@ -17,6 +17,7 @@
 #include <2geom/point.h>
 #include <2geom/rect.h>
 #include <cstdio>
+#include <utility>
 
 #include "snap-enums.h"
 
@@ -30,12 +31,12 @@ class SnapCandidatePoint
 public:
     SnapCandidatePoint() = default;; // only needed / used for resizing() of a vector in seltrans.cpp; do not use uninitialized instances!
 
-    SnapCandidatePoint(Geom::Point const &point, Inkscape::SnapSourceType const source, long const source_num, Inkscape::SnapTargetType const target, Geom::OptRect const &bbox)
+    SnapCandidatePoint(Geom::Point const &point, Inkscape::SnapSourceType const source, long const source_num, Inkscape::SnapTargetType const target, Geom::OptRect bbox)
         : _point(point),
         _source_type(source),
         _target_type(target),
         _source_num(source_num),
-        _target_bbox(bbox),
+        _target_bbox(std::move(bbox)),
         _dist()
     {
     };
@@ -131,7 +132,7 @@ class SnapCandidatePath
 
 public:
     SnapCandidatePath(Geom::PathVector* path, SnapTargetType target, Geom::OptRect bbox, bool edited = false)
-        : path_vector(path), target_type(target), target_bbox(bbox), currently_being_edited(edited) {};
+        : path_vector(path), target_type(target), target_bbox(std::move(bbox)), currently_being_edited(edited) {};
     ~SnapCandidatePath() = default;;
 
     Geom::PathVector* path_vector;

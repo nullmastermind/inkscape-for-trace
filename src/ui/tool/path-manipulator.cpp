@@ -13,6 +13,8 @@
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
 
+#include <utility>
+
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/curve.h"
@@ -117,7 +119,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
     , _live_outline(true)
     , _live_objects(true)
     , _is_bspline(false)
-    , _lpe_key(lpe_key)
+    , _lpe_key(std::move(lpe_key))
 {
     if (_lpe_key.empty()) {
         _i2d_transform = path->i2dt_affine();

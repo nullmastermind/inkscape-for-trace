@@ -43,10 +43,10 @@ public:
     Unit();
     Unit(UnitType type,
          double factor,
-         Glib::ustring const &name,
-         Glib::ustring const &name_plural,
-         Glib::ustring const &abbr,
-         Glib::ustring const &description);
+         Glib::ustring name,
+         Glib::ustring name_plural,
+         Glib::ustring abbr,
+         Glib::ustring description);
 
     void clear();
 

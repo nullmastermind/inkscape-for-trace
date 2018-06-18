@@ -25,6 +25,7 @@
 #include <gdk/gdk.h>
 
 #include <iostream>
+#include <utility>
 
 InkScale::InkScale(Glib::RefPtr<Gtk::Adjustment> adjustment, Gtk::SpinButton* spinbutton)
   : Glib::ObjectBase("InkScale")
@@ -224,7 +225,7 @@ InkSpinScale::InkSpinScale(double value, double lower,
 }
 
 InkSpinScale::InkSpinScale(Glib::RefPtr<Gtk::Adjustment> adjustment)
-  : _adjustment(adjustment)
+  : _adjustment(std::move(adjustment))
 {
   set_name("InkSpinScale");
 

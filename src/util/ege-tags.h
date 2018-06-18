@@ -54,7 +54,7 @@ class Label
 {
 public:
     Label();
-    Label(std::string const& lang, std::string const& value);
+    Label(std::string  lang, std::string  value);
     ~Label();
 
     std::string lang;
@@ -65,7 +65,7 @@ class Tag
 {
 public:
     Tag();
-    Tag(std::string const& key);
+    Tag(std::string  key);
     ~Tag();
 
     std::string key;

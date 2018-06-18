@@ -16,6 +16,8 @@
 
 #include <glibmm/i18n.h>
 
+#include <utility>
+
 #define noLPEREALPARAM_DEBUG
 
 namespace Inkscape {
@@ -23,15 +25,15 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 
-Parameter::Parameter( const Glib::ustring& label, const Glib::ustring& tip,
-                      const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
+Parameter::Parameter( Glib::ustring  label, Glib::ustring  tip,
+                      Glib::ustring  key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect )
-    : param_key(key),
+    : param_key(std::move(key)),
       param_wr(wr),
-      param_label(label),
+      param_label(std::move(label)),
       oncanvas_editable(false),
       widget_is_visible(true),
-      param_tooltip(tip),
+      param_tooltip(std::move(tip)),
       param_effect(effect)
 {
 }

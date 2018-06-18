@@ -11,6 +11,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <utility>
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -63,7 +64,7 @@ public:
     StyleNames( Glib::ustring name ) :
         CssName( name ), DisplayName( name ) {};
     StyleNames( Glib::ustring cssname, Glib::ustring displayname ) :
-        CssName( cssname ), DisplayName( displayname ) {};
+        CssName(std::move( cssname )), DisplayName(std::move( displayname )) {};
 
 public:
     Glib::ustring CssName;     // Style as Pango/CSS would write it.

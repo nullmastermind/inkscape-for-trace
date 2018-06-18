@@ -30,7 +30,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                bool default_value = false,
-               const Glib::ustring& inactive_label = "",
+               Glib::ustring  inactive_label = "",
                char const * icon_active = nullptr,
                char const * icon_inactive = nullptr,
                GtkIconSize icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR);

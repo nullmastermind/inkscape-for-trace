@@ -22,6 +22,8 @@
 
 #include <gdk/gdkkeysyms.h>
 
+#include <utility>
+
 #include "inkscape.h"
 #include "ui/monitor.h"
 #include "ui/tools/tool-base.h"
@@ -49,14 +51,14 @@ gboolean sp_retransientize_again(gpointer dlgPtr)
 //=====================================================================
 
 Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_path, int verb_num,
-               Glib::ustring const &apply_label)
+               Glib::ustring apply_label)
     : _user_hidden(false), 
       _hiddenF12(false),
       retransientize_suppress(false),
       _prefs_path(prefs_path),
       _verb_num(verb_num),
       _title(),
-      _apply_label(apply_label),
+      _apply_label(std::move(apply_label)),
       _desktop(nullptr),
       _is_active_desktop(true),
       _behavior(nullptr)

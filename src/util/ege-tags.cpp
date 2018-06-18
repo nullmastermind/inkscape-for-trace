@@ -47,6 +47,7 @@
 #include <set>
 #include <algorithm>
 #include <functional>
+#include <utility>
 
 #include "ege-tags.h"
 
@@ -55,9 +56,9 @@
 namespace ege
 {
 
-Label::Label(std::string const& lang, std::string const& value) :
-    lang(lang),
-    value(value)
+Label::Label(std::string  lang, std::string  value) :
+    lang(std::move(lang)),
+    value(std::move(value))
 {
 }
 
@@ -69,8 +70,8 @@ Label::~Label()
 Tag::~Tag()
 = default;
 
-Tag::Tag(std::string const& key) :
-    key(key)
+Tag::Tag(std::string  key) :
+    key(std::move(key))
 {
 }
 

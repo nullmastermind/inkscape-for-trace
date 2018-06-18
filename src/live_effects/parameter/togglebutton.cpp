@@ -8,6 +8,8 @@
 #include "ui/widget/registered-widget.h"
 #include <glibmm/i18n.h>
 
+#include <utility>
+
 #include "live_effects/parameter/togglebutton.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
@@ -23,11 +25,11 @@ namespace LivePathEffect {
 
 ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value, const Glib::ustring& inactive_label,
+                      Effect* effect, bool default_value, Glib::ustring  inactive_label,
                       char const * _icon_active, char const * _icon_inactive, 
                       GtkIconSize _icon_size)
     : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
-      inactive_label(inactive_label), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
+      inactive_label(std::move(inactive_label)), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
 {
     checkwdg = nullptr;
 }

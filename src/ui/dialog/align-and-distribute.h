@@ -139,7 +139,7 @@ public :
 
     enum AlignTarget { LAST=0, FIRST, BIGGEST, SMALLEST, PAGE, DRAWING, SELECTION };
     enum AlignTargetNode { LAST_NODE=0, FIRST_NODE, MID_NODE, MIN_NODE, MAX_NODE };
-    Action(const Glib::ustring &id,
+    Action(Glib::ustring id,
            const Glib::ustring &tiptext,
            guint row, guint column,
 	   Gtk::Grid &parent,

@@ -12,6 +12,7 @@
 
 #include <cstring>
 #include <sstream>
+#include <utility>
 #include <glibmm/fileutils.h>
 #include <glibmm/convert.h>
 #include <glibmm/i18n.h>
@@ -71,9 +72,9 @@ static void file_add_recent(gchar const *uri)
  */
 class Preferences::PrefNodeObserver : public XML::NodeObserver {
 public:
-    PrefNodeObserver(Observer &o, Glib::ustring const &filter) :
+    PrefNodeObserver(Observer &o, Glib::ustring filter) :
         _observer(o),
-        _filter(filter)
+        _filter(std::move(filter))
     {}
     ~PrefNodeObserver() override = default;
     void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared) override;
@@ -551,8 +552,8 @@ public:
     bool _is_attr; ///< Whether this Observer watches a single attribute
 };
 
-Preferences::Observer::Observer(Glib::ustring const &path) :
-    observed_path(path),
+Preferences::Observer::Observer(Glib::ustring path) :
+    observed_path(std::move(path)),
     _data(nullptr)
 {
 }

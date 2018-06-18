@@ -19,6 +19,8 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/point.h>
 
+#include <utility>
+
 /**
  * Routines for SPCurve and for its Geom::PathVector
  */
@@ -33,9 +35,9 @@ SPCurve::SPCurve()
     _pathv()
 {}
 
-SPCurve::SPCurve(Geom::PathVector const& pathv)
+SPCurve::SPCurve(Geom::PathVector  pathv)
   : _refcount(1),
-    _pathv(pathv)
+    _pathv(std::move(pathv))
 {}
 
 //concat constructor

@@ -38,6 +38,8 @@
 #include <glibmm/main.h>
 #include <glibmm/convert.h>
 
+#include <utility>
+
 #include "desktop.h"
 #include "dialog-manager.h"
 #include "document-undo.h"
@@ -100,11 +102,11 @@ class CheckButtonAttr : public Gtk::CheckButton, public AttrWidget
 {
 public:
     CheckButtonAttr(bool def, const Glib::ustring& label,
-                    const Glib::ustring& tv, const Glib::ustring& fv,
+                    Glib::ustring  tv, Glib::ustring  fv,
                     const SPAttributeEnum a, char* tip_text)
         : Gtk::CheckButton(label),
           AttrWidget(a, def),
-          _true_val(tv), _false_val(fv)
+          _true_val(std::move(tv)), _false_val(std::move(fv))
     {
         signal_toggled().connect(signal_attr_changed().make_slot());
         if (tip_text) {
@@ -736,7 +738,7 @@ public:
     typedef sigc::slot<void, const AttrWidget*> SetAttrSlot;
 
     Settings(FilterEffectsDialog& d, Gtk::Box& b, SetAttrSlot slot, const int maxtypes)
-        : _dialog(d), _set_attr_slot(slot), _current_type(-1), _max_types(maxtypes)
+        : _dialog(d), _set_attr_slot(std::move(slot)), _current_type(-1), _max_types(maxtypes)
     {
         _groups.resize(_max_types);
         _attrwidgets.resize(_max_types);

@@ -56,7 +56,7 @@ public:
 
     PaintDef();
     PaintDef(ColorType type);
-    PaintDef( unsigned int r, unsigned int g, unsigned int b, const std::string& description );
+    PaintDef( unsigned int r, unsigned int g, unsigned int b, std::string  description );
     virtual ~PaintDef();
 
     PaintDef( PaintDef const &other );

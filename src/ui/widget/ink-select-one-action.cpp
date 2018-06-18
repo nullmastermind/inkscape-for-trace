@@ -20,6 +20,7 @@
 #include "ink-select-one-action.h"
 
 #include <iostream>
+#include <utility>
 #include <gtkmm/toolitem.h>
 #include <gtkmm/menuitem.h>
 #include <gtkmm/radioaction.h>
@@ -49,7 +50,7 @@ InkSelectOneAction::InkSelectOneAction (const Glib::ustring &name,
     _group_label( group_label ),
     _tooltip( tooltip ),
     _stock_id( stock_id ),
-    _store (store),
+    _store (std::move(store)),
     _use_radio (true),
     _use_label (true),
     _use_icon  (true),

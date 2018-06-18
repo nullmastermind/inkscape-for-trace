@@ -36,7 +36,7 @@
  */
 class SPSlideShow : public Gtk::ApplicationWindow {
 public:
-    SPSlideShow(std::vector<Glib::ustring> const &slides,
+    SPSlideShow(std::vector<Glib::ustring> slides,
                 bool fullscreen,
                 int timer,
                 double scale);

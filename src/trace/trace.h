@@ -17,6 +17,7 @@
 
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
+#include <utility>
 #include <vector>
 
 class SPImage;
@@ -40,11 +41,11 @@ public:
     /**
      *
      */
-    TracingEngineResult(const std::string &theStyle,
-                        const std::string &thePathData,
+    TracingEngineResult(std::string theStyle,
+                        std::string thePathData,
                         long theNodeCount) :
-	    style(theStyle),
-	    pathData(thePathData),
+	    style(std::move(theStyle)),
+	    pathData(std::move(thePathData)),
 	    nodeCount(theNodeCount)
         {}
 

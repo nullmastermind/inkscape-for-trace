@@ -17,6 +17,7 @@
 #include <cerrno>
 #include <iomanip>
 #include <iostream>
+#include <utility>
 #include <glib.h>
 #include <glibmm/regex.h>
 #include <glibmm/fileutils.h>
@@ -164,16 +165,16 @@ Unit::Unit() :
 
 Unit::Unit(UnitType type,
            double factor,
-           Glib::ustring const &name,
-           Glib::ustring const &name_plural,
-           Glib::ustring const &abbr,
-           Glib::ustring const &description)
+           Glib::ustring name,
+           Glib::ustring name_plural,
+           Glib::ustring abbr,
+           Glib::ustring description)
     : type(type)
     , factor(factor)
-    , name(name)
-    , name_plural(name_plural)
-    , abbr(abbr)
-    , description(description)
+    , name(std::move(name))
+    , name_plural(std::move(name_plural))
+    , abbr(std::move(abbr))
+    , description(std::move(description))
 {
     g_return_if_fail(factor <= 0);
 }

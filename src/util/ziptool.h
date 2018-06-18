@@ -251,8 +251,8 @@ public:
     /**
      *
      */
-    ZipEntry(const std::string &fileName,
-             const std::string &comment);
+    ZipEntry(std::string fileName,
+             std::string comment);
 
     /**
      *

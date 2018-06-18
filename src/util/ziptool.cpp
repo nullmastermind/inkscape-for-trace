@@ -36,6 +36,7 @@
 #include <ctime>
 
 #include <string>
+#include <utility>
 
 #include "ziptool.h"
 
@@ -1903,11 +1904,11 @@ ZipEntry::ZipEntry() :
 /**
  *
  */
-ZipEntry::ZipEntry(const std::string &fileNameArg,
-                   const std::string &commentArg) :
+ZipEntry::ZipEntry(std::string fileNameArg,
+                   std::string commentArg) :
     crc (0L),
-    fileName (fileNameArg),
-    comment (commentArg),
+    fileName (std::move(fileNameArg)),
+    comment (std::move(commentArg)),
     compressionMethod (8),
     compressedData (),
     uncompressedData (),

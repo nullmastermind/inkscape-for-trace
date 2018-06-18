@@ -35,6 +35,8 @@
 #include <gtkmm/image.h>
 #include <gtkmm/main.h>
 
+#include <utility>
+
 #include "document.h"
 #include "ui/icon-names.h"
 #include "ui/monitor.h"
@@ -45,8 +47,8 @@
 #include "svg-view-widget.h"
 
 
-SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_screen, int timer, double scale)
-    : _slides(slides)
+SPSlideShow::SPSlideShow(std::vector<Glib::ustring> slides, bool full_screen, int timer, double scale)
+    : _slides(std::move(slides))
     , _current(0)
     , _doc(SPDocument::createNewDoc(_slides[0].c_str(), true, false))
     , _fullscreen(full_screen)

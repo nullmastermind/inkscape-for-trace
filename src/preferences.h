@@ -17,6 +17,7 @@
 #include <cfloat>
 #include <glibmm/ustring.h>
 #include <map>
+#include <utility>
 #include <vector>
 
 #include "xml/repr.h"
@@ -93,7 +94,7 @@ public:
          *
          * @param path Preference path the observer should watch.
          */
-        Observer(Glib::ustring const &path);
+        Observer(Glib::ustring path);
         virtual ~Observer();
 
         /**
@@ -227,7 +228,7 @@ public:
          */
         Glib::ustring getEntryName() const;
     private:
-        Entry(Glib::ustring const &path, void const *v) : _pref_path(path), _value(v) {}
+        Entry(Glib::ustring path, void const *v) : _pref_path(std::move(path)), _value(v) {}
 
         Glib::ustring _pref_path;
         void const *_value;

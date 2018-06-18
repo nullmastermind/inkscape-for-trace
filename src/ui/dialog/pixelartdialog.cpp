@@ -53,6 +53,8 @@
 
 #ifdef HAVE_OPENMP
 #include <omp.h>
+
+#include <utility>
 #endif // HAVE_OPENMP
 
 namespace Inkscape {
@@ -79,7 +81,7 @@ private:
     struct Output
     {
         Output(Tracer::Splines splines, SVGLength x, SVGLength y) :
-            splines(splines), x(x), y(y)
+            splines(std::move(splines)), x(x), y(y)
         {}
 
         Tracer::Splines splines;

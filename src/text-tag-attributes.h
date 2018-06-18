@@ -1,6 +1,7 @@
 #ifndef INKSCAPE_TEXT_TAG_ATTRIBUTES_H
 #define INKSCAPE_TEXT_TAG_ATTRIBUTES_H
 
+#include <utility>
 #include <vector>
 #include <glib.h>
 #include "libnrtype/Layout-TNG.h"
@@ -23,8 +24,8 @@ element.
 class TextTagAttributes {
 public:
     TextTagAttributes() = default;
-    TextTagAttributes(Inkscape::Text::Layout::OptionalTextTagAttrs const &attrs)
-        : attributes(attrs) {}
+    TextTagAttributes(Inkscape::Text::Layout::OptionalTextTagAttrs attrs)
+        : attributes(std::move(attrs)) {}
 
     /// Fill in all the fields of #attributes from the given node.
     void readFrom(Inkscape::XML::Node const *node);

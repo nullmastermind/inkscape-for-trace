@@ -28,6 +28,7 @@
 #include <glibmm/regex.h>
 
 #include <map>
+#include <utility>
 
 //#define DEBUG_STYLEDIALOG
 
@@ -1045,7 +1046,7 @@ class PropertyData
 {
 public:
     PropertyData() = default;;
-    PropertyData(Glib::ustring name) : _name(name) {};
+    PropertyData(Glib::ustring name) : _name(std::move(name)) {};
 
     void _setSheetValue(Glib::ustring value) { _sheetValue = value; };
     void _setAttrValue(Glib::ustring value)  { _attrValue  = value; };

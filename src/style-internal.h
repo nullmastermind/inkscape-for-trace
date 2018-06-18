@@ -17,6 +17,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <utility>
 #include <vector>
 #include <map>
 
@@ -125,8 +126,8 @@ class SPIBase
 {
 
 public:
-    SPIBase( Glib::ustring const &name, bool inherits = true )
-        : name(name),
+    SPIBase( Glib::ustring name, bool inherits = true )
+        : name(std::move(name)),
           inherits(inherits),
           set(false),
           inherit(false),

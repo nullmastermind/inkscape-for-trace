@@ -25,6 +25,8 @@
 
 #include <2geom/transforms.h>
 
+#include <utility>
+
 #include "align-and-distribute.h"
 
 #include "desktop.h"
@@ -56,13 +58,13 @@ namespace Dialog {
 
 /////////helper classes//////////////////////////////////
 
-Action::Action(const Glib::ustring &id,
+Action::Action(Glib::ustring id,
        const Glib::ustring &tiptext,
        guint row, guint column,
        Gtk::Grid &parent,
        AlignAndDistribute &dialog):
     _dialog(dialog),
-    _id(id),
+    _id(std::move(id)),
     _parent(parent)
 {
     Gtk::Image*  pIcon = Gtk::manage(new Gtk::Image());
