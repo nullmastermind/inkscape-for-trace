@@ -31,16 +31,16 @@ public: /* this is a hack for this release, this will be private shortly */
 
 public:
     struct open_failed : public std::exception {
-        ~open_failed() throw() override = default;
-        const char *what() const throw() override { return "Open failed"; }
+        ~open_failed() noexcept override = default;
+        const char *what() const noexcept override { return "Open failed"; }
     };
     struct no_extension_found : public std::exception {
-        ~no_extension_found() throw() override = default;
-        const char *what() const throw() override { return "No suitable input extension found"; }
+        ~no_extension_found() noexcept override = default;
+        const char *what() const noexcept override { return "No suitable input extension found"; }
     };
     struct open_cancelled : public std::exception {
-        ~open_cancelled() throw() override = default;
-        const char *what() const throw() override { return "Open was cancelled"; }
+        ~open_cancelled() noexcept override = default;
+        const char *what() const noexcept override { return "Open was cancelled"; }
     };
 
                   Input                (Inkscape::XML::Node * in_repr,

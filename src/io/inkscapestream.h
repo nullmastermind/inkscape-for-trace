@@ -21,13 +21,13 @@ class StreamException : public std::exception
 {
 public:
 
-    StreamException(const char *theReason) throw()
+    StreamException(const char *theReason) noexcept
         { reason = theReason; }
-    StreamException(Glib::ustring &theReason) throw()
+    StreamException(Glib::ustring &theReason) noexcept
         { reason = theReason; }
-    ~StreamException() throw() override
+    ~StreamException() noexcept override
         = default;
-    char const *what() const throw() override
+    char const *what() const noexcept override
         { return reason.c_str(); }
         
 private:

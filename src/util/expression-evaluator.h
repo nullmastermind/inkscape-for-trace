@@ -177,9 +177,9 @@ public:
         msgstr = os.str();
     }
 
-    ~EvaluatorException() throw() override = default; // necessary to destroy the string object!!!
+    ~EvaluatorException() noexcept override = default; // necessary to destroy the string object!!!
 
-    const char *what() const throw () override {
+    const char *what() const noexcept override {
         return msgstr.c_str();
     }
 protected:

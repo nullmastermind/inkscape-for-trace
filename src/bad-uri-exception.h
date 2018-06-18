@@ -9,12 +9,12 @@ class BadURIException : public std::exception {};
 
 class UnsupportedURIException : public BadURIException {
 public:
-    char const *what() const throw() override { return "Unsupported URI"; }
+    char const *what() const noexcept override { return "Unsupported URI"; }
 };
 
 class MalformedURIException : public BadURIException {
 public:
-    char const *what() const throw() override { return "Malformed URI"; }
+    char const *what() const noexcept override { return "Malformed URI"; }
 };
 
 }
