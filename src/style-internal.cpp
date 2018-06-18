@@ -33,13 +33,13 @@
 
 #include "bad-uri-exception.h"
 #include "extract-uri.h"
+#include "inkscape.h"
 #include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
-#include "inkscape.h"
-#include "svg/svg.h"
-#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
+#include "svg/svg-color.h"
+#include "svg/svg.h"
 
 #include "util/units.h"
 
@@ -431,15 +431,17 @@ SPILength::merge( const SPIBase* const parent ) {
 }
 
 // Generate a string useful for passing dasharray without name, etc.
-const Glib::ustring
-SPILength::toString( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
-    SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
+const Glib::ustring SPILength::toString(guint const flags, SPStyleSrc const &style_src_req,
+                                        SPIBase const *const base) const
+{
+    SPILength const *const my_base = dynamic_cast<const SPILength *>(base);
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return ("inherit");
-        } else {
+        }
+        else {
             Inkscape::CSSOStringStream os;
             switch (this->unit) {
                 case SP_CSS_UNIT_NONE:
@@ -2083,24 +2085,25 @@ SPIDashArray::read( gchar const *str ) {
     if( strcmp(str, "none") == 0) {
         return;
     }
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[(,\\s|\\s)]+", str );
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[(,\\s|\\s)]+", str);
 
     gchar *e = NULL;
     bool LineSolid = true;
     SPDocument *document = NULL;
-    if ( style) {
+    if (style) {
         document = (style->object) ? style->object->document : NULL;
     }
-    for (auto token:tokens) {
+    for (auto token : tokens) {
         SPILength spilength;
         spilength.read(token.c_str());
-        if(spilength.value > 0.00000001)
-             LineSolid = false;
+        if (spilength.value > 0.00000001)
+            LineSolid = false;
         double dash = spilength.value;
         if (document) {
             if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
                 dash = document->getViewBox().width() * spilength.value;
-            } else if(spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
+            }
+            else if (spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
                 dash = spilength.computed / document->getDocumentScale()[0];
             }
         }
@@ -2170,9 +2173,9 @@ SPIDashArray::merge( const SPIBase* const parent ) {
 
 bool
 SPIDashArray::operator==(const SPIBase& rhs) {
-     if( const SPIDashArray* r = dynamic_cast<const SPIDashArray*>(&rhs) ) {
-        for (int i = 0;i < values.size(); i++) {
-            if (values[i] != r->values[i]) { 
+    if (const SPIDashArray *r = dynamic_cast<const SPIDashArray *>(&rhs)) {
+        for (int i = 0; i < values.size(); i++) {
+            if (values[i] != r->values[i]) {
                 return false;
             }
         }

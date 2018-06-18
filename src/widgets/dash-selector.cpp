@@ -170,7 +170,8 @@ void SPDashSelector::set_dash (int ndash, double *dash, double o)
                     if (scale) {
                         if (!Geom::are_near(dash[j], pattern[j], delta))
                             break;
-                    } else {
+                    }
+                    else {
                         if (!Geom::are_near(dash[j], pattern[j], delta))
                             break;
                     }

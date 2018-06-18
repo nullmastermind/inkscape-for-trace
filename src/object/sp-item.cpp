@@ -20,13 +20,13 @@
 
 #include <glibmm/i18n.h>
 
-#include "bad-uri-exception.h"
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
-#include "print.h"
-#include "display/drawing-item.h"
 #include "attributes.h"
+#include "bad-uri-exception.h"
+#include "display/drawing-item.h"
 #include "document.h"
+#include "print.h"
+#include "svg/css-ostringstream.h"
+#include "svg/svg.h"
 
 #include "inkscape.h"
 #include "desktop.h"
@@ -1308,7 +1308,7 @@ void SPItem::adjust_stroke( gdouble ex )
 
         if ( !style->stroke_dasharray.values.empty() ) {
             for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
-                double dash =  style->stroke_dasharray.values[i].value * ex;
+                double dash = style->stroke_dasharray.values[i].value * ex;
                 Inkscape::CSSOStringStream osarray;
                 osarray << dash;
                 style->stroke_dasharray.values[i].read(osarray.str().c_str());

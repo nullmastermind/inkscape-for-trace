@@ -603,8 +603,9 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                 int mark_long =0;
                 int i;
                 for (i=0;i<n_dash;i++) {
-                  int mark = style->stroke_dasharray.values[i].value;
-                  if (mark>mark_long) { mark_long = mark; }
+                    int mark = style->stroke_dasharray.values[i].value;
+                    if (mark > mark_long) {
+                        mark_long = mark; }
                   if (mark<mark_short) { mark_short = mark; }
                 }
                 if(mark_long == mark_short){  // only one mark size
@@ -901,7 +902,7 @@ unsigned int PrintWmf::stroke(
                 first_frag = fragment;
             }
             slength = elength;
-            slength += style->stroke_dasharray.values[i++].value;  // the gap
+            slength += style->stroke_dasharray.values[i++].value; // the gap
             if (i >= n_dash) {
                 i = 0;
             }

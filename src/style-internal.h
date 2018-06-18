@@ -404,11 +404,11 @@ public:
     }
 
     virtual const Glib::ustring toString(guint const flags = SP_STYLE_FLAG_IFSET,
-                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                       SPIBase const *const base = NULL) const;
+                                         SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                         SPIBase const *const base = nullptr) const;
 
-  // To do: make private
-public:
+    // To do: make private
+  public:
     unsigned unit : 4;
     float value;
     float computed;
@@ -455,7 +455,7 @@ public:
     bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
-  
+
   // To do: make private
 public:
     bool normal : 1;
@@ -1016,7 +1016,7 @@ public:
 
   // To do: make private, change double to SVGLength
 public:
-    std::vector<SPILength> values;
+  std::vector<SPILength> values;
 };
 
 /// Filter type internal to SPStyle

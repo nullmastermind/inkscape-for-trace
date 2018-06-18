@@ -1447,11 +1447,10 @@ void InkscapePreferences::initPageBehavior()
                                _("Always store transformation as a transform= attribute on objects"));
 
     this->AddPage(_page_transforms, _("Transforms"), iter_behavior, PREFS_PAGE_BEHAVIOR_TRANSFORMS);
-    
-    _dash_scale.init ( _("Stroke width change dashes"), "/options/dash/scale", true);
-    _page_dashes.add_line( false, "", _dash_scale, "",
-                      _("When chage stroke width, scale the dash array"));
-    
+
+    _dash_scale.init(_("Stroke width change dashes"), "/options/dash/scale", true);
+    _page_dashes.add_line(false, "", _dash_scale, "", _("When chage stroke width, scale the dash array"));
+
     this->AddPage(_page_dashes, _("Dashes"), iter_behavior, PREFS_PAGE_BEHAVIOR_DASHES);
 
     // Scrolling options

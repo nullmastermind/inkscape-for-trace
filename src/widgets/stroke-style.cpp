@@ -754,9 +754,9 @@ StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
             else
                 d[i] = style->stroke_dasharray.values[i].value; // is there a better thing to do for stroke_width==0?
         }
-        dsel->set_dash(len, d, style->stroke_width.computed != 0 ?
-                       style->stroke_dashoffset.value / scaledash  :
-                       style->stroke_dashoffset.value);
+        dsel->set_dash(len, d,
+                       style->stroke_width.computed != 0 ? style->stroke_dashoffset.value / scaledash
+                                                         : style->stroke_dashoffset.value);
     } else {
         dsel->set_dash(0, nullptr, 0.0);
     }
@@ -1053,7 +1053,8 @@ StrokeStyle::scaleLine()
             gboolean scale = prefs->getBool("/options/dash/scale", true);
             if (scale) {
                 setScaledDash(css, ndash, dash, offset, width);
-            } else {
+            }
+            else {
                 setScaledDash(css, ndash, dash, offset, document->getDocumentScale()[0]);
             }
             sp_desktop_apply_css_recursive ((*i), css, true);
