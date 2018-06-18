@@ -21,15 +21,11 @@
 #pragma implementation
 #endif
 
-extern "C" {
-        
 #include <cstdlib>
 #include <cstdio>
 #include <cstddef>
 #include <cstring>
 #include <cmath>
-
-}
 
 #include "svg-builder.h"
 #include "Gfx.h"
