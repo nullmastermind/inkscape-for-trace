@@ -163,7 +163,7 @@ Shape::ConvertToForme (Path * dest)
           }
         }
 	    }
-      while (1 /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */ );
       // fin du cas non-oriente
     }
   }
@@ -316,7 +316,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
           //printf("suite %d\n",curBord);
         }
 	    }
-      while (1 /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */ );
       // fin du cas non-oriente
     }
   }
@@ -527,7 +527,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
           //printf("suite %d\n",curBord);
         }
 	    }
-      while (1 /*swdData[curBord].precParc >= 0 */ );
+      while (true /*swdData[curBord].precParc >= 0 */ );
       // fin du cas non-oriente
     }
   }

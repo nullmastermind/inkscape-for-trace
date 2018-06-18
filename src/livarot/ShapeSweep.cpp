@@ -2496,7 +2496,7 @@ Shape::GetWindings (Shape * /*a*/, Shape * /*b*/, BooleanOp /*mod*/, bool brutal
 		    curDir = true;
 		}
 	    }
-	  while (1 /*swdData[curBord].precParc >= 0 */ );
+	  while (true /*swdData[curBord].precParc >= 0 */ );
 	  // fin du cas non-oriente
 	}
     }

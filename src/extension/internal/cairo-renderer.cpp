@@ -403,7 +403,7 @@ static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx)
     ctx->transform(symbol->c2p);
 
     // apply viewbox if set
-    if (0 /*symbol->viewBox_set*/) {
+    if (false /*symbol->viewBox_set*/) {
         Geom::Affine vb2user;
         double x, y, width, height;
         double view_width, view_height;

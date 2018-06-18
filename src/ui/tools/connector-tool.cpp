@@ -242,7 +242,7 @@ void ConnectorTool::setup()
     sp_event_context_read(this, "curvature");
     sp_event_context_read(this, "orthogonal");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/connector/selcue", 0)) {
+    if (prefs->getBool("/tools/connector/selcue", false)) {
         this->enableSelectionCue();
     }
 

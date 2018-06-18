@@ -28,7 +28,7 @@
 
 SPFeConvolveMatrix::SPFeConvolveMatrix() : SPFilterPrimitive() {
 	this->bias = 0;
-	this->divisorIsSet = 0;
+	this->divisorIsSet = false;
 	this->divisor = 0;
 
     //Setting default values:

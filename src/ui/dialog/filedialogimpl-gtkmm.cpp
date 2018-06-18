@@ -1076,7 +1076,7 @@ void FileSaveDialogImplGtk::fileNameEntryChangedCallback()
 
     if (Glib::file_test(fileName, Glib::FILE_TEST_IS_DIR)) {
         set_current_folder(fileName);
-    } else if (/*Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)*/ 1) {
+    } else if (/*Glib::file_test(fileName, Glib::FILE_TEST_IS_REGULAR)*/ true) {
         // dialog with either (1) select a regular file or (2) cd to dir
         // simulate an 'OK'
         set_filename(fileName);

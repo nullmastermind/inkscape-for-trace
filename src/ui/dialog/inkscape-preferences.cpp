@@ -493,7 +493,7 @@ void InkscapePreferences::initPageTools()
     this->AddGradientCheckbox(_page_text, "/tools/text", true);
     {
         PrefCheckButton* cb = Gtk::manage( new PrefCheckButton);
-        cb->init ( _("Show font samples in the drop-down list"), "/tools/text/show_sample_in_list", 1);
+        cb->init ( _("Show font samples in the drop-down list"), "/tools/text/show_sample_in_list", true);
         _page_text.add_line( false, "", *cb, "", _("Show font samples alongside font names in the drop-down list in Text bar"));
 
         _font_dialog.init ( _("Show font substitution warning dialog"), "/options/font/substitutedlg", false);

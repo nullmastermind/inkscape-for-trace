@@ -107,7 +107,7 @@ bool SPGradient::isEquivalent(SPGradient *that)
 
     bool status = false;
     
-    while(1){ // not really a loop, used to avoid deep nesting or multiple exit points from function
+    while(true){ // not really a loop, used to avoid deep nesting or multiple exit points from function
         if (this->getStopCount() != that->getStopCount()) { break; }
         if (this->hasStops() != that->hasStops()) { break; }
         if (!this->getVector() || !that->getVector()) { break; }
@@ -167,7 +167,7 @@ bool SPGradient::isAligned(SPGradient *that)
        matches the default value.
     */
 
-    while(1){ // not really a loop, used to avoid deep nesting or multiple exit points from function
+    while(true){ // not really a loop, used to avoid deep nesting or multiple exit points from function
         if(this->gradientTransform_set != that->gradientTransform_set) { break; }
         if(this->gradientTransform_set && 
             (this->gradientTransform != that->gradientTransform)) { break; }

@@ -1177,7 +1177,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         if(newover != over){
             over = newover;
             Preferences *prefs = Preferences::get();
-            int prefs_bbox = prefs->getBool("/tools/bounding_box", 0);
+            int prefs_bbox = prefs->getBool("/tools/bounding_box", false);
             SPItem::BBoxType bbox_type = !prefs_bbox ? SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
             Geom::OptRect bbox = over->bounds(bbox_type);
             if (bbox) {

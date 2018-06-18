@@ -227,7 +227,7 @@ static void sp_button_action_set_active(SPButton *button, bool active)
     }
 
     /* temporarily lobotomized until SPActions are per-view */
-    if (0 && !active != !SP_BUTTON_IS_DOWN(button)) {
+    if (false && !active != !SP_BUTTON_IS_DOWN(button)) {
         sp_button_toggle_set_down(button, active);
     }
 }

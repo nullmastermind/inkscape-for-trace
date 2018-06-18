@@ -1024,9 +1024,9 @@ void DocumentProperties::build_metadata()
         }
     }
 
-    Gtk::Button *button_save = Gtk::manage (new Gtk::Button(_("_Save as default"),1));
+    Gtk::Button *button_save = Gtk::manage (new Gtk::Button(_("_Save as default"),true));
     button_save->set_tooltip_text(_("Save this metadata as the default metadata"));
-    Gtk::Button *button_load = Gtk::manage (new Gtk::Button(_("Use _default"),1));
+    Gtk::Button *button_load = Gtk::manage (new Gtk::Button(_("Use _default"),true));
     button_load->set_tooltip_text(_("Use the previously saved default metadata here"));
 
     auto box_buttons = Gtk::manage (new Gtk::ButtonBox);

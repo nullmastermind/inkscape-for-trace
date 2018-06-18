@@ -1252,8 +1252,8 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
             d->dc[d->level].style.font_size.computed                = 16.0;
             d->dc[d->level].style.font_weight.value                 = SP_CSS_FONT_WEIGHT_400;
             d->dc[d->level].style.font_style.value                  = SP_CSS_FONT_STYLE_NORMAL;
-            d->dc[d->level].style.text_decoration_line.underline    = 0;
-            d->dc[d->level].style.text_decoration_line.line_through = 0;
+            d->dc[d->level].style.text_decoration_line.underline    = false;
+            d->dc[d->level].style.text_decoration_line.line_through = false;
             d->dc[d->level].style.baseline_shift.value              = 0;
         }
 
@@ -3119,8 +3119,8 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].style.font_size.computed           = 16.0;
     d.dc[0].style.font_weight.value            = SP_CSS_FONT_WEIGHT_400;
     d.dc[0].style.font_style.value             = SP_CSS_FONT_STYLE_NORMAL;
-    d.dc[0].style.text_decoration_line.underline    = 0;
-    d.dc[0].style.text_decoration_line.line_through = 0;
+    d.dc[0].style.text_decoration_line.underline    = false;
+    d.dc[0].style.text_decoration_line.line_through = false;
     d.dc[0].style.baseline_shift.value         = 0;
 
     // Default pen, WMF files that do not specify a pen are unlikely to look very good!

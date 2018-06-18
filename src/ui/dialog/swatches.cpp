@@ -693,7 +693,7 @@ SwatchesPanel::~SwatchesPanel()
 void SwatchesPanel::_build_menu()
 {
     guint panel_size = 0, panel_mode = 0, panel_ratio = 100, panel_border = 0;
-    bool panel_wrap = 0;
+    bool panel_wrap = false;
     if (!_prefs_path.empty()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         panel_wrap = prefs->getBool(_prefs_path + "/panel_wrap");

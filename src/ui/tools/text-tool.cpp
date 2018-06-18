@@ -452,7 +452,7 @@ static void insert_uni_char(TextTool *const tc)
     } else {
         if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
             sp_text_context_setup_text(tc);
-            tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+            tc->nascent_object = false; // we don't need it anymore, having created a real <text>
         }
 
         gchar u[10];
@@ -539,7 +539,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
                                     nullptr, event->button.time);
                 this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
-                this->creating = 1;
+                this->creating = true;
 
                 /* Processed */
                 return TRUE;
@@ -547,7 +547,7 @@ bool TextTool::root_handler(GdkEvent* event) {
             break;
         case GDK_MOTION_NOTIFY:
             if (this->over_text) {
-                this->over_text = 0;
+                this->over_text = false;
                 // update cursor and statusbar: we are not over a text object now
                 this->cursor_shape = cursor_text_xpm;
                 this->sp_event_context_update_cursor();
@@ -615,8 +615,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                     desktop->getSelection()->clear();
                     this->pdoc = desktop->dt2doc(p1);
                     this->show = TRUE;
-                    this->phase = 1;
-                    this->nascent_object = 1; // new object was just created
+                    this->phase = true;
+                    this->nascent_object = true; // new object was just created
 
                     /* Cursor */
                     sp_canvas_item_show(this->cursor);
@@ -780,7 +780,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     /* No-break space */
                                     if (!this->text) { // printable key; create text if none (i.e. if nascent_object)
                                         sp_text_context_setup_text(this);
-                                        this->nascent_object = 0; // we don't need it anymore, having created a real <text>
+                                        this->nascent_object = false; // we don't need it anymore, having created a real <text>
                                     }
                                     this->text_sel_start = this->text_sel_end = sp_te_replace(this->text, this->text_sel_start, this->text_sel_end, "\302\240");
                                     sp_text_context_update_cursor(this);
@@ -865,7 +865,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                             {
                                 if (!this->text) { // printable key; create text if none (i.e. if nascent_object)
                                     sp_text_context_setup_text(this);
-                                    this->nascent_object = 0; // we don't need it anymore, having created a real <text>
+                                    this->nascent_object = false; // we don't need it anymore, having created a real <text>
                                 }
 
                                 iterator_pair enter_pair;
@@ -1095,7 +1095,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 return TRUE;
                             case GDK_KEY_Escape:
                                 if (this->creating) {
-                                    this->creating = 0;
+                                    this->creating = false;
                                     if (this->grabbed) {
                                         sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
                                         this->grabbed = nullptr;
@@ -1217,7 +1217,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                     return TRUE;
                 } else if (group0_keyval == GDK_KEY_Escape) { // cancel rubberband
                     if (this->creating) {
-                        this->creating = 0;
+                        this->creating = false;
                         if (this->grabbed) {
                             sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
                             this->grabbed = nullptr;
@@ -1297,7 +1297,7 @@ bool sp_text_paste_inline(ToolBase *ec)
 
             if (!tc->text) { // create text if none (i.e. if nascent_object)
                 sp_text_context_setup_text(tc);
-                tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+                tc->nascent_object = false; // we don't need it anymore, having created a real <text>
             }
 
             // using indices is slow in ustrings. Whatever.
@@ -1591,7 +1591,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
         }
 
         tc->show = TRUE;
-        tc->phase = 1;
+        tc->phase = true;
 
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         int const nChars = layout->iteratorToCharIndex(layout->end());
@@ -1665,10 +1665,10 @@ static gint sp_text_context_timeout(TextTool *tc)
     if (tc->show) {
         sp_canvas_item_show(tc->cursor);
         if (tc->phase) {
-            tc->phase = 0;
+            tc->phase = false;
             tc->cursor->setRgba32(0x000000ff);
         } else {
-            tc->phase = 1;
+            tc->phase = true;
             tc->cursor->setRgba32(0xffffffff);
         }
     }
@@ -1720,7 +1720,7 @@ static void sptc_commit(GtkIMContext */*imc*/, gchar *string, TextTool *tc)
 {
     if (!tc->text) {
         sp_text_context_setup_text(tc);
-        tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+        tc->nascent_object = false; // we don't need it anymore, having created a real <text>
     }
 
     tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, string);

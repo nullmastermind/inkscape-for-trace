@@ -311,7 +311,7 @@ private:
     bool processStyle(SPItem *item, const Glib::ustring &id, const Glib::ustring &gradientNameFill, const Glib::ustring &gradientNameStroke, Glib::ustring& output);
 
     bool processGradient(SPItem *item,
-                    const Glib::ustring &id, Geom::Affine &tf, Glib::ustring& gradientName, Glib::ustring& output, bool checkFillGradient = 1);
+                    const Glib::ustring &id, Geom::Affine &tf, Glib::ustring& gradientName, Glib::ustring& output, bool checkFillGradient = true);
 
     bool writeStyleHeader(Writer &outs);
 

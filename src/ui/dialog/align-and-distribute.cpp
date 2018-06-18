@@ -936,7 +936,7 @@ AlignAndDistribute::AlignAndDistribute()
       _nodesTable(),
       _anchorLabel(_("Relative to: ")),
       _anchorLabelNode(_("Relative to: ")),
-      _selgrpLabel(_("_Treat selection as group: "), 1)
+      _selgrpLabel(_("_Treat selection as group: "), true)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 

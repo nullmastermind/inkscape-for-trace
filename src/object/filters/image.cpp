@@ -35,7 +35,7 @@
 
 SPFeImage::SPFeImage() : SPFilterPrimitive() {
 	this->href = nullptr;
-	this->from_element = 0;
+	this->from_element = false;
 	this->SVGElemRef = nullptr;
 	this->SVGElem = nullptr;
 

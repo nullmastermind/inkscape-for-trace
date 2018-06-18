@@ -306,7 +306,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DOTTED){
         // FIXME: Per spec, this should produce round dots.
         Geom::Point pv = ps;
-        while(1){
+        while(true){
             Geom::Point pvlast = pv;
             if(dots[i]>0){
                 if(pv[Geom::X] > pf[Geom::X]) break;
@@ -331,7 +331,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     }
     else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DASHED){
         Geom::Point pv = ps;
-        while(1){
+        while(true){
             Geom::Point pvlast = pv;
             if(dashes[i]>0){
                 if(pv[Geom::X]> pf[Geom::X]) break;
@@ -359,7 +359,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
         double   x    = ps[Geom::X];
         double   y    = ps[Geom::Y] + poff[Geom::Y];
         dc.moveTo(Geom::Point(x, y + amp * wave[i]));
-        while(1){
+        while(true){
            i = ((i + 1) & 15);
            x += step;
            dc.lineTo(Geom::Point(x, y + amp * wave[i]));
@@ -367,7 +367,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
         }
         y = ps[Geom::Y] - poff[Geom::Y];
         dc.lineTo(Geom::Point(x, y + amp * wave[i]));
-        while(1){
+        while(true){
            i = ((i - 1) & 15);
            x -= step;
            dc.lineTo(Geom::Point(x, y + amp * wave[i]));

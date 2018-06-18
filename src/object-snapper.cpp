@@ -125,7 +125,7 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
                     } else {
                         Geom::OptRect bbox_of_item;
                         Preferences *prefs = Preferences::get();
-                        int prefs_bbox = prefs->getBool("/tools/bounding_box", 0);
+                        int prefs_bbox = prefs->getBool("/tools/bounding_box", false);
                         // We'll only need to obtain the visual bounding box if the user preferences tell
                         // us to, AND if we are snapping to the bounding box itself. If we're snapping to
                         // paths only, then we can just as well use the geometric bounding box (which is faster)
@@ -366,7 +366,7 @@ void Inkscape::ObjectSnapper::_collectPaths(Geom::Point /*p*/,
 
         if (_snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_BBOX_EDGE)) {
             Preferences *prefs = Preferences::get();
-            int prefs_bbox = prefs->getBool("/tools/bounding_box", 0);
+            int prefs_bbox = prefs->getBool("/tools/bounding_box", false);
             bbox_type = !prefs_bbox ?
                 SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
         }

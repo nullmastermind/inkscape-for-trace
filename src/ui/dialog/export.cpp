@@ -138,7 +138,7 @@ Export::Export (void) :
     unit_selector(),
     units_label(_("Units:")),
     filename_box(false, 5),
-    browse_label(_("_Export As..."), 1),
+    browse_label(_("_Export As..."), true),
     browse_image(),
     batch_box(false, 5),
     batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
@@ -324,7 +324,7 @@ Export::Export (void) :
     button_box.pack_end(export_button, false, false, 0);
 
     /*Advanced*/
-    Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),1));
+    Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),true));
     expander.set_label_widget(*label_advanced);
     const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
     for(int i=0; i<11; ++i)
@@ -363,7 +363,7 @@ Export::Export (void) :
     contents->pack_start(singleexport_box);
     contents->pack_start(batch_box);
     contents->pack_start(hide_box);
-    contents->pack_end(button_box, false, 0);
+    contents->pack_end(button_box, false, false);
     contents->pack_end(_prog, Gtk::PACK_EXPAND_WIDGET);
     contents->pack_end(expander, FALSE, FALSE,0);
 

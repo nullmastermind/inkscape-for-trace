@@ -23,7 +23,7 @@
 #include "display/nr-filter.h"
 
 SPFeTurbulence::SPFeTurbulence() : SPFilterPrimitive() {
-	this->stitchTiles = 0;
+	this->stitchTiles = false;
 	this->seed = 0;
 	this->numOctaves = 0;
 	this->type = Inkscape::Filters::TURBULENCE_FRACTALNOISE;

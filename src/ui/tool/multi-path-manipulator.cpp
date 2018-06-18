@@ -616,7 +616,7 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
             }
 
             if (handled) return true;
-        } while(0);
+        } while(false);
     }
 
 

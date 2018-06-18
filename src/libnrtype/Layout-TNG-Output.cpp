@@ -323,7 +323,7 @@ Geom::Affine glyph_matrix;
             unsigned lc_index  = char_index;
             unsigned hold_iisi = _spans[span_index].in_input_stream_item;
             int newtarget = 0;
-            while(1){
+            while(true){
                 glyph_index = _characters[lc_index].in_glyph;
                 if(glyph_index == -1){  // end of a line within a paragraph, for instance
                     lc_index++;

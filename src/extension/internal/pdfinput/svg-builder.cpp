@@ -1255,7 +1255,7 @@ void SvgBuilder::_flushText() {
     Glib::ustring text_buffer;
 
     // Output all buffered glyphs
-    while (1) {
+    while (true) {
         const SvgGlyph& glyph = (*i);
         std::vector<SvgGlyph>::iterator prev_iterator = i - 1;
         // Check if we need to make a new tspan

@@ -34,7 +34,7 @@
 SPStar::SPStar() : SPPolygon() ,
 	sides(5),
 	center(0, 0),
-	flatsided(0),
+	flatsided(false),
 	rounded(0.0),
 	randomized(0.0)
 {

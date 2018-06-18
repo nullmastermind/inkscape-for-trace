@@ -1767,7 +1767,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     Geom::IntRect paint_rect(xx0, yy0, xx1, yy1);
 
     Geom::OptIntRect area = paint_rect & canvas_rect;
-    if (!area || area->hasZeroArea()) return 0;
+    if (!area || area->hasZeroArea()) return false;
     paint_rect = *area;
 
     PaintRectSetup setup;

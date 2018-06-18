@@ -71,7 +71,7 @@ Find::Find()
       check_scope_selection(_("Sele_ction"), _("Limit search to the current selection")),
       check_searchin_text(_("_Text"), _("Search in text objects")),
       check_searchin_property(_("_Properties"), _("Search in object properties, styles, attributes and IDs")),
-      vbox_searchin(0, false),
+      vbox_searchin(false, false),
       frame_searchin(_("Search in")),
       frame_scope(_("Scope")),
 

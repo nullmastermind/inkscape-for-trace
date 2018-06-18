@@ -919,7 +919,7 @@ CloneTiler::CloneTiler () :
 
                 {
                     auto b = Gtk::manage(new Gtk::CheckButton(_("Color")));
-                    bool old = prefs->getBool(prefs_path + "pick_to_color", 0);
+                    bool old = prefs->getBool(prefs_path + "pick_to_color", false);
                     b->set_active(old);
                     b->set_tooltip_text(_("Each clone is painted by the picked color (the original must have unset fill or stroke)"));
                     table_attach (table, b, 0.0, 1, 2);
@@ -928,7 +928,7 @@ CloneTiler::CloneTiler () :
 
                 {
                     auto b = Gtk::manage(new Gtk::CheckButton(_("Opacity")));
-                    bool old = prefs->getBool(prefs_path + "pick_to_opacity", 0);
+                    bool old = prefs->getBool(prefs_path + "pick_to_opacity", false);
                     b->set_active(old);
                     b->set_tooltip_text(_("Each clone's opacity is determined by the picked value in that point"));
                     table_attach (table, b, 0.0, 2, 2);

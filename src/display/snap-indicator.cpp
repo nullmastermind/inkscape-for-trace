@@ -323,7 +323,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
                                                      nullptr);
 
             SP_CTRLRECT(box)->setRectangle(*bbox);
-            SP_CTRLRECT(box)->setColor(pre_snap ? 0x7f7f7fff : 0xff0000ff, 0, 0);
+            SP_CTRLRECT(box)->setColor(pre_snap ? 0x7f7f7fff : 0xff0000ff, false, 0);
             SP_CTRLRECT(box)->setDashed(true);
             SP_CTRLRECT(box)->pickable = false;  // See the extensive comment above
             sp_canvas_item_move_to_z(box, 0);

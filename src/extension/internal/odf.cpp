@@ -1696,8 +1696,8 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
     Glib::ustring outputStroke;
     Glib::ustring outputStyle;
     
-    processGradient(item, id, tf, gradientNameFill, outputFill, 1);
-    processGradient(item, id, tf, gradientNameStroke, outputStroke, 0);
+    processGradient(item, id, tf, gradientNameFill, outputFill, true);
+    processGradient(item, id, tf, gradientNameStroke, outputStroke, false);
     souts.writeUString(outputFill);
     souts.writeUString(outputStroke);
     

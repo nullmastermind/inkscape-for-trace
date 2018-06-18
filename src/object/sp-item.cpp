@@ -1496,7 +1496,7 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
 
     } // endif(compensate)
 
-    gint preserve = prefs->getBool("/options/preservetransform/value", 0);
+    gint preserve = prefs->getBool("/options/preservetransform/value", false);
     Geom::Affine transform_attr (transform);
 
     // CPPIFY: check this code.

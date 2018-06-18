@@ -245,7 +245,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     }
 
 
-    if (1) {
+    if (true) {
         snprintf(buff, sizeof(buff) - 1, "Screen=%dx%dpx, %dx%dmm", PixelsX, PixelsY, MMX, MMY);
         rec = textcomment_set(buff);
         if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
@@ -1007,7 +1007,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
         /*  find the first clip_ref at object or up the stack.  There may not be one. */
         SPClipPath *scp = nullptr;
         SPItem *item = SP_ITEM(style->object);
-        while(1) {
+        while(true) {
             scp = (item->clip_ref ? item->clip_ref->getObject() : nullptr);
             if(scp)break;
             item = SP_ITEM(item->parent);
@@ -1029,7 +1029,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                 */
                 Geom::Affine tf = item->transform;
                 SPItem *scan_item = item;
-                while(1) {
+                while(true) {
                    scan_item = SP_ITEM(scan_item->parent);
                    if(!scan_item)break;
                    tf *= scan_item->transform;

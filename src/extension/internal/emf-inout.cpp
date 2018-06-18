@@ -2920,7 +2920,7 @@ std::cout << "BEFORE DRAW"
                 }
             }
 
-            if (0 && strlen(tmp_str.str().c_str())) {
+            if (false && strlen(tmp_str.str().c_str())) {
                 tmp_outsvg << "   <!-- \"";
                 tmp_outsvg << tmp_str.str().c_str();
                 tmp_outsvg << "\" -->\n";

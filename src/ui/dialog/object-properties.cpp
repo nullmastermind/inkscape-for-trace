@@ -50,12 +50,12 @@ ObjectProperties::ObjectProperties()
     : UI::Widget::Panel("/dialogs/object/", SP_VERB_DIALOG_ITEM)
     , _blocked (false)
     , _current_item(nullptr)
-    , _label_id(_("_ID:"), 1)
-    , _label_label(_("_Label:"), 1)
-    , _label_title(_("_Title:"), 1)
-    , _label_image_rendering(_("_Image Rendering:"), 1)
-    , _cb_hide(_("_Hide"), 1)
-    , _cb_lock(_("L_ock"), 1)
+    , _label_id(_("_ID:"), true)
+    , _label_label(_("_Label:"), true)
+    , _label_title(_("_Title:"), true)
+    , _label_image_rendering(_("_Image Rendering:"), true)
+    , _cb_hide(_("_Hide"), true)
+    , _cb_lock(_("L_ock"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
     , _desktop(nullptr)
 {
@@ -168,7 +168,7 @@ void ObjectProperties::_init()
     _entry_title.signal_activate().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
     /* Create the frame for the object description */
-    Gtk::Label *label_desc = Gtk::manage(new Gtk::Label(_("_Description:"), 1));
+    Gtk::Label *label_desc = Gtk::manage(new Gtk::Label(_("_Description:"), true));
     UI::Widget::Frame *frame_desc = Gtk::manage(new UI::Widget::Frame("", FALSE));
     frame_desc->set_label_widget(*label_desc);
     frame_desc->set_padding (0,0,0,0);
@@ -237,7 +237,7 @@ void ObjectProperties::_init()
 
 
     /* Button for setting the object's id, label, title and description. */
-    Gtk::Button *btn_set = Gtk::manage(new Gtk::Button(_("_Set"), 1));
+    Gtk::Button *btn_set = Gtk::manage(new Gtk::Button(_("_Set"), true));
     btn_set->set_hexpand();
     btn_set->set_valign(Gtk::ALIGN_CENTER);
     grid_cb->attach(*btn_set, 2, 0, 1, 1);
@@ -245,7 +245,7 @@ void ObjectProperties::_init()
     btn_set->signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
     /* Create the frame for interactivity options */
-    Gtk::Label *label_interactivity = Gtk::manage(new Gtk::Label(_("_Interactivity"), 1));
+    Gtk::Label *label_interactivity = Gtk::manage(new Gtk::Label(_("_Interactivity"), true));
     _exp_interactivity.set_label_widget(*label_interactivity);
     contents->pack_start(_exp_interactivity, FALSE, FALSE, 0);
 

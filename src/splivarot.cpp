@@ -2400,7 +2400,7 @@ sp_selected_path_simplify(SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble simplifyThreshold =
         prefs->getDouble("/options/simplifythreshold/value", 0.003);
-    bool simplifyJustCoalesce = prefs->getBool("/options/simplifyjustcoalesce/value", 0);
+    bool simplifyJustCoalesce = prefs->getBool("/options/simplifyjustcoalesce/value", false);
 
     //Get the current time
     GTimeVal currentTimeVal;

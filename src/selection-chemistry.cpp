@@ -805,7 +805,7 @@ void ObjectSet::popFromGroup(){
         sp_item_group_ungroup(static_cast<SPGroup*>(parent_group), children, false);
     }
     else {
-        toNextLayer(1);
+        toNextLayer(true);
     }
 
     parent_group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -3064,8 +3064,8 @@ void ObjectSet::toGuides()
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool deleteitems = !prefs->getBool("/tools/cvg_keep_objects", 0);
-    bool wholegroups = prefs->getBool("/tools/cvg_convert_whole_groups", 0);
+    bool deleteitems = !prefs->getBool("/tools/cvg_keep_objects", false);
+    bool wholegroups = prefs->getBool("/tools/cvg_convert_whole_groups", false);
 
     // If an object is earlier in the selection list than its clone, and it is deleted, then the clone will have changed
     // and its entry in the selection list is invalid (crash).

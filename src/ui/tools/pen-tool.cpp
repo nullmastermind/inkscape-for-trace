@@ -1291,7 +1291,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
     Glib::ustring dist = q.string(desktop->namedview->display_units);
     double angle = atan2(rel[Geom::Y], rel[Geom::X]) * 180 / M_PI;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/options/compassangledisplay/value", 0) != 0) {
+    if (prefs->getBool("/options/compassangledisplay/value", false) != 0) {
         angle = 90 - angle;
         if (angle < 0) {
             angle += 360;

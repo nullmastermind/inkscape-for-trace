@@ -151,7 +151,7 @@ static ProfileFloatElement f_profile[PROFILE_FLOAT_SIZE] = {
     //TODO not sure why get 0.01 if slider width == 0, maybe a double/int problem
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/eraser/selcue", 0) != 0) {
+    if (prefs->getBool("/tools/eraser/selcue", false) != 0) {
     	this->enableSelectionCue();
     }
 

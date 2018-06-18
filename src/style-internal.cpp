@@ -2694,11 +2694,11 @@ SPITextDecorationLine::read( gchar const *str ) {
         // This method ignores inlineid keys and extra delimiters, so " ,,, blink hello" will set
         // blink and ignore hello
         const gchar *hstr = str;
-        while (1) {
+        while (true) {
             if (*str == ' ' || *str == ',' || *str == '\0'){
                 int slen = str - hstr;
                 // CSS 2 keywords
-                while(1){ // not really a loop, used to avoid a goto
+                while(true){ // not really a loop, used to avoid a goto
                     hit_one = true; // most likely we will
                     if ((slen ==  9) && strneq(hstr, "underline",    slen)){  found_underline    = true; break; }
                     if ((slen ==  8) && strneq(hstr, "overline",     slen)){  found_overline     = true; break; }
@@ -2833,7 +2833,7 @@ SPITextDecorationStyle::read( gchar const *str ) {
         // this method ignores inlineid keys and extra delimiters, so " ,,, style hello" will set style and ignore hello
         // if more than one style is present, the first is used
         const gchar *hstr = str;
-        while (1) {
+        while (true) {
             if (*str == ' ' || *str == ',' || *str == '\0'){
                 int slen = str - hstr;
                 if (     (slen ==  5) && strneq(hstr, "solid",        slen)){  found_solid  = true; found_one = true; break; }
@@ -2977,7 +2977,7 @@ SPITextDecoration::read( gchar const *str ) {
     test_color.read( "currentColor" );  // Default value
     test_color.set = false;
     const gchar *hstr = str;
-    while (1) {
+    while (true) {
         if (*str == ' ' || *str == ',' || *str == '\0'){
             int slen = str - hstr;
             gchar *frag = g_strndup(hstr,slen+1); // only send one piece at a time, since keywords may be intermixed

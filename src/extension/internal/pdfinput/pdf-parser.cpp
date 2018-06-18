@@ -1759,7 +1759,7 @@ void PdfParser::doShadingPatternFillFallback(GfxShadingPattern *sPat,
   saveState();
 
   // clip to bbox
-  if (0 ){//shading->getHasBBox()) {
+  if (false ){//shading->getHasBBox()) {
     shading->getBBox(&xMin, &yMin, &xMax, &yMax);
     state->moveTo(xMin, yMin);
     state->lineTo(xMax, yMin);
@@ -2599,7 +2599,7 @@ void PdfParser::doShowText(const GooString *s) {
   builder->beginString(state);
 
   // handle a Type 3 char
-  if (font->getType() == fontType3 && 0) {//out->interpretType3Chars()) {
+  if (font->getType() == fontType3 && false) {//out->interpretType3Chars()) {
     mat = state->getCTM();
     for (int i = 0; i < 6; ++i) {
       oldCTM[i] = mat[i];
@@ -2644,7 +2644,7 @@ void PdfParser::doShowText(const GooString *s) {
       state->setCTM(newCTM[0], newCTM[1], newCTM[2], newCTM[3], x, y);
       //~ the CTM concat values here are wrong (but never used)
       //out->updateCTM(state, 1, 0, 0, 1, 0, 0);
-      if (0){ /*!out->beginType3Char(state, curX + riseX, curY + riseY, tdx, tdy,
+      if (false){ /*!out->beginType3Char(state, curX + riseX, curY + riseY, tdx, tdy,
 			       code, u, uLen)) {*/
 #if defined(POPPLER_NEW_OBJECT_API)
 	charProc = ((Gfx8BitFont *)font)->getCharProc(code);

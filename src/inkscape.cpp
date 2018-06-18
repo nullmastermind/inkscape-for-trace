@@ -473,7 +473,7 @@ Application::Application(const char* argv, bool use_gui) :
     Glib::ustring ui_language = prefs->getString("/ui/language");
     if(!ui_language.empty())
     {
-        setenv("LANGUAGE", ui_language, 1);
+        setenv("LANGUAGE", ui_language, true);
     }
 
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON.
