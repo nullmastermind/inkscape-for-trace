@@ -809,7 +809,7 @@ PencilTool::addPowerStrokePencil()
         (_previous_pressure > step &&  pressure_shrunk < step)) 
     {
         _previous_pressure = pressure_shrunk;
-        this->points.push_back(Geom::Point(0, pressure_computed));
+        this->points.emplace_back(0, pressure_computed);
         this->_points_pos.push_back(this->_last_point);
     }
     if (this->_curve && this->ps.size() > 1) {

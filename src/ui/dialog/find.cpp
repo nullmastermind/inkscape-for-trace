@@ -502,8 +502,8 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
     }
 
     std::vector<Glib::ustring> vFontTokenNames;
-    vFontTokenNames.push_back("font-family:");
-    vFontTokenNames.push_back("-inkscape-font-specification:");
+    vFontTokenNames.emplace_back("font-family:");
+    vFontTokenNames.emplace_back("-inkscape-font-specification:");
 
     std::vector<Glib::ustring> vStyleTokens = Glib::Regex::split_simple(";", item_style);
     for(size_t i=0; i<vStyleTokens.size(); i++) {

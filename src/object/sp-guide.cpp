@@ -250,10 +250,10 @@ void sp_guide_create_guides_around_page(SPDesktop *dt)
     Geom::Point B(C[Geom::X], 0);
     Geom::Point D(0, C[Geom::Y]);
 
-    pts.push_back(std::pair<Geom::Point, Geom::Point>(A, B));
-    pts.push_back(std::pair<Geom::Point, Geom::Point>(B, C));
-    pts.push_back(std::pair<Geom::Point, Geom::Point>(C, D));
-    pts.push_back(std::pair<Geom::Point, Geom::Point>(D, A));
+    pts.emplace_back(A, B);
+    pts.emplace_back(B, C);
+    pts.emplace_back(C, D);
+    pts.emplace_back(D, A);
 
     sp_guide_pt_pairs_to_guides(doc, pts);
 

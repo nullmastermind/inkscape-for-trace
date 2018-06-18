@@ -1132,14 +1132,14 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
         Geom::OptRect bbox = this->desktopVisualBounds();
 
         if (bbox) {
-            p.push_back(Inkscape::SnapCandidatePoint(bbox->midpoint(), Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
+            p.emplace_back(bbox->midpoint(), Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT);
         }
     }
 
     for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
         if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP)) {
             // Add the first point of the path
-            p.push_back(Inkscape::SnapCandidatePoint(path_it->initialPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP));
+            p.emplace_back(path_it->initialPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP);
         }
 
         Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
@@ -1150,7 +1150,7 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
             // For each path: consider midpoints of line segments for snapping
             if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_LINE_MIDPOINT)) {
                 if (Geom::LineSegment const* line_segment = dynamic_cast<Geom::LineSegment const*>(&(*curve_it1))) {
-                    p.push_back(Inkscape::SnapCandidatePoint(Geom::middle_point(*line_segment) * i2dt, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT));
+                    p.emplace_back(Geom::middle_point(*line_segment) * i2dt, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT);
                 }
             }
 
@@ -1158,7 +1158,7 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
                 if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP) && !path_it->closed()) {
                     // Add the last point of the path, but only for open paths
                     // (for closed paths the first and last point will coincide)
-                    p.push_back(Inkscape::SnapCandidatePoint((*curve_it1).finalPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP));
+                    p.emplace_back((*curve_it1).finalPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP);
                 }
             } else {
                 /* Test whether to add the node between curve_it1 and curve_it2.
@@ -1189,7 +1189,7 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
                         break;
                     }
 
-                    p.push_back(Inkscape::SnapCandidatePoint(curve_it1->finalPoint() * i2dt, sst, stt));
+                    p.emplace_back(curve_it1->finalPoint() * i2dt, sst, stt);
                 }
             }
 
@@ -1208,7 +1208,7 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
                 if (!cs.empty()) { // There might be multiple intersections...
                     for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
                         Geom::Point p_ix = (*path_it).pointAt((*i).ta);
-                        p.push_back(Inkscape::SnapCandidatePoint(p_ix * i2dt, Inkscape::SNAPSOURCE_PATH_INTERSECTION, Inkscape::SNAPTARGET_PATH_INTERSECTION));
+                        p.emplace_back(p_ix * i2dt, Inkscape::SNAPSOURCE_PATH_INTERSECTION, Inkscape::SNAPTARGET_PATH_INTERSECTION);
                     }
                 }
             } catch (Geom::RangeError &e) {

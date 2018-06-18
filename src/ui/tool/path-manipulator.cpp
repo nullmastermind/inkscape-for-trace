@@ -295,11 +295,11 @@ add_or_replace_if_extremum(std::vector< std::pair<NodeList::iterator, double> > 
     if (testvalue > extrvalue) {
         // replace all extreme nodes with the new one
         vec.clear();
-        vec.push_back( std::pair<NodeList::iterator, double>( node, t ) );
+        vec.emplace_back( node, t );
         extrvalue = testvalue;
     } else if ( Geom::are_near(testvalue, extrvalue) ) {
         // very rare but: extremum node at the same extreme value!!! so add it to the list
-        vec.push_back( std::pair<NodeList::iterator, double>( node, t ) );
+        vec.emplace_back( node, t );
     }
 }
 

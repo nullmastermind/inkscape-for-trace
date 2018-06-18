@@ -68,7 +68,7 @@ void removeoverlap(std::vector<SPItem*> const & items, double const xGap, double
                 min[Y] = max[Y] = (min[Y] + max[Y]) / 2.;
             }
             Rectangle * vspc_rect = new Rectangle(min[X], max[X], min[Y], max[Y]);
-            records.push_back(Record(item, item_box->midpoint(), vspc_rect));
+            records.emplace_back(item, item_box->midpoint(), vspc_rect);
             rs.push_back(vspc_rect);
         }
     }

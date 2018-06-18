@@ -2233,9 +2233,9 @@ bool FilterEffectsDialog::PrimitiveList::do_connection_node(const Gtk::TreeIter&
     const int con_w = (int)(fheight * 0.35f);
     const int con_y = (int)(rct.get_y() + (h / 2) - con_w + (input * h));
     points.clear();
-    points.push_back(Gdk::Point(x, con_y));
-    points.push_back(Gdk::Point(x, con_y + con_w * 2));
-    points.push_back(Gdk::Point(x - con_w, con_y + con_w));
+    points.emplace_back(x, con_y);
+    points.emplace_back(x, con_y + con_w * 2);
+    points.emplace_back(x - con_w, con_y + con_w);
 
     return ix >= x - h && iy >= con_y && ix <= x && iy <= points[1].get_y();
 }

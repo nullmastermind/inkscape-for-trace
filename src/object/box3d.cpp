@@ -1311,8 +1311,8 @@ gchar *SPBox3D::description() const {
 
 static inline void
 box3d_push_back_corner_pair(SPBox3D const *box, std::list<std::pair<Geom::Point, Geom::Point> > &pts, int c1, int c2) {
-    pts.push_back(std::make_pair(box3d_get_corner_screen(box, c1, false),
-                                 box3d_get_corner_screen(box, c2, false)));
+    pts.emplace_back(box3d_get_corner_screen(box, c1, false),
+                                 box3d_get_corner_screen(box, c2, false));
 }
 
 void SPBox3D::convert_to_guides() const {

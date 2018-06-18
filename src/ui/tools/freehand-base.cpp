@@ -274,7 +274,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     if (!swidth) {
                         swidth = swidth/2;
                     }
-                    points.push_back(Geom::Point(0, swidth));
+                    points.emplace_back(0, swidth);
                 }
                 Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
                 lpe = SP_LPE_ITEM(item)->getCurrentLPE();

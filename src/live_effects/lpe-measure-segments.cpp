@@ -882,7 +882,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 Geom::Point point = (*iter);
                 double dproj = Inkscape::Util::Quantity::convert(distance_projection, display_unit.c_str(), unit.get_abbreviation());
                 Geom::Coord xpos = maxdistance + dproj;
-                result.push_back(Geom::Point(xpos, point[Geom::Y]));
+                result.emplace_back(xpos, point[Geom::Y]);
             }
             std::sort (result.begin(), result.end(), sortPoints);
             Geom::Path path;
@@ -1083,11 +1083,11 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     items.push_back(texton);
                     if (!hide_arrows) {
                         if (arrows_outside) {
-                            items.push_back(Glib::ustring("ArrowDINout-start"));
-                            items.push_back(Glib::ustring("ArrowDINout-end"));
+                            items.emplace_back("ArrowDINout-start");
+                            items.emplace_back("ArrowDINout-end");
                         } else {
-                            items.push_back(Glib::ustring("ArrowDIN-start"));
-                            items.push_back(Glib::ustring("ArrowDIN-end"));
+                            items.emplace_back("ArrowDIN-start");
+                            items.emplace_back("ArrowDIN-end");
                         }
                     }
                     if (((Geom::are_near(prev, prev_stored, 0.01) && Geom::are_near(next, next_stored, 0.01)) || 

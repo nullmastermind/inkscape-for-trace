@@ -33,7 +33,7 @@ void PureTransform::snap(::SnapManager *sm, std::vector<Inkscape::SnapCandidateP
             bbox.expandTo(transformed);
         }
 
-        transformed_points.push_back(Inkscape::SnapCandidatePoint(transformed, (*i).getSourceType(), source_num, Inkscape::SNAPTARGET_UNDEFINED, Geom::OptRect()));
+        transformed_points.emplace_back(transformed, (*i).getSourceType(), source_num, Inkscape::SNAPTARGET_UNDEFINED, Geom::OptRect());
         source_num++;
     }
 

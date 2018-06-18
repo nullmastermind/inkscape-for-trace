@@ -562,7 +562,7 @@ void Inkscape::ObjectSnapper::_snapPaths(IntermSnapResults &isr,
                                 Geom::Point sp_tangent_doc = curve->unitTangentAt(*np);
                                 sp_tangent_dt = dt->doc2dt(sp_tangent_doc) - dt->doc2dt(Geom::Point(0,0));
                             }
-                            isr.curves.push_back(SnappedCurve(sp_dt, sp_tangent_dt, num_path, index, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, curve, p.getSourceType(), p.getSourceNum(), it_p->target_type, it_p->target_bbox));
+                            isr.curves.emplace_back(sp_dt, sp_tangent_dt, num_path, index, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, curve, p.getSourceType(), p.getSourceNum(), it_p->target_type, it_p->target_bbox);
                             if (snap_tang || snap_perp) {
                                 // For each curve that's within snapping range, we will now also search for tangential and perpendicular snaps
                                 _snapPathsTangPerp(snap_tang, snap_perp, isr, p, curve, dt);
@@ -846,7 +846,7 @@ void Inkscape::ObjectSnapper::_snapPathsTangPerp(bool snap_tang, bool snap_perp,
             for (std::vector<double>::const_iterator t = ts.begin(); t != ts.end(); ++t) {
                 point_dt = dt->doc2dt(curve->pointAt(*t));
                 dist = Geom::distance(point_dt, p.getPoint());
-                isr.points.push_back(SnappedPoint(point_dt, p.getSourceType(), p.getSourceNum(), SNAPTARGET_PATH_TANGENTIAL, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true));
+                isr.points.emplace_back(point_dt, p.getSourceType(), p.getSourceNum(), SNAPTARGET_PATH_TANGENTIAL, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
             }
         }
 
@@ -859,7 +859,7 @@ void Inkscape::ObjectSnapper::_snapPathsTangPerp(bool snap_tang, bool snap_perp,
             for (std::vector<double>::const_iterator t = ts.begin(); t != ts.end(); ++t) {
                 point_dt = dt->doc2dt(curve->pointAt(*t));
                 dist = Geom::distance(point_dt, p.getPoint());
-                isr.points.push_back(SnappedPoint(point_dt, p.getSourceType(), p.getSourceNum(), SNAPTARGET_PATH_PERPENDICULAR, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true));
+                isr.points.emplace_back(point_dt, p.getSourceType(), p.getSourceNum(), SNAPTARGET_PATH_PERPENDICULAR, dist, getSnapperTolerance(), getSnapperAlwaysSnap(), false, true);
             }
         }
     }

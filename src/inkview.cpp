@@ -80,7 +80,7 @@ get_valid_files(std::vector<Glib::ustring> filenames,
                 std::vector<Glib::ustring> new_filenames;
                 Glib::Dir directory(file);
                 for (auto new_file: directory) {
-                    new_filenames.push_back(Glib::build_filename(file, new_file));
+                    new_filenames.emplace_back(Glib::build_filename(file, new_file));
                 }
                 std::vector<Glib::ustring> new_valid_files = get_valid_files(new_filenames, recursive);
                 valid_files.insert(valid_files.end(), new_valid_files.begin(), new_valid_files.end());

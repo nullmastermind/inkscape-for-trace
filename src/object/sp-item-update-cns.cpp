@@ -29,7 +29,7 @@ void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
              == item.constraints.end() )
         {
             item.constraints.push_back(cn);
-            cn.g->attached_items.push_back(SPGuideAttachment(&item, cn.snappoint_ix));
+            cn.g->attached_items.emplace_back(&item, cn.snappoint_ix);
         }
     }
 }

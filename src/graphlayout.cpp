@@ -175,7 +175,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
             if (v_pair != nodelookup.end()) {
                 unsigned v = v_pair->second;
                 //cout << "Edge: (" << u <<","<<v<<")"<<endl;
-                es.push_back(make_pair(u, v));
+                es.emplace_back(u, v);
                 if (conn->style->marker_end.set) {
                     if (directed && strcmp(conn->style->marker_end.value, "none")) {
                         constraints.push_back(new SeparationConstraint(YDIM, v, u,

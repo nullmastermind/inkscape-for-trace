@@ -193,7 +193,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view->set_size_request( 100, 250 );
 
   std::vector< Gtk::TargetEntry > targets;
-  targets.push_back(Gtk::TargetEntry( "application/x-inkscape-paste"));
+  targets.emplace_back( "application/x-inkscape-paste");
 
   icon_view->enable_model_drag_source (targets, Gdk::BUTTON1_MASK, Gdk::ACTION_COPY);
   icon_view->signal_drag_data_get().connect(

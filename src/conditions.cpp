@@ -139,7 +139,7 @@ static std::vector<Glib::ustring> splitByWhitespace(gchar const *value) {
         gchar *part = g_strstrip(str);
         if ( 0 == *part )
             continue;
-        parts.push_back(part);
+        parts.emplace_back(part);
     }
     g_strfreev(strlist);
     return parts;

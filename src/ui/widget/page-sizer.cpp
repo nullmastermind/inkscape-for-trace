@@ -86,13 +86,13 @@ static std::vector<std::string> lscape_papers;
 
 static void
 fill_landscape_papers() {
-    lscape_papers.push_back("US #10 Envelope");
-    lscape_papers.push_back("DL Envelope");
-    lscape_papers.push_back("Banner 468x60");
-    lscape_papers.push_back("Business Card (ISO 7810)");
-    lscape_papers.push_back("Business Card (US)");
-    lscape_papers.push_back("Business Card (Europe)");
-    lscape_papers.push_back("Business Card (Aus/NZ)");
+    lscape_papers.emplace_back("US #10 Envelope");
+    lscape_papers.emplace_back("DL Envelope");
+    lscape_papers.emplace_back("Banner 468x60");
+    lscape_papers.emplace_back("Business Card (ISO 7810)");
+    lscape_papers.emplace_back("Business Card (US)");
+    lscape_papers.emplace_back("Business Card (Europe)");
+    lscape_papers.emplace_back("Business Card (Aus/NZ)");
 }
 
 static PaperSizeRec const inkscape_papers[] = {

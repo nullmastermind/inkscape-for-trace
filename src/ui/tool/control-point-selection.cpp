@@ -719,7 +719,7 @@ void ControlPointSelection::getOriginalPoints(std::vector<Inkscape::SnapCandidat
 {
     pts.clear();
     for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        pts.push_back(Inkscape::SnapCandidatePoint(_original_positions[*i], SNAPSOURCE_NODE_HANDLE));
+        pts.emplace_back(_original_positions[*i], SNAPSOURCE_NODE_HANDLE);
     }
 }
 

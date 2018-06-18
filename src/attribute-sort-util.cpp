@@ -96,7 +96,7 @@ void sp_attribute_sort_element(Node *repr) {
       Glib::ustring value = (const char*)iter->value;
 
       // C++11 my_list.emlace_back(attribute, value);
-      my_list.push_back(std::make_pair(attribute,value));
+      my_list.emplace_back(attribute,value);
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.
@@ -183,7 +183,7 @@ void sp_attribute_sort_style(Node* repr, SPCSSAttr *css) {
     Glib::ustring value = (const char*)iter->value;
 
     // C++11 my_list.emlace_back(property, value);
-    my_list.push_back(std::make_pair(property,value));
+    my_list.emplace_back(property,value);
   }
   std::sort(my_list.begin(), my_list.end(), cmp);
   // Delete all attributes.

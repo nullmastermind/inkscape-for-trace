@@ -397,10 +397,10 @@ void ColorICCSelector::init()
     for (size_t i = 0; i < maxColorspaceComponentCount; i++) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         if (i < things.size()) {
-            _impl->_compUI.push_back(ComponentUI(things[i]));
+            _impl->_compUI.emplace_back(things[i]);
         }
         else {
-            _impl->_compUI.push_back(ComponentUI());
+            _impl->_compUI.emplace_back();
         }
 
         std::string labelStr = (i < things.size()) ? things[i].name.c_str() : "";

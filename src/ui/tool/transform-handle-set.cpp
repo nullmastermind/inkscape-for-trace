@@ -658,8 +658,8 @@ protected:
             // constrain to axes
             Geom::Point origin = _last_drag_origin();
             std::vector<Inkscape::Snapper::SnapConstraint> constraints;
-            constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, Geom::Point(1, 0)));
-            constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, Geom::Point(0, 1)));
+            constraints.emplace_back(origin, Geom::Point(1, 0));
+            constraints.emplace_back(origin, Geom::Point(0, 1));
             new_pos = sm.multipleConstrainedSnaps(Inkscape::SnapCandidatePoint(new_pos,
                 SNAPSOURCE_ROTATION_CENTER), constraints, held_shift(*event)).getPoint();
         } else if (snap) {

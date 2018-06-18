@@ -117,7 +117,7 @@ void Layout::appendControlCode(TextControlCode code, void *source_cookie, double
 // more saving of the parameters
 void Layout::appendWrapShape(Shape const *shape, DisplayAlign display_align)
 {
-    _input_wrap_shapes.push_back(InputWrapShape());
+    _input_wrap_shapes.emplace_back();
     _input_wrap_shapes.back().shape = shape;
     _input_wrap_shapes.back().display_align = display_align;
 }

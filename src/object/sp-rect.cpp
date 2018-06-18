@@ -518,21 +518,21 @@ void SPRect::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
     Geom::Point p3 = Geom::Point(this->x.computed + this->width.computed, this->y.computed) * i2dt;
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_RECT_CORNER)) {
-        p.push_back(Inkscape::SnapCandidatePoint(p0, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER));
-        p.push_back(Inkscape::SnapCandidatePoint(p1, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER));
-        p.push_back(Inkscape::SnapCandidatePoint(p2, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER));
-        p.push_back(Inkscape::SnapCandidatePoint(p3, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER));
+        p.emplace_back(p0, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER);
+        p.emplace_back(p1, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER);
+        p.emplace_back(p2, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER);
+        p.emplace_back(p3, Inkscape::SNAPSOURCE_RECT_CORNER, Inkscape::SNAPTARGET_RECT_CORNER);
     }
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_LINE_MIDPOINT)) {
-        p.push_back(Inkscape::SnapCandidatePoint((p0 + p1)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT));
-        p.push_back(Inkscape::SnapCandidatePoint((p1 + p2)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT));
-        p.push_back(Inkscape::SnapCandidatePoint((p2 + p3)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT));
-        p.push_back(Inkscape::SnapCandidatePoint((p3 + p0)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT));
+        p.emplace_back((p0 + p1)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT);
+        p.emplace_back((p1 + p2)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT);
+        p.emplace_back((p2 + p3)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT);
+        p.emplace_back((p3 + p0)/2, Inkscape::SNAPSOURCE_LINE_MIDPOINT, Inkscape::SNAPTARGET_LINE_MIDPOINT);
     }
 
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_OBJECT_MIDPOINT)) {
-        p.push_back(Inkscape::SnapCandidatePoint((p0 + p2)/2, Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT));
+        p.emplace_back((p0 + p2)/2, Inkscape::SNAPSOURCE_OBJECT_MIDPOINT, Inkscape::SNAPTARGET_OBJECT_MIDPOINT);
     }
 }
 
@@ -554,10 +554,10 @@ void SPRect::convert_to_guides() const {
     Geom::Point A3(Geom::Point(this->x.computed + this->width.computed, this->y.computed + this->height.computed) * i2dt);
     Geom::Point A4(Geom::Point(this->x.computed + this->width.computed, this->y.computed) * i2dt);
 
-    pts.push_back(std::make_pair(A1, A2));
-    pts.push_back(std::make_pair(A2, A3));
-    pts.push_back(std::make_pair(A3, A4));
-    pts.push_back(std::make_pair(A4, A1));
+    pts.emplace_back(A1, A2);
+    pts.emplace_back(A2, A3);
+    pts.emplace_back(A3, A4);
+    pts.emplace_back(A4, A1);
 
     sp_guide_pt_pairs_to_guides(this->document, pts);
 }

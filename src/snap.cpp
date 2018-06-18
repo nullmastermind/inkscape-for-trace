@@ -373,8 +373,8 @@ Inkscape::SnappedPoint SnapManager::constrainedAngularSnap(Inkscape::SnapCandida
 
         // Now do the snapping...
         std::vector<Inkscape::Snapper::SnapConstraint> constraints;
-        constraints.push_back(Inkscape::Snapper::SnapConstraint(Geom::Line(o, angle_ceil - M_PI/2)));
-        constraints.push_back(Inkscape::Snapper::SnapConstraint(Geom::Line(o, angle_floor - M_PI/2)));
+        constraints.emplace_back(Geom::Line(o, angle_ceil - M_PI/2));
+        constraints.emplace_back(Geom::Line(o, angle_floor - M_PI/2));
         sp = multipleConstrainedSnaps(p, constraints); // Constraints will always be applied, even if we didn't snap
         if (!sp.getSnapped()) { // If we haven't snapped then we only had the constraint applied;
             sp.setTarget(Inkscape::SNAPTARGET_CONSTRAINED_ANGLE);
@@ -530,19 +530,19 @@ Inkscape::SnappedPoint SnapManager::findBestSnap(Inkscape::SnapCandidatePoint co
     // Therefore we explicitly check whether the paths should be considered as snap targets themselves
     bool exclude_paths = !snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_PATH);
     if (getClosestCurve(isr.curves, closestCurve, exclude_paths)) {
-        sp_list.push_back(Inkscape::SnappedPoint(closestCurve));
+        sp_list.emplace_back(closestCurve);
     }
 
     // search for the closest snapped grid line
     Inkscape::SnappedLine closestGridLine;
     if (getClosestSL(isr.grid_lines, closestGridLine)) {
-        sp_list.push_back(Inkscape::SnappedPoint(closestGridLine));
+        sp_list.emplace_back(closestGridLine);
     }
 
     // search for the closest snapped guide line
     Inkscape::SnappedLine closestGuideLine;
     if (getClosestSL(isr.guide_lines, closestGuideLine)) {
-        sp_list.push_back(Inkscape::SnappedPoint(closestGuideLine));
+        sp_list.emplace_back(closestGuideLine);
     }
 
     // When freely snapping to a grid/guide/path, only one degree of freedom is eliminated

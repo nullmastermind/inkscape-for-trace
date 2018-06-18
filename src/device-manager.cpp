@@ -347,7 +347,7 @@ DeviceManagerImpl::DeviceManagerImpl() :
 
                InputDeviceImpl* device = new InputDeviceImpl(dev, knownIDs);
                device->reference();
-               devices.push_back(Glib::RefPtr<InputDeviceImpl>(device));
+               devices.emplace_back(device);
            }
     }
 }
@@ -441,7 +441,7 @@ std::list<Glib::RefPtr<InputDevice const> > DeviceManagerImpl::getDevices()
 {
     std::list<Glib::RefPtr<InputDevice const> > tmp;
     for ( std::list<Glib::RefPtr<InputDeviceImpl> >::const_iterator it = devices.begin(); it != devices.end(); ++it ) {
-        tmp.push_back(*it);
+        tmp.emplace_back(*it);
     }
     return tmp;
 }

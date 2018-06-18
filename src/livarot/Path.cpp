@@ -416,7 +416,7 @@ int Path::AddPoint(Geom::Point const &iPt, bool mvto)
     }
     
     int const n = pts.size();
-    pts.push_back(path_lineto(mvto ? polyline_moveto : polyline_lineto, iPt));
+    pts.emplace_back(mvto ? polyline_moveto : polyline_lineto, iPt);
     return n;
 }
 
@@ -444,7 +444,7 @@ int Path::AddPoint(Geom::Point const &iPt, int ip, double it, bool mvto)
     }
     
     int const n = pts.size();
-    pts.push_back(path_lineto(mvto ? polyline_moveto : polyline_lineto, iPt, ip, it));
+    pts.emplace_back(mvto ? polyline_moveto : polyline_lineto, iPt, ip, it);
     return n;
 }
 
@@ -459,7 +459,7 @@ int Path::AddForcedPoint(Geom::Point const &iPt)
     }
     
     int const n = pts.size();
-    pts.push_back(path_lineto(polyline_forced, pts[n - 1].p));
+    pts.emplace_back(polyline_forced, pts[n - 1].p);
     return n;
 }
 
@@ -476,7 +476,7 @@ int Path::AddForcedPoint(Geom::Point const &iPt, int /*ip*/, double /*it*/)
     }
     
     int const n = pts.size();
-    pts.push_back(path_lineto(polyline_forced, pts[n - 1].p, pts[n - 1].piece, pts[n - 1].t));
+    pts.emplace_back(polyline_forced, pts[n - 1].p, pts[n - 1].piece, pts[n - 1].t);
     return n;
 }
 

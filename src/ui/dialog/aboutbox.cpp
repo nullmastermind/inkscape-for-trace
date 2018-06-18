@@ -163,7 +163,7 @@ void AboutBox::initStrings() {
         std::string author_line;
 
         while (std::getline(authors_filestream, author_line)) {
-            authors.push_back(author_line);
+            authors.emplace_back(author_line);
         }
     }
 

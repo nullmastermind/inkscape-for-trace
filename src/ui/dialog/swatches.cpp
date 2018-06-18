@@ -344,7 +344,7 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
                                 GtkWidget *child = gtk_menu_item_new_with_label(grad->getId());
                                 gtk_menu_shell_append(GTK_MENU_SHELL(popupSub), child);
 
-                                popupItems.push_back(grad->getId());
+                                popupItems.emplace_back(grad->getId());
                                 g_signal_connect( G_OBJECT(child),
                                                   "activate",
                                                   G_CALLBACK(SwatchesPanelHook::convertGradient),

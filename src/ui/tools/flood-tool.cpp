@@ -869,7 +869,7 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     bci.current_step = 0;
 
     if (is_point_fill) {
-        fill_points.push_back(Geom::Point(event->button.x, event->button.y));
+        fill_points.emplace_back(event->button.x, event->button.y);
     } else {
         Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
         fill_points = r->getPoints();

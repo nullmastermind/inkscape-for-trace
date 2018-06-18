@@ -60,25 +60,25 @@ ObjectProperties::ObjectProperties()
     , _desktop(nullptr)
 {
     //initialize labels for the table at the bottom of the dialog
-    _int_attrs.push_back("onclick");
-    _int_attrs.push_back("onmouseover");
-    _int_attrs.push_back("onmouseout");
-    _int_attrs.push_back("onmousedown");
-    _int_attrs.push_back("onmouseup");
-    _int_attrs.push_back("onmousemove");
-    _int_attrs.push_back("onfocusin");
-    _int_attrs.push_back("onfocusout");
-    _int_attrs.push_back("onload");
+    _int_attrs.emplace_back("onclick");
+    _int_attrs.emplace_back("onmouseover");
+    _int_attrs.emplace_back("onmouseout");
+    _int_attrs.emplace_back("onmousedown");
+    _int_attrs.emplace_back("onmouseup");
+    _int_attrs.emplace_back("onmousemove");
+    _int_attrs.emplace_back("onfocusin");
+    _int_attrs.emplace_back("onfocusout");
+    _int_attrs.emplace_back("onload");
 
-    _int_labels.push_back("onclick:");
-    _int_labels.push_back("onmouseover:");
-    _int_labels.push_back("onmouseout:");
-    _int_labels.push_back("onmousedown:");
-    _int_labels.push_back("onmouseup:");
-    _int_labels.push_back("onmousemove:");
-    _int_labels.push_back("onfocusin:");
-    _int_labels.push_back("onfocusout:");
-    _int_labels.push_back("onload:");
+    _int_labels.emplace_back("onclick:");
+    _int_labels.emplace_back("onmouseover:");
+    _int_labels.emplace_back("onmouseout:");
+    _int_labels.emplace_back("onmousedown:");
+    _int_labels.emplace_back("onmouseup:");
+    _int_labels.emplace_back("onmousemove:");
+    _int_labels.emplace_back("onfocusin:");
+    _int_labels.emplace_back("onfocusout:");
+    _int_labels.emplace_back("onload:");
 
     _desktop_changed_connection = _desktop_tracker.connectDesktopChanged(
         sigc::mem_fun(*this, &ObjectProperties::_setTargetDesktop)

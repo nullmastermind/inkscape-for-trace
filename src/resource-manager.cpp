@@ -227,18 +227,18 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
                 if ( extractFilepath( href, uri ) ) {
                     if ( Glib::path_is_absolute(uri) ) {
                         if ( !Glib::file_test(uri, Glib::FILE_TEST_EXISTS) ) {
-                            result.push_back(href);
+                            result.emplace_back(href);
                             uniques.insert(href);
                         }
                     } else {
                         std::string combined = Glib::build_filename(doc->getBase(), uri);
                         if ( !Glib::file_test(combined, Glib::FILE_TEST_EXISTS) ) {
-                            result.push_back(href);
+                            result.emplace_back(href);
                             uniques.insert(href);
                         }
                     }
                 } else if ( reconstructFilepath( href, uri ) ) {
-                    result.push_back(href);
+                    result.emplace_back(href);
                     uniques.insert(href);
                 }
             }

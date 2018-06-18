@@ -245,18 +245,18 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         
         item->updateRepr();
         if (pathv.empty()) {
-            points.push_back( Geom::Point(0.2,width) );
-            points.push_back( Geom::Point(0.5,width) );
-            points.push_back( Geom::Point(0.8,width) );
+            points.emplace_back(0.2,width );
+            points.emplace_back(0.5,width );
+            points.emplace_back(0.8,width );
         } else {
             Geom::Path const &path = pathv.front();
             Geom::Path::size_type const size = path.size_default();
             if (!path.closed()) {
-                points.push_back( Geom::Point(0.2,width) );
+                points.emplace_back(0.2,width );
             }
-            points.push_back( Geom::Point(0.5*size,width) );
+            points.emplace_back(0.5*size,width );
             if (!path.closed()) {
-                points.push_back( Geom::Point(size - 0.2,width) );
+                points.emplace_back(size - 0.2,width );
             }
         }
         offset_points.set_scale_width(scale_width);
@@ -631,8 +631,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         // depending on cap type, these first and last points have width zero or take the width from the closest width point.
         ts.insert(ts.begin(), Point( pwd2_in.domain().min(),
                                     (start_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.front()[Geom::Y]) );
-        ts.push_back( Point( pwd2_in.domain().max(),
-                             (end_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.back()[Geom::Y]) );
+        ts.emplace_back( pwd2_in.domain().max(),
+                             (end_linecap==LINECAP_ZERO_WIDTH) ? 0. : ts.back()[Geom::Y] );
     }
 
     // do the interpolation in a coordinate system that is more alike to the on-canvas knots,

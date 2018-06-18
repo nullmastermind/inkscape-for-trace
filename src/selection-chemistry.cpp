@@ -3975,7 +3975,7 @@ void ObjectSet::setClipGroup()
                 || apply_to_layer){
 
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
-            mask_items.push_back(std::make_pair(dup, (*i)->i2doc_affine()));
+            mask_items.emplace_back(dup, (*i)->i2doc_affine());
 
             if (remove_original) {
                 items_to_delete.push_back(*i);

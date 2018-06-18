@@ -707,7 +707,7 @@ recursive_bezier4(const double x1, const double y1,
             {
                 if(d2 < m_distance_tolerance_square)
                 {
-                    m_points.push_back(Geom::Point(x2, y2));
+                    m_points.emplace_back(x2, y2);
                     return;
                 }
             }
@@ -715,7 +715,7 @@ recursive_bezier4(const double x1, const double y1,
             {
                 if(d3 < m_distance_tolerance_square)
                 {
-                    m_points.push_back(Geom::Point(x3, y3));
+                    m_points.emplace_back(x3, y3);
                     return;
                 }
             }
@@ -728,7 +728,7 @@ recursive_bezier4(const double x1, const double y1,
             {
                 if(m_angle_tolerance < curve_angle_tolerance_epsilon)
                 {
-                    m_points.push_back(Geom::Point(x23, y23));
+                    m_points.emplace_back(x23, y23);
                     return;
                 }
 
@@ -739,8 +739,8 @@ recursive_bezier4(const double x1, const double y1,
 
                 if(da1 < m_angle_tolerance)
                 {
-                    m_points.push_back(Geom::Point(x2, y2));
-                    m_points.push_back(Geom::Point(x3, y3));
+                    m_points.emplace_back(x2, y2);
+                    m_points.emplace_back(x3, y3);
                     return;
                 }
 
@@ -748,7 +748,7 @@ recursive_bezier4(const double x1, const double y1,
                 {
                     if(da1 > m_cusp_limit)
                     {
-                        m_points.push_back(Geom::Point(x3, y3));
+                        m_points.emplace_back(x3, y3);
                         return;
                     }
                 }
@@ -762,7 +762,7 @@ recursive_bezier4(const double x1, const double y1,
             {
                 if(m_angle_tolerance < curve_angle_tolerance_epsilon)
                 {
-                    m_points.push_back(Geom::Point(x23, y23));
+                    m_points.emplace_back(x23, y23);
                     return;
                 }
 
@@ -773,8 +773,8 @@ recursive_bezier4(const double x1, const double y1,
 
                 if(da1 < m_angle_tolerance)
                 {
-                    m_points.push_back(Geom::Point(x2, y2));
-                    m_points.push_back(Geom::Point(x3, y3));
+                    m_points.emplace_back(x2, y2);
+                    m_points.emplace_back(x3, y3);
                     return;
                 }
 
@@ -782,7 +782,7 @@ recursive_bezier4(const double x1, const double y1,
                 {
                     if(da1 > m_cusp_limit)
                     {
-                        m_points.push_back(Geom::Point(x2, y2));
+                        m_points.emplace_back(x2, y2);
                         return;
                     }
                 }
@@ -799,7 +799,7 @@ recursive_bezier4(const double x1, const double y1,
                 //----------------------
                 if(m_angle_tolerance < curve_angle_tolerance_epsilon)
                 {
-                    m_points.push_back(Geom::Point(x23, y23));
+                    m_points.emplace_back(x23, y23);
                     return;
                 }
 
@@ -815,7 +815,7 @@ recursive_bezier4(const double x1, const double y1,
                 {
                     // Finally we can stop the recursion
                     //----------------------
-                    m_points.push_back(Geom::Point(x23, y23));
+                    m_points.emplace_back(x23, y23);
                     return;
                 }
 
@@ -823,13 +823,13 @@ recursive_bezier4(const double x1, const double y1,
                 {
                     if(da1 > m_cusp_limit)
                     {
-                        m_points.push_back(Geom::Point(x2, y2));
+                        m_points.emplace_back(x2, y2);
                         return;
                     }
 
                     if(da2 > m_cusp_limit)
                     {
-                        m_points.push_back(Geom::Point(x3, y3));
+                        m_points.emplace_back(x3, y3);
                         return;
                     }
                 }

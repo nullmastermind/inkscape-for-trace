@@ -165,8 +165,8 @@ void ObjectAttributes::widget_setup (void)
         int len = 0;
         while (desc[len].label)
         {
-            labels.push_back(desc[len].label);
-            attrs.push_back (desc[len].attribute);
+            labels.emplace_back(desc[len].label);
+            attrs.emplace_back(desc[len].attribute);
             len += 1;
         }
         attrTable->set_object(obj, labels, attrs, (GtkWidget*)gobj());

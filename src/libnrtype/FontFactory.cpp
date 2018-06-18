@@ -453,7 +453,7 @@ void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
             std::cerr << "Ignoring font '" << displayName << "'" << std::endl;
             continue;
         }
-        sorted.push_back(std::make_pair(families[currentFamily], displayName));
+        sorted.emplace_back(families[currentFamily], displayName);
     }
 
     std::sort(sorted.begin(), sorted.end(), ustringPairSort);

@@ -1285,11 +1285,11 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
 
             boost::optional<Geom::Point> fperp_point, bperp_point;
             if (front_point) {
-                constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, *front_point));
+                constraints.emplace_back(origin, *front_point);
                 fperp_point = Geom::rot90(*front_point);
             }
             if (back_point) {
-                constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, *back_point));
+                constraints.emplace_back(origin, *back_point);
                 bperp_point = Geom::rot90(*back_point);
             }
             // perpendiculars only snap when they are further than snap increment away
@@ -1298,20 +1298,20 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
                 (fabs(Geom::angle_between(*fperp_point, *back_point)) > min_angle &&
                  fabs(Geom::angle_between(*fperp_point, *back_point)) < M_PI - min_angle)))
             {
-                constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, *fperp_point));
+                constraints.emplace_back(origin, *fperp_point);
             }
             if (bperp_point && (!front_point ||
                 (fabs(Geom::angle_between(*bperp_point, *front_point)) > min_angle &&
                  fabs(Geom::angle_between(*bperp_point, *front_point)) < M_PI - min_angle)))
             {
-                constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, *bperp_point));
+                constraints.emplace_back(origin, *bperp_point);
             }
 
             sp = sm.multipleConstrainedSnaps(Inkscape::SnapCandidatePoint(new_pos, _snapSourceType()), constraints, held_shift(*event));
         } else {
             // with Ctrl, constrain to axes
-            constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, Geom::Point(1, 0)));
-            constraints.push_back(Inkscape::Snapper::SnapConstraint(origin, Geom::Point(0, 1)));
+            constraints.emplace_back(origin, Geom::Point(1, 0));
+            constraints.emplace_back(origin, Geom::Point(0, 1));
             sp = sm.multipleConstrainedSnaps(Inkscape::SnapCandidatePoint(new_pos, _snapSourceType()), constraints, held_shift(*event));
         }
         new_pos = sp.getPoint();
@@ -1621,14 +1621,14 @@ void NodeList::clear()
             to_clear.push_back(&rm->_selection);
             ++in;
         }
-        nodes.push_back(std::make_pair(rm, in));
+        nodes.emplace_back(rm, in);
     }
     for (size_t i = 0, e = nodes.size(); i != e; ++i) {
         to_clear[nodes[i].second]->erase(nodes[i].first, false);
     }
     std::vector<std::vector<SelectableControlPoint *> > emission;
     for (long i = 0, e = to_clear.size(); i != e; ++i) {
-        emission.push_back(std::vector<SelectableControlPoint *>());
+        emission.emplace_back();
         for (size_t j = 0, f = nodes.size(); j != f; ++j) {
             if (nodes[j].second != i)
                 break;

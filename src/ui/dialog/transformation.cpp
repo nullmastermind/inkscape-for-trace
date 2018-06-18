@@ -645,7 +645,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                 	SPItem* item = *it;
                     Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
-                        sorted.push_back(BBoxSort(item, *bbox, Geom::X, x > 0? 1. : 0., x > 0? 0. : 1.));
+                        sorted.emplace_back(item, *bbox, Geom::X, x > 0? 1. : 0., x > 0? 0. : 1.);
                     }
                 }
                 //sort bbox by anchors
@@ -670,7 +670,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                 	SPItem* item = *it;
                 	Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
-                        sorted.push_back(BBoxSort(item, *bbox, Geom::Y, y > 0? 1. : 0., y > 0? 0. : 1.));
+                        sorted.emplace_back(item, *bbox, Geom::Y, y > 0? 1. : 0., y > 0? 0. : 1.);
                     }
                 }
                 //sort bbox by anchors

@@ -101,7 +101,7 @@ void SPPath::convert_to_guides() const {
             // only add curves for straight line segments
             if( is_straight_curve(*cit) )
             {
-                pts.push_back(std::make_pair(cit->initialPoint() * i2dt, cit->finalPoint() * i2dt));
+                pts.emplace_back(cit->initialPoint() * i2dt, cit->finalPoint() * i2dt);
             }
         }
     }

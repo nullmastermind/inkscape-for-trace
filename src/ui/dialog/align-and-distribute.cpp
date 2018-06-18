@@ -311,7 +311,7 @@ private :
             SPItem *item = *it;
             Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
-                sorted.push_back(BBoxSort(item, *bbox, _orientation, _kBegin, _kEnd));
+                sorted.emplace_back(item, *bbox, _orientation, _kBegin, _kEnd);
             }
         }
         //sort bbox by anchors

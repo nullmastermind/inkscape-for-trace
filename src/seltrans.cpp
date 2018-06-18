@@ -1298,8 +1298,8 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
 
     if (state & GDK_CONTROL_MASK) { // with Ctrl, constrain to axes
         std::vector<Inkscape::Snapper::SnapConstraint> constraints;
-        constraints.push_back(Inkscape::Snapper::SnapConstraint(_point, Geom::Point(1, 0)));
-        constraints.push_back(Inkscape::Snapper::SnapConstraint(_point, Geom::Point(0, 1)));
+        constraints.emplace_back(_point, Geom::Point(1, 0));
+        constraints.emplace_back(_point, Geom::Point(0, 1));
         Inkscape::SnappedPoint sp = m.multipleConstrainedSnaps(Inkscape::SnapCandidatePoint(pt, Inkscape::SNAPSOURCE_ROTATION_CENTER), constraints, state & GDK_SHIFT_MASK);
         pt = sp.getPoint();
     }

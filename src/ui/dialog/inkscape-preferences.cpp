@@ -1948,16 +1948,16 @@ void InkscapePreferences::initPageSpellcheck()
 
     AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
 
-    languages.push_back(Glib::ustring(C_("Spellchecker language", "None")));
-    langValues.push_back(Glib::ustring(""));
+    languages.emplace_back(C_("Spellchecker language", "None"));
+    langValues.emplace_back("");
 
     const AspellDictInfo *entry;
     int en_index = 0;
     int i = 0;
     while ( (entry = aspell_dict_info_enumeration_next(dels)) != nullptr)
     {
-        languages.push_back(Glib::ustring(entry->name));
-        langValues.push_back(Glib::ustring(entry->name));
+        languages.emplace_back(entry->name);
+        langValues.emplace_back(entry->name);
         if (!strcmp (entry->name, "en"))
         {
             en_index = i;

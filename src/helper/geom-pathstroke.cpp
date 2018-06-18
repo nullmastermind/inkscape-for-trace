@@ -444,13 +444,13 @@ void extrapolate_join_internal(join_data jd, int alternative)
                     if( circle2.contains( startPt ) && !circle1.contains( endPt ) ) {
                         // std::cout << "Expand circle1" << std::endl;
                         p = expand_circle( circle1, circle2, startPt, tang1 );
-                        points.push_back( ShapeIntersection( 0, 0, p) );
-                        points.push_back( ShapeIntersection( 0, 0, p) );
+                        points.emplace_back( 0, 0, p );
+                        points.emplace_back( 0, 0, p );
                     } else if( circle1.contains( endPt ) && !circle2.contains( startPt ) ) {
                         // std::cout << "Expand circle2" << std::endl;
                         p = expand_circle( circle2, circle1, endPt, tang2 );
-                        points.push_back( ShapeIntersection( 0, 0, p) );
-                        points.push_back( ShapeIntersection( 0, 0, p) );
+                        points.emplace_back( 0, 0, p );
+                        points.emplace_back( 0, 0, p );
                     } else {
                         // std::cout << "Either both points inside or both outside" << std::endl;
                         return( miter_clip_join(jd) );
@@ -470,8 +470,8 @@ void extrapolate_join_internal(join_data jd, int alternative)
                         ( circle1.contains( endPt ) && !circle2.contains( startPt ) ) ) {
                         
                         Geom::Point apex = adjust_circles( circle1, circle2, startPt, endPt, tang1, tang2 );
-                        points.push_back( ShapeIntersection( 0, 0, apex) );
-                        points.push_back( ShapeIntersection( 0, 0, apex) );
+                        points.emplace_back( 0, 0, apex );
+                        points.emplace_back( 0, 0, apex );
                     } else {
                         // std::cout << "Either both points inside or both outside" << std::endl;
                         return( miter_clip_join(jd) );

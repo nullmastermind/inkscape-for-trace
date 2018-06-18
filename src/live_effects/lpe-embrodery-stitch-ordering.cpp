@@ -543,7 +543,7 @@ void OrderingGroup::AddNeighbors(OrderingGroup *nghb)
 {
     for (int iThis = 0; iThis < nEndPoints; iThis++) {
         for (int iNghb = 0; iNghb < nghb->nEndPoints; iNghb++) {
-            endpoints[iThis]->nearest.push_back(OrderingGroupNeighbor(endpoints[iThis], nghb->endpoints[iNghb]));
+            endpoints[iThis]->nearest.emplace_back(endpoints[iThis], nghb->endpoints[iNghb]);
         }
     }
 }

@@ -915,7 +915,7 @@ std::vector<Glib::ustring> FileOpenDialogImplGtk::getFilenames()
     std::vector<Glib::ustring> result;
 
     for (auto it : result_tmp)
-        result.push_back(it);
+        result.emplace_back(it);
 
     if (result.empty()) {
         result = get_uris();
@@ -1067,7 +1067,7 @@ void FileSaveDialogImplGtk::fileNameEntryChangedCallback()
         // try appending to the current path
         // not this way: fileName = get_current_folder() + "/" + fileName;
         std::vector<Glib::ustring> pathSegments;
-        pathSegments.push_back(get_current_folder());
+        pathSegments.emplace_back(get_current_folder());
         pathSegments.push_back(fileName);
         fileName = Glib::build_filename(pathSegments);
     }

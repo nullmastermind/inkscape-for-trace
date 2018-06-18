@@ -982,7 +982,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
 
     // Get the snappoints at the item's center
     if (snapprefs != nullptr && snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
-        p.push_back(Inkscape::SnapCandidatePoint(getCenter(), Inkscape::SNAPSOURCE_ROTATION_CENTER, Inkscape::SNAPTARGET_ROTATION_CENTER));
+        p.emplace_back(getCenter(), Inkscape::SNAPSOURCE_ROTATION_CENTER, Inkscape::SNAPTARGET_ROTATION_CENTER);
     }
 
     // Get the snappoints of clipping paths and mask, if any
@@ -1006,7 +1006,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
                         // All snappoints are in desktop coordinates, but the item's transformation is
                         // in document coordinates. Hence the awkward construction below
                         Geom::Point pt = desktop->dt2doc((*p_orig).getPoint()) * i2dt_affine();
-                        p.push_back(Inkscape::SnapCandidatePoint(pt, (*p_orig).getSourceType(), (*p_orig).getTargetType()));
+                        p.emplace_back(pt, (*p_orig).getSourceType(), (*p_orig).getTargetType());
                     }
                 }
             }
@@ -1735,10 +1735,10 @@ void SPItem::convert_to_guides() const {
     Geom::Point B(A[Geom::X], C[Geom::Y]);
     Geom::Point D(C[Geom::X], A[Geom::Y]);
 
-    pts.push_back(std::make_pair(A, B));
-    pts.push_back(std::make_pair(B, C));
-    pts.push_back(std::make_pair(C, D));
-    pts.push_back(std::make_pair(D, A));
+    pts.emplace_back(A, B);
+    pts.emplace_back(B, C);
+    pts.emplace_back(C, D);
+    pts.emplace_back(D, A);
 
     sp_guide_pt_pairs_to_guides(document, pts);
 }

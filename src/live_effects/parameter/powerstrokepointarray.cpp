@@ -54,7 +54,7 @@ void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &po
         {
             // scale each width knot with the average scaling in X and Y
             Geom::Coord const A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
-            result.push_back(Geom::Point((*point_it)[Geom::X], A));
+            result.emplace_back((*point_it)[Geom::X], A);
         }
         param_set_and_write_new_value(result);
     }
@@ -98,7 +98,7 @@ PowerStrokePointArrayParam::reverse_controlpoints(bool write)
         for (unsigned int i = 0; i < _vector.size(); ++i) {
             Geom::Point control_pos = last_pwd2.valueAt(_vector[i][Geom::X]);
             double new_pos = Geom::nearest_time(control_pos, pwd2_in_reverse);
-            controlpoints.push_back(Geom::Point(new_pos,_vector[i][Geom::Y]));
+            controlpoints.emplace_back(new_pos,_vector[i][Geom::Y]);
             _vector[i][Geom::X] = new_pos;
         }
         if (write) {

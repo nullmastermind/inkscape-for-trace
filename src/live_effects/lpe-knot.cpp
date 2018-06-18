@@ -406,7 +406,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         if (i0 == gpaths.size() ) {THROW_EXCEPTION("lpe-knot error: group member not recognized");}// this should not happen...
 
         std::vector<Interval> dom;
-        dom.push_back(Interval(0., size_nondegenerate(gpaths[i0])));
+        dom.emplace_back(0., size_nondegenerate(gpaths[i0]));
         for (unsigned p = 0; p < crossing_points.size(); p++){
             if ( (crossing_points[p].i == i0) || (crossing_points[p].j == i0) ) {
                 unsigned i = crossing_points[p].i;

@@ -17,7 +17,7 @@ void satisfied_guide_cns(SPDesktop const &desktop,
         SPGuide &g = *(*it);
         for (unsigned int i = 0; i < snappoints.size(); ++i) {
             if (Geom::are_near(g.getDistanceFrom(snappoints[i].getPoint()), 0, 1e-2)) {
-                cns.push_back(SPGuideConstraint(&g, i));
+                cns.emplace_back(&g, i);
             }
         }
     }

@@ -177,14 +177,14 @@ ClipboardManagerImpl::ClipboardManagerImpl()
     // Presenting "image/x-emf" as CF_ENHMETAFILE must be done by Inkscape ?
 
     // push supported clipboard targets, in order of preference
-    _preferred_targets.push_back("image/x-inkscape-svg");
-    _preferred_targets.push_back("image/svg+xml");
-    _preferred_targets.push_back("image/svg+xml-compressed");
-    _preferred_targets.push_back("image/x-emf");
-    _preferred_targets.push_back("CF_ENHMETAFILE");
-    _preferred_targets.push_back("WCF_ENHMETAFILE"); // seen on Wine
-    _preferred_targets.push_back("application/pdf");
-    _preferred_targets.push_back("image/x-adobe-illustrator");
+    _preferred_targets.emplace_back("image/x-inkscape-svg");
+    _preferred_targets.emplace_back("image/svg+xml");
+    _preferred_targets.emplace_back("image/svg+xml-compressed");
+    _preferred_targets.emplace_back("image/x-emf");
+    _preferred_targets.emplace_back("CF_ENHMETAFILE");
+    _preferred_targets.emplace_back("WCF_ENHMETAFILE"); // seen on Wine
+    _preferred_targets.emplace_back("application/pdf");
+    _preferred_targets.emplace_back("image/x-adobe-illustrator");
 }
 
 
@@ -695,7 +695,7 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
     }
     for (auto i=reprs.begin();i!=reprs.end();++i) {
         Inkscape::XML::Node const * node = *i;
-        result.push_back(node->attribute("id"));
+        result.emplace_back(node->attribute("id"));
     }
     if ( result.empty() ) {
         _userWarn(desktop, ((Glib::ustring)_("Clipboard does not contain any.") + (Glib::ustring)type).c_str());
@@ -1446,17 +1446,17 @@ void ClipboardManagerImpl::_setClipboardTargets()
             Glib::ustring mime = (*out)->get_mimetype();
             if (mime != CLIPBOARD_TEXT_TARGET) {
                 if ( !plaintextSet && (mime.find("svg") == Glib::ustring::npos) ) {
-                    target_list.push_back(Gtk::TargetEntry(CLIPBOARD_TEXT_TARGET));
+                    target_list.emplace_back(CLIPBOARD_TEXT_TARGET);
                     plaintextSet = true;
                 }
-                target_list.push_back(Gtk::TargetEntry(mime));
+                target_list.emplace_back(mime);
             }
         }
     }
 
     // Add PNG export explicitly since there is no extension for this...
     // On Windows, GTK will also present this as a CF_DIB/CF_BITMAP
-    target_list.push_back(Gtk::TargetEntry( "image/png" ));
+    target_list.emplace_back( "image/png" );
 
     _clipboard->set(target_list,
         sigc::mem_fun(*this, &ClipboardManagerImpl::_onGet),

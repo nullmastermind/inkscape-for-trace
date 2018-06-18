@@ -131,7 +131,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
             //Include the transformation origin for snapping
             //For a selection or group only the overall center is considered, not for each item individually
             if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
-                p.push_back(Inkscape::SnapCandidatePoint(this_item->getCenter(), SNAPSOURCE_ROTATION_CENTER));
+                p.emplace_back(this_item->getCenter(), SNAPSOURCE_ROTATION_CENTER);
             }
         }
     }
@@ -211,7 +211,7 @@ Selection::setBackup ()
         selected_id += "--id=";
         selected_id += item->getId();
         params.push_back(selected_id);
-        _selected_ids.push_back(item->getId());
+        _selected_ids.emplace_back(item->getId());
     }
     if(tool){
         Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
@@ -242,7 +242,7 @@ Selection::setBackup ()
                 Glib::ustring selected_nodes = ss.str();
 
                 if(found_nl && found_sp) {
-                    _seldata.push_back(std::make_pair(id,std::make_pair(sp,nl)));
+                    _seldata.emplace_back(id,std::make_pair(sp,nl));
                     params.push_back(selected_nodes);
                 } else {
                     g_warning("Something went wrong while trying to pass selected nodes to extension. Please report a bug.");
