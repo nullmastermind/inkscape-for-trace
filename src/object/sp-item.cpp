@@ -20,13 +20,13 @@
 
 #include <glibmm/i18n.h>
 
-#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "display/drawing-item.h"
-#include "document.h"
-#include "print.h"
-#include "svg/css-ostringstream.h"
 #include "svg/svg.h"
+#include "svg/css-ostringstream.h"
+#include "print.h"
+#include "display/drawing-item.h"
+#include "attributes.h"
+#include "document.h"
 
 #include "inkscape.h"
 #include "desktop.h"

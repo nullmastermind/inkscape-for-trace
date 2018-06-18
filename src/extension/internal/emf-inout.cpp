@@ -32,22 +32,22 @@
 #include <cstdint>
 #include <3rdparty/libuemf/symbol_convert.h>
 
-#include "clear-n_.h"
-#include "display/drawing-item.h"
-#include "display/drawing.h"
 #include "document.h"
+#include "object/sp-root.h"
+#include "object/sp-path.h"
+#include "print.h"
+#include "extension/system.h"
+#include "extension/print.h"
 #include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "extension/print.h"
-#include "extension/system.h"
-#include "inkscape.h" // even though it is included indirectly by emf-inout.h
-#include "object/sp-path.h"
-#include "object/sp-root.h"
-#include "print.h"
-#include "svg/css-ostringstream.h"
+#include "display/drawing.h"
+#include "display/drawing-item.h"
+#include "clear-n_.h"
 #include "svg/svg.h"
+#include "svg/css-ostringstream.h"
 #include "util/units.h" // even though it is included indirectly by emf-inout.h
+#include "inkscape.h"   // even though it is included indirectly by emf-inout.h
 
 #include "emf-print.h"
 #include "emf-inout.h"
