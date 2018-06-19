@@ -207,7 +207,7 @@ Effect::merge_menu (Inkscape::XML::Node * base,
     return;
 }
 
-Effect::~Effect (void)
+Effect::~Effect ()
 {
     if (get_last_effect() == this)
         set_last_effect(nullptr);
@@ -217,7 +217,7 @@ Effect::~Effect (void)
 }
 
 bool
-Effect::check (void)
+Effect::check ()
 {
     if (!Extension::check()) {
         /** \todo  Check to see if parent has this as its only child,
@@ -346,13 +346,13 @@ Effect::find_menu (Inkscape::XML::Node * menustruct, const gchar *name)
 
 
 Gtk::VBox *
-Effect::get_info_widget(void)
+Effect::get_info_widget()
 {
     return Extension::get_info_widget();
 }
 
 PrefDialog *
-Effect::get_pref_dialog (void)
+Effect::get_pref_dialog ()
 {
     return _prefDialog;
 }

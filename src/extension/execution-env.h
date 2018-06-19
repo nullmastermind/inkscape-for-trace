@@ -81,30 +81,30 @@ public:
                   Implementation::ImplementationDocumentCache * docCache = nullptr,
                   bool show_working = true,
                   bool show_errors = true);
-    virtual ~ExecutionEnv (void);
+    virtual ~ExecutionEnv ();
 
     /** \brief Starts the execution of the effect
         \return Returns whether the effect was executed to completion */
-    void run (void);
+    void run ();
     /** \brief Cancel the execution of the effect */
-    void cancel (void);
+    void cancel ();
     /** \brief Commit the changes to the document */
-    void commit (void);
+    void commit ();
     /** \brief Undoes what the effect completed. */
-    void undo (void);
+    void undo ();
     /** \brief Wait for the effect to complete if it hasn't. */
-    bool wait (void);
-    void reselect (void);
+    bool wait ();
+    void reselect ();
 
     /** \brief Return reference to working dialog (if any) */
-    Gtk::Dialog *get_working_dialog (void) { return _visibleDialog; };
+    Gtk::Dialog *get_working_dialog () { return _visibleDialog; };
 
 private:
-    void runComplete (void);
-    void createWorkingDialog (void);
+    void runComplete ();
+    void createWorkingDialog ();
     void workingCanceled (const int resp);
-    void genDocCache (void);
-    void killDocCache (void);
+    void genDocCache ();
+    void killDocCache ();
 };
 
 } }  /* namespace Inkscape, Extension */

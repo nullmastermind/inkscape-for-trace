@@ -21,7 +21,7 @@
 
 typedef unsigned int guint32;
 extern "C" {
-    typedef void (*GCallback) (void);
+    typedef void (*GCallback) ();
 }
 
 class SPDesktop;

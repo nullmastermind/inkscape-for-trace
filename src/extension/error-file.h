@@ -23,10 +23,10 @@ class ErrorFileNotice : public Gtk::MessageDialog {
     /** The checkbutton, this is so we can figure out when it gets checked */
     Gtk::CheckButton * checkbutton;
 
-    void checkbox_toggle(void);
+    void checkbox_toggle();
 public:
-    ErrorFileNotice (void);
-    int run (void);
+    ErrorFileNotice ();
+    int run ();
 };
 
 }; };  /* namespace Inkscape, Extension */

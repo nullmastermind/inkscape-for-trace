@@ -94,7 +94,7 @@ public:
      * A function to respond to the check box changing.
      * Adjusts the value of the preference to match that in the check box.
      */
-    void on_toggle (void);
+    void on_toggle ();
 
 private:
     /** Param to change. */
@@ -104,7 +104,7 @@ private:
     sigc::signal<void> * _changeSignal;
 };
 
-void ParamBoolCheckButton::on_toggle(void)
+void ParamBoolCheckButton::on_toggle()
 {
     _pref->set(this->get_active(), nullptr /**\todo fix this */, nullptr);
     if (_changeSignal != nullptr) {

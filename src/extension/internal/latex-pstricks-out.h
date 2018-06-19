@@ -30,7 +30,7 @@ public:
               SPDocument *doc,
               gchar const *filename) override;
 
-    static void init(void);//Initialize the class
+    static void init();//Initialize the class
 };
 
 } } }  /* namespace Inkscape, Extension, Implementation */

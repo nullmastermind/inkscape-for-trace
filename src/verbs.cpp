@@ -392,7 +392,7 @@ Verb::Verb(gchar const *id, gchar const *name, gchar const *tip, gchar const *im
  * The only allocated variable is the _actions variable.  If it has
  * been allocated it is deleted.
  */
-Verb::~Verb(void)
+Verb::~Verb()
 {
     /// \todo all the actions need to be cleaned up first.
     delete _actions;
@@ -697,7 +697,7 @@ void Verb::sensitive(SPDocument *in_doc, bool in_sensitive)
 /**
  * Accessor to get the tooltip for verb as localised string.
  */
-gchar const *Verb::get_tip(void)
+gchar const *Verb::get_tip()
 {
     gchar const *result = nullptr;
     if (_tip) {
@@ -3294,7 +3294,7 @@ Verb *Verb::_base_verbs[] = {
 };
 
 std::vector<Inkscape::Verb *>
-Verb::getList (void) {
+Verb::getList () {
 
     std::vector<Verb *> verbs;
     // Go through the dynamic verb table
@@ -3313,7 +3313,7 @@ Verb::getList (void) {
 };
 
 void
-Verb::list (void) {
+Verb::list () {
     // Go through the dynamic verb table
     for (VerbTable::iterator iter = _verbs.begin(); iter != _verbs.end(); ++iter) {
         Verb * verb = iter->second;

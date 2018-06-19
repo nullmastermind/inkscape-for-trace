@@ -45,9 +45,9 @@ public:
     sigc::connection _delete_connection;
 
     void link(char* to);
-    void unlink(void);
+    void unlink();
     void start_listening(Persp3D* to);
-    void quit_listening(void);
+    void quit_listening();
 
 protected:
     bool _acceptObject(SPObject *obj) const override;

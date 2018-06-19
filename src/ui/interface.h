@@ -43,12 +43,12 @@ void sp_create_window (SPViewWidget *vw, bool editable);
  */
 void sp_ui_close_view (GtkWidget *widget);
 
-void sp_ui_new_view (void);
+void sp_ui_new_view ();
 
 /**
  * @todo TODO: not yet working. To be re-enabled (by adding to menu) once it works.
  */
-void sp_ui_new_view_preview (void);
+void sp_ui_new_view_preview ();
 
 /**
  *  This function is called to exit the program, and iterates through all
@@ -59,7 +59,7 @@ void sp_ui_new_view_preview (void);
  *  Returns FALSE if the user cancels the close_all operation, TRUE
  *  otherwise.
  */
-unsigned int sp_ui_close_all (void);
+unsigned int sp_ui_close_all ();
 
 /**
  * Build the main tool bar.

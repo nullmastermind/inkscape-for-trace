@@ -34,7 +34,7 @@ namespace Implementation {
 class Script : public Implementation {
 public:
 
-    Script(void);
+    Script();
     ~Script() override;
     bool load(Inkscape::Extension::Extension *module) override;
     void unload(Inkscape::Extension::Extension *module) override;
@@ -47,7 +47,7 @@ public:
     Gtk::Widget *prefs_output(Inkscape::Extension::Output *module) override;
     void save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename) override;
     void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc, ImplementationDocumentCache * docCache) override;
-    bool cancelProcessing (void) override;
+    bool cancelProcessing () override;
 
 private:
     bool _canceled;
@@ -96,7 +96,7 @@ private:
         bool isDead () { return _dead; }
         void init(int fd, Glib::RefPtr<Glib::MainLoop> main);
         bool read(Glib::IOCondition condition);
-        Glib::ustring string (void) { return _string; };
+        Glib::ustring string () { return _string; };
         bool toFile(const Glib::ustring &name);
     };
 
@@ -105,7 +105,7 @@ private:
                  const Glib::ustring &filein,
                  file_listener &fileout);
 
-    void pump_events(void);
+    void pump_events();
 
     /** \brief  A definition of an interpreter, which can be specified
         in the INX file, but we need to know what to call */

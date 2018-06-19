@@ -23,7 +23,7 @@ class SPItem;
 struct SPCanvasDebug : public SPCanvasItem {
 };
 
-GType sp_canvas_debug_get_type (void);
+GType sp_canvas_debug_get_type ();
 
 struct SPCanvasDebugClass : public SPCanvasItemClass{};
 

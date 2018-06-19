@@ -70,12 +70,12 @@ struct CairoRenderState {
 class CairoRenderContext {
     friend class CairoRenderer;
 public:
-    CairoRenderContext *cloneMe(void) const;
+    CairoRenderContext *cloneMe() const;
     CairoRenderContext *cloneMe(double width, double height) const;
     bool finish(bool finish_surface = true);
 
-    CairoRenderer *getRenderer(void) const;
-    cairo_t *getCairoContext(void) const;
+    CairoRenderer *getRenderer() const;
+    cairo_t *getCairoContext() const;
 
     enum CairoRenderMode {
         RENDER_MODE_NORMAL,
@@ -95,47 +95,47 @@ public:
 
     void setPSLevel(unsigned int level);
     void setEPS(bool eps);
-    unsigned int getPSLevel(void);
+    unsigned int getPSLevel();
     void setPDFLevel(unsigned int level);
     void setTextToPath(bool texttopath);
-    bool getTextToPath(void);
+    bool getTextToPath();
     void setOmitText(bool omittext);
-    bool getOmitText(void);
+    bool getOmitText();
     void setFilterToBitmap(bool filtertobitmap);
-    bool getFilterToBitmap(void);
+    bool getFilterToBitmap();
     void setBitmapResolution(int resolution);
-    int getBitmapResolution(void);
+    int getBitmapResolution();
 
     /** Creates the cairo_surface_t for the context with the
     given width, height and with the currently set target
     surface type. */
     bool setupSurface(double width, double height);
 
-    cairo_surface_t *getSurface(void);
+    cairo_surface_t *getSurface();
 
     /** Saves the contents of the context to a PNG file. */
     bool saveAsPng(const char *file_name);
 
     /** On targets supporting multiple pages, sends subsequent rendering to a new page*/
-    void newPage(void);
+    void newPage();
 
     /* Render/clip mode setting/query */
     void setRenderMode(CairoRenderMode mode);
-    CairoRenderMode getRenderMode(void) const;
+    CairoRenderMode getRenderMode() const;
     void setClipMode(CairoClipMode mode);
-    CairoClipMode getClipMode(void) const;
+    CairoClipMode getClipMode() const;
 
     void addPathVector(Geom::PathVector const &pv);
     void setPathVector(Geom::PathVector const &pv);
 
-    void pushLayer(void);
-    void popLayer(void);
+    void pushLayer();
+    void popLayer();
 
     /* Graphics state manipulation */
-    void pushState(void);
-    void popState(void);
-    CairoRenderState *getCurrentState(void) const;
-    CairoRenderState *getParentState(void) const;
+    void pushState();
+    void popState();
+    CairoRenderState *getCurrentState() const;
+    CairoRenderState *getParentState() const;
     void setStateForStyle(SPStyle const *style);
 
     void transform(Geom::Affine const &transform);
@@ -165,7 +165,7 @@ public:
 
 protected:
     CairoRenderContext(CairoRenderer *renderer);
-    virtual ~CairoRenderContext(void);
+    virtual ~CairoRenderContext();
 
     enum CairoOmitTextPageState {
         EMPTY,
@@ -223,13 +223,13 @@ protected:
     void _concatTransform(cairo_t *cr, double xx, double yx, double xy, double yy, double x0, double y0);
     void _concatTransform(cairo_t *cr, Geom::Affine const &transform);
 
-    void _prepareRenderGraphic(void);
-    void _prepareRenderText(void);
+    void _prepareRenderGraphic();
+    void _prepareRenderText();
 
     std::map<gpointer, cairo_font_face_t *> font_table;
     static void font_data_free(gpointer data);
 
-    CairoRenderState *_createState(void);
+    CairoRenderState *_createState();
 };
 
 }  /* namespace Internal */

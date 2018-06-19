@@ -18,7 +18,7 @@
 namespace Inkscape {
 namespace Extension {
 
-void init (void);
+void init ();
 
 } } /* namespace Inkscape::Extension */
 

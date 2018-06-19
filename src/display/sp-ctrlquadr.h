@@ -21,7 +21,7 @@
 struct SPCtrlQuadr;
 struct SPCtrlQuadrClass;
 
-GType sp_ctrlquadr_get_type (void);
+GType sp_ctrlquadr_get_type ();
 
 void sp_ctrlquadr_set_rgba32 (SPCtrlQuadr *cl, guint32 rgba);
 void sp_ctrlquadr_set_coords (SPCtrlQuadr *cl, const Geom::Point p1, const Geom::Point p2, const Geom::Point p3, const Geom::Point p4);

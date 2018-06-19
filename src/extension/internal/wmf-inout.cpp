@@ -67,13 +67,13 @@ namespace Internal {
 static bool clipset = false;
 static uint32_t BLTmode=0;
 
-Wmf::Wmf (void) // The null constructor
+Wmf::Wmf () // The null constructor
 {
     return;
 }
 
 
-Wmf::~Wmf (void) //The destructor
+Wmf::~Wmf () //The destructor
 {
     return;
 }
@@ -3198,7 +3198,7 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
 
 void
-Wmf::init (void)
+Wmf::init ()
 {
     /* WMF in */
     Inkscape::Extension::build_from_mem(

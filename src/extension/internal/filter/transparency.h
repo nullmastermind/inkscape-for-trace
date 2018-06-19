@@ -47,7 +47,7 @@ public:
     Blend ( ) : Filter() { };
     ~Blend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Blend") "</name>\n"
@@ -124,7 +124,7 @@ public:
     ChannelTransparency ( ) : Filter() { };
     ~ChannelTransparency ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Channel Transparency") "</name>\n"
@@ -199,7 +199,7 @@ public:
     LightEraser ( ) : Filter() { };
     ~LightEraser ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Light Eraser") "</name>\n"
@@ -273,7 +273,7 @@ public:
     Opacity ( ) : Filter() { };
     ~Opacity ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Opacity") "</name>\n"
@@ -335,7 +335,7 @@ public:
     Silhouette ( ) : Filter() { };
     ~Silhouette ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Silhouette") "</name>\n"

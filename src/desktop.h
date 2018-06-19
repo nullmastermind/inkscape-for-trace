@@ -340,7 +340,7 @@ public:
 
     void zoom_quick(bool enable = true);
     /** \brief  Returns whether the desktop is in quick zoom mode or not */
-    bool quick_zoomed(void) { return _quick_zoom_enabled; }
+    bool quick_zoomed() { return _quick_zoom_enabled; }
 
     void zoom_grab_focus();
 

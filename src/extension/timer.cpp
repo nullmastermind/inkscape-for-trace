@@ -64,7 +64,7 @@ ExpirationTimer::ExpirationTimer (Extension * in_extension):
     list that is easy, otherwise all the entries must be found, and this
     one removed from the list.
 */
-ExpirationTimer::~ExpirationTimer(void)
+ExpirationTimer::~ExpirationTimer()
 {
     if (this != next) {
         /* This will remove this entry from the circularly linked
@@ -103,7 +103,7 @@ ExpirationTimer::~ExpirationTimer(void)
     set by \c timeout.
 */
 void
-ExpirationTimer::touch (void)
+ExpirationTimer::touch ()
 {
     Glib::TimeVal current;
     current.assign_current_time();
@@ -121,7 +121,7 @@ ExpirationTimer::touch (void)
     Checks the time against the current time.
 */
 bool
-ExpirationTimer::expired (void) const
+ExpirationTimer::expired () const
 {
     if (locked > 0) return false;
 
@@ -146,7 +146,7 @@ ExpirationTimer::expired (void) const
     will then re-add the idle loop function when it runs.
 */ 
 bool
-ExpirationTimer::idle_func (void)
+ExpirationTimer::idle_func ()
 {
     // std::cout << "Idle func pass: " << idle_cnt++ << "  timer list: " << timer_list << std::endl;
 
@@ -190,7 +190,7 @@ ExpirationTimer::idle_func (void)
     the one that unloads all the extensions.
 */
 bool
-ExpirationTimer::timer_func (void)
+ExpirationTimer::timer_func ()
 {
     // std::cout << "Timer func" << std::endl;
     idle_start = timer_list;

@@ -56,11 +56,11 @@ class Dependency {
 
 public:
     Dependency  (Inkscape::XML::Node * in_repr);
-    virtual ~Dependency (void);
-    bool check  (void) const;
+    virtual ~Dependency ();
+    bool check  () const;
     const gchar* get_name();
-    Glib::ustring &get_help (void) const;
-    Glib::ustring &get_link (void) const;
+    Glib::ustring &get_help () const;
+    Glib::ustring &get_link () const;
 
     friend std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
 }; /* class Dependency */

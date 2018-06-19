@@ -141,7 +141,7 @@ public:
         return;
     };
 
-    void val_changed (void);
+    void val_changed ();
 }; /* class ParamFloatAdjustment */
 
 /**
@@ -150,7 +150,7 @@ public:
  * This function just grabs the value from the adjustment and writes
  * it to the parameter.  Very simple, but yet beautiful.
  */
-void ParamFloatAdjustment::val_changed(void)
+void ParamFloatAdjustment::val_changed()
 {
     //std::cout << "Value Changed to: " << this->get_value() << std::endl;
     _pref->set(this->get_value(), _doc, _node);

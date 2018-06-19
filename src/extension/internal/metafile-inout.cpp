@@ -274,7 +274,7 @@ uint32_t Metafile::sethexcolor(U_COLORREF color){
 Currently a random 3x4 blotch.
 Caller must free.
 */
-gchar *Metafile::bad_image_png(void){
+gchar *Metafile::bad_image_png(){
     gchar *gstring = g_strdup("iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAIAAAA7ljmRAAAAA3NCSVQICAjb4U/gAAAALElEQVQImQXBQQ2AMAAAsUJQMSWI2H8qME1yMshojwrvGB8XcHKvR1XtOTc/8HENumHCsOMAAAAASUVORK5CYII=");
     return(gstring);
 }

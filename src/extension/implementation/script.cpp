@@ -70,7 +70,7 @@ namespace Implementation {
     This just keeps coming the events through so that we'll make the GUI
     update and look pretty.
 */
-void Script::pump_events (void) {
+void Script::pump_events () {
     while ( Gtk::Main::events_pending() ) {
         Gtk::Main::iteration();
     }
@@ -903,7 +903,7 @@ void Script::checkStderr (const Glib::ustring &data,
     return;
 }
 
-bool Script::cancelProcessing (void) {
+bool Script::cancelProcessing () {
     _canceled = true;
     _main_loop->quit();
     Glib::spawn_close_pid(_pid);

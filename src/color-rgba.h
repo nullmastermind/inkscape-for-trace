@@ -36,7 +36,7 @@ public:
     /**
      * Create a quick ColorRGBA with all zeros.
      */
-    ColorRGBA(void)
+    ColorRGBA()
     {
         for (int i = 0; i < 4; i++)
             _c[i] = 0.0;

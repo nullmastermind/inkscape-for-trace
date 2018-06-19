@@ -56,7 +56,7 @@
 /* Fill */
 
 
-Gtk::Widget *sp_fill_style_widget_new(void)
+Gtk::Widget *sp_fill_style_widget_new()
 {
     return Inkscape::Widgets::createStyleWidget( FILL );
 }

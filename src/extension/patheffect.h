@@ -21,7 +21,7 @@ class PathEffect : public Extension {
 public:
                  PathEffect  (Inkscape::XML::Node * in_repr,
                               Implementation::Implementation * in_imp);
-        ~PathEffect  (void) override;
+        ~PathEffect  () override;
     void         processPath (SPDocument * doc,
                               Inkscape::XML::Node * path,
                               Inkscape::XML::Node * def);

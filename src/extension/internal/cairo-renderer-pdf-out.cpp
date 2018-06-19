@@ -238,7 +238,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 	describes the data.
 */
 void
-CairoRendererPdfOutput::init (void)
+CairoRendererPdfOutput::init ()
 {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

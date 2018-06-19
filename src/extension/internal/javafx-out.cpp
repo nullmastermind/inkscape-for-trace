@@ -101,7 +101,7 @@ static double effective_opacity(const SPStyle *style)
 //# OUTPUT FORMATTING
 //########################################################################
 
-JavaFXOutput::JavaFXOutput(void) :
+JavaFXOutput::JavaFXOutput() :
     name(),
     outbuf(),
     foutbuf(),

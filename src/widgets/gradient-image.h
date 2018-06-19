@@ -42,7 +42,7 @@ struct SPGradientImageClass {
     GtkWidgetClass parent_class;
 };
 
-GType sp_gradient_image_get_type (void);
+GType sp_gradient_image_get_type ();
 
 GtkWidget *sp_gradient_image_new (SPGradient *gradient);
 GdkPixbuf *sp_gradient_to_pixbuf (SPGradient *gr, int width, int height);

@@ -39,16 +39,16 @@ public:
 
                  Output (Inkscape::XML::Node * in_repr,
                          Implementation::Implementation * in_imp);
-        ~Output (void) override;
-    bool check                (void) override;
+        ~Output () override;
+    bool check                () override;
     void         save (SPDocument *doc,
                        gchar const *uri);
-    bool         prefs (void);
-    gchar *      get_mimetype(void);
-    gchar *      get_extension(void);
-    gchar *      get_filetypename(void);
-    gchar *      get_filetypetooltip(void);
-    bool         causes_dataloss(void) { return dataloss; };
+    bool         prefs ();
+    gchar *      get_mimetype();
+    gchar *      get_extension();
+    gchar *      get_filetypename();
+    gchar *      get_filetypetooltip();
+    bool         causes_dataloss() { return dataloss; };
 };
 
 } }  /* namespace Inkscape, Extension */

@@ -266,7 +266,7 @@ static GTimer *overallTimer = nullptr;
 /**
  * Registers SPDesktopWidget class and returns its type number.
  */
-GType SPDesktopWidget::getType(void)
+GType SPDesktopWidget::getType()
 {
     static GType type = 0;
     if (!type) {

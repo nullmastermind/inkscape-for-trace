@@ -38,7 +38,7 @@ using Inkscape::Util::unit_table;
 /**
  * Creates a new widget for the line stroke paint.
  */
-Gtk::Widget *sp_stroke_style_paint_widget_new(void)
+Gtk::Widget *sp_stroke_style_paint_widget_new()
 {
     return Inkscape::Widgets::createStyleWidget( STROKE );
 }
@@ -46,7 +46,7 @@ Gtk::Widget *sp_stroke_style_paint_widget_new(void)
 /**
  * Creates a new widget for the line stroke style.
  */
-Gtk::Widget *sp_stroke_style_line_widget_new(void)
+Gtk::Widget *sp_stroke_style_line_widget_new()
 {
     return Inkscape::Widgets::createStrokeStyleWidget();
 }

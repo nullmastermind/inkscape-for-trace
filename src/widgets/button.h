@@ -56,7 +56,7 @@ struct SPButtonClass {
 
 #define SP_BUTTON_IS_DOWN(b) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))
 
-GType sp_button_get_type (void);
+GType sp_button_get_type ();
 
 GtkWidget *sp_button_new (GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action);
 

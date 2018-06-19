@@ -33,7 +33,7 @@ LPEObjectReference::LPEObjectReference(SPObject* i_owner) : URIReference(i_owner
     user_unlink = nullptr;
 }
 
-LPEObjectReference::~LPEObjectReference(void)
+LPEObjectReference::~LPEObjectReference()
 {
     _changed_connection.disconnect(); // to do before unlinking
 
@@ -76,7 +76,7 @@ LPEObjectReference::link(const char *to)
 }
 
 void
-LPEObjectReference::unlink(void)
+LPEObjectReference::unlink()
 {
     if (lpeobject_href) {
         g_free(lpeobject_href);
@@ -98,7 +98,7 @@ LPEObjectReference::start_listening(LivePathEffectObject* to)
 }
 
 void
-LPEObjectReference::quit_listening(void)
+LPEObjectReference::quit_listening()
 {
     _modified_connection.disconnect();
     _delete_connection.disconnect();

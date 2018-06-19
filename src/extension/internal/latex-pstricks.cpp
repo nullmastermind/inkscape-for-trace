@@ -36,14 +36,14 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-PrintLatex::PrintLatex (void):
+PrintLatex::PrintLatex ():
     _width(0),
     _height(0),
     _stream(nullptr)
 {
 }
 
-PrintLatex::~PrintLatex (void)
+PrintLatex::~PrintLatex ()
 {
     if (_stream) fclose(_stream);
 
@@ -322,7 +322,7 @@ PrintLatex::textToPath(Inkscape::Extension::Print * ext)
 
 #include "clear-n_.h"
 
-void PrintLatex::init(void)
+void PrintLatex::init()
 {
     /* SVG in */
     Inkscape::Extension::build_from_mem(

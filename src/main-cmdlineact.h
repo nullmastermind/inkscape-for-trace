@@ -37,7 +37,7 @@ public:
 
     /** Return true if any actions were performed */
     static bool doList (ActionContext const & context);
-    static bool idle (void);
+    static bool idle ();
 };
 
 } // Inkscape

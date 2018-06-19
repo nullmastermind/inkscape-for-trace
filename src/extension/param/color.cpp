@@ -30,7 +30,7 @@
 namespace Inkscape {
 namespace Extension {
 
-ParamColor::~ParamColor(void)
+ParamColor::~ParamColor()
 {
     _color_changed.disconnect();
 }

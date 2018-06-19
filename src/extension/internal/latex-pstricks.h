@@ -37,8 +37,8 @@ class PrintLatex : public Inkscape::Extension::Implementation::Implementation {
     void print_2geomcurve(SVGOStringStream &os, Geom::Curve const & c );
 
 public:
-        PrintLatex (void);
-        ~PrintLatex (void) override;
+        PrintLatex ();
+        ~PrintLatex () override;
 
         /* Print functions */
         unsigned int setup (Inkscape::Extension::Print * module) override;
@@ -61,7 +61,7 @@ public:
         unsigned int comment(Inkscape::Extension::Print *module, const char * comment) override;
         bool textToPath (Inkscape::Extension::Print * ext) override;
 
-        static void init (void);
+        static void init ();
 };
 
 }  /* namespace Internal */

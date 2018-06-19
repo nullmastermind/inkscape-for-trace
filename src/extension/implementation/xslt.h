@@ -37,7 +37,7 @@ private:
 
     Glib::ustring solve_reldir(Inkscape::XML::Node *reprin);
 public:
-    XSLT (void);
+    XSLT ();
 
     bool load(Inkscape::Extension::Extension *module) override;
     void unload(Inkscape::Extension::Extension *module) override;

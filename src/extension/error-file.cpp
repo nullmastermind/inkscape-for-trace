@@ -39,7 +39,7 @@ namespace Extension {
     it should always be checked if you can see the dialog, but it is
     probably good to check anyway).
 */
-ErrorFileNotice::ErrorFileNotice (void) :
+ErrorFileNotice::ErrorFileNotice () :
     Gtk::MessageDialog(
             "",                    /* message */
             false,                 /* use markup */
@@ -80,7 +80,7 @@ ErrorFileNotice::ErrorFileNotice (void) :
 
 /** \brief Sets the preferences based on the checkbox value */
 void
-ErrorFileNotice::checkbox_toggle (void)
+ErrorFileNotice::checkbox_toggle ()
 {
     // std::cout << "Toggle value" << std::endl;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -93,7 +93,7 @@ ErrorFileNotice::checkbox_toggle (void)
     user wants to see the dialog, otherwise it just exits.
 */
 int
-ErrorFileNotice::run (void)
+ErrorFileNotice::run ()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool(PREFERENCE_ID, true))

@@ -53,7 +53,7 @@ namespace UI {
 namespace Dialog {
 
 
-SpellCheck::SpellCheck (void) :
+SpellCheck::SpellCheck () :
     UI::Widget::Panel("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
     _text(nullptr),
     _layout(nullptr),
@@ -170,7 +170,7 @@ SpellCheck::SpellCheck (void) :
     onStart ();
 }
 
-SpellCheck::~SpellCheck(void)
+SpellCheck::~SpellCheck()
 {
     clearRects();
     disconnect();

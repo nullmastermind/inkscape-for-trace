@@ -68,7 +68,7 @@ public:
     Brilliance ( ) : Filter() { };
     ~Brilliance ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Brilliance") "</name>\n"
@@ -148,7 +148,7 @@ public:
     ChannelPaint ( ) : Filter() { };
     ~ChannelPaint ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Channel Painting") "</name>\n"
@@ -249,7 +249,7 @@ public:
     ColorBlindness ( ) : Filter() { };
     ~ColorBlindness ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Color Blindness") "</name>\n"
@@ -324,7 +324,7 @@ public:
     ColorShift ( ) : Filter() { };
     ~ColorShift ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Color Shift") "</name>\n"
@@ -387,7 +387,7 @@ public:
     Colorize ( ) : Filter() { };
     ~Colorize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
                 "<name>" N_("Colorize") "</name>\n"
@@ -494,7 +494,7 @@ public:
     ComponentTransfer ( ) : Filter() { };
     ~ComponentTransfer ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Component Transfer") "</name>\n"
@@ -579,7 +579,7 @@ public:
     Duochrome ( ) : Filter() { };
     ~Duochrome ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Duochrome") "</name>\n"
@@ -704,7 +704,7 @@ public:
     ExtractChannel ( ) : Filter() { };
     ~ExtractChannel ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Extract Channel") "</name>\n"
@@ -810,7 +810,7 @@ public:
     FadeToBW ( ) : Filter() { };
     ~FadeToBW ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Fade to Black or White") "</name>\n"
@@ -889,7 +889,7 @@ public:
     Greyscale ( ) : Filter() { };
     ~Greyscale ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Greyscale") "</name>\n"
@@ -975,7 +975,7 @@ public:
     Invert ( ) : Filter() { };
     ~Invert ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Invert") "</name>\n"
@@ -1110,7 +1110,7 @@ public:
     Lighting ( ) : Filter() { };
     ~Lighting ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lighting") "</name>\n"
@@ -1181,7 +1181,7 @@ public:
     LightnessContrast ( ) : Filter() { };
     ~LightnessContrast ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Lightness-Contrast") "</name>\n"
@@ -1260,7 +1260,7 @@ public:
     NudgeRGB ( ) : Filter() { };
     ~NudgeRGB ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Nudge RGB") "</name>\n"
@@ -1372,7 +1372,7 @@ public:
     NudgeCMY ( ) : Filter() { };
     ~NudgeCMY ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Nudge CMY") "</name>\n"
@@ -1478,7 +1478,7 @@ public:
     Quadritone ( ) : Filter() { };
     ~Quadritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Quadritone Fantasy") "</name>\n"
@@ -1561,7 +1561,7 @@ public:
     SimpleBlend ( ) : Filter() { };
     ~SimpleBlend ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
     
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Simple blend") "</name>\n"
@@ -1647,7 +1647,7 @@ public:
     Solarize ( ) : Filter() { };
     ~Solarize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Solarize") "</name>\n"
@@ -1734,7 +1734,7 @@ public:
     Tritone ( ) : Filter() { };
     ~Tritone ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Tritone") "</name>\n"

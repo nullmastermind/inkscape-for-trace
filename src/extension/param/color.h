@@ -38,7 +38,7 @@ public:
                int indent,
                Inkscape::Extension::Extension * ext,
                Inkscape::XML::Node * xml);
-    ~ParamColor(void) override;
+    ~ParamColor() override;
 
     /** Returns \c _value, with a \i const to protect it. */
     guint32 get( SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }

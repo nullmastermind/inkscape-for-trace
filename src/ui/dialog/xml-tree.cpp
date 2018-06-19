@@ -303,7 +303,7 @@ void XmlTree::present()
     UI::Widget::Panel::present();
 }
 
-XmlTree::~XmlTree (void)
+XmlTree::~XmlTree ()
 {
     set_tree_desktop(nullptr);
 

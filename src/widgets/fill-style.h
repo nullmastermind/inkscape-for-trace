@@ -20,7 +20,7 @@ class Widget;
 
 class SPDesktop;
 
-Gtk::Widget *sp_fill_style_widget_new(void);
+Gtk::Widget *sp_fill_style_widget_new();
 
 void sp_fill_style_widget_set_desktop(Gtk::Widget *widget, SPDesktop *desktop);
 

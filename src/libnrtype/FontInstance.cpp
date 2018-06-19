@@ -102,7 +102,7 @@ static int ft2_cubic_to(FT_Vector const *control1, FT_Vector const *control2, FT
  *
  */
 
-font_instance::font_instance(void) :
+font_instance::font_instance() :
     pFont(nullptr),
     descr(nullptr),
     refCount(0),
@@ -129,7 +129,7 @@ font_instance::font_instance(void) :
     _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = -_descent;
 }
 
-font_instance::~font_instance(void)
+font_instance::~font_instance()
 {
     if ( parent ) {
         parent->UnrefFace(this);
@@ -164,7 +164,7 @@ font_instance::~font_instance(void)
     maxGlyph = 0;
 }
 
-void font_instance::Ref(void)
+void font_instance::Ref()
 {
     refCount++;
     //char *tc=pango_font_description_to_string(descr);
@@ -172,7 +172,7 @@ void font_instance::Ref(void)
     //free(tc);
 }
 
-void font_instance::Unref(void)
+void font_instance::Unref()
 {
     refCount--;
     //char *tc=pango_font_description_to_string(descr);
@@ -320,7 +320,7 @@ void font_instance::InstallFace(PangoFont* iFace)
     }
 }
 
-bool font_instance::IsOutlineFont(void)
+bool font_instance::IsOutlineFont()
 {
     if ( pFont == nullptr ) {
         return false;

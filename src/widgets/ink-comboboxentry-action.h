@@ -67,7 +67,7 @@ struct _Ink_ComboBoxEntry_Action {
 };
 
 
-GType ink_comboboxentry_action_get_type (void);
+GType ink_comboboxentry_action_get_type ();
 
 /**
  * Creates a GtkAction subclass that wraps a GtkComboBoxEntry object.

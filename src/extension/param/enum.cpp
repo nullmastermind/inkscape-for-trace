@@ -101,7 +101,7 @@ ParamComboBox::ParamComboBox(const gchar * name,
     }
 }
 
-ParamComboBox::~ParamComboBox (void)
+ParamComboBox::~ParamComboBox ()
 {
     //destroy choice strings
     for (auto i:choices) {
@@ -171,7 +171,7 @@ bool ParamComboBox::contains(const gchar * text, SPDocument const * /*doc*/, Ink
 }
 
 void
-ParamComboBox::changed (void) {
+ParamComboBox::changed () {
 
 }
 
@@ -200,7 +200,7 @@ public:
         Gtk::ComboBoxText(), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
         this->signal_changed().connect(sigc::mem_fun(this, &ParamComboBoxEntry::changed));
     };
-    void changed (void);
+    void changed ();
 };
 
 /**
@@ -210,7 +210,7 @@ public:
  * from the text box and putting it in the parameter.
  */
 void
-ParamComboBoxEntry::changed (void)
+ParamComboBoxEntry::changed ()
 {
     Glib::ustring data = this->get_active_text();
     _pref->set(data.c_str(), _doc, _node);

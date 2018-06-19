@@ -294,7 +294,7 @@ void OrderingPoint::FindNearest2(const std::vector<OrderingInfoEx *> &infos)
 
 // Check if "this" is among the nearest of its nearest
 
-void OrderingPoint::EnforceMutual(void)
+void OrderingPoint::EnforceMutual()
 {
     if (nearest[0] && !(this == nearest[0]->nearest[0] || this == nearest[0]->nearest[1])) {
         nearest[0] = nullptr;
@@ -334,7 +334,7 @@ void OrderingPoint::EnforceSymmetric(const OrderingPoint &other)
     }
 }
 
-void OrderingPoint::Dump(void)
+void OrderingPoint::Dump()
 {
     Coord dist0 = nearest[0] ? distance(point, nearest[0]->point) : -1.0;
     Coord dist1 = nearest[1] ? distance(point, nearest[1]->point) : -1.0;
@@ -400,7 +400,7 @@ bool OrderingGroupNeighbor::Compare(const OrderingGroupNeighbor &a, const Orderi
 
 // Find the nearest unused neighbor point
 
-OrderingGroupNeighbor *OrderingGroupPoint::FindNearestUnused(void)
+OrderingGroupNeighbor *OrderingGroupPoint::FindNearestUnused()
 {
     for (std::vector<OrderingGroupNeighbor>::iterator it = nearest.begin(); it != nearest.end(); ++it) {
         if (!it->point->used) {
@@ -420,14 +420,14 @@ OrderingGroupNeighbor *OrderingGroupPoint::FindNearestUnused(void)
 
 // Return the other end in the group of the point
 
-OrderingGroupPoint *OrderingGroupPoint::GetOtherEndGroup(void)
+OrderingGroupPoint *OrderingGroupPoint::GetOtherEndGroup()
 {
     return group->endpoints[ indexInGroup ^ 1 ];
 }
 
 // Return the alternate point (if one exists), 0 otherwise
 
-OrderingGroupPoint *OrderingGroupPoint::GetAltPointGroup(void)
+OrderingGroupPoint *OrderingGroupPoint::GetAltPointGroup()
 {
     if (group->nEndPoints < 4) {
         return nullptr;
@@ -440,7 +440,7 @@ OrderingGroupPoint *OrderingGroupPoint::GetAltPointGroup(void)
 
 // Sets the rev flags in the group assuming that the group starts with this point
 
-void OrderingGroupPoint::SetRevInGroup(void)
+void OrderingGroupPoint::SetRevInGroup()
 {
     // If this is not a front point, the item list needs to be reversed
     group->revItemList = !front;
@@ -452,7 +452,7 @@ void OrderingGroupPoint::SetRevInGroup(void)
 // Mark an end point as used and also mark the two other alternating points as used
 // Returns the used point
 
-void OrderingGroupPoint::UsePoint(void)
+void OrderingGroupPoint::UsePoint()
 {
     group->UsePoint(indexInGroup);
 }
@@ -460,13 +460,13 @@ void OrderingGroupPoint::UsePoint(void)
 // Mark an end point as unused and possibly also mark the two other alternating points as unused
 // Returns the used point
 
-void OrderingGroupPoint::UnusePoint(void)
+void OrderingGroupPoint::UnusePoint()
 {
     group->UnusePoint(indexInGroup);
 }
 
 // Return the other end in the connection
-OrderingGroupPoint *OrderingGroupPoint::GetOtherEndConnection(void)
+OrderingGroupPoint *OrderingGroupPoint::GetOtherEndConnection()
 {
     assert(connection);
     assert(connection->points[ indexInConnection ] == this);
@@ -478,7 +478,7 @@ OrderingGroupPoint *OrderingGroupPoint::GetOtherEndConnection(void)
 
 // Set the end points of a group from the items
 
-void OrderingGroup::SetEndpoints(void)
+void OrderingGroup::SetEndpoints()
 {
     assert(items.size() >= 1);
 

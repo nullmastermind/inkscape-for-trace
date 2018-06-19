@@ -310,7 +310,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
 
 
 unsigned int
-sp_ui_close_all(void)
+sp_ui_close_all()
 {
     /* Iterate through all the windows, destroying each in the order they
        become active */

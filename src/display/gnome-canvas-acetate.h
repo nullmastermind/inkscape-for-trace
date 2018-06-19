@@ -32,7 +32,7 @@ struct SPCanvasAcetateClass {
     SPCanvasItemClass parent_class;
 };
 
-GType sp_canvas_acetate_get_type (void);
+GType sp_canvas_acetate_get_type ();
 
 #endif // SEEN_SP_CANVAS_ACETATE_H
 

@@ -60,7 +60,7 @@ public:
                   int indent,
                   Inkscape::Extension::Extension * ext,
                   Inkscape::XML::Node * xml);
-    ~ParamComboBox(void) override;
+    ~ParamComboBox() override;
 
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 
@@ -78,7 +78,7 @@ public:
      */
     bool contains(const gchar * text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
 
-    void changed (void);
+    void changed ();
 }; /* class ParamComboBox */
 
 

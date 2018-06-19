@@ -37,7 +37,7 @@ Filter::Filter(gchar const * filter) :
 	return;
 }
 
-Filter::~Filter (void) {
+Filter::~Filter () {
 	if (_filter != nullptr) {
 		_filter = nullptr;
 	}

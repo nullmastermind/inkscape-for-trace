@@ -98,7 +98,7 @@ Input::Input (Inkscape::XML::Node * in_repr, Implementation::Implementation * in
     \return  None
     \brief   Destroys an Input extension
 */
-Input::~Input (void)
+Input::~Input ()
 {
     g_free(mimetype);
     g_free(extension);
@@ -117,7 +117,7 @@ Input::~Input (void)
     class' check function which also checks out the implementation.
 */
 bool
-Input::check (void)
+Input::check ()
 {
     if (extension == nullptr)
         return FALSE;
@@ -162,7 +162,7 @@ Input::open (const gchar *uri)
     \brief   Get the mime-type that describes this extension
 */
 gchar *
-Input::get_mimetype(void)
+Input::get_mimetype()
 {
     return mimetype;
 }
@@ -172,7 +172,7 @@ Input::get_mimetype(void)
     \brief   Get the filename extension for this extension
 */
 gchar *
-Input::get_extension(void)
+Input::get_extension()
 {
     return extension;
 }
@@ -182,7 +182,7 @@ Input::get_extension(void)
     \brief   Get the name of the filetype supported
 */
 gchar *
-Input::get_filetypename(void)
+Input::get_filetypename()
 {
     if (filetypename != nullptr)
         return filetypename;
@@ -195,7 +195,7 @@ Input::get_filetypename(void)
     \brief   Get the tooltip for more information on the filetype
 */
 gchar *
-Input::get_filetypetooltip(void)
+Input::get_filetypetooltip()
 {
     return filetypetooltip;
 }

@@ -30,7 +30,7 @@ public:
                 int indent,
                 Inkscape::Extension::Extension * ext,
                 Inkscape::XML::Node * xml);
-    ~ParamString(void) override;
+    ~ParamString() override;
 
     /** \brief  Returns \c _value, with a \i const to protect it. */
     const gchar *get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _value; }
@@ -45,7 +45,7 @@ public:
     void string(std::string &string) const override;
 
     void setMaxLength(int maxLenght) { _max_length = maxLenght; }
-    int getMaxLength(void) { return _max_length; }
+    int getMaxLength() { return _max_length; }
 };
 
 

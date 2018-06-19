@@ -23,7 +23,7 @@ Persp3DReference::Persp3DReference(SPObject* i_owner) : URIReference(i_owner)
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(persp3dreference_href_changed), this)); // listening to myself, this should be virtual instead
 }
 
-Persp3DReference::~Persp3DReference(void)
+Persp3DReference::~Persp3DReference()
 {
     _changed_connection.disconnect(); // to do before unlinking
 
@@ -41,7 +41,7 @@ Persp3DReference::_acceptObject(SPObject *obj) const
 }
 
 void
-Persp3DReference::unlink(void)
+Persp3DReference::unlink()
 {
     g_free(persp_href);
     persp_href = nullptr;
@@ -61,7 +61,7 @@ Persp3DReference::start_listening(Persp3D* to)
 }
 
 void
-Persp3DReference::quit_listening(void)
+Persp3DReference::quit_listening()
 {
     if ( persp == nullptr ) {
         return;

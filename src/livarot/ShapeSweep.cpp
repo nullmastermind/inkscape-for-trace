@@ -43,7 +43,7 @@
  */
 
 void
-Shape::ResetSweep (void)
+Shape::ResetSweep ()
 {
   MakePointData (true);
   MakeEdgeData (true);
@@ -51,7 +51,7 @@ Shape::ResetSweep (void)
 }
 
 void
-Shape::CleanupSweep (void)
+Shape::CleanupSweep ()
 {
   MakePointData (false);
   MakeEdgeData (false);
@@ -59,7 +59,7 @@ Shape::CleanupSweep (void)
 }
 
 void
-Shape::ForceToPolygon (void)
+Shape::ForceToPolygon ()
 {
   type = shape_polygon;
 }
@@ -3009,7 +3009,7 @@ void Shape::AddChgt(int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 
 // is this a debug function?  It's calling localized "printf" ...
 void
-Shape::Validate (void)
+Shape::Validate ()
 {
   for (int i = 0; i < numberOfPoints(); i++)
     {

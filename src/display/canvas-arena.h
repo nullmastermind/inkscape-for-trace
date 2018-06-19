@@ -61,7 +61,7 @@ struct _SPCanvasArenaClass {
     gint (* arena_event) (SPCanvasArena *carena, Inkscape::DrawingItem *item, GdkEvent *event);
 };
 
-GType sp_canvas_arena_get_type (void);
+GType sp_canvas_arena_get_type ();
 
 void sp_canvas_arena_set_pick_delta (SPCanvasArena *ca, gdouble delta);
 void sp_canvas_arena_set_sticky (SPCanvasArena *ca, gboolean sticky);

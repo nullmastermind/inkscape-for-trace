@@ -43,7 +43,7 @@ public:
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml,
                      AppearanceMode mode);
-    ~ParamRadioButton(void) override;
+    ~ParamRadioButton() override;
 
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 

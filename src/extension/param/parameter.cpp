@@ -348,7 +348,7 @@ Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extensio
     return;
 }
 
-Parameter::~Parameter(void)
+Parameter::~Parameter()
 {
     g_free(_name);
     _name = nullptr;
@@ -360,7 +360,7 @@ Parameter::~Parameter(void)
     _description = nullptr;
 }
 
-gchar *Parameter::pref_name(void) const
+gchar *Parameter::pref_name() const
 {
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }

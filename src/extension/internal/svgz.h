@@ -23,7 +23,7 @@ namespace Internal {
 
 class Svgz : public Svg {
 public:
-    static void init( void );
+    static void init( );
 };
 
 } } }  // namespace Inkscape, Extension, Implementation

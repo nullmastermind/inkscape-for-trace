@@ -65,7 +65,7 @@ public:
     Chromolitho ( ) : Filter() { };
     ~Chromolitho ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Chromolitho") "</name>\n"
@@ -226,7 +226,7 @@ public:
     CrossEngraving ( ) : Filter() { };
     ~CrossEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross Engraving") "</name>\n"
@@ -325,7 +325,7 @@ public:
     Drawing ( ) : Filter() { };
     ~Drawing ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Drawing") "</name>\n"
@@ -488,7 +488,7 @@ public:
     Electrize ( ) : Filter() { };
     ~Electrize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Electrize") "</name>\n"
@@ -578,7 +578,7 @@ public:
     NeonDraw ( ) : Filter() { };
     ~NeonDraw ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Neon Draw") "</name>\n"
@@ -681,7 +681,7 @@ public:
     PointEngraving ( ) : Filter() { };
     ~PointEngraving ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Point Engraving") "</name>\n"
@@ -844,7 +844,7 @@ public:
     Posterize ( ) : Filter() { };
     ~Posterize ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Poster Paint") "</name>\n"
@@ -967,7 +967,7 @@ public:
     PosterizeBasic ( ) : Filter() { };
     ~PosterizeBasic ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Posterize Basic") "</name>\n"

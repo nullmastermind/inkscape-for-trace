@@ -40,10 +40,10 @@ public:
   float         scale,invScale;
 
 	BitLigne(int ist,int ien,float iScale=0.25);  // default scale is 1/4 for 4x4 supersampling
-    virtual ~BitLigne(void);
+    virtual ~BitLigne();
 
   // reset the line to full empty
-	void             Reset(void);
+	void             Reset();
 	
   // put coverage from spos to epos (in canvas coordinates)
   // full==true means that the bits from (fractional) position spos to epos are entirely covered
@@ -52,7 +52,7 @@ public:
 	int              AddBord(float spos,float epos,bool full);
 
   // debug dump
-	void             Affiche(void);
+	void             Affiche();
 
 };
 

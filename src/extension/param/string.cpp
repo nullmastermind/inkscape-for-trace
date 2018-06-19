@@ -27,7 +27,7 @@ namespace Extension {
 
 
 /** Free the allocated data. */
-ParamString::~ParamString(void)
+ParamString::~ParamString()
 {
     g_free(_value);
     _value = nullptr;
@@ -136,7 +136,7 @@ public:
         this->set_max_length(_pref->getMaxLength()); //Set the max length - default zero means no maximum
         this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
     };
-    void changed_text (void);
+    void changed_text ();
 };
 
 
@@ -146,7 +146,7 @@ public:
  * This function responds to the box changing by grabbing the value
  * from the text box and putting it in the parameter.
  */
-void ParamStringEntry::changed_text(void)
+void ParamStringEntry::changed_text()
 {
     Glib::ustring data = this->get_text();
     _pref->set(data.c_str(), _doc, _node);

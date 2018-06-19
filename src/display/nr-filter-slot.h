@@ -70,7 +70,7 @@ public:
     void set_blurquality(int const q);
 
     /** Gets the gaussian filtering quality. Affects used interpolation methods */
-    int get_blurquality(void);
+    int get_blurquality();
 
     /** Sets the device scale; for high DPI monitors. */
     void set_device_scale(int const s);

@@ -34,20 +34,20 @@ public: /* TODO: These are public for the short term, but this should be fixed *
 public:
                   Print       (Inkscape::XML::Node * in_repr,
                                Implementation::Implementation * in_imp);
-         ~Print       (void) override;
-    bool  check       (void) override;
+         ~Print       () override;
+    bool  check       () override;
 
     /* FALSE means user hit cancel */
-    unsigned int  setup       (void);
-    unsigned int  set_preview (void);
+    unsigned int  setup       ();
+    unsigned int  set_preview ();
 
     unsigned int  begin       (SPDocument *doc);
-    unsigned int  finish      (void);
+    unsigned int  finish      ();
 
     /* Rendering methods */
     unsigned int  bind        (Geom::Affine const &transform,
                                float opacity);
-    unsigned int  release     (void);
+    unsigned int  release     ();
     unsigned int  comment     (const char * comment);
     unsigned int  fill        (Geom::PathVector const &pathv,
                                Geom::Affine const &ctm,
@@ -70,8 +70,8 @@ public:
     unsigned int  text        (char const *text,
                                Geom::Point const &p,
                                SPStyle const *style);
-    bool          textToPath  (void);
-    bool          fontEmbedded  (void);
+    bool          textToPath  ();
+    bool          fontEmbedded  ();
 };
 
 } }  /* namespace Inkscape, Extension */

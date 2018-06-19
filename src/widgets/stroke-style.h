@@ -90,12 +90,12 @@ struct { gchar const *key; gint value; } const SPMarkerNames[] = {
 /**
  * Creates an instance of a paint style widget.
  */
-Gtk::Widget *sp_stroke_style_paint_widget_new(void);
+Gtk::Widget *sp_stroke_style_paint_widget_new();
 
 /**
  * Creates an instance of a line style widget.
  */
-Gtk::Widget *sp_stroke_style_line_widget_new(void);
+Gtk::Widget *sp_stroke_style_line_widget_new();
 
 /**
  * Switches a line or paint style widget to track the given desktop.

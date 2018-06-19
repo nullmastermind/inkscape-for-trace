@@ -45,7 +45,7 @@ Glib::ustring sp_file_default_template_uri();
  * Return value is a pointer to the newly created desktop.
  */
 SPDesktop* sp_file_new (const std::string &templ);
-SPDesktop* sp_file_new_default (void);
+SPDesktop* sp_file_new_default ();
 
 /*######################
 ## D E L E T E
@@ -54,7 +54,7 @@ SPDesktop* sp_file_new_default (void);
 /**
  * Close the document/view
  */
-void sp_file_exit (void);
+void sp_file_exit ();
 
 /*######################
 ## O P E N

@@ -103,7 +103,7 @@ void CairoRendererOutput::save(Inkscape::Extension::Output * /*mod*/, SPDocument
 	describes the data.
 */
 void
-CairoRendererOutput::init (void)
+CairoRendererOutput::init ()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

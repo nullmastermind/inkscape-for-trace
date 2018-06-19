@@ -53,7 +53,7 @@ class ContextMenu : public Gtk::Menu
          * @param item SPItem pointer to the object selected at the time the ContextMenu is created.
          */
         ContextMenu(SPDesktop *desktop, SPItem *item);
-        ~ContextMenu(void) override;
+        ~ContextMenu() override;
         
     private:
         SPItem *_item; // pointer to the object selected at the time the ContextMenu is created
@@ -68,7 +68,7 @@ class ContextMenu : public Gtk::Menu
         /**
          * auxiliary function that adds a separator line in the context menu
          */
-        Gtk::SeparatorMenuItem* AddSeparator(void);
+        Gtk::SeparatorMenuItem* AddSeparator();
         
         /**
          * c++ified version of sp_ui_menu_append_item.
@@ -81,86 +81,86 @@ class ContextMenu : public Gtk::Menu
          * main function which is responsible for creating the context sensitive menu items,
          * calls subfunctions below to create the menu entry widgets.
          */
-        void MakeObjectMenu (void); 
+        void MakeObjectMenu (); 
         /**
          * creates menu entries for an SP_TYPE_ITEM object
          */
-        void MakeItemMenu   (void);
+        void MakeItemMenu   ();
         /**
          * creates menu entries for a grouped object
          */
-        void MakeGroupMenu  (void);
+        void MakeGroupMenu  ();
         /**
          * creates menu entries for an anchor object
          */
-        void MakeAnchorMenu (void);
+        void MakeAnchorMenu ();
         /**
          * creates menu entries for a bitmap image object
          */
-        void MakeImageMenu  (void);
+        void MakeImageMenu  ();
         /**
          * creates menu entries for a shape object
          */
-        void MakeShapeMenu  (void);
+        void MakeShapeMenu  ();
         /**
          * creates menu entries for a text object
          */
-        void MakeTextMenu   (void);
+        void MakeTextMenu   ();
         
         void EnterGroup(Gtk::MenuItem* mi);
-        void LeaveGroup(void);
-        void LockSelected(void);
-        void HideSelected(void);
+        void LeaveGroup();
+        void LockSelected();
+        void HideSelected();
         void UnLockBelow(std::vector<SPItem *> items);
         void UnHideBelow(std::vector<SPItem *> items);
         //////////////////////////////////////////
         //callbacks for the context menu entries of an SP_TYPE_ITEM object
-        void ItemProperties(void);
-        void ItemSelectThis(void);
-        void ItemMoveTo(void);
-        void SelectSameFillStroke(void);
-        void SelectSameFillColor(void);
-        void SelectSameStrokeColor(void);
-        void SelectSameStrokeStyle(void);
-        void SelectSameObjectType(void);
-        void ItemCreateLink(void);
-        void CreateGroupClip(void);
-        void SetMask(void);
-        void ReleaseMask(void);
-        void SetClip(void);
-        void ReleaseClip(void);
+        void ItemProperties();
+        void ItemSelectThis();
+        void ItemMoveTo();
+        void SelectSameFillStroke();
+        void SelectSameFillColor();
+        void SelectSameStrokeColor();
+        void SelectSameStrokeStyle();
+        void SelectSameObjectType();
+        void ItemCreateLink();
+        void CreateGroupClip();
+        void SetMask();
+        void ReleaseMask();
+        void SetClip();
+        void ReleaseClip();
         //////////////////////////////////////////
         
         
         /**
          * callback, is executed on clicking the anchor "Group" and "Ungroup" menu entry
          */
-        void ActivateUngroupPopSelection(void);
-        void ActivateUngroup(void);
-        void ActivateGroup(void);
+        void ActivateUngroupPopSelection();
+        void ActivateUngroup();
+        void ActivateGroup();
         
-        void AnchorLinkProperties(void);
+        void AnchorLinkProperties();
         /**
          * placeholder for callback to be executed on clicking the anchor "Follow link" context menu entry
          * @todo add code to follow link externally
          */
-        void AnchorLinkFollow(void);
+        void AnchorLinkFollow();
         
         /**
          * callback, is executed on clicking the anchor "Link remove" menu entry
          */
-        void AnchorLinkRemove(void);
+        void AnchorLinkRemove();
         
         
         /**
          * callback, opens the image properties dialog and is executed on clicking the context menu entry with similar name
          */
-        void ImageProperties(void);
+        void ImageProperties();
         
         /**
          * callback, is executed on clicking the image "Edit Externally" menu entry
          */
-        void ImageEdit(void);
+        void ImageEdit();
         
         /**
          * auxiliary function that loads the external image editor name from the settings.
@@ -170,39 +170,39 @@ class ContextMenu : public Gtk::Menu
         /**
          * callback, is executed on clicking the "Embed Image" menu entry
          */
-        void ImageEmbed(void);
+        void ImageEmbed();
         
         /**
          * callback, is executed on clicking the "Trace Bitmap" menu entry
          */
-        void ImageTraceBitmap(void);
+        void ImageTraceBitmap();
 
         /**
          * callback, is executed on clicking the "Trace Pixel Art" menu entry
          */
-        void ImageTracePixelArt(void);
+        void ImageTracePixelArt();
 
         /**
          * callback, is executed on clicking the "Extract Image" menu entry
          */
-        void ImageExtract(void);
+        void ImageExtract();
         
         
         /**
          * callback, is executed on clicking the "Fill and Stroke" menu entry
          */
-        void FillSettings(void);
+        void FillSettings();
         
         
         /**
          * callback, is executed on clicking the "Text and Font" menu entry
          */
-        void TextSettings(void);
+        void TextSettings();
         
         /**
          * callback, is executed on clicking the "Check spelling" menu entry
          */
-        void SpellcheckSettings(void);
+        void SpellcheckSettings();
 };
 #endif // SEEN_CONTEXT_MENU_H
 

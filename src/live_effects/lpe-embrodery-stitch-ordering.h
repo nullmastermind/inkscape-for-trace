@@ -71,11 +71,11 @@ struct OrderingPoint {
     // Find 2 nearest points to given point
     void FindNearest2(const std::vector<OrderingInfoEx *> &infos);
     // Check if "this" is among the nearest of its nearest
-    void EnforceMutual(void);
+    void EnforceMutual();
     // Check if the subpath indices of this and other are the same, otherwise zero both nearest
     void EnforceSymmetric(const OrderingPoint &other);
     // Dump point information
-    void Dump(void);
+    void Dump();
 
     Geom::Point point;
     OrderingInfoEx *infoex;
@@ -146,21 +146,21 @@ struct OrderingGroupPoint {
     }
 
     // Find the nearest unused neighbor point
-    OrderingGroupNeighbor *FindNearestUnused(void);
+    OrderingGroupNeighbor *FindNearestUnused();
     // Return the other end in the group of the point
-    OrderingGroupPoint *GetOtherEndGroup(void);
+    OrderingGroupPoint *GetOtherEndGroup();
     // Return the alternate point (if one exists), 0 otherwise
-    OrderingGroupPoint *GetAltPointGroup(void);
+    OrderingGroupPoint *GetAltPointGroup();
     // Sets the rev flags in the group assuming that the group starts with this point
-    void SetRevInGroup(void);
+    void SetRevInGroup();
     // Mark an end point as used and also mark the two other alternating points as used
     // Returns the used point
-    void UsePoint(void);
+    void UsePoint();
     // Mark an end point as unused and possibly also mark the two other alternating points as unused
     // Returns the used point
-    void UnusePoint(void);
+    void UnusePoint();
     // Return the other end in the connection
-    OrderingGroupPoint *GetOtherEndConnection(void);
+    OrderingGroupPoint *GetOtherEndConnection();
 
     // The coordinates of the point
     Geom::Point point;
@@ -239,7 +239,7 @@ struct OrderingGroup {
     }
 
     // Set the endpoints of a group from the items
-    void SetEndpoints(void);
+    void SetEndpoints();
     // Add all points from another group as neighbors
     void AddNeighbors(OrderingGroup *nghb);
     // Mark an end point as used and also mark the two other alternating points as used

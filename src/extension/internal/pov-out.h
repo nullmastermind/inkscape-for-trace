@@ -65,7 +65,7 @@ public:
     /**
      * Inkscape runtime startup call.
      */
-	static void init(void);
+	static void init();
 	
     /**
      * Reset variables to initial state

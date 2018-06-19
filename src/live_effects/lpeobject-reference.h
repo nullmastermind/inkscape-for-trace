@@ -43,9 +43,9 @@ public:
     sigc::connection _changed_connection;
 
     void            link(const char* to);
-    void            unlink(void);
+    void            unlink();
     void            start_listening(LivePathEffectObject* to);
-    void            quit_listening(void);
+    void            quit_listening();
 
     void (*user_unlink) (LPEObjectReference *me, SPObject *user);
 

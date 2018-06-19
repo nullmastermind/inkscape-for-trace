@@ -321,7 +321,7 @@ CairoEpsOutput::textToPath(Inkscape::Extension::Print * ext)
 	describes the data.
 */
 void
-CairoPsOutput::init (void)
+CairoPsOutput::init ()
 {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -363,7 +363,7 @@ CairoPsOutput::init (void)
 	describes the data.
 */
 void
-CairoEpsOutput::init (void)
+CairoEpsOutput::init ()
 {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

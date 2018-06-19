@@ -266,7 +266,7 @@ void FilterSlot::set_blurquality(int const q) {
     blurquality = q;
 }
 
-int FilterSlot::get_blurquality(void) {
+int FilterSlot::get_blurquality() {
     return blurquality;
 }
 

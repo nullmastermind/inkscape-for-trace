@@ -898,7 +898,7 @@ Inkscape::Extension::Extension *FileOpenDialogImplGtk::getSelectionType()
 /**
  * Get the file name chosen by the user.   Valid after an [OK]
  */
-Glib::ustring FileOpenDialogImplGtk::getFilename(void)
+Glib::ustring FileOpenDialogImplGtk::getFilename()
 {
     return myFilename;
 }

@@ -28,12 +28,12 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-LatexOutput::LatexOutput (void) // The null constructor
+LatexOutput::LatexOutput () // The null constructor
 {
     return;
 }
 
-LatexOutput::~LatexOutput (void) //The destructor
+LatexOutput::~LatexOutput () //The destructor
 {
     return;
 }
@@ -87,7 +87,7 @@ void LatexOutput::save(Inkscape::Extension::Output * /*mod2*/, SPDocument *doc, 
     describes the data.
 */
 void
-LatexOutput::init (void)
+LatexOutput::init ()
 {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

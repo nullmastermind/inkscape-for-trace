@@ -274,7 +274,7 @@ void Find::setTargetDesktop(SPDesktop *desktop)
     }
 }
 
-void Find::onSelectionChange(void)
+void Find::onSelectionChange()
 {
     if (!blocked) {
         status.set_text("");

@@ -77,7 +77,7 @@ protected:
     void ref_changed(SPObject *old_ref, SPObject *new_ref);
     void remove_link();
     void start_listening(SPObject * to);
-    void quit_listening(void);
+    void quit_listening();
     void linked_delete(SPObject *deleted);
     void linked_modified(SPObject *linked_obj, guint flags);
     void linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item);

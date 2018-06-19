@@ -58,7 +58,7 @@ struct GridCanvasItemClass {
 };
 
 /* Standard Gtk function */
-GType grid_canvasitem_get_type (void);
+GType grid_canvasitem_get_type ();
 
 
 

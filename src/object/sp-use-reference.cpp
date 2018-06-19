@@ -46,7 +46,7 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
     user_unlink = nullptr;
 }
 
-SPUsePath::~SPUsePath(void)
+SPUsePath::~SPUsePath()
 {
     if (originalPath != nullptr) {
         originalPath->unref();
@@ -82,7 +82,7 @@ SPUsePath::link(char *to)
 }
 
 void
-SPUsePath::unlink(void)
+SPUsePath::unlink()
 {
     g_free(sourceHref);
     sourceHref = nullptr;
@@ -103,7 +103,7 @@ SPUsePath::start_listening(SPObject* to)
 }
 
 void
-SPUsePath::quit_listening(void)
+SPUsePath::quit_listening()
 {
     if ( sourceObject == nullptr ) {
         return;

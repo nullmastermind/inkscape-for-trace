@@ -80,7 +80,7 @@ void SPAvoidRef::setAvoid(char const *value)
     }
 }
 
-void SPAvoidRef::handleSettingChange(void)
+void SPAvoidRef::handleSettingChange()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop == nullptr) {

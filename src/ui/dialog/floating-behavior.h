@@ -66,8 +66,8 @@ private:
 
     Gtk::Dialog *_d;   //< the actual dialog
 
-    void _focus_event (void);
-    bool _trans_timer (void);
+    void _focus_event ();
+    bool _trans_timer ();
 
     Glib::PropertyProxy_ReadOnly<bool> _dialog_active;  //< Variable proxy to track whether the dialog is the active window
     int _steps;          //< Number of steps for the timer to animate the transparent dialog

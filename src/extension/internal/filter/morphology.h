@@ -52,7 +52,7 @@ public:
     Crosssmooth ( ) : Filter() { };
     ~Crosssmooth ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross-smooth") "</name>\n"
@@ -160,7 +160,7 @@ public:
     Outline ( ) : Filter() { };
     ~Outline ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Outline") "</name>\n"

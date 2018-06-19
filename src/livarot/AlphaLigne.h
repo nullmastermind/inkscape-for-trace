@@ -45,10 +45,10 @@ public:
 
   // iMin and iMax are the bounds of the visible portion of the line
 	AlphaLigne(int iMin,int iMax);
-    virtual ~AlphaLigne(void);
+    virtual ~AlphaLigne();
 
   // empties the line
-	void             Reset(void);
+	void             Reset();
   
   // add some coverage.
   // pente is (eval-sval)/(epos-spos), because you can compute it once per edge, and thus spare the
@@ -58,10 +58,10 @@ public:
 	int              AddBord(float spos,float sval,float epos,float eval);
 
   // sorts the steps in increasing order. needed before you raster the line
-	void             Flatten(void);
+	void             Flatten();
 	
   // debug dump of the steps
-	void						 Affiche(void);
+	void						 Affiche();
 
   // private
 	void             AddRun(int st,float pente);

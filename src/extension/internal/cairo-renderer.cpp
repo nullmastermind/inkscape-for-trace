@@ -103,7 +103,7 @@ namespace Internal {
 CairoRenderer::CairoRenderer(void)
 = default;
 
-CairoRenderer::~CairoRenderer(void)
+CairoRenderer::~CairoRenderer()
 {
     /* restore default signal handling for SIGPIPE */
 #if !defined(_WIN32) && !defined(__WIN32__)
@@ -114,7 +114,7 @@ CairoRenderer::~CairoRenderer(void)
 }
 
 CairoRenderContext*
-CairoRenderer::createContext(void)
+CairoRenderer::createContext()
 {
     CairoRenderContext *new_context = new CairoRenderContext(this);
     g_assert( new_context != nullptr );

@@ -59,7 +59,7 @@ public:
               gchar const *text,
               Inkscape::Extension::Extension * ext);
 
-    virtual ~Parameter(void);
+    virtual ~Parameter();
 
     /** Wrapper to cast to the object and use its function. */
     bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;
@@ -100,7 +100,7 @@ public:
 
     guint32 set_color(guint32 in, SPDocument * doc, Inkscape::XML::Node * node);
 
-    gchar const * name(void) const {return _name;}
+    gchar const * name() const {return _name;}
 
     /**
      * This function creates a parameter that can be used later.  This
@@ -130,7 +130,7 @@ public:
 
     virtual Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 
-    gchar const * get_tooltip(void) const { return _description; }
+    gchar const * get_tooltip() const { return _description; }
 
     /** Indicates if the GUI for this parameter is hidden or not */
     bool get_hidden() const { return _hidden; }
@@ -181,7 +181,7 @@ protected:
     /**
      * Build the name to write the parameter from the extension's ID and the name of this parameter.
      */
-    gchar *pref_name(void) const;
+    gchar *pref_name() const;
 
     Inkscape::XML::Node * find_child (Inkscape::XML::Node * adult);
 

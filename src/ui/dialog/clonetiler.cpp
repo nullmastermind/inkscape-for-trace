@@ -1167,7 +1167,7 @@ CloneTiler::CloneTiler () :
 
 }
 
-CloneTiler::~CloneTiler (void)
+CloneTiler::~CloneTiler ()
 {
     //subselChangedConn.disconnect();
     //selectModifiedConn.disconnect();

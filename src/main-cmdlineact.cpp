@@ -99,7 +99,7 @@ CmdLineAction::doList (ActionContext const & context) {
 }
 
 bool
-CmdLineAction::idle (void) {
+CmdLineAction::idle () {
     std::list<SPDesktop *> desktops;
     INKSCAPE.get_all_desktops(desktops);
 

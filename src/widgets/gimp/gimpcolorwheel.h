@@ -63,10 +63,10 @@ struct _GimpColorWheelClass
                     GtkDirectionType  type);
 
   /* Padding for future expansion */
-  void (*_gimp_reserved1) (void);
-  void (*_gimp_reserved2) (void);
-  void (*_gimp_reserved3) (void);
-  void (*_gimp_reserved4) (void);
+  void (*_gimp_reserved1) ();
+  void (*_gimp_reserved2) ();
+  void (*_gimp_reserved3) ();
+  void (*_gimp_reserved4) ();
 };
 
 

@@ -50,7 +50,7 @@ public:
     /**
      * Updates entries and other child widgets on selection change, object modification, etc.
      */
-    void widget_setup(void);
+    void widget_setup();
 
 private:
     /**

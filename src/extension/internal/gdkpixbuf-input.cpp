@@ -163,7 +163,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 #include "clear-n_.h"
 
 void
-GdkpixbufInput::init(void)
+GdkpixbufInput::init()
 {
     static std::vector< Gdk::PixbufFormat > formatlist = Gdk::Pixbuf::get_formats();
     for (auto i: formatlist) {

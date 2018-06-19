@@ -48,14 +48,14 @@ Shape::Shape()
 
   type = shape_polygon;
 }
-Shape::~Shape (void)
+Shape::~Shape ()
 {
   maxPt = 0;
   maxAr = 0;
   free(qrsData);
 }
 
-void Shape::Affiche(void)
+void Shape::Affiche()
 {
   printf("sh=%p nbPt=%i nbAr=%i\n", this, static_cast<int>(_pts.size()), static_cast<int>(_aretes.size())); // localizing ok
   for (unsigned int i=0; i<_pts.size(); i++) {
@@ -533,7 +533,7 @@ Shape::SwapPoints (int a, int b, int c)
 }
 
 void
-Shape::SortPoints (void)
+Shape::SortPoints ()
 {
   if (_need_points_sorting && hasPoints())
     SortPoints (0, numberOfPoints() - 1);
@@ -541,7 +541,7 @@ Shape::SortPoints (void)
 }
 
 void
-Shape::SortPointsRounded (void)
+Shape::SortPointsRounded ()
 {
   if (hasPoints())
     SortPointsRounded (0, numberOfPoints() - 1);
@@ -1479,7 +1479,7 @@ Shape::SwapEdges (int a, int b, int c)
 }
 
 void
-Shape::SortEdges (void)
+Shape::SortEdges ()
 {
   if (_need_edges_sorting == false) {
     return;

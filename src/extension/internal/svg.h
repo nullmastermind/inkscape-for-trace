@@ -29,7 +29,7 @@ public:
                                gchar const *filename ) override;
     SPDocument *open( Inkscape::Extension::Input *mod,
                                 const gchar *uri ) override;
-    static void         init( void );
+    static void         init( );
 
 };
 

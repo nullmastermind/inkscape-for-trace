@@ -2181,7 +2181,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     return 0;
 }
 
-void PrintEmf::init(void)
+void PrintEmf::init()
 {
     _load_ppt_fontfix_data();
 

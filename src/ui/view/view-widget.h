@@ -36,7 +36,7 @@ class SPNamedView;
 /**
  * Registers the SPViewWidget class with Glib and returns its type number.
  */
-GType sp_view_widget_get_type(void);
+GType sp_view_widget_get_type();
 
 /**
  * Connects widget to view's 'resized' signal and calls virtual set_view()

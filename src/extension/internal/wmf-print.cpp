@@ -1562,7 +1562,7 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     return 0;
 }
 
-void PrintWmf::init(void)
+void PrintWmf::init()
 {
     _load_ppt_fontfix_data();
 

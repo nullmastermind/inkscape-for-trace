@@ -62,7 +62,7 @@ FloatingBehavior::FloatingBehavior(Dialog &dialog) :
  * zero so that the transition happens instantaneously.  This occurs on
  * windows as opacity changes cause flicker there.
  */
-void FloatingBehavior::_focus_event (void)
+void FloatingBehavior::_focus_event ()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _steps = 0;
@@ -96,7 +96,7 @@ void FloatingBehavior::_focus_event (void)
  * the opacity half way to the goal until it runs out of steps, and then
  * it just forces the goal.
  */
-bool FloatingBehavior::_trans_timer (void) {
+bool FloatingBehavior::_trans_timer () {
     // printf("Go go gadget timer: %d\n", _steps);
     if (_steps == 0) {
         if (_dialog_active.get_value()) {

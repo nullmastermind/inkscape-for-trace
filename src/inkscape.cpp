@@ -1171,7 +1171,7 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
 }
 
 Inkscape::UI::Tools::ToolBase *
-Application::active_event_context (void)
+Application::active_event_context ()
 {
     if (SP_ACTIVE_DESKTOP) {
         return SP_ACTIVE_DESKTOP->getEventContext();

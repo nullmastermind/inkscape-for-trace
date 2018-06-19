@@ -241,7 +241,7 @@ LPECloneOriginal::start_listening()
 }
 
 void
-LPECloneOriginal::quit_listening(void)
+LPECloneOriginal::quit_listening()
 {
     modified_connection.disconnect();
     listening = false;

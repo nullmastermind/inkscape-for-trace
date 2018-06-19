@@ -317,7 +317,7 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring font_featu
 }
 
 
-SPItem *TextEdit::getSelectedTextItem (void)
+SPItem *TextEdit::getSelectedTextItem ()
 {
     if (!SP_ACTIVE_DESKTOP)
         return nullptr;
@@ -333,7 +333,7 @@ SPItem *TextEdit::getSelectedTextItem (void)
 }
 
 
-unsigned TextEdit::getSelectedTextCount (void)
+unsigned TextEdit::getSelectedTextCount ()
 {
     if (!SP_ACTIVE_DESKTOP)
         return 0;

@@ -304,7 +304,7 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
 #include "clear-n_.h"
 
-void CdrInput::init(void)
+void CdrInput::init()
 {
     /* CDR */
      Inkscape::Extension::build_from_mem(

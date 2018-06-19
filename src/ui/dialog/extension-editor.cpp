@@ -121,7 +121,7 @@ ExtensionEditor::setExtensionIter(const Gtk::TreeModel::iterator &iter)
  * from the tree view in the left pane.  It figure out which extension
  * is selected and updates the widgets to have data for that extension.
  */
-void ExtensionEditor::on_pagelist_selection_changed(void)
+void ExtensionEditor::on_pagelist_selection_changed()
 {
     Glib::RefPtr<Gtk::TreeSelection> selection = _page_list.get_selection();
     Gtk::TreeModel::iterator iter = selection->get_selected();

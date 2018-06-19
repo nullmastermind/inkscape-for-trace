@@ -24,7 +24,7 @@ public:
 
 	std::vector<Shape*>     computed;
 	
-	void             UpdateComputed(void);
+	void             UpdateComputed();
 
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node *child) override;
@@ -41,7 +41,7 @@ public:
 
 	Shape            *computed;
 	
-	void             UpdateComputed(void);
+	void             UpdateComputed();
 
 	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
 	void remove_child(Inkscape::XML::Node *child) override;

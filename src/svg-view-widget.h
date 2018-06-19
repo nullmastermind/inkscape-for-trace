@@ -25,7 +25,7 @@ class SPDocument;
 /**
  * Registers SPSVGSPViewWidget class with Gtk and returns its type number.
  */
-GType sp_svg_view_widget_get_type(void);
+GType sp_svg_view_widget_get_type();
 
 /**
  * Constructs new SPSVGSPViewWidget object and returns pointer to it.

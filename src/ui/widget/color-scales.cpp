@@ -702,7 +702,7 @@ void ColorScales::_updateSliders(guint channels)
 #endif
 }
 
-static const gchar *sp_color_scales_hue_map(void)
+static const gchar *sp_color_scales_hue_map()
 {
     static gchar *map = nullptr;
 

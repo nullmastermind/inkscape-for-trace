@@ -62,7 +62,7 @@ filters_load_file (Glib::ustring filename, gchar * menuname)
 	return;
 }
 
-void Filter::filters_all_files(void)
+void Filter::filters_all_files()
 {
     for(auto &filename: get_filenames(USER, FILTERS, {".svg"})) {
         filters_load_file(filename, _("Personal"));
@@ -78,14 +78,14 @@ void Filter::filters_all_files(void)
 class mywriter : public Inkscape::IO::BasicWriter {
 	Glib::ustring _str;
 public:
-	void close(void) override;
-	void flush(void) override;
+	void close() override;
+	void flush() override;
 	void put (gunichar ch) override;
-	gchar const * c_str (void) { return _str.c_str(); }
+	gchar const * c_str () { return _str.c_str(); }
 };
 
-void mywriter::close (void) { return; }
-void mywriter::flush (void) { return; }
+void mywriter::close () { return; }
+void mywriter::flush () { return; }
 void mywriter::put (gunichar ch) { _str += ch; }
 
 

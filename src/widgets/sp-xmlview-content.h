@@ -33,7 +33,7 @@ struct SPXMLViewContentClass
 	GtkTextViewClass parent_class;
 };
 
-GType sp_xmlview_content_get_type (void);
+GType sp_xmlview_content_get_type ();
 GtkWidget * sp_xmlview_content_new (Inkscape::XML::Node * repr);
 
 #define SP_XMLVIEW_CONTENT_GET_REPR(text) (SP_XMLVIEW_CONTENT (text)->repr)

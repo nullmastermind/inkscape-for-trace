@@ -166,7 +166,7 @@ ItemParam::start_listening(SPObject * to)
 }
 
 void
-ItemParam::quit_listening(void)
+ItemParam::quit_listening()
 {
     linked_modified_connection.disconnect();
     linked_delete_connection.disconnect();

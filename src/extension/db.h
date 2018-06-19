@@ -55,7 +55,7 @@ private:
     static void foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
 
 public:
-    DB (void);
+    DB ();
     Extension * get (const gchar *key);
     void register_ext (Extension *module);
     void unregister_ext (Extension *module);

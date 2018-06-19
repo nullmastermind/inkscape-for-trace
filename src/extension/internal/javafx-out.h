@@ -40,7 +40,7 @@ class JavaFXOutput : public Inkscape::Extension::Implementation::Implementation
 {
 
 public:
-    JavaFXOutput (void);
+    JavaFXOutput ();
     
     /**
      * Our internal String definition
@@ -62,7 +62,7 @@ public:
     /**
      * Inkscape runtime startup call.
      */
-	static void init(void);
+	static void init();
 	
     /**
      * Reset variables to initial state

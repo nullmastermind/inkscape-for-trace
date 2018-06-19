@@ -132,9 +132,9 @@ struct SPGradientSelectorClass {
     void (* changed) (SPGradientSelector *sel);
 };
 
-GType sp_gradient_selector_get_type(void);
+GType sp_gradient_selector_get_type();
 
-GtkWidget *sp_gradient_selector_new (void);
+GtkWidget *sp_gradient_selector_new ();
 
 void sp_gradient_selector_set_bbox (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 

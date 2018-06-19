@@ -410,7 +410,7 @@ PathParam::start_listening(SPObject * to)
 }
 
 void
-PathParam::quit_listening(void)
+PathParam::quit_listening()
 {
     linked_modified_connection.disconnect();
     linked_delete_connection.disconnect();

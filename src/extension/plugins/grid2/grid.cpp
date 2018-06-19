@@ -158,7 +158,7 @@ public:
         return;
     };
 
-    void val_changed (void);
+    void val_changed ();
 }; /* class PrefAdjustment */
 
 /** \brief  A function to respond to the value_changed signal from the
@@ -168,7 +168,7 @@ public:
     it to the parameter.  Very simple, but yet beautiful.
 */
 void
-PrefAdjustment::val_changed (void)
+PrefAdjustment::val_changed ()
 {
     // std::cout << "Value Changed to: " << this->get_value() << std::endl;
     _ext->set_param_float(_pref, this->get_value());

@@ -125,7 +125,7 @@ BlurEdge::prefs_effect(Inkscape::Extension::Effect * module, Inkscape::UI::View:
 #include "clear-n_.h"
 
 void
-BlurEdge::init (void)
+BlurEdge::init ()
 {
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

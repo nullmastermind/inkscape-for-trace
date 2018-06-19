@@ -38,7 +38,7 @@ namespace Internal {
     the end of each call.
 */
 void
-Svgz::init(void)
+Svgz::init()
 {
     /* SVGZ in */
     Inkscape::Extension::build_from_mem(

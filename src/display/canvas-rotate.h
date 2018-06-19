@@ -32,7 +32,7 @@ struct SPCanvasRotate : public SPCanvasItem {
 
 void sp_canvas_rotate_start( SPCanvasRotate *canvas_rotate, cairo_surface_t *background );
 
-GType sp_canvas_rotate_get_type (void);
+GType sp_canvas_rotate_get_type ();
 
 struct SPCanvasRotateClass : public SPCanvasItemClass{};
 

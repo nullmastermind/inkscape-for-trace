@@ -229,13 +229,13 @@ static void FactorySubstituteFunc(FcPattern *pattern,gpointer /*data*/)
 
 font_factory *font_factory::lUsine = nullptr;
 
-font_factory *font_factory::Default(void)
+font_factory *font_factory::Default()
 {
     if ( lUsine == nullptr ) lUsine = new font_factory;
     return lUsine;
 }
 
-font_factory::font_factory(void) :
+font_factory::font_factory() :
     nbEnt(0), // Note: this "ents" cache only keeps fonts from being unreffed, does not speed up access
     maxEnt(32),
     ents(static_cast<font_entry*>(g_malloc(maxEnt*sizeof(font_entry)))),
@@ -266,7 +266,7 @@ font_factory::font_factory(void) :
 
 }
 
-font_factory::~font_factory(void)
+font_factory::~font_factory()
 {
     for (int i = 0;i < nbEnt;i++) ents[i].f->Unref();
     if ( ents ) g_free(ents);

@@ -116,7 +116,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
     }
 }
 
-ParamRadioButton::~ParamRadioButton (void)
+ParamRadioButton::~ParamRadioButton ()
 {
     //destroy choice strings
     for(auto i:choices) {
@@ -200,7 +200,7 @@ public:
     void add_changesignal() {
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamRadioButtonWdg::changed));
     };
-    void changed (void);
+    void changed ();
 };
 
 /**
@@ -209,7 +209,7 @@ public:
  * This function responds to the radiobutton selection changing by grabbing the value
  * from the text box and putting it in the parameter.
  */
-void ParamRadioButtonWdg::changed(void)
+void ParamRadioButtonWdg::changed()
 {
     if (this->get_active()) {
         Glib::ustring value = _pref->value_from_label(this->get_label());
@@ -238,10 +238,10 @@ public:
         this->signal_changed().connect(sigc::mem_fun(this, &ComboWdg::changed));
     }
     ~ComboWdg() override = default;
-    void changed (void);
+    void changed ();
 };
 
-void ComboWdg::changed(void)
+void ComboWdg::changed()
 {
     if ( _base ) {
             Glib::ustring value = _base->value_from_label(get_active_text());

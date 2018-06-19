@@ -41,18 +41,18 @@ class ExpirationTimer {
     /** \brief What extension this function relates to */
     Extension * extension;
 
-    bool expired(void) const;
+    bool expired() const;
 
-    static bool idle_func (void);
-    static bool timer_func (void);
+    static bool idle_func ();
+    static bool timer_func ();
 
 public:
     ExpirationTimer(Extension * in_extension);
-    virtual ~ExpirationTimer(void);
+    virtual ~ExpirationTimer();
 
-    void touch (void);
-    void lock (void)   { locked++;  };
-    void unlock (void) { locked--; };
+    void touch ();
+    void lock ()   { locked++;  };
+    void unlock () { locked--; };
 
     /** \brief Set the timeout variable */
     static void set_timeout (long in_seconds) { timeout = in_seconds; };

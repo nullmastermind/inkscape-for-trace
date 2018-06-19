@@ -116,24 +116,24 @@ protected:
 public:
                   Extension    (Inkscape::XML::Node * in_repr,
                                 Implementation::Implementation * in_imp);
-    virtual      ~Extension    (void);
+    virtual      ~Extension    ();
 
     void          set_state    (state_t in_state);
-    state_t       get_state    (void);
-    bool          loaded       (void);
-    virtual bool  check        (void);
-    Inkscape::XML::Node *      get_repr     (void);
-    gchar *       get_id       (void);
-    gchar *       get_name     (void);
+    state_t       get_state    ();
+    bool          loaded       ();
+    virtual bool  check        ();
+    Inkscape::XML::Node *      get_repr     ();
+    gchar *       get_id       ();
+    gchar *       get_name     ();
     /** \brief  Gets the help string for this extension */
-    gchar const * get_help     (void) { return _help; }
-    bool          is_silent (void);
-    void          deactivate   (void);
-    bool          deactivated  (void);
+    gchar const * get_help     () { return _help; }
+    bool          is_silent ();
+    void          deactivate   ();
+    bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
-    Implementation::Implementation * get_imp (void) { return imp; };
+    Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
-    ExecutionEnv *get_execution_env (void) { return execution_env; };
+    ExecutionEnv *get_execution_env () { return execution_env; };
 
 /* Parameter Stuff */
 private:
@@ -283,8 +283,8 @@ public:
 
     /* Error file handling */
 public:
-    static void      error_file_open  (void);
-    static void      error_file_close (void);
+    static void      error_file_open  ();
+    static void      error_file_close ();
 
 public:
     Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal = nullptr);
@@ -293,9 +293,9 @@ public:
 
     /* Extension editor dialog stuff */
 public:
-    Gtk::VBox *    get_info_widget(void);
-    Gtk::VBox *    get_help_widget(void);
-    Gtk::VBox *    get_params_widget(void);
+    Gtk::VBox *    get_info_widget();
+    Gtk::VBox *    get_help_widget();
+    Gtk::VBox *    get_params_widget();
 protected:
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
 };

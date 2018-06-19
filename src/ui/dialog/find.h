@@ -196,7 +196,7 @@ protected:
     /**
      * Called when desktop selection changes
      */
-    void onSelectionChange(void);
+    void onSelectionChange();
 
 private:
     Find(Find const &d) = delete;

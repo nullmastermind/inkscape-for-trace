@@ -945,7 +945,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
 #include "../clear-n_.h"
 
-void PdfInput::init(void) {
+void PdfInput::init() {
     /* PDF in */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

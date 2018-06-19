@@ -172,7 +172,7 @@ PrefDialog::run (void) {
 #endif
 
 void
-PrefDialog::preview_toggle (void) {
+PrefDialog::preview_toggle () {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool modified = document->isModifiedSinceSave();
@@ -198,7 +198,7 @@ PrefDialog::preview_toggle (void) {
 }
 
 void
-PrefDialog::param_change (void) {
+PrefDialog::param_change () {
     if (_exEnv != nullptr) {
         if (!_effect->loaded()) {
             _effect->set_state(Extension::STATE_LOADED);
@@ -213,7 +213,7 @@ PrefDialog::param_change (void) {
 }
 
 bool
-PrefDialog::param_timer_expire (void) {
+PrefDialog::param_timer_expire () {
     if (_exEnv != nullptr) {
         _exEnv->cancel();
         _exEnv->undo();

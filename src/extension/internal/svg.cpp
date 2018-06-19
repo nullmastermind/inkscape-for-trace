@@ -130,7 +130,7 @@ static void pruneProprietaryGarbage( Inkscape::XML::Node *repr )
     the end of each call.
 */
 void
-Svg::init(void)
+Svg::init()
 {
     /* SVG in */
     Inkscape::Extension::build_from_mem(

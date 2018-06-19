@@ -26,13 +26,13 @@ AlphaLigne::AlphaLigne(int iMin,int iMax)
 	after.x=max+1;
 	after.delta=0;
 }
-AlphaLigne::~AlphaLigne(void)
+AlphaLigne::~AlphaLigne()
 {
 	g_free(steps);
 	steps=nullptr;
 	nbStep=maxStep=0;
 }
-void						 AlphaLigne::Affiche(void)
+void						 AlphaLigne::Affiche()
 {
 	printf("%i steps\n",nbStep);
 	for (int i=0;i<nbStep;i++) {
@@ -42,7 +42,7 @@ void						 AlphaLigne::Affiche(void)
 }
 
 
-void             AlphaLigne::Reset(void)
+void             AlphaLigne::Reset()
 {
   // reset to empty line
   // doesn't deallocate the steps array, to minimize memory operations
@@ -243,7 +243,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 	return 0;
 }
 
-void             AlphaLigne::Flatten(void)
+void             AlphaLigne::Flatten()
 {
   // just sort
 	if ( nbStep > 0 ) qsort(steps,nbStep,sizeof(alpha_step),CmpStep);

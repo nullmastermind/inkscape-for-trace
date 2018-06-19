@@ -280,7 +280,7 @@ sp_tref_delete_self(SPObject */*deleted*/, SPTRef *self)
 /**
  * Return the object referred to via the URI reference
  */
-SPObject * SPTRef::getObjectReferredTo(void)
+SPObject * SPTRef::getObjectReferredTo()
 {
     SPObject *referredObject = nullptr;
 

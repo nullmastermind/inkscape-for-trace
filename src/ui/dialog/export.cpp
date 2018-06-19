@@ -121,7 +121,7 @@ static const char * selection_labels[SELECTION_NUMBER_OF] = {
     N_("_Page"), N_("_Drawing"), N_("_Selection"), N_("_Custom")
 };
 
-Export::Export (void) :
+Export::Export () :
     UI::Widget::Panel("/dialogs/export/", SP_VERB_DIALOG_EXPORT),
     current_key(SELECTION_PAGE),
     original_name(),
@@ -386,7 +386,7 @@ Export::Export (void) :
     onAreaToggled();
 }
 
-Export::~Export (void)
+Export::~Export ()
 {
     was_empty = TRUE;
 

@@ -54,13 +54,13 @@ public:
     sigc::connection _changed_connection;
 
     SPTagUsePath(SPObject* i_owner);
-    ~SPTagUsePath(void) override;
+    ~SPTagUsePath() override;
 
     void link(char* to);
-    void unlink(void);
+    void unlink();
     void start_listening(SPObject* to);
-    void quit_listening(void);
-    void refresh_source(void);
+    void quit_listening();
+    void refresh_source();
 
     void (*user_unlink) (SPObject *user);
 };

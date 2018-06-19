@@ -63,7 +63,7 @@ struct SPCtrlClass : public SPCanvasItemClass{
 
 
 /* Standard Gtk function */
-GType sp_ctrl_get_type (void);
+GType sp_ctrl_get_type ();
 
 
 #endif /* !INKSCAPE_CTRL_H */

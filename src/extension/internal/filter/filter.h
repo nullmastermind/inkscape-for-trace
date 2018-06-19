@@ -49,10 +49,10 @@ public:
 	void effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document, Inkscape::Extension::Implementation::ImplementationDocumentCache * docCache) override;
 
 	static void filter_init(gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter);
-	static void filters_all(void);
+	static void filters_all();
 
 	/* File loader related */
-	static void filters_all_files(void);
+	static void filters_all_files();
 	static void filters_load_node(Inkscape::XML::Node * node, gchar * menuname);
 
 };

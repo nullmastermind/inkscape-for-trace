@@ -112,12 +112,12 @@ protected:
      *
      * @return SPItem pointer to the selected text object
      */
-    SPItem *getSelectedTextItem (void);
+    SPItem *getSelectedTextItem ();
 
     /**
      * Count the number of text objects in the selection on the canvas.
      */
-    unsigned getSelectedTextCount (void);
+    unsigned getSelectedTextCount ();
 
     /**
      * Helper function to create markup from a fontspec and display in the preview label.

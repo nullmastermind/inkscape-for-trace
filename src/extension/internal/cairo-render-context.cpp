@@ -135,7 +135,7 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
 {
 }
 
-CairoRenderContext::~CairoRenderContext(void)
+CairoRenderContext::~CairoRenderContext()
 {
     for (std::map<gpointer, cairo_font_face_t *>::const_iterator iter = font_table.begin(); iter != font_table.end(); ++iter)
         font_data_free(iter->second);
@@ -152,17 +152,17 @@ void CairoRenderContext::font_data_free(gpointer data)
     }
 }
 
-CairoRenderer* CairoRenderContext::getRenderer(void) const
+CairoRenderer* CairoRenderContext::getRenderer() const
 {
     return _renderer;
 }
 
-CairoRenderState* CairoRenderContext::getCurrentState(void) const
+CairoRenderState* CairoRenderContext::getCurrentState() const
 {
     return _state;
 }
 
-CairoRenderState* CairoRenderContext::getParentState(void) const
+CairoRenderState* CairoRenderContext::getParentState() const
 {
     // if this is the root node just return it
     if (_state_stack.size() == 1) {
@@ -213,7 +213,7 @@ CairoRenderContext::cloneMe(double width, double height) const
     return new_context;
 }
 
-CairoRenderContext* CairoRenderContext::cloneMe(void) const
+CairoRenderContext* CairoRenderContext::cloneMe() const
 {
     g_assert( _is_valid );
 
@@ -416,7 +416,7 @@ void CairoRenderContext::setEPS(bool eps)
     _eps = eps;
 }
 
-unsigned int CairoRenderContext::getPSLevel(void)
+unsigned int CairoRenderContext::getPSLevel()
 {
     return _ps_level;
 }
@@ -436,7 +436,7 @@ void CairoRenderContext::setOmitText(bool omittext)
     _is_omittext = omittext;
 }
 
-bool CairoRenderContext::getOmitText(void)
+bool CairoRenderContext::getOmitText()
 {
     return _is_omittext;
 }
@@ -446,7 +446,7 @@ void CairoRenderContext::setFilterToBitmap(bool filtertobitmap)
     _is_filtertobitmap = filtertobitmap;
 }
 
-bool CairoRenderContext::getFilterToBitmap(void)
+bool CairoRenderContext::getFilterToBitmap()
 {
     return _is_filtertobitmap;
 }
@@ -456,13 +456,13 @@ void CairoRenderContext::setBitmapResolution(int resolution)
     _bitmapresolution = resolution;
 }
 
-int CairoRenderContext::getBitmapResolution(void)
+int CairoRenderContext::getBitmapResolution()
 {
     return _bitmapresolution;
 }
 
 cairo_surface_t*
-CairoRenderContext::getSurface(void)
+CairoRenderContext::getSurface()
 {
     g_assert( _is_valid );
 
@@ -494,7 +494,7 @@ CairoRenderContext::setRenderMode(CairoRenderMode mode)
 }
 
 CairoRenderContext::CairoRenderMode
-CairoRenderContext::getRenderMode(void) const
+CairoRenderContext::getRenderMode() const
 {
     return _render_mode;
 }
@@ -514,12 +514,12 @@ CairoRenderContext::setClipMode(CairoClipMode mode)
 }
 
 CairoRenderContext::CairoClipMode
-CairoRenderContext::getClipMode(void) const
+CairoRenderContext::getClipMode() const
 {
     return _clip_mode;
 }
 
-CairoRenderState* CairoRenderContext::_createState(void)
+CairoRenderState* CairoRenderContext::_createState()
 {
     CairoRenderState *state = static_cast<CairoRenderState*>(g_try_malloc(sizeof(CairoRenderState)));
     g_assert( state != nullptr );
@@ -536,7 +536,7 @@ CairoRenderState* CairoRenderContext::_createState(void)
     return state;
 }
 
-void CairoRenderContext::pushLayer(void)
+void CairoRenderContext::pushLayer()
 {
     g_assert( _is_valid );
 
@@ -553,7 +553,7 @@ void CairoRenderContext::pushLayer(void)
 }
 
 void
-CairoRenderContext::popLayer(void)
+CairoRenderContext::popLayer()
 {
     g_assert( _is_valid );
 
@@ -1007,7 +1007,7 @@ Geom::Affine CairoRenderContext::getParentTransform() const
     return parent_state->transform;
 }
 
-void CairoRenderContext::pushState(void)
+void CairoRenderContext::pushState()
 {
     g_assert( _is_valid );
 
@@ -1020,7 +1020,7 @@ void CairoRenderContext::pushState(void)
     _state = new_state;
 }
 
-void CairoRenderContext::popState(void)
+void CairoRenderContext::popState()
 {
     g_assert( _is_valid );
 

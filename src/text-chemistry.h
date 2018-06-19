@@ -14,9 +14,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-void text_put_on_path(void);
-void text_remove_from_path(void);
-void text_remove_all_kerns(void);
+void text_put_on_path();
+void text_remove_from_path();
+void text_remove_all_kerns();
 void text_flow_into_shape();
 void text_unflow();
 void flowtext_to_text();

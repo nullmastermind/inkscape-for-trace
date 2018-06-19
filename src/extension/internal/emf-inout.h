@@ -190,7 +190,7 @@ public:
     SPDocument *open( Inkscape::Extension::Input *mod,
                                 const gchar *uri ) override;
 
-    static void init(void);//Initialize the class
+    static void init();//Initialize the class
 
 private:
 

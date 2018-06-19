@@ -31,9 +31,9 @@ public:
     Avoid::ShapeRef *shapeRef;
 
     void setAvoid(char const *value);
-    void handleSettingChange(void);
+    void handleSettingChange();
 
-    Geom::Point getConnectionPointPos(void);
+    Geom::Point getConnectionPointPos();
 
     // Returns a list of SPItems of all connectors/shapes attached to
     // this object.  Pass one of the following for 'type':

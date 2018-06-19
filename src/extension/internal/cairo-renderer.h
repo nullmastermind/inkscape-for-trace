@@ -39,10 +39,10 @@ class CairoRenderContext;
 
 class CairoRenderer {
 public:
-    CairoRenderer(void);
-    virtual ~CairoRenderer(void);
+    CairoRenderer();
+    virtual ~CairoRenderer();
     
-    CairoRenderContext *createContext(void);
+    CairoRenderContext *createContext();
     void destroyContext(CairoRenderContext *ctx);
 
     void setStateForItem(CairoRenderContext *ctx, SPItem const *item);

@@ -95,7 +95,7 @@ Output::Output (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
 /**
     \brief  Destroy an output extension
 */
-Output::~Output (void)
+Output::~Output ()
 {
     g_free(mimetype);
     g_free(extension);
@@ -113,7 +113,7 @@ Output::~Output (void)
 	class' check function which also checks out the implementation.
 */
 bool
-Output::check (void)
+Output::check ()
 {
 	if (extension == nullptr)
 		return FALSE;
@@ -128,7 +128,7 @@ Output::check (void)
 	\brief   Get the mime-type that describes this extension
 */
 gchar *
-Output::get_mimetype(void)
+Output::get_mimetype()
 {
     return mimetype;
 }
@@ -138,7 +138,7 @@ Output::get_mimetype(void)
 	\brief   Get the filename extension for this extension
 */
 gchar *
-Output::get_extension(void)
+Output::get_extension()
 {
     return extension;
 }
@@ -148,7 +148,7 @@ Output::get_extension(void)
 	\brief   Get the name of the filetype supported
 */
 gchar *
-Output::get_filetypename(void)
+Output::get_filetypename()
 {
     if (filetypename != nullptr)
         return filetypename;
@@ -161,7 +161,7 @@ Output::get_filetypename(void)
 	\brief   Get the tooltip for more information on the filetype
 */
 gchar *
-Output::get_filetypetooltip(void)
+Output::get_filetypetooltip()
 {
     return filetypetooltip;
 }
@@ -173,7 +173,7 @@ Output::get_filetypetooltip(void)
 	Calls the implementation to get the preferences.
 */
 bool
-Output::prefs (void)
+Output::prefs ()
 {
     if (!loaded())
         set_state(Extension::STATE_LOADED);

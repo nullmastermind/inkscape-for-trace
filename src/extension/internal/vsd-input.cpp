@@ -304,7 +304,7 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
 
 #include "clear-n_.h"
 
-void VsdInput::init(void)
+void VsdInput::init()
 {
     /* VSD */
      Inkscape::Extension::build_from_mem(

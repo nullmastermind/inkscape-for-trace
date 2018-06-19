@@ -45,7 +45,7 @@ SPTagUsePath::SPTagUsePath(SPObject* i_owner):SPTagUseReference(i_owner)
     user_unlink = nullptr;
 }
 
-SPTagUsePath::~SPTagUsePath(void)
+SPTagUsePath::~SPTagUsePath()
 {
     delete originalPath;
     originalPath = nullptr;
@@ -80,7 +80,7 @@ SPTagUsePath::link(char *to)
 }
 
 void
-SPTagUsePath::unlink(void)
+SPTagUsePath::unlink()
 {
     g_free(sourceHref);
     sourceHref = nullptr;
@@ -99,7 +99,7 @@ SPTagUsePath::start_listening(SPObject* to)
 }
 
 void
-SPTagUsePath::quit_listening(void)
+SPTagUsePath::quit_listening()
 {
     if ( sourceObject == nullptr ) {
         return;

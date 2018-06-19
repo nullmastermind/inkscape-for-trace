@@ -975,7 +975,7 @@ SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_typ
 }
 
 void
-SPDocument::emitReconstructionStart(void)
+SPDocument::emitReconstructionStart()
 {
     // printf("Starting Reconstruction\n");
     priv->_reconstruction_start_signal.emit();
@@ -989,7 +989,7 @@ SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_t
 }
 
 void
-SPDocument::emitReconstructionFinish(void)
+SPDocument::emitReconstructionFinish()
 {
     // printf("Finishing Reconstruction\n");
     priv->_reconstruction_finish_signal.emit();

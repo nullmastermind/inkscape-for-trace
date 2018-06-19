@@ -21,8 +21,8 @@
 namespace Inkscape {
 namespace Extension {
 
-typedef Implementation::Implementation *(*_getImplementation)(void);
-typedef const gchar *(*_getInkscapeVersion)(void);
+typedef Implementation::Implementation *(*_getImplementation)();
+typedef const gchar *(*_getInkscapeVersion)();
 
 bool Loader::load_dependency(Dependency *dep)
 {

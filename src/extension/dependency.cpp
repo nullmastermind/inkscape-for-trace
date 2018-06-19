@@ -94,7 +94,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
 
     Unreference the XML structure.
 */
-Dependency::~Dependency (void)
+Dependency::~Dependency ()
 {
     Inkscape::GC::release(_repr);
 }
@@ -129,7 +129,7 @@ Dependency::~Dependency (void)
     found then a TRUE is returned.  If we get all the way through the
     path then a FALSE is returned, the command could not be found.
 */
-bool Dependency::check (void) const
+bool Dependency::check () const
 {
     // std::cout << "Checking: " << *this << std::endl;
 

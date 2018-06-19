@@ -111,7 +111,7 @@ LaTeXTextRenderer::LaTeXTextRenderer(bool pdflatex)
     push_transform(Geom::identity());
 }
 
-LaTeXTextRenderer::~LaTeXTextRenderer(void)
+LaTeXTextRenderer::~LaTeXTextRenderer()
 {
     if (_stream) {
         writePostamble();
@@ -633,7 +633,7 @@ LaTeXTextRenderer::renderItem(SPItem *item)
 }
 
 void
-LaTeXTextRenderer::writeGraphicPage(void) {
+LaTeXTextRenderer::writeGraphicPage() {
     Inkscape::SVGOStringStream os;
     os.setf(std::ios::fixed); // no scientific notation
 

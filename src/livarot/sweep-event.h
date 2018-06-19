@@ -27,7 +27,7 @@ public:
                   double itl, double itr);
 
     /// Void a SweepEvent structure.
-    void MakeDelete (void);
+    void MakeDelete ();
 };
 
 

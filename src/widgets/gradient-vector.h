@@ -62,7 +62,7 @@ struct SPGradientVectorSelectorClass {
     void (* vector_set) (SPGradientVectorSelector *gvs, SPGradient *gr);
 };
 
-GType sp_gradient_vector_selector_get_type(void);
+GType sp_gradient_vector_selector_get_type();
 
 GtkWidget *sp_gradient_vector_selector_new (SPDocument *doc, SPGradient *gradient);
 

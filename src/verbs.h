@@ -501,28 +501,28 @@ protected:
 public:
 
     /** Accessor to get the \c _default_sensitive value. */
-    bool get_default_sensitive (void) { return _default_sensitive; }
+    bool get_default_sensitive () { return _default_sensitive; }
 
     /** Accessor to get the internal variable. */
-    unsigned int get_code (void) { return _code; }
+    unsigned int get_code () { return _code; }
 
     /** Accessor to get the internal variable. */
-    char const * get_id (void) { return _id; }
+    char const * get_id () { return _id; }
 
     /** Accessor to get the internal variable. */
-    char const * get_name (void) { return _name; }
+    char const * get_name () { return _name; }
 
     /** Accessor to get the internal variable. */
-    char const * get_short_tip (void) { return _tip; };
+    char const * get_short_tip () { return _tip; };
 
     /** Accessor to get the internal variable. */
-    char const * get_tip (void) ;
+    char const * get_tip () ;
 
     /** Accessor to get the internal variable. */
-    char const * get_image (void) { return _image; }
+    char const * get_image () { return _image; }
 
     /** Get the verbs group */
-    char const * get_group (void) { return _group; }
+    char const * get_group () { return _group; }
 
     /** Set the name after initialization. */
     char const * set_name (char const * name) { _name = name; return _name; }
@@ -579,7 +579,7 @@ public:
         _verb_ids.insert(VerbIDTable::value_type(_id, this));
     }
     Verb (char const * id, char const * name, char const * tip, char const * image, char const * group);
-    virtual ~Verb (void);
+    virtual ~Verb ();
 
     SPAction * get_action(Inkscape::ActionContext const & context);
 
@@ -631,11 +631,11 @@ protected:
      *
      * @return The size in elements of the internal base array.
      */
-    static int _getBaseListSize(void) {return G_N_ELEMENTS(_base_verbs);}
+    static int _getBaseListSize() {return G_N_ELEMENTS(_base_verbs);}
 
 public:
-    static void list (void);
-    static std::vector<Inkscape::Verb *>getList (void);
+    static void list ();
+    static std::vector<Inkscape::Verb *>getList ();
 
 }; /* Verb class */
 

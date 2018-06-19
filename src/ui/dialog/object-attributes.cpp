@@ -79,7 +79,7 @@ static const SPAttrDesc image_nohref_desc[] = {
     { nullptr, nullptr}
 };
 
-ObjectAttributes::ObjectAttributes (void) :
+ObjectAttributes::ObjectAttributes () :
     UI::Widget::Panel("/dialogs/objectattr/", SP_VERB_DIALOG_ATTR),
     blocked (false),
     CurrentItem(nullptr),
@@ -97,7 +97,7 @@ ObjectAttributes::ObjectAttributes (void) :
     deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
-ObjectAttributes::~ObjectAttributes (void)
+ObjectAttributes::~ObjectAttributes ()
 {
     selectModifiedConn.disconnect();
     subselChangedConn.disconnect();
@@ -106,7 +106,7 @@ ObjectAttributes::~ObjectAttributes (void)
     deskTrack.disconnect();
 }
 
-void ObjectAttributes::widget_setup (void)
+void ObjectAttributes::widget_setup ()
 {
     if (blocked)
     {

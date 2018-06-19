@@ -70,7 +70,7 @@ private:
     ExtensionEditor(ExtensionEditor const &d);
     ExtensionEditor& operator=(ExtensionEditor const &d);
 
-    void on_pagelist_selection_changed(void);
+    void on_pagelist_selection_changed();
     static void dbfunc (Inkscape::Extension::Extension * in_plug, gpointer in_data);
     Gtk::TreeModel::iterator add_extension (Inkscape::Extension::Extension * ext);
     bool setExtensionIter(const Gtk::TreeModel::iterator &iter);

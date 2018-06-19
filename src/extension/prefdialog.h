@@ -63,9 +63,9 @@ class PrefDialog : public Gtk::Dialog {
                 directly and allows for changes. */
     sigc::connection _timersig;
 
-    void preview_toggle(void);
-    void param_change(void);
-    bool param_timer_expire(void);
+    void preview_toggle();
+    void param_change();
+    bool param_timer_expire();
     void on_response (int signal) override;
 
 public:

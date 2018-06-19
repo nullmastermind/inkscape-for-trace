@@ -43,9 +43,9 @@ public:
 
     int set (int in, SPDocument * doc, Inkscape::XML::Node * node);
 
-    int max (void) { return _max; }
+    int max () { return _max; }
 
-    int min (void) { return _min; }
+    int min () { return _min; }
 
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 

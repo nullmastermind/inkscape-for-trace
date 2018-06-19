@@ -272,7 +272,7 @@ public:
 	        SPDocument *doc,
 	        gchar const *filename) override;
 
-    static void   init  (void);
+    static void   init  ();
 
 private:
 

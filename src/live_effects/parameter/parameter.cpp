@@ -45,7 +45,7 @@ Parameter::param_write_to_repr(const char * svgd)
     param_effect->getRepr()->setAttribute(param_key.c_str(), svgd);
 }
 
-void Parameter::write_to_SVG(void)
+void Parameter::write_to_SVG()
 {
     gchar * str = param_getSVGValue();
     param_write_to_repr(str);

@@ -48,7 +48,7 @@ public:
     Blur ( ) : Filter() { };
     ~Blur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Blur") "</name>\n"
@@ -119,7 +119,7 @@ public:
     CleanEdges ( ) : Filter() { };
     ~CleanEdges ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Clean Edges") "</name>\n"
@@ -179,7 +179,7 @@ public:
     CrossBlur ( ) : Filter() { };
     ~CrossBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Cross Blur") "</name>\n"
@@ -254,7 +254,7 @@ public:
     Feather ( ) : Filter() { };
     ~Feather ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Feather") "</name>\n"
@@ -319,7 +319,7 @@ public:
     ImageBlur ( ) : Filter() { };
     ~ImageBlur ( ) override { if (_filter != nullptr) g_free((void *)_filter); return; }
 
-    static void init (void) {
+    static void init () {
         Inkscape::Extension::build_from_mem(
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Out of Focus") "</name>\n"

@@ -53,13 +53,13 @@ public:
     sigc::connection _transformed_connection;
 
     SPUsePath(SPObject* i_owner);
-    ~SPUsePath(void) override;
+    ~SPUsePath() override;
 
     void link(char* to);
-    void unlink(void);
+    void unlink();
     void start_listening(SPObject* to);
-    void quit_listening(void);
-    void refresh_source(void);
+    void quit_listening();
+    void refresh_source();
 
     void (*user_unlink) (SPObject *user);
 };

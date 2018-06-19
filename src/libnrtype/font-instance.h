@@ -45,13 +45,13 @@ public:
     // Maps for font variations.
     std::map<Glib::ustring, OTVarAxis> openTypeVarAxes;      // Axes with ranges
 
-    font_instance(void);
-    virtual ~font_instance(void);
+    font_instance();
+    virtual ~font_instance();
 
-    void                 Ref(void);
-    void                 Unref(void);
+    void                 Ref();
+    void                 Unref();
 
-    bool                 IsOutlineFont(void); // utility
+    bool                 IsOutlineFont(); // utility
     void                 InstallFace(PangoFont* iFace); // utility; should reset the pFont field if loading failed
     // in case the PangoFont is a bitmap font, for example. that way, the calling function
     // will be able to check the validity of the font before installing it in loadedFaces

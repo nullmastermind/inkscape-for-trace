@@ -98,7 +98,7 @@ public:
     /**
      * Clears data of SPAttributeTable instance, destroys all child widgets and closes connections.
      */
-    void clear(void);
+    void clear();
     
     /**
      * Reads the object attributes.
@@ -107,17 +107,17 @@ public:
      * entry boxes. Caution: function should only be used when which there is
      * no change in which objects are selected.
      */
-    void reread_properties(void);
+    void reread_properties();
     
 	/**
      * Gives access to the attributes list.
      */
-    std::vector<Glib::ustring> get_attributes(void) {return _attributes;};
+    std::vector<Glib::ustring> get_attributes() {return _attributes;};
     
 	/**
      * Gives access to the Gtk::Entry list.
      */
-    std::vector<Gtk::Entry *> get_entries(void) {return _entries;};
+    std::vector<Gtk::Entry *> get_entries() {return _entries;};
     
 	/**
      * Stores pointer to the selected object.

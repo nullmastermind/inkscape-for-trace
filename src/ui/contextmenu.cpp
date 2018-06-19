@@ -167,7 +167,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
 ContextMenu::~ContextMenu(void)
 = default;
 
-Gtk::SeparatorMenuItem* ContextMenu::AddSeparator(void)
+Gtk::SeparatorMenuItem* ContextMenu::AddSeparator()
 {
     Gtk::SeparatorMenuItem* sep = Gtk::manage(new Gtk::SeparatorMenuItem());
     sep->show();
@@ -181,12 +181,12 @@ void ContextMenu::EnterGroup(Gtk::MenuItem* mi)
     _desktop->selection->clear();
 }
 
-void ContextMenu::LeaveGroup(void)
+void ContextMenu::LeaveGroup()
 {
     _desktop->setCurrentLayer(_desktop->currentLayer()->parent);
 }
 
-void ContextMenu::LockSelected(void) 
+void ContextMenu::LockSelected() 
 {
     auto itemlist = _desktop->selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
@@ -194,7 +194,7 @@ void ContextMenu::LockSelected(void)
     }
 }
 
-void ContextMenu::HideSelected(void)
+void ContextMenu::HideSelected()
 {
     auto itemlist =_desktop->selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
@@ -288,7 +288,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
     }
 }
 
-void ContextMenu::MakeObjectMenu(void)
+void ContextMenu::MakeObjectMenu()
 {
     if (SP_IS_ITEM(_object)) {
         MakeItemMenu();
@@ -315,7 +315,7 @@ void ContextMenu::MakeObjectMenu(void)
     }
 }
 
-void ContextMenu::MakeItemMenu (void)
+void ContextMenu::MakeItemMenu ()
 {
     Gtk::MenuItem* mi;
 
@@ -480,50 +480,50 @@ void ContextMenu::MakeItemMenu (void)
     append(*mi);
 }
 
-void ContextMenu::SelectSameFillStroke(void)
+void ContextMenu::SelectSameFillStroke()
 {
     sp_select_same_fill_stroke_style(_desktop, true, true, true);
 }
 
-void ContextMenu::SelectSameFillColor(void)
+void ContextMenu::SelectSameFillColor()
 {
     sp_select_same_fill_stroke_style(_desktop, true, false, false);
 }
 
-void ContextMenu::SelectSameStrokeColor(void)
+void ContextMenu::SelectSameStrokeColor()
 {
     sp_select_same_fill_stroke_style(_desktop, false, true, false);
 }
 
-void ContextMenu::SelectSameStrokeStyle(void)
+void ContextMenu::SelectSameStrokeStyle()
 {
     sp_select_same_fill_stroke_style(_desktop, false, false, true);
 }
 
-void ContextMenu::SelectSameObjectType(void)
+void ContextMenu::SelectSameObjectType()
 {
     sp_select_same_object_type(_desktop);
 }
 
-void ContextMenu::ItemProperties(void)
+void ContextMenu::ItemProperties()
 {
     _desktop->selection->set(_item);
     _desktop->_dlg_mgr->showDialog("ObjectProperties");
 }
 
-void ContextMenu::ItemSelectThis(void)
+void ContextMenu::ItemSelectThis()
 {
     _desktop->selection->set(_item);
 }
 
-void ContextMenu::ItemMoveTo(void)
+void ContextMenu::ItemMoveTo()
 {
     Inkscape::UI::Dialogs::LayerPropertiesDialog::showMove(_desktop, _desktop->currentLayer());
 }
 
 
 
-void ContextMenu::ItemCreateLink(void)
+void ContextMenu::ItemCreateLink()
 {
     Inkscape::XML::Document *xml_doc = _desktop->doc()->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:a");
@@ -546,33 +546,33 @@ void ContextMenu::ItemCreateLink(void)
     _desktop->_dlg_mgr->showDialog("ObjectAttributes");
 }
 
-void ContextMenu::SetMask(void)
+void ContextMenu::SetMask()
 {
     _desktop->selection->setMask(false, false);
 }
 
-void ContextMenu::ReleaseMask(void)
+void ContextMenu::ReleaseMask()
 {
     _desktop->selection->unsetMask(false);
 }
 
-void ContextMenu::CreateGroupClip(void)
+void ContextMenu::CreateGroupClip()
 {
     _desktop->selection->setClipGroup();
 }
 
-void ContextMenu::SetClip(void)
+void ContextMenu::SetClip()
 {
     _desktop->selection->setMask(true, false);
 }
 
 
-void ContextMenu::ReleaseClip(void)
+void ContextMenu::ReleaseClip()
 {
     _desktop->selection->unsetMask(true);
 }
 
-void ContextMenu::MakeGroupMenu(void)
+void ContextMenu::MakeGroupMenu()
 {
     /* Ungroup */
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::MenuItem(_("_Ungroup"), true));
@@ -581,12 +581,12 @@ void ContextMenu::MakeGroupMenu(void)
     append(*mi);
 }
 
-void ContextMenu::ActivateGroup(void)
+void ContextMenu::ActivateGroup()
 {
     _desktop->selection->group();
 }
 
-void ContextMenu::ActivateUngroup(void)
+void ContextMenu::ActivateUngroup()
 {
 	std::vector<SPItem*> children;
 
@@ -594,13 +594,13 @@ void ContextMenu::ActivateUngroup(void)
     _desktop->selection->setList(children);
 }
  
-void ContextMenu::ActivateUngroupPopSelection(void)
+void ContextMenu::ActivateUngroupPopSelection()
 {
     _desktop->selection->popFromGroup();
 }
 
 
-void ContextMenu::MakeAnchorMenu(void)
+void ContextMenu::MakeAnchorMenu()
 {
     Gtk::MenuItem* mi;
     
@@ -623,12 +623,12 @@ void ContextMenu::MakeAnchorMenu(void)
     append(*mi);
 }
 
-void ContextMenu::AnchorLinkProperties(void)
+void ContextMenu::AnchorLinkProperties()
 {
     _desktop->_dlg_mgr->showDialog("ObjectAttributes");
 }
 
-void ContextMenu::AnchorLinkFollow(void)
+void ContextMenu::AnchorLinkFollow()
 {
 
     if (_desktop->selection->isEmpty()) {
@@ -644,14 +644,14 @@ void ContextMenu::AnchorLinkFollow(void)
     }
 }
 
-void ContextMenu::AnchorLinkRemove(void)
+void ContextMenu::AnchorLinkRemove()
 {
 	std::vector<SPItem*> children;
     sp_item_group_ungroup(static_cast<SPAnchor*>(_item), children, false);
     Inkscape::DocumentUndo::done(_desktop->doc(), SP_VERB_NONE, _("Remove link"));
 }
 
-void ContextMenu::MakeImageMenu (void)
+void ContextMenu::MakeImageMenu ()
 {
     Gtk::MenuItem* mi;
     Inkscape::XML::Node *ir = _object->getRepr();
@@ -713,7 +713,7 @@ void ContextMenu::MakeImageMenu (void)
     }
 }
 
-void ContextMenu::ImageProperties(void)
+void ContextMenu::ImageProperties()
 {
     _desktop->_dlg_mgr->showDialog("ObjectAttributes");
 }
@@ -741,7 +741,7 @@ Glib::ustring ContextMenu::getImageEditorName(bool is_svg) {
     return value;
 }
 
-void ContextMenu::ImageEdit(void)
+void ContextMenu::ImageEdit()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
@@ -817,19 +817,19 @@ void ContextMenu::ImageEdit(void)
     }
 }
 
-void ContextMenu::ImageTraceBitmap(void)
+void ContextMenu::ImageTraceBitmap()
 {
     INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
 }
 
-void ContextMenu::ImageTracePixelArt(void)
+void ContextMenu::ImageTracePixelArt()
 {
     INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("PixelArt");
 }
 
-void ContextMenu::ImageEmbed(void)
+void ContextMenu::ImageEmbed()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
@@ -844,7 +844,7 @@ void ContextMenu::ImageEmbed(void)
     }
 }
 
-void ContextMenu::ImageExtract(void)
+void ContextMenu::ImageExtract()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
@@ -859,7 +859,7 @@ void ContextMenu::ImageExtract(void)
     }
 }
 
-void ContextMenu::MakeShapeMenu (void)
+void ContextMenu::MakeShapeMenu ()
 {
     Gtk::MenuItem* mi;
     
@@ -870,7 +870,7 @@ void ContextMenu::MakeShapeMenu (void)
     insert(*mi,positionOfLastDialog++);
 }
 
-void ContextMenu::FillSettings(void)
+void ContextMenu::FillSettings()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
@@ -879,7 +879,7 @@ void ContextMenu::FillSettings(void)
     _desktop->_dlg_mgr->showDialog("FillAndStroke");
 }
 
-void ContextMenu::MakeTextMenu (void)
+void ContextMenu::MakeTextMenu ()
 {
     Gtk::MenuItem* mi;
 
@@ -902,7 +902,7 @@ void ContextMenu::MakeTextMenu (void)
     insert(*mi,positionOfLastDialog++);
 }
 
-void ContextMenu::TextSettings (void)
+void ContextMenu::TextSettings ()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
@@ -911,7 +911,7 @@ void ContextMenu::TextSettings (void)
     _desktop->_dlg_mgr->showDialog("TextFont");
 }
 
-void ContextMenu::SpellcheckSettings (void)
+void ContextMenu::SpellcheckSettings ()
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);

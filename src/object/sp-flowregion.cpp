@@ -89,7 +89,7 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
     this->UpdateComputed();
 }
 
-void SPFlowregion::UpdateComputed(void)
+void SPFlowregion::UpdateComputed()
 {
     for (std::vector<Shape*>::iterator it = computed.begin() ; it != computed.end() ; ++it) {
         delete *it;
@@ -236,7 +236,7 @@ void SPFlowregionExclude::update(SPCtx *ctx, unsigned int flags) {
 }
 
 
-void SPFlowregionExclude::UpdateComputed(void)
+void SPFlowregionExclude::UpdateComputed()
 {
     if (computed) {
         delete computed;

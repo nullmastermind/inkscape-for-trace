@@ -45,7 +45,7 @@ namespace Implementation {
                variables.
 
 */
-XSLT::XSLT(void) :
+XSLT::XSLT() :
     Implementation(),
     _filename(""),
     _parsedDoc(nullptr),

@@ -106,26 +106,26 @@ class Effect : public Extension {
 public:
                  Effect  (Inkscape::XML::Node * in_repr,
                           Implementation::Implementation * in_imp);
-        ~Effect  (void) override;
-    bool check                (void) override;
+        ~Effect  () override;
+    bool check                () override;
     bool         prefs   (Inkscape::UI::View::View * doc);
     void         effect  (Inkscape::UI::View::View * doc);
     /** \brief  Accessor function for a pointer to the verb */
-    Inkscape::Verb * get_verb (void) { return &_verb; };
+    Inkscape::Verb * get_verb () { return &_verb; };
 
     /** \brief  Static function to get the last effect used */
-    static Effect *  get_last_effect (void) { return _last_effect; };
+    static Effect *  get_last_effect () { return _last_effect; };
     static void      set_last_effect (Effect * in_effect);
 
-    static void      place_menus (void);
+    static void      place_menus ();
     void             place_menu (Inkscape::XML::Node * menus);
 
-    Gtk::VBox *    get_info_widget(void);
+    Gtk::VBox *    get_info_widget();
 
     bool no_doc; // if true, the effect does not process SVG document at all, so no need to save, read, and watch for errors
     bool no_live_preview; // if true, the effect does not need "live preview" checkbox in its dialog
 
-    PrefDialog *get_pref_dialog (void);
+    PrefDialog *get_pref_dialog ();
     void        set_pref_dialog (PrefDialog * prefdialog);
 private:
     static gchar *   remove_ (gchar * instr);

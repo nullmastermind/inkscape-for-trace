@@ -122,7 +122,7 @@ public:
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamIntAdjustment::val_changed));
     };
 
-    void val_changed (void);
+    void val_changed ();
 }; /* class ParamIntAdjustment */
 
 /**
@@ -131,7 +131,7 @@ public:
  * This function just grabs the value from the adjustment and writes
  * it to the parameter.  Very simple, but yet beautiful.
  */
-void ParamIntAdjustment::val_changed(void)
+void ParamIntAdjustment::val_changed()
 {
     //std::cout << "Value Changed to: " << this->get_value() << std::endl;
     _pref->set((int)this->get_value(), _doc, _node);

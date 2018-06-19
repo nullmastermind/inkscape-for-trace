@@ -65,13 +65,13 @@ static uint32_t ICMmode = 0;  // not used yet, but code to read it from EMF impl
 static uint32_t BLTmode = 0;
 float           faraway = 10000000; // used in "exclude" clips, hopefully well outside any real drawing!
 
-Emf::Emf (void) // The null constructor
+Emf::Emf () // The null constructor
 {
     return;
 }
 
 
-Emf::~Emf (void) //The destructor
+Emf::~Emf () //The destructor
 {
     return;
 }
@@ -3609,7 +3609,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
 
 void
-Emf::init (void)
+Emf::init ()
 {
     /* EMF in */
     Inkscape::Extension::build_from_mem(

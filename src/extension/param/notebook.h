@@ -55,11 +55,11 @@ private:
                       bool hidden,
                       Inkscape::Extension::Extension * ext,
                       Inkscape::XML::Node * xml);
-        ~ParamNotebookPage(void) override;
+        ~ParamNotebookPage() override;
 
         Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
         void paramString (std::list <std::string> &list);
-        gchar * get_text (void) {return _text;};
+        gchar * get_text () {return _text;};
         Parameter * get_param (const gchar * name) override;
     }; /* class ParamNotebookPage */
 
@@ -75,7 +75,7 @@ public:
                   int indent,
                   Inkscape::Extension::Extension * ext,
                   Inkscape::XML::Node * xml);
-    ~ParamNotebook(void) override;
+    ~ParamNotebook() override;
 
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
 

@@ -80,7 +80,7 @@ struct SPColorSelectorClass {
     void (* changed) (SPColorSelector *rgbsel);
 };
 
-GType sp_color_selector_get_type(void);
+GType sp_color_selector_get_type();
 
 GtkWidget *sp_color_selector_new( GType selector_type );
 

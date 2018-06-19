@@ -92,7 +92,7 @@ SPAttributeTable::~SPAttributeTable ()
     clear();
 }
 
-void SPAttributeTable::clear(void)
+void SPAttributeTable::clear()
 {
     if (table)
     {
@@ -228,7 +228,7 @@ void SPAttributeTable::change_object(SPObject *object)
 
 }
 
-void SPAttributeTable::reread_properties(void)
+void SPAttributeTable::reread_properties()
 {
     blocked = true;
 	for (guint i = 0; i < (_attributes.size()); i++)

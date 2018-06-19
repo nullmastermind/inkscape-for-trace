@@ -64,7 +64,7 @@ public:
     unsigned int text(Inkscape::Extension::Print *module, char const *text,
                               Geom::Point const &p, SPStyle const *style) override;
 
-    static void init (void);
+    static void init ();
 protected:
     static void  smuggle_adxky_out(const char *string, int16_t **adx, double *ky, int *rtl, int *ndx, float scale);
 

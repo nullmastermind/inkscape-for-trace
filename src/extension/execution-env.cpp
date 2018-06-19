@@ -63,7 +63,7 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
 
     Destroys the dialog if created and the document cache.
 */
-ExecutionEnv::~ExecutionEnv (void) {
+ExecutionEnv::~ExecutionEnv () {
     if (_visibleDialog != nullptr) {
         _visibleDialog->hide();
         delete _visibleDialog;
@@ -79,7 +79,7 @@ ExecutionEnv::~ExecutionEnv (void) {
     from the effect's implementation.
 */
 void
-ExecutionEnv::genDocCache (void) {
+ExecutionEnv::genDocCache () {
     if (_docCache == nullptr) {
         // printf("Gen Doc Cache\n");
         _docCache = _effect->get_imp()->newDocCache(_effect, _doc);
@@ -92,7 +92,7 @@ ExecutionEnv::genDocCache (void) {
     Just delete it.
 */
 void
-ExecutionEnv::killDocCache (void) {
+ExecutionEnv::killDocCache () {
     if (_docCache != nullptr) {
         // printf("Killed Doc Cache\n");
         delete _docCache;
@@ -107,7 +107,7 @@ ExecutionEnv::killDocCache (void) {
     And make sure to connect to the cancel.
 */
 void
-ExecutionEnv::createWorkingDialog (void) {
+ExecutionEnv::createWorkingDialog () {
     if (_visibleDialog != nullptr) {
         _visibleDialog->hide();
         delete _visibleDialog;
@@ -153,7 +153,7 @@ ExecutionEnv::workingCanceled( const int /*resp*/) {
 }
 
 void
-ExecutionEnv::cancel (void) {
+ExecutionEnv::cancel () {
     SPDesktop *desktop = (SPDesktop *)_doc;
     desktop->clearWaitingCursor();
     _effect->get_imp()->cancelProcessing();
@@ -161,13 +161,13 @@ ExecutionEnv::cancel (void) {
 }
 
 void
-ExecutionEnv::undo (void) {
+ExecutionEnv::undo () {
     DocumentUndo::cancel(_doc->doc());
     return;
 }
 
 void
-ExecutionEnv::commit (void) {
+ExecutionEnv::commit () {
     DocumentUndo::done(_doc->doc(), SP_VERB_NONE, _(_effect->get_name()));
     Effect::set_last_effect(_effect);
     _effect->get_imp()->commitDocument();
@@ -176,7 +176,7 @@ ExecutionEnv::commit (void) {
 }
 
 void
-ExecutionEnv::reselect (void) {
+ExecutionEnv::reselect () {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(desktop) {
         Inkscape::Selection * selection = desktop->getSelection();
@@ -188,7 +188,7 @@ ExecutionEnv::reselect (void) {
 }
 
 void
-ExecutionEnv::run (void) {
+ExecutionEnv::run () {
     _state = ExecutionEnv::RUNNING;
     if (_show_working) {
         createWorkingDialog();
@@ -203,12 +203,12 @@ ExecutionEnv::run (void) {
 }
 
 void
-ExecutionEnv::runComplete (void) {
+ExecutionEnv::runComplete () {
     _mainloop->quit();
 }
 
 bool
-ExecutionEnv::wait (void) {
+ExecutionEnv::wait () {
     if (_state != ExecutionEnv::COMPLETE) {
         if (_mainloop) {
             _mainloop = Glib::MainLoop::create(false);

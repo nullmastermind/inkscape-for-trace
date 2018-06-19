@@ -70,7 +70,7 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(const gchar * name,
     }
 }
 
-ParamNotebook::ParamNotebookPage::~ParamNotebookPage (void)
+ParamNotebook::ParamNotebookPage::~ParamNotebookPage ()
 {
     //destroy parameters
     for (auto param:parameters) {
@@ -260,7 +260,7 @@ ParamNotebook::ParamNotebook(const gchar * name,
         _value = g_strdup(defaultval);  // allocate space for _value
 }
 
-ParamNotebook::~ParamNotebook (void)
+ParamNotebook::~ParamNotebook ()
 {
     //destroy pages
     for (auto page:pages) {

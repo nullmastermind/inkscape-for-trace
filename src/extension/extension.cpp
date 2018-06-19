@@ -133,7 +133,7 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
     than freeing it because it may (I wouldn't know why) be referenced
     in another place.
 */
-Extension::~Extension (void)
+Extension::~Extension ()
 {
 //    printf("Extension Destructor: %s\n", name);
     set_state(STATE_UNLOADED);
@@ -217,7 +217,7 @@ Extension::set_state (state_t in_state)
     \brief    A getter for the state variable.
 */
 Extension::state_t
-Extension::get_state (void)
+Extension::get_state ()
 {
     return _state;
 }
@@ -227,7 +227,7 @@ Extension::get_state (void)
     \brief   A quick function to test the state of the extension
 */
 bool
-Extension::loaded (void)
+Extension::loaded ()
 {
     return get_state() == STATE_LOADED;
 }
@@ -249,7 +249,7 @@ Extension::loaded (void)
     functionality of Inkscape to be available.
 */
 bool
-Extension::check (void)
+Extension::check ()
 {
     bool retval = true;
 
@@ -321,7 +321,7 @@ Extension::printFailure (Glib::ustring reason)
     \brief   A getter for the internal Repr, does not add a reference.
 */
 Inkscape::XML::Node *
-Extension::get_repr (void)
+Extension::get_repr ()
 {
     return repr;
 }
@@ -331,7 +331,7 @@ Extension::get_repr (void)
     \brief   Whether this extension should hide the "working, please wait" dialog
 */
 bool
-Extension::is_silent (void)
+Extension::is_silent ()
 {
     return silent;
 }
@@ -341,7 +341,7 @@ Extension::is_silent (void)
     \brief   Get the ID of this extension - not a copy don't delete!
 */
 gchar *
-Extension::get_id (void)
+Extension::get_id ()
 {
     return id;
 }
@@ -351,7 +351,7 @@ Extension::get_id (void)
     \brief   Get the name of this extension - not a copy don't delete!
 */
 gchar *
-Extension::get_name (void)
+Extension::get_name ()
 {
     return name;
 }
@@ -372,7 +372,7 @@ Extension::get_name (void)
     Running this function is irreversable.
 */
 void
-Extension::deactivate (void)
+Extension::deactivate ()
 {
     set_state(STATE_DEACTIVATED);
 
@@ -389,7 +389,7 @@ Extension::deactivate (void)
     \brief   Find out the status of the extension
 */
 bool
-Extension::deactivated (void)
+Extension::deactivated ()
 {
     return get_state() == STATE_DEACTIVATED;
 }
@@ -650,7 +650,7 @@ Extension::set_param_color (const gchar * name, guint32 color, SPDocument * doc,
 
 /** \brief A function to open the error log file. */
 void
-Extension::error_file_open (void)
+Extension::error_file_open ()
 {
     gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
     gchar * filename = g_filename_from_utf8( ext_error_file, -1, nullptr, nullptr, nullptr );
@@ -665,7 +665,7 @@ Extension::error_file_open (void)
 
 /** \brief A function to close the error log file. */
 void
-Extension::error_file_close (void)
+Extension::error_file_close ()
 {
     error_file.close();
 };
@@ -674,7 +674,7 @@ Extension::error_file_close (void)
 class AutoGUI : public Gtk::VBox {
 public:
     /** \brief  Create an AutoGUI object */
-    AutoGUI (void) : Gtk::VBox() {};
+    AutoGUI () : Gtk::VBox() {};
 
     /**
      * Adds a widget with a tool tip into the autogui.
@@ -754,7 +754,7 @@ Extension::paramListString (std::list <std::string> &retlist)
 /* Extension editor dialog stuff */
 
 Gtk::VBox *
-Extension::get_info_widget(void)
+Extension::get_info_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
 
@@ -794,7 +794,7 @@ void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Gri
 }
 
 Gtk::VBox *
-Extension::get_help_widget(void)
+Extension::get_help_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
 
@@ -814,7 +814,7 @@ Extension::get_help_widget(void)
 }
 
 Gtk::VBox *
-Extension::get_params_widget(void)
+Extension::get_params_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
     Gtk::Widget * content = Gtk::manage(new Gtk::Label("Params"));

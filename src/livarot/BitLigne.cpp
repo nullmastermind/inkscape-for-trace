@@ -39,13 +39,13 @@ BitLigne::BitLigne(int ist,int ien,float iScale)
 	curMin=en;
 	curMax=st;
 }
-BitLigne::~BitLigne(void)
+BitLigne::~BitLigne()
 {
 	g_free(fullB);
 	g_free(partB);
 }
 
-void             BitLigne::Reset(void)
+void             BitLigne::Reset()
 {
 	curMin=en;
 	curMax=st+1;
@@ -167,7 +167,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
 }
 
 
-void             BitLigne::Affiche(void)
+void             BitLigne::Affiche()
 {
 	for (int i=0;i<nbInt;i++) printf(" %.8x",fullB[i]);
 	printf("\n");

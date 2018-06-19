@@ -240,8 +240,8 @@ private:
 public:
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
-    void emitReconstructionStart(void);
-    void emitReconstructionFinish(void);
+    void emitReconstructionStart();
+    void emitReconstructionFinish();
 
     unsigned long serial() const;
     void reset_key(void *dummy);

@@ -1118,11 +1118,11 @@ SelectedStyle::update()
     }
 }
 
-void SelectedStyle::opacity_0(void) {_opacity_sb.set_value(0);}
-void SelectedStyle::opacity_025(void) {_opacity_sb.set_value(25);}
-void SelectedStyle::opacity_05(void) {_opacity_sb.set_value(50);}
-void SelectedStyle::opacity_075(void) {_opacity_sb.set_value(75);}
-void SelectedStyle::opacity_1(void) {_opacity_sb.set_value(100);}
+void SelectedStyle::opacity_0() {_opacity_sb.set_value(0);}
+void SelectedStyle::opacity_025() {_opacity_sb.set_value(25);}
+void SelectedStyle::opacity_05() {_opacity_sb.set_value(50);}
+void SelectedStyle::opacity_075() {_opacity_sb.set_value(75);}
+void SelectedStyle::opacity_1() {_opacity_sb.set_value(100);}
 
 void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
 
