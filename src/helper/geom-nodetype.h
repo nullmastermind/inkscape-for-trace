@@ -25,7 +25,7 @@ namespace Geom {
  *  derivate is connected. (Thus 2 means that the node is continuous
  *  to the second derivative, i.e. has matching endpoints and tangents)
  */
-typedef enum {
+enum NodeType {
 /**  Discontinuous node, usually either start or endpoint of a path */
     NODE_NONE,
 /**  This node continuously joins two segments, but the unit tangent is discontinuous.*/
@@ -34,7 +34,7 @@ typedef enum {
     NODE_SMOOTH,
 /**  This node is symmetric. I.e. continuously joins two segments with continuous derivative */
     NODE_SYMM
-} NodeType;
+};
 
 
 NodeType get_nodetype(Curve const &c_incoming, Curve const &c_outgoing);

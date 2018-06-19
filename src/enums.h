@@ -13,7 +13,7 @@
  */
 
 /* Anchor types (imported from Gtk) */
-typedef enum
+enum SPAnchorType
 {
   SP_ANCHOR_CENTER,
   SP_ANCHOR_NORTH,
@@ -32,7 +32,7 @@ typedef enum
   SP_ANCHOR_SE		= SP_ANCHOR_SOUTH_EAST,
   SP_ANCHOR_W		= SP_ANCHOR_WEST,
   SP_ANCHOR_E		= SP_ANCHOR_EAST
-} SPAnchorType;
+};
 
 /* preserveAspectRatio */
 

@@ -15,13 +15,13 @@ namespace Widget {
 
 class ColorSlider;
 
-typedef enum {
+enum SPColorScalesMode {
     SP_COLOR_SCALES_MODE_NONE = 0,
     SP_COLOR_SCALES_MODE_RGB = 1,
     SP_COLOR_SCALES_MODE_HSL = 2,
     SP_COLOR_SCALES_MODE_CMYK = 3,
     SP_COLOR_SCALES_MODE_HSV = 4
-} SPColorScalesMode;
+};
 
 class ColorScales
     : public Gtk::Grid

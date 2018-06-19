@@ -112,12 +112,12 @@ std::vector<SPItem*> &get_all_items(std::vector<SPItem*> &list, SPObject *from, 
 std::vector<SPItem*> sp_degroup_list (std::vector<SPItem*> &items);
 
 /* selection cycling */
-typedef enum
+enum SPCycleType
 {
     SP_CYCLE_SIMPLE,
     SP_CYCLE_VISIBLE, // cycle only visible items
     SP_CYCLE_FOCUS // readjust visible area to view selected item
-} SPCycleType;
+};
 
 
 

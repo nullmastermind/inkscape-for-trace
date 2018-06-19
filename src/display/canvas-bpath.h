@@ -36,30 +36,30 @@ class Shape;
 
 /* stroke-linejoin */
 
-typedef enum {
+enum SPStrokeJoinType {
     SP_STROKE_LINEJOIN_MITER,
     SP_STROKE_LINEJOIN_ROUND,
     SP_STROKE_LINEJOIN_BEVEL
-} SPStrokeJoinType;
+};
 
 /* stroke-linecap */
 
-typedef enum {
+enum SPStrokeCapType {
     SP_STROKE_LINECAP_BUTT,
     SP_STROKE_LINECAP_ROUND,
     SP_STROKE_LINECAP_SQUARE
-} SPStrokeCapType;
+};
 
 
 /* fill-rule */
 /* clip-rule */
 
-typedef enum {
+enum SPWindRule {
     SP_WIND_RULE_NONZERO,
     SP_WIND_RULE_INTERSECT,
     SP_WIND_RULE_EVENODD,
     SP_WIND_RULE_POSITIVE
-} SPWindRule;
+};
 
 
 struct SPCanvasBPath {

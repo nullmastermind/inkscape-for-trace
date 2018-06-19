@@ -43,22 +43,22 @@ namespace Dialog
  * Used for setting filters and options, and
  * reading them back from user selections.
  */
-typedef enum {
+enum FileDialogType {
     SVG_TYPES,
     IMPORT_TYPES,
     EXPORT_TYPES,
     EXE_TYPES,
     SWATCH_TYPES,
     CUSTOM_TYPE
-    } FileDialogType;
+    };
 
 /**
  * Used for returning the type selected in a SaveAs
  */
-typedef enum {
+enum FileDialogSelectionType {
     SVG_NAMESPACE,
     SVG_NAMESPACE_WITH_EXTENSIONS
-    } FileDialogSelectionType;
+    };
 
 
 /**
@@ -248,13 +248,13 @@ class FileExportDialog
 {
 public:
 
-    typedef enum
+    enum ScopeType
         {
         SCOPE_DOCUMENT,
         SCOPE_PAGE,
         SCOPE_SELECTION,
         SCOPE_CUSTOM
-        } ScopeType;
+        };
 
     /**
      * Constructor.  Do not call directly .   Use the factory.

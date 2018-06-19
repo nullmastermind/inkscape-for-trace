@@ -90,13 +90,13 @@ class FileRec
 {
 public:
 
-    typedef enum
+    enum FileType
         {
         UNKNOWN,
         CFILE,
         HFILE,
         OFILE
-        } FileType;
+        };
 
     /**
      *  Constructor

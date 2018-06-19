@@ -75,7 +75,7 @@ namespace Glib {
     class ustring;
 }
 
-typedef enum {
+enum SPExceptionType {
     SP_NO_EXCEPTION,
     SP_INDEX_SIZE_ERR,
     SP_DOMSTRING_SIZE_ERR,
@@ -92,7 +92,7 @@ typedef enum {
     SP_INVALID_MODIFICATION_ERR,
     SP_NAMESPACE_ERR,
     SP_INVALID_ACCESS_ERR
-} SPExceptionType;
+};
 
 /// An attempt to implement exceptions, unused?
 struct SPException {

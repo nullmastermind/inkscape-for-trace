@@ -46,13 +46,13 @@ struct _ApplicationInterfaceClass {
 };
 
 
-typedef enum
+enum InkscapeError
 {
   INKSCAPE_ERROR_SELECTION,
   INKSCAPE_ERROR_OBJECT,
   INKSCAPE_ERROR_VERB,
   INKSCAPE_ERROR_OTHER
-} InkscapeError;
+};
 
 
 

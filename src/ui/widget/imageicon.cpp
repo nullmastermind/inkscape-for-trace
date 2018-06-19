@@ -27,11 +27,11 @@ namespace Widget
 
 
 
-typedef enum {
+enum FileDialogType {
     SVG_TYPES,
     IMPORT_TYPES,
     EXPORT_TYPES
-    } FileDialogType;
+    };
 
 
 /*#########################################################################

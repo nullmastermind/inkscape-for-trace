@@ -19,7 +19,7 @@
 namespace Inkscape {
 namespace UI {
 
-typedef enum {
+enum PreviewStyle {
     PREVIEW_STYLE_ICON = 0,
     PREVIEW_STYLE_PREVIEW,
     PREVIEW_STYLE_NAME,
@@ -28,12 +28,12 @@ typedef enum {
     PREVIEW_STYLE_ICON_BLURB,
     PREVIEW_STYLE_PREVIEW_NAME,
     PREVIEW_STYLE_PREVIEW_BLURB
-} PreviewStyle;
+};
 
-typedef enum {
+enum ViewType {
     VIEW_TYPE_LIST = 0,
     VIEW_TYPE_GRID
-} ViewType;
+};
 
 
 class Previewable

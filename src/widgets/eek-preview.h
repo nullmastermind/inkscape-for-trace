@@ -53,7 +53,7 @@ G_BEGIN_DECLS
 #define IS_EEK_PREVIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE( (klass), EEK_PREVIEW_TYPE))
 #define EEK_PREVIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS( (obj), EEK_PREVIEW_TYPE, EekPreviewClass))
 
-typedef enum {
+enum PreviewStyle {
     PREVIEW_STYLE_ICON = 0,
     PREVIEW_STYLE_PREVIEW,
     PREVIEW_STYLE_NAME,
@@ -62,23 +62,23 @@ typedef enum {
     PREVIEW_STYLE_ICON_BLURB,
     PREVIEW_STYLE_PREVIEW_NAME,
     PREVIEW_STYLE_PREVIEW_BLURB
-} PreviewStyle;
+};
 
-typedef enum {
+enum ViewType {
     VIEW_TYPE_LIST = 0,
     VIEW_TYPE_GRID
-} ViewType;
+};
 
-typedef enum {
+enum PreviewSize {
     PREVIEW_SIZE_TINY = 0,
     PREVIEW_SIZE_SMALL,
     PREVIEW_SIZE_MEDIUM,
     PREVIEW_SIZE_BIG,
     PREVIEW_SIZE_BIGGER,
     PREVIEW_SIZE_HUGE
-} PreviewSize;
+};
 
-typedef enum {
+enum LinkType {
   PREVIEW_LINK_NONE = 0,
   PREVIEW_LINK_IN = 1,
   PREVIEW_LINK_OUT = 2,
@@ -86,14 +86,14 @@ typedef enum {
   PREVIEW_FILL = 8,
   PREVIEW_STROKE = 16,
   PREVIEW_LINK_ALL = 31
-} LinkType;
+};
 
-typedef enum {
+enum BorderStyle {
     BORDER_NONE = 0,
     BORDER_SOLID,
     BORDER_WIDE,
     BORDER_SOLID_LAST_ROW,
-} BorderStyle;
+};
 
 typedef struct _EekPreview       EekPreview;
 typedef struct _EekPreviewClass  EekPreviewClass;

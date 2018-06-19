@@ -84,7 +84,7 @@
 using Inkscape::DocumentUndo;
 
 /* Drag and Drop */
-typedef enum {
+enum ui_drop_target_info {
     URI_LIST,
     SVG_XML_DATA,
     SVG_DATA,
@@ -95,7 +95,7 @@ typedef enum {
     APP_X_COLOR,
     APP_OSWB_COLOR,
     APP_X_INK_PASTE
-} ui_drop_target_info;
+};
 
 static GtkTargetEntry ui_drop_target_entries [] = {
     {(gchar *)"text/uri-list",                0, URI_LIST        },

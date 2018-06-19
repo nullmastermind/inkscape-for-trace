@@ -109,9 +109,9 @@ public:
     int getCurrentPage()
         { return _notebook.get_current_page(); }
 
-    typedef enum {
+    enum PageType {
         PAGE_MOVE, PAGE_SCALE, PAGE_ROTATE, PAGE_SKEW, PAGE_TRANSFORM, PAGE_QTY
-    } PageType;
+    };
 
     void updateSelection(PageType page, Inkscape::Selection *selection);
 

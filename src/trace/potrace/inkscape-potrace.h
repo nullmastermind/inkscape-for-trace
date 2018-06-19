@@ -29,7 +29,7 @@ namespace Trace {
 
 namespace Potrace {
 
-typedef enum
+enum TraceType
     {
     TRACE_BRIGHTNESS,
     TRACE_BRIGHTNESS_MULTI,
@@ -37,7 +37,7 @@ typedef enum
     TRACE_QUANT,
     TRACE_QUANT_COLOR,
     TRACE_QUANT_MONO
-    } TraceType;
+    };
 
 
 class PotraceTracingEngine : public TracingEngine

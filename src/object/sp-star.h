@@ -20,10 +20,10 @@
 #define SP_STAR(obj) (dynamic_cast<SPStar*>((SPObject*)obj))
 #define SP_IS_STAR(obj) (dynamic_cast<const SPStar*>((SPObject*)obj) != NULL)
 
-typedef enum {
+enum SPStarPoint {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
-} SPStarPoint;
+};
 
 class SPStar : public SPPolygon {
 public:

@@ -91,11 +91,11 @@ class Implementation;
 class Extension {
 public:
     /** An enumeration to identify if the Extension has been loaded or not. */
-    typedef enum {
+    enum state_t {
         STATE_LOADED,      /**< The extension has been loaded successfully */
         STATE_UNLOADED,    /**< The extension has not been loaded */
         STATE_DEACTIVATED  /**< The extension is missing something which makes it unusable */
-    } state_t;
+    };
 
 private:
     gchar     *id;                        /**< The unique identifier for the Extension */

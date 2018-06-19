@@ -27,7 +27,7 @@
 #include "object/sp-root.h"
 #include "style.h"
 
-typedef enum { REF_HREF, REF_STYLE, REF_URL, REF_CLIPBOARD } ID_REF_TYPE;
+enum ID_REF_TYPE { REF_HREF, REF_STYLE, REF_URL, REF_CLIPBOARD };
 
 struct IdReference {
     ID_REF_TYPE type;

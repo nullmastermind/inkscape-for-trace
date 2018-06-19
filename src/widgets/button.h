@@ -29,10 +29,10 @@ class View;
 }
 }
 
-typedef enum {
+enum SPButtonType {
 	SP_BUTTON_TYPE_NORMAL,
 	SP_BUTTON_TYPE_TOGGLE
-} SPButtonType;
+};
 
 struct SPBChoiceData {
 	guchar *px;

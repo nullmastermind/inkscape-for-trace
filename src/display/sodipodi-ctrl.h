@@ -18,7 +18,7 @@
 #define SP_IS_CTRL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CTRL))
 #define SP_IS_CTRL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CTRL))
 
-typedef enum {
+enum SPCtrlShapeType {
     SP_CTRL_SHAPE_SQUARE,
     SP_CTRL_SHAPE_DIAMOND,
     SP_CTRL_SHAPE_CIRCLE,
@@ -26,13 +26,13 @@ typedef enum {
     SP_CTRL_SHAPE_CROSS,
     SP_CTRL_SHAPE_BITMAP,
     SP_CTRL_SHAPE_IMAGE
-} SPCtrlShapeType;
+};
 
 
-typedef enum {
+enum SPCtrlModeType {
     SP_CTRL_MODE_COLOR,
     SP_CTRL_MODE_XOR
-} SPCtrlModeType;
+};
 
 struct SPCtrl : public SPCanvasItem {
     SPCtrlShapeType shape;

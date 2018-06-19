@@ -15,7 +15,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef enum {
+enum SPKnotShapeType {
     SP_KNOT_SHAPE_SQUARE,
     SP_KNOT_SHAPE_DIAMOND,
     SP_KNOT_SHAPE_CIRCLE,
@@ -23,20 +23,20 @@ typedef enum {
     SP_KNOT_SHAPE_CROSS,
     SP_KNOT_SHAPE_BITMAP,
     SP_KNOT_SHAPE_IMAGE
-} SPKnotShapeType;
+};
 
-typedef enum {
+enum SPKnotModeType {
     SP_KNOT_MODE_COLOR,
     SP_KNOT_MODE_XOR
-} SPKnotModeType;
+};
 
-typedef enum {
+enum SPKnotStateType {
     SP_KNOT_STATE_NORMAL,
     SP_KNOT_STATE_MOUSEOVER,
     SP_KNOT_STATE_DRAGGING,
     SP_KNOT_STATE_SELECTED,
     SP_KNOT_STATE_HIDDEN
-} SPKnotStateType;
+};
 
 #define SP_KNOT_VISIBLE_STATES 4
 
