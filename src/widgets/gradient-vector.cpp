@@ -332,7 +332,7 @@ unsigned long sp_gradient_to_hhssll(SPGradient *gr)
     SPStop *stop = gr->getFirstStop();
     unsigned long rgba = stop->get_rgba32();
     float hsl[3];
-    sp_color_rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
+    SPColor::rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
 
     return ((int)(hsl[0]*100 * 10000)) + ((int)(hsl[1]*100 * 100)) + ((int)(hsl[2]*100 * 1));
 }

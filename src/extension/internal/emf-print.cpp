@@ -378,7 +378,7 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
                 opacity = 0.0;    // basically the same as no fill
             }
 #endif
-            sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+            style->fill.value.color.get_rgb_floatv(rgb);
             hatchColor = U_RGB(255 * rgb[0], 255 * rgb[1], 255 * rgb[2]);
 
             fmode = style->fill_rule.computed == 0 ? U_WINDING : (style->fill_rule.computed == 2 ? U_ALTERNATE : U_ALTERNATE);
@@ -646,7 +646,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                 // default fill
             }
         } else if (style->stroke.isColor()) { // test last, always seems to be set, even for other types above
-            sp_color_get_rgb_floatv(&style->stroke.value.color, rgb);
+            style->stroke.value.color.get_rgb_floatv(rgb);
             brushStyle = U_BS_SOLID;
             hatchColor = U_RGB(255 * rgb[0], 255 * rgb[1], 255 * rgb[2]);
             hatchType  = U_HS_SOLIDCLR;
@@ -1175,10 +1175,10 @@ unsigned int PrintEmf::fill(
 
         SPRadialGradient *tg = (SPRadialGradient *)(gv.grad);   // linear/radial are the same here
         nstops = tg->vector.stops.size();
-        sp_color_get_rgb_floatv(&tg->vector.stops[0].color, rgb);
+        tg->vector.stops[0].color.get_rgb_floatv(rgb);
         opa    = tg->vector.stops[0].opacity;  // first stop
         c1     = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
-        sp_color_get_rgb_floatv(&tg->vector.stops[nstops - 1].color, rgb);
+        tg->vector.stops[nstops - 1].color.get_rgb_floatv(rgb);
         opa    = tg->vector.stops[nstops - 1].opacity;  // last stop
         c2     = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
 
@@ -1208,7 +1208,7 @@ unsigned int PrintEmf::fill(
             (void) create_brush(style, &wc);
             print_pathv(pathvr, fill_transform);
 
-            sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+            tg->vector.stops[istop].color.get_rgb_floatv(rgb);
             opa = tg->vector.stops[istop].opacity;
             c2 = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
 
@@ -1234,7 +1234,7 @@ unsigned int PrintEmf::fill(
                     doff_base  = doff_range;
                     doff_range = tg->vector.stops[istop].offset;  // next or last stop
                     c1 = c2;
-                    sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                    tg->vector.stops[istop].color.get_rgb_floatv(rgb);
                     opa = tg->vector.stops[istop].opacity;
                     c2 = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
                 }
@@ -1300,7 +1300,7 @@ unsigned int PrintEmf::fill(
                      rcb.top    = round(outUL[Y]);
                      rcb.right  = round(outLR[X]);
                      rcb.bottom = round(outLR[Y]);
-                     sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                     tg->vector.stops[istop].color.get_rgb_floatv(rgb);
                      opa = tg->vector.stops[istop].opacity;
                      c2 = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
 
@@ -1350,7 +1350,7 @@ unsigned int PrintEmf::fill(
                 pathvr = sp_pathvector_boolop(pathvc, pathv, bool_op_inters, (FillRule) fill_nonZero, frb);
                 print_pathv(pathvr, fill_transform);
 
-                sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                tg->vector.stops[istop].color.get_rgb_floatv(rgb);
                 opa = tg->vector.stops[istop].opacity;
                 c2 = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
 
@@ -1375,7 +1375,7 @@ unsigned int PrintEmf::fill(
                         doff_base  = doff_range;
                         doff_range = tg->vector.stops[istop].offset;  // next or last stop
                         c1 = c2;
-                        sp_color_get_rgb_floatv(&tg->vector.stops[istop].color, rgb);
+                        tg->vector.stops[istop].color.get_rgb_floatv(rgb);
                         opa = tg->vector.stops[istop].opacity;
                         c2 = U_RGBA(255 * rgb[0], 255 * rgb[1], 255 * rgb[2], 255 * opa);
                     }
@@ -2096,7 +2096,7 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     }
 
     float rgb[3];
-    sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+    style->fill.value.color.get_rgb_floatv(rgb);
     // only change the text color when it needs to be changed
     if (memcmp(htextcolor_rgb, rgb, 3 * sizeof(float))) {
         memcpy(htextcolor_rgb, rgb, 3 * sizeof(float));

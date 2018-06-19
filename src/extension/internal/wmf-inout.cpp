@@ -703,9 +703,9 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
     char tmp[1024] = {0};
 
     float fill_rgb[3];
-    sp_color_get_rgb_floatv( &(d->dc[d->level].style.fill.value.color), fill_rgb );
+    d->dc[d->level].style.fill.value.color.get_rgb_floatv(fill_rgb);
     float stroke_rgb[3];
-    sp_color_get_rgb_floatv(&(d->dc[d->level].style.stroke.value.color), stroke_rgb);
+    d->dc[d->level].style.stroke.value.color.get_rgb_floatv(stroke_rgb);
 
     // for U_WMR_BITBLT with no image, try to approximate some of these operations/
     // Assume src color is "white"

@@ -62,24 +62,24 @@ struct SPColor {
     union {
         float c[3];
     } v;
+
+    guint32 get_rgba32_ualpha (guint32 alpha) const;
+    guint32 get_rgba32_falpha (float alpha) const;
+
+    void get_rgb_floatv (float *rgb) const;
+    void get_cmyk_floatv (float *cmyk) const;
+
+    /* Plain mode helpers */
+
+    static void rgb_to_hsv_floatv (float *hsv, float r, float g, float b);
+    static void hsv_to_rgb_floatv (float *rgb, float h, float s, float v);
+
+    static void rgb_to_hsl_floatv (float *hsl, float r, float g, float b);
+    static void hsl_to_rgb_floatv (float *rgb, float h, float s, float l);
+
+    static void rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
+    static void cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
 };
-
-guint32 sp_color_get_rgba32_ualpha (const SPColor *color, guint32 alpha);
-guint32 sp_color_get_rgba32_falpha (const SPColor *color, float alpha);
-
-void sp_color_get_rgb_floatv (const SPColor *color, float *rgb);
-void sp_color_get_cmyk_floatv (const SPColor *color, float *cmyk);
-
-/* Plain mode helpers */
-
-void sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b);
-void sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v);
-
-void sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b);
-void sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l);
-
-void sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
-void sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
 
 
 #endif // SEEN_SP_COLOR_H

@@ -662,7 +662,7 @@ static bool fit_item(SPDesktop *desktop,
 
         if(picker && do_trace){
             float hsl[3];
-            sp_color_rgb_to_hsl_floatv (hsl, r, g, b);
+            SPColor::rgb_to_hsl_floatv (hsl, r, g, b);
 
             gdouble val = 0;
             switch (pick) {

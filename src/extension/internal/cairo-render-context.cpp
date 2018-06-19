@@ -1281,7 +1281,7 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
             // add stops
             for (gint i = 0; unsigned(i) < lg->vector.stops.size(); i++) {
                 float rgb[3];
-                sp_color_get_rgb_floatv(&lg->vector.stops[i].color, rgb);
+                lg->vector.stops[i].color.get_rgb_floatv(rgb);
                 cairo_pattern_add_color_stop_rgba(pattern, lg->vector.stops[i].offset, rgb[0], rgb[1], rgb[2], lg->vector.stops[i].opacity * alpha);
             }
     } else if (SP_IS_RADIALGRADIENT (paintserver)) {
@@ -1303,7 +1303,7 @@ CairoRenderContext::_createPatternForPaintServer(SPPaintServer const *const pain
         // add stops
         for (gint i = 0; unsigned(i) < rg->vector.stops.size(); i++) {
             float rgb[3];
-            sp_color_get_rgb_floatv(&rg->vector.stops[i].color, rgb);
+            rg->vector.stops[i].color.get_rgb_floatv(rgb);
             cairo_pattern_add_color_stop_rgba(pattern, rg->vector.stops[i].offset, rgb[0], rgb[1], rgb[2], rg->vector.stops[i].opacity * alpha);
         }
     } else if (SP_IS_MESHGRADIENT (paintserver)) {
@@ -1393,7 +1393,7 @@ CairoRenderContext::_setFillStyle(SPStyle const *const style, Geom::OptRect cons
         }
     } else if (style->fill.colorSet) {
         float rgb[3];
-        sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+        style->fill.value.color.get_rgb_floatv(rgb);
 
         cairo_set_source_rgba(_cr, rgb[0], rgb[1], rgb[2], alpha);
 
@@ -1414,7 +1414,7 @@ CairoRenderContext::_setStrokeStyle(SPStyle const *style, Geom::OptRect const &p
 
     if (style->stroke.isColor() || (style->stroke.isPaintserver() && !style->getStrokePaintServer()->isValid())) {
         float rgb[3];
-        sp_color_get_rgb_floatv(&style->stroke.value.color, rgb);
+        style->stroke.value.color.get_rgb_floatv(rgb);
 
         cairo_set_source_rgba(_cr, rgb[0], rgb[1], rgb[2], alpha);
     } else {

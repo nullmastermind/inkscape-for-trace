@@ -172,8 +172,8 @@ U_COLORREF PrintMetafile::avg_stop_color(SPGradient *gr)
 
         ops = gr->vector.stops[0   ].opacity;
         ope = gr->vector.stops[last].opacity;
-        sp_color_get_rgb_floatv(&gr->vector.stops[0   ].color, rgbs);
-        sp_color_get_rgb_floatv(&gr->vector.stops[last].color, rgbe);
+        gr->vector.stops[0   ].color.get_rgb_floatv(rgbs);
+        gr->vector.stops[last].color.get_rgb_floatv(rgbe);
 
         /* Replace opacity at start & stop with that fraction background color, then average those two for final color. */
         cr =    U_RGB(

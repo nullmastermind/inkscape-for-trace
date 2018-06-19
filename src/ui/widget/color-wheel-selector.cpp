@@ -198,7 +198,7 @@ void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector
     gimp_color_wheel_get_color(wheel, &h, &s, &v);
 
     float rgb[3] = { 0, 0, 0 };
-    sp_color_hsv_to_rgb_floatv(rgb, h, s, v);
+    SPColor::hsv_to_rgb_floatv(rgb, h, s, v);
 
     SPColor color(rgb[0], rgb[1], rgb[2]);
 
@@ -227,7 +227,7 @@ void ColorWheelSelector::_updateDisplay()
     _updating = true;
     {
         float hsv[3] = { 0, 0, 0 };
-        sp_color_rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
+        SPColor::rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
         gimp_color_wheel_set_color(GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2]);
     }
 

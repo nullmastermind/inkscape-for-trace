@@ -1212,7 +1212,7 @@ RotateableSwatch::~RotateableSwatch() = default;
 double
 RotateableSwatch::color_adjust(float *hsla, double by, guint32 cc, guint modifier)
 {
-    sp_color_rgb_to_hsl_floatv (hsla, SP_RGBA32_R_F(cc), SP_RGBA32_G_F(cc), SP_RGBA32_B_F(cc));
+    SPColor::rgb_to_hsl_floatv (hsla, SP_RGBA32_R_F(cc), SP_RGBA32_G_F(cc), SP_RGBA32_B_F(cc));
     hsla[3] = SP_RGBA32_A_F(cc);
     double diff = 0;
     if (modifier == 2) { // saturation
@@ -1251,7 +1251,7 @@ RotateableSwatch::color_adjust(float *hsla, double by, guint32 cc, guint modifie
     }
 
     float rgb[3];
-    sp_color_hsl_to_rgb_floatv (rgb, hsla[0], hsla[1], hsla[2]);
+    SPColor::hsl_to_rgb_floatv (rgb, hsla[0], hsla[1], hsla[2]);
 
     gchar c[64];
     sp_svg_write_color (c, sizeof(c),

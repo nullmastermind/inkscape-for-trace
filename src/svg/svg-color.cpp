@@ -358,7 +358,7 @@ static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_pt
 
         gfloat rgb[3];
 
-        sp_color_hsl_to_rgb_floatv( rgb, h, s, l );
+        SPColor::hsl_to_rgb_floatv( rgb, h, s, l );
 
         val  =  static_cast<guint>(floor(CLAMP(rgb[0], 0.0, 1.0) * 255.9999)) << 24;
         val |= (static_cast<guint>(floor(CLAMP(rgb[1], 0.0, 1.0) * 255.9999)) << 16);

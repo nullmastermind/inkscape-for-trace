@@ -2287,7 +2287,7 @@ void CloneTiler::apply()
             if (!initial_color.empty()) {
                 guint32 rgba = sp_svg_read_color (initial_color.data(), 0x000000ff);
                 float hsl[3];
-                sp_color_rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
+                SPColor::rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
 
                 double eff_i = (color_alternatei? (i%2) : (i));
                 double eff_j = (color_alternatej? (j%2) : (j));
@@ -2301,7 +2301,7 @@ void CloneTiler::apply()
                 hsl[2] = CLAMP (hsl[2], 0, 1);
 
                 float rgb[3];
-                sp_color_hsl_to_rgb_floatv (rgb, hsl[0], hsl[1], hsl[2]);
+                SPColor::hsl_to_rgb_floatv (rgb, hsl[0], hsl[1], hsl[2]);
                 sp_svg_write_color(color_string, sizeof(color_string), SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1.0));
             }
 
@@ -2334,7 +2334,7 @@ void CloneTiler::apply()
                 float a = SP_RGBA32_A_F(rgba);
 
                 float hsl[3];
-                sp_color_rgb_to_hsl_floatv (hsl, r, g, b);
+                SPColor::rgb_to_hsl_floatv (hsl, r, g, b);
 
                 gdouble val = 0;
                 switch (pick) {

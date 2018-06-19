@@ -241,8 +241,8 @@ static bool compare_pixels(guint32 check, guint32 orig, guint32 merged_orig_pixe
         (method == FLOOD_CHANNELS_L)) {
         double dac = ac;
         double dao = ao;
-        sp_color_rgb_to_hsl_floatv(hsl_check, rc / dac, gc / dac, bc / dac);
-        sp_color_rgb_to_hsl_floatv(hsl_orig, ro / dao, go / dao, bo / dao);
+        SPColor::rgb_to_hsl_floatv(hsl_check, rc / dac, gc / dac, bc / dac);
+        SPColor::rgb_to_hsl_floatv(hsl_orig, ro / dao, go / dao, bo / dao);
     }
     
     switch (method) {

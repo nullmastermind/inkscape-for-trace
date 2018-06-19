@@ -298,7 +298,7 @@ bool PovOutput::doCurve(SPItem *item, const String &id)
             {
             // see color.h for how to parse SPColor
             float rgb[3];
-            sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+            style->fill.value.color.get_rgb_floatv(rgb);
             double const dopacity = ( SP_SCALE24_TO_FLOAT(style->fill_opacity.value)
                                       * effective_opacity(shape) );
             //gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",

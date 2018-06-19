@@ -650,9 +650,9 @@ tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s
 
     if (!do_h || !do_s || !do_l) {
         float hsl_g[3];
-        sp_color_rgb_to_hsl_floatv (hsl_g, SP_RGBA32_R_F(goal), SP_RGBA32_G_F(goal), SP_RGBA32_B_F(goal));
+        SPColor::rgb_to_hsl_floatv (hsl_g, SP_RGBA32_R_F(goal), SP_RGBA32_G_F(goal), SP_RGBA32_B_F(goal));
         float hsl_c[3];
-        sp_color_rgb_to_hsl_floatv (hsl_c, color[0], color[1], color[2]);
+        SPColor::rgb_to_hsl_floatv (hsl_c, color[0], color[1], color[2]);
         if (!do_h) {
             hsl_g[0] = hsl_c[0];
         }
@@ -662,7 +662,7 @@ tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s
         if (!do_l) {
             hsl_g[2] = hsl_c[2];
         }
-        sp_color_hsl_to_rgb_floatv (rgb_g, hsl_g[0], hsl_g[1], hsl_g[2]);
+        SPColor::hsl_to_rgb_floatv (rgb_g, hsl_g[0], hsl_g[1], hsl_g[2]);
     } else {
         rgb_g[0] = SP_RGBA32_R_F(goal);
         rgb_g[1] = SP_RGBA32_G_F(goal);
@@ -679,7 +679,7 @@ static void
 tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
 {
     float hsl_c[3];
-    sp_color_rgb_to_hsl_floatv (hsl_c, color[0], color[1], color[2]);
+    SPColor::rgb_to_hsl_floatv (hsl_c, color[0], color[1], color[2]);
 
     if (do_h) {
         hsl_c[0] += g_random_double_range(-0.5, 0.5) * force;
@@ -697,7 +697,7 @@ tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
         hsl_c[2] += g_random_double_range(-hsl_c[2], 1 - hsl_c[2]) * force;
     }
 
-    sp_color_hsl_to_rgb_floatv (color, hsl_c[0], hsl_c[1], hsl_c[2]);
+    SPColor::hsl_to_rgb_floatv (color, hsl_c[0], hsl_c[1], hsl_c[2]);
 }
 
 static void
@@ -1044,17 +1044,17 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
         // HSL inversion 
         float hsv[3];
         float rgb[3];
-        sp_color_rgb_to_hsv_floatv (hsv, 
+        SPColor::rgb_to_hsv_floatv (hsv, 
                                     SP_RGBA32_R_F(fill_goal),
                                     SP_RGBA32_G_F(fill_goal),
                                     SP_RGBA32_B_F(fill_goal));
-        sp_color_hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
+        SPColor::hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
         fill_goal = SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1);
-        sp_color_rgb_to_hsv_floatv (hsv, 
+        SPColor::rgb_to_hsv_floatv (hsv, 
                                     SP_RGBA32_R_F(stroke_goal),
                                     SP_RGBA32_G_F(stroke_goal),
                                     SP_RGBA32_B_F(stroke_goal));
-        sp_color_hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
+        SPColor::hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
         stroke_goal = SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1);
 #else
         // RGB inversion 

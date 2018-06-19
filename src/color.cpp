@@ -221,14 +221,13 @@ std::string SPColor::toString() const
  * \pre color != NULL && rgb != NULL && rgb[0-2] is meaningful
  */
 void
-sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
+SPColor::get_rgb_floatv(float *rgb) const
 {
-    return_if_fail (color != nullptr);
     return_if_fail (rgb != nullptr);
 
-    rgb[0] = color->v.c[0];
-    rgb[1] = color->v.c[1];
-    rgb[2] = color->v.c[2];
+    rgb[0] = v.c[0];
+    rgb[1] = v.c[1];
+    rgb[2] = v.c[2];
 }
 
 /**
@@ -236,15 +235,14 @@ sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
  * \pre color != NULL && cmyk != NULL && cmyk[0-3] is meaningful
  */
 void
-sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
+SPColor::get_cmyk_floatv(float *cmyk) const
 {
-    return_if_fail (color != nullptr);
     return_if_fail (cmyk != nullptr);
 
-    sp_color_rgb_to_cmyk_floatv( cmyk,
-                                 color->v.c[0],
-                                 color->v.c[1],
-                                 color->v.c[2] );
+    SPColor::rgb_to_cmyk_floatv( cmyk,
+                                 v.c[0],
+                                 v.c[1],
+                                 v.c[2] );
 }
 
 /* Plain mode helpers */
@@ -253,7 +251,7 @@ sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
  * Fill hsv float array from r,g,b float values.
  */
 void
-sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
+SPColor::rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
 {
     float max, min, delta;
 
@@ -290,7 +288,7 @@ sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
  * Fill rgb float array from h,s,v float values.
  */
 void
-sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
+SPColor::hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
 {
     double f, w, q, t, d;
 
@@ -331,7 +329,7 @@ sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
  * Fill hsl float array from r,g,b float values.
  */
 void
-sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
+SPColor::rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
 {
     float max = MAX (MAX (r, g), b);
     float min = MIN (MIN (r, g), b);
@@ -375,7 +373,7 @@ hue_2_rgb (float v1, float v2, float h)
  * Fill rgb float array from h,s,l float values.
  */
 void
-sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
+SPColor::hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
 {
     if (s == 0) {
         rgb[0] = l;
@@ -400,7 +398,7 @@ sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
  * Fill cmyk float array from r,g,b float values.
  */
 void
-sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
+SPColor::rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
 {
     float c, m, y, k, kd;
 
@@ -431,7 +429,7 @@ sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
  * Fill rgb float array from c,m,y,k float values.
  */
 void
-sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k)
+SPColor::cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k)
 {
     float kd;
 

@@ -193,7 +193,7 @@ unsigned int PrintLatex::fill(Inkscape::Extension::Print * /*mod*/,
         os.setf(std::ios::fixed);
 
         fill_opacity=SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
-        sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
+        style->fill.value.color.get_rgb_floatv(rgb);
         os << "{\n\\newrgbcolor{curcolor}{" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "}\n";
         os << "\\pscustom[linestyle=none,fillstyle=solid,fillcolor=curcolor";
         if (fill_opacity!=1.0) {
@@ -229,7 +229,7 @@ unsigned int PrintLatex::stroke(Inkscape::Extension::Print * /*mod*/,
         os.setf(std::ios::fixed);
 
         stroke_opacity=SP_SCALE24_TO_FLOAT(style->stroke_opacity.value);
-        sp_color_get_rgb_floatv(&style->stroke.value.color, rgb);
+        style->stroke.value.color.get_rgb_floatv(rgb);
         os << "{\n\\newrgbcolor{curcolor}{" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "}\n";
 
         os << "\\pscustom[linewidth=" << style->stroke_width.computed*scale<< ",linecolor=curcolor";

@@ -174,7 +174,7 @@ void ColorScales::_recalcColor()
             _getCmykaFloatv(c);
 
             float rgb[3];
-            sp_color_cmyk_to_rgb_floatv(rgb, c[0], c[1], c[2], c[3]);
+            SPColor::cmyk_to_rgb_floatv(rgb, c[0], c[1], c[2], c[3]);
             color.set(rgb[0], rgb[1], rgb[2]);
             alpha = c[4];
             break;
@@ -201,24 +201,24 @@ void ColorScales::_updateDisplay()
 
     switch (_mode) {
         case SP_COLOR_SCALES_MODE_RGB:
-            sp_color_get_rgb_floatv(&color, c);
+            color.get_rgb_floatv(c);
             c[3] = _color.alpha();
             c[4] = 0.0;
             break;
         case SP_COLOR_SCALES_MODE_HSL:
-            sp_color_get_rgb_floatv(&color, tmp);
-            sp_color_rgb_to_hsl_floatv(c, tmp[0], tmp[1], tmp[2]);
+            color.get_rgb_floatv(tmp);
+            SPColor::rgb_to_hsl_floatv(c, tmp[0], tmp[1], tmp[2]);
             c[3] = _color.alpha();
             c[4] = 0.0;
             break;
         case SP_COLOR_SCALES_MODE_HSV:
-            sp_color_get_rgb_floatv(&color, tmp);
-            sp_color_rgb_to_hsv_floatv(c, tmp[0], tmp[1], tmp[2]);
+            color.get_rgb_floatv(tmp);
+            SPColor::rgb_to_hsv_floatv(c, tmp[0], tmp[1], tmp[2]);
             c[3] = _color.alpha();
             c[4] = 0.0;
             break;
         case SP_COLOR_SCALES_MODE_CMYK:
-            sp_color_get_cmyk_floatv(&color, c);
+            color.get_cmyk_floatv(c);
             c[4] = _color.alpha();
             break;
         default:
@@ -293,15 +293,15 @@ void ColorScales::_getRgbaFloatv(gfloat *rgba)
             rgba[3] = getScaled(_a[3]);
             break;
         case SP_COLOR_SCALES_MODE_HSL:
-            sp_color_hsl_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+            SPColor::hsl_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             rgba[3] = getScaled(_a[3]);
             break;
         case SP_COLOR_SCALES_MODE_HSV:
-            sp_color_hsv_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+            SPColor::hsv_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             rgba[3] = getScaled(_a[3]);
             break;
         case SP_COLOR_SCALES_MODE_CMYK:
-            sp_color_cmyk_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+            SPColor::cmyk_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
             rgba[3] = getScaled(_a[4]);
             break;
         default:
@@ -318,12 +318,12 @@ void ColorScales::_getCmykaFloatv(gfloat *cmyka)
 
     switch (_mode) {
         case SP_COLOR_SCALES_MODE_RGB:
-            sp_color_rgb_to_cmyk_floatv(cmyka, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+            SPColor::rgb_to_cmyk_floatv(cmyka, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             cmyka[4] = getScaled(_a[3]);
             break;
         case SP_COLOR_SCALES_MODE_HSL:
-            sp_color_hsl_to_rgb_floatv(rgb, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
-            sp_color_rgb_to_cmyk_floatv(cmyka, rgb[0], rgb[1], rgb[2]);
+            SPColor::hsl_to_rgb_floatv(rgb, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+            SPColor::rgb_to_cmyk_floatv(cmyka, rgb[0], rgb[1], rgb[2]);
             cmyka[4] = getScaled(_a[3]);
             break;
         case SP_COLOR_SCALES_MODE_CMYK:
@@ -422,7 +422,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             _updating = TRUE;
             c[0] = 0.0;
 
-            sp_color_rgb_to_hsl_floatv(c, rgba[0], rgba[1], rgba[2]);
+            SPColor::rgb_to_hsl_floatv(c, rgba[0], rgba[1], rgba[2]);
 
             setScaled(_a[0], c[0]);
             setScaled(_a[1], c[1]);
@@ -458,7 +458,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             _updating = TRUE;
             c[0] = 0.0;
 
-            sp_color_rgb_to_hsv_floatv(c, rgba[0], rgba[1], rgba[2]);
+            SPColor::rgb_to_hsv_floatv(c, rgba[0], rgba[1], rgba[2]);
 
             setScaled(_a[0], c[0]);
             setScaled(_a[1], c[1]);
@@ -491,7 +491,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_widget_show(_b[4]);
             _updating = TRUE;
 
-            sp_color_rgb_to_cmyk_floatv(c, rgba[0], rgba[1], rgba[2]);
+            SPColor::rgb_to_cmyk_floatv(c, rgba[0], rgba[1], rgba[2]);
             setScaled(_a[0], c[0]);
             setScaled(_a[1], c[1]);
             setScaled(_a[2], c[2]);
@@ -593,25 +593,25 @@ void ColorScales::_updateSliders(guint channels)
             /* Hue is never updated */
             if ((channels != CSC_CHANNEL_S) && (channels != CSC_CHANNEL_A)) {
                 /* Update saturation */
-                sp_color_hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]));
-                sp_color_hsl_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]));
-                sp_color_hsl_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]));
+                SPColor::hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]));
+                SPColor::hsl_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]));
+                SPColor::hsl_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]));
                 _s[1]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if ((channels != CSC_CHANNEL_V) && (channels != CSC_CHANNEL_A)) {
                 /* Update value */
-                sp_color_hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0);
-                sp_color_hsl_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5);
-                sp_color_hsl_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0);
+                SPColor::hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0);
+                SPColor::hsl_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5);
+                SPColor::hsl_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0);
                 _s[2]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if (channels != CSC_CHANNEL_A) {
                 /* Update alpha */
-                sp_color_hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+                SPColor::hsl_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
                 _s[3]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.0),
                                  SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.5),
                                  SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0));
@@ -621,25 +621,25 @@ void ColorScales::_updateSliders(guint channels)
             /* Hue is never updated */
             if ((channels != CSC_CHANNEL_S) && (channels != CSC_CHANNEL_A)) {
                 /* Update saturation */
-                sp_color_hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]));
-                sp_color_hsv_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]));
-                sp_color_hsv_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]));
+                SPColor::hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]));
+                SPColor::hsv_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]));
+                SPColor::hsv_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]));
                 _s[1]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if ((channels != CSC_CHANNEL_V) && (channels != CSC_CHANNEL_A)) {
                 /* Update value */
-                sp_color_hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0);
-                sp_color_hsv_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5);
-                sp_color_hsv_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0);
+                SPColor::hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0);
+                SPColor::hsv_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5);
+                SPColor::hsv_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0);
                 _s[2]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if (channels != CSC_CHANNEL_A) {
                 /* Update alpha */
-                sp_color_hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
+                SPColor::hsv_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
                 _s[3]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.0),
                                  SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.5),
                                  SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0));
@@ -648,43 +648,43 @@ void ColorScales::_updateSliders(guint channels)
         case SP_COLOR_SCALES_MODE_CMYK:
             if ((channels != CSC_CHANNEL_C) && (channels != CSC_CHANNEL_CMYKA)) {
                 /* Update C */
-                sp_color_cmyk_to_rgb_floatv(rgb0, 0.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgbm, 0.5, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgb1, 1.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb0, 0.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgbm, 0.5, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb1, 1.0, getScaled(_a[1]), getScaled(_a[2]), getScaled(_a[3]));
                 _s[0]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if ((channels != CSC_CHANNEL_M) && (channels != CSC_CHANNEL_CMYKA)) {
                 /* Update M */
-                sp_color_cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]), getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]), getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), 0.0, getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), 0.5, getScaled(_a[2]), getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), 1.0, getScaled(_a[2]), getScaled(_a[3]));
                 _s[1]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if ((channels != CSC_CHANNEL_Y) && (channels != CSC_CHANNEL_CMYKA)) {
                 /* Update Y */
-                sp_color_cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0, getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5, getScaled(_a[3]));
-                sp_color_cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0, getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), 0.0, getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), 0.5, getScaled(_a[3]));
+                SPColor::cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), 1.0, getScaled(_a[3]));
                 _s[2]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if ((channels != CSC_CHANNEL_K) && (channels != CSC_CHANNEL_CMYKA)) {
                 /* Update K */
-                sp_color_cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.0);
-                sp_color_cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.5);
-                sp_color_cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 1.0);
+                SPColor::cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.0);
+                SPColor::cmyk_to_rgb_floatv(rgbm, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 0.5);
+                SPColor::cmyk_to_rgb_floatv(rgb1, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 1.0);
                 _s[3]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgbm[0], rgbm[1], rgbm[2], 1.0),
                                  SP_RGBA32_F_COMPOSE(rgb1[0], rgb1[1], rgb1[2], 1.0));
             }
             if (channels != CSC_CHANNEL_CMYKA) {
                 /* Update alpha */
-                sp_color_cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]),
+                SPColor::cmyk_to_rgb_floatv(rgb0, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]),
                                             getScaled(_a[3]));
                 _s[4]->setColors(SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.0),
                                  SP_RGBA32_F_COMPOSE(rgb0[0], rgb0[1], rgb0[2], 0.5),
@@ -713,7 +713,7 @@ static const gchar *sp_color_scales_hue_map()
         p = map;
         for (h = 0; h < 1024; h++) {
             gfloat rgb[3];
-            sp_color_hsl_to_rgb_floatv(rgb, h / 1024.0, 1.0, 0.5);
+            SPColor::hsl_to_rgb_floatv(rgb, h / 1024.0, 1.0, 0.5);
             *p++ = SP_COLOR_F_TO_U(rgb[0]);
             *p++ = SP_COLOR_F_TO_U(rgb[1]);
             *p++ = SP_COLOR_F_TO_U(rgb[2]);

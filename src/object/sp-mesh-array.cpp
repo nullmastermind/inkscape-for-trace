@@ -1663,7 +1663,7 @@ void SPMeshNodeArray::bicubic( SPMeshNodeArray* smooth, SPMeshType type ) {
         d[i].resize( smooth->patch_columns() + 1 );
         for( unsigned j = 0; j < d[i].size(); ++j ) {
             float rgb_color[3];
-            sp_color_get_rgb_floatv( &this->nodes[ i*3 ][ j*3 ]->color, rgb_color );
+            this->nodes[ i*3 ][ j*3 ]->color.get_rgb_floatv(rgb_color);
             d[i][j].g[0][0] =  rgb_color[ 0 ];
             d[i][j].g[1][0] =  rgb_color[ 1 ];
             d[i][j].g[2][0] =  rgb_color[ 2 ];

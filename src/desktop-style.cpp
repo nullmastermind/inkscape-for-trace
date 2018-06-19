@@ -589,7 +589,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
 
         if (paint_res->set && paint_effectively_set && paint->isColor()) {
             gfloat d[3];
-            sp_color_get_rgb_floatv (&paint->value.color, d);
+            paint->value.color.get_rgb_floatv(d);
 
             // Check if this color is the same as previous
             if (paintImpossible) {
