@@ -15,10 +15,10 @@
 #include <glib.h> // g_assert()
 #include "attributes.h"
 
-typedef struct {
+struct SPStyleProp {
     gint code;
     gchar const *name;
-} SPStyleProp;
+};
 
 /**
  * Lookup dictionary for attributes/properties.

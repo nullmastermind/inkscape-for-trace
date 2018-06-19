@@ -60,10 +60,10 @@ struct SPEBP {
 
 /* write a png file */
 
-typedef struct SPPNGBD {
+struct SPPNGBD {
     guchar const *px;
     int rowstride;
-} SPPNGBD;
+};
 
 /**
  * A simple wrapper to list png_text.

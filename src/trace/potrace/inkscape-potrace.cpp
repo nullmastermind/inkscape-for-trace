@@ -105,11 +105,11 @@ PotraceTracingEngine::~PotraceTracingEngine()
 
 
 
-typedef struct
+struct Point
 {
     double x;
     double y;
-} Point;
+};
 
 
 /**

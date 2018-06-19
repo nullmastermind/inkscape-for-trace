@@ -30,10 +30,10 @@ class Entry;
 
 class SPDesktop;
  
-typedef struct { 
+struct win_data { 
     GtkWidget *win;
     guint stop;
-} win_data;
+};
 
 
 gboolean sp_dialog_event_handler ( GtkWindow *win, 

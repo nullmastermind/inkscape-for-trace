@@ -1097,7 +1097,7 @@ bool FileOpenDialogImplWin32::set_image_preview()
 // for the bbox rectangle.
 #pragma pack( push )
 #pragma pack( 2 )
-typedef struct
+struct APMHEADER
 {
     DWORD       dwKey;
     WORD        hmf;
@@ -1105,7 +1105,8 @@ typedef struct
     WORD        wInch;
     DWORD       dwReserved;
     WORD        wCheckSum;
-} APMHEADER, *PAPMHEADER;
+};
+using PAPMHEADER = APMHEADER *;
 #pragma pack( pop )
 
 

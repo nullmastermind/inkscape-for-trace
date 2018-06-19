@@ -187,12 +187,12 @@ PackedPixelMap *PackedPixelMapCreate(int width, int height);
 ### R G B   M A P
 #########################################################################*/
 
-typedef struct
+struct RGB
 {
     unsigned char r;
     unsigned char g;
     unsigned char b;
-} RGB;
+};
 
 
 

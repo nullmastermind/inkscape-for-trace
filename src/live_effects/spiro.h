@@ -31,11 +31,11 @@ class SPCurve;
 
 namespace Spiro {
 
-typedef struct {
+struct spiro_cp {
     double x;
     double y;
     char ty;
-} spiro_cp;
+};
 
 
 void spiro_run(const spiro_cp *src, int src_len, SPCurve &curve);

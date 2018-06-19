@@ -92,15 +92,15 @@ namespace UI {
 namespace Widget {
 
 
-typedef struct {
+struct DropTracker {
     SelectedStyle* parent;
     int item;
-} DropTracker;
+};
 
 /* Drag and Drop */
-typedef enum {
+enum ui_drop_target_info {
     APP_X_COLOR
-} ui_drop_target_info;
+};
 
 //TODO: warning: deprecated conversion from string constant to ‘gchar*’
 //

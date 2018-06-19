@@ -29,30 +29,22 @@ namespace Internal {
 #define DIRTY_FILL   0x02
 #define DIRTY_STROKE 0x04
 
-typedef struct emf_object {
-    emf_object() :
-        type(0),
-        level(0),
-        lpEMFR(nullptr)
-    {};
-    int type;
-    int level;
-    char *lpEMFR;
-} EMF_OBJECT, *PEMF_OBJECT;
+struct EMF_OBJECT {
+    int type = 0;
+    int level = 0;
+    char *lpEMFR = nullptr;
+};
+using PEMF_OBJECT = EMF_OBJECT *;
 
-typedef struct emf_strings {
-    emf_strings() :
-        size(0),
-        count(0),
-        strings(nullptr)
-    {};
-    int size;         // number of slots allocated in strings
-    int count;        // number of slots used in strings
-    char **strings;   // place to store strings
-} EMF_STRINGS, *PEMF_STRINGS;
+struct EMF_STRINGS {
+    int size = 0;               // number of slots allocated in strings
+    int count = 0;              // number of slots used in strings
+    char **strings = nullptr;   // place to store strings
+};
+using PEMF_STRINGS = EMF_STRINGS *;
 
-typedef struct emf_device_context {
-    emf_device_context() :
+struct EMF_DEVICE_CONTEXT {
+    EMF_DEVICE_CONTEXT() :
         // SPStyle: class with constructor
         font_name(nullptr),
         clip_id(0),
@@ -106,13 +98,14 @@ typedef struct emf_device_context {
     uint32_t        textAlign;
     U_XFORM         worldTransform;
     U_POINTL        cur;
-} EMF_DEVICE_CONTEXT, *PEMF_DEVICE_CONTEXT;
+};
+using PEMF_DEVICE_CONTEXT = EMF_DEVICE_CONTEXT *;
 
 #define EMF_MAX_DC 128
 
-typedef struct emf_callback_data {
+struct EMF_CALLBACK_DATA {
 
-    emf_callback_data() :
+    EMF_CALLBACK_DATA() :
         // dc: array, structure w/ constructor
         level(0),
         E2IdirY(1.0),
@@ -170,7 +163,8 @@ typedef struct emf_callback_data {
 
     int n_obj;
     PEMF_OBJECT emf_obj;
-} EMF_CALLBACK_DATA, *PEMF_CALLBACK_DATA;
+};
+using PEMF_CALLBACK_DATA = EMF_CALLBACK_DATA *;
 
 class Emf :  public Metafile 
 { 

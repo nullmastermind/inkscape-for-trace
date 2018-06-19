@@ -2334,7 +2334,7 @@ void ObjectSet::moveScreen(double dx, double dy)
 
 
 
-typedef struct Forward {
+struct Forward {
     typedef SPObject *Iterator;
 
     static Iterator children(SPObject *o) { return o->firstChild(); }
@@ -2344,9 +2344,9 @@ typedef struct Forward {
     static SPObject *object(Iterator i) { return i; }
     static Iterator next(Iterator i) { return i->getNext(); }
     static bool isNull(Iterator i) {return (!i);}
-} Forward;
+};
 
-typedef struct ListReverse {
+struct ListReverse {
     typedef std::list<SPObject *> *Iterator;
 
     static Iterator children(SPObject *o) {
@@ -2377,7 +2377,7 @@ private:
         }
         return list;
     }
-} ListReverse;
+};
 
 
 

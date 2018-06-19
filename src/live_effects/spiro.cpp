@@ -66,10 +66,10 @@ struct spiro_seg_s {
     double l;
 };
 
-typedef struct {
+struct bandmat {
     double a[11]; /* band-diagonal matrix */
     double al[5]; /* lower part of band-diagonal decomposition */
-} bandmat;
+};
 
 #ifndef M_PI
 #define M_PI            3.14159265358979323846  /* pi */

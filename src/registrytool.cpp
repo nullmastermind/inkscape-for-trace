@@ -29,12 +29,12 @@
 
 #include <glibmm/ustring.h>
 
-typedef struct
+struct KeyTableEntry
 {
     HKEY       key;
     int        strlen;
     const char *str;
-} KeyTableEntry;
+};
 
 
 

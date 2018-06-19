@@ -57,7 +57,7 @@ enum {
     PROP_FOCUS
 };
 
-typedef struct
+struct EekPreviewPrivate
 {
     int          scaledW;
     int          scaledH;
@@ -76,7 +76,7 @@ typedef struct
     guint        border;
     GdkPixbuf   *previewPixbuf;
     GdkPixbuf   *scaled;
-} EekPreviewPrivate;
+};
 
 #define EEK_PREVIEW_GET_PRIVATE(preview) \
   G_TYPE_INSTANCE_GET_PRIVATE(preview, EEK_PREVIEW_TYPE, EekPreviewPrivate)

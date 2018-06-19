@@ -38,25 +38,26 @@ namespace Extension {
 namespace Internal {
 
 /* A coloured pixel. */
-typedef struct {
+struct pixel_t {
     uint8_t red;
     uint8_t green;
     uint8_t blue;
     uint8_t opacity;
-} pixel_t;
+};
 
 /* A picture. */
-    typedef struct  {
+struct bitmap_t {
     pixel_t *pixels;
     size_t width;
     size_t height;
-} bitmap_t;
+};
     
 /* structure to store PNG image bytes */
-typedef struct {
+struct MEMPNG {
       char *buffer;
       size_t size;
-} MEMPNG, *PMEMPNG;
+};
+using PMEMPNG = MEMPNG *;
 
 class Metafile
     : public Inkscape::Extension::Implementation::Implementation

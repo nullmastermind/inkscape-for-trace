@@ -19,10 +19,10 @@
  */
 
 // a step
-typedef struct alpha_step {
+struct alpha_step {
 	int           x;     // position
 	float         delta; // increase or decrease in pixel coverage with respect to the coverage of the previous pixel
-} alpha_step;
+};
 
 
 class AlphaLigne {

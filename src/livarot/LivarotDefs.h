@@ -68,33 +68,30 @@ enum fill_typ
 typedef enum fill_typ FillRule;
 
 // stupid version of dashes: in dash x is plain, dash x+1 must be empty, so the gap field is extremely redundant
-typedef struct one_dash
+struct one_dash
 {
   bool gap;
   double length;
-}
-one_dash;
+};
 
 // color definition structures for the rasterizations primitives (not present here)
-typedef struct std_color
+struct std_color
 {
   uint32_t uCol;
   uint16_t iColA, iColR, iColG, iColB;
   double fColA, fColR, fColG, fColB;
   uint32_t iColATab[256];
-}
-std_color;
+};
 
-typedef struct grad_stop
+struct grad_stop
 {
   double at;
   double ca, cr, cg, cb;
   double iSize;
-}
-grad_stop;
+};
 
 // linear gradient for filling polygons
-typedef struct lin_grad
+struct lin_grad
 {
   int type;			// 0= gradient appears once
   // 1= repeats itself start-end/start-end/start-end...
@@ -104,11 +101,10 @@ typedef struct lin_grad
 //      double       cba,cbr,cbg,cbb; // color at gradient position 1
   int nbStop;
   grad_stop stops[2];
-}
-lin_grad;
+};
 
 // radial gradient (color is funciton of r^2, need to be corrected with a sqrt() to be r)
-typedef struct rad_grad
+struct rad_grad
 {
   int type;			// 0= gradient appears once
   // 1= repeats itself start-end/start-end/start-end...
@@ -117,8 +113,7 @@ typedef struct rad_grad
   double rxx, rxy, ryx, ryy;	// 1/radius
   int nbStop;
   grad_stop stops[2];
-}
-rad_grad;
+};
 
 // functions types for an arbitrary filling shader
 typedef void (*InitColorFunc) (int ph, int pv, void *);	// init for position ph,pv; the last parameter is a pointer
@@ -131,7 +126,7 @@ typedef void (*GotoLigneColorFunc) (int pv, void *);	// move to v-coordinate pv 
 						  // in the InitColorFunc)
 
 // an arbitrary shader
-typedef struct gen_color
+struct gen_color
 {
   double colA, colR, colG, colB;
   InitColorFunc iFunc;
@@ -139,15 +134,14 @@ typedef struct gen_color
   NextLigneColorFunc nlFunc;
   GotoPixelColorFunc gpFunc;
   GotoLigneColorFunc glFunc;
-}
-gen_color;
+};
 
 // info for a run of pixel to fill
-typedef struct raster_info {
+struct raster_info {
 		int       startPix,endPix;  // start and end pixel from the polygon POV
 		int       sth,stv;          // coordinates for the first pixel in the run, in (possibly another) POV
 		uint32_t* buffer;           // pointer to the first pixel in the run
-} raster_info;
+};
 typedef void (*RasterInRunFunc) (raster_info &dest,void *data,int nst,float vst,int nen,float ven);	// init for position ph,pv; the last parameter is a pointer
 
 

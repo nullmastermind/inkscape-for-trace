@@ -198,11 +198,11 @@ unsigned long Crc32::getValue()
 /**
  *
  */
-typedef struct
+struct Huffman
 {
     int *count;  // number of symbols of each length
     int *symbol; // canonically ordered symbols
-} Huffman;
+};
 
 /**
  *
@@ -1137,12 +1137,12 @@ void Deflater::encodeLiteralStatic(unsigned int ch)
 }
 
 
-typedef struct
+struct LenBase
 {
     unsigned int base;
     unsigned int range;
     unsigned int bits;
-} LenBase;
+};
 
 LenBase lenBases[] =
 {
@@ -1177,12 +1177,12 @@ LenBase lenBases[] =
     { 258,  1, 0 }
 };
 
-typedef struct
+struct DistBase
 {
     unsigned int base;
     unsigned int range;
     unsigned int bits;
-} DistBase;
+};
 
 DistBase distBases[] =
 {

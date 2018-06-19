@@ -26,30 +26,22 @@ namespace Internal {
 #define DIRTY_FILL   0x02
 #define DIRTY_STROKE 0x04 // not used currently
 
-typedef struct wmf_object {
-    wmf_object() :
-        type(0),
-        level(0),
-        record(nullptr)
-    {};
-    int type;
-    int level;
-    char *record;
-} WMF_OBJECT, *PWMF_OBJECT;
+struct WMF_OBJECT {
+    int type = 0;
+    int level = 0;
+    char *record = nullptr;
+};
+using PWMF_OBJECT = WMF_OBJECT *;
 
-typedef struct wmf_strings {
-    wmf_strings() :
-        size(0),
-        count(0),
-        strings(nullptr)
-    {};
-    int size;         // number of slots allocated in strings
-    int count;        // number of slots used in strings
-    char **strings;   // place to store strings
-} WMF_STRINGS, *PWMF_STRINGS;
+struct WMF_STRINGS {
+    int size = 0;               // number of slots allocated in strings
+    int count = 0;              // number of slots used in strings
+    char **strings = nullptr;   // place to store strings
+};
+using PWMF_STRINGS = WMF_STRINGS *;
 
-typedef struct wmf_device_context {
-    wmf_device_context() :
+struct WMF_DEVICE_CONTEXT {
+    WMF_DEVICE_CONTEXT() :
         // SPStyle: class with constructor
         font_name(nullptr),
         clip_id(0),
@@ -100,7 +92,8 @@ typedef struct wmf_device_context {
     U_COLORREF      textColor;
     uint16_t        textAlign;
     U_POINT16       cur;
-} WMF_DEVICE_CONTEXT, *PWMF_DEVICE_CONTEXT;
+};
+using PWMF_DEVICE_CONTEXT = WMF_DEVICE_CONTEXT *;
 
 #define WMF_MAX_DC 128
 
@@ -110,9 +103,9 @@ typedef struct wmf_device_context {
 // this fixes it, so some confusion between this struct and the one in emf-inout???
 //typedef struct wmf_callback_data {
 // as does this
-typedef struct wmf_callback_data {
+struct WMF_CALLBACK_DATA {
 
-    wmf_callback_data() :
+    WMF_CALLBACK_DATA() :
         // dc: array, structure w/ constructor
         level(0),
         E2IdirY(1.0),
@@ -164,7 +157,8 @@ typedef struct wmf_callback_data {
     int n_obj;
     int low_water;            // first object slot which _might_ be unoccupied.  Everything below is filled.
     PWMF_OBJECT wmf_obj;
-} WMF_CALLBACK_DATA, *PWMF_CALLBACK_DATA;
+};
+using PWMF_CALLBACK_DATA = WMF_CALLBACK_DATA *;
 
 class Wmf : public Metafile
 {
