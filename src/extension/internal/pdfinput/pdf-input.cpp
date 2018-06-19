@@ -777,6 +777,8 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         is_importvia_poppler = dlg->getImportMethod();
         // printf("PDF import via %s.\n", is_importvia_poppler ? "poppler" : "native");
 #endif
+    } else {
+        page_num = INKSCAPE.get_pdf_page();
     }
 
     SPDocument *doc = nullptr;
