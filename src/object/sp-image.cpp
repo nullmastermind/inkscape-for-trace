@@ -479,7 +479,7 @@ void SPImage::print(SPPrintContext *ctx) {
         Geom::Translate tp(vx, vy);
         Geom::Scale s(this->sx, this->sy);
         t = s * tp;
-        sp_print_image_R8G8B8A8_N(ctx, px, w, h, rs, t, this->style);
+        ctx->image_R8G8B8A8_N(px, w, h, rs, t, this->style);
         delete pb;
     }
 }

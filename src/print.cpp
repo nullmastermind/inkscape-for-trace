@@ -34,49 +34,48 @@
 
 
 unsigned int
-sp_print_bind(SPPrintContext *ctx, Geom::Affine const &transform, float opacity)
+SPPrintContext::bind(Geom::Affine const &transform, float opacity)
 {
-    return ctx->module->bind(transform, opacity);
+    return module->bind(transform, opacity);
 }
 
 unsigned int
-sp_print_release(SPPrintContext *ctx)
+SPPrintContext::release()
 {
-    return ctx->module->release();
+    return module->release();
 }
 
 unsigned int
-sp_print_comment(SPPrintContext *ctx, char const *comment)
+SPPrintContext::comment(char const *comment)
 {
-    return ctx->module->comment(comment);
+    return module->comment(comment);
 }
 
 unsigned int
-sp_print_fill(SPPrintContext *ctx, Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
-              Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
+SPPrintContext::fill(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
+                     Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
 {
-    return ctx->module->fill(pathv, ctm, style, pbox, dbox, bbox);
+    return module->fill(pathv, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
-sp_print_stroke(SPPrintContext *ctx, Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
-                Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
+SPPrintContext::stroke(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
+                       Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox)
 {
-    return ctx->module->stroke(pathv, ctm, style, pbox, dbox, bbox);
+    return module->stroke(pathv, ctm, style, pbox, dbox, bbox);
 }
 
 unsigned int
-sp_print_image_R8G8B8A8_N(SPPrintContext *ctx,
-                          guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-                          Geom::Affine const &transform, SPStyle const *style)
+SPPrintContext::image_R8G8B8A8_N(guchar *px, unsigned int w, unsigned int h, unsigned int rs,
+                                 Geom::Affine const &transform, SPStyle const *style)
 {
-    return ctx->module->image(px, w, h, rs, transform, style);
+    return module->image(px, w, h, rs, transform, style);
 }
 
-unsigned int sp_print_text(SPPrintContext *ctx, char const *text, Geom::Point p,
+unsigned int SPPrintContext::text(char const *text, Geom::Point p,
                            SPStyle const *style)
 {
-    return ctx->module->text(text, p, style);
+    return module->text(text, p, style);
 }
 
 /* UI */

@@ -30,24 +30,23 @@ class Print;
 
 struct SPPrintContext {
     Inkscape::Extension::Print *module;
+
+    unsigned int bind(Geom::Affine const &transform, float opacity);
+    unsigned int release();
+    unsigned int comment(char const *comment);
+    unsigned int fill(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
+                      Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox);
+    unsigned int stroke(Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
+                        Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox);
+
+    unsigned int image_R8G8B8A8_N(unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
+                                  Geom::Affine const &transform, SPStyle const *style);
+
+    unsigned int text(char const *text, Geom::Point p,
+                               SPStyle const *style);
+
+    void get_param(char *name, bool *value);
 };
-
-unsigned int sp_print_bind(SPPrintContext *ctx, Geom::Affine const &transform, float opacity);
-unsigned int sp_print_release(SPPrintContext *ctx);
-unsigned int sp_print_comment(SPPrintContext *ctx, char const *comment);
-unsigned int sp_print_fill(SPPrintContext *ctx, Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
-                           Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox);
-unsigned int sp_print_stroke(SPPrintContext *ctx, Geom::PathVector const &pathv, Geom::Affine const &ctm, SPStyle const *style,
-                             Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox);
-
-unsigned int sp_print_image_R8G8B8A8_N(SPPrintContext *ctx,
-                                       unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-                                       Geom::Affine const &transform, SPStyle const *style);
-
-unsigned int sp_print_text(SPPrintContext *ctx, char const *text, Geom::Point p,
-                           SPStyle const *style);
-
-void sp_print_get_param(SPPrintContext *ctx, char *name, bool *value);
 
 
 /* UI */

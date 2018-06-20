@@ -216,7 +216,7 @@ void SPUse::print(SPPrintContext* ctx) {
 
     if ((this->x._set && this->x.computed != 0) || (this->y._set && this->y.computed != 0)) {
         Geom::Affine tp(Geom::Translate(this->x.computed, this->y.computed));
-        sp_print_bind(ctx, tp, 1.0);
+        ctx->bind(tp, 1.0);
         translated = true;
     }
 
@@ -225,7 +225,7 @@ void SPUse::print(SPPrintContext* ctx) {
     }
 
     if (translated) {
-        sp_print_release(ctx);
+        ctx->release();
     }
 }
 
