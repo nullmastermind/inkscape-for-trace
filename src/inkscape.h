@@ -192,6 +192,13 @@ public:
     // may not be reflected by a selection change and thus needs a separate signal
     sigc::signal<void> signal_external_change;
 
+    void set_pdf_page(gint page) {
+        _pdf_page = page;
+    }
+    gint get_pdf_page() {
+        return _pdf_page;
+    }
+
 private:
     static Inkscape::Application * _S_inst;
 
@@ -217,6 +224,7 @@ private:
     char * _argv0;
     static bool _crashIsHappening;
     bool _use_gui;
+    gint _pdf_page;
 };
 
 } // namespace Inkscape

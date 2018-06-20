@@ -159,6 +159,7 @@ enum {
     SP_ARG_EXPORT_XAML,
     SP_ARG_EXPORT_TEXT_TO_PATH,
     SP_ARG_EXPORT_IGNORE_FILTERS,
+    SP_ARG_PDF_PAGE,
     SP_ARG_EXTENSIONDIR,
     SP_ARG_QUERY_X,
     SP_ARG_QUERY_Y,
@@ -223,6 +224,7 @@ static gchar *sp_export_xaml = nullptr;
 static gboolean sp_export_text_to_path = FALSE;
 static gboolean sp_export_ignore_filters = FALSE;
 static gboolean sp_export_font = FALSE;
+static gint sp_pdf_page = 1;
 static gboolean sp_query_x = FALSE;
 static gboolean sp_query_y = FALSE;
 static gboolean sp_query_width = FALSE;
@@ -278,6 +280,7 @@ static void resetCommandlineGlobals() {
         sp_export_text_to_path = FALSE;
         sp_export_ignore_filters = FALSE;
         sp_export_font = FALSE;
+        sp_pdf_page = 1;
         sp_query_x = FALSE;
         sp_query_y = FALSE;
         sp_query_width = FALSE;
@@ -470,6 +473,11 @@ struct poptOption options[] = {
      POPT_ARG_NONE, &sp_export_ignore_filters, SP_ARG_EXPORT_IGNORE_FILTERS,
      N_("Render filtered objects without filters, instead of rasterizing (PS, EPS, PDF)"),
      nullptr},
+
+    {"pdf-page", 0,
+     POPT_ARG_INT, &sp_pdf_page, SP_ARG_PDF_PAGE,
+     N_("PDF page to import"),
+     N_("PAGE")},
 
     {"query-x", 'X',
      POPT_ARG_NONE, &sp_query_x, SP_ARG_QUERY_X,
@@ -971,6 +979,7 @@ sp_main_gui(int argc, char const **argv)
 
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     Inkscape::Application::create(argv[0], true);
+    INKSCAPE.set_pdf_page(sp_pdf_page);
 
     for (auto i:fl) {
         if (sp_file_open(i,nullptr)) {
@@ -1154,6 +1163,7 @@ static int sp_main_shell(char const* command_name)
                         poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
                         if ( ctx ) {
                             std::vector<gchar *> fl = sp_process_args(ctx);
+                            INKSCAPE.set_pdf_page(sp_pdf_page);
                             if (sp_process_file_list(fl)) {
                                 retval = -1;
                             }
@@ -1206,6 +1216,7 @@ int sp_main_console(int argc, char const **argv)
     }
 
     Inkscape::Application::create(argv[0], false);
+    INKSCAPE.set_pdf_page(sp_pdf_page);
 
     if (sp_shell) {
         int retVal = sp_main_shell(argv[0]); // Run as interactive shell
