@@ -112,7 +112,7 @@ SPGradient *sp_gradient_ensure_vector_normalized(SPGradient *gr)
         gr->ensureVector();
         g_assert(gr->vector.built);
         // this adds stops from gr->vector as children to gr
-        sp_gradient_repr_write_vector (gr);
+        gr->repr_write_vector ();
     }
 
     /* If gr hrefs some other gradient, remove the href */

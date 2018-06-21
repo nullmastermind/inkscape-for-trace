@@ -84,12 +84,12 @@ TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
 
     Geom::Rect unit_rect(Geom::Point(0, 0), Geom::Point(1, 1));
     {
-        Geom::Affine g2d(sp_gradient_get_g2d_matrix(gr, Geom::identity(), unit_rect));
-        Geom::Affine gs2d(sp_gradient_get_gs2d_matrix(gr, Geom::identity(), unit_rect));
+        Geom::Affine g2d(gr->get_g2d_matrix(Geom::identity(), unit_rect));
+        Geom::Affine gs2d(gr->get_gs2d_matrix(Geom::identity(), unit_rect));
         EXPECT_TRUE(Geom::are_near(Geom::identity(), g2d));
         EXPECT_TRUE(Geom::are_near(gs2d, gr->gradientTransform * g2d, 1e-12));
 
-        sp_gradient_set_gs2d_matrix(gr, Geom::identity(), unit_rect, gs2d);
+        gr->set_gs2d_matrix(Geom::identity(), unit_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
     }
 
@@ -98,31 +98,31 @@ TEST_F(SPGradientTest, GetG2dGetGs2dSetGs2) {
                        4, 5,
                        6, 7);
     {
-        Geom::Affine g2d(sp_gradient_get_g2d_matrix(gr, funny, unit_rect));
-        Geom::Affine gs2d(sp_gradient_get_gs2d_matrix(gr, funny, unit_rect));
+        Geom::Affine g2d(gr->get_g2d_matrix(funny, unit_rect));
+        Geom::Affine gs2d(gr->get_gs2d_matrix(funny, unit_rect));
         EXPECT_TRUE(Geom::are_near(funny, g2d));
         EXPECT_TRUE(Geom::are_near(gs2d, gr->gradientTransform * g2d, 1e-12));
 
-        sp_gradient_set_gs2d_matrix(gr, funny, unit_rect, gs2d);
+        gr->set_gs2d_matrix(funny, unit_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
     }
 
     gr->gradientTransform = grXform;
     Geom::Rect larger_rect(Geom::Point(5, 6), Geom::Point(8, 10));
     {
-        Geom::Affine g2d(sp_gradient_get_g2d_matrix(gr, funny, larger_rect));
-        Geom::Affine gs2d(sp_gradient_get_gs2d_matrix(gr, funny, larger_rect));
+        Geom::Affine g2d(gr->get_g2d_matrix(funny, larger_rect));
+        Geom::Affine gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(Geom::Affine(3, 0,
                                                 0, 4,
                                                 5, 6) * funny, g2d ));
         EXPECT_TRUE(Geom::are_near(gs2d, gr->gradientTransform * g2d, 1e-12));
 
-        sp_gradient_set_gs2d_matrix(gr, funny, larger_rect, gs2d);
+        gr->set_gs2d_matrix(funny, larger_rect, gs2d);
         EXPECT_TRUE(Geom::are_near(gr->gradientTransform, grXform, 1e-12));
 
         SP_OBJECT(gr)->setKeyValue( SP_ATTR_GRADIENTUNITS, "userSpaceOnUse");
-        Geom::Affine user_g2d(sp_gradient_get_g2d_matrix(gr, funny, larger_rect));
-        Geom::Affine user_gs2d(sp_gradient_get_gs2d_matrix(gr, funny, larger_rect));
+        Geom::Affine user_g2d(gr->get_g2d_matrix(funny, larger_rect));
+        Geom::Affine user_gs2d(gr->get_gs2d_matrix(funny, larger_rect));
         EXPECT_TRUE(Geom::are_near(funny, user_g2d));
         EXPECT_TRUE(Geom::are_near(user_gs2d, gr->gradientTransform * user_g2d, 1e-12));
     }

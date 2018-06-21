@@ -185,6 +185,20 @@ public:
     static void gradientRefModified(SPObject *href, unsigned int flags, SPGradient *gradient);
     static void gradientRefChanged(SPObject *old_ref, SPObject *ref, SPGradient *gr);
 
+    /* Gradient repr methods */
+    void repr_write_vector();
+    void repr_clear_vector();
+
+    cairo_pattern_t *create_preview_pattern(double width);
+
+    /** Transforms to/from gradient position space in given environment */
+    Geom::Affine get_g2d_matrix(Geom::Affine const &ctm,
+                                Geom::Rect const &bbox) const;
+    Geom::Affine get_gs2d_matrix(Geom::Affine const &ctm,
+                                 Geom::Rect const &bbox) const;
+    void set_gs2d_matrix(Geom::Affine const &ctm, Geom::Rect const &bbox,
+                         Geom::Affine const &gs2d);
+
 private:
     bool invalidateVector();
     bool invalidateArray();
@@ -208,20 +222,6 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
                                  SPGradient *gr,
                                  Geom::OptRect const &bbox,
                                  double opacity);
-
-/* Gradient repr methods */
-void sp_gradient_repr_write_vector(SPGradient *gr);
-void sp_gradient_repr_clear_vector(SPGradient *gr);
-
-cairo_pattern_t *sp_gradient_create_preview_pattern(SPGradient *gradient, double width);
-
-/** Transforms to/from gradient position space in given environment */
-Geom::Affine sp_gradient_get_g2d_matrix(SPGradient const *gr, Geom::Affine const &ctm,
-                                      Geom::Rect const &bbox);
-Geom::Affine sp_gradient_get_gs2d_matrix(SPGradient const *gr, Geom::Affine const &ctm,
-                                       Geom::Rect const &bbox);
-void sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm, Geom::Rect const &bbox,
-                                 Geom::Affine const &gs2d);
 
 
 #endif // SEEN_SP_GRADIENT_H

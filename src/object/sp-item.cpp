@@ -1023,9 +1023,9 @@ void SPItem::invoke_print(SPPrintContext *ctx)
 {
     if ( !isHidden() ) {
     	if (!transform.isIdentity() || style->opacity.value != SP_SCALE24_MAX) {
-			sp_print_bind(ctx, transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
+			ctx->bind(transform, SP_SCALE24_TO_FLOAT(style->opacity.value));
 			this->print(ctx);
-			sp_print_release(ctx);
+			ctx->release();
     	} else {
     		this->print(ctx);
     	}

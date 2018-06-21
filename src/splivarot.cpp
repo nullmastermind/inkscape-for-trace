@@ -2559,7 +2559,7 @@ SPCurve* curve_for_item(SPItem *item)
     }
     else if (SP_IS_IMAGE(item))
     {
-    curve = sp_image_get_curve(SP_IMAGE(item));
+    curve = SP_IMAGE(item)->get_curve();
     }
     
     return curve; // do not forget to unref the curve at some point!
@@ -2584,7 +2584,7 @@ SPCurve* curve_for_item_before_LPE(SPItem *item)
     }
     else if (SP_IS_IMAGE(item))
     {
-        curve = sp_image_get_curve(SP_IMAGE(item));
+        curve = SP_IMAGE(item)->get_curve();
     }
     
     return curve; // do not forget to unref the curve at some point!

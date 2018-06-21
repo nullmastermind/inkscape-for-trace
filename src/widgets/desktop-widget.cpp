@@ -1796,7 +1796,7 @@ bool SPDesktopWidget::onFocusInEvent(GdkEventFocus*)
         std::vector<SPObject *> imageList = (desktop->doc())->getResourceList("image");
         for (std::vector<SPObject *>::const_iterator it = imageList.begin(); it != imageList.end(); ++it) {
             SPImage* image = SP_IMAGE(*it);
-            sp_image_refresh_if_outdated( image );
+            image->refresh_if_outdated();
         }
     }
 

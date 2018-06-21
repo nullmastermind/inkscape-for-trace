@@ -148,11 +148,11 @@ void SPSymbol::print(SPPrintContext* ctx) {
     if (this->cloned) {
         // Cloned <symbol> is actually renderable
 
-        sp_print_bind(ctx, this->c2p, 1.0);
+        ctx->bind(this->c2p, 1.0);
 
         SPGroup::print(ctx);
 
-        sp_print_release (ctx);
+        ctx->release ();
     }
 }
 

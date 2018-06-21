@@ -863,9 +863,9 @@ SPGradientUnits SPGradient::fetchUnits()
  * Clears the gradient's svg:stop children from its repr.
  */
 void
-sp_gradient_repr_clear_vector(SPGradient *gr)
+SPGradient::repr_clear_vector()
 {
-    Inkscape::XML::Node *repr = gr->getRepr();
+    Inkscape::XML::Node *repr = getRepr();
 
     /* Collect stops from original repr */
     std::vector<Inkscape::XML::Node *> l;
@@ -889,30 +889,27 @@ sp_gradient_repr_clear_vector(SPGradient *gr)
  * inherited from refs) into the gradient repr as svg:stop elements.
  */
 void
-sp_gradient_repr_write_vector(SPGradient *gr)
+SPGradient::repr_write_vector()
 {
-    g_return_if_fail(gr != nullptr);
-    g_return_if_fail(SP_IS_GRADIENT(gr));
-
-    Inkscape::XML::Document *xml_doc = gr->document->getReprDoc();
-    Inkscape::XML::Node *repr = gr->getRepr();
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *repr = getRepr();
 
     /* We have to be careful, as vector may be our own, so construct repr list at first */
     std::vector<Inkscape::XML::Node *> l;
 
-    for (guint i = 0; i < gr->vector.stops.size(); i++) {
+    for (guint i = 0; i < vector.stops.size(); i++) {
         Inkscape::CSSOStringStream os;
         Inkscape::XML::Node *child = xml_doc->createElement("svg:stop");
-        sp_repr_set_css_double(child, "offset", gr->vector.stops[i].offset);
+        sp_repr_set_css_double(child, "offset", vector.stops[i].offset);
         /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no
          * sense for offset proportions. */
-        os << "stop-color:" << gr->vector.stops[i].color.toString() << ";stop-opacity:" << gr->vector.stops[i].opacity;
+        os << "stop-color:" << vector.stops[i].color.toString() << ";stop-opacity:" << vector.stops[i].opacity;
         child->setAttribute("style", os.str().c_str());
         /* Order will be reversed here */
         l.push_back(child);
     }
 
-    sp_gradient_repr_clear_vector(gr);
+    repr_clear_vector();
 
     /* And insert new children from list */
     for (auto i=l.rbegin();i!=l.rend();++i) {
@@ -1072,9 +1069,9 @@ void SPGradient::rebuildArray()
 }
 
 Geom::Affine
-sp_gradient_get_g2d_matrix(SPGradient const *gr, Geom::Affine const &ctm, Geom::Rect const &bbox)
+SPGradient::get_g2d_matrix(Geom::Affine const &ctm, Geom::Rect const &bbox) const
 {
-    if (gr->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+    if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
         return ( Geom::Scale(bbox.dimensions())
                  * Geom::Translate(bbox.min())
                  * Geom::Affine(ctm) );
@@ -1084,31 +1081,31 @@ sp_gradient_get_g2d_matrix(SPGradient const *gr, Geom::Affine const &ctm, Geom::
 }
 
 Geom::Affine
-sp_gradient_get_gs2d_matrix(SPGradient const *gr, Geom::Affine const &ctm, Geom::Rect const &bbox)
+SPGradient::get_gs2d_matrix(Geom::Affine const &ctm, Geom::Rect const &bbox) const
 {
-    if (gr->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-        return ( gr->gradientTransform
+    if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+        return ( gradientTransform
                  * Geom::Scale(bbox.dimensions())
                  * Geom::Translate(bbox.min())
                  * Geom::Affine(ctm) );
     } else {
-        return gr->gradientTransform * ctm;
+        return gradientTransform * ctm;
     }
 }
 
 void
-sp_gradient_set_gs2d_matrix(SPGradient *gr, Geom::Affine const &ctm,
+SPGradient::set_gs2d_matrix(Geom::Affine const &ctm,
                             Geom::Rect const &bbox, Geom::Affine const &gs2d)
 {
-    gr->gradientTransform = gs2d * ctm.inverse();
-    if (gr->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX ) {
-        gr->gradientTransform = ( gr->gradientTransform
+    gradientTransform = gs2d * ctm.inverse();
+    if (getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX ) {
+        gradientTransform = ( gradientTransform
                                   * Geom::Translate(-bbox.min())
                                   * Geom::Scale(bbox.dimensions()).inverse() );
     }
-    gr->gradientTransform_set = TRUE;
+    gradientTransform_set = TRUE;
 
-    gr->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -1157,17 +1154,17 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
 }
 
 cairo_pattern_t *
-sp_gradient_create_preview_pattern(SPGradient *gr, double width)
+SPGradient::create_preview_pattern(double width)
 {
     cairo_pattern_t *pat = nullptr;
 
-    if (!SP_IS_MESHGRADIENT(gr)) {
-        gr->ensureVector();
+    if (!SP_IS_MESHGRADIENT(this)) {
+        ensureVector();
 
         pat = cairo_pattern_create_linear(0, 0, width, 0);
 
-        for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
-             i != gr->vector.stops.end(); ++i)
+        for (std::vector<SPGradientStop>::iterator i = vector.stops.begin();
+             i != vector.stops.end(); ++i)
         {
             cairo_pattern_add_color_stop_rgba(pat, i->offset,
               i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
@@ -1175,14 +1172,14 @@ sp_gradient_create_preview_pattern(SPGradient *gr, double width)
     } else {
 
         // For the moment, use the top row of nodes for preview.
-        unsigned columns = gr->array.patch_columns();
+        unsigned columns = array.patch_columns();
 
         double offset = 1.0/double(columns);
 
         pat = cairo_pattern_create_linear(0, 0, width, 0);
 
         for (unsigned i = 0; i < columns+1; ++i) {
-            SPMeshNode* node = gr->array.node( 0, i*3 );
+            SPMeshNode* node = array.node( 0, i*3 );
             cairo_pattern_add_color_stop_rgba(pat, i*offset,
               node->color.v.c[0], node->color.v.c[1], node->color.v.c[2], node->opacity);
         }

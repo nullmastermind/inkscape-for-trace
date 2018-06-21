@@ -641,7 +641,7 @@ void SPShape::print(SPPrintContext* ctx) {
 	
 	if (add_comments) {
 		gchar * comment = g_strdup_printf("begin '%s'", this->defaultLabel());
-		sp_print_comment(ctx, comment);
+		ctx->comment(comment);
 		g_free(comment);
 	}
 
@@ -656,11 +656,11 @@ void SPShape::print(SPPrintContext* ctx) {
     SPStyle* style = this->style;
 
     if (!style->fill.isNone()) {
-        sp_print_fill (ctx, pathv, i2dt, style, pbox, dbox, bbox);
+        ctx->fill (pathv, i2dt, style, pbox, dbox, bbox);
     }
 
     if (!style->stroke.isNone()) {
-        sp_print_stroke (ctx, pathv, i2dt, style, pbox, dbox, bbox);
+        ctx->stroke (pathv, i2dt, style, pbox, dbox, bbox);
     }
 
     /** \todo make code prettier */
@@ -737,7 +737,7 @@ void SPShape::print(SPPrintContext* ctx) {
 	if (add_comments) {
 		gchar * comment = g_strdup_printf("end '%s'",
 		this->defaultLabel());
-		sp_print_comment(ctx, comment);
+		ctx->comment(comment);
 		g_free(comment);
 	}
 }

@@ -270,9 +270,9 @@ Geom::Affine glyph_matrix;
                 _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
                 Geom::PathVector temp_pv = (*pv) * glyph_matrix;
                 if (!text_source->style->fill.isNone())
-                    sp_print_fill(ctx, temp_pv, ctm, text_source->style, pbox, dbox, bbox);
+                    ctx->fill(temp_pv, ctm, text_source->style, pbox, dbox, bbox);
                 if (!text_source->style->stroke.isNone())
-                    sp_print_stroke(ctx, temp_pv, ctm, text_source->style, pbox, dbox, bbox);
+                    ctx->stroke(temp_pv, ctm, text_source->style, pbox, dbox, bbox);
             }
         }
     }
@@ -401,16 +401,16 @@ std:: cout << "DEBUG Layout::print in while  ---  "
                 
             }
             // write it
-            sp_print_bind(ctx, glyph_matrix, 1.0);
+            ctx->bind(glyph_matrix, 1.0);
 
             // the dx array is smuggled through to the EMF driver (ignored by others) as:
             //    text<nul>w1 w2 w3 ...wn<nul><nul>
             // where the widths are floats 7 characters wide, including the space
             
             char *smuggle_string=smuggle_adxkyrtl_in(text_string.c_str(),ndx, &hold_dx[0], ky, rtl);
-            sp_print_text(ctx, smuggle_string, g_pos, text_source->style);
+            ctx->text(smuggle_string, g_pos, text_source->style);
             free(smuggle_string);
-            sp_print_release(ctx);
+            ctx->release();
             ndx = 0;
             char_index = lc_index;
         }
