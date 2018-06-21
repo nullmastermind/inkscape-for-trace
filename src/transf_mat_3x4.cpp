@@ -1,5 +1,3 @@
-#define SEEN_TRANSF_MAT_3x4_C
-
 /*
  * 3x4 transformation matrix to map points from projective 3-space into the projective plane
  *
@@ -12,12 +10,9 @@
  */
 
 #include "transf_mat_3x4.h"
-#include <gtk/gtk.h>
 #include <2geom/affine.h>
 #include "svg/stringstream.h"
 #include "syseq.h"
-#include "document.h"
-#include "inkscape.h"
 
 namespace Proj {
 
