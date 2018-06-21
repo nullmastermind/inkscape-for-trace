@@ -61,38 +61,41 @@ public:
     bool _optimizeTextpathText;
 
 private:
+
+    /** Initializes layout from <text> (i.e. this node). */
+    void _buildLayoutInit();
+
     /** Recursively walks the xml tree adding tags and their contents. The
     non-trivial code does two things: firstly, it manages the positioning
     attributes and their inheritance rules, and secondly it keeps track of line
     breaks and makes sure both that they are assigned the correct SPObject and
     that we don't get a spurious extra one at the end of the flow. */
-    unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
+    unsigned _buildLayoutInput(SPObject *object, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
 
     /** Union all exlusion shapes. */
     Shape* _buildExclusionShape() const;
 
 public:
     /** Optimize textpath text on next set_transform. */
-    void optimizeTextpathText()
-        {_optimizeTextpathText = true;}
+    void optimizeTextpathText() {_optimizeTextpathText = true;}
 
-	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-	void release() override;
-	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
-	void remove_child(Inkscape::XML::Node* child) override;
-	void set(unsigned int key, const char* value) override;
-	void update(SPCtx* ctx, unsigned int flags) override;
-	void modified(unsigned int flags) override;
-	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void remove_child(Inkscape::XML::Node* child) override;
+    void set(unsigned int key, const char* value) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
+    void modified(unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
-	Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
-	void print(SPPrintContext *ctx) override;
-        const char* displayName() const override;
-	char* description() const override;
-	Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
-	void hide(unsigned int key) override;
-	void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
-	Geom::Affine set_transform(Geom::Affine const &transform) override;
+    Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
+    void print(SPPrintContext *ctx) override;
+    const char* displayName() const override;
+    char* description() const override;
+    Inkscape::DrawingItem* show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) override;
+    void hide(unsigned int key) override;
+    void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const override;
+    Geom::Affine set_transform(Geom::Affine const &transform) override;
 };
 
 #endif

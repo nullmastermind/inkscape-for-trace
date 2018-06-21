@@ -429,233 +429,272 @@ void SPText::print(SPPrintContext *ctx) {
  * Member functions
  */
 
-unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath)
+void SPText::_buildLayoutInit()
+{
+
+    layout.strut.reset();
+    layout.wrap_mode = Inkscape::Text::Layout::WRAP_NONE; // Default to SVG 1.1
+
+    if (style) {
+
+        // Strut
+        font_instance *font = font_factory::Default()->FaceFromStyle( style );
+        if (font) {
+            font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
+            font->Unref();
+        }
+        layout.strut *= style->font_size.computed;
+        if (style->line_height.normal ) {
+            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
+        } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
+            layout.strut.computeEffective( style->line_height.computed );
+        } else {
+            if( style->font_size.computed > 0.0 ) {
+                layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
+            }
+        }
+
+
+        // To do: follow SPItem clip_ref/mask_ref code
+        if (style->shape_inside.set ) {
+
+            layout.wrap_mode = Inkscape::Text::Layout::WRAP_SHAPE_INSIDE;
+
+            // Find union of all exclusion shapes
+            Shape *exclusion_shape = nullptr;
+            if(style->shape_subtract.set) {
+                exclusion_shape = _buildExclusionShape();
+            }
+
+            // Extract out shapes (a comma separated list of urls)
+            Glib::ustring shapeInside_value = style->shape_inside.value;
+            std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
+            for (unsigned int i=0; i<shapes_url.size(); ++i) {
+                Glib::ustring shape_url = shapes_url.at(i);
+                if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                    std::cerr << "SPText::_buildLayoutInit(): Invalid shape-inside value: " << shape_url << std::endl;
+                } else {
+                    shape_url.erase(0,5);
+                    shape_url.erase(shape_url.size()-1,1);
+                    // std::cout << "SPText::_buildLayoutInit(): shape-inside: " << shape_url << std::endl;
+                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+                    if ( shape ) {
+
+                        // This code adapted from sp-flowregion.cpp: GetDest()
+                        if (!(shape->_curve)) {
+                            shape->set_shape();
+                        }
+                        SPCurve *curve = shape->getCurve();
+
+                        if ( curve ) {
+                            Path *temp = new Path;
+                            Path *padded = new Path;
+                            temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+                            if( style->shape_padding.set ) {
+                                // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
+                                temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
+                            } else {
+                                // std::cout << "  no padding" << std::endl;
+                                padded->Copy( temp );
+                            }
+                            padded->Convert( 0.25 );  // Convert to polyline
+                            Shape* sh = new Shape;
+                            padded->Fill( sh, 0 );
+                            // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
+                            //   std::cout << " ........ " << temp->pts[i].p << std::endl;
+                            // }
+                            // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
+                            Shape *uncross = new Shape;
+                            uncross->ConvertToShape( sh );
+
+                            // Subtract exclusion shape
+                            if(style->shape_subtract.set) {
+                                Shape *copy = new Shape;
+                                if (exclusion_shape && exclusion_shape->hasEdges()) {
+                                    copy->Booleen(uncross, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                                } else {
+                                    copy->Copy(uncross);
+                                }
+                                layout.appendWrapShape( copy );
+                                //delete exclusion_shape;
+                                continue;
+                            }
+
+                            layout.appendWrapShape( uncross );
+
+                            delete temp;
+                            delete padded;
+                            delete sh;
+                            // delete uncross;
+                        } else {
+                            std::cerr << "SPText::_buildLayoutInit(): Failed to get curve." << std::endl;
+                        }
+                    } else {
+                        std::cerr << "SPText::_buildLayoutInit(): Failed to find shape." << std::endl;
+                    }
+                }
+            }
+
+        } else if (style->inline_size.set) {
+
+            layout.wrap_mode = Inkscape::Text::Layout::WRAP_INLINE_SIZE;
+
+            // If both shape_inside and inline_size are set, shape_inside wins out.
+
+            // We construct a rectangle with one dimension set by the computed value of 'inline-size'
+            // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
+            // attribute values. This is handled elsewhere.
+
+            double inline_size = style->inline_size.computed;
+            unsigned mode      = style->writing_mode.computed;
+            unsigned anchor    = style->text_anchor.computed;
+            unsigned direction = style->direction.computed;
+
+            Geom::Rect frame;
+            if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+                mode == SP_CSS_WRITING_MODE_RL_TB) {
+                // horizontal
+                frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
+                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    frame *= Geom::Translate (-inline_size/2.0, 0 );
+                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                    frame *= Geom::Translate (-inline_size, 0);
+                }
+            } else {
+                // vertical
+                frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    frame *= Geom::Translate (0, -inline_size/2.0);
+                } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                    frame *= Geom::Translate (0, -inline_size);
+                }
+            }
+            // std::cout << " inline_size frame: " << frame << std::endl;
+
+            Shape *shape = new Shape;
+            shape->Reset();
+            int v0 = shape->AddPoint(frame.corner(0));
+            int v1 = shape->AddPoint(frame.corner(1));
+            int v2 = shape->AddPoint(frame.corner(2));
+            int v3 = shape->AddPoint(frame.corner(3));
+            shape->AddEdge(v0, v1);
+            shape->AddEdge(v1, v2);
+            shape->AddEdge(v2, v3);
+            shape->AddEdge(v3, v0);
+            Shape *uncross = new Shape;
+            uncross->ConvertToShape( shape );
+
+            layout.appendWrapShape( uncross );
+
+            delete shape;
+        }
+
+    } // if (style)
+}
+
+unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath)
 {
     unsigned length = 0;
     int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
-    // To do: follow SPItem clip_ref/mask_ref code
-    if (style->shape_inside.set ) {
+    if (SP_IS_TEXT(object)) {
+        SP_TEXT(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
 
-        // Find union of all exclusion shapes
-        Shape *exclusion_shape = nullptr;
-        if(style->shape_subtract.set) {
-            exclusion_shape = _buildExclusionShape();
-        }
+        // SVG 2 Text wrapping
+        if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE) {
 
-        // Extract out shapes (a comma separated list of urls)
-        Glib::ustring shapeInside_value = style->shape_inside.value;
-        std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
-        for (unsigned int i=0; i<shapes_url.size(); ++i) {
-            Glib::ustring shape_url = shapes_url.at(i);
-            if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
-            } else {
-                shape_url.erase(0,5);
-                shape_url.erase(shape_url.size()-1,1);
-                std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
-                SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
-                if ( shape ) {
+            // 'x' and 'y' attributes are always ignored.
+            optional_attrs.x.clear();
+            optional_attrs.y.clear();
 
-                    // This code adapted from sp-flowregion.cpp: GetDest()
-                    if (!(shape->_curve)) {
-                        shape->set_shape();
-                    }
-                    SPCurve *curve = shape->getCurve();
+        }  else if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
 
-                    if ( curve ) {
-                        Path *temp = new Path;
-                        Path *padded = new Path;
-                        temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
-                        if( style->shape_padding.set ) {
-                            // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
-                            temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
-                        } else {
-                            // std::cout << "  no padding" << std::endl;
-                            padded->Copy( temp );
-                        }
-                        padded->Convert( 0.25 );  // Convert to polyline
-                        Shape* sh = new Shape;
-                        padded->Fill( sh, 0 );
-                        // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
-                        //   std::cout << " ........ " << temp->pts[i].p << std::endl;
-                        // }
-                        // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
-                        Shape *uncross = new Shape;
-                        uncross->ConvertToShape( sh );
-
-                        // Subtract exclusion shape
-                        if(style->shape_subtract.set) {
-                            Shape *copy = new Shape;
-                            if (exclusion_shape && exclusion_shape->hasEdges()) {
-                                copy->Booleen(uncross, const_cast<Shape*>(exclusion_shape), bool_op_diff);
-                            } else {
-                                copy->Copy(uncross);
-                            }
-                            layout.appendWrapShape( copy );
-                            //delete exclusion_shape;
-                            continue;
-                        }
-
-                        layout.appendWrapShape( uncross );
-
-                        delete temp;
-                        delete padded;
-                        delete sh;
-                        // delete uncross;
-                    } else {
-                        std::cerr << "SPText::_buildLayoutInput(): Failed to get curve." << std::endl;
-                    }
-                } else {
-                    std::cerr << "SPText::_buildLayoutInput(): Failed to find shape." << std::endl;
-                }
-            }
-        }
-    } else if (style->inline_size.set) {
-        // If both shape_inside and inline_size are set, shape_inside wins out.
-
-        // We construct a rectangle with one dimension set by the computed value of 'inline-size'
-        // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
-        // attribute values. This is handled elsewhere.
-
-        double inline_size = style->inline_size.computed;
-        unsigned mode      = style->writing_mode.computed;
-        unsigned anchor    = style->text_anchor.computed;
-        unsigned direction = style->direction.computed;
-
-        Geom::Rect frame;
-        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
-            mode == SP_CSS_WRITING_MODE_RL_TB) {
-            // horizontal
-            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
-            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                frame *= Geom::Translate (-inline_size/2.0, 0 );
-            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
-                frame *= Geom::Translate (-inline_size, 0);
-            }
-        } else {
-            // vertical
-            frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
-            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                frame *= Geom::Translate (0, -inline_size/2.0);
-            } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
-                frame *= Geom::Translate (0, -inline_size);
-            }
-        }
-        // std::cout << " inline_size frame: " << frame << std::endl;
-
-        Shape *shape = new Shape;
-        shape->Reset();
-        int v0 = shape->AddPoint(frame.corner(0));
-        int v1 = shape->AddPoint(frame.corner(1));
-        int v2 = shape->AddPoint(frame.corner(2));
-        int v3 = shape->AddPoint(frame.corner(3));
-        shape->AddEdge(v0, v1);
-        shape->AddEdge(v1, v2);
-        shape->AddEdge(v2, v3);
-        shape->AddEdge(v3, v0);
-        Shape *uncross = new Shape;
-        uncross->ConvertToShape( shape );
-
-        layout.appendWrapShape( uncross );
-
-        delete shape;
-    }
-
-    if (SP_IS_TEXT(root)) {
-        SP_TEXT(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
-
-        layout.strut.reset();
-        if (style) {
-
-            // Strut
-            font_instance *font = font_factory::Default()->FaceFromStyle( style );
-            if (font) {
-                font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
-                font->Unref();
-            }
-            layout.strut *= style->font_size.computed;
-            if (style->line_height.normal ) {
-                layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
-            } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
-                layout.strut.computeEffective( style->line_height.computed );
-            } else {
-                if( style->font_size.computed > 0.0 ) {
-                    layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
-                }
-            }
-
-            // SVG 2 Text wrapping
-            if (style->shape_inside.set) {
-                // 'x' and 'y' attributes are always ignored.
+            // For horizontal text:
+            //   'x' is used to calculate the left/right edges of the rectangle but is not
+            //   needed later. If not deleted here, it will cause an incorrect positioning
+            //   of the first line.
+            //   'y' is used to determine where the first line box is located and is needed
+            //   during the output stage.
+            // For vertical text:
+            //   Follow above but exchange 'x' and 'y'.
+            // The SVG 2 spec currently says use the 'x' and 'y' from the <text> element,
+            // if not defined in the <text> element, use the 'x' and 'y' from the first child.
+            // We only look at the <text> element. (Doing otherwise means tracking if
+            // we've found 'x' and 'y' and then creating the Shape at the end.)
+            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
+                style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                // Horizontal text
                 optional_attrs.x.clear();
+                if (optional_attrs.y.size() > 0) {
+                    optional_attrs.y.resize(1); // Keep only first
+                }
+            } else {
+                // Vertical text
+                if (optional_attrs.x.size() > 0) {
+                    optional_attrs.x.resize(1); // Keep only first
+                }
                 optional_attrs.y.clear();
             }
-            else if (style->inline_size.set) {
-                // For horizontal text:
-                //   'x' is used to calculate the left/right edges of the rectangle but is not
-                //   needed later. If not deleted here, it will cause an incorrect positioning
-                //   of the first line.
-                //   'y' is used to determine where the first line box is located and is needed
-                //   during the output stage.
-                // For vertical text:
-                //   Follow above but exchange 'x' and 'y'.
-                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
-                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
-                    // Horizontal text
-                    optional_attrs.x.clear();
-                } else {
-                    // Vertical text
-                    optional_attrs.y.clear();
-                }
-            }
-
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
-        if (SP_TEXT(root)->attributes.getTextLength()->_set) {
+        if (SP_TEXT(object)->attributes.getTextLength()->_set) {
             layout.textLength._set = true;
-            layout.textLength.value = SP_TEXT(root)->attributes.getTextLength()->value;
-            layout.textLength.computed = SP_TEXT(root)->attributes.getTextLength()->computed;
-            layout.textLength.unit = SP_TEXT(root)->attributes.getTextLength()->unit;
-            layout.lengthAdjust = (Inkscape::Text::Layout::LengthAdjust) SP_TEXT(root)->attributes.getLengthAdjust();
+            layout.textLength.value = SP_TEXT(object)->attributes.getTextLength()->value;
+            layout.textLength.computed = SP_TEXT(object)->attributes.getTextLength()->computed;
+            layout.textLength.unit = SP_TEXT(object)->attributes.getTextLength()->unit;
+            layout.lengthAdjust = (Inkscape::Text::Layout::LengthAdjust) SP_TEXT(object)->attributes.getLengthAdjust();
         }
     }
-    else if (SP_IS_TSPAN(root)) {
-        SPTSpan *tspan = SP_TSPAN(root);
+
+    else if (SP_IS_TSPAN(object)) {
+        SPTSpan *tspan = SP_TSPAN(object);
         // x, y attributes are stripped from some tspans marked with role="line" as we do our own line layout.
         // This should be checked carefully, as it can undo line layout in imported SVG files.
         bool use_xy = !in_textpath && (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates());
         tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
+
+        // SVG 2 Text wrapping: see comment above.
+        if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE ||
+            layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
+
+            // 'x' and 'y' attributes are always ignored.
+            optional_attrs.x.clear();
+            optional_attrs.y.clear();
+        }
     }
-    else if (SP_IS_TREF(root)) {
-        SP_TREF(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
+
+    else if (SP_IS_TREF(object)) {
+        SP_TREF(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
     }
-    else if (SP_IS_TEXTPATH(root)) {
+
+    else if (SP_IS_TEXTPATH(object)) {
         in_textpath = true;
-        SP_TEXTPATH(root)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, false, true);
+        SP_TEXTPATH(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, false, true);
         optional_attrs.x.clear();
         optional_attrs.y.clear();
     }
+
     else {
         optional_attrs = parent_optional_attrs;
         child_attrs_offset = parent_attrs_offset;
     }
 
-    if (SP_IS_TSPAN(root)) {
-        if (SP_TSPAN(root)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
+
+    if (SP_IS_TSPAN(object)) {
+        if (SP_TSPAN(object)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
             // we need to allow the first line not to have role=line, but still set the source_cookie to the right value
-            SPObject *prev_object = root->getPrev();
+            SPObject *prev_object = object->getPrev();
             if (prev_object && SP_IS_TSPAN(prev_object)) {
                 if (!layout.inputExists()) {
                     layout.appendText("", prev_object->style, prev_object, &optional_attrs);
                 }
                 layout.appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, prev_object);
             }
-            if (!root->hasChildren()) {
-                layout.appendText("", root->style, root, &optional_attrs);
+            if (!object->hasChildren()) {
+                layout.appendText("", object->style, object, &optional_attrs);
             }
             length++;     // interpreting line breaks as a character for the purposes of x/y/etc attributes
                           // is a liberal interpretation of the svg spec, but a strict reading would mean
@@ -665,12 +704,12 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
         }
     }
 
-    for (auto& child: root->children) {
+    for (auto& child: object->children) {
         SPString *str = dynamic_cast<SPString *>(&child);
         if (str) {
             Glib::ustring const &string = str->string;
             // std::cout << "  Appending: >" << string << "<" << std::endl;
-            layout.appendText(string, root->style, &child, &optional_attrs, child_attrs_offset + length);
+            layout.appendText(string, object->style, &child, &optional_attrs, child_attrs_offset + length);
             length += string.length();
         } else if (!sp_repr_is_meta_element(child.getRepr())) {
             /*      ^^^^ XML Tree being directly used here while it shouldn't be.*/
@@ -694,11 +733,11 @@ Shape* SPText::_buildExclusionShape() const
     for(unsigned int i=0; i<shapes_url.size(); i++) {
         Glib::ustring shape_url = shapes_url.at(i);
         if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
+                std::cerr << "SPText::_buildExclusionShape(): Invalid shape-inside value: " << shape_url << std::endl;
         } else {
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
+            // std::cout << "SPText::_buildExlusionShape(): shape-inside: " << shape_url << std::endl;
             SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
@@ -741,9 +780,13 @@ Shape* SPText::_buildExclusionShape() const
 void SPText::rebuildLayout()
 {
     layout.clear();
+    _buildLayoutInit();
+
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
     _buildLayoutInput(this, optional_attrs, 0, false);
+
     layout.calculateFlow();
+
     for (auto& child: children) {
         if (SP_IS_TEXTPATH(&child)) {
             SPTextPath const *textpath = SP_TEXTPATH(&child);

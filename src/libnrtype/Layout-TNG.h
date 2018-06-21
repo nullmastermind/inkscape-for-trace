@@ -169,6 +169,13 @@ public:
     /** lengthAdjust values */
     enum LengthAdjust {LENGTHADJUST_SPACING, LENGTHADJUST_SPACINGANDGLYPHS};
 
+    enum WrapMode {
+        WRAP_NONE,         // No wrapping or wrapping via role="line".
+        WRAP_WHITE_SPACE,  // Wrapping via 'white-space' property.
+        WRAP_INLINE_SIZE,  // Wrapping via 'inline-size' property.
+        WRAP_SHAPE_INSIDE  // Wrapping via 'shape-inside' propertry.
+    } wrap_mode;
+
     /** The optional attributes which can be applied to a SVG text or
     related tag. See appendText(). See SVG1.1 section 10.4 for the
     definitions of all these members. See sp_svg_length_list_read() for
