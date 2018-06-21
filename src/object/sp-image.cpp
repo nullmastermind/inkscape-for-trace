@@ -735,11 +735,11 @@ static void sp_image_set_curve( SPImage *image )
 /**
  * Return duplicate of curve (if any exists) or NULL if there is no curve
  */
-SPCurve *sp_image_get_curve( SPImage *image )
+SPCurve *SPImage::get_curve() const
 {
     SPCurve *result = nullptr;
-    if (image->curve) {
-        result = image->curve->copy();
+    if (curve) {
+        result = curve->copy();
     }
     return result;
 }
@@ -841,21 +841,21 @@ void sp_embed_svg(Inkscape::XML::Node *image_node, std::string const &fn)
     }
 }
 
-void sp_image_refresh_if_outdated( SPImage* image )
+void SPImage::refresh_if_outdated()
 {
-    if ( image->href && image->pixbuf && image->pixbuf->modificationTime()) {
+    if ( href && pixbuf && pixbuf->modificationTime()) {
         // It *might* change
 
         GStatBuf st;
         memset(&st, 0, sizeof(st));
         int val = 0;
-        if (g_file_test (image->pixbuf->originalPath().c_str(), G_FILE_TEST_EXISTS)){ 
-            val = g_stat(image->pixbuf->originalPath().c_str(), &st);
+        if (g_file_test (pixbuf->originalPath().c_str(), G_FILE_TEST_EXISTS)){ 
+            val = g_stat(pixbuf->originalPath().c_str(), &st);
         }
         if ( !val ) {
             // stat call worked. Check time now
-            if ( st.st_mtime != image->pixbuf->modificationTime() ) {
-                image->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
+            if ( st.st_mtime != pixbuf->modificationTime() ) {
+                requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             }
         }
     }
