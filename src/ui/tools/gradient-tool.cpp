@@ -38,8 +38,8 @@
 
 #include "display/sp-ctrlline.h"
 
-#include "pixmaps/cursor-gradient-add.xpm"
-#include "pixmaps/cursor-gradient.xpm"
+#include "ui/pixmaps/cursor-gradient-add.xpm"
+#include "ui/pixmaps/cursor-gradient.xpm"
 
 #include "svg/css-ostringstream.h"
 

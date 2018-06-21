@@ -58,7 +58,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "pixmaps/cursor-calligraphy.xpm"
+#include "ui/pixmaps/cursor-calligraphy.xpm"
 
 #include "svg/svg.h"
 

@@ -51,7 +51,7 @@
 
 #include "helper/action.h"
 
-#include "pixmaps/cursor-select.xpm"
+#include "ui/pixmaps/cursor-select.xpm"
 
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"

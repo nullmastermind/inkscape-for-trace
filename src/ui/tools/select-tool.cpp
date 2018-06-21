@@ -44,9 +44,9 @@
 #include "object/box3d.h"
 #include "style.h"
 
-#include "pixmaps/cursor-select-d.xpm"
-#include "pixmaps/cursor-select-m.xpm"
-#include "pixmaps/handles.xpm"
+#include "ui/pixmaps/cursor-select-d.xpm"
+#include "ui/pixmaps/cursor-select-m.xpm"
+#include "ui/pixmaps/handles.xpm"
 
 #include "ui/tools-switch.h"
 #include "ui/tools/select-tool.h"

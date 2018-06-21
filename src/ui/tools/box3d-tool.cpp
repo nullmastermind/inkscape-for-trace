@@ -35,7 +35,7 @@
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
 
-#include "pixmaps/cursor-3dbox.xpm"
+#include "ui/pixmaps/cursor-3dbox.xpm"
 
 #include "object/box3d-side.h"
 #include "object/box3d.h"

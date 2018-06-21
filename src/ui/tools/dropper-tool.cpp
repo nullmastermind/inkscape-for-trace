@@ -40,10 +40,10 @@
 
 #include "object/sp-namedview.h"
 
-#include "pixmaps/cursor-dropper-f.xpm"
-#include "pixmaps/cursor-dropper-s.xpm"
-#include "pixmaps/cursor-dropping-f.xpm"
-#include "pixmaps/cursor-dropping-s.xpm"
+#include "ui/pixmaps/cursor-dropper-f.xpm"
+#include "ui/pixmaps/cursor-dropper-s.xpm"
+#include "ui/pixmaps/cursor-dropping-f.xpm"
+#include "ui/pixmaps/cursor-dropping-s.xpm"
 
 #include "svg/svg-color.h"
 

@@ -40,7 +40,7 @@
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"
 
-#include "pixmaps/cursor-ellipse.xpm"
+#include "ui/pixmaps/cursor-ellipse.xpm"
 
 #include "ui/tools/arc-tool.h"
 #include "ui/shape-editor.h"

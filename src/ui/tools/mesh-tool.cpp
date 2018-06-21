@@ -48,8 +48,8 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "pixmaps/cursor-gradient.xpm"
-#include "pixmaps/cursor-gradient-add.xpm"
+#include "ui/pixmaps/cursor-gradient.xpm"
+#include "ui/pixmaps/cursor-gradient-add.xpm"
 
 #include "ui/control-manager.h"
 #include "ui/tools/mesh-tool.h"

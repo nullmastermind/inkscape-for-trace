@@ -97,7 +97,7 @@
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 
-#include "pixmaps/cursor-connector.xpm"
+#include "ui/pixmaps/cursor-connector.xpm"
 
 #include "svg/svg.h"
 

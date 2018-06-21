@@ -37,7 +37,7 @@
 #include "object/sp-rect.h"
 #include "object/sp-namedview.h"
 
-#include "pixmaps/cursor-rect.xpm"
+#include "ui/pixmaps/cursor-rect.xpm"
 
 #include "ui/shape-editor.h"
 #include "ui/tools/rect-tool.h"

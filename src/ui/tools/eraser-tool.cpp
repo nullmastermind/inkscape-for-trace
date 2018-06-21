@@ -67,7 +67,7 @@
 #include "object/sp-use.h"
 #include "style.h"
 
-#include "pixmaps/cursor-eraser.xpm"
+#include "ui/pixmaps/cursor-eraser.xpm"
 
 #include "svg/svg.h"
 

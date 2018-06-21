@@ -35,7 +35,7 @@
 
 #include "object/sp-path.h"
 
-#include "pixmaps/cursor-crosshairs.xpm"
+#include "ui/pixmaps/cursor-crosshairs.xpm"
 
 #include "util/units.h"
 

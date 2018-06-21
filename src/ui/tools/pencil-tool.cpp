@@ -46,7 +46,7 @@
 #include "object/sp-path.h"
 #include "style.h"
 
-#include "pixmaps/cursor-pencil.xpm"
+#include "ui/pixmaps/cursor-pencil.xpm"
 
 #include "svg/svg.h"
 

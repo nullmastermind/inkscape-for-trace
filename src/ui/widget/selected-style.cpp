@@ -34,10 +34,10 @@
 #include "object/sp-radial-gradient.h"
 #include "style.h"
 
-#include "pixmaps/cursor-adj-a.xpm"
-#include "pixmaps/cursor-adj-h.xpm"
-#include "pixmaps/cursor-adj-l.xpm"
-#include "pixmaps/cursor-adj-s.xpm"
+#include "ui/pixmaps/cursor-adj-a.xpm"
+#include "ui/pixmaps/cursor-adj-h.xpm"
+#include "ui/pixmaps/cursor-adj-l.xpm"
+#include "ui/pixmaps/cursor-adj-s.xpm"
 
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"

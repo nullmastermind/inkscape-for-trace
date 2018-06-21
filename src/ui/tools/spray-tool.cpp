@@ -55,7 +55,7 @@
 #include "object/box3d.h"
 #include "object/sp-item-transform.h"
 
-#include "pixmaps/cursor-spray.xpm"
+#include "ui/pixmaps/cursor-spray.xpm"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
