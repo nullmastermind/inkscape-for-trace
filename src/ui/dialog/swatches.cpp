@@ -1207,7 +1207,7 @@ static void recalcSwatchContents(SPDocument* doc,
             ColorItem* item = new ColorItem( 0, 0, 0, name );
 
             cairo_pattern_t *check = ink_cairo_pattern_create_checkerboard();
-            cairo_pattern_t *gradient = sp_gradient_create_preview_pattern(grad, PREVIEW_PIXBUF_WIDTH);
+            cairo_pattern_t *gradient = grad->create_preview_pattern(PREVIEW_PIXBUF_WIDTH);
             cairo_set_source(ct, check);
             cairo_paint(ct);
             cairo_set_source(ct, gradient);

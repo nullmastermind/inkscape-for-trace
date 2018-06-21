@@ -113,7 +113,7 @@ static gboolean sp_gradient_image_draw(GtkWidget *widget, cairo_t *ct)
     cairo_pattern_destroy(check);
 
         if (gr) {
-        cairo_pattern_t *p = sp_gradient_create_preview_pattern(gr, allocation.width);
+        cairo_pattern_t *p = gr->create_preview_pattern(allocation.width);
         cairo_set_source(ct, p);
         cairo_paint(ct);
         cairo_pattern_destroy(p);
@@ -144,7 +144,7 @@ sp_gradient_to_pixbuf (SPGradient *gr, int width, int height)
     cairo_pattern_destroy(check);
 
     if (gr) {
-        cairo_pattern_t *p = sp_gradient_create_preview_pattern(gr, width);
+        cairo_pattern_t *p = gr->create_preview_pattern(width);
         cairo_set_source(ct, p);
         cairo_paint(ct);
         cairo_pattern_destroy(p);
@@ -171,7 +171,7 @@ sp_gradient_to_pixbuf_ref (SPGradient *gr, int width, int height)
     cairo_pattern_destroy(check);
 
     if (gr) {
-        cairo_pattern_t *p = sp_gradient_create_preview_pattern(gr, width);
+        cairo_pattern_t *p = gr->create_preview_pattern(width);
         cairo_set_source(ct, p);
         cairo_paint(ct);
         cairo_pattern_destroy(p);

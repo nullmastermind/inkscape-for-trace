@@ -215,7 +215,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
             GdkPixbuf* pixbuf = nullptr;
             if ( item->getGradient() ){
                 cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-                cairo_pattern_t *gradient = sp_gradient_create_preview_pattern(item->getGradient(), width);
+                cairo_pattern_t *gradient = item->getGradient()->create_preview_pattern(width);
                 cairo_t *ct = cairo_create(s);
                 cairo_set_source(ct, gradient);
                 cairo_paint(ct);
