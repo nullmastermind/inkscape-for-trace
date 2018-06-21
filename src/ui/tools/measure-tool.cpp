@@ -45,7 +45,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "pixmaps/cursor-measure.xpm"
+#include "ui/pixmaps/cursor-measure.xpm"
 
 #include "svg/stringstream.h"
 #include "svg/svg-color.h"

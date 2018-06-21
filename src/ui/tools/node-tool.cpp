@@ -38,8 +38,8 @@
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 
-#include "pixmaps/cursor-node-d.xpm"
-#include "pixmaps/cursor-node.xpm"
+#include "ui/pixmaps/cursor-node-d.xpm"
+#include "ui/pixmaps/cursor-node.xpm"
 
 #include "ui/control-manager.h"
 #include "ui/shape-editor.h" // temporary!

@@ -40,7 +40,7 @@
 #include "object/sp-namedview.h"
 #include "object/sp-star.h"
 
-#include "pixmaps/cursor-star.xpm"
+#include "ui/pixmaps/cursor-star.xpm"
 
 #include "ui/shape-editor.h"
 #include "ui/tools/star-tool.h"

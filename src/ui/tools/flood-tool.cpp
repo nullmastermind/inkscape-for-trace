@@ -58,7 +58,7 @@
 #include "object/sp-path.h"
 #include "object/sp-root.h"
 
-#include "pixmaps/cursor-paintbucket.xpm"
+#include "ui/pixmaps/cursor-paintbucket.xpm"
 
 #include "svg/svg.h"
 

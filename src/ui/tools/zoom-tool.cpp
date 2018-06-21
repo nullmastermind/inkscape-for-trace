@@ -19,8 +19,8 @@
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"
 #include "desktop.h"
-#include "pixmaps/cursor-zoom.xpm"
-#include "pixmaps/cursor-zoom-out.xpm"
+#include "ui/pixmaps/cursor-zoom.xpm"
+#include "ui/pixmaps/cursor-zoom-out.xpm"
 #include "selection-chemistry.h"
 
 #include "ui/tools/zoom-tool.h"

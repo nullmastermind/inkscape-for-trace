@@ -42,7 +42,7 @@
 
 #include "object/sp-path.h"
 
-#include "pixmaps/cursor-pen.xpm"
+#include "ui/pixmaps/cursor-pen.xpm"
 
 #include "ui/control-manager.h"
 #include "ui/draw-anchor.h"

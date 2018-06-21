@@ -27,7 +27,7 @@
 #include "document.h"
 #include "macros.h"
 #include "message-context.h"
-#include "pixmaps/cursor-spiral.xpm"
+#include "ui/pixmaps/cursor-spiral.xpm"
 #include "selection.h"
 #include "verbs.h"
 

@@ -44,8 +44,8 @@
 #include "object/sp-text.h"
 #include "style.h"
 
-#include "pixmaps/cursor-text-insert.xpm"
-#include "pixmaps/cursor-text.xpm"
+#include "ui/pixmaps/cursor-text-insert.xpm"
+#include "ui/pixmaps/cursor-text.xpm"
 
 #include "ui/control-manager.h"
 #include "ui/shape-editor.h"
