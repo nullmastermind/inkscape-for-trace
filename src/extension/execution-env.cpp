@@ -179,7 +179,7 @@ void
 ExecutionEnv::reselect () {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(desktop) {
-        Inkscape::Selection * selection = desktop->getSelection();
+        Inkscape::Selection *selection = desktop->getSelection();
         if (selection) {
             selection->restoreBackup();
         }
@@ -194,7 +194,7 @@ ExecutionEnv::run () {
         createWorkingDialog();
     }
     SPDesktop *desktop = (SPDesktop *)_doc;
-    Inkscape::Selection * selection = desktop->getSelection();
+    Inkscape::Selection *selection = desktop->getSelection();
     selection->setBackup();
     desktop->setWaitingCursor();
     _effect->get_imp()->effect(_effect, _doc, _docCache);
