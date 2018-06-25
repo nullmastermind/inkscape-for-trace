@@ -985,16 +985,15 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             int penstyle = (up.Style & U_PS_STYLE_MASK);
-            SPILength spilength;
-            spilength.read("1");
+            SPILength spilength("temp", 1);
             if (!d->dc[d->level].style.stroke_dasharray.values.empty() &&
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
-                spilength.read("3");
+                spilength.setDouble(3);
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
-                spilength.read("1");
+                spilength.setDouble(1);
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
             if (penstyle==U_PS_DOT || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {

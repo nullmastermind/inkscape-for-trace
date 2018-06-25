@@ -214,6 +214,8 @@ std::vector<StyleRead> getStyleData()
     StyleRead("marker-mid:url(#Arrow)"),
     StyleRead("marker-end:url(#Arrow)"),
     StyleRead("stroke-opacity:0.5"),                      // SPIScale24
+    //Currently inkscape handle unit conversion in dasharray but need
+    //a active document to do it, so we can't include in any test
     StyleRead("stroke-dasharray:0, 1, 0, 1"),             // SPIDashArray
     StyleRead("stroke-dasharray:0 1 0 1","stroke-dasharray:0, 1, 0, 1"),
     StyleRead("stroke-dasharray:0  1  2  3","stroke-dasharray:0, 1, 2, 3"),

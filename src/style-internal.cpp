@@ -37,9 +37,10 @@
 #include "preferences.h"
 #include "streq.h"
 #include "strneq.h"
-#include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
+
 #include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/css-ostringstream.h"
 
 #include "util/units.h"
 
@@ -324,45 +325,7 @@ SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase co
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
-            Inkscape::CSSOStringStream os;
-            switch (this->unit) {
-                case SP_CSS_UNIT_NONE:
-                    os << name << ":" << this->computed;
-                    break;
-                case SP_CSS_UNIT_PX:
-                    os << name << ":" << this->computed << "px";
-                    break;
-                case SP_CSS_UNIT_PT:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
-                    break;
-                case SP_CSS_UNIT_PC:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
-                    break;
-                case SP_CSS_UNIT_MM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
-                    break;
-                case SP_CSS_UNIT_CM:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
-                    break;
-                case SP_CSS_UNIT_IN:
-                    os << name << ":" << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
-                    break;
-                case SP_CSS_UNIT_EM:
-                    os << name << ":" << this->value << "em";
-                    break;
-                case SP_CSS_UNIT_EX:
-                    os << name << ":" << this->value << "ex";
-                    break;
-                case SP_CSS_UNIT_PERCENT:
-                    os << name << ":" << (this->value * 100.0) << "%";
-                    break;
-                default:
-                    /* Invalid */
-                    break;
-            }
-            os << important_str();
-            os << ";";
-            return os.str();
+            return toString(true);
         }
     }
     return Glib::ustring("");
@@ -430,58 +393,62 @@ SPILength::merge( const SPIBase* const parent ) {
     }
 }
 
-// Generate a string useful for passing dasharray without name, etc.
-const Glib::ustring SPILength::toString(guint const flags, SPStyleSrc const &style_src_req,
-                                        SPIBase const *const base) const
+void
+SPILength::setDouble(double v) {
+  unit = SP_CSS_UNIT_NONE;
+  value = v;
+  computed = v;
+  value_default = v;
+}
+
+// Generate a string and allow emove name for parsing dasharray, etc.
+const Glib::ustring
+SPILength::toString(bool wname) const
 {
-    SPILength const *const my_base = dynamic_cast<const SPILength *>(base);
-    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
-    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
-    if (should_write(flags, set, dfp, src)) {
-        if (this->inherit) {
-            return ("inherit");
-        }
-        else {
-            Inkscape::CSSOStringStream os;
-            switch (this->unit) {
-                case SP_CSS_UNIT_NONE:
-                    os << this->computed;
-                    break;
-                case SP_CSS_UNIT_PX:
-                    os << this->computed << "px";
-                    break;
-                case SP_CSS_UNIT_PT:
-                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
-                    break;
-                case SP_CSS_UNIT_PC:
-                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
-                    break;
-                case SP_CSS_UNIT_MM:
-                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
-                    break;
-                case SP_CSS_UNIT_CM:
-                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
-                    break;
-                case SP_CSS_UNIT_IN:
-                    os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
-                    break;
-                case SP_CSS_UNIT_EM:
-                    os << this->value << "em";
-                    break;
-                case SP_CSS_UNIT_EX:
-                    os << this->value << "ex";
-                    break;
-                case SP_CSS_UNIT_PERCENT:
-                    os << (this->value * 100.0) << "%";
-                    break;
-                default:
-                    /* Invalid */
-                    break;
-            }
-            return os.str();
-        }
-    }
-    return Glib::ustring("");
+  Inkscape:CSSOStringStream os;
+  if (wname) {
+    os << name << ":";
+  }
+  switch (this->unit) {
+    case SP_CSS_UNIT_NONE:
+        os << this->computed;
+        break;
+    case SP_CSS_UNIT_PX:
+        os << this->computed << "px";
+        break;
+    case SP_CSS_UNIT_PT:
+        os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
+        break;
+    case SP_CSS_UNIT_PC:
+        os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
+        break;
+    case SP_CSS_UNIT_MM:
+        os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
+        break;
+    case SP_CSS_UNIT_CM:
+        os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
+        break;
+    case SP_CSS_UNIT_IN:
+        os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
+        break;
+    case SP_CSS_UNIT_EM:
+        os << this->value << "em";
+        break;
+    case SP_CSS_UNIT_EX:
+        os << this->value << "ex";
+        break;
+    case SP_CSS_UNIT_PERCENT:
+        os << (this->value * 100.0) << "%";
+        break;
+    default:
+        /* Invalid */
+        break;
+  }
+  if (wname) {
+    os << important_str();
+    os << ";";
+  }
+  return os.str();
 }
 
 bool
@@ -2089,27 +2056,25 @@ SPIDashArray::read( gchar const *str ) {
 
     gchar *e = NULL;
     bool LineSolid = true;
-    SPDocument *document = NULL;
-    if (style) {
-        document = (style->object) ? style->object->document : NULL;
-    }
+    
     for (auto token : tokens) {
-        SPILength spilength;
+        SPILength spilength("temp");
         spilength.read(token.c_str());
         if (spilength.value > 0.00000001)
             LineSolid = false;
         double dash = spilength.value;
-        if (document) {
-            if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
-                dash = document->getViewBox().width() * spilength.value;
-            }
-            else if (spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
-                dash = spilength.computed / document->getDocumentScale()[0];
-            }
+        //Currently inkscape handle unit conversion in dasharray but need
+        //a active document to do it, so put document inside a check for units
+        //and supose units are not included in tests
+        if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
+            SPDocument *document = SP_ACTIVE_DOCUMENT;
+            dash = document->getViewBox().width() * spilength.value;
         }
-        Inkscape::CSSOStringStream osarray;
-        osarray << dash;
-        spilength.read(osarray.str().c_str());
+        else if (spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
+            SPDocument *document = SP_ACTIVE_DOCUMENT;
+            dash = spilength.computed / document->getDocumentScale()[0];
+        }
+        spilength.setDouble(dash);
         values.push_back(spilength);
     }
     if (LineSolid) {

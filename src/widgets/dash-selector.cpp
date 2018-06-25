@@ -152,8 +152,6 @@ void SPDashSelector::set_dash (int ndash, double *dash, double o)
     int pos = -1;    // Allows custom patterns to remain unscathed by this.
     int count = 0;   // will hold the NULL terminator at the end of the dashes list 
     if (ndash > 0) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gboolean scale = prefs->getBool("/options/dash/scale", true);
         double delta = 0.0;
         for (int i = 0; i < ndash; i++)
             delta += dash[i];
@@ -167,13 +165,8 @@ void SPDashSelector::set_dash (int ndash, double *dash, double o)
             if (np == ndash) {
                 int j;
                 for (j = 0; j < ndash; j++) {
-                    if (scale) {
-                        if (!Geom::are_near(dash[j], pattern[j], delta))
-                            break;
-                    }
-                    else {
-                        if (!Geom::are_near(dash[j], pattern[j], delta))
-                            break;
+                    if (!Geom::are_near(dash[j], pattern[j], delta)) {
+                        break;
                     }
                 }
                 if (j == ndash) {

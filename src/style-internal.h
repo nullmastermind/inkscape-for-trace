@@ -402,10 +402,8 @@ public:
     bool operator!=(const SPIBase& rhs) override {
         return !(*this == rhs);
     }
-
-    virtual const Glib::ustring toString(guint const flags = SP_STYLE_FLAG_IFSET,
-                                         SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
-                                         SPIBase const *const base = nullptr) const;
+    void setDouble(double v);
+    virtual const Glib::ustring toString(bool wname = false) const;
 
     // To do: make private
   public:
@@ -1013,10 +1011,9 @@ public:
         return !(*this == rhs);
     }
 
-
   // To do: make private, change double to SVGLength
 public:
-  std::vector<SPILength> values;
+    std::vector<SPILength> values;
 };
 
 /// Filter type internal to SPStyle

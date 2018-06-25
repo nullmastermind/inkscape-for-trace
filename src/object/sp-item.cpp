@@ -22,7 +22,6 @@
 
 #include "bad-uri-exception.h"
 #include "svg/svg.h"
-#include "svg/css-ostringstream.h"
 #include "print.h"
 #include "display/drawing-item.h"
 #include "attributes.h"
@@ -1309,9 +1308,7 @@ void SPItem::adjust_stroke( gdouble ex )
         if ( !style->stroke_dasharray.values.empty() ) {
             for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
                 double dash = style->stroke_dasharray.values[i].value * ex;
-                Inkscape::CSSOStringStream osarray;
-                osarray << dash;
-                style->stroke_dasharray.values[i].read(osarray.str().c_str());
+                style->stroke_dasharray.values[i].setDouble(dash);
             }
             style->stroke_dashoffset.value *= ex;
         }
