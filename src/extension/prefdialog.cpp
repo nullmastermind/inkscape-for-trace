@@ -217,6 +217,7 @@ PrefDialog::param_timer_expire () {
     if (_exEnv != nullptr) {
         _exEnv->cancel();
         _exEnv->undo();
+        _exEnv->reselect();
         _exEnv->run();
     }
 

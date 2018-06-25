@@ -194,10 +194,13 @@ ExecutionEnv::run () {
         createWorkingDialog();
     }
     SPDesktop *desktop = (SPDesktop *)_doc;
+    Inkscape::Selection * selection = desktop->getSelection();
+    selection->setBackup();
     desktop->setWaitingCursor();
     _effect->get_imp()->effect(_effect, _doc, _docCache);
     desktop->clearWaitingCursor();
     _state = ExecutionEnv::COMPLETE;
+    selection->restoreBackup();
     // _runComplete.signal();
     return;
 }
