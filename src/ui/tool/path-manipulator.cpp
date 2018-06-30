@@ -1508,7 +1508,7 @@ void PathManipulator::_setGeometry()
             LIVEPATHEFFECT(_path)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
     } else {
-        // return true to leave the decission on empty to the caller. 
+        // return true to leave the decision on empty to the caller.
         // Maybe the path become empty and we want to update to empty
         if (empty()) return;
         if (SPCurve * original = _path->getCurveBeforeLPE()){

@@ -350,7 +350,7 @@ void SPOffset::set_shape() {
 
     if ( fabs(this->rad) < 0.01 ) {
         // grosso modo: 0
-        // just put the source this as the offseted one, no one will notice
+        // just put this source as the offsetted one, no one will notice
         // it's also useless to compute the offset with a 0 radius
 
         //XML Tree being used directly here while it shouldn't be.

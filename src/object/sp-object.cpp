@@ -604,7 +604,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
     SPObject* ochild = SPFactory::createObject(type_string);
     if (ochild == nullptr) {
-        // Currenty, there are many node types that do not have
+        // Currently, there are many node types that do not have
         // corresponding classes in the SPObject tree.
         // (rdf:RDF, inkscape:clipboard, ...)
         // Thus, simply ignore this case for now.
@@ -673,7 +673,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
         SPObject* child = SPFactory::createObject(typeString);
         if (child == nullptr) {
-            // Currenty, there are many node types that do not have
+            // Currently, there are many node types that do not have
             // corresponding classes in the SPObject tree.
             // (rdf:RDF, inkscape:clipboard, ...)
             // Thus, simply ignore this case for now.

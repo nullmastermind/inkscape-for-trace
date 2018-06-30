@@ -186,7 +186,7 @@
 			<para>Internal Extensions are in a way the reverse of a normal Extension, in that instead of providing a way to hook into Inkscape from the outside, they provide hooks from inside Inkscape.  These are used directly by Inkscape, such as in the case of compiled-in printing modules.  Most users will never need to write this type of extension, they are pretty much for Inkscape core developers only.</para>
 		</section>
 		<section>
-			<title>Writeing Your Extension</title>
+			<title>Writing Your Extension</title>
 			<para>This section provides some guidance and examples for implementing different kinds of Extensions.</para>
 			<section>
 				<title>Writing Script Extensions</title>

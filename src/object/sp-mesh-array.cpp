@@ -2126,7 +2126,7 @@ guint SPMeshNodeArray::tensor_toggle( std::vector<guint> corners ) {
 }
 
 /**
-   Atempts to smooth color transitions across corners.
+   Attempts to smooth color transitions across corners.
    Input is a list of selected corner draggable indices.
 */
 guint SPMeshNodeArray::color_smooth( std::vector<guint> corners ) {
