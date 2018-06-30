@@ -246,56 +246,46 @@ endif()
 # CMake's builtin
 # ----------------------------------------------------------------------------
 
-set(TRY_GTKSPELL ON)
 # Include dependencies:
-# use patched version until GTK2_CAIROMMCONFIG_INCLUDE_DIR is added
-    pkg_check_modules(
-        GTK3
-        REQUIRED
-        gtkmm-3.0>=3.8
-        gdkmm-3.0>=3.8
-        gtk+-3.0>=3.8
-        gdk-3.0>=3.8
-        gdl-3.0>=3.4
-        )
-    list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 
-    # Use some obtuse string parsing to get the version
-    # number components for GTKMM.
-    # These variables are also substituted in config.h, and used within the
-    # GTKMM_CHECK_VERSION macro
-    string(REPLACE "." ";" GTKMM_VERSION_COMPONENTS ${GTK3_gtkmm-3.0_VERSION})
-    list(GET GTKMM_VERSION_COMPONENTS 0 INKSCAPE_GTKMM_MAJOR_VERSION)
-    list(GET GTKMM_VERSION_COMPONENTS 1 INKSCAPE_GTKMM_MINOR_VERSION)
-    list(GET GTKMM_VERSION_COMPONENTS 2 INKSCAPE_GTKMM_MICRO_VERSION)
-
-    pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
-
-    if("${GDL_3_6_FOUND}")
-        message("Using GDL 3.6 or higher")
-        add_definitions(-DWITH_GDL_3_6)
-        set (WITH_GDL_3_6 ON)
-    endif()
-
-    set(TRY_GTKSPELL )
-    pkg_check_modules(GTKSPELL3 gtkspell3-3.0)
-
-    if("${GTKSPELL3_FOUND}")
-        message("Using GtkSpell 3")
-        set (WITH_GTKSPELL ON)
-    else()
-        unset(WITH_GTKSPELL)
-    endif()
-
-    list(APPEND INKSCAPE_INCS_SYS
-        ${GTK3_INCLUDE_DIRS}
-        ${GTKSPELL3_INCLUDE_DIRS}
+pkg_check_modules(
+    GTK3
+    REQUIRED
+    gtkmm-3.0>=3.8
+    gdkmm-3.0>=3.8
+    gtk+-3.0>=3.8
+    gdk-3.0>=3.8
+    gdl-3.0>=3.4
     )
+list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
+list(APPEND INKSCAPE_INCS_SYS ${GTK3_INCLUDE_DIRS})
+list(APPEND INKSCAPE_LIBS ${GTK3_LIBRARIES})
 
-    list(APPEND INKSCAPE_LIBS
-        ${GTK3_LIBRARIES}
-        ${GTKSPELL3_LIBRARIES}
-    )
+# Use some obtuse string parsing to get the version
+# number components for GTKMM.
+# These variables are also substituted in config.h, and used within the
+# GTKMM_CHECK_VERSION macro
+string(REPLACE "." ";" GTKMM_VERSION_COMPONENTS ${GTK3_gtkmm-3.0_VERSION})
+list(GET GTKMM_VERSION_COMPONENTS 0 INKSCAPE_GTKMM_MAJOR_VERSION)
+list(GET GTKMM_VERSION_COMPONENTS 1 INKSCAPE_GTKMM_MINOR_VERSION)
+list(GET GTKMM_VERSION_COMPONENTS 2 INKSCAPE_GTKMM_MICRO_VERSION)
+
+pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
+if("${GDL_3_6_FOUND}")
+    message("Using GDL 3.6 or higher")
+    add_definitions(-DWITH_GDL_3_6)
+    set (WITH_GDL_3_6 ON)
+endif()
+
+pkg_check_modules(GTKSPELL3 gtkspell3-3.0)
+if("${GTKSPELL3_FOUND}")
+    message("Using GtkSpell 3")
+    list(APPEND INKSCAPE_INCS_SYS ${GTKSPELL3_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS ${GTKSPELL3_LIBRARIES})
+    set(WITH_GTKSPELL ON)
+else()
+    set(WITH_GTKSPELL OFF)
+endif()
 
 find_package(Boost 1.19.0 REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
