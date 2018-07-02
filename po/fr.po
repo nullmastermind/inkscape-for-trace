@@ -17823,7 +17823,7 @@ msgstr "Égaliser la _hauteur"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:637
 msgid "If not set, each row has the height of the tallest object in it"
 msgstr ""
-"Si décoché, chaque ligne a même la hauteur que l'objet le plus haut qu'elle "
+"Si décoché, chaque ligne a la même hauteur que l'objet le plus haut qu'elle "
 "contient"
 
 #. #### Number of columns ####
@@ -17842,8 +17842,8 @@ msgstr "Égaliser la _largeur"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:676
 msgid "If not set, each column has the width of the widest object in it"
 msgstr ""
-"Si décoché, chaque ligne a la même largeur que l'objet le plus large qu'elle "
-"contient"
+"Si décoché, chaque colonne a la même largeur que l'objet le plus large "
+"qu'elle contient"
 
 #. Anchor selection widget
 #: ../src/ui/dialog/grid-arrange-tab.cpp:687
@@ -22000,7 +22000,7 @@ msgstr "Angle de fin"
 #: ../src/ui/dialog/polar-arrange-tab.cpp:42
 msgctxt "Polar arrange tab"
 msgid "Anchor point:"
-msgstr "Point d'encrage :"
+msgstr "Point d'ancrage :"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:46
 msgctxt "Polar arrange tab"
