@@ -31,7 +31,7 @@ if(WIN32)
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
     ${MINGW_BIN}/libcroco-0.6-[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
-    ${MINGW_BIN}/libenchant.dll
+    ${MINGW_BIN}/libenchant-[0-9]*.dll
     ${MINGW_BIN}/libepoxy-[0-9]*.dll
     ${MINGW_BIN}/libexpat-[0-9]*.dll
     ${MINGW_BIN}/libexslt-[0-9]*.dll
@@ -197,7 +197,7 @@ if(WIN32)
 
   # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
   install(FILES
-    ${MINGW_LIB}/enchant/libenchant_aspell.dll
+    ${MINGW_LIB}/enchant-2/enchant_aspell.dll
     DESTINATION lib/enchant)
 
   # tcl/tk related files (required for tkinter)
