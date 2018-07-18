@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="object-visible-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.96929756,-165,-931.35478)" inkscape:label="00257" id="object-visible">
+      <rect style="fill:none" id="rect11899" width="16" height="16" x="165" y="961.36218"/>
+      <path style="opacity:1" d="m 173,966.3622 c -1.6569,0 -3,1.3431 -3,3 0,1.6568 1.3431,3 3,3 1.6568,0 3,-1.3432 3,-3 0,-1.6569 -1.3432,-3 -3,-3 z m -0.4931,0.8256 c 0.3741,0 0.6831,0.3108 0.6831,0.6979 0,0.3872 -0.309,0.7128 -0.6831,0.7128 -0.3741,0 -0.683,-0.3256 -0.683,-0.7128 0,-0.3871 0.3089,-0.6979 0.683,-0.6979 z" id="path11920" inkscape:connector-curvature="0"/>
+      <path style="opacity:1" d="m 173,963.3622 c -4.4183,0 -8,6 -8,6 0,0 3.5817,6 8,6 4.4183,0 8,-6 8,-6 0,0 -3.5817,-6 -8,-6 z m 0,2 c 3.866,0 6,4 6,4 0,0 -2.134,4 -6,4 -3.866,0 -6,-4 -6,-4 0,0 2.134,-4 6,-4 z" id="path11928" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path8543-5" d="m 167,967.2997 -1,-1" style="fill:none;stroke:#000000;stroke-linecap:round"/>
+      <path style="fill:none;stroke:#000000;stroke-linecap:round" d="m 179,967.2997 1,-1" id="path8545-3" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path8547-1" d="m 169,966.2997 -2,-2" style="fill:none;stroke:#000000;stroke-linecap:round"/>
+      <path style="fill:none;stroke:#000000;stroke-linecap:round" d="M 170.375,964.8622 169,962.4872" id="path8572-7" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path8574-8" d="m 172.4375,964.3622 -0.6875,-3" style="fill:none;stroke:#000000;stroke-linecap:round"/>
+      <path style="fill:none;stroke:#000000;stroke-linecap:round" d="m 177.4375,966.2997 1.5625,-2" id="path8578-8" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path8580-4" d="m 176.0625,964.8622 1.3308,-2.1541" style="fill:none;stroke:#000000;stroke-linecap:round"/>
+      <path style="fill:none;stroke:#000000;stroke-linecap:round" d="m 174,964.3622 0.8643,-3" id="path8582-8" inkscape:connector-curvature="0"/>
+    </g>
+    </svg>

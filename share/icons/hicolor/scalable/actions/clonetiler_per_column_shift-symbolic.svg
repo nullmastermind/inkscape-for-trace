@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="clonetiler_per_column_shift-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-557.99998,-772.3622)" id="clonetiler_per_column_shift" inkscape:label="00252">
+      <g id="g27407" transform="matrix(0,1,1,0,-185.3622,214.3622)">
+        <rect ry="0" style="fill:none" id="rect27409" width="16" height="16" x="743.36218" y="-574" rx="0.46966991" transform="rotate(90)"/>
+        <rect style="opacity:1" id="rect27411" width="2" height="12" x="746.36218" y="-570" rx="0" transform="rotate(90)"/>
+        <rect rx="0" y="-572" x="750.36218" height="12" width="2" id="rect27413" style="opacity:1" transform="rotate(90)"/>
+        <rect style="opacity:1" id="rect27415" width="2" height="12" x="754.36218" y="-574" rx="0" transform="rotate(90)"/>
+      </g>
+    </g>
+    </svg>

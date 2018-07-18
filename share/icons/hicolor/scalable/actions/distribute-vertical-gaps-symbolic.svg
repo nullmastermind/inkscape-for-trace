@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="distribute-vertical-gaps-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666655,0,0,0.666667,-772.65285,-497.57467)" inkscape:label="00286" id="distribute-vertical-gaps">
+      <g inkscape:label="#distribute_hdist" id="g18927" transform="rotate(-90,1190,739.362)">
+        <use xlink:href="#path5265" x="0" y="0" id="use18929" transform="matrix(1,0,0,0.7500174,124,177.0778)" width="1250" height="1250"/>
+        <path inkscape:connector-curvature="0" style="opacity:1" d="m 1161,708.3622 v 0.9231 22.1538 0.9231 h 1 v -0.9231 -22.1538 -0.9231 z" id="path18931"/>
+        <rect style="opacity:1" id="rect18933" width="14.94228" height="3" x="717.36218" y="1159" transform="matrix(0,1,1,0,0,0)"/>
+        <rect style="opacity:1" id="rect18935" width="4" height="9.0177546" x="1173" y="717.36218"/>
+        <rect style="fill:none" id="rect18937" width="24" height="24" x="1159" y="708.36218"/>
+        <path style="opacity:1" d="m 1165,715.3622 -3,-3 3,-3 v 2 h 5 v -2 l 3,3 -3,3 v -2 h -5 z" id="path18939" inkscape:connector-curvature="0"/>
+        <use height="1250" width="1250" transform="matrix(1,0,0,0.7500174,127,177.0778)" id="use18941" y="0" x="0" xlink:href="#path5265"/>
+        <path inkscape:connector-curvature="0" id="path18943" d="m 1180,715.3622 -3,-3 3,-3 v 2 h 3 v 2 h -3 z" style="opacity:1"/>
+      </g>
+    </g>
+    </svg>

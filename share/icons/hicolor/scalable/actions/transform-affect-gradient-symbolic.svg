@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="transform-affect-gradient-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.999999,-408,-527.36152)" inkscape:label="00159" id="transform-affect-gradient">
+      <rect style="fill:none" id="rect15054" width="16" height="16" x="408" y="527.36218"/>
+      <path inkscape:connector-curvature="0" id="path4430" d="m 410,528.3699 v 1 h 0.5 10.5 v 6.4923 0.5 h 1 v -0.5 -6.9923 -0.5 h -0.5 -11 z" style="opacity:1"/>
+      <path inkscape:connector-curvature="0" id="path4432" d="m 410,535.3622 v 1 h 0.5 6.5 v 0.5 0.5 h 1 v -0.5 -1 -0.5 h -0.5 -7 z" style="opacity:1"/>
+      <rect style="opacity:0.55" id="rect5201" width="2.9999981" height="4.0000048" x="412" y="530.36218"/>
+      <rect style="opacity:0.55" id="rect5203" width="1" height="1" x="411" y="531.36218"/>
+      <rect style="opacity:0.55" id="rect5205" width="1" height="1" x="411" y="533.36218"/>
+      <rect style="opacity:1" id="rect5211" width="1.9999501" height="4.0000162" x="418" y="530.36218"/>
+      <rect style="opacity:1" id="rect5213" width="1" height="1" x="417" y="532.36218"/>
+      <rect y="530.36218" x="417" height="1" width="1" id="rect5217" style="opacity:1"/>
+      <rect y="532.36218" x="410" height="1" width="1" id="rect5219" style="opacity:0.55"/>
+      <rect y="530.36218" x="410" height="1" width="1" id="rect5221" style="opacity:0.55"/>
+      <rect y="-534.36218" x="416" height="1" width="1.000002" id="rect5223" style="opacity:1" transform="scale(1,-1)"/>
+      <rect transform="scale(1,-1)" style="opacity:1" id="rect5225" width="1.000002" height="1" x="416" y="-532.36218"/>
+      <rect y="-531.36218" x="415" height="1" width="1.000002" id="rect5227" style="opacity:1" transform="scale(1,-1)"/>
+      <rect transform="scale(1,-1)" style="opacity:1" id="rect5229" width="1.000002" height="1" x="415" y="-533.36218"/>
+      <path inkscape:connector-curvature="0" id="path18881" d="m 413,539.3622 v 2.0201 h 2 v -2.0201 z" style="opacity:1"/>
+      <path inkscape:connector-curvature="0" id="path18883" d="m 417,541.3622 v -2 h 3 v -2 l 2.9883,3 -2.9883,3 v -2 z" style="opacity:1"/>
+      <path style="opacity:1" d="m 410,539.3823 v 2.0202 h 2 v -2.0202 z" id="path18885" inkscape:connector-curvature="0"/>
+    </g>
+    </svg>

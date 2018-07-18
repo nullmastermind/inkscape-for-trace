@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="path-reverse-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.99695781,0,0,1,-164.4553,-847.3622)" inkscape:label="00089" id="path-reverse">
+      <rect style="fill:none" id="rect15611" width="16" height="16" x="165" y="335" transform="translate(0,512.3622)"/>
+      <path inkscape:connector-curvature="0" id="path15627" d="m 165,849.3622 v 2 h 4 v 2 l 2.9883,-3 -2.9883,-3 v 2 z" style="opacity:1"/>
+      <path style="opacity:1" d="m 181,859.3622 v 2 h -4 v 2 l -2.9883,-3 2.9883,-3 v 2 z" id="path15629" inkscape:connector-curvature="0"/>
+      <path style="fill:none;stroke:#000000" d="m 165.4306,862.9318 c 0,0 2.5694,-7.5696 7.5694,-7.5696 5,0 7.5317,-7.5696 7.5317,-7.5696" id="path15631" inkscape:connector-curvature="0"/>
+      <rect style="opacity:1" id="rect15633" width="4" height="4.0000019" x="171" y="853.36218"/>
+    </g>
+    </svg>

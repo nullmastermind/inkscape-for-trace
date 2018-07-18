@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="xml-node-duplicate-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.666666,-772,-371.57448)" inkscape:label="00265" id="xml-node-duplicate">
+      <g id="g21890">
+        <rect style="fill:none" id="rect21796" width="24" height="24" x="1158" y="557.36218"/>
+        <rect y="563.36218" x="1164" height="18" width="1" id="rect21798" style="opacity:1"/>
+        <rect y="563.36218" x="1165" height="1" width="17" id="rect21800" style="opacity:1"/>
+        <rect y="580.36218" x="1164" height="1" width="18" id="rect21802" style="opacity:1"/>
+        <rect y="563.36218" x="1181" height="18" width="1" id="rect21804" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" id="path21806" d="m 1173,573.3622 v 8 h 8 v -8 z m 3,1 h 2 v 2 h 2 v 2 h -2 v 2 h -2 v -2 h -2 v -2 h 2 z" style="opacity:1"/>
+        <g transform="matrix(1.146412,0,0,0.920121,132.1332,549.0236)" id="g21814">
+          <path inkscape:connector-curvature="0" id="path21816" d="m 906.5,17.78125 -0.3438,0.375 -3,3 -0.375,0.34375 0.375,0.34375 3,3 0.3438,0.375 0.7187,-0.71875 -0.375,-0.34375 -2.6562,-2.65625 2.6562,-2.65625 0.375,-0.34375 z m 3,0 -0.7188,0.71875 0.375,0.34375 2.6563,2.65625 -2.6563,2.65625 -0.375,0.34375 0.7188,0.71875 0.3437,-0.375 3,-3 0.375,-0.34375 -0.375,-0.34375 -3,-3 z" style="opacity:1"/>
+        </g>
+        <rect style="opacity:1" id="rect21818" width="1" height="18" x="1158" y="557.36218"/>
+        <rect style="opacity:1" id="rect21820" width="17" height="1" x="1159" y="557.36218"/>
+        <rect style="opacity:1" id="rect21822" width="6" height="1" x="1158" y="574.36218"/>
+        <rect style="opacity:1" id="rect21824" width="1" height="5.9999981" x="1175" y="557.36218"/>
+      </g>
+    </g>
+    </svg>

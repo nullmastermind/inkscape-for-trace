@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="path-mode-bspline-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-1009,-557.36218)" inkscape:label="00216" id="path-mode-bspline">
+      <rect style="fill:none" id="rect48619" width="16" height="16" x="1009" y="557.36218"/>
+      <g id="g48628" transform="matrix(1.395066,-1.366399,1.366399,1.395066,-404.6688,1807.641)">
+        <path inkscape:connector-curvature="0" style="fill:none;stroke:#000000;stroke-linecap:round" d="m 961.7806,55.38034 c 0,0 1.3782,-1.49823 3.2604,-1.76058 1.8823,-0.26235 3.5841,1.78013 3.5841,1.78013" id="path-mode-spiro-3-8-8" inkscape:label="#spiro_splines_mode"/>
+        <path inkscape:connector-curvature="0" id="path6177-8-2" d="m 960.716,54.82044 4.5038,-4.57407 4.5738,4.47984" style="fill:none;stroke:#000000;stroke-linecap:round"/>
+      </g>
+    </g>
+    </svg>

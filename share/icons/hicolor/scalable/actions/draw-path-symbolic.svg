@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-path-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.670249,-190,-519.0092)" inkscape:label="00137" id="draw-path">
+      <path id="path6331" d="m 299.3105,788.8172 -1.5844,4.509 c -0.4193,1.2247 1.2997,1.8792 1.7357,0.6094 l 1.7599,-4.4746 z" style="opacity:1" inkscape:connector-curvature="0"/>
+      <path style="opacity:1" d="m 298.3053,782.7608 0.7935,1.1812 5.9242,2.4229 1.5611,-0.5092 1.9892,-5.5024 c -2.5,0 -0.5,-6 -7,-6 z" id="path6315" inkscape:connector-curvature="0"/>
+      <path id="path5211" d="m 299,785.3622 -0.7016,2 5,1.8992 0.7016,-1.8992 z" style="opacity:1" inkscape:connector-curvature="0"/>
+      <rect style="fill:none" id="rect6268" width="24" height="23.86286" x="285" y="774.36218"/>
+      <path style="fill:none;stroke:#000000" d="m 289.157,793.883 c 11.6613,-1.9389 -1.6778,-18.0416 -1.6778,-18.0416 h 11.0416" id="path6270" inkscape:connector-curvature="0"/>
+      <path d="m 286,793.3622 h 4 v 4 h -4 z" style="opacity:1" id="rect6272" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path18601" d="m 287,795.8798 h 9" style="fill:none;stroke:#000000"/>
+      <rect style="opacity:1" id="rect18603" width="4" height="4" x="286" y="262" transform="translate(0,512.3622)"/>
+    </g>
+    </svg>

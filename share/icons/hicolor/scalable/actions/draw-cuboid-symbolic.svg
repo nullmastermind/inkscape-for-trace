@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-cuboid-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.66412647,-272,-412.16756)" inkscape:label="00219" id="draw-cuboid">
+      <path id="path5192" d="m 422.0245,621.1892 -11.8372,4.4235 -0.2295,12.5755 8.886,5.9717 11.3127,-3.4757 0.2294,-12.1015 z" style="fill:none;stroke:#000000" inkscape:connector-curvature="0"/>
+      <rect style="fill:none" id="rect4344" width="24" height="23.126381" x="408" y="621.24683"/>
+      <path inkscape:box3dface="XYfront" id="path4628" style="opacity:1" d="m 410.431,637.9184 11.2755,-3.7876 0.2248,-12.4108 -11.2836,4.2365 -0.2167,11.962 z" inkscape:connector-curvature="0"/>
+      <path inkscape:box3dface="XZtop" id="path4630" style="opacity:1" d="m 409.8945,638.0327 11.9175,-4.2576 8.3989,6.6929 -11.2636,3.2954 z" inkscape:connector-curvature="0"/>
+      <path inkscape:box3dface="YZleft" id="path4633" style="opacity:0.55" d="m 421.9174,634.4865 7.7647,5.8197 0.2089,-11.5352 -7.9597,-7.051 z" inkscape:connector-curvature="0"/>
+      <rect style="opacity:1" id="rect25277" width="1.021484" height="13.46592" x="420.97849" y="621.34839"/>
+    </g>
+    </svg>

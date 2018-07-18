@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-calligraphic-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1.012692,0,0,0.999935,-322.0357,-805.31005)" id="draw-calligraphic-16px" inkscape:label="00140">
+      <rect style="fill:none" id="rect10047" width="15.79948" height="15.93774" x="317.99979" y="805.42438"/>
+      <path style="opacity:1" d="m 333.5474,809.2372 -0.7356,0.9188 -3.3018,-3.5798 1.1109,-1.214 m -1.7589,1.9299 1.3269,1.4319 0.648,0.716 1.3269,1.4319 -0.6789,0.716 c -0.6582,0.715 -0.6378,0.7177 -1.296,2.8638 -2.633,2.8603 -5.2768,2.8638 -5.2768,2.8638 l -0.648,0.7159 c 0,0 -0.6687,0.7151 -1.327,0 l 3.9499,-4.2957 0.062,-0.093 c 0.5209,0.276 1.141,0.1894 1.5738,-0.2801 0.5454,-0.5926 0.545,-1.5562 0,-2.1479 -0.545,-0.5917 -1.4295,-0.5925 -1.975,0 -0.4326,0.4697 -0.5011,1.1774 -0.2468,1.7432 l -0.062,0.062 -3.9499,4.2957 c -0.6582,-0.7151 0,-1.4319 0,-1.4319 l 0.648,-0.716 c 0,0 -0.01,-2.8673 2.623,-5.7276 1.975,-0.7159 1.9956,-0.7168 2.6538,-1.4319 z" id="path10153" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" style="opacity:1" d="m 318,806.0284 v 0.3338 c 3.6152,1.4602 0,9 0,12 0,6.109 4,1 4,1 v -1 c 0,0 -1.8062,3.0747 -2.3421,-0.2629 -0.898,-5.5924 6.7021,-12.0709 -1.6579,-12.0709 z" id="path23141"/>
+    </g>
+    </svg>

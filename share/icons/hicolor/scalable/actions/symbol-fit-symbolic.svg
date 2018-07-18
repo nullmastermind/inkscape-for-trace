@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="symbol-fit-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g id="symbol-fit" inkscape:label="00344">
+      <title id="title48495">symbol-fit</title>
+      <rect y="0" x="0" height="16" width="16" id="rect48497" style="fill:none"/>
+      <rect style="fill:none;stroke:#000000" id="rect48499" width="15" height="15" x="0.5" y="0.5"/>
+      <path sodipodi:arc-type="slice" d="m 9.5,0.5 a 9,9 0 0 1 -8.99999706,9 L 0.5,0.5 Z" sodipodi:end="1.570796" sodipodi:start="0" sodipodi:ry="9" sodipodi:rx="9" sodipodi:cy="0.5" sodipodi:cx="0.5" sodipodi:type="arc" id="path48501" style="opacity:0.35"/>
+      <path sodipodi:arc-type="arc" style="fill:none;stroke:#000000" id="path48503" sodipodi:type="arc" sodipodi:cx="0.5" sodipodi:cy="0.5" sodipodi:rx="9" sodipodi:ry="9" sodipodi:start="0" sodipodi:end="1.570796" sodipodi:open="true" d="m 9.5,0.5 a 9,9 0 0 1 -8.99999706,9"/>
+      <circle style="fill:none;stroke:#000000" id="circle48505" cx="8" cy="8" r="4.5"/>
+    </g>
+    </svg>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="align-vertical-top-to-anchor-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.666667,-797.33333,-421.57455)" inkscape:label="00276" id="align-vertical-top-to-anchor">
+      <g inkscape:label="#al_top_out" id="g22407" transform="matrix(1,0,0,-1,152,1288.724)">
+        <rect y="-1068" x="632.36218" height="24" width="24" id="rect22409" style="fill:none" transform="rotate(90)"/>
+        <rect y="-1068" x="652.36218" height="4" width="4" id="rect22411" style="opacity:1" transform="rotate(90)"/>
+        <rect y="-1068" x="650.36218" height="24" width="1" id="rect22413" style="opacity:1" transform="rotate(90)"/>
+        <rect y="-1064" x="633.36218" height="4.9999981" width="16" id="rect22415" style="opacity:1" transform="rotate(90)"/>
+        <rect style="opacity:1" id="rect22417" width="10" height="3.0000031" x="639.36218" y="-1057" transform="rotate(90)"/>
+        <rect y="-1052" x="635.36218" height="4" width="14" id="rect22419" style="opacity:1" transform="rotate(90)"/>
+      </g>
+    </g>
+    </svg>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="stroke-join-round-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-1112,-1024.3622)" id="stroke-join-round-16px" inkscape:label="00312">
+      <g transform="translate(990.9998,465.3622)" id="g13484" inkscape:label="stock-join-round">
+        <rect y="559" x="121.0002" height="16" width="16" id="rect13427" style="fill:none"/>
+        <rect y="565" x="133.0002" height="1" width="1" id="rect13431" style="opacity:1"/>
+        <rect y="565" x="131.0002" height="1" width="1" id="rect13433" style="opacity:1"/>
+        <rect y="565" x="129.0002" height="1" width="1" id="rect13435" style="opacity:1"/>
+        <rect y="565" x="127.0002" height="1" width="1" id="rect13437" style="opacity:1"/>
+        <rect y="567" x="127.0002" height="1" width="1" id="rect13439" style="opacity:1"/>
+        <rect y="569" x="127.0002" height="1" width="1" id="rect13441" style="opacity:1"/>
+        <rect y="571" x="127.0002" height="1" width="1" id="rect13443" style="opacity:1"/>
+        <rect y="573" x="127.0002" height="1" width="1" id="rect13445" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" id="rect13447" d="m 123.0002,574 v -4 -5 c 0,-2.216 1.784,-4 4,-4 h 8 c 0,4.3748 0,-0.8557 0,3 h -7 c -1.107,-0.047 -2,0.892 -2,2 v 5 3 z" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" id="rect13481" d="m -112,350 h 6 v 1.75 1.25 h -3 v 4 h -3 z" style="opacity:1" transform="translate(241.0002,217)"/>
+      </g>
+    </g>
+    </svg>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="tool-node-editor-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.999045,0,0,0.997514,-317.6962,-553.97274)" inkscape:label="00124" id="tool-node-editor-16px">
+      <rect y="555.35352" x="318.00861" height="16.017389" width="15.98754" id="rect13947" style="fill:none"/>
+      <rect style="opacity:1" id="rect13950" width="4" height="3.9999969" x="320" y="557.36218"/>
+      <rect style="opacity:1" id="rect13952" width="2.9999981" height="2.9999969" x="318" y="568.36218"/>
+      <path inkscape:connector-curvature="0" id="path13954" d="m 324.0039,561.3341 5.196,9.3693 3.4639,-3.5135 z" style="opacity:1"/>
+      <use style="opacity:1" xlink:href="#rect10541" height="1250" width="1250" transform="matrix(0.9994803,0,0,1.000725,45.15021,-20.41907)" id="use13956" y="0" x="0"/>
+      <path style="opacity:1" d="m 333.9687,556.3934 c -6.3317,-0.2557 -10.4469,1.4706 -12.2812,3.6875 -2.3635,2.8565 -2.8585,3.9104 -2.5718,11.3125 l 0.9155,-0.0625 c -0.0312,-4.875 -0.2244,-7.6767 1.9688,-9.9687 2.0459,-2.1381 3.5086,-4.0256 12.0153,-3.9375 l -0.0778,-1.0313 z" id="path10536" inkscape:connector-curvature="0"/>
+    </g>
+    </svg>

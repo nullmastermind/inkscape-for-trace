@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="dialog-memory-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-225,-587.3622)" inkscape:label="00102" id="dialog-memory">
+      <rect y="-20" x="115" height="16" width="16" id="rect22433" style="fill:none" transform="translate(110,607.3622)"/>
+      <g transform="translate(110,607.3622)" id="g22488" inkscape:label="preferences-environment">
+        <rect transform="scale(-1)" ry="0" rx="2" y="17" x="-121" height="2" width="1" id="rect22439"/>
+        <rect transform="scale(-1)" ry="0" rx="2" y="17" x="-123" height="2" width="1" id="rect22441"/>
+        <rect transform="scale(-1)" ry="0" rx="2" y="17" x="-125" height="2" width="1" id="rect22443"/>
+        <rect transform="scale(-1)" ry="0" rx="2" y="17" x="-127" height="2" width="1" id="rect22445"/>
+        <rect id="rect22461" width="1" height="2" x="-121" y="4" rx="2" ry="0" transform="scale(-1)"/>
+        <rect id="rect22463" width="1" height="2" x="-123" y="4" rx="2" ry="0" transform="scale(-1)"/>
+        <rect id="rect22465" width="1" height="2" x="-125" y="4" rx="2" ry="0" transform="scale(-1)"/>
+        <rect id="rect22467" width="1" height="2" x="-127" y="4" rx="2" ry="0" transform="scale(-1)"/>
+        <rect ry="0" rx="2" y="-15" x="116" height="1" width="2" id="rect22469"/>
+        <rect ry="0" rx="2" y="-13" x="116" height="1" width="2" id="rect22471"/>
+        <rect ry="0" rx="2" y="-11" x="116" height="1" width="2" id="rect22473"/>
+        <rect ry="0" rx="2" y="-9" x="116" height="1" width="2" id="rect22475"/>
+        <rect id="rect22477" width="2" height="1" x="129" y="-15" rx="2" ry="0"/>
+        <rect id="rect22479" width="2" height="1" x="129" y="-13" rx="2" ry="0"/>
+        <rect id="rect22481" width="2" height="1" x="129" y="-11" rx="2" ry="0"/>
+        <rect id="rect22483" width="2" height="1" x="129" y="-9" rx="2" ry="0"/>
+      </g>
+      <path style="opacity:1" d="m 229,591.3622 v 9 h 9 v -9 z m 1,1 h 7 v 7 h -7 z" id="rect40967" inkscape:connector-curvature="0"/>
+    </g>
+    </svg>

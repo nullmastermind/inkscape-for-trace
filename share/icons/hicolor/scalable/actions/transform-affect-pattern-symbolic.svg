@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="transform-affect-pattern-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.999998,-438,-527.35338)" inkscape:label="00160" id="transform-affect-pattern">
+      <rect y="527.35437" x="438" height="16" width="16" id="rect18970" style="fill:none"/>
+      <path style="opacity:1" d="m 440,528.3622 v 1 h 0.5 10.5 v 6.4922 0.5 h 1 v -0.5 -6.9922 -0.5 h -0.5 -11 z" id="path18966" inkscape:connector-curvature="0"/>
+      <path style="opacity:1" d="m 440,535.3544 v 1 h 0.5 6.5 v 0.5 0.5 h 1 v -0.5 -1 -0.5 h -0.5 -7 z" id="path18968" inkscape:connector-curvature="0"/>
+      <path style="opacity:1" d="m 443,539.3544 v 2.0202 h 2 v -2.0202 z" id="path18996" inkscape:connector-curvature="0"/>
+      <path style="opacity:1" d="m 447,541.3544 v -2 h 3 v -2 l 2.9883,3 -2.9883,3 v -2 z" id="path18998" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path19000" d="m 440,539.3746 v 2.0201 h 2 v -2.0201 z" style="opacity:1"/>
+      <rect style="opacity:1" id="rect19028" width="1" height="0.9995091" x="440" y="530.36267"/>
+      <rect style="opacity:1" id="rect19030" width="1" height="1" x="441" y="531.36218"/>
+      <rect style="opacity:1" id="rect19032" width="1" height="1" x="442" y="532.36218"/>
+      <rect style="opacity:1" id="rect19034" width="1" height="1" x="441" y="533.36218"/>
+      <rect y="530.36267" x="440" height="0.9995091" width="1" id="rect19036" style="opacity:1"/>
+      <rect y="531.36218" x="441" height="1" width="1" id="rect19038" style="opacity:1"/>
+      <rect y="532.36218" x="442" height="1" width="1" id="rect19040" style="opacity:1"/>
+      <rect y="533.36218" x="441" height="1" width="1" id="rect19042" style="opacity:1"/>
+      <rect y="530.36267" x="443" height="0.9995091" width="1" id="rect19060" style="opacity:1"/>
+      <rect y="531.36218" x="444" height="1" width="1" id="rect19062" style="opacity:1"/>
+      <rect y="532.36218" x="445" height="1" width="1" id="rect19064" style="opacity:1"/>
+      <rect y="533.36218" x="444" height="1" width="1" id="rect19066" style="opacity:1"/>
+      <rect style="opacity:1" id="rect19068" width="1" height="0.9995091" x="443" y="530.36267"/>
+      <rect style="opacity:1" id="rect19070" width="1" height="1" x="444" y="531.36218"/>
+      <rect style="opacity:1" id="rect19072" width="1" height="1" x="445" y="532.36218"/>
+      <rect style="opacity:1" id="rect19074" width="1" height="1" x="444" y="533.36218"/>
+      <rect style="opacity:1" id="rect19076" width="1" height="0.9995091" x="446" y="530.36267"/>
+      <rect style="opacity:1" id="rect19078" width="1" height="1" x="447" y="531.36218"/>
+      <rect style="opacity:1" id="rect19080" width="1" height="1" x="448" y="532.36218"/>
+      <rect style="opacity:1" id="rect19082" width="1" height="1" x="447" y="533.36218"/>
+      <rect y="530.36267" x="446" height="0.9995091" width="1" id="rect19084" style="opacity:1"/>
+      <rect y="531.36218" x="447" height="1" width="1" id="rect19086" style="opacity:1"/>
+      <rect y="532.36218" x="448" height="1" width="1" id="rect19088" style="opacity:1"/>
+      <rect y="533.36218" x="447" height="1" width="1" id="rect19090" style="opacity:1"/>
+    </g>
+    </svg>

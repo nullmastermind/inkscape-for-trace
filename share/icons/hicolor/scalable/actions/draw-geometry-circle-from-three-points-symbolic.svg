@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-geometry-circle-from-three-points-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-528,-589.36218)" inkscape:label="00222" id="draw-geometry-circle-from-three-points">
+      <rect style="fill:none" id="rect25473" width="16" height="16" x="528" y="589.36218"/>
+      <path inkscape:connector-curvature="0" style="fill:none;stroke:#000000" d="m 542.482,597.3622 c 0,0.8471 -0.1696,1.6939 -0.496,2.4765 -0.3263,0.7826 -0.8093,1.5005 -1.4123,2.0995 -0.603,0.599 -1.3256,1.0786 -2.1133,1.4028 -0.7878,0.3241 -1.64,0.4925 -2.4923,0.4925 -0.8523,-10e-5 -1.7041,-0.1686 -2.4913,-0.4928 -0.7872,-0.3242 -1.509,-0.8039 -2.1112,-1.4029 -0.6023,-0.599 -1.0845,-1.3168 -1.4104,-2.0994 -0.3258,-0.7825 -0.4952,-1.6292 -0.4952,-2.4762 0,-0.8471 0.1694,-1.6937 0.4952,-2.4763 0.3259,-0.7826 0.8081,-1.5004 1.4104,-2.0994 0.6022,-0.599 1.324,-1.0786 2.1112,-1.4029 0.7872,-0.3241 1.639,-0.4927 2.4913,-0.4927 0.8523,0 1.7045,0.1684 2.4923,0.4925 0.7877,0.3241 1.5103,0.8038 2.1133,1.4028 0.603,0.599 1.086,1.3168 1.4124,2.0994 0.3263,0.7827 0.4959,1.6294 0.4959,2.4766" id="path2526"/>
+      <rect style="opacity:1" id="rect25475" width="4" height="4" x="534" y="589.36218"/>
+      <rect y="595.36218" x="528" height="4" width="4" id="rect25477" style="opacity:1"/>
+      <rect style="opacity:1" id="rect25479" width="4" height="4" x="540" y="595.36218"/>
+    </g>
+    </svg>

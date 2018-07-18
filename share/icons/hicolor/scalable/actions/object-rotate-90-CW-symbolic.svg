@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="object-rotate-90-CW-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.999956,0,0,1,-284.98733,-1084.3622)" id="object-rotate-90-CW" style="opacity:1" inkscape:label="00363">
+      <g transform="translate(223.9998,725.3622)" id="g15895" inkscape:label="stock-rotate-270">
+        <rect transform="matrix(0,-1,-1,0,0,0)" style="fill:none" id="rect15886" width="16" height="16" x="-375" y="-77.000198"/>
+        <path inkscape:connector-curvature="0" style="opacity:1" d="m 294.5,574 c -3.5899,0 -6.5,2.9102 -6.5,6.5 0,0.1711 0.018,0.3323 0.031,0.5 h -3.0312 l 4,4 4,-4 h -2.9375 c -0.019,-0.1668 -0.062,-0.3282 -0.062,-0.5 0,-2.4853 2.0147,-4.5 4.5,-4.5 2.4853,0 4.5,2.0147 4.5,4.5 0,0.1718 -0.044,0.3332 -0.062,0.5 h 2.0312 c 0.013,-0.1677 0.031,-0.3289 0.031,-0.5 0,-3.5898 -2.9101,-6.5 -6.5,-6.5 z" transform="translate(-223.9998,-213)" id="path15888-3"/>
+      </g>
+    </g>
+    </svg>

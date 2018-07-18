@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="tool-measure-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.666667,-189.69806,-598.89953)" id="tool-measure" inkscape:label="00336">
+      <rect y="898.3493" x="284.54709" height="24" width="24" id="rect13362" style="fill:none"/>
+      <path style="opacity:1" d="m 290.6066,900.4247 v 20.9959 h 11.9246 v -17.1209 c 0,-1.8792 -1.1179,-3.875 -3.6875,-3.875 z m 2,2 h 6.1216 c 1.3125,0 1.8125,0.8107 1.8125,1.9375 v 15.0312 h -7.9341 z" id="path13364" inkscape:connector-curvature="0"/>
+      <rect ry="0.5" rx="0.5" y="903.36218" x="292.15979" height="1" width="4.250011" id="rect13370" style="opacity:1"/>
+      <rect style="opacity:1" id="rect13372" width="4.250011" height="1" x="292.15979" y="911.36218" rx="0.5" ry="0.5"/>
+      <rect style="opacity:1" id="rect13376" width="2.1875119" height="1" x="292.22229" y="917.36218" rx="0.5" ry="0.5"/>
+      <rect ry="0.5" rx="0.5" y="915.36218" x="292.22229" height="1" width="2.1875119" id="rect13378" style="opacity:1"/>
+      <rect style="opacity:1" id="rect13380" width="2.1875119" height="1" x="292.22229" y="913.36218" rx="0.5" ry="0.5"/>
+      <rect ry="0.5" rx="0.5" y="909.36218" x="292.22229" height="1" width="2.1875119" id="rect13382" style="opacity:1"/>
+      <rect style="opacity:1" id="rect13384" width="2.1875119" height="1" x="292.22229" y="907.36218" rx="0.5" ry="0.5"/>
+      <rect ry="0.5" rx="0.5" y="905.36218" x="292.22229" height="1" width="2.1875119" id="rect13386" style="opacity:1"/>
+    </g>
+    </svg>

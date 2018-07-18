@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="object-tweak-jitter-color-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-255,-667.36218)" id="object-tweak-jitter-color" inkscape:label="00113">
+      <rect y="667.36218" x="255" height="16" width="16" id="rect4563" style="fill:none"/>
+      <rect y="677.36218" x="257" height="4" width="4" id="rect4567" style="opacity:1"/>
+      <rect transform="scale(-1)" style="opacity:1" id="rect4569" width="4" height="3.930722" x="-269" y="-681.36218"/>
+      <rect transform="scale(-1)" style="opacity:1" id="rect4573" width="4" height="3.9999969" x="-265" y="-677.36218"/>
+      <rect y="-673.36218" x="261" height="4.0000019" width="4" id="rect4575" style="opacity:0.55" transform="scale(1,-1)"/>
+      <rect transform="scale(-1)" style="opacity:0.55" id="rect4577" width="4" height="4.0692749" x="-269" y="-677.43152"/>
+      <rect y="677.36218" x="261" height="4.0000019" width="4" id="rect4579" style="opacity:0.35"/>
+      <rect style="opacity:0.55" id="rect4581" width="4" height="3.9999969" x="257" y="673.36218"/>
+    </g>
+    </svg>

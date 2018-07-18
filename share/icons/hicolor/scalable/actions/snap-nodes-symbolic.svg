@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="snap-nodes-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.998641,0,0,0.9996,-737.97402,-506.15331)" id="snap-nodes" inkscape:label="00326">
+      <rect style="fill:none" id="rect22660" width="16" height="16" x="739" y="506.3558"/>
+      <path inkscape:connector-curvature="0" id="path22658" d="m 754.3125,522.3558 a 0.5140439,0.5121131 0 0 1 -0.4063,-0.5937 c 0.2334,-1.5961 -0.061,-3.7231 -1.125,-5.4063 -0.6325,-1.0004 -1.5307,-1.8451 -2.7812,-2.375 v -1.125 c 1.6552,0.5943 2.8607,1.6793 3.6562,2.9375 1.2267,1.94 1.518,4.2611 1.25,6.0938 a 0.5140439,0.5121131 0 0 1 -0.5937,0.4687 z m -14.7188,-0.125 a 0.5240784,0.52211 0 0 1 -0.5,-0.4375 c -0.2977,-1.827 -0.053,-4.1493 1.125,-6.0625 0.7918,-1.2859 2.0393,-2.37 3.7813,-2.9375 v 1.0625 c -1.3469,0.5016 -2.2728,1.3776 -2.9063,2.4063 -1.0134,1.6459 -1.2297,3.742 -0.9687,5.3437 a 0.5240784,0.52211 0 0 1 -0.5313,0.625 z" style="opacity:0.55"/>
+      <rect style="opacity:1" id="rect22662" width="4" height="5" x="745" y="-514.35577" transform="scale(1,-1)"/>
+      <rect y="-511.3558" x="750" height="1" width="2" id="rect22664" style="opacity:1" transform="scale(1,-1)"/>
+      <rect style="opacity:1" id="rect22666" width="2" height="1" x="742" y="-511.3558" transform="scale(1,-1)"/>
+      <circle r="1.5" cy="56.5" cx="633.5" transform="matrix(1,0,0,-1.010417,119.5,567.8975)" id="path22668" style="opacity:1"/>
+      <circle r="1.5" cy="56.5" cx="633.5" style="opacity:1" id="path22670" transform="matrix(1,0,0,-1.010417,107.5,567.9287)"/>
+    </g>
+    </svg>

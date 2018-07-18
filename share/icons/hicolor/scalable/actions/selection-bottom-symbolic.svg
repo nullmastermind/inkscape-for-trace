@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="selection-bottom-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-135,-687.36218)" inkscape:label="00063" id="selection-bottom">
+      <rect style="fill:none" id="rect12189" width="16" height="16" x="135" y="-703.36218" transform="scale(1,-1)"/>
+      <rect style="opacity:1" id="rect12191" width="5" height="2" x="136" y="-698.36218" transform="scale(1,-1)"/>
+      <rect style="opacity:1" id="rect12193" width="13" height="2" x="136" y="-702.36218" transform="scale(1,-1)"/>
+      <rect style="opacity:1" id="rect12195" width="5" height="2" x="136" y="-694.36218" transform="scale(1,-1)"/>
+      <rect style="opacity:1" id="rect12197" width="5" height="2" x="136" y="-690.36218" transform="scale(1,-1)"/>
+      <path inkscape:connector-curvature="0" id="path12199" d="m 145,688.3622 h 2 v 7 h 2 l -3,2.9883 -3,-2.9883 h 2 z" style="opacity:1"/>
+    </g>
+    </svg>

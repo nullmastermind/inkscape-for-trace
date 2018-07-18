@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="text_rotation-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-499,-836.36218)" id="text_rotation" inkscape:label="00183">
+      <rect style="fill:none" id="rect21524" width="16" height="16" x="499" y="836.36218"/>
+      <path inkscape:connector-curvature="0" id="path21526" d="M 501.5031,840.3681 499,847.3577 h 1.5019 c 0.744,-1.997 0,10e-4 0.7423,-1.9955 l 2.5586,0.018 0.7041,1.9775 h 1.5018 l -2.5031,-6.9896 z m 1.0013,1.4978 1.0123,2.4963 h -2.0025 z" style="opacity:1"/>
+      <path style="opacity:1" d="m 512.3642,842.2559 -5.0038,5.5892 1.4117,0.5519 c 1.4568,-1.5864 0,2e-4 1.4547,-1.5856 l 2.3981,0.957 -0.088,2.1002 1.4117,0.5519 0.2982,-7.4287 z m 0.3731,1.7627 v 2.6966 l -1.8823,-0.7358 z" id="path21528" inkscape:connector-curvature="0"/>
+      <rect y="838.36218" x="506" height="11" width="1" id="rect21530" style="opacity:1"/>
+      <rect y="848.36218" x="499" height="1" width="8" id="rect21532" style="opacity:1"/>
+      <rect style="opacity:1" id="rect21539" width="8.465971" height="1.0381351" x="789.94452" y="608.88788" transform="matrix(0.9327962,0.3604044,-0.378579,0.925569,0,0)"/>
+    </g>
+    </svg>

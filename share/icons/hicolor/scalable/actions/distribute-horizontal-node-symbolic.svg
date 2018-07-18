@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="distribute-horizontal-node-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.66651661,0,0,0.666667,-770.48959,-574.24147)" inkscape:label="00297" id="distribute-horizontal-node">
+      <g id="g19929" transform="rotate(-90,1168,873.3622)">
+        <g inkscape:label="#node_valign" id="g19905" transform="translate(112)">
+          <path id="path19907" d="m 1055.506,861.863 v 22.9939 0" style="fill:none;stroke:#000000" inkscape:connector-curvature="0"/>
+          <path id="path19909" d="m 1044.511,861.8622 c 2.998,3.4992 18.966,1.5984 17.492,7.4983 -1,3.9991 -16.992,0.9997 -17.492,8.498 -0.091,1.3717 0.925,2.2137 2.594,2.7677 1.67,0.554 3.993,0.8199 6.514,1.0394 2.522,0.2194 5.243,0.3924 7.708,0.7605" style="fill:none;stroke:#000000;stroke-linecap:round" inkscape:connector-curvature="0"/>
+          <rect style="opacity:1" id="rect19911" width="5.0000048" height="4.999989" x="1053" y="862.36218"/>
+          <rect y="870.36218" x="1053" height="4.999989" width="5.0000048" id="rect19913" style="opacity:1"/>
+          <rect style="opacity:1" id="rect19915" width="5.0000048" height="4.999989" x="1053" y="879.36218"/>
+          <rect style="fill:none" id="rect19917" width="24" height="24" x="1044" y="861.36218"/>
+        </g>
+        <rect style="opacity:1" id="rect19919" width="10" height="1" x="1170" y="864.36218" ry="0"/>
+        <rect ry="0" y="872.36218" x="1170" height="1" width="10" id="rect19921" style="opacity:1"/>
+        <rect style="opacity:1" id="rect19923" width="10" height="1" x="1170" y="881.36218" ry="0"/>
+        <path id="path19925" d="m 1175.968,875.3622 1.532,-2 1.468,2 H 1178 v 4 h 1 l -1.5,2 -1.5,-2 h 1 v -4 z" style="opacity:1" inkscape:connector-curvature="0"/>
+        <path inkscape:connector-curvature="0" style="opacity:1" d="m 1175.968,867.3622 1.532,-2 1.468,2 H 1178 v 3 h 1 l -1.5,2 -1.5,-2 h 1 v -3 z" id="path19927"/>
+      </g>
+    </g>
+    </svg>

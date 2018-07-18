@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="symbol-add-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g id="symbol-add" inkscape:label="00340">
+      <title id="title48587">object-symbol</title>
+      <g id="object-symbol">
+        <rect y="0" x="0" height="16" width="16" id="rect48591" style="fill:none"/>
+        <circle r="4.5" cy="10" cx="10" id="circle48593" style="opacity:0.55"/>
+        <circle style="fill:none;stroke:#000000" id="circle48595" cx="10" cy="10" r="4.5"/>
+        <path style="fill:none;stroke:#000000" d="m 2,10 h 8 V 2" id="path48597" inkscape:connector-curvature="0"/>
+        <path d="m 7,3 h 6 L 10,0 Z" id="path48599" inkscape:connector-curvature="0" style="opacity:1"/>
+      </g>
+    </g>
+    </svg>

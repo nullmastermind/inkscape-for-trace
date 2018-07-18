@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-geometry-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-438,-589.3622)" inkscape:label="00217" id="draw-geometry-16px">
+      <g transform="translate(376.9998,352.3622)" id="g5490" inkscape:label="stock-tool-measure">
+        <rect transform="translate(241.0002,217)" y="20" x="-180" height="16" width="16" id="rect5381" style="fill:none"/>
+        <rect ry="0.5" rx="0.62307692" y="247" x="62.000198" height="1.000005" width="13.95163" id="rect3094" style="opacity:1"/>
+        <path id="path1348" d="M 73.23901,243.5489 70.52619,242 l -0.77509,0.7745 1.55018,1.9362 0.7751,4.6468 L 73.0002,251 v 2 l 1,-1 0.0139,-3.8042 z" style="opacity:1" inkscape:connector-curvature="0"/>
+        <path id="path3226-3" d="M 64.76397,243.5489 67.43716,242 l 0.76376,0.7745 -1.52753,1.9362 -0.76377,4.6468 L 65.0002,251 v 2 l -1,-1 v -3.8042 z" style="opacity:1" inkscape:connector-curvature="0"/>
+        <rect rx="0.75" ry="0.60000038" y="237.00369" x="68.000198" height="1.996323" width="2" id="rect3078" style="opacity:1"/>
+        <rect ry="1.106091" rx="1.055584" y="246" x="68.000198" height="3.000005" width="1.999998" id="rect1344" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" id="path5483" transform="translate(241.0002,217)" d="m -172,21 c -1.6568,0 -3,1.34315 -3,3 0,1.65685 1.3432,3 3,3 1.6569,0 3,-1.34315 3,-3 0,-1.65685 -1.3431,-3 -3,-3 z m 0,1.46875 c 0.8452,0 1.5313,0.68607 1.5313,1.53125 0,0.84518 -0.6861,1.53125 -1.5313,1.53125 -0.8452,0 -1.5312,-0.68607 -1.5312,-1.53125 0,-0.84518 0.686,-1.53125 1.5312,-1.53125 z" style="opacity:1"/>
+      </g>
+    </g>
+    </svg>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="rectangle-make-corners-sharp-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-349,-620.36218)" inkscape:label="00170" id="rectangle-make-corners-sharp">
+      <rect style="fill:none" id="rect19811" width="16" height="16" x="349" y="620.36218"/>
+      <rect style="opacity:1" id="rect19813" width="11" height="2" x="353" y="621.36218"/>
+      <rect style="opacity:1" id="rect19815" width="2" height="11" x="362" y="621.36218"/>
+      <rect style="opacity:1" id="rect19817" width="2" height="2" x="350" y="109" transform="translate(0,512.3622)"/>
+      <rect style="opacity:1" id="rect19819" width="2" height="2" x="362" y="121" transform="translate(0,512.3622)"/>
+    </g>
+    </svg>

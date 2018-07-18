@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="snap-nodes-midpoint-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.996108,-859,-504.39161)" id="snap-nodes-midpoint" inkscape:label="00329">
+      <rect y="506.42471" x="859" height="16" width="16" id="rect22787" style="fill:none"/>
+      <rect transform="rotate(90)" y="-865" x="513.36218" height="4" width="2" id="rect22801" style="opacity:1"/>
+      <path inkscape:connector-curvature="0" id="path22803" d="m 865,511.3622 v 6 l 4,-3 z" style="opacity:1"/>
+      <rect y="510.36221" x="861" height="8" width="2" id="rect22807" style="opacity:1"/>
+      <path style="opacity:1" d="m 865,518.3622 h -6 l 3,4 z" id="path22809" inkscape:connector-curvature="0"/>
+      <path inkscape:connector-curvature="0" id="path22811" d="m 865,510.3622 h -6 l 3,-4 z" style="opacity:1"/>
+      <rect style="opacity:1" id="rect22813" width="1" height="16" x="872" y="-6" transform="translate(0,512.3622)"/>
+      <circle r="2.5" cy="1.5" cx="872.5" style="opacity:1" id="path22815" transform="translate(0,512.3622)"/>
+    </g>
+    </svg>
