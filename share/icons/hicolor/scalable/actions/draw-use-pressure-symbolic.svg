@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-use-pressure-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-use-pressure-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="7.5943519" inkscape:cx="11.375557" inkscape:cy="-22.568178" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid"/>
   </sodipodi:namedview>
   <g transform="matrix(0.999657,0,0,1,-378.86988,-805.3625)" inkscape:label="00177" id="draw-use-pressure">
       <g id="g6258" transform="matrix(1.369323,0,0,1.456319,-567.92,362.9858)">
-        <rect style="fill:none" id="use_pressure" width="11.684" height="10.9571" x="691.52399" y="303.7634"/>
+        <path inkscape:connector-curvature="0" id="use_pressure" d="m 691.52399,303.7634 h 11.684 v 10.9571 h -11.684 z" style="opacity:0;fill:none"/>
         <path inkscape:connector-curvature="0" style="opacity:1" d="m 691.5241,314.2513 0.01,0.4987 11.6782,-0.016 3e-4,-3.9732 c -2.1909,1.9293 -5.8423,3.3026 -11.6846,3.3026 z" id="path7145"/>
       </g>
       <path inkscape:connector-curvature="0" id="path20147" d="m 386,807.3622 h 2 v 6 h 3 l -4,4 -4,-3.9981 h 3 z" style="opacity:1"/>

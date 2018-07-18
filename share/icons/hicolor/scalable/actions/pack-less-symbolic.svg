@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="pack-less-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="pack-less-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="7.5943519" inkscape:cx="11.375557" inkscape:cy="-22.568178" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid"/>
   </sodipodi:namedview>
   <g id="pack-less" inkscape:label="00342">
       <title id="title48551">pack-less</title>
-      <rect y="0" x="0" height="16" width="16" id="rect48553" style="fill:none"/>
-      <rect id="rect48555" height="5" width="5" y="1.5" x="1.5" style="opacity:0.55"/>
-      <rect id="rect48557" height="5" width="5" y="1.5" x="9.5" style="opacity:0.55"/>
-      <rect id="rect48559" height="5" width="5" y="9.5" x="1.5" style="opacity:0.55"/>
-      <rect id="rect48561" height="5" width="5" y="9.5" x="9.5" style="opacity:0.55"/>
-      <rect style="fill:none;stroke:#000000" x="1.5" y="1.5" width="5" height="5" id="rect48563"/>
-      <rect style="fill:none;stroke:#000000" x="9.5" y="1.5" width="5" height="5" id="rect48565"/>
-      <rect style="fill:none;stroke:#000000" x="1.5" y="9.5" width="5" height="5" id="rect48567"/>
-      <rect style="fill:none;stroke:#000000" x="9.5" y="9.5" width="5" height="5" id="rect48569"/>
+      <path inkscape:connector-curvature="0" id="rect48553" d="M 0,0 H 16 V 16 H 0 Z" style="opacity:0;fill:none"/>
+      <path inkscape:connector-curvature="0" id="rect48555" d="m 1.5,1.5 h 5 v 5 h -5 z" style="opacity:0.55"/>
+      <path inkscape:connector-curvature="0" id="rect48557" d="m 9.5,1.5 h 5 v 5 h -5 z" style="opacity:0.55"/>
+      <path inkscape:connector-curvature="0" id="rect48559" d="m 1.5,9.5 h 5 v 5 h -5 z" style="opacity:0.55"/>
+      <path inkscape:connector-curvature="0" id="rect48561" d="m 9.5,9.5 h 5 v 5 h -5 z" style="opacity:0.55"/>
+      <path inkscape:connector-curvature="0" id="rect48563" d="M 1,1 V 1.5 7 H 7 V 1 Z M 2,2 H 6 V 6 H 2 Z" style="opacity:1;stroke-linecap:butt"/>
+      <path inkscape:connector-curvature="0" id="rect48565" d="M 9,1 V 1.5 7 h 6 V 1 Z m 1,1 h 4 v 4 h -4 z" style="opacity:1;stroke-linecap:butt"/>
+      <path inkscape:connector-curvature="0" id="rect48567" d="M 1,9 V 9.5 15 H 7 V 9 Z m 1,1 h 4 v 4 H 2 Z" style="opacity:1;stroke-linecap:butt"/>
+      <path inkscape:connector-curvature="0" id="rect48569" d="M 9,9 V 9.5 15 h 6 V 9 Z m 1,1 h 4 v 4 h -4 z" style="opacity:1;stroke-linecap:butt"/>
     </g>
     </svg>

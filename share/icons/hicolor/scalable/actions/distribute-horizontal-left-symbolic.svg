@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="distribute-horizontal-left-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="22.627417" inkscape:cx="9.2043164" inkscape:cy="4.8036905" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="distribute-horizontal-left-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="7.5943519" inkscape:cx="11.375557" inkscape:cy="-22.568178" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid"/>
   </sodipodi:namedview>
   <g transform="matrix(0.666667,0,0,0.666655,-696,-472.23283)" inkscape:label="00279" id="distribute-horizontal-left">
       <use xlink:href="#path5265" x="0" y="0" id="use5269" transform="matrix(1,0,0,0.7500174,12,177.0778)" width="1250" height="1250"/>
       <path inkscape:connector-curvature="0" style="opacity:1" d="m 1049,708.3622 v 0.9231 22.1538 0.9231 h 1 v -0.9231 -22.1538 -0.9231 z" id="path5265"/>
-      <rect style="opacity:1" id="rect5326" width="14.94228" height="5.0011559" x="717.36218" y="1048.999" transform="matrix(0,1,1,0,0,0)"/>
-      <rect style="opacity:1" id="rect5724" width="3.004833" height="9.0177546" x="1061" y="717.36218"/>
-      <rect style="fill:none" id="rect18537" width="24" height="24" x="1044" y="708.36218"/>
+      <path inkscape:connector-curvature="0" id="rect5326" d="m 717.36218,1048.999 h 14.94228 v 5.0012 h -14.94228 z" style="opacity:1" transform="matrix(0,1,1,0,0,0)"/>
+      <path inkscape:connector-curvature="0" id="rect5724" d="m 1061,717.36218 h 3.0048 v 9.01776 H 1061 Z" style="opacity:1"/>
+      <path inkscape:connector-curvature="0" id="rect18537" d="m 1044,708.36218 h 24 v 24 h -24 z" style="opacity:0;fill:none"/>
       <path style="opacity:1" d="m 1053,715.3622 -3,-3 3,-3 v 2 h 5 v -2 l 3,3 -3,3 v -2 h -5 z" id="path18619" inkscape:connector-curvature="0"/>
     </g>
     </svg>
