@@ -634,13 +634,14 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
     this->set_active(row);
 }
 
-void PrefCombo::init(Glib::ustring const &prefs_path,
-                     std::vector<Glib::ustring> labels, std::vector<int> values, int default_value)
+void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring> labels, std::vector<int> values,
+                     int default_value)
 {
     size_t labels_size = labels.size();
     size_t values_size = values.size();
     if (values_size != labels_size) {
-        std::cout << "PrefCombo::" << "Diferent number of values/labels in " << prefs_path << std::endl;
+        std::cout << "PrefCombo::"
+                  << "Diferent number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;
@@ -648,8 +649,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
     int row = 0;
     int value = prefs->getInt(_prefs_path, default_value);
 
-    for (int i = 0 ; i < labels_size; ++i)
-    {
+    for (int i = 0; i < labels_size; ++i) {
         this->append(labels[i]);
         _values.push_back(values[i]);
         if (value == values[i])
@@ -658,26 +658,25 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
     this->set_active(row);
 }
 
-void PrefCombo::init(Glib::ustring const &prefs_path,
-                     std::vector<Glib::ustring> labels, std::vector<Glib::ustring> values, Glib::ustring default_value)
+void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring> labels,
+                     std::vector<Glib::ustring> values, Glib::ustring default_value)
 {
     size_t labels_size = labels.size();
     size_t values_size = values.size();
     if (values_size != labels_size) {
-        std::cout << "PrefCombo::" << "Diferent number of values/labels in " << prefs_path << std::endl;
+        std::cout << "PrefCombo::"
+                  << "Diferent number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int row = 0;
     Glib::ustring value = prefs->getString(_prefs_path);
-    if(value.empty())
-    {
+    if (value.empty()) {
         value = default_value;
     }
 
-    for (int i = 0 ; i < labels_size; ++i)
-    {
+    for (int i = 0; i < labels_size; ++i) {
         this->append(labels[i]);
         _ustr_values.push_back(values[i]);
         if (value == values[i])

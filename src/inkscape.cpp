@@ -410,8 +410,7 @@ Application::add_style_sheet()
 #if GTK_CHECK_VERSION(3, 16, 0)
     // Gtk::CssProviderError not defined until 3.16.
     catch (const Gtk::CssProviderError &ex) {
-        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
-                   ex.what().c_str());
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
 #else
     catch (...) {
@@ -419,8 +418,8 @@ Application::add_style_sheet()
 #endif
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    //we want a tiny file with 3 or 4 lines, so we can loada witout removing context
-    //is more undertable than record previously applyed
+    // we want a tiny file with 3 or 4 lines, so we can loada witout removing context
+    // is more undertable than record previously applyed
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
       auto provider = Gtk::CssProvider::create();
@@ -477,8 +476,9 @@ Application::Application(const char* argv, bool use_gui) :
 
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
-    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
+                 prefs->getBool("/theme/darkTheme", false), NULL);
     InkErrorHandler* handler = new InkErrorHandler(use_gui);
     prefs->setErrorHandler(handler);
     {

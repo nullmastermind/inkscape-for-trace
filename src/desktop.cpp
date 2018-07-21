@@ -1573,8 +1573,7 @@ SPDesktop::onResized (double /*x*/, double /*y*/)
 /**
  * Redraw callback; queues Gtk redraw; connected by View.
  */
-void
-SPDesktop::storeDesktopPosition()
+void SPDesktop::storeDesktopPosition()
 {
     if (main) {
         _widget->storeDesktopPosition();

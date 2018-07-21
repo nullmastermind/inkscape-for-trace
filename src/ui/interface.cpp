@@ -263,29 +263,28 @@ sp_ui_new_view()
     sp_namedview_update_layers_from_document(static_cast<SPDesktop*>(dtw->view));
 }
 
-void
-sp_ui_reload()
+void sp_ui_reload()
 {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
-    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
+                 prefs->getBool("/theme/darkTheme", false), NULL);
     prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
     prefs->save();
     std::list<SPDesktop *> desktops;
     INKSCAPE.get_all_desktops(desktops);
     std::list<SPDesktop *>::iterator i = desktops.begin();
-    while (i != desktops.end())
-    {
-        SPDesktop * dt = *i;
+    while (i != desktops.end()) {
+        SPDesktop *dt = *i;
         if (dt == nullptr) {
             ++i;
             continue;
         }
         dt->storeDesktopPosition();
 
-        SPDocument *document; 
+        SPDocument *document;
         SPViewWidget *dtw;
 
         document = dt->getDocument();
@@ -300,8 +299,8 @@ sp_ui_reload()
             continue;
         }
         sp_create_window(dtw, TRUE);
-        sp_namedview_window_from_document(static_cast<SPDesktop*>(dtw->view));
-        sp_namedview_update_layers_from_document(static_cast<SPDesktop*>(dtw->view));
+        sp_namedview_window_from_document(static_cast<SPDesktop *>(dtw->view));
+        sp_namedview_update_layers_from_document(static_cast<SPDesktop *>(dtw->view));
         dt->destroyWidget();
         i++;
     }

@@ -20,7 +20,7 @@ void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& b
     Gtk::Image *buttonIcon = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_SMALL_TOOLBAR));
     buttonIcon->show();
 
-	button.set_relief(Gtk::RELIEF_NONE);
+    button.set_relief(Gtk::RELIEF_NONE);
 	button.show();
 	button.add(*buttonIcon);
 	button.set_can_focus(false);

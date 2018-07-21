@@ -318,27 +318,28 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
  * path - The directory to parse, will add nothing if directory doesn't exist
  * exclusions - Exclude files that exactly match these names.
  */
-void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustring path, std::vector<const char *> exclusions)
+void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustring path,
+                               std::vector<const char *> exclusions)
 {
-    if(!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
+    if (!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
         return;
     }
 
     Glib::Dir dir(path);
     std::string file = dir.read_name();
-    while (!file.empty()){
+    while (!file.empty()) {
         // If not extensions are specified, don't reject ANY files.
         bool reject = false;
 
         // Reject any file which matches the exclusions.
-        for (auto &exc: exclusions) {
-	    reject |= Glib::str_has_prefix(file, exc);
+        for (auto &exc : exclusions) {
+            reject |= Glib::str_has_prefix(file, exc);
         }
 
         // Reject any filename which isn't a regular file
         Glib::ustring filename = Glib::build_filename(path, file);
 
-        if(Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) && !reject) {
+        if (Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) && !reject) {
             folders.push_back(filename);
         }
         file = dir.read_name();

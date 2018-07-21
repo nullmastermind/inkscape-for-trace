@@ -111,7 +111,7 @@ ToggleButtonParam::param_newWidget()
         }
         gtk_widget_show(box_button);
         GtkWidget *icon_button = nullptr;
-        if(!value){
+        if (!value) {
             icon_button = GTK_WIDGET(sp_get_icon_image(_icon_inactive, _icon_size));
         } else {
             icon_button = GTK_WIDGET(sp_get_icon_image(_icon_active, _icon_size));
@@ -163,7 +163,7 @@ ToggleButtonParam::refresh_button()
         Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
         Gtk::IconSize is(_icon_size);
         if (!im) return;
-        if(!value){
+        if (!value) {
             im = sp_get_icon_image(_icon_inactive, is);
         } else {
             im = sp_get_icon_image(_icon_active, is);

@@ -201,7 +201,7 @@ public:
     void add_style_sheet();
     void add_icon_theme();
 
-private:
+  private:
     static Inkscape::Application * _S_inst;
 
     Application(const char* argv0, bool use_gui);

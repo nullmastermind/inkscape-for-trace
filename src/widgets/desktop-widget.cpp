@@ -1202,8 +1202,8 @@ SPDesktopWidget::shutdown()
 /**
  * \store dessktop position
  */
-void
-SPDesktopWidget::storeDesktopPosition() {
+void SPDesktopWidget::storeDesktopPosition()
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool maxed = desktop->is_maximized();
     bool full = desktop->is_fullscreen();

@@ -240,15 +240,15 @@ protected:
     UI::Widget::PrefCheckButton _t_node_delete_preserves_shape;
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
 
-    UI::Widget::PrefCombo       _gtk_theme;
-    UI::Widget::PrefCombo       _icon_theme;
+    UI::Widget::PrefCombo _gtk_theme;
+    UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefColorPicker _symbolic_color;
-    UI::Widget::PrefCombo       _misc_small_toolbar;
-    UI::Widget::PrefCombo       _misc_small_secondary;
-    UI::Widget::PrefCombo       _misc_small_tools;
-    UI::Widget::Button         *_apply_theme;
+    UI::Widget::PrefCombo _misc_small_toolbar;
+    UI::Widget::PrefCombo _misc_small_secondary;
+    UI::Widget::PrefCombo _misc_small_tools;
+    UI::Widget::Button *_apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;

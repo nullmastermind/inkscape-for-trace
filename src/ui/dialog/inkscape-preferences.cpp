@@ -19,14 +19,14 @@
 
 #include "inkscape-preferences.h"
 
-#include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
-#include <glibmm/markup.h>
-#include <gtkmm/main.h>
-#include <gtkmm/recentmanager.h>
-#include <gtkmm/recentinfo.h>
-#include <gtk/gtksettings.h>
 #include <gio/gio.h>
+#include <glibmm/i18n.h>
+#include <glibmm/markup.h>
+#include <glibmm/miscutils.h>
+#include <gtk/gtksettings.h>
+#include <gtkmm/main.h>
+#include <gtkmm/recentinfo.h>
+#include <gtkmm/recentmanager.h>
 
 #include "cms-system.h"
 #include "document.h"
@@ -52,8 +52,8 @@
 #include "object/color-profile.h"
 #include "style.h"
 
-#include "ui/widget/style-swatch.h"
 #include "ui/interface.h"
+#include "ui/widget/style-swatch.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
@@ -340,7 +340,7 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
                 _("Remember the style of the (first) selected object as this tool's style"));
 }
 
-//static void changeTheme()
+// static void changeTheme()
 //{
 //    sp_ui_reload();
 //}
@@ -580,38 +580,34 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
 }
 
-gchar * _inkscape_get_theme_dir (void)
+gchar *_inkscape_get_theme_dir(void)
 {
-  const gchar *var;
+    const gchar *var;
 
-  var = g_getenv ("GTK_DATA_PREFIX");
-  if (var == NULL)
-    var = g_getenv ("GTK_PATH");
-  return g_build_filename (var, "share", "themes", NULL);
+    var = g_getenv("GTK_DATA_PREFIX");
+    if (var == NULL)
+        var = g_getenv("GTK_PATH");
+    return g_build_filename(var, "share", "themes", NULL);
 }
 
-static void
-_inkscape_fill_gtk (const gchar *path,
-          GHashTable  *t)
+static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
 {
-  const gchar *dir_entry;
-  GDir *dir = g_dir_open (path, 0, NULL);
+    const gchar *dir_entry;
+    GDir *dir = g_dir_open(path, 0, NULL);
 
-  if (!dir)
-    return;
+    if (!dir)
+        return;
 
-  while ((dir_entry = g_dir_read_name (dir)))
-    {
-      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+    while ((dir_entry = g_dir_read_name(dir))) {
+        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
 
-      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
-          !g_hash_table_contains (t, dir_entry))
-        g_hash_table_add (t, g_strdup (dir_entry));
+        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) && !g_hash_table_contains(t, dir_entry))
+            g_hash_table_add(t, g_strdup(dir_entry));
 
-      g_free (filename);
+        g_free(filename);
     }
 
-  g_dir_close (dir);
+    g_dir_close(dir);
 }
 
 
@@ -745,8 +741,8 @@ void InkscapePreferences::initPageUI()
                         _("Selects whether the dockbar switcher will show text labels, icons, or both"), false);
     }
 
-    //Theme
-    _page_theme.add_group_header( _("Theme changes, require restart"));
+    // Theme
+    _page_theme.add_group_header(_("Theme changes, require restart"));
     {
         GHashTable *t;
         GHashTableIter iter;
@@ -754,54 +750,51 @@ void InkscapePreferences::initPageUI()
         gchar **builtin_themes;
         GList *list, *l;
         guint i;
-        const gchar * const *dirs;
+        const gchar *const *dirs;
 
-        t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+        t = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
         /* Builtin themes */
-        builtin_themes = g_resources_enumerate_children ("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
-        for (i = 0; builtin_themes[i] != NULL; i++)
-        {
-            if (g_str_has_suffix (builtin_themes[i], "/"))
-                g_hash_table_add (t, g_strndup (builtin_themes[i], strlen (builtin_themes[i]) - 1));
+        builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+        for (i = 0; builtin_themes[i] != NULL; i++) {
+            if (g_str_has_suffix(builtin_themes[i], "/"))
+                g_hash_table_add(t, g_strndup(builtin_themes[i], strlen(builtin_themes[i]) - 1));
         }
-        g_strfreev (builtin_themes);
+        g_strfreev(builtin_themes);
 
-        path = _inkscape_get_theme_dir ();
-        _inkscape_fill_gtk (path, t);
-        g_free (path);
+        path = _inkscape_get_theme_dir();
+        _inkscape_fill_gtk(path, t);
+        g_free(path);
 
-        path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
-        _inkscape_fill_gtk (path, t);
-        g_free (path);
+        path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
+        _inkscape_fill_gtk(path, t);
+        g_free(path);
 
-        path = g_build_filename (g_get_home_dir (), ".themes", NULL);
-        _inkscape_fill_gtk (path, t);
-        g_free (path);
+        path = g_build_filename(g_get_home_dir(), ".themes", NULL);
+        _inkscape_fill_gtk(path, t);
+        g_free(path);
 
-        dirs = g_get_system_data_dirs ();
-        for (i = 0; dirs[i]; i++)
-        {
-            path = g_build_filename (dirs[i], "themes", NULL);
-            _inkscape_fill_gtk (path, t);
-            g_free (path);
+        dirs = g_get_system_data_dirs();
+        for (i = 0; dirs[i]; i++) {
+            path = g_build_filename(dirs[i], "themes", NULL);
+            _inkscape_fill_gtk(path, t);
+            g_free(path);
         }
-        
+
         list = NULL;
-        g_hash_table_iter_init (&iter, t);
-        while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
-            list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
+        g_hash_table_iter_init(&iter, t);
+        while (g_hash_table_iter_next(&iter, (gpointer *)&theme, NULL))
+            list = g_list_insert_sorted(list, theme, (GCompareFunc)strcmp);
 
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
-        for (l = list; l; l = l->next)
-        {
+        for (l = list; l; l = l->next) {
             theme = (gchar *)l->data;
             labels.push_back(Glib::ustring(theme));
             values.push_back(Glib::ustring(theme));
         }
 
-        g_list_free (list);
-        g_hash_table_destroy (t);
+        g_list_free(list);
+        g_hash_table_destroy(t);
 
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
@@ -809,25 +802,24 @@ void InkscapePreferences::initPageUI()
 
     {
         using namespace Inkscape::IO::Resource;
-        auto files = get_foldernames(ICONS, {"application"});
+        auto files = get_foldernames(ICONS, { "application" });
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
-        for(auto &filename: files) {
+        for (auto &filename : files) {
             // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
             // Maybe we can link boost path utilities
             // Remove directory if present.
             // Do this before extension removal incase directory has a period character.
             const size_t last_slash_idx = filename.find_last_of("\\/");
-            if (std::string::npos != last_slash_idx)
-            {
+            if (std::string::npos != last_slash_idx) {
                 filename.erase(0, last_slash_idx + 1);
             }
 
             labels.push_back(filename);
             values.push_back(filename);
         }
-        std::sort(labels.begin(), labels.end()); 
-        std::sort(values.begin(), values.end()); 
+        std::sort(labels.begin(), labels.end());
+        std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
@@ -841,27 +833,27 @@ void InkscapePreferences::initPageUI()
         _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
     _page_theme.add_line(false, _("Color for symbolic icons:"), _symbolic_color, "", "", true);
     {
-        Glib::ustring sizeLabels[] = {C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"), C_("Icon size", "Smaller")};
-        int sizeValues[] = {3, 0, 1, 2};
+        Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
+                                       C_("Icon size", "Smaller") };
+        int sizeValues[] = { 3, 0, 1, 2 };
         // "Larger" is 3 to not break existing preference files. Should fix in GTK3
 
-        _misc_small_tools.init( "/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
-        _page_theme.add_line( false, _("Toolbox icon size:"), _misc_small_tools, "",
-                           _("Set the size for the tool icons (requires restart)"), false);
+        _misc_small_tools.init("/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
+        _page_theme.add_line(false, _("Toolbox icon size:"), _misc_small_tools, "",
+                             _("Set the size for the tool icons (requires restart)"), false);
 
-        _misc_small_toolbar.init( "/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
-        _page_theme.add_line( false, _("Control bar icon size:"), _misc_small_toolbar, "",
-                           _("Set the size for the icons in tools' control bars to use (requires restart)"), false);
+        _misc_small_toolbar.init("/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0);
+        _page_theme.add_line(false, _("Control bar icon size:"), _misc_small_toolbar, "",
+                             _("Set the size for the icons in tools' control bars to use (requires restart)"), false);
 
-        _misc_small_secondary.init( "/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1 );
-        _page_theme.add_line( false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
-                           _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
+        _misc_small_secondary.init("/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1);
+        _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
+                             _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
     Glib::ustring const label = _("Now");
     Glib::ustring const tooltip = _("A bit slow process");
-    _apply_theme = new UI::Widget::Button(label,tooltip);
-    _page_theme.add_line( false, _("Apply theme"), *_apply_theme, "",
-                           _("Apply theme"), false);
+    _apply_theme = new UI::Widget::Button(label, tooltip);
+    _page_theme.add_line(false, _("Apply theme"), *_apply_theme, "", _("Apply theme"), false);
     _apply_theme->signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     // Windows

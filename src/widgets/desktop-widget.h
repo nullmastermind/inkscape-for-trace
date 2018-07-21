@@ -163,41 +163,24 @@ struct SPDesktopWidget {
                 _dtw->window = nullptr;
             }
 
-        void storeDesktopPosition() override
-            { _dtw->storeDesktopPosition(); }
-        void requestCanvasUpdate() override
-            { _dtw->requestCanvasUpdate(); }
-        void requestCanvasUpdateAndWait() override
-            { _dtw->requestCanvasUpdateAndWait(); }
-        void enableInteraction() override
-            { _dtw->enableInteraction(); }
-        void disableInteraction() override
-            { _dtw->disableInteraction(); }
-        void activateDesktop() override
-            { sp_dtw_desktop_activate (_dtw); }
-        void deactivateDesktop() override
-            { sp_dtw_desktop_deactivate (_dtw); }
-        void updateRulers() override
-            { sp_desktop_widget_update_rulers (_dtw); }
-        void updateScrollbars (double scale) override
-            { sp_desktop_widget_update_scrollbars (_dtw, scale); }
-        void toggleRulers() override
-            { sp_desktop_widget_toggle_rulers (_dtw); }
-        void toggleScrollbars() override
-            { sp_desktop_widget_toggle_scrollbars (_dtw); }
-        void toggleColorProfAdjust() override
-            { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
-        bool colorProfAdjustEnabled() override
-            { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
-        void updateZoom() override
-            { sp_desktop_widget_update_zoom (_dtw); }
-        void letZoomGrabFocus() override
-            { _dtw->letZoomGrabFocus(); }
-        void updateRotation() override
-            { sp_desktop_widget_update_rotation (_dtw); }
-        void setToolboxFocusTo (const gchar * id) override
-            { _dtw->setToolboxFocusTo (id); }
-        void setToolboxAdjustmentValue (const gchar *id, double val) override
+            void storeDesktopPosition() override { _dtw->storeDesktopPosition(); }
+            void requestCanvasUpdate() override { _dtw->requestCanvasUpdate(); }
+            void requestCanvasUpdateAndWait() override { _dtw->requestCanvasUpdateAndWait(); }
+            void enableInteraction() override { _dtw->enableInteraction(); }
+            void disableInteraction() override { _dtw->disableInteraction(); }
+            void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
+            void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
+            void updateRulers() override { sp_desktop_widget_update_rulers(_dtw); }
+            void updateScrollbars(double scale) override { sp_desktop_widget_update_scrollbars(_dtw, scale); }
+            void toggleRulers() override { sp_desktop_widget_toggle_rulers(_dtw); }
+            void toggleScrollbars() override { sp_desktop_widget_toggle_scrollbars(_dtw); }
+            void toggleColorProfAdjust() override { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
+            bool colorProfAdjustEnabled() override { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
+            void updateZoom() override { sp_desktop_widget_update_zoom(_dtw); }
+            void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
+            void updateRotation() override { sp_desktop_widget_update_rotation(_dtw); }
+            void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
+            void setToolboxAdjustmentValue(const gchar *id, double val) override
             { _dtw->setToolboxAdjustmentValue (id, val); }
         void setToolboxSelectOneValue (gchar const *id, int val) override
             { _dtw->setToolboxSelectOneValue (id, val); }
