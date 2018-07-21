@@ -395,9 +395,7 @@ Application::add_style_sheet()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // symbolic
     auto provider = Gtk::CssProvider::create();
-    Glib::ustring css_str = "*{-gtk-icon-theme:\"";
-    css_str += prefs->getString("/theme/iconTheme");
-    css_str += "\";}";
+    Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         gchar colornamed[64];
         sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));

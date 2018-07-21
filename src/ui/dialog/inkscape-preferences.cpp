@@ -822,16 +822,12 @@ void InkscapePreferences::initPageUI()
             {
                 filename.erase(0, last_slash_idx + 1);
             }
-            
-            // Remove extension if present.
-            const size_t period_idx = filename.rfind('.');
-            if (std::string::npos != period_idx)
-            {
-                filename.erase(period_idx);
-            }
+
             labels.push_back(filename);
             values.push_back(filename);
         }
+        std::sort(labels.begin(), labels.end()); 
+        std::sort(values.begin(), values.end()); 
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
