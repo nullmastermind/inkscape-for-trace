@@ -25,6 +25,8 @@
 #include <gtkmm/main.h>
 #include <gtkmm/recentmanager.h>
 #include <gtkmm/recentinfo.h>
+#include <gtk/gtksettings.h>
+#include <gio/gio.h>
 
 #include "cms-system.h"
 #include "document.h"
@@ -51,6 +53,7 @@
 #include "style.h"
 
 #include "ui/widget/style-swatch.h"
+#include "ui/interface.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
@@ -337,6 +340,12 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
                 _("Remember the style of the (first) selected object as this tool's style"));
 }
 
+//static void changeTheme()
+//{
+//    sp_ui_reload();
+//}
+
+
 void InkscapePreferences::initPageTools()
 {
     Gtk::TreeModel::iterator iter_tools = this->AddPage(_page_tools, _("Tools"), PREFS_PAGE_TOOLS);
@@ -571,6 +580,41 @@ void InkscapePreferences::initPageTools()
 #endif // WITH_LPETOOL
 }
 
+gchar * _inkscape_get_theme_dir (void)
+{
+  const gchar *var;
+
+  var = g_getenv ("GTK_DATA_PREFIX");
+  if (var == NULL)
+    var = g_getenv ("GTK_PATH");
+  return g_build_filename (var, "share", "themes", NULL);
+}
+
+static void
+_inkscape_fill_gtk (const gchar *path,
+          GHashTable  *t)
+{
+  const gchar *dir_entry;
+  GDir *dir = g_dir_open (path, 0, NULL);
+
+  if (!dir)
+    return;
+
+  while ((dir_entry = g_dir_read_name (dir)))
+    {
+      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+
+      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
+          !g_hash_table_contains (t, dir_entry))
+        g_hash_table_add (t, g_strdup (dir_entry));
+
+      g_free (filename);
+    }
+
+  g_dir_close (dir);
+}
+
+
 void InkscapePreferences::initPageUI()
 {
     Gtk::TreeModel::iterator iter_ui = this->AddPage(_page_ui, _("Interface"), PREFS_PAGE_UI);
@@ -654,23 +698,7 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, _("Language (requires restart):"), _ui_languages, "",
                               _("Set the language for menus and number formats"), false);
 
-    {
-        Glib::ustring sizeLabels[] = {C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"), C_("Icon size", "Smaller")};
-        int sizeValues[] = {3, 0, 1, 2};
-        // "Larger" is 3 to not break existing preference files. Should fix in GTK3
-
-        _misc_small_tools.init( "/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
-        _page_ui.add_line( false, _("Toolbox icon size:"), _misc_small_tools, "",
-                           _("Set the size for the tool icons (requires restart)"), false);
-
-        _misc_small_toolbar.init( "/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
-        _page_ui.add_line( false, _("Control bar icon size:"), _misc_small_toolbar, "",
-                           _("Set the size for the icons in tools' control bars to use (requires restart)"), false);
-
-        _misc_small_secondary.init( "/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1 );
-        _page_ui.add_line( false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
-                           _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
-    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     _ui_colorsliders_top.init( _("Work-around color sliders not drawing"), "/options/workarounds/colorsontop", false);
     _page_ui.add_line( false, "", _ui_colorsliders_top, "",
@@ -717,6 +745,131 @@ void InkscapePreferences::initPageUI()
                         _("Selects whether the dockbar switcher will show text labels, icons, or both"), false);
     }
 
+    //Theme
+    _page_theme.add_group_header( _("Theme changes, require restart"));
+    {
+        GHashTable *t;
+        GHashTableIter iter;
+        gchar *theme, *path;
+        gchar **builtin_themes;
+        GList *list, *l;
+        guint i;
+        const gchar * const *dirs;
+
+        t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+        /* Builtin themes */
+        builtin_themes = g_resources_enumerate_children ("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+        for (i = 0; builtin_themes[i] != NULL; i++)
+        {
+            if (g_str_has_suffix (builtin_themes[i], "/"))
+                g_hash_table_add (t, g_strndup (builtin_themes[i], strlen (builtin_themes[i]) - 1));
+        }
+        g_strfreev (builtin_themes);
+
+        path = _inkscape_get_theme_dir ();
+        _inkscape_fill_gtk (path, t);
+        g_free (path);
+
+        path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
+        _inkscape_fill_gtk (path, t);
+        g_free (path);
+
+        path = g_build_filename (g_get_home_dir (), ".themes", NULL);
+        _inkscape_fill_gtk (path, t);
+        g_free (path);
+
+        dirs = g_get_system_data_dirs ();
+        for (i = 0; dirs[i]; i++)
+        {
+            path = g_build_filename (dirs[i], "themes", NULL);
+            _inkscape_fill_gtk (path, t);
+            g_free (path);
+        }
+        
+        list = NULL;
+        g_hash_table_iter_init (&iter, t);
+        while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+            list = g_list_insert_sorted (list, theme, (GCompareFunc)strcmp);
+
+        std::vector<Glib::ustring> labels;
+        std::vector<Glib::ustring> values;
+        for (l = list; l; l = l->next)
+        {
+            theme = (gchar *)l->data;
+            labels.push_back(Glib::ustring(theme));
+            values.push_back(Glib::ustring(theme));
+        }
+
+        g_list_free (list);
+        g_hash_table_destroy (t);
+
+//        g_object_bind_property (gtk_settings_get_default (), "gtk-theme-name",
+//                      (gpointer *)&_theme, "active-id",
+//                      (GBindingFlags)(G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE));
+
+        _theme.init("/theme/theme", labels, values, "Adwaita");
+        _page_theme.add_line(false, _("Change theme:"), _theme, "", "", false);
+    }
+
+    {
+        using namespace Inkscape::IO::Resource;
+        auto files = get_filenames(UIS, {".css"}, {"style.css","dark.css","symbolic.css"});
+        std::vector<Glib::ustring> labels;
+        std::vector<Glib::ustring> values;
+        for(auto &filename: files) {
+            // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
+            // Maybe we can link boost path utilities
+            // Remove directory if present.
+            // Do this before extension removal incase directory has a period character.
+            const size_t last_slash_idx = filename.find_last_of("\\/");
+            if (std::string::npos != last_slash_idx)
+            {
+                filename.erase(0, last_slash_idx + 1);
+            }
+            
+            // Remove extension if present.
+            const size_t period_idx = filename.rfind('.');
+            if (std::string::npos != period_idx)
+            {
+                filename.erase(period_idx);
+            }
+            labels.push_back(filename);
+            values.push_back(filename);
+        }
+        _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
+        _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
+    }
+
+    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
+    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
+    _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
+    _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
+        _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
+    _page_theme.add_line(false, _("Color for symbolic icons:"), _symbolic_color, "", "", true);
+    {
+        Glib::ustring sizeLabels[] = {C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"), C_("Icon size", "Smaller")};
+        int sizeValues[] = {3, 0, 1, 2};
+        // "Larger" is 3 to not break existing preference files. Should fix in GTK3
+
+        _misc_small_tools.init( "/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
+        _page_theme.add_line( false, _("Toolbox icon size:"), _misc_small_tools, "",
+                           _("Set the size for the tool icons (requires restart)"), false);
+
+        _misc_small_toolbar.init( "/toolbox/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
+        _page_theme.add_line( false, _("Control bar icon size:"), _misc_small_toolbar, "",
+                           _("Set the size for the icons in tools' control bars to use (requires restart)"), false);
+
+        _misc_small_secondary.init( "/toolbox/secondary", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 1 );
+        _page_theme.add_line( false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
+                           _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
+    }
+    Glib::ustring const label = _("Now");
+    Glib::ustring const tooltip = _("A bit slow process");
+    _apply_theme = new UI::Widget::Button(label,tooltip);
+    _page_theme.add_line( false, _("Apply theme"), *_apply_theme, "",
+                           _("Apply theme"), false);
+    _apply_theme->signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
+    this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
@@ -2004,12 +2157,10 @@ void InkscapePreferences::initPageSystem()
     _misc_latency_skew.init("/debug/latency/skew", 0.5, 2.0, 0.01, 0.10, 1.0, false, false);
     _page_system.add_line( false, _("Latency _skew:"), _misc_latency_skew, _("(requires restart)"),
                            _("Factor by which the event clock is skewed from the actual time (0.9766 on some systems)"), false);
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _misc_namedicon_delay.init( _("Pre-render named icons"), "/options/iconrender/named_nodelay", false);
     _page_system.add_line( false, "", _misc_namedicon_delay, "",
                            _("When on, named icons will be rendered before displaying the ui. This is for working around bugs in GTK+ named icon notification"), true);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     _page_system.add_group_header( _("System info"));
 

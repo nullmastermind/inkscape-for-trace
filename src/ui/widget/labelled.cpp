@@ -12,8 +12,8 @@
 # include <config.h>
 #endif
 
+#include "helper/icon-loader.h"
 #include "labelled.h"
-
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 
@@ -32,8 +32,7 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
 {
     g_assert(g_utf8_validate(icon.c_str(), -1, nullptr));
     if (icon != "") {
-        _icon = Gtk::manage(new Gtk::Image());
-        _icon->set_from_icon_name(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+        _icon = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         pack_start(*_icon, Gtk::PACK_SHRINK);
     }
     pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);

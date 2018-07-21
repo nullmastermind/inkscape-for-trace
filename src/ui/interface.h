@@ -45,6 +45,8 @@ void sp_ui_close_view (GtkWidget *widget);
 
 void sp_ui_new_view ();
 
+void sp_ui_reload ();
+
 /**
  * @todo TODO: not yet working. To be re-enabled (by adding to menu) once it works.
  */

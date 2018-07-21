@@ -6,8 +6,8 @@
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
-
 #include "ui/widget/anchor-selector.h"
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 
 #include <gtkmm/image.h>
@@ -17,9 +17,8 @@ namespace UI {
 namespace Widget {
 
 void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& button) {
-	Gtk::Image* buttonIcon = Gtk::manage(new Gtk::Image());
-        buttonIcon->set_from_icon_name(icon, Gtk::ICON_SIZE_SMALL_TOOLBAR);
-	buttonIcon->show();
+    Gtk::Image *buttonIcon = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_SMALL_TOOLBAR));
+    buttonIcon->show();
 
 	button.set_relief(Gtk::RELIEF_NONE);
 	button.show();

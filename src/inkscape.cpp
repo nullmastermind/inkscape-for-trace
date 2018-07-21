@@ -46,14 +46,15 @@
 #include "extension/system.h"
 #include "helper/action-context.h"
 #include "inkscape.h"
-#include "io/sys.h"
 #include "io/resource.h"
+#include "io/sys.h"
 #include "libnrtype/FontFactory.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "resource-manager.h"
-#include "ui/tools/tool-base.h"
+#include "svg/svg-color.h"
 #include "ui/dialog/debug.h"
+#include "ui/tools/tool-base.h"
 
 /* Backbones of configuration xml data */
 #include "menus-skeleton.h"
@@ -391,9 +392,37 @@ Application::add_style_sheet()
     using namespace Inkscape::IO::Resource;
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    // symbolic
+    auto provider = Gtk::CssProvider::create();
+    Glib::ustring css_str = "*{-gtk-icon-theme:\"";
+    css_str += prefs->getString("/theme/iconTheme");
+    css_str += "\";}";
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        gchar colornamed[64];
+        sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
+        css_str += "*{-gtk-icon-style: symbolic;}toolbutton image{ color: ";
+        css_str += colornamed;
+        css_str += ";}";
+    }
+    // From 3.16, throws an error which we must catch.
+    try {
+        provider->load_from_data(css_str);
+    }
+#if GTK_CHECK_VERSION(3, 16, 0)
+    // Gtk::CssProviderError not defined until 3.16.
+    catch (const Gtk::CssProviderError &ex) {
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
+                   ex.what().c_str());
+    }
+#else
+    catch (...) {
+    }
+#endif
+    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    // Calling get_filename always returns a real filename OR
-    // if no file exists, then it will have warned already and returns empty.
+    //we want a tiny file with 3 or 4 lines, so we can loada witout removing context
+    //is more undertable than record previously applyed
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
       auto provider = Gtk::CssProvider::create();
@@ -450,6 +479,8 @@ Application::Application(const char* argv, bool use_gui) :
 
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/theme").c_str(), NULL);
+    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
     InkErrorHandler* handler = new InkErrorHandler(use_gui);
     prefs->setErrorHandler(handler);
     {

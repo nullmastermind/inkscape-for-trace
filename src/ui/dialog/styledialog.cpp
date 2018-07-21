@@ -18,7 +18,7 @@
 #include "inkscape.h"
 #include "document-undo.h"
 
-
+#include "helper/icon-loader.h"
 #include "ui/widget/addtoicon.h"
 
 #include "xml/attribute-record.h"
@@ -1518,7 +1518,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
                                char const* tooltip)
 {
-    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

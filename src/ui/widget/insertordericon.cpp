@@ -8,12 +8,11 @@
  */
 
 #include "ui/widget/insertordericon.h"
- 
-#include <gtkmm/icontheme.h>
 
-#include "widgets/toolbox.h"
-#include "ui/icon-names.h"
+#include "helper/icon-loader.h"
 #include "layertypeicon.h"
+#include "ui/icon-names.h"
+#include "widgets/toolbox.h"
 
 namespace Inkscape {
 namespace UI {
@@ -31,13 +30,8 @@ InsertOrderIcon::InsertOrderIcon() :
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
 
-    gint width, height;
-    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
-    phys=width;
-
-    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-    _property_pixbuf_top = icon_theme->load_icon(_pixTopName, phys, (Gtk::IconLookupFlags)0);
-    _property_pixbuf_bottom = icon_theme->load_icon(_pixBottomName, phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_top = sp_get_icon_pixbuf(_pixTopName, GTK_ICON_SIZE_MENU);
+    _property_pixbuf_bottom = sp_get_icon_pixbuf(_pixBottomName, GTK_ICON_SIZE_MENU);
 
     property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(nullptr);
 }

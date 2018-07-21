@@ -11,10 +11,9 @@
 
 #include "ui/widget/imagetoggler.h"
 
-#include <gtkmm/icontheme.h>
-
-#include "widgets/toolbox.h"
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
+#include "widgets/toolbox.h"
 
 #include <iostream>
 
@@ -34,18 +33,8 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
 
-    gint width, height;
-    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
-    int phys = width;
-
-    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-    try {
-        _property_pixbuf_on  = icon_theme->load_icon(_pixOnName,  phys, (Gtk::IconLookupFlags)0);
-        _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
-    }
-    catch (const Gtk::IconThemeError& e) {
-        std::cerr << "ImageToggler::ImageToggler(): " << e.what() << std::endl;
-    }
+    _property_pixbuf_on = sp_get_icon_pixbuf(_pixOnName, GTK_ICON_SIZE_MENU);
+    _property_pixbuf_off = sp_get_icon_pixbuf(_pixOffName, GTK_ICON_SIZE_MENU);
 
     property_pixbuf() = _property_pixbuf_off.get_value();
 }

@@ -1194,26 +1194,32 @@ SPDesktopWidget::shutdown()
      * Use depends on setting of "options.savewindowgeometry".
      * But we save the info here regardless of the setting.
      */
-    {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool maxed = desktop->is_maximized();
-        bool full = desktop->is_fullscreen();
-        prefs->setBool("/desktop/geometry/fullscreen", full);
-        prefs->setBool("/desktop/geometry/maximized", maxed);
-        gint w, h, x, y;
-        desktop->getWindowGeometry(x, y, w, h);
-        // Don't save geom for maximized windows.  It
-        // just tells you the current maximized size, which is not
-        // as useful as whatever value it had previously.
-        if (!maxed && !full) {
-            prefs->setInt("/desktop/geometry/width", w);
-            prefs->setInt("/desktop/geometry/height", h);
-            prefs->setInt("/desktop/geometry/x", x);
-            prefs->setInt("/desktop/geometry/y", y);
-        }
-    }
+    storeDesktopPosition();
 
     return FALSE;
+}
+
+/**
+ * \store dessktop position
+ */
+void
+SPDesktopWidget::storeDesktopPosition() {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool maxed = desktop->is_maximized();
+    bool full = desktop->is_fullscreen();
+    prefs->setBool("/desktop/geometry/fullscreen", full);
+    prefs->setBool("/desktop/geometry/maximized", maxed);
+    gint w, h, x, y;
+    desktop->getWindowGeometry(x, y, w, h);
+    // Don't save geom for maximized windows.  It
+    // just tells you the current maximized size, which is not
+    // as useful as whatever value it had previously.
+    if (!maxed && !full) {
+        prefs->setInt("/desktop/geometry/width", w);
+        prefs->setInt("/desktop/geometry/height", h);
+        prefs->setInt("/desktop/geometry/x", x);
+        prefs->setInt("/desktop/geometry/y", y);
+    }
 }
 
 /**

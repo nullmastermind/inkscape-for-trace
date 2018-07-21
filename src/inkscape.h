@@ -198,6 +198,8 @@ public:
     gint get_pdf_page() {
         return _pdf_page;
     }
+    void add_style_sheet();
+    void add_icon_theme();
 
 private:
     static Inkscape::Application * _S_inst;
@@ -208,9 +210,6 @@ private:
     Application(Application const&); // no copy
     Application& operator=(Application const&); // no assign
     Application* operator&() const; // no pointer access
-
-    void add_icon_theme();
-    void add_style_sheet();
 
     Inkscape::XML::Document * _menus;
     std::map<SPDocument *, int> _document_set;

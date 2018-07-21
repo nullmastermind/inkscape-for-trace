@@ -51,6 +51,7 @@
 #include "extension/input.h"
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 #include "helper/window.h"
 
 #include "io/sys.h"
@@ -262,6 +263,52 @@ sp_ui_new_view()
     sp_namedview_update_layers_from_document(static_cast<SPDesktop*>(dtw->view));
 }
 
+void
+sp_ui_reload()
+{
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
+    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/theme").c_str(), NULL);
+    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
+    prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
+    prefs->save();
+    std::list<SPDesktop *> desktops;
+    INKSCAPE.get_all_desktops(desktops);
+    std::list<SPDesktop *>::iterator i = desktops.begin();
+    while (i != desktops.end())
+    {
+        SPDesktop * dt = *i;
+        if (dt == nullptr) {
+            ++i;
+            continue;
+        }
+        dt->storeDesktopPosition();
+
+        SPDocument *document; 
+        SPViewWidget *dtw;
+
+        document = dt->getDocument();
+        if (!document) {
+            ++i;
+            continue;
+        }
+
+        dtw = sp_desktop_widget_new(sp_document_namedview(document, nullptr));
+        if (dtw == nullptr) {
+            ++i;
+            continue;
+        }
+        sp_create_window(dtw, TRUE);
+        sp_namedview_window_from_document(static_cast<SPDesktop*>(dtw->view));
+        sp_namedview_update_layers_from_document(static_cast<SPDesktop*>(dtw->view));
+        dt->destroyWidget();
+        i++;
+    }
+    INKSCAPE.add_style_sheet();
+    prefs->setInt("/options/savewindowgeometry/value", window_geometry);
+}
+
 void sp_ui_new_view_preview()
 {
     SPDocument *document = SP_ACTIVE_DOCUMENT;
@@ -467,7 +514,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         // If there is an image associated with the action, then we can add it as an
         // icon for the menu item.  If not, give the label a bit more space
         if(show_icon && action->image) {
-            icon = gtk_image_new_from_icon_name(action->image, GTK_ICON_SIZE_MENU);
+            icon = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
         }
         else {
             icon = gtk_label_new(nullptr); // A fake icon just to act as a placeholder

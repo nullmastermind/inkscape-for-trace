@@ -10,11 +10,11 @@
 #include "ui/widget/dock.h"
 
 #include "desktop.h"
+#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "ui/icon-names.h"
-
-#include <gtkmm/icontheme.h>
 #include <glibmm/exceptionhandler.h>
+#include <gtkmm/icontheme.h>
 
 namespace Inkscape {
 namespace UI {
@@ -31,6 +31,7 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     _grab_focus_on_realize(false),
     _gdl_dock_item(nullptr)
 {
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GdlDockItemBehavior gdl_dock_behavior =
         (prefs->getBool("/options/dock/cancenterdock", true) ?
@@ -39,17 +40,7 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
 
 
     if (!icon_name.empty()) {
-        Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
-
-        int width = 0;
-        int height = 0;
-        Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
-        try {
-            _icon_pixbuf = iconTheme->load_icon(icon_name, width);
-        }
-        catch (const Gtk::IconThemeError& e) {
-            std::cerr << "DocItem::DocItem(): " << e.what() << std::endl;
-        }
+        _icon_pixbuf = sp_get_icon_pixbuf(icon_name, "/toolbox/secondary");
     }
 
     if ( _icon_pixbuf ) {

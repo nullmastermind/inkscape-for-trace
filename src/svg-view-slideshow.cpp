@@ -38,6 +38,7 @@
 #include <utility>
 
 #include "document.h"
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/monitor.h"
 #include "util/units.h"
@@ -100,29 +101,27 @@ void SPSlideShow::control_show()
         _ctrlwin->add(*t);
 
         auto btn_go_first = Gtk::manage(new Gtk::Button());
-        auto img_go_first = Gtk::manage(new Gtk::Image());
-        img_go_first->set_from_icon_name(INKSCAPE_ICON("go-first"), Gtk::ICON_SIZE_BUTTON);
+        auto img_go_first = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("go-first"), Gtk::ICON_SIZE_BUTTON));
         btn_go_first->set_image(*img_go_first);
         t->add(*btn_go_first);
         btn_go_first->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::goto_first));
 
         auto btn_go_prev = Gtk::manage(new Gtk::Button());
-        auto img_go_prev = Gtk::manage(new Gtk::Image());
-        img_go_prev->set_from_icon_name(INKSCAPE_ICON("go-previous"), Gtk::ICON_SIZE_BUTTON);
+        auto img_go_prev = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("go-previous"), Gtk::ICON_SIZE_BUTTON));
+
         btn_go_prev->set_image(*img_go_prev);
         t->add(*btn_go_prev);
         btn_go_prev->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::show_prev));
 
         auto btn_go_next = Gtk::manage(new Gtk::Button());
-        auto img_go_next = Gtk::manage(new Gtk::Image());
-        img_go_next->set_from_icon_name(INKSCAPE_ICON("go-next"), Gtk::ICON_SIZE_BUTTON);
+        auto img_go_next = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("go-next"), Gtk::ICON_SIZE_BUTTON));
+
         btn_go_next->set_image(*img_go_next);
         t->add(*btn_go_next);
         btn_go_next->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::show_next));
 
         auto btn_go_last = Gtk::manage(new Gtk::Button());
-        auto img_go_last = Gtk::manage(new Gtk::Image());
-        img_go_last->set_from_icon_name(INKSCAPE_ICON("go-last"), Gtk::ICON_SIZE_BUTTON);
+        auto img_go_last = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("go-last"), Gtk::ICON_SIZE_BUTTON));
         btn_go_last->set_image(*img_go_last);
         t->add(*btn_go_last);
         btn_go_last->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::goto_last));

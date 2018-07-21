@@ -18,11 +18,12 @@
 
 #include <glibmm/i18n.h>
 
+#include "helper/icon-loader.h"
 #include "inkscape.h"
-#include "ui/clipboard.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "originalitem.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "ui/clipboard.h"
 
 #include "object/uri.h"
 
@@ -137,8 +138,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     
     
     { // Paste item to link button
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("edit-clone", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("edit-clone", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -150,8 +150,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Remove linked item
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("gtk-remove", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-remove", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -163,8 +162,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( "gtk-go-down", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-down", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -176,8 +174,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( "gtk-go-up", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-up", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();

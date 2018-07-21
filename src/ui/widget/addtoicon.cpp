@@ -14,11 +14,10 @@
 
 #include "ui/widget/addtoicon.h"
 
-#include <gtkmm/icontheme.h>
-
-#include "widgets/toolbox.h"
-#include "ui/icon-names.h"
+#include "helper/icon-loader.h"
 #include "layertypeicon.h"
+#include "ui/icon-names.h"
+#include "widgets/toolbox.h"
 
 namespace Inkscape {
 namespace UI {
@@ -33,9 +32,6 @@ AddToIcon::AddToIcon() :
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
 
-    gint width, height;
-    gtk_icon_size_lookup(GTK_ICON_SIZE_BUTTON, &width, &height);
-    phys = width; // Assumes that we have a square icon?
 
 //    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
 //
@@ -103,11 +99,7 @@ bool AddToIcon::activate_vfunc(GdkEvent* /*event*/,
 void AddToIcon::set_pixbuf()
 {
     bool active = property_active().get_value();
-
-    auto icon_theme = Gtk::IconTheme::get_default();
-
-    property_pixbuf() = icon_theme->load_icon(active ? "list-add" : "edit-delete",
-                                              phys);
+    property_pixbuf() = sp_get_icon_pixbuf((active ? "list-add" : "edit-delete"), GTK_ICON_SIZE_BUTTON);
 }
 
 

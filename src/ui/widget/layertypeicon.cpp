@@ -13,10 +13,9 @@
 
 #include "ui/widget/layertypeicon.h"
 
-#include <gtkmm/icontheme.h>
-
-#include "widgets/toolbox.h"
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
+#include "widgets/toolbox.h"
 
 namespace Inkscape {
 namespace UI {
@@ -36,14 +35,10 @@ LayerTypeIcon::LayerTypeIcon() :
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-    gint width, height;
-    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
-    int phys = width;
 
-    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-    _property_pixbuf_layer = icon_theme->load_icon(_pixLayerName, phys, (Gtk::IconLookupFlags)0);
-    _property_pixbuf_group = icon_theme->load_icon(_pixGroupName, phys, (Gtk::IconLookupFlags)0);
-    _property_pixbuf_path = icon_theme->load_icon(_pixPathName, phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_layer = sp_get_icon_pixbuf(_pixLayerName, GTK_ICON_SIZE_MENU);
+    _property_pixbuf_group = sp_get_icon_pixbuf(_pixGroupName, GTK_ICON_SIZE_MENU);
+    _property_pixbuf_path = sp_get_icon_pixbuf(_pixPathName, GTK_ICON_SIZE_MENU);
 
     property_pixbuf() = _property_pixbuf_path.get_value();
 }

@@ -10,6 +10,7 @@
  */
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 
 #include <gtkmm/toolbutton.h>
 
@@ -236,8 +237,9 @@ SPAction::create_toolbutton_for_verb(unsigned int             verb_code,
     auto icon_name = verb->get_image();
 
     // Create a button with the required display properties
-    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_name()));
-    button->set_icon_name(icon_name);
+    auto button = Gtk::manage(new Gtk::ToolButton(verb->get_tip()));
+    auto icon_widget = sp_get_icon_image(icon_name, "/toolbox/small");
+    button->set_icon_widget(*icon_widget);
     button->set_tooltip_text(verb->get_tip());
 
     // Hook up signal handler

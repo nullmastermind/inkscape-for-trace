@@ -33,6 +33,7 @@
 #include "verbs.h"
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 
 #include "object/filters/blend.h"
 #include "object/filters/gaussian-blur.h"
@@ -230,7 +231,7 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_SMALL_TOOLBAR );
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_widget_show( child );
     btn.add( *Gtk::manage(Glib::wrap(child)) );
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -252,8 +253,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
     const char* label = nullptr;
 
     if ( iconName ) {
-        iconWidget = Gtk::manage(new Gtk::Image());
-        iconWidget->set_from_icon_name( iconName, Gtk::ICON_SIZE_MENU );
+        iconWidget = Gtk::manage(sp_get_icon_image(iconName, Gtk::ICON_SIZE_MENU));
     }
 
     if ( desktop ) {
@@ -261,8 +261,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
         if ( verb ) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !iconWidget && action && action->image ) {
-                iconWidget = Gtk::manage(new Gtk::Image());
-                iconWidget->set_from_icon_name( action->image, Gtk::ICON_SIZE_MENU );
+                iconWidget = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
             }
 
             if ( action ) {

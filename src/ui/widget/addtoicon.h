@@ -54,7 +54,6 @@ protected:
 
 
 private:
-    int phys; ///< Physical size of the icon (px)
     
 //    Glib::ustring _pixAddName;
     

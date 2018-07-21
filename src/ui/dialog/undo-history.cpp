@@ -17,14 +17,14 @@
 
 #include "undo-history.h"
 
-#include "document.h"
 #include "document-undo.h"
+#include "document.h"
+#include "helper/icon-loader.h"
 #include "inkscape.h"
-
 #include "util/signal-blocker.h"
 
 #include "desktop.h"
-#include <gtkmm/icontheme.h>
+
 
 namespace Inkscape {
 namespace UI {
@@ -45,14 +45,13 @@ void CellRendererSPIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
 
         Glib::ustring image_name = Inkscape::Verb::get(_property_event_type)->get_image();
         Gtk::Image* icon = Gtk::manage(new Gtk::Image());
-        icon->set_from_icon_name(image_name, Gtk::ICON_SIZE_MENU);
+        icon = sp_get_icon_image(image_name, Gtk::ICON_SIZE_MENU);
 
         if (icon) {
 
             // check icon type (inkscape, gtk, none)
             if ( GTK_IS_IMAGE(icon->gobj()) ) {
-                auto icon_theme = Gtk::IconTheme::get_default();
-                _property_icon = icon_theme->load_icon(image_name, 16);
+                _property_icon = sp_get_icon_pixbuf(image_name, 16);
             } else {
                 delete icon;
                 return;

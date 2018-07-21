@@ -18,12 +18,13 @@
 
 #include "ocaldialogs.h"
 
-#include "path-prefix.h"
 #include "filedialogimpl-gtkmm.h"
-#include "ui/interface.h"
+#include "helper/icon-loader.h"
 #include "inkgc/gc-core.h"
 #include "io/sys.h"
+#include "path-prefix.h"
 #include "preferences.h"
+#include "ui/interface.h"
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/spinner.h>
@@ -462,8 +463,7 @@ bool PreviewWidget::_on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 StatusWidget::StatusWidget() : Gtk::HBox(false, 6)
 {
-    image = new Gtk::Image();
-    image->set_from_icon_name("dialog-error", Gtk::ICON_SIZE_MENU);
+    image = sp_get_icon_image("dialog-error", Gtk::ICON_SIZE_MENU);
     spinner = new Gtk::Spinner();
     label = new Gtk::Label();
 
@@ -488,7 +488,7 @@ void StatusWidget::set_info(Glib::ustring text)
     spinner->hide();
     image->show();
     label->show();
-    image->set_from_icon_name("dialog-information",  Gtk::ICON_SIZE_MENU);
+    image = sp_get_icon_image("dialog-information", Gtk::ICON_SIZE_MENU);
     label->set_text(text);
 }
 
@@ -497,7 +497,7 @@ void StatusWidget::set_error(Glib::ustring text)
     spinner->hide();
     image->show();
     label->show();
-    image->set_from_icon_name("dialog-error",  Gtk::ICON_SIZE_MENU);
+    image = sp_get_icon_image("dialog-error", Gtk::ICON_SIZE_MENU);
     label->set_text(text);
 }
 

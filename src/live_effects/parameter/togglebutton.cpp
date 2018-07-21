@@ -10,14 +10,15 @@
 
 #include <utility>
 
-#include "live_effects/parameter/togglebutton.h"
-#include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "selection.h"
-#include "inkscape.h"
-#include "verbs.h"
 #include "helper-fns.h"
+#include "helper/icon-loader.h"
+#include "inkscape.h"
+#include "live_effects/effect.h"
+#include "live_effects/parameter/togglebutton.h"
+#include "selection.h"
+#include "svg/stringstream.h"
+#include "svg/svg.h"
+#include "verbs.h"
 
 namespace Inkscape {
 
@@ -110,10 +111,10 @@ ToggleButtonParam::param_newWidget()
         }
         gtk_widget_show(box_button);
         GtkWidget *icon_button = nullptr;
-        if(!value){ 
-            icon_button = gtk_image_new_from_icon_name(_icon_inactive, _icon_size);
+        if(!value){
+            icon_button = GTK_WIDGET(sp_get_icon_image(_icon_inactive, _icon_size));
         } else {
-            icon_button = gtk_image_new_from_icon_name(_icon_active, _icon_size);
+            icon_button = GTK_WIDGET(sp_get_icon_image(_icon_active, _icon_size));
         }
         gtk_widget_show(icon_button);
         gtk_box_pack_start (GTK_BOX(box_button), icon_button, false, false, 1);
@@ -162,10 +163,10 @@ ToggleButtonParam::refresh_button()
         Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
         Gtk::IconSize is(_icon_size);
         if (!im) return;
-        if(!value){ 
-            im->set_from_icon_name(_icon_inactive, is);
+        if(!value){
+            im = sp_get_icon_image(_icon_inactive, is);
         } else {
-            im->set_from_icon_name(_icon_active, is);
+            im = sp_get_icon_image(_icon_active, is);
         }
     }
 }

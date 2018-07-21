@@ -28,6 +28,7 @@
 
 #include "svg/svg-color.h"
 
+#include "helper/icon-loader.h"
 #include "ui/widget/unit-menu.h"
 
 #include "widgets/style-utils.h"
@@ -120,8 +121,7 @@ StrokeStyle::StrokeStyleButton::StrokeStyleButton(Gtk::RadioButtonGroup &grp,
     show();
     set_mode(false);
 
-    auto px = Gtk::manage(new Gtk::Image());
-    px->set_from_icon_name(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto px = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR));
     g_assert(px != nullptr);
     px->show();
     add(*px);

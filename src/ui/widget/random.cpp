@@ -14,8 +14,8 @@
 #endif
 
 
+#include "helper/icon-loader.h"
 #include "random.h"
-
 #include <glibmm/i18n.h>
 
 #include <gtkmm/button.h>
@@ -70,8 +70,7 @@ void Random::setStartSeed(long newseed)
 
 void Random::addReseedButton()
 {
-    Gtk::Image* pIcon = Gtk::manage(new Gtk::Image());
-    pIcon->set_from_icon_name( "randomize", Gtk::ICON_SIZE_BUTTON);
+    Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("randomize", Gtk::ICON_SIZE_BUTTON));
     Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();

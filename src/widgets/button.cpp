@@ -15,9 +15,10 @@
 
 #include "button.h"
 #include "helper/action-context.h"
-#include "ui/interface.h"
-#include "shortcuts.h"
 #include "helper/action.h"
+#include "helper/icon-loader.h"
+#include "shortcuts.h"
+#include "ui/interface.h"
 
 static void sp_button_dispose(GObject *object);
 static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width);
@@ -211,7 +212,7 @@ static void sp_button_set_action(SPButton *button, SPAction *action)
         button->c_set_sensitive = action->signal_set_sensitive.connect(
             sigc::bind<0>(sigc::ptr_fun(&gtk_widget_set_sensitive), GTK_WIDGET(button)));
         if (action->image) {
-            child = gtk_image_new_from_icon_name(action->image, button->lsize);
+            child = GTK_WIDGET(sp_get_icon_image(action->image, "/toolbox/tools/small")->gobj());
             gtk_widget_show(child);
             gtk_container_add(GTK_CONTAINER(button), child);
         }

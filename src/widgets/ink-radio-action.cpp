@@ -1,4 +1,5 @@
 #include "ink-radio-action.h"
+#include "helper/icon-loader.h"
 
 static void ink_radio_action_finalize( GObject* obj );
 static void ink_radio_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
@@ -157,9 +158,10 @@ static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action )
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget* child = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
-	    gtk_widget_set_hexpand(child, FALSE);
-	    gtk_widget_set_vexpand(child, FALSE);
+            GtkWidget *child =
+                GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
+            gtk_widget_set_hexpand(child, FALSE);
+            gtk_widget_set_vexpand(child, FALSE);
             gtk_tool_button_set_icon_widget(button, child);
         } else {
             // For now trigger a warning but don't do anything else

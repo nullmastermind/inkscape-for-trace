@@ -34,6 +34,7 @@
 #include "paint-selector.h"
 #include "path-prefix.h"
 
+#include "helper/icon-loader.h"
 #include "helper/stock-items.h"
 
 #include "style.h"
@@ -243,7 +244,7 @@ sp_paint_selector_init(SPPaintSelector *psel)
         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
         gtk_widget_set_tooltip_text(psel->evenodd, _("Any path self-intersections or subpaths create holes in the fill (fill-rule: evenodd)"));
         g_object_set_data(G_OBJECT(psel->evenodd), "mode", GUINT_TO_POINTER(SPPaintSelector::FILLRULE_EVENODD));
-        w = gtk_image_new_from_icon_name("fill-rule-even-odd", GTK_ICON_SIZE_MENU);
+        w = GTK_WIDGET(sp_get_icon_image("fill-rule-even-odd", GTK_ICON_SIZE_MENU)->gobj());
         gtk_container_add(GTK_CONTAINER(psel->evenodd), w);
         gtk_box_pack_start(GTK_BOX(psel->fillrulebox), psel->evenodd, FALSE, FALSE, 0);
         g_signal_connect(G_OBJECT(psel->evenodd), "toggled", G_CALLBACK(sp_paint_selector_fillrule_toggled), psel);
@@ -254,7 +255,7 @@ sp_paint_selector_init(SPPaintSelector *psel)
         // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
         gtk_widget_set_tooltip_text(psel->nonzero, _("Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"));
         g_object_set_data(G_OBJECT(psel->nonzero), "mode", GUINT_TO_POINTER(SPPaintSelector::FILLRULE_NONZERO));
-        w = gtk_image_new_from_icon_name("fill-rule-nonzero", GTK_ICON_SIZE_MENU);
+        w = GTK_WIDGET(sp_get_icon_image("fill-rule-nonzero", GTK_ICON_SIZE_MENU)->gobj());
         gtk_container_add(GTK_CONTAINER(psel->nonzero), w);
         gtk_box_pack_start(GTK_BOX(psel->fillrulebox), psel->nonzero, FALSE, FALSE, 0);
         g_signal_connect(G_OBJECT(psel->nonzero), "toggled", G_CALLBACK(sp_paint_selector_fillrule_toggled), psel);
@@ -323,8 +324,7 @@ static GtkWidget *sp_paint_selector_style_button_add(SPPaintSelector *psel,
     gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(b), FALSE);
     g_object_set_data(G_OBJECT(b), "mode", GUINT_TO_POINTER(mode));
 
-    w = gtk_image_new_from_icon_name(pixmap, GTK_ICON_SIZE_BUTTON);
-    gtk_widget_show(w);
+    w = GTK_WIDGET(sp_get_icon_image(pixmap, GTK_ICON_SIZE_BUTTON)->gobj());
     gtk_container_add(GTK_CONTAINER(b), w);
 
     gtk_box_pack_start(GTK_BOX(psel->style), b, FALSE, FALSE, 0);

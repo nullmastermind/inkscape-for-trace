@@ -83,6 +83,9 @@ struct EditWidgetInterface
     virtual void destroy() = 0;
 
 
+    /// Store window position to prefs
+    virtual void storeDesktopPosition() = 0;
+
     /// Queue a redraw request with the canvas
     virtual void requestCanvasUpdate() = 0;
 

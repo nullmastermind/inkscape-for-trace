@@ -22,15 +22,15 @@
 #include <2geom/pathvector.h>
 #include <2geom/d2.h>
 
-#include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "desktop.h"
+#include "document-undo.h"
+#include "document.h"
+#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "message-stack.h"
+#include "selection-chemistry.h"
 #include "verbs.h"
-#include "document.h"
-#include "document-undo.h"
-
+#include "xml/repr.h"
 // needed for on-canvas editing:
 #include "ui/tools-switch.h"
 #include "ui/shape-editor.h"
@@ -201,8 +201,7 @@ PathParam::param_newWidget()
     Gtk::Image * pIcon = nullptr;
     Gtk::Button * pButton = nullptr;
     if (_edit_button) {
-        pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( INKSCAPE_ICON("tool-node-editor"), Gtk::ICON_SIZE_BUTTON);
+        pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("tool-node-editor"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -214,8 +213,7 @@ PathParam::param_newWidget()
     }
     
     if (_copy_button) {
-        pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( INKSCAPE_ICON("edit-copy"), Gtk::ICON_SIZE_BUTTON);
+        pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("edit-copy"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -227,8 +225,7 @@ PathParam::param_newWidget()
     }
     
     if (_paste_button) {
-        pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( INKSCAPE_ICON("edit-paste"), Gtk::ICON_SIZE_BUTTON);
+        pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("edit-paste"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -239,8 +236,7 @@ PathParam::param_newWidget()
         pButton->set_tooltip_text(_("Paste path"));
     }
     if (_link_button) {
-        pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( INKSCAPE_ICON("edit-clone"), Gtk::ICON_SIZE_BUTTON);
+        pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("edit-clone"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();

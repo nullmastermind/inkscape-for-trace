@@ -24,6 +24,7 @@
 
 #include "object/uri.h"
 
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 
 namespace Inkscape {
@@ -52,8 +53,7 @@ OriginalItemParam::param_newWidget()
     }
 
     { // Paste item to link button
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("edit-paste", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("edit-paste", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -65,8 +65,7 @@ OriginalItemParam::param_newWidget()
     }
 
     { // Select original button
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("edit-select-original", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("edit-select-original", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();

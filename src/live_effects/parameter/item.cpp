@@ -18,12 +18,12 @@
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 
-#include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "desktop.h"
+#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "message-stack.h"
-
+#include "selection-chemistry.h"
+#include "xml/repr.h"
 // clipboard support
 #include "ui/clipboard.h"
 // required for linking to other paths
@@ -118,8 +118,7 @@ Gtk::Widget *
 ItemParam::param_newWidget()
 {
     Gtk::HBox * _widget = Gtk::manage(new Gtk::HBox());
-    Gtk::Image*  pIcon = Gtk::manage(new Gtk::Image());
-    pIcon->set_from_icon_name("edit-clone", Gtk::ICON_SIZE_BUTTON);
+    Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("edit-clone", Gtk::ICON_SIZE_BUTTON));
     Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
     Gtk::Label* pLabel = Gtk::manage(new Gtk::Label(param_label));
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);

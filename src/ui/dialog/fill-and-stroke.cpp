@@ -26,6 +26,7 @@
 
 #include "svg/css-ostringstream.h"
 
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/view/view-widget.h"
 #include "ui/widget/notebook-page.h"
@@ -177,8 +178,7 @@ FillAndStroke::_createPageTabLabel(const Glib::ustring& label, const char *label
 {
     Gtk::HBox *_tab_label_box = Gtk::manage(new Gtk::HBox(false, 4));
 
-    auto img = Gtk::manage(new Gtk::Image());
-    img->set_from_icon_name(label_image, Gtk::ICON_SIZE_MENU);
+    auto img = Gtk::manage(sp_get_icon_image(label_image, Gtk::ICON_SIZE_MENU));
     _tab_label_box->pack_start(*img);
 
     Gtk::Label *_tab_label = Gtk::manage(new Gtk::Label(label, true));

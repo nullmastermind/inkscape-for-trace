@@ -25,6 +25,7 @@
 #include "path-prefix.h"
 #include "stroke-style.h"
 
+#include "helper/icon-loader.h"
 #include "helper/stock-items.h"
 
 #include "io/sys.h"
@@ -55,8 +56,7 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, nullptr, nullptr);
 
-    empty_image = new Gtk::Image();
-    empty_image->set_from_icon_name("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    empty_image = sp_get_icon_image("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
     sandbox = ink_markers_preview_doc ();
     desktop = SP_ACTIVE_DESKTOP;

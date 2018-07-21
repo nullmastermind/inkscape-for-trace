@@ -35,6 +35,7 @@
 #include "object/sp-root.h"
 #include "object/sp-string.h"
 
+#include "helper/icon-loader.h"
 #include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/interface.h"
@@ -113,24 +114,21 @@ XmlTree::XmlTree() :
 
     tree_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
 
-    auto xml_element_new_icon = Gtk::manage(new Gtk::Image());
-    xml_element_new_icon->set_from_icon_name("xml-element-new", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto xml_element_new_icon = Gtk::manage(sp_get_icon_image("xml-element-new", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_element_new_button.set_icon_widget(*xml_element_new_icon);
     xml_element_new_button.set_tooltip_text(_("New element node"));
     xml_element_new_button.set_sensitive(false);
     tree_toolbar.add(xml_element_new_button);
 
-    auto xml_text_new_icon = Gtk::manage(new Gtk::Image());
-    xml_text_new_icon->set_from_icon_name("xml-text-new", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto xml_text_new_icon = Gtk::manage(sp_get_icon_image("xml-text-new", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_text_new_button.set_icon_widget(*xml_text_new_icon);
     xml_text_new_button.set_tooltip_text(_("New text node"));
     xml_text_new_button.set_sensitive(false);
     tree_toolbar.add(xml_text_new_button);
 
-    auto xml_node_duplicate_icon = Gtk::manage(new Gtk::Image());
-    xml_node_duplicate_icon->set_from_icon_name("xml-node-duplicate", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto xml_node_duplicate_icon = Gtk::manage(sp_get_icon_image("xml-node-duplicate", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_node_duplicate_button.set_icon_widget(*xml_node_duplicate_icon);
     xml_node_duplicate_button.set_tooltip_text(_("Duplicate node"));
@@ -139,8 +137,7 @@ XmlTree::XmlTree() :
 
     tree_toolbar.add(separator);
 
-    auto xml_node_delete_icon = Gtk::manage(new Gtk::Image());
-    xml_node_delete_icon->set_from_icon_name("xml-node-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto xml_node_delete_icon = Gtk::manage(sp_get_icon_image("xml-node-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_node_delete_button.set_icon_widget(*xml_node_delete_icon);
     xml_node_delete_button.set_tooltip_text(Q_("nodeAsInXMLdialogTooltip|Delete node"));
@@ -149,8 +146,7 @@ XmlTree::XmlTree() :
 
     tree_toolbar.add(separator2);
 
-    auto format_indent_less_icon = Gtk::manage(new Gtk::Image());
-    format_indent_less_icon->set_from_icon_name("format-indent-less", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto format_indent_less_icon = Gtk::manage(sp_get_icon_image("format-indent-less", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     unindent_node_button.set_icon_widget(*format_indent_less_icon);
     unindent_node_button.set_label(_("Unindent node"));
@@ -158,8 +154,7 @@ XmlTree::XmlTree() :
     unindent_node_button.set_sensitive(false);
     tree_toolbar.add(unindent_node_button);
 
-    auto format_indent_more_icon = Gtk::manage(new Gtk::Image());
-    format_indent_more_icon->set_from_icon_name("format-indent-more", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto format_indent_more_icon = Gtk::manage(sp_get_icon_image("format-indent-more", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     indent_node_button.set_icon_widget(*format_indent_more_icon);
     indent_node_button.set_label(_("Indent node"));
@@ -167,8 +162,7 @@ XmlTree::XmlTree() :
     indent_node_button.set_sensitive(false);
     tree_toolbar.add(indent_node_button);
 
-    auto go_up_icon = Gtk::manage(new Gtk::Image());
-    go_up_icon->set_from_icon_name("go-up", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto go_up_icon = Gtk::manage(sp_get_icon_image("go-up", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     raise_node_button.set_icon_widget(*go_up_icon);
     raise_node_button.set_label(_("Raise node"));
@@ -176,8 +170,7 @@ XmlTree::XmlTree() :
     raise_node_button.set_sensitive(false);
     tree_toolbar.add(raise_node_button);
 
-    auto go_down_icon = Gtk::manage(new Gtk::Image());
-    go_down_icon->set_from_icon_name("go-down", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto go_down_icon = Gtk::manage(sp_get_icon_image("go-down", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     lower_node_button.set_icon_widget(*go_down_icon);
     lower_node_button.set_label(_("Lower node"));
@@ -204,8 +197,8 @@ XmlTree::XmlTree() :
 
     attr_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
 
-    auto xml_attribute_delete_icon = Gtk::manage(new Gtk::Image());
-    xml_attribute_delete_icon->set_from_icon_name("xml-attribute-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    auto xml_attribute_delete_icon =
+        Gtk::manage(sp_get_icon_image("xml-attribute-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR));
     xml_attribute_delete_button.set_icon_widget(*xml_attribute_delete_icon);
     xml_attribute_delete_button.set_tooltip_text(_("Delete attribute"));
     xml_attribute_delete_button.set_sensitive(false);

@@ -28,6 +28,7 @@
 #include "io/resource.h"
 
 #include "display/cairo-utils.h"
+#include "helper/icon-loader.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
 #include "ui/icon-names.h"
@@ -272,8 +273,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->set_hexpand();
   table->attach(*Gtk::manage(tools),0,row,2,1);
 
-  auto add_symbol_image = Gtk::manage(new Gtk::Image());
-  add_symbol_image->set_from_icon_name("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto add_symbol_image = Gtk::manage(sp_get_icon_image("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   add_symbol = Gtk::manage(new Gtk::Button());
   add_symbol->add(*add_symbol_image);
@@ -283,8 +283,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   add_symbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
   tools->pack_start(* add_symbol, Gtk::PACK_SHRINK);
 
-  auto remove_symbolImage = Gtk::manage(new Gtk::Image());
-  remove_symbolImage->set_from_icon_name("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto remove_symbolImage = Gtk::manage(sp_get_icon_image("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   remove_symbol = Gtk::manage(new Gtk::Button());
   remove_symbol->add(*remove_symbolImage);
@@ -300,8 +299,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
 
-  auto packMoreImage = Gtk::manage(new Gtk::Image());
-  packMoreImage->set_from_icon_name("pack-more", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto packMoreImage = Gtk::manage(sp_get_icon_image("pack-more", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   more = Gtk::manage(new Gtk::Button());
   more->add(*packMoreImage);
@@ -311,8 +309,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   more->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::packmore));
   tools->pack_start(* more, Gtk::PACK_SHRINK);
 
-  auto packLessImage = Gtk::manage(new Gtk::Image());
-  packLessImage->set_from_icon_name("pack-less", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto packLessImage = Gtk::manage(sp_get_icon_image("pack-less", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   fewer = Gtk::manage(new Gtk::Button());
   fewer->add(*packLessImage);
@@ -323,8 +320,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   tools->pack_start(* fewer, Gtk::PACK_SHRINK);
 
   // Toggle scale to fit on/off
-  auto fit_symbolImage = Gtk::manage(new Gtk::Image());
-  fit_symbolImage->set_from_icon_name("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto fit_symbolImage = Gtk::manage(sp_get_icon_image("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   fit_symbol = Gtk::manage(new Gtk::ToggleButton());
   fit_symbol->add(*fit_symbolImage);
@@ -337,8 +333,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // Render size (scales symbols within display area)
   scale_factor = 0; // Default 1:1 * pack_size/pack_size default
-  auto zoom_outImage = Gtk::manage(new Gtk::Image());
-  zoom_outImage->set_from_icon_name("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto zoom_outImage = Gtk::manage(sp_get_icon_image("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   zoom_out = Gtk::manage(new Gtk::Button());
   zoom_out->add(*zoom_outImage);
@@ -349,8 +344,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   zoom_out->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomout));
   tools->pack_start(* zoom_out, Gtk::PACK_SHRINK);
 
-  auto zoom_inImage = Gtk::manage(new Gtk::Image());
-  zoom_inImage->set_from_icon_name("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+  auto zoom_inImage = Gtk::manage(sp_get_icon_image("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
   zoom_in = Gtk::manage(new Gtk::Button());
   zoom_in->add(*zoom_inImage);
@@ -471,20 +465,24 @@ void SymbolsDialog::rebuild() {
 void SymbolsDialog::showOverlay() {
 #if GTKMM_CHECK_VERSION(3,14,0)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
-  overlay_icon->set_from_icon_name("none", iconsize);
+  overlay_icon = sp_get_icon_image("none", iconsize);
   if (current == ALLDOCS && !l.size()) 
   {
     if (!all_docs_processed ) {
-      overlay_icon->set_from_icon_name("searching", iconsize);
-      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("First search can be slow.")) + Glib::ustring("</span>"));
+        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
+                                  Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
+        overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +
+                                 Glib::ustring(_("First search can be slow.")) + Glib::ustring("</span>"));
     } else if (!icons_found && !search_str.empty()) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term.")) + Glib::ustring("</span>"));
     } else {
-      overlay_icon->set_from_icon_name("searching", iconsize);
-      overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
-      overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring("</span>"));
+        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
+                                  Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
+        overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +
+                                 Glib::ustring("</span>"));
     }
   } else if (!number_symbols && (current != CURRENTDOC || !search_str.empty())) {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));

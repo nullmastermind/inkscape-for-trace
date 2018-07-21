@@ -17,10 +17,11 @@
 #include <cstring>
 #include <string>
 
+#include "helper/icon-loader.h"
 #include "ui/dialog/layer-properties.h"
-#include <glibmm/i18n.h>
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/reversed.hpp>
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 
@@ -46,14 +47,12 @@ public:
     {
         set_name("AlternateIcons");
         if (!a.empty()) {
-            _a = Gtk::manage(new Gtk::Image());
-            _a->set_from_icon_name(a, size);
+            _a = Gtk::manage(sp_get_icon_image(a, size));
             _a->set_no_show_all(true);
             add(*_a);
         }
         if (!b.empty()) {
-            _b = Gtk::manage(new Gtk::Image());
-            _b->set_from_icon_name(b, size);
+            _b = Gtk::manage(sp_get_icon_image(b, size));
             _b->set_no_show_all(true);
             add(*_b);
         }

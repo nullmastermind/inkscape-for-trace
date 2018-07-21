@@ -50,9 +50,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
 
-#include "widgets/ege-adjustment-action.h"
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/ink-spinscale.h"
+#include "widgets/ege-adjustment-action.h"
 
 static void ege_adjustment_action_finalize( GObject* object );
 static void ege_adjustment_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
@@ -864,7 +865,8 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
             /* Use an icon if available or use short-label */
             if ( act->private_data->iconId && strcmp( act->private_data->iconId, "" ) != 0 ) {
-                GtkWidget* icon = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
+                GtkWidget *icon =
+                    GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
                 gtk_box_pack_start( GTK_BOX(hb), icon, FALSE, FALSE, 0 );
             } else {
                 GtkWidget* lbl = gtk_label_new( g_value_get_string( &value ) ? g_value_get_string( &value ) : "wwww" );

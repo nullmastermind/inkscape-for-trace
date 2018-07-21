@@ -1,5 +1,5 @@
 #include "ink-action.h"
-
+#include "helper/icon-loader.h"
 #include <gtk/gtk.h>
 
 static void ink_action_finalize( GObject* obj );
@@ -161,7 +161,8 @@ static GtkWidget* ink_action_create_tool_item( GtkAction* action )
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget* child = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
+            GtkWidget *child =
+                GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
             gtk_tool_button_set_icon_widget( button, child );
         } else {
             // For now trigger a warning but don't do anything else

@@ -34,6 +34,7 @@
 #include "object/sp-script.h"
 #include "style.h"
 
+#include "helper/icon-loader.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/icon-names.h"
 #include "ui/shape-editor.h"
@@ -75,7 +76,7 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
 
 static void docprops_style_button(Gtk::Button& btn, char const* iconName)
 {
-    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_widget_show( child );
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -1511,8 +1512,7 @@ DocumentProperties::_createPageTabLabel(const Glib::ustring& label, const char *
     Gtk::HBox *_tab_label_box = Gtk::manage(new Gtk::HBox(false, 0));
     _tab_label_box->set_spacing(4);
 
-    auto img = Gtk::manage(new Gtk::Image());
-    img->set_from_icon_name(label_image, Gtk::ICON_SIZE_MENU);
+    auto img = Gtk::manage(sp_get_icon_image(label_image, Gtk::ICON_SIZE_MENU));
     _tab_label_box->pack_start(*img);
 
     Gtk::Label *_tab_label = Gtk::manage(new Gtk::Label(label, true));

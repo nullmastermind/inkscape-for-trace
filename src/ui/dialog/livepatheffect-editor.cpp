@@ -30,6 +30,7 @@
 #include "verbs.h"
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"
@@ -73,7 +74,7 @@ void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flag
 
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
 {
-    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_widget_show( child );
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

@@ -34,6 +34,7 @@
 
 #include "io/sys.h"
 
+#include "helper/icon-loader.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/widget/preferences-widget.h"
 
@@ -633,6 +634,58 @@ void PrefCombo::init(Glib::ustring const &prefs_path,
     this->set_active(row);
 }
 
+void PrefCombo::init(Glib::ustring const &prefs_path,
+                     std::vector<Glib::ustring> labels, std::vector<int> values, int default_value)
+{
+    size_t labels_size = labels.size();
+    size_t values_size = values.size();
+    if (values_size != labels_size) {
+        std::cout << "PrefCombo::" << "Diferent number of values/labels in " << prefs_path << std::endl;
+        return;
+    }
+    _prefs_path = prefs_path;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int row = 0;
+    int value = prefs->getInt(_prefs_path, default_value);
+
+    for (int i = 0 ; i < labels_size; ++i)
+    {
+        this->append(labels[i]);
+        _values.push_back(values[i]);
+        if (value == values[i])
+            row = i;
+    }
+    this->set_active(row);
+}
+
+void PrefCombo::init(Glib::ustring const &prefs_path,
+                     std::vector<Glib::ustring> labels, std::vector<Glib::ustring> values, Glib::ustring default_value)
+{
+    size_t labels_size = labels.size();
+    size_t values_size = values.size();
+    if (values_size != labels_size) {
+        std::cout << "PrefCombo::" << "Diferent number of values/labels in " << prefs_path << std::endl;
+        return;
+    }
+    _prefs_path = prefs_path;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int row = 0;
+    Glib::ustring value = prefs->getString(_prefs_path);
+    if(value.empty())
+    {
+        value = default_value;
+    }
+
+    for (int i = 0 ; i < labels_size; ++i)
+    {
+        this->append(labels[i]);
+        _ustr_values.push_back(values[i]);
+        if (value == values[i])
+            row = i;
+    }
+    this->set_active(row);
+}
+
 void PrefCombo::on_changed()
 {
     if (this->get_visible()) //only take action if user changed value
@@ -705,9 +758,7 @@ void PrefEntryFileButtonHBox::init(Glib::ustring const &prefs_path,
     
     relatedButton = new Gtk::Button();
     Gtk::HBox* pixlabel = new Gtk::HBox(false, 3);
-    Gtk::Image *im = new Gtk::Image();
-    im->set_from_icon_name("applications-graphics",
-                           Gtk::ICON_SIZE_BUTTON);
+    Gtk::Image *im = sp_get_icon_image("applications-graphics", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
     l->set_markup_with_mnemonic(_("_Browse..."));

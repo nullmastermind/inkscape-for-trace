@@ -384,6 +384,7 @@ public:
     bool isToolboxButtonActive (gchar const *id);
     void updateNow();
     void updateCanvasNow();
+    void storeDesktopPosition();
 
     void enableInteraction();
     void disableInteraction();

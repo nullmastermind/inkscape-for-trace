@@ -163,6 +163,8 @@ struct SPDesktopWidget {
                 _dtw->window = nullptr;
             }
 
+        void storeDesktopPosition() override
+            { _dtw->storeDesktopPosition(); }
         void requestCanvasUpdate() override
             { _dtw->requestCanvasUpdate(); }
         void requestCanvasUpdateAndWait() override
@@ -237,6 +239,7 @@ struct SPDesktopWidget {
     bool isToolboxButtonActive (gchar const *id);
     void setToolboxPosition(Glib::ustring const& id, GtkPositionType pos);
     void setCoordinateStatus(Geom::Point p);
+    void storeDesktopPosition();
     void requestCanvasUpdate();
     void requestCanvasUpdateAndWait();
     void enableInteraction();

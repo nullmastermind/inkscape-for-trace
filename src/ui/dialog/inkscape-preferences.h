@@ -70,6 +70,7 @@ enum {
     PREFS_PAGE_TOOLS_CONNECTOR,
     PREFS_PAGE_TOOLS_LPETOOL,
     PREFS_PAGE_UI,
+    PREFS_PAGE_UI_THEME,
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
     PREFS_PAGE_UI_KEYBOARD_SHORTCUTS,
@@ -160,6 +161,7 @@ protected:
     UI::Widget::DialogPage _page_eraser;
 
     UI::Widget::DialogPage _page_ui;
+    UI::Widget::DialogPage _page_theme;
     UI::Widget::DialogPage _page_windows;
     UI::Widget::DialogPage _page_grids;
 
@@ -237,6 +239,16 @@ protected:
     UI::Widget::PrefCheckButton _t_node_single_node_transform_handles;
     UI::Widget::PrefCheckButton _t_node_delete_preserves_shape;
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
+
+    UI::Widget::PrefCombo       _theme;
+    UI::Widget::PrefCombo       _icon_theme;
+    UI::Widget::PrefCheckButton _dark_theme;
+    UI::Widget::PrefCheckButton _symbolic_icons;
+    UI::Widget::PrefColorPicker _symbolic_color;
+    UI::Widget::PrefCombo       _misc_small_toolbar;
+    UI::Widget::PrefCombo       _misc_small_secondary;
+    UI::Widget::PrefCombo       _misc_small_tools;
+    UI::Widget::Button         *_apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;
@@ -357,9 +369,6 @@ protected:
 
     // UI page
     UI::Widget::PrefCombo       _ui_languages;
-    UI::Widget::PrefCombo       _misc_small_toolbar;
-    UI::Widget::PrefCombo       _misc_small_secondary;
-    UI::Widget::PrefCombo       _misc_small_tools;
     UI::Widget::PrefCheckButton _ui_colorsliders_top;
     UI::Widget::PrefSpinButton  _misc_recent;
     UI::Widget::PrefCheckButton _ui_partialdynamic;

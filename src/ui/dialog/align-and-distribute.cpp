@@ -45,6 +45,7 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 
+#include "helper/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
@@ -68,7 +69,7 @@ Action::Action(Glib::ustring id,
     _parent(parent)
 {
     Gtk::Image*  pIcon = Gtk::manage(new Gtk::Image());
-    pIcon->set_from_icon_name( _id, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    pIcon = sp_get_icon_image(_id, Gtk::ICON_SIZE_LARGE_TOOLBAR);
     Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
     pButton->set_relief(Gtk::RELIEF_NONE);
     pIcon->show();

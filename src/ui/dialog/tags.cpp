@@ -18,21 +18,23 @@
 #include <gtkmm/imagemenuitem.h>
 #include <glibmm/main.h>
 
-#include "desktop.h"
 #include "desktop-style.h"
-#include "document.h"
+#include "desktop.h"
 #include "document-undo.h"
+#include "document.h"
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 
+#include "helper/icon-loader.h"
 #include "svg/css-ostringstream.h"
-#include "ui/widget/layertypeicon.h"
+#include "ui/tools/tool-base.h" //"event-context.h"
 #include "ui/widget/addtoicon.h"
+#include "ui/widget/layertypeicon.h"
 #include "verbs.h"
 #include "xml/node-observer.h"
-#include "ui/tools/tool-base.h" //"event-context.h"
 //#include "dialogs/dialog-events.h"
 #include "ui/widget/color-notebook.h"
 #include "filter-chemistry.h"
@@ -125,7 +127,7 @@ public:
 
 void TagsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -139,7 +141,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
     const char* label = nullptr;
 
     if ( iconName ) {
-        iconWidget = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_MENU );
+        iconWidget = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU)->gobj());
     }
 
     if ( desktop ) {
@@ -147,7 +149,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
         if ( verb ) {
             SPAction *action = verb->get_action(desktop);
             if ( !iconWidget && action && action->image ) {
-                iconWidget = gtk_image_new_from_icon_name( action->image, GTK_ICON_SIZE_MENU );
+                iconWidget = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
             }
 
             if ( action ) {

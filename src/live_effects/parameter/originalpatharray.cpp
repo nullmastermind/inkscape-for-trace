@@ -32,6 +32,8 @@
 #include <2geom/coord.h>
 #include <2geom/point.h>
 
+#include "helper/icon-loader.h"
+
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
 #include "object/uri.h"
@@ -177,8 +179,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     
     
     { // Paste path to link button
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("edit-clone", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("edit-clone", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -190,8 +191,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     }
     
     { // Remove linked path
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name("gtk-remove", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-remove", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -203,8 +203,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( "gtk-go-down", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-down", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -216,8 +215,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
-        pIcon->set_from_icon_name( "gtk-go-up", Gtk::ICON_SIZE_BUTTON);
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-up", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
