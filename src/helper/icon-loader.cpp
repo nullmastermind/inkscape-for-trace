@@ -21,6 +21,7 @@
 #include "widgets/toolbox.h"
 #include <gtkmm/iconinfo.h>
 #include <gtkmm/icontheme.h>
+#include <gtkmm/toolitem.h>
 
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
@@ -45,7 +46,10 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
                 icon_name = "preferences-system";
             }
             sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor",
-            0x000000ff)); Gdk::RGBA color; color.set(colornamed); Gtk::IconInfo iconinfo =
+            0x000000ff)); 
+            Gdk::RGBA color; 
+            color.set(colornamed); 
+            Gtk::IconInfo iconinfo =
                 iconTheme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size,
                 Gtk::ICON_LOOKUP_FORCE_SIZE);
             if (bool(iconinfo)) {
@@ -117,6 +121,24 @@ Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size)
     auto icon = sp_get_icon_pixbuf(icon_name, prefs_size);
     Gtk::Image *image = new Gtk::Image(icon);
     return image;
+}
+
+std::pair<Glib::RefPtr<Gtk::RadioAction>, Gdk::RGBA > sp_set_radioaction_icon(Gtk::RadioAction::Group group, Glib::ustring icon_name, Glib::ustring label, Glib::ustring tooltip)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        icon_name = icon_name + Glib::ustring("-symbolic");
+    }
+                
+    Glib::RefPtr<Gtk::RadioAction> action =
+                    Gtk::RadioAction::create_with_icon_name (group, "Anonymous", icon_name.c_str(), label.c_str(), tooltip.c_str());
+    Gtk::ToolItem* item = action->create_tool_item(); 
+    Gdk::RGBA color; 
+    gchar colornamed[64];
+    sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor",
+        0x000000ff)); 
+    color.set(colornamed);
+    return std::make_pair(action, color);
 }
 
 /*

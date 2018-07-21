@@ -269,7 +269,7 @@ sp_ui_reload()
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/theme").c_str(), NULL);
+    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
     prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
     prefs->save();

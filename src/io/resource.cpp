@@ -213,7 +213,6 @@ Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
  *
  *  domain - Optional domain (overload), will check return domains if not.
  *  type - The type of files, e.g. TEMPLATES
- *  path - Instead of Domain and Type, specify the path to get the files from.
  *  extensions - A list of extensions to return, e.g. xml, svg
  *  exclusions - A list of names to exclude e.g. default.xml
  */
@@ -225,6 +224,7 @@ std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> ex
     get_filenames_from_path(ret, get_path_ustring(CREATE, type), extensions, exclusions);
     return ret;
 }
+
 std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
 {
     std::vector<Glib::ustring> ret;
@@ -239,9 +239,40 @@ std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const c
 }
 
 /*
+ * Gets all folders inside each type, for all domain types.
+ *
+ *  domain - Optional domain (overload), will check return domains if not.
+ *  type - The type of files, e.g. TEMPLATES
+ *  extensions - A list of extensions to return, e.g. xml, svg
+ *  exclusions - A list of names to exclude e.g. default.xml
+ */
+std::vector<Glib::ustring> get_foldernames(Type type, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_foldernames_from_path(ret, get_path_ustring(USER, type), exclusions);
+    get_foldernames_from_path(ret, get_path_ustring(SYSTEM, type), exclusions);
+    get_foldernames_from_path(ret, get_path_ustring(CREATE, type), exclusions);
+    return ret;
+}
+
+std::vector<Glib::ustring> get_foldernames(Domain domain, Type type, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_foldernames_from_path(ret, get_path_ustring(domain, type), exclusions);
+    return ret;
+}
+std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_foldernames_from_path(ret, path, exclusions);
+    return ret;
+}
+
+
+/*
  * Get all the files from a specific path and any sub-dirs, populating &files vector
  *
- * &files - Output list to populate, will be opoulated with full paths
+ * &files - Output list to populate, will be poulated with full paths
  * path - The directory to parse, will add nothing if directory doesn't exist
  * extensions - Only add files with these extensions, they must be duplicated
  * exclusions - Exclude files that exactly match these names.
@@ -275,6 +306,40 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
             get_filenames_from_path(files, filename, extensions, exclusions);
         } else if(Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR) && !reject) {
             files.push_back(filename);
+        }
+        file = dir.read_name();
+    }
+}
+
+/*
+ * Get all the files from a specific path and any sub-dirs, populating &files vector
+ *
+ * &folders - Output list to populate, will be poulated with full paths
+ * path - The directory to parse, will add nothing if directory doesn't exist
+ * exclusions - Exclude files that exactly match these names.
+ */
+void get_foldernames_from_path(std::vector<Glib::ustring> &folders, Glib::ustring path, std::vector<const char *> exclusions)
+{
+    if(!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
+        return;
+    }
+
+    Glib::Dir dir(path);
+    std::string file = dir.read_name();
+    while (!file.empty()){
+        // If not extensions are specified, don't reject ANY files.
+        bool reject = false;
+
+        // Reject any file which matches the exclusions.
+        for (auto &exc: exclusions) {
+	    reject |= Glib::str_has_prefix(file, exc);
+        }
+
+        // Reject any filename which isn't a regular file
+        Glib::ustring filename = Glib::build_filename(path, file);
+
+        if(Glib::file_test(filename, Glib::FILE_TEST_IS_DIR) && !reject) {
+            folders.push_back(filename);
         }
         file = dir.read_name();
     }

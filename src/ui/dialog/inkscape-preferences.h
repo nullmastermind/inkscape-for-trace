@@ -240,7 +240,7 @@ protected:
     UI::Widget::PrefCheckButton _t_node_delete_preserves_shape;
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
 
-    UI::Widget::PrefCombo       _theme;
+    UI::Widget::PrefCombo       _gtk_theme;
     UI::Widget::PrefCombo       _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;

@@ -803,17 +803,13 @@ void InkscapePreferences::initPageUI()
         g_list_free (list);
         g_hash_table_destroy (t);
 
-//        g_object_bind_property (gtk_settings_get_default (), "gtk-theme-name",
-//                      (gpointer *)&_theme, "active-id",
-//                      (GBindingFlags)(G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE));
-
-        _theme.init("/theme/theme", labels, values, "Adwaita");
-        _page_theme.add_line(false, _("Change theme:"), _theme, "", "", false);
+        _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
+        _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
     }
 
     {
         using namespace Inkscape::IO::Resource;
-        auto files = get_filenames(UIS, {".css"}, {"style.css","dark.css","symbolic.css"});
+        auto files = get_foldernames(ICONS, {"application"});
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         for(auto &filename: files) {
@@ -836,6 +832,8 @@ void InkscapePreferences::initPageUI()
             labels.push_back(filename);
             values.push_back(filename);
         }
+        labels.erase(unique(labels.begin(), labels.end()), labels.end());
+        values.erase(unique(values.begin(), values.end()), values.end());
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
     }

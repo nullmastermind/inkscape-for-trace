@@ -479,7 +479,7 @@ Application::Application(const char* argv, bool use_gui) :
 
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/theme").c_str(), NULL);
+    g_object_set (gtk_settings_get_default (), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", prefs->getBool("/theme/darkTheme", false), NULL);
     InkErrorHandler* handler = new InkErrorHandler(use_gui);
     prefs->setErrorHandler(handler);
