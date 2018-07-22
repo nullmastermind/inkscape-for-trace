@@ -23,6 +23,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/fileutils.h>
 #include <gtk/gtksettings.h>
 #include <gtkmm/main.h>
 #include <gtkmm/recentinfo.h>
@@ -610,7 +611,36 @@ static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
     g_dir_close(dir);
 }
 
-
+void InkscapePreferences::symbolicThemeCheck()
+{
+    using namespace Inkscape::IO::Resource;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto folders = get_foldernames(ICONS, { "application" });
+    bool symbolic = false;
+    for (auto &folder : folders) {
+        auto path = folder;
+        const size_t last_slash_idx = folder.find_last_of("\\/");
+        if (std::string::npos != last_slash_idx) {
+            folder.erase(0, last_slash_idx + 1);
+        }
+        if (folder == prefs->getString("/theme/iconTheme")) {
+            //TODO: check this on WIN
+            path += "/scalable/actions";
+            Glib::ustring ret = Glib::build_filename(path, "3dbox_four_handles-symbolic.svg");
+            if (Glib::file_test(ret, Glib::FILE_TEST_EXISTS)) {
+                symbolic = true;
+            }
+        }
+    }
+    if (!symbolic) {
+        _symbolic_icons.set_active(false);
+        _symbolic_icons.hide();
+        _symbolic_color.hide();
+    } else {
+        _symbolic_icons.show();
+        _symbolic_color.show();
+    }
+}
 void InkscapePreferences::initPageUI()
 {
     Gtk::TreeModel::iterator iter_ui = this->AddPage(_page_ui, _("Interface"), PREFS_PAGE_UI);
@@ -742,7 +772,8 @@ void InkscapePreferences::initPageUI()
     }
 
     // Theme
-    _page_theme.add_group_header(_("Theme changes, require restart"));
+    symbolicThemeCheck();
+    _page_theme.add_group_header(_("Theme changes"));
     {
         GHashTable *t;
         GHashTableIter iter;
@@ -802,21 +833,21 @@ void InkscapePreferences::initPageUI()
 
     {
         using namespace Inkscape::IO::Resource;
-        auto files = get_foldernames(ICONS, { "application" });
+        auto folders = get_foldernames(ICONS, { "application" });
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
-        for (auto &filename : files) {
+        for (auto &folder : folders) {
             // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
             // Maybe we can link boost path utilities
             // Remove directory if present.
             // Do this before extension removal incase directory has a period character.
-            const size_t last_slash_idx = filename.find_last_of("\\/");
+            const size_t last_slash_idx = folder.find_last_of("\\/");
             if (std::string::npos != last_slash_idx) {
-                filename.erase(0, last_slash_idx + 1);
+                folder.erase(0, last_slash_idx + 1);
             }
 
-            labels.push_back(filename);
-            values.push_back(filename);
+            labels.push_back(folder);
+            values.push_back(folder);
         }
         std::sort(labels.begin(), labels.end());
         std::sort(values.begin(), values.end());
@@ -824,6 +855,7 @@ void InkscapePreferences::initPageUI()
         values.erase(unique(values.begin(), values.end()), values.end());
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
+        _icon_theme.signal_changed().connect( sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
     }
 
     _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
