@@ -150,6 +150,7 @@ apps:
       - desktop-legacy
       - x11
       - wayland
+      - removable-media
     desktop: share/applications/inkscape.desktop
   viewer:
     command: desktop-launch ${SNAP}/snapcraft.sh inkview
@@ -162,3 +163,4 @@ apps:
       - desktop-legacy
       - x11
       - wayland
+      - removable-media
