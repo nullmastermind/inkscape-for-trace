@@ -885,11 +885,9 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
-    Glib::ustring const label = _("Now");
-    Glib::ustring const tooltip = _("A bit slow process");
-    _apply_theme = new UI::Widget::Button(label, tooltip);
-    _page_theme.add_line(false, _("Apply theme"), *_apply_theme, "", _("Apply theme"), false);
-    _apply_theme->signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
+    _apply_theme.init(_("Now (slow)"));
+    _page_theme.add_line(false, _("Apply theme"), _apply_theme, "", _("Apply theme"), false);
+    _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);

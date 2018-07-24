@@ -248,7 +248,7 @@ protected:
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
-    UI::Widget::Button *_apply_theme;
+    UI::Widget::PrefButton _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;
@@ -353,6 +353,7 @@ protected:
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 
     // System page
+   // UI::Widget::Button         *_apply_theme;
     UI::Widget::PrefSpinButton  _misc_latency_skew;
     UI::Widget::PrefSpinButton  _misc_simpl;
     Gtk::Entry                  _sys_user_prefs;
