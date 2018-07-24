@@ -58,12 +58,6 @@ protected:
     void on_toggled() override;
 };
 
-class PrefButton : public Gtk::Button
-{
-public:
-    void init(Glib::ustring const &label);
-};
-
 class PrefRadioButton : public Gtk::RadioButton
 {
 public:

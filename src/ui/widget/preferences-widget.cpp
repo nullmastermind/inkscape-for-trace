@@ -176,11 +176,6 @@ void PrefCheckButton::on_toggled()
     }
 }
 
-void PrefButton::init(Glib::ustring const &label)
-{
-    this->set_label(label);
-}
-
 void PrefRadioButton::init(Glib::ustring const &label, Glib::ustring const &prefs_path,
     Glib::ustring const &string_value, bool default_value, PrefRadioButton* group_member)
 {

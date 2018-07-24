@@ -248,7 +248,7 @@ protected:
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
-    UI::Widget::PrefButton _apply_theme;
+    Gtk::Button _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;

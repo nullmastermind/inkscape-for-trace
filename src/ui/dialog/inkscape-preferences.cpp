@@ -885,7 +885,8 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
-    _apply_theme.init(_("Now (slow)"));
+    _apply_theme.set_label(_("Now"));
+    _apply_theme.set_tooltip_text (_("It apply slow"));
     _page_theme.add_line(false, _("Apply theme"), _apply_theme, "", _("Apply theme"), false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
