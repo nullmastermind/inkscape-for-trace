@@ -2197,7 +2197,7 @@ void InkscapePreferences::initPageSystem()
     _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"),_("Open themes"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the users themes"), true);
     
-    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),_("Open iconos"));
+    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),_("Open icons"));
     _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the users icons"), true);
     
     _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),_("Open templates"));
@@ -2209,7 +2209,7 @@ void InkscapePreferences::initPageSystem()
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),_("Open palletes"));
     _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"), true);
 
-    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),_("Open keyboard shorcuts"));
+    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),_("Open keys shorcuts"));
     _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
     
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),_("Open UI"));
