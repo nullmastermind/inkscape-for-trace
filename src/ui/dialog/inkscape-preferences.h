@@ -359,8 +359,15 @@ protected:
     Gtk::Entry                  _sys_user_prefs;
     Gtk::Entry                  _sys_tmp_files;
     Gtk::Entry                  _sys_extension_dir;
-    Gtk::Entry                  _sys_user_extension_dir;
-    Gtk::Entry                  _sys_user_config;
+    UI::Widget::PrefOpenFolder  _sys_user_config;
+    UI::Widget::PrefOpenFolder  _sys_user_extension_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_themes_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_ui_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_icons_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_keys_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_palettes_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_templates_dir;
+    UI::Widget::PrefOpenFolder  _sys_user_symbols_dir;
     Gtk::Entry                  _sys_user_cache;
     Gtk::Entry                  _sys_data;
     Gtk::TextView               _sys_icon;

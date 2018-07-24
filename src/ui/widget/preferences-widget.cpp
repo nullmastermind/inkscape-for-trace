@@ -880,6 +880,28 @@ bool PrefEntryFileButtonHBox::on_mnemonic_activate ( bool group_cycling )
     return relatedEntry->mnemonic_activate ( group_cycling );
 }
 
+void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const &button_text)
+{
+    relatedEntry = new Gtk::Entry();
+    relatedButton = new Gtk::Button(button_text);
+    relatedEntry->set_text(entry_string);
+    relatedEntry->set_sensitive(false);
+    this->pack_start(*relatedEntry);
+    this->pack_start(*relatedButton);
+    relatedButton->signal_clicked().connect(
+            sigc::mem_fun(*this, &PrefOpenFolder::onRelatedButtonClickedCallback));
+    
+}
+
+void PrefOpenFolder::onRelatedButtonClickedCallback()
+{
+    g_mkdir_with_parents (relatedEntry->get_text().c_str(), 0700);
+    GError *error = NULL;
+    if (!g_app_info_launch_default_for_uri (("file://" + relatedEntry->get_text()).c_str(), NULL, &error)) {
+        g_warning ("Failed to open uri: %s", error->message);
+    }
+}
+
 void PrefFileButton::init(Glib::ustring const &prefs_path)
 {
     _prefs_path = prefs_path;

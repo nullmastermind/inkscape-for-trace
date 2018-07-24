@@ -2184,17 +2184,36 @@ void InkscapePreferences::initPageSystem()
 
     _page_system.add_group_header( _("System info"));
 
-    _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
-    _sys_user_config.set_editable(false);
-    _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
-
     _sys_user_prefs.set_text(prefs->getPrefsFilename());
     _sys_user_prefs.set_editable(false);
     _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
 
-    _sys_user_extension_dir.set_text((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""));
-    _sys_user_extension_dir.set_editable(false);
+    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open location"));
+    _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
+
+    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),_("Open location"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
+
+    _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"),_("Open themes"));
+    _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the users themes"), true);
+    
+    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),_("Open iconos"));
+    _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the users icons"), true);
+    
+    _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),_("Open templates"));
+    _page_system.add_line(true, _("User templates: "), _sys_user_templates_dir, "", _("Location of the users templates"), true);
+
+    _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),_("Open symbols"));
+    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the users symbols"), true);
+    
+    _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),_("Open palletes"));
+    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"), true);
+
+    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),_("Open keyboard shorcuts"));
+    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
+    
+    _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),_("Open UI"));
+    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the users UI"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());
     _sys_user_cache.set_editable(false);
