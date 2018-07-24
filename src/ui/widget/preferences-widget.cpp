@@ -880,14 +880,22 @@ bool PrefEntryFileButtonHBox::on_mnemonic_activate ( bool group_cycling )
     return relatedEntry->mnemonic_activate ( group_cycling );
 }
 
-void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const &button_text)
+void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const &tooltip)
 {
     relatedEntry = new Gtk::Entry();
-    relatedButton = new Gtk::Button(button_text);
+    relatedButton = new Gtk::Button();
+    Gtk::HBox* pixlabel = new Gtk::HBox(false, 3);
+    Gtk::Image *im = sp_get_icon_image("document-open", Gtk::ICON_SIZE_BUTTON);
+    pixlabel->pack_start(*im);
+    Gtk::Label *l = new Gtk::Label();
+    l->set_markup_with_mnemonic(_("_Browse..."));
+    pixlabel->pack_start(*l);
+    relatedButton->add(*pixlabel); 
+    relatedButton->set_tooltip_text(tooltip);
     relatedEntry->set_text(entry_string);
     relatedEntry->set_sensitive(false);
-    this->pack_start(*relatedEntry);
-    this->pack_start(*relatedButton);
+    this->pack_end(*relatedButton, false, false, 4);
+    this->pack_start(*relatedEntry, true, true, 0);
     relatedButton->signal_clicked().connect(
             sigc::mem_fun(*this, &PrefOpenFolder::onRelatedButtonClickedCallback));
     

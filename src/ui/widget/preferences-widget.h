@@ -250,7 +250,7 @@ protected:
 class PrefOpenFolder : public Gtk::HBox
 {
 public:
-    void init(Glib::ustring const &entry_string, Glib::ustring const &button_text);
+    void init(Glib::ustring const &entry_string, Glib::ustring const &tooltip);
 protected:
     Gtk::Button *relatedButton;
     Gtk::Entry *relatedEntry;
