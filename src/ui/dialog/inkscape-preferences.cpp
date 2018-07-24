@@ -2188,10 +2188,10 @@ void InkscapePreferences::initPageSystem()
     _sys_user_prefs.set_editable(false);
     _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
 
-    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open location"));
+    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open inkscape folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),_("Open location"));
+    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),_("Open extensions"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
 
     _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"),_("Open themes"));
