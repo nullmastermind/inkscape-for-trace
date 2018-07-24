@@ -80,6 +80,7 @@
 
 #include "xml/repr.h"
 
+#include "io/resource.h"
 #include "io/sys.h"
 
 #include "debug/logger.h"
@@ -646,6 +647,34 @@ static void set_extensions_env()
     //printf("PYTHONPATH = %s\n", g_getenv("PYTHONPATH"));
 }
 
+static void set_datadir_env()
+{
+    using namespace Inkscape::IO::Resource;
+    gchar *datadir;
+ 
+#ifdef WIN32
+    datadir = g_win32_locale_filename_from_utf8(profile_path(""));
+#else
+    datadir = profile_path("");
+#endif
+
+    // On some platforms, INKSCAPE_EXTENSIONDIR is not absolute,
+    // but relative to the directory that contains the Inkscape executable.
+    // Since we spawn Python chdir'ed into the script's directory,
+    // we need to obtain the absolute path here.
+    if (!g_path_is_absolute(datadir)) {
+        gchar *curdir = g_get_current_dir();
+        gchar *datadir_new = g_build_filename(curdir, datadir, NULL);
+        g_free(datadir);
+        g_free(curdir);
+        datadir = datadir_new;
+    }
+
+    g_setenv("XDG_DATA_HOME", datadir, TRUE);
+    g_free(datadir);
+    //printf("XDG_DATA_HOME = %s\n", g_getenv("XDG_DATA_HOME"));
+}
+
 /**
  * This is the classic main() entry point of the program, though on some
  * architectures it might be called by something else.
@@ -676,6 +705,7 @@ main(int argc, char **argv)
         rt.setPathInfo();
     }
 #endif
+    set_datadir_env();
     set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)

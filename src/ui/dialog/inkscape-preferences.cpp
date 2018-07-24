@@ -624,8 +624,11 @@ void InkscapePreferences::symbolicThemeCheck()
             folder.erase(0, last_slash_idx + 1);
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
-            //TODO: check this on WIN
-            path += "/scalable/actions";
+#ifdef WIN32
+    path += g_win32_locale_filename_from_utf8("/scalable/actions");
+#else
+    path += "/scalable/actions";
+#endif
             Glib::ustring ret = Glib::build_filename(path, "3dbox_four_handles-symbolic.svg");
             if (Glib::file_test(ret, Glib::FILE_TEST_EXISTS)) {
                 symbolic = true;
