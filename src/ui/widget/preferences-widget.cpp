@@ -902,15 +902,8 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
 void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
     g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
-#ifdef WIN32
-    System::Uri uri = new System::Uri(relatedEntry->get_text());
-    Glib::ustring uri_open = (uri.AbsoluteUri)
-                                 .c_str()
-#else
-    Glib::ustring uri_open = ("file://" + relatedEntry->get_text()).c_str();
-#endif
-                                     GError *error = NULL;
-    if (!g_app_info_launch_default_for_uri(uri_open.c_str(), NULL, &error)) {
+    GError *error = NULL;
+    if (!g_app_info_launch_default_for_uri(g_filename_to_uri(relatedEntry->get_text()), NULL, &error)) {
         g_warning("Failed to open uri: %s", error->message);
     }
 }
