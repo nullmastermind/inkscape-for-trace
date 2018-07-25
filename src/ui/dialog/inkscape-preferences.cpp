@@ -867,7 +867,7 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
-     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
+    _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
     _page_theme.add_line(false, _("Color for symbolic icons:"), _symbolic_color, "", "", true);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
