@@ -623,7 +623,7 @@ static void set_datadir_env()
     gchar *datadir = get_datadir_path();
     g_setenv("XDG_DATA_HOME", datadir, TRUE);
     g_free(datadir);
-    //printf("XDG_DATA_HOME = %s\n", g_getenv("XDG_DATA_HOME"));
+    // printf("XDG_DATA_HOME = %s\n", g_getenv("XDG_DATA_HOME"));
 }
 
 /**

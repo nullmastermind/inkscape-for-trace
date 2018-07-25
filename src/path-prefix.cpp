@@ -23,9 +23,9 @@
 #endif
 
 
-#include <glib.h>
-#include "path-prefix.h"
 #include "io/resource.h"
+#include "path-prefix.h"
+#include <glib.h>
 
 
 /**
@@ -88,10 +88,10 @@ gchar *get_extensions_path()
     }
 
     if (pythonpath) {
-        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s",
-                                         extdir, pythonpath);
+        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", extdir, pythonpath);
         g_free(extdir);
-    } else {
+    }
+    else {
         new_pythonpath = extdir;
     }
 
@@ -102,7 +102,7 @@ gchar *get_datadir_path()
 {
     using namespace Inkscape::IO::Resource;
     gchar *datadir;
- 
+
 #ifdef WIN32
     datadir = g_win32_locale_filename_from_utf8(profile_path(""));
 #else

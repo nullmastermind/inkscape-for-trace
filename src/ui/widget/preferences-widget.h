@@ -247,11 +247,11 @@ protected:
     bool on_mnemonic_activate( bool group_cycling ) override;
 };
 
-class PrefOpenFolder : public Gtk::HBox
-{
-public:
+class PrefOpenFolder : public Gtk::HBox {
+  public:
     void init(Glib::ustring const &entry_string, Glib::ustring const &tooltip);
-protected:
+
+  protected:
     Gtk::Button *relatedButton;
     Gtk::Entry *relatedEntry;
     void onRelatedButtonClickedCallback();
