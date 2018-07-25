@@ -3,12 +3,25 @@
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-cuboid-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid"/>
   </sodipodi:namedview>
-  <g transform="matrix(0.666667,0,0,0.663212,-272,-411.58938)" inkscape:label="00219" id="draw-cuboid">
-      <path inkscape:connector-curvature="0" id="path5192" d="m 422.13477,620.59961 -0.29102,0.10742 -12.16406,4.54688 -0.24219,13.20507 9.32227,6.26563 11.90429,-3.6582 0.24024,-12.71094 z m -0.21875,1.17969 7.95117,7.03125 -0.21875,11.49023 -10.72071,3.29492 -8.44921,-5.67773 0.21679,-11.94531 z" style="opacity:1"/>
-      <path inkscape:connector-curvature="0" id="rect4344" d="m 408,621.24683 h 24 v 23.12638 h -24 z" style="opacity:0;fill:none"/>
-      <path inkscape:box3dface="XYfront" id="path4628" style="opacity:1" d="m 410.431,637.9184 11.2755,-3.7876 0.2248,-12.4108 -11.2836,4.2365 -0.2167,11.962 z" inkscape:connector-curvature="0"/>
-      <path inkscape:box3dface="XZtop" id="path4630" style="opacity:0.8" d="m 409.8945,638.0327 11.9175,-4.2576 8.3989,6.6929 -11.2636,3.2954 z" inkscape:connector-curvature="0"/>
-      <path inkscape:box3dface="YZleft" id="path4633" style="opacity:0.5" d="m 421.9174,634.4865 7.7647,5.8197 0.2089,-11.5352 -7.9597,-7.051 z" inkscape:connector-curvature="0"/>
-      <path inkscape:connector-curvature="0" id="rect25277" d="m 420.97849,621.34839 h 1.02148 v 13.46592 h -1.02148 z" style="opacity:1"/>
-    </g>
-    </svg>
+  <g
+     transform="matrix(0.666667,0,0,0.69185061,-272,-429.81)"
+     inkscape:label="00219"
+     id="draw-cuboid">
+    <path
+       id="rect4344"
+       d="m 408,621.24683 h 24 v 23.12638 h -24 z"
+       style="opacity:0;fill:none" />
+    <path
+       id="path4628"
+       style="opacity:1"
+       d="m 410.54813,637.09422 10.83653,-3.96438 v -10.97813 l -10.77603,4.04027 z"/>
+    <path
+       id="path4630"
+       style="opacity:0.75"
+       d="m 410.99979,637.75762 10.81221,-3.98252 7.63932,6.11252 -10.78585,3.74639 z"/>
+    <path
+       id="path4633"
+       style="opacity:0.5"
+       d="m 422.22593,633.12984 7.6847,6.12984 -0.0196,-11.12059 -7.6651,-5.99201 z"/>
+  </g>
+</svg>
