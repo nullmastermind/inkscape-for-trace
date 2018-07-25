@@ -636,14 +636,16 @@ void InkscapePreferences::symbolicThemeCheck()
             }
         }
     }
-    if (!symbolic) {
-        _symbolic_icons.set_active(false);
-        _symbolic_icons.hide();
-        _symbolic_color.hide();
-    }
-    else {
-        _symbolic_icons.show();
-        _symbolic_color.show();
+    if (_symbolic_icons.get_parent()) {
+        if (!symbolic) {
+            _symbolic_icons.set_active(false);
+            _symbolic_icons.get_parent()->hide();
+            _symbolic_color.get_parent()->hide();
+        }
+        else {
+            _symbolic_icons.get_parent()->show();
+            _symbolic_color.get_parent()->show();
+        }
     }
 }
 void InkscapePreferences::initPageUI()
@@ -868,7 +870,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    _page_theme.add_line(false, _("Color for symbolic icons:"), _symbolic_color, "", "", true);
+    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", true);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
@@ -2190,7 +2192,7 @@ void InkscapePreferences::initPageSystem()
     _sys_user_prefs.set_editable(false);
     _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
 
-    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open inkscape folder"));
+    _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
     _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
@@ -2215,16 +2217,16 @@ void InkscapePreferences::initPageSystem()
                           true);
 
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
-                                _("Open palletes folder"));
+                                _("Open palettes folder"));
     _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"),
                           true);
 
     _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
-                            _("Open keys shorcuts folder"));
+                            _("Open keyboard shorcuts folder"));
     _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
 
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
-                          _("Open UI folder"));
+                          _("Open user interface folder"));
     _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the users UI"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());

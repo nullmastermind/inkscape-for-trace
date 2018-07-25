@@ -73,6 +73,7 @@
 #include "ui/clipboard.h"
 #include "ui/dialog-events.h"
 #include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/inkscape-preferences.h"
 #include "ui/dialog/layer-properties.h"
 #include "ui/interface.h"
 #include "ui/monitor.h"
@@ -267,6 +268,12 @@ void sp_ui_reload()
 {
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_UI_THEME);
+    Inkscape::UI::Dialog::Dialog *prefs_dialog = SP_ACTIVE_DESKTOP->_dlg_mgr->getDialog("InkscapePreferences");
+    if (prefs_dialog) {
+        prefs_dialog->hide();
+    }
+    SP_ACTIVE_DESKTOP->disableInteraction();
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
     g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
@@ -283,7 +290,6 @@ void sp_ui_reload()
             continue;
         }
         dt->storeDesktopPosition();
-
         SPDocument *document;
         SPViewWidget *dtw;
 
@@ -304,6 +310,7 @@ void sp_ui_reload()
         dt->destroyWidget();
         i++;
     }
+    SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
     INKSCAPE.add_style_sheet();
     prefs->setInt("/options/savewindowgeometry/value", window_geometry);
 }
