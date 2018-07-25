@@ -105,7 +105,8 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             path = profile_path(name);
         } break;
     }
-
+  
+  
     if (filename && path) {
         gchar *temp=g_build_filename(path, filename, NULL);
         g_free(path);
@@ -114,6 +115,8 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
 
     return path;
 }
+
+
 
 Util::ptr_shared get_path(Domain domain, Type type, char const *filename)
 {
@@ -422,7 +425,7 @@ char *profile_path(const char *filename)
                 int problem = errno;
                 g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
             } else {
-                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "palettes", nullptr};
+                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "ui", "symbols", "themes", "palettes", nullptr};
                 for (gchar const** name = userDirs; *name; ++name) {
                     gchar *dir = g_build_filename(prefdir, *name, NULL);
                     g_mkdir_with_parents(dir, mode);
