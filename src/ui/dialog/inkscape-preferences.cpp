@@ -625,7 +625,7 @@ void InkscapePreferences::symbolicThemeCheck()
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
 #ifdef WIN32
-    path += multiplatform_path(("/scalable/actions");
+    path += g_win32_locale_filename_from_utf8("/scalable/actions");
 #else
     path += "/scalable/actions";
 #endif
