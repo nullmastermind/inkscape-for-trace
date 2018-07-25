@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include "path-prefix.h"
+#include "io/resource.h"
 
 
 /**
@@ -61,7 +62,67 @@ char *append_inkscape_datadir(const char *relative_path)
     return g_build_filename(inkscape_datadir, relative_path, NULL);
 }
 
+gchar *get_extensions_path()
+{
+    using namespace Inkscape::IO::Resource;
+    gchar const *pythonpath = g_getenv("PYTHONPATH");
+    gchar *extdir;
+    gchar *new_pythonpath;
 
+#ifdef WIN32
+    extdir = g_win32_locale_filename_from_utf8(INKSCAPE_EXTENSIONDIR);
+#else
+    extdir = g_strdup(INKSCAPE_EXTENSIONDIR);
+#endif
+
+    // On some platforms, INKSCAPE_EXTENSIONDIR is not absolute,
+    // but relative to the directory that contains the Inkscape executable.
+    // Since we spawn Python chdir'ed into the script's directory,
+    // we need to obtain the absolute path here.
+    if (!g_path_is_absolute(extdir)) {
+        gchar *curdir = g_get_current_dir();
+        gchar *extdir_new = g_build_filename(curdir, extdir, NULL);
+        g_free(extdir);
+        g_free(curdir);
+        extdir = extdir_new;
+    }
+
+    if (pythonpath) {
+        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s",
+                                         extdir, pythonpath);
+        g_free(extdir);
+    } else {
+        new_pythonpath = extdir;
+    }
+
+    return new_pythonpath;
+}
+
+gchar *get_datadir_path()
+{
+    using namespace Inkscape::IO::Resource;
+    gchar *datadir;
+ 
+#ifdef WIN32
+    datadir = g_win32_locale_filename_from_utf8(profile_path(""));
+#else
+    datadir = profile_path("");
+#endif
+
+    // On some platforms, INKSCAPE_EXTENSIONDIR is not absolute,
+    // but relative to the directory that contains the Inkscape executable.
+    // Since we spawn Python chdir'ed into the script's directory,
+    // we need to obtain the absolute path here.
+    if (!g_path_is_absolute(datadir)) {
+        gchar *curdir = g_get_current_dir();
+        gchar *datadir_new = g_build_filename(curdir, datadir, NULL);
+        g_free(datadir);
+        g_free(curdir);
+        datadir = datadir_new;
+    }
+
+    return datadir;
+}
 /*
   Local Variables:
   mode:c++

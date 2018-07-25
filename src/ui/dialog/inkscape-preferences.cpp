@@ -625,13 +625,14 @@ void InkscapePreferences::symbolicThemeCheck()
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
 #ifdef WIN32
-    path += g_win32_locale_filename_from_utf8("/scalable/actions");
+    path += multiplatform_path(("/scalable/actions");
 #else
     path += "/scalable/actions";
 #endif
-            std::vector<Glib::ustring> symbolic = get_filenames(path, {"-symbolic.svg"}, {});
-            if (symbolic.size() > 0) {
+            std::vector<Glib::ustring> symbolic_icons = get_filenames(path, {"-symbolic.svg"}, {});
+            if (symbolic_icons.size() > 0) {
                 symbolic = true;
+                symbolic_icons.clear();
             }
         }
     }
