@@ -888,7 +888,7 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
     Gtk::Image *im = sp_get_icon_image("document-open", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
-    l->set_markup_with_mnemonic(_("_Open"));
+    l->set_markup_with_mnemonic(_("Open"));
     pixlabel->pack_start(*l);
     relatedButton->add(*pixlabel); 
     relatedButton->set_tooltip_text(tooltip);
