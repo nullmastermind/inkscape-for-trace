@@ -884,35 +884,34 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
 {
     relatedEntry = new Gtk::Entry();
     relatedButton = new Gtk::Button();
-    Gtk::HBox* pixlabel = new Gtk::HBox(false, 3);
+    Gtk::HBox *pixlabel = new Gtk::HBox(false, 3);
     Gtk::Image *im = sp_get_icon_image("document-open", Gtk::ICON_SIZE_BUTTON);
     pixlabel->pack_start(*im);
     Gtk::Label *l = new Gtk::Label();
     l->set_markup_with_mnemonic(_("Open"));
     pixlabel->pack_start(*l);
-    relatedButton->add(*pixlabel); 
+    relatedButton->add(*pixlabel);
     relatedButton->set_tooltip_text(tooltip);
     relatedEntry->set_text(entry_string);
     relatedEntry->set_sensitive(false);
     this->pack_end(*relatedButton, false, false, 4);
     this->pack_start(*relatedEntry, true, true, 0);
-    relatedButton->signal_clicked().connect(
-            sigc::mem_fun(*this, &PrefOpenFolder::onRelatedButtonClickedCallback));
-    
+    relatedButton->signal_clicked().connect(sigc::mem_fun(*this, &PrefOpenFolder::onRelatedButtonClickedCallback));
 }
 
 void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
-    g_mkdir_with_parents (relatedEntry->get_text().c_str(), 0700);
+    g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
 #ifdef WIN32
-    Uri uri = new System::Uri(relatedEntry->get_text());
-    Glib::ustring uri_open = (uri.AbsoluteUri).c_str()
+    System::Uri uri = new System::Uri(relatedEntry->get_text());
+    Glib::ustring uri_open = (uri.AbsoluteUri)
+                                 .c_str()
 #else
     Glib::ustring uri_open = ("file://" + relatedEntry->get_text()).c_str();
 #endif
-    GError *error = NULL;
-    if (!g_app_info_launch_default_for_uri (uri_open.c_str(), NULL, &error)) {
-        g_warning ("Failed to open uri: %s", error->message);
+                                     GError *error = NULL;
+    if (!g_app_info_launch_default_for_uri(uri_open.c_str(), NULL, &error)) {
+        g_warning("Failed to open uri: %s", error->message);
     }
 }
 

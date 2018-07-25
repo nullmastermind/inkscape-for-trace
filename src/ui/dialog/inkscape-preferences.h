@@ -353,21 +353,21 @@ protected:
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 
     // System page
-   // UI::Widget::Button         *_apply_theme;
+    // UI::Widget::Button         *_apply_theme;
     UI::Widget::PrefSpinButton  _misc_latency_skew;
     UI::Widget::PrefSpinButton  _misc_simpl;
     Gtk::Entry                  _sys_user_prefs;
     Gtk::Entry                  _sys_tmp_files;
     Gtk::Entry                  _sys_extension_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_config;
-    UI::Widget::PrefOpenFolder  _sys_user_extension_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_themes_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_ui_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_icons_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_keys_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_palettes_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_templates_dir;
-    UI::Widget::PrefOpenFolder  _sys_user_symbols_dir;
+    UI::Widget::PrefOpenFolder _sys_user_config;
+    UI::Widget::PrefOpenFolder _sys_user_extension_dir;
+    UI::Widget::PrefOpenFolder _sys_user_themes_dir;
+    UI::Widget::PrefOpenFolder _sys_user_ui_dir;
+    UI::Widget::PrefOpenFolder _sys_user_icons_dir;
+    UI::Widget::PrefOpenFolder _sys_user_keys_dir;
+    UI::Widget::PrefOpenFolder _sys_user_palettes_dir;
+    UI::Widget::PrefOpenFolder _sys_user_templates_dir;
+    UI::Widget::PrefOpenFolder _sys_user_symbols_dir;
     Gtk::Entry                  _sys_user_cache;
     Gtk::Entry                  _sys_data;
     Gtk::TextView               _sys_icon;
@@ -573,11 +573,11 @@ protected:
 
 
 private:
-    void symbolicThemeCheck();
-    InkscapePreferences();
-    InkscapePreferences(InkscapePreferences const &d);
-    InkscapePreferences operator=(InkscapePreferences const &d);
-    bool _init;
+  void symbolicThemeCheck();
+  InkscapePreferences();
+  InkscapePreferences(InkscapePreferences const &d);
+  InkscapePreferences operator=(InkscapePreferences const &d);
+  bool _init;
 };
 
 } // namespace Dialog

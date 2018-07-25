@@ -20,10 +20,10 @@
 #include "inkscape-preferences.h"
 
 #include <gio/gio.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
-#include <glibmm/fileutils.h>
 #include <gtk/gtksettings.h>
 #include <gtkmm/main.h>
 #include <gtkmm/recentinfo.h>
@@ -625,11 +625,11 @@ void InkscapePreferences::symbolicThemeCheck()
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
 #ifdef WIN32
-    path += g_win32_locale_filename_from_utf8("/scalable/actions");
+            path += g_win32_locale_filename_from_utf8("/scalable/actions");
 #else
-    path += "/scalable/actions";
+            path += "/scalable/actions";
 #endif
-            std::vector<Glib::ustring> symbolic_icons = get_filenames(path, {"-symbolic.svg"}, {});
+            std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { "-symbolic.svg" }, {});
             if (symbolic_icons.size() > 0) {
                 symbolic = true;
                 symbolic_icons.clear();
@@ -640,7 +640,8 @@ void InkscapePreferences::symbolicThemeCheck()
         _symbolic_icons.set_active(false);
         _symbolic_icons.hide();
         _symbolic_color.hide();
-    } else {
+    }
+    else {
         _symbolic_icons.show();
         _symbolic_color.show();
     }
@@ -859,7 +860,7 @@ void InkscapePreferences::initPageUI()
         values.erase(unique(values.begin(), values.end()), values.end());
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
-        _icon_theme.signal_changed().connect( sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
+        _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
     }
 
     _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
@@ -887,7 +888,7 @@ void InkscapePreferences::initPageUI()
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
     _apply_theme.set_label(_("Now"));
-    _apply_theme.set_tooltip_text (_("It apply slow"));
+    _apply_theme.set_tooltip_text(_("It apply slow"));
     _page_theme.add_line(false, _("Apply theme"), _apply_theme, "", _("Apply theme"), false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
@@ -2192,28 +2193,38 @@ void InkscapePreferences::initPageSystem()
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open inkscape folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
-    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),_("Open extensions folder"));
+    _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
+                                 _("Open extensions folder"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
 
-    _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"),_("Open themes folder"));
+    _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the users themes"), true);
-    
-    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),_("Open icons folder"));
+
+    _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
+                             _("Open icons folder"));
     _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the users icons"), true);
-    
-    _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),_("Open templates folder"));
-    _page_system.add_line(true, _("User templates: "), _sys_user_templates_dir, "", _("Location of the users templates"), true);
 
-    _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),_("Open symbols folder"));
-    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the users symbols"), true);
-    
-    _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),_("Open palletes folder"));
-    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"), true);
+    _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),
+                                 _("Open templates folder"));
+    _page_system.add_line(true, _("User templates: "), _sys_user_templates_dir, "",
+                          _("Location of the users templates"), true);
 
-    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),_("Open keys shorcuts folder"));
+    _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
+                               _("Open symbols folder"));
+    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the users symbols"),
+                          true);
+
+    _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
+                                _("Open palletes folder"));
+    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"),
+                          true);
+
+    _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
+                            _("Open keys shorcuts folder"));
     _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
-    
-    _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),_("Open UI folder"));
+
+    _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
+                          _("Open UI folder"));
     _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the users UI"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());
