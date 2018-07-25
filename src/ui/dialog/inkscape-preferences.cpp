@@ -629,8 +629,8 @@ void InkscapePreferences::symbolicThemeCheck()
 #else
     path += "/scalable/actions";
 #endif
-            Glib::ustring ret = Glib::build_filename(path, "3dbox_four_handles-symbolic.svg");
-            if (Glib::file_test(ret, Glib::FILE_TEST_EXISTS)) {
+            std::vector<Glib::ustring> symbolic = get_filenames(path, {"-symbolic.svg"}, {});
+            if (symbolic.size() > 0) {
                 symbolic = true;
             }
         }
