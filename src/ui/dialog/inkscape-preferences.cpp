@@ -867,7 +867,7 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
-        _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
+     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
     _page_theme.add_line(false, _("Color for symbolic icons:"), _symbolic_color, "", "", true);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
@@ -887,9 +887,9 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
-    _apply_theme.set_label(_("Now"));
+    _apply_theme.set_label(_("Apply theme"));
     _apply_theme.set_tooltip_text(_("It apply slow"));
-    _page_theme.add_line(false, _("Apply theme"), _apply_theme, "", _("Apply theme"), false);
+    _page_theme.add_line(false, "", _apply_theme, "", "", false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     // Windows
