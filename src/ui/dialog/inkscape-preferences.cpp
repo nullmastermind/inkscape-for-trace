@@ -610,6 +610,7 @@ static void _inkscape_fill_icons(const gchar *path, GHashTable *t)
     if (!dir) {
         return;
     }
+    std::cout << path << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
     while ((dir_entry = g_dir_read_name(dir))) {
         gchar *filename = g_build_filename(path, dir_entry, "index.theme", NULL);
         gchar *scalable = g_build_filename(path, dir_entry, "scalable", NULL);
@@ -794,7 +795,6 @@ void InkscapePreferences::initPageUI()
     }
 
     // Theme
-    symbolicThemeCheck();
     _page_theme.add_group_header(_("Theme changes"));
     {
         using namespace Inkscape::IO::Resource;
@@ -853,7 +853,7 @@ void InkscapePreferences::initPageUI()
     {
         GHashTable *t;
         GHashTableIter iter;
-        gchar *iconTheme, *path;
+        gchar *icon_theme, *path;
         gchar **builtin_icons;
         GList *list, *l;
         guint i;
@@ -879,15 +879,15 @@ void InkscapePreferences::initPageUI()
         list = NULL;
         g_hash_table_iter_init(&iter, t);
 
-        while (g_hash_table_iter_next(&iter, (gpointer *)&iconTheme, NULL)) {
-            list = g_list_insert_sorted(list, iconTheme, (GCompareFunc)strcmp);
+        while (g_hash_table_iter_next(&iter, (gpointer *)&icon_theme, NULL)) {
+            list = g_list_insert_sorted(list, icon_theme, (GCompareFunc)strcmp);
         }
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         for (l = list; l; l = l->next) {
-            iconTheme = (gchar *)l->data;
-            labels.push_back(Glib::ustring(iconTheme));
-            values.push_back(Glib::ustring(iconTheme));
+            icon_theme = (gchar *)l->data;
+            labels.push_back(Glib::ustring(icon_theme));
+            values.push_back(Glib::ustring(icon_theme));
         }
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
@@ -898,6 +898,7 @@ void InkscapePreferences::initPageUI()
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
+        symbolicThemeCheck();
     }
 
     _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);

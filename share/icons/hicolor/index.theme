@@ -5,12 +5,16 @@ Hidden=true
 Directories=scalable/actions,symbolic/actions
 
 [scalable/actions]
+MinSize=8
 Size=16
-Context=Actions
-Type=Threshold
+MaxSize=512
+Context=Applications
+Type=Scalable
 
 [symbolic/actions]
+MinSize=8
 Size=16
-Context=Actions
-Type=Threshold
+MaxSize=512
+Context=Applications
+Type=Scalable
 

@@ -635,7 +635,7 @@ static void set_datadir_env()
     datadir += "/inkscape";
 #endif
     g_setenv("XDG_DATA_DIRS", datadir.c_str(), TRUE);
-    // printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
+    printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
 }
 
 /**
