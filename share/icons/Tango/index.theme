@@ -2,10 +2,14 @@
 Name=Tango
 Comment=Tango icon theme
 Hidden=true
-Directories=scalable/actions
+Directories=scalable/actions,symbolic/actions
 
 [scalable/actions]
 Size=16
 Context=Actions
 Type=Threshold
 
+[symbolic/actions]
+Size=16
+Context=Actions
+Type=Threshold
