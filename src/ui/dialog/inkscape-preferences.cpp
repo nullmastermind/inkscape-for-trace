@@ -601,29 +601,26 @@ static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
     g_dir_close(dir);
 }
 
-static void _inkscape_fill_icons(const gchar *path, GHashTable  *t)
+static void _inkscape_fill_icons(const gchar *path, GHashTable *t)
 {
     const gchar *dir_entry;
     GDir *dir;
 
-    dir = g_dir_open (path, 0, NULL);
+    dir = g_dir_open(path, 0, NULL);
     if (!dir) {
         return;
     }
-    while ((dir_entry = g_dir_read_name (dir))) {
-        gchar *filename = g_build_filename (path, dir_entry, "index.theme", NULL);
-        gchar *scalable = g_build_filename (path, dir_entry, "scalable", NULL);
-        if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
-            g_file_test (scalable, G_FILE_TEST_IS_DIR) && 
-            g_strcmp0 (dir_entry, "default") != 0 &&
-            !g_hash_table_contains (t, dir_entry))
-        {
-            g_hash_table_add (t, g_strdup (dir_entry));
+    while ((dir_entry = g_dir_read_name(dir))) {
+        gchar *filename = g_build_filename(path, dir_entry, "index.theme", NULL);
+        gchar *scalable = g_build_filename(path, dir_entry, "scalable", NULL);
+        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) && g_file_test(scalable, G_FILE_TEST_IS_DIR) &&
+            g_strcmp0(dir_entry, "default") != 0 && !g_hash_table_contains(t, dir_entry)) {
+            g_hash_table_add(t, g_strdup(dir_entry));
         }
-        g_free (filename);
-        g_free (scalable);
+        g_free(filename);
+        g_free(scalable);
     }
-    g_dir_close (dir);
+    g_dir_close(dir);
 }
 
 
@@ -865,41 +862,39 @@ void InkscapePreferences::initPageUI()
         t = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 
         path = g_build_filename(g_get_user_data_dir(), "icons", NULL);
-        _inkscape_fill_icons (path, t);
+        _inkscape_fill_icons(path, t);
         g_free(path);
 
         path = g_build_filename(g_get_home_dir(), ".icons", NULL);
-        _inkscape_fill_icons (path, t);
+        _inkscape_fill_icons(path, t);
         g_free(path);
 
         dirs = g_get_system_data_dirs();
         for (i = 0; dirs[i]; i++) {
             path = g_build_filename(dirs[i], "icons", NULL);
-            _inkscape_fill_icons (path, t);
+            _inkscape_fill_icons(path, t);
             g_free(path);
-        }        
-                
-        list = NULL;
-        g_hash_table_iter_init (&iter, t);
+        }
 
-        while (g_hash_table_iter_next(&iter, (gpointer *)&iconTheme, NULL)){
-          list = g_list_insert_sorted(list, iconTheme, (GCompareFunc)strcmp);
+        list = NULL;
+        g_hash_table_iter_init(&iter, t);
+
+        while (g_hash_table_iter_next(&iter, (gpointer *)&iconTheme, NULL)) {
+            list = g_list_insert_sorted(list, iconTheme, (GCompareFunc)strcmp);
         }
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
         for (l = list; l; l = l->next) {
-          iconTheme = (gchar *)l->data;
-          labels.push_back(Glib::ustring(iconTheme));
-          values.push_back(Glib::ustring(iconTheme));
+            iconTheme = (gchar *)l->data;
+            labels.push_back(Glib::ustring(iconTheme));
+            values.push_back(Glib::ustring(iconTheme));
         }
-//        std::sort(labels.begin(), labels.end());
-//        std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-        
+
         g_list_free(list);
         g_hash_table_destroy(t);
-        
+
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));

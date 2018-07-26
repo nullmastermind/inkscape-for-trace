@@ -203,11 +203,8 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
             GError *error = nullptr;
             gsize bytesRead = 0;
             gsize bytesWritten = 0;
-            gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, PIXMAPS, "remove-color.png"),
-                                                 -1,
-                                                 &bytesRead,
-                                                 &bytesWritten,
-                                                 &error);
+            gchar *localFilename = g_filename_from_utf8(get_path(SYSTEM, PIXMAPS, "remove-color.png"), -1, &bytesRead,
+                                                        &bytesWritten, &error);
             GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file_at_scale(localFilename, width, height, FALSE, &error);
             g_free(localFilename);
             gtk_drag_set_icon_pixbuf( dc, pixbuf, 0, 0 );
@@ -512,11 +509,8 @@ void ColorItem::_regenPreview(EekPreview * preview)
         GError *error = nullptr;
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
-        gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, PIXMAPS, "remove-color.png"),
-                                                     -1,
-                                                     &bytesRead,
-                                                     &bytesWritten,
-                                                     &error);
+        gchar *localFilename =
+            g_filename_from_utf8(get_path(SYSTEM, PIXMAPS, "remove-color.png"), -1, &bytesRead, &bytesWritten, &error);
         GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(localFilename, &error);
         if (!pixbuf) {
             g_warning("Null pixbuf for %p [%s]", localFilename, localFilename );

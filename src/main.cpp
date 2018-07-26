@@ -628,7 +628,7 @@ static void set_datadir_env()
     }
     datadir += get_datadir_path();
     datadir += ":";
-    datadir +=  INKSCAPE_DATADIR;
+    datadir += INKSCAPE_DATADIR;
 #ifdef WIN32
     datadir += g_win32_locale_filename_from_utf8("/inkscape");
 #else

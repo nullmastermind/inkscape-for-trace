@@ -914,7 +914,6 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
     system((xgd).c_str());
     g_free(path);
 #endif
-
 }
 
 void PrefFileButton::init(Glib::ustring const &prefs_path)
