@@ -902,14 +902,13 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
 void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
     g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
-    GError *error = NULL;
+    //https://stackoverflow.com/questions/42442189/how-to-open-spawn-a-file-with-glib-gtkmm-in-windows
 #ifdef WIN32
     ShellExecute(NULL, "open", relatedEntry->get_text().c_str(), NULL, NULL, SW_SHOWDEFAULT);
+#elif defined(__APPLE__)
+    system(("open " + relatedEntry->get_text()).c_str());
 #else
-    if (!g_app_info_launch_default_for_uri(g_filename_to_uri(relatedEntry->get_text().c_str(), NULL, &error), NULL,
-                                           &error)) {
-        g_warning("Failed to open uri: %s", error->message);
-    }
+    system(("xdg-open " + relatedEntry->get_text()).c_str());
 #endif
 }
 
