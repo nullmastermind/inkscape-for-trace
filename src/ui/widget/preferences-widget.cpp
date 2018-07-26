@@ -902,7 +902,7 @@ void PrefOpenFolder::init(Glib::ustring const &entry_string, Glib::ustring const
 void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
     g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
-    //https://stackoverflow.com/questions/42442189/how-to-open-spawn-a-file-with-glib-gtkmm-in-windows
+    // https://stackoverflow.com/questions/42442189/how-to-open-spawn-a-file-with-glib-gtkmm-in-windows
 #ifdef WIN32
     ShellExecute(NULL, "open", relatedEntry->get_text().c_str(), NULL, NULL, SW_SHOWDEFAULT);
 #elif defined(__APPLE__)
