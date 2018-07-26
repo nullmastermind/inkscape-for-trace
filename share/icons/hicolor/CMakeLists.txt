@@ -1,3 +1,4 @@
+install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/hicolor)
 set(THEME hicolor)
 
 set(PIXMAP_SIZES "scalable")

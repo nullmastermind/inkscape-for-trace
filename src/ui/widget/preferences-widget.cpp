@@ -908,8 +908,13 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
 #elif defined(__APPLE__)
     system(("open " + relatedEntry->get_text()).c_str());
 #else
-    system(("xdg-open " + relatedEntry->get_text()).c_str());
+    gchar *path = g_filename_to_uri(relatedEntry->get_text().c_str(), NULL, NULL);
+    Glib::ustring xgd = "xdg-open ";
+    xgd += path;
+    system((xgd).c_str());
+    g_free(path);
 #endif
+
 }
 
 void PrefFileButton::init(Glib::ustring const &prefs_path)

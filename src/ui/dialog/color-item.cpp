@@ -194,7 +194,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
     if ( item )
     {
         using Inkscape::IO::Resource::get_path;
-        using Inkscape::IO::Resource::ICONS;
+        using Inkscape::IO::Resource::PIXMAPS;
         using Inkscape::IO::Resource::SYSTEM;
         int width = 32;
         int height = 24;
@@ -203,7 +203,7 @@ static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpoin
             GError *error = nullptr;
             gsize bytesRead = 0;
             gsize bytesWritten = 0;
-            gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, ICONS, "remove-color.png"),
+            gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, PIXMAPS, "remove-color.png"),
                                                  -1,
                                                  &bytesRead,
                                                  &bytesWritten,
@@ -507,12 +507,12 @@ void ColorItem::_regenPreview(EekPreview * preview)
 {
     if ( def.getType() != ege::PaintDef::RGB ) {
         using Inkscape::IO::Resource::get_path;
-        using Inkscape::IO::Resource::ICONS;
+        using Inkscape::IO::Resource::PIXMAPS;
         using Inkscape::IO::Resource::SYSTEM;
         GError *error = nullptr;
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
-        gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, ICONS, "remove-color.png"),
+        gchar *localFilename = g_filename_from_utf8( get_path(SYSTEM, PIXMAPS, "remove-color.png"),
                                                      -1,
                                                      &bytesRead,
                                                      &bytesWritten,

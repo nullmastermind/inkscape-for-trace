@@ -1,5 +1,5 @@
 set(THEME Tango)
-
+install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/Tango)
 set(PIXMAP_SIZES "scalable")
 set(CONTENT "actions")
 
