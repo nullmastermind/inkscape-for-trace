@@ -547,7 +547,7 @@ LogoArea::LogoArea() : Gtk::EventBox()
 {
     // Try to load the OCAL logo, but if the file is not found, degrade gracefully
     try {
-        std::string logo_path = Glib::build_filename(INKSCAPE_PIXMAPDIR, "OCAL.png");
+        std::string logo_path = Glib::build_filename(INKSCAPE_PIXMAPSDIR, "OCAL.png");
         logo_mask = Cairo::ImageSurface::create_from_png(logo_path);
         draw_logo = true;
     } catch(Cairo::logic_error) {

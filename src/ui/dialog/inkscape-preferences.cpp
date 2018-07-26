@@ -782,6 +782,7 @@ void InkscapePreferences::initPageUI()
     symbolicThemeCheck();
     _page_theme.add_group_header(_("Theme changes"));
     {
+        using namespace Inkscape::IO::Resource;
         GHashTable *t;
         GHashTableIter iter;
         gchar *theme, *path;
@@ -799,7 +800,11 @@ void InkscapePreferences::initPageUI()
         }
         g_strfreev(builtin_themes);
 
-        path = _inkscape_get_theme_dir();
+        path = g_strdup((char const *)Inkscape::IO::Resource::get_path(USER, DATADIR, ""));
+        _inkscape_fill_gtk(path, t);
+        g_free(path);
+        
+        path = g_strdup((char const *)Inkscape::IO::Resource::get_path(SYSTEM, DATADIR, ""));
         _inkscape_fill_gtk(path, t);
         g_free(path);
 

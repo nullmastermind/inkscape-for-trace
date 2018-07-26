@@ -43,13 +43,14 @@ char *get_extensions_path();
 #  define INKSCAPE_FONTSDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/fonts" )
 #  define INKSCAPE_GRADIENTSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/gradients" )
 #  define INKSCAPE_KEYSDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/keys" )
-#  define INKSCAPE_PIXMAPDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/icons" )
+#  define INKSCAPE_ICONSDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/icons" )
+#  define INKSCAPE_PIXMAPSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/pixmaps" )
 #  define INKSCAPE_MARKERSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/markers" )
 #  define INKSCAPE_PALETTESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/palettes" )
 #  define INKSCAPE_PATTERNSDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/patterns" )
 #  define INKSCAPE_SCREENSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/screens" )
 #  define INKSCAPE_SYMBOLSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/symbols" )
-#  define INKSCAPE_THEMEDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/icons" )
+#  define INKSCAPE_THEMEDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/themes" )
 #  define INKSCAPE_TUTORIALSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/tutorials" )
 #  define INKSCAPE_TEMPLATESDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/templates" )
 #  define INKSCAPE_UIDIR          BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/ui" )
@@ -69,13 +70,14 @@ char *get_extensions_path();
 #    define INKSCAPE_FONTSDIR     append_inkscape_datadir("fonts")
 #    define INKSCAPE_GRADIENTSDIR append_inkscape_datadir("gradients")
 #    define INKSCAPE_KEYSDIR      append_inkscape_datadir("keys")
-#    define INKSCAPE_PIXMAPDIR    append_inkscape_datadir("icons")
+#    define INKSCAPE_ICONSDIR     append_inkscape_datadir("icons")
+#    define INKSCAPE_PIXMAPSDIR     append_inkscape_datadir("pixmaps")
 #    define INKSCAPE_MARKERSDIR   append_inkscape_datadir("markers")
 #    define INKSCAPE_PALETTESDIR  append_inkscape_datadir("palettes")
 #    define INKSCAPE_PATTERNSDIR  append_inkscape_datadir("patterns")
 #    define INKSCAPE_SCREENSDIR   append_inkscape_datadir("screens")
 #    define INKSCAPE_SYMBOLSDIR   append_inkscape_datadir("symbols")
-#    define INKSCAPE_THEMEDIR     append_inkscape_datadir("icons")
+#    define INKSCAPE_THEMEDIR     append_inkscape_datadir("themes")
 #    define INKSCAPE_TUTORIALSDIR append_inkscape_datadir("tutorials")
 #    define INKSCAPE_TEMPLATESDIR append_inkscape_datadir("templates")
 #    define INKSCAPE_UIDIR        append_inkscape_datadir("ui")
@@ -94,13 +96,14 @@ char *get_extensions_path();
 #    define INKSCAPE_FONTSDIR     "Contents/Resources/share/inkscape/fonts"
 #    define INKSCAPE_GRADIENTSDIR "Contents/Resources/share/inkscape/gradients"
 #    define INKSCAPE_KEYSDIR      "Contents/Resources/share/inkscape/keys"
-#    define INKSCAPE_PIXMAPDIR    "Contents/Resources/share/inkscape/icons"
+#    define INKSCAPE_ICONSDIR     "Contents/Resources/share/inkscape/icons"
+#    define INKSCAPE_PIXMAPSDIR   "Contents/Resources/share/inkscape/pixmaps"
 #    define INKSCAPE_MARKERSDIR   "Contents/Resources/share/inkscape/markers"
 #    define INKSCAPE_PALETTESDIR  "Contents/Resources/share/inkscape/palettes"
 #    define INKSCAPE_PATTERNSDIR  "Contents/Resources/share/inkscape/patterns"
 #    define INKSCAPE_SCREENSDIR   "Contents/Resources/share/inkscape/screens"
 #    define INKSCAPE_SYMBOLSDIR   "Contents/Resources/share/inkscape/symbols"
-#    define INKSCAPE_THEMEDIR     INKSCAPE_PIXMAPDIR
+#    define INKSCAPE_THEMEDIR     "Contents/Resources/share/inkscape/themes"
 #    define INKSCAPE_TUTORIALSDIR "Contents/Resources/share/inkscape/tutorials"
 #    define INKSCAPE_TEMPLATESDIR "Contents/Resources/share/inkscape/templates"
 #    define INKSCAPE_UIDIR        "Contents/Resources/share/inkscape/ui"
@@ -119,13 +122,14 @@ char *get_extensions_path();
 #    define INKSCAPE_FONTSDIR     append_inkscape_datadir("inkscape/fonts")
 #    define INKSCAPE_GRADIENTSDIR append_inkscape_datadir("inkscape/gradients")
 #    define INKSCAPE_KEYSDIR      append_inkscape_datadir("inkscape/keys")
-#    define INKSCAPE_PIXMAPDIR    append_inkscape_datadir("inkscape/icons")
+#    define INKSCAPE_ICONSDIR     append_inkscape_datadir("inkscape/icons")
+#    define INKSCAPE_PIXMAPSDIR     append_inkscape_datadir("inkscape/pixmaps")
 #    define INKSCAPE_MARKERSDIR   append_inkscape_datadir("inkscape/markers")
 #    define INKSCAPE_PALETTESDIR  append_inkscape_datadir("inkscape/palettes")
 #    define INKSCAPE_PATTERNSDIR  append_inkscape_datadir("inkscape/patterns")
 #    define INKSCAPE_SCREENSDIR   append_inkscape_datadir("inkscape/screens")
 #    define INKSCAPE_SYMBOLSDIR   append_inkscape_datadir("inkscape/symbols")
-#    define INKSCAPE_THEMEDIR     append_inkscape_datadir("icons")
+#    define INKSCAPE_THEMEDIR     append_inkscape_datadir("inkscape/themes")
 #    define INKSCAPE_TUTORIALSDIR append_inkscape_datadir("inkscape/tutorials")
 #    define INKSCAPE_TEMPLATESDIR append_inkscape_datadir("inkscape/templates")
 #    define INKSCAPE_UIDIR        append_inkscape_datadir("inkscape/ui")

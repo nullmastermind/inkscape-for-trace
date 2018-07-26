@@ -615,15 +615,27 @@ static void set_extensions_env()
     gchar *pythonpath = get_extensions_path();
     g_setenv("PYTHONPATH", pythonpath, TRUE);
     g_free(pythonpath);
-    //printf("PYTHONPATH = %s\n", g_getenv("PYTHONPATH"));
+    // printf("PYTHONPATH = %s\n", g_getenv("PYTHONPATH"));
 }
 
 static void set_datadir_env()
 {
-    gchar *datadir = get_datadir_path();
-    g_setenv("XDG_DATA_HOME", datadir, TRUE);
-    g_free(datadir);
-    // printf("XDG_DATA_HOME = %s\n", g_getenv("XDG_DATA_HOME"));
+    gchar const *xgd = g_getenv("XDG_DATA_DIRS");
+    Glib::ustring datadir = "";
+    if (xgd) {
+        datadir += xgd;
+        datadir += ":";
+    }
+    datadir += get_datadir_path();
+    datadir += ":";
+    datadir +=  INKSCAPE_DATADIR;
+#ifdef WIN32
+    datadir += g_win32_locale_filename_from_utf8("/inkscape");
+#else
+    datadir += "/inkscape";
+#endif
+    g_setenv("XDG_DATA_DIRS", datadir.c_str(), TRUE);
+    // printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
 }
 
 /**

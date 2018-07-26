@@ -47,7 +47,9 @@ enum Type {
     SYMBOLS,
     FILTERS,
     THEMES,
-    UIS
+    UIS,
+    PIXMAPS,
+    DATADIR
 };
 
 enum Domain {

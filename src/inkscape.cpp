@@ -377,10 +377,6 @@ Application::add_icon_theme()
     // folders didn't seem to make much sense for Linux. More testing needed.
     icon_theme->append_search_path(get_path_ustring(SYSTEM, ICONS));
     icon_theme->append_search_path(get_path_ustring(USER, ICONS));
-#ifdef INKSCAPE_THEMEDIR
-    icon_theme->append_search_path(get_path_ustring(SYSTEM, THEMES));
-    icon_theme->append_search_path(get_path_ustring(USER, THEMES));
-#endif
 }
 
 /**

@@ -34,10 +34,6 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     iconTheme->set_custom_theme(prefs->getString("/theme/iconTheme"));
     iconTheme->append_search_path(get_path_ustring(SYSTEM, ICONS));
     iconTheme->append_search_path(get_path_ustring(USER, ICONS));
-#ifdef INKSCAPE_THEMEDIR
-    iconTheme->append_search_path(get_path_ustring(SYSTEM, THEMES));
-    iconTheme->append_search_path(get_path_ustring(USER, THEMES));
-#endif
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
