@@ -2222,7 +2222,7 @@ void InkscapePreferences::initPageSystem()
                           true);
 
     _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
-                            _("Open keyboard shorcuts folder"));
+                            _("Open keyboard shortcuts folder"));
     _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
 
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
