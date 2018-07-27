@@ -102,7 +102,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case PATTERNS: name = "patterns"; break;
                 case SYMBOLS: name = "symbols"; break;
                 case TEMPLATES: name = "templates"; break;
-                case THEMES: name = "icons"; break;
+                case THEMES: name = "themes"; break;
                 case UIS: name = "ui"; break;
                 case PIXMAPS: name = "pixmaps"; break;
                 case DATADIR: name = ""; break;

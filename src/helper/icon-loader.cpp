@@ -41,6 +41,8 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
             if (icon_name == "gtk-preferences") {
                 icon_name = "preferences-system";
             }
+            iconTheme->append_search_path(get_path_ustring(SYSTEM, ICONS) + "hicolor/symbolic");
+            iconTheme->append_search_path(get_path_ustring(USER, ICONS)+ "hicolor/symbolic");
             sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
             Gdk::RGBA color;
             color.set(colornamed);
@@ -48,11 +50,12 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
                 iconTheme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             if (bool(iconinfo)) {
                 // TODO: view if we need parametrice other colors
+                
                 bool was_symbolic = false;
                 _icon_pixbuf = iconinfo.load_symbolic(color, color, color, color, was_symbolic);
             }
             else {
-                _icon_pixbuf = iconTheme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+                _icon_pixbuf = iconTheme->load_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             }
         }
         else {
