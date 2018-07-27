@@ -365,21 +365,6 @@ void Application::argv0(char const* argv)
 }
 
 /**
- * \brief Add our icon theme to the search path
- */
-void
-Application::add_icon_theme()
-{
-    using namespace Inkscape::IO::Resource;
-    // Get list of the possible folders containing the theme
-    auto icon_theme = Gtk::IconTheme::get_default();
-    // We used to add get_system_data_dirs and get_user_data_dir, but these
-    // folders didn't seem to make much sense for Linux. More testing needed.
-    icon_theme->append_search_path(get_path_ustring(SYSTEM, ICONS));
-    icon_theme->append_search_path(get_path_ustring(USER, ICONS));
-}
-
-/**
  * \brief Add our CSS style sheets
  */
 void
@@ -473,6 +458,7 @@ Application::Application(const char* argv, bool use_gui) :
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
                  prefs->getBool("/theme/darkTheme", false), NULL);
     InkErrorHandler* handler = new InkErrorHandler(use_gui);
@@ -486,7 +472,6 @@ Application::Application(const char* argv, bool use_gui) :
     }
 
     if (use_gui) {
-        add_icon_theme();
         add_style_sheet();
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();

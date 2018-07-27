@@ -27,13 +27,7 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getString("/theme/iconTheme") == "") {
-        prefs->setString("/theme/iconTheme", "hicolor");
-    }
-    auto iconTheme = Gtk::IconTheme::create();
-    iconTheme->set_custom_theme(prefs->getString("/theme/iconTheme"));
-    iconTheme->append_search_path(get_path_ustring(SYSTEM, ICONS));
-    iconTheme->append_search_path(get_path_ustring(USER, ICONS));
+    auto icon_theme = Gtk::IconTheme::get_default();
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
@@ -41,25 +35,22 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
             if (icon_name == "gtk-preferences") {
                 icon_name = "preferences-system";
             }
-            iconTheme->append_search_path(get_path_ustring(SYSTEM, ICONS) + "hicolor/symbolic");
-            iconTheme->append_search_path(get_path_ustring(USER, ICONS)+ "hicolor/symbolic");
             sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
             Gdk::RGBA color;
             color.set(colornamed);
             Gtk::IconInfo iconinfo =
-                iconTheme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+                icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             if (bool(iconinfo)) {
                 // TODO: view if we need parametrice other colors
-                
                 bool was_symbolic = false;
                 _icon_pixbuf = iconinfo.load_symbolic(color, color, color, color, was_symbolic);
             }
             else {
-                _icon_pixbuf = iconTheme->load_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+                _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             }
         }
         else {
-            _icon_pixbuf = iconTheme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
         }
     }
     catch (const Gtk::IconThemeError &e) {

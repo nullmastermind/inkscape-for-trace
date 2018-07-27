@@ -621,12 +621,7 @@ static void set_extensions_env()
 static void set_datadir_env()
 {
     gchar const *xgd = g_getenv("XDG_DATA_DIRS");
-    Glib::ustring datadir = "";
-    if (xgd) {
-        datadir += xgd;
-        datadir += ":";
-    }
-    datadir += get_datadir_path();
+    Glib::ustring datadir = get_datadir_path();
     datadir += ":";
     datadir += INKSCAPE_DATADIR;
 #ifdef WIN32
@@ -634,8 +629,12 @@ static void set_datadir_env()
 #else
     datadir += "/inkscape";
 #endif
+    if (xgd) {
+        datadir += ":";
+        datadir += xgd;
+    }
     g_setenv("XDG_DATA_DIRS", datadir.c_str(), TRUE);
-    printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
+    // printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
 }
 
 /**
