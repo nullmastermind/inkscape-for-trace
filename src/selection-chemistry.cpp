@@ -37,7 +37,7 @@
 
 #include "file.h"
 
-// TOOD fixme: This should be moved into preference repr
+// TODO FIXME: This should be moved into preference repr
 SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 
 

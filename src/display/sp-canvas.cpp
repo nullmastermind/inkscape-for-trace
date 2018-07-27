@@ -174,7 +174,7 @@ enum {
 };
 
 /**
- * Callback that removes item from all referers and destroys it.
+ * Callback that removes item from all referrers and destroys it.
  */
 void sp_canvas_item_dispose(GObject           *object);
 void sp_canvas_item_finalize(GObject          *object);

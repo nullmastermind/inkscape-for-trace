@@ -643,7 +643,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring>
     size_t values_size = values.size();
     if (values_size != labels_size) {
         std::cout << "PrefCombo::"
-                  << "Diferent number of values/labels in " << prefs_path << std::endl;
+                  << "Different number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;
@@ -667,7 +667,7 @@ void PrefCombo::init(Glib::ustring const &prefs_path, std::vector<Glib::ustring>
     size_t values_size = values.size();
     if (values_size != labels_size) {
         std::cout << "PrefCombo::"
-                  << "Diferent number of values/labels in " << prefs_path << std::endl;
+                  << "Different number of values/labels in " << prefs_path << std::endl;
         return;
     }
     _prefs_path = prefs_path;

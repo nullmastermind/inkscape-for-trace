@@ -1973,7 +1973,7 @@ void
 SPIFilter::cascade( const SPIBase* const parent ) {
     if( const SPIFilter* p = dynamic_cast<const SPIFilter*>(parent) ) {
         if( inherit ) {  // Only inherits if 'inherit' true/
-            // This is rather unlikely so ignore for now. FIXME
+            // FIXME: This is rather unlikely so ignore for now. 
             (void)p;
             std::cerr << "SPIFilter::cascade: value 'inherit' not supported." << std::endl;
         } else {
@@ -1994,7 +1994,7 @@ SPIFilter::merge( const SPIBase* const parent ) {
             set     = p->set;
             inherit = p->inherit;
             if( href ) {
-                // If we alread have an href, use it (unlikely but heck...)
+                // If we already have an href, use it (unlikely but heck...)
                 if( href->getObject() ) {
                     href->detach();
                 }

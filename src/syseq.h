@@ -243,7 +243,7 @@ static double projectify (std::vector<int> const &cols, const double B[S][T], co
  *
  * Since our application will be to finding preimages of projective mappings, we provide
  * an additional argument \a proj. If this is true, we find a solution of
- * \a x[\a index]/\a x[\T - 1] = \a val insted (i.e., we want the corresponding coordinate
+ * \a x[\a index]/\a x[\T - 1] = \a val instead (i.e., we want the corresponding coordinate
  * of the _affine image_ of the point with homogeneous coordinate vector \a x to be equal
  * to \a val.
  *

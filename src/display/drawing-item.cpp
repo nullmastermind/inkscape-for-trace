@@ -1117,7 +1117,7 @@ DrawingItem::_markForUpdate(unsigned flags, bool propagate)
 /**
  * Compute the caching score.
  *
- * Higher scores mean the item is more aggresively prioritized for automatic
+ * Higher scores mean the item is more aggressively prioritized for automatic
  * caching by Inkscape::Drawing.
  */
 double
