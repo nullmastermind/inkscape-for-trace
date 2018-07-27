@@ -601,31 +601,7 @@ static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
     g_dir_close(dir);
 }
 
-static void _inkscape_fill_icons(const gchar *path, GHashTable *t)
-{
-    const gchar *dir_entry;
-    GDir *dir;
-
-    dir = g_dir_open(path, 0, NULL);
-    if (!dir) {
-        return;
-    }
-    while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "index.theme", NULL);
-        gchar *scalable = g_build_filename(path, dir_entry, "scalable", NULL);
-        gchar *symbolic = g_build_filename(path, dir_entry, "symbolic", NULL);
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) &&
-            (g_file_test(scalable, G_FILE_TEST_IS_DIR) || g_file_test(symbolic, G_FILE_TEST_IS_DIR)) &&
-            g_strcmp0(dir_entry, "default") != 0 && !g_hash_table_contains(t, dir_entry)) {
-            g_hash_table_add(t, g_strdup(dir_entry));
-        }
-        g_free(filename);
-        g_free(scalable);
-    }
-    g_dir_close(dir);
-}
-
-
+//TODO: this check only inkscape based folders dont check if icons are system wide
 void InkscapePreferences::symbolicThemeCheck()
 {
     using namespace Inkscape::IO::Resource;
@@ -663,7 +639,6 @@ void InkscapePreferences::symbolicThemeCheck()
         }
     }
 }
-
 
 void InkscapePreferences::initPageUI()
 {
@@ -850,57 +825,107 @@ void InkscapePreferences::initPageUI()
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
     }
-
+    
     {
-        GHashTable *t;
-        GHashTableIter iter;
-        gchar *icon_theme, *path;
-        gchar **builtin_icons;
-        GList *list, *l;
-        guint i;
-        const gchar *const *dirs;
-
-        t = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
-
-        path = g_build_filename(g_get_user_data_dir(), "icons", NULL);
-        _inkscape_fill_icons(path, t);
-        g_free(path);
-
-        path = g_build_filename(g_get_home_dir(), ".icons", NULL);
-        _inkscape_fill_icons(path, t);
-        g_free(path);
-
-        dirs = g_get_system_data_dirs();
-        for (i = 0; dirs[i]; i++) {
-            path = g_build_filename(dirs[i], "icons", NULL);
-            _inkscape_fill_icons(path, t);
-            g_free(path);
-        }
-
-        list = NULL;
-        g_hash_table_iter_init(&iter, t);
-
-        while (g_hash_table_iter_next(&iter, (gpointer *)&icon_theme, NULL)) {
-            list = g_list_insert_sorted(list, icon_theme, (GCompareFunc)strcmp);
-        }
+        using namespace Inkscape::IO::Resource;
+        auto folders = get_foldernames(ICONS, { "application" });
         std::vector<Glib::ustring> labels;
         std::vector<Glib::ustring> values;
-        for (l = list; l; l = l->next) {
-            icon_theme = (gchar *)l->data;
-            labels.push_back(Glib::ustring(icon_theme));
-            values.push_back(Glib::ustring(icon_theme));
+        for (auto &folder : folders) {
+            // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
+            // Maybe we can link boost path utilities
+            // Remove directory if present.
+            // Do this before extension removal incase directory has a period character.
+            const size_t last_slash_idx = folder.find_last_of("\\/");
+            if (std::string::npos != last_slash_idx) {
+                folder.erase(0, last_slash_idx + 1);
+            }
+
+            labels.push_back(folder);
+            values.push_back(folder);
         }
+        std::sort(labels.begin(), labels.end());
+        std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-
-        g_list_free(list);
-        g_hash_table_destroy(t);
-
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
-        symbolicThemeCheck();
     }
+//TODO: this previous check only inkscape based folders dont check if icons are system wide
+//Commented one give full list but maybe is strange because some icons in the system dont have inkscape ones
+//static void _inkscape_fill_icons(const gchar *path, GHashTable *t)
+//{
+//    const gchar *dir_entry;
+//    GDir *dir;
+
+//    dir = g_dir_open(path, 0, NULL);
+//    if (!dir) {
+//        return;
+//    }
+//    while ((dir_entry = g_dir_read_name(dir))) {
+//        gchar *filename = g_build_filename(path, dir_entry, "index.theme", NULL);
+//        gchar *scalable = g_build_filename(path, dir_entry, "scalable", NULL);
+//        gchar *symbolic = g_build_filename(path, dir_entry, "symbolic", NULL);
+//        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) &&
+//            (g_file_test(scalable, G_FILE_TEST_IS_DIR) || g_file_test(symbolic, G_FILE_TEST_IS_DIR)) &&
+//            g_strcmp0(dir_entry, "default") != 0 && !g_hash_table_contains(t, dir_entry)) {
+//            g_hash_table_add(t, g_strdup(dir_entry));
+//        }
+//        g_free(filename);
+//        g_free(scalable);
+//    }
+//    g_dir_close(dir);
+//}
+//    {
+//        GHashTable *t;
+//        GHashTableIter iter;
+//        gchar *icon_theme, *path;
+//        gchar **builtin_icons;
+//        GList *list, *l;
+//        guint i;
+//        const gchar *const *dirs;
+
+//        t = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+//        path = g_build_filename(g_get_user_data_dir(), "icons", NULL);
+//        _inkscape_fill_icons(path, t);
+//        g_free(path);
+
+//        path = g_build_filename(g_get_home_dir(), ".icons", NULL);
+//        _inkscape_fill_icons(path, t);
+//        g_free(path);
+
+//        dirs = g_get_system_data_dirs();
+//        for (i = 0; dirs[i]; i++) {
+//            path = g_build_filename(dirs[i], "icons", NULL);
+//            _inkscape_fill_icons(path, t);
+//            g_free(path);
+//        }
+
+//        list = NULL;
+//        g_hash_table_iter_init(&iter, t);
+
+//        while (g_hash_table_iter_next(&iter, (gpointer *)&icon_theme, NULL)) {
+//            list = g_list_insert_sorted(list, icon_theme, (GCompareFunc)strcmp);
+//        }
+//        std::vector<Glib::ustring> labels;
+//        std::vector<Glib::ustring> values;
+//        for (l = list; l; l = l->next) {
+//            icon_theme = (gchar *)l->data;
+//            labels.push_back(Glib::ustring(icon_theme));
+//            values.push_back(Glib::ustring(icon_theme));
+//        }
+//        labels.erase(unique(labels.begin(), labels.end()), labels.end());
+//        values.erase(unique(values.begin(), values.end()), values.end());
+
+//        g_list_free(list);
+//        g_hash_table_destroy(t);
+
+//        _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
+//        _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);
+//        _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
+//    }
 
     _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
@@ -931,6 +956,7 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(false, "", _apply_theme, "", "", false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
+    symbolicThemeCheck();
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_FILE, true, nullptr);
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST, false, &_win_save_geom);
