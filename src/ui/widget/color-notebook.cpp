@@ -160,8 +160,7 @@ void ColorNotebook::_initUI()
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     /* Create color management icons */
     _box_colormanaged = gtk_event_box_new();
-    GtkWidget *colormanaged =
-        GTK_WIDGET(sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *colormanaged = GTK_WIDGET(sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
     gtk_container_add(GTK_CONTAINER(_box_colormanaged), colormanaged);
     gtk_widget_set_tooltip_text(_box_colormanaged, _("Color Managed"));
     gtk_widget_set_sensitive(_box_colormanaged, false);

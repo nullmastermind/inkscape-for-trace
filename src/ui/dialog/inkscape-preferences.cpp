@@ -614,9 +614,8 @@ static void _inkscape_fill_icons(const gchar *path, GHashTable *t)
         gchar *filename = g_build_filename(path, dir_entry, "index.theme", NULL);
         gchar *scalable = g_build_filename(path, dir_entry, "scalable", NULL);
         gchar *symbolic = g_build_filename(path, dir_entry, "symbolic", NULL);
-        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) && 
-           (g_file_test(scalable, G_FILE_TEST_IS_DIR) || 
-            g_file_test(symbolic, G_FILE_TEST_IS_DIR)) &&
+        if (g_file_test(filename, G_FILE_TEST_IS_REGULAR) &&
+            (g_file_test(scalable, G_FILE_TEST_IS_DIR) || g_file_test(symbolic, G_FILE_TEST_IS_DIR)) &&
             g_strcmp0(dir_entry, "default") != 0 && !g_hash_table_contains(t, dir_entry)) {
             g_hash_table_add(t, g_strdup(dir_entry));
         }
