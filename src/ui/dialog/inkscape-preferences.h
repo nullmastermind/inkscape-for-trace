@@ -574,6 +574,7 @@ protected:
 
 private:
   void symbolicThemeCheck();
+  void themeChange();
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);
   InkscapePreferences operator=(InkscapePreferences const &d);

@@ -601,7 +601,6 @@ static void _inkscape_fill_gtk(const gchar *path, GHashTable *t)
     g_dir_close(dir);
 }
 
-//TODO: this check only inkscape based folders dont check if icons are system wide
 void InkscapePreferences::symbolicThemeCheck()
 {
     using namespace Inkscape::IO::Resource;
@@ -638,6 +637,14 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_color.get_parent()->show();
         }
     }
+}
+
+void InkscapePreferences::themeChange()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+    g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
+                 prefs->getBool("/theme/darkTheme", false), NULL);
 }
 
 void InkscapePreferences::initPageUI()
@@ -771,7 +778,7 @@ void InkscapePreferences::initPageUI()
     }
 
     // Theme
-    _page_theme.add_group_header(_("Theme changes"));
+    _page_theme.add_group_header(_("Theme changes, icon changes need reload or restart"));
     {
         using namespace Inkscape::IO::Resource;
         GHashTable *t;
@@ -824,6 +831,7 @@ void InkscapePreferences::initPageUI()
 
         _gtk_theme.init("/theme/gtkTheme", labels, values, "Adwaita");
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
+        _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
     
     {
@@ -929,6 +937,7 @@ void InkscapePreferences::initPageUI()
 
     _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
+    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
@@ -951,7 +960,7 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
-    _apply_theme.set_label(_("Apply theme"));
+    _apply_theme.set_label(_("Reload icons"));
     _apply_theme.set_tooltip_text(_("It apply slow"));
     _page_theme.add_line(false, "", _apply_theme, "", "", false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
