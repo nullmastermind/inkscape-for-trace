@@ -273,7 +273,6 @@ void sp_ui_reload()
     if (prefs_dialog) {
         prefs_dialog->hide();
     }
-    SP_ACTIVE_DESKTOP->disableInteraction();
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
     g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     g_object_set(gtk_settings_get_default(), "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
