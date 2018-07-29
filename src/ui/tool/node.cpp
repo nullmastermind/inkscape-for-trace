@@ -159,9 +159,8 @@ void Handle::move(Geom::Point const &new_pos)
                 break;
             }
         }
-        // If the segment between the handle and the node
-        // in its direction becomes linear and there are smooth nodes
-        // at its ends, make their handles colinear with the segment
+        // If the segment between the handle and the node in its direction becomes linear,
+        // and there are smooth nodes at its ends, make their handles collinear with the segment.
         if (towards && towards_second->isDegenerate()) {
             if (node_towards->type() == NODE_SMOOTH) {
                 towards->setDirection(*_parent, *node_towards);
@@ -172,7 +171,7 @@ void Handle::move(Geom::Point const &new_pos)
         }
         setPosition(new_pos);
 
-        //move the handler and its opposite the same proportion
+        // move the handle and its opposite the same proportion
         if(_pm()._isBSpline()){
             setPosition(_pm()._bsplineHandleReposition(this, false));
             bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -190,7 +189,7 @@ void Handle::move(Geom::Point const &new_pos)
             / Geom::L2sq(direction)) * direction;
         setRelativePos(new_delta);
 
-        //move the handler and its opposite the same proportion
+        // move the handle and its opposite the same proportion
         if(_pm()._isBSpline()){ 
             setPosition(_pm()._bsplineHandleReposition(this, false));
             bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -205,8 +204,8 @@ void Handle::move(Geom::Point const &new_pos)
         _parent->setType(NODE_SMOOTH, false);
         // fall through - auto nodes degrade into smooth nodes
     case NODE_SMOOTH: {
-        /* for smooth nodes, we need to rotate the other handle so that it's colinear
-         * with the dragged one while conserving length. */
+        // for smooth nodes, we need to rotate the opposite handle
+        // so that it's collinear with the dragged one, while conserving length.
         other->setDirection(new_pos, *_parent);
         } break;
     case NODE_SYMMETRIC:
@@ -217,7 +216,7 @@ void Handle::move(Geom::Point const &new_pos)
     }
     setPosition(new_pos);
 
-    // moves the handler and its opposite the same proportion
+    // move the handle and its opposite the same proportion
     if(_pm()._isBSpline()){
         setPosition(_pm()._bsplineHandleReposition(this, false));
         bspline_weight = _pm()._bsplineHandlePosition(this, false);
@@ -292,37 +291,75 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     switch (event->type)
     {
     case GDK_KEY_PRESS:
+
         switch (shortcut_key(event->key))
         {
         case GDK_KEY_s:
         case GDK_KEY_S:
+
+            /* if Shift+S is pressed while hovering over a cusp node handle,
+               hold the handle in place; otherwise, process normally.
+               this handle is guaranteed not to be degenerate. */
+
             if (held_only_shift(event->key) && _parent->_type == NODE_CUSP) {
-                // when Shift+S is pressed when hovering over a handle belonging to a cusp node,
-                // hold this handle in place; otherwise process normally
-                // this handle is guaranteed not to be degenerate
-                other()->move(_parent->position() - (position() - _parent->position()));
+
+                // make opposite handle collinear,
+                // but preserve length, unless degenerate
+                if (other()->isDegenerate())
+                    other()->setRelativePos(-relativePos());
+                else
+                    other()->setDirection(-relativePos());
                 _parent->setType(NODE_SMOOTH, false);
-                _parent->_pm().update(); // magic triple combo to add undo event
-                _parent->_pm().writeXML();
+
+                // update display
+                _parent->_pm().update();
+
+                // update undo history
                 _parent->_pm()._commit(_("Change node type"));
+
                 return true;
             }
             break;
-        default: break;
+
+        case GDK_KEY_y:
+        case GDK_KEY_Y:
+
+            /* if Shift+Y is pressed while hovering over a cusp, smooth, or auto node handle,
+               hold the handle in place; otherwise, process normally.
+               this handle is guaranteed not to be degenerate. */
+
+            if (held_only_shift(event->key) && (_parent->_type == NODE_CUSP ||
+                                                _parent->_type == NODE_SMOOTH ||
+                                                _parent->_type == NODE_AUTO)) {
+
+                // make opposite handle collinear, and of equal length
+                other()->setRelativePos(-relativePos());
+                _parent->setType(NODE_SYMMETRIC, false);
+
+                // update display
+                _parent->_pm().update();
+
+                // update undo history
+                _parent->_pm()._commit(_("Change node type"));
+
+                return true;
+            }
+            break;
         }
         break;
-    // new double click event to set the handlers of a node to the default proportion, DEFAULT_START_POWER% 
+
     case GDK_2BUTTON_PRESS:
+
+        // double-click event to set the handles of a node
+        // to the position specified by DEFAULT_START_POWER
         handle_2button_press();
         break;
-    
-    default: break;
     }
 
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-//this function moves the handler and its opposite to the default proportion of DEFAULT_START_POWER
+// this function moves the handle and its opposite to the position specified by DEFAULT_START_POWER
 void Handle::handle_2button_press(){
     if(_pm()._isBSpline()){
         setPosition(_pm()._bsplineHandleReposition(this, DEFAULT_START_POWER));
@@ -379,7 +416,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - perp_pos);
         }
         new_pos = result;
-        // moves the handler and its opposite in X fixed positions depending on parameter "steps with control" 
+        // move the handle and its opposite in X fixed positions depending on parameter "steps with control" 
         // by default in live BSpline
         if(_pm()._isBSpline()){
             setPosition(new_pos);
@@ -389,7 +426,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     }
 
     std::vector<Inkscape::SnapCandidatePoint> unselected;
-    //if the snap adjustment is activated and it is not bspline
+    // if the snap adjustment is activated and it is not BSpline
     if (snap && !_pm()._isBSpline()) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
         for (auto node : nodes) {
@@ -430,7 +467,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
             other()->setPosition(_saved_other_pos);
         }
     }
-    //if it is bspline but SHIFT or CONTROL are not pressed it fixes it in the original position
+    // if it is BSpline, but SHIFT or CONTROL are not pressed, fix it in the original position
     if(_pm()._isBSpline() && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
@@ -721,11 +758,11 @@ void Node::move(Geom::Point const &new_pos)
     _front.setPosition(_front.position() + delta);
     _back.setPosition(_back.position() + delta);
 
-    // if the node has a smooth handle after a line segment, it should be kept colinear
+    // if the node has a smooth handle after a line segment, it should be kept collinear
     // with the segment
     _fixNeighbors(old_pos, new_pos);
 
-    // move the affected handlers. First the node ones, later the adjoining ones.
+    // move the affected handles. First the node ones, later the adjoining ones.
     if(_pm()._isBSpline()){
         _front.setPosition(_pm()._bsplineHandleReposition(this->front(),nodeWeight));
         _back.setPosition(_pm()._bsplineHandleReposition(this->back(),nodeWeight));
@@ -766,7 +803,7 @@ void Node::transform(Geom::Affine const &m)
      * but smooth nodes at ends of linear segments and auto nodes need special treatment */
     _fixNeighbors(old_pos, position());
 
-    // move the involved handlers, first the node ones, later the adjoining ones 
+    // move the involved handles. First the node ones, later the adjoining ones.
     if(_pm()._isBSpline()){
         _front.setPosition(_pm()._bsplineHandleReposition(this->front(), nodeWeight));
         _back.setPosition(_pm()._bsplineHandleReposition(this->back(), nodeWeight));
@@ -789,10 +826,10 @@ Geom::Rect Node::bounds() const
 
 void Node::_fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos)
 {
-    /* This method restores handle invariants for neighboring nodes,
-     * and invariants that are based on positions of those nodes for this one. */
+    // This method restores handle invariants for neighboring nodes,
+    // and invariants that are based on positions of those nodes for this one.
 
-    /* Fix auto handles */
+    // Fix auto handles
     if (_type == NODE_AUTO) _updateAutoHandles();
     if (old_pos != new_pos) {
         if (_next() && _next()->_type == NODE_AUTO) _next()->_updateAutoHandles();
@@ -800,8 +837,8 @@ void Node::_fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos)
     }
 
     /* Fix smooth handles at the ends of linear segments.
-     * Rotate the appropriate handle to be colinear with the segment.
-     * If there is a smooth node at the other end of the segment, rotate it too. */
+       Rotate the appropriate handle to be collinear with the segment.
+       If there is a smooth node at the other end of the segment, rotate it too. */
     Handle *handle, *other_handle;
     Node *other;
     if (_is_line_segment(this, _next())) {
@@ -825,17 +862,16 @@ void Node::_fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos)
 
 void Node::_updateAutoHandles()
 {
-    // Recompute the position of automatic handles.
-    // For endnodes, retract both handles. (It's only possible to create an end auto node
-    // through the XML editor.)
+    // Recompute the position of automatic handles. For endnodes, retract both handles.
+    // (It's only possible to create an end auto node through the XML editor.)
     if (isEndNode()) {
         _front.retract();
         _back.retract();
         return;
     }
 
-    // Auto nodes automatically adjust their handles to give an appearance of smoothness,
-    // no matter what their surroundings are.
+    // auto nodes automatically adjust their handles to give
+    // an appearance of smoothness, no matter what their surroundings are.
     Geom::Point vec_next = _next()->position() - position();
     Geom::Point vec_prev = _prev()->position() - position();
     double len_next = vec_next.length(), len_prev = vec_prev.length();
@@ -897,7 +933,7 @@ void Node::setType(NodeType type, bool update_handles)
         case NODE_SMOOTH: {
             // ignore attempts to make smooth endnodes.
             if (isEndNode()) return;
-            // rotate handles to be colinear
+            // rotate handles to be collinear
             // for degenerate nodes set positions like auto handles
             bool prev_line = _is_line_segment(_prev(), this);
             bool next_line = _is_line_segment(this, _next());
@@ -915,9 +951,8 @@ void Node::setType(NodeType type, bool update_handles)
             } else if (isDegenerate()) {
                 _updateAutoHandles();
             } else if (_front.isDegenerate()) {
-                // if the front handle is degenerate and this...next is a line segment,
-                // make back colinear; otherwise pull out the other handle
-                // to 1/3 of distance to prev
+                // if the front handle is degenerate and next path segment is a line, make back collinear;
+                // otherwise, pull out the other handle to 1/3 of distance to prev.
                 if (next_line) {
                     _back.setDirection(*_next(), *this);
                 } else if (_prev()) {
@@ -932,10 +967,10 @@ void Node::setType(NodeType type, bool update_handles)
                     _back.setRelativePos(Geom::distance(_next()->position(), position()) / 3 * dir);
                 }
             } else {
-                // both handles are extended. make colinear while keeping length
-                // first make back colinear with the vector front ---> back,
-                // then make front colinear with back ---> node
-                // (not back ---> front because back's position was changed in the first call)
+                /* both handles are extended. make collinear while keeping length.
+                   first make back collinear with the vector front ---> back,
+                   then make front collinear with back ---> node.
+                   (not back ---> front, because back's position was changed in the first call) */
                 _back.setDirection(_front, _back);
                 _front.setDirection(_back, *this);
             }
@@ -964,8 +999,8 @@ void Node::setType(NodeType type, bool update_handles)
             break;
         default: break;
         }
-        /* in node type changes, about bspline traces, we can maintain them with NO_POWER power in border mode,
-           or we give them the default power in curve mode */
+        // in node type changes, for BSpline traces, we can either maintain them
+        // with NO_POWER power in border mode, or give them the default power in curve mode.
         if(_pm()._isBSpline()){
             double weight = NO_POWER;
             if(_pm()._bsplineHandlePosition(this->front()) != NO_POWER ){
@@ -1225,7 +1260,7 @@ void Node::_setState(State state)
         case STATE_CLICKED:
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
-            //this shows the handlers when selecting the nodes
+            // show the handles when selecting the nodes
             if(_pm()._isBSpline()){
                 this->front()->setPosition(_pm()._bsplineHandleReposition(this->front()));
                 this->back()->setPosition(_pm()._bsplineHandleReposition(this->back()));
