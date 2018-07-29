@@ -193,20 +193,23 @@ void PathManipulator::writeXML()
 {
     if (!_live_outline)
         _updateOutline();
+
     _setGeometry();
 
-    if (!_path) return;
-    _observer->block();
-    if (!empty()) {
-        _path->updateRepr();
-        _getXMLNode()->setAttribute(_nodetypesKey().data(), _createTypeString().data());
-    } else {
-        // this manipulator will have to be destroyed right after this call
-        _getXMLNode()->removeObserver(*_observer);
-        _path->deleteObject(true, true);
-        _path = nullptr;
+    if (_path) {
+        _observer->block();
+        if (!empty()) {
+            _path->updateRepr();
+            _getXMLNode()->setAttribute(_nodetypesKey().data(), _createTypeString().data());
+        }
+        else {
+            // this manipulator will have to be destroyed right after this call
+            _getXMLNode()->removeObserver(*_observer);
+            _path->deleteObject(true, true);
+            _path = nullptr;
+        }
+        _observer->unblock();
     }
-    _observer->unblock();
 }
 
 /** Remove all nodes from the path. */
@@ -1522,8 +1525,12 @@ void PathManipulator::_setGeometry()
 /** Figure out in what attribute to store the nodetype string. */
 Glib::ustring PathManipulator::_nodetypesKey()
 {
-    if (_lpe_key.empty()) return "sodipodi:nodetypes";
-    return _lpe_key + "-nodetypes";
+    // temporary fix
+    // if (_lpe_key.empty())
+    if (false)
+        return ("sodipodi:nodetypes");
+    else
+        return (_lpe_key + "-nodetypes");
 }
 
 /** Return the XML node we are editing.
