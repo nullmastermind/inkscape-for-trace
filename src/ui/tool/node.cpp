@@ -267,13 +267,24 @@ void Handle::setDirection(Geom::Point const &dir)
 
 char const *Handle::handle_type_to_localized_string(NodeType type)
 {
+    char const *s = "";
+
     switch(type) {
-    case NODE_CUSP: return _("Cusp node handle");
-    case NODE_SMOOTH: return _("Smooth node handle");
-    case NODE_SYMMETRIC: return _("Symmetric node handle");
-    case NODE_AUTO: return _("Auto-smooth node handle");
-    default: return "";
+    case NODE_CUSP:
+        s = _("Corner node handle");
+        break;
+    case NODE_SMOOTH:
+        s = _("Smooth node handle");
+        break;
+    case NODE_SYMMETRIC:
+        s = _("Symmetric node handle");
+        break;
+    case NODE_AUTO:
+        s = _("Auto-smooth node handle");
+        break;
     }
+
+    return (s);
 }
 
 bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event)
@@ -478,78 +489,147 @@ static double snap_increment_degrees() {
     return 180.0 / snaps;
 }
 
+#define DRAG_TO_SHAPE    "drag to shape the path"
+#define HOVER_TO_LOCK    "hover to lock"
+#define MAKE_SMOOTH      "Shift+S to make smooth"
+#define MAKE_SYMMETRIC   "Shift+Y to make symmetric"
+#define META_KEYS        "(more: %s)"
+
 Glib::ustring Handle::_getTip(unsigned state) const
 {
-    char const *more;
-    // a trick to mark as bspline if the node has no strength, we are going to use it later
-    // to show the appropriate messages. We cannot do it in any different way because the function is constant
+    /* a trick to mark as BSpline if the node has no strength;
+       we are going to use it later to show the appropriate messages.
+       we cannot do it in any different way because the function is constant. */
     Handle *h = const_cast<Handle *>(this);
     bool isBSpline = _pm()._isBSpline();
     bool can_shift_rotate = _parent->type() == NODE_CUSP && !other()->isDegenerate();
-    if (can_shift_rotate && !isBSpline) {
-        more = C_("Path handle tip", "more: Shift, Ctrl, Alt");
-    } else if(isBSpline){
-        more = C_("Path handle tip", "more: Ctrl");
-    }else {
-        more = C_("Path handle tip", "more: Ctrl, Alt");
-    }
+    Glib::ustring s = C_("Path handle tip",
+                         "node control handle");   // not expected
+
     if (state_held_alt(state) && !isBSpline) {
         if (state_held_control(state)) {
             if (state_held_shift(state) && can_shift_rotate) {
-                return format_tip(C_("Path handle tip",
-                    "<b>Shift+Ctrl+Alt</b>: preserve length and snap rotation angle to %g° "
-                    "increments while rotating both handles"),
-                    snap_increment_degrees());
-            } else {
-                return format_tip(C_("Path handle tip",
-                    "<b>Ctrl+Alt</b>: preserve length and snap rotation angle to %g° increments"),
+                s = format_tip(C_("Path handle tip",
+                    "<b>Shift+Ctrl+Alt</b>: "
+                    "preserve length and snap rotation angle to %g° increments, "
+                    "and rotate both handles"),
                     snap_increment_degrees());
             }
-        } else {
+            else {
+                s = format_tip(C_("Path handle tip",
+                    "<b>Ctrl+Alt</b>: "
+                    "preserve length and snap rotation angle to %g° increments"),
+                    snap_increment_degrees());
+            }
+        }
+        else {
             if (state_held_shift(state) && can_shift_rotate) {
-                return C_("Path handle tip",
+                s = C_("Path handle tip",
                     "<b>Shift+Alt</b>: preserve handle length and rotate both handles");
-            } else {
-                return C_("Path handle tip",
+            }
+            else {
+                s = C_("Path handle tip",
                     "<b>Alt</b>: preserve handle length while dragging");
             }
         }
-    } else {
+    }
+    else {
         if (state_held_control(state)) {
             if (state_held_shift(state) && can_shift_rotate && !isBSpline) {
-                return format_tip(C_("Path handle tip",
-                    "<b>Shift+Ctrl</b>: snap rotation angle to %g° increments and rotate both handles"),
-                    snap_increment_degrees());
-            } else if(isBSpline){
-                return format_tip(C_("Path handle tip",
-                    "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"));
-            }else{
-                return format_tip(C_("Path handle tip",
-                    "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"),
+                s = format_tip(C_("Path handle tip",
+                    "<b>Shift+Ctrl</b>: "
+                    "snap rotation angle to %g° increments, and rotate both handles"),
                     snap_increment_degrees());
             }
-        } else if (state_held_shift(state) && can_shift_rotate && !isBSpline) {
-            return C_("Path hande tip",
+            else if (isBSpline) {
+                s = C_("Path handle tip",
+                    "<b>Ctrl</b>: "
+                    "Snap handle to steps defined in BSpline Live Path Effect");
+            }
+            else {
+                s = format_tip(C_("Path handle tip",
+                    "<b>Ctrl</b>: "
+                    "snap rotation angle to %g° increments, click to retract"),
+                    snap_increment_degrees());
+            }
+        }
+        else if (state_held_shift(state) && can_shift_rotate && !isBSpline) {
+            s = C_("Path handle tip",
                 "<b>Shift</b>: rotate both handles by the same angle");
-        } else if(state_held_shift(state) && isBSpline){
-            return C_("Path hande tip",
+        }
+        else if (state_held_shift(state) && isBSpline) {
+            s = C_("Path handle tip",
                 "<b>Shift</b>: move handle");
+        }
+        else {
+            char const *handletype = handle_type_to_localized_string(_parent->_type);
+            char const *more;
+
+            if (can_shift_rotate && !isBSpline) {
+                more = C_("Path handle tip",
+                          "Shift, Ctrl, Alt");
+            }
+            else if (isBSpline) {
+                more = C_("Path handle tip",
+                          "Ctrl");
+            }
+            else {
+                more = C_("Path handle tip",
+                          "Ctrl, Alt");
+            }
+
+            if (_parent->type() == NODE_CUSP) {
+                s = format_tip(C_("Path handle tip",
+                                  "<b>%s</b>: "
+                                  DRAG_TO_SHAPE  ", "
+                                  HOVER_TO_LOCK  ", "
+                                  MAKE_SMOOTH    ", "
+                                  MAKE_SYMMETRIC ". "
+                                  META_KEYS),
+                               handletype, more);
+            }
+            else if (_parent->type() == NODE_SMOOTH) {
+                s = format_tip(C_("Path handle tip",
+                                  "<b>%s</b>: "
+                                  DRAG_TO_SHAPE  ", "
+                                  HOVER_TO_LOCK  ", "
+                                  MAKE_SYMMETRIC ". "
+                                  META_KEYS),
+                               handletype, more);
+            }
+            else if (_parent->type() == NODE_AUTO) {
+                s = format_tip(C_("Path handle tip",
+                                  "<b>%s</b>: "
+                                  "drag to make smooth, "
+                                  HOVER_TO_LOCK  ", "
+                                  MAKE_SYMMETRIC ". "
+                                  META_KEYS),
+                               handletype, more);
+            }
+            else if (_parent->type() == NODE_SYMMETRIC) {
+                s = format_tip(C_("Path handle tip",
+                                  "<b>%s</b>: "
+                                  DRAG_TO_SHAPE ". "
+                                  META_KEYS),
+                               handletype, more);
+            }
+            else if (isBSpline) {
+                double power = _pm()._bsplineHandlePosition(h);
+                s = format_tip(C_("Path handle tip",
+                                  "<b>BSpline node handle</b> (%.3g power): "
+                                  "Shift-drag to move, "
+                                  "double-click to reset. "
+                                  "(more: %s)"),
+                               power, more);
+            }
+            else {
+                s = C_("Path handle tip",
+                       "<b>unknown node handle</b>");   // not expected
+            }
         }
     }
 
-    switch (_parent->type()) {
-    case NODE_AUTO:
-        return format_tip(C_("Path handle tip",
-            "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
-    default:
-        if(!isBSpline){
-            return format_tip(C_("Path handle tip",
-                "<b>Auto node handle</b>: drag to convert to smooth node (%s)"), more);
-        }else{
-            return format_tip(C_("Path handle tip",
-                "<b>BSpline node handle</b>: Shift to drag, double click to reset (%s). %g power"),more,_pm()._bsplineHandlePosition(h));
-        }
-    }
+    return (s);
 }
 
 Glib::ustring Handle::_getDragTip(GdkEventMotion */*event*/) const
@@ -1403,58 +1483,101 @@ Node *Node::nodeAwayFrom(Handle *h)
     return nullptr;
 }
 
+#define CLICK_TO_SELECT   "click to select only this node"
+#define CLICK_TO_TOGGLE   "click to toggle scale/rotation handles"
+#define SHIFT_CTRL_ALT    "(more: Shift, Ctrl, Alt)"
+
 Glib::ustring Node::_getTip(unsigned state) const
 {
     bool isBSpline = _pm()._isBSpline();
     Handle *h = const_cast<Handle *>(&_front);
+    Glib::ustring s = C_("Path node tip",
+                         "node handle");   // not expected
+
     if (state_held_shift(state)) {
-        bool can_drag_out = (_next() && _front.isDegenerate()) || (_prev() && _back.isDegenerate());
+        bool can_drag_out = (_next() && _front.isDegenerate()) ||
+                            (_prev() &&  _back.isDegenerate());
+
         if (can_drag_out) {
             /*if (state_held_control(state)) {
-                return format_tip(C_("Path node tip",
+                s = format_tip(C_("Path node tip",
                     "<b>Shift+Ctrl:</b> drag out a handle and snap its angle "
                     "to %f° increments"), snap_increment_degrees());
             }*/
-            return C_("Path node tip",
+            s = C_("Path node tip",
                 "<b>Shift</b>: drag out a handle, click to toggle selection");
         }
-        return C_("Path node tip", "<b>Shift</b>: click to toggle selection");
+        else {
+            s = C_("Path node tip",
+                   "<b>Shift</b>: click to toggle selection");
+        }
     }
 
-    if (state_held_control(state)) {
+    else if (state_held_control(state)) {
         if (state_held_alt(state)) {
-            return C_("Path node tip", "<b>Ctrl+Alt</b>: move along handle lines, click to delete node");
+            s = C_("Path node tip",
+                   "<b>Ctrl+Alt</b>: move along handle lines, click to delete node");
         }
-        return C_("Path node tip",
+        else {
+            s = C_("Path node tip",
             "<b>Ctrl</b>: move along axes, click to change node type");
-    }
-
-    if (state_held_alt(state)) {
-        return C_("Path node tip", "<b>Alt</b>: sculpt nodes");
-    }
-
-    // No modifiers: assemble tip from node type
-    char const *nodetype = node_type_to_localized_string(_type);
-    double power = _pm()._bsplineHandlePosition(h);
-    if (_selection.transformHandlesEnabled() && selected()) {
-        if (_selection.size() == 1 && !isBSpline) {
-            return format_tip(C_("Path node tip",
-                "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
-        }else if(_selection.size() == 1){
-            return format_tip(C_("Path node tip",
-                "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g power"), power);
         }
-        return format_tip(C_("Path node tip",
-            "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
     }
-    if (!isBSpline) {
-        return format_tip(C_("Path node tip",
-            "<b>%s</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"), nodetype);
-    }else{
-        return format_tip(C_("Path node tip",
-            "<b>BSpline node</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt). %g power"), power);
-    
+
+    else if (state_held_alt(state)) {
+        s = C_("Path node tip",
+               "<b>Alt</b>: sculpt nodes");
     }
+
+    else {   // No modifiers: assemble tip from node type
+        char const *nodetype = node_type_to_localized_string(_type);
+        double power = _pm()._bsplineHandlePosition(h);
+
+        if (_selection.transformHandlesEnabled() && selected()) {
+            if (_selection.size() == 1) {
+                if (!isBSpline) {
+                    s = format_tip(C_("Path node tip",
+                                      "<b>%s</b>: "
+                                      DRAG_TO_SHAPE ". "
+                                      SHIFT_CTRL_ALT),
+                                   nodetype);
+                }
+                else {
+                    s = format_tip(C_("Path node tip",
+                                      "<b>BSpline node</b> (%.3g power): "
+                                      DRAG_TO_SHAPE ". "
+                                      SHIFT_CTRL_ALT),
+                                   power);
+                }
+            }
+            else {
+                s = format_tip(C_("Path node tip",
+                                  "<b>%s</b>: "
+                                  DRAG_TO_SHAPE   ", "
+                                  CLICK_TO_TOGGLE ". "
+                                  SHIFT_CTRL_ALT),
+                               nodetype);
+            }
+        }
+        else if (!isBSpline) {
+            s = format_tip(C_("Path node tip",
+                              "<b>%s</b>: "
+                              DRAG_TO_SHAPE   ", "
+                              CLICK_TO_SELECT ". "
+                              SHIFT_CTRL_ALT),
+                           nodetype);
+        }
+        else {
+            s = format_tip(C_("Path node tip",
+                              "<b>BSpline node</b> (%.3g power): "
+                              DRAG_TO_SHAPE   ", "
+                              CLICK_TO_SELECT ". "
+                              SHIFT_CTRL_ALT),
+                           power);
+        }
+    }
+
+    return (s);
 }
 
 Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const
@@ -1471,13 +1594,24 @@ Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const
 
 char const *Node::node_type_to_localized_string(NodeType type)
 {
+    char const *s = "";
+
     switch (type) {
-    case NODE_CUSP: return _("Cusp node");
-    case NODE_SMOOTH: return _("Smooth node");
-    case NODE_SYMMETRIC: return _("Symmetric node");
-    case NODE_AUTO: return _("Auto-smooth node");
-    default: return "";
+    case NODE_CUSP:
+        s = _("Corner node");
+        break;
+    case NODE_SMOOTH:
+        s = _("Smooth node");
+        break;
+    case NODE_SYMMETRIC:
+        s = _("Symmetric node");
+        break;
+    case NODE_AUTO:
+        s = _("Auto-smooth node");
+        break;
     }
+
+    return (s);
 }
 
 bool Node::_is_line_segment(Node *first, Node *second)
