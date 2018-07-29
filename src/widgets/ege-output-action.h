@@ -93,6 +93,10 @@ GType ege_output_action_get_type( void );
  * @param label Display label for the action.
  * @param tooltip Tooltip for the action.
  * @param stock_id Icon id to use.
+ *
+ * @deprecated GtkActions are deprecated. Use a GtkLabel inside a GtkToolItem instead.
+ *             The Inkscape::UI::Toolbar::Toolbar base class provides an add_label function
+ *             to simplify this.
  */
 EgeOutputAction* ege_output_action_new( const gchar *name,
                                         const gchar *label,

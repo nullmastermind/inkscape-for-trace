@@ -77,6 +77,20 @@ static void ink_toggle_action_finalize( GObject* obj )
 
 }
 
+/**
+ * \brief Create a new toggle action
+ *
+ * \param[in] name    The name of the Action
+ * \param[in] label   The label text to display on the Action's tool item
+ * \param[in] tooltip The tooltip text for the Action's tool item
+ * \param[in] inkId
+ * \param[in] size    The size of the tool item to display
+ *
+ * \detail The name is used by the UI Manager to look up the action when specified in a UI XML
+ *         file.
+ *
+ * \deprecated GtkActions are deprecated.  Use a Gtk::ToggleToolButton instead.
+ */
 InkToggleAction* ink_toggle_action_new( const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,

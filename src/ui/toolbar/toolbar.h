@@ -5,6 +5,11 @@
 
 class SPDesktop;
 
+namespace Gtk {
+    class Label;
+    class ToggleToolButton;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
@@ -27,7 +32,10 @@ protected:
         : _desktop(desktop)
     {}
 
-    void add_toolbutton_for_verb(unsigned int verb_code);
+    Gtk::ToolItem         * add_label(const Glib::ustring &label_text);
+    Gtk::ToggleToolButton * add_toggle_button(const Glib::ustring &label_text,
+                                              const Glib::ustring &tooltip_text);
+    Gtk::ToolButton * add_toolbutton_for_verb(unsigned int verb_code);
     void add_separator();
 
 protected:

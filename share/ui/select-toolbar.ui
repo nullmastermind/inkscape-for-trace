@@ -346,12 +346,6 @@
     <toolitem action='MeshSmoothAction' />
   </toolbar>
 
-  <toolbar name='DropperToolbar'>
-    <toolitem action='DropperOpacityAction' />
-    <toolitem action='DropperPickAlphaAction' />
-    <toolitem action='DropperSetAlphaAction' />
-  </toolbar>
-
   <toolbar name='ConnectorToolbar'>
     <toolitem action='ConnectorAvoidAction' />
     <toolitem action='ConnectorIgnoreAction' />

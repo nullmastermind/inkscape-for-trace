@@ -37,83 +37,77 @@
 #include "preferences.h"
 #include "widgets/spinbutton-events.h"
 
-using Inkscape::DocumentUndo;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
 
-//########################
-//##      Dropper       ##
-//########################
-
-static void toggle_dropper_pick_alpha( GtkToggleAction* act, gpointer tbl )
+void DropperToolbar::on_pick_alpha_button_toggled()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt( "/tools/dropper/pick", gtk_toggle_action_get_active( act ) );
-    GtkAction* set_action = GTK_ACTION( g_object_get_data(G_OBJECT(tbl), "set_action") );
-    if ( set_action ) {
-        if ( gtk_toggle_action_get_active( act ) ) {
-            gtk_action_set_sensitive( set_action, TRUE );
-        } else {
-            gtk_action_set_sensitive( set_action, FALSE );
-        }
-    }
+    auto active = _pick_alpha_button->get_active();
 
-    spinbutton_defocus(GTK_WIDGET(tbl));
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setInt( "/tools/dropper/pick", active );
+
+    _set_alpha_button->set_sensitive(active);
+
+    spinbutton_defocus(GTK_WIDGET(gobj()));
 }
 
-static void toggle_dropper_set_alpha( GtkToggleAction* act, gpointer tbl )
+void DropperToolbar::on_set_alpha_button_toggled()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool( "/tools/dropper/setalpha", gtk_toggle_action_get_active( act ) );
-    spinbutton_defocus(GTK_WIDGET(tbl));
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool( "/tools/dropper/setalpha", _set_alpha_button->get_active( ) );
+    spinbutton_defocus(GTK_WIDGET(gobj()));
 }
 
-
-/**
- * Dropper auxiliary toolbar construction and setup.
- *
+/*
  * TODO: Would like to add swatch of current color.
  * TODO: Add queue of last 5 or so colors selected with new swatches so that
  *       can drag and drop places. Will provide a nice mixing palette.
  */
-void sp_dropper_toolbox_prep(SPDesktop * /*desktop*/, GtkActionGroup* mainActions, GObject* holder)
+DropperToolbar::DropperToolbar(SPDesktop *desktop)
+    : Toolbar(desktop)
 {
+    // Add widgets to toolbar
+    add_label(_("Opacity:"));
+    _pick_alpha_button = add_toggle_button(_("Pick"),
+                                           _("Pick both the color and the alpha (transparency) under cursor; "
+                                             "otherwise, pick only the visible color premultiplied by alpha"));
+    _set_alpha_button = add_toggle_button(_("Assign"),
+                                          _("If alpha was picked, assign it to selection "
+                                            "as fill or stroke transparency"));
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint pickAlpha = prefs->getInt( "/tools/dropper/pick", 1 );
 
-    {
-        EgeOutputAction* act = ege_output_action_new( "DropperOpacityAction", _("Opacity:"), "", nullptr );
-        ege_output_action_set_use_markup( act, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-    }
+    // Set initial state of widgets
+    auto pickAlpha = prefs->getInt( "/tools/dropper/pick", 1 );
+    auto setAlpha  = prefs->getBool( "/tools/dropper/setalpha", true);
 
-    {
-        InkToggleAction* act = ink_toggle_action_new( "DropperPickAlphaAction",
-                                                      _("Pick opacity"),
-                                                      _("Pick both the color and the alpha (transparency) under cursor; otherwise, pick only the visible color premultiplied by alpha"),
-                                                      nullptr,
-                                                      GTK_ICON_SIZE_MENU );
-        g_object_set( act, "short_label", _("Pick"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_object_set_data( holder, "pick_action", act );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), pickAlpha );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_dropper_pick_alpha), holder );
-    }
+    _pick_alpha_button->set_active(pickAlpha);
+    _set_alpha_button->set_active(setAlpha);
 
-    {
-        InkToggleAction* act = ink_toggle_action_new( "DropperSetAlphaAction",
-                                                      _("Assign opacity"),
-                                                      _("If alpha was picked, assign it to selection as fill or stroke transparency"),
-                                                      nullptr,
-                                                      GTK_ICON_SIZE_MENU );
-        g_object_set( act, "short_label", _("Assign"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_object_set_data( holder, "set_action", act );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool( "/tools/dropper/setalpha", true) );
-        // make sure it's disabled if we're not picking alpha
-        gtk_action_set_sensitive( GTK_ACTION(act), pickAlpha );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_dropper_set_alpha), holder );
-    }
+    // Make sure the set-alpha button is disabled if we're not picking alpha
+    _set_alpha_button->set_sensitive(pickAlpha);
+
+    // Connect signal handlers
+    auto pick_alpha_button_toggled_cb = sigc::mem_fun(*this, &DropperToolbar::on_pick_alpha_button_toggled);
+    auto set_alpha_button_toggled_cb  = sigc::mem_fun(*this, &DropperToolbar::on_set_alpha_button_toggled);
+
+    _pick_alpha_button->signal_toggled().connect(pick_alpha_button_toggled_cb);
+    _set_alpha_button->signal_toggled().connect(set_alpha_button_toggled_cb);
+
+    show_all();
 }
 
+GtkWidget *
+DropperToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = Gtk::manage(new DropperToolbar(desktop));
+    return GTK_WIDGET(toolbar->gobj());
+}
+}
+}
+}
 
 /*
   Local Variables:

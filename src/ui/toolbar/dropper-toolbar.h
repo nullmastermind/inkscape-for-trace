@@ -27,11 +27,43 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-class SPDesktop;
+#include "toolbar.h"
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
 
-void       sp_dropper_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+/**
+ * \brief A toolbar for controlling the dropper tool
+ */
+class DropperToolbar : public Toolbar {
+private:
+    // Tool widgets
+    Gtk::ToggleToolButton *_pick_alpha_button; ///< Control whether to pick opacity
+    Gtk::ToggleToolButton *_set_alpha_button;  ///< Control whether to set opacity
 
+    // Event handlers
+    void on_pick_alpha_button_toggled();
+    void on_set_alpha_button_toggled();
+
+protected:
+    DropperToolbar(SPDesktop *desktop);
+
+public:
+    static GtkWidget * create(SPDesktop *desktop);
+};
+}
+}
+}
 #endif /* !SEEN_DROPPER_TOOLBAR_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

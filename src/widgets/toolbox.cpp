@@ -219,7 +219,7 @@ static struct {
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   nullptr, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/dropper", "dropper_toolbox", nullptr, sp_dropper_toolbox_prep,         "DropperToolbar",
+    { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, nullptr,         "DropperToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/connector", "connector_toolbox", nullptr, sp_connector_toolbox_prep,   "ConnectorToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
