@@ -778,7 +778,7 @@ void InkscapePreferences::initPageUI()
     }
 
     // Theme
-    _page_theme.add_group_header(_("Theme changes, icon changes need reload or restart"));
+    _page_theme.add_group_header(_("Theme changes"));
     {
         using namespace Inkscape::IO::Resource;
         GHashTable *t;
@@ -833,7 +833,11 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
-    
+    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
+    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
+    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
+    // Icons
+    _page_theme.add_group_header(_("Icon theme changes, need reload or restart"));
     {
         using namespace Inkscape::IO::Resource;
         auto folders = get_foldernames(ICONS, { "application" });
@@ -935,9 +939,6 @@ void InkscapePreferences::initPageUI()
 //        _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
 //    }
 
-    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
-    _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
-    _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
