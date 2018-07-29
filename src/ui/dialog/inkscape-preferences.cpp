@@ -837,7 +837,7 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
-    _page_theme.add_group_header(_("Icon theme changes, need reload or restart"));
+    _page_theme.add_group_header(_("Display icons, press reload icons or restart to apply"));
     {
         using namespace Inkscape::IO::Resource;
         auto folders = get_foldernames(ICONS, { "application" });
