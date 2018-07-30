@@ -89,6 +89,7 @@ if(WIN32)
     ${MINGW_BIN}/libpoppler-glib-[0-9]*.dll
     ${MINGW_BIN}/libpopt-[0-9]*.dll
     ${MINGW_BIN}/libpotrace-[0-9]*.dll
+    ${MINGW_BIN}/libpsl-[0-9]*.dll
     ${MINGW_BIN}/libquadmath-[0-9]*.dll
     ${MINGW_BIN}/libraqm-[0-9]*.dll
     ${MINGW_BIN}/libreadline[0-9]*.dll
