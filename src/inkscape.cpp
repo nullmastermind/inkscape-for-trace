@@ -457,25 +457,27 @@ Application::Application(const char* argv, bool use_gui) :
 
     /* Load the preferences and menus */
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkSettings * settings = gtk_settings_get_default();
-    const gchar * gtkThemeName;
-    g_object_get(settings ,"gtk-theme-name", &gtkThemeName, NULL);
-    const gchar * gtkIconThemeName;
-    g_object_get(settings ,"gtk-icon-theme-name", &gtkIconThemeName, NULL);
+    GtkSettings *settings = gtk_settings_get_default();
+    const gchar *gtkThemeName;
+    g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+    const gchar *gtkIconThemeName;
+    g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
     prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
     bool gtkApplicationPreferDarkTheme;
-    g_object_get(settings ,"gtk-application-prefer-dark-theme", gtkApplicationPreferDarkTheme, NULL);
+    g_object_get(settings, "gtk-application-prefer-dark-theme", gtkApplicationPreferDarkTheme, NULL);
     if (prefs->getString("/theme/gtkTheme") != "") {
         g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
-    } else {
+    }
+    else {
         prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
     }
-    
+
     if (prefs->getString("/theme/iconTheme") != "") {
         g_object_set(settings, "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
-    } else {
+    }
+    else {
         Glib::ustring defaulticontheme = prefs->getString("/theme/defaultIconTheme");
-        if(defaulticontheme == "Adwaita") {
+        if (defaulticontheme == "Adwaita") {
             defaulticontheme = "hicolor";
         }
         prefs->setString("/theme/iconTheme", defaulticontheme);
