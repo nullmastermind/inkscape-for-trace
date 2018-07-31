@@ -2312,6 +2312,8 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
         if (desired_page >= PREFS_PAGE_IO && desired_page <= PREFS_PAGE_IO_OPENCLIPART)
             _page_list.expand_row(_path_io, false);
         _page_list.get_selection()->select(iter);
+        if (desired_page == PREFS_PAGE_UI_THEME)
+            symbolicThemeCheck();
         return true;
     }
     return false;

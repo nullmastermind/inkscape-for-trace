@@ -423,6 +423,7 @@ Application::add_style_sheet()
       Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
+
 /* \brief Constructor for the application.
  *  Creates a new Inkscape::Application.
  *

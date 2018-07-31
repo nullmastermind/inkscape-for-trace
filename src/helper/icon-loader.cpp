@@ -27,8 +27,14 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto icon_theme = Gtk::IconTheme::get_default();
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
+    static auto icon_theme = Gtk::IconTheme::get_default();
+    static bool icon_theme_set;
+    if (!icon_theme_set) {
+        icon_theme_set = true;
+        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
+        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
+    }
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];

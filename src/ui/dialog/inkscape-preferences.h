@@ -571,10 +571,9 @@ protected:
     bool onKBSearchFilter(const Gtk::TreeModel::const_iterator& iter);
     static void onKBShortcutRenderer(Gtk::CellRenderer *rndr, Gtk::TreeIter const &iter);
 
-
 private:
-  void symbolicThemeCheck();
   void themeChange();
+  void symbolicThemeCheck();
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);
   InkscapePreferences operator=(InkscapePreferences const &d);

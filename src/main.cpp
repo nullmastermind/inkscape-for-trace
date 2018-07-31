@@ -618,30 +618,6 @@ static void set_extensions_env()
     // printf("PYTHONPATH = %s\n", g_getenv("PYTHONPATH"));
 }
 
-static void set_datadir_env()
-{
-    gchar const *xgd = g_getenv("XDG_DATA_DIRS");
-#ifdef _WIN32
-    Glib::ustring datadir = get_datadir_path();
-    datadir += ";";
-    datadir += append_inkscape_datadir("inkscape");
-    if (xgd) {
-        datadir += ";";
-    }
-#else
-    Glib::ustring datadir = get_datadir_path();
-    datadir += ":";
-    datadir += append_inkscape_datadir("inkscape");
-    if (xgd) {
-        datadir += ":";
-    }
-#endif
-    if (xgd) {
-        datadir += xgd;
-    }
-    g_setenv("XDG_DATA_DIRS", datadir.c_str(), TRUE);
-    printf("XDG_DATA_DIRS=%s\n", g_getenv("XDG_DATA_DIRS"));
-}
 
 /**
  * This is the classic main() entry point of the program, though on some
@@ -673,7 +649,6 @@ main(int argc, char **argv)
         rt.setPathInfo();
     }
 #endif
-    set_datadir_env();
     set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
