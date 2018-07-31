@@ -622,19 +622,20 @@ static void set_datadir_env()
 {
     gchar const *xgd = g_getenv("XDG_DATA_DIRS");
 #ifdef _WIN32
-    Glib::ustring pathwraper = "'";
-#else
-    Glib::ustring pathwraper = "";
-#endif
-    Glib::ustring datadir = pathwraper + get_datadir_path() + pathwraper;
+    Glib::ustring datadir = "'" + get_datadir_path() + "'";
     datadir += ":";
-    datadir += pathwraper + append_inkscape_datadir("inkscape") + pathwraper;
+    datadir += "'" + append_inkscape_datadir("inkscape") + "'";
+#else
+    Glib::ustring datadir = get_datadir_path();
+    datadir += ":";
+    datadir += append_inkscape_datadir("inkscape");
+#endif
     if (xgd) {
         datadir += ":";
-        datadir += pathwraper + xgd + pathwraper;
+        datadir += xgd;
     }
     g_setenv("XDG_DATA_DIRS", datadir.c_str(), TRUE);
-    // printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
+    printf("XDG_DATA_DIRS = %s\n", g_getenv("XDG_DATA_DIRS"));
 }
 
 /**
