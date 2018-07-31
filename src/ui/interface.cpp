@@ -302,7 +302,7 @@ void sp_ui_reload()
             continue;
         }
         sp_create_window(dtw, TRUE);
-        SPDesktop * desktop = static_cast<SPDesktop *>(dtw->view);
+        SPDesktop *desktop = static_cast<SPDesktop *>(dtw->view);
         if (desktop) {
             sp_namedview_window_from_document(desktop);
             sp_namedview_update_layers_from_document(desktop);
