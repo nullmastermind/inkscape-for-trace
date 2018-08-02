@@ -464,8 +464,8 @@ Application::Application(const char* argv, bool use_gui) :
     const gchar *gtkIconThemeName;
     g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
     prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
-    bool gtkApplicationPreferDarkTheme;
-    g_object_get(settings, "gtk-application-prefer-dark-theme", gtkApplicationPreferDarkTheme, NULL);
+    gboolean gtkApplicationPreferDarkTheme;
+    g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
     if (prefs->getString("/theme/gtkTheme") != "") {
         g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     }
