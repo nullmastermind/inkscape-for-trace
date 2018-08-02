@@ -341,12 +341,6 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
                 _("Remember the style of the (first) selected object as this tool's style"));
 }
 
-// static void changeTheme()
-//{
-//    sp_ui_reload();
-//}
-
-
 void InkscapePreferences::initPageTools()
 {
     Gtk::TreeModel::iterator iter_tools = this->AddPage(_page_tools, _("Tools"), PREFS_PAGE_TOOLS);
@@ -2199,7 +2193,7 @@ void InkscapePreferences::initPageSystem()
                                  _("Open extensions folder"));
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
 
-    _sys_user_themes_dir.init((char const *)Inkscape::IO::Resource::profile_path("/themes"), _("Open themes folder"));
+    _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the users themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
