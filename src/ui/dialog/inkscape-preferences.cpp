@@ -883,7 +883,7 @@ void InkscapePreferences::initPageUI()
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
     _apply_theme.set_label(_("Reload icons"));
-    _apply_theme.set_tooltip_text(_("It apply slow"));
+    _apply_theme.set_tooltip_text(_("Apply icon changes (may take a few seconds)"));
     _page_theme.add_line(false, "", _apply_theme, "", "", false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
@@ -2184,48 +2184,48 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_prefs.set_text(prefs->getPrefsFilename());
     _sys_user_prefs.set_editable(false);
-    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the users preferences file"), true);
+    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the user’s preferences file"), true);
 
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
     _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
                                  _("Open extensions folder"));
-    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the users extensions"), true);
+    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the user’s extensions"), true);
 
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
-    _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the users themes"), true);
+    _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
                              _("Open icons folder"));
-    _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the users icons"), true);
+    _page_system.add_line(true, _("User icons: "), _sys_user_icons_dir, "", _("Location of the user’s icons"), true);
 
     _sys_user_templates_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::TEMPLATES, ""),
                                  _("Open templates folder"));
     _page_system.add_line(true, _("User templates: "), _sys_user_templates_dir, "",
-                          _("Location of the users templates"), true);
+                          _("Location of the user’s templates"), true);
 
     _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
                                _("Open symbols folder"));
-    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the users symbols"),
+    _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
 
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));
-    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the users palettes"),
+    _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
                           true);
 
     _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
                             _("Open keyboard shortcuts folder"));
-    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the users keys"), true);
+    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the user’s keyboard mapping files"), true);
 
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
                           _("Open user interface folder"));
-    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the users UI"), true);
+    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the user’s user interface description files"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());
     _sys_user_cache.set_editable(false);
-    _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of users cache"), true);
+    _page_system.add_line(true, _("User cache: "), _sys_user_cache, "", _("Location of user’s cache"), true);
 
     Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
     if (tmp_dir.empty()) {
