@@ -1,7 +1,7 @@
-install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/hicolor)
 set(THEME hicolor)
+install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
 
-set(PIXMAP_SIZES "scalable")
+set(PIXMAP_SIZES "scalable" "symbolic")
 set(CONTENT "actions")
 
 foreach(pixmap_size ${PIXMAP_SIZES})
@@ -11,8 +11,8 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   endforeach(content)
 endforeach(pixmap_size)
 
-set(PIXMAP_SIZES "symbolic")
-set(CONTENT "actions")
+set(PIXMAP_SIZES "16x16" "22x22" "24x24" "32x32" "48x48" "256x256" "scalable" "symbolic")
+set(CONTENT "apps")
 
 foreach(pixmap_size ${PIXMAP_SIZES})
   foreach(content ${CONTENT})
