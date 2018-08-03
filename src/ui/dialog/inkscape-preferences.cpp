@@ -2184,14 +2184,16 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_prefs.set_text(prefs->getPrefsFilename());
     _sys_user_prefs.set_editable(false);
-    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "", _("Location of the user’s preferences file"), true);
+    _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "",
+                          _("Location of the user’s preferences file"), true);
 
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 
     _sys_user_extension_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::EXTENSIONS, ""),
                                  _("Open extensions folder"));
-    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "", _("Location of the user’s extensions"), true);
+    _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
+                          _("Location of the user’s extensions"), true);
 
     _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
@@ -2217,11 +2219,13 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_keys_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, ""),
                             _("Open keyboard shortcuts folder"));
-    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "", _("Location of the user’s keyboard mapping files"), true);
+    _page_system.add_line(true, _("User keys: "), _sys_user_keys_dir, "",
+                          _("Location of the user’s keyboard mapping files"), true);
 
     _sys_user_ui_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::UIS, ""),
                           _("Open user interface folder"));
-    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "", _("Location of the user’s user interface description files"), true);
+    _page_system.add_line(true, _("User UI: "), _sys_user_ui_dir, "",
+                          _("Location of the user’s user interface description files"), true);
 
     _sys_user_cache.set_text(g_get_user_cache_dir());
     _sys_user_cache.set_editable(false);
