@@ -38,9 +38,6 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];
-            if (icon_name == "gtk-preferences") {
-                icon_name = "preferences-system";
-            }
             sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
             Gdk::RGBA color;
             color.set(colornamed);

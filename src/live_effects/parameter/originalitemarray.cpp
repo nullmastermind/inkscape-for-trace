@@ -150,7 +150,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Remove linked item
-        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-remove", Gtk::ICON_SIZE_BUTTON));
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("list-remove", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -162,7 +162,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-down", Gtk::ICON_SIZE_BUTTON));
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("go-down", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -174,7 +174,7 @@ Gtk::Widget* OriginalItemArrayParam::param_newWidget()
     }
     
     { // Move Down
-        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("gtk-go-up", Gtk::ICON_SIZE_BUTTON));
+        Gtk::Image *pIcon = Gtk::manage(sp_get_icon_image("go-up", Gtk::ICON_SIZE_BUTTON));
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
