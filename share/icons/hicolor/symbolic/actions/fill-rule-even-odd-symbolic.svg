@@ -5,6 +5,6 @@
   </sodipodi:namedview>
   <g transform="matrix(0.799994,0,0,0.799999,-835.19402,-770.68897)" inkscape:label="00307" id="fill-rule-even-odd">
       <path inkscape:connector-curvature="0" id="rect20366" d="m 1044,963.36218 h 20 v 20 h -20 z" style="opacity:0;fill:none"/>
-      <path inkscape:connector-curvature="0" style="opacity:1" d="m 1054.028,983.3622 c 10.396,0 12.885,-20 6.42,-20 -6.547,0 -16.842,16.0032 -6.384,16.0032 10.327,0 0.09,-16.0032 -6.432,-16.0032 -6.522,0 -4.184,20 6.396,20 z" id="path20368"/>
+      <path inkscape:connector-curvature="0" style="opacity:1;fill-rule:evenodd" d="m 1054.028,983.3622 c 10.396,0 12.885,-20 6.42,-20 -6.547,0 -16.842,16.0032 -6.384,16.0032 10.327,0 0.09,-16.0032 -6.432,-16.0032 -6.522,0 -4.184,20 6.396,20 z" id="path20368"/>
     </g>
     </svg>
