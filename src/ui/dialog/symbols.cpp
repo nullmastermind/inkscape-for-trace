@@ -223,9 +223,9 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay_opacity->set_halign(Gtk::ALIGN_START );
   overlay_opacity->set_valign(Gtk::ALIGN_START );
   //No results
-  iconsize = Gtk::IconSize().from_name (Glib::ustring("ICON_SIZE_DIALOG_EXTRA"));
-  if(!iconsize) {
-    iconsize =  Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
+  iconsize = Gtk::IconSize().from_name(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"));
+  if (!iconsize) {
+      iconsize = Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
   }
   overlay_icon = new Gtk::Image();
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
