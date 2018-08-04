@@ -11,7 +11,7 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   endforeach(content)
 endforeach(pixmap_size)
 
-set(PIXMAP_SIZES "16x16" "22x22" "24x24" "32x32" "48x48" "256x256" "scalable" "symbolic")
+set(PIXMAP_SIZES "16x16" "22x22" "24x24" "32x32" "48x48" "256x256" "scalable")
 set(CONTENT "apps")
 
 foreach(pixmap_size ${PIXMAP_SIZES})
