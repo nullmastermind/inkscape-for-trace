@@ -605,9 +605,9 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                 for (i=0;i<n_dash;i++) {
                     int mark = style->stroke_dasharray.values[i].value;
                     if (mark > mark_long) {
-                        mark_long = mark; 
+                        mark_long = mark;
                     }
-                    if (mark<mark_short) { 
+                    if (mark < mark_short) {
                         mark_short = mark;
                     }
                 }

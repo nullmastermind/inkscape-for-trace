@@ -45,218 +45,202 @@ public:
 
 std::vector<StyleRead> getStyleData()
 {
-  StyleRead all_style_data[] = {
+    StyleRead all_style_data[] = {
 
-    // Paint -----------------------------------------------
-    StyleRead("fill:none"                                  ),
-    StyleRead("fill:currentColor"                          ),
-    StyleRead("fill:#ff00ff"                               ),
-    StyleRead("fill:rgb(100%, 0%, 100%)", "fill:#ff00ff"   ),
-    StyleRead("fill:rgb(255, 0, 255)",    "fill:#ff00ff"   ),
+        // Paint -----------------------------------------------
+        StyleRead("fill:none"), StyleRead("fill:currentColor"), StyleRead("fill:#ff00ff"),
+        StyleRead("fill:rgb(100%, 0%, 100%)", "fill:#ff00ff"), StyleRead("fill:rgb(255, 0, 255)", "fill:#ff00ff"),
 
-    // TODO - fix this to preserve the string
-    //    StyleRead("fill:url(#painter) rgb(100%, 0%, 100%)",
-    //	            "fill:url(#painter) #ff00ff", "#painter"     ),
+        // TODO - fix this to preserve the string
+        //    StyleRead("fill:url(#painter) rgb(100%, 0%, 100%)",
+        //	            "fill:url(#painter) #ff00ff", "#painter"     ),
 
-    // TODO - fix this to preserve the string
-    //StyleRead("fill:url(#painter) rgb(255, 0, 255)",
-    //	        "fill:url(#painter) #ff00ff", "#painter"),
+        // TODO - fix this to preserve the string
+        // StyleRead("fill:url(#painter) rgb(255, 0, 255)",
+        //	        "fill:url(#painter) #ff00ff", "#painter"),
 
 
-//  StyleRead("fill:#ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)"),
+        //  StyleRead("fill:#ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)"),
 
-//  StyleRead("fill:url(#painter)",                     "", "#painter"),
-//  StyleRead("fill:url(#painter) none",                "", "#painter"),
-//  StyleRead("fill:url(#painter) currentColor",        "", "#painter"),
-//  StyleRead("fill:url(#painter) #ff00ff",             "", "#painter"),
-//  StyleRead("fill:url(#painter) rgb(100%, 0%, 100%)", "", "#painter"),
-//  StyleRead("fill:url(#painter) rgb(255, 0, 255)",    "", "#painter"),
+        //  StyleRead("fill:url(#painter)",                     "", "#painter"),
+        //  StyleRead("fill:url(#painter) none",                "", "#painter"),
+        //  StyleRead("fill:url(#painter) currentColor",        "", "#painter"),
+        //  StyleRead("fill:url(#painter) #ff00ff",             "", "#painter"),
+        //  StyleRead("fill:url(#painter) rgb(100%, 0%, 100%)", "", "#painter"),
+        //  StyleRead("fill:url(#painter) rgb(255, 0, 255)",    "", "#painter"),
 
-//  StyleRead("fill:url(#painter) #ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)", "", "#painter"),
+        //  StyleRead("fill:url(#painter) #ff00ff icc-color(colorChange, 0.1, 0.5, 0.1)", "", "#painter"),
 
-//  StyleRead("fill:url(#painter) inherit",             "", "#painter"),
+        //  StyleRead("fill:url(#painter) inherit",             "", "#painter"),
 
-    StyleRead("fill:inherit"),
+        StyleRead("fill:inherit"),
 
 
-    // General tests (in general order of appearance in sp_style_read), SPIPaint tested above
-    StyleRead("visibility:hidden"),                       // SPIEnum
-    StyleRead("visibility:collapse"),
-    StyleRead("visibility:visible"),
-    StyleRead("display:none"),                            // SPIEnum
-    StyleRead("overflow:visible"),                        // SPIEnum
-    StyleRead("overflow:auto"),                           // SPIEnum
+        // General tests (in general order of appearance in sp_style_read), SPIPaint tested above
+        StyleRead("visibility:hidden"), // SPIEnum
+        StyleRead("visibility:collapse"), StyleRead("visibility:visible"),
+        StyleRead("display:none"),     // SPIEnum
+        StyleRead("overflow:visible"), // SPIEnum
+        StyleRead("overflow:auto"),    // SPIEnum
 
-    StyleRead("color:#ff0000"),
-    StyleRead("color:blue",             "color:#0000ff"),
-    // StyleRead("color:currentColor"),  SVG 1.1 does not allow color value 'currentColor'
+        StyleRead("color:#ff0000"), StyleRead("color:blue", "color:#0000ff"),
+        // StyleRead("color:currentColor"),  SVG 1.1 does not allow color value 'currentColor'
 
-    // Font shorthand
-    StyleRead("font:bold 12px Arial",
-	      "font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-height:normal;font-family:Arial"),
-    StyleRead("font:bold 12px/24px 'Times New Roman'",
-	      "font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-height:24px;font-family:\'Times New Roman\'"),
+        // Font shorthand
+        StyleRead("font:bold 12px Arial", "font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;"
+                                          "font-size:12px;line-height:normal;font-family:Arial"),
+        StyleRead("font:bold 12px/24px 'Times New Roman'",
+                  "font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;line-"
+                  "height:24px;font-family:\'Times New Roman\'"),
 
-    // From CSS 3 Fonts (examples):
-    StyleRead("font: 12pt/15pt sans-serif",
-	      "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:15pt;font-family:sans-serif"),
-    //StyleRead("font: 80% sans-serif",
-    //	        "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:80%;line-height:normal;font-family:sans-serif"),
-    //StyleRead("font: x-large/110% 'new century schoolbook', serif",
-    //	      "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:x-large;line-height:110%;font-family:\'new century schoolbook\', serif"),
-    StyleRead("font: bold italic large Palatino, serif",
-	      "font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:large;line-height:normal;font-family:Palatino, serif"),
-    //StyleRead("font: normal small-caps 120%/120% fantasy",
-    //	      "font-style:normal;font-variant:small-caps;font-weight:normal;font-stretch:normal;font-size:120%;line-height:120%;font-family:fantasy"),
-    StyleRead("font: condensed oblique 12pt 'Helvetica Neue', serif;",
-	      "font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:16px;line-height:normal;font-family:\'Helvetica Neue\', serif"),
+        // From CSS 3 Fonts (examples):
+        StyleRead("font: 12pt/15pt sans-serif", "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:"
+                                                "normal;font-size:16px;line-height:15pt;font-family:sans-serif"),
+        // StyleRead("font: 80% sans-serif",
+        //	        "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:80%;line-height:normal;font-family:sans-serif"),
+        // StyleRead("font: x-large/110% 'new century schoolbook', serif",
+        //	      "font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:x-large;line-height:110%;font-family:\'new
+        //century schoolbook\', serif"),
+        StyleRead("font: bold italic large Palatino, serif",
+                  "font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:large;line-"
+                  "height:normal;font-family:Palatino, serif"),
+        // StyleRead("font: normal small-caps 120%/120% fantasy",
+        //	      "font-style:normal;font-variant:small-caps;font-weight:normal;font-stretch:normal;font-size:120%;line-height:120%;font-family:fantasy"),
+        StyleRead("font: condensed oblique 12pt 'Helvetica Neue', serif;",
+                  "font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:16px;"
+                  "line-height:normal;font-family:\'Helvetica Neue\', serif"),
 
-    StyleRead("font-family:sans-serif"),                  // SPIString, text_private
-    StyleRead("font-family:Arial"),
-    // StyleRead("font-variant:normal;font-stretch:normal;-inkscape-font-specification:Nimbus Roman No9 L Bold Italic"),
+        StyleRead("font-family:sans-serif"), // SPIString, text_private
+        StyleRead("font-family:Arial"),
+        // StyleRead("font-variant:normal;font-stretch:normal;-inkscape-font-specification:Nimbus Roman No9 L Bold
+        // Italic"),
 
-    // Needs to be fixed (quotes should be around each font-family):
-    StyleRead("font-family:Georgia, 'Minion Web'","font-family:Georgia, \'Minion Web\'"),
-    StyleRead("font-size:12",     "font-size:12px"),      // SPIFontSize
-    StyleRead("font-size:12px"),
-    StyleRead("font-size:12pt",   "font-size:16px"),
-    StyleRead("font-size:medium"),
-    StyleRead("font-size:smaller"),
-    StyleRead("font-style:italic"),                       // SPIEnum
-    StyleRead("font-variant:small-caps"),                 // SPIEnum
-    StyleRead("font-weight:100"),                         // SPIEnum
-    StyleRead("font-weight:normal"),
-    StyleRead("font-weight:bolder"),
-    StyleRead("font-stretch:condensed"),                  // SPIEnum
+        // Needs to be fixed (quotes should be around each font-family):
+        StyleRead("font-family:Georgia, 'Minion Web'", "font-family:Georgia, \'Minion Web\'"),
+        StyleRead("font-size:12", "font-size:12px"), // SPIFontSize
+        StyleRead("font-size:12px"), StyleRead("font-size:12pt", "font-size:16px"), StyleRead("font-size:medium"),
+        StyleRead("font-size:smaller"),
+        StyleRead("font-style:italic"),       // SPIEnum
+        StyleRead("font-variant:small-caps"), // SPIEnum
+        StyleRead("font-weight:100"),         // SPIEnum
+        StyleRead("font-weight:normal"), StyleRead("font-weight:bolder"),
+        StyleRead("font-stretch:condensed"), // SPIEnum
 
-    StyleRead("font-variant-ligatures:none"),             // SPILigatures
-    StyleRead("font-variant-ligatures:normal"),
-    StyleRead("font-variant-ligatures:no-common-ligatures"),
-    StyleRead("font-variant-ligatures:discretionary-ligatures"),
-    StyleRead("font-variant-ligatures:historical-ligatures"),
-    StyleRead("font-variant-ligatures:no-contextual"),
-    StyleRead("font-variant-ligatures:common-ligatures", "font-variant-ligatures:normal"),
-    StyleRead("font-variant-ligatures:contextual", "font-variant-ligatures:normal"),
-    StyleRead("font-variant-ligatures:no-common-ligatures historical-ligatures"),
-    StyleRead("font-variant-ligatures:historical-ligatures no-contextual"),
-    StyleRead("font-variant-position:normal"),
-    StyleRead("font-variant-position:sub"),
-    StyleRead("font-variant-position:super"),
-    StyleRead("font-variant-caps:normal"),
-    StyleRead("font-variant-caps:small-caps"),
-    StyleRead("font-variant-caps:all-small-caps"),
-    StyleRead("font-variant-numeric:normal"),
-    StyleRead("font-variant-numeric:lining-nums"),
-    StyleRead("font-variant-numeric:oldstyle-nums"),
-    StyleRead("font-variant-numeric:proportional-nums"),
-    StyleRead("font-variant-numeric:tabular-nums"),
-    StyleRead("font-variant-numeric:diagonal-fractions"),
-    StyleRead("font-variant-numeric:stacked-fractions"),
-    StyleRead("font-variant-numeric:ordinal"),
-    StyleRead("font-variant-numeric:slashed-zero"),
-    StyleRead("font-variant-numeric:tabular-nums slashed-zero"),
-    StyleRead("font-variant-numeric:tabular-nums proportional-nums", "font-variant-numeric:proportional-nums"),
+        StyleRead("font-variant-ligatures:none"), // SPILigatures
+        StyleRead("font-variant-ligatures:normal"), StyleRead("font-variant-ligatures:no-common-ligatures"),
+        StyleRead("font-variant-ligatures:discretionary-ligatures"),
+        StyleRead("font-variant-ligatures:historical-ligatures"), StyleRead("font-variant-ligatures:no-contextual"),
+        StyleRead("font-variant-ligatures:common-ligatures", "font-variant-ligatures:normal"),
+        StyleRead("font-variant-ligatures:contextual", "font-variant-ligatures:normal"),
+        StyleRead("font-variant-ligatures:no-common-ligatures historical-ligatures"),
+        StyleRead("font-variant-ligatures:historical-ligatures no-contextual"),
+        StyleRead("font-variant-position:normal"), StyleRead("font-variant-position:sub"),
+        StyleRead("font-variant-position:super"), StyleRead("font-variant-caps:normal"),
+        StyleRead("font-variant-caps:small-caps"), StyleRead("font-variant-caps:all-small-caps"),
+        StyleRead("font-variant-numeric:normal"), StyleRead("font-variant-numeric:lining-nums"),
+        StyleRead("font-variant-numeric:oldstyle-nums"), StyleRead("font-variant-numeric:proportional-nums"),
+        StyleRead("font-variant-numeric:tabular-nums"), StyleRead("font-variant-numeric:diagonal-fractions"),
+        StyleRead("font-variant-numeric:stacked-fractions"), StyleRead("font-variant-numeric:ordinal"),
+        StyleRead("font-variant-numeric:slashed-zero"), StyleRead("font-variant-numeric:tabular-nums slashed-zero"),
+        StyleRead("font-variant-numeric:tabular-nums proportional-nums", "font-variant-numeric:proportional-nums"),
 
-    StyleRead("font-variation-settings:'wght' 400"),
-    StyleRead("font-variation-settings:'wght'  400", "font-variation-settings:'wght' 400"),
-    StyleRead("font-variation-settings:'wght' 400, 'slnt' 0.5", "font-variation-settings:'slnt' 0.5, 'wght' 400" ),
+        StyleRead("font-variation-settings:'wght' 400"),
+        StyleRead("font-variation-settings:'wght'  400", "font-variation-settings:'wght' 400"),
+        StyleRead("font-variation-settings:'wght' 400, 'slnt' 0.5", "font-variation-settings:'slnt' 0.5, 'wght' 400"),
 
-    // Should be moved down
-    StyleRead("text-indent:12em"),                        // SPILength?
-    StyleRead("text-align:center"),                       // SPIEnum
+        // Should be moved down
+        StyleRead("text-indent:12em"),  // SPILength?
+        StyleRead("text-align:center"), // SPIEnum
 
-    // SPITextDecoration
-    // The default value for 'text-decoration-color' is 'currentColor', but
-    // we cannot set the default to that value yet. (We need to switch
-    // SPIPaint to SPIColor and then add the ability to set default.)
-    // StyleRead("text-decoration: underline",
-    //          "text-decoration: underline;text-decoration-line: underline;text-decoration-color:currentColor"),
-    // StyleRead("text-decoration: overline underline",
-    //          "text-decoration: underline overline;text-decoration-line: underline overline;text-decoration-color:currentColor"),
+        // SPITextDecoration
+        // The default value for 'text-decoration-color' is 'currentColor', but
+        // we cannot set the default to that value yet. (We need to switch
+        // SPIPaint to SPIColor and then add the ability to set default.)
+        // StyleRead("text-decoration: underline",
+        //          "text-decoration: underline;text-decoration-line: underline;text-decoration-color:currentColor"),
+        // StyleRead("text-decoration: overline underline",
+        //          "text-decoration: underline overline;text-decoration-line: underline
+        //          overline;text-decoration-color:currentColor"),
 
-    StyleRead("text-decoration: underline wavy #0000ff",
-	      "text-decoration: underline;text-decoration-line: underline;text-decoration-style:wavy;text-decoration-color:#0000ff"),
-    StyleRead("text-decoration: double overline underline #ff0000",
-	      "text-decoration: underline overline;text-decoration-line: underline overline;text-decoration-style:double;text-decoration-color:#ff0000"),
+        StyleRead("text-decoration: underline wavy #0000ff",
+                  "text-decoration: underline;text-decoration-line: "
+                  "underline;text-decoration-style:wavy;text-decoration-color:#0000ff"),
+        StyleRead("text-decoration: double overline underline #ff0000",
+                  "text-decoration: underline overline;text-decoration-line: underline "
+                  "overline;text-decoration-style:double;text-decoration-color:#ff0000"),
 
-    // SPITextDecorationLine
-    StyleRead("text-decoration-line: underline",
-	      "text-decoration: underline;text-decoration-line: underline"),
+        // SPITextDecorationLine
+        StyleRead("text-decoration-line: underline", "text-decoration: underline;text-decoration-line: underline"),
 
-    // SPITextDecorationStyle
-    StyleRead("text-decoration-style:solid"),
-    StyleRead("text-decoration-style:dotted"),
+        // SPITextDecorationStyle
+        StyleRead("text-decoration-style:solid"), StyleRead("text-decoration-style:dotted"),
 
-    // SPITextDecorationColor
-    StyleRead("text-decoration-color:#ff00ff"),
+        // SPITextDecorationColor
+        StyleRead("text-decoration-color:#ff00ff"),
 
-    // Should be moved up
-    StyleRead("line-height:24px"),                        // SPILengthOrNormal
-    StyleRead("line-height:1.5"),
-    StyleRead("letter-spacing:2px"),                      // SPILengthOrNormal
-    StyleRead("word-spacing:2px"),                        // SPILengthOrNormal
-    StyleRead("word-spacing:normal"),
-    StyleRead("text-transform:lowercase"),                // SPIEnum
-    // ...
-    StyleRead("baseline-shift:baseline"),                 // SPIBaselineShift
-    StyleRead("baseline-shift:sub"),
-    StyleRead("baseline-shift:12.5%"),
-    StyleRead("baseline-shift:2px"),
+        // Should be moved up
+        StyleRead("line-height:24px"), // SPILengthOrNormal
+        StyleRead("line-height:1.5"),
+        StyleRead("letter-spacing:2px"), // SPILengthOrNormal
+        StyleRead("word-spacing:2px"),   // SPILengthOrNormal
+        StyleRead("word-spacing:normal"),
+        StyleRead("text-transform:lowercase"), // SPIEnum
+        // ...
+        StyleRead("baseline-shift:baseline"), // SPIBaselineShift
+        StyleRead("baseline-shift:sub"), StyleRead("baseline-shift:12.5%"), StyleRead("baseline-shift:2px"),
 
-    StyleRead("opacity:0.1"),                             // SPIScale24
-    // ...
-    StyleRead("stroke-width:2px"),                        // SPILength
-    StyleRead("stroke-linecap:round"),                    // SPIEnum
-    StyleRead("stroke-linejoin:round"),                   // SPIEnum
-    StyleRead("stroke-miterlimit:4"),                     // SPIFloat
-    StyleRead("marker:url(#Arrow)"),                      // SPIString
-    StyleRead("marker-start:url(#Arrow)"),
-    StyleRead("marker-mid:url(#Arrow)"),
-    StyleRead("marker-end:url(#Arrow)"),
-    StyleRead("stroke-opacity:0.5"),                      // SPIScale24
-    //Currently inkscape handle unit conversion in dasharray but need
-    //a active document to do it, so we can't include in any test
-    StyleRead("stroke-dasharray:0, 1, 0, 1"),             // SPIDashArray
-    StyleRead("stroke-dasharray:0 1 0 1","stroke-dasharray:0, 1, 0, 1"),
-    StyleRead("stroke-dasharray:0  1  2  3","stroke-dasharray:0, 1, 2, 3"),
-    StyleRead("stroke-dashoffset:13"),                    // SPILength
-    StyleRead("stroke-dashoffset:10px"),
-    // ...
-    //StyleRead("filter:url(#myfilter)"),                   // SPIFilter segfault in read
-    StyleRead("filter:inherit"),
+        StyleRead("opacity:0.1"), // SPIScale24
+        // ...
+        StyleRead("stroke-width:2px"),      // SPILength
+        StyleRead("stroke-linecap:round"),  // SPIEnum
+        StyleRead("stroke-linejoin:round"), // SPIEnum
+        StyleRead("stroke-miterlimit:4"),   // SPIFloat
+        StyleRead("marker:url(#Arrow)"),    // SPIString
+        StyleRead("marker-start:url(#Arrow)"), StyleRead("marker-mid:url(#Arrow)"), StyleRead("marker-end:url(#Arrow)"),
+        StyleRead("stroke-opacity:0.5"), // SPIScale24
+        // Currently inkscape handle unit conversion in dasharray but need
+        // a active document to do it, so we can't include in any test
+        StyleRead("stroke-dasharray:0, 1, 0, 1"), // SPIDashArray
+        StyleRead("stroke-dasharray:0 1 0 1", "stroke-dasharray:0, 1, 0, 1"),
+        StyleRead("stroke-dasharray:0  1  2  3", "stroke-dasharray:0, 1, 2, 3"),
+        StyleRead("stroke-dashoffset:13"), // SPILength
+        StyleRead("stroke-dashoffset:10px"),
+        // ...
+        // StyleRead("filter:url(#myfilter)"),                   // SPIFilter segfault in read
+        StyleRead("filter:inherit"),
 
-    StyleRead("opacity:0.1;fill:#ff0000;stroke:#0000ff;stroke-width:2px"),
-    StyleRead("opacity:0.1;fill:#ff0000;stroke:#0000ff;stroke-width:2px;stroke-dasharray:1, 2, 3, 4;stroke-dashoffset:15"),
+        StyleRead("opacity:0.1;fill:#ff0000;stroke:#0000ff;stroke-width:2px"),
+        StyleRead("opacity:0.1;fill:#ff0000;stroke:#0000ff;stroke-width:2px;stroke-dasharray:1, 2, 3, "
+                  "4;stroke-dashoffset:15"),
 
-    StyleRead("paint-order:stroke"),                      // SPIPaintOrder
-    StyleRead("paint-order:normal"),
-    StyleRead("paint-order: markers stroke   fill", "paint-order:markers stroke fill"),
+        StyleRead("paint-order:stroke"), // SPIPaintOrder
+        StyleRead("paint-order:normal"),
+        StyleRead("paint-order: markers stroke   fill", "paint-order:markers stroke fill"),
 
-    // !important  (in order of appearance in style-internal.h)
-    StyleRead("stroke-miterlimit:4 !important"),                     // SPIFloat
-    StyleRead("stroke-opacity:0.5 !important"),                      // SPIScale24
-    StyleRead("stroke-width:2px !important"),                        // SPILength
-    StyleRead("line-height:24px !important"),                        // SPILengthOrNormal
-    StyleRead("line-height:normal !important"),
-    StyleRead("font-stretch:condensed !important"),                  // SPIEnum
-    StyleRead("marker:url(#Arrow) !important"),                      // SPIString
-    StyleRead("color:#0000ff !important"),                           // SPIColor
-    StyleRead("fill:none !important"),                               // SPIPaint
-    StyleRead("fill:currentColor !important"),
-    StyleRead("fill:#ff00ff !important"),
-    StyleRead("paint-order:stroke !important"),                      // SPIPaintOrder
-    StyleRead("paint-order:normal !important"),
-    StyleRead("stroke-dasharray:0, 1, 0, 1 !important"),             // SPIDashArray
-    StyleRead("font-size:12px !important"),                          // SPIFontSize
-    StyleRead("baseline-shift:baseline !important"),                 // SPIBaselineShift
-    StyleRead("baseline-shift:sub !important"),
-    //StyleRead("text-decoration-line: underline !important"),         // SPITextDecorationLine
+        // !important  (in order of appearance in style-internal.h)
+        StyleRead("stroke-miterlimit:4 !important"), // SPIFloat
+        StyleRead("stroke-opacity:0.5 !important"),  // SPIScale24
+        StyleRead("stroke-width:2px !important"),    // SPILength
+        StyleRead("line-height:24px !important"),    // SPILengthOrNormal
+        StyleRead("line-height:normal !important"),
+        StyleRead("font-stretch:condensed !important"), // SPIEnum
+        StyleRead("marker:url(#Arrow) !important"),     // SPIString
+        StyleRead("color:#0000ff !important"),          // SPIColor
+        StyleRead("fill:none !important"),              // SPIPaint
+        StyleRead("fill:currentColor !important"), StyleRead("fill:#ff00ff !important"),
+        StyleRead("paint-order:stroke !important"), // SPIPaintOrder
+        StyleRead("paint-order:normal !important"),
+        StyleRead("stroke-dasharray:0, 1, 0, 1 !important"), // SPIDashArray
+        StyleRead("font-size:12px !important"),              // SPIFontSize
+        StyleRead("baseline-shift:baseline !important"),     // SPIBaselineShift
+        StyleRead("baseline-shift:sub !important"),
+        // StyleRead("text-decoration-line: underline !important"),         // SPITextDecorationLine
 
- };
+    };
 
-  size_t count = sizeof(all_style_data) / sizeof(all_style_data[0]);
-  std::vector<StyleRead> vect(all_style_data, all_style_data + count);
-  return vect;
+    size_t count = sizeof(all_style_data) / sizeof(all_style_data[0]);
+    std::vector<StyleRead> vect(all_style_data, all_style_data + count);
+    return vect;
 }
 
 TEST(StyleTest, Read) {

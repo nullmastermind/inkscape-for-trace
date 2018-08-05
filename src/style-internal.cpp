@@ -393,62 +393,62 @@ SPILength::merge( const SPIBase* const parent ) {
     }
 }
 
-void
-SPILength::setDouble(double v) {
-  unit = SP_CSS_UNIT_NONE;
-  value = v;
-  computed = v;
-  value_default = v;
+void SPILength::setDouble(double v)
+{
+    unit = SP_CSS_UNIT_NONE;
+    value = v;
+    computed = v;
+    value_default = v;
 }
 
 // Generate a string and allow emove name for parsing dasharray, etc.
-const Glib::ustring
-SPILength::toString(bool wname) const
+const Glib::ustring SPILength::toString(bool wname) const
 {
-  Inkscape:CSSOStringStream os;
-  if (wname) {
-    os << name << ":";
-  }
-  switch (this->unit) {
-    case SP_CSS_UNIT_NONE:
-        os << this->computed;
-        break;
-    case SP_CSS_UNIT_PX:
-        os << this->computed << "px";
-        break;
-    case SP_CSS_UNIT_PT:
-        os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
-        break;
-    case SP_CSS_UNIT_PC:
-        os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
-        break;
-    case SP_CSS_UNIT_MM:
-        os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
-        break;
-    case SP_CSS_UNIT_CM:
-        os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
-        break;
-    case SP_CSS_UNIT_IN:
-        os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
-        break;
-    case SP_CSS_UNIT_EM:
-        os << this->value << "em";
-        break;
-    case SP_CSS_UNIT_EX:
-        os << this->value << "ex";
-        break;
-    case SP_CSS_UNIT_PERCENT:
-        os << (this->value * 100.0) << "%";
-        break;
-    default:
-        /* Invalid */
-        break;
-  }
-  if (wname) {
-    os << important_str();
-    os << ";";
-  }
-  return os.str();
+Inkscape:
+    CSSOStringStream os;
+    if (wname) {
+        os << name << ":";
+    }
+    switch (this->unit) {
+        case SP_CSS_UNIT_NONE:
+            os << this->computed;
+            break;
+        case SP_CSS_UNIT_PX:
+            os << this->computed << "px";
+            break;
+        case SP_CSS_UNIT_PT:
+            os << Inkscape::Util::Quantity::convert(this->computed, "px", "pt") << "pt";
+            break;
+        case SP_CSS_UNIT_PC:
+            os << Inkscape::Util::Quantity::convert(this->computed, "px", "pc") << "pc";
+            break;
+        case SP_CSS_UNIT_MM:
+            os << Inkscape::Util::Quantity::convert(this->computed, "px", "mm") << "mm";
+            break;
+        case SP_CSS_UNIT_CM:
+            os << Inkscape::Util::Quantity::convert(this->computed, "px", "cm") << "cm";
+            break;
+        case SP_CSS_UNIT_IN:
+            os << Inkscape::Util::Quantity::convert(this->computed, "px", "in") << "in";
+            break;
+        case SP_CSS_UNIT_EM:
+            os << this->value << "em";
+            break;
+        case SP_CSS_UNIT_EX:
+            os << this->value << "ex";
+            break;
+        case SP_CSS_UNIT_PERCENT:
+            os << (this->value * 100.0) << "%";
+            break;
+        default:
+            /* Invalid */
+            break;
+    }
+    if (wname) {
+        os << important_str();
+        os << ";";
+    }
+    return os.str();
 }
 
 bool
@@ -2056,16 +2056,16 @@ SPIDashArray::read( gchar const *str ) {
 
     gchar *e = NULL;
     bool LineSolid = true;
-    
+
     for (auto token : tokens) {
         SPILength spilength("temp");
         spilength.read(token.c_str());
         if (spilength.value > 0.00000001)
             LineSolid = false;
         double dash = spilength.value;
-        //Currently inkscape handle unit conversion in dasharray but need
-        //a active document to do it, so put document inside a check for units
-        //and supose units are not included in tests
+        // Currently inkscape handle unit conversion in dasharray but need
+        // a active document to do it, so put document inside a check for units
+        // and supose units are not included in tests
         if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
             SPDocument *document = SP_ACTIVE_DOCUMENT;
             dash = document->getViewBox().width() * spilength.value;

@@ -1013,7 +1013,7 @@ public:
 
   // To do: make private, change double to SVGLength
 public:
-    std::vector<SPILength> values;
+  std::vector<SPILength> values;
 };
 
 /// Filter type internal to SPStyle
