@@ -111,6 +111,7 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
         dc.translate(_origin);
         dc.scale(_scale);
         dc.setSource(_pixbuf->getSurfaceRaw(), 0, 0);
+        dc.patternSetExtend(CAIRO_EXTEND_PAD);
 
         if (_style) {
             // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
