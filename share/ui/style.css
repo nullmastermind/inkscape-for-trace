@@ -171,3 +171,20 @@ combobox window.popup scrolledwindow treeview separator {
 spinbutton undershoot {
 	outline-style : none;
 }
+
+#dashCombo button{
+    background-image:image(rgb(230,230,230));
+    color:rgb(0,0,0);
+}
+#dashCombo menu{
+    background-image:image(rgb(230,230,230));
+    color:rgb(0,0,0);
+}
+#markerCombo button{
+    background-image:image(rgb(230,230,230));
+    color:rgb(0,0,0);
+}
+#markerCombo menu{
+    background-image:image(rgb(230,230,230));
+    color:rgb(0,0,0);
+}

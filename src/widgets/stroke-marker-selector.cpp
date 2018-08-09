@@ -55,7 +55,7 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     pack_start(image_renderer, false);
     set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, nullptr, nullptr);
-
+    gtk_widget_set_name(GTK_WIDGET(gobj()), "markerCombo");
     empty_image = sp_get_icon_image("no-marker", Gtk::ICON_SIZE_SMALL_TOOLBAR);
 
     sandbox = ink_markers_preview_doc ();

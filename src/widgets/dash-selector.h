@@ -83,7 +83,7 @@ private:
     };
     DashColumns dash_columns;
     Glib::RefPtr<Gtk::ListStore> dash_store;
-    Gtk::ComboBox       dash_combo;
+    Gtk::ComboBox dash_combo;
     Gtk::CellRendererPixbuf image_renderer;
     Glib::RefPtr<Gtk::Adjustment> offset;
 

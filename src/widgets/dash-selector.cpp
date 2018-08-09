@@ -60,6 +60,7 @@ SPDashSelector::SPDashSelector()
     dash_combo.pack_start(image_renderer);
     dash_combo.set_cell_data_func(image_renderer, sigc::mem_fun(*this, &SPDashSelector::prepareImageRenderer));
     dash_combo.set_tooltip_text(_("Dash pattern"));
+    dash_combo.set_name("dashCombo");
     dash_combo.show();
     dash_combo.signal_changed().connect( sigc::mem_fun(*this, &SPDashSelector::on_selection) );
 
