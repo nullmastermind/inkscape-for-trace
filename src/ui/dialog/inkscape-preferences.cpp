@@ -884,7 +884,7 @@ void InkscapePreferences::initPageUI()
     }
     _apply_theme.set_label(_("Reload icons"));
     _apply_theme.set_tooltip_text(_("Apply icon changes (may take a few seconds)"));
-    _page_theme.add_line(false, "", _apply_theme, "", "", false);
+    _page_theme.add_line(false, "", _apply_theme, "<span size=\"small\">Reloading icons will cloase all windows and open them again. No data will be lost.</span>", "", false);
     _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     symbolicThemeCheck();

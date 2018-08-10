@@ -210,7 +210,7 @@ void ControlManagerImpl::setControlSize(int size, bool force)
             }
         }
 
-        _sizeChangedSignal.emit();
+        //_sizeChangedSignal.emit();
     }
 }
 
