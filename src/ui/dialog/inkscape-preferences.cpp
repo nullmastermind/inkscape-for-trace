@@ -1521,7 +1521,7 @@ void InkscapePreferences::initPageBehavior()
                           _("Pressing an arrow key moves selected object(s) or node(s) by this distance"), false);
     _steps_scale.init ( "/options/defaultscale/value", 0.0, 1000.0, 0.01, 2.0, UNIT_TYPE_LINEAR, "px");
     //defaultscale is limited to 1000 in select-context.cpp: use the same limit here
-    _page_steps.add_line( false, _("> and < _scale by:"), _steps_scale, "",
+    _page_steps.add_line( false, _("&gt; and &lt; _scale by:"), _steps_scale, "",
                           _("Pressing > or < scales selection up or down by this increment"), false);
     _steps_inset.init ( "/options/defaultoffsetwidth/value", 0.0, 3000.0, 0.01, 2.0, UNIT_TYPE_LINEAR, "px");
     _page_steps.add_line( false, _("_Inset/Outset by:"), _steps_inset, "",

@@ -94,10 +94,10 @@ void DialogPage::add_line(bool                 indent,
     // Add a label in the first column if provided
     if (label != "")
     {
-        Gtk::Label* label_widget = Gtk::manage(new Gtk::Label("", Gtk::ALIGN_START,
+        Gtk::Label* label_widget = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START,
                                                               Gtk::ALIGN_CENTER, true));
-        label_widget->set_markup(label);
         label_widget->set_mnemonic_widget(widget);
+        label_widget->set_markup(label_widget->get_text());
         
         if (indent) {
 #if GTKMM_CHECK_VERSION(3,12,0)
@@ -134,8 +134,8 @@ void DialogPage::add_line(bool                 indent,
     // Add a label on the right of the widget if desired
     if (suffix != "")
     {
-        Gtk::Label* suffix_widget = Gtk::manage(new Gtk::Label("" , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
-        suffix_widget->set_markup(suffix);
+        Gtk::Label* suffix_widget = Gtk::manage(new Gtk::Label(suffix , Gtk::ALIGN_START , Gtk::ALIGN_CENTER, true));
+        suffix_widget->set_markup(suffix_widget->get_text());
         hb->pack_start(*suffix_widget,false,false);
     }
 
