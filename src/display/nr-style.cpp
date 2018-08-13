@@ -218,7 +218,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
 
     n_dash = style->stroke_dasharray.values.size();
     if (n_dash != 0) {
-        dash_offset = style->stroke_dashoffset.value;
+        dash_offset = style->stroke_dashoffset.computed;
         dash = new double[n_dash];
         for (unsigned int i = 0; i < n_dash; ++i) {
             dash[i] = style->stroke_dasharray.values[i].value;
