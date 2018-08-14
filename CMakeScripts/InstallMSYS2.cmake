@@ -199,7 +199,7 @@ if(WIN32)
   # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
   install(FILES
     ${MINGW_LIB}/enchant-2/enchant_aspell.dll
-    DESTINATION lib/enchant)
+    DESTINATION lib/enchant-2)
 
   # tcl/tk related files (required for tkinter)
   install(DIRECTORY
