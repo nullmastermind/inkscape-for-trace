@@ -194,6 +194,46 @@ void SPShape::update(SPCtx* ctx, guint flags) {
             sh->setChildrenStyle(this->context_style); // Resolve 'context-xxx' in children.
         }
     }
+
+    /* Update stroke/dashes for relative units. */
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+
+        SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
+
+        double const w = ictx->viewport.width();
+        double const h = ictx->viewport.height();
+        double const d = sqrt(w*w + h*h) * M_SQRT1_2; // diagonal per SVG spec
+        double const em = style->font_size.computed;
+        double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
+
+        if (style->stroke_width.unit == SP_CSS_UNIT_EM) {
+            style->stroke_width.computed = style->stroke_width.value * em;
+        }
+        else if (style->stroke_width.unit == SP_CSS_UNIT_EX) {
+            style->stroke_width.computed = style->stroke_width.value * ex;
+        }
+        else if (style->stroke_width.unit == SP_CSS_UNIT_PERCENT) {
+            style->stroke_width.computed = style->stroke_width.value * d;
+        }
+
+        if (style->stroke_dasharray.values.size() != 0) {
+            for (auto&& i: style->stroke_dasharray.values) {
+                if      (i.unit == SP_CSS_UNIT_EM)      i.computed = i.value * em;
+                else if (i.unit == SP_CSS_UNIT_EX)      i.computed = i.value * ex;
+                else if (i.unit == SP_CSS_UNIT_PERCENT) i.computed = i.value * d;
+            }
+        }
+
+        if (style->stroke_dashoffset.unit == SP_CSS_UNIT_EM) {
+            style->stroke_dashoffset.computed = style->stroke_dashoffset.value * em;
+        }
+        else if (style->stroke_dashoffset.unit == SP_CSS_UNIT_EX) {
+            style->stroke_dashoffset.computed = style->stroke_dashoffset.value * ex;
+        }
+        else if (style->stroke_dashoffset.unit == SP_CSS_UNIT_PERCENT) {
+            style->stroke_dashoffset.computed = style->stroke_dashoffset.value * d;
+        }
+    }
 }
 
 /**

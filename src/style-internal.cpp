@@ -2052,9 +2052,9 @@ SPIDashArray::read( gchar const *str ) {
     if( strcmp(str, "none") == 0) {
         return;
     }
+
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[(,\\s|\\s)]+", str);
 
-    gchar *e = NULL;
     bool LineSolid = true;
 
     for (auto token : tokens) {
@@ -2062,21 +2062,9 @@ SPIDashArray::read( gchar const *str ) {
         spilength.read(token.c_str());
         if (spilength.value > 0.00000001)
             LineSolid = false;
-        double dash = spilength.value;
-        // Currently inkscape handle unit conversion in dasharray but need
-        // a active document to do it, so put document inside a check for units
-        // and supose units are not included in tests
-        if (spilength.unit == SPCSSUnit::SP_CSS_UNIT_PERCENT) {
-            SPDocument *document = SP_ACTIVE_DOCUMENT;
-            dash = document->getViewBox().width() * spilength.value;
-        }
-        else if (spilength.unit != SPCSSUnit::SP_CSS_UNIT_NONE) {
-            SPDocument *document = SP_ACTIVE_DOCUMENT;
-            dash = spilength.computed / document->getDocumentScale()[0];
-        }
-        spilength.setDouble(dash);
         values.push_back(spilength);
     }
+
     if (LineSolid) {
         values.clear();
     }
