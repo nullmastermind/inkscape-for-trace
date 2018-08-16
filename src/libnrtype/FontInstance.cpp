@@ -288,6 +288,16 @@ void font_instance::InitTheFace()
 
        FindFontMetrics();
     }
+    
+#ifdef USE_PANGO_WIN32
+    // Someone (probably pango or cairo) sets the world transform during initialization and does not reset it.
+    // Work around this by explicitly setting it again (even if the font is already initialized)
+    XFORM identity = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+    SetWorldTransform(parent->hScreenDC, &identity);
+    SetGraphicsMode(parent->hScreenDC, GM_COMPATIBLE);
+    SelectObject(parent->hScreenDC,theFace);
+#endif
+
 }
 
 void font_instance::FreeTheFace()
