@@ -42,7 +42,7 @@ namespace {
 
 class AlternateIcons : public Gtk::HBox {
 public:
-    AlternateIcons(Gtk::IconSize size, Glib::ustring const &a, Glib::ustring const &b)
+    AlternateIcons(Gtk::BuiltinIconSize size, Glib::ustring const &a, Glib::ustring const &b)
     : _a(nullptr), _b(nullptr)
     {
         set_name("AlternateIcons");
