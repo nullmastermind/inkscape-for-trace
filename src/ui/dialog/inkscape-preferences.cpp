@@ -1339,12 +1339,12 @@ void InkscapePreferences::initPageIO()
     this->AddPage(_page_cms, _("Color management"), iter_io, PREFS_PAGE_IO_CMS);
 
     // Autosave options
-    _save_autosave_enable.init( _("Enable autosave (requires restart)"), "/options/autosave/enable", false);
+    _save_autosave_enable.init( _("Enable autosave (requires restart)"), "/options/autosave/enable", true);
     _page_autosave.add_line(false, "", _save_autosave_enable, "", _("Automatically save the current document(s) at a given interval, thus minimizing loss in case of a crash"), false);
     _save_autosave_path.init("/options/autosave/path", true);
     if (prefs->getString("/options/autosave/path").empty()) {
         // Show the default fallback "tmp dir" if autosave path is not set.
-        _save_autosave_path.set_text(Glib::get_tmp_dir());
+        _save_autosave_path.set_text(Glib::build_filename(Glib::get_user_cache_dir(), "inkscape"));
     }
     _page_autosave.add_line(false, C_("Filesystem", "Autosave _directory:"), _save_autosave_path, "", _("The directory where autosaves will be written. This should be an absolute path (starts with / on UNIX or a drive letter such as C: on Windows). "), false);
     _save_autosave_interval.init("/options/autosave/interval", 1.0, 10800.0, 1.0, 10.0, 10.0, true, false);
@@ -2238,7 +2238,7 @@ void InkscapePreferences::initPageSystem()
 
     Glib::ustring tmp_dir = prefs->getString("/options/autosave/path");
     if (tmp_dir.empty()) {
-        tmp_dir = Glib::get_tmp_dir();
+        tmp_dir = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape");
     }
     _sys_tmp_files.set_text(tmp_dir);
     _sys_tmp_files.set_editable(false);

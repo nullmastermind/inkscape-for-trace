@@ -352,7 +352,7 @@ static char const preferences_skeleton[] =
 "    </group>\n"
 "    <group id=\"forkgradientvectors\" value=\"1\"/>\n"
 "    <group id=\"iconrender\" named_nodelay=\"0\"/>\n"
-"    <group id=\"autosave\" enable=\"0\" interval=\"10\" path=\"\" max=\"10\"/>\n"
+"    <group id=\"autosave\" enable=\"1\" interval=\"10\" path=\"\" max=\"10\"/>\n"
 "    <group id=\"grids\""
 "      no_emphasize_when_zoomedout=\"0\">\n"
 "      <group id=\"xy\" "

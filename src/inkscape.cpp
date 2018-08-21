@@ -19,6 +19,7 @@
 #endif
 
 #include <cerrno>
+#include <unistd.h>
 
 #include <map>
 
@@ -212,7 +213,7 @@ int Application::autosave()
         if (!tmp.empty()) {
             autosave_dir = tmp;
         } else {
-            autosave_dir = Glib::get_tmp_dir();
+            autosave_dir = Glib::build_filename(Glib::get_user_cache_dir(), "inkscape");
         }
     }
 
@@ -239,6 +240,7 @@ int Application::autosave()
     gint autosave_max = prefs->getInt("/options/autosave/max", 10);
 
     gint docnum = 0;
+    int pid = ::getpid();
 
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents..."));
     for (std::map<SPDocument*,int>::iterator iter = _document_set.begin();
@@ -250,6 +252,7 @@ int Application::autosave()
         ++docnum;
 
         Inkscape::XML::Node *repr = doc->getReprRoot();
+
 
         if (doc->isModifiedSinceSave()) {
             gchar *oldest_autosave = nullptr;
@@ -296,7 +299,7 @@ int Application::autosave()
 
             // Set the filename we will actually save to
             g_free(baseName);
-            baseName = g_strdup_printf("inkscape-autosave-%d-%s-%03d.svg", uid, sptstr, docnum);
+            baseName = g_strdup_printf("inkscape-autosave-%d-%d-%s-%03d.svg", uid, pid, sptstr, docnum);
             gchar* full_path = g_build_filename(autosave_dir.c_str(), baseName, NULL);
             g_free(baseName);
             baseName = nullptr;
