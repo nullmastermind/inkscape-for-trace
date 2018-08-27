@@ -599,6 +599,11 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
     int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
+    // Per SVG spec, an object with 'display:none' doesn't contribute to text layout.
+    if (object->style->display.computed == SP_CSS_DISPLAY_NONE) {
+        return 0;
+    }
+
     if (SP_IS_TEXT(object)) {
         SP_TEXT(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
 
