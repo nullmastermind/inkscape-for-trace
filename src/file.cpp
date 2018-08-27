@@ -73,7 +73,6 @@
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
 
-
 using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
 using Inkscape::IO::Resource::USER;
@@ -279,7 +278,7 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         if ( INKSCAPE.use_gui() ) {
-            
+
             SPNamedView *nv = desktop->namedview;
             if (nv->lockguides) {
                 nv->lockGuides();
@@ -962,7 +961,6 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
     bool isDefault)
 {
-
     if (!SP_ACTIVE_DOCUMENT || name.length() == 0)
         return;
 
@@ -1029,10 +1027,11 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
     }
 
-    name.append(".svg");
+    auto encodedName = Glib::uri_escape_string(name);
+    encodedName.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
-        name.c_str());
+        encodedName.c_str());
     file_save(parentWindow, document, filename,
         Inkscape::Extension::db.get(".svg"), false, false,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
