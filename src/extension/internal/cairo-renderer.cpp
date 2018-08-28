@@ -389,7 +389,7 @@ static void sp_image_render(SPImage *image, CairoRenderContext *ctx)
     Geom::Scale s(width / (double)w, height / (double)h);
     Geom::Affine t(s * tp);
 
-    ctx->renderImage(image->pixbuf, t, image->style);
+    ctx->renderImage(image->pixbuf, t, image->style); 
 }
 
 static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx)
@@ -523,9 +523,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     if (pb) {
         //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
 
-        ctx->pushState();
         ctx->renderImage(pb.get(), t, item->style);
-        ctx->popState();
     }
 }
 
