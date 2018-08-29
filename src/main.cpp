@@ -195,6 +195,8 @@ static int do_export_win_metafile_common(SPDocument* doc, gchar const* uri, char
 static void do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const axis, const gchar *id);
 static void do_query_all (SPDocument *doc);
 static void do_query_all_recurse (SPObject *o);
+static void do_print_message(const char *message, ...);
+static bool detect_pipe_in_filename(const char *filename);
 
 static gchar *sp_global_printer = nullptr;
 static gchar *sp_export_png = nullptr;
@@ -242,6 +244,7 @@ static gchar *sp_export_png_utf8 = nullptr;
 static gchar *sp_export_svg_utf8 = nullptr;
 static gchar *sp_export_inkscape_svg_utf8 = nullptr;
 static gchar *sp_global_printer_utf8 = nullptr;
+static gboolean sp_writingToPipe = FALSE;
 
 #ifdef WITH_YAML
 static gchar *sp_xverbs_yaml_utf8 = nullptr;
@@ -826,6 +829,12 @@ static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flD
 #endif // WITH_YAML
     }
 
+    detect_pipe_in_filename( sp_export_png );
+    detect_pipe_in_filename( sp_export_svg );
+    detect_pipe_in_filename( sp_export_pdf );
+    detect_pipe_in_filename( sp_export_ps );
+    detect_pipe_in_filename( sp_export_eps );
+
 #ifdef WITH_DBUS
     // Before initializing extensions, we must set the DBus bus name if required
     if (sp_dbus_name != NULL) {
@@ -1187,7 +1196,7 @@ prefs->setString("/options/openmethod/value", "shell");
         && !sp_dbus_listen
 #endif // WITH_DBUS
         ) {
-        g_print("Nothing to do!\n");
+        do_print_message("Nothing to do!\n");
         prefs->setString("/options/openmethod/value", "done");
         exit(0);
     }
@@ -1243,9 +1252,9 @@ do_query_dimension (SPDocument *doc, bool extent, Geom::Dim2 const axis, const g
             } else {
                 os << area->min()[axis];
             }
-            g_print ("%s", os.str().c_str());
+            do_print_message ("%s", os.str().c_str());
         } else {
-            g_print("0");
+            do_print_message("0");
         }
     }
 }
@@ -1273,7 +1282,7 @@ do_query_all_recurse (SPObject *o)
             os << "," << area->min()[Geom::Y];
             os << "," << area->dimensions()[Geom::X];
             os << "," << area->dimensions()[Geom::Y];
-            g_print ("%s\n", os.str().c_str());
+            do_print_message ("%s\n", os.str().c_str());
         }
     }
 
@@ -1325,7 +1334,7 @@ static int do_export_png(SPDocument *doc)
             items.push_back(SP_ITEM(o));
 
             if (sp_export_id_only) {
-                g_print("Exporting only object with id=\"%s\"; all other objects hidden\n", sp_export_id);
+                do_print_message("Exporting only object with id=\"%s\"; all other objects hidden\n", sp_export_id);
             }
 
             if (sp_export_use_hints) {
@@ -1404,7 +1413,7 @@ static int do_export_png(SPDocument *doc)
             g_warning("DPI value %s out of range [0.1 - 10000.0]. Nothing exported.", sp_export_dpi);
             return 1;
         }
-        g_print("DPI: %g\n", dpi);
+        do_print_message("DPI: %g\n", dpi);
     }
 
     if (sp_export_area_snap) {
@@ -1502,16 +1511,16 @@ static int do_export_png(SPDocument *doc)
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", filename.c_str());
         return 1;
     } else {
-        g_print("Background RRGGBBAA: %08x\n", bgcolor);
+        do_print_message("Background RRGGBBAA: %08x\n", bgcolor);
 
-        g_print("Area %g:%g:%g:%g exported to %lu x %lu pixels (%g dpi)\n", area[Geom::X][0], area[Geom::Y][0], area[Geom::X][1], area[Geom::Y][1], width, height, dpi);
+        do_print_message("Area %g:%g:%g:%g exported to %lu x %lu pixels (%g dpi)\n", area[Geom::X][0], area[Geom::Y][0], area[Geom::X][1], area[Geom::Y][1], width, height, dpi);
 
         reverse(items.begin(),items.end());
 
         if ((width >= 1) && (height >= 1) && (width <= PNG_UINT_31_MAX) && (height <= PNG_UINT_31_MAX)) {
             if( sp_export_png_file(doc, path.c_str(), area, width, height, dpi,
               dpi, bgcolor, nullptr, nullptr, true, sp_export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
-                g_print("Bitmap saved as: %s\n", filename.c_str());
+                do_print_message("Bitmap saved as: %s\n", filename.c_str());
             } else {
                 g_warning("Bitmap failed to save to: %s", filename.c_str());
                 return 1;
@@ -2210,6 +2219,48 @@ sp_process_args(poptContext ctx)
     return fl;
 }
 
+/**
+ *  Print a message for the user to the terminal
+ *
+ *  If inkscape is run as part of a pipe all messages to standard output
+ *  are redirected to standard error.
+ *
+ *  \param message Message to print.
+ */
+
+static void do_print_message(const char *message, ...)
+{
+    va_list args;
+
+    va_start(args, message);
+    gchar *msg = g_strdup_vprintf(message, args);
+
+    if (sp_writingToPipe)
+        g_printerr("%s", msg);
+    else
+        g_print("%s", msg);
+
+    g_free(msg);
+    va_end(args);
+}
+
+/**
+ *  Checks if a given filename is meant to be a pipe
+ *
+ *  In case it is a pipe the variable sp_writingToPipe is set.
+ *
+ *  \param filename Filename to check for a pipe.
+ *  \return true if the filename is a pipe.
+ */
+
+static bool detect_pipe_in_filename(const char *filename)
+{
+    if (g_strcmp0(filename, "-") == 0) {
+        sp_writingToPipe = TRUE;
+        return true;
+    }
+    return false;
+}
 
 /*
   Local Variables:
