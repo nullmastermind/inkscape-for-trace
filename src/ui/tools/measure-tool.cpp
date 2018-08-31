@@ -100,7 +100,7 @@ bool SortLabelPlacement(LabelPlacement const &first, LabelPlacement const &secon
     }
 }
 
-//precision is for give the number of decimal positions 
+//precision is for give the number of decimal positions
 //of the label to calculate label width
 void repositionOverlappingLabels(std::vector<LabelPlacement> &placements, SPDesktop *desktop, Geom::Point const &normal, double fontsize, int precision)
 {
@@ -190,10 +190,10 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
 }
 
 /**
- * Create a measure iten in current document.
+ * Create a measure item in current document.
  *
  * @param pathv the path to create.
- * @param markers, if the path results get markers.
+ * @param markers if the path resuts get markers.
  * @param color of the stroke.
  * @param measure_repr container element.
  */
@@ -436,8 +436,8 @@ void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
     namedview->setAttribute (measure_point, meassure_point_str.str().c_str());
 }
 
-//This function is used to reverse the Measure, I do it in two steps because when move the knot the 
-//start_ or the end_p are overwrite so I need the original values.
+//This function is used to reverse the Measure, I do it in two steps because when
+//we move the knot the start_ or the end_p are overwritten so I need the original values.
 void MeasureTool::reverseKnots()
 {
     Geom::Point start = start_p;
@@ -862,7 +862,7 @@ void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
     if(!namedview) {
         return;
     }
-    origin *= affine; 
+    origin *= affine;
     //measure angle
     Inkscape::XML::Node *guide;
     guide = xml_doc->createElement("sodipodi:guide");
@@ -1104,7 +1104,7 @@ void MeasureTool::setMeasureCanvasItem(Geom::Point position, bool to_item, bool 
     }
     sp_canvas_item_show(canvasitem);
     sp_canvas_item_move_to_z(canvasitem, 0);
-    
+
     if(to_item) {
         setPoint(position, measure_repr);
     }
@@ -1161,8 +1161,8 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         sp_canvas_item_destroy(measure_item[idx]);
     }
     measure_item.clear();
-    
-    SPItem *newover = desktop->getItemAtPoint(cursor, into_groups); 
+
+    SPItem *newover = desktop->getItemAtPoint(cursor, into_groups);
     if (newover) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
@@ -1181,7 +1181,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             SPItem::BBoxType bbox_type = !prefs_bbox ? SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX;
             Geom::OptRect bbox = over->bounds(bbox_type);
             if (bbox) {
-                
+
                 item_width = Inkscape::Util::Quantity::convert((*bbox).width() * scale, unit->abbr, unit_name);
                 item_height = Inkscape::Util::Quantity::convert((*bbox).height() * scale, unit->abbr, unit_name);
                 item_x = Inkscape::Util::Quantity::convert((*bbox).left(), unit->abbr, unit_name);
@@ -1374,7 +1374,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     repositionOverlappingLabels(placements, desktop, windowNormal, fontsize, precision);
     for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
         LabelPlacement &place = *it;
-        
+
         setMeasureCanvasText(false, precision, place.lengthVal * scale, fontsize, unit_name, place.end, 0x0000007f, TEXT_ANCHOR_CENTER, to_item, to_phantom, measure_repr);
     }
     Geom::Point angleDisplayPt = calcAngleDisplayAnchor(desktop, angle, baseAngle,
@@ -1440,7 +1440,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
 
     if (intersections.size() > 2) {
         setMeasureCanvasControlLine(desktop->doc2dt(intersections[0]) + normal * dimension_offset, desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset, to_item, to_phantom, CTLINE_PRIMARY , measure_repr);
-        
+
         setMeasureCanvasControlLine(desktop->doc2dt(intersections[0]), desktop->doc2dt(intersections[0]) + normal * dimension_offset, to_item, to_phantom, CTLINE_PRIMARY , measure_repr);
 
         setMeasureCanvasControlLine(desktop->doc2dt(intersections[intersections.size() - 1]), desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset, to_item, to_phantom, CTLINE_PRIMARY , measure_repr);
