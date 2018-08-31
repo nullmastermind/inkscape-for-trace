@@ -4,10 +4,10 @@
 
 #include "save-template-dialog.h"
 #include "file.h"
+#include "io/resource.h"
+#include "ui/interface.h"
 
 #include <glibmm/i18n.h>
-
-#include <iostream>
 
 namespace Inkscape {
 namespace UI {
@@ -67,9 +67,9 @@ void SaveTemplate::on_name_changed() {
     }
 }
 
-void SaveTemplate::save_template(Gtk::Window &parentWindow) {
+bool SaveTemplate::save_template(Gtk::Window &parentWindow) {
 
-    sp_file_save_template(parentWindow, name_text.get_text(),
+    return sp_file_save_template(parentWindow, name_text.get_text(),
         author_text.get_text(), description_text.get_text(),
         keywords_text.get_text(), is_default_template.get_active());
 }
@@ -78,11 +78,16 @@ void SaveTemplate::save_document_as_template(Gtk::Window &parentWindow) {
 
     SaveTemplate dialog;
 
-    auto result = dialog.run();
+    auto operation_done = false;
 
-    if (result == Gtk::RESPONSE_OK){
+    while (operation_done == false) {
 
-        dialog.save_template(parentWindow);
+        auto user_response = dialog.run();
+
+        if (user_response == Gtk::RESPONSE_OK)
+            operation_done = dialog.save_template(parentWindow);
+         else
+            operation_done = true;
     }
 }
 
