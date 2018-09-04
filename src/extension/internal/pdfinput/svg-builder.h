@@ -80,7 +80,7 @@ struct SvgGlyph {
     bool style_changed;  // Set to true if style has to be reset
     SPCSSAttr *style;
     int render_mode;    // Text render mode
-    char *font_specification;   // Pointer to current font specification
+    const char *font_specification;   // Pointer to current font specification
 };
 
 /**
@@ -202,7 +202,7 @@ private:
 
     SPCSSAttr *_font_style;          // Current font style
     GfxFont *_current_font;
-    char *_font_specification;
+    const char *_font_specification;
     double _font_scaling;
     bool _need_font_update;
     Geom::Affine _text_matrix;
