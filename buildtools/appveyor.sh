@@ -53,6 +53,7 @@ cmake .. -G Ninja \
     -DCMAKE_C_COMPILER_LAUNCHER="ccache" \
     -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" \
     -DCMAKE_INSTALL_MESSAGE="NEVER" \
+    -DWITH_JEMALLOC="OFF" \
     || error "cmake failed"
 
 # build
