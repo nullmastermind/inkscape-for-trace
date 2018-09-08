@@ -546,19 +546,19 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                     }
                 }
             } else if (path) {
-            	if (old_clone->getAttribute("inkscape:connection-start") != nullptr) {
-            	    const char *old_start = old_clone->getAttribute("inkscape:connection-start");
-            	    const char *old_end = old_clone->getAttribute("inkscape:connection-end");
-            	    SPObject *new_clone = doc->getObjectById(new_ids[i]);
-            	    for (guint j = 0; j < old_ids.size(); j++) {
-            	        if(old_start == Glib::ustring("#") + old_ids[j]) {
-            	            new_clone->getRepr()->setAttribute("inkscape:connection-start", Glib::ustring("#") + new_ids[j]);
-            	        }
-            	        if(old_end == Glib::ustring("#") + old_ids[j]) {
-            	            new_clone->getRepr()->setAttribute("inkscape:connection-end", Glib::ustring("#") + new_ids[j]);
-            	        }
-            	    }
-            	}
+                if (old_clone->getAttribute("inkscape:connection-start") != nullptr) {
+                    const char *old_start = old_clone->getAttribute("inkscape:connection-start");
+                    const char *old_end = old_clone->getAttribute("inkscape:connection-end");
+                    SPObject *new_clone = doc->getObjectById(new_ids[i]);
+                    for (guint j = 0; j < old_ids.size(); j++) {
+                        if(old_start == Glib::ustring("#") + old_ids[j]) {
+                            new_clone->getRepr()->setAttribute("inkscape:connection-start", Glib::ustring("#") + new_ids[j]);
+                        }
+                        if(old_end == Glib::ustring("#") + old_ids[j]) {
+                            new_clone->getRepr()->setAttribute("inkscape:connection-end", Glib::ustring("#") + new_ids[j]);
+                        }
+                    }
+                }
             }
         }
     }
