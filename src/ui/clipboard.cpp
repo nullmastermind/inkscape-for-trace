@@ -1288,7 +1288,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     } catch (...) {
     }
 
-    //g_unlink(filename); // delete the temporary file
+    g_unlink(filename); // delete the temporary file
     g_free(filename);
 }
 
