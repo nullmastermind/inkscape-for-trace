@@ -760,15 +760,17 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             // write the complete accumulated transform passed to us
             // (we're dealing with unattached representations, so we write to their attributes
             // instead of using sp_item_set_transform)
+            
             SPUse *use=dynamic_cast<SPUse *>(item);
-            if( use && use->get_original() && use->get_original()->parent ){//we are copying something whose parent is also copied (!)
-                transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
-            }
-            gchar *transform_str = sp_svg_transform_write(transform );
-
-
-            obj_copy->setAttribute("transform", transform_str);
-            g_free(transform_str);
+            if( use && use->get_original() && use->get_original()->parent) {
+                if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
+                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                } else { // original is not copied
+                    obj_copy->setAttribute("transform-with-parent", sp_svg_transform_write(transform));
+                    obj_copy->setAttribute("transform", sp_svg_transform_write( ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform));
+                }
+            } else
+                obj_copy->setAttribute("transform", sp_svg_transform_write(transform));
         }
     }
 
@@ -1286,7 +1288,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     } catch (...) {
     }
 
-    g_unlink(filename); // delete the temporary file
+    //g_unlink(filename); // delete the temporary file
     g_free(filename);
 }
 

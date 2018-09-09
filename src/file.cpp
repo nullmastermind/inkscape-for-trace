@@ -1093,14 +1093,16 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         Inkscape::GC::release(obj_copy);
 
         pasted_objects.push_back(obj_copy);
+
+        // if we are pasting a clone to an already existing object, its
+        // transform is wrong (see ui/clipboard.cpp)
+        if(obj_copy->attribute("transform-with-parent") && target_document->getObjectById(obj->attribute("xlink:href")+1) ){
+            obj_copy->setAttribute("transform",obj_copy->attribute("transform-with-parent"));
+        }
+        if(obj_copy->attribute("transform-with-parent"))
+            obj_copy->setAttribute("transform-with-parent", nullptr);
     }
 
-    /*  take that stuff into account:
-     *   if( use && selection->includes(use->get_original()) ){//we are copying something whose parent is also copied (!)
-     *       transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
-     *   }
-     *
-     */
     std::vector<Inkscape::XML::Node*> pasted_objects_not;
     if(clipboard)
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
