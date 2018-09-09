@@ -1,7 +1,6 @@
 add_subdirectory(attributes)
 add_subdirectory(branding)
 add_subdirectory(examples)
-add_subdirectory(extensions)
 add_subdirectory(filters)
 add_subdirectory(fonts)
 add_subdirectory(gradients)
