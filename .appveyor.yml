@@ -7,6 +7,9 @@ environment:
     - MSYSTEM: MINGW64
     - MSYSTEM: MINGW32
 
+install:
+    git submodule update --init --recursive
+
 build_script:
   - C:\msys64\usr\bin\pacman -Syuu --needed --noconfirm --noprogressbar
   - C:\msys64\usr\bin\bash --login -c "$(cygpath ${APPVEYOR_BUILD_FOLDER})/buildtools/appveyor.sh"
