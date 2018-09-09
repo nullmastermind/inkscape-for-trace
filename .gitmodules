@@ -1,0 +1,3 @@
+[submodule "share/extensions"]
+	path = share/extensions
+	url = git@gitlab.com:inkscape/extensions.git
