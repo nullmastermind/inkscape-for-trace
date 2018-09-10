@@ -113,6 +113,7 @@ public:
     void patternSetFilter(cairo_filter_t filter) {
         cairo_pattern_set_filter(cairo_get_source(_ct), filter);
     }
+    void patternSetExtend(cairo_extend_t extend) { cairo_pattern_set_extend(cairo_get_source(_ct), extend); }
 
     Geom::Rect targetLogicalBounds() const;
 
