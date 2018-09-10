@@ -54,23 +54,14 @@ Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/i
 most current dependencies, including links to the source tarballs.
 
 
-Extension Dependencies
-======================
-Inkscape also has a number of extensions for implementing various
-features such as support for non-SVG file formats.  In theory, all
-extensions are optional, however in practice you will want to have these
-installed and working.  Unfortunately, there is a great deal of
-variability in how you can get these functioning properly.  Here are
-some recommendations:
+Extensions
+==========
 
-First, make sure you have Python.  If you are on Windows you
-should also install [Cygwin](https://www.cygwin.com/).
+All inkscape extensions have been moved into their own reporsitory, they
+can be installed from there and should be packaged into builds directly.
+Report all bugs and ideas to that sub project.
 
-Second, if an extension does not work, check the file
-`extensions-errors.log` located on Linux at `~/.config/inkscape` and on
-Windows at `%userprofile%\Application Data\Inkscape\`. Any missing
-programs will be listed.
-
+[Inkscape Extensions](https://gitlab.com/inkscape/extensions/)
 
 Build Options
 =============

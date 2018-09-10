@@ -25,6 +25,7 @@ namespace Inkscape {
 // TODO clean up and remove using:
 using Inkscape::Extension::Internal::SvgBuilder;
 
+#include "glib/poppler-features.h"
 #include "goo/gtypes.h"
 #include "Object.h"
 
@@ -287,7 +288,12 @@ private:
   void opMoveShowText(Object args[], int numArgs);
   void opMoveSetShowText(Object args[], int numArgs);
   void opShowSpaceText(Object args[], int numArgs);
+#if POPPLER_CHECK_VERSION(0,64,0)
   void doShowText(const GooString *s);
+#else
+  void doShowText(GooString *s);
+#endif
+  
 
   // XObject operators
   void opXObject(Object args[], int numArgs);

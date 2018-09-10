@@ -5,6 +5,7 @@ image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
 variables:
   GIT_DEPTH: "10"
+  GIT_SUBMODULE_STRATEGY: recursive
 
 cache:
   paths:

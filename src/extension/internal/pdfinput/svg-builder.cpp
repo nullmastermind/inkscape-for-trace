@@ -1020,9 +1020,9 @@ void SvgBuilder::updateFont(GfxState *state) {
     GfxFont *font = state->getFont();
     // Store original name
     if (font->getName()) {
-        _font_specification = g_strdup(font->getName()->getCString());
+        _font_specification = font->getName()->getCString();
     } else {
-        _font_specification = (char*) "Arial";
+        _font_specification = "Arial";
     }
 
     // Prune the font name to get the correct font family name
@@ -1030,7 +1030,7 @@ void SvgBuilder::updateFont(GfxState *state) {
     char *font_family = nullptr;
     char *font_style = nullptr;
     char *font_style_lowercase = nullptr;
-    char *plus_sign = strstr(_font_specification, "+");
+    const char *plus_sign = strstr(_font_specification, "+");
     if (plus_sign) {
         font_family = g_strdup(plus_sign + 1);
         _font_specification = plus_sign + 1;

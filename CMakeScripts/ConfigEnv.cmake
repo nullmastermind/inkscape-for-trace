@@ -30,6 +30,7 @@ if(WIN32)
   # Does not compile on Windows with these options.
   option(BR_PTHREADS "Use binreloc thread support" OFF)
   option(ENABLE_BINRELOC "Use AutoPackage" OFF)
+  option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 endif()
 
 if(APPLE)
