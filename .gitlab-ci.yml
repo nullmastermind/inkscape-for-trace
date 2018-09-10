@@ -33,14 +33,6 @@ inkscape:linux:
     paths:
       - build/
 
-inkscape:codequality:
-    stage: build
-    script:
-        - git fetch https://gitlab.com/inkscape/inkscape.git
-        - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
-        - if [[ -s clang_format_diff ]]; then false; fi
-    allow_failure: true
-
 inkscape:mac:
   stage: build
   tags:
@@ -74,7 +66,16 @@ inkscape:mac:
       - build/
   allow_failure: true
 
-inkscape:doc:
+
+codequality:
+  stage: build
+  script:
+    - git fetch https://gitlab.com/inkscape/inkscape.git
+    - git diff FETCH_HEAD -U0 --no-color | clang-format-diff-6.0 -p1 -style file | tee clang_format_diff
+    - if [[ -s clang_format_diff ]]; then false; fi
+  allow_failure: true
+
+source-doc:
   stage: build
   only:
     - schedules
@@ -114,11 +115,42 @@ test:linux:
     - make test
     - ctest -V
 
+translations:
+  stage: build
+  #dependencies:
+  #  - inkscape:linux
+  script:
+    # make sure dependecies for inkscape.pot are up-to-date
+    - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
+    - cd po/
+
+    # update POTFILES.in
+    - grep -v "^#" POTFILES.in > POTFILES.in.1
+    - ./generate_POTFILES.sh
+    - grep -v "^#" POTFILES.in > POTFILES.in.2
+
+    # update inkscape.pot and sync all .po files
+    - intltool-update --pot && mv untitled.pot inkscape.pot
+    - ./update_po_files.sh
+
+    # check if POTFILES.in should be updated in the repo (shall we automate this?)
+    - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
+        echo "New translatable source files were added.";
+        echo "Please update POTFILES.in so they can be translated (or add them to POTFILES.skip)";
+        exit 1;
+      fi'
+    - rm POTFILES.in.1 POTFILES.in.2
+  artifacts:
+    name: "translations"
+    paths:
+      - po/
+    when: always
+
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
   dependencies:
-    - inkscape:doc
+    - source-doc
     - clang
   script:
     - mkdir -p public/

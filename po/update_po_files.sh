@@ -28,6 +28,8 @@ while read FILENAME; do
     msgmerge "$FILENAME".old "$POT_FILENAME" > "$FILENAME"
     if [ "$?" -ne "0" ]; then
       echo "Could not merge \"$FILENAME.old\"."
+    else
+      rm "$FILENAME".old
     fi
   else
     echo "Could not rename \"$FILENAME\". File skipped."
