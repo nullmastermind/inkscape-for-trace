@@ -880,7 +880,7 @@ public:
     }
 
     bool isPaintserver() const {
-        return (value.href) ? value.href->getObject() : nullptr;
+        return value.href && value.href->getObject() != nullptr;
     }
 
     void setColor( float r, float g, float b ) {
