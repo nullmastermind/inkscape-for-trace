@@ -52,7 +52,7 @@ Geom::Point ControlPoint::_drag_origin(Geom::infinity(), Geom::infinity());
 
 int const ControlPoint::_grab_event_mask = (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_KEY_PRESS_MASK |
-        GDK_KEY_RELEASE_MASK);
+        GDK_KEY_RELEASE_MASK | GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
 
 bool ControlPoint::_drag_initiated = false;
 bool ControlPoint::_event_grab = false;

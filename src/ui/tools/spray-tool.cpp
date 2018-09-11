@@ -1304,7 +1304,8 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 
                 switch (event->scroll.direction) {
                     case GDK_SCROLL_DOWN:
-                    case GDK_SCROLL_UP: {
+                    case GDK_SCROLL_UP:
+                    case GDK_SCROLL_SMOOTH: {
                         if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
                             return TRUE;
                         }

@@ -398,7 +398,8 @@ void SelectTool::sp_select_context_cycle_through_items(Inkscape::Selection *sele
 
     std::vector<SPItem *>::iterator next = cycling_items.end();
 
-    if (scroll_event->direction == GDK_SCROLL_UP) {
+    if ((scroll_event->direction == GDK_SCROLL_UP) ||
+        (scroll_event->direction == GDK_SCROLL_SMOOTH && scroll_event->delta_y < 0)) {
         if (! cycling_cur_item) {
             next = cycling_items.begin();
         } else {
