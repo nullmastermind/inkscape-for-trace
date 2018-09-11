@@ -20,11 +20,15 @@ Running Without Installing
 For developers and others who want to run inkscape without installing it:
 
 ```bash
-ln -s . share/inkscape
+sudo apt-get install ninja ccache
+```
+
+```bash
+ln -s share share/inkscape
 mkdir -p build/conf
 cd build
-cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ ..
-make -j4
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+ninja
 export INKSCAPE_PROFILE_DIR=$PWD/conf
 PATH=$PWD/bin/:$PATH
 ./bin/inkscape
