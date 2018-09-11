@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 cmake_minimum_required(VERSION 2.8.8)
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
@@ -147,6 +148,15 @@ if(NOT WIN32)
     include(CMakeScripts/Pod2man.cmake)
     add_subdirectory(man)
 endif()
+
+
+
+# -----------------------------------------------------------------------------
+# Check License Headers
+# -----------------------------------------------------------------------------
+add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} COMMAND ./buildtools/check_license_headers.py)
+add_dependencies(inkscape check-license-headers)
+
 
 # -----------------------------------------------------------------------------
 # Test Harness
