@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Util::ListContainer - encapsulates lists as STL containers,
  *                                 providing fast appending
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2005 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UTIL_LIST_CONTAINER_H

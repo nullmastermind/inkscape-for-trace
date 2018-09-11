@@ -1,9 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ * PenTool: a context for pen tool events.
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_PEN_CONTEXT_H
 #define SEEN_PEN_CONTEXT_H
 
-/** \file 
- * PenTool: a context for pen tool events.
- */
+
 
 #include "ui/tools/freehand-base.h"
 #include "live_effects/effect.h"

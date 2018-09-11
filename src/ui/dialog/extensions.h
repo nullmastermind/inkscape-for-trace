@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * A simple dialog with information about extensions
  */
@@ -5,9 +6,9 @@
  *   Jon A. Cruz
  *
  * Copyright (C) 2005 The Inkscape Organization
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
- 
+
 #ifndef SEEN_EXTENSIONS_H
 #define SEEN_EXTENSIONS_H
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Combobox for selecting dash patterns - implementation.
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "stroke-marker-selector.h"

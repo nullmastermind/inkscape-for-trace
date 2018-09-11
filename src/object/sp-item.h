@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_ITEM_H
 #define SEEN_SP_ITEM_H
 
@@ -17,7 +18,7 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 2004 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/forward.h>

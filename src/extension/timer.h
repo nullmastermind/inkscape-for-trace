@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Here is where the extensions can get timed on when they load and
  * unload.  All of the timing is done in here.
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_TIMER_H__

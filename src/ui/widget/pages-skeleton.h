@@ -1,3 +1,23 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/**
+ * @file
+ * List of paper sizes
+ */
+/*
+ * Authors:
+ *   bulia byak <buliabyak@users.sf.net>
+ *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Jon Phillips <jon@rejon.org>
+ *   Ralf Stephan <ralf@ark.in-berlin.de> (Gtkmm)
+ *   Bob Jamison <ishmal@users.sf.net>
+ *   Abhishek Sharma
+ *   + see git history
+ *
+ * Copyright (C) 2000 - 2018 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #ifndef SEEN_PAGES_SKELETON_H
 #define SEEN_PAGES_SKELETON_H
 

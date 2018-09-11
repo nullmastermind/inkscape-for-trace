@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *
  * Copyright (C) 2012 Author
  *               2017 Tavmjong Bah
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "spin-scale.h"

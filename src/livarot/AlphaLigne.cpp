@@ -1,10 +1,13 @@
-/*
- *  AlphaLigne.cpp
- *  nlivarot
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Fred
  *
- *  Created by fred on Fri Jul 25 2003.
- *  public domain
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "AlphaLigne.h"

@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #define INKSCAPE_LPE_SPIRO_C
 
 /*
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-spiro.h"

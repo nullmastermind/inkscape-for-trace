@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  * David Yip <yipdw@alumni.rose-hulman.edu>
@@ -5,7 +6,7 @@
  *
  * Copyright (c) 2006 Authors
  *
- * Released under GNU GPL, see the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_CONSOLE_OUTPUT_UNDO_OBSERVER_H

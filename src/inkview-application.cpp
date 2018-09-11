@@ -1,9 +1,16 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/**
+ * @file
  * Inkview - An SVG file viewer.
+ */
+/*
+ * Authors:
+ *   Tavmjong Bah
  *
- * Copyright (C) 2018 Tavmjong Bah
+ * Copyright (C) 2018 Authors
  *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
+ * Read the file 'COPYING' for more information.
  *
  */
 

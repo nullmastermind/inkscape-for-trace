@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 if (${HAVE_POTRACE})
 
 set(trace_SRC

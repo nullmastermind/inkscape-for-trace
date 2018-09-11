@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_DIMENSIONS_H__
 #define SP_DIMENSIONS_H__
 

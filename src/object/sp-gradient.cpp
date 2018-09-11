@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SPGradient, SPStop, SPLinearGradient, SPRadialGradient,
  * SPMeshGradient, SPMeshRow, SPMeshPatch
@@ -17,7 +18,7 @@
  * Copyright (C) 2009 Jasper van de Gronde
  * Copyright (C) 2011 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

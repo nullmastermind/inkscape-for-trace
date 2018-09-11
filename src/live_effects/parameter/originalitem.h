@@ -1,12 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINAL_ITEM_H
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ORIGINAL_ITEM_H
 
 /*
  * Inkscape::LiveItemEffectParameters
  *
-* Copyright (C) Johan Engelen 2012 <j.b.c.engelen@alumnus.utwente.nl>
+ * Copyright (C) Johan Engelen 2012 <j.b.c.engelen@alumnus.utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/item.h"

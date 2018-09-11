@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Print Colors Preview dialog
  */
@@ -5,7 +6,7 @@
  *   Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPLv2 (or later).  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_PRINT_COLORS_PREVIEW_H

@@ -1,11 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
- *   Ralf Stephan <ralf@ark.in-berlin.de> 
+ *   Ralf Stephan <ralf@ark.in-berlin.de>
  *   Abhishek Sharma
  *
  * Copyright (C) 2006 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "tolerance-slider.h"

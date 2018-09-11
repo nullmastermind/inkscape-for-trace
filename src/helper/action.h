@@ -1,12 +1,13 @@
-/** \file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Inkscape UI action implementation
  *//*
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ * Authors:
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
  *
- * Copyright (C) 2003 Lauris Kaplinski
- *
- * This code is in public domain
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_SP_ACTION_H

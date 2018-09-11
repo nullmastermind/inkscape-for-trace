@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __UI_DIALOG_ADDTOICON_H__
 #define __UI_DIALOG_ADDTOICON_H__
 /*
@@ -7,7 +8,7 @@
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *               Martin Owens 2018 <doctormo@gmail.com>
  *
- * Released under GNU GPLv2+, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/cellrendererpixbuf.h>

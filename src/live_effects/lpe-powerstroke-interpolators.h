@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Interpolators for lists of points.
  */
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2010-2011 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_LPE_POWERSTROKE_INTERPOLATORS_H

@@ -1,14 +1,14 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * A slider with colored background - implementation.
- */
-/* Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
+ *//*
+ * Authors:
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
  *
- * Copyright (C) 2001-2002 Lauris Kaplinski
- *
- * This code is in public domain
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gdkmm/cursor.h>

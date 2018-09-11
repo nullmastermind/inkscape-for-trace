@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Clone tiling dialog
  */
@@ -5,7 +6,7 @@
  *   bulia byak <buliabyak@users.sf.net>
  *
  * Copyright (C) 2004 Authors
- * Released under the GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef __SP_CLONE_TILER_H__
 #define __SP_CLONE_TILER_H__

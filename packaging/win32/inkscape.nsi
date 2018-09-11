@@ -293,9 +293,9 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   File           /a    ${INKSCAPE_DIST_DIR}\inkview.com
   File           /a    ${INKSCAPE_DIST_DIR}\AUTHORS
   File           /a    ${INKSCAPE_DIST_DIR}\COPYING
-  File           /a    ${INKSCAPE_DIST_DIR}\GPL2.txt
-  File           /a    ${INKSCAPE_DIST_DIR}\GPL3.txt
-  File           /a    ${INKSCAPE_DIST_DIR}\LGPL2.1.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\GPL-2.0.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\GPL-3.0.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\LGPL-2.1.txt
   File           /a    ${INKSCAPE_DIST_DIR}\NEWS.md
   File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper.exe
   File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper-console.exe

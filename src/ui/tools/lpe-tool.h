@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_LPETOOL_CONTEXT_H_SEEN
 #define SP_LPETOOL_CONTEXT_H_SEEN
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 2008 Maximilian Albert
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/tools/pen-tool.h"

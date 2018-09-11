@@ -1,12 +1,14 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Combination style and object testing for cascading and flags.
+ *//*
  *
  * Authors:
  *   Martin Owens
  *
  * Copyright (C) 2018 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL version 2 or later, read the file 'COPYING' for more information
  */
 
 #include <gtest/gtest.h>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_OBJECT_SNAPPER_H
 #define SEEN_OBJECT_SNAPPER_H
 /*
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2005 - 2011 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "snapper.h"

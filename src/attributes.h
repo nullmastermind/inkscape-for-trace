@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_ATTRIBUTES_H__
 #define __SP_ATTRIBUTES_H__
 
@@ -11,7 +12,7 @@
  * Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <glibmm/value.h>
 

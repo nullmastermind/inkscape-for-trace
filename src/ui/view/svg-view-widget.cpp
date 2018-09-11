@@ -1,10 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/**
+ * @file
+ * A light-weight widget containing an SPCanvas with a View for rendering an SVG.
+ */
 /*
- * Author:
+ * Authors:
  *   Tavmjong Bah <tavmjong@free.fr>
  *
- * Copyright (C) 2018 Tavmong Bah
+ * Copyright (C) 2018 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * The contents of this file may be used under the GNU General Public License Version 2 or later.
+ * Read the file 'COPYING' for more information.
+ *
  */
 
 #include "svg-view-widget.h"

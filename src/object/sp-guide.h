@@ -1,17 +1,18 @@
-#ifndef SEEN_SP_GUIDE_H
-#define SEEN_SP_GUIDE_H
-
-/*
- * SPGuide
- *
- * A guideline
- *
- * Copyright (C) Lauris Kaplinski 2000
- * Copyright (C) Johan Engelen 2007
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * SPGuide -- a guideline
+ *//*
+ * Authors:
+ *   Lauris Kaplinski 2000
+ *   Johan Engelen 2007
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
- *
+ * 
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+#ifndef SEEN_SP_GUIDE_H
+#define SEEN_SP_GUIDE_H
 
 #include <2geom/point.h>
 #include <vector>

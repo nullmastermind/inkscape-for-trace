@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Base class for live path effect items
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2008 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H

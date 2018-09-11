@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Transforming single items
  *
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 1999-2011 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/transforms.h>

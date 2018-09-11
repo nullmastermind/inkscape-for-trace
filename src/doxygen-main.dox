@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Doxygen documentation - main page and namespace documentation.
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2005-2008 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // Note: % before a word prevents that word from being linkified

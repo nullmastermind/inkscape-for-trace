@@ -1,10 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Unit tests for SVG marker handling
- */
-/* Authors:
+ *//*
+ * Authors:
+ * see git history
  *   Johan Engelen <goejendaagh@zonnet.nl>
  *
- * This file is released into the public domain.
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cxxtest/TestSuite.h>

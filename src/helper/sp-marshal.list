@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 # marshallers for inkscape
 VOID:POINTER,UINT
 BOOLEAN:POINTER

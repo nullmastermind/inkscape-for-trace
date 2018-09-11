@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __INKSCAPE_EXTENSION_INTERNAL_PRINT_LATEX_H__
 #define __INKSCAPE_EXTENSION_INTERNAL_PRINT_LATEX_H__
 
@@ -6,10 +7,10 @@
  *
  * Author:
  *  Michael Forbes <miforbes@mbhs.edu>
- * 
+ *
  * Copyright (C) 2004 Authors
- * 
- * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <stack>

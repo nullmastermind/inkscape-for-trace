@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief A dialog for CSS selectors
  */
@@ -8,7 +9,7 @@
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
  * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "cssdialog.h"

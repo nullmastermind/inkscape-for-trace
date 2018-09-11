@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Rendering with Cairo.
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006 Miklos Erdelyi
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1933,8 +1934,6 @@ _write_callback(void *closure, const unsigned char *data, unsigned int length)
 
 #undef TRACE
 #undef TEST
-
-/* End of GNU GPL code */
 
 
 /*

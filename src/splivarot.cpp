@@ -1,11 +1,14 @@
-/*
- *  splivarot.cpp
- *  Inkscape
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * boolean operations and outlines
+ *//*
+ * Authors:
+ * see git history
  *  Created by fred on Fri Dec 05 2003.
  *  tweaked endlessly by bulia byak <buliabyak@users.sf.net>
- *  public domain
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /*

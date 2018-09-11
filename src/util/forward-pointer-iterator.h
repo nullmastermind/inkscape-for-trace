@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Util::ForwardPointerIterator - wraps a simple pointer
  *                                          with various strategies
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UTIL_FORWARD_POINTER_ITERATOR_H

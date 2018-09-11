@@ -1,17 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *    Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *
  * Copyright (C) 2006-2012 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
- /*
-  * Current limits are: one axis (y-axis) is always vertical. The other two
-  * axes are bound to a certain range of angles. The z-axis always has an angle
-  * smaller than 90 degrees (measured from horizontal, 0 degrees being a line extending
-  * to the right). The x-axis will always have an angle between 0 and 90 degrees.
-  */
+/*
+ * Current limits are: one axis (y-axis) is always vertical. The other two
+ * axes are bound to a certain range of angles. The z-axis always has an angle
+ * smaller than 90 degrees (measured from horizontal, 0 degrees being a line extending
+ * to the right). The x-axis will always have an angle between 0 and 90 degrees.
+ */
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>

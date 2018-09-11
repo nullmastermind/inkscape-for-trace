@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Eraser drawing mode
  *
@@ -19,7 +20,7 @@
  * Copyright (C) 2006 MenTaLguY
  * Copyright (C) 2008 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noERASER_VERBOSE

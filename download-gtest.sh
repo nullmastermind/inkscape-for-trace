@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
 if ! test -e gtest ; then
     mkdir gtest
 fi

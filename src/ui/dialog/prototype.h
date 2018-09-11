@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A bare minimum example of deriving from Inkscape::UI:Widget::Panel.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) Tavmjong Bah <tavmjong@free.fr>
  *
- * Released under the GNU GPL, read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_PROTOTYPE_PANEL_H

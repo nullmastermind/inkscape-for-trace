@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_LATTICE_H
 #define INKSCAPE_LPE_LATTICE_H
 
@@ -11,10 +12,10 @@
  *   Steren Giannini
  *   Noé Falzon
  *   Victor Navez
-*
-* Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/enum.h"

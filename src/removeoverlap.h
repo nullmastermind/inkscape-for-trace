@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * \brief Remove overlaps function
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2005 Authors
  *
- * Released under GNU LGPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_REMOVEOVERLAP_H

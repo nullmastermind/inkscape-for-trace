@@ -1,14 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Class for pure transformations, such as translating, scaling, stretching, skewing, and rotating. Pure means that they cannot
- * be combined. This is what makes them different from affine transformations. Pure transformations are being used in the selector
- * tool and node tool
+ * Class for pure transformations, such as translating, scaling, stretching, skewing, and rotating. Pure means that they
+ * cannot be combined. This is what makes them different from affine transformations. Pure transformations are being
+ * used in the selector tool and node tool
  *
  * Authors:
  *   Diederik van Lierop <mail@diedenrezi.nl>
  *
  * Copyright (C) 2015 Diederik van Lierop
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_PURE_TRANSFORM_H

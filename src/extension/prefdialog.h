@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
  * Copyright (C) 2005,2007-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_DIALOG_H__

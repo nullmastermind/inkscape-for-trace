@@ -1,9 +1,18 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2011 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /** @file
  * @brief Some functions relevant sorting reprs by position within document.
  * @todo Functions in this file have non-English names. Determine what they do and rename
  *       accordingly.
  */
- 
+
 #ifndef SEEN_XML_REPR_SORTING_H
 #define SEEN_XML_REPR_SORTING_H
 

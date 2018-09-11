@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Open Clip Art Library integration dialogs - implementation.
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2007 Bruno Dilly <bruno.dilly@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ocaldialogs.h"

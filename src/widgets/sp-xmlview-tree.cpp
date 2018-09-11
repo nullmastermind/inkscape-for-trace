@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Specialization of GtkTreeView for the XML tree view
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2002 MenTaLguY
  *
- * Released under the GNU GPL; see COPYING for details
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

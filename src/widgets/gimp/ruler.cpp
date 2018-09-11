@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 /*
  * Customized ruler class for inkscape.  Note that this is a fork of
  * the GimpRuler widget from GIMP: libgimpwidgets/gimpruler.c.
- * The GIMP code is released under the GPL 3.  The GIMP code itself
- * is a fork of the now-obsolete GtkRuler widget from GTK+ 2.
+ * The GIMP code was released under the LGPL3+ (which is GPL3 plus extra permissions that may be ignored).
+ * The GIMP code itself is a fork of the now-obsolete GtkRuler widget from GTK+ 2.
  *
  * Major differences between implementations in Inkscape and GIMP are
  * as follows:
@@ -26,7 +27,7 @@
  *
  * Copyright (C) 1999-2011 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v3+. Read the file 'COPYING' for more information.
  */
 
 #include <cstring>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Text-edit
  */
@@ -12,7 +13,7 @@
  * Copyright (C) 1999-2013 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_TEXT_EDIT_H

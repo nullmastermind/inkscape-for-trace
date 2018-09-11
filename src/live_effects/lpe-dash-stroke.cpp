@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "live_effects/lpe-dash-stroke.h"
 #include "2geom/pathvector.h"

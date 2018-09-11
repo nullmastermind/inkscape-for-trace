@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -8,7 +9,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2008 Johan Engelen
  *
- * Released under GNU GPL, see file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "display/curve.h"

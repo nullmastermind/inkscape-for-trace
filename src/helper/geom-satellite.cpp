@@ -1,12 +1,14 @@
-/**
- * \file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * \brief Satellite a per node holder of data.
- */ /*
-    * Authors:
-    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
-    *
-    * This code is in public domain
-    */
+ *//*
+ * Authors:
+ * see git history
+ * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #include <helper/geom-satellite.h>
 #include <2geom/curve.h>
@@ -15,7 +17,7 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
 #include <boost/optional.hpp>
-//log cache
+// log cache
 #ifdef _WIN32
 #include <Windows.h>
 #else

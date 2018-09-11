@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Code for handling extensions (i.e., scripts)
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2002-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_IMPEMENTATION_SCRIPT_H_SEEN

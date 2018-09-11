@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Deprecated structure for a set of callbacks for node state changes
  */
@@ -8,7 +9,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski and Frank Felfe
  * Copyright (C) 2000-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_XML_SP_REPR_EVENT_VECTOR

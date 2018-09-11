@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Live Path Effect editing dialog
  */
@@ -5,7 +6,7 @@
  *   Johan Engelen <j.b.c.engelen@ewi.utwente.nl>
  *
  * Copyright (C) 2007 Author
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_LIVE_PATH_EFFECT_H

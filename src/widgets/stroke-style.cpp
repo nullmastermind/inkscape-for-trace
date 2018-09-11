@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Bryce Harrington <brycehar@bryceharrington.org>
@@ -12,7 +13,7 @@
  * Copyright (C) 2004 John Cliff
  * Copyright (C) 2008 Maximilian Albert (gtkmm-ification)
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noSP_SS_VERBOSE

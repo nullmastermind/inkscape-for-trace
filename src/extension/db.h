@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Functions to keep a listing of all modules in the system.  Has its
  * own file mostly for abstraction reasons, but is pretty simple
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002-2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_MODULES_DB_H

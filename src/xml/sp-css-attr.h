@@ -1,15 +1,13 @@
-/*
- * SPCSSAttr - interface for CSS Attributes 
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * SPCSSAttr - interface for CSS Attributes
+ *//*
+ * Authors: see git history
  *
+ * Copyright (C) 2010 Authors
  * Copyright 2005 Kees Cook <kees@outflux.net>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
- *
+ * 
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_XML_SP_SPCSSATTR_H

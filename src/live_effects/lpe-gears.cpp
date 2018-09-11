@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright 2006 Michael G. Sloan <mgsloan@gmail.com>
  * Copyright 2006 Aaron Spike <aaron@ekips.org>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-gears.h"

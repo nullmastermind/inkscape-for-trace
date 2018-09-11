@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MEASURING_CONTEXT_H
 #define SEEN_SP_MEASURING_CONTEXT_H
 
@@ -9,7 +10,7 @@
  *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  * Copyright (C) 2011 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>

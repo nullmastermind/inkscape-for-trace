@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_MESH_CONTEXT_H
 #define SEEN_SP_MESH_CONTEXT_H
 
@@ -14,7 +15,7 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2005,2010 Authors
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>

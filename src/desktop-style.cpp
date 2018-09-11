@@ -1,15 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Desktop style management
  *
  * Authors:
  *   bulia byak
  *   verbalshadow
- *   Jon A. Cruz <jon@joncruz.org> 
+ *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *
  * Copyright (C) 2004, 2006 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <string>

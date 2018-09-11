@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Minimal dummy LPE effect implementation, used as an example for a base
@@ -15,7 +16,7 @@
  *
  * Copyright (C) 2007-2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-skeleton.h"

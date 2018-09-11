@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -6,7 +7,7 @@
  * Copyright (C) 2001-2005 Authors
  * Copyright (C) 2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/color-preview.h"

@@ -1,6 +1,7 @@
 # Dictionary for the fuzzer to "guess" faster important words.
 # Contains xml keywords and svg element names and attributes.
 # It might be useful to remove some of them, maybe.
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 "100"
 "200"

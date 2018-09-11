@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_INTERPOLATEPOINTS_H
 #define INKSCAPE_LPE_INTERPOLATEPOINTS_H
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) Johan Engelen 2014 <j.b.c.engelen@alumnus.utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/enum.h"

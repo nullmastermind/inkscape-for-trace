@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Traits::ListCopy - helper traits class for copying lists
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_TRAITS_LIST_COPY_H

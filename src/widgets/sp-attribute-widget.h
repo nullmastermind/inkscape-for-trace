@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Widget that listens and modifies repr attributes.
@@ -9,7 +10,7 @@
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2002,2011-2012 authors
  *
- * Licensed under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_DIALOGS_SP_ATTRIBUTE_WIDGET_H

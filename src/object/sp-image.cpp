@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <image> implementation
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2005 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -30,7 +31,7 @@
 #include "display/drawing-image.h"
 #include "display/cairo-utils.h"
 #include "display/curve.h"
-//Added for preserveAspectRatio support -- EAF
+// Added for preserveAspectRatio support -- EAF
 #include "attributes.h"
 #include "print.h"
 #include "document.h"

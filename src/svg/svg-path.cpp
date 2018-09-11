@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * svg-path.cpp: Parse SVG path element data into bezier path.
  * Authors:
@@ -12,7 +13,7 @@
  *
  * Copyright (C) 2000-2008 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

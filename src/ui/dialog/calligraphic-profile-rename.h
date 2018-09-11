@@ -1,11 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Dialog for naming calligraphic profiles
  */
 /* Author:
- *   Aubanel MONNIER 
+ *   Aubanel MONNIER
  *
  * Copyright (C) 2007 Authors
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_DIALOG_CALLIGRAPHIC_PROFILE_H

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <filter> element
  *//*
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2006,2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SP_FILTER_H_SEEN
 #define SP_FILTER_H_SEEN

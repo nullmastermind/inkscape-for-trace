@@ -1,23 +1,15 @@
-#ifndef SEEN_ZIPTOOL_H
-#define SEEN_ZIPTOOL_H
-/**
- * This is intended to be a standalone, reduced capability
- * implementation of Gzip and Zip functionality.  Its
- * targeted use case is for archiving and retrieving single files
- * which use these encoding types.  Being memory based and
- * non-optimized, it is not useful in cases where very large
- * archives are needed or where high performance is desired.
- * However, it should hopefully work well for smaller,
- * one-at-a-time tasks.  What you get in return is the ability
- * to drop these files into your project and remove the dependencies
- * on ZLib and Info-Zip.  Enjoy.
+// SPDX-License-Identifier: LGPL-2.1-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Bob Jamison
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU LGPL v2.1+, read the file 'COPYING' for more information.
  */
 /*
- * Authors:
- *   Bob Jamison
- *
- * Copyright (C) 2006-2007 Bob Jamison
- *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
  *  License as published by the Free Software Foundation; either
@@ -32,6 +24,21 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+#ifndef SEEN_ZIPTOOL_H
+#define SEEN_ZIPTOOL_H
+/**
+ * This is intended to be a standalone, reduced capability
+ * implementation of Gzip and Zip functionality.  Its
+ * targeted use case is for archiving and retrieving single files
+ * which use these encoding types.  Being memory based and
+ * non-optimized, it is not useful in cases where very large
+ * archives are needed or where high performance is desired.
+ * However, it should hopefully work well for smaller,
+ * one-at-a-time tasks.  What you get in return is the ability
+ * to drop these files into your project and remove the dependencies
+ * on ZLib and Info-Zip.  Enjoy.
+ */
+
 
 
 #include <vector>

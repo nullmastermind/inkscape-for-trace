@@ -1,16 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Dialog for naming calligraphic profiles.
  *
- * @note This file is in the wrong directory because of link order issues - 
+ * @note This file is in the wrong directory because of link order issues -
  * it is required by widgets/toolbox.cpp, and libspwidgets.a comes after
  * libinkdialogs.a in the current link order.
  */
 /* Author:
- *   Aubanel MONNIER 
+ *   Aubanel MONNIER
  *
  * Copyright (C) 2007 Authors
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "calligraphic-profile-rename.h"

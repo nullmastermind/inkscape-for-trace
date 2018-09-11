@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_RECT_CONTEXT_H__
 #define __SP_RECT_CONTEXT_H__
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>

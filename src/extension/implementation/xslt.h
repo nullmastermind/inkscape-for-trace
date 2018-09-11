@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Code for handling XSLT extensions
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2006-2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef __INKSCAPE_EXTENSION_IMPEMENTATION_XSLT_H__

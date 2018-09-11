@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_FLOOD_CONTEXT_H__
 #define __SP_FLOOD_CONTEXT_H__
 
@@ -8,7 +9,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   John Bintz <jcoswell@coswellproductions.org>
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <vector>

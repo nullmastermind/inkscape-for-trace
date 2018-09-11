@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * A simple dialog with information about extensions.
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2005 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "extensions.h"

@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Preview cache
  */
 /*
  * Copyright (C) 2007 Bryce W. Harrington <bryce@bryceharrington.org>
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UI_SVG_PREVIEW_CACHE_H

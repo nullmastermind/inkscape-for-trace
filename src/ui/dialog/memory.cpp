@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Memory statistics dialog.
@@ -5,9 +6,9 @@
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
  *
- * Copyright (C) 2005 
+ * Copyright (C) 2005
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/dialog/memory.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_INKSCAPE_CTRLRECT_H
 #define SEEN_INKSCAPE_CTRLRECT_H
 
@@ -16,7 +17,7 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2017 Tavmjong Bah
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

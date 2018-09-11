@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple dialog for objects UI.
  *
@@ -8,7 +9,7 @@
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *               Tavmjong Bah 2017
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_OBJECTS_PANEL_H

@@ -1,10 +1,13 @@
-/** \file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * @brief XML quoting routines
  *//*
  * Authors:
+ * see git history
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
- * 
- * This file is in the public domain.
+ *
+ * Copyright (C) 2015 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "xml/quote.h"

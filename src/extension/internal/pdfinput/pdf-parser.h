@@ -1,8 +1,14 @@
- /*
- * Derived from Gfx.h
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * PDF parsing using libpoppler.
+ *//*
+ * Authors:
+ * see git history
+ * 
+ * Derived from Gfx.h from poppler (?) which derives from Xpdf, Copyright 1996-2003 Glyph & Cog, LLC, which is under GPL2+.
  *
- * Copyright 1996-2003 Glyph & Cog, LLC
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef PDF_PARSER_H

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2014 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SVG_SVG_COLOR_H_SEEN
 #define SVG_SVG_COLOR_H_SEEN
 

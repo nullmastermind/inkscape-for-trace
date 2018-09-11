@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Ralf Stephan <ralf@ark.in-berlin.de>
  *
  * Copyright (C) 2005 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_WIDGET_ENTITY_ENTRY__H

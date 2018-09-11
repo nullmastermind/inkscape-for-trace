@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(I18N_FILES "inkscape.gpl" "svg.gpl" "Tango-Palette.gpl")
 
 add_custom_command(

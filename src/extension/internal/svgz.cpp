@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Code to handle compressed SVG loading and saving. Almost identical to svg
  * routines, but separated for simpler extension maintenance.
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002-2005 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "svgz.h"

@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) 2005-2007 Authors:
  *   Ted Gould <ted@gould.cx>
  *   Johan Engelen <johan@shouraizou.nl>
  *   Christopher Brown <audiere@gmail.com>
  *   Jon A. Cruz <jon@joncruz.org>
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <iostream>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef FONT_LISTER_H
 #define FONT_LISTER_H
 
@@ -13,7 +14,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2013 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <map>

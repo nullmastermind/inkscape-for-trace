@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Util::ptr_shared<T> - like T const *, but stronger.
  * Used to hold c-style strings for objects that are managed by the gc.
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2006 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UTIL_SHARE_H

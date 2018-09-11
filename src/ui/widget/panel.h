@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Bryce Harrington <bryce@bryceharrington.org>
@@ -7,7 +8,7 @@
  * Copyright (C) 2005 Jon A. Cruz
  * Copyright (C) 2012 Kris De Gussem
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UI_WIDGET_PANEL_H

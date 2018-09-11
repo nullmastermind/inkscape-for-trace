@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright (C) Steren Giannini 2008 <steren.giannini@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-bendpath.h"

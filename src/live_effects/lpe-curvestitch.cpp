@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE Curve Stitching implementation, used as an example for a base starting class
  * when implementing new LivePathEffects.
@@ -6,10 +7,10 @@
 /*
  * Authors:
  *   Johan Engelen
-*
-* Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/scalar.h"

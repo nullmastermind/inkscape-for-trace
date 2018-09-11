@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
 #define INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
 
@@ -8,14 +9,14 @@
  * Also to ScislaC for pointing me to the idea
  * Also su_v for his constructive feedback and time
  * To Nathan Hurst for his review and help on refactor
- * and finally to Liam P. White for his big help on coding, 
+ * and finally to Liam P. White for his big help on coding,
  * that saved me a lot of hours
  *
  *
  * This parameter acts as a bridge from pathVectorSatellites class to serialize it as a LPE
  * parameter
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/array.h"

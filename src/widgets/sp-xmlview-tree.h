@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * Authors:
  *   MenTaLguY <mental@rydia.net>
  *
  * Copyright (C) 2002 MenTaLguY
  *
- * Released under the GNU GPL; see COPYING for details
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_SP_XMLVIEW_TREE_H

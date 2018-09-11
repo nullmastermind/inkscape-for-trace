@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Algorithms::find_if_before - finds the position before
  *                                        the first value that satisifes
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2005 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_ALGORITHMS_FIND_IF_BEFORE_H

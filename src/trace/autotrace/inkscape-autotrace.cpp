@@ -1,12 +1,14 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * This is the C++ glue between Inkscape and Autotrace
+ *//*
  *
  * Authors:
  *   Marc Jeanmougin
  *
  * Copyright (C) 2018 Authors
  *
- * Released under GNU GPL v2 and later, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

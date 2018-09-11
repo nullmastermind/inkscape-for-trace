@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 file(GLOB _FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.svg")
 
 add_custom_command(

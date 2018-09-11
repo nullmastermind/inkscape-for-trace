@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
    A group of classes and functions for manipulating mesh gradients.
 
@@ -5,7 +6,7 @@
    be shared between two patches and the corners between up to four.
 
    The order of the points for each side always goes from left to right or top to bottom.
-   For sides 2 and 3 the points must be reversed when used (as in calls to cairo functions). 
+   For sides 2 and 3 the points must be reversed when used (as in calls to cairo functions).
 
    Two patches: (C=corner, S=side, H=handle, T=tensor)
 
@@ -34,7 +35,7 @@
  *
  * Copyright  (C) 2012, 2015 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>

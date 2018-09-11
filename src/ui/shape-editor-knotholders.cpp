@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Node editing extension to objects
  *
@@ -8,7 +9,7 @@
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/i18n.h>

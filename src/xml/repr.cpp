@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * A few non-inline functions of the C facade to Inkscape::XML::Node.
  */
@@ -11,7 +12,7 @@
  * Copyright (C) 2000-2002 Ximian, Inc.
  * g++ port Copyright (C) 2003 Nathan Hurst
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noREPR_VERBOSE

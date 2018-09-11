@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::DocumentSubset - view of a document including only a subset
  *                            of nodes
  *
  * Copyright 2006  MenTaLguY  <mental@rydia.net>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DOCUMENT_SUBSET_H

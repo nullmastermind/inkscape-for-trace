@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Undo History dialog - implementation.
@@ -8,7 +9,7 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2014 Authors
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "undo-history.h"

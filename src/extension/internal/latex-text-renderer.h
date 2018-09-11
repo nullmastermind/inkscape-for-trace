@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef EXTENSION_INTERNAL_LATEX_TEXT_RENDERER_H_SEEN
 #define EXTENSION_INTERNAL_LATEX_TEXT_RENDERER_H_SEEN
 
@@ -9,8 +10,8 @@
  *  Johan Engelen <goejendaagh@zonnet.nl>
  *
  * Copyright (C) 2010 Authors
- * 
- * Licensed under GNU GPL
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "extension/extension.h"

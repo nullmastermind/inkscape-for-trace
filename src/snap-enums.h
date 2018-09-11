@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SNAPENUMS_H_
 #define SNAPENUMS_H_
 /*
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2010 - 2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 namespace Inkscape {

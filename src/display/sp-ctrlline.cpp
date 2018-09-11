@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Simple straight line
  *
@@ -9,7 +10,7 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /*

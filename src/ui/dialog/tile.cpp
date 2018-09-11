@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple dialog for creating grid type arrangements of selected objects
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2004 Bob Jamison
  * Copyright (C) 2004 John Cliff
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/dialog/grid-arrange-tab.h"

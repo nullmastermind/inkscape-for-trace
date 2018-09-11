@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * anchor-selector.h
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef ANCHOR_SELECTOR_H_

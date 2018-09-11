@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef CANVAS_AXONOMGRID_H
 #define CANVAS_AXONOMGRID_H
 
@@ -6,7 +7,7 @@
  *    Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
  *
  * Copyright (C) 2006-2012 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "line-snapper.h"

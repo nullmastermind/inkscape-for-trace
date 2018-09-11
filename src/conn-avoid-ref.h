@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_CONN_AVOID_REF
 #define SEEN_CONN_AVOID_REF
 
@@ -10,7 +11,7 @@
  *
  * Copyright (C) 2005 Michael Wybrow
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/point.h>

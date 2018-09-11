@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
    Copyright 2005, 2006 by Gerald Friedland, Kristian Jantz and Lars Knipping
 
    Conversion to C++ for Inkscape by Bob Jamison
-   
-   Released under GNU GPL, read the file 'COPYING' for more information
+
+   Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "siox.h"
 

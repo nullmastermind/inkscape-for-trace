@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #include "ink-tool-menu-action.h"
 
 // ToolMenu Action is happily derived from http://www.gtkforums.com/viewtopic.php?t=4215

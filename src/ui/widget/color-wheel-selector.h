@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Color selector widget containing GIMP color wheel and slider
@@ -5,9 +6,8 @@
 /* Authors:
  *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
  *
- * Copyright (C) 2014 Authors
- *
- * This code is in public domain
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifndef SEEN_SP_COLOR_WHEEL_SELECTOR_H
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H

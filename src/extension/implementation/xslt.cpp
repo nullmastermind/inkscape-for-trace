@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Code for handling XSLT extensions.
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2007 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/fileutils.h>

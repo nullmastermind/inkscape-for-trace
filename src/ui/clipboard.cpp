@@ -1,24 +1,17 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * System-wide clipboard management - implementation.
- */
-/* Authors:
+ *//*
+ * Authors:
+ * see git history
  *   Krzysztof Kosiński <tweenk@o2.pl>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Incorporates some code from selection-chemistry.cpp, see that file for more credits.
  *   Abhishek Sharma
  *   Tavmjong Bah
  *
- * Copyright (C) 2008 authors
- * Copyright (C) 2010 Jon A. Cruz
- * Copyright (C) 2012 Tavmjong Bah (Symbol additions)
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/clipboard.h>

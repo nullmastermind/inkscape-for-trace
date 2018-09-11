@@ -1,10 +1,13 @@
-/**
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Generic window implementation
+ *//*
+ * Authors:
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
  *
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * This code is in public domain
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>

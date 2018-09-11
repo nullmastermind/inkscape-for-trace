@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_TEXT_CHEMISTRY_H
 #define SEEN_TEXT_CHEMISTRY_H
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2004 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 void text_put_on_path();

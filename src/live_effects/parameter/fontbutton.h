@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_FONT_H
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_FONT_H
 
@@ -5,7 +6,7 @@
  * Inkscape::LivePathEffectParameters
  *
  * Authors:
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <glib.h>
 #include "live_effects/parameter/parameter.h"

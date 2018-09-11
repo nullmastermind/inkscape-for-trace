@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Provide methods to calculate grayscale values (e.g. convert rgba value to grayscale rgba value)
  */
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2011 Author
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "display/grayscale.h"

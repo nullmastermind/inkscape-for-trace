@@ -1,6 +1,7 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE <lattice> implementation
- 
+
  */
 /*
  * Authors:
@@ -8,10 +9,10 @@
  *   Steren Giannini
  *   No� Falzon
  *   Victor Navez
-*
-* Copyright (C) 2007-2008 Authors 
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Copyright (C) 2007-2008 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-lattice.h"

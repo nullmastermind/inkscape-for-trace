@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Undo/Redo stack implementation
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2003 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * Using the split document model gives sodipodi a very simple and clean
  * undo implementation. Whenever mutation occurs in the XML tree,

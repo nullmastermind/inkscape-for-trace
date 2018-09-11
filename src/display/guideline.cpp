@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Horizontal/vertical but can also be angled line
  *
@@ -12,7 +13,7 @@
  * Copyright (C) 2009 Maximilian Albert
  * Copyright (C) 2017 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/coord.h>

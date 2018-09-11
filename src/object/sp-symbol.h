@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_SYMBOL_H
 #define SEEN_SP_SYMBOL_H
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 1999-2003 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /*

@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_TOGGLEBUTTON_H
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_TOGGLEBUTTON_H
 
 /*
  * Copyright (C) Jabiertxo Arraiza Cenoz 2014
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glib.h>

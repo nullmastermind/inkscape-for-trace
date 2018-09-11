@@ -1,27 +1,26 @@
-/**
- * \file verbs.cpp
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Actions for inkscape.
+ *
  *
  * This file implements routines necessary to deal with verbs.  A verb
  * is a numeric identifier used to retrieve standard SPActions for particular
  * views.
- */
-
-/*
+ *//*
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *   Ted Gould <ted@gould.cx>
- *   MenTaLguY <mental@rydia.net>
- *   David Turner <novalis@gnu.org>
- *   bulia byak <buliabyak@users.sf.net>
- *   Jon A. Cruz <jon@joncruz.org>
- *   Abhishek Sharma
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
+ * Ted Gould <ted@gould.cx>
+ * MenTaLguY <mental@rydia.net>
+ * David Turner <novalis@gnu.org>
+ * bulia byak <buliabyak@users.sf.net>
+ * Jon A. Cruz <jon@joncruz.org>
+ * Abhishek Sharma
+ * 2006 Johan Engelen <johan@shouraizou.nl>
+ * 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
  *
- * Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
- * Copyright (C) 2012 Kris De Gussem <Kris.DeGussem@gmail.com>
- * Copyright (C) (date unspecified) Authors
- * This code is in public domain.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

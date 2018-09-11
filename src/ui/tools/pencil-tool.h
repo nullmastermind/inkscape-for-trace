@@ -1,9 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** \file
+ * PencilTool: a context for pencil tool events
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_PENCIL_CONTEXT_H
 #define SEEN_PENCIL_CONTEXT_H
 
-/** \file
- * PencilTool: a context for pencil tool events
- */
+
 
 #include "ui/tools/freehand-base.h"
 

@@ -1,16 +1,16 @@
-#ifndef SEEN_SP_PAINT_SELECTOR_H
-#define SEEN_SP_PAINT_SELECTOR_H
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Generic paint selector widget
- *
+ *//*
  * Authors:
  *   Lauris
  *   Jon A. Cruz <jon@joncruz.org>
  *
- * Copyright (C) Lauris 2002
- * Copyright (C) 2010 Authors
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+#ifndef SEEN_SP_PAINT_SELECTOR_H
+#define SEEN_SP_PAINT_SELECTOR_H
 
 #include <glib.h>
 #include <gtk/gtk.h>

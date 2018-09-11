@@ -1,3 +1,4 @@
+; SPDX-License-Identifier: GPL-2.0-or-later
 ;########################################################
 ;## File: plugin.def
 ;## Purpose: Used by dllwrap to make an inkscape plugin

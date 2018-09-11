@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Singleton class to access the preferences file in a convenient way.
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2008,2009 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_PREFSTORE_H

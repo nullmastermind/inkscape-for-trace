@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_NR_FILTER_SPECULARLIGHTING_H
 #define SEEN_NR_FILTER_SPECULARLIGHTING_H
 
@@ -7,10 +8,10 @@
  * Authors:
  *   Niko Kiirala <niko@kiirala.com>
  *   Jean-Rene Reinhard <jr@komite.net>
- * 
+ *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "display/nr-light-types.h"

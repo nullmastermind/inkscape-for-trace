@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_HIDDEN_H
 #define INKSCAPE_LIVEPATHEFFECT_HIDDEN_H
 
@@ -12,7 +13,7 @@
  * Copyright (C) jabiertxof 2017 <jabier.arraiza@marker.es>
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/parameter.h"

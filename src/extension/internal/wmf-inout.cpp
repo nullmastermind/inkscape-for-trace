@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Windows-only Enhanced Metafile input and output.
  */
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2006-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * References:
  *  - How to Create & Play Enhanced Metafiles in Win32

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief  Event handler for dialog windows
  */
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2003-2014 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_DIALOG_EVENTS_H

@@ -1,16 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Comment node implementation
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Copyright 2005 MenTaLguY <mental@rydia.net>
+ * 
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-/* Copyright 2004-2005 MenTaLguY <mental@rydia.net>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
- *
- */
+
 
 #ifndef SEEN_INKSCAPE_XML_COMMENT_NODE_H
 #define SEEN_INKSCAPE_XML_COMMENT_NODE_H

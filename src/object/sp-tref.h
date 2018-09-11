@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SP_TREF_H
 #define SP_TREF_H
 
@@ -12,7 +13,7 @@
  *
  * Copyright (C) 2007 Gail Banaszkiewicz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-item.h"

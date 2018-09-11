@@ -1,11 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * Cartesian grid implementation.
- */
-/* Copyright (C) Johan Engelen 2006-2007 <johan@shouraizou.nl>
+ * Cartesian grid item for the Inkscape canvas.
+ *//*
+ * Authors:
+ * see git history
+ * Copyright (C) Johan Engelen 2006-2007 <johan@shouraizou.nl>
  * Copyright (C) Lauris Kaplinski 2000
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
  * Copyright (C) Tavmong Bah 2017 <tavmjong@free.fr>
+ * 
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /* As a general comment, I am not exactly proud of how things are done.

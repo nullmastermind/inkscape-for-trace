@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_OBJECTGROUP_H
 #define SEEN_SP_OBJECTGROUP_H
 
@@ -11,7 +12,7 @@
  * Copyright (C) 1999-2003 Authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-object.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_VIEWBOX_H__
 #define __SP_VIEWBOX_H__
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2013-2014 Tavmjong Bah, authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

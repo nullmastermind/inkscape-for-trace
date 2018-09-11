@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  *  \file src/svg/svg-angle.cpp
  *  \brief SVG angle type
@@ -9,7 +10,7 @@
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

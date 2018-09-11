@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Roughen LPE effect, see lpe-roughen.cpp.
  */
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2014 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_LPE_ROUGHEN_H

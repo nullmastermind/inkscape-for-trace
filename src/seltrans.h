@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SELTRANS_H
 #define SEEN_SELTRANS_H
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2006      Johan Engelen <johan@shouraizou.nl>
  * Copyright (C) 1999-2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/point.h>

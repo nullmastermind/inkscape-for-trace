@@ -1,18 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Helper functions for XML nodes
- */
-/* Authors:
+ *//*
+ * Authors:
+ *   see git history
  *   Unknown author
  *   Krzysztof Kosiński <tweenk.pl@gmail.com> (documentation)
  *
- * Copyright 2008 Authors
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_XML_NODE_FNS_H

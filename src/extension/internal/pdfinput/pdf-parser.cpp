@@ -1,14 +1,13 @@
- /*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * PDF parsing using libpoppler.
- *
- * Derived from poppler's Gfx.cc
- *
+ *//*
  * Authors:
- *   Jon A. Cruz <jon@joncruz.org>
+ * Derived from poppler's Gfx.cc, which was derived from Xpdf by 1996-2003 Glyph & Cog, LLC
+ * Jon A. Cruz <jon@joncruz.org>
  *
- * Copyright 2012 authors
- * Copyright 1996-2003 Glyph & Cog, LLC
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H

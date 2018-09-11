@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Interface to main application.
@@ -11,7 +12,7 @@
  * c++ port Copyright (C) 2003 Nathan Hurst
  * c++ification Copyright (C) 2014 Liam P. White
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cerrno>

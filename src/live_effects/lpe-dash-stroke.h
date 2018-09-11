@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_DASH_STROKE_H
 #define INKSCAPE_LPE_DASH_STROKE_H
 
 /*
  * Inkscape::LPEDashStroke
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/effect.h"

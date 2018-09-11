@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 set(io_SRC
   bufferstream.cpp

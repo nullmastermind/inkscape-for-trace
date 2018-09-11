@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Main UI stuff.
@@ -16,7 +17,7 @@
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/radiomenuitem.h>

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 name: inkscape
 version-script: packaging/snappy/version.sh
 version: devel # Replaced at build time ^^^

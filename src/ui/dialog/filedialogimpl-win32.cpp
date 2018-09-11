@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Implementation of native file dialogs for Win32.
@@ -9,12 +10,12 @@
  *
  * Copyright (C) 2004-2008 The Inkscape Organization
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #ifdef _WIN32
 
 #include "filedialogimpl-win32.h"
-//General includes
+// General includes
 #include <cairomm/win32_surface.h>
 #include <gdk/gdkwin32.h>
 #include <gdkmm/general.h>

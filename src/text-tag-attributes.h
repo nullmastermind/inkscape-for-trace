@@ -1,3 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * \brief contains and manages the attributes common to all types of text tag
+ *
+ * The five attributes x, y, dx, dy and rotate (todo: textlength, lengthadjust)
+ * are permitted on all of text, tspan and textpath elements so we need a class
+ * to abstract the management of those attributes from the actual type of the
+ * element.
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef INKSCAPE_TEXT_TAG_ATTRIBUTES_H
 #define INKSCAPE_TEXT_TAG_ATTRIBUTES_H
 
@@ -13,14 +27,6 @@ class Node;
 }
 }
 
-
-/** \brief contains and manages the attributes common to all types of text tag
-
-The five attributes x, y, dx, dy and rotate (todo: textlength, lengthadjust)
-are permitted on all of text, tspan and textpath elements so we need a class
-to abstract the management of those attributes from the actual type of the
-element.
-*/
 class TextTagAttributes {
 public:
     TextTagAttributes() = default;

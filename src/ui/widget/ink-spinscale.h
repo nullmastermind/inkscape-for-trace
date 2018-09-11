@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INK_SPINSCALE_H
 #define INK_SPINSCALE_H
 
@@ -7,7 +8,7 @@
  *
  * Copyright  (C) 2017 Tavmjong Bah
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /**

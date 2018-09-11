@@ -1,14 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_OBJECT_H
 #define INKSCAPE_LIVEPATHEFFECT_OBJECT_H
 
 /*
  * Inkscape::LivePathEffect
  *
-* Copyright (C) Johan Engelen 2007-2008 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Johan Engelen 2007-2008 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
- 
+
 
 #include "effect-enum.h"
 

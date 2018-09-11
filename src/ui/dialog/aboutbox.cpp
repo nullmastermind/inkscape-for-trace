@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Inkscape About box - implementation.
@@ -14,7 +15,7 @@
  * Copyright 2004 Jon Phillips
  * Copyright 2005 MenTaLguY
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "aboutbox.h"

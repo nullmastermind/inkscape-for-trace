@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_SPRAY_CONTEXT_H__
 #define __SP_SPRAY_CONTEXT_H__
 
@@ -7,7 +8,7 @@
  * Authors:
  *   Pierre-Antoine MARC
  *   Pierre CACLIN
- *   Aurel-Aimé MARMION   
+ *   Aurel-Aimé MARMION
  *   Julien LERAY
  *   Benoît LAVORATA
  *   Vincent MONTAGNE
@@ -17,7 +18,7 @@
  *
  * Copyright (C) 2009 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/point.h>

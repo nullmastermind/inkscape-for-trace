@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Handwriting-like drawing mode
  *
@@ -18,7 +19,7 @@
  * Copyright (C) 2005-2007 bulia byak
  * Copyright (C) 2006 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #define noDYNA_DRAW_VERBOSE

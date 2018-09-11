@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Dialog for displaying Inkscape messages
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2004 The Inkscape Organization
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_UI_DIALOGS_DEBUGDIALOG_H

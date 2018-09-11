@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief SVG Fonts dialog
  */
@@ -5,7 +6,7 @@
  *   Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
  *
  * Copyright (C) 2008 Authors
- * Released under GNU GPLv2 (or later).  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_SVG_FONTS_H

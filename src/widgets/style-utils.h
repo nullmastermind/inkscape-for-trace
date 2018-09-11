@@ -1,19 +1,13 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Common utility functions for manipulating style.
- */
-/* Author:
- *   Shlomi Fish <shlomif@cpan.org>
+ *//*
+ * Authors:
+ * see git history
+ * Shlomi Fish <shlomif@cpan.org>
  *
- * Copyright (C) 2016 Shlomi Fish
- *
- * Dually-Licensed under:
- *
- * 1. The Expat license - https://www.gnu.org/licenses/license-list.html#Expat
- *
- * 2. The GNU General Public License, either version 2, or at your option,
- * any later version of it.
- * ( https://en.wikipedia.org/wiki/GNU_General_Public_License )
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_DIALOGS_STYLE_UTILS_H

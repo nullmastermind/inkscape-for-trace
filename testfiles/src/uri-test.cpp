@@ -1,9 +1,17 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/**
+ * @file
  * Test Inkscape::URI
- *
- * Copyright 2018 (c) Thomas Holder
- *
  */
+/*
+ * Authors:
+ *   Thomas Holder
+ *
+ * Copyright (C) 2018 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #include "object/uri.h"
 #include "gtest/gtest.h"
 

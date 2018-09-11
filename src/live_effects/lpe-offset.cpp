@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE <offset> implementation
  */
@@ -10,7 +11,7 @@
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  * Copyright (C) Jabierto Arraiza 2015 <jabier.arraiza@marker.es>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/parameter/enum.h"
@@ -31,7 +32,7 @@
 #include "knotholder.h"
 #include "knot.h"
 #include <algorithm>
-//this is only to flatten nonzero fillrule
+// this is only to flatten nonzero fillrule
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 

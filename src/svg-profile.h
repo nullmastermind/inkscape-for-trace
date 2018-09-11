@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __INK_SVG_PROFILE_H__
 #define __INK_SVG_PROFILE_H__
 /*
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 namespace Inkscape {

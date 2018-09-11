@@ -1,18 +1,21 @@
-/**
- * \file
- * \brief PathVectorSatellites a class to manage satellites -per node extra data- in a pathvector
- */ /*
-    * Authors:
-    * Jabiertxof
-    * Nathan Hurst
-    * Johan Engelen
-    * Josh Andler
-    * suv
-    * Mc-
-    * Liam P. White
-    * Krzysztof Kosiński
-    * This code is in public domain
-    */
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * PathVectorSatellites a class to manage satellites -per node extra data- in a pathvector
+ *//*
+ * Authors: see git history
+ * Jabiertxof
+ * Nathan Hurst
+ * Johan Engelen
+ * Josh Andler
+ * suv
+ * Mc-
+ * Liam P. White
+ * Krzysztof Kosiński
+ * This code is in public domain
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #include <helper/geom-pathvectorsatellites.h>
 #include "util/units.h"

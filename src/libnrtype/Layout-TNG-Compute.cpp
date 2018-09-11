@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Text::Layout::Calculator - text layout engine meaty bits
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2005 Richard Hughes
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "Layout-TNG.h"
 #include "style.h"

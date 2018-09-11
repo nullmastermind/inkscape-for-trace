@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef __REMOVE_LAST_H__
 #define __REMOVE_LAST_H__
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(grid_PART_SRCS grid.cpp)                                                                      
 
 include_directories( ${CMAKE_BINARY_DIR}/src )

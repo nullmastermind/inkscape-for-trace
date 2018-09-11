@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later
 #ifndef SEEN_EGE_COLOR_PROF_TRACKER
 #define SEEN_EGE_COLOR_PROF_TRACKER
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-

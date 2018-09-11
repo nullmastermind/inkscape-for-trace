@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG <marker> implementation
  *
@@ -11,7 +12,7 @@
  *               2004-2006 Bryce Harrington
  *               2008      Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

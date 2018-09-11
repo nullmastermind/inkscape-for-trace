@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * New node tool - implementation.
@@ -7,7 +8,7 @@
  *   Abhishek Sharma
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glib/gi18n.h>

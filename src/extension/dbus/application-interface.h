@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is where the implementation of the DBus based application API lives.
  * All the methods in here are designed to be called remotly via DBus.
@@ -12,7 +13,7 @@
  *
  * Copyright (C) 2009 Soren Berg
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_EXTENSION_APPLICATION_INTERFACE_H_

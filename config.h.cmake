@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 

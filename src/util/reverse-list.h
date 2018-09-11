@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Util::reverse_list - generate a reversed list from iterator range
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2004 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UTIL_REVERSE_LIST_H

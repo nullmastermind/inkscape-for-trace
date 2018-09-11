@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_DISPLAY_GRAYSCALE_H
 #define SEEN_DISPLAY_GRAYSCALE_H
 
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2011 Author
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 typedef unsigned int guint32;

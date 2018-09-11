@@ -1,4 +1,5 @@
 # process and install .po files
+# SPDX-License-Identifier: GPL-2.0-or-later
 file(GLOB LANGUAGES *.po)
 foreach(language ${LANGUAGES})
     string(REGEX REPLACE "(.+(\\\\|/))+" "" language ${language})

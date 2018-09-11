@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __INKSCAPE_CTRLQUADR_H__
 #define __INKSCAPE_CTRLQUADR_H__
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2005 authors
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/geom.h>

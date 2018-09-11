@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 if [ "$#" -lt 2 ]; then
     echo "pass the path of the inkscape executable as parameter then the name of the test" $#

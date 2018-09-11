@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+/** @file
+ * TODO: insert short description here
+ */
 /* LIBGIMP - The GIMP Library
  * Copyright (C) 1995-1997 Peter Mattis and Spencer Kimball
  *

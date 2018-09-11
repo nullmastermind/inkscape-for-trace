@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Author:
  *   Felipe Corrêa da Silva Sanches <juca@members.fsf.org>
@@ -5,7 +6,7 @@
  *
  * Copyright (C) 2018 Felipe Corrêa da Silva Sanches, Tavmong Bah
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_WIDGET_FONT_VARIATIONS_H

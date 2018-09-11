@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Carl Hetherington <inkscape@carlh.net>
@@ -5,7 +6,7 @@
  *
  * Copyright (C) 2004 Carl Hetherington
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_WIDGET_TEXT_H

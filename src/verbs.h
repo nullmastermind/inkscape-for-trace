@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_VERBS_H
 #define SEEN_SP_VERBS_H
 /*
@@ -9,8 +10,7 @@
  *  Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
  *  Copyright (C) (date unspecified) Authors
 
- * This code is in public domain if done by Lauris
- * This code is GPL if done by Ted or David
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

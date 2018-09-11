@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Taper Stroke path effect (meant as a replacement for using Power Strokes for tapering)
  */
@@ -5,7 +6,7 @@
  *   Liam P White <inkscapebrony@gmail.com>
  * Copyright (C) 2014 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_LPE_TAPERSTROKE_H

@@ -1,11 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Memory statistics dialog
  */
 /* Authors:
  *     MenTaLguY <mental@rydia.net>
- * 
+ *
  * Copyright 2005 Authors
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UI_DIALOG_MEMORY_H

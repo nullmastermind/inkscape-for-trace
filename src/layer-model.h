@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_INKSCAPE_LAYER_MODEL_H
 #define SEEN_INKSCAPE_LAYER_MODEL_H
 
@@ -18,7 +19,7 @@
  * Copyright (C) 1999-2013 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

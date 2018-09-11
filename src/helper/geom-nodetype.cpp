@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Specific nodetype geometry functions for Inkscape, not provided my lib2geom.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2008 Johan Engelen
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "helper/geom-nodetype.h"

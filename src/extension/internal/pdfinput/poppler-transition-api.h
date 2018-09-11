@@ -1,3 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO short description
+ *//*
+ * Authors:
+ *   see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 #ifndef SEEN_POPPLER_TRANSITION_API_H
 #define SEEN_POPPLER_TRANSITION_API_H
 

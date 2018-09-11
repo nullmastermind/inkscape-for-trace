@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is what gets executed to initialize all of the modules.  For
  * the internal modules this involves executing their initialization
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002-2004 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H

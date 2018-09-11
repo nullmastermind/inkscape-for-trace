@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Symbols dialog
  */
@@ -8,7 +9,7 @@
  *               2013 Martin Owens
  *               2017 Jabiertxo Arraiza
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H

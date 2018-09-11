@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::ResourceManager - tracks external resources such as image and css files.
  *
  * Copyright 2011  Jon A. Cruz  <jon@joncruz.org>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <string>

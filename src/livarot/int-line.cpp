@@ -1,12 +1,13 @@
-/**
- *  \file livarot/int-line.cpp
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Implementation of coverage with integer boundaries.
+ *//*
+ * Authors:
+ * see git history
+ * Fred
  *
- *  \author Fred
- *
- *  public domain
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glib.h>

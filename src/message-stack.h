@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Raw stack of active status messages
  */
@@ -10,7 +11,7 @@
  * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 2011 Jon A. Cruz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_MESSAGE_STACK_H

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * 3x4 transformation matrix to map points from projective 3-space into the projective plane
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2007  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "transf_mat_3x4.h"

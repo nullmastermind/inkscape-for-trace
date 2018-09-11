@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE <lattice2> implementation
 
@@ -10,10 +11,10 @@
  *   Victor Navez
  *   ~suv
  *   Jabiertxo Arraiza
-*
-* Copyright (C) 2007-2008 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Copyright (C) 2007-2008 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm.h>

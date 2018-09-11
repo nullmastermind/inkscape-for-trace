@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Implementation of tangent-to-curve LPE.
  */
@@ -10,7 +11,7 @@
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright (C) Maximilian Albert 2008 <maximilian.albert@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-tangent_to_curve.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_GUIDELINE_H
 #define SEEN_SP_GUIDELINE_H
 
@@ -11,7 +12,7 @@
  * Copyright (C) 2000-2002 Lauris Kaplinski
  * Copyright (C) 2007 Johan Engelen
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/point.h>

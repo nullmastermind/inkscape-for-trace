@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * Rendering LaTeX file (pdf/eps/ps+latex output)
  *
@@ -12,7 +13,7 @@
  *
  * Copyright (C) 2006-2011 Authors
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "latex-text-renderer.h"

@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * The reference corresponding to href of <use> element.
  *
  * Copyright (C) 2004 Bulia Byak
  * Copyright (C) 2004 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-use-reference.h"

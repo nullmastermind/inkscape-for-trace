@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 add_subdirectory(attributes)
 add_subdirectory(branding)
 add_subdirectory(examples)

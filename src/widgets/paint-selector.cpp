@@ -1,19 +1,18 @@
-/**
- * @file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * SPPaintSelector: Generic paint selector widget.
- */
-
-/*
+ *//*
  * Authors:
+ * see git history
  *   Lauris Kaplinski
  *   bulia byak <buliabyak@users.sf.net>
  *   John Cliff <simarilius@yahoo.com>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *
- * Copyright (C) Lauris Kaplinski 2002
- * Copyright (C) 2010 Authors
-*/
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #define noSP_PS_VERBOSE
 

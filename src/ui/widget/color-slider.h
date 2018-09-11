@@ -1,12 +1,13 @@
-/*
- * A slider with colored background
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+*   Lauris Kaplinski <lauris@kaplinski.com>
  *
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * Copyright (C) 2001-2002 Lauris Kaplinski
- *
- * This code is in public domain
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_COLOR_SLIDER_H

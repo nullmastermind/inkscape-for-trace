@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_PERSP3D_REFERENCE_H
 #define SEEN_PERSP3D_REFERENCE_H
 
@@ -7,7 +8,7 @@
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2007 Maximilian Albert
  *
- * Released under GNU GPL, read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Spiral drawing context
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 1999-2001 Lauris Kaplinski
  * Copyright (C) 2001-2002 Mitsuru Oka
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

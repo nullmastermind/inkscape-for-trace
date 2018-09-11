@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+/** @file
+ * HSV color selector for GTK+
+ */
 /* HSV color selector for GTK+
  *
  * Copyright (C) 1999 The Free Software Foundation
@@ -5,7 +9,7 @@
  * Authors: Simon Budig <Simon.Budig@unix-ag.org> (original code)
  *          Federico Mena-Quintero <federico@gimp.org> (cleanup for GTK+)
  *          Jonathan Blandford <jrb@redhat.com> (cleanup for GTK+)
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or

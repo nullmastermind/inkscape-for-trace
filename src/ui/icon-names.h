@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Macro for icon names used in Inkscape
  */
@@ -5,7 +6,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_ICON_NAMES_H

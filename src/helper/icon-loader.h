@@ -1,15 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Icon Loader
+ *//*
+ * Authors:
+ * see git history
+ * Jabiertxo Arraiza <jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_INK_ICON_LOADER_H
 #define SEEN_INK_ICON_LOADER_H
 
-/*
- * Icon Loader
- *
- *
- * Authors:
- *  Jabiertxo Arraiza <jabier.arraiza@marker.es>
- *
- *
- */
 #include <gdkmm/pixbuf.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>

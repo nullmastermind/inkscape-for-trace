@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVG dimensions implementation
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1999-2005 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-dimensions.h"

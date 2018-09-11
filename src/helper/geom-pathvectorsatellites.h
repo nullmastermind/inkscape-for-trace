@@ -1,18 +1,21 @@
-/**
- * \file
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * \brief PathVectorSatellites a class to manage satellites -per node extra data- in a pathvector
- */ /*
-    * Authors:
-    * Jabiertxof
-    * Nathan Hurst
-    * Johan Engelen
-    * Josh Andler
-    * suv
-    * Mc-
-    * Liam P. White
-    * Krzysztof Kosiński
-    * This code is in public domain
-    */
+ *//*
+ * Authors: see git history
+ * Jabiertxof
+ * Nathan Hurst
+ * Johan Engelen
+ * Josh Andler
+ * suv
+ * Mc-
+ * Liam P. White
+ * Krzysztof Kosiński
+ *
+ * Copyright (C) 2017 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+
 
 #ifndef SEEN_PATHVECTORSATELLITES_H
 #define SEEN_PATHVECTORSATELLITES_H

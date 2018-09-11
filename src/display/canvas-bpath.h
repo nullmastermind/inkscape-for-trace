@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_CANVAS_BPATH_H
 #define SEEN_SP_CANVAS_BPATH_H
 
@@ -11,7 +12,7 @@
  * Copyright (C) 2001 Lauris Kaplinski and Ximian, Inc.
  * Copyright (C) 2010 authors
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

@@ -1,13 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * @brief XML tree editing dialog for Inkscape
- */
-/* Copyright Lauris Kaplinski, 2000
- *
- * Released under GNU General Public License.
- *
  * This is XML tree editor, which allows direct modifying of all elements
  *   of Inkscape document, including foreign ones.
+ *//*
+ * Authors: see git history
+ * Lauris Kaplinski, 2000
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_DIALOGS_XML_TREE_H

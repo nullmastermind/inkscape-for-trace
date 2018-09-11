@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 [D-BUS Service]
 Name=org.inkscape
 Exec=bindir/bin/inkscape

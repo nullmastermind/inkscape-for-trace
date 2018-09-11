@@ -1,16 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_EVENT_H
 #define INKSCAPE_EVENT_H
 
 /*
  * Inkscape::Event -- Container for an XML::Event along with some additional information
-*                     describing it.
- * 
+ *                     describing it.
+ *
  * Author:
  *   Gustav Broberg <broberg@kth.se>
  *
  * Copyright (c) 2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 

@@ -1,8 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ * Initial author: Peter Moulder.
+ *
+ * Copyright (C) 2013 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #include <cxxtest/TestSuite.h>
 #include "streq.h"
 
-/* Initial author: Peter Moulder.
-   Hereby released into the Public Domain. */
 
 #include <cstring>
 #include <functional>

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: LGPL-2.1-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2006 Authors
+ * Released under GNU LGPL v2.1+, read the file 'COPYING' for more information.
+ */
 /* Defines String::ucompose(fmt, arg...) for easy, i18n-friendly
  * composition of strings with Gtkmm >= 1.3.* (see www.gtkmm.org).
  * Uses Glib::ustring instead of std::string which doesn't work with

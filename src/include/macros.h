@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_MACROS_H
 #define SEEN_MACROS_H
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 // I'm of the opinion that this file should be removed, so I will in the future take the necessary steps to wipe it out.

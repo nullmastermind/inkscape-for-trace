@@ -1,10 +1,14 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-only
+/** @file
+ * TODO: insert short description here
+ *//*
  * Authors:
  *   Dmitry Zhulanov <dmitry.zhulanov@gmail.com>
  *
  * Copyright (C) 2016 Authors
  *
- * Released under GNU GPL v2, read the file 'COPYING' for more information
+ * Released under GNU GPL v2 (ONLY?), read the file 'COPYING' for more information
+ * TODO: REQUIRES RELICENSING OR REMOVAL
  *
  * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */

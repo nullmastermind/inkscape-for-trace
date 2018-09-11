@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_TWEAK_CONTEXT_H__
 #define __SP_TWEAK_CONTEXT_H__
 
@@ -5,11 +6,11 @@
  * tweaking paths without node editing
  *
  * Authors:
- *   bulia byak 
+ *   bulia byak
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/tools/tool-base.h"

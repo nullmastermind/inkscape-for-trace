@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_ATTACH_PATH_H
 #define INKSCAPE_LPE_ATTACH_PATH_H
 
@@ -6,7 +7,7 @@
  *
  * Copyright (C) Ted Janeczko 2012 <flutterguy317@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/effect.h"

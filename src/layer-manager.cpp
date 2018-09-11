@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::LayerManager - a view of a document's layers, relative
  *                          to a particular desktop
@@ -5,7 +6,7 @@
  * Copyright 2006  MenTaLguY  <mental@rydia.net>
  *   Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <set>

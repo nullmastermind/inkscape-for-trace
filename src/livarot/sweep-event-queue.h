@@ -1,8 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * A container of intersection events.
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2010 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_LIVAROT_SWEEP_EVENT_QUEUE_H
 #define SEEN_LIVAROT_SWEEP_EVENT_QUEUE_H
-/** \file 
- * A container of intersection events.
- */
 
 #include <2geom/forward.h>
 class SweepEvent;

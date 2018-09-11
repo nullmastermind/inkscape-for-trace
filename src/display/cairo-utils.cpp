@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Helper functions to use cairo with inkscape
  *
  * Copyright (C) 2007 bulia byak
  * Copyright (C) 2008 Johan Engelen
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

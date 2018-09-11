@@ -1,10 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Unit tests for the Preferences object
- */
-/* Authors:
+ *//*
+ * Authors:
+ * see git history
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
- * This file is released into the public domain.
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cxxtest/TestSuite.h>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is the code that moves all of the SVG loading and saving into
  * the module format.  Really Inkscape is built to handle these formats
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2002-2003 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm.h>

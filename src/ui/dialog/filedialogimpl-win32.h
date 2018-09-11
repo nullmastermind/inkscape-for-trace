@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Implementation of native file dialogs for Win32
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2004-2008 The Inkscape Organization
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm.h>
@@ -17,7 +18,7 @@
 #include "filedialogimpl-gtkmm.h"
  
 #include "inkgc/gc-core.h"
- // define WINVER high enough so we get the correct OPENFILENAMEW size
+// define WINVER high enough so we get the correct OPENFILENAMEW size
 #ifndef WINVER
 #define WINVER 0x0500 
 #endif

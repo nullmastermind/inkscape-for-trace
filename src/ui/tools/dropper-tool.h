@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_DROPPER_CONTEXT_H__
 #define __SP_DROPPER_CONTEXT_H__
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 1999-2002 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/point.h>

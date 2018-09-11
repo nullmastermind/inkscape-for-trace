@@ -1,15 +1,20 @@
-
-#ifndef SEEN_URI_TEST_H
-#define SEEN_URI_TEST_H
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Test uri.h
  *
  * Written to aid with refactoring the uri handling to support fullPath
  * and data URIs and also cover code which wasn't before tested.
+ *//*
+ * Authors:
+ * 2014 BasisTech Boston
  *
- * Copyright 2014 (c) BasisTech Boston
- *
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+
+#ifndef SEEN_URI_TEST_H
+#define SEEN_URI_TEST_H
+
 #include <cxxtest/TestSuite.h>
 
 #include "uri.h"

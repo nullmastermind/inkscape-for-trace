@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Print Colors Preview dialog - implementation.
@@ -6,7 +7,7 @@
  *   Felipe C. da S. Sanches <juca@members.fsf.org>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPLv2 (or later).  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 /*
 #include "desktop.h"
@@ -19,7 +20,7 @@ namespace UI {
 namespace Dialog {
 
 //Yes, I know we shouldn't hardcode CMYK. This class needs to be refactored
-// in order to accommodate spot colors and color components defined using 
+// in order to accommodate spot colors and color components defined using
 // ICC colors. --Juca
 
 void PrintColorsPreviewDialog::toggle_cyan(){

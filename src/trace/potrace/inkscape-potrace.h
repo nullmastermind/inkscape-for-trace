@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is the C++ glue between Inkscape and Potrace
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2004-2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * Potrace, the wonderful tracer located at http://potrace.sourceforge.net,
  * is provided by the generosity of Peter Selinger, to whom we are grateful.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG <tref> implementation - All character data within the referenced
  * element, including character data enclosed within additional markup,
@@ -13,7 +14,7 @@
  *
  * Copyright (C) 2007 Gail Banaszkiewicz
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-tref.h"

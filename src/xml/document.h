@@ -1,15 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * @brief Interface for XML documents
- */
-/* Copyright 2005 MenTaLguY <mental@rydia.net>
+ *  Interface for XML documents
+ *//*
+ * Authors: see git history
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * See the file COPYING for details.
- *
+ * Copyright (C) 2011 Authors
+ * Copyright 2005 MenTaLguY <mental@rydia.net>
+ * 
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_XML_SP_REPR_DOC_H

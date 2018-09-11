@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_EXTENSION_INTERNAL_BITMAP_IMAGEMAGICK_H
 #define INKSCAPE_EXTENSION_INTERNAL_BITMAP_IMAGEMAGICK_H
 
@@ -6,7 +7,7 @@
  *   Christopher Brown <audiere@gmail.com>
  *   Ted Gould <ted@gould.cx>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "extension/implementation/implementation.h"

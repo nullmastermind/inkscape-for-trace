@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * feTurbulence filter primitive renderer
  *
@@ -14,7 +15,7 @@
  *  http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
  *
  * Copyright (C) 2007 authors
- * Released under GNU GPL version 2 (or later), read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "display/cairo-templates.h"

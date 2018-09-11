@@ -12,9 +12,9 @@ if(WIN32)
     NEWS.md
     README.md
     TRANSLATORS
-	GPL2.txt
-	GPL3.txt
-	LGPL2.1.txt
+	LICENSES/GPL-2.0.txt
+	LICENSES/GPL-3.0.txt
+	LICENSES/LGPL-2.1.txt
     DESTINATION .)
 
   install(DIRECTORY doc

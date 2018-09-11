@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 if(WITH_DBUS)
 include_directories(${CMAKE_BINARY_DIR}/src/extension/dbus)
 set(dbus_SRC "")

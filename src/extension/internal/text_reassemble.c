@@ -1,3 +1,15 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * text_reassemble.c from libTERE
+ *//*
+ * Authors: see below
+ * 
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2.0+, read the file 'COPYING' for more information.
+ */
+
+
 /**
   @file text_reassemble.c
 

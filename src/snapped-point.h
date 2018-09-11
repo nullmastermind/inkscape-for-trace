@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SNAPPEDPOINT_H
 #define SEEN_SNAPPEDPOINT_H
 
@@ -9,7 +10,7 @@
  *      Mathieu Dimanche <mdimanche@free.fr>
  *      Diederik van Lierop <mail@diedenrezi.nl>
  *
- *    Released under GNU GPL, read the file 'COPYING' for more information.
+ *    Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/geom.h>

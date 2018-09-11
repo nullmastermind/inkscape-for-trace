@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_KNOTHOLDER_H
 #define SEEN_SP_KNOTHOLDER_H
 
@@ -13,7 +14,7 @@
  * Copyright (C) 2001 Mitsuru Oka
  * Copyright (C) 2008 Maximilian Albert
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

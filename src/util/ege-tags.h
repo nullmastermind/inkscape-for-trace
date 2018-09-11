@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later
 #ifndef SEEN_EGE_TAGS_H
 #define SEEN_EGE_TAGS_H
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Miscellaneous helpers for reprs.
@@ -12,7 +13,7 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * g++ port Copyright (C) 2003 Nathan Hurst
  *
- * Licensed under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

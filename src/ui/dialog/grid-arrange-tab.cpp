@@ -1,19 +1,20 @@
-    /*
-     * A simple dialog for creating grid type arrangements of selected objects
-     *
-     * Authors:
-     *   Bob Jamison ( based off trace dialog)
-     *   John Cliff
-     *   Other dudes from The Inkscape Organization
-     *   Abhishek Sharma
-     *   Declara Denis
-     *
-     * Copyright (C) 2004 Bob Jamison
-     * Copyright (C) 2004 John Cliff
-     *
-     * Released under GNU GPL, read the file 'COPYING' for more information
-     */
-    //#define DEBUG_GRID_ARRANGE 1
+// SPDX-License-Identifier: GPL-2.0-or-later
+/*
+ * A simple dialog for creating grid type arrangements of selected objects
+ *
+ * Authors:
+ *   Bob Jamison ( based off trace dialog)
+ *   John Cliff
+ *   Other dudes from The Inkscape Organization
+ *   Abhishek Sharma
+ *   Declara Denis
+ *
+ * Copyright (C) 2004 Bob Jamison
+ * Copyright (C) 2004 John Cliff
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
+//#define DEBUG_GRID_ARRANGE 1
 
 #include "ui/dialog/grid-arrange-tab.h"
 #include <glibmm/i18n.h>
@@ -29,7 +30,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-    //#include "sp-item-transform.h" FIXME
+//#include "sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
     /*

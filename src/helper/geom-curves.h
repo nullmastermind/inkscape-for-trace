@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_HELPER_GEOM_CURVES_H
 #define INKSCAPE_HELPER_GEOM_CURVES_H
 
@@ -11,7 +12,7 @@
  *
  * Copyright (C) 2008-2009 Johan Engelen
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <2geom/line.h>

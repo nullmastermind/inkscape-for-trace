@@ -1,10 +1,15 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Inkscape::ShapeEditor
- *
- * Authors:
+ * This is a container class which contains a knotholder for shapes.
+ * It is attached to a single item.
+ *//*
+ * Authors: see git history
  *   bulia byak <buliabyak@users.sf.net>
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "desktop.h"

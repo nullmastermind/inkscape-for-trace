@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_DESKTOP_WIDGET_H
 #define SEEN_SP_DESKTOP_WIDGET_H
 
@@ -7,9 +8,11 @@
  * Authors:
  *      Jon A. Cruz <jon@joncruz.org> (c) 2010
  *      John Bintz <jcoswell@coswellproductions.org> (c) 2006
- *      Ralf Stephan <ralf@ark.in-berlin.de> (c) 2005, distrib. under GPL2
+ *      Ralf Stephan <ralf@ark.in-berlin.de> (c) 2005
  *      Abhishek Sharma
  *      ? -2004
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/window.h>

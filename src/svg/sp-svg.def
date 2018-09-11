@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 EXPORTS
 	gnome_canvas_bpath_def_art_finish
 	gnome_canvas_bpath_def_closepath

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 set(filters_SRC
   sp-filter-primitive.cpp

@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 // #define TOOL_BUTTON_SIZE 28
 
 // GTK uses 24 for icon sizes by default.  Spacing adjust to keep the

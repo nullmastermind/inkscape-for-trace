@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_PAINT_SERVER_REFERENCE_H
 #define SEEN_SP_PAINT_SERVER_REFERENCE_H
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2000-2001 Ximian, Inc.
  * Copyright (C) 2010 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "uri-references.h"

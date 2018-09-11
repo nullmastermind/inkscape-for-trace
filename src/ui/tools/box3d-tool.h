@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SP_BOX3D_CONTEXT_H__
 #define __SP_BOX3D_CONTEXT_H__
 
@@ -12,7 +13,7 @@
  * Copyright (C) 2002 Lauris Kaplinski
  * Copyright (C) 2007 Maximilian Albert <Anhalter42@gmx.de>
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstddef>

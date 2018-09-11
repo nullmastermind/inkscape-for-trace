@@ -1,5 +1,13 @@
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
  *   bulia byak <buliabyak@users.sf.net>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm/adjustment.h>

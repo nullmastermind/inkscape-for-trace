@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Document properties dialog, Gtkmm-style.
@@ -15,7 +16,7 @@
  * Copyright (C) 2006-2008 Johan Engelen  <johan@shouraizou.nl>
  * Copyright (C) 2000 - 2008 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef HAVE_CONFIG_H

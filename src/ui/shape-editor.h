@@ -1,16 +1,17 @@
-#ifndef SEEN_SHAPE_EDITOR_H
-#define SEEN_SHAPE_EDITOR_H
-
-/*
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Inkscape::ShapeEditor
- *
  * This is a container class which contains a knotholder for shapes.
  * It is attached to a single item.
- *
- * Authors:
+ *//*
+ * Authors: see git history
  *   bulia byak <buliabyak@users.sf.net>
  *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
+#ifndef SEEN_SHAPE_EDITOR_H
+#define SEEN_SHAPE_EDITOR_H
 
 class KnotHolder;
 class LivePathEffectObject;

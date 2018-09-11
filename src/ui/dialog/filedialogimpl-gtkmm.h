@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Implementation of the file dialog interfaces defined in filedialogimpl.h
  */
@@ -11,7 +12,7 @@
  * Copyright (C) 2004-2008 Authors
  * Copyright (C) 2004-2007 The Inkscape Organization
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef __FILE_DIALOGIMPL_H__

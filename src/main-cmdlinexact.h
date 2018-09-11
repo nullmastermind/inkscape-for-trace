@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-only
 #ifndef __INK_MAIN_CMD_LINE_XACTIONS_H__
 #define __INK_MAIN_CMD_LINE_XACTIONS_H__
 
@@ -17,7 +18,10 @@
  *
  * Copyright (C) 2016 Authors
  *
- * Released under GNU GPL v2.x, read the file 'COPYING' for more information
+ * Released under GNU GPL v2 (ONLY?), read the file 'COPYING' for more information
+ * TODO: REQUIRES RELICENSING OR REMOVAL
+ *
+ * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
 
 #include "main-cmdlineact.h"

@@ -1,14 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
+ *
+ * Copyright (C) 2014 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_WINDOW_H
 #define SEEN_SP_WINDOW_H
-
-/**
- * Generic window implementation
- *
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * This code is in public domain
- */
 
 struct _GtkWidget;
 typedef _GtkWidget GtkWidget;

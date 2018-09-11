@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Input devices dialog (new) - implementation.
@@ -6,7 +7,7 @@
  *   Jon A. Cruz
  *
  * Copyright (C) 2008 Author
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <map>

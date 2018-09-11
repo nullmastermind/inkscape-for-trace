@@ -1,11 +1,14 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * boolean operations and outlines
+ *//*
+ * Authors: see git history
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_LIVAROT_H
 #define SEEN_SP_LIVAROT_H
-
-/*
- * boolops and outlines
- *
- * public domain
- */
 
 #include <2geom/forward.h>
 #include <2geom/path.h>

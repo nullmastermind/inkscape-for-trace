@@ -1,12 +1,13 @@
-/**
- *  \file livarot/float-line.cpp
- *
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
  * Implementation of coverage with floating-point values.
+ *//*
+ * Authors:
+ * see git history
+ * Fred
  *
- *  \author Fred
- *
- *  public domain
- *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifdef faster_flatten

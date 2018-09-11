@@ -1,15 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Lauris Kaplinski <lauris@kaplinski.com>
+ * MenTaLguY <mental@rydia.net>
+ * bulia byak <buliabyak@users.sf.net>
+ * Peter Moulder <pmoulder@mail.csse.monash.edu.au>
+ * 2005 Monash University
+ * 2005  MenTaLguY <mental@rydia.net>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 /** \file
  * Keyboard shortcut processing.
  */
 /*
  * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *   MenTaLguY <mental@rydia.net>
- *   bulia byak <buliabyak@users.sf.net>
- *   Peter Moulder <pmoulder@mail.csse.monash.edu.au>
  *
- * Copyright (C) 2005  Monash University
- * Copyright (C) 2005  MenTaLguY <mental@rydia.net>
  *
  * You may redistribute and/or modify this file under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2 of the License, or (at your

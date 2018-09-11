@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_FILTER_COLOR_H__
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_FILTER_COLOR_H__
 /* Change the 'COLOR' above to be your file name */
@@ -28,7 +29,7 @@
  *   Solarize
  *   Tritone
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 /* ^^^ Change the copyright to be you and your e-mail address ^^^ */
 

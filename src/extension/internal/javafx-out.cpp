@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A simple utility for exporting Inkscape svg Shapes as JavaFX paths.
  *
@@ -13,7 +14,7 @@
  *
  * Copyright (C) 2008,2009 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <glibmm/miscutils.h>

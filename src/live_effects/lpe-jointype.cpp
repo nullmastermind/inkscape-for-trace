@@ -1,11 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
-*
-*	 Liam P White
-*
-* Copyright (C) 2014 Authors
-*
-* Released under GNU GPL v2+, read the file 'COPYING' for more information
-*/
+ *
+ *	 Liam P White
+ *
+ * Copyright (C) 2014 Authors
+ *
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 
 #include "live_effects/parameter/enum.h"
 #include "helper/geom-pathstroke.h"

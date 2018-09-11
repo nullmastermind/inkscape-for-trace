@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
 /* HSV color selector for GTK+
  *
  * Copyright (C) 1999 The Free Software Foundation

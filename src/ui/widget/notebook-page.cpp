@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Notebook page widget.
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2004 Bryce Harrington
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "notebook-page.h"

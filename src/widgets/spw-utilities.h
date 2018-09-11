@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __SPW_UTILITIES_H__
 #define __SPW_UTILITIES_H__
 
@@ -6,10 +7,10 @@
  *
  * Author:
  *   Bryce W. Harrington <brycehar@bryceharrington.org>
- * 
+ *
  * Copyright (C) 2003 Bryce Harrington
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 /* The following are helper routines for making Inkscape dialog widgets.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 <?xml version='1.0'?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd"
@@ -5,7 +6,7 @@
 <!--
      Convert D-Bus Glib xml into DocBook refentries
      Copyright (C) 2007 William Jon McCann
-     License: GPL
+     Released under GNU GPL v2+, read the file 'COPYING' for more information.
 -->
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 

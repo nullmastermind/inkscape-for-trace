@@ -1,12 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_SHOW_HANDLES_H
 #define INKSCAPE_LPE_SHOW_HANDLES_H
 
 /*
  * Authors:
  *   Jabier Arraiza Cenoz
-*
-* Copyright (C) Jabier Arraiza Cenoz 2014 <jabier.arraiza@marker.es>
- * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * Copyright (C) Jabier Arraiza Cenoz 2014 <jabier.arraiza@marker.es>
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "helper/geom-nodetype.h"
 #include "live_effects/effect.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * SVG displacement map filter effect
  *//*
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2006 Hugo Rodrigues
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SP_FEDISPLACEMENTMAP_H_SEEN

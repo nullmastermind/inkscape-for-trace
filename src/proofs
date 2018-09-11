@@ -1,3 +1,6 @@
+
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 This file contains some loose proofs of a few properties.  It's somewhat
 ad-hoc.  At least it gives an indication of what assert/g_assert calls have
 been checked by a developer.  If an assertion does trigger, then this file may

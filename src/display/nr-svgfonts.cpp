@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * SVGFonts rendering implementation
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2008 Felipe C. da S. Sanches
  *
- * Released under GNU GPL version 2 or later.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  * Read the file 'COPYING' for more information.
  */
 

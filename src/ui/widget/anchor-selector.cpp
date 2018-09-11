@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * anchor-selector.cpp
  *
  *  Created on: Mar 22, 2012
  *      Author: denis
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "ui/widget/anchor-selector.h"
 #include "helper/icon-loader.h"

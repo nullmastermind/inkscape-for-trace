@@ -1,8 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
     Author:  Ted Gould <ted@gould.cx>
     Copyright (c) 2003-2005,2007
 
-    This code is licensed under the GNU GPL.  See COPYING for details.
+    Released under GNU GPL v2+, read the file 'COPYING' for more information.
 
     This file is the backend to the extensions system.  These are
     the parts of the system that most users will never see, but are

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * This is file is kind of the junk file.  Basically everything that
  * didn't fit in one of the other well defined areas, well, it's now
@@ -13,7 +14,7 @@
  * Copyright (C) 2006-2007 Johan Engelen
  * Copyright (C) 2002-2004 Ted Gould
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/interface.h"

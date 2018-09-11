@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Load AUTHORS file contents into $INKSCAPE_AUTHORS
 file(READ ${CMAKE_SOURCE_DIR}/AUTHORS content)
 string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")

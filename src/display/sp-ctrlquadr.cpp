@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Quadrilateral
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2005 authors
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-canvas-item.h"

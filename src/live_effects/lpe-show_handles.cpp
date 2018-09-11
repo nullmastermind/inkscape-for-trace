@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Authors:
  *   Jabier Arraiza Cenoz
-*
-* Copyright (C) Jabier Arraiza Cenoz 2014 <jabier.arraiza@marker.es>
- * Released under GNU GPL, read the file 'COPYING' for more information
+ *
+ * Copyright (C) Jabier Arraiza Cenoz 2014 <jabier.arraiza@marker.es>
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <gtkmm.h>

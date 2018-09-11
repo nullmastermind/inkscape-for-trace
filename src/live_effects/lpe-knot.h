@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** \file
  * LPE knot effect implementation, see lpe-knot.cpp.
  */
@@ -7,7 +8,7 @@
  *
  * Copyright (C) Authors 2007-2012
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_LPE_KNOT_H

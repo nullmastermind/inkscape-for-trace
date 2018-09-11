@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_LPE_ITEM_REFERENCE_H
 #define SEEN_LPE_ITEM_REFERENCE_H
 
@@ -6,7 +7,7 @@
  * Authors: Johan Engelen
  *          Abhishek Sharma
  *
- * Released under GNU GPL, read the file 'COPYING' for more information.
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "object/uri-references.h"

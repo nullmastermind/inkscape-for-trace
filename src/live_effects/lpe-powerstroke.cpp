@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * PowerStroke LPE implementation. Creates curves with modifiable stroke width.
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2010-2012 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/lpe-powerstroke.h"

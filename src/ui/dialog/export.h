@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
@@ -6,7 +7,7 @@
  * Copyright (C) 1999-2007 Authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SP_EXPORT_H

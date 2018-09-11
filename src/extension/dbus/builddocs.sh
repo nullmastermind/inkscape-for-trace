@@ -1,3 +1,5 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-or-later
 xsltproc doc/spec-to-docbook.xsl application-interface.xml > doc/org.inkscape.application.ref.xml &&
 xsltproc doc/spec-to-docbook.xsl document-interface.xml > doc/org.inkscape.document.ref.xml &&
 xsltproc doc/spec-to-docbook.xsl proposed-interface.xml > doc/org.inkscape.proposed.ref.xml &&

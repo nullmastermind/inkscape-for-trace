@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Entry widget for typing color value in css form
  *//*
@@ -5,7 +6,7 @@
  *   Tomasz Boczkowski <penginsbacon@gmail.com>
  *
  * Copyright (C) 2014 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_COLOR_ENTRY_H

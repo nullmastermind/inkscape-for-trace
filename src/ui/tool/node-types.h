@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * Node types and other small enums.
  * This file exists to reduce the number of includes pulled in by toolbox.cpp.
@@ -6,7 +7,7 @@
  *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 2009 Authors
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_UI_TOOL_NODE_TYPES_H

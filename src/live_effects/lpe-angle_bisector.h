@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LPE_ANGLE_BISECTOR_H
 #define INKSCAPE_LPE_ANGLE_BISECTOR_H
 
@@ -8,7 +9,7 @@
  *
  * Copyright (C) Authors 2007-2012
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "live_effects/effect.h"

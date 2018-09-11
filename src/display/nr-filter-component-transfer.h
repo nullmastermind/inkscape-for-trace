@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_NR_FILTER_COMPONENT_TRANSFER_H
 #define SEEN_NR_FILTER_COMPONENT_TRANSFER_H
 
@@ -9,7 +10,7 @@
  *
  * Copyright (C) 2007 authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <vector>

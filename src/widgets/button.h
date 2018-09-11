@@ -1,16 +1,17 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * Generic button widget
+ *//*
+ * Authors:
+ *  see git history
+ *  Lauris Kaplinski <lauris@kaplinski.com>
+ *
+ * Copyright (C) 2018 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef SEEN_SP_BUTTON_H
 #define SEEN_SP_BUTTON_H
 
-/**
- * Generic button widget
- *
- * Author:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *
- * Copyright (C) 2002 Lauris Kaplinski
- *
- * This code is in public domain
- */
 
 #define SP_TYPE_BUTTON (sp_button_get_type ())
 #define SP_BUTTON(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_BUTTON, SPButton))

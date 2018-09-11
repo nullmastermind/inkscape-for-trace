@@ -1,12 +1,16 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+/** @file
+ * TODO: insert short description here
+ *//*
+ * Authors:
+ * see git history
+ * Tavmjong Bah
+ *
+ * Copyright (C) 2016 Authors
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+ */
 #ifndef __SP_ATTRIBUTE_SORT_UTIL_H__
 #define __SP_ATTRIBUTE_SORT_UTIL_H__
-
-/*
- * attribute-sort-util.h
- *
- *  Created on: Jun 10, 2016
- *      Author: Tavmjong Bah
- */
 
 #include <glibmm/ustring.h>
 #include "xml/sp-css-attr.h"

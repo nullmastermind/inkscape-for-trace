@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Util::FixedPoint - fixed point type
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2006 Jasper van de Gronde
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_UTIL_FIXED_POINT_H

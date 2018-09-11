@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A class for handling connector endpoint movement and libavoid interaction.
  *
@@ -8,7 +9,7 @@
  *
  *    * Copyright (C) 2004-2005 Monash University
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include <cstring>

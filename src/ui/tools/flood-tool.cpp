@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
  * Bucket fill drawing context, works by bitmap filling an area on a rendered version
@@ -14,7 +15,7 @@
  * Copyright (C) 2000-2005 authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "flood-tool.h"

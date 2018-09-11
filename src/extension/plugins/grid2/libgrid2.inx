@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!-- SPDX-License-Identifier: GPL-2.0-or-later -->
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
 <_name>Grid2</_name>
 <id>org.inkscape.effect.grid2</id>

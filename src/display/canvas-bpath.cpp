@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Simple bezier bpath CanvasItem for inkscape
  *
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2001 Lauris Kaplinski and Ximian, Inc.
  *
- * Released under GNU GPL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  */
 

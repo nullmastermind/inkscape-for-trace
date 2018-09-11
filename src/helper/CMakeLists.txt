@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 include(${CMAKE_SOURCE_DIR}/CMakeScripts/UseGlibMarshal.cmake)
 

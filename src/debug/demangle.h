@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Debug::demangle - demangle C++ symbol names
  *
@@ -6,7 +7,7 @@
  *
  * Copyright (C) 2006 MenTaLguY
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef SEEN_INKSCAPE_DEBUG_DEMANGLE_H

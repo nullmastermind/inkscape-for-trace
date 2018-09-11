@@ -1,12 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_ENUM_H
 #define INKSCAPE_LIVEPATHEFFECT_PARAMETER_ENUM_H
 
 /*
  * Inkscape::LivePathEffectParameters
  *
-* Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "ui/widget/registered-enums.h"

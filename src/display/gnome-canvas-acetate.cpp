@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Infinite invisible canvas item
  *
@@ -10,7 +11,7 @@
  * Copyright (C) 1998-1999 The Free Software Foundation
  * Copyright (C) 2002 Lauris Kaplinski
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "gnome-canvas-acetate.h"

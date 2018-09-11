@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SP_FONTFACE_H
 #define SEEN_SP_FONTFACE_H
 
@@ -7,7 +8,7 @@
  * SVG <font-face> element implementation
  *
  * Section 20.8.3 of the W3C SVG 1.1 spec
- * available at: 
+ * available at:
  * http://www.w3.org/TR/SVG/fonts.html#FontFaceElement
  *
  * Authors:
@@ -15,7 +16,7 @@
  *
  * Copyright (C) 2008 Felipe C. da S. Sanches
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #include "sp-object.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * A quick hack to use the print output to write out a file.  This
  * then makes 'save as...' PNG.
@@ -8,7 +9,7 @@
  *
  * Copyright (C) 2004-2006 Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef EXTENSION_INTERNAL_CAIRO_PNG_OUT_H

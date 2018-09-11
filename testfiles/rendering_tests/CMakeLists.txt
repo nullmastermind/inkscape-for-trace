@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 #add your test here (do not put the .svg extension)
 set(RENDERING_TESTS 

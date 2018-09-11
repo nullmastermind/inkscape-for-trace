@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape Units
  * These classes are used for defining different unit systems.
@@ -7,7 +8,7 @@
  *
  * Copyright (C) 2013 Matthew Petroff
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
 #ifndef INKSCAPE_UTIL_UNITS_H

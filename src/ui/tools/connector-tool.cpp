@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Connector creation tool
  *
@@ -11,7 +12,7 @@
  * Copyright (C) 2009  Monash University
  * Copyright (C) 2012  Authors
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * TODO:
  *  o  Show a visual indicator for objects with the 'avoid' property set.
