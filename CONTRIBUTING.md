@@ -69,7 +69,7 @@ Building
 
 This is the best set of instructions for setting up your build directory...
 
-You should install ninga and ccache for the fastest build:
+You should install ninja and ccache for the fastest build:
 
 ```bash
 sudo apt-get install ninja-build ccache
