@@ -1079,6 +1079,7 @@ void SPCanvas::handle_realize(GtkWidget *widget)
                              GDK_ENTER_NOTIFY_MASK |
                              GDK_LEAVE_NOTIFY_MASK |
                              GDK_SCROLL_MASK |
+                             GDK_SMOOTH_SCROLL_MASK |
                              GDK_FOCUS_CHANGE_MASK);
 
     gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;

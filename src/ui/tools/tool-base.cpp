@@ -311,7 +311,7 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
 {
     if (held_control(event)) return false;
     unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
-    Geom::Point delta = dir * num; 
+    Geom::Point delta = dir * num;
     if (held_shift(event)) delta *= 10;
     if (held_alt(event)) {
         delta /= desktop->current_zoom();
@@ -795,7 +795,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             double rotate_inc = prefs->getDoubleLimited(
                     "/options/rotateincrement/value", 15, 1, 90, "°" );
             rotate_inc *= M_PI/180.0;
-            
+
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 // Do nothing
@@ -804,6 +804,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
             case GDK_SCROLL_DOWN:
                 rotate_inc = -rotate_inc;
                 break;
+
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+                double delta_y_clamped = CLAMP(delta_y, -1.0, 1.0); // values > 1 result in excessive rotating
+                rotate_inc = rotate_inc * -delta_y_clamped;
+                break;
+            }
 
             default:
                 rotate_inc = 0.0;
@@ -827,6 +834,12 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
                 break;
 
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+                desktop->scroll_relative(Geom::Point(wheel_scroll * -delta_y, 0));
+                break;
+            }
+
             default:
                 break;
             }
@@ -845,6 +858,18 @@ bool ToolBase::root_handler(GdkEvent* event) {
             case GDK_SCROLL_DOWN:
                 rel_zoom = 1 / zoom_inc;
                 break;
+
+            case GDK_SCROLL_SMOOTH: {
+                gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+                double delta_y_clamped = CLAMP(std::abs(delta_y), 0.0, 1.0); // values > 1 result in excessive zooming
+                double zoom_inc_scaled = (zoom_inc-1) * delta_y_clamped + 1;
+                if (delta_y < 0) {
+                    rel_zoom = zoom_inc_scaled;
+                } else {
+                    rel_zoom = 1 / zoom_inc_scaled;
+                }
+                break;
+            }
 
             default:
                 rel_zoom = 0.0;
@@ -877,12 +902,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-                desktop->scroll_relative(Geom::Point(delta_x, delta_y));
+                desktop->scroll_relative(Geom::Point(wheel_scroll*delta_x, -wheel_scroll*delta_y));
                 break;
             }
         }
         break;
     }
+
     default:
         break;
     }
@@ -1367,7 +1393,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         delete dse;
         return false;
     }
-    
+
     ec->_dse_callback_in_process = true;
 
     SPDesktop *dt = ec->desktop;
@@ -1405,7 +1431,7 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
         }
         ControlPoint *point = reinterpret_cast<ControlPoint*> (pitem2);
         if (point) {
-            if (point->position().isFinite() && (dt == point->_desktop)) {            
+            if (point->position().isFinite() && (dt == point->_desktop)) {
                 point->_eventHandler(ec, dse->getEvent());
             }
             else {
