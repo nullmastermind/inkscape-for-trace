@@ -34,6 +34,7 @@
 #include "document.h"
 #include "style.h"
 #include "sp-marker.h"
+#include "sp-root.h"
 #include "sp-path.h"
 #include "preferences.h"
 #include "attributes.h"
@@ -788,7 +789,11 @@ void SPShape::update_patheffect(bool write)
         /* if a path has an lpeitem applied, then reset the curve to the _curve_before_lpe.
          * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
         this->setCurveInsync(c_lpe);
-        this->resetClipPathAndMaskLPE();
+        SPRoot *root = this->document->getRoot();
+        if (!sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
+            this->resetClipPathAndMaskLPE();
+        }
+
         bool success = false;
         if (hasPathEffect() && pathEffectsEnabled()) {
             success = this->performPathEffect(c_lpe, SP_SHAPE(this));
