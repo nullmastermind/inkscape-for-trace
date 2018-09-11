@@ -20,7 +20,7 @@ Running Without Installing
 For developers and others who want to run inkscape without installing it:
 
 ```bash
-sudo apt-get install ninja ccache
+sudo apt-get install ninja-build ccache
 ```
 
 ```bash
