@@ -9,7 +9,7 @@ if(WIN32)
   install(FILES
     AUTHORS
     COPYING
-    NEWS
+    NEWS.md
     README.md
     TRANSLATORS
 	GPL2.txt
