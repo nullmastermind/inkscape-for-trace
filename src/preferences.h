@@ -552,6 +552,7 @@ private:
     ErrorReporter* _errorHandler; ///< Pointer to object reporting errors.
     bool _writable; ///< Will the preferences be saved at exit?
     bool _hasError; ///< Indication that some error has occurred;
+    std::map<Glib::ustring, const gchar*> cachedRawValue;
 
     /// Wrapper class for XML node observers
     class PrefNodeObserver;

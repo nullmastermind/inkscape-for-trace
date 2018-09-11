@@ -505,6 +505,9 @@ void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
  */
 void Preferences::remove(Glib::ustring const &pref_path)
 {
+    auto it = cachedRawValue.find(pref_path);
+    if (it != cachedRawValue.end()) cachedRawValue.erase(it);
+
     Inkscape::XML::Node *node = _getNode(pref_path, false);
     if (node && node->parent()) {
         node->parent()->removeChild(node);
@@ -746,6 +749,7 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
 
 void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 {
+    if (cachedRawValue.find(path)!=cachedRawValue.end()) { result = cachedRawValue.at(path); return; }
     // create node and attribute keys
     Glib::ustring node_key, attr_key;
     _keySplit(path, node_key, attr_key);
@@ -762,6 +766,7 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
             result = attr;
         }
     }
+    cachedRawValue[path] = result;
 }
 
 void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &value)
@@ -773,6 +778,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
     node->setAttribute(attr_key.c_str(), value.c_str());
+    cachedRawValue[path] = value.c_str();
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored
