@@ -544,28 +544,6 @@ void LayersPanel::_toggled( Glib::ustring const& str, int targetCol )
     Inkscape::SelectionHelper::fixSelection(_desktop);
 }
 
-bool LayersPanel::_handleKeyEvent(GdkEventKey *event)
-{
-
-    switch (Inkscape::UI::Tools::get_latin_keyval(event)) {
-        case GDK_KEY_Return:
-        case GDK_KEY_KP_Enter:
-        case GDK_KEY_F2: {
-            Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
-            if (iter && !_text_renderer->property_editable()) {
-                Gtk::TreeModel::Path *path = new Gtk::TreeModel::Path(iter);
-                // Edit the layer label
-                _text_renderer->property_editable() = true;
-                _tree.set_cursor(*path, *_name_column, true);
-                grab_focus();
-                return true;
-            }
-        }
-        break;
-    }
-    return false;
-}
-
 bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
 {
     static unsigned doubleclick = 0;
@@ -642,22 +620,6 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
 
     if ( (event->type == GDK_2BUTTON_PRESS) && (event->button == 1) ) {
         doubleclick = 1;
-    }
-
-    if ( event->type == GDK_BUTTON_RELEASE && doubleclick) {
-        doubleclick = 0;
-        Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn* col = nullptr;
-        int x = static_cast<int>(event->x);
-        int y = static_cast<int>(event->y);
-        int x2 = 0;
-        int y2 = 0;
-        if ( _tree.get_path_at_pos( x, y, path, col, x2, y2 ) && col == _name_column) {
-            // Double click on the Layer name, enable editing
-            _text_renderer->property_editable() = true;
-            _tree.set_cursor (path, *_name_column, true);
-            grab_focus();
-        }
     }
 
     return false;
@@ -746,12 +708,6 @@ void LayersPanel::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
     Gtk::TreeModel::Row row = *iter;
 
     _renameLayer(row, new_text);
-    _text_renderer->property_editable() = false;
-}
-
-void LayersPanel::_handleEditingCancelled()
-{
-    _text_renderer->property_editable() = false;
 }
 
 void LayersPanel::_renameLayer(Gtk::TreeModel::Row row, const Glib::ustring& name)
@@ -866,12 +822,11 @@ LayersPanel::LayersPanel() :
 
     _tree.signal_drag_drop().connect( sigc::mem_fun(*this, &LayersPanel::_handleDragDrop), false);
 
+    _text_renderer->property_editable() = true;
     _text_renderer->signal_edited().connect( sigc::mem_fun(*this, &LayersPanel::_handleEdited) );
-    _text_renderer->signal_editing_canceled().connect( sigc::mem_fun(*this, &LayersPanel::_handleEditingCancelled) );
 
     _tree.signal_button_press_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent), false );
     _tree.signal_button_release_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleButtonEvent), false );
-    _tree.signal_key_press_event().connect( sigc::mem_fun(*this, &LayersPanel::_handleKeyEvent), false );
 
     _scroller.add( _tree );
     _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
