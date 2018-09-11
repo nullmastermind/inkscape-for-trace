@@ -62,6 +62,8 @@ public:
 
     Node *next() override { return _next; }
     Node const *next() const override { return _next; }
+    Node *prev() override { return _prev; }
+    Node const *prev() const override { return _prev; }
 
     Node *firstChild() override { return _first_child; }
     Node const *firstChild() const override { return _first_child; }
@@ -139,6 +141,7 @@ private:
 
     SimpleNode *_parent;
     SimpleNode *_next;
+    SimpleNode *_prev;
     Document *_document;
     mutable unsigned _cached_position;
 

@@ -169,7 +169,7 @@ SimpleNode::SimpleNode(int code, Document *document)
     g_assert(document != nullptr);
 
     this->_document = document;
-    this->_parent = this->_next = nullptr;
+    this->_parent = this->_next = this->_prev = nullptr;
     this->_first_child = this->_last_child = nullptr;
 
     _observers.add(_subtree_observers);
@@ -185,7 +185,7 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
     g_assert(document != nullptr);
 
     _document = document;
-    _parent = _next = nullptr;
+    _parent = _next = _prev = nullptr;
     _first_child = _last_child = nullptr;
 
     for ( SimpleNode *child = node._first_child ;
@@ -194,8 +194,9 @@ SimpleNode::SimpleNode(SimpleNode const &node, Document *document)
         SimpleNode *child_copy=dynamic_cast<SimpleNode *>(child->duplicate(document));
 
         child_copy->_setParent(this);
-        if (_last_child) {
+        if (_last_child) { // not the first iteration
             _last_child->_next = child_copy;
+            child_copy->_prev = _last_child;
         } else {
             _first_child = child_copy;
         }
@@ -417,10 +418,14 @@ void SimpleNode::addChild(Node *generic_child, Node *generic_ref) {
     if (ref) {
         next = ref->_next;
         ref->_next = child;
+
+        child->_prev = ref;
     } else {
+        if(_first_child) _first_child->_prev = child;
         next = _first_child;
         _first_child = child;
     }
+
     if (!next) { // appending?
         _last_child = child;
         // set cached position if possible when appending
@@ -432,6 +437,7 @@ void SimpleNode::addChild(Node *generic_child, Node *generic_ref) {
             child->_cached_position = ref->_cached_position + 1;
         }
     } else {
+        next->_prev = child;
         // invalidate cached positions otherwise
         _cached_positions_valid = false;
     }
@@ -449,26 +455,28 @@ void SimpleNode::removeChild(Node *generic_child) {
     g_assert(generic_child->document() == _document);
 
     SimpleNode *child=dynamic_cast<SimpleNode *>(generic_child);
-    SimpleNode *ref=dynamic_cast<SimpleNode *>(previous_node(child));
+    SimpleNode *ref=child->_prev;
+    SimpleNode *next = child->_next;
 
     g_assert(child->_parent == this);
 
     Debug::EventTracker<DebugRemoveChild> tracker(*this, *child);
 
-    SimpleNode *next = child->_next;
     if (ref) {
         ref->_next = next;
     } else {
         _first_child = next;
     }
-    if (!next) { // removing the last child?
-        _last_child = ref;
+    if (next) { // removing the last child?
+        next->_prev = ref;
     } else {
         // removing any other child invalidates the cached positions
+        _last_child = ref;
         _cached_positions_valid = false;
     }
 
     child->_next = nullptr;
+    child->_prev = nullptr;
     child->_setParent(nullptr);
     _child_count--;
 
@@ -488,7 +496,7 @@ void SimpleNode::changeOrder(Node *generic_child, Node *generic_ref) {
     g_return_if_fail(child != ref);
     g_return_if_fail(!ref || ref->parent() == this);
 
-    SimpleNode *const prev=dynamic_cast<SimpleNode *>(previous_node(child));
+    SimpleNode *const prev= child->_prev;
 
     Debug::EventTracker<DebugSetChildPosition> tracker(*this, *child, prev, ref);
 
@@ -503,7 +511,9 @@ void SimpleNode::changeOrder(Node *generic_child, Node *generic_ref) {
     } else {
         _first_child = next;
     }
-    if (!next) {
+    if (next) {
+        next->_prev = prev;
+    } else {
         _last_child = prev;
     }
 
@@ -515,8 +525,13 @@ void SimpleNode::changeOrder(Node *generic_child, Node *generic_ref) {
         next = _first_child;
         _first_child = child;
     }
+
+    child->_prev = ref;
     child->_next = next;
-    if (!next) {
+    
+    if (next) {
+        next->_prev = child;
+    } else {
         _last_child = child;
     }
 

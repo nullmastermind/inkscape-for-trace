@@ -286,6 +286,8 @@ public:
      */
     virtual Node *next()=0;
     virtual Node const *next() const=0;
+    virtual Node *prev()=0;
+    virtual Node const *prev() const=0;
     //@}
 
     //@{

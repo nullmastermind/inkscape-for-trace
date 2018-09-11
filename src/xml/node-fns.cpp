@@ -59,6 +59,7 @@ struct node_matches {
 
 // documentation moved to header
 Node *previous_node(Node *node) {
+    return node->prev();
     using Inkscape::Algorithms::find_if_before;
 
     if ( !node || !node->parent() ) {
