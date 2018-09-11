@@ -42,8 +42,8 @@
 #include "ui/tools/tool-base.h"
 
 #include "widgets/sp-xmlview-attr-list.h"
-#include "widgets/sp-xmlview-content.h"
 #include "widgets/sp-xmlview-tree.h"
+#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -60,8 +60,6 @@ XmlTree::XmlTree() :
     selected_repr (nullptr),
     tree (nullptr),
     attributes (nullptr),
-    content (nullptr),
-    attr_name (),
     status (""),
     tree_toolbar(),
     xml_element_new_button ( _("New element node")),
@@ -72,12 +70,6 @@ XmlTree::XmlTree() :
     indent_node_button(),
     raise_node_button(),
     lower_node_button(),
-    attr_toolbar(),
-    xml_attribute_delete_button (_("Delete attribute")),
-    text_container (),
-    attr_container (),
-    attr_subpaned_container(Gtk::ORIENTATION_VERTICAL),
-    set_attr (_("Set")),
     new_window(nullptr)
 {
 
@@ -85,6 +77,8 @@ XmlTree::XmlTree() :
     if (!desktop) {
         return;
     }
+
+    notebook_content = new Gtk::Notebook();
 
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -98,8 +92,7 @@ XmlTree::XmlTree() :
     status_box.pack_start( status, TRUE, TRUE, 0);
     contents->pack_end(status_box, false, false, 2);
 
-    paned.set_position(256);
-    contents->pack_start(paned, TRUE, TRUE, 0);
+    contents->pack_start(*notebook_content, true, true, 0);
 
     _message_stack = new Inkscape::MessageStack();
     _message_context = new Inkscape::MessageContext(_message_stack);
@@ -107,7 +100,7 @@ XmlTree::XmlTree() :
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     /* tree view */
-    paned.pack1(left_box);
+    notebook_content->insert_page(node_box, _("_Nodes"), NOTEBOOK_PAGE_NODES, true);
 
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
@@ -178,81 +171,36 @@ XmlTree::XmlTree() :
     lower_node_button.set_sensitive(false);
     tree_toolbar.add(lower_node_button);
 
-    left_box.pack_start(tree_toolbar, FALSE, TRUE, 0);
+    node_box.pack_start(tree_toolbar, FALSE, TRUE, 0);
 
     Gtk::ScrolledWindow *tree_scroller = new Gtk::ScrolledWindow();
     tree_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     tree_scroller->set_shadow_type(Gtk::SHADOW_IN);
     tree_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(tree))));
 
-    left_box.pack_start(*tree_scroller);
+    node_box.pack_start(*tree_scroller);
 
     /* node view */
-    paned.pack2(right_box);
+    notebook_content->insert_page(attr_box, _("_Attributes"), NOTEBOOK_PAGE_ATTRS, true);
 
     /* attributes */
-    right_box.pack_start( attr_container, TRUE, TRUE, 0 );
-
     attributes = SP_XMLVIEW_ATTR_LIST(sp_xmlview_attr_list_new(nullptr));
-
-    attr_toolbar.set_toolbar_style(Gtk::TOOLBAR_ICONS);
-
-    auto xml_attribute_delete_icon =
-        Gtk::manage(sp_get_icon_image("xml-attribute-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR));
-    xml_attribute_delete_button.set_icon_widget(*xml_attribute_delete_icon);
-    xml_attribute_delete_button.set_tooltip_text(_("Delete attribute"));
-    xml_attribute_delete_button.set_sensitive(false);
-    attr_toolbar.add(xml_attribute_delete_button);
-
-    attr_container.pack_start( attr_toolbar, FALSE, TRUE, 0 );
-    attr_container.pack_start( attr_subpaned_container, TRUE, TRUE, 0 );
 
     Gtk::ScrolledWindow *attr_scroller = new Gtk::ScrolledWindow();
     attr_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     attr_scroller->set_shadow_type(Gtk::SHADOW_IN);
     attr_scroller->set_size_request(-1, 80);
 
-    attr_subpaned_container.pack1( *attr_scroller );
+    attr_box.pack_start( *attr_scroller );
     attr_scroller->add(*Gtk::manage(Glib::wrap(GTK_WIDGET(attributes))));
-
-    attr_vbox.pack_start( attr_hbox, FALSE, TRUE, 0);
-
-    attr_name.set_tooltip_text(_("Attribute name") ); // TRANSLATORS: "Attribute" is a noun here
-    attr_name.set_width_chars (10);
-    attr_hbox.pack_start( attr_name, TRUE, TRUE, 0);
-
-    set_attr.set_sensitive(FALSE);
-    attr_hbox.pack_start(set_attr, FALSE, FALSE, 0);
-
-    Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
-    scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
-    scroller->set_shadow_type(Gtk::SHADOW_IN);
-    scroller->set_size_request(-1, 40);
-
-    attr_vbox.pack_start(*scroller, TRUE, TRUE, 0);
-
-    attr_value.set_wrap_mode(Gtk::WRAP_CHAR);
-    attr_value.set_tooltip_text( _("Attribute value") );// TRANSLATORS: "Attribute" is a noun here
-    attr_value.set_editable(TRUE);
-    scroller->add(attr_value);
-
-    attr_subpaned_container.pack2( attr_vbox, FALSE, FALSE );
-
-    /* text */
-    text_container.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
-    right_box.pack_start(text_container, TRUE, TRUE, 0);
-
-    content = SP_XMLVIEW_CONTENT(sp_xmlview_content_new(nullptr));
-    text_container.add(*Gtk::manage(Glib::wrap(GTK_WIDGET(content))));
 
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
     g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
     g_signal_connect_after( G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
 
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(attributes));
-    g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_attr_select_row), this);
     g_signal_connect( G_OBJECT(attributes), "row-value-changed", G_CALLBACK(on_attr_row_changed), this);
+    g_signal_connect( G_OBJECT(attributes), "attr-value-edited", G_CALLBACK(on_attr_edited), this);
 
     xml_element_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_element_node));
     xml_text_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_text_node));
@@ -262,22 +210,16 @@ XmlTree::XmlTree() :
     indent_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_indent_node));
     raise_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_raise_node));
     lower_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_lower_node));
-    xml_attribute_delete_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_delete_attr));
-    set_attr.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_set_attr));
-    attr_name.signal_changed().connect(sigc::mem_fun(*this, &XmlTree::onNameChanged));
-    attr_value.signal_key_press_event().connect(sigc::mem_fun(*this, &XmlTree::sp_xml_tree_key_press), false);
+
+    styles = new CssDialog;
+    css_box.pack_start(*styles);
+    notebook_content->insert_page(css_box, _("_Styles"), NOTEBOOK_PAGE_STYLES, true);
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     /* initial show/hide */
     show_all();
-
-/*
-    // hide() doesn't seem to work in the constructor, so moved this to present()
-    text_container.hide();
-    attr_container.hide();
-*/
 
     tree_reset_context();
 
@@ -288,9 +230,6 @@ XmlTree::XmlTree() :
 
 void XmlTree::present()
 {
-    text_container.hide();
-    attr_container.hide();
-
     set_tree_select(get_dt_select());
 
     UI::Widget::Panel::present();
@@ -339,19 +278,6 @@ void XmlTree::attr_reset_context(gint attr)
         _message_context->set(Inkscape::NORMAL_MESSAGE, message);
         g_free(message);
     }
-}
-
-bool XmlTree::sp_xml_tree_key_press(GdkEventKey *event)
-{
-    unsigned int shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
-
-    /* fixme: if you need to add more xml-tree-specific callbacks, you should probably upgrade
-     * the sp_shortcut mechanism to take into account windows. */
-    if (shortcut == (SP_SHORTCUT_CONTROL_MASK | GDK_KEY_Return)) {
-        cmd_set_attr();
-        return true;
-    }
-    return false;
 }
 
 void XmlTree::set_tree_desktop(SPDesktop *desktop)
@@ -450,7 +376,6 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
         gtk_tree_selection_unselect_all (selection);
 
         on_tree_unselect_row_disable();
-        on_tree_unselect_row_hide();
     }
     propagate_tree_select(repr);
 }
@@ -463,12 +388,6 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
         sp_xmlview_attr_list_set_repr(attributes, repr);
     } else {
         sp_xmlview_attr_list_set_repr(attributes, nullptr);
-    }
-
-    if (repr && ( repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE || repr->type() == Inkscape::XML::PI_NODE ) ) {
-        sp_xmlview_content_set_repr(content, repr);
-    } else {
-        sp_xmlview_content_set_repr(content, nullptr);
     }
 }
 
@@ -540,8 +459,6 @@ void XmlTree::on_tree_select_row(GtkTreeSelection *selection, gpointer data)
         self->propagate_tree_select(nullptr);
         self->set_dt_select(nullptr);
         self->on_tree_unselect_row_disable();
-        self->on_tree_unselect_row_hide();
-        self->on_attr_unselect_row_clear_text();
         return;
     }
 
@@ -665,21 +582,6 @@ void XmlTree::on_tree_select_row_enable(GtkTreeIter *node)
             lower_node_button.set_sensitive(false);
         }
     }
-
-    //on_tree_select_row_show_if_element
-    if (repr->type() == Inkscape::XML::ELEMENT_NODE) {
-        attr_container.show();
-    } else {
-        attr_container.hide();
-    }
-
-    //on_tree_select_row_show_if_text
-    if ( repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE || repr->type() == Inkscape::XML::PI_NODE ) {
-        text_container.show();
-    } else {
-        text_container.hide();
-    }
-
 }
 
 
@@ -724,52 +626,32 @@ void XmlTree::on_tree_unselect_row_disable()
     indent_node_button.set_sensitive(false);
     raise_node_button.set_sensitive(false);
     lower_node_button.set_sensitive(false);
-    xml_attribute_delete_button.set_sensitive(false);
 }
 
-void XmlTree::on_tree_unselect_row_hide()
-{
-    attr_container.hide();
-    text_container.hide();
-}
-
-void XmlTree::on_attr_select_row(GtkTreeSelection *selection, gpointer data)
+void XmlTree::on_attr_edited(SPXMLViewAttrList *attributes, const gchar * name, const gchar * value, gpointer data)
 {
     XmlTree *self = static_cast<XmlTree *>(data);
+    g_assert(self->selected_repr != nullptr);
 
-    GtkTreeIter   iter;
-    GtkTreeModel *model;
-
-    if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
-        // Nothing selected
-        self->selected_attr = 0;
-        self->attr_reset_context(self->selected_attr);
-
-        self->xml_attribute_delete_button.set_sensitive(false);
-        self->on_attr_unselect_row_clear_text();
-        return;
+    if(value) {
+        self->selected_repr->setAttribute(name, value, false);
+    } else {
+        self->selected_repr->setAttribute(name, nullptr, false);
     }
 
-    gchar *name = nullptr;
-    gchar *value = nullptr;
-    guint attr = 0;
-    gtk_tree_model_get (model, &iter, ATTR_COL_NAME, &name, ATTR_COL_VALUE, &value, ATTR_COL_ATTR, &attr, -1);
-
-    self->attr_name.set_text(name);
-    self->attr_value.get_buffer()->set_text(value);
-
-    self->attr_value.grab_focus ();
-    self->xml_attribute_delete_button.set_sensitive(true);
-
-    self->selected_attr = attr;
-    self->attr_reset_context(self->selected_attr);
-
-    if (name) {
-        g_free(name);
+    SPObject *updated = self->current_document->getObjectByRepr(self->selected_repr);
+    if (updated) {
+        // force immediate update of dependent attributes
+        updated->updateRepr();
     }
 
-    if (value) {
-        g_free(value);
+    reinterpret_cast<SPObject *>(self->current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+    if(value) {
+        DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR, _("Change attribute"));
+        sp_xmlview_attr_list_select_row_by_key(attributes, name);
+    } else {
+        DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR, _("Delete attribute"));
     }
 }
 
@@ -796,20 +678,6 @@ void XmlTree::on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * n
     }
 }
 
-void XmlTree::on_attr_unselect_row_clear_text()
-{
-    attr_name.set_text("");
-    // Set text with empty Glib::ustring
-    attr_value.get_buffer()->set_text( Glib::ustring() );
-}
-
-void XmlTree::onNameChanged()
-{
-    Glib::ustring text = attr_name.get_text();
-    /* TODO: need to do checking a little more rigorous than this */
-    set_attr.set_sensitive(!text.empty());
-}
-
 void XmlTree::onCreateNameChanged()
 {
     Glib::ustring text = name_entry->get_text();
@@ -822,9 +690,6 @@ void XmlTree::on_desktop_selection_changed()
     if (!blocked++) {
         Inkscape::XML::Node *node = get_dt_select();
         set_tree_select(node);
-        if (!node) {
-            on_attr_unselect_row_clear_text();
-        }
     }
     blocked--;
 }
@@ -941,7 +806,6 @@ void XmlTree::cmd_new_element_node()
 } // end of cmd_new_element_node()
 
 
-
 void XmlTree::cmd_new_text_node()
 {
     g_assert(selected_repr != nullptr);
@@ -955,9 +819,6 @@ void XmlTree::cmd_new_text_node()
 
     set_tree_select(text);
     set_dt_select(text);
-
-    gtk_window_set_focus(GTK_WINDOW(new_window), GTK_WIDGET(content));
-
 }
 
 void XmlTree::cmd_duplicate_node()
@@ -988,54 +849,6 @@ void XmlTree::cmd_delete_node()
     DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
                        Q_("nodeAsInXMLinHistoryDialog|Delete node"));
 }
-
-
-
-void XmlTree::cmd_delete_attr()
-{
-    g_assert(selected_repr != nullptr);
-    g_assert(selected_attr != 0);
-
-    selected_repr->setAttribute(g_quark_to_string(selected_attr), nullptr);
-
-    SPObject *updated = current_document->getObjectByRepr(selected_repr);
-    if (updated) {
-        // force immediate update of dependent attributes
-        updated->updateRepr();
-    }
-
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Delete attribute"));
-}
-
-
-
-void XmlTree::cmd_set_attr()
-{
-    g_assert(selected_repr != nullptr);
-
-    gchar *name = g_strdup(attr_name.get_text().c_str());
-    gchar *value = g_strdup(attr_value.get_buffer()->get_text().c_str());
-
-    selected_repr->setAttribute(name, value, false);
-
-    g_free(name);
-    g_free(value);
-
-    SPObject *updated = current_document->getObjectByRepr(selected_repr);
-    if (updated) {
-        // force immediate update of dependent attributes
-        updated->updateRepr();
-    }
-
-    reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Change attribute"));
-
-    /* TODO: actually, the row won't have been created yet.  why? */
-    sp_xmlview_attr_list_select_row_by_key(attributes, name);
-}
-
 
 void XmlTree::cmd_raise_node()
 {

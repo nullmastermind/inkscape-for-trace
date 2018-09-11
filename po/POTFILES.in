@@ -365,7 +365,6 @@ src/widgets/paint-selector.cpp
 src/widgets/sp-attribute-widget.cpp
 src/widgets/sp-color-selector.cpp
 src/widgets/sp-xmlview-attr-list.cpp
-src/widgets/sp-xmlview-content.cpp
 src/widgets/stroke-marker-selector.cpp
 src/widgets/stroke-style.cpp
 src/widgets/swatch-selector.cpp

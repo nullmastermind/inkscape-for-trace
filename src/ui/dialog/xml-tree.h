@@ -23,9 +23,11 @@
 #include <gtkmm/toolbar.h>
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/notebook.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/button.h>
 
+#include "ui/dialog/cssdialog.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "message.h"
 
@@ -126,9 +128,9 @@ private:
     static void after_tree_move(SPXMLViewTree *attributes, gpointer value, gpointer data);
 
     /**
-      * Callback for when attribute selection changes
+      * Callback for when an attribute is edited.
       */
-    static void on_attr_select_row(GtkTreeSelection *selection, gpointer data);
+    static void on_attr_edited(SPXMLViewAttrList *attributes, const gchar * name, const gchar * value, gpointer /*data*/);
 
     /**
       * Callback for when attribute list values change
@@ -142,7 +144,6 @@ private:
     void on_tree_unselect_row_disable();
     void on_tree_unselect_row_hide();
     void on_attr_unselect_row_disable();
-    void on_attr_unselect_row_clear_text();
 
     void onNameChanged();
     void onCreateNameChanged();
@@ -168,11 +169,7 @@ private:
     void cmd_indent_node();
     void cmd_unindent_node();
 
-    void cmd_delete_attr();
-    void cmd_set_attr();
     void present() override;
-
-    bool sp_xml_tree_key_press(GdkEventKey *event);
 
     bool in_dt_coordsys(SPObject const &item);
 
@@ -185,6 +182,14 @@ private:
      * Flag to ensure only one operation is performed at once
      */
     gint blocked;
+
+    /* Each of the notebook page type (by number) */
+    Gtk::Notebook *notebook_content;
+    enum {
+        NOTEBOOK_PAGE_NODES,
+        NOTEBOOK_PAGE_ATTRS,
+        NOTEBOOK_PAGE_STYLES,
+    };
 
     /**
      * Status bar
@@ -212,16 +217,15 @@ private:
     /* XmlTree Widgets */
     SPXMLViewTree *tree;
     SPXMLViewAttrList *attributes;
-    SPXMLViewContent *content;
+    CssDialog *styles;
 
-    Gtk::Entry attr_name;
-    Gtk::TextView attr_value;
-
-    Gtk::Button *create_button;
+    /* XML Node Creation pop-up window */
     Gtk::Entry *name_entry;
-    Gtk::Paned paned;
-    Gtk::VBox left_box;
-    Gtk::VBox right_box;
+    Gtk::Button *create_button;
+
+    Gtk::VBox node_box;
+    Gtk::VBox attr_box;
+    Gtk::VBox css_box;
     Gtk::HBox status_box;
     Gtk::Label status;
     Gtk::Toolbar    tree_toolbar;
@@ -235,17 +239,6 @@ private:
     Gtk::ToolButton indent_node_button;
     Gtk::ToolButton raise_node_button;
     Gtk::ToolButton lower_node_button;
-
-    Gtk::Toolbar    attr_toolbar;
-    Gtk::ToolButton xml_attribute_delete_button;
-
-    Gtk::VBox attr_vbox;
-    Gtk::ScrolledWindow text_container;
-    Gtk::HBox attr_hbox;
-    Gtk::VBox attr_container;
-    Gtk::Paned attr_subpaned_container;
-
-    Gtk::Button set_attr;
 
     GtkWidget *new_window;
 

@@ -21,17 +21,17 @@
 
 struct SPXMLViewAttrList
 {
-	GtkTreeView list;
-	GtkListStore *store;
+    GtkTreeView list; 
+    GtkListStore *store;
 
-	Inkscape::XML::Node * repr;
+    Inkscape::XML::Node * repr;
 };
 
 struct SPXMLViewAttrListClass
 {
-	GtkTreeViewClass parent_class;
+    GtkTreeViewClass parent_class;
 
-	void (* row_changed) (SPXMLViewAttrList *list, gint row);
+    void (* row_changed) (SPXMLViewAttrList *list, gint row);
 };
 
 GType sp_xmlview_attr_list_get_type ();
@@ -41,6 +41,8 @@ GtkWidget * sp_xmlview_attr_list_new (Inkscape::XML::Node * repr);
 
 void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * repr);
 void sp_xmlview_attr_list_select_row_by_key(SPXMLViewAttrList * list, const gchar *name);
+void attr_value_edited (GtkCellRendererText *cell, gchar * path_string, gchar * new_value, gpointer data);
+gboolean attr_key_pressed(GtkWidget *attributes, GdkEventKey *event, gpointer data);
 
 /* Attribute list store columns */
 enum {ATTR_COL_NAME=0, ATTR_COL_ATTR=1, ATTR_COL_VALUE=2, ATTR_N_COLS=3 };
