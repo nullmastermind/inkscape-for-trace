@@ -22,7 +22,6 @@ set(widgets_SRC
 	sp-color-selector.cpp
 	sp-widget.cpp
 	sp-xmlview-attr-list.cpp
-	sp-xmlview-content.cpp
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spw-utilities.cpp
@@ -55,7 +54,6 @@ set(widgets_SRC
 	sp-color-selector.h
 	sp-widget.h
 	sp-xmlview-attr-list.h
-	sp-xmlview-content.h
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spw-utilities.h

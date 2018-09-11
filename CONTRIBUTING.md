@@ -64,25 +64,44 @@ appreciate this. New files should have one or two lines describing the
 purpose of the code inside the file.
 
 
-Makefiles
-=========
-Inkscape currently uses CMake. We encourage you to build it by creating a build 
-folder, and running 
+Building
+========
 
-`cmake <<<source folder>>> \`
-`-DCMAKE_C_COMPILER_LAUNCHER=ccache \`
-`-DCMAKE_CXX_COMPILER_LAUNCHER=ccache \`
-`-DCMAKE_BUILD_TYPE=Debug \`
-`-DCMAKE_INSTALL_PREFIX:PATH=$PWD/..`
+This is the best set of instructions for setting up your build directory...
 
-This uses ccache to speed up later builds (optional), create a Debug build 
-(use "Release" otherwise) and makes a local install prefix.
+You should install ninja and ccache for the fastest build:
 
-(If you have ninja available, add "-G Ninja" to enable it)
+```bash
+sudo apt-get install ninja-build ccache
+```
+  
+Next we prepare a build directory with a symlink to Inkscape's share folder, add a profile dir and set the bin folder (optional):
 
-Then, run `make -j$(nproc) install` (or `ninja install`) to build & install
+```bash
+ln -s share share/inkscape
+mkdir -p build/conf
+cd build
+export INKSCAPE_PROFILE_DIR=$PWD/conf
+PATH=$PWD/bin/:$PATH
+```
 
+Now we invoke cmake, letting it know to use our new build directory prefix, ccache and the Ninja compiler:
 
+```bash
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+```
+
+Invoke ninja to build the code. You may also use plain gcc's `make` if you didn't specific `-G` in the command above:
+```bash
+ninja
+```
+
+Now we can run inkscape that we have built, with the latest resources and code:
+
+```bash
+./bin/inkscape
+```
+  
 Testing
 =======
 
