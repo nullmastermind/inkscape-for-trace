@@ -17,31 +17,8 @@ a developer and packager task. These instructions are kept on the Inkscape wiki.
 Running Without Installing
 ==========================
 
-For developers and others who want to run inkscape without installing it:
-
-```bash
-sudo apt-get install ninja-build ccache
-```
-
-```bash
-ln -s share share/inkscape
-mkdir -p build/conf
-cd build
-cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-ninja
-export INKSCAPE_PROFILE_DIR=$PWD/conf
-PATH=$PWD/bin/:$PATH
-./bin/inkscape
-```
-
-This won't work for other platforms such as Windows and Mac, see above. But
-what it is doing is linking the share directory into a location where
-the inkscape binary will be able to find it. Allowing you to change the
-inkscape shared files without rebuilding or installing.
-
-Then setting a local configuration directory, keeping your configurations
-separate from any installed version.
-
+For developers and others who want to run inkscape without installing it please
+see the ***Building*** section in the `CONTRIBUTING.md` file.
 
 Required Dependencies
 =====================
