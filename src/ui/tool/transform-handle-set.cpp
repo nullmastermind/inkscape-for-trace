@@ -243,8 +243,8 @@ double ScaleHandle::_last_scale_y = 1.0;
 class ScaleCornerHandle : public ScaleHandle {
 public:
 
-    ScaleCornerHandle(TransformHandleSet &th, unsigned corner) :
-        ScaleHandle(th, corner_to_anchor(corner), _corner_to_pixbuf(corner)),
+    ScaleCornerHandle(TransformHandleSet &th, unsigned corner, unsigned d_corner) :
+        ScaleHandle(th, corner_to_anchor(d_corner), _corner_to_pixbuf(d_corner)),
         _corner(corner)
     {}
 
@@ -330,8 +330,8 @@ private:
  */
 class ScaleSideHandle : public ScaleHandle {
 public:
-    ScaleSideHandle(TransformHandleSet &th, unsigned side)
-        : ScaleHandle(th, side_to_anchor(side), _side_to_pixbuf(side))
+    ScaleSideHandle(TransformHandleSet &th, unsigned side, unsigned d_side)
+        : ScaleHandle(th, side_to_anchor(d_side), _side_to_pixbuf(side))
         , _side(side)
     {}
 protected:
@@ -409,8 +409,8 @@ private:
  */
 class RotateHandle : public TransformHandle {
 public:
-    RotateHandle(TransformHandleSet &th, unsigned corner)
-        : TransformHandle(th, corner_to_anchor(corner), _corner_to_pixbuf(corner))
+    RotateHandle(TransformHandleSet &th, unsigned corner, unsigned d_corner)
+        : TransformHandle(th, corner_to_anchor(d_corner), _corner_to_pixbuf(d_corner))
         , _corner(corner)
     {}
 protected:
@@ -491,8 +491,8 @@ double RotateHandle::_last_angle = 0;
 
 class SkewHandle : public TransformHandle {
 public:
-    SkewHandle(TransformHandleSet &th, unsigned side)
-        : TransformHandle(th, side_to_anchor(side), _side_to_pixbuf(side))
+    SkewHandle(TransformHandleSet &th, unsigned side, unsigned d_side)
+        : TransformHandle(th, side_to_anchor(d_side), _side_to_pixbuf(side))
         , _side(side)
     {}
 
@@ -707,11 +707,14 @@ TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
     sp_canvas_item_hide(_trans_outline);
     _trans_outline->setDashed(true);
 
+    bool y_inverted = !d->is_yaxisdown();
     for (unsigned i = 0; i < 4; ++i) {
-        _scale_corners[i] = new ScaleCornerHandle(*this, i);
-        _scale_sides[i] = new ScaleSideHandle(*this, i);
-        _rot_corners[i] = new RotateHandle(*this, i);
-        _skew_sides[i] = new SkewHandle(*this, i);
+        unsigned d_c = y_inverted ? i : 3 - i;
+        unsigned d_s = y_inverted ? i : 6 - i;
+        _scale_corners[i] = new ScaleCornerHandle(*this, i, d_c);
+        _scale_sides[i] = new ScaleSideHandle(*this, i, d_s);
+        _rot_corners[i] = new RotateHandle(*this, i, d_c);
+        _skew_sides[i] = new SkewHandle(*this, i, d_s);
     }
     _center = new RotationCenter(*this);
     // when transforming, update rotation center position

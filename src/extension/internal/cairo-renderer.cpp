@@ -663,7 +663,7 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     if (pageBoundingBox) {
         d = Geom::Rect::from_xywh(Geom::Point(0,0), doc->getDimensions());
     } else {
-        Geom::OptRect bbox = base->desktopVisualBounds();
+        Geom::OptRect bbox = base->documentVisualBounds();
         if (!bbox) {
             g_message("CairoRenderer: empty bounding box.");
             return false;
@@ -672,13 +672,14 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     }
     d.expandBy(bleedmargin_px);
 
+    double px_to_ctx_units = 1.0;
     if (ctx->_vector_based_target) {
         // convert from px to pt
-        d *= Geom::Scale(Inkscape::Util::Quantity::convert(1, "px", "pt"));
+        px_to_ctx_units = Inkscape::Util::Quantity::convert(1, "px", "pt");
     }
 
-    ctx->_width = d.width();
-    ctx->_height = d.height();
+    ctx->_width = d.width() * px_to_ctx_units;
+    ctx->_height = d.height() * px_to_ctx_units;
 
     TRACE(("setupDocument: %f x %f\n", ctx->_width, ctx->_height));
 
@@ -690,13 +691,8 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
             Geom::Affine tp( Geom::Translate( bleedmargin_px, bleedmargin_px ) );
             ctx->transform(tp);
         } else {
-            double high = doc->getHeight().value("px");
-            if (ctx->_vector_based_target)
-                high = Inkscape::Util::Quantity::convert(high, "px", "pt");
-
             // this transform translates the export drawing to a virtual page (0,0)-(width,height)
-            Geom::Affine tp(Geom::Translate(-d.left() * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0),
-                                            (d.bottom() - high) * (ctx->_vector_based_target ? Inkscape::Util::Quantity::convert(1, "pt", "px") : 1.0)));
+            Geom::Affine tp(Geom::Translate(-d.min()));
             ctx->transform(tp);
         }
     }

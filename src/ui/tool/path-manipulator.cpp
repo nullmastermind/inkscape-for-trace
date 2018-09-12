@@ -1445,16 +1445,14 @@ void PathManipulator::_updateOutline()
         // linear segment that starts at the time value of 0.5 and extends for 10 pixels
         // at an angle 150 degrees from the unit tangent. This creates the appearance
         // of little 'harpoons' that show the direction of the subpaths.
+        auto rot_scale_w2d = Geom::Rotate(210.0 / 180.0 * M_PI) * Geom::Scale(10.0) * _desktop->w2d();
         Geom::PathVector arrows;
         for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
             Geom::Path &path = *i;
             for (Geom::Path::iterator j = path.begin(); j != path.end_default(); ++j) {
                 Geom::Point at = j->pointAt(0.5);
                 Geom::Point ut = j->unitTangentAt(0.5);
-                // rotate the point 
-                ut *= Geom::Rotate(150.0 / 180.0 * M_PI);
-                Geom::Point arrow_end = _desktop->w2d(
-                    _desktop->d2w(at) + Geom::unit_vector(_desktop->d2w(ut)) * 10.0);
+                Geom::Point arrow_end = at + (Geom::unit_vector(_desktop->d2w(ut)) * rot_scale_w2d);
 
                 Geom::Path arrow(at);
                 arrow.appendNew<Geom::LineSegment>(arrow_end);

@@ -278,6 +278,10 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         _items_centers.push_back(it->getCenter()); // for content-dragging, we need to remember original centers
     }
 
+    if (y != -1 && _desktop->is_yaxisdown()) {
+        y = 1 - y;
+    }
+
     _handle_x = x;
     _handle_y = y;
 
@@ -631,12 +635,14 @@ void Inkscape::SelTrans::_showHandles(SPSelTransType type)
     // shouldn't have nullary bbox, but knots
     g_assert(_bbox);
 
+    auto const y_dir = _desktop->yaxisdir();
+
     for (int i = 0; i < NUMHANDS; i++) {
         if (hands[i].type != type)
             continue;
 
         // Position knots to scale the selection bbox
-        Geom::Point const bpos(hands[i].x, hands[i].y);
+        Geom::Point const bpos(hands[i].x, (hands[i].y - 0.5) * (-y_dir) + 0.5);
         Geom::Point p(_bbox->min() + (_bbox->dimensions() * Geom::Scale(bpos)));
         knots[i]->moveto(p);
         knots[i]->show();

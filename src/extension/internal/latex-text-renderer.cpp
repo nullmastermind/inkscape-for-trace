@@ -45,6 +45,7 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
+#include "inkscape.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "document.h"
@@ -680,7 +681,9 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     }
 
     // flip y-axis
-    push_transform( Geom::Scale(1,-1) * Geom::Translate(0, doc->getHeight().value("px")) ); /// @fixme hardcoded desktop transform!
+    if (SP_ACTIVE_DESKTOP) {
+        push_transform( SP_ACTIVE_DESKTOP->doc2dt() );
+    }
 
     // write the info to LaTeX
     Inkscape::SVGOStringStream os;

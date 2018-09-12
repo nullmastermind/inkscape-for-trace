@@ -623,7 +623,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                     // Cursor height is defined by the new text object's font size; it needs to be set
                     // artificially here, for the text object does not exist yet:
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
-                    this->cursor->setCoords(p1, p1 + Geom::Point(0, cursor_height));
+                    auto const y_dir = desktop->yaxisdir();
+                    this->cursor->setCoords(p1, p1 - Geom::Point(0, y_dir * cursor_height));
                     if (this->imc) {
                         GdkRectangle im_cursor;
                         Geom::Point const top_left = SP_EVENT_CONTEXT(this)->desktop->get_display_area().corner(3);

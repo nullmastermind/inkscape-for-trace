@@ -426,6 +426,9 @@ public:
     Geom::Point doc2dt(Geom::Point const &p) const;
     Geom::Point dt2doc(Geom::Point const &p) const;
 
+    bool is_yaxisdown() const { return _doc2dt[3] > 0; }
+    double yaxisdir() const { return _doc2dt[3]; }
+
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
     void mouseover() override {}
@@ -455,16 +458,8 @@ private:
             _scale = scale;
             _update();
         }
-        void setScale( double scale ) {
-            _scale = Geom::Scale(scale, -scale); // Y flip
-            _update();
-        }
         void addScale( Geom::Scale scale) {
             _scale *= scale;
-            _update();
-        }
-        void addScale( double scale ) {
-            _scale *= Geom::Scale(scale, -scale); // Y flip?? Check
             _update();
         }
 

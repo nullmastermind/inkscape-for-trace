@@ -841,6 +841,12 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
             margin_bottom = Inkscape::Util::Quantity::convert(margin_bottom, nv_units, "px");
         }
     }
+
+    double y_dir = SP_ACTIVE_DESKTOP->yaxisdir();
+
+    if (y_dir > 0) {
+        std::swap(margin_top, margin_bottom);
+    }
     
     Geom::Rect const rect_with_margins(
             rect.min() - Geom::Point(margin_left, margin_bottom),
@@ -852,7 +858,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         );
 
     Geom::Translate const tr(
-            Geom::Point(0, old_height - rect_with_margins.height())
+            Geom::Point(0, (y_dir > 0) ? 0 : old_height - rect_with_margins.height())
             - rect_with_margins.min());
     root->translateChildItems(tr);
 
@@ -862,7 +868,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         nv->translateGrids(tr2);
 
         // update the viewport so the drawing appears to stay where it was
-        nv->scrollAllDesktops(-tr2[0], tr2[1], false);
+        nv->scrollAllDesktops(-tr2[0], -tr2[1] * y_dir, false);
     }
 }
 

@@ -31,6 +31,8 @@
 #include "rdf.h"
 #include "util/units.h"
 
+#include "inkscape.h"
+
 #include "object/sp-item.h"
 #include "object/sp-root.h"
 #include "object/sp-defs.h"
@@ -425,8 +427,13 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
 
     doc->ensureUpToDate();
 
+    Geom::Affine dt2doc;
+    if (SP_ACTIVE_DESKTOP) {
+        dt2doc = SP_ACTIVE_DESKTOP->dt2doc();
+    }
+
     /* Calculate translation by transforming to document coordinates (flipping Y)*/
-    Geom::Point translation = Geom::Point(-area[Geom::X][0], area[Geom::Y][1] - doc->getHeight().value("px"));
+    Geom::Point translation = -(area * dt2doc).min();
 
     /*  This calculation is only valid when assumed that (x0,y0)= area.corner(0) and (x1,y1) = area.corner(2)
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0

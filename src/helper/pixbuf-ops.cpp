@@ -27,6 +27,7 @@
 #include "object/sp-defs.h"
 #include "object/sp-use.h"
 #include "util/units.h"
+#include "inkscape.h"
 
 #include "helper/pixbuf-ops.h"
 
@@ -111,13 +112,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
 
     Geom::Rect screen=Geom::Rect(Geom::Point(x0,y0), Geom::Point(x1, y1));
 
-    double padding = 1.0;
-
-    Geom::Point origin(screen.min()[Geom::X],
-                  doc->getHeight().value("px") - screen[Geom::Y].extent() - screen.min()[Geom::Y]);
-
-    origin[Geom::X] = origin[Geom::X] + (screen[Geom::X].extent() * ((1 - padding) / 2));
-    origin[Geom::Y] = origin[Geom::Y] + (screen[Geom::Y].extent() * ((1 - padding) / 2));
+    Geom::Point origin = screen.min() * SP_ACTIVE_DESKTOP->doc2dt();
 
     Geom::Scale scale(Inkscape::Util::Quantity::convert(xdpi, "px", "in"), Inkscape::Util::Quantity::convert(ydpi, "px", "in"));
     Geom::Affine affine = scale * Geom::Translate(-origin * scale);

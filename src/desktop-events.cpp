@@ -128,8 +128,9 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 Geom::Point const event_dt(desktop->w2d(event_w));
 
                 // calculate the normal of the guidelines when dragged from the edges of rulers.
-                Geom::Point normal_bl_to_tr(-1.,1.); //bottomleft to topright
-                Geom::Point normal_tr_to_bl(1.,1.); //topright to bottomleft
+                auto const y_dir = desktop->yaxisdir();
+                Geom::Point normal_bl_to_tr(1., y_dir); //bottomleft to topright
+                Geom::Point normal_tr_to_bl(-1., y_dir); //topright to bottomleft
                 normal_bl_to_tr.normalize();
                 normal_tr_to_bl.normalize();
                 Inkscape::CanvasGrid * grid = sp_namedview_get_first_enabled_grid(desktop->namedview);
@@ -245,6 +246,12 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     // If root viewBox set, interpret guides in terms of viewBox (90/96)
                     double newx = event_dt.x();
                     double newy = event_dt.y();
+
+                    // <sodipodi:guide> stores inverted y-axis coordinates
+                    if (desktop->is_yaxisdown()) {
+                        newy = desktop->doc()->getHeight().value("px") - newy;
+                        normal[Geom::Y] *= -1.0;
+                    }
 
                     SPRoot *root = desktop->doc()->getRoot();
                     if( root->viewBox_set ) {

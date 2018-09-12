@@ -100,9 +100,7 @@ Grid::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View *doc
             bounding_area = *bounds;
         }
 
-        gdouble doc_height  =  (document->doc())->getHeight().value("px");
-        Geom::Rect temprec = Geom::Rect(Geom::Point(bounding_area.min()[Geom::X], doc_height - bounding_area.min()[Geom::Y]),
-                                    Geom::Point(bounding_area.max()[Geom::X], doc_height - bounding_area.max()[Geom::Y]));
+        Geom::Rect temprec = bounding_area * static_cast<SPDesktop *>(document)->doc2dt();
 
         bounding_area = temprec;
     }

@@ -288,6 +288,7 @@ bool CalligraphicTool::apply(Geom::Point p) {
         // 1b. fixed dc->angle (absolutely flat nib):
         double const radians = ( (this->angle - 90) / 180.0 ) * M_PI;
         Geom::Point ang1 = Geom::Point(-sin(radians),  cos(radians));
+        ang1.y() *= -this->desktop->yaxisdir();
         a1 = atan2(ang1);
     }
 
