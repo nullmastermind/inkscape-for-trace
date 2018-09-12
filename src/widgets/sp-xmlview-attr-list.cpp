@@ -36,13 +36,13 @@ GtkWidget *sp_xmlview_attr_list_new (Inkscape::XML::Node * repr)
 {
     SPXMLViewAttrList * attr_list = SP_XMLVIEW_ATTR_LIST(g_object_new(SP_TYPE_XMLVIEW_ATTR_LIST, nullptr));
 
-    attr_list->store = gtk_list_store_new (ATTR_N_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING, GDK_TYPE_RGBA);
+    attr_list->store = gtk_list_store_new (ATTR_N_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING);
     gtk_tree_view_set_model (GTK_TREE_VIEW(attr_list), GTK_TREE_MODEL(attr_list->store));
 
     // Attribute name column
     int colpos = 0;
     GtkCellRenderer *cell = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Name"), cell, "text", ATTR_COL_NAME, "foreground-rgba", ATTR_COL_COLOR, NULL);
+    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Name"), cell, "text", ATTR_COL_NAME, NULL);
     GtkTreeViewColumn *column = gtk_tree_view_get_column (GTK_TREE_VIEW(attr_list), colpos);
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 
@@ -55,7 +55,7 @@ GtkWidget *sp_xmlview_attr_list_new (Inkscape::XML::Node * repr)
     // Attribute value column
     colpos = 1;
     cell = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Value"), cell, "text", ATTR_COL_VALUE, "foreground-rgba", ATTR_COL_COLOR, NULL);
+    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Value"), cell, "text", ATTR_COL_VALUE, NULL);
     column = gtk_tree_view_get_column (GTK_TREE_VIEW(attr_list), colpos);
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
     gtk_cell_renderer_set_padding (cell, 2, 0);
@@ -104,7 +104,7 @@ sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * r
             // Create an 'add-new' row to create new rows
             GtkTreeIter iter;
             gtk_list_store_append (list->store, &iter);
-            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, "", ATTR_COL_VALUE, "<new>", ATTR_COL_ATTR, NULL, ATTR_COL_COLOR, "#ccccccff", -1);
+            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, "", ATTR_COL_VALUE, "", ATTR_COL_ATTR, NULL, -1);
         }
 }
 
@@ -265,13 +265,13 @@ event_attr_changed (Inkscape::XML::Node * /*repr*/,
 
     if (match) {
         if (new_value) {
-            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), ATTR_COL_COLOR, "#000000", -1);
+            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), -1);
         } else {
             gtk_list_store_remove  (list->store, &iter);
         }
     } else if (new_value != nullptr) {
         gtk_list_store_append (list->store, &iter);
-        gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), ATTR_COL_COLOR, "#000000", -1);
+        gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), -1);
     }
 
     // send a "changed" signal so widget owners will know I've updated

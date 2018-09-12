@@ -51,7 +51,6 @@ enum {
     ATTR_COL_NAME,
     ATTR_COL_ATTR,
     ATTR_COL_VALUE,
-    ATTR_COL_COLOR,
     ATTR_N_COLS,
 };
 
