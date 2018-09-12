@@ -765,8 +765,8 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     unsigned int width = (int)ceil(screen.width() * zoom_scale * padding);
     unsigned int height = (int)ceil(screen.height() * zoom_scale * padding);
 
-    Geom::Point origin(screen.min()[Geom::X],
-                       document->getHeight().value("px") - screen.height() - screen.min()[Geom::Y]);
+    Geom::Point origin = screen.corner(desktop->is_yaxisdown() ? 0 : 3)
+        * desktop->doc2dt();
                     
     origin[Geom::X] += (screen.width() * ((1 - padding) / 2));
     origin[Geom::Y] += (screen.height() * ((1 - padding) / 2));
@@ -876,7 +876,11 @@ static void sp_flood_do_flood_fill(ToolBase *event_context, GdkEvent *event, boo
     }
 
     for (unsigned int i = 0; i < fill_points.size(); i++) {
-        Geom::Point pw = Geom::Point(fill_points[i][Geom::X] / zoom_scale, document->getHeight().value("px") + (fill_points[i][Geom::Y] / zoom_scale)) * affine;
+        Geom::Point pw = fill_points[i]
+            * Geom::Scale(1. / zoom_scale)
+            * desktop->doc2dt().withoutTranslation()
+            * desktop->doc2dt()
+            * affine;
 
         pw[Geom::X] = (int)MIN(width - 1, MAX(0, pw[Geom::X]));
         pw[Geom::Y] = (int)MIN(height - 1, MAX(0, pw[Geom::Y]));

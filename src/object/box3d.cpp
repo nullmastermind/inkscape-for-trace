@@ -149,6 +149,9 @@ void SPBox3D::set(unsigned int key, const gchar* value) {
         case SP_ATTR_INKSCAPE_BOX3D_CORNER0:
             if (value && strcmp(value, "0 : 0 : 0 : 0")) {
                 box->orig_corner0 = Proj::Pt3(value);
+                if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                    box->orig_corner0[Proj::Y] *= -1;
+                }
                 box->save_corner0 = box->orig_corner0;
                 box3d_position_set(box);
             }
@@ -156,6 +159,9 @@ void SPBox3D::set(unsigned int key, const gchar* value) {
         case SP_ATTR_INKSCAPE_BOX3D_CORNER7:
             if (value && strcmp(value, "0 : 0 : 0 : 0")) {
                 box->orig_corner7 = Proj::Pt3(value);
+                if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                    box->orig_corner7[Proj::Y] *= -1;
+                }
                 box->save_corner7 = box->orig_corner7;
                 box3d_position_set(box);
             }
@@ -227,8 +233,15 @@ Inkscape::XML::Node* SPBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
             }
         }
 
-        gchar *coordstr0 = box->orig_corner0.coord_string();
-        gchar *coordstr7 = box->orig_corner7.coord_string();
+        auto corner0 = box->orig_corner0;
+        auto corner7 = box->orig_corner7;
+        if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+            corner0[Proj::Y] *= -1;
+            corner7[Proj::Y] *= -1;
+        }
+
+        gchar *coordstr0 = corner0.coord_string();
+        gchar *coordstr7 = corner7.coord_string();
         repr->setAttribute("inkscape:corner0", coordstr0);
         repr->setAttribute("inkscape:corner7", coordstr7);
         g_free(coordstr0);

@@ -2990,17 +2990,7 @@ void ObjectSet::toMarker(bool apply)
         return;
     }
 
-    // FIXME: Inverted Y coordinate
-    Geom::Point doc_height( 0, doc->getHeight().value("px"));
-
-    // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coordinate  
-    Geom::Point move_p = doc_height - corner;
-    move_p[Geom::Y] = -move_p[Geom::Y];
-    Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
-
-    Geom::Point center( *c - corner ); // As defined by rotation center
-    center[Geom::Y] = -center[Geom::Y];
+    Geom::Point center = desktop()->dt2doc(*c);
 
     std::vector<SPItem*> items_(items().begin(), items().end());
 
@@ -3042,7 +3032,7 @@ void ObjectSet::toMarker(bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform * move);
+    gchar const *mark_id = generate_marker(repr_copies, bbox, doc, center, parent_transform);
     (void)mark_id;
 
     // restore compensation setting
@@ -3378,11 +3368,6 @@ void ObjectSet::tile(bool apply)
         return;
     }
 
-    // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point move_p = Geom::Point(0, doc->getHeight().value("px")) - (r->min() + Geom::Point(0, r->dimensions()[Geom::Y]));
-    move_p[Geom::Y] = -move_p[Geom::Y];
-    Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
-
     std::vector<SPItem*> items_(items().begin(), items().end());
 
     sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
@@ -3428,10 +3413,9 @@ void ObjectSet::tile(bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
+    Geom::Affine move = Geom::Translate(- bbox.min());
     gchar const *pat_id = SPPattern::produce(repr_copies, bbox, doc,
-                                       ( Geom::Affine(Geom::Translate(desktop()->dt2doc(Geom::Point(r->min()[Geom::X],
-                                                                                            r->max()[Geom::Y]))))
-                                         * parent_transform.inverse() ),
+                                       move.inverse() /* patternTransform */,
                                        parent_transform * move);
 
     // restore compensation setting
@@ -3443,13 +3427,14 @@ void ObjectSet::tile(bool apply)
         rect->setAttribute("style", style_str);
         g_free(style_str);
 
-        Geom::Point min = bbox.min() * parent_transform.inverse();
-        Geom::Point max = bbox.max() * parent_transform.inverse();
+        gchar *c = sp_svg_transform_write(parent_transform.inverse());
+        rect->setAttribute("transform", c);
+        g_free(c);
 
-        sp_repr_set_svg_double(rect, "width", max[Geom::X] - min[Geom::X]);
-        sp_repr_set_svg_double(rect, "height", max[Geom::Y] - min[Geom::Y]);
-        sp_repr_set_svg_double(rect, "x", min[Geom::X]);
-        sp_repr_set_svg_double(rect, "y", min[Geom::Y]);
+        sp_repr_set_svg_double(rect, "width", bbox.width());
+        sp_repr_set_svg_double(rect, "height", bbox.height());
+        sp_repr_set_svg_double(rect, "x", bbox.left());
+        sp_repr_set_svg_double(rect, "y", bbox.top());
 
         // restore parent and position
         parent->getRepr()->appendChild(rect);
@@ -3741,20 +3726,21 @@ void ObjectSet::createBitmapCopy()
     {
         SPItem *parentItem = dynamic_cast<SPItem *>(parent_object);
         if (parentItem) {
-            eek = parentItem->i2dt_affine();
+            eek = parentItem->i2doc_affine();
         } else {
             g_assert_not_reached();
         }
     }
     Geom::Affine t;
 
-    double shift_x = bbox->min()[Geom::X];
-    double shift_y = bbox->max()[Geom::Y];
+    auto bbox_doc = (*bbox) * _desktop->dt2doc();
+    double shift_x = bbox_doc.left();
+    double shift_y = bbox_doc.top();
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
         shift_x = round(shift_x);
-        shift_y = -round(-shift_y); // this gets correct rounding despite coordinate inversion, remove the negations when the inversion is gone
+        shift_y = round(shift_y);
     }
-    t = Geom::Scale(1, -1) * Geom::Translate(shift_x, shift_y) * eek.inverse();  /// @fixme hardcoded doc2dt transform?
+    t = Geom::Translate(shift_x, shift_y) * eek.inverse();
 
     // TODO: avoid roundtrip via file
     // Do the export

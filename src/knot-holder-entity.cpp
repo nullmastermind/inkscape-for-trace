@@ -142,28 +142,9 @@ KnotHolderEntity::snap_knot_position_constrained(Geom::Point const &p, Inkscape:
 
 /*  TODO: this pattern manipulation is not able to handle general transformation matrices. Only matrices that are the result of a pure scale times a pure rotation. */
 
-static gdouble sp_pattern_extract_theta(SPPattern const *pat)
-{
-    Geom::Affine transf = pat->getTransform();
-    return Geom::atan2(transf.xAxis());
-}
-
-static Geom::Point sp_pattern_extract_scale(SPPattern const *pat)
-{
-    Geom::Affine transf = pat->getTransform();
-    return Geom::Point( transf.expansionX(), transf.expansionY() );
-}
-
-static Geom::Point sp_pattern_extract_trans(SPPattern const *pat)
-{
-    return Geom::Point(pat->getTransform()[4], pat->getTransform()[5]);
-}
-
 void
 PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
-    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
-
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
 
@@ -176,18 +157,23 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
     }
 
     if (state)  {
-        Geom::Point const q = p_snapped - sp_pattern_extract_trans(pat);
+        Geom::Point const q = p_snapped - knot_get();
         item->adjust_pattern(Geom::Translate(q), false, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     }
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+static Geom::Point sp_pattern_knot_get(SPPattern const *pat, gdouble x, gdouble y)
+{
+    return Geom::Point(x, y) * pat->getTransform();
+}
+
 Geom::Point
 PatternKnotHolderEntityXY::knot_get() const
 {
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
-    return sp_pattern_extract_trans(pat);
+    return sp_pattern_knot_get(pat, 0, 0);
 }
 
 Geom::Point
@@ -195,14 +181,7 @@ PatternKnotHolderEntityAngle::knot_get() const
 {
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
-    gdouble x = pat->width();
-    gdouble y = 0;
-    Geom::Point delta = Geom::Point(x,y);
-    Geom::Point scale = sp_pattern_extract_scale(pat);
-    gdouble theta = sp_pattern_extract_theta(pat);
-    delta = delta * Geom::Affine(Geom::Scale(scale))*Geom::Affine(Geom::Rotate(theta));
-    delta = delta + sp_pattern_extract_trans(pat);
-    return delta;
+    return sp_pattern_knot_get(pat, pat->width(), 0);
 }
 
 void
@@ -214,53 +193,47 @@ PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     // get the angle from pattern 0,0 to the cursor pos
-    Geom::Point delta = p - sp_pattern_extract_trans(pat);
-    gdouble theta = atan2(delta);
+    Geom::Point transform_origin = sp_pattern_knot_get(pat, 0, 0);
+    gdouble theta = atan2(p - transform_origin);
+    gdouble theta_old = atan2(knot_get() - transform_origin);
 
     if ( state & GDK_CONTROL_MASK ) {
         theta = sp_round(theta, M_PI/snaps);
     }
 
-    // get the scale from the current transform so we can keep it.
-    Geom::Point scl = sp_pattern_extract_scale(pat);
-    Geom::Affine rot = Geom::Affine(Geom::Scale(scl)) * Geom::Affine(Geom::Rotate(theta));
-    Geom::Point const t = sp_pattern_extract_trans(pat);
-    rot[4] = t[Geom::X];
-    rot[5] = t[Geom::Y];
-    item->adjust_pattern(rot, true, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
+    Geom::Affine rot = Geom::Translate(-transform_origin)
+                     * Geom::Rotate(theta - theta_old)
+                     * Geom::Translate(transform_origin);
+    item->adjust_pattern(rot, false, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
-PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
+PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
 
-    // get angle from current transform
-    gdouble theta = sp_pattern_extract_theta(pat);
-
     // Get the new scale from the position of the knotholder
-    Geom::Point d = p_snapped - sp_pattern_extract_trans(pat);
+    Geom::Affine transform = pat->getTransform();
+    Geom::Affine transform_inverse = transform.inverse();
+    Geom::Point d = p_snapped * transform_inverse;
+    Geom::Point d_origin = origin * transform_inverse;
+    Geom::Point origin_dt;
     gdouble pat_x = pat->width();
     gdouble pat_y = pat->height();
-    Geom::Scale scl(1);
     if ( state & GDK_CONTROL_MASK ) {
         // if ctrl is pressed: use 1:1 scaling
-        gdouble pat_h = hypot(pat_x, pat_y);
-        scl = Geom::Scale(d.length() / pat_h);
-    } else {
-        d *= Geom::Rotate(-theta);
-        scl = Geom::Scale(d[Geom::X] / pat_x, d[Geom::Y] / pat_y);
+        d = d_origin * (d.length() / d_origin.length());
     }
 
-    Geom::Affine rot = (Geom::Affine)scl * Geom::Rotate(theta);
+    Geom::Affine rot = Geom::Translate(-origin_dt)
+                     * Geom::Scale(d.x() / pat_x, d.y() / pat_y)
+                     * Geom::Translate(origin_dt)
+                     * transform;
 
-    Geom::Point const t = sp_pattern_extract_trans(pat);
-    rot[4] = t[Geom::X];
-    rot[5] = t[Geom::Y];
     item->adjust_pattern(rot, true, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -270,16 +243,7 @@ Geom::Point
 PatternKnotHolderEntityScale::knot_get() const
 {
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
-
-    gdouble x = pat->width();
-    gdouble y = pat->height();
-    Geom::Point delta = Geom::Point(x,y);
-    Geom::Affine a = pat->getTransform();
-    a[4] = 0;
-    a[5] = 0;
-    delta = delta * a;
-    delta = delta + sp_pattern_extract_trans(pat);
-    return delta;
+    return sp_pattern_knot_get(pat, pat->width(), pat->height());
 }
 
 /* Filter manipulation */

@@ -918,8 +918,7 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
-    /// @fixme hardcoded desktop transform
-    Geom::Affine m = Geom::Scale(1, -1) * Geom::Translate(0, document->getHeight().value("px"));
+    Geom::Affine const& m = SP_ACTIVE_DESKTOP->doc2dt();
     Geom::OptRect ret = documentVisualBounds();
     if (ret) *ret *= m;
     return ret;

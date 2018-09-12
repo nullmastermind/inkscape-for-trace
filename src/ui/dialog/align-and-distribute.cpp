@@ -130,7 +130,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     if (selected.empty()) return;
 
-    const Coeffs &a = _allCoeffs[index];
+    Coeffs a = _allCoeffs[index]; // copy
     SPItem *focus = nullptr;
     Geom::OptRect b = Geom::OptRect();
     Selection::CompareSize horiz = (a.mx0 != 0.0) || (a.mx1 != 0.0)
@@ -167,6 +167,13 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     if(focus)
         b = focus->desktopPreferredBounds();
     g_return_if_fail(b);
+
+    if (horiz == Selection::HORIZONTAL && desktop->is_yaxisdown()) {
+        a.my0 = 1. - a.my0;
+        a.my1 = 1. - a.my1;
+        a.sy0 = 1. - a.sy0;
+        a.sy1 = 1. - a.sy1;
+    }
 
     // Generate the move point from the selected bounding box
     Geom::Point mp = Geom::Point(a.mx0 * b->min()[Geom::X] + a.mx1 * b->max()[Geom::X],
@@ -303,6 +310,13 @@ private :
         ++second;
         if (second == selected.end()) return;
 
+        double kBegin = _kBegin;
+        double kEnd = _kEnd;
+        if (_orientation == Geom::Y && desktop->is_yaxisdown()) {
+            kBegin = 1. - kBegin;
+            kEnd = 1. - kEnd;
+        }
+
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int prefs_bbox = prefs->getBool("/tools/bounding_box");
         std::vector< BBoxSort  > sorted;
@@ -312,7 +326,7 @@ private :
             SPItem *item = *it;
             Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
-                sorted.emplace_back(item, *bbox, _orientation, _kBegin, _kEnd);
+                sorted.emplace_back(item, *bbox, _orientation, kBegin, kEnd);
             }
         }
         //sort bbox by anchors

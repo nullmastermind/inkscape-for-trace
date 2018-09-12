@@ -16,6 +16,7 @@
  *
  */
 
+#include "inkscape.h"
 #include "sodipodi-ctrlrect.h"
 #include "sp-canvas-util.h"
 #include "display/cairo-utils.h"
@@ -122,33 +123,41 @@ void CtrlRect::render(SPCanvasBuf *buf)
 
         // Draw shadow first. Shadow extends under rectangle to reduce aliasing effects.
         if (_shadow_width > 0 && !_dashed) {
+            Geom::Point const * corners = rect_transformed;
+            double shadowydir = _affine.det() > 0 ? -1 : 1;
+
+            // is the desktop y-axis downwards?
+            if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                ++corners; // need corners 1/2/3 instead of 0/1/2
+                shadowydir *= -1;
+            }
 
             // Offset by half stroke width (_shadow_width is in window coordinates).
             // Need to handle change in handedness with flips.
-            Geom::Point shadow( _shadow_width/2.0, (_affine.det()>0?-1:1)*_shadow_width/2.0 );
+            Geom::Point shadow( _shadow_width/2.0, shadowydir * _shadow_width/2.0 );
             shadow *= Geom::Rotate( rotation );
 
             if (axis_aligned) {
                 // Snap to pixel grid (add 0.5 to center on pixel).
                 cairo_move_to( buf->ct,
-                               floor(rect_transformed[0][X]+shadow[X]+0.5) + 0.5,
-                               floor(rect_transformed[0][Y]+shadow[Y]+0.5) + 0.5 );
+                               floor(corners[0][X] + shadow[X]+0.5) + 0.5,
+                               floor(corners[0][Y] + shadow[Y]+0.5) + 0.5 );
                 cairo_line_to( buf->ct,
-                               floor(rect_transformed[1][X]+shadow[X]+0.5) + 0.5,
-                               floor(rect_transformed[1][Y]+shadow[Y]+0.5) + 0.5 );
+                               floor(corners[1][X] + shadow[X]+0.5) + 0.5,
+                               floor(corners[1][Y] + shadow[Y]+0.5) + 0.5 );
                 cairo_line_to( buf->ct,
-                               floor(rect_transformed[2][X]+shadow[X]+0.5) + 0.5,
-                               floor(rect_transformed[2][Y]+shadow[Y]+0.5) + 0.5 );
+                               floor(corners[2][X] + shadow[X]+0.5) + 0.5,
+                               floor(corners[2][Y] + shadow[Y]+0.5) + 0.5 );
             } else {
                 cairo_move_to( buf->ct,
-                               rect_transformed[0][X]+shadow[X],
-                               rect_transformed[0][Y]+shadow[Y] );
+                               corners[0][X] + shadow[X],
+                               corners[0][Y] + shadow[Y] );
                 cairo_line_to( buf->ct,
-                               rect_transformed[1][X]+shadow[X],
-                               rect_transformed[1][Y]+shadow[Y] );
+                               corners[1][X] + shadow[X],
+                               corners[1][Y] + shadow[Y] );
                 cairo_line_to( buf->ct,
-                               rect_transformed[2][X]+shadow[X],
-                               rect_transformed[2][Y]+shadow[Y] );
+                               corners[2][X] + shadow[X],
+                               corners[2][Y] + shadow[Y] );
             }               
 
             ink_cairo_set_source_rgba32( buf->ct, _shadow_color );

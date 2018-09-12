@@ -385,6 +385,7 @@ protected:
     UI::Widget::PrefSpinButton  _misc_recent;
     UI::Widget::PrefCheckButton _ui_partialdynamic;
     UI::Widget::ZoomCorrRulerSlider _ui_zoom_correction;
+    UI::Widget::PrefCheckButton _ui_yaxisdown;
 
     //Spellcheck
     UI::Widget::PrefCombo       _spell_language;

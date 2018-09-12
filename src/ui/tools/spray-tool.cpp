@@ -969,7 +969,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale));
                 sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
                 // Move the cursor p
-                sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
                 Inkscape::GC::release(copy);
                 if(picker){
                     sp_desktop_apply_css_recursive(item_copied, css, true);
@@ -1013,7 +1013,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                     sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                     sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                    sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
 
                     // Union and duplication
                     set->clear();
@@ -1101,7 +1101,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                 sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                sp_item_move_rel(item_copied, Geom::Translate(move * desktop->doc2dt().withoutTranslation()));
                 if(picker){
                     sp_desktop_apply_css_recursive(item_copied, css, true);
                 }

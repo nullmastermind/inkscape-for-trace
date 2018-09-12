@@ -595,11 +595,11 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
             // rotation
             case GDK_KEY_bracketleft:
             case GDK_KEY_braceleft:
-                pm.rotateHandle(n, which, 1, one_pixel);
+                pm.rotateHandle(n, which, -_desktop->yaxisdir(), one_pixel);
                 break;
             case GDK_KEY_bracketright:
             case GDK_KEY_braceright:
-                pm.rotateHandle(n, which, -1, one_pixel);
+                pm.rotateHandle(n, which, _desktop->yaxisdir(), one_pixel);
                 break;
             // adjust length
             case GDK_KEY_period:

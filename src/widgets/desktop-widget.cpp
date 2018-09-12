@@ -1712,6 +1712,9 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 
     double lower_y = dtw->dt2r * (viewbox.bottom() - dtw->ruler_origin[Geom::Y]);
     double upper_y = dtw->dt2r * (viewbox.top()    - dtw->ruler_origin[Geom::Y]);
+    if (dtw->desktop->is_yaxisdown()) {
+        std::swap(lower_y, upper_y);
+    }
     sp_ruler_set_range(SP_RULER(dtw->vruler),
                        lower_y,
 		       upper_y,
@@ -2293,8 +2296,9 @@ sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
     }
 
     /* Canvas region we always show unconditionally */
-    Geom::Rect carea( Geom::Point(deskarea->min()[Geom::X] * scale - 64, deskarea->max()[Geom::Y] * -scale - 64),
-                    Geom::Point(deskarea->max()[Geom::X] * scale + 64, deskarea->min()[Geom::Y] * -scale + 64)  );
+    double const y_dir = dtw->desktop->yaxisdir();
+    Geom::Rect carea( Geom::Point(deskarea->left() * scale - 64, (deskarea->top() * scale + 64) * y_dir),
+                    Geom::Point(deskarea->right() * scale + 64, (deskarea->bottom() * scale - 64) * y_dir)  );
 
     Geom::Rect viewbox = dtw->canvas->getViewbox();
 

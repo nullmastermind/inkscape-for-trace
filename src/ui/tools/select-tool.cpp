@@ -906,6 +906,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
             gdouble const nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px"); // in px
             gdouble const offset = prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000, "px");
             int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+            auto const y_dir = desktop->yaxisdir();
 
             switch (get_latin_keyval (&event->key)) {
                 case GDK_KEY_Left: // move selection left
@@ -935,6 +936,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_KP_Up:
                     if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
+                        mul *= -y_dir;
                         
                         if (MOD__ALT(event)) { // alt
                             if (MOD__SHIFT(event)) {
@@ -981,6 +983,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_KP_Down:
                     if (!MOD__CTRL(event)) { // not ctrl
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
+                        mul *= -y_dir;
                         
                         if (MOD__ALT(event)) { // alt
                             if (MOD__SHIFT(event)) {
@@ -1038,9 +1041,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
                         selection->rotateScreen(mul*1);
                     } else if (MOD__CTRL(event)) {
-                        selection->rotate(90);
+                        selection->rotate(-90 * y_dir);
                     } else if (snaps) {
-                        selection->rotate(180.0/snaps);
+                        selection->rotate(-180.0/snaps * y_dir);
                     }
                     
                     ret = TRUE;
@@ -1051,9 +1054,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         gint mul = 1 + gobble_key_events(get_latin_keyval(&event->key), 0); // with any mask
                         selection->rotateScreen(-1*mul);
                     } else if (MOD__CTRL(event)) {
-                        selection->rotate(-90);
+                        selection->rotate(90 * y_dir);
                     } else if (snaps) {
-                        selection->rotate(-180.0/snaps);
+                        selection->rotate(180.0/snaps * y_dir);
                     }
                     
                     ret = TRUE;

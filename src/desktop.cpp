@@ -127,7 +127,7 @@ SPDesktop::SPDesktop() :
     _widget( nullptr ),
     _guides_message_context( nullptr ),
     _active( false ),
-    _doc2dt( Geom::Scale(1, -1) ),
+    _doc2dt( Geom::identity() ),
     _image_render_observer(this, "/options/rendering/imageinoutlinemode"),
     grids_visible( false )
 {
@@ -255,7 +255,10 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
 
     /* Connect event for page resize */
-    _doc2dt[5] = document->getHeight().value("px");
+    if (!prefs->getBool("/options/yaxisdown", false)) {
+        _doc2dt[3] = -1;
+        _doc2dt[5] = document->getHeight().value("px");
+    }
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
 
     _modified_connection =
@@ -886,7 +889,7 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
     } else {
         zoom = w.height() / r.height();
     }
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
 
     // Zero offset, actual offset calculated later.
     _current_affine.setOffset( Geom::Point( 0, 0 ) );
@@ -903,9 +906,7 @@ Geom::Rect SPDesktop::get_display_area() const
     Geom::Rect const viewbox = canvas->getViewbox();
     double const scale = _current_affine.getZoom();
 
-    /// @fixme hardcoded desktop transform
-    return Geom::Rect(Geom::Point(viewbox.min()[Geom::X] / scale, viewbox.max()[Geom::Y] / -scale),
-                      Geom::Point(viewbox.max()[Geom::X] / scale, viewbox.min()[Geom::Y] / -scale));
+    return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);
 }
 
 
@@ -917,7 +918,7 @@ SPDesktop::zoom_absolute_keep_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);    
     Geom::Point w = d2w( c ); // Must be before zoom changed.
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
     set_display_area( c, w );
 }
 
@@ -937,7 +938,7 @@ void
 SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
-    _current_affine.setScale( zoom );
+    _current_affine.setScale( Geom::Scale(zoom, _doc2dt[3] * zoom) );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
 }
@@ -1682,7 +1683,9 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    _doc2dt[5] = height;
+    if (!Inkscape::Preferences::get()->getBool("/options/yaxisdown", false)) {
+        _doc2dt[5] = height;
+    }
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
     Geom::Rect const a(Geom::Point(0, 0), Geom::Point(width, height));
     SP_CTRLRECT(page)->setRectangle(a);
