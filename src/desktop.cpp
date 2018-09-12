@@ -255,7 +255,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
 
     /* Connect event for page resize */
-    if (!prefs->getBool("/options/yaxisdown", false)) {
+    if (!prefs->getBool("/options/yaxisdown", true)) {
         _doc2dt[3] = -1;
         _doc2dt[5] = document->getHeight().value("px");
     }
@@ -1683,7 +1683,7 @@ SPDesktop::onDocumentURISet (gchar const* uri)
 void
 SPDesktop::onDocumentResized (gdouble width, gdouble height)
 {
-    if (!Inkscape::Preferences::get()->getBool("/options/yaxisdown", false)) {
+    if (!Inkscape::Preferences::get()->getBool("/options/yaxisdown", true)) {
         _doc2dt[5] = height;
     }
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
