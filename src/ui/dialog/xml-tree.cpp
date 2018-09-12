@@ -101,6 +101,7 @@ XmlTree::XmlTree() :
 
     /* tree view */
     notebook_content->insert_page(node_box, _("_Nodes"), NOTEBOOK_PAGE_NODES, true);
+    notebook_content->set_tab_detachable(node_box, true);
 
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
@@ -182,6 +183,7 @@ XmlTree::XmlTree() :
 
     /* node view */
     notebook_content->insert_page(attr_box, _("_Attributes"), NOTEBOOK_PAGE_ATTRS, true);
+    notebook_content->set_tab_detachable(attr_box, true);
 
     /* attributes */
     attributes = SP_XMLVIEW_ATTR_LIST(sp_xmlview_attr_list_new(nullptr));
@@ -214,6 +216,7 @@ XmlTree::XmlTree() :
     styles = new CssDialog;
     css_box.pack_start(*styles);
     notebook_content->insert_page(css_box, _("_Styles"), NOTEBOOK_PAGE_STYLES, true);
+    notebook_content->set_tab_detachable(css_box, true);
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
