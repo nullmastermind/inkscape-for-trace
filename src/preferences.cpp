@@ -39,6 +39,10 @@ static void migrateDetails( Inkscape::XML::Document *from, Inkscape::XML::Docume
 
 static Inkscape::XML::Document *migrateFromDoc = nullptr;
 
+// cachedRawValue prefixes for encoding nullptr
+static Glib::ustring const RAWCACHE_CODE_NULL {"N"};
+static Glib::ustring const RAWCACHE_CODE_VALUE {"V"};
+
 // TODO clean up. Function copied from file.cpp:
 // what gets passed here is not actually an URI... it is an UTF-8 encoded filename (!)
 static void file_add_recent(gchar const *uri)
@@ -749,7 +753,18 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
 
 void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 {
-    if (cachedRawValue.find(path)!=cachedRawValue.end()) { result = cachedRawValue.at(path); return; }
+    // will return empty string if `path` was not in the cache yet
+    auto& cacheref = cachedRawValue[path];
+
+    if (!cacheref.empty()) {
+        if (cacheref == RAWCACHE_CODE_NULL) {
+            result = nullptr;
+        } else {
+            result = cacheref.c_str() + RAWCACHE_CODE_VALUE.length();
+        }
+        return;
+    }
+
     // create node and attribute keys
     Glib::ustring node_key, attr_key;
     _keySplit(path, node_key, attr_key);
@@ -766,7 +781,13 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
             result = attr;
         }
     }
-    cachedRawValue[path] = result;
+
+    if (!result) {
+        cacheref = RAWCACHE_CODE_NULL;
+    } else {
+        cacheref = RAWCACHE_CODE_VALUE;
+        cacheref += result;
+    }
 }
 
 void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &value)
@@ -778,7 +799,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
     node->setAttribute(attr_key.c_str(), value.c_str());
-    cachedRawValue[path] = value.c_str();
+    cachedRawValue[path] = RAWCACHE_CODE_VALUE + value;
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored
