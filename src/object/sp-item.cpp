@@ -918,9 +918,10 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
-    Geom::Affine const& m = SP_ACTIVE_DESKTOP->doc2dt();
     Geom::OptRect ret = documentVisualBounds();
-    if (ret) *ret *= m;
+    if (ret && SP_ACTIVE_DESKTOP) {
+        *ret *= SP_ACTIVE_DESKTOP->doc2dt();
+    }
     return ret;
 }
 
