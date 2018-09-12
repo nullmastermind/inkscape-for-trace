@@ -39,12 +39,20 @@ GtkWidget * sp_xmlview_attr_list_new (Inkscape::XML::Node * repr);
 
 #define SP_XMLVIEW_ATTR_LIST_GET_REPR(list) (SP_XMLVIEW_ATTR_LIST (list)->repr)
 
+gint attr_sort_name_iter (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter  *iter_b, gpointer data);
 void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * repr);
 void sp_xmlview_attr_list_select_row_by_key(SPXMLViewAttrList * list, const gchar *name);
+void attr_name_edited (GtkCellRendererText *cell, gchar * path_string, gchar * new_value, gpointer data);
 void attr_value_edited (GtkCellRendererText *cell, gchar * path_string, gchar * new_value, gpointer data);
 gboolean attr_key_pressed(GtkWidget *attributes, GdkEventKey *event, gpointer data);
 
 /* Attribute list store columns */
-enum {ATTR_COL_NAME=0, ATTR_COL_ATTR=1, ATTR_COL_VALUE=2, ATTR_N_COLS=3 };
+enum {
+    ATTR_COL_NAME,
+    ATTR_COL_ATTR,
+    ATTR_COL_VALUE,
+    ATTR_COL_COLOR,
+    ATTR_N_COLS,
+};
 
 #endif

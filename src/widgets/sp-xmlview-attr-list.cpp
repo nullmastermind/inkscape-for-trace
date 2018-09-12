@@ -36,33 +36,54 @@ GtkWidget *sp_xmlview_attr_list_new (Inkscape::XML::Node * repr)
 {
     SPXMLViewAttrList * attr_list = SP_XMLVIEW_ATTR_LIST(g_object_new(SP_TYPE_XMLVIEW_ATTR_LIST, nullptr));
 
-    attr_list->store = gtk_list_store_new (ATTR_N_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING );
+    attr_list->store = gtk_list_store_new (ATTR_N_COLS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_STRING, GDK_TYPE_RGBA);
     gtk_tree_view_set_model (GTK_TREE_VIEW(attr_list), GTK_TREE_MODEL(attr_list->store));
 
     // Attribute name column
     int colpos = 0;
     GtkCellRenderer *cell = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Name"), cell, "text", ATTR_COL_NAME, NULL);
+    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Name"), cell, "text", ATTR_COL_NAME, "foreground-rgba", ATTR_COL_COLOR, NULL);
     GtkTreeViewColumn *column = gtk_tree_view_get_column (GTK_TREE_VIEW(attr_list), colpos);
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-    gtk_tree_view_column_set_sort_column_id (column, colpos);
+
+    gtk_tree_sortable_set_sort_func( GTK_TREE_SORTABLE(attr_list->store), ATTR_COL_NAME, attr_sort_name_iter, GINT_TO_POINTER(ATTR_COL_NAME), NULL);
     gtk_tree_sortable_set_sort_column_id ( GTK_TREE_SORTABLE(attr_list->store), ATTR_COL_NAME, GTK_SORT_ASCENDING);
     gtk_cell_renderer_set_padding (cell, 2, 0);
+    g_object_set(cell, "editable", TRUE, NULL);
+    g_signal_connect(cell, "edited", (GCallback) attr_name_edited, attr_list);
 
     // Attribute value column
     colpos = 1;
     cell = gtk_cell_renderer_text_new ();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Value"), cell, "text", ATTR_COL_VALUE, NULL);
+    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(attr_list), colpos, _("Value"), cell, "text", ATTR_COL_VALUE, "foreground-rgba", ATTR_COL_COLOR, NULL);
     column = gtk_tree_view_get_column (GTK_TREE_VIEW(attr_list), colpos);
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
     gtk_cell_renderer_set_padding (cell, 2, 0);
     g_object_set(cell, "editable", TRUE, NULL);
-
-    sp_xmlview_attr_list_set_repr (attr_list, repr);
     g_signal_connect(cell, "edited", (GCallback) attr_value_edited, attr_list);
+
+    // Final listview settings
     g_signal_connect( G_OBJECT(attr_list), "key-press-event", G_CALLBACK(attr_key_pressed), NULL);
+    gtk_widget_set_name(GTK_WIDGET(attr_list), "attrlist");
+    sp_xmlview_attr_list_set_repr (attr_list, repr);
 
     return GTK_WIDGET(attr_list);
+}
+
+gint
+attr_sort_name_iter (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter  *iter_b, gpointer /*data*/)
+{
+    gint ret;
+    gchar *name1, *name2;
+
+    gtk_tree_model_get(model, iter_a, ATTR_COL_NAME, &name1, -1);
+    gtk_tree_model_get(model, iter_b, ATTR_COL_NAME, &name2, -1);
+    if(name1[0] == 0) { return 1; }
+    if(name2[0] == 0) { return -1; }
+    ret = g_utf8_collate(name1, name2);
+    g_free(name1);
+    g_free(name2);
+    return ret;
 }
 
 void
@@ -79,6 +100,11 @@ sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, Inkscape::XML::Node * r
             Inkscape::GC::anchor(repr);
             sp_repr_add_listener (repr, &repr_events, list);
             sp_repr_synthesize_events (repr, &repr_events, list);
+
+            // Create an 'add-new' row to create new rows
+            GtkTreeIter iter;
+            gtk_list_store_append (list->store, &iter);
+            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, "", ATTR_COL_VALUE, "<new>", ATTR_COL_ATTR, NULL, ATTR_COL_COLOR, "#ccccccff", -1);
         }
 }
 
@@ -150,6 +176,27 @@ void sp_xmlview_attr_list_select_row_by_key(SPXMLViewAttrList * list, const gcha
 }
 
 void
+attr_name_edited (GtkCellRendererText *cell,
+                  gchar * path_string,
+                  gchar * new_name,
+                  gpointer data) {
+
+    SPXMLViewAttrList * list = SP_XMLVIEW_ATTR_LIST (data);
+    GtkTreeIter iter;
+    gboolean valid = gtk_tree_model_get_iter_from_string( GTK_TREE_MODEL(list->store), &iter, path_string );
+    if(valid) {
+        gchar *old_name = nullptr;
+        gchar *value = nullptr;
+        gtk_tree_model_get (GTK_TREE_MODEL(list->store), &iter, ATTR_COL_NAME, &old_name, ATTR_COL_VALUE, &value, -1);
+        if(old_name[0] != 0) {
+            // Remove named value
+            g_signal_emit_by_name(G_OBJECT (list), "attr-value-edited", old_name, nullptr );
+        }
+        g_signal_emit_by_name(G_OBJECT (list), "attr-value-edited", new_name, value );
+    }
+}
+
+void
 attr_value_edited (GtkCellRendererText *cell,
                    gchar * path_string,
                    gchar * new_value,
@@ -161,6 +208,7 @@ attr_value_edited (GtkCellRendererText *cell,
     if(valid) {
         gchar *name = nullptr;
         gtk_tree_model_get (GTK_TREE_MODEL(list->store), &iter, ATTR_COL_NAME, &name, -1);
+        if(name[0] == 0 or name[0] == '<') { return; }
         g_signal_emit_by_name(G_OBJECT (list), "attr-value-edited", name, new_value );
     }
 }
@@ -171,15 +219,15 @@ attr_key_pressed(GtkWidget *attributes, GdkEventKey *event, gpointer /*data*/)
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(attributes));
     GtkTreeIter   iter;
     GtkTreeModel *model;
-    gchar *name = nullptr;
     if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
-        gtk_tree_model_get (model, &iter, 0, &name, -1);
-
         switch (event->keyval)
         {
             case GDK_KEY_Delete:
             case GDK_KEY_KP_Delete:
+                gchar *name = nullptr;
+                gtk_tree_model_get (model, &iter, 0, &name, -1);
                 g_signal_emit_by_name(G_OBJECT (attributes), "attr-value-edited", name, nullptr);
+                if(name) g_free(name);
                 return true;
         }
     }
@@ -217,13 +265,13 @@ event_attr_changed (Inkscape::XML::Node * /*repr*/,
 
     if (match) {
         if (new_value) {
-            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), -1);
+            gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), ATTR_COL_COLOR, "#000000", -1);
         } else {
             gtk_list_store_remove  (list->store, &iter);
         }
     } else if (new_value != nullptr) {
         gtk_list_store_append (list->store, &iter);
-        gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), -1);
+        gtk_list_store_set (list->store, &iter, ATTR_COL_NAME, name, ATTR_COL_VALUE, new_value, ATTR_COL_ATTR, g_quark_from_string (name), ATTR_COL_COLOR, "#000000", -1);
     }
 
     // send a "changed" signal so widget owners will know I've updated
