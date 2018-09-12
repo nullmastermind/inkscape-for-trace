@@ -17,6 +17,7 @@
 #include <cfloat>
 #include <glibmm/ustring.h>
 #include <map>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -123,7 +124,11 @@ public:
     friend class Preferences; // Preferences class has to access _value
     public:
         ~Entry() = default;
-        Entry() : _pref_path(""), _value(nullptr) {} // needed to enable use in maps
+        Entry() : _pref_path(""), _value(nullptr),
+        cached_bool(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) { 
+        
+        
+        } // needed to enable use in maps
         Entry(Entry const &other) = default;
 
         /**
@@ -228,10 +233,21 @@ public:
          */
         Glib::ustring getEntryName() const;
     private:
-        Entry(Glib::ustring path, void const *v) : _pref_path(std::move(path)), _value(v) {}
+        Entry(Glib::ustring path, void const *v) : _pref_path(std::move(path)), _value(v),
+        cached_bool(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) {}
 
         Glib::ustring _pref_path;
         void const *_value;
+        
+        mutable bool value_bool;
+        mutable int value_int;
+        mutable double value_double;
+        mutable Glib::ustring value_unit;
+        mutable guint32 value_color;
+        mutable SPCSSAttr* value_style;
+
+        mutable bool cached_bool, cached_int, cached_double, cached_unit, cached_color, cached_style;
+
     };
 
     // utility methods
@@ -552,7 +568,7 @@ private:
     ErrorReporter* _errorHandler; ///< Pointer to object reporting errors.
     bool _writable; ///< Will the preferences be saved at exit?
     bool _hasError; ///< Indication that some error has occurred;
-    std::map<Glib::ustring, Glib::ustring> cachedRawValue;
+    std::unordered_map<std::string, Glib::ustring> cachedRawValue;
 
     /// Wrapper class for XML node observers
     class PrefNodeObserver;

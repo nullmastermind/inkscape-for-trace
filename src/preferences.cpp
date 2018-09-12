@@ -509,7 +509,7 @@ void Preferences::mergeStyle(Glib::ustring const &pref_path, SPCSSAttr *style)
  */
 void Preferences::remove(Glib::ustring const &pref_path)
 {
-    auto it = cachedRawValue.find(pref_path);
+    auto it = cachedRawValue.find(pref_path.c_str());
     if (it != cachedRawValue.end()) cachedRawValue.erase(it);
 
     Inkscape::XML::Node *node = _getNode(pref_path, false);
@@ -754,7 +754,7 @@ Inkscape::XML::Node *Preferences::_getNode(Glib::ustring const &pref_key, bool c
 void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
 {
     // will return empty string if `path` was not in the cache yet
-    auto& cacheref = cachedRawValue[path];
+    auto& cacheref = cachedRawValue[path.c_str()];
 
     if (!cacheref.empty()) {
         if (cacheref == RAWCACHE_CODE_NULL) {
@@ -799,7 +799,7 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
     node->setAttribute(attr_key.c_str(), value.c_str());
-    cachedRawValue[path] = RAWCACHE_CODE_VALUE + value;
+    cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored
@@ -807,30 +807,41 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
 
 bool Preferences::_extractBool(Entry const &v)
 {
+    if (v.cached_bool) return v.value_bool;
+    v.cached_bool = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     if ( !s[0] || !strcmp(s, "0") || !strcmp(s, "false") ) {
         return false;
     } else {
+        v.value_bool = true;
         return true;
     }
 }
 
 int Preferences::_extractInt(Entry const &v)
 {
+    if (v.cached_int) return v.value_int;
+    v.cached_int = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     if ( !strcmp(s, "true") ) {
+        v.value_int = 1;
         return true;
     } else if ( !strcmp(s, "false") ) {
+        v.value_int = 0;
         return false;
     } else {
-        return atoi(s);
+        v.value_int = atoi(s);
+        return v.value_int;
     }
 }
 
 double Preferences::_extractDouble(Entry const &v)
 {
+    if (v.cached_double) return v.value_double;
+    v.cached_double = true;
     gchar const *s = static_cast<gchar const *>(v._value);
-    return g_ascii_strtod(s, nullptr);
+    v.value_double = g_ascii_strtod(s, nullptr);
+    return v.value_double;
 }
 
 double Preferences::_extractDouble(Entry const &v, Glib::ustring const &requested_unit)
@@ -852,6 +863,9 @@ Glib::ustring Preferences::_extractString(Entry const &v)
 
 Glib::ustring Preferences::_extractUnit(Entry const &v)
 {
+    if (v.cached_unit) return v.value_unit;
+    v.cached_unit = true;
+    v.value_unit = "";
     gchar const *str = static_cast<gchar const *>(v._value);
     gchar const *e;
     g_ascii_strtod(str, (char **) &e);
@@ -863,12 +877,15 @@ Glib::ustring Preferences::_extractUnit(Entry const &v)
         /* Unitless */
         return "";
     } else {
-        return Glib::ustring(e);
+        v.value_unit = Glib::ustring(e);
+        return v.value_unit;
     }
 }
 
 guint32 Preferences::_extractColor(Entry const &v)
 {
+    if (v.cached_color) return v.value_color;
+    v.cached_color = true;
     gchar const *s = static_cast<gchar const *>(v._value);
     std::istringstream hr(s);
     guint32 color;
@@ -878,13 +895,17 @@ guint32 Preferences::_extractColor(Entry const &v)
     } else {
         hr >> color;
     }
+    v.value_color = color;
     return color;
 }
 
 SPCSSAttr *Preferences::_extractStyle(Entry const &v)
 {
+    if (v.cached_style) return v.value_style;
+    v.cached_style = true;
     SPCSSAttr *style = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(style, static_cast<gchar const*>(v._value));
+    v.value_style = style;
     return style;
 }
 
