@@ -47,6 +47,16 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
 LPEPowerClip::~LPEPowerClip() = default;
 
 void
+LPEPowerClip::doOnApply (SPLPEItem const * lpeitem)
+{
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    SPObject * clip_path = item->clip_ref->getObject();
+    if (!clip_path) {
+        item->removeCurrentPathEffect(false);
+    }
+}
+
+void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     SPObject * clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     gchar * uri_str = uri.param_getSVGValue();

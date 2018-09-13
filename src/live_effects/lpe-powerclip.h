@@ -18,6 +18,7 @@ class LPEPowerClip : public Effect {
 public:
     LPEPowerClip(LivePathEffectObject *lpeobject);
     ~LPEPowerClip() override;
+    void doOnApply (SPLPEItem const * lpeitem);
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;

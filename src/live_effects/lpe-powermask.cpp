@@ -51,6 +51,16 @@ LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
 LPEPowerMask::~LPEPowerMask() = default;
 
 void
+LPEPowerMask::doOnApply (SPLPEItem const * lpeitem)
+{
+    SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
+    SPObject * mask = item->mask_ref->getObject();
+    if (!mask) {
+        item->removeCurrentPathEffect(false);
+    }
+}
+
+void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     //To avoid close of color dialog and better performance on change color
     SPObject * mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
