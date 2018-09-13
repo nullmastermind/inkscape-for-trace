@@ -399,7 +399,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
             handling_value = true;
             break;
 
-            /* Block delimeters */
+            /* Block delimiters */
         case YAML_BLOCK_SEQUENCE_START_TOKEN:
             if( state == HANDLING_ROOT ) {
                 if( key == "run" )

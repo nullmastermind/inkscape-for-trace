@@ -3,12 +3,12 @@ icons, markers, filters, keyboard maps, etc.
 
 attributes - 
 branding   - Official visual collateral
-examples   - Sharable example drawings
+examples   - Shareable example drawings
 extensions - Plugable scripts runnable by Inkscape
 filters    - Custom SVG filters loaded at runtime, under Effects > Filters
 fonts      - 
 gradients  - 
-icons      - Program icons follwoing the freedesktop.org icon scheme.
+icons      - Program icons following the freedesktop.org icon scheme.
 keys       - 
 markers    - 
 palettes   - 

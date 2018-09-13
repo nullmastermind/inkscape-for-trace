@@ -121,7 +121,7 @@ enum SPCycleType
 
 
 
-// TOOD fixme: This should be moved into preference repr
+// TODO FIXME: This should be moved into preference repr
 extern SPCycleType SP_CYCLING;
 
 #endif // SEEN_SELECTION_CHEMISTRY_H

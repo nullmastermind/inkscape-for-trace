@@ -117,7 +117,7 @@ void PngTextList::add(gchar const* key, gchar const* text)
         item->lang_key = nullptr;
 #endif // PNG_iTXt_SUPPORTED
     } else {
-        g_warning("Unable to allocate arrary for %d PNG text data.", count);
+        g_warning("Unable to allocate array for %d PNG text data.", count);
         textItems = nullptr;
         count = 0;
     }

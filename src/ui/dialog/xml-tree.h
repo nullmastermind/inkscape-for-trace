@@ -68,7 +68,7 @@ private:
     void set_tree_desktop(SPDesktop *desktop);
 
     /**
-     * Is invoked when the documnet changes
+     * Is invoked when the document changes
      */
     void set_tree_document(SPDocument *document);
 
