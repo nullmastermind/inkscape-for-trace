@@ -1,4 +1,9 @@
 # All source files whose translatable messages should not be seen as of now
+src/3rdparty/autotrace/autotrace.c
+src/3rdparty/autotrace/autotrace.h
+src/3rdparty/autotrace/color.c
+src/3rdparty/autotrace/config.h
+src/3rdparty/autotrace/intl.h
 src/live_effects/lpe-angle_bisector.cpp
 src/live_effects/lpe-circle_with_radius.cpp
 src/live_effects/lpe-dynastroke.cpp
