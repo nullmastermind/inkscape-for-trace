@@ -355,6 +355,7 @@ set(INKSCAPE_TARGET_LIBS
         uemf_LIB
         2geom_LIB
         depixelize_LIB
+        autotrace_LIB
         util_LIB
         gc_LIB
 )

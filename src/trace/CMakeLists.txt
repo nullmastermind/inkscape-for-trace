@@ -9,6 +9,7 @@ set(trace_SRC
 	trace.cpp
 
 	potrace/inkscape-potrace.cpp
+	autotrace/inkscape-autotrace.cpp
 
 	# -------
 	# Headers
@@ -22,6 +23,7 @@ set(trace_SRC
 
 	potrace/bitmap.h
 	potrace/inkscape-potrace.h
+	autotrace/inkscape-autotrace.h
 )
 
 # add_inkscape_lib(trace_LIB "${trace_SRC}")

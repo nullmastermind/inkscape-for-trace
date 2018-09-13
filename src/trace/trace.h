@@ -129,15 +129,12 @@ class TracingEngine
      *  of an SVG <path> element.
      */
     virtual  std::vector<TracingEngineResult> trace(
-                           Glib::RefPtr<Gdk::Pixbuf> /*pixbuf*/)
-        { std::vector<TracingEngineResult> dummy;  return dummy; }
-
+                           Glib::RefPtr<Gdk::Pixbuf> /*pixbuf*/) = 0;
 
     /**
      *  Abort the thread that is executing getPathDataFromPixbuf()
      */
-    virtual void abort()
-        {}
+    virtual void abort() = 0;
 
 
 
