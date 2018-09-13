@@ -117,10 +117,10 @@ public:
     PixelFormat pixelFormat() const { return _pixel_format; }
     void ensurePixelFormat(PixelFormat fmt);
 
-    static Pixbuf *create_from_data_uri(gchar const *uri);
-    static Pixbuf *create_from_file(std::string const &fn);
+    static Pixbuf *create_from_data_uri(gchar const *uri, char const *svgdpi = NULL);
+    static Pixbuf *create_from_file(std::string const &fn, char const *svgddpi = NULL);
 
-private:
+  private:
     void _ensurePixelsARGB32();
     void _ensurePixelsPixbuf();
     void _forceAlpha();

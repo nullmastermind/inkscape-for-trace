@@ -145,6 +145,7 @@ enum SPAttributeEnum {
     /* SPImage, SPRect, etc. */
     SP_ATTR_X,
     SP_ATTR_Y,
+    SP_ATTR_SVG_DPI,
     /* SPPath */
     // SP_ATTR_D,  Promoted to property in SVG 2
     SP_ATTR_INKSCAPE_ORIGINAL_D,

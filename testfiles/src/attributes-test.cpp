@@ -463,6 +463,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("inkscape:window-x", true),
         AttributeInfo("inkscape:window-y", true),
         AttributeInfo("inkscape:zoom", true),
+        AttributeInfo("inkscape:svg-dpi", true),
         AttributeInfo("osb:paint", true),
         AttributeInfo("sodipodi:arc-type", true),
         AttributeInfo("sodipodi:arg1", true),

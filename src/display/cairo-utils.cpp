@@ -207,7 +207,7 @@ Pixbuf::~Pixbuf()
     }
 }
 
-Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
+Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, char const *svgdpi)
 {
     Pixbuf *pixbuf = nullptr;
 
@@ -310,7 +310,11 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
             return nullptr;
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+        double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+        if (svgdpi && atof(svgdpi) > 0) {
+            dpi = atof(svgdpi);
+        }
+        std::cout << dpi << "dpi" << std::endl;
         // Get the size of the document
         Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
         Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
@@ -338,7 +342,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data)
     return pixbuf;
 }
 
-Pixbuf *Pixbuf::create_from_file(std::string const &fn)
+Pixbuf *Pixbuf::create_from_file(std::string const &fn, char const *svgdpi)
 {
     Pixbuf *pb = nullptr;
     // test correctness of filename
@@ -350,7 +354,6 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
     if (val == 0 && stdir.st_mode & S_IFDIR){
         return nullptr;
     }
-
     // we need to load the entire file into memory,
     // since we'll store it as MIME data
     gchar *data = nullptr;
@@ -383,7 +386,11 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
                     return nullptr;
                 }
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                const double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+                double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
+                if (svgdpi && atof(svgdpi) > 0) {
+                    dpi = atof(svgdpi);
+                }
+                std::cout << dpi << "dpi" << std::endl;
                 // Get the size of the document
                 Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
                 Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();

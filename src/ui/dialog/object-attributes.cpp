@@ -67,7 +67,6 @@ static const SPAttrDesc image_desc[] = {
     { N_("Y:"), "y"},
     { N_("Width:"), "width"},
     { N_("Height:"), "height"},
-    { N_("Image Rendering:"), "image-rendering"},
     { nullptr, nullptr}
 };
 

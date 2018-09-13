@@ -142,6 +142,7 @@ Svg::init()
                     "<_option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document)") "</_option>\n"
                     "<_option value='link' >" N_("Link the SVG file in a image tag (not editable in this document).") "</_option>\n"
                   "</param>\n"
+            "<param name='svgdpi' type='float' precision='2' min='1' max='999999' gui-text='DPI for rendered SVG'>96.00</param>\n"
             "<param name='scale' appearance='minimal' type='optiongroup' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
                     "<_option value='auto' >" N_("None (auto)") "</_option>\n"
                     "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
@@ -208,7 +209,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
-    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
+    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 ||
+        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
         is_import = true;
     }
     if(INKSCAPE.use_gui() && is_import && ask) {
@@ -243,6 +245,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
         // what Inkscaper's expect.
         image_node->setAttribute("preserveAspectRatio", "none");
+        Glib::ustring svgdpi = Glib::ustring::format(mod->get_param_float("svgdpi"));
+        image_node->setAttribute("inkscape:svg-dpi", svgdpi.c_str());
         image_node->setAttribute("width", Glib::ustring::format(width));
         image_node->setAttribute("height", Glib::ustring::format(height));
         Glib::ustring scale = prefs->getString("/dialogs/import/scale");
@@ -254,11 +258,12 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         }
         // convert filename to uri
         if (embed) {
-            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
+            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri, svgdpi.c_str()));
             if(pb) {
                 sp_embed_svg(image_node, uri);
             }
-        } else {
+        }
+        else {
             gchar* _uri = g_filename_to_uri(uri, nullptr, nullptr);
             if(_uri) {
                 image_node->setAttribute("xlink:href", _uri);

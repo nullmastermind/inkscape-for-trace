@@ -750,6 +750,8 @@ static void
 sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
 {
     // dealing with the bizarre filename convention in Inkscape for now
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setString("/options/openmethod/value", "open");
     gchar *uri = gtk_recent_chooser_get_current_uri(GTK_RECENT_CHOOSER(recent_menu));
     gchar *local_fn = g_filename_from_uri(uri, nullptr, nullptr);
     gchar *utf8_fn = g_filename_to_utf8(local_fn, -1, nullptr, nullptr, nullptr);
@@ -757,6 +759,7 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
     g_free(utf8_fn);
     g_free(local_fn);
     g_free(uri);
+    prefs->setString("/options/openmethod/value", "done");
 }
 
 static void

@@ -72,7 +72,8 @@
 
 static void sp_image_set_curve(SPImage *image);
 
-static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base );
+static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base,
+                                                  char const *svgdpi);
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 
@@ -117,7 +118,9 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->clipbox = Geom::Rect();
     this->sx = this->sy = 1.0;
     this->ox = this->oy = 0.0;
-
+    this->dpi = 96.00;
+    this->prev_width = 0.0;
+    this->prev_height = 0.0;
     this->curve = nullptr;
 
     this->href = nullptr;
@@ -137,6 +140,7 @@ void SPImage::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "y" );
     this->readAttr( "width" );
     this->readAttr( "height" );
+    this->readAttr("inkscape:svg-dpi");
     this->readAttr( "preserveAspectRatio" );
     this->readAttr( "color-profile" );
 
@@ -214,6 +218,10 @@ void SPImage::set(unsigned int key, const gchar* value) {
             }
 
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            break;
+
+        case SP_ATTR_SVG_DPI:
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
         case SP_ATTR_PRESERVEASPECTRATIO:
@@ -330,11 +338,14 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->pixbuf = nullptr;
         if (this->href) {
             Inkscape::Pixbuf *pixbuf = nullptr;
-            pixbuf = sp_image_repr_read_image (
-                this->getRepr()->attribute("xlink:href"),
-                this->getRepr()->attribute("sodipodi:absref"),
-                doc->getBase());
-            
+            const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+            if (!svgdpi) {
+                svgdpi = "96";
+            }
+            this->dpi = atof(svgdpi);
+            pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
+                                              this->getRepr()->attribute("sodipodi:absref"), doc->getBase(), svgdpi);
+
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
                 if ( this->color_profile ) apply_profile( pixbuf );
@@ -348,7 +359,6 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
 
     // Why continue without a pixbuf? So we can display "Missing Image" png.
     // Eventually, we should properly support SVG image type (i.e. render it ourselves).
-
     if (this->pixbuf) {
         if (!this->x._set) {
             this->x.unit = SVGLength::PX;
@@ -398,8 +408,32 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->sy = c2p[3];
     }
 
+
+
     // TODO: eliminate ox, oy, sx, sy
+
     sp_image_update_canvas_image ((SPImage *) this);
+    double proportion_pixbuf = this->pixbuf->height() / (double)this->pixbuf->width();
+    double proportion_image = this->height.computed / (double)this->width.computed;
+    if (this->prev_width &&
+        (this->prev_width != this->pixbuf->width() || this->prev_height != this->pixbuf->height())) {
+        if (std::abs(this->prev_width - this->pixbuf->width()) > std::abs(this->prev_height - this->pixbuf->height())) {
+            proportion_pixbuf = this->pixbuf->width() / (double)this->pixbuf->height();
+            proportion_image = this->width.computed / (double)this->height.computed;
+            if (proportion_pixbuf != proportion_image) {
+                double new_height = this->height.computed * proportion_pixbuf;
+                sp_repr_set_svg_double(this->getRepr(), "width", new_height);
+            }
+        }
+        else {
+            if (proportion_pixbuf != proportion_image) {
+                double new_width = this->width.computed * proportion_pixbuf;
+                sp_repr_set_svg_double(this->getRepr(), "height", new_width);
+            }
+        }
+    }
+    this->prev_width = this->pixbuf->width();
+    this->prev_height = this->pixbuf->height();
 }
 
 void SPImage::modified(unsigned int flags) {
@@ -437,7 +471,7 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
     if (this->height._set) {
         sp_repr_set_svg_double(repr, "height", this->height.computed);
     }
-
+    repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
     //XML Tree being used directly here while it shouldn't be...
     repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -511,10 +545,12 @@ gchar* SPImage::description() const {
         this->document) 
     {
         Inkscape::Pixbuf * pb = nullptr;
-        pb = sp_image_repr_read_image (
-                this->getRepr()->attribute("xlink:href"),
-                this->getRepr()->attribute("sodipodi:absref"),
-                this->document->getBase());
+        const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
+        if (!svgdpi) {
+            svgdpi = "96";
+        }
+        pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
+                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getBase(), svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),
@@ -537,7 +573,7 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
-Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base)
+Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, char const *svgdpi)
 {
     Inkscape::Pixbuf *inkpb = nullptr;
 
@@ -547,7 +583,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
         if (strncmp (filename,"file:",5) == 0) {
             gchar *fullname = g_filename_from_uri(filename, nullptr, nullptr);
             if (fullname) {
-                inkpb = Inkscape::Pixbuf::create_from_file(fullname);
+                inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
                 g_free(fullname);
                 if (inkpb != nullptr) {
                     return inkpb;
@@ -556,7 +592,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
         } else if (strncmp (filename,"data:",5) == 0) {
             /* data URI - embedded image */
             filename += 5;
-            inkpb = Inkscape::Pixbuf::create_from_data_uri(filename);
+            inkpb = Inkscape::Pixbuf::create_from_data_uri(filename, svgdpi);
             if (inkpb != nullptr) {
                 return inkpb;
             }
@@ -574,7 +610,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
                 // different dir) or unset (when doc is not saved yet), so we check for base+href existence first,
                 // and if it fails, we also try to use bare href regardless of its g_path_is_absolute
                 if (g_file_test (fullname, G_FILE_TEST_EXISTS) && !g_file_test (fullname, G_FILE_TEST_IS_DIR)) {
-                    inkpb = Inkscape::Pixbuf::create_from_file(fullname);
+                    inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
                     if (inkpb != nullptr) {
                         g_free (fullname);
                         return inkpb;
@@ -585,7 +621,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
 
             /* try filename as absolute */
             if (g_file_test (filename, G_FILE_TEST_EXISTS) && !g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-                inkpb = Inkscape::Pixbuf::create_from_file(filename);
+                inkpb = Inkscape::Pixbuf::create_from_file(filename, svgdpi);
                 if (inkpb != nullptr) {
                     return inkpb;
                 }
@@ -603,7 +639,7 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             g_warning ("xlink:href did not resolve to a valid image file, now trying sodipodi:absref=\"%s\"", absref);
         }
 
-        inkpb = Inkscape::Pixbuf::create_from_file(filename);
+        inkpb = Inkscape::Pixbuf::create_from_file(filename, svgdpi);
         if (inkpb != nullptr) {
             return inkpb;
         }
@@ -633,7 +669,6 @@ sp_image_update_arenaitem (SPImage *image, Inkscape::DrawingImage *ai)
 static void sp_image_update_canvas_image(SPImage *image)
 {
     SPItem *item = SP_ITEM(image);
-
     for (SPItemView *v = item->display; v != nullptr; v = v->next) {
         sp_image_update_arenaitem(image, dynamic_cast<Inkscape::DrawingImage *>(v->arenaitem));
     }

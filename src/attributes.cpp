@@ -137,6 +137,7 @@ static SPStyleProp const props[] = {
     /* SPImage */
     {SP_ATTR_X, "x"},
     {SP_ATTR_Y, "y"},
+    {SP_ATTR_SVG_DPI, "inkscape:svg-dpi"},
     /* SPPath */
     {SP_ATTR_INKSCAPE_ORIGINAL_D, "inkscape:original-d"},
     /* (Note: XML representation of connectors may change in future.) */
