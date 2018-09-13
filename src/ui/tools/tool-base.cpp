@@ -902,7 +902,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-                desktop->scroll_relative(Geom::Point(wheel_scroll*delta_x, -wheel_scroll*delta_y));
+                desktop->scroll_relative(Geom::Point(-wheel_scroll*delta_x, -wheel_scroll*delta_y));
                 break;
             }
         }
