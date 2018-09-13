@@ -245,8 +245,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
         // what Inkscaper's expect.
         image_node->setAttribute("preserveAspectRatio", "none");
-        Glib::ustring svgdpi = Glib::ustring::format(mod->get_param_float("svgdpi"));
-        image_node->setAttribute("inkscape:svg-dpi", svgdpi.c_str());
+        double svgdpi = mod->get_param_float("svgdpi");
+        image_node->setAttribute("inkscape:svg-dpi", Glib::ustring::format(svgdpi).c_str());
         image_node->setAttribute("width", Glib::ustring::format(width));
         image_node->setAttribute("height", Glib::ustring::format(height));
         Glib::ustring scale = prefs->getString("/dialogs/import/scale");
@@ -258,7 +258,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         }
         // convert filename to uri
         if (embed) {
-            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri, svgdpi.c_str()));
+            std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri, svgdpi));
             if(pb) {
                 sp_embed_svg(image_node, uri);
             }

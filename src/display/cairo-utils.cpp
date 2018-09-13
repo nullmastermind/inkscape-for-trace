@@ -207,7 +207,7 @@ Pixbuf::~Pixbuf()
     }
 }
 
-Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, char const *svgdpi)
+Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, double svgdpi)
 {
     Pixbuf *pixbuf = nullptr;
 
@@ -311,8 +311,8 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, char const *svgdpi)
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
-        if (svgdpi && atof(svgdpi) > 0) {
-            dpi = atof(svgdpi);
+        if (svgdpi && svgdpi > 0) {
+            dpi = svgdpi;
         }
         std::cout << dpi << "dpi" << std::endl;
         // Get the size of the document
@@ -342,7 +342,7 @@ Pixbuf *Pixbuf::create_from_data_uri(gchar const *uri_data, char const *svgdpi)
     return pixbuf;
 }
 
-Pixbuf *Pixbuf::create_from_file(std::string const &fn, char const *svgdpi)
+Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
 {
     Pixbuf *pb = nullptr;
     // test correctness of filename
@@ -387,8 +387,8 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, char const *svgdpi)
                 }
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                 double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
-                if (svgdpi && atof(svgdpi) > 0) {
-                    dpi = atof(svgdpi);
+                if (svgdpi && svgdpi > 0) {
+                    dpi = svgdpi;
                 }
                 std::cout << dpi << "dpi" << std::endl;
                 // Get the size of the document
