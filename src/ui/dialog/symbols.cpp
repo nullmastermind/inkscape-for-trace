@@ -188,6 +188,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
   //icon_view->set_text_column(  columns->symbol_id  );
   icon_view->set_tooltip_column( 1 );
+  icon_view->set_name( "symbolsView" );
   icon_view->set_pixbuf_column( columns->symbol_image );
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
