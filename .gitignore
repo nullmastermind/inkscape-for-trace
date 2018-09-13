@@ -13,3 +13,4 @@ inkscape_devel_source.tar.bz2
 *.swp
 *~
 *.rej
+.vscode
