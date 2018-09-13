@@ -77,6 +77,7 @@ private:
     gint dimension_offset;
     Geom::Point start_p;
     Geom::Point end_p;
+    Geom::Point last_pos;
     std::vector<SPCanvasItem *> measure_tmp_items;
     std::vector<SPCanvasItem *> measure_phantom_items;
     std::vector<SPCanvasItem *> measure_item;

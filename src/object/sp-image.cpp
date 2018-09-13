@@ -73,7 +73,7 @@
 static void sp_image_set_curve(SPImage *image);
 
 static Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base,
-                                                  char const *svgdpi);
+                                                  double svgdpi = 0);
 static void sp_image_update_arenaitem (SPImage *img, Inkscape::DrawingImage *ai);
 static void sp_image_update_canvas_image (SPImage *image);
 
@@ -338,11 +338,11 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         this->pixbuf = nullptr;
         if (this->href) {
             Inkscape::Pixbuf *pixbuf = nullptr;
-            const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
-            if (!svgdpi) {
-                svgdpi = "96";
+            double svgdpi = 96;
+            if (this->getRepr()->attribute("inkscape:svg-dpi")) {
+                svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
             }
-            this->dpi = atof(svgdpi);
+            this->dpi = svgdpi;
             pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
                                               this->getRepr()->attribute("sodipodi:absref"), doc->getBase(), svgdpi);
 
@@ -545,9 +545,9 @@ gchar* SPImage::description() const {
         this->document) 
     {
         Inkscape::Pixbuf * pb = nullptr;
-        const gchar *svgdpi = this->getRepr()->attribute("inkscape:svg-dpi");
-        if (!svgdpi) {
-            svgdpi = "96";
+        double svgdpi = 96;
+        if (this->getRepr()->attribute("inkscape:svg-dpi")) {
+            svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
         }
         pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
                                       this->getRepr()->attribute("sodipodi:absref"), this->document->getBase(), svgdpi);
@@ -573,7 +573,7 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
-Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, char const *svgdpi)
+Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, double svgdpi)
 {
     Inkscape::Pixbuf *inkpb = nullptr;
 
