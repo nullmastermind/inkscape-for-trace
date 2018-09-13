@@ -81,21 +81,6 @@
 //#define TEST(_args) _args
 #define TEST(_args)
 
-// FIXME: expose these from sp-clippath/mask.cpp
-struct SPClipPathView {
-    SPClipPathView *next;
-    unsigned int key;
-    Inkscape::DrawingItem *arenaitem;
-    Geom::OptRect bbox;
-};
-
-struct SPMaskView {
-    SPMaskView *next;
-    unsigned int key;
-    Inkscape::DrawingItem *arenaitem;
-    Geom::OptRect bbox;
-};
-
 namespace Inkscape {
 namespace Extension {
 namespace Internal {

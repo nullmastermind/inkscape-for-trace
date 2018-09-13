@@ -2,6 +2,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/lpe-powermask.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"   
 #include <2geom/path-intersection.h>
 #include <2geom/intersection-graph.h>
 #include "display/curve.h"
@@ -101,6 +103,9 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
             mask_box.close();
             setMask();
         }
+    } else if(!hide_mask) {
+        SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+        item->removeCurrentPathEffect(false);
     }
     g_free(uri_str);
 }
@@ -321,6 +326,36 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
                 lpe->getRepr()->setAttribute("hide_mask", "false");
                 lpe->getRepr()->setAttribute("background", "true");
                 lpe->getRepr()->setAttribute("background_color", "#ffffffff");
+            }
+        }
+    }
+}
+
+
+void sp_remove_powermask(Inkscape::Selection *sel) {
+    if (!sel->isEmpty()) {
+        auto selList = sel->items();
+        for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
+            SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
+            if (lpeitem) {
+                if (lpeitem->hasPathEffect() && lpeitem->pathEffectsEnabled()) {
+                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
+                    {
+                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                        if (!lpeobj) {
+                            /** \todo Investigate the cause of this.
+                             * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
+                            */
+                            g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
+                            return;
+                        }
+                        Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                        if (lpe->getName() == "powermask") {
+                            lpe->doOnRemove(lpeitem);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

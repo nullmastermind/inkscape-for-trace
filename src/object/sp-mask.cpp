@@ -30,13 +30,6 @@
 #include "sp-item.h"
 #include "sp-mask.h"
 
-struct SPMaskView {
-	SPMaskView *next;
-	unsigned int key;
-	Inkscape::DrawingItem *arenaitem;
-	Geom::OptRect bbox;
-};
-
 SPMaskView *sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 SPMaskView *sp_mask_view_list_remove (SPMaskView *list, SPMaskView *view);
 

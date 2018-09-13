@@ -1321,7 +1321,7 @@ void SPItem::adjust_stroke( gdouble ex )
 /**
  * Find out the inverse of previous transform of an item (from its repr)
  */
-static Geom::Affine sp_item_transform_repr (SPItem *item)
+Geom::Affine sp_item_transform_repr (SPItem *item)
 {
     Geom::Affine t_old(Geom::identity());
     gchar const *t_attr = item->getRepr()->attribute("transform");

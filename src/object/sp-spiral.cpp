@@ -407,6 +407,7 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
     if (hasPathEffect() && pathEffectsEnabled() && 
         (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
          this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP) || 
          this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
          this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
     {

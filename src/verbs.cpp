@@ -1637,6 +1637,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->editMask(false);
             break;
         case SP_VERB_OBJECT_UNSET_MASK:
+            Inkscape::LivePathEffect::sp_remove_powermask(sp_action_get_selection(action));
             sel->unsetMask(false);
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
@@ -1653,6 +1654,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sel->editMask(true);
             break;
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
+            Inkscape::LivePathEffect::sp_remove_powerclip(sp_action_get_selection(action));
             sel->unsetMask(true);
             break;
         default:

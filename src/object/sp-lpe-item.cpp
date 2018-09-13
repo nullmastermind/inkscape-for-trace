@@ -201,6 +201,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
     }
 
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
+        size_t path_effect_list_size =  this->path_effect_list->size();
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
@@ -211,9 +212,13 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 g_warning("SPLPEItem::performPathEffect - NULL lpeobj in list!");
                 return false;
             }
+
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if(!performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
+            if (!performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
                 return false;
+            }
+            if (path_effect_list_size != this->path_effect_list->size()) {
+                break;
             }
         }
     }
@@ -462,6 +467,17 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                         gchar *title = shape->title();
                         // remember description
                         gchar *desc = shape->desc();
+                        // remember transformation
+                        gchar const *transform_str = shape->getRepr()->attribute("transform");
+                        // Mask
+                        gchar const *mask_str = (gchar *) shape->getRepr()->attribute("mask");
+                        // Clip path
+                        gchar const *clip_str = (gchar *) shape->getRepr()->attribute("clip-path");
+
+                        /* Rotation center */
+                        gchar const *transform_center_x = shape->getRepr()->attribute("inkscape:transform-center-x");
+                        gchar const *transform_center_y = shape->getRepr()->attribute("inkscape:transform-center-y");
+
                         // remember highlight color
                         guint32 highlight_color = 0;
                         if (shape->isHighlightSet())
@@ -476,6 +492,16 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                         repr->setAttribute("id", id);
                         // restore class
                         repr->setAttribute("class", class_attr);
+                        // restore transform
+                        repr->setAttribute("transform", transform_str);
+                        // restore clip
+                        repr->setAttribute("clip-path", clip_str);
+                        // restore mask
+                        repr->setAttribute("mask", mask_str);
+                        // restore transform_center_x
+                        repr->setAttribute("inkscape:transform-center-x", transform_center_x);
+                        // restore transform_center_y
+                        repr->setAttribute("inkscape:transform-center-y", transform_center_y);
                         //restore d
                         repr->setAttribute("d", d_str);
                         //restore style
@@ -589,9 +615,9 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
         effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
-        PathEffectList new_list = *this->path_effect_list;
-        new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-        this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+        this->path_effect_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
+        std::cout << this->path_effect_list->size() << "this->path_effect_list11111"  << std::endl;
+        this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(*this->path_effect_list));
         if (!keep_paths) {
             // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
             if( SP_IS_GENERICELLIPSE(this)) {
@@ -612,9 +638,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             return;
         }
     }
-    PathEffectList new_list = *this->path_effect_list;
     std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = new_list.begin(); i != new_list.end(); ++i) {
+    for (i = this->path_effect_list->begin(); i != this->path_effect_list->end(); ++i) {
         Inkscape::LivePathEffect::LPEObjectReference *lperef = (*i);
         if (!lperef) {
             continue;
@@ -628,9 +653,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             }
         }
     }
-    new_list.clear();
+    this->path_effect_list->clear();
     this->getRepr()->setAttribute("inkscape:path-effect", nullptr);
-
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
         if (SP_IS_GENERICELLIPSE(this)) {
@@ -959,15 +983,14 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
                     }
                     success = false;
                 }
-                Inkscape::XML::Node *repr = clip_mask->getRepr();
                 if (success && c) {
                     shape->setCurveInsync(c);
                     gchar *str = sp_svg_write_path(c->get_pathvector());
-                    repr->setAttribute("d", str);
+                    shape->setAttribute("d", str);
                     g_free(str);
                 } else {
                      // LPE was unsuccessful or doeffect stack return null.. Read the old 'd'-attribute.
-                    if (gchar const * value = repr->attribute("d")) {
+                    if (gchar const * value = shape->getAttribute("d")) {
                         Geom::PathVector pv = sp_svg_read_pathv(value);
                         SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                         if (oldcurve) {

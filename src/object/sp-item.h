@@ -418,6 +418,8 @@ Geom::Affine i2anc_affine(SPObject const *item, SPObject const *ancestor);
 
 Geom::Affine i2i_affine(SPObject const *src, SPObject const *dest);
 
+Geom::Affine sp_item_transform_repr (SPItem *item);
+
 /* fixme: - these are evil, but OK */
 
 int sp_item_repr_compare_position(SPItem const *first, SPItem const *second);

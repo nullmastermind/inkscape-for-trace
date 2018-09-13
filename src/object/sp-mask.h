@@ -21,15 +21,20 @@
 #define SP_MASK(obj) (dynamic_cast<SPMask*>((SPObject*)obj))
 #define SP_IS_MASK(obj) (dynamic_cast<const SPMask*>((SPObject*)obj) != NULL)
 
-struct SPMaskView;
-
 namespace Inkscape {
 
 class Drawing;
 class DrawingItem;
 
+
 } // namespace Inkscape
 
+struct SPMaskView {
+	SPMaskView *next;
+	unsigned int key;
+	Inkscape::DrawingItem *arenaitem;
+	Geom::OptRect bbox;
+};
 
 class SPMask : public SPObjectGroup {
 public:

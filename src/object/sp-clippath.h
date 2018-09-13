@@ -15,15 +15,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define SP_CLIPPATH(obj) (dynamic_cast<SPClipPath*>((SPObject*)obj))
-#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj) != NULL)
-
-struct SPClipPathView;
-
 #include <cstdio>
 #include "sp-object-group.h"
+#include "display/drawing.h"
+#include "display/drawing-group.h"
 #include "uri-references.h"
 #include "xml/node.h"
+
+#define SP_CLIPPATH(obj) (dynamic_cast<SPClipPath*>((SPObject*)obj))
+#define SP_IS_CLIPPATH(obj) (dynamic_cast<const SPClipPath*>((SPObject*)obj) != NULL)
 
 namespace Inkscape {
 
@@ -31,6 +31,14 @@ class Drawing;
 class DrawingItem;
 
 } // namespace Inkscape
+
+
+struct SPClipPathView {
+    SPClipPathView *next;
+    unsigned int key;
+    Inkscape::DrawingItem *arenaitem;
+    Geom::OptRect bbox;
+};
 
 class SPClipPath : public SPObjectGroup {
 public:

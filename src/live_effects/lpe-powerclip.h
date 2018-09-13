@@ -21,14 +21,12 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
-    Gtk::Widget * newWidget() override;
-    //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void doAfterEffect (SPLPEItem const* lpeitem) override;
-    void addInverse (SPItem * clip_data);
+    void addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root);
+    void updateInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);
-    void convertShapes();
 private:
     HiddenParam is_inverse;
     HiddenParam uri;
@@ -38,9 +36,10 @@ private:
     MessageParam message;
     Geom::Path clip_box;
     Geom::Affine base;
-    bool convert_shapes;
+    Geom::Affine lastapplyed;
 };
 
+void sp_remove_powerclip(Inkscape::Selection *sel);
 void sp_inverse_powerclip(Inkscape::Selection *sel);
 
 } //namespace LivePathEffect
