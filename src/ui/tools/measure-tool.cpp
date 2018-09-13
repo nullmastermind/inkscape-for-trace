@@ -339,6 +339,7 @@ MeasureTool::MeasureTool()
     start_p = readMeasurePoint(true);
     end_p = readMeasurePoint(false);
     dimension_offset = 35;
+    last_pos = Geom::Point(0,0);
     // create the knots
     this->knot_start = new SPKnot(desktop, _("Measure start, <b>Shift+Click</b> for position dialog"));
     this->knot_start->setMode(SP_KNOT_MODE_XOR);
@@ -587,6 +588,13 @@ bool MeasureTool::root_handler(GdkEvent* event)
         if ((event->key.keyval == GDK_KEY_Shift_L) || (event->key.keyval == GDK_KEY_Shift_R)) {
             explicit_base_tmp = explicit_base;
             explicit_base = end_p;
+            showInfoBox(last_pos, true);
+        }
+        break;
+    }
+    case GDK_KEY_RELEASE: {
+        if ((event->key.keyval == GDK_KEY_Shift_L) || (event->key.keyval == GDK_KEY_Shift_R)) {
+            showInfoBox(last_pos, false);
         }
         break;
     }
@@ -605,11 +613,11 @@ bool MeasureTool::root_handler(GdkEvent* event)
                 snap_manager.preSnap(scp);
                 snap_manager.unSetup();
             }
-            Geom::Point const motion_w(event->motion.x, event->motion.y);
+            last_pos = Geom::Point(event->motion.x, event->motion.y);
             if(event->motion.state & GDK_SHIFT_MASK) {
-                showInfoBox(motion_w, true);
+                showInfoBox(last_pos, true);
             } else {
-                showInfoBox(motion_w, false);
+                showInfoBox(last_pos, false);
             }
         } else {
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
