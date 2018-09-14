@@ -27,6 +27,7 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/button.h>
 
+#include "ui/dialog/attrdialog.h"
 #include "ui/dialog/cssdialog.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "message.h"
@@ -125,17 +126,17 @@ private:
     /**
       * Callback when a node is moved in the tree
       */
-    static void after_tree_move(SPXMLViewTree *attributes, gpointer value, gpointer data);
+    static void after_tree_move(SPXMLViewTree *tree, gpointer value, gpointer data);
 
     /**
       * Callback for when an attribute is edited.
       */
-    static void on_attr_edited(SPXMLViewAttrList *attributes, const gchar * name, const gchar * value, gpointer /*data*/);
+    //static void on_attr_edited(SPXMLViewAttrList *attributes, const gchar * name, const gchar * value, gpointer /*data*/);
 
     /**
       * Callback for when attribute list values change
       */
-    static void on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * name, gpointer data);
+    //static void on_attr_row_changed(SPXMLViewAttrList *attributes, const gchar * name, gpointer data);
 
     /**
       * Enable widgets based on current selections
@@ -216,7 +217,8 @@ private:
 
     /* XmlTree Widgets */
     SPXMLViewTree *tree;
-    SPXMLViewAttrList *attributes;
+    //SPXMLViewAttrList *attributes;
+    AttrDialog *attributes;
     CssDialog *styles;
 
     /* XML Node Creation pop-up window */

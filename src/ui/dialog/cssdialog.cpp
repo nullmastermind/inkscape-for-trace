@@ -80,7 +80,11 @@ CssDialog::CssDialog():
       _attrCol->add_attribute(_attrRenderer->property_text(), _cssColumns._styleAttrVal);
     }
 
-    _styleButton(_buttonAddProperty, "list-add", "Add a new property");
+    GtkWidget *child = GTK_WIDGET(sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    gtk_widget_show(child);
+    _buttonAddProperty.add(*manage(Glib::wrap(child)));
+    _buttonAddProperty.set_relief(Gtk::RELIEF_NONE);
+    _buttonAddProperty.set_tooltip_text("Add a new property");
 
     _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(_buttonAddProperty, Gtk::PACK_SHRINK);
@@ -112,25 +116,6 @@ void CssDialog::setDesktop(SPDesktop* desktop)
 {
     _desktop = desktop;
 }
-
-
-/**
- * @brief CssDialog::_styleButton
- * @param btn
- * @param iconName
- * @param tooltip
- * This function sets the style of '+'button at the bottom of dialog.
- */
-void CssDialog::_styleButton(Gtk::Button& btn, char const* iconName,
-                               char const* tooltip)
-{
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
-    gtk_widget_show(child);
-    btn.add(*manage(Glib::wrap(child)));
-    btn.set_relief(Gtk::RELIEF_NONE);
-    btn.set_tooltip_text(tooltip);
-}
-
 
 /**
  * @brief CssDialog::_addProperty

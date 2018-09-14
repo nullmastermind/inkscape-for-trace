@@ -79,7 +79,6 @@ public:
 
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
-    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
 
     // Signal handlers
     void _addProperty();
