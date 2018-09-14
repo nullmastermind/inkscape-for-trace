@@ -96,8 +96,11 @@ static Proj::Pt2 legacy_transform_forward(Proj::Pt2 pt, SPDocument const *doc) {
     }
 
     // <inkscape:perspective> stores inverted y-axis coordinates
-    if (pt[2] && SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
-        pt[1] = doc->getHeight().value("px") - pt[1];
+    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        pt[1] *= -1;
+        if (pt[2]) {
+            pt[1] += doc->getHeight().value("px");
+        }
     }
 
     return pt;
@@ -108,8 +111,11 @@ static Proj::Pt2 legacy_transform_forward(Proj::Pt2 pt, SPDocument const *doc) {
  */
 static Proj::Pt2 legacy_transform_backward(Proj::Pt2 pt, SPDocument const *doc) {
     // <inkscape:perspective> stores inverted y-axis coordinates
-    if (pt[2] && SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
-        pt[1] = doc->getHeight().value("px") - pt[1];
+    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        pt[1] *= -1;
+        if (pt[2]) {
+            pt[1] += doc->getHeight().value("px");
+        }
     }
 
     // Written values are in 'user units'.
