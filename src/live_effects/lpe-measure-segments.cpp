@@ -185,13 +185,13 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Base of the LPE, focus on measure display and positioning"));
-    projection.param_update_default(_("This section is optional. To activate pulse the icon down \"Active\" "
-    " to set the elements on clipboard, the element is converted to a line with measurements based on the selected items"));
-    options.param_update_default(_("Here we show measurement settings that usually don't change much"));
+    general.param_update_default(_("Measure display and positioning, remembe "));
+    projection.param_update_default(_("To activate pulse the icon down \"Active\" to set the elements on clipboard, showing a line with measurements based on the selected items"));
+    options.param_update_default(_("Here we show measurement settings, that usually don't change much"));
     tips.param_update_default(_("<b>Style Dialog</b> styling using XML editor to find appropriate classes or ID's\n"
-    "<b>Default Parameters</b> In all LPE, at the bottom, it's possible to change these for future uses\n"
-    "<b>Blacklists...</b> This allow to hide some segments or projection steps to measure"));
+    "<b>Blacklists</b> This allow to hide some segments or projection steps to measure"
+    "<b>Apply mutiple times</b> in conjunction of blacklists to allow measures with diferent orientations or a extra projection \n"
+    ));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
