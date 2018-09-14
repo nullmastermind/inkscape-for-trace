@@ -217,7 +217,8 @@ bool sp_file_open(const Glib::ustring &uri,
     if (desktop) {
         desktop->setWaitingCursor();
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setString("/options/openmethod/value", "open");
     SPDocument *doc = nullptr;
     bool cancelled = false;
     try {
@@ -230,7 +231,7 @@ bool sp_file_open(const Glib::ustring &uri,
         doc = nullptr;
         cancelled = true;
     }
-
+    prefs->setString("/options/openmethod/value", "done");
     if (desktop) {
         desktop->clearWaitingCursor();
     }

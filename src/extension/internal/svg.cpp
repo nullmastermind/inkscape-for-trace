@@ -210,7 +210,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
     bool is_import = false;
     if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 ||
-        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0) {
+        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0)
+    {
         is_import = true;
     }
     if(INKSCAPE.use_gui() && is_import && ask) {
@@ -226,7 +227,6 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         prefs->setString("/dialogs/import/scale", scale );
         prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
     }
-    
     SPDocument * doc = SPDocument::createNewDoc (nullptr, TRUE, TRUE);
     if (link_svg.compare("include") != 0 && is_import) {
         bool embed = ( link_svg.compare( "embed" ) == 0 );
