@@ -97,10 +97,10 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
     centers(_("Project center"), _("Use centers as measurement"), "centers", &wr, this, false),
     maxmin(_("Only max and min"), _("Compute only max/min projection values"), "maxmin", &wr, this, false),
-    general(_("General"), _("General"), "general", &wr, this, ""),
-    projection(_("Projection"), _("Projection"), "projection", &wr, this, ""),
-    options(_("Options"), _("Options"), "options", &wr, this, ""),
-    tips(_("Tips"), _("Tips"), "tips", &wr, this, "")
+    general(_("General"), _("General"), "general", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
+    projection(_("Projection"), _("Projection"), "projection", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
+    options(_("Options"), _("Options"), "options", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
+    tips(_("Tips"), _("Tips"), "tips", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER)
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);
@@ -185,12 +185,13 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Measure display and positioning, remembe "));
+    general.param_update_default(_("Measure display and positioning"));
     projection.param_update_default(_("To activate pulse the icon down \"Active\" to set the elements on clipboard, showing a line with measurements based on the selected items"));
     options.param_update_default(_("Here we show measurement settings, that usually don't change much"));
-    tips.param_update_default(_("<b>Style Dialog</b> styling using XML editor to find appropriate classes or ID's\n"
-    "<b>Blacklists</b> This allow to hide some segments or projection steps to measure"
-    "<b>Apply mutiple times</b> in conjunction of blacklists to allow measures with diferent orientations or a extra projection \n"
+    tips.param_update_default(_("<b>Style Dialog</b> Styling using XML editor to find appropriate classes or ID's\n"
+    "<b>Blacklists</b> This allow to hide some segments or projection steps to measure\n"
+    "<b>Mutiple Measures</b> In the same object, in conjunction of blacklists, allow measures with diferent orientations or a extra projection \n"
+    "<b>Set Defaults</b> Remember all LPE has it in the bottom \n"
     ));
 }
 

@@ -15,10 +15,15 @@ namespace LivePathEffect {
 
 MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const gchar * default_message )
+                      Effect* effect, const gchar * default_message, Gtk::Align halign, 
+                      Gtk::Align valign, double marginstart, double marginend)
     : Parameter(label, tip, key, wr, effect),
       message(default_message),
-      defmessage(default_message)
+      defmessage(default_message),
+      _halign(halign),
+      _valign(valign),
+      _marginstart(marginstart),
+      _marginend(marginend)
 {
     _label  = nullptr;
     _min_height = -1;
@@ -72,28 +77,27 @@ MessageParam::param_newWidget()
     Gtk::Widget * widg_frame = frame->get_label_widget();
 
 #if GTKMM_CHECK_VERSION(3,12,0)
-    widg_frame->set_margin_end(5);
-    widg_frame->set_margin_start(5);
+    widg_frame->set_margin_end(_marginend);
+    widg_frame->set_margin_start(_marginstart);
 #else
-    widg_frame->set_margin_right(5);
-    widg_frame->set_margin_left(5);
+    widg_frame->set_margin_right(_marginend);
+    widg_frame->set_margin_left(_marginstart);
 #endif
-
     _label = new Gtk::Label (message, Gtk::ALIGN_END);
     _label->set_use_underline (true);
     _label->set_use_markup();
     _label->set_line_wrap(true);
     _label->set_size_request(-1, _min_height);
     Gtk::Widget* widg_label = dynamic_cast<Gtk::Widget *> (_label);
-    widg_label->set_margin_top(8);
-    widg_label->set_margin_bottom(10);
+    widg_label->set_halign(_halign);
+    widg_label->set_valign(_valign);
 
 #if GTKMM_CHECK_VERSION(3,12,0)
-    widg_label->set_margin_end(6);
-    widg_label->set_margin_start(6);
+    widg_label->set_margin_end(_marginend);
+    widg_label->set_margin_start(_marginstart);
 #else
-    widg_label->set_margin_right(6);
-    widg_label->set_margin_left(6);
+    widg_label->set_margin_right(_marginstart);
+    widg_label->set_margin_left(_marginstart);
 #endif
 
     frame->add(*widg_label);

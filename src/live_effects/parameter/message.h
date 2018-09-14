@@ -21,7 +21,11 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               const gchar * default_message = "Default message");
+               const gchar * default_message = "Default message",
+               Gtk::Align halign = Gtk::ALIGN_END,
+               Gtk::Align valign = Gtk::ALIGN_CENTER,
+               double marginstart = 6,
+               double marginend = 6);
     ~MessageParam() override = default;
 
     Gtk::Widget * param_newWidget() override;
@@ -43,6 +47,14 @@ private:
     MessageParam& operator=(const MessageParam&) = delete;
     const gchar *  message;
     const gchar *  defmessage;
+    Gtk::Align _halign;
+    Gtk::Align _valign;
+    double _marginstart;
+    double _marginend;
+    double _marginleft;
+    double _marginright;
+
+    
 };
 
 } //namespace LivePathEffect
