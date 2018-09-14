@@ -33,6 +33,7 @@ enum Filletmethod {
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
+    ~LPEFilletChamfer();
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
     void doOnApply(SPLPEItem const *lpeItem) override;
@@ -56,17 +57,15 @@ private:
     ScalarParam chamfer_steps;
     BoolParam flexible;
     HiddenParam mode;
-    BoolParam mirror_knots;
     BoolParam only_selected;
     BoolParam use_knot_distance;
     BoolParam hide_knots;
     BoolParam apply_no_radius;
     BoolParam apply_with_radius;
-    ScalarParam helper_size;
     bool _degenerate_hide;
     PathVectorSatellites *_pathvector_satellites;
     Geom::PathVector _hp;
-
+    gchar * previous_unit;
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
 

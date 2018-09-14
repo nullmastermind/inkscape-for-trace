@@ -31,7 +31,6 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _knot_shape = SP_KNOT_SHAPE_DIAMOND;
     _knot_mode = SP_KNOT_MODE_XOR;
     _knot_color = 0xAAFF8800;
-    _helper_size = 0;
     _use_distance = false;
     _global_knot_hide = false;
     _current_zoom = 0;
@@ -77,12 +76,6 @@ void SatellitesArrayParam::setGlobalKnotHide(bool global_knot_hide)
 void SatellitesArrayParam::setEffectType(EffectType et)
 {
     _effectType = et;
-}
-
-void SatellitesArrayParam::setHelperSize(int hs)
-{
-    _helper_size = hs;
-    updateCanvasIndicators();
 }
 
 void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
@@ -141,62 +134,8 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 if (pos <= 0 || pos >= 1) {
                     continue;
                 }
-                Geom::Point point_a = curve_in->pointAt(pos);
-                Geom::Point deriv_a = unit_vector(derivative(curve_in->toSBasis()).pointAt(pos));
-                Geom::Rotate rot(Geom::Rotate::from_degrees(-90));
-                deriv_a = deriv_a * rot;
-                Geom::Point point_c = point_a - deriv_a * _helper_size;
-                Geom::Point point_d = point_a + deriv_a * _helper_size;
-                Geom::Ray ray_1(point_c, point_d);
-                char const *svgd = "M 1,0.25 0.5,0 1,-0.25 M 1,0.5 0,0 1,-0.5";
-                Geom::PathVector pathv = sp_svg_read_pathv(svgd);
-                Geom::Affine aff = Geom::Affine();
-                aff *= Geom::Scale(_helper_size);
-                if (mirror) {
-                    aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(90));
-                } else {
-                    aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(270));
-                }
-                aff *= Geom::Translate(curve_in->pointAt(pos));
-                pathv *= aff;
-                _hp.push_back(pathv[0]);
-                _hp.push_back(pathv[1]);
-                if (overflow) {
-                    double diameter = _helper_size;
-                    if (_helper_size == 0) {
-                        diameter = 15;
-                        char const *svgd;
-                        svgd = "M 0.7,0.35 A 0.35,0.35 0 0 1 0.35,0.7 0.35,0.35 0 0 1 0,0.35 "
-                               "0.35,0.35 0 0 1 0.35,0 0.35,0.35 0 0 1 0.7,0.35 Z";
-                        Geom::PathVector pathv = sp_svg_read_pathv(svgd);
-                        aff = Geom::Affine();
-                        aff *= Geom::Scale(diameter);
-                        aff *= Geom::Translate(point_a - Geom::Point(diameter * 0.35, diameter * 0.35));
-                        pathv *= aff;
-                        _hp.push_back(pathv[0]);
-                    } else {
-                        char const *svgd;
-                        svgd = "M 0 -1.32 A 1.32 1.32 0 0 0 -1.32 0 A 1.32 1.32 0 0 0 0 1.32 A "
-                               "1.32 1.32 0 0 0 1.18 0.59 L 0 0 L 1.18 -0.59 A 1.32 1.32 0 0 0 "
-                               "0 -1.32 z";
-                        Geom::PathVector pathv = sp_svg_read_pathv(svgd);
-                        aff = Geom::Affine();
-                        aff *= Geom::Scale(_helper_size / 2.0);
-                        if (mirror) {
-                            aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(90));
-                        } else {
-                            aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(270));
-                        }
-                        aff *= Geom::Translate(curve_in->pointAt(pos));
-                        pathv *= aff;
-                        _hp.push_back(pathv[0]);
-                    }
-                }
             }
         }
-    }
-    if (!_knot_reset_helper.empty()) {
-        _hp.insert(_hp.end(), _knot_reset_helper.begin(), _knot_reset_helper.end() );
     }
     if (mirror) {
         updateCanvasIndicators(false);
@@ -352,15 +291,6 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         satellite.amount = amount;
     } else {
         satellite.setPosition(s, pathv[path_index][curve_index]);
-    }
-    _pparam->_knot_reset_helper.clear();
-    if (satellite.amount == 0) {
-        char const *svgd;
-        svgd = "M -5.39,8.78 -9.13,5.29 -10.38,10.28 Z M -7.22,7.07 -3.43,3.37 m -1.95,-12.16 -3.74,3.5 -1.26,-5 z "
-               "m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z "
-               "M 7.07,7.07 3.29,3.37 M 5.24,-8.78 l 3.74,3.5 1.26,-5 z M 7.07,-7.07 3.29,-3.37";
-        _pparam->_knot_reset_helper = sp_svg_read_pathv(svgd);
-        _pparam->_knot_reset_helper *= Geom::Affine(_pparam->_helper_size * 0.1,0,0,_pparam->_helper_size * 0.1,0,0) * Geom::Translate(pathv[path_index][curve_index].initialPoint());
     }
     _pparam->_vector[path_index][curve_index] = satellite;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);

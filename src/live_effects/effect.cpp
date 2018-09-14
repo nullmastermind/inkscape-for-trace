@@ -409,8 +409,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
     current_zoom = 0.0;
 }
 
-Effect::~Effect()
-= default;
+Effect::~Effect() = default;
 
 Glib::ustring
 Effect::getName() const

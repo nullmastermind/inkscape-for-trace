@@ -43,14 +43,12 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
              "method", FMConverter, &wr, this, FM_AUTO),
       mode(_("Mode:"), _("Mode, fillet or chamfer"),
              "mode", &wr, this, "F", true),
-      radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
+      radius(_("Radius:"), _("Radius, in unit or %"), "radius", &wr,
              this, 0.0),
       chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps",
                     &wr, this, 1),
-      flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"),
+      flexible(_("Radius in %"), _("Flexible radius size (%)"),
                "flexible", &wr, this, false),
-      mirror_knots(_("Mirror Knots"), _("Mirror Knots"), "mirror_knots", &wr,
-                   this, true),
       only_selected(_("Change only selected nodes"),
                     _("Change only selected nodes"), "only_selected", &wr, this,
                     false),
@@ -61,8 +59,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                  false),
       apply_no_radius(_("Apply changes if radius = 0"), _("Apply changes if radius = 0"), "apply_no_radius", &wr, this, true),
       apply_with_radius(_("Apply changes if radius > 0"), _("Apply changes if radius > 0"), "apply_with_radius", &wr, this, true),
-      helper_size(_("Helper path size with direction to node:"),
-                  _("Helper path size with direction to node"), "helper_size", &wr, this, 0),
       _pathvector_satellites(nullptr),
       _degenerate_hide(false)
 {
@@ -72,10 +68,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     registerParameter(&mode);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
-    registerParameter(&helper_size);
     registerParameter(&flexible);
     registerParameter(&use_knot_distance);
-    registerParameter(&mirror_knots);
     registerParameter(&apply_no_radius);
     registerParameter(&apply_with_radius);
     registerParameter(&only_selected);
@@ -88,10 +82,14 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
-    helper_size.param_set_range(0, 999);
-    helper_size.param_set_increments(5, 5);
-    helper_size.param_set_digits(0);
     _provides_knotholder_entities = true;
+    previous_unit = NULL;
+}
+
+LPEFilletChamfer::~LPEFilletChamfer() {
+    if(previous_unit) {
+        g_free(previous_unit);
+    }
 }
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
@@ -131,7 +129,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 satellite.setSteps(chamfer_steps);
                 satellite.setAmount(power);
                 satellite.setIsTime(flexible);
-                satellite.setHasMirror(mirror_knots);
+                satellite.setHasMirror(true);
                 satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
@@ -144,7 +142,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 satellite.setSteps(chamfer_steps);
                 satellite.setAmount(power);
                 satellite.setIsTime(flexible);
-                satellite.setHasMirror(mirror_knots);
+                satellite.setHasMirror(true);
                 satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
@@ -187,13 +185,6 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(6);
                 }
-//            } else if (param->param_key == "unit") {
-//                Inkscape::UI::Widget::RegisteredUnitMenu* widg_registered = 
-//                    Gtk::manage(dynamic_cast< Inkscape::UI::Widget::RegisteredUnitMenu *>(widg));
-//                widg_registered->setUnit(unit.get_abbreviation());
-//                widg_registered->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change unit parameter"));
-//                widg_registered->getUnitMenu()->signal_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::convertUnit));
-//                widg = widg_registered;
             } else if (param->param_key == "chamfer_steps") {
                 Inkscape::UI::Widget::Scalar *widg_registered =
                     Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
@@ -206,11 +197,6 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(3);
                 }
-            } else if (param->param_key == "helper_size") {
-                Inkscape::UI::Widget::Scalar *widg_registered =
-                    Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                widg_registered->signal_value_changed().connect(
-                    sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
             } else if (param->param_key == "only_selected") {
                 Gtk::manage(widg);
             }
@@ -279,15 +265,6 @@ void LPEFilletChamfer::updateAmount()
                                          use_knot_distance, flexible);
     satellites_param.setPathVectorSatellites(_pathvector_satellites);
 }
-
-//void LPEFilletChamfer::convertUnit()
-//{
-//    SPDocument * document = SP_ACTIVE_DOCUMENT;
-//    SPNamedView *nv = sp_document_namedview(document, NULL);
-//    Glib::ustring display_unit = nv->display_units->abbr;
-//    _pathvector_satellites->convertUnit(unit.get_abbreviation(), display_unit, apply_no_radius, apply_with_radius);
-//    satellites_param.setPathVectorSatellites(_pathvector_satellites);
-//}
 
 void LPEFilletChamfer::updateChamferSteps()
 {
@@ -363,7 +340,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 satellite.setSteps(chamfer_steps);
                 satellite.setAmount(power);
                 satellite.setIsTime(flexible);
-                satellite.setHasMirror(mirror_knots);
+                satellite.setHasMirror(true);
                 satellite.setHidden(hide_knots);
                 _pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
                 satellites = _pathvector_satellites->getSatellites();
@@ -375,12 +352,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         } else {
             satellites_param.setGlobalKnotHide(false);
         }
-        if (hide_knots) {
-            satellites_param.setHelperSize(0);
-        } else {
-            satellites_param.setHelperSize(helper_size);
-        }
-        for (size_t i = 0; i < satellites.size(); ++i) {
+         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
                 if (j >= pathv[i].size()) {
                     continue;
@@ -397,9 +369,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                         satellites[i][j].amount = size;
                     }
                 }
-                if (satellites[i][j].has_mirror != mirror_knots) {
-                    satellites[i][j].has_mirror = mirror_knots;
-                }
                 satellites[i][j].hidden = hide_knots;
                 if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
                     satellites[i][j].setSelected(true);
@@ -413,6 +382,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         _pathvector_satellites->setSatellites(satellites);
         satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
         refreshKnots();
+        gchar const *current_unit = unit.get_abbreviation();
+        if (previous_unit && strcmp(previous_unit, current_unit) ) {
+            updateAmount();
+        }
+        previous_unit = const_cast<gchar *>(current_unit);
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }

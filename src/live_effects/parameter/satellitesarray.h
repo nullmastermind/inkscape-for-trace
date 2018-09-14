@@ -40,7 +40,6 @@ public:
     {
         return nullptr;
     }
-    virtual void setHelperSize(int hs);
     void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) override;
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item, bool mirror);
     void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
@@ -72,8 +71,6 @@ private:
     SPKnotModeType _knot_mode;
     guint32 _knot_color;
     Geom::PathVector _hp;
-    Geom::PathVector _knot_reset_helper;
-    int _helper_size;
     bool _use_distance;
     bool _global_knot_hide;
     double _current_zoom;
