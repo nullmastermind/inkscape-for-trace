@@ -161,8 +161,10 @@ translations:
 
     # check if POTFILES.in should be updated in the repo (shall we automate this?)
     - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
-        echo "New translatable source files were added.";
-        echo "Please update POTFILES.in so they can be translated (or add them to POTFILES.skip)";
+        git diff POTFILES.in
+        echo "New translatable strings in source files found.";
+        echo "Please add the paths to POTFILES.in so they can be translated";
+        echo "(or add them to POTFILES.skip to exlude them from translations).";
         exit 1;
       fi'
     - rm POTFILES.in.1 POTFILES.in.2
