@@ -180,12 +180,12 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     previous_size = 0;
     pagenumber = 0;
     helpdata.param_update_default(_("<b><big>General</big></b>\n"
-                        "Measure display and positioning\n"
+                        "Measure display and positioning\n\n"
                         "<b><big>Projection</big></b>\n"
-                        "Show a line with measurements based on the selected items\n"
+                        "Show a line with measurements based on the selected items\n\n"
                         "<b><big>Options</big></b>\n"
-                        "That usually don't change much\n"
-                        "<b><big>Help</big></b>\n"
+                        "That usually don't change much\n\n"
+                        "<b><big>Tips</big></b>\n"
                         "<b><i>Style Dialog</i></b> Styling using XML editor to find appropriate classes or ID's\n"
                         "<b><i>Blacklists</i></b> This allow to hide some segments or projection steps to measure\n"
                         "<b><i>Multiple Measures</i></b> In the same object, in conjunction of blacklists, "
