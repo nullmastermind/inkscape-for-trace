@@ -80,10 +80,7 @@ private:
     ScalarParam distance_projection;
     ScalarParam angle_projection;
     BoolParam avoid_overlapping;
-    MessageParam general;
-    MessageParam projection;
-    MessageParam options;
-    MessageParam tips;
+    MessageParam helpdata;
     Glib::ustring display_unit;
     bool locked_pagenumber;
     double doc_scale;

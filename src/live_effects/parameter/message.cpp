@@ -15,16 +15,20 @@ namespace LivePathEffect {
 
 MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const gchar * default_message, Gtk::Align halign, 
-                      Gtk::Align valign, double marginstart, double marginend)
+                      Effect* effect, const gchar * default_message, const Glib::ustring& legend, 
+                      Gtk::Align halign, Gtk::Align valign, double marginstart, double marginend)
     : Parameter(label, tip, key, wr, effect),
       message(default_message),
       defmessage(default_message),
+      _legend(legend),
       _halign(halign),
       _valign(valign),
       _marginstart(marginstart),
       _marginend(marginend)
 {
+    if (_legend == Glib::ustring("Use Label")) {
+        _legend = label;
+    }
     _label  = nullptr;
     _min_height = -1;
 }
@@ -73,7 +77,7 @@ MessageParam::param_set_min_height(int height)
 Gtk::Widget *
 MessageParam::param_newWidget()
 {
-    Gtk::Frame * frame = new Gtk::Frame (param_label);
+    Gtk::Frame * frame = new Gtk::Frame (_legend);
     Gtk::Widget * widg_frame = frame->get_label_widget();
 
 #if GTKMM_CHECK_VERSION(3,12,0)

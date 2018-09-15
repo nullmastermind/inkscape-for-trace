@@ -22,7 +22,8 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const gchar * default_message = "Default message",
-               Gtk::Align halign = Gtk::ALIGN_END,
+               const Glib::ustring& legend = "Use Label",
+               Gtk::Align halign = Gtk::ALIGN_START,
                Gtk::Align valign = Gtk::ALIGN_CENTER,
                double marginstart = 6,
                double marginend = 6);
@@ -47,6 +48,7 @@ private:
     MessageParam& operator=(const MessageParam&) = delete;
     const gchar *  message;
     const gchar *  defmessage;
+    Glib::ustring _legend;
     Gtk::Align _halign;
     Gtk::Align _valign;
     double _marginstart;

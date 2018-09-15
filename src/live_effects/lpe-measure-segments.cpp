@@ -97,10 +97,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
     centers(_("Project center"), _("Use centers as measurement"), "centers", &wr, this, false),
     maxmin(_("Only max and min"), _("Compute only max/min projection values"), "maxmin", &wr, this, false),
-    general(_("General"), _("General"), "general", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
-    projection(_("Projection"), _("Projection"), "projection", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
-    options(_("Options"), _("Options"), "options", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER),
-    tips(_("Tips"), _("Tips"), "tips", &wr, this, "", Gtk::ALIGN_START, Gtk::ALIGN_CENTER)
+    helpdata(_("Help"), _("Measure segments help"), "helpdata", &wr, this, "", "")
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);
@@ -136,10 +133,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&bboxonly);
     registerParameter(&centers);
     registerParameter(&maxmin);
-    registerParameter(&general);
-    registerParameter(&projection);
-    registerParameter(&options);
-    registerParameter(&tips);
+    registerParameter(&helpdata);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
@@ -185,14 +179,18 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     locale_base = strdup(setlocale(LC_NUMERIC, nullptr));
     previous_size = 0;
     pagenumber = 0;
-    general.param_update_default(_("Measure display and positioning"));
-    projection.param_update_default(_("To activate pulse the icon down \"Active\" to set the elements on clipboard, showing a line with measurements based on the selected items"));
-    options.param_update_default(_("Here we show measurement settings, that usually don't change much"));
-    tips.param_update_default(_("<b>Style Dialog</b> Styling using XML editor to find appropriate classes or ID's\n"
-    "<b>Blacklists</b> This allow to hide some segments or projection steps to measure\n"
-    "<b>Mutiple Measures</b> In the same object, in conjunction of blacklists, allow measures with diferent orientations or a extra projection \n"
-    "<b>Set Defaults</b> Remember all LPE has it in the bottom \n"
-    ));
+    helpdata.param_update_default(_("<b><big>General</big></b>\n"
+                        "Measure display and positioning\n"
+                        "<b><big>Projection</big></b>\n"
+                        "Show a line with measurements based on the selected items\n"
+                        "<b><big>Options</big></b>\n"
+                        "That usually don't change much\n"
+                        "<b><big>Help</big></b>\n"
+                        "<b><i>Style Dialog</i></b> Styling using XML editor to find appropriate classes or ID's\n"
+                        "<b><i>Blacklists</i></b> This allow to hide some segments or projection steps to measure\n"
+                        "<b><i>Multiple Measures</i></b> In the same object, in conjunction of blacklists, "
+                        "allow measures with diferent orientations or a extra projection \n"
+                        "<b><i>Set Defaults</i></b> Remember all LPE has it in the bottom"));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
@@ -243,7 +241,6 @@ LPEMeasureSegments::newWidget()
                 {
                     vbox1->pack_start(*widg, false, true, 2);
                 } else if (param->param_key == "precision"     ||
-                           param->param_key == "fix_overlaps"  ||
                            param->param_key == "coloropacity"  ||
                            param->param_key == "font"          ||
                            param->param_key == "format"        ||
@@ -255,10 +252,7 @@ LPEMeasureSegments::newWidget()
                            param->param_key == "hide_arrows"     )
                 {
                     vbox2->pack_start(*widg, false, true, 2);
-                } else if (param->param_key == "general"    ||
-                           param->param_key == "projection" ||
-                           param->param_key == "options"    ||
-                           param->param_key == "tips"         )
+                } else if (param->param_key == "helpdata")
                 {
                     vbox3->pack_start(*widg, false, true, 2);
                 } else {
