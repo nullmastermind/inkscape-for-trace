@@ -7,15 +7,16 @@ variables:
   GIT_DEPTH: "10"
   GIT_SUBMODULE_STRATEGY: recursive
 
-cache:
-  paths:
-    - ccache/
 
 # Building inkscape
 inkscape:linux:
   stage: build
   except:
     - schedules
+  cache:
+    key: "cache-linux"
+    paths:
+      - ccache/
   before_script:
     # CCache Config
     - mkdir -p ccache
@@ -43,6 +44,10 @@ inkscape:mac:
     - branches@inkscape/inkscape
   except:
     - schedules
+  cache:
+    key: "cache-mac"
+    paths:
+      - ccache/
   before_script:
     - brew update
     - brew upgrade
