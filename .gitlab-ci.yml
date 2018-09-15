@@ -14,6 +14,8 @@ cache:
 # Building inkscape
 inkscape:linux:
   stage: build
+  except:
+    - schedules
   before_script:
     # CCache Config
     - mkdir -p ccache
@@ -39,6 +41,8 @@ inkscape:mac:
     - mac
   only:
     - branches@inkscape/inkscape
+  except:
+    - schedules
   before_script:
     - brew update
     - brew upgrade
@@ -69,6 +73,8 @@ inkscape:mac:
 
 codequality:
   stage: build
+  except:
+    - schedules
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - echo "Your commit does not comply exactly with the clang-format style checker.\nPlease review the following diff or apply it with\n \$ git apply <<EOF"
@@ -79,6 +85,8 @@ codequality:
 
 codeprotect:
   stage: build
+  except:
+    - schedules
   script:
     - git fetch https://gitlab.com/inkscape/inkscape.git
     - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
@@ -87,7 +95,8 @@ codeprotect:
 source-doc:
   stage: build
   only:
-    - schedules
+    variables:
+      - $SCHEDULED_JOB_NAME == "source-doc"
   script:
     - cd buildtools
     - doxygen Doxyfile
@@ -104,7 +113,8 @@ source-doc:
 clang:
   stage: build
   only:
-    - schedules
+    variables:
+      - $SCHEDULED_JOB_NAME == "clang"
   script:
     - apt-get update -yqq && apt-get install -y clang
     - mkdir -p clang-build
@@ -117,6 +127,8 @@ clang:
 
 test:linux:
   stage: test
+  except:
+    - schedules
   dependencies:
     - inkscape:linux
   script:
@@ -126,8 +138,8 @@ test:linux:
 
 translations:
   stage: build
-  #dependencies:
-  #  - inkscape:linux
+  except:
+    - schedules
   script:
     # make sure dependecies for inkscape.pot are up-to-date
     - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
@@ -158,6 +170,8 @@ translations:
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
+  only:
+    - schedules
   dependencies:
     - source-doc
     - clang
@@ -170,5 +184,3 @@ pages:
   artifacts:
     paths:
       - public
-  only:
-    - schedules
