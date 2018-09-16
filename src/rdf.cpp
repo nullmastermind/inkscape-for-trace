@@ -25,7 +25,7 @@
 
 /*
    Example RDF XML from various places...
- 
+
 <rdf:RDF xmlns="http://creativecommons.org/ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -41,7 +41,7 @@
    </Agent></dc:rights>
    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
    <dc:source rdf:resource="source"/>
-   <license rdf:resource="http://creativecommons.org/licenses/by/4.0/" 
+   <license rdf:resource="http://creativecommons.org/licenses/by/4.0/"
 />
 </Work>
 
@@ -57,13 +57,13 @@
      <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
      <license rdf:resource="http://creativecommons.org/ns#PublicDomain" />
   </Work>
-  
+
   <License rdf:about="http://creativecommons.org/ns#PublicDomain">
      <permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
      <permits rdf:resource="http://creativecommons.org/ns#Distribution" />
      <permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
   </License>
-  
+
 </rdf:RDF>
 
 
@@ -174,32 +174,32 @@ struct rdf_double_t rdf_license_ofl [] = {
 };
 
 struct rdf_license_t rdf_licenses [] = {
-    { N_("CC Attribution"), 
+    { N_("CC Attribution"),
       "http://creativecommons.org/licenses/by/4.0/",
       rdf_license_cc_a,
     },
 
-    { N_("CC Attribution-ShareAlike"), 
+    { N_("CC Attribution-ShareAlike"),
       "http://creativecommons.org/licenses/by-sa/4.0/",
       rdf_license_cc_a_sa,
     },
 
-    { N_("CC Attribution-NoDerivs"), 
+    { N_("CC Attribution-NoDerivs"),
       "http://creativecommons.org/licenses/by-nd/4.0/",
       rdf_license_cc_a_nd,
     },
 
-    { N_("CC Attribution-NonCommercial"), 
+    { N_("CC Attribution-NonCommercial"),
       "http://creativecommons.org/licenses/by-nc/4.0/",
       rdf_license_cc_a_nc,
     },
 
-    { N_("CC Attribution-NonCommercial-ShareAlike"), 
+    { N_("CC Attribution-NonCommercial-ShareAlike"),
       "http://creativecommons.org/licenses/by-nc-sa/4.0/",
       rdf_license_cc_a_nc_sa,
     },
 
-    { N_("CC Attribution-NonCommercial-NoDerivs"), 
+    { N_("CC Attribution-NonCommercial-NoDerivs"),
       "http://creativecommons.org/licenses/by-nc-nd/4.0/",
       rdf_license_cc_a_nc_nd,
     },
@@ -335,7 +335,7 @@ public:
      *  @return  A pointer to the entity's static contents as a string
      *  @param   repr    The XML element to extract from
      *  @param   entity  The desired RDF/Work entity
-     *  
+     *
      */
     static const gchar *getReprText( Inkscape::XML::Node const * repr, struct rdf_work_entity_t const & entity );
 
@@ -353,7 +353,7 @@ public:
  *
  *  @return  A pointer to an RDF/Work entity
  *  @param   name  The desired RDF/Work entity
- *  
+ *
  */
 struct rdf_work_entity_t *rdf_find_entity(gchar const * name)
 {
@@ -495,7 +495,7 @@ const gchar *RDFImpl::getReprText( Inkscape::XML::Node const * repr, struct rdf_
         case RDF_CONTENT:
             temp = repr->firstChild();
             if ( temp == nullptr ) return nullptr;
-            
+
             return temp->content();
 
         case RDF_AGENT:
@@ -526,7 +526,7 @@ const gchar *RDFImpl::getReprText( Inkscape::XML::Node const * repr, struct rdf_
                 /* backwards compatible: read contents */
                 temp = repr->firstChild();
                 if ( temp == nullptr ) return nullptr;
-            
+
                 return temp->content();
             }
 
@@ -782,7 +782,7 @@ Inkscape::XML::Node const *RDFImpl::getXmlRepr( SPDocument const * doc, gchar co
     } else if ( !doc->getReprDoc() ) {
         g_critical("XML doc is null.");
     } else if (!name) {
-        g_critical("Null name passed to getXmlRepr()");        
+        g_critical("Null name passed to getXmlRepr()");
     } else {
         Inkscape::XML::Node const * rdf = getRdfRootRepr( doc );
         if ( rdf ) {
@@ -807,7 +807,7 @@ Inkscape::XML::Node *RDFImpl::ensureXmlRepr( SPDocument * doc, gchar const * nam
     } else if ( !doc->getReprDoc() ) {
         g_critical("XML doc is null.");
     } else if (!name) {
-        g_critical("Null name passed to ensureXmlRepr()");        
+        g_critical("Null name passed to ensureXmlRepr()");
     } else {
         Inkscape::XML::Node * rdf = ensureRdfRootRepr( doc );
         if ( rdf ) {
@@ -836,7 +836,7 @@ Inkscape::XML::Node const *RDFImpl::getWorkRepr( SPDocument const * doc, gchar c
     } else if ( !doc->getReprDoc() ) {
         g_critical("XML doc is null.");
     } else if (!name) {
-        g_critical("Null name passed to getWorkRepr()");        
+        g_critical("Null name passed to getWorkRepr()");
     } else {
         Inkscape::XML::Node const* work = getXmlRepr( doc, XML_TAG_NAME_WORK );
         if ( work ) {
@@ -854,7 +854,7 @@ Inkscape::XML::Node *RDFImpl::ensureWorkRepr( SPDocument * doc, gchar const * na
     } else if ( !doc->getReprDoc() ) {
         g_critical("XML doc is null.");
     } else if (!name) {
-        g_critical("Null name passed to ensureWorkRepr()");        
+        g_critical("Null name passed to ensureWorkRepr()");
     } else {
         Inkscape::XML::Node * work = ensureXmlRepr( doc, XML_TAG_NAME_WORK );
         if ( work ) {
@@ -1067,9 +1067,9 @@ struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
     // TODO: would it be better to do this code on document load?  Is
     // sp_metadata_build() then the right place to put the call to sort out
     // any RDF mess?
-    
+
     struct rdf_license_t * license_by_properties = nullptr;
-    
+
     Inkscape::XML::Node const *repr = getXmlRepr( document, XML_TAG_NAME_LICENSE );
     if (repr) {
         for ( struct rdf_license_t * license = rdf_licenses; license->name; license++ ) {
@@ -1113,7 +1113,7 @@ struct rdf_license_t *RDFImpl::getLicense(SPDocument *document)
         g_warning("No %s metadata found, derived license URI from %s: %s",
                   XML_TAG_NAME_LICENSE_PROP, XML_TAG_NAME_LICENSE,
                   license_by_properties->uri);
-        
+
         // Set license property to match
         setWorkEntity(document, *entity, license_by_properties->uri);
 
@@ -1216,7 +1216,7 @@ void RDFImpl::setDefaults( SPDocument * doc )
 
 /*
  * Add the metadata stored in the users preferences to the document if
- *   a) the preference 'Input/Output->Add default metatdata to new documents' is true, and
+ *   a) the preference 'Input/Output->Add default metadata to new documents' is true, and
  *   b) there is no metadata already in the file (such as from a template)
  */
 void rdf_add_from_preferences(SPDocument *doc)

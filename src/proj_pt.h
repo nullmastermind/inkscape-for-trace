@@ -48,7 +48,7 @@ public:
     }
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
-         the result for finite points is the same as if the affine points were addes ***/
+         the result for finite points is the same as if the affine points were added ***/
     inline Pt2 &operator+(Pt2 &rhs) const {
         Pt2 *result = new Pt2 (*this);
         result->normalize();
@@ -105,7 +105,7 @@ public:
     }
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
-         the result for finite points is the same as if the affine points were addes ***/
+         the result for finite points is the same as if the affine points were added ***/
     inline Pt3 &operator+(Pt3 &rhs) const {
         Pt3 *result = new Pt3 (*this);
         result->normalize();
@@ -134,7 +134,7 @@ public:
         }
         return *result;
     }
-    
+
     inline double operator[] (unsigned int index) const {
         if (index > 3) { return Geom::infinity(); }
         return pt[index];

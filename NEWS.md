@@ -92,7 +92,7 @@ Bspline.gif Bspline2.gif
 Live Path Effect mode
 
 Bspline3.gif
- 
+
 
 The options in the Live effect dialog give you control on bspline paths.
 
@@ -100,18 +100,18 @@ The options in the Live effect dialog give you control on bspline paths.
 * Make cusp nodes.
 * Numeric input for weight.
 * Steps with CONTROL snaps in node/handle editing.
-* Ignore cusp nodes, affect to all other widgets changes and, for example, 
+* Ignore cusp nodes, affect to all other widgets changes and, for example,
   retain cusp nodes when you change the power.
 * Change only selected nodes, affect to all other widgets changes.
 * Show a helper path with the final shape and the generated new nodes.
 
- 
+
 
 Roughen
 
 ---
 Roughen.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=130Dbt0juvY)
 
@@ -129,7 +129,7 @@ Simplify
 
 ---
 Simplify.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=gaWujN_iTSk)
 
@@ -147,7 +147,7 @@ Perspective/Envelope
 
 ---
 Perspective-envelope.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=CjKGatyxTZ8)
 
@@ -163,7 +163,7 @@ Lattice Deformation 2
 
 ---
 Latice2.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=YlK9L88_tWE)
 [Symmetry video](https://www.youtube.com/watch?v=jhuVjqFA6ig)
@@ -180,7 +180,7 @@ Show Handles
 
 ---
 ShowHandles.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=h9ul_PR9XYo)
 
@@ -196,7 +196,7 @@ ShowHandles.gif
 Transform by two points
 
 TransformByTwoKnots.png
- 
+
 
 [Extended video](https://www.youtube.com/watch?v=ZLmYdWoXXIw)
 [Extended video (Elastic rubber)](https://www.youtube.com/watch?v=lOWTeZC_LjM)
@@ -325,7 +325,7 @@ settings, so only change these if you know what you are doing.
 
 HPGL Export
 
-The HPGL export (File -> Save as -> HP Grafics Language file) has now the same
+The HPGL export (File -> Save as -> HP Graphics Language file) has now the same
 multiple pens feature as the #Plotter Driver.
 
 HPGL Import

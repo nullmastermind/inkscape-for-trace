@@ -18,7 +18,7 @@
 
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
-#include "ui/widget/entry.h" 
+#include "ui/widget/entry.h"
 #include "ui/widget/frame.h"
 
 #include <gtkmm/box.h>
@@ -64,7 +64,7 @@ protected:
     /**
      * Callbacks for pressing the dialog buttons.
      */
-    void    onFind();             
+    void    onFind();
     void    onReplace();
     void    onExpander();
     void    onAction();
@@ -83,7 +83,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param id the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -94,7 +94,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param name the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -106,7 +106,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param name the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -117,7 +117,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param name the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -128,7 +128,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param name the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -139,7 +139,7 @@ protected:
      *
      * @param item the SPItem to check
      * @param name the value to compare with
-     * @param exact do an exacty match
+     * @param exact do an exact match
      * @param casematch match the text case exactly
      * @param replace replace the value if found
      *
@@ -192,7 +192,7 @@ protected:
      * Is invoked by the desktop tracker when the desktop changes.
      */
     void        setTargetDesktop(SPDesktop *desktop);
-    
+
     /**
      * Called when desktop selection changes
      */

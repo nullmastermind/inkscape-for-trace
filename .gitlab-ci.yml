@@ -146,7 +146,7 @@ translations:
   except:
     - schedules
   script:
-    # make sure dependecies for inkscape.pot are up-to-date
+    # make sure dependencies for inkscape.pot are up-to-date
     - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
     - cd po/
 
