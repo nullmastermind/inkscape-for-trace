@@ -74,11 +74,13 @@ public:
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
     void setRepr(Inkscape::XML::Node * repr);
+    void setUndo(Glib::ustring const &event_description);
 
     // Signal handlers
     void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
     bool onAttrCreate(GdkEventButton *event);
     bool onAttrDelete(GdkEventButton *event);
+    bool onKeyPressed(GdkEventKey *event);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
 

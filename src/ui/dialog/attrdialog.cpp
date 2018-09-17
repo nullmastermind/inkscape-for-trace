@@ -13,12 +13,16 @@
 
 #include "verbs.h"
 #include "selection.h"
+#include "document-undo.h"
 
 #include "helper/icon-loader.h"
 #include "ui/widget/addtoicon.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
+
+#include <glibmm/i18n.h>
+#include <gdk/gdkkeysyms.h>
 
 static void on_attr_changed (Inkscape::XML::Node * repr,
                          const gchar * name,
@@ -64,14 +68,14 @@ AttrDialog::AttrDialog():
     Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::Widget::AddToIcon());
     addRenderer->property_active() = false;
 
-    int addCol = _treeView.append_column("", *addRenderer) - 1;
-    Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
+    _treeView.append_column("", *addRenderer);
+    Gtk::TreeViewColumn *col = _treeView.get_column(0);
     if (col) {
         auto add_icon = Gtk::manage(sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR));
         col->add_attribute(addRenderer->property_active(), _attrColumns._colUnsetAttr);
         col->set_clickable(true);
         col->set_widget(*add_icon);
-        add_icon->set_tooltip_text("Add a new attribute");
+        add_icon->set_tooltip_text(_("Add a new attribute"));
         add_icon->show();
         // This gets the GtkButton inside the GtkBox, inside the GtkAlignment, inside the GtkImage icon.
         auto button = add_icon->get_parent()->get_parent()->get_parent();
@@ -80,24 +84,26 @@ AttrDialog::AttrDialog():
         button->signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrCreate), false);
     }
     _treeView.signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
+    _treeView.signal_key_press_event().connect(sigc::mem_fun(*this, &AttrDialog::onKeyPressed));
+    _treeView.set_search_column(-1);
 
     _nameRenderer = Gtk::manage(new Gtk::CellRendererText());
     _nameRenderer->property_editable() = true;
-    _nameRenderer->property_placeholder_text().set_value("Attribute Name");
+    _nameRenderer->property_placeholder_text().set_value(_("Attribute Name"));
     _nameRenderer->signal_edited().connect(sigc::mem_fun(*this, &AttrDialog::nameEdited));
-    int nameColNum = _treeView.append_column("Name", *_nameRenderer) - 1;
-    _nameCol = _treeView.get_column(nameColNum);
+    _treeView.append_column(_("Name"), *_nameRenderer);
+    _nameCol = _treeView.get_column(1);
     if (_nameCol) {
       _nameCol->add_attribute(_nameRenderer->property_text(), _attrColumns._attributeName);
     }
 
     _valueRenderer = Gtk::manage(new Gtk::CellRendererText());
     _valueRenderer->property_editable() = true;
-    _valueRenderer->property_placeholder_text().set_value("Attribute Value");
+    _valueRenderer->property_placeholder_text().set_value(_("Attribute Value"));
     _valueRenderer->property_ellipsize().set_value(Pango::ELLIPSIZE_MIDDLE);
     _valueRenderer->signal_edited().connect(sigc::mem_fun(*this, &AttrDialog::valueEdited));
-    int valueColNum = _treeView.append_column("Value", *_valueRenderer) - 1;
-    _valueCol = _treeView.get_column(valueColNum);
+    _treeView.append_column(_("Value"), *_valueRenderer);
+    _valueCol = _treeView.get_column(2);
     if (_valueCol) {
       _valueCol->add_attribute(_valueRenderer->property_text(), _attrColumns._attributeValue);
     }
@@ -139,6 +145,7 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
         _store->clear();
         _repr->removeListenerByData(this);
         Inkscape::GC::release(_repr);
+        _repr = nullptr;
     }
     _repr = repr;
     if (repr) {
@@ -146,6 +153,18 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
         _repr->addListener(&_repr_events, this);
         _repr->synthesizeEvents(&_repr_events, this);
     }
+}
+
+/**
+ * @brief AttrDialog::onKeyPressed
+ * @param event_description
+ * @return
+ * Send an undo message and mark this point for undo
+ */
+void AttrDialog::setUndo(Glib::ustring const &event_description)
+{
+    SPDocument *document = this->_desktop->doc();
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, event_description);
 }
 
 /**
@@ -193,7 +212,7 @@ bool AttrDialog::onAttrCreate(GdkEventButton *event)
 /**
  * @brief AttrDialog::onAttrDelete
  * @param event
- * @return
+ * @return true
  * Delete the attribute from the xml
  */
 bool AttrDialog::onAttrDelete(GdkEventButton *event)
@@ -214,9 +233,47 @@ bool AttrDialog::onAttrDelete(GdkEventButton *event)
             if (col == _treeView.get_column(0) && row) {
                 Glib::ustring name = row[_attrColumns._attributeName];
                 this->_repr->setAttribute(name.c_str(), nullptr, false);
+                this->setUndo(_("Delete attribute"));
                 // Return true to prevent propergation
                 return true;
             }
+        }
+    }
+    return false;
+}
+
+/**
+ * @brief AttrDialog::onKeyPressed
+ * @param event
+ * @return true
+ * Delete or create elements based on key presses
+ */
+bool AttrDialog::onKeyPressed(GdkEventKey *event)
+{
+    if(this->_repr) {
+        auto selection = this->_treeView.get_selection();
+        Gtk::TreeModel::Row row = *(selection->get_selected());
+        switch (event->keyval)
+        {
+            case GDK_KEY_Delete:
+            case GDK_KEY_KP_Delete:
+              {
+                // Create new attribute (repeat code, fold into above event!)
+                Glib::ustring name = row[_attrColumns._attributeName];
+                this->_repr->setAttribute(name.c_str(), nullptr, false);
+                this->setUndo(_("Delete attribute"));
+                return true;
+              }
+            case GDK_KEY_plus:
+            case GDK_KEY_Insert:
+              {
+                // Create new attribute (repeat code, fold into above event!)
+                Gtk::TreeIter iter = this->_store->append();
+                Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
+                this->_treeView.set_cursor(path, *this->_nameCol, true);
+                grab_focus();
+                return true;
+              }
         }
     }
     return false;
@@ -231,15 +288,15 @@ bool AttrDialog::onAttrDelete(GdkEventButton *event)
  */
 void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name)
 {
-
     Gtk::TreeModel::Row row = *_store->get_iter(path);
-    if(row) {
+    if(row && this->_repr) {
         Glib::ustring old_name = row[_attrColumns._attributeName];
         Glib::ustring value = row[_attrColumns._attributeValue];
         if(!old_name.empty()) {
             // Remove named value
             _repr->setAttribute(old_name, nullptr, false);
             _repr->setAttribute(name, value, false);
+            this->setUndo(_("Rename attribute"));
         } else {
             // Move to editing value, we set the name as a temporary store value
             row[_attrColumns._attributeName] = name;
@@ -258,12 +315,12 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
  */
 void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& value)
 {
-
     Gtk::TreeModel::Row row = *_store->get_iter(path);
-    if(row) {
+    if(row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
         if(name.empty()) return;
         _repr->setAttribute(name, value, false);
+        this->setUndo(_("Change attribute value"));
     }
 }
 
