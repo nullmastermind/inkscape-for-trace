@@ -349,26 +349,32 @@ void sp_file_convert_dpi(SPDocument *doc)
                                              "in the file is most important. (Experimental.)"));
             Gtk::CheckButton backup_button(_("Create a backup file in same directory."));
             Gtk::Expander moreinfo(_("More details..."));
-            Gtk::Label moreinfo_text;
+            Gtk::Label moreinfo_text("", Gtk::ALIGN_START);
             moreinfo_text.set_markup(
-                _("<small>We've updated Inkscape to follow the CSS standard of 96 DPI for better browser "
-                  "compatibility; we used to use 90 DPI. "
-                  "Digital artwork for screen display will be converted to 96 DPI without scaling and should be "
-                  "unaffected. "
-                  "Artwork drawn at 90 DPI for a specific physical size will be too small if converted to 96 DPI "
-                  "without any scaling. There are two scaling methods:\n\n"
-                  "<b>Scaling the whole document:</b> The least error-prone method, this preserves the appearance of "
-                  "the artwork, including filters and the position of masks, etc. "
-                  "The scale of the artwork relative to the document size may not be accurate.\n\n"
-                  "<b>Scaling individual elements in the artwork:</b> This method is less reliable and can result in "
-                  "a changed appearance, "
-                  "but is better for physical output that relies on accurate sizes and positions (for example, for "
-                  "3D printing.)\n\n"
-                  "More information about this change are available in the <a "
-                  "href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a>"
-                  "</small>"));
+                _("<small>We've updated Inkscape to follow the CSS standard of 96 DPI for "
+                "better browser compatibility; we used to use 90 DPI. Digital artwork for screen\n"
+                "display will be converted to 96 DPI without scaling and should be unaffected.\n"
+                "Artwork drawn at 90 DPI for a specific physical size will be too small if "
+                "converted to 96 DPI without any scaling. There are two scaling methods:\n\n"
+                "<b>Scaling the whole document:</b> The least error-prone method, this preserves "
+                "the appearance of the artwork, including filters and the position of masks, etc. \n"
+                "The scale of the artwork relative to the document size may not be accurate.\n\n"
+                "<b>Scaling individual elements in the artwork:</b> This method is less reliable "
+                "and can result in a changed appearance, \nbut is better for physical output that " 
+                "relies on accurate sizes and positions (for example, for 3D printing.)\n\n"
+                "More information about this change are available in the <a "
+                "href='https://inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a>"
+                "</small>"));
             moreinfo_text.set_line_wrap(true);
-            moreinfo_text.set_size_request(554,-1);
+            moreinfo_text.set_margin_bottom(20);
+            moreinfo_text.set_margin_top(20);
+#if GTK_CHECK_VERSION(3,12,0)
+            moreinfo_text.set_margin_start(30);
+            moreinfo_text.set_margin_end(15);
+#else
+            moreinfo_text.set_margin_left(30);
+            moreinfo_text.set_margin_right(15);
+#endif
             Gtk::Box b;
             b.set_border_width(0);
             
@@ -389,14 +395,14 @@ void sp_file_convert_dpi(SPDocument *doc)
 #endif
 
             Gtk::Box *content = scale_dialog.get_content_area();
-            content->pack_start(explanation, false, false, 5);
-            content->pack_start(choice1, false, false, 5);
-            content->pack_start(choice2, false, false, 5);
-            content->pack_start(b,       false, false, 5);
-            content->pack_start(backup_button, false, false, 5);
             Gtk::Button *ok_button = scale_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);
             backup_button.set_active(backup);
-            content->pack_start(moreinfo, false, false, 5);
+            content->pack_start(explanation,   false, false, 5);
+            content->pack_start(choice1,       false, false, 5);
+            content->pack_start(choice2,       false, false, 5);
+            content->pack_start(b,             false, false, 5);
+            content->pack_start(backup_button, false, false, 5);
+            content->pack_start(moreinfo,      false, false, 5);
             moreinfo.add(moreinfo_text);
             scale_dialog.show_all_children();
             b.hide();

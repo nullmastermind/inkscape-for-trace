@@ -1940,7 +1940,7 @@ SPIFilter::read( gchar const *str ) {
 const Glib::ustring SPIFilter::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const /*base*/) const
 {
     // TODO: fix base
-    //SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
+    // SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
     // bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool dfp = true;
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
