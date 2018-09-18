@@ -2146,7 +2146,7 @@ inkscape:path-effect="#path-effect36695" striped for faster load
 <rect rx="1" ry="0" y="691.3622" x="498" height="6.999998" width="7" id="rect15587" style="opacity:0.3;fill:url(#linearGradient19282)" />
 <rect style="fill:url(#linearGradient19282)" id="rect15591" width="7" height="6.999998" x="507" y="691.3622" ry="0" rx="1" />
 </g>
-<g id="transform-move-vertical">
+<g id="transform-move-vertical" transform="matrix(1,0,0,-1,0,1380.7244)">
 <rect y="682.3622" x="528.0117" height="16" width="16" id="rect15593" style="fill:none" />
 <path sodipodi:nodetypes="cccccccc" inkscape:connector-curvature="0" id="path15595" d="m 530,695.3622 2,0 0,-6 2,0 -3,-4 -3,4 2,0 z" style="fill:url(#linearGradient19282)" />
 <rect style="fill:url(#linearGradient19282)" id="rect15597" width="7" height="6.999998" x="536" y="682.3622" ry="0" rx="1" />
@@ -2170,13 +2170,13 @@ inkscape:path-effect="#path-effect36695" striped for faster load
 <path sodipodi:nodetypes="ccccc" inkscape:connector-curvature="0" id="rect4845" d="M 498,712.3622 498,719.3622 505,719.3622 505,712.3622 Z" style="opacity:0.3;fill:url(#linearGradient19282)" />
 <path sodipodi:nodetypes="ccccc" inkscape:connector-curvature="0" id="path4855" d="M 498,712.3622 506.5625,722.3622 513.875,722.3622 505.3437,712.3622 Z" style="fill:url(#linearGradient19282)" />
 </g>
-<g id="transform-skew-vertical" transform="translate(-1)">
+<g id="transform-skew-vertical" transform="matrix(1,0,0,-1,-1,1440.7244)">
 <rect style="fill:none" id="rect19383" width="16" height="16" x="529" y="712.3622" />
 <path inkscape:connector-curvature="0" style="fill:url(#linearGradient19282)" d="m 539,722.3622 2,0 0,6 2,0 0,-6 2,0 -3,-4 -3,4 z" id="path19386" />
 <path style="opacity:0.3;fill:url(#linearGradient19282)" d="m 529,721.3622 0,7 7,0 0,-7 z" id="path19388" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc" />
 <path style="fill:url(#linearGradient19282)" d="m 539,712.3622 -10,9 0,7 10,-8.2188 z" id="path19390" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc" />
 </g>
-<g id="transform-rotate" inkscape:label="#transform_rotate" transform="translate(-1)">
+<g id="transform-rotate" inkscape:label="#transform_rotate" transform="matrix(1,0,0,-1,-1,1440.7503)">
 <rect ry="0" rx="0.4696699" y="712.3752" x="559" height="15.98698" width="16" id="rect10072" style="fill:none" />
 <path id="path18623" d="M 559,712.3752 559,717.3711 C 559.9848,717.3661 561.1151,717.3891 562,717.3711 L 564,717.3711 562.1875,715.5601 562.1875,715.5288 C 562.5583,714.8006 563.4428,714.2486 564.5625,714.2486 566.0554,714.2486 567.125,715.2524 567.125,716.3094 567.0359,716.8508 567.5134,717.4128 568.0625,717.4128 568.6116,717.4128 569.0891,716.8508 569,716.3094 569,714.0554 566.9356,712.3751 564.5625,712.3751 563.0226,712.3751 561.6127,713.0735 560.8125,714.1862 Z" style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccscscscc" />
 <path inkscape:connector-curvature="0" id="rect10846" d="M 568.9687,727.5816 A 0.950095,0.9493217 0 0 0 570.0625,728.3622 C 572.3183,728.3622 574,726.2995 574,723.9283 574,722.3897 573.3011,720.9809 572.1875,720.1814 L 574,718.3703 569,718.3703 569,720.1189 569,720.2125 A 0.950095,0.9493217 0 0 0 569,720.6809 L 569,721.3678 569,723.3662 570.8125,721.5552 C 570.8215,721.5592 570.8351,721.5512 570.8438,721.5552 571.5726,721.9257 572.125,722.8094 572.125,723.9282 572.125,725.4199 571.1204,726.4886 570.0625,726.4886 A 0.950095,0.9493217 0 0 0 568.9687,727.5816 Z" style="fill:url(#linearGradient19282)" />

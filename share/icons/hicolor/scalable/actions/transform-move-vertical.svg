@@ -22,7 +22,7 @@
     </g>
   </defs>
 
-  <g id="transform-move-vertical" inkscape:label="#arrows_hor">
+  <g id="transform-move-vertical" inkscape:label="#arrows_hor" transform="matrix(1,0,0,-1,0,24)">
     <use xlink:href="#TheRect" transform="translate( 2,14)" style="opacity:0.5"/>
     <use xlink:href="#TheRect" transform="translate( 2, 1)"/>
 

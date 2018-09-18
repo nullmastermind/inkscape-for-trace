@@ -22,7 +22,7 @@
     </g>
   </defs>
 
-<g id="transform-rotate" inkscape:label="#transform_rotate">
+<g id="transform-rotate" inkscape:label="#transform_rotate" transform="matrix(1,0,0,-1,0,24)">
 
     <use xlink:href="#TheRect" transform="translate(12,12)" style="opacity:0.5"/>
     <use xlink:href="#TheRect" transform="translate(12,12) rotate(-45)"/>

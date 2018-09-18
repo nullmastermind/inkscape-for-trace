@@ -126,7 +126,7 @@ Transformation::Transformation()
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));
 
     // make icons match desktop rotation direction
-    if (getDesktop()->is_yaxisdown()) {
+    if (!getDesktop()->is_yaxisdown()) {
         _scalar_move_vertical.flipIconVertically();
         _scalar_rotate.flipIconVertically();
         _scalar_skew_vertical.flipIconVertically();
