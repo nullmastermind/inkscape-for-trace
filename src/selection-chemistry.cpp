@@ -3951,6 +3951,15 @@ void ObjectSet::setClipGroup()
 
     sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
 
+    //convert any rects to paths
+    for (std::vector<SPItem*>::const_iterator i = items_.begin(); i != items_.end(); ++i) {
+        clear();
+        if (dynamic_cast<SPRect *>(*i)) {
+            add(*i);
+            toCurves();
+        }
+    }
+
     // See lp bug #542004
     clear();
 
