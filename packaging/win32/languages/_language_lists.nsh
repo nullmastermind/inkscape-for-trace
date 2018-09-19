@@ -69,7 +69,6 @@
     !insertmacro ${_MACRONAME} EnglishAustralian   en_AU
     !insertmacro ${_MACRONAME} EnglishCanadian     en_CA
     !insertmacro ${_MACRONAME} EnglishBritain      en_GB
-    !insertmacro ${_MACRONAME} EnglishPiglatin     en_US@piglatin
     !insertmacro ${_MACRONAME} Esperanto           eo
     !insertmacro ${_MACRONAME} Spanish             es
     !insertmacro ${_MACRONAME} SpanishMexico       es_MX
