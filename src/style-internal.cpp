@@ -2312,6 +2312,9 @@ SPIFontSize::merge( const SPIBase* const parent ) {
                 // Computed value same as parent
                 set      = p->set;
                 inherit  = p->inherit;
+                type     = p->type;
+                unit     = p->unit;
+                literal  = p->literal;
                 value    = p->value;
                 computed = p->computed; // Just to be sure
             } else if ( type == SP_FONT_SIZE_LENGTH  && 
