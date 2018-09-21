@@ -946,8 +946,7 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
         if (sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
             shape->setAttribute("inkscape:original-d", nullptr);
         } else {
-            SPCurve * c = nullptr;
-            c = shape->getCurve();
+            SPCurve * c = shape->getCurve();
             if (c) {
                 bool success = false;
                 try {
