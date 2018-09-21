@@ -869,6 +869,9 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
     if (gtk_widget_get_realized (widget)) {
         Geom::Rect const area = dtw->desktop->get_display_area();
+        Geom::Rect const d_canvas = dtw->desktop->getCanvas()->getViewbox();
+        Geom::Point midpoint = dtw->desktop->w2d(d_canvas.midpoint());
+
         double zoom = dtw->desktop->current_zoom();
 
         if (GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate) {
@@ -883,7 +886,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             double newshortside = MIN(newarea.width(), newarea.height());
             zoom *= newshortside / oldshortside;
         }
-        dtw->desktop->zoom_absolute_center_point (area.midpoint(), zoom);
+        dtw->desktop->zoom_absolute_center_point (midpoint, zoom);
 
         // TODO - Should call show_dialogs() from sp_namedview_window_from_document only.
         // But delaying the call to here solves dock sizing issues on OS X, (see #171579)
