@@ -782,8 +782,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
         bool shift = (event->scroll.state & GDK_SHIFT_MASK);
         bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
 
+        int constexpr WHEEL_SCROLL_DEFAULT = 40;
         int const wheel_scroll = prefs->getIntLimited(
-                "/options/wheelscroll/value", 40, 0, 1000);
+                "/options/wheelscroll/value", WHEEL_SCROLL_DEFAULT, 0, 1000);
 
         // Size of smooth-scrolls (only used in GTK+ 3)
         gdouble delta_x = 0;
@@ -807,6 +808,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
                 double delta_y_clamped = CLAMP(delta_y, -1.0, 1.0); // values > 1 result in excessive rotating
                 rotate_inc = rotate_inc * -delta_y_clamped;
                 break;
@@ -827,15 +832,21 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
+            case GDK_SCROLL_LEFT:
                 desktop->scroll_relative(Geom::Point(wheel_scroll, 0));
                 break;
 
             case GDK_SCROLL_DOWN:
+            case GDK_SCROLL_RIGHT:
                 desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
                 break;
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
                 desktop->scroll_relative(Geom::Point(wheel_scroll * -delta_y, 0));
                 break;
             }
@@ -861,6 +872,10 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH: {
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
                 double delta_y_clamped = CLAMP(std::abs(delta_y), 0.0, 1.0); // values > 1 result in excessive zooming
                 double zoom_inc_scaled = (zoom_inc-1) * delta_y_clamped + 1;
                 if (delta_y < 0) {
@@ -902,6 +917,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             case GDK_SCROLL_SMOOTH:
                 gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
+#ifdef GDK_WINDOWING_QUARTZ
+                // MacBook trackpad scroll event gives pixel delta
+                delta_x /= WHEEL_SCROLL_DEFAULT;
+                delta_y /= WHEEL_SCROLL_DEFAULT;
+#endif
                 desktop->scroll_relative(Geom::Point(-wheel_scroll*delta_x, -wheel_scroll*delta_y));
                 break;
             }
