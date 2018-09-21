@@ -947,25 +947,6 @@ SPLPEItem::applyToClipPathOrMask(SPItem *clip_mask, SPItem* to, Inkscape::LivePa
             shape->setAttribute("inkscape:original-d", nullptr);
         } else {
             SPCurve * c = nullptr;
-            // If item is a SPRect, convert it to path first:
-            if ( dynamic_cast<SPRect *>(shape) ) {
-                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-                if (desktop) {
-                    Inkscape::Selection *sel = desktop->getSelection();
-                    if ( sel && !sel->isEmpty() ) {
-                        sel->clear();
-                        sel->add(SP_ITEM(shape));
-                        sel->toCurves();
-                        SPItem* item = sel->singleItem();
-                        shape = dynamic_cast<SPShape *>(item);
-                        if (!shape) {
-                            return;
-                        }
-                        sel->clear();
-                        sel->add(this);
-                    }
-                }
-            }
             c = shape->getCurve();
             if (c) {
                 bool success = false;
