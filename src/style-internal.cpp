@@ -70,10 +70,8 @@ inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
 
 const Glib::ustring SPIBase::write(guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const
 {
-    SPIBase const *const my_base = dynamic_cast<const SPIBase*>(base);
-    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
-    if (should_write(flags, set, dfp, src)) {
+    if (should_write(flags, set, !inherits, src)) {
         auto value = this->get_value();
         if ( !value.empty() ) {
             return (name + ":" + value + important_str() + ";");
@@ -997,6 +995,7 @@ SPIEastAsian::read( gchar const *str ) {
 const Glib::ustring SPIEastAsian::get_value() const
 {
     if(this->inherit) return Glib::ustring("inherit");
+    if(this->value == 0) return Glib::ustring("normal");
     auto ret = Glib::ustring("");
     unsigned j = 1;
     auto enums = enum_font_variant_east_asian;
@@ -1137,8 +1136,9 @@ void SPIColor::read( gchar const *str ) {
 
 const Glib::ustring SPIColor::get_value() const
 {
-    if(this->inherit) return Glib::ustring("inherit");
+    // currentcolor goes first to handle special case for 'color' property
     if(this->currentcolor) return Glib::ustring("currentColor");
+    if(this->inherit) return Glib::ustring("inherit");
     char color_buf[8];
     sp_svg_write_color(color_buf, sizeof(color_buf), this->value.color.toRGBA32( 0 ));
 
@@ -1349,9 +1349,7 @@ const Glib::ustring SPIPaint::get_value() const
     // url must go first as other values can serve as fallbacks
     auto ret = Glib::ustring("");
     if (this->value.href && this->value.href->getURI()) {
-        gchar *uri = this->value.href->getURI()->toString();
-        ret += g_strdup_printf("url(%s)", uri);
-        g_free((void *) uri);
+        ret += this->value.href->getURI()->toStdString(true);
     }
     switch(this->paintOrigin) {
         case SP_CSS_PAINT_ORIGIN_CURRENT_COLOR:
@@ -1714,9 +1712,7 @@ SPIFilter::read( gchar const *str ) {
 const Glib::ustring SPIFilter::get_value() const
 {
     if(this->inherit) return Glib::ustring("inherit");
-    auto uri = Glib::ustring(this->href->getURI()->toString());
-    Glib::ustring ret = "url(" + uri + ")";
-    return ret;
+    return this->href->getURI()->toStdString(true);
 }
 
 void
