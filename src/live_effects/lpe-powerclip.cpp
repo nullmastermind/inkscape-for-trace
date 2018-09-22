@@ -142,6 +142,9 @@ LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root){
     SPObject *elemref = NULL;
     if(root) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
+        if (!SP_IS_SHAPE(clip_data)) {
+            return;
+        }
         SP_SHAPE(clip_data)->removeAllPathEffects(true);
         Inkscape::XML::Node *clip_path_node = xml_doc->createElement("svg:path");
         Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
