@@ -201,7 +201,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"save_as\" default=\"\" append_extension=\"1\" enable_preview=\"1\" path=\"\" use_current_dir=\"1\"/>\n"
 "    <group id=\"save_copy\" default=\"\" append_extension=\"1\" enable_preview=\"1\" path=\"\"/>\n"
 "    <group id=\"open\" enable_preview=\"1\" path=\"\"/>\n"
-"    <group id=\"import\" enable_preview=\"1\" path=\"\" ask=\"1\" link=\"link\" scale=\"optimizeSpeed\"/>\n"
+"    <group id=\"import\" enable_preview=\"1\" path=\"\" ask=\"1\" ask_svg=\"1\" link=\"link\" scale=\"optimizeSpeed\"/>\n"
 "    <group id=\"debug\" redirect=\"0\"/>\n"
 "    <group id=\"clonetiler\" />\n"
 "    <group id=\"gridtiler\" />\n"

@@ -149,7 +149,7 @@ Svg::init()
                     "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"
                   "</param>\n"
 
-            "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
+            "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >%s</param>\n"
             "<input>\n"
                 "<extension>.svg</extension>\n"
                 "<mimetype>image/svg+xml</mimetype>\n"
@@ -158,7 +158,7 @@ Svg::init()
                 "<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Svg());
-
+    
     /* SVG out Inkscape */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -205,10 +205,10 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     auto file = Gio::File::create_for_uri(uri);
     const auto path = file->get_path();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool ask = prefs->getBool("/dialogs/import/ask");
+    bool ask_svg = prefs->getBool("/dialogs/import/ask_svg");
     Glib::ustring import_mode_svg  = prefs->getString("/dialogs/import/import_mode_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
-    if(mod->get_gui() && ask) {
+    if(mod->get_gui() && ask_svg) {
         Glib::ustring mod_import_mode_svg = mod->get_param_optiongroup("import_mode_svg");
         Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
         if( import_mode_svg.compare( mod_import_mode_svg) != 0 ) {
@@ -219,7 +219,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
             scale = mod_scale;
         }
         prefs->setString("/dialogs/import/scale", scale );
-        prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
+        prefs->setBool("/dialogs/import/ask_svg", !mod->get_param_bool("do_not_ask") );
     }
     SPDocument * doc = SPDocument::createNewDoc (nullptr, TRUE, TRUE);
     if (prefs->getBool("/options/onimport", false) && import_mode_svg.compare("include") != 0) {

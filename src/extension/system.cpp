@@ -98,9 +98,10 @@ SPDocument *open(Extension *key, gchar const *filename)
     if (strlen(imod->get_id()) > 21) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool ask = prefs->getBool("/dialogs/import/ask");
+        bool ask_svg = prefs->getBool("/dialogs/import/ask_svg");
         Glib::ustring id = Glib::ustring(imod->get_id(), 22);
         if (id.compare("org.inkscape.input.svg") == 0) {
-            if (ask && prefs->getBool("/options/onimport", false)) {
+            if (ask_svg && prefs->getBool("/options/onimport", false)) {
                 show = true;
                 imod->set_gui(true);
             } else {

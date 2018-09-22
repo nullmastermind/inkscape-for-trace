@@ -1731,9 +1731,12 @@ void InkscapePreferences::initPageBitmaps()
                             _("Resolution used by the Create Bitmap Copy command"), false);
 
     _page_bitmaps.add_group_header( _("Import"));
-    _bitmap_ask.init(_("Ask about linking and scaling when importing"), "/dialogs/import/ask", true);
+    _bitmap_ask.init(_("Ask about linking and scaling when importing bitmap images"), "/dialogs/import/ask", true);
     _page_bitmaps.add_line( true, "", _bitmap_ask, "",
                            _("Pop-up linking and scaling dialog when importing bitmap image."));
+    _svg_ask.init(_("Ask about linking and scaling when importing SVG images"), "/dialogs/import/ask_svg", true);
+    _page_bitmaps.add_line( true, "", _svg_ask, "",
+                           _("Pop-up linking and scaling dialog when importing SVG image."));
 
     {
         Glib::ustring labels[] = {_("Embed"), _("Link")};
