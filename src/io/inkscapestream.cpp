@@ -501,8 +501,9 @@ Writer &BasicWriter::writeChar(char ch)
  */ 
 Writer &BasicWriter::writeUString(Glib::ustring &str)
 {
-    for (int i=0; i< (int)str.size(); i++)
-        put(str[i]);
+    for (auto it = str.begin(); it != str.end(); it++) {
+        put(*it);
+    }
     return *this;
 }
 
