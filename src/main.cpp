@@ -1100,7 +1100,6 @@ static int sp_main_shell(char const* command_name)
 {
     int retval = 0;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString("/options/openmethod/value", "shell");
     const unsigned int buffer_size = 4096;
     gchar *command_line = g_strnfill(buffer_size, 0);
     g_strlcpy(command_line, command_name, buffer_size);
@@ -1166,7 +1165,6 @@ static int sp_main_shell(char const* command_name)
     } while (linedata && (retval == 0));
 
     g_free(command_line);
-    prefs->setString("/options/openmethod/value", "done");
     return retval;
 }
 
@@ -1174,7 +1172,6 @@ int sp_main_console(int argc, char const **argv)
 {
     /* We are started in text mode */
 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-prefs->setString("/options/openmethod/value", "shell");
 #if !GLIB_CHECK_VERSION(2,36,0)
     /* Do this g_type_init(), so that we can use Xft/Freetype2 (Pango)
      * in a non-Gtk environment.  Used in libnrtype's
@@ -1197,7 +1194,6 @@ prefs->setString("/options/openmethod/value", "shell");
 #endif // WITH_DBUS
         ) {
         do_print_message("Nothing to do!\n");
-        prefs->setString("/options/openmethod/value", "done");
         exit(0);
     }
 
@@ -1206,16 +1202,13 @@ prefs->setString("/options/openmethod/value", "shell");
 
     if (sp_shell) {
         int retVal = sp_main_shell(argv[0]); // Run as interactive shell
-        prefs->setString("/options/openmethod/value", "done");
         exit((retVal < 0) ? 1 : 0);
     } else {
         int retVal = sp_process_file_list(fl); // Normal command line invocation
         if (retVal){
-            prefs->setString("/options/openmethod/value", "done");
             exit(1);
         }
     }
-    prefs->setString("/options/openmethod/value", "done");
     return 0;
 }
 

@@ -889,14 +889,10 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_new_default();
             break;
         case SP_VERB_FILE_OPEN:
-            prefs->setString("/options/openmethod/value", "open");
             sp_file_open_dialog(*parent, nullptr, nullptr);
-            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_REVERT:
-            prefs->setString("/options/openmethod/value", "revert");
             sp_file_revert_dialog();
-            prefs->setString("/options/openmethod/value", "done");
             break;
         case SP_VERB_FILE_SAVE:
             sp_file_save(*parent, nullptr, nullptr);
@@ -914,17 +910,15 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_print(*parent);
             break;
         case SP_VERB_FILE_IMPORT:
-            prefs->setString("/options/openmethod/value","import");
+            prefs->setBool("/options/onimport",true);
             sp_file_import(*parent);
-            prefs->setString("/options/openmethod/value", "done");
+            prefs->setBool("/options/onimport",false);
             break;
 //        case SP_VERB_FILE_EXPORT:
 //            sp_file_export_dialog(*parent);
 //            break;
         case SP_VERB_FILE_IMPORT_FROM_OCAL:
-            prefs->setString("/options/openmethod/value", "ocal");
             sp_file_import_from_ocal(*parent);
-            prefs->setString("/options/openmethod/value", "done");
             break;
 //        case SP_VERB_FILE_EXPORT_TO_OCAL:
 //            sp_file_export_to_ocal(*parent);
@@ -939,9 +933,7 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_ui_close_view(nullptr);
             break;
         case SP_VERB_FILE_TEMPLATES:
-            prefs->setString("/options/openmethod/value", "template");
             Inkscape::UI::NewFromTemplate::load_new_from_template();
-            prefs->setString("/options/openmethod/value", "done");
             break;
         default:
             break;

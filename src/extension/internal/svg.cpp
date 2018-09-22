@@ -137,7 +137,7 @@ Svg::init()
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("SVG Input") "</name>\n"
             "<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
-            "<param name='link_svg' type='optiongroup' appearance='full' _gui-text='" N_("SVG Image Import Type:") "' >\n"
+            "<param name='import_mode_svg' type='optiongroup' appearance='full' _gui-text='" N_("SVG Image Import Type:") "' >\n"
                     "<_option value='include' >" N_("Include SVG image as editable object(s) in the current file") "</_option>\n"
                     "<_option value='embed' >" N_("Embed the SVG file in a image tag (not editable in this document)") "</_option>\n"
                     "<_option value='link' >" N_("Link the SVG file in a image tag (not editable in this document).") "</_option>\n"
@@ -206,21 +206,15 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     const auto path = file->get_path();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool ask = prefs->getBool("/dialogs/import/ask");
-    Glib::ustring link_svg  = prefs->getString("/dialogs/import/link_svg");
+    Glib::ustring import_mode_svg  = prefs->getString("/dialogs/import/import_mode_svg");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
-    bool is_import = false;
-    if (strcmp(prefs->getString("/options/openmethod/value").c_str(), "done") == 0 ||
-        strcmp(prefs->getString("/options/openmethod/value").c_str(), "import") == 0)
-    {
-        is_import = true;
-    }
-    if(INKSCAPE.use_gui() && is_import && ask) {
-        Glib::ustring mod_link_svg = mod->get_param_optiongroup("link_svg");
+    if(mod->get_gui() && ask) {
+        Glib::ustring mod_import_mode_svg = mod->get_param_optiongroup("import_mode_svg");
         Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
-        if( link_svg.compare( mod_link_svg) != 0 ) {
-            link_svg = mod_link_svg;
+        if( import_mode_svg.compare( mod_import_mode_svg) != 0 ) {
+            import_mode_svg = mod_import_mode_svg;
         }
-        prefs->setString("/dialogs/import/link_svg", link_svg );
+        prefs->setString("/dialogs/import/import_mode_svg", import_mode_svg );
         if( scale.compare( mod_scale ) != 0 ) {
             scale = mod_scale;
         }
@@ -228,8 +222,8 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
         prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
     }
     SPDocument * doc = SPDocument::createNewDoc (nullptr, TRUE, TRUE);
-    if (link_svg.compare("include") != 0 && is_import) {
-        bool embed = ( link_svg.compare( "embed" ) == 0 );
+    if (prefs->getBool("/options/onimport", false) && import_mode_svg.compare("include") != 0) {
+        bool embed = ( import_mode_svg.compare( "embed" ) == 0 );
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
         SPNamedView *nv = sp_document_namedview(doc, nullptr);
         Glib::ustring display_unit = nv->display_units->abbr;

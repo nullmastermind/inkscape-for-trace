@@ -1745,7 +1745,7 @@ void InkscapePreferences::initPageBitmaps()
     {
         Glib::ustring labels[] = {_("Include"), _("Embed"), _("Link")};
         Glib::ustring values[] = {"include", "embed", "link"};
-        _svg_link.init("/dialogs/import/link_svg", labels, values, G_N_ELEMENTS(values), "include");
+        _svg_link.init("/dialogs/import/import_mode_svg", labels, values, G_N_ELEMENTS(values), "include");
         _page_bitmaps.add_line( false, _("SVG import mode:"), _svg_link, "", "", false);
     }
 
