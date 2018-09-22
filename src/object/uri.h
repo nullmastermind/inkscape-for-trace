@@ -117,6 +117,26 @@ public:
     char *toString() const { return _impl->toString(); }
 
     /**
+      * Return a more useful std::string with optional url(...)
+      * useful for css printing.
+      */
+    std::string toStdString(bool with_braces=false) const {
+        char *uri = this->toString();
+        auto ret = std::string("");
+        if(uri) {
+            if(with_braces) {
+                ret += "url(";
+                ret += uri;
+                ret += ")";
+            } else {
+                ret += uri;
+            }
+            free((void *) uri);
+        }
+        return ret;
+    }
+
+    /**
      * Assignment operator.
      */
     URI &operator=(URI const &uri);
