@@ -67,6 +67,7 @@
 #include "object/sp-stop.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
 #include "object/sp-path.h"
 #include "object/sp-text.h"
 #include "object/sp-flowtext.h"
@@ -935,12 +936,7 @@ static Glib::ustring formatTransform(Geom::Affine &tf)
 static Geom::Affine getODFTransform(const SPItem *item)
 {
     //### Get SVG-to-ODF transform
-    Geom::Affine tf (item->i2dt_affine());
-    //Flip Y into document coordinates
-    double doc_height    = SP_ACTIVE_DOCUMENT->getHeight().value("px");
-    Geom::Affine doc2dt_tf = Geom::Affine(Geom::Scale(1.0, -1.0));                    /// @fixme hardcoded desktop transform
-    doc2dt_tf            = doc2dt_tf * Geom::Affine(Geom::Translate(0, doc_height));
-    tf                   = tf * doc2dt_tf;
+    Geom::Affine tf (item->i2doc_affine());
     tf                   = tf * Geom::Affine(Geom::Scale(pxToCm));
     return tf;
 }
@@ -962,14 +958,13 @@ static Geom::OptRect getODFBoundingBox(const SPItem *item)
 
 
 /**
- * Get the transform for an item, correcting for
- * handedness reversal
+ * Get the transform for an item, including parents, but without
+ * root viewBox transformation.
  */
 static Geom::Affine getODFItemTransform(const SPItem *item)
 {
-    Geom::Affine itemTransform (Geom::Scale(1, -1));  /// @fixme hardcoded doc2dt transform?
-    itemTransform = itemTransform * (Geom::Affine)item->transform;
-    itemTransform = itemTransform * Geom::Scale(1, -1);
+    Geom::Affine itemTransform (item->i2doc_affine() *
+            SP_ACTIVE_DOCUMENT->getRoot()->c2p.inverse());
     return itemTransform;
 }
 
@@ -1720,10 +1715,9 @@ bool OdfOutput::writeTree(Writer &couts, Writer &souts,
         double iwidth  = img->width.value;
         double iheight = img->height.value;
 
-        Geom::Rect ibbox(Geom::Point(ix, iy), Geom::Point(ix+iwidth, iy+iheight));
-        ibbox = ibbox * tf;
-        ix      = ibbox.min()[Geom::X];
-        iy      = ibbox.min()[Geom::Y];
+        Geom::Point ibbox_min = Geom::Point(ix, iy) * tf;
+        ix      = ibbox_min.x();
+        iy      = ibbox_min.y();
         iwidth  = xscale * iwidth;
         iheight = yscale * iheight;
 

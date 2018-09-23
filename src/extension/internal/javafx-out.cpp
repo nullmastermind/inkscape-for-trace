@@ -492,8 +492,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
     }
 
     // convert the path to only lineto's and cubic curveto's:
-    Geom::Scale yflip(1.0, -1.0); /// @fixme  hardcoded desktop transform!
-    Geom::Affine tf = item->i2dt_affine() * yflip;
+    Geom::Affine tf = item->i2doc_affine();
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( shape->_curve->get_pathvector() * tf );
 
     //Count the NR_CURVETOs/LINETOs (including closing line segment)
@@ -632,8 +631,7 @@ bool JavaFXOutput::doCurve(SPItem *item, const String &id)
     }
 
     // convert the path to only lineto's and cubic curveto's:
-    Geom::Scale yflip(1.0, -1.0); /// @fixme hardcoded desktop transform
-    Geom::Affine tf = item->i2dt_affine() * yflip;
+    Geom::Affine tf = item->i2doc_affine();
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers( curve->get_pathvector() * tf );
 
     //Count the NR_CURVETOs/LINETOs (including closing line segment)
