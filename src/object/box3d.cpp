@@ -652,7 +652,7 @@ box3d_XY_axes_are_swapped (SPBox3D *box) {
 
 static inline void
 box3d_aux_set_z_orders (int z_orders[6], int a, int b, int c, int d, int e, int f) {
-    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
         std::swap(a, f);
         std::swap(b, e);
         std::swap(c, d);

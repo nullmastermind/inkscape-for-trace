@@ -133,7 +133,7 @@ void SPGuide::set(unsigned int key, const gchar *value) {
                 Geom::Point direction(newx, newy);
 
                 // <sodipodi:guide> stores inverted y-axis coordinates
-                if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+                if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
                     direction[Geom::Y] *= -1.0;
                 }
 
@@ -184,7 +184,7 @@ void SPGuide::set(unsigned int key, const gchar *value) {
             }
 
             // <sodipodi:guide> stores inverted y-axis coordinates
-            if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+            if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
                 this->point_on_line[Geom::Y] = document->getHeight().value("px") - this->point_on_line[Geom::Y];
             }
         } else {
@@ -229,7 +229,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     }
 
     // <sodipodi:guide> stores inverted y-axis coordinates
-    if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
         newy = doc->getHeight().value("px") - newy;
         n[Geom::Y] *= -1.0;
     }
@@ -386,7 +386,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
         double newy = point_on_line.y();
 
         // <sodipodi:guide> stores inverted y-axis coordinates
-        if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
             newy = document->getHeight().value("px") - newy;
         }
 
@@ -439,7 +439,7 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
         auto normal = normal_to_line;
 
         // <sodipodi:guide> stores inverted y-axis coordinates
-        if (SP_ACTIVE_DESKTOP && SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
             normal[Geom::Y] *= -1.0;
         }
 
