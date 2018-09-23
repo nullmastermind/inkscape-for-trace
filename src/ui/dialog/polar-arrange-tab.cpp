@@ -184,11 +184,9 @@ static Geom::Point calcPoint(float cx, float cy, float rx, float ry, float angle
 }
 
 /**
- * Returns the selected anchor point in document coordinates. If anchor
+ * Returns the selected anchor point in desktop coordinates. If anchor
  * is 0 to 8, then a bounding box point has been chosen. If it is 9 however
  * the rotational center is chosen.
- * @todo still using a hack to get the real coordinate space (subtracting document height
- * 		 and inverting axes)
  */
 static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 {
@@ -237,11 +235,9 @@ static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 	// If using center
 	if(anchor == 9)
 		source = item->getCenter();
-	else
+	else if (SP_ACTIVE_DESKTOP)
 	{
-		// FIXME:
-		source[1] -= item->document->getHeight().value("px");
-		source[1] *= -1;
+		source *= SP_ACTIVE_DESKTOP->doc2dt();
 	}
 
 	return source;

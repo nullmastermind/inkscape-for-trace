@@ -324,10 +324,9 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
                  new_x = grid_left + (((col_widths[col] - width)/2)*HorizAlign) + col_xs[col];
                  new_y = grid_top + (((row_heights[row] - height)/2)*VertAlign) + row_ys[row];
 
-                 // signs are inverted between x and y due to y inversion
-                 Geom::Point move = Geom::Point(new_x - min[Geom::X], min[Geom::Y] - new_y);
+                 Geom::Point move = Geom::Point(new_x, new_y) - min;
                  Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
-                 item->set_i2d_affine(item->i2dt_affine() * affine);
+                 item->set_i2d_affine(item->i2doc_affine() * affine * SP_ACTIVE_DESKTOP->doc2dt());
                  item->doWriteTransform(item->transform);
                  item->updateRepr();
                  cnt +=1;

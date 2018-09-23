@@ -262,7 +262,7 @@ bool SPItem::isCenterSet() const {
     return (transform_center_x != 0 || transform_center_y != 0);
 }
 
-// Get the item's transformation center in document coordinates (i.e. in pixels)
+// Get the item's transformation center in desktop coordinates (i.e. in pixels)
 Geom::Point SPItem::getCenter() const {
     document->ensureUpToDate();
 
@@ -1614,19 +1614,15 @@ Geom::Affine SPItem::i2doc_affine() const
 
 Geom::Affine SPItem::i2dt_affine() const
 {
-    Geom::Affine ret;
+    Geom::Affine ret(i2doc_affine());
     SPDesktop const *desktop = SP_ACTIVE_DESKTOP;
     if ( desktop ) {
-        ret = i2doc_affine() * desktop->doc2dt();
-    } else {
-        // TODO temp code to prevent crashing on command-line launch:
-        ret = i2doc_affine()
-            * Geom::Scale(1, -1)
-            * Geom::Translate(0, document->getHeight().value("px"));
+        ret *= desktop->doc2dt();
     }
     return ret;
 }
 
+// TODO should be named "set_i2dt_affine"
 void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
 {
     Geom::Affine dt2p; /* desktop to item parent transform */
