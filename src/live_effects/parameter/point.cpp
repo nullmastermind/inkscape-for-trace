@@ -155,8 +155,7 @@ PointParam::param_newWidget()
                                                               *param_wr,
                                                               param_effect->getRepr(),
                                                               param_effect->getSPDoc() ) );
-    Geom::Affine transf = Geom::Scale(1, -1);
-    transf[5] = SP_ACTIVE_DOCUMENT->getHeight().value("px");
+    Geom::Affine transf = SP_ACTIVE_DESKTOP->doc2dt();
     pointwdg->setTransform(transf);
     pointwdg->setValue( *this );
     pointwdg->clearProgrammatically();
