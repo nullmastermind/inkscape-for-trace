@@ -1,10 +1,6 @@
 #ifndef SEEN_MENUS_SKELETON_H
 #define SEEN_MENUS_SKELETON_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #ifdef __cplusplus
 #undef N_
 #define N_(x) x

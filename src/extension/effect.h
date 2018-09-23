@@ -11,7 +11,6 @@
 #ifndef INKSCAPE_EXTENSION_EFFECT_H__
 #define INKSCAPE_EXTENSION_EFFECT_H__
 
-#include <config.h>
 #include <glibmm/i18n.h>
 #include "verbs.h"
 #include "extension.h"

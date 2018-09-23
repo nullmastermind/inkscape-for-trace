@@ -12,10 +12,6 @@
 #ifndef SEEN_INKSCAPE_GC_CORE_H
 #define SEEN_INKSCAPE_GC_CORE_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <new>
 #include <cstdlib>
 

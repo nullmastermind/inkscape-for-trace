@@ -12,14 +12,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#include <stack>
 
 #include "extension/implementation/implementation.h"
 #include "extension/extension.h"
 
 #include "svg/stringstream.h"
-
-#include <stack>
 
 namespace Inkscape {
 namespace Extension {

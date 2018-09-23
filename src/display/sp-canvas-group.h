@@ -19,10 +19,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glib-object.h>
 
 #define SP_TYPE_CANVAS_GROUP (sp_canvas_group_get_type())

@@ -7,15 +7,10 @@
 #ifndef my_font_factory
 #define my_font_factory
 
-//#include <glibmm/ustring.h>
-
 #include <functional>
 #include <algorithm>
 #include <utility>
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 #ifdef _WIN32
 //#define USE_PANGO_WIN32 // disable for Bug 165665
 #endif

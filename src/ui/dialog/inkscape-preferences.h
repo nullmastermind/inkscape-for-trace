@@ -15,10 +15,6 @@
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"

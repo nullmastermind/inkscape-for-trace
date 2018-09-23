@@ -10,10 +10,6 @@
 #ifndef INKSCAPE_UI_WIDGET_PAGE_SIZER_H
 #define INKSCAPE_UI_WIDGET_PAGE_SIZER_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <cstddef>
 #include "ui/widget/registered-widget.h"
 #include <sigc++/sigc++.h>

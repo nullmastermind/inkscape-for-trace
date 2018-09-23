@@ -17,10 +17,6 @@
 #ifndef SEEN_DIALOGS_STROKE_STYLE_H
 #define SEEN_DIALOGS_STROKE_STYLE_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glibmm/i18n.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/radiobutton.h>

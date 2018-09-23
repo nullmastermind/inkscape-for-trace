@@ -9,9 +9,6 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <glibmm.h>
 

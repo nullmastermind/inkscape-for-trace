@@ -11,10 +11,6 @@
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_INOUT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_INOUT_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #define PNG_SKIP_SETJMP_CHECK // else any further png.h include blows up in the compiler
 #include <png.h>
 #include <cstdio>

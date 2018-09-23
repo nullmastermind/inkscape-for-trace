@@ -12,10 +12,6 @@
 #ifndef SEEN_PROTOTYPE_PANEL_H
 #define SEEN_PROTOTYPE_PANEL_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <iostream>
 #include "ui/widget/panel.h"
 #include "ui/dialog/desktop-tracker.h"

@@ -11,10 +11,6 @@
 #ifndef INKSCAPE_DIALOG_GUIDELINE_H
 #define INKSCAPE_DIALOG_GUIDELINE_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/dialog.h>
 #include <gtkmm/grid.h>
 

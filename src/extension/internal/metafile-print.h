@@ -11,10 +11,6 @@
 #ifndef SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_PRINT_H
 #define SEEN_INKSCAPE_EXTENSION_INTERNAL_METAFILE_PRINT_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <map>
 #include <stack>
 #include <glibmm/ustring.h>

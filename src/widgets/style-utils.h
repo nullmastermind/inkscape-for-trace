@@ -19,10 +19,6 @@
 #ifndef SEEN_DIALOGS_STYLE_UTILS_H
 #define SEEN_DIALOGS_STYLE_UTILS_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "desktop-style.h"
 
 namespace Inkscape {

@@ -13,10 +13,6 @@
 #ifndef __OCAL_DIALOG_H__
 #define __OCAL_DIALOG_H__
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 // Gtkmm includes
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>

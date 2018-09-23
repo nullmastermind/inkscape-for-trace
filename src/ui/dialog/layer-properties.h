@@ -12,10 +12,6 @@
 #ifndef INKSCAPE_DIALOG_LAYER_PROPERTIES_H
 #define INKSCAPE_DIALOG_LAYER_PROPERTIES_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>

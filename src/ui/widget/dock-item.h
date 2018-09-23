@@ -11,10 +11,6 @@
 #ifndef INKSCAPE_UI_WIGET_DOCK_ITEM_H
 #define INKSCAPE_UI_WIGET_DOCK_ITEM_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/window.h>

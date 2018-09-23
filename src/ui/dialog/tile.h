@@ -16,10 +16,6 @@
 #ifndef SEEN_UI_DIALOG_TILE_H
 #define SEEN_UI_DIALOG_TILE_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/checkbutton.h>

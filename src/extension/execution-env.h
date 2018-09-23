@@ -10,8 +10,6 @@
 #ifndef INKSCAPE_EXTENSION_EXECUTION_ENV_H__
 #define INKSCAPE_EXTENSION_EXECUTION_ENV_H__
 
-#include <config.h>
-
 #include <glibmm/main.h>
 #include <glibmm/ustring.h>
 

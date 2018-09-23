@@ -14,10 +14,6 @@
 #ifndef SEEN_OBJECTS_PANEL_H
 #define SEEN_OBJECTS_PANEL_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>

@@ -13,8 +13,8 @@
 #ifndef SEEN_PATH_PREFIX_H
 #define SEEN_PATH_PREFIX_H
 
-#ifndef INKSCAPE_DATADIR
-# error "INKSCAPE_DATADIR undefined. Must #include config.h before anything else."
+#ifdef HAVE_CONFIG_H
+# include "config.h"
 #endif
 #include "prefix.h"
 

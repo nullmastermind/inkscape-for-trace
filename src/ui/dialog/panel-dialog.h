@@ -11,10 +11,6 @@
 #ifndef INKSCAPE_PANEL_DIALOG_H
 #define INKSCAPE_PANEL_DIALOG_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <glibmm/i18n.h>
 #include <gtkmm/dialog.h>
 

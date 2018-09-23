@@ -6,10 +6,6 @@
  * A simple abstraction to provide opaque compatibility with either lcms or lcms2.
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif // HAVE_CONFIG_H
-
 #if HAVE_LIBLCMS1
 # include <icc34.h>
 #endif

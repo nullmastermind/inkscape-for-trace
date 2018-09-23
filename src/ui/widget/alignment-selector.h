@@ -7,10 +7,6 @@
 #ifndef ANCHOR_SELECTOR_H_
 #define ANCHOR_SELECTOR_H_
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <gtkmm/bin.h>
 #include <gtkmm/button.h>
 #include <gtkmm/grid.h>

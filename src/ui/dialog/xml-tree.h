@@ -13,10 +13,6 @@
 #ifndef SEEN_DIALOGS_XML_TREE_H
 #define SEEN_DIALOGS_XML_TREE_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include "ui/widget/panel.h"
 #include <gtkmm/entry.h>
 #include <gtkmm/textview.h>

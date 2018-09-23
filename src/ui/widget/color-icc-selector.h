@@ -1,10 +1,6 @@
 #ifndef SEEN_SP_COLOR_ICC_SELECTOR_H
 #define SEEN_SP_COLOR_ICC_SELECTOR_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/widget.h>
 #include <gtkmm/grid.h>
 

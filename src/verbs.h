@@ -13,10 +13,6 @@
  * This code is GPL if done by Ted or David
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <cstring>
 #include <string>
 #include <glibmm/ustring.h>

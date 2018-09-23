@@ -12,10 +12,6 @@
 #ifndef SEEN_UI_TOOL_NODE_H
 #define SEEN_UI_TOOL_NODE_H
 
-#if HAVE_CONFIG_H
- #include "config.h"
-#endif
-
 #include <iterator>
 #include <iosfwd>
 #include <stdexcept>

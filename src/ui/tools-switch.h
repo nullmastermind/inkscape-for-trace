@@ -12,10 +12,6 @@
 #ifndef SEEN_TOOLS_SWITCH_H
 #define SEEN_TOOLS_SWITCH_H
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 class SPDesktop;
 class SPItem;
 namespace Geom {

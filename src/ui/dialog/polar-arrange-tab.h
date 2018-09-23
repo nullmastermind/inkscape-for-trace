@@ -10,10 +10,6 @@
 #ifndef INKSCAPE_UI_DIALOG_POLAR_ARRANGE_TAB_H
 #define INKSCAPE_UI_DIALOG_POLAR_ARRANGE_TAB_H
 
-#if HAVE_CONFIG_H
- #include "config.h"
-#endif
-
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/anchor-selector.h"
 #include "ui/dialog/arrange-tab.h"

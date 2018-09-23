@@ -11,10 +11,6 @@
 #ifndef INKSCAPE_DIALOG_CALLIGRAPHIC_PROFILE_H
 #define INKSCAPE_DIALOG_CALLIGRAPHIC_PROFILE_H
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>

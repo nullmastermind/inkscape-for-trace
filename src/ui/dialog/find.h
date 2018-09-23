@@ -12,10 +12,6 @@
 #ifndef INKSCAPE_UI_DIALOG_FIND_H
 #define INKSCAPE_UI_DIALOG_FIND_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h"

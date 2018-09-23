@@ -13,10 +13,6 @@
 #ifndef INKSCAPE_UI_DIALOG_DOCUMENT_METADATA_H
 #define INKSCAPE_UI_DIALOG_DOCUMENT_METADATA_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <list>
 #include <cstddef>
 #include "ui/widget/panel.h"

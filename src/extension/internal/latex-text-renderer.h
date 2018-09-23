@@ -13,10 +13,6 @@
  * Licensed under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "extension/extension.h"
 #include <2geom/affine.h>
 #include <stack>

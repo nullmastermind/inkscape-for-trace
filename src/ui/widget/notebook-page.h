@@ -10,10 +10,6 @@
 #ifndef INKSCAPE_UI_WIDGET_NOTEBOOK_PAGE_H
 #define INKSCAPE_UI_WIDGET_NOTEBOOK_PAGE_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 
 namespace Gtk {

@@ -29,10 +29,6 @@
 #ifndef SEEN_DIALOGS_ITEM_PROPERTIES_H
 #define SEEN_DIALOGS_ITEM_PROPERTIES_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "ui/widget/panel.h"
 #include "ui/widget/frame.h"
 

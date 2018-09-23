@@ -13,10 +13,6 @@
 #ifndef SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 #define SEEN_INKSCAPE_UI_WIDGET_PANEL_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <map>
 

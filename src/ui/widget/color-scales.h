@@ -1,10 +1,6 @@
 #ifndef SEEN_SP_COLOR_SCALES_H
 #define SEEN_SP_COLOR_SCALES_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/grid.h>
 
 #include "ui/selected-color.h"

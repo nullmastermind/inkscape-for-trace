@@ -15,10 +15,6 @@
 #ifndef SEEN_DIALOGS_SP_ATTRIBUTE_WIDGET_H
 #define SEEN_DIALOGS_SP_ATTRIBUTE_WIDGET_H
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/widget.h>
 #include <cstddef>
 #include <sigc++/connection.h>

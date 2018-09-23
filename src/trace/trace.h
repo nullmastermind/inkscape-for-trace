@@ -9,10 +9,6 @@
 #ifndef SEEN_TRACE_H
 #define SEEN_TRACE_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 # include <cstring>
 
 #include <glibmm/refptr.h>

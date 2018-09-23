@@ -13,10 +13,6 @@
 #ifndef INKSCAPE_UI_CURRENT_STYLE_H
 #define INKSCAPE_UI_CURRENT_STYLE_H
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/eventbox.h>

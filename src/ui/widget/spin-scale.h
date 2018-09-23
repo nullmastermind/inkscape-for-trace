@@ -10,10 +10,6 @@
 #ifndef INKSCAPE_UI_WIDGET_SPIN_SCALE_H
 #define INKSCAPE_UI_WIDGET_SPIN_SCALE_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/togglebutton.h>

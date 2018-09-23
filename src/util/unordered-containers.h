@@ -12,10 +12,6 @@
 #ifndef SEEN_INK_UTIL_UNORDERED_CONTAINERS_H
 #define SEEN_INK_UTIL_UNORDERED_CONTAINERS_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glibmm/ustring.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
