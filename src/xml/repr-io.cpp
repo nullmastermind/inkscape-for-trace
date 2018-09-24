@@ -772,24 +772,15 @@ static void repr_write_comment( Writer &out, const gchar * val, bool addWhitespa
     if (addWhitespace && indent) {
         for (gint i = 0; i < indentLevel; i++) {
             for (gint j = 0; j < indent; j++) {
-                out.writeString(" ");
+                out.writeChar(' ');
             }
         }
     }
 
-    out.writeString("<!--");
-    // WARNING out.printf() and out.writeString() are *NOT* non-ASCII friendly.
-    if (val) {
-        for (const gchar* cur = val; *cur; cur++ ) {
-            out.writeChar(*cur);
-        }
-    } else {
-        out.writeString(" ");
-    }
-    out.writeString("-->");
+    out.printf("<!--%s-->", val);
 
     if (addWhitespace) {
-        out.writeString("\n");
+        out.writeChar('\n');
     }
 }
 
@@ -976,7 +967,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     if (add_whitespace && indent) {
         for (gint i = 0; i < indent_level; i++) {
             for (gint j = 0; j < indent; j++) {
-                out.writeString(" ");
+                out.writeChar(' ');
             }
         }
     }
@@ -1002,11 +993,11 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
           iter ; ++iter )
     {
         if (!inlineattrs) {
-            out.writeString("\n");
+            out.writeChar('\n');
             if (indent) {
                 for ( gint i = 0 ; i < indent_level + 1 ; i++ ) {
                     for ( gint j = 0 ; j < indent ; j++ ) {
-                        out.writeString(" ");
+                        out.writeChar(' ');
                     }
                 }
             }
@@ -1024,9 +1015,9 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         }
     }
     if (repr->firstChild()) {
-        out.writeString( ">" );
+        out.writeChar('>');
         if (loose && add_whitespace) {
-            out.writeString( "\n" );
+            out.writeChar('\n');
         }
         for (child = repr->firstChild(); child != nullptr; child = child->next()) {
             sp_repr_write_stream(child, out, ( loose ? indent_level + 1 : 0 ),
@@ -1037,7 +1028,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         if (loose && add_whitespace && indent) {
             for (gint i = 0; i < indent_level; i++) {
                 for ( gint j = 0 ; j < indent ; j++ ) {
-                    out.writeString(" ");
+                    out.writeChar(' ');
                 }
             }
         }
@@ -1050,7 +1041,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     // after closing text
 
     if (add_whitespace || !strcmp (repr->name(), "svg:text")) {
-        out.writeString( "\n" );
+        out.writeChar('\n');
     }
 }
 
