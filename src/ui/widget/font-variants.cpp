@@ -896,7 +896,7 @@ namespace Widget {
           for (auto table: res->openTypeTables) {
 
               if (table.first == "liga" ||
-                  table.first == "dlig" ||
+                  table.first == "clig" ||
                   table.first == "dlig" ||
                   table.first == "hgli" ||
                   table.first == "calt") {
