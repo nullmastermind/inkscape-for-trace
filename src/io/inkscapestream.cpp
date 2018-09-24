@@ -501,9 +501,8 @@ Writer &BasicWriter::writeChar(char ch)
  */ 
 Writer &BasicWriter::writeUString(Glib::ustring &str)
 {
-    for (auto it = str.begin(); it != str.end(); it++) {
-        put(*it);
-    }
+    std::string tmp = str.raw();
+    writeStdString(tmp);
     return *this;
 }
 
@@ -512,8 +511,9 @@ Writer &BasicWriter::writeUString(Glib::ustring &str)
  */ 
 Writer &BasicWriter::writeStdString(std::string &str)
 {
-    Glib::ustring tmp(str);
-    writeUString(tmp);
+    for (auto it = str.begin(); it != str.end(); it++) {
+        put(*it);
+    }
     return *this;
 }
 
@@ -522,12 +522,12 @@ Writer &BasicWriter::writeStdString(std::string &str)
  */ 
 Writer &BasicWriter::writeString(const char *str)
 {
-    Glib::ustring tmp;
+    std::string tmp;
     if (str)
         tmp = str;
     else
         tmp = "null";
-    writeUString(tmp);
+    writeStdString(tmp);
     return *this;
 }
 
