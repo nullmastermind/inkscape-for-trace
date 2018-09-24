@@ -189,7 +189,7 @@ public:
     /**
      * Send one byte to the destination stream.
      */
-    virtual int put(gunichar ch) = 0;
+    virtual int put(char ch) = 0;
 
 
 }; // class OutputStream
@@ -212,7 +212,7 @@ public:
     
     void flush() override;
     
-    int put(gunichar ch) override;
+    int put(char ch) override;
 
 protected:
 
@@ -238,7 +238,7 @@ public:
     void flush() override
         { }
     
-    int put(gunichar ch) override
+    int put(char ch) override
         {return  putchar(ch); }
 
 };
@@ -275,7 +275,7 @@ public:
     
     virtual void close() = 0;
     
-    virtual gunichar get() = 0;
+    virtual char get() = 0;
     
     virtual Glib::ustring readLine() = 0;
     
@@ -330,7 +330,7 @@ public:
     
     void close() override;
     
-    gunichar get() override;
+    char get() override;
     
     Glib::ustring readLine() override;
     
@@ -402,7 +402,7 @@ public:
     
     void close() override;
     
-    gunichar get() override;
+    char get() override;
 
 
 private:
@@ -429,7 +429,7 @@ public:
     
     void close() override;
     
-    gunichar get() override;
+    char get() override;
 
 
 private:
@@ -470,7 +470,7 @@ public:
     
     virtual void flush() = 0;
     
-    virtual void put(gunichar ch) = 0;
+    virtual void put(char ch) = 0;
     
     /* Formatted output */
     virtual Writer& printf(char const *fmt, ...) G_GNUC_PRINTF(2,3) = 0;
@@ -524,7 +524,7 @@ public:
     
     void flush() override;
     
-    void put(gunichar ch) override;
+    void put(char ch) override;
     
     
     
@@ -615,7 +615,7 @@ public:
     
     void flush() override;
     
-    void put(gunichar ch) override;
+    void put(char ch) override;
 
 
 private:
@@ -643,7 +643,7 @@ public:
     void flush() override;
 
     
-    void put(gunichar ch) override;
+    void put(char ch) override;
 
 
 private:

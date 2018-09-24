@@ -359,14 +359,14 @@ void GzipOutputStream::close()
     uLong outlong = crc;
     for (int n = 0; n < 4; n++)
         {
-        destination.put(static_cast<gunichar>(outlong & 0xff));
+        destination.put(static_cast<char>(outlong & 0xff));
         outlong >>= 8;
         }
     //# send the file length
     outlong = totalIn & 0xffffffffL;
     for (int n = 0; n < 4; n++)
         {
-        destination.put(static_cast<gunichar>(outlong & 0xff));
+        destination.put(static_cast<char>(outlong & 0xff));
         outlong >>= 8;
         }
 
@@ -432,7 +432,7 @@ void GzipOutputStream::flush()
 /**
  * Writes the specified byte to this output stream.
  */ 
-int GzipOutputStream::put(gunichar ch)
+int GzipOutputStream::put(char ch)
 {
     if (closed)
         {

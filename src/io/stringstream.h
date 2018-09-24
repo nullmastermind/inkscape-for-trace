@@ -67,7 +67,7 @@ public:
     
     void flush() override;
     
-    int put(gunichar ch) override;
+    int put(char ch) override;
 
     virtual Glib::ustring &getString()
         { return buffer; }

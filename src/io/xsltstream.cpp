@@ -228,7 +228,7 @@ void XsltOutputStream::flush()
 /**
  * Writes the specified byte to this output stream.
  */ 
-int XsltOutputStream::put(gunichar ch)
+int XsltOutputStream::put(char ch)
 {
     outbuf.push_back(ch);
 	return 1;

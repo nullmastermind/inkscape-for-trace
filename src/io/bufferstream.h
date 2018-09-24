@@ -86,7 +86,7 @@ public:
     ~BufferOutputStream() override;
     void close() override;
     void flush() override;
-    int put(gunichar ch) override;
+    int put(char ch) override;
     virtual std::vector<unsigned char> &getBuffer()
         { return buffer; }
 

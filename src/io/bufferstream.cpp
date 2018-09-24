@@ -135,7 +135,7 @@ void BufferOutputStream::flush()
 /**
  * Writes the specified byte to this output stream.
  */
-int BufferOutputStream::put(gunichar ch)
+int BufferOutputStream::put(char ch)
 {
     if (closed)
         return -1;

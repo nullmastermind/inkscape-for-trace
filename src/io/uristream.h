@@ -84,7 +84,7 @@ public:
 
     void close() override;
 
-    gunichar get() override;
+    char get() override;
 
 private:
 
@@ -118,7 +118,7 @@ public:
 
     void flush() override;
 
-    int put(gunichar ch) override;
+    int put(char ch) override;
 
 private:
 
@@ -155,7 +155,7 @@ public:
 
     void flush() override;
 
-    void put(gunichar ch) override;
+    void put(char ch) override;
 
 private:
 

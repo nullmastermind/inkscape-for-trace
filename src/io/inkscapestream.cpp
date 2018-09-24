@@ -125,7 +125,7 @@ void BasicOutputStream::flush()
 /**
  * Writes the specified byte to this output stream.
  */ 
-int BasicOutputStream::put(gunichar ch)
+int BasicOutputStream::put(char ch)
 {
     if (closed)
         return -1;
@@ -173,12 +173,12 @@ void BasicReader::close()
 /**
  * Reads the next byte of data from the reader.
  */ 
-gunichar BasicReader::get()
+char BasicReader::get()
 {
     if (source)
         return source->get();
     else
-        return (gunichar)-1;
+        return (char)-1;
 }
    
 
@@ -190,7 +190,7 @@ Glib::ustring BasicReader::readLine()
     Glib::ustring str;
     while (available() > 0)
         {
-        gunichar ch = get();
+        char ch = get();
         if (ch == '\n')
             break;
         str.push_back(ch);
@@ -206,8 +206,8 @@ Glib::ustring BasicReader::readWord()
     Glib::ustring str;
     while (available() > 0)
         {
-        gunichar ch = get();
-        if (!g_unichar_isprint(ch))
+        char ch = get();
+        if (!std::isprint(ch))
             break;
         str.push_back(ch);
         }
@@ -366,10 +366,9 @@ int InputStreamReader::available()
  *  Overloaded to receive its bytes from an InputStream
  *  rather than a Reader
  */
-gunichar InputStreamReader::get()
+char InputStreamReader::get()
 {
-    //Do we need conversions here?
-    gunichar ch = (gunichar)inputStream.get();
+    char ch = inputStream.get();
     return ch;
 }
 
@@ -418,10 +417,9 @@ int StdReader::available()
  *  Overloaded to receive its bytes from an InputStream
  *  rather than a Reader
  */
-gunichar StdReader::get()
+char StdReader::get()
 {
-    //Do we need conversions here?
-    gunichar ch = (gunichar)inputStream->get();
+    char ch = inputStream->get();
     return ch;
 }
 
@@ -464,7 +462,7 @@ void BasicWriter::flush()
 /**
  * Writes the specified byte to this output writer.
  */ 
-void BasicWriter::put(gunichar ch)
+void BasicWriter::put(char ch)
 {
     if (destination)
         destination->put(ch);
@@ -490,8 +488,7 @@ Writer &BasicWriter::printf(char const *fmt, ...)
  */ 
 Writer &BasicWriter::writeChar(char ch)
 {
-    gunichar uch = ch;
-    put(uch);
+    put(ch);
     return *this;
 }
 
@@ -738,7 +735,7 @@ void OutputStreamWriter::flush()
  *  Overloaded to redirect the output chars from the next Writer
  *  in the chain to an OutputStream instead.
  */
-void OutputStreamWriter::put(gunichar ch)
+void OutputStreamWriter::put(char ch)
 {
     outputStream.put(ch);
 }
@@ -788,7 +785,7 @@ void StdWriter::flush()
  *  Overloaded to redirect the output chars from the next Writer
  *  in the chain to an OutputStream instead.
  */
-void StdWriter::put(gunichar ch)
+void StdWriter::put(char ch)
 {
     outputStream->put(ch);
 }

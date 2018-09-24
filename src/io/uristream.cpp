@@ -268,9 +268,9 @@ void UriReader::close()
 /**
  *
  */
-gunichar UriReader::get()
+char UriReader::get()
 {
-    gunichar ch = (gunichar)inputStream->get();
+    char ch = inputStream->get();
     return ch;
 }
 
@@ -402,7 +402,7 @@ void UriOutputStream::flush()
 /**
  * Writes the specified byte to this output stream.
  */
-int UriOutputStream::put(gunichar ch)
+int UriOutputStream::put(char ch)
 {
     if (closed)
         return -1;
@@ -468,7 +468,7 @@ void UriWriter::flush()
 /**
  *
  */
-void UriWriter::put(gunichar ch)
+void UriWriter::put(char ch)
 {
     outputStream->put(ch);
 }

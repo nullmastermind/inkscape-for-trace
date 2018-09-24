@@ -80,13 +80,13 @@ class mywriter : public Inkscape::IO::BasicWriter {
 public:
 	void close() override;
 	void flush() override;
-	void put (gunichar ch) override;
+	void put (char ch) override;
 	gchar const * c_str () { return _str.c_str(); }
 };
 
 void mywriter::close () { return; }
 void mywriter::flush () { return; }
-void mywriter::put (gunichar ch) { _str += ch; }
+void mywriter::put (char ch) { _str += ch; }
 
 
 void

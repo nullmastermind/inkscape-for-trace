@@ -88,7 +88,7 @@ public:
     
     void flush() override;
     
-    int put(gunichar ch) override;
+    int put(char ch) override;
 
     /**
      * Sets the maximum line length for base64 output.  If
