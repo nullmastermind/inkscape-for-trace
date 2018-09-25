@@ -1230,7 +1230,7 @@ void Deflater::encodeDistStatic(unsigned int len, unsigned int dist)
         }
 
     bool found = false;
-    for (int i=0 ; i<30 ; i++)
+    for (int i=0 ; i<29 ; i++)
         {
         unsigned int base  = lenBases[i].base;
         unsigned int range = lenBases[i].range;
