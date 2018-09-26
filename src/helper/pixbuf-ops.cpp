@@ -83,12 +83,12 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
 /**
     generates a bitmap from given items
     the bitmap is stored in RAM and not written to file
-    @param x0
-    @param y0
-    @param x1
-    @param y1
-    @param width
-    @param height
+    @param x0       area left in document coordinates
+    @param y0       area top in document coordinates
+    @param x1       area right in document coordinates
+    @param y1       area bottom in document coordinates
+    @param width    bitmap width in pixels
+    @param height   bitmap height in pixels
     @param xdpi
     @param ydpi
     @return the created GdkPixbuf structure or NULL if no memory is allocable
@@ -112,7 +112,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
 
     Geom::Rect screen=Geom::Rect(Geom::Point(x0,y0), Geom::Point(x1, y1));
 
-    Geom::Point origin = screen.min() * SP_ACTIVE_DESKTOP->doc2dt();
+    Geom::Point origin = screen.min();
 
     Geom::Scale scale(Inkscape::Util::Quantity::convert(xdpi, "px", "in"), Inkscape::Util::Quantity::convert(ydpi, "px", "in"));
     Geom::Affine affine = scale * Geom::Translate(-origin * scale);

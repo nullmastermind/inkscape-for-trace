@@ -451,7 +451,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     TRACE(("sp_asbitmap_render: resolution: %f\n", res ));
 
     // Get the bounding box of the selection in desktop coordinates.
-    Geom::OptRect bbox = item->desktopVisualBounds();
+    Geom::OptRect bbox = item->documentVisualBounds();
 
     // no bbox, e.g. empty group
     if (!bbox) {
@@ -478,23 +478,22 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     // Location of bounding box in document coordinates.
     double shift_x = bbox->min()[Geom::X];
-    double shift_y = bbox->max()[Geom::Y];
+    double shift_y = bbox->top();
 
     // For default 96 dpi, snap bitmap to pixel grid
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { 
         shift_x = round (shift_x);
-        shift_y = -round (-shift_y); // Correct rounding despite coordinate inversion.
-                                     // Remove the negations when the inversion is gone.
+        shift_y = round (shift_y);
     }
 
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
 
     // Matix to put bitmap in correct place on document
-    Geom::Affine t_on_document = (Geom::Affine)(Geom::Scale (scale_x, -scale_y)) *
+    Geom::Affine t_on_document = (Geom::Affine)(Geom::Scale (scale_x, scale_y)) *
                                  (Geom::Affine)(Geom::Translate (shift_x, shift_y));
 
     // ctx matrix already includes item transformation. We must substract.
-    Geom::Affine t_item =  item->i2dt_affine ();
+    Geom::Affine t_item =  item->i2doc_affine();
     Geom::Affine t = t_on_document * t_item.inverse();
 
     // Do the export
