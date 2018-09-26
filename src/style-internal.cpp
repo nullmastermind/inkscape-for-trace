@@ -1712,7 +1712,8 @@ SPIFilter::read( gchar const *str ) {
 const Glib::ustring SPIFilter::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
-    return this->href->getURI()->toStdString(true);
+    if (this->href) return this->href->getURI()->toStdString(true);
+    return Glib::ustring("");
 }
 
 void
