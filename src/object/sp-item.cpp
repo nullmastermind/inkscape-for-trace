@@ -1513,13 +1513,11 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
              !(!transform.isTranslation() && style && style->getFilter())) // the object does not have a filter, or the transform is translation (which is supposed to not affect filters)
         )
     {
+        transform_attr = this->set_transform(transform);
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
-            if (compensate) {
-                double const expansion = 1. / advertized_transform.descrim();
-                adjust_stroke_width_recursive(expansion);
-            }
         }
+
     } else {
         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
             lpeitem->adjust_livepatheffect(transform_attr);
