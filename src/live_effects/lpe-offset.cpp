@@ -311,7 +311,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     }
     Geom::PathIntersectionGraph *pig_b = new Geom::PathIntersectionGraph(ret, re_painter);
-    if (pig && !ret.empty() && !re_painter.empty()) {
+    if (pig_b && !ret.empty() && !re_painter.empty()) {
         ret = pig_b->getUnion();
     }
     return ret;
