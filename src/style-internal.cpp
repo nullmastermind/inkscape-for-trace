@@ -306,7 +306,7 @@ const Glib::ustring SPILength::get_value() const
 {
     if(this->inherit) return Glib::ustring("inherit");
     auto value = this->computed;
-    auto unit = Glib::ustring("");
+    auto unit_out = Glib::ustring("");
     switch (this->unit) {
         case SP_CSS_UNIT_NONE:
             break;
@@ -318,23 +318,23 @@ const Glib::ustring SPILength::get_value() const
         case SP_CSS_UNIT_MM:
         case SP_CSS_UNIT_CM:
         case SP_CSS_UNIT_IN:
-            unit = sp_style_get_css_unit_string(this->unit);
-            value = Inkscape::Util::Quantity::convert(this->computed, "px", unit);
+            unit_out = sp_style_get_css_unit_string(this->unit);
+            value = Inkscape::Util::Quantity::convert(this->computed, "px", unit_out);
             break;
         case SP_CSS_UNIT_EM:
         case SP_CSS_UNIT_EX:
-            unit = sp_style_get_css_unit_string(this->unit);
+            unit_out = sp_style_get_css_unit_string(this->unit);
             value = this->value;
             break;
         case SP_CSS_UNIT_PERCENT:
-            unit = "%";
+            unit_out = "%";
             value = this->value * 100.0;
             break;
         default:
             /* Invalid */
             break;
     }
-    return Glib::ustring::format(value) + unit;
+    return Glib::ustring::format(value) + unit_out;
 }
 
 void
