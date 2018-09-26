@@ -311,7 +311,7 @@ const Glib::ustring SPILength::get_value() const
         case SP_CSS_UNIT_NONE:
             break;
         case SP_CSS_UNIT_PX:
-            unit = "px";
+            unit_out = "px";
             break;
         case SP_CSS_UNIT_PT:
         case SP_CSS_UNIT_PC:
