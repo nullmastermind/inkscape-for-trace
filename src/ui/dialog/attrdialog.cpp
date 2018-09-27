@@ -82,7 +82,8 @@ AttrDialog::AttrDialog():
         // isn't in this exact way, the onAttrDelete is called when the header lines are pressed.
         button->signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrCreate), false);
     }
-    _treeView.signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
+    //_treeView.signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
+    addRenderer->signal_activated().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
     _treeView.signal_key_press_event().connect(sigc::mem_fun(*this, &AttrDialog::onKeyPressed));
     _treeView.set_search_column(-1);
 
@@ -214,31 +215,15 @@ bool AttrDialog::onAttrCreate(GdkEventButton *event)
  * @return true
  * Delete the attribute from the xml
  */
-bool AttrDialog::onAttrDelete(GdkEventButton *event)
+//bool AttrDialog::onAttrDelete(GdkEventButton *event)
+void AttrDialog::onAttrDelete(Glib::ustring path)
 {
-    if (event->type == GDK_BUTTON_RELEASE && event->button == 1 && this->_repr) {
-        if(!this->_treeView.has_focus()) {
-            // If the treeView doesn't have focus, then it's probably the edit
-            // input box or some other widget that propergates to the same click
-            return false;
-        }
-        int x = static_cast<int>(event->x);
-        int y = static_cast<int>(event->y);
-        Gtk::TreeModel::Path path;
-        Gtk::TreeViewColumn *col = nullptr;
-        int x2, y2 = 0;
-        if (_treeView.get_path_at_pos(x, y, path, col, x2, y2)) {
-            Gtk::TreeModel::Row row = *_store->get_iter(path);
-            if (col == _treeView.get_column(0) && row) {
-                Glib::ustring name = row[_attrColumns._attributeName];
-                this->_repr->setAttribute(name.c_str(), nullptr, false);
-                this->setUndo(_("Delete attribute"));
-                // Return true to prevent propergation
-                return true;
-            }
-        }
+    Gtk::TreeModel::Row row = *_store->get_iter(path);
+    if (row) {
+        Glib::ustring name = row[_attrColumns._attributeName];
+        this->_repr->setAttribute(name.c_str(), nullptr, false);
+        this->setUndo(_("Delete attribute"));
     }
-    return false;
 }
 
 /**

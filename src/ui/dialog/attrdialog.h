@@ -76,8 +76,8 @@ public:
 
     // Signal handlers
     void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
+    void onAttrDelete(Glib::ustring path);
     bool onAttrCreate(GdkEventButton *event);
-    bool onAttrDelete(GdkEventButton *event);
     bool onKeyPressed(GdkEventKey *event);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
