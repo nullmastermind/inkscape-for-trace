@@ -43,11 +43,9 @@ public:
     class AttrColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         AttrColumns() {
-	  add(_colUnsetAttr);
 	  add(_attributeName);
 	  add(_attributeValue);
 	}
-        Gtk::TreeModelColumn<bool> _colUnsetAttr;
         Gtk::TreeModelColumn<Glib::ustring> _attributeName;
         Gtk::TreeModelColumn<Glib::ustring> _attributeValue;
     };

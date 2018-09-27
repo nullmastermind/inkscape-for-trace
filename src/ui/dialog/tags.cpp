@@ -31,7 +31,7 @@
 #include "helper/icon-loader.h"
 #include "svg/css-ostringstream.h"
 #include "ui/tools/tool-base.h" //"event-context.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/widget/iconrenderer.h"
 #include "ui/widget/layertypeicon.h"
 #include "verbs.h"
 #include "xml/node-observer.h"
@@ -286,7 +286,7 @@ public:
     Gtk::TreeModelColumn<SPObject*> _colParentObject;
     Gtk::TreeModelColumn<SPObject*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;
-    Gtk::TreeModelColumn<bool> _colAddRemove;
+    Gtk::TreeModelColumn<int> _colAddRemove;
     Gtk::TreeModelColumn<bool> _colAllowAddRemove;
 };
 
@@ -391,7 +391,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                 row[_model->_colObject] = &child;
                 row[_model->_colParentObject] = NULL;
                 row[_model->_colLabel] = child.label() ? child.label() : child.getId();
-                row[_model->_colAddRemove] = true;
+                row[_model->_colAddRemove] = 1;
                 row[_model->_colAllowAddRemove] = true;
                 
                 _tree.expand_to_path( _store->get_path(iter) );
@@ -409,7 +409,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
             rowitems[_model->_colObject] = NULL;
             rowitems[_model->_colParentObject] = obj;
             rowitems[_model->_colLabel] = _("Items");
-            rowitems[_model->_colAddRemove] = false;
+            rowitems[_model->_colAddRemove] = 0;
             rowitems[_model->_colAllowAddRemove] = false;
             
             _tree.expand_to_path( _store->get_path(iteritems) );
@@ -423,7 +423,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                     row[_model->_colObject] = &child;
                     row[_model->_colParentObject] = NULL;
                     row[_model->_colLabel] = item ? (item->label() ? item->label() : item->getId()) : SP_TAG_USE(&child)->href;
-                    row[_model->_colAddRemove] = false;
+                    row[_model->_colAddRemove] = 0;
                     row[_model->_colAllowAddRemove] = true;
 
                     if (SP_TAG(obj)->expanded()) {
@@ -933,11 +933,14 @@ TagsPanel::TagsPanel() :
     tooltip_string += (_("Remove from selection set"));
     _tree.set_tooltip_text( tooltip_string );
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage( new Inkscape::UI::Widget::AddToIcon());
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage( new Inkscape::UI::Widget::IconRenderer());
+    addRenderer->add_icon("edit-delete");
+    addRenderer->add_icon("list-add");
+
     int addColNum = _tree.append_column("type", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _tree.get_column(addColNum);
     if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _model->_colAddRemove );
+        col->add_attribute( addRenderer->property_icon(), _model->_colAddRemove );
         col->add_attribute( addRenderer->property_visible(), _model->_colAllowAddRemove );
     }
 

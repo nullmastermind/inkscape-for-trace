@@ -17,7 +17,7 @@
 #include "selection.h"
 
 #include "helper/icon-loader.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"
 
@@ -47,14 +47,11 @@ CssDialog::CssDialog():
     _store = Gtk::ListStore::create(_cssColumns);
     _treeView.set_model(_store);
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::Widget::AddToIcon());
-    addRenderer->property_active() = false;
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+    addRenderer->add_icon("edit-delete");
 
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
-    if (col) {
-        col->add_attribute(addRenderer->property_active(), _cssColumns._colUnsetProp);
-    }
 
     _propRenderer = Gtk::manage(new Gtk::CellRendererText());
     _propRenderer->property_editable() = true;

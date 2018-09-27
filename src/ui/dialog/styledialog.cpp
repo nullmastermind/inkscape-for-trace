@@ -19,7 +19,7 @@
 #include "document-undo.h"
 
 #include "helper/icon-loader.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
@@ -248,8 +248,10 @@ StyleDialog::StyleDialog() :
 #endif
 
     // Tree
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
-                new Inkscape::UI::Widget::AddToIcon() );
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(
+                new Inkscape::UI::Widget::IconRenderer() );
+    addRenderer->add_icon("edit-delete");
+    addRenderer->add_icon("list-add");
 
     _store = TreeStore::create(this);
     _treeView.set_model(_store);
@@ -260,7 +262,7 @@ StyleDialog::StyleDialog() :
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _mColumns._colIsSelector );
+        col->add_attribute( addRenderer->property_icon(), _mColumns._colIsSelector );
     }
     _treeView.append_column("CSS Selector", _mColumns._colSelector);
     _treeView.set_expander_column(*(_treeView.get_column(1)));

@@ -16,7 +16,7 @@
 #include "document-undo.h"
 
 #include "helper/icon-loader.h"
-#include "ui/widget/addtoicon.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
@@ -65,14 +65,13 @@ AttrDialog::AttrDialog():
     _store = Gtk::ListStore::create(_attrColumns);
     _treeView.set_model(_store);
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::Widget::AddToIcon());
-    addRenderer->property_active() = false;
+    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+    addRenderer->add_icon("edit-delete");
 
     _treeView.append_column("", *addRenderer);
     Gtk::TreeViewColumn *col = _treeView.get_column(0);
     if (col) {
         auto add_icon = Gtk::manage(sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR));
-        col->add_attribute(addRenderer->property_active(), _attrColumns._colUnsetAttr);
         col->set_clickable(true);
         col->set_widget(*add_icon);
         add_icon->set_tooltip_text(_("Add a new attribute"));

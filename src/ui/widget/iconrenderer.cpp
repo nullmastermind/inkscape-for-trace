@@ -3,8 +3,9 @@
  *   Theodore Janeczko
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
+ *               Martin Owens 2018 <doctormo@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPLv2+, read the file 'COPYING' for more information
  */
 
 
@@ -12,7 +13,7 @@
 #include <config.h>
 #endif
 
-#include "ui/widget/addtoicon.h"
+#include "ui/widget/iconrenderer.h"
 
 #include "helper/icon-loader.h"
 #include "layertypeicon.h"
@@ -23,29 +24,16 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-AddToIcon::AddToIcon() :
-    Glib::ObjectBase(typeid(AddToIcon)),
+IconRenderer::IconRenderer() :
+    Glib::ObjectBase(typeid(IconRenderer)),
     Gtk::CellRendererPixbuf(),
-//    _pixAddName(INKSCAPE_ICON("layer-new")),
-    _property_active(*this, "active", false)
-//    _property_pixbuf_add(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_icon(*this, "icon", 0)
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-
-
-//    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-//
-//    if (!icon_theme->has_icon(_pixAddName)) {
-//        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixAddName.data()), Inkscape::ICON_SIZE_DECORATION );
-//    }
-//    if (icon_theme->has_icon(_pixAddName)) {
-//        _property_pixbuf_add = icon_theme->load_icon(_pixAddName, phys, (Gtk::IconLookupFlags)0);
-//    }
-
     set_pixbuf();
 }
 
-void AddToIcon::get_preferred_height_vfunc(Gtk::Widget& widget,
+void IconRenderer::get_preferred_height_vfunc(Gtk::Widget& widget,
                                               int& min_h,
                                               int& nat_h) const
 {
@@ -60,7 +48,7 @@ void AddToIcon::get_preferred_height_vfunc(Gtk::Widget& widget,
     }
 }
 
-void AddToIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
+void IconRenderer::get_preferred_width_vfunc(Gtk::Widget& widget,
                                              int& min_w,
                                              int& nat_w) const
 {
@@ -75,7 +63,7 @@ void AddToIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
     }
 }
 
-void AddToIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
+void IconRenderer::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
@@ -86,7 +74,7 @@ void AddToIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
     Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
 }
 
-bool AddToIcon::activate_vfunc(GdkEvent* /*event*/,
+bool IconRenderer::activate_vfunc(GdkEvent* /*event*/,
                                Gtk::Widget& /*widget*/,
                                const Glib::ustring& /*path*/,
                                const Gdk::Rectangle& /*background_area*/,
@@ -96,10 +84,19 @@ bool AddToIcon::activate_vfunc(GdkEvent* /*event*/,
     return false;
 }
 
-void AddToIcon::set_pixbuf()
+void IconRenderer::add_icon(Glib::ustring name)
 {
-    bool active = property_active().get_value();
-    property_pixbuf() = sp_get_icon_pixbuf((active ? "list-add" : "edit-delete"), GTK_ICON_SIZE_BUTTON);
+    _icons.push_back(name);
+}
+
+void IconRenderer::set_pixbuf()
+{
+    int icon_index = property_icon().get_value();
+    auto icon_name = Glib::ustring("image-missing");
+    if(icon_index >= 0 && icon_index < _icons.size()) {
+        icon_name = _icons[icon_index];
+    }
+    property_pixbuf() = sp_get_icon_pixbuf(icon_name.c_str(), GTK_ICON_SIZE_BUTTON);
 }
 
 

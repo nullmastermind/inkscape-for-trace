@@ -142,7 +142,7 @@ set(ui_SRC
 	dialog/xml-tree.cpp
         dialog/save-template-dialog.cpp
 
-	widget/addtoicon.cpp
+	widget/iconrenderer.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
 	widget/button.cpp
@@ -361,7 +361,7 @@ set(ui_SRC
 	tools/tweak-tool.h
 	tools/zoom-tool.h
 
-	widget/addtoicon.h
+	widget/iconrenderer.h
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h

@@ -5,8 +5,9 @@
  *   Theodore Janeczko
  *
  * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
+ *               Martin Owens 2018 <doctormo@gmail.com>
  *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * Released under GNU GPLv2+, read the file 'COPYING' for more information
  */
 
 #include <gtkmm/cellrendererpixbuf.h>
@@ -17,15 +18,16 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class AddToIcon : public Gtk::CellRendererPixbuf {
+class IconRenderer : public Gtk::CellRendererPixbuf {
 public:
-    AddToIcon();
-    ~AddToIcon() override = default;;
+    IconRenderer();
+    ~IconRenderer() override = default;;
 
-    Glib::PropertyProxy<bool> property_active() { return _property_active.get_proxy(); }
+    Glib::PropertyProxy<int> property_icon() { return _property_icon.get_proxy(); }
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_on();
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_off();
 
+    void add_icon(Glib::ustring name);
 protected:
     void render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget,
@@ -48,13 +50,10 @@ protected:
                                 const Gdk::Rectangle &cell_area,
                                 Gtk::CellRendererState flags) override;
 
-
 private:
     
-//    Glib::ustring _pixAddName;
-    
-    Glib::Property<bool> _property_active;
-//    Glib::Property< Glib::RefPtr<Gdk::Pixbuf> > _property_pixbuf_add;
+    Glib::Property<int> _property_icon;
+    std::vector<Glib::ustring> _icons;
     void set_pixbuf();
 };
 
