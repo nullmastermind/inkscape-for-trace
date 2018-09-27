@@ -1628,7 +1628,7 @@ void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
     Geom::Affine dt2p; /* desktop to item parent transform */
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
-    } else {
+    } else if (SP_ACTIVE_DESKTOP) {
         SPDesktop *dt = SP_ACTIVE_DESKTOP;
         dt2p = dt->dt2doc();
     }

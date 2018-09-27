@@ -1608,10 +1608,11 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
         build_flat_item_list(key, SP_GROUP(this->root), true);
         _node_cache_valid=true;
     }
-    SPObject *current_layer = SP_ACTIVE_DESKTOP->currentLayer();
+    SPObject *current_layer = nullptr;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::LayerModel *layer_model = nullptr;
     if(desktop){
+        current_layer = desktop->currentLayer();
         layer_model = desktop->layers;
     }
     size_t item_counter = 0;
