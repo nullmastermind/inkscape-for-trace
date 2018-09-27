@@ -13,8 +13,8 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 
 # update MSYS2-packages and MINGW-packages (but only for current architecture)
-pacman -Quq | grep -v mingw-w64- | xargs pacman -S --needed --noconfirm --noprogressbar
-pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S --needed --noconfirm --noprogressbar
+pacman -Quq | grep -v mingw-w64- | xargs pacman -S $PACMAN_OPTIONS
+pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S $PACMAN_OPTIONS
 
 # do everything in /build
 cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
@@ -36,7 +36,7 @@ wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_
 # install dependencies
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
-pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} --needed --noconfirm --noprogressbar
+pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} $PACMAN_OPTIONS
 
 export CCACHE_DIR=$(cygpath -a ccache/master)
 ccache --max-size=200M
