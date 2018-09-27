@@ -842,7 +842,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         }
     }
 
-    double y_dir = SP_ACTIVE_DESKTOP->yaxisdir();
+    double y_dir = SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->yaxisdir() : 1;
 
     if (y_dir > 0) {
         std::swap(margin_top, margin_bottom);
