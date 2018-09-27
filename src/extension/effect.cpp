@@ -13,7 +13,6 @@
 #include "helper/action.h"
 #include "ui/view/view.h"
 
-#include "desktop.h"
 #include "implementation/implementation.h"
 #include "effect.h"
 #include "execution-env.h"
@@ -270,7 +269,6 @@ Effect::effect (Inkscape::UI::View::View * doc)
     if (!loaded())
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     ExecutionEnv executionEnv(this, doc);
     execution_env = &executionEnv;
     timer->lock();

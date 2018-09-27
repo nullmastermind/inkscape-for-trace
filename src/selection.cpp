@@ -192,7 +192,7 @@ Selection::emptyBackup(){
 void
 Selection::setBackup () 
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {
@@ -255,7 +255,7 @@ Selection::setBackup ()
 void
 Selection::restoreBackup() 
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::UI::Tools::NodeTool *tool = nullptr;
     if (desktop) {

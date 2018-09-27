@@ -26,7 +26,6 @@
 
 #include <xml/repr.h>
 #include "document-private.h"
-#include "desktop.h"
 #include "inkscape.h"
 
 #include "io/sys.h"
@@ -195,8 +194,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         
         gchar * base = g_strndup(e, a);
 
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *doc = desktop->getDocument();
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
         SPDefs *defs = doc->getDefs();
         if (!defs) {
             g_free(base);
@@ -265,8 +263,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
     
     else {
         
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SPDocument *doc = desktop->getDocument();
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
         SPObject *object = doc->getObjectById(urn);
 
         return object;
