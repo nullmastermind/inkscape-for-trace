@@ -82,7 +82,6 @@ AttrDialog::AttrDialog():
         // isn't in this exact way, the onAttrDelete is called when the header lines are pressed.
         button->signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrCreate), false);
     }
-    //_treeView.signal_button_release_event().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
     addRenderer->signal_activated().connect(sigc::mem_fun(*this, &AttrDialog::onAttrDelete));
     _treeView.signal_key_press_event().connect(sigc::mem_fun(*this, &AttrDialog::onKeyPressed));
     _treeView.set_search_column(-1);
@@ -215,7 +214,6 @@ bool AttrDialog::onAttrCreate(GdkEventButton *event)
  * @return true
  * Delete the attribute from the xml
  */
-//bool AttrDialog::onAttrDelete(GdkEventButton *event)
 void AttrDialog::onAttrDelete(Glib::ustring path)
 {
     Gtk::TreeModel::Row row = *_store->get_iter(path);
@@ -284,9 +282,11 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         } else {
             // Move to editing value, we set the name as a temporary store value
             row[_attrColumns._attributeName] = name;
-            Gtk::TreeModel::Path _path = (Gtk::TreeModel::Path)row;
-            _treeView.set_cursor(_path, *_valueCol, true);
-            grab_focus();
+            // This would be nice to have, but it causes a crash when treeview looses focus
+            // because signaling vs. focus is in some sort of conflict.
+            //Gtk::TreeModel::Path _path = (Gtk::TreeModel::Path)row;
+            //_treeView.set_cursor(_path, *_valueCol, true);
+            //grab_focus();
         }
     }
 }
