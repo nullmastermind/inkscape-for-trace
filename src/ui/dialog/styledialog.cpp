@@ -925,6 +925,7 @@ void StyleDialog::_addSelector()
         result = textDialogPtr->run();
         if (result != Gtk::RESPONSE_OK) { // Cancel, close dialog, etc.
             textDialogPtr->hide();
+            delete textDialogPtr;
             return;
         }
         /**

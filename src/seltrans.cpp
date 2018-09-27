@@ -1455,6 +1455,8 @@ void Inkscape::SelTrans::moveTo(Geom::Point const &xy, guint state)
                 }
             }
         }
+        delete bb;
+        delete sn;
     }
 
     Geom::Affine const move((Geom::Translate(dxy)));
