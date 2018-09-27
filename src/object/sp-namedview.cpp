@@ -273,6 +273,8 @@ void SPNamedView::release() {
 }
 
 void SPNamedView::set(unsigned int key, const gchar* value) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool global_snapping = prefs->getBool("/options/snapdefault/value", false);
     switch (key) {
     case SP_ATTR_VIEWONLY:
             this->editable = (!value);
@@ -431,7 +433,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_SNAP_GLOBAL:
-            this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : TRUE);
+            this->snap_manager.snapprefs.setSnapEnabledGlobally(value ? sp_str_to_bool(value) : global_snapping);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_SNAP_BBOX:

@@ -204,6 +204,7 @@ protected:
 
     Gtk::Scale      *_slider_snapping_delay;
 
+    UI::Widget::PrefCheckButton _snap_default;
     UI::Widget::PrefCheckButton _snap_indicator;
     UI::Widget::PrefCheckButton _snap_closest_only;
     UI::Widget::PrefCheckButton _snap_mouse_pointer;
