@@ -33,6 +33,14 @@ IconRenderer::IconRenderer() :
     set_pixbuf();
 }
 
+/*
+ * Called when an icon is clicked.
+ */
+IconRenderer::type_signal_activated IconRenderer::signal_activated()
+{
+    return m_signal_activated;
+}
+
 void IconRenderer::get_preferred_height_vfunc(Gtk::Widget& widget,
                                               int& min_h,
                                               int& nat_h) const
@@ -76,12 +84,13 @@ void IconRenderer::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
 
 bool IconRenderer::activate_vfunc(GdkEvent* /*event*/,
                                Gtk::Widget& /*widget*/,
-                               const Glib::ustring& /*path*/,
+                               const Glib::ustring& path,
                                const Gdk::Rectangle& /*background_area*/,
                                const Gdk::Rectangle& /*cell_area*/,
                                Gtk::CellRendererState /*flags*/)
 {
-    return false;
+    m_signal_activated.emit(path);
+    return true;
 }
 
 void IconRenderer::add_icon(Glib::ustring name)

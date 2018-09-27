@@ -28,7 +28,12 @@ public:
     Glib::PropertyProxy< Glib::RefPtr<Gdk::Pixbuf> > property_pixbuf_off();
 
     void add_icon(Glib::ustring name);
+
+    typedef sigc::signal<void, Glib::ustring> type_signal_activated;
+    type_signal_activated signal_activated();
 protected:
+    type_signal_activated m_signal_activated;
+
     void render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
                                Gtk::Widget& widget,
                                const Gdk::Rectangle& background_area,
