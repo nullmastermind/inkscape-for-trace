@@ -1041,6 +1041,7 @@ SPIString::read( gchar const *str ) {
 const Glib::ustring SPIString::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
+    if (!this->value) return Glib::ustring("");
     if( name.compare( "font-family" ) == 0 ) {
         Glib::ustring font_family( this->value );
         css_font_family_quote( font_family );
