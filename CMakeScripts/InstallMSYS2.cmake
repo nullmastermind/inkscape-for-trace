@@ -30,6 +30,7 @@ if(WIN32)
     ${MINGW_BIN}/libcairomm-1.0-[0-9]*.dll
     ${MINGW_BIN}/libcdr-0.[0-9]*.dll
     ${MINGW_BIN}/libcroco-0.6-[0-9]*.dll
+    ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
     ${MINGW_BIN}/libenchant-[0-9]*.dll
@@ -100,6 +101,7 @@ if(WIN32)
     ${MINGW_BIN}/libsigc-2.0-[0-9]*.dll
     ${MINGW_BIN}/libsoup-2.4-[0-9]*.dll
     ${MINGW_BIN}/libsqlite3-[0-9]*.dll
+    ${MINGW_BIN}/libssl-1_[0-9]*.dll
     ${MINGW_BIN}/libstdc++-[0-9]*.dll
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
     ${MINGW_BIN}/libthai-[0-9]*.dll
