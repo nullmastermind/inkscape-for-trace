@@ -46,6 +46,7 @@ public:
     
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
+    const std::vector<SPIBase *> properties();
     void clear();
     void clear(SPAttributeEnum id);
     void read(SPObject *object, Inkscape::XML::Node *repr);
