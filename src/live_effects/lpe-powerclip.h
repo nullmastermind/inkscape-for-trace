@@ -24,7 +24,7 @@ public:
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* lpeitem) override;
     void doAfterEffect (SPLPEItem const* lpeitem) override;
-    void addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root);
+    void addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root);
     void updateInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);

@@ -109,7 +109,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
             gchar * is_inverse_str = is_inverse.param_getSVGValue();
             if(!strcmp(is_inverse_str,"false") && inverse && isVisible()) {
                 SPCurve * clipcurve = new SPCurve();
-                addInverse(SP_ITEM(clip_data), clipcurve, true);     
+                addInverse(SP_ITEM(clip_data), clipcurve, Geom::Affine::identity(), true);     
             } else if((!strcmp(is_inverse_str,"true") && !inverse && isVisible()) ||
                 (inverse && !is_visible && is_inverse_str == (Glib::ustring)"true"))
             {
@@ -133,7 +133,7 @@ LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
 }
 
 void
-LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root){
+LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root){
     gchar * is_inverse_str = is_inverse.param_getSVGValue();
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -142,10 +142,7 @@ LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root){
     SPObject *elemref = NULL;
     if(root) {
         Inkscape::XML::Document *xml_doc = document->getReprDoc();
-        if (!SP_IS_SHAPE(clip_data)) {
-            return;
-        }
-        SP_SHAPE(clip_data)->removeAllPathEffects(true);
+        SP_LPE_ITEM(clip_data)->removeAllPathEffects(true);
         Inkscape::XML::Node *clip_path_node = xml_doc->createElement("svg:path");
         Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
         parent->appendChild(clip_path_node);
@@ -158,15 +155,16 @@ LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, bool root){
             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
             for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
                 SPItem *subitem = *iter;
-                addInverse(subitem, clipcurve, false);
+                Geom::Affine affine_group = SP_ITEM(clip_data)->transform;
+                addInverse(subitem, clipcurve, affine_group, false);
                 if (root) {
-                    Geom::Affine affine = SP_ITEM(clip_data)->transform;
-                    clip_box *= affine;
+                     clip_box *= affine_group;
                 }
             }
         } else if (SP_IS_SHAPE(clip_data)) {
             SPCurve * c = nullptr;
             c = SP_SHAPE(clip_data)->getCurve();
+            c->transform(affine);
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
                 //TODO: this can be not correct but no better way

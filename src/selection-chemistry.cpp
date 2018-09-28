@@ -3947,19 +3947,29 @@ void ObjectSet::setClipGroup()
 
     doc->ensureUpToDate();
 
+    // Coment this section because we dont need it I think. 
+    // Also updated comment code to work correctly if finaly is needed
+    // To active again remove next line and uncoment the section
     std::vector<SPItem*> items_(items().begin(), items().end());
-
-    sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
+    /* 
+    std::vector<SPItem*> items_prerect_(items().begin(), items().end());
+    std::vector<SPItem*> items_;
 
     // convert any rects to paths
-    for (std::vector<SPItem *>::const_iterator i = items_.begin(); i != items_.end(); ++i) {
+    for (std::vector<SPItem *>::const_iterator i = items_prerect_.begin(); i != items_prerect_.end(); ++i) {
         clear();
         if (dynamic_cast<SPRect *>(*i)) {
             add(*i);
             toCurves();
+            items_.push_back(*items().begin());
+        } else {
+            items_.push_back(*i);
         }
     }
-
+    clear(); 
+    */
+    sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
+    
     // See lp bug #542004
     clear();
 
@@ -4030,7 +4040,6 @@ void ObjectSet::setClipGroup()
     gchar const *attributeName = apply_clip_path ? "clip-path" : "mask";
     for (std::vector<SPItem*>::const_reverse_iterator i = apply_to_items.rbegin(); i != apply_to_items.rend(); ++i) {
         SPItem *item = reinterpret_cast<SPItem *>(*i);
-
         std::vector<Inkscape::XML::Node*> mask_items_dup;
         std::map<Inkscape::XML::Node*, Geom::Affine> dup_transf;
         for (auto it = mask_items.begin(); it != mask_items.end(); ++it) {
@@ -4059,7 +4068,7 @@ void ObjectSet::setClipGroup()
             // Apply clip/mask to group instead
             apply_mask_to = group;
 
-            items_to_select.push_back(item = (SPItem*)(doc->getObjectByRepr(group)));
+            items_to_select.push_back((SPItem*)doc->getObjectByRepr(group));
             Inkscape::GC::release(spnew);
             Inkscape::GC::release(group);
         }
