@@ -15,6 +15,7 @@
 #endif
 
 #ifdef HAVE_POPPLER
+#include "poppler-transition-api.h"
 
 class SPDocument;
 namespace Inkscape {
@@ -174,7 +175,7 @@ private:
     void _addStopToGradient(Inkscape::XML::Node *gradient, double offset,
                             GfxRGB *color, double opacity);
     bool _addGradientStops(Inkscape::XML::Node *gradient, GfxShading *shading,
-                           Function *func);
+                           _POPPLER_CONST Function *func);
     gchar *_createTilingPattern(GfxTilingPattern *tiling_pattern, GfxState *state,
                                 bool is_stroke=false);
     // Image/mask creation

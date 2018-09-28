@@ -291,8 +291,8 @@ PdfParser::PdfParser(XRef *xrefA,
                      int /*pageNum*/,
 		     int rotate,
 		     Dict *resDict,
-                     PDFRectangle *box,
-		     PDFRectangle *cropBox) :
+                     _POPPLER_CONST PDFRectangle *box,
+                     _POPPLER_CONST PDFRectangle *cropBox) :
     xref(xrefA),
     builder(builderA),
     subPage(gFalse),
@@ -314,7 +314,7 @@ PdfParser::PdfParser(XRef *xrefA,
   builder->setDocumentSize(Inkscape::Util::Quantity::convert(state->getPageWidth(), "pt", "px"),
                            Inkscape::Util::Quantity::convert(state->getPageHeight(), "pt", "px"));
 
-  double *ctm = state->getCTM();
+  const double *ctm = state->getCTM();
   double scaledCTM[6];
   for (int i = 0; i < 6; ++i) {
     baseMatrix[i] = ctm[i];
@@ -349,7 +349,7 @@ PdfParser::PdfParser(XRef *xrefA,
 PdfParser::PdfParser(XRef *xrefA,
 		     Inkscape::Extension::Internal::SvgBuilder *builderA,
                      Dict *resDict,
-		     PDFRectangle *box) :
+		     _POPPLER_CONST PDFRectangle *box) :
     xref(xrefA),
     builder(builderA),
     subPage(gTrue),
@@ -568,7 +568,7 @@ const char *PdfParser::getPreviousOperator(unsigned int look_back) {
 
 void PdfParser::execOp(Object *cmd, Object args[], int numArgs) {
   PdfOperator *op;
-  char *name;
+  const char *name;
   Object *argPtr;
   int i;
 
@@ -616,7 +616,7 @@ void PdfParser::execOp(Object *cmd, Object args[], int numArgs) {
   (this->*op->func)(argPtr, numArgs);
 }
 
-PdfOperator* PdfParser::findOp(char *name) {
+PdfOperator* PdfParser::findOp(const char *name) {
   int a = -1;
   int b = numOps;
   int cmp = -1;
@@ -1748,7 +1748,7 @@ void PdfParser::doShadingPatternFillFallback(GfxShadingPattern *sPat,
                                              GBool stroke, GBool eoFill) {
   GfxShading *shading;
   GfxPath *savedPath;
-  double *ctm, *btm, *ptm;
+  const double *ctm, *btm, *ptm;
   double m[6], ictm[6], m1[6];
   double xMin, yMin, xMax, yMax;
   double det;
@@ -1990,7 +1990,7 @@ void PdfParser::doFunctionShFill1(GfxFunctionShading *shading,
   GfxColor color0M, color1M, colorM0, colorM1, colorMM;
   GfxColor colors2[4];
   double functionColorDelta = colorDeltas[pdfFunctionShading-1];
-  double *matrix;
+  const double *matrix;
   double xM, yM;
   int nComps, i, j;
 
@@ -2170,7 +2170,7 @@ void PdfParser::doPatchMeshShFill(GfxPatchMeshShading *shading) {
   }
 }
 
-void PdfParser::fillPatch(GfxPatch *patch, int nComps, int depth) {
+void PdfParser::fillPatch(_POPPLER_CONST GfxPatch *patch, int nComps, int depth) {
   GfxPatch patch00 = blankPatch();
   GfxPatch patch01 = blankPatch();
   GfxPatch patch10 = blankPatch();
@@ -2591,7 +2591,7 @@ void PdfParser::doShowText(GooString *s) {
   double x, y, dx, dy, tdx, tdy;
   double originX, originY, tOriginX, tOriginY;
   double oldCTM[6], newCTM[6];
-  double *mat;
+  const double *mat;
   Object charProc;
   Dict *resDict;
   Parser *oldParser;
@@ -3665,7 +3665,6 @@ void PdfParser::opBeginImage(Object /*args*/[], int /*numArgs*/)
 Stream *PdfParser::buildImageStream() {
   Object dict;
   Object obj;
-  char *key;
   Stream *str;
 
   // build dictionary
@@ -3683,26 +3682,17 @@ Stream *PdfParser::buildImageStream() {
       obj.free();
 #endif
     } else {
-      key = copyString(obj.getName());
-#if defined(POPPLER_NEW_OBJECT_API)
-      obj = parser->getObj();
-#else
-      obj.free();
-      parser->getObj(&obj);
-#endif
-      if (obj.isEOF() || obj.isError()) {
-	gfree(key);
+      Object obj2;
+      _POPPLER_CALL(obj2, parser->getObj);
+      if (obj2.isEOF() || obj2.isError()) {
+        _POPPLER_FREE(obj);
 	break;
       }
-#if defined(POPPLER_NEW_OBJECT_API)
-      dict.dictAdd(key, std::move(obj));
+      _POPPLER_DICTADD(dict, obj.getName(), obj2);
+      _POPPLER_FREE(obj);
+      _POPPLER_FREE(obj2);
     }
-    obj = parser->getObj();
-#else
-      dict.dictAdd(key, &obj);
-    }
-    parser->getObj(&obj);
-#endif
+    _POPPLER_CALL(obj, parser->getObj);
   }
   if (obj.isEOF()) {
     error(errSyntaxError, getPos(), "End of file in inline image");

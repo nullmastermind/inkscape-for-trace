@@ -804,7 +804,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
             dlg->getImportSettings(prefs);
 
         // Apply crop settings
-        PDFRectangle *clipToBox = nullptr;
+        _POPPLER_CONST PDFRectangle *clipToBox = nullptr;
         double crop_setting;
         sp_repr_get_double(prefs, "cropTo", &crop_setting);
 

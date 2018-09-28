@@ -15,6 +15,7 @@
 #endif
 
 #ifdef HAVE_POPPLER
+#include "poppler-transition-api.h"
 
 #include <gtkmm/dialog.h>
 
