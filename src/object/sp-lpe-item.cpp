@@ -18,7 +18,6 @@
 #include <glibmm/i18n.h>
 
 #include "bad-uri-exception.h"
-#include "ui/tool/multi-path-manipulator.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpe-path_length.h"
@@ -43,8 +42,6 @@
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-rect.h"
-#include "ui/tools-switch.h"
-#include "ui/tools/node-tool.h"
 
 /* LPEItem base class */
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
