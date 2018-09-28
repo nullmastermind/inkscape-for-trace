@@ -321,7 +321,7 @@ StyleDialog::StyleDialog() :
     _paned.pack2(*_cssPane, Gtk::SHRINK);
     _cssPane->show_all();
 
-    _cssPane->_propRenderer->signal_edited().connect(
+    /*_cssPane->_propRenderer->signal_edited().connect(
         sigc::mem_fun(*this, &StyleDialog::_handleProp));
     _cssPane->_sheetRenderer->signal_edited().connect(
         sigc::mem_fun(*this, &StyleDialog::_handleSheet));
@@ -329,7 +329,7 @@ StyleDialog::StyleDialog() :
         sigc::mem_fun(*this, &StyleDialog::_handleAttr));
     _cssPane->_treeView.signal_button_release_event().connect(
         sigc::mem_fun(*this, &StyleDialog::_delProperty),
-        false);
+        false);*/
 
     // Document & Desktop
     _desktop_changed_connection = _desktopTracker.connectDesktopChanged(
@@ -1088,21 +1088,21 @@ void StyleDialog::_updateCSSPanel()
         Glib::ustring sheet;
         Glib::ustring attr;
         if (row[_mColumns._colIsSelector]) {
-            _cssPane->_propRenderer->property_editable() = true;
-            _cssPane->_sheetRenderer->property_editable() = true;
-            _cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("black");
-            _cssPane->_attrRenderer->property_editable() = false;
-            _cssPane->_buttonAddProperty.set_sensitive(true);
+            //_cssPane->_propRenderer->property_editable() = true;
+            //_cssPane->_sheetRenderer->property_editable() = true;
+            //_cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("black");
+            //_cssPane->_attrRenderer->property_editable() = false;
+            //_cssPane->_buttonAddProperty.set_sensitive(true);
 
             properties = row[_mColumns._colProperties];
             sheet = row[_mColumns._colProperties];
             _objObserver.set( nullptr );
         } else {
-            _cssPane->_propRenderer->property_editable() = false;
-            _cssPane->_sheetRenderer->property_editable() = false;
-            _cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("gray");
-            _cssPane->_attrRenderer->property_editable() = false; // false for now...
-            _cssPane->_buttonAddProperty.set_sensitive(false);
+            //_cssPane->_propRenderer->property_editable() = false;
+            //_cssPane->_sheetRenderer->property_editable() = false;
+            //_cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("gray");
+            //_cssPane->_attrRenderer->property_editable() = false; // false for now...
+            //_cssPane->_buttonAddProperty.set_sensitive(false);
 
             std::vector<SPObject *> objects = row[_mColumns._colObj];
             Gtk::TreeModel::iterator piter = row.parent();
@@ -1161,8 +1161,8 @@ void StyleDialog::_updateCSSPanel()
             //           << " " << it.second._getAttrValue()
             //           << std::endl;
             _cssPane->_propRow = *(_cssPane->_store->append());
-            _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
-            _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = it.second._getName();
+            _cssPane->_propRow[_cssPane->_cssColumns.deleteButton] = false;
+            _cssPane->_propRow[_cssPane->_cssColumns.label] = it.second._getName();
             _cssPane->_propRow[_cssPane->_cssColumns._styleSheetVal] = it.second._getSheetValue();
             _cssPane->_propRow[_cssPane->_cssColumns._styleAttrVal ] = it.second._getAttrValue();
         }
@@ -1335,7 +1335,7 @@ void StyleDialog::_handleProp(const Glib::ustring& path, const Glib::ustring& ne
     Gtk::TreeModel::iterator iterCss = _cssPane->_treeView.get_model()->get_iter(path);
     if (iterCss) {
         Gtk::TreeModel::Row row = *iterCss;
-        row[_cssPane->_cssColumns._propertyLabel] = new_text;
+        row[_cssPane->_cssColumns.label] = new_text;
     }
 
     // To do: validate.
@@ -1365,7 +1365,7 @@ void StyleDialog::_handleSheet(const Glib::ustring& path, const Glib::ustring& n
     Glib::ustring properties;
     for (auto& crow: _cssPane->_store->children()) {
         properties = properties +
-            crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+            crow[_cssPane->_cssColumns.label] + ": " +
             crow[_cssPane->_cssColumns._styleSheetVal] + "; ";
     }
 
@@ -1403,7 +1403,7 @@ void StyleDialog::_handleAttr(const Glib::ustring& path, const Glib::ustring& ne
     Glib::ustring properties;
     for (auto& crow: _cssPane->_store->children()) {
         properties = properties +
-            crow[_cssPane->_cssColumns._propertyLabel] + ": ";
+            crow[_cssPane->_cssColumns.label] + ": ";
             crow[_cssPane->_cssColumns._styleAttrVal] + "; ";
     }
 
@@ -1457,7 +1457,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                                 Glib::ustring sheetVal = crow[_cssPane->_cssColumns._styleSheetVal];
                                 if (!sheetVal.empty()) {
                                     properties = properties +
-                                        crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+                                        crow[_cssPane->_cssColumns.label] + ": " +
                                         crow[_cssPane->_cssColumns._styleSheetVal] + "; ";
                                 }
                             }
@@ -1484,7 +1484,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                                 Glib::ustring attrVal = crow[_cssPane->_cssColumns._styleAttrVal];
                                 if (!attrVal.empty()) {
                                     properties = properties +
-                                        crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+                                        crow[_cssPane->_cssColumns.label] + ": " +
                                         crow[_cssPane->_cssColumns._styleAttrVal]  + "; ";
                                 }
                             }

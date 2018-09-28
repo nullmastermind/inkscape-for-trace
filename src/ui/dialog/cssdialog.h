@@ -15,14 +15,18 @@
 #ifndef CSSDIALOG_H
 #define CSSDIALOG_H
 
-#include "message.h"
-#include <gtkmm/dialog.h>
+
+#include <glibmm/regex.h>
+#include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
 
 #include "desktop.h"
+
+#define CSS_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::CssDialog*>((Inkscape::UI::Dialog::CssDialog*)obj))
+#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
 class MessageStack;
@@ -49,15 +53,23 @@ public:
     class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         CssColumns() {
-	  add(_colUnsetProp);
-	  add(_propertyLabel);
+	  add(deleteButton);
+	  add(label);
 	  add(_styleSheetVal);
 	  add(_styleAttrVal);
+	  add(label_color);
+	  add(attr_color);
+	  add(attr_strike);
+	  add(editable);
 	}
-        Gtk::TreeModelColumn<bool> _colUnsetProp;
-        Gtk::TreeModelColumn<Glib::ustring> _propertyLabel;
-        Gtk::TreeModelColumn<Glib::ustring> _styleSheetVal;
+        Gtk::TreeModelColumn<bool> deleteButton;
+        Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
+        Gtk::TreeModelColumn<Glib::ustring> _styleSheetVal;
+        Gtk::TreeModelColumn<Gdk::RGBA> label_color;
+        Gtk::TreeModelColumn<Gdk::RGBA> attr_color;
+        Gtk::TreeModelColumn<bool> attr_strike;
+        Gtk::TreeModelColumn<bool> editable;
     };
     CssColumns _cssColumns;
 
@@ -71,9 +83,6 @@ public:
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::TreeModel::Row _propRow;
-    Gtk::CellRendererText *_propRenderer;
-    Gtk::CellRendererText *_sheetRenderer;
-    Gtk::CellRendererText *_attrRenderer;
     Gtk::TreeViewColumn *_propCol;
     Gtk::TreeViewColumn *_sheetCol;
     Gtk::TreeViewColumn *_attrCol;
@@ -87,23 +96,32 @@ public:
     static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 
 
-    // Widgets
-    Gtk::VBox _mainBox;
-    Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::HBox _buttonBox;
-    Gtk::Button _buttonAddProperty;
-
     // Variables - Inkscape
     SPDesktop* _desktop;
+    Inkscape::XML::Node* _repr;
 
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
+    void setRepr(Inkscape::XML::Node * repr);
 
-    /**
-     * Signal handlers
+    // Parsing functions
+    std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
+    Glib::ustring compileStyle(std::map<Glib::ustring, Glib::ustring> props);
+
+
      */
-    sigc::connection _message_changed_connection;
-    bool _addProperty(GdkEventButton *event);
+    // Signal handlers
+    void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
+
+private:
+
+    Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
+    Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
+
+    bool onPropertyCreate(GdkEventButton *event);
+    void onPropertyDelete(Glib::ustring path);
+    bool setStyleProperty(Glib::ustring name, Glib::ustring value);
+
 };
 
 
