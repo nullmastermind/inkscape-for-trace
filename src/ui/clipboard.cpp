@@ -1108,9 +1108,6 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem)
     {
-        // for each effect in the stack, check if we need to fork it before adding it to the item
-        lpeitem->forkPathEffectsIfNecessary(1);
-
         std::istringstream iss(effectstack);
         std::string href;
         while (std::getline(iss, href, ';'))
@@ -1122,6 +1119,8 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
             LivePathEffectObject *lpeobj = LIVEPATHEFFECT(obj);
             lpeitem->addPathEffect(lpeobj);
         }
+        // for each effect in the stack, check if we need to fork it before adding it to the item
+        lpeitem->forkPathEffectsIfNecessary(1);
     }
 }
 
