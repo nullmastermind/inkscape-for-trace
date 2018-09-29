@@ -477,9 +477,9 @@ public:
 
     virtual Writer& writeChar(char val) = 0;
 
-    virtual Writer& writeUString(Glib::ustring &val) = 0;
+    virtual Writer& writeUString(const Glib::ustring &val) = 0;
 
-    virtual Writer& writeStdString(std::string &val) = 0;
+    virtual Writer& writeStdString(const std::string &val) = 0;
 
     virtual Writer& writeString(const char *str) = 0;
 
@@ -533,9 +533,9 @@ public:
 
     Writer& writeChar(char val) override;
 
-    Writer& writeUString(Glib::ustring &val) override;
+    Writer& writeUString(const Glib::ustring &val) override;
 
-    Writer& writeStdString(std::string &val) override;
+    Writer& writeStdString(const std::string &val) override;
 
     Writer& writeString(const char *str) override;
 

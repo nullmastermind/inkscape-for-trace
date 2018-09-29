@@ -496,19 +496,18 @@ Writer &BasicWriter::writeChar(char ch)
 /**
  * Writes the specified unicode string to this output writer.
  */ 
-Writer &BasicWriter::writeUString(Glib::ustring &str)
+Writer &BasicWriter::writeUString(const Glib::ustring &str)
 {
-    std::string tmp = str.raw();
-    writeStdString(tmp);
+    writeStdString(str.raw());
     return *this;
 }
 
 /**
  * Writes the specified standard string to this output writer.
  */ 
-Writer &BasicWriter::writeStdString(std::string &str)
+Writer &BasicWriter::writeStdString(const std::string &str)
 {
-    for (auto it = str.begin(); it != str.end(); it++) {
+    for (auto it = str.begin(); it != str.end(); ++it) {
         put(*it);
     }
     return *this;
