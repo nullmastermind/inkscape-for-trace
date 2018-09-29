@@ -1868,7 +1868,8 @@ void ObjectSet::rotate90(bool ccw)
         return;
 
     auto items_copy = items();
-    Geom::Rotate const rot_90(Geom::Point(0, ccw ? 1 : -1)); // pos. or neg. rotation, depending on the value of ccw
+    double y_dir = desktop() ? desktop()->yaxisdir() : 1;
+    Geom::Rotate const rot_90(Geom::Point(0, ccw ? -y_dir : y_dir)); // pos. or neg. rotation, depending on the value of ccw
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
         SPItem *item = *l;
         if (item) {
