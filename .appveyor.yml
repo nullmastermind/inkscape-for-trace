@@ -12,7 +12,8 @@ install:
     git submodule update --init --recursive
 
 build_script:
-  - del C:\Windows\system32\libssl-*.dll C:\Windows\system32\libcrypto-*.dll
+  - del C:\Windows\System32\libssl-*.dll C:\Windows\system32\libcrypto-*.dll
+  - del C:\Windows\SysWOW64\libssl-*.dll C:\Windows\SysWOW64\libcrypto-*.dll
   - C:\msys64\usr\bin\pacman -Syuu %PACMAN_OPTIONS%
   - C:\msys64\usr\bin\bash --login -c "$(cygpath ${APPVEYOR_BUILD_FOLDER})/buildtools/appveyor.sh"
 
