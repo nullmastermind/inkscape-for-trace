@@ -1200,9 +1200,10 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 #endif
 
     bool already_propagated = (!(this->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
-
-    this->uflags |= flags;
-    
+    //https://stackoverflow.com/a/7841333
+    if ((this->uflags & flags) !=  flags ) {
+        this->uflags |= flags;
+    }
     /* If requestModified has already been called on this object or one of its children, then we
      * don't need to set CHILD_MODIFIED on our ancestors because it's already been done.
      */
@@ -1210,7 +1211,9 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
         if (parent) {
             parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
         } else {
-            document->requestModified();
+            if(this->document) {
+                this->document->requestModified();
+            }
         }
     }
 

@@ -227,8 +227,13 @@ void SPPath::set(unsigned int key, const gchar* value) {
                     curve->unref();
                 }
             } else {
-                this->setCurveBeforeLPE(nullptr);
-                
+                bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+                if (!haslpe) {
+                    this->setCurveBeforeLPE(nullptr);
+                } else {
+                    //This happends on undo, fix bug:#1791784
+                    this->removeAllPathEffects(false);
+                }
             }
             sp_lpe_item_update_patheffect(this, true, true);
             break;
