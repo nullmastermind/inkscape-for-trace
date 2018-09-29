@@ -62,6 +62,12 @@ LPEParallel::~LPEParallel()
 void
 LPEParallel::doOnApply (SPLPEItem const* lpeitem)
 {
+    if (!SP_IS_SHAPE(lpeitem)) {
+        g_warning("LPE parallel can only be applied to shapes (not groups).");
+        SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+        item->removeCurrentPathEffect(false);
+        return;
+    }
     SPCurve const *curve = SP_SHAPE(lpeitem)->_curve;
 
     A = *(curve->first_point());

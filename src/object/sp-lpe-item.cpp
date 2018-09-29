@@ -605,7 +605,6 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
         effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
         this->path_effect_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-        std::cout << this->path_effect_list->size() << "this->path_effect_list11111"  << std::endl;
         this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(*this->path_effect_list));
         if (!keep_paths) {
             // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
