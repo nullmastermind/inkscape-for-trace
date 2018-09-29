@@ -1,14 +1,13 @@
-// SPDX-License-Identifier: GPL-2.0-only
+// SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
- * TODO: insert short description here
+ * Extended actions ("xverbs") that can be queued in a yaml file
  *//*
  * Authors:
  *   Dmitry Zhulanov <dmitry.zhulanov@gmail.com>
  *
  * Copyright (C) 2016 Authors
  *
- * Released under GNU GPL v2 (ONLY?), read the file 'COPYING' for more information
- * TODO: REQUIRES RELICENSING OR REMOVAL
+ * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  *
  * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
