@@ -43,6 +43,8 @@
 #include "display/sp-canvas-group.h"
 #include "display/canvas-rotate.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/sp-guide.h"
 
 #include "ui/contextmenu.h"

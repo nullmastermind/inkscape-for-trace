@@ -225,36 +225,4 @@
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
 #cmakedefine LPE_ENABLE_TEST_EFFECTS 1
 
-/* Local variables to store GTKMM version */
-#cmakedefine INKSCAPE_GTKMM_MAJOR_VERSION @INKSCAPE_GTKMM_MAJOR_VERSION@
-#cmakedefine INKSCAPE_GTKMM_MINOR_VERSION @INKSCAPE_GTKMM_MINOR_VERSION@
-#cmakedefine INKSCAPE_GTKMM_MICRO_VERSION @INKSCAPE_GTKMM_MICRO_VERSION@
-
-/**
- * Check GtkMM version
- *
- * This is adapted from the upstream Gtk+ macro for use with GtkMM
- *
- * @todo Perhaps this should be in its own header?  However, this is likely to
- *       be used very frequently, so It would be annoying to have to add another
- *	 header inclusion in many files
- *
- *
- * @major: major version (e.g. 1 for version 1.2.5)
- * @minor: minor version (e.g. 2 for version 1.2.5)
- * @micro: micro version (e.g. 5 for version 1.2.5)
- *
- * Returns %TRUE if the version of the GTK+ header files
- * is the same as or newer than the passed-in version.
- *
- * Returns: %TRUE if GTK+ headers are new enough
- */
-#define GTKMM_CHECK_VERSION(major,minor,micro)                            \
-  (INKSCAPE_GTKMM_MAJOR_VERSION > (major) ||                                     \
-  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION > (minor)) || \
-  (INKSCAPE_GTKMM_MAJOR_VERSION == (major) && INKSCAPE_GTKMM_MINOR_VERSION == (minor) && \
-  INKSCAPE_GTKMM_MICRO_VERSION >= (micro)))
-
 #endif /* _CONFIG_H_ */
-
-

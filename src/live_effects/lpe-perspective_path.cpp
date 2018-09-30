@@ -20,6 +20,8 @@
 #include "knotholder.h"
 #include <util/units.h>
 
+#include "include/gtkmm_version.h"
+
 #include "object/persp3d.h"
 #include "object/sp-defs.h"
 

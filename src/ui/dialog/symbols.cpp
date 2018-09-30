@@ -19,32 +19,32 @@
 #include <fstream>
 #include <regex>
 
+#include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
-#include <glibmm/markup.h>
 
+#include "desktop.h"
+#include "document.h"
+#include "inkscape.h"
 #include "path-prefix.h"
-#include "io/sys.h"
-#include "io/resource.h"
+#include "selection.h"
+#include "symbols.h"
+#include "verbs.h"
 
 #include "display/cairo-utils.h"
+#include "helper/action.h"
 #include "helper/icon-loader.h"
+#include "include/gtkmm_version.h"
+#include "io/resource.h"
+#include "io/sys.h"
+#include "object/sp-defs.h"
+#include "object/sp-root.h"
+#include "object/sp-symbol.h"
+#include "object/sp-use.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
 #include "ui/icon-names.h"
-
-#include "symbols.h"
-
-#include "selection.h"
-#include "desktop.h"
-
-#include "document.h"
-#include "inkscape.h"
-
-#include "object/sp-root.h"
-#include "object/sp-use.h"
-#include "object/sp-defs.h"
-#include "object/sp-symbol.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -66,9 +66,6 @@
   #endif
 #endif
 
-#include "verbs.h"
-#include "helper/action.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {

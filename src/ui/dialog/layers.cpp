@@ -32,6 +32,8 @@
 #include "helper/action.h"
 #include "helper/icon-loader.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/sp-root.h"
 
 #include "svg/css-ostringstream.h"

@@ -32,6 +32,8 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
+#include "include/gtkmm_version.h"
+
 #include "io/sys.h"
 
 #include "helper/icon-loader.h"

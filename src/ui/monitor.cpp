@@ -30,6 +30,8 @@
 #include <gdkmm/rectangle.h>
 #include <gdkmm/window.h>
 
+#include "include/gtkmm_version.h"
+
 #if GTKMM_CHECK_VERSION(3,22,0)
 # include <gdkmm/monitor.h>
 #else

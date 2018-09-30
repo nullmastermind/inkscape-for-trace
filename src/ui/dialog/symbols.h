@@ -13,12 +13,15 @@
 
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
+
+#include <vector>
+
 #include <gtkmm.h>
 
 #include "display/drawing.h"
+#include "include/gtkmm_version.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include <vector>
 
 class SPObject;
 class SPSymbol;

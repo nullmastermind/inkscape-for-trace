@@ -15,6 +15,8 @@
 #include "new-from-template.h"
 #include "file.h"
 
+#include "include/gtkmm_version.h"
+
 namespace Inkscape {
 namespace UI {
 

@@ -27,6 +27,8 @@
 #include "document-undo.h"
 #include "verbs.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/sp-object.h"
 
 #include "xml/repr.h"

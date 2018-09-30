@@ -27,6 +27,8 @@
 
 #include "display/sp-canvas.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-namedview.h"

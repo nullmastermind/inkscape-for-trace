@@ -51,6 +51,8 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/filters/blend.h"
 #include "object/filters/colormatrix.h"
 #include "object/filters/componenttransfer.h"

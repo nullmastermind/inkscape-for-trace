@@ -48,6 +48,8 @@
 
 #include "helper/action.h"
 
+#include "include/gtkmm_version.h"
+
 #include "io/resource.h"
 
 #include "object/sp-namedview.h"

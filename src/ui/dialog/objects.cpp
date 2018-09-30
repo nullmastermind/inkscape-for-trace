@@ -35,6 +35,8 @@
 #include "helper/action.h"
 #include "helper/icon-loader.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/filters/blend.h"
 #include "object/filters/gaussian-blur.h"
 #include "object/sp-clippath.h"

@@ -47,6 +47,8 @@
 
 #include "extension/internal/gdkpixbuf-input.h"
 
+#include "include/gtkmm_version.h"
+
 #include "io/resource.h"
 #include "io/sys.h"
 

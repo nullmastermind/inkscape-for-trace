@@ -15,31 +15,32 @@
 #include "config.h"
 #endif
 
-#include "svg-fonts-dialog.h"
+#include <message-stack.h>
+#include <sstream>
+
+#include <gtkmm/scale.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/imagemenuitem.h>
+#include <glibmm/stringutils.h>
+#include <glibmm/i18n.h>
+
+#include "desktop.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include <gtkmm/notebook.h>
-#include <gtkmm/scale.h>
-#include <gtkmm/imagemenuitem.h>
-#include <message-stack.h>
 #include "selection.h"
-#include "svg/svg.h"
-#include "xml/repr.h"
-#include "desktop.h"
-
-#include <sstream>
-#include "display/nr-svgfonts.h"
+#include "svg-fonts-dialog.h"
 #include "verbs.h"
 
+#include "display/nr-svgfonts.h"
+#include "include/gtkmm_version.h"
+#include "object/sp-defs.h"
 #include "object/sp-font-face.h"
-#include "object/sp-glyph.h"
-#include "object/sp-missing-glyph.h"
 #include "object/sp-font.h"
 #include "object/sp-glyph-kerning.h"
-#include "object/sp-defs.h"
-
-#include <glibmm/i18n.h>
-#include <glibmm/stringutils.h>
+#include "object/sp-glyph.h"
+#include "object/sp-missing-glyph.h"
+#include "svg/svg.h"
+#include "xml/repr.h"
 
 SvgFontDrawingArea::SvgFontDrawingArea():
     _x(0),
