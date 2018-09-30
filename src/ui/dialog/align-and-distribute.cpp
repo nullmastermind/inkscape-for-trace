@@ -580,6 +580,9 @@ private :
             // First criteria: Sort according to the angle to the center point
             double angle_a = atan2(double(point_a[Geom::Y]), double(point_a[Geom::X]));
             double angle_b = atan2(double(point_b[Geom::Y]), double(point_b[Geom::X]));
+            double dt_yaxisdir = SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->yaxisdir() : 1;
+            angle_a *= -dt_yaxisdir;
+            angle_b *= -dt_yaxisdir;
             if (angle_a != angle_b) return (angle_a < angle_b);
             // Second criteria: Sort according to the distance the center point
             Geom::Coord length_a = point_a.length();
