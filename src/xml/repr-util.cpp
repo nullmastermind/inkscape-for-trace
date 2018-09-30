@@ -15,11 +15,8 @@
  * Licensed under GNU GPL
  */
 
-#include "config.h"
-
-# include <cstring>
-
-# include <cstdlib>
+#include <cstring>
+#include <cstdlib>
 
 
 #include <glib.h>

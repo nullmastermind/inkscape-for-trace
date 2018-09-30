@@ -13,7 +13,7 @@
 #define SEEN_SPELLCHECK_H
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include <vector>

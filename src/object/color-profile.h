@@ -1,6 +1,10 @@
 #ifndef SEEN_COLOR_PROFILE_H
 #define SEEN_COLOR_PROFILE_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <set>
 #include <vector>
 

@@ -10,10 +10,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "document.h"
 #include "layer-fns.h"
 

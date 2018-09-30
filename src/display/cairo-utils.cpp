@@ -8,10 +8,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include "display/cairo-utils.h"
 
 #include <stdexcept>

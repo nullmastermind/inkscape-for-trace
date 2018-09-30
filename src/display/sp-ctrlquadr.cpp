@@ -10,10 +10,6 @@
  * Released under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "sp-canvas-item.h"
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"

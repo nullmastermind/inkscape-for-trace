@@ -10,6 +10,10 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include "dock.h"
 #include "inkscape.h"
 #include "preferences.h"

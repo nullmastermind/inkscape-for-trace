@@ -9,10 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "sp-metadata.h"
 #include "xml/node-iterators.h"
 #include "document.h"

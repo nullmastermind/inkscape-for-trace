@@ -34,8 +34,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#include "config.h"
-
 #include <libintl.h>
 
 #include <cstdint>

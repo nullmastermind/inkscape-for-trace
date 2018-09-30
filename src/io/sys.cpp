@@ -11,10 +11,6 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <fstream>
 #ifdef _WIN32
 #include <fcntl.h>

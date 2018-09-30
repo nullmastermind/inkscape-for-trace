@@ -39,8 +39,11 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstdio>
-#include "config.h"
 
 #ifdef WITH_LIBWPG
 

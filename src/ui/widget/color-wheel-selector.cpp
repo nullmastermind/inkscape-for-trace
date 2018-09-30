@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "color-wheel-selector.h"
 
 #include <glibmm/i18n.h>

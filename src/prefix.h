@@ -17,6 +17,10 @@
 #ifndef _PREFIX_H_
 #define _PREFIX_H_
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

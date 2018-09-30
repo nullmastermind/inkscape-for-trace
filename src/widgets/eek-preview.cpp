@@ -33,9 +33,6 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 
 #include <algorithm>
 using std::min;

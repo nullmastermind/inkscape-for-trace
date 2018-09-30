@@ -8,11 +8,6 @@
  * Released under GNU GPLv2+, read the file 'COPYING' for more information
  */
 
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "ui/widget/iconrenderer.h"
 
 #include "helper/icon-loader.h"

@@ -13,6 +13,10 @@
 #ifndef __EXTENSION_INTERNAL_WPGOUTPUT_H__
 #define __EXTENSION_INTERNAL_WPGOUTPUT_H__
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #ifdef WITH_LIBWPG
 
 #include "../implementation/implementation.h"

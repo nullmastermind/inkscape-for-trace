@@ -23,8 +23,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-
 #include "util/expression-evaluator.h"
 #include "util/units.h"
 

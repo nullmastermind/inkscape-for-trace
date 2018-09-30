@@ -13,10 +13,6 @@
   * to the right). The x-axis will always have an angle between 0 and 90 degrees.
   */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/grid.h>

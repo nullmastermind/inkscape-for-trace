@@ -3,10 +3,6 @@
  *   Jon A. Cruz <jon@joncruz.org>
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cmath>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>

@@ -23,13 +23,12 @@
  * --> expands br_locate to foobar_br_locate
  */
 
-#ifndef _PREFIX_C_
-#define _PREFIX_C_
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
+#ifndef _PREFIX_C_
+#define _PREFIX_C_
 
 #include <glib.h>
 #include <cstdlib>

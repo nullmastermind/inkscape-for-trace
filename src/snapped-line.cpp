@@ -1,4 +1,4 @@
-/**#include <config.h>
+/**
  *    \file src/snapped-line.cpp
  *    SnappedLine class.
  *

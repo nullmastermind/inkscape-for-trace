@@ -11,10 +11,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "undo-history.h"
 
 #include "document-undo.h"

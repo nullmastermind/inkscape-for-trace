@@ -24,10 +24,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "live_effects/lpe-line_segment.h"
 #include "lpe-toolbar.h"
 

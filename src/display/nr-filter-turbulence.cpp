@@ -17,10 +17,6 @@
  * Released under GNU GPL version 2 (or later), read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "display/cairo-templates.h"
 #include "display/cairo-utils.h"
 #include "display/nr-filter.h"

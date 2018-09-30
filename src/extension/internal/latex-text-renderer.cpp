@@ -15,10 +15,6 @@
  * Licensed under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "latex-text-renderer.h"
 
 #include <csignal>

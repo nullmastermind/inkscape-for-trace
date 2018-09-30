@@ -16,10 +16,6 @@
 
 #define noREPR_VERBOSE
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cstring>
 
 #include "xml/repr.h"

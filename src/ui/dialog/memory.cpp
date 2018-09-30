@@ -10,10 +10,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "ui/dialog/memory.h"
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>

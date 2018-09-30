@@ -10,9 +10,6 @@
     contains the base class for all of that.
 */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include "implementation.h"
 
 #include <extension/output.h>

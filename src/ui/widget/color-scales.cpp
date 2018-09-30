@@ -2,10 +2,6 @@
  *   bulia byak <buliabyak@users.sf.net>
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
 

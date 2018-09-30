@@ -11,10 +11,6 @@
  * Licensed under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <glibmm/i18n.h>
 
 #include "preferences.h"

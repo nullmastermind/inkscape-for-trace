@@ -36,10 +36,6 @@
 #define noSP_DOCUMENT_DEBUG_IDLE
 #define noSP_DOCUMENT_DEBUG_UNDO
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <string>
 #include <cstring>
 

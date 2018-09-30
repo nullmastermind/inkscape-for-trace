@@ -10,10 +10,6 @@
  */
 
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "svg/test-stubs.h"
 #include <map>
 #include <string>

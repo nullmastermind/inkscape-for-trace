@@ -23,10 +23,6 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cstring>
 #include <string>
 #include <glibmm/i18n.h>

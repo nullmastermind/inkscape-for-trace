@@ -8,6 +8,10 @@
 #ifndef PDF_PARSER_H
 #define PDF_PARSER_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #ifdef HAVE_POPPLER
 #include "poppler-transition-api.h"
 

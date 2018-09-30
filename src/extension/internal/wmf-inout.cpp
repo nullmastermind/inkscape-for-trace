@@ -22,11 +22,6 @@
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
 
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 //#include <png.h>   //This must precede text_reassemble.h or it blows up in pngconf.h when compiling
 #include <cstdio>
 #include <cstdlib>

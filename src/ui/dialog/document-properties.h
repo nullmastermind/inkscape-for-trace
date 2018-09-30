@@ -14,6 +14,10 @@
 #ifndef INKSCAPE_UI_DIALOG_DOCUMENT_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_DOCUMENT_PREFERENCES_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstddef>
 #include <sigc++/sigc++.h>
 #include <gtkmm/comboboxtext.h>

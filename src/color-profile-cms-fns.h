@@ -1,6 +1,10 @@
 #ifndef SEEN_COLOR_PROFILE_CMS_FNS_H
 #define SEEN_COLOR_PROFILE_CMS_FNS_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #if HAVE_LIBLCMS2
 #  include <lcms2.h>
 #elif HAVE_LIBLCMS1

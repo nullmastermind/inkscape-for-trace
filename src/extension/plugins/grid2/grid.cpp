@@ -11,10 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/spinbutton.h>

@@ -12,10 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <color-rgba.h>
 #include "io/sys.h"
 #include "extension/system.h"

@@ -8,6 +8,11 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <glib.h>
 #include "Layout-TNG.h"
 #include "display/drawing-text.h"

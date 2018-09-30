@@ -12,10 +12,6 @@
  */
 #ifndef SEEN_PATH_PREFIX_H
 #define SEEN_PATH_PREFIX_H
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
 #include "prefix.h"
 
 

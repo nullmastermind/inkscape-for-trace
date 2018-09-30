@@ -12,12 +12,12 @@
  * This code is in public domain
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #undef SPCS_PREVIEW
 #define noDUMP_CHANGE_INFO
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>

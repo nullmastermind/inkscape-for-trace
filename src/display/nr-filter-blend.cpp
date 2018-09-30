@@ -16,10 +16,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <glibmm.h>
 #include "display/cairo-templates.h"
 #include "display/cairo-utils.h"

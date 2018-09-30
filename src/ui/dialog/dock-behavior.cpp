@@ -10,11 +10,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "dock-behavior.h"
 #include "inkscape.h"
 #include "desktop.h"

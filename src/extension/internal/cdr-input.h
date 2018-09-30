@@ -14,7 +14,7 @@
 #define __EXTENSION_INTERNAL_CDROUTPUT_H__
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #ifdef WITH_LIBCDR

@@ -11,10 +11,6 @@
  * Released under GNU GPLv2 (or later).  Read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <message-stack.h>
 #include <sstream>
 

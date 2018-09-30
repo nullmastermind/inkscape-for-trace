@@ -23,12 +23,6 @@
  *      http://msdn.microsoft.com/library/en-us/gdi/metafile_5hkj.asp
  */
 
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/elliptical-arc.h>
 

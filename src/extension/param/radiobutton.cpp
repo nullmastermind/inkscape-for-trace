@@ -14,10 +14,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>

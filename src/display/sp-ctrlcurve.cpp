@@ -11,10 +11,6 @@
  * Released under GNU GPL
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "display/sp-ctrlcurve.h"
 #include "display/sp-canvas-util.h"
 #include "display/cairo-utils.h"

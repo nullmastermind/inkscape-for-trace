@@ -14,6 +14,10 @@
 #ifndef SEEN_INKSCAPE_SP_IMAGE_H
 #define SEEN_INKSCAPE_SP_IMAGE_H
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <glibmm/ustring.h>
 #include "svg/svg-length.h"
 #include "display/curve.h"

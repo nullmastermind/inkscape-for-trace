@@ -11,10 +11,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/dialog.h> // for Gtk::RESPONSE_*
 
 #include <glibmm/i18n.h>

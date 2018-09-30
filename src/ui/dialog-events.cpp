@@ -11,10 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
 #include "macros.h"

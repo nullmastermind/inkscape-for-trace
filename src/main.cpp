@@ -23,11 +23,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 

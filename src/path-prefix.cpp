@@ -17,16 +17,13 @@
  *
  */
 
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
-
 
 #include "io/resource.h"
 #include "path-prefix.h"
 #include <glib.h>
-
 
 /**
  * Determine the location of the Inkscape data directory (typically the share/ folder

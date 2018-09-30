@@ -8,7 +8,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
 
 #include "util/units.h"

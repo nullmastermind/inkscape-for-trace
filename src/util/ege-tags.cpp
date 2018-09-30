@@ -34,10 +34,6 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif // HAVE_CONFIG_H
-
 #include <libintl.h>
 
 #if !defined(_)

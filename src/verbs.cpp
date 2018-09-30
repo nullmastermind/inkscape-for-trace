@@ -24,11 +24,6 @@
  * This code is in public domain.
  */
 
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cstring>
 #include <string>
 

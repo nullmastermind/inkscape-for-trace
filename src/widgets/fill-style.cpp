@@ -18,10 +18,6 @@
 
 #define noSP_FS_VERBOSE
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <gtkmm/box.h>
 #include <glibmm/i18n.h>
 

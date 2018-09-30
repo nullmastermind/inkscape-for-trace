@@ -11,7 +11,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h" // Needed for HAVE_OPENMP
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #include <algorithm>
 #include <cmath>

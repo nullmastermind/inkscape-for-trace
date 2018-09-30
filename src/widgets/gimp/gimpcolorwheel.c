@@ -38,8 +38,6 @@
  * Gtk+ 3 code merge: commit bcfc6, gtk3-port branch (2013-01-06)
  */
 
-#include "config.h"
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 

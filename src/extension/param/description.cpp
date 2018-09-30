@@ -9,10 +9,6 @@
 # define ESCAPE_DOLLAR_COMMANDLINE
 #endif
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <glibmm/i18n.h>

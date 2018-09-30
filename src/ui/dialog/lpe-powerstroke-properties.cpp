@@ -13,10 +13,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "lpe-powerstroke-properties.h"
 #include <boost/lexical_cast.hpp>
 #include <glibmm/i18n.h>

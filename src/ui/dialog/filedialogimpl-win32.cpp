@@ -13,9 +13,6 @@
  */
 #ifdef _WIN32
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
 #include "filedialogimpl-win32.h"
 //General includes
 #include <cairomm/win32_surface.h>

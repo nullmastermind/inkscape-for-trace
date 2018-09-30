@@ -5,11 +5,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
-
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include "config.h"  // only include where actually required!
 #endif
+
+//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 // include effects:
 #include "live_effects/lpe-patternalongpath.h"

@@ -16,10 +16,6 @@
 
 #define DRAW_VERBOSE
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "desktop-style.h"
 #include "macros.h"
 #include "message-stack.h"

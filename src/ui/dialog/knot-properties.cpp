@@ -13,10 +13,6 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "ui/dialog/knot-properties.h"
 
 #include <boost/lexical_cast.hpp>

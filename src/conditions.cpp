@@ -10,10 +10,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <set>
 
 #include <glibmm/ustring.h>

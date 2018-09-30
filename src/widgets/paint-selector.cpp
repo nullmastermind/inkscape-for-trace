@@ -17,10 +17,6 @@
 
 #define noSP_PS_VERBOSE
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <cstring>
 #include <string>
 #include <vector>

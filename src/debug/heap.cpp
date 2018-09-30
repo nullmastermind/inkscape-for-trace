@@ -9,10 +9,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include "inkgc/gc-alloc.h"
 #include "debug/gc-heap.h"
 #include "debug/sysv-heap.h"
