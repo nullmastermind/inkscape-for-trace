@@ -345,7 +345,7 @@ sp_ui_close_view(GtkWidget */*widget*/)
     INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
-        SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
+        SPDocument *doc = SPDocument::createNewDoc( templateUri.empty() ? nullptr : templateUri.c_str(), TRUE, true );
         // Set viewBox if it doesn't exist
         if (!doc->getRoot()->viewBox_set) {
             doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
