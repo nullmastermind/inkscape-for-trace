@@ -24,7 +24,6 @@
 #include <gtkmm/paned.h>
 
 #include "ui/dialog/desktop-tracker.h"
-#include "ui/dialog/cssdialog.h"
 
 #include "xml/helper-observer.h"
 
@@ -115,7 +114,6 @@ private:
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Button* del;
     Gtk::Button* create;
-    CssDialog *_cssPane;
 
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
@@ -133,7 +131,6 @@ private:
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
     void _selectObjects(int, int);
-    void _updateCSSPanel();
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
@@ -158,13 +155,6 @@ private:
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
-    void _objChanged();
-
-    // Signal handlers for CssDialog
-    void _handleProp( const Glib::ustring& path, const Glib::ustring& new_text);
-    void _handleSheet(const Glib::ustring& path, const Glib::ustring& new_text);
-    void _handleAttr( const Glib::ustring& path, const Glib::ustring& new_text);
-    bool _delProperty(GdkEventButton *event);
 
     // GUI
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
