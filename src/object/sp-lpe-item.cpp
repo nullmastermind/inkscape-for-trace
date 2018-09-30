@@ -552,13 +552,11 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         hreflist.push_back(value); // C++11: should be emplace_back std::move'd  (also the reason why passed by value to addPathEffect)
 
         this->getRepr()->setAttribute("inkscape:path-effect", hreflist_svg_string(hreflist));
-
         // Make sure that ellipse is stored as <svg:path>
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
-        // make sure there is an original-d for paths!!!
-        sp_lpe_item_create_original_path_recursive(this);
+        
 
         LivePathEffectObject *lpeobj = this->path_effect_list->back()->lpeobject;
         if (lpeobj && lpeobj->get_lpe()) {
@@ -568,7 +566,10 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
                 // has to be called when all the subitems have their lpes applied
                 lpe->resetDefaults(this);
             }
-
+            // Moved here to fix #1299461, we can call previious function twice after
+            // if anyone find necesary
+            // make sure there is an original-d for paths!!!
+            sp_lpe_item_create_original_path_recursive(this);
             // perform this once when the effect is applied
             lpe->doOnApply_impl(this);
 

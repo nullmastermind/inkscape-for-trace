@@ -99,6 +99,14 @@ PathParam::~PathParam()
 //            }
 //        }
 //    }
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        // TODO remove the tools_switch atrocity.
+        if (tools_isactive(desktop, TOOLS_NODES)) {
+            tools_switch(desktop, TOOLS_SELECT);
+            tools_switch(desktop, TOOLS_NODES);
+        }
+    }
     g_free(defvalue);
 }
 
