@@ -102,8 +102,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         double power = radius;
         if (!flexible) {
             SPDocument * document = SP_ACTIVE_DOCUMENT;
-            SPNamedView *nv = sp_document_namedview(document, nullptr);
-            Glib::ustring display_unit = nv->display_units->abbr;
+            Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
             power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
         }
         SatelliteType satellite_type = FILLET;
@@ -257,8 +256,7 @@ void LPEFilletChamfer::updateAmount()
     double power = radius;
     if (!flexible) {
         SPDocument * document = SP_ACTIVE_DOCUMENT;
-        SPNamedView *nv = sp_document_namedview(document, nullptr);
-        Glib::ustring display_unit = nv->display_units->abbr;
+        Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
         power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
     }
     _pathvector_satellites->updateAmount(power, apply_no_radius, apply_with_radius, only_selected, 
@@ -323,8 +321,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 double power = radius;
                 if (!flexible) {
                     SPDocument * document = SP_ACTIVE_DOCUMENT;
-                    SPNamedView *nv = sp_document_namedview(document, nullptr);
-                    Glib::ustring display_unit = nv->display_units->abbr;
+                    Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
                     power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
                 }
                 SatelliteType satellite_type = FILLET;

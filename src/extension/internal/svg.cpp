@@ -39,7 +39,6 @@
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
 
-#include "object/sp-namedview.h"
 #include "object/sp-image.h"
 #include "object/sp-root.h"
 #include "util/units.h"
@@ -225,11 +224,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
     if (prefs->getBool("/options/onimport", false) && import_mode_svg.compare("include") != 0) {
         bool embed = ( import_mode_svg.compare( "embed" ) == 0 );
         SPDocument * ret = SPDocument::createNewDoc(uri, TRUE);
-        SPNamedView *nv = sp_document_namedview(doc, nullptr);
-        Glib::ustring display_unit = nv->display_units->abbr;
-        if (display_unit.empty()) {
-            display_unit = "px";
-        }
+        Glib::ustring display_unit = doc->getDisplayUnit()->abbr.c_str();
         double width  = ret->getWidth().value(display_unit);
         double height = ret->getHeight().value(display_unit);
         // Create image node

@@ -914,11 +914,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (shape) {
         //only check constrain viewbox on X
         Geom::Scale scaledoc = document->getDocumentScale();
-        SPNamedView *nv = sp_document_namedview(document, nullptr);
-        display_unit = nv->display_units->abbr;
-        if (display_unit.empty()) {
-            display_unit = "px";
-        }
+        display_unit = document->getDisplayUnit()->abbr.c_str();
         doc_scale = Inkscape::Util::Quantity::convert( scaledoc[Geom::X], "px", display_unit.c_str() );
         if (doc_scale > 0) {
             doc_scale= 1.0/doc_scale;
