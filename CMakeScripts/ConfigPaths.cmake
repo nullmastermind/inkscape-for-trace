@@ -6,7 +6,6 @@ if(WIN32)
         CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
   endif()
   
-  set(INKSCAPE_LIBDIR "\\\\lib")
   set(INKSCAPE_DATADIR "") # can be set via the environment variable INKSCAPE_DATADIR at runtime
   
   set(PACKAGE_LOCALE_DIR "\\\\share\\\\locale")
@@ -16,7 +15,6 @@ if(WIN32)
   
   mark_as_advanced(SHARE_INSTALL)
 else()
-  set(INKSCAPE_LIBDIR "${CMAKE_INSTALL_PREFIX}/lib")
   set(INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
   # TODO: check and change this to correct value:
