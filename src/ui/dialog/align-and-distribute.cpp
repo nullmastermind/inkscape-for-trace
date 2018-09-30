@@ -602,7 +602,6 @@ private :
         if (!selection) return;
 
         std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
-        if (selected.empty()) return;
 
         //Check 2 or more selected objects
         if (selected.size() < 2) return;
@@ -621,20 +620,15 @@ private :
 		}
 		sort(selected.begin(),selected.end(),sort_compare);
 	}
-	std::vector<SPItem*>::iterator it(selected.begin());
-	SPItem* item = *it;
-	Geom::Point p1 =  item->getCenter();
-	for (++it ;it != selected.end(); ++it)
+
+	Geom::Point p1 = selected.back()->getCenter();
+	for (SPItem *item : selected)
 	{
-		item = *it;
 		Geom::Point p2 = item->getCenter();
 		Geom::Point delta = p1 - p2;
 		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 		p1 = p2;
 	}
-	Geom::Point p2 = selected.front()->getCenter();
-	Geom::Point delta = p1 - p2;
-	sp_item_move_rel(selected.front(),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
