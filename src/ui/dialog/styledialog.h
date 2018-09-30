@@ -46,14 +46,14 @@ class StyleDialog : public Widget::Panel {
 
 public:
     ~StyleDialog() override;
-
-    static StyleDialog &getInstance() { return *new StyleDialog(); }
-
-private:
     // No default constructor, noncopyable, nonassignable
     StyleDialog();
     StyleDialog(StyleDialog const &d) = delete;
     StyleDialog operator=(StyleDialog const &d) = delete;
+
+    static StyleDialog &getInstance() { return *new StyleDialog(); }
+
+private:
 
     // Monitor <style> element for changes.
     class NodeObserver;

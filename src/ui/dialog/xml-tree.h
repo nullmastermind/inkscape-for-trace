@@ -27,6 +27,7 @@
 
 #include "ui/dialog/attrdialog.h"
 #include "ui/dialog/cssdialog.h"
+#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "message.h"
 
@@ -213,14 +214,13 @@ private:
     //SPXMLViewAttrList *attributes;
     AttrDialog *attributes;
     CssDialog *styles;
+    StyleDialog *selectors;
 
     /* XML Node Creation pop-up window */
     Gtk::Entry *name_entry;
     Gtk::Button *create_button;
 
     Gtk::VBox node_box;
-    Gtk::VBox attr_box;
-    Gtk::VBox css_box;
     Gtk::HBox status_box;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;

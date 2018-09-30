@@ -54,9 +54,7 @@ public:
     NodeObserver(StyleDialog* styleDialog) :
         _styleDialog(styleDialog)
     {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::NodeObserver: Constructor" << std::endl;
-#endif
+        g_debug("StyleDialog::NodeObserver: Constructor");
     };
 
     void notifyContentChanged(Inkscape::XML::Node &node,
@@ -73,9 +71,7 @@ StyleDialog::NodeObserver::notifyContentChanged(
     Inkscape::Util::ptr_shared /*old_content*/,
     Inkscape::Util::ptr_shared /*new_content*/ ) {
 
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::NodeObserver::notifyContentChanged" << std::endl;
-#endif
+    g_debug("StyleDialog::NodeObserver::notifyContentChanged");
 
     _styleDialog->_readStyleElement();
     _styleDialog->_selectRow();
@@ -90,9 +86,7 @@ public:
         _styleDialog(styleDialog),
         _repr(repr)
     {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::NodeWatcher: Constructor" << std::endl;
-#endif
+        g_debug("StyleDialog::NodeWatcher: Constructor");
     };
 
     void notifyChildAdded( Inkscape::XML::Node &/*node*/,
@@ -179,9 +173,8 @@ StyleDialog::TreeStore::TreeStore()
 bool
 StyleDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path) const
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::TreeStore::row_draggable_vfunc" << std::endl;
-#endif
+    g_debug("StyleDialog::TreeStore::row_draggable_vfunc");
+
     auto unconstThis = const_cast<StyleDialog::TreeStore*>(this);
     const_iterator iter = unconstThis->get_iter(path);
     if (iter) {
@@ -200,9 +193,7 @@ bool
 StyleDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& dest,
                                                 const Gtk::SelectionData& selection_data) const
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::TreeStore::row_drop_possible_vfunc" << std::endl;
-#endif
+    g_debug("StyleDialog::TreeStore::row_drop_possible_vfunc");
 
     Gtk::TreeModel::Path dest_parent = dest;
     dest_parent.up();
@@ -214,9 +205,7 @@ StyleDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& dest
 void
 StyleDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "on_row_deleted" << std::endl;
-#endif
+    g_debug("on_row_deleted");
 
     if (_styledialog->_updating) return;  // Don't write if we deleted row (other than from DND)
 
@@ -244,9 +233,7 @@ StyleDialog::StyleDialog() :
     _textNode(nullptr),
     _desktopTracker()
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::StyleDialog" << std::endl;
-#endif
+    g_debug("StyleDialog::StyleDialog");
 
     // Tree
     Inkscape::UI::Widget::IconRenderer * addRenderer = manage(
@@ -341,9 +328,7 @@ StyleDialog::StyleDialog() :
  */
 StyleDialog::~StyleDialog()
 {
-#ifdef DEBUG_STYLEDIALOOG
-    std::cout << "StyleDialog::~StyleDialog" << std::endl;
-#endif
+    g_debug("StyleDialog::~StyleDialog");
     _desktop_changed_connection.disconnect();
     _document_replaced_connection.disconnect();
     _selection_changed_connection.disconnect();
@@ -412,9 +397,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
  */
 void StyleDialog::_readStyleElement()
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_readStyleElement: updating " << (_updating?"true":"false")<< std::endl;
-#endif
+    g_debug("StyleDialog::_readStyleElement: updating %s", (_updating?"true":"false"));
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
@@ -517,17 +500,13 @@ void StyleDialog::_writeStyleElement()
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
     _updating = false;
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_writeStyleElement(): |" << styleContent << "|" << std::endl;
-#endif
+    g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent);
 }
 
 
 void StyleDialog::_addWatcherRecursive(Inkscape::XML::Node *node) {
 
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_addWatcherRecursive()" << std::endl;
-#endif
+    g_debug("StyleDialog::_addWatcherRecursive()");
 
     StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher(this, node);
     node->addObserver(*w);
@@ -558,9 +537,7 @@ void StyleDialog::_updateWatchers()
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
     _addWatcherRecursive(root);
 
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_updateWatchers(): " << _nodeWatchers.size() << std::endl;
-#endif
+    g_debug("StyleDialog::_updateWatchers(): %d", _nodeWatchers.size());
 
     _updating = false;
 }
@@ -573,9 +550,7 @@ void StyleDialog::_updateWatchers()
  */
 void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_addToSelector: Entrance" << std::endl;
-#endif
+    g_debug("StyleDialog::_addToSelector: Entrance");
     if (*row) {
 
         Glib::ustring selector = row[_mColumns._colSelector];
@@ -656,9 +631,7 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
  */
 void StyleDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_removeFromSelector: Entrance" << std::endl;
-#endif
+    g_debug("StyleDialog::_removeFromSelector: Entrance");
     if (*row) {
 
         Glib::ustring objectLabel = row[_mColumns._colSelector];
@@ -760,12 +733,10 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector) {
 
     std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
 
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_getObjVec: |" << selector << "|" << std::endl;
+    g_debug("StyleDialog::_getObjVec: | %s |", selector);
     for (auto& obj: objVec) {
-        std::cout << "  " << (obj->getId()?obj->getId():"null") << std::endl;
+        g_debug("  %s", obj->getId() ? obj->getId() : "null");
     }
-#endif
 
     return objVec;
 }
@@ -814,9 +785,7 @@ void StyleDialog::_insertClass(const std::vector<SPObject *>& objVec, const Glib
  */
 void StyleDialog::_selectObjects(int eventX, int eventY)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_selectObjects: " << eventX << ", " << eventY << std::endl;
-#endif
+    g_debug("StyleDialog::_selectObjects: %d, %d", eventX, eventY);
 
     getDesktop()->selection->clear();
     Gtk::TreeViewColumn *col = _treeView.get_column(1);
@@ -850,9 +819,7 @@ void StyleDialog::_selectObjects(int eventX, int eventY)
  */
 void StyleDialog::_addSelector()
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_addSelector: Entrance" << std::endl;
-#endif
+    g_debug("StyleDialog::_addSelector: Entrance");
 
     // Store list of selected elements on desktop (not to be confused with selector).
     Inkscape::Selection* selection = getDesktop()->getSelection();
@@ -968,9 +935,8 @@ void StyleDialog::_addSelector()
  */
 void StyleDialog::_delSelector()
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_delSelector" << std::endl;
-#endif
+    g_debug("StyleDialog::_delSelector");
+
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
@@ -993,9 +959,8 @@ void StyleDialog::_delSelector()
  */
 bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_handleButtonEvent: Entrance" << std::endl;
-#endif
+    g_debug("StyleDialog::_handleButtonEvent: Entrance");
+
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
         Gtk::TreeViewColumn *col = nullptr;
         Gtk::TreeModel::Path path;
@@ -1052,9 +1017,7 @@ private:
 void
 StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::handleDocumentReplaced()" << std::endl;
-#endif
+    g_debug("StyleDialog::handleDocumentReplaced()");
 
     _selection_changed_connection.disconnect();
 
@@ -1072,9 +1035,7 @@ StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* documen
  */
 void
 StyleDialog::_handleDesktopChanged(SPDesktop* desktop) {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::handleDesktopReplaced()" << std::endl;
-#endif
+    g_debug("StyleDialog::handleDesktopReplaced()");
 
     if (getDesktop() == desktop) {
         // This will happen after construction of dialog. We've already
@@ -1103,10 +1064,7 @@ StyleDialog::_handleDesktopChanged(SPDesktop* desktop) {
  */
 void
 StyleDialog::_handleSelectionChanged() {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_handleSelectionChanged()" << std::endl;
-#endif
-
+    g_debug("StyleDialog::_handleSelectionChanged()");
     _selectRow();
 }
 
@@ -1120,9 +1078,7 @@ StyleDialog::_handleSelectionChanged() {
  */
 void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_buttonEventsSelectObjs" << std::endl;
-#endif
+    g_debug("StyleDialog::_buttonEventsSelectObjs");
 
     _updating = true;
 
@@ -1142,9 +1098,8 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
  */
 void StyleDialog::_selectRow()
 {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_selectRow: updating: " << (_updating?"true":"false") << std::endl;
-#endif
+    g_debug("StyleDialog::_selectRow: updating: %s", (_updating?"true":"false"));
+
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
 
     if (SP_ACTIVE_DESKTOP != getDesktop()) {

@@ -188,8 +188,6 @@
    </submenu>
    <submenu _name="_Object">
        <verb verb-id="DialogObjects" />
-       <verb verb-id="DialogTags" />
-       <verb verb-id="DialogStyle" />
        <separator/>
        <verb verb-id="DialogFillStroke" />
        <verb verb-id="DialogObjectProperties" />

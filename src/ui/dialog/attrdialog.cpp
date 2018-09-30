@@ -64,7 +64,7 @@ namespace Dialog {
  * New attribute can be added by clicking '+' at bottom of the attr pane. '-'
  */
 AttrDialog::AttrDialog():
-    UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_CSS),
+    UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_ATTR),
     _desktop(nullptr),
     _repr(nullptr)
 {
