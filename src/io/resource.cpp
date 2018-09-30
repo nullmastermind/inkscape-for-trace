@@ -20,7 +20,7 @@
 #include "config.h"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <shlobj.h> // for SHGetSpecialFolderLocation
 #endif
 
@@ -378,7 +378,7 @@ char *profile_path(const char *filename)
             prefdir = g_strdup(userenv);
         }
 
-#ifdef WIN32
+#ifdef _WIN32
         // prefer c:\Documents and Settings\UserName\Application Data\ to c:\Documents and Settings\userName\;
         // TODO: CSIDL_APPDATA is C:\Users\UserName\AppData\Roaming these days
         //       should we migrate to AppData\Local? Then we can simply use the portable g_get_user_config_dir()

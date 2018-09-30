@@ -70,7 +70,7 @@ static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
 static void (* fpe_handler)  (int) = SIG_DFL;
 static void (* ill_handler)  (int) = SIG_DFL;
-#ifndef WIN32
+#ifndef _WIN32
 static void (* bus_handler)  (int) = SIG_DFL;
 #endif
 
@@ -78,7 +78,7 @@ static void (* bus_handler)  (int) = SIG_DFL;
 
 #define SP_INDENT 8
 
-#ifdef WIN32
+#ifdef _WIN32
 typedef int uid_t;
 #define getuid() 0
 #endif
@@ -449,7 +449,7 @@ Application::Application(const char* argv, bool use_gui) :
     abrt_handler = signal (SIGABRT, Application::crash_handler);
     fpe_handler  = signal (SIGFPE,  Application::crash_handler);
     ill_handler  = signal (SIGILL,  Application::crash_handler);
-#ifndef WIN32
+#ifndef _WIN32
     bus_handler  = signal (SIGBUS,  Application::crash_handler);
 #endif
 
@@ -518,7 +518,7 @@ Application::Application(const char* argv, bool use_gui) :
     /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON.
      * Use only if use_gui is enabled
      */
-#ifdef WIN32
+#ifdef _WIN32
 #define DEFAULT_LOG_REDIRECT true
 #else
 #define DEFAULT_LOG_REDIRECT false
@@ -613,7 +613,7 @@ Application::crash_handler (int /*signum*/)
     signal (SIGABRT, abrt_handler );
     signal (SIGFPE,  fpe_handler  );
     signal (SIGILL,  ill_handler  );
-#ifndef WIN32
+#ifndef _WIN32
     signal (SIGBUS,  bus_handler  );
 #endif
 

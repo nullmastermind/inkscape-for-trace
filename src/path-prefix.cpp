@@ -73,7 +73,7 @@ gchar *get_extensions_path()
     gchar *extdir;
     gchar *new_pythonpath;
 
-#ifdef WIN32
+#ifdef _WIN32
     extdir = g_win32_locale_filename_from_utf8(INKSCAPE_EXTENSIONDIR);
 #else
     extdir = g_strdup(INKSCAPE_EXTENSIONDIR);
@@ -107,7 +107,7 @@ gchar *get_datadir_path()
     using namespace Inkscape::IO::Resource;
     gchar *datadir;
 
-#ifdef WIN32
+#ifdef _WIN32
     datadir = g_win32_locale_filename_from_utf8(profile_path(""));
 #else
     datadir = profile_path("");

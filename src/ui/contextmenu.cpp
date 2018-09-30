@@ -753,7 +753,7 @@ void ContextMenu::ImageEdit()
     Glib::ustring name;
     Glib::ustring fullname;
 
-#ifdef WIN32
+#ifdef _WIN32
     // g_spawn_command_line_sync parsing is done according to Unix shell rules,
     // not Windows command interpreter rules. Thus we need to enclose the
     // executable path with single quotes.

@@ -27,7 +27,7 @@
 # include "config.h"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -43,7 +43,7 @@ namespace Inkscape {
 
 /** does all required gettext initialization and takes care of the respective locale directory paths */
 void initialize_gettext() {
-#ifdef WIN32
+#ifdef _WIN32
     gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
 
     // obtain short path to executable dir and pass it
@@ -90,7 +90,7 @@ void bind_textdomain_codeset_utf8() {
  *       for now do something even easier - switch console encoding to UTF8 and be done with it!
  *     this also works nicely on MSYS consoles where UTF8 encoding is used by default, too  */
 void bind_textdomain_codeset_console() {
-#ifdef WIN32
+#ifdef _WIN32
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 #else
     std::string charset;

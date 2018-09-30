@@ -109,7 +109,7 @@ get_valid_files(std::vector<Glib::ustring> filenames,
     return valid_files;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 // minimal print handler (just prints the string to stdout)
 void g_print_no_convert(const gchar *buf) { fputs(buf, stdout); }
 void g_printerr_no_convert(const gchar *buf) { fputs(buf, stderr); }
@@ -117,7 +117,7 @@ void g_printerr_no_convert(const gchar *buf) { fputs(buf, stderr); }
 
 int main (int argc, char **argv)
 {
-#ifdef WIN32
+#ifdef _WIN32
     // Ugly hack to make g_print emit UTF-8 encoded characters. Otherwise glib will *always*
     // perform character conversion to the system's ANSI code page making UTF-8 output impossible.
     g_set_print_handler(g_print_no_convert);

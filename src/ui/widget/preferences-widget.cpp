@@ -41,7 +41,7 @@
 #include "ui/widget/preferences-widget.h"
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -805,7 +805,7 @@ void PrefEntryFileButtonHBox::onRelatedButtonClickedCallback()
                   (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
             open_path = "";
 
-#ifdef WIN32
+#ifdef _WIN32
         //# If no open path, default to our win32 documents folder
         if (open_path.empty())
         {
@@ -907,7 +907,7 @@ void PrefOpenFolder::onRelatedButtonClickedCallback()
 {
     g_mkdir_with_parents(relatedEntry->get_text().c_str(), 0700);
     // https://stackoverflow.com/questions/42442189/how-to-open-spawn-a-file-with-glib-gtkmm-in-windows
-#ifdef WIN32
+#ifdef _WIN32
     ShellExecute(NULL, "open", relatedEntry->get_text().c_str(), NULL, NULL, SW_SHOWDEFAULT);
 #elif defined(__APPLE__)
     system(("open " + relatedEntry->get_text()).c_str());

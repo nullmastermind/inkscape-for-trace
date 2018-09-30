@@ -16,7 +16,7 @@
 #endif
 
 #include <fstream>
-#ifdef WIN32
+#ifdef _WIN32
 #include <fcntl.h>
 #include <io.h>
 #endif
@@ -78,7 +78,7 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 
         Glib::ustring how( mode );
         if ( how.find("w") != Glib::ustring::npos ) {
-#ifdef WIN32
+#ifdef _WIN32
             setmode(fileno(stdout), O_BINARY);
 #endif
             return stdout;

@@ -710,7 +710,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 
     // PDFDoc is from poppler. PDFDoc is used for preview and for native import.
 
-#ifndef WIN32
+#ifndef _WIN32
     // poppler does not use glib g_open. So on win32 we must use unicode call. code was copied from
     // glib gstdio.c
     GooString *filename_goo = new GooString(uri);

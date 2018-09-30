@@ -61,7 +61,7 @@
 #include "extension/output.h"
 
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <commdlg.h>
 #include <gdk/gdkwin32.h>
@@ -1313,7 +1313,7 @@ void Export::onBrowse ()
 
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fs), filename.c_str());
 
-#ifdef WIN32
+#ifdef _WIN32
     // code in this section is borrowed from ui/dialogs/filedialogimpl-win32.cpp
     OPENFILENAMEW opf;
     WCHAR filter_string[20];

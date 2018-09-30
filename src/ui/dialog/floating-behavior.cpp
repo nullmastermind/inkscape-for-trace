@@ -184,7 +184,7 @@ FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint transient_policy = prefs->getIntLimited("/options/transientpolicy/value", 1, 0, 2);
 
-#ifdef WIN32 // Win32 special code to enable transient dialogs
+#ifdef _WIN32 // Win32 special code to enable transient dialogs
     transient_policy = 2;
 #endif
 

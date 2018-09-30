@@ -1,12 +1,6 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-/* Define WIN32 when on windows */
-#ifndef WIN32
-#cmakedefine WIN32
-#endif
-
-
 
 /* Name of package */
 #define PACKAGE "${PROJECT_NAME}"

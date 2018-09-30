@@ -261,7 +261,7 @@ Extension::check ()
 
     // No need to include Windows only extensions
     // See LP bug #1307554 for details - https://bugs.launchpad.net/inkscape/+bug/1307554
-#ifndef WIN32
+#ifndef _WIN32
     const char* win_ext[] = {"com.vaxxine.print.win32"};
     std::vector<std::string> v (win_ext, win_ext + sizeof(win_ext)/sizeof(win_ext[0]));
     std::string ext_id(id);

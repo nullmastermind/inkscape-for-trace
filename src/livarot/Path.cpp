@@ -813,7 +813,7 @@ Type1 fonts because they use cubic-paths instead of the
 bezier-paths used by True-Type fonts."
 */
 
-#ifdef WIN32
+#ifdef _WIN32
 	    Geom::Point np = nData->p - nData->end;
 	    if ( np[Geom::X] < l ) {
 		l = np[Geom::X];

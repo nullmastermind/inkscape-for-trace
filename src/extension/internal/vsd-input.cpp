@@ -233,7 +233,7 @@ void VsdImportDialog::_setPreviewPage()
 
 SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-     #ifdef WIN32
+     #ifdef _WIN32
           // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
           // therefore attempt to convert uri to the system codepage
           // even if this is not possible the alternate short (8.3) file name will be used if available

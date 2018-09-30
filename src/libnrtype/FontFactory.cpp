@@ -791,7 +791,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
     }
 
     gchar *dir;
-# ifdef WIN32
+# ifdef _WIN32
     dir = g_win32_locale_filename_from_utf8(utf8dir);
 # else
     dir = g_filename_from_utf8(utf8dir, -1, nullptr, nullptr, nullptr);
@@ -823,7 +823,7 @@ void font_factory::AddFontFile(char const *utf8file)
     }
 
     gchar *file;
-# ifdef WIN32
+# ifdef _WIN32
     file = g_win32_locale_filename_from_utf8(utf8file);
 # else
     file = g_filename_from_utf8(utf8file, -1, nullptr, nullptr, nullptr);

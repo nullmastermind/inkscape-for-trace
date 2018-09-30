@@ -249,7 +249,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
         }
         // Other bitmaps are either really absolute, or already relative.
 
-#ifdef WIN32
+#ifdef _WIN32
         /* Windows relative path needs their native separators before we
          * compare it to native baserefs. */
         if ( !Glib::path_is_absolute(href) ) {
@@ -278,7 +278,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
                                                   ? abs_href.c_str()
                                                   : nullptr ));
             if (!Glib::path_is_absolute(new_href)) {
-#ifdef WIN32
+#ifdef _WIN32
                 /* Native Windows path separators are replaced with / so that the href
                  * also works on Gnu/Linux and OSX */
                 std::replace(new_href.begin(), new_href.end(), '\\', '/');

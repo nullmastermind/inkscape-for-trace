@@ -12,7 +12,7 @@
 
 #include <glibmm.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include "filedialogimpl-gtkmm.h"
  

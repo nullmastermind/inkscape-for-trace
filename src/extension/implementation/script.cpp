@@ -51,7 +51,7 @@
 
 #include "path-prefix.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <sys/stat.h>
 #include "registrytool.h"
@@ -86,7 +86,7 @@ void Script::pump_events () {
 */
 Script::interpreter_t const Script::interpreterTab[] = {
         {"perl",   "perl-interpreter",   "perl"   },
-#ifdef WIN32
+#ifdef _WIN32
         {"python", "python-interpreter", "pythonw" },
 #else
         {"python", "python-interpreter", "python" },

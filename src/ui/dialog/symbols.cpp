@@ -714,7 +714,7 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
 // Read Visio stencil files
 SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
   gchar *fullname;
-  #ifdef WIN32
+  #ifdef _WIN32
     // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
     // therefore attempt to convert uri to the system codepage
     // even if this is not possible the alternate short (8.3) file name will be used if available

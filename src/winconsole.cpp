@@ -38,7 +38,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef WIN32
+#ifdef _WIN32
 #undef DATADIR
 #include <windows.h>
 

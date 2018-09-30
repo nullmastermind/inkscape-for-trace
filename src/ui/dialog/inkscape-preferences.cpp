@@ -60,7 +60,7 @@
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
-# ifdef WIN32
+# ifdef _WIN32
 #  include <windows.h>
 # endif
 #endif
@@ -610,7 +610,7 @@ void InkscapePreferences::symbolicThemeCheck()
             folder.erase(0, last_slash_idx + 1);
         }
         if (folder == prefs->getString("/theme/iconTheme")) {
-#ifdef WIN32
+#ifdef _WIN32
             path += g_win32_locale_filename_from_utf8("/symbolic/actions");
 #else
             path += "/symbolic/actions";
@@ -953,7 +953,7 @@ void InkscapePreferences::initPageUI()
                             _("Dockable"));
     _page_windows.add_line( true, "", _win_floating, "",
                             _("Floating"));
-#ifdef WIN32
+#ifdef _WIN32
     _page_windows.add_group_header( _("Desktop integration"));
     _page_windows.add_line( true, "", _win_native, "",
                             _("Use Windows like open and save dialogs"));
@@ -961,7 +961,7 @@ void InkscapePreferences::initPageUI()
                             _("Use GTK open and save dialogs "));
 #endif
 
-#ifndef WIN32 // non-Win32 special code to enable transient dialogs
+#ifndef _WIN32 // non-Win32 special code to enable transient dialogs
     _page_windows.add_group_header( _("Dialogs on top:"));
 
     _page_windows.add_line( true, "", _win_ontop_none, "",
@@ -982,7 +982,7 @@ void InkscapePreferences::initPageUI()
 
 
     _page_windows.add_group_header( _("Miscellaneous"));
-#ifndef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
+#ifndef _WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
     _page_windows.add_line( true, "", _win_hide_task, "",
                             _("Whether dialog windows are to be hidden in the window manager taskbar"));
 #endif
@@ -2118,7 +2118,7 @@ void InkscapePreferences::initPageSpellcheck()
 
   AspellConfig *config = new_aspell_config();
 
-#ifdef WIN32
+#ifdef _WIN32
     // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
     // this is some black magick to find out the executable path to give it to aspell
     char exeName[MAX_PATH+1];

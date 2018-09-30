@@ -11,7 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#ifdef WIN32
+#ifdef _WIN32
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -1926,7 +1926,7 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
 
 } } } // namespace Dialog, UI, Inkscape
 
-#endif // ifdef WIN32
+#endif // ifdef _WIN32
 
 /*
   Local Variables:

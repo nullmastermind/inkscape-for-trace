@@ -85,7 +85,7 @@
 
 #define CLIPBOARD_TEXT_TARGET "text/plain"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -1149,7 +1149,7 @@ SPDocument *ClipboardManagerImpl::_retrieveClipboard(Glib::ustring required_targ
     bool file_saved = false;
     Glib::ustring target = best_target;
 
-#ifdef WIN32
+#ifdef _WIN32
     if (best_target == "CF_ENHMETAFILE" || best_target == "WCF_ENHMETAFILE")
     {   // Try to save clipboard data as en emf file (using win32 api)
         if (OpenClipboard(NULL)) {
@@ -1397,7 +1397,7 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
             return *i;
         }
     }
-#ifdef WIN32
+#ifdef _WIN32
     if (OpenClipboard(NULL))
     {   // If both bitmap and metafile are present, pick the one that was exported first.
         UINT format = EnumClipboardFormats(0);
@@ -1463,7 +1463,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
         sigc::mem_fun(*this, &ClipboardManagerImpl::_onGet),
         sigc::mem_fun(*this, &ClipboardManagerImpl::_onClear));
 
-#ifdef WIN32
+#ifdef _WIN32
     // If the "image/x-emf" target handled by the emf extension would be
     // presented as a CF_ENHMETAFILE automatically (just like an "image/bmp"
     // is presented as a CF_BITMAP) this code would not be needed.. ???

@@ -49,7 +49,7 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
         return nullptr;
         }
 
-#ifndef WIN32
+#ifndef _WIN32
     gchar *filename = g_filename_from_utf8( utf8name, -1, nullptr, nullptr, nullptr );
     if ( filename ) {
         if (mode == FILE_READ)

@@ -97,10 +97,10 @@
 #include <extension/output.h>
 #include <extension/input.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include "registrytool.h"
-#endif // WIN32
+#endif // _WIN32
 
 #include "extension/init.h"
 // Not ideal, but there doesn't appear to be a nicer system in place for
@@ -305,7 +305,7 @@ static void resetCommandlineGlobals() {
         sp_global_printer_utf8 = nullptr;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 static bool replaceArgs( int& argc, char**& argv );
 #endif
 static std::vector<gchar *> sp_process_args(poptContext ctx);
@@ -578,7 +578,7 @@ gchar * blankParam = g_strdup("");
 
 
 
-#ifdef WIN32
+#ifdef _WIN32
 
 /**
  * Set up the PATH, INKSCAPE_LOCALEDIR and PYTHONPATH environment
@@ -640,7 +640,7 @@ main(int argc, char **argv)
     Inkscape::initialize_gettext();
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
     gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
     _win32_set_inkscape_env(datadir);
     g_free(datadir);
@@ -665,7 +665,7 @@ main(int argc, char **argv)
 
     gboolean use_gui;
 
-#if !defined(WIN32) && !defined(GDK_WINDOWING_QUARTZ)
+#if !defined(_WIN32) && !defined(GDK_WINDOWING_QUARTZ)
     use_gui = (g_getenv("DISPLAY") != nullptr);
 #else
     use_gui = TRUE;
@@ -725,12 +725,12 @@ main(int argc, char **argv)
         }
     }
 
-#ifdef WIN32
+#ifdef _WIN32
     {
         // If the call fails, we'll need to convert charsets
         needToRecodeParams = !replaceArgs( argc, argv );
     }
-#endif // WIN32
+#endif // _WIN32
 
     int retcode;
 
@@ -975,7 +975,7 @@ sp_main_gui(int argc, char const **argv)
     Glib::signal_idle().connect(sigc::ptr_fun(&Inkscape::CmdLineAction::idle));
     main_instance.run();
 
-#ifdef WIN32
+#ifdef _WIN32
     //We might not need anything here
     //sp_win32_finish(); <-- this is a NOP func
 #endif
@@ -1846,7 +1846,7 @@ static int do_export_xaml(SPDocument* doc, gchar const* uri, char const* mime)
     return do_export_win_metafile_common(doc, uri, mime);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool replaceArgs( int& argc, char**& argv )
 {
     bool worked = false;
@@ -2120,7 +2120,7 @@ bool replaceArgs( int& argc, char**& argv )
 
     return worked;
 }
-#endif // WIN32
+#endif // _WIN32
 
 static std::vector<gchar *>
 sp_process_args(poptContext ctx)

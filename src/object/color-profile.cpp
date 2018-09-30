@@ -20,7 +20,7 @@
 #include <io/sys.h>
 #include <io/resource.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #ifndef _WIN32_WINDOWS         // Allow use of features specific to Windows 98 or later. Required for correctly including icm.h
 #define _WIN32_WINDOWS 0x0410
 #endif
@@ -46,9 +46,9 @@
 #include <glibmm/convert.h>
 #include "uri.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <icm.h>
-#endif // WIN32
+#endif // _WIN32
 
 using Inkscape::ColorProfile;
 using Inkscape::ColorProfileImpl;
@@ -788,7 +788,7 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
         g_free(path);
     }
 
-#ifdef WIN32
+#ifdef _WIN32
     wchar_t pathBuf[MAX_PATH + 1];
     pathBuf[0] = 0;
     DWORD pathSize = sizeof(pathBuf);
@@ -802,7 +802,7 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
         }
         g_free( utf8Path );
     }
-#endif // WIN32
+#endif // _WIN32
 
     return sources;
 }

@@ -82,7 +82,7 @@ using Inkscape::IO::Resource::USER;
 #include "extension/dbus/dbus-init.h"
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -467,7 +467,7 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
               (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)))
         open_path = "";
 
-#ifdef WIN32
+#ifdef _WIN32
     //# If no open path, default to our win32 documents folder
     if (open_path.empty())
     {

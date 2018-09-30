@@ -346,7 +346,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         g_free(document->name);
         document->name = nullptr;
     }
-#ifndef WIN32
+#ifndef _WIN32
     document->uri = prepend_current_dir_if_relative(uri);
 #else
     // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
@@ -890,7 +890,7 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
     gchar *new_uri = nullptr;
     if (filename) {
 
-#ifndef WIN32
+#ifndef _WIN32
         new_uri = prepend_current_dir_if_relative(filename);
 #else
         // FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!

@@ -50,7 +50,7 @@
 #include "object/sp-clippath.h"
 
 #include "util/units.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include "libnrtype/FontFactory.h" // USE_PANGO_WIN32
 #endif
 
@@ -270,7 +270,7 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(fn, "w");
 #else
             osp = _popen(fn, "w");
@@ -297,7 +297,7 @@ bool CairoRenderContext::setPdfTarget(gchar const *utf8_fn)
             gchar *qn = ( *fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
                 : g_strdup("lpr") );
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(qn, "w");
 #else
             osp = _popen(qn, "w");
@@ -352,7 +352,7 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
         if (*fn == '|') {
             fn += 1;
             while (isspace(*fn)) fn += 1;
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(fn, "w");
 #else
             osp = _popen(fn, "w");
@@ -379,7 +379,7 @@ bool CairoRenderContext::setPsTarget(gchar const *utf8_fn)
             gchar *qn = ( *fn
                     ? g_strdup_printf("lpr -P %s", fn)  /* FIXME: quote fn */
                 : g_strdup("lpr") );
-#ifndef WIN32
+#ifndef _WIN32
             osp = popen(qn, "w");
 #else
             osp = _popen(qn, "w");

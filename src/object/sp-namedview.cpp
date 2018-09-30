@@ -785,7 +785,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             }
         }
         if ((w > 0) && (h > 0)) {
-#ifndef WIN32
+#ifndef _WIN32
             gint dx= 0;
             gint dy = 0;
             gint dw = 0;
