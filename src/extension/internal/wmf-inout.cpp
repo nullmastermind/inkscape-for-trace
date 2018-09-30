@@ -1261,7 +1261,7 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
         d->wmf_obj[index].type = 0;
 // We are keeping a copy of the WMR rather than just a structure.  Currently that is not necessary as the entire
 // WMF is read in at once and is stored in a big malloc.  However, in past versions it was handled
-// reord by record, and we might need to do that again at some point in the future if we start running into WMF
+// record by record, and we might need to do that again at some point in the future if we start running into WMF
 // files too big to fit into memory.
         if (d->wmf_obj[index].record)
             free(d->wmf_obj[index].record);

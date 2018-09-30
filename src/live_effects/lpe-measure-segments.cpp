@@ -189,7 +189,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
                         "<b><i>Style Dialog</i></b> Styling using XML editor to find appropriate classes or ID's\n"
                         "<b><i>Blacklists</i></b> This allow to hide some segments or projection steps to measure\n"
                         "<b><i>Multiple Measures</i></b> In the same object, in conjunction of blacklists, "
-                        "allow measures with diferent orientations or a extra projection \n"
+                        "allow measures with different orientations or a extra projection \n"
                         "<b><i>Set Defaults</i></b> Remember all LPE has it in the bottom"));
 }
 

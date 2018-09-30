@@ -972,7 +972,7 @@ public:
 
     /* mustn't compare _glyph_index in these operators because for characters
     that don't have glyphs (line breaks, elided soft hyphens, etc), the glyph
-    index is -1 which makes them not well-ordered. To be honest, interating by
+    index is -1 which makes them not well-ordered. To be honest, iterating by
     glyphs is not very useful and should be avoided. */
     bool operator< (iterator const &other) const
         {return _char_index < other._char_index;}

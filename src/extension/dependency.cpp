@@ -114,7 +114,7 @@ Dependency::~Dependency ()
 
     If the \c _location is \c LOCATION_EXTENSIONS then the \c INKSCAPE_EXTENSIONDIR
     is put on the front of the string with \c build_filename.  Then the
-    appopriate filetest is run.
+    appropriate filetest is run.
 
     If the \c _location is \c LOCATION_ABSOLUTE then the file test is
     run directly on the string.

@@ -267,13 +267,13 @@ void SelectionHelper::selectPrev(SPDesktop *dt)
 /*
  * Fixes the current selection, removing locked objects from it
  */
-void SelectionHelper::fixSelection(SPDesktop *dt) 
+void SelectionHelper::fixSelection(SPDesktop *dt)
 {
     if(!dt)
         return;
 
     Inkscape::Selection *selection = dt->getSelection();
-    
+
     std::vector<SPItem*> items ;
 
     auto selList = selection->items();
@@ -392,17 +392,17 @@ void ObjectSet::deleteItems()
             return;
          }
     }
-    
+
         if (isEmpty()) {
             selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
     }
     std::vector<SPItem*> selected(items().begin(), items().end());
-    clear(); 
+    clear();
     sp_selection_delete_impl(selected);
     if(SPDesktop *d = desktop()){
         d->currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        
+
         /* a tool may have set up private information in it's selection context
          * that depends on desktop items.  I think the only sane way to deal with
          * this currently is to reset the current tool, which will reset it's
@@ -438,12 +438,12 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
         //TODO: understand why layer management is tied to desktop and not to document.
         return;
     }
-        
+
     SPDocument *doc = document();
-    
+
     if(!doc)
         return;
-    
+
     Inkscape::XML::Document* xml_doc = doc->getReprDoc();
 
     // check if something is selected
@@ -820,11 +820,11 @@ void ObjectSet::popFromGroup(){
     }
 
     parent_group->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    
+
     if(document())
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP_POP_SELECTION,
                        _("Pop selection from group"));
-    
+
 }
 
 static void ungroup_impl(ObjectSet *set)
@@ -983,7 +983,7 @@ bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *s
 }
 
 void ObjectSet::raise(bool skip_undo){
-    
+
     if(isEmpty()){
         selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to raise."));
         return;
@@ -1047,7 +1047,7 @@ void ObjectSet::raiseToTop(bool skip_undo) {
         return;
     }
 
-    
+
     std::vector<Inkscape::XML::Node*> rl(xmlNodes().begin(), xmlNodes().end());
     sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
 
@@ -1406,7 +1406,7 @@ void ObjectSet::toNextLayer(bool skip_undo)
     if(!desktop())
         return;
     SPDesktop *dt=desktop(); //TODO make it desktop-independent
-        
+
     // check if something is selected
     if (isEmpty()) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer above."));
@@ -2375,7 +2375,7 @@ struct ListReverse {
         return *(i->begin());
     }
     static Iterator next(Iterator i) { i->pop_front(); return i; }
-    
+
     static bool isNull(Iterator i) {return i->empty();}
 
 private:
@@ -2966,7 +2966,7 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 void ObjectSet::toMarker(bool apply)
 {
     // sp_selection_tile has similar code
-    if (desktop() == nullptr) { // TODO: We should not need desktop for that. 
+    if (desktop() == nullptr) { // TODO: We should not need desktop for that.
                              //       Someone get rid of the dt2doc() call.
         return;
     }
@@ -3087,7 +3087,7 @@ void ObjectSet::toGuides()
 
 /*
  * Convert objects to <symbol>. How that happens depends on what is selected:
- * 
+ *
  * 1) A random selection of objects will be embedded into a single <symbol> element.
  *
  * 2) Except, a single <g> will have its content directly embedded into a <symbol>; the 'id' and
@@ -3164,14 +3164,14 @@ void ObjectSet::toSymbol()
     Inkscape::XML::Node *defsrepr = doc->getDefs()->getRepr();
     Inkscape::XML::Node *symbol_repr = xml_doc->createElement("svg:symbol");
     Inkscape::XML::Node *title_repr = xml_doc->createElement("svg:title");
-    
+
     defsrepr->appendChild(symbol_repr);
     bool settitle = false;
     // For a single group, copy relevant attributes.
     if( single_group ) {
         Glib::ustring id = the_group->getAttribute("id");
         symbol_repr->setAttribute("style",  the_group->getAttribute("style"));
-        
+
         gchar * title = the_group->title();
         if (title) {
             symbol_repr->appendChild(title_repr);
@@ -3180,7 +3180,7 @@ void ObjectSet::toSymbol()
             Inkscape::GC::release(title_repr);
         }
         g_free(title);
-        
+
         gchar * desc = the_group->desc();
         if (desc) {
             Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
@@ -3274,7 +3274,7 @@ void ObjectSet::unSymbol()
     }
 
     SPObject* symbol = single();
- 
+
     // Make sure we have only one object in selection.
     // Require that we really have a <symbol>.
     if( symbol == nullptr || !dynamic_cast<SPSymbol *>( symbol ))  {
@@ -3310,7 +3310,7 @@ void ObjectSet::unSymbol()
             }
         }
     }
-        
+
     for (std::vector<SPObject*>::const_reverse_iterator i=children.rbegin();i!=children.rend();++i){
         Inkscape::XML::Node *repr = (*i)->getRepr();
         repr->parent()->removeChild(repr);
@@ -3371,7 +3371,7 @@ void ObjectSet::tile(bool apply)
 
     // bottommost object, after sorting
     SPObject *parent = items_[0]->parent;
-    
+
 
     Geom::Affine parent_transform;
     {
@@ -3820,9 +3820,9 @@ void ObjectSet::setClipGroup()
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to create clippath or mask from."));
         return;
     }
-        
+
     std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
-    
+
     sort(p.begin(),p.end(),sp_repr_compare_position_bool);
 
     clear();
@@ -3832,7 +3832,7 @@ void ObjectSet::setClipGroup()
 
     Inkscape::XML::Node *inner = xml_doc->createElement("svg:g");
     inner->setAttribute("inkscape:label", "Clip");
-    
+
     for(std::vector<Inkscape::XML::Node*>::const_iterator i=p.begin();i!=p.end();++i){
         Inkscape::XML::Node *current = *i;
 
@@ -3877,12 +3877,12 @@ void ObjectSet::setClipGroup()
             }
         }
     }
-    
+
     Inkscape::XML::Node *outer = xml_doc->createElement("svg:g");
     outer->appendChild(inner);
     topmost_parent->appendChild(outer);
     outer->setPosition(topmost + 1);
-    
+
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
     clone->setAttribute("x", "0", false);
     clone->setAttribute("y", "0", false);
@@ -3895,12 +3895,12 @@ void ObjectSet::setClipGroup()
     templist.push_back(clone);
     // add the new clone to the top of the original's parent
     gchar const *mask_id = SPClipPath::create(templist, doc);
-    
-    
+
+
     outer->setAttribute("clip-path", g_strdup_printf("url(#%s)", mask_id));
 
     Inkscape::GC::release(clone);
-    
+
     set(outer);
     DocumentUndo::done(doc, SP_VERB_OBJECT_SET_CLIPPATH, _("Create Clip Group"));
 }
@@ -3943,12 +3943,12 @@ void ObjectSet::setClipGroup()
     // /END FIXME
 
     doc->ensureUpToDate();
-
-    // Coment this section because we dont need it I think. 
-    // Also updated comment code to work correctly if finaly is needed
-    // To active again remove next line and uncoment the section
+is
+    // Comment out this section because we don't need it, I think.
+    // Also updated comment code to work correctly if indeed it's needed.
+    // To reactivate, remove the next line and uncomment the section.
     std::vector<SPItem*> items_(items().begin(), items().end());
-    /* 
+    /*
     std::vector<SPItem*> items_prerect_(items().begin(), items().end());
     std::vector<SPItem*> items_;
 
@@ -3963,10 +3963,10 @@ void ObjectSet::setClipGroup()
             items_.push_back(*i);
         }
     }
-    clear(); 
+    clear();
     */
     sort(items_.begin(),items_.end(),sp_object_compare_position_bool);
-    
+
     // See lp bug #542004
     clear();
 
@@ -4275,7 +4275,7 @@ void ObjectSet::swapFillStroke()
     auto list= items();
     for (auto itemlist=list.begin();itemlist!=list.end();++itemlist) {
         SPItem *item = *itemlist;
-        
+
         SPCSSAttr *css = sp_repr_css_attr_new ();
 
         _paintserver_id.clear();

@@ -36,7 +36,7 @@ namespace XML {
  * all changes made to the document are stored in an internal event log. At any time
  * after starting the transaction, you can call the rollback() method, which restores
  * the document to the state it was before starting the transaction. Calling the commit()
- * method causes the internal event log to be discarded, and you can estabilish a new
+ * method causes the internal event log to be discarded, and you can establish a new
  * "restore point" by calling beginTransaction() again. There can be only one active
  * transaction at a time for a given document.
  */

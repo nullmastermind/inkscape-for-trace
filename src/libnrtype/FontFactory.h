@@ -130,7 +130,7 @@ public:
                                int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
                                int size=10, int spacing=0);
 
-    /// Semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
+    /// Semi-private: tells the font_factory that the font_instance 'who' has died and should be removed from loadedFaces
     void                  UnrefFace(font_instance* who);
 
     // internal

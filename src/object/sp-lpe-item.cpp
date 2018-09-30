@@ -74,7 +74,7 @@ void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
 void SPLPEItem::release() {
     // disconnect all modified listeners:
-    
+
     for (std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
          mod_it != this->lpe_modified_connection_list->end(); ++mod_it)
     {
@@ -239,7 +239,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             return false;
         }
         //if is not clip or mask or LPE apply to clip and mask
-        if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) { 
+        if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) {
             lpe->setCurrentShape(current);
             if (!SP_IS_GROUP(this)) {
                 lpe->pathvector_before_effect = curve->get_pathvector();
@@ -263,8 +263,8 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                 }
                 return false;
             }
-            
-            
+
+
             if (!SP_IS_GROUP(this)) {
                 // To have processed the shape to doAfterEffect
                 lpe->pathvector_after_effect = curve->get_pathvector();
@@ -422,7 +422,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
         if (repr->attribute("inkscape:original-d") &&
             !lpeitem->hasPathEffectRecursive() &&
             (!is_clip_mask ||
-            ( is_clip_mask && force))) 
+            ( is_clip_mask && force)))
         {
             if (!keep_paths) {
                 repr->setAttribute("d", repr->attribute("inkscape:original-d"));
@@ -445,7 +445,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
             if (d_str) {
                 if (!lpeitem->hasPathEffectRecursive() &&
                     (!is_clip_mask ||
-                    ( is_clip_mask && force))) 
+                    ( is_clip_mask && force)))
                 {
                     if (!keep_paths) {
                         repr->setAttribute("d", nullptr);
@@ -458,7 +458,7 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths,
                         // remember parent
                         Inkscape::XML::Node *parent = shape->getRepr()->parent();
                         // remember class
-                        char const *class_attr = shape->getRepr()->attribute("class");        
+                        char const *class_attr = shape->getRepr()->attribute("class");
                         // remember title
                         gchar *title = shape->title();
                         // remember description
@@ -555,7 +555,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
-        
+
 
         LivePathEffectObject *lpeobj = this->path_effect_list->back()->lpeobject;
         if (lpeobj && lpeobj->get_lpe()) {
@@ -565,8 +565,8 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
                 // has to be called when all the subitems have their lpes applied
                 lpe->resetDefaults(this);
             }
-            // Moved here to fix #1299461, we can call previious function twice after
-            // if anyone find necesary
+            // Moved here to fix #1299461, we can call previous function twice after
+            // if anyone find necessary
             // make sure there is an original-d for paths!!!
             sp_lpe_item_create_original_path_recursive(this);
             // perform this once when the effect is applied
@@ -747,7 +747,7 @@ bool SPLPEItem::hasPathEffectOnClipOrMask(SPLPEItem * shape) const
     if (!path_effect_list || path_effect_list->empty()) {
         return false;
     }
-    
+
     for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
     {
         LivePathEffectObject *lpeobj = (*it)->lpeobject;

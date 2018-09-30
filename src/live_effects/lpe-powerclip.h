@@ -37,7 +37,7 @@ private:
     MessageParam message;
     Geom::Path clip_box;
     Geom::Affine base;
-    Geom::Affine lastapplyed;
+    Geom::Affine lastapplied;
 };
 
 void sp_remove_powerclip(Inkscape::Selection *sel);

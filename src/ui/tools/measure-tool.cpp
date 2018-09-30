@@ -190,7 +190,7 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
  * Create a measure item in current document.
  *
  * @param pathv the path to create.
- * @param markers if the path resuts get markers.
+ * @param markers if the path results get markers.
  * @param color of the stroke.
  * @param measure_repr container element.
  */
