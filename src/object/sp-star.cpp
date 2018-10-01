@@ -494,23 +494,20 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
+    // TODO: try to remove CLONE_ORIGINAL from here
     if (hasPathEffect() && pathEffectsEnabled() && 
-        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP) || 
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
+        this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL))
     {
         // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
         // also if the effect is type BEND PATH to fix bug #179842
-        this->adjust_livepatheffect(xform);
+        this->adjust_livepatheffect(xform.inverse());
         return xform;
     }
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
         // Adjust livepatheffect
         if (hasPathEffect() && pathEffectsEnabled()) {
-            this->adjust_livepatheffect(xform);
+            this->adjust_livepatheffect(xform.inverse());
         }
         return xform;
     }

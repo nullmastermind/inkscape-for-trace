@@ -1513,12 +1513,14 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
         )
     {
         transform_attr = this->set_transform(transform);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            lpeitem->adjust_livepatheffect(transform_attr);
+        }
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
         }
-
     } else {
-        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+        if (!preserve && lpeitem && lpeitem->hasPathEffectRecursive()) {
             lpeitem->adjust_livepatheffect(transform_attr);
         }
         if (freeze_stroke_width) {

@@ -35,7 +35,6 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this),
     method(_("LPE's on linked:"), _("LPE's on linked"), "method", FLMConverter, &wr, this, FLM_BSPLINESPIRO),
     fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
-    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, false),
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true),
     applied("Store the first apply", "", "applied", &wr, this, "false", false)
@@ -43,7 +42,6 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     registerParameter(&linked_paths);
     registerParameter(&method);
     registerParameter(&fuse);
-    registerParameter(&allow_transforms);
     registerParameter(&join);
     registerParameter(&close);
     registerParameter(&applied);
@@ -76,7 +74,6 @@ void LPEFillBetweenMany::doOnApply (SPLPEItem const* lpeitem)
                     lpe_repr->setAttribute("linkedpaths", os.str());
                     lpe_repr->setAttribute("applied", "true");
                     lpe_repr->setAttribute("method", "partial");
-                    lpe_repr->setAttribute("allow_transforms", "false");
                     document->getDefs()->getRepr()->addChild(lpe_repr, nullptr); // adds to <defs> and assigns the 'id' attribute
                 }
                 std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
@@ -144,10 +141,6 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                 res_pathv.push_back(linked_path);
             }
         }
-    }
-    
-    if(!allow_transforms) {
-        SP_ITEM(sp_lpe_item)->setAttribute("transform", nullptr);
     }
     
     if (!res_pathv.empty() && close) {

@@ -326,17 +326,21 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
+    // Only set transform with proportional scaling
+    if (!transform.withoutTranslation().isUniformScale()) {
+        // Adjust livepatheffect
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            this->adjust_livepatheffect(transform.inverse());
+            return transform;
+        }
+    }
+    // TODO: try to remove CLONE_ORIGINAL from here
     // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
     if (_curve_before_lpe && hasPathEffectRecursive()) {
-        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP) || 
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) 
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL)) 
         {
             // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
             // also if the effect is type BEND PATH to fix bug #179842
-            this->adjust_livepatheffect(transform);
             return transform;
         } else {
             _curve_before_lpe->transform(transform);

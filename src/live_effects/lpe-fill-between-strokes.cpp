@@ -20,7 +20,6 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     second_path(_("Second path:"), _("Second path from which to take the original path data"), "secondpath", &wr, this),
     reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this),
     fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
-    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, false),
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
@@ -28,7 +27,6 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     registerParameter(&second_path);
     registerParameter(&reverse_second);
     registerParameter(&fuse);
-    registerParameter(&allow_transforms);
     registerParameter(&join);
     registerParameter(&close);
 }
@@ -40,9 +38,6 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
 {
     if (curve) {
         Geom::Affine affine = Geom::identity();
-        if(!allow_transforms) {
-            SP_ITEM(sp_lpe_item)->setAttribute("transform", nullptr);
-        }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             SPItem * linked1 = linked_path.getObject();

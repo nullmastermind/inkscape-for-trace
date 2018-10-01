@@ -35,7 +35,6 @@ private:
     OriginalPathArrayParam linked_paths;
     EnumParam<Filllpemethod> method;
     BoolParam fuse;
-    BoolParam allow_transforms;
     BoolParam join;
     BoolParam close;
     HiddenParam applied;
