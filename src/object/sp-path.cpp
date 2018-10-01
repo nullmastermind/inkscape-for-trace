@@ -326,14 +326,13 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-    // Only set transform with proportional scaling
-    if (!transform.withoutTranslation().isUniformScale()) {
-        // Adjust livepatheffect
-        if (hasPathEffect() && pathEffectsEnabled()) {
-            this->adjust_livepatheffect(transform.inverse());
-            return transform;
-        }
+    if (hasPathEffect() && pathEffectsEnabled())
+    {
+        // Inverse it to compensate
+        this->adjust_livepatheffect(transform.inverse());
+        return transform;
     }
+
     // TODO: try to remove CLONE_ORIGINAL from here
     // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
     if (_curve_before_lpe && hasPathEffectRecursive()) {
@@ -357,9 +356,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Adjust gradient fill
     this->adjust_gradient(transform);
-
-    // Adjust LPE
-    this->adjust_livepatheffect(transform);
 
     // nothing remains - we've written all of the transform, so return identity
     return Geom::identity();
