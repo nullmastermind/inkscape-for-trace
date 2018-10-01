@@ -77,10 +77,13 @@ LPERuler::ruler_mark(Geom::Point const &A, Geom::Point const &n, MarkType const 
 
     double real_mark_length = mark_length;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    real_mark_length = Inkscape::Util::Quantity::convert(real_mark_length, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    if (document) {
+        real_mark_length = Inkscape::Util::Quantity::convert(real_mark_length, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    }
     double real_minor_mark_length = minor_mark_length;
-    real_minor_mark_length = Inkscape::Util::Quantity::convert(real_minor_mark_length, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
-
+    if (document) {
+        real_minor_mark_length = Inkscape::Util::Quantity::convert(real_minor_mark_length, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    }
     n_major = real_mark_length * n;
     n_minor = real_minor_mark_length * n;
     if (mark_dir == MARKDIR_BOTH) {
@@ -130,10 +133,13 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
 
     double real_mark_distance = mark_distance;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    real_mark_distance = Inkscape::Util::Quantity::convert(real_mark_distance, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
-
+    if (document) {
+        real_mark_distance = Inkscape::Util::Quantity::convert(real_mark_distance, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    }  
     double real_offset = offset;
-    real_offset = Inkscape::Util::Quantity::convert(real_offset, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    if (document) {
+        real_offset = Inkscape::Util::Quantity::convert(real_offset, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
+    }
     for (double s = real_offset; s<totlength; s+=real_mark_distance){
         s_cuts.push_back(s);
     }
