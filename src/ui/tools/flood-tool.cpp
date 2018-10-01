@@ -33,7 +33,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
@@ -46,6 +45,8 @@
 #include "display/drawing-image.h"
 #include "display/drawing.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"

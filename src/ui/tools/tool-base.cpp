@@ -28,7 +28,7 @@
 #include "desktop.h"
 #include "gradient-drag.h"
 #include "knot-ptr.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "rubberband.h"
 #include "selcue.h"

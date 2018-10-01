@@ -25,7 +25,6 @@
 #include "document-private.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "perspective-line.h"
 #include "selection-chemistry.h"
@@ -34,6 +33,8 @@
 
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "ui/pixmaps/cursor-3dbox.xpm"
 

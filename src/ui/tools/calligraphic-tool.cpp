@@ -41,7 +41,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "macros.h"
 #include "message-context.h"
 #include "selection.h"
 #include "splivarot.h"
@@ -52,6 +51,8 @@
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "display/sp-canvas.h"
+
+#include "include/macros.h"
 
 #include "livarot/Shape.h"
 

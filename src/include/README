@@ -1,0 +1,3 @@
+Configuration, defines, macros and similar that do not fit anywhere else.
+
+Try to keep this to a minimum and move to more suitable locations whenever possible.

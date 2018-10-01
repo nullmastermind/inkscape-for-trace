@@ -25,9 +25,6 @@
 
 #include "xml/repr.h"
 
-#define SP_MACROS_SILENT
-
-
 SPFeDistantLight::SPFeDistantLight()
     : SPObject(), azimuth(0), azimuth_set(FALSE), elevation(0), elevation_set(FALSE) {
 }

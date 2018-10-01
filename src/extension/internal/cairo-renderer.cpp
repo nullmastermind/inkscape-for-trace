@@ -684,8 +684,6 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     return ret;
 }
 
-#include "macros.h" // SP_PRINT_*
-
 // Apply an SVG clip path
 void
 CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
@@ -701,7 +699,6 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
     // FIXME: the access to the first clippath view to obtain the bbox is completely bogus
     Geom::Affine saved_ctm;
     if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && cp->display->bbox) {
-        //SP_PRINT_DRECT("clipd", cp->display->bbox);
         Geom::Rect clip_bbox = *cp->display->bbox;
         Geom::Affine t(Geom::Scale(clip_bbox.dimensions()));
         t[4] = clip_bbox.left();
@@ -754,7 +751,6 @@ CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
     // FIXME: the access to the first mask view to obtain the bbox is completely bogus
     // TODO: should the bbox be transformed if maskUnits != userSpaceOnUse ?
     if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX && mask->display->bbox) {
-        //SP_PRINT_DRECT("maskd", &mask->display->bbox);
         Geom::Rect mask_bbox = *mask->display->bbox;
         Geom::Affine t(Geom::Scale(mask_bbox.dimensions()));
         t[4] = mask_bbox.left();

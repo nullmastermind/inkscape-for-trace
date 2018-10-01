@@ -451,8 +451,6 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                             * Geom::Scale(width / area.width(),
                                         height / area.height()));
 
-    //SP_PRINT_MATRIX("SVG2PNG", &affine);
-
     struct SPEBP ebp;
     ebp.width  = width;
     ebp.height = height;

@@ -32,8 +32,6 @@
 using std::map;
 using std::pair;
 
-#define SP_MACROS_SILENT
-
 static void filter_ref_changed(SPObject *old_ref, SPObject *ref, SPFilter *filter);
 static void filter_ref_modified(SPObject *href, guint flags, SPFilter *filter);
 

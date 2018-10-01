@@ -23,7 +23,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "selection.h"
@@ -32,6 +31,8 @@
 
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
+
+#include "include/macros.h"
 
 #include "object/sp-ellipse.h"
 #include "object/sp-namedview.h"

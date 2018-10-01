@@ -26,7 +26,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"

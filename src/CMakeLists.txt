@@ -159,7 +159,6 @@ set(inkscape_SRC
   layer-model.h
   line-geometry.h
   line-snapper.h
-  macros.h
   main-cmdlineact.h
   main-cmdlinexact.h
   media.h

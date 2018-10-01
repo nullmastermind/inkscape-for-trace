@@ -18,7 +18,6 @@
 #include <cairomm/surface.h>
 
 #include "gradient-image.h"
-#include "macros.h"
 
 #include "display/cairo-utils.h"
 

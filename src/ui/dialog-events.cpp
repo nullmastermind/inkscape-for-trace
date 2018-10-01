@@ -13,12 +13,12 @@
 
 #include <gtkmm/entry.h>
 #include <gtkmm/window.h>
-#include "macros.h"
+
 #include "desktop.h"
 #include "inkscape.h"
-#include "ui/tools/tool-base.h"
-
+#include "include/macros.h"
 #include "ui/dialog-events.h"
+#include "ui/tools/tool-base.h"
 
 
 /**

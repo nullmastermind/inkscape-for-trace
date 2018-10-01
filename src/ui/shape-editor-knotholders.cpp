@@ -32,7 +32,7 @@
 #include "object/sp-star.h"
 #include "style.h"
 
-#define sp_round(v,m) (((v) < 0.0) ? ((ceil((v) / (m) - 0.5)) * (m)) : ((floor((v) / (m) + 0.5)) * (m)))
+#include "include/macros.h"
 
 class RectKnotHolder : public KnotHolder {
 public:

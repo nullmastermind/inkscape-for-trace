@@ -23,8 +23,6 @@
 
 #include "xml/repr.h"
 
-#define SP_MACROS_SILENT
-
 SPFeSpotLight::SPFeSpotLight()
     : SPObject(), x(0), x_set(FALSE), y(0), y_set(FALSE), z(0), z_set(FALSE), pointsAtX(0), pointsAtX_set(FALSE),
       pointsAtY(0), pointsAtY_set(FALSE), pointsAtZ(0), pointsAtZ_set(FALSE),

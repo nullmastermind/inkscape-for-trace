@@ -24,7 +24,6 @@
 #include "widgets/ink-action.h"
 #include "widgets/ink-toggle-action.h"
 #include "widgets/toolbox.h"
-#include "macros.h"
 #include "selection.h"
 #include "verbs.h"
 

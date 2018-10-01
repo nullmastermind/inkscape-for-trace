@@ -20,7 +20,7 @@
 #include "document.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"

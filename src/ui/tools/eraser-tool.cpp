@@ -43,7 +43,6 @@
 #include "document.h"
 #include "layer-manager.h"
 #include "layer-model.h"
-#include "macros.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "rubberband.h"
@@ -56,6 +55,8 @@
 #include "display/canvas-arena.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+
+#include "include/macros.h"
 
 #include "object/sp-clippath.h"
 #include "object/sp-item-group.h"

@@ -14,7 +14,7 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#include "macros.h"
+#include "include/macros.h"
 #include "rubberband.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"

@@ -36,7 +36,7 @@
 #include "document.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "message-context.h"
 #include "path-chemistry.h"
 #include "selection.h"

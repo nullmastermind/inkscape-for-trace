@@ -20,14 +20,14 @@
 #include "desktop.h"
 #include "inkscape.h"
 #include "knotholder.h"
-#include "macros.h"
 #include "preferences.h"
 #include "snap.h"
+#include "style.h"
 
+#include "include/macros.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
-#include "style.h"
 
 int KnotHolderEntity::counter = 0;
 

@@ -17,12 +17,13 @@
 #define DRAW_VERBOSE
 
 #include "desktop-style.h"
-#include "macros.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
 
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
+
+#include "include/macros.h"
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"

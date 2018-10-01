@@ -22,7 +22,6 @@
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "macros.h"
 #include "message-context.h"
 #include "preferences.h"
 #include "selection.h"
@@ -33,6 +32,8 @@
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "display/cairo-utils.h"
+
+#include "include/macros.h"
 
 #include "object/sp-namedview.h"
 

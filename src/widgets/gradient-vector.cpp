@@ -35,7 +35,7 @@
 #include "document-undo.h"
 #include "gradient-vector.h"
 #include "layer-manager.h"
-#include "macros.h"
+#include "include/macros.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 

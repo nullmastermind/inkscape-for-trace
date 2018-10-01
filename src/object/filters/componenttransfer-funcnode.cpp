@@ -22,9 +22,6 @@
 #include "xml/repr.h"
 #include "helper-fns.h"
 
-#define SP_MACROS_SILENT
-
-
 /* FeFuncNode class */
 SPFeFuncNode::SPFeFuncNode(SPFeFuncNode::Channel channel)
     : SPObject(), type(Inkscape::Filters::COMPONENTTRANSFER_TYPE_IDENTITY),

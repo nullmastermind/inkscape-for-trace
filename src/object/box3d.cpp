@@ -34,7 +34,7 @@
 
 #include "desktop.h"
 
-#include "macros.h"
+#include "include/macros.h"
 
 static void box3d_ref_changed(SPObject *old_ref, SPObject *ref, SPBox3D *box);
 
