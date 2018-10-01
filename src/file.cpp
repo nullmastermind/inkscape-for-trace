@@ -60,6 +60,7 @@
 #include "io/resource.h"
 #include "io/sys.h"
 
+#include "object/sp-defs.h"
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 #include "style.h"
@@ -290,7 +291,11 @@ bool sp_file_open(const Glib::ustring &uri,
             // Check for font substitutions
             Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(doc);
         }
-
+        // Related bug:#1769679 #18
+        SPDefs * defs = dynamic_cast<SPDefs *>(doc->getDefs());
+        if (defs && !existing) {
+            defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
+        }
         return TRUE;
     } else if (!cancelled) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
