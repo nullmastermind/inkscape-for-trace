@@ -70,8 +70,11 @@ inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
 
 const Glib::ustring SPIBase::write(guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const
 {
+    // Is this class different from the SPIBase given, this is used in Object-to-Path
+    SPIBase const *const my_base = dynamic_cast<const SPIBase*>(base);
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
-    if (should_write(flags, set, !inherits, src)) {
+    if (should_write(flags, set, dfp, src)) {
         auto value = this->get_value();
         if ( !value.empty() ) {
             return (name + ":" + value + important_str() + ";");
