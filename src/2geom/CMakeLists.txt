@@ -49,7 +49,6 @@ set(2geom_SRC
 	svg-path-parser.cpp
 	svg-path-writer.cpp
 	sweep-bounds.cpp
-	toposweep.cpp
 	transforms.cpp
 	utils.cpp
 
@@ -67,7 +66,6 @@ set(2geom_SRC
 	cairo-path-sink.h
 	choose.h
 	circle.h
-	circulator.h
 	concepts.h
 	conic_section_clipper.h
 	conic_section_clipper_cr.h
@@ -118,7 +116,6 @@ set(2geom_SRC
 	svg-path-writer.h
 	sweep-bounds.h
 	sweeper.h
-	toposweep.h
 	transforms.h
 	utils.h
 

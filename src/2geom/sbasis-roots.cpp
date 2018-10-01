@@ -46,11 +46,11 @@
 
  *  the gsl poly roots finder is faster than bernstein too, but we don't use it for 3 reasons:
 
- a) it requires convertion to poly, which is numerically unstable
+ a) it requires conversion to poly, which is numerically unstable
 
  b) it requires gsl (which is currently not a dependency, and would bring in a whole slew of unrelated stuff)
 
- c) it finds all roots, even complex ones.  We don't want to accidently treat a nearly real root as a real root
+ c) it finds all roots, even complex ones.  We don't want to accidentally treat a nearly real root as a real root
 
 From memory gsl poly roots was about 10 times faster than bernstein in the case where all the roots
 are in [0,1] for polys of order 5.  I spent some time working out whether eigenvalue root finding
@@ -85,7 +85,7 @@ namespace Geom{
 
 /** Find the smallest interval that bounds a
  \param a sbasis function
- \returns inteval
+ \returns interval
 
 */
 
@@ -113,7 +113,7 @@ OptInterval bounds_exact(SBasis const &a) {
 
 /** Find a small interval that bounds a
  \param a sbasis function
- \returns inteval
+ \returns interval
 
 */
 // I have no idea how this works, some clever bounding argument by jfb.
@@ -231,7 +231,7 @@ static void multi_roots_internal(SBasis const &f,
         }
         return;
     }
-////usefull?
+////useful?
 //     if (f.size()==1){
 //         int idxa=upper_level(levels,fa);
 //         int idxb=upper_level(levels,fb);
@@ -390,8 +390,8 @@ static std::vector<Interval> fuseContiguous(std::vector<Interval> const &sets, d
    -compute f at both ends of the given segment [a,b].
    -compute bounds m<df(t)<M for df on the segment.
     Suppose f(a) is between two 'levels' c and C. Then
-      f wont enter c before a + (f(a)-c.max())/m
-      f wont enter C before a + (C.min()-f(a))/M
+      f won't enter c before a + (f(a)-c.max())/m
+      f won't enter C before a + (C.min()-f(a))/M
     From this we conclude nothing happens before a'=a+min((f(a)-c.max())/m,(C.min()-f(a))/M).
     We do the same for b: compute some b' such that nothing happens in (b',b].
     -if [a',b'] is not empty, repeat the process with [a',(a'+b')/2] and [(a'+b')/2,b'].

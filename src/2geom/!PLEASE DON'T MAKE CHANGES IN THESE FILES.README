@@ -8,6 +8,7 @@ The command above will only update existing files. If you add new files
 to 2Geom, you'll need to copy the new files manually. Same if you remove
 some files. Note that the trailing slashes are required!
 
-2geom's BZR repo = lp:lib2geom
-http://lib2geom.sourceforge.net
-
+2Geom's git repository is hosted on GitHub
+  https://github.com/inkscape/lib2geom
+and mirrored on GitLab
+  https://gitlab.com/inkscape/lib2geom

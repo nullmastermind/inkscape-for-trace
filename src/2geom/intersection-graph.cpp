@@ -174,7 +174,7 @@ void PathIntersectionGraph::_assignEdgeWindingParities(Coord precision)
 void PathIntersectionGraph::_assignComponentStatusFromDegenerateIntersections()
 {
     // If a path has only degenerate intersections, assign its status now.
-    // This protects against later accidentaly picking a point for winding
+    // This protects against later accidentally picking a point for winding
     // determination that is exactly at a removed intersection.
     for (unsigned w = 0; w < 2; ++w) {
         for (unsigned li = 0; li < _components[w].size(); ++li) {
@@ -410,10 +410,10 @@ PathVector PathIntersectionGraph::_getResult(bool enter_a, bool enter_b)
         assert(!result.back().empty());
     }
 
-    if (n_processed != size() * 2) {
+    /*if (n_processed != size() * 2) {
         std::cerr << "Processed " << n_processed << " intersections, expected " << (size() * 2) << std::endl;
-    }
-    //assert(n_processed == size() * 2);
+    }*/
+    assert(n_processed == size() * 2);
 
     return result;
 }

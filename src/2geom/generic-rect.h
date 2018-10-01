@@ -89,7 +89,7 @@ public:
         f[Y] = CInterval(y0, y1);
     }
     /** @brief Create a rectangle from a range of points.
-     * The resulting rectangle will contain all ponts from the range.
+     * The resulting rectangle will contain all points from the range.
      * The return type of iterators must be convertible to Point.
      * The range must not be empty. For possibly empty ranges, see OptRect.
      * @param start Beginning of the range
@@ -280,7 +280,7 @@ public:
     void unionWith(OptCRect const &b);
 
     /** @brief Expand the rectangle in both directions by the specified amount.
-     * Note that this is different from scaling. Negative values wil shrink the
+     * Note that this is different from scaling. Negative values will shrink the
      * rectangle. If <code>-amount</code> is larger than
      * half of the width, the X interval will contain only the X coordinate
      * of the midpoint; same for height. */
@@ -288,7 +288,7 @@ public:
         expandBy(amount, amount);
     }
     /** @brief Expand the rectangle in both directions.
-     * Note that this is different from scaling. Negative values wil shrink the
+     * Note that this is different from scaling. Negative values will shrink the
      * rectangle. If <code>-x</code> is larger than
      * half of the width, the X interval will contain only the X coordinate
      * of the midpoint; same for height. */
@@ -374,7 +374,7 @@ public:
     }
     
     /** @brief Create a rectangle from a range of points.
-     * The resulting rectangle will contain all ponts from the range.
+     * The resulting rectangle will contain all points from the range.
      * If the range contains no points, the result will be an empty rectangle.
      * The return type of iterators must be convertible to the corresponding
      * point type (Point or IntPoint).

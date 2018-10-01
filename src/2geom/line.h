@@ -342,7 +342,7 @@ public:
      * This operation is useful in reducing intersection problems to root-finding problems.
      * There are many affines which do this transformation. This function returns one that
      * preserves angles, areas and distances - a rotation combined with a translation, and
-     * additionaly moves the initial point of the line to (0,0). This way it works without
+     * additionally moves the initial point of the line to (0,0). This way it works without
      * problems even for lines perpendicular to the target, though may in some cases have
      * lower precision than e.g. a shear transform.
      * @param d Which coordinate of points on the line should be zero after the transformation */
@@ -431,7 +431,7 @@ bool are_parallel(Line const &l1, Line const &l2, double eps = EPSILON)
  * This tests for being parallel and the origin of one line being close to the other,
  * so it tests whether the images of the lines are similar, not whether the same time values
  * correspond to similar points. For example a line from (1,1) to (2,2) and a line from
- * (-1,-1) to (0,0) will the the same, because their images match, even though there is
+ * (-1,-1) to (0,0) will be the same, because their images match, even though there is
  * no time value for which the lines give similar points.
  * @relates Line */
 inline
