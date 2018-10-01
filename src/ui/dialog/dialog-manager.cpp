@@ -55,7 +55,6 @@
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/objects.h"
-#include "ui/dialog/tags.h"
 #include "ui/dialog/styledialog.h"
 #include "ui/dialog/cssdialog.h"
 
@@ -116,7 +115,6 @@ DialogManager::DialogManager() {
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          FloatingBehavior>);
         registerFactory("ObjectsPanel",        &create<ObjectsPanel,         FloatingBehavior>);
-        registerFactory("TagsPanel",           &create<TagsPanel,            FloatingBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, FloatingBehavior>);
         registerFactory("Memory",              &create<Memory,               FloatingBehavior>);
         registerFactory("Messages",            &create<Messages,             FloatingBehavior>);
@@ -159,7 +157,6 @@ DialogManager::DialogManager() {
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          DockBehavior>);
         registerFactory("ObjectsPanel",        &create<ObjectsPanel,         DockBehavior>);
-        registerFactory("TagsPanel",           &create<TagsPanel,            DockBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, DockBehavior>);
         registerFactory("Memory",              &create<Memory,               DockBehavior>);
         registerFactory("Messages",            &create<Messages,             DockBehavior>);

@@ -2015,7 +2015,6 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
     mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
-    mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags") );
     mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
 
 
