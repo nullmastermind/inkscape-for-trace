@@ -1,6 +1,9 @@
-
 #ifndef __INK_MAIN_CMD_LINE_XACTIONS_H__
 #define __INK_MAIN_CMD_LINE_XACTIONS_H__
+
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
 
 #ifdef WITH_YAML
 

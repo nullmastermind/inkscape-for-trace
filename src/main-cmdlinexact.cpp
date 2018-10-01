@@ -9,6 +9,10 @@
  * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #ifdef WITH_YAML
 
 #include <list>

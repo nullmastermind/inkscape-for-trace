@@ -125,8 +125,6 @@ include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
   add_definitions(-D_FORTIFY_SOURCE=2)
 endif()
-add_definitions(-DHAVE_CONFIG_H)
-add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
 if(BUILD_SHARED_LIBS AND NOT WIN32)
     add_definitions(-fPIC)
 endif()
