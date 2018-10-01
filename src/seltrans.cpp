@@ -572,8 +572,12 @@ void Inkscape::SelTrans::stamp()
             if ( copy_item->isCenterSet() && _center ) {
                 copy_item->setCenter(*_center * _current_relative_affine);
             }
-
             Inkscape::GC::release(copy_repr);
+            SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(copy_item);
+            if(lpeitem && lpeitem->hasPathEffectRecursive()) {
+                lpeitem->forkPathEffectsIfNecessary(1);
+                sp_lpe_item_update_patheffect(lpeitem, true, true);
+            }
         }
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
                            _("Stamp"));

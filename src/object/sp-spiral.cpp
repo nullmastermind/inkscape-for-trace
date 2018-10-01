@@ -408,21 +408,14 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    // TODO: try to remove CLONE_ORIGINAL from here
-    if (hasPathEffect() && pathEffectsEnabled() && 
-        this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) )
+    if (hasPathEffect() && pathEffectsEnabled())
     {
-        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-        // also if the effect is type BEND PATH to fix bug #179842
+        // Inverse it to compensate
         this->adjust_livepatheffect(xform.inverse());
         return xform;
     }
     // Only set transform with proportional scaling
     if (!xform.withoutTranslation().isUniformScale()) {
-        // Adjust livepatheffect
-        if (hasPathEffect() && pathEffectsEnabled()) {
-            this->adjust_livepatheffect(xform);
-        }
         return xform;
     }
 
@@ -462,9 +455,6 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
-
-    // Adjust livepatheffect
-    this->adjust_livepatheffect(xform);
 
     return ret;
 }

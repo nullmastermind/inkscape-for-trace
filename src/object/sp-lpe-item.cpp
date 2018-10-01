@@ -187,7 +187,6 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-
 /**
  * returns true when LPE was successful.
  */
