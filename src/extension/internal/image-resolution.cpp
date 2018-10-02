@@ -30,7 +30,7 @@
 #include <csetjmp>
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 #include <Magick++.h>
 #endif
 
@@ -396,7 +396,7 @@ void ImageResolution::readjfif(char const *) {
 
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 void ImageResolution::readmagick(char const *fn) {
     Magick::Image image;
     debug("Trying image.read");
@@ -439,7 +439,7 @@ void ImageResolution::readmagick(char const *fn) {
 void ImageResolution::readmagick(char const *) {
 }
 
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
 }
 }

@@ -309,16 +309,28 @@ list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
 if(WITH_IMAGE_MAGICK)
-    pkg_check_modules(ImageMagick ImageMagick++ )
-    if(ImageMagick_FOUND)
-        list(APPEND INKSCAPE_LIBS ${ImageMagick_LDFLAGS})
-        add_definitions(${ImageMagick_CFLAGS_OTHER})
-
-        list(APPEND INKSCAPE_INCS_SYS ${ImageMagick_INCLUDE_DIRS})
-        list(APPEND INKSCAPE_LIBS ${ImageMagick_LIBRARIES})
+    # we want "<" but pkg_check_modules only offers "<=" for some reason; let's hope nobody actually has 7.0.0
+    pkg_check_modules(MAGICK ImageMagick++<=7)
+    if(MAGICK_FOUND)
+        set(WITH_GRAPHICS_MAGICK OFF)  # prefer ImageMagick for now and disable GraphicsMagick if found
     else()
-        set(WITH_IMAGE_MAGICK OFF)  # enable 'Extensions > Raster'
+        set(WITH_IMAGE_MAGICK OFF)
     endif()
+endif()
+if(WITH_GRAPHICS_MAGICK)
+    pkg_check_modules(MAGICK GraphicsMagick++)
+    if(NOT MAGICK_FOUND)
+        set(WITH_GRAPHICS_MAGICK OFF)
+    endif()
+endif()
+if(MAGICK_FOUND)
+    list(APPEND INKSCAPE_LIBS ${MAGICK_LDFLAGS})
+    add_definitions(${MAGICK_CFLAGS_OTHER})
+
+    list(APPEND INKSCAPE_INCS_SYS ${MAGICK_INCLUDE_DIRS})
+    list(APPEND INKSCAPE_LIBS ${MAGICK_LIBRARIES})
+
+    set(WITH_MAGICK ON) # enable 'Extensions > Raster'
 endif()
 
 set(ENABLE_NLS OFF)

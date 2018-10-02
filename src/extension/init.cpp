@@ -65,7 +65,7 @@
 #include "dbus/dbus-init.h"
 #endif
 
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
 #include <Magick++.h>
 #include "internal/bitmap/adaptiveThreshold.h"
 #include "internal/bitmap/addNoise.h"
@@ -102,7 +102,7 @@
 //#include "internal/bitmap/threshold.h"
 #include "internal/bitmap/unsharpmask.h"
 #include "internal/bitmap/wave.h"
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
 #include "internal/filter/filter.h"
 
@@ -191,7 +191,7 @@ init()
 #endif
 
     /* Raster Effects */
-#ifdef WITH_IMAGE_MAGICK
+#ifdef WITH_MAGICK
     Magick::InitializeMagick(NULL);
 
     Internal::Bitmap::AdaptiveThreshold::init();
@@ -229,7 +229,7 @@ init()
     //Internal::Bitmap::Threshold::init();
     Internal::Bitmap::Unsharpmask::init();
     Internal::Bitmap::Wave::init();
-#endif /* WITH_IMAGE_MAGICK */
+#endif /* WITH_MAGICK */
 
     Internal::Filter::Filter::filters_all();
 
