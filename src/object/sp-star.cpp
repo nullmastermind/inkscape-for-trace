@@ -490,10 +490,7 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
-    if (hasPathEffect() && pathEffectsEnabled())
-    {
-        // Inverse it to compensate
-        this->adjust_livepatheffect(xform.inverse());
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return xform;
     }
     // Only set transform with proportional scaling

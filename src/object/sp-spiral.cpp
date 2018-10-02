@@ -408,10 +408,7 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled())
-    {
-        // Inverse it to compensate
-        this->adjust_livepatheffect(xform.inverse());
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return xform;
     }
     // Only set transform with proportional scaling

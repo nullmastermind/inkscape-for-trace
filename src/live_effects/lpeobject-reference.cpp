@@ -114,8 +114,9 @@ lpeobjectreference_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, LPEObj
     if ( refobj ) {
         lpeobjref->start_listening(refobj);
     }
-
-    lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    if (lpeobjref->owner) {
+        lpeobjref->owner->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 static void

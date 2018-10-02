@@ -502,10 +502,7 @@ void SPGenericEllipse::set_shape()
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled())
-    {
-        // Inverse it to compensate
-        this->adjust_livepatheffect(xform.inverse());
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return xform;
     }
 

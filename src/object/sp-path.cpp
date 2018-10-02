@@ -322,10 +322,7 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-    if (hasPathEffect() && pathEffectsEnabled())
-    {
-        // Inverse it to compensate
-        this->adjust_livepatheffect(transform.inverse());
+    if (hasPathEffect() && pathEffectsEnabled()) {
         return transform;
     }
 
