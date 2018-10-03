@@ -1139,21 +1139,7 @@ const Glib::ustring SPIColor::get_value() const
     // currentcolor goes first to handle special case for 'color' property
     if (this->currentcolor) return Glib::ustring("currentColor");
     if (this->inherit) return Glib::ustring("inherit");
-    char color_buf[8];
-    sp_svg_write_color(color_buf, sizeof(color_buf), this->value.color.toRGBA32( 0 ));
-
-    auto ret = Glib::ustring(color_buf);
-    if (this->value.color.icc) {
-        if ( !ret.empty() ) {
-            ret += " ";
-        }
-        ret += "icc-color(" + this->value.color.icc->colorProfile;
-        for(auto i: this->value.color.icc->colors) {
-            ret += ", " + Glib::ustring::format(i);
-        }
-        ret += ')';
-    }
-    return ret;
+    return this->value.color.toString();
 }
 
 void
