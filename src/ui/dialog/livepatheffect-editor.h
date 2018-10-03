@@ -19,6 +19,7 @@
 #include "ui/widget/frame.h"
 #include "live_effects/effect-enum.h"
 #include <gtkmm/liststore.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/toolbar.h>
@@ -96,7 +97,6 @@ private:
     };
 
     bool lpe_list_locked;
-    bool lpe_changed;
     //Inkscape::UI::Widget::ComboBoxEnum<LivePathEffect::EffectType> combo_effecttype;
     
     Gtk::Widget * effectwidget;
@@ -104,6 +104,7 @@ private:
     UI::Widget::Frame effectcontrol_frame;
     Gtk::HBox effectapplication_hbox;
     Gtk::VBox effectcontrol_vbox;
+    Gtk::EventBox effectcontrol_eventbox;
     Gtk::VBox effectlist_vbox;
     ModelColumns columns;
     Gtk::ScrolledWindow scrolled_window;
@@ -111,8 +112,8 @@ private:
     Glib::RefPtr<Gtk::ListStore> effectlist_store;
     Glib::RefPtr<Gtk::TreeSelection> effectlist_selection;
 
-    void on_visibility_toggled( Glib::ustring const& str );
-
+    void on_visibility_toggled( Glib::ustring const& str);
+    bool _on_button_release(GdkEventButton* button_event);
     Gtk::ButtonBox toolbar_hbox;
     Gtk::Button button_add;
     Gtk::Button button_remove;

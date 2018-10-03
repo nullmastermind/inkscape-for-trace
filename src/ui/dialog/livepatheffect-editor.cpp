@@ -56,8 +56,8 @@ void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
-    lpeeditor->lpe_changed = true;
     lpeeditor->onSelectionChanged(selection);
+    lpeeditor->_on_button_release(nullptr); //to force update widgets
 }
 
 void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
@@ -88,7 +88,6 @@ LivePathEffectEditor::LivePathEffectEditor()
     : UI::Widget::Panel("/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
       deskTrack(),
       lpe_list_locked(false),
-      lpe_changed(true),
       effectwidget(nullptr),
       status_label("", Gtk::ALIGN_CENTER),
       effectcontrol_frame(""),
@@ -114,7 +113,10 @@ LivePathEffectEditor::LivePathEffectEditor()
 
     effectlist_vbox.pack_start(scrolled_window, Gtk::PACK_EXPAND_WIDGET);
     effectlist_vbox.pack_end(toolbar_hbox, Gtk::PACK_SHRINK);
-    effectcontrol_frame.add(effectcontrol_vbox);
+    effectcontrol_eventbox.add_events(Gdk::BUTTON_RELEASE_MASK);
+    effectcontrol_eventbox.signal_button_release_event().connect(sigc::mem_fun(*this, &LivePathEffectEditor::_on_button_release) );
+    effectcontrol_eventbox.add(effectcontrol_vbox);
+    effectcontrol_frame.add(effectcontrol_eventbox);
 
     button_add.set_tooltip_text(_("Add path effect"));
     lpe_style_button(button_add, INKSCAPE_ICON("list-add"));
@@ -196,11 +198,29 @@ LivePathEffectEditor::~LivePathEffectEditor()
     }
 }
 
+bool LivePathEffectEditor::_on_button_release(GdkEventButton* button_event) {
+    Glib::RefPtr<Gtk::TreeSelection> sel = effectlist_view.get_selection();
+    if (sel->count_selected_rows () == 0) {
+        return true;
+    }
+    Gtk::TreeModel::iterator it = sel->get_selected();
+    LivePathEffect::LPEObjectReference * lperef = (*it)[columns.lperef];
+    if (lperef && current_lpeitem && current_lperef != lperef) {
+        if (lperef->getObject()) {
+            LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
+            if (effect) {
+                effect->upd_params = true;
+                showParams(*effect);
+            }
+        }
+    }
+    return true;
+}
+
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
-    if (!effect.upd_params && !lpe_changed) {
-        lpe_changed = false;
+    if (effectwidget && !effect.upd_params) {
         return;
     }
     if (effectwidget) {
@@ -211,14 +231,13 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     effectwidget = effect.newWidget();
     effectcontrol_frame.set_label(effect.getName());
     effectcontrol_vbox.pack_start(*effectwidget, true, true);
-
+ 
     button_remove.show();
     status_label.hide();
     effectcontrol_frame.show();
     effectcontrol_vbox.show_all_children();
     // fixme: add resizing of dialog
     effect.upd_params = false;
-    lpe_changed = false;
 }
 
 void
@@ -277,9 +296,7 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
             if ( lpeitem ) {
                 effect_list_reload(lpeitem);
-
                 current_lpeitem = lpeitem;
-
                 set_sensitize_all(true);
                 if ( lpeitem->hasPathEffect() ) {
                     Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
@@ -550,7 +567,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
             current_lperef = lperef;
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
-                lpe_changed = true;
+                effect->upd_params = true;
                 showParams(*effect);
                 //To reload knots and helper paths
                 Inkscape::Selection *sel = _getSelection();

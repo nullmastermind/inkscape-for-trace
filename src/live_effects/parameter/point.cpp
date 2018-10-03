@@ -209,6 +209,7 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
+    pparam->param_effect->upd_params = true;
     if(this->pparam->liveupdate){
         pparam->param_setValue(s, true);
     } else {

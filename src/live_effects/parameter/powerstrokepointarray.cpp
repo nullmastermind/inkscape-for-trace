@@ -179,7 +179,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     if (!valid_index(_index)) {
         return;
     }
-
+    _pparam->param_effect->upd_params = true;
     /// @todo how about item transforms???
     Piecewise<D2<SBasis> > const & pwd2 = _pparam->get_pwd2();
     Piecewise<D2<SBasis> > const & n = _pparam->get_pwd2_normal();

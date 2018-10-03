@@ -141,8 +141,6 @@ protected:
     bool _set_undo;
 
 private:
-    bool on_button_release(GdkEventButton* button_event);
-
     ScalarParam(const ScalarParam&) = delete;
     ScalarParam& operator=(const ScalarParam&) = delete;
 };

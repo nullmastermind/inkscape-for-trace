@@ -173,8 +173,10 @@ public:
     ~VectorParamKnotHolderEntity_Origin() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state) override {
+        param->param_effect->upd_params = true;
         Geom::Point const s = snap_knot_position(p, state);
         param->setOrigin(s);
+        param->set_and_write_new_values(param->origin, param->vector);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
     Geom::Point knot_get() const override {
