@@ -37,6 +37,8 @@
 #include "document.h"
 #include "inkscape.h"
 #include "verbs.h"
+#include "style.h"
+#include "style-enums.h"
 
 #include "object/sp-image.h"
 
@@ -211,9 +213,9 @@ void ObjectProperties::_init()
     grid_top->attach(_label_image_rendering, 0, 4, 1, 1);
 
     /* Create the combo box text for the 'image-rendering' property  */
-    _combo_image_rendering.append( "auto" );
-    _combo_image_rendering.append( "optimizeQuality" );
-    _combo_image_rendering.append( "optimizeSpeed" );
+    for (unsigned i = 0; enum_shape_rendering[i].key; ++i) {
+        _combo_image_rendering.append(enum_shape_rendering[i].key);
+    }
     _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is up-scaled:\n\t'auto' no preference;\n\t'optimizeQuality' smooth;\n\t'optimizeSpeed' blocky.\nNote that this behaviour is not defined in the SVG 1.1 specification and not all browsers follow this interpretation."));
 
     _combo_image_rendering.set_valign(Gtk::ALIGN_CENTER);
@@ -354,14 +356,7 @@ void ObjectProperties::update()
         if (SP_IS_IMAGE(item)) {
             _combo_image_rendering.show();
             _label_image_rendering.show();
-            char const *str = obj->getStyleProperty( "image-rendering", "auto" );
-            if (strcmp( str, "auto" ) == 0) {
-                _combo_image_rendering.set_active(0);
-            } else if (strcmp(str, "optimizeQuality") == 0) {
-                _combo_image_rendering.set_active(1);
-            } else {
-                _combo_image_rendering.set_active(2);
-            }
+            _combo_image_rendering.set_active(obj->style->image_rendering.value);
         } else {
             _combo_image_rendering.hide();
             _combo_image_rendering.unset_active();
