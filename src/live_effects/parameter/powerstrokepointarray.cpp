@@ -218,7 +218,8 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
 
 void PowerStrokePointArrayParamKnotHolderEntity::knot_set_offset(Geom::Point offset)
 {
-	_pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y() / 2);
+	_pparam->param_effect->upd_params = true;
+    _pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y() / 2);
 	this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
 }
 

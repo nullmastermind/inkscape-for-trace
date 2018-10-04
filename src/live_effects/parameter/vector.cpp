@@ -197,8 +197,10 @@ public:
 
     void knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint /*state*/) override {
         Geom::Point const s = p - param->origin;
+        param->param_effect->upd_params = true;
         /// @todo implement angle snapping when holding CTRL
         param->setVector(s);
+        param->set_and_write_new_values(param->origin, param->vector);
         sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
     };
     Geom::Point knot_get() const override {
