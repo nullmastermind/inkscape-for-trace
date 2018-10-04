@@ -33,6 +33,7 @@ SPStop::~SPStop() = default;
 void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
+    this->readAttr( "style" );
     this->readAttr( "offset" );
     this->readAttr( "path" ); // For mesh
     SPObject::build(doc, repr);
@@ -63,7 +64,11 @@ void SPStop::set(unsigned int key, const gchar* value) {
             break;
         }
         default: {
-            SPObject::set(key, value);
+            if (SP_ATTRIBUTE_IS_CSS(key)) {
+                this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            } else {
+                SPObject::set(key, value);
+            }
             break;
         }
     }
@@ -129,7 +134,6 @@ SPColor SPStop::getColor() const
         return style->color.value.color;
     }
     Glib::ustring color = style->stop_color.value.color.toString();
-    g_warning("Getting stop_color: %s", color.c_str());
     return style->stop_color.value.color;
 }
 
@@ -143,7 +147,6 @@ gfloat SPStop::getOpacity() const
  */
 guint32 SPStop::get_rgba32() const
 {
-    g_warning("Asking for rgba32!");
     return getColor().toRGBA32(getOpacity());
 }
 
