@@ -539,7 +539,6 @@ void SPGradient::modified(guint flags)
 #ifdef OBJECT_TRACE
     objectTrace( "SPGradient::modified" );
 #endif
-
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
         if (SP_IS_MESHGRADIENT(this)) {
             this->invalidateArray();

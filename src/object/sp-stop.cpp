@@ -69,10 +69,20 @@ void SPStop::set(unsigned int key, const gchar* value) {
             } else {
                 SPObject::set(key, value);
             }
+            // This makes sure that the parent sp-gradient is updated.
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         }
     }
 }
+
+void SPStop::modified(guint flags)
+{
+    if (parent && !(flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
+        parent->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+    }
+}
+
 
 /**
  * Virtual set: set attribute to value.
