@@ -245,7 +245,7 @@ private:
     }
 
     std::unordered_map<std::string, SPIBasePtr> m_name_map;
-    std::unordered_map<SPAttributeEnum, SPIBasePtr> m_id_map;
+    std::unordered_map</* SPAttributeEnum */ int, SPIBasePtr> m_id_map;
     std::vector<SPIBasePtr> m_vector;
 };
 
