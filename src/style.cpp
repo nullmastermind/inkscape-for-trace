@@ -259,7 +259,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // Unimplemented SVG 1.1: alignment-baseline, clip, clip-path, color-profile, cursor,
     // dominant-baseline, flood-color, flood-opacity, font-size-adjust,
     // glyph-orientation-horizontal, glyph-orientation-vertical, kerning, lighting-color,
-    // pointer-events, stop-color, stop-opacity, unicode-bidi
+    // pointer-events, unicode-bidi
 
     // For enums:   property( name, enumeration, default value , inherits = true );
     // For scale24: property( name, default value = 0, inherits = true );
@@ -384,7 +384,11 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     color_rendering(  "color-rendering", enum_color_rendering, SP_CSS_COLOR_RENDERING_AUTO),
     image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
     shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
-    text_rendering(    "text-rendering", enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO )
+    text_rendering( "text-rendering", enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO ),
+
+    // Stop color and opacity
+    stop_color("stop-color"),
+    stop_opacity("stop-opacity", SP_SCALE24_MAX)
 {
     // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
@@ -566,7 +570,7 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     // if( !(*temp == *this ) ) std::cout << "SPStyle::read: Need to clear" << std::endl;
     // delete temp;
 
-    clear(); // FIXME, If this isn't here, gradient editing stops working. Why?
+    clear(); // FIXME, If this isn't here, EVERYTHING stops working! Why?
 
     if (object && object->cloned) {
         cloned = true;

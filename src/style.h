@@ -268,6 +268,10 @@ public:
     /** enable-background, used for defining where filter effects get their background image */
     SPIEnum enable_background;
 
+    /** gradient-stop */
+    SPIColor stop_color;
+    SPIScale24 stop_opacity;
+
     /* Rendering hints ----------------------- */
 
     /** hints on how to render: e.g. speed vs. accuracy.

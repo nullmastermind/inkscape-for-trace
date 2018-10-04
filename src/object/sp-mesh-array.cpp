@@ -853,8 +853,8 @@ bool SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
                             if( (istop == 0 && irow == 0 && icolumn > 0) || (istop == 1 && irow > 0 ) ) {
                                 // skip 
                             } else {
-                                SPColor color   = stop->getEffectiveColor();
-                                double opacity  = stop->opacity;
+                                SPColor color   = stop->getColor();
+                                double opacity  = stop->getOpacity();
                                 new_patch.setColor( istop, color );
                                 new_patch.setOpacity( istop, opacity );
                                 new_patch.setStopPtr( istop, stop );
@@ -1087,7 +1087,7 @@ static SPColor default_color( SPItem *item ) {
             if ( SP_IS_GRADIENT(server) && SP_GRADIENT(server)->getVector() ) {
                 SPStop *firstStop = SP_GRADIENT(server)->getVector()->getFirstStop();
                 if ( firstStop ) {
-                    color = firstStop->getEffectiveColor();
+                    color = firstStop->getColor();
                 }
             }
         }

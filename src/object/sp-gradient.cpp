@@ -128,8 +128,8 @@ bool SPGradient::isEquivalent(SPGradient *that)
 
         bool effective = true;
         while (effective && (as && bs)) {
-            if (!as->getEffectiveColor().isClose(bs->getEffectiveColor(), 0.001) ||
-                    as->offset != bs->offset || as->opacity != bs->opacity ) {
+            if (!as->getColor().isClose(bs->getColor(), 0.001) ||
+                    as->offset != bs->offset || as->getOpacity() != bs->getOpacity() ) {
                 effective = false;
                 break;
             } 
@@ -1003,8 +1003,8 @@ void SPGradient::rebuildVector()
             // down to 100%."
             gstop.offset = CLAMP(gstop.offset, 0, 1);
 
-            gstop.color = stop->getEffectiveColor();
-            gstop.opacity = stop->opacity;
+            gstop.color = stop->getColor();
+            gstop.opacity = stop->getOpacity();
 
             vector.stops.push_back(gstop);
         }

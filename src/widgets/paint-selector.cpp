@@ -670,8 +670,8 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
             // Gradient can be null if object paint is changed externally (ie. with a color picker tool)
             if (gradient)
             {
-                SPColor color = gradient->getFirstStop()->specified_color;
-                float alpha = gradient->getFirstStop()->opacity;
+                SPColor color = gradient->getFirstStop()->getColor();
+                float alpha = gradient->getFirstStop()->getOpacity();
                 psel->selected_color->setColorAlpha(color, alpha, false);
             }
         }

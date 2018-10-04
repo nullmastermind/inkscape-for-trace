@@ -605,7 +605,7 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
     SelectedColor *csel = static_cast<SelectedColor*>(g_object_get_data(G_OBJECT(tbl), "cselector"));
     // set its color, from the stored array
     g_object_set_data(G_OBJECT(tbl), "updating_color", reinterpret_cast<void*>(1));
-    csel->setColorAlpha(stop->getEffectiveColor(), stop->opacity);
+    csel->setColorAlpha(stop->getColor(), stop->getOpacity());
     g_object_set_data(G_OBJECT(tbl), "updating_color", reinterpret_cast<void*>(0));
     GtkWidget *offspin = GTK_WIDGET(g_object_get_data(G_OBJECT(tbl), "offspn"));
     GtkWidget *offslide =GTK_WIDGET(g_object_get_data(G_OBJECT(tbl), "offslide"));
@@ -1083,7 +1083,7 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         SelectedColor *csel =  static_cast<SelectedColor*>(g_object_get_data(G_OBJECT(widget), "cselector"));
 
         g_object_set_data(G_OBJECT(widget), "updating_color", reinterpret_cast<void*>(1));
-        csel->setColorAlpha(stop->getEffectiveColor(), stop->opacity);
+        csel->setColorAlpha(stop->getColor(), stop->getOpacity());
         g_object_set_data(G_OBJECT(widget), "updating_color", reinterpret_cast<void*>(0));
 
         /* Fill preview */
@@ -1227,8 +1227,10 @@ static void sp_gradient_vector_color_dragged(Inkscape::UI::SelectedColor *select
         return;
     }
 
-    selected_color->colorAlpha(stop->specified_color, stop->opacity);
-    stop->currentColor = false;
+    SPColor color = stop->getColor();
+    gfloat opacity = stop->getOpacity();
+    selected_color->colorAlpha(color, opacity);
+    stop->style->stop_color.currentcolor = false;
 
     blocked = FALSE;
 }

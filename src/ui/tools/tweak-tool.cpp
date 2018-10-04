@@ -837,10 +837,10 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // so it only affects the ends of this interstop;
                     // distribute the force between the two endstops so that they
                     // get all the painting even if they are not touched by the brush
-                    tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                    tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                  force * (pos_e - offset_l) / (offset_h - offset_l),
                                  do_h, do_s, do_l);
-                    tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                    tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
                                 force * (offset_h - pos_e) / (offset_h - offset_l),
                                 do_h, do_s, do_l);
                     stop->updateRepr();
@@ -850,14 +850,14 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // wide brush, may affect more than 2 stops,
                     // paint each stop by the force from the profile curve
                     if (offset_l <= pos_e && offset_l > pos_e - r) {
-                        tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                        tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
                                     force * tweak_profile (fabs (pos_e - offset_l), r),
                                     do_h, do_s, do_l);
                         child_prev->updateRepr();
                     }
 
                     if (offset_h >= pos_e && offset_h < pos_e + r) {
-                        tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                        tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                      force * tweak_profile (fabs (pos_e - offset_h), r),
                                      do_h, do_s, do_l);
                         stop->updateRepr();
@@ -879,7 +879,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                 for( unsigned j=0; j < array->nodes[i].size(); j+=3 ) {
                     SPStop *stop = array->nodes[i][j]->stop;
                     double distance = Geom::L2(Geom::Point(p - array->nodes[i][j]->p)); 
-                    tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                    tweak_color (mode, stop->getColor().v.c, rgb_goal,
                                  force * tweak_profile (distance, radius), do_h, do_s, do_l);
                     stop->updateRepr();
                 }

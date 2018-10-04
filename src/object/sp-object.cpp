@@ -1430,55 +1430,6 @@ sp_object_get_unique_id(SPObject    *object,
     return buf;
 }
 
-// Style
-
-gchar const * SPObject::getStyleProperty(gchar const *key, gchar const *def) const
-{
-    //g_return_val_if_fail(object != NULL, NULL);
-    //g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-    g_return_val_if_fail(key != nullptr, NULL);
-
-    //XML Tree being used here.
-    gchar const *style = getRepr()->attribute("style");
-    if (style) {
-        size_t const len = strlen(key);
-        char const *p;
-        while ( (p = strstr(style, key))
-                != nullptr )
-        {
-            p += len;
-            while ((*p <= ' ') && *p) {
-                p++;
-            }
-            if (*p++ != ':') {
-                break;
-            }
-            while ((*p <= ' ') && *p) {
-                p++;
-            }
-            size_t const inherit_len = sizeof("inherit") - 1;
-            if (*p
-                && !(strneq(p, "inherit", inherit_len)
-                     && (p[inherit_len] == '\0'
-                         || p[inherit_len] == ';'
-                         || g_ascii_isspace(p[inherit_len])))) {
-                return p;
-            }
-        }
-    }
-
-    //XML Tree being used here.
-    gchar const *val = getRepr()->attribute(key);
-    if (val && !streq(val, "inherit")) {
-        return val;
-    }
-    if (this->parent) {
-        return (this->parent)->getStyleProperty(key, def);
-    }
-
-    return def;
-}
-
 void SPObject::_requireSVGVersion(Inkscape::Version version) {
     for ( SPObject::ParentIterator iter=this ; iter ; ++iter ) {
         SPObject *object = iter;

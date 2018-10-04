@@ -720,36 +720,6 @@ public:
 
     void removeAttribute(char const *key, SPException *ex=nullptr);
 
-    /**
-     * Returns an object style property.
-     *
-     * \todo
-     * fixme: Use proper CSS parsing.  The current version is buggy
-     * in a number of situations where key is a substring of the
-     * style string other than as a property name (including
-     * where key is a substring of a property name), and is also
-     * buggy in its handling of inheritance for properties that
-     * aren't inherited by default.  It also doesn't allow for
-     * the case where the property is specified but with an invalid
-     * value (in which case I believe the CSS2 error-handling
-     * behaviour applies, viz. behave as if the property hadn't
-     * been specified).  Also, the current code doesn't use CRSelEng
-     * stuff to take a value from stylesheets.  Also, we aren't
-     * setting any hooks to force an update for changes in any of
-     * the inputs (i.e., in any of the elements that this function
-     * queries).
-     *
-     * \par
-     * Given that the default value for a property depends on what
-     * property it is (e.g., whether to inherit or not), and given
-     * the above comment about ignoring invalid values, and that the
-     * repr parent isn't necessarily the right element to inherit
-     * from (e.g., maybe we need to inherit from the referencing
-     * <use> element instead), we should probably make the caller
-     * responsible for ascending the repr tree as necessary.
-     */
-    char const *getStyleProperty(char const *key, char const *def) const;
-
     void setCSS(SPCSSAttr *css, char const *attr);
 
     void changeCSS(SPCSSAttr *css, char const *attr);

@@ -24,12 +24,8 @@
 #include "svg/css-ostringstream.h"
 
 SPStop::SPStop() : SPObject() {
-	this->path_string = nullptr;
-
+    this->path_string = nullptr;
     this->offset = 0.0;
-    this->currentColor = false;
-    this->specified_color.set( 0x000000ff );
-    this->opacity = 1.0;
 }
 
 SPStop::~SPStop() = default;
@@ -38,10 +34,8 @@ void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     SPObject::build(doc, repr);
 
     this->readAttr( "offset" );
-    this->readAttr( "stop-color" );
-    this->readAttr( "stop-opacity" );
-    this->readAttr( "style" );
     this->readAttr( "path" ); // For mesh
+    SPObject::build(doc, repr);
 }
 
 /**
@@ -50,55 +44,6 @@ void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 
 void SPStop::set(unsigned int key, const gchar* value) {
     switch (key) {
-        case SP_ATTR_STYLE: {
-        /** \todo
-         * fixme: We are reading simple values 3 times during build (Lauris).
-         * \par
-         * We need presentation attributes etc.
-         * \par
-         * remove the hackish "style reading" from here: see comments in
-         * sp_object_get_style_property about the bugs in our current
-         * approach.  However, note that SPStyle doesn't currently have
-         * stop-color and stop-opacity properties.
-         */
-            {
-                gchar const *p = this->getStyleProperty( "stop-color", "black");
-                if (streq(p, "currentColor")) {
-                    this->currentColor = true;
-                } else {
-                    this->specified_color = SPStop::readStopColor( p );
-                }
-            }
-            {
-                gchar const *p = this->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, this->opacity);
-                this->opacity = opacity;
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        case SP_PROP_STOP_COLOR: {
-            {
-                gchar const *p = this->getStyleProperty( "stop-color", "black");
-                if (streq(p, "currentColor")) {
-                    this->currentColor = true;
-                } else {
-                    this->currentColor = false;
-                    this->specified_color = SPStop::readStopColor( p );
-                }
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
-        case SP_PROP_STOP_OPACITY: {
-            {
-                gchar const *p = this->getStyleProperty( "stop-opacity", "1");
-                gdouble opacity = sp_svg_read_percentage(p, this->opacity);
-                this->opacity = opacity;
-            }
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-            break;
-        }
         case SP_ATTR_OFFSET: {
             this->offset = sp_svg_read_percentage(value, 0.0);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
@@ -133,26 +78,7 @@ Inkscape::XML::Node* SPStop::write(Inkscape::XML::Document* xml_doc, Inkscape::X
         repr = xml_doc->createElement("svg:stop");
     }
 
-    Glib::ustring colorStr = this->specified_color.toString();
-    gfloat opacity = this->opacity;
-
     SPObject::write(xml_doc, repr, flags);
-
-    // Since we do a hackish style setting here (because SPStyle does not support stop-color and
-    // stop-opacity), we must do it AFTER calling the parent write method; otherwise
-    // sp_object_write would clear our style= attribute (bug 1695287)
-
-    Inkscape::CSSOStringStream os;
-    os << "stop-color:";
-    if (this->currentColor) {
-        os << "currentColor";
-    } else {
-        os << colorStr;
-    }
-    os << ";stop-opacity:" << opacity;
-    repr->setAttribute("style", os.str().c_str());
-    repr->setAttribute("stop-color", nullptr);
-    repr->setAttribute("stop-opacity", nullptr);
     sp_repr_set_css_double(repr, "offset", this->offset);
     /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no sense
      * for offset proportions. */
@@ -197,59 +123,28 @@ SPStop* SPStop::getPrevStop() {
     return result;
 }
 
-SPColor SPStop::readStopColor(Glib::ustring const &styleStr, guint32 dfl) {
-    SPColor color(dfl);
-    SPIPaint paint;
-
-    paint.read( styleStr.c_str() );
-
-    if ( paint.isColor() ) {
-        color = paint.value.color;
+SPColor SPStop::getColor() const
+{
+    if (style->stop_color.currentcolor) {
+        return style->color.value.color;
     }
-
-    return color;
+    Glib::ustring color = style->stop_color.value.color.toString();
+    g_warning("Getting stop_color: %s", color.c_str());
+    return style->stop_color.value.color;
 }
 
-SPColor SPStop::getEffectiveColor() const {
-    SPColor ret;
-
-    if (currentColor) {
-        char const *str = getStyleProperty("color", nullptr);
-        /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
-         * value depends on user agent, and don't give any further restrictions that I can
-         * see.) */
-        ret = readStopColor( str, 0 );
-    } else {
-        ret = specified_color;
-    }
-
-    return ret;
+gfloat SPStop::getOpacity() const
+{
+    return SP_SCALE24_TO_FLOAT(style->stop_opacity.value);
 }
 
 /**
  * Return stop's color as 32bit value.
  */
-guint32 SPStop::get_rgba32() const {
-    guint32 rgb0 = 0;
-
-    /* Default value: arbitrarily black.  (SVG1.1 and CSS2 both say that the initial
-     * value depends on user agent, and don't give any further restrictions that I can
-     * see.) */
-    if (this->currentColor) {
-        char const *str = this->getStyleProperty("color", nullptr);
-
-        if (str) {
-            rgb0 = sp_svg_read_color(str, rgb0);
-        }
-
-        unsigned const alpha = static_cast<unsigned>(this->opacity * 0xff + 0.5);
-
-        g_return_val_if_fail((alpha & ~0xff) == 0, rgb0 | 0xff);
-
-        return rgb0 | alpha;
-    } else {
-        return this->specified_color.toRGBA32(this->opacity);
-    }
+guint32 SPStop::get_rgba32() const
+{
+    g_warning("Asking for rgba32!");
+    return getColor().toRGBA32(getOpacity());
 }
 
 /*
