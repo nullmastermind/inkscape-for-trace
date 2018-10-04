@@ -24,6 +24,7 @@
 #include <cstring>
 #include <string>
 #include <algorithm>
+#include <unordered_map>
 
 #include <glibmm/regex.h>
 
@@ -67,8 +68,188 @@ void sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, 
 static void sp_style_object_release(SPObject *object, SPStyle *style);
 static CRSelEng *sp_repr_sel_eng();
 
+/**
+ * Helper class for SPStyle property member lookup by SPAttributeEnum or
+ * by name, and for iterating over ordered members.
+ */
+class SPStylePropHelper {
+    SPStylePropHelper() {
+#define REGISTER_PROPERTY(id, member, name) \
+        _register(reinterpret_cast<SPIBasePtr>(&SPStyle::member), id, name)
 
-//SPPropMap SPStyle::_propmap;
+        // SVG 2: Attributes promoted to properties
+        REGISTER_PROPERTY(SP_ATTR_D, d, "d");
+
+        // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
+        REGISTER_PROPERTY(SP_PROP_COLOR, color, "color");
+
+        // 'font-size'/'font' must be before properties that need to know em, ex size (SPILength,
+        // SPILengthOrNormal)
+        REGISTER_PROPERTY(SP_PROP_FONT_STYLE, font_style, "font-style");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT, font_variant, "font-variant");
+        REGISTER_PROPERTY(SP_PROP_FONT_WEIGHT, font_weight, "font-weight");
+        REGISTER_PROPERTY(SP_PROP_FONT_STRETCH, font_stretch, "font-stretch");
+        REGISTER_PROPERTY(SP_PROP_FONT_SIZE, font_size, "font-size");
+        REGISTER_PROPERTY(SP_PROP_LINE_HEIGHT, line_height, "line-height");
+        REGISTER_PROPERTY(SP_PROP_FONT_FAMILY, font_family, "font-family");
+        REGISTER_PROPERTY(SP_PROP_FONT, font, "font");
+        REGISTER_PROPERTY(SP_PROP_INKSCAPE_FONT_SPEC, font_specification, "-inkscape-font-specification");
+
+        // Font variants
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_LIGATURES, font_variant_ligatures, "font-variant-ligatures");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_POSITION, font_variant_position, "font-variant-position");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_CAPS, font_variant_caps, "font-variant-caps");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_NUMERIC, font_variant_numeric, "font-variant-numeric");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_ALTERNATES, font_variant_alternates, "font-variant-alternates");
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIANT_EAST_ASIAN, font_variant_east_asian, "font-variant-east-asian");
+        REGISTER_PROPERTY(SP_PROP_FONT_FEATURE_SETTINGS, font_feature_settings, "font-feature-settings");
+
+        // Variable Fonts
+        REGISTER_PROPERTY(SP_PROP_FONT_VARIATION_SETTINGS, font_variation_settings, "font-variation-settings");
+
+        REGISTER_PROPERTY(SP_PROP_TEXT_INDENT, text_indent, "text-indent");
+        REGISTER_PROPERTY(SP_PROP_TEXT_ALIGN, text_align, "text-align");
+
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION, text_decoration, "text-decoration");
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_LINE, text_decoration_line, "text-decoration-line");
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_STYLE, text_decoration_style, "text-decoration-style");
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_COLOR, text_decoration_color, "text-decoration-color");
+
+        REGISTER_PROPERTY(SP_PROP_LETTER_SPACING, letter_spacing, "letter-spacing");
+        REGISTER_PROPERTY(SP_PROP_WORD_SPACING, word_spacing, "word-spacing");
+        REGISTER_PROPERTY(SP_PROP_TEXT_TRANSFORM, text_transform, "text-transform");
+
+        REGISTER_PROPERTY(SP_PROP_WRITING_MODE, writing_mode, "writing-mode");
+        REGISTER_PROPERTY(SP_PROP_DIRECTION, direction, "direction");
+        REGISTER_PROPERTY(SP_PROP_TEXT_ORIENTATION, text_orientation, "text-orientation");
+        REGISTER_PROPERTY(SP_PROP_DOMINANT_BASELINE, dominant_baseline, "dominant-baseline");
+        REGISTER_PROPERTY(SP_PROP_BASELINE_SHIFT, baseline_shift, "baseline-shift");
+        REGISTER_PROPERTY(SP_PROP_TEXT_ANCHOR, text_anchor, "text-anchor");
+        REGISTER_PROPERTY(SP_PROP_WHITE_SPACE, white_space, "white-space");
+
+        REGISTER_PROPERTY(SP_PROP_SHAPE_INSIDE, shape_inside, "shape-inside");
+        REGISTER_PROPERTY(SP_PROP_SHAPE_SUBTRACT, shape_subtract, "shape-subtract");
+        REGISTER_PROPERTY(SP_PROP_SHAPE_PADDING, shape_padding, "shape-padding");
+        REGISTER_PROPERTY(SP_PROP_SHAPE_MARGIN, shape_margin, "shape-margin");
+        REGISTER_PROPERTY(SP_PROP_INLINE_SIZE, inline_size, "inline-size");
+
+        REGISTER_PROPERTY(SP_PROP_CLIP_RULE, clip_rule, "clip-rule");
+        REGISTER_PROPERTY(SP_PROP_DISPLAY, display, "display");
+        REGISTER_PROPERTY(SP_PROP_OVERFLOW, overflow, "overflow");
+        REGISTER_PROPERTY(SP_PROP_VISIBILITY, visibility, "visibility");
+        REGISTER_PROPERTY(SP_PROP_OPACITY, opacity, "opacity");
+
+        REGISTER_PROPERTY(SP_PROP_ISOLATION, isolation, "isolation");
+        REGISTER_PROPERTY(SP_PROP_MIX_BLEND_MODE, mix_blend_mode, "mix-blend-mode");
+
+        REGISTER_PROPERTY(SP_PROP_COLOR_INTERPOLATION, color_interpolation, "color-interpolation");
+        REGISTER_PROPERTY(SP_PROP_COLOR_INTERPOLATION_FILTERS, color_interpolation_filters, "color-interpolation-filters");
+
+        REGISTER_PROPERTY(SP_PROP_SOLID_COLOR, solid_color, "solid-color");
+        REGISTER_PROPERTY(SP_PROP_SOLID_OPACITY, solid_opacity, "solid-opacity");
+
+        REGISTER_PROPERTY(SP_PROP_VECTOR_EFFECT, vector_effect, "vector-effect");
+
+        REGISTER_PROPERTY(SP_PROP_FILL, fill, "fill");
+        REGISTER_PROPERTY(SP_PROP_FILL_OPACITY, fill_opacity, "fill-opacity");
+        REGISTER_PROPERTY(SP_PROP_FILL_RULE, fill_rule, "fill-rule");
+
+        REGISTER_PROPERTY(SP_PROP_STROKE, stroke, "stroke");
+        REGISTER_PROPERTY(SP_PROP_STROKE_WIDTH, stroke_width, "stroke-width");
+        REGISTER_PROPERTY(SP_PROP_STROKE_LINECAP, stroke_linecap, "stroke-linecap");
+        REGISTER_PROPERTY(SP_PROP_STROKE_LINEJOIN, stroke_linejoin, "stroke-linejoin");
+        REGISTER_PROPERTY(SP_PROP_STROKE_MITERLIMIT, stroke_miterlimit, "stroke-miterlimit");
+        REGISTER_PROPERTY(SP_PROP_STROKE_DASHARRAY, stroke_dasharray, "stroke-dasharray");
+        REGISTER_PROPERTY(SP_PROP_STROKE_DASHOFFSET, stroke_dashoffset, "stroke-dashoffset");
+        REGISTER_PROPERTY(SP_PROP_STROKE_OPACITY, stroke_opacity, "stroke-opacity");
+
+        REGISTER_PROPERTY(SP_PROP_MARKER, marker, "marker");
+        REGISTER_PROPERTY(SP_PROP_MARKER_START, marker_start, "marker-start");
+        REGISTER_PROPERTY(SP_PROP_MARKER_MID, marker_mid, "marker-mid");
+        REGISTER_PROPERTY(SP_PROP_MARKER_END, marker_end, "marker-end");
+
+        REGISTER_PROPERTY(SP_PROP_PAINT_ORDER, paint_order, "paint-order");
+
+        REGISTER_PROPERTY(SP_PROP_FILTER, filter, "filter");
+        REGISTER_PROPERTY(SP_ATTR_INVALID, filter_blend_mode, "filter-blend-mode");
+        REGISTER_PROPERTY(SP_ATTR_INVALID, filter_gaussianBlur_deviation, "filter-gaussianBlur-deviation");
+
+        REGISTER_PROPERTY(SP_PROP_COLOR_RENDERING, color_rendering, "color-rendering");
+        REGISTER_PROPERTY(SP_PROP_IMAGE_RENDERING, image_rendering, "image-rendering");
+        REGISTER_PROPERTY(SP_PROP_SHAPE_RENDERING, shape_rendering, "shape-rendering");
+        REGISTER_PROPERTY(SP_PROP_TEXT_RENDERING, text_rendering, "text-rendering");
+
+        REGISTER_PROPERTY(SP_PROP_ENABLE_BACKGROUND, enable_background, "enable-background");
+    }
+
+    // this is a singleton, copy not allowed
+    SPStylePropHelper(SPStylePropHelper const&) = delete;
+public:
+
+    /**
+     * Singleton instance
+     */
+    static SPStylePropHelper &instance() {
+        static SPStylePropHelper _instance;
+        return _instance;
+    }
+
+    /**
+     * Get property pointer by enum
+     */
+    SPIBase *get(SPStyle *style, SPAttributeEnum id) {
+        auto it = m_id_map.find(id);
+        if (it != m_id_map.end()) {
+            return _get(style, it->second);
+        }
+        return nullptr;
+    }
+
+    /**
+     * Get property pointer by name
+     */
+    SPIBase *get(SPStyle *style, const std::string &name) {
+        auto it = m_name_map.find(name);
+        if (it != m_name_map.end()) {
+            return _get(style, it->second);
+        }
+        return nullptr;
+    }
+
+    /**
+     * Get a vector of property pointers
+     * \todo provide iterator instead
+     */
+    std::vector<SPIBase *> get_vector(SPStyle *style) {
+        std::vector<SPIBase *> v;
+        v.reserve(m_vector.size());
+        for (auto ptr : m_vector) {
+            v.push_back(_get(style, ptr));
+        }
+        return v;
+    }
+
+private:
+    SPIBase *_get(SPStyle *style, SPIBasePtr ptr) { return &(style->*ptr); }
+
+    void _register(SPIBasePtr ptr, SPAttributeEnum id, const char *name) {
+        m_vector.push_back(ptr);
+
+        if (id != SP_ATTR_INVALID) {
+            m_id_map[id] = ptr;
+        }
+
+        if (name[0]) {
+            m_name_map[name] = ptr;
+        }
+    }
+
+    std::unordered_map<std::string, SPIBasePtr> m_name_map;
+    std::unordered_map<SPAttributeEnum, SPIBasePtr> m_id_map;
+    std::vector<SPIBasePtr> m_vector;
+};
+
+auto &_prop_helper = SPStylePropHelper::instance();
 
 // C++11 allows one constructor to call another... might be useful. The original C code
 // had separate calls to create SPStyle, one with only SPDocument and the other with only
@@ -281,211 +462,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // This might be too resource hungary... but for now it possible to loop over properties
-
-    // SVG 2: Attributes promoted to properties
-    _properties.push_back( &d );
-
-    // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
-    _properties.push_back( &color );
-
-    // 'font-size'/'font' must be before properties that need to know em, ex size (SPILength,
-    // SPILengthOrNormal)
-    _properties.push_back( &font_style );
-    _properties.push_back( &font_variant );
-    _properties.push_back( &font_weight );
-    _properties.push_back( &font_stretch );
-    _properties.push_back( &font_size ); 
-    _properties.push_back( &line_height );
-    _properties.push_back( &font_family );
-    _properties.push_back( &font );
-    _properties.push_back( &font_specification );
-
-    // Font variants
-    _properties.push_back( &font_variant_ligatures );
-    _properties.push_back( &font_variant_position );
-    _properties.push_back( &font_variant_caps );
-    _properties.push_back( &font_variant_numeric );
-    _properties.push_back( &font_variant_alternates );
-    _properties.push_back( &font_variant_east_asian );
-    _properties.push_back( &font_feature_settings );
-
-    // Variable Fonts
-    _properties.push_back( &font_variation_settings );
-
-    _properties.push_back( &text_indent );
-    _properties.push_back( &text_align );
-
-    _properties.push_back( &text_decoration );
-    _properties.push_back( &text_decoration_line );
-    _properties.push_back( &text_decoration_style );
-    _properties.push_back( &text_decoration_color );
-
-    _properties.push_back( &letter_spacing );
-    _properties.push_back( &word_spacing );
-    _properties.push_back( &text_transform );
-
-    _properties.push_back( &writing_mode );
-    _properties.push_back( &direction );
-    _properties.push_back( &text_orientation );
-    _properties.push_back( &dominant_baseline );
-    _properties.push_back( &baseline_shift );
-    _properties.push_back( &text_anchor );
-    _properties.push_back( &white_space );
-
-    _properties.push_back( &shape_inside );
-    _properties.push_back( &shape_subtract );
-    _properties.push_back( &shape_padding );
-    _properties.push_back( &shape_margin );
-    _properties.push_back( &inline_size );
-
-    _properties.push_back( &clip_rule );
-    _properties.push_back( &display );
-    _properties.push_back( &overflow );
-    _properties.push_back( &visibility );
-    _properties.push_back( &opacity );
-
-    _properties.push_back( &isolation );
-    _properties.push_back( &mix_blend_mode );
-
-    _properties.push_back( &color_interpolation );
-    _properties.push_back( &color_interpolation_filters );
-
-    _properties.push_back( &solid_color );
-    _properties.push_back( &solid_opacity );
-
-    _properties.push_back( &vector_effect );
-
-    _properties.push_back( &fill );
-    _properties.push_back( &fill_opacity );
-    _properties.push_back( &fill_rule );
-
-    _properties.push_back( &stroke );
-    _properties.push_back( &stroke_width );
-    _properties.push_back( &stroke_linecap );
-    _properties.push_back( &stroke_linejoin );
-    _properties.push_back( &stroke_miterlimit );
-    _properties.push_back( &stroke_dasharray );
-    _properties.push_back( &stroke_dashoffset );
-    _properties.push_back( &stroke_opacity );
-
-    _properties.push_back( &marker );
-    _properties.push_back( &marker_start );
-    _properties.push_back( &marker_mid );
-    _properties.push_back( &marker_end );
-
-    _properties.push_back( &paint_order );
-
-    _properties.push_back( &filter );
-    _properties.push_back( &filter_blend_mode );
-    _properties.push_back( &filter_gaussianBlur_deviation );
-
-    _properties.push_back( &color_rendering );
-    _properties.push_back( &image_rendering );
-    _properties.push_back( &shape_rendering );
-    _properties.push_back( &text_rendering );
-
-    _properties.push_back( &enable_background );
-
-    // MAP -------------------------------------------
-
-    // if( _propmap.size() == 0 ) {
-
-    //     // 'color' must be before 'fill', 'stroke', 'text-decoration-color', ...
-    //     _propmap.insert( std::make_pair( color.name,                 reinterpret_cast<SPIBasePtr>(&SPStyle::color                 ) ) );
-
-    //     // 'font-size' must be before properties that need to know em, ex size (SPILength, SPILengthOrNormal)
-    //     _propmap.insert( std::make_pair( font_style.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::font_style            ) ) );
-    //     _propmap.insert( std::make_pair( font_variant.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::font_variant          ) ) );
-    //     _propmap.insert( std::make_pair( font_weight.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::font_weight           ) ) );
-    //     _propmap.insert( std::make_pair( font_stretch.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::font_stretch          ) ) );
-    //     _propmap.insert( std::make_pair( font_size.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::font_size             ) ) ); 
-    //     _propmap.insert( std::make_pair( line_height.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::line_height           ) ) );
-    //     _propmap.insert( std::make_pair( font_family.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::font_family           ) ) ); 
-    //     _propmap.insert( std::make_pair( font.name,                  reinterpret_cast<SPIBasePtr>(&SPStyle::font                  ) ) ); 
-    //     _propmap.insert( std::make_pair( font_specification.name,    reinterpret_cast<SPIBasePtr>(&SPStyle::font_specification    ) ) ); 
-
-    // font_variant_ligatures );
-    // font_variant_position );
-    // font_variant_caps );
-    // font_variant_numeric );
-    // font_variant_alternates );
-    // font_variant_east_asian );
-    // font_feature_settings );
-
-    //     _propmap.insert( std::make_pair( text_indent.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::text_indent           ) ) );
-    //     _propmap.insert( std::make_pair( text_align.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::text_align            ) ) );
-
-    //     _propmap.insert( std::make_pair( text_decoration.name,       reinterpret_cast<SPIBasePtr>(&SPStyle::text_decoration       ) ) );
-    //     _propmap.insert( std::make_pair( text_decoration_line.name,  reinterpret_cast<SPIBasePtr>(&SPStyle::text_decoration_line  ) ) );
-    //     _propmap.insert( std::make_pair( text_decoration_style.name, reinterpret_cast<SPIBasePtr>(&SPStyle::text_decoration_style ) ) );
-    //     _propmap.insert( std::make_pair( text_decoration_color.name, reinterpret_cast<SPIBasePtr>(&SPStyle::text_decoration_color ) ) );
-
-    //     _propmap.insert( std::make_pair( letter_spacing.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::letter_spacing        ) ) );
-    //     _propmap.insert( std::make_pair( word_spacing.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::word_spacing          ) ) );
-    //     _propmap.insert( std::make_pair( text_transform.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::text_transform        ) ) );
-
-    //     _propmap.insert( std::make_pair( direction.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::direction             ) ) );
-    //     _propmap.insert( std::make_pair( writing_mode.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::writing_mode          ) ) );
-    //     _propmap.insert( std::make_pair( text_orientation.name,      reinterpret_cast<SPIBasePtr>(&SPStyle::text_orientation      ) ) );
-    //     _propmap.insert( std::make_pair( dominant_baseline.name,     reinterpret_cast<SPIBasePtr>(&SPStyle::dominant_baseline     ) ) );
-    //     _propmap.insert( std::make_pair( baseline_shift.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::baseline_shift        ) ) );
-    //     _propmap.insert( std::make_pair( text_anchor.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::text_anchor           ) ) );
-    //     _propmap.insert( std::make_pair( white_space.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::white_space           ) ) );
-
-
-    //     _propmap.insert( std::make_pair( shape_inside.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::shape_inside          ) ) );
-    //     _propmap.insert( std::make_pair( shape_padding.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::shape_padding         ) ) );
-
-    //     _propmap.insert( std::make_pair( clip_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::clip_rule             ) ) );
-    //     _propmap.insert( std::make_pair( display.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::display               ) ) );
-    //     _propmap.insert( std::make_pair( overflow.name,              reinterpret_cast<SPIBasePtr>(&SPStyle::overflow              ) ) );
-    //     _propmap.insert( std::make_pair( visibility.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::visibility            ) ) );
-    //     _propmap.insert( std::make_pair( opacity.name,               reinterpret_cast<SPIBasePtr>(&SPStyle::opacity               ) ) );
-
-    //     _propmap.insert( std::make_pair( isolation.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::isolation             ) ) );
-    //     _propmap.insert( std::make_pair( mix_blend_mode.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::mix_blend_mode        ) ) );
-
-    //     _propmap.insert( std::make_pair( color_interpolation.name,   reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation   ) ) );
-    //     _propmap.insert( std::make_pair( color_interpolation_filters.name, reinterpret_cast<SPIBasePtr>(&SPStyle::color_interpolation_filters ) ) );
-
-    //     _propmap.insert( std::make_pair( solid_color.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::solid_color           ) ) );
-    //     _propmap.insert( std::make_pair( solid_opacity.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::solid_opacity         ) ) );
-
-    //     _propmap.insert( std::make_pair( vector_effect.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::vector_effect         ) ) );
-
-    //     _propmap.insert( std::make_pair( fill.name,                  reinterpret_cast<SPIBasePtr>(&SPStyle::fill                  ) ) );
-    //     _propmap.insert( std::make_pair( fill_opacity.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::fill_opacity          ) ) );
-    //     _propmap.insert( std::make_pair( fill_rule.name,             reinterpret_cast<SPIBasePtr>(&SPStyle::fill_rule             ) ) );
-
-
-    //     _propmap.insert( std::make_pair( stroke.name,                reinterpret_cast<SPIBasePtr>(&SPStyle::stroke                ) ) );
-    //     _propmap.insert( std::make_pair( stroke_width.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_width          ) ) );
-    //     _propmap.insert( std::make_pair( stroke_linecap.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_linecap        ) ) );
-    //     _propmap.insert( std::make_pair( stroke_linejoin.name,       reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_linejoin       ) ) );
-    //     _propmap.insert( std::make_pair( stroke_miterlimit.name,     reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_miterlimit     ) ) );
-    //     _propmap.insert( std::make_pair( stroke_dasharray.name,      reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_dasharray      ) ) );
-    //     _propmap.insert( std::make_pair( stroke_dashoffset.name,     reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_dashoffset     ) ) );
-    //     _propmap.insert( std::make_pair( stroke_opacity.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::stroke_opacity        ) ) );
-
-    //     _propmap.insert( std::make_pair( marker.name,                reinterpret_cast<SPIBasePtr>(&SPStyle::marker                ) ) );
-    //     _propmap.insert( std::make_pair( marker_start.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::marker_start          ) ) );
-    //     _propmap.insert( std::make_pair( marker_mid.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::marker_mid            ) ) );
-    //     _propmap.insert( std::make_pair( marker_end.name,            reinterpret_cast<SPIBasePtr>(&SPStyle::marker_end            ) ) );
-
-    //     _propmap.insert( std::make_pair( paint_order.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::paint_order           ) ) );
-
-    //     _propmap.insert( std::make_pair( filter.name,                reinterpret_cast<SPIBasePtr>(&SPStyle::filter                ) ) );
-    //     _propmap.insert( std::make_pair( filter_blend_mode.name,     reinterpret_cast<SPIBasePtr>(&SPStyle::filter_blend_mode     ) ) );
-    //     _propmap.insert( std::make_pair( filter_gaussianBlur_deviation.name, reinterpret_cast<SPIBasePtr>(&SPStyle::filter_gaussianBlur_deviation ) ) );
-
-    //     _propmap.insert( std::make_pair( color_rendering.name,       reinterpret_cast<SPIBasePtr>(&SPStyle::color_rendering       ) ) );
-    //     _propmap.insert( std::make_pair( image_rendering.name,       reinterpret_cast<SPIBasePtr>(&SPStyle::image_rendering       ) ) );
-    //     _propmap.insert( std::make_pair( shape_rendering.name,       reinterpret_cast<SPIBasePtr>(&SPStyle::shape_rendering       ) ) );
-    //     _propmap.insert( std::make_pair( text_rendering.name,        reinterpret_cast<SPIBasePtr>(&SPStyle::text_rendering        ) ) );
-
-    //     _propmap.insert( std::make_pair( enable_background.name,     reinterpret_cast<SPIBasePtr>(&SPStyle::enable_background     ) ) );
-
-    // }
+    _properties = _prop_helper.get_vector(this);
 }
 
 SPStyle::~SPStyle() {
@@ -511,8 +488,6 @@ SPStyle::~SPStyle() {
         filter_modified_connection.disconnect();
     }
 
-    _properties.clear();
-
     // Conjecture: all this SPStyle ref counting is not needed. SPObject creates an instance of
     // SPStyle when it is constructed and deletes it when it is destructed. The refcount is
     // incremented and decremented only in the files: display/drawing-item.cpp,
@@ -523,20 +498,11 @@ SPStyle::~SPStyle() {
     // std::cout << "SPStyle::~SPStyle(): Exit\n" << std::endl;
 }
 
-// Used in SPStyle::clear()
-void clear_property( SPIBase* p ) {
-    p->clear();
-}
-
-
-// Matches void sp_style_clear();
 void
 SPStyle::clear() {
-
-    for_each( _properties.begin(), _properties.end(), clear_property );
-    // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
-    //     (this->*(i->second)).clear();
-    // }
+    for (auto * p : _properties) {
+        p->clear();
+    }
 
     // Release connection to object, created in constructor.
     release_connection.disconnect();
@@ -624,9 +590,6 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
             _properties[i]->readAttribute( repr );
         }
     }
-    // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
-    //     (this->*(i->second)).readAttribute( repr );
-    // }
 
     /* 4 Cascade from parent */
     // std::cout << " CASCADING FROM PARENT" << std::endl;
@@ -705,175 +668,6 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
     g_return_if_fail(val != nullptr);
 
     switch (id) {
-        case SP_ATTR_D:
-            d.readIfUnset( val, source );
-            break;
-        case SP_PROP_INKSCAPE_FONT_SPEC:
-            font_specification.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_FAMILY:
-            font_family.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_SIZE:
-            font_size.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_SIZE_ADJUST:
-            if (strcmp(val, "none") != 0) {
-                g_warning("Unimplemented style property id SP_PROP_FONT_SIZE_ADJUST: value: %s", val);
-            }
-            break;
-        case SP_PROP_FONT_STYLE:
-            font_style.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT:
-            font_variant.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_WEIGHT:
-            font_weight.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_STRETCH:
-            font_stretch.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT:
-            font.readIfUnset( val, source );
-            break;
-
-            /* Font Variants CSS 3 */
-        case SP_PROP_FONT_VARIANT_LIGATURES:
-            font_variant_ligatures.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT_POSITION:
-            font_variant_position.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT_CAPS:
-            font_variant_caps.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT_NUMERIC:
-            font_variant_numeric.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT_ALTERNATES:
-            font_variant_alternates.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_VARIANT_EAST_ASIAN:
-            font_variant_east_asian.readIfUnset( val, source );
-            break;
-        case SP_PROP_FONT_FEATURE_SETTINGS:
-            font_feature_settings.readIfUnset( val, source );
-            break;
-
-        case SP_PROP_FONT_VARIATION_SETTINGS:
-            font_variation_settings.readIfUnset( val, source );
-            break;
-
-            /* Text */
-        case SP_PROP_TEXT_INDENT:
-            text_indent.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_ALIGN:
-            text_align.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_DECORATION:
-            text_decoration.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_DECORATION_LINE:
-            text_decoration_line.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_DECORATION_STYLE:
-            text_decoration_style.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_DECORATION_COLOR:
-            text_decoration_color.readIfUnset( val, source );
-            break;
-        case SP_PROP_LINE_HEIGHT:
-            line_height.readIfUnset( val, source );
-            break;
-        case SP_PROP_LETTER_SPACING:
-            letter_spacing.readIfUnset( val, source );
-            break;
-        case SP_PROP_WORD_SPACING:
-            word_spacing.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_TRANSFORM:
-            text_transform.readIfUnset( val, source );
-            break;
-            /* Text (css3) */
-        case SP_PROP_DIRECTION:
-            direction.readIfUnset( val, source );
-            break;
-        case SP_PROP_WRITING_MODE:
-            writing_mode.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_ORIENTATION:
-            text_orientation.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_ANCHOR:
-            text_anchor.readIfUnset( val, source );
-            break;
-        case SP_PROP_WHITE_SPACE:
-            white_space.readIfUnset( val, source );
-            break;
-        case SP_PROP_SHAPE_INSIDE:
-            shape_inside.readIfUnset( val, source );
-            break;
-        case SP_PROP_SHAPE_SUBTRACT:
-            shape_subtract.readIfUnset( val, source );
-            break;
-        case SP_PROP_SHAPE_PADDING:
-            shape_padding.readIfUnset( val, source );
-            break;
-        case SP_PROP_SHAPE_MARGIN:
-            shape_margin.readIfUnset( val, source );
-            break;
-        case SP_PROP_INLINE_SIZE:
-            inline_size.readIfUnset( val, source );
-            break;
-        case SP_PROP_DOMINANT_BASELINE:
-            dominant_baseline.readIfUnset( val, source );
-            break;
-        case SP_PROP_BASELINE_SHIFT:
-            baseline_shift.readIfUnset( val, source );
-            break;
-        case SP_PROP_TEXT_RENDERING:
-            text_rendering.readIfUnset( val, source );
-            break;
-        case SP_PROP_ALIGNMENT_BASELINE:
-            g_warning("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
-            break;
-        case SP_PROP_GLYPH_ORIENTATION_HORIZONTAL:
-            g_warning("Unimplemented style property SP_PROP_ORIENTATION_HORIZONTAL: value: %s", val);
-            break;
-        case SP_PROP_GLYPH_ORIENTATION_VERTICAL:
-            g_warning("Unimplemented style property SP_PROP_ORIENTATION_VERTICAL: value: %s", val);
-            break;
-        case SP_PROP_KERNING:
-            g_warning("Unimplemented style property SP_PROP_KERNING: value: %s", val);
-            break;
-            /* Misc */
-        case SP_PROP_CLIP:
-            g_warning("Unimplemented style property SP_PROP_CLIP: value: %s", val);
-            break;
-        case SP_PROP_COLOR:
-            color.readIfUnset( val, source );
-            break;
-        case SP_PROP_CURSOR:
-            g_warning("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
-            break;
-        case SP_PROP_DISPLAY:
-            display.readIfUnset( val, source );
-            break;
-        case SP_PROP_OVERFLOW:
-            overflow.readIfUnset( val, source );
-            break;
-        case SP_PROP_VISIBILITY:
-            visibility.readIfUnset( val, source );
-            break;
-        case SP_PROP_ISOLATION:
-            isolation.readIfUnset( val, source );
-            break;
-        case SP_PROP_MIX_BLEND_MODE:
-            mix_blend_mode.readIfUnset( val, source );
-            break;
-
             /* SVG */
             /* Clip/Mask */
         case SP_PROP_CLIP_PATH:
@@ -887,10 +681,7 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
 
             //XML Tree being directly used here.
             this->object->getRepr()->setAttribute("clip-path", val);
-            break;
-        case SP_PROP_CLIP_RULE:
-            clip_rule.readIfUnset( val, source );
-            break;
+            return;
         case SP_PROP_MASK:
             /** \todo
              * See comment for SP_PROP_CLIP_PATH
@@ -899,124 +690,24 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
             
             //XML Tree being directly used here.
             this->object->getRepr()->setAttribute("mask", val);
-            break;
-        case SP_PROP_OPACITY:
-            opacity.readIfUnset( val, source );
-            break;
-        case SP_PROP_ENABLE_BACKGROUND:
-            enable_background.readIfUnset( val, source );
-            break;
-            /* Filter */
+            return;
         case SP_PROP_FILTER:
             if( !filter.inherit ) filter.readIfUnset( val, source );
-            break;
-        case SP_PROP_FLOOD_COLOR:
-            g_warning("Unimplemented style property SP_PROP_FLOOD_COLOR: value: %s", val);
-            break;
-        case SP_PROP_FLOOD_OPACITY:
-            g_warning("Unimplemented style property SP_PROP_FLOOD_OPACITY: value: %s", val);
-            break;
-        case SP_PROP_LIGHTING_COLOR:
-            g_warning("Unimplemented style property SP_PROP_LIGHTING_COLOR: value: %s", val);
-            break;
-            /* Gradient */
-        case SP_PROP_STOP_COLOR:
-            g_warning("Unimplemented style property SP_PROP_STOP_COLOR: value: %s", val);
-            break;
-        case SP_PROP_STOP_OPACITY:
-            g_warning("Unimplemented style property SP_PROP_STOP_OPACITY: value: %s", val);
-            break;
-            /* Interactivity */
-        case SP_PROP_POINTER_EVENTS:
-            g_warning("Unimplemented style property SP_PROP_POINTER_EVENTS: value: %s", val);
-            break;
-            /* Paint */
+            return;
         case SP_PROP_COLOR_INTERPOLATION:
             // We read it but issue warning
             color_interpolation.readIfUnset( val, source );
             if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
                 g_warning("Inkscape currently only supports color-interpolation = sRGB");
             }
-            break;
-        case SP_PROP_COLOR_INTERPOLATION_FILTERS:
-            color_interpolation_filters.readIfUnset( val, source );
-            break;
-        case SP_PROP_COLOR_PROFILE:
-            g_warning("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
-            break;
-        case SP_PROP_COLOR_RENDERING:
-            color_rendering.readIfUnset( val, source );
-            break;
-        case SP_PROP_SOLID_COLOR:
-            solid_color.readIfUnset( val, source );
-            break;
-        case SP_PROP_SOLID_OPACITY:
-            solid_opacity.readIfUnset( val, source );
-            break;
-        case SP_PROP_VECTOR_EFFECT:
-            vector_effect.readIfUnset( val );
-            break;
-        case SP_PROP_FILL:
-            fill.readIfUnset( val, source );
-            break;
-        case SP_PROP_FILL_OPACITY:
-            fill_opacity.readIfUnset( val, source );
-            break;
-        case SP_PROP_FILL_RULE:
-            fill_rule.readIfUnset( val, source );
-            break;
-        case SP_PROP_IMAGE_RENDERING:
-            image_rendering.readIfUnset( val, source );
-            break;
-        case SP_PROP_MARKER:
-            /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */ 
-            marker.readIfUnset( val, source );
-            break;
-        case SP_PROP_MARKER_START:
-            /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_start.readIfUnset( val, source );
-            break;
-        case SP_PROP_MARKER_MID:
-            /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_mid.readIfUnset( val, source );
-            break;
-        case SP_PROP_MARKER_END:
-            /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_end.readIfUnset( val, source );
-            break;
-        case SP_PROP_SHAPE_RENDERING:
-            shape_rendering.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE:
-            stroke.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_WIDTH:
-            stroke_width.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_DASHARRAY:
-            stroke_dasharray.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_DASHOFFSET:
-            stroke_dashoffset.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_LINECAP:
-            stroke_linecap.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_LINEJOIN:
-            stroke_linejoin.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_MITERLIMIT:
-            stroke_miterlimit.readIfUnset( val, source );
-            break;
-        case SP_PROP_STROKE_OPACITY:
-            stroke_opacity.readIfUnset( val, source );
-            break;
-        case SP_PROP_PAINT_ORDER:
-            paint_order.readIfUnset( val, source );
-            break;
-        default:
-            g_warning("SPIStyle::readIfUnset(): Invalid style property id: %d value: %s", id, val);
-            break;
+            return;
+    }
+
+    auto p = _prop_helper.get(this, (SPAttributeEnum)id);
+    if (p) {
+        p->readIfUnset(val, source);
+    } else {
+        g_warning("Unimplemented style property %d", id);
     }
 }
 
@@ -1046,13 +737,6 @@ SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle cons
             style_string += _properties[i]->write( flags, style_src_req, nullptr );
         }
     }
-    // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
-    //     if( base != NULL ) {
-    //         style_string += (this->*(i->second)).write( flags, &(base->*(i->second)) );
-    //     } else {
-    //         style_string += (this->*(i->second)).write( flags, NULL );
-    //     }
-    // }
 
     // Remove trailing ';'
     if( style_string.size() > 0 ) {
@@ -1079,9 +763,6 @@ SPStyle::cascade( SPStyle const *const parent ) {
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         _properties[i]->cascade( parent->_properties[i] );
     }
-    // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
-    //     (this->*(i->second)).cascade( &(parent->*(i->second)) );
-    // }
 }
 
 // Corresponds to sp_style_merge_from_dying_parent()
@@ -1108,9 +789,6 @@ SPStyle::merge( SPStyle const *const parent ) {
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         _properties[i]->merge( parent->_properties[i] );
     }
-    // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
-    //     (this->*(i->second)).cascade( &(parent->*(i->second)) );
-    // }
 }
 
 /**
