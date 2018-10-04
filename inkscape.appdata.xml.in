@@ -23,13 +23,13 @@
       open, community-oriented development.
     </p>
   </description>
-  <url type="homepage">http://inkscape.org/</url>
-  <url type="bugtracker">https://inkscape.org/en/contribute/report-bugs/</url>
-  <url type="donation">https://inkscape.org/en/support-us/donate/</url>
-  <url type="help">https://inkscape.org/en/learn/books/</url>
+  <url type="homepage">https://inkscape.org</url>
+  <url type="bugtracker">https://inkscape.org/contribute/report-bugs</url>
+  <url type="donation">https://inkscape.org/support-us/donate</url>
+  <url type="help">https://inkscape.org/learn</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/hughsie/fedora-appstream/master/screenshots-extra/inkscape/a.png</image>
+      <image>https://inkscape.org/~bryce/%E2%98%85screenshot-freedom-machine-inkscape-10</image>
       <_caption>Main application window</_caption>
     </screenshot>
   </screenshots>
