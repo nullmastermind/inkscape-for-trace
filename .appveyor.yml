@@ -2,6 +2,13 @@ version: '{branch}-{build}'
 
 clone_depth: 10
 
+# do not build feature branches with open pull requests
+skip_branch_with_pr: true
+
+# avoid building 32-bit if 64-bit failed already
+matrix:
+  fast_finish: true
+
 environment:
   PACMAN_OPTIONS: "--needed --noconfirm --noprogressbar --overwrite \\*"
   matrix:
