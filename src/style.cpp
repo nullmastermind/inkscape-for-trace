@@ -180,6 +180,9 @@ class SPStylePropHelper {
         REGISTER_PROPERTY(SP_PROP_TEXT_RENDERING, text_rendering, "text-rendering");
 
         REGISTER_PROPERTY(SP_PROP_ENABLE_BACKGROUND, enable_background, "enable-background");
+
+        REGISTER_PROPERTY(SP_PROP_STOP_COLOR, stop_color, "stop-color");
+        REGISTER_PROPERTY(SP_PROP_STOP_OPACITY, stop_opacity, "stop-opacity");
     }
 
     // this is a singleton, copy not allowed
