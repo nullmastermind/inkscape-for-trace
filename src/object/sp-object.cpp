@@ -1097,21 +1097,6 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             }
             g_warning("Item's style is NULL; repr style attribute is %s", style_str);
         }
-
-        /** \note We treat this->style as authoritative.  Its effects have
-         * been written to the style attribute above; any properties that are
-         * unset we take to be deliberately unset (e.g. so that clones can
-         * override the property).
-         *
-         * Note that the below has an undesirable consequence of changing the
-         * appearance on renderers that lack CSS support (e.g. SVG tiny);
-         * possibly we should write property attributes instead of a style
-         * attribute.
-         */
-        // With the changes to preserves style source this is no longer needed
-        // and the above comment no longer applies. I leave it here until these
-        // change are well tested.
-        // sp_style_unset_property_attrs (this);
     }
 
 #ifdef OBJECT_TRACE

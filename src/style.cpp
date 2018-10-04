@@ -570,42 +570,32 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     }
 
     /* 2 Style sheet */
-    // std::cout << " MERGING OBJECT STYLESHEET" << std::endl;
     if (object) {
         _mergeObjectStylesheet( object );
-    } else {
-        // std::cerr << "SPStyle::read: No object! Can not read style sheet" << std::endl;
     }
 
     /* 3 Presentation attributes */
-    // std::cout << " MERGING PRESENTATION ATTRIBUTES" << std::endl;
-    for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
-
+    for (auto * p : _properties) {
         // Shorthands are not allowed as presentation properites. Note: text-decoration and
         // font-variant are converted to shorthands in CSS 3 but can still be read as a
         // non-shorthand for compatibility with older renders, so they should not be in this list.
         // We could add a flag to SPIBase to avoid string comparison.
-        if( _properties[i]->name.compare( "font" ) != 0 &&
-            _properties[i]->name.compare( "marker" ) != 0 ) {
-            _properties[i]->readAttribute( repr );
+        if( p->name != "font" && p->name != "marker") {
+            p->readAttribute( repr );
         }
     }
 
     /* 4 Cascade from parent */
-    // std::cout << " CASCADING FROM PARENT" << std::endl;
     if( object ) {
         if( object->parent ) {
             cascade( object->parent->style );
         }
-    } else {
-        // When does this happen?
+    } else if( repr->parent() ) { // When does this happen?
         // std::cout << "SPStyle::read(): reading via repr->parent()" << std::endl;
-        if( repr->parent() ) {
-            SPStyle *parent = new SPStyle();
-            parent->read( nullptr, repr->parent() );
-            cascade( parent );
-            delete parent;
-        }
+        SPStyle *parent = new SPStyle();
+        parent->read( nullptr, repr->parent() );
+        cascade( parent );
+        delete parent;
     }
 }
 
@@ -1318,149 +1308,6 @@ sp_style_set_property_url (SPObject *item, gchar const *property, SPObject *link
         sp_repr_css_change(repr, css, "style");
     }
     sp_repr_css_attr_unref(css);
-}
-
-// Called in sp-object.cpp
-/**
- * Clear all style property attributes in object.
- */
-void
-sp_style_unset_property_attrs(SPObject *o)
-{
-    if (!o) {
-        return;
-    }
-
-    SPStyle *style = o->style;
-    if (!style) {
-        return;
-    }
-
-    Inkscape::XML::Node *repr = o->getRepr();
-    if (!repr) {
-        return;
-    }
-
-    if (style->opacity.set) {
-        repr->setAttribute("opacity", nullptr);
-    }
-    if (style->color.set) {
-        repr->setAttribute("color", nullptr);
-    }
-    if (style->color_interpolation.set) {
-        repr->setAttribute("color-interpolation", nullptr);
-    }
-    if (style->color_interpolation_filters.set) {
-        repr->setAttribute("color-interpolation-filters", nullptr);
-    }
-    if (style->solid_color.set) {
-        repr->setAttribute("solid-color", nullptr);
-    }
-    if (style->solid_opacity.set) {
-        repr->setAttribute("solid-opacity", nullptr);
-    }
-    if (style->vector_effect.set) {
-        repr->setAttribute("vector-effect", nullptr);
-    }
-    if (style->fill.set) {
-        repr->setAttribute("fill", nullptr);
-    }
-    if (style->fill_opacity.set) {
-        repr->setAttribute("fill-opacity", nullptr);
-    }
-    if (style->fill_rule.set) {
-        repr->setAttribute("fill-rule", nullptr);
-    }
-    if (style->stroke.set) {
-        repr->setAttribute("stroke", nullptr);
-    }
-    if (style->stroke_width.set) {
-        repr->setAttribute("stroke-width", nullptr);
-    }
-    if (style->stroke_linecap.set) {
-        repr->setAttribute("stroke-linecap", nullptr);
-    }
-    if (style->stroke_linejoin.set) {
-        repr->setAttribute("stroke-linejoin", nullptr);
-    }
-    if (style->marker.set) {
-        repr->setAttribute("marker", nullptr);
-    }
-    if (style->marker_start.set) {
-        repr->setAttribute("marker-start", nullptr);
-    }
-    if (style->marker_mid.set) {
-        repr->setAttribute("marker-mid", nullptr);
-    }
-    if (style->marker_end.set) {
-        repr->setAttribute("marker-end", nullptr);
-    }
-    if (style->stroke_opacity.set) {
-        repr->setAttribute("stroke-opacity", nullptr);
-    }
-    if (style->stroke_dasharray.set) {
-        repr->setAttribute("stroke-dasharray", nullptr);
-    }
-    if (style->stroke_dashoffset.set) {
-        repr->setAttribute("stroke-dashoffset", nullptr);
-    }
-    if (style->paint_order.set) {
-        repr->setAttribute("paint-order", nullptr);
-    }
-    if (style->font_specification.set) {
-        repr->setAttribute("-inkscape-font-specification", nullptr);
-    }
-    if (style->font_family.set) {
-        repr->setAttribute("font-family", nullptr);
-    }
-    if (style->text_anchor.set) {
-        repr->setAttribute("text-anchor", nullptr);
-    }
-    if (style->white_space.set) {
-        repr->setAttribute("white-space", nullptr);
-    }
-    if (style->shape_inside.set) {
-        repr->setAttribute("shape-inside", nullptr);
-    }
-    if (style->shape_subtract.set) {
-        repr->setAttribute("shape-subtract", nullptr);
-    }
-    if (style->shape_padding.set) {
-        repr->setAttribute("shape-padding", nullptr);
-    }
-    if (style->shape_margin.set) {
-        repr->setAttribute("shape-margin", nullptr);
-    }
-    if (style->inline_size.set) {
-        repr->setAttribute("inline-size", nullptr);
-    }
-    if (style->writing_mode.set) {
-        repr->setAttribute("writing-mode", nullptr);
-    }
-    if (style->text_orientation.set) {
-        repr->setAttribute("text-orientation", nullptr);
-    }
-    if (style->filter.set) {
-        repr->setAttribute("filter", nullptr);
-    }
-    if (style->enable_background.set) {
-        repr->setAttribute("enable-background", nullptr);
-    }
-    if (style->clip_rule.set) {
-        repr->setAttribute("clip-rule", nullptr);
-    }
-    if (style->color_rendering.set) {
-        repr->setAttribute("color-rendering", nullptr);
-    }
-    if (style->image_rendering.set) {
-        repr->setAttribute("image-rendering", nullptr);
-    }
-    if (style->shape_rendering.set) {
-        repr->setAttribute("shape-rendering", nullptr);
-    }
-    if (style->text_rendering.set) {
-        repr->setAttribute("text-rendering", nullptr);
-    }
 }
 
 /**
