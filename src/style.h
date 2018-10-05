@@ -29,9 +29,6 @@
 // Define SPIBasePtr, a Pointer to a data member of SPStyle of type SPIBase;
 typedef SPIBase SPStyle::*SPIBasePtr;
 
-// Define SPPropMap, a map linking property name to property data
-// typedef std::map<std::string, SPIBasePtr> SPPropMap;
-
 namespace Inkscape {
 namespace XML {
 class Node;
@@ -47,6 +44,7 @@ public:
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     void clear();
+    void clear(/* SPAttributeEnum */ int id);
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
@@ -84,7 +82,6 @@ public:
 private:
     /// Pointers to all the properties (for looping through them)
     std::vector<SPIBase *> _properties;
-    // static SPPropMap _propmap;
 
 public:
 

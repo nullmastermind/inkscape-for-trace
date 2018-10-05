@@ -84,6 +84,7 @@ void SPClipPath::set(unsigned int key, const gchar* value) {
             break;
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
+                this->style->clear(key);
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObjectGroup::set(key, value);

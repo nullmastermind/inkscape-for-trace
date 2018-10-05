@@ -106,6 +106,7 @@ void SPHatchPath::set(unsigned int key, const gchar* value)
 
     default:
         if (SP_ATTRIBUTE_IS_CSS(key)) {
+            style->clear(key);
             requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         } else {
             SPObject::set(key, value);

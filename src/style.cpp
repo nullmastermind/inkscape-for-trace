@@ -499,6 +499,16 @@ SPStyle::~SPStyle() {
 }
 
 void
+SPStyle::clear(/* SPAttributeEnum */ int id) {
+    SPIBase *p = _prop_helper.get(this, (SPAttributeEnum)id);
+    if (p) {
+        p->clear();
+    } else {
+        g_warning("Unimplemented style property %d", id);
+    }
+}
+
+void
 SPStyle::clear() {
     for (auto * p : _properties) {
         p->clear();
