@@ -315,7 +315,7 @@ void ColorProfile::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void ColorProfile::set(unsigned key, gchar const *value) {
+void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_XLINK_HREF:
             if ( this->href ) {

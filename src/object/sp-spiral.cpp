@@ -89,7 +89,7 @@ Inkscape::XML::Node* SPSpiral::write(Inkscape::XML::Document *xml_doc, Inkscape:
     return repr;
 }
 
-void SPSpiral::set(unsigned int key, gchar const* value) {
+void SPSpiral::set(SPAttributeEnum key, gchar const* value) {
     /// \todo fixme: we should really collect updates
     switch (key) {
     case SP_ATTR_SODIPODI_CX:

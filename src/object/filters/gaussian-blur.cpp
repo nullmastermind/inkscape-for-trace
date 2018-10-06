@@ -50,7 +50,7 @@ void SPGaussianBlur::release() {
 /**
  * Sets a specific value in the SPGaussianBlur.
  */
-void SPGaussianBlur::set(unsigned int key, gchar const *value) {
+void SPGaussianBlur::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
         case SP_ATTR_STDDEVIATION:
             this->stdDeviation.set(value);

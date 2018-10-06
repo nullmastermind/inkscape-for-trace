@@ -103,7 +103,7 @@ static Inkscape::Filters::FilterComponentTransferType sp_feComponenttransfer_rea
 /**
  * Sets a specific value in the SPFeFuncNode.
  */
-void SPFeFuncNode::set(unsigned int key, gchar const *value) {
+void SPFeFuncNode::set(SPAttributeEnum key, gchar const *value) {
     Inkscape::Filters::FilterComponentTransferType type;
     double read_num;
 

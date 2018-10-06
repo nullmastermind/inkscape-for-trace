@@ -85,7 +85,7 @@ void SPTRef::release() {
     SPItem::release();
 }
 
-void SPTRef::set(unsigned int key, const gchar* value) {
+void SPTRef::set(SPAttributeEnum key, const gchar* value) {
     debug("0x%p %s(%u): '%s'",this,
             sp_attribute_name(key),key,value ? value : "<no value>");
 

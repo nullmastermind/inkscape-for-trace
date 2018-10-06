@@ -37,7 +37,7 @@ void SPSymbol::release() {
 	SPGroup::release();
 }
 
-void SPSymbol::set(unsigned int key, const gchar* value) {
+void SPSymbol::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
     case SP_ATTR_VIEWBOX:
         set_viewBox( value );

@@ -101,7 +101,7 @@ static glyphOrientation sp_glyph_read_orientation(gchar const *value)
     return GLYPH_ORIENTATION_BOTH;
 }
 
-void SPGlyph::set(unsigned int key, const gchar *value)
+void SPGlyph::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
         case SP_ATTR_UNICODE:

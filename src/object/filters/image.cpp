@@ -96,7 +96,7 @@ static void sp_feImage_href_modified(SPObject* /*old_elem*/, SPObject* new_elem,
 /**
  * Sets a specific value in the SPFeImage.
  */
-void SPFeImage::set(unsigned int key, gchar const *value) {
+void SPFeImage::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
     /*DEAL WITH SETTING ATTRIBUTES HERE*/
         case SP_ATTR_XLINK_HREF:

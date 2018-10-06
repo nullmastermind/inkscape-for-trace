@@ -90,7 +90,7 @@ Inkscape::XML::Node* SPStar::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
-void SPStar::set(unsigned int key, const gchar* value) {
+void SPStar::set(SPAttributeEnum key, const gchar* value) {
     SVGLength::Unit unit;
 
     /* fixme: we should really collect updates */

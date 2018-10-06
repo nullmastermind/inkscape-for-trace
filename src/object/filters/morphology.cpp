@@ -74,7 +74,7 @@ static Inkscape::Filters::FilterMorphologyOperator sp_feMorphology_read_operator
 /**
  * Sets a specific value in the SPFeMorphology.
  */
-void SPFeMorphology::set(unsigned int key, gchar const *value) {
+void SPFeMorphology::set(SPAttributeEnum key, gchar const *value) {
     Inkscape::Filters::FilterMorphologyOperator read_operator;
     
     switch(key) {

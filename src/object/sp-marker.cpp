@@ -113,7 +113,7 @@ void SPMarker::release() {
 }
 
 
-void SPMarker::set(unsigned int key, const gchar* value) {
+void SPMarker::set(SPAttributeEnum key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_MARKERUNITS:
 		this->markerUnits_set = FALSE;

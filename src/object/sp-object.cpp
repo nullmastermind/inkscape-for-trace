@@ -879,7 +879,7 @@ void SPObject::repr_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML:
     object->order_changed(child, old, newer);
 }
 
-void SPObject::set(unsigned int key, gchar const* value) {
+void SPObject::set(SPAttributeEnum key, gchar const* value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;
@@ -975,7 +975,7 @@ void SPObject::set(unsigned int key, gchar const* value) {
 #endif
 }
 
-void SPObject::setKeyValue(unsigned int key, gchar const *value)
+void SPObject::setKeyValue(SPAttributeEnum key, gchar const *value)
 {
     //g_assert(object != NULL);
     //g_assert(SP_IS_OBJECT(object));
@@ -992,7 +992,7 @@ void SPObject::readAttr(gchar const *key)
     //XML Tree being used here.
     g_assert(this->getRepr() != nullptr);
 
-    unsigned int keyid = sp_attribute_lookup(key);
+    auto keyid = sp_attribute_lookup(key);
     if (keyid != SP_ATTR_INVALID) {
         /* Retrieve the 'key' attribute from the object's XML representation */
         gchar const *value = getRepr()->attribute(key);

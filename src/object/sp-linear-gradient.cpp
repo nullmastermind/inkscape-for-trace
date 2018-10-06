@@ -29,7 +29,7 @@ void SPLinearGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 /**
  * Callback: set attribute.
  */
-void SPLinearGradient::set(unsigned int key, const gchar* value) {
+void SPLinearGradient::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_X1:
             this->x1.readOrUnset(value, SVGLength::PERCENT, 0.0, 0.0);

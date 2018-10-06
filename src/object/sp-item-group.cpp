@@ -310,7 +310,7 @@ gchar *SPGroup::description() const {
         ngettext(_("of <b>%d</b> object"), _("of <b>%d</b> objects"), len), len);
 }
 
-void SPGroup::set(unsigned int key, gchar const* value) {
+void SPGroup::set(SPAttributeEnum key, gchar const* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_GROUPMODE:
             if ( value && !strcmp(value, "layer") ) {

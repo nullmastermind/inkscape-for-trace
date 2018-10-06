@@ -101,7 +101,7 @@ static Inkscape::Filters::FilterTurbulenceType sp_feTurbulence_read_type(gchar c
 /**
  * Sets a specific value in the SPFeTurbulence.
  */
-void SPFeTurbulence::set(unsigned int key, gchar const *value) {
+void SPFeTurbulence::set(SPAttributeEnum key, gchar const *value) {
     int read_int;
     double read_num;
     bool read_bool;

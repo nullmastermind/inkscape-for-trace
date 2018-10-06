@@ -506,8 +506,8 @@ SPStyle::~SPStyle() {
 }
 
 void
-SPStyle::clear(/* SPAttributeEnum */ int id) {
-    SPIBase *p = _prop_helper.get(this, (SPAttributeEnum)id);
+SPStyle::clear(SPAttributeEnum id) {
+    SPIBase *p = _prop_helper.get(this, id);
     if (p) {
         p->clear();
     } else {
@@ -667,7 +667,7 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
-SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
+SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &source ) {
 
     // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
@@ -710,7 +710,7 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
             return;
     }
 
-    auto p = _prop_helper.get(this, (SPAttributeEnum)id);
+    auto p = _prop_helper.get(this, id);
     if (p) {
         p->readIfUnset(val, source);
     } else {
@@ -856,7 +856,7 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
 
     // std::cout << "SPStyle::_mergeDecl" << std::endl;
 
-    unsigned const prop_idx = sp_attribute_lookup(decl->property->stryng->str);
+    auto prop_idx = sp_attribute_lookup(decl->property->stryng->str);
     if (prop_idx != SP_ATTR_INVALID) {
         /** \todo
          * effic: Test whether the property is already set before trying to

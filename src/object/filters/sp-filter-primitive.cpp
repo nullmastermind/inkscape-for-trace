@@ -75,7 +75,7 @@ void SPFilterPrimitive::release() {
 /**
  * Sets a specific value in the SPFilterPrimitive.
  */
-void SPFilterPrimitive::set(unsigned int key, gchar const *value) {
+void SPFilterPrimitive::set(SPAttributeEnum key, gchar const *value) {
 
     int image_nr;
     switch (key) {

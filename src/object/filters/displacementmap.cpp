@@ -96,7 +96,7 @@ static FilterDisplacementMapChannelSelector sp_feDisplacementMap_readChannelSele
 /**
  * Sets a specific value in the SPFeDisplacementMap.
  */
-void SPFeDisplacementMap::set(unsigned int key, gchar const *value) {
+void SPFeDisplacementMap::set(SPAttributeEnum key, gchar const *value) {
     int input;
     double read_num;
     FilterDisplacementMapChannelSelector read_selector;

@@ -44,7 +44,7 @@ void SPFeMerge::release() {
 /**
  * Sets a specific value in the SPFeMerge.
  */
-void SPFeMerge::set(unsigned int key, gchar const *value) {
+void SPFeMerge::set(SPAttributeEnum key, gchar const *value) {
     switch(key) {
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/
         default:

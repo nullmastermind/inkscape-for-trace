@@ -38,7 +38,7 @@ public:
     ~SPTagUse() override;
     
     void build(SPDocument *doc, Inkscape::XML::Node *repr) override;
-    void set(unsigned key, gchar const *value) override;
+    void set(SPAttributeEnum key, gchar const *value) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags) override;
     void release() override;
     

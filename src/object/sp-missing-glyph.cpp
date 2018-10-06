@@ -41,7 +41,7 @@ void SPMissingGlyph::release() {
 }
 
 
-void SPMissingGlyph::set(unsigned int key, const gchar* value) {
+void SPMissingGlyph::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_D:
         {

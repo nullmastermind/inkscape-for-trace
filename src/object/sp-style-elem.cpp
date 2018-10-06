@@ -24,7 +24,7 @@ SPStyleElem::SPStyleElem() : SPObject() {
 
 SPStyleElem::~SPStyleElem() = default;
 
-void SPStyleElem::set(unsigned int key, const gchar* value) {
+void SPStyleElem::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_TYPE: {
             if (!value) {

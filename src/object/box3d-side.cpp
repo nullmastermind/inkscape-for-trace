@@ -71,7 +71,7 @@ Inkscape::XML::Node* Box3DSide::write(Inkscape::XML::Document *xml_doc, Inkscape
     return repr;
 }
 
-void Box3DSide::set(unsigned int key, const gchar* value) {
+void Box3DSide::set(SPAttributeEnum key, const gchar* value) {
     // TODO: In case the box was recreated (by undo, e.g.) we need to recreate the path
     //       (along with other info?) from the parent box.
 

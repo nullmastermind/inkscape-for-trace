@@ -70,7 +70,7 @@ SPTag::build(SPDocument *document, Inkscape::XML::Node *repr)
  * Sets a specific value in the SPTag.
  */
 void
-SPTag::set(unsigned int key, gchar const *value)
+SPTag::set(SPAttributeEnum key, gchar const *value)
 {
     
     switch (key)

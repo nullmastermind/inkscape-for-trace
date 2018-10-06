@@ -550,7 +550,7 @@ std::vector<size_t> getIdIds()
     std::vector<AttributeInfo> all_attrs = getKnownAttrs();
     ids.reserve(all_attrs.size()); // minimize memory thrashing
     for (AttrItr it(all_attrs.begin()); it != all_attrs.end(); ++it) {
-        unsigned int id = sp_attribute_lookup(it->attr.c_str());
+        auto id = sp_attribute_lookup(it->attr.c_str());
         if (id >= ids.size()) {
             ids.resize(id + 1);
         }
@@ -565,7 +565,7 @@ TEST(AttributesTest, SupportedKnown)
 {
     std::vector<AttributeInfo> all_attrs = getKnownAttrs();
     for (AttrItr it(all_attrs.begin()); it != all_attrs.end(); ++it) {
-        unsigned int id = sp_attribute_lookup(it->attr.c_str());
+        auto id = sp_attribute_lookup(it->attr.c_str());
         EXPECT_EQ(it->supported, id != 0u) << "Matching for attribute '" << it->attr << "'";
     }
 }
@@ -576,8 +576,8 @@ TEST(AttributesTest, NameRoundTrip)
     std::vector<AttributeInfo> all_attrs = getKnownAttrs();
     for (AttrItr it(all_attrs.begin()); it != all_attrs.end(); ++it) {
         if (it->supported) {
-            unsigned int id = sp_attribute_lookup(it->attr.c_str());
-            char const *redoneName = reinterpret_cast<char const *>(sp_attribute_name(id));
+            auto id = sp_attribute_lookup(it->attr.c_str());
+            char const *redoneName = sp_attribute_name(id);
             EXPECT_TRUE(redoneName != NULL) << "For attribute '" << it->attr << "'";
             if (redoneName) {
                 EXPECT_EQ(it->attr, redoneName);
@@ -615,7 +615,7 @@ TEST(AttributesTest, ValuesAreKnown)
     std::vector<size_t> ids = getIdIds();
     for (size_t i = FIRST_VALID_ID; i < ids.size(); ++i) {
         if (!ids[i]) {
-            unsigned char const *name = sp_attribute_name(i);
+            char const *name = sp_attribute_name((SPAttributeEnum)i);
             EXPECT_TRUE(ids[i] > 0) << "Attribute string with enum " << i << " {" << name << "} not handled";
         }
     }
@@ -627,7 +627,7 @@ TEST(AttributesTest, ValuesUnique)
     std::vector<size_t> ids = getIdIds();
     for (size_t i = FIRST_VALID_ID; i < ids.size(); ++i) {
         EXPECT_LE(ids[i], size_t(1)) << "Attribute enum " << i << " used for multiple strings"
-                                     << " including {" << sp_attribute_name(i) << "}";
+                                     << " including {" << sp_attribute_name((SPAttributeEnum)i) << "}";
     }
 }
 

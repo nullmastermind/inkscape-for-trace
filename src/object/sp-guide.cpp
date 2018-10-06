@@ -89,7 +89,7 @@ void SPGuide::release()
     SPObject::release();
 }
 
-void SPGuide::set(unsigned int key, const gchar *value) {
+void SPGuide::set(SPAttributeEnum key, const gchar *value) {
     switch (key) {
     case SP_ATTR_INKSCAPE_COLOR:
         if (value) {

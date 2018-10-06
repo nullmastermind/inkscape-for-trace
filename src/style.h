@@ -26,6 +26,8 @@
 #include "3rdparty/libcroco/cr-declaration.h"
 #include "3rdparty/libcroco/cr-prop-list.h"
 
+enum SPAttributeEnum : unsigned;
+
 // Define SPIBasePtr, a Pointer to a data member of SPStyle of type SPIBase;
 typedef SPIBase SPStyle::*SPIBasePtr;
 
@@ -44,11 +46,11 @@ public:
     SPStyle(SPDocument *document = nullptr, SPObject *object = nullptr);// document is ignored if valid object given
     ~SPStyle();
     void clear();
-    void clear(/* SPAttributeEnum */ int id);
+    void clear(SPAttributeEnum id);
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
-    void readIfUnset( int id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
+    void readIfUnset(SPAttributeEnum id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
                          SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                          SPStyle const *const base = nullptr ) const;

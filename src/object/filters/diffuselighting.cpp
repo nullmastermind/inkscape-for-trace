@@ -76,7 +76,7 @@ void SPFeDiffuseLighting::release() {
 /**
  * Sets a specific value in the SPFeDiffuseLighting.
  */
-void SPFeDiffuseLighting::set(unsigned int key, gchar const *value) {
+void SPFeDiffuseLighting::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     

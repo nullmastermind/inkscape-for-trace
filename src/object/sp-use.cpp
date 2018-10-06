@@ -106,7 +106,7 @@ void SPUse::release() {
     SPItem::release();
 }
 
-void SPUse::set(unsigned int key, const gchar* value) {
+void SPUse::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_X:
             this->x.readOrUnset(value);

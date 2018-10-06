@@ -114,7 +114,7 @@ void SPBox3D::release() {
     SPGroup::release();
 }
 
-void SPBox3D::set(unsigned int key, const gchar* value) {
+void SPBox3D::set(SPAttributeEnum key, const gchar* value) {
     SPBox3D* object = this;
     SPBox3D *box = object;
 

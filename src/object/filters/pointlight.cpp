@@ -66,7 +66,7 @@ void SPFePointLight::release() {
 /**
  * Sets a specific value in the SPFePointLight.
  */
-void SPFePointLight::set(unsigned int key, gchar const *value) {
+void SPFePointLight::set(SPAttributeEnum key, gchar const *value) {
     gchar *end_ptr;
 
     switch (key) {

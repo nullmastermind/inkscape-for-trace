@@ -51,7 +51,7 @@ void SPMeshGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 
-void SPMeshGradient::set(unsigned key, gchar const *value) {
+void SPMeshGradient::set(SPAttributeEnum key, gchar const *value) {
 #ifdef OBJECT_TRACE
   objectTrace( "SPMeshGradient::set" );
 #endif

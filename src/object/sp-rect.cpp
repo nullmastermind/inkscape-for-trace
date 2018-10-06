@@ -50,7 +50,7 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 #endif
 }
 
-void SPRect::set(unsigned key, gchar const *value) {
+void SPRect::set(SPAttributeEnum key, gchar const *value) {
 
 #ifdef OBJECT_TRACE
     std::stringstream temp;

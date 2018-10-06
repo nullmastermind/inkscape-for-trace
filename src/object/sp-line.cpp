@@ -38,7 +38,7 @@ void SPLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     this->readAttr( "y2" );
 }
 
-void SPLine::set(unsigned int key, const gchar* value) {
+void SPLine::set(SPAttributeEnum key, const gchar* value) {
     /* fixme: we should really collect updates */
 
     switch (key) {

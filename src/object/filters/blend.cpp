@@ -129,7 +129,7 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
 /**
  * Sets a specific value in the SPFeBlend.
  */
-void SPFeBlend::set(unsigned int key, gchar const *value) {
+void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
     Inkscape::Filters::FilterBlendMode mode;
     int input;
 

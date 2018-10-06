@@ -211,7 +211,7 @@ void SPPath::release() {
     SPShape::release();
 }
 
-void SPPath::set(unsigned int key, const gchar* value) {
+void SPPath::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_ORIGINAL_D:
             if (value) {

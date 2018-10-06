@@ -43,7 +43,7 @@ void SPStop::build(SPDocument* doc, Inkscape::XML::Node* repr) {
  * Virtual build: set stop attributes from its associated XML node.
  */
 
-void SPStop::set(unsigned int key, const gchar* value) {
+void SPStop::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_OFFSET: {
             this->offset = sp_svg_read_percentage(value, 0.0);

@@ -27,7 +27,7 @@ public:
 
 	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
 	void release() override;
-	void set(unsigned int key, const char* value) override;
+	void set(SPAttributeEnum key, const char* value) override;
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;

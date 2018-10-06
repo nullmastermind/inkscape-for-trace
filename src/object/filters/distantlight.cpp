@@ -62,7 +62,7 @@ void SPFeDistantLight::release() {
 /**
  * Sets a specific value in the SPFeDistantLight.
  */
-void SPFeDistantLight::set(unsigned int key, gchar const *value) {
+void SPFeDistantLight::set(SPAttributeEnum key, gchar const *value) {
     gchar *end_ptr;
 
     switch (key) {

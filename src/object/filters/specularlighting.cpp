@@ -81,7 +81,7 @@ void SPFeSpecularLighting::release() {
 /**
  * Sets a specific value in the SPFeSpecularLighting.
  */
-void SPFeSpecularLighting::set(unsigned int key, gchar const *value) {
+void SPFeSpecularLighting::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
 

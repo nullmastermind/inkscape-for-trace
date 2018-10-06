@@ -272,7 +272,7 @@ void SPNamedView::release() {
     SPObjectGroup::release();
 }
 
-void SPNamedView::set(unsigned int key, const gchar* value) {
+void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool global_snapping = prefs->getBool("/options/snapdefault/value", false);
     switch (key) {

@@ -216,7 +216,7 @@ void SPOffset::release() {
     SPShape::release();
 }
 
-void SPOffset::set(unsigned int key, const gchar* value) {
+void SPOffset::set(SPAttributeEnum key, const gchar* value) {
     if ( this->sourceDirty ) {
     	refresh_offset_source(this);
     }

@@ -12,7 +12,7 @@
 #include "attributes.h"
 
 struct SPStyleProp {
-    gint code;
+    SPAttributeEnum code;
     gchar const *name;
 };
 
@@ -558,28 +558,28 @@ static SPStyleProp const props[] = {
 #define n_attrs (sizeof(props) / sizeof(props[0]))
 
 /** Returns an SPAttributeEnum; SP_ATTR_INVALID (of value 0) if key isn't recognized. */
-unsigned
+SPAttributeEnum
 sp_attribute_lookup(gchar const *key)
 {
     for (unsigned int i = 1; i < n_attrs; i++) {
         g_assert(props[i].code == static_cast< gint >(i) );
         // If this g_assert fails, then the sort order of SPAttributeEnum does not match the order in props[]!
         if(g_str_equal(const_cast<void *>(static_cast<void const *>(props[i].name)), key))
-            return GPOINTER_TO_UINT(GINT_TO_POINTER(props[i].code));
+            return props[i].code;
     }
     // std::cerr << "sp_attribute_lookup: invalid attribute: "
     //           << (key?key:"Null") << std::endl;
     return SP_ATTR_INVALID;
 }
 
-unsigned char const *
-sp_attribute_name(unsigned int id)
+gchar const *
+sp_attribute_name(SPAttributeEnum id)
 {
     if (id >= n_attrs) {
         return nullptr;
     }
 
-    return (unsigned char*)props[id].name;
+    return props[id].name;
 }
 
 

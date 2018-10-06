@@ -65,7 +65,7 @@ void SPAnchor::release() {
     SPGroup::release();
 }
 
-void SPAnchor::set(unsigned int key, const gchar* value) {
+void SPAnchor::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
             g_free(this->href);

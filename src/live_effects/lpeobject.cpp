@@ -95,7 +95,7 @@ void LivePathEffectObject::release() {
 /**
  * Virtual set: set attribute to value.
  */
-void LivePathEffectObject::set(unsigned key, gchar const *value) {
+void LivePathEffectObject::set(SPAttributeEnum key, gchar const *value) {
 #ifdef LIVEPATHEFFECT_VERBOSE
     g_print("Set livepatheffect");
 #endif

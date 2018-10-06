@@ -92,7 +92,7 @@ void SPLPEItem::release() {
     SPItem::release();
 }
 
-void SPLPEItem::set(unsigned int key, gchar const* value) {
+void SPLPEItem::set(SPAttributeEnum key, gchar const* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_PATH_EFFECT:
             {

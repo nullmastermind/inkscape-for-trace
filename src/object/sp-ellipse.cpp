@@ -91,7 +91,7 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
     SPShape::build(document, repr);
 }
 
-void SPGenericEllipse::set(unsigned int key, gchar const *value)
+void SPGenericEllipse::set(SPAttributeEnum key, gchar const *value)
 {
     // There are multiple ways to set internal cx, cy, rx, and ry (via SVG attributes or Sodipodi
     // attributes) thus we don't want to unset them if a read fails (e.g., when we explicitly clear

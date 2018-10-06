@@ -72,7 +72,7 @@ void SPMeshpatch::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 /**
  * Virtual build: set meshpatch attributes from its associated XML node.
  */
-void SPMeshpatch::set(unsigned int key, const gchar* value) {
+void SPMeshpatch::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_TENSOR: {
             if (value) {

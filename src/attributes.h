@@ -15,9 +15,6 @@
  */
 #include <glibmm/value.h>
 
-unsigned int sp_attribute_lookup(gchar const *key);
-unsigned char const *sp_attribute_name(unsigned int id);
-
 /**
  * True iff k is a property in SVG, i.e. something that can be written either in a style attribute
  * or as its own XML attribute. This must be kept in sync with SPAttributeEnum.
@@ -31,7 +28,7 @@ unsigned char const *sp_attribute_name(unsigned int id);
  * line-by-line comparison. Also, inorder for proper parsing, some
  * properites must be before others (e.g. 'font' before 'font-family').
  */
-enum SPAttributeEnum {
+enum SPAttributeEnum : unsigned {
     SP_ATTR_INVALID,  ///< Must have value 0.
     /* SPObject */
     SP_ATTR_ID,
@@ -568,6 +565,9 @@ enum SPAttributeEnum {
     /* LivePathEffect */
     SP_PROP_PATH_EFFECT,
 };
+
+SPAttributeEnum sp_attribute_lookup(gchar const *key);
+gchar const *sp_attribute_name(SPAttributeEnum id);
 
 #endif
 

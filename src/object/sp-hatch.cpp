@@ -125,7 +125,7 @@ void SPHatch::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref)
     //FIXME: notify all hatches that refer to this child set
 }
 
-void SPHatch::set(unsigned int key, const gchar* value)
+void SPHatch::set(SPAttributeEnum key, const gchar* value)
 {
     switch (key) {
     case SP_ATTR_HATCHUNITS:

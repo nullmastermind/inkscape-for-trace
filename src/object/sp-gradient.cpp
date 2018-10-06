@@ -329,7 +329,7 @@ void SPGradient::release()
 /**
  * Set gradient attribute to value.
  */
-void SPGradient::set(unsigned key, gchar const *value)
+void SPGradient::set(SPAttributeEnum key, gchar const *value)
 {
 #ifdef OBJECT_TRACE
     std::stringstream temp;

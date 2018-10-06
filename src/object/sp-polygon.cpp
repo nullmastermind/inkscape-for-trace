@@ -102,7 +102,7 @@ static gboolean polygon_get_value(gchar const **p, gdouble *v)
     return true;
 }
 
-void SPPolygon::set(unsigned int key, const gchar* value) {
+void SPPolygon::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_POINTS: {
             if (!value) {

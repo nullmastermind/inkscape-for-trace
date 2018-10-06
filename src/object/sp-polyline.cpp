@@ -29,7 +29,7 @@ void SPPolyLine::build(SPDocument * document, Inkscape::XML::Node * repr) {
     this->readAttr("points");
 }
 
-void SPPolyLine::set(unsigned int key, const gchar* value) {
+void SPPolyLine::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_POINTS: {
             SPCurve * curve;

@@ -94,7 +94,7 @@ void SPPattern::release()
     SPPaintServer::release();
 }
 
-void SPPattern::set(unsigned int key, const gchar *value)
+void SPPattern::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
         case SP_ATTR_PATTERNUNITS:

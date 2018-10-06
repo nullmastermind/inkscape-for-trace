@@ -68,7 +68,7 @@ void SPTSpan::release() {
     SPItem::release();
 }
 
-void SPTSpan::set(unsigned int key, const gchar* value) {
+void SPTSpan::set(SPAttributeEnum key, const gchar* value) {
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
@@ -277,7 +277,7 @@ void SPTextPath::release() {
     SPItem::release();
 }
 
-void SPTextPath::set(unsigned int key, const gchar* value) {
+void SPTextPath::set(SPAttributeEnum key, const gchar* value) {
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);

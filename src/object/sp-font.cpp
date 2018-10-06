@@ -74,7 +74,7 @@ void SPFont::release() {
     SPObject::release();
 }
 
-void SPFont::set(unsigned int key, const gchar *value) {
+void SPFont::set(SPAttributeEnum key, const gchar *value) {
     // TODO these are floating point, so some epsilon comparison would be good
     switch (key) {
         case SP_ATTR_HORIZ_ORIGIN_X:

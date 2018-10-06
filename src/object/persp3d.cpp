@@ -133,7 +133,7 @@ static Proj::Pt2 legacy_transform_backward(Proj::Pt2 pt, SPDocument const *doc) 
  */
 // FIXME: Currently we only read the finite positions of vanishing points;
 //        should we move VPs into their own repr (as it's done for SPStop, e.g.)?
-void Persp3D::set(unsigned key, gchar const *value) {
+void Persp3D::set(SPAttributeEnum key, gchar const *value) {
 
     switch (key) {
         case SP_ATTR_INKSCAPE_PERSP3D_VP_X: {

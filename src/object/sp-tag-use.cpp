@@ -84,7 +84,7 @@ SPTagUse::release()
 }
 
 void
-SPTagUse::set(unsigned key, gchar const *value)
+SPTagUse::set(SPAttributeEnum key, gchar const *value)
 {
 
     switch (key) {

@@ -79,7 +79,7 @@ bool GlyphNames::contains(const char* name)
     return false;
 }
 
-void SPGlyphKerning::set(unsigned int key, const gchar *value)
+void SPGlyphKerning::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
         case SP_ATTR_U1:

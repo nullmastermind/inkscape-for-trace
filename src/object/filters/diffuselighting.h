@@ -49,7 +49,7 @@ protected:
 
 	void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr) override;
 
-	void set(unsigned int key, const gchar* value) override;
+	void set(SPAttributeEnum key, const gchar* value) override;
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 

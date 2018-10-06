@@ -61,6 +61,8 @@ class SPObject;
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
 
+enum SPAttributeEnum : unsigned;
+
 class SPCSSAttr;
 class SPStyle;
 
@@ -705,7 +707,7 @@ public:
     /**
      * Call virtual set() function of object.
      */
-    void setKeyValue(unsigned int key, char const *value);
+    void setKeyValue(SPAttributeEnum key, char const *value);
 
     void setAttribute(         char const *key,          char const *value, SPException *ex=nullptr);
     void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=nullptr);
@@ -816,7 +818,7 @@ protected:
 
 	virtual void order_changed(Inkscape::XML::Node* child, Inkscape::XML::Node* old_repr, Inkscape::XML::Node* new_repr);
 
-	virtual void set(unsigned int key, const char* value);
+	virtual void set(SPAttributeEnum key, const char* value);
 
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);

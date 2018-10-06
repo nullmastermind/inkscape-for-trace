@@ -79,7 +79,7 @@ void SPHatchPath::release()
     SPObject::release();
 }
 
-void SPHatchPath::set(unsigned int key, const gchar* value)
+void SPHatchPath::set(SPAttributeEnum key, const gchar* value)
 {
     switch (key) {
     case SP_ATTR_D:

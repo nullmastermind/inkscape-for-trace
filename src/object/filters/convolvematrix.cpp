@@ -102,7 +102,7 @@ static Inkscape::Filters::FilterConvolveMatrixEdgeMode sp_feConvolveMatrix_read_
 /**
  * Sets a specific value in the SPFeConvolveMatrix.
  */
-void SPFeConvolveMatrix::set(unsigned int key, gchar const *value) {
+void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
     double read_num;
     int read_int;
     bool read_bool;

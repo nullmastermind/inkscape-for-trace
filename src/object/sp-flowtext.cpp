@@ -145,7 +145,7 @@ void SPFlowtext::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->readAttr( "inkscape:layoutOptions" );     // must happen after css has been read
 }
 
-void SPFlowtext::set(unsigned int key, const gchar* value) {
+void SPFlowtext::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_LAYOUT_OPTIONS: {
             // deprecated attribute, read for backward compatibility only

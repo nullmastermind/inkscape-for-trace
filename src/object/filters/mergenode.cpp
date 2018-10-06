@@ -47,7 +47,7 @@ void SPFeMergeNode::release() {
 /**
  * Sets a specific value in the SPFeMergeNode.
  */
-void SPFeMergeNode::set(unsigned int key, gchar const *value) {
+void SPFeMergeNode::set(SPAttributeEnum key, gchar const *value) {
     SPFeMerge *parent = SP_FEMERGE(this->parent);
 
     if (key == SP_ATTR_IN) {

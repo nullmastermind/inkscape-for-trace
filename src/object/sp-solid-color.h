@@ -30,7 +30,7 @@ public:
 
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-    void set(unsigned int key, char const* value) override;
+    void set(SPAttributeEnum key, char const* value) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 

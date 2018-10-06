@@ -57,7 +57,7 @@ void SPFeFlood::release() {
 /**
  * Sets a specific value in the SPFeFlood.
  */
-void SPFeFlood::set(unsigned int key, gchar const *value) {
+void SPFeFlood::set(SPAttributeEnum key, gchar const *value) {
     gchar const *cend_ptr = nullptr;
     gchar *end_ptr = nullptr;
     guint32 read_color;

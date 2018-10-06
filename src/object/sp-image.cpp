@@ -176,7 +176,7 @@ void SPImage::release() {
     SPItem::release();
 }
 
-void SPImage::set(unsigned int key, const gchar* value) {
+void SPImage::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_XLINK_HREF:
             g_free (this->href);

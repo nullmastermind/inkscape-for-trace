@@ -106,7 +106,7 @@ void SPShape::release() {
     SPLPEItem::release();
 }
 
-void SPShape::set(unsigned int key, const gchar* value) {
+void SPShape::set(SPAttributeEnum key, const gchar* value) {
 	SPLPEItem::set(key, value);
 }
 

@@ -370,7 +370,7 @@ void SPFontFace::release() {
 	SPObject::release();
 }
 
-void SPFontFace::set(unsigned int key, const gchar *value) {
+void SPFontFace::set(SPAttributeEnum key, const gchar *value) {
     std::vector<FontFaceStyleType> style;
     std::vector<FontFaceVariantType> variant;
     std::vector<FontFaceWeightType> weight;

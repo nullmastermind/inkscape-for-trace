@@ -51,7 +51,7 @@ public:
 protected:
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void release() override;
-    void set(unsigned int key, const gchar* value) override;
+    void set(SPAttributeEnum key, const gchar* value) override;
     void update(SPCtx* ctx, unsigned int flags) override;
 
 private:

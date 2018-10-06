@@ -96,7 +96,7 @@ void SPRoot::release()
 }
 
 
-void SPRoot::set(unsigned int key, const gchar *value)
+void SPRoot::set(SPAttributeEnum key, const gchar *value)
 {
     switch (key) {
     case SP_ATTR_VERSION:

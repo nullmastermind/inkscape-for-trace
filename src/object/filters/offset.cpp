@@ -54,7 +54,7 @@ void SPFeOffset::release() {
 /**
  * Sets a specific value in the SPFeOffset.
  */
-void SPFeOffset::set(unsigned int key, gchar const *value) {
+void SPFeOffset::set(SPAttributeEnum key, gchar const *value) {
     double read_num;
 
     switch(key) {

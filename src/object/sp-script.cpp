@@ -52,7 +52,7 @@ void SPScript::modified(unsigned int /*flags*/) {
 }
 
 
-void SPScript::set(unsigned int key, const gchar* value) {
+void SPScript::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
 	case SP_ATTR_XLINK_HREF:
             if (this->xlinkhref) {

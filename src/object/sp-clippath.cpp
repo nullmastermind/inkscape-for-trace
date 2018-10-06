@@ -65,7 +65,7 @@ void SPClipPath::release() {
     SPObjectGroup::release();
 }
 
-void SPClipPath::set(unsigned int key, const gchar* value) {
+void SPClipPath::set(SPAttributeEnum key, const gchar* value) {
     switch (key) {
         case SP_ATTR_CLIPPATHUNITS:
             this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;

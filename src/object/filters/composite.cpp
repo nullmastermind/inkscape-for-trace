@@ -117,7 +117,7 @@ sp_feComposite_read_operator(gchar const *value) {
 /**
  * Sets a specific value in the SPFeComposite.
  */
-void SPFeComposite::set(unsigned int key, gchar const *value) {
+void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
     int input;
     FeCompositeOperator op;
     double k_n;

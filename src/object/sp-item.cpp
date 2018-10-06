@@ -426,7 +426,7 @@ void SPItem::release() {
     //item->_transformed_signal.~signal();
 }
 
-void SPItem::set(unsigned int key, gchar const* value) {
+void SPItem::set(SPAttributeEnum key, gchar const* value) {
     SPItem *item = this;
     SPItem* object = item;
 

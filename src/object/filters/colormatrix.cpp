@@ -77,7 +77,7 @@ static Inkscape::Filters::FilterColorMatrixType sp_feColorMatrix_read_type(gchar
 /**
  * Sets a specific value in the SPFeColorMatrix.
  */
-void SPFeColorMatrix::set(unsigned int key, gchar const *str) {
+void SPFeColorMatrix::set(SPAttributeEnum key, gchar const *str) {
     Inkscape::Filters::FilterColorMatrixType read_type;
 
 	/*DEAL WITH SETTING ATTRIBUTES HERE*/

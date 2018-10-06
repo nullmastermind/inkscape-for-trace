@@ -111,7 +111,7 @@ void SPFilter::release() {
 /**
  * Sets a specific value in the SPFilter.
  */
-void SPFilter::set(unsigned int key, gchar const *value) {
+void SPFilter::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_FILTERUNITS:
             if (value) {

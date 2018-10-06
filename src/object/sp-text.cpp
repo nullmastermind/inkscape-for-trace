@@ -83,7 +83,7 @@ void SPText::release() {
     SPItem::release();
 }
 
-void SPText::set(unsigned int key, const gchar* value) {
+void SPText::set(SPAttributeEnum key, const gchar* value) {
     //std::cout << "SPText::set: " << sp_attribute_name( key ) << ": " << (value?value:"Null") << std::endl;
 
     if (this->attributes.readSingleAttribute(key, value, style, &viewport)) {

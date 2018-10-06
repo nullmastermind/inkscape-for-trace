@@ -69,7 +69,7 @@ void SPMask::release() {
     SPObjectGroup::release();
 }
 
-void SPMask::set(unsigned int key, const gchar* value) {
+void SPMask::set(SPAttributeEnum key, const gchar* value) {
 	switch (key) {
 	case SP_ATTR_MASKUNITS:
 		this->maskUnits = SP_CONTENT_UNITS_OBJECTBOUNDINGBOX;
