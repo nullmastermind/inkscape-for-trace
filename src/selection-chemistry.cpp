@@ -3943,7 +3943,7 @@ void ObjectSet::setClipGroup()
     // /END FIXME
 
     doc->ensureUpToDate();
-is
+
     // Comment out this section because we don't need it, I think.
     // Also updated comment code to work correctly if indeed it's needed.
     // To reactivate, remove the next line and uncomment the section.
