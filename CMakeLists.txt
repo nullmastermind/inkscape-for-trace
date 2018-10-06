@@ -50,13 +50,6 @@ endif()
 # this can be removed if/when cmake 3.1 is made the minimum required version
 set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH ON)
 
-# workaround for omission in cmake 2.8.4's GNU.cmake, fixed in 2.8.5
-if(CMAKE_COMPILER_IS_GNUCC)
-    if(NOT DARWIN)
-    set(CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem ")
-    endif()
-endif()
-
 # console output is slow as hell on Windows and as a result status messages of the "install" target slow down
 # the whole build process considerably (especially since we also copy a lot of files from the devlibs)
 # TODO: Is this worth to be configurable / also applicable to other platforms?
