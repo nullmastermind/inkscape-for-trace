@@ -518,7 +518,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 break;
             }
 
-            if (!prefs->getBool("/tools/nodes/pathflash_selected") && selection->includes(over_item)) {
+            if (!prefs->getBool("/tools/nodes/pathflash_selected") && over_item && selection->includes(over_item)) {
                 break;
             }
 
