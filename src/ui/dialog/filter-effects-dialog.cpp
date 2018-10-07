@@ -3086,7 +3086,7 @@ void FilterEffectsDialog::update_settings_view()
 
     SPFilterPrimitive* prim = _primitive_list.get_selected();
 
-    if(prim) {
+    if(prim && prim->getRepr()) {
 
         //XML Tree being used directly here while it shouldn't be.
         _settings->show_and_update(FPConverter.get_id_from_key(prim->getRepr()->name()), prim);
