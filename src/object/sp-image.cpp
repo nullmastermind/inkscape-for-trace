@@ -756,7 +756,7 @@ static void sp_image_set_curve( SPImage *image )
         SPCurve *c = nullptr;
         
         if (rect->isFinite()) {
-            SPCurve::new_from_rect(*rect, true);
+            c = SPCurve::new_from_rect(*rect, true);
         }
 
         if (image->curve) {
