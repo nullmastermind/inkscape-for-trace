@@ -193,7 +193,7 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         }
         sp_set_font_size_smaller (GTK_WIDGET(_none[i].gobj()));
         _none[i].show_all();
-        __none[i] = (i == SS_FILL)? (C_("Fill and stroke", "No fill")) : (C_("Fill and stroke", "No stroke"));
+        __none[i] = (i == SS_FILL)? (C_("Fill and stroke", "No fill, middle-click for black fill")) : (C_("Fill and stroke", "No stroke, middle-click for black stroke"));
 
         _pattern[i].set_markup (_("Pattern"));
         sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
@@ -1020,7 +1020,7 @@ SelectedStyle::update()
                 place->add(*_color_preview[i]);
                 gchar c_string[64];
                 g_snprintf (c_string, 64, "%06x/%.3g", color >> 8, SP_RGBA32_A_F(color));
-                place->set_tooltip_text(__color[i] + ": " + c_string + _(", drag to adjust"));
+                place->set_tooltip_text(__color[i] + ": " + c_string + _(", drag to adjust, middle-click to remove"));
                 _mode[i] = SS_COLOR;
                 _popup_copy[i].set_sensitive(true);
 
