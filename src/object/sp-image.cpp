@@ -753,7 +753,11 @@ static void sp_image_set_curve( SPImage *image )
         }
     } else {
         Geom::OptRect rect = image->bbox(Geom::identity(), SPItem::VISUAL_BBOX);
-        SPCurve *c = SPCurve::new_from_rect(*rect, true);
+        SPCurve *c = nullptr;
+        
+        if (rect->isFinite()) {
+            SPCurve::new_from_rect(*rect, true);
+        }
 
         if (image->curve) {
             image->curve = image->curve->unref();
