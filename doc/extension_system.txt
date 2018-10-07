@@ -45,7 +45,7 @@ modified.  Please look aton the Inkscape webpage also.
 *Script* - A script is a type of extension that is implemented through
  an external program that receives and sets SVG data through files and
  pipes.  This allows Inkscape to use programs that handle SVG but are
- targeted differently, seemlessly inside of Inkscape.
+ targeted differently, seamlessly inside of Inkscape.
 
 *Language Binding* - A special type of plug-in that wraps a scripting
  language interpreter such as Perl, Python, Lisp, etc.  A user

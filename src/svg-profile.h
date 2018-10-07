@@ -38,11 +38,11 @@ namespace Inkscape {
     bitfield.
  
     The entire class has been optimized for inlining and compiler reduction
-    of code.  All entires should allow being put in a structure or other
+    of code.  All entries should allow being put in a structure or other
     static allocation.  For most operations, simple and/or instructions
     in the processor is required after optimization.
 
-    Adding additional profiles to the class is as easy as adding entires
+    Adding additional profiles to the class is as easy as adding entries
     into the enum.  Adding additional aggregates requires adding to the
     enum, and adding the aggregate into the constructor for the class.
 */
@@ -74,7 +74,7 @@ public:
 
         SVG_PRINT_1_1,        /**< */
 
-        PROFILE_UNIQUE_CNT,   /**< A marker to separate between the entires
+        PROFILE_UNIQUE_CNT,   /**< A marker to separate between the entries
                                    that are unique, and those which are
                                    aggregates of them. */
 

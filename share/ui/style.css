@@ -94,7 +94,7 @@ combobox window.popup scrolledwindow treeview separator {
     padding: 0;
 }
 
-/* Keep pallete scrollbar from generating warnings. */
+/* Keep palette scrollbar from generating warnings. */
 #PreviewHolderScroller .vertical slider {
     min-height: 15px;
 }

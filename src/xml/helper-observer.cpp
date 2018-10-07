@@ -19,7 +19,7 @@ SignalObserver::~SignalObserver()
 // Add this observer to the SPObject and remove it from any previous object
 void SignalObserver::set(SPObject* o)
 {
-  // XML Tree being used direcly in this function in the following code
+  // XML Tree being used directly in this function in the following code
   //   while it shouldn't be
   // Pointer to object is stored, so refcounting should be increased/decreased
     if(_oldsel) {

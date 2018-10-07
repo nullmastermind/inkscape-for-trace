@@ -488,7 +488,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
 
-    // Matix to put bitmap in correct place on document
+    // Matrix to put bitmap in correct place on document
     Geom::Affine t_on_document = (Geom::Affine)(Geom::Scale (scale_x, scale_y)) *
                                  (Geom::Affine)(Geom::Translate (shift_x, shift_y));
 

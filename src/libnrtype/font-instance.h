@@ -105,8 +105,8 @@ private:
     double  _ascent;       // Typographic ascent.
     double  _descent;      // Typographic descent.
     double  _xheight;      // x-height of font.
-    double  _ascent_max;   // Maxiumum ascent of all glyphs in font.
-    double  _descent_max;  // Maxiumum descent of all glyphs in font.
+    double  _ascent_max;   // Maximum ascent of all glyphs in font.
+    double  _descent_max;  // Maximum descent of all glyphs in font.
 
     // Baselines
     double _baselines[SP_CSS_BASELINE_SIZE];

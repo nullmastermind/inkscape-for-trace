@@ -69,7 +69,7 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
                     attrsRemoved.push_back(attrName);
                 }
             }
-            // Can't change the set we're interating over while we are iterating.
+            // Can't change the set we're iterating over while we are iterating.
             for ( std::vector<gchar const*>::iterator it = attrsRemoved.begin(); it != attrsRemoved.end(); ++it ) {
                 repr->setAttribute(*it, nullptr);
             }

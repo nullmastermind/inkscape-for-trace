@@ -130,7 +130,7 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
 
     // I think what's going on here is that we're moving the top of the scanline to the given position...
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y, line_text_height);
-    // ...then actually retreiving the scanline (which alters the first two parameters)
+    // ...then actually retrieving the scanline (which alters the first two parameters)
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y + line_text_height , &line_rasterization, true, line_text_height);
     // sanitise the raw rasterisation, which could have weird overlaps 
     line_rasterization.Flatten();

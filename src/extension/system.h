@@ -75,7 +75,7 @@ Glib::ustring get_file_save_path (SPDocument *doc, FileSaveMethod method);
  * Write the given file extension back to prefs so that it can be used later on.
  *
  * @param extension the file extension which should be written to prefs
- * @param method the file save mathod of the dialog
+ * @param method the file save method of the dialog
  */
 void store_file_extension_in_prefs (Glib::ustring extension, FileSaveMethod method);
 
@@ -83,7 +83,7 @@ void store_file_extension_in_prefs (Glib::ustring extension, FileSaveMethod meth
  * Write the given path back to prefs so that it can be used later on.
  *
  * @param path the path which should be written to prefs
- * @param method the file save mathod of the dialog
+ * @param method the file save method of the dialog
  */
 void store_save_path_in_prefs (Glib::ustring path, FileSaveMethod method);
 

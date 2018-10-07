@@ -116,7 +116,7 @@ protected:
      * Disconnects the view from the document signals, connects the view 
      * to a new one, and emits the _document_set_signal on the view.
      *
-     * This is code comon to all subclasses and called from their
+     * This is code common to all subclasses and called from their
      * setDocument() methods after they are done.
      * 
      * @param doc The new document to connect the view to.

@@ -114,7 +114,7 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
         g_object_weak_ref(G_OBJECT(adj), _adjustmentFinalizedCB, this);
         _adjList.push_back(adj);
     } else {
-        std::cerr << "UnitTracker::addAjustment: Ajustment already added!" << std::endl;
+        std::cerr << "UnitTracker::addAjustment: Adjustment already added!" << std::endl;
     }
 }
 

@@ -353,7 +353,7 @@ SPDocument implements undo and redo stacks and an id-based object
 dictionary.  Thanks to unique id attributes, the latter can be used to
 map from the XML tree back to the object tree.  Documents are
 themselves registered by the main program metaobject 'Sodipodi', which
-does elementary bookeeping.
+does elementary bookkeeping.
 
 SPDocument performs the basic operations needed for asynchronous
 update notification (SPObject ::modified virtual method), and implements

@@ -700,7 +700,7 @@ void font_instance::FindFontMetrics() {
     // On Windows, the typographic ascender and descender are taken from the otmMacAscent and
     // otmMacDescent values:
     //   http://microsoft.public.win32.programmer.gdi.narkive.com/LV6k4BDh/msdn-documentation-outlinetextmetrics-clarification
-    // The otmAscent and otmDescent values are the maxiumum ascent and maxiumum descent of all the
+    // The otmAscent and otmDescent values are the maximum ascent and maximum descent of all the
     // glyphs in a font.
     if ( theFace ) {
 

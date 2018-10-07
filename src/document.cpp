@@ -1753,7 +1753,7 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
  * Count the number of objects in a given document recursively using the count_objects_recursive helper function
  * 
  * @param[in] document Pointer to the document for counting objects
- * @return Numer of objects in the document
+ * @return Number of objects in the document
  */
 static unsigned int objects_in_document(SPDocument *document)
 {

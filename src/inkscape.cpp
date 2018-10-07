@@ -8,7 +8,7 @@
  *   Liam P. White <inkscapebrony@gmail.com>
  *
  * Copyright (C) 1999-2014 authors
- * c++ port Copyright (C) 2003 Nathan Hurst 
+ * c++ port Copyright (C) 2003 Nathan Hurst
  * c++ification Copyright (C) 2014 Liam P. White
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -80,7 +80,7 @@ typedef int uid_t;
 #endif
 
 /**  C++ification TODO list
- * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break. 
+ * - _S_inst should NOT need to be assigned inside the constructor, but if it isn't the Filters+Extensions menus break.
  * - Application::_deskops has to be a pointer because of a signal bug somewhere else. Basically, it will attempt to access a deleted object in sp_ui_close_all(),
  *   but if it's a pointer we can stop and return NULL in Application::active_desktop()
  * - These functions are calling Application::create for no good reason I can determine:
@@ -129,7 +129,7 @@ void inkscape_unref(Inkscape::Application & in)
             delete Inkscape::Application::_S_inst;
         }
     } else {
-        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)", 
+        g_error("Attempt to unref an Application (=%p) not the current instance (=%p) (maybe it's already been destroyed?)",
                 &in, Inkscape::Application::_S_inst);
     }
 }
@@ -263,7 +263,7 @@ int Application::autosave()
             while( (filename = g_dir_read_name(autosave_dir_ptr)) != nullptr ){
                 if ( strncmp(filename, baseName, strlen(baseName)) == 0 ){
                     gchar* full_path = g_build_filename( autosave_dir.c_str(), filename, NULL );
-                    if (g_file_test (full_path, G_FILE_TEST_EXISTS)){ 
+                    if (g_file_test (full_path, G_FILE_TEST_EXISTS)){
                         if ( g_stat(full_path, &sb) != -1 ) {
                             if ( difftime(sb.st_ctime, min_time) < 0 || min_time == 0 ){
                                 min_time = sb.st_ctime;
@@ -398,8 +398,8 @@ Application::add_style_sheet()
 #endif
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    // we want a tiny file with 3 or 4 lines, so we can loada witout removing context
-    // is more undertable than record previously applyed
+    // we want a tiny file with 3 or 4 lines, so we can load without removing context
+    // is more understandable than record previously applied
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
       auto provider = Gtk::CssProvider::create();
@@ -537,7 +537,7 @@ Application::Application(const char* argv, bool use_gui) :
     Inkscape::Extension::init();
 
     autosave_init();
-    
+
     /* Initialize font factory */
     font_factory *factory = font_factory::Default();
     if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
@@ -825,7 +825,7 @@ void
 Application::selection_changed (Inkscape::Selection * selection)
 {
     g_return_if_fail (selection != nullptr);
-    
+
     if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         signal_selection_changed.emit(selection);
     }
@@ -905,7 +905,7 @@ Application::remove_desktop (SPDesktop * desktop)
             SPDesktop * new_desktop = *(++_desktops->begin());
             _desktops->erase(std::find(_desktops->begin(), _desktops->end(), new_desktop));
             _desktops->insert(_desktops->begin(), new_desktop);
-            
+
             signal_activate_desktop.emit(new_desktop);
             signal_eventcontext_set.emit(new_desktop->getEventContext());
             signal_selection_set.emit(new_desktop->getSelection());
@@ -939,7 +939,7 @@ Application::activate_desktop (SPDesktop * desktop)
     }
 
     std::vector<SPDesktop*>::iterator i;
-    
+
     if ((i = std::find (_desktops->begin(), _desktops->end(), desktop)) == _desktops->end()) {
         g_error("Tried to activate desktop not added to list.");
     }
