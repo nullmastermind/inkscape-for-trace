@@ -184,6 +184,10 @@ bool SVGLength::read(gchar const *str)
         return false;
     }
 
+    if (!strcmp(str, "nan") || !strcmp(str, "-nan") || !strcmp(str, "NaN") || !strcmp(str, "-NaN")) {
+        return false;
+    }
+
     SVGLength::Unit u;
     float v;
     float c;

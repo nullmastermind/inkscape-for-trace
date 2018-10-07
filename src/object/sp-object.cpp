@@ -996,14 +996,6 @@ void SPObject::readAttr(gchar const *key)
     if (keyid != SP_ATTR_INVALID) {
         /* Retrieve the 'key' attribute from the object's XML representation */
         gchar const *value = getRepr()->attribute(key);
-        if (value &&
-            (!strcmp(value, "nan")
-            || !strcmp(value, "-nan")
-            || !strcmp(value, "NaN")
-            || !strcmp(value, "-NaN")
-            )) {
-          value = nullptr;
-        }
 
         setKeyValue(keyid, value);
     }
