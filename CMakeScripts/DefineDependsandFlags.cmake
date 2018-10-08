@@ -14,6 +14,8 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 # Add C++11 standard compliance
 # TODO: Add a proper check for compiler compliance here
 # ----------------------------------------------------------------------------
+# this can be removed when cmake minimum is 3.1 
+# as replaced with CMAKE_CXX_STANDARD in main CMakeLists.txt
 list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 
 
