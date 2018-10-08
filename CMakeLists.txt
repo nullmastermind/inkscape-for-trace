@@ -13,6 +13,10 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
+# Used in cmake 3.1+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 
 # avoid having empty buildtype
