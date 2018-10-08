@@ -161,8 +161,8 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     text_top_bottom.param_set_range(-999999.0, 999999.0);
     text_top_bottom.param_set_increments(1, 1);
     text_top_bottom.param_set_digits(2);
-    line_width.param_set_range(-999999.0, 999999.0);
-    line_width.param_set_increments(1, 1);
+    line_width.param_set_range(0, 999999.0);
+    line_width.param_set_increments(0.1, 0.1);
     line_width.param_set_digits(2);
     helpline_distance.param_set_range(-999999.0, 999999.0);
     helpline_distance.param_set_increments(1, 1);
