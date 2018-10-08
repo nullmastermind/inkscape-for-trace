@@ -582,7 +582,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
         break;
     }
     case GDK_KEY_PRESS: {
-        if ((event->key.keyval == GDK_KEY_Shift_L) || (event->key.keyval == GDK_KEY_Shift_R)) {
+        if ((event->key.keyval == GDK_KEY_Control_L) || (event->key.keyval == GDK_KEY_Control_R)) {
             explicit_base_tmp = explicit_base;
             explicit_base = end_p;
             showInfoBox(last_pos, true);
@@ -590,7 +590,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
         break;
     }
     case GDK_KEY_RELEASE: {
-        if ((event->key.keyval == GDK_KEY_Shift_L) || (event->key.keyval == GDK_KEY_Shift_R)) {
+        if ((event->key.keyval == GDK_KEY_Control_L) || (event->key.keyval == GDK_KEY_Control_R)) {
             showInfoBox(last_pos, false);
         }
         break;
@@ -611,7 +611,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
                 snap_manager.unSetup();
             }
             last_pos = Geom::Point(event->motion.x, event->motion.y);
-            if(event->motion.state & GDK_SHIFT_MASK) {
+            if (event->motion.state & GDK_CONTROL_MASK) {
                 showInfoBox(last_pos, true);
             } else {
                 showInfoBox(last_pos, false);
@@ -1229,7 +1229,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
             showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
         } else if (SP_IS_GROUP(over)) {
-            measure_str = _("Shift to measure into group");
+            measure_str = _("Press 'CTRL' to measure into group");
             showItemInfoText(pos + (rel_position * zoom),measure_str,fontsize);
             rel_position = Geom::Point(rel_position[Geom::X], rel_position[Geom::Y] + gap);
         }
