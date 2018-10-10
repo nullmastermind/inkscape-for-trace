@@ -328,12 +328,14 @@ struct poptOption options[] = {
      POPT_ARG_STRING, nullptr, SP_ARG_FILE,
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
+
 #ifdef WITH_YAML
     {"xverbs", 0,
      POPT_ARG_STRING, &sp_xverbs_yaml, SP_ARG_XVERBS,
      N_("xverbs command"),
      N_("XVERBS_FILENAME")},
 #endif // WITH_YAML
+
     {"print", 'p',
      POPT_ARG_STRING, &sp_global_printer, SP_ARG_PRINT,
      N_("Print document(s) to specified output file (use '| program' for pipe)"),
@@ -628,14 +630,8 @@ static void set_extensions_env()
 int
 main(int argc, char **argv)
 {
-#ifdef HAVE_FPSETMASK
-    /* This is inherited from Sodipodi code, where it was in #ifdef __FreeBSD__.  It's probably
-       safe to remove: the default mask is already 0 in C99, and in current FreeBSD according to
-       the fenv man page on www.freebsd.org, and in glibc according to (libc)FP Exceptions. */
-    fpsetmask(fpgetmask() & ~(FP_X_DZ | FP_X_INV));
-#endif
-
 #ifdef ENABLE_NLS
+    // Native Language Support
     Inkscape::initialize_gettext();
 #endif
 
@@ -651,23 +647,23 @@ main(int argc, char **argv)
         rt.setPathInfo();
     }
 #endif
+
     set_extensions_env();
 
-    // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
-    Gtk::Main::init_gtkmm_internals();
-
+    // Checks libxml version is compatible with version software is compiled against
     LIBXML_TEST_VERSION
 
+    // Garbage Collector
     Inkscape::GC::init();
 
     Inkscape::Debug::Logger::init();
 
-    gboolean use_gui;
+    bool use_gui;
 
 #if !defined(_WIN32) && !defined(GDK_WINDOWING_QUARTZ)
     use_gui = (g_getenv("DISPLAY") != nullptr);
 #else
-    use_gui = TRUE;
+    use_gui = true;
 #endif
     /* Test whether with/without GUI is forced */
     for (int i = 1; i < argc; i++) {
@@ -716,10 +712,10 @@ main(int argc, char **argv)
            )
         {
             /* main_console handles any exports -- not the gui */
-            use_gui = FALSE;
+            use_gui = false;
             break;
         } else if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--with-gui")) {
-            use_gui = TRUE;
+            use_gui = true;
             break;
         }
     }
@@ -778,7 +774,7 @@ static void fixupFilenameEncoding( std::vector<gchar*> &filenames)
 static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flDest )
 {
 #ifdef ENABLE_NLS
-    // temporarily switch gettext encoding to locale, so that help messages can be output properly
+    // Temporarily switch gettext encoding to locale, so that help messages can be output properly.
     Inkscape::bind_textdomain_codeset_console();
 #endif
 
@@ -791,7 +787,7 @@ static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flD
     poptFreeContext(ctx);
    
 #ifdef ENABLE_NLS
-    // now switch gettext back to UTF-8 (for GUI)
+    // Now switch gettext back to UTF-8 (for GUI)
     Inkscape::bind_textdomain_codeset_utf8();
 #endif
 
