@@ -24,19 +24,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
+# include "config.h"
 #endif
 
 // This has to be included prior to anything that includes setjmp.h, it croaks otherwise
 #include <png.h>
 
-#include "ui/widget/panel.h" // This has to be the first to include <glib.h> because of Glibmm's dependence on a deprecated feature...
-
-#include "path-prefix.h"
-
-#ifdef HAVE_IEEEFP_H
-#include <ieeefp.h>
-#endif
 #include <cstring>
 
 #include <popt.h>
@@ -46,67 +39,7 @@
 
 #include <libxml/tree.h>
 
-#include <gdkmm/screen.h>
-
-#include "inkgc/gc-core.h"
-
-#ifdef AND
-#undef AND
-#endif
-
-#include "file.h"
-#include "document.h"
-#include "layer-model.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "ui/interface.h"
-#include "print.h"
-#include "color.h"
-
-#include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "svg/stringstream.h"
-
-#include "inkscape.h"
-#include "inkscape-version.h"
-
-#include "object/object-set.h"
-#include "object/sp-guide.h"
-#include "object/sp-root.h"
-#include "object/sp-namedview.h"
-#include "object/sp-text.h"
-#include "object/sp-flowtext.h"
-
-#include "xml/repr.h"
-
-#include "io/resource.h"
-#include "io/sys.h"
-
-#include "debug/logger.h"
-#include "debug/log-display-config.h"
-
-#include "helper/action-context.h"
-#include "helper/png-write.h"
-#ifdef ENABLE_NLS
-#include "helper/gettext.h"
-#endif
-
-#include <extension/extension.h>
-#include <extension/db.h>
-#include <extension/output.h>
-#include <extension/input.h>
-
-#ifdef _WIN32
-#include <windows.h>
-#include "registrytool.h"
-#endif // _WIN32
-
-#include "extension/init.h"
-// Not ideal, but there doesn't appear to be a nicer system in place for
-// passing command-line parameters to extensions before initialization...
-#ifdef WITH_DBUS
-#include "extension/dbus/dbus-init.h"
-#endif // WITH_DBUS
+#include "ui/widget/panel.h" // This has to be the first to include <glib.h> because of Glibmm's dependence on a deprecated feature...
 
 #include <glibmm/i18n.h>
 #include <glibmm/convert.h>
@@ -115,15 +48,73 @@
 #include <glibmm/main.h>
 #include <gtkmm/main.h>
 #include <gtkmm/window.h>
+#include <gdkmm/screen.h>
+
+#include <cerrno>
+
+#ifdef _WIN32
+#include <windows.h>
+#include "registrytool.h"
+#endif // _WIN32
+
+#include "inkscape.h"
+#include "inkscape-version.h"
+
+#include "color.h"
+#include "document.h"
+#include "file.h"
+#include "layer-model.h"
+#include "path-chemistry.h"
+#include "path-prefix.h"
+#include "print.h"
+#include "selection-chemistry.h"
+#include "selection.h"
+#include "text-editing.h"
+#include "verbs.h"
+
+#include "debug/logger.h"
+#include "debug/log-display-config.h"
+
+#include "extension/extension.h"
+#include "extension/db.h"
+#include "extension/output.h"
+#include "extension/input.h"
+#include "extension/init.h"
+// Not ideal, but there doesn't appear to be a nicer system in place for
+// passing command-line parameters to extensions before initialization...
+#ifdef WITH_DBUS
+#include "extension/dbus/dbus-init.h"
+#endif // WITH_DBUS
+
+#include "helper/action-context.h"
+#include "helper/png-write.h"
+#ifdef ENABLE_NLS
+#include "helper/gettext.h"
+#endif
+
+#include "inkgc/gc-core.h"
+
+#include "io/resource.h"
+#include "io/sys.h"
+
+#include "object/object-set.h"
+#include "object/sp-guide.h"
+#include "object/sp-root.h"
+#include "object/sp-namedview.h"
+#include "object/sp-text.h"
+#include "object/sp-flowtext.h"
+
+#include "ui/interface.h"
+
+#include "svg/svg.h"
+#include "svg/svg-color.h"
+#include "svg/stringstream.h"
+
+#include "xml/repr.h"
 
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
 
-#include <cerrno>
-#include "verbs.h"
-
-#include "path-chemistry.h"
-#include "text-editing.h"
 
 enum {
     SP_ARG_NONE,
