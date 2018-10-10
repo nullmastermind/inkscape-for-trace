@@ -38,9 +38,6 @@
 #cmakedefine HAVE_CAIRO_PDF 1
 #cmakedefine PANGO_ENABLE_ENGINE 1
 
-/* Define to 1 if you have the `fpsetmask' function. (delete !!!) */
-#cmakedefine HAVE_FPSETMASK 1
-
 /* Build with GDL 3.6 or higher */
 #cmakedefine WITH_GDL_3_6 1
 
@@ -89,8 +86,8 @@
 /* enable gtk spelling widget */
 #cmakedefine WITH_GTKSPELL 1
 
-/* Image Magick++ support for bitmap effects */
-#cmakedefine WITH_IMAGE_MAGICK 1
+/* Image/Graphics Magick++ support for bitmap effects */
+#cmakedefine WITH_MAGICK 1
 
 /* Use libjpeg */
 #cmakedefine HAVE_JPEG 1
