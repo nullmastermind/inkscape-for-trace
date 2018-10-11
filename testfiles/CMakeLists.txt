@@ -18,6 +18,7 @@ set(TEST_SOURCES
 	dir-util-test
 	sp-object-test
 	object-set-test
+	object-style-test
 	style-test
 	sp-gradient-test
 	object-test)
