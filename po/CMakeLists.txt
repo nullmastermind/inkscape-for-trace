@@ -4,7 +4,9 @@ foreach(language ${LANGUAGES})
     string(REGEX REPLACE "(.+(\\\\|/))+" "" language ${language})
     string(REGEX REPLACE "\\.po$" "" language ${language})
     set(pofile ${CMAKE_CURRENT_SOURCE_DIR}/${language}.po)
-    GETTEXT_PROCESS_PO_FILES(${language} ALL INSTALL_DESTINATION "share/locale/" PO_FILES ${pofile})
+    set(gmofile ${CMAKE_CURRENT_BINARY_DIR}/${language}.gmo)
+    GETTEXT_PROCESS_PO_FILES(${language} ALL PO_FILES ${pofile})
+    install(FILES ${gmofile} DESTINATION "${PACKAGE_LOCALE_DIR}/${language}/LC_MESSAGES/" RENAME ${CMAKE_PROJECT_NAME}.mo)
 endforeach(language)
 
 

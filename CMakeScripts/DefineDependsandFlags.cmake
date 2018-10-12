@@ -340,7 +340,7 @@ if(WITH_NLS)
     if(INTLTOOL-UPDATE)
         message(STATUS "Found íntltool. inkscape.pot will be re-created if missing.")
     else()
-        message(STATUS "Did not find íntltool. inkscape.pot can't be re-created.")
+        message(STATUS "Did not find intltool. inkscape.pot can't be re-created.")
     endif()
 endif(WITH_NLS)
 
