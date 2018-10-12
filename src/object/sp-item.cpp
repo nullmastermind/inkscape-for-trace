@@ -861,6 +861,10 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
         ownerItem->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(clip_ref->getObject()->geometricBounds(transform));
     }
+    if (mask_ref->getObject()) {
+        bbox_valid = false;  // LP Bug 1349018
+        bbox.intersectWith(mask_ref->getObject()->visualBounds(transform));
+    }
 
     return bbox;
 }
