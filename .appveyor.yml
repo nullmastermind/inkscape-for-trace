@@ -1,6 +1,6 @@
 version: '{branch}-{build}'
 
-clone_depth: 10
+clone_depth: 100
 
 # do not build feature branches with open pull requests
 skip_branch_with_pr: true
