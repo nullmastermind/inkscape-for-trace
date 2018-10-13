@@ -292,12 +292,6 @@ set(view_SRC
 )
 
 if(WIN32)
-  # Sources for the inkscape executable on Windows.
-  list(APPEND main_SRC
-    registrytool.h
-    registrytool.cpp
-  )
-
   # Configure and add the platform specific resource files (enabling the app icon).
   string(TIMESTAMP COPYRIGHT_YEAR %Y)
   
