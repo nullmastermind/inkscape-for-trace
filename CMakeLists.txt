@@ -160,7 +160,7 @@ else()
               PATHS "$ENV{GMOCK_DIR}"
                 "/usr/src/googletest/googlemock"
                     "/usr/src/gmock"
-                "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+                "${CMAKE_SOURCE_DIR}/gtest/gtest/googlemock"
              )
     endif(NOT GMOCK_DIR)
     if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
