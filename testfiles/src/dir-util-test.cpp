@@ -13,7 +13,7 @@
 
 #include <glib.h>
 
-#include "dir-util.h"
+#include "io/dir-util.h"
 
 namespace {
 
