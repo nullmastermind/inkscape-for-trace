@@ -11,6 +11,7 @@ if(NOT GTEST_FOUND) # not required for gtest 1.8.0 and later
                                ${CMAKE_SOURCE_DIR}/gtest/gtest/include)
 endif()
 include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams")
+include_directories("${CMAKE_SOURCE_DIR}/src/io")
 
 set(TEST_SOURCES
 	attributes-test
