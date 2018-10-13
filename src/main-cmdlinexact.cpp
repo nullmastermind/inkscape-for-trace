@@ -31,7 +31,6 @@
 #include "file.h"
 #include "inkscape.h"
 #include "preferences.h"
-#include "resource-manager.h"
 #include "selection.h"
 #include "verbs.h"
 #include "yaml.h"
@@ -43,6 +42,7 @@
 #include "helper/action.h"
 #include "helper/png-write.h"
 
+#include "io/resource-manager.h"
 #include "io/sys.h"
 
 #include "object/sp-namedview.h"

@@ -14,7 +14,6 @@
 #include <gtkmm.h>
 
 #include "desktop.h"
-#include "dir-util.h"
 #include "document-undo.h"
 #include "document.h"
 #include "file.h"
@@ -36,6 +35,7 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
+#include "io/dir-util.h"
 #include "io/sys.h"
 
 #include "object/persp3d.h"

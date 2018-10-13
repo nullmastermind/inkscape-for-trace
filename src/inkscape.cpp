@@ -25,8 +25,6 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
-#include "debug/simple-event.h"
-#include "debug/event-tracker.h"
 
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
@@ -34,22 +32,30 @@
 #include <glibmm/convert.h>
 
 #include "desktop.h"
-
 #include "device-manager.h"
 #include "document.h"
+#include "inkscape.h"
+#include "message-stack.h"
+#include "path-prefix.h"
+
+#include "debug/simple-event.h"
+#include "debug/event-tracker.h"
+
 #include "extension/db.h"
 #include "extension/init.h"
 #include "extension/output.h"
 #include "extension/system.h"
+
 #include "helper/action-context.h"
-#include "inkscape.h"
+
 #include "io/resource.h"
+#include "io/resource-manager.h"
 #include "io/sys.h"
+
 #include "libnrtype/FontFactory.h"
-#include "message-stack.h"
-#include "path-prefix.h"
-#include "resource-manager.h"
+
 #include "svg/svg-color.h"
+
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
 

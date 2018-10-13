@@ -4,9 +4,9 @@
 #include <glibmm/uriutils.h>
 
 #include "../document.h"  /* Unfortunately there's a separate xml/document.h. */
-#include "dir-util.h"
 #include "streq.h"
 
+#include "io/dir-util.h"
 #include "io/sys.h"
 
 #include "object/sp-object.h"

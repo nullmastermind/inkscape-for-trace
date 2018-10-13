@@ -46,7 +46,6 @@
 #include "path-prefix.h"
 #include "print.h"
 #include "rdf.h"
-#include "resource-manager.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
@@ -58,6 +57,7 @@
 #include "helper/png-write.h"
 
 #include "io/resource.h"
+#include "io/resource-manager.h"
 #include "io/sys.h"
 
 #include "object/sp-defs.h"

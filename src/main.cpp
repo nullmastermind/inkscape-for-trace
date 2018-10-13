@@ -54,7 +54,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#include "registrytool.h"
+#include "io/registrytool.h"
 #endif // _WIN32
 
 #include "inkscape.h"

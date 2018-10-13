@@ -54,7 +54,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <sys/stat.h>
-#include "registrytool.h"
+#include "io/registrytool.h"
 #endif
 
 /** This is the command buffer that gets allocated from the stack */

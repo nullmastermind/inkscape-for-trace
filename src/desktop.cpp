@@ -38,7 +38,6 @@
 #include "layer-manager.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "resource-manager.h"
 
 #include "display/canvas-arena.h"
 #include "display/canvas-debug.h"
@@ -54,6 +53,8 @@
 
 #include "helper/action-context.h"
 #include "helper/action.h" //sp_action_perform
+
+#include "io/resource-manager.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"

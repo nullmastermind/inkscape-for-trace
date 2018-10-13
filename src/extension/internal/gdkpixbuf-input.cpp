@@ -4,7 +4,7 @@
 
 #include <glib/gprintf.h>
 #include <glibmm/i18n.h>
-#include "dir-util.h"
+#include "io/dir-util.h"
 #include "display/cairo-utils.h"
 #include "document-private.h"
 #include "document-undo.h"

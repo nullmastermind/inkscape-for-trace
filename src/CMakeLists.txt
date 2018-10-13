@@ -19,7 +19,6 @@ set(inkscape_SRC
   desktop-style.cpp
   desktop.cpp
   device-manager.cpp
-  dir-util.cpp
   document-subset.cpp
   document-undo.cpp
   document.cpp
@@ -67,7 +66,6 @@ set(inkscape_SRC
   pure-transform.cpp
   rdf.cpp
   removeoverlap.cpp
-  resource-manager.cpp
   rubberband.cpp
   satisfied-guide-cns.cpp
   selcue.cpp
@@ -124,7 +122,6 @@ set(inkscape_SRC
   desktop-style.h
   desktop.h
   device-manager.h
-  dir-util.h
   document-private.h
   document-subset.h
   document-undo.h
@@ -183,7 +180,6 @@ set(inkscape_SRC
   rdf.h
   remove-last.h
   removeoverlap.h
-  resource-manager.h
   rubberband.h
   satisfied-guide-cns.h
   selcue.h

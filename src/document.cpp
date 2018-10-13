@@ -42,7 +42,7 @@
 #include <2geom/transforms.h>
 
 #include "desktop.h"
-#include "dir-util.h"
+#include "io/dir-util.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "file.h"
