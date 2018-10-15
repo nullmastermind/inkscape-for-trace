@@ -1201,4 +1201,4 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

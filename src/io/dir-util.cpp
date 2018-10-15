@@ -251,4 +251,4 @@ char *prepend_current_dir_if_relative(gchar const *uri)
   fill-column:99
   End:
 */
-// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 encoding=utf-8 textwidth=99 :
+// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 fileencoding=utf-8 textwidth=99 :

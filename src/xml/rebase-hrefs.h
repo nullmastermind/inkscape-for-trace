@@ -51,4 +51,4 @@ Inkscape::Util::List<AttributeRecord const> rebase_href_attrs(
   fill-column:99
   End:
 */
-// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 encoding=utf-8 textwidth=99 :
+// vi: set autoindent shiftwidth=4 tabstop=8 filetype=cpp expandtab softtabstop=4 fileencoding=utf-8 textwidth=99 :
