@@ -29,40 +29,25 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
 {
     // Determine whether the image should be embedded
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool ask = prefs->getBool("/dialogs/import/ask");
+    bool ask =            prefs->getBool(  "/dialogs/import/ask");
+    bool forcexdpi =      prefs->getBool(  "/dialogs/import/forcexdpi");
     Glib::ustring link  = prefs->getString("/dialogs/import/link");
-    bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
-    // std::cout << "GkdpixbufInput::open: "
-    //           << " ask: " << ask
-    //           << ", link: " << link 
-    //           << ", forcexdpi: " << forcexdpi 
-    //           << ", scale: " << scale << std::endl;
-    // std::cout << "     in  preferences: "
-    //           << " ask: " << !mod->get_param_bool("do_not_ask")
-    //           << ", link: " << mod->get_param_optiongroup("link")
-    //           << ", mod_dpi: " << mod->get_param_optiongroup("dpi")
-    //           << ", scale: " << mod->get_param_optiongroup("scale") << std::endl;
+
+    // If we asked about import preferences, get values and update preferences.
     if( ask ) {
-        Glib::ustring mod_link = mod->get_param_optiongroup("link");
-        Glib::ustring mod_dpi = mod->get_param_optiongroup("dpi");
-        bool mod_forcexdpi = ( mod_dpi.compare( "from_default" ) == 0 );
-        Glib::ustring mod_scale = mod->get_param_optiongroup("scale");
-        if( link.compare( mod_link ) != 0 ) {
-            link = mod_link;
-        }
-        prefs->setString("/dialogs/import/link", link );
-        if( forcexdpi != mod_forcexdpi ) {
-            forcexdpi = mod_forcexdpi;
-        }
-        prefs->setBool("/dialogs/import/forcexdpi", forcexdpi );
-        if( scale.compare( mod_scale ) != 0 ) {
-            scale = mod_scale;
-        }
-        prefs->setString("/dialogs/import/scale", scale );
-        prefs->setBool("/dialogs/import/ask", !mod->get_param_bool("do_not_ask") );
+        ask       = !mod->get_param_bool("do_not_ask");
+        forcexdpi = (mod->get_param_optiongroup("dpi") == "from_default");
+        link      =  mod->get_param_optiongroup("link");
+        scale     =  mod->get_param_optiongroup("scale");
+
+        prefs->setBool(  "/dialogs/import/ask",       ask      );
+        prefs->setBool(  "/dialogs/import/forcexdpi", forcexdpi);
+        prefs->setString("/dialogs/import/link",      link     );
+        prefs->setString("/dialogs/import/scale",     scale    );
     }
-    bool embed = ( link.compare( "embed" ) == 0 );
+
+    bool embed = (link == "embed");
  
     SPDocument *doc = nullptr;
     std::unique_ptr<Inkscape::Pixbuf> pb(Inkscape::Pixbuf::create_from_file(uri));
@@ -78,7 +63,7 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         double width = pb->width();
         double height = pb->height();
         double defaultxdpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", Inkscape::Util::Quantity::convert(1, "in", "px"));
-        //bool forcexdpi = prefs->getBool("/dialogs/import/forcexdpi");
+
         ImageResolution *ir = nullptr;
         double xscale = 1;
         double yscale = 1;
@@ -111,10 +96,10 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         sp_repr_set_svg_double(image_node, "width", width);
         sp_repr_set_svg_double(image_node, "height", height);
 
-        // Added 11 Feb 2014 as we now honor "preserveAspectRatio" and this is
-        // what Inkscaper's expect.
+        // Set default value as we honor "preserveAspectRatio".
         image_node->setAttribute("preserveAspectRatio", "none");
 
+        // This is actually 'image-rendering'.
         if( scale.compare( "auto" ) != 0 ) {
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_set_property(css, "image-rendering", scale.c_str());
