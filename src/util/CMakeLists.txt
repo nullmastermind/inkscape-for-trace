@@ -32,7 +32,6 @@ set(util_SRC
 	reverse-list.h
 	share.h
 	signal-blocker.h
-	tuple.h
 	ucompose.hpp
 	units.h
 	ziptool.h
