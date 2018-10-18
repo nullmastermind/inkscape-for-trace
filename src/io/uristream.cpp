@@ -321,11 +321,14 @@ UriOutputStream::UriOutputStream(Inkscape::URI &destination)
             //printf("out path:'%s'\n", cpath);
             outf = fopen_utf8name(cpath, FILE_WRITE);
             //outf = fopen(cpath, "wb");
-            g_free(cpath);
+
             if (!outf) {
                 Glib::ustring err = "UriOutputStream cannot open file ";
                 err += cpath;
+                g_free(cpath);
                 throw StreamException(err);
+            } else {
+                g_free(cpath);
             }
         break;
 
