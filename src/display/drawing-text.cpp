@@ -603,6 +603,16 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             }
             if (has_stroke) {
                 _nrstyle.applyStroke(dc);
+
+                // Special handling for thin outline mode when we're drawing lines smaller than half a pixel
+                if (_drawing.outlineThin()) {
+                    double outline_thin_size = 0.5, trash = 0.5;
+                    dc.device_to_user_distance(outline_thin_size, trash);
+                    if (_nrstyle.stroke_width < outline_thin_size) {
+                        dc.setLineWidth(outline_thin_size);
+                    }
+                }
+
                 dc.strokePreserve();
             }
         }

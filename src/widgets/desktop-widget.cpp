@@ -813,6 +813,8 @@ SPDesktopWidget::updateTitle(gchar const* uri)
             Name += N_("outline");
         } else if (desktop->getMode() == Inkscape::RENDERMODE_NO_FILTERS) {
             Name += N_("no filters");
+        } else if (desktop->getMode() == Inkscape::RENDERMODE_OUTLINE_THIN) {
+            Name += N_("outline thin");
         }
 
         if (desktop->getColorMode() != Inkscape::COLORMODE_NORMAL &&

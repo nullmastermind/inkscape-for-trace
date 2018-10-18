@@ -50,6 +50,7 @@ public:
     RenderMode renderMode() const;
     ColorMode colorMode() const;
     bool outline() const;
+    bool outlineThin() const;
     bool renderFilters() const;
     int blurQuality() const;
     int filterQuality() const;

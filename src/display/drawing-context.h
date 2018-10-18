@@ -52,6 +52,8 @@ public:
     void translate(double dx, double dy) { cairo_translate(_ct, dx, dy); }
     void scale(Geom::Scale const &s) { cairo_scale(_ct, s[Geom::X], s[Geom::Y]); }
     void scale(double sx, double sy) { cairo_scale(_ct, sx, sy); }
+    void device_to_user_distance(double &dx, double &dy) { cairo_device_to_user_distance(_ct, &dx, &dy); }
+    void user_to_device_distance(double &dx, double &dy) { cairo_user_to_device_distance(_ct, &dx, &dy); }
 
     void moveTo(Geom::Point const &p) { cairo_move_to(_ct, p[Geom::X], p[Geom::Y]); }
     void lineTo(Geom::Point const &p) { cairo_line_to(_ct, p[Geom::X], p[Geom::Y]); }

@@ -2132,6 +2132,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_VIEW_MODE_OUTLINE:
             dt->setDisplayModeOutline();
             break;
+        case SP_VERB_VIEW_MODE_OUTLINE_THIN:
+            dt->setDisplayModeOutlineThin();
+            break;
         case SP_VERB_VIEW_MODE_TOGGLE:
             dt->displayModeToggle();
             break;
@@ -3108,6 +3111,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Switch to normal display without filters"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_MODE_OUTLINE, "ViewModeOutline", N_("_Outline"),
                  N_("Switch to outline (wireframe) display mode"), nullptr),
+    new ZoomVerb(SP_VERB_VIEW_MODE_OUTLINE_THIN, "ViewModeOutlineThin", N_("O_utline thin strokes"),
+                 N_("Outline strokes that are smaller than 1 pixel and draw the rest normally"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_MODE_TOGGLE, "ViewModeToggle", N_("_Toggle"),
                  N_("Toggle between normal and outline display modes"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_NORMAL, "ViewColorModeNormal", N_("_Normal"),

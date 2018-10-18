@@ -79,9 +79,14 @@ Drawing::outline() const
     return renderMode() == RENDERMODE_OUTLINE;
 }
 bool
+Drawing::outlineThin() const
+{
+    return renderMode() == RENDERMODE_OUTLINE_THIN;
+}
+bool
 Drawing::renderFilters() const
 {
-    return renderMode() == RENDERMODE_NORMAL;
+    return renderMode() == RENDERMODE_NORMAL || renderMode() == RENDERMODE_OUTLINE_THIN;
 }
 int
 Drawing::blurQuality() const

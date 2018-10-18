@@ -266,6 +266,9 @@ public:
     void setDisplayModeOutline() {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
     }
+    void setDisplayModeOutlineThin() {
+        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE_THIN);
+    }
     void displayModeToggle();
     Inkscape::RenderMode _display_mode;
     Inkscape::RenderMode getMode() const { return _display_mode; }
