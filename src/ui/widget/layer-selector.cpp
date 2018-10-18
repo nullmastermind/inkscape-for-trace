@@ -26,7 +26,6 @@
 #include "layer-manager.h"
 #include "ui/icon-names.h"
 #include "ui/util.h"
-#include "util/filter-list.h"
 #include "util/reverse-list.h"
 #include "verbs.h"
 #include "xml/node-event-vector.h"
