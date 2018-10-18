@@ -21,7 +21,6 @@ set(util_SRC
 	fixed_point.h
 	format.h
 	forward-pointer-iterator.h
-	function.h
 	list-container-test.h
 	list-container.h
 	list-copy.h
