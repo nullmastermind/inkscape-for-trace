@@ -10,6 +10,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <unordered_set>
+
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
@@ -39,13 +41,13 @@ struct hash_nodelist_iterator
     : public std::unary_function<NodeList::iterator, std::size_t>
 {
     std::size_t operator()(NodeList::iterator i) const {
-        return INK_HASH<NodeList::iterator::pointer>()(&*i);
+        return std::hash<NodeList::iterator::pointer>()(&*i);
     }
 };
 
 typedef std::pair<NodeList::iterator, NodeList::iterator> IterPair;
 typedef std::vector<IterPair> IterPairList;
-typedef INK_UNORDERED_SET<NodeList::iterator, hash_nodelist_iterator> IterSet;
+typedef std::unordered_set<NodeList::iterator, hash_nodelist_iterator> IterSet;
 typedef std::multimap<double, IterPair> DistanceMap;
 typedef std::pair<double, IterPair> DistanceMapItem;
 

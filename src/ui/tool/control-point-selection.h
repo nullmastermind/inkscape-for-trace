@@ -14,13 +14,14 @@
 
 #include <list>
 #include <memory>
+#include <unordered_map>
+#include <unordered_set>
 #include <boost/optional.hpp>
 #include <cstddef>
 #include <sigc++/sigc++.h>
 #include <2geom/forward.h>
 #include <2geom/point.h>
 #include <2geom/rect.h>
-#include "util/unordered-containers.h"
 #include "ui/tool/commit-events.h"
 #include "ui/tool/manipulator.h"
 #include "snap-candidate.h"
@@ -42,7 +43,7 @@ class ControlPointSelection : public Manipulator, public sigc::trackable {
 public:
     ControlPointSelection(SPDesktop *d, SPCanvasGroup *th_group);
     ~ControlPointSelection() override;
-    typedef INK_UNORDERED_SET<SelectableControlPoint *> set_type;
+    typedef std::unordered_set<SelectableControlPoint *> set_type;
     typedef set_type Set; // convenience alias
 
     typedef set_type::iterator iterator;
@@ -144,8 +145,8 @@ private:
     set_type _points;
 
     set_type _all_points;
-    INK_UNORDERED_MAP<SelectableControlPoint *, Geom::Point> _original_positions;
-    INK_UNORDERED_MAP<SelectableControlPoint *, Geom::Affine> _last_trans;
+    std::unordered_map<SelectableControlPoint *, Geom::Point> _original_positions;
+    std::unordered_map<SelectableControlPoint *, Geom::Affine> _last_trans;
     boost::optional<double> _rot_radius;
     boost::optional<double> _mouseover_rot_radius;
     Geom::OptRect _bounds;

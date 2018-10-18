@@ -32,7 +32,6 @@
 #include <2geom/path-sink.h>
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
-#include "util/unordered-containers.h"
 
 
 #ifndef USE_PANGO_WIN32

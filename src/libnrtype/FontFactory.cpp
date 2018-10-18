@@ -16,6 +16,8 @@
 #define PANGO_ENABLE_ENGINE
 #endif
 
+#include <unordered_map>
+
 #include <glibmm/i18n.h>
 
 #include <fontconfig/fontconfig.h>
@@ -25,13 +27,12 @@
 #include <pango/pango-ot.h>
 
 #include "io/sys.h"
-#include "util/unordered-containers.h"
 
 #include "libnrtype/FontFactory.h"
 #include "libnrtype/font-instance.h"
 #include "libnrtype/OpenTypeUtil.h"
 
-typedef INK_UNORDERED_MAP<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
+typedef std::unordered_map<PangoFontDescription*, font_instance*, font_descr_hash, font_descr_equal> FaceMapType;
 
 // need to avoid using the size field
 size_t font_descr_hash::operator()( PangoFontDescription *const &x) const {

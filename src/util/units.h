@@ -13,12 +13,24 @@
 #ifndef INKSCAPE_UTIL_UNITS_H
 #define INKSCAPE_UTIL_UNITS_H
 
-#include <map>
+#include <unordered_map>
 #include <boost/operators.hpp>
 #include <glibmm/ustring.h>
 #include <2geom/coord.h>
 #include "svg/svg-length.h"
-#include "unordered-containers.h"
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+namespace std {
+template <>
+struct hash<Glib::ustring> : public std::unary_function<Glib::ustring, std::size_t> {
+    std::size_t operator()(Glib::ustring const &s) const {
+        return hash<std::string>()(s.raw());
+    }
+};
+} // namespace std
+
+#endif
 
 namespace Inkscape {
 namespace Util {
@@ -137,8 +149,8 @@ public:
     UnitTable();
     virtual ~UnitTable();
 
-    typedef INK_UNORDERED_MAP<Glib::ustring, Unit> UnitMap;
-    typedef INK_UNORDERED_MAP<unsigned, Unit*> UnitCodeMap;
+    typedef std::unordered_map<Glib::ustring, Unit> UnitMap;
+    typedef std::unordered_map<unsigned, Unit*> UnitCodeMap;
 
     /** Add a new unit to the table */
     void    addUnit(Unit const &u, bool primary);
