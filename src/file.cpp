@@ -959,13 +959,13 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 /**
  *  Save a copy of a document as template.
  */
-void
+bool
 sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
     bool isDefault)
 {
     if (!SP_ACTIVE_DOCUMENT || name.length() == 0)
-        return;
+        return true;
 
     auto document = SP_ACTIVE_DOCUMENT;
 
@@ -1021,23 +1021,30 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
 
     root->appendChild(templateinfo_node);
 
-    if (isDefault) {
-
-        auto filename =  Inkscape::IO::Resource::get_path_ustring(USER,
-            TEMPLATES, "default.svg");
-        file_save(parentWindow, document, filename,
-        Inkscape::Extension::db.get(".svg"), false, false,
-        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-    }
-
     auto encodedName = Glib::uri_escape_string(name);
     encodedName.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
         encodedName.c_str());
-    file_save(parentWindow, document, filename,
-        Inkscape::Extension::db.get(".svg"), false, false,
-        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+
+    auto operation_confirmed = sp_ui_overwrite_file(filename.c_str());
+
+    if (operation_confirmed) {
+
+        file_save(parentWindow, document, filename,
+            Inkscape::Extension::db.get(".svg"), false, false,
+            Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+
+        if (isDefault) {
+
+            filename =  Inkscape::IO::Resource::get_path_ustring(USER,
+                TEMPLATES, "default.svg");
+
+            file_save(parentWindow, document, filename,
+                Inkscape::Extension::db.get(".svg"), false, false,
+                Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        }
+    }
 
     auto nodeToRemove = sp_repr_lookup_name(root, "inkscape:_templateinfo");
 
@@ -1048,6 +1055,8 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     }
 
     DocumentUndo::setUndoSensitive(document, true);
+
+    return operation_confirmed;
 }
 
 

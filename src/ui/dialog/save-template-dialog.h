@@ -42,7 +42,7 @@ private:
     Gtk::CheckButton is_default_template;
 
     SaveTemplate();
-    void save_template(Gtk::Window &parentWindow);
+    bool save_template(Gtk::Window &parentWindow);
 
 };
 }
