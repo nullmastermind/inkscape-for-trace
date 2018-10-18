@@ -108,7 +108,7 @@
          <verb verb-id="ViewModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewModeNoFilters" radio="yes"/>
          <verb verb-id="ViewModeOutline" radio="yes"/>
-	 <verb verb-id="ViewModeOutlineThin" radio="yes"/>
+	 <verb verb-id="ViewModeVisibleHairlines" radio="yes"/>
          <!--Better location in menu needs to be found-->
          <!--verb verb-id="ViewModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->

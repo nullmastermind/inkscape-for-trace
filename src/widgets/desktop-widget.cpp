@@ -813,8 +813,8 @@ SPDesktopWidget::updateTitle(gchar const* uri)
             Name += N_("outline");
         } else if (desktop->getMode() == Inkscape::RENDERMODE_NO_FILTERS) {
             Name += N_("no filters");
-        } else if (desktop->getMode() == Inkscape::RENDERMODE_OUTLINE_THIN) {
-            Name += N_("outline thin");
+        } else if (desktop->getMode() == Inkscape::RENDERMODE_VISIBLE_HAIRLINES) {
+            Name += N_("visible hairlines");
         }
 
         if (desktop->getColorMode() != Inkscape::COLORMODE_NORMAL &&

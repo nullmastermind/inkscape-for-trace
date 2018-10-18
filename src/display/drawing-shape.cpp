@@ -186,13 +186,13 @@ DrawingShape::_renderStroke(DrawingContext &dc)
         }
         _nrstyle.applyStroke(dc);
 
-        // Special handling for thin outline mode when we're drawing lines smaller than half a
-        // pixel
-        if (_drawing.outlineThin()) {
-            double outline_thin_size = 0.5, trash = 0.5;
-            dc.device_to_user_distance(outline_thin_size, trash);
-            if (_nrstyle.stroke_width < outline_thin_size) {
-                dc.setLineWidth(outline_thin_size);
+        // If the draw mode is set to visible hairlines, don't let them get smaller than half a
+        // pixel.
+        if (_drawing.visibleHairlines()) {
+            double half_pixel_size = 0.5, trash = 0.5;
+            dc.device_to_user_distance(half_pixel_size, trash);
+            if (_nrstyle.stroke_width < half_pixel_size) {
+                dc.setLineWidth(half_pixel_size);
             }
         }
 
@@ -267,13 +267,13 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
                 if (has_stroke) {
                     _nrstyle.applyStroke(dc);
 
-                    // Special handling for thin outline mode when we're drawing lines smaller than
-                    // half a pixel
-                    if (_drawing.outlineThin()) {
-                        double outline_thin_size = 0.5, trash = 0.5;
-                        dc.device_to_user_distance(outline_thin_size, trash);
-                        if (_nrstyle.stroke_width < outline_thin_size) {
-                            dc.setLineWidth(outline_thin_size);
+                    // If the draw mode is set to visible hairlines, don't let anything get smaller
+                    // than half a pixel.
+                    if (_drawing.visibleHairlines()) {
+                        double half_pixel_size = 0.5, trash = 0.5;
+                        dc.device_to_user_distance(half_pixel_size, trash);
+                        if (_nrstyle.stroke_width < half_pixel_size) {
+                            dc.setLineWidth(half_pixel_size);
                         }
                     }
 

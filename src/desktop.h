@@ -266,8 +266,8 @@ public:
     void setDisplayModeOutline() {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
     }
-    void setDisplayModeOutlineThin() {
-        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE_THIN);
+    void setDisplayModeVisibleHairlines() {
+        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
     }
     void displayModeToggle();
     Inkscape::RenderMode _display_mode;

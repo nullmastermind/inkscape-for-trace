@@ -682,8 +682,8 @@ static gboolean update_view_menu(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
         new_state = mode == Inkscape::RENDERMODE_NO_FILTERS;
     } else if (!strcmp(action->id, "ViewModeOutline")) {
         new_state = mode == Inkscape::RENDERMODE_OUTLINE;
-    } else if (!strcmp(action->id, "ViewModeOutlineThin")) {
-        new_state = mode == Inkscape::RENDERMODE_OUTLINE_THIN;
+    } else if (!strcmp(action->id, "ViewModeVisibleHairlines")) {
+        new_state = mode == Inkscape::RENDERMODE_VISIBLE_HAIRLINES;
     } else if (!strcmp(action->id, "ViewColorModeNormal")) {
         new_state = colormode == Inkscape::COLORMODE_NORMAL;
     } else if (!strcmp(action->id, "ViewColorModeGrayscale")) {

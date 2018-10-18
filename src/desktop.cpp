@@ -519,9 +519,9 @@ void SPDesktop::displayModeToggle() {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
         break;
     case Inkscape::RENDERMODE_OUTLINE:
-        _setDisplayMode(Inkscape::RENDERMODE_OUTLINE_THIN);
+        _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
         break;
-    case Inkscape::RENDERMODE_OUTLINE_THIN:
+    case Inkscape::RENDERMODE_VISIBLE_HAIRLINES:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
         break;
     default:
