@@ -26,7 +26,6 @@ set(util_SRC
 	list-copy.h
 	list.h
 	longest-common-suffix.h
-	map-list.h
 	reference.h
 	reverse-list.h
 	share.h
