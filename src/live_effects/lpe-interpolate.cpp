@@ -65,11 +65,13 @@ Geom::PathVector LPEInterpolate::doEffect_path(Geom::PathVector const &path_in)
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_B = path_in[1].toPwSb();
 
     // Transform both paths to (0,0) midpoint, so they can easily be positioned along interpolate_path
-    if (Geom::OptRect bounds = Geom::bounds_exact(pwd2_A)) {
-        pwd2_A -= bounds->midpoint();
+    Geom::OptRect bounds_A = Geom::bounds_exact(pwd2_A);
+    if (bounds_A) {
+        pwd2_A -= bounds_A->midpoint();
     }
-    if (Geom::OptRect bounds = Geom::bounds_exact(pwd2_B)) {
-        pwd2_B -= bounds->midpoint();
+    Geom::OptRect bounds_B = Geom::bounds_exact(pwd2_B);
+    if (bounds_B) {
+        pwd2_B -= bounds_B->midpoint();
     }
 
     // Make sure both paths have the same number of segments and cuts at the same locations
@@ -77,9 +79,7 @@ Geom::PathVector LPEInterpolate::doEffect_path(Geom::PathVector const &path_in)
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pA = Geom::partition(pwd2_A, pwd2_B.cuts);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pB = Geom::partition(pwd2_B, pwd2_A.cuts);
 
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > trajectory = trajectory_path.get_pathvector()[0].toPwSb();
-    if (equidistant_spacing)
-        trajectory = Geom::arc_length_parametrization(trajectory);
+    auto trajectory = calculate_trajectory(bounds_A, bounds_B);
 
     Geom::Interval trajectory_domain = trajectory.domain();
 
@@ -94,6 +94,46 @@ Geom::PathVector LPEInterpolate::doEffect_path(Geom::PathVector const &path_in)
     }
 
     return path_out;
+}
+
+
+// returns the lpe parameter trajectory_path, transformed so that it starts at the
+// bounding box center of the first path and ends at the bounding box center of the
+// second path
+Geom::Piecewise<Geom::D2<Geom::SBasis> > LPEInterpolate::calculate_trajectory(Geom::OptRect bounds_A,
+                                                                              Geom::OptRect bounds_B)
+{
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > trajectory = trajectory_path.get_pathvector()[0].toPwSb();
+
+    if (equidistant_spacing) {
+        trajectory = Geom::arc_length_parametrization(trajectory);
+    }
+
+    if (!bounds_A || !bounds_B) {
+        return trajectory;
+    }
+
+    auto trajectory_start = trajectory.firstValue();
+    auto trajectory_end = trajectory.lastValue();
+
+    auto midpoint_A = bounds_A->midpoint();
+    auto midpoint_B = bounds_B->midpoint();
+
+    Geom::Ray original(trajectory_start, trajectory_end);
+    Geom::Ray transformed(midpoint_A, midpoint_B);
+
+    double rotation = transformed.angle() - original.angle();
+    double scale = Geom::distance(midpoint_A, midpoint_B) / Geom::distance(trajectory_start, trajectory_end);
+
+    Geom::Affine transformation;
+
+    transformation *= Geom::Translate(-trajectory_start);
+    transformation *= Geom::Scale(scale, scale);
+    transformation *= Geom::Rotate(rotation);
+
+    transformation *= Geom::Translate(midpoint_A);
+
+    return trajectory * transformation;
 }
 
 void LPEInterpolate::resetDefaults(SPItem const *item)

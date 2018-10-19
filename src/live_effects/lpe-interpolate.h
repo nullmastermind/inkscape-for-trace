@@ -36,6 +36,8 @@ class LPEInterpolate : public Effect {
     ScalarParam number_of_steps;
     BoolParam equidistant_spacing;
 
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > calculate_trajectory(Geom::OptRect bounds_A, Geom::OptRect bounds_B);
+
     LPEInterpolate(const LPEInterpolate &) = delete;
     LPEInterpolate &operator=(const LPEInterpolate &) = delete;
 };
