@@ -143,6 +143,7 @@ PageSizer::PageSizer(Registry & _wr)
         g_strfreev(lines);
         g_free(content);
     }
+    g_free(path);
 
     pack_start (_paperSizeListScroller, true, true, 0);
 
