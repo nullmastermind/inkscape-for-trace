@@ -408,7 +408,7 @@ void SPFilter::build_renderer(Inkscape::Filters::Filter *nr_filter)
     }
 }
 
-int SPFilter::primitive_count() {
+int SPFilter::primitive_count() const {
     int count = 0;
 
     for(auto& primitive_obj: this->children) {
@@ -420,7 +420,7 @@ int SPFilter::primitive_count() {
     return count;
 }
 
-int SPFilter::get_image_name(gchar const *name) {
+int SPFilter::get_image_name(gchar const *name) const {
     gchar *name_copy = strdup(name);
     map<gchar *, int, ltstr>::iterator result = this->_image_name->find(name_copy);
     free(name_copy);
@@ -480,7 +480,7 @@ gchar const *SPFilter::name_for_image(int const image) const {
     return nullptr;
 }
 
-Glib::ustring SPFilter::get_new_result_name() {
+Glib::ustring SPFilter::get_new_result_name() const {
     int largest = 0;
 
     for(auto& primitive_obj: this->children) {

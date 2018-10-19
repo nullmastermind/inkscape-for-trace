@@ -49,10 +49,10 @@ public:
     void build_renderer(Inkscape::Filters::Filter *nr_filter);
 
     /// Returns the number of filter primitives in this SPFilter object.
-    int primitive_count();
+    int primitive_count() const;
 
     /// Returns a slot number for given image name, or -1 for unknown name.
-    int get_image_name(char const *name);
+    int get_image_name(char const *name) const;
 
     /// Returns slot number for given image name, even if it's unknown.
     int set_image_name(char const *name);
@@ -62,7 +62,7 @@ public:
     char const *name_for_image(int const image) const;
 
     /// Returns a result image name that is not in use inside this filter.
-    Glib::ustring get_new_result_name();
+    Glib::ustring get_new_result_name() const;
 
     SPFilterUnits filterUnits;
     unsigned int filterUnits_set : 1;
