@@ -111,22 +111,23 @@ PageSizer::PageSizer(Registry & _wr)
 
     char *path = Inkscape::IO::Resource::profile_path("pages.csv");
     if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
-        if (!g_file_set_contents(path, pages_skeleton,sizeof(pages_skeleton) , nullptr)) {
+        if (!g_file_set_contents(path, pages_skeleton, sizeof(pages_skeleton) , nullptr)) {
             g_warning(_("Failed to create the page file."));
         }
     }
-    
+ 
     gchar *content = nullptr;
-    if (g_file_get_contents (path, &content, nullptr, NULL)) {
+    if (g_file_get_contents(path, &content, nullptr, nullptr)) {
     
-        gchar **lines = g_strsplit_set (content, "\n", 0);
+        gchar **lines = g_strsplit_set(content, "\n", 0);
 
         for (int i = 0; lines && lines[i]; ++i) {
-            gchar **line = g_strsplit_set (lines[i], ",", 5);
-            if(!line[0] || !line[1] || !line[2] || !line[3] ) continue;
+            gchar **line = g_strsplit_set(lines[i], ",", 5);
+            if (!line[0] || !line[1] || !line[2] || !line[3] || line[0][0]=='#')
+                continue;
             //name, width, height, unit
-            double width = g_ascii_strtod (line[1], nullptr);
-            double height = g_ascii_strtod (line[2], nullptr);
+            double width = g_ascii_strtod(line[1], nullptr);
+            double height = g_ascii_strtod(line[2], nullptr);
             Glib::ustring name = line[0];
             char formatBuf[80];
             snprintf(formatBuf, 79, "%0.1f x %0.1f", width, height);
@@ -138,9 +139,9 @@ PageSizer::PageSizer(Registry & _wr)
             row[_paperSizeListColumns.nameColumn] = name;
             row[_paperSizeListColumns.descColumn] = desc;
             g_strfreev(line);
-            }
+        }
         g_strfreev(lines);
-        g_free (content);
+        g_free(content);
     }
 
     pack_start (_paperSizeListScroller, true, true, 0);
