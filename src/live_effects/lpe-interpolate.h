@@ -15,34 +15,35 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/path.h"
-#include "live_effects/parameter/bool.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
 
 class LPEInterpolate : public Effect {
-public:
+  public:
     LPEInterpolate(LivePathEffectObject *lpeobject);
     ~LPEInterpolate() override;
 
-    Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
+    Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
 
-    void resetDefaults(SPItem const* item) override;
-private:
-    PathParam   trajectory_path;
+    void resetDefaults(SPItem const *item) override;
+
+  private:
+    PathParam trajectory_path;
     ScalarParam number_of_steps;
-    BoolParam   equidistant_spacing;
+    BoolParam equidistant_spacing;
 
-    LPEInterpolate(const LPEInterpolate&) = delete;
-    LPEInterpolate& operator=(const LPEInterpolate&) = delete;
+    LPEInterpolate(const LPEInterpolate &) = delete;
+    LPEInterpolate &operator=(const LPEInterpolate &) = delete;
 };
 
-} //namespace LivePathEffect
-} //namespace Inkscape
+} // namespace LivePathEffect
+} // namespace Inkscape
 
-#endif  // INKSCAPE_LPE_INTERPOLATE_H
+#endif // INKSCAPE_LPE_INTERPOLATE_H
 
 /*
   Local Variables:

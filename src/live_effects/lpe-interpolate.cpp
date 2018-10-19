@@ -24,11 +24,15 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject),
-    trajectory_path(_("Trajectory:"), _("Path along which intermediate steps are created."), "trajectory", &wr, this, "M0,0 L0,0"),
-    number_of_steps(_("Steps_:"), _("Determines the number of steps from start to end path."), "steps", &wr, this, 5),
-    equidistant_spacing(_("E_quidistant spacing"), _("If true, the spacing between intermediates is constant along the length of the path. If false, the distance depends on the location of the nodes of the trajectory path."), "equidistant_spacing", &wr, this, true)
+LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject)
+    : Effect(lpeobject)
+    , trajectory_path(_("Trajectory:"), _("Path along which intermediate steps are created."), "trajectory", &wr, this,
+                      "M0,0 L0,0")
+    , number_of_steps(_("Steps_:"), _("Determines the number of steps from start to end path."), "steps", &wr, this, 5)
+    , equidistant_spacing(_("E_quidistant spacing"),
+                          _("If true, the spacing between intermediates is constant along the length of the path. If "
+                            "false, the distance depends on the location of the nodes of the trajectory path."),
+                          "equidistant_spacing", &wr, this, true)
 {
     show_orig_path = true;
 
@@ -40,20 +44,18 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject) :
     number_of_steps.param_set_range(2, Geom::infinity());
 }
 
-LPEInterpolate::~LPEInterpolate()
-= default;
+LPEInterpolate::~LPEInterpolate() = default;
 
 /*
  * interpolate path_in[0] to path_in[1]
  */
-Geom::PathVector
-LPEInterpolate::doEffect_path (Geom::PathVector const & path_in)
+Geom::PathVector LPEInterpolate::doEffect_path(Geom::PathVector const &path_in)
 {
-    if ( (path_in.size() < 2) || (number_of_steps < 2)) {
+    if ((path_in.size() < 2) || (number_of_steps < 2)) {
         return path_in;
     }
     // Don't allow empty path parameter:
-    if ( trajectory_path.get_pathvector().empty() ) {
+    if (trajectory_path.get_pathvector().empty()) {
         return path_in;
     }
 
@@ -82,20 +84,19 @@ LPEInterpolate::doEffect_path (Geom::PathVector const & path_in)
     Geom::Interval trajectory_domain = trajectory.domain();
 
     for (int i = 0; i < number_of_steps; ++i) {
-        double fraction = i / (number_of_steps-1);
+        double fraction = i / (number_of_steps - 1);
 
-        Geom::Piecewise<Geom::D2<Geom::SBasis> > pResult = pA*(1-fraction)  +  pB*fraction;
-        pResult += trajectory.valueAt(trajectory_domain.min() + fraction*trajectory_domain.extent());
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pResult = pA * (1 - fraction) + pB * fraction;
+        pResult += trajectory.valueAt(trajectory_domain.min() + fraction * trajectory_domain.extent());
 
         Geom::PathVector pathv = Geom::path_from_piecewise(pResult, LPE_CONVERSION_TOLERANCE);
-        path_out.push_back( pathv[0] );
+        path_out.push_back(pathv[0]);
     }
 
     return path_out;
 }
 
-void
-LPEInterpolate::resetDefaults(SPItem const* item)
+void LPEInterpolate::resetDefaults(SPItem const *item)
 {
     Effect::resetDefaults(item);
 
@@ -104,7 +105,7 @@ LPEInterpolate::resetDefaults(SPItem const* item)
 
     SPCurve const *crv = SP_PATH(item)->getCurveForEdit(true);
     Geom::PathVector const &pathv = crv->get_pathvector();
-    if ( (pathv.size() < 2) )
+    if ((pathv.size() < 2))
         return;
 
     Geom::OptRect bounds_A = pathv[0].boundsExact();
@@ -112,16 +113,17 @@ LPEInterpolate::resetDefaults(SPItem const* item)
 
     if (bounds_A && bounds_B) {
         Geom::PathVector traj_pathv;
-        traj_pathv.push_back( Geom::Path() );
-        traj_pathv[0].start( bounds_A->midpoint() );
-        traj_pathv[0].appendNew<Geom::LineSegment>( bounds_B->midpoint() );
-        trajectory_path.set_new_value( traj_pathv, true );
-    } else {
+        traj_pathv.push_back(Geom::Path());
+        traj_pathv[0].start(bounds_A->midpoint());
+        traj_pathv[0].appendNew<Geom::LineSegment>(bounds_B->midpoint());
+        trajectory_path.set_new_value(traj_pathv, true);
+    }
+    else {
         trajectory_path.param_set_and_write_default();
     }
 }
 
-} //namespace LivePathEffect
+} // namespace LivePathEffect
 } /* namespace Inkscape */
 
 /*
