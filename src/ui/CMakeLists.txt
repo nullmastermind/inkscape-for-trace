@@ -400,6 +400,7 @@ set(ui_SRC
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/page-sizer.h
+  widget/pages-skeleton.h 
 	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h
