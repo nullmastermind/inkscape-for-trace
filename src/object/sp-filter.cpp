@@ -17,6 +17,7 @@
 
 #include <map>
 #include <cstring>
+#include <utility>
 
 #include <glibmm.h>
 
@@ -221,8 +222,7 @@ void SPFilter::update(SPCtx *ctx, guint flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
     std::vector<SPObject*> l(this->childList(true, SPObject::ActionUpdate));
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *child = *i;
+    for(SPObject* child: l){
         if( SP_IS_FILTER_PRIMITIVE( child ) ) {
             child->updateDisplay(ctx, childflags);
         }
@@ -411,7 +411,7 @@ void SPFilter::build_renderer(Inkscape::Filters::Filter *nr_filter)
 int SPFilter::primitive_count() const {
     int count = 0;
 
-    for(auto& primitive_obj: this->children) {
+    for(const auto& primitive_obj: this->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             count++;
         }
@@ -421,9 +421,7 @@ int SPFilter::primitive_count() const {
 }
 
 int SPFilter::get_image_name(gchar const *name) const {
-    gchar *name_copy = strdup(name);
-    map<gchar *, int, ltstr>::iterator result = this->_image_name->find(name_copy);
-    free(name_copy);
+    map<gchar *, int, ltstr>::iterator result = this->_image_name->find(const_cast<gchar*>(name));
     if (result == this->_image_name->end()) return -1;
     else return (*result).second;
 }
@@ -433,7 +431,7 @@ int SPFilter::set_image_name(gchar const *name) {
     this->_image_number_next++;
     gchar *name_copy = strdup(name);
     pair<gchar*,int> new_pair(name_copy, value);
-    pair<map<gchar*,int,ltstr>::iterator,bool> ret = this->_image_name->insert(new_pair);
+    const pair<map<gchar*,int,ltstr>::iterator,bool> ret = this->_image_name->insert(new_pair);
     if (ret.second == false) {
         // The element is not inserted (because an element with the same key was already in the map) 
         // Therefore, free the memory allocated for the new entry:
@@ -483,9 +481,9 @@ gchar const *SPFilter::name_for_image(int const image) const {
 Glib::ustring SPFilter::get_new_result_name() const {
     int largest = 0;
 
-    for(auto& primitive_obj: this->children) {
+    for(const auto& primitive_obj: this->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
-            Inkscape::XML::Node *repr = primitive_obj.getRepr();
+            const Inkscape::XML::Node *repr = primitive_obj.getRepr();
             char const *result = repr->attribute("result");
             int index;
             if (result)
