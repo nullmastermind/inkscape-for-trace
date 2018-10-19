@@ -52,8 +52,8 @@ void SPFeBlend::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
         SPFilter *parent = SP_FILTER(this->parent);
-        this->in2 = sp_filter_primitive_name_previous_out(this);
-        repr->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
+        this->in2 = this->name_previous_out();
+        repr->setAttribute("in2", parent->name_for_image(this->in2));
     }
 }
 
@@ -144,7 +144,7 @@ void SPFeBlend::set(SPAttributeEnum key, gchar const *value) {
             }
             break;
         case SP_ATTR_IN2:
-            input = sp_filter_primitive_read_in(this, value);
+            input = this->read_in(value);
 
             if (input != this->in2) {
                 this->in2 = input;
@@ -174,10 +174,10 @@ void SPFeBlend::update(SPCtx *ctx, guint flags) {
         this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
         SPFilter *parent = SP_FILTER(this->parent);
-        this->in2 = sp_filter_primitive_name_previous_out(this);
+        this->in2 = this->name_previous_out();
 
         // TODO: XML Tree being used directly here while it shouldn't be.
-        this->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
+        this->getRepr()->setAttribute("in2", parent->name_for_image(this->in2));
     }
 
     SPFilterPrimitive::update(ctx, flags);
@@ -193,11 +193,11 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
         repr = doc->createElement("svg:feBlend");
     }
 
-    gchar const *in2_name = sp_filter_name_for_image(parent, this->in2);
+    gchar const *in2_name = parent->name_for_image(this->in2);
 
     if( !in2_name ) {
 
-        // This code is very similar to sp_filter_primtive_name_previous_out()
+        // This code is very similar to name_previous_out()
         SPObject *i = parent->firstChild();
 
         // Find previous filter primitive
@@ -207,7 +207,7 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
 
         if( i ) {
             SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
-            in2_name = sp_filter_name_for_image(parent, i_prim->image_out);
+            in2_name = parent->name_for_image(i_prim->image_out);
         }
     }
 
@@ -272,7 +272,7 @@ void SPFeBlend::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterBlend *nr_blend = dynamic_cast<Inkscape::Filters::FilterBlend*>(nr_primitive);
     g_assert(nr_blend != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_blend->set_mode(this->blend_mode);
     nr_blend->set_input(1, this->in2);

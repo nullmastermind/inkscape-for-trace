@@ -161,7 +161,7 @@ void SPFeFlood::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterFlood *nr_flood = dynamic_cast<Inkscape::Filters::FilterFlood*>(nr_primitive);
     g_assert(nr_flood != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
     
     nr_flood->set_opacity(this->opacity);
     nr_flood->set_color(this->color);

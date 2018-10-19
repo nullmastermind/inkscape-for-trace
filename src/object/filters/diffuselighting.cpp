@@ -285,7 +285,7 @@ void SPFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_diffuselighting != nullptr);
 
     this->renderer = nr_diffuselighting;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_diffuselighting->diffuseConstant = this->diffuseConstant;
     nr_diffuselighting->surfaceScale = this->surfaceScale;

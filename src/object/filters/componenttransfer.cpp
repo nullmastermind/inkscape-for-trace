@@ -168,7 +168,7 @@ void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_componenttransfer != nullptr);
 
     this->renderer = nr_componenttransfer;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
 
     sp_feComponentTransfer_children_modified(this);    //do we need it?!

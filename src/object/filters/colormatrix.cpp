@@ -141,7 +141,7 @@ void SPFeColorMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterColorMatrix *nr_colormatrix = dynamic_cast<Inkscape::Filters::FilterColorMatrix*>(nr_primitive);
     g_assert(nr_colormatrix != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
     nr_colormatrix->set_type(this->type);
     nr_colormatrix->set_value(this->value);
     nr_colormatrix->set_values(this->values);

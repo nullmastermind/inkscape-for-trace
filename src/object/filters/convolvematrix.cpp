@@ -295,7 +295,7 @@ void SPFeConvolveMatrix::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterConvolveMatrix *nr_convolve = dynamic_cast<Inkscape::Filters::FilterConvolveMatrix*>(nr_primitive);
     g_assert(nr_convolve != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_convolve->set_targetX(this->targetX);
     nr_convolve->set_targetY(this->targetY);

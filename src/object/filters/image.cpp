@@ -239,7 +239,7 @@ void SPFeImage::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterImage *nr_image = dynamic_cast<Inkscape::Filters::FilterImage*>(nr_primitive);
     g_assert(nr_image != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_image->from_element = this->from_element;
     nr_image->SVGElem = this->SVGElem;

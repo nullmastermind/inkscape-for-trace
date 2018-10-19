@@ -118,7 +118,7 @@ void SPFeOffset::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterOffset *nr_offset = dynamic_cast<Inkscape::Filters::FilterOffset*>(nr_primitive);
     g_assert(nr_offset != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_offset->set_dx(this->dx);
     nr_offset->set_dy(this->dy);

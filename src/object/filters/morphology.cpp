@@ -142,7 +142,7 @@ void SPFeMorphology::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterMorphology *nr_morphology = dynamic_cast<Inkscape::Filters::FilterMorphology*>(nr_primitive);
     g_assert(nr_morphology != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
     
     nr_morphology->set_operator(this->Operator);
     nr_morphology->set_xradius( this->radius.getNumber() );

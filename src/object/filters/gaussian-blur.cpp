@@ -104,7 +104,7 @@ void SPGaussianBlur::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterPrimitive *nr_primitive = filter->get_primitive(handle);
     Inkscape::Filters::FilterGaussian *nr_blur = dynamic_cast<Inkscape::Filters::FilterGaussian*>(nr_primitive);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     gfloat num = this->stdDeviation.getNumber();
 

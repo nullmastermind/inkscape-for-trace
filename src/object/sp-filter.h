@@ -41,8 +41,28 @@ struct ltstr {
 
 class SPFilter : public SPObject, public SPDimensions {
 public:
-	SPFilter();
-	~SPFilter() override;
+    SPFilter();
+    ~SPFilter() override;
+
+    /* Initializes the given Inkscape::Filters::Filter object as a renderer for this
+     * SPFilter object. */
+    void build_renderer(Inkscape::Filters::Filter *nr_filter);
+
+    /// Returns the number of filter primitives in this SPFilter object.
+    int primitive_count();
+
+    /// Returns a slot number for given image name, or -1 for unknown name.
+    int get_image_name(char const *name);
+
+    /// Returns slot number for given image name, even if it's unknown.
+    int set_image_name(char const *name);
+
+    /** Finds image name based on it's slot number. Returns 0 for unknown slot
+     * numbers. */
+    char const *name_for_image(int const image) const;
+
+    /// Returns a result image name that is not in use inside this filter.
+    Glib::ustring get_new_result_name();
 
     SPFilterUnits filterUnits;
     unsigned int filterUnits_set : 1;
@@ -61,43 +81,18 @@ public:
     int _image_number_next;
 
 protected:
-	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-	void release() override;
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void release() override;
 
-	void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
-	void remove_child(Inkscape::XML::Node* child) override;
+    void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) override;
+    void remove_child(Inkscape::XML::Node* child) override;
 
-	void set(SPAttributeEnum key, const char* value) override;
+    void set(SPAttributeEnum key, const char* value) override;
 
-	void update(SPCtx* ctx, unsigned int flags) override;
+    void update(SPCtx* ctx, unsigned int flags) override;
 
-	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
-
-void sp_filter_set_filter_units(SPFilter *filter, SPFilterUnits filterUnits);
-void sp_filter_set_primitive_units(SPFilter *filter, SPFilterUnits filterUnits);
-SPFilterPrimitive *add_primitive(SPFilter *filter, SPFilterPrimitive *primitive);
-SPFilterPrimitive *get_primitive(SPFilter *filter, int index);
-
-/* Initializes the given Inkscape::Filters::Filter object as a renderer for this
- * SPFilter object. */
-void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr_filter);
-
-/// Returns the number of filter primitives in this SPFilter object.
-int sp_filter_primitive_count(SPFilter *filter);
-
-/// Returns a slot number for given image name, or -1 for unknown name.
-int sp_filter_get_image_name(SPFilter *filter, char const *name);
-
-/// Returns slot number for given image name, even if it's unknown.
-int sp_filter_set_image_name(SPFilter *filter, char const *name);
-
-/** Finds image name based on it's slot number. Returns 0 for unknown slot
- * numbers. */
-char const *sp_filter_name_for_image(SPFilter const *filter, int const image);
-
-/// Returns a result image name that is not in use inside this filter.
-Glib::ustring sp_filter_get_new_result_name(SPFilter *filter);
 
 #endif /* !SP_FILTER_H_SEEN */
 

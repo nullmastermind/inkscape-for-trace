@@ -89,7 +89,7 @@ void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterMerge *nr_merge = dynamic_cast<Inkscape::Filters::FilterMerge*>(nr_primitive);
     g_assert(nr_merge != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     int in_nr = 0;
 

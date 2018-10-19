@@ -59,8 +59,8 @@ void SPFeComposite::build(SPDocument *document, Inkscape::XML::Node *repr) {
 		this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
 	{
 		SPFilter *parent = SP_FILTER(this->parent);
-		this->in2 = sp_filter_primitive_name_previous_out(this);
-		repr->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
+		this->in2 = this->name_previous_out();
+		repr->setAttribute("in2", parent->name_for_image(this->in2));
 	}
 }
 
@@ -169,7 +169,7 @@ void SPFeComposite::set(SPAttributeEnum key, gchar const *value) {
             break;
 
         case SP_ATTR_IN2:
-            input = sp_filter_primitive_read_in(this, value);
+            input = this->read_in(value);
             if (input != this->in2) {
                 this->in2 = input;
                 this->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -201,10 +201,10 @@ void SPFeComposite::update(SPCtx *ctx, guint flags) {
         this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
         SPFilter *parent = SP_FILTER(this->parent);
-        this->in2 = sp_filter_primitive_name_previous_out(this);
+        this->in2 = this->name_previous_out();
 
 		//XML Tree being used directly here while it shouldn't be.
-        this->getRepr()->setAttribute("in2", sp_filter_name_for_image(parent, this->in2));
+        this->getRepr()->setAttribute("in2", parent->name_for_image(this->in2));
     }
 
     SPFilterPrimitive::update(ctx, flags);
@@ -220,11 +220,11 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
         repr = doc->createElement("svg:feComposite");
     }
 
-    gchar const *in2_name = sp_filter_name_for_image(parent, this->in2);
+    gchar const *in2_name = parent->name_for_image(this->in2);
 
     if( !in2_name ) {
 
-        // This code is very similar to sp_filter_primitive_name_previous_out()
+        // This code is very similar to name_previous_out()
         SPObject *i = parent->firstChild();
 
         // Find previous filter primitive
@@ -234,7 +234,7 @@ Inkscape::XML::Node* SPFeComposite::write(Inkscape::XML::Document *doc, Inkscape
 
         if( i ) {
             SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
-            in2_name = sp_filter_name_for_image(parent, i_prim->image_out);
+            in2_name = parent->name_for_image(i_prim->image_out);
         }
     }
 
@@ -310,7 +310,7 @@ void SPFeComposite::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterComposite *nr_composite = dynamic_cast<Inkscape::Filters::FilterComposite*>(nr_primitive);
     g_assert(nr_composite != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_composite->set_operator(this->composite_operator);
     nr_composite->set_input(1, this->in2);

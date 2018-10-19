@@ -93,7 +93,7 @@ void SPFeTile::build_renderer(Inkscape::Filters::Filter* filter) {
     Inkscape::Filters::FilterTile *nr_tile = dynamic_cast<Inkscape::Filters::FilterTile*>(nr_primitive);
     g_assert(nr_tile != nullptr);
 
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 }
 
 /*

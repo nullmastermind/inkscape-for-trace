@@ -2426,7 +2426,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
                         // Make sure the target has a result
                         const gchar *gres = repr->attribute("result");
                         if(!gres) {
-                            result = sp_filter_get_new_result_name(SP_FILTER(prim->parent));
+                            result = SP_FILTER(prim->parent)->get_new_result_name();
                             repr->setAttribute("result", result.c_str());
                             in_val = result.c_str();
                         }

@@ -374,10 +374,10 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
     
     if (style && style->filter.set && style->getFilter()) {
         if (!_filter) {
-            int primitives = sp_filter_primitive_count(SP_FILTER(style->getFilter()));
+            int primitives = SP_FILTER(style->getFilter())->primitive_count();
             _filter = new Inkscape::Filters::Filter(primitives);
         }
-        sp_filter_build_renderer(SP_FILTER(style->getFilter()), _filter);
+        SP_FILTER(style->getFilter())->build_renderer(_filter);
     } else {
         // no filter set for this group
         delete _filter;

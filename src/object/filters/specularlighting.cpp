@@ -297,7 +297,7 @@ void SPFeSpecularLighting::build_renderer(Inkscape::Filters::Filter* filter) {
     g_assert(nr_specularlighting != nullptr);
 
     this->renderer = nr_specularlighting;
-    sp_filter_primitive_renderer_common(this, nr_primitive);
+    this->renderer_common(nr_primitive);
 
     nr_specularlighting->specularConstant = this->specularConstant;
     nr_specularlighting->specularExponent = this->specularExponent;

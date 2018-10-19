@@ -51,7 +51,7 @@ void SPFeMergeNode::set(SPAttributeEnum key, gchar const *value) {
     SPFeMerge *parent = SP_FEMERGE(this->parent);
 
     if (key == SP_ATTR_IN) {
-        int input = sp_filter_primitive_read_in(parent, value);
+        int input = parent->read_in(value);
         if (input != this->input) {
             this->input = input;
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);

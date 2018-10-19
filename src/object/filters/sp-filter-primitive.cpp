@@ -81,7 +81,7 @@ void SPFilterPrimitive::set(SPAttributeEnum key, gchar const *value) {
     switch (key) {
         case SP_ATTR_IN:
             if (value) {
-                image_nr = sp_filter_primitive_read_in(this, value);
+                image_nr = this->read_in(value);
             } else {
                 image_nr = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
             }
@@ -92,7 +92,7 @@ void SPFilterPrimitive::set(SPAttributeEnum key, gchar const *value) {
             break;
         case SP_ATTR_RESULT:
             if (value) {
-                image_nr = sp_filter_primitive_read_result(this, value);
+                image_nr = this->read_result(value);
             } else {
                 image_nr = Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
             }
@@ -155,10 +155,10 @@ Inkscape::XML::Node* SPFilterPrimitive::write(Inkscape::XML::Document *doc, Inks
         repr = object->getRepr()->duplicate(doc);
     }
 
-    gchar const *in_name = sp_filter_name_for_image(parent, prim->image_in);
+    gchar const *in_name = parent->name_for_image(prim->image_in);
     repr->setAttribute("in", in_name);
 
-    gchar const *out_name = sp_filter_name_for_image(parent, prim->image_out);
+    gchar const *out_name = parent->name_for_image(prim->image_out);
     repr->setAttribute("result", out_name);
 
     /* Do we need to add x,y,width,height? */
@@ -167,9 +167,9 @@ Inkscape::XML::Node* SPFilterPrimitive::write(Inkscape::XML::Document *doc, Inks
     return repr;
 }
 
-int sp_filter_primitive_read_in(SPFilterPrimitive *prim, gchar const *name)
+int SPFilterPrimitive::read_in(gchar const *name)
 {
-    if (!name || !prim){
+    if (!name || !this){
         return Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
     }
     // TODO: are these case sensitive or not? (assumed yes)
@@ -194,42 +194,42 @@ int sp_filter_primitive_read_in(SPFilterPrimitive *prim, gchar const *name)
             break;
     }
 
-    SPFilter *parent = SP_FILTER(prim->parent);
-    int ret = sp_filter_get_image_name(parent, name);
+    SPFilter *parent = SP_FILTER(this->parent);
+    int ret = parent->get_image_name(name);
     if (ret >= 0) return ret;
 
     return Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
-int sp_filter_primitive_read_result(SPFilterPrimitive *prim, gchar const *name)
+int SPFilterPrimitive::read_result(gchar const *name)
 {
-    SPFilter *parent = SP_FILTER(prim->parent);
-    int ret = sp_filter_get_image_name(parent, name);
+    SPFilter *parent = SP_FILTER(this->parent);
+    int ret = parent->get_image_name(name);
     if (ret >= 0) return ret;
 
-    ret = sp_filter_set_image_name(parent, name);
+    ret = parent->set_image_name(name);
     if (ret >= 0) return ret;
 
     return Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
 }
 
 /**
- * Gives name for output of previous filter. Makes things clearer when prim
+ * Gives name for output of previous filter. Makes things clearer when 'this'
  * is a filter with two or more inputs. Returns the slot number of result
  * of previous primitive, or NR_FILTER_SOURCEGRAPHIC if this is the first
  * primitive.
  */
-int sp_filter_primitive_name_previous_out(SPFilterPrimitive *prim) {
-    SPFilter *parent = SP_FILTER(prim->parent);
+int SPFilterPrimitive::name_previous_out() {
+    SPFilter *parent = SP_FILTER(this->parent);
     SPObject *i = parent->firstChild();
-    while (i && i->getNext() != prim) {
+    while (i && i->getNext() != this) {
         i = i->getNext();
     }
     if (i) {
         SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
         if (i_prim->image_out < 0) {
-            Glib::ustring name = sp_filter_get_new_result_name(parent);
-            int slot = sp_filter_set_image_name(parent, name.c_str());
+            Glib::ustring name = parent->get_new_result_name();
+            int slot = parent->set_image_name(name.c_str());
             i_prim->image_out = slot;
             //XML Tree is being directly used while it shouldn't be.
             i_prim->getRepr()->setAttribute("result", name.c_str());
@@ -242,21 +242,20 @@ int sp_filter_primitive_name_previous_out(SPFilterPrimitive *prim) {
 }
 
 /* Common initialization for filter primitives */
-void sp_filter_primitive_renderer_common(SPFilterPrimitive *sp_prim, Inkscape::Filters::FilterPrimitive *nr_prim)
+void SPFilterPrimitive::renderer_common(Inkscape::Filters::FilterPrimitive *nr_prim)
 {
-    g_assert(sp_prim != nullptr);
     g_assert(nr_prim != nullptr);
 
     
-    nr_prim->set_input(sp_prim->image_in);
-    nr_prim->set_output(sp_prim->image_out);
+    nr_prim->set_input(this->image_in);
+    nr_prim->set_output(this->image_out);
 
     /* TODO: place here code to handle input images, filter area etc. */
     // We don't know current viewport or bounding box, this is wrong approach.
-    nr_prim->set_subregion( sp_prim->x, sp_prim->y, sp_prim->width, sp_prim->height );
+    nr_prim->set_subregion( this->x, this->y, this->width, this->height );
 
     // Give renderer access to filter properties
-    nr_prim->setStyle( sp_prim->style );
+    nr_prim->setStyle( this->style );
 }
 
 
