@@ -49,7 +49,6 @@
 
 
 #include "util/find-last-if.h"
-#include "util/reverse-list.h"
 
 #include "extract-uri.h"
 

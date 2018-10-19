@@ -24,8 +24,6 @@
 
 #include "object/sp-item-group.h"
 
-#include "util/format.h"
-
 #include "xml/node-observer.h"
 
 namespace Inkscape {
@@ -270,7 +268,6 @@ void LayerManager::_rebuild() {
 
         for ( std::vector<SPObject *>::const_iterator iter = layers.begin(); iter != layers.end(); ++iter ) {
             SPObject *layer = *iter;
-//             Debug::EventTracker<DebugLayerNote> tracker(Util::format("Examining %s", layer->label()));
             bool needsAdd = false;
             std::set<SPGroup*> additional;
 
