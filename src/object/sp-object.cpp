@@ -1193,10 +1193,10 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
      * don't need to set CHILD_MODIFIED on our ancestors because it's already been done.
      */
     if (already_propagated) {
-        if (parent) {
-            parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
-        } else {
-            if(this->document) {
+        if(this->document) {
+            if (parent) {
+                parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
+            } else {
                 this->document->requestModified();
             }
         }
