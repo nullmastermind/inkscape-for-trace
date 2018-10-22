@@ -21,7 +21,6 @@
 
 #include "selection.h"
 #include "inkscape.h"
-#include "document-private.h"
 
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"

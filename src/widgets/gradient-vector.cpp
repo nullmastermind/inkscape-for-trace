@@ -27,7 +27,6 @@
 
 
 
-#include "document-private.h"
 #include "gradient-chemistry.h"
 #include "inkscape.h"
 #include "preferences.h"

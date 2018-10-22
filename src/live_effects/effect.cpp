@@ -75,7 +75,6 @@
 #include "xml/sp-css-attr.h"
 
 #include "message-stack.h"
-#include "document-private.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"

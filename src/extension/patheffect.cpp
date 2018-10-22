@@ -7,7 +7,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "document-private.h"
 
 #include "patheffect.h"
 #include "db.h"

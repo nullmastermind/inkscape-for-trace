@@ -21,7 +21,6 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "selection.h"
 #include "svg-fonts-dialog.h"

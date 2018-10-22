@@ -24,7 +24,6 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 #include "preferences.h"
 
 #include "sp-marker.h"

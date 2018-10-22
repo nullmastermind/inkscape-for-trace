@@ -22,9 +22,9 @@
 #include "svg-builder.h"
 #include "pdf-parser.h"
 
-#include <png.h>
+#include "document.h"
+#include "png.h"
 
-#include "document-private.h"
 #include "xml/document.h"
 #include "xml/node.h"
 #include "xml/repr.h"

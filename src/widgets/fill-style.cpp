@@ -23,7 +23,6 @@
 
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "fill-n-stroke-factory.h"
 #include "fill-style.h"

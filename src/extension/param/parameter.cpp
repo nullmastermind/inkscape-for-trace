@@ -16,27 +16,31 @@
 #endif
 
 #include <cstring>
+#include <list>
 
-#include "ui/widget/color-notebook.h"
-#include <xml/node.h>
+#include <glibmm/i18n.h>
+#include <sigc++/sigc++.h>
 
-#include <extension/extension.h>
-#include "document-private.h"
-#include "object/sp-defs.h"
-#include <color.h>
-
-#include "parameter.h"
 #include "bool.h"
+#include "color.h"
 #include "color.h"
 #include "description.h"
 #include "enum.h"
 #include "float.h"
 #include "int.h"
 #include "notebook.h"
+#include "parameter.h"
 #include "radiobutton.h"
 #include "string.h"
 
-#include <glibmm/i18n.h>
+#include "extension/extension.h"
+
+#include "object/sp-defs.h"
+
+#include "ui/widget/color-notebook.h"
+
+#include "xml/node.h"
+
 
 namespace Inkscape {
 namespace Extension {

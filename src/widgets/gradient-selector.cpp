@@ -16,7 +16,6 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/treeview.h>
 
-#include "document-private.h"
 #include "document-undo.h"
 #include "document.h"
 #include "gradient-chemistry.h"

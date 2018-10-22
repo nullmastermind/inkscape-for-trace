@@ -22,7 +22,6 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include "document-private.h"
 
 #include "radiobutton.h"
 

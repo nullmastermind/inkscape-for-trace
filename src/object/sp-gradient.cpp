@@ -36,13 +36,11 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
-#include "bad-uri-exception.h"
-#include "display/cairo-utils.h"
-#include "svg/svg.h"
-#include "svg/css-ostringstream.h"
 #include "attributes.h"
-#include "document-private.h"
+#include "bad-uri-exception.h"
+#include "document.h"
 #include "gradient-chemistry.h"
+
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
@@ -51,8 +49,10 @@
 #include "sp-mesh-patch.h"
 #include "sp-stop.h"
 
-/// Has to be power of 2   Seems to be unused.
-//#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
+#include "display/cairo-utils.h"
+
+#include "svg/svg.h"
+#include "svg/css-ostringstream.h"
 
 bool SPGradient::hasStops() const
 {

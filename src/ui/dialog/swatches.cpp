@@ -34,7 +34,6 @@
 
 #include "desktop-style.h"
 #include "document.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "extension/db.h"
 #include "inkscape.h"

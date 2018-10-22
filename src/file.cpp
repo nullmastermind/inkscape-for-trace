@@ -36,7 +36,6 @@
 #include "file.h"
 
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "event-log.h"
 #include "id-clash.h"

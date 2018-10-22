@@ -21,7 +21,6 @@
 #include "path-prefix.h"
 
 #include <xml/repr.h>
-#include "document-private.h"
 #include "inkscape.h"
 
 #include "io/sys.h"

@@ -24,7 +24,6 @@
 #include "display/drawing-shape.h"
 #include "helper/geom.h"
 #include "attributes.h"
-#include "document-private.h"
 #include "sp-item.h"
 #include "sp-hatch-path.h"
 #include "svg/css-ostringstream.h"

@@ -52,7 +52,6 @@
 #include "svg-builder.h"
 #include "pdf-parser.h"
 
-#include "document-private.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "util/units.h"

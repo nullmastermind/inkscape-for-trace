@@ -20,7 +20,6 @@
 
 #include "xml/node.h"
 #include "extension/extension.h"
-#include "document-private.h"
 #include "enum.h"
 #include "preferences.h"
 

@@ -49,7 +49,6 @@
 #include "extension/input.h"
 
 #include "document.h"
-#include "document-private.h"
 #include "inkscape.h"
 
 #include "ui/dialog-events.h"

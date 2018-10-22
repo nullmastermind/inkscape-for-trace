@@ -37,7 +37,6 @@
 
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
 #include "document.h"
-#include "document-private.h"
 #include "message-stack.h"
 #include "context-fns.h"
 #include "ui/tools/dropper-tool.h" // used in copy()

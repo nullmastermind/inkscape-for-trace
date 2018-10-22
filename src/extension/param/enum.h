@@ -15,7 +15,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <vector>
+
 #include "parameter.h"
+#include "document.h"
 
 namespace Gtk {
 class Widget;

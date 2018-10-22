@@ -20,7 +20,6 @@
 #include "enums.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 #include "style.h"
 
 #include <2geom/transforms.h>

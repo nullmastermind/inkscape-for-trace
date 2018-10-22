@@ -16,23 +16,26 @@
 
 #include <cstring>
 #include <string>
+
 #include <glibmm.h>
+
 #include <2geom/transforms.h>
 
+#include "attributes.h"
 #include "bad-uri-exception.h"
-#include "svg/svg.h"
+#include "document.h"
+
+#include "sp-defs.h"
+#include "sp-factory.h"
+#include "sp-item.h"
+
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
 #include "display/drawing-group.h"
-#include "attributes.h"
-#include "document-private.h"
 
-#include "sp-factory.h"
-
-#include "sp-defs.h"
-#include "sp-item.h"
+#include "svg/svg.h"
 
 SPPattern::SPPattern()
     : SPPaintServer()

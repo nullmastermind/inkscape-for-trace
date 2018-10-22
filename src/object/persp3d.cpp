@@ -17,7 +17,6 @@
 #include "sp-defs.h"
 
 #include "attributes.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "vanishing-point.h"
 #include "ui/tools/box3d-tool.h"

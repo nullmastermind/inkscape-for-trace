@@ -13,7 +13,6 @@
 #include "xml/node-event-vector.h"
 #include "attributes.h"
 #include "document.h"
-#include "document-private.h"
 
 #include "object/sp-defs.h"
 

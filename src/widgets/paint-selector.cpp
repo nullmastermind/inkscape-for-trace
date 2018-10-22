@@ -24,7 +24,6 @@
 #include <glibmm/i18n.h>
 
 #include "desktop-style.h"
-#include "document-private.h"
 #include "gradient-selector.h"
 #include "inkscape.h"
 #include "paint-selector.h"

@@ -27,7 +27,6 @@
 
 #include "desktop-style.h"
 #include "desktop.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"

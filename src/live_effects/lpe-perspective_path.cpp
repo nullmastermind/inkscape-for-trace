@@ -13,7 +13,6 @@
 #include <gtkmm.h>
 
 //#include "transf_mat_3x4.h"
-#include "document-private.h"
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpeobject.h"
 #include "knot-holder-entity.h"
