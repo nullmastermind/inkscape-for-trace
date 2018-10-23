@@ -7,15 +7,9 @@
  *
  */
 
-#include <cstring>
-#include <glibmm/i18n.h>
-
 #include "desktop.h"
 #include "document.h"
 #include "knotholder.h"
-#include "inkscape.h"
-
-#include "object/sp-path.h"
 
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
@@ -107,11 +101,7 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *na
         changed_kh = !sh->has_local_change();
         sh->decrement_local_change();
         if (changed_kh) {
-            // this can happen if an LPEItem's knotholder handle was dragged, in which case we want
-            // to keep the knotholder; in all other cases (e.g., if the LPE itself changes) we delete it
-            SPObject * obj = SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"));
-            bool is_shape = SP_IS_SHAPE(obj) && !SP_IS_PATH(obj);
-            sh->reset_item(!strcmp(name, "d") || is_shape);
+            sh->reset_item();
         }
     }
 }
@@ -125,14 +115,14 @@ static Inkscape::XML::NodeEventVector shapeeditor_repr_events = {
 };
 
 
-void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
+void ShapeEditor::set_item(SPItem *item) {
     if (_blockSetItem) {
         return;
     }
     // this happens (and should only happen) when for an LPEItem having both knotholder and
     // nodepath the knotholder is adapted; in this case we don't want to delete the knotholder
     // since this freezes the handles
-    unset_item(keep_knotholder);
+    unset_item(true);
 
     if (item) {
         Inkscape::XML::Node *repr;
@@ -172,14 +162,14 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
 
 /** FIXME: This thing is only called when the item needs to be updated in response to repr change.
    Why not make a reload function in KnotHolder? */
-void ShapeEditor::reset_item(bool keep_knotholder)
+void ShapeEditor::reset_item()
 {
     if (knotholder) {
         SPObject *obj = desktop->getDocument()->getObjectByRepr(knotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
-        set_item(SP_ITEM(obj), keep_knotholder);
+        set_item(SP_ITEM(obj));
     } else if (lpeknotholder) {
         SPObject *obj = desktop->getDocument()->getObjectByRepr(lpeknotholder_listener_attached_for); /// note that it is not certain that this is an SPItem; it could be a LivePathEffectObject.
-        set_item(SP_ITEM(obj), keep_knotholder);
+        set_item(SP_ITEM(obj));
     }
 }
 

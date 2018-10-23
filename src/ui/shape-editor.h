@@ -26,7 +26,7 @@ public:
     ShapeEditor(SPDesktop *desktop, Geom::Affine edit_transform = Geom::identity());
     ~ShapeEditor();
 
-    void set_item(SPItem *item, bool keep_knotholder = false);
+    void set_item(SPItem *item);
     void unset_item(bool keep_knotholder = false);
 
     void update_knotholder(); //((deprecated))
@@ -42,7 +42,7 @@ public:
     static void event_attr_changed(Inkscape::XML::Node * /*repr*/, char const *name, char const * /*old_value*/,
                                    char const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
-    void reset_item (bool keep_knotholder = true);
+    void reset_item();
     static bool _blockSetItem;
 
     SPDesktop *desktop;
