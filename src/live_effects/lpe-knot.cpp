@@ -345,7 +345,8 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     ,
     // initialise your parameters here:
-    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 3)
+    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this,
+                       3)
     , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
                            "prop_to_stroke_width", &wr, this, true)
     , inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
