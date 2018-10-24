@@ -24,9 +24,11 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
-include(CMakeScripts/ConfigPaths.cmake)
 
 project(inkscape)
+
+include(CMakeScripts/ConfigPaths.cmake)
+
 set(PROJECT_NAME inkscape)
 
 set(INKSCAPE_VERSION_MAJOR  0)
