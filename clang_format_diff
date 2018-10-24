@@ -1,23 +1,36 @@
---- src/live_effects/lpe-knot.h	(before formatting)
-+++ src/live_effects/lpe-knot.h	(after formatting)
-@@ -76,7 +76,7 @@
-   ScalarParam interruption_width;
-   BoolParam  prop_to_stroke_width;
-   BoolParam inverse_width;
--  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0, 
-+  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0,
-   // but changed from bool to hidden parameter to retain backward compatibility and dont show in the UI
-   HiddenParam add_stroke_width;
-   HiddenParam add_other_stroke_width;
+--- src/object/sp-ellipse.cpp	(before formatting)
++++ src/object/sp-ellipse.cpp	(after formatting)
+@@ -461,13 +461,13 @@
+     if (this->_isSlice() && this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE) {
+         pb.lineTo(Geom::Point(0, 0));
+     }
+-//    If convert to paths ellipses become unclosed so comment this and call "closePath"
+-//    Remove later
+-//    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
+-//        pb.closePath();
+-//    } else {
+-//        pb.flush();
+-//    }
++    //    If convert to paths ellipses become unclosed so comment this and call "closePath"
++    //    Remove later
++    //    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
++    //        pb.closePath();
++    //    } else {
++    //        pb.flush();
++    //    }
+     pb.closePath();
+     c = new SPCurve(pb.peek());
+ 
 --- src/live_effects/lpe-knot.cpp	(before formatting)
 +++ src/live_effects/lpe-knot.cpp	(after formatting)
-@@ -345,7 +345,8 @@
-     : Effect(lpeobject)
-     ,
-     // initialise your parameters here:
--    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 3)
-+    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this,
-+                       3)
-     , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
-                            "prop_to_stroke_width", &wr, this, true)
-     , inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
+@@ -50,8 +50,8 @@
+ 
+ static Geom::Path::size_type size_nondegenerate(Geom::Path const &path) {
+     Geom::Path::size_type retval = path.size_default();
+-    const Geom::Curve &closingline = path.back_closed(); 
+-    // the closing line segment is always of type 
++    const Geom::Curve &closingline = path.back_closed();
++    // the closing line segment is always of type
+     // Geom::LineSegment.
+     if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+         // closingline.isDegenerate() did not work, because it only checks for

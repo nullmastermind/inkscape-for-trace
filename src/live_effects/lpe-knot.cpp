@@ -50,8 +50,8 @@ public:
 
 static Geom::Path::size_type size_nondegenerate(Geom::Path const &path) {
     Geom::Path::size_type retval = path.size_default();
-    const Geom::Curve &closingline = path.back_closed(); 
-    // the closing line segment is always of type 
+    const Geom::Curve &closingline = path.back_closed();
+    // the closing line segment is always of type
     // Geom::LineSegment.
     if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
         // closingline.isDegenerate() did not work, because it only checks for
