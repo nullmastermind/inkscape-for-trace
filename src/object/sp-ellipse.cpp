@@ -461,11 +461,14 @@ void SPGenericEllipse::set_shape()
     if (this->_isSlice() && this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE) {
         pb.lineTo(Geom::Point(0, 0));
     }
-    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
-        pb.closePath();
-    } else {
-        pb.flush();
-    }
+//    If convert to paths ellipses become unclosed so comment this and call "closePath"
+//    Remove later
+//    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
+//        pb.closePath();
+//    } else {
+//        pb.flush();
+//    }
+    pb.closePath();
     c = new SPCurve(pb.peek());
 
     // gchar *str = sp_svg_write_path(curve->get_pathvector());

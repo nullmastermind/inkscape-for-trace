@@ -49,13 +49,17 @@ public:
 
 
 static Geom::Path::size_type size_nondegenerate(Geom::Path const &path) {
-    Geom::Path::size_type retval = path.size_open();
-
-    // if path is closed and closing segment is not degenerate
-    if (path.closed() && !path.back_closed().isDegenerate()) {
-        retval = path.size_closed();
+    Geom::Path::size_type retval = path.size_default();
+    const Geom::Curve &closingline = path.back_closed(); 
+    // the closing line segment is always of type 
+    // Geom::LineSegment.
+    if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+        // closingline.isDegenerate() did not work, because it only checks for
+        // *exact* zero length, which goes wrong for relative coordinates and
+        // rounding errors...
+        // the closing line segment has zero-length. So stop before that one!
+        retval = path.size_open();
     }
-
     return retval;
 }
 
