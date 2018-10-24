@@ -418,7 +418,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         unsigned i0 = 0;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         gint precision = prefs->getInt("/options/svgoutput/numericprecision");
-        prefs->setInt("/options/svgoutput/numericprecision", 4); // thinc is enogught to minor diferences
+        prefs->setInt("/options/svgoutput/numericprecision", 4); // I think this is enough for minor differences
         for (i0=0; i0<gpaths.size(); i0++){
             if (!strcmp(sp_svg_write_path(original_pathv[comp]), sp_svg_write_path(gpaths[i0])))
                 break;
@@ -660,7 +660,7 @@ void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
     e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-              _("Drag to select a crossing, click to flip it, CTRL + click to update all crossings"));
+              _("Drag to select a crossing, click to flip it, Ctrl + click to update all crossings"));
     knotholder->add(e);
 };
 
