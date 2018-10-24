@@ -16,9 +16,9 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/lpegroupbbox.h"
-#include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/array.h"
 #include "live_effects/parameter/hidden.h"
+#include "live_effects/parameter/parameter.h"
 //#include "live_effects/parameter/path.h"
 #include "live_effects/parameter/bool.h"
 #include "2geom/crossing.h"
@@ -75,10 +75,10 @@ private:
  
   ScalarParam interruption_width;
   BoolParam  prop_to_stroke_width;
-  BoolParam  inverse_width;
+  BoolParam inverse_width;
   // Legacy ones
-  HiddenParam  add_stroke_width;
-  HiddenParam  add_other_stroke_width;
+  HiddenParam add_stroke_width;
+  HiddenParam add_other_stroke_width;
   ScalarParam switcher_size;
   ArrayParam<double> crossing_points_vector;//svg storage of crossing_points
   
