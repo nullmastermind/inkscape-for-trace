@@ -353,8 +353,12 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
                        3)
     , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
                            "prop_to_stroke_width", &wr, this, true)
-    , inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
+    , both(_("_Both gaps"), _("Use gap in both intersection elements"),
+                    "both", &wr, this, false)
+    , inverse_width(_("_Groups: Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
                     "inverse_width", &wr, this, false)
+    , unclimb(_("_Groups: unclimb"), _("Don`t climb the gap in the same path"),
+                    "unclimb", &wr, this, false)
     , add_stroke_width("St_roke width", "Add the stroke width to the interruption size", "add_stroke_width", &wr, this,
                        "inkscape_1.0_and_up", true)
     , add_other_stroke_width("_Crossing path stroke width", "Add crossed stroke width to the interruption size",
@@ -372,7 +376,9 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     registerParameter(&interruption_width);
     registerParameter(&prop_to_stroke_width);
     registerParameter(&add_stroke_width);
+    registerParameter(&both);
     registerParameter(&inverse_width);
+    registerParameter(&unclimb);
     registerParameter(&add_other_stroke_width);
     registerParameter(&crossing_points_vector);
 
@@ -445,7 +451,9 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
 
 
                 int geom_sign = ( cross(flag_i[1], flag_j[1]) < 0 ? 1 : -1);
-
+                if (unclimb) {
+                    geom_sign = comp%2 == 0 ? -1 : -1;
+                }
                 bool i0_is_under = false;
                 double width = interruption_width;
                 if ( crossing_points[p].sign * geom_sign > 0 ){
@@ -453,11 +461,14 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                 }
                 else if (crossing_points[p].sign * geom_sign < 0) {
                     if (j == i0){
-                        std::swap( i, j);
-                        std::swap(ti, tj);
-                        std::swap(flag_i,flag_j);
                         i0_is_under = true;
                     }
+                }
+                i0_is_under = crossing_points[p].sign != 0 && both?true:i0_is_under;
+                if (i0_is_under && j == i0){
+                    std::swap( i, j);
+                    std::swap(ti, tj);
+                    std::swap(flag_i,flag_j);
                 }
                 if (i0_is_under){
                     if ( prop_to_stroke_width.get_value() ) {
@@ -482,6 +493,21 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                         dom = complementOf( Interval(hidden.min()+period, period) ,dom);
                     }else{
                         dom = complementOf(hidden,dom);
+                    }
+                    if (crossing_points[p].i == i0 && 
+                        crossing_points[p].j == i0 &&
+                        crossing_points[p].sign != 0 &&
+                        both) 
+                    {
+                        hidden = findShadowedTime(gpaths[i0], flag_i, tj, width/2);
+                        period  = size_nondegenerate(gpaths[i0]);
+                        if (hidden.max() > period ) hidden -= period;
+                        if (hidden.min()<0){
+                            dom = complementOf( Interval(0,hidden.max()) ,dom);
+                            dom = complementOf( Interval(hidden.min()+period, period) ,dom);
+                        }else{
+                            dom = complementOf(hidden,dom);
+                        }
                     }
                 }
             }
