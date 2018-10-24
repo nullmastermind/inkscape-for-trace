@@ -76,7 +76,8 @@ private:
   ScalarParam interruption_width;
   BoolParam  prop_to_stroke_width;
   BoolParam inverse_width;
-  // Legacy ones
+  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0, 
+  // but changed from bool to hidden parameter to retain backward compatibility and dont show in the UI
   HiddenParam add_stroke_width;
   HiddenParam add_other_stroke_width;
   ScalarParam switcher_size;

@@ -345,15 +345,15 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     ,
     // initialise your parameters here:
-    interruption_width(_("_Width:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 1)
+    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 1)
     , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
                            "prop_to_stroke_width", &wr, this, true)
     , inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
                     "inverse_width", &wr, this, false)
     , add_stroke_width("St_roke width", "Add the stroke width to the interruption size", "add_stroke_width", &wr, this,
-                       "false", true)
+                       "inkscape_1.0_and_up", true)
     , add_other_stroke_width("_Crossing path stroke width", "Add crossed stroke width to the interruption size",
-                             "add_other_stroke_width", &wr, this, "false", true)
+                             "add_other_stroke_width", &wr, this, "inkscape_1.0_and_up", true)
     , switcher_size(_("S_witcher size:"), _("Orientation indicator/switcher size"), "switcher_size", &wr, this, 15)
     , crossing_points_vector(_("Crossing Signs"), _("Crossings signs"), "crossing_points_vector", &wr, this)
     , crossing_points()
