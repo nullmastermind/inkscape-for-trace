@@ -1,0 +1,23 @@
+--- src/live_effects/lpe-knot.h	(before formatting)
++++ src/live_effects/lpe-knot.h	(after formatting)
+@@ -76,7 +76,7 @@
+   ScalarParam interruption_width;
+   BoolParam  prop_to_stroke_width;
+   BoolParam inverse_width;
+-  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0, 
++  // "add_stroke_width" and "add_other_stroke_width" parameters are not used since Inkscape 1.0,
+   // but changed from bool to hidden parameter to retain backward compatibility and dont show in the UI
+   HiddenParam add_stroke_width;
+   HiddenParam add_other_stroke_width;
+--- src/live_effects/lpe-knot.cpp	(before formatting)
++++ src/live_effects/lpe-knot.cpp	(after formatting)
+@@ -345,7 +345,8 @@
+     : Effect(lpeobject)
+     ,
+     // initialise your parameters here:
+-    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 1)
++    interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this,
++                       1)
+     , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
+                            "prop_to_stroke_width", &wr, this, true)
+     , inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
