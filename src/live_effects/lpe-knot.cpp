@@ -344,10 +344,11 @@ CrossingPoints::inherit_signs(CrossingPoints const &other, int default_value)
 LPEKnot::LPEKnot(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // initialise your parameters here:
-    interruption_width(_("Fi_xed width:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 3),
-    prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Interruption width' as a ratio of stroke width"), "prop_to_stroke_width", &wr, this, true),
-    add_stroke_width(_("St_roke width"), _("Add the stroke width to the interruption size"), "add_stroke_width", &wr, this, true),
-    add_other_stroke_width(_("_Crossing path stroke width"), _("Add crossed stroke width to the interruption size"), "add_other_stroke_width", &wr, this, true),
+    interruption_width(_("_Width:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this, 1),
+    prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"), "prop_to_stroke_width", &wr, this, true),
+    inverse_width(_("_Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"), "inverse_width", &wr, this,  false),
+    add_stroke_width("St_roke width", "Add the stroke width to the interruption size", "add_stroke_width", &wr, this, "false", true),
+    add_other_stroke_width("_Crossing path stroke width", "Add crossed stroke width to the interruption size", "add_other_stroke_width", &wr, this, "false", true),
     switcher_size(_("S_witcher size:"), _("Orientation indicator/switcher size"), "switcher_size", &wr, this, 15),
     crossing_points_vector(_("Crossing Signs"), _("Crossings signs"), "crossing_points_vector", &wr, this),
     crossing_points(),
@@ -357,11 +358,12 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject) :
     switcher(0.,0.)
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
+    registerParameter(&switcher_size);
     registerParameter(&interruption_width);
     registerParameter(&prop_to_stroke_width);
     registerParameter(&add_stroke_width);
-    registerParameter(&add_other_stroke_width);
-    registerParameter(&switcher_size);
+    registerParameter(&inverse_width);
+    registerParameter(&add_other_stroke_width); 
     registerParameter(&crossing_points_vector);
 
     _provides_knotholder_entities = true;
@@ -400,9 +402,13 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         //find the relevant path component in gpaths (required to allow groups!)
         //Q: do we always receive the group members in the same order? can we rest on that?
         unsigned i0 = 0;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        gint precision = prefs->getInt("/options/svgoutput/numericprecision");
+        prefs->setInt("/options/svgoutput/numericprecision", 4);//thinc is enogught to minor diferences
         for (i0=0; i0<gpaths.size(); i0++){
-            if (original_pathv[comp]==gpaths[i0]) break;
+            if (!strcmp(sp_svg_write_path(original_pathv[comp]),sp_svg_write_path(gpaths[i0]))) break;
         }
+        prefs->setInt("/options/svgoutput/numericprecision", precision);
         if (i0 == gpaths.size() ) {THROW_EXCEPTION("lpe-knot error: group member not recognized");}// this should not happen...
 
         std::vector<Interval> dom;
@@ -430,9 +436,10 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                 int geom_sign = ( cross(flag_i[1], flag_j[1]) < 0 ? 1 : -1);
 
                 bool i0_is_under = false;
+                double width = interruption_width;
                 if ( crossing_points[p].sign * geom_sign > 0 ){
                     i0_is_under = ( i == i0 );
-                }else if ( crossing_points[p].sign * geom_sign < 0 ){
+                } else if ( crossing_points[p].sign * geom_sign < 0 ){
                     if (j == i0){
                         std::swap( i, j);
                         std::swap(ti, tj);
@@ -441,14 +448,17 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                     }
                 }
                 if (i0_is_under){
-                    double width = interruption_width;
                     if ( prop_to_stroke_width.get_value() ) {
-                        width *= gstroke_widths[i];
+                        if (inverse_width) {
+                            width *= gstroke_widths[j];
+                        } else {
+                            width *= gstroke_widths[i];
+                        }
                     }
-                    if ( add_stroke_width.get_value() ) {
+                    if (add_stroke_width.get_value() == "true") {
                         width += gstroke_widths[i];
                     }
-                    if ( add_other_stroke_width.get_value() ) {
+                    if (add_other_stroke_width.get_value() == "true") {
                         width += gstroke_widths[j];
                     }
                     Interval hidden = findShadowedTime(gpaths[i0], flag_j, ti, width/2);
@@ -476,7 +486,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                 path_out.push_back(gpaths[i0]);
                 continue;
             }else{
-//                std::cout<<"fusing first and last component\n";
+                // std::cout<<"fusing first and last component\n";
                 ++beg_comp;
                 --end_comp;
                 Geom::Path first = gpaths[i0].portion(dom.back());
@@ -614,7 +624,7 @@ void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
     e->create( nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-               _("Drag to select a crossing, click to flip it") );
+               _("Drag to select a crossing, click to flip it, CTRL + click to update all crossings") );
     knotholder->add(e);
 };
 
@@ -645,6 +655,11 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
     if (s < lpe->crossing_points.size()){
         if (state & GDK_SHIFT_MASK){
             lpe->crossing_points[s].sign = 1;
+        } else if (state & GDK_CONTROL_MASK){
+            int sign = lpe->crossing_points[s].sign;
+            for (unsigned p = 0; p < lpe->crossing_points.size(); p++){
+                lpe->crossing_points[p].sign = ((sign+2)%3)-1;
+            }
         }else{
             int sign = lpe->crossing_points[s].sign;
             lpe->crossing_points[s].sign = ((sign+2)%3)-1;
