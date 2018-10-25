@@ -351,12 +351,11 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     // initialise your parameters here:
     interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this,
                        3)
-    , prop_to_stroke_width(_("_In units of stroke width"), _("Consider 'Width' as a ratio of stroke width"),
+    , prop_to_stroke_width(_("_In units of stroke width"), _("Gap width is given in multiples of stroke width. When unchecked, document units are used."),
                            "prop_to_stroke_width", &wr, this, true)
     , both(_("_Both gaps"), _("Use gap in both intersection elements"), "both", &wr, this, false)
-    , inverse_width(_("_Groups: Inverse"), _("Use other stroke width, useful in groups with diferent stroke width"),
+    , inverse_width(_("_Groups: Inverse"), _("Use other stroke width, useful in groups with different stroke widths"),
                     "inverse_width", &wr, this, false)
-    , unclimb(_("_Groups: unclimb"), _("Don`t climb the gap in the same path"), "unclimb", &wr, this, false)
     , add_stroke_width("St_roke width", "Add the stroke width to the interruption size", "add_stroke_width", &wr, this,
                        "inkscape_1.0_and_up", true)
     , add_other_stroke_width("_Crossing path stroke width", "Add crossed stroke width to the interruption size",
@@ -376,7 +375,6 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     registerParameter(&add_stroke_width);
     registerParameter(&both);
     registerParameter(&inverse_width);
-    registerParameter(&unclimb);
     registerParameter(&add_other_stroke_width);
     registerParameter(&crossing_points_vector);
 
@@ -449,9 +447,6 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
 
 
                 int geom_sign = ( cross(flag_i[1], flag_j[1]) < 0 ? 1 : -1);
-                if (unclimb) {
-                    geom_sign = comp % 2 == 0 ? -1 : -1;
-                }
                 bool i0_is_under = false;
                 double width = interruption_width;
                 if ( crossing_points[p].sign * geom_sign > 0 ){
@@ -660,7 +655,7 @@ void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
     e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-              _("Drag to select a crossing, click to flip it, Ctrl + click to update all crossings"));
+              _("Drag to select a crossing, click to flip it, Shift + click to change all crossings, Ctrl + click to reset and change all crossings"));
     knotholder->add(e);
 };
 
@@ -690,7 +685,10 @@ KnotHolderEntityCrossingSwitcher::knot_click(guint state)
     unsigned s = lpe->selectedCrossing;
     if (s < lpe->crossing_points.size()){
         if (state & GDK_SHIFT_MASK){
-            lpe->crossing_points[s].sign = 1;
+            int sign = lpe->crossing_points[s].sign;
+            for (unsigned p = 0; p < lpe->crossing_points.size(); p++) {
+                lpe->crossing_points[p].sign = ((lpe->crossing_points[p].sign + 2) % 3) - 1;
+            }
         }
         else if (state & GDK_CONTROL_MASK) {
             int sign = lpe->crossing_points[s].sign;
