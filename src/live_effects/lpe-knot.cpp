@@ -351,8 +351,10 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject)
     // initialise your parameters here:
     interruption_width(_("_Gap length:"), _("Size of hidden region of lower string"), "interruption_width", &wr, this,
                        3)
-    , prop_to_stroke_width(_("_In units of stroke width"), _("Gap width is given in multiples of stroke width. When unchecked, document units are used."),
-                           "prop_to_stroke_width", &wr, this, true)
+    , prop_to_stroke_width(
+          _("_In units of stroke width"),
+          _("Gap width is given in multiples of stroke width. When unchecked, document units are used."),
+          "prop_to_stroke_width", &wr, this, true)
     , both(_("_Both gaps"), _("Use gap in both intersection elements"), "both", &wr, this, false)
     , inverse_width(_("_Groups: Inverse"), _("Use other stroke width, useful in groups with different stroke widths"),
                     "inverse_width", &wr, this, false)
@@ -655,7 +657,8 @@ void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
     e->create(nullptr, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-              _("Drag to select a crossing, click to flip it, Shift + click to change all crossings, Ctrl + click to reset and change all crossings"));
+              _("Drag to select a crossing, click to flip it, Shift + click to change all crossings, Ctrl + click to "
+                "reset and change all crossings"));
     knotholder->add(e);
 };
 
