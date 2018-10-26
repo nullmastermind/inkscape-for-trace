@@ -720,11 +720,11 @@ msgstr "Crumpled matte plastic, with melted edge"
 
 #: ../share/filters/filters.svg.h:254
 msgid "Enamel Jewelry"
-msgstr "Enamel Jewelry"
+msgstr "Enamel Jewellery"
 
 #: ../share/filters/filters.svg.h:256
 msgid "Slightly cracked enameled texture"
-msgstr "Slightly cracked enameled texture"
+msgstr "Slightly cracked enamelled texture"
 
 #: ../share/filters/filters.svg.h:258
 msgid "Rough Paper"
@@ -792,7 +792,7 @@ msgstr "Tartan"
 
 #: ../share/filters/filters.svg.h:288
 msgid "Checkered tartan pattern"
-msgstr "Checkered tartan pattern"
+msgstr "Chequered tartan pattern"
 
 #: ../share/filters/filters.svg.h:290
 msgid "Shaken Liquid"
@@ -1019,7 +1019,7 @@ msgstr "3D Wood"
 
 #: ../share/filters/filters.svg.h:400
 msgid "3D warped, fibered wood texture"
-msgstr "3D warped, fibered wood texture"
+msgstr "3D warped, fibred wood texture"
 
 #: ../share/filters/filters.svg.h:402
 msgid "3D Mother of Pearl"
@@ -1121,7 +1121,7 @@ msgstr "Adds a small scale graininess"
 
 #: ../share/filters/filters.svg.h:418
 msgid "Plaster Color"
-msgstr "Plaster Color"
+msgstr "Plaster Colour"
 
 #: ../share/filters/filters.svg.h:420
 msgid "Colored plaster emboss effect"
@@ -1262,7 +1262,7 @@ msgstr "Carnaval"
 
 #: ../share/filters/filters.svg.h:476
 msgid "White splotches evocating carnaval masks"
-msgstr "White splotches evocating carnaval masks"
+msgstr "White splotches evoking carnaval masks"
 
 #: ../share/filters/filters.svg.h:478
 msgid "Plastify"
@@ -1564,7 +1564,7 @@ msgstr "Plasticine"
 
 #: ../share/filters/filters.svg.h:612
 msgid "Matte modeling paste emboss effect"
-msgstr "Matte modeling paste emboss effect"
+msgstr "Matte modelling paste emboss effect"
 
 #: ../share/filters/filters.svg.h:614
 msgid "Rough Canvas Painting"
@@ -1635,7 +1635,7 @@ msgstr "Fill Background"
 
 #: ../share/filters/filters.svg.h:648
 msgid "Adds a colorizable opaque background"
-msgstr "Adds a colorisable opaque background"
+msgstr "Adds a colourisable opaque background"
 
 #: ../share/filters/filters.svg.h:650
 msgid "Flatten Transparency"
@@ -1717,7 +1717,7 @@ msgstr "Alpha Turbulent"
 
 #: ../share/filters/filters.svg.h:690
 msgid "Colorize Turbulent"
-msgstr "Colorise Turbulent"
+msgstr "Colourise Turbulent"
 
 #: ../share/filters/filters.svg.h:694
 msgid "Cross Noise B"
@@ -1921,7 +1921,7 @@ msgstr "Carving emboss effect"
 
 #: ../share/filters/filters.svg.h:802
 msgid "Chromolitho Alternate"
-msgstr "Chromolitho Alternate"
+msgstr "Chromolitho Alternative"
 
 #: ../share/filters/filters.svg.h:804
 msgid "Old chromolithographic effect"
@@ -3288,11 +3288,11 @@ msgstr "Stripes 4:1 white"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Checkerboard"
-msgstr "Checkerboard"
+msgstr "Chequerboard"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Checkerboard white"
-msgstr "Checkerboard white"
+msgstr "Chequerboard white"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Packed circles"
@@ -5256,7 +5256,7 @@ msgstr "Colourise"
 
 #: ../src/extension/internal/bitmap/colorize.cpp:58
 msgid "Colorize selected bitmap(s) with specified color, using given opacity"
-msgstr "Colorise selected bitmap(s) with specified colour, using given opacity"
+msgstr "Colourise selected bitmap(s) with specified colour, using given opacity"
 
 #: ../src/extension/internal/bitmap/contrast.cpp:40
 #: ../src/extension/internal/filter/color.h:1190
@@ -7387,7 +7387,7 @@ msgstr "Stroke opacity:"
 
 #: ../src/extension/internal/filter/morphology.h:206
 msgid "Adds a colorizable outline"
-msgstr "Adds a colorisable outline"
+msgstr "Adds a colourisable outline"
 
 #: ../src/extension/internal/filter/overlays.h:56
 msgid "Noise Fill"
@@ -7737,7 +7737,7 @@ msgstr "Use object's colour"
 
 #: ../src/extension/internal/filter/shadows.h:84
 msgid "Colorizable Drop shadow"
-msgstr "Colorisable Drop shadow"
+msgstr "Colourisable Drop shadow"
 
 #: ../src/extension/internal/filter/textures.h:62
 msgid "Ink Blot"
@@ -9029,7 +9029,7 @@ msgstr ""
 
 #: ../src/knot.cpp:343
 msgid "Node or handle drag canceled."
-msgstr "Node or handle drag canceled."
+msgstr "Node or handle drag cancelled."
 
 #: ../src/knotholder.cpp:194
 msgid "Change handle"
@@ -11077,7 +11077,7 @@ msgstr "Centre mirror line"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:63
 msgid "Adjust center of mirroring"
-msgstr "Adjust center of mirroring"
+msgstr "Adjust centre of mirroring"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:64
 #: ../share/extensions/pathalongpath.inx.h:10
@@ -11294,7 +11294,7 @@ msgstr "Background opacity"
 #: ../src/live_effects/lpe-powermask.cpp:38
 #, fuzzy
 msgid "Set color and opacity of the background"
-msgstr "Adds a colorisable opaque background"
+msgstr "Adds a colourisable opaque background"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:126
 msgid "CubicBezierSmooth"
@@ -13519,7 +13519,7 @@ msgstr "Fragment:"
 
 #: ../src/rdf.cpp:298
 msgid "XML fragment for the RDF 'License' section"
-msgstr "XML fragment for the RDF 'License' section"
+msgstr "XML fragment for the RDF 'Licence' section"
 
 #: ../src/resource-manager.cpp:377
 msgid "Fixup broken links"
@@ -15785,14 +15785,14 @@ msgstr "If unset, no antialiasing will be done on the drawing"
 
 #: ../src/ui/dialog/document-properties.cpp:104
 msgid "Checkerboard background"
-msgstr "Checkerboard background"
+msgstr "Chequerboard background"
 
 #: ../src/ui/dialog/document-properties.cpp:104
 msgid ""
 "If set, use checkerboard for background, otherwise use background color at "
 "full opacity."
 msgstr ""
-"If set, use checkerboard for background, otherwise use background colour at "
+"If set, use chequerboard for background, otherwise use background colour at "
 "full opacity."
 
 #: ../src/ui/dialog/document-properties.cpp:105
@@ -15830,7 +15830,7 @@ msgid ""
 "bitmap)."
 msgstr ""
 "Colour of the page background. Note: transparency setting ignored while "
-"editing if 'Checkerboard background' unset (but used when exporting to "
+"editing if 'Chequerboard background' unset (but used when exporting to "
 "bitmap)."
 
 #: ../src/ui/dialog/document-properties.cpp:109
@@ -19890,7 +19890,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:774
 msgid "Dialog behavior (requires restart)"
-msgstr "Dialogue behavior (requires restart)"
+msgstr "Dialogue behaviour (requires restart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:780
 msgid "Desktop integration"
@@ -21335,12 +21335,12 @@ msgstr "Average quality, acceptable display speed"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1501
 #: ../src/ui/dialog/inkscape-preferences.cpp:1525
 msgid "Lower quality (some artifacts), but display is faster"
-msgstr "Lower quality (some artifacts), but display is faster"
+msgstr "Lower quality (some artefacts), but display is faster"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1503
 #: ../src/ui/dialog/inkscape-preferences.cpp:1527
 msgid "Lowest quality (considerable artifacts), but display is fastest"
-msgstr "Lowest quality (considerable artifacts), but display is fastest"
+msgstr "Lowest quality (considerable artefacts), but display is fastest"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1517
 msgid "Filter effects quality for display"
@@ -22545,7 +22545,7 @@ msgstr "Convert to _B-spline curves"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:269
 msgid "Preserve staircasing artifacts"
-msgstr "Preserve staircasing artifacts"
+msgstr "Preserve staircasing artefacts"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:276
 msgid "_Smooth curves"
@@ -23481,7 +23481,7 @@ msgstr "Remove bottom (background) layer when done"
 
 #: ../src/ui/dialog/tracedialog.cpp:673
 msgid "Multiple scans: creates a group of paths"
-msgstr "Multiple scana: creates a group of paths"
+msgstr "Multiple scans: creates a group of paths"
 
 #. # end multiple scan
 #. ## end mode page
@@ -25051,11 +25051,11 @@ msgstr "Choose a construction tool from the toolbar."
 #. create the knots
 #: ../src/ui/tools/measure-tool.cpp:343
 msgid "Measure start, <b>Shift+Click</b> for position dialog"
-msgstr "Measure start, <b>Shift+Click</b> for position dialog"
+msgstr "Measure start, <b>Shift+Click</b> for position dialogue"
 
 #: ../src/ui/tools/measure-tool.cpp:349
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
-msgstr "Measure end, <b>Shift+Click</b> for position dialog"
+msgstr "Measure end, <b>Shift+Click</b> for position dialogue"
 
 #: ../src/ui/tools/measure-tool.cpp:756 ../share/extensions/measure.inx.h:2
 msgid "Measure"
@@ -25414,11 +25414,11 @@ msgstr ""
 
 #: ../src/ui/tools/select-tool.cpp:206
 msgid "Move canceled."
-msgstr "Move canceled."
+msgstr "Move cancelled."
 
 #: ../src/ui/tools/select-tool.cpp:214
 msgid "Selection canceled."
-msgstr "Selection canceled."
+msgstr "Selection cancelled."
 
 #: ../src/ui/tools/select-tool.cpp:646
 msgid ""
@@ -29821,7 +29821,7 @@ msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 msgstr ""
-"Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
+"Angle behaviour (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 
 #. Cap Rounding
@@ -39586,7 +39586,7 @@ msgid ""
 "enabled browsers, etc."
 msgstr ""
 "Remove metadata tags along with all the contained information, which may "
-"include licence and author information, alternate versions for non-SVG-"
+"include licence and author information, alternative versions for non-SVG-"
 "enabled browsers, etc."
 
 #: ../share/extensions/scour.inx.h:24
@@ -39950,7 +39950,7 @@ msgstr "Percent:"
 
 #: ../share/extensions/straightseg.inx.h:3
 msgid "Behavior:"
-msgstr "Behavior:"
+msgstr "Behaviour:"
 
 #: ../share/extensions/summersnight.inx.h:1
 msgid "Envelope"
@@ -41011,13 +41011,13 @@ msgstr "Tutorials"
 #~ "If set, the dock item can be resized when docked in a GtkPanel widget"
 
 #~ msgid "Item behavior"
-#~ msgstr "Item behavior"
+#~ msgstr "Item behaviour"
 
 #~ msgid ""
 #~ "General behavior for the dock item (i.e. whether it can float, if it's "
 #~ "locked, etc.)"
 #~ msgstr ""
-#~ "General behavior for the dock item (i.e. whether it can float, if it's "
+#~ "General behaviour for the dock item (i.e. whether it can float, if it's "
 #~ "locked, etc.)"
 
 #~ msgid "Locked"
@@ -41938,7 +41938,7 @@ msgstr "Tutorials"
 
 #~ msgctxt "Symbol"
 #~ msgid "Jewlers"
-#~ msgstr "Jewlers"
+#~ msgstr "Jewellers"
 
 #~ msgctxt "Symbol"
 #~ msgid "Hairdressers"
@@ -42006,7 +42006,7 @@ msgstr "Tutorials"
 
 #~ msgctxt "Symbol"
 #~ msgid "Off License / Liquor Store"
-#~ msgstr "Off License / Liquor Store"
+#~ msgstr "Off Licence / Liquor Store"
 
 #~ msgctxt "Symbol"
 #~ msgid "Tennis"
@@ -45029,7 +45029,7 @@ msgstr "Tutorials"
 #~ msgstr ""
 #~ "Error exporting the document. Verify if the server name, username and "
 #~ "password are correct, if the server has support for webdav and verify if "
-#~ "you didn't forget to choose a license."
+#~ "you didn't forget to choose a licence."
 
 #~ msgid "Document exported..."
 #~ msgstr "Document exported..."
