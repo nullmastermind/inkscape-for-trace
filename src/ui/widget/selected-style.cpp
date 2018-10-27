@@ -1096,7 +1096,10 @@ SelectedStyle::update()
         current_stroke_width = w;
 
         {
-            gchar *str = g_strdup_printf(" %.3g", w);
+            gchar *str = g_strdup_printf(" %#.3g", w);
+            if (str[strlen(str)-1] == ',') {
+                str[strlen(str)-1] = '\0';
+            }
             _stroke_width.set_markup(str);
             g_free (str);
         }
