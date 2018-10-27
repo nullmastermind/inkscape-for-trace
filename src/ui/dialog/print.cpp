@@ -16,6 +16,7 @@
 
 #include <gtkmm.h>
 
+#include "inkscape.h"
 #include "preferences.h"
 #include "print.h"
 
@@ -220,7 +221,10 @@ void Print::begin_print(const Glib::RefPtr<Gtk::PrintContext>&)
 
 Gtk::PrintOperationResult Print::run(Gtk::PrintOperationAction, Gtk::Window &parent_window)
 {
+    // Remember to restore the previous print settings
+    _printop->set_print_settings(SP_ACTIVE_DESKTOP->printer_settings._gtk_print_settings);
     _printop->run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parent_window);
+    SP_ACTIVE_DESKTOP->printer_settings._gtk_print_settings = _printop->get_print_settings();
     return Gtk::PRINT_OPERATION_RESULT_APPLY;
 }
 

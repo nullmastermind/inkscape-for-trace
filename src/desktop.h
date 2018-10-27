@@ -34,6 +34,7 @@
 
 #include "preferences.h"
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
+#include "ui/dialog/print.h"
 
 class SPCSSAttr;
 struct SPCanvas;
@@ -147,6 +148,8 @@ public:
     DocumentInterface *dbus_document_interface;
     Inkscape::Display::TemporaryItemList *temporary_item_list;
     Inkscape::Display::SnapIndicator *snapindicator;
+    /// Stored settings for print dialogue
+    Inkscape::UI::Dialog::PrinterSettings printer_settings;
 
     Inkscape::UI::Tools::ToolBase* getEventContext() const;
     Inkscape::Selection* getSelection() const;
