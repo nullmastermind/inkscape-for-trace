@@ -86,7 +86,6 @@ set(inkscape_SRC
   sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
-  svg-view-slideshow.cpp
   svg-view-widget.cpp
   svg-view.cpp
   text-chemistry.cpp
@@ -207,7 +206,6 @@ set(inkscape_SRC
   style-internal.h
   style.h
   svg-profile.h
-  svg-view-slideshow.h
   svg-view-widget.h
   svg-view.h
   syseq.h
@@ -285,9 +283,11 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 set(main_SRC main.cpp)
 set(view_SRC
-  inkview.cpp
-  inkview-options-group.cpp
-  inkview-options-group.h
+  inkview-main.cpp
+  inkview-application.h
+  inkview-application.cpp
+  inkview-window.h
+  inkview-window.cpp
 )
 
 if(WIN32)
