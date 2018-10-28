@@ -36,6 +36,7 @@ private:
     bool   recursive;
     int    timer;
     double scale;
+    bool   preload;
 
     InkviewWindow* window;
 };

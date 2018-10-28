@@ -35,6 +35,7 @@ InkviewApplication::InkviewApplication()
     , recursive(false)
     , timer(0)
     , scale(1.0)
+    , preload(false)
 {
     // ==================== Initializations =====================
     // Garbage Collector
@@ -54,6 +55,7 @@ InkviewApplication::InkviewApplication()
     add_main_option_entry(OPTION_TYPE_BOOL,     "recursive",  'r', N_("Search folders recursively"),                  "");
     add_main_option_entry(OPTION_TYPE_INT,      "timer",      't', N_("Change image every NUMBER seconds"), N_("NUMBER"));
     add_main_option_entry(OPTION_TYPE_DOUBLE,   "scale",      's', N_("Scale image by factor NUMBER"),      N_("NUMBER"));
+    add_main_option_entry(OPTION_TYPE_BOOL,     "preload",    'p', N_("Preload files"),                               "");
    
     signal_handle_local_options().connect(sigc::mem_fun(*this, &InkviewApplication::on_handle_local_options));
 
@@ -89,7 +91,7 @@ InkviewApplication::on_activate()
 void
 InkviewApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
-    window = new InkviewWindow(files, fullscreen, recursive, timer, scale);
+    window = new InkviewWindow(files, fullscreen, recursive, timer, scale, preload);
     window->show_all();
     add_window(*window);
 }
@@ -122,6 +124,10 @@ InkviewApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict
 
     if (options->contains("scale")) {
         options->lookup_value("scale", scale);
+    }
+
+    if (options->contains("preload")) {
+        options->lookup_value("preload", preload);
     }
 
     return -1; // Keep going

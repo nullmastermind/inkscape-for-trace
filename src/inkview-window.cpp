@@ -23,17 +23,25 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
                              bool fullscreen,
                              bool recursive,
                              int timer,
-                             double scale)
+                             double scale,
+                             bool preload
+    )
     : _files(files)
     , _fullscreen(fullscreen)
     , _recursive(recursive)
     , _timer(timer)
     , _scale(scale)
+    , _preload(preload)
     , _index(-1)
     , _view(nullptr)
     , _controlwindow(nullptr)
 {
     _files = create_file_list(_files);
+
+    if (_preload) {
+        preload_documents();
+    }
+
     _documents.resize( _files.size(), nullptr); // We keep _documents and _files in sync.
 
     // Callbacks
@@ -165,6 +173,24 @@ InkviewWindow::load_document()
     }
 
     return document;
+}
+
+
+
+void
+InkviewWindow::preload_documents()
+{
+    for (auto it =_files.begin(); it != _files.end(); ) {
+
+        SPDocument* document =
+            SPDocument::createNewDoc ((*it)->get_parse_name().c_str(), true, false);
+        if (document) {
+            _documents.push_back(document);
+            ++it;
+        } else {
+            it = _files.erase(it);
+        }
+    }
 }
 
 static std::string window_markup = R"(

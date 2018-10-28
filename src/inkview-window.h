@@ -16,38 +16,40 @@ class SPDocument;
 
 class InkviewWindow : public Gtk::ApplicationWindow {
 
- public:
-  InkviewWindow(const Gio::Application::type_vec_files files,
-                bool fullscreen, bool recursive, int timer, double scale);
+public:
+    InkviewWindow(const Gio::Application::type_vec_files files,
+                  bool fullscreen, bool recursive, int timer, double scale, bool preload);
 
- private:
-  std::vector<Glib::RefPtr<Gio::File> >
+private:
+    std::vector<Glib::RefPtr<Gio::File> >
     create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& files);
-  void update_title();
-  bool show_document(SPDocument* document);
-  SPDocument* load_document();
+    void update_title();
+    bool show_document(SPDocument* document);
+    SPDocument* load_document();
+    void preload_documents();
 
-  Gio::Application::type_vec_files  _files;
-  bool   _fullscreen;
-  bool   _recursive;
-  int    _timer;
-  double _scale;
+    Gio::Application::type_vec_files  _files;
+    bool   _fullscreen;
+    bool   _recursive;
+    int    _timer;
+    double _scale;
+    bool   _preload;
 
-  int _index;
-  std::vector<SPDocument*> _documents;
+    int _index;
+    std::vector<SPDocument*> _documents;
 
-  GtkWidget* _view;
-  Gtk::Window* _controlwindow;
+    GtkWidget* _view;
+    Gtk::Window* _controlwindow;
 
-  // Callbacks
-  void show_control();
-  void show_next();
-  void show_prev();
-  void show_first();
-  void show_last();
+    // Callbacks
+    void show_control();
+    void show_next();
+    void show_prev();
+    void show_first();
+    void show_last();
 
-  bool key_press(GdkEventKey* event);
-  bool on_timer();
+    bool key_press(GdkEventKey* event);
+    bool on_timer();
 };
 
 #endif // INKVIEW_WINDOW_H
