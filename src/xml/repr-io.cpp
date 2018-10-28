@@ -75,7 +75,6 @@ public:
           LoadEntities(false),
           cachedData(),
           cachedPos(0),
-          dummy("x"),
           instr(nullptr),
           gzin(nullptr)
     {
@@ -112,8 +111,7 @@ private:
     bool LoadEntities; // Checks for SYSTEM Entities (requires cached data)
     std::string cachedData;
     unsigned int cachedPos;
-    Inkscape::URI dummy;
-    Inkscape::IO::UriInputStream* instr;
+    Inkscape::IO::FileInputStream* instr;
     Inkscape::IO::GzipInputStream* gzin;
 };
 
@@ -136,7 +134,7 @@ int XmlSource::setFile(char const *filename, bool load_entities=false)
                 fclose(fp);
                 fp = nullptr;
                 fp = Inkscape::IO::fopen_utf8name(filename, "r");
-                instr = new Inkscape::IO::UriInputStream(fp, dummy);
+                instr = new Inkscape::IO::FileInputStream(fp);
                 gzin = new Inkscape::IO::GzipInputStream(*instr);
 
                 memset( firstFew, 0, sizeof(firstFew) );
@@ -669,8 +667,7 @@ void sp_repr_save_stream(Document *doc, FILE *fp, gchar const *default_ns, bool 
                     gchar const *const old_href_abs_base,
                     gchar const *const new_href_abs_base)
 {
-    Inkscape::URI dummy("x");
-    Inkscape::IO::UriOutputStream bout(fp, dummy);
+    Inkscape::IO::FileOutputStream bout(fp);
     Inkscape::IO::GzipOutputStream *gout = compress ? new Inkscape::IO::GzipOutputStream(bout) : nullptr;
     Inkscape::IO::OutputStreamWriter *out  = compress ? new Inkscape::IO::OutputStreamWriter( *gout ) : new Inkscape::IO::OutputStreamWriter( bout );
 

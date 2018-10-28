@@ -29,22 +29,19 @@ namespace IO
 {
 
 //#########################################################################
-//# U R I    I N P U T    S T R E A M   /   R E A D E R
+//# F I L E    I N P U T    S T R E A M
 //#########################################################################
 
 /**
- * This class is for receiving a stream of data from a resource
- * defined in a URI
+ * This class is for receiving a stream of data from a file
  */
-class UriInputStream : public InputStream
+class FileInputStream : public InputStream
 {
 
 public:
-    UriInputStream(FILE *source, Inkscape::URI &uri);
+    FileInputStream(FILE *source);
 
-    UriInputStream(Inkscape::URI &source);
-
-    ~UriInputStream() override;
+    ~FileInputStream() override;
 
     int available() override;
 
@@ -53,66 +50,28 @@ public:
     int get() override;
 
 private:
-    Inkscape::URI &uri;
     FILE *inf;           //for file: uris
-    unsigned char *data; //for data: uris
-    int dataPos;         //  current read position in data field
-    int dataLen;         //  length of data buffer
-    bool closed;
-    int scheme;
 
+}; // class FileInputStream
 
-}; // class UriInputStream
-
-
-
-
-/**
- * This class is for receiving a stream of formatted data from a resource
- * defined in a URI
- */
-class UriReader : public BasicReader
-{
-
-public:
-
-    UriReader(Inkscape::URI &source);
-
-    ~UriReader() override;
-
-    int available() override;
-
-    void close() override;
-
-    char get() override;
-
-private:
-
-    UriInputStream *inputStream;
-
-}; // class UriReader
 
 
 
 //#########################################################################
-//# U R I    O U T P U T    S T R E A M    /    W R I T E R
+//# F I L E    O U T P U T    S T R E A M
 //#########################################################################
 
 /**
- * This class is for sending a stream to a destination resource
- * defined in a URI
- *
+ * This class is for sending a stream to a destination file
  */
-class UriOutputStream : public OutputStream
+class FileOutputStream : public OutputStream
 {
 
 public:
 
-    UriOutputStream(FILE *fp, Inkscape::URI &destination);
+    FileOutputStream(FILE *fp);
 
-    UriOutputStream(Inkscape::URI &destination);
-
-    ~UriOutputStream() override;
+    ~FileOutputStream() override;
 
     void close() override;
 
@@ -122,47 +81,11 @@ public:
 
 private:
 
-    bool closed;
     bool ownsFile;
 
     FILE *outf;         //for file: uris
-    Glib::ustring data; //for data: uris
 
-    Inkscape::URI &uri;
-
-    int scheme;
-
-}; // class UriOutputStream
-
-
-
-
-
-/**
- * This class is for sending a stream of formatted data to a resource
- * defined in a URI
- */
-class UriWriter : public BasicWriter
-{
-
-public:
-
-    UriWriter(Inkscape::URI &source);
-
-    ~UriWriter() override;
-
-    void close() override;
-
-    void flush() override;
-
-    void put(char ch) override;
-
-private:
-
-    UriOutputStream *outputStream;
-
-}; // class UriReader
-
+}; // class FileOutputStream
 
 
 
@@ -173,3 +96,5 @@ private:
 
 
 #endif // SEEN_INKSCAPE_IO_URISTREAM_H
+
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

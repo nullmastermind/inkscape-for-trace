@@ -93,7 +93,7 @@ private:
     int outsize;
     int outpos;
 
-}; // class UriInputStream
+}; // class XsltInputStream
 
 
 
@@ -128,7 +128,7 @@ private:
     
     bool flushed;
 
-}; // class UriOutputStream
+}; // class XsltOutputStream
 
 
 
