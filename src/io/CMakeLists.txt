@@ -1,6 +1,5 @@
 
 set(io_SRC
-  base64stream.cpp
   bufferstream.cpp
   dir-util.cpp
   gzipstream.cpp
@@ -15,7 +14,6 @@ set(io_SRC
 
   # -------
   # Headers
-  base64stream.h
   bufferstream.h
   dir-util.h
   gzipstream.h

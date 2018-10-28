@@ -34,8 +34,6 @@
 #include "svg/svg-color.h"
 #include "color.h"
 #include "util/units.h"
-#include "io/stringstream.h"
-#include "io/base64stream.h"
 #include "display/nr-filter-utils.h"
 #include "libnrtype/font-instance.h"
 #include "object/sp-defs.h"
@@ -1465,20 +1463,12 @@ void SvgBuilder::endTextObject(GfxState * /*state*/) {
 /**
  * Helper functions for supporting direct PNG output into a base64 encoded stream
  */
-void png_write_base64stream(png_structp png_ptr, png_bytep data, png_size_t length)
+void png_write_vector(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    Inkscape::IO::Base64OutputStream *stream =
-            (Inkscape::IO::Base64OutputStream*)png_get_io_ptr(png_ptr); // Get pointer to stream
+    auto *v_ptr = reinterpret_cast<std::vector<guchar> *>(png_get_io_ptr(png_ptr)); // Get pointer to stream
     for ( unsigned i = 0 ; i < length ; i++ ) {
-        stream->put((int)data[i]);
+        v_ptr->push_back(data[i]);
     }
-}
-
-void png_flush_base64stream(png_structp png_ptr)
-{
-    Inkscape::IO::Base64OutputStream *stream =
-            (Inkscape::IO::Base64OutputStream*)png_get_io_ptr(png_ptr); // Get pointer to stream
-    stream->flush();
 }
 
 /**
@@ -1511,13 +1501,11 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     sp_repr_get_int(_preferences, "embedImages", &attr_value);
     bool embed_image = ( attr_value != 0 );
     // Set read/write functions
-    Inkscape::IO::StringOutputStream base64_string;
-    Inkscape::IO::Base64OutputStream base64_stream(base64_string);
+    std::vector<guchar> png_buffer;
     FILE *fp = nullptr;
     gchar *file_name = nullptr;
     if (embed_image) {
-        base64_stream.setColumnWidth(0);   // Disable line breaks
-        png_set_write_fn(png_ptr, &base64_stream, png_write_base64stream, png_flush_base64stream);
+        png_set_write_fn(png_ptr, &png_buffer, png_write_vector, nullptr);
     } else {
         static int counter = 0;
         file_name = g_strdup_printf("%s_img%d.png", _docname, counter++);
@@ -1652,7 +1640,6 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     // Close PNG
     png_write_end(png_ptr, info_ptr);
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    base64_stream.close();
 
     // Create repr
     Inkscape::XML::Node *image_node = _xml_doc->createElement("svg:image");
@@ -1676,8 +1663,9 @@ Inkscape::XML::Node *SvgBuilder::_createImage(Stream *str, int width, int height
     // Create href
     if (embed_image) {
         // Append format specification to the URI
-        Glib::ustring& png_data = base64_string.getString();
-        png_data.insert(0, "data:image/png;base64,");
+        auto *base64String = g_base64_encode(png_buffer.data(), png_buffer.size());
+        auto png_data = std::string("data:image/png;base64,") + base64String;
+        g_free(base64String);
         image_node->setAttribute("xlink:href", png_data.c_str());
     } else {
         fclose(fp);
