@@ -18,7 +18,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/entry.h>
 
-#include "document-private.h"
 #include "document-undo.h"
 #include "inkscape.h"
 #include "preferences.h"
@@ -122,7 +121,7 @@ EntityLineEntry::on_changed()
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     Glib::ustring text = static_cast<Gtk::Entry*>(_packable)->get_text();
     if (rdf_set_work_entity (doc, _entity, text.c_str())) {
-        if (doc->priv->sensitive) {
+        if (doc->sensitive) {
             DocumentUndo::done(doc, SP_VERB_NONE, "Document metadata updated");
         }
     }

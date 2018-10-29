@@ -122,7 +122,6 @@ set(inkscape_SRC
   desktop-style.h
   desktop.h
   device-manager.h
-  document-private.h
   document-subset.h
   document-undo.h
   document.h

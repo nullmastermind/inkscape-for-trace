@@ -43,7 +43,6 @@
 
 #include "desktop.h"
 #include "io/dir-util.h"
-#include "document-private.h"
 #include "document-undo.h"
 #include "file.h"
 #include "id-clash.h"
@@ -105,7 +104,6 @@ SPDocument::SPDocument() :
     uri(nullptr),
     base(nullptr),
     name(nullptr),
-    priv(nullptr), // reset in ctor
     actionkey(),
     modified_id(0),
     rerouting_handler_id(0),
@@ -121,27 +119,23 @@ SPDocument::SPDocument() :
     // This results in much better looking orthogonal connector paths.
     router->setRoutingPenalty(Avoid::segmentPenalty);
 
-    SPDocumentPrivate *p = new SPDocumentPrivate();
+    _serial = next_serial++;
 
-    p->serial = next_serial++;
-
-    p->sensitive = false;
-    p->partial = nullptr;
-    p->history_size = 0;
-    p->seeking = false;
-
-    priv = p;
+    sensitive = false;
+    partial = nullptr;
+    history_size = 0;
+    seeking = false;
 
     // Once things are set, hook in the manager
     profileManager = new Inkscape::ProfileManager(this);
 
     // XXX only for testing!
-    priv->undoStackObservers.add(p->console_output_undo_observer);
+    undoStackObservers.add(console_output_undo_observer);
     _node_cache = std::deque<SPItem*>();
 }
 
 SPDocument::~SPDocument() {
-    priv->destroySignal.emit();
+    destroySignal.emit();
 
     // kill/unhook this first
     if ( profileManager ) {
@@ -155,33 +149,31 @@ SPDocument::~SPDocument() {
     }
 
     if (oldSignalsConnected) {
-        priv->selChangeConnection.disconnect();
-        priv->desktopActivatedConnection.disconnect();
+        selChangeConnection.disconnect();
+        desktopActivatedConnection.disconnect();
     } else {
         _selection_changed_connection.disconnect();
         _desktop_activated_connection.disconnect();
     }
 
-    if (priv) {
-        if (priv->partial) {
-            sp_repr_free_log(priv->partial);
-            priv->partial = nullptr;
-        }
-
-        DocumentUndo::clearRedo(this);
-        DocumentUndo::clearUndo(this);
-
-        if (root) {
-            root->releaseReferences();
-            sp_object_unref(root);
-            root = nullptr;
-        }
-
-        if (rdoc) Inkscape::GC::release(rdoc);
-
-        /* Free resources */
-        priv->resources.clear();
+    if (partial) {
+        sp_repr_free_log(partial);
+        partial = nullptr;
     }
+
+    DocumentUndo::clearRedo(this);
+    DocumentUndo::clearUndo(this);
+
+    if (root) {
+        root->releaseReferences();
+        sp_object_unref(root);
+        root = nullptr;
+    }
+
+    if (rdoc) Inkscape::GC::release(rdoc);
+
+    /* Free resources */
+    resources.clear();
 
     // This also destroys all attached stylesheets
     cr_cascade_unref(style_cascade);
@@ -226,7 +218,7 @@ SPDocument::~SPDocument() {
 
 sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
 {
-    return priv->destroySignal.connect(slot);
+    return destroySignal.connect(slot);
 }
 
 SPDefs *SPDocument::getDefs()
@@ -281,7 +273,7 @@ void SPDocument::initialize_current_persp3d()
 **/
 
 unsigned long SPDocument::serial() const {
-    return priv->serial;
+    return _serial;
 }
 
 void SPDocument::queueForOrphanCollection(SPObject *object) {
@@ -455,11 +447,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     DocumentUndo::setUndoSensitive(document, true);
 
     // reset undo key when selection changes, so that same-key actions on different objects are not coalesced
-    document->priv->selChangeConnection = INKSCAPE.signal_selection_changed.connect(
+    document->selChangeConnection = INKSCAPE.signal_selection_changed.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
-    document->priv->desktopActivatedConnection = INKSCAPE.signal_activate_desktop.connect(
+    document->desktopActivatedConnection = INKSCAPE.signal_activate_desktop.connect(
                 sigc::hide(sigc::bind(
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
@@ -696,7 +688,6 @@ void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const 
 
 Inkscape::Util::Quantity SPDocument::getWidth() const
 {
-    g_return_val_if_fail(this->priv != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
     g_return_val_if_fail(this->root != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
 
     gdouble result = root->width.value;
@@ -735,7 +726,6 @@ void SPDocument::setWidth(const Inkscape::Util::Quantity &width, bool changeSize
 
 Inkscape::Util::Quantity SPDocument::getHeight() const
 {
-    g_return_val_if_fail(this->priv != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
     g_return_val_if_fail(this->root != nullptr, Inkscape::Util::Quantity(0.0, unit_table.getUnit("")));
 
     gdouble result = root->height.value;
@@ -924,7 +914,7 @@ void SPDocument::do_change_uri(gchar const *const filename, bool const rebase)
     this->base = new_base;
     this->uri = new_uri;
 
-    this->priv->uri_set_signal.emit(this->uri);
+    this->uri_set_signal.emit(this->uri);
 }
 
 /**
@@ -952,52 +942,52 @@ void SPDocument::changeUriAndHrefs(gchar const *filename)
 
 void SPDocument::emitResizedSignal(gdouble width, gdouble height)
 {
-    this->priv->resized_signal.emit(width, height);
+    this->resized_signal.emit(width, height);
 }
 
 sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
 {
-    return priv->modified_signal.connect(slot);
+    return modified_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
 {
-    return priv->uri_set_signal.connect(slot);
+    return uri_set_signal.connect(slot);
 }
 
 sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
 {
-    return priv->resized_signal.connect(slot);
+    return resized_signal.connect(slot);
 }
 
 sigc::connection
 SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
 {
-    return priv->_reconstruction_start_signal.connect(slot);
+    return _reconstruction_start_signal.connect(slot);
 }
 
 void
 SPDocument::emitReconstructionStart()
 {
     // printf("Starting Reconstruction\n");
-    priv->_reconstruction_start_signal.emit();
+    _reconstruction_start_signal.emit();
     return;
 }
 
 sigc::connection
 SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
 {
-    return priv->_reconstruction_finish_signal.connect(slot);
+    return _reconstruction_finish_signal.connect(slot);
 }
 
 void
 SPDocument::emitReconstructionFinish()
 {
     // printf("Finishing Reconstruction\n");
-    priv->_reconstruction_finish_signal.emit();
+    _reconstruction_finish_signal.emit();
     // indicates that gradients are reloaded (to rebuild the Auto palette)
-    priv->resources_changed_signals[g_quark_from_string("gradient")].emit();
-    priv->resources_changed_signals[g_quark_from_string("filter")].emit();
+    resources_changed_signals[g_quark_from_string("gradient")].emit();
+    resources_changed_signals[g_quark_from_string("filter")].emit();
 
 
 /**    
@@ -1010,7 +1000,7 @@ SPDocument::emitReconstructionFinish()
 
 sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
 {
-    return priv->commit_signal.connect(slot);
+    return commit_signal.connect(slot);
 }
 
 
@@ -1018,7 +1008,7 @@ sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type s
 void SPDocument::_emitModified() {
     static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
     root->emitModified(0);
-    priv->modified_signal.emit(flags);
+    modified_signal.emit(flags);
     _node_cache_valid=false;
 }
 
@@ -1027,26 +1017,22 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
 
     if (object) {
         if(object->getId())
-            priv->iddef.erase(object->getId());
-        g_assert(priv->iddef.find(id)==priv->iddef.end());
-        priv->iddef[id] = object;
-        //g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) == NULL);
-        //g_hash_table_insert(priv->iddef, GINT_TO_POINTER(idq), object);
+            iddef.erase(object->getId());
+        g_assert(iddef.find(id)==iddef.end());
+        iddef[id] = object;
     } else {
-        g_assert(priv->iddef.find(id)!=priv->iddef.end());
-        priv->iddef.erase(id);
-        //g_assert(g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq)) != NULL);
-        //g_hash_table_remove(priv->iddef, GINT_TO_POINTER(idq));
+        g_assert(iddef.find(id)!=iddef.end());
+        iddef.erase(id);
     }
 
-    SPDocumentPrivate::IDChangedSignalMap::iterator pos;
+    SPDocument::IDChangedSignalMap::iterator pos;
 
-    pos = priv->id_changed_signals.find(idq);
-    if ( pos != priv->id_changed_signals.end() ) {
+    pos = id_changed_signals.find(idq);
+    if ( pos != id_changed_signals.end() ) {
         if (!(*pos).second.empty()) {
             (*pos).second.emit(object);
         } else { // discard unused signal
-            priv->id_changed_signals.erase(pos);
+            id_changed_signals.erase(pos);
         }
     }
 }
@@ -1054,31 +1040,23 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
 void
 SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
 {
-    this->priv->undoStackObservers.add(observer);
+    this->undoStackObservers.add(observer);
 }
 
 void
 SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
 {
-    this->priv->undoStackObservers.remove(observer);
+    this->undoStackObservers.remove(observer);
 }
 
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 {
-    return getObjectById( id.c_str() );
-}
-
-SPObject *SPDocument::getObjectById(gchar const *id) const
-{
-    g_return_val_if_fail(id != nullptr, NULL);
-    if (!priv || priv->iddef.empty()) {
+    if (id.empty() || iddef.empty()) {
     	return nullptr;
     }
 
-    // GQuark idq = g_quark_from_string(id);
-    std::map<std::string, SPObject *>::iterator rv = priv->iddef.find(id);
-    //gpointer rv = g_hash_table_lookup(priv->iddef, GINT_TO_POINTER(idq));
-    if(rv != priv->iddef.end())
+    std::map<std::string, SPObject *>::const_iterator rv = iddef.find(id);
+    if(rv != iddef.end())
     {
         return (rv->second);
     }
@@ -1086,12 +1064,22 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     {
         return nullptr;
     }
+    return getObjectById( id );
+}
+
+SPObject *SPDocument::getObjectById(gchar const *id) const
+{
+    if (id == nullptr) {
+        return nullptr;
+    }
+
+    return getObjectById(Glib::ustring(id));
 }
 
 sigc::connection SPDocument::connectIdChanged(gchar const *id,
                                               SPDocument::IDChangedSignal::slot_type slot)
 {
-    return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
+    return id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
@@ -1195,19 +1183,19 @@ std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &se
 void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object)
 {
     if (object) {
-        g_assert(priv->reprdef.find(repr)==priv->reprdef.end());
-        priv->reprdef[repr] = object;
+        g_assert(reprdef.find(repr)==reprdef.end());
+        reprdef[repr] = object;
     } else {
-        g_assert(priv->reprdef.find(repr)!=priv->reprdef.end());
-        priv->reprdef.erase(repr); 
+        g_assert(reprdef.find(repr)!=reprdef.end());
+        reprdef.erase(repr);
     }
 }
 
 SPObject *SPDocument::getObjectByRepr(Inkscape::XML::Node *repr) const
 {
     g_return_val_if_fail(repr != nullptr, NULL);
-    std::map<Inkscape::XML::Node *, SPObject *>::iterator rv = priv->reprdef.find(repr);
-    if(rv != priv->reprdef.end())
+    std::map<Inkscape::XML::Node *, SPObject *>::const_iterator rv = reprdef.find(repr);
+    if(rv != reprdef.end())
         return (rv->second);
     else
         return nullptr;
@@ -1569,7 +1557,6 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
 std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
-    g_return_val_if_fail(this->priv != nullptr, x);
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_insensitive, into_groups);
 }
 
@@ -1583,7 +1570,6 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
 std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
-    g_return_val_if_fail(this->priv != nullptr, x);
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_insensitive, into_groups);
 }
 
@@ -1635,8 +1621,6 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
                                     bool const into_groups, SPItem *upto) const 
 {
-    g_return_val_if_fail(this->priv != nullptr, NULL);
-
     // Build a flattened SVG DOM for find_item_at_point.
     std::deque<SPItem*> bak(_node_cache);
     if(!into_groups){
@@ -1657,8 +1641,6 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
 
 SPItem *SPDocument::getGroupAtPoint(unsigned int key, Geom::Point const &p) const
 {
-    g_return_val_if_fail(this->priv != nullptr, NULL);
-
     return find_group_at_point(key, SP_GROUP(this->root), p);
 }
 
@@ -1674,9 +1656,9 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = priv->resources[key];
+        std::vector<SPObject *> rlist = resources[key];
         g_return_val_if_fail(std::find(rlist.begin(),rlist.end(),object) == rlist.end(), false);
-        priv->resources[key].insert(priv->resources[key].begin(),object);
+        resources[key].insert(resources[key].begin(),object);
 
         GQuark q = g_quark_from_string(key);
 
@@ -1687,7 +1669,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         the backtrace is unusable with crashed from this cause]
         */
         if(object->getId() || dynamic_cast<SPGroup*>(object) )
-            priv->resources_changed_signals[q].emit();
+            resources_changed_signals[q].emit();
 
         result = true;
     }
@@ -1705,14 +1687,14 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
     bool result = false;
 
     if ( !object->cloned ) {
-        std::vector<SPObject *> rlist = priv->resources[key];
+        std::vector<SPObject *> rlist = resources[key];
         g_return_val_if_fail(!rlist.empty(), false);
-        std::vector<SPObject*>::iterator it = std::find(priv->resources[key].begin(),priv->resources[key].end(),object);
+        std::vector<SPObject*>::iterator it = std::find(resources[key].begin(),resources[key].end(),object);
         g_return_val_if_fail(it != rlist.end(), false);
-        priv->resources[key].erase(it);
+        resources[key].erase(it);
 
         GQuark q = g_quark_from_string(key);
-        priv->resources_changed_signals[q].emit();
+        resources_changed_signals[q].emit();
 
         result = true;
     }
@@ -1720,20 +1702,20 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
     return result;
 }
 
-std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key) const
+std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key)
 {
     std::vector<SPObject *> emptyset;
     g_return_val_if_fail(key != nullptr, emptyset);
     g_return_val_if_fail(*key != '\0', emptyset);
 
-    return this->priv->resources[key];
+    return resources[key];
 }
 
 sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
                                                      SPDocument::ResourcesChangedSignal::slot_type slot)
 {
     GQuark q = g_quark_from_string(key);
-    return this->priv->resources_changed_signals[q].connect(slot);
+    return resources_changed_signals[q].connect(slot);
 }
 
 /* Helpers */
@@ -1808,7 +1790,7 @@ unsigned int SPDocument::vacuumDocument()
 }
 
 bool SPDocument::isSeeking() const {
-    return priv->seeking;
+    return seeking;
 }
 
 /**
