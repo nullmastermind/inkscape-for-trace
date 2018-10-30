@@ -100,10 +100,12 @@ Gtk::HBox* SvgFontsDialog::AttrEntry(gchar* lbl, const SPAttributeEnum attr){
 }
 */
 
-SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr){
+SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr){
     this->dialog = d;
     this->attr = attr;
-    this->add(* Gtk::manage(new Gtk::Label(lbl)) );
+    entry.set_tooltip_text(tooltip);
+    auto label = new Gtk::Label(lbl);
+    this->add(*Gtk::manage(label));
     this->add(entry);
     this->show_all();
 
@@ -145,10 +147,11 @@ void SvgFontsDialog::AttrEntry::on_attr_changed(){
 
 }
 
-SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr) {
+SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr) {
 
     this->dialog = d;
     this->attr = attr;
+    spin.set_tooltip_text(tooltip);
     this->add(* Gtk::manage(new Gtk::Label(lbl)) );
     this->add(spin);
     this->show_all();
@@ -459,16 +462,16 @@ SPGlyph* SvgFontsDialog::get_selected_glyph()
 
 Gtk::VBox* SvgFontsDialog::global_settings_tab(){
     _font_label          = new Gtk::Label( _("Font Attributes") );
-    _horiz_adv_x_spin    = new AttrSpin( this, (gchar*) _("Horiz. Advance X"), SP_ATTR_HORIZ_ADV_X);
-    _horiz_origin_x_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin X "), SP_ATTR_HORIZ_ORIGIN_X);
-    _horiz_origin_y_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin Y "), SP_ATTR_HORIZ_ORIGIN_Y);
+    _horiz_adv_x_spin    = new AttrSpin( this, (gchar*) _("Horiz. Advance X"), _("Average amount of horizontal space each letter takes up."), SP_ATTR_HORIZ_ADV_X);
+    _horiz_origin_x_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin X"), _("Average horizontal origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_X);
+    _horiz_origin_y_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin Y"), _("Average vertical origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_Y);
     _font_face_label     = new Gtk::Label( _("Font Face Attributes") );
-    _familyname_entry    = new AttrEntry(this, (gchar*) _("Family Name:"), SP_PROP_FONT_FAMILY);
-    _units_per_em_spin   = new AttrSpin( this, (gchar*) _("Units per em"), SP_ATTR_UNITS_PER_EM);
-    _ascent_spin         = new AttrSpin( this, (gchar*) _("Ascent:"),      SP_ATTR_ASCENT);
-    _descent_spin        = new AttrSpin( this, (gchar*) _("Descent:"),     SP_ATTR_DESCENT);
-    _cap_height_spin     = new AttrSpin( this, (gchar*) _("Cap Height:"),  SP_ATTR_CAP_HEIGHT);
-    _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    SP_ATTR_X_HEIGHT);
+    _familyname_entry    = new AttrEntry(this, (gchar*) _("Family Name:"), _("Name of the font as it appears in font selectors and css font-family properties."), SP_PROP_FONT_FAMILY);
+    _units_per_em_spin   = new AttrSpin( this, (gchar*) _("Units per em"), _("Number of display units each letter takes up."), SP_ATTR_UNITS_PER_EM);
+    _ascent_spin         = new AttrSpin( this, (gchar*) _("Ascent:"),      _("Amount of space taken up by accenders like the tall line on the letter 'h'."), SP_ATTR_ASCENT);
+    _descent_spin        = new AttrSpin( this, (gchar*) _("Descent:"),     _("Amount of space taken up by decenders like the tail on the letter 'g'."), SP_ATTR_DESCENT);
+    _cap_height_spin     = new AttrSpin( this, (gchar*) _("Cap Height:"),  _("I don't know what this does."), SP_ATTR_CAP_HEIGHT);
+    _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    _("Not sure about this one either."), SP_ATTR_X_HEIGHT);
 
     //_descent_spin->set_range(-4096,0);
 

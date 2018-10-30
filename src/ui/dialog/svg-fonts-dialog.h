@@ -88,7 +88,7 @@ public:
     class AttrEntry : public Gtk::HBox
     {
     public:
-        AttrEntry(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr);
+        AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr);
         void set_text(char*);
     private:
         SvgFontsDialog* dialog;
@@ -100,7 +100,7 @@ public:
     class AttrSpin : public Gtk::HBox
     {
     public:
-        AttrSpin(SvgFontsDialog* d, gchar* lbl, const SPAttributeEnum attr);
+        AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring tooltip, const SPAttributeEnum attr);
         void set_value(double v);
         void set_range(double low, double high);
         Inkscape::UI::Widget::SpinButton* getSpin() { return &spin; }
