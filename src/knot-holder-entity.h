@@ -87,6 +87,7 @@ public:
     unsigned int   _ungrab_handler_id;
 
 private:
+    sigc::connection _mousedown_connection;
     sigc::connection _moved_connection;
     sigc::connection _click_connection;
     sigc::connection _ungrabbed_connection;

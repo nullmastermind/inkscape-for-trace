@@ -58,6 +58,7 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
     update_knot();
     knot->show();
 
+    _mousedown_connection = knot->mousedown_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_mousedown_handler));
     _moved_connection = knot->moved_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_moved_handler));
     _click_connection = knot->click_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_clicked_handler));
     _ungrabbed_connection = knot->ungrabbed_signal.connect(sigc::mem_fun(*parent_holder, &KnotHolder::knot_ungrabbed_handler));
@@ -66,6 +67,7 @@ void KnotHolderEntity::create(SPDesktop *desktop, SPItem *item, KnotHolder *pare
 
 KnotHolderEntity::~KnotHolderEntity()
 {
+    _mousedown_connection.disconnect();
     _moved_connection.disconnect();
     _click_connection.disconnect();
     _ungrabbed_connection.disconnect();
