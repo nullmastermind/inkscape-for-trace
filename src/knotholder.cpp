@@ -76,7 +76,7 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
 }
 
 KnotHolder::~KnotHolder() {
-	sp_object_unref(item);
+    sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {
@@ -185,7 +185,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     }
 
     // for drag, this is done by ungrabbed_handler, but for click we must do it here
-    
+
     if (saved_item) { //increasingly aggressive sanity checks
        if (saved_item->document) {
             // enum is unsigned so can't be less than SP_VERB_INVALID
@@ -208,7 +208,7 @@ KnotHolder::transform_selected(Geom::Affine transform){
     }
 }
 
-void 
+void
 KnotHolder::unselect_knots(){
     if (tools_isactive(desktop, TOOLS_NODES)) {
         Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
@@ -238,7 +238,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     	this->dragging = true;
     }
 
-	// this was a local change and the knotholder does not need to be recreated:
+    // this was a local change and the knotholder does not need to be recreated:
     this->local_change = TRUE;
 
     for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
