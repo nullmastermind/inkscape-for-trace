@@ -326,7 +326,7 @@ static void         UnionShape(Shape **base_shape, Shape const *add_shape)
 
 static void         GetDest(SPObject* child,Shape **computed)
 {
-	if ( child == nullptr ) return;
+	if ( child == nullptr || dynamic_cast<SPItem *>(child) == nullptr ) return;
 
 	SPCurve *curve=nullptr;
 	Geom::Affine tr_mat;
