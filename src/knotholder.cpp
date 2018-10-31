@@ -275,7 +275,6 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
                 e->knot->selectKnot(false);
             }
             if (e->knot == knot) {
-                // no need to test whether knot_click exists since it's virtual now
                 if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
                     e->knot->selectKnot(true);
                 } else {
