@@ -138,7 +138,6 @@ test:linux:
     - inkscape:linux
   script:
     - cd build
-    - make test
     - ctest -V
 
 translations:
