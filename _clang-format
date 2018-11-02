@@ -38,7 +38,7 @@ Standard:        Cpp03
 IndentWidth:     4
 TabWidth:        4
 UseTab:          Never
-BreakBeforeBraces: Stroustrup
+BreakBeforeBraces: WebKit
 IndentFunctionDeclarationAfterType: false
 SpacesInParentheses: false
 SpacesInAngles:  false
