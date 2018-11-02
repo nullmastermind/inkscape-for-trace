@@ -37,6 +37,10 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+struct PrinterSettings {
+    Glib::RefPtr<Gtk::PrintSettings> _gtk_print_settings;
+};
+
 class Print {
 public:
     Print(SPDocument *doc, SPItem *base);
