@@ -276,6 +276,8 @@ public:
 
 private:
 
+    std::string docBaseUri;
+
     void reset();
 
     //cc or dc metadata name/value pairs

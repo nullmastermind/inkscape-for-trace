@@ -318,6 +318,7 @@ public:
      *
      */
     virtual void setUncompressedData(const std::vector<unsigned char> &val);
+    virtual void setUncompressedData(const std::string &val);
 
     /**
      *

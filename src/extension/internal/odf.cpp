@@ -79,6 +79,7 @@
 
 #include "io/inkscapestream.h"
 #include "io/bufferstream.h"
+#include "io/sys.h"
 #include <util/ziptool.h>
 #include <iomanip>
 namespace Inkscape
@@ -889,25 +890,6 @@ static Glib::ustring getAttribute( Inkscape::XML::Node *node, char const *attrNa
 }
 
 
-/**
- * Get the extension suffix from the end of a file name
- */
-static Glib::ustring getExtension(const Glib::ustring &fname)
-{
-    Glib::ustring ext;
-
-    std::string::size_type pos = fname.rfind('.');
-    if (pos == fname.npos)
-        {
-        ext = "";
-        }
-    else
-        {
-        ext = fname.substr(pos);
-        }
-    return ext;
-}
-
 static Glib::ustring formatTransform(Geom::Affine &tf)
 {
     Glib::ustring str;
@@ -1049,38 +1031,30 @@ void OdfOutput::preprocess(ZipFile &zf, Inkscape::XML::Node *node)
         return;
     }
 
-    if (nodeName == "image" || nodeName == "svg:image")
-        {
+    if (nodeName == "image" || nodeName == "svg:image") {
         Glib::ustring href = getAttribute(node, "xlink:href");
-        if (href.size() > 0)
-            {
-            Glib::ustring oldName = href;
-            Glib::ustring ext = getExtension(oldName);
-            if (ext == ".jpeg")
-                ext = ".jpg";
-            if (imageTable.find(oldName) == imageTable.end())
-                {
-                char buf[64];
-                snprintf(buf, sizeof(buf), "Pictures/image%u%s",
-                         static_cast<unsigned int>(imageTable.size()), ext.c_str());
-                Glib::ustring newName = buf;
-                imageTable[oldName] = newName;
-                Glib::ustring comment = "old name was: ";
-                comment.append(oldName);
-                Inkscape::URI oldUri(oldName.c_str());
-                std::string pathName = oldUri.toNativeFilename();
-                ZipEntry *ze = zf.addFile(pathName, comment);
-                if (ze)
-                    {
-                    ze->setFileName(newName);
-                    }
-                else
-                    {
-                    g_warning("Could not load image file '%s'", pathName.c_str());
-                    }
+        if (href.size() > 0 && imageTable.count(href) == 0) {
+            try {
+                auto uri = Inkscape::URI(href.c_str(), docBaseUri.c_str());
+                auto mimetype = uri.getMimeType();
+
+                if (mimetype.substr(0, 6) != "image/") {
+                    return;
                 }
+
+                auto ext = mimetype.substr(6);
+                auto newName = Glib::ustring("Pictures/image") + std::to_string(imageTable.size()) + "." + ext;
+
+                imageTable[href] = newName;
+
+                auto ze = zf.newEntry(newName, "");
+                ze->setUncompressedData(uri.getContents());
+                ze->finish();
+            } catch (...) {
+                g_warning("Could not handle URI '%.100s'", href.c_str());
             }
         }
+    }
 
     for (Inkscape::XML::Node *child = node->firstChild() ;
             child ; child = child->next())
@@ -1122,19 +1096,14 @@ bool OdfOutput::writeManifest(ZipFile &zf)
     std::map<Glib::ustring, Glib::ustring>::iterator iter;
     for (iter = imageTable.begin() ; iter!=imageTable.end() ; ++iter)
         {
-        Glib::ustring oldName = iter->first;
         Glib::ustring newName = iter->second;
 
-        Glib::ustring ext = getExtension(oldName);
-        if (ext == ".jpeg")
-            ext = ".jpg";
+        // note: mime subtype was added as file extenion in OdfOutput::preprocess
+        Glib::ustring mimesubtype = Inkscape::IO::get_file_extension(newName);
+
         outs.printf("    <manifest:file-entry manifest:media-type=\"");
-        if (ext == ".gif")
-            outs.printf("image/gif");
-        else if (ext == ".png")
-            outs.printf("image/png");
-        else if (ext == ".jpg")
-            outs.printf("image/jpeg");
+        outs.printf("image/");
+        outs.printf(mimesubtype.c_str());
         outs.printf("\" manifest:full-path=\"");
         outs.writeString(newName.c_str());
         outs.printf("\"/>\n");
@@ -2082,6 +2051,8 @@ void OdfOutput::reset()
 void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gchar const *filename)
 {
     reset();
+
+    docBaseUri = Inkscape::URI::from_dirname(doc->getBase()).str();
 
     ZipFile zf;
     preprocess(zf, doc->rroot);

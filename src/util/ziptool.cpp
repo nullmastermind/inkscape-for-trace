@@ -2019,6 +2019,13 @@ void ZipEntry::setUncompressedData(const std::vector<unsigned char> &val)
     uncompressedData = val;
 }
 
+void ZipEntry::setUncompressedData(const std::string &s)
+{
+    uncompressedData.clear();
+    uncompressedData.reserve(s.size());
+    uncompressedData.insert(uncompressedData.begin(), s.begin(), s.end());
+}
+
 /**
  *
  */
