@@ -1527,22 +1527,27 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
 {
     if (data || GTK_IS_BIN (data)) {
         void *child = gtk_bin_get_child (GTK_BIN (data));
-        //child is either
-        //- a GtkBox, whose first child is a label displaying name if the menu
-        //item has an accel key
-        //- a GtkLabel if the menu has no accel key
-        if (child != nullptr){
+        // child is either
+        // - a GtkLabel (if the menu has no accel key or icon)
+        // - a GtkBox (if item has an accel key or image)
+        //   in which case we need to find the GtkLabel in the box
+        // - something else we do not expect (yet)
+        if (child != nullptr) {
             if (GTK_IS_LABEL(child)) {
                 gtk_label_set_markup_with_mnemonic(GTK_LABEL (child), name.c_str());
             } else if (GTK_IS_BOX(child)) {
                 std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
-
-                // Label is second child in list
-                Gtk::Label *label = dynamic_cast<Gtk::Label*>(children[1]);
-                if(!label) return;
-                label->set_markup_with_mnemonic(name);
-            }//else sp_ui_menu_append_item_from_verb has been modified and can set
-            //a menu item in yet another way...
+                for (auto child: children) {
+                    Gtk::Label *label = dynamic_cast<Gtk::Label*>(child);
+                    if (label) {
+                        label->set_markup_with_mnemonic(name);
+                        break;
+                    }
+                }
+            } else {
+                // sp_ui_menu_append_item_from_verb might have learned to set a menu item in yet another way...
+                g_assert_not_reached();
+            }
         }
     }
 }
