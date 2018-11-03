@@ -668,8 +668,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_grid_attach(GTK_GRID(dtw->coord_status), label_y, 1, 1, 1, 1);
     dtw->coord_status_x = gtk_label_new(nullptr);
     dtw->coord_status_y = gtk_label_new(nullptr);
-    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_x), "<tt>   0.00 </tt>" );
-    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_y), "<tt>   0.00 </tt>" );
+    gtk_widget_set_name(dtw->coord_status_x, "CoordinateStatusX");
+    gtk_widget_set_name(dtw->coord_status_y, "CoordinateStatusY");
+    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_x), "   0.00 ");
+    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_y), "   0.00 ");
 
     auto label_z = gtk_label_new(_("Z:"));
     gtk_widget_set_name(label_z, "ZLabel");
@@ -1273,11 +1275,11 @@ void
 SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
     gchar *cstr;
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::X]);
+    cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::X]);
     gtk_label_set_markup( GTK_LABEL(this->coord_status_x), cstr );
     g_free(cstr);
 
-    cstr = g_strdup_printf("<tt>%7.2f </tt>", dt2r * p[Geom::Y]);
+    cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::Y]);
     gtk_label_set_markup( GTK_LABEL(this->coord_status_y), cstr );
     g_free(cstr);
 }
