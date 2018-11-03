@@ -10,6 +10,7 @@
 #include "io/sys.h"
 
 #include "object/sp-object.h"
+#include "object/uri.h"
 
 #include "xml/node.h"
 #include "xml/rebase-hrefs.h"
@@ -39,57 +40,7 @@ static bool href_needs_rebasing(std::string const &href)
              * as a dependency and do it properly.  For now we'll just try to be simple (while
              * at least still correctly handling data hrefs). */
             ret = false;
-        } else if (Glib::path_is_absolute(href)) {
-            /* If absolute then keep it as is.
-             *
-             * Even in the following borderline cases:
-             *
-             *   - We keep it absolute even if it is in new_base (directly or indirectly).
-             *
-             *   - We assume that if xlink:href is absolute then we honour it in preference to
-             *     sodipodi:absref even if sodipodi:absref points to an existing file while xlink:href
-             *     doesn't.  This is because we aren't aware of any bugs in xlink:href handling when
-             *     it's absolute, so we assume that it's the best value to use even in this case.)
-             */
-            /* No strong preference on what we do for sodipodi:absref.  Once we're
-             * confident of our handling of xlink:href and xlink:base, we should clear it.
-             * Though for the moment we do the simple thing: neither clear nor set it. */
-            ret = false;
         }
-    }
-
-    return ret;
-}
-
-static std::string calc_abs_href(std::string const &abs_base_dir, std::string const &href,
-                                 gchar const *const sp_absref)
-{
-    std::string ret = Glib::build_filename(abs_base_dir, href);
-
-    if ( sp_absref
-         && !Inkscape::IO::file_test(ret.c_str(),       G_FILE_TEST_EXISTS)
-         &&  Inkscape::IO::file_test(sp_absref, G_FILE_TEST_EXISTS) )
-    {
-        /* sodipodi:absref points to an existing file while xlink:href doesn't.
-         * This could mean that xlink:href is wrong, or it could mean that the user
-         * intends to supply the missing file later.
-         *
-         * Given that we aren't sure what the right behaviour is, and given that a
-         * wrong xlink:href value may mean a bug (as has occurred in the past), we
-         * write a message to stderr. */
-        g_warning("xlink:href points to non-existent file, so using sodipodi:absref instead");
-
-        /* Currently, we choose to use sodipodi:absref in this situation (because we
-         * aren't yet confident in xlink:href interpretation); though note that
-         * honouring a foreign attribute in preference to standard SVG xlink:href and
-         * xlink:base means that we're not a conformant SVG user agent, so eventually
-         * we hope to have enough confidence in our xlink:href and xlink:base handling
-         * to be able to disregard sodipodi:absref.
-         *
-         * effic: Once we no longer consult sodipodi:absref, we can do
-         * `if (base unchanged) { return; }' at the start of rebase_hrefs.
-         */
-        ret = sp_absref;
     }
 
     return ret;
@@ -144,8 +95,16 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
          * reversed.) */
     }
 
-    std::string abs_href = calc_abs_href(old_abs_base, static_cast<char const *>(old_href), sp_absref);
-    std::string new_href = sp_relative_path_from_path(abs_href, new_abs_base);
+    auto uri = URI::from_href_and_basedir(static_cast<char const *>(old_href), old_abs_base);
+    auto abs_href = uri.toNativeFilename();
+
+    if (!Inkscape::IO::file_test(abs_href.c_str(), G_FILE_TEST_EXISTS) &&
+        Inkscape::IO::file_test(sp_absref, G_FILE_TEST_EXISTS)) {
+        uri = URI::from_native_filename(sp_absref);
+    }
+
+    auto new_href = uri.str(URI::from_dirname(new_abs_base).str().c_str());
+
     ret = cons(AttributeRecord(href_key, share_string(new_href.c_str())), ret); // Check if this is safe/copied or if it is only held.
     if (sp_absref) {
         /* We assume that if there wasn't previously a sodipodi:absref attribute
@@ -195,12 +154,14 @@ std::string Inkscape::XML::calc_abs_doc_base(gchar const *doc_base)
 
 void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_base, bool const spns)
 {
-    if (!doc->getBase()) {
-        return;
-    }
+    using Inkscape::URI;
 
-    std::string old_abs_base = calc_abs_doc_base(doc->getBase());
-    std::string new_abs_base = calc_abs_doc_base(new_base);
+    std::string old_base_url_str = URI::from_dirname(doc->getBase()).str();
+    std::string new_base_url_str;
+
+    if (new_base) {
+        new_base_url_str = URI::from_dirname(new_base).str();
+    }
 
     /* TODO: Should handle not just image but also:
      *
@@ -226,76 +187,44 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
     for (std::vector<SPObject *>::const_iterator it = images.begin(); it != images.end(); ++it) {
         Inkscape::XML::Node *ir = (*it)->getRepr();
 
-        std::string uri;
-        {
-            gchar const *tmp = ir->attribute("xlink:href");
-            if ( !tmp ) {
-                continue;
+        auto href_cstr = ir->attribute("xlink:href");
+        if (!href_cstr) {
+            continue;
+        }
+
+        // skip fragment URLs
+        if (href_cstr[0] == '#') {
+            continue;
+        }
+
+        // make absolute
+        URI url;
+        try {
+            url = URI(href_cstr, old_base_url_str.c_str());
+        } catch (...) {
+            continue;
+        }
+
+        // skip non-file URLs
+        if (!url.hasScheme("file")) {
+            continue;
+        }
+
+        // if path doesn't exist, use sodipodi:absref
+        if (!g_file_test(url.toNativeFilename().c_str(), G_FILE_TEST_EXISTS)) {
+            auto spabsref = ir->attribute("sodipodi:absref");
+            if (spabsref && g_file_test(spabsref, G_FILE_TEST_EXISTS)) {
+                url = URI::from_native_filename(spabsref);
             }
-            uri = tmp;
+        } else if (spns) {
+            ir->setAttribute("sodipodi:absref", url.toNativeFilename());
         }
-        if ( uri.substr(0, 7) == "file://" ) {
-            uri = Glib::filename_from_uri(uri);
-        }
-        // The following two cases are for absolute hrefs that can be converted to relative.
-        // Imported images, first time rebased, need an old base.
-        std::string href = uri;
-        if ( Glib::path_is_absolute(href) ) {
-            href = sp_relative_path_from_path(uri, old_abs_base);
-        }
-        // Files moved from a absolute path need a new one.
-        if ( Glib::path_is_absolute(href) ) {
-            href = sp_relative_path_from_path(uri, new_abs_base);
-        }
-        // Other bitmaps are either really absolute, or already relative.
 
-#ifdef _WIN32
-        /* Windows relative path needs their native separators before we
-         * compare it to native baserefs. */
-        if ( !Glib::path_is_absolute(href) ) {
-            std::replace(href.begin(), href.end(), '/', '\\');
-        }
-#endif
-
-        /* TODO: Most of this function currently treats href as if it were a simple filename
-         * (e.g. passing it to g_path_is_absolute, g_build_filename or IO::file_test, or avoiding
-         * changing non-file hrefs), which breaks if href starts with a scheme or if href contains
-         * any escaping. */
-
-        if ( href_needs_rebasing(href) ) {
-            std::string abs_href = calc_abs_href(old_abs_base, href, ir->attribute("sodipodi:absref"));
-
-            /* todo: One difficult case once we support writing to non-file locations is where
-             * existing hrefs in the document point to local files.  In this case, we should
-             * probably copy those referenced files to the new location at the same time.  It's
-             * less clear what to do when copying from one non-file location to another.  We may
-             * need to ask the user in some way (even if it's as a checkbox), but we'd like to
-             * bother the user as little as possible yet also want to warn the user about the case
-             * of file hrefs. */
-
-            std::string new_href = sp_relative_path_from_path(abs_href, new_abs_base);
-            ir->setAttribute("sodipodi:absref", ( spns
-                                                  ? abs_href.c_str()
-                                                  : nullptr ));
-            if (!Glib::path_is_absolute(new_href)) {
-#ifdef _WIN32
-                /* Native Windows path separators are replaced with / so that the href
-                 * also works on Gnu/Linux and OSX */
-                std::replace(new_href.begin(), new_href.end(), '\\', '/');
-#endif
-                ir->setAttribute("xlink:href", new_href.c_str());
-            } else {
-                ir->setAttribute("xlink:href", g_filename_to_uri(new_href.c_str(), nullptr, nullptr));
-            }
-
-            /* impl: I assume that if !spns then any existing sodipodi:absref is about to get
-             * cleared (or is already cleared) anyway, in which case it doesn't matter whether we
-             * clear or leave any existing sodipodi:absref value.  If that assumption turns out to
-             * be wrong, then leaving it means risking leaving the wrong value (if xlink:href
-             * referred to a different file than sodipodi:absref) while clearing it means risking
-             * losing information. */
-        }
+        auto href_str = url.str(new_base_url_str.c_str());
+        ir->setAttribute("xlink:href", href_str);
     }
+
+    doc->setBase(new_base);
 }
 
 
