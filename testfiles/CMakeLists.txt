@@ -13,6 +13,7 @@ endif()
 include_directories("${CMAKE_SOURCE_DIR}/src/3rdparty/adaptagrams")
 
 set(TEST_SOURCES
+	uri-test
 	attributes-test
 	color-profile-test
 	dir-util-test

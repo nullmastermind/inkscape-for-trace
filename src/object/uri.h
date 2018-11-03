@@ -19,6 +19,17 @@ namespace Inkscape {
 
 /**
  * Represents an URI as per RFC 2396.
+ *
+ * Typical use-cases of this class:
+ * - converting between relative and absolute URIs
+ * - converting URIs to/from filenames (alternative: Glib functions, but those only handle absolute paths)
+ * - generic handling of data/file/http URIs (e.g. URI::getContents and URI::getMimeType)
+ *
+ * Wraps libxml2's URI functions. Direct usage of libxml2's C-API is discouraged if favor of
+ * Inkscape::URI. (At the time of writing this, no de-factor standard C++ URI library exists, so
+ * wrapping libxml2 seems like a good solution)
+ *
+ * Implementation detail: Immutable type, copies share a ref-counted data pointer.
  */
 class URI {
 public:
@@ -35,8 +46,12 @@ public:
      * Constructor from a C-style ASCII string.
      *
      * @param preformed Properly quoted C-style string to be represented.
+     * @param baseuri If @a preformed is a relative URI, use @a baseuri to make it absolute
+     *
+     * @throw MalformedURIException
      */
-    explicit URI(char const *preformed);
+    explicit URI(char const *preformed, char const *baseuri = nullptr);
+    explicit URI(char const *preformed, URI const &baseuri);
 
     /**
      * Destructor.
@@ -63,7 +78,7 @@ public:
     /**
      * Determines if the relative URI represented is a 'net-path' as per RFC 2396.
      *
-     * A net-path is one that starts with "\\".
+     * A net-path is one that starts with "//".
      *
      * @return \c true if the URI is relative and a net-path, \c false otherwise.
      */
@@ -81,7 +96,7 @@ public:
     /**
      * Determines if the relative URI represented is a 'absolute-path' as per RFC 2396.
      *
-     * An absolute-path is one that starts with a single "\".
+     * An absolute-path is one that starts with a single "/".
      *
      * @return \c true if the URI is relative and an absolute-path, \c false otherwise.
      */
@@ -101,11 +116,25 @@ public:
 
     static URI from_native_filename(char const *path);
 
-    static char *to_native_filename(char const* uri);
+    /**
+     * URI of a local directory. The URI path will end with a slash.
+     */
+    static URI from_dirname(char const *path);
+
+    /**
+     * Convenience function for the common use case given a xlink:href attribute and a local
+     * directory as the document base. Returns an empty URI on failure.
+     */
+    static URI from_href_and_basedir(char const *href, char const *basedir);
 
     const std::string getFullPath(std::string const &base) const;
 
-    char *toNativeFilename() const;
+    /**
+     * Convert this URI to a native filename.
+     *
+     * @throw Glib::ConvertError If this is not a "file" URI
+     */
+    std::string toNativeFilename() const;
 
     /**
      * Returns a glib string version of this URI.
@@ -113,28 +142,41 @@ public:
      * The returned string must be freed with \c g_free().
      *
      * @return a glib string version of this URI.
+     *
+     * @todo remove this method and use str() instead
      */
     char *toString() const { return _impl->toString(); }
 
     /**
-      * Return a more useful std::string with optional url(...)
-      * useful for css printing.
-      */
-    std::string toStdString(bool with_braces=false) const {
-        char *uri = this->toString();
-        auto ret = std::string("");
-        if(uri) {
-            if(with_braces) {
-                ret += "url(";
-                ret += uri;
-                ret += ")";
-            } else {
-                ret += uri;
-            }
-            free((void *) uri);
-        }
-        return ret;
+     * Return the string representation of this URI
+     *
+     * @param baseuri Return a relative path if this URI shares protocol and host with @a baseuri
+     */
+    std::string str(char const *baseuri = nullptr) const;
+
+    /**
+     * Get the MIME type (e.g.\ "image/png")
+     */
+    std::string getMimeType() const;
+
+    /**
+     * Return the contents of the file
+     */
+    std::string getContents() const;
+
+    /**
+     * Return a CSS formatted url value
+     *
+     * @param baseuri Return a relative path if this URI shares protocol and host with @a baseuri
+     */
+    std::string cssStr(char const *baseuri = nullptr) const {
+        return "url(" + str(baseuri) + ")";
     }
+
+    /**
+     * True if the scheme equals the given string (not case sensitive)
+     */
+    bool hasScheme(const char *scheme) const;
 
     /**
      * Assignment operator.

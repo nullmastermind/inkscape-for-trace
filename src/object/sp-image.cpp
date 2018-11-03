@@ -580,52 +580,21 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
     gchar const *filename = href;
     
     if (filename != nullptr) {
-        if (strncmp (filename,"file:",5) == 0) {
-            gchar *fullname = g_filename_from_uri(filename, nullptr, nullptr);
-            if (fullname) {
-                inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
-                g_free(fullname);
-                if (inkpb != nullptr) {
-                    return inkpb;
-                }
-            }
-        } else if (strncmp (filename,"data:",5) == 0) {
+        if (g_ascii_strncasecmp(filename, "data:", 5) == 0) {
             /* data URI - embedded image */
             filename += 5;
             inkpb = Inkscape::Pixbuf::create_from_data_uri(filename, svgdpi);
-            if (inkpb != nullptr) {
-                return inkpb;
-            }
         } else {
+            auto url = Inkscape::URI::from_href_and_basedir(href, base);
 
-            if (!g_path_is_absolute (filename)) {
-                /* try to load from relative pos combined with document base*/
-                const gchar *docbase = base;
-                if (!docbase) {
-                    docbase = ".";
-                }
-                gchar *fullname = g_build_filename(docbase, filename, NULL);
-
-                // document base can be wrong (on the temporary doc when importing bitmap from a
-                // different dir) or unset (when doc is not saved yet), so we check for base+href existence first,
-                // and if it fails, we also try to use bare href regardless of its g_path_is_absolute
-                if (g_file_test (fullname, G_FILE_TEST_EXISTS) && !g_file_test (fullname, G_FILE_TEST_IS_DIR)) {
-                    inkpb = Inkscape::Pixbuf::create_from_file(fullname, svgdpi);
-                    if (inkpb != nullptr) {
-                        g_free (fullname);
-                        return inkpb;
-                    }
-                }
-                g_free (fullname);
+            if (url.hasScheme("file")) {
+                auto native = url.toNativeFilename();
+                inkpb = Inkscape::Pixbuf::create_from_file(native.c_str(), svgdpi);
             }
+        }
 
-            /* try filename as absolute */
-            if (g_file_test (filename, G_FILE_TEST_EXISTS) && !g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-                inkpb = Inkscape::Pixbuf::create_from_file(filename, svgdpi);
-                if (inkpb != nullptr) {
-                    return inkpb;
-                }
-            }
+        if (inkpb != nullptr) {
+            return inkpb;
         }
     }
 

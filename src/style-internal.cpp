@@ -1335,7 +1335,7 @@ const Glib::ustring SPIPaint::get_value() const
     // url must go first as other values can serve as fallbacks
     auto ret = Glib::ustring("");
     if (this->value.href && this->value.href->getURI()) {
-        ret += this->value.href->getURI()->toStdString(true);
+        ret += this->value.href->getURI()->cssStr();
     }
     switch(this->paintOrigin) {
         case SP_CSS_PAINT_ORIGIN_CURRENT_COLOR:
@@ -1698,7 +1698,7 @@ SPIFilter::read( gchar const *str ) {
 const Glib::ustring SPIFilter::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
-    if (this->href) return this->href->getURI()->toStdString(true);
+    if (this->href) return this->href->getURI()->cssStr();
     return Glib::ustring("");
 }
 
