@@ -532,8 +532,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
 {
     Gtk::Widget *item;
 
-    // Just create a menu separator if this isn't a real action.
-    // Otherwise, create a real menu item
+    // Just create a menu separator if this isn't a real action. Otherwise, create a real menu item
     if (verb->get_code() == SP_VERB_NONE) {
         item = new Gtk::SeparatorMenuItem();
     } else {
@@ -552,7 +551,6 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         // Now create the label and add it to the menu item
         GtkWidget *label = gtk_accel_label_new(action->name);
         gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
-        gtk_label_set_use_underline(GTK_LABEL(label), true);
 
 #if GTK_CHECK_VERSION(3,16,0)
         gtk_label_set_xalign(GTK_LABEL(label), 0.0);
@@ -761,39 +759,26 @@ static gboolean update_view_menu(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
 }
 
 static void
-sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *label, gchar const *tip, gchar const *pref,
-                                       void (*callback_toggle)(GtkCheckMenuItem *, gpointer user_data),
-                                       gboolean (*callback_update)(GtkWidget *widget, cairo_t *cr, gpointer user_data),
-                                       Inkscape::Verb *verb)
+sp_ui_menu_append_check_item_from_verb(GtkMenu *menu, Inkscape::UI::View::View *view, gchar const *pref, Inkscape::Verb *verb)
 {
-    unsigned int shortcut = (verb) ? sp_shortcut_get_primary(verb) : 0;
-    SPAction *action = (verb) ? verb->get_action(Inkscape::ActionContext(view)) : nullptr;
-    GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action ? action->name : label);
-
-#if 0
-    if (!action->sensitive) {
-        gtk_widget_set_sensitive(item, FALSE);
-    }
-#endif
+    unsigned int shortcut = sp_shortcut_get_primary(verb);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
+    GtkWidget *item = gtk_check_menu_item_new_with_mnemonic(action->name);
 
     sp_shortcut_add_accelerator(item, shortcut);
-
-    gtk_widget_show(item);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
     g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
     g_object_set_data(G_OBJECT(item), "action", (gpointer) action);
 
-    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref);
+    g_signal_connect( G_OBJECT(item), "toggled", (GCallback) checkitem_toggled, (void *) pref);
+    g_signal_connect( G_OBJECT(item), "draw", (GCallback) checkitem_update, (void *) pref);
 
-    g_signal_connect( G_OBJECT(item), "draw", (GCallback) callback_update, (void *) pref);
+    checkitem_update(item, nullptr, (void *)pref);
 
-    (*callback_update)(item, nullptr, (void *)pref);
-
-    g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select), (gpointer) (action ? action->tip : tip));
-    g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect), NULL);
-
+    g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select_action), action );
+    g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
 }
 
 static void
@@ -812,24 +797,23 @@ sp_recent_open(GtkRecentChooser *recent_menu, gpointer /*user_data*/)
 static void
 sp_ui_checkboxes_menus(GtkMenu *m, Inkscape::UI::View::View *view)
 {
-    //sp_ui_menu_append_check_item_from_verb(m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
-    //                                       checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "commands",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_COMMANDS_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view,nullptr, nullptr, "snaptoolbox",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SNAP_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "toppanel",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOL_TOOLBAR));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "toolbox",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_TOOLBOX));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "rulers",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "scrollbars",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "panels",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_PALETTE));
-    sp_ui_menu_append_check_item_from_verb(m, view, nullptr, nullptr, "statusbar",
-                                           checkitem_toggled, checkitem_update, Inkscape::Verb::get(SP_VERB_TOGGLE_STATUSBAR));
+    //sp_ui_menu_append_check_item_from_verb(m, view, "menu", 0);
+    sp_ui_menu_append_check_item_from_verb(m, view, "commands",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_COMMANDS_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view,"snaptoolbox",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_SNAP_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, "toppanel",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_TOOL_TOOLBAR));
+    sp_ui_menu_append_check_item_from_verb(m, view, "toolbox",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_TOOLBOX));
+    sp_ui_menu_append_check_item_from_verb(m, view, "rulers",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS));
+    sp_ui_menu_append_check_item_from_verb(m, view, "scrollbars",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS));
+    sp_ui_menu_append_check_item_from_verb(m, view, "panels",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_PALETTE));
+    sp_ui_menu_append_check_item_from_verb(m, view, "statusbar",
+                                           Inkscape::Verb::get(SP_VERB_TOGGLE_STATUSBAR));
 }
 
 
@@ -965,8 +949,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                 } else if (menu_pntr->attribute("check") != nullptr) {
                     if (verb->get_code() != SP_VERB_NONE) {
                         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-                        sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, action->name, action->tip, nullptr,
-                            checkitem_toggled, checkitem_update, verb);
+                        sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, nullptr, verb);
                     }
                 } else {
                     sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icons_curr);
