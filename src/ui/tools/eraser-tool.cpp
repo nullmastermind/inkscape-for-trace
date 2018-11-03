@@ -674,7 +674,7 @@ void EraserTool::set_to_accumulated() {
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
                 if (eraser_mode  == ERASER_MODE_CUT || eraser_mode  == ERASER_MODE_CLIP) {
-                    toWorkOn = document->getItemsPartiallyInBox(this->desktop->dkey, *eraserBbox);
+                    toWorkOn = document->getItemsPartiallyInBox(this->desktop->dkey, *eraserBbox, false, false, false, true);
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(this->desktop);
                     toWorkOn = document->getItemsAtPoints(this->desktop->dkey, r->getPoints());
