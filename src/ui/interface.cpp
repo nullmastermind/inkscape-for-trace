@@ -178,7 +178,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
             if (pw>0 && ph>0) {
                 Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
                 pw = std::min(pw, monitor_geometry.get_width());
-                ph = std::min(ph, monitor_geometry.get_height());      
+                ph = std::min(ph, monitor_geometry.get_height());
                 desktop->setWindowSize(pw, ph);
                 desktop->setWindowPosition(Geom::Point(px, py));
             }
@@ -447,7 +447,7 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
         g_free(key);
     }
 }
-               
+
 /* install CSS to shift icons into the space reserved for toggles (i.e. check and radio items) */
 void shift_icons(GtkWidget *menu, gpointer /* user_data */)
 {
@@ -469,7 +469,7 @@ void shift_icons(GtkWidget *menu, gpointer /* user_data */)
     }
 
     // get the first MenuItem with an image (i.e. "ImageMenuItem" as named below)
-    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_MENU(menu))->get_children();
+    std::vector<Gtk::Widget *> children = Glib::wrap(GTK_MENU(menu))->get_children();
     for (auto child: children) {
         if (child->get_name() == "ImageMenuItem") {
             menuitem = static_cast<Gtk::MenuItem *>(child);
@@ -508,7 +508,7 @@ void shift_icons(GtkWidget *menu, gpointer /* user_data */)
 
 /**
  * Appends a custom menu UI from a verb.
- * 
+ *
  * @see ContextMenu::AppendItemFromVerb for a c++ified alternative. Consider dropping sp_ui_menu_append_item_from_verb when c++ifying interface.cpp.
  *
  * @param menu      The menu to which the item will be appended
@@ -549,10 +549,6 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
             item = new Gtk::MenuItem();
         }
 
-        // Create a box to contain all the widgets (icon, label, accelerator)
-        // that will go inside the menu item
-        GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-
         // Now create the label and add it to the menu item
         GtkWidget *label = gtk_accel_label_new(action->name);
         gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
@@ -571,17 +567,19 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item->gobj());
 
         // If there is an image associated with the action, then we can add it as an icon for the menu item.
-        if(show_icon && action->image) {
+        if (show_icon && action->image) {
+            item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
             GtkWidget *icon = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
+
+            // create a box to hold icon and label as GtkMenuItem derives from GtkBin and can only hold one child
+            GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
             gtk_box_pack_start(GTK_BOX(box), icon, FALSE, FALSE, 0);
-            item->set_name("ImageMenuItem");
+            gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+
+            gtk_container_add(GTK_CONTAINER(item->gobj()), box);
+        } else {
+            gtk_container_add(GTK_CONTAINER(item->gobj()), label);
         }
-
-        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
-
-        // Finally, pack all the widgets into the menu item
-        gtk_container_add(GTK_CONTAINER(item->gobj()), box);
-
 
         action->signal_set_sensitive.connect(
             sigc::bind<0>(
@@ -913,7 +911,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
     int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
 
     for (Inkscape::XML::Node *menu_pntr = menus; menu_pntr != nullptr; menu_pntr = menu_pntr->next()) {
-             
+
         // Check if the "show-icons" attribute is set, and set the flag here accordingly
         bool show_icons_curr = show_icons;
         if (show_icons_pref == 1) {          // enable all icons
@@ -992,7 +990,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
             continue;
         }
-        
+
         if (!strcmp(menu_pntr->name(), "recent-file-list")) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1101,7 +1099,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
                             g_free(str);
                             str = 0;
 
-                            item->setAttribute( 
+                            item->setAttribute(
                                 fillnotstroke ? "inkscape:x-fill-tag":"inkscape:x-stroke-tag",
                                 palName.c_str(),
                                 false );
@@ -1393,9 +1391,9 @@ sp_ui_drag_data_received(GtkWidget *widget,
             ext->set_gui(false);
 
             gchar *filename = g_build_filename( g_get_tmp_dir(), "inkscape-dnd-import", NULL );
-            g_file_set_contents(filename, 
-                reinterpret_cast<gchar const *>(gtk_selection_data_get_data (data)), 
-                gtk_selection_data_get_length (data), 
+            g_file_set_contents(filename,
+                reinterpret_cast<gchar const *>(gtk_selection_data_get_data (data)),
+                gtk_selection_data_get_length (data),
                 nullptr);
             file_import(doc, filename, ext);
             g_free(filename);
@@ -1538,7 +1536,7 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
             } else if (GTK_IS_BOX(child)) {
                 std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
                 for (auto child: children) {
-                    Gtk::Label *label = dynamic_cast<Gtk::Label*>(child);
+                    Gtk::Label *label = dynamic_cast<Gtk::Label *>(child);
                     if (label) {
                         label->set_markup_with_mnemonic(name);
                         break;
