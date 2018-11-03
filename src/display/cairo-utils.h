@@ -119,8 +119,11 @@ public:
 
     static Pixbuf *create_from_data_uri(gchar const *uri, double svgdpi = 0);
     static Pixbuf *create_from_file(std::string const &fn, double svgddpi = 0);
+    static Pixbuf *create_from_buffer(std::string const &, double svgddpi = 0, std::string const &fn = "");
 
   private:
+    static Pixbuf *create_from_buffer(gchar *&&, gsize, double svgddpi = 0, std::string const &fn = "");
+
     void _ensurePixelsARGB32();
     void _ensurePixelsPixbuf();
     void _forceAlpha();

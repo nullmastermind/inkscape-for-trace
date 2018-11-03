@@ -363,6 +363,31 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
             std::cerr << "   (" << fn << ")" << std::endl;
             return nullptr;
         }
+
+        pb = Pixbuf::create_from_buffer(std::move(data), len, svgdpi, fn);
+
+        if (pb) {
+            pb->_mod_time = stdir.st_mtime;
+        }
+    } else {
+        std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
+        return nullptr;
+    }
+
+    return pb;
+}
+
+Pixbuf *Pixbuf::create_from_buffer(std::string const &buffer, double svgdpi, std::string const &fn)
+{
+    auto datacopy = (gchar *)g_memdup(buffer.data(), buffer.size());
+    return Pixbuf::create_from_buffer(std::move(datacopy), buffer.size(), svgdpi, fn);
+}
+
+Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std::string const &fn)
+{
+    Pixbuf *pb = nullptr;
+    GError *error = nullptr;
+    {
         GdkPixbuf *buf = nullptr;
         GdkPixbufLoader *loader = nullptr;
         std::string::size_type idx;
@@ -432,7 +457,6 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
         if (buf) {
             g_object_ref(buf);
             pb = new Pixbuf(buf);
-            pb->_mod_time = stdir.st_mtime;
             pb->_path = fn;
             if (!is_svg) {
                 GdkPixbufFormat *fmt = gdk_pixbuf_loader_get_format(loader);
@@ -450,9 +474,6 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn, double svgdpi)
 
         // TODO: we could also read DPI, ICC profile, gamma correction, and other information
         // from the file. This can be done by using format-specific libraries e.g. libpng.
-    } else {
-        std::cerr << "Pixbuf::create_from_file: failed to get contents: " << fn << std::endl;
-        return nullptr;
     }
 
     return pb;

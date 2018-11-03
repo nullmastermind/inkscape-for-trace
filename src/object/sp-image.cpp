@@ -25,6 +25,7 @@
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
 #include <glibmm/i18n.h>
+#include <giomm/error.h>
 
 #include "display/drawing-image.h"
 #include "display/cairo-utils.h"
@@ -590,6 +591,13 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             if (url.hasScheme("file")) {
                 auto native = url.toNativeFilename();
                 inkpb = Inkscape::Pixbuf::create_from_file(native.c_str(), svgdpi);
+            } else {
+                try {
+                    auto contents = url.getContents();
+                    inkpb = Inkscape::Pixbuf::create_from_buffer(contents, svgdpi);
+                } catch (const Gio::Error &e) {
+                    g_warning("URI::getContents failed for '%.100s'", href);
+                }
             }
         }
 
