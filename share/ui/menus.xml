@@ -228,27 +228,23 @@
    <submenu _name="_Path">
        <verb verb-id="ObjectToPath" />
        <verb verb-id="StrokeToPath" />
-
-#if HAVE_POTRACE
-       <verb verb-id="SelectionTrace" />
-#endif
-
+       <verb verb-id="SelectionTrace" /> <!-- depends on HAVE_POTRACE -->
        <verb verb-id="SelectionPixelArt" />
        <separator/>
-       <verb verb-id="SelectionUnion"     show-icon="yes" />
-       <verb verb-id="SelectionDiff"      show-icon="yes" />
-       <verb verb-id="SelectionIntersect" show-icon="yes" />
-       <verb verb-id="SelectionSymDiff"   show-icon="yes"/>
-       <verb verb-id="SelectionDivide"    show-icon="yes"/>
-       <verb verb-id="SelectionCutPath"   show-icon="yes"/>
+       <verb verb-id="SelectionUnion" />
+       <verb verb-id="SelectionDiff" />
+       <verb verb-id="SelectionIntersect" />
+       <verb verb-id="SelectionSymDiff" />
+       <verb verb-id="SelectionDivide" />
+       <verb verb-id="SelectionCutPath" />
        <separator/>
-       <verb verb-id="SelectionCombine"    show-icon="yes"/>
-       <verb verb-id="SelectionBreakApart" show-icon="yes"/>
+       <verb verb-id="SelectionCombine" />
+       <verb verb-id="SelectionBreakApart" />
        <separator/>
-       <verb verb-id="SelectionInset"        show-icon="yes"/>
-       <verb verb-id="SelectionOffset"       show-icon="yes"/>
-       <verb verb-id="SelectionDynOffset"    show-icon="yes"/>
-       <verb verb-id="SelectionLinkedOffset" show-icon="yes"/>
+       <verb verb-id="SelectionInset" />
+       <verb verb-id="SelectionOffset" />
+       <verb verb-id="SelectionDynOffset" />
+       <verb verb-id="SelectionLinkedOffset" />
        <separator/>
        <verb verb-id="SelectionSimplify" />
        <verb verb-id="SelectionReverse" />
@@ -270,9 +266,8 @@
        <verb verb-id="ObjectFlowtextToText" />
        <separator/>
        <verb verb-id="SelectionTextRemoveKerns" />
-       <!--ifdef HAVE_ASPELL-->
        <separator/>
-       <verb verb-id="DialogSpellcheck" />
+       <verb verb-id="DialogSpellcheck" />  <!-- depends on HAVE_ASPELL -->
    </submenu>
    <submenu _name="Filter_s">
        <filters-list/>

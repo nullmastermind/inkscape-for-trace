@@ -889,6 +889,13 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Secondary toolbar icon size:"), _misc_small_secondary, "",
                              _("Set the size for the icons in secondary toolbars to use (requires restart)"), false);
     }
+    {
+        Glib::ustring menu_icons_labels[] = {_("Yes"), _("No"), _("Theme decides")};
+        int menu_icons_values[] = {1, -1, 0};
+        _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
+        _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
+                             _("You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file."), false);
+    }
     _apply_theme.set_label(_("Reload icons"));
     _apply_theme.set_tooltip_text(_("Apply icon changes (may take a few seconds)"));
     _page_theme.add_line(false, "", _apply_theme, "<span size=\"small\">Reloading icons will close all windows and open them again. No data will be lost.</span>", "", false);

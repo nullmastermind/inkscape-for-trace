@@ -897,19 +897,45 @@ private:
  *  the verb that is missing, and display that.  The menu item is also made
  *  insensitive.
  *
- * @param  menus  This is the XML that defines the menu
- * @param  menu   Menu to be added to
- * @param  view   The View that this menu is being built for
+ * @param  menus        This is the XML that defines the menu
+ * @param  menu         Menu to be added to
+ * @param  view         The View that this menu is being built for
+ * @param  show_icons   Whether to show icons (can be overridden by the current XML::Node and preferences)
  */
-static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view)
+static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view,
+                                  bool show_icons = true)
 {
     if (menus == nullptr) return;
     if (menu == nullptr)  return;
     Gtk::RadioMenuItem::Group group;
 
-    for (Inkscape::XML::Node *menu_pntr = menus;
-         menu_pntr != nullptr;
-         menu_pntr = menu_pntr->next()) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
+
+    for (Inkscape::XML::Node *menu_pntr = menus; menu_pntr != nullptr; menu_pntr = menu_pntr->next()) {
+             
+        // Check if the "show-icons" attribute is set, and set the flag here accordingly
+        bool show_icons_curr = show_icons;
+        if (show_icons_pref == 1) {          // enable all icons
+            show_icons_curr = true;
+        } else if (show_icons_pref == -1) {  // disable all icons
+            show_icons_curr = false;
+        } else {                             // read from XML file or inherit (=keep) previous value if unset
+            const char *str = menu_pntr->attribute("show-icons");
+            if (str) {
+                if (!g_ascii_strcasecmp(str, "yes") || !g_ascii_strcasecmp(str, "true") || !g_ascii_strcasecmp(str, "1")) {
+                    show_icons_curr = true;
+                } else if (!g_ascii_strcasecmp(str, "no") || !g_ascii_strcasecmp(str, "false") || !g_ascii_strcasecmp(str, "0")) {
+                    show_icons_curr = false;
+                } else {
+                    g_warning("Invalid value for attribute 'show-icons': '%s'", str);
+                }
+            }
+        }
+
+        if (!strcmp(menu_pntr->name(), "inkscape")) {
+            sp_ui_build_dyn_menus(menu_pntr->firstChild(), menu, view, show_icons_curr);
+        }
         if (!strcmp(menu_pntr->name(), "submenu")) {
             GtkWidget *mitem;
             if (menu_pntr->attribute("_name") != nullptr) {
@@ -918,7 +944,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                 mitem = gtk_menu_item_new_with_mnemonic(menu_pntr->attribute("name"));
             }
             GtkWidget *submenu = gtk_menu_new();
-            sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view);
+            sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view, show_icons_curr);
             gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), GTK_WIDGET(submenu));
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), mitem);
             g_signal_connect(submenu, "map", G_CALLBACK(shift_icons), NULL);
@@ -926,19 +952,11 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
         }
         if (!strcmp(menu_pntr->name(), "verb")) {
             gchar const *verb_name = menu_pntr->attribute("verb-id");
-
-            // Check if the "show-icon" attribute is set, and set the flag here accordingly
-            bool show_icon = false;
-
-            if(menu_pntr->attribute("show-icon") != nullptr) {
-                show_icon = true;
-            }
-
             Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != nullptr) {
                 if (menu_pntr->attribute("radio") != nullptr) {
-                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, show_icon, true, &group);
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, false, true, &group);
                     if (menu_pntr->attribute("default") != nullptr) {
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
                     }
@@ -953,7 +971,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                             checkitem_toggled, checkitem_update, verb);
                     }
                 } else {
-                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icon);
+                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icons_curr);
                     Gtk::RadioMenuItem::Group group2;
                     group = group2;
                 }
@@ -1017,7 +1035,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 GtkWidget *sp_ui_main_menubar(Inkscape::UI::View::View *view)
 {
     GtkWidget *mbar = gtk_menu_bar_new();
-    sp_ui_build_dyn_menus(INKSCAPE.get_menus(), mbar, view);
+    sp_ui_build_dyn_menus(INKSCAPE.get_menus()->parent(), mbar, view);
     return mbar;
 }
 
