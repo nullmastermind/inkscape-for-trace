@@ -33,7 +33,6 @@ enum Filletmethod {
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
-    ~LPEFilletChamfer();
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     Geom::PathVector doEffect_path(Geom::PathVector const &path_in) override;
     void doOnApply(SPLPEItem const *lpeItem) override;
@@ -65,7 +64,7 @@ private:
     bool _degenerate_hide;
     PathVectorSatellites *_pathvector_satellites;
     Geom::PathVector _hp;
-    gchar * previous_unit;
+    Glib::ustring previous_unit;
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
 

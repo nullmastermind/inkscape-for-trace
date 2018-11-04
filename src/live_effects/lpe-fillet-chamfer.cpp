@@ -83,13 +83,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
     _provides_knotholder_entities = true;
-    previous_unit = NULL;
-}
-
-LPEFilletChamfer::~LPEFilletChamfer() {
-    if(previous_unit) {
-        g_free(previous_unit);
-    }
+    previous_unit = Glib::ustring("");
 }
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
@@ -379,11 +373,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         _pathvector_satellites->setSatellites(satellites);
         satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
         refreshKnots();
-        gchar const *current_unit = unit.get_abbreviation();
-        if (previous_unit && strcmp(previous_unit, current_unit) ) {
+        Glib::ustring current_unit = Glib::ustring(unit.get_abbreviation());
+        if (previous_unit != current_unit) {
             updateAmount();
         }
-        previous_unit = const_cast<gchar *>(current_unit);
+        previous_unit = current_unit;
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
