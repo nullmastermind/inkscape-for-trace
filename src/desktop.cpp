@@ -726,19 +726,6 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
     g_return_val_if_fail (doc() != nullptr, NULL);
     return doc()->getGroupAtPoint(dkey, p);
 }
-/**
- * Returns a vector of visible items in a desktop
- */
-std::vector<SPItem *> SPDesktop::getVisibleItems(bool isFiltered) {
-    std::vector<SPItem *> result;
-    for(auto item:getDocument()->getItemsPartiallyInBox(dkey, get_display_area(), false, true, true, false, true)) {
-        if(isFiltered && !item->isFiltered()) {
-            continue;
-        }
-        result.push_back(item);
-    }
-    return result;
-}
 
 /**
  * Returns the mouse point in document coordinates; if mouse is
