@@ -59,6 +59,10 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
 
     // ToDo: Add Pause, Resume.
 
+    if (_fullscreen) {
+        Gtk::Window::fullscreen();
+    }
+
     // Show first file
     activate_action( "show_first" );
 }
@@ -67,6 +71,8 @@ std::vector<Glib::RefPtr<Gio::File> >
 InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& files)
 {
     std::vector<Glib::RefPtr<Gio::File> > valid_files;
+
+    static bool first = true;
 
     for (auto file : files) {
         Gio::FileType type = file->query_file_type();
@@ -78,10 +84,10 @@ InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& fi
 
             case Gio::FILE_TYPE_REGULAR:
             {
-                // If recursive, only look at SVG and SVGZ files.
+                // Only look at SVG and SVGZ files.
                 std::string basename = file->get_basename();
                 std::string extension = basename.substr(basename.find_last_of(".") + 1);
-                if (!_recursive || extension == "svg" || extension == "svgz") { 
+                if (extension == "svg" || extension == "svgz") {
                     valid_files.push_back(file);
                 }
                 break;
@@ -89,7 +95,7 @@ InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& fi
 
             case Gio::FILE_TYPE_DIRECTORY:
             {
-                if (_recursive) {
+                if (_recursive || first) {
                     // No easy way to get children of directory!
                     Glib::RefPtr<Gio::FileEnumerator> children = file->enumerate_children();
                     Glib::RefPtr<Gio::FileInfo> info;
@@ -105,6 +111,7 @@ InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& fi
             default:
                 std::cerr << "InkviewWindow: Unknown file type: " << type << std::endl;
         }
+        first = false;
     }
 
     return valid_files;
