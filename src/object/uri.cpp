@@ -10,6 +10,8 @@
 
 #include "uri.h"
 
+#include <cstring>
+
 #include <giomm/contenttype.h>
 #include <giomm/file.h>
 #include <glibmm/base64.h>
