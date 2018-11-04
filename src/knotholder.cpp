@@ -76,7 +76,7 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
 }
 
 KnotHolder::~KnotHolder() {
-	sp_object_unref(item);
+    sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {
@@ -127,28 +127,36 @@ bool KnotHolder::knot_mouseover() const {
 }
 
 void
-KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
+KnotHolder::knot_mousedown_handler(SPKnot *knot, guint state)
 {
-    KnotHolder *knot_holder = this;
-    SPItem *saved_item = this->item;
-
     if (!(state & GDK_SHIFT_MASK)) {
         unselect_knots();
     }
-    for(std::list<KnotHolderEntity *>::iterator i = knot_holder->entity.begin(); i != knot_holder->entity.end(); ++i) {
+    for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
         if (!(state & GDK_SHIFT_MASK)) {
             e->knot->selectKnot(false);
         }
         if (e->knot == knot) {
-            // no need to test whether knot_click exists since it's virtual now
-            e->knot_click(state);
             if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
                 e->knot->selectKnot(true);
             } else {
                 e->knot->selectKnot(false);
             }
         }
+    }
+}
+
+void
+KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
+{
+    SPItem *saved_item = this->item;
+
+    for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
+        KnotHolderEntity *e = *i;
+        if (e->knot == knot)
+            // no need to test whether knot_click exists since it's virtual now
+            e->knot_click(state);
     }
 
     {
@@ -158,7 +166,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
         }
     }
 
-    knot_holder->update_knots();
+    this->update_knots();
 
     unsigned int object_verb = SP_VERB_NONE;
 
@@ -185,7 +193,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     }
 
     // for drag, this is done by ungrabbed_handler, but for click we must do it here
-    
+
     if (saved_item) { //increasingly aggressive sanity checks
        if (saved_item->document) {
             // enum is unsigned so can't be less than SP_VERB_INVALID
@@ -208,7 +216,7 @@ KnotHolder::transform_selected(Geom::Affine transform){
     }
 }
 
-void 
+void
 KnotHolder::unselect_knots(){
     if (tools_isactive(desktop, TOOLS_NODES)) {
         Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
@@ -238,7 +246,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     	this->dragging = true;
     }
 
-	// this was a local change and the knotholder does not need to be recreated:
+    // this was a local change and the knotholder does not need to be recreated:
     this->local_change = TRUE;
 
     for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
@@ -266,23 +274,11 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
     if (this->released) {
         this->released(this->item);
     } else {
-        if (!(state & GDK_SHIFT_MASK)) {
-            unselect_knots();
-        }
-        for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
-            KnotHolderEntity *e = *i;
-            if (!(state & GDK_SHIFT_MASK)) {
-                e->knot->selectKnot(false);
-            }
-            if (e->knot == knot) {
-                // no need to test whether knot_click exists since it's virtual now
-                if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
-                    e->knot->selectKnot(true);
-                } else {
-                    e->knot->selectKnot(false);
-                }
-            }
-        }
+        // if a point is dragged while not selected, it should select itself,
+        // even if it was just unselected in the mousedown event handler.
+        if (!(knot->flags & SP_KNOT_SELECTED))
+            knot->selectKnot(true);
+
         SPObject *object = (SPObject *) this->item;
 
         // Caution: this call involves a screen update, which may process events, and as a
