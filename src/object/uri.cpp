@@ -320,22 +320,73 @@ gchar *URI::Impl::toString() const {
     }
 }
 
+/**
+ * Replacement for buggy xmlBuildRelativeURI
+ * https://gitlab.gnome.org/GNOME/libxml2/merge_requests/12
+ *
+ * Special case: Don't cross filesystem root, e.g. drive letter on Windows.
+ * This is an optimization to keep things practical, it's not required for correctness.
+ *
+ * @param uri an absolute URI
+ * @param base an absolute URI without any ".." path segments
+ * @return relative URI if possible, otherwise @a uri unchanged
+ */
+static std::string build_relative_uri(char const *uri, char const *base)
+{
+    size_t n_slash = 0;
+    size_t i = 0;
+
+    // find longest common prefix
+    for (; uri[i]; ++i) {
+        if (uri[i] != base[i]) {
+            break;
+        }
+
+        if (uri[i] == '/') {
+            ++n_slash;
+        }
+    }
+
+    // URIs must share protocol://server/
+    if (n_slash < 3) {
+        return uri;
+    }
+
+    // Don't cross filesystem root
+    if (n_slash == 3 && g_str_has_prefix(base, "file:///") && base[8]) {
+        return uri;
+    }
+
+    std::string relative;
+
+    for (size_t j = i; base[j]; ++j) {
+        if (base[j] == '/') {
+            relative += "../";
+        }
+    }
+
+    while (uri[i - 1] != '/') {
+        --i;
+    }
+
+    relative += (uri + i);
+
+    if (relative.empty() && base[i]) {
+        relative = "./";
+    }
+
+    return relative;
+}
+
 std::string URI::str(char const *baseuri) const
 {
     std::string s;
     gchar *save = _impl->toString();
     if (save) {
-        xmlChar *rel = nullptr;
-        const char *latest = save;
-        if (baseuri) {
-            rel = xmlBuildRelativeURI((xmlChar *)save, (xmlChar *)baseuri);
-            if (rel) {
-                latest = (const char *)rel;
-            }
-        }
-        s = latest;
-        if (rel) {
-            xmlFree(rel);
+        if (baseuri && baseuri[0]) {
+            s = build_relative_uri(save, baseuri);
+        } else {
+            s = save;
         }
         g_free(save);
     }
