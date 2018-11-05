@@ -26,8 +26,10 @@ TEST(UriTest, FromDir)
 {
 #ifdef _WIN32
     ASSERT_EQ(URI::from_dirname("C:\\tmp").str(), "file:///C:/tmp/");
+    ASSERT_EQ(URI::from_dirname("C:\\").str(), "file:///C:/");
     ASSERT_EQ(URI::from_href_and_basedir("uri.svg", "C:\\tmp").str(), "file:///C:/tmp/uri.svg");
 #else
+    ASSERT_EQ(URI::from_dirname("/").str(), "file:///");
     ASSERT_EQ(URI::from_dirname("/tmp").str(), "file:///tmp/");
     ASSERT_EQ(URI::from_href_and_basedir("uri.svg", "/tmp").str(), "file:///tmp/uri.svg");
 #endif

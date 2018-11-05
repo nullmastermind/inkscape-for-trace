@@ -290,7 +290,12 @@ URI URI::from_dirname(gchar const *path)
         pathstr = Glib::build_filename(Glib::get_current_dir(), pathstr);
     }
 
-    auto uristr = Glib::filename_to_uri(pathstr) + "/";
+    auto uristr = Glib::filename_to_uri(pathstr);
+
+    if (uristr[uristr.size() - 1] != '/') {
+        uristr.push_back('/');
+    }
+
     return URI(uristr.c_str());
 }
 
