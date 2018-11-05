@@ -137,17 +137,6 @@ public:
     std::string toNativeFilename() const;
 
     /**
-     * Returns a glib string version of this URI.
-     *
-     * The returned string must be freed with \c g_free().
-     *
-     * @return a glib string version of this URI.
-     *
-     * @todo remove this method and use str() instead
-     */
-    char *toString() const { return _impl->toString(); }
-
-    /**
      * Return the string representation of this URI
      *
      * @param baseuri Return a relative path if this URI shares protocol and host with @a baseuri

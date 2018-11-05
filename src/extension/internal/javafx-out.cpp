@@ -391,14 +391,12 @@ bool JavaFXOutput::doStyle(SPStyle *style)
         }
     else if (fill.isPaintserver()){
         if (fill.value.href && fill.value.href->getURI() ){
-            gchar *str = fill.value.href->getURI()->toString();
-            String uri = (str ? str : "");
+            String uri = fill.value.href->getURI()->str();
             /* trim the anchor '#' from the front */
             if (uri.size() > 0 && uri[0]=='#') {
                 uri = uri.substr(1);
             }
             out("            fill: %s()\n", sanatize(uri).c_str());
-            g_free(str);
         }
     }
 

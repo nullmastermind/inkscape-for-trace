@@ -627,15 +627,11 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
        paint_res->colorSet = paint->colorSet;
        paint_res->paintOrigin = paint->paintOrigin;
        if (paint_res->set && paint_effectively_set && paint->isPaintserver()) { // copy the server
-           gchar const *string = nullptr; // memory leak results if style->get* called inside sp_style_set_to_uri_string.
            if (isfill) {
-               string = style->getFillURI();
-               sp_style_set_to_uri_string (style_res, true, string);
+               sp_style_set_to_uri(style_res, true, style->getFillURI());
            } else {
-               string = style->getStrokeURI();
-               sp_style_set_to_uri_string (style_res, false, string);
+               sp_style_set_to_uri(style_res, false, style->getStrokeURI());
            }
-           if(string)g_free((void *) string);
        }
        paint_res->set = paint_effectively_set;
        style_res->fill_rule.computed = style->fill_rule.computed; // no averaging on this, just use the last one

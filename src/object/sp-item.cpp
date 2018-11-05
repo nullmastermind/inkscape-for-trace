@@ -749,20 +749,14 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
     if (item->clip_ref){
         if (item->clip_ref->getObject()) {
-            gchar *uri = item->clip_ref->getURI()->toString();
-            const gchar *value = g_strdup_printf ("url(%s)", uri);
-            repr->setAttribute ("clip-path", value);
-            g_free ((void *) value);
-            g_free ((void *) uri);
+            auto value = item->clip_ref->getURI()->cssStr();
+            repr->setAttribute("clip-path", value.c_str());
         }
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            gchar *uri = item->mask_ref->getURI()->toString();
-            const gchar *value = g_strdup_printf ("url(%s)", uri);
-            repr->setAttribute ("mask", value);
-            g_free ((void *) value);
-            g_free ((void *) uri);
+            auto value = item->clip_ref->getURI()->cssStr();
+            repr->setAttribute("mask", value.c_str());
         }
     }
     if (item->_highlightColor){

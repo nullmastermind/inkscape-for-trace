@@ -629,9 +629,8 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     }
 
     if (this->ref->getURI()) {
-        gchar *uri_string = this->ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = this->ref->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || this->units_set) {

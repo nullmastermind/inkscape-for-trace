@@ -217,9 +217,8 @@ Inkscape::XML::Node* SPBox3D::write(Inkscape::XML::Document *xml_doc, Inkscape::
             /* box is not yet linked to a perspective; use the document's current perspective */
             SPDocument *doc = object->document;
             if (box->persp_ref->getURI()) {
-                gchar *uri_string = box->persp_ref->getURI()->toString();
-                repr->setAttribute("inkscape:perspectiveID", uri_string);
-                g_free(uri_string);
+                auto uri_string = box->persp_ref->getURI()->str();
+                repr->setAttribute("inkscape:perspectiveID", uri_string.c_str());
             } else {
                 Glib::ustring href = "#";
                 href += doc->getCurrentPersp3D()->getId();

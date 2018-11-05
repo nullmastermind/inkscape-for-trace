@@ -1221,10 +1221,9 @@ sp_style_set_ipaint_to_uri_string (SPStyle *style, SPIPaint *paint, const gchar 
 }
 
 // Called in: desktop-style.cpp
-void
-sp_style_set_to_uri_string (SPStyle *style, bool isfill, const gchar *uri)
+void sp_style_set_to_uri(SPStyle *style, bool isfill, Inkscape::URI const *uri)
 {
-    sp_style_set_ipaint_to_uri_string (style, isfill? &style->fill : &style->stroke, uri);
+    sp_style_set_ipaint_to_uri(style, isfill ? &style->fill : &style->stroke, uri, style->document);
 }
 
 // Called in: widgets/font-selector.cpp, widgets/text-toolbar.cpp, ui/dialog/text-edit.cpp

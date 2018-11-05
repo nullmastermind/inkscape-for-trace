@@ -312,15 +312,15 @@ public:
 
     SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : nullptr; }
     SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : nullptr; }
-    char    const *getFilterURI() const { return (filter.href) ? filter.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getFilterURI() const { return (filter.href) ? filter.href->getURI() : nullptr; }
 
     SPPaintServer       *getFillPaintServer()         { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
     SPPaintServer const *getFillPaintServer()   const { return (fill.value.href) ? fill.value.href->getObject() : nullptr; }
-    char         const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getFillURI()           const { return (fill.value.href) ? fill.value.href->getURI() : nullptr; }
 
     SPPaintServer       *getStrokePaintServer()       { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
     SPPaintServer const *getStrokePaintServer() const { return (stroke.value.href) ? stroke.value.href->getObject() : nullptr; }
-    char        const  *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI()->toString() : nullptr; }
+    Inkscape::URI const *getStrokeURI()         const { return (stroke.value.href) ? stroke.value.href->getURI() : nullptr; }
 
     /**
      * Return a font feature string useful for Pango.
@@ -333,7 +333,7 @@ SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();
 
 SPStyle *sp_style_unref(SPStyle *style); // SPStyle::unref();
 
-void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const char *uri); // ?
+void sp_style_set_to_uri(SPStyle *style, bool isfill, Inkscape::URI const *uri); // ?
 
 char const *sp_style_get_css_unit_string(int unit);  // No change?
 

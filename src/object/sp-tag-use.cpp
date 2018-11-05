@@ -128,9 +128,8 @@ SPTagUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, gui
     SPObject::write(xml_doc, repr, flags);
     
     if (ref->getURI()) {
-        gchar *uri_string = ref->getURI()->toString();
-        repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
+        auto uri_string = ref->getURI()->str();
+        repr->setAttribute("xlink:href", uri_string.c_str());
     }
 
     return repr;

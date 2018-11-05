@@ -173,10 +173,10 @@ Inkscape::XML::Node* SPTRef::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     this->attributes.writeTo(repr);
 
     if (this->uriOriginalRef->getURI()) {
-        gchar *uri_string = this->uriOriginalRef->getURI()->toString();
+        auto uri = this->uriOriginalRef->getURI()->str();
+        auto uri_string = uri.c_str();
         debug("uri_string=%s", uri_string);
         repr->setAttribute("xlink:href", uri_string);
-        g_free(uri_string);
     }
 
     SPItem::write(xml_doc, repr, flags);
