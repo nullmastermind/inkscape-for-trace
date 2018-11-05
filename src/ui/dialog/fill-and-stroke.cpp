@@ -28,7 +28,6 @@
 
 #include "helper/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/view/view-widget.h"
 #include "ui/widget/notebook-page.h"
 
 #include "widgets/fill-style.h"
