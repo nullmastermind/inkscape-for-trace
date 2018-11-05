@@ -699,6 +699,12 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
     if (!carea) return RENDER_OK;
 
+    // expand render on filtered items
+    Geom::OptIntRect cl = _cacheRect();
+    if (_filter && render_filters) {
+        carea = cl;
+    }
+
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
 
@@ -731,8 +737,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
             // we were previously outside of the canvas.
-            Geom::OptIntRect cl = _drawing.cacheLimit();
-            cl.intersectWith(_drawbox);
             if (cl) {
                 _cache = new DrawingCache(*cl, device_scale);
             }
