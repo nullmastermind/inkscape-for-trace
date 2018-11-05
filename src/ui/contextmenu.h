@@ -35,7 +35,7 @@ class Verb;
  * Implements the Inkscape context menu.
  * 
  * For the context menu implementation, the ContextMenu class stores the object
- * that was selected in a private data member. This should be farely safe to do
+ * that was selected in a private data member. This should be fairly safe to do
  * and a pointer to the SPItem as well as SPObject class are kept.
  * All callbacks of the context menu entries are implemented as private
  * functions.
@@ -54,7 +54,14 @@ class ContextMenu : public Gtk::Menu
          */
         ContextMenu(SPDesktop *desktop, SPItem *item);
         ~ContextMenu() override;
-        
+
+        /**
+         * install CSS to shift menu icons into the space reserved for toggles (i.e. check and radio items)
+         *
+         * TODO: This should be private but we already re-use this code in ui/interface.cpp which is not c++ified yet.
+         *       In future ContextMenu and the (to be created) class for the menu bar should then be derived from one common base class.
+         */
+        void ShiftIcons();
     private:
         SPItem *_item; // pointer to the object selected at the time the ContextMenu is created
         SPObject *_object; // pointer to the object selected at the time the ContextMenu is created
@@ -71,11 +78,15 @@ class ContextMenu : public Gtk::Menu
         Gtk::SeparatorMenuItem* AddSeparator();
         
         /**
-         * c++ified version of sp_ui_menu_append_item.
+         * Appends a custom menu UI from a verb.
          * 
+         * c++ified version of sp_ui_menu_append_item.
          * @see sp_ui_menu_append_item_from_verb and synchronize/drop that function when c++ifying other code in interface.cpp
+         * 
+         * @param show_icon True if an icon should be displayed before the menu item's label
+         * 
          */
-        void AppendItemFromVerb(Inkscape::Verb *verb);
+        void AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon = false);
         
         /**
          * main function which is responsible for creating the context sensitive menu items,

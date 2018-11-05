@@ -19,8 +19,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/icontheme.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 #include <glibmm/miscutils.h>
@@ -68,6 +66,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/clipboard.h"
+#include "ui/contextmenu.h"
 #include "ui/dialog-events.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/inkscape-preferences.h"
@@ -448,62 +447,15 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
     }
 }
 
-/* install CSS to shift icons into the space reserved for toggles (i.e. check and radio items) */
+/* install CSS to shift icons into the space reserved for toggles (i.e. check and radio items)
+ *
+ * TODO: This code already exists as a C++ version in the class ContextMenu so we can simply wrap it here.
+ *       In future ContextMenu and the (to be created) class for the menu bar should then be derived from one common base class.
+ */
 void shift_icons(GtkWidget *menu, gpointer /* user_data */)
 {
-    static auto provider = Gtk::CssProvider::create();
-    static bool provider_added = false;
-
-    Gtk::MenuItem *menuitem = nullptr;
-    Gtk::Box *content = nullptr;
-    Gtk::Image *icon = nullptr;
-
-    static int current_shift = 0;
-    int calculated_shift = 0;
-
-    // install CssProvider for our custom styles
-    if (!provider_added) {
-        auto const screen = Gdk::Screen::get_default();
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        provider_added = true;
-    }
-
-    // get the first MenuItem with an image (i.e. "ImageMenuItem" as named below)
-    std::vector<Gtk::Widget *> children = Glib::wrap(GTK_MENU(menu))->get_children();
-    for (auto child: children) {
-        if (child->get_name() == "ImageMenuItem") {
-            menuitem = static_cast<Gtk::MenuItem *>(child);
-            content = static_cast<Gtk::Box *>(menuitem->get_child());
-            icon = static_cast<Gtk::Image *>(content->get_children()[0]);
-            break;
-        }
-    }
-
-    // calculate how far we have to shift the icon to fit it into the empty space between menuitem and its content
-    if (icon) {
-        auto allocation_menuitem = menuitem->get_allocation();
-        auto allocation_icon = icon->get_allocation();
-
-        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
-            calculated_shift = allocation_menuitem.get_width() - allocation_icon.get_x() - allocation_icon.get_width();
-        } else {
-            calculated_shift = -allocation_icon.get_x();
-        }
-    }
-
-    // install CSS to shift icon, use a threshold to avoid overly frequent updates
-    // (gtk's own calculations for the reserved space are off by a few pixels if there is no check/radio item in a menu)
-    if (calculated_shift && std::abs(current_shift - calculated_shift) > 2) {
-        current_shift = calculated_shift;
-
-        std::string css_str;
-        if (menuitem->get_direction() == Gtk::TEXT_DIR_RTL) {
-            css_str = "#ImageMenuItem image {margin-right:" + std::to_string(-calculated_shift) + "px;}";
-        } else {
-            css_str = "#ImageMenuItem image {margin-left:" + std::to_string(calculated_shift) + "px;}";
-        }
-        provider->load_from_data(css_str);
-    }
+    ContextMenu *contextmenu = static_cast<ContextMenu *>(Glib::wrap(menu));
+    contextmenu->ShiftIcons();
 }
 
 /**
@@ -557,10 +509,6 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
 #else
         gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 #endif
-
-        GtkAccelGroup *accel_group = sp_shortcut_get_accel_group();
-        gtk_menu_set_accel_group(menu, accel_group);
-
         sp_shortcut_add_accelerator(item->gobj(), sp_shortcut_get_primary(verb));
         gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item->gobj());
 
