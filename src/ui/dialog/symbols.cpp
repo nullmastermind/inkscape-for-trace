@@ -221,11 +221,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay_opacity->set_halign(Gtk::ALIGN_START );
   overlay_opacity->set_valign(Gtk::ALIGN_START );
   //No results
-  iconsize = Gtk::IconSize().from_name(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"));
-  if (!iconsize) {
-      iconsize = Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
-  }
-  overlay_icon = new Gtk::Image();
+  overlay_icon = sp_get_icon_image("searching", 110, true);
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
   overlay_icon->set_valign(Gtk::ALIGN_START );
   overlay_icon->set_margin_top(45);
@@ -466,11 +462,11 @@ void SymbolsDialog::rebuild() {
 void SymbolsDialog::showOverlay() {
 #if GTKMM_CHECK_VERSION(3,14,0)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
-  overlay_icon = sp_get_icon_image("none", iconsize);
   if (current == ALLDOCS && !l.size()) 
   {
+    overlay_icon->hide();
     if (!all_docs_processed ) {
-        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_icon->show();
         overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
                                   Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +
@@ -479,7 +475,7 @@ void SymbolsDialog::showOverlay() {
       overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") + Glib::ustring(_("No results found")) + Glib::ustring("</span>"));
       overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") + Glib::ustring(_("Try a different search term.")) + Glib::ustring("</span>"));
     } else {
-        overlay_icon = sp_get_icon_image("searching", iconsize);
+        overlay_icon->show();
         overlay_title->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"large\">") +
                                   Glib::ustring(_("Search in all symbol sets...")) + Glib::ustring("</span>"));
         overlay_desc->set_markup(Glib::ustring("<span foreground=\"#333333\" size=\"small\">") +

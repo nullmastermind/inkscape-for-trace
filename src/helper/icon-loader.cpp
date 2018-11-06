@@ -19,7 +19,7 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/toolitem.h>
 
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size, bool negative)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -34,7 +34,12 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     try {
         if (prefs->getBool("/theme/symbolicIcons", false)) {
             gchar colornamed[64];
-            sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
+            int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+            // Use in case the special widgets have inverse theme background and symbolic
+            if (negative) {
+                colorset = colorset ^ 0xffffff00;
+            }
+            sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
             Gdk::RGBA color;
             color.set(colornamed);
             Gtk::IconInfo iconinfo =
@@ -58,61 +63,63 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     return _icon_pixbuf;
 }
 
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size)
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size, bool negative)
 {
     int width, height;
     Gtk::IconSize::lookup(Gtk::IconSize(icon_size), width, height);
-    return sp_get_icon_pixbuf(icon_name, width);
+    return sp_get_icon_pixbuf(icon_name, width, negative);
 }
 
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, GtkIconSize icon_size)
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, GtkIconSize icon_size, bool negative)
 {
     gint width, height;
     gtk_icon_size_lookup(icon_size, &width, &height);
-    return sp_get_icon_pixbuf(icon_name, width);
+    return sp_get_icon_pixbuf(icon_name, width, negative);
 }
 
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar const *prefs_size)
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar const *prefs_size, bool negative)
 {
     // Load icon based in preference size defined allowed values are:
     //"/toolbox/tools/small" Toolbox icon size
     //"/toolbox/small" Control bar icon size
     //"/toolbox/secondary" Secondary toolbar icon size
     GtkIconSize icon_size = Inkscape::UI::ToolboxFactory::prefToSize(prefs_size);
-    return sp_get_icon_pixbuf(icon_name, icon_size);
+    return sp_get_icon_pixbuf(icon_name, icon_size, negative);
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gint size)
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gint size, bool negative)
 {
-    auto icon = sp_get_icon_pixbuf(icon_name, size);
+    auto icon = sp_get_icon_pixbuf(icon_name, size, negative);
     Gtk::Image *image = new Gtk::Image(icon);
     return image;
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size)
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size, bool negative)
 {
-    auto icon = sp_get_icon_pixbuf(icon_name, icon_size);
+    auto icon = sp_get_icon_pixbuf(icon_name, icon_size, negative);
     Gtk::Image *image = new Gtk::Image(icon);
     return image;
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size)
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size, bool negative)
 {
-    auto icon = sp_get_icon_pixbuf(icon_name, icon_size);
+    auto icon = sp_get_icon_pixbuf(icon_name, icon_size, negative);
     Gtk::Image *image = new Gtk::Image(icon);
     return image;
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size)
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size, bool negative)
 {
-    auto icon = sp_get_icon_pixbuf(icon_name, prefs_size);
+    auto icon = sp_get_icon_pixbuf(icon_name, prefs_size, negative);
     Gtk::Image *image = new Gtk::Image(icon);
     return image;
 }
 
 std::pair<Glib::RefPtr<Gtk::RadioAction>, Gdk::RGBA> sp_set_radioaction_icon(Gtk::RadioAction::Group group,
                                                                              Glib::ustring icon_name,
-                                                                             Glib::ustring label, Glib::ustring tooltip)
+                                                                             Glib::ustring label, 
+                                                                             Glib::ustring tooltip,
+                                                                             bool negative)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/theme/symbolicIcons", false)) {
@@ -124,7 +131,12 @@ std::pair<Glib::RefPtr<Gtk::RadioAction>, Gdk::RGBA> sp_set_radioaction_icon(Gtk
     Gtk::ToolItem *item = action->create_tool_item();
     Gdk::RGBA color;
     gchar colornamed[64];
-    sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
+    int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+    // Use in case the special widgets have inverse theme background and symbolic
+    if (negative) {
+        colorset = colorset ^ 0xffffff00;
+    }
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
     color.set(colornamed);
     return std::make_pair(action, color);
 }
