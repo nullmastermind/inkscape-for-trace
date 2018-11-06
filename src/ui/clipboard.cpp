@@ -1245,7 +1245,8 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
     // FIXME: Temporary hack until we add support for memory output.
     // Save to a temporary file, read it back and then set the clipboard contents
     gchar *filename = g_build_filename( g_get_user_cache_dir(), "inkscape-clipboard-export", NULL );
-    gsize len; gchar *data;
+    gchar *data = nullptr;
+    gsize len;
 
     try {
         if (out == outlist.end() && target == "image/png")
@@ -1288,6 +1289,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
 
     g_unlink(filename); // delete the temporary file
     g_free(filename);
+    g_free(data);
 }
 
 
