@@ -87,7 +87,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     registerParameter(&update_on_knot_move);
     offset.param_set_increments(0.1, 0.1);
     offset.param_set_digits(4);
-    offset_pt = Geom::Point();
+    offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
     origin = Geom::Point();
     evenodd = true;
     _knot_entity = nullptr;
@@ -178,6 +178,7 @@ sp_set_origin(Geom::PathVector original_pathv, Geom::Point &origin)
         Geom::PathTime pathtime = pathvectortime->asPathTime();
         origin = bigger[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
     }
+
 }
 
 void
@@ -417,6 +418,11 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
 Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
 {
     LPEOffset const * lpe = dynamic_cast<LPEOffset const*> (_effect);
+    if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
+        if(boost::optional< Geom::Point > offset_point = SP_SHAPE(item)->getCurve()->first_point()) {
+            return *offset_point;
+        }
+    }
     return lpe->offset_pt;
 }
 
