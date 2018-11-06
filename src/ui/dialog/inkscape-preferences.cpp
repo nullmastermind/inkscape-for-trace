@@ -603,6 +603,7 @@ void InkscapePreferences::symbolicThemeCheck()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     auto folders = get_foldernames(ICONS, { "application" });
     bool symbolic = false;
+    bool default_icon_theme = true;
     for (auto &folder : folders) {
         auto path = folder;
         const size_t last_slash_idx = folder.find_last_of("\\/");
@@ -615,12 +616,16 @@ void InkscapePreferences::symbolicThemeCheck()
 #else
             path += "/symbolic/actions";
 #endif
+            default_icon_theme = false;
             std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { ".svg" }, {});
             if (symbolic_icons.size() > 0) {
                 symbolic = true;
                 symbolic_icons.clear();
             }
         }
+    }
+    if (default_icon_theme) {
+        symbolic = true;
     }
     if (_symbolic_icons.get_parent()) {
         if (!symbolic) {
