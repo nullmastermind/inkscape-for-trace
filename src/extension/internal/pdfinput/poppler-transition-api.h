@@ -3,6 +3,12 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(0,71,0)
+typedef bool GBool;
+#define gTrue true
+#define gFalse false
+#endif
+
 #if POPPLER_CHECK_VERSION(0,70,0)
 #define _POPPLER_CONST const
 #else
