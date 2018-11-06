@@ -42,7 +42,8 @@ public:
         ~Output () override;
     bool check                () override;
     void         save (SPDocument *doc,
-                       gchar const *uri);
+                       gchar const *filename,
+                       bool detachbase = false);
     bool         prefs ();
     gchar *      get_mimetype();
     gchar *      get_extension();

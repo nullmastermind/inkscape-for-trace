@@ -8,8 +8,6 @@ class SPDocument;
 namespace Inkscape {
 namespace XML {
 
-std::string calc_abs_doc_base(char const *doc_base);
-
 /**
  * Change relative hrefs in doc to be relative to \a new_base instead of doc.base.
  *

@@ -178,6 +178,11 @@ public:
                           Geom::Point const & /*p*/,
                           SPStyle const * /*style*/) { return 0; }
     virtual void     processPath(Inkscape::XML::Node * /*node*/) {}
+
+    /**
+     * If detach = true, when saving to a file, don't store URIs realtive to the filename
+     */
+    virtual void setDetachBase(bool detach) {}
 };
 
 

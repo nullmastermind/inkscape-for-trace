@@ -43,7 +43,6 @@ using Inkscape::XML::Document;
 using Inkscape::XML::SimpleDocument;
 using Inkscape::XML::Node;
 using Inkscape::XML::AttributeRecord;
-using Inkscape::XML::calc_abs_doc_base;
 using Inkscape::XML::rebase_href_attrs;
 
 Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
@@ -709,8 +708,15 @@ bool sp_repr_save_rebased_file(Document *doc, gchar const *const filename, gchar
 
     Glib::ustring old_href_abs_base;
     Glib::ustring new_href_abs_base;
+
+    if (old_base) {
+        old_href_abs_base = old_base;
+        if (!Glib::path_is_absolute(old_href_abs_base)) {
+            old_href_abs_base = Glib::build_filename(Glib::get_current_dir(), old_href_abs_base);
+        }
+    }
+
     if (for_filename) {
-        old_href_abs_base = calc_abs_doc_base(old_base);
         if (Glib::path_is_absolute(for_filename)) {
             new_href_abs_base = Glib::path_get_dirname(for_filename);
         } else {

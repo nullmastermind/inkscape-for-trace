@@ -103,7 +103,12 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
         uri = URI::from_native_filename(sp_absref);
     }
 
-    auto new_href = uri.str(URI::from_dirname(new_abs_base).str().c_str());
+    std::string baseuri;
+    if (new_abs_base) {
+        baseuri = URI::from_dirname(new_abs_base).str();
+    }
+
+    auto new_href = uri.str(baseuri.c_str());
 
     ret = cons(AttributeRecord(href_key, share_string(new_href.c_str())), ret); // Check if this is safe/copied or if it is only held.
     if (sp_absref) {
@@ -113,40 +118,6 @@ Inkscape::XML::rebase_href_attrs(gchar const *const old_abs_base,
                                                  ? sp_absref
                                                  : share_string(abs_href.c_str()) )),
                    ret);
-    }
-
-    return ret;
-}
-
-// std::string Inkscape::XML::rebase_href_attrs( std::string const &oldAbsBase, std::string const &newAbsBase, gchar const * /*href*/, gchar const */*absref*/ )
-// {
-//     std::string ret;
-//     //g_message( "XX  need to flip from [%s] to [%s]", oldAbsBase.c_str(), newAbsBase.c_str() );
-
-//     if ( oldAbsBase != newAbsBase ) {
-//     }
-
-//     return ret;
-// }
-
-std::string Inkscape::XML::calc_abs_doc_base(gchar const *doc_base)
-{
-    /* Note that we don't currently try to handle the case of doc_base containing
-     * `..' or `.' path components.  This non-handling means that sometimes
-     * sp_relative_path_from_path will needlessly give an absolute path.
-     *
-     * It's probably not worth trying to address this until we're using proper
-     * relative URL/IRI href processing (with liburiparser).
-     *
-     * (Note that one possible difficulty with `..' is symlinks.) */
-    std::string ret;
-
-    if (!doc_base) {
-        ret = Glib::get_current_dir();
-    } else if (Glib::path_is_absolute(doc_base)) {
-        ret = doc_base;
-    } else {
-        ret = Glib::build_filename( Glib::get_current_dir(), doc_base );
     }
 
     return ret;

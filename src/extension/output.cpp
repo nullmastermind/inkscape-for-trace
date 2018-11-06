@@ -211,8 +211,9 @@ Output::prefs ()
 	could be changed, and old files will still work properly.
 */
 void
-Output::save(SPDocument *doc, gchar const *filename)
+Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
 {
+    imp->setDetachBase(detachbase);
     imp->save(this, doc, filename);
 
 	return;

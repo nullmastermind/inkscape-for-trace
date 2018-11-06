@@ -1279,7 +1279,12 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 // Need to load the extension.
                 (*out)->set_state(Inkscape::Extension::Extension::STATE_LOADED);
             }
-            (*out)->save(_clipboardSPDoc, filename);
+
+            if (SP_ACTIVE_DOCUMENT) {
+                _clipboardSPDoc->setBase(SP_ACTIVE_DOCUMENT->getBase());
+            }
+
+            (*out)->save(_clipboardSPDoc, filename, true);
         }
         g_file_get_contents(filename, &data, &len, nullptr);
 

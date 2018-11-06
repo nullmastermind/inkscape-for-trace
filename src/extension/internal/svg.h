@@ -22,8 +22,11 @@ namespace Extension {
 namespace Internal {
 
 class Svg : public Inkscape::Extension::Implementation::Implementation {
+    bool m_detachbase = false;
 
 public:
+    void        setDetachBase(bool detach) override { m_detachbase = detach; }
+
     void        save( Inkscape::Extension::Output *mod,
                                SPDocument *doc,
                                gchar const *filename ) override;
