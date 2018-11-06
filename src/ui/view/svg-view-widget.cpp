@@ -42,7 +42,6 @@ SVGViewWidget::SVGViewWidget(SPDocument* document)
 SVGViewWidget::~SVGViewWidget()
 {
     delete _view;
-    delete _canvas;
 }
 
 void
