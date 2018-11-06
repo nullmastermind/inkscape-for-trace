@@ -7373,7 +7373,7 @@ msgstr "Extérieur"
 
 #: ../src/extension/internal/filter/morphology.h:63
 msgid "Open"
-msgstr "Overt"
+msgstr "Ouvert"
 
 #: ../src/extension/internal/filter/morphology.h:65
 #: ../src/ui/tools/measure-tool.cpp:1242 ../src/ui/widget/page-sizer.cpp:231
@@ -28303,7 +28303,7 @@ msgstr "Verrouiller tous les guides"
 
 #: ../src/verbs.cpp:2718 ../src/widgets/desktop-widget.cpp:383
 msgid "Toggle lock of all guides in the document"
-msgstr "Inverser l'état du verrou tous les guides du document"
+msgstr "Inverser l'état du verrou de tous les guides du document"
 
 #: ../src/verbs.cpp:2719
 msgid "Create _Guides Around the Page"
