@@ -18,7 +18,6 @@
 #include "ui/widget/panel.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
-#include "ui/widget/imageicon.h"
 #include "ui/widget/button.h"
 #include "ui/dialog/desktop-tracker.h"
 

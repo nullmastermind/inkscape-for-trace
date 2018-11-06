@@ -93,8 +93,6 @@ typedef int uid_t;
  *
  *   Inkscape::UI::Dialog::SVGPreview::SVGPreview()
  *       src/ui/dialog/filedialogimpl-gtkmm.cpp:542:9
- *   void Inkscape::UI::Widget::ImageIcon::init()
- *       src/ui/widget/imageicon.cpp:93:9
  */
 
 

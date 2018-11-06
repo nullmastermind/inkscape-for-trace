@@ -167,7 +167,6 @@ set(ui_SRC
 	widget/font-variations.cpp
 	widget/frame.cpp
 	widget/highlight-picker.cpp
-	widget/imageicon.cpp
 	widget/imagetoggler.cpp
 	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
@@ -389,7 +388,6 @@ set(ui_SRC
 	widget/frame.h
 	widget/highlight-picker.h
 	widget/insertordericon.h
-	widget/imageicon.h
 	widget/imagetoggler.h
 	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
@@ -400,7 +398,7 @@ set(ui_SRC
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/page-sizer.h
-  widget/pages-skeleton.h 
+	widget/pages-skeleton.h 
 	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h
