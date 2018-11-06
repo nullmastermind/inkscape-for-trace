@@ -14,6 +14,15 @@
 
 class SPDocument;
 
+namespace Inkscape {
+namespace UI {
+namespace View {
+  class SVGViewWidget;
+}
+}
+}
+
+
 class InkviewWindow : public Gtk::ApplicationWindow {
 
 public:
@@ -38,7 +47,7 @@ private:
     int _index;
     std::vector<SPDocument*> _documents;
 
-    GtkWidget* _view;
+    Inkscape::UI::View::SVGViewWidget* _view;
     Gtk::Window* _controlwindow;
 
     // Callbacks

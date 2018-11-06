@@ -278,7 +278,6 @@ override) the bindings in the main default.xml.
   <bind action="ToggleStatusbar" />
 
   <bind action="ViewNew" />
-  <bind action="ViewNewPreview" />
   <bind action="ViewIconPreview" />
 
   <bind key="KP_5" modifiers="Primary" action="ViewModeToggle" display="true" />

@@ -35,15 +35,16 @@ namespace Gtk {
 class Expander;
 }
 
-namespace Inkscape
-{
+namespace Inkscape {
+  class URI;
 
-class URI;
+namespace UI {
 
-namespace UI
-{
-namespace Dialog
-{
+namespace View {
+  class SVGViewWidget;
+}
+
+namespace Dialog {
 
 /*#########################################################################
 ### Utility
@@ -121,7 +122,7 @@ private:
     /**
      * The sp_svg_view widget
      */
-    Gtk::Widget *viewerGtk;
+    Inkscape::UI::View::SVGViewWidget *viewer;
 
     /**
      * are we currently showing the "no preview" image?

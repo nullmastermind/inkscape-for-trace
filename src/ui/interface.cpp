@@ -36,7 +36,6 @@
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "shortcuts.h"
-#include "svg-view-widget.h"
 
 #include "display/sp-canvas.h"
 
@@ -75,6 +74,7 @@
 #include "ui/monitor.h"
 #include "ui/tools/tool-base.h"
 #include "ui/uxmanager.h"
+#include "ui/view/svg-view-widget.h"
 
 #include "widgets/desktop-widget.h"
 #include "widgets/ege-paint-def.h"
@@ -309,18 +309,6 @@ void sp_ui_reload()
     SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
     INKSCAPE.add_style_sheet();
     prefs->setInt("/options/savewindowgeometry/value", window_geometry);
-}
-
-void sp_ui_new_view_preview()
-{
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    if ( document ) {
-        SPViewWidget *dtw = reinterpret_cast<SPViewWidget *>(sp_svg_view_widget_new(document));
-        g_return_if_fail(dtw != nullptr);
-        SP_SVG_VIEW_WIDGET(dtw)->setResize(true, 400.0, 400.0);
-
-        sp_create_window(dtw, FALSE);
-    }
 }
 
 void

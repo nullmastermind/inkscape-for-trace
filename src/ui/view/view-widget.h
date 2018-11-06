@@ -61,7 +61,7 @@ SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
  */
 class SPViewWidget {
  public:
-	GtkEventBox eventbox;
+    GtkEventBox eventbox;  // NOT USED!
 
         Inkscape::UI::View::View *view;
 

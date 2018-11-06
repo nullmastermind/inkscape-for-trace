@@ -86,8 +86,6 @@ set(inkscape_SRC
   sp-item-notify-moveto.cpp 
   style-internal.cpp
   style.cpp
-  svg-view-widget.cpp
-  svg-view.cpp
   text-chemistry.cpp
   text-editing.cpp
   transf_mat_3x4.cpp
@@ -206,8 +204,6 @@ set(inkscape_SRC
   style-internal.h
   style.h
   svg-profile.h
-  svg-view-widget.h
-  svg-view.h
   syseq.h
   text-chemistry.h
   text-editing.h

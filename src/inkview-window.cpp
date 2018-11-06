@@ -13,10 +13,11 @@
 
 #include "document.h"
 #include "inkscape.h"  // INKSCAPE macro
-#include "svg-view.h"
-#include "svg-view-widget.h"
 
 #include "ui/monitor.h"
+#include "ui/view/svg-view.h"
+#include "ui/view/svg-view-widget.h"
+
 #include "util/units.h"
 
 InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
@@ -146,10 +147,10 @@ InkviewWindow::show_document(SPDocument* document)
     INKSCAPE.add_document(document);
 
     if (_view) {
-        reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW(_view))->setDocument(document);
+        _view->setDocument(document);
     } else {
-        _view = sp_svg_view_widget_new(document);
-        add (*Glib::wrap(_view));
+        _view = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(document));
+        add (*_view);
     }
 
     update_title();

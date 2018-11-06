@@ -2120,9 +2120,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_VIEW_NEW:
             sp_ui_new_view();
             break;
-        case SP_VERB_VIEW_NEW_PREVIEW:
-            sp_ui_new_view_preview();
-            break;
         case SP_VERB_VIEW_MODE_NORMAL:
             dt->setDisplayModeNormal();
             break;
@@ -3102,8 +3099,6 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove excess toolbars to focus on drawing"), nullptr),
     new ZoomVerb(SP_VERB_VIEW_NEW, "ViewNew", N_("Duplic_ate Window"), N_("Open a new window with the same document"),
                  INKSCAPE_ICON("window-new")),
-    new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"), N_("New View Preview"),
-                 nullptr /*"view_new_preview"*/),
 
     new ZoomVerb(SP_VERB_VIEW_MODE_NORMAL, "ViewModeNormal", N_("_Normal"), N_("Switch to normal display mode"),
                  nullptr),

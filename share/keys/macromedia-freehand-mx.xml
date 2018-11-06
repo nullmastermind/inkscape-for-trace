@@ -166,7 +166,6 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
   <bind key="n" modifiers="Shift,Alt" action="ViewNew"/>
   <bind key="N" modifiers="Shift,Alt" action="ViewNew"/>
 
-  <bind action="ViewNewPreview"/>
   <bind action="ViewIconPreview"/>
 
   <bind action="ViewModeNormal"/>

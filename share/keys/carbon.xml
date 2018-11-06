@@ -253,7 +253,6 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind action="ToggleStatusbar" />
   
   <bind action="ViewNew" />
-  <bind action="ViewNewPreview" />
   <bind action="ViewIconPreview" />
 
   <bind key="KP_5" modifiers="Cmd" action="ViewModeToggle" display="true" />

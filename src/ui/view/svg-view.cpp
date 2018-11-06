@@ -15,7 +15,7 @@
 
 #include <2geom/transforms.h>
 
-#include "svg-view.h"
+#include "ui/view/svg-view.h"
 
 #include "document.h"
 
@@ -27,7 +27,11 @@
 
 #include "util/units.h"
 
-SPSVGView::SPSVGView(SPCanvasGroup *parent)
+namespace Inkscape {
+namespace UI {
+namespace View {
+
+SVGView::SVGView(SPCanvasGroup *parent)
 {
     _hscale = 1.0;
     _vscale = 1.0;
@@ -41,7 +45,7 @@ SPSVGView::SPSVGView(SPCanvasGroup *parent)
     _parent = parent;
 }
 
-SPSVGView::~SPSVGView()
+SVGView::~SVGView()
 {
     if (doc() && _drawing)
     {
@@ -50,7 +54,7 @@ SPSVGView::~SPSVGView()
     }
 }
 
-void SPSVGView::setScale(gdouble hscale, gdouble vscale)
+void SVGView::setScale(gdouble hscale, gdouble vscale)
 {
     if (!_rescale && ((hscale != _hscale) || (vscale != _vscale))) {
         _hscale = hscale;
@@ -59,7 +63,7 @@ void SPSVGView::setScale(gdouble hscale, gdouble vscale)
     }
 }
 
-void SPSVGView::setRescale(bool rescale, bool keepaspect, gdouble width, gdouble height)
+void SVGView::setRescale(bool rescale, bool keepaspect, gdouble width, gdouble height)
 {
     g_return_if_fail (!rescale || (width >= 0.0));
     g_return_if_fail (!rescale || (height >= 0.0));
@@ -72,7 +76,7 @@ void SPSVGView::setRescale(bool rescale, bool keepaspect, gdouble width, gdouble
     doRescale (true);
 }
 
-void SPSVGView::doRescale(bool event)
+void SVGView::doRescale(bool event)
 {
     if (!doc()) {
         return;
@@ -84,20 +88,24 @@ void SPSVGView::doRescale(bool event)
         return;
     }
 
+    double x_offset = 0.0;
+    double y_offset = 0.0;
     if (_rescale) {
         _hscale = _width / doc()->getWidth().value("px");
         _vscale = _height / doc()->getHeight().value("px");
         if (_keepaspect) {
             if (_hscale > _vscale) {
                 _hscale = _vscale;
-                } else {
-                    _vscale = _hscale;
-                }
+                x_offset = (_width  - doc()->getWidth().value("px")  * _vscale)/2.0;
+            } else {
+                _vscale = _hscale;
+                y_offset = (_height - doc()->getHeight().value("px") * _hscale)/2.0;
+            }
         }
     }
 
     if (_drawing) {
-        sp_canvas_item_affine_absolute (_drawing, Geom::Scale(_hscale, _vscale));
+        sp_canvas_item_affine_absolute (_drawing, Geom::Scale(_hscale, _vscale) * Geom::Translate(x_offset, y_offset));
     }
 
     if (event) {
@@ -106,7 +114,7 @@ void SPSVGView::doRescale(bool event)
     }
 }
 
-void SPSVGView::mouseover()
+void SVGView::mouseover()
 {
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor  *cursor  = gdk_cursor_new_for_display(display, GDK_HAND2);
@@ -115,7 +123,7 @@ void SPSVGView::mouseover()
     g_object_unref(cursor);
 }
 
-void SPSVGView::mouseout()
+void SVGView::mouseout()
 {
     GdkWindow *window = gtk_widget_get_window (GTK_WIDGET(SP_CANVAS_ITEM(_drawing)->canvas));
     gdk_window_set_cursor(window, nullptr);
@@ -126,7 +134,7 @@ void SPSVGView::mouseout()
  * Callback connected with arena_event.
  */
 /// \todo fixme.
-static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SPSVGView *svgview)
+static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SVGView *svgview)
 {
 	static gdouble x, y;
 	static gboolean active = FALSE;
@@ -181,7 +189,7 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 	return TRUE;
 }
 
-void SPSVGView::setDocument(SPDocument *document)
+void SVGView::setDocument(SPDocument *document)
 {
     if (doc()) {
         doc()->getRoot()->invoke_hide(_dkey);
@@ -208,12 +216,15 @@ void SPSVGView::setDocument(SPDocument *document)
     }
 }
 
-void SPSVGView::onDocumentResized(gdouble width, gdouble height)
+void SVGView::onDocumentResized(gdouble width, gdouble height)
 {
     setScale (width, height);
     doRescale (!_rescale);
 }
 
+}
+}
+}
 
 /*
   Local Variables:

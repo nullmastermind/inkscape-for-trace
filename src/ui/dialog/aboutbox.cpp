@@ -31,12 +31,13 @@
 #include "document.h"
 #include "inkscape-version.h"
 #include "path-prefix.h"
-#include "svg-view-widget.h"
 #include "text-editing.h"
 
 #include "object/sp-text.h"
 
 #include "ui/icon-names.h"
+#include "ui/view/svg-view-widget.h"
+
 #include "util/units.h"
 
 
@@ -122,21 +123,20 @@ void AboutBox::build_splash_widget() {
         }
         doc->ensureUpToDate();
 
-        GtkWidget *v=sp_svg_view_widget_new(doc);
+        auto viewer = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(doc));
 
         // temporary hack: halve the dimensions so the dialog will fit
-        double width=doc->getWidth().value("px") / 2;
-        double height=doc->getHeight().value("px") / 2;
+        double width=doc->getWidth().value("px") / 2.0;
+        double height=doc->getHeight().value("px") / 2.0;
+        viewer->setResize(width, height);
 
         doc->doUnref();
-
-        SP_SVG_VIEW_WIDGET(v)->setResize(false, static_cast<int>(width), static_cast<int>(height));
 
         _splash_widget = new Gtk::AspectFrame();
         _splash_widget->unset_label();
         _splash_widget->set_shadow_type(Gtk::SHADOW_NONE);
         _splash_widget->property_ratio() = width / height;
-        _splash_widget->add(*manage(Glib::wrap(v)));
+        _splash_widget->add(*viewer);
     }
 }
 

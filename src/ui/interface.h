@@ -48,11 +48,6 @@ void sp_ui_new_view ();
 void sp_ui_reload();
 
 /**
- * @todo TODO: not yet working. To be re-enabled (by adding to menu) once it works.
- */
-void sp_ui_new_view_preview ();
-
-/**
  *  This function is called to exit the program, and iterates through all
  *  open document view windows, attempting to close each in turn.  If the
  *  view has unsaved information, the user will be prompted to save,

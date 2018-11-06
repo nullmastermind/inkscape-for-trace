@@ -228,7 +228,6 @@ Future improvements:
   <bind key="numbersign" action="ToggleGrid" display="true"/>
 
   <bind action="ViewNew"/>
-  <bind action="ViewNewPreview"/>
   <bind action="ViewIconPreview"/>
 
   <bind action="ViewModeNormal"/>

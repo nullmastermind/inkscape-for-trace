@@ -1,5 +1,5 @@
-#ifndef SEEN_SP_SVG_VIEW_H
-#define SEEN_SP_SVG_VIEW_H
+#ifndef SEEN_SVG_VIEW_H
+#define SEEN_SVG_VIEW_H
 /*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -16,10 +16,14 @@
 struct SPCanvasGroup;
 struct SPCanvasItem;
 
+namespace Inkscape {
+namespace UI {
+namespace View {
+
 /**
  * Generic SVG view.
  */
-class SPSVGView : public Inkscape::UI::View::View {
+class SVGView : public View {
 public:	
     unsigned int    _dkey;
     SPCanvasGroup  *_parent;
@@ -35,9 +39,9 @@ public:
     /**
      * Constructs new SPSVGView object and returns pointer to it.
      */
-    SPSVGView(SPCanvasGroup* parent);
+    SVGView(SPCanvasGroup* parent);
 
-    ~SPSVGView() override;
+    ~SVGView() override;
         
     /**
      * Rescales SPSVGView to given proportions.
@@ -78,7 +82,11 @@ private:
     void onDocumentResized(double, double) override;
 };
 
-#endif // SEEN_SP_SVG_VIEW_H
+}
+}
+}
+
+#endif // SEEN_SVG_VIEW_H
 
 /*
   Local Variables:

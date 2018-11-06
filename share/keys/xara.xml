@@ -251,7 +251,6 @@ Hom/end keys-select minimum or maximum feather values
   <bind key="numbersign" action="ToggleGrid" display="true"/>
 
   <bind action="ViewNew"/>
-  <bind action="ViewNewPreview"/>
   <bind action="ViewIconPreview"/>
 
   <bind action="ViewModeNormal"/>
