@@ -16,6 +16,7 @@
  */
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -132,28 +133,47 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
         (d_source == SP_STYLE_SRC_STYLE_PROP || d_source == SP_STYLE_SRC_STYLE_SHEET) ) {
 
         if (style->d.value) {
-            Geom::PathVector pv = sp_svg_read_pathv(style->d.value);
-            SPCurve *curve = new SPCurve(pv);
-            if (curve) {
+            // Chrome shipped with a different syntax for property vs attribute.
+            // The SVG Working group decided to follow the Chrome syntax (which may
+            // allow future extensions of the 'd' property). The property syntax
+            // wraps the path data with "path(...)". We must strip that!
 
-                // Update curve
-                this->setCurveInsync(curve, TRUE);
-                curve->unref();
+            // Must be Glib::ustring or we get conversion errors!
+            Glib::ustring input = style->d.value;
+            Glib::ustring expression = R"A(path\("(.*)"\))A";
+            Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create(expression);
+            Glib::MatchInfo matchInfo;
+            regex->match(input, matchInfo);
 
-                // Convert from property to attribute (convert back on write)
-                getRepr()->setAttribute("d", style->d.value);
+            if (matchInfo.matches()) {
+                Glib::ustring  value = matchInfo.fetch(1);
+                Geom::PathVector pv = sp_svg_read_pathv(value.c_str());
 
-                SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
-                sp_repr_css_unset_property ( css, "d");
-                sp_repr_css_set ( getRepr(), css, "style" );
-                sp_repr_css_attr_unref ( css );
+                SPCurve *curve = new SPCurve(pv);
+                if (curve) {
 
-                style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
-            } else {
-                // Do nothing... don't overwrite 'd' from attribute
+                    // Update curve
+                    this->setCurveInsync(curve, TRUE);
+                    curve->unref();
+
+                    // Convert from property to attribute (convert back on write)
+                    getRepr()->setAttribute("d", value);
+
+                    SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
+                    sp_repr_css_unset_property ( css, "d");
+                    sp_repr_css_set ( getRepr(), css, "style" );
+                    sp_repr_css_attr_unref ( css );
+
+                    style->d.style_src = SP_STYLE_SRC_ATTRIBUTE;
+                } else {
+                    std::cerr << "SPPath::build: Failed to create curve: " << input << std::endl;
+                }
             }
         }
+        // If any if statement is false, do nothing... don't overwrite 'd' from attribute
     }
+
+
     // this->readAttr( "inkscape:original-d" ); // bug #1299948
     // Why we take the long way of doing this probably needs some explaining:
     //
