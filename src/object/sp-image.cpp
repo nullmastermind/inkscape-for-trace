@@ -33,7 +33,6 @@
 //Added for preserveAspectRatio support -- EAF
 #include "attributes.h"
 #include "print.h"
-#include "brokenimage.xpm"
 #include "document.h"
 #include "sp-image.h"
 #include "sp-clippath.h"
