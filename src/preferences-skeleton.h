@@ -37,6 +37,7 @@ static char const preferences_skeleton[] =
 "    <group id=\"panels\" state=\"1\"/>\n"
 "    <group id=\"rulers\" state=\"1\"/>\n"
 "    <group id=\"scrollbars\" state=\"1\"/>\n"
+"    <group id=\"splitcanvas\" x=\"0.5\" y=\"0\" inverse=\"0\" />\n"
 "  </group>\n"
 "  <group id=\"fullscreen\">\n"
 "    <group id=\"task\" />\n"

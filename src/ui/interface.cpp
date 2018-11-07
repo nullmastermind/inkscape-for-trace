@@ -624,6 +624,9 @@ static gboolean checkitem_update(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
         else if (!strcmp(action->id, "ViewCmsToggle")) {
             ison = dt->colorProfAdjustEnabled();
         }
+        else if (!strcmp(action->id, "ViewSplitModeToggle")) {
+            ison = dt->splitMode();
+        }
         else  {
             ison = getViewStateFromPref(view, pref);
         }

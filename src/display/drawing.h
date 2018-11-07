@@ -60,6 +60,7 @@ public:
     void setBlurQuality(int q);
     void setFilterQuality(int q);
     void setExact(bool e);
+    bool getExact() const {return _exact;};
 
     Geom::OptIntRect const &cacheLimit() const;
     void setCacheLimit(Geom::OptIntRect const &r);

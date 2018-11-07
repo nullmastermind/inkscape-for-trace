@@ -108,7 +108,7 @@
          <verb verb-id="ViewModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewModeNoFilters" radio="yes"/>
          <verb verb-id="ViewModeOutline" radio="yes"/>
-	 <verb verb-id="ViewModeVisibleHairlines" radio="yes"/>
+	     <verb verb-id="ViewModeVisibleHairlines" radio="yes"/>
          <!--Better location in menu needs to be found-->
          <!--verb verb-id="ViewModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
@@ -129,6 +129,7 @@
          <verb verb-id="RotateZero"/>
        </submenu>
        <separator/>
+       <verb verb-id="ViewSplitModeToggle" check="yes" />
        <verb verb-id="ToggleGrid" check="yes" />
        <verb verb-id="ToggleGuides" check="yes" />
        <verb verb-id="ViewCmsToggle" check="yes" />

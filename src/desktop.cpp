@@ -121,6 +121,7 @@ SPDesktop::SPDesktop() :
     _reconstruction_old_layer_id(), // an id attribute is not allowed to be the empty string
     _display_mode(Inkscape::RENDERMODE_NORMAL),
     _display_color_mode(Inkscape::COLORMODE_NORMAL),
+    _split_canvas(false),
     _widget( nullptr ),
     _guides_message_context( nullptr ),
     _active( false ),
@@ -1542,6 +1543,19 @@ void SPDesktop::toggleGrids()
         //there is no grid present at the moment. add a rectangular grid and make it visible
         namedview->writeNewGrid(this->getDocument(), Inkscape::GRID_RECTANGULAR);
         showGrids(true);
+    }
+}
+
+void SPDesktop::toggleSplitMode()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        _split_canvas = !_split_canvas;
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        dtw->splitCanvas(_split_canvas);
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
+        getCanvas()->requestRedraw(getCanvas()->_x0, getCanvas()->_y0, allocation.width, allocation.height);
     }
 }
 

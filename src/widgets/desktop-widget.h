@@ -16,6 +16,8 @@
  */
 
 #include <gtkmm/window.h>
+#include <gtkmm/overlay.h>
+#include "include/gtkmm_version.h"
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
@@ -253,6 +255,7 @@ public:
     void requestCanvasUpdateAndWait();
     void enableInteraction();
     void disableInteraction();
+    void splitCanvas(bool split);
     void updateTitle(gchar const *uri);
     bool onFocusInEvent(GdkEventFocus*);
 

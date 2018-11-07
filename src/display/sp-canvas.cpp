@@ -32,6 +32,7 @@
 #include <2geom/affine.h>
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
+#include "display/canvas-arena.h"
 #include "display/rendermode.h"
 #include "display/cairo-utils.h"
 #include "preferences.h"
@@ -1942,12 +1943,36 @@ int SPCanvas::paint()
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPCanvasArena *arena = nullptr;
+    bool split = false;
+    bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
+    double split_x = 1;
+    double split_y = 1;
+    double split_width = 1;
+    double split_height = 1;
+    if (desktop && desktop->splitMode()) {
+        split = desktop->splitMode();
+        arena = SP_CANVAS_ARENA (desktop->drawing);
+        split_x = prefs->getDoubleLimited("/window/splitcanvas/x", 0.5, 0, 1);
+        split_y = prefs->getDoubleLimited("/window/splitcanvas/y", 1  , 0, 1);
+    }
     GtkAllocation allocation;
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
-    cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
-    cairo_region_t *to_draw = cairo_region_create_rectangle(&crect);
+    cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
+    cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};
+    cairo_region_t *to_draw = nullptr;
+    cairo_region_t *to_draw_outline = nullptr;
+    if (inverse && split) {
+        to_draw = cairo_region_create_rectangle(&crect_outline);
+        to_draw_outline = cairo_region_create_rectangle(&crect);
+    } else {
+        to_draw = cairo_region_create_rectangle(&crect);
+        to_draw_outline = cairo_region_create_rectangle(&crect_outline);
+    }
     cairo_region_subtract(to_draw, _clean_region);
+    cairo_region_subtract(to_draw_outline, _clean_region);
 
     int n_rects = cairo_region_num_rectangles(to_draw);
     for (int i = 0; i < n_rects; ++i) {
@@ -1956,16 +1981,39 @@ int SPCanvas::paint()
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
             cairo_region_destroy(to_draw);
+            cairo_region_destroy(to_draw_outline);
             return FALSE;
         };
     }
-
+    
+    if (arena) {
+        Inkscape::RenderMode rm = arena->drawing.renderMode();
+        arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+        bool exact = arena->drawing.getExact();
+        arena->drawing.setExact(false);
+        int n_rects = cairo_region_num_rectangles(to_draw_outline);
+        for (int i = 0; i < n_rects; ++i) {
+            cairo_rectangle_int_t crect;
+            cairo_region_get_rectangle(to_draw_outline, i, &crect);
+            if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
+                // Aborted
+                arena->drawing.setExact(exact);
+                arena->drawing.setRenderMode(rm);
+                cairo_region_destroy(to_draw);
+                cairo_region_destroy(to_draw_outline);
+                return FALSE;
+            };
+        }
+        arena->drawing.setExact(exact);
+        arena->drawing.setRenderMode(rm);
+    }
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
     }
 
     cairo_region_destroy(to_draw);
+    cairo_region_destroy(to_draw_outline);
 
     return TRUE;
 }

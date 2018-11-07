@@ -59,6 +59,7 @@
 #include "extension/db.h"
 
 #include "helper/action.h"
+#include "helper/icon-loader.h"
 
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
@@ -87,6 +88,7 @@
 #include "toolbox.h"
 #include "widget-sizes.h"
 
+
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
@@ -105,6 +107,12 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWidget *dtw);
+
+static void sp_update_guides_lock( GtkWidget *button, gpointer data );
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+#endif // defined(HAVE_LIBLCMS1)GtkImage || defined(HAVE_LIBLCMS2)
+static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
@@ -378,6 +386,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
     // Added to table wrapper later either directly or via paned window shared with dock.
 
+
+
+
     // Lock guides button
     dtw->_guides_lock = Glib::wrap(GTK_TOGGLE_BUTTON(
                                       sp_button_new_from_data( GTK_ICON_SIZE_MENU,
@@ -496,7 +507,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         }
         watcher->add(dtw);
     }
-
     /* Canvas */
     dtw->canvas = SP_CANVAS(SPCanvas::createAA());
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -522,7 +532,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas), TRUE);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 1, 1);
 
     /* Dock */
     bool create_dock =
@@ -776,7 +785,22 @@ SPDesktopWidget::dispose(GObject *object)
     }
 }
 
-
+void 
+SPDesktopWidget::splitCanvas(bool split)
+{
+    if(split) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double split_x = prefs->getDoubleLimited("/window/splitcanvas/x", 0.5, 0, 1);
+        double split_y = prefs->getDoubleLimited("/window/splitcanvas/y", 1  , 0, 1);
+        int width = gtk_widget_get_allocated_width(GTK_WIDGET(this->canvas));
+        int height = gtk_widget_get_allocated_height(GTK_WIDGET(this->canvas));
+        gtk_widget_set_margin_start(this->split_button, width * split_x);
+        gtk_widget_set_margin_end(this->split_button, height * split_y);
+        gtk_widget_set_visible(this->split_button, true);
+    } else {
+        gtk_widget_set_visible(this->split_button, false);
+    }
+}
 /**
  * Set the title in the desktop-window (if desktop has an own window).
  *

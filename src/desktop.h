@@ -402,6 +402,8 @@ public:
     bool colorProfAdjustEnabled();
 
     void toggleGrids();
+    void toggleSplitMode();
+    bool splitMode() const { return _split_canvas; };
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
@@ -531,6 +533,7 @@ private:
     DesktopAffine _current_affine;
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
+    bool _split_canvas;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
 
