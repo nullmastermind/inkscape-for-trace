@@ -286,7 +286,6 @@ msgid "Sharpen edges and boundaries within the object, force=0.3"
 msgstr "Renforcer les bords et frontières intérieures de l'objet, force=0,3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
 msgstr "Peinture à l'huile"
 
@@ -1185,7 +1184,6 @@ msgstr "Crème BD"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-#, fuzzy
 msgid "Non-realistic 3D Shaders"
 msgstr "Ombrages 3D non réalistes"
 
@@ -1207,7 +1205,6 @@ msgstr ""
 "sur les croisements des lignes"
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
 msgstr "Ombre et lumière"
 
@@ -1578,7 +1575,6 @@ msgid "Pixellize"
 msgstr "Pixéliser"
 
 #: ../share/filters/filters.svg.h:591
-#, fuzzy
 msgid "Pixel Tools"
 msgstr "Outils pixel"
 
@@ -2047,7 +2043,6 @@ msgstr ""
 "Rendu des canaux cyan, magenta et jaune avec un fond que l'on peut colorer"
 
 #: ../share/filters/filters.svg.h:834
-#, fuzzy
 msgid "Contouring Table"
 msgstr "Table de contours"
 
@@ -2064,7 +2059,6 @@ msgid "Converts blurred contour to posterized steps"
 msgstr "Convertit un contour flou en bandes postérisées"
 
 #: ../share/filters/filters.svg.h:842
-#, fuzzy
 msgid "Contouring Discrete"
 msgstr "Contours discrets"
 
@@ -4532,12 +4526,10 @@ msgid "<b>Guideline</b>: %s"
 msgstr "<b>Ligne de guide</b> : %s"
 
 #: ../src/desktop.cpp:765
-#, fuzzy
 msgid "No previous transform."
 msgstr "Plus de zoom précédent."
 
 #: ../src/desktop.cpp:788
-#, fuzzy
 msgid "No next transform."
 msgstr "Plus de zoom suivant."
 
@@ -7078,7 +7070,6 @@ msgstr ""
 "d'arrière-plans"
 
 #: ../src/extension/internal/filter/color.h:1484
-#, fuzzy
 msgid "Quadritone Fantasy"
 msgstr "Quadritone fantaisie"
 
@@ -7096,7 +7087,6 @@ msgid "Replace hue by two colors"
 msgstr "Remplace la teinte par deux couleurs"
 
 #: ../src/extension/internal/filter/color.h:1567
-#, fuzzy
 msgid "Simple blend"
 msgstr "Flou"
 
@@ -7149,7 +7139,6 @@ msgid "Exclusion"
 msgstr "Exclusion"
 
 #: ../src/extension/internal/filter/color.h:1594
-#, fuzzy
 msgid "Simple blend filter"
 msgstr "Flou"
 
@@ -7778,7 +7767,6 @@ msgid "Simple posterizing effect"
 msgstr "Effet de postérisation simple"
 
 #: ../src/extension/internal/filter/protrusions.h:48
-#, fuzzy
 msgid "Snow Crest"
 msgstr "Crête neigeuse"
 
@@ -14218,7 +14206,6 @@ msgid "Fit Page to Selection"
 msgstr "Ajuster la page à la sélection"
 
 #: ../src/selection-chemistry.cpp:4310 ../src/verbs.cpp:2724
-#, fuzzy
 msgid "Swap fill and stroke of an object"
 msgstr "Intervertir fond et contour"
 
@@ -16413,7 +16400,6 @@ msgstr "Lier un profil de couleurs"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:313
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:322
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:331
-#, fuzzy
 msgid "_Remove"
 msgstr "Supp_rimer"
 
@@ -19815,7 +19801,6 @@ msgid "Kannada (kn)"
 msgstr "Kannada (kn)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:592
-#, fuzzy
 msgid "Kashmiri in Perso-Arabic script (ks@aran)"
 msgstr "Kashmiri, écriture Perso-Arabique (ks@aran)"
 
@@ -26583,7 +26568,6 @@ msgid "CMYK"
 msgstr "CMJN"
 
 #: ../src/ui/widget/color-scales.cpp:43
-#, fuzzy
 msgid "HSV"
 msgstr "TSL"
 
@@ -26928,7 +26912,6 @@ msgid "Document license updated"
 msgstr "Licence du document mise à jour"
 
 #: ../src/ui/widget/object-composite-settings.cpp:137
-#, fuzzy
 msgid "Change blur/blend filter"
 msgstr "Modifier le flou"
 
@@ -29438,7 +29421,6 @@ msgid "Zoom to fit selection in window"
 msgstr "Zoomer sur la sélection"
 
 #: ../src/verbs.cpp:3053
-#, fuzzy
 msgid "Rotate Clockwise"
 msgstr "Tourner dans le sens horaire"
 
@@ -29448,7 +29430,6 @@ msgid "Rotate canvas clockwise"
 msgstr "Tourner dans le sens horaire"
 
 #: ../src/verbs.cpp:3054
-#, fuzzy
 msgid "Rotate Counter-Clockwise"
 msgstr "Tourner dans le sens anti-horaire"
 
@@ -29467,7 +29448,6 @@ msgid "Reset canvas rotation to zero"
 msgstr ""
 
 #: ../src/verbs.cpp:3057
-#, fuzzy
 msgid "Flip Horizontally"
 msgstr "Retourner horizontalement"
 
@@ -29477,7 +29457,6 @@ msgid "Flip canvas horizontally"
 msgstr "Retourner les nœuds horizontalement"
 
 #: ../src/verbs.cpp:3058
-#, fuzzy
 msgid "Flip Vertically"
 msgstr "Retourner verticalement"
 
