@@ -396,8 +396,10 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
         if(idx != std::string::npos)
         {
             if (boost::iequals(fn.substr(idx+1).c_str(), "svg")) {
-                SPDocument *svgDoc = SPDocument::createNewDoc(fn.c_str(), TRUE);
-               // Check the document loaded properly
+
+                SPDocument *svgDoc = SPDocument::createNewDocFromMem (data, len, true);
+
+                // Check the document loaded properly
                 if (svgDoc == nullptr) {
                     return nullptr;
                 }
@@ -406,12 +408,13 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                     svgDoc->doUnref();
                     return nullptr;
                 }
+
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                 double dpi = prefs->getDouble("/dialogs/import/defaultxdpi/value", 96.0);
                 if (svgdpi && svgdpi > 0) {
                     dpi = svgdpi;
                 }
-                std::cout << dpi << "dpi" << std::endl;
+
                 // Get the size of the document
                 Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
                 Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
@@ -454,6 +457,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
             
             buf = gdk_pixbuf_loader_get_pixbuf(loader);
         }
+
         if (buf) {
             g_object_ref(buf);
             pb = new Pixbuf(buf);
@@ -463,6 +467,7 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
                 gchar *fmt_name = gdk_pixbuf_format_get_name(fmt);
                 pb->_setMimeData((guchar *) data, len, fmt_name);
                 g_free(fmt_name);
+                g_object_unref(loader);
             } else {
                 pb->_setMimeData((guchar *) data, len, "svg");
             }
@@ -470,7 +475,6 @@ Pixbuf *Pixbuf::create_from_buffer(gchar *&&data, gsize len, double svgdpi, std:
             std::cerr << "Pixbuf::create_from_file: failed to load contents: " << fn << std::endl;
             g_free(data);
         }
-        g_object_unref(loader);
 
         // TODO: we could also read DPI, ICC profile, gamma correction, and other information
         // from the file. This can be done by using format-specific libraries e.g. libpng.

@@ -1170,7 +1170,10 @@ void SPObject::requestDisplayUpdate(unsigned int flags)
 {
     g_return_if_fail( this->document != nullptr );
 
-    if (update_in_progress) {
+    // update_in_progress is a global variable. It can be come greater than one when reading in a second
+    // document (as in creating the broken image bitmap). It is still an important warning so we don't
+    // remove it entirely. We probably shouldn't be calling requestDisplayUpdate in the set() methods.
+    if (update_in_progress > 2) {
         g_print("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
     }
 

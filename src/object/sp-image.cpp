@@ -574,6 +574,20 @@ Inkscape::DrawingItem* SPImage::show(Inkscape::Drawing &drawing, unsigned int /*
     return ai;
 }
 
+static std::string broken_image_svg = R"A(
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640">
+  <rect width="100%" height="100%" style="fill:white;stroke:red;stroke-width:20px"/>
+  <rect x="35%" y="10%" width="30%" height="30%" style="fill:red"/>
+  <path d="m 280,120  80,80" style="fill:none;stroke:white;stroke-width:20px"/>
+  <path d="m 360,120 -80,80" style="fill:none;stroke:white;stroke-width:20px"/>
+  <g style="font-family:sans-serif;font-size:100px;font-weight:bold;text-anchor:middle">
+    <text x="50%" y="380">Linked</text>
+    <text x="50%" y="490">Image</text>
+    <text x="50%" y="600">Not Found</text>
+  </g>
+</svg>
+)A";
+
 Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absref, gchar const *base, double svgdpi)
 {
     Inkscape::Pixbuf *inkpb = nullptr;
@@ -621,12 +635,13 @@ Inkscape::Pixbuf *sp_image_repr_read_image(gchar const *href, gchar const *absre
             return inkpb;
         }
     }
-    /* Nope: We do not find any valid pixmap file :-( */
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **) brokenimage_xpm);
-    inkpb = new Inkscape::Pixbuf(pixbuf);
 
-    /* It should be included xpm, so if it still does not does load, */
-    /* our libraries are broken */
+    /* Nope: We do not find any valid pixmap file :-( */
+    // Need a "fake" filename to trigger svg mode.
+    inkpb = Inkscape::Pixbuf::create_from_buffer(broken_image_svg, 0, "brokenimage.svg");
+
+    /* It's included here so if it still does not does load, */
+    /* our libraries are broken! */
     g_assert (inkpb != nullptr);
 
     return inkpb;
