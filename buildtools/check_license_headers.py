@@ -32,6 +32,9 @@ for root, dirs, files in os.walk("."):
             continue
         if sum([p.startswith(i) for i in IGNORE_PATHS]):
             continue
+        if subprocess.call(["git", "check-ignore", "-q", "--", p]) == 0:
+            # file is in .gitignore
+            continue
         license[p] = None
         hasSPDX[p] = False
         
