@@ -310,8 +310,11 @@ enum SPTextRendering {
 };
 
 enum SPVectorEffect {
-    SP_VECTOR_EFFECT_NONE,
-    SP_VECTOR_EFFECT_NON_SCALING_STROKE
+    SP_VECTOR_EFFECT_NONE                 = 0,
+    SP_VECTOR_EFFECT_NON_SCALING_STROKE   = 1,
+    SP_VECTOR_EFFECT_NON_SCALING_SIZE     = 2,
+    SP_VECTOR_EFFECT_NON_ROTATION         = 4,
+    SP_VECTOR_EFFECT_FIXED_POSITION       = 8
 };
 
 struct SPStyleEnum {
@@ -675,6 +678,9 @@ static SPStyleEnum const enum_color_interpolation[] = {
 static SPStyleEnum const enum_vector_effect[] = {
     {"none",               SP_VECTOR_EFFECT_NONE},
     {"non-scaling-stroke", SP_VECTOR_EFFECT_NON_SCALING_STROKE},
+    {"non-scaling-size",   SP_VECTOR_EFFECT_NON_SCALING_SIZE},
+    {"non-rotation",       SP_VECTOR_EFFECT_NON_ROTATION},
+    {"fixed-position",     SP_VECTOR_EFFECT_FIXED_POSITION},
     {nullptr, -1}
 };
 

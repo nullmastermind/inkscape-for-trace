@@ -2780,6 +2780,106 @@ SPITextDecoration::operator==(const SPIBase& rhs) {
     }
 }
 
+// SPIVectorEffect ------------------------------------------------
+
+void
+SPIVectorEffect::read( gchar const *str ) {
+
+    if( !str ) return;
+
+    if (!strcmp(str, "none")) {
+        set          = true;
+        stroke       = false;
+        size         = false;
+        rotate       = false;
+        fixed        = false;
+    } else {
+        bool found_one          = false;
+        bool hit_one            = false;
+
+        bool found_stroke       = false;
+        bool found_size         = false;
+        bool found_rotate       = false;
+        bool found_fixed        = false;
+
+        const gchar *hstr = str;
+        while (true) {
+            if (*str == ' ' || *str == ',' || *str == '\0'){
+                int slen = str - hstr;
+
+                while(true){ // not really a loop, used to avoid a goto
+                    hit_one = true; // most likely we will
+                    if ((slen == 18) && strneq(hstr, "non-scaling-stroke", slen)){  found_stroke = true; break; }
+                    if ((slen == 16) && strneq(hstr, "non-scaling-size",   slen)){  found_size   = true; break; }
+                    if ((slen == 12) && strneq(hstr, "non-rotation",       slen)){  found_rotate = true; break; }
+                    if ((slen == 14) && strneq(hstr, "fixed-position",     slen)){  found_fixed  = true; break; }
+                    if ((slen ==  4) && strneq(hstr, "none",               slen)){                       break; }
+
+                    hit_one = false; // whatever this thing is, we do not recognize it
+                    break;
+                }
+                found_one |= hit_one;
+                if(*str == '\0')break;
+                hstr = str + 1;
+            }
+            str++;
+        }
+        if (found_one) {
+            set          = true;
+            stroke       = found_stroke;
+            size         = found_size;
+            rotate       = found_rotate;
+            fixed        = found_fixed;
+        }
+        else {
+            set          = false;
+        }
+    }
+
+    // std::cout << "  stroke: " << stroke
+    //           << "  size: " << size
+    //           << "  rotate: " << rotate
+    //           << "  fixed: " << fixed
+    //           << std::endl;
+}
+
+const Glib::ustring SPIVectorEffect::get_value() const
+{
+    if (this->inherit) return Glib::ustring("inherit");
+    auto ret = Glib::ustring("");
+    if (this->stroke) ret += " non-scaling-stroke";
+    if (this->size)   ret += " non-scaling-size";
+    if (this->rotate) ret += " non-rotation";
+    if (this->fixed)  ret += " fixed-position";
+    if (ret.empty())  ret += "none";
+    return ret;
+}
+
+// Does not inherit!
+// void
+// SPIVectorEffect::cascade( const SPIBase* const parent ) {
+// }
+
+// void
+// SPIVectorEffect::merge( const SPIBase* const parent ) {
+// }
+
+bool
+SPIVectorEffect::operator==(const SPIBase& rhs) {
+    if( const SPIVectorEffect* r = dynamic_cast<const SPIVectorEffect*>(&rhs) ) {
+        return
+            (stroke    == r->stroke) &&
+            (size      == r->size  ) &&
+            (rotate    == r->rotate) &&
+            (fixed     == r->fixed ) &&
+            SPIBase::operator==(rhs);
+    } else {
+        return false;
+    }
+}
+
+
+
 
 
 /* ----------------------------  NOTES  ----------------------------- */                        

@@ -354,7 +354,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
 
     // Vector effects
-    vector_effect(    "vector-effect",   enum_vector_effect,   SP_VECTOR_EFFECT_NONE,   false ),
+    vector_effect(),
 
     // Fill properties
     fill(             "fill"                                 ),  // SPIPaint

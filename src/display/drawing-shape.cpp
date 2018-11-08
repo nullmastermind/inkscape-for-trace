@@ -180,7 +180,7 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     if( has_stroke ) {
         // TODO: remove segments outside of bbox when no dashes present
         dc.path(_curve->get_pathvector());
-        if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+        if (_style && _style->vector_effect.stroke) {
             dc.restore();
             dc.save();
         }
@@ -260,7 +260,7 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
                     _nrstyle.applyFill(dc);
                     dc.fillPreserve();
                 }
-                if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+                if (_style && _style->vector_effect.stroke) {
                     dc.restore();
                     dc.save();
                 }

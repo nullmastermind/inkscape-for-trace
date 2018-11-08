@@ -1299,6 +1299,49 @@ struct SPITextDecorationData {
     float   line_through_position;
 };
 
+/// Vector Effects.  THIS SHOULD BE A GENERIC CLASS
+class SPIVectorEffect : public SPIBase
+{
+
+public:
+    SPIVectorEffect()
+        : SPIBase( "vector-effect" ) {
+        this->clear();
+        inherits = false;
+    }
+
+    ~SPIVectorEffect() override
+    = default;
+
+    void read( gchar const *str ) override;
+    const Glib::ustring get_value() const override;
+    void clear() override {
+        SPIBase::clear();
+        stroke = false;
+        size   = false;
+        rotate = false;
+        fixed  = false;
+    }
+
+    // Does not inherit
+    void cascade( const SPIBase* const parent ) override {};
+    void merge(   const SPIBase* const parent ) override {};
+
+    SPIVectorEffect& operator=(const SPIVectorEffect& rhs) = default;
+
+    bool operator==(const SPIBase& rhs) override;
+    bool operator!=(const SPIBase& rhs) override {
+        return !(*this == rhs);
+    }
+
+  // To do: make private
+public:
+    bool stroke : 1;
+    bool size   : 1;
+    bool rotate : 1;
+    bool fixed  : 1;
+};
+
 #endif // SEEN_SP_STYLE_INTERNAL_H
 
 

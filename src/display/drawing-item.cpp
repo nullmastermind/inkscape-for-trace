@@ -555,6 +555,33 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     if (_transform) {
         child_ctx.ctm = *_transform * ctx.ctm;
     }
+
+    // Vector effects
+    if (_style) {
+
+        if (_style->vector_effect.fixed) {
+            child_ctx.ctm.setTranslation(Geom::Point(0,0));
+        }
+
+        if (_style->vector_effect.size) {
+            double value = sqrt(child_ctx.ctm.det());
+            if (value > 0 ) {
+                child_ctx.ctm[0] = child_ctx.ctm[0]/value;
+                child_ctx.ctm[1] = child_ctx.ctm[1]/value;
+                child_ctx.ctm[2] = child_ctx.ctm[2]/value;
+                child_ctx.ctm[3] = child_ctx.ctm[3]/value;
+            }
+        }
+
+        if (_style->vector_effect.rotate) {
+            double value = sqrt(child_ctx.ctm.det());
+            child_ctx.ctm[0] = value;
+            child_ctx.ctm[1] = 0;
+            child_ctx.ctm[2] = 0;
+            child_ctx.ctm[3] = value;
+        }
+    }
+
     /* Remember the transformation matrix */
     Geom::Affine ctm_change = _ctm.inverse() * child_ctx.ctm;
     _ctm = child_ctx.ctm;

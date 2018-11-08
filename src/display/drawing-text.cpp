@@ -598,7 +598,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         }
         {
             Inkscape::DrawingContext::Save save(dc);
-            if (!_style || !(_style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE)) {
+            if (!_style || !(_style->vector_effect.stroke)) {
                 dc.transform(_ctm);
             }
             if (has_stroke) {
