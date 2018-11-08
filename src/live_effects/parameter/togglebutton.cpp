@@ -161,13 +161,12 @@ ToggleButtonParam::refresh_button()
     }
     if ( _icon_active ) {
         GdkPixbuf * icon_pixbuf = nullptr;
-        Gtk::Image *im = dynamic_cast<Gtk::Image*>(children[0]);
-        Gtk::IconSize is(_icon_size);
+        Gtk::Widget *im = dynamic_cast<Gtk::Image*>(children[0]);
         if (!im) return;
         if (!value) {
-            im = sp_get_icon_image(_icon_inactive, is);
+            im = Glib::wrap(sp_get_icon_image(_icon_inactive, _icon_size));
         } else {
-            im = sp_get_icon_image(_icon_active, is);
+            im = Glib::wrap(sp_get_icon_image(_icon_active, _icon_size));
         }
     }
 }

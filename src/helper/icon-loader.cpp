@@ -38,6 +38,13 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     return icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
 }
 
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::IconSize icon_size)
+{
+    int width, height;
+    Gtk::IconSize::lookup(icon_size, width, height);
+    return sp_get_icon_pixbuf(icon_name, width);
+}
+
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size)
 {
     int width, height;
@@ -62,19 +69,20 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar cons
     return sp_get_icon_pixbuf(icon_name, icon_size);
 }
 
-Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gint size)
-{
-    
-    Gtk::Image *icon = new Gtk::Image();
-    icon->set_from_icon_name(icon_name, Gtk::IconSize(size));
-    return icon;
-}
 
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size)
 {
     
     Gtk::Image *icon = new Gtk::Image();
     icon->set_from_icon_name(icon_name, Gtk::IconSize(icon_size));
+    return icon;
+}
+
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::IconSize icon_size)
+{
+    
+    Gtk::Image *icon = new Gtk::Image();
+    icon->set_from_icon_name(icon_name, icon_size);
     return icon;
 }
 
