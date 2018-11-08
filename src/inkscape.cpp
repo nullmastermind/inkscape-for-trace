@@ -378,15 +378,26 @@ Application::add_style_sheet()
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    // symbolic
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
+        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
         gchar colornamed[64];
-        sp_svg_write_color(colornamed, sizeof(colornamed), prefs->getInt("/theme/symbolicColor", 0x000000ff));
-        css_str += "*{-gtk-icon-style: symbolic;}toolbutton image{ color: ";
+        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+        // Use in case the special widgets have inverse theme background and symbolic
+        int colorset_inverse = colorset ^ 0xffffff00;
+        gchar colornamed_inverse[64];
+        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+        css_str += "*{ -gtk-icon-style: symbolic;}";
+        css_str += "image{ color:";
         css_str += colornamed;
         css_str += ";}";
+        css_str += "#iconinverse{ color:";
+        css_str += colornamed_inverse;
+        css_str += ";}";
+        css_str += "#iconregular{ -gtk-icon-style: regular;}";
+    } else {
+        css_str += "*{-gtk-icon-style: regular;}";
     }
     GtkSettings *settings = gtk_settings_get_default();
     const gchar *gtk_font_name = "";
@@ -518,6 +529,7 @@ Application::Application(const char* argv, bool use_gui) :
             g_object_set(settings, "gtk-application-prefer-dark-theme",
                          prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         }
+        
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }

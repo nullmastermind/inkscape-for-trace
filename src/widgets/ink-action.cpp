@@ -171,7 +171,7 @@ static GtkWidget* ink_action_create_tool_item( GtkAction* action )
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
             GtkWidget *child =
-                GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
+                sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
             gtk_tool_button_set_icon_widget( button, child );
         } else {
             // For now trigger a warning but don't do anything else

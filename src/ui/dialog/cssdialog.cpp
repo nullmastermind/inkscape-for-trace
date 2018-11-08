@@ -78,7 +78,7 @@ CssDialog::CssDialog():
       _attrCol->add_attribute(_attrRenderer->property_text(), _cssColumns._styleAttrVal);
     }
 
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     _buttonAddProperty.add(*manage(Glib::wrap(child)));
     _buttonAddProperty.set_relief(Gtk::RELIEF_NONE);

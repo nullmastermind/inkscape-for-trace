@@ -188,7 +188,7 @@ static GtkWidget* ink_toggle_action_create_tool_item( GtkAction* action )
         GtkToolButton* button = GTK_TOOL_BUTTON(item);
         if ( act->private_data->iconId ) {
             GtkWidget *child =
-                GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
+                sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
 
             gtk_widget_set_hexpand(child, FALSE);
             gtk_widget_set_vexpand(child, FALSE);
@@ -220,8 +220,7 @@ static void ink_toggle_action_update_icon( InkToggleAction* action )
                 if ( GTK_IS_TOOL_BUTTON(proxies->data) ) {
                     GtkToolButton* button = GTK_TOOL_BUTTON(proxies->data);
 
-                    GtkWidget *child = GTK_WIDGET(
-                        sp_get_icon_image(action->private_data->iconId, action->private_data->iconSize)->gobj());
+                    GtkWidget *child = sp_get_icon_image(action->private_data->iconId, action->private_data->iconSize);
                     gtk_widget_set_hexpand(child, FALSE);
                     gtk_widget_set_vexpand(child, FALSE);
                     gtk_widget_show_all(child);

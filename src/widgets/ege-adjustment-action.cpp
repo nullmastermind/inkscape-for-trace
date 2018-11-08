@@ -867,7 +867,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
             /* Use an icon if available or use short-label */
             if ( act->private_data->iconId && strcmp( act->private_data->iconId, "" ) != 0 ) {
                 GtkWidget *icon =
-                    GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
+                    sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
                 gtk_box_pack_start( GTK_BOX(hb), icon, FALSE, FALSE, 0 );
             } else {
                 GtkWidget* lbl = gtk_label_new( g_value_get_string( &value ) ? g_value_get_string( &value ) : "wwww" );

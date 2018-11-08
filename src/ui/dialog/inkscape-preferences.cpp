@@ -29,6 +29,7 @@
 #include <gtkmm/main.h>
 #include <gtkmm/recentinfo.h>
 #include <gtkmm/recentmanager.h>
+#include <gtkmm/cssprovider.h>
 
 #include "cms-system.h"
 #include "document.h"
@@ -55,7 +56,7 @@
 
 #include "object/color-profile.h"
 #include "style.h"
-
+#include "svg/svg-color.h"
 #include "ui/interface.h"
 #include "ui/widget/style-swatch.h"
 
@@ -635,12 +636,53 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_color.get_parent()->hide();
         }
         else {
+
             _symbolic_icons.get_parent()->show();
             _symbolic_color.get_parent()->show();
         }
     }
 }
 
+void InkscapePreferences::symbolicAddClass()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto const screen = Gdk::Screen::get_default();
+    auto provider = Gtk::CssProvider::create();
+    Glib::ustring css_str = "";
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+        gchar colornamed[64];
+        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+        // Use in case the special widgets have inverse theme background and symbolic
+        int colorset_inverse = colorset ^ 0xffffff00;
+        gchar colornamed_inverse[64];
+        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+        css_str += "*{ -gtk-icon-style: symbolic;}";
+        css_str += "image{ color:";
+        css_str += colornamed;
+        css_str += ";}";
+        css_str += "iconinverse{ color:";
+        css_str += colornamed_inverse;
+        css_str += ";}";
+        css_str += "iconregular{ -gtk-icon-style: regular;}";
+    } else {
+        css_str += "*{-gtk-icon-style: regular;}";
+    }
+    // From 3.16, throws an error which we must catch.
+    try {
+        provider->load_from_data(css_str);
+    }
+#if GTK_CHECK_VERSION(3, 16, 0)
+    // Gtk::CssProviderError not defined until 3.16.
+    catch (const Gtk::CssProviderError &ex) {
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+    }
+#else
+    catch (...) {
+    }
+#endif
+    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
 void InkscapePreferences::themeChange()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -874,9 +916,13 @@ void InkscapePreferences::initPageUI()
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
     }
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
+    _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false);
+    Gtk::Button * _apply_color = new Gtk::Button(_("Apply color"));
+    _apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
+    _apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, _apply_color);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
@@ -2388,6 +2434,9 @@ void InkscapePreferences::on_pagelist_selection_changed()
             Gtk::Main::iteration();
         }
         this->show_all_children();
+        if (prefs->getInt("/dialogs/preferences/page",0) == PREFS_PAGE_UI_THEME) {
+            symbolicThemeCheck();
+        }
     }
 }
 

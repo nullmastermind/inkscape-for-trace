@@ -95,7 +95,7 @@ static void sp_gradient_selector_class_init(SPGradientSelectorClass *klass)
 static void gradsel_style_button(GtkWidget *gtkbtn, char const *iconName)
 {
     Gtk::Button *btn = Glib::wrap(GTK_BUTTON(gtkbtn));
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn->add(*manage(Glib::wrap(child)));
     btn->set_relief(Gtk::RELIEF_NONE);

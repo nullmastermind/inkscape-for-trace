@@ -222,7 +222,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay_opacity->set_halign(Gtk::ALIGN_START );
   overlay_opacity->set_valign(Gtk::ALIGN_START );
   //No results
-  overlay_icon = sp_get_icon_image("searching", 110, true);
+  overlay_icon = sp_get_icon_image("searching", 110);
+  overlay_icon->set_name("iconinverse");
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
   overlay_icon->set_valign(Gtk::ALIGN_START );
   overlay_icon->set_margin_top(45);

@@ -123,7 +123,7 @@ public:
 
 void TagsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -137,7 +137,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
     const char* label = nullptr;
 
     if ( iconName ) {
-        iconWidget = GTK_WIDGET(sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU)->gobj());
+        iconWidget = sp_get_icon_image(iconName, GTK_ICON_SIZE_MENU);
     }
 
     if ( desktop ) {
@@ -145,7 +145,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
         if ( verb ) {
             SPAction *action = verb->get_action(desktop);
             if ( !iconWidget && action && action->image ) {
-                iconWidget = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
+                iconWidget = sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU);
             }
 
             if ( action ) {

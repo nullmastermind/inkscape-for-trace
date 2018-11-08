@@ -159,21 +159,21 @@ void ColorNotebook::_initUI()
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     /* Create color management icons */
     _box_colormanaged = gtk_event_box_new();
-    GtkWidget *colormanaged = GTK_WIDGET(sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *colormanaged = sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_container_add(GTK_CONTAINER(_box_colormanaged), colormanaged);
     gtk_widget_set_tooltip_text(_box_colormanaged, _("Color Managed"));
     gtk_widget_set_sensitive(_box_colormanaged, false);
     gtk_box_pack_start(GTK_BOX(rgbabox), _box_colormanaged, FALSE, FALSE, 2);
 
     _box_outofgamut = gtk_event_box_new();
-    GtkWidget *outofgamut = GTK_WIDGET(sp_get_icon_image("out-of-gamut-icon", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *outofgamut = sp_get_icon_image("out-of-gamut-icon", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_container_add(GTK_CONTAINER(_box_outofgamut), outofgamut);
     gtk_widget_set_tooltip_text(_box_outofgamut, _("Out of gamut!"));
     gtk_widget_set_sensitive(_box_outofgamut, false);
     gtk_box_pack_start(GTK_BOX(rgbabox), _box_outofgamut, FALSE, FALSE, 2);
 
     _box_toomuchink = gtk_event_box_new();
-    GtkWidget *toomuchink = GTK_WIDGET(sp_get_icon_image("too-much-ink-icon", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *toomuchink = sp_get_icon_image("too-much-ink-icon", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_container_add(GTK_CONTAINER(_box_toomuchink), toomuchink);
     gtk_widget_set_tooltip_text(_box_toomuchink, _("Too much ink!"));
     gtk_widget_set_sensitive(_box_toomuchink, false);
@@ -182,7 +182,7 @@ void ColorNotebook::_initUI()
 
 
     /* Color picker */
-    GtkWidget *picker = GTK_WIDGET(sp_get_icon_image("color-picker", GTK_ICON_SIZE_SMALL_TOOLBAR)->gobj());
+    GtkWidget *picker = sp_get_icon_image("color-picker", GTK_ICON_SIZE_SMALL_TOOLBAR);
     _btn_picker = gtk_button_new();
     gtk_button_set_relief(GTK_BUTTON(_btn_picker), GTK_RELIEF_NONE);
     gtk_container_add(GTK_CONTAINER(_btn_picker), picker);

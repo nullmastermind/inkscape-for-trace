@@ -168,7 +168,7 @@ static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action )
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
             GtkWidget *child =
-                GTK_WIDGET(sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize)->gobj());
+                sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
             gtk_widget_set_hexpand(child, FALSE);
             gtk_widget_set_vexpand(child, FALSE);
             gtk_tool_button_set_icon_widget(button, child);

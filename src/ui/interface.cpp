@@ -504,7 +504,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         // If there is an image associated with the action, then we can add it as an icon for the menu item.
         if (show_icon && action->image) {
             item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
-            GtkWidget *icon = GTK_WIDGET(sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU)->gobj());
+            GtkWidget *icon = sp_get_icon_image(action->image, GTK_ICON_SIZE_MENU);
 
             // create a box to hold icon and label as GtkMenuItem derives from GtkBin and can only hold one child
             GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
