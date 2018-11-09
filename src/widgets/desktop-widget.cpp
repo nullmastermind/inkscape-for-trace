@@ -27,11 +27,6 @@
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/scrollbar.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/separatormenuitem.h>
 
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
@@ -111,7 +106,7 @@ static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWid
 static void sp_update_guides_lock( GtkWidget *button, gpointer data );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_toggled( GtkWidget *button, gpointer data );
-#endif // defined(HAVE_LIBLCMS1)GtkImage || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
