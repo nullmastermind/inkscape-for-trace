@@ -794,11 +794,7 @@ SPDesktopWidget::splitCanvas(bool split)
         double split_y = prefs->getDoubleLimited("/window/splitcanvas/y", 1  , 0, 1);
         int width = gtk_widget_get_allocated_width(GTK_WIDGET(this->canvas));
         int height = gtk_widget_get_allocated_height(GTK_WIDGET(this->canvas));
-        gtk_widget_set_margin_start(this->split_button, width * split_x);
-        gtk_widget_set_margin_end(this->split_button, height * split_y);
-        gtk_widget_set_visible(this->split_button, true);
     } else {
-        gtk_widget_set_visible(this->split_button, false);
     }
 }
 /**
