@@ -144,7 +144,7 @@
   <g
      id="object-rows"
      inkscape:label="#clonetiler_per_column"
-     transform="matrix(1,0,0,0.998006,-319.03741,-103.61827)">
+     transform="matrix(0,1,0.998006,0,-103.61827,-319.03741)">
     <rect
        height="16.03196"
        id="rect9056"
