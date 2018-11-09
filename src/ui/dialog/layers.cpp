@@ -28,7 +28,7 @@
 #include "verbs.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "include/gtkmm_version.h"
 
@@ -36,7 +36,7 @@
 
 #include "svg/css-ostringstream.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/imagetoggler.h"

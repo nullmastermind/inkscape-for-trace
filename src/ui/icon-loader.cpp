@@ -26,7 +26,6 @@ void sp_load_theme()
 
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
-
     using namespace Inkscape::IO::Resource;
     static auto icon_theme = Gtk::IconTheme::get_default();
     static bool icon_theme_set;
@@ -35,7 +34,41 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
     }
-    return icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+    // TODO all calls to "sp_get_icon_pixbuf" need to be removed in thew furture
+    // Put here temporary for allow use symbolic in a few icons require pixbug instead Gtk::Image
+    // We coulden't acces to pixbuf of a symbolic ones with the next order 
+    // icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+    // Maybe we can do with Gio, but not sure.  Also can render a icon to pixbuf but need to be 
+    // a stock-icon not on named ones I think or access directly to the icon.svg file
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
+    try {
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
+            gchar colornamed[64];
+            int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+            // Use in case the special widgets have inverse theme background and symbolic
+            sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+            Gdk::RGBA color;
+            color.set(colornamed);
+            Gtk::IconInfo iconinfo =
+                icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            if (bool(iconinfo)) {
+                bool was_symbolic = false;
+                _icon_pixbuf = iconinfo.load_symbolic(color, color, color, color, was_symbolic);
+            }
+            else {
+                _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+            }
+            std::cout << "Icon Loader using a future dead function in this icon: " << icon_name << std::endl;
+        }
+        else {
+            _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
+        }
+    }
+    catch (const Gtk::IconThemeError &e) {
+        std::cout << "Icon Loader error loading icon file: " << e.what() << std::endl;
+    }
+    return _icon_pixbuf;
 }
 
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::IconSize icon_size)

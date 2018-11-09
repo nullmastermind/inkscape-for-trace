@@ -9,7 +9,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "labelled.h"
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>

@@ -12,7 +12,7 @@
 #include <utility>
 
 #include "helper-fns.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/togglebutton.h"

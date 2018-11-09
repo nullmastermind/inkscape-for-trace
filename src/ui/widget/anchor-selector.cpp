@@ -8,7 +8,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "ui/widget/anchor-selector.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
 #include <gtkmm/image.h>

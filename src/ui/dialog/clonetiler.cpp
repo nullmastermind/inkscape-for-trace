@@ -40,7 +40,7 @@
 #include "display/drawing-context.h"
 #include "display/drawing.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "helper/window.h"
 
 #include "object/sp-item.h"

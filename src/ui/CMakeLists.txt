@@ -5,6 +5,7 @@ set(ui_SRC
 	control-manager.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
+	icon-loader.cpp
 	interface.cpp
         monitor.cpp
 	previewholder.cpp
@@ -152,7 +153,7 @@ set(ui_SRC
 	widget/color-icc-selector.cpp
 	widget/color-notebook.cpp
 	widget/color-picker.cpp
-	widget/color-preview.cpp
+	widget/color-preview.cpp	icon-loader.cpp
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
@@ -216,6 +217,7 @@ set(ui_SRC
 	draw-anchor.h
 	event-debug.h
 	icon-names.h
+	icon-loader.h
 	interface.h
         monitor.h
 	previewable.h

@@ -42,7 +42,7 @@
 
 #include "helper/action.h"
 #include "helper/action-context.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "include/gtkmm_version.h"
 

@@ -21,7 +21,7 @@
 
 #include "object/uri.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
 namespace Inkscape {

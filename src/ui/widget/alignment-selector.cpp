@@ -6,7 +6,7 @@
  */
 
 #include "ui/widget/alignment-selector.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
 #include <gtkmm/image.h>

@@ -51,7 +51,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/ink-spinscale.h"
 #include "widgets/ege-adjustment-action.h"

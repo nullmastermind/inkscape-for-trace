@@ -19,7 +19,7 @@
 #include "inkscape.h"
 #include "document-undo.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"

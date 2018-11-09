@@ -8,7 +8,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include "ink-radio-action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 static void ink_radio_action_finalize( GObject* obj );
 static void ink_radio_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );

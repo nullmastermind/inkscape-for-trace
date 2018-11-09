@@ -27,7 +27,7 @@
 #include "verbs.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject-reference.h"

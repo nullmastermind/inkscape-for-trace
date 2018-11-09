@@ -26,7 +26,7 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"

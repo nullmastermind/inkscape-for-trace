@@ -29,7 +29,7 @@
 
 #include "svg/svg-color.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/widget/unit-menu.h"
 
 #include "widgets/style-utils.h"

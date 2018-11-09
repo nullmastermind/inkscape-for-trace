@@ -16,7 +16,7 @@
 #include "ocaldialogs.h"
 
 #include "filedialogimpl-gtkmm.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "io/sys.h"
 #include "path-prefix.h"
 #include "preferences.h"

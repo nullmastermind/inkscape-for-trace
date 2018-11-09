@@ -18,7 +18,7 @@
 #include "button.h"
 #include "helper/action-context.h"
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "shortcuts.h"
 #include "ui/interface.h"
 

@@ -16,7 +16,7 @@
 
 #include "document-undo.h"
 #include "document.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "util/signal-blocker.h"
 

@@ -11,7 +11,7 @@
  */
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include <gtkmm/toolbutton.h>
 

@@ -15,7 +15,7 @@
 
 #include <glibmm/i18n.h>
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "originalitem.h"
 #include "svg/stringstream.h"

@@ -27,7 +27,7 @@
 
 #include "svg/css-ostringstream.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/widget/notebook-page.h"
 

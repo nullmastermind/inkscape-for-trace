@@ -30,7 +30,7 @@
 #include "display/canvas-grid.h"
 #include "document-properties.h"
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "include/gtkmm_version.h"
 #include "io/sys.h"
 #include "object/sp-root.h"

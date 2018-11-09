@@ -10,7 +10,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "random.h"
 #include <glibmm/i18n.h>
 

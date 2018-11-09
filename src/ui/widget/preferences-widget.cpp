@@ -33,7 +33,7 @@
 
 #include "io/sys.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/dialog/filedialog.h"
 #include "ui/widget/preferences-widget.h"
 

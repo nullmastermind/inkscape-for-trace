@@ -29,7 +29,7 @@
 #include "preferences.h"
 #include "profile-manager.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "object/color-profile.h"
 
 #include "svg/svg-icc-color.h"

@@ -16,7 +16,7 @@
 #include "selection.h"
 #include "document-undo.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
 #include "xml/node-event-vector.h"

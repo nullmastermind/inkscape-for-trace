@@ -26,7 +26,7 @@
 #include "transformation.h"
 #include "verbs.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
 

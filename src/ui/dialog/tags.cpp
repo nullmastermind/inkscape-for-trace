@@ -26,8 +26,8 @@
 #include "verbs.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "include/gtkmm_version.h"
 #include "object/sp-defs.h"
 #include "object/sp-item.h"

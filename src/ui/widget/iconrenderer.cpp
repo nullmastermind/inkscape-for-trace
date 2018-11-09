@@ -11,7 +11,7 @@
 
 #include "ui/widget/iconrenderer.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "layertypeicon.h"
 #include "ui/icon-names.h"
 #include "widgets/toolbox.h"

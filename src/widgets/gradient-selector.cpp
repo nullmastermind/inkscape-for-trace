@@ -31,7 +31,7 @@
 #include "style.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "ui/icon-names.h"
 

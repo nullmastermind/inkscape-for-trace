@@ -29,7 +29,7 @@
 #include <2geom/coord.h>
 #include <2geom/point.h>
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 
 #include "object/sp-shape.h"
 #include "object/sp-text.h"

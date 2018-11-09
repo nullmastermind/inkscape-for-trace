@@ -22,7 +22,7 @@
 #include "path-prefix.h"
 #include "stroke-style.h"
 
-#include "helper/icon-loader.h"
+#include "ui/icon-loader.h"
 #include "helper/stock-items.h"
 
 #include "io/sys.h"
