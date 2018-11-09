@@ -1948,15 +1948,15 @@ int SPCanvas::paint()
     SPCanvasArena *arena = nullptr;
     bool split = false;
     bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
+    bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
     double split_x = 1;
     double split_y = 1;
-    double split_width = 1;
-    double split_height = 1;
     if (desktop && desktop->splitMode()) {
+        double value = split_x = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA (desktop->drawing);
-        split_x = prefs->getDoubleLimited("/window/splitcanvas/x", 0.5, 0, 1);
-        split_y = prefs->getDoubleLimited("/window/splitcanvas/y", 1  , 0, 1);
+        split_x = !vertical ? 1 : value;
+        split_y = vertical ? 1 : value;
     }
     GtkAllocation allocation;
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);

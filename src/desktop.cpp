@@ -1555,7 +1555,7 @@ void SPDesktop::toggleSplitMode()
         dtw->splitCanvas(_split_canvas);
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
-        getCanvas()->requestRedraw(getCanvas()->_x0, getCanvas()->_y0, allocation.width, allocation.height);
+        getCanvas()->requestRedraw(getCanvas()->_x0, getCanvas()->_y0, getCanvas()->_x0 + allocation.width, getCanvas()->_y0 + allocation.height);
     }
 }
 
