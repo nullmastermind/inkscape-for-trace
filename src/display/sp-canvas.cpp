@@ -1532,22 +1532,36 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         return FALSE;
     
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
+    std::cout << *canvas->_spliter << std::endl;
+    std::cout << cursor_pos << std::endl;
+    std::cout << canvas->_is_dragging << std::endl;
+    GdkDisplay *display = gdk_display_get_default();
     if (canvas->_spliter && (*canvas->_spliter).contains(cursor_pos) && !canvas->_is_dragging) {
+        if (!canvas->_oversplit) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+            GdkCursor *cursor = nullptr;
+            if(vertical) {
+                cursor = gdk_cursor_new_from_name (display, "ew-resize");
+            } else {
+                cursor = gdk_cursor_new_from_name (display, "ns-resize");
+            }
+            if (cursor) {
+                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
+                g_object_unref (cursor);
+            }
+        }
         canvas->_oversplit = true;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
-        GdkDisplay *display = gdk_display_get_default();
-        GdkCursor *cursor = nullptr;
-        if(vertical) {
-            cursor = gdk_cursor_new_from_name (display, "ew-resize");
-        } else {
-            cursor = gdk_cursor_new_from_name (display, "ns-resize");
-        }
-        if (cursor) {
-            gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-            g_object_unref (cursor);
-        }
+        std::cout << "overoverover" << std::endl;
     } else {
+        if (canvas->_oversplit) {
+            GdkCursorType cursor_type = GDK_HAND1;
+            GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
+            if (cursor) {
+                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
+                g_object_unref (cursor);
+            }
+        }
         canvas->_oversplit = false;
     }
     canvas->_state = event->state;
@@ -1964,6 +1978,8 @@ int SPCanvas::paint()
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
     }
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPCanvasArena *arena = nullptr;
@@ -1978,10 +1994,12 @@ int SPCanvas::paint()
         arena = SP_CANVAS_ARENA (desktop->drawing);
         split_x = !vertical ? 1 : value;
         split_y = vertical ? 1 : value;
+        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * (1-split_x))) - 1;
+        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * (1-split_y))) - 1;
+        Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1;
+        Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1;
+        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
     }
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
-   
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_region_t *to_draw = nullptr;
@@ -2028,12 +2046,6 @@ int SPCanvas::paint()
         }
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
-    }
-
-    if (desktop && desktop->splitMode()) {
-        split_x = int(allocation.width * split_x);
-        split_y = int(allocation.height * split_y);
-        _spliter = Geom::OptIntRect(_x0 + split_x - 1, _y0 + split_y - 1,_x0 + split_x + 1, _y0 + split_y - 1);
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter
