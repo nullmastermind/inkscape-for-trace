@@ -529,7 +529,7 @@ Application::Application(const char* argv, bool use_gui) :
             g_object_set(settings, "gtk-application-prefer-dark-theme",
                          prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         }
-        
+
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }

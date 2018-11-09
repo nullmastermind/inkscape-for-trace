@@ -24,5 +24,5 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar cons
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size);
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::IconSize icon_size);
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_sice);
-GtkWidget  *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size);
+GtkWidget *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size);
 #endif // SEEN_INK_STOCK_ITEMS_H

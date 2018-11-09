@@ -35,7 +35,6 @@
 
 #include "display/cairo-utils.h"
 #include "helper/action.h"
-#include "ui/icon-loader.h"
 #include "include/gtkmm_version.h"
 #include "io/resource.h"
 #include "io/sys.h"
@@ -45,6 +44,7 @@
 #include "object/sp-use.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 
 #ifdef WITH_LIBVISIO

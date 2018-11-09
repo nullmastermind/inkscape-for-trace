@@ -36,8 +36,8 @@
 #include "object/sp-root.h"
 #include "object/sp-string.h"
 
-#include "ui/icon-loader.h"
 #include "ui/dialog-events.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"

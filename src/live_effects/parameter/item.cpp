@@ -20,10 +20,10 @@
 #include "svg/svg.h"
 
 #include "desktop.h"
-#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
+#include "ui/icon-loader.h"
 #include "xml/repr.h"
 // clipboard support
 #include "ui/clipboard.h"

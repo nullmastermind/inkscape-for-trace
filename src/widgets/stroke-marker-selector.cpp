@@ -22,8 +22,8 @@
 #include "path-prefix.h"
 #include "stroke-style.h"
 
-#include "ui/icon-loader.h"
 #include "helper/stock-items.h"
+#include "ui/icon-loader.h"
 
 #include "io/sys.h"
 

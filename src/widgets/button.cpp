@@ -18,8 +18,8 @@
 #include "button.h"
 #include "helper/action-context.h"
 #include "helper/action.h"
-#include "ui/icon-loader.h"
 #include "shortcuts.h"
+#include "ui/icon-loader.h"
 #include "ui/interface.h"
 
 static void sp_button_dispose(GObject *object);

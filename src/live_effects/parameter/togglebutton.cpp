@@ -12,13 +12,13 @@
 #include <utility>
 
 #include "helper-fns.h"
-#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/togglebutton.h"
 #include "selection.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
+#include "ui/icon-loader.h"
 #include "verbs.h"
 
 namespace Inkscape {
@@ -161,7 +161,7 @@ ToggleButtonParam::refresh_button()
     }
     if ( _icon_active ) {
         GdkPixbuf * icon_pixbuf = nullptr;
-        Gtk::Widget *im = dynamic_cast<Gtk::Image*>(children[0]);
+        Gtk::Widget *im = dynamic_cast<Gtk::Image *>(children[0]);
         if (!im) return;
         if (!value) {
             im = Glib::wrap(sp_get_icon_image(_icon_inactive, _icon_size));

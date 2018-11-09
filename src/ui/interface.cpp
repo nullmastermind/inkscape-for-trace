@@ -46,8 +46,8 @@
 #include "extension/input.h"
 
 #include "helper/action.h"
-#include "ui/icon-loader.h"
 #include "helper/window.h"
+#include "ui/icon-loader.h"
 
 #include "io/sys.h"
 

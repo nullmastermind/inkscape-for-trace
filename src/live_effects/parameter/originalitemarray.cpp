@@ -15,12 +15,12 @@
 
 #include <glibmm/i18n.h>
 
-#include "ui/icon-loader.h"
 #include "inkscape.h"
 #include "originalitem.h"
 #include "svg/stringstream.h"
 #include "svg/svg.h"
 #include "ui/clipboard.h"
+#include "ui/icon-loader.h"
 
 #include "object/uri.h"
 

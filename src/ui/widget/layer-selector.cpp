@@ -14,8 +14,8 @@
 #include <cstring>
 #include <string>
 
-#include "ui/icon-loader.h"
 #include "ui/dialog/layer-properties.h"
+#include "ui/icon-loader.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <glibmm/i18n.h>

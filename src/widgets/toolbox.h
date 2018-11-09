@@ -62,9 +62,9 @@ public:
     static void updateSnapToolbox(SPDesktop *desktop, Inkscape::UI::Tools::ToolBase *eventcontext, GtkWidget *toolbox);
 
     static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
-    static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0 );
+    static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);
 
-private:
+  private:
     ToolboxFactory() = delete;
 };
 

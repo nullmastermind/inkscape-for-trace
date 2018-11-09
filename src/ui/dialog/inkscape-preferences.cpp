@@ -26,10 +26,10 @@
 #include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
 #include <gtk/gtksettings.h>
+#include <gtkmm/cssprovider.h>
 #include <gtkmm/main.h>
 #include <gtkmm/recentinfo.h>
 #include <gtkmm/recentmanager.h>
-#include <gtkmm/cssprovider.h>
 
 #include "cms-system.h"
 #include "document.h"
@@ -919,7 +919,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    Gtk::Button * _apply_color = new Gtk::Button(_("Apply color"));
+    Gtk::Button *_apply_color = new Gtk::Button(_("Apply color"));
     _apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
     _apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, _apply_color);
@@ -2434,7 +2434,7 @@ void InkscapePreferences::on_pagelist_selection_changed()
             Gtk::Main::iteration();
         }
         this->show_all_children();
-        if (prefs->getInt("/dialogs/preferences/page",0) == PREFS_PAGE_UI_THEME) {
+        if (prefs->getInt("/dialogs/preferences/page", 0) == PREFS_PAGE_UI_THEME) {
             symbolicThemeCheck();
         }
     }

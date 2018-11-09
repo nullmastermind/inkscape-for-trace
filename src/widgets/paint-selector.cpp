@@ -28,8 +28,8 @@
 #include "paint-selector.h"
 #include "path-prefix.h"
 
-#include "ui/icon-loader.h"
 #include "helper/stock-items.h"
+#include "ui/icon-loader.h"
 
 #include "style.h"
 

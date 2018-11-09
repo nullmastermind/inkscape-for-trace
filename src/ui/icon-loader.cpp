@@ -20,9 +20,7 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/toolitem.h>
 
-void sp_load_theme()
-{
-   }
+void sp_load_theme() {}
 
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
@@ -36,9 +34,9 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
     }
     // TODO all calls to "sp_get_icon_pixbuf" need to be removed in thew furture
     // Put here temporary for allow use symbolic in a few icons require pixbug instead Gtk::Image
-    // We coulden't acces to pixbuf of a symbolic ones with the next order 
+    // We coulden't acces to pixbuf of a symbolic ones with the next order
     // icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
-    // Maybe we can do with Gio, but not sure.  Also can render a icon to pixbuf but need to be 
+    // Maybe we can do with Gio, but not sure.  Also can render a icon to pixbuf but need to be
     // a stock-icon not on named ones I think or access directly to the icon.svg file
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::RefPtr<Gdk::Pixbuf> _icon_pixbuf;
@@ -105,7 +103,7 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar cons
 
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size)
 {
-    
+
     Gtk::Image *icon = new Gtk::Image();
     icon->set_from_icon_name(icon_name, Gtk::IconSize(icon_size));
     return icon;
@@ -113,7 +111,7 @@ Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon
 
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::IconSize icon_size)
 {
-    
+
     Gtk::Image *icon = new Gtk::Image();
     icon->set_from_icon_name(icon_name, icon_size);
     return icon;
@@ -121,7 +119,7 @@ Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::IconSize icon_size)
 
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size)
 {
-    
+
     Gtk::IconSize icon_size = Inkscape::UI::ToolboxFactory::prefToSize_mm(prefs_size);
     Gtk::Image *icon = new Gtk::Image();
     icon->set_from_icon_name(icon_name, icon_size);
@@ -131,7 +129,7 @@ Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_size)
 
 GtkWidget *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size)
 {
-    
+
     return gtk_image_new_from_icon_name(icon_name.c_str(), icon_size);
 }
 

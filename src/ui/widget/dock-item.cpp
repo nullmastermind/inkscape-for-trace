@@ -11,8 +11,8 @@
 #include "ui/widget/dock.h"
 
 #include "desktop.h"
-#include "ui/icon-loader.h"
 #include "inkscape.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include <glibmm/exceptionhandler.h>
 #include <gtkmm/icontheme.h>
