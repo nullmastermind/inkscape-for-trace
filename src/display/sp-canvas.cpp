@@ -980,6 +980,8 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
+    canvas->_oversplit = false;
+    canvas->_spliter = Geom::OptIntRect();
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
@@ -1528,7 +1530,26 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 
     if (canvas->_root == nullptr) // canvas being deleted
         return FALSE;
-
+    
+    Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
+    if (canvas->_spliter && (*canvas->_spliter).contains(cursor_pos) && !canvas->_is_dragging) {
+        canvas->_oversplit = true;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+        GdkDisplay *display = gdk_display_get_default();
+        GdkCursor *cursor = nullptr;
+        if(vertical) {
+            cursor = gdk_cursor_new_from_name (display, "ew-resize");
+        } else {
+            cursor = gdk_cursor_new_from_name (display, "ns-resize");
+        }
+        if (cursor) {
+            gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
+            g_object_unref (cursor);
+        }
+    } else {
+        canvas->_oversplit = false;
+    }
     canvas->_state = event->state;
     canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
     status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
@@ -1949,10 +1970,10 @@ int SPCanvas::paint()
     bool split = false;
     bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+    double value = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
     double split_x = 1;
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
-        double value = split_x = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA (desktop->drawing);
         split_x = !vertical ? 1 : value;
@@ -1960,6 +1981,7 @@ int SPCanvas::paint()
     }
     GtkAllocation allocation;
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
+   
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_region_t *to_draw = nullptr;
@@ -2007,6 +2029,13 @@ int SPCanvas::paint()
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
     }
+
+    if (desktop && desktop->splitMode()) {
+        split_x = int(allocation.width * split_x);
+        split_y = int(allocation.height * split_y);
+        _spliter = Geom::OptIntRect(_x0 + split_x - 1, _y0 + split_y - 1,_x0 + split_x + 1, _y0 + split_y - 1);
+    }
+
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;

@@ -27,6 +27,7 @@
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/paned.h>
 
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
@@ -54,7 +55,6 @@
 #include "extension/db.h"
 
 #include "helper/action.h"
-#include "helper/icon-loader.h"
 
 #include "object/sp-image.h"
 #include "object/sp-namedview.h"
@@ -62,6 +62,7 @@
 
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/swatches.h"
+#include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/interface.h"
 #include "ui/tools/box3d-tool.h"
