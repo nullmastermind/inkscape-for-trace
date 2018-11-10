@@ -87,7 +87,7 @@ CssDialog::CssDialog():
         Gtk::Image *add_icon = Gtk::manage(sp_get_icon_image("list-add", Gtk::ICON_SIZE_SMALL_TOOLBAR));
         col->set_clickable(true);
         col->set_widget(*add_icon);
-        add_icon->set_tooltip_text(_("Add a new attribute"));
+        add_icon->set_tooltip_text(_("Add a new style property"));
         add_icon->show();
         // This gets the GtkButton inside the GtkBox, inside the GtkAlignment, inside the GtkImage icon.
         auto button = add_icon->get_parent()->get_parent()->get_parent();
