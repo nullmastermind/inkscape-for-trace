@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /** @file
  * @brief Interface for XML nodes
- *//*
-/* Authors:
+ *
+ * Authors:
  *   MenTaLguY <mental@rydia.net>
  *   Krzysztof Kosiński <tweenk.pl@gmail.com> (documentation)
  *
