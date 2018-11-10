@@ -1994,11 +1994,13 @@ int SPCanvas::paint()
         arena = SP_CANVAS_ARENA (desktop->drawing);
         split_x = !vertical ? 1 : value;
         split_y = vertical ? 1 : value;
-        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * (1-split_x))) - 1;
-        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * (1-split_y))) - 1;
-        Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1;
-        Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1;
-        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+        guint hruler_gap = desktop->get_hruler_thickness();
+        guint vruler_gap = desktop->get_vruler_thickness();
+        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * (1-split_x))) - 1 - vruler_gap;
+        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * (1-split_y))) - 1 - hruler_gap;
+        Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1 - vruler_gap;
+        Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1 - hruler_gap; 
+        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};

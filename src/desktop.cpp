@@ -910,6 +910,62 @@ Geom::Rect SPDesktop::get_display_area() const
     return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);
 }
 
+guint
+SPDesktop::get_hruler_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->hruler, &allocation);
+        return allocation.height;
+    }
+    return 0;
+}
+
+guint
+SPDesktop::get_vruler_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->vruler, &allocation);
+        return allocation.width;
+    }
+    return 0;
+}
+
+guint
+SPDesktop::get_hscrool_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->hscrollbar, &allocation);
+        return allocation.height;
+    }
+    return 0;
+}
+
+guint
+SPDesktop::get_vscrool_thickness()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(dtw->vscrollbar_box, &allocation);
+        return allocation.width;
+    }
+    return 0;
+}
+
+    int get_hruler_thickness();
+    int get_vruler_thickness();
+    int get_vscrool_thickness();
+    int get_hscrool_thickness();
 
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.
@@ -1555,7 +1611,8 @@ void SPDesktop::toggleSplitMode()
         dtw->splitCanvas(_split_canvas);
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
-        getCanvas()->requestRedraw(getCanvas()->_x0, getCanvas()->_y0, getCanvas()->_x0 + allocation.width, getCanvas()->_y0 + allocation.height);
+        SPCanvas * canvas = getCanvas();
+        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width, canvas->_y0 + allocation.height);
     }
 }
 
