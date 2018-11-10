@@ -1255,7 +1255,7 @@ int SPCanvas::emitEvent(GdkEvent *event)
         ev->crossing.x += _x0;
         ev->crossing.y += _y0;
         break;
-    /* case GDK_MOTION_NOTIFY:
+    case GDK_MOTION_NOTIFY:
         ev->motion.x += _x0;
         ev->motion.y += _y0;
         break;
@@ -1277,12 +1277,7 @@ int SPCanvas::emitEvent(GdkEvent *event)
         if (next_canvas_doubleclick) {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
             handle_doubleclick(GTK_WIDGET(this), event2);
-        } */
-    case GDK_MOTION_NOTIFY:
-    case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:    
+        }  
         ev->motion.x += _x0;
         ev->motion.y += _y0;
         break;
@@ -1531,14 +1526,15 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // Pick the current item as if the button were not pressed, and
         // then process the event.
         //
-        canvas->_state = event->state;
         if (!canvas->_oversplit) {
+            canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
+            canvas->_state ^= mask;
+            retval = canvas->emitEvent((GdkEvent *) event);
         } else {
             canvas->_splitpressed = true;
+            retval = 1;
         }
-        canvas->_state ^= mask;
-        retval = canvas->emitEvent((GdkEvent *) event);
         break;
 
     case GDK_BUTTON_RELEASE:
@@ -1546,15 +1542,16 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // after the button has been released
         //
         canvas->_splitpressed = false;
-        canvas->_state = event->state;
-        retval = canvas->emitEvent((GdkEvent *) event);
-        event->state ^= mask;
-        canvas->_state = event->state;
-        //if (!canvas->_oversplit) {
+        if (canvas->_oversplit) {
+            retval = 1;
+        } else {
+            canvas->_state = event->state;
+            retval = canvas->emitEvent((GdkEvent *) event);
+            event->state ^= mask;
+            canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
-        //}
-        event->state ^= mask;
-
+            event->state ^= mask;
+        }
         break;
 
     default:
@@ -1621,19 +1618,28 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         }
         canvas->_oversplit = false;
     }
-    /* if (canvas->_splitpressed) {
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
-        guint value = vertical ? 1/(allocation.width/cursor_pos[Geom::X]) : 1/(allocation.height/cursor_pos[Geom::Y]);
-        prefs->setDouble("/window/splitcanvas/value", value);
-    } */
     canvas->_state = event->state;
     canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
     status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
     if (event->is_hint) {
         request_motions(gtk_widget_get_window (widget), event);
     }
-
+    if (canvas->_splitpressed) {
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
+        double value = vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
+        std::cout << value << "----" << allocation.width << "----" << cursor_pos[Geom::X] << std::endl;
+        if (value < 0.05 || value > 0.95) {
+            prefs->setDouble("/window/splitcanvas/value", 0.5);
+            prefs->setBool("/window/splitcanvas/split", false);
+            prefs->setBool("/window/splitcanvas/vertical", true);
+            SP_ACTIVE_DESKTOP->toggleSplitMode()
+        } else {
+            prefs->setDouble("/window/splitcanvas/value", value);
+        }
+        canvas->dirtyAll();
+        canvas->paint();
+    }
     return status;
 }
 
@@ -2261,8 +2267,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     _y0 = iy;
 
     // Adjust the clean region
-    //if (clear || _spliter) {
-    if (clear ) {
+    if (clear || _spliter) {
         dirtyAll();
     } else {
         cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
