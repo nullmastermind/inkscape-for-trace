@@ -4,12 +4,17 @@
 # Author: Max Gaukler <development@maxgaukler.de>
 # Licensed under GPL version 2 or any later version, read the file "COPYING" for more information.
 
+from __future__ import print_function
+
 import fnmatch
 import os
 import sys
 import subprocess
 license = {}
 hasSPDX = {}
+
+if sys.version_info[0] < 3:
+    from io import open
 
 # do not check licenses in these subdirectories:
 # TODO: have look at the libraries' licenses
