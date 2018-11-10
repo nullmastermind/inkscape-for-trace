@@ -16,6 +16,8 @@
 #include "preferences.h"
 #include "svg/svg-color.h"
 #include "widgets/toolbox.h"
+#include <gdkmm/display.h>
+#include <gdkmm/screen.h>
 #include <gtkmm/iconinfo.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/toolitem.h>
@@ -24,14 +26,9 @@ void sp_load_theme() {}
 
 Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
 {
-    using namespace Inkscape::IO::Resource;
-    static auto icon_theme = Gtk::IconTheme::get_default();
-    static bool icon_theme_set;
-    if (!icon_theme_set) {
-        icon_theme_set = true;
-        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
-        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
-    }
+    Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
+    Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
+    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_for_screen(screen);
     // TODO all calls to "sp_get_icon_pixbuf" need to be removed in thew furture
     // Put here temporary for allow use symbolic in a few icons require pixbug instead Gtk::Image
     // We coulden't acces to pixbuf of a symbolic ones with the next order

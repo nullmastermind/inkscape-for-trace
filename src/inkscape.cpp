@@ -498,6 +498,10 @@ Application::Application(const char* argv, bool use_gui) :
     }
 
     if (use_gui) {
+        using namespace Inkscape::IO::Resource;
+        auto icon_theme = Gtk::IconTheme::get_default();
+        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
+        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
         add_style_sheet();
         /* Load the preferences and menus */
         GtkSettings *settings = gtk_settings_get_default();
