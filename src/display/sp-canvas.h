@@ -151,6 +151,7 @@ public:
     static void handle_get_preferred_height(GtkWidget *widget, gint *min_h, gint *nat_h);
     static void handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
     static gint handle_button(GtkWidget *widget, GdkEventButton *event);
+    static gint handle_doubleclick(GtkWidget *widget, GdkEventButton *event);
 
     /**
      * Scroll event handler for the canvas.
@@ -175,6 +176,7 @@ public:
 
     bool _is_dragging;
     bool _oversplit;
+    bool _splitpressed;
     Geom::OptIntRect _spliter;
     double _dx0;
     double _dy0;
