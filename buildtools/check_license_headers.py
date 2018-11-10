@@ -4,6 +4,7 @@
 # Author: Max Gaukler <development@maxgaukler.de>
 # Licensed under GPL version 2 or any later version, read the file "COPYING" for more information.
 
+import fnmatch
 import os
 import sys
 import subprocess
@@ -12,29 +13,87 @@ hasSPDX = {}
 
 # do not check licenses in these subdirectories:
 # TODO: have look at the libraries' licenses
-IGNORE_PATHS = ["./LICENSES", "./ccache", "./build", "./inst/", "./doc", "./man", "./packaging", "./po", "./share/", "./src/3rdparty/", "./src/2geom/", "./CMakeScripts/"]
+IGNORE_PATHS = [
+    ".git*",
+    "CMakeScripts",
+    "LICENSES",
+    "ccache",
+    "build*",
+    "doc",
+    "inst",
+    "man",
+    "packaging",
+    "patches",
+    "po",
+    "share",
+    "src/2geom",
+    "src/3rdparty",
+]
+
 # do not check licenses for the following file endings:
-IGNORE_FILE_ENDINGS = ["README", "README.md", "NEWS", "NEWS.md", "AUTHORS", "CONTRIBUTING.md", "INSTALL.md", "HACKING", "COPYING", "BUILD_YOUR_OWN", "TRANSLATORS", ".ods", ".dia", ".bz2", ".bmp", ".dll", ".png", ".svg", ".po", ".rc", ".kate-swp", ".xpm", ".xml", "Notes.txt", "todo.txt"]
+IGNORE_FILE_ENDINGS = [
+    ".bmp",
+    ".bz2",
+    ".dia",
+    ".dll",
+    ".kate-swp",
+    ".ods",
+    ".png",
+    ".po",
+    ".rc",
+    ".svg",
+    ".xml",
+    ".xpm",
+    "AUTHORS",
+    "BUILD_YOUR_OWN",
+    "CONTRIBUTING.md",
+    "COPYING",
+    "HACKING",
+    "INSTALL.md",
+    "NEWS",
+    "NEWS.md",
+    "Notes.txt",
+    "README",
+    "README.md",
+    "TRANSLATORS",
+    "todo.txt",
+]
+
 # permitted licenses (MUST BE compatible with licensing the compiled product as GPL3).
 # IF YOU CHANGE THIS, also update the list of licenses in COPYING!
-PERMITTED_LICENSES = ["GPL-2.0-or-later", "GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later", "GPL-3.0-or-later", "LGPL-2.1-or-later", "GPL-3.0-or-later", "LGPL-3.0-or-later"]
+PERMITTED_LICENSES = [
+    "GPL-2.0-or-later",
+    "GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later",
+    "GPL-3.0-or-later",
+    "GPL-3.0-or-later",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-or-later",
+]
 
 if not os.path.exists("./LICENSES"):
     print("this script must be run from the main git directory", file=sys.stderr)
     sys.exit(1)
 
-for root, dirs, files in os.walk("."):
-    for name in files:
-        p = os.path.join(root,name)
-        if ".git" in p:
-            continue
-        if sum([p.endswith(i) for i in IGNORE_FILE_ENDINGS]):
-            continue
-        if sum([p.startswith(i) for i in IGNORE_PATHS]):
-            continue
-        if subprocess.call(["git", "check-ignore", "-q", "--", p]) == 0:
-            # file is in .gitignore
-            continue
+
+def files_all():
+    ignore_paths = [('./' + p) for p in IGNORE_PATHS]
+    ignore_paths += [(p + '/*') for p in ignore_paths]
+
+    for root, dirs, files in os.walk("."):
+        for name in files:
+            p = os.path.join(root,name)
+            if any(p.endswith(i) for i in IGNORE_FILE_ENDINGS):
+                continue
+            if any(fnmatch.fnmatch(p, i) for i in ignore_paths):
+                continue
+            if subprocess.call(["git", "check-ignore", "-q", "--", p]) == 0:
+                # file is in .gitignore
+                continue
+            yield p
+
+
+def main(filenames):
+    for p in filenames:
         license[p] = None
         hasSPDX[p] = False
         
@@ -45,6 +104,9 @@ for root, dirs, files in os.walk("."):
                 if line.startswith("SPDX-License-Identifier: "):
                     hasSPDX[p] = True
                     license[p] = line[len("SPDX-License-Identifier: "):]
+        except IOError:
+            print("Cannot open {} (ignored)".format(p), file=sys.stderr)
+            continue
         except UnicodeDecodeError:
             print("Encoding of {} is damaged (should be UTF8), cannot check license".format(p), file=sys.stderr)
             print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
@@ -61,6 +123,9 @@ for root, dirs, files in os.walk("."):
             print("\n".join(PERMITTED_LICENSES), file=sys.stderr)
             print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
             sys.exit(1)
-        
-        
-            
+
+
+if __name__ == '__main__':
+    main(files_all())
+
+# vi:sw=4:expandtab:

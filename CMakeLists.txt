@@ -155,7 +155,6 @@ endif()
 # Check License Headers
 # -----------------------------------------------------------------------------
 add_custom_target(check-license-headers WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} COMMAND ./buildtools/check_license_headers.py)
-add_dependencies(inkscape check-license-headers)
 
 
 # -----------------------------------------------------------------------------

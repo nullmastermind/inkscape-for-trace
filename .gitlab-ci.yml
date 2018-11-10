@@ -139,6 +139,7 @@ test:linux:
   script:
     - cd build
     - ctest -V
+    - make check-license-headers
 
 translations:
   stage: build
