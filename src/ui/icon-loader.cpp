@@ -57,14 +57,14 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
             else {
                 _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             }
-            std::cout << "Icon Loader using a future dead function in this icon: " << icon_name << std::endl;
+            g_warning("Icon Loader using a future dead function in this icon: %s", icon_name);
         }
         else {
             _icon_pixbuf = icon_theme->load_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
         }
     }
     catch (const Gtk::IconThemeError &e) {
-        std::cout << "Icon Loader error loading icon file: " << e.what() << std::endl;
+        g_warning("Icon Loader error loading icon file: %s", e.what());
     }
     return _icon_pixbuf;
 }
