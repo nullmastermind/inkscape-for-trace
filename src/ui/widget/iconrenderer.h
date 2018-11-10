@@ -59,7 +59,7 @@ protected:
 private:
     
     Glib::Property<int> _property_icon;
-    std::vector<Glib::ustring> _icons;
+    std::vector<Glib::RefPtr<Gdk::Pixbuf>> _icons;
     void set_pixbuf();
 };
 

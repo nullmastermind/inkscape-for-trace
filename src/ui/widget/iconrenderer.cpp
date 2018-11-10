@@ -91,17 +91,17 @@ bool IconRenderer::activate_vfunc(GdkEvent* /*event*/,
 
 void IconRenderer::add_icon(Glib::ustring name)
 {
-    _icons.push_back(name);
+    _icons.push_back(sp_get_icon_pixbuf(name.c_str(), GTK_ICON_SIZE_BUTTON));
 }
 
 void IconRenderer::set_pixbuf()
 {
     int icon_index = property_icon().get_value();
-    auto icon_name = Glib::ustring("image-missing");
     if(icon_index >= 0 && icon_index < _icons.size()) {
-        icon_name = _icons[icon_index];
+        property_pixbuf() = _icons[icon_index];
+    } else {
+        property_pixbuf() = sp_get_icon_pixbuf("image-missing", GTK_ICON_SIZE_BUTTON);
     }
-    property_pixbuf() = sp_get_icon_pixbuf(icon_name.c_str(), GTK_ICON_SIZE_BUTTON);
 }
 
 
