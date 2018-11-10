@@ -68,8 +68,6 @@ IGNORE_FILE_ENDINGS = [
 # IF YOU CHANGE THIS, also update the list of licenses in COPYING!
 PERMITTED_LICENSES = [
     "GPL-2.0-or-later",
-    "GPL-2.0-or-later OR MPL-1.1 OR LGPL-2.1-or-later",
-    "GPL-3.0-or-later",
     "GPL-3.0-or-later",
     "LGPL-2.1-or-later",
     "LGPL-3.0-or-later",
@@ -122,7 +120,7 @@ def main(filenames):
             print("This is required so that we can make sure all files have compatible licenses.", file=sys.stderr)
             print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
             sys.exit(1)
-        if not license[p] in PERMITTED_LICENSES:
+        if not any(lic in PERMITTED_LICENSES for lic in license[p].split(' OR ')):
             print("File '{}' has an incompatible or unknown license '{}' in the SPDX-License-Identifier header.".format(p, license[p]), file=sys.stderr)
             print("Allowed licenses are: ", file=sys.stderr)
             print("\n".join(PERMITTED_LICENSES), file=sys.stderr)
