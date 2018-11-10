@@ -84,7 +84,7 @@ CssDialog::CssDialog():
         col->add_attribute(addRenderer->property_visible(), _cssColumns.deleteButton);
         col->set_sort_column(_cssColumns.deleteButton);
 
-        auto add_icon = Gtk::manage(sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR));
+        Gtk::Image *add_icon = Gtk::manage(sp_get_icon_image("list-add", Gtk::ICON_SIZE_SMALL_TOOLBAR));
         col->set_clickable(true);
         col->set_widget(*add_icon);
         add_icon->set_tooltip_text(_("Add a new attribute"));
