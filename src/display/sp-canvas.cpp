@@ -1532,9 +1532,6 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         return FALSE;
     
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
-    std::cout << *canvas->_spliter << std::endl;
-    std::cout << cursor_pos << std::endl;
-    std::cout << canvas->_is_dragging << std::endl;
     GdkDisplay *display = gdk_display_get_default();
     if (canvas->_spliter && (*canvas->_spliter).contains(cursor_pos) && !canvas->_is_dragging) {
         if (!canvas->_oversplit) {
@@ -2001,6 +1998,8 @@ int SPCanvas::paint()
         Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1 - vruler_gap;
         Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1 - hruler_gap; 
         _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
+    } else {
+        canvas->_spliter = Geom::OptIntRect();
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
     cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};
@@ -2141,7 +2140,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 
     Geom::IntRect old_area = getViewboxIntegers();
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
-
+    
     GtkAllocation allocation;
     gtk_widget_get_allocation(&_widget, &allocation);
 
@@ -2196,7 +2195,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     _y0 = iy;
 
     // Adjust the clean region
-    if (clear) {
+    if (clear || _spliter) {
         dirtyAll();
     } else {
         cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
