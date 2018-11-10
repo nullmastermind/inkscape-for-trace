@@ -73,6 +73,11 @@ PERMITTED_LICENSES = [
     "LGPL-3.0-or-later",
 ]
 
+
+class LicenseCheckError(Exception):
+    pass
+
+
 if not os.path.exists("./LICENSES"):
     print("this script must be run from the main git directory", file=sys.stderr)
     sys.exit(1)
@@ -111,24 +116,30 @@ def main(filenames):
             print("Cannot open {} (ignored)".format(p), file=sys.stderr)
             continue
         except UnicodeDecodeError:
-            print("Encoding of {} is damaged (should be UTF8), cannot check license".format(p), file=sys.stderr)
-            print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
-            sys.exit(1)
+            raise LicenseCheckError(
+                "Encoding of {} is damaged (should be UTF8), cannot check license"
+                .format(p))
+
         if not hasSPDX[p]:
-            print("File '{}' does not have a SPDX-License-Identifier: header.".format(p), file=sys.stderr)
-            print("Please have a look at the coding style: https://inkscape.org/en/develop/coding-style/", file=sys.stderr)
-            print("This is required so that we can make sure all files have compatible licenses.", file=sys.stderr)
-            print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
-            sys.exit(1)
+            raise LicenseCheckError(
+                "File '{}' does not have a SPDX-License-Identifier: header.\n"
+                "Please have a look at the coding style: https://inkscape.org/en/develop/coding-style/\n"
+                "This is required so that we can make sure all files have compatible licenses."
+                .format(p))
+
         if not any(lic in PERMITTED_LICENSES for lic in license[p].split(' OR ')):
-            print("File '{}' has an incompatible or unknown license '{}' in the SPDX-License-Identifier header.".format(p, license[p]), file=sys.stderr)
-            print("Allowed licenses are: ", file=sys.stderr)
-            print("\n".join(PERMITTED_LICENSES), file=sys.stderr)
-            print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
-            sys.exit(1)
+            raise LicenseCheckError(
+                "File '{}' has an incompatible or unknown license '{}' in the SPDX-License-Identifier header.\n"
+                "Allowed licenses are:\n"
+                "{}".format(p, license[p], "\n".join(PERMITTED_LICENSES)))
 
 
 if __name__ == '__main__':
-    main(files_all())
+    try:
+        main(files_all())
+    except LicenseCheckError as e:
+        print(e, file=sys.stderr)
+        print("If you think this message is wrong, edit buildtools/check_license_header.py", file=sys.stderr)
+        sys.exit(1)
 
 # vi:sw=4:expandtab:
