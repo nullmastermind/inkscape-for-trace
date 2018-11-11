@@ -187,7 +187,7 @@ DrawingItem *DrawingGlyphs::_pickItem(Geom::Point const &p, double /*delta*/, un
     bool invisible = (ggroup->_nrstyle.fill.type == NRStyle::PAINT_NONE) &&
         (ggroup->_nrstyle.stroke.type == NRStyle::PAINT_NONE);
 
-    if (_font && _bbox && (_drawing.outline() || !invisible) ) {
+    if (_font && _bbox && (_drawing.outline() || _drawing.getOutlineSensitive() || !invisible) ) {
         // With text we take a simple approach: pick if the point is in a character bbox
         Geom::Rect expanded(_pick_bbox);
         // FIXME, why expand by delta?  When is the next line needed?

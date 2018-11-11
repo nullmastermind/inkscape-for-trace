@@ -617,10 +617,6 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
         return -1;
     }
 
-    /* if (item->canvas->_oversplit) {
-        return -1;
-    } */
-
     // This test disallows grabbing events by an invisible item, which may be useful
     // sometimes. An example is the hidden control point used for the selector component,
     // where it is used for object selection and rubberbanding. There seems to be nothing
@@ -1458,9 +1454,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
 
 gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event) {
     SPCanvas *canvas = SP_CANVAS (widget);
-    std::cout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << std::endl;
     if(canvas->_oversplit) {
-        std::cout << "aaaaaaaaaaaaaaaaaaaaa" << std::endl;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
         bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
@@ -1475,6 +1469,7 @@ gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event) {
             prefs->setBool("/window/splitcanvas/vertical", true);
             prefs->setBool("/window/splitcanvas/inverse", false);
         }
+        prefs->setDouble("/window/splitcanvas/value", 0.5);
         canvas->dirtyAll();
         canvas->addIdle();;
     }
@@ -1602,7 +1597,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 {
     int status;
     SPCanvas *canvas = SP_CANVAS (widget);
-
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     trackLatency((GdkEvent *)event);
 
     if (event->window != getWindow(canvas)) {
@@ -1616,6 +1611,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     GdkDisplay *display = gdk_display_get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+    bool inverse = prefs->getBool("/window/splitcanvas/inverse", true);
     
     if (canvas->_spliter && (*canvas->_spliter).contains(cursor_pos) && !canvas->_is_dragging) {
         if (!canvas->_oversplit) {
@@ -1629,15 +1625,19 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
                 gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
                 g_object_unref (cursor);
             }
+            canvas->_oversplit = true;
+            canvas->paintSpliter();
+            (*canvas->_spliter).expandBy(2);
         }
         canvas->_oversplit = true;
-        std::cout << *canvas->_spliter << "----" << canvas->_splitpressed << "overoverover" << std::endl;
     } else {
-        if (canvas->_oversplit && !canvas->_splitpressed) {
-            SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-            if (desktop && desktop->event_context) {
+        if (canvas->_oversplit) {
+            if (desktop && desktop->event_context && !canvas->_splitpressed) {
                 desktop->event_context->sp_event_context_update_cursor();
             }
+            canvas->_oversplit = false;
+            canvas->paintSpliter();
+            (*canvas->_spliter).expandBy(-2);
         }
         canvas->_oversplit = false;
     }
@@ -1645,16 +1645,17 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
         double value = vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
-        std::cout << value << "----" << allocation.width << "----" << cursor_pos[Geom::X] << std::endl;
-        if (value < 0.05 || value > 0.95) {
-            prefs->setDouble("/window/splitcanvas/value", 0.5);
-            prefs->setBool("/window/splitcanvas/split", false);
-            prefs->setBool("/window/splitcanvas/vertical", true);
-            SP_ACTIVE_DESKTOP->toggleSplitMode();
+        if (value < 0.03 || value > 0.97) {
+            SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+            if (desktop && desktop->event_context) {
+                desktop->event_context->sp_event_context_update_cursor();
+                desktop->toggleSplitMode();
+                canvas->_splitpressed = false;
+                canvas->_oversplit = false;
+            }
         } else {
             prefs->setDouble("/window/splitcanvas/value", value);
         }
-        std::cout << "loolololololo" << std::endl;
         canvas->dirtyAll();
         canvas->addIdle();
         status = 1;
@@ -1666,7 +1667,17 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             request_motions(gtk_widget_get_window (widget), event);
         }
     }
-    
+
+    if (desktop) {
+        SPCanvasArena *arena = SP_CANVAS_ARENA (desktop->drawing);
+        if (desktop->splitMode()) {
+            bool contains = canvas->_spliter_area.contains(cursor_pos);
+            bool setoutline = inverse ? !contains : contains;
+            arena->drawing.setOutlineSensitive(setoutline);
+        } else {
+            arena->drawing.setOutlineSensitive(false);
+        }
+    }
     return status;
 }
 
@@ -1778,41 +1789,39 @@ void SPCanvas::paintSpliter()
         return;
     SPCanvas *canvas = SP_CANVAS(this);
     Geom::IntRect linerect = (*canvas->_spliter);
+    Geom::IntPoint c0 = Geom::IntPoint(linerect.corner(0));
+    Geom::IntPoint c1 = Geom::IntPoint(linerect.corner(1));
+    Geom::IntPoint c2 = Geom::IntPoint(linerect.corner(2));
+    Geom::IntPoint c3 = Geom::IntPoint(linerect.corner(3));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
-    bool inverse = prefs->getBool("/window/splitcanvas/inversel", false);
-    guint gapx = 0;
-    guint gapy = 0;
-    if (vertical) {
-        if(inverse) {
-            gapx = 3;
-        } else {
-            gapx = 0;
-        }
-    } else {
-        if(inverse) {
-           gapy = 3;
-        } else {
-           gapy = 0;
-        } 
-    }
-    Geom::IntRect linerectint = linerect;
-    Geom::IntPoint c0 = Geom::IntPoint(linerectint.corner(0));
-    Geom::IntPoint c1 = Geom::IntPoint(linerectint.corner(1));
-    Geom::IntPoint c2 = Geom::IntPoint(linerectint.corner(2));
-    Geom::IntPoint c3 = Geom::IntPoint(linerectint.corner(3));
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Geom::IntPoint start = c0;
-    Geom::IntPoint end   = vertical ? c3 : c2;
+     // We need to draw the line in middle of pixel
+    // https://developer.gnome.org/gtkmm-tutorial/stable/sec-cairo-drawing-lines.html.en:17.2.3
+    double gapx = vertical ? 0.5 : 0;
+    double gapy = vertical ? 0 : 0.5;
+    Geom::Point start = vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
+    Geom::Point end   = vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
     cairo_t *ct = cairo_create(_backing_store);
-    cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 1);
+    cairo_set_source_rgba (ct, 1, 1, 1, 1);        
+    cairo_set_line_width (ct, 1.0);
+    cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
+    cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
+    cairo_stroke (ct);
+    if (canvas->_oversplit) {
+        cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.4);        
+    }
     cairo_set_line_width (ct, 1.0);
     cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
     cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
     cairo_stroke (ct);
     cairo_restore(ct);
     cairo_destroy(ct);
-    gtk_widget_queue_draw_area(GTK_WIDGET(this), c0[0] + gapx, c0[1] + gapy, linerect.width() + 1 , linerect.height() + 1);
+    double updwidth = vertical ? 4 : linerect.width();
+    double updheight = vertical ?  linerect.height() : 4;
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), start[0] - 2, start[1] - 2, updwidth, updheight);
 }
 
 struct PaintRectSetup {
@@ -2129,7 +2138,6 @@ int SPCanvas::paint()
     bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
     double value = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
-    std::cout << "mmmm" << prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1) << std::endl;
     double split_x = 1;
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
@@ -2146,8 +2154,18 @@ int SPCanvas::paint()
         Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1 - vruler_gap;
         Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1 - hruler_gap; 
         _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
+        split_x = !vertical ? 0 : value;
+        split_y =  vertical ? 0 : value;
+        coord1x = allocation.x + (int(allocation.width  * split_x)) + 1 - vruler_gap;
+        coord1y = allocation.y + (int(allocation.height * split_y)) + 1 - hruler_gap;
+        split_x = !vertical ? 1 : value;
+        split_y =  vertical ? 1 : value;
+        coord2x = allocation.x + allocation.width  - vruler_gap;
+        coord2y = allocation.y + allocation.height - hruler_gap; 
+        _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
     } else {
         _spliter = Geom::OptIntRect();
+        _spliter_area = Geom::OptIntRect();
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
     split_x = !vertical ? 0 : value;

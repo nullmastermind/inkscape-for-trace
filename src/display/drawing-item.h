@@ -131,8 +131,9 @@ public:
 
     void setKey(unsigned key) { _key = key; }
     unsigned key() const { return _key; }
-    void setItem(SPItem *item) { _item = item; }
-    SPItem* getItem() const { return _item; } // SPItem
+
+    void setData(void *data) { _user_data = data; }
+    void *data() const { return _user_data; }
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = STATE_ALL, unsigned reset = 0);
     unsigned render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0, DrawingItem *stop_at = nullptr);

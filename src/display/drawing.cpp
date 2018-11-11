@@ -36,6 +36,7 @@ Drawing::Drawing(SPCanvasArena *arena)
     , outlinecolor(0x000000ff)
     , delta(0)
     , _exact(false)
+    , _outline_sensitive(true)
     , _rendermode(RENDERMODE_NORMAL)
     , _colormode(COLORMODE_NORMAL)
     , _blur_quality(BLUR_QUALITY_BEST)
@@ -133,6 +134,12 @@ Drawing::setExact(bool e)
 {
     _exact = e;
 }
+
+void 
+Drawing::setOutlineSensitive(bool e) 
+{
+    _outline_sensitive = e;
+};
 
 Geom::OptIntRect const &
 Drawing::cacheLimit() const

@@ -174,11 +174,12 @@ public:
     guint _idle_id;
 
     SPCanvasItem *_root;
-
+    
+    Geom::OptIntRect _spliter;
+    Geom::OptIntRect _spliter_area;
     bool _is_dragging;
     bool _oversplit;
     bool _splitpressed;
-    Geom::OptIntRect _spliter;
     double _dx0;
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window

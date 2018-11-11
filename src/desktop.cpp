@@ -1607,6 +1607,10 @@ void SPDesktop::toggleSplitMode()
     Gtk::Window *parent = getToplevel();
     if (parent) {
         _split_canvas = !_split_canvas;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setBool("/window/splitcanvas/vertical", true);
+        prefs->setBool("/window/splitcanvas/inverse", false);
+        prefs->setDouble("/window/splitcanvas/value", 0.5);
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         dtw->splitCanvas(_split_canvas);
         GtkAllocation allocation;

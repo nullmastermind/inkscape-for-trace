@@ -1481,7 +1481,6 @@ void SPDocument::build_flat_item_list(unsigned int dkey, SPGroup *group, gboolea
             build_flat_item_list(dkey, SP_GROUP(&o), into_groups);
         } else {
             SPItem *child = SP_ITEM(&o);
-
             if (child->isVisibleAndUnlocked(dkey)) {
                 _node_cache.push_front(child);
             }
