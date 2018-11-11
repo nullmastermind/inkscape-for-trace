@@ -126,7 +126,8 @@ private:
      * @return true if the drawing completes
      */
     int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
-
+    
+    void paintSpliter();
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
     bool paintRect(int xx0, int yy0, int xx1, int yy1);

@@ -41,6 +41,7 @@
 #include "cms-system.h"
 #include "debug/gdk-event-latency-tracker.h"
 #include "desktop.h"
+#include "ui/tools/tool-base.h"
 #include "color.h"
 
 #if GTK_CHECK_VERSION(3,20,0)
@@ -1248,7 +1249,6 @@ int SPCanvas::emitEvent(GdkEvent *event)
     // offsets of the fields in the event structures.
 
     GdkEvent *ev = gdk_event_copy(event);
-    static unsigned next_canvas_doubleclick = 0;
     switch (ev->type) {
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
@@ -1260,12 +1260,10 @@ int SPCanvas::emitEvent(GdkEvent *event)
         ev->motion.y += _y0;
         break;
     case GDK_BUTTON_PRESS:
-        next_canvas_doubleclick = 0;
         ev->motion.x += _x0;
         ev->motion.y += _y0;
         break;
     case GDK_2BUTTON_PRESS:
-        next_canvas_doubleclick = ev->button.button;
         ev->motion.x += _x0;
         ev->motion.y += _y0;
         break;
@@ -1274,10 +1272,6 @@ int SPCanvas::emitEvent(GdkEvent *event)
         ev->motion.y += _y0;
         break;
     case GDK_BUTTON_RELEASE:
-        if (next_canvas_doubleclick) {
-            GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
-            handle_doubleclick(GTK_WIDGET(this), event2);
-        }  
         ev->motion.x += _x0;
         ev->motion.y += _y0;
         break;
@@ -1464,6 +1458,7 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
 
 gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event) {
     SPCanvas *canvas = SP_CANVAS (widget);
+    std::cout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << std::endl;
     if(canvas->_oversplit) {
         std::cout << "aaaaaaaaaaaaaaaaaaaaa" << std::endl;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1481,7 +1476,7 @@ gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event) {
             prefs->setBool("/window/splitcanvas/inverse", false);
         }
         canvas->dirtyAll();
-        canvas->paint();
+        canvas->addIdle();;
     }
     return 0;
 }
@@ -1518,14 +1513,13 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
     default:
         mask = 0;
     }
+    static unsigned next_canvas_doubleclick = 0;
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
         // Pick the current item as if the button were not pressed, and
         // then process the event.
-        //
+        next_canvas_doubleclick = 0;
         if (!canvas->_oversplit) {
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
@@ -1533,17 +1527,48 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             retval = canvas->emitEvent((GdkEvent *) event);
         } else {
             canvas->_splitpressed = true;
-            retval = 1;
+            retval = TRUE;
+        }
+        break;
+    case GDK_2BUTTON_PRESS:
+        // Pick the current item as if the button were not pressed, and
+        // then process the event.
+        next_canvas_doubleclick = reinterpret_cast<GdkEvent *>(event)->button.button;
+        
+        if (!canvas->_oversplit) {
+            canvas->_state = event->state;
+            canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
+            canvas->_state ^= mask;
+            retval = canvas->emitEvent((GdkEvent *) event);
+        } else {
+            canvas->_splitpressed = true;
+            retval = TRUE;
+        }
+        break;
+    case GDK_3BUTTON_PRESS:
+        // Pick the current item as if the button were not pressed, and
+        // then process the event.
+        if (!canvas->_oversplit) {
+            canvas->_state = event->state;
+            canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
+            canvas->_state ^= mask;
+            retval = canvas->emitEvent((GdkEvent *) event);
+        } else {
+            canvas->_splitpressed = true;
+            retval = TRUE;
         }
         break;
 
     case GDK_BUTTON_RELEASE:
         // Process the event as if the button were pressed, then repick
         // after the button has been released
-        //
         canvas->_splitpressed = false;
+        if (next_canvas_doubleclick) {
+            GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
+            handle_doubleclick(GTK_WIDGET(canvas), event2);
+        } 
         if (canvas->_oversplit) {
-            retval = 1;
+            retval = TRUE;
         } else {
             canvas->_state = event->state;
             retval = canvas->emitEvent((GdkEvent *) event);
@@ -1608,21 +1633,13 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         canvas->_oversplit = true;
         std::cout << *canvas->_spliter << "----" << canvas->_splitpressed << "overoverover" << std::endl;
     } else {
-        if (canvas->_oversplit) {
-            GdkCursorType cursor_type = GDK_HAND1;
-            GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
-            if (cursor) {
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
+        if (canvas->_oversplit && !canvas->_splitpressed) {
+            SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+            if (desktop && desktop->event_context) {
+                desktop->event_context->sp_event_context_update_cursor();
             }
         }
         canvas->_oversplit = false;
-    }
-    canvas->_state = event->state;
-    canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
-    status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
-    if (event->is_hint) {
-        request_motions(gtk_widget_get_window (widget), event);
     }
     if (canvas->_splitpressed) {
         GtkAllocation allocation;
@@ -1633,13 +1650,23 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             prefs->setDouble("/window/splitcanvas/value", 0.5);
             prefs->setBool("/window/splitcanvas/split", false);
             prefs->setBool("/window/splitcanvas/vertical", true);
-            SP_ACTIVE_DESKTOP->toggleSplitMode()
+            SP_ACTIVE_DESKTOP->toggleSplitMode();
         } else {
             prefs->setDouble("/window/splitcanvas/value", value);
         }
+        std::cout << "loolololololo" << std::endl;
         canvas->dirtyAll();
-        canvas->paint();
+        canvas->addIdle();
+        status = 1;
+    } else {
+        canvas->_state = event->state;
+        canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
+        status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
+        if (event->is_hint) {
+            request_motions(gtk_widget_get_window (widget), event);
+        }
     }
+    
     return status;
 }
 
@@ -1741,6 +1768,51 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
+}
+
+void SPCanvas::paintSpliter()
+{
+    // Prevent crash if paintSingleBuffer is called before _backing_store is
+    // initialized.
+    if (_backing_store == nullptr)
+        return;
+    SPCanvas *canvas = SP_CANVAS(this);
+    Geom::IntRect linerect = (*canvas->_spliter);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+    bool inverse = prefs->getBool("/window/splitcanvas/inversel", false);
+    guint gapx = 0;
+    guint gapy = 0;
+    if (vertical) {
+        if(inverse) {
+            gapx = 3;
+        } else {
+            gapx = 0;
+        }
+    } else {
+        if(inverse) {
+           gapy = 3;
+        } else {
+           gapy = 0;
+        } 
+    }
+    Geom::IntRect linerectint = linerect;
+    Geom::IntPoint c0 = Geom::IntPoint(linerectint.corner(0));
+    Geom::IntPoint c1 = Geom::IntPoint(linerectint.corner(1));
+    Geom::IntPoint c2 = Geom::IntPoint(linerectint.corner(2));
+    Geom::IntPoint c3 = Geom::IntPoint(linerectint.corner(3));
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Geom::IntPoint start = c0;
+    Geom::IntPoint end   = vertical ? c3 : c2;
+    cairo_t *ct = cairo_create(_backing_store);
+    cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 1);
+    cairo_set_line_width (ct, 1.0);
+    cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
+    cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
+    cairo_stroke (ct);
+    cairo_restore(ct);
+    cairo_destroy(ct);
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), c0[0] + gapx, c0[1] + gapy, linerect.width() + 1 , linerect.height() + 1);
 }
 
 struct PaintRectSetup {
@@ -2047,26 +2119,30 @@ int SPCanvas::paint()
         sp_canvas_item_invoke_update(_root, Geom::identity(), 0);
         _need_update = FALSE;
     }
+    SPCanvas *canvas = SP_CANVAS(this);
     GtkAllocation allocation;
-    gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPCanvasArena *arena = nullptr;
     bool split = false;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
     double value = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
+    std::cout << "mmmm" << prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1) << std::endl;
     double split_x = 1;
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA (desktop->drawing);
-        split_x = !vertical ? 1 : value;
-        split_y = vertical ? 1 : value;
+        split_x = !vertical ? 0 : value;
+        split_y =  vertical ? 0 : value;
         guint hruler_gap = desktop->get_hruler_thickness();
         guint vruler_gap = desktop->get_vruler_thickness();
-        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * (1-split_x))) - 1 - vruler_gap;
-        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * (1-split_y))) - 1 - hruler_gap;
+        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * split_x)) - 1 - vruler_gap;
+        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * split_y)) - 1 - hruler_gap;
+        split_x = !vertical ? 1 : value;
+        split_y =  vertical ? 1 : value;
         Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + 1 - vruler_gap;
         Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + 1 - hruler_gap; 
         _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
@@ -2074,7 +2150,12 @@ int SPCanvas::paint()
         _spliter = Geom::OptIntRect();
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
-    cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * (1-split_x)), _y0 + int(allocation.height * (1-split_y)), int(allocation.width * split_x), int(allocation.height * split_y)};
+    split_x = !vertical ? 0 : value;
+    split_y =  vertical ? 0 : value;
+    cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width  * split_x),
+                                            _y0 + int(allocation.height * split_y), 
+                                            int(allocation.width  * (1 - split_x)), 
+                                            int(allocation.height * (1 - split_y))};
     cairo_region_t *to_draw = nullptr;
     cairo_region_t *to_draw_outline = nullptr;
     if (inverse && split) {
@@ -2119,6 +2200,7 @@ int SPCanvas::paint()
         }
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
+        canvas->paintSpliter();
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter

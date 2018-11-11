@@ -710,7 +710,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 {
     bool outline = _drawing.outline();
     bool render_filters = _drawing.renderFilters();
-    std::cout << outline << "outline"<< std::endl;
     // stop_at is handled in DrawingGroup, but this check is required to handle the case
     // where a filtered item with background-accessing filter has enable-background: new
     if (this == stop_at) return RENDER_STOP;
