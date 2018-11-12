@@ -308,7 +308,7 @@ void sp_ui_reload()
         i++;
     }
     SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
-    INKSCAPE.add_style_sheet();
+    INKSCAPE.add_gtk_css();
     prefs->setInt("/options/savewindowgeometry/value", window_geometry);
 }
 

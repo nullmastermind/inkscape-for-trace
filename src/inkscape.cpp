@@ -372,7 +372,7 @@ void Application::argv0(char const* argv)
  * \brief Add our CSS style sheets
  */
 void
-Application::add_style_sheet()
+Application::add_gtk_css()
 {
     using namespace Inkscape::IO::Resource;
     // Add style sheet (GTK3)
@@ -502,7 +502,7 @@ Application::Application(const char* argv, bool use_gui) :
         auto icon_theme = Gtk::IconTheme::get_default();
         icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
-        add_style_sheet();
+        add_gtk_css();
         /* Load the preferences and menus */
         GtkSettings *settings = gtk_settings_get_default();
         if (settings) {

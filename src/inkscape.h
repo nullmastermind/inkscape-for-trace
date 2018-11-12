@@ -199,7 +199,7 @@ public:
     gint get_pdf_page() {
         return _pdf_page;
     }
-    void add_style_sheet();
+    void add_gtk_css();
     void add_icon_theme();
 
   private:
