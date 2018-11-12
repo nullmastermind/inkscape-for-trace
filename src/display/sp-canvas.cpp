@@ -981,9 +981,19 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
-    canvas->_oversplit = false;
+    canvas->_oversplit_top = false;
+    canvas->_oversplit_bottom = false;
+    canvas->_oversplit_left = false;
+    canvas->_oversplit_right = false;
     canvas->_spliter = Geom::OptIntRect();
+    canvas->_spliter = Geom::OptIntRect();
+    canvas->_spliter_control = Geom::OptIntRect();
+    canvas->_spliter_top = Geom::OptIntRect();
+    canvas->_spliter_bottom = Geom::OptIntRect();
+    canvas->_spliter_right = Geom::OptIntRect();
+    canvas->_spliter_left = Geom::OptIntRect();
     canvas->_splitpressed = false;
+    canvas->_changecursor = false;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
@@ -1593,6 +1603,39 @@ static inline void request_motions(GdkWindow *w, GdkEventMotion *event) {
     gdk_event_request_motions(event);
 }
 
+void SPCanvas::set_cursor(GtkWidget *widget)
+{
+    SPCanvas *canvas = SP_CANVAS (widget);
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    GdkDisplay *display = gdk_display_get_default();
+    GdkCursor *cursor = nullptr;
+    if (canvas->_oversplit_top ||
+        canvas->_oversplit_bottom ||
+        canvas->_oversplit_left ||
+        canvas->_oversplit_right) 
+    {
+        cursor = gdk_cursor_new_from_name (display, "pointer");
+        gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
+        g_object_unref (cursor);
+        canvas->_changecursor = true;
+    } else if (canvas->_oversplit) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
+        if(vertical) {
+            cursor = gdk_cursor_new_from_name (display, "ew-resize");
+        } else {
+            cursor = gdk_cursor_new_from_name (display, "ns-resize");
+        }
+        gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
+        g_object_unref (cursor);
+        canvas->_changecursor = true;
+    } else {
+        if (desktop && desktop->event_context && !canvas->_splitpressed && canvas->_changecursor) {
+            desktop->event_context->sp_event_context_update_cursor();
+            canvas->_changecursor = false;
+        }
+    }
+}
 int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 {
     int status;
@@ -1608,23 +1651,12 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         return FALSE;
     
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
-    GdkDisplay *display = gdk_display_get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
     bool inverse = prefs->getBool("/window/splitcanvas/inverse", true);
     
-    if (canvas->_spliter && (*canvas->_spliter).contains(cursor_pos) && !canvas->_is_dragging) {
+    if (canvas->_spliter && ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) && !canvas->_is_dragging) {
         if (!canvas->_oversplit) {
-            GdkCursor *cursor = nullptr;
-            if(vertical) {
-                cursor = gdk_cursor_new_from_name (display, "ew-resize");
-            } else {
-                cursor = gdk_cursor_new_from_name (display, "ns-resize");
-            }
-            if (cursor) {
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
-            }
             canvas->_oversplit = true;
             canvas->paintSpliter();
             (*canvas->_spliter).expandBy(2);
@@ -1632,15 +1664,37 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         canvas->_oversplit = true;
     } else {
         if (canvas->_oversplit) {
-            if (desktop && desktop->event_context && !canvas->_splitpressed) {
-                desktop->event_context->sp_event_context_update_cursor();
-            }
             canvas->_oversplit = false;
             canvas->paintSpliter();
             (*canvas->_spliter).expandBy(-2);
         }
         canvas->_oversplit = false;
     }
+    if (canvas->_spliter_top && (*canvas->_spliter_top).contains(cursor_pos) && !canvas->_is_dragging) {
+        canvas->_oversplit_top = true;
+        canvas->paintSpliter();
+    } else {
+        canvas->_oversplit_top = false;
+    }
+    if (canvas->_spliter_bottom && (*canvas->_spliter_bottom).contains(cursor_pos) && !canvas->_is_dragging) {
+        canvas->_oversplit_bottom = true;
+        canvas->paintSpliter();
+    } else {
+        canvas->_oversplit_bottom = false;
+    }
+    if (canvas->_spliter_left && (*canvas->_spliter_left).contains(cursor_pos) && !canvas->_is_dragging) {
+        canvas->_oversplit_left = true;
+        canvas->paintSpliter();
+    } else {
+        canvas->_oversplit_left = false;
+    }
+    if (canvas->_spliter_right && (*canvas->_spliter_right).contains(cursor_pos) && !canvas->_is_dragging) {
+        canvas->_oversplit_right = true;
+        canvas->paintSpliter();
+    } else {
+        canvas->_oversplit_right = false;
+    }
+    canvas->set_cursor(widget);
     if (canvas->_splitpressed) {
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
@@ -1787,6 +1841,7 @@ void SPCanvas::paintSpliter()
     // initialized.
     if (_backing_store == nullptr)
         return;
+    // Todo: scale for HiDPI screens
     SPCanvas *canvas = SP_CANVAS(this);
     Geom::IntRect linerect = (*canvas->_spliter);
     Geom::IntPoint c0 = Geom::IntPoint(linerect.corner(0));
@@ -1802,13 +1857,19 @@ void SPCanvas::paintSpliter()
     double gapy = vertical ? 0 : 0.5;
     Geom::Point start = vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
     Geom::Point end   = vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
+    Geom::Point middle   = Geom::middle_point(start, end) ;
+    canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - 20), int(middle[1] - 20)), Geom::IntPoint(int(middle[0] + 20), int(middle[1] + 20)));
+    canvas->_spliter_top = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - 10), int(middle[1] - 15)), Geom::IntPoint(int(middle[0] + 10), int(middle[1] - 10)));
+    canvas->_spliter_bottom = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - 10), int(middle[1] + 15)), Geom::IntPoint(int(middle[0] + 10), int(middle[1] + 10)));
+    canvas->_spliter_left = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - 15), int(middle[1] - 5)), Geom::IntPoint(int(middle[0] - 15), int(middle[1] + 5)));
+    canvas->_spliter_right = Geom::OptIntRect(Geom::IntPoint(int(middle[0] + 15), int(middle[1] - 5)), Geom::IntPoint(int(middle[0] + 15), int(middle[1] + 5)));
     cairo_t *ct = cairo_create(_backing_store);
     cairo_set_source_rgba (ct, 1, 1, 1, 1);        
     cairo_set_line_width (ct, 1.0);
     cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
     cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
     cairo_stroke (ct);
-    if (canvas->_oversplit) {
+    if (canvas->_oversplit || canvas->_splitpressed) {
         cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.8);
     } else {
         cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.4);        
@@ -1817,11 +1878,80 @@ void SPCanvas::paintSpliter()
     cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
     cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
     cairo_stroke (ct);
+    /*     
+    // Get by: https://gitlab.com/snippets/1777221
+    M 40,19.999997 C 39.999998,8.9543032 31.045694,0 20,0 8.9543062,0 1.6568541e-6,8.9543032 0,19.999997 0,31.045692 8.954305,39.999997 20,39.999997 31.045695,39.999997 40,31.045692 40,19.999997 Z
+    M 11.109859,15.230724 2.8492384,19.999997 11.109861,24.769269 Z
+    M 29.249158,15.230724 37.509779,19.999997 29.249158,24.769269 Z
+    M 15.230728,29.03051 20,37.29113 24.769272,29.030509 Z
+    M 15.230728,10.891209 20,2.630586 24.769272,10.891209 Z */
+    double updwidth = vertical ? 42 : linerect.width();
+    double updheight = vertical ?  linerect.height() : 42;
+    cairo_translate(ct, middle[0]-20, middle[1]-20);
+    cairo_move_to(ct, 40,19.999997);
+    cairo_curve_to(ct, 39.999998,8.9543032,31.045694,0,20,0);
+    cairo_curve_to(ct, 8.9543062,0,1.6568541e-6,8.9543032,0,19.999997);
+    cairo_curve_to(ct, 0,31.045692,8.954305,39.999997,20,39.999997);
+    cairo_curve_to(ct, 31.045695,39.999997,40,31.045692,40,19.999997);
+    cairo_close_path(ct);
+    cairo_set_source_rgba (ct, 1, 1, 1, 1);  
+    cairo_fill(ct);
+    if (canvas->_oversplit || canvas->_splitpressed) {
+        cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 0.05, 0.05, 0.05, 0.4);        
+    }
+    cairo_move_to(ct, 40,19.999997);
+    cairo_curve_to(ct, 39.999998,8.9543032,31.045694,0,20,0);
+    cairo_curve_to(ct, 8.9543062,0,1.6568541e-6,8.9543032,0,19.999997);
+    cairo_curve_to(ct, 0,31.045692,8.954305,39.999997,20,39.999997);
+    cairo_curve_to(ct, 31.045695,39.999997,40,31.045692,40,19.999997);
+    cairo_close_path(ct);
+    cairo_fill(ct);
+    if (canvas->_oversplit_top) {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.4);
+    }
+    cairo_move_to(ct, 11.109859,15.230724);
+    cairo_line_to(ct, 2.8492384,19.999997);
+    cairo_line_to(ct, 11.109861,24.769269);
+    cairo_close_path(ct);
+    cairo_fill(ct);
+    if (canvas->_oversplit_bottom) {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.4);
+    }
+    cairo_move_to(ct, 29.249158,15.230724);
+    cairo_line_to(ct, 37.509779,19.999997);
+    cairo_line_to(ct, 29.249158,24.769269);
+    cairo_close_path(ct);
+    cairo_fill(ct);
+    if (canvas->_oversplit_left) {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.4);
+    }
+    cairo_move_to(ct, 15.230728,29.03051);
+    cairo_line_to(ct, 20,37.29113);
+    cairo_line_to(ct, 24.769272,29.030509);
+    cairo_close_path(ct);
+    cairo_fill(ct);
+    if (canvas->_oversplit_right) {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.8);
+    } else {
+        cairo_set_source_rgba (ct, 1, 1, 1, 0.4);
+    }
+    cairo_move_to(ct, 15.230728,10.891209);
+    cairo_line_to(ct, 20,2.630586);
+    cairo_line_to(ct, 24.769272,10.891209);
+    cairo_close_path(ct);
+    cairo_fill(ct);
+    cairo_translate(ct, -middle[0]-20, -middle[1]-20);
     cairo_restore(ct);
     cairo_destroy(ct);
-    double updwidth = vertical ? 4 : linerect.width();
-    double updheight = vertical ?  linerect.height() : 4;
-    gtk_widget_queue_draw_area(GTK_WIDGET(this), start[0] - 2, start[1] - 2, updwidth, updheight);
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), start[0] - 21, start[1] - 21, updwidth, updheight);
 }
 
 struct PaintRectSetup {

@@ -128,6 +128,7 @@ private:
     int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
     
     void paintSpliter();
+    void set_cursor(GtkWidget *widget);
     /// Draws a specific rectangular part of the canvas.
     /// @return true if the rectangle painting succeeds.
     bool paintRect(int xx0, int yy0, int xx1, int yy1);
@@ -177,9 +178,19 @@ public:
     
     Geom::OptIntRect _spliter;
     Geom::OptIntRect _spliter_area;
+    Geom::OptIntRect _spliter_control;
+    Geom::OptIntRect _spliter_top;
+    Geom::OptIntRect _spliter_bottom;
+    Geom::OptIntRect _spliter_left;
+    Geom::OptIntRect _spliter_right;
+    bool _oversplit_top;
+    bool _oversplit_bottom;
+    bool _oversplit_left;
+    bool _oversplit_right;
     bool _is_dragging;
     bool _oversplit;
     bool _splitpressed;
+    bool _changecursor;
     double _dx0;
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
