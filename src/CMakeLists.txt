@@ -245,6 +245,7 @@ list(APPEND inkscape_SRC
 
 # All folders for internal inkscape
 # these call add_inkscape_source
+add_subdirectory(actions)
 add_subdirectory(debug)
 add_subdirectory(display)
 add_subdirectory(extension)
@@ -278,7 +279,13 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 # Setup the executable
 # -----------------------------------------------------------------------------
-set(main_SRC main.cpp)
+set(main_SRC
+  inkscape-main.cpp
+  inkscape-application.h
+  inkscape-application.cpp
+  actions/actions-base.h
+  actions/actions-base.cpp
+)
 set(view_SRC
   inkview-main.cpp
   inkview-application.h

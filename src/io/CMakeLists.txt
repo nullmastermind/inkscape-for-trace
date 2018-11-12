@@ -2,6 +2,8 @@
 
 set(io_SRC
   dir-util.cpp
+  file.cpp
+  file-export-cmd.cpp
   resource.cpp
   resource-manager.cpp
   stream/bufferstream.cpp
@@ -16,6 +18,8 @@ set(io_SRC
   # -------
   # Headers
   dir-util.h
+  file.h
+  file-export-cmd.h
   resource.h
   resource-manager.h
   stream/bufferstream.h
