@@ -18,6 +18,9 @@ public:
 	SPStyleElem();
 	~SPStyleElem() override;
 
+    // Container for the libcroco style sheet instance created on load.
+    CRStyleSheet *style_sheet;
+
     Media media;
     bool is_css;
 

@@ -29,6 +29,7 @@ using Inkscape::XML::TEXT_NODE;
 SPStyleElem::SPStyleElem() : SPObject() {
     media_set_all(this->media);
     this->is_css = false;
+    this->style_sheet = nullptr;
 }
 
 SPStyleElem::~SPStyleElem() = default;
@@ -451,14 +452,11 @@ void update_style_recursively( SPObject *object ) {
 
 void SPStyleElem::read_content() {
 
-    // This won't work when we support multiple style sheets in a file.
-    // We'll need to identify which style sheet this element corresponds to
-    // and replace just that part of the total style sheet. (The first
-    // style element would correspond to document->style_sheet, while
-    // laters ones are chained on using style_sheet->next).
-
-    document->style_sheet = cr_stylesheet_new (nullptr);
-    CRParser *parser = parser_init(document->style_sheet, document);
+    // First, create the style-sheet object and track it in this
+    // element so that it can be edited. It'll be combined with
+    // the document's style sheet later.
+    style_sheet = cr_stylesheet_new (nullptr);
+    CRParser *parser = parser_init(style_sheet, document);
 
     CRDocHandler *sac_handler = nullptr;
     cr_parser_get_sac_handler (parser, &sac_handler);
@@ -469,22 +467,21 @@ void SPStyleElem::read_content() {
     CRStatus const parse_status =
         cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
-    // std::cout << "SPStyeElem::read_content: result:" << std::endl;
-    // const gchar* string = cr_stylesheet_to_string (document->style_sheet);
-    // std::cout << (string?string:"Null") << std::endl;
-
     if (parse_status == CR_OK) {
-        // Also destroys old style sheet:
-        cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
+        if(!document->style_sheet) {
+            // if the style is the first style sheet that we've seen, set the document's
+            // first style sheet to this style and create a cascade object with it.
+            document->style_sheet = style_sheet;
+            cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
+        } else {
+            // If not the first, then chain up this style_sheet
+            cr_stylesheet_append_import (document->style_sheet, style_sheet);
+        }
     } else {
-        cr_stylesheet_destroy (document->style_sheet);
-        document->style_sheet = nullptr;
+        cr_stylesheet_destroy (style_sheet);
+        style_sheet = nullptr;
         if (parse_status != CR_PARSING_ERROR) {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
-            /* Better than nothing.  TODO: Improve libcroco's error handling.  At a minimum, add a
-               strerror-like function so that we can give a string rather than an integer. */
-            /* TODO: Improve error diagnosis stuff in inkscape.  We'd like a panel showing the
-               errors/warnings/unsupported features of the current document. */
         }
     }
 
