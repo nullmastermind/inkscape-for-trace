@@ -67,7 +67,7 @@
 Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
 bool Inkscape::Application::_crashIsHappening = false;
 
-#define DESKTOP_IS_ACTIVE(d) (!INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
+#define DESKTOP_IS_ACTIVE(d) (INKSCAPE._desktops != nullptr && !INKSCAPE._desktops->empty() && ((d) == INKSCAPE._desktops->front()))
 
 static void (* segv_handler) (int) = SIG_DFL;
 static void (* abrt_handler) (int) = SIG_DFL;
@@ -612,7 +612,7 @@ Application::~Application()
     _S_inst = nullptr; // this will probably break things
 
     refCount = 0;
-    gtk_main_quit ();
+    // gtk_main_quit ();
 }
 
 /** Sets the keyboard modifer to map to Alt.
@@ -1282,6 +1282,7 @@ Application::action_context_for_document(SPDocument *doc)
     // Document is not associated with any desktops - maybe we're in command-line mode
     std::map<SPDocument *, AppSelectionModel *>::iterator sel_iter = _selection_models.find(doc);
     if (sel_iter == _selection_models.end()) {
+        std::cout << "Application::action_context_for_document: no selection model" << std::endl;
         return Inkscape::ActionContext();
     }
     return Inkscape::ActionContext(sel_iter->second->getSelection());
@@ -1312,7 +1313,7 @@ Application::exit ()
     signal_shut_down.emit();
 
     Inkscape::Preferences::unload();
-    gtk_main_quit ();
+    //gtk_main_quit ();
 }
 
 

@@ -3,6 +3,8 @@
 set(io_SRC
   bufferstream.cpp
   dir-util.cpp
+  file.cpp
+  file-export-cmd.cpp
   gzipstream.cpp
   inkscapestream.cpp
   resource.cpp
@@ -17,6 +19,8 @@ set(io_SRC
   # Headers
   bufferstream.h
   dir-util.h
+  file.h
+  file-export-cmd.h
   gzipstream.h
   inkscapestream.h
   resource.h
