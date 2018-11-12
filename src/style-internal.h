@@ -727,8 +727,8 @@ public:
         value.color.set(0);
     }
 
-    SPIColor( Glib::ustring const &name )
-        : SPIBase( name ),
+    SPIColor( Glib::ustring const &name, bool inherits = true )
+        : SPIBase( name, inherits ),
           currentcolor(false) {
         value.color.set(0);
     }

@@ -388,11 +388,11 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     color_rendering(  "color-rendering", enum_color_rendering, SP_CSS_COLOR_RENDERING_AUTO),
     image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
     shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
-    text_rendering( "text-rendering", enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO ),
+    text_rendering(   "text-rendering",  enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO ),
 
     // Stop color and opacity
-    stop_color("stop-color"),
-    stop_opacity("stop-opacity", SP_SCALE24_MAX)
+    stop_color("stop-color",                      false),       // SPIColor, does not inherit
+    stop_opacity("stop-opacity", SP_SCALE24_MAX,  false)        // Does not inherit
 {
     // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;
