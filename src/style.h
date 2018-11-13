@@ -58,6 +58,7 @@ public:
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
     void mergeString( char const *const p );
+    void mergeStatement( CRStatement *statement );
     bool operator==(const SPStyle& rhs);
 
     int style_ref()   { ++_refcount; return _refcount; }

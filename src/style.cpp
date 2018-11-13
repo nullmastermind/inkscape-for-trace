@@ -807,6 +807,17 @@ SPStyle::mergeString( gchar const *const p ) {
     _mergeString( p );
 }
 
+/**
+  * Append an existing css statement into this style, used in css editing
+  * always appends declarations as STYLE_SHEET properties.
+  */
+void
+SPStyle::mergeStatement( CRStatement *statement ) {
+    CRDeclaration *decl_list = NULL;
+    cr_statement_ruleset_get_declarations (statement, &decl_list);
+    _mergeDeclList(decl_list, SP_STYLE_SRC_STYLE_SHEET);
+}
+
 // Mostly for unit testing
 bool
 SPStyle::operator==(const SPStyle& rhs) {

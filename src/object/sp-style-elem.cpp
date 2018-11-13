@@ -450,6 +450,23 @@ void update_style_recursively( SPObject *object ) {
     }
 }
 
+/*
+ * Returns each statement as an SPStyle
+ */
+std::vector<SPStyle *> SPStyleElem::getStyles() {
+    std::vector<SPStyle *> ret;
+    gint count = cr_stylesheet_nr_rules(style_sheet);
+
+    for (gint x = 0; x < count; x++) {
+        SPStyle *item = new SPStyle(nullptr, nullptr);
+        CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
+        item->mergeStatement(statement);
+        ret.push_back(item);
+    }
+
+    return ret;
+}
+
 void SPStyleElem::read_content() {
 
     // First, create the style-sheet object and track it in this

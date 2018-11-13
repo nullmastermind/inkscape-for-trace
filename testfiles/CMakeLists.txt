@@ -21,6 +21,7 @@ set(TEST_SOURCES
 	sp-object-test
 	object-set-test
 	object-style-test
+	style-elem-test
 	style-test
 	sp-gradient-test
 	object-test)

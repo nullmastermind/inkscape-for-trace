@@ -15,8 +15,8 @@
 
 class SPStyleElem : public SPObject {
 public:
-	SPStyleElem();
-	~SPStyleElem() override;
+    SPStyleElem();
+    ~SPStyleElem() override;
 
     // Container for the libcroco style sheet instance created on load.
     CRStyleSheet *style_sheet;
@@ -24,10 +24,12 @@ public:
     Media media;
     bool is_css;
 
-	void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
-	void set(SPAttributeEnum key, char const* value) override;
-	void read_content() override;
-	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+    void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
+    void set(SPAttributeEnum key, char const* value) override;
+    void read_content() override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+
+    std::vector<SPStyle *> getStyles();
 };
 
 
