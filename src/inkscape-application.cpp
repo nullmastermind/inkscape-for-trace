@@ -316,8 +316,10 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     }
 
     if (options->contains("action-list")) {
-        std::cerr << "action-list: not implemented" << std::endl;
-        list_actions(); // Doesn't work... member of Gio::ActionGroup, not Gio::ActionMap.
+        std::vector<Glib::ustring> actions = list_actions();
+        for (auto action : actions) {
+            std::cout << action << std::endl;
+        }
         return EXIT_SUCCESS;
     }
 
