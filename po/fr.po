@@ -4527,11 +4527,11 @@ msgstr "<b>Ligne de guide</b> : %s"
 
 #: ../src/desktop.cpp:765
 msgid "No previous transform."
-msgstr "Plus de zoom précédent."
+msgstr "Plus de vue précédente."
 
 #: ../src/desktop.cpp:788
 msgid "No next transform."
-msgstr "Plus de zoom suivant."
+msgstr "Plus de vue suivante."
 
 #: ../src/display/canvas-axonomgrid.cpp:325 ../src/display/canvas-grid.cpp:675
 msgid "Grid _units:"
@@ -8525,7 +8525,7 @@ msgstr ""
 
 #: ../src/file-update.cpp:350
 msgid "Create a backup file in same directory."
-msgstr "Créer un fichier de sauvegarde dans le même dossier."
+msgstr "Créer un fichier de récupération dans le même dossier."
 
 #: ../src/file-update.cpp:351
 msgid "More details..."
@@ -9118,7 +9118,7 @@ msgstr "Parcourt rapidement une collection de fichiers .svg(z)\n"
 msgid ""
 "Example:\n"
 "  inkview -t 3 file1.svg file2.svgz series*.svg more_files"
-msgstr "Exemple:\n"
+msgstr "Exemple :\n"
 "  inkview -t 3 fichier1.svg fichier2.svgz serie*.svg autres_fichiers"
 
 #: ../src/inkview.cpp:168
@@ -9618,7 +9618,7 @@ msgstr "depuis la courbe"
 
 #: ../src/live_effects/lpe-bool.cpp:71
 msgid "Operand path:"
-msgstr "Chemin d'opérande :"
+msgstr "Chemin opérande :"
 
 #: ../src/live_effects/lpe-bool.cpp:71
 msgid "Operand for the boolean operation"
@@ -9634,15 +9634,15 @@ msgstr "Opération booléenne"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands:"
-msgstr "Intervertir les opérandes"
+msgstr "Intervertir les opérandes :"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands (useful e.g. for difference)"
-msgstr "Intervertir les opérandes (e.g. pour la différence)"
+msgstr "Intervertir les opérandes (par ex. pour la différence)"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Remove inner:"
-msgstr "Supprimer l'intérieur"
+msgstr "Supprimer l'intérieur:"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid ""
@@ -9677,7 +9677,7 @@ msgstr "Chemin lié :"
 #: ../src/live_effects/lpe-bounding-box.cpp:19
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:19
 msgid "Path from which to take the original path data"
-msgstr "Chemin à partir duquel le chemin original sera cloné"
+msgstr "Chemin fournissant le chemin original"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 msgid "Visual Bounds"
@@ -9761,9 +9761,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
-#, fuzzy
 msgid "With Spiro or BSpline"
-msgstr "Avec Spiro ou BSpline"
+msgstr "Avec spiro ou B-spline"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
@@ -9771,14 +9770,12 @@ msgid "With LPE's"
 msgstr ""
 
 #: ../src/live_effects/lpe-clone-original.cpp:39
-#, fuzzy
 msgid "Linked Item:"
 msgstr "Élément lié :"
 
 #: ../src/live_effects/lpe-clone-original.cpp:39
-#, fuzzy
 msgid "Item from which to take the original data"
-msgstr "Élément à partir duquel le chemin original sera cloné"
+msgstr "Élément fournissant le chemin original"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
 #, fuzzy
@@ -10244,7 +10241,7 @@ msgstr "Définit la direction et l'amplitude de l'extrusion"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
 msgid "Paths from which to take the original path data"
-msgstr "Chemins à partir desquels prendre les données de chemin originales"
+msgstr "Éléments fournissant les chemins originaux"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
@@ -10256,14 +10253,13 @@ msgstr ""
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:22
-#, fuzzy
 msgid "Fuse coincident points"
 msgstr "Fusionner les points superposés"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
 msgid "Join subpaths"
-msgstr "Combiner les sous-chemins"
+msgstr "Joindre les sous-chemins"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
@@ -10278,11 +10274,11 @@ msgstr "Referme le chemin"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Second path:"
-msgstr "Deuxième chemin :"
+msgstr "Second chemin :"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Second path from which to take the original path data"
-msgstr "Second chemin à partir duquel prendre les données de chemin originales"
+msgstr "Second chemin fournissant le chemin original"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Reverse Second"
@@ -39549,7 +39545,7 @@ msgid ""
 "freeze. Always save your work before plotting!"
 msgstr ""
 "L'utilisation de mauvais paramètres peut dans certaines circonstances causer "
-"des plantages de l'application. Sauvegardez toujours votre travail avant "
+"des plantages de l'application. Enregistrez toujours votre travail avant "
 "d'utiliser cette extension !"
 
 #: ../share/extensions/plotter.inx.h:34
