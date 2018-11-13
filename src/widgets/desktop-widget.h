@@ -253,7 +253,6 @@ public:
     void requestCanvasUpdateAndWait();
     void enableInteraction();
     void disableInteraction();
-    void splitCanvas(bool split);
     void updateTitle(gchar const *uri);
     bool onFocusInEvent(GdkEventFocus*);
 

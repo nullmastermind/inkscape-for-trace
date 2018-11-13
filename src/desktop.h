@@ -440,8 +440,8 @@ public:
     void mouseout() override {}
     guint get_hruler_thickness();
     guint get_vruler_thickness();
-    guint get_vscrool_thickness();
-    guint get_hscrool_thickness();
+    guint get_vscroll_thickness();
+    guint get_hscroll_thickness();
     virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
 

@@ -781,18 +781,6 @@ SPDesktopWidget::dispose(GObject *object)
     }
 }
 
-void 
-SPDesktopWidget::splitCanvas(bool split)
-{
-    if(split) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        double split_x = prefs->getDoubleLimited("/window/splitcanvas/x", 0.5, 0, 1);
-        double split_y = prefs->getDoubleLimited("/window/splitcanvas/y", 1  , 0, 1);
-        int width = gtk_widget_get_allocated_width(GTK_WIDGET(this->canvas));
-        int height = gtk_widget_get_allocated_height(GTK_WIDGET(this->canvas));
-    } else {
-    }
-}
 /**
  * Set the title in the desktop-window (if desktop has an own window).
  *

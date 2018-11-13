@@ -981,10 +981,8 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
-    canvas->_oversplit_top = false;
-    canvas->_oversplit_bottom = false;
-    canvas->_oversplit_left = false;
-    canvas->_oversplit_right = false;
+    canvas->_oversplit_vertical = false;
+    canvas->_oversplit_horizontal = false;
     canvas->_spliter = Geom::OptIntRect();
     canvas->_spliter = Geom::OptIntRect();
     canvas->_spliter_control = Geom::OptIntRect();
@@ -1263,21 +1261,9 @@ int SPCanvas::emitEvent(GdkEvent *event)
         ev->crossing.y += _y0;
         break;
     case GDK_MOTION_NOTIFY:
-        ev->motion.x += _x0;
-        ev->motion.y += _y0;
-        break;
     case GDK_BUTTON_PRESS:
-        ev->motion.x += _x0;
-        ev->motion.y += _y0;
-        break;
     case GDK_2BUTTON_PRESS:
-        ev->motion.x += _x0;
-        ev->motion.y += _y0;
-        break;
     case GDK_3BUTTON_PRESS:
-        ev->motion.x += _x0;
-        ev->motion.y += _y0;
-        break;
     case GDK_BUTTON_RELEASE:
         ev->motion.x += _x0;
         ev->motion.y += _y0;
@@ -1563,25 +1549,15 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             bool spliter_clicked = false;
             bool reset = false;
             if (!canvas->_splitdragging) {
-                if(canvas->_oversplit_top) {
+                if(canvas->_oversplit_vertical) {
+                    prefs->setBool("/window/splitcanvas/inverse", !inverse);
                     prefs->setBool("/window/splitcanvas/vertical", false);
-                    prefs->setBool("/window/splitcanvas/inverse", true);
                     reset = vertical? true: false;
                     spliter_clicked = true;
-                } else if (canvas->_oversplit_bottom) {
-                    prefs->setBool("/window/splitcanvas/vertical", false);
-                    prefs->setBool("/window/splitcanvas/inverse", false);
-                    reset = vertical? true: false;
-                    spliter_clicked = true;
-                } else if (canvas->_oversplit_left) {
+                } else if (canvas->_oversplit_horizontal) {
+                    prefs->setBool("/window/splitcanvas/inverse", !inverse);
                     prefs->setBool("/window/splitcanvas/vertical", true);
-                    prefs->setBool("/window/splitcanvas/inverse", true);
-                    reset = vertical? false : true;
-                    spliter_clicked = true;
-                } else if (canvas->_oversplit_right) {
-                    prefs->setBool("/window/splitcanvas/vertical", true);
-                    prefs->setBool("/window/splitcanvas/inverse", false);
-                    reset = vertical? false : true;
+                    reset = !vertical? true: false;
                     spliter_clicked = true;
                 }
                 if (spliter_clicked) {
@@ -1629,8 +1605,7 @@ void SPCanvas::set_cursor(GtkWidget *widget)
     if (desktop && desktop->splitMode()) {
         GdkDisplay *display = gdk_display_get_default();
         GdkCursor *cursor = nullptr;
-        if (canvas->_oversplit_top) 
-        {
+        if (canvas->_oversplit_vertical) {
             if (canvas->_changecursor != 1) {
                 cursor = gdk_cursor_new_from_name (display, "pointer");
                 gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
@@ -1638,7 +1613,7 @@ void SPCanvas::set_cursor(GtkWidget *widget)
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 1;
-        } else if (canvas->_oversplit_bottom) {
+        } else if (canvas->_oversplit_horizontal) {
             if (canvas->_changecursor != 2) {
                 cursor = gdk_cursor_new_from_name (display, "pointer");
                 gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
@@ -1646,24 +1621,8 @@ void SPCanvas::set_cursor(GtkWidget *widget)
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 2;
-        } else if (canvas->_oversplit_left) {
-            if (canvas->_changecursor != 3) {
-                cursor = gdk_cursor_new_from_name (display, "pointer");
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
-                canvas->paintSpliter();
-            }
-            canvas->_changecursor = 3;
-        } else if (canvas->_oversplit_right) {
-            if (canvas->_changecursor != 4) {
-                cursor = gdk_cursor_new_from_name (display, "pointer");
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
-                canvas->paintSpliter();
-            }
-            canvas->_changecursor = 4;
         } else if (canvas->_oversplit) {
-            if (canvas->_changecursor != 5) {
+            if (canvas->_changecursor != 3) {
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                 bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
                 if(vertical) {
@@ -1675,16 +1634,13 @@ void SPCanvas::set_cursor(GtkWidget *widget)
                 g_object_unref (cursor);
                 canvas->paintSpliter();
             }
-            canvas->_changecursor = 5;
+            canvas->_changecursor = 3;
         } else {
-            if (desktop && desktop->event_context && !canvas->_splitpressed && canvas->_changecursor != 6) {
+            if (desktop && desktop->event_context && !canvas->_splitpressed && canvas->_changecursor != 4) {
                 desktop->event_context->sp_event_context_update_cursor();
                 canvas->paintSpliter();
             }
-            canvas->_changecursor = 6;
-        }
-        if(canvas->_splitpressed) {
-            canvas->paintSpliter();
+            canvas->_changecursor = 4;
         }
     }
 }
@@ -1711,26 +1667,28 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     } else {
         canvas->_oversplit = false;
     }
-    if (canvas->_spliter_top && (*canvas->_spliter_top).contains(cursor_pos) && !canvas->_is_dragging) {
-        canvas->_oversplit_top = true;
+    if (canvas->_spliter_left && 
+        canvas->_spliter_right && 
+        ((*canvas->_spliter_left).contains(cursor_pos) ||
+         (*canvas->_spliter_right).contains(cursor_pos)) &&
+        !canvas->_is_dragging) 
+    {
+        canvas->_oversplit_horizontal = true;
     } else {
-        canvas->_oversplit_top = false;
+        canvas->_oversplit_horizontal = false;
     }
-    if (canvas->_spliter_bottom && (*canvas->_spliter_bottom).contains(cursor_pos) && !canvas->_is_dragging) {
-        canvas->_oversplit_bottom = true;
+    if (!canvas->_oversplit_horizontal &&
+        canvas->_spliter_top && 
+        canvas->_spliter_bottom && 
+        ((*canvas->_spliter_top).contains(cursor_pos) ||
+         (*canvas->_spliter_bottom).contains(cursor_pos)) &&
+        !canvas->_is_dragging) 
+    {
+        canvas->_oversplit_vertical = true;
     } else {
-        canvas->_oversplit_bottom = false;
+        canvas->_oversplit_vertical = false;
     }
-    if (canvas->_spliter_left && (*canvas->_spliter_left).contains(cursor_pos) && !canvas->_is_dragging) {
-        canvas->_oversplit_left = true;
-    } else {
-        canvas->_oversplit_left = false;
-    }
-    if (canvas->_spliter_right && (*canvas->_spliter_right).contains(cursor_pos) && !canvas->_is_dragging) {
-        canvas->_oversplit_right = true;
-    } else {
-        canvas->_oversplit_right = false;
-    }
+    
     canvas->set_cursor(widget);
     if (canvas->_splitpressed) {
         GtkAllocation allocation;
@@ -1744,10 +1702,8 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
                 desktop->toggleSplitMode();
                 canvas->_splitpressed = false;
                 canvas->_oversplit = false;
-                canvas->_oversplit_top = false;
-                canvas->_oversplit_bottom = false;
-                canvas->_oversplit_left = false;
-                canvas->_oversplit_right = false;
+                canvas->_oversplit_vertical = false;
+                canvas->_oversplit_horizontal = false;
             }
         } else {
             prefs->setDouble("/window/splitcanvas/value", value);
@@ -1940,41 +1896,31 @@ void SPCanvas::paintSpliter()
     cairo_line_to(ct, 20,2.630586);
     cairo_line_to(ct, 24.769272,10.891209);
     cairo_close_path(ct);
-    if (canvas->_oversplit_top) {
+    if (canvas->_oversplit_vertical) {
         cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
     } else {
-        cairo_set_source_rgba (ct, 0.7, 0.7, 0.7, 1);
+        cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
     }
     cairo_fill(ct); 
     cairo_move_to(ct, 15.230728,29.03051);
     cairo_line_to(ct, 20,37.29113);
     cairo_line_to(ct, 24.769272,29.030509);
     cairo_close_path(ct);
-    if (canvas->_oversplit_bottom) {
-        cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
-    } else {
-        cairo_set_source_rgba (ct, 0.7, 0.7, 0.7, 1);
-    }
     cairo_fill(ct);  
     cairo_move_to(ct, 11.109859,15.230724);
     cairo_line_to(ct, 2.8492384,19.999997);
     cairo_line_to(ct, 11.109861,24.769269);
     cairo_close_path(ct);
-    if (canvas->_oversplit_left) {
+    if (canvas->_oversplit_horizontal) {
         cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
     } else {
-        cairo_set_source_rgba (ct, 0.7, 0.7, 0.7, 1);
+        cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
     }
     cairo_fill(ct);
     cairo_move_to(ct, 29.249158,15.230724);
     cairo_line_to(ct, 37.509779,19.999997);
     cairo_line_to(ct, 29.249158,24.769269);
     cairo_close_path(ct);
-    if (canvas->_oversplit_right) {
-        cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
-    } else {
-        cairo_set_source_rgba (ct, 0.7, 0.7, 0.7, 1);
-    }
     cairo_fill(ct);
     cairo_scale(ct, 1/ds, 1/ds);
     cairo_translate(ct, -middle[0]-(20 * ds), -middle[1]-(20 * ds)); 

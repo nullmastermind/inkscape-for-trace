@@ -183,10 +183,8 @@ public:
     Geom::OptIntRect _spliter_bottom;
     Geom::OptIntRect _spliter_left;
     Geom::OptIntRect _spliter_right;
-    bool _oversplit_top;
-    bool _oversplit_bottom;
-    bool _oversplit_left;
-    bool _oversplit_right;
+    bool _oversplit_vertical;
+    bool _oversplit_horizontal;
     bool _is_dragging;
     bool _oversplit;
     bool _splitpressed;

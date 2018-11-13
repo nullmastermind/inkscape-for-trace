@@ -937,7 +937,7 @@ SPDesktop::get_vruler_thickness()
 }
 
 guint
-SPDesktop::get_hscrool_thickness()
+SPDesktop::get_hscroll_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -950,7 +950,7 @@ SPDesktop::get_hscrool_thickness()
 }
 
 guint
-SPDesktop::get_vscrool_thickness()
+SPDesktop::get_vscroll_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -964,8 +964,8 @@ SPDesktop::get_vscrool_thickness()
 
     int get_hruler_thickness();
     int get_vruler_thickness();
-    int get_vscrool_thickness();
-    int get_hscrool_thickness();
+    int get_vscroll_thickness();
+    int get_hscroll_thickness();
 
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.
@@ -1612,7 +1612,6 @@ void SPDesktop::toggleSplitMode()
         prefs->setBool("/window/splitcanvas/inverse", false);
         prefs->setDouble("/window/splitcanvas/value", 0.5);
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        dtw->splitCanvas(_split_canvas);
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
         SPCanvas * canvas = getCanvas();
