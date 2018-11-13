@@ -190,7 +190,8 @@ public:
     bool _is_dragging;
     bool _oversplit;
     bool _splitpressed;
-    bool _changecursor;
+    bool _splitdragging;
+    guint _changecursor;
     double _dx0;
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
