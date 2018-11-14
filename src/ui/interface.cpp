@@ -271,7 +271,15 @@ void sp_ui_reload()
         prefs_dialog->hide();
     }
     int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    g_object_set(gtk_settings_get_default(), "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
+    if (GtkSettings *settings = gtk_settings_get_default()) {
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        if (themeiconname != "") {
+            if (themeiconname == "hicolor") {
+                themeiconname = "Adwaita";
+            }
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+        }
+    }
     prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
     prefs->save();
     std::list<SPDesktop *> desktops;

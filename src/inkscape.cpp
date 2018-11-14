@@ -520,8 +520,12 @@ Application::Application(const char* argv, bool use_gui) :
                 prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
             }
 
-            if (prefs->getString("/theme/iconTheme") != "") {
-                g_object_set(settings, "gtk-icon-theme-name", prefs->getString("/theme/iconTheme").c_str(), NULL);
+            Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+            if (themeiconname != "") {
+                if (themeiconname == "hicolor") {
+                    themeiconname = "Adwaita";
+                }
+                g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
             }
             else {
                 Glib::ustring defaulticontheme = prefs->getString("/theme/defaultIconTheme");
