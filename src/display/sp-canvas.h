@@ -183,15 +183,19 @@ public:
     Geom::OptIntRect _spliter_bottom;
     Geom::OptIntRect _spliter_left;
     Geom::OptIntRect _spliter_right;
-    bool _oversplit_vertical;
-    bool _oversplit_horizontal;
+    Geom::Point _spliter_control_pos;
+    Geom::Point _spliter_in_control_pos;
+    double _split_value;
+    bool _split_vertical;
+    bool _split_inverse;
+    bool _split_hover_vertical;
+    bool _split_hover_horizontal;
+    bool _split_hover;
+    bool _split_pressed;
+    bool _split_control_pressed;
+    bool _split_dragging;
+
     bool _is_dragging;
-    bool _oversplit;
-    bool _splitpressed;
-    bool _splitcontrolpressed;
-    bool _splitdragging;
-    Geom::Point _splitercontolpos;
-    Geom::Point _spliterincontrolpos;
     guint _changecursor;
     double _dx0;
     double _dy0;

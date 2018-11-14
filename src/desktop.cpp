@@ -487,6 +487,9 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     SP_CANVAS_ARENA (drawing)->drawing.setRenderMode(mode);
     canvas->_rendermode = mode;
     _display_mode = mode;
+    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+        _split_canvas = false;
+    }
     redrawDesktop();
     _widget->setTitle( this->getDocument()->getName() );
 }
@@ -528,6 +531,9 @@ void SPDesktop::displayModeToggle() {
         break;
     default:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+    }
+    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+        _split_canvas = false;
     }
 }
 void SPDesktop::displayColorModeToggle() {
@@ -1607,10 +1613,6 @@ void SPDesktop::toggleSplitMode()
     Gtk::Window *parent = getToplevel();
     if (parent) {
         _split_canvas = !_split_canvas;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool("/window/splitcanvas/vertical", true);
-        prefs->setBool("/window/splitcanvas/inverse", false);
-        prefs->setDouble("/window/splitcanvas/value", 0.5);
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);

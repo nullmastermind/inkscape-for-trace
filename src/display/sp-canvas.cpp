@@ -417,7 +417,7 @@ static void sp_canvas_item_invoke_update(SPCanvasItem *item, Geom::Affine const 
  * Helper function to invoke the point method of the item.
  *
  * The argument x, y should be in the parent's item-relative coordinate
- * system.  This routine applies the inverse of the item's transform,
+ * system.  This routine applies the _split_inverse of the item's transform,
  * maintaining the affine invariant.
  */
 static double sp_canvas_item_invoke_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item)
@@ -981,21 +981,29 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
-    canvas->_oversplit_vertical = false;
-    canvas->_oversplit_horizontal = false;
+
+    // Split view controls
     canvas->_spliter = Geom::OptIntRect();
-    canvas->_spliter = Geom::OptIntRect();
+    canvas->_spliter_area = Geom::OptIntRect();
     canvas->_spliter_control = Geom::OptIntRect();
     canvas->_spliter_top = Geom::OptIntRect();
     canvas->_spliter_bottom = Geom::OptIntRect();
-    canvas->_spliter_right = Geom::OptIntRect();
     canvas->_spliter_left = Geom::OptIntRect();
-    canvas->_splitpressed = false;
-    canvas->_splitdragging = false;
-    canvas->_splitcontrolpressed = false;
+    canvas->_spliter_right = Geom::OptIntRect();
+    canvas->_spliter_control_pos = Geom::Point();
+    canvas->_spliter_in_control_pos = Geom::Point();
+    canvas->_split_value = 0.5;
+    canvas->_split_vertical = true;
+    canvas->_split_inverse = false;
+    canvas->_split_hover_vertical = false;
+    canvas->_split_hover_horizontal = false;
+    canvas->_split_hover = false;
+    canvas->_split_pressed = false;
+    canvas->_split_control_pressed = false;
+    canvas->_split_dragging = false;
+
     canvas->_changecursor = 0;
-    canvas->_splitercontolpos = Geom::Point();
-    canvas->_spliterincontrolpos = Geom::Point();
+    bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
@@ -1497,17 +1505,17 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // Pick the current item as if the button were not pressed, and
         // then process the event.
         next_canvas_doubleclick = 0;
-        if (!canvas->_oversplit) {
+        if (!canvas->_split_hover) {
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
             retval = canvas->emitEvent((GdkEvent *) event);
         } else {
-            canvas->_splitpressed = true;
+            canvas->_split_pressed = true;
             Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
-            canvas->_spliterincontrolpos = cursor_pos - (*canvas->_spliter_control).midpoint();
+            canvas->_spliter_in_control_pos = cursor_pos - (*canvas->_spliter_control).midpoint();
             if (canvas->_spliter && canvas->_spliter_control.contains(cursor_pos) && !canvas->_is_dragging) {
-                canvas->_splitcontrolpressed = true;
+                canvas->_split_control_pressed = true;
             } 
             retval = TRUE;
         }
@@ -1517,26 +1525,26 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // then process the event.
         next_canvas_doubleclick = reinterpret_cast<GdkEvent *>(event)->button.button;
         
-        if (!canvas->_oversplit) {
+        if (!canvas->_split_hover) {
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
             retval = canvas->emitEvent((GdkEvent *) event);
         } else {
-            canvas->_splitpressed = true;
+            canvas->_split_pressed = true;
             retval = TRUE;
         }
         break;
     case GDK_3BUTTON_PRESS:
         // Pick the current item as if the button were not pressed, and
         // then process the event.
-        if (!canvas->_oversplit) {
+        if (!canvas->_split_hover) {
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
             retval = canvas->emitEvent((GdkEvent *) event);
         } else {
-            canvas->_splitpressed = true;
+            canvas->_split_pressed = true;
             retval = TRUE;
         }
         break;
@@ -1544,47 +1552,45 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
     case GDK_BUTTON_RELEASE:
         // Process the event as if the button were pressed, then repick
         // after the button has been released
-        canvas->_splitpressed = false;
+        canvas->_split_pressed = false;
         if (next_canvas_doubleclick) {
             GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
             handle_doubleclick(GTK_WIDGET(canvas), event2);
         } 
-        if (canvas->_oversplit) {
+        if (canvas->_split_hover) {
             retval = TRUE;
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
-            bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
             bool spliter_clicked = false;
             bool reset = false;
-            if (!canvas->_splitdragging) {
+            if (!canvas->_split_dragging) {
                 GtkAllocation allocation;
                 gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
-                Geom::Point pos = canvas->_splitercontolpos;
-                double value = vertical ? 1/(allocation.height/(double)pos[Geom::Y]) : 1/(allocation.width/(double)pos[Geom::X]) ;
-                if(canvas->_oversplit_vertical) {
-                    prefs->setBool("/window/splitcanvas/inverse", !inverse);
-                    prefs->setBool("/window/splitcanvas/vertical", false);
+                Geom::Point pos = canvas->_spliter_control_pos;
+                double value = canvas->_split_vertical ? 1/(allocation.height/(double)pos[Geom::Y]) : 1/(allocation.width/(double)pos[Geom::X]) ;
+                if(canvas->_split_hover_vertical) {
+                    canvas->_split_inverse = !canvas->_split_inverse;
                     spliter_clicked = true;
-                    reset = vertical? true: false;
+                    reset = canvas->_split_vertical? true: false;
                     if (reset) {
-                        prefs->setDouble("/window/splitcanvas/value", value);
+                        canvas->_split_value = value;
                     }
-                } else if (canvas->_oversplit_horizontal) {
-                    prefs->setBool("/window/splitcanvas/inverse", !inverse);
-                    prefs->setBool("/window/splitcanvas/vertical", true);
+                    canvas->_split_vertical = false;
+                } else if (canvas->_split_hover_horizontal) {
+                    canvas->_split_inverse = !canvas->_split_inverse;
                     spliter_clicked = true;
-                    reset = !vertical? true: false;
+                    reset = !canvas->_split_vertical? true: false;
                     if (reset) {
-                        prefs->setDouble("/window/splitcanvas/value", value);
+                        canvas->_split_value = value;
                     }
+                    canvas->_split_vertical = true;
                 }
                 if (spliter_clicked) {
                     canvas->dirtyAll();
                     canvas->addIdle();
                 }
             }
-            canvas->_splitcontrolpressed = false;
-            canvas->_splitdragging = false;
+            canvas->_split_control_pressed = false;
+            canvas->_split_dragging = false;
         } else {
             canvas->_state = event->state;
             retval = canvas->emitEvent((GdkEvent *) event);
@@ -1621,7 +1627,7 @@ void SPCanvas::set_cursor(GtkWidget *widget)
     if (desktop && desktop->splitMode()) {
         GdkDisplay *display = gdk_display_get_default();
         GdkCursor *cursor = nullptr;
-        if (canvas->_oversplit_vertical) {
+        if (canvas->_split_hover_vertical) {
             if (canvas->_changecursor != 1) {
                 cursor = gdk_cursor_new_from_name (display, "pointer");
                 gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
@@ -1629,7 +1635,7 @@ void SPCanvas::set_cursor(GtkWidget *widget)
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 1;
-        } else if (canvas->_oversplit_horizontal) {
+        } else if (canvas->_split_hover_horizontal) {
             if (canvas->_changecursor != 2) {
                 cursor = gdk_cursor_new_from_name (display, "pointer");
                 gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
@@ -1637,11 +1643,10 @@ void SPCanvas::set_cursor(GtkWidget *widget)
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 2;
-        } else if (canvas->_oversplit) {
+        } else if (canvas->_split_hover) {
             if (canvas->_changecursor != 3) {
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
-                if(vertical) {
+                if(_split_vertical) {
                     cursor = gdk_cursor_new_from_name (display, "ew-resize");
                 } else {
                     cursor = gdk_cursor_new_from_name (display, "ns-resize");
@@ -1652,7 +1657,7 @@ void SPCanvas::set_cursor(GtkWidget *widget)
             }
             canvas->_changecursor = 3;
         } else {
-            if (desktop && desktop->event_context && !canvas->_splitpressed && canvas->_changecursor != 4) {
+            if (desktop && desktop->event_context && !canvas->_split_pressed && canvas->_changecursor != 4) {
                 desktop->event_context->sp_event_context_update_cursor();
                 canvas->paintSpliter();
             }
@@ -1676,12 +1681,10 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
-    bool inverse = prefs->getBool("/window/splitcanvas/inverse", true);
     if (canvas->_spliter && ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) && !canvas->_is_dragging) {
-        canvas->_oversplit = true;
+        canvas->_split_hover = true;
     } else {
-        canvas->_oversplit = false;
+        canvas->_split_hover = false;
     }
     if (canvas->_spliter_left && 
         canvas->_spliter_right && 
@@ -1689,44 +1692,47 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
          (*canvas->_spliter_right).contains(cursor_pos)) &&
         !canvas->_is_dragging) 
     {
-        canvas->_oversplit_horizontal = true;
+        canvas->_split_hover_horizontal = true;
     } else {
-        canvas->_oversplit_horizontal = false;
+        canvas->_split_hover_horizontal = false;
     }
-    if (!canvas->_oversplit_horizontal &&
+    if (!canvas->_split_hover_horizontal &&
         canvas->_spliter_top && 
         canvas->_spliter_bottom && 
         ((*canvas->_spliter_top).contains(cursor_pos) ||
          (*canvas->_spliter_bottom).contains(cursor_pos)) &&
         !canvas->_is_dragging) 
     {
-        canvas->_oversplit_vertical = true;
+        canvas->_split_hover_vertical = true;
     } else {
-        canvas->_oversplit_vertical = false;
+        canvas->_split_hover_vertical = false;
     }
     
     canvas->set_cursor(widget);
-    if (canvas->_splitpressed) {
+    if (canvas->_split_pressed) {
         GtkAllocation allocation;
-        canvas->_splitdragging = true;
+        canvas->_split_dragging = true;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
         double hide_horiz = 1/(allocation.width/(double)cursor_pos[Geom::X]);
         double hide_vert = 1/(allocation.height/(double)cursor_pos[Geom::Y]);
-        double value = vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
+        double value = canvas->_split_vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
         if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
             SPDesktop * desktop = SP_ACTIVE_DESKTOP;
             if (desktop && desktop->event_context) {
                 desktop->event_context->sp_event_context_update_cursor();
                 desktop->toggleSplitMode();
-                canvas->_splitpressed = false;
-                canvas->_oversplit = false;
-                canvas->_oversplit_vertical = false;
-                canvas->_oversplit_horizontal = false;
+                canvas->_split_pressed = false;
+                canvas->_split_hover = false;
+                canvas->_split_hover_vertical = false;
+                canvas->_split_hover_horizontal = false;
+                canvas->_split_value = 0.5;
+                canvas->_split_vertical = true;
+                canvas->_split_inverse = false;
             }
         } else {
-            prefs->setDouble("/window/splitcanvas/value", value);
-            if (canvas->_splitcontrolpressed && !canvas->_is_dragging) {
-                canvas->_splitercontolpos = cursor_pos - canvas->_spliterincontrolpos;
+            canvas->_split_value = value;
+            if (canvas->_split_control_pressed && !canvas->_is_dragging) {
+                canvas->_spliter_control_pos = cursor_pos - canvas->_spliter_in_control_pos;
             } 
         }
         canvas->dirtyAll();
@@ -1745,7 +1751,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         SPCanvasArena *arena = SP_CANVAS_ARENA (desktop->drawing);
         if (desktop->splitMode()) {
             bool contains = canvas->_spliter_area.contains(cursor_pos);
-            bool setoutline = inverse ? !contains : contains;
+            bool setoutline = canvas->_split_inverse ? !contains : contains;
             arena->drawing.setOutlineSensitive(setoutline);
         } else {
             arena->drawing.setOutlineSensitive(false);
@@ -1869,20 +1875,18 @@ void SPCanvas::paintSpliter()
     Geom::IntPoint c2 = Geom::IntPoint(linerect.corner(2));
     Geom::IntPoint c3 = Geom::IntPoint(linerect.corner(3));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
-    bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
      // We need to draw the line in middle of pixel
     // https://developer.gnome.org/gtkmm-tutorial/stable/sec-cairo-drawing-lines.html.en:17.2.3
-    double gapx = vertical ? 0.5 : 0;
-    double gapy = vertical ? 0 : 0.5;
-    Geom::Point start = vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
-    Geom::Point end   = vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
+    double gapx = _split_vertical ? 0.5 : 0;
+    double gapy = _split_vertical ? 0 : 0.5;
+    Geom::Point start = _split_vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
+    Geom::Point end   = _split_vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
     Geom::Point middle   = Geom::middle_point(start, end) ;
-    if(canvas->_splitercontolpos != Geom::Point()) {
-        middle[Geom::X] = vertical ? middle[Geom::X] : canvas->_splitercontolpos[Geom::X];
-        middle[Geom::Y] = vertical ? canvas->_splitercontolpos[Geom::Y] : middle[Geom::Y];
+    if(canvas->_spliter_control_pos != Geom::Point()) {
+        middle[Geom::X] = _split_vertical ? middle[Geom::X] : canvas->_spliter_control_pos[Geom::X];
+        middle[Geom::Y] = _split_vertical ? canvas->_spliter_control_pos[Geom::Y] : middle[Geom::Y];
     } 
-    canvas->_splitercontolpos = middle;
+    canvas->_spliter_control_pos = middle;
     canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (25 * ds))));
     canvas->_spliter_top     = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] - (10 * ds))));
     canvas->_spliter_bottom  = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] + (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))));
@@ -1894,7 +1898,7 @@ void SPCanvas::paintSpliter()
     cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
     cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
     cairo_stroke_preserve (ct);
-    if (canvas->_oversplit || canvas->_splitpressed) {
+    if (canvas->_split_hover || canvas->_split_pressed) {
         cairo_set_source_rgba (ct, 0.15, 0.15, 0.15, 1);
     } else {
         cairo_set_source_rgba (ct, 0.3, 0.3, 0.3, 1);        
@@ -1907,8 +1911,8 @@ void SPCanvas::paintSpliter()
     M 29.249158,15.230724 37.509779,19.999997 29.249158,24.769269 Z
     M 15.230728,29.03051 20,37.29113 24.769272,29.030509 Z
     M 15.230728,10.891209 20,2.630586 24.769272,10.891209 Z */
-    double updwidth = vertical ? 0 : linerect.width();
-    double updheight = vertical ?  linerect.height() : 0;
+    double updwidth = _split_vertical ? 0 : linerect.width();
+    double updheight = _split_vertical ?  linerect.height() : 0;
     cairo_translate(ct, middle[0]-(20 * ds), middle[1]- (20 * ds));
     cairo_scale(ct, ds, ds);
     cairo_move_to(ct, 40,19.999997);
@@ -1922,7 +1926,7 @@ void SPCanvas::paintSpliter()
     cairo_line_to(ct, 20,2.630586);
     cairo_line_to(ct, 24.769272,10.891209);
     cairo_close_path(ct);
-    if (canvas->_oversplit_vertical) {
+    if (canvas->_split_hover_vertical) {
         cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
     } else {
         cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
@@ -1937,7 +1941,7 @@ void SPCanvas::paintSpliter()
     cairo_line_to(ct, 2.8492384,19.999997);
     cairo_line_to(ct, 11.109861,24.769269);
     cairo_close_path(ct);
-    if (canvas->_oversplit_horizontal) {
+    if (canvas->_split_hover_horizontal) {
         cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
     } else {
         cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
@@ -2266,48 +2270,61 @@ int SPCanvas::paint()
     SPCanvasArena *arena = nullptr;
     bool split = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool inverse = prefs->getBool("/window/splitcanvas/inverse", false);
-    bool vertical = prefs->getBool("/window/splitcanvas/vertical", true);
-    double value = prefs->getDoubleLimited("/window/splitcanvas/value", 0.5, 0, 1);
     double split_x = 1;
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA (desktop->drawing);
-        split_x = !vertical ? 0 : value;
-        split_y =  vertical ? 0 : value;
+        split_x = !_split_vertical ? 0 : _split_value;
+        split_y =  _split_vertical ? 0 : _split_value;
         guint hruler_gap = desktop->get_hruler_thickness();
         guint vruler_gap = desktop->get_vruler_thickness();
         Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * split_x)) - (3 * canvas->_device_scale) - vruler_gap;
         Geom::IntCoord coord1y = allocation.y + (int(allocation.height * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
-        split_x = !vertical ? 1 : value;
-        split_y =  vertical ? 1 : value;
+        split_x = !_split_vertical ? 1 : _split_value;
+        split_y =  _split_vertical ? 1 : _split_value;
         Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
         Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + (3* canvas->_device_scale) - hruler_gap; 
         _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
-        split_x = !vertical ? 0 : value;
-        split_y =  vertical ? 0 : value;
+        split_x = !_split_vertical ? 0 : _split_value;
+        split_y =  _split_vertical ? 0 : _split_value;
         coord1x = allocation.x + (int(allocation.width  * split_x)) - vruler_gap;
         coord1y = allocation.y + (int(allocation.height * split_y)) - hruler_gap;
-        split_x = !vertical ? 1 : value;
-        split_y =  vertical ? 1 : value;
+        split_x = !_split_vertical ? 1 : _split_value;
+        split_y =  _split_vertical ? 1 : _split_value;
         coord2x = allocation.x + allocation.width  - vruler_gap;
         coord2y = allocation.y + allocation.height - hruler_gap; 
         _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
     } else {
-        _spliter = Geom::OptIntRect();
-        _spliter_area = Geom::OptIntRect();
+        canvas->_spliter = Geom::OptIntRect();
+        canvas->_spliter_area = Geom::OptIntRect();
+        canvas->_spliter_control = Geom::OptIntRect();
+        canvas->_spliter_top = Geom::OptIntRect();
+        canvas->_spliter_bottom = Geom::OptIntRect();
+        canvas->_spliter_left = Geom::OptIntRect();
+        canvas->_spliter_right = Geom::OptIntRect();
+        canvas->_spliter_control_pos = Geom::Point();
+        canvas->_spliter_in_control_pos = Geom::Point();
+        canvas->_split_value = 0.5;
+        canvas->_split_vertical = true;
+        canvas->_split_inverse = false;
+        canvas->_split_hover_vertical = false;
+        canvas->_split_hover_horizontal = false;
+        canvas->_split_hover = false;
+        canvas->_split_pressed = false;
+        canvas->_split_control_pressed = false;
+        canvas->_split_dragging = false;
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
-    split_x = !vertical ? 0 : value;
-    split_y =  vertical ? 0 : value;
+    split_x = !_split_vertical ? 0 : _split_value;
+    split_y =  _split_vertical ? 0 : _split_value;
     cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width  * split_x),
                                             _y0 + int(allocation.height * split_y), 
                                             int(allocation.width  * (1 - split_x)), 
                                             int(allocation.height * (1 - split_y))};
     cairo_region_t *to_draw = nullptr;
     cairo_region_t *to_draw_outline = nullptr;
-    if (inverse && split) {
+    if (_split_inverse && split) {
         to_draw = cairo_region_create_rectangle(&crect_outline);
         to_draw_outline = cairo_region_create_rectangle(&crect);
     } else {
