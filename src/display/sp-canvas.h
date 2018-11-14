@@ -188,7 +188,10 @@ public:
     bool _is_dragging;
     bool _oversplit;
     bool _splitpressed;
+    bool _splitcontrolpressed;
     bool _splitdragging;
+    Geom::Point _splitercontolpos;
+    Geom::Point _spliterincontrolpos;
     guint _changecursor;
     double _dx0;
     double _dy0;

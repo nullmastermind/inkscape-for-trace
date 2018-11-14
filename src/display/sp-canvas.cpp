@@ -53,7 +53,7 @@ using Inkscape::Debug::GdkEventLatencyTracker;
 // gtk_check_version returns non-NULL on failure
 static bool const HAS_BROKEN_MOTION_HINTS =
   true || gtk_check_version(2, 12, 0) != nullptr;
-
+          
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
 
@@ -992,7 +992,10 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_spliter_left = Geom::OptIntRect();
     canvas->_splitpressed = false;
     canvas->_splitdragging = false;
+    canvas->_splitcontrolpressed = false;
     canvas->_changecursor = 0;
+    canvas->_splitercontolpos = Geom::Point();
+    canvas->_spliterincontrolpos = Geom::Point();
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
@@ -1501,6 +1504,11 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             retval = canvas->emitEvent((GdkEvent *) event);
         } else {
             canvas->_splitpressed = true;
+            Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
+            canvas->_spliterincontrolpos = cursor_pos - (*canvas->_spliter_control).midpoint();
+            if (canvas->_spliter && canvas->_spliter_control.contains(cursor_pos) && !canvas->_is_dragging) {
+                canvas->_splitcontrolpressed = true;
+            } 
             retval = TRUE;
         }
         break;
@@ -1549,25 +1557,33 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             bool spliter_clicked = false;
             bool reset = false;
             if (!canvas->_splitdragging) {
+                GtkAllocation allocation;
+                gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
+                Geom::Point pos = canvas->_splitercontolpos;
+                double value = vertical ? 1/(allocation.height/(double)pos[Geom::Y]) : 1/(allocation.width/(double)pos[Geom::X]) ;
                 if(canvas->_oversplit_vertical) {
                     prefs->setBool("/window/splitcanvas/inverse", !inverse);
                     prefs->setBool("/window/splitcanvas/vertical", false);
-                    reset = vertical? true: false;
                     spliter_clicked = true;
+                    reset = vertical? true: false;
+                    if (reset) {
+                        prefs->setDouble("/window/splitcanvas/value", value);
+                    }
                 } else if (canvas->_oversplit_horizontal) {
                     prefs->setBool("/window/splitcanvas/inverse", !inverse);
                     prefs->setBool("/window/splitcanvas/vertical", true);
-                    reset = !vertical? true: false;
                     spliter_clicked = true;
+                    reset = !vertical? true: false;
+                    if (reset) {
+                        prefs->setDouble("/window/splitcanvas/value", value);
+                    }
                 }
                 if (spliter_clicked) {
-                    if (reset) {
-                        prefs->setDouble("/window/splitcanvas/value", 0.5);
-                    }
                     canvas->dirtyAll();
                     canvas->addIdle();
                 }
             }
+            canvas->_splitcontrolpressed = false;
             canvas->_splitdragging = false;
         } else {
             canvas->_state = event->state;
@@ -1707,6 +1723,9 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             }
         } else {
             prefs->setDouble("/window/splitcanvas/value", value);
+            if (canvas->_splitcontrolpressed && !canvas->_is_dragging) {
+                canvas->_splitercontolpos = cursor_pos - canvas->_spliterincontrolpos;
+            } 
         }
         canvas->dirtyAll();
         canvas->addIdle();
@@ -1857,6 +1876,10 @@ void SPCanvas::paintSpliter()
     Geom::Point start = vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
     Geom::Point end   = vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
     Geom::Point middle   = Geom::middle_point(start, end) ;
+    if(canvas->_splitercontolpos != Geom::Point()) {
+        middle[Geom::X] = vertical ? middle[Geom::X] : canvas->_splitercontolpos[Geom::X];
+        middle[Geom::Y] = vertical ? canvas->_splitercontolpos[Geom::Y] : middle[Geom::Y];
+    }
     canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (25 * ds))));
     canvas->_spliter_top     = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] - (10 * ds))));
     canvas->_spliter_bottom  = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] + (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))));
