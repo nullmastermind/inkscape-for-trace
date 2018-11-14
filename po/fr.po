@@ -158,7 +158,7 @@ msgstr "Protubérances"
 
 #: ../share/filters/filters.svg.h:24
 msgid "Inky splotches underneath the object"
-msgstr "Taches d'encre en-dessous de l'objet"
+msgstr "Taches d'encre en dessous de l'objet"
 
 #: ../share/filters/filters.svg.h:26
 msgid "Fire"
@@ -9642,7 +9642,7 @@ msgstr "Intervertir les opérandes (par ex. pour la différence)"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Remove inner:"
-msgstr "Supprimer l'intérieur:"
+msgstr "Supprimer l'intérieur :"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid ""
@@ -10286,7 +10286,7 @@ msgstr "Inverser le second chemin"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Reverses the second path order"
-msgstr "Inverse la direction du second chemin"
+msgstr "Inverse le sens du second chemin"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:31
 #: ../src/ui/toolbar/text-toolbar.cpp:2211
@@ -13884,7 +13884,7 @@ msgstr "Descendre au calque précédent."
 
 #: ../src/selection-chemistry.cpp:1480
 msgid "No more layers below."
-msgstr "Plus de calque en-dessous."
+msgstr "Plus de calque en dessous."
 
 #: ../src/selection-chemistry.cpp:1493
 msgid "Select <b>object(s)</b> to move."
@@ -14570,7 +14570,7 @@ msgstr "Sélectionner une seule <b>image</b> à vectoriser"
 
 #: ../src/trace/trace.cpp:113
 msgid "Select one image and one or more shapes above it"
-msgstr "Sélectionner une image et une ou plusieurs formes au dessus d'elle"
+msgstr "Sélectionner une image et une ou plusieurs formes au-dessus d'elle"
 
 #: ../src/trace/trace.cpp:217
 msgid "Trace: No active desktop"
@@ -14657,7 +14657,7 @@ msgstr "Cacher les objets sélectionnés"
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:105
 msgid "Unhide objects below"
-msgstr "Montrer les objets en-dessous"
+msgstr "Montrer les objets en dessous"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:113
@@ -14667,7 +14667,7 @@ msgstr "Verrouiller les objets sélectionnés"
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:121
 msgid "Unlock objects below"
-msgstr "Déverrouiller les objets en-dessous"
+msgstr "Déverrouiller les objets en dessous"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/contextmenu.cpp:145
@@ -16514,7 +16514,7 @@ msgstr ""
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "Bit depth"
-msgstr "Résolution en bits"
+msgstr "Profondeur en bits"
 
 #: ../src/ui/dialog/export.cpp:148
 msgid "Compression"
@@ -17383,7 +17383,7 @@ msgstr "Déplacement en Y :"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2804
 msgid "Color component that controls the displacement in the Y direction"
-msgstr "Composante RGB qui contrôle le déplacement dans la direction Y"
+msgstr "Composante RGB qui contrôle le déplacement suivant l'axe Y"
 
 #. default: black
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2807
@@ -19189,14 +19189,14 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:404
 msgid "Show path direction on outlines"
-msgstr "Afficher la direction des chemins sur le contour"
+msgstr "Afficher le sens des chemins sur le contour"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:405
 msgid ""
 "Visualize the direction of selected paths by drawing small arrows in the "
 "middle of each outline segment"
 msgstr ""
-"Visualise la direction des chemins sélectionnés en dessinant de petites "
+"Visualise le sens des chemins sélectionnés en dessinant de petites "
 "flèches au milieu de chaque segment de contour"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:406
@@ -19418,7 +19418,7 @@ msgstr "Toujours enregistrer la taille du texte en pixels (px)"
 #. _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
 #: ../src/ui/dialog/inkscape-preferences.cpp:514
 msgid "Font directories"
-msgstr "Dossier des polices"
+msgstr "Dossiers des polices"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:515
 msgid "Use Inkscape's fonts directory"
@@ -20790,7 +20790,7 @@ msgstr "Marquer les couleurs hors-gamut"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1080
 msgid "Highlights colors that are out of gamut for the target device"
 msgstr ""
-"Mettre en exergue les couleurs qui sont en-dehors du gamut pour le "
+"Mettre en exergue les couleurs qui sont en dehors du gamut pour le "
 "périphérique cible"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1087
@@ -21523,7 +21523,7 @@ msgstr ""
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
-"Si décoché, l'objet le plus en-dessous de la sélection est utilisé comme "
+"Si décoché, l'objet le plus en dessous de la sélection est utilisé comme "
 "chemin de découpe ou masque"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1418
@@ -21660,7 +21660,7 @@ msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr "Définit la taille relative des pavés de rendu de la page. Plus "
-"forte est la valeur, plus grands sont les pavés."
+"la valeur est grande, plus les pavés seront grands."
 
 #. blur quality
 #. filter quality
@@ -23115,7 +23115,7 @@ msgstr "Nom :"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:19
 msgid "Author: "
-msgstr "Auteur"
+msgstr "Auteur :"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:20
 #: ../src/ui/dialog/template-widget.cpp:127
@@ -27994,7 +27994,7 @@ msgstr "Délier les clones _récursivement"
 
 #: ../src/verbs.cpp:2671
 msgid "Unlink all clones in the selection, even if they are in groups."
-msgstr "Délier tous les clones de la sélection, même dans les groupes"
+msgstr "Délier tous les clones de la sélection, même dans les groupes."
 
 #: ../src/verbs.cpp:2672
 msgid "Relink to Copied"
@@ -28525,7 +28525,7 @@ msgstr "Invers_er"
 #: ../src/verbs.cpp:2820
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
 msgstr ""
-"Inverser la direction des chemins sélectionnés (utile pour retourner des "
+"Inverser le sens des chemins sélectionnés (utile pour retourner des "
 "marqueurs)"
 
 #: ../src/verbs.cpp:2825
@@ -28833,7 +28833,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2911 ../src/verbs.cpp:2919
 msgid "_Set Inverse (LPE)"
-msgstr "Inverser (LPE)"
+msgstr "Inverser (ECI)"
 
 #: ../src/verbs.cpp:2912
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
