@@ -1710,8 +1710,10 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         GtkAllocation allocation;
         canvas->_splitdragging = true;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
+        double hide_horiz = 1/(allocation.width/(double)cursor_pos[Geom::X]);
+        double hide_vert = 1/(allocation.height/(double)cursor_pos[Geom::Y]);
         double value = vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
-        if (value < 0.03 || value > 0.97) {
+        if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
             SPDesktop * desktop = SP_ACTIVE_DESKTOP;
             if (desktop && desktop->event_context) {
                 desktop->event_context->sp_event_context_update_cursor();
@@ -1879,7 +1881,8 @@ void SPCanvas::paintSpliter()
     if(canvas->_splitercontolpos != Geom::Point()) {
         middle[Geom::X] = vertical ? middle[Geom::X] : canvas->_splitercontolpos[Geom::X];
         middle[Geom::Y] = vertical ? canvas->_splitercontolpos[Geom::Y] : middle[Geom::Y];
-    }
+    } 
+    canvas->_splitercontolpos = middle;
     canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (25 * ds))));
     canvas->_spliter_top     = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] - (10 * ds))));
     canvas->_spliter_bottom  = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] + (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))));
