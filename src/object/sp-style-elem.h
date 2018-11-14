@@ -23,13 +23,14 @@ public:
 
     Media media;
     bool is_css;
+    std::vector<SPStyle *> styles;
 
     void build(SPDocument* doc, Inkscape::XML::Node* repr) override;
     void set(SPAttributeEnum key, char const* value) override;
     void read_content() override;
-    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
+    void release() override;
 
-    std::vector<SPStyle *> getStyles();
+    Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 };
 
 

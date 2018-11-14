@@ -450,23 +450,6 @@ void update_style_recursively( SPObject *object ) {
     }
 }
 
-/*
- * Returns each statement as an SPStyle
- */
-std::vector<SPStyle *> SPStyleElem::getStyles() {
-    std::vector<SPStyle *> ret;
-    gint count = cr_stylesheet_nr_rules(style_sheet);
-
-    for (gint x = 0; x < count; x++) {
-        SPStyle *item = new SPStyle(nullptr, nullptr);
-        CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
-        item->mergeStatement(statement);
-        ret.push_back(item);
-    }
-
-    return ret;
-}
-
 void SPStyleElem::read_content() {
 
     // First, create the style-sheet object and track it in this
@@ -505,6 +488,16 @@ void SPStyleElem::read_content() {
     cr_parser_destroy(parser);
     delete parse_tmp;
 
+    //Record each css statement as an SPStyle
+    gint count = cr_stylesheet_nr_rules(style_sheet);
+
+    for (gint x = 0; x < count; x++) {
+        SPStyle *item = new SPStyle(nullptr, nullptr);
+        CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
+        item->mergeStatement(statement);
+        styles.push_back(item);
+    }
+
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );
@@ -542,6 +535,13 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
     SPObject::build(document, repr);
 }
 
+void SPStyleElem::release() {
+    while(!styles.empty()) {
+        auto style = styles.back();
+        sp_style_unref(style);
+        styles.pop_back();
+    }
+}
 
 
 /*

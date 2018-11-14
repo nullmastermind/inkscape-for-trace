@@ -60,18 +60,14 @@ TEST_F(ObjectTest, StyleElems) {
     SPStyleElem *one = dynamic_cast<SPStyleElem *>(doc->getObjectById("style01"));
     ASSERT_TRUE(one != nullptr);
 
-    std::vector<SPStyle *> styles = one->getStyles();
-
-    for(auto style: styles) {
+    for(auto style: one->styles) {
         EXPECT_EQ(style->fill.get_value(), Glib::ustring("#ff0000"));
     }
 
     SPStyleElem *two = dynamic_cast<SPStyleElem *>(doc->getObjectById("style02"));
     ASSERT_TRUE(one != nullptr);
 
-    std::vector<SPStyle *> styles_two = two->getStyles();
-
-    for(auto style: styles_two) {
+    for(auto style: two->styles) {
         EXPECT_EQ(style->fill.get_value(), Glib::ustring("#008000"));
     }
 }
