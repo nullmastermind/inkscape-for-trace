@@ -491,6 +491,11 @@ void SPStyleElem::read_content() {
     //Record each css statement as an SPStyle
     gint count = cr_stylesheet_nr_rules(style_sheet);
 
+    // Clean out any previous styles
+    for (auto& style:styles)
+        sp_style_unref(style);
+    styles.clear();
+
     for (gint x = 0; x < count; x++) {
         SPStyle *item = new SPStyle(nullptr, nullptr);
         CRStatement *statement = cr_stylesheet_statement_get_from_list(style_sheet, x);
@@ -536,11 +541,10 @@ void SPStyleElem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 }
 
 void SPStyleElem::release() {
-    while(!styles.empty()) {
-        auto style = styles.back();
+    for (auto& style:styles)
         sp_style_unref(style);
-        styles.pop_back();
-    }
+    styles.clear();
+    SPObject::release();
 }
 
 
