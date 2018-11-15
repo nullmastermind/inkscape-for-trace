@@ -274,9 +274,6 @@ void sp_ui_reload()
     if (GtkSettings *settings = gtk_settings_get_default()) {
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         if (themeiconname != "") {
-            if (themeiconname == "hicolor") {
-                themeiconname = "Adwaita";
-            }
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
         }
     }

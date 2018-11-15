@@ -507,12 +507,14 @@ Application::Application(const char* argv, bool use_gui) :
         GtkSettings *settings = gtk_settings_get_default();
         if (settings) {
             const gchar *gtkThemeName;
-            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
             const gchar *gtkIconThemeName;
-            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
             gboolean gtkApplicationPreferDarkTheme;
+            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
             g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+            g_object_set(settings, "gtk-application-prefer-dark-theme",
+                         prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
+            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
             if (prefs->getString("/theme/gtkTheme") != "") {
                 g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
             }
@@ -522,20 +524,11 @@ Application::Application(const char* argv, bool use_gui) :
 
             Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
             if (themeiconname != "") {
-                if (themeiconname == "hicolor") {
-                    themeiconname = "Adwaita";
-                }
                 g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-            }
+            } 
             else {
-                Glib::ustring defaulticontheme = prefs->getString("/theme/defaultIconTheme");
-                if (defaulticontheme == "Adwaita") {
-                    defaulticontheme = "hicolor";
-                }
-                prefs->setString("/theme/iconTheme", defaulticontheme);
+                prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
             }
-            g_object_set(settings, "gtk-application-prefer-dark-theme",
-                         prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         }
 
         load_menus();

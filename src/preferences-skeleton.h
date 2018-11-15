@@ -82,7 +82,7 @@ static char const preferences_skeleton[] =
 "       inkscape:window-height=\"480\" />\n"
 "  </group>\n"
 "  <group id=\"theme\" \n" 
-"       gtkTheme=\"Adwaita\" iconTheme=\"hicolor\"  symbolicIcons=\"0\" darkTheme=\"0\" symbolicColor=\"0x000000ff\" >\n"
+"       gtkTheme=\"\" iconTheme=\"\"  symbolicIcons=\"0\" darkTheme=\"0\" symbolicColor=\"0x000000ff\" >\n"
 "  </group>\n"
 "\n"
 "  <group id=\"tools\"\n"
