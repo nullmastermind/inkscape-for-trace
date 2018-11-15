@@ -1217,6 +1217,9 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
                                 allocation->width, allocation->height);
     }
     // Schedule redraw of any newly exposed regions
+    canvas->_split_value = 0.5;
+    canvas->_spliter_control_pos = Geom::Point();
+    canvas->dirtyAll();
     canvas->addIdle();
 }
 
@@ -1715,7 +1718,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
         double hide_horiz = 1/(allocation.width/(double)cursor_pos[Geom::X]);
         double hide_vert = 1/(allocation.height/(double)cursor_pos[Geom::Y]);
-        double value = canvas->_split_vertical ? 1/(allocation.width/(double)cursor_pos[Geom::X]) : 1/(allocation.height/(double)cursor_pos[Geom::Y]);
+        double value = canvas->_split_vertical ? hide_horiz : hide_vert;
         if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
             SPDesktop * desktop = SP_ACTIVE_DESKTOP;
             if (desktop && desktop->event_context) {
@@ -2530,6 +2533,20 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
         // scrolling without zoom; redraw only the newly exposed areas
         if ((dx != 0) || (dy != 0)) {
             if (gtk_widget_get_realized(GTK_WIDGET(this))) {
+                SPCanvas *canvas = SP_CANVAS(this);
+                if (canvas->_spliter) {
+                    double scroll_horiz = 1/(allocation.width/(double)-dx);
+                    double scroll_vert = 1/(allocation.height/(double)-dy);
+                    double gap = canvas->_split_vertical ? scroll_horiz : scroll_vert;
+                    canvas->_split_value = canvas->_split_value + gap;
+                    if (scroll_horiz < 0.03 || scroll_horiz > 0.97 || scroll_vert < 0.03 || scroll_vert > 0.97) {
+                        if (canvas->_split_value > 0.97) {
+                            canvas->_split_value = 0.97;
+                        } else if (canvas->_split_value < 0.03) { 
+                            canvas->_split_value = 0.03;
+                        }
+                    }
+                }
                 gdk_window_scroll(getWindow(this), -dx, -dy);
             }
         }
