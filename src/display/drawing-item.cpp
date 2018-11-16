@@ -725,13 +725,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
-    if (!carea) return RENDER_OK;
-
+    
     // expand render on filtered items
     Geom::OptIntRect cl = _cacheRect();
-    if (_filter && render_filters) {
+    if (_filter != nullptr && render_filters && cl) {
+        setCached(true, true);
         carea = cl;
     }
+    
+    if (!carea) return RENDER_OK;
 
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
