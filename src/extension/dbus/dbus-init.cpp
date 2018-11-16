@@ -212,7 +212,7 @@ init_desktop (void) {
 }
 
 void
-dbus_set_bus_name(gchar * bus_name)
+dbus_set_bus_name(gchar const * bus_name)
 {
     g_assert(bus_name != NULL);
     g_assert(instance_bus_name == NULL);
