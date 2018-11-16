@@ -170,6 +170,7 @@ set(ui_SRC
 	widget/frame.cpp
 	widget/highlight-picker.cpp
 	widget/imagetoggler.cpp
+        widget/ink-color-wheel.cpp
 	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
@@ -394,6 +395,7 @@ set(ui_SRC
 	widget/highlight-picker.h
 	widget/insertordericon.h
 	widget/imagetoggler.h
+        widget/ink-color-wheel.h
 	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
 	widget/labelled.h

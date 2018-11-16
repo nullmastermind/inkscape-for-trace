@@ -17,7 +17,7 @@
 #include "ui/dialog-events.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
-#include "widgets/gimp/gimpcolorwheel.h"
+#include "ui/widget/ink-color-wheel.h"
 
 namespace Inkscape {
 namespace UI {
@@ -46,8 +46,6 @@ ColorWheelSelector::ColorWheelSelector(SelectedColor &color)
 
 ColorWheelSelector::~ColorWheelSelector()
 {
-    _wheel = nullptr;
-
     _color_changed_connection.disconnect();
     _color_dragged_connection.disconnect();
 }
@@ -57,14 +55,12 @@ void ColorWheelSelector::_initUI()
     /* Create components */
     gint row = 0;
 
-    _wheel = gimp_color_wheel_new();
-    gtk_widget_show(_wheel);
-
-    gtk_widget_set_halign(_wheel, GTK_ALIGN_FILL);
-    gtk_widget_set_valign(_wheel, GTK_ALIGN_FILL);
-    gtk_widget_set_hexpand(_wheel, TRUE);
-    gtk_widget_set_vexpand(_wheel, TRUE);
-    gtk_grid_attach(GTK_GRID(gobj()), _wheel, 0, row, 3, 1);
+    _wheel = Gtk::manage(new Inkscape::UI::Widget::ColorWheel());
+    _wheel->set_halign(Gtk::ALIGN_FILL);
+    _wheel->set_valign(Gtk::ALIGN_FILL);
+    _wheel->set_hexpand(true);
+    _wheel->set_vexpand(true);
+    attach(*_wheel, 0, row, 3, 1);
 
     row++;
 
@@ -72,15 +68,9 @@ void ColorWheelSelector::_initUI()
     Gtk::Label *label = Gtk::manage(new Gtk::Label(_("_A:"), true));
     label->set_halign(Gtk::ALIGN_END);
     label->set_valign(Gtk::ALIGN_CENTER);
-    label->show();
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
     label->set_margin_start(XPAD);
     label->set_margin_end(XPAD);
-  #else
-    label->set_margin_left(XPAD);
-    label->set_margin_right(XPAD);
-  #endif
     label->set_margin_top(YPAD);
     label->set_margin_bottom(YPAD);
     label->set_halign(Gtk::ALIGN_FILL);
@@ -93,15 +83,9 @@ void ColorWheelSelector::_initUI()
     /* Slider */
     _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_alpha_adjustment));
     _slider->set_tooltip_text(_("Alpha (opacity)"));
-    _slider->show();
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
     _slider->set_margin_start(XPAD);
     _slider->set_margin_end(XPAD);
-  #else
-    _slider->set_margin_left(XPAD);
-    _slider->set_margin_right(XPAD);
-  #endif
     _slider->set_margin_top(YPAD);
     _slider->set_margin_bottom(YPAD);
     _slider->set_hexpand(true);
@@ -117,15 +101,9 @@ void ColorWheelSelector::_initUI()
     spin_button->set_tooltip_text(_("Alpha (opacity)"));
     sp_dialog_defocus_on_enter(GTK_WIDGET(spin_button->gobj()));
     label->set_mnemonic_widget(*spin_button);
-    spin_button->show();
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
     spin_button->set_margin_start(XPAD);
     spin_button->set_margin_end(XPAD);
-  #else
-    spin_button->set_margin_left(XPAD);
-    spin_button->set_margin_right(XPAD);
-  #endif
     spin_button->set_margin_top(YPAD);
     spin_button->set_margin_bottom(YPAD);
     spin_button->set_halign(Gtk::ALIGN_CENTER);
@@ -137,8 +115,9 @@ void ColorWheelSelector::_initUI()
     _slider->signal_grabbed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderGrabbed));
     _slider->signal_released.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderReleased));
     _slider->signal_value_changed.connect(sigc::mem_fun(*this, &ColorWheelSelector::_sliderChanged));
+    _wheel->signal_color_changed().connect(sigc::mem_fun(*this, &ColorWheelSelector::_wheelChanged));
 
-    g_signal_connect(G_OBJECT(_wheel), "changed", G_CALLBACK(_wheelChanged), this);
+    show_all();
 }
 
 void ColorWheelSelector::on_show()
@@ -192,19 +171,14 @@ void ColorWheelSelector::_sliderChanged()
     _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
 }
 
-void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *wheelSelector)
+void ColorWheelSelector::_wheelChanged()
 {
-    if (wheelSelector->_updating) {
+    if (_updating) {
         return;
     }
 
-    gdouble h = 0;
-    gdouble s = 0;
-    gdouble v = 0;
-    gimp_color_wheel_get_color(wheel, &h, &s, &v);
-
-    float rgb[3] = { 0, 0, 0 };
-    SPColor::hsv_to_rgb_floatv(rgb, h, s, v);
+    double rgb[3] = { 0, 0, 0 };
+    _wheel->get_rgb(rgb[0], rgb[1], rgb[2]);
 
     SPColor color(rgb[0], rgb[1], rgb[2]);
 
@@ -212,13 +186,13 @@ void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector
     guint32 mid = color.toRGBA32(0x7f);
     guint32 end = color.toRGBA32(0xff);
 
-    wheelSelector->_updating = true;
-    wheelSelector->_slider->setColors(start, mid, end);
-    wheelSelector->_color.preserveICC();
+    _updating = true;
+    _slider->setColors(start, mid, end);
+    _color.preserveICC();
 
-    wheelSelector->_color.setHeld(gimp_color_wheel_is_adjusting(wheel));
-    wheelSelector->_color.setColor(color);
-    wheelSelector->_updating = false;
+    _color.setHeld(_wheel->is_adjusting());
+    _color.setColor(color);
+    _updating = false;
 }
 
 void ColorWheelSelector::_updateDisplay()
@@ -234,7 +208,7 @@ void ColorWheelSelector::_updateDisplay()
     {
         float hsv[3] = { 0, 0, 0 };
         SPColor::rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
-        gimp_color_wheel_set_color(GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2]);
+        _wheel->set_rgb(_color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
     }
 
     guint32 start = _color.color().toRGBA32(0x00);

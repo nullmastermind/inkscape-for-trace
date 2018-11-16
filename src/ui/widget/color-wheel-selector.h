@@ -16,14 +16,12 @@
 
 #include "ui/selected-color.h"
 
-typedef struct _GimpColorWheel GimpColorWheel;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
 class ColorSlider;
-
+class ColorWheel;
 class ColorWheelSelector
     : public Gtk::Grid
 {
@@ -43,14 +41,14 @@ protected:
     void _sliderGrabbed();
     void _sliderReleased();
     void _sliderChanged();
-    static void _wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *cs);
+    void _wheelChanged();
 
     void _updateDisplay();
 
     SelectedColor &_color;
     bool _updating;
     Glib::RefPtr<Gtk::Adjustment> _alpha_adjustment;
-    GtkWidget *_wheel;
+    Inkscape::UI::Widget::ColorWheel *_wheel;
     Inkscape::UI::Widget::ColorSlider *_slider;
 
 private:
