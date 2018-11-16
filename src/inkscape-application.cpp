@@ -22,6 +22,10 @@
 #include "desktop.h"              // Access to window
 #include "actions/actions-base.h" // Actions
 
+#ifdef WITH_DBUS
+# include "extension/dbus/dbus-init.h"
+#endif
+
 #ifdef ENABLE_NLS
 // Native Language Support - shouldn't this always be used?
 #include "helper/gettext.h"   // gettext init
