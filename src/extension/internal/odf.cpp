@@ -1092,7 +1092,7 @@ bool OdfOutput::writeManifest(ZipFile &zf)
 
         outs.printf("    <manifest:file-entry manifest:media-type=\"");
         outs.printf("image/");
-        outs.printf(mimesubtype.c_str());
+        outs.printf("%s", mimesubtype.c_str());
         outs.printf("\" manifest:full-path=\"");
         outs.writeString(newName.c_str());
         outs.printf("\"/>\n");
