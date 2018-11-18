@@ -24,9 +24,9 @@
 #include "xml/text-node.h"
 
 #include "io/sys.h"
-#include "io/uristream.h"
-#include "io/stringstream.h"
-#include "io/gzipstream.h"
+#include "io/stream/stringstream.h"
+#include "io/stream/gzipstream.h"
+#include "io/stream/uristream.h"
 
 #include "extension/extension.h"
 

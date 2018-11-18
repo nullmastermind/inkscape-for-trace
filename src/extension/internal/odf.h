@@ -13,7 +13,6 @@
 #ifndef EXTENSION_INTERNAL_ODG_OUT_H
 #define EXTENSION_INTERNAL_ODG_OUT_H
 
-#include <io/stringstream.h>
 #include <util/ziptool.h>
 
 #include "extension/implementation/implementation.h"

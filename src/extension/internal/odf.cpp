@@ -66,8 +66,8 @@
 #include "document.h"
 #include "extension/extension.h"
 
-#include "io/inkscapestream.h"
-#include "io/bufferstream.h"
+#include "io/stream/bufferstream.h"
+#include "io/stream/stringstream.h"
 #include "io/sys.h"
 #include <util/ziptool.h>
 #include <iomanip>

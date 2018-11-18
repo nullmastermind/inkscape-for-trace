@@ -25,7 +25,6 @@
 #include "inkgc/gc-core.h"
 #include "xml/repr.h"
 #include "inkscape.h"
-#include "io/stringstream.h"
 #include "desktop.h"
 
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle

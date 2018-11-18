@@ -10,7 +10,7 @@
 
 #include "io/sys.h"
 #include "io/resource.h"
-#include "io/inkscapestream.h"
+#include "io/stream/inkscapestream.h"
 
 /* Directory includes */
 #include "path-prefix.h"
