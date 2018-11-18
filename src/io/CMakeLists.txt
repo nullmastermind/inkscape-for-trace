@@ -1,31 +1,31 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 set(io_SRC
-  bufferstream.cpp
   dir-util.cpp
-  gzipstream.cpp
-  inkscapestream.cpp
   resource.cpp
   resource-manager.cpp
-  stringstream.cpp
+  stream/bufferstream.cpp
+  stream/gzipstream.cpp
+  stream/inkscapestream.cpp
+  stream/stringstream.cpp
+  stream/uristream.cpp
+  stream/xsltstream.cpp
   sys.cpp
   http.cpp
-  uristream.cpp
-  xsltstream.cpp
 
   # -------
   # Headers
-  bufferstream.h
   dir-util.h
-  gzipstream.h
-  inkscapestream.h
   resource.h
   resource-manager.h
-  stringstream.h
+  stream/bufferstream.h
+  stream/gzipstream.h
+  stream/inkscapestream.h
+  stream/stringstream.h
+  stream/uristream.h
+  stream/xsltstream.h
   sys.h
   http.h
-  uristream.h
-  xsltstream.h
 )
 
 if(WIN32)
