@@ -31,6 +31,9 @@
 #include "helper/gettext.h"   // gettext init
 #endif // ENABLE_NLS
 
+#include "io/resource.h"
+using Inkscape::IO::Resource::UIS;
+
 // This is a bit confusing as there are two ways to handle command line arguments and files
 // depending on if the Gio::APPLICATION_HANDLES_OPEN and/or Gio::APPLICATION_HANDLES_COMMAND_LINE
 // flags are set. If the open flag is set and the command line not, the all the remainng arguments
@@ -182,13 +185,15 @@ InkscapeApplication::on_startup2()
     // ========================= Builder ==========================
     _builder = Gtk::Builder::create();
 
+    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.xml");
+
     try
     {
-        _builder->add_from_file("ink-application.xml");
+        _builder->add_from_file(app_builder_file);
     }
     catch (const Glib::Error& ex)
     {
-        std::cerr << "InkscapeApplication: ink_application.xml file not read! " << ex.what() << std::endl;
+        std::cerr << "InkscapeApplication: " << app_builder_file << " file not read! " << ex.what() << std::endl;
     }
 
     auto object = _builder->get_object("menu-application");
