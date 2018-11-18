@@ -1,0 +1,13 @@
+
+This directory contains code related to streams.
+
+Base class:
+  inkscapestream.h  Used by other stream handling code and odf, filter-file
+
+Derived classes:
+  bufferstream.h    Used by odf
+  gzipstream.h      Used by repr-io.cpp
+  stringstream.h    Used by rerp-io.cpp and ui/clipboard.cpp
+                    Note file with same name in src/svg
+  uristream.h       Used by repr-io.cpp
+  xsltstream.h      Used by none one (except testfile)
