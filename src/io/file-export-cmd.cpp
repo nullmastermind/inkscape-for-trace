@@ -343,7 +343,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                 items.push_back(SP_ITEM(o));
 
                 if (export_id_only) {
-                    std::cout << "Exporting only object with id=\""
+                    std::cerr << "Exporting only object with id=\""
                               << object << "\"; all other objects hidden." << std::endl;
                 }
 
@@ -517,8 +517,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         }
 
         // Do we really need to print this?
-        std::cout << "Background RRGGBBAA: " << std::hex << bgcolor << std::dec << std::endl;
-        std::cout << "Area "
+        std::cerr << "Background RRGGBBAA: " << std::hex << bgcolor << std::dec << std::endl;
+        std::cerr << "Area "
                   << area[Geom::X][0] << ":" << area[Geom::Y][0] << ":"
                   << area[Geom::X][1] << ":" << area[Geom::Y][1] << " exported to "
                   << width << " x " << height << " pixels (" << dpi << " dpi)" << std::endl;
