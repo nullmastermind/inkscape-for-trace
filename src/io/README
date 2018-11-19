@@ -1,0 +1,32 @@
+
+This directory contains code related to input and output.
+
+
+Note that input and output to particular file formats may be implemented elsewhere:
+
+1. Internal extensions. See src/extensions/internal
+
+   Input:  CDR, EMF, WMF VSD WPG
+   Output: SVG, PNG (via Cairo), PS, EPS, PDF, JavaFX, POV, ODF, EMF, WMF, XAML, LaTex.
+
+2. External extensions (Python). See share/extensions
+
+   Input: PS, EPS, PDF, SK, XAML, DXF, DIA, AI, ?
+   Output: SVG (Layers/Optimized), SK1, XCF, HTML5, SIF, PTL, HPGL, DXF, FXG, XAML(?), CANVAS, ?
+
+3. SVG (XML) low level code: src/xml/repr-io.h
+
+
+To do:
+
+1. Move all file related code here (other than extensions).
+2. Move extension input/output code into subdirectories within src/extensions/internal and share/extensions.
+3. Separate out creating a document and creating a document window. The former belongs here, the later in src/ui.
+4. Use std::string for all file names and use glibmm file utilities.
+5. Use Glib::ustring for URI's and use Inkscape's URI utilities (if not available in glibmm).
+6. Rewrite file export code to share a common base and to allow easy export of objects. Should be Gio::Action based.
+
+
+Files to move here:
+  src/util/ziptool.h     (used by ODF, note SVG uses Inkscape::IO::GzipInputStream, can that be used instead?).
+  src/helper/png-write.h
