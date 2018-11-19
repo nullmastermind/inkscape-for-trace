@@ -405,7 +405,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             /* Try to parse area (given in SVG pixels) */
             gdouble x0,y0,x1,y1;
             if (sscanf(export_area.c_str(), "%lg:%lg:%lg:%lg", &x0, &y0, &x1, &y1) != 4) {
-                g_warning("Cannot parse export area '%s'; use 'x0:y0:x1:y1'. Nothing exported.", export_area);
+                g_warning("Cannot parse export area '%s'; use 'x0:y0:x1:y1'. Nothing exported.", export_area.c_str());
                 return 1;
             }
             area = Geom::Rect(Geom::Interval(x0,x1), Geom::Interval(y0,y1));
