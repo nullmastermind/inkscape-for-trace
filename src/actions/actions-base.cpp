@@ -13,6 +13,7 @@
 #include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
 
 #include "actions-base.h"
+#include "actions-helper.h"
 
 #include "inkscape-application.h"
 
@@ -46,46 +47,6 @@ print_verb_list()
     // everything else.
     Inkscape::Extension::init();  // extension/init.h
     Inkscape::Verb::list();       // verbs.h
-}
-
-// Helper function: returns true if both document and selection found.
-bool
-get_document_and_selection(InkscapeApplication* app, SPDocument** document, Inkscape::Selection** selection)
-{
-    *document = app->get_active_document();
-    if (!(*document)) {
-        std::cerr << "get_document_and_selection: No document!" << std::endl;
-        return false;
-    }
-
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(*document);
-    *selection = context.getSelection();
-    if (!*selection) {
-        std::cerr << "get_document_and_selection: No selection!" << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-void
-select_via_id(Glib::ustring ids, InkscapeApplication* app)
-{
-    SPDocument* document = nullptr;
-    Inkscape::Selection* selection = nullptr;
-    if (!get_document_and_selection(app, &document, &selection)) {
-        return;
-    }
-
-    auto tokens = Glib::Regex::split_simple("\\s*,\\s*", ids);
-    for (auto id : tokens) {
-        SPObject* object = document->getObjectById(id);
-        if (object) {
-            selection->add(object);
-        } else {
-            std::cerr << "select: did not find object with id: " << id << std::endl;
-        }
-    }
 }
 
 // Helper function for query_x(), query_y(), query_width(), and query_height().
@@ -253,10 +214,8 @@ add_actions_base(InkscapeApplication* app)
     app->add_action(               "no-convert-baseline",                                 sigc::ptr_fun(&no_convert_baseline)                    );
 
     app->add_action(               "vacuum-defs",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&vacuum_defs),               app)        );
-    app->add_action_radio_string(  "select",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null");
     app->add_action_radio_string(  "verb",               sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&verbs),                     app), "null");
 
-    app->add_action_radio_string(  "query-id",           sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&select_via_id),             app), "null"); // For backwards compatibility.
     app->add_action(               "query-x",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_x),                   app)        );
     app->add_action(               "query-y",            sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_y),                   app)        );
     app->add_action(               "query-width",        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_width),               app)        );

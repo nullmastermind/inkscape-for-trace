@@ -285,6 +285,10 @@ set(main_SRC
   inkscape-application.cpp
   actions/actions-base.h
   actions/actions-base.cpp
+  actions/actions-helper.h
+  actions/actions-helper.cpp
+  actions/actions-selection.h
+  actions/actions-selection.cpp
 )
 set(view_SRC
   inkview-main.cpp

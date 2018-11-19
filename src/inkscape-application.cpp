@@ -20,7 +20,9 @@
 #include "file.h"                 // File open and window creation.
 #include "io/file.h"              // File open (command line).
 #include "desktop.h"              // Access to window
-#include "actions/actions-base.h" // Actions
+
+#include "actions/actions-base.h"      // Actions
+#include "actions/actions-selection.h" // Actions
 
 #ifdef WITH_DBUS
 # include "extension/dbus/dbus-init.h"
@@ -59,6 +61,7 @@ InkscapeApplication::InkscapeApplication()
 
     // ======================== Actions =========================
     add_actions_base(this);  // actions that are GUI independent
+    add_actions_selection(this); // actions for object selection
 
     // ====================== Command Line ======================
 
@@ -363,7 +366,6 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         // Split action list
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", actions);
         for (auto token : tokens) {
-            std::cout << token << std::endl;
             std::vector<Glib::ustring> tokens2 = Glib::Regex::split_simple("\\s*:\\s*", token);
             std::string action;
             std::string value;
@@ -399,8 +401,11 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
                     _command_line_actions.push_back( std::make_pair( action, Glib::VariantBase() ) );
                 }
             } else {
+                // Assume a verb
                 std::cerr << "InkscapeApplication::on_handle_local_options: '"
                           << action << "' is not a valid action!" << std::endl;
+                _command_line_actions.push_back(
+                    std::make_pair("verb", Glib::Variant<Glib::ustring>::create(action)));
             }
         }
     }
@@ -435,7 +440,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->lookup_value("query-id", query_id);
         if (!query_id.empty()) {
             _command_line_actions.push_back(
-                std::make_pair("query-id", Glib::Variant<Glib::ustring>::create(query_id)));
+                std::make_pair("select-via-id", Glib::Variant<Glib::ustring>::create(query_id)));
         }
     }
 
