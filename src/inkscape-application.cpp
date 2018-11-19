@@ -105,8 +105,8 @@ InkscapeApplication::InkscapeApplication()
     //                                                                                                                                          B = PNG, S = SVG, P = PS/EPS/PDF
     // Export - Geometry
     add_main_option_entry(OPTION_TYPE_STRING,   "export-area",         'a', N_("Export: Area to export in SVG user units."),                          N_("x0:y0:x1:y1")); // BSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-drawing",      'D', N_("Export: Area to export is drawing (not page)."),                                     ""); // BSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-page",         'C', N_("Export: Area to export is page."),                                                   ""); // BSP
+    add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-drawing", 'D', N_("Export: Area to export is drawing (not page)."),                                     ""); // BSP
+    add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-page",    'C', N_("Export: Area to export is page."),                                                   ""); // BSP
     add_main_option_entry(OPTION_TYPE_INT,      "export-margin",      '\0', N_("Export: Margin around export area: units of page size for SVG, mm for PS/EPS/PDF."), ""); // xSP
     add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-snap",   '\0', N_("Export: Snap the bitmap export area outwards to the nearest integer values."),       ""); // Bxx
     add_main_option_entry(OPTION_TYPE_INT,      "export-width",        'w', N_("Export: Bitmap width in pixels (overrides --export-dpi)."),                 N_("WIDTH")); // Bxx

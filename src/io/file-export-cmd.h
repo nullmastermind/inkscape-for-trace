@@ -26,11 +26,11 @@ public:
 
 private:
 
-    std::string get_filename_out(std::string filename_in="");
-    int do_export_svg(   SPDocument* doc, std::string filename_out);
-    int do_export_png(   SPDocument* doc, std::string filename_out);
-    int do_export_ps_pdf(SPDocument* doc, std::string filename_out, std::string mime_type);
-    int do_export_win_metafile(SPDocument* doc, std::string filename_out, std::string mime_type);
+    std::string get_filename_out(std::string filename_in="", std::string object_id="");
+    int do_export_svg(   SPDocument* doc, std::string filename_in);
+    int do_export_png(   SPDocument* doc, std::string filename_in);
+    int do_export_ps_pdf(SPDocument* doc, std::string filename_in, std::string mime_type);
+    int do_export_win_metafile(SPDocument* doc, std::string filename_in, std::string mime_type);
 
 public:
     // Should be private, but this is just temporary code (I hope!).
