@@ -609,7 +609,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
                     set_export_pdf_version_fail=false;
                 } else {
                     g_warning("Desired PDF export version \"%s\" not supported! Hint: input one of the versions found in the pdf export dialog e.g. \"1.4\".",
-                              export_pdf_level);
+                              export_pdf_level.c_str());
                 }
             } catch (...) {
                 // can be thrown along the way:
