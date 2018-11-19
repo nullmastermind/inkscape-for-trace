@@ -66,7 +66,7 @@ InkscapeApplication::InkscapeApplication()
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
     // Actions
-    add_main_option_entry(OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARGUMENT)"));
+    add_main_option_entry(OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[,ACTION(:ARG)]*"));
     add_main_option_entry(OPTION_TYPE_BOOL,     "action-list",        '\0', N_("Actions: List available actions."),                                                  "");
 
     // Query
@@ -84,7 +84,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", 0, N_("Open: Do not fix pre-0.92 document's text baseline spacing on opening."), "");
 
     // Query - Geometry
-    add_main_option_entry(OPTION_TYPE_STRING,   "query-id",            'I', N_("Query: ID of object to be queried."),                                          N_("ID"));
+    add_main_option_entry(OPTION_TYPE_STRING,   "query-id",            'I', N_("Query: ID(s) of object(s) to be queried."),                N_("OBJECT-ID[,OBJECT-ID]*"));
     add_main_option_entry(OPTION_TYPE_BOOL,     "query-all",           'S', N_("Query: Print bounding boxes of all objects."),                                       "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "query-x",             'X', N_("Query: X coordinate of drawing or object (if specified by --query-id)."),            "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "query-y",             'Y', N_("Query: Y coordinate of drawing or object (if specified by --query-id)."),            "");
@@ -113,7 +113,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_INT,      "export-height",       'h', N_("Export: Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
 
     // Export - Options
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID of object to export."),                                      N_("OBJECT-ID")); // BSP
+    add_main_option_entry(OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID(s) of object(s) to export."),                   N_("OBJECT-ID[,OBJECT-ID]*")); // BSP
     add_main_option_entry(OPTION_TYPE_BOOL,     "export-id-only",      'j', N_("Export: Hide all objects except object with ID selected by export-id."),             ""); // BSx
     add_main_option_entry(OPTION_TYPE_BOOL,     "export-plain-svg",    'l', N_("Export: Remove items in the Inkscape namespace."),                                   ""); // xSx
     add_main_option_entry(OPTION_TYPE_INT,      "export-dpi",          'd', N_("Export: Resolution for rasterization bitmaps and filters (default is 96)."),  N_("DPI")); // BxP
