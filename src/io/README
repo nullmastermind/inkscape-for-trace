@@ -25,6 +25,9 @@ To do:
 4. Use std::string for all file names and use glibmm file utilities.
 5. Use Glib::ustring for URI's and use Inkscape's URI utilities (if not available in glibmm).
 6. Rewrite file export code to share a common base and to allow easy export of objects. Should be Gio::Action based.
+   Things like cropping, selecting an object, hiding other objects, etc. should be done before the document is passed
+   to the file type specific export code. This way, we can use the same export options for all file types (where they
+   make sense). Only type specific options (e.g. PS Level) should be handled by the type specific code.
 
 
 Files to move here:
