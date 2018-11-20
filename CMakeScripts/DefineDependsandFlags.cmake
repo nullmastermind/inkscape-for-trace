@@ -18,6 +18,9 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 # as replaced with CMAKE_CXX_STANDARD in main CMakeLists.txt
 list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 
+# Errors for common mistakes
+list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
+list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
 
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)

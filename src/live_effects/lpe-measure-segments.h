@@ -88,7 +88,6 @@ private:
     double fontsize;
     double anotation_width;
     double previous_size;
-    unsigned long rgb24;
     guint32 rgb32;
     double arrow_gap;
     guint pagenumber;
