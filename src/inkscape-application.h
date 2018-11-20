@@ -26,6 +26,8 @@
 #include "helper/action.h"
 #include "io/file-export-cmd.h"   // File export (non-verb)
 
+typedef std::vector<std::pair<std::string, Glib::VariantBase> > action_vector_t;
+
 class InkscapeApplication : public Gtk::Application
 {
 protected:
@@ -43,7 +45,10 @@ protected:
     void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
 
 private:
-    void create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>());
+    SPDesktop* create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>());
+    void parse_actions(const Glib::ustring& input, action_vector_t& action_vector);
+    void shell();
+    void shell2();
 
 private:
     // Callbacks
@@ -57,13 +62,14 @@ private:
     Glib::RefPtr<Gtk::Builder> _builder;
 
     bool _with_gui;
+    bool _use_shell;
     InkFileExportCmd _file_export;
 
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP
     std::vector<SPDocument*> _documents;
 
     // Actions from the command line or file.
-    std::vector<std::pair<std::string, Glib::VariantBase> > _command_line_actions;
+    action_vector_t _command_line_actions;
 };
 
 #endif // INKSCAPE_APPLICATION_H

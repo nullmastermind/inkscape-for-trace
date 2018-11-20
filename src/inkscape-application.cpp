@@ -46,6 +46,7 @@ InkscapeApplication::InkscapeApplication()
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
                        Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
     , _with_gui(true)
+    , _use_shell(false)
 {
 
     // ==================== Initializations =====================
@@ -98,7 +99,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
     add_main_option_entry(OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
     add_main_option_entry(OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[,VERB-ID]*"));
-  //add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interative shell mode."),                                 "");
+    add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interative shell mode."),                                 "");
 
     // Export - File and File Type
     add_main_option_entry(OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
@@ -215,9 +216,16 @@ InkscapeApplication::on_activate()
     on_startup2();
 
     if (_with_gui) {
-        create_window();
+        if (_use_shell) {
+            shell(); // Shell will create its own windows.
+        } else {
+            create_window();
+        }
     } else {
         std::cerr << "InkscapeApplication::on_activate:  Without GUI" << std::endl;
+        if (_use_shell) {
+            shell2();
+        }
         // Create blank document?
     }
 }
@@ -259,8 +267,12 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
                 activate_action( action.first, action.second );
             }
 
-            // Save... can't use action yet.
-            _file_export.do_export(doc, file->get_path());
+            if (_use_shell) {
+                shell2();
+            } else {
+                // Save... can't use action yet.
+                _file_export.do_export(doc, file->get_path());
+            }
 
             // Remove from our application... we only have one in command-line mode.
             _documents.pop_back();
@@ -275,7 +287,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
     // Gtk::Application::on_open(files, hint);
 }
 
-void
+SPDesktop*
 InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 {
     SPDesktop* desktop = nullptr;
@@ -290,7 +302,136 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
 
     // Add to Gtk::Window to app window list.
     add_window(*desktop->getToplevel());
+
+    return (desktop); // Temp: Need to track desktop for shell mode.
 }
+
+
+void
+InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& action_vector)
+{
+    // Split action list
+    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
+    for (auto token : tokens) {
+        std::vector<Glib::ustring> tokens2 = Glib::Regex::split_simple("\\s*:\\s*", token);
+        std::string action;
+        std::string value;
+        if (tokens2.size() > 0) {
+            action = tokens2[0];
+        }
+        if (tokens2.size() > 1) {
+            value = tokens2[1];
+        }
+
+        Glib::RefPtr<Gio::Action> action_ptr = lookup_action(action);
+        if (action_ptr) {
+            // Doesn't seem to be a way to test this using the C++ binding without Glib-CRITICAL errors.
+            const  GVariantType* gtype = g_action_get_parameter_type(action_ptr->gobj());
+            if (gtype) {
+                // With value.
+                Glib::VariantType type = action_ptr->get_parameter_type();
+                if (type.get_string() == "s") {
+                    action_vector.push_back(
+                        std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
+                } else if (type.get_string() == "i") {
+                    action_vector.push_back(
+                        std::make_pair( action, Glib::Variant<int>::create(std::stoi(value))));
+                } else if (type.get_string() == "d") {
+                    action_vector.push_back(
+                        std::make_pair( action, Glib::Variant<double>::create(std::stod(value))));
+                } else {
+                    std::cerr << "InkscapeApplication::parse_actions: unhandled action value: "
+                              << action << ": " << type.get_string() << std::endl;
+                }
+            } else {
+                // Stateless (i.e. no value).
+                action_vector.push_back( std::make_pair( action, Glib::VariantBase() ) );
+            }
+        } else {
+            // Assume a verb
+            // std::cerr << "InkscapeApplication::parse_actions: '"
+            //           << action << "' is not a valid action! Assuming verb!" << std::endl;
+            action_vector.push_back(
+                std::make_pair("verb", Glib::Variant<Glib::ustring>::create(action)));
+        }
+    }
+}
+
+// Interactively trigger actions. This is a travesty! Due to most verbs requiring a desktop we must
+// create one even in shell mode!
+void
+InkscapeApplication::shell()
+{
+    std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
+    std::cout << " Input of the form:" << std::endl;
+    std::cout << "> filename action1:arg1; action2:arg2; verb1; verb2; ..." << std::endl;
+
+    std::string input;
+    while (true) {
+        std::cout << "> ";
+        std::getline(std::cin, input);
+
+        if (input == "quit") break;
+
+        // Get filename which must be first and separated by space (and not contain ':' or ';').
+        // Regex works on Glib::ustrings and will give bad results if one tries to use std::string.
+        Glib::ustring input_u = input;
+        Glib::ustring filename;
+        Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("^\\s*([^:;\\s]+)\\s+(.*)");
+        Glib::MatchInfo match_info;
+        regex->match(input_u, match_info);
+        if (match_info.matches()) {
+            filename = match_info.fetch(1);
+            input_u = match_info.fetch(2);
+        } else {
+            std::cerr << "InkscapeApplication::shell: Failed to find file in |"
+                      << input << "|" << std::endl;
+        }
+
+        // Create desktop.
+        SPDesktop* desktop = nullptr;
+        if (!filename.empty()) {
+            Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
+            desktop = create_window(file);
+        }
+
+        // Find and execute actions (verbs).
+        action_vector_t action_vector;
+        parse_actions(input_u, action_vector);
+        for (auto action: action_vector) {
+            activate_action( action.first, action.second );
+        }
+
+        if (desktop) {
+            desktop->destroy();
+        }
+    }
+
+    quit(); // Must quit or segfault.
+}
+
+// Once we don't need to create a window just to process verbs!
+void
+InkscapeApplication::shell2()
+{
+    std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
+    std::cout << " Input of the form:" << std::endl;
+    std::cout << "> action1:arg1; action2;arg2; verb1; verb2; ..." << std::endl;
+    std::cout << "Only verbs that don't require a desktop may be used." << std::endl;
+
+    std::string input;
+    while (true) {
+        std::cout << "> ";
+        std::cin >> input;
+        if (input == "quit") break;
+        action_vector_t action_vector;
+        parse_actions(input, action_vector);
+        for (auto action: action_vector) {
+            activate_action( action.first, action.second );
+        }
+    }
+}
+
 
 // ========================= Callbacks ==========================
 
@@ -338,9 +479,10 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     // For options without arguments.
     auto base = Glib::VariantBase();
 
-    // ====================== GUI  =====================
+    // ================== GUI and Shell ================
     if (options->contains("without-gui"))    _with_gui = false;
     if (options->contains("with-gui"))       _with_gui = true;
+    if (options->contains("shell"))         _use_shell = true;
 
     // Some options should preclude using gui!
     if (options->contains("query-id")      ||
@@ -362,52 +504,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     Glib::ustring actions;
     if (options->contains("actions")) {
         options->lookup_value("actions", actions);
-
-        // Split action list
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", actions);
-        for (auto token : tokens) {
-            std::vector<Glib::ustring> tokens2 = Glib::Regex::split_simple("\\s*:\\s*", token);
-            std::string action;
-            std::string value;
-            if (tokens2.size() > 0) {
-                action = tokens2[0];
-            }
-            if (tokens2.size() > 1) {
-                value = tokens2[1];
-            }
-
-            Glib::RefPtr<Gio::Action> action_ptr = lookup_action(action);
-            if (action_ptr) {
-                // Doesn't seem to be a way to test this using the C++ binding without Glib-CRITICAL errors.
-                const  GVariantType* gtype = g_action_get_parameter_type(action_ptr->gobj());
-                if (gtype) {
-                    // With value.
-                    Glib::VariantType type = action_ptr->get_parameter_type();
-                    if (type.get_string() == "s") {
-                        _command_line_actions.push_back(
-                            std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
-                    } else if (type.get_string() == "i") {
-                        _command_line_actions.push_back(
-                            std::make_pair( action, Glib::Variant<int>::create(std::stoi(value))));
-                    } else if (type.get_string() == "d") {
-                        _command_line_actions.push_back(
-                            std::make_pair( action, Glib::Variant<double>::create(std::stod(value))));
-                    } else {
-                        std::cerr << "InkscapeApplication::on_handle_local_options: unhandled action value: "
-                                  << action << ": " << type.get_string() << std::endl;
-                    }
-                } else {
-                    // Stateless (i.e. no value).
-                    _command_line_actions.push_back( std::make_pair( action, Glib::VariantBase() ) );
-                }
-            } else {
-                // Assume a verb
-                std::cerr << "InkscapeApplication::on_handle_local_options: '"
-                          << action << "' is not a valid action!" << std::endl;
-                _command_line_actions.push_back(
-                    std::make_pair("verb", Glib::Variant<Glib::ustring>::create(action)));
-            }
-        }
+        parse_actions(actions, _command_line_actions);
     }
 
 
@@ -474,6 +571,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
                 std::make_pair("verb", Glib::Variant<Glib::ustring>::create(verb)));
         }
     }
+
 
     // ==================== EXPORT =====================
     if (options->contains("export-file")) {
