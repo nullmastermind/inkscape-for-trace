@@ -12,9 +12,7 @@ if(WIN32)
   endif()
   
   set(CMAKE_C_COMPILER "${MINGW_BIN}/gcc.exe")
-  set(CMAKE_C_LINK_EXECUTABLE "${MINGW_BIN}/gcc.exe")
   set(CMAKE_CXX_COMPILER "${MINGW_BIN}/g++.exe")
-  set(CMAKE_CXX_LINK_EXECUTABLE "${MINGW_BIN}/g++.exe")
   set(CMAKE_CXX_STANDARD 11)
   
   # Setup Windows resource files compiler.
