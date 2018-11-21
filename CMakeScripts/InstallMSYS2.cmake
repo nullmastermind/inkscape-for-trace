@@ -89,7 +89,6 @@ if(WIN32)
     ${MINGW_BIN}/libpng16-[0-9]*.dll
     ${MINGW_BIN}/libpoppler-[0-9]*.dll
     ${MINGW_BIN}/libpoppler-glib-[0-9]*.dll
-    ${MINGW_BIN}/libpopt-[0-9]*.dll
     ${MINGW_BIN}/libpotrace-[0-9]*.dll
     ${MINGW_BIN}/libpsl-[0-9]*.dll
     ${MINGW_BIN}/libquadmath-[0-9]*.dll
