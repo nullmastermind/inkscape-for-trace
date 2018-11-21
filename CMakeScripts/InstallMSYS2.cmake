@@ -122,7 +122,8 @@ if(WIN32)
     ${MINGW_BIN}/smime[0-9]*.dll
     ${MINGW_BIN}/tcl[0-9]*.dll
     ${MINGW_BIN}/tk[0-9]*.dll
-    ${MINGW_BIN}/zlib1.dll)
+    ${MINGW_BIN}/zlib1.dll
+    ${MINGW_BIN}/libzstd.dll)
   INSTALL(FILES ${MINGW_LIBS} DESTINATION .)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
