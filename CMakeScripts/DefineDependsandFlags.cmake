@@ -39,6 +39,7 @@ if(WIN32)
 
     list(APPEND INKSCAPE_LIBS "-lmscms")
 
+    list(APPEND INKSCAPE_CXX_FLAGS "-mms-bitfields")
     list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
     list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
 
