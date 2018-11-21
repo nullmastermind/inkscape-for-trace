@@ -139,7 +139,13 @@ test:linux:
   script:
     - cd build
     - ctest -V
-    - make check-license-headers
+
+check-license-headers:
+  stage: build
+  except:
+    - schedules
+  script:
+    - python buildtools/check_license_headers.py
 
 translations:
   stage: build
