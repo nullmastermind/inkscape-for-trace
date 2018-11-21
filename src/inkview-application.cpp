@@ -21,6 +21,7 @@
 #include "inkview-application.h"
 
 #include "inkscape.h"             // Inkscape::Application
+#include "inkscape-version.h"     // Inkscape version
 #include "inkgc/gc-core.h"        // Garbage Collecting init
 #include "inkview-window.h"
 
@@ -58,6 +59,7 @@ InkviewApplication::InkviewApplication()
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
+    add_main_option_entry(OPTION_TYPE_BOOL,     "version",    'V', N_("Print: Inkview version."),                                                          "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "fullscreen", 'f', N_("Launch in fullscreen mode"),                   "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "recursive",  'r', N_("Search folders recursively"),                  "");
     add_main_option_entry(OPTION_TYPE_INT,      "timer",      't', N_("Change image every NUMBER seconds"), N_("NUMBER"));
@@ -115,6 +117,11 @@ InkviewApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict
     if (!options) {
         std::cerr << "InkviewApplication::on_handle_local_options: options is null!" << std::endl;
         return -1; // Keep going
+    }
+
+    if (options->contains("version")) {
+        std::cout << "Inkscape " << Inkscape::version_string << std::endl;
+        return EXIT_SUCCESS;
     }
 
     if (options->contains("fullscreen")) {
