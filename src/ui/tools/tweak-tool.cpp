@@ -1156,7 +1156,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
 
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
 

@@ -90,7 +90,7 @@ public:
       { return _message_stack; }
     /// Returns a pointer to the view's tipsMessageContext.
     Inkscape::MessageContext *tipsMessageContext() const
-      { return _tips_message_context; }
+      { return _tips_message_context.get(); }
 
     void emitResized(gdouble width, gdouble height);
     void requestRedraw();
@@ -110,7 +110,7 @@ public:
 protected:
     SPDocument *_doc;
     std::shared_ptr<Inkscape::MessageStack> _message_stack;
-    Inkscape::MessageContext *_tips_message_context;
+    std::unique_ptr<Inkscape::MessageContext> _tips_message_context;
 
     virtual void _close();
 

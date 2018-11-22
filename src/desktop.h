@@ -252,7 +252,7 @@ public:
     void destroy();
 
     Inkscape::MessageContext *guidesMessageContext() const {
-        return _guides_message_context;
+        return _guides_message_context.get();
     }
 
     Inkscape::Display::TemporaryItem * add_temporary_canvasitem (SPCanvasItem *item, guint lifetime, bool move_to_bottom = true);
@@ -449,7 +449,7 @@ public:
 
 private:
     Inkscape::UI::View::EditWidgetInterface       *_widget;
-    Inkscape::MessageContext  *_guides_message_context;
+    std::unique_ptr<Inkscape::MessageContext> _guides_message_context;
     bool _active;
 
     // This simple class ensures that _w2d is always in sync with _rotation and _scale

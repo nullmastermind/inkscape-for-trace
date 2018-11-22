@@ -194,7 +194,7 @@ private:
      * Status bar
      */
     std::shared_ptr<Inkscape::MessageStack> _message_stack;
-    Inkscape::MessageContext *_message_context;
+    std::unique_ptr<Inkscape::MessageContext> _message_context;
 
     /**
      * Signal handlers

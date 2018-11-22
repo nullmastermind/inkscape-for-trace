@@ -1232,7 +1232,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
             break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
-                if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                     return TRUE;
                 }
                 this->setCloneTilerPrefs();
@@ -1307,7 +1307,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                     case GDK_SCROLL_DOWN:
                     case GDK_SCROLL_UP:
                     case GDK_SCROLL_SMOOTH: {
-                        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+                        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                             return TRUE;
                         }
                         this->last_push = desktop->dt2doc(scroll_dt);

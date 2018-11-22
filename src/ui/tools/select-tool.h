@@ -21,7 +21,6 @@
 struct SPCanvasItem;
 
 namespace Inkscape {
-  class MessageContext;
   class SelTrans;
   class SelectionDescriber;
 }

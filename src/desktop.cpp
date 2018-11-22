@@ -147,7 +147,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     Inkscape::ResourceManager::getManager();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    _guides_message_context = new Inkscape::MessageContext(messageStack());
+    _guides_message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(messageStack()));
 
     current = prefs->getStyle("/desktop/style");
 
@@ -376,7 +376,6 @@ void SPDesktop::destroy()
         drawing = nullptr;
     }
 
-    delete _guides_message_context;
     _guides_message_context = nullptr;
 }
 
@@ -685,7 +684,7 @@ void SPDesktop::setEventContext(const std::string& toolName)
     } else {
         event_context = ToolFactory::createObject(toolName);
         event_context->desktop = this;
-        event_context->message_context = new Inkscape::MessageContext(this->messageStack());
+        event_context->message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(this->messageStack()));
         event_context->setup();
 
         // Make sure no delayed snapping events are carried over after switching tools

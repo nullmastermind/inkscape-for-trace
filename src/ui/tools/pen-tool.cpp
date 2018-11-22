@@ -390,7 +390,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
         && this->expecting_clicks_for_LPE != 1) {
 
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return true;
         }
 

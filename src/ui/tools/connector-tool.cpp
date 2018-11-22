@@ -470,7 +470,7 @@ bool ConnectorTool::_handleButtonPress(GdkEventButton const &bevent)
     bool ret = false;
 
         if ( bevent.button == 1 && !this->space_panning ) {
-            if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+            if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
                 return true;
             }
 

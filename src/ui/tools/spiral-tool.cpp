@@ -331,7 +331,7 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
     if (!this->spiral) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

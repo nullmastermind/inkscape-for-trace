@@ -102,8 +102,6 @@ protected:
     double tremor;
     double cap_rounding;
 
-    //Inkscape::MessageContext *_message_context;
-
     bool is_drawing;
 
     /** uses absolute width independent of zoom */

@@ -51,10 +51,6 @@ public:
     SelTrans(SPDesktop *desktop);
     ~SelTrans();
 
-    Inkscape::MessageContext &messageContext() {
-        return _message_context;
-    }
-
     void increaseState();
     void resetState();
     void setCenter(Geom::Point const &p);

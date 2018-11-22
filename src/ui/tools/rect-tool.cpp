@@ -362,7 +362,7 @@ void RectTool::drag(Geom::Point const pt, guint state) {
     SPDesktop *desktop = this->desktop;
 
     if (!this->rect) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

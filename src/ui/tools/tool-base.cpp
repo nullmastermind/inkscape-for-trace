@@ -119,9 +119,7 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
 }
 
 ToolBase::~ToolBase() {
-    if (this->message_context) {
-        delete this->message_context;
-    }
+    this->message_context = nullptr;
 
     if (this->desktop) {
         this->desktop = nullptr;

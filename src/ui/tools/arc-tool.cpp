@@ -320,7 +320,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
 
 void ArcTool::drag(Geom::Point pt, guint state) {
     if (!this->arc) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

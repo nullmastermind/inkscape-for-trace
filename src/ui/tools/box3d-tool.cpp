@@ -496,7 +496,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
 void Box3dTool::drag(guint /*state*/) {
     if (!this->box3d) {
-        if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
+        if (Inkscape::have_viable_layer(desktop, defaultMessageContext()) == false) {
             return;
         }
 

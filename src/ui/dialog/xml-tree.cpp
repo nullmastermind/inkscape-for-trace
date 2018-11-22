@@ -96,7 +96,7 @@ XmlTree::XmlTree() :
     contents->pack_start(*notebook_content, true, true, 0);
 
     _message_stack = std::make_shared<Inkscape::MessageStack>();
-    _message_context = new Inkscape::MessageContext(_message_stack);
+    _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
     _message_changed_connection = _message_stack->connectChanged(
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
@@ -235,7 +235,6 @@ XmlTree::~XmlTree ()
     set_tree_desktop(nullptr);
 
     _message_changed_connection.disconnect();
-    delete _message_context;
     _message_context = nullptr;
     _message_stack = nullptr;
     _message_changed_connection.~connection();
@@ -268,9 +267,8 @@ void XmlTree::attr_reset_context(gint attr)
     }
     else {
         const gchar *name = g_quark_to_string(attr);
-        gchar *message = g_strdup_printf(_("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
-        _message_context->set(Inkscape::NORMAL_MESSAGE, message);
-        g_free(message);
+        _message_context->setF(Inkscape::NORMAL_MESSAGE,
+                               _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
     }
 }
 
