@@ -341,110 +341,71 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         objects.push_back(Glib::ustring()); // So we do loop at least once for root.
     }
 
-    for (auto object : objects) {
+    for (auto object_id : objects) {
 
-        std::string filename_out = get_filename_out(filename_in, object);
+        std::string filename_out = get_filename_out(filename_in, object_id);
 
         std::vector<SPItem*> items;
 
-        // Find export area.
-        Geom::Rect area;
-        if (!object.empty() || export_area_drawing) {
+        // Find export object. (Either root or object with specified id.)
+        SPObject *object = doc->getRoot();
+        if (!object_id.empty()) {
+            object = doc->getObjectById(object_id);
+        }
 
-            SPObject *o = nullptr;
-            SPObject *o_area = nullptr;
-            if (!object.empty() && export_area_drawing) {
-                o = doc->getObjectById(object);
-                o_area = doc->getRoot();
-            } else if (!object.empty()) {
-                o = doc->getObjectById(object);
-                o_area = o;
-            } else if (export_area_drawing) {
-                o = doc->getRoot();
-                o_area = o;
+        if (!object) {
+            std::cerr << "InkFileExport::do_export_png: "
+                      << "Object with id=\"" << object
+                      << "\" was not found in the document. Skipping." << std::endl;
+            continue;
+        }
+
+        if (!SP_IS_ITEM (object)) {
+            std::cerr << "InkFileExportCmd::do_export_png: "
+                      << "Object with id=\"" << object_id
+                      << "\" is not a visible item. Skipping." << std::endl;
+            continue;
+        }
+
+        items.push_back(SP_ITEM(object)); // There is only one item, why do this?
+
+        if (export_id_only) {
+            std::cerr << "Exporting only object with id=\""
+                      << object_id << "\"; all other objects hidden." << std::endl;
+        }
+
+        // Find file name and dpi from hints.
+        if (export_use_hints) {
+
+            // Retrieve export filename hint.
+            const gchar *fn_hint = object->getRepr()->attribute("inkscape:export-filename");
+            if (fn_hint) {
+                filename_out = fn_hint;
+                filename_from_hint = true;
+            } else {
+                std::cerr << "InkFileExport::do_export_png: "
+                          << "Export filename hint not found for object " << object_id << ". Skipping." << std::endl;
+                continue;
             }
 
-            if (o) {
-                if (!SP_IS_ITEM (o)) {
-                    std::cerr << "InkFileExportCmd::do_export_png: "
-                              << "Object with id=\"" << object
-                              << "\" is not a visible item. Skipping." << std::endl;
-                    continue;
-                }
-
-                items.push_back(SP_ITEM(o));
-
-                if (export_id_only) {
-                    std::cerr << "Exporting only object with id=\""
-                              << object << "\"; all other objects hidden." << std::endl;
-                }
-
-                if (export_use_hints) {
-
-                    // Retrieve export filename hint.
-                    const gchar *fn_hint = o->getRepr()->attribute("inkscape:export-filename");
-                    if (fn_hint) {
-                        filename_out = fn_hint;
-                        filename_from_hint = true;
-                    } else {
-                        std::cerr << "InkFileExport::do_export_png: "
-                                  << "Export filename hint not found for object " << object << ". Skipping." << std::endl;
-                        continue;
-                    }
-
-                    // Retrieve export dpi hint. Only xdpi as ydpi is always the same now.
-                    const gchar *dpi_hint = o->getRepr()->attribute("inkscape:export-xdpi");
-                    if (dpi_hint) {
-                        if (export_dpi || export_width || export_height) {
-                            std::cerr << "InkFileExport::do_export_png: "
-                                      << "Using bitmap dimensions from the command line "
-                                      << "(--export-dpi, --export-width, or --export-height). "
-                                      << "DPI hint " << dpi_hint << " is ignored." << std::endl;
-                        } else {
-                            dpi = atof(dpi_hint);
-                        }
-                    } else {
-                        std::cerr << "InkFileExport::do_export_png: "
-                                  << "Export DPI hint not found for the object." << std::endl;
-                    }
-                }
-
-                // Write object bbox to area.
-                doc->ensureUpToDate();
-                Geom::OptRect areaMaybe = static_cast<SPItem *>(o_area)->desktopVisualBounds();
-                if (areaMaybe) {
-                    area = *areaMaybe;
-                } else {
+            // Retrieve export dpi hint. Only xdpi as ydpi is always the same now.
+            const gchar *dpi_hint = object->getRepr()->attribute("inkscape:export-xdpi");
+            if (dpi_hint) {
+                if (export_dpi || export_width || export_height) {
                     std::cerr << "InkFileExport::do_export_png: "
-                              << "Unable to determine a valid bounding box. Skipping." << std::endl;
-                    continue;
+                              << "Using bitmap dimensions from the command line "
+                              << "(--export-dpi, --export-width, or --export-height). "
+                              << "DPI hint " << dpi_hint << " is ignored." << std::endl;
+                } else {
+                    dpi = atof(dpi_hint);
                 }
             } else {
                 std::cerr << "InkFileExport::do_export_png: "
-                          << "Object with id=\"" << object
-                          << "\" was not found in the document. Skipping." << std::endl;
-                continue;
+                          << "Export DPI hint not found for the object." << std::endl;
             }
         }
 
-        if (!export_area.empty()) {
-
-            /* Try to parse area (given in SVG pixels) */
-            gdouble x0,y0,x1,y1;
-            if (sscanf(export_area.c_str(), "%lg:%lg:%lg:%lg", &x0, &y0, &x1, &y1) != 4) {
-                g_warning("Cannot parse export area '%s'; use 'x0:y0:x1:y1'. Nothing exported.", export_area.c_str());
-                return 1;
-            }
-            area = Geom::Rect(Geom::Interval(x0,x1), Geom::Interval(y0,y1));
-
-        } else if (export_area_page || !(!object.empty() || export_area_drawing)) {
-
-            /* Export the whole page: note: Inkscape uses 'page' in all menus and dialogs, not 'canvas' */
-            doc->ensureUpToDate();
-            Geom::Point origin(doc->getRoot()->x.computed, doc->getRoot()->y.computed);
-            area = Geom::Rect(origin, origin + doc->getDimensions());
-        }
-        // End finding area.
+        // ------------------------- File name -------------------------
 
         // Check we have a filename.
         if (filename_out.empty()) {
@@ -452,6 +413,25 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                       << "No valid export filename given and no filename hint. Skipping." << std::endl;
             continue;
         }
+
+        if (filename_from_hint) {
+            //Make relative paths go from the document location, if possible:
+            if (!Glib::path_is_absolute(filename_out) && doc->getURI()) {
+                std::string dirname = Glib::path_get_dirname(doc->getURI());
+                if (!dirname.empty()) {
+                    filename_out = Glib::build_filename(dirname, filename_out);
+                }
+            }
+        }
+
+        // Check if directory exists
+        std::string directory = Glib::path_get_dirname(filename_out);
+        if (!Glib::file_test(directory, Glib::FILE_TEST_IS_DIR)) {
+            std::cerr << "File path " << filename_out << " includes directory that doesn't exist. Skipping." << std::endl;
+            continue;
+        }
+
+        // -------------------------- DPI -------------------------------
 
         if (export_dpi != 0.0 && dpi == 0.0) {
             dpi = export_dpi;
@@ -463,14 +443,54 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             }
         }
 
-        if (export_area_snap) {
-            area = area.roundOutwards();
-        }
-
         // default dpi
         if (dpi == 0.0) {
             dpi = Inkscape::Util::Quantity::convert(1, "in", "px");
         }
+
+        // -------------------------  Area -------------------------------
+
+        Geom::Rect area;
+        doc->ensureUpToDate();
+
+        // Three choices: 1. Command-line export_area  2. Page area  3. Drawing area
+        if (!export_area.empty()) {
+
+            // Export area command-line
+
+            /* Try to parse area (given in SVG pixels) */
+            gdouble x0,y0,x1,y1;
+            if (sscanf(export_area.c_str(), "%lg:%lg:%lg:%lg", &x0, &y0, &x1, &y1) != 4) {
+                g_warning("Cannot parse export area '%s'; use 'x0:y0:x1:y1'. Nothing exported.", export_area.c_str());
+                return 1; // If it fails once, it will fail for all objects.
+            }
+            area = Geom::Rect(Geom::Interval(x0,x1), Geom::Interval(y0,y1));
+
+        } else if (export_area_page || (!export_area_drawing && object_id.empty())) {
+
+            // Export area page (explicit or if no object is given).
+            Geom::Point origin(doc->getRoot()->x.computed, doc->getRoot()->y.computed);
+            area = Geom::Rect(origin, origin + doc->getDimensions());
+
+        } else {
+
+            // Export area drawing (explicit or if object is given).
+            Geom::OptRect areaMaybe = static_cast<SPItem *>(object)->desktopVisualBounds();
+            if (areaMaybe) {
+                area = *areaMaybe;
+            } else {
+                std::cerr << "InkFileExport::do_export_png: "
+                          << "Unable to determine a valid bounding box. Skipping." << std::endl;
+                continue;
+            }
+        }
+
+        if (export_area_snap) {
+            area = area.roundOutwards();
+        }
+        // End finding area.
+
+        // -------------------------- Width and Height ---------------------------------
 
         unsigned long int width = 0;
         unsigned long int height = 0;
@@ -499,22 +519,12 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             height = (unsigned long int) (Inkscape::Util::Quantity::convert(area.height(), "px", "in") * dpi + 0.5);
         }
 
-        if (filename_from_hint) {
-            //Make relative paths go from the document location, if possible:
-            if (!Glib::path_is_absolute(filename_out) && doc->getURI()) {
-                std::string dirname = Glib::path_get_dirname(doc->getURI());
-                if (!dirname.empty()) {
-                    filename_out = Glib::build_filename(dirname, filename_out);
-                }
-            }
-        }
-
-        // Check if directory exists
-        std::string directory = Glib::path_get_dirname(filename_out);
-        if (!Glib::file_test(directory, Glib::FILE_TEST_IS_DIR)) {
-            std::cerr << "File path " << filename_out << " includes directory that doesn't exist." << std::endl;
+        if ((width < 1) || (height < 1) || (width > PNG_UINT_31_MAX) || (height > PNG_UINT_31_MAX)) {
+            std::cerr << "InkFileExport::do_export_png: Dimensions " << width << "x" << height << " are out of range (1 to " << PNG_UINT_31_MAX << ")." << std::endl;
             continue;
         }
+
+        // ----------------------  Generate the PNG -------------------------------
 
         // Do we really need to print this?
         std::cerr << "Background RRGGBBAA: " << std::hex << bgcolor << std::dec << std::endl;
@@ -523,17 +533,12 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                   << area[Geom::X][1] << ":" << area[Geom::Y][1] << " exported to "
                   << width << " x " << height << " pixels (" << dpi << " dpi)" << std::endl;
 
-        reverse(items.begin(),items.end());
+        reverse(items.begin(),items.end()); // But there was only one item!
 
-        if ((width >= 1) && (height >= 1) && (width <= PNG_UINT_31_MAX) && (height <= PNG_UINT_31_MAX)) {
-            if( sp_export_png_file(doc, filename_out.c_str(), area, width, height, dpi,
-                                   dpi, bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
-            } else {
-                std::cerr << "InkFileExport::do_export_png: Failed to export to " << filename_out << std::endl;
-                continue;
-            }
+        if( sp_export_png_file(doc, filename_out.c_str(), area, width, height, dpi,
+                               dpi, bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
         } else {
-            std::cerr << "InkFileExport::do_export_png: Dimensions " << width << "x" << height << " are out of range (1 to " << PNG_UINT_31_MAX << ")." << std::endl;
+            std::cerr << "InkFileExport::do_export_png: Failed to export to " << filename_out << std::endl;
             continue;
         }
 
