@@ -308,6 +308,33 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                   << "--export-use-hints can only be used with --export-id or --export-area-drawing; ignored." << std::endl;;
     }
 
+    guint32 bgcolor = 0x00000000;
+    if (!export_background.empty()) {
+        // override the page color
+        bgcolor = sp_svg_read_color(export_background.c_str(), 0xffffff00);
+        bgcolor |= 0xff; // default is no opacity
+    } else {
+        // read from namedview
+        Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
+        if (nv && nv->attribute("pagecolor")){
+            bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
+        }
+        if (nv && nv->attribute("inkscape:pageopacity")){
+            double opacity = 1.0;
+            sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
+            bgcolor |= SP_COLOR_F_TO_U(opacity);
+        }
+    }
+    bgcolor &= (guint32) 0xffffff00;
+
+    if (export_background_opacity > 1.0) {
+        float value = CLAMP (export_background_opacity, 1.0f, 255.0f);
+        bgcolor |= (guint32) floor(value);
+    } else {
+        float value = CLAMP (export_background_opacity, 0.0f, 1.0f);
+        bgcolor |= SP_COLOR_F_TO_U(value);
+    }
+
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
     if (objects.empty()) {
@@ -431,8 +458,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             if ((dpi < 0.1) || (dpi > 10000.0)) {
                 std::cerr << "InkFileExport::do_export_png: "
                           << "DPI value " << export_dpi
-                          << " out of range [0.1 - 10000.0]. Nothing exported.";
-                return 1;
+                          << " out of range [0.1 - 10000.0]. Skipping.";
+                continue;
             }
         }
 
@@ -453,7 +480,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             if ((width < 1) || (width > PNG_UINT_31_MAX)) {
                 std::cerr << "InkFileExport::do_export_png: "
                           << "Export width " << width << " out of range (1 to " << PNG_UINT_31_MAX << ")." << std::endl;
-                return 1;
+                continue;
             }
             dpi = (gdouble) Inkscape::Util::Quantity::convert(width, "in", "px") / area.width();
         } else {
@@ -465,38 +492,11 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             if ((height < 1) || (height > PNG_UINT_31_MAX)) {
                 std::cerr << "InkFileExport::do_export_png: "
                           << "Export height " << height << " out of range (1 to " << PNG_UINT_31_MAX << ")" << std::endl;
-                return 1;
+                continue;
             }
             dpi = (gdouble) Inkscape::Util::Quantity::convert(height, "in", "px") / area.height();
         } else {
             height = (unsigned long int) (Inkscape::Util::Quantity::convert(area.height(), "px", "in") * dpi + 0.5);
-        }
-
-        guint32 bgcolor = 0x00000000;
-        if (!export_background.empty()) {
-            // override the page color
-            bgcolor = sp_svg_read_color(export_background.c_str(), 0xffffff00);
-            bgcolor |= 0xff; // default is no opacity
-        } else {
-            // read from namedview
-            Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
-            if (nv && nv->attribute("pagecolor")){
-                bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
-            }
-            if (nv && nv->attribute("inkscape:pageopacity")){
-                double opacity = 1.0;
-                sp_repr_get_double (nv, "inkscape:pageopacity", &opacity);
-                bgcolor |= SP_COLOR_F_TO_U(opacity);
-            }
-        }
-        bgcolor &= (guint32) 0xffffff00;
-
-        if (export_background_opacity > 1.0) {
-            float value = CLAMP (export_background_opacity, 1.0f, 255.0f);
-            bgcolor |= (guint32) floor(value);
-        } else {
-            float value = CLAMP (export_background_opacity, 0.0f, 1.0f);
-            bgcolor |= SP_COLOR_F_TO_U(value);
         }
 
         if (filename_from_hint) {
@@ -513,7 +513,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         std::string directory = Glib::path_get_dirname(filename_out);
         if (!Glib::file_test(directory, Glib::FILE_TEST_IS_DIR)) {
             std::cerr << "File path " << filename_out << " includes directory that doesn't exist." << std::endl;
-            return 1;
+            continue;
         }
 
         // Do we really need to print this?
@@ -530,11 +530,11 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                                    dpi, bgcolor, nullptr, nullptr, true, export_id_only ? items : std::vector<SPItem*>()) == 1 ) {
             } else {
                 std::cerr << "InkFileExport::do_export_png: Failed to export to " << filename_out << std::endl;
-                return 1;
+                continue;
             }
         } else {
             std::cerr << "InkFileExport::do_export_png: Dimensions " << width << "x" << height << " are out of range (1 to " << PNG_UINT_31_MAX << ")." << std::endl;
-            return 1;
+            continue;
         }
 
     } // End loop over objects.
