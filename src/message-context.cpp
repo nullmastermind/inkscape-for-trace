@@ -16,15 +16,12 @@
 
 namespace Inkscape {
 
-MessageContext::MessageContext(MessageStack *stack)
-: _stack(stack), _message_id(0), _flash_message_id(0)
-{
-    GC::anchor(_stack);
-}
+MessageContext::MessageContext(std::shared_ptr<MessageStack> stack)
+: _stack(std::move(stack)), _message_id(0), _flash_message_id(0)
+{}
 
 MessageContext::~MessageContext() {
     clear();
-    GC::release(_stack);
     _stack = nullptr;
 }
 

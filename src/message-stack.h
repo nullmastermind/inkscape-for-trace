@@ -23,9 +23,6 @@
 #include <glibmm/ustring.h>
 #include <sigc++/sigc++.h>
 
-#include "inkgc/gc-managed.h"
-#include "gc-finalized.h"
-#include "gc-anchored.h"
 #include "message.h"
 
 namespace Inkscape {
@@ -48,13 +45,11 @@ namespace Inkscape {
  * assuming that the message you pushed is still on top is an
  * invalid and unsafe assumption.
  */
-class MessageStack : public GC::Managed<>,
-                     public GC::Finalized,
-                     public GC::Anchored
+class MessageStack final
 {
 public:
     MessageStack();
-    ~MessageStack() override;
+    ~MessageStack();
 
     /** @brief returns the type of message currently at the top of the stack */
     MessageType currentMessageType() {

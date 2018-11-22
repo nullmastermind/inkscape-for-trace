@@ -14,6 +14,7 @@
 
 #include <gdk/gdk.h>
 #include <cstddef>
+#include <memory>
 #include <sigc++/connection.h>
 #include "message.h"
 #include "inkgc/gc-managed.h"
@@ -85,7 +86,7 @@ public:
     SPDocument *doc() const
       { return _doc; }
     /// Returns a pointer to the view's message stack.
-    Inkscape::MessageStack *messageStack() const
+    std::shared_ptr<Inkscape::MessageStack> messageStack() const
       { return _message_stack; }
     /// Returns a pointer to the view's tipsMessageContext.
     Inkscape::MessageContext *tipsMessageContext() const
@@ -108,7 +109,7 @@ public:
 
 protected:
     SPDocument *_doc;
-    Inkscape::MessageStack *_message_stack;
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
     Inkscape::MessageContext *_tips_message_context;
 
     virtual void _close();

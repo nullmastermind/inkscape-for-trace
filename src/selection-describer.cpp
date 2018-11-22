@@ -13,7 +13,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <memory>
 #include <set>
+#include <utility>
 
 #include <glibmm/i18n.h>
 
@@ -86,8 +88,8 @@ static int count_filtered (const std::vector<SPItem*> &items)
 
 namespace Inkscape {
 
-SelectionDescriber::SelectionDescriber(Inkscape::Selection *selection, MessageStack *stack, char *when_selected, char *when_nothing)
-    : _context(stack),
+SelectionDescriber::SelectionDescriber(Inkscape::Selection *selection, std::shared_ptr<MessageStack> stack, char *when_selected, char *when_nothing)
+    : _context(std::move(stack)),
       _when_selected (when_selected),
       _when_nothing (when_nothing)
 {

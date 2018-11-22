@@ -358,7 +358,7 @@ bool ClipboardManagerImpl::paste(SPDesktop *desktop, bool in_place)
     if ( desktop == nullptr ) {
         return false;
     }
-    if ( Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false ) {
+    if ( Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false ) {
         return false;
     }
 

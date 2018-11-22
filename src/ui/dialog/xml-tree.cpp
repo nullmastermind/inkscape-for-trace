@@ -20,6 +20,7 @@
 #include "xml-tree.h"
 
 #include <glibmm/i18n.h>
+#include <memory>
 
 
 #include "desktop.h"
@@ -94,7 +95,7 @@ XmlTree::XmlTree() :
 
     contents->pack_start(*notebook_content, true, true, 0);
 
-    _message_stack = new Inkscape::MessageStack();
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = new Inkscape::MessageContext(_message_stack);
     _message_changed_connection = _message_stack->connectChanged(
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
@@ -236,7 +237,6 @@ XmlTree::~XmlTree ()
     _message_changed_connection.disconnect();
     delete _message_context;
     _message_context = nullptr;
-    Inkscape::GC::release(_message_stack);
     _message_stack = nullptr;
     _message_changed_connection.~connection();
 }

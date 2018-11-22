@@ -13,6 +13,8 @@
 #ifndef SEEN_DIALOGS_XML_TREE_H
 #define SEEN_DIALOGS_XML_TREE_H
 
+#include <memory>
+
 #include "ui/widget/panel.h"
 #include <gtkmm/entry.h>
 #include <gtkmm/textview.h>
@@ -191,7 +193,7 @@ private:
     /**
      * Status bar
      */
-    Inkscape::MessageStack *_message_stack;
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
     Inkscape::MessageContext *_message_context;
 
     /**

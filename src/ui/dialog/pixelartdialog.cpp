@@ -363,7 +363,7 @@ Tracer::Kopf2011::Options PixelArtDialogImpl::options()
 
 void PixelArtDialogImpl::vectorize()
 {
-    Inkscape::MessageStack *msgStack = desktop->messageStack();
+    Inkscape::MessageStack *msgStack = desktop->getMessageStack();
 
     if ( !desktop->selection ) {
         char *msg = _("Select an <b>image</b> to trace");

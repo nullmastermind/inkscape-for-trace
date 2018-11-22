@@ -513,7 +513,7 @@ bool TextTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
 
-                if (Inkscape::have_viable_layer(desktop, desktop->messageStack()) == false) {
+                if (Inkscape::have_viable_layer(desktop, desktop->getMessageStack()) == false) {
                     return TRUE;
                 }
 

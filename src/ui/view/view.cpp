@@ -12,6 +12,7 @@
  */
 
 #include <2geom/point.h>
+#include <memory>
 #include "document.h"
 #include "view.h"
 #include "message-stack.h"
@@ -57,7 +58,7 @@ _onDocumentResized (double x, double y, View* v)
 View::View()
 :  _doc(nullptr)
 {
-    _message_stack = GC::release(new Inkscape::MessageStack());
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
     _tips_message_context = new Inkscape::MessageContext(_message_stack);
 
     _resized_connection = _resized_signal.connect (sigc::bind (sigc::ptr_fun (&_onResized), this));

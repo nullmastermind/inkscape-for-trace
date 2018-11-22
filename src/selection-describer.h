@@ -14,6 +14,7 @@
 #define SEEN_INKSCAPE_SELECTION_DESCRIPTION_HANDLER_H
 
 #include <cstddef>
+#include <memory>
 #include <sigc++/sigc++.h>
 #include "message-context.h"
 
@@ -24,7 +25,7 @@ class Selection;
 
 class SelectionDescriber : public sigc::trackable {
 public:
-    SelectionDescriber(Inkscape::Selection *selection, MessageStack *stack, char *when_selected, char *when_nothing);
+    SelectionDescriber(Inkscape::Selection *selection, std::shared_ptr<MessageStack> stack, char *when_selected, char *when_nothing);
     ~SelectionDescriber();
 
 private:

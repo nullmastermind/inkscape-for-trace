@@ -16,6 +16,7 @@
 #define SEEN_INKSCAPE_MESSAGE_CONTEXT_H
 
 #include <cstdarg>
+#include <memory>
 #include <glib.h>
 
 #include "message.h"
@@ -42,7 +43,7 @@ public:
       *
       * @param stack the Inkscape::MessageStack to use for our messages
       */
-    MessageContext(MessageStack *stack);
+    MessageContext(std::shared_ptr<MessageStack> stack);
     ~MessageContext();
 
     /** @brief pushes a message on the stack, replacing our old message
@@ -100,7 +101,7 @@ public:
     void clear();
 
 private:
-    MessageStack *_stack; ///< the message stack to use
+    std::shared_ptr<MessageStack> _stack; ///< the message stack to use
     MessageId _message_id; ///< our current message id, or 0
     MessageId _flash_message_id; ///< current flashed message id, or 0
 };

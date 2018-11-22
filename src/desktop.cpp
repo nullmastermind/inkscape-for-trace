@@ -24,8 +24,8 @@
 
 #include <glibmm/i18n.h>
 #include <2geom/transforms.h>
-
 #include <2geom/rect.h>
+#include <memory>
 
 #include "desktop.h"
 
@@ -147,7 +147,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     Inkscape::ResourceManager::getManager();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    _guides_message_context = new Inkscape::MessageContext(const_cast<Inkscape::MessageStack*>(messageStack()));
+    _guides_message_context = new Inkscape::MessageContext(messageStack());
 
     current = prefs->getStyle("/desktop/style");
 
@@ -433,7 +433,7 @@ SPCanvasGroup* SPDesktop::getTempGroup() const {
 }
 
 Inkscape::MessageStack* SPDesktop::getMessageStack() const {
-	return messageStack();
+	return messageStack().get();
 }
 
 SPNamedView* SPDesktop::getNamedView() const {
