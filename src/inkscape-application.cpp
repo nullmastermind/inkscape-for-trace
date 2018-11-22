@@ -74,7 +74,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_BOOL,     "action-list",        '\0', N_("Actions: List available actions."),                                                  "");
 
     // Query
-    add_main_option_entry(OPTION_TYPE_BOOL,     "version",             'v', N_("Print: Inkscape version."),                                                          "");
+    add_main_option_entry(OPTION_TYPE_BOOL,     "version",             'V', N_("Print: Inkscape version."),                                                          "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "extensions-directory",'x', N_("Print: Extensions directory."),                                                      "");
     add_main_option_entry(OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("Print: List verbs."),                                                                "");
 
