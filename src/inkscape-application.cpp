@@ -485,15 +485,18 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     if (options->contains("shell"))         _use_shell = true;
 
     // Some options should preclude using gui!
-    if (options->contains("query-id")      ||
-        options->contains("query-x")       ||
-        options->contains("query-all")     ||
-        options->contains("query-y")       ||
-        options->contains("query-width")   ||
-        options->contains("query-height")  ||
-        options->contains("export-type")   ||
-        options->contains("export-file")   ||
-        options->contains("export-overwrite")
+    if (options->contains("query-id")         ||
+        options->contains("query-x")          ||
+        options->contains("query-all")        ||
+        options->contains("query-y")          ||
+        options->contains("query-width")      ||
+        options->contains("query-height")     ||
+        options->contains("export-file")      ||
+        options->contains("export-type")      ||
+        options->contains("export-overwrite") ||
+        options->contains("export-id")        ||
+        options->contains("export-plain-svg") ||
+        options->contains("export-text-to_path")
         ) {
         _with_gui = false;
     }
