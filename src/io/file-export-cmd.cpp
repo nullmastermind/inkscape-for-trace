@@ -38,7 +38,6 @@
 
 InkFileExportCmd::InkFileExportCmd()
     : over_write(false)
-    , export_type("svg")
     , export_overwrite(false)
     , export_area_drawing(false)
     , export_area_page(false)
@@ -62,41 +61,83 @@ InkFileExportCmd::InkFileExportCmd()
 void
 InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 {
-    if (export_type == "svg") {
+    // Get type from filename.
+    std::string export_type_filename;
+    if (!export_filename.empty() && export_filename != "-") {
+
+        auto extension_pos = export_filename.find_last_of('.');
+
+        if (extension_pos == std::string::npos) {
+            std::cerr << "InkFileExportCmd::do_export: No export_filename extension: " << export_filename << std::endl;
+            return;
+        }
+
+        export_type_filename = export_filename.substr(extension_pos+1);
+    }
+
+    // Check for consistency between export_type and export_filename type.
+    if (!export_type.empty() && !export_type_filename.empty() && export_type != export_type_filename) {
+        std::cerr << "InkFileExportCmd::do_export: Mismatch between export_type and export_filename extension: "
+                  << export_type << ", " << export_type_filename << std::endl;
+        return ;
+    }
+
+    // Determine type.
+    export_type_internal = "svg"; // Default
+    if (export_use_hints) {
+        if (export_type != "png" && !export_type.empty()) {
+            std::cerr << "InkFileExportCmd::do_export: --export-hints can only be used with PNG export!" << std::endl;
+            return;
+        }
+        if (!export_filename.empty()) {
+            std::cerr << "InkFileExportCmd::do_export: --export-filename cannot be used with --export-use-hints!" << std::endl;
+            return;
+        }
+        export_type_internal = "png"; // Hints only work with PNG export.
+    }
+    if (!export_type.empty()) {
+        export_type_internal = export_type;
+    }
+    if (!export_type_filename.empty()) {
+        export_type_internal = export_type_filename;
+    }
+
+    if (export_type_internal == "svg") {
 
         do_export_svg(doc, filename_in);
 
-    } else if (export_type == "png") {
+    } else if (export_type_internal == "png") {
 
         do_export_png(doc, filename_in);
 
-    } else if (export_type == "ps") {
+    } else if (export_type_internal == "ps") {
 
         do_export_ps_pdf(doc, filename_in, "image/x-postscript");
 
-    } else if (export_type == "eps") {
+    } else if (export_type_internal == "eps") {
 
         do_export_ps_pdf(doc, filename_in, "image/x-e-postscript");
 
-    } else if (export_type == "pdf") {
+    } else if (export_type_internal == "pdf") {
 
         do_export_ps_pdf(doc, filename_in, "application/pdf");
 
-    } else if (export_type == "emf") {
+    } else if (export_type_internal == "emf") {
 
         do_export_win_metafile(doc, filename_in, "image/x-emf");
 
-    } else if (export_type == "wmf") {
+    } else if (export_type_internal == "wmf") {
 
         do_export_win_metafile(doc, filename_in, "image/x-wmf");
 
-    } else if (export_type == "xaml") {
+    } else if (export_type_internal == "xaml") {
 
         do_export_win_metafile(doc, filename_in, "text/xml+xaml");
 
     } else {
 
-        std::cerr << "InkFileExportCmd::export: Unknown export type: " << export_type << std::endl;
+        std::cerr << "InkFileExportCmd::export: Unknown export type: " << export_type_internal
+                  << ". Allowed values: [svg,png,ps,eps,pdf,emf,wmf,xaml]." << std::endl;
     }
 }
 
@@ -105,44 +146,8 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 std::string
 InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_id)
 {
-
-    if (export_type != "svg"     &&
-        export_type != "png"     &&
-        export_type != "ps"      &&
-        export_type != "eps"     &&
-        export_type != "pdf"     &&
-        export_type != "emf"     &&
-        export_type != "wmf"     &&
-        export_type != "xaml"    &&
-        export_type != "svg"     ) {
-        std::cerr << "InkFileExportCmd::get_filename_out: Invalid export-type: " << export_type
-                  << "  Allowed values: [svg,png,ps,eps,pdf,emf,wmf,xaml]." << std::endl;
-        return (std::string());
-    }
-
-    // Writing to pipe.
-    if (export_filename == "-") {
-        // No need to check if valid file name.
-        return export_filename;
-    }
-
     // Use export_filename if given.
     if (!export_filename.empty()) {
-        // Check file extension matches file_type.
-        auto extension_pos = export_filename.find_last_of('.');
-
-        if (extension_pos == std::string::npos) {
-            std::cerr << "InkFileExportCmd::get_filename_out: no export_filename extension: " << export_filename << std::endl;
-            return (std::string());
-        }
-
-        std::string extension = export_filename.substr(extension_pos+1);
-        if (export_type != extension) {
-            std::cerr << "InkFileExportCmd::get_filename_out: mismatch between export_filename extension and export_type: "
-                      << extension << ", " << export_type << std::endl;
-            return (std::string());
-        }
-
         return export_filename;
     }
 
@@ -154,17 +159,17 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
     }
 
     std::string extension = filename_in.substr(extension_pos+1);
-    if (export_overwrite && export_type == extension) {
+    if (export_overwrite && export_type_internal == extension) {
         return filename_in;
     } else {
         std::string tag;
-        if (export_type == extension) {
+        if (export_type_internal == extension) {
             tag = "_out";
         }
         if (!object_id.empty()) {
             tag = "_" + object_id;
         }
-        return (filename_in.substr(0,extension_pos) + tag + "." + export_type);
+        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_internal);
     }
 
     // We need a valid file name to write to unless we're using PNG export hints.
@@ -335,9 +340,9 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
             if (o) {
                 if (!SP_IS_ITEM (o)) {
                     std::cerr << "InkFileExportCmd::do_export_png: "
-                              << "Object with id=" << object
-                              << " is not a visible item. Nothing exported." << std::endl;
-                    return 1;
+                              << "Object with id=\"" << object
+                              << "\" is not a visible item. Skipping." << std::endl;
+                    continue;
                 }
 
                 items.push_back(SP_ITEM(o));
@@ -352,17 +357,12 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                     // Retrieve export filename hint.
                     const gchar *fn_hint = o->getRepr()->attribute("inkscape:export-filename");
                     if (fn_hint) {
-                        if (!filename_out.empty()) {
-                            std::cerr << "InkFileExport::do_export_png: "
-                                      << "Using export filename from the command line."
-                                      << " Filename hint " << fn_hint << " is ignored.";
-                        } else {
-                            filename_out = fn_hint;
-                            filename_from_hint = true;
-                        }
+                        filename_out = fn_hint;
+                        filename_from_hint = true;
                     } else {
                         std::cerr << "InkFileExport::do_export_png: "
-                                  << "Export filename hint not found for the object.";
+                                  << "Export filename hint not found for object " << object << ". Skipping." << std::endl;
+                        continue;
                     }
 
                     // Retrieve export dpi hint. Only xdpi as ydpi is always the same now.
@@ -372,13 +372,13 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                             std::cerr << "InkFileExport::do_export_png: "
                                       << "Using bitmap dimensions from the command line "
                                       << "(--export-dpi, --export-width, or --export-height). "
-                                      << "DPI hint " << dpi_hint << " is ignored.";
+                                      << "DPI hint " << dpi_hint << " is ignored." << std::endl;
                         } else {
                             dpi = atof(dpi_hint);
                         }
                     } else {
                         std::cerr << "InkFileExport::do_export_png: "
-                                  << "Export DPI hint not found for the object.";
+                                  << "Export DPI hint not found for the object." << std::endl;
                     }
                 }
 
@@ -389,14 +389,14 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
                     area = *areaMaybe;
                 } else {
                     std::cerr << "InkFileExport::do_export_png: "
-                              << "Unable to determine a valid bounding box. Nothing exported.";
-                    return 1;
+                              << "Unable to determine a valid bounding box. Skipping." << std::endl;
+                    continue;
                 }
             } else {
                 std::cerr << "InkFileExport::do_export_png: "
                           << "Object with id=\"" << object
-                          << "\" was not found in the document. Nothing exported.";
-                return 1;
+                          << "\" was not found in the document. Skipping." << std::endl;
+                continue;
             }
         }
 
@@ -422,8 +422,8 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         // Check we have a filename.
         if (filename_out.empty()) {
             std::cerr << "InkFileExport::do_export_png: "
-                      << "No valid export filename given and no filename hint. Nothing exported.";
-            return 1;
+                      << "No valid export filename given and no filename hint. Skipping." << std::endl;
+            continue;
         }
 
         if (export_dpi != 0.0 && dpi == 0.0) {
