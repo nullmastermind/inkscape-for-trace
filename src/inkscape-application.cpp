@@ -99,7 +99,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
     add_main_option_entry(OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
     add_main_option_entry(OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[,VERB-ID]*"));
-    add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interative shell mode."),                                 "");
+    add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
 
     // Export - File and File Type
     add_main_option_entry(OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
