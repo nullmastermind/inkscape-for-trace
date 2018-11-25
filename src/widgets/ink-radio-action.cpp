@@ -17,15 +17,16 @@ static void ink_radio_action_set_property( GObject* obj, guint propId, const GVa
 static GtkWidget* ink_radio_action_create_menu_item( GtkAction* action );
 static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action );
 
-struct _InkRadioActionPrivate
+typedef struct
 {
     gchar* iconId;
     GtkIconSize iconSize;
-};
+} InkRadioActionPrivate;
 
-#define INK_RADIO_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), INK_RADIO_ACTION_TYPE, InkRadioActionPrivate ) )
+#define INK_RADIO_ACTION_GET_PRIVATE(o) \
+    reinterpret_cast<InkRadioActionPrivate *>(ink_radio_action_get_instance_private (o));
 
-G_DEFINE_TYPE(InkRadioAction, ink_radio_action, GTK_TYPE_RADIO_ACTION);
+G_DEFINE_TYPE_WITH_PRIVATE(InkRadioAction, ink_radio_action, GTK_TYPE_RADIO_ACTION);
 
 enum {
     PROP_INK_ID = 1,
@@ -63,24 +64,23 @@ static void ink_radio_action_class_init( InkRadioActionClass* klass )
                                                            (int)GTK_ICON_SIZE_DIALOG,
                                                            (int)GTK_ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
-
-        g_type_class_add_private( klass, sizeof(InkRadioActionClass) );
     }
 }
 
 static void ink_radio_action_init( InkRadioAction* action )
 {
-    action->private_data = INK_RADIO_ACTION_GET_PRIVATE( action );
-    action->private_data->iconId = nullptr;
-    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
+    auto priv = INK_RADIO_ACTION_GET_PRIVATE( action );
+    priv->iconId = nullptr;
+    priv->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
 static void ink_radio_action_finalize( GObject* obj )
 {
     InkRadioAction* action = INK_RADIO_ACTION( obj );
+    auto priv = INK_RADIO_ACTION_GET_PRIVATE( action );
 
-    g_free( action->private_data->iconId );
-    g_free( action->private_data );
+    g_free( priv->iconId );
+    g_free( priv );
 
 }
 
@@ -106,17 +106,18 @@ InkRadioAction* ink_radio_action_new( const gchar *name,
 static void ink_radio_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec )
 {
     InkRadioAction* action = INK_RADIO_ACTION( obj );
-    (void)action;
+    auto priv = INK_RADIO_ACTION_GET_PRIVATE (action);
+
     switch ( propId ) {
         case PROP_INK_ID:
         {
-            g_value_set_string( value, action->private_data->iconId );
+            g_value_set_string( value, priv->iconId );
         }
         break;
 
         case PROP_INK_SIZE:
         {
-            g_value_set_int( value, action->private_data->iconSize );
+            g_value_set_int( value, priv->iconSize );
         }
         break;
 
@@ -128,19 +129,20 @@ static void ink_radio_action_get_property( GObject* obj, guint propId, GValue* v
 void ink_radio_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec )
 {
     InkRadioAction* action = INK_RADIO_ACTION( obj );
-    (void)action;
+    auto priv = INK_RADIO_ACTION_GET_PRIVATE (action);
+
     switch ( propId ) {
         case PROP_INK_ID:
         {
-            gchar* tmp = action->private_data->iconId;
-            action->private_data->iconId = g_value_dup_string( value );
+            gchar* tmp = priv->iconId;
+            priv->iconId = g_value_dup_string( value );
             g_free( tmp );
         }
         break;
 
         case PROP_INK_SIZE:
         {
-            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
+            priv->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
@@ -161,13 +163,14 @@ static GtkWidget* ink_radio_action_create_menu_item( GtkAction* action )
 static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action )
 {
     InkRadioAction* act = INK_RADIO_ACTION( action );
+    auto priv = INK_RADIO_ACTION_GET_PRIVATE (act);
     GtkWidget* item = GTK_RADIO_ACTION_CLASS(ink_radio_action_parent_class)->parent_class.parent_class.create_tool_item(action);
 
-    if ( act->private_data->iconId ) {
+    if ( priv->iconId ) {
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget *child = sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
+            GtkWidget *child = sp_get_icon_image(priv->iconId, priv->iconSize);
             gtk_widget_set_hexpand(child, FALSE);
             gtk_widget_set_vexpand(child, FALSE);
             gtk_tool_button_set_icon_widget(button, child);

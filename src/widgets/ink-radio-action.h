@@ -23,12 +23,10 @@ G_BEGIN_DECLS
 
 typedef struct _InkRadioAction      InkRadioAction;
 typedef struct _InkRadioActionClass InkRadioActionClass;
-typedef struct _InkRadioActionPrivate InkRadioActionPrivate;
 
 struct _InkRadioAction
 {
     GtkRadioAction action;
-    InkRadioActionPrivate *private_data;
 };
 
 struct _InkRadioActionClass
