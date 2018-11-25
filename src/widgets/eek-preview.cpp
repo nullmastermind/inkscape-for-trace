@@ -77,13 +77,13 @@ struct EekPreviewPrivate
 };
 
 #define EEK_PREVIEW_GET_PRIVATE(preview) \
-  G_TYPE_INSTANCE_GET_PRIVATE(preview, EEK_PREVIEW_TYPE, EekPreviewPrivate)
+    reinterpret_cast<EekPreviewPrivate *>(eek_preview_get_instance_private (preview))
 
 static void     eek_preview_class_init( EekPreviewClass *klass );
 static void     eek_preview_init( EekPreview *preview );
 static gboolean eek_preview_draw(GtkWidget* widget, cairo_t* cr);
 
-G_DEFINE_TYPE(EekPreview, eek_preview, GTK_TYPE_DRAWING_AREA);
+G_DEFINE_TYPE_WITH_PRIVATE (EekPreview, eek_preview, GTK_TYPE_DRAWING_AREA);
 
 static GtkWidgetClass* parent_class = nullptr;
 
@@ -558,8 +558,6 @@ static void eek_preview_class_init( EekPreviewClass *klass )
     /* For keybindings: */
     widgetClass->popup_menu = eek_preview_popup_menu;
 
-    g_type_class_add_private(gobjClass, sizeof(EekPreviewPrivate));
-
     eek_preview_signals[CLICKED_SIGNAL] =
         g_signal_new( "clicked",
                       G_TYPE_FROM_CLASS( klass ),
@@ -596,7 +594,7 @@ eek_preview_set_linked(EekPreview *preview,
 {
     EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
 
-    g_return_if_fail(IS_EEK_PREVIEW(preview));
+    g_return_if_fail(EEK_IS_PREVIEW(preview));
 
     link = (LinkType)(link & PREVIEW_LINK_ALL);
 
@@ -611,7 +609,7 @@ eek_preview_set_linked(EekPreview *preview,
 LinkType
 eek_preview_get_linked(EekPreview *preview)
 {
-    g_return_val_if_fail(IS_EEK_PREVIEW(preview), PREVIEW_LINK_NONE);
+    g_return_val_if_fail(EEK_IS_PREVIEW(preview), PREVIEW_LINK_NONE);
 
     return (LinkType)EEK_PREVIEW_GET_PRIVATE(preview)->linked;
 }
@@ -619,7 +617,7 @@ eek_preview_get_linked(EekPreview *preview)
 gboolean
 eek_preview_get_focus_on_click(EekPreview* preview)
 {
-    g_return_val_if_fail(IS_EEK_PREVIEW(preview), FALSE);
+    g_return_val_if_fail(EEK_IS_PREVIEW(preview), FALSE);
 
     return EEK_PREVIEW_GET_PRIVATE(preview)->takesFocus;
 }
@@ -630,7 +628,7 @@ eek_preview_set_focus_on_click(EekPreview *preview,
 {
     EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
 
-    g_return_if_fail(IS_EEK_PREVIEW(preview));
+    g_return_if_fail(EEK_IS_PREVIEW(preview));
 
     if (focus_on_click != priv->takesFocus)
     {
@@ -647,7 +645,7 @@ eek_preview_set_details(EekPreview   *preview,
 {
     EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
 
-    g_return_if_fail(IS_EEK_PREVIEW(preview));
+    g_return_if_fail(EEK_IS_PREVIEW(preview));
 
     priv->view  = view;
 
@@ -709,7 +707,7 @@ eek_preview_init(EekPreview *preview)
 
 GtkWidget* eek_preview_new(void)
 {
-    return GTK_WIDGET( g_object_new( EEK_PREVIEW_TYPE, nullptr ) );
+    return GTK_WIDGET( g_object_new( EEK_TYPE_PREVIEW, nullptr ) );
 }
 
 /*
