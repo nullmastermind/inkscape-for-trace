@@ -60,7 +60,6 @@ G_BEGIN_DECLS
 
 typedef struct _EgeOutputAction      EgeOutputAction;
 typedef struct _EgeOutputActionClass EgeOutputActionClass;
-typedef struct _EgeOutputActionPrivate EgeOutputActionPrivate;
 
 /**
  * Instance structure of EgeOutputAction.
@@ -69,9 +68,6 @@ struct _EgeOutputAction
 {
     /** Parent instance structure. */
     GtkAction action;
-
-    /** Pointer to private instance data. */
-    EgeOutputActionPrivate *private_data;
 };
 
 /**

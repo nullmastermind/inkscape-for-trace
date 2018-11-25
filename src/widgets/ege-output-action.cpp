@@ -56,18 +56,18 @@ static void fixup_labels( GObject *gobject, GParamSpec *arg1, gpointer user_data
 /* static GtkWidget* create_menu_item( GtkAction* action ); */
 static GtkWidget* create_tool_item( GtkAction* action );
 
-struct _EgeOutputActionPrivate
-{
+typedef struct {
     gboolean useMarkup;
-};
+} EgeOutputActionPrivate;
 
-#define EGE_OUTPUT_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), EGE_OUTPUT_ACTION_TYPE, EgeOutputActionPrivate ) )
+#define EGE_OUTPUT_ACTION_GET_PRIVATE( o ) \
+    reinterpret_cast<EgeOutputActionPrivate *>(ege_output_action_get_instance_private (o))
 
 enum {
     PROP_USE_MARKUP = 1,
 };
 
-G_DEFINE_TYPE(EgeOutputAction, ege_output_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE_WITH_PRIVATE(EgeOutputAction, ege_output_action, GTK_TYPE_ACTION);
 
 void ege_output_action_class_init( EgeOutputActionClass* klass )
 {
@@ -87,16 +87,14 @@ void ege_output_action_class_init( EgeOutputActionClass* klass )
                                                                "If markup should be used",
                                                                FALSE,
                                                                (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
-
-        g_type_class_add_private( klass, sizeof(EgeOutputActionClass) );
     }
 }
 
 
 void ege_output_action_init( EgeOutputAction* action )
 {
-    action->private_data = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
-    action->private_data->useMarkup = FALSE;
+    auto priv = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
+    priv->useMarkup = FALSE;
 
     g_signal_connect( action, "notify", G_CALLBACK( fixup_labels ), NULL );
 }
@@ -122,8 +120,9 @@ EgeOutputAction* ege_output_action_new( const gchar *name,
 gboolean ege_output_action_get_use_markup( EgeOutputAction* action )
 {
     g_return_val_if_fail( IS_EGE_OUTPUT_ACTION(action), FALSE );
+    auto priv = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
 
-    return action->private_data->useMarkup;
+    return priv->useMarkup;
 }
 
 void ege_output_action_set_use_markup( EgeOutputAction* action, gboolean setting )
@@ -134,9 +133,10 @@ void ege_output_action_set_use_markup( EgeOutputAction* action, gboolean setting
 void ege_output_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec )
 {
     EgeOutputAction* action = EGE_OUTPUT_ACTION( obj );
+    auto priv = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
     switch ( propId ) {
         case PROP_USE_MARKUP:
-            g_value_set_boolean( value, action->private_data->useMarkup );
+            g_value_set_boolean( value, priv->useMarkup );
             break;
 
         default:
@@ -147,10 +147,11 @@ void ege_output_action_get_property( GObject* obj, guint propId, GValue* value, 
 void ege_output_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec )
 {
     EgeOutputAction* action = EGE_OUTPUT_ACTION( obj );
+    auto priv = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
     switch ( propId ) {
         case PROP_USE_MARKUP:
         {
-            action->private_data->useMarkup = g_value_get_boolean( value );
+            priv->useMarkup = g_value_get_boolean( value );
         }
         break;
 
@@ -168,6 +169,8 @@ GtkWidget* create_tool_item( GtkAction* action )
 
     if ( IS_EGE_OUTPUT_ACTION(action) )
     {
+        auto act  = EGE_OUTPUT_ACTION (action);
+        auto priv = EGE_OUTPUT_ACTION_GET_PRIVATE( act );
         GValue value;
         auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
@@ -183,7 +186,7 @@ GtkWidget* create_tool_item( GtkAction* action )
         lbl = gtk_label_new( " " );
         gtk_container_add( GTK_CONTAINER(hb), lbl );
 
-        if ( EGE_OUTPUT_ACTION(action)->private_data->useMarkup ) {
+        if ( priv->useMarkup ) {
             lbl = gtk_label_new(nullptr);
             gtk_label_set_markup( GTK_LABEL(lbl), sss ? sss : " " );
         } else {
@@ -227,7 +230,9 @@ void fixup_labels( GObject *gobject, GParamSpec *arg1, gpointer user_data )
                             Gtk::Widget *child = children[1];
                             if ( GTK_IS_LABEL(child->gobj()) ) {
                                 Gtk::Label* lbl = dynamic_cast<Gtk::Label *>(child);
-                                if ( EGE_OUTPUT_ACTION(gobject)->private_data->useMarkup ) {
+                                auto action = EGE_OUTPUT_ACTION(gobject);
+                                auto priv   = EGE_OUTPUT_ACTION_GET_PRIVATE( action );
+                                if ( priv->useMarkup ) {
                                     lbl->set_markup(str2);
                                 } else {
                                     lbl->set_text(str2);
@@ -242,4 +247,13 @@ void fixup_labels( GObject *gobject, GParamSpec *arg1, gpointer user_data )
         g_free( str );
     }
 }
-
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
