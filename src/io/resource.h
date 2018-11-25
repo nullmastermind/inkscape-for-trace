@@ -45,7 +45,7 @@ enum Type {
     THEMES,
     UIS,
     PIXMAPS,
-    DATADIR
+    DATA_DIR
 };
 
 enum Domain {
