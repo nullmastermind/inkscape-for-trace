@@ -52,28 +52,8 @@ typedef struct _GtkWidget GtkWidget;
 
 G_BEGIN_DECLS
 
-#define EGE_COLOR_PROF_TRACKER_TYPE                ( ege_color_prof_tracker_get_type() )
-#define EGE_COLOR_PROF_TRACKER( obj )              ( G_TYPE_CHECK_INSTANCE_CAST( (obj), EGE_COLOR_PROF_TRACKER_TYPE, EgeColorProfTracker) )
-#define EGE_COLOR_PROF_TRACKER_CLASS( klass )      ( G_TYPE_CHECK_CLASS_CAST( (klass), EGE_COLOR_PROF_TRACKER_TYPE, EgeColorProfTrackerClass) )
-#define IS_EGE_COLOR_PROF_TRACKER( obj )           ( G_TYPE_CHECK_INSTANCE_TYPE( (obj), EGE_COLOR_PROF_TRACKER_TYPE) )
-#define IS_EGE_COLOR_PROF_TRACKER_CLASS( klass )   ( G_TYPE_CHECK_CLASS_TYPE( (klass), EGE_COLOR_PROF_TRACKER_TYPE) )
-#define EGE_COLOR_PROF_TRACKER_GET_CLASS( obj )    ( G_TYPE_INSTANCE_GET_CLASS( (obj), EGE_COLOR_PROF_TRACKER_TYPE, EgeColorProfTrackerClass) )
-
-typedef struct _EgeColorProfTracker        EgeColorProfTracker;
-typedef struct _EgeColorProfTrackerClass   EgeColorProfTrackerClass;
-typedef struct _EgeColorProfTrackerPrivate EgeColorProfTrackerPrivate;
-
-/**
- * Instance structure of EgeColorProfTracker.
- */
-struct _EgeColorProfTracker
-{
-    /** Parent instance structure. */
-    GObject object;
-
-    /** Pointer to private instance data. */
-    EgeColorProfTrackerPrivate *private_data;
-};
+#define EGE_TYPE_COLOR_PROF_TRACKER ege_color_prof_tracker_get_type ()
+G_DECLARE_DERIVABLE_TYPE (EgeColorProfTracker, ege_color_prof_tracker, EGE, COLOR_PROF_TRACKER, GObject)
 
 /**
  * Class structure of EgeColorProfTracker.
@@ -85,9 +65,6 @@ struct _EgeColorProfTrackerClass
 
     void (*changed) (EgeColorProfTracker* tracker);
 };
-
-/** Standard Gtk type function */
-GType ege_color_prof_tracker_get_type( void );
 
 /**
  * Creates a new EgeColorProfTracker instance.

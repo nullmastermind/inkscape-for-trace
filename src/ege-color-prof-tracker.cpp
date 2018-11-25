@@ -94,14 +94,14 @@ static ScreenTrack *tracked_screen = nullptr;
 
 static std::vector<EgeColorProfTracker *> abstract_trackers;
 
-struct _EgeColorProfTrackerPrivate
+typedef struct
 {
     GtkWidget* _target;
     gint _monitor;
-};
+} EgeColorProfTrackerPrivate;
 
-#define EGE_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), EGE_COLOR_PROF_TRACKER_TYPE, EgeColorProfTrackerPrivate ) )
-
+#define EGE_COLOR_PROF_TRACKER_GET_PRIVATE( o ) \
+    reinterpret_cast<EgeColorProfTrackerPrivate *>( ege_color_prof_tracker_get_instance_private (o))
 
 static void target_finalized( gpointer data, GObject* where_the_object_was );
 static void window_finalized( gpointer data, GObject* where_the_object_was );
@@ -111,7 +111,7 @@ static void target_screen_changed_cb(GtkWidget* widget, GdkScreen* prev_screen, 
 static void screen_size_changed_cb(GdkScreen* screen, gpointer user_data);
 static void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker );
 
-G_DEFINE_TYPE(EgeColorProfTracker, ege_color_prof_tracker, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (EgeColorProfTracker, ege_color_prof_tracker, G_TYPE_OBJECT);
 
 void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
 {
@@ -158,26 +158,25 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                           g_cclosure_marshal_VOID__INT,
                                           G_TYPE_NONE, 1,
                                           G_TYPE_INT);
-
-        g_type_class_add_private( klass, sizeof(EgeColorProfTrackerClass) );
     }
 }
 
 
 void ege_color_prof_tracker_init( EgeColorProfTracker* tracker )
 {
-    tracker->private_data = EGE_GET_PRIVATE( tracker );
-    tracker->private_data->_target = nullptr;
-    tracker->private_data->_monitor = 0;
+    auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE( tracker );
+    priv->_target = nullptr;
+    priv->_monitor = 0;
 }
 
 EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
 {
-    GObject* obj = (GObject*)g_object_new( EGE_COLOR_PROF_TRACKER_TYPE,
+    GObject* obj = (GObject*)g_object_new( EGE_TYPE_COLOR_PROF_TRACKER,
                                            nullptr );
 
     EgeColorProfTracker* tracker = EGE_COLOR_PROF_TRACKER( obj );
-    tracker->private_data->_target = target;
+    auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (tracker);
+    priv->_target = target;
 
     if ( target ) {
         g_object_weak_ref( G_OBJECT(target), target_finalized, obj );
@@ -203,14 +202,15 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
 
 void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gpointer* ptr, guint* len )
 {
+    auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE( const_cast<EgeColorProfTracker *>(tracker) );
     gpointer dataPos = nullptr;
     guint dataLen = 0;
     if (tracker) {
-        if (tracker->private_data->_target ) {
-            GdkScreen* screen = gtk_widget_get_screen(tracker->private_data->_target);
+        if (priv->_target ) {
+            GdkScreen* screen = gtk_widget_get_screen(priv->_target);
             if ( tracked_screen ) {
-                if ( tracker->private_data->_monitor >= 0 && tracker->private_data->_monitor < (static_cast<gint>(tracked_screen->profiles->len))) {
-                    GByteArray* gba = static_cast<GByteArray*>(g_ptr_array_index(tracked_screen->profiles, tracker->private_data->_monitor));
+                if ( priv->_monitor >= 0 && priv->_monitor < (static_cast<gint>(tracked_screen->profiles->len))) {
+                    GByteArray* gba = static_cast<GByteArray*>(g_ptr_array_index(tracked_screen->profiles, priv->_monitor));
                     if ( gba ) {
                         dataPos = gba->data;
                         dataLen = gba->len;
@@ -330,9 +330,10 @@ void target_finalized( gpointer data, GObject* where_the_object_was )
     (void)data;
     if ( tracked_screen ) {
         for (auto i = tracked_screen->trackers->begin(); i != tracked_screen->trackers->end(); ++i) {
-            if ( (void*)((*i)->private_data->_target) == (void*)where_the_object_was ) {
+            auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (*i);
+            if ( (void*)(priv->_target) == (void*)where_the_object_was ) {
                 /* The tracked widget is now gone, remove it */
-                (*i)->private_data->_target = nullptr;
+                priv->_target = nullptr;
                 tracked_screen->trackers->erase(i);
                 break;
             }
@@ -352,6 +353,7 @@ void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
     if ( event->type == GDK_CONFIGURE ) {
         GdkWindow* window = gtk_widget_get_window (widget);
         EgeColorProfTracker* tracker = (EgeColorProfTracker*)user_data;
+        auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (tracker);
 
         // In old Gtk+ versions, we can directly find the ID number for a monitor.
         // In Gtk+ >= 3.22, however, we need to figure out the ID
@@ -373,8 +375,8 @@ void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
         gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
 #endif
 
-        if ( monitorNum != tracker->private_data->_monitor && monitorNum != -1 ) {
-            tracker->private_data->_monitor = monitorNum;
+        if ( monitorNum != priv->_monitor && monitorNum != -1 ) {
+            priv->_monitor = monitorNum;
             g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
         }
     }
@@ -582,7 +584,8 @@ void fire(gint monitor)
 {
     if ( tracked_screen ) {
         for (auto tracker:(*(tracked_screen->trackers))) {
-            if ( (monitor == -1) || (tracker->private_data->_monitor == monitor) ) {
+            auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (tracker);
+            if ( (monitor == -1) || (priv->_monitor == monitor) ) {
                 g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
             }
         }
