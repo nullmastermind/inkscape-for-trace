@@ -60,7 +60,6 @@ G_BEGIN_DECLS
 
 typedef struct _EgeAdjustmentAction      EgeAdjustmentAction;
 typedef struct _EgeAdjustmentActionClass EgeAdjustmentActionClass;
-typedef struct _EgeAdjustmentActionPrivate EgeAdjustmentActionPrivate;
 
 namespace Inkscape {
     namespace UI {
@@ -77,9 +76,6 @@ struct _EgeAdjustmentAction
 {
     /** Parent instance structure. */
     GtkAction action;
-
-    /** Pointer to private instance data. */
-    EgeAdjustmentActionPrivate *private_data;
 };
 
 /**

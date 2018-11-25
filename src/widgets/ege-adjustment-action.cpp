@@ -102,8 +102,7 @@ struct _EgeAdjustmentDescr
     gdouble value;
 };
 
-struct _EgeAdjustmentActionPrivate
-{
+typedef struct {
     GtkAdjustment* adj;
     GtkWidget* focusWidget;
     gdouble climbRate;
@@ -122,9 +121,10 @@ struct _EgeAdjustmentActionPrivate
     gchar* iconId;
     GtkIconSize iconSize;
     Inkscape::UI::Widget::UnitTracker *unitTracker;
-};
+} EgeAdjustmentActionPrivate;
 
-#define EGE_ADJUSTMENT_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), EGE_ADJUSTMENT_ACTION_TYPE, EgeAdjustmentActionPrivate ) )
+#define EGE_ADJUSTMENT_ACTION_GET_PRIVATE(o) \
+    reinterpret_cast<EgeAdjustmentActionPrivate *>( ege_adjustment_action_get_instance_private (o))
 
 enum {
     PROP_ADJUSTMENT = 1,
@@ -150,7 +150,7 @@ enum {
     BUMP_CUSTOM = 100
 };
 
-G_DEFINE_TYPE(EgeAdjustmentAction, ege_adjustment_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE_WITH_PRIVATE(EgeAdjustmentAction, ege_adjustment_action, GTK_TYPE_ACTION);
 
 static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass )
 {
@@ -248,8 +248,6 @@ static void ege_adjustment_action_class_init( EgeAdjustmentActionClass* klass )
                                                                "Unit Tracker",
                                                                "The widget that keeps track of the unit",
                                                                (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
-
-        g_type_class_add_private( klass, sizeof(EgeAdjustmentActionClass) );
     }
 }
 
@@ -260,25 +258,25 @@ void ege_adjustment_action_set_compact_tool_factory( EgeCreateAdjWidgetCB factor
 
 static void ege_adjustment_action_init( EgeAdjustmentAction* action )
 {
-    action->private_data = EGE_ADJUSTMENT_ACTION_GET_PRIVATE( action );
-    action->private_data->adj = nullptr;
-    action->private_data->focusWidget = nullptr;
-    action->private_data->climbRate = 0.0;
-    action->private_data->digits = 2;
-    action->private_data->epsilon = 0.009;
-    action->private_data->format = g_strdup_printf("%%0.%df%%s%%s", action->private_data->digits);
-    action->private_data->selfId = nullptr;
-    action->private_data->toolPost = nullptr;
-    action->private_data->lastVal = 0.0;
-    action->private_data->step = 0.0;
-    action->private_data->page = 0.0;
-    action->private_data->appearanceMode = APPEARANCE_NONE;
-    action->private_data->transferFocus = FALSE;
-    //action->private_data->descriptions = 0;
-    action->private_data->appearance = nullptr;
-    action->private_data->iconId = nullptr;
-    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
-    action->private_data->unitTracker = nullptr;
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE( action );
+    priv->adj = nullptr;
+    priv->focusWidget = nullptr;
+    priv->climbRate = 0.0;
+    priv->digits = 2;
+    priv->epsilon = 0.009;
+    priv->format = g_strdup_printf("%%0.%df%%s%%s", priv->digits);
+    priv->selfId = nullptr;
+    priv->toolPost = nullptr;
+    priv->lastVal = 0.0;
+    priv->step = 0.0;
+    priv->page = 0.0;
+    priv->appearanceMode = APPEARANCE_NONE;
+    priv->transferFocus = FALSE;
+    //priv->descriptions = 0;
+    priv->appearance = nullptr;
+    priv->iconId = nullptr;
+    priv->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
+    priv->unitTracker = nullptr;
 }
 
 static void ege_adjustment_action_finalize( GObject* object )
@@ -288,12 +286,13 @@ static void ege_adjustment_action_finalize( GObject* object )
     g_return_if_fail( IS_EGE_ADJUSTMENT_ACTION(object) );
 
     action = EGE_ADJUSTMENT_ACTION( object );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
 
     // g_free(NULL) does nothing
-    g_free( action->private_data->format );
-    g_free( action->private_data->selfId );
-    g_free( action->private_data->appearance );
-    g_free( action->private_data->iconId );
+    g_free( priv->format );
+    g_free( priv->selfId );
+    g_free( priv->appearance );
+    g_free( priv->iconId );
 
     egeAct_free_all_descriptions( action );
 
@@ -330,45 +329,46 @@ EgeAdjustmentAction* ege_adjustment_action_new( GtkAdjustment* adjustment,
 static void ege_adjustment_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec )
 {
     EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION( obj );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
     switch ( propId ) {
         case PROP_ADJUSTMENT:
-            g_value_set_object( value, action->private_data->adj );
+            g_value_set_object( value, priv->adj );
             break;
 
         case PROP_FOCUS_WIDGET:
-            g_value_set_pointer( value, action->private_data->focusWidget );
+            g_value_set_pointer( value, priv->focusWidget );
             break;
 
         case PROP_CLIMB_RATE:
-            g_value_set_double( value, action->private_data->climbRate );
+            g_value_set_double( value, priv->climbRate );
             break;
 
         case PROP_DIGITS:
-            g_value_set_uint( value, action->private_data->digits );
+            g_value_set_uint( value, priv->digits );
             break;
 
         case PROP_SELFID:
-            g_value_set_string( value, action->private_data->selfId );
+            g_value_set_string( value, priv->selfId );
             break;
 
         case PROP_TOOL_POST:
-            g_value_set_pointer( value, (void*)action->private_data->toolPost );
+            g_value_set_pointer( value, (void*)priv->toolPost );
             break;
 
         case PROP_APPEARANCE:
-            g_value_set_string( value, action->private_data->appearance );
+            g_value_set_string( value, priv->appearance );
             break;
 
         case PROP_ICON_ID:
-            g_value_set_string( value, action->private_data->iconId );
+            g_value_set_string( value, priv->iconId );
             break;
 
         case PROP_ICON_SIZE:
-            g_value_set_int( value, action->private_data->iconSize );
+            g_value_set_int( value, priv->iconSize );
             break;
 
         case PROP_UNIT_TRACKER:
-            g_value_set_pointer( value, action->private_data->unitTracker );
+            g_value_set_pointer( value, priv->unitTracker );
             break;
 
         default:
@@ -379,13 +379,14 @@ static void ege_adjustment_action_get_property( GObject* obj, guint propId, GVal
 void ege_adjustment_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec )
 {
     EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION( obj );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
     switch ( propId ) {
         case PROP_ADJUSTMENT:
         {
-            action->private_data->adj = GTK_ADJUSTMENT( g_value_get_object( value ) );
-            g_object_get( G_OBJECT(action->private_data->adj),
-                          "step-increment", &action->private_data->step,
-                          "page-increment", &action->private_data->page,
+            priv->adj = GTK_ADJUSTMENT( g_value_get_object( value ) );
+            g_object_get( G_OBJECT(priv->adj),
+                          "step-increment", &priv->step,
+                          "page-increment", &priv->page,
                           NULL );
         }
         break;
@@ -393,88 +394,88 @@ void ege_adjustment_action_set_property( GObject* obj, guint propId, const GValu
         case PROP_FOCUS_WIDGET:
         {
             /* TODO unhook prior */
-            action->private_data->focusWidget = (GtkWidget*)g_value_get_pointer( value );
+            priv->focusWidget = (GtkWidget*)g_value_get_pointer( value );
         }
         break;
 
         case PROP_CLIMB_RATE:
         {
             /* TODO pass on */
-            action->private_data->climbRate = g_value_get_double( value );
+            priv->climbRate = g_value_get_double( value );
         }
         break;
 
         case PROP_DIGITS:
         {
             /* TODO pass on */
-            action->private_data->digits = g_value_get_uint( value );
-            switch ( action->private_data->digits ) {
-                case 0: action->private_data->epsilon = 0.9; break;
-                case 1: action->private_data->epsilon = 0.09; break;
-                case 2: action->private_data->epsilon = 0.009; break;
-                case 3: action->private_data->epsilon = 0.0009; break;
-                case 4: action->private_data->epsilon = 0.00009; break;
+            priv->digits = g_value_get_uint( value );
+            switch ( priv->digits ) {
+                case 0: priv->epsilon = 0.9; break;
+                case 1: priv->epsilon = 0.09; break;
+                case 2: priv->epsilon = 0.009; break;
+                case 3: priv->epsilon = 0.0009; break;
+                case 4: priv->epsilon = 0.00009; break;
             }
-            if ( action->private_data->format ) {
-                g_free( action->private_data->format );
+            if ( priv->format ) {
+                g_free( priv->format );
             }
-            action->private_data->format = g_strdup_printf("%%0.%df%%s%%s", action->private_data->digits);
+            priv->format = g_strdup_printf("%%0.%df%%s%%s", priv->digits);
         }
         break;
 
         case PROP_SELFID:
         {
             /* TODO pass on */
-            gchar* prior = action->private_data->selfId;
-            action->private_data->selfId = g_value_dup_string( value );
+            gchar* prior = priv->selfId;
+            priv->selfId = g_value_dup_string( value );
             g_free( prior );
         }
         break;
 
         case PROP_TOOL_POST:
         {
-            action->private_data->toolPost = (EgeWidgetFixup)g_value_get_pointer( value );
+            priv->toolPost = (EgeWidgetFixup)g_value_get_pointer( value );
         }
         break;
 
         case PROP_APPEARANCE:
         {
-            gchar* tmp = action->private_data->appearance;
+            gchar* tmp = priv->appearance;
             gchar* newVal = g_value_dup_string( value );
-            action->private_data->appearance = newVal;
+            priv->appearance = newVal;
             g_free( tmp );
 
-            if ( !action->private_data->appearance || (strcmp("", newVal) == 0) ) {
-                action->private_data->appearanceMode = APPEARANCE_NONE;
+            if ( !priv->appearance || (strcmp("", newVal) == 0) ) {
+                priv->appearanceMode = APPEARANCE_NONE;
             } else if ( strcmp("full", newVal) == 0 ) {
-                action->private_data->appearanceMode = APPEARANCE_FULL;
+                priv->appearanceMode = APPEARANCE_FULL;
             } else if ( strcmp("compact", newVal) == 0 ) {
-                action->private_data->appearanceMode = APPEARANCE_COMPACT;
+                priv->appearanceMode = APPEARANCE_COMPACT;
             } else if ( strcmp("minimal", newVal) == 0 ) {
-                action->private_data->appearanceMode = APPEARANCE_MINIMAL;
+                priv->appearanceMode = APPEARANCE_MINIMAL;
             } else {
-                action->private_data->appearanceMode = APPEARANCE_UNKNOWN;
+                priv->appearanceMode = APPEARANCE_UNKNOWN;
             }
         }
         break;
 
         case PROP_ICON_ID:
         {
-            gchar* tmp = action->private_data->iconId;
-            action->private_data->iconId = g_value_dup_string( value );
+            gchar* tmp = priv->iconId;
+            priv->iconId = g_value_dup_string( value );
             g_free( tmp );
         }
         break;
 
         case PROP_ICON_SIZE:
         {
-            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
+            priv->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
         case PROP_UNIT_TRACKER:
         {
-            action->private_data->unitTracker = (Inkscape::UI::Widget::UnitTracker*)g_value_get_pointer( value );
+            priv->unitTracker = (Inkscape::UI::Widget::UnitTracker*)g_value_get_pointer( value );
         }
         break;
 
@@ -487,23 +488,27 @@ GtkAdjustment* ege_adjustment_action_get_adjustment( EgeAdjustmentAction* action
 {
     g_return_val_if_fail( IS_EGE_ADJUSTMENT_ACTION(action), NULL );
 
-    return action->private_data->adj;
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
+
+    return priv->adj;
 }
 
 void ege_adjustment_action_set_focuswidget( EgeAdjustmentAction* action, GtkWidget* widget )
 {
     g_return_if_fail( IS_EGE_ADJUSTMENT_ACTION(action) );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
 
     /* TODO unhook prior */
 
-    action->private_data->focusWidget = widget;
+    priv->focusWidget = widget;
 }
 
 GtkWidget* ege_adjustment_action_get_focuswidget( EgeAdjustmentAction* action )
 {
     g_return_val_if_fail( IS_EGE_ADJUSTMENT_ACTION(action), NULL );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
 
-    return action->private_data->focusWidget;
+    return priv->focusWidget;
 }
 
 static void egeAct_free_description( gpointer data, gpointer user_data ) {
@@ -520,13 +525,14 @@ static void egeAct_free_description( gpointer data, gpointer user_data ) {
 
 static void egeAct_free_all_descriptions( EgeAdjustmentAction* action )
 {
-    for(auto i:action->private_data->descriptions) {
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
+    for(auto i:priv->descriptions) {
         egeAct_free_description(i,nullptr);
     }
-    for(auto i:action->private_data->descriptions) {
+    for(auto i:priv->descriptions) {
         g_free(i);
     }
-    action->private_data->descriptions.clear();
+    priv->descriptions.clear();
 }
 
 static gint egeAct_compare_descriptions( gconstpointer a, gconstpointer b )
@@ -550,6 +556,7 @@ static gint egeAct_compare_descriptions( gconstpointer a, gconstpointer b )
 void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar const** descriptions, gdouble const* values, guint count )
 {
     g_return_if_fail( IS_EGE_ADJUSTMENT_ACTION(action) );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
 
     egeAct_free_all_descriptions( action );
 
@@ -559,8 +566,8 @@ void ege_adjustment_action_set_descriptions( EgeAdjustmentAction* action, gchar 
             EgeAdjustmentDescr* descr = g_new0( EgeAdjustmentDescr, 1 );
             descr->descr = descriptions[i] ? g_strdup( descriptions[i] ) : nullptr;
             descr->value = values[i];
-            action->private_data->descriptions.push_back(descr);
-            std::sort(action->private_data->descriptions.begin(),action->private_data->descriptions.end());
+            priv->descriptions.push_back(descr);
+            std::sort(priv->descriptions.begin(),priv->descriptions.end());
         }
     }
 }
@@ -575,15 +582,16 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
     GtkCheckMenuItem* item = GTK_CHECK_MENU_ITEM(obj);
     if ( gtk_check_menu_item_get_active (item)) {
         EgeAdjustmentAction* act = (EgeAdjustmentAction*)g_object_get_qdata( G_OBJECT(obj), gDataName );
+        auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (act);
         gint what = GPOINTER_TO_INT(data);
 
 
-        gdouble base = gtk_adjustment_get_value( act->private_data->adj );
+        gdouble base = gtk_adjustment_get_value( priv->adj );
         gdouble lower = 0.0;
         gdouble upper = 0.0;
         gdouble step = 0.0;
         gdouble page = 0.0;
-        g_object_get( G_OBJECT(act->private_data->adj),
+        g_object_get( G_OBJECT(priv->adj),
                       "lower", &lower,
                       "upper", &upper,
                       "step-increment", &step,
@@ -592,36 +600,36 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
 
         switch ( what ) {
             case BUMP_TOP:
-                gtk_adjustment_set_value( act->private_data->adj, upper );
+                gtk_adjustment_set_value( priv->adj, upper );
                 break;
 
             case BUMP_PAGE_UP:
-                gtk_adjustment_set_value( act->private_data->adj, base + page );
+                gtk_adjustment_set_value( priv->adj, base + page );
                 break;
 
             case BUMP_UP:
-                gtk_adjustment_set_value( act->private_data->adj, base + step );
+                gtk_adjustment_set_value( priv->adj, base + step );
                 break;
 
             case BUMP_DOWN:
-                gtk_adjustment_set_value( act->private_data->adj, base - step );
+                gtk_adjustment_set_value( priv->adj, base - step );
                 break;
 
             case BUMP_PAGE_DOWN:
-                gtk_adjustment_set_value( act->private_data->adj, base - page );
+                gtk_adjustment_set_value( priv->adj, base - page );
                 break;
 
             case BUMP_BOTTOM:
-                gtk_adjustment_set_value( act->private_data->adj, lower );
+                gtk_adjustment_set_value( priv->adj, lower );
                 break;
 
             default:
                 if ( what >= BUMP_CUSTOM ) {
                     guint index = what - BUMP_CUSTOM;
-                    if ( index < act->private_data->descriptions.size() ) {
-                        EgeAdjustmentDescr* descr = act->private_data->descriptions[index];
+                    if ( index < priv->descriptions.size() ) {
+                        EgeAdjustmentDescr* descr = priv->descriptions[index];
                         if ( descr ) {
-                            gtk_adjustment_set_value( act->private_data->adj, descr->value );
+                            gtk_adjustment_set_value( priv->adj, descr->value );
                         }
                     }
                 }
@@ -631,22 +639,23 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
 
 static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, Gtk::RadioMenuItem::Group *group, gdouble num, gboolean active )
 {
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (act);
     char* str = nullptr;
     EgeAdjustmentDescr* marker = nullptr;
-    std::vector<EgeAdjustmentDescr*> cur = act->private_data->descriptions;
+    std::vector<EgeAdjustmentDescr*> cur = priv->descriptions;
 
     for (auto descr:cur) {
         gdouble delta = num - descr->value;
         if ( delta < 0.0 ) {
             delta = -delta;
         }
-        if ( delta < act->private_data->epsilon ) {
+        if ( delta < priv->epsilon ) {
             marker = descr;
             break;
         }
     }
 
-    str = g_strdup_printf( act->private_data->format, num,
+    str = g_strdup_printf( priv->format, num,
                            ((marker && marker->descr) ? ": " : ""),
                            ((marker && marker->descr) ? marker->descr : ""));
 
@@ -675,13 +684,14 @@ static int flush_explicit_items( std::vector<EgeAdjustmentDescr*> descriptions,
 {
     if(pos >= descriptions.size() || pos < 0) return pos;
     EgeAdjustmentDescr* descr = descriptions[pos];
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (act);
 
-    gdouble valUpper = num + act->private_data->epsilon;
-    gdouble valLower = num - act->private_data->epsilon;
+    gdouble valUpper = num + priv->epsilon;
+    gdouble valLower = num - priv->epsilon;
 
     while ( pos>=0 && pos<descriptions.size() && descr && (descr->value >= valLower) ) {
         if ( descr->value > valUpper ) {
-            create_single_menu_item( toggleCb, val + ( std::find(act->private_data->descriptions.begin(),act->private_data->descriptions.end(),descr) - act->private_data->descriptions.begin() ) , menu, act, dst, group, descr->value, FALSE );
+            create_single_menu_item( toggleCb, val + ( std::find(priv->descriptions.begin(),priv->descriptions.end(),descr) - priv->descriptions.begin() ) , menu, act, dst, group, descr->value, FALSE );
         }
         pos--;
         descr = (pos<0) ? descriptions[pos] : nullptr;
@@ -692,19 +702,20 @@ static int flush_explicit_items( std::vector<EgeAdjustmentDescr*> descriptions,
 
 static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
 {
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (act);
     GtkWidget* menu = gtk_menu_new();
 
     Gtk::RadioMenuItem::Group group;
     GtkWidget* single = nullptr;
-    std::vector<EgeAdjustmentDescr*> list = act->private_data->descriptions;
+    std::vector<EgeAdjustmentDescr*> list = priv->descriptions;
     int addOns = list.size() - 1;
 
-    gdouble base = gtk_adjustment_get_value( act->private_data->adj );
+    gdouble base = gtk_adjustment_get_value( priv->adj );
     gdouble lower = 0.0;
     gdouble upper = 0.0;
     gdouble step = 0.0;
     gdouble page = 0.0;
-    g_object_get( G_OBJECT(act->private_data->adj),
+    g_object_get( G_OBJECT(priv->adj),
                   "lower", &lower,
                   "upper", &upper,
                   "step-increment", &step,
@@ -741,8 +752,8 @@ static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
         create_single_menu_item( G_CALLBACK(process_menu_action), BUMP_BOTTOM, menu, act, &single, &group, lower, FALSE );
     }
 
-    if ( !act->private_data->descriptions.empty() ) {
-        gdouble value = ((EgeAdjustmentDescr*)act->private_data->descriptions[0])->value;
+    if ( !priv->descriptions.empty() ) {
+        gdouble value = ((EgeAdjustmentDescr*)priv->descriptions[0])->value;
         flush_explicit_items( list, addOns, G_CALLBACK(process_menu_action), BUMP_CUSTOM, menu, act, &single, &group, value );
     }
 
@@ -817,6 +828,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
     if ( IS_EGE_ADJUSTMENT_ACTION(action) ) {
         EgeAdjustmentAction* act = EGE_ADJUSTMENT_ACTION( action );
+        auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (act);
         GtkWidget* spinbutton = nullptr;
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
@@ -825,24 +837,24 @@ static GtkWidget* create_tool_item( GtkAction* action )
         g_value_init( &value, G_TYPE_STRING );
         g_object_get_property( G_OBJECT(action), "short_label", &value );
 
-        if ( act->private_data->appearanceMode == APPEARANCE_FULL ) {
+        if ( priv->appearanceMode == APPEARANCE_FULL ) {
             /* Slider */
             InkSpinScale* inkspinscale =
-              new InkSpinScale(Glib::wrap(act->private_data->adj));
+              new InkSpinScale(Glib::wrap(priv->adj));
             inkspinscale->set_label( g_value_get_string( &value ));
             inkspinscale->set_digits(0);
             spinbutton = (GtkWidget*)inkspinscale->gobj();
             gtk_widget_set_size_request(spinbutton, 100, -1);
 
-        } else if ( act->private_data->appearanceMode == APPEARANCE_MINIMAL ) {
+        } else if ( priv->appearanceMode == APPEARANCE_MINIMAL ) {
             spinbutton = gtk_scale_button_new( GTK_ICON_SIZE_MENU, 0, 100, 2, nullptr );
-            gtk_scale_button_set_adjustment( GTK_SCALE_BUTTON(spinbutton), act->private_data->adj );
+            gtk_scale_button_set_adjustment( GTK_SCALE_BUTTON(spinbutton), priv->adj );
             gtk_scale_button_set_icons( GTK_SCALE_BUTTON(spinbutton), floogles );
         } else {
             if ( gFactoryCb ) {
-                spinbutton = gFactoryCb( act->private_data->adj, act->private_data->climbRate, act->private_data->digits, act->private_data->unitTracker );
+                spinbutton = gFactoryCb( priv->adj, priv->climbRate, priv->digits, priv->unitTracker );
             } else {
-                spinbutton = gtk_spin_button_new( act->private_data->adj, act->private_data->climbRate, act->private_data->digits );
+                spinbutton = gtk_spin_button_new( priv->adj, priv->climbRate, priv->digits );
             }
         }
 
@@ -860,13 +872,13 @@ static GtkWidget* create_tool_item( GtkAction* action )
             g_value_unset( &tooltip );
         }
 
-        if ( act->private_data->appearanceMode != APPEARANCE_FULL ) {
+        if ( priv->appearanceMode != APPEARANCE_FULL ) {
             GtkWidget* filler1 = gtk_label_new(" ");
             gtk_box_pack_start( GTK_BOX(hb), filler1, FALSE, FALSE, 0 );
 
             /* Use an icon if available or use short-label */
-            if ( act->private_data->iconId && strcmp( act->private_data->iconId, "" ) != 0 ) {
-                GtkWidget *icon = sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
+            if ( priv->iconId && strcmp( priv->iconId, "" ) != 0 ) {
+                GtkWidget *icon = sp_get_icon_image(priv->iconId, priv->iconSize);
                 gtk_box_pack_start( GTK_BOX(hb), icon, FALSE, FALSE, 0 );
             } else {
                 GtkWidget* lbl = gtk_label_new( g_value_get_string( &value ) ? g_value_get_string( &value ) : "wwww" );
@@ -875,7 +887,7 @@ static GtkWidget* create_tool_item( GtkAction* action )
             }
         }
 
-        if ( act->private_data->appearanceMode == APPEARANCE_FULL ) {
+        if ( priv->appearanceMode == APPEARANCE_FULL ) {
             gtk_box_pack_start( GTK_BOX(hb), spinbutton, TRUE, TRUE, 0 );
         }  else {
             gtk_box_pack_start( GTK_BOX(hb), spinbutton, FALSE, FALSE, 0 );
@@ -883,8 +895,8 @@ static GtkWidget* create_tool_item( GtkAction* action )
 
         gtk_container_add( GTK_CONTAINER(item), hb );
 
-        if ( act->private_data->selfId ) {
-            g_object_set_data( G_OBJECT(spinbutton), act->private_data->selfId, spinbutton );
+        if ( priv->selfId ) {
+            g_object_set_data( G_OBJECT(spinbutton), priv->selfId, spinbutton );
         }
 
         g_signal_connect( G_OBJECT(spinbutton), "focus-in-event", G_CALLBACK(focus_in_cb), action );
@@ -894,19 +906,19 @@ static GtkWidget* create_tool_item( GtkAction* action )
         g_signal_connect( G_OBJECT(spinbutton), "value-changed", G_CALLBACK(value_changed_cb), action );
 
         g_signal_connect_swapped( G_OBJECT(spinbutton), "event", G_CALLBACK(event_cb), action );
-        if ( act->private_data->appearanceMode == APPEARANCE_FULL ) {
+        if ( priv->appearanceMode == APPEARANCE_FULL ) {
             /* */
-        } else if ( act->private_data->appearanceMode == APPEARANCE_MINIMAL ) {
+        } else if ( priv->appearanceMode == APPEARANCE_MINIMAL ) {
             /* */
         } else {
-            gtk_entry_set_width_chars( GTK_ENTRY(spinbutton), act->private_data->digits + 3 );
+            gtk_entry_set_width_chars( GTK_ENTRY(spinbutton), priv->digits + 3 );
         }
 
         gtk_widget_show_all( item );
 
         /* Shrink or whatnot after shown */
-        if ( act->private_data->toolPost ) {
-            act->private_data->toolPost( item );
+        if ( priv->toolPost ) {
+            priv->toolPost( item );
         }
 
         g_value_unset( &value );
@@ -929,9 +941,10 @@ static void disconnect_proxy( GtkAction *action, GtkWidget *proxy )
 
 void ege_adjustment_action_defocus( EgeAdjustmentAction* action )
 {
-    if ( action->private_data->transferFocus ) {
-        if ( action->private_data->focusWidget ) {
-            gtk_widget_grab_focus( action->private_data->focusWidget );
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
+    if ( priv->transferFocus ) {
+        if ( priv->focusWidget ) {
+            gtk_widget_grab_focus( priv->focusWidget );
         }
     }
 }
@@ -941,14 +954,15 @@ gboolean focus_in_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
     (void)event;
     if ( IS_EGE_ADJUSTMENT_ACTION(data) ) {
         EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION( data );
+        auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
         if ( GTK_IS_SPIN_BUTTON(widget) ) {
-            action->private_data->lastVal = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
+            priv->lastVal = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
         } else if ( GTK_IS_SCALE_BUTTON(widget) ) {
-            action->private_data->lastVal = gtk_scale_button_get_value( GTK_SCALE_BUTTON(widget) );
+            priv->lastVal = gtk_scale_button_get_value( GTK_SCALE_BUTTON(widget) );
         } else if (GTK_IS_RANGE(widget) ) {
-            action->private_data->lastVal = gtk_range_get_value( GTK_RANGE(widget) );
+            priv->lastVal = gtk_range_get_value( GTK_RANGE(widget) );
         }
-        action->private_data->transferFocus = TRUE;
+        priv->transferFocus = TRUE;
     }
 
     return FALSE; /* report event not consumed */
@@ -960,7 +974,8 @@ static gboolean focus_out_cb( GtkWidget *widget, GdkEventKey *event, gpointer da
     (void)event;
     if ( IS_EGE_ADJUSTMENT_ACTION(data) ) {
         EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION( data );
-        action->private_data->transferFocus = FALSE;
+        auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
+        priv->transferFocus = FALSE;
     }
 
     return FALSE; /* report event not consumed */
@@ -1016,6 +1031,7 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
 {
     gboolean wasConsumed = FALSE; /* default to report event not consumed */
     EgeAdjustmentAction* action = EGE_ADJUSTMENT_ACTION(data);
+    auto priv = EGE_ADJUSTMENT_ACTION_GET_PRIVATE (action);
     guint key = 0;
     gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          event->hardware_keycode, (GdkModifierType)event->state,
@@ -1024,8 +1040,8 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
     switch ( key ) {
         case GDK_KEY_Escape:
         {
-            action->private_data->transferFocus = TRUE;
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), action->private_data->lastVal );
+            priv->transferFocus = TRUE;
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), priv->lastVal );
             ege_adjustment_action_defocus( action );
             wasConsumed = TRUE;
         }
@@ -1034,7 +1050,7 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
         {
-            action->private_data->transferFocus = TRUE;
+            priv->transferFocus = TRUE;
             ege_adjustment_action_defocus( action );
             wasConsumed = TRUE;
         }
@@ -1042,14 +1058,14 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
 
         case GDK_KEY_Tab:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             wasConsumed = process_tab( widget, 1 );
         }
         break;
 
         case GDK_KEY_ISO_Left_Tab:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             wasConsumed = process_tab( widget, -1 );
         }
         break;
@@ -1057,9 +1073,9 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             gdouble val = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val + action->private_data->step );
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val + priv->step );
             wasConsumed = TRUE;
         }
         break;
@@ -1067,9 +1083,9 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_Down:
         case GDK_KEY_KP_Down:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             gdouble val = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val - action->private_data->step );
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val - priv->step );
             wasConsumed = TRUE;
         }
         break;
@@ -1077,9 +1093,9 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_Page_Up:
         case GDK_KEY_KP_Page_Up:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             gdouble val = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val + action->private_data->page );
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val + priv->page );
             wasConsumed = TRUE;
         }
         break;
@@ -1087,9 +1103,9 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_Page_Down:
         case GDK_KEY_KP_Page_Down:
         {
-            action->private_data->transferFocus = FALSE;
+            priv->transferFocus = FALSE;
             gdouble val = gtk_spin_button_get_value( GTK_SPIN_BUTTON(widget) );
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val - action->private_data->page );
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), val - priv->page );
             wasConsumed = TRUE;
         }
         break;
@@ -1097,8 +1113,8 @@ gboolean keypress_cb( GtkWidget *widget, GdkEventKey *event, gpointer data )
         case GDK_KEY_z:
         case GDK_KEY_Z:
         {
-            action->private_data->transferFocus = FALSE;
-            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), action->private_data->lastVal );
+            priv->transferFocus = FALSE;
+            gtk_spin_button_set_value( GTK_SPIN_BUTTON(widget), priv->lastVal );
             wasConsumed = TRUE;
         }
         break;
