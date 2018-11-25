@@ -101,7 +101,6 @@ struct _EekPreviewClass
     void (*clicked) (EekPreview* splat);
 };
 
-GType      eek_preview_get_type(void) G_GNUC_CONST;
 GtkWidget* eek_preview_new(void);
 
 void eek_preview_set_details(EekPreview   *preview,
