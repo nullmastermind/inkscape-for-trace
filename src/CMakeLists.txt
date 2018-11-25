@@ -287,6 +287,8 @@ set(main_SRC
   actions/actions-base.cpp
   actions/actions-helper.h
   actions/actions-helper.cpp
+  actions/actions-output.h
+  actions/actions-output.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
 )

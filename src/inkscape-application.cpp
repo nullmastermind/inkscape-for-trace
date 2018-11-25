@@ -22,6 +22,7 @@
 #include "desktop.h"              // Access to window
 
 #include "actions/actions-base.h"      // Actions
+#include "actions/actions-output.h"    // Actions
 #include "actions/actions-selection.h" // Actions
 
 #ifdef WITH_DBUS
@@ -61,7 +62,8 @@ InkscapeApplication::InkscapeApplication()
     Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
 
     // ======================== Actions =========================
-    add_actions_base(this);  // actions that are GUI independent
+    add_actions_base(this);      // actions that are GUI independent
+    add_actions_output(this);    // actions for file export
     add_actions_selection(this); // actions for object selection
 
     // ====================== Command Line ======================
@@ -330,15 +332,27 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
             if (gtype) {
                 // With value.
                 Glib::VariantType type = action_ptr->get_parameter_type();
-                if (type.get_string() == "s") {
+                if (type.get_string() == "b") {
+                    bool b = false;
+                    if (value == "0" || value == "true" || value.empty()) {
+                        b = true;
+                    } else if (value =="1" || value == "false") {
+                        b = false;
+                    } else {
+                        std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;
+                    }
+                    std::cout << "parse_actions boolean: " << value << ":" << std::boolalpha << b << std::endl;
                     action_vector.push_back(
-                        std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
+                        std::make_pair( action, Glib::Variant<bool>::create(b)));
                 } else if (type.get_string() == "i") {
                     action_vector.push_back(
                         std::make_pair( action, Glib::Variant<int>::create(std::stoi(value))));
                 } else if (type.get_string() == "d") {
                     action_vector.push_back(
                         std::make_pair( action, Glib::Variant<double>::create(std::stod(value))));
+                } else if (type.get_string() == "s") {
+                    action_vector.push_back(
+                        std::make_pair( action, Glib::Variant<Glib::ustring>::create(value) ));
                 } else {
                     std::cerr << "InkscapeApplication::parse_actions: unhandled action value: "
                               << action << ": " << type.get_string() << std::endl;

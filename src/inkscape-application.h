@@ -37,6 +37,7 @@ public:
     static Glib::RefPtr<InkscapeApplication> create();
 
     SPDocument* get_active_document();
+    InkFileExportCmd* file_export() { return &_file_export; }
 
 protected:
     void on_startup()  override;
