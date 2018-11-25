@@ -413,8 +413,6 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("inkscape:layoutOptions", true),
         AttributeInfo("inkscape:lockguides", true),
         AttributeInfo("inkscape:locked", true),
-        AttributeInfo("inkscape:measure-end", true),
-        AttributeInfo("inkscape:measure-start", true),
         AttributeInfo("inkscape:object-nodes", true),
         AttributeInfo("inkscape:object-paths", true),
         AttributeInfo("inkscape:original", true),

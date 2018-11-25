@@ -21,6 +21,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <2geom/point.h>
 
 #include "xml/repr.h"
 
@@ -126,7 +127,7 @@ public:
     public:
         ~Entry() = default;
         Entry() : _pref_path(""), _value(nullptr),
-        cached_bool(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) { 
+        cached_bool(false), cached_point(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) { 
         
         
         } // needed to enable use in maps
@@ -145,6 +146,13 @@ public:
          * @param def Default value if the preference is not set.
          */
         inline bool getBool(bool def=false) const;
+
+        /**
+         * Interpret the preference as an point.
+         *
+         * @param def Default value if the preference is not set.
+         */
+        inline Geom::Point getPoint(Geom::Point def=Geom::Point()) const;
 
         /**
          * Interpret the preference as an integer.
@@ -235,19 +243,20 @@ public:
         Glib::ustring getEntryName() const;
     private:
         Entry(Glib::ustring path, void const *v) : _pref_path(std::move(path)), _value(v),
-        cached_bool(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) {}
+        cached_bool(false), cached_point (false), cached_int (false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) {}
 
         Glib::ustring _pref_path;
         void const *_value;
         
         mutable bool value_bool;
+        mutable Geom::Point value_point;
         mutable int value_int;
         mutable double value_double;
         mutable Glib::ustring value_unit;
         mutable guint32 value_color;
         mutable SPCSSAttr* value_style;
 
-        mutable bool cached_bool, cached_int, cached_double, cached_unit, cached_color, cached_style;
+        mutable bool cached_bool, cached_point, cached_int, cached_double, cached_unit, cached_color, cached_style;
 
     };
 
@@ -317,6 +326,16 @@ public:
      */
     bool getBool(Glib::ustring const &pref_path, bool def=false) {
         return getEntry(pref_path).getBool(def);
+    }
+
+    /**
+     * Retrieve a point.
+     *
+     * @param pref_path Path to the retrieved preference.
+     * @param def The default value to return if the preference is not set.
+     */
+    Geom::Point getPoint(Glib::ustring const &pref_path, Geom::Point def=Geom::Point()) {
+        return getEntry(pref_path).getPoint(def);
     }
 
     /**
@@ -432,6 +451,11 @@ public:
     void setBool(Glib::ustring const &pref_path, bool value);
 
     /**
+     * Set a point value.
+     */
+    void setPoint(Glib::ustring const &pref_path, Geom::Point value);
+
+    /**
      * Set an integer value.
      */
     void setInt(Glib::ustring const &pref_path, int value);
@@ -537,6 +561,7 @@ protected:
      * that v._value is not NULL
      */
     bool _extractBool(Entry const &v);
+    Geom::Point _extractPoint(Entry const &v);
     int _extractInt(Entry const &v);
     double _extractDouble(Entry const &v);
     double _extractDouble(Entry const &v, Glib::ustring const &requested_unit);
@@ -600,6 +625,15 @@ inline bool Preferences::Entry::getBool(bool def) const
         return def;
     } else {
         return Inkscape::Preferences::get()->_extractBool(*this);
+    }
+}
+
+inline Geom::Point Preferences::Entry::getPoint(Geom::Point def) const
+{
+    if (!this->isValid()) {
+        return def;
+    } else {
+        return Inkscape::Preferences::get()->_extractPoint(*this);
     }
 }
 

@@ -137,9 +137,6 @@ enum SPAttributeEnum : unsigned {
     SP_ATTR_POSITION,
     SP_ATTR_INKSCAPE_COLOR,
     SP_ATTR_INKSCAPE_LOCKED,
-    /* Measure tool */
-    SP_ATTR_INKSCAPE_MEASURE_START,
-    SP_ATTR_INKSCAPE_MEASURE_END,
     /* SPImage, SPRect, etc. */
     SP_ATTR_X,
     SP_ATTR_Y,

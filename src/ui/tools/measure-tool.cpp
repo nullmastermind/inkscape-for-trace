@@ -398,41 +398,15 @@ MeasureTool::~MeasureTool()
 }
 
 Geom::Point MeasureTool::readMeasurePoint(bool is_start) {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPNamedView *namedview = desktop->namedview;
-    if(!namedview) {
-        return Geom::Point(Geom::infinity(),Geom::infinity());
-    }
-    char const * measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
-    char const * measure_point_data = namedview->getAttribute (measure_point);
-    if(!measure_point_data) {
-        measure_point_data = "0,0";
-        namedview->setAttribute (measure_point, measure_point_data);
-    }
-    gchar ** strarray = g_strsplit(measure_point_data, ",", 2);
-    double newx, newy;
-    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-    success += sp_svg_number_read_d(strarray[1], &newy);
-    g_strfreev (strarray);
-    if (success == 2) {
-        Geom::Point point_data(newx, newy);
-        return point_data;
-    }
-    return Geom::Point(Geom::infinity(),Geom::infinity());
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring measure_point = is_start ? "/tools/measure/measure-start" : "/tools/measure/measure-end";
+    return prefs->getPoint(measure_point, Geom::Point(Geom::infinity(),Geom::infinity()));
 }
 
 void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPNamedView *namedview = desktop->namedview;
-    if(!namedview) {
-        return;
-    }
-    std::stringstream meassure_point_str;
-    meassure_point_str.imbue(std::locale::classic());
-    meassure_point_str << point[Geom::X] << "," << point[Geom::Y];
-    gchar const *measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
-    namedview->setAttribute (measure_point, meassure_point_str.str().c_str());
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring measure_point = is_start ? "/tools/measure/measure-start" : "/tools/measure/measure-end";
+    prefs->setPoint(measure_point, point);
 }
 
 //This function is used to reverse the Measure, I do it in two steps because when

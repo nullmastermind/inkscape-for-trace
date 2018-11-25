@@ -128,9 +128,6 @@ static SPStyleProp const props[] = {
     {SP_ATTR_POSITION, "position"},
     {SP_ATTR_INKSCAPE_COLOR, "inkscape:color"},
     {SP_ATTR_INKSCAPE_LOCKED, "inkscape:locked"},
-    /* Measure tool */
-    {SP_ATTR_INKSCAPE_MEASURE_START, "inkscape:measure-start"},
-    {SP_ATTR_INKSCAPE_MEASURE_END,   "inkscape:measure-end"},
     /* SPImage */
     {SP_ATTR_X, "x"},
     {SP_ATTR_Y, "y"},
