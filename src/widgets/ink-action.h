@@ -26,12 +26,10 @@ G_BEGIN_DECLS
 
 typedef struct _InkAction      InkAction;
 typedef struct _InkActionClass InkActionClass;
-typedef struct _InkActionPrivate InkActionPrivate;
 
 struct _InkAction
 {
     GtkAction action;
-    InkActionPrivate *private_data;
 };
 
 struct _InkActionClass

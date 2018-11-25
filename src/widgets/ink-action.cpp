@@ -18,15 +18,16 @@ static void ink_action_set_property( GObject* obj, guint propId, const GValue *v
 static GtkWidget* ink_action_create_menu_item( GtkAction* action );
 static GtkWidget* ink_action_create_tool_item( GtkAction* action );
 
-struct _InkActionPrivate
+typedef struct
 {
     gchar* iconId;
     GtkIconSize iconSize;
-};
+} InkActionPrivate;
 
-#define INK_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), INK_ACTION_TYPE, InkActionPrivate ) )
+#define INK_ACTION_GET_PRIVATE( o ) \
+    reinterpret_cast<InkActionPrivate *>(ink_action_get_instance_private (o))
 
-G_DEFINE_TYPE(InkAction, ink_action, GTK_TYPE_ACTION);
+G_DEFINE_TYPE_WITH_PRIVATE(InkAction, ink_action, GTK_TYPE_ACTION);
 
 enum {
     PROP_INK_ID = 1,
@@ -64,24 +65,23 @@ static void ink_action_class_init( InkActionClass* klass )
                                                            (int)GTK_ICON_SIZE_DIALOG,
                                                            (int)GTK_ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
-
-        g_type_class_add_private( klass, sizeof(InkActionClass) );
     }
 }
 
 static void ink_action_init( InkAction* action )
 {
-    action->private_data = INK_ACTION_GET_PRIVATE( action );
-    action->private_data->iconId = nullptr;
-    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
+    auto priv = INK_ACTION_GET_PRIVATE (action);
+    priv->iconId = nullptr;
+    priv->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
 static void ink_action_finalize( GObject* obj )
 {
     InkAction* action = INK_ACTION( obj );
+    auto priv = INK_ACTION_GET_PRIVATE (action);
 
-    g_free( action->private_data->iconId );
-    g_free( action->private_data );
+    g_free( priv->iconId );
+    g_free( priv );
 
 }
 
@@ -108,17 +108,18 @@ InkAction* ink_action_new( const gchar *name,
 static void ink_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec )
 {
     InkAction* action = INK_ACTION( obj );
-    (void)action;
+    auto priv = INK_ACTION_GET_PRIVATE (action);
+
     switch ( propId ) {
         case PROP_INK_ID:
         {
-            g_value_set_string( value, action->private_data->iconId );
+            g_value_set_string( value, priv->iconId );
         }
         break;
 
         case PROP_INK_SIZE:
         {
-            g_value_set_int( value, action->private_data->iconSize );
+            g_value_set_int( value, priv->iconSize );
         }
         break;
 
@@ -130,19 +131,20 @@ static void ink_action_get_property( GObject* obj, guint propId, GValue* value, 
 void ink_action_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec )
 {
     InkAction* action = INK_ACTION( obj );
-    (void)action;
+    auto priv = INK_ACTION_GET_PRIVATE (action);
+
     switch ( propId ) {
         case PROP_INK_ID:
         {
-            gchar* tmp = action->private_data->iconId;
-            action->private_data->iconId = g_value_dup_string( value );
+            gchar* tmp = priv->iconId;
+            priv->iconId = g_value_dup_string( value );
             g_free( tmp );
         }
         break;
 
         case PROP_INK_SIZE:
         {
-            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
+            priv->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
@@ -164,13 +166,14 @@ static GtkWidget* ink_action_create_menu_item( GtkAction* action )
 static GtkWidget* ink_action_create_tool_item( GtkAction* action )
 {
     InkAction* act = INK_ACTION( action );
+    auto priv = INK_ACTION_GET_PRIVATE (act);
     GtkWidget* item = GTK_ACTION_CLASS(ink_action_parent_class)->create_tool_item(action);
 
-    if ( act->private_data->iconId ) {
+    if ( priv->iconId ) {
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget *child = sp_get_icon_image(act->private_data->iconId, act->private_data->iconSize);
+            GtkWidget *child = sp_get_icon_image(priv->iconId, priv->iconSize);
             gtk_tool_button_set_icon_widget( button, child );
         } else {
             // For now trigger a warning but don't do anything else
