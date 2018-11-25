@@ -24,12 +24,10 @@ G_BEGIN_DECLS
 
 typedef struct _InkToggleAction      InkToggleAction;
 typedef struct _InkToggleActionClass InkToggleActionClass;
-typedef struct _InkToggleActionPrivate InkToggleActionPrivate;
 
 struct _InkToggleAction
 {
     GtkToggleAction action;
-    InkToggleActionPrivate *private_data;
 };
 
 struct _InkToggleActionClass
