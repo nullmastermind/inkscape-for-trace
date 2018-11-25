@@ -17,6 +17,7 @@ description: >
  open, community-oriented development.
 confinement: strict
 grade: stable
+base: core18
 
 parts:
   inkscape:
@@ -69,7 +70,7 @@ parts:
       - libgtkmm-2.4-1v5
       - libgtkspell0
       - liblcms2-2
-      - libmagick++-6.q16-5v5
+      - libmagick++-6.q16-7
       - libpangomm-1.4-1v5
       - libpoppler-glib8
       - librevenge-0.0-0
@@ -88,7 +89,6 @@ parts:
       - -lib/inkscape/*.a
     after:
       - desktop-gtk3
-      - gnome-3-26
   snapcraft-wrapper:
     plugin: dump
     source: packaging/snappy/
@@ -101,18 +101,6 @@ parts:
       - scour
     stage-packages:
       - pstoedit
-      - python-uniconvertor
-    after:
-      - gnome-3-26
-  gnome-3-26:
-    plugin: nil
-    build-packages:
-      - software-properties-common
-    prepare: |
-       add-apt-repository -y ppa:ubuntu-desktop/gnome-3-26
-       apt-get -y update
-       apt-get -y dist-upgrade
-       apt-get -y install gtk-update-icon-cache
   desktop-gtk3:
     source: https://github.com/Ubuntu/snapcraft-desktop-helpers.git
     source-type: git
@@ -137,8 +125,6 @@ parts:
       - libappindicator3-1
       - locales-all
       - xdg-user-dirs
-    after:
-      - gnome-3-26
 
 apps:
   inkscape:
