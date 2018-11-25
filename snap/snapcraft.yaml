@@ -19,6 +19,16 @@ confinement: strict
 grade: stable
 base: core18
 
+plugs:
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
+
 parts:
   inkscape:
     plugin: cmake
