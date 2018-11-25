@@ -37,8 +37,6 @@ private:
 public:
     // Should be private, but this is just temporary code (I hope!).
 
-    bool          over_write;
-
     // One-to-one correspondence with command line options
     std::string   export_filename; // Only if one file is processed!
 

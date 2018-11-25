@@ -37,8 +37,7 @@
 #include "extension/init.h"
 
 InkFileExportCmd::InkFileExportCmd()
-    : over_write(false)
-    , export_overwrite(false)
+    : export_overwrite(false)
     , export_area_drawing(false)
     , export_area_page(false)
     , export_margin(0)
