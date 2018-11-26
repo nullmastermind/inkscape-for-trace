@@ -72,7 +72,7 @@ InkscapeApplication::InkscapeApplication()
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
     // Actions
-    add_main_option_entry(OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[,ACTION(:ARG)]*"));
+    add_main_option_entry(OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
     add_main_option_entry(OPTION_TYPE_BOOL,     "action-list",        '\0', N_("Actions: List available actions."),                                                  "");
 
     // Query
@@ -100,7 +100,7 @@ InkscapeApplication::InkscapeApplication()
     // Processing
     add_main_option_entry(OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
     add_main_option_entry(OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
-    add_main_option_entry(OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[,VERB-ID]*"));
+    add_main_option_entry(OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
     add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
 
     // Export - File and File Type
@@ -119,7 +119,7 @@ InkscapeApplication::InkscapeApplication()
     add_main_option_entry(OPTION_TYPE_INT,      "export-height",       'h', N_("Export: Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
 
     // Export - Options
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID(s) of object(s) to export."),                   N_("OBJECT-ID[,OBJECT-ID]*")); // BSP
+    add_main_option_entry(OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID(s) of object(s) to export."),                   N_("OBJECT-ID[;OBJECT-ID]*")); // BSP
     add_main_option_entry(OPTION_TYPE_BOOL,     "export-id-only",      'j', N_("Export: Hide all objects except object with ID selected by export-id."),             ""); // BSx
     add_main_option_entry(OPTION_TYPE_BOOL,     "export-plain-svg",    'l', N_("Export: Remove items in the Inkscape namespace."),                                   ""); // xSx
     add_main_option_entry(OPTION_TYPE_INT,      "export-dpi",          'd', N_("Export: Resolution for rasterization bitmaps and filters (default is 96)."),  N_("DPI")); // BxP
@@ -341,7 +341,6 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
                     } else {
                         std::cerr << "InkscapeApplication::parse_actions: Invalid boolean value: " << action << ":" << value << std::endl;
                     }
-                    std::cout << "parse_actions boolean: " << value << ":" << std::boolalpha << b << std::endl;
                     action_vector.push_back(
                         std::make_pair( action, Glib::Variant<bool>::create(b)));
                 } else if (type.get_string() == "i") {
