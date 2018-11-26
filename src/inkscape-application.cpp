@@ -483,6 +483,7 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
     if (options->contains("action-list")) {
         std::vector<Glib::ustring> actions = list_actions();
+        std::sort(actions.begin(), actions.end());
         for (auto action : actions) {
             std::cout << action << std::endl;
         }
