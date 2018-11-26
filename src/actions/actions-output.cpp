@@ -28,7 +28,7 @@ export_type(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     app->file_export()->export_type = s.get();
-    std::cout << "export-type: " << s.get() << std::endl;
+    // std::cout << "export-type: " << s.get() << std::endl;
 }
 
 void
@@ -36,7 +36,7 @@ export_filename(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
     app->file_export()->export_filename = s.get();
-    std::cout << "export-filename: " << s.get() << std::endl;
+    // std::cout << "export-filename: " << s.get() << std::endl;
 }
 
 void
@@ -44,7 +44,7 @@ export_overwrite(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_overwrite = b.get();
-    std::cout << "export-overwrite: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-overwrite: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -52,7 +52,7 @@ export_area(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
     app->file_export()->export_area = s.get();
-    std::cout << "export-area: " << s.get() << std::endl;
+    // std::cout << "export-area: " << s.get() << std::endl;
 }
 
 void
@@ -60,7 +60,7 @@ export_area_drawing(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_area_drawing = b.get();
-    std::cout << "export-area-drawing: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-area-drawing: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -68,7 +68,7 @@ export_area_page(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_area_page = b.get();
-    std::cout << "export-area-page: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-area-page: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -76,7 +76,7 @@ export_margin(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_margin = i.get();
-    std::cout << "export-margin: " << i.get() << std::endl;
+    // std::cout << "export-margin: " << i.get() << std::endl;
 }
 
 void
@@ -84,7 +84,7 @@ export_area_snap(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_area_snap = b.get();
-    std::cout << "export-area-snap: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-area-snap: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -92,7 +92,7 @@ export_width(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_width = i.get();
-    std::cout << "export-width: " << i.get() << std::endl;
+    // std::cout << "export-width: " << i.get() << std::endl;
 }
 
 void
@@ -100,7 +100,7 @@ export_height(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_height = i.get();
-    std::cout << "export-height: " << i.get() << std::endl;
+    // std::cout << "export-height: " << i.get() << std::endl;
 }
 
 void
@@ -108,7 +108,7 @@ export_id(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
     app->file_export()->export_id = s.get();
-    std::cout << "export-id: " << s.get() << std::endl;
+    // std::cout << "export-id: " << s.get() << std::endl;
 }
 
 void
@@ -116,7 +116,7 @@ export_id_only(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_id_only = b.get();
-    std::cout << "export-id-only: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-id-only: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -124,7 +124,7 @@ export_plain_svg(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_plain_svg = b.get();
-    std::cout << "export-plain-svg: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-plain-svg: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -132,7 +132,7 @@ export_dpi(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_dpi = i.get();
-    std::cout << "export-dpi: " << i.get() << std::endl;
+    // std::cout << "export-dpi: " << i.get() << std::endl;
 }
 
 void
@@ -140,7 +140,7 @@ export_ignore_filters(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_ignore_filters = b.get();
-    std::cout << "export-ignore-filters: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-ignore-filters: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -148,7 +148,7 @@ export_text_to_path(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_text_to_path = b.get();
-    std::cout << "export-text-to-path: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-text-to-path: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -156,7 +156,7 @@ export_ps_level(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<int> i = Glib::VariantBase::cast_dynamic<Glib::Variant<int> >(value);
     app->file_export()->export_ps_level = i.get();
-    std::cout << "export-dpi: " << i.get() << std::endl;
+    // std::cout << "export-dpi: " << i.get() << std::endl;
 }
 
 void
@@ -164,7 +164,7 @@ export_pdf_level(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
     app->file_export()->export_pdf_level = s.get();
-    std::cout << "export-pdf-level" << s.get() << std::endl;
+    // std::cout << "export-pdf-level" << s.get() << std::endl;
 }
 
 void
@@ -172,7 +172,7 @@ export_latex(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_latex = b.get();
-    std::cout << "export-latex: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-latex: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -180,7 +180,7 @@ export_use_hints(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<bool> b = Glib::VariantBase::cast_dynamic<Glib::Variant<bool> >(value);
     app->file_export()->export_use_hints = b.get();
-    std::cout << "export-use-hints: " << std::boolalpha << b.get() << std::endl;
+    // std::cout << "export-use-hints: " << std::boolalpha << b.get() << std::endl;
 }
 
 void
@@ -188,7 +188,7 @@ export_background(const Glib::VariantBase& value, InkscapeApplication *app)
 {
     Glib::Variant<std::string> s = Glib::VariantBase::cast_dynamic<Glib::Variant<std::string> >(value);
     app->file_export()->export_background = s.get();
-    std::cout << "export-background: " << s.get() << std::endl;
+    // std::cout << "export-background: " << s.get() << std::endl;
 }
 
 void
@@ -196,7 +196,7 @@ export_background_opacity(const Glib::VariantBase&  value, InkscapeApplication *
 {
     Glib::Variant<double> d = Glib::VariantBase::cast_dynamic<Glib::Variant<double> >(value);
     app->file_export()->export_background_opacity = d.get();
-    std::cout << d.get() << std::endl;
+    // std::cout << d.get() << std::endl;
 }
 
 void
@@ -213,7 +213,6 @@ export_do(InkscapeApplication *app)
 void
 add_actions_output(InkscapeApplication* app)
 {
-    std::cout << "add_actions_output!" << std::endl;
     Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
     Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
