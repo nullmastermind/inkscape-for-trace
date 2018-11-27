@@ -23,7 +23,6 @@
 #include "inkscape.h"  // INKSCAPE macro
 
 #include "ui/monitor.h"
-#include "ui/view/svg-view.h"
 #include "ui/view/svg-view-widget.h"
 
 #include "util/units.h"
