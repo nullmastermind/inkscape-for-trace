@@ -69,7 +69,7 @@
 #include "ui/dialog/ocaldialogs.h"
 #include "ui/interface.h"
 #include "ui/tools/tool-base.h"
-#include "ui/view/view-widget.h"
+#include "widgets/desktop-widget.h"
 
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"

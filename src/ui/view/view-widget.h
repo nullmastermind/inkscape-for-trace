@@ -15,6 +15,7 @@
 
 #include <gtk/gtk.h>
 
+
 namespace Inkscape {
 namespace UI {
 namespace View {
@@ -50,11 +51,6 @@ void sp_view_widget_set_view(SPViewWidget *vw, Inkscape::UI::View::View *view);
  * Calls the virtual shutdown() function of the SPViewWidget.
  */
 bool sp_view_widget_shutdown(SPViewWidget *vw);
-
-/**
- * Create a new SPViewWidget (which happens to be a SPDesktopWidget).
- */
-SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
 
 /**
  * SPViewWidget is a GUI widget that contain a single View. It is also
