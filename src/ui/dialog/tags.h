@@ -20,8 +20,10 @@
 #include <gtkmm/dialog.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/panel.h"
+#include "object/sp-tag.h"
+#include "object/sp-tag-use.h"
+#include "object/sp-tag-use-reference.h"
 #include "desktop-tracker.h"
-#include "ui/widget/style-subject.h"
 #include "selection.h"
 #include "ui/widget/filter-effect-chooser.h"
 
