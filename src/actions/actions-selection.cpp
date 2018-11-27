@@ -97,6 +97,7 @@ select_all(InkscapeApplication* app)
     if (!get_document_and_selection(app, &document, &selection)) {
         return;
     }
+    std::cerr << "select_all: Not implemented!" << std::endl;
 }
 
 void

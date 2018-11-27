@@ -24,6 +24,7 @@
 #include "actions/actions-base.h"      // Actions
 #include "actions/actions-output.h"    // Actions
 #include "actions/actions-selection.h" // Actions
+#include "actions/actions-transform.h" // Actions
 
 #ifdef WITH_DBUS
 # include "extension/dbus/dbus-init.h"
@@ -65,6 +66,7 @@ InkscapeApplication::InkscapeApplication()
     add_actions_base(this);      // actions that are GUI independent
     add_actions_output(this);    // actions for file export
     add_actions_selection(this); // actions for object selection
+    add_actions_transform(this); // actions for transforming selected objects
 
     // ====================== Command Line ======================
 
@@ -160,6 +162,16 @@ InkscapeApplication::get_active_document()
     // This should change based on last document window in focus if with GUI.  But for now we're
     // only using it for command line mode so return last document (the one currently be read in).
     return _documents.back();
+}
+
+Inkscape::Selection*
+InkscapeApplication::get_active_selection()
+{
+    // This should change based on last document window in focus if with GUI.  But for now we're
+    // only using it for command line mode so return last document (the one currently be read in).
+    SPDocument* document = _documents.back();
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    return context.getSelection();
 }
 
 void

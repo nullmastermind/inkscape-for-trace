@@ -1875,9 +1875,10 @@ void ObjectSet::rotate90(bool ccw)
         }
     }
 
-    DocumentUndo::done(document(),
-                       ccw ? SP_VERB_OBJECT_ROTATE_90_CCW : SP_VERB_OBJECT_ROTATE_90_CW,
-                       ccw ? _("Rotate 90\xc2\xb0 CCW") : _("Rotate 90\xc2\xb0 CW"));
+    if (document())
+        DocumentUndo::done(document(),
+                           ccw ? SP_VERB_OBJECT_ROTATE_90_CCW : SP_VERB_OBJECT_ROTATE_90_CW,
+                           ccw ? _("Rotate 90\xc2\xb0 CCW") : _("Rotate 90\xc2\xb0 CW"));
 }
 
 void ObjectSet::rotate(gdouble const angle_degrees)
@@ -1891,12 +1892,13 @@ void ObjectSet::rotate(gdouble const angle_degrees)
     }
     rotateRelative(*center_, angle_degrees);
 
-    DocumentUndo::maybeDone(document(),
-                            ( ( angle_degrees > 0 )
-                              ? "selector:rotate:ccw"
-                              : "selector:rotate:cw" ),
-                            SP_VERB_CONTEXT_SELECT,
-                            _("Rotate"));
+    if (document())
+        DocumentUndo::maybeDone(document(),
+                                ( ( angle_degrees > 0 )
+                                  ? "selector:rotate:ccw"
+                                  : "selector:rotate:cw" ),
+                                SP_VERB_CONTEXT_SELECT,
+                                _("Rotate"));
 }
 
 /*

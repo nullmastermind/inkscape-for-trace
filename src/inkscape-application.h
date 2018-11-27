@@ -23,6 +23,8 @@
 #include <gtkmm.h>
 
 #include "document.h"
+#include "selection.h"
+
 #include "helper/action.h"
 #include "io/file-export-cmd.h"   // File export (non-verb)
 
@@ -37,6 +39,8 @@ public:
     static Glib::RefPtr<InkscapeApplication> create();
 
     SPDocument* get_active_document();
+    Inkscape::Selection* get_active_selection();
+
     InkFileExportCmd* file_export() { return &_file_export; }
 
 protected:

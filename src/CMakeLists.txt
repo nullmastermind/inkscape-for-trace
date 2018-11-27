@@ -291,6 +291,8 @@ set(main_SRC
   actions/actions-output.cpp
   actions/actions-selection.h
   actions/actions-selection.cpp
+  actions/actions-transform.h
+  actions/actions-transform.cpp
 )
 set(view_SRC
   inkview-main.cpp
