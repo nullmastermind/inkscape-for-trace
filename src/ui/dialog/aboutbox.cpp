@@ -86,7 +86,7 @@ AboutBox::AboutBox()
     set_website       (  "https://www.inkscape.org");
     set_website_label (_("Inkscape website"));
     set_license_type    (Gtk::LICENSE_GPL_3_0);
-    set_copyright     (_("© 2017 Inkscape Developers"));
+    set_copyright     (_("© 2019 Inkscape Developers"));
     set_comments      (_("Open Source Scalable Vector Graphics Editor\n"
                          "Draw Freely."));
 }
