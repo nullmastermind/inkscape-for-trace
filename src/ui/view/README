@@ -5,16 +5,16 @@ View is an abstract base class for all UI document views. Documents
 can be displayed by more than one window, each having its own view
 (e.g. zoom level, selection, etc.).
 
-View is the parent class for:
+View is the base class for:
 
-* SPDocument
+* SPDesktop
 * SVGView
 
-SPViewWidget is the "parent" for:
+SPViewWidget is the base for:
 
 * SPDocumentWidget
 
-(It was also parent for SPSVGViewWidget but that has been replaced by
+(It was also base for SPSVGViewWidget but that has been replaced by
 SVGViewWidget which is derived, rather uselessly, from Gtk::Scrollbar).
 
 SPViewWidget contains a GtkEventBox and holds a View.
@@ -28,9 +28,10 @@ SPDesktopWidget contains a
        SPCanvas
   Plus lots of other junk.
 
-SVGViewWidget contains a
-  GtkScrolledWindow
-    SPCanvas.
+SVGViewWidget is derived from Gtk::Scrollbar. It contains:
+  SPCanvas
+  SVGView
+
 
 To do:
 
@@ -39,3 +40,7 @@ To do:
   It doesn't use the EventBox of SPViewWidget!
 * Get rid of SPViewWidget, integrating it directly into a
   new C++ Desktop widget.
+
+A DesktopViewWidget should contain:
+  DesktopView (aka SPDesktop)
+  SPCanvas
