@@ -46,15 +46,12 @@ class Drawing;
 class DrawingItem;
 class URIReference;
 
+namespace UI {
+namespace View {
+class View;
 }
-
-enum {
-    SP_EVENT_INVALID,
-    SP_EVENT_NONE,
-    SP_EVENT_ACTIVATE,
-    SP_EVENT_MOUSEOVER,
-    SP_EVENT_MOUSEOUT
-};
+}
+}
 
 // TODO make a completely new function that transforms either the fill or
 // stroke of any SPItem  without adding an extra parameter to adjust_pattern.
@@ -75,9 +72,18 @@ enum PatternTransform {
  *
  */
 class SPEvent {
+
 public:
-    unsigned int type;
-    void* data;
+    enum Type {
+        INVALID,
+        NONE,
+        ACTIVATE,
+        MOUSEOVER,
+        MOUSEOUT
+    };
+
+    Type type;
+    Inkscape::UI::View::View* view;
 };
 
 class SPItemView {
