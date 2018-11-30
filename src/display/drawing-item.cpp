@@ -25,6 +25,8 @@
 #include "display/cairo-utils.h"
 #include "display/cairo-templates.h"
 
+#include "object/sp-item.h"
+
 namespace Inkscape {
 
 void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
@@ -119,7 +121,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _fill_pattern(nullptr)
     , _stroke_pattern(nullptr)
     , _filter(nullptr)
-    , _user_data(nullptr)
+    , _item(nullptr)
     , _cache(nullptr)
     , _state(0)
     , _child_type(CHILD_ORPHAN)
@@ -1030,10 +1032,9 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
 Glib::ustring
 DrawingItem::name()
 {
-    SPObject *object = static_cast<SPObject *>(_user_data);
-    if (object) {
-        if(object->getId())
-            return object->getId();
+    if (_item) {
+        if (_item->getId())
+            return _item->getId();
         else
             return "No object id";
     } else {
