@@ -130,11 +130,12 @@ void SVGView::mouseout()
     gdk_window_set_cursor(window, nullptr);
 }
 
+
 //----------------------------------------------------------------
 /**
  * Callback connected with arena_event.
  */
-/// \todo fixme.
+/// \todo fixme. This hasn't worked since at least 0.48. It should result in a cursor change over <a></a> links.
 static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SVGView *svgview)
 {
 	static gdouble x, y;
@@ -144,46 +145,46 @@ static gint arena_handler(SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, G
 	SPItem *spitem = (ai) ? (static_cast<SPItem*>(ai->data())) : nullptr;
 
 	switch (event->type) {
-	case GDK_BUTTON_PRESS:
-		if (event->button.button == 1) {
-			active = TRUE;
-			x = event->button.x;
-			y = event->button.y;
-		}
-		break;
-	case GDK_BUTTON_RELEASE:
-		if (event->button.button == 1) {
-			if (active && (event->button.x == x) &&
-                                      (event->button.y == y)) {
-				spev.type = SP_EVENT_ACTIVATE;
-                                if ( spitem != nullptr )
-				{
-				  spitem->emitEvent (spev);
-                                }
-      			}
+            case GDK_BUTTON_PRESS:
+                if (event->button.button == 1) {
+                    active = TRUE;
+                    x = event->button.x;
+                    y = event->button.y;
+                }
+                break;
+            case GDK_BUTTON_RELEASE:
+                if (event->button.button == 1) {
+                    if (active && (event->button.x == x) &&
+                        (event->button.y == y)) {
+                        spev.type = SPEvent::ACTIVATE;
+                        if ( spitem != nullptr )
+                        {
+                            spitem->emitEvent (spev);
+                        }
+                    }
 		}
 		active = FALSE;
 		break;
-	case GDK_MOTION_NOTIFY:
+            case GDK_MOTION_NOTIFY:
 		active = FALSE;
 		break;
-	case GDK_ENTER_NOTIFY:
-		spev.type = SP_EVENT_MOUSEOVER;
-		spev.data = svgview;
+            case GDK_ENTER_NOTIFY:
+		spev.type = SPEvent::MOUSEOVER;
+		spev.view = svgview;
                 if ( spitem != nullptr )
 		{
-		  spitem->emitEvent (spev);
+                    spitem->emitEvent (spev);
                 }
 		break;
-	case GDK_LEAVE_NOTIFY:
-		spev.type = SP_EVENT_MOUSEOUT;
-		spev.data = svgview;
+            case GDK_LEAVE_NOTIFY:
+		spev.type = SPEvent::MOUSEOUT;
+		spev.view = svgview;
                 if ( spitem != nullptr )
 		{
-		  spitem->emitEvent (spev);
+                    spitem->emitEvent (spev);
                 }
 		break;
-	default:
+            default:
 		break;
 	}
 
