@@ -31,6 +31,10 @@ class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
 
+namespace Gtk {
+class Box;
+class Scrollbar;
+}
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -55,7 +59,6 @@ void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
 /* Show/hide rulers & scrollbars */
 void sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw);
-void sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw );
 bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
@@ -81,16 +84,25 @@ struct SPDesktopWidget {
 
     Gtk::Window *window;
 
+private:
     // The root vbox of the window layout.
-    GtkWidget *vbox;
+    Gtk::Box *_vbox;
 
-    GtkWidget *hbox;
+    Gtk::Box *_hbox;
 
-    GtkWidget *menubar, *statusbar;
+    GtkWidget *_menubar;
+    Gtk::Box  *_statusbar;
 
-    Inkscape::UI::Dialogs::SwatchesPanel *panels;
+    Inkscape::UI::Dialogs::SwatchesPanel *_panels;
 
-    GtkWidget *hscrollbar, *vscrollbar, *vscrollbar_box;
+    Gtk::Scrollbar *_hscrollbar;
+    Gtk::Scrollbar *_vscrollbar;
+    Glib::RefPtr<Gtk::Adjustment> _hadj;
+    Glib::RefPtr<Gtk::Adjustment> _vadj;
+
+    Gtk::Box *_vscrollbar_box;
+
+public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
@@ -124,8 +136,6 @@ struct SPDesktopWidget {
 
     Geom::Point ruler_origin;
     double dt2r;
-
-    GtkAdjustment *hadj, *vadj;
 
     Inkscape::Widgets::LayerSelector *layer_selector;
 
@@ -179,9 +189,9 @@ struct SPDesktopWidget {
             void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
             void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
             void updateRulers() override { sp_desktop_widget_update_rulers(_dtw); }
-            void updateScrollbars(double scale) override { sp_desktop_widget_update_scrollbars(_dtw, scale); }
+            void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
             void toggleRulers() override { sp_desktop_widget_toggle_rulers(_dtw); }
-            void toggleScrollbars() override { sp_desktop_widget_toggle_scrollbars(_dtw); }
+            void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
             void toggleColorProfAdjust() override { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
             bool colorProfAdjustEnabled() override { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
             void updateZoom() override { sp_desktop_widget_update_zoom(_dtw); }
@@ -255,7 +265,9 @@ private:
     void layoutWidgets();
 
     void namedviewModified(SPObject *obj, guint flags);
-
+    void on_adjustment_value_changed();
+    void toggle_scrollbars();
+    void update_scrollbars(double scale);
 };
 
 /// The SPDesktopWidget vtable

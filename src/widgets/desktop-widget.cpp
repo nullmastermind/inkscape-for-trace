@@ -28,6 +28,8 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/scrollbar.h>
+#include <gtkmm/separator.h>
 
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
@@ -336,48 +338,48 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_interaction_disabled_counter = 0;
 
     /* Main table */
-    dtw->vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(dtw->vbox, "DesktopMainTable");
-    gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(dtw->vbox) );
+    dtw->_vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    dtw->_vbox->set_name("DesktopMainTable");
+    gtk_container_add( GTK_CONTAINER(dtw), GTK_WIDGET(dtw->_vbox->gobj()) );
 
     /* Status bar */
-    dtw->statusbar = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_name(dtw->statusbar, "DesktopStatusBar");
-    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->statusbar, FALSE, TRUE, 0);
+    dtw->_statusbar = Gtk::manage(new Gtk::Box());
+    dtw->_statusbar->set_name("DesktopStatusBar");
+    dtw->_vbox->pack_end(*dtw->_statusbar, false, true);
 
     /* Swatches panel */
     {
         using Inkscape::UI::Dialogs::SwatchesPanel;
 
-        dtw->panels = new SwatchesPanel("/embedded/swatches");
-        dtw->panels->set_vexpand(false);
-        gtk_box_pack_end( GTK_BOX( dtw->vbox ), GTK_WIDGET(dtw->panels->gobj()), FALSE, TRUE, 0 );
+        dtw->_panels = new SwatchesPanel("/embedded/swatches");
+        dtw->_panels->set_vexpand(false);
+        dtw->_vbox->pack_end(*dtw->_panels, false, true);
     }
 
     /* DesktopHBox (Vertical toolboxes, canvas) */
-    dtw->hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_name(dtw->hbox, "DesktopHbox");
-    gtk_box_pack_end( GTK_BOX (dtw->vbox), dtw->hbox, TRUE, TRUE, 0 );
+    dtw->_hbox = Gtk::manage(new Gtk::Box());
+    dtw->_hbox->set_name("DesktopHbox");
+    dtw->_vbox->pack_end(*dtw->_hbox, true, true);
 
     /* Toolboxes */
     dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
-    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
+    dtw->_vbox->pack_end(*Glib::wrap(dtw->aux_toolbox), false, true);
 
     dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
     ToolboxFactory::setOrientation( dtw->snap_toolbox, GTK_ORIENTATION_VERTICAL );
-    gtk_box_pack_end( GTK_BOX(dtw->hbox), dtw->snap_toolbox, FALSE, TRUE, 0 );
+    dtw->_hbox->pack_end(*Glib::wrap(dtw->snap_toolbox), false, true);
 
     dtw->commands_toolbox = ToolboxFactory::createCommandsToolbox();
-    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->commands_toolbox, FALSE, TRUE, 0);
+    dtw->_vbox->pack_end(*Glib::wrap(dtw->commands_toolbox), false, true);
 
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
-    gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
+    dtw->_hbox->pack_start(*Glib::wrap(dtw->tool_toolbox), false, true);
 
     /* Canvas table wrapper */
-    auto tbl_wrapper = gtk_grid_new(); // Is this widget really needed? No!
-    gtk_widget_set_name(tbl_wrapper, "CanvasTableWrapper");
-    gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl_wrapper, TRUE, TRUE, 1 );
+    auto tbl_wrapper = Gtk::manage(new Gtk::Grid()); // Is this widget really needed? No!
+    tbl_wrapper->set_name("CanvasTableWrapper");
+    dtw->_hbox->pack_start(*tbl_wrapper, true, true, 1);
 
     /* Canvas table */
     dtw->canvas_tbl = gtk_grid_new();
@@ -431,18 +433,18 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 1, 1);
 
     // Horizontal scrollbar
-    dtw->hadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
-    dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
-    gtk_widget_set_name(dtw->hscrollbar, "HorizontalScrollbar");
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->hscrollbar, 1, 2, 1, 1);
+    dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+    dtw->_hscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_hadj));
+    dtw->_hscrollbar->set_name("HorizontalScrollbar");
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_hscrollbar->gobj()), 1, 2, 1, 1);
 
     // By packing the sticky zoom button and vertical scrollbar in a box it allows the canvas to
     // expand fully to the top if the rulers are hidden.
     // (Otherwise, the canvas is pushed down by the height of the sticky zoom button.)
 
     // Vertical Scrollbar box
-    dtw->vscrollbar_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->vscrollbar_box, 2, 0, 1, 2);
+    dtw->_vscrollbar_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_vscrollbar_box->gobj()), 2, 0, 1, 2);
 
     // Sticky zoom button
     dtw->sticky_zoom = sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
@@ -453,13 +455,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_widget_set_name(dtw->sticky_zoom, "StickyZoom");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs->getBool("/options/stickyzoom/value"));
     g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
-    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->sticky_zoom, FALSE, FALSE, 0);
+    dtw->_vscrollbar_box->pack_start(*Glib::wrap(dtw->sticky_zoom), false, false);
 
     // Vertical scrollbar
-    dtw->vadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
-    dtw->vscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT(dtw->vadj));
-    gtk_widget_set_name(dtw->vscrollbar, "VerticalScrollbar");
-    gtk_box_pack_start (GTK_BOX (dtw->vscrollbar_box), dtw->vscrollbar, TRUE, TRUE, 0);
+    dtw->_vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
+    dtw->_vscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_vadj, Gtk::ORIENTATION_VERTICAL));
+    dtw->_vscrollbar->set_name("VerticalScrollbar");
+    dtw->_vscrollbar_box->pack_start(*dtw->_vscrollbar, true, true, 0);
 
     gchar const* tip = "";
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
@@ -549,7 +551,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
         paned->set_hexpand(true);
         paned->set_vexpand(true);
-        gtk_grid_attach(GTK_GRID(tbl_wrapper), GTK_WIDGET (paned->gobj()), 1, 1, 1, 1);
+        tbl_wrapper->attach(*paned, 1, 1, 1, 1);
     } else {
         gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
         gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
@@ -557,27 +559,24 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     }
 
     // connect scrollbar signals
-    g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
-    g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
-
+    dtw->_hadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed));
+    dtw->_vadj->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::on_adjustment_value_changed));
 
     // --------------- Status Tool Bar ------------------//
 
     // Selected Style (Fill/Stroke/Opacity)
     dtw->selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
-    GtkHBox *ss_ = dtw->selected_style->gobj();
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), GTK_WIDGET(ss_), FALSE, FALSE, 0);
+    dtw->_statusbar->pack_start(*dtw->selected_style, false, false);
 
     // Separator
-    gtk_box_pack_start(GTK_BOX(dtw->statusbar),
-		    gtk_separator_new(GTK_ORIENTATION_VERTICAL),
-		    FALSE, FALSE, 0);
+    dtw->_statusbar->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)),
+		                false, false);
 
     // Layer Selector
     dtw->layer_selector = new Inkscape::Widgets::LayerSelector(nullptr);
     // FIXME: need to unreference on container destruction to avoid leak
     dtw->layer_selector->reference();
-    gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);
+    dtw->_statusbar->pack_start(*dtw->layer_selector, false, false, 1);
 
     // Select Status
     dtw->select_status = gtk_label_new (nullptr);
@@ -594,7 +593,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Display the initial welcome message in the statusbar
     gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
 
-    gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->select_status, TRUE, TRUE, 0);
+    dtw->_statusbar->pack_start(*Glib::wrap(dtw->select_status), true, true);
 
 
     // Zoom status spinbutton ---------------
@@ -689,7 +688,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     sp_set_font_size_smaller (dtw->coord_status);
 
-    gtk_box_pack_end (GTK_BOX (dtw->statusbar), dtw->coord_status, FALSE, FALSE, 0);
+    dtw->_statusbar->pack_end(*Glib::wrap(dtw->coord_status), false, false);
 
     // --------------- Color Management ---------------- //
     dtw->_tracker = ege_color_prof_tracker_new(GTK_WIDGET(dtw->layer_selector->gobj()));
@@ -707,7 +706,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(sp_dtw_color_profile_event), dtw );
 
     // ------------------ Finish Up -------------------- //
-    gtk_widget_show_all (dtw->vbox);
+    dtw->_vbox->show_all();
 
     gtk_widget_grab_focus (GTK_WIDGET(dtw->canvas));
 
@@ -1478,9 +1477,9 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "menu/state", true)) {
-        gtk_widget_hide (dtw->menubar);
+        gtk_widget_hide (dtw->_menubar);
     } else {
-        gtk_widget_show_all (dtw->menubar);
+        gtk_widget_show_all (dtw->_menubar);
     }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
@@ -1510,24 +1509,24 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "statusbar/state", true)) {
-        gtk_widget_hide (dtw->statusbar);
+        dtw->_statusbar->hide();
     } else {
-        gtk_widget_show_all (dtw->statusbar);
+        dtw->_statusbar->show_all();
     }
 
     if (!prefs->getBool(pref_root + "panels/state", true)) {
-        gtk_widget_hide ( GTK_WIDGET(dtw->panels->gobj()) );
+        dtw->_panels->hide();
     } else {
-        gtk_widget_show_all( GTK_WIDGET(dtw->panels->gobj()) );
+        dtw->_panels->show_all();
     }
 
     if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
-        gtk_widget_hide (dtw->hscrollbar);
-        gtk_widget_hide (dtw->vscrollbar_box);
+        dtw->_hscrollbar->hide();
+        dtw->_vscrollbar_box->hide();
         gtk_widget_hide (dtw->cms_adjust);
     } else {
-        gtk_widget_show_all (dtw->hscrollbar);
-        gtk_widget_show_all (dtw->vscrollbar_box);
+        dtw->_hscrollbar->show_all();
+        dtw->_vscrollbar_box->show_all();
         gtk_widget_show_all (dtw->cms_adjust);
     }
 
@@ -1619,26 +1618,30 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
         switch(pos) {
             case GTK_POS_TOP:
             case GTK_POS_BOTTOM:
-                if ( gtk_widget_is_ancestor(toolbox, hbox) ) {
+                if ( gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj())) ) {
                     // Removing a widget can reduce ref count to zero
                     g_object_ref(G_OBJECT(toolbox));
-                    gtk_container_remove(GTK_CONTAINER(hbox), toolbox);
-                    gtk_container_add(GTK_CONTAINER(vbox), toolbox);
+                    _hbox->remove(*Glib::wrap(toolbox));
+                    _vbox->add(*Glib::wrap(toolbox));
                     g_object_unref(G_OBJECT(toolbox));
-                    gtk_box_set_child_packing(GTK_BOX(vbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
+
+                    // Function doesn't seem to be in Gtkmm wrapper yet
+                    gtk_box_set_child_packing(_vbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                 }
                 ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_HORIZONTAL);
                 break;
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
-                if ( !gtk_widget_is_ancestor(toolbox, hbox) ) {
+                if ( !gtk_widget_is_ancestor(toolbox, GTK_WIDGET(_hbox->gobj())) ) {
                     g_object_ref(G_OBJECT(toolbox));
-                    gtk_container_remove(GTK_CONTAINER(vbox), toolbox);
-                    gtk_container_add(GTK_CONTAINER(hbox), toolbox);
+                    _vbox->remove(*Glib::wrap(toolbox));
+                    _hbox->add(*Glib::wrap(toolbox));
                     g_object_unref(G_OBJECT(toolbox));
-                    gtk_box_set_child_packing(GTK_BOX(hbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
+
+                    // Function doesn't seem to be in Gtkmm wrapper yet
+                    gtk_box_set_child_packing(_hbox->gobj(), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                     if (pos == GTK_POS_LEFT) {
-                        gtk_box_reorder_child( GTK_BOX(hbox), toolbox, 0 );
+                        _hbox->reorder_child(*Glib::wrap(toolbox), 0 );
                     }
                 }
                 ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_VERTICAL);
@@ -1684,11 +1687,11 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     dtw->layer_selector->setDesktop(dtw->desktop);
 
-    dtw->menubar = sp_ui_main_menubar (dtw->desktop);
-    gtk_widget_set_name(dtw->menubar, "MenuBar");
-    gtk_widget_show_all (dtw->menubar);
+    dtw->_menubar = sp_ui_main_menubar (dtw->desktop);
+    gtk_widget_set_name(dtw->_menubar, "MenuBar");
+    gtk_widget_show_all (dtw->_menubar);
 
-    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
+    dtw->_vbox->pack_start(*Glib::wrap(dtw->_menubar), false, false);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -1697,7 +1700,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     toolboxes.push_back(dtw->commands_toolbox);
     toolboxes.push_back(dtw->snap_toolbox);
 
-    dtw->panels->setDesktop( dtw->desktop );
+    dtw->_panels->setDesktop( dtw->desktop );
 
     UXManager::getInstance()->addTrack(dtw);
     UXManager::getInstance()->connectToDesktop( toolboxes, dtw->desktop );
@@ -1790,19 +1793,19 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
     }
 }
 
-static void
-sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWidget *dtw)
+void
+SPDesktopWidget::on_adjustment_value_changed()
 {
-    if (dtw->update)
+    if (update)
         return;
 
-    dtw->update = 1;
+    update = 1;
 
     // Do not call canvas->scrollTo directly... messes up 'offset'.
-    dtw->desktop->scroll_absolute( Geom::Point(gtk_adjustment_get_value(dtw->hadj),
-                                               gtk_adjustment_get_value(dtw->vadj)), false);
+    desktop->scroll_absolute( Geom::Point(_hadj->get_value(),
+                                          _vadj->get_value()), false);
 
-    dtw->update = 0;
+    update = 0;
 }
 
 /* we make the desktop window with focus active, signal is connected in interface.c */
@@ -2220,19 +2223,19 @@ sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw)
 }
 
 void
-sp_desktop_widget_toggle_scrollbars (SPDesktopWidget *dtw)
+SPDesktopWidget::toggle_scrollbars()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->hscrollbar)) {
-        gtk_widget_hide (dtw->hscrollbar);
-        gtk_widget_hide (dtw->vscrollbar_box);
-        gtk_widget_hide (dtw->cms_adjust);
-        prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
+    if (_hscrollbar->get_visible()) {
+        _hscrollbar->hide();
+        _vscrollbar_box->hide();
+        gtk_widget_hide (cms_adjust);
+        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
     } else {
-        gtk_widget_show_all (dtw->hscrollbar);
-        gtk_widget_show_all (dtw->vscrollbar_box);
-        gtk_widget_show_all (dtw->cms_adjust);
-        prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
+        _hscrollbar->show_all();
+        _vscrollbar_box->show_all();
+        gtk_widget_show_all (cms_adjust);
+        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
     }
 }
 
@@ -2258,41 +2261,40 @@ void
 sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->menubar)) {
-        gtk_widget_hide (dtw->menubar);
+    if (gtk_widget_get_visible (dtw->_menubar)) {
+        gtk_widget_hide (dtw->_menubar);
         prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", false);
     } else {
-        gtk_widget_show_all (dtw->menubar);
+        gtk_widget_show_all (dtw->_menubar);
         prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", true);
     }
 }
 */
 
 static void
-set_adjustment (GtkAdjustment *adj, double l, double u, double ps, double si, double pi)
+set_adjustment (Glib::RefPtr<Gtk::Adjustment> &adj, double l, double u, double ps, double si, double pi)
 {
-    if ((l != gtk_adjustment_get_lower(adj)) ||
-        (u != gtk_adjustment_get_upper(adj)) ||
-        (ps != gtk_adjustment_get_page_size(adj)) ||
-        (si != gtk_adjustment_get_step_increment(adj)) ||
-        (pi != gtk_adjustment_get_page_increment(adj))) {
-	    gtk_adjustment_set_lower(adj, l);
-	    gtk_adjustment_set_upper(adj, u);
-	    gtk_adjustment_set_page_size(adj, ps);
-	    gtk_adjustment_set_step_increment(adj, si);
-	    gtk_adjustment_set_page_increment(adj, pi);
+    if ((l != adj->get_lower()) ||
+        (u != adj->get_upper()) ||
+        (ps != adj->get_page_size()) ||
+        (si != adj->get_step_increment()) ||
+        (pi != adj->get_page_increment())) {
+	    adj->set_lower(l);
+	    adj->set_upper(u);
+	    adj->set_page_size(ps);
+	    adj->set_step_increment(si);
+	    adj->set_page_increment(pi);
     }
 }
 
 void
-sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
+SPDesktopWidget::update_scrollbars(double scale)
 {
-    if (!dtw) return;
-    if (dtw->update) return;
-    dtw->update = 1;
+    if (update) return;
+    update = 1;
 
     /* The desktop region we always show unconditionally */
-    SPDocument *doc = dtw->desktop->doc();
+    SPDocument *doc = desktop->doc();
     Geom::Rect darea ( Geom::Point(-doc->getWidth().value("px"), -doc->getHeight().value("px")),
                      Geom::Point(2 * doc->getWidth().value("px"), 2 * doc->getHeight().value("px"))  );
 
@@ -2304,28 +2306,28 @@ sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale)
     }
 
     /* Canvas region we always show unconditionally */
-    double const y_dir = dtw->desktop->yaxisdir();
+    double const y_dir = desktop->yaxisdir();
     Geom::Rect carea( Geom::Point(deskarea->left() * scale - 64, (deskarea->top() * scale + 64) * y_dir),
                     Geom::Point(deskarea->right() * scale + 64, (deskarea->bottom() * scale - 64) * y_dir)  );
 
-    Geom::Rect viewbox = dtw->canvas->getViewbox();
+    Geom::Rect viewbox = canvas->getViewbox();
 
     /* Viewbox is always included into scrollable region */
     carea = Geom::unify(carea, viewbox);
 
-    set_adjustment(dtw->hadj, carea.min()[Geom::X], carea.max()[Geom::X],
+    set_adjustment(_hadj, carea.min()[Geom::X], carea.max()[Geom::X],
                    viewbox.dimensions()[Geom::X],
                    0.1 * viewbox.dimensions()[Geom::X],
                    viewbox.dimensions()[Geom::X]);
-    gtk_adjustment_set_value(dtw->hadj, viewbox.min()[Geom::X]);
+    _hadj->set_value(viewbox.min()[Geom::X]);
 
-    set_adjustment(dtw->vadj, carea.min()[Geom::Y], carea.max()[Geom::Y],
+    set_adjustment(_vadj, carea.min()[Geom::Y], carea.max()[Geom::Y],
                    viewbox.dimensions()[Geom::Y],
                    0.1 * viewbox.dimensions()[Geom::Y],
                    viewbox.dimensions()[Geom::Y]);
-    gtk_adjustment_set_value(dtw->vadj, viewbox.min()[Geom::Y]);
+    _vadj->set_value(viewbox.min()[Geom::Y]);
 
-    dtw->update = 0;
+    update = 0;
 }
 
 
