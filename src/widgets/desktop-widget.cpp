@@ -387,19 +387,20 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Added to table wrapper later either directly or via paned window shared with dock.
 
     // Lock guides button
-    dtw->_guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+    dtw->_guides_lock = Glib::wrap(GTK_TOGGLE_BUTTON(
+                                      sp_button_new_from_data( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
                                                nullptr,
                                                INKSCAPE_ICON("object-locked"),
-                                               _("Toggle lock of all guides in the document"));
+                                               _("Toggle lock of all guides in the document"))));
+
     auto guides_lock_style_provider = Gtk::CssProvider::create();
     guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
-    auto wnd = Glib::wrap(GTK_TOGGLE_BUTTON(dtw->_guides_lock));
-    wnd->set_name("LockGuides");
-    auto context = wnd->get_style_context();
+    dtw->_guides_lock->set_name("LockGuides");
+    auto context = dtw->_guides_lock->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    wnd->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->_guides_lock, 0, 0, 1, 1);
+    dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_guides_lock->gobj()), 0, 0, 1, 1);
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -1019,7 +1020,7 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
 void
 SPDesktopWidget::update_guides_lock()
 {
-    bool down = SP_BUTTON_IS_DOWN(_guides_lock);
+    bool down = _guides_lock->get_active();
 
     auto doc  = desktop->getDocument();
     auto nv   = desktop->getNamedView();
@@ -1530,11 +1531,11 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
-        gtk_widget_hide (dtw->_guides_lock);
+        dtw->_guides_lock->hide();
         gtk_widget_hide (dtw->hruler);
         gtk_widget_hide (dtw->vruler);
     } else {
-        gtk_widget_show_all (dtw->_guides_lock);
+        dtw->_guides_lock->show_all();
         gtk_widget_show_all (dtw->hruler);
         gtk_widget_show_all (dtw->vruler);
     }
@@ -2208,13 +2209,13 @@ void
 SPDesktopWidget::toggle_rulers()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (_guides_lock)) {
-        gtk_widget_hide(_guides_lock);
+    if (_guides_lock->get_visible()) {
+        _guides_lock->hide();
         gtk_widget_hide(hruler);
         gtk_widget_hide(vruler);
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
     } else {
-        gtk_widget_show_all(_guides_lock);
+        _guides_lock->show_all();
         gtk_widget_show_all(hruler);
         gtk_widget_show_all(vruler);
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);

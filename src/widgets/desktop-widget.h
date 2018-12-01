@@ -35,6 +35,7 @@ namespace Gtk {
 class Box;
 class MenuBar;
 class Scrollbar;
+class ToggleButton;
 }
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
@@ -102,7 +103,7 @@ private:
 
     Gtk::Box *_vscrollbar_box;
 
-    GtkWidget *_guides_lock;
+    Gtk::ToggleButton *_guides_lock;
 
 public:
 
