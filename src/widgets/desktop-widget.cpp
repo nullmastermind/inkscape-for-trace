@@ -105,10 +105,6 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWidget *dtw);
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-static void cms_adjust_toggled( GtkWidget *button, gpointer data );
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
@@ -118,7 +114,6 @@ static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor);
-static void sp_dtw_sticky_zoom_toggled (GtkMenuItem *item, gpointer data);
 
 static gint sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
 static bool sp_dtw_rotation_output (GtkSpinButton *spin, gpointer data);
@@ -217,10 +212,10 @@ void CMSPrefWatcher::_refreshAll()
 void CMSPrefWatcher::_setCmsSensitive(bool enabled)
 {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    for ( std::list<SPDesktopWidget*>::iterator it = _widget_list.begin(); it != _widget_list.end(); ++it ) {
-        SPDesktopWidget *dtw = *it;
-        if ( gtk_widget_get_sensitive( dtw->cms_adjust ) != enabled ) {
-            cms_adjust_set_sensitive( dtw, enabled );
+    for ( auto dtw : _widget_list ) {
+        auto cms_adj = dtw->get_cms_adjust();
+        if ( cms_adj->get_sensitive() != enabled ) {
+            dtw->cms_adjust_set_sensitive(enabled);
         }
     }
 #else
@@ -448,15 +443,15 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_vscrollbar_box->gobj()), 2, 0, 1, 2);
 
     // Sticky zoom button
-    dtw->sticky_zoom = sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
+    dtw->_sticky_zoom = Glib::wrap(GTK_TOGGLE_BUTTON(sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
                                                  SP_BUTTON_TYPE_TOGGLE,
                                                  nullptr,
                                                  INKSCAPE_ICON("zoom-original"),
-                                                 _("Zoom drawing if window size changes"));
-    gtk_widget_set_name(dtw->sticky_zoom, "StickyZoom");
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dtw->sticky_zoom), prefs->getBool("/options/stickyzoom/value"));
-    g_signal_connect (G_OBJECT (dtw->sticky_zoom), "toggled", G_CALLBACK (sp_dtw_sticky_zoom_toggled), dtw);
-    dtw->_vscrollbar_box->pack_start(*Glib::wrap(dtw->sticky_zoom), false, false);
+                                                 _("Zoom drawing if window size changes"))));
+    dtw->_sticky_zoom->set_name("StickyZoom");
+    dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
+    dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled));
+    dtw->_vscrollbar_box->pack_start(*dtw->_sticky_zoom, false, false);
 
     // Vertical scrollbar
     dtw->_vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -472,31 +467,32 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
             tip = act->tip;
         }
     }
-    dtw->cms_adjust = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
-                                               SP_BUTTON_TYPE_TOGGLE,
-                                               nullptr,
-                                               INKSCAPE_ICON("color-management"),
-                                               tip );
-    gtk_widget_set_name(dtw->cms_adjust, "CMS_Adjust");
+    dtw->_cms_adjust = Glib::wrap(GTK_TOGGLE_BUTTON(
+                sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+                    SP_BUTTON_TYPE_TOGGLE,
+                    nullptr,
+                    INKSCAPE_ICON("color-management"),
+                    tip )));
+    dtw->_cms_adjust->set_name("CMS_Adjust");
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     {
         Glib::ustring current = prefs->getString("/options/displayprofile/uri");
         bool enabled = current.length() > 0;
-        cms_adjust_set_sensitive( dtw, enabled );
+        dtw->cms_adjust_set_sensitive(enabled );
         if ( enabled ) {
             bool active = prefs->getBool("/options/displayprofile/enable");
             if ( active ) {
-                sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), TRUE );
+                sp_button_toggle_set_down( SP_BUTTON(dtw->_cms_adjust->gobj()), TRUE );
             }
         }
     }
-    g_signal_connect_after( G_OBJECT(dtw->cms_adjust), "clicked", G_CALLBACK(cms_adjust_toggled), dtw );
+    g_signal_connect_after( G_OBJECT(dtw->_cms_adjust->gobj()), "clicked", G_CALLBACK(SPDesktopWidget::cms_adjust_toggled), dtw );
 #else
-    cms_adjust_set_sensitive(dtw, FALSE);
+    dtw->cms_adjust_set_sensitive(false);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), dtw->cms_adjust, 2, 2, 1, 1);
+    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_cms_adjust->gobj()), 2, 2, 1, 1);
     {
         if (!watcher) {
             watcher = new CMSPrefWatcher();
@@ -701,7 +697,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         bool enabled = false;
         dtw->canvas->_cms_key = id;
         enabled = !dtw->canvas->_cms_key.empty();
-        cms_adjust_set_sensitive( dtw, enabled );
+        dtw->cms_adjust_set_sensitive(enabled);
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(sp_dtw_color_profile_event), dtw );
@@ -883,7 +879,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate (widget, allocation);
         }
 
-        if (SP_BUTTON_IS_DOWN(dtw->sticky_zoom)) {
+        if (dtw->get_sticky_zoom_active()) {
             /* Find new visible area */
             Geom::Rect newarea = dtw->desktop->get_display_area();
             /* Calculate adjusted zoom */
@@ -1009,7 +1005,7 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
     dtw->canvas->_cms_key = id;
     dtw->requestCanvasUpdate();
     enabled = !dtw->canvas->_cms_key.empty();
-    cms_adjust_set_sensitive( dtw, enabled );
+    dtw->cms_adjust_set_sensitive(enabled);
 }
 #else // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget * /*dtw*/)
@@ -1038,11 +1034,12 @@ SPDesktopWidget::update_guides_lock()
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
+void
+SPDesktopWidget::cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
 
-    bool down = SP_BUTTON_IS_DOWN(dtw->cms_adjust);
+    bool down = dtw->_cms_adjust->get_active();
     if ( down != dtw->canvas->_enable_cms_display_adj ) {
         dtw->canvas->_enable_cms_display_adj = down;
         dtw->desktop->redrawDesktop();
@@ -1057,16 +1054,17 @@ void cms_adjust_toggled( GtkWidget */*button*/, gpointer data )
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled )
+void
+SPDesktopWidget::cms_adjust_set_sensitive(bool enabled)
 {
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
     if ( verb ) {
-        SPAction *act = verb->get_action( Inkscape::ActionContext( dtw->viewwidget.view ) );
+        SPAction *act = verb->get_action( Inkscape::ActionContext(viewwidget.view) );
         if ( act ) {
             sp_action_set_sensitive( act, enabled );
         }
     }
-    gtk_widget_set_sensitive( dtw->cms_adjust, enabled );
+    _cms_adjust->set_sensitive(enabled);
 }
 
 void
@@ -1523,11 +1521,11 @@ void SPDesktopWidget::layoutWidgets()
     if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
         dtw->_hscrollbar->hide();
         dtw->_vscrollbar_box->hide();
-        gtk_widget_hide (dtw->cms_adjust);
+        dtw->_cms_adjust->hide();
     } else {
         dtw->_hscrollbar->show_all();
         dtw->_vscrollbar_box->show_all();
-        gtk_widget_show_all (dtw->cms_adjust);
+        dtw->_cms_adjust->show_all();
     }
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
@@ -2017,12 +2015,11 @@ sp_dtw_zoom_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
 }
 
 
-static void
-sp_dtw_sticky_zoom_toggled (GtkMenuItem *, gpointer data)
+void
+SPDesktopWidget::sticky_zoom_toggled()
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/stickyzoom/value", SP_BUTTON_IS_DOWN(dtw->sticky_zoom));
+    prefs->setBool("/options/stickyzoom/value", _sticky_zoom->get_active());
 }
 
 
@@ -2229,29 +2226,30 @@ SPDesktopWidget::toggle_scrollbars()
     if (_hscrollbar->get_visible()) {
         _hscrollbar->hide();
         _vscrollbar_box->hide();
-        gtk_widget_hide (cms_adjust);
+        _cms_adjust->hide();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
     } else {
         _hscrollbar->show_all();
         _vscrollbar_box->show_all();
-        gtk_widget_show_all (cms_adjust);
+        _cms_adjust->show_all();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
     }
 }
 
-bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw )
+bool
+SPDesktopWidget::get_color_prof_adj_enabled() const
 {
-    return gtk_widget_get_sensitive( dtw->cms_adjust ) &&
-              SP_BUTTON_IS_DOWN(dtw->cms_adjust) ;
+    return _cms_adjust->get_sensitive() && _cms_adjust->get_active();
 }
 
-void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw )
+void
+SPDesktopWidget::toggle_color_prof_adj()
 {
-    if ( gtk_widget_get_sensitive( dtw->cms_adjust ) ) {
-        if ( SP_BUTTON_IS_DOWN(dtw->cms_adjust) ) {
-            sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), FALSE );
+    if (_cms_adjust->get_sensitive()) {
+        if (_cms_adjust->get_active()) {
+            sp_button_toggle_set_down( SP_BUTTON(_cms_adjust->gobj()), FALSE );
         } else {
-            sp_button_toggle_set_down( SP_BUTTON(dtw->cms_adjust), TRUE );
+            sp_button_toggle_set_down( SP_BUTTON(_cms_adjust->gobj()), TRUE );
         }
     }
 }
@@ -2330,6 +2328,11 @@ SPDesktopWidget::update_scrollbars(double scale)
     update = 0;
 }
 
+bool
+SPDesktopWidget::get_sticky_zoom_active() const
+{
+    return _sticky_zoom->get_active();
+}
 
 /*
   Local Variables:

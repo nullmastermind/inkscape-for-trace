@@ -61,8 +61,6 @@ void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
 /* Show/hide rulers & scrollbars */
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
-void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw );
-bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
 
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
@@ -105,14 +103,15 @@ private:
 
     Gtk::ToggleButton *_guides_lock;
 
+    Gtk::ToggleButton *_cms_adjust;
+    Gtk::ToggleButton *_sticky_zoom;
+
 public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *sticky_zoom;
-    GtkWidget *cms_adjust;
     GtkWidget *coord_status;
     GtkWidget *coord_status_x;
     GtkWidget *coord_status_y;
@@ -194,8 +193,8 @@ public:
             void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
             void toggleRulers() override { _dtw->toggle_rulers(); }
             void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
-            void toggleColorProfAdjust() override { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
-            bool colorProfAdjustEnabled() override { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
+            void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
+            bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
             void updateZoom() override { sp_desktop_widget_update_zoom(_dtw); }
             void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
             void updateRotation() override { sp_desktop_widget_update_rotation(_dtw); }
@@ -258,6 +257,14 @@ public:
     void updateNamedview();
     void update_guides_lock();
 
+    /// Get the CMS adjustment button widget
+    decltype(_cms_adjust) get_cms_adjust() const {return _cms_adjust;}
+
+    void cms_adjust_set_sensitive(bool enabled);
+    bool get_color_prof_adj_enabled() const;
+    void toggle_color_prof_adj();
+    bool get_sticky_zoom_active() const;
+
 private:
     GtkWidget *tool_toolbox;
     GtkWidget *aux_toolbox;
@@ -272,6 +279,11 @@ private:
     void toggle_scrollbars();
     void update_scrollbars(double scale);
     void toggle_rulers();
+    void sticky_zoom_toggled();
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+#endif
 };
 
 /// The SPDesktopWidget vtable
