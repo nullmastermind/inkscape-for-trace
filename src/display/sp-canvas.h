@@ -126,7 +126,7 @@ private:
      * @return true if the drawing completes
      */
     int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
-    
+
     void paintSpliter();
     void set_cursor(GtkWidget *widget);
     /// Draws a specific rectangular part of the canvas.
@@ -175,7 +175,7 @@ public:
     guint _idle_id;
 
     SPCanvasItem *_root;
-    
+
     Geom::OptIntRect _spliter;
     Geom::OptIntRect _spliter_area;
     Geom::OptIntRect _spliter_control;

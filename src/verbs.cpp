@@ -3124,10 +3124,10 @@ Verb *Verb::_base_verbs[] = {
 
     new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("Toggle _Split View Mode"),
                  N_("Split canvas in 2 to show outline"), nullptr),
-    
+
     new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
-    
+
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
                  N_("Open a window to preview objects at different icon resolutions"),
                  INKSCAPE_ICON("dialog-icon-preview")),

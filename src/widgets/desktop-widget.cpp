@@ -26,13 +26,13 @@
 #endif
 
 #include <gtkmm/cssprovider.h>
-#include <gtkmm/messagedialog.h>
 #include <gtkmm/menubar.h>
- #include <gtkmm/paned.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/paned.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/separatormenuitem.h>
- 
+
 
 
 #include <gdkmm/types.h>
@@ -381,7 +381,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->canvas_tbl = gtk_grid_new();
     gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
     // Added to table wrapper later either directly or via paned window shared with dock.
-
 
 
 

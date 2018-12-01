@@ -27,22 +27,22 @@
 #include <gdkmm/rectangle.h>
 #include <cairomm/region.h>
 
-#include "helper/sp-marshal.h"
-#include <2geom/rect.h>
-#include <2geom/affine.h>
-#include "display/sp-canvas.h"
-#include "display/sp-canvas-group.h"
-#include "display/canvas-arena.h"
-#include "display/rendermode.h"
-#include "display/cairo-utils.h"
-#include "preferences.h"
-#include "inkscape.h"
-#include "sodipodi-ctrlrect.h"
 #include "cms-system.h"
+#include "color.h"
 #include "debug/gdk-event-latency-tracker.h"
 #include "desktop.h"
+#include "display/cairo-utils.h"
+#include "display/canvas-arena.h"
+#include "display/rendermode.h"
+#include "display/sp-canvas-group.h"
+#include "display/sp-canvas.h"
+#include "helper/sp-marshal.h"
+#include "inkscape.h"
+#include "preferences.h"
+#include "sodipodi-ctrlrect.h"
 #include "ui/tools/tool-base.h"
-#include "color.h"
+#include <2geom/affine.h>
+#include <2geom/rect.h>
 
 #if GTK_CHECK_VERSION(3,20,0)
 # include <gdkmm/seat.h>
@@ -53,7 +53,7 @@ using Inkscape::Debug::GdkEventLatencyTracker;
 // gtk_check_version returns non-NULL on failure
 static bool const HAS_BROKEN_MOTION_HINTS =
   true || gtk_check_version(2, 12, 0) != nullptr;
-          
+
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
 
@@ -1463,8 +1463,9 @@ int SPCanvas::pickCurrentItem(GdkEvent *event)
     return retval;
 }
 
-gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event) {
-    SPCanvas *canvas = SP_CANVAS (widget);
+gint SPCanvas::handle_doubleclick(GtkWidget *widget, GdkEventButton *event)
+{
+    SPCanvas *canvas = SP_CANVAS(widget);
     // Maybe we want to use double click on canvas so retain here
     return 0;
 }
@@ -1512,14 +1513,14 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
-            retval = canvas->emitEvent((GdkEvent *) event);
+            retval = canvas->emitEvent((GdkEvent *)event);
         } else {
             canvas->_split_pressed = true;
-            Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
+            Geom::IntPoint cursor_pos = Geom::IntPoint(event->x, event->y);
             canvas->_spliter_in_control_pos = cursor_pos - (*canvas->_spliter_control).midpoint();
             if (canvas->_spliter && canvas->_spliter_control.contains(cursor_pos) && !canvas->_is_dragging) {
                 canvas->_split_control_pressed = true;
-            } 
+            }
             retval = TRUE;
         }
         break;
@@ -1527,12 +1528,12 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // Pick the current item as if the button were not pressed, and
         // then process the event.
         next_canvas_doubleclick = reinterpret_cast<GdkEvent *>(event)->button.button;
-        
+
         if (!canvas->_split_hover) {
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
-            retval = canvas->emitEvent((GdkEvent *) event);
+            retval = canvas->emitEvent((GdkEvent *)event);
         } else {
             canvas->_split_pressed = true;
             retval = TRUE;
@@ -1545,7 +1546,7 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
             canvas->_state ^= mask;
-            retval = canvas->emitEvent((GdkEvent *) event);
+            retval = canvas->emitEvent((GdkEvent *)event);
         } else {
             canvas->_split_pressed = true;
             retval = TRUE;
@@ -1557,9 +1558,9 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
         // after the button has been released
         canvas->_split_pressed = false;
         if (next_canvas_doubleclick) {
-            GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
+            GdkEventButton *event2 = reinterpret_cast<GdkEventButton *>(event);
             handle_doubleclick(GTK_WIDGET(canvas), event2);
-        } 
+        }
         if (canvas->_split_hover) {
             retval = TRUE;
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1569,11 +1570,12 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
                 GtkAllocation allocation;
                 gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
                 Geom::Point pos = canvas->_spliter_control_pos;
-                double value = canvas->_split_vertical ? 1/(allocation.height/(double)pos[Geom::Y]) : 1/(allocation.width/(double)pos[Geom::X]) ;
-                if(canvas->_split_hover_vertical) {
+                double value = canvas->_split_vertical ? 1 / (allocation.height / (double)pos[Geom::Y])
+                                                       : 1 / (allocation.width / (double)pos[Geom::X]);
+                if (canvas->_split_hover_vertical) {
                     canvas->_split_inverse = !canvas->_split_inverse;
                     spliter_clicked = true;
-                    reset = canvas->_split_vertical? true: false;
+                    reset = canvas->_split_vertical ? true : false;
                     if (reset) {
                         canvas->_split_value = value;
                     }
@@ -1581,7 +1583,7 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
                 } else if (canvas->_split_hover_horizontal) {
                     canvas->_split_inverse = !canvas->_split_inverse;
                     spliter_clicked = true;
-                    reset = !canvas->_split_vertical? true: false;
+                    reset = !canvas->_split_vertical ? true : false;
                     if (reset) {
                         canvas->_split_value = value;
                     }
@@ -1596,7 +1598,7 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
             canvas->_split_dragging = false;
         } else {
             canvas->_state = event->state;
-            retval = canvas->emitEvent((GdkEvent *) event);
+            retval = canvas->emitEvent((GdkEvent *)event);
             event->state ^= mask;
             canvas->_state = event->state;
             canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
@@ -1625,37 +1627,37 @@ static inline void request_motions(GdkWindow *w, GdkEventMotion *event) {
 
 void SPCanvas::set_cursor(GtkWidget *widget)
 {
-    SPCanvas *canvas = SP_CANVAS (widget);
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    SPCanvas *canvas = SP_CANVAS(widget);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->splitMode()) {
         GdkDisplay *display = gdk_display_get_default();
         GdkCursor *cursor = nullptr;
         if (canvas->_split_hover_vertical) {
             if (canvas->_changecursor != 1) {
-                cursor = gdk_cursor_new_from_name (display, "pointer");
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
+                cursor = gdk_cursor_new_from_name(display, "pointer");
+                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+                g_object_unref(cursor);
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 1;
         } else if (canvas->_split_hover_horizontal) {
             if (canvas->_changecursor != 2) {
-                cursor = gdk_cursor_new_from_name (display, "pointer");
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
+                cursor = gdk_cursor_new_from_name(display, "pointer");
+                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+                g_object_unref(cursor);
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 2;
         } else if (canvas->_split_hover) {
             if (canvas->_changecursor != 3) {
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                if(_split_vertical) {
-                    cursor = gdk_cursor_new_from_name (display, "ew-resize");
+                if (_split_vertical) {
+                    cursor = gdk_cursor_new_from_name(display, "ew-resize");
                 } else {
-                    cursor = gdk_cursor_new_from_name (display, "ns-resize");
+                    cursor = gdk_cursor_new_from_name(display, "ns-resize");
                 }
-                gdk_window_set_cursor (gtk_widget_get_window(widget), cursor);
-                g_object_unref (cursor);
+                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+                g_object_unref(cursor);
                 canvas->paintSpliter();
             }
             canvas->_changecursor = 3;
@@ -1672,7 +1674,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 {
     int status;
     SPCanvas *canvas = SP_CANVAS (widget);
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     trackLatency((GdkEvent *)event);
 
     if (event->window != getWindow(canvas)) {
@@ -1681,46 +1683,41 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 
     if (canvas->_root == nullptr) // canvas being deleted
         return FALSE;
-    
-    Geom::IntPoint cursor_pos = Geom::IntPoint(event->x,event->y);
+
+    Geom::IntPoint cursor_pos = Geom::IntPoint(event->x, event->y);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (canvas->_spliter && ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) && !canvas->_is_dragging) {
+    if (canvas->_spliter &&
+        ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) &&
+        !canvas->_is_dragging) {
         canvas->_split_hover = true;
     } else {
         canvas->_split_hover = false;
     }
-    if (canvas->_spliter_left && 
-        canvas->_spliter_right && 
-        ((*canvas->_spliter_left).contains(cursor_pos) ||
-         (*canvas->_spliter_right).contains(cursor_pos)) &&
-        !canvas->_is_dragging) 
-    {
+    if (canvas->_spliter_left && canvas->_spliter_right &&
+        ((*canvas->_spliter_left).contains(cursor_pos) || (*canvas->_spliter_right).contains(cursor_pos)) &&
+        !canvas->_is_dragging) {
         canvas->_split_hover_horizontal = true;
     } else {
         canvas->_split_hover_horizontal = false;
     }
-    if (!canvas->_split_hover_horizontal &&
-        canvas->_spliter_top && 
-        canvas->_spliter_bottom && 
-        ((*canvas->_spliter_top).contains(cursor_pos) ||
-         (*canvas->_spliter_bottom).contains(cursor_pos)) &&
-        !canvas->_is_dragging) 
-    {
+    if (!canvas->_split_hover_horizontal && canvas->_spliter_top && canvas->_spliter_bottom &&
+        ((*canvas->_spliter_top).contains(cursor_pos) || (*canvas->_spliter_bottom).contains(cursor_pos)) &&
+        !canvas->_is_dragging) {
         canvas->_split_hover_vertical = true;
     } else {
         canvas->_split_hover_vertical = false;
     }
-    
+
     canvas->set_cursor(widget);
     if (canvas->_split_pressed) {
         GtkAllocation allocation;
         canvas->_split_dragging = true;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
-        double hide_horiz = 1/(allocation.width/(double)cursor_pos[Geom::X]);
-        double hide_vert = 1/(allocation.height/(double)cursor_pos[Geom::Y]);
+        double hide_horiz = 1 / (allocation.width / (double)cursor_pos[Geom::X]);
+        double hide_vert = 1 / (allocation.height / (double)cursor_pos[Geom::Y]);
         double value = canvas->_split_vertical ? hide_horiz : hide_vert;
         if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
-            SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             if (desktop && desktop->event_context) {
                 desktop->event_context->sp_event_context_update_cursor();
                 desktop->toggleSplitMode();
@@ -1736,7 +1733,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             canvas->_split_value = value;
             if (canvas->_split_control_pressed && !canvas->_is_dragging) {
                 canvas->_spliter_control_pos = cursor_pos - canvas->_spliter_in_control_pos;
-            } 
+            }
         }
         canvas->dirtyAll();
         canvas->addIdle();
@@ -1746,12 +1743,12 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
         status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
         if (event->is_hint) {
-            request_motions(gtk_widget_get_window (widget), event);
+            request_motions(gtk_widget_get_window(widget), event);
         }
     }
 
     if (desktop) {
-        SPCanvasArena *arena = SP_CANVAS_ARENA (desktop->drawing);
+        SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
         if (desktop->splitMode()) {
             bool contains = canvas->_spliter_area.contains(cursor_pos);
             bool setoutline = canvas->_split_inverse ? !contains : contains;
@@ -1878,88 +1875,94 @@ void SPCanvas::paintSpliter()
     Geom::IntPoint c2 = Geom::IntPoint(linerect.corner(2));
     Geom::IntPoint c3 = Geom::IntPoint(linerect.corner(3));
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-     // We need to draw the line in middle of pixel
+    // We need to draw the line in middle of pixel
     // https://developer.gnome.org/gtkmm-tutorial/stable/sec-cairo-drawing-lines.html.en:17.2.3
     double gapx = _split_vertical ? 0.5 : 0;
     double gapy = _split_vertical ? 0 : 0.5;
-    Geom::Point start = _split_vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3) ;
-    Geom::Point end   = _split_vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2) ;
-    Geom::Point middle   = Geom::middle_point(start, end) ;
-    if(canvas->_spliter_control_pos != Geom::Point()) {
+    Geom::Point start = _split_vertical ? Geom::middle_point(c0, c1) : Geom::middle_point(c0, c3);
+    Geom::Point end = _split_vertical ? Geom::middle_point(c2, c3) : Geom::middle_point(c1, c2);
+    Geom::Point middle = Geom::middle_point(start, end);
+    if (canvas->_spliter_control_pos != Geom::Point()) {
         middle[Geom::X] = _split_vertical ? middle[Geom::X] : canvas->_spliter_control_pos[Geom::X];
         middle[Geom::Y] = _split_vertical ? canvas->_spliter_control_pos[Geom::Y] : middle[Geom::Y];
-    } 
-    canvas->_spliter_control_pos = middle;
-    canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (25 * ds))));
-    canvas->_spliter_top     = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] - (10 * ds))));
-    canvas->_spliter_bottom  = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] + (25 * ds))), Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))));
-    canvas->_spliter_left    = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (10 * ds))), Geom::IntPoint(int(middle[0]            ), int(middle[1] + (10 * ds))));
-    canvas->_spliter_right   = Geom::OptIntRect(Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))), Geom::IntPoint(int(middle[0]            ), int(middle[1] - (10 * ds))));
-    cairo_t *ct = cairo_create(_backing_store);
-    cairo_set_antialias (ct, CAIRO_ANTIALIAS_BEST);
-    cairo_set_line_width (ct, 1.0 * ds);
-    cairo_line_to (ct, start[0] + gapx, start[1] + gapy);
-    cairo_line_to (ct, end[0] + gapx, end[1] + gapy);
-    cairo_stroke_preserve (ct);
-    if (canvas->_split_hover || canvas->_split_pressed) {
-        cairo_set_source_rgba (ct, 0.15, 0.15, 0.15, 1);
-    } else {
-        cairo_set_source_rgba (ct, 0.3, 0.3, 0.3, 1);        
     }
-    cairo_stroke (ct);
-    /*     
+    canvas->_spliter_control_pos = middle;
+    canvas->_spliter_control = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))),
+                                                Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (25 * ds))));
+    canvas->_spliter_top = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (25 * ds))),
+                                            Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] - (10 * ds))));
+    canvas->_spliter_bottom = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] + (25 * ds))),
+                                               Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))));
+    canvas->_spliter_left = Geom::OptIntRect(Geom::IntPoint(int(middle[0] - (25 * ds)), int(middle[1] - (10 * ds))),
+                                             Geom::IntPoint(int(middle[0]), int(middle[1] + (10 * ds))));
+    canvas->_spliter_right = Geom::OptIntRect(Geom::IntPoint(int(middle[0] + (25 * ds)), int(middle[1] + (10 * ds))),
+                                              Geom::IntPoint(int(middle[0]), int(middle[1] - (10 * ds))));
+    cairo_t *ct = cairo_create(_backing_store);
+    cairo_set_antialias(ct, CAIRO_ANTIALIAS_BEST);
+    cairo_set_line_width(ct, 1.0 * ds);
+    cairo_line_to(ct, start[0] + gapx, start[1] + gapy);
+    cairo_line_to(ct, end[0] + gapx, end[1] + gapy);
+    cairo_stroke_preserve(ct);
+    if (canvas->_split_hover || canvas->_split_pressed) {
+        cairo_set_source_rgba(ct, 0.15, 0.15, 0.15, 1);
+    } else {
+        cairo_set_source_rgba(ct, 0.3, 0.3, 0.3, 1);
+    }
+    cairo_stroke(ct);
+    /*
     Get by: https://gitlab.com/snippets/1777221
-    M 40,19.999997 C 39.999998,8.9543032 31.045694,0 20,0 8.9543062,0 1.6568541e-6,8.9543032 0,19.999997 0,31.045692 8.954305,39.999997 20,39.999997 31.045695,39.999997 40,31.045692 40,19.999997 Z
-    M 11.109859,15.230724 2.8492384,19.999997 11.109861,24.769269 Z
-    M 29.249158,15.230724 37.509779,19.999997 29.249158,24.769269 Z
-    M 15.230728,29.03051 20,37.29113 24.769272,29.030509 Z
+    M 40,19.999997 C 39.999998,8.9543032 31.045694,0 20,0 8.9543062,0 1.6568541e-6,8.9543032 0,19.999997
+    0,31.045692 8.954305,39.999997 20,39.999997 31.045695,39.999997 40,31.045692 40,19.999997 Z M
+    11.109859,15.230724 2.8492384,19.999997 11.109861,24.769269 Z M 29.249158,15.230724
+    37.509779,19.999997 29.249158,24.769269 Z M 15.230728,29.03051 20,37.29113 24.769272,29.030509 Z
     M 15.230728,10.891209 20,2.630586 24.769272,10.891209 Z */
     double updwidth = _split_vertical ? 0 : linerect.width();
-    double updheight = _split_vertical ?  linerect.height() : 0;
-    cairo_translate(ct, middle[0]-(20 * ds), middle[1]- (20 * ds));
+    double updheight = _split_vertical ? linerect.height() : 0;
+    cairo_translate(ct, middle[0] - (20 * ds), middle[1] - (20 * ds));
     cairo_scale(ct, ds, ds);
-    cairo_move_to(ct, 40,19.999997);
-    cairo_curve_to(ct, 39.999998,8.9543032,31.045694,0,20,0);
-    cairo_curve_to(ct, 8.9543062,0,0,8.9543032,0,19.999997);
-    cairo_curve_to(ct, 0,31.045692,8.954305,39.999997,20,39.999997);
-    cairo_curve_to(ct, 31.045695,39.999997,40,31.045692,40,19.999997);
+    cairo_move_to(ct, 40, 19.999997);
+    cairo_curve_to(ct, 39.999998, 8.9543032, 31.045694, 0, 20, 0);
+    cairo_curve_to(ct, 8.9543062, 0, 0, 8.9543032, 0, 19.999997);
+    cairo_curve_to(ct, 0, 31.045692, 8.954305, 39.999997, 20, 39.999997);
+    cairo_curve_to(ct, 31.045695, 39.999997, 40, 31.045692, 40, 19.999997);
     cairo_close_path(ct);
     cairo_fill(ct);
-    cairo_move_to(ct, 15.230728,10.891209);
-    cairo_line_to(ct, 20,2.630586);
-    cairo_line_to(ct, 24.769272,10.891209);
+    cairo_move_to(ct, 15.230728, 10.891209);
+    cairo_line_to(ct, 20, 2.630586);
+    cairo_line_to(ct, 24.769272, 10.891209);
     cairo_close_path(ct);
     if (canvas->_split_hover_vertical) {
-        cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
+        cairo_set_source_rgba(ct, 0.90, 0.90, 0.90, 1);
     } else {
-        cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
+        cairo_set_source_rgba(ct, 0.6, 0.6, 0.6, 1);
     }
-    cairo_fill(ct); 
-    cairo_move_to(ct, 15.230728,29.03051);
-    cairo_line_to(ct, 20,37.29113);
-    cairo_line_to(ct, 24.769272,29.030509);
+    cairo_fill(ct);
+    cairo_move_to(ct, 15.230728, 29.03051);
+    cairo_line_to(ct, 20, 37.29113);
+    cairo_line_to(ct, 24.769272, 29.030509);
     cairo_close_path(ct);
-    cairo_fill(ct);  
-    cairo_move_to(ct, 11.109859,15.230724);
-    cairo_line_to(ct, 2.8492384,19.999997);
-    cairo_line_to(ct, 11.109861,24.769269);
+    cairo_fill(ct);
+    cairo_move_to(ct, 11.109859, 15.230724);
+    cairo_line_to(ct, 2.8492384, 19.999997);
+    cairo_line_to(ct, 11.109861, 24.769269);
     cairo_close_path(ct);
     if (canvas->_split_hover_horizontal) {
-        cairo_set_source_rgba (ct, 0.90, 0.90, 0.90, 1);
+        cairo_set_source_rgba(ct, 0.90, 0.90, 0.90, 1);
     } else {
-        cairo_set_source_rgba (ct, 0.6, 0.6, 0.6, 1);
+        cairo_set_source_rgba(ct, 0.6, 0.6, 0.6, 1);
     }
     cairo_fill(ct);
-    cairo_move_to(ct, 29.249158,15.230724);
-    cairo_line_to(ct, 37.509779,19.999997);
-    cairo_line_to(ct, 29.249158,24.769269);
+    cairo_move_to(ct, 29.249158, 15.230724);
+    cairo_line_to(ct, 37.509779, 19.999997);
+    cairo_line_to(ct, 29.249158, 24.769269);
     cairo_close_path(ct);
     cairo_fill(ct);
-    cairo_scale(ct, 1/ds, 1/ds);
-    cairo_translate(ct, -middle[0]-(20 * ds), -middle[1]-(20 * ds)); 
+    cairo_scale(ct, 1 / ds, 1 / ds);
+    cairo_translate(ct, -middle[0] - (20 * ds), -middle[1] - (20 * ds));
     cairo_restore(ct);
     cairo_destroy(ct);
-    gtk_widget_queue_draw_area(GTK_WIDGET(this), start[0] - (21 * ds), start[1] - (21 * ds), updwidth + (42 * ds), updheight + (42 * ds));
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), start[0] - (21 * ds), start[1] - (21 * ds), updwidth + (42 * ds),
+                               updheight + (42 * ds));
 }
 
 struct PaintRectSetup {
@@ -2277,27 +2280,31 @@ int SPCanvas::paint()
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
         split = desktop->splitMode();
-        arena = SP_CANVAS_ARENA (desktop->drawing);
+        arena = SP_CANVAS_ARENA(desktop->drawing);
         split_x = !_split_vertical ? 0 : _split_value;
-        split_y =  _split_vertical ? 0 : _split_value;
+        split_y = _split_vertical ? 0 : _split_value;
         guint hruler_gap = desktop->get_hruler_thickness();
         guint vruler_gap = desktop->get_vruler_thickness();
-        Geom::IntCoord coord1x = allocation.x + (int(allocation.width  * split_x)) - (3 * canvas->_device_scale) - vruler_gap;
-        Geom::IntCoord coord1y = allocation.y + (int(allocation.height * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
+        Geom::IntCoord coord1x =
+            allocation.x + (int(allocation.width * split_x)) - (3 * canvas->_device_scale) - vruler_gap;
+        Geom::IntCoord coord1y =
+            allocation.y + (int(allocation.height * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
         split_x = !_split_vertical ? 1 : _split_value;
-        split_y =  _split_vertical ? 1 : _split_value;
-        Geom::IntCoord coord2x = allocation.x + (int(allocation.width  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
-        Geom::IntCoord coord2y = allocation.y + (int(allocation.height * split_y)) + (3* canvas->_device_scale) - hruler_gap; 
-        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
+        split_y = _split_vertical ? 1 : _split_value;
+        Geom::IntCoord coord2x =
+            allocation.x + (int(allocation.width * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
+        Geom::IntCoord coord2y =
+            allocation.y + (int(allocation.height * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
+        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
         split_x = !_split_vertical ? 0 : _split_value;
-        split_y =  _split_vertical ? 0 : _split_value;
-        coord1x = allocation.x + (int(allocation.width  * split_x)) - vruler_gap;
+        split_y = _split_vertical ? 0 : _split_value;
+        coord1x = allocation.x + (int(allocation.width * split_x)) - vruler_gap;
         coord1y = allocation.y + (int(allocation.height * split_y)) - hruler_gap;
         split_x = !_split_vertical ? 1 : _split_value;
-        split_y =  _split_vertical ? 1 : _split_value;
-        coord2x = allocation.x + allocation.width  - vruler_gap;
-        coord2y = allocation.y + allocation.height - hruler_gap; 
-        _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y); 
+        split_y = _split_vertical ? 1 : _split_value;
+        coord2x = allocation.x + allocation.width - vruler_gap;
+        coord2y = allocation.y + allocation.height - hruler_gap;
+        _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
     } else {
         canvas->_spliter = Geom::OptIntRect();
         canvas->_spliter_area = Geom::OptIntRect();
@@ -2318,13 +2325,13 @@ int SPCanvas::paint()
         canvas->_split_control_pressed = false;
         canvas->_split_dragging = false;
     }
-    cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y)};
+    cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y) };
     split_x = !_split_vertical ? 0 : _split_value;
-    split_y =  _split_vertical ? 0 : _split_value;
-    cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width  * split_x),
-                                            _y0 + int(allocation.height * split_y), 
-                                            int(allocation.width  * (1 - split_x)), 
-                                            int(allocation.height * (1 - split_y))};
+    split_y = _split_vertical ? 0 : _split_value;
+    cairo_rectangle_int_t crect_outline = { _x0 + int(allocation.width * split_x),
+                                            _y0 + int(allocation.height * split_y),
+                                            int(allocation.width * (1 - split_x)),
+                                            int(allocation.height * (1 - split_y)) };
     cairo_region_t *to_draw = nullptr;
     cairo_region_t *to_draw_outline = nullptr;
     if (_split_inverse && split) {
@@ -2348,7 +2355,7 @@ int SPCanvas::paint()
             return FALSE;
         };
     }
-    
+
     if (arena) {
         Inkscape::RenderMode rm = arena->drawing.renderMode();
         arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
@@ -2463,7 +2470,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 
     Geom::IntRect old_area = getViewboxIntegers();
     Geom::IntRect new_area = old_area + Geom::IntPoint(dx, dy);
-    
+
     GtkAllocation allocation;
     gtk_widget_get_allocation(&_widget, &allocation);
 
@@ -2535,14 +2542,14 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
             if (gtk_widget_get_realized(GTK_WIDGET(this))) {
                 SPCanvas *canvas = SP_CANVAS(this);
                 if (canvas->_spliter) {
-                    double scroll_horiz = 1/(allocation.width/(double)-dx);
-                    double scroll_vert = 1/(allocation.height/(double)-dy);
+                    double scroll_horiz = 1 / (allocation.width / (double)-dx);
+                    double scroll_vert = 1 / (allocation.height / (double)-dy);
                     double gap = canvas->_split_vertical ? scroll_horiz : scroll_vert;
                     canvas->_split_value = canvas->_split_value + gap;
                     if (scroll_horiz < 0.03 || scroll_horiz > 0.97 || scroll_vert < 0.03 || scroll_vert > 0.97) {
                         if (canvas->_split_value > 0.97) {
                             canvas->_split_value = 0.97;
-                        } else if (canvas->_split_value < 0.03) { 
+                        } else if (canvas->_split_value < 0.03) {
                             canvas->_split_value = 0.03;
                         }
                     }

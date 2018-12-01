@@ -128,7 +128,7 @@ public:
 
     Gtk::Scrollbar *hscrollbar;
     Gtk::Scrollbar *vscrollbar;
- 
+
     Gtk::Box *vscrollbar_box;
 
     Inkscape::UI::Widget::Dock *dock;

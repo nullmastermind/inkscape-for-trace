@@ -43,7 +43,7 @@ Drawing::Drawing(SPCanvasArena *arena)
     , _filter_quality(Filters::FILTER_QUALITY_BEST)
     , _cache_score_threshold(50000.0)
     , _cache_budget(0)
-    , _grayscale_colormatrix(std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + 20 ))
+    , _grayscale_colormatrix(std::vector<gdouble>(grayscale_value_matrix, grayscale_value_matrix + 20))
     , _canvasarena(arena)
 {
 
@@ -135,11 +135,7 @@ Drawing::setExact(bool e)
     _exact = e;
 }
 
-void 
-Drawing::setOutlineSensitive(bool e) 
-{
-    _outline_sensitive = e;
-};
+void Drawing::setOutlineSensitive(bool e) { _outline_sensitive = e; };
 
 Geom::OptIntRect const &
 Drawing::cacheLimit() const

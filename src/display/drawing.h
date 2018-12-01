@@ -60,9 +60,9 @@ public:
     void setBlurQuality(int q);
     void setFilterQuality(int q);
     void setExact(bool e);
-    bool getExact() const {return _exact;};
+    bool getExact() const { return _exact; };
     void setOutlineSensitive(bool e);
-    bool getOutlineSensitive() const {return _outline_sensitive;};
+    bool getOutlineSensitive() const { return _outline_sensitive; };
 
     Geom::OptIntRect const &cacheLimit() const;
     void setCacheLimit(Geom::OptIntRect const &r);

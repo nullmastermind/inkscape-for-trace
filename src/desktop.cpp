@@ -84,50 +84,51 @@ static void _reconstruction_start(SPDesktop * desktop);
 static void _reconstruction_finish(SPDesktop * desktop);
 static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop);
 
-SPDesktop::SPDesktop() :
-    _dlg_mgr( nullptr ),
-    namedview( nullptr ),
-    canvas( nullptr ),
-    layers( nullptr ),
-    selection( nullptr ),
-    event_context( nullptr ),
-    layer_manager( nullptr ),
-    event_log( nullptr ),
-    temporary_item_list( nullptr ),
-    snapindicator( nullptr ),
-    acetate( nullptr ),
-    main( nullptr ),
-    gridgroup( nullptr ),
-    guides( nullptr ),
-    drawing( nullptr ),
-    sketch( nullptr ),
-    controls( nullptr ),
-    tempgroup ( nullptr ),
-    page( nullptr ),
-    page_border( nullptr ),
-    current( nullptr ),
-    _focusMode(false),
-    dkey( 0 ),
-    number( 0 ),
-    window_state(0),
-    interaction_disabled_counter( 0 ),
-    waiting_cursor( false ),
-    showing_dialogs ( false ),
-    guides_active( false ),
-    gr_item( nullptr ),
-    gr_point_type( POINT_LG_BEGIN ),
-    gr_point_i( 0 ),
-    gr_fill_or_stroke( Inkscape::FOR_FILL ),
-    _reconstruction_old_layer_id(), // an id attribute is not allowed to be the empty string
-    _display_mode(Inkscape::RENDERMODE_NORMAL),
-    _display_color_mode(Inkscape::COLORMODE_NORMAL),
-    _split_canvas(false),
-    _widget( nullptr ),
-    _guides_message_context( nullptr ),
-    _active( false ),
-    _doc2dt( Geom::identity() ),
-    _image_render_observer(this, "/options/rendering/imageinoutlinemode"),
-    grids_visible( false )
+SPDesktop::SPDesktop()
+    : _dlg_mgr(nullptr)
+    , namedview(nullptr)
+    , canvas(nullptr)
+    , layers(nullptr)
+    , selection(nullptr)
+    , event_context(nullptr)
+    , layer_manager(nullptr)
+    , event_log(nullptr)
+    , temporary_item_list(nullptr)
+    , snapindicator(nullptr)
+    , acetate(nullptr)
+    , main(nullptr)
+    , gridgroup(nullptr)
+    , guides(nullptr)
+    , drawing(nullptr)
+    , sketch(nullptr)
+    , controls(nullptr)
+    , tempgroup(nullptr)
+    , page(nullptr)
+    , page_border(nullptr)
+    , current(nullptr)
+    , _focusMode(false)
+    , dkey(0)
+    , number(0)
+    , window_state(0)
+    , interaction_disabled_counter(0)
+    , waiting_cursor(false)
+    , showing_dialogs(false)
+    , guides_active(false)
+    , gr_item(nullptr)
+    , gr_point_type(POINT_LG_BEGIN)
+    , gr_point_i(0)
+    , gr_fill_or_stroke(Inkscape::FOR_FILL)
+    , _reconstruction_old_layer_id()
+    , // an id attribute is not allowed to be the empty string
+    _display_mode(Inkscape::RENDERMODE_NORMAL)
+    , _display_color_mode(Inkscape::COLORMODE_NORMAL)
+    , _split_canvas(false)
+    , _widget(nullptr)
+    , _guides_message_context(nullptr)
+    , _active(false)
+    , _doc2dt(Geom::identity())
+    , _image_render_observer(this, "/options/rendering/imageinoutlinemode")
+    , grids_visible(false)
 {
     layers = new Inkscape::LayerModel();
     layers->_layer_activated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_activated), this));
@@ -916,8 +917,7 @@ Geom::Rect SPDesktop::get_display_area() const
     return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);
 }
 
-guint
-SPDesktop::get_hruler_thickness()
+guint SPDesktop::get_hruler_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -929,8 +929,7 @@ SPDesktop::get_hruler_thickness()
     return 0;
 }
 
-guint
-SPDesktop::get_vruler_thickness()
+guint SPDesktop::get_vruler_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -942,8 +941,7 @@ SPDesktop::get_vruler_thickness()
     return 0;
 }
 
-guint
-SPDesktop::get_hscroll_thickness()
+guint SPDesktop::get_hscroll_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -955,8 +953,7 @@ SPDesktop::get_hscroll_thickness()
     return 0;
 }
 
-guint
-SPDesktop::get_vscroll_thickness()
+guint SPDesktop::get_vscroll_thickness()
 {
     Gtk::Window *parent = getToplevel();
     if (parent) {
@@ -968,10 +965,10 @@ SPDesktop::get_vscroll_thickness()
     return 0;
 }
 
-    int get_hruler_thickness();
-    int get_vruler_thickness();
-    int get_vscroll_thickness();
-    int get_hscroll_thickness();
+int get_hruler_thickness();
+int get_vruler_thickness();
+int get_vscroll_thickness();
+int get_hscroll_thickness();
 
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.
@@ -1616,8 +1613,9 @@ void SPDesktop::toggleSplitMode()
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
-        SPCanvas * canvas = getCanvas();
-        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width, canvas->_y0 + allocation.height);
+        SPCanvas *canvas = getCanvas();
+        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
+                              canvas->_y0 + allocation.height);
     }
 }
 
