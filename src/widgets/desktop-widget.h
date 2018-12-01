@@ -33,8 +33,10 @@ class SPObject;
 
 namespace Gtk {
 class Box;
+class Grid;
 class MenuBar;
 class Scrollbar;
+class SpinButton;
 class ToggleButton;
 }
 
@@ -53,7 +55,6 @@ void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
-void sp_desktop_widget_update_zoom(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rotation(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
@@ -83,6 +84,8 @@ struct SPDesktopWidget {
 
     Gtk::Window *window;
 
+    static void dispose(GObject *object);
+
 private:
     // The root vbox of the window layout.
     Gtk::Box *_vbox;
@@ -105,6 +108,15 @@ private:
 
     Gtk::ToggleButton *_cms_adjust;
     Gtk::ToggleButton *_sticky_zoom;
+    Gtk::Grid *_coord_status;
+
+    Gtk::Label *_coord_status_x;
+    Gtk::Label *_coord_status_y;
+    Gtk::SpinButton *_zoom_status;
+    sigc::connection _zoom_status_input_connection;
+    sigc::connection _zoom_status_output_connection;
+    sigc::connection _zoom_status_value_changed_connection;
+    sigc::connection _zoom_status_populate_popup_connection;
 
 public:
 
@@ -112,14 +124,9 @@ public:
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *coord_status;
-    GtkWidget *coord_status_x;
-    GtkWidget *coord_status_y;
     GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
-    GtkWidget *zoom_status;
     GtkWidget *rotation_status;
-    gulong zoom_update;
     gulong rotation_update;
 
     Inkscape::UI::Widget::Dock *dock;
@@ -195,7 +202,7 @@ public:
             void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
             void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
             bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
-            void updateZoom() override { sp_desktop_widget_update_zoom(_dtw); }
+            void updateZoom() override { _dtw->update_zoom(); }
             void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
             void updateRotation() override { sp_desktop_widget_update_rotation(_dtw); }
             void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
@@ -264,6 +271,7 @@ public:
     bool get_color_prof_adj_enabled() const;
     void toggle_color_prof_adj();
     bool get_sticky_zoom_active() const;
+    void update_zoom();
 
 private:
     GtkWidget *tool_toolbox;
@@ -280,6 +288,11 @@ private:
     void update_scrollbars(double scale);
     void toggle_rulers();
     void sticky_zoom_toggled();
+    int zoom_input(double *new_val);
+    bool zoom_output();
+    void zoom_value_changed();
+    void zoom_menu_handler(double factor);
+    void zoom_populate_popup(Gtk::Menu *menu);
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );

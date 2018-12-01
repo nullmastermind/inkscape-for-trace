@@ -31,6 +31,7 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/separator.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
@@ -97,7 +98,6 @@ using Inkscape::Util::unit_table;
 /* SPDesktopWidget */
 
 static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);
-static void sp_desktop_widget_dispose(GObject *object);
 
 static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static void sp_desktop_widget_realize (GtkWidget *widget);
@@ -109,10 +109,7 @@ static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDe
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
 static gdouble sp_dtw_zoom_display_to_value (gdouble value);
-static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
-static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
-static void sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor);
 
 static gint sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
@@ -298,7 +295,7 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-    object_class->dispose = sp_desktop_widget_dispose;
+    object_class->dispose = SPDesktopWidget::dispose;
 
     widget_class->size_allocate = sp_desktop_widget_size_allocate;
     widget_class->realize = sp_desktop_widget_realize;
@@ -594,29 +591,30 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 
     // Zoom status spinbutton ---------------
-    dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
-    g_object_set_data (G_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
-    gtk_widget_set_tooltip_text (dtw->zoom_status, _("Zoom"));
-    gtk_widget_set_size_request (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
-    gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
-    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
-    gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
+    auto zoom_adj = Gtk::Adjustment::create(100.0, log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
+    dtw->_zoom_status = Gtk::manage(new Gtk::SpinButton(zoom_adj));
+
+    dtw->_zoom_status->set_data("dtw", dtw->canvas);
+    dtw->_zoom_status->set_tooltip_text(_("Zoom"));
+    dtw->_zoom_status->set_size_request(STATUS_ZOOM_WIDTH, -1);
+    dtw->_zoom_status->set_width_chars(6);
+    dtw->_zoom_status->set_numeric(false);
+    dtw->_zoom_status->set_update_policy(Gtk::UPDATE_ALWAYS);
 
     // Callbacks
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->zoom_status);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->zoom_status);
-    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
-    g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+    dtw->_zoom_status_input_connection  = dtw->_zoom_status->signal_input().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_input));
+    dtw->_zoom_status_output_connection = dtw->_zoom_status->signal_output().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_output));
+    g_signal_connect (G_OBJECT (dtw->_zoom_status->gobj()), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->_zoom_status->gobj());
+    g_signal_connect (G_OBJECT (dtw->_zoom_status->gobj()), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->_zoom_status->gobj());
+    dtw->_zoom_status_value_changed_connection = dtw->_zoom_status->signal_value_changed().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_value_changed));
+    dtw->_zoom_status_populate_popup_connection = dtw->_zoom_status->signal_populate_popup().connect(sigc::mem_fun(dtw, &SPDesktopWidget::zoom_populate_popup));
 
     // Style
     auto css_provider_spinbutton = Gtk::CssProvider::create();
     css_provider_spinbutton->load_from_data("* { padding-left: 2px; padding-right: 2px; padding-top: 0px; padding-bottom: 0px;}");  // Shouldn't this be in a style sheet? Used also by rotate.
 
-    auto zoomstat = Glib::wrap(dtw->zoom_status);
-    zoomstat->set_name("ZoomStatus");
-    auto context_zoom = zoomstat->get_style_context();
+    dtw->_zoom_status->set_name("ZoomStatus");
+    auto context_zoom = dtw->_zoom_status->get_style_context();
     context_zoom->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
     // Rotate status spinbutton ---------------
@@ -646,46 +644,44 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 
     // Cursor coordinates
-    dtw->coord_status = gtk_grid_new();
-    gtk_widget_set_name(dtw->coord_status, "CoordinateAndZStatus");
-    gtk_grid_set_row_spacing(GTK_GRID(dtw->coord_status), 0);
-    gtk_grid_set_column_spacing(GTK_GRID(dtw->coord_status), 2);
-    auto sep = gtk_separator_new(GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_name(sep, "CoordinateSeparator");
-    gtk_grid_attach(GTK_GRID(dtw->coord_status),
-		    GTK_WIDGET(sep),
-		    0, 0, 1, 2);
+    dtw->_coord_status = Gtk::manage(new Gtk::Grid());
+    dtw->_coord_status->set_name("CoordinateAndZStatus");
+    dtw->_coord_status->set_row_spacing(0);
+    dtw->_coord_status->set_column_spacing(2);
+    auto sep = Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL));
+    sep->set_name("CoordinateSeparator");
+    dtw->_coord_status->attach(*sep, 0, 0, 1, 2);
 
-    gtk_widget_set_tooltip_text (dtw->coord_status, _("Cursor coordinates"));
-    auto label_x = gtk_label_new(_("X:"));
-    auto label_y = gtk_label_new(_("Y:"));
-    gtk_widget_set_halign(label_x, GTK_ALIGN_START);
-    gtk_widget_set_halign(label_y, GTK_ALIGN_START);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_x, 1, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_y, 1, 1, 1, 1);
-    dtw->coord_status_x = gtk_label_new(nullptr);
-    dtw->coord_status_y = gtk_label_new(nullptr);
-    gtk_widget_set_name(dtw->coord_status_x, "CoordinateStatusX");
-    gtk_widget_set_name(dtw->coord_status_y, "CoordinateStatusY");
-    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_x), "   0.00 ");
-    gtk_label_set_markup(GTK_LABEL(dtw->coord_status_y), "   0.00 ");
+    dtw->_coord_status->set_tooltip_text(_("Cursor coordinates"));
+    auto label_x = Gtk::manage(new Gtk::Label(_("X:")));
+    auto label_y = Gtk::manage(new Gtk::Label(_("Y:")));
+    label_x->set_halign(Gtk::ALIGN_START);
+    label_y->set_halign(Gtk::ALIGN_START);
+    dtw->_coord_status->attach(*label_x, 1, 0, 1, 1);
+    dtw->_coord_status->attach(*label_y, 1, 1, 1, 1);
+    dtw->_coord_status_x = Gtk::manage(new Gtk::Label());
+    dtw->_coord_status_y = Gtk::manage(new Gtk::Label());
+    dtw->_coord_status_x->set_name("CoordinateStatusX");
+    dtw->_coord_status_y->set_name("CoordinateStatusY");
+    dtw->_coord_status_x->set_markup("   0.00 ");
+    dtw->_coord_status_y->set_markup("   0.00 ");
 
-    auto label_z = gtk_label_new(_("Z:"));
-    gtk_widget_set_name(label_z, "ZLabel");
-    auto label_r = gtk_label_new(_("R:"));
-    gtk_widget_set_name(label_r, "RLabel");
-    gtk_widget_set_halign(dtw->coord_status_x, GTK_ALIGN_END);
-    gtk_widget_set_halign(dtw->coord_status_y, GTK_ALIGN_END);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_x, 2, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_y, 2, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_z, 3, 0, 1, 2);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_r, 5, 0, 1, 2);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->zoom_status, 4, 0, 1, 2);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->rotation_status, 6, 0, 1, 2);
+    auto label_z = Gtk::manage(new Gtk::Label(_("Z:")));
+    label_z->set_name("ZLabel");
+    auto label_r = Gtk::manage(new Gtk::Label(_("R:")));
+    label_r->set_name("RLabel");
+    dtw->_coord_status_x->set_halign(Gtk::ALIGN_END);
+    dtw->_coord_status_y->set_halign(Gtk::ALIGN_END);
+    dtw->_coord_status->attach(*dtw->_coord_status_x, 2, 0, 1, 1);
+    dtw->_coord_status->attach(*dtw->_coord_status_y, 2, 1, 1, 1);
+    dtw->_coord_status->attach(*label_z, 3, 0, 1, 2);
+    dtw->_coord_status->attach(*label_r, 5, 0, 1, 2);
+    dtw->_coord_status->attach(*dtw->_zoom_status, 4, 0, 1, 2);
+    dtw->_coord_status->attach(*Glib::wrap(dtw->rotation_status), 6, 0, 1, 2);
 
-    sp_set_font_size_smaller (dtw->coord_status);
+    sp_set_font_size_smaller(GTK_WIDGET(dtw->_coord_status->gobj()));
 
-    dtw->_statusbar->pack_end(*Glib::wrap(dtw->coord_status), false, false);
+    dtw->_statusbar->pack_end(*dtw->_coord_status, false, false);
 
     // --------------- Color Management ---------------- //
     dtw->_tracker = ege_color_prof_tracker_new(GTK_WIDGET(dtw->layer_selector->gobj()));
@@ -730,7 +726,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 /**
  * Called before SPDesktopWidget destruction.
  */
-static void sp_desktop_widget_dispose(GObject *object)
+void
+SPDesktopWidget::dispose(GObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
 
@@ -746,11 +743,11 @@ static void sp_desktop_widget_dispose(GObject *object)
         }
 
         // Zoom
-        g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK(sp_dtw_zoom_input), dtw);
-        g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK(sp_dtw_zoom_output), dtw);
-        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->zoom_status), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->zoom_status);
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+        dtw->_zoom_status_input_connection.disconnect();
+        dtw->_zoom_status_output_connection.disconnect();
+        g_signal_handlers_disconnect_matched (G_OBJECT (dtw->_zoom_status->gobj()), G_SIGNAL_MATCH_DATA, 0, 0, nullptr, nullptr, dtw->_zoom_status);
+        dtw->_zoom_status_value_changed_connection.disconnect();
+        dtw->_zoom_status_populate_popup_connection.disconnect();
 
         // Rotation
         g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK(sp_dtw_rotation_input), dtw);
@@ -1274,19 +1271,18 @@ SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
     gchar *cstr;
     cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::X]);
-    gtk_label_set_markup( GTK_LABEL(this->coord_status_x), cstr );
+    _coord_status_x->set_markup(cstr);
     g_free(cstr);
 
     cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::Y]);
-    gtk_label_set_markup( GTK_LABEL(this->coord_status_y), cstr );
+    _coord_status_y->set_markup(cstr);
     g_free(cstr);
 }
 
 void
 SPDesktopWidget::letZoomGrabFocus()
 {
-    if (zoom_status)
-        gtk_widget_grab_focus (zoom_status);
+    if (_zoom_status) _zoom_status->grab_focus();
 }
 
 void
@@ -1836,10 +1832,10 @@ sp_dtw_zoom_display_to_value (gdouble value)
     return  log (value / 100.0) / log (2);
 }
 
-static gint
-sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
+int
+SPDesktopWidget::zoom_input(double *new_val)
 {
-    gchar *b = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin)));
+    gchar *b = g_strdup(_zoom_status->get_text().c_str());
 
     gchar *comma = g_strstr_len (b, -1, ",");
     if (comma) {
@@ -1857,161 +1853,89 @@ sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
     return TRUE;
 }
 
-static bool
-sp_dtw_zoom_output (GtkSpinButton *spin, gpointer /*data*/)
+bool
+SPDesktopWidget::zoom_output()
 {
     gchar b[64];
-    double val = sp_dtw_zoom_value_to_display (gtk_spin_button_get_value (spin));
+    double val = sp_dtw_zoom_value_to_display (_zoom_status->get_value());
     if (val < 10) {
         g_snprintf (b, 64, "%4.1f%%", val);
     } else {
         g_snprintf (b, 64, "%4.0f%%", val);
     }
-    gtk_entry_set_text (GTK_ENTRY (spin), b);
-    return TRUE;
+    _zoom_status->set_text(b);
+    return true;
 }
 
-static void
-sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
+void
+SPDesktopWidget::zoom_value_changed()
 {
-    double const zoom_factor = pow (2, gtk_spin_button_get_value (spin));
-
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (data);
-    SPDesktop *desktop = dtw->desktop;
+    double const zoom_factor = pow (2, _zoom_status->get_value());
 
     // Zoom around center of window
     Geom::Rect const d_canvas = desktop->getCanvas()->getViewbox();
     Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
-    g_signal_handler_block (spin, dtw->zoom_update);
+    _zoom_status_value_changed_connection.block();
     desktop->zoom_absolute_center_point (midpoint, zoom_factor);
-    g_signal_handler_unblock (spin, dtw->zoom_update);
+    _zoom_status_value_changed_connection.unblock();
 
-    spinbutton_defocus (GTK_WIDGET(spin));
+    spinbutton_defocus(GTK_WIDGET(_zoom_status->gobj()));
 }
 
-static void
-sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
+void
+SPDesktopWidget::zoom_menu_handler(double factor)
 {
-    Geom::Rect const d = dt->get_display_area();
-    dt->zoom_absolute_center_point (d.midpoint(), factor);
+    Geom::Rect const d = desktop->get_display_area();
+    desktop->zoom_absolute_center_point (d.midpoint(), factor);
 }
 
-// Zoom Popup Menu
-static void
-sp_dtw_zoom_10 (GtkMenuItem */*item*/, gpointer data)
+void
+SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
 {
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 0.1);
-}
-
-static void
-sp_dtw_zoom_25 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 0.25);
-}
-
-static void
-sp_dtw_zoom_50 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 0.5);
-}
-
-static void
-sp_dtw_zoom_100 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 1.0);
-}
-
-static void
-sp_dtw_zoom_200 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 2.0);
-}
-
-static void
-sp_dtw_zoom_500 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 5.0);
-}
-
-static void
-sp_dtw_zoom_1000 (GtkMenuItem */*item*/, gpointer data)
-{
-    sp_dtw_zoom_menu_handler (static_cast<SPDesktop*>(data), 10.0);
-}
-
-static void
-sp_dtw_zoom_page (GtkMenuItem */*item*/, gpointer data)
-{
-    static_cast<SPDesktop*>(data)->zoom_page();
-}
-
-static void
-sp_dtw_zoom_drawing (GtkMenuItem */*item*/, gpointer data)
-{
-    static_cast<SPDesktop*>(data)->zoom_drawing();
-}
-
-static void
-sp_dtw_zoom_selection (GtkMenuItem */*item*/, gpointer data)
-{
-    static_cast<SPDesktop*>(data)->zoom_selection();
-}
-
-static void
-sp_dtw_zoom_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
-{
-    SPDesktop *dt = SP_DESKTOP_WIDGET (data)->desktop;
-    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(menu))->get_children();
-    for ( auto iter : children) {
-        Glib::wrap(GTK_CONTAINER(menu))->remove(*iter);
+    for ( auto iter : menu->get_children()) {
+        menu->remove(*iter);
     }
 
-    GtkWidget *item;
+    auto item_1000 = Gtk::manage(new Gtk::MenuItem("1000%"));
+    auto item_500  = Gtk::manage(new Gtk::MenuItem("500%"));
+    auto item_200  = Gtk::manage(new Gtk::MenuItem("200%"));
+    auto item_100  = Gtk::manage(new Gtk::MenuItem("100%"));
+    auto item_50   = Gtk::manage(new Gtk::MenuItem( "50%"));
+    auto item_25   = Gtk::manage(new Gtk::MenuItem( "25%"));
+    auto item_10   = Gtk::manage(new Gtk::MenuItem( "10%"));
 
-    item = gtk_menu_item_new_with_label ("1000%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_1000), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    item_1000->signal_activate().connect(sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler), 10.00));
+    item_500->signal_activate().connect( sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  5.00));
+    item_200->signal_activate().connect( sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  2.00));
+    item_100->signal_activate().connect( sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  1.00));
+    item_50->signal_activate().connect(  sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  0.50));
+    item_25->signal_activate().connect(  sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  0.25));
+    item_10->signal_activate().connect(  sigc::bind(sigc::mem_fun(this, &SPDesktopWidget::zoom_menu_handler),  0.10));
 
-    item = gtk_menu_item_new_with_label ("500%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_500), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    menu->append(*item_1000);
+    menu->append(*item_500);
+    menu->append(*item_200);
+    menu->append(*item_100);
+    menu->append(*item_50);
+    menu->append(*item_25);
+    menu->append(*item_10);
 
-    item = gtk_menu_item_new_with_label ("200%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_200), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    auto sep = Gtk::manage(new Gtk::SeparatorMenuItem());
+    menu->append(*sep);
 
-    item = gtk_menu_item_new_with_label ("100%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_100), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    auto item_page = Gtk::manage(new Gtk::MenuItem(_("Page")));
+    item_page->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_page));
+    menu->append(*item_page);
 
-    item = gtk_menu_item_new_with_label ("50%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_50), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    auto item_drawing = Gtk::manage(new Gtk::MenuItem(_("Drawing")));
+    item_drawing->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_drawing));
+    menu->append(*item_drawing);
 
-    item = gtk_menu_item_new_with_label ("25%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_25), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+    auto item_selection = Gtk::manage(new Gtk::MenuItem(_("Selection")));
+    item_selection->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_selection));
+    menu->append(*item_selection);
 
-    item = gtk_menu_item_new_with_label ("10%");
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_10), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-    item = gtk_separator_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-    item = gtk_menu_item_new_with_label (_("Page"));
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_page), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-    item = gtk_menu_item_new_with_label (_("Drawing"));
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_drawing), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-    item = gtk_menu_item_new_with_label (_("Selection"));
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_zoom_selection), dt);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-    gtk_widget_show_all (GTK_WIDGET (menu));
+    menu->show_all();
 }
 
 
@@ -2024,14 +1948,12 @@ SPDesktopWidget::sticky_zoom_toggled()
 
 
 void
-sp_desktop_widget_update_zoom (SPDesktopWidget *dtw)
+SPDesktopWidget::update_zoom()
 {
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(dtw->zoom_status));
-
-    g_signal_handler_block (G_OBJECT (dtw->zoom_status), dtw->zoom_update);
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (dtw->zoom_status), log(dtw->desktop->current_zoom()) / log(2));
-    gtk_widget_queue_draw(GTK_WIDGET(dtw->zoom_status));
-    g_signal_handler_unblock (G_OBJECT (dtw->zoom_status), dtw->zoom_update);
+    _zoom_status_value_changed_connection.block();
+    _zoom_status->set_value(log(desktop->current_zoom()) / log(2));
+    _zoom_status->queue_draw();
+    _zoom_status_value_changed_connection.unblock();
 }
 
 
@@ -2141,7 +2063,7 @@ sp_dtw_rotate_180 (GtkMenuItem */*item*/, SPDesktopWidget * data)
        gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status),180);
 }
 
-static void
+void
 sp_dtw_rotation_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(data);
