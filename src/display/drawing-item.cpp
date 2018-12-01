@@ -121,7 +121,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _fill_pattern(nullptr)
     , _stroke_pattern(nullptr)
     , _filter(nullptr)
-    , _item(nullptr)
+    , _user_data(nullptr)
     , _cache(nullptr)
     , _state(0)
     , _child_type(CHILD_ORPHAN)
@@ -1031,9 +1031,10 @@ DrawingItem::pick(Geom::Point const &p, double delta, unsigned flags)
 Glib::ustring
 DrawingItem::name()
 {
-    if (_item) {
-        if (_item->getId())
-            return _item->getId();
+    SPObject *object = static_cast<SPObject *>(_user_data);
+    if (object) {
+        if(object->getId())
+            return object->getId();
         else
             return "No object id";
     } else {

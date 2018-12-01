@@ -1818,7 +1818,7 @@ static gint
 _arena_handler (SPCanvasArena */*arena*/, Inkscape::DrawingItem *ai, GdkEvent *event, SPDesktop *desktop)
 {
     if (ai) {
-        SPItem *spi = ai->getItem();
+        SPItem *spi = (ai) ? static_cast<SPItem *>(ai->data()) : nullptr;
         return sp_event_context_item_handler (desktop->event_context, spi, event);
     } else {
         return sp_event_context_root_handler (desktop->event_context, event);

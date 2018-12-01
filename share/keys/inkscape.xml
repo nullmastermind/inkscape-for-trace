@@ -292,6 +292,8 @@ override) the bindings in the main default.xml.
   <bind action="ViewColorModeNormal" />
   <bind action="ViewColorModeGrayscale" />
 
+  <bind key="KP_7" modifiers="Primary" action="ViewSplitModeToggle"  display="true" /> <!-- | -->
+
 <!-- Edit -->
 
   <bind key="z" modifiers="Primary" action="EditUndo" display="true" />

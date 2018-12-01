@@ -3121,9 +3121,9 @@ Verb *Verb::_base_verbs[] = {
     //                 N_("Switch to print colors preview mode"), NULL),
     new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_TOGGLE, "ViewColorModeToggle", N_("_Toggle"),
                  N_("Toggle between normal and grayscale color display modes"), nullptr),
-    
-    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("Togg_le Split View Mode"),
-                 N_("Split canvas in 2 to show outline"), INKSCAPE_ICON("dot")),
+
+    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("Toggle _Split View Mode"),
+                 N_("Split canvas in 2 to show outline"), nullptr),
     
     new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),

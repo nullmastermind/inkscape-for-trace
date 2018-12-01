@@ -131,7 +131,6 @@ public:
 
     void setKey(unsigned key) { _key = key; }
     unsigned key() const { return _key; }
-
     void setData(void *data) { _user_data = data; }
     void *data() const { return _user_data; }
 
@@ -205,7 +204,7 @@ protected:
     DrawingPattern *_fill_pattern;
     DrawingPattern *_stroke_pattern;
     Inkscape::Filters::Filter *_filter;
-    SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
+    void *_user_data; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
 
     CacheList::iterator _cache_iterator;
