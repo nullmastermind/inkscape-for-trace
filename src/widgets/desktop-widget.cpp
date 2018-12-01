@@ -27,6 +27,7 @@
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/menubar.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrollbar.h>
 #include <gtkmm/separator.h>
@@ -104,7 +105,6 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWidget *dtw);
-static void sp_update_guides_lock( GtkWidget *button, gpointer data );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_toggled( GtkWidget *button, gpointer data );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -387,19 +387,19 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // Added to table wrapper later either directly or via paned window shared with dock.
 
     // Lock guides button
-    dtw->guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+    dtw->_guides_lock = sp_button_new_from_data( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
                                                nullptr,
                                                INKSCAPE_ICON("object-locked"),
                                                _("Toggle lock of all guides in the document"));
     auto guides_lock_style_provider = Gtk::CssProvider::create();
     guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
-    auto wnd = Glib::wrap(dtw->guides_lock);
+    auto wnd = Glib::wrap(GTK_TOGGLE_BUTTON(dtw->_guides_lock));
     wnd->set_name("LockGuides");
     auto context = wnd->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    g_signal_connect (G_OBJECT (dtw->guides_lock), "toggled", G_CALLBACK (sp_update_guides_lock), dtw);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->guides_lock, 0, 0, 1, 1);
+    wnd->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), dtw->_guides_lock, 0, 0, 1, 1);
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -1016,23 +1016,22 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-void sp_update_guides_lock( GtkWidget */*button*/, gpointer data )
+void
+SPDesktopWidget::update_guides_lock()
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
+    bool down = SP_BUTTON_IS_DOWN(_guides_lock);
 
-    bool down = SP_BUTTON_IS_DOWN(dtw->guides_lock);
-
-    SPDocument *doc = dtw->desktop->getDocument();
-    SPNamedView *nv = dtw->desktop->getNamedView();
-    Inkscape::XML::Node *repr = nv->getRepr();
+    auto doc  = desktop->getDocument();
+    auto nv   = desktop->getNamedView();
+    auto repr = nv->getRepr();
 
     if ( down != nv->lockguides ) {
         nv->lockguides = down;
         sp_namedview_guides_toggle_lock(doc, nv);
         if (down) {
-            dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Locked all guides"));
+            setMessage (Inkscape::NORMAL_MESSAGE, _("Locked all guides"));
         } else {
-            dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Unlocked all guides"));
+            setMessage (Inkscape::NORMAL_MESSAGE, _("Unlocked all guides"));
         }
     }
 }
@@ -1477,9 +1476,9 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "menu/state", true)) {
-        gtk_widget_hide (dtw->_menubar);
+        dtw->_menubar->hide();
     } else {
-        gtk_widget_show_all (dtw->_menubar);
+        dtw->_menubar->show_all();
     }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
@@ -1531,11 +1530,11 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
-        gtk_widget_hide (dtw->guides_lock);
+        gtk_widget_hide (dtw->_guides_lock);
         gtk_widget_hide (dtw->hruler);
         gtk_widget_hide (dtw->vruler);
     } else {
-        gtk_widget_show_all (dtw->guides_lock);
+        gtk_widget_show_all (dtw->_guides_lock);
         gtk_widget_show_all (dtw->hruler);
         gtk_widget_show_all (dtw->vruler);
     }
@@ -1687,11 +1686,11 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
     dtw->layer_selector->setDesktop(dtw->desktop);
 
-    dtw->_menubar = sp_ui_main_menubar (dtw->desktop);
-    gtk_widget_set_name(dtw->_menubar, "MenuBar");
-    gtk_widget_show_all (dtw->_menubar);
+    dtw->_menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar (dtw->desktop)));
+    dtw->_menubar->set_name("MenuBar");
+    dtw->_menubar->show_all();
 
-    dtw->_vbox->pack_start(*Glib::wrap(dtw->_menubar), false, false);
+    dtw->_vbox->pack_start(*dtw->_menubar, false, false);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -2206,19 +2205,19 @@ sp_desktop_widget_update_rotation (SPDesktopWidget *dtw)
 
 // --------------- Rulers/Scrollbars/Etc. -----------------
 void
-sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw)
+SPDesktopWidget::toggle_rulers()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->guides_lock)) {
-        gtk_widget_hide (dtw->guides_lock);
-        gtk_widget_hide (dtw->hruler);
-        gtk_widget_hide (dtw->vruler);
-        prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
+    if (gtk_widget_get_visible (_guides_lock)) {
+        gtk_widget_hide(_guides_lock);
+        gtk_widget_hide(hruler);
+        gtk_widget_hide(vruler);
+        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
     } else {
-        gtk_widget_show_all (dtw->guides_lock);
-        gtk_widget_show_all (dtw->hruler);
-        gtk_widget_show_all (dtw->vruler);
-        prefs->setBool(dtw->desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
+        gtk_widget_show_all(_guides_lock);
+        gtk_widget_show_all(hruler);
+        gtk_widget_show_all(vruler);
+        prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
     }
 }
 
@@ -2261,11 +2260,11 @@ void
 sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (gtk_widget_get_visible (dtw->_menubar)) {
-        gtk_widget_hide (dtw->_menubar);
+    if (dtw->_menubar->get_visible()) {
+        dtw->_menubar->hide();
         prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", false);
     } else {
-        gtk_widget_show_all (dtw->_menubar);
+        dtw->_menubar->show_all();
         prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", true);
     }
 }

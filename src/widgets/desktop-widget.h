@@ -33,6 +33,7 @@ class SPObject;
 
 namespace Gtk {
 class Box;
+class MenuBar;
 class Scrollbar;
 }
 
@@ -58,7 +59,6 @@ void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
 /* Show/hide rulers & scrollbars */
-void sp_desktop_widget_toggle_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 void sp_desktop_widget_toggle_color_prof_adj( SPDesktopWidget *dtw );
 bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
@@ -90,8 +90,8 @@ private:
 
     Gtk::Box *_hbox;
 
-    GtkWidget *_menubar;
-    Gtk::Box  *_statusbar;
+    Gtk::MenuBar *_menubar;
+    Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialogs::SwatchesPanel *_panels;
 
@@ -102,13 +102,14 @@ private:
 
     Gtk::Box *_vscrollbar_box;
 
+    GtkWidget *_guides_lock;
+
 public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *guides_lock;
     GtkWidget *sticky_zoom;
     GtkWidget *cms_adjust;
     GtkWidget *coord_status;
@@ -190,7 +191,7 @@ public:
             void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
             void updateRulers() override { sp_desktop_widget_update_rulers(_dtw); }
             void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
-            void toggleRulers() override { sp_desktop_widget_toggle_rulers(_dtw); }
+            void toggleRulers() override { _dtw->toggle_rulers(); }
             void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
             void toggleColorProfAdjust() override { sp_desktop_widget_toggle_color_prof_adj(_dtw); }
             bool colorProfAdjustEnabled() override { return sp_desktop_widget_color_prof_adj_enabled(_dtw); }
@@ -254,6 +255,7 @@ public:
     static SPDesktopWidget* createInstance(SPNamedView *namedview);
 
     void updateNamedview();
+    void update_guides_lock();
 
 private:
     GtkWidget *tool_toolbox;
@@ -268,6 +270,7 @@ private:
     void on_adjustment_value_changed();
     void toggle_scrollbars();
     void update_scrollbars(double scale);
+    void toggle_rulers();
 };
 
 /// The SPDesktopWidget vtable
