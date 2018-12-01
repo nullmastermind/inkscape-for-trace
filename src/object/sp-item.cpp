@@ -1179,7 +1179,7 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
                 stroke_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
         }
-        ai->setData(this);
+        ai->setItem(this);
         ai->setItemBounds(geometricBounds());
     }
 
