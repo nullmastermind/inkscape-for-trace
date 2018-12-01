@@ -80,6 +80,7 @@ AboutBox::AboutBox()
 
     // Set Application metadata, which will be automatically
     // inserted into text widgets by the Gtk::AboutDialog parent class
+    // clang-format off
     set_program_name  (  "Inkscape");
     set_version       (  Inkscape::version_string);
     set_logo_icon_name(  INKSCAPE_ICON("inkscape"));
@@ -89,6 +90,7 @@ AboutBox::AboutBox()
     set_copyright     (_("© 2019 Inkscape Developers"));
     set_comments      (_("Open Source Scalable Vector Graphics Editor\n"
                          "Draw Freely."));
+    // clang-format on
 }
 
 /**
