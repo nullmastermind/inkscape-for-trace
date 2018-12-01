@@ -97,12 +97,8 @@ private:
 
     Inkscape::UI::Dialogs::SwatchesPanel *_panels;
 
-    Gtk::Scrollbar *_hscrollbar;
-    Gtk::Scrollbar *_vscrollbar;
     Glib::RefPtr<Gtk::Adjustment> _hadj;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
-
-    Gtk::Box *_vscrollbar_box;
 
     Gtk::ToggleButton *_guides_lock;
 
@@ -128,6 +124,12 @@ public:
     GtkWidget *select_status_eventbox;
     GtkWidget *rotation_status;
     gulong rotation_update;
+
+
+    Gtk::Scrollbar *hscrollbar;
+    Gtk::Scrollbar *vscrollbar;
+ 
+    Gtk::Box *vscrollbar_box;
 
     Inkscape::UI::Widget::Dock *dock;
 

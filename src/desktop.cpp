@@ -949,7 +949,7 @@ SPDesktop::get_hscroll_thickness()
     if (parent) {
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
-        gtk_widget_get_allocation(dtw->hscrollbar, &allocation);
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->hscrollbar), &allocation);
         return allocation.height;
     }
     return 0;
@@ -962,7 +962,7 @@ SPDesktop::get_vscroll_thickness()
     if (parent) {
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
-        gtk_widget_get_allocation(dtw->vscrollbar_box, &allocation);
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->vscrollbar_box), &allocation);
         return allocation.width;
     }
     return 0;

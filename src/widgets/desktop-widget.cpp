@@ -27,7 +27,13 @@
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/paned.h>
+#include <gtkmm/menubar.h>
+ #include <gtkmm/paned.h>
+#include <gtkmm/scrollbar.h>
+#include <gtkmm/separator.h>
+#include <gtkmm/separatormenuitem.h>
+ 
+
 
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
@@ -103,12 +109,6 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWidget *dtw);
-
-static void sp_update_guides_lock( GtkWidget *button, gpointer data );
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-static void cms_adjust_toggled( GtkWidget *button, gpointer data );
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
@@ -434,17 +434,17 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // Horizontal scrollbar
     dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    dtw->_hscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_hadj));
-    dtw->_hscrollbar->set_name("HorizontalScrollbar");
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_hscrollbar->gobj()), 1, 2, 1, 1);
+    dtw->hscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_hadj));
+    dtw->hscrollbar->set_name("HorizontalScrollbar");
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->hscrollbar->gobj()), 1, 2, 1, 1);
 
     // By packing the sticky zoom button and vertical scrollbar in a box it allows the canvas to
     // expand fully to the top if the rulers are hidden.
     // (Otherwise, the canvas is pushed down by the height of the sticky zoom button.)
 
     // Vertical Scrollbar box
-    dtw->_vscrollbar_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_vscrollbar_box->gobj()), 2, 0, 1, 2);
+    dtw->vscrollbar_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->vscrollbar_box->gobj()), 2, 0, 1, 2);
 
     // Sticky zoom button
     dtw->_sticky_zoom = Glib::wrap(GTK_TOGGLE_BUTTON(sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
@@ -455,13 +455,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_sticky_zoom->set_name("StickyZoom");
     dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
     dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled));
-    dtw->_vscrollbar_box->pack_start(*dtw->_sticky_zoom, false, false);
+    dtw->vscrollbar_box->pack_start(*dtw->_sticky_zoom, false, false);
 
     // Vertical scrollbar
     dtw->_vadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
-    dtw->_vscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_vadj, Gtk::ORIENTATION_VERTICAL));
-    dtw->_vscrollbar->set_name("VerticalScrollbar");
-    dtw->_vscrollbar_box->pack_start(*dtw->_vscrollbar, true, true, 0);
+    dtw->vscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_vadj, Gtk::ORIENTATION_VERTICAL));
+    dtw->vscrollbar->set_name("VerticalScrollbar");
+    dtw->vscrollbar_box->pack_start(*dtw->vscrollbar, true, true, 0);
 
     gchar const* tip = "";
     Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
@@ -528,6 +528,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas), TRUE);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 1, 1);
 
     /* Dock */
     bool create_dock =
@@ -1519,12 +1520,12 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "scrollbars/state", true)) {
-        dtw->_hscrollbar->hide();
-        dtw->_vscrollbar_box->hide();
+        dtw->hscrollbar->hide();
+        dtw->vscrollbar_box->hide();
         dtw->_cms_adjust->hide();
     } else {
-        dtw->_hscrollbar->show_all();
-        dtw->_vscrollbar_box->show_all();
+        dtw->hscrollbar->show_all();
+        dtw->vscrollbar_box->show_all();
         dtw->_cms_adjust->show_all();
     }
 
@@ -2149,14 +2150,14 @@ void
 SPDesktopWidget::toggle_scrollbars()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (_hscrollbar->get_visible()) {
-        _hscrollbar->hide();
-        _vscrollbar_box->hide();
+    if (hscrollbar->get_visible()) {
+        hscrollbar->hide();
+        vscrollbar_box->hide();
         _cms_adjust->hide();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", false);
     } else {
-        _hscrollbar->show_all();
-        _vscrollbar_box->show_all();
+        hscrollbar->show_all();
+        vscrollbar_box->show_all();
         _cms_adjust->show_all();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/scrollbars/state" : "/window/scrollbars/state", true);
     }
