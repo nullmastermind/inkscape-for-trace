@@ -5,14 +5,14 @@
 # Agradecimientos: zert, softcatala, 2002-2003.
 # Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.
 # Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
-# Lucas Vieites <lucas@codexion.com>, 2003-2017.
+# Lucas Vieites <lucas@codexion.com>, 2003-2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.1\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-04-21 11:25+0100\n"
-"PO-Revision-Date: 2017-09-17 12:51+0200\n"
+"PO-Revision-Date: 2018-12-02 16:33+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español; Castellano <inkscape-translator@lists.sourceforge."
 "net>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Gtranslator 2.91.7\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../inkscape.appdata.xml.in.h:1
@@ -4405,17 +4405,20 @@ msgstr "En blanco"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "Folleto A4 tres paneles"
 
 #: ../share/templates/templates.h:1
 msgid ""
 "An A4 page 3-fold Roll template with guides, print marks, and marked leaflet "
 "pages. Inner and outer page contents go into their respective Layers."
 msgstr ""
+"Una plantilla para una hoja A4 doblada en tres, con guías, marcas de "
+"impresión y hojas marcadas. El contenido del interior y del exterior va en "
+"sus correspondientes capas."
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "Folleto A4 tres paneles"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -4497,14 +4500,12 @@ msgid "<b>Guideline</b>: %s"
 msgstr "<b>Línea guía</b>: %s"
 
 #: ../src/desktop.cpp:765
-#, fuzzy
 msgid "No previous transform."
-msgstr "No hay menos zoom."
+msgstr "No hay transformación anterior."
 
 #: ../src/desktop.cpp:788
-#, fuzzy
 msgid "No next transform."
-msgstr "No hay más zoom."
+msgstr "No hay siguiente transformación."
 
 #: ../src/display/canvas-axonomgrid.cpp:325 ../src/display/canvas-grid.cpp:675
 msgid "Grid _units:"
@@ -5046,9 +5047,8 @@ msgstr ""
 "pregunte en las listas de correo."
 
 #: ../src/extension/implementation/script.cpp:756
-#, fuzzy
 msgid "The output from the extension could not be parsed."
-msgstr "No se ha podido leer el archivo de preferencias %s."
+msgstr "No se ha podido interpretar la salida de la extensión."
 
 #: ../src/extension/implementation/script.cpp:1130
 msgid ""
@@ -5899,9 +5899,8 @@ msgstr "_Cancelar"
 #: ../src/extension/internal/vsd-input.cpp:152
 #: ../src/extension/prefdialog.cpp:75 ../src/ui/dialog/guides.cpp:164
 #: ../src/ui/dialog/pixelartdialog.cpp:300 ../src/ui/dialog/tracedialog.cpp:820
-#, fuzzy
 msgid "_OK"
-msgstr "OK"
+msgstr "_OK"
 
 #. Fill in the template
 #: ../src/extension/internal/cdr-input.cpp:222
@@ -7056,9 +7055,8 @@ msgid "Replace hue by two colors"
 msgstr "Reemplazar tono por dos colores"
 
 #: ../src/extension/internal/filter/color.h:1567
-#, fuzzy
 msgid "Simple blend"
-msgstr "Desenfoque sencillo"
+msgstr "Mezcla simple"
 
 #: ../src/extension/internal/filter/color.h:1570
 #: ../src/extension/internal/filter/paint.h:593
@@ -7109,9 +7107,8 @@ msgid "Exclusion"
 msgstr "Exclusión"
 
 #: ../src/extension/internal/filter/color.h:1594
-#, fuzzy
 msgid "Simple blend filter"
-msgstr "Desenfoque sencillo"
+msgstr "Filtro de mezcla simple"
 
 #: ../src/extension/internal/filter/color.h:1655
 msgid "Hue rotation (°)"
@@ -8250,14 +8247,12 @@ msgid "PDF Input"
 msgstr "Entrada PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:957
-#, fuzzy
 msgid "Portable Document Format (*.pdf)"
-msgstr "Formato de documento portable de Adobe"
+msgstr "Formato de documento portable (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:958
-#, fuzzy
 msgid "Portable Document Format"
-msgstr "Formato de documento portable de Adobe"
+msgstr "Formato de documento portable"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:965
 msgid "AI Input"
@@ -8440,9 +8435,8 @@ msgstr "_Cerrar"
 
 #: ../src/extension/prefdialog.cpp:75 ../src/ui/dialog/text-edit.cpp:71
 #: ../src/ui/dialog/transformation.cpp:145
-#, fuzzy
 msgid "_Apply"
-msgstr "Aplicar a:"
+msgstr "_Aplicar"
 
 #: ../src/extension/prefdialog.cpp:253
 msgid "Live preview"
@@ -8646,6 +8640,8 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
+"No se ha podido guardar el archivo:\n"
+"No se ha encontrado ningún objeto con ID «%s»."
 
 #: ../src/file.cpp:679
 #, c-format
@@ -9069,45 +9065,39 @@ msgstr "Opciones predeterminadas del programa"
 
 #: ../src/inkview-options-group.cpp:13
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "Lanzar en modo pantalla completa"
 
 #: ../src/inkview-options-group.cpp:20
-#, fuzzy
 msgid "Search folders recursively"
-msgstr "Desconectar clones _recursivamente"
+msgstr "Buscar recursivamente en carpetas"
 
 #: ../src/inkview-options-group.cpp:27 ../src/inkview-options-group.cpp:35
 msgid "NUM"
 msgstr "NUM"
 
 #: ../src/inkview-options-group.cpp:28
-#, fuzzy
 msgid "Change image every NUM seconds"
-msgstr "Cambiar todas las imágenes en la selección"
+msgstr "Cambiar la imagen cada NUM segundos"
 
 #: ../src/inkview-options-group.cpp:36
-#, fuzzy
 msgid "Scale image by factor NUM"
-msgstr "Factor de escala"
+msgstr "Escalar la imagen con factor NUM"
 
 #: ../src/inkview-options-group.cpp:42
 msgid "FILES/FOLDERS…"
-msgstr ""
+msgstr "ARCHIVOS/CARPETAS…"
 
 #: ../src/inkview.cpp:71
-#, fuzzy
 msgid "File or folder does not exist"
-msgstr "El directorio «%s» no existe."
+msgstr "El archivo o directorio no existe"
 
 #: ../src/inkview.cpp:104
-#, fuzzy
 msgid "Could not open file"
-msgstr "No se ha podido encontrar el archivo: %s"
+msgstr "No se ha podido abrir el archivo"
 
 #: ../src/inkview.cpp:130
-#, fuzzy
 msgid "- display SVG files"
-msgstr "Abrir archivos SVG"
+msgstr "- mostrar archivos SVG"
 
 #: ../src/inkview.cpp:132
 msgid ""
@@ -9123,7 +9113,7 @@ msgstr ""
 
 #: ../src/inkview.cpp:168
 msgid "No valid files to load."
-msgstr ""
+msgstr "No hay archivos válidos que cargar."
 
 #: ../src/knot.cpp:343
 msgid "Node or handle drag canceled."
@@ -9217,9 +9207,8 @@ msgid "Power stroke"
 msgstr "Power stroke"
 
 #: ../src/live_effects/effect.cpp:117 ../src/selection-chemistry.cpp:2939
-#, fuzzy
 msgid "Clone original"
-msgstr "Clonar trayecto original"
+msgstr "Clonar original"
 
 #: ../src/live_effects/effect.cpp:120
 msgid "Lattice Deformation 2"
@@ -9287,42 +9276,36 @@ msgstr "Caja de contorno"
 
 #. 0.93
 #: ../src/live_effects/effect.cpp:138
-#, fuzzy
 msgid "Measure Segments"
-msgstr "Herramienta de medida"
+msgstr "Medir segmentos"
 
 #: ../src/live_effects/effect.cpp:139
 msgid "Fillet/Chamfer"
 msgstr "Filete/Chaflán"
 
 #: ../src/live_effects/effect.cpp:140
-#, fuzzy
 msgid "Boolean operation"
-msgstr "Proporción áurea"
+msgstr "Operación booleana"
 
 #: ../src/live_effects/effect.cpp:141
 msgid "Embroidery stitch"
-msgstr ""
+msgstr "Punto de bordado"
 
 #: ../src/live_effects/effect.cpp:142
-#, fuzzy
 msgid "Power clip"
-msgstr "Tendido eléctrico"
+msgstr "Power clip"
 
 #: ../src/live_effects/effect.cpp:143
-#, fuzzy
 msgid "Power mask"
-msgstr "Power stroke"
+msgstr "Power mask"
 
 #: ../src/live_effects/effect.cpp:144
-#, fuzzy
 msgid "Ellipse from points"
-msgstr "Elipse por 5 puntos"
+msgstr "Elipse a partir de puntos"
 
 #: ../src/live_effects/effect.cpp:146
-#, fuzzy
 msgid "Dash Stroke"
-msgstr "Trazo"
+msgstr "Trazo de rayas"
 
 #: ../src/live_effects/effect.cpp:148
 msgid "doEffect stack test"
@@ -9413,22 +9396,20 @@ msgstr ""
 #  FIXME: implement averaging of all parameters for multiple selected
 #  gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
 #: ../src/live_effects/effect.cpp:833 ../src/live_effects/effect.cpp:911
-#, fuzzy
 msgid "<b>Default value:</b> "
-msgstr " <b>_Crear</b> "
+msgstr "<b>Valor predeterminado</b> "
 
 #: ../src/live_effects/effect.cpp:834 ../src/live_effects/effect.cpp:898
 msgid "<b>Default value overridden:</b> "
-msgstr ""
+msgstr "<b>Valor predeterminado sobrescrito</b> "
 
 #: ../src/live_effects/effect.cpp:836 ../src/live_effects/effect.cpp:894
-#, fuzzy
 msgid "Update"
-msgstr "Act_ualizar"
+msgstr "Actualizar"
 
 #: ../src/live_effects/effect.cpp:837 ../src/live_effects/effect.cpp:897
 msgid "<b>Default value:</b> <s>"
-msgstr ""
+msgstr "<b>Valor predeterminado</b> <s>"
 
 #: ../src/live_effects/effect.cpp:839 ../src/live_effects/effect.cpp:908
 #: ../src/ui/dialog/xml-tree.cpp:79
@@ -9437,7 +9418,7 @@ msgstr "Aceptar"
 
 #: ../src/live_effects/effect.cpp:840 ../src/live_effects/effect.cpp:912
 msgid "<b>Default value overridden:</b> None\n"
-msgstr ""
+msgstr "<b>Valor predeterminado sobrescrito</b> Ninguno\n"
 
 #: ../src/live_effects/effect.cpp:842 ../src/live_effects/effect.cpp:899
 #: ../src/live_effects/effect.cpp:913
@@ -9569,9 +9550,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bendpath.cpp:63
 #: ../src/live_effects/lpe-patternalongpath.cpp:92
-#, fuzzy
 msgid "Hide width knot"
-msgstr "Ocultar nudos"
+msgstr "Ocultar anchura del nudo"
 
 #: ../src/live_effects/lpe-bendpath.cpp:185
 #: ../src/live_effects/lpe-patternalongpath.cpp:301
@@ -9579,122 +9559,107 @@ msgid "Change the width"
 msgstr "Cambiar el ancho"
 
 #: ../src/live_effects/lpe-bool.cpp:37
-#, fuzzy
 msgid "union"
-msgstr "Unión"
+msgstr "unión"
 
 #: ../src/live_effects/lpe-bool.cpp:38
-#, fuzzy
 msgid "intersection"
-msgstr "Intersección"
+msgstr "intersección"
 
 #: ../src/live_effects/lpe-bool.cpp:39
-#, fuzzy
 msgid "difference"
-msgstr "Diferencia"
+msgstr "diferencia"
 
 #: ../src/live_effects/lpe-bool.cpp:40
-#, fuzzy
 msgid "symmetric difference"
-msgstr "Nodo simétrico"
+msgstr "diferencia simétrica"
 
 #: ../src/live_effects/lpe-bool.cpp:41
-#, fuzzy
 msgid "division"
-msgstr "División"
+msgstr "división"
 
 #. Note on naming of operations:
 #. bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
 #. bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
 #: ../src/live_effects/lpe-bool.cpp:45
-#, fuzzy
 msgid "cut"
-msgstr "Fuera"
+msgstr "corte"
 
 #: ../src/live_effects/lpe-bool.cpp:46
-#, fuzzy
 msgid "cut inside"
-msgstr "Exterior"
+msgstr "corte interior"
 
 #: ../src/live_effects/lpe-bool.cpp:47
-#, fuzzy
 msgid "cut outside"
-msgstr "Exterior"
+msgstr "corte exterior"
 
 #: ../src/live_effects/lpe-bool.cpp:53 ../src/live_effects/lpe-bool.cpp:62
-#, fuzzy
 msgid "odd-even"
-msgstr "igual"
+msgstr "impar-par"
 
 #: ../src/live_effects/lpe-bool.cpp:54 ../src/live_effects/lpe-bool.cpp:63
 msgid "non-zero"
-msgstr ""
+msgstr "no-cero"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
-#, fuzzy
 msgid "positive"
-msgstr "Composición"
+msgstr "positivo"
 
 #: ../src/live_effects/lpe-bool.cpp:56
-#, fuzzy
 msgid "from curve"
-msgstr "Arrastrar curva"
+msgstr "desde curva"
 
 #: ../src/live_effects/lpe-bool.cpp:71
-#, fuzzy
 msgid "Operand path:"
-msgstr "Trayecto de curva:"
+msgstr "Trayecto del operando:"
 
 #: ../src/live_effects/lpe-bool.cpp:71
-#, fuzzy
 msgid "Operand for the boolean operation"
-msgstr "La desviación estándar para la operación de desenfoque."
+msgstr "Operando de la operación booleana"
 
 #: ../src/live_effects/lpe-bool.cpp:72
-#, fuzzy
 msgid "Operation:"
-msgstr "Operador:"
+msgstr "Operación:"
 
 #: ../src/live_effects/lpe-bool.cpp:72
-#, fuzzy
 msgid "Boolean Operation"
-msgstr "Operación manual"
+msgstr "Operación booleana"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands:"
-msgstr ""
+msgstr "Intercambiar operandos:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands (useful e.g. for difference)"
-msgstr ""
+msgstr "Intercambia los operandos (útil para la diferencia, por ejemplo)"
 
 #: ../src/live_effects/lpe-bool.cpp:74
-#, fuzzy
 msgid "Remove inner:"
-msgstr "Eliminar filtro"
+msgstr "Eliminar interior:"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Para operaciones de corte: elimina las líneas (no contornos) interiores del "
+"trayecto de corte para evitar puntos invisibles extra"
 
 #: ../src/live_effects/lpe-bool.cpp:75
-#, fuzzy
 msgid "Fill type this:"
-msgstr "Todos los tipos"
+msgstr "Tipo de relleno para esto:"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Fill type (winding mode) for this path"
-msgstr ""
+msgstr "Tipo de relleno (modo serpenteante) para este trayecto"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Tipo de relleno operando:"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 msgid "Fill type (winding mode) for operand path"
-msgstr ""
+msgstr "Tipo de relleno (modo serpenteante) para el trayecto operando"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:19
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
@@ -9778,47 +9743,41 @@ msgid "Change scalar parameter"
 msgstr "Cambiar parámetro escalar"
 
 #: ../src/live_effects/lpe-clone-original.cpp:30
-#, fuzzy
 msgid "No shape"
-msgstr "Sin intercambio"
+msgstr "Sin forma"
 
 #: ../src/live_effects/lpe-clone-original.cpp:31
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
 msgid "Without LPE's"
-msgstr ""
+msgstr "Sin efectos de trayecto"
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
-#, fuzzy
 msgid "With Spiro or BSpline"
-msgstr "Spiro spline"
+msgstr "Con Spiro o BSpline"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
 msgid "With LPE's"
-msgstr ""
+msgstr "Con efectos de trayecto"
 
 #: ../src/live_effects/lpe-clone-original.cpp:39
-#, fuzzy
 msgid "Linked Item:"
-msgstr "Trayecto enlazado:"
+msgstr "Objeto enlazado:"
 
 #: ../src/live_effects/lpe-clone-original.cpp:39
-#, fuzzy
 msgid "Item from which to take the original data"
-msgstr "Trayecto del cual se obtendrán los datos del trayecto original"
+msgstr "Elemento del cual se obtendrán los datos originales"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
-#, fuzzy
 msgid "Shape linked"
-msgstr "Se desconectan"
+msgstr "Forma conectada"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
 #: ../src/live_effects/lpe-fill-between-many.cpp:38
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
-#, fuzzy
 msgid "Allow transforms"
-msgstr "Transformaciones"
+msgstr "Permitir transformaciones"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:24
 msgid "Size _X:"
@@ -9838,7 +9797,7 @@ msgstr "El tamaño de la rejilla en la dirección Y."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:39
 msgid "Kaleidoscope"
-msgstr ""
+msgstr "Caleidoscopio"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:40
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
@@ -9852,16 +9811,14 @@ msgid "Method:"
 msgstr "Método:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:61
-#, fuzzy
 msgid "Rotate methods"
-msgstr "Modo rotación"
+msgstr "Rotar métodos"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:62
 msgid "Origin"
 msgstr "Origen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:62
-#, fuzzy
 msgid "Adjust origin of the rotation"
 msgstr "Ajustar origen de la rotación"
 
@@ -9887,27 +9844,24 @@ msgid "Angle of the first copy"
 msgstr "Ángulo de la primera copia"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
-#, fuzzy
 msgid "Rotation angle"
-msgstr "Ángulo de rotación:"
+msgstr "Ángulo de rotación"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:65
 msgid "Angle between two successive copies"
 msgstr "Ángulo entre dos copias sucesivas"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
-#, fuzzy
 msgid "Number of copies"
-msgstr "Número de copias:"
+msgstr "Número de copias"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:66
 msgid "Number of copies of the original path"
 msgstr "Número de copias del trayecto original"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
-#, fuzzy
 msgid "Gap"
-msgstr "Gráfica"
+msgstr "Espaciado"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
 msgid "360º Copies"
@@ -9918,31 +9872,28 @@ msgid "No rotation angle, fixed to 360º"
 msgstr "Sin ángulo de rotación, fijado a 360º"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
-#, fuzzy
 msgid "Mirror copies"
-msgstr "Reflejar eje X"
+msgstr "Copias reflejadas"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
-#, fuzzy
 msgid "Mirror between copies"
-msgstr "Espacio entre copias:"
+msgstr "Espacio entre copias"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Split elements"
-msgstr "Escalar elementos"
+msgstr "Dividir elementos"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
 msgid "Split elements, this allow gradients and other paints."
 msgstr ""
+"Dividir los elementos, esto permitirá usar degradados y otros rellenos."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:340
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:145
-#, fuzzy
 msgid "Reset styles"
-msgstr "Mantener estilo"
+msgstr "Reiniciar estilos"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:36
 msgid "Stitch path:"
@@ -10025,54 +9976,49 @@ msgid "Scale the width of the stitch path relative to its length"
 msgstr "Escalar la anchura del trayecto de cosido en relación con su longitud"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:17
-#, fuzzy
 msgid "Number of dashes"
-msgstr "Número de pasos:"
+msgstr "Número de trazos"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:18
-#, fuzzy
 msgid "Hole factor"
-msgstr "Factor de escala"
+msgstr ""
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:19
-#, fuzzy
 msgid "Use segments"
-msgstr "Borrar segmento"
+msgstr "Usar segmentos"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:20
-#, fuzzy
 msgid "Half start/end"
-msgstr "Arco: Cambiar inicio/fin"
+msgstr "Partir en dos inicio/fin"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:20
-#, fuzzy
 msgid "Start and end of each segment has half size"
-msgstr "Medidas de inicio y de fin activas."
+msgstr "El inicio y fin de cada segmento tiene la mitad del tamaño"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:21
 msgid "Unify dashes"
-msgstr ""
+msgstr "Unificar trazos"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:21
 msgid "Aprox unify the dashes lenght using the min with segment"
 msgstr ""
+"Unificar la longitud de los trazos mediante el ancho mínimo del segmento"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 #: ../src/live_effects/lpe-powerclip.cpp:33
 msgid "Info Box"
-msgstr ""
+msgstr "Caja de información"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 #: ../src/live_effects/lpe-powerclip.cpp:33
-#, fuzzy
 msgid "Important messages"
-msgstr "Ajustes de importación"
+msgstr "Mensajes importantes"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr ""
+msgstr "Añadir <b>«Rellenar entre muchos efectos»</b> para añadir relleno."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10083,26 +10029,24 @@ msgid "No ellipse found for specified points"
 msgstr "No se ha encontrado elipse para los cinco puntos indicados"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:29
-#, fuzzy
 msgid "no reordering"
-msgstr "Renderizar"
+msgstr "no reordenar"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
 msgid "zig-zag"
-msgstr ""
+msgstr "zig-zag"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "zig-zag, reverso primero"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
-#, fuzzy
 msgid "closest"
-msgstr "Cerrar"
+msgstr "más cercano"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
 msgid "closest, reverse first"
-msgstr ""
+msgstr "más cercano, reverso primero"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "traveling salesman 2-opt (fast, bad)"
@@ -10122,96 +10066,87 @@ msgstr ""
 
 #  create dialog
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:44
-#, fuzzy
 msgid "straight line"
-msgstr "línea de rejilla"
+msgstr "línea recta"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:45
-#, fuzzy
 msgid "move to begin"
-msgstr "Mover a capa"
+msgstr "mover al inicio"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:46
-#, fuzzy
 msgid "move to middle"
-msgstr "Convertir en filete"
+msgstr "mover al centro"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:47
-#, fuzzy
 msgid "move to end"
-msgstr "Mover a capa"
+msgstr "mover al fin"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:55
-#, fuzzy
 msgid "Ordering method"
-msgstr "Método de orientación"
+msgstr "Método de ordenación"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:55
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Método usado para ordenar subtrayectos"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
-#, fuzzy
 msgid "Connection method"
-msgstr "Longitud del conector"
+msgstr "Método de conexión"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Método para conectar puntos finales de subtrayectos"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
-#, fuzzy
 msgid "Stitch length"
-msgstr "Longitud de trayecto"
+msgstr "Longitud de puntada"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "If not 0, linearize path with given step length"
-msgstr ""
+msgstr "Si no es 0, lineraizar el trayecto con la longitud de paso dada"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
-#, fuzzy
 msgid "Minimum stitch length [%]"
-msgstr "Longitud máxima de segmento:"
+msgstr "Longitud mínima de puntada [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Combine steps shorter than this [%]"
-msgstr ""
+msgstr "Combinar pasos más cortos que esto [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
-#, fuzzy
 msgid "Stitch pattern"
-msgstr "Trayecto de cosido:"
+msgstr "Patrón de puntadas"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Select between different stitch patterns"
-msgstr ""
+msgstr "Elige entre varios patrones de puntada"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
-#, fuzzy
 msgid "Show stitches"
-msgstr "Mostrar puntos"
+msgstr "Mostrar puntadas"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
 msgstr ""
+"Mostrar puntadas como pequeñas separaciones (solo para inspección, no para "
+"output)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Show stitch gap"
-msgstr ""
+msgstr "Mostrar separación de puntada"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Gap between stitches when showing stitches"
-msgstr ""
+msgstr "Separación entre puntadas cuando se muestren las puntadas"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Jump if longer"
-msgstr ""
+msgstr "Saltar si más largo"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
-#, fuzzy
 msgid "Jump connection if longer than"
-msgstr "Eliminar punto de conexión"
+msgstr "Saltar la conexión si es más larga que"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 msgid "Top bend path:"
@@ -10246,7 +10181,6 @@ msgid "Left path along which to bend the original path"
 msgstr "Trayecto izquierdo a lo largo del cual se torcerá el trayecto original"
 
 #: ../src/live_effects/lpe-envelope.cpp:23
-#, fuzzy
 msgid "_Enable left &amp; right paths"
 msgstr "A_ctivar trayectos derecho e izquierdo"
 
@@ -10255,7 +10189,6 @@ msgid "Enable the left and right deformation paths"
 msgstr "Activar los trayectos de deformación de la derecha y la izquierda"
 
 #: ../src/live_effects/lpe-envelope.cpp:24
-#, fuzzy
 msgid "_Enable top &amp; bottom paths"
 msgstr "Activar tray_ectos superior e inferior"
 
@@ -10277,23 +10210,21 @@ msgstr "Trayectos de los cuales se obtendrán los datos del trayecto original"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr ""
+msgstr "Efectos en enlazados:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
-msgstr ""
+msgstr "Efectos en enlazados"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:22
-#, fuzzy
 msgid "Fuse coincident points"
-msgstr "Nuevo punto de conexión"
+msgstr "Fundir puntos coincidentes"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
-#, fuzzy
 msgid "Join subpaths"
-msgstr "Cerrar trayecto."
+msgstr "Unir subtrayectos"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
@@ -10303,9 +10234,8 @@ msgstr "Cerrar"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Close path"
-msgstr "Cerrar trayecto."
+msgstr "Cerrar trayecto"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Second path:"
@@ -10345,12 +10275,11 @@ msgstr "Unidad"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:42
 msgid "Methods to calculate the fillet or chamfer"
-msgstr ""
+msgstr "Métodos para calcular el filete o el chaflán"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:44
-#, fuzzy
 msgid "Mode, fillet or chamfer"
-msgstr "Modificar filete-chaflán"
+msgstr "Modo, filete o chaflán"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:46
 msgid "Radius (unit or %):"
@@ -10373,9 +10302,8 @@ msgid "Flexible radius size (%)"
 msgstr "Tamaño de radio flexible (%)"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:52
-#, fuzzy
 msgid "Mirror Knots"
-msgstr "Reflejar eje X"
+msgstr "Reflejar nudos"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:57
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:58
@@ -10387,24 +10315,20 @@ msgid "Hide knots"
 msgstr "Ocultar nudos"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:62
-#, fuzzy
 msgid "Apply changes if radius = 0"
-msgstr "Aplicar cambio si el peso = 0%"
+msgstr "Aplicar cambios si el radio = 0"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:63
-#, fuzzy
 msgid "Apply changes if radius > 0"
-msgstr "Aplicar cambios si el peso > 0%"
+msgstr "Aplicar cambios si el radio > 0%"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:64
-#, fuzzy
 msgid "Helper path size with direction to node:"
-msgstr "Tamaño del ayudante con dirección:"
+msgstr "Tamaño del trayecto ayudante con dirección al nodo:"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:65
-#, fuzzy
 msgid "Helper path size with direction to node"
-msgstr "Tamaño del ayudante con dirección"
+msgstr "Tamaño del trayecto ayudante con dirección al nodo"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:232
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:63
@@ -10690,9 +10614,8 @@ msgid "Mirror movements in vertical"
 msgstr "Reflejar los movimientos verticalmente"
 
 #: ../src/live_effects/lpe-lattice2.cpp:38
-#, fuzzy
 msgid "Use only perimeter"
-msgstr "Cambiar parámetro bool"
+msgstr "Usar solamente perímetro"
 
 #: ../src/live_effects/lpe-lattice2.cpp:39
 msgid "Update while moving knots (maybe slow)"
@@ -10992,32 +10915,28 @@ msgid "Orientation method"
 msgstr "Método de orientación"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:65
-#, fuzzy
 msgid "Color and opacity"
-msgstr "Color y alfa"
+msgstr "Color y opacidad"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:65
-#, fuzzy
 msgid "Set color and opacity of the measurements"
-msgstr "Las unidades que se usarán para las mediciones"
+msgstr "Fijar el color y la opacidad de las medidas"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:66
-#, fuzzy
 msgid "Font"
-msgstr "Tipogra_fía"
+msgstr "Tipografía"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:66
 msgid "Font Selector"
 msgstr "Selector de tipografía"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
-#, fuzzy
 msgid "Fix overlaps °"
-msgstr "Solapamiento máx.:"
+msgstr "Arreglar ° de solapamiento"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
 msgid "Min angle where overlaps are fixed, 180° no fix"
-msgstr ""
+msgstr "Ángulo mínimo para arreglar solapamientos, 180° sin arreglo"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
 #: ../src/widgets/gimp/ruler.cpp:225
@@ -11052,18 +10971,16 @@ msgid "Scaling factor"
 msgstr "Factor de escala"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:76
-#, fuzzy
 msgid "Format"
-msgstr "Formato:"
+msgstr "Formato"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:76
 msgid "Format the number ex:{measure} {unit}, return to save"
 msgstr "Formatear el número, p.ej.{medida} {unidad}, \"Enter\" para guardar"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:77
-#, fuzzy
 msgid "Blacklist"
-msgstr "Negro"
+msgstr "Lista negra"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:77
 msgid ""
@@ -11072,14 +10989,12 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:78
-#, fuzzy
 msgid "Inverse blacklist"
-msgstr "Filete inverso"
+msgstr "Lista negra inversa"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:78
-#, fuzzy
 msgid "Blacklist as whitelist"
-msgstr "Blanco y negro"
+msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:79
 msgid "Arrows outside"
@@ -11090,32 +11005,28 @@ msgid "Flip side"
 msgstr "Envés"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
-#, fuzzy
 msgid "Scale sensitive"
-msgstr "Sensible a escala*"
+msgstr "Sensible a escala"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid "Costrained scale sensitive to transformed containers"
 msgstr "Escala constreñida, sensible a contenedores transformados"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:82
-#, fuzzy
 msgid "Local Number Format"
-msgstr "Formato local de número*"
+msgstr "Formato local de número"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:82
 msgid "Local number format"
 msgstr "Formato local de número"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Rotate Annotation"
 msgstr "Rotar anotación"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
-#, fuzzy
 msgid "Hide if label over"
-msgstr "Ocultar si etiqueta por encima de*"
+msgstr "Ocultar si etiqueta por encima de"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Hide DIN line if label over"
@@ -11169,9 +11080,8 @@ msgid "Gap on split"
 msgstr ""
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
-#, fuzzy
 msgid "Discard original path"
-msgstr "¿Eliminar trayecto original?"
+msgstr "Eliminar trayecto original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
 msgid "Check this to only keep the mirrored part of the path"
@@ -11382,23 +11292,20 @@ msgid "_Clear"
 msgstr "_Limpiar"
 
 #: ../src/live_effects/lpe-powerclip.cpp:28
-#, fuzzy
 msgid "Hide clip"
-msgstr "Ocultar todo"
+msgstr "Ocultar recorte"
 
 #: ../src/live_effects/lpe-powerclip.cpp:31
-#, fuzzy
 msgid "Inverse clip"
-msgstr "Filete inverso"
+msgstr "Recorte inverso"
 
 #: ../src/live_effects/lpe-powerclip.cpp:32
-#, fuzzy
 msgid "Flatten clip"
-msgstr "Aplanar Beziers"
+msgstr "Aplanar recorte"
 
 #: ../src/live_effects/lpe-powerclip.cpp:32
 msgid "Flatten clip, see fill rule once convert to paths"
-msgstr ""
+msgstr "Aplanar recorte, ver regla de relleno un vez convertido a trayectos"
 
 #: ../src/live_effects/lpe-powerclip.cpp:33
 msgid ""
@@ -11407,35 +11314,29 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-powerclip.cpp:305
-#, fuzzy
 msgid "Convert clips to paths, undoable"
-msgstr "Convertir textos en trayectos"
+msgstr "Convertir recortes en trayectos, no se puede deshacer"
 
 #: ../src/live_effects/lpe-powermask.cpp:34
-#, fuzzy
 msgid "Invert mask"
-msgstr "_Invertir imagen"
+msgstr "Invertir máscara"
 
 #. wrap(_("Wrap mask data"), _("Wrap mask data allowing previous filters"), "wrap", &wr, this, false),
 #: ../src/live_effects/lpe-powermask.cpp:36
-#, fuzzy
 msgid "Hide mask"
-msgstr "Ocultar imagen"
+msgstr "Ocultar máscara"
 
 #: ../src/live_effects/lpe-powermask.cpp:37
-#, fuzzy
 msgid "Add background to mask"
-msgstr "Imagen de fondo"
+msgstr "Añadir fondo a máscara"
 
 #: ../src/live_effects/lpe-powermask.cpp:38
-#, fuzzy
 msgid "Background color and opacity"
-msgstr "Opacidad del fondo"
+msgstr "Color y opacidad del fondo"
 
 #: ../src/live_effects/lpe-powermask.cpp:38
-#, fuzzy
 msgid "Set color and opacity of the background"
-msgstr "Añade un fondo opaco colorizable"
+msgstr "Fijar el colo y la opacidad del fondo"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:126
 msgid "CubicBezierSmooth"
@@ -11482,14 +11383,12 @@ msgstr ""
 "lineal, 1 = suave"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:175
-#, fuzzy
 msgid "Width scale:"
-msgstr "Ancho del rectángulo"
+msgstr ""
 
 #: ../src/live_effects/lpe-powerstroke.cpp:175
-#, fuzzy
 msgid "Width scale all points"
-msgstr "Mostrar todas las tipografías"
+msgstr ""
 
 #: ../src/live_effects/lpe-powerstroke.cpp:176
 msgid "Start cap:"
@@ -11513,25 +11412,21 @@ msgid "Determines the shape of the path's end"
 msgstr "Determina la forma del final del trayecto"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:37
-#, fuzzy
 msgid "Auto ellipse"
-msgstr "Crear elipse"
+msgstr "Auto elipse"
 
 #. !< (2..4 points: circle, from 5 points: ellipse)
 #: ../src/live_effects/lpe-pts2ellipse.cpp:38
-#, fuzzy
 msgid "Force circle"
-msgstr "Forzar arco"
+msgstr "Forzar círculo"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:39
-#, fuzzy
 msgid "Isometric circle"
-msgstr "Rejilla axonométrica"
+msgstr "Círculo isométrico"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:45
-#, fuzzy
 msgid "Methods to generate the ellipse"
-msgstr "Arrastre para mover la elipse"
+msgstr "Métodos para generar la elipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:47
 #, fuzzy
@@ -11545,11 +11440,11 @@ msgstr "Arrastre para mover la elipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:49
 msgid "_Arc"
-msgstr ""
+msgstr "_Arco"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:49
 msgid "Generate open arc (open ellipse)"
-msgstr ""
+msgstr "Generar arco abierto (elipse abierta)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:50
 #, fuzzy
@@ -11573,16 +11468,15 @@ msgstr "Ejecutar la vectorización"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:52
 msgid "A_xes"
-msgstr ""
+msgstr "E_jes"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:52
 msgid "Draw both semi-major and semi-minor axes"
 msgstr ""
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
-#, fuzzy
 msgid "Axes Rotation"
-msgstr "Rotación"
+msgstr "Rotación de ejes"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 #, fuzzy
@@ -11590,14 +11484,12 @@ msgid "Axes rotation angle [deg]"
 msgstr "Ajustar el ángulo de rotación"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:54
-#, fuzzy
 msgid "Source _Path"
-msgstr "Anchura del origen"
+msgstr "Trayec_to de origen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:54
-#, fuzzy
 msgid "Show the original source path"
-msgstr "Clonar trayecto original"
+msgstr "Mostrar el trayecto original"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:218
 msgid "Frequency randomness:"
@@ -12003,9 +11895,8 @@ msgid "Show center of node"
 msgstr "Mostrar centro de nodo"
 
 #: ../src/live_effects/lpe-show_handles.cpp:33
-#, fuzzy
 msgid "Show original"
-msgstr "Seleccionar original"
+msgstr "Mostrar original"
 
 #: ../src/live_effects/lpe-show_handles.cpp:34
 msgid "Scale nodes and handles"
@@ -12392,9 +12283,8 @@ msgid "Change bool parameter"
 msgstr "Cambiar parámetro bool"
 
 #: ../src/live_effects/parameter/colorpicker.cpp:125
-#, fuzzy
 msgid "Change color button parameter"
-msgstr "Cambiar parámetro de botón de tipos"
+msgstr "Cambiar parámetro del botón de color"
 
 #: ../src/live_effects/parameter/enum.h:49
 msgid "Change enumeration parameter"
@@ -12405,20 +12295,17 @@ msgid "Change font button parameter"
 msgstr "Cambiar parámetro de botón de tipos"
 
 #: ../src/live_effects/parameter/item.cpp:133
-#, fuzzy
 msgid "Link to item on clipboard"
-msgstr "Enlazar al trayecto en el portapapeles"
+msgstr "Enlazar al elemento en el portapapeles"
 
 #: ../src/live_effects/parameter/item.cpp:255
-#, fuzzy
 msgid "Link item parameter to path"
-msgstr "Asociar el parámetro de trayecto al trayecto"
+msgstr "Asociar el parámetro del elemento al trayecto"
 
 #: ../src/live_effects/parameter/originalitem.cpp:66
 #: ../src/live_effects/parameter/originalitemarray.cpp:149
-#, fuzzy
 msgid "Link to item"
-msgstr "Asociar a trayecto"
+msgstr "Asociar al elemento"
 
 #: ../src/live_effects/parameter/originalitem.cpp:79
 #: ../src/live_effects/parameter/originalpath.cpp:82
@@ -12426,9 +12313,8 @@ msgid "Select original"
 msgstr "Seleccionar original"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:76
-#, fuzzy
 msgid "Active"
-msgstr "Todo inactivo"
+msgstr "Activo"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:83
 #: ../src/live_effects/parameter/originalpatharray.cpp:105
@@ -12444,9 +12330,8 @@ msgid "Link item parameter to item"
 msgstr "Asociar el parámetro de trayecto al trayecto"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:162
-#, fuzzy
 msgid "Remove Item"
-msgstr "Eliminar elemento/conjunto"
+msgstr "Eliminar elemento"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:175
 #: ../src/live_effects/parameter/originalpatharray.cpp:215
@@ -12461,19 +12346,16 @@ msgid "Move Up"
 msgstr "Mover hacia arriba"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:228
-#, fuzzy
 msgid "Move item up"
-msgstr "Mover trayecto arriba"
+msgstr "Mover elemento arriba"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:258
-#, fuzzy
 msgid "Move item down"
-msgstr "Mover trayecto abajo"
+msgstr "Mover elemento abajo"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:276
-#, fuzzy
 msgid "Remove item"
-msgstr "Eliminar filtro"
+msgstr "Eliminar elemento"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:316
 #, fuzzy
@@ -12491,9 +12373,8 @@ msgid "Reverse"
 msgstr "Revertir"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:98
-#, fuzzy
 msgid "Visible"
-msgstr "_Visible"
+msgstr "Visible"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:148
 #: ../src/live_effects/parameter/path.cpp:558
