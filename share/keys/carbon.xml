@@ -267,6 +267,7 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind action="ViewColorModeGrayscale" />
 
   <bind key="KP_6" modifiers="Cmd" action="ViewSplitModeToggle" display="true" />
+  <bind key="KP_6" modifiers="Alt" action="ViewXRayToggle"  display="true" />
 
 <!-- Edit -->
   

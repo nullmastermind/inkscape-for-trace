@@ -194,7 +194,8 @@ public:
     bool _split_pressed;
     bool _split_control_pressed;
     bool _split_dragging;
-
+    double _xray_value;
+    bool _xray_clip;
     bool _is_dragging;
     guint _changecursor;
     double _dx0;

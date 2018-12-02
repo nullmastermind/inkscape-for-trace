@@ -132,6 +132,7 @@ in the style of Corel DRAW X8. See default.xml for more information.
 <bind key="F9" modifiers="Shift" action="ViewModeToggle" display="true" />
 <bind action="ViewColorModeToggle" />
 <bind action="ViewSplitModeToggle" />
+<bind action="ViewXRayToggle" />
 <bind key="F4" action="ZoomDrawing" display="true"/>
 
 <bind key="F2" action="ZoomIn" display="true" />

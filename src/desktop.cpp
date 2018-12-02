@@ -123,6 +123,7 @@ SPDesktop::SPDesktop()
     _display_mode(Inkscape::RENDERMODE_NORMAL)
     , _display_color_mode(Inkscape::COLORMODE_NORMAL)
     , _split_canvas(false)
+    , _xray(false)
     , _widget(nullptr)
     , _guides_message_context(nullptr)
     , _active(false)
@@ -1609,6 +1610,23 @@ void SPDesktop::toggleSplitMode()
     Gtk::Window *parent = getToplevel();
     if (parent) {
         _split_canvas = !_split_canvas;
+        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        GtkAllocation allocation;
+        gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);
+        SPCanvas *canvas = getCanvas();
+        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
+                              canvas->_y0 + allocation.height);
+    }
+}
+
+void SPDesktop::toggleXRay()
+{
+    Gtk::Window *parent = getToplevel();
+    if (parent) {
+        _xray = !_xray;
+        if (_split_canvas && _xray) {
+            return toggleSplitMode();
+        }
         SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
         GtkAllocation allocation;
         gtk_widget_get_allocation(GTK_WIDGET(dtw->canvas), &allocation);

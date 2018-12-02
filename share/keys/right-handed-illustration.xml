@@ -237,6 +237,7 @@ Future improvements:
   <bind key="KP_Begin" modifiers="Ctrl" action="ViewModeToggle" />
   <bind action="ViewColorModeToggle" />
   <bind action="ViewSplitModeToggle" />
+  <bind action="ViewXRayToggle" />
   <!-- Edit -->
 
   <bind key="z" modifiers="Ctrl" action="EditUndo" display="true"/>

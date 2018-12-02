@@ -130,6 +130,7 @@
        </submenu>
        <separator/>
        <verb verb-id="ViewSplitModeToggle" check="yes" />
+       <verb verb-id="ViewXRayToggle" check="yes" />
        <verb verb-id="ToggleGrid" check="yes" />
        <verb verb-id="ToggleGuides" check="yes" />
        <verb verb-id="ViewCmsToggle" check="yes" />

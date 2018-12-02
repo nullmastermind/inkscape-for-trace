@@ -403,7 +403,9 @@ public:
 
     void toggleGrids();
     void toggleSplitMode();
+    void toggleXRay();
     bool splitMode() const { return _split_canvas; };
+    bool xrayMode() const { return _xray; };
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
@@ -537,6 +539,7 @@ private:
     std::list<DesktopAffine> transforms_past;
     std::list<DesktopAffine> transforms_future;
     bool _split_canvas;
+    bool _xray;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
 

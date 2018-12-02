@@ -361,6 +361,27 @@ void sp_canvas_item_dispose(GObject *object)
     G_OBJECT_CLASS(sp_canvas_item_parent_class)->dispose(object);
 }
 
+void sp_reset_spliter(SPCanvas * canvas) {
+    canvas->_spliter = Geom::OptIntRect();
+    canvas->_spliter_area = Geom::OptIntRect();
+    canvas->_spliter_control = Geom::OptIntRect();
+    canvas->_spliter_top = Geom::OptIntRect();
+    canvas->_spliter_bottom = Geom::OptIntRect();
+    canvas->_spliter_left = Geom::OptIntRect();
+    canvas->_spliter_right = Geom::OptIntRect();
+    canvas->_spliter_control_pos = Geom::Point();
+    canvas->_spliter_in_control_pos = Geom::Point();
+    canvas->_split_value = 0.5;
+    canvas->_split_vertical = true;
+    canvas->_split_inverse = false;
+    canvas->_split_hover_vertical = false;
+    canvas->_split_hover_horizontal = false;
+    canvas->_split_hover = false;
+    canvas->_split_pressed = false;
+    canvas->_split_control_pressed = false;
+    canvas->_split_dragging = false;
+}
+
 void sp_canvas_item_real_destroy(SPCanvasItem *object)
 {
   g_signal_handlers_destroy(object);
@@ -1001,6 +1022,8 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_split_pressed = false;
     canvas->_split_control_pressed = false;
     canvas->_split_dragging = false;
+    canvas->_xray_value = 100;
+    canvas->_xray_clip = false;
 
     canvas->_changecursor = 0;
     bool _is_dragging;
@@ -1717,17 +1740,10 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         double hide_vert = 1 / (allocation.height / (double)cursor_pos[Geom::Y]);
         double value = canvas->_split_vertical ? hide_horiz : hide_vert;
         if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             if (desktop && desktop->event_context) {
                 desktop->event_context->sp_event_context_update_cursor();
                 desktop->toggleSplitMode();
-                canvas->_split_pressed = false;
-                canvas->_split_hover = false;
-                canvas->_split_hover_vertical = false;
-                canvas->_split_hover_horizontal = false;
-                canvas->_split_value = 0.5;
-                canvas->_split_vertical = true;
-                canvas->_split_inverse = false;
+                sp_reset_spliter(canvas);
             }
         } else {
             canvas->_split_value = value;
@@ -1739,6 +1755,12 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         canvas->addIdle();
         status = 1;
     } else {
+        if (desktop && desktop->event_context && desktop->xrayMode()) {
+            sp_reset_spliter(canvas);
+            canvas->dirtyAll();
+            canvas->addIdle();
+            status = 1;
+        }
         canvas->_state = event->state;
         canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
         status = canvas->emitEvent(reinterpret_cast<GdkEvent *>(event));
@@ -1753,6 +1775,8 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             bool contains = canvas->_spliter_area.contains(cursor_pos);
             bool setoutline = canvas->_split_inverse ? !contains : contains;
             arena->drawing.setOutlineSensitive(setoutline);
+        } else if (desktop->xrayMode()) {
+            arena->drawing.setOutlineSensitive(true);
         } else {
             arena->drawing.setOutlineSensitive(false);
         }
@@ -1807,7 +1831,9 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
                                             paint_rect.height() * _device_scale,
                                             stride);
     cairo_surface_set_device_scale(imgs, _device_scale, _device_scale);
-
+/*     if (_xray_clip) {
+        
+    } */
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -2306,24 +2332,7 @@ int SPCanvas::paint()
         coord2y = allocation.y + allocation.height - hruler_gap;
         _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
     } else {
-        canvas->_spliter = Geom::OptIntRect();
-        canvas->_spliter_area = Geom::OptIntRect();
-        canvas->_spliter_control = Geom::OptIntRect();
-        canvas->_spliter_top = Geom::OptIntRect();
-        canvas->_spliter_bottom = Geom::OptIntRect();
-        canvas->_spliter_left = Geom::OptIntRect();
-        canvas->_spliter_right = Geom::OptIntRect();
-        canvas->_spliter_control_pos = Geom::Point();
-        canvas->_spliter_in_control_pos = Geom::Point();
-        canvas->_split_value = 0.5;
-        canvas->_split_vertical = true;
-        canvas->_split_inverse = false;
-        canvas->_split_hover_vertical = false;
-        canvas->_split_hover_horizontal = false;
-        canvas->_split_hover = false;
-        canvas->_split_pressed = false;
-        canvas->_split_control_pressed = false;
-        canvas->_split_dragging = false;
+        sp_reset_spliter(canvas);
     }
     cairo_rectangle_int_t crect = { _x0, _y0, int(allocation.width * split_x), int(allocation.height * split_y) };
     split_x = !_split_vertical ? 0 : _split_value;
@@ -2377,6 +2386,30 @@ int SPCanvas::paint()
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
         canvas->paintSpliter();
+    } else if (desktop && desktop->xrayMode()) {
+        _xray_clip = true;
+        Geom::Point xray_orig = desktop->point();
+        xray_orig *= desktop->current_zoom();
+        arena = SP_CANVAS_ARENA(desktop->drawing);
+        Inkscape::RenderMode rm = arena->drawing.renderMode();
+        arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+        bool exact = arena->drawing.getExact();
+        arena->drawing.setExact(false);
+        if (!paintRect(xray_orig[0]-_xray_value, 
+                       xray_orig[1]-_xray_value, 
+                       xray_orig[0]-_xray_value + (_xray_value * 2), 
+                       xray_orig[1]-_xray_value + (_xray_value * 2))) 
+        {
+            // Aborted
+            arena->drawing.setExact(exact);
+            arena->drawing.setRenderMode(rm);
+            cairo_region_destroy(to_draw);
+            cairo_region_destroy(to_draw_outline);
+            return FALSE;
+        };
+        arena->drawing.setExact(exact);
+        arena->drawing.setRenderMode(rm);
+        _xray_clip = false;
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter

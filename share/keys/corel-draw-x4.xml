@@ -159,6 +159,7 @@ See default.xml for more information.
   <bind key="F9" modifiers="Shift" action="ViewModeToggle" display="true" />
   <bind action="ViewColorModeToggle" />
   <bind action="ViewSplitModeToggle" />
+  <bind action="ViewXRayToggle" />
 <!-- Path actions -->
 
   <bind key="q" modifiers="Ctrl" action="ObjectToPath" display="true"/>

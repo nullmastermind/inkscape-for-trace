@@ -302,6 +302,12 @@ override) the bindings in the main default.xml.
   <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" display="true" />
   <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" />
 
+
+  <bind key="6" modifiers="Alt" action="ViewXRayToggle" display="true" />
+  <bind key="6" modifiers="Alt" action="ViewXRayToggle" />
+  <bind key="KP_6" modifiers="Alt" action="ViewXRayToggle" display="true" />
+  <bind key="KP_6" modifiers="Alt" action="ViewXRayToggle" />
+
 <!-- Edit -->
 
   <bind key="z" modifiers="Primary" action="EditUndo" display="true" />

@@ -299,6 +299,7 @@ Path -> Unsmooth - Ctrl+Alt+U
   <bind key="L" modifiers="Ctrl,Alt" action="ViewModeToggle" />
   <bind action="ViewColorModeToggle" />
   <bind action="ViewSplitModeToggle" />
+  <bind action="ViewXRayToggle" />
 <!-- LAYOUT MENU -->
 
 <!-- Needs checking
