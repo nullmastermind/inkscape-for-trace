@@ -297,7 +297,8 @@ Path -> Unsmooth - Ctrl+Alt+U
 <!-- Live Curve Editing is conceptually close to wireframe mode, thus using the verb -->
   <bind key="l" modifiers="Ctrl,Alt" action="ViewModeToggle" display="true" />
   <bind key="L" modifiers="Ctrl,Alt" action="ViewModeToggle" />
-
+  <bind action="ViewColorModeToggle" />
+  <bind action="ViewSplitModeToggle" />
 <!-- LAYOUT MENU -->
 
 <!-- Needs checking
