@@ -266,7 +266,8 @@ Last Effect Alt+Shift+Ctrl+E
 
   <bind key="y" modifiers="Ctrl" action="ViewModeToggle" />
   <bind key="Y" modifiers="Ctrl" action="ViewModeToggle" display="true" />
-    
+  <bind action="ViewColorModeToggle" />
+  <bind action="ViewSplitModeToggle" />
   <bind key="equal" modifiers="Ctrl" action="ZoomIn" display="true"/>
   <bind key="minus" modifiers="Ctrl" action="ZoomOut" display="true"/>
   <bind key="0" modifiers="Ctrl" action="ZoomPage" display="true"/>

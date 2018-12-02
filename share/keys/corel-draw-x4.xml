@@ -157,7 +157,8 @@ See default.xml for more information.
 <!-- Toggle View -->
 
   <bind key="F9" modifiers="Shift" action="ViewModeToggle" display="true" />
-
+  <bind action="ViewColorModeToggle" />
+  <bind action="ViewSplitModeToggle" />
 <!-- Path actions -->
 
   <bind key="q" modifiers="Ctrl" action="ObjectToPath" display="true"/>
