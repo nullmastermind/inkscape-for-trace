@@ -280,19 +280,27 @@ override) the bindings in the main default.xml.
   <bind action="ViewNew" />
   <bind action="ViewIconPreview" />
 
+  <bind key="5" modifiers="Primary" action="ViewModeToggle" display="true" />
+  <bind key="5" modifiers="Primary" action="ViewModeToggle" />
   <bind key="KP_5" modifiers="Primary" action="ViewModeToggle" display="true" />
-  <bind key="KP_Begin" modifiers="Primary" action="ViewModeToggle" />
+  <bind key="KP_5" modifiers="Primary" action="ViewModeToggle" />
 
   <bind action="ViewModeNormal" />
   <bind action="ViewModeNoFilters" />
   <bind action="ViewModeOutline" />
+  <bind action="ViewModeVisibleHairlines" />
 
-  <bind key="KP_5" modifiers="Shift" action="ViewColorModeToggle" display="true" />
-
+  <bind key="5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
+  <bind key="5" modifiers="Alt" action="ViewColorModeToggle" />
+  <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
+  <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" />
   <bind action="ViewColorModeNormal" />
   <bind action="ViewColorModeGrayscale" />
 
-  <bind key="KP_7" modifiers="Primary" action="ViewSplitModeToggle"  display="true" /> <!-- | -->
+  <bind key="6" modifiers="Primary" action="ViewSplitModeToggle" display="true" />
+  <bind key="6" modifiers="Primary" action="ViewSplitModeToggle" />
+  <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" display="true" />
+  <bind key="KP_6" modifiers="Primary" action="ViewSplitModeToggle" />
 
 <!-- Edit -->
 

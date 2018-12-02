@@ -256,16 +256,17 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind action="ViewIconPreview" />
 
   <bind key="KP_5" modifiers="Cmd" action="ViewModeToggle" display="true" />
-  <bind key="KP_Begin" modifiers="Cmd" action="ViewModeToggle" />
 
   <bind action="ViewModeNormal" />
   <bind action="ViewModeNoFilters" />
   <bind action="ViewModeOutline" />
 
-  <bind key="KP_5" modifiers="Shift" action="ViewColorModeToggle" display="true" />
+  <bind key="KP_5" modifiers="Alt" action="ViewColorModeToggle" display="true" />
 
   <bind action="ViewColorModeNormal" />
   <bind action="ViewColorModeGrayscale" />
+
+  <bind key="KP_6" modifiers="Cmd" action="ViewSplitModeToggle" display="true" />
 
 <!-- Edit -->
   
