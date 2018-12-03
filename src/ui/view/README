@@ -13,32 +13,38 @@ View is the base class for:
 SPViewWidget is the base for:
 
 * SPDocumentWidget
+* SPSVGViewWidget  REMOVED
 
-(It was also base for SPSVGViewWidget but that has been replaced by
-SVGViewWidget which is derived, rather uselessly, from Gtk::Scrollbar).
+SPSVGViewWidget has been replaced by SVGViewWidget, see below.
 
-SPViewWidget contains a GtkEventBox and holds a View.
 
-SPDesktopWidget contains a
-  VBox
-   HBox
-    GtkGrid
-     GtkPaned
-      GtkGrid
-       SPCanvas
-  Plus lots of other junk.
+SPViewWidget:
+  Contains a GtkEventBox and holds a View.
 
-SVGViewWidget is derived from Gtk::Scrollbar. It no longer is dependent
-on View (and really doesn't belong here anymore). It contains:
-  SPCanvas
+SPDesktopWidget:
+  Contains:
+    VBox
+      HBox
+        GtkGrid
+         GtkPaned
+           GtkGrid
+             SPCanvas
+   Plus lots of other junk.
+
+
+SVGViewWidget:
+  Used many places as a convienient way to show an SVG (file dialog, Inkview).
+  Derived, rather uselessly, from Gtk::Scrollbar.
+  It no longer is dependent on View (and really doesn't belong here anymore).
+
+ It contains: SPCanvas
 
 To do:
+
 
 * Convert everything to C++.
 * Evaluate moving SPDesktopWidget down the widget stack.
   It doesn't use the EventBox of SPViewWidget!
-* Get rid of SPViewWidget, integrating it directly into a
-  new C++ Desktop widget.
 
 A DesktopViewWidget should contain:
   DesktopView (aka SPDesktop)
