@@ -118,6 +118,7 @@ private:
     int doUpdate();
 
     void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
+    void paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect);
 
     /**
      * Paint the given rect, recursively subdividing the region until it is the size of a single

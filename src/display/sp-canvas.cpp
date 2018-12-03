@@ -1831,9 +1831,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
                                             paint_rect.height() * _device_scale,
                                             stride);
     cairo_surface_set_device_scale(imgs, _device_scale, _device_scale);
-/*     if (_xray_clip) {
-        
-    } */
+    
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -1884,6 +1882,92 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
+}
+
+void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect)
+{
+
+    // Prevent crash if paintSingleBuffer is called before _backing_store is
+    // initialized.
+    if (_backing_store == nullptr)
+        return;
+    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0, _y0, (paint_rect.left() - _x0) + paint_rect.width(),
+                                                       (paint_rect.top() - _y0) + paint_rect.height());
+    SPCanvasBuf buf;
+    buf.buf = nullptr;
+    buf.buf_rowstride = 0;
+    buf.rect = rect_moved;
+    buf.canvas_rect = canvas_rect;
+    buf.device_scale = _device_scale;
+    buf.is_empty = true;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    // Make sure the following code does not go outside of _backing_store's data
+    // FIXME for device_scale.
+    assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
+    assert(paint_rect.left() - _x0 >= 0);
+    assert(paint_rect.top() - _y0 >= 0);
+    assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
+    assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
+    cairo_surface_t * copy_backing = cairo_surface_create_for_rectangle (_backing_store,
+                                        paint_rect.left(),
+                                        paint_rect.top(),
+                                        paint_rect.width(),
+                                        paint_rect.height());
+    Geom::Point xray_orig = desktop->doc2dt(desktop->point());
+    xray_orig *= desktop->current_zoom();
+
+    buf.ct = cairo_create(copy_backing);
+    cairo_save(buf.ct);
+    cairo_set_source(buf.ct, _background);
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
+    //cairo_arc(buf.ct, xray_orig[Geom::X], xray_orig[Geom::Y], _xray_value, 0, 2*M_PI);
+    //cairo_clip(buf.ct);
+    cairo_paint(buf.ct);
+    cairo_restore(buf.ct);
+    // cairo_surface_write_to_png( copy_backing, "debug1.png" );
+
+    if (_root->visible) {
+        SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
+    }
+    //cairo_arc(buf.ct, xray_orig[Geom::X], xray_orig[Geom::Y], _xray_value, 0, 2*M_PI);
+    //cairo_clip(buf.ct);
+    //cairo_paint(buf.ct);
+    // cairo_surface_write_to_png( copy_backing, "debug2.png" );
+
+    // output to X
+    cairo_destroy(buf.ct);
+
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    if (_enable_cms_display_adj) {
+        cmsHTRANSFORM transf = nullptr;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
+        if ( fromDisplay ) {
+            transf = Inkscape::CMSSystem::getDisplayPer(_cms_key);
+        } else {
+            transf = Inkscape::CMSSystem::getDisplayTransform();
+        }
+
+        if (transf) {
+            cairo_surface_flush(copy_backing);
+            unsigned char *px = cairo_image_surface_get_data(copy_backing);
+            int stride = cairo_image_surface_get_stride(copy_backing);
+            for (int i=0; i<paint_rect.height(); ++i) {
+                unsigned char *row = px + i*stride;
+                Inkscape::CMSSystem::doTransform(transf, row, row, paint_rect.width());
+            }
+            cairo_surface_mark_dirty(copy_backing);
+        }
+    }
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    cairo_surface_unmap_image(_backing_store, copy_backing);
+    // cairo_surface_write_to_png( _backing_store, "debug3.png" );
+    cairo_surface_mark_dirty(_backing_store);
+    // Mark the painted rectangle clean
+    markRect(paint_rect, 0);
+
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
+                               paint_rect.height());
 }
 
 void SPCanvas::paintSpliter()
@@ -2395,18 +2479,13 @@ int SPCanvas::paint()
         arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
         bool exact = arena->drawing.getExact();
         arena->drawing.setExact(false);
-        if (!paintRect(xray_orig[0]-_xray_value, 
-                       xray_orig[1]-_xray_value, 
-                       xray_orig[0]-_xray_value + (_xray_value * 2), 
-                       xray_orig[1]-_xray_value + (_xray_value * 2))) 
-        {
-            // Aborted
-            arena->drawing.setExact(exact);
-            arena->drawing.setRenderMode(rm);
-            cairo_region_destroy(to_draw);
-            cairo_region_destroy(to_draw_outline);
-            return FALSE;
-        };
+        Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
+        allocation.width, allocation.height);
+        Geom::IntRect xray_rect = Geom::IntRect::from_xywh(xray_orig[0]-_xray_value,
+                                                           xray_orig[1]-_xray_value,
+                                                           (_xray_value * 2),
+                                                           (_xray_value * 2));
+        paintXRayBuffer(xray_rect, canvas_rect);
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
         _xray_clip = false;
