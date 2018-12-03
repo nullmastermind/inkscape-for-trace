@@ -52,7 +52,7 @@ InkFileExportCmd::InkFileExportCmd()
     , export_pdf_level("1.5")
     , export_latex(false)
     , export_id_only(false)
-    , export_background_opacity(1.0)
+    , export_background_opacity(0.0) // Transparent default
     , export_plain_svg(false)
 {
 }
