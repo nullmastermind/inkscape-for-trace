@@ -95,17 +95,12 @@ public:
     void emitResized(gdouble width, gdouble height);
     void requestRedraw();
 
-    // view subclasses must give implementations of these methods
-
-    virtual bool shutdown() = 0;
-    virtual void mouseover() = 0;
-    virtual void mouseout() = 0;
-
-    virtual void onResized (double, double) = 0;
-    virtual void onRedrawRequested() = 0;
-    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) = 0;
-    virtual void onDocumentURISet (gchar const* uri) = 0;
-    virtual void onDocumentResized (double, double) = 0;
+    virtual void onResized (double, double) {};
+    virtual void onRedrawRequested() {};
+    virtual void onStatusMessage (Inkscape::MessageType type, gchar const *message) {};
+    virtual void onDocumentURISet (gchar const* uri) {};
+    virtual void onDocumentResized (double, double) {};
+    virtual bool shutdown() { return false; };
 
 protected:
     SPDocument *_doc;

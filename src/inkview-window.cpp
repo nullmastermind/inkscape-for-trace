@@ -20,7 +20,6 @@
 #include <iostream>
 
 #include "document.h"
-#include "inkscape.h"  // INKSCAPE macro
 
 #include "ui/monitor.h"
 #include "ui/view/svg-view-widget.h"
@@ -148,10 +147,6 @@ InkviewWindow::show_document(SPDocument* document)
     int width  = MIN((int)document->getWidth().value("px")  * _scale,  monitor_geometry.get_width());
     int height = MIN((int)document->getHeight().value("px") * _scale,  monitor_geometry.get_height());
     resize (width, height);
-
-    // setDocument() reduces the document count... bump it up so document won't be deleted.
-    // ToDo: view should not be handling document lifetime.
-    INKSCAPE.add_document(document);
 
     if (_view) {
         _view->setDocument(document);

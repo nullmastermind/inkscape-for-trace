@@ -48,7 +48,7 @@ class URIReference;
 
 namespace UI {
 namespace View {
-class View;
+class SVGViewWidget;
 }
 }
 }
@@ -70,6 +70,7 @@ enum PatternTransform {
  * to process correct ones in meaningful way.
  * Also, this probably goes to SPObject base class.
  *
+ * GUI Code should not be here!
  */
 class SPEvent {
 
@@ -83,7 +84,7 @@ public:
     };
 
     Type type;
-    Inkscape::UI::View::View* view;
+    Inkscape::UI::View::SVGViewWidget* view;
 };
 
 class SPItemView {

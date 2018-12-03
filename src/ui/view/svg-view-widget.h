@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /**
  * @file
- * A light-weight widget containing an SPCanvas with a View for rendering an SVG.
+ * A light-weight widget containing an SPCanvas with for rendering an SVG.
  */
 /*
  * Authors:
@@ -21,15 +21,15 @@
 #include <gtkmm.h>
 
 class SPDocument;
+class SPCanvasGroup;
+class SPCanvasItem;
 
 namespace Inkscape {
 namespace UI {
 namespace View {
 
-class SVGView;
-
 /**
- * A light-weight widget containing an SPCanvas with an SVGView for rendering an SVG.
+ * A light-weight widget containing an SPCanvas for rendering an SVG.
  */
 class SVGViewWidget : public Gtk::ScrolledWindow {
 
@@ -42,8 +42,33 @@ public:
 private:
     void size_allocate(Gtk::Allocation& allocation);
 
-    SVGView* _view;
     GtkWidget* _canvas;
+
+// From SVGView ---------------------------------
+
+public:
+    SPDocument*     _document;
+    unsigned int    _dkey;
+    SPCanvasGroup  *_parent;
+    SPCanvasItem   *_drawing;
+    double          _hscale;     ///< horizontal scale
+    double          _vscale;     ///< vertical scale
+    bool            _rescale;    ///< whether to rescale automatically
+    bool            _keepaspect;
+    double          _width;
+    double          _height;
+
+    /**
+     * Helper function that sets rescale ratio.
+     */
+    void doRescale();
+
+    /**
+     * Change cursor (used for links).
+     */
+    void mouseover();
+    void mouseout();
+
 };
 
 } // Namespace View

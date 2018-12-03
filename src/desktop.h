@@ -436,12 +436,12 @@ public:
 
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
-    void mouseover() override {}
-    void mouseout() override {}
+
     guint get_hruler_thickness();
     guint get_vruler_thickness();
     guint get_vscroll_thickness();
     guint get_hscroll_thickness();
+
     virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
 
@@ -581,11 +581,11 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    void onResized (double, double) override;
-    void onRedrawRequested() override;
-    void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
-    void onDocumentURISet (gchar const* uri) override;
-    void onDocumentResized (double, double) override;
+    void onResized (double, double);
+    void onRedrawRequested();
+    void onStatusMessage (Inkscape::MessageType type, gchar const *message);
+    void onDocumentURISet (gchar const* uri);
+    void onDocumentResized (double, double);
 
     static void _onActivate (SPDesktop* dt);
     static void _onDeactivate (SPDesktop* dt);

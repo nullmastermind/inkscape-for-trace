@@ -20,7 +20,7 @@
 #include "xml/repr.h"
 #include "attributes.h"
 #include "sp-anchor.h"
-#include "ui/view/svg-view.h"
+#include "ui/view/svg-view-widget.h"
 #include "document.h"
 
 SPAnchor::SPAnchor() : SPGroup() {
@@ -154,11 +154,13 @@ gchar* SPAnchor::description() const {
 
 /* fixme: We should forward event to appropriate container/view */
 /* The only use of SPEvent appears to be here, to change the cursor in Inkview when over a link (and
- * which hasn't worked since at least 0.48). */
-gint SPAnchor::event(SPEvent* event) {
+ * which hasn't worked since at least 0.48). GUI code should not be here. */
+int SPAnchor::event(SPEvent* event) {
+
     switch (event->type) {
 	case SPEvent::ACTIVATE:
             if (this->href) {
+                // If this actually worked, it could be useful to open a webpage with the link.
                 g_print("Activated xlink:href=\"%s\"\n", this->href);
                 return TRUE;
             }
@@ -166,18 +168,16 @@ gint SPAnchor::event(SPEvent* event) {
 
 	case SPEvent::MOUSEOVER:
         {
-            auto view = dynamic_cast<Inkscape::UI::View::SVGView*>(event->view);
-            if (view) {
-                view->mouseover();
+            if (event->view) {
+                event->view->mouseover();
             }
             break;
         }
 
 	case SPEvent::MOUSEOUT:
         {
-            auto view = dynamic_cast<Inkscape::UI::View::SVGView*>(event->view);
-            if (view) {
-                view->mouseout();
+            if (event->view) {
+                event->view->mouseout();
             }
             break;
         }

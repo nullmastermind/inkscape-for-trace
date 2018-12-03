@@ -8,7 +8,7 @@ can be displayed by more than one window, each having its own view
 View is the base class for:
 
 * SPDesktop
-* SVGView
+* SVGView  REMOVED
 
 SPViewWidget is the base for:
 
@@ -28,10 +28,9 @@ SPDesktopWidget contains a
        SPCanvas
   Plus lots of other junk.
 
-SVGViewWidget is derived from Gtk::Scrollbar. It contains:
+SVGViewWidget is derived from Gtk::Scrollbar. It no longer is dependent
+on View (and really doesn't belong here anymore). It contains:
   SPCanvas
-  SVGView
-
 
 To do:
 
