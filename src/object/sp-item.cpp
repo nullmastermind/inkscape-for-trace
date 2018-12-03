@@ -1193,7 +1193,7 @@ void SPItem::hide(unsigned int /*key*/) {
 
 void SPItem::invoke_hide(unsigned key)
 {
-	this->hide(key);
+    this->hide(key);
 
     SPItemView *ref = nullptr;
     SPItemView *v = display;

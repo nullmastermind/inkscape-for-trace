@@ -314,7 +314,10 @@ public:
     static unsigned int display_key_new(unsigned int numkeys);
 
     Inkscape::DrawingItem *invoke_show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags);
+
+    // Removed item from display tree.
     void invoke_hide(unsigned int key);
+
     void getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs=nullptr) const;
     void adjust_pattern(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false, PatternTransform = TRANSFORM_BOTH);
     void adjust_gradient(/* Geom::Affine const &premul, */ Geom::Affine const &postmul, bool set = false);
