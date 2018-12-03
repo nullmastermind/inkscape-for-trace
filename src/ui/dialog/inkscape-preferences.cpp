@@ -1725,6 +1725,11 @@ void InkscapePreferences::initPageRendering()
     _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, "",
                               _("On modern hardware, increasing this value (default is 16) can help to get a better performance when there are large areas with filtered objects (this includes blur and blend modes) in your drawing. Decrease the value to make zooming and panning in relevant areas faster on low-end hardware in drawings with few or no filters."), false);
 
+    // rendering xray radius
+    _rendering_xray_radius.init("/options/rendering/xray-radius", 1.0, 1500.0, 1.0, 100.0, 100.0, true, false);
+    _page_rendering.add_line( false, _("Rendering XRay radius:"), _rendering_xray_radius, "",
+                              _("XRay mode radius preview"), false);
+
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
                                   BLUR_QUALITY_BEST, false, nullptr);

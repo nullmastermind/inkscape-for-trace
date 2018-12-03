@@ -1022,8 +1022,8 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_split_pressed = false;
     canvas->_split_control_pressed = false;
     canvas->_split_dragging = false;
-    canvas->_xray_value = 100;
-    canvas->_xray_clip = false;
+    canvas->_xray_radius = 100;
+    canvas->_xray = false;
 
     canvas->_changecursor = 0;
     bool _is_dragging;
@@ -1756,10 +1756,15 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         status = 1;
     } else {
         if (desktop && desktop->event_context && desktop->xrayMode()) {
-            sp_reset_spliter(canvas);
+            if (!canvas->_xray) {
+                sp_reset_spliter(canvas);
+            }
+            canvas->_xray = true;
             canvas->dirtyAll();
             canvas->addIdle();
             status = 1;
+        } else {
+            canvas->_xray = false;
         }
         canvas->_state = event->state;
         canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
@@ -1775,7 +1780,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             bool contains = canvas->_spliter_area.contains(cursor_pos);
             bool setoutline = canvas->_split_inverse ? !contains : contains;
             arena->drawing.setOutlineSensitive(setoutline);
-        } else if (desktop->xrayMode()) {
+        } else if (canvas->_xray) {
             arena->drawing.setOutlineSensitive(true);
         } else {
             arena->drawing.setOutlineSensitive(false);
@@ -1891,12 +1896,12 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // initialized.
     if (_backing_store == nullptr)
         return;
-    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0, _y0, (paint_rect.left() - _x0) + paint_rect.width(),
-                                                       (paint_rect.top() - _y0) + paint_rect.height());
+    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0,_y0, _x0 + paint_rect.width(),
+                                                       _y0 + paint_rect.height());
     SPCanvasBuf buf;
     buf.buf = nullptr;
     buf.buf_rowstride = 0;
-    buf.rect = rect_moved;
+    buf.rect = paint_rect;
     buf.canvas_rect = canvas_rect;
     buf.device_scale = _device_scale;
     buf.is_empty = true;
@@ -1908,59 +1913,51 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     assert(paint_rect.top() - _y0 >= 0);
     assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
     assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
-    cairo_surface_t * copy_backing = cairo_surface_create_for_rectangle (_backing_store,
-                                        paint_rect.left(),
-                                        paint_rect.top(),
-                                        paint_rect.width(),
-                                        paint_rect.height());
-    Geom::Point xray_orig = desktop->doc2dt(desktop->point());
-    xray_orig *= desktop->current_zoom();
-
+    cairo_surface_t *copy_backing = cairo_surface_create_similar_image (_backing_store,
+                                                                        CAIRO_FORMAT_ARGB32,
+                                                                        paint_rect.width(),
+                                                                        paint_rect.height());
+/*     Geom::Point _xray_orig = desktop->doc2dt(desktop->point());
+    _xray_orig *= desktop->current_zoom(); */
     buf.ct = cairo_create(copy_backing);
+    cairo_t * result = cairo_create(_backing_store);
+    cairo_translate(result, -_x0, -_y0);
     cairo_save(buf.ct);
+    cairo_set_source_rgba(buf.ct, 1, 1, 1, 0);
+    cairo_fill(buf.ct);
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
+    cairo_clip(buf.ct);
+    cairo_paint(buf.ct);
     cairo_set_source(buf.ct, _background);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
-    //cairo_arc(buf.ct, xray_orig[Geom::X], xray_orig[Geom::Y], _xray_value, 0, 2*M_PI);
-    //cairo_clip(buf.ct);
     cairo_paint(buf.ct);
-    cairo_restore(buf.ct);
+
     // cairo_surface_write_to_png( copy_backing, "debug1.png" );
+
+
 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
-    //cairo_arc(buf.ct, xray_orig[Geom::X], xray_orig[Geom::Y], _xray_value, 0, 2*M_PI);
+    cairo_restore(buf.ct);
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
+    cairo_clip(buf.ct);
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_DEST_IN);
+    cairo_paint(buf.ct);
+    //cairo_arc(buf.ct, _xray_orig[Geom::X], _xray_orig[Geom::Y], _xray_radius, 0, 2*M_PI);
     //cairo_clip(buf.ct);
     //cairo_paint(buf.ct);
     // cairo_surface_write_to_png( copy_backing, "debug2.png" );
 
     // output to X
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
+    
+    cairo_set_source_surface(result, copy_backing,  paint_rect.left(),  paint_rect.top());
+    cairo_set_operator(buf.ct, CAIRO_OPERATOR_IN);
+    cairo_paint(result);
     cairo_destroy(buf.ct);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    if (_enable_cms_display_adj) {
-        cmsHTRANSFORM transf = nullptr;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
-        if ( fromDisplay ) {
-            transf = Inkscape::CMSSystem::getDisplayPer(_cms_key);
-        } else {
-            transf = Inkscape::CMSSystem::getDisplayTransform();
-        }
-
-        if (transf) {
-            cairo_surface_flush(copy_backing);
-            unsigned char *px = cairo_image_surface_get_data(copy_backing);
-            int stride = cairo_image_surface_get_stride(copy_backing);
-            for (int i=0; i<paint_rect.height(); ++i) {
-                unsigned char *row = px + i*stride;
-                Inkscape::CMSSystem::doTransform(transf, row, row, paint_rect.width());
-            }
-            cairo_surface_mark_dirty(copy_backing);
-        }
-    }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    cairo_surface_unmap_image(_backing_store, copy_backing);
+    cairo_surface_destroy(copy_backing);
     // cairo_surface_write_to_png( _backing_store, "debug3.png" );
     cairo_surface_mark_dirty(_backing_store);
     // Mark the painted rectangle clean
@@ -1984,7 +1981,6 @@ void SPCanvas::paintSpliter()
     Geom::IntPoint c1 = Geom::IntPoint(linerect.corner(1));
     Geom::IntPoint c2 = Geom::IntPoint(linerect.corner(2));
     Geom::IntPoint c3 = Geom::IntPoint(linerect.corner(3));
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // We need to draw the line in middle of pixel
     // https://developer.gnome.org/gtkmm-tutorial/stable/sec-cairo-drawing-lines.html.en:17.2.3
     double gapx = _split_vertical ? 0.5 : 0;
@@ -2386,6 +2382,8 @@ int SPCanvas::paint()
     SPCanvasArena *arena = nullptr;
     bool split = false;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _xray_radius = prefs->getIntLimited("/options/rendering/xray-radius", 100, 1, 1500);
+
     double split_x = 1;
     double split_y = 1;
     if (desktop && desktop->splitMode()) {
@@ -2470,10 +2468,9 @@ int SPCanvas::paint()
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
         canvas->paintSpliter();
-    } else if (desktop && desktop->xrayMode()) {
-        _xray_clip = true;
-        Geom::Point xray_orig = desktop->point();
-        xray_orig *= desktop->current_zoom();
+    } else if (desktop && _xray) {
+        Geom::Point _xray_orig = desktop->point();
+        _xray_orig *= desktop->current_zoom();
         arena = SP_CANVAS_ARENA(desktop->drawing);
         Inkscape::RenderMode rm = arena->drawing.renderMode();
         arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
@@ -2481,14 +2478,13 @@ int SPCanvas::paint()
         arena->drawing.setExact(false);
         Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
         allocation.width, allocation.height);
-        Geom::IntRect xray_rect = Geom::IntRect::from_xywh(xray_orig[0]-_xray_value,
-                                                           xray_orig[1]-_xray_value,
-                                                           (_xray_value * 2),
-                                                           (_xray_value * 2));
-        paintXRayBuffer(xray_rect, canvas_rect);
+        Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0]-_xray_radius,
+                                                           _xray_orig[1]-_xray_radius,
+                                                           (_xray_radius * 2),
+                                                           (_xray_radius * 2));
+        paintXRayBuffer(_xray_rect, canvas_rect);
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);
-        _xray_clip = false;
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter
@@ -2637,7 +2633,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     _y0 = iy;
 
     // Adjust the clean region
-    if (clear || _spliter) {
+    if (clear || _spliter || _xray) {
         dirtyAll();
     } else {
         cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };

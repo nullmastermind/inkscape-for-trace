@@ -309,6 +309,7 @@ protected:
     UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
     UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
+    UI::Widget::PrefSpinButton  _rendering_xray_radius;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 
     UI::Widget::PrefCheckButton _trans_scale_stroke;
