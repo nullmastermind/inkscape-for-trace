@@ -167,19 +167,12 @@ bool
 ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
 
     Cairo::RefPtr<Cairo::Surface> surface = cr->get_target();
-    Cairo::RefPtr<Cairo::ImageSurface> image_surface =
-        Cairo::RefPtr<Cairo::ImageSurface>::cast_dynamic(surface);
-    if (!image_surface) {
-        std::cerr << "ColorWheel::on_draw: Failed Cast!" << std::endl;
-        return false;
-    }
 
     Gtk::Allocation allocation = get_allocation();
     const int width  = allocation.get_width();
     const int height = allocation.get_height();
 
-    Cairo::Format format = image_surface->get_format();
-    const int stride = Cairo::ImageSurface::format_stride_for_width(format, width);
+    const int stride = Cairo::ImageSurface::format_stride_for_width(Cairo::FORMAT_RGB24, width);
 
     int cx = width/2;
     int cy = height/2;
