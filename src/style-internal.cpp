@@ -188,8 +188,8 @@ SPIScale24::merge( const SPIBase* const parent ) {
                 value   = p->value;
             }
         } else {
-            // Needed only for 'opacity' which does not inherit. See comment at bottom of file.
-            if( name.compare( "opacity" ) != 0 )
+            // Needed only for 'opacity' and 'stop-opacity' which do not inherit. See comment at bottom of file.
+            if( name != "opacity" && name != "stop-opacity" )
                 std::cerr << "SPIScale24::merge: unhandled property: " << name << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
@@ -2886,9 +2886,9 @@ SPIVectorEffect::operator==(const SPIBase& rhs) {
 /* ----------------------------  NOTES  ----------------------------- */                        
 
 /*
- * opacity's effect is cumulative; we set the new value to the combined effect.  The
- * default value for opacity is 1.0, not inherit.  (Note that stroke-opacity and
- * fill-opacity are quite different from opacity, and don't need any special handling.)
+ * opacity's effect is cumulative; we set the new value to the combined effect.  The default value
+ * for opacity is 1.0, not inherit. stop-opacity also does not inherit. (Note that stroke-opacity
+ * and fill-opacity are quite different from opacity, and don't need any special handling.)
  *
  * Cases:
  * - parent & child were each previously unset, in which case the effective
