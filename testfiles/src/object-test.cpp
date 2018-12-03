@@ -40,36 +40,36 @@ public:
         // svg:polyline
         // svg:image
         // svg:line
-        char const *docString =
-                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n"
-                "<!-- just a comment -->\n"
-                "<title id=\"title\">SVG test</title>\n"
-                "<defs>\n"
-                "  <path id=\"P\" d=\"M -21,-4 -5,0 -18,12 -3,4 -4,21 0,5 12,17 4,2 21,3 5,-1 17,-12 2,-4 3,-21 -1,-5 -12,-18 -4,-3z\"/>\n"
-                "  <linearGradient id=\"LG\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\">\n"
-                "    <stop offset=\"0%\" style=\"stop-color:#ffff00;stop-opacity:1\"/>\n"
-                "    <stop offset=\"100%\" style=\"stop-color:red;stop-opacity:1\"/>\n"
-                "  </linearGradient>\n"
-                "  <clipPath id=\"clip\" clipPathUnits=\"userSpaceOnUse\">\n"
-                "    <rect x=\"10\" y=\"10\" width=\"100\" height=\"100\"/>\n"
-                "  </clipPath>\n"
-                "  <filter style=\"color-interpolation-filters:sRGB\" id=\"filter\" x=\"-0.15\" width=\"1.34\" y=\"0\" height=\"1\">\n"
-                "    <feGaussianBlur stdDeviation=\"4.26\"/>\n"
-                "  </filter>\n"
-                "</defs>\n"
+        char const *docString = R"A(
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- just a comment -->
+  <title id="title">SVG test</title>
+  <defs>
+    <path id="P" d="M -21,-4 -5,0 -18,12 -3,4 -4,21 0,5 12,17 4,2 21,3 5,-1 17,-12 2,-4 3,-21 -1,-5 -12,-18 -4,-3z"/>
+    <linearGradient id="LG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffff00;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:red;stop-opacity:1"/>
+    </linearGradient>
+    <clipPath id="clip" clipPathUnits="userSpaceOnUse">
+      <rect x="10" y="10" width="100" height="100"/>
+    </clipPath>
+    <filter style="color-interpolation-filters:sRGB" id="filter" x="-0.15" width="1.34" y="0" height="1">
+      <feGaussianBlur stdDeviation="4.26"/>
+    </filter>
+  </defs>
 
-                "<g id=\"G\" transform=\"skewX(10.5) translate(9,5)\">\n"
-                "  <use id=\"U\" xlink:href=\"#P\" opacity=\"0.5\" fill=\"#1dace3\" transform=\"rotate(4)\"/>\n"
-                "  <circle id=\"C\" cx=\"45.5\" cy=\"67\" r=\"23\" fill=\"#000\"/>\n"
-                "  <ellipse id=\"E\" cx=\"200\" cy=\"70\" rx=\"85\" ry=\"55\" fill=\"url(#LG)\"/>\n"
-                "  <text id=\"T\" fill=\"#fff\" style=\"font-size:45;font-family:Verdana\" x=\"150\" y=\"86\">TEST</text>\n"
-                "  <polygon id=\"PG\" points=\"60,20 100,40 100,80 60,100 20,80 20,40\" clip-path=\"url(#clip)\" filter=\"url(#filter)\"/>\n"
-                "  <polyline id=\"PL\" points=\"0,40 40,40 40,80 80,80 80,120 120,120 120,160\" style=\"fill:none;stroke:red;stroke-width:4\"/>\n"
-                "  <image id=\"I\" xlink:href=\"data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjE4MCIgd2lkdGg9IjUwMCI+PHBhdGggZD0iTTAsNDAgNDAsNDAgNDAs" // this is one line
-                "ODAgODAsODAgODAsMTIwIDEyMCwxMjAgMTIwLDE2MCIgc3R5bGU9ImZpbGw6d2hpdGU7c3Ryb2tlOnJlZDtzdHJva2Utd2lkdGg6NCIvPjwvc3ZnPgo=\"/>\n"
-                "  <line id=\"L\" x1=\"20\" y1=\"100\" x2=\"100\" y2=\"20\" stroke=\"black\" stroke-width=\"2\"/>\n"
-                "</g>\n"
-                "</svg>\n";
+  <g id="G" transform="skewX(10.5) translate(9,5)">
+    <use id="U" xlink:href="#P" opacity="0.5" fill="#1dace3" transform="rotate(4)"/>
+    <circle id="C" cx="45.5" cy="67" r="23" fill="#000"/>
+    <ellipse id="E" cx="200" cy="70" rx="85" ry="55" fill="url(#LG)"/>
+    <text id="T" fill="#fff" style="font-size:45;font-family:Verdana" x="150" y="86">TEST</text>
+    <polygon id="PG" points="60,20 100,40 100,80 60,100 20,80 20,40" clip-path="url(#clip)" filter="url(#filter)"/>
+    <polyline id="PL" points="0,40 40,40 40,80 80,80 80,120 120,120 120,160" style="fill:none;stroke:red;stroke-width:4"/>
+    <image id="I" xlink:href="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjE4MCIgd2lkdGg9IjUwMCI+PHBhdGggZD0iTTAsNDAgNDAsNDAgNDAsODAgODAsODAgODAsMTIwIDEyMCwxMjAgMTIwLDE2MCIgc3R5bGU9ImZpbGw6d2hpdGU7c3Ryb2tlOnJlZDtzdHJva2Utd2lkdGg6NCIvPjwvc3ZnPgo="/>
+    <line id="L" x1="20" y1="100" x2="100" y2="20" stroke="black" stroke-width="2"/>
+  </g>
+</svg>
+        )A";
         doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
     }
 
