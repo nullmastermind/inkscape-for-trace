@@ -78,12 +78,13 @@ bool sp_repr_save_rebased_file(Inkscape::XML::Document *doc, char const *filenam
 
 SPCSSAttr *sp_repr_css_attr_new();
 void sp_repr_css_attr_unref(SPCSSAttr *css);
-SPCSSAttr *sp_repr_css_attr(Inkscape::XML::Node *repr, char const *attr);
+SPCSSAttr *sp_repr_css_attr(Inkscape::XML::Node const *repr, char const *attr);
 SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text);
-SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node *repr, char const *attr);
+SPCSSAttr *sp_repr_css_attr_inherited(Inkscape::XML::Node const *repr, char const *attr);
 SPCSSAttr *sp_repr_css_attr_unset_all(SPCSSAttr *css);
 
 char const *sp_repr_css_property(SPCSSAttr *css, char const *name, char const *defval);
+Glib::ustring sp_repr_css_property(SPCSSAttr *css, Glib::ustring const &name, Glib::ustring const &defval);
 void sp_repr_css_set_property(SPCSSAttr *css, char const *name, char const *value);
 void sp_repr_css_unset_property(SPCSSAttr *css, char const *name);
 bool sp_repr_css_property_is_unset(SPCSSAttr *css, char const *name);
@@ -151,10 +152,25 @@ std::vector<Inkscape::XML::Node const *> sp_repr_lookup_name_many(Inkscape::XML:
                                                                   char const *name,
                                                                   int maxdepth = -1);
 
+// Find an element node using an unique attribute.
 Inkscape::XML::Node *sp_repr_lookup_child(Inkscape::XML::Node *repr,
                                           char const *key,
                                           char const *value);
 
+// Find an element node using an unique attribute recursively.
+Inkscape::XML::Node *sp_repr_lookup_descendant(Inkscape::XML::Node *repr,
+                                               char const *key,
+                                               char const *value);
+
+Inkscape::XML::Node const *sp_repr_lookup_descendant(Inkscape::XML::Node const *repr,
+                                                     char const *key,
+                                                     char const *value);
+
+// Find element nodes using a property value.
+std::vector<Inkscape::XML::Node *> sp_repr_lookup_property_many(Inkscape::XML::Node *repr,
+                                                                Glib::ustring const &property,
+                                                                Glib::ustring const &value,
+                                                                int maxdepth = -1);
 
 inline Inkscape::XML::Node *sp_repr_document_first_child(Inkscape::XML::Document const *doc) {
     return const_cast<Inkscape::XML::Node *>(doc->firstChild());

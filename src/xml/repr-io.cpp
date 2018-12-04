@@ -981,10 +981,9 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     }
     out.printf( "<%s", element_name );
 
-    // if this is a <text> element, suppress formatting whitespace
+    // If this is a <text> element, suppress formatting whitespace
     // for its content and children:
-    gchar const *xml_space_attr = repr->attribute("xml:space");
-    if (xml_space_attr != nullptr && !strcmp(xml_space_attr, "preserve")) {
+    if (strcmp(repr->name(),"svg:text") == 0) {
         add_whitespace = false;
     }
 
@@ -1014,6 +1013,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
             break;
         }
     }
+
     if (repr->firstChild()) {
         out.writeChar('>');
         if (loose && add_whitespace) {

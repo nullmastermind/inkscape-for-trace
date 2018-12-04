@@ -61,7 +61,7 @@ protected:
     SimpleNode *_duplicate(Document* doc) const override { return new SPCSSAttrImpl(*this, doc); }
 };
 
-static void sp_repr_css_add_components(SPCSSAttr *css, Node *repr, gchar const *attr);
+static void sp_repr_css_add_components(SPCSSAttr *css, Node const *repr, gchar const *attr);
 
 /**
  * Creates an empty SPCSSAttr (a class for manipulating CSS style properties).
@@ -90,7 +90,7 @@ void sp_repr_css_attr_unref(SPCSSAttr *css)
  * string is parsed by libcroco which returns a CRDeclaration list (a typical C linked list) of
  * properties and values. This list is then used to fill the attributes of the new SPCSSAttr.
  */
-SPCSSAttr *sp_repr_css_attr(Node *repr, gchar const *attr)
+SPCSSAttr *sp_repr_css_attr(Node const *repr, gchar const *attr)
 {
     g_assert(repr != nullptr);
     g_assert(attr != nullptr);
@@ -174,9 +174,9 @@ SPCSSAttr *sp_repr_css_attr_parse_color_to_fill(const Glib::ustring &text)
 /**
  * Adds an attribute to an existing SPCSAttr with the cascaded value including all parents.
  */ 
-static void sp_repr_css_attr_inherited_recursive(SPCSSAttr *css, Node *repr, gchar const *attr)
+static void sp_repr_css_attr_inherited_recursive(SPCSSAttr *css, Node const *repr, gchar const *attr)
 {
-    Node *parent = repr->parent();
+    const Node *parent = repr->parent();
 
     // read the ancestors from root down, using head recursion, so that children override parents
     if (parent) {
@@ -188,7 +188,7 @@ static void sp_repr_css_attr_inherited_recursive(SPCSSAttr *css, Node *repr, gch
 /**
  * Creates a new SPCSSAttr with one attribute whose value is determined by cascading.
  */
-SPCSSAttr *sp_repr_css_attr_inherited(Node *repr, gchar const *attr)
+SPCSSAttr *sp_repr_css_attr_inherited(Node const *repr, gchar const *attr)
 {
     g_assert(repr != nullptr);
     g_assert(attr != nullptr);
@@ -205,7 +205,7 @@ SPCSSAttr *sp_repr_css_attr_inherited(Node *repr, gchar const *attr)
  * (nominally a style attribute).
  * 
  */
-static void sp_repr_css_add_components(SPCSSAttr *css, Node *repr, gchar const *attr)
+static void sp_repr_css_add_components(SPCSSAttr *css, Node const *repr, gchar const *attr)
 {
     g_assert(css != nullptr);
     g_assert(repr != nullptr);
@@ -228,6 +228,23 @@ char const *sp_repr_css_property(SPCSSAttr *css, gchar const *name, gchar const 
     return ( attr == nullptr
              ? defval
              : attr );
+}
+
+/**
+ * Returns a character string of the value of a given style property or a default value if the
+ * attribute is not found.
+ */
+Glib::ustring sp_repr_css_property(SPCSSAttr *css, Glib::ustring const &name, Glib::ustring const &defval)
+{
+    g_assert(css != nullptr);
+
+    Glib::ustring retval = defval;
+    char const *attr = ((Node *)css)->attribute(name.c_str());
+    if (attr) {
+        retval = attr;
+    }
+
+    return retval;
 }
 
 /**
