@@ -614,20 +614,15 @@ static gboolean checkitem_update(GtkWidget *widget, cairo_t * /*cr*/, gpointer u
 
         if (!strcmp(action->id, "ToggleGrid")) {
             ison = dt->gridsEnabled();
-        }
-        else if (!strcmp(action->id, "EditGuidesToggleLock")) {
+        } else if (!strcmp(action->id, "EditGuidesToggleLock")) {
             ison = dt->namedview->lockguides;
-        }
-        else if (!strcmp(action->id, "ToggleGuides")) {
+        } else if (!strcmp(action->id, "ToggleGuides")) {
             ison = dt->namedview->getGuides();
-        }
-        else if (!strcmp(action->id, "ViewCmsToggle")) {
+        } else if (!strcmp(action->id, "ViewCmsToggle")) {
             ison = dt->colorProfAdjustEnabled();
-        } 
-        else if (!strcmp(action->id, "ViewSplitModeToggle")) {
+        } else if (!strcmp(action->id, "ViewSplitModeToggle")) {
             ison = dt->splitMode();
-        }
-        else if (!strcmp(action->id, "ViewXRayToggle")) {
+        } else if (!strcmp(action->id, "ViewXRayToggle")) {
             ison = dt->xrayMode();
         } else {
             ison = getViewStateFromPref(view, pref);

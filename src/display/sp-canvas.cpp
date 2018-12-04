@@ -361,7 +361,8 @@ void sp_canvas_item_dispose(GObject *object)
     G_OBJECT_CLASS(sp_canvas_item_parent_class)->dispose(object);
 }
 
-void sp_reset_spliter(SPCanvas * canvas) {
+void sp_reset_spliter(SPCanvas *canvas)
+{
     canvas->_spliter = Geom::OptIntRect();
     canvas->_spliter_area = Geom::OptIntRect();
     canvas->_spliter_control = Geom::OptIntRect();
@@ -1836,7 +1837,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
                                             paint_rect.height() * _device_scale,
                                             stride);
     cairo_surface_set_device_scale(imgs, _device_scale, _device_scale);
-    
+
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -1896,8 +1897,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // initialized.
     if (_backing_store == nullptr)
         return;
-    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0,_y0, _x0 + paint_rect.width(),
-                                                       _y0 + paint_rect.height());
+    Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0, _y0, _x0 + paint_rect.width(), _y0 + paint_rect.height());
     SPCanvasBuf buf;
     buf.buf = nullptr;
     buf.buf_rowstride = 0;
@@ -1913,19 +1913,17 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     assert(paint_rect.top() - _y0 >= 0);
     assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
     assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
-    cairo_surface_t *copy_backing = cairo_surface_create_similar_image (_backing_store,
-                                                                        CAIRO_FORMAT_ARGB32,
-                                                                        paint_rect.width(),
-                                                                        paint_rect.height());
-/*     Geom::Point _xray_orig = desktop->doc2dt(desktop->point());
-    _xray_orig *= desktop->current_zoom(); */
+    cairo_surface_t *copy_backing = cairo_surface_create_similar_image(_backing_store, CAIRO_FORMAT_ARGB32,
+                                                                       paint_rect.width(), paint_rect.height());
+    /*     Geom::Point _xray_orig = desktop->doc2dt(desktop->point());
+        _xray_orig *= desktop->current_zoom(); */
     buf.ct = cairo_create(copy_backing);
-    cairo_t * result = cairo_create(_backing_store);
+    cairo_t *result = cairo_create(_backing_store);
     cairo_translate(result, -_x0, -_y0);
     cairo_save(buf.ct);
     cairo_set_source_rgba(buf.ct, 1, 1, 1, 0);
     cairo_fill(buf.ct);
-    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
     cairo_clip(buf.ct);
     cairo_paint(buf.ct);
     cairo_set_source(buf.ct, _background);
@@ -1940,19 +1938,19 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
     cairo_restore(buf.ct);
-    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
     cairo_clip(buf.ct);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_DEST_IN);
     cairo_paint(buf.ct);
-    //cairo_arc(buf.ct, _xray_orig[Geom::X], _xray_orig[Geom::Y], _xray_radius, 0, 2*M_PI);
-    //cairo_clip(buf.ct);
-    //cairo_paint(buf.ct);
+    // cairo_arc(buf.ct, _xray_orig[Geom::X], _xray_orig[Geom::Y], _xray_radius, 0, 2*M_PI);
+    // cairo_clip(buf.ct);
+    // cairo_paint(buf.ct);
     // cairo_surface_write_to_png( copy_backing, "debug2.png" );
 
     // output to X
-    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2*M_PI);
-    
-    cairo_set_source_surface(result, copy_backing,  paint_rect.left(),  paint_rect.top());
+    cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
+
+    cairo_set_source_surface(result, copy_backing, paint_rect.left(), paint_rect.top());
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_IN);
     cairo_paint(result);
     cairo_destroy(buf.ct);
@@ -2476,12 +2474,9 @@ int SPCanvas::paint()
         arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
         bool exact = arena->drawing.getExact();
         arena->drawing.setExact(false);
-        Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
-        allocation.width, allocation.height);
-        Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0]-_xray_radius,
-                                                           _xray_orig[1]-_xray_radius,
-                                                           (_xray_radius * 2),
-                                                           (_xray_radius * 2));
+        Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
+        Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius,
+                                                            (_xray_radius * 2), (_xray_radius * 2));
         paintXRayBuffer(_xray_rect, canvas_rect);
         arena->drawing.setExact(exact);
         arena->drawing.setRenderMode(rm);

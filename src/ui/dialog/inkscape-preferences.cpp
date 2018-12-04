@@ -1727,8 +1727,8 @@ void InkscapePreferences::initPageRendering()
 
     // rendering xray radius
     _rendering_xray_radius.init("/options/rendering/xray-radius", 1.0, 1500.0, 1.0, 100.0, 100.0, true, false);
-    _page_rendering.add_line( false, _("Rendering XRay radius:"), _rendering_xray_radius, "",
-                              _("XRay mode radius preview"), false);
+    _page_rendering.add_line(false, _("Rendering XRay radius:"), _rendering_xray_radius, "",
+                             _("XRay mode radius preview"), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
