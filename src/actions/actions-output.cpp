@@ -219,6 +219,9 @@ add_actions_output(InkscapeApplication* app)
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
     Glib::VariantType BString(Glib::VARIANT_TYPE_BYTESTRING);
 
+    // Debian 9 has 2.50.0
+#if GLIB_CHECK_VERSION(2, 52, 0)
+
     // Matches command line options
     app->add_action_with_parameter( "export-type",              String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_type),         app));
     app->add_action_with_parameter( "export-filename",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_filename),     app)); // MAY NOT WORK DUE TO std::string
@@ -247,6 +250,9 @@ add_actions_output(InkscapeApplication* app)
 
     // Extra
     app->add_action(                "export-do",                        sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_do),           app));
+#else
+    std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
+#endif
 }
 
 /*
