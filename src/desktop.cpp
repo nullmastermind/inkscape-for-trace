@@ -941,34 +941,8 @@ guint SPDesktop::get_vruler_thickness()
     return 0;
 }
 
-guint SPDesktop::get_hscroll_thickness()
-{
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(GTK_WIDGET(dtw->hscrollbar), &allocation);
-        return allocation.height;
-    }
-    return 0;
-}
-
-guint SPDesktop::get_vscroll_thickness()
-{
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(GTK_WIDGET(dtw->vscrollbar_box), &allocation);
-        return allocation.width;
-    }
-    return 0;
-}
-
 int get_hruler_thickness();
 int get_vruler_thickness();
-int get_vscroll_thickness();
-int get_hscroll_thickness();
 
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.

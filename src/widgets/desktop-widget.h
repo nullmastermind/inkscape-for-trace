@@ -120,18 +120,17 @@ private:
     sigc::connection _rotation_status_value_changed_connection;
     sigc::connection _rotation_status_populate_popup_connection;
 
+    Inkscape::UI::Widget::Dock *_dock;
+
+    Gtk::Scrollbar *_hscrollbar;
+    Gtk::Scrollbar *_vscrollbar;
+    Gtk::Box *_vscrollbar_box;
+
 public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
-
-    Gtk::Scrollbar *hscrollbar;
-    Gtk::Scrollbar *vscrollbar;
-
-    Gtk::Box *vscrollbar_box;
-
-    Inkscape::UI::Widget::Dock *dock;
 
     Inkscape::UI::Widget::SelectedStyle *selected_style;
 
