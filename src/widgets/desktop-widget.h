@@ -113,6 +113,7 @@ private:
     sigc::connection _zoom_status_output_connection;
     sigc::connection _zoom_status_value_changed_connection;
     sigc::connection _zoom_status_populate_popup_connection;
+    Gtk::Label *_select_status;
 
 public:
 
@@ -120,7 +121,6 @@ public:
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
     GtkWidget *rotation_status;
     gulong rotation_update;

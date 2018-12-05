@@ -229,15 +229,14 @@ static CMSPrefWatcher* watcher = nullptr;
 void
 SPDesktopWidget::setMessage (Inkscape::MessageType type, const gchar *message)
 {
-    GtkLabel *sb=GTK_LABEL(this->select_status);
-    gtk_label_set_markup (sb, message ? message : "");
+    _select_status->set_markup(message ? message : "");
 
     // make sure the important messages are displayed immediately!
-    if (type == Inkscape::IMMEDIATE_MESSAGE && gtk_widget_is_drawable (GTK_WIDGET(sb))) {
-        gtk_widget_queue_draw(GTK_WIDGET(sb));
+    if (type == Inkscape::IMMEDIATE_MESSAGE && _select_status->get_is_drawable()) {
+        _select_status->queue_draw();
     }
 
-    gtk_widget_set_tooltip_text (this->select_status, gtk_label_get_text (sb));
+    _select_status->set_tooltip_text(_select_status->get_text());
 }
 
 Geom::Point
@@ -578,21 +577,21 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_statusbar->pack_start(*dtw->layer_selector, false, false, 1);
 
     // Select Status
-    dtw->select_status = gtk_label_new (nullptr);
-    gtk_widget_set_name( dtw->select_status, "SelectStatus");
-    gtk_label_set_ellipsize (GTK_LABEL(dtw->select_status), PANGO_ELLIPSIZE_END);
+    dtw->_select_status = Gtk::manage(new Gtk::Label());
+    dtw->_select_status->set_name("SelectStatus");
+    dtw->_select_status->set_ellipsize(Pango::ELLIPSIZE_END);
 #if GTK_CHECK_VERSION(3,10,0)
-    gtk_label_set_line_wrap (GTK_LABEL(dtw->select_status), true);
-    gtk_label_set_lines (GTK_LABEL(dtw->select_status), 2);
+    dtw->_select_status->set_line_wrap(true);
+    dtw->_select_status->set_lines(2);
 #endif
 
-    gtk_widget_set_halign(dtw->select_status, GTK_ALIGN_START);
-    gtk_widget_set_size_request (dtw->select_status, 1, -1);
+    dtw->_select_status->set_halign(Gtk::ALIGN_START);
+    dtw->_select_status->set_size_request(1, -1);
 
     // Display the initial welcome message in the statusbar
-    gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
+    dtw->_select_status->set_markup(_("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
 
-    dtw->_statusbar->pack_start(*Glib::wrap(dtw->select_status), true, true);
+    dtw->_statusbar->pack_start(*dtw->_select_status, true, true);
 
 
     // Zoom status spinbutton ---------------
