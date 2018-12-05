@@ -305,12 +305,10 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
  * This adjusts the range of the rulers when the dock container is adjusted
  * (fixes lp:950552)
  */
-static void canvas_tbl_size_allocate(GtkWidget    * widget,
-                                     GdkRectangle * /*allocation*/,
-                                     gpointer      data)
+void
+SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& /*allocation*/)
 {
-    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
-    sp_desktop_widget_update_rulers(dtw);
+    sp_desktop_widget_update_rulers(this);
 }
 
 /**
@@ -371,8 +369,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_hbox->pack_start(*tbl_wrapper, true, true, 1);
 
     /* Canvas table */
-    dtw->canvas_tbl = gtk_grid_new();
-    gtk_widget_set_name(dtw->canvas_tbl, "CanvasTable");
+    dtw->_canvas_tbl = Gtk::manage(new Gtk::Grid());
+    dtw->_canvas_tbl->set_name("CanvasTable");
     // Added to table wrapper later either directly or via paned window shared with dock.
 
 
@@ -391,7 +389,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     auto context = dtw->_guides_lock->get_style_context();
     context->add_provider(guides_lock_style_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_guides_lock->gobj()), 0, 0, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -407,7 +405,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
+    dtw->_canvas_tbl->attach(*Glib::wrap(eventbox), 1, 0, 1, 1);
 
     /* Vertical ruler */
     eventbox = gtk_event_box_new ();
@@ -422,13 +420,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 1, 1, 1);
+    dtw->_canvas_tbl->attach(*Glib::wrap(eventbox), 0, 1, 1, 1);
 
     // Horizontal scrollbar
     dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
     dtw->_hscrollbar = Gtk::manage(new Gtk::Scrollbar(dtw->_hadj));
     dtw->_hscrollbar->set_name("HorizontalScrollbar");
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_hscrollbar->gobj()), 1, 2, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_hscrollbar, 1, 2, 1, 1);
 
     // By packing the sticky zoom button and vertical scrollbar in a box it allows the canvas to
     // expand fully to the top if the rulers are hidden.
@@ -436,7 +434,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // Vertical Scrollbar box
     dtw->_vscrollbar_box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_vscrollbar_box->gobj()), 2, 0, 1, 2);
+    dtw->_canvas_tbl->attach(*dtw->_vscrollbar_box, 2, 0, 1, 2);
 
     // Sticky zoom button
     dtw->_sticky_zoom = Glib::wrap(GTK_TOGGLE_BUTTON(sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
@@ -488,7 +486,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->cms_adjust_set_sensitive(false);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    gtk_grid_attach( GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->_cms_adjust->gobj()), 2, 2, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_cms_adjust, 2, 2, 1, 1);
     {
         if (!watcher) {
             watcher = new CMSPrefWatcher();
@@ -520,7 +518,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas), TRUE);
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), GTK_WIDGET(dtw->canvas), 1, 1, 1, 1);
+    dtw->_canvas_tbl->attach(*Glib::wrap(GTK_WIDGET(dtw->canvas)), 1, 1, 1, 1);
 
     /* Dock */
     bool create_dock =
@@ -532,7 +530,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         auto paned = new Gtk::Paned();
         paned->set_name("Canvas_and_Dock");
 
-        paned->pack1(*Glib::wrap(dtw->canvas_tbl));
+        paned->pack1(*dtw->_canvas_tbl);
         paned->pack2(dtw->_dock->getWidget(), Gtk::FILL);
 
         /* Prevent the paned from catching F6 and F8 by unsetting the default callbacks */
@@ -545,9 +543,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         paned->set_vexpand(true);
         tbl_wrapper->attach(*paned, 1, 1, 1, 1);
     } else {
-        gtk_widget_set_hexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
-        gtk_widget_set_vexpand(GTK_WIDGET(dtw->canvas_tbl), TRUE);
-        gtk_grid_attach(GTK_GRID(tbl_wrapper), GTK_WIDGET (dtw->canvas_tbl), 1, 1, 1, 1);
+        dtw->_canvas_tbl->set_hexpand(true);
+        dtw->_canvas_tbl->set_vexpand(true);
+        gtk_grid_attach(GTK_GRID(tbl_wrapper), GTK_WIDGET (dtw->_canvas_tbl->gobj()), 1, 1, 1, 1);
     }
 
     // connect scrollbar signals
@@ -557,8 +555,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     // --------------- Status Tool Bar ------------------//
 
     // Selected Style (Fill/Stroke/Opacity)
-    dtw->selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
-    dtw->_statusbar->pack_start(*dtw->selected_style, false, false);
+    dtw->_selected_style = new Inkscape::UI::Widget::SelectedStyle(true);
+    dtw->_statusbar->pack_start(*dtw->_selected_style, false, false);
 
     // Separator
     dtw->_statusbar->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)),
@@ -715,10 +713,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // Ensure that ruler ranges are updated correctly whenever the canvas table
     // is resized
-    g_signal_connect (G_OBJECT (dtw->canvas_tbl),
-                      "size-allocate",
-                      G_CALLBACK (canvas_tbl_size_allocate),
-                      dtw);
+    dtw->_canvas_tbl_size_allocate_connection = dtw->_canvas_tbl->signal_size_allocate().connect(sigc::mem_fun(dtw, &SPDesktopWidget::canvas_tbl_size_allocate));
 }
 
 /**
@@ -756,7 +751,7 @@ SPDesktopWidget::dispose(GObject *object)
 
         // Canvas
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas), (gpointer) G_CALLBACK (sp_desktop_widget_event), dtw);
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas_tbl), (gpointer) G_CALLBACK (canvas_tbl_size_allocate), dtw);
+        dtw->_canvas_tbl_size_allocate_connection.disconnect();
 
         dtw->layer_selector->setDesktop(nullptr);
         dtw->layer_selector->unreference();
@@ -1666,7 +1661,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     // This needs desktop set for its spacing preferences.
     init_avoided_shape_geometry(dtw->desktop);
 
-    dtw->selected_style->setDesktop(dtw->desktop);
+    dtw->_selected_style->setDesktop(dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
     sp_desktop_widget_update_rulers (dtw);

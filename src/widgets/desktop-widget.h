@@ -126,22 +126,23 @@ private:
     Gtk::Scrollbar *_vscrollbar;
     Gtk::Box *_vscrollbar_box;
 
+    Inkscape::UI::Widget::SelectedStyle *_selected_style;
+
+    /** A table for displaying the canvas, rulers etc */
+    Gtk::Grid *_canvas_tbl;
+    sigc::connection _canvas_tbl_size_allocate_connection;
+
 public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
 
-    Inkscape::UI::Widget::SelectedStyle *selected_style;
-
     gint coord_status_id, select_status_id;
 
     unsigned int _interaction_disabled_counter;
 
     SPCanvas  *canvas;
-
-    /** A table for displaying the canvas, rulers etc */
-    GtkWidget *canvas_tbl;
 
     Geom::Point ruler_origin;
     double dt2r;
@@ -299,6 +300,7 @@ private:
     bool rotation_output();
     void rotation_value_changed();
     void rotation_populate_popup(Gtk::Menu *menu);
+    void canvas_tbl_size_allocate(Gtk::Allocation &allocation);
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );
