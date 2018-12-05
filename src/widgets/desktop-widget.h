@@ -55,7 +55,6 @@ void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
-void sp_desktop_widget_update_rotation(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
@@ -114,17 +113,18 @@ private:
     sigc::connection _zoom_status_value_changed_connection;
     sigc::connection _zoom_status_populate_popup_connection;
     Gtk::Label *_select_status;
+    Gtk::SpinButton *_rotation_status;
+
+    sigc::connection _rotation_status_input_connection;
+    sigc::connection _rotation_status_output_connection;
+    sigc::connection _rotation_status_value_changed_connection;
+    sigc::connection _rotation_status_populate_popup_connection;
 
 public:
 
     /* Rulers */
     GtkWidget *hruler, *vruler;
     GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
-
-    GtkWidget *select_status_eventbox;
-    GtkWidget *rotation_status;
-    gulong rotation_update;
-
 
     Gtk::Scrollbar *hscrollbar;
     Gtk::Scrollbar *vscrollbar;
@@ -206,7 +206,7 @@ public:
             bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
             void updateZoom() override { _dtw->update_zoom(); }
             void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
-            void updateRotation() override { sp_desktop_widget_update_rotation(_dtw); }
+            void updateRotation() override { _dtw->update_rotation(); }
             void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
             void setToolboxAdjustmentValue(const gchar *id, double val) override
             { _dtw->setToolboxAdjustmentValue (id, val); }
@@ -274,6 +274,7 @@ public:
     void toggle_color_prof_adj();
     bool get_sticky_zoom_active() const;
     void update_zoom();
+    void update_rotation();
 
 private:
     GtkWidget *tool_toolbox;
@@ -295,6 +296,10 @@ private:
     void zoom_value_changed();
     void zoom_menu_handler(double factor);
     void zoom_populate_popup(Gtk::Menu *menu);
+    int rotation_input(double *new_val);
+    bool rotation_output();
+    void rotation_value_changed();
+    void rotation_populate_popup(Gtk::Menu *menu);
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );
