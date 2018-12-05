@@ -813,6 +813,7 @@ SPStyle::mergeString( gchar const *const p ) {
   */
 void
 SPStyle::mergeStatement( CRStatement *statement ) {
+    if (statement->type != RULESET_STMT) return;
     CRDeclaration *decl_list = NULL;
     cr_statement_ruleset_get_declarations (statement, &decl_list);
     _mergeDeclList(decl_list, SP_STYLE_SRC_STYLE_SHEET);
