@@ -40,7 +40,6 @@
 #include "sp-cursor.h"
 #include "verbs.h"
 
-#include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
 #include "display/guideline.h"
 #include "display/snap-indicator.h"
@@ -67,7 +66,6 @@ using Inkscape::DocumentUndo;
 
 static void snoop_extended(GdkEvent* event, SPDesktop *desktop);
 static void init_extended();
-void sp_dt_ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
 
 /* Root item handler */
 
@@ -92,210 +90,7 @@ int sp_desktop_root_handler(SPCanvasItem */*item*/, GdkEvent *event, SPDesktop *
     return sp_event_context_root_handler(desktop->event_context, event);
 }
 
-static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
-{
-    static bool clicked = false;
-    static bool dragged = false;
-    static SPCanvasItem *guide = nullptr;
-    static Geom::Point normal;
-    int wx, wy;
-    static gint xp = 0, yp = 0; // where drag started
 
-    SPDesktop *desktop = dtw->desktop;
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(dtw->canvas));
-
-    gint width, height;
-
-    auto device = gdk_event_get_device(event);
-    gdk_window_get_device_position(window, device, &wx, &wy, nullptr);
-    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
-    
-    Geom::Point const event_win(wx, wy);
-
-    switch (event->type) {
-    case GDK_BUTTON_PRESS:
-            if (event->button.button == 1) {
-                clicked = true;
-                dragged = false;
-                // save click origin
-                xp = (gint) event->button.x;
-                yp = (gint) event->button.y;
-
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                Geom::Point const event_dt(desktop->w2d(event_w));
-
-                // calculate the normal of the guidelines when dragged from the edges of rulers.
-                auto const y_dir = desktop->yaxisdir();
-                Geom::Point normal_bl_to_tr(1., y_dir); //bottomleft to topright
-                Geom::Point normal_tr_to_bl(-1., y_dir); //topright to bottomleft
-                normal_bl_to_tr.normalize();
-                normal_tr_to_bl.normalize();
-                Inkscape::CanvasGrid * grid = sp_namedview_get_first_enabled_grid(desktop->namedview);
-                if (grid){
-                    if (grid->getGridType() == Inkscape::GRID_AXONOMETRIC ) {
-                        Inkscape::CanvasAxonomGrid *axonomgrid = dynamic_cast<Inkscape::CanvasAxonomGrid *>(grid);
-                        if (event->button.state & GDK_CONTROL_MASK) {
-                            // guidelines normal to gridlines
-                            normal_bl_to_tr = Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0);
-                            normal_tr_to_bl = Geom::Point::polar(axonomgrid->angle_rad[2], 1.0);
-                        } else {
-                            normal_bl_to_tr = rot90(Geom::Point::polar(axonomgrid->angle_rad[2], 1.0));
-                            normal_tr_to_bl = rot90(Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0));
-                        }
-                    }
-                }
-                if (horiz) {
-                    if (wx < 50) {
-                        normal = normal_bl_to_tr;
-                    } else if (wx > width - 50) {
-                        normal = normal_tr_to_bl;
-                    } else {
-                        normal = Geom::Point(0.,1.);
-                    }
-                } else {
-                    if (wy < 50) {
-                        normal = normal_bl_to_tr;
-                    } else if (wy > height - 50) {
-                        normal = normal_tr_to_bl;
-                    } else {
-                        normal = Geom::Point(1.,0.);
-                    }
-                }
-
-                guide = sp_guideline_new(desktop->guides, nullptr, event_dt, normal);
-                sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
-
-                auto window = gtk_widget_get_window(widget);
-
-#if GTK_CHECK_VERSION(3,20,0)
-                auto seat = gdk_device_get_seat(device);
-                gdk_seat_grab(seat,
-                              window,
-                              GDK_SEAT_CAPABILITY_ALL_POINTING,
-                              FALSE,
-                              nullptr,
-                              event,
-                              nullptr,
-                              nullptr);
-#else
-                gdk_device_grab(device,
-                                window,
-                                GDK_OWNERSHIP_NONE,
-                                FALSE,
-                                (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
-                                NULL,
-                                event->button.time);
-#endif
-            }
-            break;
-    case GDK_MOTION_NOTIFY:
-            if (clicked) {
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                Geom::Point event_dt(desktop->w2d(event_w));
-
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                gint tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-                if ( ( abs( (gint) event->motion.x - xp ) < tolerance )
-                        && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
-                    break;
-                }
-
-                dragged = true;
-
-                // explicitly show guidelines; if I draw a guide, I want them on
-                if ((horiz ? wy : wx) >= 0) {
-                    desktop->namedview->setGuides(true);
-                }
-
-                if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                    sp_dt_ruler_snap_new_guide(desktop, guide, event_dt, normal);
-                }
-                sp_guideline_set_normal(SP_GUIDELINE(guide), normal);
-                sp_guideline_set_position(SP_GUIDELINE(guide), event_dt);
-
-                desktop->set_coordinate_status(event_dt);
-            }
-            break;
-    case GDK_BUTTON_RELEASE:
-            if (clicked && event->button.button == 1) {
-                sp_event_context_discard_delayed_snap_event(desktop->event_context);
-
-#if GTK_CHECK_VERSION(3,20,0)
-                auto seat = gdk_device_get_seat(device);
-                gdk_seat_ungrab(seat);
-#else
-                gdk_device_ungrab(device, event->button.time);
-#endif
-
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
-                Geom::Point event_dt(desktop->w2d(event_w));
-
-                if (!(event->button.state & GDK_SHIFT_MASK)) {
-                    sp_dt_ruler_snap_new_guide(desktop, guide, event_dt, normal);
-                }
-
-                sp_canvas_item_destroy(guide);
-                guide = nullptr;
-                if ((horiz ? wy : wx) >= 0) {
-                    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-                    Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
-
-                    // If root viewBox set, interpret guides in terms of viewBox (90/96)
-                    double newx = event_dt.x();
-                    double newy = event_dt.y();
-
-                    // <sodipodi:guide> stores inverted y-axis coordinates
-                    if (desktop->is_yaxisdown()) {
-                        newy = desktop->doc()->getHeight().value("px") - newy;
-                        normal[Geom::Y] *= -1.0;
-                    }
-
-                    SPRoot *root = desktop->doc()->getRoot();
-                    if( root->viewBox_set ) {
-                        newx = newx * root->viewBox.width()  / root->width.computed;
-                        newy = newy * root->viewBox.height() / root->height.computed;
-                    }
-                    sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
-                    sp_repr_set_point(repr, "orientation", normal);
-                    desktop->namedview->appendChild(repr);
-                    Inkscape::GC::release(repr);
-                    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                     _("Create guide"));
-                }
-                desktop->set_coordinate_status(event_dt);
-
-                if (!dragged) {
-                    // Ruler click (without drag) toggle the guide visibility on and off
-                    Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-                    sp_namedview_toggle_guides(desktop->getDocument(), repr);
-                    
-                }
-
-                clicked = false;
-                dragged = false;
-            }
-    default:
-            break;
-    }
-
-    return FALSE;
-}
-
-int sp_dt_hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
-{
-    if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HRULER);
-    }
-    return sp_dt_ruler_event(widget, event, dtw, true);
-}
-
-int sp_dt_vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
-{
-    if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_VRULER);
-    }
-    return sp_dt_ruler_event(widget, event, dtw, false);
-}
 
 static Geom::Point drag_origin;
 static SPGuideDragType drag_type = SP_DRAG_NONE;
@@ -748,42 +543,6 @@ void snoop_extended(GdkEvent* event, SPDesktop *desktop)
         }
     }
 }
-
-
-void sp_dt_ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem * /*guide*/, Geom::Point &event_dt, Geom::Point &normal)
-{
-    SnapManager &m = desktop->namedview->snap_manager;
-    m.setup(desktop);
-    // We're dragging a brand new guide, just pulled of the rulers seconds ago. When snapping to a
-    // path this guide will change it slope to become either tangential or perpendicular to that path. It's
-    // therefore not useful to try tangential or perpendicular snapping, so this will be disabled temporarily
-    bool pref_perp = m.snapprefs.getSnapPerp();
-    bool pref_tang = m.snapprefs.getSnapTang();
-    m.snapprefs.setSnapPerp(false);
-    m.snapprefs.setSnapTang(false);
-    // We only have a temporary guide which is not stored in our document yet.
-    // Because the guide snapper only looks in the document for guides to snap to,
-    // we don't have to worry about a guide snapping to itself here
-    Geom::Point normal_orig = normal;
-    m.guideFreeSnap(event_dt, normal, false, false);
-    // After snapping, both event_dt and normal have been modified accordingly; we'll take the normal (of the
-    // curve we snapped to) to set the normal the guide. And rotate it by 90 deg. if needed
-    if (pref_perp) { // Perpendicular snapping to paths is requested by the user, so let's do that
-        if (normal != normal_orig) {
-            normal = Geom::rot90(normal);
-        }
-    }
-    if (!(pref_tang || pref_perp)) { // if we don't want to snap either perpendicularly or tangentially, then
-        normal = normal_orig; // we must restore the normal to it's original state
-    }
-    // Restore the preferences
-    m.snapprefs.setSnapPerp(pref_perp);
-    m.snapprefs.setSnapTang(pref_tang);
-    m.unSetup();
-}
-
-
-
 /*
   Local Variables:
   mode:c++

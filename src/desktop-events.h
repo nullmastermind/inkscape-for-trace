@@ -35,11 +35,6 @@ gint sp_canvas_enter_notify (GtkWidget *widget, GdkEventCrossing *event, SPDeskt
 gint sp_canvas_leave_notify (GtkWidget *widget, GdkEventCrossing *event, SPDesktop *desktop);
 gint sp_canvas_motion_notify (GtkWidget *widget,GdkEventMotion *motion, SPDesktop *desktop);
 
-/* Rulers */
-
-int sp_dt_hruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
-int sp_dt_vruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
-
 /* Guides */
 
 gint sp_dt_guide_event (SPCanvasItem *item, GdkEvent *event, gpointer data);

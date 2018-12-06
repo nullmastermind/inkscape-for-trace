@@ -27,6 +27,7 @@
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
+struct SPCanvasItem;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
@@ -53,9 +54,6 @@ class ToggleButton;
 SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
-void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
-void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
-void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
@@ -144,9 +142,9 @@ private:
     Geom::Point _ruler_origin;
     double _dt2r;
 
-public:
+    SPCanvas *_canvas;
 
-    SPCanvas  *canvas;
+public:
 
     Inkscape::Widgets::LayerSelector *layer_selector;
 
@@ -178,11 +176,11 @@ public:
         Geom::Point getPointer() override
             { return _dtw->window_get_pointer(); }
         void setIconified() override
-            { sp_desktop_widget_iconify (_dtw); }
+            { _dtw->iconify(); }
         void setMaximized() override
-            { sp_desktop_widget_maximize (_dtw); }
+            { _dtw->maximize(); }
         void setFullscreen() override
-            { sp_desktop_widget_fullscreen (_dtw); }
+            { _dtw->fullscreen(); }
         bool shutdown() override
             { return _dtw->shutdown(); }
         void destroy() override
@@ -279,6 +277,12 @@ public:
     void update_rulers();
     double get_hruler_thickness() const;
     double get_vruler_thickness() const;
+    GtkAllocation get_canvas_allocation() const;
+    static int hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
+    static int vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
+    void iconify();
+    void maximize();
+    void fullscreen();
 
 private:
     GtkWidget *tool_toolbox;
@@ -308,7 +312,11 @@ private:
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );
+    static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif
+    static gint ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz);
+    static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
+    static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 };
 
 /// The SPDesktopWidget vtable
