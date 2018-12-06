@@ -392,31 +392,31 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
 
     /* Horizontal ruler */
-    dtw->_hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
-    gtk_widget_set_name(dtw->_hruler, "HorizontalRuler");
+    dtw->_hruler = Glib::wrap(sp_ruler_new(GTK_ORIENTATION_HORIZONTAL));
+    dtw->_hruler->set_name("HorizontalRuler");
     dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
     Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
-    sp_ruler_set_unit(SP_RULER(dtw->_hruler), pt);
+    sp_ruler_set_unit(SP_RULER(dtw->_hruler->gobj()), pt);
     dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_hruler_box->add(*Glib::wrap(dtw->_hruler));
+    dtw->_hruler_box->add(*dtw->_hruler);
 
-    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_press_event",   G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "motion_notify_event",  G_CALLBACK (sp_dt_hruler_event), dtw);
 
     dtw->_canvas_tbl->attach(*dtw->_hruler_box, 1, 0, 1, 1);
 
     /* Vertical ruler */
-    dtw->_vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_name(dtw->_vruler, "VerticalRuler");
+    dtw->_vruler = Glib::wrap(sp_ruler_new(GTK_ORIENTATION_VERTICAL));
+    dtw->_vruler->set_name("VerticalRuler");
     dtw->_vruler_box = Gtk::manage(new Gtk::EventBox());
-    sp_ruler_set_unit (SP_RULER (dtw->_vruler), pt);
+    sp_ruler_set_unit (SP_RULER (dtw->_vruler->gobj()), pt);
     dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_vruler_box->add(*Glib::wrap(dtw->_vruler));
+    dtw->_vruler_box->add(*dtw->_vruler);
 
-    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_press_event",   G_CALLBACK (sp_dt_vruler_event), dtw);
     g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "motion_notify_event",  G_CALLBACK (sp_dt_vruler_event), dtw);
 
     dtw->_canvas_tbl->attach(*dtw->_vruler_box, 0, 1, 1, 1);
 
@@ -498,8 +498,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     gtk_widget_set_can_focus (GTK_WIDGET (dtw->canvas), TRUE);
 
-    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler), GTK_WIDGET(dtw->canvas));
-    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler), GTK_WIDGET(dtw->canvas));
+    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->canvas));
+    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->canvas));
     auto css_provider  = gtk_css_provider_new();
     auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->canvas));
 
@@ -1516,12 +1516,12 @@ void SPDesktopWidget::layoutWidgets()
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
         dtw->_guides_lock->hide();
-        gtk_widget_hide (dtw->_hruler);
-        gtk_widget_hide (dtw->_vruler);
+        dtw->_hruler->hide();
+        dtw->_vruler->hide();
     } else {
         dtw->_guides_lock->show_all();
-        gtk_widget_show_all (dtw->_hruler);
-        gtk_widget_show_all (dtw->_vruler);
+        dtw->_hruler->show_all();
+        dtw->_vruler->show_all();
     }
 }
 
@@ -1700,7 +1700,7 @@ SPDesktopWidget::update_rulers()
 
     double lower_x = dt2r * (viewbox.left()  - ruler_origin[Geom::X]);
     double upper_x = dt2r * (viewbox.right() - ruler_origin[Geom::X]);
-    sp_ruler_set_range(SP_RULER(_hruler),
+    sp_ruler_set_range(SP_RULER(_hruler->gobj()),
 	      	       lower_x,
 		       upper_x,
 		       (upper_x - lower_x));
@@ -1710,7 +1710,7 @@ SPDesktopWidget::update_rulers()
     if (desktop->is_yaxisdown()) {
         std::swap(lower_y, upper_y);
     }
-    sp_ruler_set_range(SP_RULER(_vruler),
+    sp_ruler_set_range(SP_RULER(_vruler->gobj()),
                        lower_y,
 		       upper_y,
 		       (upper_y - lower_y));
@@ -1725,8 +1725,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         this->dt2r = 1. / nv->display_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        sp_ruler_set_unit(SP_RULER (this->_vruler), nv->getDisplayUnit());
-        sp_ruler_set_unit(SP_RULER (this->_hruler), nv->getDisplayUnit());
+        sp_ruler_set_unit(SP_RULER(_vruler->gobj()), nv->getDisplayUnit());
+        sp_ruler_set_unit(SP_RULER(_hruler->gobj()), nv->getDisplayUnit());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),
@@ -2058,13 +2058,13 @@ SPDesktopWidget::toggle_rulers()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (_guides_lock->get_visible()) {
         _guides_lock->hide();
-        gtk_widget_hide(_hruler);
-        gtk_widget_hide(_vruler);
+        _hruler->hide();
+        _vruler->hide();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
     } else {
         _guides_lock->show_all();
-        gtk_widget_show_all(_hruler);
-        gtk_widget_show_all(_vruler);
+        _hruler->show_all();
+        _vruler->show_all();
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
     }
 }
@@ -2187,17 +2187,15 @@ SPDesktopWidget::get_sticky_zoom_active() const
 double
 SPDesktopWidget::get_hruler_thickness() const
 {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(_hruler, &allocation);
-    return allocation.height;
+    auto allocation = _hruler->get_allocation();
+    return allocation.get_height();
 }
 
 double
 SPDesktopWidget::get_vruler_thickness() const
 {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(_vruler, &allocation);
-    return allocation.width;
+    auto allocation = _vruler->get_allocation();
+    return allocation.get_width();
 }
 /*
   Local Variables:

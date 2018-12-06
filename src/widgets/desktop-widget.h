@@ -136,7 +136,8 @@ private:
     Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
 
     /* Rulers */
-    GtkWidget *_hruler, *_vruler;
+    Gtk::Widget *_hruler;
+    Gtk::Widget *_vruler;
 
 public:
 
