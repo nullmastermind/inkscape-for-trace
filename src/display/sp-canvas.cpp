@@ -41,6 +41,7 @@
 #include "preferences.h"
 #include "sodipodi-ctrlrect.h"
 #include "ui/tools/tool-base.h"
+#include "widgets/desktop-widget.h"
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 
@@ -2389,8 +2390,10 @@ int SPCanvas::paint()
         arena = SP_CANVAS_ARENA(desktop->drawing);
         split_x = !_split_vertical ? 0 : _split_value;
         split_y = _split_vertical ? 0 : _split_value;
-        guint hruler_gap = desktop->get_hruler_thickness();
-        guint vruler_gap = desktop->get_vruler_thickness();
+        auto window = desktop->getToplevel();
+        auto dtw = static_cast<SPDesktopWidget *>(window->get_data("desktopwidget"));
+        guint hruler_gap = dtw->get_hruler_thickness();
+        guint vruler_gap = dtw->get_vruler_thickness();
         Geom::IntCoord coord1x =
             allocation.x + (int(allocation.width * split_x)) - (3 * canvas->_device_scale) - vruler_gap;
         Geom::IntCoord coord1y =

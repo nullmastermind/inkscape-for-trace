@@ -917,33 +917,6 @@ Geom::Rect SPDesktop::get_display_area() const
     return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);
 }
 
-guint SPDesktop::get_hruler_thickness()
-{
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(dtw->hruler, &allocation);
-        return allocation.height;
-    }
-    return 0;
-}
-
-guint SPDesktop::get_vruler_thickness()
-{
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        GtkAllocation allocation;
-        gtk_widget_get_allocation(dtw->vruler, &allocation);
-        return allocation.width;
-    }
-    return 0;
-}
-
-int get_hruler_thickness();
-int get_vruler_thickness();
-
 /**
  * Zoom keeping the point 'c' fixed in the desktop window.
  */

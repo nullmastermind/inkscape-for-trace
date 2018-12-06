@@ -308,7 +308,7 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
 void
 SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& /*allocation*/)
 {
-    sp_desktop_widget_update_rulers(this);
+    update_rulers();
 }
 
 /**
@@ -392,35 +392,33 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
 
     /* Horizontal ruler */
-    GtkWidget *eventbox = gtk_event_box_new ();
-    dtw->hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
-    gtk_widget_set_name(dtw->hruler, "HorizontalRuler");
-    dtw->hruler_box = eventbox;
+    dtw->_hruler = sp_ruler_new(GTK_ORIENTATION_HORIZONTAL);
+    gtk_widget_set_name(dtw->_hruler, "HorizontalRuler");
+    dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
     Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
-    sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
-    gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt->name_plural.c_str()));
-    gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
+    sp_ruler_set_unit(SP_RULER(dtw->_hruler), pt);
+    dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
+    dtw->_hruler_box->add(*Glib::wrap(dtw->_hruler));
 
-    g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
-    g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
-    g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 
-    dtw->_canvas_tbl->attach(*Glib::wrap(eventbox), 1, 0, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_hruler_box, 1, 0, 1, 1);
 
     /* Vertical ruler */
-    eventbox = gtk_event_box_new ();
-    dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
-    gtk_widget_set_name(dtw->vruler, "VerticalRuler");
-    dtw->vruler_box = eventbox;
-    sp_ruler_set_unit (SP_RULER (dtw->vruler), pt);
-    gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(pt->name_plural.c_str()));
-    gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
+    dtw->_vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
+    gtk_widget_set_name(dtw->_vruler, "VerticalRuler");
+    dtw->_vruler_box = Gtk::manage(new Gtk::EventBox());
+    sp_ruler_set_unit (SP_RULER (dtw->_vruler), pt);
+    dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
+    dtw->_vruler_box->add(*Glib::wrap(dtw->_vruler));
 
-    g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
-    g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
-    g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
+    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 
-    dtw->_canvas_tbl->attach(*Glib::wrap(eventbox), 0, 1, 1, 1);
+    dtw->_canvas_tbl->attach(*dtw->_vruler_box, 0, 1, 1, 1);
 
     // Horizontal scrollbar
     dtw->_hadj = Gtk::Adjustment::create(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0);
@@ -500,8 +498,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     gtk_widget_set_can_focus (GTK_WIDGET (dtw->canvas), TRUE);
 
-    sp_ruler_add_track_widget (SP_RULER(dtw->hruler), GTK_WIDGET(dtw->canvas));
-    sp_ruler_add_track_widget (SP_RULER(dtw->vruler), GTK_WIDGET(dtw->canvas));
+    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler), GTK_WIDGET(dtw->canvas));
+    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler), GTK_WIDGET(dtw->canvas));
     auto css_provider  = gtk_css_provider_new();
     auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->canvas));
 
@@ -1518,12 +1516,12 @@ void SPDesktopWidget::layoutWidgets()
 
     if (!prefs->getBool(pref_root + "rulers/state", true)) {
         dtw->_guides_lock->hide();
-        gtk_widget_hide (dtw->hruler);
-        gtk_widget_hide (dtw->vruler);
+        gtk_widget_hide (dtw->_hruler);
+        gtk_widget_hide (dtw->_vruler);
     } else {
         dtw->_guides_lock->show_all();
-        gtk_widget_show_all (dtw->hruler);
-        gtk_widget_show_all (dtw->vruler);
+        gtk_widget_show_all (dtw->_hruler);
+        gtk_widget_show_all (dtw->_vruler);
     }
 }
 
@@ -1664,7 +1662,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->_selected_style->setDesktop(dtw->desktop);
 
     /* Once desktop is set, we can update rulers */
-    sp_desktop_widget_update_rulers (dtw);
+    dtw->update_rulers();
 
     sp_view_widget_set_view (SP_VIEW_WIDGET (dtw), dtw->desktop);
 
@@ -1696,23 +1694,23 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 
 
 void
-sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
+SPDesktopWidget::update_rulers()
 {
-    Geom::Rect viewbox = dtw->desktop->get_display_area();
+    Geom::Rect viewbox = desktop->get_display_area();
 
-    double lower_x = dtw->dt2r * (viewbox.left()  - dtw->ruler_origin[Geom::X]);
-    double upper_x = dtw->dt2r * (viewbox.right() - dtw->ruler_origin[Geom::X]);
-    sp_ruler_set_range(SP_RULER(dtw->hruler),
+    double lower_x = dt2r * (viewbox.left()  - ruler_origin[Geom::X]);
+    double upper_x = dt2r * (viewbox.right() - ruler_origin[Geom::X]);
+    sp_ruler_set_range(SP_RULER(_hruler),
 	      	       lower_x,
 		       upper_x,
 		       (upper_x - lower_x));
 
-    double lower_y = dtw->dt2r * (viewbox.bottom() - dtw->ruler_origin[Geom::Y]);
-    double upper_y = dtw->dt2r * (viewbox.top()    - dtw->ruler_origin[Geom::Y]);
-    if (dtw->desktop->is_yaxisdown()) {
+    double lower_y = dt2r * (viewbox.bottom() - ruler_origin[Geom::Y]);
+    double upper_y = dt2r * (viewbox.top()    - ruler_origin[Geom::Y]);
+    if (desktop->is_yaxisdown()) {
         std::swap(lower_y, upper_y);
     }
-    sp_ruler_set_range(SP_RULER(dtw->vruler),
+    sp_ruler_set_range(SP_RULER(_vruler),
                        lower_y,
 		       upper_y,
 		       (upper_y - lower_y));
@@ -1727,8 +1725,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         this->dt2r = 1. / nv->display_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
-        sp_ruler_set_unit(SP_RULER (this->vruler), nv->getDisplayUnit());
-        sp_ruler_set_unit(SP_RULER (this->hruler), nv->getDisplayUnit());
+        sp_ruler_set_unit(SP_RULER (this->_vruler), nv->getDisplayUnit());
+        sp_ruler_set_unit(SP_RULER (this->_hruler), nv->getDisplayUnit());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),
@@ -1771,10 +1769,10 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
             } // children
         } // if aux_toolbox is a container
 
-        gtk_widget_set_tooltip_text(this->hruler_box, gettext(nv->display_units->name_plural.c_str()));
-        gtk_widget_set_tooltip_text(this->vruler_box, gettext(nv->display_units->name_plural.c_str()));
+        _hruler_box->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
+        _vruler_box->set_tooltip_text(gettext(nv->display_units->name_plural.c_str()));
 
-        sp_desktop_widget_update_rulers(this);
+        update_rulers();
         ToolboxFactory::updateSnapToolbox(this->desktop, nullptr, this->snap_toolbox);
     }
 }
@@ -2060,13 +2058,13 @@ SPDesktopWidget::toggle_rulers()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (_guides_lock->get_visible()) {
         _guides_lock->hide();
-        gtk_widget_hide(hruler);
-        gtk_widget_hide(vruler);
+        gtk_widget_hide(_hruler);
+        gtk_widget_hide(_vruler);
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", false);
     } else {
         _guides_lock->show_all();
-        gtk_widget_show_all(hruler);
-        gtk_widget_show_all(vruler);
+        gtk_widget_show_all(_hruler);
+        gtk_widget_show_all(_vruler);
         prefs->setBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state", true);
     }
 }
@@ -2184,6 +2182,22 @@ bool
 SPDesktopWidget::get_sticky_zoom_active() const
 {
     return _sticky_zoom->get_active();
+}
+
+double
+SPDesktopWidget::get_hruler_thickness() const
+{
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(_hruler, &allocation);
+    return allocation.height;
+}
+
+double
+SPDesktopWidget::get_vruler_thickness() const
+{
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(_vruler, &allocation);
+    return allocation.width;
 }
 /*
   Local Variables:

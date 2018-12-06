@@ -439,8 +439,6 @@ public:
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
 
-    guint get_hruler_thickness();
-    guint get_vruler_thickness();
     guint get_vscroll_thickness();
     guint get_hscroll_thickness();
 

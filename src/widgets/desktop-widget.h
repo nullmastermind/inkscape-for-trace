@@ -33,6 +33,7 @@ class SPObject;
 
 namespace Gtk {
 class Box;
+class EventBox;
 class Grid;
 class MenuBar;
 class Scrollbar;
@@ -55,7 +56,6 @@ void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
-void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
 
@@ -132,11 +132,13 @@ private:
     Gtk::Grid *_canvas_tbl;
     sigc::connection _canvas_tbl_size_allocate_connection;
 
-public:
+    Gtk::EventBox *_hruler_box;
+    Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
 
     /* Rulers */
-    GtkWidget *hruler, *vruler;
-    GtkWidget *hruler_box, *vruler_box; // eventboxes for setting tooltips
+    GtkWidget *_hruler, *_vruler;
+
+public:
 
     gint coord_status_id, select_status_id;
 
@@ -198,7 +200,7 @@ public:
             void disableInteraction() override { _dtw->disableInteraction(); }
             void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
             void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
-            void updateRulers() override { sp_desktop_widget_update_rulers(_dtw); }
+            void updateRulers() override { _dtw->update_rulers(); }
             void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
             void toggleRulers() override { _dtw->toggle_rulers(); }
             void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
@@ -275,6 +277,9 @@ public:
     bool get_sticky_zoom_active() const;
     void update_zoom();
     void update_rotation();
+    void update_rulers();
+    double get_hruler_thickness() const;
+    double get_vruler_thickness() const;
 
 private:
     GtkWidget *tool_toolbox;
