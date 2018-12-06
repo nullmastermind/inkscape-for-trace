@@ -1260,11 +1260,11 @@ void
 SPDesktopWidget::setCoordinateStatus(Geom::Point p)
 {
     gchar *cstr;
-    cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::X]);
+    cstr = g_strdup_printf("%7.2f", _dt2r * p[Geom::X]);
     _coord_status_x->set_markup(cstr);
     g_free(cstr);
 
-    cstr = g_strdup_printf("%7.2f", dt2r * p[Geom::Y]);
+    cstr = g_strdup_printf("%7.2f", _dt2r * p[Geom::Y]);
     _coord_status_y->set_markup(cstr);
     g_free(cstr);
 }
@@ -1646,9 +1646,9 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, nullptr));
 
-    dtw->dt2r = 1. / namedview->display_units->factor;
+    dtw->_dt2r = 1. / namedview->display_units->factor;
 
-    dtw->ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
+    dtw->_ruler_origin = Geom::Point(0,0); //namedview->gridorigin;   Why was the grid origin used here?
 
     dtw->desktop = new SPDesktop();
     dtw->stub = new SPDesktopWidget::WidgetStub (dtw);
@@ -1698,15 +1698,15 @@ SPDesktopWidget::update_rulers()
 {
     Geom::Rect viewbox = desktop->get_display_area();
 
-    double lower_x = dt2r * (viewbox.left()  - ruler_origin[Geom::X]);
-    double upper_x = dt2r * (viewbox.right() - ruler_origin[Geom::X]);
+    double lower_x = _dt2r * (viewbox.left()  - _ruler_origin[Geom::X]);
+    double upper_x = _dt2r * (viewbox.right() - _ruler_origin[Geom::X]);
     sp_ruler_set_range(SP_RULER(_hruler->gobj()),
 	      	       lower_x,
 		       upper_x,
 		       (upper_x - lower_x));
 
-    double lower_y = dt2r * (viewbox.bottom() - ruler_origin[Geom::Y]);
-    double upper_y = dt2r * (viewbox.top()    - ruler_origin[Geom::Y]);
+    double lower_y = _dt2r * (viewbox.bottom() - _ruler_origin[Geom::Y]);
+    double upper_y = _dt2r * (viewbox.top()    - _ruler_origin[Geom::Y]);
     if (desktop->is_yaxisdown()) {
         std::swap(lower_y, upper_y);
     }
@@ -1722,8 +1722,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
     SPNamedView *nv=SP_NAMEDVIEW(obj);
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
-        this->dt2r = 1. / nv->display_units->factor;
-        this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
+        _dt2r = 1. / nv->display_units->factor;
+        _ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
 
         sp_ruler_set_unit(SP_RULER(_vruler->gobj()), nv->getDisplayUnit());
         sp_ruler_set_unit(SP_RULER(_hruler->gobj()), nv->getDisplayUnit());

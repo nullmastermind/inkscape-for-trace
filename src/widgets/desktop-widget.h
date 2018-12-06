@@ -139,16 +139,14 @@ private:
     Gtk::Widget *_hruler;
     Gtk::Widget *_vruler;
 
-public:
-
-    gint coord_status_id, select_status_id;
-
     unsigned int _interaction_disabled_counter;
 
-    SPCanvas  *canvas;
+    Geom::Point _ruler_origin;
+    double _dt2r;
 
-    Geom::Point ruler_origin;
-    double dt2r;
+public:
+
+    SPCanvas  *canvas;
 
     Inkscape::Widgets::LayerSelector *layer_selector;
 
