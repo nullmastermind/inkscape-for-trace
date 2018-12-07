@@ -540,12 +540,18 @@ void FileDialogBaseGtk::internalSetup()
     // Open executable file dialogs don't need the preview panel
     if (_dialogType != EXE_TYPES) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool enablePreview = prefs->getBool(preferenceBase + "/enable_preview", true);
+        bool enablePreview   = prefs->getBool(preferenceBase + "/enable_preview", true);
+        bool enableSVGExport = prefs->getBool(preferenceBase + "/enable_svgexport", false);
 
         previewCheckbox.set_label(Glib::ustring(_("Enable preview")));
         previewCheckbox.set_active(enablePreview);
 
         previewCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_previewEnabledCB));
+
+        svgexportCheckbox.set_label(Glib::ustring(_("Export as SVG 1.1 per settings in Preference Dialog.")));
+        svgexportCheckbox.set_active(enableSVGExport);
+
+        svgexportCheckbox.signal_toggled().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_svgexportEnabledCB));
 
         // Catch selection-changed events, so we can adjust the text widget
         signal_update_preview().connect(sigc::mem_fun(*this, &FileDialogBaseGtk::_updatePreviewCallback));
@@ -579,6 +585,13 @@ void FileDialogBaseGtk::_previewEnabledCB()
         // Clears out any current preview image.
         svgPreview.showNoPreview();
     }
+}
+
+void FileDialogBaseGtk::_svgexportEnabledCB()
+{
+    bool enabled = svgexportCheckbox.get_active();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool(preferenceBase + "/enable_svgexport", enabled);
 }
 
 
@@ -931,6 +944,7 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     childBox.pack_end(fileTypeComboBox);
     checksBox.pack_start(fileTypeCheckbox);
     checksBox.pack_start(previewCheckbox);
+    checksBox.pack_start(svgexportCheckbox);
 
     set_extra_widget(childBox);
 
