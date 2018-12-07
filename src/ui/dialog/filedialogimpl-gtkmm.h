@@ -189,9 +189,10 @@ protected:
     SVGPreview svgPreview;
 
     /**
-	 * Child widgets
-	 */
+     * Child widgets
+     */
     Gtk::CheckButton previewCheckbox;
+    Gtk::CheckButton svgexportCheckbox;
 
 private:
     void internalSetup();
@@ -205,6 +206,11 @@ private:
      * Callback for seeing if the preview needs to be drawn
      */
     void _updatePreviewCallback();
+
+    /**
+     * Callback to for SVG 2 to SVG 1.1 export.
+     */
+    void _svgexportEnabledCB();
 };
 
 

@@ -1265,6 +1265,28 @@ void InkscapePreferences::initPageIO()
 
     this->AddPage(_page_svgoutput, _("SVG output"), iter_io, PREFS_PAGE_IO_SVGOUTPUT);
 
+    // SVG Export Options ==========================================
+
+    // SVG 2 Fallbacks
+    _page_svgexport.add_group_header( _("SVG 2"));
+    _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
+    _svgexport_insert_mesh_polyfill.init( _("Insert Mesh Gradient JavaScript polyfill."),                            "/options/svgexport/mesh_insertpolyfill",    true );
+
+    _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."),        false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render meshes (only fill."), false);
+
+    // SVG Export Options (SVG 2 -> SVG 1)
+    _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
+
+    _svgexport_remove_marker_auto_start_reverse.init( _("Replace markers with 'auto_start_reverse'."),               "/options/svgexport/marker_autostartreverse", false);
+    _svgexport_remove_marker_context_paint.init(      _("Replace markers using 'context_paint' or 'context_fill'."), "/options/svgexport/marker_contextpaint",     false);
+
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_auto_start_reverse, "", _("SVG 2 allows markers to automatically be reversed at start of path."), false);
+    _page_svgexport.add_line( false, "", _svgexport_remove_marker_context_paint,      "", _("SVG 2 allows markers to automatically match stroke color."),           false);
+
+    this->AddPage(_page_svgexport, _("SVG export"), iter_io, PREFS_PAGE_IO_SVGEXPORT);
+
+
     // CMS options
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const numIntents = 4;
