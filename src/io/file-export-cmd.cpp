@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2018 Tavmjong Bah
  *
- * Git blame shows that bulia byak is the main author of the orignal export code from
+ * Git blame shows that bulia byak is the main author of the original export code from
  * main.cpp. Other authors of note include Nicolas Dufour, Vinicius dos Santos Oliveira, and Bob
  * Jamison; none of whom bothered to add their names to the copyright of main.cc.
  *
@@ -176,7 +176,7 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
 
     //     // Check for file name.
     //     if (filename_out.empty()) {
-    //         std::cerr << "InkFileExportCmd::do_export: Could not determine ouput file name!" << std::endl;
+    //         std::cerr << "InkFileExportCmd::do_export: Could not determine output file name!" << std::endl;
     //         return (std::string());
     //     }
 
@@ -188,7 +188,7 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
     //     }
     // }
 }
-    
+
 /**
  *  Perform an SVG export
  *

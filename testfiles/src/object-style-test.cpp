@@ -145,7 +145,7 @@ TEST_F(ObjectTest, StyleSource) {
 }
 
 /*
- * Test the breaking up of the font property and recreation into seperate properties.
+ * Test the breaking up of the font property and recreation into separate properties.
  */
 TEST_F(ObjectTest, StyleFont) {
     ASSERT_TRUE(doc != nullptr);
@@ -167,7 +167,7 @@ TEST_F(ObjectTest, StyleFont) {
 }
 
 /*
- * Test the consumption of font dependant lengths in SPILength, e.g. EM, EX and % units
+ * Test the consumption of font dependent lengths in SPILength, e.g. EM, EX and % units
  */
 TEST_F(ObjectTest, StyleFontSizes) {
     ASSERT_TRUE(doc != nullptr);
