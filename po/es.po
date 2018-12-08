@@ -5,14 +5,14 @@
 # Agradecimientos: zert, softcatala, 2002-2003.
 # Jose Antonio Salgueiro Aquino <developer@telefonica.net>, 2003.
 # Francisco Javier F. Serrador <serrador@arrakis.es>, 2003.
-# Lucas Vieites <lucas@codexion.com>, 2003-2018.
+# Lucas Vieites <lucas@codexion.com>, 2003- 2018, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.1\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-04-21 11:25+0100\n"
-"PO-Revision-Date: 2018-12-05 20:39+0100\n"
+"PO-Revision-Date: 2018-12-08 12:51+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español; Castellano <inkscape-translator@lists.sourceforge."
 "net>\n"
@@ -23041,7 +23041,7 @@ msgstr "Corregir ortografía"
 
 #: ../src/ui/dialog/styledialog.cpp:535
 msgid "Edited style element."
-msgstr ""
+msgstr "Elemento de estilo editado."
 
 #: ../src/ui/dialog/styledialog.cpp:883 ../src/ui/dialog/xml-tree.cpp:908
 msgid "Cancel"
@@ -26720,9 +26720,8 @@ msgid "Resi_ze page to content..."
 msgstr "Ajustar página a _contenido..."
 
 #: ../src/ui/widget/page-sizer.cpp:414
-#, fuzzy
 msgid "_Resize page to drawing or selection (Ctrl+Shift+R)"
-msgstr "Ajusta_r página a dibujo o selección"
+msgstr "Ajusta_r página a dibujo o selección (Ctrl+Mayús+R)"
 
 #: ../src/ui/widget/page-sizer.cpp:415
 msgid ""
@@ -27501,14 +27500,12 @@ msgid "Save a copy of the document under a new name"
 msgstr "Guardar una copia del documento con un nombre nuevo"
 
 #: ../src/verbs.cpp:2606
-#, fuzzy
 msgid "Save template ..."
-msgstr "Nuevo a partir de plan_tilla..."
+msgstr "Guardar plantilla..."
 
 #: ../src/verbs.cpp:2607
-#, fuzzy
 msgid "Save a copy of the document as template"
-msgstr "Guardar una copia del documento con un nombre nuevo"
+msgstr "Guardar una copia del documento como plantilla"
 
 #: ../src/verbs.cpp:2608
 msgid "_Print..."
@@ -28589,12 +28586,12 @@ msgstr "Aplicar máscara a selección (utiliza el objeto superior como máscara)
 
 #: ../src/verbs.cpp:2911 ../src/verbs.cpp:2919
 msgid "_Set Inverse (LPE)"
-msgstr ""
+msgstr "U_sar inversa (LPE)"
 
 #: ../src/verbs.cpp:2912
-#, fuzzy
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
-msgstr "Aplicar máscara a selección (utiliza el objeto superior como máscara)"
+msgstr ""
+"Aplicar máscara inversa a selección (utiliza el objeto superior como máscara)"
 
 #: ../src/verbs.cpp:2913 ../src/verbs.cpp:2923 ../share/ui/menus.xml.h:2
 msgid "_Edit"
@@ -28620,13 +28617,12 @@ msgstr ""
 "trazo de recorte)"
 
 #: ../src/verbs.cpp:2920
-#, fuzzy
 msgid ""
 "Apply inverse clipping path to selection (using the topmost object as "
 "clipping path)"
 msgstr ""
-"Aplicar trazado de recorte a selección (utiliza el objeto superior como "
-"trazo de recorte)"
+"Aplicar trazado de recorte inverso a selección (utiliza el objeto superior "
+"como trazo de recorte)"
 
 #: ../src/verbs.cpp:2921
 msgid "Create Cl_ip Group"
@@ -29093,62 +29089,52 @@ msgid "Zoom to fit selection in window"
 msgstr "Ajustar la selección a la ventana"
 
 #: ../src/verbs.cpp:3053
-#, fuzzy
 msgid "Rotate Clockwise"
 msgstr "Girar hacia la derecha"
 
 #: ../src/verbs.cpp:3053
-#, fuzzy
 msgid "Rotate canvas clockwise"
-msgstr "Girar hacia la derecha"
+msgstr "Girar el lienzo hacia la derecha"
 
 #: ../src/verbs.cpp:3054
-#, fuzzy
 msgid "Rotate Counter-Clockwise"
 msgstr "Girar hacia la izquierda"
 
 #: ../src/verbs.cpp:3054
-#, fuzzy
 msgid "Rotate canvas counter-clockwise"
-msgstr "Girar hacia la izquierda"
+msgstr "Girar el lienzo hacia la izquierda"
 
 #: ../src/verbs.cpp:3055
-#, fuzzy
 msgid "Reset Rotation"
-msgstr "Rotación"
+msgstr "Reiniciar rotación"
 
 #: ../src/verbs.cpp:3055
 msgid "Reset canvas rotation to zero"
-msgstr ""
+msgstr "Fijar la rotación del lienzo a cero"
 
 #: ../src/verbs.cpp:3057
-#, fuzzy
 msgid "Flip Horizontally"
 msgstr "Reflejo horizontal"
 
 #: ../src/verbs.cpp:3057
-#, fuzzy
 msgid "Flip canvas horizontally"
-msgstr "Reflejar los nodos horizontalmente"
+msgstr "Reflejar el lienzo horizontalmente"
 
 #: ../src/verbs.cpp:3058
-#, fuzzy
 msgid "Flip Vertically"
 msgstr "Reflejo vertical"
 
 #: ../src/verbs.cpp:3058
-#, fuzzy
 msgid "Flip canvas vertically"
-msgstr "Reflejar los nodos verticalmente"
+msgstr "Reflejar el lienzo verticalmente"
 
 #: ../src/verbs.cpp:3059
-#, fuzzy
 msgid "Reset Flip"
-msgstr "Reiniciar rejilla"
+msgstr "Reiniciar reflejo"
 
 #: ../src/verbs.cpp:3059
 msgid "Undo any flip"
-msgstr ""
+msgstr "Deshacer cualquier reflejo"
 
 #. WHY ARE THE FOLLOWING ZoomVerbs???
 #. View
@@ -29345,11 +29331,11 @@ msgstr ""
 #. Dialogs
 #: ../src/verbs.cpp:3112
 msgid "Prototype..."
-msgstr ""
+msgstr "Prototipo..."
 
 #: ../src/verbs.cpp:3113
 msgid "Prototype Dialog"
-msgstr ""
+msgstr "Diálogo prototipo"
 
 #: ../src/verbs.cpp:3114
 msgid "P_references..."
@@ -29827,18 +29813,16 @@ msgid "Center on horizontal and vertical axis"
 msgstr "Centrar en los ejes horizontal y vertical"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:144
-#, fuzzy
 msgid "Change arc"
-msgstr "Cambiar desenfoque"
+msgstr "Cambiar arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc: Change start/end"
 msgstr "Arco: Cambiar inicio/fin"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:278
-#, fuzzy
 msgid "Arc: Changed arc type"
-msgstr "Arco: Cambiar inicio/fin"
+msgstr "Arco: Cambiar tipo de arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:413 ../src/ui/toolbar/arc-toolbar.cpp:452
 #: ../src/ui/toolbar/rect-toolbar.cpp:268
@@ -29874,9 +29858,8 @@ msgid "Rx:"
 msgstr "Rx:"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:463
-#, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
-msgstr "Radio horizontal de las esquinas redondeadas"
+msgstr "Radio horizontal del círculo, elipse, o arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:479 ../src/ui/toolbar/rect-toolbar.cpp:371
 msgid "Vertical radius"
@@ -29887,9 +29870,8 @@ msgid "Ry:"
 msgstr "Ry:"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:479
-#, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
-msgstr "Crear círculos, elipses y arcos"
+msgstr "Radio vertical del círculo, elipse, o arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:492 ../src/ui/toolbar/lpe-toolbar.cpp:404
 #: ../src/ui/toolbar/node-toolbar.cpp:614
@@ -29918,22 +29900,20 @@ msgstr ""
 "El ángulo (en grados) desde la horizontal hasta el punto final del arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:532
-#, fuzzy
 msgid "Switch to slice (closed shape with two radii)"
 msgstr "Cambiar a segmento (forma cerrada con dos radios)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:537
 msgid "Arc (Open)"
-msgstr ""
+msgstr "Arco (abierto)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:538
 msgid "Switch to arc (unclosed shape)"
-msgstr "Cambiar a archo (forma sin cerrar)"
+msgstr "Cambiar a arco (forma sin cerrar)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:544
-#, fuzzy
 msgid "Switch to chord (closed shape)"
-msgstr "Cambiar a archo (forma sin cerrar)"
+msgstr "Cambiar a cuerda (forma cerrada)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:569
 msgid "Make whole"
@@ -30444,7 +30424,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:620
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr ""
+msgstr "Rotación. (También Ctrl+Mayús+Rueda)"
 
 #: ../src/widgets/desktop-widget.cpp:654
 msgid "Cursor coordinates"
@@ -30561,7 +30541,6 @@ msgid "remove"
 msgstr "eliminar"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:152
-#, fuzzy
 msgid "Delete objects touched by eraser"
 msgstr "Borrar objetos tocados por el borrador"
 
@@ -30578,9 +30557,8 @@ msgid "Clip"
 msgstr "Recorte"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:164
-#, fuzzy
 msgid "Clip from objects"
-msgstr "Recorte de objetos"
+msgstr "Recorte desde objetos"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:188
 msgid "(no width)"
@@ -30718,7 +30696,6 @@ msgid "No gradient"
 msgstr "Sin degradado"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:153
-#, fuzzy
 msgid "Nothing Selected"
 msgstr "Sin selección"
 
@@ -30951,7 +30928,6 @@ msgstr "Ambos abiertos"
 #. Name
 #. Label
 #: ../src/ui/toolbar/lpe-toolbar.cpp:375
-#, fuzzy
 msgid "Choose a line segement type"
 msgstr "Elegir un tipo de segmento de línea"
 
@@ -30980,14 +30956,12 @@ msgid "Start and end measures active."
 msgstr "Medidas de inicio y de fin activas."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:178
-#, fuzzy
 msgid "Measures only selected."
-msgstr "Cambiar solo los nodos seleccionados"
+msgstr "Medir solo lo seleccionado."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:180
-#, fuzzy
 msgid "Measure all."
-msgstr "Medir trayecto"
+msgstr "Medir todo."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:196
 msgid "Show all crossings."
@@ -31058,9 +31032,8 @@ msgstr "Marcar desvío de la dimensión"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:362
 #: ../src/ui/toolbar/measure-toolbar.cpp:363
-#, fuzzy
 msgid "Measure only selected"
-msgstr "Cambiar solo los nodos seleccionados"
+msgstr "Medir solo lo seleccionado"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:374
 #: ../src/ui/toolbar/measure-toolbar.cpp:375
@@ -31220,13 +31193,11 @@ msgstr "Bicúbica"
 
 #. Name
 #: ../src/ui/toolbar/mesh-toolbar.cpp:561
-#, fuzzy
 msgid "Smoothing"
-msgstr "Suavizado:"
+msgstr "Suavizado"
 
 #. Label
 #: ../src/ui/toolbar/mesh-toolbar.cpp:562
-#, fuzzy
 msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
 msgstr ""
 "Coons: sin suavizado. Bicúbica: suavizado a través de los límites del parche."
@@ -31664,9 +31635,8 @@ msgstr "Modo de las líneas nuevas dibujadas por esta herramienta"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:188
 #: ../src/ui/toolbar/pencil-toolbar.cpp:189
-#, fuzzy
 msgid "LPE spiro or bspline flatten"
-msgstr "Aplanado simplificado LPE"
+msgstr "Spiro o aplanado bspline LPE"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:226
 msgctxt "Freehand shape"
@@ -31695,9 +31665,8 @@ msgstr "Última aplicada"
 
 #. Name
 #: ../src/ui/toolbar/pencil-toolbar.cpp:254
-#, fuzzy
 msgid "Shape"
-msgstr "Formas"
+msgstr "Forma"
 
 #. Label
 #: ../src/ui/toolbar/pencil-toolbar.cpp:255
@@ -31705,38 +31674,33 @@ msgid "Shape of new paths drawn by this tool"
 msgstr "Forma de los trayectos nuevos dibujados por esta herramienta"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:507
-#, fuzzy
 msgid "Min pressure"
-msgstr "Presión"
+msgstr "Presión mínima"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:507
 msgid "Min:"
-msgstr ""
+msgstr "Mín:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:507
-#, fuzzy
 msgid "Min percent of pressure"
-msgstr "Una descripción del recurso"
+msgstr "Porcentaje mínimo de presión"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:525
-#, fuzzy
 msgid "Max pressure"
-msgstr "Presión"
+msgstr "Presión máxima"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:525
 msgid "Max:"
-msgstr ""
+msgstr "Máx:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:525
-#, fuzzy
 msgid "Max percent of pressure"
-msgstr "Impresión de cera sobre textura de papel de seda"
+msgstr "Porcentaje mínimo de presión"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:542
 #: ../src/ui/toolbar/pencil-toolbar.cpp:543
-#, fuzzy
 msgid "Use pressure input"
-msgstr "Presión del borrador"
+msgstr "Usar input de presión"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:560
 msgid "(many nodes, rough)"
@@ -32643,9 +32607,8 @@ msgid "Text: Change line-height unit"
 msgstr "Texto: Cambiar unidad de altura de línea"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1061
-#, fuzzy
 msgid "Text: Change line spacing mode"
-msgstr "Texto: Cambiar modo de escritura"
+msgstr "Texto: Cambiar modo de espaciado de líneas"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1098
 msgid "Text: Change word-spacing"
@@ -32676,9 +32639,8 @@ msgid "Text: Change orientation"
 msgstr "Texto: Cambiar orientación"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1398
-#, fuzzy
 msgid "Text: Change direction"
-msgstr "Texto: Cambiar orientación"
+msgstr "Texto: Cambiar dirección"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1996
 msgid "Font Family"
@@ -32821,32 +32783,29 @@ msgstr "Orientación de texto (glifo) en texto vertical."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2255
 msgid "LTR"
-msgstr ""
+msgstr "IAD"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2256
-#, fuzzy
 msgid "Left to right text"
-msgstr "De izquierda a derecha"
+msgstr "Texto de izquierda a derecha"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2261
 msgid "RTL"
-msgstr ""
+msgstr "DAI"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2262
-#, fuzzy
 msgid "Right to left text"
-msgstr "De derecha a izquierda"
+msgstr "Texto de derecha a izquierda"
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:2268
-#, fuzzy
 msgid "Text direction"
-msgstr "Dirección de texto:"
+msgstr "Dirección del texto"
 
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:2269
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Dirección del texto para texto horizontal normal."
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2295
@@ -32876,18 +32835,16 @@ msgstr "Línea:"
 
 #. short label
 #: ../src/ui/toolbar/text-toolbar.cpp:2302
-#, fuzzy
 msgid "Spacing between baselines"
-msgstr "Espacio entre líneas (veces el tamaño de la fuente)"
+msgstr "Espacio entre líneas base"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2341
-#, fuzzy
 msgid "Adaptive"
-msgstr "Relativo"
+msgstr "Adaptativo"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2342
 msgid "Line spacing adapts to font size."
-msgstr ""
+msgstr "El espaciado de línea se adapta al tamaño de fuente."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2347
 #: ../share/extensions/polyhedron_3d.inx.h:54
@@ -32896,30 +32853,28 @@ msgstr "Mínimo"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2348
 msgid "Line spacing adapts to fonts size with set minimum spacing."
-msgstr ""
+msgstr "El espaciado de línea se adapta al tamaño de fuente con mínimo fijo."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2352
 msgid "Even"
-msgstr ""
+msgstr "Uniforme"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2353
 msgid "Lines evenly spaced."
-msgstr ""
+msgstr "Líneas con espacio uniforme."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2358
-#, fuzzy
 msgid "Adjustable ☠"
-msgstr "Ajustar alfa"
+msgstr "Ajustable ☠"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2359
 msgid "Line spacing fully adjustable"
-msgstr ""
+msgstr "Espaciado de línea completamente ajustable"
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:2365
-#, fuzzy
 msgid "Line Spacing Mode"
-msgstr "Espaciado de líneas:"
+msgstr "Modo de espaciado de líneas"
 
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:2366
@@ -32930,6 +32885,11 @@ msgid ""
 " Even: Evenly spaced.\n"
 " Adjustable: No restrictions."
 msgstr ""
+"¿Cómo se deberían espaciar múltiples líneas base?\n"
+" Adaptativo: El espaciado de línea se adapta al tamaño de fuente.\n"
+" Mínimo: Como adaptativo, pero con un mínimo fijado.\n"
+" Uniforme: espaciado uniforme.\n"
+" Ajustable: Sin restricciones"
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2383
@@ -33899,9 +33859,10 @@ msgid "Pen "
 msgstr "Pluma "
 
 #: ../share/extensions/hpgl_encoder.py:130
-#, fuzzy
 msgid "Failed to convert objects to paths. Continued without converting."
-msgstr "Convierta primero los objetos a trayectos. Hay [%s]."
+msgstr ""
+"No se han podido convertir los objetos en trayectos. Continuando sin "
+"convertir."
 
 #. issue error if no hpgl data found
 #: ../share/extensions/hpgl_input.py:58
@@ -33959,9 +33920,8 @@ msgid "No matching node for expression: %s"
 msgstr "No hay nodo coincidente para la expresión %s"
 
 #: ../share/extensions/interp_att_g.py:146
-#, fuzzy
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr "Todos los seleccionados fijan un atributo en el último"
+msgstr "Ha seleccionado «Otro». Indique un atributo para interpolar."
 
 #: ../share/extensions/interp_att_g.py:182
 msgid "There is no selection to interpolate"
@@ -34574,9 +34534,8 @@ msgid "AI 8.0 Input"
 msgstr "Entrada AI 8.0"
 
 #: ../share/extensions/ai_input.inx.h:2
-#, fuzzy
 msgid "Adobe Illustrator 8.0 and below (UC) (*.ai)"
-msgstr "Adobe Illustrator 8.0 e inferiores (*.ai)"
+msgstr "Adobe Illustrator 8.0 e inferiores (UC) (*.ai)"
 
 #: ../share/extensions/ai_input.inx.h:3
 msgid "Open files saved with Adobe Illustrator 8.0 or older"
@@ -34635,9 +34594,8 @@ msgid "Computer Graphics Metafile files input"
 msgstr "Entrada de Computer Graphics Metafile"
 
 #: ../share/extensions/cgm_input.inx.h:2
-#, fuzzy
 msgid "Computer Graphics Metafile files (UC) (*.cgm)"
-msgstr "Archivos Computer Graphics Metafile (*.cgm)"
+msgstr "Archivos Computer Graphics Metafile (UC) (*.cgm)"
 
 #: ../share/extensions/cgm_input.inx.h:3
 msgid "Open Computer Graphics Metafile files"
@@ -35223,19 +35181,16 @@ msgstr ""
 "ciertos puntos."
 
 #: ../share/extensions/dxf12_outlines.inx.h:1
-#, fuzzy
 msgid "Desktop Cutting Plotter R12"
-msgstr "Plóter de corte de escritorio"
+msgstr "Plóter de corte de escritorio R12"
 
 #: ../share/extensions/dxf12_outlines.inx.h:2
-#, fuzzy
 msgid "Desktop Cutting Plotter (AutoCAD DXF R12) (*.dxf)"
-msgstr "Plóter de corte de escritorio (AutoCAD DXF R14) (*.dxf)"
+msgstr "Plóter de corte de escritorio (AutoCAD DXF R12) (*.dxf)"
 
 #: ../share/extensions/dxf12_outlines.inx.h:3
-#, fuzzy
 msgid "DXF R12 Output"
-msgstr "Salida DXF"
+msgstr "Salida DXF R12"
 
 #: ../share/extensions/dxf_input.inx.h:1
 msgid "DXF Input"
@@ -35299,9 +35254,8 @@ msgid "Import AutoCAD's Document Exchange Format"
 msgstr "Importar el formato de intercambio de documento de AutoCAD"
 
 #: ../share/extensions/dxf_outlines.inx.h:1
-#, fuzzy
 msgid "Desktop Cutting Plotter R14"
-msgstr "Plóter de corte de escritorio"
+msgstr "Plóter de corte de escritorio R14"
 
 #: ../share/extensions/dxf_outlines.inx.h:3
 msgid "use ROBO-Master type of spline output"
@@ -35674,7 +35628,7 @@ msgstr "Subdivisiones:"
 
 #: ../share/extensions/frame.inx.h:1
 msgid "Frame"
-msgstr ""
+msgstr "Marco"
 
 #: ../share/extensions/funcplot.inx.h:1
 msgid "Function Plotter"
@@ -35818,7 +35772,6 @@ msgid "About"
 msgstr "Acerca de"
 
 #: ../share/extensions/gcodetools_about.inx.h:2
-#, fuzzy
 msgid ""
 "Gcodetools was developed to make simple Gcode from Inkscape's paths. Gcode "
 "is a special format which is used in most of CNC machines. So Gcodetools "
@@ -35842,11 +35795,11 @@ msgstr ""
 "Se puede utilizar con mucho tipos de máquinas: \n"
 "\tFresadoras\n"
 "\tTornos\n"
-"\tCortadores láser y plasma\n"
-"\tGrabadores\n"
-"\n"
+"\tCortadoras láser y plasma\n"
+"\tGrabadoras\n"
 "\tPlóters\n"
 "\tetc.\n"
+"\t\n"
 "Obtenga más información en http://www.cnc-club.ru/gcodetools"
 
 #: ../share/extensions/gcodetools_about.inx.h:14
@@ -36050,9 +36003,8 @@ msgstr "Función de profundidad:"
 #: ../share/extensions/gcodetools_area.inx.h:36
 #: ../share/extensions/gcodetools_lathe.inx.h:19
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:6
-#, fuzzy
 msgid "Sort paths to reduce rapid distance"
-msgstr "Ordenar trayectos para reducir distancia"
+msgstr "Ordenar trayectos para reducir distancia rápida"
 
 #: ../share/extensions/gcodetools_area.inx.h:37
 #: ../share/extensions/gcodetools_lathe.inx.h:20
@@ -36530,14 +36482,13 @@ msgid "Lathe modify path"
 msgstr "Modificar trayecto del torno"
 
 #: ../share/extensions/gcodetools_lathe.inx.h:11
-#, fuzzy
 msgid ""
 "\n"
 "\t\t\tThis function modifies path so it will be possible to be cut it with a "
 "rectangular cutter.\n"
 "\t\t"
 msgstr ""
-"\t\n"
+"\n"
 "\t\t\tEsta función modifica el trayecto de modo que pueda ser cortado con el "
 "cortador rectangular.\n"
 "\t\t"
@@ -36551,9 +36502,8 @@ msgid "Prepare path for plasma"
 msgstr "Preparar para plasma"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:2
-#, fuzzy
 msgid "Prepare path for plasma or laser cutters"
-msgstr "Preparar para cortadores de plasma o láser"
+msgstr "Preparar para cortadoras de plasma o láser"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:3
 msgid "Create in-out paths"
@@ -37479,9 +37429,8 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx.h:34
 #: ../share/extensions/plotter.inx.h:69
-#, fuzzy
 msgid "Convert objects to paths"
-msgstr "Convirtiendo objetos en trayectos..."
+msgstr "Convertir objetos en trayectos"
 
 #: ../share/extensions/hpgl_output.inx.h:35
 #: ../share/extensions/plotter.inx.h:70
@@ -37489,6 +37438,8 @@ msgid ""
 "Check this to automatically (nondestructively) convert all objects to paths "
 "before plotting (Default: Checked)"
 msgstr ""
+"Marque esto para convertir (sin destruir) automáticamente todos los objetos "
+"a trayectos antes de plotear (Predet. Marcado)"
 
 #: ../share/extensions/hpgl_output.inx.h:36
 #: ../share/extensions/plotter.inx.h:71
@@ -37632,9 +37583,8 @@ msgstr "Manual de Inkscape"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_manual.inx.h:3
-#, fuzzy
 msgid "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
-msgstr "http://tavmjong.org/INKSCAPE/MANUAL/html/index.php"
+msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
 
 #: ../share/extensions/inkscape_help_relnotes.inx.h:1
 msgid "New in This Version"
@@ -37697,7 +37647,7 @@ msgstr "Otro atributo:"
 
 #: ../share/extensions/interp_att_g.inx.h:5
 msgid "Examples: r, width, inkscape:rounded, sodipodi:sides"
-msgstr ""
+msgstr "Ejemplos: r, ancho, inkscape:rounded, sodipodi:sides"
 
 #: ../share/extensions/interp_att_g.inx.h:6
 msgid "Other Attribute type:"
@@ -37713,7 +37663,7 @@ msgstr "Valor inicial:"
 
 #: ../share/extensions/interp_att_g.inx.h:9
 msgid "Examples: 0.5, 5, #rgb, #rrggbb or r, g, b"
-msgstr ""
+msgstr "Ejemplos: 0.5, 5, #rgb, #rrggbb or r, g, b"
 
 #: ../share/extensions/interp_att_g.inx.h:10
 msgid "End Value:"
@@ -37737,18 +37687,16 @@ msgid "Other"
 msgstr "Otro"
 
 #: ../share/extensions/interp_att_g.inx.h:22
-#, fuzzy
 msgid "Other Attribute"
-msgstr "Otro atributo:"
+msgstr "Otro atributo"
 
 #: ../share/extensions/interp_att_g.inx.h:23
-#, fuzzy
 msgid ""
 "If you selected \"Other\" above, you must specify the details for this "
 "\"other\" here."
 msgstr ""
-"Si selecciona «Otro» debe conocer los atributos SVG que identifican este "
-"«otro»."
+"Si selecciona «Otro», aquí debe indicar los atributos SVG que identifican "
+"este «otro»."
 
 #: ../share/extensions/interp_att_g.inx.h:25
 msgid "Integer Number"
@@ -38123,13 +38071,12 @@ msgid "Set number of columns to default:"
 msgstr "Fijar número de columnas a predeterminado:"
 
 #: ../share/extensions/jessyInk_keyBindings.inx.h:45
-#, fuzzy
 msgid ""
 "This extension allows you customize the key bindings JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
 "Esta extensión le permite personalizar las combinaciones que utiliza "
-"JessyInk. Acceda a http://code.google.com/p/jessyink para obtener más "
+"JessyInk. Acceda a https://code.google.com/p/jessyink para obtener más "
 "información."
 
 #: ../share/extensions/jessyInk_masterSlide.inx.h:1
@@ -38172,13 +38119,12 @@ msgid "Dragging/zoom"
 msgstr "Arrastre/zoom"
 
 #: ../share/extensions/jessyInk_mouseHandler.inx.h:7
-#, fuzzy
 msgid ""
 "This extension allows you customize the mouse handler JessyInk uses. Please "
 "see code.google.com/p/jessyink for more details."
 msgstr ""
 "Esta extensión le permite personalizar el gestor de ratón que utiliza "
-"JessyInk. Acceda a http://code.google.com/p/jessyink para obtener más "
+"JessyInk. Acceda a https://code.google.com/p/jessyink para obtener más "
 "información."
 
 #: ../share/extensions/jessyInk_summary.inx.h:1
@@ -39200,23 +39146,20 @@ msgid "Connection Settings "
 msgstr "Configuración de conexión "
 
 #: ../share/extensions/plotter.inx.h:4
-#, fuzzy
 msgid "Port type:"
-msgstr "Tipo de gráfica:"
+msgstr "Tipo de puerto:"
 
 #: ../share/extensions/plotter.inx.h:5
-#, fuzzy
 msgid "Parallel port:"
-msgstr "Paralelo"
+msgstr "Puerto paralelo:"
 
 #: ../share/extensions/plotter.inx.h:6
-#, fuzzy
 msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
-"El puerto de su conexión serie, en Windows será algo similar a «COM1», en "
-"Linux será algo como «/dev/ttyUSB0» (Predet.: «COM1»)"
+"El puerto de su conexión paralela, no está soportado en Windows, en Linux "
+"será algo como «/dev/usb/lp2» (Predet.: «/dev/usb/lp2»)"
 
 #: ../share/extensions/plotter.inx.h:7
 msgid "Serial port:"
@@ -39298,9 +39241,8 @@ msgid "The command language to use (Default: HPGL)"
 msgstr "El lenguaje de comandos que se usará (Predet: HPGL)"
 
 #: ../share/extensions/plotter.inx.h:24
-#, fuzzy
 msgid "Serial"
-msgstr "Puerto serie:"
+msgstr "Serie"
 
 #: ../share/extensions/plotter.inx.h:26
 msgid "Software (XON/XOFF)"
@@ -39377,9 +39319,8 @@ msgid "AutoCAD Plot Input"
 msgstr "Entrada de AutoCAD Plot"
 
 #: ../share/extensions/plt_input.inx.h:2 ../share/extensions/plt_output.inx.h:2
-#, fuzzy
 msgid "HP Graphics Language Plot file [AutoCAD] (UC) (*.plt)"
-msgstr "Archivo HP Graphics Language Plot [AutoCAD] (*.plt)"
+msgstr "Archivo HP Graphics Language Plot [AutoCAD] (UC) (*.plt)"
 
 #: ../share/extensions/plt_input.inx.h:3
 msgid "Open HPGL plotter files"
@@ -39595,12 +39536,11 @@ msgstr "Medio"
 
 #: ../share/extensions/prepare_file_save_as.inx.h:1
 msgid "Pre-Process File Save As..."
-msgstr ""
+msgstr "Guardar archivo pre-proceso como..."
 
 #: ../share/extensions/prepare_print_win32_vector.inx.h:1
-#, fuzzy
 msgid "Pre-Process Win32 Vector Print"
-msgstr "Impresión vector Win32"
+msgstr "Impresión vector pre-proceso Win32"
 
 #: ../share/extensions/previous_glyph_layer.inx.h:1
 msgid "View Previous Glyph"
@@ -40281,21 +40221,19 @@ msgstr ""
 #. this parameter is checked programatically in the extension to show a warning
 #: ../share/extensions/scour.inx.h:59
 msgid "Show warnings for older versions of Scour"
-msgstr ""
+msgstr "Mostrar avisos para versiones más antiguas de Scour"
 
 #: ../share/extensions/scour.inx.h:60
-#, fuzzy
 msgid "Optimized SVG Output is provided by"
-msgstr "Salida SVG optimizada"
+msgstr "Salida SVG optimizada proporcianada por"
 
 #: ../share/extensions/scour.inx.h:61
 msgid "For details please refer to"
-msgstr ""
+msgstr "Diríjase aquí para más detalles"
 
 #: ../share/extensions/scour.inx.h:62
-#, fuzzy
 msgid "This version of the extension is designed for"
-msgstr "la extensión está diseñada solo para Windows."
+msgstr "Esta versión de la extensión está diseñada para"
 
 #: ../share/extensions/scour.inx.h:63
 msgid "Optimized SVG (*.svg)"
@@ -40356,9 +40294,8 @@ msgid "sK1 vector graphics files input"
 msgstr "Entrada de archivos de gráficos vectoriales sK1"
 
 #: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
-#, fuzzy
 msgid "sK1 vector graphics files (UC) (*.sk1)"
-msgstr "Archivos vectoriales sK1 (.sk1)"
+msgstr "Archivos vectoriales sK1 (UC) (*.sk1)"
 
 #: ../share/extensions/sk1_input.inx.h:3
 msgid "Open files saved in sK1 vector graphics editor"
@@ -41328,9 +41265,8 @@ msgid "Windows Metafile Input"
 msgstr "Entrada de metaarchivo de windows"
 
 #: ../share/extensions/wmf_input.inx.h:2 ../share/extensions/wmf_output.inx.h:2
-#, fuzzy
 msgid "Windows Metafile (UC) (*.wmf)"
-msgstr "Metaarchivo de Windows (*.wmf)"
+msgstr "Metaarchivo de Windows (UC) (*.wmf)"
 
 #: ../share/extensions/wmf_input.inx.h:3 ../share/extensions/wmf_output.inx.h:3
 msgid "A popular graphics file format for clipart"
@@ -41365,9 +41301,8 @@ msgid "_Color display mode"
 msgstr "Modo de visualización de _color"
 
 #: ../share/ui/menus.xml.h:10
-#, fuzzy
 msgid "_Canvas orientation"
-msgstr "Orientación de página:"
+msgstr "Orienta_ción del lienzo:"
 
 #: ../share/ui/menus.xml.h:11
 msgid "Sh_ow/Hide"
