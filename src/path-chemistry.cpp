@@ -32,6 +32,7 @@
 #include "verbs.h"
 
 #include "display/curve.h"
+#include "display/sp-canvas.h"
 
 #include "object/box3d.h"
 #include "object/object-set.h"
@@ -207,7 +208,8 @@ ObjectSet::breakApart(bool skip_undo)
         desktop()->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Breaking apart paths..."));
         // set "busy" cursor
         desktop()->setWaitingCursor();
-    
+        // disable redrawing during the break-apart operation for remarkable speedup for large paths
+        desktop()->getCanvas()->_drawing_disabled = true;
     }
 
     bool did = false;
@@ -281,9 +283,11 @@ ObjectSet::breakApart(bool skip_undo)
         g_free(style);
         g_free(path_effect);
     }
-    
-    if(desktop())
+
+    if (desktop()) {
+        desktop()->getCanvas()->_drawing_disabled = false;
         desktop()->clearWaitingCursor();
+    }
 
     if (did) {
         if ( !skip_undo ) {
