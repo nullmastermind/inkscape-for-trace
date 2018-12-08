@@ -38,6 +38,8 @@
 #include "text-editing.h"
 #include "verbs.h"
 
+#include "display/sp-canvas.h"
+
 #include "helper/geom.h"
 
 #include "livarot/Path.h"
@@ -321,7 +323,11 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 {
     if (nullptr != desktop() && !checked) {
         SPDocument *doc = desktop()->getDocument();
+        // don't redraw the canvas during the operation as that can remarkably slow down the progress
+        desktop()->getCanvas()->_drawing_disabled = true;
         BoolOpErrors returnCode = ObjectSet::pathBoolOp(bop, true, true);
+        desktop()->getCanvas()->_drawing_disabled = false;
+
         switch(returnCode) {
         case ERR_TOO_LESS_PATHS_1:
             boolop_display_error_message(desktop(), _("Select <b>at least 1 path</b> to perform a boolean union."));
