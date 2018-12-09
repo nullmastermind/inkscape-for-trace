@@ -141,9 +141,29 @@ void URI::Impl::unreference() {
     }
 }
 
+// From RFC 2396:
+//
+// URI-reference = [ absoluteURI | relativeURI ] [ "#" fragment ]
+// absoluteURI   = scheme ":" ( hier_part | opaque_part )
+// relativeURI   = ( net_path | abs_path | rel_path ) [ "?" query ]
+//
+// hier_part     = ( net_path | abs_path ) [ "?" query ]
+// opaque_part   = uric_no_slash *uric
+//
+// uric_no_slash = unreserved | escaped | ";" | "?" | ":" | "@" |
+//                 "&" | "=" | "+" | "$" | ","
+//
+// net_path      = "//" authority [ abs_path ]
+// abs_path      = "/"  path_segments
+// rel_path      = rel_segment [ abs_path ]
+//
+// rel_segment   = 1*( unreserved | escaped |
+//                     ";" | "@" | "&" | "=" | "+" | "$" | "," )
+//
+// authority     = server | reg_name
+
 bool URI::Impl::isOpaque() const {
-    bool opq = !isRelative() && (getOpaque() != nullptr);
-    return opq;
+    return getOpaque() != nullptr;
 }
 
 bool URI::Impl::isRelative() const {
@@ -151,33 +171,23 @@ bool URI::Impl::isRelative() const {
 }
 
 bool URI::Impl::isNetPath() const {
-    bool isNet = false;
-    if ( isRelative() )
-    {
-        const gchar *path = getPath();
-        isNet = path && path[0] == '\\' && path[1] == '\\';
-    }
-    return isNet;
+    return isRelative() && _uri->server;
 }
 
 bool URI::Impl::isRelativePath() const {
-    bool isRel = false;
-    if ( isRelative() )
-    {
+    if (isRelative() && !_uri->server) {
         const gchar *path = getPath();
-        isRel = !path || path[0] != '\\';
+        return path && path[0] != '/';
     }
-    return isRel;
+    return false;
 }
 
 bool URI::Impl::isAbsolutePath() const {
-    bool isAbs = false;
-    if ( isRelative() )
-    {
+    if (isRelative() && !_uri->server) {
         const gchar *path = getPath();
-        isAbs = path && path[0] == '\\'&& path[1] != '\\';
+        return path && path[0] == '/';
     }
-    return isAbs;
+    return false;
 }
 
 const gchar *URI::Impl::getScheme() const {
@@ -197,7 +207,13 @@ const gchar *URI::Impl::getFragment() const {
 }
 
 const gchar *URI::Impl::getOpaque() const {
-    return (gchar *)_uri->opaque;
+    if (!isRelative() && !_uri->server) {
+        const gchar *path = getPath();
+        if (path && path[0] != '/') {
+            return path;
+        }
+    }
+    return nullptr;
 }
 
 /*

@@ -103,18 +103,46 @@ public:
      */
     bool isAbsolutePath() const { return _impl->isAbsolutePath(); }
 
+    /**
+     * Return the scheme, e.g.\ "http", or \c NULL if this is not an absolute URI.
+     */
     const char *getScheme() const { return _impl->getScheme(); }
 
+    /**
+     * Return the path.
+     *
+     * Example: "http://host/foo/bar?query#frag" -> "/foo/bar"
+     *
+     * For an opaque URI, this is identical to getOpaque()
+     */
     const char *getPath() const { return _impl->getPath(); }
 
+    /**
+     * Return the query, which is the part between "?" and the optional fragment hash ("#")
+     */
     const char *getQuery() const { return _impl->getQuery(); }
 
+    /**
+     * Return the fragment, which is everything after "#"
+     */
     const char *getFragment() const { return _impl->getFragment(); }
 
+    /**
+     * For an opaque URI, return everything between the scheme colon (":") and the optional
+     * fragment hash ("#"). For non-opaque URIs, return NULL.
+     */
     const char *getOpaque() const { return _impl->getOpaque(); }
 
+    /**
+     * @deprecated The regular constructor auto-detects UTF-8 characters and percent-encodes them.
+     *
+     * @todo remove, it's unused and percent-encodes most reserved characters, including "%", ":", "?", "#".
+     */
     static URI fromUtf8( char const* path );
 
+    /**
+     * Construct a "file" URI from an absolute filename.
+     */
     static URI from_native_filename(char const *path);
 
     /**
@@ -128,6 +156,11 @@ public:
      */
     static URI from_href_and_basedir(char const *href, char const *basedir);
 
+    /**
+     * @deprecated Use ::toNativeFilename() instead
+     *
+     * @todo remove
+     */
     const std::string getFullPath(std::string const &base) const;
 
     /**
