@@ -439,9 +439,6 @@ public:
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
 
-    guint get_vscroll_thickness();
-    guint get_hscroll_thickness();
-
     virtual bool onDeleteUI (GdkEventAny*);
     virtual bool onWindowStateEvent (GdkEventWindowState* event);
 

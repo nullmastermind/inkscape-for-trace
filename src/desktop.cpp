@@ -1554,30 +1554,22 @@ void SPDesktop::toggleGrids()
 
 void SPDesktop::toggleSplitMode()
 {
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
+    if (this->getToplevel()) {
         _split_canvas = !_split_canvas;
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        auto allocation = dtw->get_canvas_allocation();
         SPCanvas *canvas = getCanvas();
-        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
-                              canvas->_y0 + allocation.height);
+        canvas->requestFullRedraw();
     }
 }
 
 void SPDesktop::toggleXRay()
 {
-    Gtk::Window *parent = getToplevel();
-    if (parent) {
+    if (this->getToplevel()) {
         _xray = !_xray;
         if (_split_canvas && _xray) {
-            return toggleSplitMode();
+            _split_canvas = !_split_canvas;
         }
-        SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
-        auto allocation = dtw->get_canvas_allocation();
         SPCanvas *canvas = getCanvas();
-        canvas->requestRedraw(canvas->_x0, canvas->_y0, canvas->_x0 + allocation.width,
-                              canvas->_y0 + allocation.height);
+        canvas->requestFullRedraw();
     }
 }
 

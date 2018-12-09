@@ -1026,7 +1026,6 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_split_dragging = false;
     canvas->_xray_radius = 100;
     canvas->_xray = false;
-
     canvas->_changecursor = 0;
     bool _is_dragging;
 
@@ -1596,7 +1595,7 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
                 gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
                 Geom::Point pos = canvas->_spliter_control_pos;
                 double value = canvas->_split_vertical ? 1 / (allocation.height / (double)pos[Geom::Y])
-                                                       : 1 / (allocation.width / (double)pos[Geom::X]);
+                                                       : 1 / (allocation.width  / (double)pos[Geom::X]);
                 if (canvas->_split_hover_vertical) {
                     canvas->_split_inverse = !canvas->_split_inverse;
                     spliter_clicked = true;
@@ -1738,8 +1737,8 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         GtkAllocation allocation;
         canvas->_split_dragging = true;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
-        double hide_horiz = 1 / (allocation.width / (double)cursor_pos[Geom::X]);
-        double hide_vert = 1 / (allocation.height / (double)cursor_pos[Geom::Y]);
+        double hide_horiz = 1 / (allocation.width  / (double)cursor_pos[Geom::X]);
+        double hide_vert  = 1 / (allocation.height / (double)cursor_pos[Geom::Y]);
         double value = canvas->_split_vertical ? hide_horiz : hide_vert;
         if (hide_horiz < 0.03 || hide_horiz > 0.97 || hide_vert < 0.03 || hide_vert > 0.97) {
             if (desktop && desktop->event_context) {
@@ -1762,7 +1761,6 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
                 sp_reset_spliter(canvas);
             }
             canvas->_xray = true;
-            canvas->dirtyAll();
             canvas->addIdle();
             status = 1;
         } else {
@@ -1852,6 +1850,12 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop && _xray) {
+        cairo_set_source_rgba(buf.ct, 1, 1, 1, 0);
+        cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
+        cairo_paint(buf.ct);
+    }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
     // output to X
@@ -1906,7 +1910,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     buf.canvas_rect = canvas_rect;
     buf.device_scale = _device_scale;
     buf.is_empty = true;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     // Make sure the following code does not go outside of _backing_store's data
     // FIXME for device_scale.
     assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
@@ -1916,8 +1919,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
     cairo_surface_t *copy_backing = cairo_surface_create_similar_image(_backing_store, CAIRO_FORMAT_ARGB32,
                                                                        paint_rect.width(), paint_rect.height());
-    /*     Geom::Point _xray_orig = desktop->doc2dt(desktop->point());
-        _xray_orig *= desktop->current_zoom(); */
     buf.ct = cairo_create(copy_backing);
     cairo_t *result = cairo_create(_backing_store);
     cairo_translate(result, -_x0, -_y0);
@@ -1959,8 +1960,8 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_surface_destroy(copy_backing);
     // cairo_surface_write_to_png( _backing_store, "debug3.png" );
     cairo_surface_mark_dirty(_backing_store);
-    // Mark the painted rectangle clean
-    markRect(paint_rect, 0);
+    // Mark the painted rectangle un-clean to remove old x-ray when mouse change position
+    markRect(paint_rect, 1);
 
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
                                paint_rect.height());
@@ -2388,31 +2389,34 @@ int SPCanvas::paint()
     if (desktop && desktop->splitMode()) {
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA(desktop->drawing);
-        split_x = !_split_vertical ? 0 : _split_value;
-        split_y = _split_vertical ? 0 : _split_value;
         auto window = desktop->getToplevel();
         auto dtw = static_cast<SPDesktopWidget *>(window->get_data("desktopwidget"));
-        guint hruler_gap = dtw->get_hruler_thickness();
-        guint vruler_gap = dtw->get_vruler_thickness();
+        bool hasrullers = prefs->getBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state");
+        int hruler_gap = hasrullers ? dtw->get_hruler_thickness() : 1;
+        int vruler_gap = hasrullers ? dtw->get_vruler_thickness() : 1;
+        
+        split_x = !_split_vertical ? 0 : _split_value;
+        split_y = _split_vertical ? 0 : _split_value;
+
         Geom::IntCoord coord1x =
-            allocation.x + (int(allocation.width * split_x)) - (3 * canvas->_device_scale) - vruler_gap;
+            allocation.x + (int((allocation.width) * split_x))  - (3 * canvas->_device_scale) - vruler_gap;
         Geom::IntCoord coord1y =
-            allocation.y + (int(allocation.height * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
+            allocation.y + (int((allocation.height) * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
         split_x = !_split_vertical ? 1 : _split_value;
         split_y = _split_vertical ? 1 : _split_value;
         Geom::IntCoord coord2x =
-            allocation.x + (int(allocation.width * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
+            allocation.x + (int((allocation.width)  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
         Geom::IntCoord coord2y =
-            allocation.y + (int(allocation.height * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
+            allocation.y + (int((allocation.height) * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
         _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
         split_x = !_split_vertical ? 0 : _split_value;
         split_y = _split_vertical ? 0 : _split_value;
-        coord1x = allocation.x + (int(allocation.width * split_x)) - vruler_gap;
-        coord1y = allocation.y + (int(allocation.height * split_y)) - hruler_gap;
+        coord1x = allocation.x + (int((allocation.width ) * split_x)) - vruler_gap;
+        coord1y = allocation.y + (int((allocation.height) * split_y)) - hruler_gap;
         split_x = !_split_vertical ? 1 : _split_value;
         split_y = _split_vertical ? 1 : _split_value;
-        coord2x = allocation.x + allocation.width - vruler_gap;
-        coord2y = allocation.y + allocation.height - hruler_gap;
+        coord2x = allocation.x + allocation.width;
+        coord2y = allocation.y + allocation.height;        
         _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
     } else {
         sp_reset_spliter(canvas);
@@ -2454,6 +2458,8 @@ int SPCanvas::paint()
         bool exact = arena->drawing.getExact();
         arena->drawing.setExact(false);
         int n_rects = cairo_region_num_rectangles(to_draw_outline);
+       // _split_value /= canvas->_split_vertical ? ((allocation.widt) * _split_value ) / allocation.height)
+         //                                       : ((allocation.width) * _split_value ) / allocation.height);
         for (int i = 0; i < n_rects; ++i) {
             cairo_rectangle_int_t crect;
             cairo_region_get_rectangle(to_draw_outline, i, &crect);
@@ -2648,8 +2654,8 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
             if (gtk_widget_get_realized(GTK_WIDGET(this))) {
                 SPCanvas *canvas = SP_CANVAS(this);
                 if (canvas->_spliter) {
-                    double scroll_horiz = 1 / (allocation.width / (double)-dx);
-                    double scroll_vert = 1 / (allocation.height / (double)-dy);
+                    double scroll_horiz = 1 / (allocation.width  / (double)-dx);
+                    double scroll_vert  = 1 / (allocation.height / (double)-dy);
                     double gap = canvas->_split_vertical ? scroll_horiz : scroll_vert;
                     canvas->_split_value = canvas->_split_value + gap;
                     if (scroll_horiz < 0.03 || scroll_horiz > 0.97 || scroll_vert < 0.03 || scroll_vert > 0.97) {
@@ -2691,6 +2697,11 @@ void SPCanvas::requestRedraw(int x0, int y0, int x1, int y1)
 
     Geom::IntRect bbox(x0, y0, x1, y1);
     dirtyRect(bbox);
+    addIdle();
+}
+void SPCanvas::requestFullRedraw()
+{
+    dirtyAll();
     addIdle();
 }
 

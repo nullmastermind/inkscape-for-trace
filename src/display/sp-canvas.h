@@ -80,6 +80,7 @@ struct SPCanvas {
 
     /// Queues a redraw of rectangular canvas area.
     void requestRedraw(int x1, int y1, int x2, int y2);
+    void requestFullRedraw();
     void requestUpdate();
 
     void forceFullRedrawAfterInterruptions(unsigned int count);
