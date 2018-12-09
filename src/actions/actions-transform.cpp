@@ -27,8 +27,9 @@ transform_rotate(const Glib::VariantBase& value, InkscapeApplication *app)
     selection->rotate(d.get());
 }
 
+template<class T>
 void
-add_actions_transform(InkscapeApplication* app)
+add_actions_transform(ConcreteInkscapeApplication<T>* app)
 {
     Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
     Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
@@ -43,6 +44,10 @@ add_actions_transform(InkscapeApplication* app)
 #endif
 }
 
+
+
+template void add_actions_transform(ConcreteInkscapeApplication<Gio::Application>* app);
+template void add_actions_transform(ConcreteInkscapeApplication<Gtk::Application>* app);
 
 
 

@@ -201,8 +201,9 @@ vacuum_defs(InkscapeApplication* app)
     document->vacuumDocument();
 }
 
+template<class T>
 void
-add_actions_base(InkscapeApplication* app)
+add_actions_base(ConcreteInkscapeApplication<T>* app)
 {
     // Note: "radio" actions are just an easy way to set type without using templating.
     app->add_action("inkscape-version",                                                   sigc::ptr_fun(&print_inkscape_version   ));
@@ -223,6 +224,9 @@ add_actions_base(InkscapeApplication* app)
     app->add_action(               "query-all",          sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&query_all),                 app)        );
 
 }
+
+template void add_actions_base(ConcreteInkscapeApplication<Gio::Application>* app);
+template void add_actions_base(ConcreteInkscapeApplication<Gtk::Application>* app);
 
 /*
   Local Variables:

@@ -19,9 +19,11 @@
 
 int main(int argc, char *argv[])
 {
-    auto application = InkscapeApplication::create();
 
-    return application->run(argc, argv);
+    if(gtk_init_check(NULL, NULL))
+        return (new ConcreteInkscapeApplication<Gtk::Application>())->run(argc, argv);
+    else
+        return (new ConcreteInkscapeApplication<Gio::Application>())->run(argc, argv);
 }
 
 /*

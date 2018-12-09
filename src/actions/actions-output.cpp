@@ -210,8 +210,9 @@ export_do(InkscapeApplication *app)
     app->file_export()->do_export(document, filename);
 }
 
+template <class T>
 void
-add_actions_output(InkscapeApplication* app)
+add_actions_output(ConcreteInkscapeApplication<T>* app)
 {
     Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
     Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
@@ -254,6 +255,12 @@ add_actions_output(InkscapeApplication* app)
     std::cerr << "add_actions: Some actions require Glibmm 2.52, compiled with: " << glib_major_version << "." << glib_minor_version << std::endl;
 #endif
 }
+
+
+template void add_actions_output(ConcreteInkscapeApplication<Gio::Application>* app);
+template void add_actions_output(ConcreteInkscapeApplication<Gtk::Application>* app);
+
+
 
 /*
   Local Variables:

@@ -11,9 +11,10 @@
 #ifndef INK_ACTIONS_SELECTION_H
 #define INK_ACTIONS_SELECTION_H
 
-class InkscapeApplication;
+template<class T> class ConcreteInkscapeApplication;
 
-void add_actions_selection(InkscapeApplication* app);
+template<class T>
+void add_actions_selection(ConcreteInkscapeApplication<T>* app);
 
 #endif // INK_ACTIONS_SELECTION_H
 

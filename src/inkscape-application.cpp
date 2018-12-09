@@ -43,12 +43,14 @@ using Inkscape::IO::Resource::UIS;
 // flags are set. If the open flag is set and the command line not, the all the remainng arguments
 // after calling on_handle_local_options() are assumed to be filenames.
 
-InkscapeApplication::InkscapeApplication()
-    : Gtk::Application("org.inkscape.application.with_gui",
+InkscapeApplication::InkscapeApplication() : _with_gui(true), _use_shell(false) {}
+
+template<class T>
+ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
+    : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
                        Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
-    , _with_gui(true)
-    , _use_shell(false)
+    , InkscapeApplication()
 {
 
     // ==================== Initializations =====================
@@ -74,86 +76,81 @@ InkscapeApplication::InkscapeApplication()
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
     // Actions
-    add_main_option_entry(OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
-    add_main_option_entry(OPTION_TYPE_BOOL,     "action-list",        '\0', N_("Actions: List available actions."),                                                  "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "action-list",        '\0', N_("Actions: List available actions."),                                                  "");
 
     // Query
-    add_main_option_entry(OPTION_TYPE_BOOL,     "version",             'V', N_("Print: Inkscape version."),                                                          "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "extensions-directory",'x', N_("Print: Extensions directory."),                                                      "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("Print: List verbs."),                                                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",             'V', N_("Print: Inkscape version."),                                                          "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extensions-directory",'x', N_("Print: Extensions directory."),                                                      "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("Print: List verbs."),                                                                "");
 
     // Interface
-    add_main_option_entry(OPTION_TYPE_BOOL,     "with-gui",            'g', N_("GUI: With graphical interface."),                                                    "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "without-gui",         'G', N_("GUI: Console only."),                                                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",            'g', N_("GUI: With graphical interface."),                                                    "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",         'G', N_("GUI: Console only."),                                                                "");
 
     // Open/Import
-    add_main_option_entry(OPTION_TYPE_INT,      "pdf-page",           '\0', N_("Open: PDF page to import"),         N_("PAGE"));
-    add_main_option_entry(OPTION_TYPE_STRING,   "convert-dpi-method", '\0', N_("Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]."), "[...]");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", 0, N_("Open: Do not fix pre-0.92 document's text baseline spacing on opening."), "");
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "pdf-page",           '\0', N_("Open: PDF page to import"),         N_("PAGE"));
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "convert-dpi-method", '\0', N_("Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]."), "[...]");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", 0, N_("Open: Do not fix pre-0.92 document's text baseline spacing on opening."), "");
 
     // Query - Geometry
-    add_main_option_entry(OPTION_TYPE_STRING,   "query-id",            'I', N_("Query: ID(s) of object(s) to be queried."),                N_("OBJECT-ID[,OBJECT-ID]*"));
-    add_main_option_entry(OPTION_TYPE_BOOL,     "query-all",           'S', N_("Query: Print bounding boxes of all objects."),                                       "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "query-x",             'X', N_("Query: X coordinate of drawing or object (if specified by --query-id)."),            "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "query-y",             'Y', N_("Query: Y coordinate of drawing or object (if specified by --query-id)."),            "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "query-width",         'W', N_("Query: Width of drawing or object (if specified by --query-id)."),                   "");
-    add_main_option_entry(OPTION_TYPE_BOOL,     "query-height",        'H', N_("Query: Heightof drawing or object (if specified by --query-id)."),                   "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "query-id",            'I', N_("Query: ID(s) of object(s) to be queried."),                N_("OBJECT-ID[,OBJECT-ID]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-all",           'S', N_("Query: Print bounding boxes of all objects."),                                       "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-x",             'X', N_("Query: X coordinate of drawing or object (if specified by --query-id)."),            "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-y",             'Y', N_("Query: Y coordinate of drawing or object (if specified by --query-id)."),            "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-width",         'W', N_("Query: Width of drawing or object (if specified by --query-id)."),                   "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-height",        'H', N_("Query: Heightof drawing or object (if specified by --query-id)."),                   "");
 
     // Processing
-    add_main_option_entry(OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
-    add_main_option_entry(OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
-    add_main_option_entry(OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
-    add_main_option_entry(OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
 
     // Export - File and File Type
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
-    add_main_option_entry(OPTION_TYPE_FILENAME, "export-file",         'o', N_("Export: File name"),                                              N_("EXPORT-FILENAME"));
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-overwrite",   '\0', N_("Export: Overwrite input file."),                                                     ""); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
+    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-file",         'o', N_("Export: File name"),                                              N_("EXPORT-FILENAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",   '\0', N_("Export: Overwrite input file."),                                                     ""); // BSP
 
     //                                                                                                                                          B = PNG, S = SVG, P = PS/EPS/PDF
     // Export - Geometry
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-area",         'a', N_("Export: Area to export in SVG user units."),                          N_("x0:y0:x1:y1")); // BSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-drawing", 'D', N_("Export: Area to export is drawing (not page)."),                                     ""); // BSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-page",    'C', N_("Export: Area to export is page."),                                                   ""); // BSP
-    add_main_option_entry(OPTION_TYPE_INT,      "export-margin",      '\0', N_("Export: Margin around export area: units of page size for SVG, mm for PS/EPS/PDF."), ""); // xSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-area-snap",   '\0', N_("Export: Snap the bitmap export area outwards to the nearest integer values."),       ""); // Bxx
-    add_main_option_entry(OPTION_TYPE_INT,      "export-width",        'w', N_("Export: Bitmap width in pixels (overrides --export-dpi)."),                 N_("WIDTH")); // Bxx
-    add_main_option_entry(OPTION_TYPE_INT,      "export-height",       'h', N_("Export: Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-area",         'a', N_("Export: Area to export in SVG user units."),                          N_("x0:y0:x1:y1")); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-drawing", 'D', N_("Export: Area to export is drawing (not page)."),                                     ""); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-page",    'C', N_("Export: Area to export is page."),                                                   ""); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-margin",      '\0', N_("Export: Margin around export area: units of page size for SVG, mm for PS/EPS/PDF."), ""); // xSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-snap",   '\0', N_("Export: Snap the bitmap export area outwards to the nearest integer values."),       ""); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-width",        'w', N_("Export: Bitmap width in pixels (overrides --export-dpi)."),                 N_("WIDTH")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-height",       'h', N_("Export: Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
 
     // Export - Options
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID(s) of object(s) to export."),                   N_("OBJECT-ID[;OBJECT-ID]*")); // BSP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-id-only",      'j', N_("Export: Hide all objects except object with ID selected by export-id."),             ""); // BSx
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-plain-svg",    'l', N_("Export: Remove items in the Inkscape namespace."),                                   ""); // xSx
-    add_main_option_entry(OPTION_TYPE_INT,      "export-dpi",          'd', N_("Export: Resolution for rasterization bitmaps and filters (default is 96)."),  N_("DPI")); // BxP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"),    ""); // xxP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-text-to-path", 'T', N_("Export: Convert text to paths. (PS/EPS/PDF/SVG)."),                                  ""); // xxP
-    add_main_option_entry(OPTION_TYPE_INT,      "export-ps-level",    '\0', N_("Export: Postscript level (2 or 3). Default is 3."),                      N_("PS-Level")); // xxP
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-pdf-level",   '\0', N_("Export: PDF level (1.4 or 1.5)"),                                       N_("PDF-Level")); // xxP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-latex",       '\0', N_("Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via \\input{file.tex}"), ""); // xxP
-    add_main_option_entry(OPTION_TYPE_BOOL,     "export-use-hints",    't', N_("Export: Use stored filename and DPI hints when exporting object selected by --export-id."), ""); // Bxx
-    add_main_option_entry(OPTION_TYPE_STRING,   "export-background",   'b', N_("Export: Background color for exported bitmaps (any SVG color string)."),    N_("COLOR")); // Bxx
-    add_main_option_entry(OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to 255)."), N_("VALUE")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-id",           'i', N_("Export: ID(s) of object(s) to export."),                   N_("OBJECT-ID[;OBJECT-ID]*")); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-id-only",      'j', N_("Export: Hide all objects except object with ID selected by export-id."),             ""); // BSx
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-plain-svg",    'l', N_("Export: Remove items in the Inkscape namespace."),                                   ""); // xSx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-dpi",          'd', N_("Export: Resolution for rasterization bitmaps and filters (default is 96)."),  N_("DPI")); // BxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"),    ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-text-to-path", 'T', N_("Export: Convert text to paths. (PS/EPS/PDF/SVG)."),                                  ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-ps-level",    '\0', N_("Export: Postscript level (2 or 3). Default is 3."),                      N_("PS-Level")); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-pdf-level",   '\0', N_("Export: PDF level (1.4 or 1.5)"),                                       N_("PDF-Level")); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-latex",       '\0', N_("Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via \\input{file.tex}"), ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",    't', N_("Export: Use stored filename and DPI hints when exporting object selected by --export-id."), ""); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",   'b', N_("Export: Background color for exported bitmaps (any SVG color string)."),    N_("COLOR")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to 255)."), N_("VALUE")); // Bxx
 
 #ifdef WITH_YAML
-    add_main_option_entry(OPTION_TYPE_FILENAME, "xverbs",             '\0', N_("Process: xverb command file."),                                   N_("XVERBS-FILENAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "xverbs",             '\0', N_("Process: xverb command file."),                                   N_("XVERBS-FILENAME"));
 #endif // WITH_YAML
 
 #ifdef WITH_DBUS
-    add_main_option_entry(OPTION_TYPE_BOOL,     "dbus-listen",        '\0', N_("D-Bus: Enter a listening loop for D-Bus messages in console mode."),                 "");
-    add_main_option_entry(OPTION_TYPE_STRING,   "dbus-name",          '\0', N_("D-Bus: Specify the D-Bus name (default is 'org.inkscape')."),            N_("BUS-NAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",        '\0', N_("D-Bus: Enter a listening loop for D-Bus messages in console mode."),                 "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",          '\0', N_("D-Bus: Specify the D-Bus name (default is 'org.inkscape')."),            N_("BUS-NAME"));
 #endif // WITH_DBUS
     
-    signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
+    Gio::Application::signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
 
     // This is normally called for us... but after the "handle_local_options" signal is emitted. If
     // we want to rely on actions for handling options, we need to call it here. This appears to
     // have no unwanted side-effect. It will also trigger the call to on_startup().
-    register_application();
-}
-
-Glib::RefPtr<InkscapeApplication> InkscapeApplication::create()
-{
-    return Glib::RefPtr<InkscapeApplication>(new InkscapeApplication());
+    T::register_application();
 }
 
 SPDocument*
@@ -174,16 +171,23 @@ InkscapeApplication::get_active_selection()
     return context.getSelection();
 }
 
+template<class T>
 void
-InkscapeApplication::on_startup()
+ConcreteInkscapeApplication<T>::on_startup()
 {
-    Gtk::Application::on_startup();
+    T::on_startup();
 }
 
 // Here are things that should be in on_startup() but cannot be as we don't set _with_gui until
 // on_handle_local_options() is called.
+template<> void ConcreteInkscapeApplication<Gio::Application>::on_startup2()
+{
+    Inkscape::Application::create(nullptr, false);
+}
+
+template<>
 void
-InkscapeApplication::on_startup2()
+ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
 {
     // This should be completely rewritten.
     Inkscape::Application::create(nullptr, _with_gui); // argv appears to not be used.
@@ -224,8 +228,9 @@ InkscapeApplication::on_startup2()
 }
 
 // Open document window with default document. Either this or on_open() is called.
+template<class T>
 void
-InkscapeApplication::on_activate()
+ConcreteInkscapeApplication<T>::on_activate()
 {
     on_startup2();
 
@@ -246,8 +251,9 @@ InkscapeApplication::on_activate()
 
 // Open document window for each file. Either this or on_activate() is called.
 // type_vec_files == std::vector<Glib::RefPtr<Gio::File> >
+template<class T>
 void
-InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
+ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
     on_startup2();
 
@@ -259,7 +265,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
 
             // Process each file.
             for (auto action: _command_line_actions) {
-                activate_action( action.first, action.second );
+		    Gio::Application::activate_action( action.first, action.second );
             }
 
         } else {
@@ -278,7 +284,7 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
 
             // process_file(file);
             for (auto action: _command_line_actions) {
-                activate_action( action.first, action.second );
+		    Gio::Application::activate_action( action.first, action.second );
             }
 
             if (_use_shell) {
@@ -301,8 +307,28 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
     // Gtk::Application::on_open(files, hint);
 }
 
+
+
+template<class T>
 SPDesktop*
-InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
+ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file)
+{
+    SPDesktop* desktop = nullptr;
+    if (file) {
+        desktop = sp_file_new_default();
+        sp_file_open(file->get_parse_name(), nullptr, false, true);
+    } else {
+        desktop = sp_file_new_default();
+    }
+    _documents.push_back(desktop->getDocument());
+    return (desktop); // Temp: Need to track desktop for shell mode.
+}
+
+
+
+template<>
+SPDesktop*
+ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
 {
     SPDesktop* desktop = nullptr;
     if (file) {
@@ -320,9 +346,9 @@ InkscapeApplication::create_window(const Glib::RefPtr<Gio::File>& file)
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
 
-
+template<class T>
 void
-InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& action_vector)
+ConcreteInkscapeApplication<T>::parse_actions(const Glib::ustring& input, action_vector_t& action_vector)
 {
     // Split action list
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*;\\s*", input);
@@ -337,7 +363,7 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
             value = tokens2[1];
         }
 
-        Glib::RefPtr<Gio::Action> action_ptr = lookup_action(action);
+        Glib::RefPtr<Gio::Action> action_ptr = Gio::Application::lookup_action(action);
         if (action_ptr) {
             // Doesn't seem to be a way to test this using the C++ binding without Glib-CRITICAL errors.
             const  GVariantType* gtype = g_action_get_parameter_type(action_ptr->gobj());
@@ -384,8 +410,9 @@ InkscapeApplication::parse_actions(const Glib::ustring& input, action_vector_t& 
 
 // Interactively trigger actions. This is a travesty! Due to most verbs requiring a desktop we must
 // create one even in shell mode!
+template<class T>
 void
-InkscapeApplication::shell()
+ConcreteInkscapeApplication<T>::shell()
 {
     std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
@@ -424,7 +451,7 @@ InkscapeApplication::shell()
         action_vector_t action_vector;
         parse_actions(input_u, action_vector);
         for (auto action: action_vector) {
-            activate_action( action.first, action.second );
+		Gio::Application::activate_action( action.first, action.second );
         }
 
         if (desktop) {
@@ -432,12 +459,13 @@ InkscapeApplication::shell()
         }
     }
 
-    quit(); // Must quit or segfault.
+    T::quit(); // Must quit or segfault.
 }
 
 // Once we don't need to create a window just to process verbs!
+template<class T>
 void
-InkscapeApplication::shell2()
+ConcreteInkscapeApplication<T>::shell2()
 {
     std::cout << "Inkscape interactive shell mode. Type 'quit' to quit." << std::endl;
     std::cout << " Input of the form:" << std::endl;
@@ -452,7 +480,7 @@ InkscapeApplication::shell2()
         action_vector_t action_vector;
         parse_actions(input, action_vector);
         for (auto action: action_vector) {
-            activate_action( action.first, action.second );
+            T::activate_action( action.first, action.second );
         }
     }
 }
@@ -468,8 +496,9 @@ InkscapeApplication::shell2()
  * For each file without GUI: Open -> Query -> Process -> Export 
  * More flexible processing can be done via actions or xverbs.
  */
+template<class T>
 int
-InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
+ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
 {
     if (!options) {
         std::cerr << "InkscapeApplication::on_handle_local_options: options is null!" << std::endl;
@@ -479,22 +508,22 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
     // ===================== QUERY =====================
     // These are processed first as they result in immediate program termination.
     if (options->contains("version")) {
-        activate_action("inkscape-version");
+        T::activate_action("inkscape-version");
         return EXIT_SUCCESS;
     }
 
     if (options->contains("extensions-directory")) {
-        activate_action("extensions-directory");
+        T::activate_action("extensions-directory");
         return EXIT_SUCCESS;
     }
 
     if (options->contains("verb-list")) {
-        activate_action("verb-list");
+        T::activate_action("verb-list");
         return EXIT_SUCCESS;
     }
 
     if (options->contains("action-list")) {
-        std::vector<Glib::ustring> actions = list_actions();
+        std::vector<Glib::ustring> actions = T::list_actions();
         std::sort(actions.begin(), actions.end());
         for (auto action : actions) {
             std::cout << action << std::endl;
@@ -688,14 +717,18 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
 
 //   ========================  Actions  =========================
 
+template<class T>
 void
-InkscapeApplication::on_new()
+ConcreteInkscapeApplication<T>::on_new()
 {
     create_window();
 }
 
+template<class T> void ConcreteInkscapeApplication<T>::on_quit(){ T::quit(); }
+
+template<>
 void
-InkscapeApplication::on_quit()
+ConcreteInkscapeApplication<Gtk::Application>::on_quit()
 {
     // Delete all windows (quit() doesn't do this).
     std::vector<Gtk::Window*> windows = get_windows();
@@ -705,6 +738,9 @@ InkscapeApplication::on_quit()
 
     quit();
 }
+
+template class ConcreteInkscapeApplication<Gio::Application>;
+template class ConcreteInkscapeApplication<Gtk::Application>;
 
 /*
   Local Variables:
