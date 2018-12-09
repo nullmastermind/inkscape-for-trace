@@ -14,6 +14,10 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(0, 72, 0)
+#define getCString c_str
+#endif
+
 #if POPPLER_CHECK_VERSION(0,71,0)
 typedef bool GBool;
 #define gTrue true

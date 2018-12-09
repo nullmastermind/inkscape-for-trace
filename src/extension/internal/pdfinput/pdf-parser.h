@@ -37,7 +37,6 @@ namespace Inkscape {
 using Inkscape::Extension::Internal::SvgBuilder;
 
 #include "glib/poppler-features.h"
-#include "goo/gtypes.h"
 #include "Object.h"
 
 class GooString;
