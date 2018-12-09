@@ -216,48 +216,16 @@ const gchar *URI::Impl::getOpaque() const {
     return nullptr;
 }
 
-/*
- * Returns the absolute path to an existing file referenced in this URI,
- * if the uri is data, the path is empty or the file doesn't exist, then
- * an empty string is returned.
- *
- * Does not check if the returned path is the local document's path (local)
- * and thus redundent. Caller is expected to check against the document's path.
- *
- * @param base directory name to use as base if this is not an absolute URL
- */
-const std::string URI::getFullPath(std::string const &base) const {
-    if (!_impl->getPath()) {
-        return "";
-    }
-
-    URI url;
-
-    if (!base.empty() && !getScheme()) {
-        url = Inkscape::URI::from_href_and_basedir(str().c_str(), base.c_str());
-    } else {
-        url = *this;
-    }
-
-    if (!url.hasScheme("file")) {
-        return "";
-    }
-
-    auto path = Glib::filename_from_uri(url.str());
-
-    // Check the existence of the file
-    if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS)
-      || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {
-        path.clear();
-    }
-    return path;
-}
-
-
-/* TODO !!! proper error handling */
 std::string URI::toNativeFilename() const
 { //
-    return Glib::filename_from_uri(str());
+    auto uristr = str();
+
+    // remove fragment identifier
+    if (getFragment() != nullptr) {
+        uristr.resize(uristr.find('#'));
+    }
+
+    return Glib::filename_from_uri(uristr);
 }
 
 URI URI::fromUtf8( gchar const* path ) {

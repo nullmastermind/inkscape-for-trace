@@ -352,33 +352,26 @@ void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
                     //# 1.  Get complete URI of document
                     gchar const *docbase = doc->getURI();
 
-                    gchar* escaped = g_uri_escape_string(this->href, "!*'();@=+$,/?#", TRUE);
-
-                    //g_message("docbase:%s\n", docbase);
-                    //org::w3c::dom::URI docUri(docbase);
                     Inkscape::URI docUri("");
                     if (docbase) { // The file has already been saved
                         docUri = Inkscape::URI::from_native_filename(docbase);
                     }
 
-                    //# 2. Get href of icc file.  we don't care if it's rel or abs
-                    //org::w3c::dom::URI hrefUri(escaped);
-                    Inkscape::URI hrefUri(escaped);
-                    //# 3.  Resolve the href according the docBase.  This follows
-                    //      the w3c specs.  All absolute and relative issues are considered
-                    std::string fullpath = hrefUri.getFullPath(docUri.getFullPath(""));
-
-                    gchar* fullname = g_uri_unescape_string(fullpath.c_str(), "");
                     this->impl->_clearProfile();
-                    this->impl->_profHandle = cmsOpenProfileFromFile( fullname, "r" );
+
+                    try {
+                        auto hrefUri = Inkscape::URI(this->href, docUri);
+                        auto contents = hrefUri.getContents();
+                        this->impl->_profHandle = cmsOpenProfileFromMem(contents.data(), contents.size());
+                    } catch (...) {
+                        g_warning("Failed to open CMS profile URI '%.100s'", this->href);
+                    }
+
                     if ( this->impl->_profHandle ) {
                         this->impl->_profileSpace = cmsGetColorSpace( this->impl->_profHandle );
                         this->impl->_profileClass = cmsGetDeviceClass( this->impl->_profHandle );
                     }
                     DEBUG_MESSAGE( lcmsOne, "cmsOpenProfileFromFile( '%s'...) = %p", fullname, (void*)this->impl->_profHandle );
-                    g_free(escaped);
-                    escaped = nullptr;
-                    g_free(fullname);
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
                 }
             }

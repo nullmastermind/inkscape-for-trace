@@ -130,8 +130,16 @@ void URIReference::attach(const URI &uri)
 
     // The path contains references to separate document files to load.
     if (document && uri.getPath() && !skip) {
-        std::string base = document->getBase() ? document->getBase() : "";
-        std::string path = uri.getFullPath(base);
+        char const *base = document->getBase();
+        auto absuri = URI::from_href_and_basedir(uri.str().c_str(), base);
+        std::string path;
+
+        try {
+            path = absuri.toNativeFilename();
+        } catch (const Glib::Error &e) {
+            g_warning("%s", e.what().c_str());
+        }
+
         if (!path.empty()) {
             document = document->createChildDoc(path);
         } else {

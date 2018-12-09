@@ -88,6 +88,7 @@ TEST(UriTest, Str)
 #else
     ASSERT_EQ(URI("file:///tmp/uri.svg").toNativeFilename(), "/tmp/uri.svg");
     ASSERT_EQ(URI("file:///tmp/x%20y.svg").toNativeFilename(), "/tmp/x y.svg");
+    ASSERT_EQ(URI("file:///a/b#hash").toNativeFilename(), "/a/b");
 #endif
 }
 

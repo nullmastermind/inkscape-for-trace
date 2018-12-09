@@ -157,14 +157,9 @@ public:
     static URI from_href_and_basedir(char const *href, char const *basedir);
 
     /**
-     * @deprecated Use ::toNativeFilename() instead
-     *
-     * @todo remove
-     */
-    const std::string getFullPath(std::string const &base) const;
-
-    /**
      * Convert this URI to a native filename.
+     *
+     * Discards the fragment identifier.
      *
      * @throw Glib::ConvertError If this is not a "file" URI
      */
