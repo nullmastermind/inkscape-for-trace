@@ -180,7 +180,9 @@ ConcreteInkscapeApplication<T>::on_startup()
 
 // Here are things that should be in on_startup() but cannot be as we don't set _with_gui until
 // on_handle_local_options() is called.
-template<> void ConcreteInkscapeApplication<Gio::Application>::on_startup2()
+template<>
+void
+ConcreteInkscapeApplication<Gio::Application>::on_startup2()
 {
     Inkscape::Application::create(nullptr, false);
 }
@@ -589,7 +591,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
     // ===================== QUERY =====================
 
-    // 'query-id' should be processed first! Idea: We could turn this into a comma separated list.
+    // 'query-id' should be processed first! Can be a comma separated list.
     if (options->contains("query-id")) {
         Glib::ustring query_id;
         options->lookup_value("query-id", query_id);

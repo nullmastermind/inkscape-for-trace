@@ -42,24 +42,25 @@ public:
     virtual void on_quit() = 0;
     SPDocument* get_active_document();
     Inkscape::Selection* get_active_selection();
+
 protected:
     bool _with_gui;
     bool _use_shell;
     InkscapeApplication();
+
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP
     std::vector<SPDocument*> _documents;
+
     InkFileExportCmd _file_export;
+
     // Actions from the command line or file.
     action_vector_t _command_line_actions;
-
-
 };
 
-
-
-
-
-
+// T can be either:
+//   Gio::Application (window server is not present) or
+//   Gtk::Application (window server is present).
+// With Gtk::Application, one can still run "headless" by not creating any windows.
 template <class T> class ConcreteInkscapeApplication : public T, public InkscapeApplication
 {
 public:
@@ -78,11 +79,11 @@ protected:
 
 private:
     // Callbacks
-    int  on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options);
+    int  on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options) override;
 
     // Actions
-    void on_new();
-    void on_quit();
+    void on_new() override;
+    void on_quit() override;
     void on_about();
     
     void shell();
