@@ -30,24 +30,14 @@ struct NRStyle {
     NRStyle();
     ~NRStyle();
 
-    void set(SPStyle *style, SPStyle *context_style = nullptr);
-    bool prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
-    bool prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
-    bool prepareTextDecorationFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
-    bool prepareTextDecorationStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
-    void applyFill(Inkscape::DrawingContext &dc);
-    void applyStroke(Inkscape::DrawingContext &dc);
-    void applyTextDecorationFill(Inkscape::DrawingContext &dc);
-    void applyTextDecorationStroke(Inkscape::DrawingContext &dc);
-    void update();
-
     enum PaintType {
         PAINT_NONE,
         PAINT_COLOR,
         PAINT_SERVER
     };
 
-    struct Paint {
+    class Paint {
+      public:
         Paint() : type(PAINT_NONE), color(0), server(nullptr), opacity(1.0) {}
         ~Paint() { clear(); }
 
@@ -60,6 +50,18 @@ struct NRStyle {
         void set(SPColor const &c);
         void set(SPPaintServer *ps);
     };
+
+    void set(SPStyle *style, SPStyle *context_style = nullptr);
+    cairo_pattern_t* preparePaint(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern, Paint& paint);
+    bool prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
+    bool prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
+    bool prepareTextDecorationFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
+    bool prepareTextDecorationStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern);
+    void applyFill(Inkscape::DrawingContext &dc);
+    void applyStroke(Inkscape::DrawingContext &dc);
+    void applyTextDecorationFill(Inkscape::DrawingContext &dc);
+    void applyTextDecorationStroke(Inkscape::DrawingContext &dc);
+    void update();
 
     Paint fill;
     Paint stroke;
