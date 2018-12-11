@@ -87,28 +87,33 @@ struct NRStyle {
     static const size_t PAINT_ORDER_LAYERS = 3;
     PaintOrderType paint_order_layer[PAINT_ORDER_LAYERS];
 
-#define TEXT_DECORATION_LINE_CLEAR        0x00
-#define TEXT_DECORATION_LINE_SET          0x01
-#define TEXT_DECORATION_LINE_INHERIT      0x02
-#define TEXT_DECORATION_LINE_UNDERLINE    0x04
-#define TEXT_DECORATION_LINE_OVERLINE     0x08
-#define TEXT_DECORATION_LINE_LINETHROUGH  0x10
-#define TEXT_DECORATION_LINE_BLINK        0x20
+    enum TextDecorationLine {
+        TEXT_DECORATION_LINE_CLEAR       = 0x00,
+        TEXT_DECORATION_LINE_SET         = 0x01,
+        TEXT_DECORATION_LINE_INHERIT     = 0x02,
+        TEXT_DECORATION_LINE_UNDERLINE   = 0x04,
+        TEXT_DECORATION_LINE_OVERLINE    = 0x08,
+        TEXT_DECORATION_LINE_LINETHROUGH = 0x10,
+        TEXT_DECORATION_LINE_BLINK       = 0x20
+    };
 
-#define TEXT_DECORATION_STYLE_CLEAR       0x00
-#define TEXT_DECORATION_STYLE_SET         0x01
-#define TEXT_DECORATION_STYLE_INHERIT     0x02
-#define TEXT_DECORATION_STYLE_SOLID       0x04
-#define TEXT_DECORATION_STYLE_ISDOUBLE    0x08
-#define TEXT_DECORATION_STYLE_DOTTED      0x10
-#define TEXT_DECORATION_STYLE_DASHED      0x20
-#define TEXT_DECORATION_STYLE_WAVY        0x40
+    enum TextDecorationStyle {
+        TEXT_DECORATION_STYLE_CLEAR      = 0x00,
+        TEXT_DECORATION_STYLE_SET        = 0x01,
+        TEXT_DECORATION_STYLE_INHERIT    = 0x02,
+        TEXT_DECORATION_STYLE_SOLID      = 0x04,
+        TEXT_DECORATION_STYLE_ISDOUBLE   = 0x08,
+        TEXT_DECORATION_STYLE_DOTTED     = 0x10,
+        TEXT_DECORATION_STYLE_DASHED     = 0x20,
+        TEXT_DECORATION_STYLE_WAVY       = 0x40
+    };
 
     int   text_decoration_line;
     int   text_decoration_style;
     Paint text_decoration_fill;
     Paint text_decoration_stroke;
     float text_decoration_stroke_width;
+
     // These are the same as in style.h
     float phase_length;
     bool  tspan_line_start;

@@ -291,7 +291,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     Geom::Point pf = Geom::Point(step * round(p2[Geom::X]/step),p2[Geom::Y]);
     Geom::Point poff = Geom::Point(0,thickness/2.0);
 
-    if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_ISDOUBLE){
+    if(_nrstyle.text_decoration_style & NRStyle::TEXT_DECORATION_STYLE_ISDOUBLE){
         ps -= Geom::Point(0, vextent/12.0);
         pf -= Geom::Point(0, vextent/12.0);
         dc.rectangle( Geom::Rect(ps + poff, pf - poff));
@@ -304,7 +304,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
     to figure where in each of their cycles to start.  Only accurate to 1 part in 16.
     Huge positive offset should keep the phase calculation from ever being negative.
     */
-    else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DOTTED){
+    else if(_nrstyle.text_decoration_style & NRStyle::TEXT_DECORATION_STYLE_DOTTED){
         // FIXME: Per spec, this should produce round dots.
         Geom::Point pv = ps;
         while(true){
@@ -330,7 +330,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             i = 0;  // once in phase, it stays in phase
         }
     }
-    else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DASHED){
+    else if(_nrstyle.text_decoration_style & NRStyle::TEXT_DECORATION_STYLE_DASHED){
         Geom::Point pv = ps;
         while(true){
             Geom::Point pvlast = pv;
@@ -355,7 +355,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             i = 0;  // once in phase, it stays in phase
         }
     }
-    else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_WAVY){
+    else if(_nrstyle.text_decoration_style & NRStyle::TEXT_DECORATION_STYLE_WAVY){
         double   amp  = vextent/10.0;
         double   x    = ps[Geom::X];
         double   y    = ps[Geom::Y] + poff[Geom::Y];
@@ -403,13 +403,13 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
 
     if( under ) {
 
-        if(_nrstyle.text_decoration_line & TEXT_DECORATION_LINE_UNDERLINE){
+        if(_nrstyle.text_decoration_line & NRStyle::TEXT_DECORATION_LINE_UNDERLINE){
             p1 = Geom::Point(0.0,          -_nrstyle.underline_position);
             p2 = Geom::Point(tsp_width_adj,-_nrstyle.underline_position);
             decorateStyle(dc, tsp_size_adj, xphase, p1, p2, thickness);
         }
 
-        if(_nrstyle.text_decoration_line & TEXT_DECORATION_LINE_OVERLINE){
+        if(_nrstyle.text_decoration_line & NRStyle::TEXT_DECORATION_LINE_OVERLINE){
             p1 = Geom::Point(0.0,          tsp_asc_adj -_nrstyle.underline_position + 1 * final_underline_thickness);
             p2 = Geom::Point(tsp_width_adj,tsp_asc_adj -_nrstyle.underline_position + 1 * final_underline_thickness);
             decorateStyle(dc, tsp_size_adj, xphase,  p1, p2, thickness);
@@ -418,7 +418,7 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
     } else {
         // Over
 
-        if(_nrstyle.text_decoration_line & TEXT_DECORATION_LINE_LINETHROUGH){
+        if(_nrstyle.text_decoration_line & NRStyle::TEXT_DECORATION_LINE_LINETHROUGH){
             thickness = final_line_through_thickness;
             p1 = Geom::Point(0.0,          _nrstyle.line_through_position);
             p2 = Geom::Point(tsp_width_adj,_nrstyle.line_through_position);
@@ -426,7 +426,7 @@ void DrawingText::decorateItem(DrawingContext &dc, double phase_length, bool und
         }
 
         // Obviously this does not blink, but it does indicate which text has been set with that attribute
-        if(_nrstyle.text_decoration_line & TEXT_DECORATION_LINE_BLINK){
+        if(_nrstyle.text_decoration_line & NRStyle::TEXT_DECORATION_LINE_BLINK){
             thickness = final_line_through_thickness;
             p1 = Geom::Point(0.0,          _nrstyle.line_through_position - 2*final_line_through_thickness);
             p2 = Geom::Point(tsp_width_adj,_nrstyle.line_through_position - 2*final_line_through_thickness);
@@ -467,7 +467,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
 
 
     // Do we have text decorations?
-    bool decorate = (_nrstyle.text_decoration_line != TEXT_DECORATION_LINE_CLEAR );
+    bool decorate = (_nrstyle.text_decoration_line != NRStyle::TEXT_DECORATION_LINE_CLEAR );
 
     // prepareFill / prepareStroke need to be called with _ctm in effect.
     // However, we might need to apply a different ctm for glyphs.
