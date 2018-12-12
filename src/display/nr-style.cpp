@@ -43,6 +43,31 @@ void NRStyle::Paint::set(SPPaintServer *ps)
     }
 }
 
+void NRStyle::Paint::set(const SPIPaint* paint)
+{
+    if (paint->isPaintserver()) {
+        SPPaintServer* server = paint->value.href->getObject();
+        if (server && server->isValid()) {
+            set(server);
+        } else if (paint->colorSet) {
+            set(paint->value.color);
+        } else {
+            clear();
+        }
+    } else if (paint->isColor()) {
+        set(paint->value.color);
+    } else if (paint->isNone()) {
+        clear();
+    } else if (paint->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ||
+               paint->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE) {
+        // A marker in the defs section will result in ending up here.
+        // std::cerr << "NRStyle::Paint::set: Double" << std::endl;
+    } else {
+        g_assert_not_reached();
+    }
+}
+
+
 NRStyle::NRStyle()
     : fill()
     , stroke()
@@ -112,28 +137,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
         }
     }
     
-    if ( style_fill->isPaintserver() ) {
-    	SPPaintServer* server = style->getFillPaintServer();
-    	if ( server && server->isValid() ) {
-    		fill.set(server);
-    	} else if ( style_fill->colorSet ) {
-    		fill.set(style_fill->value.color);
-    	} else {
-    		fill.clear();
-    	}
-    } else if ( style_fill->isColor() ) {
-        fill.set(style_fill->value.color);
-    } else if ( style_fill->isNone() ) {
-        fill.clear();
-    } else if ( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        // A marker in the defs section will result in ending up here.
-        //std::cerr << "NRStyle::set: fill: context-fill: Double" << std::endl;
-    } else if ( style_fill->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        //std::cerr << "NRStyle::set: fill: context-stroke: Double" << std::endl;
-    } else {
-        g_assert_not_reached();
-    }
-
+    fill.set(style_fill);
     fill.opacity = SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
 
     switch (style->fill_rule.computed) {
@@ -161,28 +165,8 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
             //std::cerr << "NRStyle::set: 'context-stroke': 'context_style' is NULL" << std::endl;
         }
     }
-    
-    if ( style_stroke->isPaintserver() ) {
-    	SPPaintServer* server = style->getStrokePaintServer();
-		if ( server && server->isValid() ) {
-			stroke.set(server);
-		} else if ( style_stroke->isColor() ) {
-			stroke.set(style_stroke->colorSet);
-		} else {
-			stroke.clear();
-		}
-    } else if ( style_stroke->isColor() ) {
-        stroke.set(style_stroke->value.color);
-    } else if ( style_stroke->isNone() ) {
-        stroke.clear();
-    } else if ( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_FILL ) {
-        //std::cerr << "NRStyle::set: stroke: context-fill: Double" << std::endl;
-    } else if ( style_stroke->paintOrigin == SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE ) {
-        //std::cerr << "NRStyle::set: stroke: context-stroke: Double" << std::endl;
-    } else {
-        g_assert_not_reached();
-    }
 
+    stroke.set(style_stroke);
     stroke.opacity = SP_SCALE24_TO_FLOAT(style->stroke_opacity.value);
     stroke_width = style->stroke_width.computed;
     switch (style->stroke_linecap.computed) {
@@ -275,6 +259,10 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
        Hopefully the standard will be clarified to resolve this issue.
     */
 
+    // Unless explicitly set on an element, text decoration is inherited from
+    // closest ancestor where 'text-decoration' was set. That is, setting
+    // 'text-decoration' on an ancestor fixes the fill and stroke of the
+    // decoration to the fill and stroke values of that ancestor.
     SPStyle* style_td = style;
     if ( style->text_decoration.style_td ) style_td = style->text_decoration.style_td;
     text_decoration_stroke.opacity = SP_SCALE24_TO_FLOAT(style_td->stroke_opacity.value);
@@ -302,25 +290,8 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
 
     } else {
         // Pick color/pattern from text
-        if ( style_td->fill.isPaintserver() ) {
-            text_decoration_fill.set(style_td->getFillPaintServer());
-        } else if ( style_td->fill.isColor() ) {
-            text_decoration_fill.set(style_td->fill.value.color);
-        } else if ( style_td->fill.isNone() ) {
-            text_decoration_fill.clear();
-        } else {
-            //g_assert_not_reached();
-        }
-
-        if ( style_td->stroke.isPaintserver() ) {
-            text_decoration_stroke.set(style_td->getStrokePaintServer());
-        } else if ( style_td->stroke.isColor() ) {
-            text_decoration_stroke.set(style_td->stroke.value.color);
-        } else if ( style_td->stroke.isNone() ) {
-            text_decoration_stroke.clear();
-        } else {
-            //g_assert_not_reached();
-        }
+        text_decoration_fill.set(&(style_td->fill));
+        text_decoration_stroke.set(&(style_td->stroke));
     }
 
     if(text_decoration_line != TEXT_DECORATION_LINE_CLEAR){

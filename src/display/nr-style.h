@@ -20,6 +20,7 @@
 
 class SPPaintServer;
 class SPStyle;
+class SPIPaint;
 
 namespace Inkscape {
 class DrawingContext;
@@ -49,6 +50,7 @@ struct NRStyle {
         void clear();
         void set(SPColor const &c);
         void set(SPPaintServer *ps);
+        void set(const SPIPaint* paint);
     };
 
     void set(SPStyle *style, SPStyle *context_style = nullptr);
