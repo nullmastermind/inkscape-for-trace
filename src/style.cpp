@@ -115,6 +115,8 @@ class SPStylePropHelper {
         REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_LINE, text_decoration_line, "text-decoration-line");
         REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_STYLE, text_decoration_style, "text-decoration-style");
         REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_COLOR, text_decoration_color, "text-decoration-color");
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_FILL, text_decoration_fill, "text-decoration-fill");
+        REGISTER_PROPERTY(SP_PROP_TEXT_DECORATION_STROKE, text_decoration_stroke, "text-decoration-stroke");
 
         REGISTER_PROPERTY(SP_PROP_LETTER_SPACING, letter_spacing, "letter-spacing");
         REGISTER_PROPERTY(SP_PROP_WORD_SPACING, word_spacing, "word-spacing");
@@ -332,6 +334,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     text_decoration_line(),
     text_decoration_style(),
     text_decoration_color( "text-decoration-color" ),            // SPIColor
+    text_decoration_fill(  "text-decoration-fill" ),             // SPIPaint
+    text_decoration_stroke("text-decoration-stroke" ),           // SPIPaint
 
     // General visual properties
     clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),

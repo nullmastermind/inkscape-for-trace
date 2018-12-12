@@ -268,10 +268,13 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
     text_decoration_stroke.opacity = SP_SCALE24_TO_FLOAT(style_td->stroke_opacity.value);
     text_decoration_stroke_width = style_td->stroke_width.computed;
 
-    if( style->text_decoration_color.set          ||
-        style->text_decoration_color.inherit      || 
-        style->text_decoration_color.currentcolor ) {
-
+    // Priority is given in order:
+    //   * text_decoration_fill
+    //   * text_decoration_color (only if fill set)
+    //   * fill
+    if (style_td->text_decoration_fill.set) {
+        text_decoration_fill.set(&(style_td->text_decoration_fill));
+    } else if (style_td->text_decoration_color.set) {
         if(style->fill.isPaintserver() || style->fill.isColor()) {
             // SVG sets color specifically
             text_decoration_fill.set(style->text_decoration_color.value.color);
@@ -279,7 +282,14 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
             // No decoration fill because no text fill
             text_decoration_fill.clear();
         }
+    } else {
+        // Pick color/pattern from text
+        text_decoration_fill.set(&(style_td->fill));
+    }
 
+    if (style_td->text_decoration_stroke.set) {
+        text_decoration_stroke.set(&(style_td->text_decoration_stroke));
+    } else if (style_td->text_decoration_color.set) {
         if(style->stroke.isPaintserver() || style->stroke.isColor()) {
             // SVG sets color specifically
             text_decoration_stroke.set(style->text_decoration_color.value.color);
@@ -287,10 +297,8 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
             // No decoration stroke because no text stroke
             text_decoration_stroke.clear();
         }
-
     } else {
         // Pick color/pattern from text
-        text_decoration_fill.set(&(style_td->fill));
         text_decoration_stroke.set(&(style_td->stroke));
     }
 

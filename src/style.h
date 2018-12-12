@@ -186,6 +186,8 @@ public:
     SPITextDecorationLine  text_decoration_line;
     SPITextDecorationStyle text_decoration_style;  // SPIEnum? Only one can be set at time.
     SPIColor               text_decoration_color;
+    SPIPaint               text_decoration_fill;
+    SPIPaint               text_decoration_stroke;
     // used to implement text_decoration, not saved to or read from SVG file
     SPITextDecorationData  text_decoration_data;
 
