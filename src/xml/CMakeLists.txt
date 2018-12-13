@@ -40,7 +40,6 @@ set(xml_SRC
 	pi-node.h
 	quote-test.h
 	quote.h
-	rebase-hrefs-test.h
 	rebase-hrefs.h
 	repr-action-test.h
 	repr-sorting.h
