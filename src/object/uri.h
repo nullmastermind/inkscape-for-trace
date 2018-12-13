@@ -134,13 +134,6 @@ public:
     const char *getOpaque() const { return _impl->getOpaque(); }
 
     /**
-     * @deprecated The regular constructor auto-detects UTF-8 characters and percent-encodes them.
-     *
-     * @todo remove, it's unused and percent-encodes most reserved characters, including "%", ":", "?", "#".
-     */
-    static URI fromUtf8( char const* path );
-
-    /**
      * Construct a "file" URI from an absolute filename.
      */
     static URI from_native_filename(char const *path);

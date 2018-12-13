@@ -228,37 +228,6 @@ std::string URI::toNativeFilename() const
     return Glib::filename_from_uri(uristr);
 }
 
-URI URI::fromUtf8( gchar const* path ) {
-    if ( !path ) {
-        throw MalformedURIException();
-    }
-    Glib::ustring tmp;
-    for ( int i = 0; path[i]; i++ )
-    {
-        gint one = 0x0ff & path[i];
-        if ( ('a' <= one && one <= 'z')
-             || ('A' <= one && one <= 'Z')
-             || ('0' <= one && one <= '9')
-             || one == '_'
-             || one == '-'
-             || one == '!'
-             || one == '.'
-             || one == '~'
-             || one == '\''
-             || one == '('
-             || one == ')'
-             || one == '*'
-            ) {
-            tmp += (gunichar)one;
-        } else {
-            gchar scratch[4];
-            g_snprintf( scratch, 4, "%%%02X", one );
-            tmp.append( scratch );
-        }
-    }
-    return URI( tmp.data() );
-}
-
 /* TODO !!! proper error handling */
 URI URI::from_native_filename(gchar const *path) {
     gchar *uri = g_filename_to_uri(path, nullptr, nullptr);
