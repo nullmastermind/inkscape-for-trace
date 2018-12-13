@@ -1245,8 +1245,8 @@ SPIPaint::read( gchar const *str ) {
         if ( strneq(str, "url", 3) ) {
 
             // FIXME: THE FOLLOWING CODE SHOULD BE PUT IN A PRIVATE FUNCTION FOR REUSE
-            gchar *uri = extract_uri( str, &str );
-            if(uri == nullptr || uri[0] == '\0') {
+            auto uri = extract_uri(str, &str);
+            if(uri.empty()) {
                 std::cerr << "SPIPaint::read: url is empty or invalid" << std::endl;
             } else if (!style ) {
                 std::cerr << "SPIPaint::read: url with empty SPStyle pointer" << std::endl;
@@ -1265,11 +1265,9 @@ SPIPaint::read( gchar const *str ) {
                     }
                 }
 
-                // std::cout << "uri: " << (uri?uri:"null") << std::endl;
                 // TODO check what this does in light of move away from union
-                sp_style_set_ipaint_to_uri_string ( style, this, uri);
+                sp_style_set_ipaint_to_uri_string(style, this, uri.c_str());
             }
-            g_free( uri );
         }
 
         while ( g_ascii_isspace(*str) ) {
@@ -1658,8 +1656,8 @@ SPIFilter::read( gchar const *str ) {
     } else if (streq(str, "none")) {
         set = true;
     } else if (strneq(str, "url", 3)) {
-        gchar *uri = extract_uri(str);
-        if (uri == nullptr || uri[0] == '\0') {
+        auto uri = extract_uri(str);
+        if (uri.empty()) {
             std::cerr << "SPIFilter::read: url is empty or invalid" << std::endl;
             return;
         } else if (!style) {
@@ -1684,12 +1682,11 @@ SPIFilter::read( gchar const *str ) {
 
         // We have href
         try {
-            href->attach(Inkscape::URI(uri));
+            href->attach(Inkscape::URI(uri.c_str()));
         } catch (Inkscape::BadURIException &e) {
             std::cerr << "SPIFilter::read() " << e.what() << std::endl;
             href->detach();
         }
-        g_free (uri);
 
     } else {
         std::cerr << "SPIFilter::read(): malformed value: " << str << std::endl;

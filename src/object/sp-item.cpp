@@ -441,15 +441,14 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             break;
         }
         case SP_PROP_CLIP_PATH: {
-            gchar *uri = extract_uri(value);
-            if (uri) {
+            auto uri = extract_uri(value);
+            if (!uri.empty()) {
                 try {
-                    item->clip_ref->attach(Inkscape::URI(uri));
+                    item->clip_ref->attach(Inkscape::URI(uri.c_str()));
                 } catch (Inkscape::BadURIException &e) {
                     g_warning("%s", e.what());
                     item->clip_ref->detach();
                 }
-                g_free(uri);
             } else {
                 item->clip_ref->detach();
             }
@@ -457,15 +456,14 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
             break;
         }
         case SP_PROP_MASK: {
-            gchar *uri = extract_uri(value);
-            if (uri) {
+            auto uri = extract_uri(value);
+            if (!uri.empty()) {
                 try {
-                    item->mask_ref->attach(Inkscape::URI(uri));
+                    item->mask_ref->attach(Inkscape::URI(uri.c_str()));
                 } catch (Inkscape::BadURIException &e) {
                     g_warning("%s", e.what());
                     item->mask_ref->detach();
                 }
-                g_free(uri);
             } else {
                 item->mask_ref->detach();
             }

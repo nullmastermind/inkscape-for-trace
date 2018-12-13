@@ -16,15 +16,16 @@
 
 // Functions as per 4.3.4 of CSS 2.1
 // http://www.w3.org/TR/CSS21/syndata.html#uri
-gchar *extract_uri( gchar const *s, gchar const** endptr )
+std::string extract_uri(char const *s, char const **endptr)
 {
-    if (!s)
-        return nullptr;
+    std::string result;
 
-    gchar* result = nullptr;
+    if (!s)
+        return result;
+
     gchar const *sb = s;
     if ( strlen(sb) < 4 || strncmp(sb, "url", 3) != 0 ) {
-        return nullptr;
+        return result;
     }
 
     sb += 3;
@@ -54,7 +55,12 @@ gchar *extract_uri( gchar const *s, gchar const** endptr )
             delim = *sb;
             sb++;
         }
-        gchar const* se = sb + 1;
+
+        if (!*sb) {
+            return result;
+        }
+
+        gchar const* se = sb;
         while ( *se && (*se != delim) ) {
             se++;
         }
@@ -67,14 +73,12 @@ gchar *extract_uri( gchar const *s, gchar const** endptr )
                 }
 
                 // back up for any trailing whitespace
-                se--;
-                while ( ( se[-1] == ' ' ) ||
-                        ( se[-1] == '\t' ) )
+                while (se > sb && g_ascii_isspace(se[-1]))
                 {
                     se--;
                 }
 
-                result = g_strndup(sb, se - sb + 1);
+                result = std::string(sb, se);
             } else {
                 gchar const* tail = se + 1;
                 while ( ( *tail == ' ' ) ||
@@ -86,7 +90,7 @@ gchar *extract_uri( gchar const *s, gchar const** endptr )
                     if ( endptr ) {
                         *endptr = tail + 1;
                     }
-                    result = g_strndup(sb, se - sb);
+                    result = std::string(sb, se);
                 }
             }
         }

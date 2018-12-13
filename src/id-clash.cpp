@@ -107,12 +107,11 @@ find_references(SPObject *elem, refmap_type &refmap)
                 const char *attr = clipboard_properties[i];
                 const gchar *value = sp_repr_css_property(css, attr, nullptr);
                 if (value) {
-                    gchar *uri = extract_uri(value);
-                    if (uri && uri[0] == '#') {
+                    auto uri = extract_uri(value);
+                    if (uri[0] == '#') {
                         IdReference idref = { REF_CLIPBOARD, elem, attr };
-                        refmap[uri+1].push_back(idref);
+                        refmap[uri.c_str() + 1].push_back(idref);
                     }
-                    g_free(uri);
                 }
             }
 
@@ -163,12 +162,11 @@ find_references(SPObject *elem, refmap_type &refmap)
     for (unsigned i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
         const gchar *value = style->marker_ptrs[i]->value;
         if (value) {
-            gchar *uri = extract_uri(value);
-            if (uri && uri[0] == '#') {
+            auto uri = extract_uri(value);
+            if (uri[0] == '#') {
                 IdReference idref = { REF_STYLE, elem, markers[i] };
-                refmap[uri+1].push_back(idref);
+                refmap[uri.c_str() + 1].push_back(idref);
             }
-            g_free(uri);
         }
     }
 
@@ -177,12 +175,11 @@ find_references(SPObject *elem, refmap_type &refmap)
         const char *attr = other_url_properties[i];
         const gchar *value = repr_elem->attribute(attr);
         if (value) {
-            gchar *uri = extract_uri(value);
-            if (uri && uri[0] == '#') {
+            auto uri = extract_uri(value);
+            if (uri[0] == '#') {
                 IdReference idref = { REF_URL, elem, attr };
-                refmap[uri+1].push_back(idref);
+                refmap[uri.c_str() + 1].push_back(idref);
             }
-            g_free(uri);
         }
     }
     

@@ -243,10 +243,9 @@ SPObject *sp_css_uri_reference_resolve(SPDocument *document, const gchar *uri)
     SPObject *ref = nullptr;
 
     if (document && uri && (strncmp(uri, "url(", 4) == 0)) {
-        gchar *trimmed = extract_uri(uri);
-        if (trimmed) {
-            ref = sp_uri_reference_resolve(document, trimmed);
-            g_free(trimmed);
+        auto trimmed = extract_uri(uri);
+        if (!trimmed.empty()) {
+            ref = sp_uri_reference_resolve(document, trimmed.c_str());
         }
     }
 
