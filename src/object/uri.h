@@ -64,7 +64,7 @@ public:
      *
      * @return \c true if the URI is opaque, \c false if hierarchial.
      */
-    bool isOpaque() const { return _impl->isOpaque(); }
+    bool isOpaque() const;
 
     /**
      * Determines if the URI represented is 'relative' as per RFC 2396.
@@ -74,7 +74,7 @@ public:
      *
      * @return \c true if the URI is relative, \c false if it is absolute.
      */
-    bool isRelative() const { return _impl->isRelative(); }
+    bool isRelative() const;
 
     /**
      * Determines if the relative URI represented is a 'net-path' as per RFC 2396.
@@ -83,7 +83,7 @@ public:
      *
      * @return \c true if the URI is relative and a net-path, \c false otherwise.
      */
-    bool isNetPath() const { return _impl->isNetPath(); }
+    bool isNetPath() const;
 
     /**
      * Determines if the relative URI represented is a 'relative-path' as per RFC 2396.
@@ -92,7 +92,7 @@ public:
      *
      * @return \c true if the URI is relative and a relative-path, \c false otherwise.
      */
-    bool isRelativePath() const { return _impl->isRelativePath(); }
+    bool isRelativePath() const;
 
     /**
      * Determines if the relative URI represented is a 'absolute-path' as per RFC 2396.
@@ -101,12 +101,12 @@ public:
      *
      * @return \c true if the URI is relative and an absolute-path, \c false otherwise.
      */
-    bool isAbsolutePath() const { return _impl->isAbsolutePath(); }
+    bool isAbsolutePath() const;
 
     /**
      * Return the scheme, e.g.\ "http", or \c NULL if this is not an absolute URI.
      */
-    const char *getScheme() const { return _impl->getScheme(); }
+    const char *getScheme() const;
 
     /**
      * Return the path.
@@ -115,23 +115,23 @@ public:
      *
      * For an opaque URI, this is identical to getOpaque()
      */
-    const char *getPath() const { return _impl->getPath(); }
+    const char *getPath() const;
 
     /**
      * Return the query, which is the part between "?" and the optional fragment hash ("#")
      */
-    const char *getQuery() const { return _impl->getQuery(); }
+    const char *getQuery() const;
 
     /**
      * Return the fragment, which is everything after "#"
      */
-    const char *getFragment() const { return _impl->getFragment(); }
+    const char *getFragment() const;
 
     /**
      * For an opaque URI, return everything between the scheme colon (":") and the optional
      * fragment hash ("#"). For non-opaque URIs, return NULL.
      */
-    const char *getOpaque() const { return _impl->getOpaque(); }
+    const char *getOpaque() const;
 
     /**
      * Construct a "file" URI from an absolute filename.
@@ -201,24 +201,16 @@ private:
         void reference();
         void unreference();
 
-        bool isOpaque() const;
-        bool isRelative() const;
-        bool isNetPath() const;
-        bool isRelativePath() const;
-        bool isAbsolutePath() const;
-        const char *getScheme() const;
-        const char *getPath() const;
-        const char *getQuery() const;
-        const char *getFragment() const;
-        const char *getOpaque() const;
-        char *toString() const;
     private:
         Impl(xmlURIPtr uri);
         ~Impl();
         int _refcount;
+    public:
         xmlURIPtr _uri;
     };
     Impl *_impl;
+
+    xmlURIPtr _xmlURIPtr() const { return _impl->_uri; }
 };
 
 }  /* namespace Inkscape */

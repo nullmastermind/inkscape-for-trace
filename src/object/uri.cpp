@@ -43,8 +43,7 @@ static bool uri_needs_escaping(char const *uri)
 }
 
 URI::URI() {
-    const gchar *in = "";
-    _impl = Impl::create(xmlParseURI(in));
+    _impl = Impl::create(xmlCreateURI());
 }
 
 URI::URI(const URI &uri) {
@@ -162,52 +161,52 @@ void URI::Impl::unreference() {
 //
 // authority     = server | reg_name
 
-bool URI::Impl::isOpaque() const {
+bool URI::isOpaque() const {
     return getOpaque() != nullptr;
 }
 
-bool URI::Impl::isRelative() const {
-    return !_uri->scheme;
+bool URI::isRelative() const {
+    return !_xmlURIPtr()->scheme;
 }
 
-bool URI::Impl::isNetPath() const {
-    return isRelative() && _uri->server;
+bool URI::isNetPath() const {
+    return isRelative() && _xmlURIPtr()->server;
 }
 
-bool URI::Impl::isRelativePath() const {
-    if (isRelative() && !_uri->server) {
+bool URI::isRelativePath() const {
+    if (isRelative() && !_xmlURIPtr()->server) {
         const gchar *path = getPath();
         return path && path[0] != '/';
     }
     return false;
 }
 
-bool URI::Impl::isAbsolutePath() const {
-    if (isRelative() && !_uri->server) {
+bool URI::isAbsolutePath() const {
+    if (isRelative() && !_xmlURIPtr()->server) {
         const gchar *path = getPath();
         return path && path[0] == '/';
     }
     return false;
 }
 
-const gchar *URI::Impl::getScheme() const {
-    return (gchar *)_uri->scheme;
+const gchar *URI::getScheme() const {
+    return (gchar *)_xmlURIPtr()->scheme;
 }
 
-const gchar *URI::Impl::getPath() const {
-    return (gchar *)_uri->path;
+const gchar *URI::getPath() const {
+    return (gchar *)_xmlURIPtr()->path;
 }
 
-const gchar *URI::Impl::getQuery() const {
-    return (gchar *)_uri->query;
+const gchar *URI::getQuery() const {
+    return (gchar *)_xmlURIPtr()->query;
 }
 
-const gchar *URI::Impl::getFragment() const {
-    return (gchar *)_uri->fragment;
+const gchar *URI::getFragment() const {
+    return (gchar *)_xmlURIPtr()->fragment;
 }
 
-const gchar *URI::Impl::getOpaque() const {
-    if (!isRelative() && !_uri->server) {
+const gchar *URI::getOpaque() const {
+    if (!isRelative() && !_xmlURIPtr()->server) {
         const gchar *path = getPath();
         if (path && path[0] != '/') {
             return path;
@@ -259,18 +258,6 @@ URI URI::from_href_and_basedir(char const *href, char const *basedir)
         return URI(href, URI::from_dirname(basedir));
     } catch (...) {
         return URI();
-    }
-}
-
-gchar *URI::Impl::toString() const {
-    xmlChar *string = xmlSaveUri(_uri);
-    if (string) {
-        /* hand the string off to glib memory management */
-        gchar *glib_string = g_strdup((gchar *)string);
-        xmlFree(string);
-        return glib_string;
-    } else {
-        return nullptr;
     }
 }
 
@@ -335,14 +322,15 @@ static std::string build_relative_uri(char const *uri, char const *base)
 std::string URI::str(char const *baseuri) const
 {
     std::string s;
-    gchar *save = _impl->toString();
-    if (save) {
+    auto saveuri = xmlSaveUri(_xmlURIPtr());
+    if (saveuri) {
+        auto save = (const char *)saveuri;
         if (baseuri && baseuri[0]) {
             s = build_relative_uri(save, baseuri);
         } else {
             s = save;
         }
-        g_free(save);
+        xmlFree(saveuri);
     }
     return s;
 }
