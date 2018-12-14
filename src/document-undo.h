@@ -14,11 +14,7 @@ namespace Glib {
     class ustring;
 }
 
-typedef struct _GObject GObject;
-
-class SPDesktop;
 class SPDocument;
-struct InkscapeApplication;
 
 namespace Inkscape {
 
@@ -29,14 +25,7 @@ public:
     /**
      * Set undo sensitivity.
      *
-     * \note
-     *   Since undo sensitivity needs to be nested, setting undo sensitivity
-     *   should be done like this:
-     *\verbatim
-     bool saved = DocumentUndo::getUndoSensitive(document);
-     DocumentUndo::setUndoSensitive(document, false);
-     ... do stuff ...
-     DocumentUndo::setUndoSensitive(document, saved);  \endverbatim
+     * Don't use this to temporarily turn sensitivity off, use ScopedInsensitive instead.
     */
     static void setUndoSensitive(SPDocument *doc, bool sensitive);
 
@@ -57,6 +46,30 @@ public:
     static gboolean undo(SPDocument *document);
 
     static gboolean redo(SPDocument *document);
+
+    /**
+     * RAII-style mechanism for creating a temporary undo-insensitive context.
+     *
+     * \verbatim
+        {
+            DocumentUndo::ScopedInsensitive tmp(document);
+            ... do stuff ...
+            // "tmp" goes out of scope here and automatically restores undo-sensitivity
+        } \endverbatim
+     */
+    class ScopedInsensitive {
+        SPDocument * m_doc;
+        bool m_saved;
+
+      public:
+        ScopedInsensitive(SPDocument *doc)
+            : m_doc(doc)
+        {
+            m_saved = getUndoSensitive(doc);
+            setUndoSensitive(doc, false);
+        }
+        ~ScopedInsensitive() { setUndoSensitive(m_doc, m_saved); }
+    };
 };
 
 } // namespace Inkscape

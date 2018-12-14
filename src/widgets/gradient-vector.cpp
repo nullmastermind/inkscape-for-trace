@@ -1095,10 +1095,8 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         // Once the user edits a gradient, it stops being auto-collectable
         if (gradient->getRepr()->attribute("inkscape:collect")) {
             SPDocument *document = gradient->document;
-            bool saved = DocumentUndo::getUndoSensitive(document);
-            DocumentUndo::setUndoSensitive(document, false);
+            DocumentUndo::ScopedInsensitive _no_undo(document);
             gradient->getRepr()->setAttribute("inkscape:collect", nullptr);
-            DocumentUndo::setUndoSensitive(document, saved);
         }
     } else { // no gradient, disable everything
         gtk_widget_set_sensitive(widget, FALSE);

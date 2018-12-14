@@ -364,8 +364,7 @@ void init_avoided_shape_geometry(SPDesktop *desktop)
     // Don't count this as changes to the document,
     // it is basically just late initialisation.
     SPDocument *document = desktop->getDocument();
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
+    DocumentUndo::ScopedInsensitive _no_undo(document);
 
     bool initialised = false;
     std::vector<SPItem *> tmp;
@@ -376,8 +375,6 @@ void init_avoided_shape_geometry(SPDesktop *desktop)
         SPItem *item = *iter;
         item->avoidRef->handleSettingChange();
     }
-
-    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 

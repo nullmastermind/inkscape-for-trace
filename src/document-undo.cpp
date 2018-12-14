@@ -78,13 +78,6 @@ void Inkscape::DocumentUndo::setUndoSensitive(SPDocument *doc, bool sensitive)
 	doc->sensitive = sensitive;
 }
 
-/*TODO: Throughout the inkscape code tree set/get_undo_sensitive are used for
- * as is shown above.  Perhaps it makes sense to create new functions,
- * undo_ignore, and undo_recall to replace the start and end parts of the above.
- * The main complexity with this is that they have to nest, so you have to store
- * the saved bools in a stack.  Perhaps this is why the above solution is better.
- */
-
 bool Inkscape::DocumentUndo::getUndoSensitive(SPDocument const *document) {
 	g_assert(document != nullptr);
 

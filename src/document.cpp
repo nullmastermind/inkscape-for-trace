@@ -1276,12 +1276,9 @@ SPDocument::_updateDocument()
             SPItemCtx ctx;
             setupViewport(&ctx);
 
-            bool saved = DocumentUndo::getUndoSensitive(this);
-            DocumentUndo::setUndoSensitive(this, false);
+            DocumentUndo::ScopedInsensitive _no_undo(this);
 
             this->root->updateDisplay((SPCtx *)&ctx, 0);
-
-            DocumentUndo::setUndoSensitive(this, saved);
         }
         this->_emitModified();
     }

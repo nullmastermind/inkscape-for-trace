@@ -1136,8 +1136,7 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
         return;
     }
 
-    bool saved = DocumentUndo::getUndoSensitive(doc);
-    DocumentUndo::setUndoSensitive(doc, false);
+    DocumentUndo::ScopedInsensitive _no_undo(doc);
 
     bool v = false;
     SPAttributeEnum attr = (SPAttributeEnum) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(act), "SP_ATTR_INKSCAPE"));
@@ -1233,8 +1232,6 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
 
     // The snapping preferences are stored in the document, and therefore toggling makes the document dirty
     doc->setModifiedSinceSave();
-
-    DocumentUndo::setUndoSensitive(doc, saved);
 }
 
 void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
