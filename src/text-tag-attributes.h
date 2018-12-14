@@ -137,6 +137,12 @@ public:
     /** Sets the first coordinates in the x and y vectors. */
     void setFirstXY(Geom::Point &point);
 
+    /** Gets first value in the x vector as an SVGLength. Not guaranteed to remain valid. */
+    SVGLength* getFirstXLength();
+
+    /** Gets first value in the y vector as an SVGLength. Not guaranteed to remain valid. */
+    SVGLength* getFirstYLength();
+
     SVGLength *getTextLength() { return &(attributes.textLength); }
     int getLengthAdjust() { return attributes.lengthAdjust; }
 

@@ -30,6 +30,7 @@
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
+
 #include "svg/svg.h"
 #include "display/drawing-text.h"
 #include "attributes.h"
@@ -168,8 +169,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
         // Set inline_size computed value if necessary (i.e. if unit is %).
         if (style->inline_size.set) {
             if (style->inline_size.unit == SP_CSS_UNIT_PERCENT) {
-                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
-                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                if (is_horizontal()) {
                     style->inline_size.computed = style->inline_size.value * ictx->viewport.width();
                 } else {
                     style->inline_size.computed = style->inline_size.value * ictx->viewport.height();
@@ -319,7 +319,13 @@ void SPText::hide(unsigned int key) {
 }
 
 const char* SPText::displayName() const {
-    return _("Text");
+    if (has_inline_size()) {
+        return _("Auto-wrapped text");
+    } else if (has_shape_inside()) {
+        return _("Text in-a-shape");
+    } else {
+        return _("Text");
+    }
 }
 
 gchar* SPText::description() const {
@@ -546,32 +552,8 @@ void SPText::_buildLayoutInit()
             // and the other dimension set to infinity. Text is laid out starting at the 'x' and 'y'
             // attribute values. This is handled elsewhere.
 
-            double inline_size = style->inline_size.computed;
-            unsigned mode      = style->writing_mode.computed;
-            unsigned anchor    = style->text_anchor.computed;
-            unsigned direction = style->direction.computed;
-
-            Geom::Rect frame;
-            if (mode == SP_CSS_WRITING_MODE_LR_TB ||
-                mode == SP_CSS_WRITING_MODE_RL_TB) {
-                // horizontal
-                frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
-                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                    frame *= Geom::Translate (-inline_size/2.0, 0 );
-                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
-                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
-                    frame *= Geom::Translate (-inline_size, 0);
-                }
-            } else {
-                // vertical
-                frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
-                if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-                    frame *= Geom::Translate (0, -inline_size/2.0);
-                } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
-                    frame *= Geom::Translate (0, -inline_size);
-                }
-            }
-            // std::cout << " inline_size frame: " << frame << std::endl;
+            Geom::OptRect opt_frame = get_frame();
+            Geom::Rect frame = *opt_frame;
 
             Shape *shape = new Shape;
             shape->Reset();
@@ -606,16 +588,21 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
     }
 
     if (SP_IS_TEXT(object)) {
-        SP_TEXT(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, true, true);
+
+        bool use_xy = true;
+        bool use_dxdyrotate = true;
+
+        // SVG 2 Text wrapping.
+        if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE ||
+            layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
+            use_xy = false;
+            use_dxdyrotate = false;
+        }
+
+        SP_TEXT(object)->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, use_dxdyrotate);
 
         // SVG 2 Text wrapping
-        if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE) {
-
-            // 'x' and 'y' attributes are always ignored.
-            optional_attrs.x.clear();
-            optional_attrs.y.clear();
-
-        }  else if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
+        if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
 
             // For horizontal text:
             //   'x' is used to calculate the left/right edges of the rectangle but is not
@@ -629,20 +616,24 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
             // if not defined in the <text> element, use the 'x' and 'y' from the first child.
             // We only look at the <text> element. (Doing otherwise means tracking if
             // we've found 'x' and 'y' and then creating the Shape at the end.)
-            if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
-                style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+            if (is_horizontal()) {
                 // Horizontal text
-                optional_attrs.x.clear();
-                if (optional_attrs.y.size() > 0) {
-                    optional_attrs.y.resize(1); // Keep only first
+                SVGLength* y = attributes.getFirstYLength();
+                if (y) {
+                    optional_attrs.y.push_back(*y);
+                } else {
+                    std::cerr << "SPText::_buildLayoutInput: No 'y' attribute value with horizontal 'inline-size'!" << std::endl;
                 }
             } else {
                 // Vertical text
-                if (optional_attrs.x.size() > 0) {
-                    optional_attrs.x.resize(1); // Keep only first
+                SVGLength* x = attributes.getFirstXLength();
+                if (x) {
+                    optional_attrs.x.push_back(*x);
+                } else {
+                    std::cerr << "SPText::_buildLayoutInput: No 'x' attribute value with vertical 'inline-size'!" << std::endl;
                 }
-                optional_attrs.y.clear();
             }
+
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
@@ -657,19 +648,20 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
 
     else if (SP_IS_TSPAN(object)) {
         SPTSpan *tspan = SP_TSPAN(object);
+
         // x, y attributes are stripped from some tspans marked with role="line" as we do our own line layout.
         // This should be checked carefully, as it can undo line layout in imported SVG files.
         bool use_xy = !in_textpath && (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED || !tspan->attributes.singleXYCoordinates());
-        tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, true);
+        bool use_dxdyrotate = true;
 
         // SVG 2 Text wrapping: see comment above.
         if (layout.wrap_mode == Inkscape::Text::Layout::WRAP_SHAPE_INSIDE ||
             layout.wrap_mode == Inkscape::Text::Layout::WRAP_INLINE_SIZE) {
-
-            // 'x' and 'y' attributes are always ignored.
-            optional_attrs.x.clear();
-            optional_attrs.y.clear();
+            use_xy = false;
+            use_dxdyrotate = false;
         }
+
+        tspan->attributes.mergeInto(&optional_attrs, parent_optional_attrs, parent_attrs_offset, use_xy, use_dxdyrotate);
     }
 
     else if (SP_IS_TREF(object)) {
@@ -876,6 +868,225 @@ void SPText::_clearFlow(Inkscape::DrawingGroup *in_arena)
     in_arena->clearChildren();
 }
 
+bool SPText::is_horizontal() const
+{
+    unsigned mode = style->writing_mode.computed;
+    return (mode == SP_CSS_WRITING_MODE_LR_TB || mode == SP_CSS_WRITING_MODE_RL_TB);
+}
+
+bool SPText::has_inline_size() const
+{
+    return (style->inline_size.set);
+}
+
+bool SPText::has_shape_inside() const
+{
+    return (style->shape_inside.set);
+}
+
+// Gets rectangle defined by <text> x, y and inline-size ("infinite" in one direction).
+Geom::OptRect SPText::get_frame()
+{
+    Geom::OptRect opt_frame;
+    Geom::Rect frame;
+
+    if (style->inline_size.set) {
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        if (is_horizontal()) {
+            // horizontal
+            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (-inline_size/2.0, 0 );
+            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                frame *= Geom::Translate (-inline_size, 0);
+            }
+        } else {
+            // vertical
+            frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (0, -inline_size/2.0);
+            } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                frame *= Geom::Translate (0, -inline_size);
+            }
+        }
+
+        opt_frame = frame;
+
+    } else {
+        // See if 'shape-inside' has rectangle
+        Inkscape::XML::Node* rectangle = get_first_rectangle();
+
+        if (rectangle) {
+            double x = 0.0;
+            double y = 0.0;
+            double width = 0.0;
+            double height = 0.0;
+            sp_repr_get_double (rectangle, "x",      &x);
+            sp_repr_get_double (rectangle, "y",      &y);
+            sp_repr_get_double (rectangle, "width",  &width);
+            sp_repr_get_double (rectangle, "height", &height);
+            frame = Geom::Rect::from_xywh( x, y, width, height);
+            opt_frame = frame;
+        }
+    }
+
+    return opt_frame;
+}
+
+// Find the node of the first rectangle (if it exists) in 'shape-inside'.
+Inkscape::XML::Node* SPText::get_first_rectangle()
+{
+    Inkscape::XML::Node* first_rectangle = nullptr;
+
+    Inkscape::XML::Node *our_ref = getRepr();
+
+    if (style->shape_inside.set && style->shape_inside.value) {
+
+        std::vector<Glib::ustring> shapes = get_shapes();
+
+        for (auto shape: shapes) {
+
+            Inkscape::XML::Node *item =
+                sp_repr_lookup_descendant (our_ref->root(), "id", shape.c_str());
+
+            if (item && strncmp("svg:rect", item->name(), 8) == 0) {
+                return item;
+                break;
+            }
+        }
+    }
+
+    return first_rectangle;
+}
+
+// Get a list of shape in 'shape-inside' as a vector of strings.
+std::vector<Glib::ustring> SPText::get_shapes() const
+{
+    std::vector<Glib::ustring> shapes;
+    if (style->shape_inside.set && style->shape_inside.value) {
+
+        static Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("url\\(#([A-z0-9#]*)\\)");
+        Glib::MatchInfo matchInfo;
+        regex->match(style->shape_inside.value, matchInfo);
+
+        while (matchInfo.matches()) {
+            shapes.push_back(matchInfo.fetch(1));
+            matchInfo.next();
+        }
+    }
+
+    return shapes;
+}
+
+
+SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
+{
+    SPDocument *doc = desktop->getDocument();
+
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
+    text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    g_assert(text_object != nullptr);
+
+    // Invert coordinate system?
+    p0 *= desktop->dt2doc();
+    p1 *= desktop->dt2doc();
+
+    // Pixels to user units
+    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+
+    sp_repr_set_svg_double( text_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double( text_repr, "y", p0[Geom::Y]);
+
+    double inline_size = p1[Geom::X] - p0[Geom::X];
+
+    text_object->style->inline_size.setDouble( inline_size );
+    text_object->style->inline_size.set = true;
+
+    Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
+    text_repr->appendChild(text_node);
+
+    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
+    g_assert(item != nullptr);
+
+    // text_object->transform = item->i2doc_affine().inverse();
+
+    text_object->updateRepr();
+
+    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
+
+    Inkscape::GC::release(text_repr);
+    Inkscape::GC::release(text_node);
+
+    return text_object;
+}
+
+SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
+{
+    SPDocument *doc = desktop->getDocument();
+
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *text_repr = xml_doc->createElement("svg:text");
+    text_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+
+    SPText *text_object = dynamic_cast<SPText *>(desktop->currentLayer()->appendChildRepr(text_repr));
+    g_assert(text_object != nullptr);
+
+    // Invert coordinate system?
+    p0 *= desktop->dt2doc();
+    p1 *= desktop->dt2doc();
+
+    // Pixels to user units
+    p0 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    p1 *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+
+    // Create rectangle
+    Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+    sp_repr_set_svg_double( rect_repr, "x", p0[Geom::X]);
+    sp_repr_set_svg_double( rect_repr, "y", p0[Geom::Y]);
+    sp_repr_set_svg_double( rect_repr, "width",  abs(p1[Geom::X]-p0[Geom::X]));
+    sp_repr_set_svg_double( rect_repr, "height", abs(p1[Geom::Y]-p0[Geom::Y]));
+
+    // Find defs, if does not exist, create.
+    Inkscape::XML::Node *defs_repr = sp_repr_lookup_name (xml_doc->root(), "svg:defs");
+    if (defs_repr == nullptr) {
+        defs_repr = xml_doc->createElement("svg:defs");
+        xml_doc->root()->addChild(defs_repr, nullptr);
+    }
+
+    // Add rectangle to defs.
+    defs_repr->addChild(rect_repr, nullptr);
+
+    // Link rectangle to text
+    std::string value("url(#");
+    value += rect_repr->attribute("id");
+    value += ")";
+    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
+    sp_repr_css_set_property (css, "shape-inside", value.c_str());
+    sp_repr_css_set(text_repr, css, "style");
+    sp_repr_css_attr_unref(css);
+
+    Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
+    text_repr->appendChild(text_node);
+
+    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
+    g_assert(item != nullptr);
+
+    Inkscape::GC::release(text_repr);
+    Inkscape::GC::release(text_node);
+    Inkscape::GC::release(defs_repr);
+    Inkscape::GC::release(rect_repr);
+
+    return text_object;
+}
 
 /*
  * TextTagAttributes implementation
@@ -1029,6 +1240,30 @@ void TextTagAttributes::setFirstXY(Geom::Point &point)
     attributes.y[0] = point[Geom::Y];
 }
 
+SVGLength* TextTagAttributes::getFirstXLength()
+{
+    if (!attributes.x.empty()) {
+        return &attributes.x[0];
+    } else {
+        return nullptr;
+    }
+}
+
+SVGLength* TextTagAttributes::getFirstYLength()
+{
+    if (!attributes.y.empty()) {
+        return &attributes.y[0];
+    } else {
+        return nullptr;
+    }
+}
+
+// Instance of TextTagAttributes contains attributes as defined by text/tspan element.
+// output: What will be sent to the rendering engine.
+// parent_attrs: Attributes collected from all ancestors.
+// parent_attrs_offset: Where this element fits into the parent_attrs.
+// copy_xy: Should this elements x, y attributes contribute to output (can preserve set values but not use them... kind of strange).
+// copy_dxdxrotate: Should this elements dx, dy, rotate attributes contribute to output.
 void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *output, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_attrs, unsigned parent_attrs_offset, bool copy_xy, bool copy_dxdyrotate) const
 {
     mergeSingleAttribute(&output->x,      parent_attrs.x,      parent_attrs_offset, copy_xy ? &attributes.x : nullptr);
