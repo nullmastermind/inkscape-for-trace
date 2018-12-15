@@ -384,16 +384,5 @@ LPEEmbroderyStitch::resetDefaults(SPItem const *item)
     Effect::resetDefaults(item);
 }
 
-
-/** /todo check whether this special case is necessary. It seems to "bug" editing behavior:
- * scaling an object with transforms preserved behaves differently from scaling with
- * transforms optimized (difference caused by this special method).
- * special casing is probably needed, because rotation should not be propagated to the strokepath.
- */
-void
-LPEEmbroderyStitch::transform_multiply(Affine const &postmul, bool set)
-{
-}
-
 } //namespace LivePathEffect
 } /* namespace Inkscape */

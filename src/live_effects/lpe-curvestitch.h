@@ -33,8 +33,6 @@ public:
 
     void resetDefaults(SPItem const* item) override;
 
-    void transform_multiply(Geom::Affine const& postmul, bool set) override;
-
 private:
     PathParam strokepath;
     ScalarParam nrofpaths;

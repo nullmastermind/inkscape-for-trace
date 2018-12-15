@@ -102,9 +102,6 @@ public:
      */
     virtual void resetDefaults(SPItem const* item);
 
-    /// /todo: is this method really necessary? it causes UI inconsistensies... (johan)
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-
     // /TODO: providesKnotholder() is currently used as an indicator of whether a nodepath is
     // created for an item or not. When we allow both at the same time, this needs rethinking!
     bool providesKnotholder() const;
@@ -140,7 +137,10 @@ public:
     BoolParam is_visible;
     Geom::PathVector pathvector_before_effect;
     Geom::PathVector pathvector_after_effect;
-protected:
+    SPLPEItem *sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with
+                            // them.
+    SPShape *current_shape; // these get stored in performPathEffects.
+  protected:
     Effect(LivePathEffectObject *lpeobject);
 
     // provide a set of doEffect functions so the developer has a choice
@@ -175,8 +175,6 @@ protected:
     // this boolean defaults to false, it concatenates the input path to one pwd2,
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
-    SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    SPShape * current_shape; // these get stored in performPathEffects.
     std::vector<Glib::ustring> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;

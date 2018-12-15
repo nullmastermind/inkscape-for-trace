@@ -40,8 +40,6 @@ public:
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in) override;
 
-    void transform_multiply(Geom::Affine const& postmul, bool set) override;
-
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
     
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;

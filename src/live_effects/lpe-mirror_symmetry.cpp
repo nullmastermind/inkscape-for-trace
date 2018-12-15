@@ -401,17 +401,6 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 }
 
 void
-LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
-        Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
-    }
-    previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-}
-
-void
 LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;

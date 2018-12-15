@@ -38,18 +38,26 @@ LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
 void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
 {
     if (curve) {
-        Geom::Affine affine = Geom::identity();
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        Inkscape::Selection *selection = nullptr;
+        if (desktop) {
+            selection = desktop->selection;
+        }
+        Geom::Affine transf = sp_item_transform_repr(sp_lpe_item);
+        if (transf != Geom::identity()) {
+            sp_lpe_item->doWriteTransform(Geom::identity());
+        }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
-            Geom::PathVector linked_pathv = linked_path.get_pathvector();
             SPItem * linked1 = linked_path.getObject();
-            if (linked1) {
-                linked_pathv *= linked1->transform;
+            if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
+                SP_ITEM(linked1)->doWriteTransform(transf);
+            }
+            Geom::PathVector linked_pathv = linked_path.get_pathvector();
+            SPItem * linked2 = second_path.getObject();
+            if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
+                SP_ITEM(linked2)->doWriteTransform(transf);
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();
-            SPItem * linked2 = second_path.getObject();
-            if (linked2) {
-                second_pathv*= linked2->transform;
-            }
             Geom::PathVector result_linked_pathv;
             Geom::PathVector result_second_pathv;
             for (Geom::PathVector::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
@@ -82,26 +90,25 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                     }
                     result_linked_pathv.push_back(result_second_pathv.front());
                 }
-                result_linked_pathv *= affine.inverse();
                 curve->set_pathvector(result_linked_pathv);
             } else if ( !result_linked_pathv.empty() ) {
-                result_linked_pathv *= affine.inverse();
                 curve->set_pathvector(result_linked_pathv);
             } else if ( !result_second_pathv.empty() ) {
-                result_second_pathv *= affine.inverse();
                 curve->set_pathvector(result_second_pathv);
             }
         }
         else if ( linked_path.linksToPath() && linked_path.getObject() ) {
+            SPItem *linked1 = linked_path.getObject();
+            if (linked1 && transf != Geom::identity() && selection && !selection->includes(linked1->getRepr())) {
+                SP_ITEM(linked1)->doWriteTransform(transf);
+            }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             Geom::PathVector result_pathv;
-
             for (Geom::PathVector::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
             {
                 result_pathv.push_back((*iter));
             }
             if ( !result_pathv.empty() ) {
-                result_pathv *= affine.inverse();
                 if (close) {
                     result_pathv.front().close();
                 }
@@ -109,15 +116,17 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             }
         }
         else if ( second_path.linksToPath() && second_path.getObject() ) {
+            SPItem *linked2 = second_path.getObject();
+            if (linked2 && transf != Geom::identity() && selection && !selection->includes(linked2->getRepr())) {
+                SP_ITEM(linked2)->doWriteTransform(transf);
+            }
             Geom::PathVector second_pathv = second_path.get_pathvector();
             Geom::PathVector result_pathv;
-
             for (Geom::PathVector::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
             {
                 result_pathv.push_back((*iter));
             }
             if ( !result_pathv.empty() ) {
-                result_pathv *= affine.inverse();
                 if (close) {
                     result_pathv.front().close();
                 }

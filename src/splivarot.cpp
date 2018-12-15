@@ -715,7 +715,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     item_source->adjust_stroke(i2doc.descrim());
     item_source->adjust_pattern(i2doc);
     item_source->adjust_gradient(i2doc);
-    item_source->adjust_livepatheffect(i2doc);
 
     Inkscape::XML::Node *repr_source = source->getRepr();
 

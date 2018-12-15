@@ -335,8 +335,6 @@ public:
      */
     void adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors, bool is_pattern);
 
-    void adjust_livepatheffect(Geom::Affine const &postmul, bool set = false);
-
     /**
      * Set a new transform on an object.
      *

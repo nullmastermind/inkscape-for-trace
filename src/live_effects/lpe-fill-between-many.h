@@ -29,18 +29,16 @@ class LPEFillBetweenMany : public Effect {
 public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
     ~LPEFillBetweenMany() override;
-    void doOnApply (SPLPEItem const* lpeitem) override;
     void doEffect (SPCurve * curve) override;
-
 private:
     OriginalPathArrayParam linked_paths;
     EnumParam<Filllpemethod> method;
     BoolParam fuse;
     BoolParam join;
     BoolParam close;
+    BoolParam autoreverse;
     HiddenParam applied;
     Filllpemethod previous_method;
-private:
     LPEFillBetweenMany(const LPEFillBetweenMany&) = delete;
     LPEFillBetweenMany& operator=(const LPEFillBetweenMany&) = delete;
 };

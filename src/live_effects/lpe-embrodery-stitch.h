@@ -31,8 +31,6 @@ public:
 
     void resetDefaults(SPItem const *item) override;
 
-    void transform_multiply(Geom::Affine const &postmul, bool set) override;
-
     enum order_method {
         order_method_no_reorder,
         order_method_zigzag,

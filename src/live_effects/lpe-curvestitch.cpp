@@ -183,24 +183,6 @@ LPECurveStitch::resetDefaults(SPItem const* item)
     }
 }
 
-
-/** /todo check whether this special case is necessary. It seems to "bug" editing behavior:
- * scaling an object with transforms preserved behaves differently from scaling with
- * transforms optimized (difference caused by this special method).
- * special casing is probably needed, because rotation should not be propagated to the strokepath.
- */
-void
-LPECurveStitch::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    // only take translations into account
-    if (postmul.isTranslation()) {
-        strokepath.param_transform_multiply(postmul, set);
-    } else if (!scale_y_rel.get_value()) {
-        transformed = true;
-        strokepath.param_transform_multiply(postmul, set);
-    }
-}
-
 } //namespace LivePathEffect
 } /* namespace Inkscape */
 

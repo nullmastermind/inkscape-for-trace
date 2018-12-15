@@ -45,7 +45,6 @@ public:
     void doOnApply (SPLPEItem const* lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doAfterEffect (SPLPEItem const* lpeitem) override;
-    void transform_multiply(Geom::Affine const& postmul, bool set) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;

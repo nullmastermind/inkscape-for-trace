@@ -281,9 +281,6 @@ Geom::Affine SPBox3D::set_transform(Geom::Affine const &xform) {
 
             // Adjust gradient fill
             childitem->adjust_gradient(xform);
-
-            // Adjust LPE
-            childitem->adjust_livepatheffect(xform);
         }
     }
 

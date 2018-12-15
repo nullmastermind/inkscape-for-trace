@@ -268,25 +268,6 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
 }
 
 void
-LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    // overriding the Effect class default method, disabling transform forwarding to the parameters.
-
-    // only take translations into account
-    // Check if proportional stroke-width scaling is on
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
-    if (transform_stroke && !scale_y_rel) {
-        prop_scale.param_set_value(prop_scale * ((postmul.expansionX() + postmul.expansionY()) / 2));
-        prop_scale.write_to_SVG();
-    }
-    if (postmul.isTranslation()) {
-        pattern.param_transform_multiply(postmul, set);
-        pattern.write_to_SVG();
-    }
-}
-
-void
 LPEPatternAlongPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.push_back(helper_path);

@@ -366,18 +366,6 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 }
 
 void
-LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
-{
-    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
-        Parameter * param = *it;
-        if(param->param_key != "starting_point" || postmul.isRotation()) {
-            param->param_transform_multiply(postmul, set);
-        }
-    }
-}
-
-void
 LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;

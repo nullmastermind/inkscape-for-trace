@@ -42,7 +42,6 @@ public:
     void doAfterEffect (SPLPEItem const* lpeitem) override;
     void split(Geom::PathVector &path_in, Geom::Path const &divider);
     void resetDefaults(SPItem const* item) override;
-    void transform_multiply(Geom::Affine const& postmul, bool set) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;

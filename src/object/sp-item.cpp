@@ -1411,26 +1411,6 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
     }
 }
 
-void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
-{
-    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(this);
-    if ( lpeitem && lpeitem->hasPathEffect() ) {
-        lpeitem->forkPathEffectsIfNecessary();
-        // now that all LPEs are forked_if_necessary, we can apply the transform
-        PathEffectList effect_list =  lpeitem->getEffectList();
-        for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
-        {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
-            if (lpeobj) {
-                Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                if (lpe && lpe->isReady()) {
-                    lpe->transform_multiply(postmul, set);
-                }
-            }
-        }
-    }
-}
-
 // CPPIFY:: make pure virtual?
 // Not all SPItems must necessarily have a set transform method!
 Geom::Affine SPItem::set_transform(Geom::Affine const &transform) {
