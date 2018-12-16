@@ -12,8 +12,8 @@
 #ifndef INKSCAPE_URI_H
 #define INKSCAPE_URI_H
 
-#include <exception>
 #include <libxml/uri.h>
+#include <memory>
 #include <string>
 
 namespace Inkscape {
@@ -39,11 +39,6 @@ public:
     URI();
 
     /**
-     * Copy constructor.
-     */
-    URI(URI const &uri);
-
-    /**
      * Constructor from a C-style ASCII string.
      *
      * @param preformed Properly quoted C-style string to be represented.
@@ -53,11 +48,6 @@ public:
      */
     explicit URI(char const *preformed, char const *baseuri = nullptr);
     explicit URI(char const *preformed, URI const &baseuri);
-
-    /**
-     * Destructor.
-     */
-    ~URI();
 
     /**
      * Determines if the URI represented is an 'opaque' URI.
@@ -191,28 +181,12 @@ public:
      */
     bool hasScheme(const char *scheme) const;
 
-    /**
-     * Assignment operator.
-     */
-    URI &operator=(URI const &uri);
-
 private:
-    class Impl {
-    public:
-        static Impl *create(xmlURIPtr uri);
-        void reference();
-        void unreference();
+    std::shared_ptr<xmlURI> m_shared;
 
-    private:
-        Impl(xmlURIPtr uri);
-        ~Impl();
-        int _refcount;
-    public:
-        xmlURIPtr _uri;
-    };
-    Impl *_impl;
+    void init(xmlURI *ptr) { m_shared.reset(ptr, xmlFreeURI); }
 
-    xmlURIPtr _xmlURIPtr() const { return _impl->_uri; }
+    xmlURI *_xmlURIPtr() const { return m_shared.get(); }
 };
 
 }  /* namespace Inkscape */

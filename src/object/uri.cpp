@@ -43,12 +43,7 @@ static bool uri_needs_escaping(char const *uri)
 }
 
 URI::URI() {
-    _impl = Impl::create(xmlCreateURI());
-}
-
-URI::URI(const URI &uri) {
-    uri._impl->reference();
-    _impl = uri._impl;
+    init(xmlCreateURI());
 }
 
 URI::URI(gchar const *preformed, char const *baseuri)
@@ -96,48 +91,12 @@ URI::URI(gchar const *preformed, char const *baseuri)
     if (!uri) {
         throw MalformedURIException();
     }
-    _impl = Impl::create(uri);
+    init(uri);
 }
 
 URI::URI(char const *preformed, URI const &baseuri)
     : URI::URI(preformed, baseuri.str().c_str())
 {
-}
-
-URI::~URI() {
-    _impl->unreference();
-}
-
-URI &URI::operator=(URI const &uri) {
-// No check for self-assignment needed, as _impl refcounting increments first.
-    uri._impl->reference();
-    _impl->unreference();
-    _impl = uri._impl;
-    return *this;
-}
-
-URI::Impl *URI::Impl::create(xmlURIPtr uri) {
-    return new Impl(uri);
-}
-
-URI::Impl::Impl(xmlURIPtr uri)
-: _refcount(1), _uri(uri) {}
-
-URI::Impl::~Impl() {
-    if (_uri) {
-        xmlFreeURI(_uri);
-        _uri = nullptr;
-    }
-}
-
-void URI::Impl::reference() {
-    _refcount++;
-}
-
-void URI::Impl::unreference() {
-    if (!--_refcount) {
-        delete this;
-    }
 }
 
 // From RFC 2396:
