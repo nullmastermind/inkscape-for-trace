@@ -172,6 +172,8 @@ public:
 
     /**
      * Return the contents of the file
+     *
+     * @throw Glib::Error If the URL can't be read
      */
     std::string getContents() const;
 

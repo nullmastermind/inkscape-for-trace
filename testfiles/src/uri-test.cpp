@@ -27,8 +27,15 @@ char const *win_url_unc = "file://laptop/My%20Documents/FileSchemeURIs.doc";
 char const *win_url_local = "file:///C:/Documents%20and%20Settings/davris/FileSchemeURIs.doc";
 char const *win_filename_local = "C:\\Documents and Settings\\davris\\FileSchemeURIs.doc";
 
+TEST(UriTest, Malformed)
+{
+    ASSERT_ANY_THROW(URI(nullptr));
+    ASSERT_ANY_THROW(URI("nonhex-%XX"));
+}
+
 TEST(UriTest, GetPath)
 {
+    ASSERT_STREQ(URI().getPath(), nullptr);
     ASSERT_STREQ(URI("foo.svg").getPath(), "foo.svg");
     ASSERT_STREQ(URI("foo.svg#bar").getPath(), "foo.svg");
     ASSERT_STREQ(URI("#bar").getPath(), nullptr);
@@ -53,6 +60,10 @@ TEST(UriTest, FromDir)
 
 TEST(UriTest, Str)
 {
+    ASSERT_EQ(URI().str(), "");
+    ASSERT_EQ(URI("").str(), "");
+    ASSERT_EQ(URI("", "http://a/b").str(), "http://a/b");
+
     ASSERT_EQ(URI("uri.svg").str(), "uri.svg");
     ASSERT_EQ(URI("tmp/uri.svg").str(), "tmp/uri.svg");
     ASSERT_EQ(URI("/tmp/uri.svg").str(), "/tmp/uri.svg");
@@ -90,6 +101,8 @@ TEST(UriTest, Str)
     ASSERT_EQ(URI("file:///tmp/x%20y.svg").toNativeFilename(), "/tmp/x y.svg");
     ASSERT_EQ(URI("file:///a/b#hash").toNativeFilename(), "/a/b");
 #endif
+
+    ASSERT_ANY_THROW(URI("http://a/b").toNativeFilename());
 }
 
 TEST(UriTest, StrDataScheme)
@@ -116,6 +129,8 @@ TEST(UriTest, GetContents)
     ASSERT_EQ(URI("data:,umlaut-%C3%96").getContents(), "umlaut-\xC3\x96");
     ASSERT_EQ(URI(DATA_BASE64_HELLO_WORLD).getContents(), "Hello World");
     ASSERT_EQ(URI(DATA_BASE64_HELLO_WORLD_WRAPPED).getContents(), "Hello World");
+
+    ASSERT_ANY_THROW(URI().getContents());
 }
 
 TEST(UriTest, CssStr)
@@ -138,6 +153,7 @@ TEST(UriTest, GetMimeType)
 
 TEST(UriTest, HasScheme)
 {
+    ASSERT_FALSE(URI().hasScheme("file"));
     ASSERT_FALSE(URI("uri.svg").hasScheme("file"));
     ASSERT_FALSE(URI("uri.svg").hasScheme("data"));
 
@@ -157,6 +173,7 @@ TEST(UriTest, HasScheme)
 
 TEST(UriTest, isOpaque)
 {
+    ASSERT_FALSE(URI().isOpaque());
     ASSERT_FALSE(URI("file:///uri.svg").isOpaque());
     ASSERT_FALSE(URI("/uri.svg").isOpaque());
     ASSERT_FALSE(URI("uri.svg").isOpaque());
@@ -171,6 +188,8 @@ TEST(UriTest, isOpaque)
 
 TEST(UriTest, isRelative)
 {
+    ASSERT_TRUE(URI().isRelative());
+
     ASSERT_FALSE(URI("http://web/uri.svg").isRelative());
     ASSERT_FALSE(URI("file:///uri.svg").isRelative());
     ASSERT_FALSE(URI("mailto:user@host.xy").isRelative());
@@ -185,6 +204,7 @@ TEST(UriTest, isRelative)
 
 TEST(UriTest, isNetPath)
 {
+    ASSERT_FALSE(URI().isNetPath());
     ASSERT_FALSE(URI("http://web/uri.svg").isNetPath());
     ASSERT_FALSE(URI("file:///uri.svg").isNetPath());
     ASSERT_FALSE(URI("/uri.svg").isNetPath());
@@ -195,6 +215,9 @@ TEST(UriTest, isNetPath)
 
 TEST(UriTest, isRelativePath)
 {
+    ASSERT_FALSE(URI("foo:bar").isRelativePath());
+    ASSERT_TRUE(URI("foo%3Abar").isRelativePath());
+
     ASSERT_FALSE(URI("http://web/uri.svg").isRelativePath());
     ASSERT_FALSE(URI("//web/uri.svg").isRelativePath());
     ASSERT_FALSE(URI("/uri.svg").isRelativePath());
@@ -206,6 +229,7 @@ TEST(UriTest, isRelativePath)
 
 TEST(UriTest, isAbsolutePath)
 {
+    ASSERT_FALSE(URI().isAbsolutePath());
     ASSERT_FALSE(URI("http://web/uri.svg").isAbsolutePath());
     ASSERT_FALSE(URI("//web/uri.svg").isAbsolutePath());
     ASSERT_FALSE(URI("uri.svg").isAbsolutePath());
@@ -216,6 +240,8 @@ TEST(UriTest, isAbsolutePath)
 
 TEST(UriTest, getScheme)
 {
+    ASSERT_STREQ(URI().getScheme(), nullptr);
+
     ASSERT_STREQ(URI("https://web/uri.svg").getScheme(), "https");
     ASSERT_STREQ(URI("file:///uri.svg").getScheme(), "file");
     ASSERT_STREQ(URI("data:,").getScheme(), "data");
@@ -225,12 +251,14 @@ TEST(UriTest, getScheme)
 
 TEST(UriTest, getQuery)
 {
+    ASSERT_STREQ(URI().getQuery(), nullptr);
     ASSERT_STREQ(URI("uri.svg?a=b&c=d").getQuery(), "a=b&c=d");
     ASSERT_STREQ(URI("?a=b&c=d#hash").getQuery(), "a=b&c=d");
 }
 
 TEST(UriTest, getFragment)
 {
+    ASSERT_STREQ(URI().getFragment(), nullptr);
     ASSERT_STREQ(URI("uri.svg").getFragment(), nullptr);
     ASSERT_STREQ(URI("uri.svg#hash").getFragment(), "hash");
     ASSERT_STREQ(URI("?a=b&c=d#hash").getFragment(), "hash");
@@ -239,6 +267,7 @@ TEST(UriTest, getFragment)
 
 TEST(UriTest, getOpaque)
 {
+    ASSERT_STREQ(URI().getOpaque(), nullptr);
     ASSERT_STREQ(URI("urn:isbn:096139210x#hash").getOpaque(), "isbn:096139210x");
     ASSERT_STREQ(URI("data:,foo").getOpaque(), ",foo");
 }
