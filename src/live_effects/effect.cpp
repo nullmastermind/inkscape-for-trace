@@ -48,7 +48,6 @@
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpe-perp_bisector.h"
 #include "live_effects/lpe-perspective-envelope.h"
-#include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpe-powerclip.h"
 #include "live_effects/lpe-powermask.h"
 #include "live_effects/lpe-powerstroke.h"
@@ -156,7 +155,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {PARALLEL,              N_("Parallel"),                        "parallel"},
     {PATH_LENGTH,           N_("Path length"),                     "path_length"},
     {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
-    {PERSPECTIVE_PATH,      N_("Perspective path"),                "perspective_path"},
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),                      "text_label"},
@@ -221,9 +219,6 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case CIRCLE_WITH_RADIUS:
             neweffect = static_cast<Effect*> ( new LPECircleWithRadius(lpeobj) );
-            break;
-        case PERSPECTIVE_PATH:
-            neweffect = static_cast<Effect*> ( new LPEPerspectivePath(lpeobj) );
             break;
         case SPIRO:
             neweffect = static_cast<Effect*> ( new LPESpiro(lpeobj) );

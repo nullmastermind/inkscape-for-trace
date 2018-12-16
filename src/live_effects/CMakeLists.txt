@@ -40,7 +40,6 @@ set(live_effects_SRC
 	lpe-patternalongpath.cpp
 	lpe-perp_bisector.cpp
 	lpe-perspective-envelope.cpp
-	lpe-perspective_path.cpp
 	lpe-powerclip.cpp
 	lpe-powermask.cpp
 	lpe-powerstroke.cpp
@@ -134,7 +133,6 @@ set(live_effects_SRC
 	lpe-patternalongpath.h
 	lpe-perp_bisector.h
 	lpe-perspective-envelope.h
-	lpe-perspective_path.h
 	lpe-powerstroke-interpolators.h
 	lpe-powerclip.h
 	lpe-powermask.h
