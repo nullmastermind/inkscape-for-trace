@@ -17,6 +17,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtkmm/clipboard.h>
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 
 #include <display/sp-ctrlline.h>
 #include <display/sodipodi-ctrlrect.h>
@@ -28,6 +29,7 @@
 #include "document-undo.h"
 #include "document.h"
 #include "include/macros.h"
+#include "inkscape.h"
 #include "message-context.h"
 #include "message-stack.h"
 #include "rubberband.h"
@@ -39,6 +41,10 @@
 #include "object/sp-flowtext.h"
 #include "object/sp-namedview.h"
 #include "object/sp-text.h"
+#include "object/sp-rect.h"
+#include "object/sp-shape.h"
+#include "object/sp-ellipse.h"
+
 #include "style.h"
 
 #include "ui/pixmaps/cursor-text-insert.xpm"
@@ -125,12 +131,14 @@ void TextTool::setup() {
     this->cursor->setRgba32(0x000000ff);
     sp_canvas_item_hide(this->cursor);
 
+    // The rectangle box tightly wrapping text object when selected or under cursor.
     this->indicator = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->indicator)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->indicator)->setColor(0x0000ff7f, false, 0);
     SP_CTRLRECT(this->indicator)->setShadow(1, 0xffffff7f);
     sp_canvas_item_hide(this->indicator);
 
+    // The rectangle box outlining wrapping the shape for text in a shape.
     this->frame = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRLRECT, nullptr);
     SP_CTRLRECT(this->frame)->setRectangle(Geom::Rect(Geom::Point(0, 0), Geom::Point(100, 100)));
     SP_CTRLRECT(this->frame)->setColor(0x0000ff7f, false, 0);
@@ -166,7 +174,10 @@ void TextTool::setup() {
     this->shape_editor = new ShapeEditor(this->desktop);
 
     SPItem *item = this->desktop->getSelection()->singleItem();
-    if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+    if (item && (
+            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
+            (SP_IS_TEXT(item) && !SP_TEXT(item)->has_shape_inside())           )
+        ) {
         this->shape_editor->set_item(item);
     }
 
@@ -640,12 +651,41 @@ bool TextTool::root_handler(GdkEvent* event) {
                     double cursor_height = sp_desktop_get_font_size_tool(desktop);
                     if (fabs(p1[Geom::Y] - this->p0[Geom::Y]) > cursor_height) {
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
-                        SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
-                        /* Set style */
-                        sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
-                        desktop->getSelection()->set(ft);
+
+                        if (false) {
+                            // SVG 2 text
+
+                            SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);
+
+                            /* Get "shape-inside" */
+                            gchar* shape_inside = g_strdup(text->style->shape_inside.value);
+
+                            /* Set style */
+                            sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
+
+                            /* Restore "shape-inside" */
+                            text->style->shape_inside.read( shape_inside );
+                            g_free( shape_inside );
+                            text->updateRepr();
+
+                            desktop->getSelection()->set(text);
+
+                        } else {
+                            // SVG 1.2 text
+
+                            SPItem *ft = create_flowtext_with_internal_frame (desktop, this->p0, p1);
+
+                            /* Set style */
+                            sp_desktop_apply_style_tool(desktop, ft->getRepr(), "/tools/text", true);
+
+                            ft->updateRepr();
+
+                            desktop->getSelection()->set(ft);
+                        }
+
                         desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Flowed text is created."));
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, _("Create flowed text"));
+
                     } else {
                         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The frame is <b>too small</b> for the current font size. Flowed text not created."));
                     }
@@ -1449,7 +1489,11 @@ void TextTool::_selectionChanged(Inkscape::Selection *selection)
 
     ec->shape_editor->unset_item();
     SPItem *item = selection->singleItem();
-    if (item && SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) {
+    if (item && (
+            (SP_IS_FLOWTEXT(item) && SP_FLOWTEXT(item)->has_internal_frame()) ||
+            (SP_IS_TEXT(item) &&
+             !(SP_TEXT(item)->has_shape_inside() && !SP_TEXT(item)->get_first_rectangle()))
+            )) {
         ec->shape_editor->set_item(item);
     }
 
@@ -1599,23 +1643,44 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             truncated = true;
             trunc = _(" [truncated]");
         }
+
+        if (truncated) {
+            SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
+        } else {
+            SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
+        }
+
         if (SP_IS_FLOWTEXT(tc->text)) {
             SPItem *frame = SP_FLOWTEXT(tc->text)->get_frame (nullptr); // first frame only
             if (frame) {
-                if (truncated) {
-                    SP_CTRLRECT(tc->frame)->setColor(0xff0000ff, false, 0);
-                } else {
-                    SP_CTRLRECT(tc->frame)->setColor(0x0000ff7f, false, 0);
-                }
                 sp_canvas_item_show(tc->frame);
                 Geom::OptRect frame_bbox = frame->desktopVisualBounds();
                 if (frame_bbox) {
                     SP_CTRLRECT(tc->frame)->setRectangle(*frame_bbox);
+                    sp_canvas_item_show(tc->frame);
                 }
             }
 
             SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit flowed text (%d character%s); <b>Enter</b> to start new paragraph.", "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new paragraph.", nChars), nChars, trunc);
+
+        } else if (SP_IS_TEXT(tc->text)) {
+
+            Geom::OptRect opt_frame = SP_TEXT(tc->text)->get_frame();
+
+            if (opt_frame) {
+                // User units to screen pixels
+                Geom::Rect frame = *opt_frame;
+                frame *= SP_TEXT(tc->text)->i2doc_affine();
+                frame *= SP_ACTIVE_DESKTOP->dt2doc().inverse();
+
+                SP_CTRLRECT(tc->frame)->setRectangle(frame);
+                sp_canvas_item_show(tc->frame);
+            } else {
+                sp_canvas_item_hide(tc->frame);
+            }
+
         } else {
+
             SP_EVENT_CONTEXT(tc)->message_context->setF(Inkscape::NORMAL_MESSAGE, ngettext("Type or edit text (%d character%s); <b>Enter</b> to start new line.", "Type or edit text (%d characters%s); <b>Enter</b> to start new line.", nChars), nChars, trunc);
         }
 
@@ -1655,6 +1720,12 @@ static void sp_text_context_update_text_selection(TextTool *tc)
         sp_ctrlquadr_set_coords(SP_CTRLQUADR(quad_canvasitem), quads[i], quads[i+1], quads[i+2], quads[i+3]);
         sp_canvas_item_show(quad_canvasitem);
         tc->text_selection_quads.push_back(quad_canvasitem);
+    }
+
+    if (tc->shape_editor != nullptr) {
+        if (tc->shape_editor->knotholder) {
+            tc->shape_editor->knotholder->update_knots();
+        }
     }
 }
 

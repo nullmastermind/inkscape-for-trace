@@ -947,10 +947,10 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 void Layout::Calculator::_createFirstScanlineMaker()
 {
     _current_shape_index = 0;
+    InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream.front());
     if (_flow._input_wrap_shapes.empty()) {
         // create the special no-wrapping infinite scanline maker
         double initial_x = 0, initial_y = 0;
-        InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream.front());
         if (!text_source->x.empty())
             initial_x = text_source->x.front().computed;
         if (!text_source->y.empty())
@@ -961,6 +961,31 @@ void Layout::Calculator::_createFirstScanlineMaker()
     else {
         _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
         TRACE(("  begin wrap shape 0\n"));
+
+        // 'inside-shape' uses an infinitely high (wide) shape. We must set initial y. (We only need to do it here as there is only one shape.)
+        if (text_source->style->inline_size.set) {
+            _block_progression = _flow._blockProgression();
+            if( _block_progression == RIGHT_TO_LEFT ||
+                _block_progression == LEFT_TO_RIGHT ) {
+                // Vertical text, CJK
+                if (!text_source->x.empty()) {
+                    double initial_x = text_source->x.front().computed;
+                    _scanline_maker->setNewYCoordinate(initial_x);
+                } else {
+                    std::cerr << "Layout::Calculator::_createFirstScanlineMaker: no x value with 'inline-size'!" << std::endl;
+                    _scanline_maker->setNewYCoordinate(0);
+                }
+            } else {
+                // Horizontal text
+                if (!text_source->y.empty()) {
+                    double initial_y = text_source->y.front().computed;
+                    _scanline_maker->setNewYCoordinate(initial_y);
+                } else {
+                    std::cerr << "Layout::Calculator::_createFirstScanlineMaker: no y value with 'inline-size'!" << std::endl;
+                    _scanline_maker->setNewYCoordinate(0);
+                }
+            }
+        }
     }
 }
 

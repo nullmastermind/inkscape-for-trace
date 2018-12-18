@@ -31,6 +31,7 @@
 #include "object/sp-rect.h"
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
+#include "object/sp-text.h"
 #include "style.h"
 
 #include "include/macros.h"
@@ -69,6 +70,12 @@ class OffsetKnotHolder : public KnotHolder {
 public:
     OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
     ~OffsetKnotHolder() override = default;;
+};
+
+class TextKnotHolder : public KnotHolder {
+public:
+    TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
+    ~TextKnotHolder() override = default;;
 };
 
 class FlowtextKnotHolder : public KnotHolder {
@@ -116,6 +123,8 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
         knotholder = new SpiralKnotHolder(desktop, item, nullptr);
     } else if (dynamic_cast<SPOffset *>(item)) {
         knotholder = new OffsetKnotHolder(desktop, item, nullptr);
+    } else if (dynamic_cast<SPText *>(item)) {
+        knotholder = new TextKnotHolder(desktop, item, nullptr);
     } else {
         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
         if (flowtext && flowtext->has_internal_frame()) {
@@ -1627,6 +1636,186 @@ OffsetKnotHolder::OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
 
     add_pattern_knotholder();
 }
+
+
+/* SPText */
+class TextKnotHolderEntityInlineSize : public KnotHolderEntity {
+public:
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_click(unsigned int state) override;
+};
+
+Geom::Point
+TextKnotHolderEntityInlineSize::knot_get() const
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    Geom::Point p;
+
+    if (text->style->shape_inside.set) {
+        // SVG 2 'shape-inside'. We only get here if there is a rectangle shape.
+
+        Geom::OptRect frame = text->get_frame();
+        if (frame) {
+            p = (*frame).corner(2);
+        } else {
+            std::cerr << "TextKnotHolderEntityInlineSize::knot_get(): no frame!" << std::endl;
+        }
+
+    } else {
+        // 'shape-inside' or normal text.
+
+        SPStyle* style = text->style;
+
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        p = text->attributes.firstXY();
+
+        if (text->style->inline_size.set) {
+            // SVG 2 'inline-size'
+
+            // Keep handle at end of text line.
+            if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+                mode == SP_CSS_WRITING_MODE_RL_TB) {
+                // horizontal
+                if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
+                     (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+                    p *= Geom::Translate (inline_size, 0);
+                } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (inline_size/2.0, 0 );
+                } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (-inline_size/2.0, 0 );
+                } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                            (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                    p *= Geom::Translate (-inline_size, 0);
+                }
+            } else {
+                // vertical
+                if (anchor == SP_CSS_TEXT_ANCHOR_START) {
+                    p *= Geom::Translate (0, inline_size);
+                } else if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                    p *= Geom::Translate (0, inline_size/2.0);
+                } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                    p *= Geom::Translate (0, -inline_size);
+                }
+            }
+        } else {
+            // Normal single line text.
+            Geom::OptRect bbox = text->geometricBounds(); // Check if this is best.
+            if (bbox) {
+                if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+                    mode == SP_CSS_WRITING_MODE_RL_TB) {
+                    // horizontal
+                    if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
+                         (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+                        p *= Geom::Translate ((*bbox).width(), 0);
+                    } else if ( direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate ((*bbox).width()/2, 0);
+                    } else if ( direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate (-(*bbox).width()/2, 0);
+                    } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                                (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                        p *= Geom::Translate (-(*bbox).width(), 0);
+                    }
+                } else {
+                    // vertical
+                    if (anchor == SP_CSS_TEXT_ANCHOR_START) {
+                        p *= Geom::Translate (0, (*bbox).height());
+                    } else if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                        p *= Geom::Translate (0, (*bbox).height()/2);
+                    } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                        p *= Geom::Translate (0, -(*bbox).height());
+                    }
+                    p += Geom::Point((*bbox).width(), 0); // Keep on right side
+                }
+            }
+        }
+    }
+
+    return p;
+}
+
+void
+TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    if (text->style->shape_inside.set) {
+        // Text in a shape: rectangle
+
+        Inkscape::XML::Node* rectangle = text->get_first_rectangle();
+        double x = 0.0;
+        double y = 0.0;
+        sp_repr_get_double (rectangle, "x",      &x);
+        sp_repr_get_double (rectangle, "y",      &y);
+        double width  = s[Geom::X] - x;
+        double height = s[Geom::Y] - y;
+        sp_repr_set_svg_double (rectangle, "width",  width);
+        sp_repr_set_svg_double (rectangle, "height", height);
+
+    } else {
+        // Normal or 'inline-size' text.
+
+        SPStyle* style = text->style;
+
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        Geom::Point delta = s - text->attributes.firstXY();
+        double size = 0.0;
+        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+            mode == SP_CSS_WRITING_MODE_RL_TB) {
+            size = abs(delta[Geom::X]);
+        } else {
+            size = delta[Geom::Y];
+        }
+        if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            size *= 2.0;
+        }
+
+        text->style->inline_size.setDouble(abs(size));
+        text->style->inline_size.set = true;
+    }
+
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    text->updateRepr();
+}
+
+void
+TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
+{
+    SPText *text = dynamic_cast<SPText *>(item);
+    g_assert(text != nullptr);
+
+    if (state & GDK_CONTROL_MASK) {
+        text->style->inline_size.clear();
+    }
+
+    text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    text->updateRepr();
+}
+
+TextKnotHolder::TextKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
+    KnotHolder(desktop, item, relhandler)
+{
+    TextKnotHolderEntityInlineSize *entity_inlinesize = new TextKnotHolderEntityInlineSize();
+
+    entity_inlinesize->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+                              _("Adjust the <b>inline size</b> (line length) of the text."),
+                              SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+
+    entity.push_back(entity_inlinesize);
+}
+
 
 // TODO: this is derived from RectKnotHolderEntityWH because it used the same static function
 // set_internal as the latter before KnotHolderEntity was C++ified. Check whether this also makes
