@@ -122,6 +122,14 @@ Preferences::~Preferences()
 void Preferences::_loadDefaults()
 {
     _prefs_doc = sp_repr_read_mem(preferences_skeleton, PREFERENCES_SKELETON_SIZE, nullptr);
+#ifdef _WIN32
+    setInt("/dialogs/transparency/animate-time", 0); // apparently windows sucks (flickers)
+    setBool("/options/desktopintegration/value", 1);
+#endif
+#if defined(GDK_WINDOWING_QUARTZ)
+    // No maximise for Quartz, see lp:1302627
+    setInt("/options/defaultwindowsize/value", -1);
+#endif
 }
 
 /**
