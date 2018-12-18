@@ -854,7 +854,7 @@ int Preferences::_extractInt(Entry const &v)
         v.value_int = 0;
         return false;
     } else {
-        v.value_int = atoi(s);
+        v.value_int = (int)strtol(s, nullptr, 0);
         return v.value_int;
     }
 }
