@@ -506,6 +506,10 @@ void InkscapePreferences::initPageTools()
 
         _font_dialog.init ( _("Show font substitution warning dialog"), "/options/font/substitutedlg", false);
         _page_text.add_line( false, "", _font_dialog, "", _("Show font substitution warning dialog when requested fonts are not available on the system"));
+
+        cb = Gtk::manage(new PrefCheckButton);
+        cb->init ( _("Use SVG2 auto-flowed text"),  "/tools/text/use_svg2", false);
+        _page_text.add_line( false, "", *cb, "", _("Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"));
     }
 
     Glib::ustring sizeLabels[] = {_("Pixel"), _("Point"), _("Pica"), _("Millimeter"), _("Centimeter"), _("Inch"), _("Em square")/*, _("Ex square"), _("Percent")*/};
