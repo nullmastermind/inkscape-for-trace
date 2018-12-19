@@ -652,7 +652,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                     if (fabs(p1[Geom::Y] - this->p0[Geom::Y]) > cursor_height) {
                         // otherwise even one line won't fit; most probably a slip of hand (even if bigger than tolerance)
 
-                        if (false) {
+                        if (prefs->getBool("/tools/text/use_svg2")) {
                             // SVG 2 text
 
                             SPItem *text = create_text_with_rectangle (desktop, this->p0, p1);

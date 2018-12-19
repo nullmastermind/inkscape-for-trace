@@ -299,7 +299,8 @@ text_flow_into_shape()
         return;
     }
 
-    if (false) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/text/use_svg2")) {
         // SVG 2 Text
 
         if (SP_IS_TEXT(text)) {
@@ -333,66 +334,66 @@ text_flow_into_shape()
     } else {
         // SVG 1.2 Flowed Text
 
-    if (SP_IS_TEXT(text)) {
-      // remove transform from text, but recursively scale text's fontsize by the expansion
-      SP_TEXT(text)->_adjustFontsizeRecursive(text, text->transform.descrim());
-      text->getRepr()->setAttribute("transform", nullptr);
-    }
-
-    Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");
-    root_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
-    root_repr->setAttribute("style", text->getRepr()->attribute("style")); // fixme: transfer style attrs too
-    shape->parent->getRepr()->appendChild(root_repr);
-    SPObject *root_object = doc->getObjectByRepr(root_repr);
-    g_return_if_fail(SP_IS_FLOWTEXT(root_object));
-
-    Inkscape::XML::Node *region_repr = xml_doc->createElement("svg:flowRegion");
-    root_repr->appendChild(region_repr);
-    SPObject *object = doc->getObjectByRepr(region_repr);
-    g_return_if_fail(SP_IS_FLOWREGION(object));
-
-    /* Add clones */
-    auto items = selection->items();
-    for(auto i=items.begin();i!=items.end();++i){
-        SPItem *item = *i;
-        if (SP_IS_SHAPE(item)){
-            Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
-            clone->setAttribute("x", "0");
-            clone->setAttribute("y", "0");
-            gchar *href_str = g_strdup_printf("#%s", item->getRepr()->attribute("id"));
-            clone->setAttribute("xlink:href", href_str);
-            g_free(href_str);
-
-            // add the new clone to the region
-            region_repr->appendChild(clone);
+        if (SP_IS_TEXT(text)) {
+            // remove transform from text, but recursively scale text's fontsize by the expansion
+            SP_TEXT(text)->_adjustFontsizeRecursive(text, text->transform.descrim());
+            text->getRepr()->setAttribute("transform", nullptr);
         }
-    }
 
-    if (SP_IS_TEXT(text)) { // flow from text, as string
-        Inkscape::XML::Node *para_repr = xml_doc->createElement("svg:flowPara");
-        root_repr->appendChild(para_repr);
-        object = doc->getObjectByRepr(para_repr);
-        g_return_if_fail(SP_IS_FLOWPARA(object));
+        Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");
+        root_repr->setAttribute("xml:space", "preserve"); // we preserve spaces in the text objects we create
+        root_repr->setAttribute("style", text->getRepr()->attribute("style")); // fixme: transfer style attrs too
+        shape->parent->getRepr()->appendChild(root_repr);
+        SPObject *root_object = doc->getObjectByRepr(root_repr);
+        g_return_if_fail(SP_IS_FLOWTEXT(root_object));
 
-        Inkscape::Text::Layout const *layout = te_get_layout(text);
-        Glib::ustring text_ustring = sp_te_get_string_multiline(text, layout->begin(), layout->end());
+        Inkscape::XML::Node *region_repr = xml_doc->createElement("svg:flowRegion");
+        root_repr->appendChild(region_repr);
+        SPObject *object = doc->getObjectByRepr(region_repr);
+        g_return_if_fail(SP_IS_FLOWREGION(object));
 
-        Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_ustring.c_str()); // FIXME: transfer all formatting! and convert newlines into flowParas!
-        para_repr->appendChild(text_repr);
+        /* Add clones */
+        auto items = selection->items();
+        for(auto i=items.begin();i!=items.end();++i){
+            SPItem *item = *i;
+            if (SP_IS_SHAPE(item)){
+                Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
+                clone->setAttribute("x", "0");
+                clone->setAttribute("y", "0");
+                gchar *href_str = g_strdup_printf("#%s", item->getRepr()->attribute("id"));
+                clone->setAttribute("xlink:href", href_str);
+                g_free(href_str);
 
-        Inkscape::GC::release(para_repr);
-        Inkscape::GC::release(text_repr);
-
-    } else { // reflow an already flowed text, preserving paras
-        for(auto& o: text->children) {
-            if (SP_IS_FLOWPARA(&o)) {
-                Inkscape::XML::Node *para_repr = o.getRepr()->duplicate(xml_doc);
-                root_repr->appendChild(para_repr);
-                object = doc->getObjectByRepr(para_repr);
-                g_return_if_fail(SP_IS_FLOWPARA(object));
-                Inkscape::GC::release(para_repr);
+                // add the new clone to the region
+                region_repr->appendChild(clone);
             }
         }
+
+        if (SP_IS_TEXT(text)) { // flow from text, as string
+            Inkscape::XML::Node *para_repr = xml_doc->createElement("svg:flowPara");
+            root_repr->appendChild(para_repr);
+            object = doc->getObjectByRepr(para_repr);
+            g_return_if_fail(SP_IS_FLOWPARA(object));
+
+            Inkscape::Text::Layout const *layout = te_get_layout(text);
+            Glib::ustring text_ustring = sp_te_get_string_multiline(text, layout->begin(), layout->end());
+
+            Inkscape::XML::Node *text_repr = xml_doc->createTextNode(text_ustring.c_str()); // FIXME: transfer all formatting! and convert newlines into flowParas!
+            para_repr->appendChild(text_repr);
+
+            Inkscape::GC::release(para_repr);
+            Inkscape::GC::release(text_repr);
+
+        } else { // reflow an already flowed text, preserving paras
+            for(auto& o: text->children) {
+                if (SP_IS_FLOWPARA(&o)) {
+                    Inkscape::XML::Node *para_repr = o.getRepr()->duplicate(xml_doc);
+                    root_repr->appendChild(para_repr);
+                    object = doc->getObjectByRepr(para_repr);
+                    g_return_if_fail(SP_IS_FLOWPARA(object));
+                    Inkscape::GC::release(para_repr);
+                }
+            }
     }
 
     text->deleteObject(true);
