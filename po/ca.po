@@ -12,13 +12,15 @@
 # Eulàlia Pagès, <eulaliapages@gmail.com>, 2015
 # Xavier Beà, <xavier.bea@gmail.com>, 2015
 # Carles Ferrando, <carles.ferrando@gmail.com>, 2015
+# Jaume Jorba <jaume.jorba@gmail.com>, 2018
+# 
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2018-04-21 11:25+0100\n"
-"PO-Revision-Date: 2018-08-10 21:56+0100\n"
+"PO-Revision-Date: 2018-12-17 10:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: Catalan <gnome@llistes.softcatala.org>\n"
 "Language: ca\n"
@@ -26,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: ../inkscape.appdata.xml.in.h:1
 msgid "Main application window"
@@ -1660,7 +1662,7 @@ msgstr "Omple el fons"
 
 #: ../share/filters/filters.svg.h:648
 msgid "Adds a colorizable opaque background"
-msgstr "Afegeix un fons opac pintable"
+msgstr "Afegeix un fons opac acolorit"
 
 #: ../share/filters/filters.svg.h:650
 msgid "Flatten Transparency"
@@ -4405,17 +4407,20 @@ msgstr "Negre"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "Fulletó de 3-plecs en rotlle A4"
 
 #: ../share/templates/templates.h:1
 msgid ""
 "An A4 page 3-fold Roll template with guides, print marks, and marked leaflet "
 "pages. Inner and outer page contents go into their respective Layers."
 msgstr ""
+"Plantilla per a pàgina A4 de 3-plecs amb guies, marques d'impressió, i "
+"marques per a pàgines de fulletó. El contingut de la pàgina interior i "
+"exterior va a la seva respectiva capa."
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "Fulletó de 3-plecs A4"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -7095,7 +7100,7 @@ msgstr "Exclusió"
 
 #: ../src/extension/internal/filter/color.h:1594
 msgid "Simple blend filter"
-msgstr ""
+msgstr "Filtre simple barreja"
 
 #: ../src/extension/internal/filter/color.h:1655
 msgid "Hue rotation (°)"
@@ -8449,28 +8454,39 @@ msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"es va crear en una versió anterior d'Inkscape (90 DPI) i necessitem "
+"compatibilitzar-lo amb les versions més noves (96 DPI). Expliqui'ns sobre "
+"aquest fitxer:\n"
 
 #: ../src/file-update.cpp:339
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
+"Aquest fitxer conté obres digitals per mostrar a la pantalla. <b>(Trieu-la si "
+"no n'esteu segur.) </b>"
 
 #: ../src/file-update.cpp:342
 msgid "This file is intended for physical output, such as paper or 3D prints."
 msgstr ""
+"Aquest fitxer està destinat a la sortida física, com ara impressions de "
+"paper o 3D."
 
 #: ../src/file-update.cpp:344
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"L'aparició d'elements com clips, màscares, filtres, i clons\n"
+"és més important. <b> (Trieu-la si no n'esteu segur.) </b>"
 
 #: ../src/file-update.cpp:348
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"La precisió de la mida de la unitat física i els valors de posició dels objectes\n"
+"en el fitxer és més important. (Experimental)."
 
 #: ../src/file-update.cpp:350
 msgid "Create a backup file in same directory."
@@ -8478,7 +8494,7 @@ msgstr "Crea una còpia de seguretat al mateix directori."
 
 #: ../src/file-update.cpp:351
 msgid "More details..."
-msgstr ""
+msgstr "Més detalls..."
 
 #: ../src/file-update.cpp:354
 msgid ""
@@ -8502,6 +8518,24 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Hem actualitzat Inkscape per seguir l'estàndard CSS de 96 DPI per a "
+"una millor compatibilitat amb els navegadors; hem utilitzat 90 DPI. Les "
+"il·lustracions digitals per visualitzar en pantalla es convertiran a 96 DPI "
+"sense escalar i no es veuran afectades. Les dibuixades a 90 DPI per a una "
+"mida física específica seran massa petites si es converteixen a 96 DPI sense "
+"cap escalat. Hi ha dos mètodes d'escalat:\n"
+"\n"
+"<b>Escalat del document sencer:</b> El mètode menys propens a errors, "
+"això preserva l'aparença de la il·lustració, inclosos els filtres i la "
+"posició de les màscares, etc. L'escalat relatiu a la mida del document pot "
+"no ser precís.\n"
+"\n"
+"<b>Escala d'elements individual: </b> Aquest mètode és menys fiable i pot "
+"provocar canviar-ne l'aspecte, però és millor per a la sortida física que es "
+"basa en mides i posicions precises (per exemple, per a impressió en 3D).\n"
+"\n"
+"Podeu trobar més informació sobre aquest canvi a la pàgina <a href='https://"
+"inkscape.org/en/learn/faq#dpi_change'> Inkscape FAQ </a> </small>"
 
 #: ../src/file-update.cpp:397
 msgid "OK"
@@ -8600,6 +8634,8 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
+"El fitxer no es pot desar:\n"
+"No s'ha trobat cap objecte amb ID: «%s»."
 
 #: ../src/file.cpp:679
 #, c-format
@@ -8609,6 +8645,10 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
+"No s'ha pogut desar el fitxer «%s».\n"
+"\n"
+"La extensió ha retornat la següent informació addicional:\n"
+"«%s»"
 
 #: ../src/file.cpp:714 ../src/file.cpp:716
 msgid "Document saved."
@@ -9018,15 +9058,15 @@ msgstr "Opcions del programa per defecte"
 
 #: ../src/inkview-options-group.cpp:13
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "Inicia en mode de pantalla completa"
 
 #: ../src/inkview-options-group.cpp:20
 msgid "Search folders recursively"
-msgstr ""
+msgstr "Cerca de forma recursiva a les carpetes"
 
 #: ../src/inkview-options-group.cpp:27 ../src/inkview-options-group.cpp:35
 msgid "NUM"
-msgstr ""
+msgstr "NUM"
 
 #: ../src/inkview-options-group.cpp:28
 msgid "Change image every NUM seconds"
@@ -9038,7 +9078,7 @@ msgstr "Escala la imatge pel factor NUM (número)"
 
 #: ../src/inkview-options-group.cpp:42
 msgid "FILES/FOLDERS…"
-msgstr ""
+msgstr "FITXERS/CARPETES..."
 
 #: ../src/inkview.cpp:71
 msgid "File or folder does not exist"
@@ -9057,16 +9097,20 @@ msgid ""
 "Quickly browse through a collection of .svg(z) files\n"
 "or show them as a slide show."
 msgstr ""
+"Navegueu ràpidament per una col·lecció de fitxers .svg (z)\n"
+"o mostreu-los com una presentació de diapositives."
 
 #: ../src/inkview.cpp:135
 msgid ""
 "Example:\n"
 "  inkview -t 3 file1.svg file2.svgz series*.svg more_files"
 msgstr ""
+"Exemple:\n"
+"   inkview -t 3 file1.svg file2.svgz series*.svg more_files"
 
 #: ../src/inkview.cpp:168
 msgid "No valid files to load."
-msgstr ""
+msgstr "No hi ha fitxers vàlids per carregar."
 
 #: ../src/knot.cpp:343
 msgid "Node or handle drag canceled."
@@ -9242,11 +9286,11 @@ msgstr "Operació booleana"
 
 #: ../src/live_effects/effect.cpp:141
 msgid "Embroidery stitch"
-msgstr ""
+msgstr "Punt de brodat"
 
 #: ../src/live_effects/effect.cpp:142
 msgid "Power clip"
-msgstr ""
+msgstr "Retall de potència"
 
 #: ../src/live_effects/effect.cpp:143
 msgid "Power mask"
@@ -9342,7 +9386,7 @@ msgstr "Cap efecte"
 #, c-format
 msgid "Please specify a parameter path for the LPE '%s' with %d mouse clicks"
 msgstr ""
-"Especifiqueu un paràmetre del camí per al «%s» LPE amb %d clics del ratolí"
+"Especifiqueu un paràmetre del camí per al «%s» LPT amb %d clics del ratolí"
 
 #: ../src/live_effects/effect.cpp:833 ../src/live_effects/effect.cpp:911
 msgid "<b>Default value:</b> "
@@ -9350,7 +9394,7 @@ msgstr "<b>Valor per defecte:</b> "
 
 #: ../src/live_effects/effect.cpp:834 ../src/live_effects/effect.cpp:898
 msgid "<b>Default value overridden:</b> "
-msgstr ""
+msgstr "<b>Valor predeterminat sobreescrit: </b>"
 
 #: ../src/live_effects/effect.cpp:836 ../src/live_effects/effect.cpp:894
 msgid "Update"
@@ -9367,12 +9411,12 @@ msgstr "Assigna"
 
 #: ../src/live_effects/effect.cpp:840 ../src/live_effects/effect.cpp:912
 msgid "<b>Default value overridden:</b> None\n"
-msgstr ""
+msgstr "<b>Valor predeterminat sobreescrit:</b> cap\n"
 
 #: ../src/live_effects/effect.cpp:842 ../src/live_effects/effect.cpp:899
 #: ../src/live_effects/effect.cpp:913
 msgid "<b>Current parameter value:</b> "
-msgstr ""
+msgstr "<b>Valor del paràmetre actual: </b>"
 
 #. image-rendering
 #: ../src/live_effects/effect.cpp:852
@@ -9382,7 +9426,7 @@ msgstr "Desassigna"
 
 #: ../src/live_effects/effect.cpp:866
 msgid "</b>: Set default parameters"
-msgstr ""
+msgstr "</b>: Estableix els paràmetres per defecte"
 
 #: ../src/live_effects/effect.cpp:984
 #, c-format
@@ -9572,7 +9616,7 @@ msgstr "Intercanvi d'operands:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands (useful e.g. for difference)"
-msgstr ""
+msgstr "Intercanvia els operands (útil, per exemple, per a la diferència)"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Remove inner:"
@@ -9583,6 +9627,8 @@ msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Per a operacions de tall: suprimeix línies interiors (sense contorn) de tall "
+"per evitar punts invisibles extra"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Fill type this:"
@@ -9688,7 +9734,7 @@ msgstr "Sense forma"
 #: ../src/live_effects/lpe-clone-original.cpp:31
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
 msgid "Without LPE's"
-msgstr ""
+msgstr "Sense LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
@@ -9698,7 +9744,7 @@ msgstr "Amb espiral o BSpline"
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
 msgid "With LPE's"
-msgstr ""
+msgstr "Amb LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:39
 msgid "Linked Item:"
@@ -9736,7 +9782,7 @@ msgstr "La mida de la graella en la direcció Y."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:39
 msgid "Kaleidoscope"
-msgstr ""
+msgstr "Calidoscopi"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:40
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
@@ -9826,7 +9872,7 @@ msgstr "Divideix els elements"
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
 msgid "Split elements, this allow gradients and other paints."
-msgstr ""
+msgstr "Divideix elements, això permet gradients i altres dibuixos."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:340
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:145
@@ -9940,12 +9986,14 @@ msgstr "Unifica les línies"
 #: ../src/live_effects/lpe-dash-stroke.cpp:21
 msgid "Aprox unify the dashes lenght using the min with segment"
 msgstr ""
+"Aproximadament unificar la longitud dels guions utilitzant el segment amb "
+"mínima amplada"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 #: ../src/live_effects/lpe-powerclip.cpp:33
 msgid "Info Box"
-msgstr ""
+msgstr "Capsa d'informació"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 #: ../src/live_effects/lpe-measure-segments.cpp:85
@@ -9955,7 +10003,7 @@ msgstr "Missatges importants"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr ""
+msgstr "Afegeix <b>«Emplenar entre molts LPE»</b> per afegir l'emplenat."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -9971,11 +10019,11 @@ msgstr "sense reordenació"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
 msgid "zig-zag"
-msgstr ""
+msgstr "zig-zag"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "zig-zag, invers primer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "closest"
@@ -9983,23 +10031,23 @@ msgstr "més proper"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
 msgid "closest, reverse first"
-msgstr ""
+msgstr "el més proper, invers primer"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "traveling salesman 2-opt (fast, bad)"
-msgstr ""
+msgstr "viatjant de comerç 2-opt (ràpid, dolent)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:35
 msgid "traveling salesman 3-opt (fast, ok)"
-msgstr ""
+msgstr "viatjant de comerç 3-opt (ràpid, correcte)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:36
 msgid "traveling salesman 4-opt (seconds)"
-msgstr ""
+msgstr "viatjant de comerç 4-opt (segons)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:37
 msgid "traveling salesman 5-opt (minutes)"
-msgstr ""
+msgstr "viatjant de comerç 5-opt (minuts)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:44
 msgid "straight line"
@@ -10023,7 +10071,7 @@ msgstr "Mètode d'ordenament"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:55
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Mètode utilitzat per ordenar els subcamins"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Connection method"
@@ -10031,56 +10079,58 @@ msgstr "Mètode de connexió"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Mètode per connectar els punts d'acabament amb els subcamins"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "Stitch length"
-msgstr ""
+msgstr "Longitud de puntada"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "If not 0, linearize path with given step length"
-msgstr ""
+msgstr "Si no és 0, es linealitza el camí amb una longitud de pas específica"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Minimum stitch length [%]"
-msgstr ""
+msgstr "Mínima longitud de la puntada [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Combine steps shorter than this [%]"
-msgstr ""
+msgstr "Combina passos més curts que aquest [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Stitch pattern"
-msgstr ""
+msgstr "Patró de puntades"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Select between different stitch patterns"
-msgstr ""
+msgstr "Seleccioneu entre diferents patrons de puntades"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Show stitches"
-msgstr ""
+msgstr "Mostrar puntades"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
 msgstr ""
+"Mostra les puntades com a petits buits (només per a la inspecció - no usar "
+"per a la sortida)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Show stitch gap"
-msgstr ""
+msgstr "Mostra l'espaiat entre puntades"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Gap between stitches when showing stitches"
-msgstr ""
+msgstr "Espaiat entre puntades quan es mostren les puntades"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Jump if longer"
-msgstr ""
+msgstr "Salta si és més llarg"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Jump connection if longer than"
-msgstr ""
+msgstr "Salta la connexió si és més llarga que"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 msgid "Top bend path:"
@@ -10144,16 +10194,16 @@ msgstr "Camins des d'on es prenen les dades del camí original"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr ""
+msgstr "LPE's enllaçats:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
-msgstr ""
+msgstr "LPE's enllaçats"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:22
 msgid "Fuse coincident points"
-msgstr ""
+msgstr "Fusiona punts coincidents"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
@@ -10209,11 +10259,11 @@ msgstr "Unitat"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:42
 msgid "Methods to calculate the fillet or chamfer"
-msgstr ""
+msgstr "Mètodes per calcular un arrodoniment o cantonada"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:44
 msgid "Mode, fillet or chamfer"
-msgstr ""
+msgstr "Mode arrodoniment o cantonada"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:46
 msgid "Radius (unit or %):"
@@ -10871,7 +10921,7 @@ msgstr "Soluciona ° superposats"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
 msgid "Min angle where overlaps are fixed, 180° no fix"
-msgstr ""
+msgstr "Angle Min on s'arreglen els solapaments, 180 ° no arreglats"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
 #: ../src/widgets/gimp/ruler.cpp:225
@@ -10892,7 +10942,7 @@ msgstr "Sobreposa línia d'ajuda"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 msgid "Line width. DIM line group standard are 0.25 or 0.35"
-msgstr ""
+msgstr "Amplada de línia. L'estàndard pel grup de línies DIM és 0,25 o 0,35"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:74
 #: ../src/selection-chemistry.cpp:2262 ../src/seltrans.cpp:480
@@ -10911,7 +10961,7 @@ msgstr "Format"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:76
 msgid "Format the number ex:{measure} {unit}, return to save"
-msgstr ""
+msgstr "Formata el número p. ex.:{mesura} {unitat}, entrar per desar"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:77
 msgid "Blacklist"
@@ -10922,6 +10972,8 @@ msgid ""
 "Optional segment index that exclude measure, comma limited, you can add more "
 "LPE like this to fill the holes"
 msgstr ""
+"Índex de segment opcional que exclou la mesura, limitat per comes, podeu "
+"afegir més LPE com aquest per omplir els forats"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:78
 msgid "Inverse blacklist"
@@ -10933,11 +10985,11 @@ msgstr "Llista negra com a llista blanca"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:79
 msgid "Arrows outside"
-msgstr "Flexes cap enfora"
+msgstr "Fletxes cap enfora"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:80
 msgid "Flip side"
-msgstr ""
+msgstr "Capgira la cara"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid "Scale sensitive"
@@ -10945,7 +10997,7 @@ msgstr "Sensitivitat de l'escalat"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid "Costrained scale sensitive to transformed containers"
-msgstr ""
+msgstr "Escala sensible restringida pels contenidors transformats"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:82
 msgid "Local Number Format"
@@ -10953,7 +11005,7 @@ msgstr "Format de nombre local"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:82
 msgid "Local number format"
-msgstr ""
+msgstr "Format de nombre local"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
 msgid "Rotate Annotation"
@@ -10965,13 +11017,16 @@ msgstr "Amaga si l'etiqueta està per sobre"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 msgid "Hide DIN line if label over"
-msgstr ""
+msgstr "Oculta la línia DIN si l'etiqueta està a sobre"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:85
 msgid ""
 "Use <b>\"Style Dialog\"</b> to more styling. Each measure element has extra "
 "selectors. Use !important to override defaults..."
 msgstr ""
+"Utilitzeu el «<b>Diàleg d'estil</b>» per obtenir més opcions d'estil. Cada "
+"element de mesura té selectors addicionals. Utilitzeu !important per "
+"sobreescriure els valors predeterminats..."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:321
 msgid "Non Uniform Scale"
@@ -11012,7 +11067,7 @@ msgstr "Mode mou amb simetria"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Gap on split"
-msgstr ""
+msgstr "Espai al dividir"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
 msgid "Discard original path"
@@ -11244,12 +11299,16 @@ msgstr "Aplana el retall"
 #: ../src/live_effects/lpe-powerclip.cpp:32
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr ""
+"Aplana el retall, veure les regles d'emplenat un cop s'hagin convertit a "
+"camins."
 
 #: ../src/live_effects/lpe-powerclip.cpp:33
 msgid ""
 "Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result "
 "after convert clip to paths."
 msgstr ""
+"La regla d'emplenat parell-senar al diàleg <b>emplenat i traç</b> si el "
+"resultat desprès de convertir el clip en camí no està allisat."
 
 #: ../src/live_effects/lpe-powerclip.cpp:305
 msgid "Convert clips to paths, undoable"
@@ -11363,7 +11422,7 @@ msgstr "Cercle isomètric"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:45
 msgid "Methods to generate the ellipse"
-msgstr ""
+msgstr "Mètodes per generar l'elipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:47
 msgid "_Frame (isometric rectangle)"
@@ -11371,15 +11430,15 @@ msgstr "_Marc (rectangle isomètric)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:47
 msgid "Draw Parallelogram around the ellipse"
-msgstr ""
+msgstr "Dibuixa un paralel·logram al voltant de l'el·lipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:49
 msgid "_Arc"
-msgstr ""
+msgstr "_Arc"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:49
 msgid "Generate open arc (open ellipse)"
-msgstr ""
+msgstr "Generar un arc obert (el·lipse oberta)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:50
 msgid "_Other Arc side"
@@ -11399,11 +11458,11 @@ msgstr "divideix l'arc"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:52
 msgid "A_xes"
-msgstr ""
+msgstr "_Eixos"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:52
 msgid "Draw both semi-major and semi-minor axes"
-msgstr ""
+msgstr "Dibuixa els eixos semi-major i semi-menor"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 msgid "Axes Rotation"
@@ -12491,7 +12550,7 @@ msgstr "NOM DEL FITXER"
 
 #: ../src/main.cpp:324
 msgid "xverbs command"
-msgstr ""
+msgstr "ordre xverbs"
 
 #: ../src/main.cpp:325
 msgid "XVERBS_FILENAME"
@@ -12544,6 +12603,8 @@ msgid ""
 "Sets margin around exported area (default 0) in units of page size for SVG "
 "and mm for PS/EPS/PDF"
 msgstr ""
+"Estableix el marge al voltant de l'àrea exportada (per defecte 0) en les "
+"unitats de mida de la pàgina pel SVG, i en mm per a PS / EPS / PDF"
 
 #: ../src/main.cpp:360 ../src/main.cpp:402
 msgid "VALUE"
@@ -12790,12 +12851,16 @@ msgstr "Inicia l'Inkscape en mode petxina interactiva."
 #: ../src/main.cpp:544
 msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
 msgstr ""
+"No repareu l'espaiat de la línia de text pels fitxers antics (pre-0.92) en "
+"obrir-los."
 
 #: ../src/main.cpp:549
 msgid ""
 "Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|"
 "scale-document])"
 msgstr ""
+"Mètode utilitzat per convertir documents pre-.92 dpi, si és necessari. ([cap|"
+"escala-caixa de visualització|escala-document])"
 
 #: ../src/main.cpp:793 ../src/main.cpp:1141
 msgid ""
@@ -12851,7 +12916,7 @@ msgstr "Divideix"
 
 #: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:543
 msgid "Chord"
-msgstr ""
+msgstr "Corda"
 
 #: ../src/object/sp-ellipse.cpp:395
 msgid "Arc"
@@ -14635,7 +14700,8 @@ msgstr "© 2017 Inkscape Developers"
 msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
-msgstr "Editor de gràfics vectorials escalables de codi lliure\n"
+msgstr ""
+"Editor de gràfics vectorials escalables de codi lliure\n"
 "Dibuixeu lliurement."
 
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
@@ -16257,6 +16323,9 @@ msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
+"Activa l'entrellaçat ADAM7 per a la sortida PNG. Això dóna lloc a imatges "
+"lleugerament més pesades, però les imatges grans es veuran millor abans quan "
+"es carregui el fitxer"
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "Bit depth"
@@ -16268,7 +16337,7 @@ msgstr "Compressió"
 
 #: ../src/ui/dialog/export.cpp:150
 msgid "pHYs dpi"
-msgstr ""
+msgstr "pHYs dpi"
 
 #: ../src/ui/dialog/export.cpp:155
 msgid "Hide all except selected"
@@ -16355,13 +16424,15 @@ msgstr "Exporta el fitxer de mapa de bits amb aquests valors"
 #. Advanced
 #: ../src/ui/dialog/export.cpp:327
 msgid "Advanced"
-msgstr ""
+msgstr "Avançat"
 
 #: ../src/ui/dialog/export.cpp:341
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
+"S'obligarà a establir el dpi físic per al fitxer png. Establiu-lo en 72 si "
+"us esteu planejant treballar el PNG amb Photoshop"
 
 #: ../src/ui/dialog/export.cpp:481
 msgid "bitmap"
@@ -18676,11 +18747,11 @@ msgstr "Base simplificada:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:237
 msgid "on dynamic LPE simplify"
-msgstr "simplifica el LPE dinàmic"
+msgstr "simplifica LPE dinàmic"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:238
 msgid "Base simplify of dynamic LPE based simplify"
-msgstr "Base simplificadament de l'LPE dinàmica basada simplificadament"
+msgstr "Base simplificada basat en LPE dinàmic simplificat"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:246
 msgid "Pressure change for new knot:"
@@ -18696,6 +18767,8 @@ msgid ""
 "Percentage increase / decrease of stylus pressure that is required to create "
 "a new PowerStroke knot."
 msgstr ""
+"Percentatge d'increment / decrement de la pressió de llapis que es requereix "
+"per crear un nou nus de PowerStroke."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:261
 msgid "<b>No objects selected</b> to take the style from."
@@ -19039,7 +19112,7 @@ msgstr "Formes"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:469
 msgid "Pressure sensitivity settings"
-msgstr ""
+msgstr "Configuració de la sensibilitat a la pressió"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:472
 msgid "Sketch mode"
@@ -19158,35 +19231,40 @@ msgstr "La mida del text sempre surt en píxels (px)"
 #. _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
 #: ../src/ui/dialog/inkscape-preferences.cpp:514
 msgid "Font directories"
-msgstr ""
+msgstr "Carpetes de tipus de lletra"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:515
 msgid "Use Inkscape's fonts directory"
-msgstr ""
+msgstr "Utilitzar la carpeta de fonts de Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:516
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's global "
 "\"share\" directory"
 msgstr ""
+"Carregueu fonts addicionals al directori «fonts» ubicades al directori "
+"global «share» d'Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:517
 msgid "Use user's fonts directory"
-msgstr ""
+msgstr "Utilitza la carpeta de tipus de lletra de l'usuari"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:518
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's user "
 "configuration directory"
 msgstr ""
+"Carregar fonts addicionals de la carpeta «fonts» localitzada a la carpeta "
+"de configuració d'usuari a Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:520
 msgid "Additional font directories"
-msgstr "Directoris de tipus de lletra addicionals:"
+msgstr "Directoris de tipus de lletra addicionals"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:520
 msgid "Load additional fonts from custom locations (one path per line)"
 msgstr ""
+"Carrega tipus de lletra addicionals d'ubicacions personalitzades (un camí per línia)"
 
 #. Spray
 #: ../src/ui/dialog/inkscape-preferences.cpp:526
@@ -21203,13 +21281,15 @@ msgstr "Desenllaça els clons"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1407
 msgid "Path operations unlink clones"
-msgstr ""
+msgstr "Operacions de traçat desenllacen clons"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1409
 msgid ""
 "The following path operations will unlink clones: Stroke to path, Object to "
 "path, Boolean operations, Combine, Break apart"
 msgstr ""
+"Les següents operacions de traçat desenllaçaran clons: traç a camí, objecte "
+"a camí, operacions booleanes, combinar, dividir"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1412
@@ -21363,6 +21443,8 @@ msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr ""
+"Establir la mida relativa dels mosaics utilitzats per renderitzar el llenç. "
+"Més gran és el valor més gran la mida del mosaic."
 
 #. blur quality
 #. filter quality
@@ -22909,7 +22991,7 @@ msgstr "Afegeix"
 
 #: ../src/ui/dialog/styledialog.cpp:890
 msgid "Invalid entry: Not an id (#), class (.), or element CSS selector."
-msgstr ""
+msgstr "Entrada invàlida: no hi ha id (#), o un element selector CSS."
 
 #: ../src/ui/dialog/styledialog.cpp:1498
 msgid "Deleted property from style attribute."
@@ -22930,7 +23012,7 @@ msgstr "Atributs del tipus de lletra"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
 msgid "Horiz. Advance X"
-msgstr ""
+msgstr "Avançament horitzontal X"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:468
 msgid "Horiz. Origin X "
@@ -22965,7 +23047,7 @@ msgid "Cap Height:"
 msgstr "Alçada de les majúscules:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:476
-msgid "X Height:"
+msgid "x Height:"
 msgstr "Alçada de l'X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:549
@@ -23253,7 +23335,7 @@ msgstr "Conjunt de símbols: "
 #. Search
 #: ../src/ui/dialog/symbols.cpp:164
 msgid "Return to start search."
-msgstr ""
+msgstr "Retorna a la cerca inicial."
 
 #: ../src/ui/dialog/symbols.cpp:280
 msgid "Add Symbol from the current document."
@@ -23291,7 +23373,7 @@ msgstr "S'està cercant..."
 #: ../src/ui/dialog/symbols.cpp:459 ../src/ui/dialog/symbols.cpp:1061
 #: ../src/ui/dialog/symbols.cpp:1125
 msgid "Loading all symbols..."
-msgstr ""
+msgstr "Carregant tots els simbols..."
 
 #: ../src/ui/dialog/symbols.cpp:460
 msgid "Searching...."
@@ -23303,7 +23385,7 @@ msgstr "Cerca en tots els conjunts de símbols..."
 
 #: ../src/ui/dialog/symbols.cpp:480
 msgid "First search can be slow."
-msgstr ""
+msgstr "La primera cerca pot ser lenta."
 
 #: ../src/ui/dialog/symbols.cpp:482 ../src/ui/dialog/symbols.cpp:490
 #: ../src/ui/dialog/symbols.cpp:496
@@ -23312,13 +23394,15 @@ msgstr "No s'ha trobat cap resultat"
 
 #: ../src/ui/dialog/symbols.cpp:483
 msgid "Try a different search term."
-msgstr ""
+msgstr "Proveu un terme de cerca diferent."
 
 #: ../src/ui/dialog/symbols.cpp:491 ../src/ui/dialog/symbols.cpp:497
 msgid ""
 "Try a different search term,\n"
 "or switch to a different symbol set."
 msgstr ""
+"Proveu un terme de cerca diferent\n"
+"o canvieu a un conjunt diferent de símbols."
 
 #: ../src/ui/dialog/symbols.cpp:493
 msgid "No symbols found"
@@ -23330,6 +23414,9 @@ msgid ""
 "Choose a different symbol set\n"
 "or add a new symbol."
 msgstr ""
+"No hi ha símbols al document actual\n"
+"Trieu un conjunt diferent de símbols\n"
+"o afegiu un nou símbol."
 
 #: ../src/ui/dialog/symbols.cpp:817 ../src/ui/dialog/symbols.cpp:837
 msgid "Unnamed Symbols"
@@ -23337,11 +23424,11 @@ msgstr "Símbols sense nom"
 
 #: ../src/ui/dialog/symbols.cpp:956
 msgid "notitle_"
-msgstr ""
+msgstr "notitle_"
 
 #: ../src/ui/dialog/symbols.cpp:1228
 msgid "Symbol without title "
-msgstr ""
+msgstr "Símbol sense títol "
 
 #: ../src/ui/dialog/tags.cpp:252 ../src/ui/dialog/tags.cpp:550
 #: ../src/ui/dialog/tags.cpp:668 ../src/ui/dialog/tags.cpp:931
@@ -25388,9 +25475,8 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b>Segment de corba</b>: angle %3.2f&#176;; amb <b>Maj+clic</b> fer un node cúspide,"
-"<b>ALT</b> mou al previ, <b>Retorn</b> o <b>Maj+Retorn</b> per acabar"
-
+"<b>Segment de corba</b>: angle %3.2f&#176;; amb <b>Maj+clic</b> fer un node "
+"cúspide,<b>ALT</b> mou al previ, <b>Retorn</b> o <b>Maj+Retorn</b> per acabar"
 
 #: ../src/ui/tools/pen-tool.cpp:1805
 #, c-format
@@ -25398,8 +25484,8 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b>Segment de línia</b>: angle %3.2f&#176;; amb <b>Maj+clic</"
-"b> fer un node cúspide; <b>Retorn</b> o <b>Maj+Retorn</b> per acabar"
+"<b>Segment de línia</b>: angle %3.2f&#176;; amb <b>Maj+clic</b> fer un node "
+"cúspide; <b>Retorn</b> o <b>Maj+Retorn</b> per acabar"
 
 #: ../src/ui/tools/pen-tool.cpp:1809
 #, c-format
@@ -25530,7 +25616,8 @@ msgstr "Crea un rectangle"
 #: ../src/ui/tools/select-tool.cpp:152
 msgid "Click selection to toggle scale/rotation handles (or Shift+s)"
 msgstr ""
-"Cliqueu la selecció per commutar entre punts de control per girar/escalar (or Maj+s)"
+"Cliqueu la selecció per commutar entre punts de control per girar/escalar "
+"(or Maj+s)"
 
 #: ../src/ui/tools/select-tool.cpp:153
 msgid ""
@@ -26472,7 +26559,7 @@ msgstr "S'ha actualitzat la llicència del document"
 
 #: ../src/ui/widget/object-composite-settings.cpp:137
 msgid "Change blur/blend filter"
-msgstr ""
+msgstr "Canvieu el filtre a difuminar / barrejar"
 
 #: ../src/ui/widget/object-composite-settings.cpp:172
 #: ../src/ui/widget/selected-style.cpp:895
@@ -27611,6 +27698,7 @@ msgstr "Desen_llaça el clons recursivament"
 #: ../src/verbs.cpp:2671
 msgid "Unlink all clones in the selection, even if they are in groups."
 msgstr ""
+"Desenllaça tots els clons a la selecció, fins i tot si estan en grups."
 
 #: ../src/verbs.cpp:2672
 msgid "Relink to Copied"
@@ -27990,7 +28078,7 @@ msgstr "Fes els objectes seleccionats més grans"
 
 #: ../src/verbs.cpp:2775
 msgid "_Grow on screen"
-msgstr ""
+msgstr "_Creix a la pantalla"
 
 #: ../src/verbs.cpp:2776
 msgid "Make selected objects bigger relative to screen"
@@ -28432,11 +28520,13 @@ msgstr "Aplica la màscara a la selecció (usa l'objecte superior com a màscara
 
 #: ../src/verbs.cpp:2911 ../src/verbs.cpp:2919
 msgid "_Set Inverse (LPE)"
-msgstr ""
+msgstr "_Estableix (LPE) invertit"
 
 #: ../src/verbs.cpp:2912
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
-msgstr "Aplica la màscara inversa a la selecció (usa l'objecte superior com a màscara)"
+msgstr ""
+"Aplica la màscara inversa a la selecció (usa l'objecte superior com a "
+"màscara)"
 
 #: ../src/verbs.cpp:2913 ../src/verbs.cpp:2923 ../share/ui/menus.xml.h:2
 msgid "_Edit"
@@ -28466,8 +28556,8 @@ msgid ""
 "Apply inverse clipping path to selection (using the topmost object as "
 "clipping path)"
 msgstr ""
-"Aplica el camí de retall invers a la selecció (fes servir l'objecte més elevat com "
-"a camí de retall)"
+"Aplica el camí de retall invers a la selecció (fes servir l'objecte més "
+"elevat com a camí de retall)"
 
 #: ../src/verbs.cpp:2921
 msgid "Create Cl_ip Group"
@@ -28979,7 +29069,7 @@ msgstr "Reinicia el capgirament"
 
 #: ../src/verbs.cpp:3059
 msgid "Undo any flip"
-msgstr ""
+msgstr "Desfés qualsevol capgirament"
 
 #. WHY ARE THE FOLLOWING ZoomVerbs???
 #. View
@@ -29175,11 +29265,11 @@ msgstr ""
 #. Dialogs
 #: ../src/verbs.cpp:3112
 msgid "Prototype..."
-msgstr ""
+msgstr "Prototip..."
 
 #: ../src/verbs.cpp:3113
 msgid "Prototype Dialog"
-msgstr ""
+msgstr "Diàleg prototip"
 
 #: ../src/verbs.cpp:3114
 msgid "P_references..."
@@ -29390,11 +29480,11 @@ msgstr "Mostra les etiquetes"
 
 #: ../src/verbs.cpp:3169
 msgid "Style Dialog..."
-msgstr ""
+msgstr "Diàleg d'estil..."
 
 #: ../src/verbs.cpp:3170
 msgid "View Style Dialog"
-msgstr ""
+msgstr "Mostra el diàleg d'estil"
 
 #: ../src/verbs.cpp:3171
 msgid "Css Dialog..."
@@ -29743,7 +29833,7 @@ msgstr "Commuta a dividir (forma tancada amb dos radis)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:537
 msgid "Arc (Open)"
-msgstr ""
+msgstr "Arc (obert)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:538
 msgid "Switch to arc (unclosed shape)"
@@ -30263,7 +30353,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:620
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr ""
+msgstr "Rotació. (També Ctrl+Shift+Scroll)"
 
 #: ../src/widgets/desktop-widget.cpp:654
 msgid "Cursor coordinates"
@@ -30782,11 +30872,11 @@ msgstr "Mostra la informació de les mesures de l'element seleccionat"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:414
 msgid "Open LPE dialog"
-msgstr "Obre el diàleg LPE"
+msgstr "Obre el diàleg EET"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:415
 msgid "Open LPE dialog (to adapt parameters numerically)"
-msgstr "Obre el diàleg LPE per adaptar els paràmetres numèricament"
+msgstr "Obre el diàleg LPE (per adaptar els paràmetres numèricament)"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:160
 msgid "Start and end measures inactive."
@@ -30934,6 +31024,12 @@ msgid ""
 "For web: convert to bitmap (Edit->Make bitmap copy).\n"
 "For print: export to PDF."
 msgstr ""
+"Els gradients de malla són part del SVG 2\n"
+"* La sintaxi pot canviar\n"
+"* La implementació als navegadors web no està garantida\n"
+"\n"
+"Per a web: convertir a bitmap (Edita->Fés una copia del bitmap).\n"
+"Per imprimir: exportar a PDF."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:384
 msgid "normal"
@@ -31462,7 +31558,7 @@ msgstr "Mode de línies noves dibuixades amb aquesta eina"
 #: ../src/ui/toolbar/pencil-toolbar.cpp:188
 #: ../src/ui/toolbar/pencil-toolbar.cpp:189
 msgid "LPE spiro or bspline flatten"
-msgstr "Aplanar simplificadament l'LPE espiral bspline"
+msgstr "LPE espiral o bspline aplanat"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:226
 msgctxt "Freehand shape"
@@ -31526,7 +31622,7 @@ msgstr "Percentatge màxim de pressió"
 #: ../src/ui/toolbar/pencil-toolbar.cpp:542
 #: ../src/ui/toolbar/pencil-toolbar.cpp:543
 msgid "Use pressure input"
-msgstr ""
+msgstr "Utilitza l'entrada de pressió"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:560
 msgid "(many nodes, rough)"
@@ -31564,7 +31660,7 @@ msgstr "Simplifica la interacció basada en LPE"
 #: ../src/ui/toolbar/pencil-toolbar.cpp:612
 #: ../src/ui/toolbar/pencil-toolbar.cpp:613
 msgid "LPE simplify flatten"
-msgstr " Aplanar simplificadament l'LPE"
+msgstr "LPE aplanat simplificat"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:127
 msgid "Change rectangle"
@@ -32606,7 +32702,7 @@ msgstr "Orientació del text (glif) en text vertical."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2255
 msgid "LTR"
-msgstr ""
+msgstr "LTR"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2256
 msgid "Left to right text"
@@ -32614,7 +32710,7 @@ msgstr "Text de d'esquerra a dreta"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2261
 msgid "RTL"
-msgstr ""
+msgstr "RTL"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2262
 msgid "Right to left text"
@@ -32628,7 +32724,7 @@ msgstr "Direcció del text"
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:2269
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Direcció del text pel text horitzontal normal."
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2295
@@ -32667,7 +32763,7 @@ msgstr "Adaptiu"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2342
 msgid "Line spacing adapts to font size."
-msgstr ""
+msgstr "Espaiat entre línies adaptat a la mida del tipus de lletra."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2347
 #: ../share/extensions/polyhedron_3d.inx.h:54
@@ -32677,14 +32773,16 @@ msgstr "Mínim"
 #: ../src/ui/toolbar/text-toolbar.cpp:2348
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
+"L'espaiat de línies s'adapta a la mida dels tipus de lletra amb l'espaiat "
+"mínim establert."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2352
 msgid "Even"
-msgstr ""
+msgstr "Uniforme"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2353
 msgid "Lines evenly spaced."
-msgstr ""
+msgstr "Línies separades uniformement."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2358
 msgid "Adjustable ☠"
@@ -32692,12 +32790,12 @@ msgstr "Ajustable ☠"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2359
 msgid "Line spacing fully adjustable"
-msgstr ""
+msgstr "Espaiat de línia totalment ajustable"
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:2365
 msgid "Line Spacing Mode"
-msgstr ""
+msgstr "Mode d'espaiat de línia"
 
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:2366
@@ -32708,6 +32806,11 @@ msgid ""
 " Even: Evenly spaced.\n"
 " Adjustable: No restrictions."
 msgstr ""
+"Com s'han de separar múltiples punts de referència?\n"
+" Adaptatiu: l'espaiat entre línies s'adapta a la mida de la lletra.\n"
+" Mínim: com l'adaptatiu, però posat al mínim.\n"
+" Uniforme: espaiat uniforme.\n"
+" Ajustable: sense restriccions."
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2383
@@ -32804,6 +32907,8 @@ msgstr "Desassigna l'alçada de la línia"
 #: ../src/ui/toolbar/text-toolbar.cpp:2539
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
+"Si està habilitat, l'alçada de la línia s'estableix en part de la selecció. "
+"Feu clic per desactivar-ho."
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:2551
@@ -32817,6 +32922,9 @@ msgid ""
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
+"Mostra l'estil de l'element de text més extern. Els valors «font-size» i "
+"«line-height» de l'element de text més exterior determinen l'espaiat mínim "
+"de les línies al bloc."
 
 #: ../src/widgets/toolbox.cpp:192
 msgid "Color/opacity used for color tweaking"
@@ -33099,7 +33207,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:217
 msgid "Attract/repel mode"
-msgstr "Mode atrau/repel"
+msgstr "Mode atrau/repèl"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:218
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
@@ -33682,7 +33790,9 @@ msgstr "Ploma "
 
 #: ../share/extensions/hpgl_encoder.py:130
 msgid "Failed to convert objects to paths. Continued without converting."
-msgstr "S'ha produït un error en convertir objectes en camins. S'ha continuat sense conversió."
+msgstr ""
+"S'ha produït un error en convertir objectes en camins. S'ha continuat sense "
+"conversió."
 
 #. issue error if no hpgl data found
 #: ../share/extensions/hpgl_input.py:58
@@ -33741,7 +33851,7 @@ msgstr "No hi ha cap node que coincideixi amb l'expressió: %s"
 
 #: ../share/extensions/interp_att_g.py:146
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr ""
+msgstr "Heu seleccionat «Altre». Introduïu un atribut per interpolar."
 
 #: ../share/extensions/interp_att_g.py:182
 msgid "There is no selection to interpolate"
@@ -34234,7 +34344,8 @@ msgstr ""
 "Cal instal·lar el programari UniConvertor.\n"
 "Per a GNU/Linux: instal·la el paquet python-UniConvertor.\n"
 "Per a Windows: descarrega'l des de\n"
-"https://sk1project.net/modules.php?name=Products&product=uniconvertor&op=download\n"
+"https://sk1project.net/modules.php?"
+"name=Products&product=uniconvertor&op=download\n"
 "i instal·la'l en la ubicació Python de l'Inkscape\n"
 
 #: ../share/extensions/voronoi2svg.py:205
@@ -34728,8 +34839,8 @@ msgid ""
 "Choose this tab if you would like to see page info previously to apply DPI "
 "Switcher."
 msgstr ""
-"Escolliu aquesta pestanya si voleu veure la pàgina d'informació abans d'aplicar el "
-"commutador de DPI."
+"Escolliu aquesta pestanya si voleu veure la pàgina d'informació abans "
+"d'aplicar el commutador de DPI."
 
 #: ../share/extensions/dots.inx.h:1
 msgid "Number Nodes"
@@ -35428,7 +35539,7 @@ msgstr "Subdivisions:"
 
 #: ../share/extensions/frame.inx.h:1
 msgid "Frame"
-msgstr ""
+msgstr "Marc"
 
 #: ../share/extensions/funcplot.inx.h:1
 msgid "Function Plotter"
@@ -35586,7 +35697,19 @@ msgid ""
 "\t\n"
 "To get more info visit developers page at http://www.cnc-club.ru/gcodetools"
 msgstr ""
-
+"Gcodetools es va desenvolupar per fer un Gcode senzill des de les rutes "
+"d'Inkscape. Gcode és un format especial que s'utilitza en la majoria de les "
+"màquines CNC. Així que Gcodetools us permet utilitzar Inkscape com a "
+"programa CAM.\n"
+"\n"
+"\n"
+"Es pot utilitzar a molts tipus de màquines:\n"
+"\tFresadores \n"
+"\tTorns\n"
+"\tTalladores làser i de plasma, i gravadores\n"
+"\tFresadores gravadores\n"
+"\tPlotters\n"
+"\tetc."
 
 #: ../share/extensions/gcodetools_about.inx.h:14
 #: ../share/extensions/gcodetools_area.inx.h:70
@@ -35685,9 +35808,9 @@ msgstr ""
 "\n"
 "Els traços s'inicien des de «1/2 D» fins «l'amplada de l'àrea» amb l'amplada "
 "total amb «D» passos on D és mesura des de la definició de l'eina més "
-"propera (valor «Diàmetre de l'eina»).\n El desplaçament només es crearà si "
-"«l'amplada de l'àrea» és igual a «1/2 D»"
-"\".\n"
+"propera (valor «Diàmetre de l'eina»).\n"
+" El desplaçament només es crearà si «l'amplada de l'àrea» és igual a «1/2 "
+"D»\".\n"
 "\t\t\t"
 
 #: ../share/extensions/gcodetools_area.inx.h:11
@@ -35823,12 +35946,11 @@ msgstr ""
 "\n"
 "Tolerància a la interpolació «Biarc» és la distància màxima entre el camí i "
 "la seva aproximació.\n"
-"El segment es divideix en dos segments si la distància "
-"entre el segment del camí i la seva aproximació supera la tolerància a la "
-"interpolació «Biarc»\n."
-"Per a la funció de la profunditat «c = intensitat de "
-"color» des de 0,0 (blanc) fins a 1.0 (negre), «d és la profunditat» definida "
-"pels punts d'orientació, «s - superfície» definida pels punts d'orientació. \n"
+"El segment es divideix en dos segments si la distància entre el segment del "
+"camí i la seva aproximació supera la tolerància a la interpolació «Biarc»\n"
+".Per a la funció de la profunditat «c = intensitat de color» des de 0,0 "
+"(blanc) fins a 1.0 (negre), «d és la profunditat» definida pels punts "
+"d'orientació, «s - superfície» definida pels punts d'orientació. \n"
 
 #: ../share/extensions/gcodetools_area.inx.h:46
 #: ../share/extensions/gcodetools_engraving.inx.h:16
@@ -36056,9 +36178,8 @@ msgstr ""
 "dxf_import). També podeu desar la forma original. Només s'usarà el punt "
 "d'inici de cada corba.\n"
 "\n"
-"També podeu seleccionar manualment l'objecte, editor "
-"de XML (MAJ + Ctrl + X) i afegir o eliminar etiquetes XML «dxfpoint» amb "
-"qualsevol valor.\n"
+"També podeu seleccionar manualment l'objecte, editor de XML (MAJ + Ctrl + X) "
+"i afegir o eliminar etiquetes XML «dxfpoint» amb qualsevol valor.\n"
 "\t\t  "
 
 #: ../share/extensions/gcodetools_dxf_points.inx.h:10
@@ -36110,9 +36231,9 @@ msgstr ""
 "\n"
 "Aquesta funció crea el camí per gravar lletres o qualsevol forma amb angles "
 "aguts.\n"
-"La profunditat del cúter com una funció del radi està definit per l'eina.\n" 
-"La profunditat pot ser qualsevol expressió de Python. Per exemple: "
-"con....(45 graus)......................: w\n"
+"La profunditat del cúter com una funció del radi està definit per l'eina.\n"
+"La profunditat pot ser qualsevol expressió de Python. Per exemple: con...."
+"(45 graus)......................: w\n"
 "con....(alçada / diàmetre=10/3)..: 10*w/3\n"
 "esfera..(radi r)...........................: math.sqrt(max(0,r**2-w**2))\n"
 "el·lipse.(eix menor r, major 4r).....: math.sqrt(max(0,r**2-w**2))*4"
@@ -36208,17 +36329,16 @@ msgstr ""
 "\n"
 "Els punts d'orientació s'utilitzen per calcular la transformació "
 "(desplaçament, escala, mirall, rotació en el pla XY) del camí.\n"
-"Mode 3 punts només: no poseu els tres punts en una sola línia (utilitzeu el mode 2 punts "
-"en el seu lloc).\n" 
+"Mode 3 punts només: no poseu els tres punts en una sola línia (utilitzeu el "
+"mode 2 punts en el seu lloc).\n"
 "\n"
-"Podeu modificar després els valors de la superfície Z, la "
-"profunditat Z utilitzant l'eina de text (3a coordenada)."
+"Podeu modificar després els valors de la superfície Z, la profunditat Z "
+"utilitzant l'eina de text (3a coordenada).\n"
+"Si no hi ha punts dins de la capa actual es prenen de la capa superior.\n"
 "\n"
-"Si no hi ha punts dins de la capa actual es prenen de la capa superior.\n" 
-"\n"
-"No desagrupeu els punts d'orientació! Podeu seleccionar usant doble clic per entrar el grup o "
-"amb Ctrl + Clic. Ara premeu aplica per a crear punts de control (conjunt "
-"independent per a cada capa).\n"
+"No desagrupeu els punts d'orientació! Podeu seleccionar usant doble clic per "
+"entrar el grup o amb Ctrl + Clic. Ara premeu aplica per a crear punts de "
+"control (conjunt independent per a cada capa).\n"
 "\t\t\t"
 
 #: ../share/extensions/gcodetools_lathe.inx.h:1
@@ -36269,8 +36389,8 @@ msgid ""
 "\t\t"
 msgstr ""
 "\n"
-"\t\t\tAquesta funció modifica camí pel qual serà capaç de ser tallat amb el cúter "
-"rectangular.\n"
+"\t\t\tAquesta funció modifica camí pel qual serà capaç de ser tallat amb el "
+"cúter rectangular.\n"
 "\t\t"
 
 #: ../share/extensions/gcodetools_orientation_points.inx.h:1
@@ -36391,10 +36511,10 @@ msgid ""
 msgstr ""
 "\n"
 "Seleccionat el tipus d'eina per omplir els valors per defecte apropiats. "
-"Podeu canviar aquests valors utilitzant l'eina de text més endavant.\n" 
+"Podeu canviar aquests valors utilitzant l'eina de text més endavant.\n"
 "\n"
-"S'usa l'eina superior (ordre z) en la capa activa. Si no hi ha una eina dins de la "
-"capa actual es pren de la capa superior.\n"
+"S'usa l'eina superior (ordre z) en la capa activa. Si no hi ha una eina dins "
+"de la capa actual es pren de la capa superior.\n"
 "\n"
 "Feu clic a «Aplica» per crear una nova eina.\n"
 "\t\t\t"
@@ -37220,6 +37340,8 @@ msgid ""
 "Check this to automatically (nondestructively) convert all objects to paths "
 "before plotting (Default: Checked)"
 msgstr ""
+"Marqueu-ho per automàticament (no destructivament) convertir tots els "
+"objectes a traços abans de plotejar (per defecte: marcat)"
 
 #: ../share/extensions/hpgl_output.inx.h:36
 #: ../share/extensions/plotter.inx.h:71
@@ -37427,7 +37549,7 @@ msgstr "Un altre atribut:"
 
 #: ../share/extensions/interp_att_g.inx.h:5
 msgid "Examples: r, width, inkscape:rounded, sodipodi:sides"
-msgstr ""
+msgstr "Exemples: r, amplada, inkscape:arrodonit, sodipodi: cares"
 
 #: ../share/extensions/interp_att_g.inx.h:6
 msgid "Other Attribute type:"
@@ -37443,7 +37565,7 @@ msgstr "Valor inicial:"
 
 #: ../share/extensions/interp_att_g.inx.h:9
 msgid "Examples: 0.5, 5, #rgb, #rrggbb or r, g, b"
-msgstr ""
+msgstr "Exemples: 0.5, 5, #rgb, #rrggbb o r, g, b"
 
 #: ../share/extensions/interp_att_g.inx.h:10
 msgid "End Value:"
@@ -37475,6 +37597,8 @@ msgid ""
 "If you selected \"Other\" above, you must specify the details for this "
 "\"other\" here."
 msgstr ""
+"Si heu seleccionat «Altres» a dalt, aquí heu d'especificar els detalls "
+"d'aquest «Altres»."
 
 #: ../share/extensions/interp_att_g.inx.h:25
 msgid "Integer Number"
@@ -38926,8 +39050,8 @@ msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
-"Port de la vostra connexió en paral·lel, no és compatible amb el Windows, en Linux "
-"quelcom semblant a «/dev/usb/lp2» (Per defecte: /dev/usb/lp2)"
+"Port de la vostra connexió en paral·lel, no és compatible amb el Windows, en "
+"Linux quelcom semblant a «/dev/usb/lp2» (Per defecte: /dev/usb/lp2)"
 
 #: ../share/extensions/plotter.inx.h:7
 msgid "Serial port:"
@@ -39063,7 +39187,7 @@ msgid ""
 "ignore this command. (Default: 0)"
 msgstr ""
 "La ploma es mourà a una velocitat en cm/s o mm/s depenent del vostre model "
-"de traçador. Establiu a 0 per ometre l'ordre. La majoria dels traçador "
+"de traçador. Establiu a 0 per ometre l'ordre. La majoria dels traçadors "
 "ignoren aquesta ordre (Per defecte: 0)"
 
 #: ../share/extensions/plotter.inx.h:47
@@ -39304,7 +39428,7 @@ msgstr "Mitjana"
 
 #: ../share/extensions/prepare_file_save_as.inx.h:1
 msgid "Pre-Process File Save As..."
-msgstr ""
+msgstr "Desa el fitxer de preprocessament com a..."
 
 #: ../share/extensions/prepare_print_win32_vector.inx.h:1
 msgid "Pre-Process Win32 Vector Print"
@@ -39992,7 +40116,7 @@ msgstr ""
 #. this parameter is checked programatically in the extension to show a warning
 #: ../share/extensions/scour.inx.h:59
 msgid "Show warnings for older versions of Scour"
-msgstr ""
+msgstr "Mostra avisos per a versions antigues de Scour"
 
 #: ../share/extensions/scour.inx.h:60
 msgid "Optimized SVG Output is provided by"
@@ -40000,7 +40124,7 @@ msgstr "Sortida SVG optimitzat proveïda per"
 
 #: ../share/extensions/scour.inx.h:61
 msgid "For details please refer to"
-msgstr ""
+msgstr "Per a més detalls dirigiu-vos a"
 
 #: ../share/extensions/scour.inx.h:62
 msgid "This version of the extension is designed for"
