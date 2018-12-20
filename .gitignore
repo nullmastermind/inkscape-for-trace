@@ -14,3 +14,13 @@ inkscape_devel_source.tar.bz2
 *~
 *.rej
 .vscode
+
+# Snap packaging specific rules
+/snap/.snapcraft/
+/parts/
+/stage/
+/prime/
+
+/*.snap
+/*_source.tar.bz2
+
