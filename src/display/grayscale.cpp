@@ -85,9 +85,9 @@ unsigned char luminance(unsigned char r, unsigned char g, unsigned char b) {
 bool activeDesktopIsGrayscale() {
     if (SP_ACTIVE_DESKTOP) {
         return (SP_ACTIVE_DESKTOP->getColorMode() == Inkscape::COLORMODE_GRAYSCALE);
-    } else {
-        return false;
     }
+    
+    return false;
 }
 
 

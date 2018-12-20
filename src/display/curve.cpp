@@ -325,16 +325,15 @@ SPCurve::is_closed() const
 {
     if (is_empty()) {
         return false;
-    } else {
-        bool closed = true;
-        for (Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
-             if ( ! it->closed() ) {
-                closed = false;
-                break;
-            }
+    } 
+    
+    for (Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
+        if ( ! it->closed() ) {
+            return false;
         }
-        return closed;
     }
+    
+    return true;    
 }
 
 /**
@@ -345,9 +344,12 @@ SPCurve::is_equal(SPCurve * other) const
 {
     if(other == nullptr) {
         return false;
-    } else if(_pathv == other->get_pathvector()){
+    } 
+
+    if(_pathv == other->get_pathvector()){
         return true;
     }
+    
     return false;
 }
 
