@@ -963,7 +963,7 @@ void Layout::Calculator::_createFirstScanlineMaker()
         TRACE(("  begin wrap shape 0\n"));
 
         // 'inside-shape' uses an infinitely high (wide) shape. We must set initial y. (We only need to do it here as there is only one shape.)
-        if (text_source->style->inline_size.set) {
+        if (_flow.wrap_mode == WRAP_INLINE_SIZE) {
             _block_progression = _flow._blockProgression();
             if( _block_progression == RIGHT_TO_LEFT ||
                 _block_progression == LEFT_TO_RIGHT ) {
@@ -1985,6 +1985,15 @@ void Layout::_calculateCursorShapeForEmpty()
     if (_input_wrap_shapes.empty()) {
         _empty_cursor_shape.position = Geom::Point(text_source->x.empty() || !text_source->x.front()._set ? 0.0 : text_source->x.front().computed,
                                                  text_source->y.empty() || !text_source->y.front()._set ? 0.0 : text_source->y.front().computed);
+    } else if (wrap_mode == WRAP_INLINE_SIZE) {
+        // 'inline-size' has a wrap shape of an "infinite" rectangle, we need the place where the text should begin.
+        double x = 0;
+        double y = 0;
+        if (!text_source->x.empty())
+            x = text_source->x.front().computed;
+        if (!text_source->y.empty())
+            y = text_source->y.front().computed;
+        _empty_cursor_shape.position = Geom::Point(x, y);
     } else {
         Direction block_progression = text_source->styleGetBlockProgression();
         ShapeScanlineMaker scanline_maker(_input_wrap_shapes.front().shape, block_progression);
@@ -2006,12 +2015,15 @@ bool Layout::calculateFlow()
     TRACE(("begin calculateFlow()\n"));
     Layout::Calculator calc = Calculator(this);
     bool result = calc.calculate();
+
     if (textLengthIncrement != 0) {
         TRACE(("Recalculating layout the second time to fit textLength!\n"));
         result = calc.calculate();
     }
-    if (_characters.empty())
+
+    if (_characters.empty()) {
         _calculateCursorShapeForEmpty();
+    }
     return result;
 }
 
