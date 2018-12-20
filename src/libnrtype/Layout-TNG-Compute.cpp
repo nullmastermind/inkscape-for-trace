@@ -962,7 +962,7 @@ void Layout::Calculator::_createFirstScanlineMaker()
         _scanline_maker = new ShapeScanlineMaker(_flow._input_wrap_shapes[_current_shape_index].shape, _block_progression);
         TRACE(("  begin wrap shape 0\n"));
 
-        // 'inside-shape' uses an infinitely high (wide) shape. We must set initial y. (We only need to do it here as there is only one shape.)
+        // 'inline-size' uses an infinitely high (wide) shape. We must set initial y. (We only need to do it here as there is only one shape.)
         if (_flow.wrap_mode == WRAP_INLINE_SIZE) {
             _block_progression = _flow._blockProgression();
             if( _block_progression == RIGHT_TO_LEFT ||
