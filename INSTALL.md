@@ -28,7 +28,7 @@ install, if they are not already present on your system.  The most
 typical libraries you may need to install are:
 
    * [Boehm-GC](http://www.hboehm.info/gc/)
-   * [libsigc++](http://libsigc.sourceforge.net/)
+   * [libsigc++](https://github.com/libsigcplusplus/libsigcplusplus)
    * [gtkmm](https://www.gtkmm.org/)
 
 Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/index.php/CompilingInkscape) for the
