@@ -504,7 +504,7 @@ void SPGenericEllipse::set_shape()
 
 Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled()) {
+    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
         return xform;
     }
 

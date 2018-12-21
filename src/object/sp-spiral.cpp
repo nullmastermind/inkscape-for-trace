@@ -409,7 +409,7 @@ void SPSpiral::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape
  */
 Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 {
-    if (hasPathEffect() && pathEffectsEnabled()) {
+    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
         return xform;
     }
     // Only set transform with proportional scaling

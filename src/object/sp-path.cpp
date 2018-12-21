@@ -343,7 +343,7 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-    if (hasPathEffect() && pathEffectsEnabled()) {
+    if (hasPathEffectRecursive() && pathEffectsEnabled()) {
         return transform;
     }
 
