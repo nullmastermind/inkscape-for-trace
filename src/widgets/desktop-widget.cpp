@@ -674,8 +674,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         enabled = !dtw->_canvas->_cms_key.empty();
         dtw->cms_adjust_set_sensitive(enabled);
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     g_signal_connect( G_OBJECT(dtw->_tracker), "changed", G_CALLBACK(SPDesktopWidget::color_profile_event), dtw );
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     // ------------------ Finish Up -------------------- //
     dtw->_vbox->show_all();
