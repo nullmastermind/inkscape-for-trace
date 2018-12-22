@@ -500,7 +500,7 @@ void StyleDialog::_writeStyleElement()
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
     _updating = false;
-    g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent);
+    g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
 
@@ -537,7 +537,7 @@ void StyleDialog::_updateWatchers()
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
     _addWatcherRecursive(root);
 
-    g_debug("StyleDialog::_updateWatchers(): %d", _nodeWatchers.size());
+    g_debug("StyleDialog::_updateWatchers(): %d", (int)_nodeWatchers.size());
 
     _updating = false;
 }
@@ -733,7 +733,7 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector) {
 
     std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
 
-    g_debug("StyleDialog::_getObjVec: | %s |", selector);
+    g_debug("StyleDialog::_getObjVec: | %s |", selector.c_str());
     for (auto& obj: objVec) {
         g_debug("  %s", obj->getId() ? obj->getId() : "null");
     }
