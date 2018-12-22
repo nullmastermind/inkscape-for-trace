@@ -30,6 +30,7 @@
 #include "svg/svg-color.h"
 
 #include "ui/icon-loader.h"
+#include "ui/widget/dash-selector.h"
 #include "ui/widget/unit-menu.h"
 
 #include "widgets/style-utils.h"
@@ -214,9 +215,9 @@ StrokeStyle::StrokeStyle() :
     spw_label(table, _("Dashes:"), 0, i, nullptr); //no mnemonic for now
                                             //decide what to do:
                                             //   implement a set_mnemonic_source function in the
-                                            //   SPDashSelector class, so that we do not have to
+                                            //   Inkscape::UI::Widget::DashSelector class, so that we do not have to
                                             //   expose any of the underlying widgets?
-    dashSelector = Gtk::manage(new SPDashSelector);
+    dashSelector = Gtk::manage(new Inkscape::UI::Widget::DashSelector);
 
     dashSelector->show();
     dashSelector->set_hexpand();
@@ -735,7 +736,7 @@ StrokeStyle::getItemColorForMarker(SPItem *item, Inkscape::PaintTarget fill_or_s
  * Sets selector widgets' dash style from an SPStyle object.
  */
 void
-StrokeStyle::setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style)
+StrokeStyle::setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style)
 {
     if (!style->stroke_dasharray.values.empty()) {
         double d[64];

@@ -17,14 +17,17 @@
 
 #include <sigc++/signal.h>
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 /**
  * Class that wraps a combobox and spinbutton for selecting dash patterns.
  */
-class SPDashSelector : public Gtk::HBox {
+class DashSelector : public Gtk::HBox {
 public:
-    SPDashSelector();
-    ~SPDashSelector() override;
+    DashSelector();
+    ~DashSelector() override;
 
     /**
      * Get and set methods for dashes
@@ -90,6 +93,10 @@ private:
     int preview_lineheight;
 
 };
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #endif // SEEN_SP_DASH_SELECTOR_NEW_H
 

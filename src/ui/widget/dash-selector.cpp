@@ -30,7 +30,11 @@
 #include "ui/dialog-events.h"
 #include "ui/widget/spinbutton.h"
 
-gchar const *const SPDashSelector::_prefs_path = "/palette/dashes";
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+gchar const *const DashSelector::_prefs_path = "/palette/dashes";
 
 static double dash_0[] = {-1.0};
 static double dash_1_1[] = {1.0, 1.0, -1.0};
@@ -44,7 +48,7 @@ static double *builtin_dashes[] = {dash_0, dash_1_1, dash_2_1, dash_4_1, dash_1_
 
 static double **dashes = nullptr;
 
-SPDashSelector::SPDashSelector()
+DashSelector::DashSelector()
     : preview_width(80),
       preview_height(16),
       preview_lineheight(2)
@@ -55,15 +59,15 @@ SPDashSelector::SPDashSelector()
     dash_store = Gtk::ListStore::create(dash_columns);
     dash_combo.set_model(dash_store);
     dash_combo.pack_start(image_renderer);
-    dash_combo.set_cell_data_func(image_renderer, sigc::mem_fun(*this, &SPDashSelector::prepareImageRenderer));
+    dash_combo.set_cell_data_func(image_renderer, sigc::mem_fun(*this, &DashSelector::prepareImageRenderer));
     dash_combo.set_tooltip_text(_("Dash pattern"));
     dash_combo.set_name("dashCombo");
     dash_combo.show();
-    dash_combo.signal_changed().connect( sigc::mem_fun(*this, &SPDashSelector::on_selection) );
+    dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
 
     this->pack_start(dash_combo, false, false, 0);
     offset = Gtk::Adjustment::create(0.0, 0.0, 10.0, 0.1, 1.0, 0.0);
-    offset->signal_value_changed().connect(sigc::mem_fun(*this, &SPDashSelector::offset_value_changed));
+    offset->signal_value_changed().connect(sigc::mem_fun(*this, &DashSelector::offset_value_changed));
     auto sb = new Inkscape::UI::Widget::SpinButton(offset, 0.1, 2);
     sb->set_tooltip_text(_("Pattern offset"));
     sp_dialog_defocus_on_enter_cpp(sb);
@@ -88,18 +92,18 @@ SPDashSelector::SPDashSelector()
     this->set_data("pattern", dashes[0]);
 }
 
-SPDashSelector::~SPDashSelector() {
+DashSelector::~DashSelector() {
     // FIXME: for some reason this doesn't get called; does the call to manage() in
     // sp_stroke_style_line_widget_new() not processed correctly?
 }
 
-void SPDashSelector::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
+void DashSelector::prepareImageRenderer( Gtk::TreeModel::const_iterator const &row ) {
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*row)[dash_columns.pixbuf];
     image_renderer.property_pixbuf() = pixbuf;
 }
 
-void SPDashSelector::init_dashes() {
+void DashSelector::init_dashes() {
 
     if (!dashes) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -145,7 +149,7 @@ void SPDashSelector::init_dashes() {
     }
 }
 
-void SPDashSelector::set_dash (int ndash, double *dash, double o)
+void DashSelector::set_dash (int ndash, double *dash, double o)
 {
     int pos = -1;    // Allows custom patterns to remain unscathed by this.
     int count = 0;   // will hold the NULL terminator at the end of the dashes list 
@@ -199,7 +203,7 @@ void SPDashSelector::set_dash (int ndash, double *dash, double o)
     }
 }
 
-void SPDashSelector::get_dash(int *ndash, double **dash, double *off)
+void DashSelector::get_dash(int *ndash, double **dash, double *off)
 {
     double *pattern = (double*) this->get_data("pattern");
 
@@ -229,7 +233,7 @@ void SPDashSelector::get_dash(int *ndash, double **dash, double *off)
 /**
  * Fill a pixbuf with the dash pattern using standard cairo drawing
  */
-GdkPixbuf* SPDashSelector::sp_dash_to_pixbuf(double *pattern)
+GdkPixbuf* DashSelector::sp_dash_to_pixbuf(double *pattern)
 {
     int n_dashes;
     for (n_dashes = 0; pattern[n_dashes] >= 0.0; n_dashes ++) ;
@@ -255,7 +259,7 @@ GdkPixbuf* SPDashSelector::sp_dash_to_pixbuf(double *pattern)
 /**
  * Fill a pixbuf with a text label using standard cairo drawing
  */
-GdkPixbuf* SPDashSelector::sp_text_to_pixbuf(char *text)
+GdkPixbuf* DashSelector::sp_text_to_pixbuf(char *text)
 {
     cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, preview_width, preview_height);
     cairo_t *ct = cairo_create(s);
@@ -275,7 +279,7 @@ GdkPixbuf* SPDashSelector::sp_text_to_pixbuf(char *text)
     return pixbuf;
 }
 
-void SPDashSelector::on_selection ()
+void DashSelector::on_selection ()
 {
     double *pattern = dash_combo.get_active()->get_value(dash_columns.dash);
     this->set_data ("pattern", pattern);
@@ -283,10 +287,13 @@ void SPDashSelector::on_selection ()
     changed_signal.emit();
 }
 
-void SPDashSelector::offset_value_changed()
+void DashSelector::offset_value_changed()
 {
     changed_signal.emit();
 }
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

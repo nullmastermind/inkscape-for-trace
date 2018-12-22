@@ -50,7 +50,6 @@
 #include "ui/icon-names.h"
 #include "ui/widget/spinbutton.h"
 
-#include "widgets/dash-selector.h"
 #include "widgets/paint-selector.h"
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
@@ -69,6 +68,7 @@ namespace Inkscape {
     }
     namespace UI {
         namespace Widget {
+            class DashSelector;
             class UnitMenu;
         }
     }
@@ -143,7 +143,7 @@ private:
     void updateLine();
     void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void updateMarkerHist(SPMarkerLoc const which);
-    void setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style);
+    void setDashSelectorFromStyle(Inkscape::UI::Widget::DashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
     void setCapType (unsigned const captype);
     void setPaintOrder (gchar const *paint_order);
@@ -195,7 +195,7 @@ private:
     StrokeStyleButton *paintOrderMFS;
     StrokeStyleButton *paintOrderSMF;
     StrokeStyleButton *paintOrderMSF;
-    SPDashSelector *dashSelector;
+    Inkscape::UI::Widget::DashSelector *dashSelector;
 
     gboolean update;
     SPDesktop *desktop;
