@@ -445,6 +445,8 @@ public:
     void applyCurrentOrToolStyle(SPObject *obj, Glib::ustring const &tool_path, bool with_text);
 
 private:
+    GtkGesture *zoomgesture = nullptr;
+
     Inkscape::UI::View::EditWidgetInterface       *_widget;
     std::unique_ptr<Inkscape::MessageContext> _guides_message_context;
     bool _active;

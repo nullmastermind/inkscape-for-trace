@@ -84,6 +84,25 @@ static void _reconstruction_start(SPDesktop * desktop);
 static void _reconstruction_finish(SPDesktop * desktop);
 static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop);
 
+static gdouble _pinch_begin_zoom = 1.;
+
+static void _pinch_begin_handler(GtkGesture *gesture, GdkEventSequence *sequence, SPDesktop *desktop)
+{
+    _pinch_begin_zoom = desktop->current_zoom();
+}
+
+static void _pinch_scale_changed_handler(GtkGesture *gesture, gdouble delta, SPDesktop *desktop)
+{
+    GdkEventSequence *sequence = gtk_gesture_get_last_updated_sequence(gesture);
+    const GdkEvent *event = gtk_gesture_get_last_event(gesture, sequence);
+
+    Geom::Point button_window(event->button.x, event->button.y);
+    Geom::Point button_world = sp_canvas_window_to_world(desktop->canvas, button_window);
+    Geom::Point button_dt(desktop->w2d(button_world));
+
+    desktop->zoom_absolute_keep_point(button_dt, _pinch_begin_zoom * delta);
+}
+
 SPDesktop::SPDesktop()
     : _dlg_mgr(nullptr)
     , namedview(nullptr)
@@ -208,6 +227,11 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
     drawing = sp_canvas_item_new (main, SP_TYPE_CANVAS_ARENA, nullptr);
     g_signal_connect (G_OBJECT (drawing), "arena_event", G_CALLBACK (_arena_handler), this);
+
+    // pinch zoom
+    zoomgesture = gtk_gesture_zoom_new(GTK_WIDGET(getCanvas()));
+    g_signal_connect(zoomgesture, "begin", G_CALLBACK(_pinch_begin_handler), this);
+    g_signal_connect(zoomgesture, "scale-changed", G_CALLBACK(_pinch_scale_changed_handler), this);
 
     SP_CANVAS_ARENA (drawing)->drawing.delta = prefs->getDouble("/options/cursortolerance/value", 1.0); // default is 1 px
 
@@ -363,6 +387,11 @@ void SPDesktop::destroy()
     g_signal_handlers_disconnect_by_func(G_OBJECT (acetate), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (main), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (drawing), (gpointer) G_CALLBACK(_arena_handler), this);
+
+    if (zoomgesture) {
+        g_signal_handlers_disconnect_by_data(zoomgesture, this);
+        g_clear_object(&zoomgesture);
+    }
 
     delete layers;
 
