@@ -149,8 +149,8 @@ Glib::ustring get_filename(Type type, char const *filename, char const *locale)
     Glib::ustring result;
 
     if(locale != nullptr) {
-      char *user_locale = _get_path(USER, type, filename);
-      char *sys_locale = _get_path(SYSTEM, type, filename);
+      char *user_locale = _get_path(USER, type, locale);
+      char *sys_locale = _get_path(SYSTEM, type, locale);
 
       if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
           result = Glib::ustring(user_locale);
