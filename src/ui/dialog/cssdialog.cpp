@@ -50,12 +50,23 @@ CssDialog::CssDialog():
     _store = Gtk::ListStore::create(_cssColumns);
     _treeView.set_model(_store);
 
-    Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+     Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
 
-    int addCol = _treeView.append_column("", *addRenderer) - 1;
-    Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
-
+    _treeView.append_column("", *addRenderer);
+    Gtk::TreeViewColumn *col = _treeView.get_column(0);
+    if (col) {
+        auto add_icon = Gtk::manage(sp_get_icon_image("list-add", Gtk::ICON_SIZE_SMALL_TOOLBAR));
+        col->set_clickable(true);
+        col->set_widget(*add_icon);
+        add_icon->set_tooltip_text(_("Add a new attribute"));
+        add_icon->show();
+        // This gets the GtkButton inside the GtkBox, inside the GtkAlignment, inside the GtkImage icon.
+        auto button = add_icon->get_parent()->get_parent()->get_parent();
+        // Assign the button event so that create happens BEFORE delete. If this code
+        // isn't in this exact way, the onAttrDelete is called when the header lines are pressed.
+        button->signal_button_release_event().connect(sigc::mem_fun(*this, &CssDialog::_addProperty), true);
+    }
     _propRenderer = Gtk::manage(new Gtk::CellRendererText());
     _propRenderer->property_editable() = true;
     int nameColNum = _treeView.append_column("CSS Property", *_propRenderer) - 1;
@@ -93,22 +104,10 @@ CssDialog::CssDialog():
     _message_changed_connection = _message_stack->connectChanged(
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
-
-    GtkWidget *child = sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_widget_show(child);
-    _buttonAddProperty.add(*manage(Glib::wrap(child)));
-    _buttonAddProperty.set_relief(Gtk::RELIEF_NONE);
-    _buttonAddProperty.set_tooltip_text("Add a new property");
-
-    _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
-    _buttonBox.pack_start(_buttonAddProperty, Gtk::PACK_SHRINK);
-
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
     css_reset_context(0);
     setDesktop(getDesktop());
-
-    _buttonAddProperty.signal_clicked().connect(sigc::mem_fun(*this, &CssDialog::_addProperty));
 }
 
 
@@ -165,9 +164,13 @@ void CssDialog::css_reset_context(gint css)
  * panel. A new row is added, double clicking which text for new property can be
  * added.
  */
-void CssDialog::_addProperty()
+bool CssDialog::_addProperty(GdkEventButton *event)
 {
-    _propRow = *(_store->append());
+    if(event->type == GDK_BUTTON_RELEASE && event->button == 1) {
+        _propRow = *(_store->append());
+        return true;
+    }
+    return false;
 }
 
 } // namespace Dialog

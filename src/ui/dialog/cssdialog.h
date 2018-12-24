@@ -103,7 +103,7 @@ public:
      * Signal handlers
      */
     sigc::connection _message_changed_connection;
-    void _addProperty();
+    bool _addProperty(GdkEventButton *event);
 };
 
 
