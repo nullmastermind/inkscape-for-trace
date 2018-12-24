@@ -16,11 +16,13 @@
 
 #include "verbs.h"
 #include "selection.h"
-
+#include "message-context.h"
+#include "message-stack.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
 #include "xml/attribute-record.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
@@ -78,6 +80,20 @@ CssDialog::CssDialog():
       _attrCol->add_attribute(_attrRenderer->property_text(), _cssColumns._styleAttrVal);
     }
 
+    status.set_halign(Gtk::ALIGN_START);
+    status.set_valign(Gtk::ALIGN_CENTER);
+    status.set_size_request(1, -1);
+    status.set_markup("");
+    status.set_line_wrap(true);
+    status_box.pack_start( status, TRUE, TRUE, 0);
+    _getContents()->pack_end(status_box, false, false, 2);
+
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
+    _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
+    _message_changed_connection = _message_stack->connectChanged(
+            sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
+
+
     GtkWidget *child = sp_get_icon_image("list-add", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     _buttonAddProperty.add(*manage(Glib::wrap(child)));
@@ -89,6 +105,7 @@ CssDialog::CssDialog():
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
+    css_reset_context(0);
     setDesktop(getDesktop());
 
     _buttonAddProperty.signal_clicked().connect(sigc::mem_fun(*this, &CssDialog::_addProperty));
@@ -102,6 +119,17 @@ CssDialog::CssDialog():
 CssDialog::~CssDialog()
 {
     setDesktop(nullptr);
+    _message_changed_connection.disconnect();
+    _message_context = nullptr;
+    _message_stack = nullptr;
+    _message_changed_connection.~connection();
+}
+
+void CssDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar *message, GtkWidget *widget)
+{
+    if (widget) {
+        gtk_label_set_markup(GTK_LABEL(widget), message ? message : "");
+    }
 }
 
 
@@ -113,6 +141,22 @@ CssDialog::~CssDialog()
 void CssDialog::setDesktop(SPDesktop* desktop)
 {
     _desktop = desktop;
+}
+
+/**
+ * Sets the CSSDialog status bar, depending on which attr is selected.
+ */
+void CssDialog::css_reset_context(gint css)
+{
+    if (css == 0) {
+        _message_context->set(Inkscape::NORMAL_MESSAGE,
+                              _("<b>Click</b> CSS property to edit."));
+    }
+    else {
+        const gchar *name = g_quark_to_string(css);
+        _message_context->setF(Inkscape::NORMAL_MESSAGE,
+                               _("Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+    }
 }
 
 /**

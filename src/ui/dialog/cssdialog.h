@@ -20,10 +20,13 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <ui/widget/panel.h>
+#include "message.h"
 
 #include "desktop.h"
 
 namespace Inkscape {
+class MessageStack;
+class MessageContext;
 namespace UI {
 namespace Dialog {
 
@@ -58,6 +61,12 @@ public:
     };
     CssColumns _cssColumns;
 
+    /**
+     * Status bar
+     */
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
+    std::unique_ptr<Inkscape::MessageContext> _message_context;
+
     // TreeView
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
@@ -68,6 +77,15 @@ public:
     Gtk::TreeViewColumn *_propCol;
     Gtk::TreeViewColumn *_sheetCol;
     Gtk::TreeViewColumn *_attrCol;
+    Gtk::HBox status_box;
+    Gtk::Label status;
+
+    /**
+    * Sets the XML status bar, depending on which attr is selected.
+    */
+    void css_reset_context(gint css);
+    static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
+
 
     // Widgets
     Gtk::VBox _mainBox;
@@ -81,7 +99,10 @@ public:
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
 
-    // Signal handlers
+    /**
+     * Signal handlers
+     */
+    sigc::connection _message_changed_connection;
     void _addProperty();
 };
 
