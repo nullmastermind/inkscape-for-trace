@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Author:
- *   Bryce Harrington <bryce@bryceharrington.org>
+ * Inkflow-box widget. 
+ * This widget allow pack widgets in a flowbox with a controller to show-hide
  *
- * Copyright (C) 2004 Bryce Harrington
+ * Author:
+ *   Jabier Arraiza <jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2018 Jabier Arraiza
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -23,7 +26,7 @@ namespace UI {
 namespace Widget {
 
 /**
- * A tabbed notebook page for dialogs.
+ * A flowbox widget with filter controller for dialogs.
  */
 
 class InkFlowBox : public Gtk::VBox {

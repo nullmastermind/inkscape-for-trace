@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Notebook page widget.
+ * Inkflow-box widget. 
+ * This widget allow pack widgets in a flowbox with a controller to show-hide
  *
  * Author:
- *   Bryce Harrington <bryce@bryceharrington.org>
+ *   Jabier Arraiza <jabier.arraiza@marker.es>
  *
- * Copyright (C) 2004 Bryce Harrington
+ * Copyright (C) 2018 Jabier Arraiza
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -26,7 +27,6 @@ namespace Widget {
 InkFlowBox::InkFlowBox(const gchar * name)
 {
     set_name(name);
-    //_flowbox.set_homogeneous();
     this->pack_start(_controller, false, false, 0);
     this->pack_start(_flowbox, true, true, 0);
     _flowbox.set_activate_on_single_click(true);
