@@ -226,6 +226,7 @@ src/ui/dialog/aboutbox.cpp
 src/ui/dialog/align-and-distribute.cpp
 src/ui/dialog/attrdialog.cpp
 src/ui/dialog/calligraphic-profile-rename.cpp
+src/ui/dialog/cssdialog.cpp
 src/ui/dialog/clonetiler.cpp
 src/ui/dialog/color-item.cpp
 src/ui/dialog/debug.cpp
