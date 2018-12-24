@@ -15,12 +15,12 @@
 #ifndef CSSDIALOG_H
 #define CSSDIALOG_H
 
-#include <gtkmm/treeview.h>
+#include "message.h"
+#include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/dialog.h>
+#include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
-#include "message.h"
 
 #include "desktop.h"
 
@@ -81,8 +81,8 @@ public:
     Gtk::Label status;
 
     /**
-    * Sets the XML status bar, depending on which attr is selected.
-    */
+     * Sets the XML status bar, depending on which attr is selected.
+     */
     void css_reset_context(gint css);
     static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 

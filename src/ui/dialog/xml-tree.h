@@ -15,15 +15,15 @@
 
 #include <memory>
 
-#include "ui/widget/panel.h"
 #include "ui/widget/ink-flow-box.h"
+#include "ui/widget/panel.h"
+#include <gtkmm/button.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separatortoolitem.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/toolbar.h>
-#include <gtkmm/separatortoolitem.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/button.h>
 
 #include "ui/dialog/attrdialog.h"
 #include "ui/dialog/cssdialog.h"

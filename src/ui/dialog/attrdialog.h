@@ -13,13 +13,13 @@
 #ifndef ATTRDIALOG_H
 #define ATTRDIALOG_H
 
-#include <gtkmm/treeview.h>
+#include "desktop.h"
+#include "message.h"
+#include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/dialog.h>
+#include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
-#include "message.h"
-#include "desktop.h"
 
 #define ATTR_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::AttrDialog*>((Inkscape::UI::Dialog::AttrDialog*)obj))
 
@@ -85,8 +85,8 @@ public:
     void setRepr(Inkscape::XML::Node * repr);
     void setUndo(Glib::ustring const &event_description);
     /**
-    * Sets the XML status bar, depending on which attr is selected.
-    */
+     * Sets the XML status bar, depending on which attr is selected.
+     */
     void attr_reset_context(gint attr);
     static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 

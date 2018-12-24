@@ -14,12 +14,12 @@
 
 #include "cssdialog.h"
 
-#include "verbs.h"
-#include "selection.h"
 #include "message-context.h"
 #include "message-stack.h"
+#include "selection.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
+#include "verbs.h"
 
 #include "xml/attribute-record.h"
 #include <glibmm/i18n.h>
@@ -50,7 +50,7 @@ CssDialog::CssDialog():
     _store = Gtk::ListStore::create(_cssColumns);
     _treeView.set_model(_store);
 
-     Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+    Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
 
     _treeView.append_column("", *addRenderer);
@@ -96,13 +96,13 @@ CssDialog::CssDialog():
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);
-    status_box.pack_start( status, TRUE, TRUE, 0);
+    status_box.pack_start(status, TRUE, TRUE, 0);
     _getContents()->pack_end(status_box, false, false, 2);
 
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
-    _message_changed_connection = _message_stack->connectChanged(
-            sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
+    _message_changed_connection =
+        _message_stack->connectChanged(sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
@@ -148,13 +148,12 @@ void CssDialog::setDesktop(SPDesktop* desktop)
 void CssDialog::css_reset_context(gint css)
 {
     if (css == 0) {
-        _message_context->set(Inkscape::NORMAL_MESSAGE,
-                              _("<b>Click</b> CSS property to edit."));
-    }
-    else {
+        _message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> CSS property to edit."));
+    } else {
         const gchar *name = g_quark_to_string(css);
-        _message_context->setF(Inkscape::NORMAL_MESSAGE,
-                               _("Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+        _message_context->setF(
+            Inkscape::NORMAL_MESSAGE,
+            _("Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
     }
 }
 
@@ -166,7 +165,7 @@ void CssDialog::css_reset_context(gint css)
  */
 bool CssDialog::_addProperty(GdkEventButton *event)
 {
-    if(event->type == GDK_BUTTON_RELEASE && event->button == 1) {
+    if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
         _propRow = *(_store->append());
         return true;
     }

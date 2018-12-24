@@ -103,13 +103,13 @@ AttrDialog::AttrDialog():
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);
-    status_box.pack_start( status, TRUE, TRUE, 0);
+    status_box.pack_start(status, TRUE, TRUE, 0);
     _getContents()->pack_end(status_box, false, false, 2);
 
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
-    _message_changed_connection = _message_stack->connectChanged(
-            sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
+    _message_changed_connection =
+        _message_stack->connectChanged(sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     _valueRenderer = Gtk::manage(new Gtk::CellRendererText());
     _valueRenderer->property_editable() = true;
@@ -198,13 +198,12 @@ void AttrDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar
 void AttrDialog::attr_reset_context(gint attr)
 {
     if (attr == 0) {
-        _message_context->set(Inkscape::NORMAL_MESSAGE,
-                              _("<b>Click</b> attribute to edit."));
-    }
-    else {
+        _message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> attribute to edit."));
+    } else {
         const gchar *name = g_quark_to_string(attr);
-        _message_context->setF(Inkscape::NORMAL_MESSAGE,
-                               _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+        _message_context->setF(
+            Inkscape::NORMAL_MESSAGE,
+            _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
     }
 }
 

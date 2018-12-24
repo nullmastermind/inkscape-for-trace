@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Inkflow-box widget. 
+ * Inkflow-box widget.
  * This widget allow pack widgets in a flowbox with a controller to show-hide
  *
  * Author:
@@ -14,11 +14,11 @@
 #ifndef INKSCAPE_INK_FLOW_BOX_H
 #define INKSCAPE_INK_FLOW_BOX_H
 
-#include <gtkmm/box.h>
 #include <gtkmm/actionbar.h>
+#include <gtkmm/box.h>
 #include <gtkmm/flowbox.h>
-#include <gtkmm/togglebutton.h>
 #include <gtkmm/flowboxchild.h>
+#include <gtkmm/togglebutton.h>
 #include <sigc++/signal.h>
 
 namespace Inkscape {
@@ -30,20 +30,20 @@ namespace Widget {
  */
 
 class InkFlowBox : public Gtk::VBox {
-public:
-    InkFlowBox(const gchar * name);
+  public:
+    InkFlowBox(const gchar *name);
     ~InkFlowBox() override;
     void insert(Gtk::Widget *widget, Glib::ustring label, gint pos, bool active, int minwidth);
     void on_toggle(gint pos, Gtk::ToggleButton *tbutton);
     void on_global_toggle(Gtk::ToggleButton *tbutton);
     void set_visible(gint pos, bool visible);
-    bool on_filter(Gtk::FlowBoxChild* child);
+    bool on_filter(Gtk::FlowBoxChild *child);
     Glib::ustring getPrefsPath(gint pos);
     /**
      * Construct a InkFlowBox.
      */
 
-private:
+  private:
     Gtk::FlowBox _flowbox;
     Gtk::ActionBar _controller;
     gint showing;

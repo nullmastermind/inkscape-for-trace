@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Inkflow-box widget. 
+ * Inkflow-box widget.
  * This widget allow pack widgets in a flowbox with a controller to show-hide
  *
  * Author:
@@ -12,19 +12,19 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
+#include "config.h" // only include where actually required!
 #endif
 
 #include "preferences.h"
-#include "ui/widget/ink-flow-box.h"
 #include "ui/icon-loader.h"
+#include "ui/widget/ink-flow-box.h"
 #include <gtkmm/adjustment.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-InkFlowBox::InkFlowBox(const gchar * name)
+InkFlowBox::InkFlowBox(const gchar *name)
 {
     set_name(name);
     this->pack_start(_controller, false, false, 0);
@@ -35,11 +35,12 @@ InkFlowBox::InkFlowBox(const gchar * name)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), true));
     Glib::ustring iconname = "object-unlocked";
-    if(tbutton->get_active()) {
+    if (tbutton->get_active()) {
         iconname = "object-locked";
     }
     tbutton->set_image(*sp_get_icon_image(iconname, Gtk::ICON_SIZE_MENU));
-    tbutton->signal_toggled().connect(sigc::bind< Gtk::ToggleButton* >(sigc::mem_fun (*this, &InkFlowBox::on_global_toggle), tbutton) );
+    tbutton->signal_toggled().connect(
+        sigc::bind<Gtk::ToggleButton *>(sigc::mem_fun(*this, &InkFlowBox::on_global_toggle), tbutton));
     _controller.pack_start(*tbutton);
     tbutton->show();
     showing = 0;
@@ -48,29 +49,29 @@ InkFlowBox::InkFlowBox(const gchar * name)
 
 InkFlowBox::~InkFlowBox() {}
 
-Glib::ustring
-InkFlowBox::getPrefsPath(gint pos) {
+Glib::ustring InkFlowBox::getPrefsPath(gint pos)
+{
     return Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/index_") + std::to_string(pos);
 }
 
-bool 
-InkFlowBox::on_filter(Gtk::FlowBoxChild* child) {
+bool InkFlowBox::on_filter(Gtk::FlowBoxChild *child)
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if(prefs->getBool(getPrefsPath(child->get_index()), true)) {
-        showing ++;
+    if (prefs->getBool(getPrefsPath(child->get_index()), true)) {
+        showing++;
         return true;
     }
     return false;
 }
 
-void 
-InkFlowBox::on_toggle(gint pos, Gtk::ToggleButton *tbutton) {
+void InkFlowBox::on_toggle(gint pos, Gtk::ToggleButton *tbutton)
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool global = prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), true);
     if (global && sensitive) {
         sensitive = false;
         bool active = true;
-        for (auto child:tbutton->get_parent()->get_children()) {
+        for (auto child : tbutton->get_parent()->get_children()) {
             if (tbutton != child) {
                 dynamic_cast<Gtk::ToggleButton *>(child)->set_active(active);
                 active = false;
@@ -83,19 +84,19 @@ InkFlowBox::on_toggle(gint pos, Gtk::ToggleButton *tbutton) {
         prefs->setBool(getPrefsPath(pos), tbutton->get_active());
     }
     showing = 0;
-    _flowbox.set_filter_func(sigc::mem_fun (*this, &InkFlowBox::on_filter));
+    _flowbox.set_filter_func(sigc::mem_fun(*this, &InkFlowBox::on_filter));
     _flowbox.set_max_children_per_line(showing);
 }
 
-void 
-InkFlowBox::on_global_toggle(Gtk::ToggleButton *tbutton) {
+void InkFlowBox::on_global_toggle(Gtk::ToggleButton *tbutton)
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), tbutton->get_active());
     sensitive = true;
     if (tbutton->get_active()) {
         sensitive = false;
         bool active = true;
-        for (auto child:tbutton->get_parent()->get_children()) {
+        for (auto child : tbutton->get_parent()->get_children()) {
             if (tbutton != child) {
                 dynamic_cast<Gtk::ToggleButton *>(child)->set_active(active);
                 active = false;
@@ -103,26 +104,27 @@ InkFlowBox::on_global_toggle(Gtk::ToggleButton *tbutton) {
         }
     }
     Glib::ustring iconname = "object-unlocked";
-    if(tbutton->get_active()) {
+    if (tbutton->get_active()) {
         iconname = "object-locked";
     }
     tbutton->set_image(*sp_get_icon_image(iconname, Gtk::ICON_SIZE_MENU));
     sensitive = true;
 }
 
-void 
-InkFlowBox::insert(Gtk::Widget *widget, Glib::ustring label, gint pos, bool active, int minwidth){
+void InkFlowBox::insert(Gtk::Widget *widget, Glib::ustring label, gint pos, bool active, int minwidth)
+{
     Gtk::ToggleButton *tbutton = new Gtk::ToggleButton(label, true);
     tbutton->set_active(active);
-    tbutton->signal_toggled().connect(sigc::bind<gint, Gtk::ToggleButton* >(sigc::mem_fun (*this, &InkFlowBox::on_toggle),pos, tbutton) );
+    tbutton->signal_toggled().connect(
+        sigc::bind<gint, Gtk::ToggleButton *>(sigc::mem_fun(*this, &InkFlowBox::on_toggle), pos, tbutton));
     _controller.pack_start(*tbutton);
     tbutton->show();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool(getPrefsPath(pos), active);
-    widget->set_size_request(minwidth,-1);
+    widget->set_size_request(minwidth, -1);
     _flowbox.insert(*widget, pos);
     showing = 0;
-    _flowbox.set_filter_func(sigc::mem_fun (*this, &InkFlowBox::on_filter) );
+    _flowbox.set_filter_func(sigc::mem_fun(*this, &InkFlowBox::on_filter));
     _flowbox.set_max_children_per_line(showing);
 }
 
