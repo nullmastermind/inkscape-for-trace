@@ -82,11 +82,6 @@ private:
     void tree_reset_context();
 
     /**
-     * Sets the XML status bar, depending on which attr is selected.
-     */
-    void attr_reset_context(gint attr);
-
-    /**
      * Is the selected tree node editable
      */
     gboolean xml_tree_node_mutable(GtkTreeIter *node);
@@ -228,7 +223,7 @@ private:
     Gtk::VBox css_box;
     Gtk::HBox status_box;
     Gtk::Label status;
-    Gtk::Toolbar    tree_toolbar;
+    Gtk::Toolbar tree_toolbar;
     Gtk::ToolButton xml_element_new_button;
     Gtk::ToolButton xml_text_new_button;
     Gtk::ToolButton xml_node_delete_button;

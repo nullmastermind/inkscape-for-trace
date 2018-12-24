@@ -90,7 +90,6 @@ XmlTree::XmlTree() :
     status.set_markup("");
     status.set_line_wrap(true);
     status_box.pack_start( status, TRUE, TRUE, 0);
-    contents->pack_end(status_box, false, false, 2);
 
     contents->pack_start(*flowbox_content, true, true, 0);
 
@@ -179,6 +178,8 @@ XmlTree::XmlTree() :
 
     node_box.pack_start(*tree_scroller);
 
+    node_box.pack_end(status_box, false, false, 2);
+
     /* attributes */
     attributes = new AttrDialog;
     attr_box.pack_start(*attributes);
@@ -249,22 +250,6 @@ void XmlTree::tree_reset_context()
                           _("<b>Click</b> to select nodes, <b>drag</b> to rearrange."));
 }
 
-
-/**
- * Sets the XML status bar, depending on which attr is selected.
- */
-void XmlTree::attr_reset_context(gint attr)
-{
-    if (attr == 0) {
-        _message_context->set(Inkscape::NORMAL_MESSAGE,
-                              _("<b>Click</b> attribute to edit."));
-    }
-    else {
-        const gchar *name = g_quark_to_string(attr);
-        _message_context->setF(Inkscape::NORMAL_MESSAGE,
-                               _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
-    }
-}
 
 void XmlTree::set_tree_desktop(SPDesktop *desktop)
 {

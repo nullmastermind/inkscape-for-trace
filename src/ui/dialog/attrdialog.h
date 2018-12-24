@@ -18,12 +18,14 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <ui/widget/panel.h>
-
+#include "message.h"
 #include "desktop.h"
 
 #define ATTR_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::AttrDialog*>((Inkscape::UI::Dialog::AttrDialog*)obj))
 
 namespace Inkscape {
+class MessageStack;
+class MessageContext;
 namespace UI {
 namespace Dialog {
 
@@ -60,6 +62,12 @@ public:
     Gtk::TreeViewColumn *_nameCol;
     Gtk::TreeViewColumn *_valueCol;
 
+    /**
+     * Status bar
+     */
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
+    std::unique_ptr<Inkscape::MessageContext> _message_context;
+
     // Widgets
     Gtk::VBox _mainBox;
     Gtk::ScrolledWindow _scrolledWindow;
@@ -69,13 +77,23 @@ public:
     // Variables - Inkscape
     SPDesktop* _desktop;
     Inkscape::XML::Node* _repr;
+    Gtk::HBox status_box;
+    Gtk::Label status;
 
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
     void setRepr(Inkscape::XML::Node * repr);
     void setUndo(Glib::ustring const &event_description);
+    /**
+    * Sets the XML status bar, depending on which attr is selected.
+    */
+    void attr_reset_context(gint attr);
+    static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 
-    // Signal handlers
+    /**
+     * Signal handlers
+     */
+    sigc::connection _message_changed_connection;
     void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
     void onAttrDelete(Glib::ustring path);
     bool onAttrCreate(GdkEventButton *event);

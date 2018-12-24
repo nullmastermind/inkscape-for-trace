@@ -16,6 +16,8 @@
 #include "selection.h"
 #include "document-undo.h"
 
+#include "message-context.h"
+#include "message-stack.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
@@ -96,6 +98,18 @@ AttrDialog::AttrDialog():
     if (_nameCol) {
       _nameCol->add_attribute(_nameRenderer->property_text(), _attrColumns._attributeName);
     }
+    status.set_halign(Gtk::ALIGN_START);
+    status.set_valign(Gtk::ALIGN_CENTER);
+    status.set_size_request(1, -1);
+    status.set_markup("");
+    status.set_line_wrap(true);
+    status_box.pack_start( status, TRUE, TRUE, 0);
+    _getContents()->pack_end(status_box, false, false, 2);
+
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
+    _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
+    _message_changed_connection = _message_stack->connectChanged(
+            sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     _valueRenderer = Gtk::manage(new Gtk::CellRendererText());
     _valueRenderer->property_editable() = true;
@@ -107,7 +121,7 @@ AttrDialog::AttrDialog():
     if (_valueCol) {
       _valueCol->add_attribute(_valueRenderer->property_text(), _attrColumns._attributeValue);
     }
-
+    attr_reset_context(0);
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
     setDesktop(getDesktop());
@@ -121,6 +135,10 @@ AttrDialog::AttrDialog():
 AttrDialog::~AttrDialog()
 {
     setDesktop(nullptr);
+    _message_changed_connection.disconnect();
+    _message_context = nullptr;
+    _message_stack = nullptr;
+    _message_changed_connection.~connection();
 }
 
 
@@ -165,6 +183,29 @@ void AttrDialog::setUndo(Glib::ustring const &event_description)
 {
     SPDocument *document = this->_desktop->doc();
     DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, event_description);
+}
+
+void AttrDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar *message, GtkWidget *widget)
+{
+    if (widget) {
+        gtk_label_set_markup(GTK_LABEL(widget), message ? message : "");
+    }
+}
+
+/**
+ * Sets the AttrDialog status bar, depending on which attr is selected.
+ */
+void AttrDialog::attr_reset_context(gint attr)
+{
+    if (attr == 0) {
+        _message_context->set(Inkscape::NORMAL_MESSAGE,
+                              _("<b>Click</b> attribute to edit."));
+    }
+    else {
+        const gchar *name = g_quark_to_string(attr);
+        _message_context->setF(Inkscape::NORMAL_MESSAGE,
+                               _("Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+    }
 }
 
 /**
