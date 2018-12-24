@@ -33,7 +33,7 @@ InkFlowBox::InkFlowBox(const gchar * name)
     Gtk::ToggleButton *tbutton = new Gtk::ToggleButton("", false);
     tbutton->set_always_show_image(true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock/"), true));
+    tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), true));
     Glib::ustring iconname = "object-unlocked";
     if(tbutton->get_active()) {
         iconname = "object-locked";
