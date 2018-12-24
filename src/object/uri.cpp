@@ -365,6 +365,85 @@ bool URI::hasScheme(const char *scheme) const
     return s && g_ascii_strcasecmp(s, scheme) == 0;
 }
 
+/**
+ * If \c s starts with a "%XX" triplet, return its byte value, 0 otherwise.
+ */
+static int uri_unescape_triplet(const char *s)
+{
+    int H1, H2;
+
+    if (s[0] == '%'                                //
+        && (H1 = g_ascii_xdigit_value(s[1])) != -1 //
+        && (H2 = g_ascii_xdigit_value(s[2])) != -1) {
+        return (H1 << 4) | H2;
+    }
+
+    return 0;
+}
+
+/**
+ * If \c s starts with a percent-escaped UTF-8 sequence, unescape one code
+ * point and store it in \c out variable. Do nothing and return 0 if \c s
+ * doesn't start with UTF-8.
+ *
+ * @param[in] s percent-escaped string
+ * @param[out] out out-buffer, must have at least size 5
+ * @return number of bytes read from \c s
+ */
+static int uri_unescape_utf8_codepoint(const char *s, char *out)
+{
+    int n = 0;
+    int value = uri_unescape_triplet(s);
+
+    if ((value >> 5) == /* 0b110 */ 0x6) {
+        // 110xxxxx 10xxxxxx
+        n = 2;
+    } else if ((value >> 4) == /* 0b1110 */ 0xE) {
+        // 1110xxxx 10xxxxxx 10xxxxxx
+        n = 3;
+    } else if ((value >> 3) == /* 0b11110 */ 0x1E) {
+        // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+        n = 4;
+    } else {
+        return 0;
+    }
+
+    out[0] = value;
+    out[n] = 0;
+
+    for (int i = 1; i < n; ++i) {
+        value = uri_unescape_triplet(s + (i * 3));
+
+        if ((value >> 6) != /* 0b10 */ 0x2) {
+            return 0;
+        }
+
+        out[i] = value;
+    }
+
+    return n * 3;
+}
+
+std::string uri_to_iri(const char *uri)
+{
+    std::string iri;
+
+    char utf8buf[5];
+
+    for (const char *p = uri; *p;) {
+        int n = uri_unescape_utf8_codepoint(p, utf8buf);
+        if (n) {
+            iri.append(utf8buf);
+            p += n;
+        } else {
+            iri += *p;
+            p += 1;
+        }
+    }
+
+    return iri;
+}
+
 } // namespace Inkscape
 
 

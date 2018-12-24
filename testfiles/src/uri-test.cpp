@@ -282,6 +282,16 @@ TEST(UriTest, from_native_filename)
 #endif
 }
 
+TEST(UriTest, uri_to_iri)
+{
+    // unescape UTF-8 (U+00D6)
+    ASSERT_EQ(Inkscape::uri_to_iri("data:,umlaut-%C3%96"), "data:,umlaut-\xC3\x96");
+    // don't unescape ASCII (U+003A)
+    ASSERT_EQ(Inkscape::uri_to_iri("foo%3Abar"), "foo%3Abar");
+    // sequence (U+00D6 U+1F37A U+003A)
+    ASSERT_EQ(Inkscape::uri_to_iri("%C3%96%F0%9F%8D%BA%3A"), "\xC3\x96\xF0\x9F\x8D\xBA%3A");
+}
+
 /*
   Local Variables:
   mode:c++

@@ -189,6 +189,17 @@ private:
     xmlURI *_xmlURIPtr() const { return m_shared.get(); }
 };
 
+/**
+ * Unescape the UTF-8 parts of the given URI.
+ *
+ * Does not decode non-UTF-8 escape sequences (e.g. reserved ASCII characters).
+ * Does not do any IDN (internationalized domain name) decoding.
+ *
+ * @param uri URI or part of a URI
+ * @return IRI equivalent of \c uri
+ */
+std::string uri_to_iri(const char *uri);
+
 }  /* namespace Inkscape */
 
 #endif
