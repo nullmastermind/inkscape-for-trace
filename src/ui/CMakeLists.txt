@@ -16,7 +16,6 @@ set(ui_SRC
 	tools-switch.cpp
     util.cpp
 	uxmanager.cpp
-
 	cache/svg_preview_cache.cpp
 
 	tool/control-point-selection.cpp
@@ -153,7 +152,7 @@ set(ui_SRC
 	widget/color-icc-selector.cpp
 	widget/color-notebook.cpp
 	widget/color-picker.cpp
-	widget/color-preview.cpp	icon-loader.cpp
+	widget/color-preview.cpp	
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
@@ -172,6 +171,7 @@ set(ui_SRC
 	widget/highlight-picker.cpp
 	widget/imagetoggler.cpp
     widget/ink-color-wheel.cpp
+	widget/ink-flow-box.cpp
 	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
@@ -397,6 +397,7 @@ set(ui_SRC
 	widget/insertordericon.h
 	widget/imagetoggler.h
     widget/ink-color-wheel.h
+	widget/ink-flow-box.h
 	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
 	widget/labelled.h

@@ -16,12 +16,12 @@
 #include <memory>
 
 #include "ui/widget/panel.h"
+#include "ui/widget/ink-flow-box.h"
 #include <gtkmm/entry.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/toolbar.h>
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/notebook.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/button.h>
 
@@ -183,11 +183,11 @@ private:
     gint blocked;
 
     /* Each of the notebook page type (by number) */
-    Gtk::Notebook *notebook_content;
+    UI::Widget::InkFlowBox *flowbox_content;
     enum {
-        NOTEBOOK_PAGE_NODES,
-        NOTEBOOK_PAGE_ATTRS,
-        NOTEBOOK_PAGE_STYLES,
+        FLOWBOX_PAGE_NODES,
+        FLOWBOX_PAGE_ATTRS,
+        FLOWBOX_PAGE_STYLES,
     };
 
     /**

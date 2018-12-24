@@ -78,8 +78,7 @@ XmlTree::XmlTree() :
     if (!desktop) {
         return;
     }
-
-    notebook_content = new Gtk::Notebook();
+    flowbox_content = Gtk::manage(new Inkscape::UI::Widget::InkFlowBox("XMLFlow"));
 
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -93,7 +92,7 @@ XmlTree::XmlTree() :
     status_box.pack_start( status, TRUE, TRUE, 0);
     contents->pack_end(status_box, false, false, 2);
 
-    contents->pack_start(*notebook_content, true, true, 0);
+    contents->pack_start(*flowbox_content, true, true, 0);
 
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
@@ -101,9 +100,7 @@ XmlTree::XmlTree() :
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     /* tree view */
-    notebook_content->insert_page(node_box, _("_Nodes"), NOTEBOOK_PAGE_NODES, true);
-    notebook_content->set_tab_detachable(node_box, true);
-
+    flowbox_content->insert(&node_box, _("_Nodes"), FLOWBOX_PAGE_NODES, true, -1);
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
 
@@ -185,8 +182,7 @@ XmlTree::XmlTree() :
     /* attributes */
     attributes = new AttrDialog;
     attr_box.pack_start(*attributes);
-    notebook_content->insert_page(attr_box, _("_Attributes"), NOTEBOOK_PAGE_ATTRS, true);
-    notebook_content->set_tab_detachable(attr_box, true);
+    flowbox_content->insert(&attr_box, _("_Attributes"), FLOWBOX_PAGE_ATTRS, false, 200);
 
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
@@ -207,15 +203,13 @@ XmlTree::XmlTree() :
 
     styles = new CssDialog;
     css_box.pack_start(*styles);
-    notebook_content->insert_page(css_box, _("_Styles"), NOTEBOOK_PAGE_STYLES, true);
-    notebook_content->set_tab_detachable(css_box, true);
+    flowbox_content->insert(&css_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
     /* initial show/hide */
     show_all();
-
     tree_reset_context();
 
     g_assert(desktop != nullptr);
