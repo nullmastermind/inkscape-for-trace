@@ -242,7 +242,6 @@ R"=====(
     <group id="input" />
     <group id="colorpickerwindow" />
     <group id="undo-history" />
-    <!-- animate-time in ms -->
     <group id="transparency"
        on-focus="1.0"
        on-blur="0.50"
@@ -393,8 +392,6 @@ R"=====(
   </group>
 
   <group id="extensions">
-    <!-- NOTE: This gets filled in by the extensions themselves based on
-         the properties that they provide in their INX files. -->
   </group>
 
   <group id="desktop"
