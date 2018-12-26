@@ -414,6 +414,12 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
     // TODO: eliminate ox, oy, sx, sy
 
     sp_image_update_canvas_image ((SPImage *) this);
+
+    // don't crash with missing xlink:href attribute
+    if (!this->pixbuf) {
+        return;
+    }
+
     double proportion_pixbuf = this->pixbuf->height() / (double)this->pixbuf->width();
     double proportion_image = this->height.computed / (double)this->width.computed;
     if (this->prev_width &&
