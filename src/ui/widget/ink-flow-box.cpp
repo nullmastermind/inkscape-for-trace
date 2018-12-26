@@ -113,14 +113,14 @@ void InkFlowBox::on_global_toggle(Gtk::ToggleButton *tbutton)
 
 void InkFlowBox::insert(Gtk::Widget *widget, Glib::ustring label, gint pos, bool active, int minwidth)
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Gtk::ToggleButton *tbutton = new Gtk::ToggleButton(label, true);
-    tbutton->set_active(active);
+    tbutton->set_active(prefs->getBool(getPrefsPath(pos), active));
     tbutton->signal_toggled().connect(
         sigc::bind<gint, Gtk::ToggleButton *>(sigc::mem_fun(*this, &InkFlowBox::on_toggle), pos, tbutton));
     _controller.pack_start(*tbutton);
     tbutton->show();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool(getPrefsPath(pos), active);
+    prefs->setBool(getPrefsPath(pos), prefs->getBool(getPrefsPath(pos), active));
     widget->set_size_request(minwidth, -1);
     _flowbox.insert(*widget, pos);
     showing = 0;
