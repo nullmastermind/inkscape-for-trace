@@ -19,23 +19,28 @@ testname=$(basename $test)
     compare -metric AE ${testname}.png ${EXPECTED}.png ${testname}-compare.png 2> .tmp
     test1=`cat .tmp`
     echo $test1
-    if [ $test1 == 0 ]; then
+    if [ "$test1" == 0 ]; then
         echo ${testname} "PASSED"
         rm ${testname}.png ${testname}-compare.png
     else
         echo ${testname} "FAILED"
         exit_status=1
     fi
+
+if [ -f "${EXPECTED}-large.png" ]; then
     ${INKSCAPE_EXE} --export-file=${testname}-large.png -d 384 ${test}.svg #2>/dev/null >/dev/null
     compare -metric AE ${testname}-large.png ${EXPECTED}-large.png ${testname}-compare-large.png 2>.tmp
     test2=`cat .tmp`
-    if [ $test2 == 0 ]; then
+    if [ "$test2" = 0 ]; then
         echo ${testname}-large "PASSED"
         rm ${testname}-large.png ${testname}-compare-large.png
     else
         echo ${testname}-large "FAILED"
         exit_status=1
     fi
+else
+    echo ${testname}-large "SKIPPED"
+fi
 
 rm .tmp
 exit $exit_status
