@@ -406,9 +406,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
     dtw->_hruler_box->add(*dtw->_hruler);
 
-    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_press_event",   G_CALLBACK (SPDesktopWidget::hruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "button_release_event", G_CALLBACK (SPDesktopWidget::hruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_hruler_box->gobj()), "motion_notify_event",  G_CALLBACK (SPDesktopWidget::hruler_event), dtw);
+    dtw->_hruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler_box, true));
+    dtw->_hruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler_box, true));
+    dtw->_hruler_box->signal_motion_notify_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_hruler_box, true));
 
     dtw->_canvas_tbl->attach(*dtw->_hruler_box, 1, 0, 1, 1);
 
@@ -420,9 +420,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
     dtw->_vruler_box->add(*dtw->_vruler);
 
-    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_press_event",   G_CALLBACK (SPDesktopWidget::vruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "button_release_event", G_CALLBACK (SPDesktopWidget::vruler_event), dtw);
-    g_signal_connect (G_OBJECT (dtw->_vruler_box->gobj()), "motion_notify_event",  G_CALLBACK (SPDesktopWidget::vruler_event), dtw);
+    dtw->_vruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler_box, false));
+    dtw->_vruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler_box, false));
+    dtw->_vruler_box->signal_motion_notify_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_motion_notify_event), dtw->_vruler_box, false));
 
     dtw->_canvas_tbl->attach(*dtw->_vruler_box, 0, 1, 1, 1);
 
@@ -2208,180 +2208,16 @@ SPDesktopWidget::get_vruler_thickness() const
 gint
 SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
 {
-    int wx, wy;
-
-    SPDesktop *desktop = dtw->desktop;
-    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(dtw->_canvas));
-
-    gint width, height;
-
-    auto device = gdk_event_get_device(event);
-    gdk_window_get_device_position(window, device, &wx, &wy, nullptr);
-    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
-
-    Geom::Point const event_win(wx, wy);
-
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-            if (event->button.button == 1) {
-                dtw->_ruler_clicked = true;
-                dtw->_ruler_dragged = false;
-                // save click origin
-                dtw->_xp = (gint) event->button.x;
-                dtw->_yp = (gint) event->button.y;
-
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->_canvas, event_win));
-                Geom::Point const event_dt(desktop->w2d(event_w));
-
-                // calculate the normal of the guidelines when dragged from the edges of rulers.
-                auto const y_dir = desktop->yaxisdir();
-                Geom::Point normal_bl_to_tr(1., y_dir); //bottomleft to topright
-                Geom::Point normal_tr_to_bl(-1., y_dir); //topright to bottomleft
-                normal_bl_to_tr.normalize();
-                normal_tr_to_bl.normalize();
-                Inkscape::CanvasGrid * grid = sp_namedview_get_first_enabled_grid(desktop->namedview);
-                if (grid){
-                    if (grid->getGridType() == Inkscape::GRID_AXONOMETRIC ) {
-                        Inkscape::CanvasAxonomGrid *axonomgrid = dynamic_cast<Inkscape::CanvasAxonomGrid *>(grid);
-                        if (event->button.state & GDK_CONTROL_MASK) {
-                            // guidelines normal to gridlines
-                            normal_bl_to_tr = Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0);
-                            normal_tr_to_bl = Geom::Point::polar(axonomgrid->angle_rad[2], 1.0);
-                        } else {
-                            normal_bl_to_tr = rot90(Geom::Point::polar(axonomgrid->angle_rad[2], 1.0));
-                            normal_tr_to_bl = rot90(Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0));
-                        }
-                    }
-                }
-                if (horiz) {
-                    if (wx < 50) {
-                        dtw->_normal = normal_bl_to_tr;
-                    } else if (wx > width - 50) {
-                        dtw->_normal = normal_tr_to_bl;
-                    } else {
-                        dtw->_normal = Geom::Point(0.,1.);
-                    }
-                } else {
-                    if (wy < 50) {
-                        dtw->_normal = normal_bl_to_tr;
-                    } else if (wy > height - 50) {
-                        dtw->_normal = normal_tr_to_bl;
-                    } else {
-                        dtw->_normal = Geom::Point(1.,0.);
-                    }
-                }
-
-                dtw->_active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, dtw->_normal);
-                sp_guideline_set_color(SP_GUIDELINE(dtw->_active_guide), desktop->namedview->guidehicolor);
-
-                auto window = gtk_widget_get_window(widget);
-
-#if GTK_CHECK_VERSION(3,20,0)
-                auto seat = gdk_device_get_seat(device);
-                gdk_seat_grab(seat,
-                              window,
-                              GDK_SEAT_CAPABILITY_ALL_POINTING,
-                              FALSE,
-                              nullptr,
-                              event,
-                              nullptr,
-                              nullptr);
-#else
-                gdk_device_grab(device,
-                                window,
-                                GDK_OWNERSHIP_NONE,
-                                FALSE,
-                                (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
-                                NULL,
-                                event->button.time);
-#endif
-            }
-            break;
+        dtw->on_ruler_box_button_press_event(&event->button, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        break;
     case GDK_MOTION_NOTIFY:
-            if (dtw->_ruler_clicked) {
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->_canvas, event_win));
-                Geom::Point event_dt(desktop->w2d(event_w));
-
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                gint tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-                if ( ( abs( (gint) event->motion.x - dtw->_xp ) < tolerance )
-                        && ( abs( (gint) event->motion.y - dtw->_yp ) < tolerance ) ) {
-                    break;
-                }
-
-                dtw->_ruler_dragged = true;
-
-                // explicitly show guidelines; if I draw a guide, I want them on
-                if ((horiz ? wy : wx) >= 0) {
-                    desktop->namedview->setGuides(true);
-                }
-
-                if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                    ruler_snap_new_guide(desktop, dtw->_active_guide, event_dt, dtw->_normal);
-                }
-                sp_guideline_set_normal(SP_GUIDELINE(dtw->_active_guide), dtw->_normal);
-                sp_guideline_set_position(SP_GUIDELINE(dtw->_active_guide), event_dt);
-
-                desktop->set_coordinate_status(event_dt);
-            }
-            break;
+        dtw->on_ruler_box_motion_notify_event(&event->motion, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        break;
     case GDK_BUTTON_RELEASE:
-            if (dtw->_ruler_clicked && event->button.button == 1) {
-                sp_event_context_discard_delayed_snap_event(desktop->event_context);
-
-#if GTK_CHECK_VERSION(3,20,0)
-                auto seat = gdk_device_get_seat(device);
-                gdk_seat_ungrab(seat);
-#else
-                gdk_device_ungrab(device, event->button.time);
-#endif
-
-                Geom::Point const event_w(sp_canvas_window_to_world(dtw->_canvas, event_win));
-                Geom::Point event_dt(desktop->w2d(event_w));
-
-                if (!(event->button.state & GDK_SHIFT_MASK)) {
-                    ruler_snap_new_guide(desktop, dtw->_active_guide, event_dt, dtw->_normal);
-                }
-
-                sp_canvas_item_destroy(dtw->_active_guide);
-                dtw->_active_guide = nullptr;
-                if ((horiz ? wy : wx) >= 0) {
-                    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-                    Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
-
-                    // If root viewBox set, interpret guides in terms of viewBox (90/96)
-                    double newx = event_dt.x();
-                    double newy = event_dt.y();
-
-                    // <sodipodi:guide> stores inverted y-axis coordinates
-                    if (desktop->is_yaxisdown()) {
-                        newy = desktop->doc()->getHeight().value("px") - newy;
-                        dtw->_normal[Geom::Y] *= -1.0;
-                    }
-
-                    SPRoot *root = desktop->doc()->getRoot();
-                    if( root->viewBox_set ) {
-                        newx = newx * root->viewBox.width()  / root->width.computed;
-                        newy = newy * root->viewBox.height() / root->height.computed;
-                    }
-                    sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
-                    sp_repr_set_point(repr, "orientation", dtw->_normal);
-                    desktop->namedview->appendChild(repr);
-                    Inkscape::GC::release(repr);
-                    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
-                                     _("Create guide"));
-                }
-                desktop->set_coordinate_status(event_dt);
-
-                if (!dtw->_ruler_dragged) {
-                    // Ruler click (without drag) toggle the guide visibility on and off
-                    Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-                    sp_namedview_toggle_guides(desktop->getDocument(), repr);
-                }
-
-                dtw->_ruler_clicked = false;
-                dtw->_ruler_dragged = false;
-            }
+        dtw->on_ruler_box_button_release_event(&event->button, Glib::wrap(GTK_EVENT_BOX(widget)), horiz);
+        break;
     default:
             break;
     }
@@ -2389,22 +2225,220 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
     return FALSE;
 }
 
-int
-SPDesktopWidget::hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
+bool
+SPDesktopWidget::on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz)
 {
-    if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HRULER);
+    if (horiz) {
+        sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) widget->gobj(), (gpointer) this, event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_HRULER);
     }
-    return ruler_event(widget, event, dtw, true);
+    else {
+        sp_event_context_snap_delay_handler(desktop->event_context, (gpointer) widget->gobj(), (gpointer) this, event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_VRULER);
+    }
+
+    int wx, wy;
+
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+
+    gint width, height;
+
+    gdk_window_get_device_position(window, event->device, &wx, &wy, nullptr);
+    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
+
+    Geom::Point const event_win(wx, wy);
+
+    if (_ruler_clicked) {
+        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point event_dt(desktop->w2d(event_w));
+
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        gint tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+        if ( ( abs( (gint) event->x - _xp ) < tolerance )
+                && ( abs( (gint) event->y - _yp ) < tolerance ) ) {
+            return false;
+        }
+
+        _ruler_dragged = true;
+
+        // explicitly show guidelines; if I draw a guide, I want them on
+        if ((horiz ? wy : wx) >= 0) {
+            desktop->namedview->setGuides(true);
+        }
+
+        if (!(event->state & GDK_SHIFT_MASK)) {
+            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+        }
+        sp_guideline_set_normal(SP_GUIDELINE(_active_guide), _normal);
+        sp_guideline_set_position(SP_GUIDELINE(_active_guide), event_dt);
+
+        desktop->set_coordinate_status(event_dt);
+    }
+
+    return false;
 }
 
-int
-SPDesktopWidget::vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
+bool
+SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz)
 {
-    if (event->type == GDK_MOTION_NOTIFY) {
-        sp_event_context_snap_delay_handler(dtw->desktop->event_context, (gpointer) widget, (gpointer) dtw, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::GUIDE_VRULER);
+    int wx, wy;
+
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+
+    gint width, height;
+
+    gdk_window_get_device_position(window, event->device, &wx, &wy, nullptr);
+    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
+
+    Geom::Point const event_win(wx, wy);
+
+    if (_ruler_clicked && event->button == 1) {
+        sp_event_context_discard_delayed_snap_event(desktop->event_context);
+
+#if GTK_CHECK_VERSION(3,20,0)
+        auto seat = gdk_device_get_seat(event->device);
+        gdk_seat_ungrab(seat);
+#else
+        gdk_device_ungrab(device, event->time);
+#endif
+
+        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point event_dt(desktop->w2d(event_w));
+
+        if (!(event->state & GDK_SHIFT_MASK)) {
+            ruler_snap_new_guide(desktop, _active_guide, event_dt, _normal);
+        }
+
+        sp_canvas_item_destroy(_active_guide);
+        _active_guide = nullptr;
+        if ((horiz ? wy : wx) >= 0) {
+            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
+
+            // If root viewBox set, interpret guides in terms of viewBox (90/96)
+            double newx = event_dt.x();
+            double newy = event_dt.y();
+
+            // <sodipodi:guide> stores inverted y-axis coordinates
+            if (desktop->is_yaxisdown()) {
+                newy = desktop->doc()->getHeight().value("px") - newy;
+                _normal[Geom::Y] *= -1.0;
+            }
+
+            SPRoot *root = desktop->doc()->getRoot();
+            if( root->viewBox_set ) {
+                newx = newx * root->viewBox.width()  / root->width.computed;
+                newy = newy * root->viewBox.height() / root->height.computed;
+            }
+            sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
+            sp_repr_set_point(repr, "orientation", _normal);
+            desktop->namedview->appendChild(repr);
+            Inkscape::GC::release(repr);
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
+                    _("Create guide"));
+        }
+        desktop->set_coordinate_status(event_dt);
+
+        if (!_ruler_dragged) {
+            // Ruler click (without drag) toggle the guide visibility on and off
+            Inkscape::XML::Node *repr = desktop->namedview->getRepr();
+            sp_namedview_toggle_guides(desktop->getDocument(), repr);
+        }
+
+        _ruler_clicked = false;
+        _ruler_dragged = false;
     }
-    return ruler_event(widget, event, dtw, false);
+
+    return false;
+}
+
+bool
+SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz)
+{
+    int wx, wy;
+
+    GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(_canvas));
+
+    gint width, height;
+
+    gdk_window_get_device_position(window, event->device, &wx, &wy, nullptr);
+    gdk_window_get_geometry(window, nullptr /*x*/, nullptr /*y*/, &width, &height);
+
+    Geom::Point const event_win(wx, wy);
+
+    if (event->button == 1) {
+        _ruler_clicked = true;
+        _ruler_dragged = false;
+        // save click origin
+        _xp = (gint) event->x;
+        _yp = (gint) event->y;
+
+        Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
+        Geom::Point const event_dt(desktop->w2d(event_w));
+
+        // calculate the normal of the guidelines when dragged from the edges of rulers.
+        auto const y_dir = desktop->yaxisdir();
+        Geom::Point normal_bl_to_tr(1., y_dir); //bottomleft to topright
+        Geom::Point normal_tr_to_bl(-1., y_dir); //topright to bottomleft
+        normal_bl_to_tr.normalize();
+        normal_tr_to_bl.normalize();
+        Inkscape::CanvasGrid * grid = sp_namedview_get_first_enabled_grid(desktop->namedview);
+        if (grid){
+            if (grid->getGridType() == Inkscape::GRID_AXONOMETRIC ) {
+                Inkscape::CanvasAxonomGrid *axonomgrid = dynamic_cast<Inkscape::CanvasAxonomGrid *>(grid);
+                if (event->state & GDK_CONTROL_MASK) {
+                    // guidelines normal to gridlines
+                    normal_bl_to_tr = Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0);
+                    normal_tr_to_bl = Geom::Point::polar(axonomgrid->angle_rad[2], 1.0);
+                } else {
+                    normal_bl_to_tr = rot90(Geom::Point::polar(axonomgrid->angle_rad[2], 1.0));
+                    normal_tr_to_bl = rot90(Geom::Point::polar(-axonomgrid->angle_rad[0], 1.0));
+                }
+            }
+        }
+        if (horiz) {
+            if (wx < 50) {
+                _normal = normal_bl_to_tr;
+            } else if (wx > width - 50) {
+                _normal = normal_tr_to_bl;
+            } else {
+                _normal = Geom::Point(0.,1.);
+            }
+        } else {
+            if (wy < 50) {
+                _normal = normal_bl_to_tr;
+            } else if (wy > height - 50) {
+                _normal = normal_tr_to_bl;
+            } else {
+                _normal = Geom::Point(1.,0.);
+            }
+        }
+
+        _active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, _normal);
+        sp_guideline_set_color(SP_GUIDELINE(_active_guide), desktop->namedview->guidehicolor);
+
+        auto window = widget->get_window()->gobj();
+
+#if GTK_CHECK_VERSION(3,20,0)
+        auto seat = gdk_device_get_seat(event->device);
+        gdk_seat_grab(seat,
+                window,
+                GDK_SEAT_CAPABILITY_ALL_POINTING,
+                FALSE,
+                nullptr,
+                (GdkEvent*)event,
+                nullptr,
+                nullptr);
+#else
+        gdk_device_grab(event->device,
+                window,
+                GDK_OWNERSHIP_NONE,
+                FALSE,
+                (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
+                NULL,
+                event->time);
+#endif
+    }
+
+    return false;
 }
 
 GtkAllocation

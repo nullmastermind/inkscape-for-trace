@@ -1479,9 +1479,9 @@ gboolean sp_event_context_snap_watchdog_callback(gpointer data) {
             g_assert(GTK_IS_WIDGET(item));
             g_assert(SP_IS_DESKTOP_WIDGET(item2));
             if (dse->getOrigin() == DelayedSnapEvent::GUIDE_HRULER) {
-                SPDesktopWidget::hruler_event(GTK_WIDGET(item), dse->getEvent(), SP_DESKTOP_WIDGET(item2));
+                SPDesktopWidget::ruler_event(GTK_WIDGET(item), dse->getEvent(), SP_DESKTOP_WIDGET(item2), true);
             } else {
-                SPDesktopWidget::vruler_event(GTK_WIDGET(item), dse->getEvent(), SP_DESKTOP_WIDGET(item2));
+                SPDesktopWidget::ruler_event(GTK_WIDGET(item), dse->getEvent(), SP_DESKTOP_WIDGET(item2), false);
             }
         }
     }

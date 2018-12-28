@@ -287,11 +287,10 @@ public:
     double get_hruler_thickness() const;
     double get_vruler_thickness() const;
     GtkAllocation get_canvas_allocation() const;
-    static int hruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
-    static int vruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
     void iconify();
     void maximize();
     void fullscreen();
+    static gint ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz);
 
 private:
     GtkWidget *tool_toolbox;
@@ -323,9 +322,11 @@ private:
     static void cms_adjust_toggled( GtkWidget *button, gpointer data );
     static void color_profile_event(EgeColorProfTracker *tracker, SPDesktopWidget *dtw);
 #endif
-    static gint ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz);
     static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
+    bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
+    bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
+    bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz);
 };
 
 /// The SPDesktopWidget vtable
