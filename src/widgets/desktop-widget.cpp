@@ -321,6 +321,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     new (&dtw->modified_connection) sigc::connection();
 
+    dtw->_ruler_clicked = false;
+    dtw->_ruler_dragged = false;
+    dtw->_active_guide = nullptr;
+    dtw->_xp = 0;
+    dtw->_yp = 0;
     dtw->window = nullptr;
     dtw->desktop = nullptr;
     dtw->_interaction_disabled_counter = 0;
@@ -2203,12 +2208,7 @@ SPDesktopWidget::get_vruler_thickness() const
 gint
 SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz)
 {
-    static bool clicked = false;
-    static bool dragged = false;
-    static SPCanvasItem *guide = nullptr;
-    static Geom::Point normal;
     int wx, wy;
-    static gint xp = 0, yp = 0; // where drag started
 
     SPDesktop *desktop = dtw->desktop;
     GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(dtw->_canvas));
@@ -2224,11 +2224,11 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
     switch (event->type) {
     case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
-                clicked = true;
-                dragged = false;
+                dtw->_ruler_clicked = true;
+                dtw->_ruler_dragged = false;
                 // save click origin
-                xp = (gint) event->button.x;
-                yp = (gint) event->button.y;
+                dtw->_xp = (gint) event->button.x;
+                dtw->_yp = (gint) event->button.y;
 
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->_canvas, event_win));
                 Geom::Point const event_dt(desktop->w2d(event_w));
@@ -2255,24 +2255,24 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                 }
                 if (horiz) {
                     if (wx < 50) {
-                        normal = normal_bl_to_tr;
+                        dtw->_normal = normal_bl_to_tr;
                     } else if (wx > width - 50) {
-                        normal = normal_tr_to_bl;
+                        dtw->_normal = normal_tr_to_bl;
                     } else {
-                        normal = Geom::Point(0.,1.);
+                        dtw->_normal = Geom::Point(0.,1.);
                     }
                 } else {
                     if (wy < 50) {
-                        normal = normal_bl_to_tr;
+                        dtw->_normal = normal_bl_to_tr;
                     } else if (wy > height - 50) {
-                        normal = normal_tr_to_bl;
+                        dtw->_normal = normal_tr_to_bl;
                     } else {
-                        normal = Geom::Point(1.,0.);
+                        dtw->_normal = Geom::Point(1.,0.);
                     }
                 }
 
-                guide = sp_guideline_new(desktop->guides, nullptr, event_dt, normal);
-                sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
+                dtw->_active_guide = sp_guideline_new(desktop->guides, nullptr, event_dt, dtw->_normal);
+                sp_guideline_set_color(SP_GUIDELINE(dtw->_active_guide), desktop->namedview->guidehicolor);
 
                 auto window = gtk_widget_get_window(widget);
 
@@ -2298,18 +2298,18 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
             }
             break;
     case GDK_MOTION_NOTIFY:
-            if (clicked) {
+            if (dtw->_ruler_clicked) {
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->_canvas, event_win));
                 Geom::Point event_dt(desktop->w2d(event_w));
 
                 Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                 gint tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-                if ( ( abs( (gint) event->motion.x - xp ) < tolerance )
-                        && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+                if ( ( abs( (gint) event->motion.x - dtw->_xp ) < tolerance )
+                        && ( abs( (gint) event->motion.y - dtw->_yp ) < tolerance ) ) {
                     break;
                 }
 
-                dragged = true;
+                dtw->_ruler_dragged = true;
 
                 // explicitly show guidelines; if I draw a guide, I want them on
                 if ((horiz ? wy : wx) >= 0) {
@@ -2317,16 +2317,16 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                 }
 
                 if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                    ruler_snap_new_guide(desktop, guide, event_dt, normal);
+                    ruler_snap_new_guide(desktop, dtw->_active_guide, event_dt, dtw->_normal);
                 }
-                sp_guideline_set_normal(SP_GUIDELINE(guide), normal);
-                sp_guideline_set_position(SP_GUIDELINE(guide), event_dt);
+                sp_guideline_set_normal(SP_GUIDELINE(dtw->_active_guide), dtw->_normal);
+                sp_guideline_set_position(SP_GUIDELINE(dtw->_active_guide), event_dt);
 
                 desktop->set_coordinate_status(event_dt);
             }
             break;
     case GDK_BUTTON_RELEASE:
-            if (clicked && event->button.button == 1) {
+            if (dtw->_ruler_clicked && event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
 #if GTK_CHECK_VERSION(3,20,0)
@@ -2340,11 +2340,11 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                 Geom::Point event_dt(desktop->w2d(event_w));
 
                 if (!(event->button.state & GDK_SHIFT_MASK)) {
-                    ruler_snap_new_guide(desktop, guide, event_dt, normal);
+                    ruler_snap_new_guide(desktop, dtw->_active_guide, event_dt, dtw->_normal);
                 }
 
-                sp_canvas_item_destroy(guide);
-                guide = nullptr;
+                sp_canvas_item_destroy(dtw->_active_guide);
+                dtw->_active_guide = nullptr;
                 if ((horiz ? wy : wx) >= 0) {
                     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
                     Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
@@ -2356,7 +2356,7 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                     // <sodipodi:guide> stores inverted y-axis coordinates
                     if (desktop->is_yaxisdown()) {
                         newy = desktop->doc()->getHeight().value("px") - newy;
-                        normal[Geom::Y] *= -1.0;
+                        dtw->_normal[Geom::Y] *= -1.0;
                     }
 
                     SPRoot *root = desktop->doc()->getRoot();
@@ -2365,7 +2365,7 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                         newy = newy * root->viewBox.height() / root->height.computed;
                     }
                     sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
-                    sp_repr_set_point(repr, "orientation", normal);
+                    sp_repr_set_point(repr, "orientation", dtw->_normal);
                     desktop->namedview->appendChild(repr);
                     Inkscape::GC::release(repr);
                     DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
@@ -2373,14 +2373,14 @@ SPDesktopWidget::ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget
                 }
                 desktop->set_coordinate_status(event_dt);
 
-                if (!dragged) {
+                if (!dtw->_ruler_dragged) {
                     // Ruler click (without drag) toggle the guide visibility on and off
                     Inkscape::XML::Node *repr = desktop->namedview->getRepr();
                     sp_namedview_toggle_guides(desktop->getDocument(), repr);
                 }
 
-                clicked = false;
-                dragged = false;
+                dtw->_ruler_clicked = false;
+                dtw->_ruler_dragged = false;
             }
     default:
             break;

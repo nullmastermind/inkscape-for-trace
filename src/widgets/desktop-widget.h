@@ -84,6 +84,15 @@ struct SPDesktopWidget {
     static void dispose(GObject *object);
 
 private:
+    // Flags for ruler event handling
+    bool _ruler_clicked; ///< True if the ruler has been clicked
+    bool _ruler_dragged; ///< True if a drag on the ruler is occurring
+
+    SPCanvasItem *_active_guide; ///< The guide currently being handled during a ruler event
+    Geom::Point _normal; ///< Normal to the guide currently being handled during ruler event
+    int _xp; ///< x coordinate for start of drag
+    int _yp; ///< y coordinate for start of drag
+
     // The root vbox of the window layout.
     Gtk::Box *_vbox;
 
