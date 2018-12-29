@@ -22,7 +22,11 @@
 #include "ui/icon-loader.h"
 #include "ui/interface.h"
 
-SPButton::~SPButton()
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+Button::~Button()
 {
     if (_action) {
         _c_set_active.disconnect();
@@ -39,7 +43,7 @@ SPButton::~SPButton()
 }
 
 void
-SPButton::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
+Button::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 {
     auto child = get_child();
 
@@ -60,7 +64,7 @@ SPButton::get_preferred_width_vfunc(int &minimal_width, int &natural_width) cons
 }
 
 void
-SPButton::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
+Button::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
 {
     auto child = get_child();
 
@@ -81,15 +85,15 @@ SPButton::get_preferred_height_vfunc(int &minimal_height, int &natural_height) c
 }
 
 void
-SPButton::on_clicked()
+Button::on_clicked()
 {
-    if (_type == SP_BUTTON_TYPE_TOGGLE) {
+    if (_type == BUTTON_TYPE_TOGGLE) {
         Gtk::Button::on_clicked();
     }
 }
 
 bool
-SPButton::process_event(GdkEvent *event)
+Button::process_event(GdkEvent *event)
 {
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
@@ -106,15 +110,15 @@ SPButton::process_event(GdkEvent *event)
 }
 
 void
-SPButton::perform_action()
+Button::perform_action()
 {
     if (_action) {
         sp_action_perform(_action, nullptr);
     }
 }
 
-SPButton::SPButton(GtkIconSize   size,
-                   SPButtonType  type,
+Button::Button(GtkIconSize   size,
+                   ButtonType  type,
                    SPAction     *action,
                    SPAction     *doubleclick_action)
     :
@@ -131,9 +135,9 @@ SPButton::SPButton(GtkIconSize   size,
     set_can_focus(false);
     set_can_default(false);
 
-    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &SPButton::perform_action));
+    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &Button::perform_action));
 
-    signal_event().connect(sigc::mem_fun(*this, &SPButton::process_event));
+    signal_event().connect(sigc::mem_fun(*this, &Button::process_event));
 
     set_action(action);
 
@@ -146,7 +150,7 @@ SPButton::SPButton(GtkIconSize   size,
 }
 
 void
-SPButton::toggle_set_down(bool down)
+Button::toggle_set_down(bool down)
 {
     _on_clicked.block();
     set_active(down);
@@ -154,7 +158,7 @@ SPButton::toggle_set_down(bool down)
 }
 
 void
-SPButton::set_doubleclick_action(SPAction *action)
+Button::set_doubleclick_action(SPAction *action)
 {
     if (_doubleclick_action) {
         g_object_unref(_doubleclick_action);
@@ -166,7 +170,7 @@ SPButton::set_doubleclick_action(SPAction *action)
 }
 
 void
-SPButton::set_action(SPAction *action)
+Button::set_action(SPAction *action)
 {
     Gtk::Widget *child;
 
@@ -184,7 +188,7 @@ SPButton::set_action(SPAction *action)
     if (action) {
         g_object_ref(action);
         _c_set_active = action->signal_set_active.connect(
-                sigc::mem_fun(*this, &SPButton::action_set_active));
+                sigc::mem_fun(*this, &Button::action_set_active));
 
         _c_set_sensitive = action->signal_set_sensitive.connect(
                 sigc::mem_fun(*this, &Gtk::Widget::set_sensitive));
@@ -200,9 +204,9 @@ SPButton::set_action(SPAction *action)
 }
 
 void
-SPButton::action_set_active(bool active)
+Button::action_set_active(bool active)
 {
-    if (_type != SP_BUTTON_TYPE_TOGGLE) {
+    if (_type != BUTTON_TYPE_TOGGLE) {
         return;
     }
 
@@ -213,7 +217,7 @@ SPButton::action_set_active(bool active)
 }
 
 void
-SPButton::set_composed_tooltip(SPAction *action)
+Button::set_composed_tooltip(SPAction *action)
 {
     if (action) {
         unsigned int shortcut = sp_shortcut_get_primary(action->verb);
@@ -236,8 +240,8 @@ SPButton::set_composed_tooltip(SPAction *action)
     }
 }
 
-SPButton::SPButton(GtkIconSize               size,
-                   SPButtonType              type,
+Button::Button(GtkIconSize               size,
+                   ButtonType              type,
                    Inkscape::UI::View::View *view,
                    const gchar              *name,
                    const gchar              *tip)
@@ -254,13 +258,17 @@ SPButton::SPButton(GtkIconSize               size,
     set_can_focus(false);
     set_can_default(false);
 
-    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &SPButton::perform_action));
-    signal_event().connect(sigc::mem_fun(*this, &SPButton::process_event));
+    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &Button::perform_action));
+    signal_event().connect(sigc::mem_fun(*this, &Button::process_event));
 
     auto action = sp_action_new(Inkscape::ActionContext(view), name, name, tip, name, nullptr);
     set_action(action);
     g_object_unref(action);
 }
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

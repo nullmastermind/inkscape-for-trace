@@ -33,8 +33,6 @@
 #include <gtkmm/separator.h>
 #include <gtkmm/separatormenuitem.h>
 
-
-
 #include <gdkmm/types.h>
 #if GTK_CHECK_VERSION(3,20,0)
 #include <gdkmm/seat.h>
@@ -76,6 +74,7 @@
 #include "ui/interface.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/button.h"
 #include "ui/widget/dock.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/layer-selector.h"
@@ -86,7 +85,6 @@
 #include "util/units.h"
 
 // We're in the "widgets" directory, so no need to explicitly prefix these:
-#include "button.h"
 #include "gimp/ruler.h"
 #include "spinbutton-events.h"
 #include "spw-utilities.h"
@@ -382,11 +380,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 
     // Lock guides button
-    dtw->_guides_lock = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
-                                               SP_BUTTON_TYPE_TOGGLE,
-                                               nullptr,
-                                               INKSCAPE_ICON("object-locked"),
-                                               _("Toggle lock of all guides in the document")));
+    dtw->_guides_lock = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
+                                                                     Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
+                                                                     nullptr,
+                                                                     INKSCAPE_ICON("object-locked"),
+                                                                     _("Toggle lock of all guides in the document")));
 
     auto guides_lock_style_provider = Gtk::CssProvider::create();
     guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
@@ -440,11 +438,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_canvas_tbl->attach(*dtw->_vscrollbar_box, 2, 0, 1, 2);
 
     // Sticky zoom button
-    dtw->_sticky_zoom = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
-                                                 SP_BUTTON_TYPE_TOGGLE,
-                                                 nullptr,
-                                                 INKSCAPE_ICON("zoom-original"),
-                                                 _("Zoom drawing if window size changes")));
+    dtw->_sticky_zoom = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
+                                                                     Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
+                                                                     nullptr,
+                                                                     INKSCAPE_ICON("zoom-original"),
+                                                                     _("Zoom drawing if window size changes")));
     dtw->_sticky_zoom->set_name("StickyZoom");
     dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
     dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled));
@@ -464,11 +462,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
             tip = act->tip;
         }
     }
-    dtw->_cms_adjust = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
-                    SP_BUTTON_TYPE_TOGGLE,
-                    nullptr,
-                    INKSCAPE_ICON("color-management"),
-                    tip ));
+    dtw->_cms_adjust = Gtk::manage(new Inkscape::UI::Widget::Button(GTK_ICON_SIZE_MENU,
+                                                                    Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
+                                                                    nullptr,
+                                                                    INKSCAPE_ICON("color-management"),
+                                                                    tip ));
     dtw->_cms_adjust->set_name("CMS_Adjust");
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)

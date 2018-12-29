@@ -147,6 +147,7 @@ set(ui_SRC
 	widget/iconrenderer.cpp
 	widget/alignment-selector.cpp
 	widget/anchor-selector.cpp
+        widget/button.cpp
 	widget/clipmaskicon.cpp
 	widget/color-entry.cpp
 	widget/color-icc-selector.cpp
@@ -370,6 +371,7 @@ set(ui_SRC
 	widget/alignment-selector.h
 	widget/anchor-selector.h
 	widget/attr-widget.h
+        widget/button.h
 	widget/clipmaskicon.h
 	widget/color-entry.h
 	widget/color-icc-selector.h

@@ -26,7 +26,6 @@
 
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
-class SPButton;
 struct SPCanvas;
 struct SPCanvasItem;
 class SPDesktop;
@@ -41,6 +40,14 @@ class MenuBar;
 class Scrollbar;
 class SpinButton;
 class ToggleButton;
+}
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class Button;
+}
+}
 }
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
@@ -109,7 +116,7 @@ private:
 
     Gtk::ToggleButton *_guides_lock;
 
-    SPButton *_cms_adjust;
+    Inkscape::UI::Widget::Button *_cms_adjust;
     Gtk::ToggleButton *_sticky_zoom;
     Gtk::Grid *_coord_status;
 

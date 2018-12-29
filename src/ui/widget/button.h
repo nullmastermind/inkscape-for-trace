@@ -22,21 +22,17 @@ namespace UI {
 namespace View {
 class View;
 }
-}
-}
 
-enum SPButtonType {
-	SP_BUTTON_TYPE_NORMAL,
-	SP_BUTTON_TYPE_TOGGLE
+namespace Widget {
+
+enum ButtonType {
+    BUTTON_TYPE_NORMAL,
+    BUTTON_TYPE_TOGGLE
 };
 
-struct SPBChoiceData {
-	guchar *px;
-};
-
-class SPButton : public Gtk::ToggleButton{
+class Button : public Gtk::ToggleButton{
 private:
-    SPButtonType _type;
+    ButtonType _type;
     GtkIconSize _lsize;
     unsigned int _psize;
     SPAction *_action;
@@ -60,24 +56,25 @@ protected:
     void on_clicked() override;
 
 public:
-    SPButton(GtkIconSize   size,
-             SPButtonType  type,
-             SPAction     *action,
-             SPAction     *doubleclick_action);
+    Button(GtkIconSize  size,
+           ButtonType   type,
+           SPAction    *action,
+           SPAction    *doubleclick_action);
     
-    SPButton(GtkIconSize               size,
-                   SPButtonType              type,
-                   Inkscape::UI::View::View *view,
-                   const gchar              *name,
-                   const gchar              *tip);
+    Button(GtkIconSize               size,
+           ButtonType                type,
+           Inkscape::UI::View::View *view,
+           const gchar              *name,
+           const gchar              *tip);
 
-    ~SPButton();
+    ~Button();
 
     void toggle_set_down(bool down);
 };
 
-#define SP_BUTTON_IS_DOWN(b) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))
-
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 #endif // !SEEN_SP_BUTTON_H
 
 /*
