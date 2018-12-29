@@ -36,7 +36,7 @@
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 static std::vector<std::string> mimeStrings;
 static std::map<std::string, guint> mimeToInt;
@@ -788,7 +788,7 @@ void ColorItem::_linkTone( ColorItem& other, int percent, int grayLevel )
     }
 }
 
-} // namespace Dialogs
+} // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 

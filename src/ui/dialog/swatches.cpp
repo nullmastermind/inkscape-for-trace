@@ -58,7 +58,7 @@
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 
 enum {
@@ -871,7 +871,7 @@ void SwatchesPanel::setDesktop( SPDesktop* desktop )
             _currentDesktop->connectToolSubselectionChanged(
                 sigc::hide(sigc::mem_fun(*this, &SwatchesPanel::_updateFromSelection)));
 
-            sigc::bound_mem_functor1<void, Inkscape::UI::Dialogs::SwatchesPanel, SPDocument*> first = sigc::mem_fun(*this, &SwatchesPanel::_setDocument);
+            sigc::bound_mem_functor1<void, SwatchesPanel, SPDocument*> first = sigc::mem_fun(*this, &SwatchesPanel::_setDocument);
             sigc::slot<void, SPDocument*> base2 = first;
             sigc::slot<void,SPDesktop*, SPDocument*> slot2 = sigc::hide<0>( base2 );
             _documentConnection = desktop->connectDocumentReplaced( slot2 );
@@ -1414,7 +1414,7 @@ void SwatchesPanel::_rebuild()
     _holder->thawUpdates();
 }
 
-} //namespace Dialogs
+} //namespace Dialog
 } //namespace UI
 } //namespace Inkscape
 

@@ -33,22 +33,28 @@ struct SPDesktopWidget;
 class SPObject;
 
 namespace Gtk {
-class Box;
-class EventBox;
-class Grid;
-class MenuBar;
-class Scrollbar;
-class SpinButton;
-class ToggleButton;
+    class Box;
+    class EventBox;
+    class Grid;
+    class MenuBar;
+    class Scrollbar;
+    class SpinButton;
+    class ToggleButton;
 }
 
 namespace Inkscape {
 namespace UI {
+namespace Dialog {
+class SwatchesPanel;
+} // namespace Dialog
+
 namespace Widget {
 class Button;
-}
-}
-}
+class LayerSelector;
+class SelectedStyle;
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -70,12 +76,6 @@ void sp_desktop_widget_update_scrollbars (SPDesktopWidget *dtw, double scale);
 
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
-
-namespace Inkscape { namespace Widgets { class LayerSelector; } }
-
-namespace Inkscape { namespace UI { namespace Widget { class SelectedStyle; } } }
-
-namespace Inkscape { namespace UI { namespace Dialogs { class SwatchesPanel; } } }
 
 /// A GtkEventBox on an SPDesktop.
 struct SPDesktopWidget {
@@ -109,7 +109,7 @@ private:
     Gtk::MenuBar *_menubar;
     Gtk::Box     *_statusbar;
 
-    Inkscape::UI::Dialogs::SwatchesPanel *_panels;
+    Inkscape::UI::Dialog::SwatchesPanel *_panels;
 
     Glib::RefPtr<Gtk::Adjustment> _hadj;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
@@ -162,8 +162,7 @@ private:
     SPCanvas *_canvas;
 
 public:
-
-    Inkscape::Widgets::LayerSelector *layer_selector;
+    Inkscape::UI::Widget::LayerSelector *layer_selector;
 
     EgeColorProfTracker* _tracker;
 
@@ -172,78 +171,78 @@ public:
         WidgetStub (SPDesktopWidget* dtw) : _dtw(dtw) {}
 
         void setTitle (gchar const *uri) override
-            { _dtw->updateTitle (uri); }
+        { _dtw->updateTitle (uri); }
         Gtk::Window* getWindow() override
-            { return _dtw->window; }
+        { return _dtw->window; }
 
         void layout() override {
             _dtw->layoutWidgets();
         }
 
         void present() override
-            { _dtw->presentWindow(); }
+        { _dtw->presentWindow(); }
         void getGeometry (gint &x, gint &y, gint &w, gint &h) override
-            { _dtw->getWindowGeometry (x, y, w, h); }
+        { _dtw->getWindowGeometry (x, y, w, h); }
         void setSize (gint w, gint h) override
-            { _dtw->setWindowSize (w, h); }
+        { _dtw->setWindowSize (w, h); }
         void setPosition (Geom::Point p) override
-            { _dtw->setWindowPosition (p); }
+        { _dtw->setWindowPosition (p); }
         void setTransient (void* p, int transient_policy) override
-            { _dtw->setWindowTransient (p, transient_policy); }
+        { _dtw->setWindowTransient (p, transient_policy); }
         Geom::Point getPointer() override
-            { return _dtw->window_get_pointer(); }
+        { return _dtw->window_get_pointer(); }
         void setIconified() override
-            { _dtw->iconify(); }
+        { _dtw->iconify(); }
         void setMaximized() override
-            { _dtw->maximize(); }
+        { _dtw->maximize(); }
         void setFullscreen() override
-            { _dtw->fullscreen(); }
+        { _dtw->fullscreen(); }
         bool shutdown() override
-            { return _dtw->shutdown(); }
+        { return _dtw->shutdown(); }
         void destroy() override
-            {
-                if(_dtw->window != nullptr)
-                    delete _dtw->window;
-                _dtw->window = nullptr;
-            }
+        {
+            if(_dtw->window != nullptr)
+                delete _dtw->window;
+            _dtw->window = nullptr;
+        }
 
-            void storeDesktopPosition() override { _dtw->storeDesktopPosition(); }
-            void requestCanvasUpdate() override { _dtw->requestCanvasUpdate(); }
-            void requestCanvasUpdateAndWait() override { _dtw->requestCanvasUpdateAndWait(); }
-            void enableInteraction() override { _dtw->enableInteraction(); }
-            void disableInteraction() override { _dtw->disableInteraction(); }
-            void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
-            void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
-            void updateRulers() override { _dtw->update_rulers(); }
-            void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
-            void toggleRulers() override { _dtw->toggle_rulers(); }
-            void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
-            void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
-            bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
-            void updateZoom() override { _dtw->update_zoom(); }
-            void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
-            void updateRotation() override { _dtw->update_rotation(); }
-            void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
-            void setToolboxAdjustmentValue(const gchar *id, double val) override
-            { _dtw->setToolboxAdjustmentValue (id, val); }
+        void storeDesktopPosition() override { _dtw->storeDesktopPosition(); }
+        void requestCanvasUpdate() override { _dtw->requestCanvasUpdate(); }
+        void requestCanvasUpdateAndWait() override { _dtw->requestCanvasUpdateAndWait(); }
+        void enableInteraction() override { _dtw->enableInteraction(); }
+        void disableInteraction() override { _dtw->disableInteraction(); }
+        void activateDesktop() override { sp_dtw_desktop_activate(_dtw); }
+        void deactivateDesktop() override { sp_dtw_desktop_deactivate(_dtw); }
+        void updateRulers() override { _dtw->update_rulers(); }
+        void updateScrollbars(double scale) override { _dtw->update_scrollbars(scale); }
+        void toggleRulers() override { _dtw->toggle_rulers(); }
+        void toggleScrollbars() override { _dtw->toggle_scrollbars(); }
+        void toggleColorProfAdjust() override { _dtw->toggle_color_prof_adj(); }
+        bool colorProfAdjustEnabled() override { return _dtw->get_color_prof_adj_enabled(); }
+        void updateZoom() override { _dtw->update_zoom(); }
+        void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
+        void updateRotation() override { _dtw->update_rotation(); }
+        void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
+        void setToolboxAdjustmentValue(const gchar *id, double val) override
+        { _dtw->setToolboxAdjustmentValue (id, val); }
         void setToolboxSelectOneValue (gchar const *id, int val) override
-            { _dtw->setToolboxSelectOneValue (id, val); }
+        { _dtw->setToolboxSelectOneValue (id, val); }
         bool isToolboxButtonActive (gchar const* id) override
-            { return _dtw->isToolboxButtonActive (id); }
+        { return _dtw->isToolboxButtonActive (id); }
         void setCoordinateStatus (Geom::Point p) override
-            { _dtw->setCoordinateStatus (p); }
+        { _dtw->setCoordinateStatus (p); }
         void setMessage (Inkscape::MessageType type, gchar const* msg) override
-            { _dtw->setMessage (type, msg); }
+        { _dtw->setMessage (type, msg); }
 
         bool showInfoDialog( Glib::ustring const &message ) override {
             return _dtw->showInfoDialog( message );
         }
 
         bool warnDialog (Glib::ustring const &text) override
-            { return _dtw->warnDialog (text); }
+        { return _dtw->warnDialog (text); }
 
         Inkscape::UI::Widget::Dock* getDock () override
-            { return _dtw->getDock(); }
+        { return _dtw->getDock(); }
     };
 
     WidgetStub *stub;
@@ -300,7 +299,7 @@ public:
     void fullscreen();
     static gint ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, bool horiz);
 
-private:
+    private:
     GtkWidget *tool_toolbox;
     GtkWidget *aux_toolbox;
     GtkWidget *commands_toolbox;
@@ -345,12 +344,12 @@ struct SPDesktopWidgetClass {
 #endif /* !SEEN_SP_DESKTOP_WIDGET_H */
 
 /*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
+   Local Variables:
+mode:c++
+c-file-style:"stroustrup"
+c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+indent-tabs-mode:nil
+fill-column:99
+End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

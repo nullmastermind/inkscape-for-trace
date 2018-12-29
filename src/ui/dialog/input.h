@@ -20,7 +20,6 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-
 class InputDialog : public UI::Widget::Panel
 {
 public:

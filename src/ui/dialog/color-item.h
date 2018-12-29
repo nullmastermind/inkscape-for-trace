@@ -22,7 +22,7 @@ class SPGradient;
 
 namespace Inkscape {
 namespace UI {
-namespace Dialogs {
+namespace Dialog {
 
 class ColorItem;
 
@@ -109,7 +109,7 @@ private:
     std::vector<ColorItem*> _listeners;
 };
 
-} // namespace Dialogs
+} // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 

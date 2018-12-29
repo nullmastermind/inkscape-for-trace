@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Inkscape::Widgets::LayerSelector - layer selector widget
+ * Inkscape::UI::Widget::LayerSelector - layer selector widget
  *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -33,7 +33,8 @@ class Node;
 
 
 namespace Inkscape {
-namespace Widgets {
+namespace UI {
+namespace Widget {
 
 class DocumentTreeModel;
 
@@ -96,8 +97,9 @@ private:
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 };
 
-}
-}
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #endif
 /*

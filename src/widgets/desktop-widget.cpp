@@ -340,9 +340,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     /* Swatches panel */
     {
-        using Inkscape::UI::Dialogs::SwatchesPanel;
-
-        dtw->_panels = new SwatchesPanel("/embedded/swatches");
+        dtw->_panels = new Inkscape::UI::Dialog::SwatchesPanel("/embedded/swatches");
         dtw->_panels->set_vexpand(false);
         dtw->_vbox->pack_end(*dtw->_panels, false, true);
     }
@@ -563,7 +561,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 		                false, false);
 
     // Layer Selector
-    dtw->layer_selector = new Inkscape::Widgets::LayerSelector(nullptr);
+    dtw->layer_selector = new Inkscape::UI::Widget::LayerSelector(nullptr);
     // FIXME: need to unreference on container destruction to avoid leak
     dtw->layer_selector->reference();
     dtw->_statusbar->pack_start(*dtw->layer_selector, false, false, 1);

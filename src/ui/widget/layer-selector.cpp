@@ -32,7 +32,8 @@
 #include "xml/node-event-vector.h"
 
 namespace Inkscape {
-namespace Widgets {
+namespace UI {
+namespace Widget {
 
 namespace {
 
@@ -599,8 +600,9 @@ void LayerSelector::_hideLayer(bool hide) {
     }
 }
 
-}
-}
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

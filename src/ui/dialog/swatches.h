@@ -24,7 +24,7 @@ namespace UI {
 
 class PreviewHolder;
 
-namespace Dialogs {
+namespace Dialog {
 
 class ColorItem;
 class SwatchPage;
@@ -90,7 +90,7 @@ private:
     friend class DocTrack;
 };
 
-} //namespace Dialogs
+} //namespace Dialog
 } //namespace UI
 } //namespace Inkscape
 

@@ -95,7 +95,6 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
 DialogManager::DialogManager() {
 
     using namespace Behavior;
-    using namespace Inkscape::UI::Dialogs; // temporary
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int dialogs_type = prefs->getIntLimited("/options/dialogtype/value", DOCK, 0, 1);
