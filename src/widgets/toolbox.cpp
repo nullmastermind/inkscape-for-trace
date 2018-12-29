@@ -324,19 +324,18 @@ Gtk::Widget* VerbAction::create_tool_item_vfunc()
 //     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
     GtkWidget* toolbox = nullptr;
-    GtkToolItem *button_toolitem = sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
-                                                                                      SP_BUTTON_TYPE_TOGGLE,
-                                                                                      verb,
-                                                                                      verb2,
-                                                                                      view );
+    auto holder = Glib::wrap(sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
+                                                                                    SP_BUTTON_TYPE_TOGGLE,
+                                                                                    verb,
+                                                                                    verb2,
+                                                                                    view ));
 
-    GtkWidget* button_widget = gtk_bin_get_child(GTK_BIN(button_toolitem));
+    auto button_widget = static_cast<SPButton *>(holder->get_child());
 
     if ( active ) {
-        sp_button_toggle_set_down( SP_BUTTON(button_widget), active);
+        button_widget->toggle_set_down(active);
     }
-    gtk_widget_show_all( button_widget );
-    Gtk::ToolItem* holder = Glib::wrap(button_toolitem);
+    button_widget->show_all();
 
 //     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
     return holder;
@@ -362,10 +361,9 @@ void VerbAction::set_active(bool active)
         Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(*it);
         if (ti) {
             // *should* have one child that is the SPButton
-            Gtk::Widget* child = ti->get_child();
-            if ( child && SP_IS_BUTTON(child->gobj()) ) {
-                SPButton* button = SP_BUTTON(child->gobj());
-                sp_button_toggle_set_down( button, active );
+            auto child = dynamic_cast<SPButton *>(ti->get_child());
+            if (child) {
+                child->toggle_set_down(active);
             }
         }
     }
@@ -477,30 +475,30 @@ GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t
     }
 
     /* fixme: Handle sensitive/unsensitive */
-    /* fixme: Implement sp_button_new_from_action */
-    GtkWidget *b = sp_button_new(size, type, action, doubleclick_action);
-    gtk_widget_show(b);
-    GtkToolItem *b_toolitem = gtk_tool_item_new();
-    gtk_container_add(GTK_CONTAINER(b_toolitem), b);
+    /* fixme: Implement SPButton construction from action */
+    auto b = Gtk::manage(new SPButton(size, type, action, doubleclick_action));
+    b->show();
+    auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
+    b_toolitem->add(*b);
 
     unsigned int shortcut = sp_shortcut_get_primary(verb);
     if (shortcut != GDK_KEY_VoidSymbol) {
         gchar *key = sp_shortcut_get_label(shortcut);
         gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
         if ( t ) {
-           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
-           gtk_widget_set_tooltip_text(b, tip);
+           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
+           b->set_tooltip_text(tip);
         }
         g_free(tip);
         g_free(key);
     } else {
         if ( t ) {
-            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem, -1);
-            gtk_widget_set_tooltip_text(b, action->tip);
+            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
+            b->set_tooltip_text(action->tip);
         }
     }
 
-    return b_toolitem;
+    return GTK_TOOL_ITEM(b_toolitem->gobj());
 }
 
 

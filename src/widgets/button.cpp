@@ -22,220 +22,198 @@
 #include "ui/icon-loader.h"
 #include "ui/interface.h"
 
-static void sp_button_dispose(GObject *object);
-static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width);
-static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height);
-static void sp_button_clicked(GtkButton *button);
-static void sp_button_perform_action(SPButton *button, gpointer data);
-static gint sp_button_process_event(SPButton *button, GdkEvent *event);
-
-static void sp_button_set_action(SPButton *button, SPAction *action);
-static void sp_button_set_doubleclick_action(SPButton *button, SPAction *action);
-static void sp_button_action_set_active(SPButton *button, bool active);
-static void sp_button_set_composed_tooltip(GtkWidget *widget, SPAction *action);
-
-G_DEFINE_TYPE(SPButton, sp_button, GTK_TYPE_TOGGLE_BUTTON);
-
-static void sp_button_class_init(SPButtonClass *klass)
+SPButton::~SPButton()
 {
-    GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
-    GtkButtonClass *button_class = GTK_BUTTON_CLASS(klass);
-
-    object_class->dispose = sp_button_dispose;
-    //widget_class->get_preferred_width = sp_button_get_preferred_width;
-    //widget_class->get_preferred_height = sp_button_get_preferred_height;
-    button_class->clicked = sp_button_clicked;
-}
-
-static void sp_button_init(SPButton *button)
-{
-    button->action = nullptr;
-    button->doubleclick_action = nullptr;
-    new (&button->c_set_active) sigc::connection();
-    new (&button->c_set_sensitive) sigc::connection();
-
-    gtk_container_set_border_width(GTK_CONTAINER(button), 0);
-
-    gtk_widget_set_can_focus(GTK_WIDGET(button), FALSE);
-    gtk_widget_set_can_default(GTK_WIDGET(button), FALSE);
-
-    g_signal_connect_after(G_OBJECT(button), "clicked", G_CALLBACK(sp_button_perform_action), NULL);
-    g_signal_connect_after(G_OBJECT(button), "event", G_CALLBACK(sp_button_process_event), NULL);
-}
-
-static void sp_button_dispose(GObject *object)
-{
-    SPButton *button = SP_BUTTON(object);
-
-    if (button->action) {
-        sp_button_set_action(button, nullptr);
-    }
-    if (button->doubleclick_action) {
-        sp_button_set_doubleclick_action(button, nullptr);
+    if (_action) {
+        _c_set_active.disconnect();
+        _c_set_sensitive.disconnect();
+        g_object_unref(_action);
     }
 
-    button->c_set_active.~connection();
-    button->c_set_sensitive.~connection();
+    if (_doubleclick_action) {
+        set_doubleclick_action(nullptr);
+    }
 
-    (G_OBJECT_CLASS(sp_button_parent_class))->dispose(object);
+    _c_set_active.~connection();
+    _c_set_sensitive.~connection();
 }
 
-static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
+void
+SPButton::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 {
-    GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+    auto child = get_child();
 
     if (child) {
-        gtk_widget_get_preferred_width(GTK_WIDGET(child), minimal_width, natural_width);
+        child->get_preferred_width(minimal_width, natural_width);
     } else {
-        *minimal_width = 0;
-        *natural_width = 0;
+        minimal_width = 0;
+        natural_width = 0;
     }
 
-    GtkStyleContext *context = gtk_widget_get_style_context (widget);
-    GtkBorder padding;
-    GtkBorder border;
+    auto context = get_style_context();
 
-    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
+    auto border = context->get_border(Gtk::STATE_FLAG_NORMAL);
 
-    *minimal_width += MAX(2, padding.left + padding.right + border.left + border.right);
-    *natural_width += MAX(2, padding.left + padding.right + border.left + border.right);
+    minimal_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
+    natural_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
 }
 
-static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
+void
+SPButton::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
 {
-    GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+    auto child = get_child();
 
     if (child) {
-        gtk_widget_get_preferred_height(GTK_WIDGET(child), minimal_height, natural_height);
+        child->get_preferred_height(minimal_height, natural_height);
     } else {
-        *minimal_height = 0;
-        *natural_height = 0;
+        minimal_height = 0;
+        natural_height = 0;
     }
 
-    GtkStyleContext *context = gtk_widget_get_style_context (widget);
-    GtkBorder padding;
-    GtkBorder border;
+    auto context = get_style_context();
 
-    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
+    auto border = context->get_border(Gtk::STATE_FLAG_NORMAL);
 
-    *minimal_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
-    *natural_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
+    minimal_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
+    natural_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
 }
 
-static void sp_button_clicked(GtkButton *button)
+void
+SPButton::on_clicked()
 {
-    SPButton *sp_button = SP_BUTTON(button);
-
-    if (sp_button->type == SP_BUTTON_TYPE_TOGGLE) {
-        (GTK_BUTTON_CLASS(sp_button_parent_class))->clicked(button);
+    if (_type == SP_BUTTON_TYPE_TOGGLE) {
+        Gtk::Button::on_clicked();
     }
 }
 
-static gint sp_button_process_event(SPButton *button, GdkEvent *event)
+bool
+SPButton::process_event(GdkEvent *event)
 {
     switch (event->type) {
     case GDK_2BUTTON_PRESS:
-        if (button->doubleclick_action) {
-            sp_action_perform(button->doubleclick_action, nullptr);
+        if (_doubleclick_action) {
+            sp_action_perform(_doubleclick_action, nullptr);
         }
-        return TRUE;
+        return true;
         break;
     default:
         break;
     }
 
-    return FALSE;
+    return false;
 }
 
-static void sp_button_perform_action(SPButton *button, gpointer /*data*/)
+void
+SPButton::perform_action()
 {
-    if (button->action) {
-        sp_action_perform(button->action, nullptr);
+    if (_action) {
+        sp_action_perform(_action, nullptr);
     }
 }
 
-GtkWidget *sp_button_new(GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action)
+SPButton::SPButton(GtkIconSize   size,
+                   SPButtonType  type,
+                   SPAction     *action,
+                   SPAction     *doubleclick_action)
+    :
+    _action(nullptr),
+    _doubleclick_action(nullptr),
+    _type(type),
+    _lsize(CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG))
 {
-    SPButton *button = SP_BUTTON(g_object_new(SP_TYPE_BUTTON, nullptr));
+    new (&_c_set_active) sigc::connection();
+    new (&_c_set_sensitive) sigc::connection();
 
-    button->type = type;
-    button->lsize = CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG);
+    set_border_width(0);
 
-    sp_button_set_action(button, action);
-    if (doubleclick_action)
-        sp_button_set_doubleclick_action(button, doubleclick_action);
+    set_can_focus(false);
+    set_can_default(false);
+
+    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &SPButton::perform_action));
+
+    signal_event().connect(sigc::mem_fun(*this, &SPButton::process_event));
+
+    set_action(action);
+
+    if (doubleclick_action) {
+        set_doubleclick_action(doubleclick_action);
+    }
 
     // The Inkscape style is no-relief buttons
-    gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
-
-    return GTK_WIDGET(button);
+    set_relief(Gtk::RELIEF_NONE);
 }
 
-void sp_button_toggle_set_down(SPButton *button, gboolean down)
+void
+SPButton::toggle_set_down(bool down)
 {
-    g_return_if_fail(button->type == SP_BUTTON_TYPE_TOGGLE);
-    g_signal_handlers_block_by_func(G_OBJECT(button), (gpointer)G_CALLBACK(sp_button_perform_action), NULL);
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), (unsigned int)down);
-    g_signal_handlers_unblock_by_func(G_OBJECT(button), (gpointer)G_CALLBACK(sp_button_perform_action), NULL);
+    _on_clicked.block();
+    set_active(down);
+    _on_clicked.unblock();
 }
 
-static void sp_button_set_doubleclick_action(SPButton *button, SPAction *action)
+void
+SPButton::set_doubleclick_action(SPAction *action)
 {
-    if (button->doubleclick_action) {
-        g_object_unref(button->doubleclick_action);
+    if (_doubleclick_action) {
+        g_object_unref(_doubleclick_action);
     }
-    button->doubleclick_action = action;
+    _doubleclick_action = action;
     if (action) {
         g_object_ref(action);
     }
 }
 
-static void sp_button_set_action(SPButton *button, SPAction *action)
+void
+SPButton::set_action(SPAction *action)
 {
-    GtkWidget *child;
+    Gtk::Widget *child;
 
-    if (button->action) {
-        button->c_set_active.disconnect();
-        button->c_set_sensitive.disconnect();
-        child = gtk_bin_get_child(GTK_BIN(button));
+    if (_action) {
+        _c_set_active.disconnect();
+        _c_set_sensitive.disconnect();
+        child = get_child();
         if (child) {
-            gtk_container_remove(GTK_CONTAINER(button), child);
+            remove();
         }
-        g_object_unref(button->action);
+        g_object_unref(_action);
     }
-    button->action = action;
+
+    _action = action;
     if (action) {
         g_object_ref(action);
-        button->c_set_active = action->signal_set_active.connect(
-            sigc::bind<0>(sigc::ptr_fun(&sp_button_action_set_active), SP_BUTTON(button)));
-        button->c_set_sensitive = action->signal_set_sensitive.connect(
-            sigc::bind<0>(sigc::ptr_fun(&gtk_widget_set_sensitive), GTK_WIDGET(button)));
+        _c_set_active = action->signal_set_active.connect(
+                sigc::mem_fun(*this, &SPButton::action_set_active));
+
+        _c_set_sensitive = action->signal_set_sensitive.connect(
+                sigc::mem_fun(*this, &Gtk::Widget::set_sensitive));
+
         if (action->image) {
-            child = sp_get_icon_image(action->image, button->lsize);
-            gtk_widget_show(child);
-            gtk_container_add(GTK_CONTAINER(button), child);
+            child = Glib::wrap(sp_get_icon_image(action->image, _lsize));
+            child->show();
+            add(*child);
         }
     }
 
-    sp_button_set_composed_tooltip(GTK_WIDGET(button), action);
+    set_composed_tooltip(action);
 }
 
-static void sp_button_action_set_active(SPButton *button, bool active)
+void
+SPButton::action_set_active(bool active)
 {
-    if (button->type != SP_BUTTON_TYPE_TOGGLE) {
+    if (_type != SP_BUTTON_TYPE_TOGGLE) {
         return;
     }
 
     /* temporarily lobotomized until SPActions are per-view */
-    if (false && !active != !SP_BUTTON_IS_DOWN(button)) {
-        sp_button_toggle_set_down(button, active);
+    if (false && !active != !get_active()) {
+        toggle_set_down(active);
     }
 }
 
-static void sp_button_set_composed_tooltip(GtkWidget *widget, SPAction *action)
+void
+SPButton::set_composed_tooltip(SPAction *action)
 {
     if (action) {
         unsigned int shortcut = sp_shortcut_get_primary(action->verb);
@@ -245,26 +223,43 @@ static void sp_button_set_composed_tooltip(GtkWidget *widget, SPAction *action)
             gchar *key = sp_shortcut_get_label(shortcut);
 
             gchar *tip = g_strdup_printf("%s (%s)", action->tip, key);
-            gtk_widget_set_tooltip_text(widget, tip);
+            set_tooltip_text(tip);
             g_free(tip);
             g_free(key);
         } else {
             // action has no shortcut
-            gtk_widget_set_tooltip_text(widget, action->tip);
+            set_tooltip_text(action->tip);
         }
     } else {
         // no action
-        gtk_widget_set_tooltip_text(widget, nullptr);
+        set_tooltip_text(nullptr);
     }
 }
 
-GtkWidget *sp_button_new_from_data(GtkIconSize size, SPButtonType type, Inkscape::UI::View::View *view,
-                                   const gchar *name, const gchar *tip)
+SPButton::SPButton(GtkIconSize               size,
+                   SPButtonType              type,
+                   Inkscape::UI::View::View *view,
+                   const gchar              *name,
+                   const gchar              *tip)
+    :
+        _action(nullptr),
+        _doubleclick_action(nullptr),
+        _type(type),
+        _lsize(CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG))
 {
-    SPAction *action = sp_action_new(Inkscape::ActionContext(view), name, name, tip, name, nullptr);
-    GtkWidget *button = sp_button_new(size, type, action, nullptr);
+    new (&_c_set_active) sigc::connection();
+    new (&_c_set_sensitive) sigc::connection();
+    set_border_width(0);
+
+    set_can_focus(false);
+    set_can_default(false);
+
+    _on_clicked = signal_clicked().connect(sigc::mem_fun(*this, &SPButton::perform_action));
+    signal_event().connect(sigc::mem_fun(*this, &SPButton::process_event));
+
+    auto action = sp_action_new(Inkscape::ActionContext(view), name, name, tip, name, nullptr);
+    set_action(action);
     g_object_unref(action);
-    return button;
 }
 
 /*

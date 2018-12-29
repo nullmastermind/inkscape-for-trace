@@ -26,6 +26,7 @@
 
 // forward declaration
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
+class SPButton;
 struct SPCanvas;
 struct SPCanvasItem;
 class SPDesktop;
@@ -108,7 +109,7 @@ private:
 
     Gtk::ToggleButton *_guides_lock;
 
-    Gtk::ToggleButton *_cms_adjust;
+    SPButton *_cms_adjust;
     Gtk::ToggleButton *_sticky_zoom;
     Gtk::Grid *_coord_status;
 

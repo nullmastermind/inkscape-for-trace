@@ -382,12 +382,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
 
     // Lock guides button
-    dtw->_guides_lock = Glib::wrap(GTK_TOGGLE_BUTTON(
-                                      sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+    dtw->_guides_lock = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
                                                SP_BUTTON_TYPE_TOGGLE,
                                                nullptr,
                                                INKSCAPE_ICON("object-locked"),
-                                               _("Toggle lock of all guides in the document"))));
+                                               _("Toggle lock of all guides in the document")));
 
     auto guides_lock_style_provider = Gtk::CssProvider::create();
     guides_lock_style_provider->load_from_data("GtkWidget { padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; }");
@@ -441,11 +440,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_canvas_tbl->attach(*dtw->_vscrollbar_box, 2, 0, 1, 2);
 
     // Sticky zoom button
-    dtw->_sticky_zoom = Glib::wrap(GTK_TOGGLE_BUTTON(sp_button_new_from_data ( GTK_ICON_SIZE_MENU,
+    dtw->_sticky_zoom = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
                                                  SP_BUTTON_TYPE_TOGGLE,
                                                  nullptr,
                                                  INKSCAPE_ICON("zoom-original"),
-                                                 _("Zoom drawing if window size changes"))));
+                                                 _("Zoom drawing if window size changes")));
     dtw->_sticky_zoom->set_name("StickyZoom");
     dtw->_sticky_zoom->set_active(prefs->getBool("/options/stickyzoom/value"));
     dtw->_sticky_zoom->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::sticky_zoom_toggled));
@@ -465,12 +464,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
             tip = act->tip;
         }
     }
-    dtw->_cms_adjust = Glib::wrap(GTK_TOGGLE_BUTTON(
-                sp_button_new_from_data( GTK_ICON_SIZE_MENU,
+    dtw->_cms_adjust = Gtk::manage(new SPButton( GTK_ICON_SIZE_MENU,
                     SP_BUTTON_TYPE_TOGGLE,
                     nullptr,
                     INKSCAPE_ICON("color-management"),
-                    tip )));
+                    tip ));
     dtw->_cms_adjust->set_name("CMS_Adjust");
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -481,7 +479,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         if ( enabled ) {
             bool active = prefs->getBool("/options/displayprofile/enable");
             if ( active ) {
-                sp_button_toggle_set_down( SP_BUTTON(dtw->_cms_adjust->gobj()), TRUE );
+                dtw->_cms_adjust->toggle_set_down(true);
             }
         }
     }
@@ -2104,9 +2102,9 @@ SPDesktopWidget::toggle_color_prof_adj()
 {
     if (_cms_adjust->get_sensitive()) {
         if (_cms_adjust->get_active()) {
-            sp_button_toggle_set_down( SP_BUTTON(_cms_adjust->gobj()), FALSE );
+            _cms_adjust->toggle_set_down(false);
         } else {
-            sp_button_toggle_set_down( SP_BUTTON(_cms_adjust->gobj()), TRUE );
+            _cms_adjust->toggle_set_down(true);
         }
     }
 }
