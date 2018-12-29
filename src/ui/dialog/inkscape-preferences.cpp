@@ -1944,14 +1944,20 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
     box_buttons->set_hexpand();
     _page_keyshortcuts.attach(*box_buttons, 0, row, 3, 1);
 
-    UI::Widget::Button *kb_reset = Gtk::manage(new UI::Widget::Button(_("Reset"), _("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above")));
+    auto kb_reset = Gtk::manage(new Gtk::Button(_("Reset")));
+    kb_reset->set_use_underline();
+    kb_reset->set_tooltip_text(_("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above"));
     box_buttons->pack_start(*kb_reset, true, true, 6);
     box_buttons->set_child_secondary(*kb_reset);
 
-    UI::Widget::Button *kb_import = Gtk::manage(new UI::Widget::Button(_("Import ..."), _("Import custom keyboard shortcuts from a file")));
+    auto kb_import = Gtk::manage(new Gtk::Button(_("Import ...")));
+    kb_import->set_use_underline();
+    kb_import->set_tooltip_text(_("Import custom keyboard shortcuts from a file"));
     box_buttons->pack_end(*kb_import, true, true, 6);
 
-    UI::Widget::Button *kb_export = Gtk::manage(new UI::Widget::Button(_("Export ..."), _("Export custom keyboard shortcuts to a file")));
+    auto kb_export = Gtk::manage(new Gtk::Button(_("Export ...")));
+    kb_export->set_use_underline();
+    kb_export->set_tooltip_text(_("Export custom keyboard shortcuts to a file"));
     box_buttons->pack_end(*kb_export, true, true, 6);
 
     kb_reset->signal_clicked().connect( sigc::mem_fun(*this, &InkscapePreferences::onKBReset) );

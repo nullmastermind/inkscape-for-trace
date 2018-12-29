@@ -20,7 +20,6 @@
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
-#include "ui/widget/button.h"
 
 namespace Gtk {
 class Dialog;
@@ -311,16 +310,16 @@ private:
     Gtk::Image browse_image;
 
     Gtk::HBox batch_box;
-    Inkscape::UI::Widget::CheckButton    batch_export;
+    Gtk::CheckButton    batch_export;
 
     Gtk::HBox hide_box;
-    Inkscape::UI::Widget::CheckButton    hide_export;
+    Gtk::CheckButton    hide_export;
 
-    Inkscape::UI::Widget::CheckButton closeWhenDone;
+    Gtk::CheckButton closeWhenDone;
 
     /* Advanced */
     Gtk::Expander expander;
-    Inkscape::UI::Widget::CheckButton interlacing;
+    Gtk::CheckButton interlacing;
     Gtk::Label                        bitdepth_label;
     Gtk::ComboBoxText                 bitdepth_cb;
     Gtk::Label                        zlib_label;

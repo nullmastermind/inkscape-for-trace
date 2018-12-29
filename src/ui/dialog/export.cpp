@@ -138,8 +138,8 @@ Export::Export () :
     browse_label(_("_Export As..."), true),
     browse_image(),
     batch_box(false, 5),
-    batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
-    interlacing(_("Use interlacing"),_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file")),
+    batch_export(_("B_atch export all selected objects")),
+    interlacing(_("Use interlacing")),
     bitdepth_label(_("Bit depth")),
     bitdepth_cb(),
     zlib_label(_("Compression")),
@@ -149,8 +149,8 @@ Export::Export () :
     antialiasing_label(_("Antialiasing")),
     antialiasing_cb(),
     hide_box(false, 5),
-    hide_export(_("Hide all except selected"), _("In the exported image, hide all objects except those that are selected")),
-    closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
+    hide_export(_("Hide all except selected")),
+    closeWhenDone(_("Close when complete")),
     button_box(false, 3),
     _prog(),
     prog_dlg(nullptr),
@@ -162,6 +162,14 @@ Export::Export () :
     subselChangedConn(),
     selectModifiedConn()
 {
+    batch_export.set_use_underline();
+    batch_export.set_tooltip_text(_("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)"));
+    hide_export.set_use_underline();
+    hide_export.set_tooltip_text(_("In the exported image, hide all objects except those that are selected"));
+    interlacing.set_use_underline();
+    interlacing.set_tooltip_text(_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file"));
+    closeWhenDone.set_use_underline();
+    closeWhenDone.set_tooltip_text(_("Once the export completes, close this dialog"));
     prefs = Inkscape::Preferences::get();
 
     singleexport_box.set_border_width(0);

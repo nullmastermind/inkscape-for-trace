@@ -14,7 +14,6 @@
 #define INKSCAPE_UI_DIALOG_FIND_H
 
 #include "ui/widget/panel.h"
-#include "ui/widget/button.h"
 #include "ui/widget/entry.h"
 #include "ui/widget/frame.h"
 
@@ -22,6 +21,7 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/label.h>
+#include <gtkmm/radiobutton.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -208,11 +208,11 @@ private:
     /**
      * Scope and search in widgets
      */
-    UI::Widget::RadioButton    check_scope_all;
-    UI::Widget::RadioButton    check_scope_layer;
-    UI::Widget::RadioButton    check_scope_selection;
-    UI::Widget::RadioButton    check_searchin_text;
-    UI::Widget::RadioButton    check_searchin_property;
+    Gtk::RadioButton    check_scope_all;
+    Gtk::RadioButton    check_scope_layer;
+    Gtk::RadioButton    check_scope_selection;
+    Gtk::RadioButton    check_searchin_text;
+    Gtk::RadioButton    check_searchin_property;
     Gtk::HBox hbox_searchin;
     Gtk::VBox vbox_scope;
     Gtk::VBox vbox_searchin;
@@ -222,10 +222,10 @@ private:
     /**
      * General option widgets
      */
-    UI::Widget::CheckButton    check_case_sensitive;
-    UI::Widget::CheckButton    check_exact_match;
-    UI::Widget::CheckButton    check_include_hidden;
-    UI::Widget::CheckButton    check_include_locked;
+    Gtk::CheckButton    check_case_sensitive;
+    Gtk::CheckButton    check_exact_match;
+    Gtk::CheckButton    check_include_hidden;
+    Gtk::CheckButton    check_include_locked;
     Gtk::VBox vbox_options1;
     Gtk::VBox vbox_options2;
     Gtk::HBox hbox_options;
@@ -236,11 +236,11 @@ private:
     /**
      * Property type widgets
      */
-    UI::Widget::CheckButton    check_ids;
-    UI::Widget::CheckButton    check_attributename;
-    UI::Widget::CheckButton    check_attributevalue;
-    UI::Widget::CheckButton    check_style;
-    UI::Widget::CheckButton    check_font;
+    Gtk::CheckButton    check_ids;
+    Gtk::CheckButton    check_attributename;
+    Gtk::CheckButton    check_attributevalue;
+    Gtk::CheckButton    check_style;
+    Gtk::CheckButton    check_font;
     Gtk::VBox vbox_properties;
     Gtk::HBox hbox_properties1;
     Gtk::HBox hbox_properties2;
@@ -249,22 +249,22 @@ private:
     /**
      * A vector of all the properties widgets for easy processing
      */
-    std::vector<UI::Widget::CheckButton *> checkProperties;
+    std::vector<Gtk::CheckButton *> checkProperties;
 
     /**
      * Object type widgets
      */
-    UI::Widget::CheckButton    check_alltypes;
-    UI::Widget::CheckButton    check_rects;
-    UI::Widget::CheckButton    check_ellipses;
-    UI::Widget::CheckButton    check_stars;
-    UI::Widget::CheckButton    check_spirals;
-    UI::Widget::CheckButton    check_paths;
-    UI::Widget::CheckButton    check_texts;
-    UI::Widget::CheckButton    check_groups;
-    UI::Widget::CheckButton    check_clones;
-    UI::Widget::CheckButton    check_images;
-    UI::Widget::CheckButton    check_offsets;
+    Gtk::CheckButton    check_alltypes;
+    Gtk::CheckButton    check_rects;
+    Gtk::CheckButton    check_ellipses;
+    Gtk::CheckButton    check_stars;
+    Gtk::CheckButton    check_spirals;
+    Gtk::CheckButton    check_paths;
+    Gtk::CheckButton    check_texts;
+    Gtk::CheckButton    check_groups;
+    Gtk::CheckButton    check_clones;
+    Gtk::CheckButton    check_images;
+    Gtk::CheckButton    check_offsets;
     Gtk::VBox vbox_types1;
     Gtk::VBox vbox_types2;
     Gtk::HBox hbox_types;
@@ -273,7 +273,7 @@ private:
     /**
      * A vector of all the check option widgets for easy processing
      */
-    std::vector<UI::Widget::CheckButton *> checkTypes;
+    std::vector<Gtk::CheckButton *> checkTypes;
 
     //Gtk::HBox hbox_text;
 
@@ -281,8 +281,8 @@ private:
      * Action Buttons and status
      */
     Gtk::Label status;
-    UI::Widget::Button button_find;
-    UI::Widget::Button button_replace;
+    Gtk::Button button_find;
+    Gtk::Button button_replace;
     Gtk::ButtonBox box_buttons;
     Gtk::HBox hboxbutton_row;
 

@@ -63,54 +63,128 @@ Find::Find()
       entry_find(_("F_ind:"), _("Find objects by their content or properties (exact or partial match)")),
       entry_replace(_("R_eplace:"), _("Replace match with this value")),
 
-      check_scope_all(_("_All"), _("Search in all layers")),
-      check_scope_layer(_("Current _layer"), _("Limit search to the current layer")),
-      check_scope_selection(_("Sele_ction"), _("Limit search to the current selection")),
-      check_searchin_text(_("_Text"), _("Search in text objects")),
-      check_searchin_property(_("_Properties"), _("Search in object properties, styles, attributes and IDs")),
+      check_scope_all(_("_All")),
+      check_scope_layer(_("Current _layer")),
+      check_scope_selection(_("Sele_ction")),
+      check_searchin_text(_("_Text")),
+      check_searchin_property(_("_Properties")),
       vbox_searchin(false, false),
       frame_searchin(_("Search in")),
       frame_scope(_("Scope")),
 
-      check_case_sensitive(_("Case sensiti_ve"), _("Match upper/lower case"), false),
-      check_exact_match(_("E_xact match"), _("Match whole objects only"), false),
-      check_include_hidden(_("Include _hidden"), _("Include hidden objects in search"), false),
-      check_include_locked(_("Include loc_ked"), _("Include locked objects in search"), false),
+      check_case_sensitive(_("Case sensiti_ve")),
+      check_exact_match(_("E_xact match")),
+      check_include_hidden(_("Include _hidden")),
+      check_include_locked(_("Include loc_ked")),
       expander_options(_("Options")),
       frame_options(_("General")),
 
-      check_ids(_("_ID"), _("Search id name"), true),
-      check_attributename(_("Attribute _name"), _("Search attribute name"), false),
-      check_attributevalue(_("Attri_bute value"), _("Search attribute value"), true),
-      check_style(_("_Style"), _("Search style"), true),
-      check_font(_("F_ont"), _("Search fonts"), false),
+      check_ids(_("_ID")),
+      check_attributename(_("Attribute _name")),
+      check_attributevalue(_("Attri_bute value")),
+      check_style(_("_Style")),
+      check_font(_("F_ont")),
       frame_properties(_("Properties")),
 
-      check_alltypes(_("All types"), _("Search all object types"), true),
-      check_rects(_("Rectangles"), _("Search rectangles"), false),
-      check_ellipses(_("Ellipses"), _("Search ellipses, arcs, circles"), false),
-      check_stars(_("Stars"), _("Search stars and polygons"), false),
-      check_spirals(_("Spirals"), _("Search spirals"), false),
-      check_paths(_("Paths"), _("Search paths, lines, polylines"), false),
-      check_texts(_("Texts"), _("Search text objects"), false),
-      check_groups(_("Groups"), _("Search groups"), false),
+      check_alltypes(_("All types")),
+      check_rects(_("Rectangles")),
+      check_ellipses(_("Ellipses")),
+      check_stars(_("Stars")),
+      check_spirals(_("Spirals")),
+      check_paths(_("Paths")),
+      check_texts(_("Texts")),
+      check_groups(_("Groups")),
       check_clones(
                     //TRANSLATORS: "Clones" is a noun indicating type of object to find
-                    C_("Find dialog", "Clones"), _("Search clones"), false),
+                    C_("Find dialog", "Clones")),
 
-      check_images(_("Images"), _("Search images"), false),
-      check_offsets(_("Offsets"), _("Search offset objects"), false),
+      check_images(_("Images")),
+      check_offsets(_("Offsets")),
       frame_types(_("Object types")),
 
       status(""),
-      button_find(_("_Find"), _("Select all objects matching the selection criteria")),
-      button_replace(_("_Replace All"), _("Replace all matches")),
+      button_find(_("_Find")),
+      button_replace(_("_Replace All")),
       _action_replace(false),
       blocked(false),
       desktop(nullptr),
       deskTrack()
 
 {
+    button_find.set_use_underline();
+    button_find.set_tooltip_text(_("Select all objects matching the selection criteria"));
+    button_replace.set_use_underline();
+    button_replace.set_tooltip_text(_("Replace all matches"));
+    check_scope_all.set_use_underline();
+    check_scope_all.set_tooltip_text(_("Search in all layers"));
+    check_scope_layer.set_use_underline();
+    check_scope_layer.set_tooltip_text(_("Limit search to the current layer"));
+    check_scope_selection.set_use_underline();
+    check_scope_selection.set_tooltip_text(_("Limit search to the current selection"));
+    check_searchin_text.set_use_underline();
+    check_searchin_text.set_tooltip_text(_("Search in text objects"));
+    check_searchin_property.set_use_underline();
+    check_searchin_property.set_tooltip_text(_("Search in object properties, styles, attributes and IDs"));
+    check_case_sensitive.set_use_underline();
+    check_case_sensitive.set_tooltip_text(_("Match upper/lower case"));
+    check_case_sensitive.set_active(false);
+    check_exact_match.set_use_underline();
+    check_exact_match.set_tooltip_text(_("Match whole objects only"));
+    check_exact_match.set_active(false);
+    check_include_hidden.set_use_underline();
+    check_include_hidden.set_tooltip_text(_("Include hidden objects in search"));
+    check_include_hidden.set_active(false);
+    check_include_locked.set_use_underline();
+    check_include_locked.set_tooltip_text(_("Include locked objects in search"));
+    check_include_locked.set_active(false);
+    check_ids.set_use_underline();
+    check_ids.set_tooltip_text(_("Search id name"));
+    check_ids.set_active(true);
+    check_attributename.set_use_underline();
+    check_attributename.set_tooltip_text(_("Search attribute name"));
+    check_attributename.set_active(false);
+    check_attributevalue.set_use_underline();
+    check_attributevalue.set_tooltip_text(_("Search attribute value"));
+    check_attributevalue.set_active(true);
+    check_style.set_use_underline();
+    check_style.set_tooltip_text(_("Search style"));
+    check_style.set_active(true);
+    check_font.set_use_underline();
+    check_font.set_tooltip_text(_("Search fonts"));
+    check_font.set_active(false);
+    check_alltypes.set_use_underline();
+    check_alltypes.set_tooltip_text(_("Search all object types"));
+    check_alltypes.set_active(true);
+    check_rects.set_use_underline();
+    check_rects.set_tooltip_text(_("Search rectangles"));
+    check_rects.set_active(false);
+    check_ellipses.set_use_underline();
+    check_ellipses.set_tooltip_text(_("Search ellipses, arcs, circles"));
+    check_ellipses.set_active(false);
+    check_stars.set_use_underline();
+    check_stars.set_tooltip_text(_("Search stars and polygons"));
+    check_stars.set_active(false);
+    check_spirals.set_use_underline();
+    check_spirals.set_tooltip_text(_("Search spirals"));
+    check_spirals.set_active(false);
+    check_paths.set_use_underline();
+    check_paths.set_tooltip_text(_("Search paths, lines, polylines"));
+    check_paths.set_active(false);
+    check_texts.set_use_underline();
+    check_texts.set_tooltip_text(_("Search text objects"));
+    check_texts.set_active(false);
+    check_groups.set_use_underline();
+    check_groups.set_tooltip_text(_("Search groups"));
+    check_groups.set_active(false),
+    check_clones.set_use_underline();
+    check_clones.set_tooltip_text(_("Search clones"));
+    check_clones.set_active(false);
+    check_images.set_use_underline();
+    check_images.set_tooltip_text(_("Search images"));
+    check_images.set_active(false);
+    check_offsets.set_use_underline();
+    check_offsets.set_tooltip_text(_("Search offset objects"));
+    check_offsets.set_active(false);
     entry_find.getEntry()->set_width_chars(25);
     entry_replace.getEntry()->set_width_chars(25);
 

@@ -12,12 +12,12 @@
 #ifndef INKSCAPE_DIALOG_GUIDELINE_H
 #define INKSCAPE_DIALOG_GUIDELINE_H
 
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/colorbutton.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/grid.h>
-
 #include <gtkmm/label.h>
-#include <gtkmm/colorbutton.h>
-#include "ui/widget/button.h"
+
 #include "ui/widget/unit-menu.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/entry.h"
@@ -66,8 +66,8 @@ private:
     Gtk::Grid   _layout_table;
     Gtk::Label  _label_name;
     Gtk::Label  _label_descr;
-    Inkscape::UI::Widget::CheckButton _locked_toggle;
-    Inkscape::UI::Widget::CheckButton _relative_toggle;
+    Gtk::CheckButton _locked_toggle;
+    Gtk::CheckButton _relative_toggle;
     static bool _relative_toggle_status; // remember the status of the _relative_toggle_status button across instances
     Inkscape::UI::Widget::UnitMenu _unit_menu;
     Inkscape::UI::Widget::ScalarUnit _spin_button_x;

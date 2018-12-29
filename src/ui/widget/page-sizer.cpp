@@ -25,7 +25,6 @@
 #include "verbs.h"
 #include "helper/action.h"
 #include "object/sp-root.h"
-#include "ui/widget/button.h"
 #include "io/resource.h"
 
 using std::pair;

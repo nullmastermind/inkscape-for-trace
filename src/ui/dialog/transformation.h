@@ -19,7 +19,6 @@
 #include "ui/widget/panel.h"
 #include "ui/widget/notebook-page.h"
 #include "ui/widget/scalar-unit.h"
-#include "ui/widget/button.h"
 #include "ui/dialog/desktop-tracker.h"
 
 
@@ -148,10 +147,10 @@ protected:
     Gtk::RadioButton         _counterclockwise_rotate;
     Gtk::RadioButton         _clockwise_rotate;
 
-    UI::Widget::CheckButton  _check_move_relative;
-    UI::Widget::CheckButton  _check_scale_proportional;
-    UI::Widget::CheckButton  _check_apply_separately;
-    UI::Widget::CheckButton  _check_replace_matrix;
+    Gtk::CheckButton  _check_move_relative;
+    Gtk::CheckButton  _check_scale_proportional;
+    Gtk::CheckButton  _check_apply_separately;
+    Gtk::CheckButton  _check_replace_matrix;
 
     SPDesktop *_desktop;
     DesktopTracker _deskTrack;

@@ -19,7 +19,6 @@
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
-#include "ui/widget/button.h"
 #include <cstddef>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/comboboxtext.h>
@@ -359,7 +358,7 @@ protected:
     UI::Widget::PrefCheckButton _misc_namedicon_delay;
 
     // System page
-    // UI::Widget::Button         *_apply_theme;
+    // Gtk::Button         *_apply_theme;
     UI::Widget::PrefSpinButton  _misc_latency_skew;
     UI::Widget::PrefSpinButton  _misc_simpl;
     Gtk::Entry                  _sys_user_prefs;
