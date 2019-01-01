@@ -76,7 +76,7 @@ static CRSelEng *sp_repr_sel_eng();
 class SPStylePropHelper {
     SPStylePropHelper() {
 #define REGISTER_PROPERTY(id, member, name) \
-        _register(reinterpret_cast<SPIBasePtr>(&SPStyle::member), id, name)
+        _register(reinterpret_cast<SPIBasePtr>(&SPStyle::member), id) /* name unused */
 
         // SVG 2: Attributes promoted to properties
         REGISTER_PROPERTY(SP_ATTR_D, d, "d");
@@ -215,11 +215,7 @@ public:
      * Get property pointer by name
      */
     SPIBase *get(SPStyle *style, const std::string &name) {
-        auto it = m_name_map.find(name);
-        if (it != m_name_map.end()) {
-            return _get(style, it->second);
-        }
-        return nullptr;
+        return get(style, sp_attribute_lookup(name.c_str()));
     }
 
     /**
@@ -238,19 +234,14 @@ public:
 private:
     SPIBase *_get(SPStyle *style, SPIBasePtr ptr) { return &(style->*ptr); }
 
-    void _register(SPIBasePtr ptr, SPAttributeEnum id, const char *name) {
+    void _register(SPIBasePtr ptr, SPAttributeEnum id) {
         m_vector.push_back(ptr);
 
         if (id != SP_ATTR_INVALID) {
             m_id_map[id] = ptr;
         }
-
-        if (name[0]) {
-            m_name_map[name] = ptr;
-        }
     }
 
-    std::unordered_map<std::string, SPIBasePtr> m_name_map;
     std::unordered_map</* SPAttributeEnum */ int, SPIBasePtr> m_id_map;
     std::vector<SPIBasePtr> m_vector;
 };

@@ -564,7 +564,14 @@ enum SPAttributeEnum : unsigned {
     SP_PROP_PATH_EFFECT,
 };
 
+/**
+ * Get attribute id by name. Return SP_ATTR_INVALID for invalid names.
+ */
 SPAttributeEnum sp_attribute_lookup(gchar const *key);
+
+/**
+ * Get attribute name by id. Return NULL for invalid ids.
+ */
 gchar const *sp_attribute_name(SPAttributeEnum id);
 
 #endif
