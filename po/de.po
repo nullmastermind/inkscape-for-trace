@@ -293,7 +293,6 @@ msgid "Sharpen edges and boundaries within the object, force=0.3"
 msgstr "Kanten und Grenzen schärfen, Stärke = 0,3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
 msgstr "Ölgemälde"
 
@@ -1541,7 +1540,6 @@ msgid "Pixellize"
 msgstr "Verpixeln"
 
 #: ../share/filters/filters.svg.h:591
-#, fuzzy
 msgid "Pixel Tools"
 msgstr "Pixelwerkzeug"
 
@@ -4406,17 +4404,18 @@ msgstr "Leer"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "A4 Broschüre 3-fach gefaltet"
 
 #: ../share/templates/templates.h:1
 msgid ""
 "An A4 page 3-fold Roll template with guides, print marks, and marked leaflet "
 "pages. Inner and outer page contents go into their respective Layers."
-msgstr ""
+msgstr "Eine A4-Broschüre, 3-fach gefaltet, mit Hilfslinien, Druckmarken und "
+"Broschürenseiten. Der Inhalt für Innen- und Außenseite gehört in die jeweiligen Ebenen."
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "A4 Broschüre 3-fach gefaltet"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -4442,7 +4441,7 @@ msgstr "Vorlage für LaTeX Beamer mit Hilfsgitter."
 # The original appears to be a bit redundant, but I don't know enough about LaTex.
 #: ../share/templates/templates.h:1
 msgid "LaTex LaTeX latex grid beamer"
-msgstr "LaTex LaTeX latex Gitter Beamer"
+msgstr "LaTex Beamer Gitter"
 
 #: ../share/templates/templates.h:1
 msgid "Typography Canvas"
@@ -5051,9 +5050,8 @@ msgstr ""
 "zu dieser Erweiterung haben."
 
 #: ../src/extension/implementation/script.cpp:715
-#, fuzzy
 msgid "The output from the extension could not be parsed."
-msgstr "Die Einstellungsdatei %s konnte nicht gelesen werden."
+msgstr "Die Ausgabe der Erweiterung konnte nicht gelesen werden."
 
 #: ../src/extension/implementation/script.cpp:1043
 msgid ""
@@ -5892,9 +5890,8 @@ msgstr "_Abbrechen"
 #: ../src/extension/internal/vsd-input.cpp:156
 #: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/guides.cpp:161
 #: ../src/ui/dialog/pixelartdialog.cpp:304 ../src/ui/dialog/tracedialog.cpp:818
-#, fuzzy
 msgid "_OK"
-msgstr "_K:"
+msgstr "_OK"
 
 #. Fill in the template
 #: ../src/extension/internal/cdr-input.cpp:227
@@ -8263,14 +8260,12 @@ msgid "PDF Input"
 msgstr "PDF einlesen"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:959
-#, fuzzy
 msgid "Portable Document Format (*.pdf)"
-msgstr "Adobe Portable Document Format"
+msgstr "Portable Document Format (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:960
-#, fuzzy
 msgid "Portable Document Format"
-msgstr "Adobe Portable Document Format"
+msgstr "Portable Document Format"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:967
 msgid "AI Input"
@@ -8303,12 +8298,11 @@ msgstr "SVG einlesen"
 #: ../src/extension/internal/svg.cpp:637
 #, fuzzy
 msgid "SVG Image Import Type:"
-msgstr "Art des Bildimports:"
+msgstr "Art des SVG-Bildimports:"
 
 #: ../src/extension/internal/svg.cpp:638
-#, fuzzy
 msgid "Include SVG image as editable object(s) in the current file"
-msgstr "Alle Objekte in der aktuellen Ebene einblenden"
+msgstr "SVG-Bild als bearbeitbeare Objekte in aktueller Datei einbinden"
 
 #: ../src/extension/internal/svg.cpp:639
 msgid "Embed the SVG file in a image tag (not editable in this document)"
@@ -8490,46 +8484,52 @@ msgstr ""
 "als SVG-Dokument geöffnet."
 
 #: ../src/file-update.cpp:334
-#, fuzzy
 msgid "Convert legacy Inkscape file"
-msgstr "Umwandeln in invertierte Abrundung"
+msgstr "Datei aus alter Inkscape-Version umwandeln"
 
 #: ../src/file-update.cpp:340
 msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"wurde in einer alten Version von Inkscape (90 DPI) erstellt\n und "
+"muss nun mit neueren Versionen kompatibel (96 DPI) gemacht werden. \n"
+"Bitte wählen Sie aus:\n"
+
 
 #: ../src/file-update.cpp:348
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
-msgstr ""
+msgstr "Diese Datei ist für die Anzeige am Bildschirm gedacht, z.B. digitale Kunst. <b>(Im Zweifelsfall auswählen.)</b>"
 
 #: ../src/file-update.cpp:351
 msgid "This file is intended for physical output, such as paper or 3D prints."
-msgstr ""
+msgstr "Diese Datei ist für die physikalische Ausgabe, z.B. auf Papier oder als 3D-Druck gedacht."
 
 #: ../src/file-update.cpp:353
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Das Aussehen von Elementen wie Ausschneidepfaden, Masken, Filtern, Klonen \n"
+"ist am wichtigsten <b>(Im Zweifelsfall auswählen.)</b>"
 
 #: ../src/file-update.cpp:357
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"Die Genauigkeit der physikalischen Abmessungen und Positionen der Objekte\n"
+"in der Datei ist am wichtigsten. (Experimentell.)"
 
 #: ../src/file-update.cpp:359
-#, fuzzy
 msgid "Create a backup file in same directory."
-msgstr "Kann Profilverzeichnis %s nicht erstellen."
+msgstr "Sicherungsdatei im selben Verzeichnis erstellen"
 
 #: ../src/file-update.cpp:360
 msgid "More details..."
-msgstr ""
+msgstr "Mehr Details..."
 
 #: ../src/file-update.cpp:363
 msgid ""
@@ -8554,18 +8554,34 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Wir haben Inkscape aktualisiert, um besser mit Browsern kompatibel \n"
+" zu sein. Diese verwenden den CSS-Standard von 96 DPI, vorher nutzte Inkscape \n"
+" 90 DPI. Digitale Kunst für die Anzeige am Bildschirm wird ohne Skalierung \n"
+"nach 96 DPI gewandelt und sollte nicht betroffen sein.\n"
+"Mit 90 DPI für eine bestimmte physikalische Größe gezeichnete Kunst wird \n"
+" zu klein sein, wenn sie ohne Skalierung nach 96 DPI gewandelt wird. \n"
+" Zum Skalieren gibt es zwei Möglichkeiten:\n\n"
+"<b>Ganzes Dokument skalieren:</b> Am wenigsten fehleranfällig."
+" Erhält das Aussehen von Kunst, \n"
+" einschließlich Filtern, der Position von Masken usw.\n"
+" Die Skalierung relativ zur Dokumentengröße kann unter Umständen ungenau sein.\n\n"
+"<b>Einzelne Elemente skalieren:</b> Diese Methode ist weniger zuverlässig und \n"
+" kann zu verändertem Aussehen führen. Sie ist jedoch besser für physikalische \n"
+"Ausgabe, die auf präzise Abmessungen und Positionen angewiesen ist (z.B. 3D-Druck).\n"
+"\n"
+"Weitere Informationen über diese Änderung finden Sie in der <a href='https://"
+"inkscape.org/de/lernen/haufig-gestellte-fragen/#dpi_change'>Inkscape FAQ</a></small>"
 
 #: ../src/file-update.cpp:407
-#, fuzzy
 msgid "OK"
-msgstr "O"
+msgstr "OK"
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file-update.cpp:634
 #, fuzzy
 msgid "Update Document"
-msgstr "Das Dokument speichern"
+msgstr "Dokument aktualisieren"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
@@ -8653,6 +8669,8 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
+"Datei konnte nicht gespeichert werden: \n"
+"Kein Objekt mit ID '%s' gefunden."
 
 #: ../src/file.cpp:681
 #, c-format
@@ -8662,6 +8680,10 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
+"Datei %s konnte nicht gespeichert werden: \n"
+"\n"
+"Die folgende Information wurde von der Ausgabe-Erweiterung zurückgegeben:\n"
+"'%s'"
 
 #: ../src/file.cpp:716 ../src/file.cpp:718
 msgid "Document saved."
@@ -9057,17 +9079,17 @@ msgstr "Erweiterungsverzeichnis ausgeben und beenden"
 
 #: ../src/inkscape-application.cpp:85
 msgid "Print: List verbs."
-msgstr ""
+msgstr "Liste der Verben ausgeben."
 
 #. Interface
 #: ../src/inkscape-application.cpp:88
 msgid "GUI: With graphical interface."
-msgstr ""
+msgstr "Mit graphischer Oberfläche."
 
 #: ../src/inkscape-application.cpp:89
 #, fuzzy
 msgid "GUI: Console only."
-msgstr "nur Symbole"
+msgstr "Nur Konsole, ohne graphische Oberfläche."
 
 #. Open/Import
 #: ../src/inkscape-application.cpp:92
@@ -9077,7 +9099,7 @@ msgstr "Wählen Sie die zu importierende Datei"
 
 #: ../src/inkscape-application.cpp:92
 msgid "PAGE"
-msgstr ""
+msgstr "SEITE"
 
 #: ../src/inkscape-application.cpp:93
 msgid ""
@@ -9091,9 +9113,8 @@ msgstr ""
 
 #. Query - Geometry
 #: ../src/inkscape-application.cpp:97
-#, fuzzy
 msgid "Query: ID(s) of object(s) to be queried."
-msgstr "ID des Objektes, dessen Abmessungen abgefragt werden"
+msgstr "IDs der Objekte, deren Abmessungen abgefragt werden"
 
 #: ../src/inkscape-application.cpp:97 ../src/inkscape-application.cpp:106
 msgid "OBJECT-ID[,OBJECT-ID]*"
@@ -9111,28 +9132,24 @@ msgstr ""
 "Objektes"
 
 #: ../src/inkscape-application.cpp:100
-#, fuzzy
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
 msgstr ""
 "Abfragen der Y-Koordinate der Zeichnung oder des mit --query-id angegebenen "
 "Objektes"
 
 #: ../src/inkscape-application.cpp:101
-#, fuzzy
 msgid "Query: Width of drawing or object (if specified by --query-id)."
 msgstr ""
 "Abfragen der Breite der Zeichnung oder des mit --query-id angegebenen "
 "Objektes"
 
 #: ../src/inkscape-application.cpp:102
-#, fuzzy
 msgid "Query: Heightof drawing or object (if specified by --query-id)."
 msgstr ""
 "Abfragen der Höhe der Zeichnung oder des mit --query-id angegebenen Objektes"
 
 #. Processing
 #: ../src/inkscape-application.cpp:105
-#, fuzzy
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
 msgstr "Unbenutzte Elemente aus den &lt;defs&gt; des Dokuments entfernen"
@@ -9151,22 +9168,19 @@ msgid "VERB-ID[;VERB-ID]*"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:108
-#, fuzzy
 msgid "Process: Start Inkscape in interactive shell mode."
 msgstr "Inkscape in interaktivem Konsolenmodus starten."
 
 #. Export - File and File Type
 #: ../src/inkscape-application.cpp:111
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
-msgstr ""
+msgstr "Export: Dateityp:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:112
-#, fuzzy
 msgid "Export: File name"
 msgstr "Dateiname"
 
 #: ../src/inkscape-application.cpp:112
-#, fuzzy
 msgid "EXPORT-FILENAME"
 msgstr "DATEINAME"
 
@@ -9187,13 +9201,11 @@ msgstr "X0:Y0:X1:Y1"
 
 #. BSP
 #: ../src/inkscape-application.cpp:118
-#, fuzzy
 msgid "Export: Area to export is drawing (not page)."
 msgstr "Exportierter Bereich ist die gesamte Zeichnung (nicht die Seite)"
 
 #. BSP
 #: ../src/inkscape-application.cpp:119
-#, fuzzy
 msgid "Export: Area to export is page."
 msgstr "Exportierter Bereich ist die gesamte Seite"
 
@@ -9215,7 +9227,6 @@ msgstr ""
 
 #. Bxx
 #: ../src/inkscape-application.cpp:122
-#, fuzzy
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
 msgstr "Breite der erzeugten Rastergrafik in Pixeln (überschreibt Export-dpi)"
 
@@ -9225,7 +9236,6 @@ msgstr "BREITE"
 
 #. Bxx
 #: ../src/inkscape-application.cpp:123
-#, fuzzy
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr "Breite der erzeugten Rastergrafik in Pixeln (überschreibt Export-dpi)"
 
@@ -9237,9 +9247,8 @@ msgstr "HÖHE"
 #. Bxx
 #. Export - Options
 #: ../src/inkscape-application.cpp:126
-#, fuzzy
 msgid "Export: ID(s) of object(s) to export."
-msgstr "ID des zu exportierenden Objektes"
+msgstr "IDs der zu exportierenden Objekte"
 
 #: ../src/inkscape-application.cpp:126
 msgid "OBJECT-ID[;OBJECT-ID]*"
@@ -9247,7 +9256,6 @@ msgstr ""
 
 #. BSP
 #: ../src/inkscape-application.cpp:127
-#, fuzzy
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr "Verstecke alle Objekte außer den gerade gewählten im exportierten Bild"
 
@@ -9258,7 +9266,6 @@ msgstr ""
 
 #. xSx
 #: ../src/inkscape-application.cpp:129
-#, fuzzy
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
 msgstr ""
@@ -9272,47 +9279,42 @@ msgstr "DPI"
 
 #. BxP
 #: ../src/inkscape-application.cpp:130
-#, fuzzy
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
 msgstr "Objekte ohne Filter zeichnen, statt Rasterisierung (PS, EPS, PDF)"
 
 #. xxP
 #: ../src/inkscape-application.cpp:131
-#, fuzzy
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr "Textelemente beim Export (PS, EPS, PDF, SVG) in Pfade umwandeln"
 
 #. xxP
 #: ../src/inkscape-application.cpp:132
 msgid "Export: Postscript level (2 or 3). Default is 3."
-msgstr ""
+msgstr "Export: Postscript-Level (2 oder 3). Standard: 3."
 
 #: ../src/inkscape-application.cpp:132
-#, fuzzy
 msgid "PS-Level"
 msgstr "PS-Level"
 
 #. xxP
 #: ../src/inkscape-application.cpp:133
 msgid "Export: PDF level (1.4 or 1.5)"
-msgstr ""
+msgstr "Export: PDF-Version (1.4 oder 1.5)"
 
 #: ../src/inkscape-application.cpp:133
-#, fuzzy
 msgid "PDF-Level"
-msgstr "Ebene"
+msgstr "PDF-Version"
 
 #. xxP
 #: ../src/inkscape-application.cpp:134
 msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
-msgstr ""
+msgstr "Export: Text in getrennte LaTeX-Datei exportieren (PS/EPS/PDF). Einbinden mittels \\input{file.tex}"
 
 #. xxP
 #: ../src/inkscape-application.cpp:135
-#, fuzzy
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
 "--export-id."
@@ -9322,11 +9324,10 @@ msgstr ""
 
 #. Bxx
 #: ../src/inkscape-application.cpp:136
-#, fuzzy
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr ""
 "Hintergrundfarbe der exportierten Rastergrafik (jede von SVG unterstützte "
-"Farbzeichenkette)"
+"Farbangabe)"
 
 #: ../src/inkscape-application.cpp:136
 msgid "COLOR"
@@ -9361,7 +9362,6 @@ msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr "Warteschleife für D-Bus-Nachrichten im Konsolen-Modus eingeben"
 
 #: ../src/inkscape-application.cpp:145
-#, fuzzy
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr ""
 "D-Bus-Namen angeben, dessen Nachrichten angezeigt werden sollen (Vorgabe ist "
@@ -9428,13 +9428,12 @@ msgstr ""
 #. Will automatically handle character conversions.
 #. Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 #: ../src/inkview-application.cpp:62
-#, fuzzy
 msgid "Print: Inkview version."
-msgstr "Versionsnummer von Inkscape ausgeben"
+msgstr "Versionsnummer von Inkview ausgeben"
 
 #: ../src/inkview-application.cpp:63
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "In Vollbild öffnen"
 
 #: ../src/inkview-application.cpp:64
 #, fuzzy
@@ -9442,16 +9441,14 @@ msgid "Search folders recursively"
 msgstr "Klonverbindung auf_trennen"
 
 #: ../src/inkview-application.cpp:65
-#, fuzzy
 msgid "Change image every NUMBER seconds"
-msgstr "Alle Rastergrafiken in der aktuellen Auswahl"
+msgstr "Bild alle ZAHL Sekunden ändern"
 
 #: ../src/inkview-application.cpp:65 ../src/inkview-application.cpp:66
 msgid "NUMBER"
-msgstr ""
+msgstr "ZAHL"
 
 #: ../src/inkview-application.cpp:66
-#, fuzzy
 msgid "Scale image by factor NUMBER"
 msgstr "Saklierungsfaktor"
 
@@ -9493,7 +9490,7 @@ msgstr "<b>Drehen</b> des Füllmusters; <b>Strg</b> rastet Winkel ein"
 #: ../src/knotholder.cpp:391 ../src/knotholder.cpp:393
 #, fuzzy
 msgid "<b>Resize</b> the filter effect region"
-msgstr "Breite des Filtereffekts"
+msgstr ""
 
 #: ../src/libnrtype/FontFactory.cpp:664
 msgid "Ignoring font without family that will crash Pango"
@@ -9644,7 +9641,7 @@ msgstr "Abrunden/Fasen"
 #: ../src/live_effects/effect.cpp:139
 #, fuzzy
 msgid "Boolean operation"
-msgstr "Goldener Schnitt"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:140
 msgid "Embroidery stitch"
@@ -9653,12 +9650,12 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:141
 #, fuzzy
 msgid "Power clip"
-msgstr "Knoten in Linien"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:142
 #, fuzzy
 msgid "Power mask"
-msgstr "Power Stroke (variable Konturbreite)"
+msgstr ""
 
 #: ../src/live_effects/effect.cpp:143
 #, fuzzy
@@ -9668,7 +9665,7 @@ msgstr "Ellipse durch 5 Punkte"
 #: ../src/live_effects/effect.cpp:145
 #, fuzzy
 msgid "Dash Stroke"
-msgstr "Kontur"
+msgstr "Gestrichelte Kontur"
 
 #: ../src/live_effects/effect.cpp:147
 msgid "doEffect stack test"
@@ -9688,7 +9685,7 @@ msgstr "Kreis durch 3 Punkte"
 
 #: ../src/live_effects/effect.cpp:151
 msgid "Dynamic stroke"
-msgstr "Dynamischer Strich"
+msgstr "Dynamische Kontur"
 
 #: ../src/live_effects/effect.cpp:152 ../share/extensions/extrude.inx.h:1
 msgid "Extrude"
@@ -9754,7 +9751,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:828 ../src/live_effects/effect.cpp:905
 #, fuzzy
 msgid "<b>Default value:</b> "
-msgstr " <b>_Erzeugen</b> "
+msgstr "<b>Standardwert:</b> "
 
 #: ../src/live_effects/effect.cpp:829 ../src/live_effects/effect.cpp:892
 msgid "<b>Default value overridden:</b> "
@@ -9929,7 +9926,7 @@ msgstr "Differenz"
 #: ../src/live_effects/lpe-bool.cpp:41
 #, fuzzy
 msgid "symmetric difference"
-msgstr "symmetrischer Knoten"
+msgstr "symmetrische Differenz"
 
 #: ../src/live_effects/lpe-bool.cpp:42
 #, fuzzy
@@ -9940,24 +9937,23 @@ msgstr "Division"
 #. bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
 #. bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
 #: ../src/live_effects/lpe-bool.cpp:46
-#, fuzzy
 msgid "cut"
-msgstr "Out"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:47
 #, fuzzy
 msgid "cut inside"
-msgstr "Außen"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:48
 #, fuzzy
 msgid "cut outside"
-msgstr "Außen"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:54 ../src/live_effects/lpe-bool.cpp:63
 #, fuzzy
 msgid "odd-even"
-msgstr "eben"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
 msgid "non-zero"
@@ -9991,7 +9987,7 @@ msgstr "Operator:"
 #: ../src/live_effects/lpe-bool.cpp:73
 #, fuzzy
 msgid "Boolean Operation"
-msgstr "Manueller Betrieb"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Swap operands:"
@@ -10004,7 +10000,7 @@ msgstr ""
 #: ../src/live_effects/lpe-bool.cpp:75
 #, fuzzy
 msgid "Remove inner:"
-msgstr "Filter entfernen"
+msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid ""
@@ -10108,12 +10104,12 @@ msgstr "Gewichtung auf 0 setzen"
 #: ../src/live_effects/lpe-bspline.cpp:164
 #: ../src/live_effects/parameter/parameter.cpp:192
 msgid "Change scalar parameter"
-msgstr "Skalarparameter ändern"
+msgstr "skalaren Parameter ändern"
 
 #: ../src/live_effects/lpe-clone-original.cpp:31
 #, fuzzy
 msgid "No shape"
-msgstr "Kein Tausch"
+msgstr "Keine Form"
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
@@ -10401,7 +10397,7 @@ msgstr ""
 #: ../src/live_effects/lpe-powerclip.cpp:37
 #, fuzzy
 msgid "Important messages"
-msgstr "Importeinstellungen"
+msgstr "Wichtige Nachrichten"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:23
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
@@ -11524,7 +11520,7 @@ msgstr ""
 #: ../src/live_effects/lpe-measure-segments.cpp:96
 #, fuzzy
 msgid "Turn doesn't fit measurements"
-msgstr "Die Einheiten, die für die Bemaßungen verwendet werden"
+msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:97
 #, fuzzy
@@ -11553,12 +11549,12 @@ msgstr "Mittelpunkt setzen"
 #: ../src/live_effects/lpe-measure-segments.cpp:99
 #, fuzzy
 msgid "Use centers as measurement"
-msgstr "Papierdickenmessung:"
+msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:100
 #, fuzzy
 msgid "Only max and min"
-msgstr "Nur Schwarz-Weiß:"
+msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:100
 msgid "Compute only max/min projection values"
@@ -27031,11 +27027,11 @@ msgstr "Y-Koordinate der Auswahl"
 #. Name
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Fill by"
-msgstr "Füllen mit:"
+msgstr "Füllen anhand von"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
 msgid "Fill Threshold"
-msgstr "Füll-Schwellwert:"
+msgstr "Füll-Schwellwert"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:161
 msgid ""
@@ -27051,7 +27047,7 @@ msgstr "Vergrößern/Verkleinern um"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
 msgid "Grow/shrink by:"
-msgstr "Vergrößern/Verkleinern um"
+msgstr "Vergrößern/Verkleinern um:"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:190
 msgid ""
@@ -27238,7 +27234,7 @@ msgstr "Rechteck ändern"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:322
 msgid "W:"
-msgstr "W:"
+msgstr "B:"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:322
 msgid "Width of rectangle"
@@ -27948,7 +27944,7 @@ msgstr "Text: Schriftstil ändern"
 #: ../src/ui/toolbar/text-toolbar.cpp:362
 #, fuzzy
 msgid "Text: Unset line height."
-msgstr "Text: Linienhöhe ändern"
+msgstr "Text: Zeilenabstand ändern"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text: Change superscript or subscript"
@@ -27960,7 +27956,7 @@ msgstr "Text: Ausrichtung ändern"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:713
 msgid "Text: Change line-height"
-msgstr "Text: Linienhöhe ändern"
+msgstr "Text: Zeilenabstand ändern"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:877
 msgid "Text: Change line-height unit"
@@ -28200,7 +28196,7 @@ msgstr "Größerer Abstand"
 #. name
 #: ../src/ui/toolbar/text-toolbar.cpp:2296
 msgid "Line Height"
-msgstr "Linienhöhe"
+msgstr "Zeilenabstand"
 
 #. label
 #: ../src/ui/toolbar/text-toolbar.cpp:2297

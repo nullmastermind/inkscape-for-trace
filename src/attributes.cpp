@@ -9,6 +9,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <cstring>
+#include <map>
+
 #include <glib.h> // g_assert()
 #include "attributes.h"
 
@@ -555,15 +558,34 @@ static SPStyleProp const props[] = {
 
 #define n_attrs (sizeof(props) / sizeof(props[0]))
 
-/** Returns an SPAttributeEnum; SP_ATTR_INVALID (of value 0) if key isn't recognized. */
+/**
+ * Inverse to the \c props array for lookup by name.
+ */
+struct AttributeLookupImpl {
+    struct cstrless {
+        bool operator()(char const *lhs, char const *rhs) const { return std::strcmp(lhs, rhs) < 0; }
+    };
+
+    std::map<char const *, SPAttributeEnum, cstrless> m_map;
+
+    AttributeLookupImpl()
+    {
+        for (unsigned int i = 1; i < n_attrs; i++) {
+            // sanity check: order of props array must match SPAttributeEnum
+            g_assert(props[i].code == i);
+
+            m_map[props[i].name] = props[i].code;
+        }
+    }
+};
+
 SPAttributeEnum
 sp_attribute_lookup(gchar const *key)
 {
-    for (unsigned int i = 1; i < n_attrs; i++) {
-        g_assert(props[i].code == static_cast< gint >(i) );
-        // If this g_assert fails, then the sort order of SPAttributeEnum does not match the order in props[]!
-        if(g_str_equal(const_cast<void *>(static_cast<void const *>(props[i].name)), key))
-            return props[i].code;
+    static AttributeLookupImpl const _instance;
+    auto it = _instance.m_map.find(key);
+    if (it != _instance.m_map.end()) {
+        return it->second;
     }
     // std::cerr << "sp_attribute_lookup: invalid attribute: "
     //           << (key?key:"Null") << std::endl;

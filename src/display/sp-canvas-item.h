@@ -21,6 +21,7 @@
  */
 
 #include <2geom/rect.h>
+#include <boost/intrusive/list.hpp>
 #include <glib-object.h>
 
 #include "ui/control-types.h"
@@ -48,6 +49,9 @@ typedef struct _GdkCursor         GdkCursor;
  */
 struct SPCanvasItem {
     GInitiallyUnowned parent_instance;
+
+    // boost linked list member hook
+    boost::intrusive::list_member_hook<> member_hook_;
 
     SPCanvas *canvas;
     SPCanvasItem *parent;
@@ -77,6 +81,12 @@ struct SPCanvasItem {
 };
 
 GType sp_canvas_item_get_type();
+
+//Define type for linked list storing SPCanvasItems
+typedef boost::intrusive::list<
+    SPCanvasItem,
+    boost::intrusive::member_hook<SPCanvasItem, boost::intrusive::list_member_hook<>, &SPCanvasItem::member_hook_> >
+    SPCanvasItemList;
 
 /**
  * The vtable of an SPCanvasItem.
