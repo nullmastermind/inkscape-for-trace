@@ -107,7 +107,7 @@ InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& fi
                     Glib::RefPtr<Gio::FileEnumerator> children = file->enumerate_children();
                     Glib::RefPtr<Gio::FileInfo> info;
                     std::vector<Glib::RefPtr<Gio::File> > input;
-                    while (info = children->next_file()) {
+                    while ((info = children->next_file())) {
                         input.push_back(children->get_child(info));
                     }
                     auto new_files = create_file_list(input);

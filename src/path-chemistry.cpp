@@ -401,10 +401,9 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         if (lpeitem) {
             selected.erase(remove(selected.begin(), selected.end(), item), selected.end());
             lpeitem->removeAllPathEffects(true);
-            SPObject *elemref = nullptr;
-            if (elemref = document->getObjectById(id)) {
+            SPObject *elemref = document->getObjectById(id);
+            if (elemref) {
                 //If the LPE item is a shape is converted to a path so we need to reupdate the item
-                
                 item = dynamic_cast<SPItem *>(elemref);
                 selected.push_back(item);
             }

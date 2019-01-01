@@ -135,8 +135,8 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                     if (id.empty()) {
                         return;
                     }
-                    SPObject *elemref = nullptr;
-                    if (elemref = document->getObjectById(id.c_str())) {
+                    SPObject *elemref = document->getObjectById(id.c_str());
+                    if (elemref) {
                         SP_ITEM(elemref)->setHidden(true);
                     }
                     counter++;
@@ -277,16 +277,14 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     elemref_id += "-";
     elemref_id += this->lpeobj->getId();
     items.push_back(elemref_id);
-    SPObject *elemref= nullptr;
+    SPObject *elemref = document->getObjectById(elemref_id.c_str());
     Inkscape::XML::Node *phantom = nullptr;
-    if (elemref = document->getObjectById(elemref_id.c_str())) {
+    if (elemref) {
         phantom = elemref->getRepr();
     } else {
         phantom = createPathBase(sp_lpe_item);
         phantom->setAttribute("id", elemref_id.c_str());
         reset = true;
-    }
-    if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }

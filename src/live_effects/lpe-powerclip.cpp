@@ -211,8 +211,8 @@ LPEPowerClip::updateInverse (SPItem * clip_data) {
                 updateInverse(subitem);
             }
         } else if (SP_IS_SHAPE(clip_data)) {
-            SPObject *elemref = nullptr;
-            if (elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()))) {
+            SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
+            if (elemref) {
                 SPCurve * c = nullptr;
                 c = SP_SHAPE(elemref)->getCurve();
                 if (c) {
@@ -258,8 +258,8 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                 is_inverse.param_setValue((Glib::ustring)"false", true);
             }
         }
-        SPObject *elemref = nullptr;
-        if (elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()))) {
+        SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
+        if (elemref) {
             elemref ->deleteObject(false);
         } 
     }
@@ -298,8 +298,8 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
         if (!document) {
             return path_out;
         }
-        SPObject *elemref = nullptr;
-        if (elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()))) {
+        SPObject *elemref = document->getObjectById(Glib::ustring("lpe_") + Glib::ustring(this->getLPEObj()->getId()));
+        if (elemref) {
             SPCurve * c = nullptr;
             c = SP_SHAPE(elemref)->getCurve();
             if (c) {

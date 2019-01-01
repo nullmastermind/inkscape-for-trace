@@ -347,16 +347,14 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
     elemref_id += this->lpeobj->getId();
     items.clear();
     items.push_back(elemref_id);
-    SPObject *elemref = nullptr;
+    SPObject *elemref = document->getObjectById(elemref_id.c_str());
     Inkscape::XML::Node *phantom = nullptr;
-    if (elemref = document->getObjectById(elemref_id.c_str())) {
+    if (elemref) {
         phantom = elemref->getRepr();
     } else {
         phantom = createPathBase(sp_lpe_item);
         phantom->setAttribute("id", elemref_id.c_str());
         reset = true;
-    }
-    if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }

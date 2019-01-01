@@ -528,7 +528,7 @@ ColorWheel::on_button_press_event(GdkEventButton* event)
 bool
 ColorWheel::on_button_release_event(GdkEventButton* event)
 {
-    _mode == DRAG_NONE;
+    _mode = DRAG_NONE;
     return true;
 }
 

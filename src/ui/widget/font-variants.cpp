@@ -1046,7 +1046,7 @@ namespace Widget {
           for (auto table: res->openTypeTables) {
               if (table.first == "case" ||
                   table.first == "hist" ||
-                  table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't')) {
+                  (table.first[0] == 's' && table.first[1] == 's' && !(table.first[2] == 't'))) {
 
                   if( (it = table_copy.find(table.first)) != table_copy.end() ) table_copy.erase( it );
 
@@ -1063,7 +1063,7 @@ namespace Widget {
                   table.first == "cwsh" ||
                   table.first == "ornm" ||
                   table.first == "nalt" ||
-                  table.first[0] == 'c' && table.first[1] == 'v') {
+                  (table.first[0] == 'c' && table.first[1] == 'v')) {
 
                   if (table.second.input.length() == 0) {
                       // This can happen if a table is not in the 'DFLT' script and 'dflt' language.
