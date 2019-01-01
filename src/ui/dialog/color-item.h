@@ -51,11 +51,11 @@ public:
     ~ColorItem() override;
     ColorItem(ColorItem const &other);
     virtual ColorItem &operator=(ColorItem const &other);
-    Gtk::Widget* getPreview(PreviewStyle style,
-                                    ViewType view,
-                                    ::PreviewSize size,
-                                    guint ratio,
-                                    guint border) override;
+    Gtk::Widget* getPreview(UI::Widget::PreviewStyle style,
+                            UI::Widget::ViewType     view,
+                            UI::Widget::PreviewSize  size,
+                            guint                    ratio,
+                            guint                    border) override;
     void buttonClicked(bool secondary = false);
 
     void setGradient(SPGradient *grad);
@@ -88,7 +88,7 @@ private:
     static void _colorDefChanged(void* data);
 
     void _updatePreviews();
-    void _regenPreview(EekPreview * preview);
+    void _regenPreview(UI::Widget::Preview * preview);
 
     void _linkTint( ColorItem& other, int percent );
     void _linkTone( ColorItem& other, int percent, int grayLevel );

@@ -248,7 +248,7 @@ static void removeit( GtkWidget *widget, gpointer data )
 }
 
 /* extern'ed from color-item.cpp */
-bool colorItemHandleButtonPress(GdkEventButton* event, EekPreview *preview, gpointer user_data)
+bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *preview, gpointer user_data)
 {
     gboolean handled = FALSE;
 
@@ -695,10 +695,10 @@ void SwatchesPanel::_build_menu()
     if (!_prefs_path.empty()) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         panel_wrap = prefs->getBool(_prefs_path + "/panel_wrap");
-        panel_size = prefs->getIntLimited(_prefs_path + "/panel_size", 1, 0, PREVIEW_SIZE_HUGE);
+        panel_size = prefs->getIntLimited(_prefs_path + "/panel_size", 1, 0, UI::Widget::PREVIEW_SIZE_HUGE);
         panel_mode = prefs->getIntLimited(_prefs_path + "/panel_mode", 1, 0, 10);
         panel_ratio = prefs->getIntLimited(_prefs_path + "/panel_ratio", 100, 0, 500 );
-        panel_border = prefs->getIntLimited(_prefs_path + "/panel_border", BORDER_NONE, 0, 2 );
+        panel_border = prefs->getIntLimited(_prefs_path + "/panel_border", UI::Widget::BORDER_NONE, 0, 2 );
     }
 
     _menu = new Gtk::Menu();
@@ -890,25 +890,25 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_SIZE: {
         prefs->setInt(_prefs_path + "/panel_size", value);
 
-        ViewType curr_type = _holder->getPreviewType();
+        auto curr_type = _holder->getPreviewType();
         guint curr_ratio = _holder->getPreviewRatio();
-        ::BorderStyle curr_border = _holder->getPreviewBorder();
+        auto curr_border = _holder->getPreviewBorder();
 
         switch (value) {
         case 0:
-            _holder->setStyle(::PREVIEW_SIZE_TINY, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(UI::Widget::PREVIEW_SIZE_TINY, curr_type, curr_ratio, curr_border);
             break;
         case 1:
-            _holder->setStyle(::PREVIEW_SIZE_SMALL, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(UI::Widget::PREVIEW_SIZE_SMALL, curr_type, curr_ratio, curr_border);
             break;
         case 2:
-            _holder->setStyle(::PREVIEW_SIZE_MEDIUM, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(UI::Widget::PREVIEW_SIZE_MEDIUM, curr_type, curr_ratio, curr_border);
             break;
         case 3:
-            _holder->setStyle(::PREVIEW_SIZE_BIG, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(UI::Widget::PREVIEW_SIZE_BIG, curr_type, curr_ratio, curr_border);
             break;
         case 4:
-            _holder->setStyle(::PREVIEW_SIZE_HUGE, curr_type, curr_ratio, curr_border);
+            _holder->setStyle(UI::Widget::PREVIEW_SIZE_HUGE, curr_type, curr_ratio, curr_border);
             break;
         default:
             break;
@@ -919,15 +919,15 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_MODE: {
         prefs->setInt(_prefs_path + "/panel_mode", value);
 
-        ::PreviewSize curr_size = _holder->getPreviewSize();
+        auto curr_size = _holder->getPreviewSize();
         guint curr_ratio = _holder->getPreviewRatio();
-        ::BorderStyle curr_border = _holder->getPreviewBorder();
+        auto curr_border = _holder->getPreviewBorder();
         switch (value) {
         case 0:
-            _holder->setStyle(curr_size, VIEW_TYPE_LIST, curr_ratio, curr_border);
+            _holder->setStyle(curr_size, UI::Widget::VIEW_TYPE_LIST, curr_ratio, curr_border);
             break;
         case 1:
-            _holder->setStyle(curr_size, VIEW_TYPE_GRID, curr_ratio, curr_border);
+            _holder->setStyle(curr_size, UI::Widget::VIEW_TYPE_GRID, curr_ratio, curr_border);
             break;
         default:
             break;
@@ -937,9 +937,9 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_SHAPE: {
         prefs->setInt(_prefs_path + "/panel_ratio", value);
 
-        ViewType curr_type = _holder->getPreviewType();
-        ::PreviewSize curr_size = _holder->getPreviewSize();
-        ::BorderStyle curr_border = _holder->getPreviewBorder();
+        auto curr_type = _holder->getPreviewType();
+        auto curr_size = _holder->getPreviewSize();
+        auto curr_border = _holder->getPreviewBorder();
 
         _holder->setStyle(curr_size, curr_type, value, curr_border);
         break;
@@ -947,19 +947,19 @@ void SwatchesPanel::_updateSettings(int settings, int value)
     case SWATCHES_SETTINGS_BORDER: {
         prefs->setInt(_prefs_path + "/panel_border", value);
 
-        ::PreviewSize curr_size = _holder->getPreviewSize();
-        ViewType curr_type = _holder->getPreviewType();
+        auto curr_size = _holder->getPreviewSize();
+        auto curr_type = _holder->getPreviewType();
         guint curr_ratio = _holder->getPreviewRatio();
 
         switch (value) {
         case 0:
-            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_NONE);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, UI::Widget::BORDER_NONE);
             break;
         case 1:
-            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_SOLID);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, UI::Widget::BORDER_SOLID);
             break;
         case 2:
-            _holder->setStyle(curr_size, curr_type, curr_ratio, BORDER_WIDE);
+            _holder->setStyle(curr_size, curr_type, curr_ratio, UI::Widget::BORDER_WIDE);
             break;
         default:
             break;

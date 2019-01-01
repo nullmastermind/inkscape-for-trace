@@ -37,11 +37,11 @@ PreviewHolder::PreviewHolder() :
     _prefCols(0),
     _updatesFrozen(false),
     _anchor(SP_ANCHOR_CENTER),
-    _baseSize(PREVIEW_SIZE_SMALL),
+    _baseSize(UI::Widget::PREVIEW_SIZE_SMALL),
     _ratio(100),
-    _view(VIEW_TYPE_LIST),
+    _view(UI::Widget::VIEW_TYPE_LIST),
     _wrap(false),
-    _border(BORDER_NONE)
+    _border(UI::Widget::BORDER_NONE)
 {
     set_name( "PreviewHolder" );
     _scroller = Gtk::manage(new Gtk::ScrolledWindow());
@@ -102,7 +102,7 @@ void PreviewHolder::clear()
     items.clear();
     _prefCols = 0;
     // Kludge to restore scrollbars
-    if ( !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
+    if ( !_wrap && (_view != UI::Widget::VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
         _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
     }
     rebuildUI();
@@ -123,8 +123,12 @@ void PreviewHolder::addPreview( Previewable* preview )
         switch(_view) {
             case VIEW_TYPE_LIST:
                 {
-                    Gtk::Widget* label = Gtk::manage(preview->getPreview(PREVIEW_STYLE_BLURB, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
-                    Gtk::Widget* item = Gtk::manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_LIST, _baseSize, _ratio, _border));
+                    Gtk::Widget* label = Gtk::manage(preview->getPreview(UI::Widget::PREVIEW_STYLE_BLURB,
+                                                                         UI::Widget::VIEW_TYPE_LIST,
+                                                                         _baseSize, _ratio, _border));
+                    Gtk::Widget* item = Gtk::manage(preview->getPreview(UI::Widget::PREVIEW_STYLE_PREVIEW,
+                                                                        UI::Widget::VIEW_TYPE_LIST,
+                                                                        _baseSize, _ratio, _border));
 
                     item->set_hexpand();
                     item->set_vexpand();
@@ -138,7 +142,9 @@ void PreviewHolder::addPreview( Previewable* preview )
                 break;
             case VIEW_TYPE_GRID:
                 {
-                    Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, VIEW_TYPE_GRID, _baseSize, _ratio, _border));
+                    Gtk::Widget* item = Gtk::manage(items[i]->getPreview(UI::Widget::PREVIEW_STYLE_PREVIEW,
+                                                                         UI::Widget::VIEW_TYPE_GRID,
+                                                                         _baseSize, _ratio, _border));
 
                     int ncols = 1;
                     int nrows = 1;
@@ -191,7 +197,11 @@ void PreviewHolder::thawUpdates()
     rebuildUI();
 }
 
-void PreviewHolder::setStyle( ::PreviewSize size, ViewType view, guint ratio, ::BorderStyle border )
+void
+PreviewHolder::setStyle(UI::Widget::PreviewSize size,
+                        UI::Widget::ViewType    view,
+                        guint                   ratio,
+                        UI::Widget::BorderStyle border )
 {
     if ( size != _baseSize || view != _view || ratio != _ratio || border != _border ) {
         _baseSize = size;
@@ -199,7 +209,7 @@ void PreviewHolder::setStyle( ::PreviewSize size, ViewType view, guint ratio, ::
         _ratio = ratio;
         _border = border;
         // Kludge to restore scrollbars
-        if ( !_wrap && (_view != VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
+        if ( !_wrap && (_view != UI::Widget::VIEW_TYPE_LIST) && (_anchor == SP_ANCHOR_NORTH || _anchor == SP_ANCHOR_SOUTH) ) {
             _scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER );
         }
         rebuildUI();
@@ -314,7 +324,7 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* item, int itemCount, int& n
             }
         }
     } else {
-        ncols = (_baseSize == PREVIEW_SIZE_SMALL || _baseSize == PREVIEW_SIZE_TINY) ?
+        ncols = (_baseSize == UI::Widget::PREVIEW_SIZE_SMALL || _baseSize == UI::Widget::PREVIEW_SIZE_TINY) ?
             COLUMNS_FOR_SMALL : COLUMNS_FOR_LARGE;
         if ( _prefCols > 0 ) {
             ncols = _prefCols;
@@ -335,7 +345,7 @@ void PreviewHolder::rebuildUI()
 
     _insides->set_column_spacing(0);
     _insides->set_row_spacing(0);
-    if (_border == BORDER_WIDE) {
+    if (_border == UI::Widget::BORDER_WIDE) {
         _insides->set_column_spacing(1);
         _insides->set_row_spacing(1);
     }
@@ -346,10 +356,10 @@ void PreviewHolder::rebuildUI()
             _insides->set_column_spacing(8);
 
             for ( unsigned int i = 0; i < items.size(); i++ ) {
-                Gtk::Widget* label = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_BLURB, _view, _baseSize, _ratio, _border));
+                Gtk::Widget* label = Gtk::manage(items[i]->getPreview(UI::Widget::PREVIEW_STYLE_BLURB, _view, _baseSize, _ratio, _border));
                 //label->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
 
-                Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, _border));
+                Gtk::Widget* item = Gtk::manage(items[i]->getPreview(UI::Widget::PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, _border));
 
                 item->set_hexpand();
                 item->set_vexpand();
@@ -372,10 +382,10 @@ void PreviewHolder::rebuildUI()
             for ( unsigned int i = 0; i < items.size(); i++ ) {
 
                 // If this is the last row, flag so the previews can draw a bottom
-                ::BorderStyle border = ((row == nrows -1) && (_border == BORDER_SOLID)) ?
-                    BORDER_SOLID_LAST_ROW : _border;
+                UI::Widget::BorderStyle border = ((row == nrows -1) && (_border == UI::Widget::BORDER_SOLID)) ?
+                    UI::Widget::BORDER_SOLID_LAST_ROW : _border;
 
-                Gtk::Widget* item = Gtk::manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
+                Gtk::Widget* item = Gtk::manage(items[i]->getPreview(UI::Widget::PREVIEW_STYLE_PREVIEW, _view, _baseSize, _ratio, border));
                 item->set_hexpand();
                 item->set_vexpand();
 

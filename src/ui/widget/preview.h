@@ -45,6 +45,10 @@
  * Generic implementation of an object that can be shown by a preview.
  */
 
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
 enum PreviewStyle {
     PREVIEW_STYLE_ICON = 0,
     PREVIEW_STYLE_PREVIEW,
@@ -87,7 +91,7 @@ enum BorderStyle {
     BORDER_SOLID_LAST_ROW,
 };
 
-class EekPreview : public Gtk::DrawingArea {
+class Preview : public Gtk::DrawingArea {
 private:
     int           _scaledW;
     int           _scaledH;
@@ -124,7 +128,7 @@ protected:
     bool on_leave_notify_event(GdkEventCrossing* event ) override;
 
 public:
-    EekPreview();
+    Preview();
     bool get_focus_on_click() const {return _takesFocus;}
     void set_focus_on_click(bool focus_on_click) {_takesFocus = focus_on_click;}
     LinkType get_linked() const;
@@ -141,6 +145,9 @@ public:
     decltype(_signal_alt_clicked) signal_alt_clicked() {return _signal_alt_clicked;}
 };
 
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #endif /* SEEN_EEK_PREVIEW_H */
 

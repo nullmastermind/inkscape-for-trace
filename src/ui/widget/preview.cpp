@@ -39,8 +39,12 @@
 using std::min;
 
 #include <gdkmm/general.h>
-#include "eek-preview.h"
+#include "preview.h"
 #include "preferences.h"
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 #define PRIME_BUTTON_MAGIC_NUMBER 1
 
@@ -51,7 +55,7 @@ using std::min;
 #define PREVIEW_MAX_RATIO 500
 
 void
-EekPreview::set_color(int r, int g, int b )
+Preview::set_color(int r, int g, int b )
 {
     _r = r;
     _g = g;
@@ -62,7 +66,7 @@ EekPreview::set_color(int r, int g, int b )
 
 
 void
-EekPreview::set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf)
+Preview::set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf)
 {
     _previewPixbuf = pixbuf;
 
@@ -81,7 +85,7 @@ static gboolean setupDone = FALSE;
 static GtkRequisition sizeThings[PREVIEW_SIZE_NEXTFREE];
 
 void
-EekPreview::set_size_mappings( guint count, GtkIconSize const* sizes )
+Preview::set_size_mappings( guint count, GtkIconSize const* sizes )
 {
     gint width = 0;
     gint height = 0;
@@ -116,7 +120,7 @@ EekPreview::set_size_mappings( guint count, GtkIconSize const* sizes )
 }
 
 void
-EekPreview::size_request(GtkRequisition* req) const
+Preview::size_request(GtkRequisition* req) const
 {
     int               width   = 0;
     int               height  = 0;
@@ -151,7 +155,7 @@ EekPreview::size_request(GtkRequisition* req) const
 }
 
 void
-EekPreview::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
+Preview::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 {
     GtkRequisition requisition;
     size_request(&requisition);
@@ -159,7 +163,7 @@ EekPreview::get_preferred_width_vfunc(int &minimal_width, int &natural_width) co
 }
 
 void
-EekPreview::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
+Preview::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
 {
     GtkRequisition requisition;
     size_request(&requisition);
@@ -167,7 +171,7 @@ EekPreview::get_preferred_height_vfunc(int &minimal_height, int &natural_height)
 }
 
 bool
-EekPreview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
+Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 {
     auto allocation = get_allocation();
 
@@ -343,7 +347,7 @@ EekPreview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 
 
 bool
-EekPreview::on_enter_notify_event(GdkEventCrossing* event )
+Preview::on_enter_notify_event(GdkEventCrossing* event )
 {
     _within = true;
     set_state_flags(_hot ? Gtk::STATE_FLAG_ACTIVE : Gtk::STATE_FLAG_PRELIGHT, false);
@@ -352,7 +356,7 @@ EekPreview::on_enter_notify_event(GdkEventCrossing* event )
 }
 
 bool
-EekPreview::on_leave_notify_event(GdkEventCrossing* event)
+Preview::on_leave_notify_event(GdkEventCrossing* event)
 {
     _within = false;
     set_state_flags(Gtk::STATE_FLAG_NORMAL, false);
@@ -361,7 +365,7 @@ EekPreview::on_leave_notify_event(GdkEventCrossing* event)
 }
 
 bool
-EekPreview::on_button_press_event(GdkEventButton *event)
+Preview::on_button_press_event(GdkEventButton *event)
 {
     if (_takesFocus && !has_focus() )
     {
@@ -383,7 +387,7 @@ EekPreview::on_button_press_event(GdkEventButton *event)
 }
 
 bool
-EekPreview::on_button_release_event(GdkEventButton* event)
+Preview::on_button_release_event(GdkEventButton* event)
 {
     _hot = false;
     set_state_flags(Gtk::STATE_FLAG_NORMAL, false);
@@ -409,7 +413,7 @@ EekPreview::on_button_release_event(GdkEventButton* event)
 }
 
 void
-EekPreview::set_linked(LinkType link)
+Preview::set_linked(LinkType link)
 {
     link = (LinkType)(link & PREVIEW_LINK_ALL);
 
@@ -422,16 +426,16 @@ EekPreview::set_linked(LinkType link)
 }
 
 LinkType
-EekPreview::get_linked() const
+Preview::get_linked() const
 {
     return (LinkType)_linked;
 }
 
 void
-EekPreview::set_details(ViewType      view,
-                        PreviewSize   size,
-                        guint         ratio,
-                        guint         border)
+Preview::set_details(ViewType      view,
+                     PreviewSize   size,
+                     guint         ratio,
+                     guint         border)
 {
     _view  = view;
 
@@ -453,7 +457,7 @@ EekPreview::set_details(ViewType      view,
     queue_draw();
 }
 
-EekPreview::EekPreview()
+Preview::Preview()
     : _r(0x80),
       _g(0x80),
       _b(0xcc),
@@ -482,6 +486,10 @@ EekPreview::EekPreview()
               |Gdk::ENTER_NOTIFY_MASK
               |Gdk::LEAVE_NOTIFY_MASK );
 }
+
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

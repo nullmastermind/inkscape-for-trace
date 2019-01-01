@@ -21,7 +21,6 @@ class Grid;
 class ScrolledWindow;
 }
 
-#include "../widgets/eek-preview.h"
 #include "enums.h"
 
 namespace Inkscape {
@@ -39,14 +38,17 @@ public:
     virtual void addPreview( Previewable* preview );
     virtual void freezeUpdates();
     virtual void thawUpdates();
-    virtual void setStyle( ::PreviewSize size, ViewType view, guint ratio, ::BorderStyle border );
+    virtual void setStyle(UI::Widget::PreviewSize size,
+                          UI::Widget::ViewType    view,
+                          guint                   ratio,
+                          UI::Widget::BorderStyle border);
     virtual void setOrientation(SPAnchorType how);
     virtual int getColumnPref() const { return _prefCols; }
     virtual void setColumnPref( int cols );
-    virtual ::PreviewSize getPreviewSize() const { return _baseSize; }
-    virtual ViewType getPreviewType() const { return _view; }
+    virtual UI::Widget::PreviewSize getPreviewSize() const { return _baseSize; }
+    virtual UI::Widget::ViewType getPreviewType() const { return _view; }
     virtual guint getPreviewRatio() const { return _ratio; }
-    virtual ::BorderStyle getPreviewBorder() const { return _border; }
+    virtual UI::Widget::BorderStyle getPreviewBorder() const { return _border; }
     virtual void setWrap( bool wrap );
     virtual bool getWrap() const { return _wrap; }
 
@@ -64,11 +66,11 @@ private:
     int _prefCols;
     bool _updatesFrozen;
     SPAnchorType _anchor;
-    ::PreviewSize _baseSize;
+    UI::Widget::PreviewSize _baseSize;
     guint _ratio;
-    ViewType _view;
+    UI::Widget::ViewType _view;
     bool _wrap;
-    ::BorderStyle _border;
+    UI::Widget::BorderStyle _border;
 };
 
 } //namespace UI

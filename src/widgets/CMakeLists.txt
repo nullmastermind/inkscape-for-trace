@@ -3,7 +3,6 @@ add_subdirectory(gimp)
 
 set(widgets_SRC
 	desktop-widget.cpp
-	eek-preview.cpp
 	ege-adjustment-action.cpp
 	ege-output-action.cpp
 	ege-paint-def.cpp
@@ -31,7 +30,6 @@ set(widgets_SRC
 	# -------
 	# Headers
 	desktop-widget.h
-	eek-preview.h
 	ege-adjustment-action.h
 	ege-output-action.h
 	ege-paint-def.h

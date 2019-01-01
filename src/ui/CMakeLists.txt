@@ -186,6 +186,7 @@ set(ui_SRC
 	widget/panel.cpp
 	widget/point.cpp
 	widget/preferences-widget.cpp
+        widget/preview.cpp
 	widget/random.cpp
 	widget/registered-widget.cpp
 	widget/registry.cpp
@@ -412,6 +413,7 @@ set(ui_SRC
 	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h
+        widget/preview.h
 	widget/random.h
 	widget/registered-enums.h
 	widget/registered-widget.h

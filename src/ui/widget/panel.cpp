@@ -20,7 +20,7 @@
 #include "desktop.h"
 
 #include "inkscape.h"
-#include "widgets/eek-preview.h"
+#include "preview.h"
 
 namespace Inkscape {
 namespace UI {
@@ -35,7 +35,7 @@ void Panel::prep() {
         GTK_ICON_SIZE_DND, // Not used by options, but included to make the last size larger
         GTK_ICON_SIZE_DIALOG
     };
-    EekPreview::set_size_mappings( G_N_ELEMENTS(sizes), sizes );
+    Preview::set_size_mappings( G_N_ELEMENTS(sizes), sizes );
 }
 
 Panel::Panel(gchar const *prefs_path, int verb_num) :

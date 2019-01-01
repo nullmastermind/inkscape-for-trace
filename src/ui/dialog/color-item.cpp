@@ -178,7 +178,7 @@ static bool popVal( guint64& numVal, std::string& str )
 }
 
 // TODO resolve this more cleanly:
-extern bool colorItemHandleButtonPress(GdkEventButton* event, EekPreview *preview, gpointer user_data);
+extern bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *preview, gpointer user_data);
 
 void
 ColorItem::drag_begin(const Glib::RefPtr<Gdk::DragContext> &dc)
@@ -307,18 +307,18 @@ void ColorItem::setState( bool fill, bool stroke )
         _isStroke = stroke;
 
         for ( auto widget : _previews ) {
-            auto preview = dynamic_cast<EekPreview *>(widget);
+            auto preview = dynamic_cast<UI::Widget::Preview *>(widget);
 
             if (preview) {
                 int val = preview->get_linked();
-                val &= ~(PREVIEW_FILL | PREVIEW_STROKE);
+                val &= ~(UI::Widget::PREVIEW_FILL | UI::Widget::PREVIEW_STROKE);
                 if ( _isFill ) {
-                    val |= PREVIEW_FILL;
+                    val |= UI::Widget::PREVIEW_FILL;
                 }
                 if ( _isStroke ) {
-                    val |= PREVIEW_STROKE;
+                    val |= UI::Widget::PREVIEW_STROKE;
                 }
-                preview->set_linked(static_cast<LinkType>(val));
+                preview->set_linked(static_cast<UI::Widget::LinkType>(val));
             }
         }
     }
@@ -339,7 +339,7 @@ void ColorItem::setName(const Glib::ustring name)
     //def.descr = name;
 
     for (auto widget : _previews) {
-        auto preview = dynamic_cast<EekPreview *>(widget);
+        auto preview = dynamic_cast<UI::Widget::Preview *>(widget);
         auto label = dynamic_cast<Gtk::Label *>(widget);
         if (preview) {
             preview->set_tooltip_text(name);
@@ -409,7 +409,7 @@ void ColorItem::_colorDefChanged(void* data)
 void ColorItem::_updatePreviews()
 {
     for (auto widget : _previews) {
-        auto preview = dynamic_cast<EekPreview *>(widget);
+        auto preview = dynamic_cast<UI::Widget::Preview *>(widget);
         if (preview) {
             _regenPreview(preview);
             preview->queue_draw();
@@ -480,7 +480,7 @@ void ColorItem::_updatePreviews()
 
 }
 
-void ColorItem::_regenPreview(EekPreview * preview)
+void ColorItem::_regenPreview(UI::Widget::Preview * preview)
 {
     if ( def.getType() != ege::PaintDef::RGB ) {
         using Inkscape::IO::Resource::get_path;
@@ -521,27 +521,32 @@ void ColorItem::_regenPreview(EekPreview * preview)
         preview->set_pixbuf(pixbuf);
     }
 
-    preview->set_linked((LinkType)((_linkSrc ? PREVIEW_LINK_IN:0)
-                                  | (_listeners.empty() ? 0:PREVIEW_LINK_OUT)
-                                  | (_isLive ? PREVIEW_LINK_OTHER:0)) );
+    preview->set_linked(static_cast<UI::Widget::LinkType>( (_linkSrc           ? UI::Widget::PREVIEW_LINK_IN : 0)
+                                                         | (_listeners.empty() ? 0 : UI::Widget::PREVIEW_LINK_OUT)
+                                                         | (_isLive            ? UI::Widget::PREVIEW_LINK_OTHER:0)) );
 }
 
-Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewSize size, guint ratio, guint border)
+Gtk::Widget*
+ColorItem::getPreview(UI::Widget::PreviewStyle style,
+                      UI::Widget::ViewType     view,
+                      UI::Widget::PreviewSize  size,
+                      guint                    ratio,
+                      guint                    border)
 {
     Gtk::Widget* widget = nullptr;
-    if ( style == PREVIEW_STYLE_BLURB) {
+    if ( style == UI::Widget::PREVIEW_STYLE_BLURB) {
         Gtk::Label *lbl = new Gtk::Label(def.descr);
         lbl->set_halign(Gtk::ALIGN_START);
         lbl->set_valign(Gtk::ALIGN_CENTER);
         widget = lbl;
     } else {
-        auto preview = Gtk::manage(new EekPreview());
+        auto preview = Gtk::manage(new UI::Widget::Preview());
         preview->set_name("ColorItemPreview");
 
         _regenPreview(preview);
 
-        preview->set_details((::ViewType)view,
-                             (::PreviewSize)size,
+        preview->set_details((UI::Widget::ViewType)view,
+                             (UI::Widget::PreviewSize)size,
                              ratio,
                              border );
 
