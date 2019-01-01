@@ -136,8 +136,7 @@ struct SPCanvasGroup {
 
     SPCanvasItem item;
 
-    std::list<SPCanvasItem *> items;
-
+    SPCanvasItemList items;
 };
 
 /**
@@ -271,6 +270,9 @@ void sp_canvas_item_construct(SPCanvasItem *item, SPCanvasGroup *parent, gchar c
 {
     g_return_if_fail(SP_IS_CANVAS_GROUP(parent));
     g_return_if_fail(SP_IS_CANVAS_ITEM(item));
+
+    // manually invoke list_member_hook constructor
+    new (&(item->member_hook_)) boost::intrusive::list_member_hook<>();
 
     item->parent = SP_CANVAS_ITEM(parent);
     item->canvas = item->parent->canvas;
@@ -495,14 +497,15 @@ void sp_canvas_item_raise(SPCanvasItem *item, int positions)
     }
 
     SPCanvasGroup *parent = SP_CANVAS_GROUP (item->parent);
-    std::list<SPCanvasItem *>::iterator l = std::find(parent->items.begin(),parent->items.end(), item);
-    g_assert (l != parent->items.end());
+    auto from = parent->items.iterator_to(*item);
+    auto to = from;
 
-    for (int i=0; i<=positions && l != parent->items.end(); ++i)
-        ++l;
+    for (int i = 0; i <= positions && to != parent->items.end(); ++i) {
+        ++to;
+    }
 
-    parent->items.remove(item);
-    parent->items.insert(l, item);
+    parent->items.erase(from);
+    parent->items.insert(to, *item);
 
     redraw_if_visible (item);
     item->canvas->_need_repick = TRUE;
@@ -515,8 +518,8 @@ void sp_canvas_item_raise_to_top(SPCanvasItem *item)
     if (!item->parent)
         return;
     SPCanvasGroup *parent = SP_CANVAS_GROUP (item->parent);
-    parent->items.remove(item);
-    parent->items.push_back(item);
+    parent->items.erase(parent->items.iterator_to(*item));
+    parent->items.push_back(*item);
     redraw_if_visible (item);
     item->canvas->_need_repick = TRUE;
 }
@@ -540,18 +543,20 @@ void sp_canvas_item_lower(SPCanvasItem *item, int positions)
 
     SPCanvasGroup *parent = SP_CANVAS_GROUP(item->parent);
 
-    if (!parent || positions == 0 || item == parent->items.front() ) {
+    if (!parent || positions == 0 || item == &parent->items.front()) {
         return;
     }
 
-    std::list<SPCanvasItem *>::iterator l = std::find(parent->items.begin(), parent->items.end(), item);
-    g_assert (l != parent->items.end());
+    auto from = parent->items.iterator_to(*item);
+    auto to = from;
+    g_assert(from != parent->items.end());
 
-    for (int i=0; i<positions && l != parent->items.begin(); ++i)
-        --l;
+    for (int i = 0; i < positions && to != parent->items.begin(); ++i) {
+        --to;
+    }
 
-    parent->items.remove(item);
-    parent->items.insert(l, item);
+    parent->items.erase(from);
+    parent->items.insert(to, *item);
 
     redraw_if_visible (item);
     item->canvas->_need_repick = TRUE;
@@ -564,8 +569,8 @@ void sp_canvas_item_lower_to_bottom(SPCanvasItem *item)
     if (!item->parent)
         return;
     SPCanvasGroup *parent = SP_CANVAS_GROUP (item->parent);
-    parent->items.remove(item);
-    parent->items.push_front(item);
+    parent->items.erase(parent->items.iterator_to(*item));
+    parent->items.push_front(*item);
     redraw_if_visible (item);
     item->canvas->_need_repick = TRUE;
 }
@@ -768,8 +773,8 @@ gint sp_canvas_item_order (SPCanvasItem * item)
 {
     SPCanvasGroup * p = SP_CANVAS_GROUP(item->parent);
     size_t index = 0;
-    for (std::list<SPCanvasItem*>::const_iterator it = p->items.begin(); it != p->items.end(); ++it, ++index) {
-        if ((*it) == item) {
+    for (auto it = p->items.begin(); it != p->items.end(); ++it, ++index) {
+        if (item == &(*it)) {
             return index;
         }
     }
@@ -793,7 +798,7 @@ static void sp_canvas_group_class_init(SPCanvasGroupClass *klass)
 
 static void sp_canvas_group_init(SPCanvasGroup * group)
 {
-    new (&group->items) std::list<SPCanvasItem *>;
+    new (&group->items) SPCanvasItemList;
 }
 
 void SPCanvasGroup::destroy(SPCanvasItem *object)
@@ -803,12 +808,14 @@ void SPCanvasGroup::destroy(SPCanvasItem *object)
 
     SPCanvasGroup *group = SP_CANVAS_GROUP(object);
 
-    for (std::list<SPCanvasItem *>::iterator it = group->items.begin(); it != group->items.end(); ++it) {
-        sp_canvas_item_destroy(*it);
+    for (auto it = group->items.begin(); it != group->items.end();) {
+        SPCanvasItem *item = &(*it);
+        it++;
+        sp_canvas_item_destroy(item);
     }
 
     group->items.clear();
-    group->items.~list(); // invoke manually
+    group->items.~SPCanvasItemList(); // invoke manually
 
     if (SP_CANVAS_ITEM_CLASS(sp_canvas_group_parent_class)->destroy) {
         (* SP_CANVAS_ITEM_CLASS(sp_canvas_group_parent_class)->destroy)(object);
@@ -817,11 +824,11 @@ void SPCanvasGroup::destroy(SPCanvasItem *object)
 
 void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags)
 {
-    SPCanvasGroup const *group = SP_CANVAS_GROUP(item);
+    SPCanvasGroup *group = SP_CANVAS_GROUP(item);
     Geom::OptRect bounds;
 
-    for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *i = *it;
+    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
+        SPCanvasItem *i = &(*it);
 
         sp_canvas_item_invoke_update (i, affine, flags);
 
@@ -844,7 +851,7 @@ void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsig
 
 double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item)
 {
-    SPCanvasGroup const *group = SP_CANVAS_GROUP(item);
+    SPCanvasGroup *group = SP_CANVAS_GROUP(item);
     double const x = p[Geom::X];
     double const y = p[Geom::Y];
     int x1 = (int)(x - item->canvas->_close_enough);
@@ -856,8 +863,8 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
     *actual_item = nullptr;
 
     double dist = 0.0;
-    for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = *it;
+    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
+        SPCanvasItem *child = &(*it);
 
         if ((child->x1 <= x2) && (child->y1 <= y2) && (child->x2 >= x1) && (child->y2 >= y1)) {
             SPCanvasItem *point_item = nullptr; // cater for incomplete item implementations
@@ -888,10 +895,10 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
 
 void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
-    SPCanvasGroup const *group = SP_CANVAS_GROUP(item);
+    SPCanvasGroup *group = SP_CANVAS_GROUP(item);
 
-    for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = *it;
+    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
+        SPCanvasItem *child = &(*it);
         if (child->visible) {
             if ((child->x1 < buf->rect.right()) &&
                 (child->y1 < buf->rect.bottom()) &&
@@ -909,8 +916,8 @@ void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
 
-    for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = *it;
+    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
+        SPCanvasItem *child = &(*it);
         if (child->visible) {
             if (SP_CANVAS_ITEM_GET_CLASS(child)->viewbox_changed) {
                 SP_CANVAS_ITEM_GET_CLASS(child)->viewbox_changed(child, new_area);
@@ -924,7 +931,7 @@ void SPCanvasGroup::add(SPCanvasItem *item)
     g_object_ref(item);
     g_object_ref_sink(item);
 
-    items.push_back(item);
+    items.push_back(*item);
 
     sp_canvas_item_request_update(item);
 }
@@ -933,7 +940,7 @@ void SPCanvasGroup::remove(SPCanvasItem *item)
 {
     g_return_if_fail(item != nullptr);
 
-    auto position = std::find(items.begin(), items.end(), item);
+    auto position = items.iterator_to(*item);
     if (position != items.end()) {
         items.erase(position);
     }
