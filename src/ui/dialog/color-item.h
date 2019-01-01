@@ -79,12 +79,10 @@ private:
                              guint event_time,
                              gpointer user_data);
 
-    static void _dragGetColorData( GtkWidget *widget,
-                                   GdkDragContext *drag_context,
-                                   GtkSelectionData *data,
-                                   guint info,
-                                   guint time,
-                                   gpointer user_data);
+    void _dragGetColorData(const Glib::RefPtr<Gdk::DragContext> &drag_context,
+                           Gtk::SelectionData                   &data,
+                           guint                                 info,
+                           guint                                 time);
 
     static void _wireMagicColors( SwatchPage *colorSet );
     static void _colorDefChanged(void* data);
@@ -94,6 +92,11 @@ private:
 
     void _linkTint( ColorItem& other, int percent );
     void _linkTone( ColorItem& other, int percent, int grayLevel );
+    void drag_begin(const Glib::RefPtr<Gdk::DragContext> &dc);
+    void handleClick();
+    void handleSecondaryClick(gint arg1);
+    bool handleEnterNotify(GdkEventCrossing* event);
+    bool handleLeaveNotify(GdkEventCrossing* event);
 
     std::vector<Gtk::Widget*> _previews;
 

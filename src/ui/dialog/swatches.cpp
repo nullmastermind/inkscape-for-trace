@@ -248,14 +248,12 @@ static void removeit( GtkWidget *widget, gpointer data )
 }
 
 /* extern'ed from color-item.cpp */
-gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, gpointer user_data );
-
-gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, gpointer user_data )
+bool colorItemHandleButtonPress(GdkEventButton* event, EekPreview *preview, gpointer user_data)
 {
     gboolean handled = FALSE;
 
     if ( event && (event->button == 3) && (event->type == GDK_BUTTON_PRESS) ) {
-        SwatchesPanel* swp = findContainingPanel( widget );
+        SwatchesPanel* swp = findContainingPanel( GTK_WIDGET(preview->gobj()) );
 
         if ( !popupMenu ) {
             popupMenu = gtk_menu_new();
@@ -329,7 +327,7 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
             if ( popupMenu ) {
                 gtk_container_foreach(GTK_CONTAINER(popupSub), removeit, popupSub);
                 bool processed = false;
-                GtkWidget *wdgt = gtk_widget_get_ancestor(widget, SP_TYPE_DESKTOP_WIDGET);
+                GtkWidget *wdgt = gtk_widget_get_ancestor(GTK_WIDGET(preview->gobj()), SP_TYPE_DESKTOP_WIDGET);
                 if ( wdgt ) {
                     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(wdgt);
                     if ( dtw && dtw->desktop ) {

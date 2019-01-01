@@ -38,7 +38,7 @@
 #include <algorithm>
 using std::min;
 
-#include <gtk/gtk.h>
+#include <gdkmm/general.h>
 #include "eek-preview.h"
 #include "preferences.h"
 
@@ -50,79 +50,38 @@ using std::min;
 
 #define PREVIEW_MAX_RATIO 500
 
-enum {
-    PROP_0,
-    PROP_FOCUS
-};
-
-struct EekPreviewPrivate
+void
+EekPreview::set_color(int r, int g, int b )
 {
-    int          scaledW;
-    int          scaledH;
+    _r = r;
+    _g = g;
+    _b = b;
 
-    int          r;
-    int          g;
-    int          b;
-
-    gboolean     hot;
-    gboolean     within;
-    gboolean     takesFocus;
-    ViewType     view;
-    PreviewSize  size;
-    guint        ratio;
-    guint        linked;
-    guint        border;
-    GdkPixbuf   *previewPixbuf;
-    GdkPixbuf   *scaled;
-};
-
-#define EEK_PREVIEW_GET_PRIVATE(preview) \
-    reinterpret_cast<EekPreviewPrivate *>(eek_preview_get_instance_private (preview))
-
-static void     eek_preview_class_init( EekPreviewClass *klass );
-static void     eek_preview_init( EekPreview *preview );
-static gboolean eek_preview_draw(GtkWidget* widget, cairo_t* cr);
-
-G_DEFINE_TYPE_WITH_PRIVATE (EekPreview, eek_preview, GTK_TYPE_DRAWING_AREA);
-
-static GtkWidgetClass* parent_class = nullptr;
-
-void eek_preview_set_color( EekPreview* preview, int r, int g, int b )
-{
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    priv->r = r;
-    priv->g = g;
-    priv->b = b;
-
-    gtk_widget_queue_draw(GTK_WIDGET(preview));
+    queue_draw();
 }
 
 
 void
-eek_preview_set_pixbuf(EekPreview *preview,
-                       GdkPixbuf  *pixbuf)
+EekPreview::set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf)
 {
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
+    _previewPixbuf = pixbuf;
 
-    priv->previewPixbuf     = pixbuf;
+    queue_draw();
 
-    gtk_widget_queue_draw(GTK_WIDGET(preview));
-
-    if (priv->scaled)
+    if (_scaled)
     {
-        g_object_unref(priv->scaled);
-        priv->scaled = nullptr;
+        _scaled.reset();
     }
 
-    priv->scaledW = gdk_pixbuf_get_width(priv->previewPixbuf);
-    priv->scaledH = gdk_pixbuf_get_height(priv->previewPixbuf);
+    _scaledW = _previewPixbuf->get_width();
+    _scaledH = _previewPixbuf->get_height();
 }
 
 static gboolean setupDone = FALSE;
 static GtkRequisition sizeThings[PREVIEW_SIZE_NEXTFREE];
 
-void eek_preview_set_size_mappings( guint count, GtkIconSize const* sizes )
+void
+EekPreview::set_size_mappings( guint count, GtkIconSize const* sizes )
 {
     gint width = 0;
     gint height = 0;
@@ -156,12 +115,11 @@ void eek_preview_set_size_mappings( guint count, GtkIconSize const* sizes )
     setupDone = TRUE;
 }
 
-static void eek_preview_size_request( GtkWidget* widget, GtkRequisition* req )
+void
+EekPreview::size_request(GtkRequisition* req) const
 {
-    gint               width   = 0;
-    gint               height  = 0;
-    EekPreview        *preview = EEK_PREVIEW(widget);
-    EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
+    int               width   = 0;
+    int               height  = 0;
 
     if ( !setupDone ) {
         GtkIconSize sizes[] = {
@@ -171,18 +129,18 @@ static void eek_preview_size_request( GtkWidget* widget, GtkRequisition* req )
             GTK_ICON_SIZE_BUTTON,
             GTK_ICON_SIZE_DIALOG
         };
-        eek_preview_set_size_mappings( G_N_ELEMENTS(sizes), sizes );
+        set_size_mappings( G_N_ELEMENTS(sizes), sizes );
     }
 
-    width = sizeThings[priv->size].width;
-    height = sizeThings[priv->size].height;
+    width = sizeThings[_size].width;
+    height = sizeThings[_size].height;
 
-    if ( priv->view == VIEW_TYPE_LIST ) {
+    if ( _view == VIEW_TYPE_LIST ) {
         width *= 3;
     }
 
-    if ( priv->ratio != 100 ) {
-        width = (width * priv->ratio) / 100;
+    if ( _ratio != 100 ) {
+        width = (width * _ratio) / 100;
         if ( width < 0 ) {
             width = 1;
         }
@@ -192,116 +150,100 @@ static void eek_preview_size_request( GtkWidget* widget, GtkRequisition* req )
     req->height = height;
 }
 
-static void eek_preview_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
+void
+EekPreview::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 {
-	GtkRequisition requisition;
-	eek_preview_size_request(widget, &requisition);
-	*minimal_width = *natural_width = requisition.width;
+    GtkRequisition requisition;
+    size_request(&requisition);
+    minimal_width = natural_width = requisition.width;
 }
 
-static void eek_preview_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
+void
+EekPreview::get_preferred_height_vfunc(int &minimal_height, int &natural_height) const
 {
-	GtkRequisition requisition;
-	eek_preview_size_request(widget, &requisition);
-	*minimal_height = *natural_height = requisition.height;
+    GtkRequisition requisition;
+    size_request(&requisition);
+    minimal_height = natural_height = requisition.height;
 }
 
-enum {
-  CLICKED_SIGNAL,
-  ALTCLICKED_SIGNAL,
-  LAST_SIGNAL
-};
-
-
-static guint eek_preview_signals[LAST_SIGNAL] = { 0 };
-
-static
-gboolean eek_preview_draw(GtkWidget *widget,
-                          cairo_t   *cr)
+bool
+EekPreview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
 {
-
-    EekPreview        *preview = EEK_PREVIEW(widget);
-    EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(widget, &allocation);
+    auto allocation = get_allocation();
 
     gint insetTop = 0, insetBottom = 0;
     gint insetLeft = 0, insetRight = 0;
 
-    if (priv->border == BORDER_SOLID) {
+    if (_border == BORDER_SOLID) {
         insetTop = 1;
         insetLeft = 1;
     }
-    if (priv->border == BORDER_SOLID_LAST_ROW) {
+    if (_border == BORDER_SOLID_LAST_ROW) {
         insetTop = insetBottom = 1;
         insetLeft = 1;
     }
-    if (priv->border == BORDER_WIDE) {
+    if (_border == BORDER_WIDE) {
         insetTop = insetBottom = 1;
         insetLeft = insetRight = 1;
     }
 
-    auto context = gtk_widget_get_style_context(widget);
+    auto context = get_style_context();
 
-    gtk_render_frame(context,
-                     cr,
-                     0, 0,
-                     allocation.width, allocation.height);
-
-    gtk_render_background(context,
-                          cr,
+    context->render_frame(cr,
                           0, 0,
-                          allocation.width, allocation.height);
+                          allocation.get_width(), allocation.get_height());
+
+    context->render_background(cr,
+                               0, 0,
+                               allocation.get_width(), allocation.get_height());
 
     // Border
-    if (priv->border != BORDER_NONE) {
-        cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
-        cairo_rectangle(cr, 0, 0, allocation.width, allocation.height);
-        cairo_fill(cr);
+    if (_border != BORDER_NONE) {
+        cr->set_source_rgb(0.0, 0.0, 0.0);
+        cr->rectangle(0, 0, allocation.get_width(), allocation.get_height());
+        cr->fill();
     }
 
-    cairo_set_source_rgb(cr, priv->r/65535.0, priv->g/65535.0, priv->b/65535.0 );
-    cairo_rectangle(cr, insetLeft, insetTop, allocation.width - (insetLeft + insetRight), allocation.height - (insetTop + insetBottom));
-    cairo_fill(cr);
+    cr->set_source_rgb(_r/65535.0, _g/65535.0, _b/65535.0 );
+    cr->rectangle(insetLeft, insetTop, allocation.get_width() - (insetLeft + insetRight), allocation.get_height() - (insetTop + insetBottom));
+    cr->fill();
 
-    if (priv->previewPixbuf )
+    if (_previewPixbuf )
     {
-        if ((allocation.width != priv->scaledW) || (allocation.height != priv->scaledH)) {
-            if (priv->scaled)
+        if ((allocation.get_width() != _scaledW) || (allocation.get_height() != _scaledH)) {
+            if (_scaled)
             {
-                g_object_unref(priv->scaled);
+                _scaled.reset();
             }
 
-            priv->scaledW = allocation.width - (insetLeft + insetRight);
-            priv->scaledH = allocation.height - (insetTop + insetBottom);
+            _scaledW = allocation.get_width() - (insetLeft + insetRight);
+            _scaledH = allocation.get_height() - (insetTop + insetBottom);
 
-            priv->scaled = gdk_pixbuf_scale_simple(priv->previewPixbuf,
-                                                   priv->scaledW,
-                                                   priv->scaledH,
-                                                   GDK_INTERP_BILINEAR);
+            _scaled = _previewPixbuf->scale_simple(_scaledW,
+                                                   _scaledH,
+                                                   Gdk::INTERP_BILINEAR);
         }
 
-        GdkPixbuf *pix = (priv->scaled) ? priv->scaled : priv->previewPixbuf;
+        Glib::RefPtr<Gdk::Pixbuf> pix = (_scaled) ? _scaled : _previewPixbuf;
 
         // Border
-        if (priv->border != BORDER_NONE) {
-            cairo_set_source_rgb(cr, 0.0, 0.0, 0.0);
-            cairo_rectangle(cr, 0, 0, allocation.width, allocation.height);
-            cairo_fill(cr);
+        if (_border != BORDER_NONE) {
+            cr->set_source_rgb(0.0, 0.0, 0.0);
+            cr->rectangle(0, 0, allocation.get_width(), allocation.get_height());
+            cr->fill();
         }
 
-        gdk_cairo_set_source_pixbuf(cr, pix, insetLeft, insetTop);
-        cairo_paint(cr);
+        Gdk::Cairo::set_source_pixbuf(cr, pix, insetLeft, insetTop);
+        cr->paint();
     }
 
-    if (priv->linked)
+    if (_linked)
     {
         /* Draw arrow */
         GdkRectangle possible = {insetLeft,
                                  insetTop,
-                                 (allocation.width - (insetLeft + insetRight)),
-                                 (allocation.height - (insetTop + insetBottom))
+                                 (allocation.get_width() - (insetLeft + insetRight)),
+                                 (allocation.get_height() - (insetTop + insetBottom))
                                 };
 
         GdkRectangle area = {possible.x,
@@ -321,48 +263,45 @@ gboolean eek_preview_draw(GtkWidget *widget,
             area.x += diff;
         }
 
-        if (priv->linked & PREVIEW_LINK_IN)
+        if (_linked & PREVIEW_LINK_IN)
         {
-            gtk_render_arrow(context,
-                             cr,
-                             G_PI, // Down-pointing arrow
-                             area.x, area.y,
-                             min(area.width, area.height)
-                            );
+            context->render_arrow(cr,
+                                  G_PI, // Down-pointing arrow
+                                  area.x, area.y,
+                                  min(area.width, area.height)
+                                 );
         }
 
-        if (priv->linked & PREVIEW_LINK_OUT)
+        if (_linked & PREVIEW_LINK_OUT)
         {
             GdkRectangle otherArea = {area.x, area.y, area.width, area.height};
             if ( otherArea.height < possible.height ) {
                 otherArea.y = possible.y + (possible.height - otherArea.height);
             }
 
-            gtk_render_arrow(context,
-                             cr,
-                             G_PI, // Down-pointing arrow
-                             otherArea.x, otherArea.y,
-                             min(otherArea.width, otherArea.height)
-                            );
+            context->render_arrow(cr,
+                                  G_PI, // Down-pointing arrow
+                                  otherArea.x, otherArea.y,
+                                  min(otherArea.width, otherArea.height)
+                                 );
         }
 
-        if (priv->linked & PREVIEW_LINK_OTHER)
+        if (_linked & PREVIEW_LINK_OTHER)
         {
             GdkRectangle otherArea = {insetLeft, area.y, area.width, area.height};
             if ( otherArea.height < possible.height ) {
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
 
-            gtk_render_arrow(context,
-                             cr,
-                             1.5*G_PI, // Left-pointing arrow
-                             otherArea.x, otherArea.y,
-                             min(otherArea.width, otherArea.height)
-                            );
+            context->render_arrow(cr,
+                                  1.5*G_PI, // Left-pointing arrow
+                                  otherArea.x, otherArea.y,
+                                  min(otherArea.width, otherArea.height)
+                                 );
         }
 
 
-        if (priv->linked & PREVIEW_FILL)
+        if (_linked & PREVIEW_FILL)
         {
             GdkRectangle otherArea = {possible.x + ((possible.width / 4) - (area.width / 2)),
                                       area.y,
@@ -370,13 +309,12 @@ gboolean eek_preview_draw(GtkWidget *widget,
             if ( otherArea.height < possible.height ) {
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
-            gtk_render_check(context,
-                             cr,
-                             otherArea.x, otherArea.y,
-                             otherArea.width, otherArea.height );
+            context->render_check(cr,
+                                  otherArea.x, otherArea.y,
+                                  otherArea.width, otherArea.height );
         }
 
-        if (priv->linked & PREVIEW_STROKE)
+        if (_linked & PREVIEW_STROKE)
         {
             GdkRectangle otherArea = {possible.x + (((possible.width * 3) / 4) - (area.width / 2)),
                                       area.y,
@@ -385,329 +323,164 @@ gboolean eek_preview_draw(GtkWidget *widget,
                 otherArea.y = possible.y + (possible.height - otherArea.height) / 2;
             }
             // This should be a diamond too?
-            gtk_render_check(context,
-                             cr,
-                             otherArea.x, otherArea.y,
-                             otherArea.width, otherArea.height );
+            context->render_check(cr,
+                                  otherArea.x, otherArea.y,
+                                  otherArea.width, otherArea.height );
         }
     }
 
 
-    if ( gtk_widget_has_focus(widget) ) {
-        gtk_widget_get_allocation (widget, &allocation);
+    if ( has_focus() ) {
+        allocation = get_allocation();
 
-        gtk_render_focus(context,
-                         cr,
-                         0 + 1, 0 + 1,
-                         allocation.width - 2, allocation.height - 2 );
+        context->render_focus(cr,
+                              0 + 1, 0 + 1,
+                              allocation.get_width() - 2, allocation.get_height() - 2 );
     }
 
-    return FALSE;
+    return false;
 }
 
 
-static gboolean eek_preview_enter_cb( GtkWidget* widget, GdkEventCrossing* event )
+bool
+EekPreview::on_enter_notify_event(GdkEventCrossing* event )
 {
-    if ( gtk_get_event_widget( (GdkEvent*)event ) == widget ) {
-        EekPreview        *preview = EEK_PREVIEW(widget);
-        EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
+    _within = true;
+    set_state_flags(_hot ? Gtk::STATE_FLAG_ACTIVE : Gtk::STATE_FLAG_PRELIGHT, false);
 
-        priv->within = TRUE;
-        gtk_widget_set_state_flags( widget, priv->hot ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_PRELIGHT, false );
-    }
-
-    return FALSE;
+    return false;
 }
 
-static gboolean eek_preview_leave_cb( GtkWidget* widget, GdkEventCrossing* event )
+bool
+EekPreview::on_leave_notify_event(GdkEventCrossing* event)
 {
-    if ( gtk_get_event_widget( (GdkEvent*)event ) == widget ) {
-        EekPreview        *preview = EEK_PREVIEW(widget);
-        EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
+    _within = false;
+    set_state_flags(Gtk::STATE_FLAG_NORMAL, false);
 
-        priv->within = FALSE;
-        gtk_widget_set_state_flags( widget, GTK_STATE_FLAG_NORMAL, false );
-    }
-
-    return FALSE;
+    return false;
 }
 
-static gboolean eek_preview_button_press_cb( GtkWidget* widget, GdkEventButton* event )
+bool
+EekPreview::on_button_press_event(GdkEventButton *event)
 {
-    if ( gtk_get_event_widget( (GdkEvent*)event ) == widget )
+    if (_takesFocus && !has_focus() )
     {
-        EekPreview        *preview = EEK_PREVIEW(widget);
-        EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
-
-        if ( priv->takesFocus && !gtk_widget_has_focus(widget) )
-        {
-            gtk_widget_grab_focus(widget);
-        }
-
-        if ( event->button == PRIME_BUTTON_MAGIC_NUMBER ||
-             event->button == 2 )
-        {
-            priv->hot = TRUE;
-
-            if ( priv->within )
-            {
-                gtk_widget_set_state_flags( widget, GTK_STATE_FLAG_ACTIVE, false );
-            }
-        }
+        grab_focus();
     }
 
-    return FALSE;
-}
-
-static gboolean eek_preview_button_release_cb( GtkWidget* widget, GdkEventButton* event )
-{
-    if ( gtk_get_event_widget( (GdkEvent*)event ) == widget ) {
-        EekPreview        *preview = EEK_PREVIEW(widget);
-        EekPreviewPrivate *priv    = EEK_PREVIEW_GET_PRIVATE(preview);
-
-        priv->hot = FALSE;
-        gtk_widget_set_state_flags( widget, GTK_STATE_FLAG_NORMAL, false );
-
-        if ( priv->within &&
-            (event->button == PRIME_BUTTON_MAGIC_NUMBER ||
-             event->button == 2))
-        {
-            gboolean isAlt = ( ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) ||
-                                (event->button == 2));
-
-            if ( isAlt )
-            {
-                g_signal_emit( widget, eek_preview_signals[ALTCLICKED_SIGNAL], 0, 2 );
-            }
-            else
-            {
-                g_signal_emit( widget, eek_preview_signals[CLICKED_SIGNAL], 0 );
-            }
-        }
-    }
-
-    return FALSE;
-}
-
-static void eek_preview_get_property( GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
-{
-    EekPreview        *preview   = EEK_PREVIEW( object );
-    EekPreviewPrivate *priv      = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    switch (prop_id)
+    if ( event->button == PRIME_BUTTON_MAGIC_NUMBER ||
+            event->button == 2 )
     {
-        case PROP_FOCUS:
-            g_value_set_boolean( value, priv->takesFocus );
-            break;
+        _hot = true;
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-            break;
+        if ( _within )
+        {
+            set_state_flags(Gtk::STATE_FLAG_ACTIVE, false);
+        }
     }
+
+    return false;
 }
 
-static void
-eek_preview_set_property(GObject      *object,
-                         guint         prop_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
+bool
+EekPreview::on_button_release_event(GdkEventButton* event)
 {
-    EekPreview        *preview   = EEK_PREVIEW( object );
+    _hot = false;
+    set_state_flags(Gtk::STATE_FLAG_NORMAL, false);
 
-    switch (prop_id)
+    if (_within &&
+         (event->button == PRIME_BUTTON_MAGIC_NUMBER ||
+          event->button == 2))
     {
-        case PROP_FOCUS:
-            eek_preview_set_focus_on_click(preview, g_value_get_boolean(value));
-            break;
+        gboolean isAlt = ( ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) ||
+                (event->button == 2));
 
-        default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-            break;
+        if ( isAlt )
+        {
+            _signal_alt_clicked(2);
+        }
+        else
+        {
+            _signal_clicked.emit();
+        }
     }
-}
 
-
-static gboolean eek_preview_popup_menu( GtkWidget* widget )
-{
-    gboolean blip = parent_class->popup_menu ? parent_class->popup_menu(widget) : FALSE;
-    return blip;
-}
-
-
-static void eek_preview_class_init( EekPreviewClass *klass )
-{
-    GObjectClass*   gobjClass   = G_OBJECT_CLASS(klass);
-    GtkWidgetClass* widgetClass = (GtkWidgetClass*)klass;
-
-    gobjClass->set_property = eek_preview_set_property;
-    gobjClass->get_property = eek_preview_get_property;
-
-    parent_class = (GtkWidgetClass*)g_type_class_peek_parent( klass );
-
-    widgetClass->get_preferred_width = eek_preview_get_preferred_width;
-    widgetClass->get_preferred_height = eek_preview_get_preferred_height;
-    widgetClass->draw = eek_preview_draw;
-    widgetClass->button_press_event = eek_preview_button_press_cb;
-    widgetClass->button_release_event = eek_preview_button_release_cb;
-    widgetClass->enter_notify_event = eek_preview_enter_cb;
-    widgetClass->leave_notify_event = eek_preview_leave_cb;
-
-    /* For keybindings: */
-    widgetClass->popup_menu = eek_preview_popup_menu;
-
-    eek_preview_signals[CLICKED_SIGNAL] =
-        g_signal_new( "clicked",
-                      G_TYPE_FROM_CLASS( klass ),
-                      (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
-                      G_STRUCT_OFFSET( EekPreviewClass, clicked ),
-                      nullptr, nullptr,
-                      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0 );
-
-    eek_preview_signals[ALTCLICKED_SIGNAL] =
-        g_signal_new( "alt-clicked",
-                      G_TYPE_FROM_CLASS( klass ),
-                      (GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
-                      G_STRUCT_OFFSET( EekPreviewClass, clicked ),
-                      nullptr, nullptr,
-                      g_cclosure_marshal_VOID__INT, G_TYPE_NONE,
-                      1, G_TYPE_INT );
-
-
-    g_object_class_install_property( gobjClass,
-                                     PROP_FOCUS,
-                                     g_param_spec_boolean(
-                                         "focus-on-click",
-                                         nullptr,
-                                         "flag to grab focus when clicked",
-                                         TRUE,
-                                         (GParamFlags)(G_PARAM_READWRITE | G_PARAM_CONSTRUCT)
-                                         )
-                                   );
+    return false;
 }
 
 void
-eek_preview_set_linked(EekPreview *preview,
-                       LinkType    link)
+EekPreview::set_linked(LinkType link)
 {
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    g_return_if_fail(EEK_IS_PREVIEW(preview));
-
     link = (LinkType)(link & PREVIEW_LINK_ALL);
 
-    if (link != (LinkType)priv->linked)
+    if (link != _linked)
     {
-        priv->linked = link;
+        _linked = link;
 
-        gtk_widget_queue_draw(GTK_WIDGET(preview));
+        queue_draw();
     }
 }
 
 LinkType
-eek_preview_get_linked(EekPreview *preview)
+EekPreview::get_linked() const
 {
-    g_return_val_if_fail(EEK_IS_PREVIEW(preview), PREVIEW_LINK_NONE);
-
-    return (LinkType)EEK_PREVIEW_GET_PRIVATE(preview)->linked;
-}
-
-gboolean
-eek_preview_get_focus_on_click(EekPreview* preview)
-{
-    g_return_val_if_fail(EEK_IS_PREVIEW(preview), FALSE);
-
-    return EEK_PREVIEW_GET_PRIVATE(preview)->takesFocus;
+    return (LinkType)_linked;
 }
 
 void
-eek_preview_set_focus_on_click(EekPreview *preview,
-                               gboolean    focus_on_click)
-{
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    g_return_if_fail(EEK_IS_PREVIEW(preview));
-
-    if (focus_on_click != priv->takesFocus)
-    {
-        priv->takesFocus = focus_on_click;
-    }
-}
-
-void
-eek_preview_set_details(EekPreview   *preview,
-                        ViewType      view,
+EekPreview::set_details(ViewType      view,
                         PreviewSize   size,
                         guint         ratio,
                         guint         border)
 {
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
-
-    g_return_if_fail(EEK_IS_PREVIEW(preview));
-
-    priv->view  = view;
+    _view  = view;
 
     if ( size > PREVIEW_SIZE_LAST )
     {
         size = PREVIEW_SIZE_LAST;
     }
 
-    priv->size = size;
+    _size = size;
 
     if ( ratio > PREVIEW_MAX_RATIO )
     {
         ratio = PREVIEW_MAX_RATIO;
     }
 
-    priv->ratio  = ratio;
-    priv->border = border;
+    _ratio  = ratio;
+    _border = border;
 
-    gtk_widget_queue_draw(GTK_WIDGET(preview));
+    queue_draw();
 }
 
-static void
-eek_preview_init(EekPreview *preview)
+EekPreview::EekPreview()
+    : _r(0x80),
+      _g(0x80),
+      _b(0xcc),
+      _scaledW(0),
+      _scaledH(0),
+      _hot(false),
+      _within(false),
+      _takesFocus(false),
+      _view(VIEW_TYPE_LIST),
+      _size(PREVIEW_SIZE_SMALL),
+      _ratio(100),
+      _border(BORDER_NONE),
+      _previewPixbuf(nullptr),
+      _scaled(nullptr)
 {
-    GtkWidget         *widg = GTK_WIDGET(preview);
-    EekPreviewPrivate *priv = EEK_PREVIEW_GET_PRIVATE(preview);
+    set_can_focus(true);
+    set_receives_default(true);
 
-    gtk_widget_set_can_focus( widg, TRUE );
-    gtk_widget_set_receives_default( widg, TRUE );
+    set_sensitive(true);
 
-    gtk_widget_set_sensitive( widg, TRUE );
-
-    gtk_widget_add_events(widg, GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_KEY_PRESS_MASK
-                          | GDK_KEY_RELEASE_MASK
-                          | GDK_FOCUS_CHANGE_MASK
-                          | GDK_ENTER_NOTIFY_MASK
-                          | GDK_LEAVE_NOTIFY_MASK );
-
-    priv->r             = 0x80;
-    priv->g             = 0x80;
-    priv->b             = 0xcc;
-    priv->scaledW       = 0;
-    priv->scaledH       = 0;
-
-    priv->hot           = FALSE;
-    priv->within        = FALSE;
-    priv->takesFocus    = FALSE;
-
-    priv->view          = VIEW_TYPE_LIST;
-    priv->size          = PREVIEW_SIZE_SMALL;
-    priv->ratio         = 100;
-    priv->border        = BORDER_NONE;
-    priv->previewPixbuf = nullptr;
-    priv->scaled        = nullptr;
-}
-
-
-GtkWidget* eek_preview_new(void)
-{
-    return GTK_WIDGET( g_object_new( EEK_TYPE_PREVIEW, nullptr ) );
+    add_events(Gdk::BUTTON_PRESS_MASK
+              |Gdk::BUTTON_RELEASE_MASK
+              |Gdk::KEY_PRESS_MASK
+              |Gdk::KEY_RELEASE_MASK
+              |Gdk::FOCUS_CHANGE_MASK
+              |Gdk::ENTER_NOTIFY_MASK
+              |Gdk::LEAVE_NOTIFY_MASK );
 }
 
 /*

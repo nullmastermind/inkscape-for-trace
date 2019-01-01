@@ -35,7 +35,7 @@ void Panel::prep() {
         GTK_ICON_SIZE_DND, // Not used by options, but included to make the last size larger
         GTK_ICON_SIZE_DIALOG
     };
-    eek_preview_set_size_mappings( G_N_ELEMENTS(sizes), sizes );
+    EekPreview::set_size_mappings( G_N_ELEMENTS(sizes), sizes );
 }
 
 Panel::Panel(gchar const *prefs_path, int verb_num) :

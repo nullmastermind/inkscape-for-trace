@@ -38,17 +38,12 @@
 #ifndef SEEN_EEK_PREVIEW_H
 #define SEEN_EEK_PREVIEW_H
 
-#include <gtk/gtk.h>
+#include <gtkmm/drawingarea.h>
 
 /**
  * @file
  * Generic implementation of an object that can be shown by a preview.
  */
-
-G_BEGIN_DECLS
-
-#define EEK_TYPE_PREVIEW eek_preview_get_type()
-G_DECLARE_DERIVABLE_TYPE (EekPreview, eek_preview, EEK, PREVIEW, GtkDrawingArea)
 
 enum PreviewStyle {
     PREVIEW_STYLE_ICON = 0,
@@ -92,34 +87,60 @@ enum BorderStyle {
     BORDER_SOLID_LAST_ROW,
 };
 
-typedef struct _EekPreview       EekPreview;
+class EekPreview : public Gtk::DrawingArea {
+private:
+    int           _scaledW;
+    int           _scaledH;
 
-struct _EekPreviewClass
-{
-    GtkDrawingAreaClass parent_class;
+    int           _r;
+    int           _g;
+    int           _b;
 
-    void (*clicked) (EekPreview* splat);
+    bool          _hot;
+    bool          _within;
+    bool          _takesFocus; ///< flag to grab focus when clicked
+    ViewType      _view;
+    PreviewSize   _size;
+    unsigned int  _ratio;
+    LinkType      _linked;
+    unsigned int  _border;
+
+    Glib::RefPtr<Gdk::Pixbuf> _previewPixbuf;
+    Glib::RefPtr<Gdk::Pixbuf> _scaled;
+
+    // signals
+    sigc::signal<void> _signal_clicked;
+    sigc::signal<void, int> _signal_alt_clicked;
+
+    void size_request(GtkRequisition *req) const;
+
+protected:
+    void get_preferred_width_vfunc(int &minimal_width, int &natural_width) const override;
+    void get_preferred_height_vfunc(int &minimal_height, int &natural_height) const override;
+    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
+    bool on_button_press_event(GdkEventButton *button_event) override;
+    bool on_button_release_event(GdkEventButton *button_event) override;
+    bool on_enter_notify_event(GdkEventCrossing* event ) override;
+    bool on_leave_notify_event(GdkEventCrossing* event ) override;
+
+public:
+    EekPreview();
+    bool get_focus_on_click() const {return _takesFocus;}
+    void set_focus_on_click(bool focus_on_click) {_takesFocus = focus_on_click;}
+    LinkType get_linked() const;
+    void set_linked(LinkType link);
+    void set_details(ViewType      view,
+                     PreviewSize   size,
+                     guint         ratio,
+                     guint         border);
+    void set_color(int r, int g, int b);
+    void set_pixbuf(const Glib::RefPtr<Gdk::Pixbuf> &pixbuf);
+    static void set_size_mappings(guint count, GtkIconSize const* sizes);
+
+    decltype(_signal_clicked) signal_clicked() {return _signal_clicked;}
+    decltype(_signal_alt_clicked) signal_alt_clicked() {return _signal_alt_clicked;}
 };
 
-GtkWidget* eek_preview_new(void);
-
-void eek_preview_set_details(EekPreview   *preview,
-                             ViewType      view,
-                             PreviewSize   size,
-                             guint         ratio, 
-                             guint         border);
-void eek_preview_set_color( EekPreview* splat, int r, int g, int b );
-void eek_preview_set_pixbuf( EekPreview* splat, GdkPixbuf* pixbuf );
-
-void eek_preview_set_linked( EekPreview* splat, LinkType link );
-LinkType eek_preview_get_linked( EekPreview* splat );
-
-gboolean eek_preview_get_focus_on_click( EekPreview* preview );
-void eek_preview_set_focus_on_click( EekPreview* preview, gboolean focus_on_click );
-
-void eek_preview_set_size_mappings( guint count, GtkIconSize const* sizes );
-
-G_END_DECLS
 
 #endif /* SEEN_EEK_PREVIEW_H */
 
