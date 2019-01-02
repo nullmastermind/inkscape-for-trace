@@ -1,8 +1,6 @@
-To update inkscape.pot run
-  intltool-update --pot && mv untitled.pot inkscape.pot
-from the /po directory
-
-This is also done by executing the cmake target 'inkscape_pot', e.g. 'make inkscape_pot' (delete inkscape.pot first)
+To update inkscape.pot, delete it first and generate the target "inkscape_pot"
+(with "make inkscape_pot" or "ninja inkscape_pot" from your build folder),
+these commands should create it in the source directory
 
 
 
