@@ -115,13 +115,12 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
         unsigned int counter = 0;
         Geom::Point current = Geom::Point();
         std::vector<unsigned int> done;
-        for (std::vector<PathAndDirectionAndVisible *>::iterator iter = linked_paths._vector.begin();
-             iter != linked_paths._vector.end(); ++iter) {
+        for (auto & iter : linked_paths._vector) {
             SPObject *obj;
-            if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj) &&
-                !(*iter)->_pathvector.empty() && (*iter)->visibled) {
+            if (iter->ref.isAttached() && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj) &&
+                !iter->_pathvector.empty() && iter->visibled) {
                 Geom::Path linked_path;
-                if ((*iter)->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
+                if (iter->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
                     counter++;
                     continue;
                 }
@@ -129,8 +128,8 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                     SP_ITEM(obj)->doWriteTransform(transf);
                 }
                 if (counter == 0) {
-                    current = (*iter)->_pathvector.front().finalPoint();
-                    Geom::Path initial_path = (*iter)->_pathvector.front();
+                    current = iter->_pathvector.front().finalPoint();
+                    Geom::Path initial_path = iter->_pathvector.front();
                     done.push_back(0);
                     if (close && !join) {
                         initial_path.close();

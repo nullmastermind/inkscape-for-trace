@@ -2228,44 +2228,44 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
     }
 
     for(auto & node : nodes) {
-        for( guint j = 0; j < node.size(); ++j ) {
+        for(auto & j : node) {
 
             // std::cout << " Draggers: " << i << " " << j << " " << nodes[i][j]->node_type << std::endl;
-            switch ( node[j]->node_type ) {
+            switch ( j->node_type ) {
 
                 case MG_NODE_TYPE_CORNER:
                 {
-                    mg->array.corners.push_back( node[j] );
+                    mg->array.corners.push_back( j );
                     GrDraggable *corner = new GrDraggable (item, POINT_MG_CORNER, icorner, fill_or_stroke);
                     addDragger ( corner );
-                    node[j]->draggable = icorner;
+                    j->draggable = icorner;
                     ++icorner;
                     break;
                 }
 
                 case MG_NODE_TYPE_HANDLE:
                 {
-                    mg->array.handles.push_back( node[j] );
+                    mg->array.handles.push_back( j );
                     GrDraggable *handle = new GrDraggable (item, POINT_MG_HANDLE, ihandle, fill_or_stroke);
                     GrDragger* dragger = addDragger ( handle );
 
-                    if( !show_handles || !node[j]->set ) {
+                    if( !show_handles || !j->set ) {
                         dragger->knot->hide();
                     }
-                    node[j]->draggable = ihandle;
+                    j->draggable = ihandle;
                     ++ihandle;
                     break;
                 }
 
                 case MG_NODE_TYPE_TENSOR:
                 {
-                    mg->array.tensors.push_back( node[j] );
+                    mg->array.tensors.push_back( j );
                     GrDraggable *tensor = new GrDraggable (item, POINT_MG_TENSOR, itensor, fill_or_stroke);
                     GrDragger* dragger = addDragger ( tensor );
-                    if( !show_handles || !node[j]->set ) {
+                    if( !show_handles || !j->set ) {
                         dragger->knot->hide();
                     }
-                    node[j]->draggable = itensor;
+                    j->draggable = itensor;
                     ++itensor;
                     break;
                 }
@@ -2303,11 +2303,11 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
     guint itensor = 0;
 
     for(auto & node : nodes) {
-        for( guint j = 0; j < node.size(); ++j ) {
+        for(auto & j : node) {
 
             // std::cout << " Draggers: " << i << " " << j << " " << nodes[i][j]->node_type << std::endl;
 
-            switch ( node[j]->node_type ) {
+            switch ( j->node_type ) {
 
                 case MG_NODE_TYPE_CORNER:
                     // Do nothing, corners are always shown.
@@ -2319,7 +2319,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
                     if (dragger) {
                         Geom::Point pk = getGradientCoords( item, POINT_MG_HANDLE, ihandle, fill_or_stroke);
                         dragger->knot->moveto(pk);
-                        if( !show_handles || !node[j]->set ) {
+                        if( !show_handles || !j->set ) {
                             dragger->knot->hide();
                         } else {
                             dragger->knot->show();
@@ -2338,7 +2338,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
                     if (dragger) {
                         Geom::Point pk = getGradientCoords( item, POINT_MG_TENSOR, itensor, fill_or_stroke);
                         dragger->knot->moveto(pk);
-                        if( !show_handles || !node[j]->set ) {
+                        if( !show_handles || !j->set ) {
                             dragger->knot->hide();
                         } else {
                             dragger->knot->show();

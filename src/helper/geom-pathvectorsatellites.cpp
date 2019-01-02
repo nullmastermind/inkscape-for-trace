@@ -69,11 +69,11 @@ void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 {
     size_t counter = 0;
     for (auto & _satellite : _satellites) {
-        for (size_t j = 0; j < _satellite.size(); ++j) {
+        for (auto & j : _satellite) {
             if (find (selected.begin(), selected.end(), counter) != selected.end()) {
-                _satellite[j].setSelected(true);
+                j.setSelected(true);
             } else {
-                _satellite[j].setSelected(false);
+                j.setSelected(false);
             }
             counter++;
         }
@@ -83,18 +83,18 @@ void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 void PathVectorSatellites::updateSteps(size_t steps, bool apply_no_radius, bool apply_with_radius, bool only_selected)
 {
     for (auto & _satellite : _satellites) {
-        for (size_t j = 0; j < _satellite.size(); ++j) {
-            if ((!apply_no_radius && _satellite[j].amount == 0) ||
-                (!apply_with_radius && _satellite[j].amount != 0)) 
+        for (auto & j : _satellite) {
+            if ((!apply_no_radius && j.amount == 0) ||
+                (!apply_with_radius && j.amount != 0)) 
             {
                 continue;
             }
             if (only_selected) {
-                if (_satellite[j].selected) {
-                    _satellite[j].steps = steps;
+                if (j.selected) {
+                    j.steps = steps;
                 }
             } else {
-                _satellite[j].steps = steps;
+                j.steps = steps;
             }
         }
     }

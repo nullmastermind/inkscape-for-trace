@@ -265,8 +265,8 @@ LPEPts2Ellipse::doEffect_path (Geom::PathVector const & path_in)
         // extract first point of this path
         pts.push_back(pit.initialPoint());
         // iterate over all curves
-        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end(); ++cit) {
-            pts.push_back(cit->finalPoint());
+        for (const auto & cit : pit) {
+            pts.push_back(cit.finalPoint());
         }
     }
 

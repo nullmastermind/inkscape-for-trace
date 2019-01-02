@@ -784,8 +784,7 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
 void AssertIsTour(std::vector<OrderingGroup *> &groups, std::vector<OrderingGroupConnection *> &connections, OrderingGroupConnection *longestConnection)
 {
     for (auto & connection : connections) {
-        for (int i = 0; i < 2; i++) {
-            OrderingGroupPoint *pnt = connection->points[i];
+        for (auto pnt : connection->points) {
             assert(pnt->connection == connection);
             assert(pnt->connection->points[pnt->indexInConnection] == pnt);
             assert(pnt->group->endpoints[pnt->indexInGroup] == pnt);

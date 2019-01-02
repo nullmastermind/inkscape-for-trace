@@ -1460,9 +1460,9 @@ void SPMeshNodeArray::create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bb
 void SPMeshNodeArray::clear() {
 
     for(auto & node : nodes) {
-        for( guint j = 0; j < node.size(); ++j ) {
-            if( node[j] ) {
-                delete node[j];
+        for(auto & j : node) {
+            if( j ) {
+                delete j;
             }
         }
     }

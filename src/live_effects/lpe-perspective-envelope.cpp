@@ -205,8 +205,8 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         }
         int h = 0;
         for(auto & i : solmatrix) {
-            for( int j = 0; j < 8; j++ ) {
-                gslSolmatrix[h] = i[j];
+            for(double j : i) {
+                gslSolmatrix[h] = j;
                 h++;
             }
         }
@@ -221,12 +221,12 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         gsl_linalg_LU_solve (&m.matrix, p, &b.vector, x);
         h = 0;
         for(auto & i : projmatrix) {
-            for( int j = 0; j < 3; j++ ) {
+            for(double & j : i) {
                 if(h==8) {
                     projmatrix[2][2] = 1.0;
                     continue;
                 }
-                i[j] = gsl_vector_get(x, h);
+                j = gsl_vector_get(x, h);
                 h++;
             }
         }

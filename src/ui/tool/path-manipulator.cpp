@@ -916,8 +916,8 @@ void PathManipulator::showHandles(bool show)
         }
     } else {
         for (auto & _subpath : _subpaths) {
-            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-                j->showHandles(false);
+            for (auto & j : *_subpath) {
+                j.showHandles(false);
             }
         }
     }
@@ -952,8 +952,8 @@ void PathManipulator::setLiveObjects(bool set)
 void PathManipulator::updateHandles()
 {
     for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            j->updateHandles();
+        for (auto & j : *_subpath) {
+            j.updateHandles();
         }
     }
 }
@@ -963,8 +963,8 @@ void PathManipulator::setControlsTransform(Geom::Affine const &tnew)
     Geom::Affine delta = _i2d_transform.inverse() * _edit_transform.inverse() * tnew * _i2d_transform;
     _edit_transform = tnew;
     for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            j->transform(delta);
+        for (auto & j : *_subpath) {
+            j.transform(delta);
         }
     }
     _createGeometryFromControlPoints();
@@ -1097,8 +1097,8 @@ void PathManipulator::_externalChange(unsigned type)
         // vector<bool> should be specialized so that it takes only 1 bit per value
         std::vector<bool> selpos;
         for (auto & _subpath : _subpaths) {
-            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-                selpos.push_back(j->selected());
+            for (auto & j : *_subpath) {
+                selpos.push_back(j.selected());
             }
         }
         unsigned size = selpos.size(), curpos = 0;
@@ -1122,8 +1122,8 @@ void PathManipulator::_externalChange(unsigned type)
         _d2i_transform = _i2d_transform.inverse();
         i2d_change *= _i2d_transform;
         for (auto & _subpath : _subpaths) {
-            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-                j->transform(i2d_change);
+            for (auto & j : *_subpath) {
+                j.transform(i2d_change);
             }
         }
         _updateOutline();
@@ -1223,8 +1223,8 @@ void PathManipulator::_createControlPointsFromGeometry()
     }
     std::string::iterator tsi = nodetype_string.begin();
     for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            j->setType(Node::parse_nodetype(*tsi++), false);
+        for (auto & j : *_subpath) {
+            j.setType(Node::parse_nodetype(*tsi++), false);
         }
         if (_subpath->closed()) {
             // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
@@ -1418,8 +1418,8 @@ std::string PathManipulator::_createTypeString()
     // precondition: no single-node subpaths
     std::stringstream tstr;
     for (auto & _subpath : _subpaths) {
-        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
-            tstr << j->type();
+        for (auto & j : *_subpath) {
+            tstr << j.type();
         }
         // nodestring format peculiarity: first node is counted twice for closed paths
         if (_subpath->closed()) tstr << _subpath->begin()->type();

@@ -159,9 +159,9 @@ void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &postmul,
 
     if (prefs->getBool("/options/transform/rectcorners", true)) {
         for (auto & i : _vector) {
-            for (size_t j = 0; j < i.size(); ++j) {
-                if (!i[j].is_time && i[j].amount > 0) {
-                    i[j].amount = i[j].amount * ((postmul.expansionX() + postmul.expansionY()) / 2);
+            for (auto & j : i) {
+                if (!j.is_time && j.amount > 0) {
+                    j.amount = j.amount * ((postmul.expansionX() + postmul.expansionY()) / 2);
                 }
             }
         }

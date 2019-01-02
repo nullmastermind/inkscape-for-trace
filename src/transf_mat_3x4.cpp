@@ -161,8 +161,8 @@ TransfMat3x4::print () const {
   g_print ("Transformation matrix:\n");
   for (const auto & i : tmat) {
     g_print ("  ");
-    for (int j = 0; j < 4; ++j) {
-      g_print ("%8.2f ", i[j]);
+    for (double j : i) {
+      g_print ("%8.2f ", j);
     }
     g_print ("\n");
   }

@@ -832,8 +832,8 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
             if ( it.name.empty() ) {
                 // Check to see if we can derive one
                 std::list<Glib::ustring> names;
-                for ( std::list<Glib::RefPtr<InputDevice const> >::iterator it2 = it.devices.begin(); it2 != it.devices.end(); ++it2 ) {
-                    names.push_back( (*it2)->getName() );
+                for (auto & device : it.devices) {
+                    names.push_back( device->getName() );
                 }
                 Glib::ustring common = getCommon(names);
                 if ( !common.empty() ) {
@@ -847,8 +847,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
             for ( std::list<Glib::RefPtr<InputDevice const> >::iterator it2 = it.devices.begin(); it2 != it.devices.end(); ++it2 ) {
                 Glib::RefPtr<InputDevice const> dev = *it2;
                 if ( dev->getSource() == Gdk::SOURCE_PEN ) {
-                    for ( std::list<Glib::RefPtr<InputDevice const> >::iterator it3 = it.devices.begin(); it3 != it.devices.end(); ++it3 ) {
-                        Glib::RefPtr<InputDevice const> dev2 = *it3;
+                    for (auto dev2 : it.devices) {
                         if ( dev2->getSource() == Gdk::SOURCE_ERASER ) {
                             DeviceManager::getManager().setLinkedTo(dev->getId(), dev2->getId());                            
                             break; // only check the first eraser... for now
@@ -858,8 +857,7 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
                 }
             }
 
-            for ( std::list<Glib::RefPtr<InputDevice const> >::iterator it2 = it.devices.begin(); it2 != it.devices.end(); ++it2 ) {
-                Glib::RefPtr<InputDevice const> dev = *it2;
+            for (auto dev : it.devices) {
                 Gtk::TreeModel::Row deviceRow = *(store->append(childrow.children()));
                 deviceRow[getCols().description] = dev->getName();
                 deviceRow[getCols().device] = dev;

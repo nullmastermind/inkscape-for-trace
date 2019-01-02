@@ -90,11 +90,11 @@ public:
 
         for (const auto & time : times){
             LevelCrossings lcs;
-            for (unsigned j=0; j<time.size(); j++){
+            for (double j : time){
                 LevelCrossing lc;
-                lc.pt = f.valueAt(time[j]);
-                lc.t = time[j];
-                lc.sign = ( dx.valueAt(time[j])>0 );
+                lc.pt = f.valueAt(j);
+                lc.t = j;
+                lc.sign = ( dx.valueAt(j)>0 );
                 lc.used = false;
                 lcs.push_back(lc);
             }
