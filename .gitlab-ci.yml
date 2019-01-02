@@ -100,7 +100,7 @@ codeprotect:
 clangtidy:linux:
   stage: test
   dependencies: 
-    - build:linux
+    - inkscape:linux
   except:
     - schedules
   script:
