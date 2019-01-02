@@ -67,11 +67,11 @@ public:
     ConcreteInkscapeApplication();
 
 public:
-    InkFileExportCmd* file_export() { return &_file_export; }
+    InkFileExportCmd* file_export() override { return &_file_export; }
 
 protected:
     void on_startup()  override;
-    void on_startup2();
+    void on_startup2() override;
     void on_activate() override;
     void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
     SPDesktop* create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>());

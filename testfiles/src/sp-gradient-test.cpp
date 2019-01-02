@@ -29,7 +29,7 @@ public:
         gr = new SPGradient();
     }
 
-    ~SPGradientTest() {
+    ~SPGradientTest() override {
         delete gr;
         DocPerCaseTest::TearDownTestCase();
     }

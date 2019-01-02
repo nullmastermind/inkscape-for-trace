@@ -32,7 +32,7 @@ public:
     }
 
 protected:
-    virtual void SetUp()
+    void SetUp() override
     {
         DocPerCaseTest::SetUp();
         _prof = new Inkscape::ColorProfile();
@@ -40,7 +40,7 @@ protected:
         _prof->document = _doc;
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         if (_prof) {
             delete _prof;

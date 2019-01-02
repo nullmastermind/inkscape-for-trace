@@ -581,11 +581,11 @@ private:
     sigc::connection _commit_connection;
     sigc::connection _modified_connection;
 
-    void onResized (double, double);
-    void onRedrawRequested();
-    void onStatusMessage (Inkscape::MessageType type, gchar const *message);
-    void onDocumentURISet (gchar const* uri);
-    void onDocumentResized (double, double);
+    void onResized (double, double) override;
+    void onRedrawRequested() override;
+    void onStatusMessage (Inkscape::MessageType type, gchar const *message) override;
+    void onDocumentURISet (gchar const* uri) override;
+    void onDocumentResized (double, double) override;
 
     static void _onActivate (SPDesktop* dt);
     static void _onDeactivate (SPDesktop* dt);

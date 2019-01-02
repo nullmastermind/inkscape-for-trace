@@ -40,7 +40,7 @@ rect { fill: green; opacity:1.0; }\
         doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
     }
 
-    ~ObjectTest() {
+    ~ObjectTest() override {
         doc->doUnref();
     }
 

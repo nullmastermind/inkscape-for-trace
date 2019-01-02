@@ -248,9 +248,8 @@ namespace UStringPrivate
     // assemble string
     std::string str;
   
-    for (output_list::const_iterator i = output.begin(), end = output.end();
-	 i != end; ++i)
-      str += *i;
+    for (const auto & i : output)
+      str += i;
   
     return str;
   }

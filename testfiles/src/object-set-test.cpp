@@ -77,7 +77,7 @@ public:
         r3->set_shape();
 
     }
-    ~ObjectSetTest() {
+    ~ObjectSetTest() override {
         delete set;
         delete set2;
         delete X;

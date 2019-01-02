@@ -112,8 +112,8 @@ public:
             }
         }
         typedef typename std::set<void*>::iterator RmIter;
-        for (RmIter ri = to_remove.begin(); ri != to_remove.end(); ++ri) {
-            removeItem(*ri);
+        for (auto ri : to_remove) {
+            removeItem(ri);
         }
     }
 

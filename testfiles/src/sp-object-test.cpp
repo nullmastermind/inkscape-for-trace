@@ -40,7 +40,7 @@ public:
         b->invoke_build(_doc, bt, 0);
         a->invoke_build(_doc, at, 0);
     }
-    ~SPObjectTest() {
+    ~SPObjectTest() override {
         delete e;
         delete d;
         delete c;

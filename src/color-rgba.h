@@ -39,8 +39,8 @@ public:
      */
     ColorRGBA()
     {
-        for (int i = 0; i < 4; i++)
-            _c[i] = 0.0;
+        for (float & i : _c)
+            i = 0.0;
     }
 
     /**

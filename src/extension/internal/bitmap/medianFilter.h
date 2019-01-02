@@ -19,8 +19,8 @@ class MedianFilter : public ImageMagick
 private:
 	float _radius;
 public:
-	void applyEffect(Magick::Image *image);
-	void refreshParameters(Inkscape::Extension::Effect *module);
+	void applyEffect(Magick::Image *image) override;
+	void refreshParameters(Inkscape::Extension::Effect *module) override;
 	static void init(void);
 };
 

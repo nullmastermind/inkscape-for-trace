@@ -100,20 +100,20 @@ private:
     }
     template <typename R, typename A>
     void invokeForAll(R (PathManipulator::*method)(A), A a) {
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
-            ((i->second.get())->*method)(a);
+        for (auto & i : _mmap) {
+            ((i.second.get())->*method)(a);
         }
     }
     template <typename R, typename A>
     void invokeForAll(R (PathManipulator::*method)(A const &), A const &a) {
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
-            ((i->second.get())->*method)(a);
+        for (auto & i : _mmap) {
+            ((i.second.get())->*method)(a);
         }
     }
     template <typename R, typename A, typename B>
     void invokeForAll(R (PathManipulator::*method)(A,B), A a, B b) {
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
-            ((i->second.get())->*method)(a, b);
+        for (auto & i : _mmap) {
+            ((i.second.get())->*method)(a, b);
         }
     }
 

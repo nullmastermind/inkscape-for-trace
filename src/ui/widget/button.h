@@ -51,8 +51,8 @@ private:
     sigc::connection _on_clicked;
 
 protected:
-    virtual void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const override;
-    virtual void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const override;
+    void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const override;
+    void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const override;
     void on_clicked() override;
 
 public:
@@ -67,7 +67,7 @@ public:
            const gchar              *name,
            const gchar              *tip);
 
-    ~Button();
+    ~Button() override;
 
     void toggle_set_down(bool down);
 };

@@ -64,8 +64,8 @@ class pool {
       cblock = 0;
       size = sizeof(T) > sizeof(void *) ? sizeof(T) : sizeof(void *);
       next = nullptr;
-      for (int k = 0; k < 64; k++) {
-          block[k] = nullptr;
+      for (auto & k : block) {
+          k = nullptr;
       }
   }
 

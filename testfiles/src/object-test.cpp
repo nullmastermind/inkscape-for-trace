@@ -73,7 +73,7 @@ public:
         doc = SPDocument::createNewDocFromMem(docString, static_cast<int>(strlen(docString)), false);
     }
 
-    ~ObjectTest() {
+    ~ObjectTest() override {
         doc->doUnref();
     }
 

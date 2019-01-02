@@ -20,7 +20,7 @@ class LPEPowerMask : public Effect {
 public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
     ~LPEPowerMask() override;
-    void doOnApply (SPLPEItem const * lpeitem);
+    void doOnApply (SPLPEItem const * lpeitem) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void doEffect (SPCurve * curve) override;
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;

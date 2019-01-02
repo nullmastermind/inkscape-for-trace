@@ -23,9 +23,9 @@ private:
     int _left;
     int _right;
 public:
-    void applyEffect(Magick::Image *image);
-    void postEffect(Magick::Image *image, SPItem *item);
-    void refreshParameters(Inkscape::Extension::Effect *module);
+    void applyEffect(Magick::Image *image) override;
+    void postEffect(Magick::Image *image, SPItem *item) override;
+    void refreshParameters(Inkscape::Extension::Effect *module) override;
     static void init (void);
 };
 

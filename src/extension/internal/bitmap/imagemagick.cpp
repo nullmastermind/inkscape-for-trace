@@ -47,7 +47,7 @@ protected:
     SPItem** _imageItems;
 public:
     ImageMagickDocCache(Inkscape::UI::View::View * view);
-    ~ImageMagickDocCache ( );
+    ~ImageMagickDocCache ( ) override;
 };
 
 ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :

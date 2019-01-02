@@ -227,8 +227,8 @@ struct OrderingGroup {
         revItems(false),
         index(indexIn)
     {
-        for (int i = 0; i < sizeof(endpoints) / sizeof(*endpoints); i++) {
-            endpoints[i] = nullptr;
+        for (auto & endpoint : endpoints) {
+            endpoint = nullptr;
         }
     }
 
