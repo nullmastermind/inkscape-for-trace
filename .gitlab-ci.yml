@@ -26,7 +26,7 @@ inkscape:linux:
     - mkdir -p build/conf
     - ln -s . share/inkscape
     - cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - make -j3 install
     - make -j3 tests
     - cpack -G DEB
@@ -97,6 +97,13 @@ codeprotect:
     - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
+clangtidy:linux:
+  stage: test
+  depends: build:linux
+  except:
+    - schedules
+  script:
+    - cd build && run-clang-tidy -fix -header-filter='.*' && git checkout ../src/3rdparty/ ../src/2geom/
 source-doc:
   stage: build
   only:
