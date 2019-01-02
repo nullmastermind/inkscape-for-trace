@@ -33,7 +33,7 @@ AdaptiveThreshold::refreshParameters(Inkscape::Extension::Effect *module) {
 #include "../clear-n_.h"
 
 void
-AdaptiveThreshold::init(void)
+AdaptiveThreshold::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

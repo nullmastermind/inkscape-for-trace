@@ -429,13 +429,13 @@ void PixelArtDialogImpl::processLibdepixelize(const Input &input)
     }
 
     if ( voronoiRadioButton.get_active() ) {
-        output.push_back(Output(Tracer::Kopf2011::to_voronoi(input.pixbuf,
+        output.emplace_back(Tracer::Kopf2011::to_voronoi(input.pixbuf,
                                                              lastOptions),
-                                input.x, input.y));
+                                input.x, input.y);
     } else {
-        output.push_back(Output(Tracer::Kopf2011::to_splines(input.pixbuf,
+        output.emplace_back(Tracer::Kopf2011::to_splines(input.pixbuf,
                                                              lastOptions),
-                                input.x, input.y));
+                                input.x, input.y);
     }
 }
 

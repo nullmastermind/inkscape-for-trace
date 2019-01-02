@@ -32,7 +32,7 @@ GaussianBlur::refreshParameters(Inkscape::Extension::Effect* module) {
 #include "../clear-n_.h"
 
 void
-GaussianBlur::init(void)
+GaussianBlur::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

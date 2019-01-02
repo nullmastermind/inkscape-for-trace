@@ -1187,7 +1187,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                     d->dc[d->level].style.stroke_dasharray.values.clear();
                 for (unsigned int i=0; i<pEmr->elp.elpNumEntries; i++) {
                     double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
-                    d->dc[d->level].style.stroke_dasharray.values.push_back(SPILength("temp", dash_length));
+                    d->dc[d->level].style.stroke_dasharray.values.emplace_back("temp", dash_length);
                 }
                 d->dc[d->level].style.stroke_dasharray.set = 1;
             } else {

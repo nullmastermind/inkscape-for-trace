@@ -31,7 +31,7 @@ Implode::refreshParameters(Inkscape::Extension::Effect* module) {
 #include "../clear-n_.h"
 
 void
-Implode::init(void)
+Implode::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

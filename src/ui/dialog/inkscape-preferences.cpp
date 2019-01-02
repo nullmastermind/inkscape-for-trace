@@ -875,8 +875,8 @@ void InkscapePreferences::initPageUI()
         std::vector<Glib::ustring> values;
         for (l = list; l; l = l->next) {
             theme = (gchar *)l->data;
-            labels.push_back(Glib::ustring(theme));
-            values.push_back(Glib::ustring(theme));
+            labels.emplace_back(theme);
+            values.emplace_back(theme);
         }
 
         g_list_free(list);
@@ -913,7 +913,7 @@ void InkscapePreferences::initPageUI()
         std::sort(values.begin(), values.end());
         labels.erase(unique(labels.begin(), labels.end()), labels.end());
         values.erase(unique(values.begin(), values.end()), values.end());
-        labels.push_back(_("Use system icons"));
+        labels.emplace_back(_("Use system icons"));
         values.push_back(prefs->getString("/theme/defaultIconTheme"));
         _icon_theme.init("/theme/iconTheme", labels, values, "hicolor");
         _page_theme.add_line(false, _("Change icon theme:"), _icon_theme, "", "", false);

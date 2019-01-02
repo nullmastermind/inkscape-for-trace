@@ -30,7 +30,7 @@ Negate::refreshParameters(Inkscape::Extension::Effect* /*module*/) {
 #include "../clear-n_.h"
 
 void
-Negate::init(void)
+Negate::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

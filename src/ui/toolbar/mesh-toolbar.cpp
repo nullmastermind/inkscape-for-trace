@@ -285,7 +285,7 @@ static MeshTool *get_mesh_tool()
     return tool;
 }
 
-static void ms_toggle_sides(void)
+static void ms_toggle_sides()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
@@ -293,7 +293,7 @@ static void ms_toggle_sides(void)
     }
 }
 
-static void ms_make_elliptical(void)
+static void ms_make_elliptical()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
@@ -301,7 +301,7 @@ static void ms_make_elliptical(void)
     }
 }
 
-static void ms_pick_colors(void)
+static void ms_pick_colors()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
@@ -309,7 +309,7 @@ static void ms_pick_colors(void)
     }
 }
 
-static void ms_fit_mesh(void)
+static void ms_fit_mesh()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
@@ -317,7 +317,7 @@ static void ms_fit_mesh(void)
     }
 }
 
-static void ms_toggle_handles(void)
+static void ms_toggle_handles()
 {
     MeshTool *mt = get_mesh_tool();
     if (mt) {
@@ -338,7 +338,7 @@ static void ms_toggle_fill_stroke(InkToggleAction * /*act*/, gpointer data)
     }
 }
 
-static void ms_warning_popup(void)
+static void ms_warning_popup()
 {
     char *msg = _("Mesh gradients are part of SVG 2:\n"
                   "* Syntax may change.\n"

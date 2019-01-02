@@ -24,7 +24,7 @@ private:
 public:
   void applyEffect(Magick::Image *image) override;
   void refreshParameters(Inkscape::Extension::Effect *module) override;
-  static void init(void);
+  static void init();
 };
 
 }; /* namespace Bitmap */

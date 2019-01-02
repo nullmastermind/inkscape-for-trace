@@ -77,7 +77,7 @@ static NodeTool *get_node_tool()
     return tool;
 }
 
-static void sp_node_path_edit_add(void)
+static void sp_node_path_edit_add()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -85,28 +85,28 @@ static void sp_node_path_edit_add(void)
     }
 }
 
-static void sp_node_path_edit_add_min_x(void)
+static void sp_node_path_edit_add_min_x()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
         nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_X);
     }
 }
-static void sp_node_path_edit_add_max_x(void)
+static void sp_node_path_edit_add_max_x()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
         nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MAX_X);
     }
 }
-static void sp_node_path_edit_add_min_y(void)
+static void sp_node_path_edit_add_min_y()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
         nt->_multipath->insertNodesAtExtrema(Inkscape::UI::PointManipulator::EXTR_MIN_Y);
     }
 }
-static void sp_node_path_edit_add_max_y(void)
+static void sp_node_path_edit_add_max_y()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -114,7 +114,7 @@ static void sp_node_path_edit_add_max_y(void)
     }
 }
 
-static void sp_node_path_edit_delete(void)
+static void sp_node_path_edit_delete()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -123,7 +123,7 @@ static void sp_node_path_edit_delete(void)
     }
 }
 
-static void sp_node_path_edit_delete_segment(void)
+static void sp_node_path_edit_delete_segment()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -131,7 +131,7 @@ static void sp_node_path_edit_delete_segment(void)
     }
 }
 
-static void sp_node_path_edit_break(void)
+static void sp_node_path_edit_break()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -139,7 +139,7 @@ static void sp_node_path_edit_break(void)
     }
 }
 
-static void sp_node_path_edit_join(void)
+static void sp_node_path_edit_join()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -147,7 +147,7 @@ static void sp_node_path_edit_join(void)
     }
 }
 
-static void sp_node_path_edit_join_segment(void)
+static void sp_node_path_edit_join_segment()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -155,7 +155,7 @@ static void sp_node_path_edit_join_segment(void)
     }
 }
 
-static void sp_node_path_edit_toline(void)
+static void sp_node_path_edit_toline()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -163,7 +163,7 @@ static void sp_node_path_edit_toline(void)
     }
 }
 
-static void sp_node_path_edit_tocurve(void)
+static void sp_node_path_edit_tocurve()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -171,7 +171,7 @@ static void sp_node_path_edit_tocurve(void)
     }
 }
 
-static void sp_node_path_edit_cusp(void)
+static void sp_node_path_edit_cusp()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -179,7 +179,7 @@ static void sp_node_path_edit_cusp(void)
     }
 }
 
-static void sp_node_path_edit_smooth(void)
+static void sp_node_path_edit_smooth()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -187,7 +187,7 @@ static void sp_node_path_edit_smooth(void)
     }
 }
 
-static void sp_node_path_edit_symmetrical(void)
+static void sp_node_path_edit_symmetrical()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {
@@ -195,7 +195,7 @@ static void sp_node_path_edit_symmetrical(void)
     }
 }
 
-static void sp_node_path_edit_auto(void)
+static void sp_node_path_edit_auto()
 {
     NodeTool *nt = get_node_tool();
     if (nt) {

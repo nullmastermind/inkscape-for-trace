@@ -35,7 +35,7 @@ Level::refreshParameters(Inkscape::Extension::Effect* module) {
 #include "../clear-n_.h"
 
 void
-Level::init(void)
+Level::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

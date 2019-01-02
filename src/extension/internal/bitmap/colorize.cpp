@@ -44,7 +44,7 @@ Colorize::refreshParameters(Inkscape::Extension::Effect *module) {
 #include "../clear-n_.h"
 
 void
-Colorize::init(void)
+Colorize::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

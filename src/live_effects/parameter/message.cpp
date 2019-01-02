@@ -8,6 +8,8 @@
 #include <glibmm/i18n.h>
 #include <gtkmm.h>
 
+#include <utility>
+
 #include "include/gtkmm_version.h"
 #include "live_effects/parameter/message.h"
 #include "live_effects/effect.h"
@@ -18,12 +20,12 @@ namespace LivePathEffect {
 
 MessageParam::MessageParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, const gchar * default_message, const Glib::ustring& legend, 
+                      Effect* effect, const gchar * default_message, Glib::ustring  legend, 
                       Gtk::Align halign, Gtk::Align valign, double marginstart, double marginend)
     : Parameter(label, tip, key, wr, effect),
       message(default_message),
       defmessage(default_message),
-      _legend(legend),
+      _legend(std::move(legend)),
       _halign(halign),
       _valign(valign),
       _marginstart(marginstart),

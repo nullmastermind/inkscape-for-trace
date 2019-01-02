@@ -32,7 +32,7 @@ Blur::refreshParameters(Inkscape::Extension::Effect *module) {
 #include "../clear-n_.h"
 
 void
-Blur::init(void)
+Blur::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

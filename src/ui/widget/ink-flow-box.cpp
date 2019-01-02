@@ -47,7 +47,7 @@ InkFlowBox::InkFlowBox(const gchar *name)
     sensitive = true;
 }
 
-InkFlowBox::~InkFlowBox() {}
+InkFlowBox::~InkFlowBox() = default;
 
 Glib::ustring InkFlowBox::getPrefsPath(gint pos)
 {

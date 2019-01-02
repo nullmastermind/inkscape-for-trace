@@ -239,7 +239,7 @@ InkFileExportCmd::do_export_svg(SPDocument* doc, std::string filename_in)
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
     if (objects.empty()) {
-        objects.push_back(Glib::ustring()); // So we do loop at least once for root.
+        objects.emplace_back(); // So we do loop at least once for root.
     }
 
     for (auto object : objects) {
@@ -337,7 +337,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
     if (objects.empty()) {
-        objects.push_back(Glib::ustring()); // So we do loop at least once for root.
+        objects.emplace_back(); // So we do loop at least once for root.
     }
 
     for (auto object_id : objects) {
@@ -644,7 +644,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
     // Export each object in list (or root if empty).  Use ';' so in future it could be possible to selected multiple objects to export together.
     std::vector<Glib::ustring> objects = Glib::Regex::split_simple("\\s*;\\s*", export_id);
     if (objects.empty()) {
-        objects.push_back(Glib::ustring()); // So we do loop at least once for root.
+        objects.emplace_back(); // So we do loop at least once for root.
     }
 
     for (auto object : objects) {

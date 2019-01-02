@@ -23,7 +23,7 @@ public:
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const gchar * default_message = "Default message",
-               const Glib::ustring& legend = "Use Label",
+               Glib::ustring  legend = "Use Label",
                Gtk::Align halign = Gtk::ALIGN_START,
                Gtk::Align valign = Gtk::ALIGN_CENTER,
                double marginstart = 6,

@@ -32,7 +32,7 @@ Opacity::refreshParameters(Inkscape::Extension::Effect* module) {
 #include "../clear-n_.h"
 
 void
-Opacity::init(void)
+Opacity::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

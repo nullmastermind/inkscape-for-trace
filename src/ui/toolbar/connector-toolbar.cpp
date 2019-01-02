@@ -61,13 +61,13 @@ using Inkscape::UI::PrefPusher;
 //##      Connector      ##
 //#########################
 
-static void sp_connector_path_set_avoid(void)
+static void sp_connector_path_set_avoid()
 {
     Inkscape::UI::Tools::cc_selection_set_avoid(true);
 }
 
 
-static void sp_connector_path_set_ignore(void)
+static void sp_connector_path_set_ignore()
 {
     Inkscape::UI::Tools::cc_selection_set_avoid(false);
 }
@@ -215,7 +215,7 @@ static void connector_spacing_changed(GtkAdjustment *adj, GObject* tbl)
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_connector_graph_layout(void)
+static void sp_connector_graph_layout()
 {
     if (!SP_ACTIVE_DESKTOP) {
         return;

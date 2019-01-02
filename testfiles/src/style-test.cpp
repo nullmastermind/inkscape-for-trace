@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -23,13 +24,13 @@ namespace {
 class StyleRead {
 
 public:
-  StyleRead(std::string const &src, std::string const &dst, std::string const &uri) :
-    src(src), dst(dst), uri(uri)
+  StyleRead(std::string src, std::string dst, std::string uri) :
+    src(std::move(src)), dst(std::move(dst)), uri(std::move(uri))
   {
   }
 
-  StyleRead(std::string const &src, std::string const &dst) :
-    src(src), dst(dst), uri("")
+  StyleRead(std::string src, std::string dst) :
+    src(std::move(src)), dst(std::move(dst)), uri("")
   {
   }
 
@@ -275,8 +276,8 @@ TEST(StyleTest, Read) {
 class StyleMatch {
 
 public:
-  StyleMatch(std::string const &src, std::string const &dst, bool const &match) :
-    src(src), dst(dst), match(match)
+  StyleMatch(std::string src, std::string dst, bool const &match) :
+    src(std::move(src)), dst(std::move(dst)), match(match)
   {
   }
 
@@ -426,8 +427,8 @@ TEST(StyleTest, Match) {
 class StyleCascade {
 
 public:
-  StyleCascade(std::string const &parent, std::string const &child, std::string const &result) :
-    parent(parent), child(child), result(result)
+  StyleCascade(std::string parent, std::string child, std::string result) :
+    parent(std::move(parent)), child(std::move(child)), result(std::move(result))
   {
   }
 

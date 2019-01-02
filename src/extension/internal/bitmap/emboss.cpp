@@ -32,7 +32,7 @@ Emboss::refreshParameters(Inkscape::Extension::Effect *module) {
 #include "../clear-n_.h"
 
 void
-Emboss::init(void)
+Emboss::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

@@ -12,6 +12,7 @@
  */
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -25,8 +26,8 @@ static const unsigned int FIRST_VALID_ID = 1;
 class AttributeInfo
 {
 public:
-    AttributeInfo(std::string const &attr, bool supported) :
-        attr(attr),
+    AttributeInfo(std::string attr, bool supported) :
+        attr(std::move(attr)),
         supported(supported)
     {
     }

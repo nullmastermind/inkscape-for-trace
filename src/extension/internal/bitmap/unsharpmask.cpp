@@ -35,7 +35,7 @@ Unsharpmask::refreshParameters(Inkscape::Extension::Effect* module) {
 #include "../clear-n_.h"
 
 void
-Unsharpmask::init(void)
+Unsharpmask::init()
 {
 	Inkscape::Extension::build_from_mem(
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

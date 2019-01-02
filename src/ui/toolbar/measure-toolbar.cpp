@@ -236,7 +236,7 @@ sp_toggle_show_in_between( GtkToggleAction* act, gpointer data )
     }
 }
 static void 
-sp_reverse_knots(void){
+sp_reverse_knots(){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->reverseKnots();
@@ -244,7 +244,7 @@ sp_reverse_knots(void){
 }
 
 static void 
-sp_to_mark_dimension(void){
+sp_to_mark_dimension(){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toMarkDimension();
@@ -252,7 +252,7 @@ sp_to_mark_dimension(void){
 }
 
 static void 
-sp_to_guides(void){
+sp_to_guides(){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toGuides();
@@ -260,7 +260,7 @@ sp_to_guides(void){
 }
 
 static void 
-sp_to_phantom(void){
+sp_to_phantom(){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toPhantom();
@@ -268,7 +268,7 @@ sp_to_phantom(void){
 }
 
 static void 
-sp_to_item(void){
+sp_to_item(){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toItem();
