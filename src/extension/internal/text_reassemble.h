@@ -29,11 +29,11 @@ extern "C" {
 #endif
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <stdint.h>
-#include <ctype.h>
+#include <stdlib.h> //NOLINT
+#include <stdio.h>  //NOLINT
+#include <math.h>   //NOLINT
+#include <stdint.h> //NOLINT
+#include <ctype.h>  //NOLINT
 #include <fontconfig/fontconfig.h>
 #include <ft2build.h>
 #include <iconv.h>
