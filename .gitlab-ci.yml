@@ -104,7 +104,7 @@ clangtidy:linux:
   script:
     - mkdir -p build && cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    - run-clang-tidy -fix -header-filter='.*' && git checkout ../src/3rdparty/ ../src/2geom/
+    - run-clang-tidy -fix -header-filter='.*' > /dev/null && git checkout ../src/3rdparty/ ../src/2geom/
     - git diff | tee clang_tidy_diff
     - if [[ -s clang_tidy_diff ]]; then false; fi
 
