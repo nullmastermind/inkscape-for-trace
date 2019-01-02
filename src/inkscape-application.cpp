@@ -334,8 +334,8 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 {
     SPDesktop* desktop = nullptr;
     if (file) {
-        desktop = sp_file_new_default();
         sp_file_open(file->get_parse_name(), nullptr, false, true);
+        desktop = SP_ACTIVE_DESKTOP;
     } else {
         desktop = sp_file_new_default();
     }
