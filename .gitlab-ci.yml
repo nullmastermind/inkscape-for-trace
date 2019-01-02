@@ -99,11 +99,13 @@ codeprotect:
 
 clangtidy:linux:
   stage: test
-  depends: build:linux
+  dependencies: 
+    - build:linux
   except:
     - schedules
   script:
     - cd build && run-clang-tidy -fix -header-filter='.*' && git checkout ../src/3rdparty/ ../src/2geom/
+
 source-doc:
   stage: build
   only:
