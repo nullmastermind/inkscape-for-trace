@@ -45,9 +45,9 @@ UnitTracker::UnitTracker(UnitType unit_type) :
     _store = Gtk::ListStore::create(columns);
     Gtk::TreeModel::Row row;
 
-    for (UnitTable::UnitMap::iterator m_iter = m.begin(); m_iter != m.end(); ++m_iter) {
+    for (auto & m_iter : m) {
 
-        Glib::ustring unit = m_iter->first;
+        Glib::ustring unit = m_iter.first;
 
         row = *(_store->append());
         row[columns.col_label    ] = unit;

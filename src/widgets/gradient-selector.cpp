@@ -251,13 +251,13 @@ void SPGradientSelector::setMode(SelectorMode mode)
     if (mode != this->mode) {
         this->mode = mode;
         if (mode == MODE_SWATCH) {
-            for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+            for (auto & it : nonsolid)
             {
-                gtk_widget_hide(*it);
+                gtk_widget_hide(it);
             }
-            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            for (auto & swatch_widget : swatch_widgets)
             {
-                gtk_widget_show_all(*it);
+                gtk_widget_show_all(swatch_widget);
             }
 
             Gtk::TreeView::Column* icon_column = treeview->get_column(0);
@@ -266,13 +266,13 @@ void SPGradientSelector::setMode(SelectorMode mode)
             SPGradientVectorSelector* vs = SP_GRADIENT_VECTOR_SELECTOR(vectors);
             vs->setSwatched();
         } else {
-            for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+            for (auto & it : nonsolid)
             {
-                gtk_widget_show_all(*it);
+                gtk_widget_show_all(it);
             }
-            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            for (auto & swatch_widget : swatch_widgets)
             {
-                gtk_widget_hide(*it);
+                gtk_widget_hide(swatch_widget);
             }
             Gtk::TreeView::Column* icon_column = treeview->get_column(0);
             icon_column->set_title(_("Gradient"));
@@ -411,25 +411,25 @@ void SPGradientSelector::setVector(SPDocument *doc, SPGradient *vector)
     if (vector) {
         if ( (mode == MODE_SWATCH) && vector->isSwatch() ) {
             if ( vector->isSolid() ) {
-                for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+                for (auto & it : nonsolid)
                 {
-                    gtk_widget_hide(*it);
+                    gtk_widget_hide(it);
                 }
             } else {
-                for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+                for (auto & it : nonsolid)
                 {
-                    gtk_widget_show_all(*it);
+                    gtk_widget_show_all(it);
                 }
             }
         } else if (mode != MODE_SWATCH) {
 
-            for (std::vector<GtkWidget*>::iterator it = swatch_widgets.begin(); it != swatch_widgets.end(); ++it)
+            for (auto & swatch_widget : swatch_widgets)
             {
-                gtk_widget_hide(*it);
+                gtk_widget_hide(swatch_widget);
             }
-            for (std::vector<GtkWidget*>::iterator it = nonsolid.begin(); it != nonsolid.end(); ++it)
+            for (auto & it : nonsolid)
             {
-                gtk_widget_show_all(*it);
+                gtk_widget_show_all(it);
             }
 
         }

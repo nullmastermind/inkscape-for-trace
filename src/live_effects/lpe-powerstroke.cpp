@@ -593,8 +593,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         return path_out;
     }
     std::vector<Geom::Point> ts;
-    for (std::vector<Geom::Point>::iterator tsp = ts_no_scale.begin(); tsp != ts_no_scale.end(); ++tsp) {
-        Geom::Point p = Geom::Point((*tsp)[Geom::X], (*tsp)[Geom::Y] * scale_width);
+    for (auto & tsp : ts_no_scale) {
+        Geom::Point p = Geom::Point(tsp[Geom::X], tsp[Geom::Y] * scale_width);
         ts.push_back(p);
     }
     if (sort_points) {
@@ -640,8 +640,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     // instead of the heavily compressed coordinate system of (segment_no offset, Y) in which the knots are stored
     double pwd2_in_arclength = length(pwd2_in);
     double xcoord_scaling = pwd2_in_arclength / ts.back()[Geom::X];
-    for (std::size_t i = 0, e = ts.size(); i < e; ++i) {
-        ts[i][Geom::X] *= xcoord_scaling;
+    for (auto & t : ts) {
+        t[Geom::X] *= xcoord_scaling;
     }
     
     Geom::Path strokepath = interpolator->interpolateToPath(ts);

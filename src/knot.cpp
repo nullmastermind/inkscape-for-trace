@@ -159,10 +159,10 @@ SPKnot::~SPKnot() {
         this->item = nullptr;
     }
 
-    for (gint i = 0; i < SP_KNOT_VISIBLE_STATES; i++) {
-        if (this->cursor[i]) {
-            g_object_unref(this->cursor[i]);
-            this->cursor[i] = nullptr;
+    for (auto & i : this->cursor) {
+        if (i) {
+            g_object_unref(i);
+            i = nullptr;
         }
     }
 

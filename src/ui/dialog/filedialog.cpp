@@ -64,13 +64,11 @@ bool hasSuffix(const Glib::ustring &str, const Glib::ustring &ext)
 bool isValidImageFile(const Glib::ustring &fileName)
 {
     std::vector<Gdk::PixbufFormat>formats = Gdk::Pixbuf::get_formats();
-    for (unsigned int i=0; i<formats.size(); i++)
+    for (auto format : formats)
         {
-        Gdk::PixbufFormat format = formats[i];
         std::vector<Glib::ustring>extensions = format.get_extensions();
-        for (unsigned int j=0; j<extensions.size(); j++)
+        for (auto ext : extensions)
             {
-            Glib::ustring ext = extensions[j];
             if (hasSuffix(fileName, ext))
                 return true;
             }

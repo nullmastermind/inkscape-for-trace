@@ -47,13 +47,13 @@ void sp_spiro_do_effect(SPCurve *curve){
     Spiro::spiro_cp *path = g_new (Spiro::spiro_cp, len);
     int ip = 0;
 
-    for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
-        if (path_it->empty())
+    for(const auto & path_it : original_pathv) {
+        if (path_it.empty())
             continue;
 
         // start of path
         {
-            Geom::Point p = path_it->initialPoint();
+            Geom::Point p = path_it.initialPoint();
             path[ip].x = p[X];
             path[ip].y = p[Y];
             path[ip].ty = '{' ;  // for closed paths, this is overwritten
@@ -61,9 +61,9 @@ void sp_spiro_do_effect(SPCurve *curve){
         }
 
         // midpoints
-        Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
-        Geom::Path::const_iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
+        Geom::Path::const_iterator curve_it1 = path_it.begin();      // incoming curve
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());         // outgoing curve
+        Geom::Path::const_iterator curve_endit = path_it.end_default(); // this determines when the loop has to stop
 
         while ( curve_it2 != curve_endit )
         {
@@ -103,9 +103,9 @@ void sp_spiro_do_effect(SPCurve *curve){
         Geom::Point p = curve_it1->finalPoint();
         path[ip].x = p[X];
         path[ip].y = p[Y];
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             // curve_it1 points to the (visually) closing segment. determine the match between first and this last segment (the closing node)
-            Geom::NodeType nodetype = Geom::get_nodetype(*curve_it1, path_it->front());
+            Geom::NodeType nodetype = Geom::get_nodetype(*curve_it1, path_it.front());
             switch (nodetype) {
                 case Geom::NODE_NONE: // can't happen! but if it does, it means the path isn't closed :-)
                     path[ip].ty = '}';

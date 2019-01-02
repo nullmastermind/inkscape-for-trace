@@ -74,8 +74,8 @@ void update_presets_list(GObject *tbl)
         bool match = true;
 
         std::vector<Inkscape::Preferences::Entry> preset = prefs->getAllEntries(*i);
-        for (std::vector<Inkscape::Preferences::Entry>::iterator j = preset.begin(); j != preset.end(); ++j) {
-            Glib::ustring entry_name = j->getEntryName();
+        for (auto & j : preset) {
+            Glib::ustring entry_name = j.getEntryName();
             if (entry_name == "id" || entry_name == "name") {
                 continue;
             }
@@ -83,7 +83,7 @@ void update_presets_list(GObject *tbl)
             void *widget = g_object_get_data(tbl, entry_name.data());
             if (widget) {
                 if (GTK_IS_ADJUSTMENT(widget)) {
-                    double v = j->getDouble();
+                    double v = j.getDouble();
                     GtkAdjustment* adj = static_cast<GtkAdjustment *>(widget);
                     //std::cout << "compared adj " << attr_name << gtk_adjustment_get_value(adj) << " to " << v << "\n";
                     if (fabs(gtk_adjustment_get_value(adj) - v) > 1e-6) {
@@ -91,7 +91,7 @@ void update_presets_list(GObject *tbl)
                         break;
                     }
                 } else if (GTK_IS_TOGGLE_ACTION(widget)) {
-                    bool v = j->getBool();
+                    bool v = j.getBool();
                     GtkToggleAction* toggle = static_cast<GtkToggleAction *>(widget);
                     //std::cout << "compared toggle " << attr_name << gtk_toggle_action_get_active(toggle) << " to " << v << "\n";
                     if ( static_cast<bool>(gtk_toggle_action_get_active(toggle)) != v ) {
@@ -218,9 +218,9 @@ static void sp_dcc_build_presets_list(GObject *tbl)
     std::vector<Glib::ustring> presets = get_presets_list();
     int ii=1;
 
-    for (std::vector<Glib::ustring>::iterator i = presets.begin(); i != presets.end(); ++i) {
+    for (auto & preset : presets) {
         GtkTreeIter iter;
-        Glib::ustring preset_name = prefs->getString(*i + "/name");
+        Glib::ustring preset_name = prefs->getString(preset + "/name");
 
         if (!preset_name.empty()) {
             row = *(store->append());
@@ -303,8 +303,7 @@ static void sp_dcc_save_profile(GtkWidget * /*widget*/, GObject *tbl)
         g_free(profile_id);
     }
 
-    for (unsigned i = 0; i < G_N_ELEMENTS(widget_names); ++i) {
-        gchar const *const widget_name = widget_names[i];
+    for (auto widget_name : widget_names) {
         void *widget = g_object_get_data(tbl, widget_name);
         if (widget) {
             if (GTK_IS_ADJUSTMENT(widget)) {
@@ -351,8 +350,8 @@ static void sp_ddc_change_profile(GObject* tbl, int mode)
         std::vector<Inkscape::Preferences::Entry> preset = prefs->getAllEntries(preset_path);
 
         // Shouldn't this be std::map?
-        for (std::vector<Inkscape::Preferences::Entry>::iterator i = preset.begin(); i != preset.end(); ++i) {
-            Glib::ustring entry_name = i->getEntryName();
+        for (auto & i : preset) {
+            Glib::ustring entry_name = i.getEntryName();
             if (entry_name == "id" || entry_name == "name") {
                 continue;
             }
@@ -360,11 +359,11 @@ static void sp_ddc_change_profile(GObject* tbl, int mode)
             if (widget) {
                 if (GTK_IS_ADJUSTMENT(widget)) {
                     GtkAdjustment* adj = static_cast<GtkAdjustment *>(widget);
-                    gtk_adjustment_set_value(adj, i->getDouble());
+                    gtk_adjustment_set_value(adj, i.getDouble());
                     //std::cout << "set adj " << attr_name << " to " << v << "\n";
                 } else if (GTK_IS_TOGGLE_ACTION(widget)) {
                     GtkToggleAction* toggle = static_cast<GtkToggleAction *>(widget);
-                    gtk_toggle_action_set_active(toggle, i->getBool());
+                    gtk_toggle_action_set_active(toggle, i.getBool());
                     //std::cout << "set toggle " << attr_name << " to " << v << "\n";
                 } else {
                     g_warning("Unknown widget type for preset: %s\n", entry_name.data());

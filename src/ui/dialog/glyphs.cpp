@@ -355,9 +355,9 @@ GlyphsPanel::GlyphsPanel() :
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
         scriptCombo = Gtk::manage(new Gtk::ComboBoxText());
-        for (std::map<GUnicodeScript, Glib::ustring>::iterator it = getScriptToName().begin(); it != getScriptToName().end(); ++it)
+        for (auto & it : getScriptToName())
         {
-            scriptCombo->append(it->second);
+            scriptCombo->append(it.second);
         }
 
         scriptCombo->set_active_text(getScriptToName()[G_UNICODE_SCRIPT_INVALID_CODE]);
@@ -379,8 +379,8 @@ GlyphsPanel::GlyphsPanel() :
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
         rangeCombo = Gtk::manage(new Gtk::ComboBoxText());
-        for ( std::vector<NamedRange>::iterator it = getRanges().begin(); it != getRanges().end(); ++it ) {
-            rangeCombo->append(it->second);
+        for (auto & it : getRanges()) {
+            rangeCombo->append(it.second);
         }
 
         rangeCombo->set_active_text(getRanges()[1].second);
@@ -463,12 +463,12 @@ GlyphsPanel::GlyphsPanel() :
 
 GlyphsPanel::~GlyphsPanel()
 {
-    for (std::vector<sigc::connection>::iterator it =  instanceConns.begin(); it != instanceConns.end(); ++it) {
-        it->disconnect();
+    for (auto & instanceConn : instanceConns) {
+        instanceConn.disconnect();
     }
     instanceConns.clear();
-    for (std::vector<sigc::connection>::iterator it = desktopConns.begin(); it != desktopConns.end(); ++it) {
-        it->disconnect();
+    for (auto & desktopConn : desktopConns) {
+        desktopConn.disconnect();
     }
     desktopConns.clear();
 }
@@ -484,8 +484,8 @@ void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
 {
     if (targetDesktop != desktop) {
         if (targetDesktop) {
-            for (std::vector<sigc::connection>::iterator it = desktopConns.begin(); it != desktopConns.end(); ++it) {
-                it->disconnect();
+            for (auto & desktopConn : desktopConns) {
+                desktopConn.disconnect();
             }
             desktopConns.clear();
         }
@@ -655,9 +655,9 @@ void GlyphsPanel::rebuild()
         GUnicodeScript script = G_UNICODE_SCRIPT_INVALID_CODE;
         Glib::ustring scriptName = scriptCombo->get_active_text();
         std::map<GUnicodeScript, Glib::ustring> items = getScriptToName();
-        for (std::map<GUnicodeScript, Glib::ustring>::iterator it = items.begin(); it != items.end(); ++it) {
-            if (scriptName == it->second) {
-                script = it->first;
+        for (auto & item : items) {
+            if (scriptName == item.second) {
+                script = item.first;
                 break;
             }
         }
@@ -685,12 +685,12 @@ void GlyphsPanel::rebuild()
 
         GlyphColumns *columns = getColumns();
         store->clear();
-        for (std::vector<gunichar>::iterator it = present.begin(); it != present.end(); ++it)
+        for (unsigned int & it : present)
         {
             Gtk::ListStore::iterator row = store->append();
             Glib::ustring tmp;
-            tmp += *it;
-            (*row)[columns->code] = *it;
+            tmp += it;
+            (*row)[columns->code] = it;
             (*row)[columns->name] = tmp;
         }
 

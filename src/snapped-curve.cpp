@@ -220,12 +220,12 @@ bool getClosestIntersectionCL(std::list<Inkscape::SnappedCurve> const &curve_lis
 {
     bool success = false;
 
-    for (std::list<Inkscape::SnappedCurve>::const_iterator i = curve_list.begin(); i != curve_list.end(); ++i) {
-        if ((*i).getTarget() != Inkscape::SNAPTARGET_BBOX_EDGE) { // We don't support snapping to intersections of bboxes,
+    for (const auto & i : curve_list) {
+        if (i.getTarget() != Inkscape::SNAPTARGET_BBOX_EDGE) { // We don't support snapping to intersections of bboxes,
             // as this would require two bboxes two be flashed in the snap indicator
-            for (std::list<Inkscape::SnappedLine>::const_iterator j = line_list.begin(); j != line_list.end(); ++j) {
-                if ((*j).getTarget() != Inkscape::SNAPTARGET_BBOX_EDGE) { // We don't support snapping to intersections of bboxes
-                    Inkscape::SnappedPoint sp = (*i).intersect(*j, p, dt2doc);
+            for (const auto & j : line_list) {
+                if (j.getTarget() != Inkscape::SNAPTARGET_BBOX_EDGE) { // We don't support snapping to intersections of bboxes
+                    Inkscape::SnappedPoint sp = i.intersect(j, p, dt2doc);
                     if (sp.getAtIntersection()) {
                         // if it's the first point
                         bool const c1 = !success;

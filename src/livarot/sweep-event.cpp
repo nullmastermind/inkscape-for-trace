@@ -38,9 +38,9 @@ SweepEvent *SweepEventQueue::add(SweepTree *iLeft, SweepTree *iRight, Geom::Poin
     events[n].MakeNew (iLeft, iRight, px, itl, itr);
 
     SweepTree *t[2] = { iLeft, iRight };
-    for (int i = 0; i < 2; i++) {
-        Shape *s = t[i]->src;
-	Shape::dg_arete const &e = s->getEdge(t[i]->bord);
+    for (auto & i : t) {
+        Shape *s = i->src;
+	Shape::dg_arete const &e = s->getEdge(i->bord);
 	int const n = std::max(e.st, e.en);
 	s->pData[n].pending++;;
     }

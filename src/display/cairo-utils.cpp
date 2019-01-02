@@ -760,8 +760,8 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
             Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
 
             // recurse to convert the new path resulting from the sbasis to svgd
-            for (Geom::Path::iterator iter = sbasis_path.begin(); iter != sbasis_path.end(); ++iter) {
-                feed_curve_to_cairo(cr, *iter, trans, view, optimize_stroke);
+            for (const auto & iter : sbasis_path) {
+                feed_curve_to_cairo(cr, iter, trans, view, optimize_stroke);
             }
         }
     }
@@ -845,8 +845,8 @@ feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv, Geom::Affi
     if (pathv.empty())
         return;
 
-    for(Geom::PathVector::const_iterator it = pathv.begin(); it != pathv.end(); ++it) {
-        feed_path_to_cairo(ct, *it, trans, area, optimize_stroke, stroke_width);
+    for(const auto & it : pathv) {
+        feed_path_to_cairo(ct, it, trans, area, optimize_stroke, stroke_width);
     }
 }
 
@@ -858,8 +858,8 @@ feed_pathvector_to_cairo (cairo_t *ct, Geom::PathVector const &pathv)
     if (pathv.empty())
         return;
 
-    for(Geom::PathVector::const_iterator it = pathv.begin(); it != pathv.end(); ++it) {
-        feed_path_to_cairo(ct, *it);
+    for(const auto & it : pathv) {
+        feed_path_to_cairo(ct, it);
     }
 }
 

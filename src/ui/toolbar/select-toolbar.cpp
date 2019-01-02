@@ -84,15 +84,15 @@ sp_selection_layout_widget_update(SPWidget *spw, Inkscape::Selection *sel)
 
             if (unit->type == Inkscape::Util::UNIT_TYPE_DIMENSIONLESS) {
                 double const val = unit->factor * 100;
-                for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
-                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
+                for (auto i : keyval) {
+                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), i.key));
                     gtk_adjustment_set_value(a, val);
-                    tracker->setFullVal( a, keyval[i].val );
+                    tracker->setFullVal( a, i.val );
                 }
             } else {
-                for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
-                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), keyval[i].key));
-                    gtk_adjustment_set_value(a, Quantity::convert(keyval[i].val, "px", unit));
+                for (auto i : keyval) {
+                    GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(spw), i.key));
+                    gtk_adjustment_set_value(a, Quantity::convert(i.val, "px", unit));
                 }
             }
         }
@@ -123,10 +123,9 @@ sp_selection_layout_widget_change_selection(SPWidget *spw, Inkscape::Selection *
         gboolean setActive = (selection && !selection->isEmpty());
         std::vector<GtkAction*> *contextActions = reinterpret_cast<std::vector<GtkAction*> *>(g_object_get_data(G_OBJECT(spw), "contextActions"));
         if ( contextActions ) {
-            for ( std::vector<GtkAction*>::iterator iter = contextActions->begin();
-                  iter != contextActions->end(); ++iter) {
-                if ( setActive != gtk_action_is_sensitive(*iter) ) {
-                    gtk_action_set_sensitive( *iter, setActive );
+            for (auto & contextAction : *contextActions) {
+                if ( setActive != gtk_action_is_sensitive(contextAction) ) {
+                    gtk_action_set_sensitive( contextAction, setActive );
                 }
             }
         }
@@ -536,10 +535,9 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     // Update now.
     sp_selection_layout_widget_update(SP_WIDGET(spw), SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
 
-    for ( std::vector<GtkAction*>::iterator iter = contextActions->begin();
-          iter != contextActions->end(); ++iter) {
-        if ( gtk_action_is_sensitive(*iter) ) {
-            gtk_action_set_sensitive( *iter, FALSE );
+    for (auto & contextAction : *contextActions) {
+        if ( gtk_action_is_sensitive(contextAction) ) {
+            gtk_action_set_sensitive( contextAction, FALSE );
         }
     }
 

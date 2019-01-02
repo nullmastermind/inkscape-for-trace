@@ -198,20 +198,19 @@ void LPERoughen::doEffect(SPCurve *curve)
 {
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(curve->get_pathvector());
     curve->reset();
-    for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
-            path_it != original_pathv.end(); ++path_it) {
-        if (path_it->empty())
+    for (const auto & path_it : original_pathv) {
+        if (path_it.empty())
             continue;
 
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
         SPCurve *nCurve = new SPCurve();
         Geom::Point prev(0, 0);
         Geom::Point last_move(0, 0);
         nCurve->moveto(curve_it1->initialPoint());
-        if (path_it->closed()) {
-          const Geom::Curve &closingline = path_it->back_closed(); 
+        if (path_it.closed()) {
+          const Geom::Curve &closingline = path_it.back_closed(); 
           // the closing line segment is always of type 
           // Geom::LineSegment.
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
@@ -219,7 +218,7 @@ void LPERoughen::doEffect(SPCurve *curve)
             // *exact* zero length, which goes wrong for relative coordinates and
             // rounding errors...
             // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
+            curve_endit = path_it.end_open();
           }
         }
         while (curve_it1 != curve_endit) {
@@ -265,7 +264,7 @@ void LPERoughen::doEffect(SPCurve *curve)
             ++curve_it1;
             ++curve_it2;
         }
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             if(handles == HM_SMOOTH && curve_it1 == curve_endit){
                 SPCurve *out = new SPCurve();
                 nCurve = nCurve->create_reverse();

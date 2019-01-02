@@ -189,17 +189,16 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
-            path_it != original_pathv.end(); ++path_it) {
-        if (path_it->empty()) {
+    for (const auto & path_it : original_pathv) {
+        if (path_it.empty()) {
             continue;
         }
         if (!prefs->getBool("/tools/nodes/show_outline", true)){
-            hp.push_back(*path_it);
+            hp.push_back(path_it);
         }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
         SPCurve *curve_n = new SPCurve();
         Geom::Point previousNode(0, 0);
         Geom::Point node(0, 0);
@@ -211,8 +210,8 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
         Geom::D2<Geom::SBasis> sbasis_helper;
         Geom::CubicBezier const *cubic = nullptr;
         curve_n->moveto(curve_it1->initialPoint());
-        if (path_it->closed()) {
-          const Geom::Curve &closingline = path_it->back_closed(); 
+        if (path_it.closed()) {
+          const Geom::Curve &closingline = path_it.back_closed(); 
           // the closing line segment is always of type 
           // Geom::LineSegment.
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
@@ -220,7 +219,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
             // *exact* zero length, which goes wrong for relative coordinates and
             // rounding errors...
             // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
+            curve_endit = path_it.end_open();
           }
         }
         while (curve_it1 != curve_endit) {
@@ -264,13 +263,13 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
                 out->reset();
                 delete out;
             }
-            if (path_it->closed() && curve_it2 == curve_endit) {
+            if (path_it.closed() && curve_it2 == curve_endit) {
                 SPCurve *start = new SPCurve();
-                start->moveto(path_it->begin()->initialPoint());
-                start->lineto(path_it->begin()->finalPoint());
+                start->moveto(path_it.begin()->initialPoint());
+                start->lineto(path_it.begin()->finalPoint());
                 Geom::D2<Geom::SBasis> sbasis_start = start->first_segment()->toSBasis();
                 SPCurve *line_helper = new SPCurve();
-                cubic = dynamic_cast<Geom::CubicBezier const *>(&*path_it->begin());
+                cubic = dynamic_cast<Geom::CubicBezier const *>(&*path_it.begin());
                 if (cubic) {
                     line_helper->moveto(sbasis_start.valueAt(
                                            Geom::nearest_time((*cubic)[1], *start->first_segment())));
@@ -301,7 +300,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
                 curve_n->move_endpoints(node, node);
             } else if ( curve_it2 == curve_endit) {
                 curve_n->curveto(point_at1, point_at2, curve_it1->finalPoint());
-                curve_n->move_endpoints(path_it->begin()->initialPoint(), curve_it1->finalPoint());
+                curve_n->move_endpoints(path_it.begin()->initialPoint(), curve_it1->finalPoint());
             } else {
                 SPCurve *line_helper = new SPCurve();
                 line_helper->moveto(point_at2);
@@ -323,7 +322,7 @@ void sp_bspline_do_effect(SPCurve *curve, double helper_size)
             ++curve_it1;
             ++curve_it2;
         }
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             curve_n->closepath_current();
         }
         curve->append(curve_n, false);
@@ -359,15 +358,14 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
 
-    for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
-            path_it != original_pathv.end(); ++path_it) {
+    for (const auto & path_it : original_pathv) {
 
-        if (path_it->empty()) {
+        if (path_it.empty()) {
             continue;
         }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
 
         SPCurve *curve_n = new SPCurve();
         Geom::Point point_at0(0, 0);
@@ -378,8 +376,8 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
         Geom::D2<Geom::SBasis> sbasis_out;
         Geom::CubicBezier const *cubic = nullptr;
         curve_n->moveto(curve_it1->initialPoint());
-        if (path_it->closed()) {
-          const Geom::Curve &closingline = path_it->back_closed(); 
+        if (path_it.closed()) {
+          const Geom::Curve &closingline = path_it.back_closed(); 
           // the closing line segment is always of type 
           // Geom::LineSegment.
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
@@ -387,7 +385,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
             // *exact* zero length, which goes wrong for relative coordinates and
             // rounding errors...
             // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
+            curve_endit = path_it.end_open();
           }
         }
         while (curve_it1 != curve_endit) {
@@ -461,13 +459,13 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
             ++curve_it1;
             ++curve_it2;
         }
-        if (path_it->closed()) {
-            curve_n->move_endpoints(path_it->begin()->initialPoint(),
-                                   path_it->begin()->initialPoint());
+        if (path_it.closed()) {
+            curve_n->move_endpoints(path_it.begin()->initialPoint(),
+                                   path_it.begin()->initialPoint());
         } else {
-            curve_n->move_endpoints(path_it->begin()->initialPoint(), point_at3);
+            curve_n->move_endpoints(path_it.begin()->initialPoint(), point_at3);
         }
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             curve_n->closepath_current();
         }
         curve->append(curve_n, false);

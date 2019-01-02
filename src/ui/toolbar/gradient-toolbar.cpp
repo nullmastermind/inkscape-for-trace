@@ -608,14 +608,10 @@ static void select_stop_by_draggers(SPGradient *gradient, ToolBase *ev, GObject 
     int selected = -1;
 
     // For all selected draggers
-    for(auto i = drag->selected.begin(); i != drag->selected.end(); ++i) {
-
-        GrDragger *dragger = *i;
+    for(auto dragger : drag->selected) {
 
         // For all draggables of dragger
-         for(auto j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) {
-
-            GrDraggable *draggable = *j; 
+         for(auto draggable : dragger->draggables) {
 
             if (draggable->point_type != POINT_RG_FOCUS) {
                 n++;

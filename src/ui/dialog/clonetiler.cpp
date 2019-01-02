@@ -142,9 +142,7 @@ CloneTiler::CloneTiler () :
                                            GTK_CELL_RENDERER(cell_list->data),
                                            "markup", 0, NULL);
 
-            for (unsigned j = 0; j < G_N_ELEMENTS(sym_groups); ++j) {
-                SymGroups const &sg = sym_groups[j];
-
+            for (const auto & sg : sym_groups) {
                 // Add the description of the symgroup to a new row
                 combo->append(sg.label);
             }

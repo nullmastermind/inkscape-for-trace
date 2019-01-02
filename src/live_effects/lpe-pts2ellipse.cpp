@@ -261,11 +261,11 @@ LPEPts2Ellipse::doEffect_path (Geom::PathVector const & path_in)
     // from: extension/internal/odf.cpp
     // get all points
     std::vector<Point> pts;
-    for(PathVector::const_iterator pit = path_in.begin(); pit!= path_in.end(); ++pit) {
+    for(const auto & pit : path_in) {
         // extract first point of this path
-        pts.push_back(pit->initialPoint());
+        pts.push_back(pit.initialPoint());
         // iterate over all curves
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end(); ++cit) {
             pts.push_back(cit->finalPoint());
         }
     }

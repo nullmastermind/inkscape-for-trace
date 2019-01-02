@@ -1229,8 +1229,7 @@ CairoRenderContext::_createHatchPainter(SPPaintServer const *const paintserver, 
     std::vector<SPHatchPath *> children(evil->hatchPaths());
 
     for (int i = 0; i < overflow_steps; i++) {
-        for (std::vector<SPHatchPath *>::iterator iter = children.begin(); iter != children.end(); ++iter) {
-            SPHatchPath *path = *iter;
+        for (auto path : children) {
             _renderer->renderHatchPath(pattern_ctx, *path, dkey);
         }
         pattern_ctx->transform(overflow_transform);
@@ -1698,18 +1697,18 @@ unsigned int CairoRenderContext::_showGlyphs(cairo_t *cr, PangoFont * /*font*/, 
 
     unsigned int num_invalid_glyphs = 0;
     unsigned int i = 0; // is a counter for indexing the glyphs array, only counts the valid glyphs
-    for (std::vector<CairoGlyphInfo>::const_iterator it_info = glyphtext.begin() ; it_info != glyphtext.end() ; ++it_info) {
+    for (const auto & it_info : glyphtext) {
         // skip glyphs which are PANGO_GLYPH_EMPTY (0x0FFFFFFF)
         // or have the PANGO_GLYPH_UNKNOWN_FLAG (0x10000000) set
-        if (it_info->index == 0x0FFFFFFF || it_info->index & 0x10000000) {
+        if (it_info.index == 0x0FFFFFFF || it_info.index & 0x10000000) {
             TRACE(("INVALID GLYPH found\n"));
             g_message("Invalid glyph found, continuing...");
             num_invalid_glyphs++;
             continue;
         }
-        glyphs[i].index = it_info->index;
-        glyphs[i].x     = it_info->x;
-        glyphs[i].y     = it_info->y;
+        glyphs[i].index = it_info.index;
+        glyphs[i].x     = it_info.x;
+        glyphs[i].y     = it_info.y;
         i++;
     }
 

@@ -482,7 +482,7 @@ gaussian_pass_IIR(Geom::Dim2 d, double deviation, cairo_surface_t *src, cairo_su
 
     // Compute filter
     calcFilter(deviation, bf);
-    for(size_t i=0; i<N; i++) bf[i] = -bf[i];
+    for(double & i : bf) i = -i;
     b[0] = 1; // b[0] == alpha (scaling coefficient)
     for(size_t i=0; i<N; i++) {
         b[i+1] = bf[i];

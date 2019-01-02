@@ -661,14 +661,14 @@ void ObjectsPanel::_checkTreeSelection()
     bool sensitiveNonTop = true;
     bool sensitiveNonBottom = true;
 
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( sensitive );
+    for (auto & it : _watching) {
+        it->set_sensitive( sensitive );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonTop );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( sensitiveNonTop );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonBottom );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( sensitiveNonBottom );
     }
 }
 
@@ -1478,9 +1478,8 @@ void ObjectsPanel::_highlightPickerColorMod()
     guint32 rgba = color.toRGBA32( alpha );
 
     //Set the highlight color for all items in the _highlight_target (all selected items)
-    for (std::vector<SPItem *>::iterator iter = _highlight_target.begin(); iter != _highlight_target.end(); ++iter)
+    for (auto target : _highlight_target)
     {
-        SPItem * target = *iter;
         target->setHighlightColor(rgba);
         target->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
@@ -1929,14 +1928,14 @@ ObjectsPanel::ObjectsPanel() :
     // -------------------------------------------------------
 
     //Set initial sensitivity of buttons
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watching) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( false );
     }
 
     //Set up the color selection dialog

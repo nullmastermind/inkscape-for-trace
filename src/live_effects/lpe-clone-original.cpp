@@ -74,10 +74,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
-        for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
-             obj_it != childs.end(); ++obj_it) {
+        for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes((*obj_it), dest_child, attributes, style_attributes); 
+            cloneAttrbutes(child, dest_child, attributes, style_attributes); 
             index++;
         }
     }

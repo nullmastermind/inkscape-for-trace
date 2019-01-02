@@ -76,10 +76,9 @@ void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 void SPLPEItem::release() {
     // disconnect all modified listeners:
 
-    for (std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
-         mod_it != this->lpe_modified_connection_list->end(); ++mod_it)
+    for (auto & mod_it : *this->lpe_modified_connection_list)
     {
-        mod_it->disconnect();
+        mod_it.disconnect();
     }
 
     delete this->lpe_modified_connection_list;
@@ -103,11 +102,9 @@ void SPLPEItem::set(SPAttributeEnum key, gchar const* value) {
                  sp_lpe_item_enable_path_effects(this, false);
 
                 // disconnect all modified listeners:
-                for ( std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
-                      mod_it != this->lpe_modified_connection_list->end();
-                      ++mod_it)
+                for (auto & mod_it : *this->lpe_modified_connection_list)
                 {
-                    mod_it->disconnect();
+                    mod_it.disconnect();
                 }
 
                 this->lpe_modified_connection_list->clear();
@@ -199,9 +196,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
 
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
         size_t path_effect_list_size =  this->path_effect_list->size();
-        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+        for (auto & it : *this->path_effect_list)
         {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            LivePathEffectObject *lpeobj = it->lpeobject;
             if (!lpeobj) {
                 /** \todo Investigate the cause of this.
                  * For example, this happens when copy pasting an object with LPE applied. Probably because the object is pasted while the effect is not yet pasted to defs, and cannot be found.
@@ -749,9 +746,9 @@ bool SPLPEItem::hasPathEffectOnClipOrMask(SPLPEItem * shape) const
         return false;
     }
 
-    for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+    for (auto & it : *this->path_effect_list)
     {
-        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+        LivePathEffectObject *lpeobj = it->lpeobject;
         if (!lpeobj) {
             continue;
         }
@@ -1044,9 +1041,9 @@ static std::string patheffectlist_svg_string(PathEffectList const & list)
 {
     HRefList hreflist;
 
-    for (PathEffectList::const_iterator it = list.begin(); it != list.end(); ++it)
+    for (auto it : list)
     {
-        hreflist.push_back( std::string((*it)->lpeobject_href) ); // C++11: use emplace_back
+        hreflist.push_back( std::string(it->lpeobject_href) ); // C++11: use emplace_back
     }
 
     return hreflist_svg_string(hreflist);
@@ -1064,7 +1061,7 @@ static std::string hreflist_svg_string(HRefList const & list)
     std::string r;
     bool semicolon_first = false;
 
-    for (HRefList::const_iterator it = list.begin(); it != list.end(); ++it)
+    for (const auto & it : list)
     {
         if (semicolon_first) {
             r += ';';
@@ -1072,7 +1069,7 @@ static std::string hreflist_svg_string(HRefList const & list)
 
         semicolon_first = true;
 
-        r += (*it);
+        r += it;
     }
 
     return r;
@@ -1111,9 +1108,9 @@ Inkscape::LivePathEffect::Effect* SPLPEItem::getCurrentLPE()
 
 bool SPLPEItem::setCurrentPathEffect(Inkscape::LivePathEffect::LPEObjectReference* lperef)
 {
-    for (PathEffectList::iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it) {
-        if ((*it)->lpeobject_repr == lperef->lpeobject_repr) {
-            this->current_path_effect = (*it);  // current_path_effect should always be a pointer from the path_effect_list !
+    for (auto & it : *path_effect_list) {
+        if (it->lpeobject_repr == lperef->lpeobject_repr) {
+            this->current_path_effect = it;  // current_path_effect should always be a pointer from the path_effect_list !
             return true;
         }
     }
@@ -1170,9 +1167,9 @@ bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users)
 
         std::vector<LivePathEffectObject const *> old_lpeobjs, new_lpeobjs;
         PathEffectList effect_list = this->getEffectList();
-        for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
+        for (auto & it : effect_list)
         {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            LivePathEffectObject *lpeobj = it->lpeobject;
             if (lpeobj) {
                 LivePathEffectObject *forked_lpeobj = lpeobj->fork_private_if_necessary(nr_of_allowed_users);
                 if (forked_lpeobj != lpeobj) {

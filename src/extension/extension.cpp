@@ -147,8 +147,8 @@ Extension::~Extension ()
         delete param;
     }
 
-    for (unsigned int i = 0 ; i < _deps.size(); i++) {
-        delete _deps[i];
+    for (auto & _dep : _deps) {
+        delete _dep;
     }
     _deps.clear();
 
@@ -284,11 +284,11 @@ Extension::check ()
         retval = false;
     }
 
-    for (unsigned int i = 0 ; i < _deps.size(); i++) {
-        if (_deps[i]->check() == FALSE) {
+    for (auto & _dep : _deps) {
+        if (_dep->check() == FALSE) {
             // std::cout << "Failed: " << *(_deps[i]) << std::endl;
             printFailure(Glib::ustring(_("a dependency was not met.")));
-            error_file << *_deps[i] << std::endl;
+            error_file << *_dep << std::endl;
             retval = false;
         }
     }

@@ -217,8 +217,8 @@ Selection::setBackup ()
     if(tool){
         Inkscape::UI::ControlPointSelection *cps = tool->_selected_nodes;
         std::list<Inkscape::UI::SelectableControlPoint *> points_list = cps->_points_list;
-        for (std::list<Inkscape::UI::SelectableControlPoint *>::iterator i = points_list.begin(); i != points_list.end(); ++i) {
-            Inkscape::UI::Node *node = dynamic_cast<Inkscape::UI::Node*>(*i);
+        for (auto & i : points_list) {
+            Inkscape::UI::Node *node = dynamic_cast<Inkscape::UI::Node*>(i);
             if (node) { 
                 std::string id = node->nodeList().subpathList().pm().item()->getId(); 
 
@@ -282,14 +282,14 @@ Selection::restoreBackup()
         Inkscape::UI::Node * node = dynamic_cast<Inkscape::UI::Node*>(*points_list.begin());
         if (node) {
             Inkscape::UI::SubpathList sp = node->nodeList().subpathList();
-            for (std::vector<std::pair<std::string, std::pair<int, int> > >::iterator l = _seldata.begin(); l != _seldata.end();  ++l) {
-                SPPath * path = dynamic_cast<SPPath *>(document->getObjectById(l->first));
+            for (auto & l : _seldata) {
+                SPPath * path = dynamic_cast<SPPath *>(document->getObjectById(l.first));
                 gint sp_count = 0;
                 for (Inkscape::UI::SubpathList::iterator j = sp.begin(); j != sp.end(); ++j, ++sp_count) {
-                    if(sp_count == l->second.first) {
+                    if(sp_count == l.second.first) {
                         gint nt_count = 0;
                         for (Inkscape::UI::NodeList::iterator k = (*j)->begin(); k != (*j)->end(); ++k, ++nt_count) {
-                            if(nt_count == l->second.second) {
+                            if(nt_count == l.second.second) {
                                 cps->insert(k.ptr());
                                 break;
                             }

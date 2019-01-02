@@ -234,8 +234,8 @@ Persp3D *SPDocument::getCurrentPersp3D() {
     // Check if current_persp3d is still valid
     std::vector<Persp3D*> plist;
     getPerspectivesInDefs(plist);
-    for (unsigned int i = 0; i < plist.size(); ++i) {
-        if (current_persp3d == plist[i])
+    for (auto & i : plist) {
+        if (current_persp3d == i)
             return current_persp3d;
     }
 
@@ -1839,8 +1839,8 @@ void SPDocument::importDefs(SPDocument *source)
 
     prevent_id_clashes(source, this);
     
-    for (std::vector<Inkscape::XML::Node const *>::iterator defs = defsNodes.begin(); defs != defsNodes.end(); ++defs) {
-       importDefsNode(source, const_cast<Inkscape::XML::Node *>(*defs), target_defs);
+    for (auto & defsNode : defsNodes) {
+       importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
     }
 }
 

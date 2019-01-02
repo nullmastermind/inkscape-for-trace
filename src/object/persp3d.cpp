@@ -357,8 +357,8 @@ persp3d_toggle_VP (Persp3D *persp, Proj::Axis axis, bool set_undo) {
 /* toggle VPs for the same axis in all perspectives of a given list */
 void
 persp3d_toggle_VPs (std::list<Persp3D *> p, Proj::Axis axis) {
-    for (std::list<Persp3D *>::iterator i = p.begin(); i != p.end(); ++i) {
-        persp3d_toggle_VP((*i), axis, false);
+    for (auto & i : p) {
+        persp3d_toggle_VP(i, axis, false);
     }
     DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
                        _("Toggle multiple vanishing points"));
@@ -423,8 +423,8 @@ persp3d_has_box (Persp3D *persp, SPBox3D *box) {
 
     // FIXME: For some reason, std::find() does not seem to compare pointers "correctly" (or do we need to
     //        provide a proper comparison function?), so we manually traverse the list.
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        if ((*i) == box) {
+    for (auto & boxe : persp_impl->boxes) {
+        if (boxe == box) {
             return true;
         }
     }
@@ -437,8 +437,8 @@ persp3d_update_box_displays (Persp3D *persp) {
 
     if (persp_impl->boxes.empty())
         return;
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        box3d_position_set(*i);
+    for (auto & boxe : persp_impl->boxes) {
+        box3d_position_set(boxe);
     }
 }
 
@@ -452,9 +452,9 @@ persp3d_update_box_reprs (Persp3D *persp) {
 
     if (persp_impl->boxes.empty())
         return;
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        (*i)->updateRepr(SP_OBJECT_WRITE_EXT);
-        box3d_set_z_orders(*i);
+    for (auto & boxe : persp_impl->boxes) {
+        boxe->updateRepr(SP_OBJECT_WRITE_EXT);
+        box3d_set_z_orders(boxe);
     }
 }
 
@@ -464,8 +464,8 @@ persp3d_update_z_orders (Persp3D *persp) {
 
     if (persp_impl->boxes.empty())
         return;
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        box3d_set_z_orders(*i);
+    for (auto & boxe : persp_impl->boxes) {
+        box3d_set_z_orders(boxe);
     }
 }
 
@@ -477,8 +477,8 @@ persp3d_list_of_boxes(Persp3D *persp) {
     Persp3DImpl *persp_impl = persp->perspective_impl;
 
     std::list<SPBox3D *> bx_lst;
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        bx_lst.push_back(*i);
+    for (auto & boxe : persp_impl->boxes) {
+        bx_lst.push_back(boxe);
     }
     return bx_lst;
 }
@@ -500,9 +500,9 @@ persp3d_absorb(Persp3D *persp1, Persp3D *persp2) {
     //       otherwise the loop below gets confused when perspectives are reattached.
     std::list<SPBox3D *> boxes_of_persp2 = persp3d_list_of_boxes(persp2);
 
-    for (std::list<SPBox3D *>::iterator i = boxes_of_persp2.begin(); i != boxes_of_persp2.end(); ++i) {
-        box3d_switch_perspectives((*i), persp2, persp1, true);
-        (*i)->updateRepr(SP_OBJECT_WRITE_EXT); // so that undo/redo can do its job properly
+    for (auto & i : boxes_of_persp2) {
+        box3d_switch_perspectives(i, persp2, persp1, true);
+        i->updateRepr(SP_OBJECT_WRITE_EXT); // so that undo/redo can do its job properly
     }
 }
 
@@ -528,8 +528,8 @@ persp3d_has_all_boxes_in_selection (Persp3D *persp, Inkscape::ObjectSet *set) {
 
     std::list<SPBox3D *> selboxes = set->box3DList();
 
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        if (std::find(selboxes.begin(), selboxes.end(), *i) == selboxes.end()) {
+    for (auto & boxe : persp_impl->boxes) {
+        if (std::find(selboxes.begin(), selboxes.end(), boxe) == selboxes.end()) {
             // we have an unselected box in the perspective
             return false;
         }
@@ -544,9 +544,9 @@ persp3d_print_debugging_info (Persp3D *persp) {
     Persp3DImpl *persp_impl = persp->perspective_impl;
     g_print ("=== Info for Persp3D %d ===\n", persp_impl->my_counter);
     gchar * cstr;
-    for (int i = 0; i < 4; ++i) {
-        cstr = persp3d_get_VP(persp, Proj::axes[i]).coord_string();
-        g_print ("  VP %s:   %s\n", Proj::string_from_axis(Proj::axes[i]), cstr);
+    for (auto & axe : Proj::axes) {
+        cstr = persp3d_get_VP(persp, axe).coord_string();
+        g_print ("  VP %s:   %s\n", Proj::string_from_axis(axe), cstr);
         g_free(cstr);
     }
     cstr = persp3d_get_VP(persp, Proj::W).coord_string();
@@ -554,8 +554,8 @@ persp3d_print_debugging_info (Persp3D *persp) {
     g_free(cstr);
 
     g_print ("  Boxes: ");
-    for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin(); i != persp_impl->boxes.end(); ++i) {
-        g_print ("%d (%d)  ", (*i)->my_counter, box3d_get_perspective(*i)->perspective_impl->my_counter);
+    for (auto & boxe : persp_impl->boxes) {
+        g_print ("%d (%d)  ", boxe->my_counter, box3d_get_perspective(boxe)->perspective_impl->my_counter);
     }
     g_print ("\n");
     g_print ("========================\n");
@@ -578,13 +578,12 @@ persp3d_print_all_selected() {
 
     std::list<Persp3D *> sel_persps = SP_ACTIVE_DESKTOP->getSelection()->perspList();
 
-    for (std::list<Persp3D *>::iterator j = sel_persps.begin(); j != sel_persps.end(); ++j) {
-        Persp3D *persp = SP_PERSP3D(*j);
+    for (auto & sel_persp : sel_persps) {
+        Persp3D *persp = SP_PERSP3D(sel_persp);
         Persp3DImpl *persp_impl = persp->perspective_impl;
         g_print ("  %s (%d):  ", persp->getRepr()->attribute("id"), persp->perspective_impl->my_counter);
-        for (std::vector<SPBox3D *>::iterator i = persp_impl->boxes.begin();
-             i != persp_impl->boxes.end(); ++i) {
-            g_print ("%d ", (*i)->my_counter);
+        for (auto & boxe : persp_impl->boxes) {
+            g_print ("%d ", boxe->my_counter);
         }
         g_print ("\n");
     }

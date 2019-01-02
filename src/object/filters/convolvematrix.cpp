@@ -137,8 +137,8 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 if (! this->divisorIsSet) {
                     this->divisor = 0;
                     
-                    for (unsigned int i = 0; i< this->kernelMatrix.size(); i++) {
-                        this->divisor += this->kernelMatrix[i];
+                    for (double i : this->kernelMatrix) {
+                        this->divisor += i;
                     }
                     
                     if (this->divisor == 0) {
@@ -158,8 +158,8 @@ void SPFeConvolveMatrix::set(SPAttributeEnum key, gchar const *value) {
                 if (read_num == 0) {
                     // This should actually be an error, but given our UI it is more useful to simply set divisor to the default.
                     if (this->kernelMatrixIsSet) {
-                        for (unsigned int i = 0; i< this->kernelMatrix.size(); i++) {
-                            read_num += this->kernelMatrix[i];
+                        for (double i : this->kernelMatrix) {
+                            read_num += i;
                         }
                     }
                     

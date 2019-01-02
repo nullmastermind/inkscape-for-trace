@@ -72,11 +72,10 @@ SvgPreview::SvgPreview()
 
 SvgPreview::~SvgPreview()
 {
-    for (std::map<Glib::ustring, GdkPixbuf *>::iterator i = _pixmap_cache.begin();
-         i != _pixmap_cache.end(); ++i)
+    for (auto & i : _pixmap_cache)
     {
-        g_object_unref(i->second);
-        i->second = NULL;
+        g_object_unref(i.second);
+        i.second = NULL;
     }
 }
 

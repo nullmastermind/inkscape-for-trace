@@ -214,9 +214,8 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
     std::vector<Piecewise<D2<SBasis> > > pieces_in = split_at_discontinuities (pwd2_in);
 
     //work separately on each component.
-    for (unsigned pieceidx = 0; pieceidx < pieces_in.size(); pieceidx++){
+    for (auto piece : pieces_in){
 
-        Piecewise<D2<SBasis> > piece = pieces_in[pieceidx];
         Piecewise<SBasis> piecelength = arcLengthSb(piece,.1);
         double piece_total_length = piecelength.segs.back().at1()-piecelength.segs.front().at0();
         pathlength.concat(piecelength + total_length);

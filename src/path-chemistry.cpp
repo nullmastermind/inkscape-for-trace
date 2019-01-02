@@ -368,8 +368,7 @@ bool
 sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& selected, std::vector<Inkscape::XML::Node*> &to_select, bool skip_all_lpeitems)
 {
     bool did = false;
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i){
-        SPItem *item = *i;
+    for (auto item : items){
         g_assert(item != nullptr);
         SPDocument *document = item->document;
 

@@ -372,11 +372,10 @@ static std::vector<Inkscape::XML::Node*> sp_selection_paste_impl(SPDocument *doc
 
 static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool propagate = true, bool propagate_descendants = true)
 {
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i) {
-        sp_object_ref(*i, nullptr);
+    for (auto item : items) {
+        sp_object_ref(item, nullptr);
     }
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : items) {
         item->deleteObject(propagate, propagate_descendants);
         sp_object_unref(item, nullptr);
     }
@@ -586,8 +585,8 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
     g_return_if_fail(group != nullptr);
     std::vector<SPItem*> items = sp_item_group_item_list(group);
 
-    for(unsigned int i = 0; i < items.size(); i++){
-        items[i]->deleteObject();
+    for(auto & item : items){
+        item->deleteObject();
     }
 
     DocumentUndo::done(doc, SP_VERB_EDIT_CLEAR_ALL,
@@ -862,19 +861,19 @@ static void ungroup_impl(ObjectSet *set)
     }
 
     // do the actual work
-    for (std::vector<SPItem*>::iterator item = items.begin(); item != items.end(); ++item) {
-        SPItem *obj = *item;
+    for (auto & item : items) {
+        SPItem *obj = item;
 
         // ungroup only the groups marked earlier
-        if (groups.find(*item) != groups.end()) {
+        if (groups.find(item) != groups.end()) {
             std::vector<SPItem*> children;
             sp_item_group_ungroup(dynamic_cast<SPGroup *>(obj), children, false);
             // add the items resulting from ungrouping to the selection
             new_select.insert(new_select.end(),children.begin(),children.end());
-            *item = NULL; // zero out the original pointer, which is no longer valid
+            item = NULL; // zero out the original pointer, which is no longer valid
         } else {
             // if not a group, keep in the selection
-            new_select.push_back(*item);
+            new_select.push_back(item);
         }
     }
 
@@ -960,8 +959,8 @@ enclose_items(std::vector<SPItem*> const &items)
     g_assert(!items.empty());
 
     Geom::OptRect r;
-    for (std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();++i) {
-        r.unionWith((*i)->documentVisualBounds());
+    for (auto item : items) {
+        r.unionWith(item->documentVisualBounds());
     }
     return r;
 }
@@ -1389,8 +1388,7 @@ void ObjectSet::pasteSizeSeparately(bool apply_x, bool apply_y)
  */
 void sp_selection_change_layer_maintain_clones(std::vector<SPItem*> const &items,SPObject *where)
 {
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : items) {
         if (item) {
             SPItem *oldparent = dynamic_cast<SPItem *>(item->parent);
             SPItem *newparent = dynamic_cast<SPItem *>(where);
@@ -1586,8 +1584,8 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
     Persp3D *persp;
     Persp3D *transf_persp;
     std::list<Persp3D *> plist = perspList();
-    for (std::list<Persp3D *>::iterator i = plist.begin(); i != plist.end(); ++i) {
-        persp = (Persp3D *) (*i);
+    for (auto & i : plist) {
+        persp = (Persp3D *) i;
 
         if (!persp3d_has_all_boxes_in_selection (persp, this)) {
             std::list<SPBox3D *> selboxes = box3DList(persp);
@@ -1595,8 +1593,8 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             // create a new perspective as a copy of the current one and link the selected boxes to it
             transf_persp = persp3d_create_xml_element (persp->document, persp->perspective_impl);
 
-            for (std::list<SPBox3D *>::iterator b = selboxes.begin(); b != selboxes.end(); ++b)
-                box3d_switch_perspectives(*b, persp, transf_persp);
+            for (auto & selboxe : selboxes)
+                box3d_switch_perspectives(selboxe, persp, transf_persp);
         } else {
             transf_persp = persp;
         }
@@ -2448,8 +2446,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
                             SPObject *root, bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
 {
     SPObject *current=root;
-    for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();++i) {
-        SPItem *item = *i;
+    for(auto item : items) {
         if ( root->isAncestorOf(item) &&
              ( !only_in_viewport || desktop->isWithinViewport(item) ) )
         {
@@ -4041,10 +4038,10 @@ void ObjectSet::setClipGroup()
         SPItem *item = reinterpret_cast<SPItem *>(*i);
         std::vector<Inkscape::XML::Node*> mask_items_dup;
         std::map<Inkscape::XML::Node*, Geom::Affine> dup_transf;
-        for (auto it = mask_items.begin(); it != mask_items.end(); ++it) {
-            Inkscape::XML::Node *dup = ((*it).first)->duplicate(xml_doc);
+        for (auto & mask_item : mask_items) {
+            Inkscape::XML::Node *dup = (mask_item.first)->duplicate(xml_doc);
             mask_items_dup.push_back(dup);
-            dup_transf[dup] = (*it).second;
+            dup_transf[dup] = mask_item.second;
         }
 
         Inkscape::XML::Node *current = SP_OBJECT(*i)->getRepr();
@@ -4081,9 +4078,9 @@ void ObjectSet::setClipGroup()
 
         // inverted object transform should be applied to a mask object,
         // as mask is calculated in user space (after applying transform)
-        for (auto it = mask_items_dup.begin(); it != mask_items_dup.end(); ++it) {
-            SPItem *clip_item = SP_ITEM(doc->getObjectByRepr(*it));
-            clip_item->doWriteTransform(dup_transf[*it]);
+        for (auto & it : mask_items_dup) {
+            SPItem *clip_item = SP_ITEM(doc->getObjectByRepr(it));
+            clip_item->doWriteTransform(dup_transf[it]);
             clip_item->doWriteTransform(clip_item->transform * item->i2doc_affine().inverse());
         }
 
@@ -4169,8 +4166,8 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     }
 
     // restore mask objects into a document
-    for ( std::map<SPObject*,SPItem*>::iterator it = referenced_objects.begin() ; it != referenced_objects.end() ; ++it) {
-        SPObject *obj = (*it).first; // Group containing the clipped paths or masks
+    for (auto & referenced_object : referenced_objects) {
+        SPObject *obj = referenced_object.first; // Group containing the clipped paths or masks
         std::vector<Inkscape::XML::Node *> items_to_move;
         for (auto& child: obj->children) {
             // Collect all clipped paths and masks within a single group
@@ -4193,8 +4190,8 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         }
 
         // remember parent and position of the item to which the clippath/mask was applied
-        Inkscape::XML::Node *parent = ((*it).second)->getRepr()->parent();
-        gint pos = ((*it).second)->getRepr()->position();
+        Inkscape::XML::Node *parent = (referenced_object.second)->getRepr()->parent();
+        gint pos = (referenced_object.second)->getRepr()->position();
 
         // Iterate through all clipped paths / masks
         for (auto i=items_to_move.rbegin();i!=items_to_move.rend();++i) {
@@ -4209,7 +4206,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
             // transform mask, so it is moved the same spot where mask was applied
             Geom::Affine transform(mask_item->transform);
-            transform *= (*it).second->transform;
+            transform *= referenced_object.second->transform;
             mask_item->doWriteTransform(transform);
         }
     }

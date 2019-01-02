@@ -269,13 +269,11 @@ void PolarArrangeTab::arrange()
 	bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
 
 	int count = 0;
-	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
+	for(auto item : tmp)
 	{
 		if(arrangeOnEllipse)
 		{
-			SPItem *item = *i;
-
-			if(arrangeOnFirstEllipse)
+				if(arrangeOnFirstEllipse)
 			{
 				// The first selected ellipse is actually the last one in the list
 				if(SP_IS_GENERICELLIPSE(item))
@@ -338,11 +336,9 @@ void PolarArrangeTab::arrange()
 	Geom::Point realCenter = Geom::Point(cx, cy) * transformation;
 
 	int i = 0;
-	for(std::vector<SPItem*>::const_iterator it=tmp.begin();it!=tmp.end(); ++it)
+	for(auto item : tmp)
 	{
-		SPItem *item = *it;
-
-		// Ignore the reference ellipse if any
+			// Ignore the reference ellipse if any
 		if(item != referenceEllipse)
 		{
 			float angle = calcAngle(arcBeg, arcEnd, count, i);

@@ -1416,9 +1416,9 @@ static void sp_text_set_sizes(GtkListStore* model_size, int unit)
     // Array must be same length as SPCSSUnit in style.h
     float ratios[] = {1, 1, 1, 10, 4, 40, 100, 16, 8, 0.16};
 
-    for( unsigned int i = 0; i < G_N_ELEMENTS(sizes); ++i ) {
+    for(int i : sizes) {
         GtkTreeIter iter;
-        Glib::ustring size = Glib::ustring::format(sizes[i] / (float)ratios[unit]);
+        Glib::ustring size = Glib::ustring::format(i / (float)ratios[unit]);
         gtk_list_store_append( model_size, &iter );
         gtk_list_store_set( model_size, &iter, 0, size.c_str(), -1 );
     }

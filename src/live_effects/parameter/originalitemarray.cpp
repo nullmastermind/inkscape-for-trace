@@ -293,8 +293,7 @@ OriginalItemArrayParam::on_link_button_click()
         }
         os << (*iter)->href << "," << ((*iter)->actived ? "1" : "0");
     }
-    for (auto i=itemsid.begin();i!=itemsid.end();++i) {
-        Glib::ustring itemid = *i;
+    for (auto itemid : itemsid) {
         // add '#' at start to make it an uri.
         itemid.insert(itemid.begin(), '#');
 
@@ -423,13 +422,13 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     bool foundOne = false;
-    for (std::vector<ItemAndActive*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+    for (auto iter : _vector) {
         if (foundOne) {
             os << "|";
         } else {
             foundOne = true;
         }
-        os << (*iter)->href << "," << ((*iter)->actived ? "1" : "0");
+        os << iter->href << "," << (iter->actived ? "1" : "0");
     }
     return g_strdup(os.str().c_str());
 }
@@ -441,9 +440,9 @@ gchar * OriginalItemArrayParam::param_getDefaultSVGValue() const
 
 void OriginalItemArrayParam::update()
 {
-    for (std::vector<ItemAndActive*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
-        SPObject *linked_obj = (*iter)->ref.getObject();
-        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, *iter);
+    for (auto & iter : _vector) {
+        SPObject *linked_obj = iter->ref.getObject();
+        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, iter);
     }
 }
 

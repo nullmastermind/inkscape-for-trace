@@ -48,8 +48,8 @@
 static void sp_shape_update_marker_view (SPShape *shape, Inkscape::DrawingItem *ai);
 
 SPShape::SPShape() : SPLPEItem() {
-    for ( int i = 0 ; i < SP_MARKER_LOC_QTY ; i++ ) {
-        this->_marker[i] = nullptr;
+    for (auto & i : this->_marker) {
+        i = nullptr;
     }
 
     this->_curve = nullptr;
@@ -920,8 +920,8 @@ int SPShape::numberOfMarkers(int type) const {
         {
             if ( this->_marker[SP_MARKER_LOC] ) {
                 guint n = 0;
-                for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
-                    n += path_it->size_default() + 1;
+                for(const auto & path_it : pathv) {
+                    n += path_it.size_default() + 1;
                 }
                 return n;
             } else {
@@ -936,8 +936,8 @@ int SPShape::numberOfMarkers(int type) const {
         {
             if ( this->_marker[SP_MARKER_LOC_MID] ) {
                 guint n = 0;
-                for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
-                    n += path_it->size_default() + 1;
+                for(const auto & path_it : pathv) {
+                    n += path_it.size_default() + 1;
                 }
                 n = (n > 1) ? (n - 2) : 0; // Minus the start and end marker, but never negative.
                                            // A path or polyline may have only one point.
@@ -1178,16 +1178,16 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
         }
     }
 
-    for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
+    for(const auto & path_it : pathv) {
         if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP)) {
             // Add the first point of the path
-            p.emplace_back(path_it->initialPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP);
+            p.emplace_back(path_it.initialPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP);
         }
 
-        Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());  // outgoing curve
+        Geom::Path::const_iterator curve_it1 = path_it.begin();      // incoming curve
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());  // outgoing curve
 
-        while (curve_it1 != path_it->end_default())
+        while (curve_it1 != path_it.end_default())
         {
             // For each path: consider midpoints of line segments for snapping
             if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_LINE_MIDPOINT)) {
@@ -1196,8 +1196,8 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
                 }
             }
 
-            if (curve_it2 == path_it->end_default()) { // Test will only pass for the last iteration of the while loop
-                if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP) && !path_it->closed()) {
+            if (curve_it2 == path_it.end_default()) { // Test will only pass for the last iteration of the while loop
+                if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP) && !path_it.closed()) {
                     // Add the last point of the path, but only for open paths
                     // (for closed paths the first and last point will coincide)
                     p.emplace_back((*curve_it1).finalPoint() * i2dt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP);
@@ -1245,11 +1245,11 @@ void SPShape::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
             Geom::Crossings cs;
 
             try {
-                cs = self_crossings(*path_it); // This can be slow!
+                cs = self_crossings(path_it); // This can be slow!
 
                 if (!cs.empty()) { // There might be multiple intersections...
                     for (Geom::Crossings::const_iterator i = cs.begin(); i != cs.end(); ++i) {
-                        Geom::Point p_ix = (*path_it).pointAt((*i).ta);
+                        Geom::Point p_ix = path_it.pointAt((*i).ta);
                         p.emplace_back(p_ix * i2dt, Inkscape::SNAPSOURCE_PATH_INTERSECTION, Inkscape::SNAPTARGET_PATH_INTERSECTION);
                     }
                 }

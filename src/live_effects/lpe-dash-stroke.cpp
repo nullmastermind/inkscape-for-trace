@@ -77,15 +77,15 @@ Geom::PathVector
 LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
     Geom::PathVector const pv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector result;
-    for (Geom::PathVector::const_iterator path_it = pv.begin(); path_it != pv.end(); ++path_it) {
-        if (path_it->empty()) {
+    for (const auto & path_it : pv) {
+        if (path_it.empty()) {
             continue;
         }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
-        if (path_it->closed()) {
-          const Geom::Curve &closingline = path_it->back_closed(); 
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
+        if (path_it.closed()) {
+          const Geom::Curve &closingline = path_it.back_closed(); 
           // the closing line segment is always of type 
           // Geom::LineSegment.
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
@@ -93,7 +93,7 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             // *exact* zero length, which goes wrong for relative coordinates and
             // rounding errors...
             // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
+            curve_endit = path_it.end_open();
           }
         }
         size_t numberdashes_fixed = numberdashes;
@@ -118,7 +118,7 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
         double holepercent = globalhole/numberholes;
         double dashsize_fixed = 0;
         double holesize_fixed = 0;
-        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = (*path_it).toPwSb();
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = path_it.toPwSb();
         double lenght_pwd2 = length (pwd2);
         double minlenght = lenght_pwd2;
         if(unifysegment) {
@@ -132,15 +132,15 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                 ++curve_it1;
                 ++curve_it2;
             } 
-            curve_it1 = path_it->begin();
-            curve_it2 = ++(path_it->begin());
-            curve_endit = path_it->end_default();
+            curve_it1 = path_it.begin();
+            curve_it2 = ++(path_it.begin());
+            curve_endit = path_it.end_default();
         }
         size_t p_index = 0;
         size_t start_index = result.size();
         if(splitsegments) {
             while (curve_it1 != curve_endit) {
-                Geom::Path segment = (*path_it).portion(p_index, p_index + 1);
+                Geom::Path segment = path_it.portion(p_index, p_index + 1);
                 if(unifysegment) {
                     double integral;
                     double fractional = modf((*curve_it1).length()/(dashsize_fixed + holesize_fixed), &integral);
@@ -222,7 +222,7 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
                     }
                 }
                 if (curve_it2 == curve_endit) {
-                    if (path_it->closed()) {
+                    if (path_it.closed()) {
                         Geom::Path end = result[result.size()-1];
                         end.setFinal(result[start_index].initialPoint());
                         end.append(result[start_index]);
@@ -243,7 +243,7 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             } else {
                 end = timeAtLength(dashsize,pwd2);
             }
-            result.push_back((*path_it).portion(start, end));
+            result.push_back(path_it.portion(start, end));
             double startsize = dashsize + holesize;
             if (halfextreme) {
                 startsize = (dashsize/2.0) + holesize;
@@ -251,14 +251,14 @@ LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
             double endsize = startsize + dashsize;
             start = timeAtLength(startsize,pwd2);
             end   = timeAtLength(endsize,pwd2);
-            while (start  < (*path_it).size() && start  > 0) {
-                result.push_back((*path_it).portion(start, end));
+            while (start  < path_it.size() && start  > 0) {
+                result.push_back(path_it.portion(start, end));
                 startsize = endsize + holesize;
                 endsize = startsize + dashsize;
                 start = timeAtLength(startsize,pwd2);
                 end   = timeAtLength(endsize,pwd2);
             }
-            if (path_it->closed()) {
+            if (path_it.closed()) {
                 Geom::Path end = result[result.size()-1];
                 end.setFinal(result[start_index].initialPoint());
                 end.append(result[start_index]);

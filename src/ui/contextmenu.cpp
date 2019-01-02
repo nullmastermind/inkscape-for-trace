@@ -93,11 +93,11 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true, true, true);
     bool has_down_hidden = false;
     bool has_down_locked = false;
-    for(std::vector< SPItem * >::iterator down = down_items.begin(); down != down_items.end(); ++down){
-        if((*down)->isHidden()) {
+    for(auto & down_item : down_items){
+        if(down_item->isHidden()) {
             has_down_hidden = true;
         }
-        if((*down)->isLocked()) {
+        if(down_item->isLocked()) {
             has_down_locked = true;
         }
     }
@@ -216,10 +216,10 @@ void ContextMenu::HideSelected()
 void ContextMenu::UnLockBelow(std::vector<SPItem *> items)
 {
     _desktop->selection->clear();
-    for(auto i=items.begin();i!=items.end(); ++i) {
-        if ((*i)->isLocked()) {
-            (*i)->setLocked(false);
-            _desktop->selection->add(*i);
+    for(auto & item : items) {
+        if (item->isLocked()) {
+            item->setLocked(false);
+            _desktop->selection->add(item);
         }
     }
 }
@@ -227,10 +227,10 @@ void ContextMenu::UnLockBelow(std::vector<SPItem *> items)
 void ContextMenu::UnHideBelow(std::vector<SPItem *> items)
 {
     _desktop->selection->clear();
-    for(auto i=items.begin();i!=items.end(); ++i) {
-        if ((*i)->isHidden()) {
-            (*i)->setHidden(false);
-            _desktop->selection->add(*i);
+    for(auto & item : items) {
+        if (item->isHidden()) {
+            item->setHidden(false);
+            _desktop->selection->add(item);
         }
     }
 }

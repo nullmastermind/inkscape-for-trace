@@ -355,9 +355,9 @@ void Inflater::trace(char const *fmt, ...)
  */
 void Inflater::dump()
 {
-    for (unsigned int i=0 ; i<dest.size() ; i++)
+    for (unsigned char i : dest)
         {
-        fputc(dest[i], stdout);
+        fputc(i, stdout);
         }
 }
 
@@ -1599,8 +1599,8 @@ bool GzipFile::write()
     putByte(0);
 
     //file name
-    for (unsigned int i=0 ; i<fileName.size() ; i++)
-        putByte(fileName[i]);
+    for (char i : fileName)
+        putByte(i);
     putByte(0);
 
 
@@ -2323,8 +2323,8 @@ bool ZipFile::writeFileData()
         putInt(fname.size());//fileName length
         putInt(8);//extra field length
         //file name
-        for (unsigned int i=0 ; i<fname.size() ; i++)
-            putByte((unsigned char)fname[i]);
+        for (char i : fname)
+            putByte((unsigned char)i);
         //extra field
         putInt(0x7855);
         putInt(4);
@@ -2374,14 +2374,14 @@ bool ZipFile::writeCentralDirectory()
         putLong(entry->getPosition());
 
         //file name
-        for (unsigned int i=0 ; i<fname.size() ; i++)
-            putByte((unsigned char)fname[i]);
+        for (char i : fname)
+            putByte((unsigned char)i);
         //extra field
         putInt(0x7855);
         putInt(0);
         //comment
-        for (unsigned int i=0 ; i<ecomment.size() ; i++)
-            putByte((unsigned char)ecomment[i]);
+        for (char i : ecomment)
+            putByte((unsigned char)i);
         }
     unsigned long cdSize = fileBuf.size() - cdPosition;
 
@@ -2393,8 +2393,8 @@ bool ZipFile::writeCentralDirectory()
     putLong(cdSize);  //size of central dir
     putLong(cdPosition); //position of central dir
     putInt(comment.size());//comment size
-    for (unsigned int i=0 ; i<comment.size() ; i++)
-        putByte(comment[i]);
+    for (char i : comment)
+        putByte(i);
     return true;
 }
 

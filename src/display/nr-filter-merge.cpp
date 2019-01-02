@@ -45,8 +45,8 @@ void FilterMerge::render_cairo(FilterSlot &slot)
     // output is RGBA if at least one input is RGBA
     bool rgba32 = false;
     cairo_surface_t *out = nullptr;
-    for (std::vector<int>::iterator i = _input_image.begin(); i != _input_image.end(); ++i) {
-        cairo_surface_t *in = slot.getcairo(*i);
+    for (int & i : _input_image) {
+        cairo_surface_t *in = slot.getcairo(i);
         if (cairo_surface_get_content(in) == CAIRO_CONTENT_COLOR_ALPHA) {
             out = ink_cairo_surface_create_identical(in);
             set_cairo_surface_ci( out, ci_fp );
@@ -60,8 +60,8 @@ void FilterMerge::render_cairo(FilterSlot &slot)
     }
     cairo_t *out_ct = cairo_create(out);
 
-    for (std::vector<int>::iterator i = _input_image.begin(); i != _input_image.end(); ++i) {
-        cairo_surface_t *in = slot.getcairo(*i);
+    for (int & i : _input_image) {
+        cairo_surface_t *in = slot.getcairo(i);
 
         set_cairo_surface_ci( in, ci_fp );
         cairo_set_source_surface(out_ct, in, 0, 0);
@@ -86,8 +86,7 @@ double FilterMerge::complexity(Geom::Affine const &)
 
 bool FilterMerge::uses_background()
 {
-    for (unsigned int i = 0; i < _input_image.size(); ++i) {
-        int input = _input_image[i];
+    for (int input : _input_image) {
         if (input == NR_FILTER_BACKGROUNDIMAGE || input == NR_FILTER_BACKGROUNDALPHA) {
             return true;
         }

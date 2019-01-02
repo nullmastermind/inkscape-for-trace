@@ -24,15 +24,14 @@
 
 #include "bool.h"
 #include "color.h"
-#include "color.h"
 #include "description.h"
 #include "enum.h"
-#include "float.h"
+#include "./float.h"
 #include "int.h"
 #include "notebook.h"
 #include "parameter.h"
 #include "radiobutton.h"
-#include "string.h"
+#include "./string.h"
 
 #include "extension/extension.h"
 

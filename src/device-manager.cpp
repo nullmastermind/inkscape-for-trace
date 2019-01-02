@@ -125,8 +125,8 @@ static std::map<Gdk::AxisUse, Glib::ustring> &getAxisToString()
     static std::map<Gdk::AxisUse, Glib::ustring> mapping;
     if (!init) {
         init = true;
-        for (std::map<Glib::ustring, Gdk::AxisUse>::iterator it = getStringToAxis().begin(); it != getStringToAxis().end(); ++it) {
-            mapping.insert(std::make_pair(it->second, it->first));
+        for (auto & it : getStringToAxis()) {
+            mapping.insert(std::make_pair(it.second, it.first));
         }
     }
     return mapping;
@@ -151,8 +151,8 @@ static std::map<Gdk::InputMode, Glib::ustring> &getModeToString()
     static std::map<Gdk::InputMode, Glib::ustring> mapping;
     if (!init) {
         init = true;
-        for (std::map<Glib::ustring, Gdk::InputMode>::iterator it = getStringToMode().begin(); it != getStringToMode().end(); ++it) {
-            mapping.insert(std::make_pair(it->second, it->first));
+        for (auto & it : getStringToMode()) {
+            mapping.insert(std::make_pair(it.second, it.first));
         }
     }
     return mapping;
@@ -357,17 +357,17 @@ void DeviceManagerImpl::loadConfig()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    for (std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = devices.begin(); it != devices.end(); ++it) {
-        if ((*it)->getSource() != Gdk::SOURCE_MOUSE) {
-            Glib::ustring path = "/devices/" + (*it)->getId();
+    for (auto & device : devices) {
+        if (device->getSource() != Gdk::SOURCE_MOUSE) {
+            Glib::ustring path = "/devices/" + device->getId();
 
             Gdk::InputMode mode = Gdk::MODE_DISABLED;
             Glib::ustring val = prefs->getString(path + "/mode");
             if (getStringToMode().find(val) != getStringToMode().end()) {
                 mode = getStringToMode()[val];
             }
-            if ((*it)->getMode() != mode) {
-                setMode( (*it)->getId(), mode );
+            if (device->getMode() != mode) {
+                setMode( device->getId(), mode );
             }
 
             //
@@ -379,7 +379,7 @@ void DeviceManagerImpl::loadConfig()
                     Glib::ustring name = parts[i];
                     if (getStringToAxis().find(name) != getStringToAxis().end()) {
                         Gdk::AxisUse use = getStringToAxis()[name];
-                        setAxisUse( (*it)->getId(), i, use );
+                        setAxisUse( device->getId(), i, use );
                     }
                 }
             }
@@ -393,7 +393,7 @@ void DeviceManagerImpl::loadConfig()
                         guint key = 0;
                         GdkModifierType mods = static_cast<GdkModifierType>(0);
                         gtk_accelerator_parse( keyStr.c_str(), &key, &mods );
-                        setKey( (*it)->getId(), i, key, static_cast<Gdk::ModifierType>(mods) );
+                        setKey( device->getId(), i, key, static_cast<Gdk::ModifierType>(mods) );
                     }
                 }
             }
@@ -405,28 +405,28 @@ void DeviceManagerImpl::saveConfig()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    for (std::list<Glib::RefPtr<InputDeviceImpl> >::iterator it = devices.begin(); it != devices.end(); ++it) {
-        if ((*it)->getSource() != Gdk::SOURCE_MOUSE) {
-            Glib::ustring path = "/devices/" + (*it)->getId();
+    for (auto & it : devices) {
+        if (it->getSource() != Gdk::SOURCE_MOUSE) {
+            Glib::ustring path = "/devices/" + it->getId();
 
-            prefs->setString( path + "/mode", getModeToString()[(*it)->getMode()].c_str() );
+            prefs->setString( path + "/mode", getModeToString()[it->getMode()].c_str() );
 
             Glib::ustring tmp;
-            for (gint i = 0; i < (*it)->getNumAxes(); ++i) {
+            for (gint i = 0; i < it->getNumAxes(); ++i) {
                 if (i > 0) {
                     tmp += ";";
                 }
-                Glib::RefPtr<Gdk::Device> device = (*it)->getDevice();
+                Glib::RefPtr<Gdk::Device> device = it->getDevice();
                 tmp += getAxisToString()[device->get_axis_use(i)];
             }
             prefs->setString( path + "/axes", tmp );
 
             tmp = "";
-            for (gint i = 0; i < (*it)->getNumKeys(); ++i) {
+            for (gint i = 0; i < it->getNumKeys(); ++i) {
                 if (i > 0) {
                     tmp += ";";
                 }
-                Glib::RefPtr<Gdk::Device> device = (*it)->getDevice();
+                Glib::RefPtr<Gdk::Device> device = it->getDevice();
 		guint keyval;
                 Gdk::ModifierType modifiers;
 		device->get_key(i, keyval, modifiers);

@@ -169,7 +169,7 @@ inline Ocnode *ocnodeNew(pool<Ocnode> *pool)
     node->ref = nullptr;
     node->parent = nullptr;
     node->nchild = 0;
-    for (int i = 0; i < 8; i++) node->child[i] = nullptr;
+    for (auto & i : node->child) i = nullptr;
     node->mi = 0;
     return node;
 }
@@ -185,8 +185,8 @@ inline void ocnodeFree(pool<Ocnode> *pool, Ocnode *node) {
 static void octreeDelete(pool<Ocnode> *pool, Ocnode *node)
 {
     if (!node) return;
-    for (int i = 0; i < 8; i++)
-        octreeDelete(pool, node->child[i]);
+    for (auto & i : node->child)
+        octreeDelete(pool, i);
     ocnodeFree(pool, node);
 }
 
@@ -375,16 +375,16 @@ static void ocnodeStrip(pool<Ocnode> *pool, Ocnode **ref, int *count, unsigned l
         node->nleaf = 0;
         node->mi = 0;
         Ocnode **lonelychild = nullptr;
-        for (int i = 0; i < 8; i++) if (node->child[i])
+        for (auto & i : node->child) if (i)
             {
-            ocnodeStrip(pool, &node->child[i], count, lvl);
-            if (node->child[i])
+            ocnodeStrip(pool, &i, count, lvl);
+            if (i)
                 {
-                lonelychild = &node->child[i];
+                lonelychild = &i;
                 node->nchild++;
-                node->nleaf += node->child[i]->nleaf;
-                if (!node->mi || node->mi > node->child[i]->mi)
-                    node->mi = node->child[i]->mi;
+                node->nleaf += i->nleaf;
+                if (!node->mi || node->mi > i->mi)
+                    node->mi = i->mi;
                 }
             }
       // tree adjustments
@@ -501,9 +501,9 @@ static void octreeIndex(Ocnode *node, RGB *rgbpal, int *index)
         (*index)++;
         }
     else
-        for (int i = 0; i < 8; i++)
-            if (node->child[i])
-                octreeIndex(node->child[i], rgbpal, index);
+        for (auto & i : node->child)
+            if (i)
+                octreeIndex(i, rgbpal, index);
 }
 
 /**

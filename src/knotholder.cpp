@@ -79,10 +79,10 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
 KnotHolder::~KnotHolder() {
     sp_object_unref(item);
 
-    for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
+    for (auto & i : entity)
     {
-        delete (*i);
-        (*i) = NULL;
+        delete i;
+        i = NULL;
     }
     entity.clear(); // is this necessary?
     sizeUpdatedConn.disconnect();
@@ -98,16 +98,14 @@ void KnotHolder::updateControlSizes()
 {
     ControlManager &mgr = ControlManager::getManager();
 
-    for (std::list<KnotHolderEntity *>::iterator it = entity.begin(); it != entity.end(); ++it) {
-        KnotHolderEntity *e = *it;
+    for (auto e : entity) {
         mgr.updateItem(e->knot->item);
     }
 }
 
 void KnotHolder::update_knots()
 {
-    for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
-        KnotHolderEntity *e = *i;
+    for (auto e : entity) {
         e->update_knot();
     }
 }
@@ -116,8 +114,8 @@ void KnotHolder::update_knots()
  * Returns true if at least one of the KnotHolderEntities has the mouse hovering above it.
  */
 bool KnotHolder::knot_mouseover() const {
-    for (std::list<KnotHolderEntity *>::const_iterator i = entity.begin(); i != entity.end(); ++i) {
-        const SPKnot *knot = (*i)->knot;
+    for (auto i : entity) {
+        const SPKnot *knot = i->knot;
 
         if (knot && (knot->flags & SP_KNOT_MOUSEOVER)) {
             return true;
@@ -133,8 +131,7 @@ KnotHolder::knot_mousedown_handler(SPKnot *knot, guint state)
     if (!(state & GDK_SHIFT_MASK)) {
         unselect_knots();
     }
-    for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
-        KnotHolderEntity *e = *i;
+    for(auto e : this->entity) {
         if (!(state & GDK_SHIFT_MASK)) {
             e->knot->selectKnot(false);
         }
@@ -153,8 +150,7 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
 {
     SPItem *saved_item = this->item;
 
-    for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
-        KnotHolderEntity *e = *i;
+    for(auto e : this->entity) {
         if (e->knot == knot)
             // no need to test whether knot_click exists since it's virtual now
             e->knot_click(state);
@@ -208,8 +204,8 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
 
 void
 KnotHolder::transform_selected(Geom::Affine transform){
-    for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
-        SPKnot *knot = (*i)->knot;
+    for (auto & i : entity) {
+        SPKnot *knot = i->knot;
         if (knot->flags & SP_KNOT_SELECTED) {
             knot_moved_handler(knot, knot->pos * transform , 0);
             knot->selectKnot(true);
@@ -227,8 +223,7 @@ KnotHolder::unselect_knots(){
                 if (shape_editor && shape_editor->has_knotholder()) {
                     KnotHolder * knotholder = shape_editor->knotholder;
                     if (knotholder) {
-                        for(std::list<KnotHolderEntity *>::iterator i = knotholder->entity.begin(); i != knotholder->entity.end(); ++i) {
-                            KnotHolderEntity *e = *i;
+                        for(auto e : knotholder->entity) {
                             if (e->knot->flags & SP_KNOT_SELECTED) {
                                 e->knot->selectKnot(false);
                             }
@@ -250,8 +245,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     // this was a local change and the knotholder does not need to be recreated:
     this->local_change = TRUE;
 
-    for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
-        KnotHolderEntity *e = *i;
+    for(auto e : this->entity) {
         if (e->knot == knot) {
             Geom::Point const q = p * item->i2dt_affine().inverse() * _edit_transform.inverse();
             e->knot_set(q, e->knot->drag_origin * item->i2dt_affine().inverse() * _edit_transform.inverse(), state);

@@ -155,8 +155,8 @@ void LayerModel::toggleLockOtherLayers(SPObject *object) {
         item->setLocked(false);
     }
 
-    for ( std::vector<SPObject*>::iterator it = layers.begin(); it != layers.end(); ++it ) {
-        SP_ITEM(*it)->setLocked(othersLocked);
+    for (auto & layer : layers) {
+        SP_ITEM(layer)->setLocked(othersLocked);
     }
 }
 
@@ -187,8 +187,8 @@ void LayerModel::toggleLayerSolo(SPObject *object) {
         item->setHidden(false);
     }
 
-    for ( std::vector<SPObject*>::iterator it = layers.begin(); it != layers.end(); ++it ) {
-        SP_ITEM(*it)->setHidden(othersShowing);
+    for (auto & layer : layers) {
+        SP_ITEM(layer)->setHidden(othersShowing);
     }
 }
 

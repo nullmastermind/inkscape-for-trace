@@ -1385,9 +1385,9 @@ void InkscapePreferences::initPageIO()
         gint index = 0;
         _cms_display_profile.append(_("<none>"));
         index++;
-        for ( std::vector<Glib::ustring>::iterator it = names.begin(); it != names.end(); ++it ) {
-            _cms_display_profile.append( *it );
-            Glib::ustring path = CMSSystem::getPathForProfile(*it);
+        for (auto & name : names) {
+            _cms_display_profile.append( name );
+            Glib::ustring path = CMSSystem::getPathForProfile(name);
             if ( !path.empty() && path == current ) {
                 _cms_display_profile.set_active(index);
             }
@@ -1400,9 +1400,9 @@ void InkscapePreferences::initPageIO()
         names = ::Inkscape::CMSSystem::getSoftproofNames();
         current = prefs->getString("/options/softproof/uri");
         index = 0;
-        for ( std::vector<Glib::ustring>::iterator it = names.begin(); it != names.end(); ++it ) {
-            _cms_proof_profile.append( *it );
-            Glib::ustring path = CMSSystem::getPathForProfile(*it);
+        for (auto & name : names) {
+            _cms_proof_profile.append( name );
+            Glib::ustring path = CMSSystem::getPathForProfile(name);
             if ( !path.empty() && path == current ) {
                 _cms_proof_profile.set_active(index);
             }
@@ -2114,9 +2114,8 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
     std::vector<Verb *>verbs = Inkscape::Verb::getList();
 
-    for (unsigned int i = 0; i < verbs.size(); i++) {
+    for (auto verb : verbs) {
 
-        Inkscape::Verb* verb = verbs[i];
         if (!verb) {
             continue;
         }

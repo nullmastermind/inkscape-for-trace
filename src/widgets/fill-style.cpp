@@ -574,39 +574,39 @@ void FillNStroke::updateFromPaint()
                         }
                     }
 
-                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
+                    for(auto item : items){
                         //FIXME: see above
                         if (kind == FILL) {
-                            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
+                            sp_repr_css_change_recursive(item->getRepr(), css, "style");
                         }
 
                         if (!vector) {
                             SPGradient *gr = sp_gradient_vector_for_object( document,
                                                                             desktop,
-                                                                            reinterpret_cast<SPObject*>(*i),
+                                                                            reinterpret_cast<SPObject*>(item),
                                                                             (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE,
                                                                             createSwatch );
                             if ( gr && createSwatch ) {
                                 gr->setSwatch();
                             }
-                            sp_item_set_gradient(*i,
+                            sp_item_set_gradient(item,
                                                  gr,
                                                  gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         } else {
-                            sp_item_set_gradient(*i, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
+                            sp_item_set_gradient(item, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         }
                     }
                 } else {
                     // We have changed from another gradient type, or modified spread/units within
                     // this gradient type.
                     vector = sp_gradient_ensure_vector_normalized(vector);
-                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
+                    for(auto item : items){
                         //FIXME: see above
                         if (kind == FILL) {
-                            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
+                            sp_repr_css_change_recursive(item->getRepr(), css, "style");
                         }
 
-                        SPGradient *gr = sp_item_set_gradient(*i, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
+                        SPGradient *gr = sp_item_set_gradient(item, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         psel->pushAttrsToGradient( gr );
                     }
                 }
@@ -639,16 +639,16 @@ void FillNStroke::updateFromPaint()
 
                 SPMeshGradient * mesh = psel->getMeshGradient();
 
-                for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
+                for(auto item : items){
 
                     //FIXME: see above
                     if (kind == FILL) {
-                        sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
+                        sp_repr_css_change_recursive(item->getRepr(), css, "style");
                     }
 
                     // Check if object already has mesh.
                     bool has_mesh = false;
-                    SPStyle *style = (*i)->style;
+                    SPStyle *style = item->style;
                     if (style) {
                         SPPaintServer *server =
                             (kind==FILL) ? style->getFillPaintServer():style->getStrokePaintServer();
@@ -672,11 +672,11 @@ void FillNStroke::updateFromPaint()
 
                         // Get corresponding object
                         SPMeshGradient *mg = static_cast<SPMeshGradient *>(document->getObjectByRepr(repr));
-                        mg->array.create(mg, *i, (kind==FILL) ?
-                                         (*i)->geometricBounds() : (*i)->visualBounds());
+                        mg->array.create(mg, item, (kind==FILL) ?
+                                         item->geometricBounds() : item->visualBounds());
 
-                        bool isText = SP_IS_TEXT(*i);
-                        sp_style_set_property_url (*i, ((kind == FILL) ? "fill":"stroke"),
+                        bool isText = SP_IS_TEXT(item);
+                        sp_style_set_property_url (item, ((kind == FILL) ? "fill":"stroke"),
                                                    mg, isText);
 
                         // (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_STYLE_MODIFIED_FLAG);
@@ -702,11 +702,11 @@ void FillNStroke::updateFromPaint()
                         mg->array.read(mg);
 
                         Geom::OptRect item_bbox = (kind==FILL) ?
-                            (*i)->geometricBounds() : (*i)->visualBounds();
+                            item->geometricBounds() : item->visualBounds();
                         mg->array.fill_box( item_bbox );
 
-                        bool isText = SP_IS_TEXT(*i);
-                        sp_style_set_property_url (*i, ((kind == FILL) ? "fill":"stroke"),
+                        bool isText = SP_IS_TEXT(item);
+                        sp_style_set_property_url (item, ((kind == FILL) ? "fill":"stroke"),
                                                    mg, isText);
                     }
                 }
@@ -747,12 +747,12 @@ void FillNStroke::updateFromPaint()
                     // cannot just call sp_desktop_set_style, because we don't want to touch those
                     // objects who already have the same root pattern but through a different href
                     // chain. FIXME: move this to a sp_item_set_pattern
-                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
-                        Inkscape::XML::Node *selrepr = (*i)->getRepr();
+                    for(auto item : items){
+                        Inkscape::XML::Node *selrepr = item->getRepr();
                         if ( (kind == STROKE) && !selrepr) {
                             continue;
                         }
-                        SPObject *selobj = *i;
+                        SPObject *selobj = item;
 
                         SPStyle *style = selobj->style;
                         if (style && ((kind == FILL) ? style->fill : style->stroke).isPaintserver()) {

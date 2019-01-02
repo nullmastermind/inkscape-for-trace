@@ -105,12 +105,12 @@ bool TagSet::addTag(Tag const& tag)
         if (tag.key == it->key) {
             present = true;
 
-            for ( std::vector<Label>::const_iterator it2 = tag.labels.begin(); it2 != tag.labels.end(); ++it2 ) {
-                std::vector<Label>::iterator itOld = std::find_if( it->labels.begin(), it->labels.end(), std::bind2nd(sameLang(), *it2) );
+            for (const auto & label : tag.labels) {
+                std::vector<Label>::iterator itOld = std::find_if( it->labels.begin(), it->labels.end(), std::bind2nd(sameLang(), label) );
                 if (itOld != it->labels.end()) {
-                    itOld->value = it2->value;
+                    itOld->value = label.value;
                 } else {
-                    it->labels.push_back(*it2);
+                    it->labels.push_back(label);
                 }
             }
         }

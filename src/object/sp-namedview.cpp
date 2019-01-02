@@ -910,8 +910,8 @@ void SPNamedView::hide(SPDesktop const *desktop)
 {
     g_assert(desktop != nullptr);
     g_assert(std::find(views.begin(),views.end(),desktop)!=views.end());
-    for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
-        (*it)->hideSPGuide(desktop->getCanvas());
+    for(auto & guide : this->guides) {
+        guide->hideSPGuide(desktop->getCanvas());
     }
     views.erase(std::remove(views.begin(),views.end(),desktop),views.end());
 }
@@ -922,8 +922,8 @@ void SPNamedView::activateGuides(void* desktop, bool active)
     g_assert(std::find(views.begin(),views.end(),desktop)!=views.end());
 
     SPDesktop *dt = static_cast<SPDesktop*>(desktop);
-    for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
-        (*it)->sensitize(dt->getCanvas(), active);
+    for(auto & guide : this->guides) {
+        guide->sensitize(dt->getCanvas(), active);
     }
 }
 
@@ -1166,8 +1166,8 @@ Inkscape::CanvasGrid * sp_namedview_get_first_enabled_grid(SPNamedView *namedvie
 }
 
 void SPNamedView::translateGuides(Geom::Translate const &tr) {
-    for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
-        SPGuide &guide = *(*it);
+    for(auto & it : this->guides) {
+        SPGuide &guide = *it;
         Geom::Point point_on_line = guide.getPoint();
         point_on_line *= tr;
         guide.moveto(point_on_line, true);
@@ -1175,14 +1175,14 @@ void SPNamedView::translateGuides(Geom::Translate const &tr) {
 }
 
 void SPNamedView::translateGrids(Geom::Translate const &tr) {
-    for(std::vector<Inkscape::CanvasGrid *>::iterator it=this->grids.begin();it!=this->grids.end();++it ) {
-        (*it)->setOrigin((*it)->origin * tr);
+    for(auto & grid : this->grids) {
+        grid->setOrigin(grid->origin * tr);
     }
 }
 
 void SPNamedView::scrollAllDesktops(double dx, double dy, bool is_scrolling) {
-    for(std::vector<SPDesktop *>::iterator it=this->views.begin();it!=this->views.end();++it ) {
-        (*it)->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
+    for(auto & view : this->views) {
+        view->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
     }
 }
 

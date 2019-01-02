@@ -1709,10 +1709,10 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
     // Recalculate line_box_height after backing out chunks
     *line_height = line_height_saved;
     for (std::vector<ChunkInfo>::const_iterator it_chunk = chunk_info->begin() ; it_chunk != chunk_info->end() ; it_chunk++) {
-        for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
-            FontMetrics span_height = it_span->start.iter_span->line_height;
+        for (const auto & broken_span : it_chunk->broken_spans) {
+            FontMetrics span_height = broken_span.start.iter_span->line_height;
             TRACE(("      brokenspan line_height: %f\n", span_height.emSize() ));
-            span_height.computeEffective( it_span->start.iter_span->line_height_multiplier );
+            span_height.computeEffective( broken_span.start.iter_span->line_height_multiplier );
             line_height->max( span_height );
         }
     }

@@ -151,9 +151,7 @@ gint UXManagerImpl::getDefaultTask( SPDesktop *desktop )
 
 void UXManagerImpl::setTask(SPDesktop* dt, gint val)
 {
-    for (vector<SPDesktopWidget*>::iterator it = dtws.begin(); it != dtws.end(); ++it) {
-        SPDesktopWidget* dtw = *it;
-
+    for (auto dtw : dtws) {
         gboolean notDone = Inkscape::Preferences::get()->getBool("/options/workarounds/dynamicnotdone", false);
 
         if (dtw->desktop == dt) {
@@ -217,9 +215,7 @@ void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPD
     vector<GtkWidget*>& tracked = tracker.boxes;
     tracker.destroyConn = desktop->connectDestroy(&desktopDestructHandler);
 
-    for (vector<GtkWidget*>::const_iterator it = toolboxes.begin(); it != toolboxes.end(); ++it ) {
-        GtkWidget* toolbox = *it;
-
+    for (auto toolbox : toolboxes) {
         ToolboxFactory::setToolboxDesktop( toolbox, desktop );
         if (find(tracked.begin(), tracked.end(), toolbox) == tracked.end()) {
             tracked.push_back(toolbox);

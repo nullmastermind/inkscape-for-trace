@@ -88,8 +88,8 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
     Geom::PathVector path_out;
     Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     if(original_path) {
-        for (unsigned int i=0; i < path_in.size(); i++) {
-            path_out.push_back(path_in[i]);
+        for (const auto & i : path_in) {
+            path_out.push_back(i);
         }
     }
     if(!outline_path.empty()) {
@@ -100,8 +100,8 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
         if (shape_curve) {
             Geom::PathVector original_curve = shape_curve->get_pathvector();
             if(original_path) {
-                for (unsigned int i=0; i < original_curve.size(); i++) {
-                    path_out.push_back(original_curve[i]);
+                for (const auto & i : original_curve) {
+                    path_out.push_back(i);
                 }
             }
             original_pathv.insert(original_pathv.end(), original_curve.begin(), original_curve.end());
@@ -111,8 +111,8 @@ Geom::PathVector LPEShowHandles::doEffect_path (Geom::PathVector const & path_in
     } else {
         generateHelperPath(original_pathv);
     }
-    for (unsigned int i=0; i < outline_path.size(); i++) {
-        path_out.push_back(outline_path[i]);
+    for (const auto & i : outline_path) {
+        path_out.push_back(i);
     }
 
     return path_out;
@@ -126,33 +126,33 @@ LPEShowHandles::generateHelperPath(Geom::PathVector result)
     }
 
     Geom::CubicBezier const *cubic = nullptr;
-    for (Geom::PathVector::iterator path_it = result.begin(); path_it != result.end(); ++path_it) {
+    for (auto & path_it : result) {
         //Si está vacío...
-        if (path_it->empty()) {
+        if (path_it.empty()) {
             continue;
         }
         //Itreadores
-        Geom::Path::iterator curve_it1 = path_it->begin(); // incoming curve
-        Geom::Path::iterator curve_it2 = ++(path_it->begin()); // outgoing curve
-        Geom::Path::iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
+        Geom::Path::iterator curve_it1 = path_it.begin(); // incoming curve
+        Geom::Path::iterator curve_it2 = ++(path_it.begin()); // outgoing curve
+        Geom::Path::iterator curve_endit = path_it.end_default(); // this determines when the loop has to stop
 
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             // if the path is closed, maybe we have to stop a bit earlier because the
             // closing line segment has zerolength.
-            Geom::Curve const &closingline = path_it->back_closed(); // the closing line segment is always of type
+            Geom::Curve const &closingline = path_it.back_closed(); // the closing line segment is always of type
             // Geom::LineSegment.
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 // closingline.isDegenerate() did not work, because it only checks for
                 // *exact* zero length, which goes wrong for relative coordinates and
                 // rounding errors...
                 // the closing line segment has zero-length. So stop before that one!
-                curve_endit = path_it->end_open();
+                curve_endit = path_it.end_open();
             }
         }
         if(nodes) {
             Geom::NodeType nodetype = Geom::NODE_CUSP;
-            if(path_it->closed()) {
-                nodetype = Geom::get_nodetype(path_it->finalCurve(), *curve_it1);
+            if(path_it.closed()) {
+                nodetype = Geom::get_nodetype(path_it.finalCurve(), *curve_it1);
             } 
             drawNode(curve_it1->initialPoint(), nodetype);
         }
@@ -170,7 +170,7 @@ LPEShowHandles::generateHelperPath(Geom::PathVector result)
                     }
                 }
             }
-            if(nodes && (curve_it2 != curve_endit || !path_it->closed())) {
+            if(nodes && (curve_it2 != curve_endit || !path_it.closed())) {
                 Geom::NodeType nodetype = Geom::get_nodetype(*curve_it1, *curve_it2);
                 drawNode(curve_it1->finalPoint(), nodetype);
             }

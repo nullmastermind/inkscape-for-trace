@@ -45,21 +45,21 @@ SPConnEndPair::SPConnEndPair(SPPath *const owner)
 
 SPConnEndPair::~SPConnEndPair()
 {
-    for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
-        delete this->_connEnd[handle_ix];
-        this->_connEnd[handle_ix] = nullptr;
+    for (auto & handle_ix : this->_connEnd) {
+        delete handle_ix;
+        handle_ix = nullptr;
     }
 }
 
 void SPConnEndPair::release()
 {
-    for (unsigned handle_ix = 0; handle_ix < 2; ++handle_ix) {
-        this->_connEnd[handle_ix]->_changed_connection.disconnect();
-        this->_connEnd[handle_ix]->_delete_connection.disconnect();
-        this->_connEnd[handle_ix]->_transformed_connection.disconnect();
-        g_free(this->_connEnd[handle_ix]->href);
-        this->_connEnd[handle_ix]->href = nullptr;
-        this->_connEnd[handle_ix]->ref.detach();
+    for (auto & handle_ix : this->_connEnd) {
+        handle_ix->_changed_connection.disconnect();
+        handle_ix->_delete_connection.disconnect();
+        handle_ix->_transformed_connection.disconnect();
+        g_free(handle_ix->href);
+        handle_ix->href = nullptr;
+        handle_ix->ref.detach();
     }
 
     // If the document is being destroyed then the router instance

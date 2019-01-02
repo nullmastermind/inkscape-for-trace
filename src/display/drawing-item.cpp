@@ -254,9 +254,9 @@ DrawingItem::clearChildren()
     // prevent children from referencing the parent during deletion
     // this way, children won't try to remove themselves from a list
     // from which they have already been removed by clear_and_dispose
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->_parent = NULL;
-        i->_child_type = CHILD_ORPHAN;
+    for (auto & i : _children) {
+        i._parent = NULL;
+        i._child_type = CHILD_ORPHAN;
     }
     _children.clear_and_dispose(DeleteDisposer());
     _markForUpdate(STATE_ALL, false);
@@ -418,8 +418,8 @@ void
 DrawingItem::setChildrenStyle(SPStyle* context_style)
 {
     _context_style = context_style;
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->setChildrenStyle( context_style );
+    for (auto & i : _children) {
+        i.setChildrenStyle( context_style );
     }
 }
 
@@ -1053,8 +1053,8 @@ DrawingItem::recursivePrintTree( unsigned level )
         std::cout << "  ";
     }
     std::cout << name() << std::endl;
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->recursivePrintTree( level+1 );
+    for (auto & i : _children) {
+        i.recursivePrintTree( level+1 );
     }
 }
 
@@ -1105,8 +1105,8 @@ DrawingItem::_invalidateFilterBackground(Geom::IntRect const &area)
         _cache->markDirty(area);
     }
 
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->_invalidateFilterBackground(area);
+    for (auto & i : _children) {
+        i._invalidateFilterBackground(area);
     }
 }
 

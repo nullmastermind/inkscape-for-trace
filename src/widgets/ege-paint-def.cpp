@@ -263,11 +263,11 @@ bool PaintDef::fromMIMEData(std::string const & type, char const * data, int len
     }
     if ( changed ) {
         // beware of callbacks changing things
-        for ( std::vector<HookData*>::iterator it = _listeners.begin(); it != _listeners.end(); ++it )
+        for (auto & _listener : _listeners)
         {
-            if ( (*it)->_cb )
+            if ( _listener->_cb )
             {
-                (*it)->_cb( (*it)->_data );
+                _listener->_cb( _listener->_data );
             }
         }
     }
@@ -282,11 +282,11 @@ void PaintDef::setRGB( unsigned int r, unsigned int g, unsigned int b )
         this->b = b;
 
         // beware of callbacks changing things
-        for ( std::vector<HookData*>::iterator it = _listeners.begin(); it != _listeners.end(); ++it )
+        for (auto & _listener : _listeners)
         {
-            if ( (*it)->_cb )
+            if ( _listener->_cb )
             {
-                (*it)->_cb( (*it)->_data );
+                _listener->_cb( _listener->_data );
             }
         }
     }

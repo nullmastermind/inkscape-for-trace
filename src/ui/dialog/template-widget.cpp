@@ -128,8 +128,8 @@ void TemplateWidget::_displayTemplateDetails()
         message += _("Description: ") + _current_template.long_description + "\n\n";
     if (!_current_template.keywords.empty()){
         message += _("Keywords: ");
-        for (std::set<Glib::ustring>::iterator it = _current_template.keywords.begin(); it != _current_template.keywords.end(); ++it)
-            message += *it + " ";
+        for (const auto & keyword : _current_template.keywords)
+            message += keyword + " ";
         message += "\n\n";
     }
     

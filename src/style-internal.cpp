@@ -599,8 +599,8 @@ const Glib::ustring
 SPIFontVariationSettings::toString() const {
 
     Inkscape::CSSOStringStream os;
-    for (auto it=axes.begin(); it!=axes.end(); ++it){
-        os << it->first << "=" << it->second << ",";
+    for (const auto & axe : axes){
+        os << axe.first << "=" << axe.second << ",";
     }
 
     std::string string = os.str(); // Glib::ustring doesn't have pop_back()
@@ -806,9 +806,9 @@ SPILigatures::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
-        for( unsigned i = 0; i < tokens.size(); ++i ) {
+        for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
-                if (tokens[i].compare( enums[j].key ) == 0 ) {
+                if (token.compare( enums[j].key ) == 0 ) {
                     set = true;
                     inherit = false;
                     if( enums[j].value < SP_CSS_FONT_VARIANT_LIGATURES_NOCOMMON ) {
@@ -863,9 +863,9 @@ SPINumeric::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
-        for( unsigned i = 0; i < tokens.size(); ++i ) {
+        for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
-                if (tokens[i].compare( enums[j].key ) == 0 ) {
+                if (token.compare( enums[j].key ) == 0 ) {
                     set = true;
                     inherit = false;
                     value |=  enums[j].value;
@@ -945,9 +945,9 @@ SPIEastAsian::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
-        for( unsigned i = 0; i < tokens.size(); ++i ) {
+        for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
-                if (tokens[i].compare( enums[j].key ) == 0 ) {
+                if (token.compare( enums[j].key ) == 0 ) {
                     set = true;
                     inherit = false;
 

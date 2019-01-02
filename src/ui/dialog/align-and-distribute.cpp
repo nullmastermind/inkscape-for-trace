@@ -190,11 +190,9 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
 
     //Move each item in the selected list separately
     bool changed = false;
-    for (std::vector<SPItem*>::iterator it(selected.begin());
-         it != selected.end(); ++it)
+    for (auto item : selected)
     {
-    	SPItem* item= *it;
-        desktop->getDocument()->ensureUpToDate();
+    	desktop->getDocument()->ensureUpToDate();
         if (!sel_as_group)
             b = (item)->desktopPreferredBounds();
         if (b && (!focus || (item) != focus)) {
@@ -316,10 +314,7 @@ private :
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int prefs_bbox = prefs->getBool("/tools/bounding_box");
         std::vector< BBoxSort  > sorted;
-        for (std::vector<SPItem*>::iterator it(selected.begin());
-            it != selected.end();
-            ++it){
-            SPItem *item = *it;
+        for (auto item : selected){
             Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
                 sorted.emplace_back(item, *bbox, _orientation, kBegin, kEnd);
@@ -713,12 +708,9 @@ private :
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-        for (std::vector<SPItem*>::iterator it(selected.begin());
-            it != selected.end();
-            ++it)
+        for (auto item : selected)
         {
-        	SPItem* item = *it;
-            desktop->getDocument()->ensureUpToDate();
+        	desktop->getDocument()->ensureUpToDate();
             Geom::OptRect item_box = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (item_box) {
                 // find new center, staying within bbox
@@ -793,12 +785,9 @@ private :
 
         std::vector<Baselines> sorted;
 
-        for (std::vector<SPItem*>::iterator it(selected.begin());
-            it != selected.end();
-            ++it)
+        for (auto item : selected)
         {
-        	SPItem* item = *it;
-            if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
+        	if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item);
                 boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
@@ -881,12 +870,9 @@ private :
                 ref_point = b->min();
             }
 
-            for (std::vector<SPItem*>::iterator it(selected.begin());
-                 it != selected.end();
-                 ++it)
+            for (auto item : selected)
             {
-            	SPItem* item = *it;
-                if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
+            	if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                     Inkscape::Text::Layout const *layout = te_get_layout(item);
                     boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                     if (pt) {
@@ -1151,9 +1137,8 @@ AlignAndDistribute::AlignAndDistribute()
 
 AlignAndDistribute::~AlignAndDistribute()
 {
-    for (std::list<Action *>::iterator it = _actionList.begin();
-         it != _actionList.end();  ++it) {
-        delete *it;
+    for (auto & it : _actionList) {
+        delete it;
     }
 
     _toolChangeConn.disconnect();

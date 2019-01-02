@@ -119,32 +119,32 @@ public:
     void collapseRow(Gtk::TreeModel::Path const &path)
     {
         std::vector<std::unique_ptr<SignalBlocker> > blockers;
-        for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
+        for (auto & _connection : _connections)
         {
-            addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
-            addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_COLLAPSE]);
+            addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
+            addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_COLLAPSE]);
         }
 
-        for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
+        for (auto & _connection : _connections)
         {
-            it->_event_list_view->collapse_row(path);
+            _connection._event_list_view->collapse_row(path);
         }
     }
 
     void selectRow(Gtk::TreeModel::Path const &path)
     {
         std::vector<std::unique_ptr<SignalBlocker> > blockers;
-        for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
+        for (auto & _connection : _connections)
         {
-            addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
-            addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_EXPAND]);
+            addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
+            addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_EXPAND]);
         }
 
-        for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
+        for (auto & _connection : _connections)
         {
-            it->_event_list_view->expand_to_path(path);
-            it->_event_list_selection->select(path);
-            it->_event_list_view->scroll_to_row(path);
+            _connection._event_list_view->expand_to_path(path);
+            _connection._event_list_selection->select(path);
+            _connection._event_list_view->scroll_to_row(path);
         }
     }
 
@@ -152,10 +152,10 @@ public:
     {
         if (eventListStore) {
             std::vector<std::unique_ptr<SignalBlocker> > blockers;
-            for (std::vector<DialogConnection>::iterator it(_connections.begin()); it != _connections.end(); ++it)
+            for (auto & _connection : _connections)
             {
-                addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
-                addBlocker(blockers, &(*it->_callback_connections)[Inkscape::EventLog::CALLB_EXPAND]);
+                addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_SELECTION_CHANGE]);
+                addBlocker(blockers, &(*_connection._callback_connections)[Inkscape::EventLog::CALLB_EXPAND]);
             }
 
             eventListStore->clear();

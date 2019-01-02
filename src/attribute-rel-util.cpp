@@ -129,9 +129,8 @@ void sp_attribute_clean_element(Node *repr, unsigned int flags) {
   }
 
   // Do actual deleting (done after so as not to perturb List iterator).
-  for( std::set<Glib::ustring>::const_iterator iter_d = attributesToDelete.begin();
-       iter_d != attributesToDelete.end(); ++iter_d ) {
-    repr->setAttribute( (*iter_d).c_str(), nullptr, false );
+  for(const auto & iter_d : attributesToDelete) {
+    repr->setAttribute( iter_d.c_str(), nullptr, false );
   }
 }
 
@@ -268,8 +267,8 @@ void sp_attribute_clean_style(Node* repr, SPCSSAttr *css, unsigned int flags) {
   } // End loop over style properties
 
   // Delete unneeded style properties. Do this at the end so as to not perturb List iterator.
-  for( std::set<Glib::ustring>::const_iterator iter_d = toDelete.begin(); iter_d != toDelete.end(); ++iter_d ) {
-    sp_repr_css_set_property( css, (*iter_d).c_str(), nullptr );
+  for(const auto & iter_d : toDelete) {
+    sp_repr_css_set_property( css, iter_d.c_str(), nullptr );
   }
 
 }
@@ -304,8 +303,8 @@ void sp_attribute_purge_default_style(SPCSSAttr *css, unsigned int flags) {
   } // End loop over style properties
 
   // Delete unneeded style properties. Do this at the end so as to not perturb List iterator.
-  for( std::set<Glib::ustring>::const_iterator iter_d = toDelete.begin(); iter_d != toDelete.end(); ++iter_d ) {
-    sp_repr_css_set_property( css, (*iter_d).c_str(), nullptr );
+  for(const auto & iter_d : toDelete) {
+    sp_repr_css_set_property( css, iter_d.c_str(), nullptr );
   }
 
 }

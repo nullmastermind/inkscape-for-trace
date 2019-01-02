@@ -73,14 +73,14 @@ DrawingGroup::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     if (_child_transform) {
         child_ctx.ctm = *_child_transform * ctx.ctm;
     }
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->update(area, child_ctx, flags, reset);
+    for (auto & i : _children) {
+        i.update(area, child_ctx, flags, reset);
     }
     if (beststate & STATE_BBOX) {
         _bbox = Geom::OptIntRect();
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            if (i->visible()) {
-                _bbox.unionWith(outline ? i->geometricBounds() : i->visualBounds());
+        for (auto & i : _children) {
+            if (i.visible()) {
+                _bbox.unionWith(outline ? i.geometricBounds() : i.visualBounds());
             }
         }
     }
@@ -92,23 +92,23 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
 {
     if (stop_at == nullptr) {
         // normal rendering
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            i->setAntialiasing(_antialias);
-            i->render(dc, area, flags, stop_at);
+        for (auto & i : _children) {
+            i.setAntialiasing(_antialias);
+            i.render(dc, area, flags, stop_at);
         }
     } else {
         // background rendering
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            if (&*i == stop_at) return RENDER_OK; // do not render the stop_at item at all
-            if (i->isAncestorOf(stop_at)) {
+        for (auto & i : _children) {
+            if (&i == stop_at) return RENDER_OK; // do not render the stop_at item at all
+            if (i.isAncestorOf(stop_at)) {
                 // render its ancestors without masks, opacity or filters
-                i->setAntialiasing(_antialias);
-                i->render(dc, area, flags | RENDER_FILTER_BACKGROUND, stop_at);
+                i.setAntialiasing(_antialias);
+                i.render(dc, area, flags | RENDER_FILTER_BACKGROUND, stop_at);
                 // stop further rendering
                 return RENDER_OK;
             } else {
-                i->setAntialiasing(_antialias);
-                i->render(dc, area, flags, stop_at);
+                i.setAntialiasing(_antialias);
+                i.render(dc, area, flags, stop_at);
             }
         }
     }
@@ -118,16 +118,16 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
 void
 DrawingGroup::_clipItem(DrawingContext &dc, Geom::IntRect const &area)
 {
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->clip(dc, area);
+    for (auto & i : _children) {
+        i.clip(dc, area);
     }
 }
 
 DrawingItem *
 DrawingGroup::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 {
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        DrawingItem *picked = i->pick(p, delta, flags);
+    for (auto & i : _children) {
+        DrawingItem *picked = i.pick(p, delta, flags);
         if (picked) {
             return _pick_children ? picked : this;
         }

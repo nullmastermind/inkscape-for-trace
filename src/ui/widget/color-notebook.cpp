@@ -289,8 +289,8 @@ void ColorNotebook::_updateICCButtons()
         if (prof && CMSSystem::isPrintColorSpace(prof)) {
             gtk_widget_show(GTK_WIDGET(_box_toomuchink));
             double ink_sum = 0;
-            for (unsigned int i = 0; i < color.icc->colors.size(); i++) {
-                ink_sum += color.icc->colors[i];
+            for (double i : color.icc->colors) {
+                ink_sum += i;
             }
 
             /* Some literature states that when the sum of paint values exceed 320%, it is considered to be a satured

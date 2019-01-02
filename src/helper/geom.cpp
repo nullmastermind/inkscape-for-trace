@@ -154,11 +154,11 @@ bounds_exact_transformed(Geom::PathVector const & pv, Geom::Affine const & t)
     Geom::Point initial = pv.front().initialPoint() * t;
     Geom::Rect bbox(initial, initial);        // obtain well defined bbox as starting point to unionWith
 
-    for (Geom::PathVector::const_iterator it = pv.begin(); it != pv.end(); ++it) {
-        bbox.expandTo(it->initialPoint() * t);
+    for (const auto & it : pv) {
+        bbox.expandTo(it.initialPoint() * t);
 
         // don't loop including closing segment, since that segment can never increase the bbox
-        for (Geom::Path::const_iterator cit = it->begin(); cit != it->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = it.begin(); cit != it.end_open(); ++cit) {
             Geom::Curve const &c = *cit;
 
             unsigned order = 0;
@@ -395,8 +395,8 @@ geom_curve_bbox_wind_distance(Geom::Curve const & c, Geom::Affine const &m,
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
 
         //recurse to convert the new path resulting from the sbasis to svgd
-        for (Geom::Path::iterator iter = sbasis_path.begin(); iter != sbasis_path.end(); ++iter) {
-            geom_curve_bbox_wind_distance(*iter, m, pt, bbox, wind, dist, tolerance, viewbox, p0);
+        for (const auto & iter : sbasis_path) {
+            geom_curve_bbox_wind_distance(iter, m, pt, bbox, wind, dist, tolerance, viewbox, p0);
         }
     }
 }
@@ -423,13 +423,13 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
     Geom::Point p_start(0,0);
     bool start_set = false;
 
-    for (Geom::PathVector::const_iterator it = pathv.begin(); it != pathv.end(); ++it) {
+    for (const auto & it : pathv) {
 
         if (start_set) { // this is a new subpath
             if (wind && (p0 != p_start)) // for correct fill picking, each subpath must be closed
                 geom_line_wind_distance (p0[X], p0[Y], p_start[X], p_start[Y], pt, wind, dist);
         }
-        p0 = it->initialPoint() * m;
+        p0 = it.initialPoint() * m;
         p_start = p0;
         start_set = true;
         if (bbox) {
@@ -437,7 +437,7 @@ pathv_matrix_point_bbox_wind_distance (Geom::PathVector const & pathv, Geom::Aff
         }
 
         // loop including closing segment if path is closed
-        for (Geom::Path::const_iterator cit = it->begin(); cit != it->end_default(); ++cit) {
+        for (Geom::Path::const_iterator cit = it.begin(); cit != it.end_default(); ++cit) {
             geom_curve_bbox_wind_distance(*cit, m, pt, bbox, wind, dist, tolerance, viewbox, p0);
         }
     }
@@ -459,12 +459,12 @@ pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
 {
     Geom::PathVector output;
 
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
+    for (const auto & pit : pathv) {
         output.push_back( Geom::Path() );
         output.back().setStitching(true);
-        output.back().start( pit->initialPoint() );
+        output.back().start( pit.initialPoint() );
 
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 Geom::LineSegment l(cit->initialPoint(), cit->finalPoint());
                 output.back().append(l);
@@ -482,7 +482,7 @@ pathv_to_linear_and_cubic_beziers( Geom::PathVector const &pathv )
             }
         }
         
-        output.back().close( pit->closed() );
+        output.back().close( pit.closed() );
     }
     
     return output;
@@ -557,19 +557,19 @@ pathv_to_cubicbezier( Geom::PathVector const &pathv)
 {
     Geom::PathVector output;
     double cubicGap = 0.01;
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
+    for (const auto & pit : pathv) {
         output.push_back( Geom::Path() );
-        output.back().start( pit->initialPoint() );
-        output.back().close( pit->closed() );
+        output.back().start( pit.initialPoint() );
+        output.back().close( pit.closed() );
         bool end_open = false;
-        if (pit->closed()) {
-            const Geom::Curve &closingline = pit->back_closed();
+        if (pit.closed()) {
+            const Geom::Curve &closingline = pit.back_closed();
             if (!are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 end_open = true;
             }
         }
-        Geom::Path pitCubic = (Geom::Path)(*pit);
-        if(end_open && pit->closed()){
+        Geom::Path pitCubic = (Geom::Path)pit;
+        if(end_open && pit.closed()){
             pitCubic.close(false);
             pitCubic.appendNew<Geom::LineSegment>( pitCubic.initialPoint() );
             pitCubic.close(true);

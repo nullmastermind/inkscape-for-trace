@@ -183,7 +183,7 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
         while (fgets(tempstr, 1024, gradient) != nullptr) {
             double dbls[3 + 4 + 4];
             gchar *p = tempstr;
-            for (unsigned i = 0; i < G_N_ELEMENTS(dbls); ++i) {
+            for (double & dbl : dbls) {
                 gchar *end = nullptr;
                 double const xi = g_ascii_strtod(p, &end);
                 if (!end || end == p || !g_ascii_isspace(*end)) {
@@ -192,7 +192,7 @@ GimpGrad::open (Inkscape::Extension::Input */*module*/, gchar const *filename)
                 if (xi < 0 || 1 < xi) {
                     goto error;
                 }
-                dbls[i] = xi;
+                dbl = xi;
                 p = end + 1;
             }
 

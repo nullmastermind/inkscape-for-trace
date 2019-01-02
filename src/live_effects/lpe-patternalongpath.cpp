@@ -184,8 +184,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > paths_in;
         paths_in = split_at_discontinuities(pwd2_in);
 
-        for (unsigned idx = 0; idx < paths_in.size(); idx++){
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > path_i = paths_in[idx];
+        for (auto path_i : paths_in){
             Piecewise<SBasis> x = x0;
             Piecewise<SBasis> y = y0;
             Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2, 0.1);
@@ -257,8 +256,8 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         }
         if (fuse_tolerance > 0){
             pre_output = fuse_nearby_ends(pre_output, fuse_tolerance);
-            for (unsigned i=0; i<pre_output.size(); i++){
-                output.concat(pre_output[i]);
+            for (const auto & i : pre_output){
+                output.concat(i);
             }
         }
         return output;

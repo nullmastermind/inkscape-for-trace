@@ -841,8 +841,8 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
     }
 
     // Unparent (delete)
-    for (unsigned int i = 0; i < delete_list.size(); i++) {
-        sp_repr_unparent(delete_list[i]);
+    for (auto & i : delete_list) {
+        sp_repr_unparent(i);
     }
     attribs.clear();
     oldroot->mergeFrom(newroot, "id", true, true);

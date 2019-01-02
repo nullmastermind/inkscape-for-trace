@@ -405,8 +405,7 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
         std::vector<Piecewise<D2<SBasis> > > paths_in;
         paths_in = split_at_discontinuities(pwd2_in);
 
-        for (unsigned idx = 0; idx < paths_in.size(); idx++) {
-            Piecewise<D2<SBasis> > path_i = paths_in[idx];
+        for (auto path_i : paths_in) {
             Piecewise<SBasis> x = x0;
             Piecewise<SBasis> y = y0;
             Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2,.1);

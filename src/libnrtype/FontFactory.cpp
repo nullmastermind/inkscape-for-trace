@@ -461,8 +461,8 @@ void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
 
     std::sort(sorted.begin(), sorted.end(), ustringPairSort);
     
-    for (size_t i = 0; i < sorted.size(); ++i) {
-        out.push_back(sorted[i].first);
+    for (auto & i : sorted) {
+        out.push_back(i.first);
     }
 }
 

@@ -498,8 +498,8 @@ SpellCheck::nextWord()
     // skip words containing digits
     if (_prefs->getInt(_prefs_path + "ignorenumbers") != 0) {
         bool digits = false;
-        for (unsigned int i = 0; i < _word.size(); i++) {
-            if (g_unichar_isdigit(_word[i])) {
+        for (unsigned int i : _word) {
+            if (g_unichar_isdigit(i)) {
                digits = true;
                break;
             }
@@ -512,8 +512,8 @@ SpellCheck::nextWord()
     // skip ALL-CAPS words 
     if (_prefs->getInt(_prefs_path + "ignoreallcaps") != 0) {
         bool allcaps = true;
-        for (unsigned int i = 0; i < _word.size(); i++) {
-            if (!g_unichar_isupper(_word[i])) {
+        for (unsigned int i : _word) {
+            if (!g_unichar_isupper(i)) {
                allcaps = false;
                break;
             }
@@ -564,15 +564,15 @@ SpellCheck::nextWord()
         if (points.size() >= 4) { // we may not have a single quad if this is a clipped part of text on path; in that case skip drawing the rect
             Geom::Point tl, br;
             tl = br = points.front();
-            for (unsigned i = 0 ; i < points.size() ; i ++) {
-                if (points[i][Geom::X] < tl[Geom::X])
-                    tl[Geom::X] = points[i][Geom::X];
-                if (points[i][Geom::Y] < tl[Geom::Y])
-                    tl[Geom::Y] = points[i][Geom::Y];
-                if (points[i][Geom::X] > br[Geom::X])
-                    br[Geom::X] = points[i][Geom::X];
-                if (points[i][Geom::Y] > br[Geom::Y])
-                    br[Geom::Y] = points[i][Geom::Y];
+            for (auto & point : points) {
+                if (point[Geom::X] < tl[Geom::X])
+                    tl[Geom::X] = point[Geom::X];
+                if (point[Geom::Y] < tl[Geom::Y])
+                    tl[Geom::Y] = point[Geom::Y];
+                if (point[Geom::X] > br[Geom::X])
+                    br[Geom::X] = point[Geom::X];
+                if (point[Geom::Y] > br[Geom::Y])
+                    br[Geom::Y] = point[Geom::Y];
             }
 
             // expand slightly

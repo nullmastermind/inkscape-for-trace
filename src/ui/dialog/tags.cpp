@@ -239,8 +239,7 @@ bool TagsPanel::_executeAction()
             {
                 std::vector<SPObject *> todelete;
                 _tree.get_selection()->selected_foreach_iter(sigc::bind<std::vector<SPObject *>*>(sigc::mem_fun(*this, &TagsPanel::_checkForDeleted), &todelete));
-                for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
-                    SPObject * obj = *iter;
+                for (auto obj : todelete) {
                     if (obj && obj->parent && obj->getRepr() && obj->parent->getRepr()) {
                         //obj->parent->getRepr()->removeChild(obj->getRepr());
                         obj->deleteObject(true, true);
@@ -501,14 +500,14 @@ void TagsPanel::_checkTreeSelection()
 //    }
 
 
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( sensitive );
+    for (auto & it : _watching) {
+        it->set_sensitive( sensitive );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonTop );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( sensitiveNonTop );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonBottom );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( sensitiveNonBottom );
     }
 }
 
@@ -537,8 +536,7 @@ bool TagsPanel::_handleKeyEvent(GdkEventKey *event)
             std::vector<SPObject *> todelete;
             _tree.get_selection()->selected_foreach_iter(sigc::bind<std::vector<SPObject *>*>(sigc::mem_fun(*this, &TagsPanel::_checkForDeleted), &todelete));
             if (!todelete.empty()) {
-                for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
-                    SPObject * obj = *iter;
+                for (auto obj : todelete) {
                     if (obj && obj->parent && obj->getRepr() && obj->parent->getRepr()) {
                         //obj->parent->getRepr()->removeChild(obj->getRepr());
                         obj->deleteObject(true, true);
@@ -652,8 +650,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                             // FIXME unnecessary use of XML tree
                             _tree.get_selection()->selected_foreach_iter(sigc::bind<std::vector<SPObject *>*>(sigc::mem_fun(*this, &TagsPanel::_checkForDeleted), &todelete));
                             if (!todelete.empty()) {
-                                for (std::vector<SPObject *>::iterator iter = todelete.begin(); iter != todelete.end(); ++iter) {
-                                    SPObject * tobj = *iter;
+                                for (auto tobj : todelete) {
                                     if (tobj && tobj->parent && tobj->getRepr() && tobj->parent->getRepr()) {
                                         //tobj->parent->getRepr()->removeChild(tobj->getRepr());
                                         tobj->deleteObject(true, true);
@@ -788,9 +785,8 @@ bool TagsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*context*
 void TagsPanel::_doTreeMove( )
 {
     if (_dnd_target) {
-        for (std::vector<SPTag *>::iterator iter = _dnd_source.begin(); iter != _dnd_source.end(); ++iter)
+        for (auto src : _dnd_source)
         {
-            SPTag *src = *iter;
             if (src != _dnd_target) {
                 src->moveTo(_dnd_target, _dnd_into);
             }
@@ -1009,14 +1005,14 @@ TagsPanel::TagsPanel() :
 
 
 
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watching) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( false );
     }
 
     setDesktop( targetDesktop );

@@ -99,8 +99,8 @@ void TemplateLoadTab::_initKeywordsList()
 {
     _keywords_combo.append(_("All"));
 
-    for (std::set<Glib::ustring>::iterator it = _keywords.begin() ; it != _keywords.end() ; ++it){
-        _keywords_combo.append(*it);
+    for (const auto & _keyword : _keywords){
+        _keywords_combo.append(_keyword);
     }
 }
 
@@ -147,36 +147,36 @@ void TemplateLoadTab::_refreshTemplatesList()
 
     switch (_current_search_type){
     case ALL :{
-        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
+        for (auto & it : _tdata) {
             Gtk::TreeModel::iterator iter = _tlist_store->append();
             Gtk::TreeModel::Row row = *iter;
-            row[_columns.textValue]  = it->first;
+            row[_columns.textValue]  = it.first;
         }
         break;
     }
 
     case LIST_KEYWORD: {
-        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-            if (it->second.keywords.count(_current_keyword.lowercase()) != 0){
+        for (auto & it : _tdata) {
+            if (it.second.keywords.count(_current_keyword.lowercase()) != 0){
                 Gtk::TreeModel::iterator iter = _tlist_store->append();
                 Gtk::TreeModel::Row row = *iter;
-                row[_columns.textValue]  = it->first;
+                row[_columns.textValue]  = it.first;
             }
         }
         break;
     }
 
     case USER_SPECIFIED : {
-        for (std::map<Glib::ustring, TemplateData>::iterator it = _tdata.begin() ; it != _tdata.end() ; ++it) {
-            if (it->second.keywords.count(_current_keyword.lowercase()) != 0 ||
-                it->second.display_name.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
-                it->second.author.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
-                it->second.short_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
-                it->second.long_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos )
+        for (auto & it : _tdata) {
+            if (it.second.keywords.count(_current_keyword.lowercase()) != 0 ||
+                it.second.display_name.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it.second.author.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it.second.short_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos ||
+                it.second.long_description.lowercase().find(_current_keyword.lowercase()) != Glib::ustring::npos )
             {
                 Gtk::TreeModel::iterator iter = _tlist_store->append();
                 Gtk::TreeModel::Row row = *iter;
-                row[_columns.textValue]  = it->first;
+                row[_columns.textValue]  = it.first;
             }
         }
         break;

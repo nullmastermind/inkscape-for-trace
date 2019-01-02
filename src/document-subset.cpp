@@ -130,12 +130,11 @@ struct DocumentSubset::Relations : public GC::Managed<GC::ATOMIC>,
     Relations() { records[nullptr]; }
 
     ~Relations() override {
-        for ( Map::iterator iter=records.begin()
-            ; iter != records.end() ; ++iter )
+        for (auto & iter : records)
         {
-            if ((*iter).first) {
-                sp_object_unref((*iter).first);
-                Record &record=(*iter).second;
+            if (iter.first) {
+                sp_object_unref(iter.first);
+                Record &record=iter.second;
                 record.release_connection.disconnect();
                 record.position_changed_connection.disconnect();
             }
@@ -199,10 +198,9 @@ private:
         Record *record=get(obj);
         if (record) {
             Siblings &children=record->children;
-            for ( Siblings::iterator iter=children.begin()
-                ; iter != children.end() ; ++iter )
+            for (auto & iter : children)
             {
-                _doRemoveSubtree(*iter);
+                _doRemoveSubtree(iter);
             }
             _doRemove(obj);
         }
@@ -248,10 +246,9 @@ void DocumentSubset::Relations::addOne(SPObject *obj) {
         std::back_insert_iterator<Siblings>(children),
         obj
     );
-    for ( Siblings::iterator iter=children.begin()
-        ; iter != children.end() ; ++iter )
+    for (auto & iter : children)
     {
-        Record *child_record=get(*iter);
+        Record *child_record=get(iter);
         g_assert( child_record != nullptr );
         child_record->parent = obj;
     }
@@ -283,10 +280,9 @@ void DocumentSubset::Relations::remove(SPObject *obj, bool subtree) {
         siblings.insert(siblings.begin()+index,
                         children.begin(), children.end());
 
-        for ( Siblings::iterator iter=children.begin()
-            ; iter != children.end() ; ++iter)
+        for (auto & iter : children)
         {
-            Record *child_record=get(*iter);
+            Record *child_record=get(iter);
             g_assert( child_record != nullptr );
             child_record->parent = record->parent;
         }

@@ -37,14 +37,14 @@ TEST(DirUtilTest, Base)
 #endif
     };
 
-    for ( size_t i = 0; i < G_N_ELEMENTS(cases); i++ )
+    for (auto & i : cases)
     {
-        if ( cases[i][0] && cases[i][1] ) { // std::string can't use null.
-            std::string  result = sp_relative_path_from_path( cases[i][0], cases[i][1] );
+        if ( i[0] && i[1] ) { // std::string can't use null.
+            std::string  result = sp_relative_path_from_path( i[0], i[1] );
             ASSERT_FALSE( result.empty() );
             if ( !result.empty() )
             {
-                ASSERT_EQ( std::string(cases[i][2]), result );
+                ASSERT_EQ( std::string(i[2]), result );
             }
         }
     }

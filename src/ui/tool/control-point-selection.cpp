@@ -136,8 +136,8 @@ void ControlPointSelection::clear()
 /** Select all points that this selection can contain. */
 void ControlPointSelection::selectAll()
 {
-    for (set_type::iterator i = _all_points.begin(); i != _all_points.end(); ++i) {
-        insert(*i, false);
+    for (auto _all_point : _all_points) {
+        insert(_all_point, false);
     }
     std::vector<SelectableControlPoint *> out(_all_points.begin(), _all_points.end());
     if (!out.empty())
@@ -147,10 +147,10 @@ void ControlPointSelection::selectAll()
 void ControlPointSelection::selectArea(Geom::Rect const &r)
 {
     std::vector<SelectableControlPoint *> out;
-    for (set_type::iterator i = _all_points.begin(); i != _all_points.end(); ++i) {
-        if (r.contains(**i)) {
-            insert(*i, false);
-            out.push_back(*i);
+    for (auto _all_point : _all_points) {
+        if (r.contains(*_all_point)) {
+            insert(_all_point, false);
+            out.push_back(_all_point);
         }
     }
     if (!out.empty())
@@ -160,14 +160,14 @@ void ControlPointSelection::selectArea(Geom::Rect const &r)
 void ControlPointSelection::invertSelection()
 {
     std::vector<SelectableControlPoint *> in, out;
-    for (set_type::iterator i = _all_points.begin(); i != _all_points.end(); ++i) {
-        if ((*i)->selected()) {
-            in.push_back(*i);
-            erase(*i); 
+    for (auto _all_point : _all_points) {
+        if (_all_point->selected()) {
+            in.push_back(_all_point);
+            erase(_all_point); 
         }
         else {
-            out.push_back(*i);
-            insert(*i, false); 
+            out.push_back(_all_point);
+            insert(_all_point, false); 
         }
     }
     if (!in.empty())
@@ -181,21 +181,21 @@ void ControlPointSelection::spatialGrow(SelectableControlPoint *origin, int dir)
     Geom::Point p = origin->position();
     double best_dist = grow ? HUGE_VAL : 0;
     SelectableControlPoint *match = nullptr;
-    for (set_type::iterator i = _all_points.begin(); i != _all_points.end(); ++i) {
-        bool selected = (*i)->selected();
+    for (auto _all_point : _all_points) {
+        bool selected = _all_point->selected();
         if (grow && !selected) {
-            double dist = Geom::distance((*i)->position(), p);
+            double dist = Geom::distance(_all_point->position(), p);
             if (dist < best_dist) {
                 best_dist = dist;
-                match = *i;
+                match = _all_point;
             }
         }
         if (!grow && selected) {
-            double dist = Geom::distance((*i)->position(), p);
+            double dist = Geom::distance(_all_point->position(), p);
             // use >= to also deselect the origin node when it's the last one selected
             if (dist >= best_dist) {
                 best_dist = dist;
-                match = *i;
+                match = _all_point;
             }
         }
     }
@@ -209,8 +209,7 @@ void ControlPointSelection::spatialGrow(SelectableControlPoint *origin, int dir)
 /** Transform all selected control points by the given affine transformation. */
 void ControlPointSelection::transform(Geom::Affine const &m)
 {
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        SelectableControlPoint *cur = *i;
+    for (auto cur : _points) {
         cur->transform(m);
     }
     _updateBounds();
@@ -230,8 +229,8 @@ void ControlPointSelection::align(Geom::Dim2 axis)
 
 
     Geom::OptInterval bound;
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        bound.unionWith(Geom::OptInterval((*i)->position()[d]));
+    for (auto _point : _points) {
+        bound.unionWith(Geom::OptInterval(_point->position()[d]));
     }
 
     if (!bound) { return; }
@@ -257,10 +256,10 @@ void ControlPointSelection::align(Geom::Dim2 axis)
             return;
     }
 
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        Geom::Point pos = (*i)->position();
+    for (auto _point : _points) {
+        Geom::Point pos = _point->position();
         pos[d] = new_coord;
-        (*i)->move(pos);
+        _point->move(pos);
     }
 }
 
@@ -276,9 +275,9 @@ void ControlPointSelection::distribute(Geom::Dim2 d)
     Geom::OptInterval bound;
     // first we insert all points into a multimap keyed by the aligned coord to sort them
     // simultaneously we compute the extent of selection
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        Geom::Point pos = (*i)->position();
-        sm.insert(std::make_pair(pos[d], (*i)));
+    for (auto _point : _points) {
+        Geom::Point pos = _point->position();
+        sm.insert(std::make_pair(pos[d], _point));
         bound.unionWith(Geom::OptInterval(pos[d]));
     }
 
@@ -345,13 +344,13 @@ void ControlPointSelection::_pointGrabbed(SelectableControlPoint *point)
     double maxdist = 0;
     Geom::Affine m;
     m.setIdentity();
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        _original_positions.insert(std::make_pair(*i, (*i)->position()));
-        _last_trans.insert(std::make_pair(*i, m));
-        double dist = Geom::distance(*_grabbed_point, **i);
+    for (auto _point : _points) {
+        _original_positions.insert(std::make_pair(_point, _point->position()));
+        _last_trans.insert(std::make_pair(_point, m));
+        double dist = Geom::distance(*_grabbed_point, *_point);
         if (dist > maxdist) {
             maxdist = dist;
-            _farthest_point = *i;
+            _farthest_point = _point;
         }
     }
 }
@@ -362,8 +361,7 @@ void ControlPointSelection::_pointDragged(Geom::Point &new_pos, GdkEventMotion *
     double fdist = Geom::distance(_original_positions[_grabbed_point], _original_positions[_farthest_point]);
     if (held_only_alt(*event) && fdist > 0) {
         // Sculpting
-        for (iterator i = _points.begin(); i != _points.end(); ++i) {
-            SelectableControlPoint *cur = (*i);
+        for (auto cur : _points) {
             Geom::Affine trans;
             trans.setIdentity();
             double dist = Geom::distance(_original_positions[cur], _original_positions[_grabbed_point]);
@@ -410,8 +408,7 @@ void ControlPointSelection::_pointDragged(Geom::Point &new_pos, GdkEventMotion *
         }
     } else {
         Geom::Point delta = new_pos - _grabbed_point->position();
-        for (iterator i = _points.begin(); i != _points.end(); ++i) {
-            SelectableControlPoint *cur = (*i);
+        for (auto cur : _points) {
             cur->move(_original_positions[cur] + abs_delta);
         }
         _handles->rotationCenter().move(_handles->rotationCenter().position() + delta);
@@ -461,8 +458,7 @@ void ControlPointSelection::_updateBounds()
 {
     _rot_radius = boost::none;
     _bounds = Geom::OptRect();
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        SelectableControlPoint *cur = (*i);
+    for (auto cur : _points) {
         Geom::Point p = cur->position();
         if (!_bounds) {
             _bounds = Geom::Rect(p, p);
@@ -719,8 +715,8 @@ bool ControlPointSelection::event(Inkscape::UI::Tools::ToolBase * /*event_contex
 void ControlPointSelection::getOriginalPoints(std::vector<Inkscape::SnapCandidatePoint> &pts)
 {
     pts.clear();
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        pts.emplace_back(_original_positions[*i], SNAPSOURCE_NODE_HANDLE);
+    for (auto _point : _points) {
+        pts.emplace_back(_original_positions[_point], SNAPSOURCE_NODE_HANDLE);
     }
 }
 
@@ -728,9 +724,9 @@ void ControlPointSelection::getUnselectedPoints(std::vector<Inkscape::SnapCandid
 {
     pts.clear();
     ControlPointSelection::Set &nodes = this->allPoints();
-    for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-        if (!(*i)->selected()) {
-            Node *n = static_cast<Node*>(*i);
+    for (auto node : nodes) {
+        if (!node->selected()) {
+            Node *n = static_cast<Node*>(node);
             pts.push_back(n->snapCandidatePoint());
         }
     }
@@ -739,8 +735,8 @@ void ControlPointSelection::getUnselectedPoints(std::vector<Inkscape::SnapCandid
 void ControlPointSelection::setOriginalPoints()
 {
     _original_positions.clear();
-    for (iterator i = _points.begin(); i != _points.end(); ++i) {
-        _original_positions.insert(std::make_pair(*i, (*i)->position()));
+    for (auto _point : _points) {
+        _original_positions.insert(std::make_pair(_point, _point->position()));
     }
 }
 

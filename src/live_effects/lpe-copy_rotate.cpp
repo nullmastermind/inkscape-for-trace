@@ -200,10 +200,9 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
-        for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
-             obj_it != childs.end(); ++obj_it) {
+        for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, transform, reset); 
+            cloneD(child, dest_child, transform, reset); 
             index++;
         }
         return;
@@ -251,8 +250,7 @@ LPECopyRotate::createPathBase(SPObject *elemref) {
         container->setAttribute("transform", prev->attribute("transform"));
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         Inkscape::XML::Node *previous = nullptr;
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPObject *sub_item = *iter;
+        for (auto sub_item : item_list) {
             Inkscape::XML::Node *resultnode = createPathBase(sub_item);
             container->addChild(resultnode, previous);
             previous = resultnode;
@@ -427,12 +425,11 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
     int position = 0;
     Geom::Crossings cs = crossings(original,divider);
     std::vector<double> crossed;
-    for(unsigned int i = 0; i < cs.size(); i++) {
-        crossed.push_back(cs[i].ta);
+    for(auto & c : cs) {
+        crossed.push_back(c.ta);
     }
     std::sort(crossed.begin(), crossed.end());
-    for (unsigned int i = 0; i < crossed.size(); i++) {
-        double time_end = crossed[i];
+    for (double time_end : crossed) {
         if (time_start == time_end || time_end - time_start < Geom::EPSILON) {
             continue;
         }

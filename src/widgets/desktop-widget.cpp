@@ -197,8 +197,8 @@ void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint /*monitor*/, C
 void CMSPrefWatcher::_refreshAll()
 {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    for ( std::list<SPDesktopWidget*>::iterator it = _widget_list.begin(); it != _widget_list.end(); ++it ) {
-        (*it)->requestCanvasUpdate();
+    for (auto & it : _widget_list) {
+        it->requestCanvasUpdate();
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 }

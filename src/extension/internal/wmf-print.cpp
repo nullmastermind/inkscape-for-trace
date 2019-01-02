@@ -833,9 +833,9 @@ unsigned int PrintWmf::fill(
             Dashes converted to line segments will "open" a closed path.
         */
         bool all_closed = true;
-        for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
-            for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
-                if (pit->end_default() != pit->end_closed()) {
+        for (const auto & pit : pathv) {
+            for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
+                if (pit.end_default() != pit.end_closed()) {
                     all_closed = false;
                 }
             }
@@ -881,8 +881,8 @@ unsigned int PrintWmf::stroke(
         double tlength;                                       // length of tmp_pathpw
         double slength = 0.0;                                 // start of gragment
         double elength;                                       // end of gragment
-        for (unsigned int i = 0; i < pathv.size(); i++) {
-            tmp_pathpw.concat(pathv[i].toPwSb());
+        for (const auto & i : pathv) {
+            tmp_pathpw.concat(i.toPwSb());
         }
         tlength = length(tmp_pathpw, 0.1);
         tmp_pathpw2 = arc_length_parametrization(tmp_pathpw);

@@ -1128,8 +1128,8 @@ void SelectedStyle::opacity_1() {_opacity_sb.set_value(100);}
 void SelectedStyle::on_opacity_menu (Gtk::Menu *menu) {
 
     Glib::ListHandle<Gtk::Widget *> children = menu->get_children();
-    for (Glib::ListHandle<Gtk::Widget *>::iterator iter = children.begin(); iter != children.end(); ++iter) {
-        menu->remove(*(*iter));
+    for (auto iter : children) {
+        menu->remove(*iter);
     }
 
     {

@@ -109,12 +109,12 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         if (it != gchar_map_to_satellite_type.end()) {
             satellite_type = it->second;
         }
-        for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it !=  pathv.end(); ++path_it) {
-            if (path_it->empty()) {
+        for (const auto & path_it : pathv) {
+            if (path_it.empty()) {
                 continue;
             }
             std::vector<Satellite> subpath_satellites;
-            for (Geom::Path::const_iterator curve_it = path_it->begin(); curve_it !=  path_it->end(); ++curve_it) {
+            for (Geom::Path::const_iterator curve_it = path_it.begin(); curve_it !=  path_it.end(); ++curve_it) {
                 //Maybe we want this satellites...
                 //if (curve_it->isDegenerate()) {
                 //  continue 
@@ -131,7 +131,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             //so maybe in the future we can need this last satellite in other effects
             //don't remove for this effect because _pathvector_satellites class has methods when the path is modified
             //and we want one method for all uses
-            if (!path_it->closed()) {
+            if (!path_it.closed()) {
                 Satellite satellite(satellite_type);
                 satellite.setSteps(chamfer_steps);
                 satellite.setAmount(power);

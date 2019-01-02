@@ -36,8 +36,8 @@ public:
 
     SPMarkerView() = default;;
     ~SPMarkerView() {
-        for (unsigned int i = 0; i < items.size(); ++i) {
-            delete items[i];
+        for (auto & item : items) {
+            delete item;
         }
         items.clear();
     }
@@ -218,9 +218,9 @@ void SPMarker::update(SPCtx *ctx, guint flags) {
     // As last step set additional transform of drawing group
     std::map<unsigned int, SPMarkerView>::iterator it;
     for (it = views_map.begin(); it != views_map.end(); ++it) {
-        for (unsigned i = 0 ; i < it->second.items.size() ; ++i) {
-            if (it->second.items[i]) {
-                Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(it->second.items[i]);
+        for (auto & item : it->second.items) {
+            if (item) {
+                Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(item);
                 g->setChildTransform(this->c2p);
             }
         }

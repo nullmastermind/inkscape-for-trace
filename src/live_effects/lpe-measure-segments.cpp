@@ -740,8 +740,8 @@ std::vector< Point >
 transformNodes(std::vector< Point > nodes, Geom::Affine transform)
 {
     std::vector< Point > result;
-    for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
-        Geom::Point point = (*iter);
+    for (auto & node : nodes) {
+        Geom::Point point = node;
         result.push_back(point * transform);
     }
     return result;
@@ -758,8 +758,7 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
     //TODO handle clones/use
     if (group) {
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *sub_item = *iter;
+        for (auto sub_item : item_list) {
             std::vector< Point > nodes = transformNodes(getNodes(sub_item, sub_item->transform, onbbox, centers, bboxonly), transform);
             current_nodes.insert(current_nodes.end(), nodes.begin(), nodes.end());
         }
@@ -849,8 +848,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::OptRect bbox = sp_lpe_item->geometricBounds(sp_lpe_item->transform);
             Geom::Point pojpoint = Geom::Point();
             double maxdistance = -std::numeric_limits<double>::max();
-            for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
-                Geom::Point point = (*iter);
+            for (auto & node : nodes) {
+                Geom::Point point = node;
                 point *= Geom::Translate(mid).inverse();
                 point *= Geom::Rotate(angle).inverse();
                 point *= Geom::Translate(mid);
@@ -858,9 +857,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     maxdistance = point[Geom::X];
                 }
             }
-            for (std::vector<ItemAndActive*>::iterator iter = linked_items._vector.begin(); iter != linked_items._vector.end(); ++iter) {
+            for (auto & iter : linked_items._vector) {
                 SPObject *obj;
-                if ((*iter)->ref.isAttached() &&  (*iter)->actived && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj)) {
+                if (iter->ref.isAttached() &&  iter->actived && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj)) {
                     SPItem * item = dynamic_cast<SPItem *>(obj);
                     if (item) {
                         Geom::Affine affinetransform_sub = i2anc_affine(SP_OBJECT(item), SP_OBJECT(document->getRoot()));
@@ -874,8 +873,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 }
             }
 
-            for ( std::vector<Point>::iterator iter = nodes.begin(); iter != nodes.end(); ++iter ) {
-                Geom::Point point = (*iter);
+            for (auto & node : nodes) {
+                Geom::Point point = node;
                 double dproj = Inkscape::Util::Quantity::convert(distance_projection, display_unit.c_str(), unit.get_abbreviation());
                 Geom::Coord xpos = maxdistance + dproj;
                 result.emplace_back(xpos, point[Geom::Y]);
@@ -885,8 +884,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Point prevpoint(0,0);
             size_t counter = 0;
             bool started = false;
-            for ( std::vector<Point>::iterator iter = result.begin(); iter != result.end(); ++iter ) {
-                Geom::Point point = (*iter);
+            for (auto & iter : result) {
+                Geom::Point point = iter;
                 if (Geom::are_near(prevpoint, point)){
                     continue;
                 }

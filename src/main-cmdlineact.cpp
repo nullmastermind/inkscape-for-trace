@@ -92,8 +92,7 @@ CmdLineAction::doIt (ActionContext const & context) {
 bool
 CmdLineAction::doList (ActionContext const & context) {
     bool hasActions = !_list.empty();
-    for (std::list<CmdLineAction *>::iterator i = _list.begin(); i != _list.end(); ++i) {
-        CmdLineAction * entry = *i;
+    for (auto entry : _list) {
         entry->doIt(context);
     }
     return hasActions;
@@ -106,9 +105,7 @@ CmdLineAction::idle () {
 
     // We're going to assume one desktop per document, because no one
     // should have had time to make more at this point.
-    for (std::list<SPDesktop *>::iterator i = desktops.begin();
-            i != desktops.end(); ++i) {
-        SPDesktop * desktop = *i;
+    for (auto desktop : desktops) {
         //Inkscape::UI::View::View * view = dynamic_cast<Inkscape::UI::View::View *>(desktop);    
         doList(ActionContext(desktop));
     }

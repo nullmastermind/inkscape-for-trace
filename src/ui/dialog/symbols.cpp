@@ -393,8 +393,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
 SymbolsDialog::~SymbolsDialog()
 {
-  for (std::vector<sigc::connection>::iterator it =  instanceConns.begin(); it != instanceConns.end(); ++it) {
-      it->disconnect();
+  for (auto & instanceConn : instanceConns) {
+      instanceConn.disconnect();
   }
   idleconn.disconnect();
   instanceConns.clear();

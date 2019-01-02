@@ -333,11 +333,11 @@ PathVector LPEEmbroderyStitch::doEffect_path(PathVector const &path_in)
             }
 
             if (show_stitches) {
-                for (std::vector< D2<SBasis> >::iterator it = pwStitch.segs.begin(); it != pwStitch.segs.end(); ++it) {
+                for (auto & seg : pwStitch.segs) {
                     // Create  anew piecewise with just one segment
                     Piecewise<D2<SBasis> > pwOne;
                     pwOne.push_cut(0);
-                    pwOne.push_seg(*it);
+                    pwOne.push_seg(seg);
                     pwOne.push_cut(1);
 
                     // make piecewise equidistant in time
@@ -360,11 +360,11 @@ PathVector LPEEmbroderyStitch::doEffect_path(PathVector const &path_in)
                 }
             } else {
                 PathVector pathv = path_from_piecewise(pwStitch, LPE_CONVERSION_TOLERANCE);
-                for (size_t ipv = 0; ipv < pathv.size(); ipv++) {
+                for (const auto & ipv : pathv) {
                     if (connect_with_previous) {
-                        path_out.back().append(pathv[ipv]);
+                        path_out.back().append(ipv);
                     } else {
-                        path_out.push_back(pathv[ipv]);
+                        path_out.push_back(ipv);
                     }
                 }
             }

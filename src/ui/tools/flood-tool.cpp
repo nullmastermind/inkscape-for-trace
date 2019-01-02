@@ -392,8 +392,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     double offset = prefs->getDouble("/tools/paintbucket/offset", 0.0);
 
-    for (unsigned int i=0 ; i<results.size() ; i++) {
-        Inkscape::Trace::TracingEngineResult result = results[i];
+    for (auto result : results) {
         totalNodeCount += result.getNodeCount();
 
         Inkscape::XML::Node *pathRepr = xml_doc->createElement("svg:path");

@@ -200,8 +200,7 @@ std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Gli
         // CSS font fallbacks can have more that one font listed, split the font list
         std::vector<Glib::ustring> vFonts = Glib::Regex::split_simple("," , fonts);
         bool fontFound = false;
-        for(size_t i=0; i<vFonts.size(); i++) {
-            Glib::ustring font = vFonts[i];
+        for(auto font : vFonts) {
             // trim whitespace
             size_t startpos = font.find_first_not_of(" \n\r\t");
             size_t endpos = font.find_last_not_of(" \n\r\t");

@@ -30,8 +30,8 @@ bool UnitMenu::setUnitType(UnitType unit_type)
     // Expand the unit widget with unit entries from the unit table
     UnitTable::UnitMap m = unit_table.units(unit_type);
 
-    for (UnitTable::UnitMap::iterator i = m.begin(); i != m.end(); ++i) {
-        append(i->first);
+    for (auto & i : m) {
+        append(i.first);
     }
     _type = unit_type;
     set_active_text(unit_table.primary(unit_type));

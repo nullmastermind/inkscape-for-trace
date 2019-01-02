@@ -480,14 +480,14 @@ void LayersPanel::_checkTreeSelection()
     }
 
 
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( sensitive );
+    for (auto & it : _watching) {
+        it->set_sensitive( sensitive );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonTop );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( sensitiveNonTop );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( sensitiveNonBottom );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( sensitiveNonBottom );
     }
 }
 
@@ -927,14 +927,14 @@ LayersPanel::LayersPanel() :
 
 
 
-    for ( std::vector<Gtk::Widget*>::iterator it = _watching.begin(); it != _watching.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watching) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonTop.begin(); it != _watchingNonTop.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonTop) {
+        it->set_sensitive( false );
     }
-    for ( std::vector<Gtk::Widget*>::iterator it = _watchingNonBottom.begin(); it != _watchingNonBottom.end(); ++it ) {
-        (*it)->set_sensitive( false );
+    for (auto & it : _watchingNonBottom) {
+        it->set_sensitive( false );
     }
 
     setDesktop( targetDesktop );

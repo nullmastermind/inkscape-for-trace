@@ -111,9 +111,9 @@ IconPreviewPanel::IconPreviewPanel() :
     std::vector<Glib::ustring> pref_sizes = prefs->getAllDirs("/iconpreview/sizes/default");
     std::vector<int> rawSizes;
 
-    for (std::vector<Glib::ustring>::iterator i = pref_sizes.begin(); i != pref_sizes.end(); ++i) {
-        if (prefs->getBool(*i + "/show", true)) {
-            int sizeVal = prefs->getInt(*i + "/value", -1);
+    for (auto & pref_size : pref_sizes) {
+        if (prefs->getBool(pref_size + "/show", true)) {
+            int sizeVal = prefs->getInt(pref_size + "/value", -1);
             if (sizeVal > 0) {
                 rawSizes.push_back(sizeVal);
             }

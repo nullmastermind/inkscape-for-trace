@@ -70,8 +70,8 @@ SnapManager::SnapperList SnapManager::getGridSnappers() const
     SnapperList s;
 
     if (_desktop && _desktop->gridsEnabled() && snapprefs.isTargetSnappable(Inkscape::SNAPTARGET_GRID)) {
-        for(std::vector<Inkscape::CanvasGrid *>::const_iterator it = _named_view->grids.begin(); it != _named_view->grids.end(); ++it) {
-            s.push_back((*it)->snapper);
+        for(auto grid : _named_view->grids) {
+            s.push_back(grid->snapper);
         }
     }
 
@@ -132,8 +132,8 @@ Inkscape::SnappedPoint SnapManager::freeSnap(Inkscape::SnapCandidatePoint const 
     IntermSnapResults isr;
     SnapperList const snappers = getSnappers();
 
-    for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-        (*i)->freeSnap(isr, p, bbox_to_snap, &_items_to_ignore, _unselected_nodes);
+    for (auto snapper : snappers) {
+        snapper->freeSnap(isr, p, bbox_to_snap, &_items_to_ignore, _unselected_nodes);
     }
 
     return findBestSnap(p, isr, false, false, to_paths_only);
@@ -173,8 +173,7 @@ Geom::Point SnapManager::multipleOfGridPitch(Geom::Point const &t, Geom::Point c
 
         // Cannot use getGridSnappers() because we need both the grids AND their snappers
         // Therefore we iterate through all grids manually
-        for (std::vector<Inkscape::CanvasGrid *>::const_iterator it = _named_view->grids.begin(); it != _named_view->grids.end(); ++it) {
-            Inkscape::CanvasGrid *grid = (*it); 
+        for (auto grid : _named_view->grids) {
             const Inkscape::Snapper* snapper = grid->snapper;
             if (snapper && snapper->ThisSnapperMightSnap()) {
                 // To find the nearest multiple of the grid pitch for a given translation t, we
@@ -257,8 +256,8 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
 
     IntermSnapResults isr;
     SnapperList const snappers = getSnappers();
-    for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-        (*i)->constrainedSnap(isr, p, bbox_to_snap, constraint, &_items_to_ignore, _unselected_nodes);
+    for (auto snapper : snappers) {
+        snapper->constrainedSnap(isr, p, bbox_to_snap, constraint, &_items_to_ignore, _unselected_nodes);
     }
 
     result = findBestSnap(p, isr, true);
@@ -300,10 +299,10 @@ Inkscape::SnappedPoint SnapManager::multipleConstrainedSnaps(Inkscape::SnapCandi
 
     // Project the mouse pointer on each of the constraints
     std::vector<Geom::Point> projections;
-    for (std::vector<Inkscape::Snapper::SnapConstraint>::const_iterator c = constraints.begin(); c != constraints.end(); ++c) {
+    for (const auto & constraint : constraints) {
         // Project the mouse pointer onto the constraint; In case we don't snap then we will
         // return the projection onto the constraint, such that the constraint is always enforced
-        Geom::Point pp = (*c).projection(p.getPoint());
+        Geom::Point pp = constraint.projection(p.getPoint());
         projections.push_back(pp);
     }
 
@@ -341,8 +340,8 @@ Inkscape::SnappedPoint SnapManager::multipleConstrainedSnaps(Inkscape::SnapCandi
         result.setPoint(cc.projection(result.getPoint()));
     } else {
         // Try to snap along the closest constraint
-        for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-            (*i)->constrainedSnap(isr, p, bbox_to_snap, cc, &_items_to_ignore,_unselected_nodes);
+        for (auto snapper : snappers) {
+            snapper->constrainedSnap(isr, p, bbox_to_snap, cc, &_items_to_ignore,_unselected_nodes);
         }
         result = findBestSnap(p, isr, true);
     }

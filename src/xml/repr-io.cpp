@@ -78,9 +78,9 @@ public:
           instr(nullptr),
           gzin(nullptr)
     {
-        for (int k=0;k<4;k++)
+        for (unsigned char & k : firstFew)
         {
-            firstFew[k]=0;
+            k=0;
         }
     }
     virtual ~XmlSource()
@@ -877,10 +877,10 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
     }
 
     List<AttributeRecord const> attributes=repr->attributeList();
-    for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
+    for (auto & iter : ns_map) 
     {
-        Glib::QueryQuark prefix=(*iter).first;
-        ptr_shared ns_uri=(*iter).second;
+        Glib::QueryQuark prefix=iter.first;
+        ptr_shared ns_uri=iter.second;
 
         if (prefix.id()) {
             if ( prefix != xml_prefix ) {

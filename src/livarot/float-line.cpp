@@ -546,16 +546,16 @@ void FloatLigne::Flatten()
 void FloatLigne::Affiche()
 {
     printf("%lu : \n", (long unsigned int) bords.size());
-    for (int i = 0; i < int(bords.size()); i++) {
-        printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0)); // localization ok
+    for (auto & bord : bords) {
+        printf("(%f %f %f %i) ",bord.pos,bord.val,bord.pente,(bord.start?1:0)); // localization ok
     }
     
     printf("\n");
     printf("%lu : \n", (long unsigned int) runs.size());
     
-    for (int i = 0; i < int(runs.size()); i++) {
+    for (auto & run : runs) {
         printf("(%f %f -> %f %f / %f)",
-               runs[i].st, runs[i].vst, runs[i].en, runs[i].ven, runs[i].pente); // localization ok
+               run.st, run.vst, run.en, run.ven, run.pente); // localization ok
     }
     
     printf("\n");
@@ -627,8 +627,7 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
     float lastStart=0;
     float lastEnd = 0;
     
-    for (int i = 0; i < int(a->runs.size()); i++) {
-        float_ligne_run runA = a->runs[i];
+    for (auto runA : a->runs) {
         if ( runA.vst <= tresh ) {
             if ( runA.ven <= tresh ) {
                 if ( startExists ) {
@@ -717,8 +716,7 @@ void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
         return;
     }
 
-    for (int i = 0; i < int(a->runs.size()); i++) {
-        float_ligne_run runA = a->runs[i];
+    for (auto runA : a->runs) {
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {
                 if ( over ) {
@@ -761,8 +759,7 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
     bool startExists = false;
     float lastStart = 0;
     float lastEnd = 0;
-    for (int i = 0; i < int(a->runs.size()); i++) {
-        float_ligne_run runA = a->runs[i];
+    for (auto runA : a->runs) {
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {
                 if ( startExists ) {
@@ -850,8 +847,7 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
     float lastStart = 0;
     float lastEnd = 0;
     
-    for (int i = 0; i < int(a->runs.size()); i++) {
-        float_ligne_run runA = a->runs[i];
+    for (auto runA : a->runs) {
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {
                 if ( startExists ) {

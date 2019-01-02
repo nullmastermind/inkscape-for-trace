@@ -442,8 +442,8 @@ IndexedMap *IndexedMapCreate(int width, int height)
 
     RGB rgb;
     rgb.r = rgb.g = rgb.b = 0;
-    for (int i=0; i<256 ; i++){
-        me->clut[i] = rgb;
+    for (auto & i : me->clut){
+        i = rgb;
     }
 
     return me;

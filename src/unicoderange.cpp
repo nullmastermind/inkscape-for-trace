@@ -70,8 +70,8 @@ int UnicodeRange::add_range(gchar* val){
 }
 
 bool UnicodeRange::contains(gchar unicode){
-    for(unsigned int i=0;i<this->unichars.size();i++){
-        if (static_cast<gunichar>(unicode) == this->unichars[i]){
+    for(unsigned int unichar : this->unichars){
+        if (static_cast<gunichar>(unicode) == unichar){
             return true;
         }
     }
@@ -88,8 +88,7 @@ bool UnicodeRange::contains(gchar unicode){
     }
 
     bool found;
-    for(unsigned int i=0;i<this->range.size();i++){
-        Urange r = this->range[i];
+    for(auto r : this->range){
         if (r.end){
             if (unival >= hex2int(r.start) && unival <= hex2int(r.end)) return true;
         } else {

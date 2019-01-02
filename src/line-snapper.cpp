@@ -58,15 +58,15 @@ void Inkscape::LineSnapper::freeSnap(IntermSnapResults &isr,
             // For this we need to know where the origin is located of the line that is currently being rotated,
             std::vector<std::pair<Geom::Point, bool> > const origins_and_vectors = p.getOriginsAndVectors();
             // Now we will iterate over all the origins and vectors and see which of these will get use a tangential or perpendicular snap
-            for (std::vector<std::pair<Geom::Point, bool> >::const_iterator it_origin_or_vector = origins_and_vectors.begin(); it_origin_or_vector != origins_and_vectors.end(); ++it_origin_or_vector) {
-                if ((*it_origin_or_vector).second) { // if "second" is true then "first" is a vector, otherwise it's a point
+            for (const auto & origins_and_vector : origins_and_vectors) {
+                if (origins_and_vector.second) { // if "second" is true then "first" is a vector, otherwise it's a point
                     // When snapping a line with a constant vector (constant direction) to a guide or grid line,
                     // then either all points will be perpendicular/tangential or none at all. This is not very useful
                     continue;
                 }
 
                 //Geom::Point origin_doc = _snapmanager->getDesktop()->dt2doc((*it_origin_or_vector).first); // "first" contains a Geom::Point, denoting either a point
-                Geom::Point origin = (*it_origin_or_vector).first; // "first" contains a Geom::Point, denoting either a point
+                Geom::Point origin = origins_and_vector.first; // "first" contains a Geom::Point, denoting either a point
 
                 // We won't try to snap tangentially; a line being tangential to another line can be achieved by snapping both its endpoints
                 // individually to the other line. There's no need to have an explicit tangential snap here, that would be redundant
@@ -104,9 +104,9 @@ void Inkscape::LineSnapper::constrainedSnap(IntermSnapResults &isr,
     /* Get the lines that we will try to snap to */
     const LineList lines = _getSnapLines(pp);
 
-    for (LineList::const_iterator i = lines.begin(); i != lines.end(); ++i) {
+    for (const auto & line : lines) {
         Geom::Point const point_on_line = c.hasPoint() ? c.getPoint() : pp;
-        Geom::Line gridguide_line(i->second, i->second + Geom::rot90(i->first));
+        Geom::Line gridguide_line(line.second, line.second + Geom::rot90(line.first));
 
         if (c.isCircular()) {
             // Find the intersections between the line and the circular constraint

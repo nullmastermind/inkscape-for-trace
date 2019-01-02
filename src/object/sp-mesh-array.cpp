@@ -897,8 +897,8 @@ bool SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
     }
 
     // Insure we have a true array.
-    for( guint i = 0; i < nodes.size(); ++i ) {
-        nodes[ i ].resize( max_column * 3 + 1 );
+    for(auto & node : nodes) {
+        node.resize( max_column * 3 + 1 );
     }
 
     // Set node edge.
@@ -1459,10 +1459,10 @@ void SPMeshNodeArray::create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bb
 */
 void SPMeshNodeArray::clear() {
 
-    for( guint i = 0; i < nodes.size(); ++i ) {
-        for( guint j = 0; j < nodes[i].size(); ++j ) {
-            if( nodes[i][j] ) {
-                delete nodes[i][j];
+    for(auto & node : nodes) {
+        for( guint j = 0; j < node.size(); ++j ) {
+            if( node[j] ) {
+                delete node[j];
             }
         }
     }
@@ -1514,9 +1514,9 @@ class SPMeshSmoothCorner {
 
 public:
     SPMeshSmoothCorner() {
-        for( unsigned i = 0; i < 3; ++i ) {
+        for(auto & i : g) {
             for( unsigned j = 0; j < 4; ++j ) {
-                g[i][j] = 0;
+                i[j] = 0;
             }
         }
     }
@@ -2143,9 +2143,8 @@ guint SPMeshNodeArray::color_smooth( std::vector<guint> corners ) {
     guint ncols = patch_columns() * 3 + 1;
     guint nrows = patch_rows() * 3 + 1;
 
-    for( guint i = 0; i < corners.size(); ++i ) {
+    for(unsigned int corner : corners) {
 
-        guint corner = corners[i];
         // std::cout << "SPMeshNodeArray::color_smooth: " << i << " " << corner << std::endl;
 
         // Node row & col
@@ -2319,9 +2318,7 @@ guint SPMeshNodeArray::color_pick( std::vector<guint> icorners, SPItem* item ) {
     // }
 
     // Do picking
-    for( guint i = 0; i < icorners.size(); ++i ) {
-
-        guint corner = icorners[i];
+    for(unsigned int corner : icorners) {
 
         SPMeshNode* n = corners[ corner ];
 
@@ -2788,8 +2785,8 @@ SPCurve * SPMeshNodeArray::outline_path() {
 void SPMeshNodeArray::transform(Geom::Affine const &m) {
 
     for (int i = 0; i < nodes[0].size(); ++i) {
-        for (int j = 0; j < nodes.size(); ++j) {
-            nodes[j][i]->p *= m;
+        for (auto & node : nodes) {
+            node[i]->p *= m;
         }
     }
 }

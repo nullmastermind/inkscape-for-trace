@@ -207,8 +207,8 @@ size_t
 LPETransform2Pts::nodeCount(Geom::PathVector pathvector) const
 {
     size_t n = 0;
-    for (Geom::PathVector::iterator it = pathvector.begin(); it != pathvector.end(); ++it) {
-        n += it->size_closed();
+    for (auto & it : pathvector) {
+        n += it.size_closed();
     }
     return n;
 }
@@ -217,8 +217,8 @@ Geom::Point
 LPETransform2Pts::pointAtNodeIndex(Geom::PathVector pathvector, size_t index) const
 {
     size_t n = 0;
-    for (Geom::PathVector::iterator pv_it = pathvector.begin(); pv_it != pathvector.end(); ++pv_it) {
-        for (Geom::Path::iterator curve_it = pv_it->begin(); curve_it != pv_it->end_closed(); ++curve_it) {
+    for (auto & pv_it : pathvector) {
+        for (Geom::Path::iterator curve_it = pv_it.begin(); curve_it != pv_it.end_closed(); ++curve_it) {
             if(index == n) {
                 return curve_it->initialPoint();
             }
@@ -232,10 +232,10 @@ Geom::Path
 LPETransform2Pts::pathAtNodeIndex(Geom::PathVector pathvector, size_t index) const
 {
     size_t n = 0;
-    for (Geom::PathVector::iterator pv_it = pathvector.begin(); pv_it != pathvector.end(); ++pv_it) {
-        for (Geom::Path::iterator curve_it = pv_it->begin(); curve_it != pv_it->end_closed(); ++curve_it) {
+    for (auto & pv_it : pathvector) {
+        for (Geom::Path::iterator curve_it = pv_it.begin(); curve_it != pv_it.end_closed(); ++curve_it) {
             if(index == n) {
-                return *pv_it;
+                return pv_it;
             }
             n++;
         }

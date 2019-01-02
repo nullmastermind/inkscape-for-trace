@@ -80,8 +80,8 @@ static void sp_tweak_mode_changed( GObject *tbl, int mode )
     static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
     bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
                  (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
-    for (size_t i = 0; i < G_N_ELEMENTS(names); ++i) {
-        GtkAction *act = GTK_ACTION(g_object_get_data( tbl, names[i] ));
+    for (auto & name : names) {
+        GtkAction *act = GTK_ACTION(g_object_get_data( tbl, name ));
         if (act) {
             gtk_action_set_visible(act, flag);
         }

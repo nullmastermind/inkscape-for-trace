@@ -204,10 +204,10 @@ void ControlManagerImpl::setControlSize(int size, bool force)
     } else if (force || (size != _size)) {
         _size = size;
 
-        for (std::vector<SPCanvasItem *>::iterator it = _itemList.begin(); it != _itemList.end(); ++it)
+        for (auto & it : _itemList)
         {
-            if (*it) {
-                updateItem(*it);
+            if (it) {
+                updateItem(it);
             }
         }
 

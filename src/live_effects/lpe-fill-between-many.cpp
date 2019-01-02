@@ -80,22 +80,21 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
         selection = desktop->selection;
     }
     if (!autoreverse) {
-        for (std::vector<PathAndDirectionAndVisible *>::iterator iter = linked_paths._vector.begin();
-             iter != linked_paths._vector.end(); ++iter) {
+        for (auto & iter : linked_paths._vector) {
             SPObject *obj;
-            if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj) &&
-                !(*iter)->_pathvector.empty() && (*iter)->visibled) {
+            if (iter->ref.isAttached() && (obj = iter->ref.getObject()) && SP_IS_ITEM(obj) &&
+                !iter->_pathvector.empty() && iter->visibled) {
                 Geom::Path linked_path;
-                if ((*iter)->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
+                if (iter->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
                     continue;
                 }
                 if (obj && transf != Geom::identity() && selection && !selection->includes(obj->getRepr())) {
                     SP_ITEM(obj)->doWriteTransform(transf);
                 }
-                if ((*iter)->reversed) {
-                    linked_path = (*iter)->_pathvector.front().reversed();
+                if (iter->reversed) {
+                    linked_path = iter->_pathvector.front().reversed();
                 } else {
-                    linked_path = (*iter)->_pathvector.front();
+                    linked_path = iter->_pathvector.front();
                 }
                 if (!res_pathv.empty() && join) {
                     if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.01) || !fuse) {
@@ -142,26 +141,25 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
                 unsigned int counter2 = 0;
                 unsigned int added = 0;
                 PathAndDirectionAndVisible *nearest = nullptr;
-                for (std::vector<PathAndDirectionAndVisible *>::iterator iter2 = linked_paths._vector.begin();
-                     iter2 != linked_paths._vector.end(); ++iter2) {
+                for (auto & iter2 : linked_paths._vector) {
                     SPObject *obj2;
-                    if ((*iter2)->ref.isAttached() && (obj2 = (*iter2)->ref.getObject()) && SP_IS_ITEM(obj2) &&
-                        !(*iter2)->_pathvector.empty() && (*iter2)->visibled) {
+                    if (iter2->ref.isAttached() && (obj2 = iter2->ref.getObject()) && SP_IS_ITEM(obj2) &&
+                        !iter2->_pathvector.empty() && iter2->visibled) {
                         if (obj == obj2 || std::find(done.begin(), done.end(), counter2) != done.end()) {
                             counter2++;
                             continue;
                         }
-                        if ((*iter2)->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
+                        if (iter2->_pathvector.front().closed() && linked_paths._vector.size() > 1) {
                             counter2++;
                             continue;
                         }
-                        Geom::Point start = (*iter2)->_pathvector.front().initialPoint();
-                        Geom::Point end = (*iter2)->_pathvector.front().finalPoint();
+                        Geom::Point start = iter2->_pathvector.front().initialPoint();
+                        Geom::Point end = iter2->_pathvector.front().finalPoint();
                         Geom::Coord distance_iter =
                             std::min(Geom::distance(current, end), Geom::distance(current, start));
                         if (distance > distance_iter) {
                             distance = distance_iter;
-                            nearest = (*iter2);
+                            nearest = iter2;
                             added = counter2;
                         }
                         counter2++;

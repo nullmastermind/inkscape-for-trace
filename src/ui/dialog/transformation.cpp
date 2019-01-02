@@ -655,12 +655,9 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
 
             if (fabs(x) > 1e-6) {
                 std::vector< BBoxSort  > sorted;
-                for (std::vector<SPItem*>::iterator it(selected.begin());
-                     it != selected.end();
-                     ++it)
+                for (auto item : selected)
                 {
-                	SPItem* item = *it;
-                    Geom::OptRect bbox = item->desktopPreferredBounds();
+                	Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
                         sorted.emplace_back(item, *bbox, Geom::X, x > 0? 1. : 0., x > 0? 0. : 1.);
                     }
@@ -680,12 +677,9 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
             }
             if (fabs(y) > 1e-6) {
                 std::vector< BBoxSort  > sorted;
-                for (std::vector<SPItem*>::iterator it(selected.begin());
-                     it != selected.end();
-                     ++it)
+                for (auto item : selected)
                 {
-                	SPItem* item = *it;
-                	Geom::OptRect bbox = item->desktopPreferredBounds();
+                		Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
                         sorted.emplace_back(item, *bbox, Geom::Y, y > 0? 1. : 0., y > 0? 0. : 1.);
                     }

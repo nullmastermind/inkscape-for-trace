@@ -446,8 +446,8 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         dc.setSource(rgba);
         dc.setTolerance(0.5); // low quality, but good enough for outline mode
 
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&*i);
+        for (auto & i : _children) {
+            DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
             if (!g) throw InvalidItemException();
 
             Inkscape::DrawingContext::Save save(dc);
@@ -512,9 +512,9 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             double leftmost  = DBL_MAX;
             bool   first_y   = true;
             double start_y   = 0.0;
-            for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
+            for (auto & i : _children) {
 
-                DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&*i);
+                DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
                 if (!g) throw InvalidItemException();
 
                 if (!invset) {
@@ -576,8 +576,8 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
         }
 
         // accumulate the path that represents the glyphs
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&*i);
+        for (auto & i : _children) {
+            DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
             if (!g) throw InvalidItemException();
 
             Inkscape::DrawingContext::Save save(dc);
@@ -678,8 +678,8 @@ void DrawingText::_clipItem(DrawingContext &dc, Geom::IntRect const &/*area*/)
         }
     }
 
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&*i);
+    for (auto & i : _children) {
+        DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
         if (!g) {
             throw InvalidItemException();
         }

@@ -245,9 +245,7 @@ void SPPattern::update(SPCtx *ctx, unsigned int flags)
     std::list<SPObject *> l;
     _getChildren(l);
 
-    for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
-        SPObject *child = *it;
-
+    for (auto child : l) {
         sp_object_ref(child, nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -271,9 +269,7 @@ void SPPattern::modified(unsigned int flags)
     std::list<SPObject *> l;
     _getChildren(l);
 
-    for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
-        SPObject *child = *it;
-
+    for (auto child : l) {
         sp_object_ref(child, nullptr);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -402,8 +398,7 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
     const gchar *pat_id = repr->attribute("id");
     SPObject *pat_object = document->getObjectById(pat_id);
 
-    for (NodePtrIterator i = reprs.begin(); i != reprs.end(); ++i) {
-        Inkscape::XML::Node *node = *i;
+    for (auto node : reprs) {
         SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 
         Geom::Affine dup_transform;

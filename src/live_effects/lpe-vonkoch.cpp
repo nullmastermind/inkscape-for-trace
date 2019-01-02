@@ -98,18 +98,18 @@ LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)
     m0 = m0.inverse();
 
     std::vector<Affine> transforms;
-    for (unsigned i=0; i<generating_path.size(); i++){
+    for (const auto & i : generating_path){
         Affine m;
-        if(generating_path[i].size()==1){
-            Point p = generating_path[i].pointAt(0);
-            Point u = generating_path[i].pointAt(1)-p;
+        if(i.size()==1){
+            Point p = i.pointAt(0);
+            Point u = i.pointAt(1)-p;
             m = Affine(u[X], u[Y],-u[Y], u[X], p[X], p[Y]);
             m = m0*m;
             transforms.push_back(m);
-        }else if(generating_path[i].size()>=2){
-            Point p = generating_path[i].pointAt(1);
-            Point u = generating_path[i].pointAt(2)-p;
-            Point v = p-generating_path[i].pointAt(0);
+        }else if(i.size()>=2){
+            Point p = i.pointAt(1);
+            Point u = i.pointAt(2)-p;
+            Point v = p-i.pointAt(0);
             if (similar_only.get_value()){
                 int sign = (u[X]*v[Y]-u[Y]*v[X]>=0?1:-1);
                 v[X] = -u[Y]*sign;
@@ -127,8 +127,8 @@ LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)
 
     //Do nothing if the output is too complex... 
     int path_in_complexity = 0;
-    for (unsigned k = 0; k < path_in.size(); k++){
-            path_in_complexity+=path_in[k].size();
+    for (const auto & k : path_in){
+            path_in_complexity+=k.size();
     }
     double complexity = std::pow(transforms.size(), nbgenerations) * path_in_complexity;
     if (drawall.get_value()){
@@ -156,9 +156,9 @@ LPEVonKoch::doEffect_path (Geom::PathVector const & path_in)
             path_out = Geom::PathVector();
             complexity = 0;
         }
-        for (unsigned j = 0; j<transforms.size(); j++){
+        for (const auto & transform : transforms){
             for (unsigned k = 0; k<pathi.size() && complexity < maxComplexity; k++){
-                path_out.push_back(pathi[k]*transforms[j]); 
+                path_out.push_back(pathi[k]*transform); 
                 complexity+=pathi[k].size();
             }
         }

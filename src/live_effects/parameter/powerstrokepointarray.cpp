@@ -69,19 +69,19 @@ PowerStrokePointArrayParam::recalculate_controlpoints_for_new_pwd2(Geom::Piecewi
         if (last_pwd2.size() > pwd2_in.size()) {
             // Path has become shorter: rescale offsets
             double factor = (double)pwd2_in.size() / (double)last_pwd2.size();
-            for (unsigned int i = 0; i < _vector.size(); ++i) {
-                _vector[i][Geom::X] *= factor;
+            for (auto & i : _vector) {
+                i[Geom::X] *= factor;
             }
         } else if (last_pwd2.size() < pwd2_in.size()) {
             // Path has become longer: probably node added, maintain position of knots
             Geom::Piecewise<Geom::D2<Geom::SBasis> > normal = rot90(unitVector(derivative(pwd2_in)));
-            for (unsigned int i = 0; i < _vector.size(); ++i) {
-                Geom::Point pt = _vector[i];
+            for (auto & i : _vector) {
+                Geom::Point pt = i;
                 Geom::Point position = last_pwd2.valueAt(pt[Geom::X]) + pt[Geom::Y] * last_pwd2_normal.valueAt(pt[Geom::X]);
                 
                 double t = nearest_time(position, pwd2_in);
                 double offset = dot(position - pwd2_in.valueAt(t), normal.valueAt(t));
-                _vector[i] = Geom::Point(t, offset);
+                i = Geom::Point(t, offset);
             }
         }
 
@@ -96,11 +96,11 @@ PowerStrokePointArrayParam::reverse_controlpoints(bool write)
     std::vector<Geom::Point> controlpoints;
     if (!last_pwd2.empty()) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in_reverse = reverse(last_pwd2);
-        for (unsigned int i = 0; i < _vector.size(); ++i) {
-            Geom::Point control_pos = last_pwd2.valueAt(_vector[i][Geom::X]);
+        for (auto & i : _vector) {
+            Geom::Point control_pos = last_pwd2.valueAt(i[Geom::X]);
             double new_pos = Geom::nearest_time(control_pos, pwd2_in_reverse);
-            controlpoints.emplace_back(new_pos,_vector[i][Geom::Y]);
-            _vector[i][Geom::X] = new_pos;
+            controlpoints.emplace_back(new_pos,i[Geom::Y]);
+            i[Geom::X] = new_pos;
         }
         if (write) {
             write_to_SVG();
@@ -235,8 +235,8 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
                 vec.erase(vec.begin() + _index);
                 _pparam->param_set_and_write_new_value(vec);
                 // shift knots down one index
-                for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
-                    PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
+                for(auto & ent : parent_holder->entity) {
+                    PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(ent);
                     if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
                         if (pspa_ent->_index > this->_index) {
                             --pspa_ent->_index;
@@ -254,8 +254,8 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_click(guint state)
             _pparam->param_set_and_write_new_value(vec);
 
             // shift knots up one index
-            for(std::list<KnotHolderEntity *>::iterator ent = parent_holder->entity.begin(); ent != parent_holder->entity.end(); ++ent) {
-                PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(*ent);
+            for(auto & ent : parent_holder->entity) {
+                PowerStrokePointArrayParamKnotHolderEntity *pspa_ent = dynamic_cast<PowerStrokePointArrayParamKnotHolderEntity *>(ent);
                 if ( pspa_ent && pspa_ent->_pparam == this->_pparam ) {  // check if the knotentity belongs to this powerstrokepointarray parameter
                     if (pspa_ent->_index > this->_index) {
                         ++pspa_ent->_index;

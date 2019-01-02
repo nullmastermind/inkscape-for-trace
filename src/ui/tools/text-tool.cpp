@@ -244,10 +244,9 @@ void TextTool::finish() {
         this->frame = nullptr;
     }
 
-    for (std::vector<SPCanvasItem*>::iterator it = this->text_selection_quads.begin() ;
-         it != this->text_selection_quads.end() ; ++it) {
-        sp_canvas_item_hide(*it);
-        sp_canvas_item_destroy(*it);
+    for (auto & text_selection_quad : this->text_selection_quads) {
+        sp_canvas_item_hide(text_selection_quad);
+        sp_canvas_item_destroy(text_selection_quad);
     }
     
     this->text_selection_quads.clear();
@@ -1702,9 +1701,9 @@ static void sp_text_context_update_text_selection(TextTool *tc)
     // the selection update (can't do both atomically, alas)
     if (!tc->desktop) return;
 
-    for (std::vector<SPCanvasItem*>::iterator it = tc->text_selection_quads.begin() ; it != tc->text_selection_quads.end() ; ++it) {
-        sp_canvas_item_hide(*it);
-        sp_canvas_item_destroy(*it);
+    for (auto & text_selection_quad : tc->text_selection_quads) {
+        sp_canvas_item_hide(text_selection_quad);
+        sp_canvas_item_destroy(text_selection_quad);
     }
     tc->text_selection_quads.clear();
 

@@ -381,8 +381,8 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
     //if the snap adjustment is activated and it is not bspline
     if (snap && !_pm()._isBSpline()) {
         ControlPointSelection::Set &nodes = _parent->_selection.allPoints();
-        for (ControlPointSelection::Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            Node *n = static_cast<Node*>(*i);
+        for (auto node : nodes) {
+            Node *n = static_cast<Node*>(node);
             unselected.push_back(n->snapCandidatePoint());
         }
         sm.setupIgnoreSelection(_desktop, true, &unselected);
@@ -1225,9 +1225,9 @@ void Node::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         // Build the list of unselected nodes.
         typedef ControlPointSelection::Set Set;
         Set &nodes = _selection.allPoints();
-        for (Set::iterator i = nodes.begin(); i != nodes.end(); ++i) {
-            if (!(*i)->selected()) {
-                Node *n = static_cast<Node*>(*i);
+        for (auto node : nodes) {
+            if (!node->selected()) {
+                Node *n = static_cast<Node*>(node);
                 Inkscape::SnapCandidatePoint p(n->position(), n->_snapSourceType(), n->_snapTargetType());
                 unselected.push_back(p);
             }

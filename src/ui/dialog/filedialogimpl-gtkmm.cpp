@@ -67,8 +67,7 @@ namespace Dialog {
 
 void fileDialogExtensionToPattern(Glib::ustring &pattern, Glib::ustring &extension)
 {
-    for (unsigned int i = 0; i < extension.length(); ++i) {
-        Glib::ustring::value_type ch = extension[i];
+    for (unsigned int ch : extension) {
         if (Glib::Unicode::isalpha(ch)) {
             pattern += '[';
             pattern += Glib::Unicode::toupper(ch);
@@ -87,8 +86,7 @@ void findEntryWidgets(Gtk::Container *parent, std::vector<Gtk::Entry *> &result)
         return;
     }
     std::vector<Gtk::Widget *> children = parent->get_children();
-    for (unsigned int i = 0; i < children.size(); ++i) {
-        Gtk::Widget *child = children[i];
+    for (auto child : children) {
         GtkWidget *wid = child->gobj();
         if (GTK_IS_ENTRY(wid))
             result.push_back(dynamic_cast<Gtk::Entry *>(child));
@@ -102,8 +100,7 @@ void findExpanderWidgets(Gtk::Container *parent, std::vector<Gtk::Expander *> &r
     if (!parent)
         return;
     std::vector<Gtk::Widget *> children = parent->get_children();
-    for (unsigned int i = 0; i < children.size(); ++i) {
-        Gtk::Widget *child = children[i];
+    for (auto child : children) {
         GtkWidget *wid = child->gobj();
         if (GTK_IS_EXPANDER(wid))
             result.push_back(dynamic_cast<Gtk::Expander *>(child));
@@ -742,11 +739,8 @@ void FileOpenDialogImplGtk::createFilterMenu()
         Inkscape::Extension::DB::InputList extension_list;
         Inkscape::Extension::db.get_input_list(extension_list);
 
-        for (Inkscape::Extension::DB::InputList::iterator current_item = extension_list.begin();
-             current_item != extension_list.end(); ++current_item)
+        for (auto imod : extension_list)
         {
-            Inkscape::Extension::Input *imod = *current_item;
-
             // FIXME: would be nice to grey them out instead of not listing them
             if (imod->deactivated())
                 continue;
@@ -1091,10 +1085,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
     Inkscape::Extension::db.get_output_list(extension_list);
     knownExtensions.clear();
 
-    for (Inkscape::Extension::DB::OutputList::iterator current_item = extension_list.begin();
-         current_item != extension_list.end(); ++current_item) {
-        Inkscape::Extension::Output *omod = *current_item;
-
+    for (auto omod : extension_list) {
         // FIXME: would be nice to grey them out instead of not listing them
         if (omod->deactivated())
             continue;

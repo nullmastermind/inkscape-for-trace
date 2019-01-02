@@ -265,8 +265,8 @@ static bool evaluateRequiredFeatures(SPItem const */*item*/, gchar const *value)
         return false;
     }
     
-    for ( unsigned int i = 0 ; i < parts.size() ; i++ ) {
-        if (!evaluateSingleFeature(parts[i].c_str())) {
+    for (auto & part : parts) {
+        if (!evaluateSingleFeature(part.c_str())) {
             return false;
         }
     }

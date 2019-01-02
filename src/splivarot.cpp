@@ -913,8 +913,8 @@ void item_outline_add_marker_child( SPItem const *item, Geom::Affine marker_tran
         Geom::PathVector* marker_pathv = item_outline(item);
 
         if (marker_pathv) {
-            for (unsigned int j=0; j < marker_pathv->size(); j++) {
-                pathv_in->push_back((*marker_pathv)[j] * tr);
+            for (const auto & j : *marker_pathv) {
+                pathv_in->push_back(j * tr);
             }
             delete marker_pathv;
         }
@@ -1183,8 +1183,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
             return false;
         }
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *subitem = *iter;
+        for (auto subitem : item_list) {
             sp_item_path_outline(subitem, desktop, legacy);
         }
     } else {

@@ -43,8 +43,8 @@ void PathVectorSatellites::setSatellites(Satellites satellites)
 size_t PathVectorSatellites::getTotalSatellites()
 {
     size_t counter = 0;
-    for (size_t i = 0; i < _satellites.size(); ++i) {
-        for (size_t j = 0; j < _satellites[i].size(); ++j) { 
+    for (auto & _satellite : _satellites) {
+        for (size_t j = 0; j < _satellite.size(); ++j) { 
             counter++;
         }
     }
@@ -68,12 +68,12 @@ std::pair<size_t, size_t> PathVectorSatellites::getIndexData(size_t index)
 void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 {
     size_t counter = 0;
-    for (size_t i = 0; i < _satellites.size(); ++i) {
-        for (size_t j = 0; j < _satellites[i].size(); ++j) {
+    for (auto & _satellite : _satellites) {
+        for (size_t j = 0; j < _satellite.size(); ++j) {
             if (find (selected.begin(), selected.end(), counter) != selected.end()) {
-                _satellites[i][j].setSelected(true);
+                _satellite[j].setSelected(true);
             } else {
-                _satellites[i][j].setSelected(false);
+                _satellite[j].setSelected(false);
             }
             counter++;
         }
@@ -82,19 +82,19 @@ void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 
 void PathVectorSatellites::updateSteps(size_t steps, bool apply_no_radius, bool apply_with_radius, bool only_selected)
 {
-    for (size_t i = 0; i < _satellites.size(); ++i) {
-        for (size_t j = 0; j < _satellites[i].size(); ++j) {
-            if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
-                (!apply_with_radius && _satellites[i][j].amount != 0)) 
+    for (auto & _satellite : _satellites) {
+        for (size_t j = 0; j < _satellite.size(); ++j) {
+            if ((!apply_no_radius && _satellite[j].amount == 0) ||
+                (!apply_with_radius && _satellite[j].amount != 0)) 
             {
                 continue;
             }
             if (only_selected) {
-                if (_satellites[i][j].selected) {
-                    _satellites[i][j].steps = steps;
+                if (_satellite[j].selected) {
+                    _satellite[j].steps = steps;
                 }
             } else {
-                _satellites[i][j].steps = steps;
+                _satellite[j].steps = steps;
             }
         }
     }
@@ -205,13 +205,13 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     //TODO evaluate fix on nodes at same position
     size_t number_nodes = pathv.nodes().size();
     size_t previous_number_nodes = _pathvector.nodes().size();
-    for (size_t i = 0; i < pathv.size(); i++) {
+    for (const auto & i : pathv) {
         std::vector<Satellite> path_satellites;
-        size_t count = pathv[i].size_default();
-        if ( pathv[i].closed()) {
-          const Geom::Curve &closingline = pathv[i].back_closed(); 
+        size_t count = i.size_default();
+        if ( i.closed()) {
+          const Geom::Curve &closingline = i.back_closed(); 
           if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            count = pathv[i].size_open();
+            count = i.size_open();
           }
         }
         for (size_t j = 0; j < count; j++) {
@@ -225,7 +225,7 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
                   }
                 }
                 for (size_t l = 0; l < count2; l++) {
-                    if (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint()))
+                    if (Geom::are_near(_pathvector[k][l].initialPoint(),  i[j].initialPoint()))
                     {
                         path_satellites.push_back(_satellites[k][l]);
                         found = true;

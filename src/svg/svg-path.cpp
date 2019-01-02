@@ -89,8 +89,8 @@ static void sp_svg_write_curve(Inkscape::SVG::PathString & str, Geom::Curve cons
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c->toSBasis(), 0.1);
 
         //recurse to convert the new path resulting from the sbasis to svgd
-        for(Geom::Path::iterator iter = sbasis_path.begin(); iter != sbasis_path.end(); ++iter) {
-            sp_svg_write_curve(str, &(*iter));
+        for(const auto & iter : sbasis_path) {
+            sp_svg_write_curve(str, &iter);
         }
     }
 }
@@ -110,8 +110,8 @@ static void sp_svg_write_path(Inkscape::SVG::PathString & str, Geom::Path const 
 gchar * sp_svg_write_path(Geom::PathVector const &p) {
     Inkscape::SVG::PathString str;
 
-    for(Geom::PathVector::const_iterator pit = p.begin(); pit != p.end(); ++pit) {
-        sp_svg_write_path(str, *pit);
+    for(const auto & pit : p) {
+        sp_svg_write_path(str, pit);
     }
 
     return g_strdup(str.c_str());

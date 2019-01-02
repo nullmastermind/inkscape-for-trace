@@ -158,9 +158,9 @@ SPCurve::split() const
 {
     std::list<SPCurve *> l;
 
-    for (Geom::PathVector::const_iterator path_it = _pathv.begin(); path_it != _pathv.end(); ++path_it) {
+    for (const auto & path_it : _pathv) {
         Geom::PathVector newpathv;
-        newpathv.push_back(*path_it);
+        newpathv.push_back(path_it);
         SPCurve * newcurve = new SPCurve(newpathv);
         l.push_back(newcurve);
     }
@@ -327,8 +327,8 @@ SPCurve::is_closed() const
         return false;
     } 
     
-    for (Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
-        if ( ! it->closed() ) {
+    for (const auto & it : _pathv) {
+        if ( ! it.closed() ) {
             return false;
         }
     }
@@ -531,8 +531,8 @@ SPCurve::append(SPCurve const *curve2,
             _pathv.push_back( (*it) );
         }
     } else {
-        for (Geom::PathVector::const_iterator it = curve2->_pathv.begin(); it != curve2->_pathv.end(); ++it) {
-            _pathv.push_back( (*it) );
+        for (const auto & it : curve2->_pathv) {
+            _pathv.push_back( it );
         }
     }
 }
@@ -658,10 +658,10 @@ size_t
 SPCurve::nodes_in_path() const
 {
     size_t nr = 0;
-    for(Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
+    for(const auto & it : _pathv) {
         // if the path does not have any segments, it is a naked moveto,
         // and therefore any path has at least one valid node
-        size_t psize = std::max<size_t>(1, it->size_closed());
+        size_t psize = std::max<size_t>(1, it.size_closed());
         nr += psize;
     }
 

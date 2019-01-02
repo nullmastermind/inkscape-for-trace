@@ -114,8 +114,8 @@ void DashSelector::init_dashes() {
             SPStyle style;
             dashes = g_new (double *, dash_prefs.size() + 2); // +1 for custom slot, +1 for terminator slot
             
-            for (std::vector<Glib::ustring>::iterator i = dash_prefs.begin(); i != dash_prefs.end(); ++i) {
-                style.readFromPrefs( *i );
+            for (auto & dash_pref : dash_prefs) {
+                style.readFromPrefs( dash_pref );
                 
                 if (!style.stroke_dasharray.values.empty()) {
                     dashes[pos] = g_new (double, style.stroke_dasharray.values.size() + 1);

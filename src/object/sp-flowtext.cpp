@@ -406,12 +406,12 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
             SPFlowregion *region = dynamic_cast<SPFlowregion *>(&child);
             if (region) {
                 std::vector<Shape*> const &computed = region->computed;
-                for (std::vector<Shape*>::const_iterator it = computed.begin() ; it != computed.end() ; ++it) {
+                for (auto it : computed) {
                     shapes->push_back(Shape());
                     if (exclusion_shape->hasEdges()) {
-                        shapes->back().Booleen(*it, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                        shapes->back().Booleen(it, const_cast<Shape*>(exclusion_shape), bool_op_diff);
                     } else {
-                        shapes->back().Copy(*it);
+                        shapes->back().Copy(it);
                     }
                     layout.appendWrapShape(&shapes->back());
                 }

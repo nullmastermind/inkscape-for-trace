@@ -37,11 +37,10 @@ namespace XML {
 void CompositeNodeObserver::notifyChildAdded(Node &node, Node &child, Node *prev)
 {
     _startIteration();
-    for ( ObserverRecordList::iterator iter=_active.begin() ;
-          iter != _active.end() ; ++iter )
+    for (auto & iter : _active)
     {
-        if (!iter->marked) {
-            iter->observer.notifyChildAdded(node, child, prev);
+        if (!iter.marked) {
+            iter.observer.notifyChildAdded(node, child, prev);
         }
     }
     _finishIteration();
@@ -51,11 +50,10 @@ void CompositeNodeObserver::notifyChildRemoved(Node &node, Node &child,
                                                            Node *prev)
 {
     _startIteration();
-    for ( ObserverRecordList::iterator iter=_active.begin() ;
-          iter != _active.end() ; ++iter )
+    for (auto & iter : _active)
     {
-        if (!iter->marked) {
-            iter->observer.notifyChildRemoved(node, child, prev);
+        if (!iter.marked) {
+            iter.observer.notifyChildRemoved(node, child, prev);
         }
     }
     _finishIteration();
@@ -66,11 +64,10 @@ void CompositeNodeObserver::notifyChildOrderChanged(Node &node, Node &child,
                                                                 Node *new_prev)
 {
     _startIteration();
-    for ( ObserverRecordList::iterator iter=_active.begin() ;
-          iter != _active.end() ; ++iter )
+    for (auto & iter : _active)
     {
-        if (!iter->marked) {
-            iter->observer.notifyChildOrderChanged(node, child, old_prev, new_prev);
+        if (!iter.marked) {
+            iter.observer.notifyChildOrderChanged(node, child, old_prev, new_prev);
         }
     }
     _finishIteration();
@@ -81,11 +78,10 @@ void CompositeNodeObserver::notifyContentChanged(
     Util::ptr_shared old_content, Util::ptr_shared new_content
 ) {
     _startIteration();
-    for ( ObserverRecordList::iterator iter=_active.begin() ;
-          iter != _active.end() ; ++iter )
+    for (auto & iter : _active)
     {
-        if (!iter->marked) {
-            iter->observer.notifyContentChanged(node, old_content, new_content);
+        if (!iter.marked) {
+            iter.observer.notifyContentChanged(node, old_content, new_content);
         }
     }
     _finishIteration();
@@ -96,11 +92,10 @@ void CompositeNodeObserver::notifyAttributeChanged(
     Util::ptr_shared old_value, Util::ptr_shared new_value
 ) {
     _startIteration();
-    for ( ObserverRecordList::iterator iter=_active.begin() ;
-          iter != _active.end() ; ++iter )
+    for (auto & iter : _active)
     {
-        if (!iter->marked) {
-            iter->observer.notifyAttributeChanged(node, name, old_value, new_value);
+        if (!iter.marked) {
+            iter.observer.notifyAttributeChanged(node, name, old_value, new_value);
         }
     }
     _finishIteration();

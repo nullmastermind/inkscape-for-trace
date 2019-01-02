@@ -317,8 +317,8 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
         if ( user_data ) {
             ColorItem* item = reinterpret_cast<ColorItem*>(user_data);
             bool show = swp && (swp->getSelectedIndex() == 0);
-            for ( std::vector<GtkWidget*>::iterator it = popupExtras.begin(); it != popupExtras.end(); ++ it) {
-                gtk_widget_set_sensitive(*it, show);
+            for (auto & popupExtra : popupExtras) {
+                gtk_widget_set_sensitive(popupExtra, show);
             }
 
             bounceTarget = item;
@@ -625,9 +625,9 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
                     first = docPalettes[nullptr];
                 } else {
                     std::vector<SwatchPage*> pages = _getSwatchSets();
-                    for ( std::vector<SwatchPage*>::iterator iter = pages.begin(); iter != pages.end(); ++iter ) {
-                        if ( (*iter)->_name == targetName ) {
-                            first = *iter;
+                    for (auto & page : pages) {
+                        if ( page->_name == targetName ) {
+                            first = page;
                             break;
                         }
                         index++;
@@ -649,8 +649,7 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
 
         int i = 0;
         std::vector<SwatchPage*> swatchSets = _getSwatchSets();
-        for ( std::vector<SwatchPage*>::iterator it = swatchSets.begin(); it != swatchSets.end(); ++it) {
-            SwatchPage* curr = *it;
+        for (auto curr : swatchSets) {
             Gtk::RadioMenuItem* single = Gtk::manage(new Gtk::RadioMenuItem(groupOne, curr->_name));
             if ( curr == first ) {
                 hotItem = single;
@@ -1076,15 +1075,13 @@ bool DocTrack::handleTimerCB()
     double now = timer->elapsed();
 
     std::vector<DocTrack *> needCallback;
-    for (std::vector<DocTrack *>::iterator it = docTrackings.begin(); it != docTrackings.end(); ++it) {
-        DocTrack *track = *it;
+    for (auto track : docTrackings) {
         if ( track->updatePending && ( (now - track->lastGradientUpdate) >= DOC_UPDATE_THREASHOLD) ) {
             needCallback.push_back(track);
         }
     }
 
-    for (std::vector<DocTrack *>::iterator it = needCallback.begin(); it != needCallback.end(); ++it) {
-        DocTrack *track = *it;
+    for (auto track : needCallback) {
         if ( std::find(docTrackings.begin(), docTrackings.end(), track) != docTrackings.end() ) { // Just in case one gets deleted while we are looping
             // Note: calling handleDefsModified will call queueUpdateIfNeeded and thus update the time and flag.
             SwatchesPanel::handleDefsModified(track->doc);
@@ -1097,8 +1094,7 @@ bool DocTrack::handleTimerCB()
 bool DocTrack::queueUpdateIfNeeded( SPDocument *doc )
 {
     bool deferProcessing = false;
-    for (std::vector<DocTrack*>::iterator it = docTrackings.begin(); it != docTrackings.end(); ++it) {
-        DocTrack *track = *it;
+    for (auto track : docTrackings) {
         if ( track->doc == doc ) {
             double now = timer->elapsed();
             double elapsed = now - track->lastGradientUpdate;
@@ -1193,10 +1189,8 @@ static void recalcSwatchContents(SPDocument* doc,
 
     if ( !newList.empty() ) {
         std::reverse(newList.begin(), newList.end());
-        for ( std::vector<SPGradient*>::iterator it = newList.begin(); it != newList.end(); ++it )
+        for (auto grad : newList)
         {
-            SPGradient* grad = *it;
-
             cairo_surface_t *preview = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                 PREVIEW_PIXBUF_WIDTH, VBLOCK);
             cairo_t *ct = cairo_create(preview);
@@ -1235,22 +1229,22 @@ void SwatchesPanel::handleGradientsChange(SPDocument *document)
         std::map<ColorItem*, SPGradient*> tmpGrads;
         recalcSwatchContents(document, tmpColors, tmpPrevs, tmpGrads);
 
-        for (std::map<ColorItem*, cairo_pattern_t*>::iterator it = tmpPrevs.begin(); it != tmpPrevs.end(); ++it) {
-            it->first->setPattern(it->second);
-            cairo_pattern_destroy(it->second);
+        for (auto & tmpPrev : tmpPrevs) {
+            tmpPrev.first->setPattern(tmpPrev.second);
+            cairo_pattern_destroy(tmpPrev.second);
         }
 
-        for (std::map<ColorItem*, SPGradient*>::iterator it = tmpGrads.begin(); it != tmpGrads.end(); ++it) {
-            it->first->setGradient(it->second);
+        for (auto & tmpGrad : tmpGrads) {
+            tmpGrad.first->setGradient(tmpGrad.second);
         }
 
         docPalette->_colors.swap(tmpColors);
 
         // Figure out which SwatchesPanel instances are affected and update them.
 
-        for (std::map<SwatchesPanel*, SPDocument*>::iterator it = docPerPanel.begin(); it != docPerPanel.end(); ++it) {
-            if (it->second == document) {
-                SwatchesPanel* swp = it->first;
+        for (auto & it : docPerPanel) {
+            if (it.second == document) {
+                SwatchesPanel* swp = it.first;
                 std::vector<SwatchPage*> pages = swp->_getSwatchSets();
                 SwatchPage* curr = pages[swp->_currentIndex];
                 if (curr == docPalette) {
@@ -1292,8 +1286,8 @@ void SwatchesPanel::handleDefsModified(SPDocument *document)
             }
         }
 
-        for (std::map<ColorItem*, cairo_pattern_t*>::iterator it = tmpPrevs.begin(); it != tmpPrevs.end(); ++it) {
-            cairo_pattern_destroy(it->second);
+        for (auto & tmpPrev : tmpPrevs) {
+            cairo_pattern_destroy(tmpPrev.second);
         }
     }
 }
@@ -1385,8 +1379,8 @@ void SwatchesPanel::_updateFromSelection()
             }
         }
 
-        for ( boost::ptr_vector<ColorItem>::iterator it = docPalette->_colors.begin(); it != docPalette->_colors.end(); ++it ) {
-            ColorItem* item = &*it;
+        for (auto & _color : docPalette->_colors) {
+            ColorItem* item = &_color;
             bool isFill = (fillId == item->def.descr);
             bool isStroke = (strokeId == item->def.descr);
             item->setState( isFill, isStroke );
@@ -1406,8 +1400,8 @@ void SwatchesPanel::_rebuild()
     _holder->freezeUpdates();
     // TODO restore once 'clear' works _holder->addPreview(_clear);
     _holder->addPreview(_remove);
-    for ( boost::ptr_vector<ColorItem>::iterator it = curr->_colors.begin(); it != curr->_colors.end(); ++it) {
-        _holder->addPreview(&*it);
+    for (auto & _color : curr->_colors) {
+        _holder->addPreview(&_color);
     }
     _holder->thawUpdates();
 }

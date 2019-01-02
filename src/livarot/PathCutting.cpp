@@ -63,8 +63,8 @@ void  Path::DashPolylineFromStyle(SPStyle *style, float scale, float min_len)
 
         double dlen = 0.0;
         // Find total length
-        for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
-            dlen += style->stroke_dasharray.values[i].value * scale;
+        for (auto & value : style->stroke_dasharray.values) {
+            dlen += value.value * scale;
         }
         if (dlen >= min_len) {
             // Extract out dash pattern (relative positions)
@@ -411,8 +411,8 @@ void  Path::AddCurve(Geom::Curve const &c)
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
 
         //recurse to convert the new path resulting from the sbasis to svgd
-        for(Geom::Path::iterator iter = sbasis_path.begin(); iter != sbasis_path.end(); ++iter) {
-            AddCurve(*iter);
+        for(const auto & iter : sbasis_path) {
+            AddCurve(iter);
         }
     }
 }
@@ -435,8 +435,8 @@ void  Path::LoadPath(Geom::Path const &path, Geom::Affine const &tr, bool doTran
 
     MoveTo( pathtr.initialPoint() );
 
-    for(Geom::Path::const_iterator cit = pathtr.begin(); cit != pathtr.end(); ++cit) {
-        AddCurve(*cit);
+    for(const auto & cit : pathtr) {
+        AddCurve(cit);
     }
 
     if (pathtr.closed()) {
@@ -463,8 +463,8 @@ void  Path::LoadPathVector(Geom::PathVector const &pv, Geom::Affine const &tr, b
             LoadPath(*it, tr, doTransformation, true);
         }
     } else {
-        for(Geom::PathVector::const_iterator it = pv.begin(); it != pv.end(); ++it) {
-            LoadPath(*it, tr, doTransformation, true);
+        for(const auto & it : pv) {
+            LoadPath(it, tr, doTransformation, true);
         }
     }
 }
@@ -527,8 +527,8 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
   Path**   res=nullptr;
   Path*    curAdd=nullptr;
   
-  for (int i=0;i<int(descr_cmd.size());i++) {
-    int const typ = descr_cmd[i]->getType();
+  for (auto & i : descr_cmd) {
+    int const typ = i->getType();
     switch ( typ ) {
       case descr_moveto:
         if ( curAdd ) {
@@ -549,7 +549,7 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
         curAdd=new Path;
         curAdd->SetBackData(false);
         {
-          PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
+          PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(i);
           curAdd->MoveTo(nData->p);
         }
           break;
@@ -560,31 +560,31 @@ Path**      Path::SubPaths(int &outNb,bool killNoSurf)
         break;        
       case descr_lineto:
       {
-        PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
+        PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(i);
         curAdd->LineTo(nData->p);
       }
         break;
       case descr_cubicto:
       {
-        PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
+        PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(i);
         curAdd->CubicTo(nData->p,nData->start,nData->end);
       }
         break;
       case descr_arcto:
       {
-        PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
+        PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(i);
         curAdd->ArcTo(nData->p,nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
       }
         break;
       case descr_bezierto:
       {
-        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
+        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(i);
         curAdd->BezierTo(nData->p);
       }
         break;
       case descr_interm_bezier:
       {
-        PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
+        PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(i);
         curAdd->IntermBezierTo(nData->p);
       }
         break;

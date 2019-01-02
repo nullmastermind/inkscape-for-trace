@@ -357,8 +357,8 @@ void VerbAction::set_active(bool active)
 {
     this->active = active;
     Glib::SListHandle<Gtk::Widget*> proxies = get_proxies();
-    for ( Glib::SListHandle<Gtk::Widget*>::iterator it = proxies.begin(); it != proxies.end(); ++it ) {
-        Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(*it);
+    for (auto proxie : proxies) {
+        Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(proxie);
         if (ti) {
             // *should* have one child that is the Inkscape::UI::Widget::Button
             auto child = dynamic_cast<Inkscape::UI::Widget::Button *>(ti->get_child());
@@ -607,8 +607,8 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         desktop->connectDestroy(&desktopDestructHandler);
     }
 
-    for ( guint i = 0; i < G_N_ELEMENTS(verbsToUse); i++ ) {
-        Inkscape::Verb* verb = Inkscape::Verb::get(verbsToUse[i]);
+    for (int i : verbsToUse) {
+        Inkscape::Verb* verb = Inkscape::Verb::get(i);
         if ( verb ) {
             if (!mainActions->get_action(verb->get_id())) {
                 GtkAction* act = create_action_for_verb( verb, view, toolboxSize );

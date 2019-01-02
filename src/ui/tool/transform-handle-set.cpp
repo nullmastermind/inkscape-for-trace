@@ -154,8 +154,8 @@ bool TransformHandle::grabbed(GdkEventMotion *)
         _all_snap_sources_sorted = _snap_points;
 
         // Calculate and store the distance to the reference point for each snap candidate point
-        for(std::vector<Inkscape::SnapCandidatePoint>::iterator i = _all_snap_sources_sorted.begin(); i != _all_snap_sources_sorted.end(); ++i) {
-            (*i).setDistance(Geom::L2((*i).getPoint() - _origin));
+        for(auto & i : _all_snap_sources_sorted) {
+            i.setDistance(Geom::L2(i.getPoint() - _origin));
         }
 
         // Sort them ascending, using the distance calculated above as the single criteria
@@ -724,8 +724,8 @@ TransformHandleSet::TransformHandleSet(SPDesktop *d, SPCanvasGroup *th_group)
 
 TransformHandleSet::~TransformHandleSet()
 {
-    for (unsigned i = 0; i < 17; ++i) {
-        delete _handles[i];
+    for (auto & _handle : _handles) {
+        delete _handle;
     }
 }
 
@@ -844,9 +844,9 @@ void TransformHandleSet::_updateVisibility(bool v)
         _center->setVisible(show_rotate /*&& bp[Geom::X] > handle_size[Geom::X]
             && bp[Geom::Y] > handle_size[Geom::Y]*/);
     } else {
-        for (unsigned i = 0; i < 17; ++i) {
-            if (_handles[i] != _active)
-                _handles[i]->setVisible(false);
+        for (auto & _handle : _handles) {
+            if (_handle != _active)
+                _handle->setVisible(false);
         }
     }
     

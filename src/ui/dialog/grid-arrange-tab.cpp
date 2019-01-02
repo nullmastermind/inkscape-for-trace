@@ -198,8 +198,7 @@
 
             cnt=0;
             const std::vector<SPItem*> sizes(sorted);
-            for (std::vector<SPItem*>::const_iterator i = sizes.begin();i!=sizes.end(); ++i) {
-                SPItem *item = *i;
+            for (auto item : sizes) {
                 Geom::OptRect b = item->documentVisualBounds();
                 if (b) {
                     width = b->dimensions()[Geom::X];

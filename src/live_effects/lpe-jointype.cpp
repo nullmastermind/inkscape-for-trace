@@ -168,8 +168,8 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
 Geom::PathVector LPEJoinType::doEffect_path(Geom::PathVector const & path_in)
 {
     Geom::PathVector ret;
-    for (size_t i = 0; i < path_in.size(); ++i) {
-        Geom::PathVector tmp = Inkscape::outline(path_in[i], line_width, 
+    for (const auto & i : path_in) {
+        Geom::PathVector tmp = Inkscape::outline(i, line_width, 
                                                  (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                                  static_cast<LineJoinType>(linejoin_type.get_value()),
                                                  static_cast<LineCapType>(linecap_type.get_value()));

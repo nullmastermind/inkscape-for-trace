@@ -853,8 +853,8 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
       }
       _POPPLER_FREE(obj3);
       if ((haveBackdropColor = _POPPLER_CALL_ARGS_DEREF(obj3, obj2.dictLookup, "BC").isArray())) {
-	for (int i = 0; i < gfxColorMaxComps; ++i) {
-	  backdropColor.c[i] = 0;
+	for (int & i : backdropColor.c) {
+	  i = 0;
 	}
 	for (int i = 0; i < obj3.arrayGetLength() && i < gfxColorMaxComps; ++i) {
           _POPPLER_CALL_ARGS(obj4, obj3.arrayGet, i);
@@ -893,8 +893,8 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	      blendingColorSpace->getDefaultColor(&backdropColor);
 	    } else {
 	      //~ need to get the parent or default color space (?)
-	      for (int i = 0; i < gfxColorMaxComps; ++i) {
-		backdropColor.c[i] = 0;
+	      for (int & i : backdropColor.c) {
+		i = 0;
 	      }
 	    }
 	  }

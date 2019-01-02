@@ -548,8 +548,8 @@ std::vector<size_t> getIdIds()
     std::vector<size_t> ids;
     std::vector<AttributeInfo> all_attrs = getKnownAttrs();
     ids.reserve(all_attrs.size()); // minimize memory thrashing
-    for (AttrItr it(all_attrs.begin()); it != all_attrs.end(); ++it) {
-        auto id = sp_attribute_lookup(it->attr.c_str());
+    for (auto & all_attr : all_attrs) {
+        auto id = sp_attribute_lookup(all_attr.attr.c_str());
         if (id >= ids.size()) {
             ids.resize(id + 1);
         }

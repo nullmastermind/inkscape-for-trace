@@ -204,9 +204,9 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             free_term[i+4] = handles[i][Y];
         }
         int h = 0;
-        for( int i = 0; i < 8; i++ ) {
+        for(auto & i : solmatrix) {
             for( int j = 0; j < 8; j++ ) {
-                gslSolmatrix[h] = solmatrix[i][j];
+                gslSolmatrix[h] = i[j];
                 h++;
             }
         }
@@ -220,13 +220,13 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         gsl_linalg_LU_decomp (&m.matrix, p, &s);
         gsl_linalg_LU_solve (&m.matrix, p, &b.vector, x);
         h = 0;
-        for( int i = 0; i < 3; i++ ) {
+        for(auto & i : projmatrix) {
             for( int j = 0; j < 3; j++ ) {
                 if(h==8) {
                     projmatrix[2][2] = 1.0;
                     continue;
                 }
-                projmatrix[i][j] = gsl_vector_get(x, h);
+                i[j] = gsl_vector_get(x, h);
                 h++;
             }
         }
@@ -239,21 +239,21 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
     Geom::Point point_at1(0, 0);
     Geom::Point point_at2(0, 0);
     Geom::Point point_at3(0, 0);
-    for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+    for (const auto & path_it : original_pathv) {
         //Si está vacío...
-        if (path_it->empty())
+        if (path_it.empty())
             continue;
         //Itreadores
         SPCurve *nCurve = new SPCurve();
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        Geom::Path::const_iterator curve_it1 = path_it.begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
+        Geom::Path::const_iterator curve_endit = path_it.end_default();
 
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             const Geom::Curve &closingline =
-                path_it->back_closed();
+                path_it.back_closed();
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                curve_endit = path_it->end_open();
+                curve_endit = path_it.end_open();
             }
         }
         if(deform_type == DEFORMATION_PERSPECTIVE) {
@@ -287,7 +287,7 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             }
         }
         //y cerramos la curva
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             nCurve->move_endpoints(point_at3, point_at3);
             nCurve->closepath_current();
         }

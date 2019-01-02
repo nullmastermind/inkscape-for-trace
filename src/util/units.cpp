@@ -267,9 +267,9 @@ UnitTable::UnitTable()
 
 UnitTable::~UnitTable()
 {
-    for (UnitCodeMap::iterator iter = _unit_map.begin(); iter != _unit_map.end(); ++iter)
+    for (auto & iter : _unit_map)
     {
-        delete iter->second;
+        delete iter.second;
     }
 }
 
@@ -383,9 +383,9 @@ bool UnitTable::hasUnit(Glib::ustring const &unit) const
 UnitTable::UnitMap UnitTable::units(UnitType type) const
 {
     UnitMap submap;
-    for (UnitCodeMap::const_iterator iter = _unit_map.begin(); iter != _unit_map.end(); ++iter) {
-        if (iter->second->type == type) {
-            submap.insert(UnitMap::value_type(iter->second->abbr, *iter->second));
+    for (auto iter : _unit_map) {
+        if (iter.second->type == type) {
+            submap.insert(UnitMap::value_type(iter.second->abbr, *iter.second));
         }
     }
 

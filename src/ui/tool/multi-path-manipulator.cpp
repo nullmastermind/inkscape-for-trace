@@ -58,8 +58,8 @@ void find_join_iterators(ControlPointSelection &sel, IterPairList &pairs)
     IterSet join_iters;
 
     // find all endnodes in selection
-    for (ControlPointSelection::iterator i = sel.begin(); i != sel.end(); ++i) {
-        Node *node = dynamic_cast<Node*>(*i);
+    for (auto i : sel) {
+        Node *node = dynamic_cast<Node*>(i);
         if (!node) continue;
         NodeList::iterator iter = NodeList::get_iterator(node);
         if (!iter.next() || !iter.prev()) join_iters.insert(iter);
@@ -181,8 +181,7 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
     }
 
     // add newly selected items
-    for (std::set<ShapeRecord>::iterator i = shapes.begin(); i != shapes.end(); ++i) {
-        ShapeRecord const &r = *i;
+    for (const auto & r : shapes) {
         if (!SP_IS_PATH(r.item) && !IS_LIVEPATHEFFECT(r.item)) continue;
         std::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.item,
             r.edit_transform, _getOutlineColor(r.role, r.item), r.lpe_key));
@@ -297,8 +296,8 @@ void MultiPathManipulator::setNodeType(NodeType type)
     // When all selected nodes are already cusp, retract their handles
     bool retract_handles = (type == NODE_CUSP);
 
-    for (ControlPointSelection::iterator i = _selection.begin(); i != _selection.end(); ++i) {
-        Node *node = dynamic_cast<Node*>(*i);
+    for (auto i : _selection) {
+        Node *node = dynamic_cast<Node*>(i);
         if (node) {
             retract_handles &= (node->type() == NODE_CUSP);
             node->setType(type);
@@ -306,8 +305,8 @@ void MultiPathManipulator::setNodeType(NodeType type)
     }
 
     if (retract_handles) {
-        for (ControlPointSelection::iterator i = _selection.begin(); i != _selection.end(); ++i) {
-            Node *node = dynamic_cast<Node*>(*i);
+        for (auto i : _selection) {
+            Node *node = dynamic_cast<Node*>(i);
             if (node) {
                 node->front()->retract();
                 node->back()->retract();
@@ -371,37 +370,37 @@ void MultiPathManipulator::joinNodes()
     }
     find_join_iterators(_selection, joins);
 
-    for (IterPairList::iterator i = joins.begin(); i != joins.end(); ++i) {
-        bool same_path = prepare_join(*i);
-        NodeList &sp_first = NodeList::get(i->first);
-        NodeList &sp_second = NodeList::get(i->second);
-        i->first->setType(NODE_CUSP, false);
+    for (auto & join : joins) {
+        bool same_path = prepare_join(join);
+        NodeList &sp_first = NodeList::get(join.first);
+        NodeList &sp_second = NodeList::get(join.second);
+        join.first->setType(NODE_CUSP, false);
 
         Geom::Point joined_pos, pos_handle_front, pos_handle_back;
-        pos_handle_front = *i->second->front();
-        pos_handle_back = *i->first->back();
+        pos_handle_front = *join.second->front();
+        pos_handle_back = *join.first->back();
 
         // When we encounter the mouseover node, we unset the iterator - it will be invalidated
-        if (i->first == preserve_pos) {
-            joined_pos = *i->first;
+        if (join.first == preserve_pos) {
+            joined_pos = *join.first;
             preserve_pos = NodeList::iterator();
-        } else if (i->second == preserve_pos) {
-            joined_pos = *i->second;
+        } else if (join.second == preserve_pos) {
+            joined_pos = *join.second;
             preserve_pos = NodeList::iterator();
         } else {
-            joined_pos = Geom::middle_point(*i->first, *i->second);
+            joined_pos = Geom::middle_point(*join.first, *join.second);
         }
 
         // if the handles aren't degenerate, don't move them
-        i->first->move(joined_pos);
-        Node *joined_node = i->first.ptr();
-        if (!i->second->front()->isDegenerate()) {
+        join.first->move(joined_pos);
+        Node *joined_node = join.first.ptr();
+        if (!join.second->front()->isDegenerate()) {
             joined_node->front()->setPosition(pos_handle_front);
         }
-        if (!i->first->back()->isDegenerate()) {
+        if (!join.first->back()->isDegenerate()) {
             joined_node->back()->setPosition(pos_handle_back);
         }
-        sp_second.erase(i->second);
+        sp_second.erase(join.second);
 
         if (same_path) {
             sp_first.setClosed(true);
@@ -409,7 +408,7 @@ void MultiPathManipulator::joinNodes()
             sp_first.splice(sp_first.end(), sp_second);
             sp_second.kill();
         }
-        _selection.insert(i->first.ptr());
+        _selection.insert(join.first.ptr());
     }
 
     if (joins.empty()) {
@@ -441,12 +440,12 @@ void MultiPathManipulator::joinSegments()
     IterPairList joins;
     find_join_iterators(_selection, joins);
 
-    for (IterPairList::iterator i = joins.begin(); i != joins.end(); ++i) {
-        bool same_path = prepare_join(*i);
-        NodeList &sp_first = NodeList::get(i->first);
-        NodeList &sp_second = NodeList::get(i->second);
-        i->first->setType(NODE_CUSP, false);
-        i->second->setType(NODE_CUSP, false);
+    for (auto & join : joins) {
+        bool same_path = prepare_join(join);
+        NodeList &sp_first = NodeList::get(join.first);
+        NodeList &sp_second = NodeList::get(join.second);
+        join.first->setType(NODE_CUSP, false);
+        join.second->setType(NODE_CUSP, false);
         if (same_path) {
             sp_first.setClosed(true);
         } else {
@@ -510,9 +509,9 @@ void MultiPathManipulator::move(Geom::Point const &delta)
 
 void MultiPathManipulator::showOutline(bool show)
 {
-    for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
+    for (auto & i : _mmap) {
         // always show outlines for clipping paths and masks
-        i->second->showOutline(show || i->first.role != SHAPE_ROLE_NORMAL);
+        i.second->showOutline(show || i.first.role != SHAPE_ROLE_NORMAL);
     }
     _show_outline = show;
 }
@@ -759,8 +758,8 @@ bool MultiPathManipulator::event(Inkscape::UI::Tools::ToolBase *event_context, G
         break;
     case GDK_MOTION_NOTIFY:
         combine_motion_events(_desktop->canvas, event->motion, 0);
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
-            if (i->second->event(event_context, event)) return true;
+        for (auto & i : _mmap) {
+            if (i.second->event(event_context, event)) return true;
         }
         break;
     default: break;

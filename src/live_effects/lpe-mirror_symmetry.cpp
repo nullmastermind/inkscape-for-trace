@@ -282,10 +282,9 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
-        for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
-             obj_it != childs.end(); ++obj_it) {
+        for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, reset); 
+            cloneD(child, dest_child, reset); 
             index++;
         }
         return;
@@ -322,8 +321,7 @@ LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
         container->setAttribute("transform", prev->attribute("transform"));
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         Inkscape::XML::Node *previous = nullptr;
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPObject *sub_item = *iter;
+        for (auto sub_item : item_list) {
             Inkscape::XML::Node *resultnode = createPathBase(sub_item);
             container->addChild(resultnode, previous);
             previous = resultnode;
@@ -471,24 +469,23 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         Geom::Point gap = dir * split_gap;
         path_out *= Geom::Translate(gap);
     } else if (fuse_paths && !discard_orig_path) {
-        for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
-             path_it != original_pathv.end(); ++path_it) 
+        for (const auto & path_it : original_pathv) 
         {
-            if (path_it->empty()) {
+            if (path_it.empty()) {
                 continue;
             }
             Geom::PathVector tmp_pathvector;
             double time_start = 0.0;
             int position = 0;
             bool end_open = false;
-            if (path_it->closed()) {
-                const Geom::Curve &closingline = path_it->back_closed();
+            if (path_it.closed()) {
+                const Geom::Curve &closingline = path_it.back_closed();
                 if (!are_near(closingline.initialPoint(), closingline.finalPoint())) {
                     end_open = true;
                 }
             }
-            Geom::Path original = *path_it;
-            if (end_open && path_it->closed()) {
+            Geom::Path original = path_it;
+            if (end_open && path_it.closed()) {
                 original.close(false);
                 original.appendNew<Geom::LineSegment>( original.initialPoint() );
                 original.close(true);
@@ -505,8 +502,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             divider.appendNew<Geom::LineSegment>(e);
             Geom::Crossings cs = crossings(original, divider);
             std::vector<double> crossed;
-            for(unsigned int i = 0; i < cs.size(); i++) {
-                crossed.push_back(cs[i].ta);
+            for(auto & c : cs) {
+                crossed.push_back(c.ta);
             }
             std::sort(crossed.begin(), crossed.end());
             for (unsigned int i = 0; i < crossed.size(); i++) {
@@ -571,8 +568,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             tmp_pathvector.clear();
         }
     } else if (!fuse_paths || discard_orig_path) {
-        for (size_t i = 0; i < original_pathv.size(); ++i) {
-            path_out.push_back(original_pathv[i] * m);
+        for (const auto & i : original_pathv) {
+            path_out.push_back(i * m);
         }
     }
     return path_out;

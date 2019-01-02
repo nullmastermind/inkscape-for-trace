@@ -588,8 +588,8 @@ bool Inkscape::ObjectSnapper::isUnselectedNode(Geom::Point const &point, std::ve
         return false;
     }
 
-    for (std::vector<SnapCandidatePoint>::const_iterator i = unselected_nodes->begin(); i != unselected_nodes->end(); ++i) {
-        if (Geom::L2(point - (*i).getPoint()) < 1e-4) {
+    for (const auto & unselected_node : *unselected_nodes) {
+        if (Geom::L2(point - unselected_node.getPoint()) < 1e-4) {
             return true;
         }
     }
@@ -819,9 +819,9 @@ void Inkscape::ObjectSnapper::_snapPathsTangPerp(bool snap_tang, bool snap_perp,
     // or we need to know the vector of the guide which is currently being translated
     std::vector<std::pair<Geom::Point, bool> > const origins_and_vectors = p.getOriginsAndVectors();
     // Now we will iterate over all the origins and vectors and see which of these will get use a tangential or perpendicular snap
-    for (std::vector<std::pair<Geom::Point, bool> >::const_iterator it_origin_or_vector = origins_and_vectors.begin(); it_origin_or_vector != origins_and_vectors.end(); ++it_origin_or_vector) {
-        Geom::Point origin_or_vector_doc = dt->dt2doc((*it_origin_or_vector).first); // "first" contains a Geom::Point, denoting either a point or vector
-        if ((*it_origin_or_vector).second) { // if "second" is true then "first" is a vector, otherwise it's a point
+    for (const auto & origins_and_vector : origins_and_vectors) {
+        Geom::Point origin_or_vector_doc = dt->dt2doc(origins_and_vector.first); // "first" contains a Geom::Point, denoting either a point or vector
+        if (origins_and_vector.second) { // if "second" is true then "first" is a vector, otherwise it's a point
             // So we have a vector, which tells us what tangential or perpendicular direction we're looking for
             if (curve->degreesOfFreedom() <= 2) { // A LineSegment has order one, and therefore 2 DOF
                 // When snapping to a point of a line segment that has a specific tangential or normal vector, then either all point
@@ -839,7 +839,7 @@ void Inkscape::ObjectSnapper::_snapPathsTangPerp(bool snap_tang, bool snap_perp,
         std::vector<double> ts;
 
         if (snap_tang) { // Find all points that lead to a tangential snap
-            if ((*it_origin_or_vector).second) { // if "second" is true then "first" is a vector, otherwise it's a point
+            if (origins_and_vector.second) { // if "second" is true then "first" is a vector, otherwise it's a point
                 ts = find_tangents_by_vector(origin_or_vector_doc, curve->toSBasis());
             } else {
                 ts = find_tangents(origin_or_vector_doc, curve->toSBasis());
@@ -852,7 +852,7 @@ void Inkscape::ObjectSnapper::_snapPathsTangPerp(bool snap_tang, bool snap_perp,
         }
 
         if (snap_perp) { // Find all points that lead to a perpendicular snap
-            if ((*it_origin_or_vector).second) {
+            if (origins_and_vector.second) {
                 ts = find_normals_by_vector(origin_or_vector_doc, curve->toSBasis());
             } else {
                 ts = find_normals(origin_or_vector_doc, curve->toSBasis());

@@ -59,8 +59,8 @@ FilterSlot::FilterSlot(DrawingItem *item, DrawingContext *bgdc,
 
 FilterSlot::~FilterSlot()
 {
-    for (SlotMap::iterator i = _slots.begin(); i != _slots.end(); ++i) {
-        cairo_surface_destroy(i->second);
+    for (auto & _slot : _slots) {
+        cairo_surface_destroy(_slot.second);
     }
 }
 

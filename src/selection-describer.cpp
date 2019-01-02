@@ -42,8 +42,7 @@ char* collect_terms (const std::vector<SPItem*> &items)
     std::stringstream ss;
     bool first = true;
 
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();++iter ) {
-        SPItem *item = *iter;
+    for (auto item : items) {
         if (item && item->displayName()) {
             Glib::ustring term(item->displayName());
             if (term != "" && (check.insert(term).second)) {
@@ -60,8 +59,7 @@ static int count_terms (const std::vector<SPItem*> &items)
 {
     std::set<Glib::ustring> check;
     int count=0;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();++iter ) {
-        SPItem *item = *iter;
+    for (auto item : items) {
         if (item && item->displayName()) {
             Glib::ustring term(item->displayName());
             if (term != "" && (check.insert(term).second)) {
@@ -76,8 +74,7 @@ static int count_terms (const std::vector<SPItem*> &items)
 static int count_filtered (const std::vector<SPItem*> &items)
 {
     int count=0;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();++iter ) {
-        SPItem *item = *iter;
+    for (auto item : items) {
         if (item) {
             count += item->isFiltered();
         }

@@ -672,11 +672,11 @@ spiro_iter(spiro_seg *s, bandmat *m, int *perm, double *v, const int n)
 
     for (int i = 0; i < nmat; i++) {
         v[i] = 0.;
-        for (int j = 0; j < 11; j++) {
-            m[i].a[j] = 0.;
+        for (double & j : m[i].a) {
+            j = 0.;
         }
-        for (int j = 0; j < 5; j++) {
-            m[i].al[j] = 0.;
+        for (double & j : m[i].al) {
+            j = 0.;
         }
     }
 

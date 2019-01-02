@@ -119,9 +119,8 @@ struct Point
  */
 static bool hasPoint(std::vector<Point> &points, double x, double y)
 {
-    for (unsigned int i=0; i<points.size() ; i++)
+    for (auto p : points)
         {
-        Point p = points[i];
         if (p.x == x && p.y == y)
             return true;
         }

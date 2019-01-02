@@ -476,8 +476,7 @@ void SPText::_buildLayoutInit()
             // Extract out shapes (a comma separated list of urls)
             Glib::ustring shapeInside_value = style->shape_inside.value;
             std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
-            for (unsigned int i=0; i<shapes_url.size(); ++i) {
-                Glib::ustring shape_url = shapes_url.at(i);
+            for (auto shape_url : shapes_url) {
                 if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
                     std::cerr << "SPText::_buildLayoutInit(): Invalid shape-inside value: " << shape_url << std::endl;
                 } else {
@@ -728,8 +727,7 @@ Shape* SPText::_buildExclusionShape() const
     // Extract out shapes (a comma separated list of urls)
     std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
 
-    for(unsigned int i=0; i<shapes_url.size(); i++) {
-        Glib::ustring shape_url = shapes_url.at(i);
+    for(auto shape_url : shapes_url) {
         if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
                 std::cerr << "SPText::_buildExclusionShape(): Invalid shape-inside value: " << shape_url << std::endl;
         } else {
@@ -1138,11 +1136,11 @@ bool TextTagAttributes::readSingleAttribute(unsigned key, gchar const *value, SP
         double const h = viewport->height();
         double const em = style->font_size.computed;
         double const ex = em * 0.5;
-        for(std::vector<SVGLength>::iterator it = attr_vector->begin(); it != attr_vector->end(); ++it) {
+        for(auto & it : *attr_vector) {
             if( update_x )
-                it->update( em, ex, w );
+                it.update( em, ex, w );
             if( update_y )
-                it->update( em, ex, h );
+                it.update( em, ex, h );
         }
     }
     return true;
@@ -1169,17 +1167,17 @@ void TextTagAttributes::writeTo(Inkscape::XML::Node *node) const
 
 void TextTagAttributes::update( double em, double ex, double w, double h )
 {
-    for(std::vector<SVGLength>::iterator it = attributes.x.begin(); it != attributes.x.end(); ++it) {
-        it->update( em, ex, w );
+    for(auto & it : attributes.x) {
+        it.update( em, ex, w );
     }
-    for(std::vector<SVGLength>::iterator it = attributes.y.begin(); it != attributes.y.end(); ++it) {
-        it->update( em, ex, h );
+    for(auto & it : attributes.y) {
+        it.update( em, ex, h );
     }
-    for(std::vector<SVGLength>::iterator it = attributes.dx.begin(); it != attributes.dx.end(); ++it) {
-        it->update( em, ex, w );
+    for(auto & it : attributes.dx) {
+        it.update( em, ex, w );
     }
-    for(std::vector<SVGLength>::iterator it = attributes.dy.begin(); it != attributes.dy.end(); ++it) {
-        it->update( em, ex, h );
+    for(auto & it : attributes.dy) {
+        it.update( em, ex, h );
     }
 }
 
@@ -1199,9 +1197,9 @@ void TextTagAttributes::writeSingleAttributeVector(Inkscape::XML::Node *node, gc
         Glib::ustring string;
 
         // FIXME: this has no concept of unset values because sp_svg_length_list_read() can't read them back in
-        for (std::vector<SVGLength>::const_iterator it = attr_vector.begin() ; it != attr_vector.end() ; ++it) {
+        for (auto it : attr_vector) {
             if (!string.empty()) string += ' ';
-            string += it->write();
+            string += it.write();
         }
         node->setAttribute(key, string.c_str());
     }
@@ -1440,10 +1438,10 @@ void TextTagAttributes::transform(Geom::Affine const &matrix, double scale_x, do
             attributes.y[i] = point[Geom::Y];
         }
     }
-    for (std::vector<SVGLength>::iterator it = attributes.dx.begin() ; it != attributes.dx.end() ; ++it)
-        *it = it->computed * scale_x;
-    for (std::vector<SVGLength>::iterator it = attributes.dy.begin() ; it != attributes.dy.end() ; ++it)
-        *it = it->computed * scale_y;
+    for (auto & it : attributes.dx)
+        it = it.computed * scale_x;
+    for (auto & it : attributes.dy)
+        it = it.computed * scale_y;
 }
 
 double TextTagAttributes::getDx(unsigned index)

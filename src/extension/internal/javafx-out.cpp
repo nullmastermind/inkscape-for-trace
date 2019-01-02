@@ -312,9 +312,8 @@ bool JavaFXOutput::doGradient(SPGradient *grad, const String &id)
             {
             out("            stops:\n");
             out("                [\n");
-            for (unsigned int i = 0 ; i<stops.size() ; i++)
+            for (auto stop : stops)
                 {
-                SPGradientStop stop = stops[i];
                 out("                Stop {\n");
                 out("                    offset: %s\n", DSTR(stop.offset));
                 out("                    color: %s\n",  rgba(stop.color, stop.opacity).c_str());
@@ -342,9 +341,8 @@ bool JavaFXOutput::doGradient(SPGradient *grad, const String &id)
             {
             out("            stops:\n");
             out("            [\n");
-            for (unsigned int i = 0 ; i<stops.size() ; i++)
+            for (auto stop : stops)
                 {
-                SPGradientStop stop = stops[i];
                 out("                Stop {\n");
                 out("                    offset: %s\n", DSTR(stop.offset));
                 out("                    color: %s\n",  rgba(stop.color, stop.opacity).c_str());

@@ -508,8 +508,8 @@ Writer &BasicWriter::writeUString(const Glib::ustring &str)
  */ 
 Writer &BasicWriter::writeStdString(const std::string &str)
 {
-    for (auto it = str.begin(); it != str.end(); ++it) {
-        put(*it);
+    for (char it : str) {
+        put(it);
     }
     return *this;
 }

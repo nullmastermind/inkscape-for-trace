@@ -675,8 +675,8 @@ void SimpleNode::cleanOriginal(Node *src, gchar const *key){
             to_delete.push_back(child);
         }
     }
-    for ( std::vector<Node *>::iterator i = to_delete.begin(); i != to_delete.end(); ++i) {
-        removeChild(*i);
+    for (auto & i : to_delete) {
+        removeChild(i);
     }
 }
 

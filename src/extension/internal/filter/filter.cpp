@@ -130,10 +130,8 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 	Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
 	Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
 
-    for(std::vector<SPItem*>::iterator item = items.begin();
-            item != items.end(); ++item) {
-        SPItem * spitem = *item;
-	Inkscape::XML::Node * node = spitem->getRepr();
+    for(auto spitem : items) {
+        	Inkscape::XML::Node * node = spitem->getRepr();
 
 		SPCSSAttr * css = sp_repr_css_attr(node, "style");
 		gchar const * filter = sp_repr_css_property(css, "filter", nullptr);

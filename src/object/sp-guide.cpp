@@ -249,8 +249,8 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
 
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts)
 {
-    for (std::list<std::pair<Geom::Point, Geom::Point> >::iterator i = pts.begin(); i != pts.end(); ++i) {
-        SPGuide::createSPGuide(doc, (*i).first, (*i).second);
+    for (auto & pt : pts) {
+        SPGuide::createSPGuide(doc, pt.first, pt.second);
     }
 }
 

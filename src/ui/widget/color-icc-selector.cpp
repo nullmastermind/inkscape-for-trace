@@ -186,9 +186,9 @@ std::vector<colorspace::Component> colorspace::getColorSpaceInfo(uint32_t space)
         sets[cmsSigCmyData].push_back(Component(_("_M:"), _("Magenta"), 1));
         sets[cmsSigCmyData].push_back(Component(_("_Y:"), _("Yellow"), 1));
 
-        for (std::map<cmsUInt32Number, std::vector<Component> >::iterator it = sets.begin(); it != sets.end(); ++it) {
-            knownColorspaces.insert(it->first);
-            maxColorspaceComponentCount = std::max(maxColorspaceComponentCount, it->second.size());
+        for (auto & set : sets) {
+            knownColorspaces.insert(set.first);
+            maxColorspaceComponentCount = std::max(maxColorspaceComponentCount, set.second.size());
         }
     }
 
@@ -806,10 +806,10 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
         profChanged = true;
     }
 
-    for (size_t i = 0; i < _compUI.size(); i++) {
-        gtk_widget_hide(_compUI[i]._label);
-        _compUI[i]._slider->hide();
-        gtk_widget_hide(_compUI[i]._btn);
+    for (auto & i : _compUI) {
+        gtk_widget_hide(i._label);
+        i._slider->hide();
+        gtk_widget_hide(i._btn);
     }
 
     if (profile) {

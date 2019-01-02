@@ -16,7 +16,7 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include "float.h"
+#include "./float.h"
 
 namespace Inkscape {
 namespace Extension {

@@ -519,8 +519,8 @@ void SPObject::cropToObject(SPObject *except)
             }
         }
     }
-    for (std::size_t i = 0; i < toDelete.size(); ++i) {
-        (toDelete[i])->deleteObject(true, true);
+    for (auto & i : toDelete) {
+        i->deleteObject(true, true);
     }
 }
 

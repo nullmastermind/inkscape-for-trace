@@ -1297,8 +1297,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         if ( back ) {
             {
                 // invert && back && !weighted
-                for (int i = 0; i < int(pts.size()); i++) {
-                    dest->AddPoint(pts[i].p);
+                for (auto & pt : pts) {
+                    dest->AddPoint(pt.p);
                 }
                 int lastM = 0;
                 int curP = 1;
@@ -1381,8 +1381,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
 
             {
                 // invert && !back && !weighted
-                for (int i = 0; i < int(pts.size()); i++) {
-                    dest->AddPoint(pts[i].p);
+                for (auto & pt : pts) {
+                    dest->AddPoint(pt.p);
                 }
                 int lastM = 0;
                 int curP = 1;
@@ -1437,8 +1437,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         if ( back ) {
             {
                 // !invert && back && !weighted
-                for (int i = 0; i < int(pts.size()); i++) {
-                    dest->AddPoint(pts[i].p);
+                for (auto & pt : pts) {
+                    dest->AddPoint(pt.p);
                 }
 
                 int lastM = 0;
@@ -1512,8 +1512,8 @@ void Path::Fill(Shape* dest, int pathID, bool justAdd, bool closeIfNeeded, bool 
         } else {
             {
                 // !invert && !back && !weighted
-                for (int i = 0;i < int(pts.size()); i++) {
-                    dest->AddPoint(pts[i].p);
+                for (auto & pt : pts) {
+                    dest->AddPoint(pt.p);
                 }
 
                 int lastM = 0;

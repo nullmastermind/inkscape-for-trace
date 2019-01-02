@@ -266,8 +266,8 @@ void ColorScales::setScaled(GtkAdjustment *a, gfloat v, bool constrained)
 void ColorScales::_setRangeLimit(gdouble upper)
 {
     _rangeLimit = upper;
-    for (gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(_a)); i++) {
-        gtk_adjustment_set_upper(_a[i], upper);
+    for (auto & i : _a) {
+        gtk_adjustment_set_upper(i, upper);
     }
 }
 

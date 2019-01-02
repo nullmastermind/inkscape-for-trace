@@ -117,16 +117,16 @@ void ms_read_selection( Inkscape::Selection *selection,
 
     // Read desktop selection, taking into account fill/stroke toggles
     std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients( selection );
-    for (auto i = meshes.begin(); i != meshes.end(); ++i) {
+    for (auto & meshe : meshes) {
         if (first) {
-            ms_selected = (*i);
-            ms_type = (*i)->type;
+            ms_selected = meshe;
+            ms_type = meshe->type;
             first = false;
         } else {
-            if (ms_selected != (*i)) {
+            if (ms_selected != meshe) {
                 ms_selected_multi = true;
             }
-            if (ms_type != (*i)->type) {
+            if (ms_type != meshe->type) {
                 ms_type_multi = true;
             }
         }
@@ -261,10 +261,10 @@ static void ms_type_changed( GObject *tbl, int mode )
     std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients(selection);
 
     SPMeshType type = (SPMeshType) mode;
-    for (auto i = meshes.begin(); i != meshes.end(); ++i) {
-        (*i)->type = type;
-        (*i)->type_set = true;
-        (*i)->updateRepr();
+    for (auto & meshe : meshes) {
+        meshe->type = type;
+        meshe->type_set = true;
+        meshe->updateRepr();
     }
     if (!meshes.empty() ) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));

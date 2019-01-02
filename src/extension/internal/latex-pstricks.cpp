@@ -304,8 +304,8 @@ PrintLatex::print_2geomcurve(SVGOStringStream &os, Geom::Curve const &c)
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
 
-        for(Geom::Path::iterator iter = sbasis_path.begin(); iter != sbasis_path.end(); ++iter) {
-            print_2geomcurve(os, *iter);
+        for(const auto & iter : sbasis_path) {
+            print_2geomcurve(os, iter);
         }
     }
 }

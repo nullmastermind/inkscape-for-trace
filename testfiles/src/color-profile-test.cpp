@@ -70,9 +70,9 @@ TEST_F(ColorProfileTest, SetRenderingIntent)
         {"auto2", (guint)Inkscape::RENDERING_INTENT_UNKNOWN},
     };
 
-    for ( size_t i = 0; i < G_N_ELEMENTS( cases ); i++ ) {
-        _prof->setKeyValue( SP_ATTR_RENDERING_INTENT, cases[i].attr);
-        ASSERT_EQ( (guint)cases[i].intVal, _prof->rendering_intent ) << cases[i].attr;
+    for (auto i : cases) {
+        _prof->setKeyValue( SP_ATTR_RENDERING_INTENT, i.attr);
+        ASSERT_EQ( (guint)i.intVal, _prof->rendering_intent ) << i.attr;
     }
 }
 
@@ -83,11 +83,11 @@ TEST_F(ColorProfileTest, SetLocal)
         "something",
     };
 
-    for ( size_t i = 0; i < G_N_ELEMENTS( cases ); i++ ) {
-        _prof->setKeyValue( SP_ATTR_LOCAL, cases[i]);
+    for (auto & i : cases) {
+        _prof->setKeyValue( SP_ATTR_LOCAL, i);
         ASSERT_TRUE( _prof->local != NULL );
         if ( _prof->local ) {
-            ASSERT_EQ( std::string(cases[i]), _prof->local );
+            ASSERT_EQ( std::string(i), _prof->local );
         }
     }
     _prof->setKeyValue( SP_ATTR_LOCAL, NULL);
@@ -101,11 +101,11 @@ TEST_F(ColorProfileTest, SetName)
         "something",
     };
 
-    for ( size_t i = 0; i < G_N_ELEMENTS( cases ); i++ ) {
-        _prof->setKeyValue( SP_ATTR_NAME, cases[i]);
+    for (auto & i : cases) {
+        _prof->setKeyValue( SP_ATTR_NAME, i);
         ASSERT_TRUE( _prof->name != NULL );
         if ( _prof->name ) {
-            ASSERT_EQ( std::string(cases[i]), _prof->name );
+            ASSERT_EQ( std::string(i), _prof->name );
         }
     }
     _prof->setKeyValue( SP_ATTR_NAME, NULL );

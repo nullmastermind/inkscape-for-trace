@@ -91,8 +91,8 @@ void Layout::_clearOutputObjects()
     _paragraphs.clear();
     _lines.clear();
     _chunks.clear();
-    for (std::vector<Span>::iterator it_span = _spans.begin() ; it_span != _spans.end() ; ++it_span)
-        if (it_span->font) it_span->font->Unref();
+    for (auto & _span : _spans)
+        if (_span.font) _span.font->Unref();
     _spans.clear();
     _characters.clear();
     _glyphs.clear();
@@ -755,10 +755,10 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
                     Path::cut_position *end_otp = const_cast<Path&>(path).CurvilignToPosition(1, &end_offset, unused);
                     if (end_otp != nullptr && end_otp[0].piece >= 0) {
                         bool on_same_subpath = true;
-                        for (size_t i = 0 ; i < path.pts.size() ; i++) {
-                            if (path.pts[i].piece <= start_otp[0].piece) continue;
-                            if (path.pts[i].piece >= end_otp[0].piece) break;
-                            if (path.pts[i].isMoveTo == polyline_moveto) {
+                        for (const auto & pt : path.pts) {
+                            if (pt.piece <= start_otp[0].piece) continue;
+                            if (pt.piece >= end_otp[0].piece) break;
+                            if (pt.isMoveTo == polyline_moveto) {
                                 on_same_subpath = false;
                                 break;
                             }
@@ -809,9 +809,9 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
         char_index = next_cluster_char_index;
     }
 
-    for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
-        _spans[span_index].x_start += offset;
-        _spans[span_index].x_end += offset;
+    for (auto & _span : _spans) {
+        _span.x_start += offset;
+        _span.x_end += offset;
     }
 
     _path_fitted = &path;
@@ -847,11 +847,11 @@ void Layout::transform(Geom::Affine const &transform)
 {
     // this is all massively oversimplified
     // I can't actually think of anybody who'll want to use it at the moment, so it'll stay simple
-    for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
-        Geom::Point point(_glyphs[glyph_index].x, _glyphs[glyph_index].y);
+    for (auto & _glyph : _glyphs) {
+        Geom::Point point(_glyph.x, _glyph.y);
         point *= transform;
-        _glyphs[glyph_index].x = point[0];
-        _glyphs[glyph_index].y = point[1];
+        _glyph.x = point[0];
+        _glyph.y = point[1];
     }
 }
 

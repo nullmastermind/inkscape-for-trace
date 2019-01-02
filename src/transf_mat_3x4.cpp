@@ -159,10 +159,10 @@ TransfMat3x4::copy_tmat(double rhs[3][4]) {
 void
 TransfMat3x4::print () const {
   g_print ("Transformation matrix:\n");
-  for (int i = 0; i < 3; ++i) {
+  for (const auto & i : tmat) {
     g_print ("  ");
     for (int j = 0; j < 4; ++j) {
-      g_print ("%8.2f ", tmat[i][j]);
+      g_print ("%8.2f ", i[j]);
     }
     g_print ("\n");
   }

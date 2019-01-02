@@ -146,11 +146,11 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
     }
     std::vector<std::vector<double> > roots = multi_roots(arclength, s_cuts);
     std::vector<double> t_cuts;
-    for (unsigned v=0; v<roots.size();v++){
+    for (auto & root : roots){
         //FIXME: 2geom multi_roots solver seem to sometimes "repeat" solutions.
         //Here, we are supposed to have one and only one solution for each s.
-        if(roots[v].size()>0) 
-            t_cuts.push_back(roots[v][0]);
+        if(root.size()>0) 
+            t_cuts.push_back(root[0]);
     }
     //draw the marks
     for (size_t i = 0; i < t_cuts.size(); i++) {

@@ -84,8 +84,8 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     unsigned beststate = STATE_ALL;
 
     // update markers
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->update(area, ctx, flags, reset);
+    for (auto & i : _children) {
+        i.update(area, ctx, flags, reset);
     }
 
     if (!(flags & STATE_RENDER)) {
@@ -100,8 +100,8 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
                 }
             }
             if (beststate & STATE_BBOX) {
-                for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-                    _bbox.unionWith(i->geometricBounds());
+                for (auto & i : _children) {
+                    _bbox.unionWith(i.geometricBounds());
                 }
             }
         }
@@ -146,8 +146,8 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     }
 
     if (beststate & STATE_BBOX) {
-        for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-            _bbox.unionWith(i->geometricBounds());
+        for (auto & i : _children) {
+            _bbox.unionWith(i.geometricBounds());
         }
     }
     return STATE_ALL;
@@ -206,8 +206,8 @@ void
 DrawingShape::_renderMarkers(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
     // marker rendering
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        i->render(dc, area, flags, stop_at);
+    for (auto & i : _children) {
+        i.render(dc, area, flags, stop_at);
     }
 }
 
@@ -289,8 +289,8 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
     }
 
     // Handle different paint orders
-    for (unsigned i = 0; i < NRStyle::PAINT_ORDER_LAYERS; ++i) {
-        switch (_nrstyle.paint_order_layer[i]) {
+    for (auto & i : _nrstyle.paint_order_layer) {
+        switch (i) {
             case NRStyle::PAINT_ORDER_FILL:
                 _renderFill(dc);
                 break;
@@ -412,8 +412,8 @@ DrawingShape::_pickItem(Geom::Point const &p, double delta, unsigned flags)
     }
 
     // if not picked on the shape itself, try its markers
-    for (ChildrenList::iterator i = _children.begin(); i != _children.end(); ++i) {
-        DrawingItem *ret = i->pick(p, delta, flags & ~PICK_STICKY);
+    for (auto & i : _children) {
+        DrawingItem *ret = i.pick(p, delta, flags & ~PICK_STICKY);
         if (ret) {
             _last_pick = this;
             return this;

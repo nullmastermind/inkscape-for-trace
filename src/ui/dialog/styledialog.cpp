@@ -853,8 +853,7 @@ void StyleDialog::_selectObjects(int eventX, int eventY)
                 Gtk::TreeModel::Children children = row.children();
                 std::vector<SPObject *> objVec = row[_mColumns._colObj];
 
-                for (unsigned i = 0; i < objVec.size(); ++i) {
-                    SPObject *obj = objVec[i];
+                for (auto obj : objVec) {
                     getDesktop()->selection->add(obj);
                 }
             }
@@ -1292,13 +1291,11 @@ void StyleDialog::_selectRow()
         SPObject *obj = selection->objects().back();
 
         Gtk::TreeModel::Children children = _store->children();
-        for(Gtk::TreeModel::Children::iterator iter = children.begin();
-            iter != children.end(); ++iter) {
+        for(auto row : children) {
 
-            Gtk::TreeModel::Row row = *iter;
             std::vector<SPObject *> objVec = row[_mColumns._colObj];
-            for (unsigned i = 0; i < objVec.size(); ++i) {
-                if (obj->getId() == objVec[i]->getId()) {
+            for (auto & i : objVec) {
+                if (obj->getId() == i->getId()) {
                     _treeView.get_selection()->select(row);
                     _updateCSSPanel();
                     return;

@@ -160,9 +160,9 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     sp_canvas_item_hide(_grip);
     sp_canvas_item_hide(_norm);
 
-    for (int i = 0; i < 4; i++) {
-        _l[i] = ControlManager::getManager().createControlLine(desktop->getControls());
-        sp_canvas_item_hide(_l[i]);
+    for (auto & i : _l) {
+        i = ControlManager::getManager().createControlLine(desktop->getControls());
+        sp_canvas_item_hide(i);
     }
 
     _sel_changed_connection = _selection->connectChanged(
@@ -183,9 +183,9 @@ Inkscape::SelTrans::~SelTrans()
     _sel_changed_connection.disconnect();
     _sel_modified_connection.disconnect();
 
-    for (int i = 0; i < NUMHANDS; i++) {
-        knot_unref(knots[i]);
-        knots[i] = nullptr;
+    for (auto & knot : knots) {
+        knot_unref(knot);
+        knot = nullptr;
     }
 
     if (_norm) {
@@ -196,15 +196,15 @@ Inkscape::SelTrans::~SelTrans()
         sp_canvas_item_destroy(_grip);
         _grip = nullptr;
     }
-    for (int i = 0; i < 4; i++) {
-        if (_l[i]) {
-            sp_canvas_item_destroy(_l[i]);
-            _l[i] = nullptr;
+    for (auto & i : _l) {
+        if (i) {
+            sp_canvas_item_destroy(i);
+            i = nullptr;
         }
     }
 
-    for (unsigned i = 0; i < _items.size(); i++) {
-        sp_object_unref(_items[i], nullptr);
+    for (auto & _item : _items) {
+        sp_object_unref(_item, nullptr);
     }
 
     _items.clear();
@@ -330,8 +330,8 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         bool c2 = prefs->getBool("/options/snapclosestonly/value", false);
         if (translating && (c1 || c2)) {
             // Get the bounding box points for each item in the selection
-            for (unsigned i = 0; i < _items.size(); i++) {
-                Geom::OptRect b = _items[i]->desktopBounds(_snap_bbox_type);
+            for (auto & _item : _items) {
+                Geom::OptRect b = _item->desktopBounds(_snap_bbox_type);
                 getBBoxPoints(b, &_bbox_points, false, c, emp, mp);
             }
         } else {
@@ -369,8 +369,8 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
     }
 
     if (_show == SHOW_OUTLINE) {
-        for (int i = 0; i < 4; i++)
-            sp_canvas_item_show(_l[i]);
+        for (auto & i : _l)
+            sp_canvas_item_show(i);
     }
 
     _updateHandles();
@@ -425,16 +425,16 @@ void Inkscape::SelTrans::ungrab()
     Inkscape::Selection *selection = _desktop->getSelection();
     _updateVolatileState();
 
-    for (unsigned i = 0; i < _items.size(); i++) {
-        sp_object_unref(_items[i], nullptr);
+    for (auto & _item : _items) {
+        sp_object_unref(_item, nullptr);
     }
 
     sp_canvas_item_hide(_norm);
     sp_canvas_item_hide(_grip);
 
     if (_show == SHOW_OUTLINE) {
-        for (int i = 0; i < 4; i++)
-            sp_canvas_item_hide(_l[i]);
+        for (auto & i : _l)
+            sp_canvas_item_hide(i);
     }
     if(!_stamp_cache.empty()){
         _stamp_cache.clear();
@@ -589,8 +589,8 @@ void Inkscape::SelTrans::stamp()
 
 void Inkscape::SelTrans::_updateHandles()
 {
-    for (int i = 0; i < NUMHANDS; i++)
-        knots[i]->hide();
+    for (auto & knot : knots)
+        knot->hide();
 
     if ( !_show_handles || _empty )
         return;
@@ -772,8 +772,8 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
 
     // in case items have been unhooked from the document, don't
     // try to continue processing events for them.
-    for (unsigned int i = 0; i < _items.size(); i++) {
-        if ( !_items[i]->document ) {
+    for (auto & _item : _items) {
+        if ( !_item->document ) {
             return;
         }
     }
@@ -1598,8 +1598,8 @@ void Inkscape::SelTrans::_keepClosestPointOnly(Geom::Point const &p)
     _all_snap_sources_sorted.insert(_all_snap_sources_sorted.end(), _bbox_points.begin(), _bbox_points.end());
 
     // Calculate and store the distance to the reference point for each snap candidate point
-    for(std::vector<Inkscape::SnapCandidatePoint>::iterator i = _all_snap_sources_sorted.begin(); i != _all_snap_sources_sorted.end(); ++i) {
-        (*i).setDistance(Geom::L2((*i).getPoint() - p));
+    for(auto & i : _all_snap_sources_sorted) {
+        i.setDistance(Geom::L2(i.getPoint() - p));
     }
 
     // Sort them ascending, using the distance calculated above as the single criteria

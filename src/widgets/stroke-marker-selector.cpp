@@ -421,9 +421,8 @@ MarkerComboBox::update_marker_image(gchar const *mname)
     }
     sandbox->getRoot()->invoke_hide(visionkey);
 
-    for(Gtk::TreeIter iter = marker_store->children().begin();
-        iter != marker_store->children().end(); ++iter) {
-            Gtk::TreeModel::Row row = (*iter);
+    for(const auto & iter : marker_store->children()) {
+            Gtk::TreeModel::Row row = iter;
             if (row[marker_columns.marker] && row[marker_columns.history] &&
                     !strcmp(row[marker_columns.marker], mname)) {
                 row[marker_columns.image] = prv;

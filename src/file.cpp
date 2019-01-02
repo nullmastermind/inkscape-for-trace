@@ -539,9 +539,9 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     //# Iterate through filenames if more than 1
     if (flist.size() > 1)
     {
-        for (unsigned int i = 0; i < flist.size(); i++)
+        for (const auto & i : flist)
         {
-            fileName = flist[i];
+            fileName = i;
 
             Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
             if ( newFileName.size() > 0 )
@@ -1372,9 +1372,9 @@ sp_file_import(Gtk::Window &parentWindow)
     //# Iterate through filenames if more than 1
     if (flist.size() > 1)
     {
-        for (unsigned int i = 0; i < flist.size(); i++)
+        for (const auto & i : flist)
         {
-            fileName = flist[i];
+            fileName = i;
 
             Glib::ustring newFileName = Glib::filename_to_utf8(fileName);
             if (!newFileName.empty())

@@ -122,9 +122,9 @@ FontSelector::set_sizes ()
     //                    PX  PT  PC  MM  CM   IN  EM  EX     %
     double ratios[] = {1,  1,  1, 10,  4, 40, 100, 16,  8, 0.16};
 
-    for (unsigned int i = 0; i < G_N_ELEMENTS(sizes); ++i)
+    for (int i : sizes)
     {
-        double size = sizes[i]/ratios[unit];
+        double size = i/ratios[unit];
         size_combobox.append( Glib::ustring::format(size) );
     }
 }

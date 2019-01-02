@@ -446,9 +446,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
     if (selectedNodesPoints.size() > 0) {
         using Geom::X;
         using Geom::Y; 
-        for (std::vector<Geom::Point>::const_iterator i = selectedNodesPoints.begin();
-                i != selectedNodesPoints.end(); ++i) {
-            Geom::Point p = *i;
+        for (auto p : selectedNodesPoints) {
             Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
             Geom::Point p2(nodePoint[X],nodePoint[Y]);
             p2 *= transformCoordinate;
@@ -467,9 +465,7 @@ Effect::processObjects(LPEAction lpe_action)
     if (!document) {
         return;
     }
-    for (std::vector<Glib::ustring>::iterator el_it = items.begin(); 
-         el_it != items.end(); ++el_it) {
-        Glib::ustring id = *el_it;
+    for (auto id : items) {
         if (id.empty()) {
             return;
         }
@@ -621,20 +617,20 @@ Effect::doEffect_path (Geom::PathVector const & path_in)
 
     if ( !concatenate_before_pwd2 ) {
         // default behavior
-        for (unsigned int i=0; i < path_in.size(); i++) {
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_in[i].toPwSb();
+        for (const auto & i : path_in) {
+            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = i.toPwSb();
             Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
             Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
             // add the output path vector to the already accumulated vector:
-            for (unsigned int j=0; j < path.size(); j++) {
-                path_out.push_back(path[j]);
+            for (const auto & j : path) {
+                path_out.push_back(j);
             }
         }
     } else {
       // concatenate the path into possibly discontinuous pwd2
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in;
-        for (unsigned int i=0; i < path_in.size(); i++) {
-            pwd2_in.concat( path_in[i].toPwSb() );
+        for (const auto & i : path_in) {
+            pwd2_in.concat( i.toPwSb() );
         }
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
         path_out = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
@@ -716,8 +712,8 @@ Effect::addHandles(KnotHolder *knotholder, SPItem *item) {
     addKnotHolderEntities(knotholder, item);
 
     // add handles provided by the effect's parameters (if any)
-    for (std::vector<Parameter *>::iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->addKnotHolderEntities(knotholder, item);
+    for (auto & p : param_vector) {
+        p->addKnotHolderEntities(knotholder, item);
     }
 }
 
@@ -736,8 +732,8 @@ Effect::getCanvasIndicators(SPLPEItem const* lpeitem)
     addCanvasIndicators(lpeitem, hp_vec);
 
     // add indicators provided by the effect's parameters
-    for (std::vector<Parameter *>::iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->addCanvasIndicators(lpeitem, hp_vec);
+    for (auto & p : param_vector) {
+        p->addCanvasIndicators(lpeitem, hp_vec);
     }
 
     return hp_vec;
@@ -1006,8 +1002,8 @@ Effect::providesKnotholder() const
     }
 
     // otherwise: are there any parameters that have knotholderentities?
-    for (std::vector<Parameter *>::const_iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
-        if ((*p)->providesKnotHolderEntities()) {
+    for (auto p : param_vector) {
+        if (p->providesKnotHolderEntities()) {
             return true;
         }
     }

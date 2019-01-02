@@ -158,10 +158,10 @@ void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &postmul,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (prefs->getBool("/options/transform/rectcorners", true)) {
-        for (size_t i = 0; i < _vector.size(); ++i) {
-            for (size_t j = 0; j < _vector[i].size(); ++j) {
-                if (!_vector[i][j].is_time && _vector[i][j].amount > 0) {
-                    _vector[i][j].amount = _vector[i][j].amount * ((postmul.expansionX() + postmul.expansionY()) / 2);
+        for (auto & i : _vector) {
+            for (size_t j = 0; j < i.size(); ++j) {
+                if (!i[j].is_time && i[j].amount > 0) {
+                    i[j].amount = i[j].amount * ((postmul.expansionX() + postmul.expansionY()) / 2);
                 }
             }
         }

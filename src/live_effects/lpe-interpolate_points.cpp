@@ -53,18 +53,18 @@ LPEInterpolatePoints::doEffect_path (Geom::PathVector const & path_in)
     Geom::PathVector path_out;
     std::unique_ptr<Geom::Interpolate::Interpolator> interpolator(  Geom::Interpolate::Interpolator::create(static_cast<Geom::Interpolate::InterpolatorType>(interpolator_type.get_value())) );
 
-    for(Geom::PathVector::const_iterator path_it = path_in.begin(); path_it != path_in.end(); ++path_it) {
-        if (path_it->empty())
+    for(const auto & path_it : path_in) {
+        if (path_it.empty())
             continue;
 
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             g_warning("Interpolate points LPE currently ignores whether path is closed or not.");
         }
 
         std::vector<Geom::Point> pts;
-        pts.push_back(path_it->initialPoint());
+        pts.push_back(path_it.initialPoint());
 
-        for (Geom::Path::const_iterator it = path_it->begin(), e = path_it->end_default(); it != e; ++it) {
+        for (Geom::Path::const_iterator it = path_it.begin(), e = path_it.end_default(); it != e; ++it) {
             pts.push_back((*it).finalPoint());
         }
 

@@ -277,35 +277,35 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	      curSh = neSh;
 	    }
 
-	  for (unsigned int i = 0; i < chgts.size(); i++)
+	  for (auto & chgt : chgts)
 	    {
-	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
-	      if (chgts[i].type == 0)
+	      chgt.ptNo = pData[chgt.ptNo].newInd;
+	      if (chgt.type == 0)
 		{
-		  if (chgts[i].src->getEdge(chgts[i].bord).st <
-		      chgts[i].src->getEdge(chgts[i].bord).en)
+		  if (chgt.src->getEdge(chgt.bord).st <
+		      chgt.src->getEdge(chgt.bord).en)
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].stPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].stPt =
+			chgt.ptNo;
 		    }
 		  else
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].enPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].enPt =
+			chgt.ptNo;
 		    }
 		}
-	      else if (chgts[i].type == 1)
+	      else if (chgt.type == 1)
 		{
-		  if (chgts[i].src->getEdge(chgts[i].bord).st >
-		      chgts[i].src->getEdge(chgts[i].bord).en)
+		  if (chgt.src->getEdge(chgt.bord).st >
+		      chgt.src->getEdge(chgt.bord).en)
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].stPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].stPt =
+			chgt.ptNo;
 		    }
 		  else
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].enPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].enPt =
+			chgt.ptNo;
 		    }
 		}
 	    }
@@ -590,31 +590,31 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	curSh = neSh;
       }
 
-    for (unsigned int i = 0; i < chgts.size(); i++)
+    for (auto & chgt : chgts)
       {
-	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
-	if (chgts[i].type == 0)
+	chgt.ptNo = pData[chgt.ptNo].newInd;
+	if (chgt.type == 0)
 	  {
-	    if (chgts[i].src->getEdge(chgts[i].bord).st <
-		chgts[i].src->getEdge(chgts[i].bord).en)
+	    if (chgt.src->getEdge(chgt.bord).st <
+		chgt.src->getEdge(chgt.bord).en)
 	      {
-		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
 	      }
 	    else
 	      {
-		chgts[i].src->swsData[chgts[i].bord].enPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
 	      }
 	  }
-	else if (chgts[i].type == 1)
+	else if (chgt.type == 1)
 	  {
-	    if (chgts[i].src->getEdge(chgts[i].bord).st >
-		chgts[i].src->getEdge(chgts[i].bord).en)
+	    if (chgt.src->getEdge(chgt.bord).st >
+		chgt.src->getEdge(chgt.bord).en)
 	      {
-		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
 	      }
 	    else
 	      {
-		chgts[i].src->swsData[chgts[i].bord].enPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
 	      }
 	  }
       }
@@ -1078,35 +1078,35 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      curSh = neSh;
 	    }
 
-	  for (unsigned int i = 0; i < chgts.size(); i++)
+	  for (auto & chgt : chgts)
 	    {
-	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
-	      if (chgts[i].type == 0)
+	      chgt.ptNo = pData[chgt.ptNo].newInd;
+	      if (chgt.type == 0)
 		{
-		  if (chgts[i].src->getEdge(chgts[i].bord).st <
-		      chgts[i].src->getEdge(chgts[i].bord).en)
+		  if (chgt.src->getEdge(chgt.bord).st <
+		      chgt.src->getEdge(chgt.bord).en)
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].stPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].stPt =
+			chgt.ptNo;
 		    }
 		  else
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].enPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].enPt =
+			chgt.ptNo;
 		    }
 		}
-	      else if (chgts[i].type == 1)
+	      else if (chgt.type == 1)
 		{
-		  if (chgts[i].src->getEdge(chgts[i].bord).st >
-		      chgts[i].src->getEdge(chgts[i].bord).en)
+		  if (chgt.src->getEdge(chgt.bord).st >
+		      chgt.src->getEdge(chgt.bord).en)
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].stPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].stPt =
+			chgt.ptNo;
 		    }
 		  else
 		    {
-		      chgts[i].src->swsData[chgts[i].bord].enPt =
-			chgts[i].ptNo;
+		      chgt.src->swsData[chgt.bord].enPt =
+			chgt.ptNo;
 		    }
 		}
 	    }
@@ -1408,31 +1408,31 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       }
 
     /* FIXME: this kind of code seems to appear frequently */
-    for (unsigned int i = 0; i < chgts.size(); i++)
+    for (auto & chgt : chgts)
       {
-	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
-	if (chgts[i].type == 0)
+	chgt.ptNo = pData[chgt.ptNo].newInd;
+	if (chgt.type == 0)
 	  {
-	    if (chgts[i].src->getEdge(chgts[i].bord).st <
-		chgts[i].src->getEdge(chgts[i].bord).en)
+	    if (chgt.src->getEdge(chgt.bord).st <
+		chgt.src->getEdge(chgt.bord).en)
 	      {
-		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
 	      }
 	    else
 	      {
-		chgts[i].src->swsData[chgts[i].bord].enPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
 	      }
 	  }
-	else if (chgts[i].type == 1)
+	else if (chgt.type == 1)
 	  {
-	    if (chgts[i].src->getEdge(chgts[i].bord).st >
-		chgts[i].src->getEdge(chgts[i].bord).en)
+	    if (chgt.src->getEdge(chgt.bord).st >
+		chgt.src->getEdge(chgt.bord).en)
 	      {
-		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].stPt = chgt.ptNo;
 	      }
 	    else
 	      {
-		chgts[i].src->swsData[chgts[i].bord].enPt = chgts[i].ptNo;
+		chgt.src->swsData[chgt.bord].enPt = chgt.ptNo;
 	      }
 	  }
       }
@@ -2724,14 +2724,14 @@ void
 Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 			 int /*edgeHead*/)
 {
-  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
+  for (auto & chgt : chgts)
     {
-      int chLeN = chgts[cCh].ptNo;
-      int chRiN = chgts[cCh].ptNo;
-      if (chgts[cCh].src)
+      int chLeN = chgt.ptNo;
+      int chRiN = chgt.ptNo;
+      if (chgt.src)
 	{
-	  Shape *lS = chgts[cCh].src;
-	  int lB = chgts[cCh].bord;
+	  Shape *lS = chgt.src;
+	  int lB = chgt.bord;
 	  int lftN = lS->swsData[lB].leftRnd;
 	  int rgtN = lS->swsData[lB].rightRnd;
 	  if (lftN < chLeN)
@@ -2754,10 +2754,10 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 	      lS->swsData[lB].rightRnd = n;
 	    }
 	}
-      if (chgts[cCh].osrc)
+      if (chgt.osrc)
 	{
-	  Shape *rS = chgts[cCh].osrc;
-	  int rB = chgts[cCh].obord;
+	  Shape *rS = chgt.osrc;
+	  int rB = chgt.obord;
 	  int lftN = rS->swsData[rB].leftRnd;
 	  int rgtN = rS->swsData[rB].rightRnd;
 	  if (lftN < chLeN)
@@ -2780,12 +2780,12 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 	      rS->swsData[rB].rightRnd = n;
 	    }
 	}
-      if (chgts[cCh].lSrc)
+      if (chgt.lSrc)
 	{
-	  if (chgts[cCh].lSrc->swsData[chgts[cCh].lBrd].leftRnd < lastChgtPt)
+	  if (chgt.lSrc->swsData[chgt.lBrd].leftRnd < lastChgtPt)
 	    {
-	      Shape *nSrc = chgts[cCh].lSrc;
-	      int nBrd = chgts[cCh].lBrd /*,nNo=chgts[cCh].ptNo */ ;
+	      Shape *nSrc = chgt.lSrc;
+	      int nBrd = chgt.lBrd /*,nNo=chgts[cCh].ptNo */ ;
 	      bool hit;
 
 	      do
@@ -2849,12 +2849,12 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * /*shapeHead*/,
 
 	    }
 	}
-      if (chgts[cCh].rSrc)
+      if (chgt.rSrc)
 	{
-	  if (chgts[cCh].rSrc->swsData[chgts[cCh].rBrd].leftRnd < lastChgtPt)
+	  if (chgt.rSrc->swsData[chgt.rBrd].leftRnd < lastChgtPt)
 	    {
-	      Shape *nSrc = chgts[cCh].rSrc;
-	      int nBrd = chgts[cCh].rBrd /*,nNo=chgts[cCh].ptNo */ ;
+	      Shape *nSrc = chgt.rSrc;
+	      int nBrd = chgt.rBrd /*,nNo=chgts[cCh].ptNo */ ;
 	      bool hit;
 	      do
 		{
@@ -3043,35 +3043,35 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 		   BooleanOp mod)
 {
 
-  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
+  for (auto & chgt : chgts)
     {
-      if (chgts[cCh].type == 0)
+      if (chgt.type == 0)
 	{
-	  Shape *lS = chgts[cCh].src;
-	  int lB = chgts[cCh].bord;
-	  lS->swsData[lB].curPoint = chgts[cCh].ptNo;
+	  Shape *lS = chgt.src;
+	  int lB = chgt.bord;
+	  lS->swsData[lB].curPoint = chgt.ptNo;
 	}
     }
-  for (unsigned int cCh = 0; cCh < chgts.size(); cCh++)
+  for (auto & chgt : chgts)
     {
 //              int   chLeN=chgts[cCh].ptNo;
 //              int   chRiN=chgts[cCh].ptNo;
-      if (chgts[cCh].src)
+      if (chgt.src)
 	{
-	  Shape *lS = chgts[cCh].src;
-	  int lB = chgts[cCh].bord;
+	  Shape *lS = chgt.src;
+	  int lB = chgt.bord;
 	  Avance (lastPointNo, lastChgtPt, lS, lB, a, b, mod);
 	}
-      if (chgts[cCh].osrc)
+      if (chgt.osrc)
 	{
-	  Shape *rS = chgts[cCh].osrc;
-	  int rB = chgts[cCh].obord;
+	  Shape *rS = chgt.osrc;
+	  int rB = chgt.obord;
 	  Avance (lastPointNo, lastChgtPt, rS, rB, a, b, mod);
 	}
-      if (chgts[cCh].lSrc)
+      if (chgt.lSrc)
 	{
-	  Shape *nSrc = chgts[cCh].lSrc;
-	  int nBrd = chgts[cCh].lBrd;
+	  Shape *nSrc = chgt.lSrc;
+	  int nBrd = chgt.lBrd;
 	  while (nSrc->swsData[nBrd].leftRnd >=
 		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
 	    {
@@ -3088,10 +3088,10 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 	      nBrd = node->bord;
 	    }
 	}
-      if (chgts[cCh].rSrc)
+      if (chgt.rSrc)
 	{
-	  Shape *nSrc = chgts[cCh].rSrc;
-	  int nBrd = chgts[cCh].rBrd;
+	  Shape *nSrc = chgt.rSrc;
+	  int nBrd = chgt.rBrd;
 	  while (nSrc->swsData[nBrd].rightRnd >=
 		 lastChgtPt /*&& nSrc->swsData[nBrd].doneTo < lastChgtPt */ )
 	    {

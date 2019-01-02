@@ -650,8 +650,8 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
     Inkscape::XML::Node *tempnode = tempdoc->createElement("prefs");
 
     std::vector<Inkscape::Preferences::Entry> attrs = prefs->getAllEntries(path);
-    for (std::vector<Inkscape::Preferences::Entry>::iterator i = attrs.begin(); i != attrs.end(); ++i) {
-        tempnode->setAttribute(i->getEntryName().data(), i->getString().data());
+    for (auto & attr : attrs) {
+        tempnode->setAttribute(attr.getEntryName().data(), attr.getString().data());
     }
 
     read( nullptr, tempnode );
@@ -1627,9 +1627,9 @@ css_font_family_quote(Glib::ustring &val)
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val );
 
     val.erase();
-    for( unsigned i=0; i < tokens.size(); ++i ) {
-        css_quote( tokens[i] );
-        val += tokens[i] + ", ";
+    for(auto & token : tokens) {
+        css_quote( token );
+        val += token + ", ";
     }
     if( val.size() > 1 )
         val.erase( val.size() - 2 ); // Remove trailing ", "
@@ -1664,9 +1664,9 @@ css_font_family_unquote(Glib::ustring &val)
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", val );
 
     val.erase();
-    for( unsigned i=0; i < tokens.size(); ++i ) {
-        css_unquote( tokens[i] );
-        val += tokens[i] + ", ";
+    for(auto & token : tokens) {
+        css_unquote( token );
+        val += token + ", ";
     }
     if( val.size() > 1 )
         val.erase( val.size() - 2 ); // Remove trailing ", "

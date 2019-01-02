@@ -827,8 +827,8 @@ void SPCanvasGroup::update(SPCanvasItem *item, Geom::Affine const &affine, unsig
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
     Geom::OptRect bounds;
 
-    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *i = &(*it);
+    for (auto & item : group->items) {
+        SPCanvasItem *i = &item;
 
         sp_canvas_item_invoke_update (i, affine, flags);
 
@@ -863,8 +863,8 @@ double SPCanvasGroup::point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **ac
     *actual_item = nullptr;
 
     double dist = 0.0;
-    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = &(*it);
+    for (auto & it : group->items) {
+        SPCanvasItem *child = &it;
 
         if ((child->x1 <= x2) && (child->y1 <= y2) && (child->x2 >= x1) && (child->y2 >= y1)) {
             SPCanvasItem *point_item = nullptr; // cater for incomplete item implementations
@@ -897,8 +897,8 @@ void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
 
-    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = &(*it);
+    for (auto & item : group->items) {
+        SPCanvasItem *child = &item;
         if (child->visible) {
             if ((child->x1 < buf->rect.right()) &&
                 (child->y1 < buf->rect.bottom()) &&
@@ -916,8 +916,8 @@ void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
 
-    for (auto it = group->items.begin(); it != group->items.end(); ++it) {
-        SPCanvasItem *child = &(*it);
+    for (auto & item : group->items) {
+        SPCanvasItem *child = &item;
         if (child->visible) {
             if (SP_CANVAS_ITEM_GET_CLASS(child)->viewbox_changed) {
                 SP_CANVAS_ITEM_GET_CLASS(child)->viewbox_changed(child, new_area);

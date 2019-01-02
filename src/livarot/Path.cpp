@@ -32,8 +32,8 @@ Path::Path()
 
 Path::~Path()
 {
-    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); ++i) {
-        delete *i;
+    for (auto & i : descr_cmd) {
+        delete i;
     }
 }
 
@@ -51,8 +51,8 @@ void Path::Affiche()
 
 void Path::Reset()
 {
-    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); ++i) {
-        delete *i;
+    for (auto & i : descr_cmd) {
+        delete i;
     }
     
     descr_cmd.clear();
@@ -65,8 +65,8 @@ void Path::Copy(Path * who)
 {
     ResetPoints();
     
-    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); ++i) {
-        delete *i;
+    for (auto & i : descr_cmd) {
+        delete i;
     }
         
     descr_cmd.clear();
@@ -699,8 +699,8 @@ void Path::PointAndTangentAt(int piece, double at, Geom::Point &pos, Geom::Point
 
 void Path::Transform(const Geom::Affine &trans)
 {
-    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); ++i) {
-        (*i)->transform(trans);
+    for (auto & i : descr_cmd) {
+        i->transform(trans);
     }
 }
 
@@ -710,12 +710,12 @@ void Path::FastBBox(double &l,double &t,double &r,double &b)
     bool empty = true;
     Geom::Point lastP(0, 0);
     
-    for (int i = 0; i < int(descr_cmd.size()); i++) {
-	int const typ = descr_cmd[i]->getType();
+    for (auto & i : descr_cmd) {
+	int const typ = i->getType();
 	switch ( typ ) {
 	case descr_lineto:
 	{
-	    PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
+	    PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];
@@ -740,7 +740,7 @@ void Path::FastBBox(double &l,double &t,double &r,double &b)
 	
 	case descr_moveto:
 	{
-	    PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
+	    PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];
@@ -765,7 +765,7 @@ void Path::FastBBox(double &l,double &t,double &r,double &b)
 	
 	case descr_arcto:
 	{
-	    PathDescrArcTo *nData  =  dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
+	    PathDescrArcTo *nData  =  dynamic_cast<PathDescrArcTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];
@@ -790,7 +790,7 @@ void Path::FastBBox(double &l,double &t,double &r,double &b)
 	
 	case descr_cubicto:
 	{
-	    PathDescrCubicTo *nData  =  dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
+	    PathDescrCubicTo *nData  =  dynamic_cast<PathDescrCubicTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];
@@ -853,7 +853,7 @@ bezier-paths used by True-Type fonts."
 	
 	case descr_bezierto:
 	{
-	    PathDescrBezierTo *nData  =  dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
+	    PathDescrBezierTo *nData  =  dynamic_cast<PathDescrBezierTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];
@@ -878,7 +878,7 @@ bezier-paths used by True-Type fonts."
 	
 	case descr_interm_bezier:
 	{
-	    PathDescrIntermBezierTo *nData  =  dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
+	    PathDescrIntermBezierTo *nData  =  dynamic_cast<PathDescrIntermBezierTo *>(i);
 	    if ( empty ) {
 		l = r = nData->p[Geom::X];
 		t = b = nData->p[Geom::Y];

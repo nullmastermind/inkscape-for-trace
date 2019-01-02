@@ -1298,9 +1298,9 @@ void SPItem::adjust_stroke( gdouble ex )
         style->stroke_width.set = TRUE;
 
         if ( !style->stroke_dasharray.values.empty() ) {
-            for (unsigned i = 0; i < style->stroke_dasharray.values.size(); i++) {
-                style->stroke_dasharray.values[i].value    *= ex;
-                style->stroke_dasharray.values[i].computed *= ex;
+            for (auto & value : style->stroke_dasharray.values) {
+                value.value    *= ex;
+                value.computed *= ex;
             }
             style->stroke_dashoffset.value    *= ex;
             style->stroke_dashoffset.computed *= ex;

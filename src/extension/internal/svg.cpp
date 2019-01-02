@@ -72,8 +72,8 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
                 }
             }
             // Can't change the set we're iterating over while we are iterating.
-            for ( std::vector<gchar const*>::iterator it = attrsRemoved.begin(); it != attrsRemoved.end(); ++it ) {
-                repr->setAttribute(*it, nullptr);
+            for (auto & it : attrsRemoved) {
+                repr->setAttribute(it, nullptr);
             }
         }
 
@@ -85,8 +85,8 @@ static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
                 pruneExtendedNamespaces(child);
             }
         }
-        for ( std::vector<Inkscape::XML::Node *>::iterator it = nodesRemoved.begin(); it != nodesRemoved.end(); ++it ) {
-            repr->removeChild(*it);
+        for (auto & it : nodesRemoved) {
+            repr->removeChild(it);
         }
     }
 }
@@ -108,8 +108,8 @@ static void pruneProprietaryGarbage( Inkscape::XML::Node *repr )
                 pruneProprietaryGarbage(child);
             }
         }
-        for ( std::vector<Inkscape::XML::Node *>::iterator it = nodesRemoved.begin(); it != nodesRemoved.end(); ++it ) { 
-            repr->removeChild(*it);
+        for (auto & it : nodesRemoved) { 
+            repr->removeChild(it);
         }
     }
 }

@@ -209,8 +209,8 @@ sp_create_window(SPViewWidget *vw, bool editable)
         }
         int pos = nui_drop_target_entries;
 
-        for (std::vector<Glib::ustring>::iterator it = types.begin() ; it != types.end() ; ++it) {
-            completeDropTargets[pos].target = g_strdup((*it).c_str());
+        for (auto & type : types) {
+            completeDropTargets[pos].target = g_strdup(type.c_str());
             completeDropTargets[pos].flags = 0;
             completeDropTargets[pos].info = IMAGE_DATA;
             pos++;

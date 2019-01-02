@@ -220,8 +220,8 @@ void PathManipulator::clear()
 /** Select all nodes in subpaths that have something selected. */
 void PathManipulator::selectSubpaths()
 {
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        NodeList::iterator sp_start = (*i)->begin(), sp_end = (*i)->end();
+    for (auto & _subpath : _subpaths) {
+        NodeList::iterator sp_start = _subpath->begin(), sp_end = _subpath->end();
         for (NodeList::iterator j = sp_start; j != sp_end; ++j) {
             if (j->selected()) {
                 // if at least one of the nodes from this subpath is selected,
@@ -237,11 +237,11 @@ void PathManipulator::selectSubpaths()
 /** Invert selection in the selected subpaths. */
 void PathManipulator::invertSelectionInSubpaths()
 {
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             if (j->selected()) {
                 // found selected node - invert selection in this subpath
-                for (NodeList::iterator k = (*i)->begin(); k != (*i)->end(); ++k) {
+                for (NodeList::iterator k = _subpath->begin(); k != _subpath->end(); ++k) {
                     if (k->selected()) _selection.erase(k.ptr());
                     else _selection.insert(k.ptr());
                 }
@@ -257,8 +257,8 @@ void PathManipulator::insertNodes()
 {
     if (_num_selected < 2) return;
 
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             NodeList::iterator k = j.next();
             if (k && j->selected() && k->selected()) {
                 j = subdivideSegment(j, 0.5);
@@ -312,11 +312,11 @@ void PathManipulator::insertNodeAtExtremum(ExtremumType extremum)
     double sign    = (extremum == EXTR_MIN_X || extremum == EXTR_MIN_Y) ? -1. : 1.;
     Geom::Dim2 dim = (extremum == EXTR_MIN_X || extremum == EXTR_MAX_X) ? Geom::X : Geom::Y;
 
-    for (SubpathList::iterator subp = _subpaths.begin(); subp != _subpaths.end(); ++subp) {
+    for (auto & _subpath : _subpaths) {
         Geom::Coord extrvalue = - Geom::infinity();
         std::vector< std::pair<NodeList::iterator, double> > extremum_vector;
 
-        for (NodeList::iterator first = (*subp)->begin(); first != (*subp)->end(); ++first) {
+        for (NodeList::iterator first = _subpath->begin(); first != _subpath->end(); ++first) {
             NodeList::iterator second = first.next();
             if (second && first->selected() && second->selected()) {
                 add_or_replace_if_extremum(extremum_vector, extrvalue, sign * first->position()[dim], first, 0.);
@@ -331,19 +331,19 @@ void PathManipulator::insertNodeAtExtremum(ExtremumType extremum)
                     // and determine extremum
                     Geom::Bezier deriv1d = derivative(temp1d);
                     std::vector<double> rs = deriv1d.roots();
-                    for (std::vector<double>::iterator it = rs.begin(); it != rs.end(); ++it) {
-                        add_or_replace_if_extremum(extremum_vector, extrvalue, sign * temp1d.valueAt(*it), first, *it);
+                    for (double & r : rs) {
+                        add_or_replace_if_extremum(extremum_vector, extrvalue, sign * temp1d.valueAt(r), first, r);
                     }
                 }
             }
         }
 
-        for (unsigned i = 0; i < extremum_vector.size(); ++i) {
+        for (auto & i : extremum_vector) {
             // don't insert node at the start or end of a segment, i.e. round values for extr_t
-            double t = extremum_vector[i].second;
+            double t = i.second;
             if ( !Geom::are_near(t - std::floor(t+0.5),0.) )  //  std::floor(t+0.5) is another way of writing round(t)
             {
-                _selection.insert( subdivideSegment(extremum_vector[i].first, t).ptr() );
+                _selection.insert( subdivideSegment(i.first, t).ptr() );
             }
         }
     }
@@ -356,8 +356,8 @@ void PathManipulator::duplicateNodes()
 {
     if (_num_selected == 0) return;
 
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             if (j->selected()) {
                 NodeList::iterator k = j.next();
                 Node *n = new Node(_multi_path_manipulator._path_data.node_data, *j);
@@ -372,7 +372,7 @@ void PathManipulator::duplicateNodes()
                 n->front()->setPosition(*j->front());
                 j->front()->retract();
                 j->setType(NODE_CUSP, false);
-                (*i)->insert(k, n);
+                _subpath->insert(k, n);
 
                 if (k) {
                     // We need to manually call the selection change callback to refresh
@@ -399,11 +399,10 @@ void PathManipulator::weldNodes(NodeList::iterator preserve_pos)
     hideDragPoint();
 
     bool pos_valid = preserve_pos;
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        SubpathPtr sp = *i;
+    for (auto sp : _subpaths) {
         unsigned num_selected = 0, num_unselected = 0;
-        for (NodeList::iterator j = sp->begin(); j != sp->end(); ++j) {
-            if (j->selected()) ++num_selected;
+        for (auto & j : *sp) {
+            if (j.selected()) ++num_selected;
             else ++num_unselected;
         }
         if (num_selected < 2) continue;
@@ -474,11 +473,10 @@ void PathManipulator::weldSegments()
     if (_num_selected < 2) return;
     hideDragPoint();
 
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        SubpathPtr sp = *i;
+    for (auto sp : _subpaths) {
         unsigned num_selected = 0, num_unselected = 0;
-        for (NodeList::iterator j = sp->begin(); j != sp->end(); ++j) {
-            if (j->selected()) ++num_selected;
+        for (auto & j : *sp) {
+            if (j.selected()) ++num_selected;
             else ++num_unselected;
         }
 
@@ -588,8 +586,8 @@ void PathManipulator::deleteNodes(bool keep_shape)
         // If there are less than 2 unselected nodes in an open subpath or no unselected nodes
         // in a closed one, delete entire subpath.
         unsigned num_unselected = 0, num_selected = 0;
-        for (NodeList::iterator j = sp->begin(); j != sp->end(); ++j) {
-            if (j->selected()) ++num_selected;
+        for (auto & j : *sp) {
+            if (j.selected()) ++num_selected;
             else ++num_unselected;
         }
         if (num_selected == 0) {
@@ -709,8 +707,8 @@ void PathManipulator::deleteSegments()
         SubpathPtr sp = *i;
         bool has_unselected = false;
         unsigned num_selected = 0;
-        for (NodeList::iterator j = sp->begin(); j != sp->end(); ++j) {
-            if (j->selected()) {
+        for (auto & j : *sp) {
+            if (j.selected()) {
                 ++num_selected;
             } else {
                 has_unselected = true;
@@ -779,16 +777,16 @@ void PathManipulator::deleteSegments()
  *                      will be reversed. Otherwise all subpaths will be reversed. */
 void PathManipulator::reverseSubpaths(bool selected_only)
 {
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
+    for (auto & _subpath : _subpaths) {
         if (selected_only) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 if (j->selected()) {
-                    (*i)->reverse();
+                    _subpath->reverse();
                     break; // continue with the next subpath
                 }
             }
         } else {
-            (*i)->reverse();
+            _subpath->reverse();
         }
     }
 }
@@ -797,8 +795,8 @@ void PathManipulator::reverseSubpaths(bool selected_only)
 void PathManipulator::setSegmentType(SegmentType type)
 {
     if (_num_selected == 0) return;
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             NodeList::iterator k = j.next();
             if (!(k && j->selected() && k->selected())) continue;
             switch (type) {
@@ -908,8 +906,8 @@ void PathManipulator::showHandles(bool show)
 {
     if (show == _show_handles) return;
     if (show) {
-        for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+        for (auto & _subpath : _subpaths) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 if (!j->selected()) continue;
                 j->showHandles(true);
                 if (j.prev()) j.prev()->showHandles(true);
@@ -917,8 +915,8 @@ void PathManipulator::showHandles(bool show)
             }
         }
     } else {
-        for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+        for (auto & _subpath : _subpaths) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 j->showHandles(false);
             }
         }
@@ -953,8 +951,8 @@ void PathManipulator::setLiveObjects(bool set)
 
 void PathManipulator::updateHandles()
 {
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             j->updateHandles();
         }
     }
@@ -964,8 +962,8 @@ void PathManipulator::setControlsTransform(Geom::Affine const &tnew)
 {
     Geom::Affine delta = _i2d_transform.inverse() * _edit_transform.inverse() * tnew * _i2d_transform;
     _edit_transform = tnew;
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             j->transform(delta);
         }
     }
@@ -1068,8 +1066,8 @@ NodeList::iterator PathManipulator::extremeNode(NodeList::iterator origin, bool 
     double extr_dist = closest ? HUGE_VAL : -HUGE_VAL;
     if (_num_selected == 0 && !search_unselected) return match;
 
-    for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             if(j->selected()) {
                 if (!search_selected) continue;
             } else {
@@ -1098,8 +1096,8 @@ void PathManipulator::_externalChange(unsigned type)
         // ugly: stored offsets of selected nodes in a vector
         // vector<bool> should be specialized so that it takes only 1 bit per value
         std::vector<bool> selpos;
-        for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+        for (auto & _subpath : _subpaths) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 selpos.push_back(j->selected());
             }
         }
@@ -1107,8 +1105,8 @@ void PathManipulator::_externalChange(unsigned type)
 
         _createControlPointsFromGeometry();
 
-        for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+        for (auto & _subpath : _subpaths) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 if (curpos >= size) goto end_restore;
                 if (selpos[curpos]) _selection.insert(j.ptr());
                 ++curpos;
@@ -1123,8 +1121,8 @@ void PathManipulator::_externalChange(unsigned type)
         _i2d_transform = _path->i2dt_affine();
         _d2i_transform = _i2d_transform.inverse();
         i2d_change *= _i2d_transform;
-        for (SubpathList::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-            for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+        for (auto & _subpath : _subpaths) {
+            for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
                 j->transform(i2d_change);
             }
         }
@@ -1160,22 +1158,22 @@ void PathManipulator::_createControlPointsFromGeometry()
     pathv *= (_edit_transform * _i2d_transform);
 
     // in this loop, we know that there are no zero-segment subpaths
-    for (Geom::PathVector::iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
+    for (auto & pit : pathv) {
         // prepare new subpath
         SubpathPtr subpath(new NodeList(_subpaths));
         _subpaths.push_back(subpath);
 
-        Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit->initialPoint());
+        Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit.initialPoint());
         subpath->push_back(previous_node);
 
-        bool closed = pit->closed();
+        bool closed = pit.closed();
 
-        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end(); ++cit) {
+        for (Geom::Path::iterator cit = pit.begin(); cit != pit.end(); ++cit) {
             Geom::Point pos = cit->finalPoint();
             Node *current_node;
             // if the closing segment is degenerate and the path is closed, we need to move
             // the handle of the first node instead of creating a new one
-            if (closed && cit == --(pit->end())) {
+            if (closed && cit == --(pit.end())) {
                 current_node = subpath->begin().get_pointer();
             } else {
                 /* regardless of segment type, create a new node at the end
@@ -1197,7 +1195,7 @@ void PathManipulator::_createControlPointsFromGeometry()
             previous_node = current_node;
         }
         // If the path is closed, make the list cyclic
-        if (pit->closed()) subpath->setClosed(true);
+        if (pit.closed()) subpath->setClosed(true);
     }
 
     // we need to set the nodetypes after all the handles are in place,
@@ -1224,14 +1222,14 @@ void PathManipulator::_createControlPointsFromGeometry()
         nodetype_string.append(nodetype_len - nodetype_string.size(), 'b');
     }
     std::string::iterator tsi = nodetype_string.begin();
-    for (std::list<SubpathPtr>::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             j->setType(Node::parse_nodetype(*tsi++), false);
         }
-        if ((*i)->closed()) {
+        if (_subpath->closed()) {
             // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
             // the first one to remain backward compatible.
-            (*i)->begin()->setType(Node::parse_nodetype(*tsi++), false);
+            _subpath->begin()->setType(Node::parse_nodetype(*tsi++), false);
         }
     }
 }
@@ -1419,12 +1417,12 @@ std::string PathManipulator::_createTypeString()
 {
     // precondition: no single-node subpaths
     std::stringstream tstr;
-    for (std::list<SubpathPtr>::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             tstr << j->type();
         }
         // nodestring format peculiarity: first node is counted twice for closed paths
-        if ((*i)->closed()) tstr << (*i)->begin()->type();
+        if (_subpath->closed()) tstr << _subpath->begin()->type();
     }
     return tstr.str();
 }
@@ -1448,8 +1446,7 @@ void PathManipulator::_updateOutline()
         // of little 'harpoons' that show the direction of the subpaths.
         auto rot_scale_w2d = Geom::Rotate(210.0 / 180.0 * M_PI) * Geom::Scale(10.0) * _desktop->w2d();
         Geom::PathVector arrows;
-        for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
-            Geom::Path &path = *i;
+        for (auto & path : pv) {
             for (Geom::Path::iterator j = path.begin(); j != path.end_default(); ++j) {
                 Geom::Point at = j->pointAt(0.5);
                 Geom::Point ut = j->unitTangentAt(0.5);
@@ -1600,8 +1597,8 @@ bool PathManipulator::_handleClicked(Handle *h, GdkEventButton *event)
 }
 
 void PathManipulator::_selectionChangedM(std::vector<SelectableControlPoint *> pvec, bool selected) {
-    for (size_t n = 0, e = pvec.size(); n < e; ++n) {
-        _selectionChanged(pvec[n], selected);
+    for (auto & n : pvec) {
+        _selectionChanged(n, selected);
     }
 }
 
@@ -1650,8 +1647,8 @@ void PathManipulator::_selectionChanged(SelectableControlPoint *p, bool selected
 void PathManipulator::_removeNodesFromSelection()
 {
     // remove this manipulator's nodes from selection
-    for (std::list<SubpathPtr>::iterator i = _subpaths.begin(); i != _subpaths.end(); ++i) {
-        for (NodeList::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+    for (auto & _subpath : _subpaths) {
+        for (NodeList::iterator j = _subpath->begin(); j != _subpath->end(); ++j) {
             _selection.erase(j.get_pointer());
         }
     }

@@ -35,8 +35,8 @@ SPFlowregion::SPFlowregion() : SPItem() {
 }
 
 SPFlowregion::~SPFlowregion() {
-	for (std::vector<Shape*>::iterator it = this->computed.begin() ; it != this->computed.end() ; ++it) {
-        delete *it;
+	for (auto & it : this->computed) {
+        delete it;
 	}
 }
 
@@ -97,8 +97,8 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
 
 void SPFlowregion::UpdateComputed()
 {
-    for (std::vector<Shape*>::iterator it = computed.begin() ; it != computed.end() ; ++it) {
-        delete *it;
+    for (auto & it : computed) {
+        delete it;
     }
     computed.clear();
 

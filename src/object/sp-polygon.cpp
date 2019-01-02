@@ -44,8 +44,8 @@ static gchar *sp_svg_write_polygon(Geom::PathVector const & pathv)
 {
     Inkscape::SVGOStringStream os;
 
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit) {
+    for (const auto & pit : pathv) {
+        for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
             if ( is_straight_curve(*cit) )
             {
                 os << cit->finalPoint()[0] << "," << cit->finalPoint()[1] << " ";

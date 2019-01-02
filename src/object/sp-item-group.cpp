@@ -896,8 +896,7 @@ void SPGroup::update_patheffect(bool write) {
 #endif
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-        SPObject *sub_item = *iter;
+    for (auto sub_item : item_list) {
         if (sub_item) {
             SPLPEItem *lpe_item = dynamic_cast<SPLPEItem *>(sub_item);
             if (lpe_item) {
@@ -908,9 +907,9 @@ void SPGroup::update_patheffect(bool write) {
 
     this->resetClipPathAndMaskLPE();
     if (hasPathEffect() && pathEffectsEnabled()) {
-        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+        for (auto & it : *this->path_effect_list)
         {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            LivePathEffectObject *lpeobj = it->lpeobject;
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
                 if (lpe) {
@@ -927,8 +926,7 @@ static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePathEffect::Effect *lpe, bool write)
 {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-        SPObject *sub_item = *iter;
+    for (auto sub_item : item_list) {
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, lpe, write);

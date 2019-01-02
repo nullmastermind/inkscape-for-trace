@@ -190,11 +190,11 @@ ConnectorTool::~ConnectorTool()
 {
     this->sel_changed_connection.disconnect();
 
-    for (int i = 0; i < 2; ++i) {
+    for (auto & i : this->endpt_handle) {
         if (this->endpt_handle[1]) {
             //g_object_unref(this->endpt_handle[i]);
-            knot_unref(this->endpt_handle[i]);
-            this->endpt_handle[i] = nullptr;
+            knot_unref(i);
+            i = nullptr;
         }
     }
 
@@ -313,8 +313,8 @@ static void cc_clear_active_knots(SPKnotList k)
 {
     // Hide the connection points if they exist.
     if (k.size()) {
-        for (SPKnotList::iterator it = k.begin(); it != k.end(); ++it) {
-            it->first->hide();
+        for (auto & it : k) {
+            it.first->hide();
         }
     }
 }
@@ -335,9 +335,9 @@ void ConnectorTool::cc_clear_active_conn()
     }
 
     // Hide the endpoint handles.
-    for (int i = 0; i < 2; ++i) {
-        if (this->endpt_handle[i]) {
-            this->endpt_handle[i]->hide();
+    for (auto & i : this->endpt_handle) {
+        if (i) {
+            i->hide();
         }
     }
 }

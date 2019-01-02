@@ -383,16 +383,16 @@ MeasureTool::~MeasureTool()
     /* unref should call destroy */
     knot_unref(this->knot_start);
     knot_unref(this->knot_end);
-    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_tmp_items[idx]);
+    for (auto & measure_tmp_item : measure_tmp_items) {
+        sp_canvas_item_destroy(measure_tmp_item);
     }
     measure_tmp_items.clear();
-    for (size_t idx = 0; idx < measure_item.size(); ++idx) {
-        sp_canvas_item_destroy(measure_item[idx]);
+    for (auto & idx : measure_item) {
+        sp_canvas_item_destroy(idx);
     }
     measure_item.clear();
-    for (size_t idx = 0; idx < measure_phantom_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_phantom_items[idx]);
+    for (auto & measure_phantom_item : measure_phantom_items) {
+        sp_canvas_item_destroy(measure_phantom_item);
     }
     measure_phantom_items.clear();
 }
@@ -594,8 +594,8 @@ bool MeasureTool::root_handler(GdkEvent* event)
         } else {
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             //Inkscape::Util::Unit const * unit = desktop->getNamedView()->getDisplayUnit();
-            for (size_t idx = 0; idx < measure_item.size(); ++idx) {
-                sp_canvas_item_destroy(measure_item[idx]);
+            for (auto & idx : measure_item) {
+                sp_canvas_item_destroy(idx);
             }
             measure_item.clear();
             ret = TRUE;
@@ -757,12 +757,12 @@ void MeasureTool::toPhantom()
         return;
     }
     SPDocument *doc = desktop->getDocument();
-    for (size_t idx = 0; idx < measure_phantom_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_phantom_items[idx]);
+    for (auto & measure_phantom_item : measure_phantom_items) {
+        sp_canvas_item_destroy(measure_phantom_item);
     }
     measure_phantom_items.clear();
-    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_tmp_items[idx]);
+    for (auto & measure_tmp_item : measure_tmp_items) {
+        sp_canvas_item_destroy(measure_tmp_item);
     }
     measure_tmp_items.clear();
     showCanvasItems(false, false, true);
@@ -1029,8 +1029,8 @@ void MeasureTool::reset()
 {
     this->knot_start->hide();
     this->knot_end->hide();
-    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_tmp_items[idx]);
+    for (auto & measure_tmp_item : measure_tmp_items) {
+        sp_canvas_item_destroy(measure_tmp_item);
     }
     measure_tmp_items.clear();
 }
@@ -1148,8 +1148,8 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::Util::Unit const * unit = desktop->getNamedView()->getDisplayUnit();
-    for (size_t idx = 0; idx < measure_item.size(); ++idx) {
-        sp_canvas_item_destroy(measure_item[idx]);
+    for (auto & idx : measure_item) {
+        sp_canvas_item_destroy(idx);
     }
     measure_item.clear();
 
@@ -1247,8 +1247,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     writeMeasurePoint(start_p, true);
     writeMeasurePoint(end_p, false);
     //clear previous canvas items, we'll draw new ones
-    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-        sp_canvas_item_destroy(measure_tmp_items[idx]);
+    for (auto & measure_tmp_item : measure_tmp_items) {
+        sp_canvas_item_destroy(measure_tmp_item);
     }
     measure_tmp_items.clear();
     //TODO:Calculate the measure area for current length and origin
@@ -1334,8 +1334,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
 
     std::vector<Geom::Point> intersections;
     std::sort(intersection_times.begin(), intersection_times.end());
-    for (std::vector<double>::iterator iter_t = intersection_times.begin(); iter_t != intersection_times.end(); ++iter_t) {
-        intersections.push_back(lineseg[0].pointAt(*iter_t));
+    for (double & intersection_time : intersection_times) {
+        intersections.push_back(lineseg[0].pointAt(intersection_time));
     }
 
     if(!show_in_between && intersection_times.size() > 1) {
@@ -1363,9 +1363,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     int precision = prefs->getInt("/tools/measure/precision", 2);
     // Adjust positions
     repositionOverlappingLabels(placements, desktop, windowNormal, fontsize, precision);
-    for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
-        LabelPlacement &place = *it;
-
+    for (auto & place : placements) {
         setMeasureCanvasText(false, precision, place.lengthVal * scale, fontsize, unit_name, place.end, 0x0000007f, TEXT_ANCHOR_CENTER, to_item, to_phantom, measure_repr);
     }
     Geom::Point angleDisplayPt = calcAngleDisplayAnchor(desktop, angle, baseAngle,
@@ -1438,8 +1436,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     }
 
     // call-out lines
-    for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
-        LabelPlacement &place = *it;
+    for (auto & place : placements) {
         setMeasureCanvasControlLine(place.start, place.end, to_item, to_phantom, CTLINE_SECONDARY, measure_repr);
     }
 

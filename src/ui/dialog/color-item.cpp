@@ -416,22 +416,22 @@ void ColorItem::_updatePreviews()
         }
     }
 
-    for ( std::vector<ColorItem*>::iterator it = _listeners.begin(); it != _listeners.end(); ++it ) {
+    for (auto & _listener : _listeners) {
         guint r = def.getR();
         guint g = def.getG();
         guint b = def.getB();
 
-        if ( (*it)->_linkIsTone ) {
-            r = ( ((*it)->_linkPercent * (*it)->_linkGray) + ((100 - (*it)->_linkPercent) * r) ) / 100;
-            g = ( ((*it)->_linkPercent * (*it)->_linkGray) + ((100 - (*it)->_linkPercent) * g) ) / 100;
-            b = ( ((*it)->_linkPercent * (*it)->_linkGray) + ((100 - (*it)->_linkPercent) * b) ) / 100;
+        if ( _listener->_linkIsTone ) {
+            r = ( (_listener->_linkPercent * _listener->_linkGray) + ((100 - _listener->_linkPercent) * r) ) / 100;
+            g = ( (_listener->_linkPercent * _listener->_linkGray) + ((100 - _listener->_linkPercent) * g) ) / 100;
+            b = ( (_listener->_linkPercent * _listener->_linkGray) + ((100 - _listener->_linkPercent) * b) ) / 100;
         } else {
-            r = ( ((*it)->_linkPercent * 255) + ((100 - (*it)->_linkPercent) * r) ) / 100;
-            g = ( ((*it)->_linkPercent * 255) + ((100 - (*it)->_linkPercent) * g) ) / 100;
-            b = ( ((*it)->_linkPercent * 255) + ((100 - (*it)->_linkPercent) * b) ) / 100;
+            r = ( (_listener->_linkPercent * 255) + ((100 - _listener->_linkPercent) * r) ) / 100;
+            g = ( (_listener->_linkPercent * 255) + ((100 - _listener->_linkPercent) * g) ) / 100;
+            b = ( (_listener->_linkPercent * 255) + ((100 - _listener->_linkPercent) * b) ) / 100;
         }
 
-        (*it)->def.setRGB( r, g, b );
+        _listener->def.setRGB( r, g, b );
     }
 
 

@@ -103,8 +103,7 @@ find_references(SPObject *elem, refmap_type &refmap)
     if (!std::strcmp(repr_elem->name(), "inkscape:clipboard")) {
         SPCSSAttr *css = sp_repr_css_attr(repr_elem, "style");
         if (css) {
-            for (unsigned i = 0; i < NUM_CLIPBOARD_PROPERTIES; ++i) {
-                const char *attr = clipboard_properties[i];
+            for (auto attr : clipboard_properties) {
                 const gchar *value = sp_repr_css_property(css, attr, nullptr);
                 if (value) {
                     auto uri = extract_uri(value);
@@ -120,8 +119,7 @@ find_references(SPObject *elem, refmap_type &refmap)
     }
 
     /* check for xlink:href="#..." and similar */
-    for (unsigned i = 0; i < NUM_HREF_LIKE_ATTRIBUTES; ++i) {
-        const char *attr = href_like_attributes[i];
+    for (auto attr : href_like_attributes) {
         const gchar *val = repr_elem->attribute(attr);
         if (val && val[0] == '#') {
             std::string id(val+1);
@@ -171,8 +169,7 @@ find_references(SPObject *elem, refmap_type &refmap)
     }
 
     /* check for other url(#...) references */
-    for (unsigned i = 0; i < NUM_OTHER_URL_PROPERTIES; ++i) {
-        const char *attr = other_url_properties[i];
+    for (auto attr : other_url_properties) {
         const gchar *value = repr_elem->attribute(attr);
         if (value) {
             auto uri = extract_uri(value);

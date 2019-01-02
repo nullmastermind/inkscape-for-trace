@@ -1083,9 +1083,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
 
 //    auto items= selection->items();
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-    for(auto i=items.begin();i!=items.end(); ++i){
-        SPItem *item = *i;
-
+    for(auto item : items){
         if (is_color_mode (tc->mode)) {
             if (do_fill || do_stroke || do_opacity) {
                 if (sp_tweak_color_recursive (tc->mode, item, item_at_point,

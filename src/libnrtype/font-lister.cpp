@@ -74,8 +74,8 @@ FontLister::FontLister()
     font_factory::Default()->GetUIFamilies(familyVector);
 
     // Traverse through the family names and set up the list store
-    for (size_t i = 0; i < familyVector.size(); ++i) {
-        const char* displayName = sp_font_family_get_name(familyVector[i]);
+    for (auto & i : familyVector) {
+        const char* displayName = sp_font_family_get_name(i);
         
         if (displayName == nullptr || *displayName == '\0') {
             continue;
@@ -90,7 +90,7 @@ FontLister::FontLister()
             // ever decides to use this font
             (*treeModelIter)[FontList.styles] = NULL;
             // store the pango representation for generating the style
-            (*treeModelIter)[FontList.pango_family] = familyVector[i];
+            (*treeModelIter)[FontList.pango_family] = i;
             (*treeModelIter)[FontList.onSystem] = true;
         }
     }
@@ -1139,9 +1139,7 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
 
         /* See if font-family on system */
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", family);
-        for (size_t i = 0; i < tokens.size(); ++i) {
-
-            Glib::ustring token = tokens[i];
+        for (auto token : tokens) {
 
             GtkTreeIter iter;
             gboolean valid;

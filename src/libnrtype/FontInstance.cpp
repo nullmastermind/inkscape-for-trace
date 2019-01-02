@@ -525,8 +525,8 @@ void font_instance::LoadGlyph(int glyph_id)
         if ( doAdd ) {
             Geom::PathVector pv = path_builder.peek();
             // close all paths
-            for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
-                i->close();
+            for (auto & i : pv) {
+                i.close();
             }
             if ( !pv.empty() ) {
                 n_g.pathvector = new Geom::PathVector(pv);

@@ -62,9 +62,9 @@ gchar* SPPath::description() const {
         Glib::ustring s;
         PathEffectList effect_list =  this->getEffectList();
         
-        for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
+        for (auto & it : effect_list)
         {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            LivePathEffectObject *lpeobj = it->lpeobject;
             
             if (!lpeobj || !lpeobj->get_lpe()) {
                 break;
@@ -94,8 +94,8 @@ void SPPath::convert_to_guides() const {
     Geom::Affine const i2dt(this->i2dt_affine());
     Geom::PathVector const & pv = this->_curve->get_pathvector();
     
-    for(Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
-        for(Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_default(); ++cit) {
+    for(const auto & pit : pv) {
+        for(Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_default(); ++cit) {
             // only add curves for straight line segments
             if( is_straight_curve(*cit) )
             {

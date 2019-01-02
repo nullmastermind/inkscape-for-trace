@@ -522,12 +522,12 @@ bool PovOutput::doTree(SPDocument *doc)
         out("#end\n");
         out("\n\n");
         out("#declare %s = union {\n", id.c_str());
-        for (unsigned i = 0 ; i < povShapes.size() ; i++)
+        for (auto & povShape : povShapes)
             {
-            out("    object { %s\n", povShapes[i].id.c_str());
+            out("    object { %s\n", povShape.id.c_str());
             out("        texture { \n");
-            if (povShapes[i].color.length()>0)
-                out("            pigment { %s }\n", povShapes[i].color.c_str());
+            if (povShape.color.length()>0)
+                out("            pigment { %s }\n", povShape.color.c_str());
             else
                 out("            pigment { rgb <0,0,0> }\n");
             out("            finish { %s_Finish }\n", pfx);
@@ -551,12 +551,12 @@ bool PovOutput::doTree(SPDocument *doc)
         out("\n\n");
         out("#declare %s_Z = union {\n", pfx);
 
-        for (unsigned i = 0 ; i < povShapes.size() ; i++)
+        for (auto & povShape : povShapes)
             {
-            out("    object { %s\n", povShapes[i].id.c_str());
+            out("    object { %s\n", povShape.id.c_str());
             out("        texture { \n");
-            if (povShapes[i].color.length()>0)
-                out("            pigment { %s }\n", povShapes[i].color.c_str());
+            if (povShape.color.length()>0)
+                out("            pigment { %s }\n", povShape.color.c_str());
             else
                 out("            pigment { rgb <0,0,0> }\n");
             out("            finish { %s_Finish }\n", pfx);

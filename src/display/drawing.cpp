@@ -146,10 +146,9 @@ void
 Drawing::setCacheLimit(Geom::OptIntRect const &r)
 {
     _cache_limit = r;
-    for (std::set<DrawingItem *>::iterator i = _cached_items.begin();
-         i != _cached_items.end(); ++i)
+    for (auto _cached_item : _cached_items)
     {
-        (*i)->_markForUpdate(DrawingItem::STATE_CACHE, false);
+        _cached_item->_markForUpdate(DrawingItem::STATE_CACHE, false);
     }
 }
 void
@@ -234,8 +233,8 @@ Drawing::_pickItemsForCaching()
     std::set_difference(_cached_items.begin(), _cached_items.end(),
                         to_cache.begin(), to_cache.end(),
                         std::inserter(to_uncache, to_uncache.end()));
-    for (std::set<DrawingItem*>::iterator j = to_uncache.begin(); j != to_uncache.end(); ++j) {
-        (*j)->setCached(false);
+    for (auto j : to_uncache) {
+        j->setCached(false);
     }
 }
 

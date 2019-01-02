@@ -60,13 +60,13 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             Geom::PathVector second_pathv = second_path.get_pathvector();
             Geom::PathVector result_linked_pathv;
             Geom::PathVector result_second_pathv;
-            for (Geom::PathVector::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
+            for (auto & iter : linked_pathv)
             {
-                result_linked_pathv.push_back((*iter));
+                result_linked_pathv.push_back(iter);
             }
-            for (Geom::PathVector::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
+            for (auto & iter : second_pathv)
             {
-                result_second_pathv.push_back((*iter));
+                result_second_pathv.push_back(iter);
             }
 
             if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
@@ -104,9 +104,9 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             }
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             Geom::PathVector result_pathv;
-            for (Geom::PathVector::iterator iter = linked_pathv.begin(); iter != linked_pathv.end(); ++iter)
+            for (auto & iter : linked_pathv)
             {
-                result_pathv.push_back((*iter));
+                result_pathv.push_back(iter);
             }
             if ( !result_pathv.empty() ) {
                 if (close) {
@@ -122,9 +122,9 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             }
             Geom::PathVector second_pathv = second_path.get_pathvector();
             Geom::PathVector result_pathv;
-            for (Geom::PathVector::iterator iter = second_pathv.begin(); iter != second_pathv.end(); ++iter)
+            for (auto & iter : second_pathv)
             {
-                result_pathv.push_back((*iter));
+                result_pathv.push_back(iter);
             }
             if ( !result_pathv.empty() ) {
                 if (close) {

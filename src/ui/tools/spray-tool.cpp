@@ -584,8 +584,7 @@ static bool fit_item(SPDesktop *desktop,
         double bbox_top = bbox_down->top();
         gchar const * item_down_sharp = g_strdup_printf("#%s", item_down->getId());
         items_down_erased.push_back(item_down);
-        for (std::vector<SPItem*>::const_iterator j=items_selected.begin(); j!=items_selected.end(); ++j) {
-            SPItem *item_selected = *j;
+        for (auto item_selected : items_selected) {
             gchar const * spray_origin;
             if(!item_selected->getAttribute("inkscape:spray-origin")){
                 spray_origin = g_strdup_printf("#%s", item_selected->getId());
@@ -1143,14 +1142,12 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     {
         std::vector<SPItem*> const items(set->items().begin(), set->items().end());
 
-        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
-            SPItem *item = *i;
+        for(auto item : items){
             g_assert(item != nullptr);
             sp_object_ref(item);
         }
 
-        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
-            SPItem *item = *i;
+        for(auto item : items){
             g_assert(item != nullptr);
             if (sp_spray_recursive(desktop
                                 , set
@@ -1193,8 +1190,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             }
         }
 
-        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
-            SPItem *item = *i;
+        for(auto item : items){
             g_assert(item != nullptr);
             sp_object_unref(item);
         }

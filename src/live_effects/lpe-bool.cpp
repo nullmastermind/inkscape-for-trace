@@ -254,11 +254,11 @@ sp_pathvector_boolop_slice_intersect(Geom::PathVector const &pathva, Geom::PathV
 
     // Create an array of bools which states which pieces are in
     std::vector<bool> inside_flags(result_path->descr_cmd.size(), false);
-    for (std::vector<Path::cut_position>::iterator itPiece = inside_pieces.begin(); itPiece != inside_pieces.end(); ++itPiece) {
-        inside_flags[ itPiece->piece ] = true;
+    for (auto & inside_piece : inside_pieces) {
+        inside_flags[ inside_piece.piece ] = true;
         // also enable the element -1 to get the MoveTo
-        if (itPiece->piece >= 1) {
-            inside_flags[ itPiece->piece - 1 ] = true;
+        if (inside_piece.piece >= 1) {
+            inside_flags[ inside_piece.piece - 1 ] = true;
         }
     }
 

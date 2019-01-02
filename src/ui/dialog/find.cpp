@@ -288,12 +288,12 @@ Find::Find()
     check_searchin_property.signal_clicked().connect(sigc::mem_fun(*this, &Find::onSearchinProperty));
     check_alltypes.signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleAlltypes));
 
-    for(size_t i = 0; i < checkProperties.size(); i++) {
-        checkProperties[i]->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
+    for(auto & checkPropertie : checkProperties) {
+        checkPropertie->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
     }
 
-    for(size_t i = 0; i < checkTypes.size(); i++) {
-        checkTypes[i]->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
+    for(auto & checkType : checkTypes) {
+        checkType->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
     }
 
     onSearchinText();
@@ -577,11 +577,11 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
     vFontTokenNames.emplace_back("-inkscape-font-specification:");
 
     std::vector<Glib::ustring> vStyleTokens = Glib::Regex::split_simple(";", item_style);
-    for(size_t i=0; i<vStyleTokens.size(); i++) {
-        Glib::ustring token = vStyleTokens[i];
-        for(size_t j=0; j<vFontTokenNames.size(); j++) {
-            if ( token.find(vFontTokenNames[j]) != std::string::npos) {
-                Glib::ustring font1 = Glib::ustring(vFontTokenNames[j]).append(text);
+    for(auto & vStyleToken : vStyleTokens) {
+        Glib::ustring token = vStyleToken;
+        for(const auto & vFontTokenName : vFontTokenNames) {
+            if ( token.find(vFontTokenName) != std::string::npos) {
+                Glib::ustring font1 = Glib::ustring(vFontTokenName).append(text);
                 bool found = find_strcmp(token.c_str(), font1.c_str(), exact, casematch);
                 if (found) {
                     ret = true;
@@ -591,7 +591,7 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
                         // Exact match fails since the "font-family:" is in the token, since the find was exact it still works with false below
                         Glib::ustring new_item_style = find_replace(orig_str, text, replace_text , false /*exact*/, casematch, true);
                         if (new_item_style != orig_str) {
-                            vStyleTokens.at(i) = new_item_style;
+                            vStyleToken = new_item_style;
                         }
                         g_free(orig_str);
                         g_free(replace_text);
@@ -603,8 +603,8 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
 
     if (ret && _action_replace) {
         Glib::ustring new_item_style;
-        for(size_t i=0; i<vStyleTokens.size(); i++) {
-            new_item_style.append(vStyleTokens.at(i)).append(";");
+        for(const auto & vStyleToken : vStyleTokens) {
+            new_item_style.append(vStyleToken).append(";");
         }
         new_item_style.erase(new_item_style.size()-1);
         item->getRepr()->setAttribute("style", new_item_style.data());
@@ -968,8 +968,8 @@ void Find::onToggleCheck ()
         propertyok = true;
     } else {
 
-        for(size_t i = 0; i < checkProperties.size(); i++) {
-            if (checkProperties[i]->get_active()) {
+        for(auto & checkPropertie : checkProperties) {
+            if (checkPropertie->get_active()) {
                 propertyok = true;
             }
         }
@@ -990,8 +990,8 @@ void Find::onToggleCheck ()
 void Find::onToggleAlltypes ()
 {
      bool all  =check_alltypes.get_active();
-     for(size_t i = 0; i < checkTypes.size(); i++) {
-         checkTypes[i]->set_sensitive(!all);
+     for(auto & checkType : checkTypes) {
+         checkType->set_sensitive(!all);
      }
 
      onToggleCheck();
@@ -1011,8 +1011,8 @@ void Find::onSearchinProperty ()
 
 void Find::searchinToggle(bool on)
 {
-    for(size_t i = 0; i < checkProperties.size(); i++) {
-        checkProperties[i]->set_sensitive(on);
+    for(auto & checkPropertie : checkProperties) {
+        checkPropertie->set_sensitive(on);
     }
 }
 

@@ -199,8 +199,8 @@ DocumentProperties::~DocumentProperties()
     Inkscape::XML::Node *root = getDesktop()->getDocument()->getRoot()->getRepr();
     root->removeListenerByData (this);
 
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it)
-        delete (*it);
+    for (auto & it : _rdflist)
+        delete it;
 }
 
 //========================================================================
@@ -1495,8 +1495,8 @@ void DocumentProperties::update()
 
     //-----------------------------------------------------------meta pages
     /* update the RDF entities */
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it)
-        (*it)->update (SP_ACTIVE_DOCUMENT);
+    for (auto & it : _rdflist)
+        it->update (SP_ACTIVE_DOCUMENT);
 
     _licensor.update (SP_ACTIVE_DOCUMENT);
 
@@ -1540,16 +1540,16 @@ void DocumentProperties::on_response (int id)
 void DocumentProperties::load_default_metadata()
 {
     /* Get the data RDF entities data from preferences*/
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it) {
-        (*it)->load_from_preferences ();
+    for (auto & it : _rdflist) {
+        it->load_from_preferences ();
     }
 }
 
 void DocumentProperties::save_default_metadata()
 {
     /* Save these RDF entities to preferences*/
-    for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it) {
-        (*it)->save_to_preferences (SP_ACTIVE_DOCUMENT);
+    for (auto & it : _rdflist) {
+        it->save_to_preferences (SP_ACTIVE_DOCUMENT);
    }
 }
 

@@ -105,9 +105,7 @@ Gtk::Widget* InkSelectOneAction::create_menu_item_vfunc() {
         Gtk::RadioButton::Group group;
         int index = 0;
         auto children = _store->children();
-        for (auto iter = children.begin(); iter != children.end(); ++iter) {
-            Gtk::TreeModel::Row row = *iter;
-
+        for (auto row : children) {
             InkSelectOneActionColumns columns;
             Glib::ustring label     = row[columns.col_label     ];
             Glib::ustring icon      = row[columns.col_icon      ];
@@ -159,9 +157,7 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         Gtk::RadioAction::Group group;
         int index = 0;
         auto children = _store->children();
-        for (auto iter = children.begin(); iter != children.end(); ++iter) {
-            Gtk::TreeModel::Row row = *iter;
-
+        for (auto row : children) {
             InkSelectOneActionColumns columns;
             Glib::ustring label     = row[columns.col_label    ];
             Glib::ustring icon      = row[columns.col_icon     ];
@@ -217,8 +213,8 @@ Gtk::Widget* InkSelectOneAction::create_tool_item_vfunc() {
         }
 
         std::vector<Gtk::CellRenderer*> cells = _combobox->get_cells();
-        for (auto iter = cells.begin(); iter!= cells.end(); ++iter) {
-            _combobox->add_attribute (**iter, "sensitive", columns.col_sensitive);
+        for (auto & cell : cells) {
+            _combobox->add_attribute (*cell, "sensitive", columns.col_sensitive);
         }
 
         _combobox->set_active (_active);

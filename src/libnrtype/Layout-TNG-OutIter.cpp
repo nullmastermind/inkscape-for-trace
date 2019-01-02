@@ -97,20 +97,20 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
         local_y = x;
     }
     // stage 1:
-    for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
+    for (const auto & _span : _spans) {
         double span_left, span_right;
-        if (_spans[span_index].x_start < _spans[span_index].x_end) {
-            span_left = _spans[span_index].x_start;
-            span_right = _spans[span_index].x_end;
+        if (_span.x_start < _span.x_end) {
+            span_left = _span.x_start;
+            span_right = _span.x_end;
         } else {
-            span_left = _spans[span_index].x_end;
-            span_right = _spans[span_index].x_start;
+            span_left = _span.x_end;
+            span_right = _span.x_start;
         }
-        if (   local_x >= _chunks[_spans[span_index].in_chunk].left_x + span_left
-            && local_x <= _chunks[_spans[span_index].in_chunk].left_x + span_right
-            && local_y >= _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift - _spans[span_index].line_height.ascent
-            && local_y <= _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift + _spans[span_index].line_height.descent) {
-            return _cursorXOnLineToIterator(_chunks[_spans[span_index].in_chunk].in_line, local_x);
+        if (   local_x >= _chunks[_span.in_chunk].left_x + span_left
+            && local_x <= _chunks[_span.in_chunk].left_x + span_right
+            && local_y >= _span.line(this).baseline_y + _span.baseline_shift - _span.line_height.ascent
+            && local_y <= _span.line(this).baseline_y + _span.baseline_shift + _span.line_height.descent) {
+            return _cursorXOnLineToIterator(_chunks[_span.in_chunk].in_line, local_x);
         }
     }
     

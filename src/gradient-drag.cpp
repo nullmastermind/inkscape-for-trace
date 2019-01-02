@@ -150,8 +150,7 @@ static int gr_drag_style_query(SPStyle *style, int property, gpointer data)
         cf[0] = cf[1] = cf[2] = cf[3] = 0;
 
         int count = 0;
-        for(std::set<GrDragger *>::const_iterator it = drag->selected.begin(); it != drag->selected.end(); ++it) { //for all selected draggers
-            GrDragger *d = *it;
+        for(auto d : drag->selected) { //for all selected draggers
             for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
                 GrDraggable *draggable = *it2;
 
@@ -300,8 +299,7 @@ bool GrDrag::styleSet( const SPCSSAttr *css )
         return false;
     }
 
-    for(std::set<GrDragger *>::const_iterator it = selected.begin(); it != selected.end(); ++it) { //for all selected draggers
-        GrDragger *d = *it;
+    for(auto d : selected) { //for all selected draggers
         for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
             GrDraggable *draggable = *it2; 
             local_change = true;
@@ -323,8 +321,7 @@ guint32 GrDrag::getColor()
 
     int count = 0;
 
-    for(std::set<GrDragger *>::const_iterator it = selected.begin(); it != selected.end(); ++it) { //for all selected draggers
-        GrDragger *d = *it;
+    for(auto d : selected) { //for all selected draggers
         for(std::vector<GrDraggable *>::const_iterator it2 = d->draggables.begin(); it2 != d->draggables.end(); ++it2 ) { //for all draggables of dragger
             GrDraggable *draggable = *it2; 
 
@@ -1944,8 +1941,8 @@ GrDragger::isSelected()
  */
 void GrDrag::deselect_all()
 {
-    for (std::set<GrDragger *>::const_iterator it = selected.begin(); it != selected.end(); ++it )
-        (*it)->deselect();
+    for (auto it : selected)
+        it->deselect();
     selected.clear();
 }
 
@@ -1976,8 +1973,8 @@ void GrDrag::selectByCoords(std::vector<Geom::Point> coords)
 {
     for (std::vector<GrDragger *>::const_iterator l = this->draggers.begin(); l != this->draggers.end(); ++l) {
         GrDragger *d = *l; 
-        for (guint k = 0; k < coords.size(); k++) {
-            if (Geom::L2 (d->point - coords[k]) < 1e-4) {
+        for (auto coord : coords) {
+            if (Geom::L2 (d->point - coord) < 1e-4) {
                 setSelected (d, true, true);
             }
         }
@@ -2230,45 +2227,45 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
         return;
     }
 
-    for( guint i = 0; i < nodes.size(); ++i ) {
-        for( guint j = 0; j < nodes[i].size(); ++j ) {
+    for(auto & node : nodes) {
+        for( guint j = 0; j < node.size(); ++j ) {
 
             // std::cout << " Draggers: " << i << " " << j << " " << nodes[i][j]->node_type << std::endl;
-            switch ( nodes[i][j]->node_type ) {
+            switch ( node[j]->node_type ) {
 
                 case MG_NODE_TYPE_CORNER:
                 {
-                    mg->array.corners.push_back( nodes[i][j] );
+                    mg->array.corners.push_back( node[j] );
                     GrDraggable *corner = new GrDraggable (item, POINT_MG_CORNER, icorner, fill_or_stroke);
                     addDragger ( corner );
-                    nodes[i][j]->draggable = icorner;
+                    node[j]->draggable = icorner;
                     ++icorner;
                     break;
                 }
 
                 case MG_NODE_TYPE_HANDLE:
                 {
-                    mg->array.handles.push_back( nodes[i][j] );
+                    mg->array.handles.push_back( node[j] );
                     GrDraggable *handle = new GrDraggable (item, POINT_MG_HANDLE, ihandle, fill_or_stroke);
                     GrDragger* dragger = addDragger ( handle );
 
-                    if( !show_handles || !nodes[i][j]->set ) {
+                    if( !show_handles || !node[j]->set ) {
                         dragger->knot->hide();
                     }
-                    nodes[i][j]->draggable = ihandle;
+                    node[j]->draggable = ihandle;
                     ++ihandle;
                     break;
                 }
 
                 case MG_NODE_TYPE_TENSOR:
                 {
-                    mg->array.tensors.push_back( nodes[i][j] );
+                    mg->array.tensors.push_back( node[j] );
                     GrDraggable *tensor = new GrDraggable (item, POINT_MG_TENSOR, itensor, fill_or_stroke);
                     GrDragger* dragger = addDragger ( tensor );
-                    if( !show_handles || !nodes[i][j]->set ) {
+                    if( !show_handles || !node[j]->set ) {
                         dragger->knot->hide();
                     }
-                    nodes[i][j]->draggable = itensor;
+                    node[j]->draggable = itensor;
                     ++itensor;
                     break;
                 }
@@ -2305,12 +2302,12 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
     guint ihandle = 0;
     guint itensor = 0;
 
-    for( guint i = 0; i < nodes.size(); ++i ) {
-        for( guint j = 0; j < nodes[i].size(); ++j ) {
+    for(auto & node : nodes) {
+        for( guint j = 0; j < node.size(); ++j ) {
 
             // std::cout << " Draggers: " << i << " " << j << " " << nodes[i][j]->node_type << std::endl;
 
-            switch ( nodes[i][j]->node_type ) {
+            switch ( node[j]->node_type ) {
 
                 case MG_NODE_TYPE_CORNER:
                     // Do nothing, corners are always shown.
@@ -2322,7 +2319,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
                     if (dragger) {
                         Geom::Point pk = getGradientCoords( item, POINT_MG_HANDLE, ihandle, fill_or_stroke);
                         dragger->knot->moveto(pk);
-                        if( !show_handles || !nodes[i][j]->set ) {
+                        if( !show_handles || !node[j]->set ) {
                             dragger->knot->hide();
                         } else {
                             dragger->knot->show();
@@ -2341,7 +2338,7 @@ void GrDrag::refreshDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::Pai
                     if (dragger) {
                         Geom::Point pk = getGradientCoords( item, POINT_MG_TENSOR, itensor, fill_or_stroke);
                         dragger->knot->moveto(pk);
-                        if( !show_handles || !nodes[i][j]->set ) {
+                        if( !show_handles || !node[j]->set ) {
                             dragger->knot->hide();
                         } else {
                             dragger->knot->show();
@@ -2733,9 +2730,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
     bool did = false;
 
-    for(std::set<GrDragger *>::const_iterator it = selected.begin(); it != selected.end(); ++it) {
-        GrDragger *d = *it;
-
+    for(auto d : selected) {
         if (!d->isA(POINT_LG_MID) && !d->isA(POINT_RG_MID1) && !d->isA(POINT_RG_MID2)) {
             // if this is an endpoint,
 
@@ -2745,8 +2740,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
             if (d->isA(POINT_RG_R1) || d->isA(POINT_RG_R2) ||
                 (d->isA(POINT_RG_FOCUS) && !d->isA(POINT_RG_CENTER))) {
                 bool skip_radius_with_center = false;
-                for(std::set<GrDragger *>::const_iterator di = selected.begin(); di != selected.end(); ++di) {
-                    GrDragger *d_new = *di;
+                for(auto d_new : selected) {
                     if (d_new->isA (( d->draggables[0])->item,
                                     POINT_RG_CENTER,
                                     0,

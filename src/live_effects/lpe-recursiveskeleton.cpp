@@ -73,8 +73,7 @@ LPERecursiveSkeleton::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > co
         std::vector<Piecewise<D2<SBasis> > > skeleton = split_at_discontinuities(output);
 
         output.clear();
-        for (unsigned idx = 0; idx < skeleton.size(); idx++){
-            Piecewise<D2<SBasis> > path_i = skeleton[idx];
+        for (auto path_i : skeleton){
             Piecewise<SBasis> x = x0;
             Piecewise<SBasis> y = y0;
             Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2,.1);

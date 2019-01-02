@@ -442,8 +442,8 @@ static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tb
                                 guint curve_length = sp_shape->getCurve()->get_segment_count();
                                 std::vector<Geom::Point> ts = lpe_powerstroke->offset_points.data();
                                 double factor = (double)curve_length/ (double)previous_curve_length;
-                                for (size_t i = 0; i < ts.size(); i++) {
-                                    ts[i][Geom::X] = ts[i][Geom::X] * factor;
+                                for (auto & t : ts) {
+                                    t[Geom::X] = t[Geom::X] * factor;
                                 }
                                 lpe_powerstroke->offset_points.param_setValue(ts);
                             }

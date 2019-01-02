@@ -505,8 +505,8 @@ sp_svg_create_color_hash()
 {
     std::map<string, unsigned long> colors;
 
-    for (unsigned i = 0 ; i < G_N_ELEMENTS(sp_svg_color_named) ; i++) {
-        colors[sp_svg_color_named[i].name] = sp_svg_color_named[i].rgb;
+    for (const auto & i : sp_svg_color_named) {
+        colors[i.name] = i.rgb;
     }
     return colors;
 }

@@ -302,8 +302,8 @@ void sp_update_helperpath() {
             
             Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
             std::vector<Geom::Point> selectedNodesPositions;
-            for (Inkscape::UI::ControlPointSelection::iterator i = selectionNodes->begin(); i != selectionNodes->end(); ++i) {
-                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
+            for (auto selectionNode : *selectionNodes) {
+                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selectionNode);
                 selectedNodesPositions.push_back(n->position());
             }
             lpe->setSelectedNodePoints(selectedNodesPositions);
@@ -311,8 +311,8 @@ void sp_update_helperpath() {
             SPCurve *c = new SPCurve();
             SPCurve *cc = new SPCurve();
             std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(SP_LPE_ITEM(selection->singleItem()));
-            for (std::vector<Geom::PathVector>::iterator p = cs.begin(); p != cs.end(); ++p) {
-                cc->set_pathvector(*p);
+            for (auto & p : cs) {
+                cc->set_pathvector(p);
                 c->append(cc, false);
                 cc->reset();
             }
@@ -441,9 +441,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         }
     }
 
-    for (std::set<ShapeRecord>::iterator i = shapes.begin(); i != shapes.end(); ++i) {
-        ShapeRecord const &r = *i;
-
+    for (const auto & r : shapes) {
         if ((SP_IS_SHAPE(r.item) || SP_IS_TEXT(r.item) || SP_IS_GROUP(r.item) || SP_IS_OBJECTGROUP(r.item)) &&
             this->_shape_editors.find(r.item) == this->_shape_editors.end())
         {
@@ -674,9 +672,9 @@ void NodeTool::update_tip(GdkEvent *event) {
             // of a line going through them relative to the X axis.
             Inkscape::UI::ControlPointSelection::Set &selection_nodes = this->_selected_nodes->allPoints();
             std::vector<Geom::Point> positions;
-            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection_nodes.begin(); i != selection_nodes.end(); ++i) {
-                if ((*i)->selected()) {
-                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
+            for (auto selection_node : selection_nodes) {
+                if (selection_node->selected()) {
+                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(selection_node);
                     positions.push_back(n->position());
                 }
             }

@@ -896,13 +896,13 @@ SPGradient::repr_write_vector()
     /* We have to be careful, as vector may be our own, so construct repr list at first */
     std::vector<Inkscape::XML::Node *> l;
 
-    for (guint i = 0; i < vector.stops.size(); i++) {
+    for (auto & stop : vector.stops) {
         Inkscape::CSSOStringStream os;
         Inkscape::XML::Node *child = xml_doc->createElement("svg:stop");
-        sp_repr_set_css_double(child, "offset", vector.stops[i].offset);
+        sp_repr_set_css_double(child, "offset", stop.offset);
         /* strictly speaking, offset an SVG <number> rather than a CSS one, but exponents make no
          * sense for offset proportions. */
-        os << "stop-color:" << vector.stops[i].color.toString() << ";stop-opacity:" << vector.stops[i].opacity;
+        os << "stop-color:" << stop.color.toString() << ";stop-opacity:" << stop.opacity;
         child->setAttribute("style", os.str().c_str());
         /* Order will be reversed here */
         l.push_back(child);
@@ -1134,12 +1134,11 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
 
     // add stops
     if (!SP_IS_MESHGRADIENT(gr)) {
-        for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
-             i != gr->vector.stops.end(); ++i)
+        for (auto & stop : gr->vector.stops)
         {
             // multiply stop opacity by paint opacity
-            cairo_pattern_add_color_stop_rgba(cp, i->offset,
-                                              i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity * opacity);
+            cairo_pattern_add_color_stop_rgba(cp, stop.offset,
+                                              stop.color.v.c[0], stop.color.v.c[1], stop.color.v.c[2], stop.opacity * opacity);
         }
     }
 
@@ -1162,11 +1161,10 @@ SPGradient::create_preview_pattern(double width)
 
         pat = cairo_pattern_create_linear(0, 0, width, 0);
 
-        for (std::vector<SPGradientStop>::iterator i = vector.stops.begin();
-             i != vector.stops.end(); ++i)
+        for (auto & stop : vector.stops)
         {
-            cairo_pattern_add_color_stop_rgba(pat, i->offset,
-              i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
+            cairo_pattern_add_color_stop_rgba(pat, stop.offset,
+              stop.color.v.c[0], stop.color.v.c[1], stop.color.v.c[2], stop.opacity);
         }
     } else {
 

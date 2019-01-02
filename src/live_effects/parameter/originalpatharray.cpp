@@ -333,8 +333,7 @@ OriginalPathArrayParam::on_link_button_click()
         }
         os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
     }
-    for (auto i=pathsid.begin();i!=pathsid.end();++i) {
-        Glib::ustring pathid = *i;
+    for (auto pathid : pathsid) {
         // add '#' at start to make it an uri.
         pathid.insert(pathid.begin(), '#');
 
@@ -512,13 +511,13 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     bool foundOne = false;
-    for (std::vector<PathAndDirectionAndVisible*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+    for (auto iter : _vector) {
         if (foundOne) {
             os << "|";
         } else {
             foundOne = true;
         }
-        os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
+        os << iter->href << "," << (iter->reversed ? "1" : "0") << "," << (iter->visibled ? "1" : "0");
     }
     return g_strdup(os.str().c_str());
 }
@@ -530,9 +529,9 @@ gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const
 
 void OriginalPathArrayParam::update()
 {
-    for (std::vector<PathAndDirectionAndVisible*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
-        SPObject *linked_obj = (*iter)->ref.getObject();
-        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, *iter);
+    for (auto & iter : _vector) {
+        SPObject *linked_obj = iter->ref.getObject();
+        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, iter);
     }
 }
 

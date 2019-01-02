@@ -195,12 +195,12 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar cons
     const char * xslt_params[max_parameters+1] ;
 
     int count = 0;
-    for(std::list<std::string>::iterator t=params.begin(); t != params.end(); ++t) {
-        std::size_t pos = t->find("=");
+    for(auto & param : params) {
+        std::size_t pos = param.find("=");
         std::ostringstream parameter;
         std::ostringstream value;
-        parameter << t->substr(2,pos-2);
-        value << t->substr(pos+1);
+        parameter << param.substr(2,pos-2);
+        value << param.substr(pos+1);
         xslt_params[count++] = g_strdup_printf("%s", parameter.str().c_str());
         xslt_params[count++] = g_strdup_printf("'%s'", value.str().c_str());
     }

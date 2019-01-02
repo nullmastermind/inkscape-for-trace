@@ -244,11 +244,9 @@ int Application::autosave()
     int pid = ::getpid();
 
     SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Autosaving documents..."));
-    for (std::map<SPDocument*,int>::iterator iter = _document_set.begin();
-          iter != _document_set.end();
-          ++iter) {
+    for (auto & iter : _document_set) {
 
-        SPDocument *doc = iter->first;
+        SPDocument *doc = iter.first;
 
         ++docnum;
 
@@ -715,9 +713,9 @@ Application::crash_handler (int /*signum*/)
                 inkscapedir
             };
             FILE *file = nullptr;
-            for(size_t i=0; i<sizeof(locations)/sizeof(*locations); i++) {
-                if (!locations[i]) continue; // It seems to be okay, but just in case
-                gchar * filename = g_build_filename(locations[i], c, NULL);
+            for(auto & location : locations) {
+                if (!location) continue; // It seems to be okay, but just in case
+                gchar * filename = g_build_filename(location, c, NULL);
                 Inkscape::IO::dump_fopen_call(filename, "E");
                 file = Inkscape::IO::fopen_utf8name(filename, "w");
                 if (file) {
@@ -1009,9 +1007,9 @@ Application::reactivate_desktop (SPDesktop * desktop)
 SPDesktop *
 Application::find_desktop_by_dkey (unsigned int dkey)
 {
-    for (std::vector<SPDesktop*>::iterator r = _desktops->begin(), e = _desktops->end(); r != e; ++r) {
-        if ((*r)->dkey == dkey){
-            return *r;
+    for (auto & _desktop : *_desktops) {
+        if (_desktop->dkey == dkey){
+            return _desktop;
         }
     }
     return nullptr;
@@ -1023,9 +1021,9 @@ Application::maximum_dkey()
 {
     unsigned int dkey = 0;
 
-    for (std::vector<SPDesktop*>::iterator r = _desktops->begin(), e = _desktops->end(); r != e; ++r) {
-        if ((*r)->dkey > dkey){
-            dkey = (*r)->dkey;
+    for (auto & _desktop : *_desktops) {
+        if (_desktop->dkey > dkey){
+            dkey = _desktop->dkey;
         }
     }
     return dkey;
@@ -1146,12 +1144,10 @@ Application::add_document (SPDocument *document)
     // try to insert the pair into the list
     if (!(_document_set.insert(std::make_pair(document, 1)).second)) {
         //insert failed, this key (document) is already in the list
-        for (std::map<SPDocument*,int>::iterator iter = _document_set.begin();
-               iter != _document_set.end();
-               ++iter) {
-            if (iter->first == document) {
+        for (auto & iter : _document_set) {
+            if (iter.first == document) {
                 // found this document in list, increase its count
-                iter->second ++;
+                iter.second ++;
             }
        }
     } else {
@@ -1228,8 +1224,7 @@ Application::sole_desktop_for_document(SPDesktop const &desktop) {
     if (!document) {
         return false;
     }
-    for ( std::vector<SPDesktop*>::iterator iter = _desktops->begin(), e = _desktops->end() ; iter != e; ++iter ) {
-        SPDesktop *other_desktop = *iter;
+    for (auto other_desktop : *_desktops) {
         SPDocument *other_document = other_desktop->doc();
         if ( other_document == document && other_desktop != &desktop ) {
             return false;
@@ -1268,8 +1263,7 @@ Application::action_context_for_document(SPDocument *doc)
 {
     // If there are desktops, check them first to see if the document is bound to one of them
     if (_desktops != nullptr) {
-        for (std::vector<SPDesktop*>::iterator iter = _desktops->begin(), e = _desktops->end() ; iter != e ; ++iter) {
-            SPDesktop *desktop = *iter;
+        for (auto desktop : *_desktops) {
             if (desktop->doc() == doc) {
                 return Inkscape::ActionContext(desktop);
             }
@@ -1293,8 +1287,8 @@ Application::action_context_for_document(SPDocument *doc)
 void
 Application::refresh_display ()
 {
-    for (std::vector<SPDesktop*>::iterator l = _desktops->begin(), e = _desktops->end(); l != e; ++l) {
-        (*l)->requestRedraw();
+    for (auto & _desktop : *_desktops) {
+        _desktop->requestRedraw();
     }
 }
 

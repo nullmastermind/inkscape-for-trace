@@ -1978,8 +1978,7 @@ void Shape::_countUpDownTotalDegree2(int P,
     *upEdge = -1;
     *downEdge = -1;
     
-    for (int i = 0; i < 2; i++) {
-        int const j = getPoint(P).incidentEdge[i];
+    for (int j : getPoint(P).incidentEdge) {
         Shape::dg_arete const &e = getEdge(j);
         if ( P == std::max(e.st, e.en) ) {
             *upEdge = j;

@@ -1398,9 +1398,9 @@ unsigned int PrintEmf::fill(
             Dashes converted to line segments will "open" a closed path.
         */
         bool all_closed = true;
-        for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
-            for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
-                if (pit->end_default() != pit->end_closed()) {
+        for (const auto & pit : pathv) {
+            for (Geom::Path::const_iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
+                if (pit.end_default() != pit.end_closed()) {
                     all_closed = false;
                 }
             }
@@ -1447,8 +1447,8 @@ unsigned int PrintEmf::stroke(
         double tlength;                                       // length of tmp_pathpw
         double slength = 0.0;                                 // start of gragment
         double elength;                                       // end of gragment
-        for (unsigned int i = 0; i < pathv.size(); i++) {
-            tmp_pathpw.concat(pathv[i].toPwSb());
+        for (const auto & i : pathv) {
+            tmp_pathpw.concat(i.toPwSb());
         }
         tlength = length(tmp_pathpw, 0.1);
         tmp_pathpw2 = arc_length_parametrization(tmp_pathpw);
@@ -1507,11 +1507,11 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     int curves = 0;
     char *rec  = nullptr;
 
-    for (Geom::PathVector::iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (auto & pit : pv) {
         moves++;
         nodes++;
 
-        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             nodes++;
 
             if (is_straight_curve(*cit)) {
@@ -1532,11 +1532,11 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     /**
      * For all Subpaths in the <path>
      */
-    for (Geom::PathVector::iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (auto & pit : pv) {
         using Geom::X;
         using Geom::Y;
 
-        Geom::Point p0 = pit->initialPoint();
+        Geom::Point p0 = pit.initialPoint();
 
         p0[X] = (p0[X] * PX2WORLD);
         p0[Y] = (p0[Y] * PX2WORLD);
@@ -1551,7 +1551,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
         /**
          * For all segments in the subpath
          */
-        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::iterator cit = pit.begin(); cit != pit.end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 //Geom::Point p0 = cit->initialPoint();
                 Geom::Point p1 = cit->finalPoint();

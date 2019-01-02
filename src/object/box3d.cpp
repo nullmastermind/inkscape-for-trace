@@ -49,8 +49,8 @@ SPBox3D::SPBox3D() : SPGroup() {
     this->persp_ref = new Persp3DReference(this);
 
     /* we initialize the z-orders to zero so that they are updated during dragging */
-    for (int i = 0; i < 6; ++i) {
-        z_orders[i] = 0;
+    for (int & z_order : z_orders) {
+        z_order = 0;
     }
 }
 
@@ -62,8 +62,8 @@ void SPBox3D::build(SPDocument *document, Inkscape::XML::Node *repr) {
     my_counter = counter++;
 
     /* we initialize the z-orders to zero so that they are updated during dragging */
-    for (int i = 0; i < 6; ++i) {
-        z_orders[i] = 0;
+    for (int & z_order : z_orders) {
+        z_order = 0;
     }
 
     // TODO: Create/link to the correct perspective
@@ -1051,9 +1051,9 @@ box3d_recompute_z_orders (SPBox3D *box) {
     // TODO: If there are still errors in z-orders of everted boxes, we need to choose a variable corner
     //       instead of the hard-coded corner #3 in the computations above
     Box3D::Axis ev = box3d_everted_directions(box);
-    for (int i = 0; i < 3; ++i) {
-        if (ev & Box3D::axes[i]) {
-            box3d_swap_sides(z_orders, Box3D::axes[i]);
+    for (auto & axe : Box3D::axes) {
+        if (ev & axe) {
+            box3d_swap_sides(z_orders, axe);
         }
     }
 
@@ -1090,8 +1090,8 @@ box3d_set_z_orders (SPBox3D *box) {
     if (box3d_recompute_z_orders (box)) {
         std::map<int, Box3DSide *> sides = box3d_get_sides(box);
         std::map<int, Box3DSide *>::iterator side;
-        for (unsigned int i = 0; i < 6; ++i) {
-            side = sides.find(box->z_orders[i]);
+        for (int z_order : box->z_orders) {
+            side = sides.find(z_order);
             if (side != sides.end()) {
                 ((*side).second)->lowerToBottom();
             }

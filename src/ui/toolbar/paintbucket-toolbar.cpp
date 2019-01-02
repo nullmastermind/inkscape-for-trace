@@ -95,8 +95,7 @@ static void paintbucket_defaults(GtkWidget *, GObject *tbl)
         {"offset", 0.0}
     };
 
-    for (unsigned i = 0; i < G_N_ELEMENTS(key_values); ++i) {
-        KeyValue const &kv = key_values[i];
+    for (auto kv : key_values) {
         GtkAdjustment* adj = static_cast<GtkAdjustment *>(g_object_get_data(tbl, kv.key));
         if ( adj ) {
             gtk_adjustment_set_value(adj, kv.value);

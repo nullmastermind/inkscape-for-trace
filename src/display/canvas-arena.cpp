@@ -54,8 +54,8 @@ struct CachePrefObserver : public Inkscape::Preferences::Observer {
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         std::vector<Inkscape::Preferences::Entry> v = prefs->getAllEntries(observed_path);
-        for (unsigned i=0; i<v.size(); ++i) {
-            notify(v[i]);
+        for (const auto & i : v) {
+            notify(i);
         }
         prefs->addObserver(*this);
     }

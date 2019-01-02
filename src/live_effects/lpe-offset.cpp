@@ -132,8 +132,8 @@ sp_get_outer(Geom::PathVector pathvector)
     Geom::OptRect bbox;
     Geom::Path ret;
     Geom::PathVector ret_pv;
-    for (Geom::PathVector::iterator path_it = pathvector.begin(); path_it != pathvector.end(); ++path_it) {
-        Geom::Path iter = (*path_it);
+    for (auto & path_it : pathvector) {
+        Geom::Path iter = path_it;
         if (iter.empty()) {
             continue;
         }
@@ -157,8 +157,8 @@ sp_get_inner(Geom::PathVector pathvector)
     Geom::PathVector ret_pv;
     Geom::PathVector outer = sp_get_outer(pathvector);
     Geom::OptRect bbox = outer.boundsFast();
-    for (Geom::PathVector::iterator path_it = pathvector.begin(); path_it != pathvector.end(); ++path_it) {
-        Geom::Path iter = (*path_it);
+    for (auto & path_it : pathvector) {
+        Geom::Path iter = path_it;
         if (iter.empty()) {
             continue;
         }

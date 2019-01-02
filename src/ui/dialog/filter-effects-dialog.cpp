@@ -215,8 +215,8 @@ public:
 
     ~MultiSpinButton() override
     {
-        for(unsigned i = 0; i < _spins.size(); ++i)
-            delete _spins[i];
+        for(auto & _spin : _spins)
+            delete _spin;
     }
 
     std::vector<SpinButtonAttr*>& get_spinbuttons()
@@ -391,10 +391,9 @@ public:
     std::vector<double> get_values() const
     {
         std::vector<double> vec;
-        for(Gtk::TreeIter iter = _model->children().begin();
-            iter != _model->children().end(); ++iter) {
+        for(const auto & iter : _model->children()) {
             for(unsigned c = 0; c < _tree.get_columns().size(); ++c)
-                vec.push_back((*iter)[_columns.cols[c]]);
+                vec.push_back(iter[_columns.cols[c]]);
         }
         return vec;
     }
@@ -402,12 +401,11 @@ public:
     void set_values(const std::vector<double>& v)
     {
         unsigned i = 0;
-        for(Gtk::TreeIter iter = _model->children().begin();
-            iter != _model->children().end(); ++iter) {
+        for(const auto & iter : _model->children()) {
             for(unsigned c = 0; c < _tree.get_columns().size(); ++c) {
                 if(i >= v.size())
                     return;
-                (*iter)[_columns.cols[c]] = v[i];
+                iter[_columns.cols[c]] = v[i];
                 ++i;
             }
         }
@@ -418,10 +416,9 @@ public:
         // use SVGOStringStream to output SVG-compatible doubles
         Inkscape::SVGOStringStream os;
 
-        for(Gtk::TreeIter iter = _model->children().begin();
-            iter != _model->children().end(); ++iter) {
+        for(const auto & iter : _model->children()) {
             for(unsigned c = 0; c < _tree.get_columns().size(); ++c) {
-                os << (*iter)[_columns.cols[c]] << " ";
+                os << iter[_columns.cols[c]] << " ";
             }
         }
 
@@ -451,8 +448,8 @@ private:
         MatrixColumns()
         {
             cols.resize(5);
-            for(unsigned i = 0; i < cols.size(); ++i)
-                add(cols[i]);
+            for(auto & col : cols)
+                add(col);
         }
         std::vector<Gtk::TreeModelColumn<double> > cols;
     };
@@ -754,8 +751,8 @@ public:
     {
         for(int i = 0; i < _max_types; ++i) {
             delete _groups[i];
-            for(unsigned j = 0; j < _attrwidgets[i].size(); ++j)
-                delete _attrwidgets[i][j];
+            for(auto & j : _attrwidgets[i])
+                delete j;
         }
     }
 
@@ -764,15 +761,15 @@ public:
     {
         if(t != _current_type) {
             type(t);
-            for(unsigned i = 0; i < _groups.size(); ++i)
-                _groups[i]->hide();
+            for(auto & _group : _groups)
+                _group->hide();
         }
         if(t >= 0) {
             _groups[t]->show(); // Do not use show_all(), it shows children than should be hidden
         }
         _dialog.set_attrs_locked(true);
-        for(unsigned i = 0; i < _attrwidgets[_current_type].size(); ++i)
-            _attrwidgets[_current_type][i]->set_from_attribute(ob);
+        for(auto & i : _attrwidgets[_current_type])
+            i->set_from_attribute(ob);
         _dialog.set_attrs_locked(false);
     }
 
@@ -908,8 +905,8 @@ public:
 
         MultiSpinButton* msb = new MultiSpinButton(lo, hi, step_inc, climb, digits, attrs, default_values, tips);
         add_widget(msb, label);
-        for(unsigned i = 0; i < msb->get_spinbuttons().size(); ++i)
-            add_attr_widget(msb->get_spinbuttons()[i]);
+        for(auto & i : msb->get_spinbuttons())
+            add_attr_widget(i);
         return msb;
     }
     MultiSpinButton* add_multispinbutton(double def1, double def2, double def3, const SPAttributeEnum attr1, const SPAttributeEnum attr2,
@@ -933,8 +930,8 @@ public:
 
         MultiSpinButton* msb = new MultiSpinButton(lo, hi, step_inc, climb, digits, attrs, default_values, tips);
         add_widget(msb, label);
-        for(unsigned i = 0; i < msb->get_spinbuttons().size(); ++i)
-            add_attr_widget(msb->get_spinbuttons()[i]);
+        for(auto & i : msb->get_spinbuttons())
+            add_attr_widget(i);
         return msb;
     }
 
@@ -1565,9 +1562,9 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 
 void FilterEffectsDialog::FilterModifier::update_counts()
 {    
-    for(Gtk::TreeModel::iterator i = _model->children().begin(); i != _model->children().end(); ++i) {
-        SPFilter* f = SP_FILTER((*i)[_columns.filter]);
-        (*i)[_columns.count] = f->getRefCount();
+    for(const auto & i : _model->children()) {
+        SPFilter* f = SP_FILTER(i[_columns.filter]);
+        i[_columns.count] = f->getRefCount();
         }
 }
 
@@ -3074,8 +3071,8 @@ void FilterEffectsDialog::update_settings_view()
 //First Tab
 
     std::vector<Gtk::Widget*> vect1 = _settings_tab1.get_children();
-    for(unsigned int i=0; i<vect1.size(); i++) 
-	    vect1[i]->hide();
+    for(auto & i : vect1) 
+	    i->hide();
     _empty_settings.show();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

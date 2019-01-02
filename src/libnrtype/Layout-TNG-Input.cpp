@@ -30,8 +30,8 @@ namespace Text {
 
 void Layout::_clearInputObjects()
 {
-    for(std::vector<InputStreamItem*>::iterator it = _input_stream.begin() ; it != _input_stream.end() ; ++it) {
-        delete *it;
+    for(auto & it : _input_stream) {
+        delete it;
     }
 
     _input_stream.clear();
@@ -72,9 +72,9 @@ void Layout::appendText(Glib::ustring const &text,
         if (!optional_attributes->rotate.empty() && optional_attributes_offset >= optional_attributes->rotate.size()) {
             SVGLength last_rotate;
             last_rotate = 0.f;
-            for (std::vector<SVGLength>::const_iterator it = optional_attributes->rotate.begin() ; it != optional_attributes->rotate.end() ; ++it)
-                if (it->_set)
-                    last_rotate = *it;
+            for (auto it : optional_attributes->rotate)
+                if (it._set)
+                    last_rotate = it;
             new_source->rotate.resize(1, last_rotate);
         }
         new_source->textLength._set = optional_attributes->textLength._set;

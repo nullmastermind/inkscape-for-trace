@@ -128,8 +128,8 @@ public:
         double y = p[Geom::Y] * _baseFreq[Geom::Y];
         double ratio = 1.0;
 
-        for (int k = 0; k < 4; ++k)
-            pixel[k] = 0.0;
+        for (double & k : pixel)
+            k = 0.0;
 
         for(int octave = 0; octave < _octaves; ++octave)
         {

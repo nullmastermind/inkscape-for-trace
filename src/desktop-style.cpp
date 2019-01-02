@@ -449,8 +449,7 @@ stroke_average_width (const std::vector<SPItem*> &objects)
     gdouble avgwidth = 0.0;
     bool notstroked = true;
     int n_notstroked = 0;
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPItem *item = *i;
+    for (auto item : objects) {
         if (!item) {
             continue;
         }
@@ -515,8 +514,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
     prev[0] = prev[1] = prev[2] = 0.0;
     bool same_color = true;
 
-        for (std::vector<SPItem*>::const_iterator i = objects.begin(); i!= objects.end(); ++i) {
-        SPObject *obj = *i;
+        for (auto obj : objects) {
         if (!obj) {
             continue;
         }
@@ -695,8 +693,7 @@ objects_query_opacity (const std::vector<SPItem*> &objects, SPStyle *style_res)
     guint opacity_items = 0;
 
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!obj) {
             continue;
         }
@@ -751,8 +748,7 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
 
     int n_stroked = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!obj) {
             continue;
         }
@@ -825,8 +821,7 @@ objects_query_miterlimit (const std::vector<SPItem*> &objects, SPStyle *style_re
     gdouble prev_ml = -1;
     bool same_ml = true;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -883,8 +878,7 @@ objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style_res
     bool same_cap = true;
     int n_stroked = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -934,8 +928,7 @@ objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_re
     bool same_join = true;
     int n_stroked = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -986,8 +979,7 @@ objects_query_paintorder (const std::vector<SPItem*> &objects, SPStyle *style_re
     bool same_order = true;
     int n_order = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -1057,9 +1049,7 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
     int texts = 0;
     int no_size = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         if (!isTextualItem(obj)) {
             continue;
         }
@@ -1234,9 +1224,7 @@ objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res
 
     int texts = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         if (!isTextualItem(obj)) {
             continue;
         }
@@ -1309,9 +1297,7 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
     numeric_res->value   = 0;
     asian_res->value     = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         if (!isTextualItem(obj)) {
             continue;
         }
@@ -1391,9 +1377,7 @@ objects_query_writing_modes (const std::vector<SPItem*> &objects, SPStyle *style
 
     int texts = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         if (!isTextualItem(obj)) {
             continue;
         }
@@ -1444,9 +1428,7 @@ objects_query_fontfeaturesettings (const std::vector<SPItem*> &objects, SPStyle 
     }
     style_res->font_feature_settings.set = FALSE;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
         if (!isTextualItem(obj)) {
             continue;
@@ -1512,9 +1494,7 @@ objects_query_baselines (const std::vector<SPItem*> &objects, SPStyle *style_res
 
     int texts = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         if (!isTextualItem(obj)) {
             continue;
         }
@@ -1600,9 +1580,7 @@ objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_re
     }
     style_res->font_family.set = FALSE;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
         if (!isTextualItem(obj)) {
             continue;
@@ -1656,9 +1634,7 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
     }
     style_res->font_specification.set = FALSE;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
-
+    for (auto obj : objects) {
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
         if (!isTextualItem(obj)) {
             continue;
@@ -1714,8 +1690,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
     bool same_blend = true;
     guint items = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!obj) {
             continue;
         }
@@ -1807,8 +1782,7 @@ objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res)
     guint blur_items = 0;
     guint items = 0;
 
-    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); ++i) {
-        SPObject *obj = *i;
+    for (auto obj : objects) {
         if (!obj) {
             continue;
         }

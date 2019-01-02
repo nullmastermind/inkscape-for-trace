@@ -972,15 +972,15 @@ void offset_curve(Geom::Path& res, Geom::Curve const* current, double width, dou
             }
             default: {
                 Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(current->toSBasis(), tolerance);
-                for (size_t i = 0; i < sbasis_path.size(); ++i)
-                    offset_curve(res, &sbasis_path[i], width, tolerance);
+                for (const auto & i : sbasis_path)
+                    offset_curve(res, &i, width, tolerance);
                 break;
             }
         }
     } else {
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(current->toSBasis(), 0.1);
-        for (size_t i = 0; i < sbasis_path.size(); ++i)
-            offset_curve(res, &sbasis_path[i], width, tolerance);
+        for (const auto & i : sbasis_path)
+            offset_curve(res, &i, width, tolerance);
     }
 }
 

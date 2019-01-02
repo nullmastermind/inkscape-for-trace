@@ -316,8 +316,7 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
 
     // Get list of selected draggers for each mesh.
     // For all selected draggers (a dragger may include draggerables from different meshes).
-    for (std::set<GrDragger *>::const_iterator i = drag->selected.begin(); i != drag->selected.end(); ++i) {
-        GrDragger *dragger = *i;
+    for (auto dragger : drag->selected) {
         // For all draggables of dragger (a draggable corresponds to a unique mesh).
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end() ; ++j) { 
             GrDraggable *d = *j;

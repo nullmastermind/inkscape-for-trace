@@ -301,16 +301,15 @@ void LayerManager::_rebuild() {
                 if ( !includes(layer) ) {
                     layersToAdd.insert(SP_GROUP(layer));
                 }
-                for ( std::set<SPGroup*>::iterator it = additional.begin(); it != additional.end(); ++it ) {
-                    if ( !includes(*it) ) {
-                        layersToAdd.insert(*it);
+                for (auto it : additional) {
+                    if ( !includes(it) ) {
+                        layersToAdd.insert(it);
                     }
                 }
             }
         }
 
-        for ( std::set<SPGroup*>::iterator it = layersToAdd.begin(); it != layersToAdd.end(); ++it ) {
-            SPGroup* layer = *it;
+        for (auto layer : layersToAdd) {
             // Filter out objects in the middle of being deleted
 
             // Such may have been the cause of bug 1339397.

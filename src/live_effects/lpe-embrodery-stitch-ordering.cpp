@@ -175,8 +175,8 @@ void OrderingOriginal(std::vector<OrderingInfo> &infos)
 
 void OrderingZigZag(std::vector<OrderingInfo> &infos, bool revfirst)
 {
-    for (std::vector<OrderingInfo>::iterator it = infos.begin(); it != infos.end(); ++it) {
-        it->reverse = (it->index & 1) == (revfirst ? 0 : 1);
+    for (auto & info : infos) {
+        info.reverse = (info.index & 1) == (revfirst ? 0 : 1);
     }
 }
 
@@ -260,32 +260,32 @@ void OrderingPoint::FindNearest2(const std::vector<OrderingInfoEx *> &infos)
     nearest[0] = nullptr;
     nearest[1] = nullptr;
 
-    for (std::vector<OrderingInfoEx *>::const_iterator it = infos.begin(); it != infos.end(); ++it) {
-        Coord dist = distance(point, (*it)->beg.point);
+    for (auto info : infos) {
+        Coord dist = distance(point, info->beg.point);
         if (dist < dist1) {
-            if (&(*it)->beg != this && &(*it)->end != this) {
+            if (&info->beg != this && &info->end != this) {
                 if (dist < dist0) {
                     nearest[1] = nearest[0];
-                    nearest[0] = &(*it)->beg;
+                    nearest[0] = &info->beg;
                     dist1 = dist0;
                     dist0 = dist;
                 } else {
-                    nearest[1] = &(*it)->beg;
+                    nearest[1] = &info->beg;
                     dist1 = dist;
                 }
             }
         }
 
-        dist = distance(point, (*it)->end.point);
+        dist = distance(point, info->end.point);
         if (dist < dist1) {
-            if (&(*it)->beg != this && &(*it)->end != this) {
+            if (&info->beg != this && &info->end != this) {
                 if (dist < dist0) {
                     nearest[1] = nearest[0];
-                    nearest[0] = &(*it)->end;
+                    nearest[0] = &info->end;
                     dist1 = dist0;
                     dist0 = dist;
                 } else {
-                    nearest[1] = &(*it)->end;
+                    nearest[1] = &info->end;
                     dist1 = dist;
                 }
             }
@@ -403,14 +403,14 @@ bool OrderingGroupNeighbor::Compare(const OrderingGroupNeighbor &a, const Orderi
 
 OrderingGroupNeighbor *OrderingGroupPoint::FindNearestUnused()
 {
-    for (std::vector<OrderingGroupNeighbor>::iterator it = nearest.begin(); it != nearest.end(); ++it) {
-        if (!it->point->used) {
+    for (auto & it : nearest) {
+        if (!it.point->used) {
             DebugTrace1TSP(("Nearest: group %d, size %d, point %d, nghb %d, xFrom %.4lf, yFrom %.4lf, xTo %.4lf, yTo %.4lf, dist %.4lf",
                             it->point->group->index, it->point->group->items.size(), it->point->indexInGroup, it - nearest.begin(),
                             point.x(), 297 - point.y(),
                             it->point->point.x(), 297 - it->point->point.y(),
                             it->distance));
-            return &*it;
+            return &it;
         }
     }
 
@@ -641,11 +641,11 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
     if (contains(connections, *longestConnect)) {
         // The longest connection is inside the active set, so we need to search for the longest outside
         Coord length = 0.0;
-        for (std::vector<OrderingGroupConnection *>::iterator it = allconnections.begin(); it != allconnections.end(); it++) {
-            if ((*it)->Distance() > length) {
-                if (!contains(connections, *it)) {
-                    longestOutside = *it;
-                    length = (*it)->Distance();
+        for (auto & allconnection : allconnections) {
+            if (allconnection->Distance() > length) {
+                if (!contains(connections, allconnection)) {
+                    longestOutside = allconnection;
+                    length = allconnection->Distance();
                 }
             }
         }
@@ -662,13 +662,13 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
     // Assign a swap bit and end bit to each active connection
     int nEndBits = 0;
     int nSwapBits = 0;
-    for (std::vector<OrderingSegment>::iterator it = segments.begin(); it != segments.end(); it++) {
-        it->endbit = nEndBits++;
-        if (it->nEndPoints == 4) {
-            it->swapbit = nSwapBits++;
+    for (auto & segment : segments) {
+        segment.endbit = nEndBits++;
+        if (segment.nEndPoints == 4) {
+            segment.swapbit = nSwapBits++;
         } else {
             // bit 32 should always be 0
-            it->swapbit = 31;
+            segment.swapbit = 31;
         }
     }
 
@@ -702,14 +702,14 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
 
                 // Close the loop with the end point of the last segment
                 OrderingGroupPoint *prevend = segments[permutation.back()].GetEndPoint(iSwap, iEnd);
-                for (std::vector<int>::iterator it = permutation.begin(); it != permutation.end(); it++) {
-                    OrderingGroupPoint *thisbeg = segments[*it].GetBeginPoint(iSwap, iEnd);
+                for (int & it : permutation) {
+                    OrderingGroupPoint *thisbeg = segments[it].GetBeginPoint(iSwap, iEnd);
                     Coord length = Geom::distance(thisbeg->point, prevend->point);
                     lengthTotal += length;
                     if (length > lengthLongest) {
                         lengthLongest = length;
                     }
-                    prevend = segments[*it].GetEndPoint(iSwap, iEnd);
+                    prevend = segments[it].GetEndPoint(iSwap, iEnd);
                 }
                 lengthTotal -= lengthLongest;
 
@@ -723,11 +723,11 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
 
                     // Just debug printing
                     OrderingGroupPoint *prevend = segments[permutation.back()].GetEndPoint(iSwap, iEnd);
-                    for (std::vector<int>::iterator it = permutation.begin(); it != permutation.end(); it++) {
-                        OrderingGroupPoint *thisbeg = segments[*it].GetBeginPoint(iSwap, iEnd);
+                    for (int & it : permutation) {
+                        OrderingGroupPoint *thisbeg = segments[it].GetBeginPoint(iSwap, iEnd);
                         DebugTrace2TSP(("IMP 0F=%d %d %.6lf", thisbeg->group->index, thisbeg->indexInGroup, Geom::distance(thisbeg->point, prevend->point)));
                         DebugTrace2TSP(("IMP 0T=%d %d %.6lf", prevend->group->index, prevend->indexInGroup, Geom::distance(thisbeg->point, prevend->point)));
-                        prevend = segments[*it].GetEndPoint(iSwap, iEnd);
+                        prevend = segments[it].GetEndPoint(iSwap, iEnd);
                     }
                 }
 
@@ -768,9 +768,9 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
         }
 
         (*longestConnect) = longestOutside;
-        for (std::vector<OrderingGroupConnection *>::iterator it = connections.begin(); it != connections.end(); ++it) {
-            if ((*it)->Distance() > (*longestConnect)->Distance()) {
-                *longestConnect = *it;
+        for (auto & connection : connections) {
+            if (connection->Distance() > (*longestConnect)->Distance()) {
+                *longestConnect = connection;
             }
         }
         DebugTrace2TSP(("LONG =%d %d %.6lf", (*longestConnect)->points[0]->group->index, (*longestConnect)->points[0]->indexInGroup, (*longestConnect)->Distance()));
@@ -783,10 +783,10 @@ bool FindShortestReconnect(std::vector<OrderingSegment> &segments, std::vector<O
 // Check if connections form a tour
 void AssertIsTour(std::vector<OrderingGroup *> &groups, std::vector<OrderingGroupConnection *> &connections, OrderingGroupConnection *longestConnection)
 {
-    for (std::vector<OrderingGroupConnection *>::iterator it = connections.begin(); it != connections.end(); it++) {
+    for (auto & connection : connections) {
         for (int i = 0; i < 2; i++) {
-            OrderingGroupPoint *pnt = (*it)->points[i];
-            assert(pnt->connection == *it);
+            OrderingGroupPoint *pnt = connection->points[i];
+            assert(pnt->connection == connection);
             assert(pnt->connection->points[pnt->indexInConnection] == pnt);
             assert(pnt->group->endpoints[pnt->indexInGroup] == pnt);
         }
@@ -872,8 +872,8 @@ void OrderGroups(std::vector<OrderingGroup *> *groups, const int nDims)
     }
 
     // Initialize the endpoints for all groups
-    for (std::vector<OrderingGroup *>::iterator it = groups->begin(); it != groups->end(); ++it) {
-        (*it)->SetEndpoints();
+    for (auto & group : *groups) {
+        group->SetEndpoints();
     }
 
     // Find the neighboring points for all end points of all groups and sort by distance
@@ -1048,9 +1048,9 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     )
 
     // Make sure the nearest points are mutual
-    for (std::vector<OrderingInfoEx *>::iterator it = infoex.begin(); it != infoex.end(); ++it) {
-        (*it)->beg.EnforceMutual();
-        (*it)->end.EnforceMutual();
+    for (auto & it : infoex) {
+        it->beg.EnforceMutual();
+        it->end.EnforceMutual();
     }
 
     DebugTraceGrouping(
@@ -1062,9 +1062,9 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     )
 
     // Make sure the nearest points for begin and end lead to the same sub-path (same index)
-    for (std::vector<OrderingInfoEx *>::iterator it = infoex.begin(); it != infoex.end(); ++it) {
-        (*it)->beg.EnforceSymmetric((*it)->end);
-        (*it)->end.EnforceSymmetric((*it)->beg);
+    for (auto & it : infoex) {
+        it->beg.EnforceSymmetric(it->end);
+        it->end.EnforceSymmetric(it->beg);
     }
 
     DebugTraceGrouping(
@@ -1085,10 +1085,10 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     std::vector<OrderingInfo> result;
     result.reserve(infos.size());
     int nUngrouped = 0;
-    for (std::vector<OrderingInfoEx *>::iterator it = infoex.begin(); it != infoex.end(); ++it) {
-        if (!(*it)->grouped) {
+    for (auto & it : infoex) {
+        if (!it->grouped) {
             groups.push_back(new OrderingGroup(groups.size()));
-            groups.back()->items.push_back(*it);
+            groups.back()->items.push_back(it);
             nUngrouped++;
         }
     }
@@ -1105,17 +1105,17 @@ void OrderingAdvanced(std::vector<OrderingInfo> &infos, int nDims)
     OrderGroups(&groups, nDims);
 
     // Copy grouped lines to output
-    for (std::vector<OrderingGroup *>::iterator itGroup = groups.begin(); itGroup != groups.end(); ++itGroup) {
-        for (unsigned int iItem = 0; iItem < (*itGroup)->items.size(); iItem++) {
-            unsigned int iItemRev = (*itGroup)->revItemList ? (*itGroup)->items.size() - 1 - iItem : iItem;
-            OrderingInfoEx *item = (*itGroup)->items[iItemRev];
+    for (auto & group : groups) {
+        for (unsigned int iItem = 0; iItem < group->items.size(); iItem++) {
+            unsigned int iItemRev = group->revItemList ? group->items.size() - 1 - iItem : iItem;
+            OrderingInfoEx *item = group->items[iItemRev];
 
             // If revItems is false, even items shall have reverse=false
             // In this case ( ( iItem & 1 ) == 0 )== true, revItems=false, (true==false) == false
-            bool reverse = ((iItem & 1) == 0) == (*itGroup)->revItems;
+            bool reverse = ((iItem & 1) == 0) == group->revItems;
             if (!reverse) {
-                for (std::vector<int>::iterator itOrig = item->origIndices.begin(); itOrig != item->origIndices.end(); ++itOrig) {
-                    result.push_back(infos[*itOrig]);
+                for (int & origIndice : item->origIndices) {
+                    result.push_back(infos[origIndice]);
                     result.back().reverse = false;
                 }
             } else {

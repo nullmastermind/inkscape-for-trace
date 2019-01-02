@@ -26,8 +26,7 @@ TemporaryItemList::TemporaryItemList(SPDesktop *desktop)
 TemporaryItemList::~TemporaryItemList()
 {
     // delete all items in list so the timeouts are removed
-    for ( std::list<TemporaryItem*>::iterator it = itemlist.begin(); it != itemlist.end(); ++it ) {
-        TemporaryItem * tempitem = *it;
+    for (auto tempitem : itemlist) {
         delete tempitem;
     }
     itemlist.clear();
@@ -49,8 +48,8 @@ TemporaryItemList::delete_item( TemporaryItem * tempitem )
 {
     // check if the item is in the list, if so, delete it. (in other words, don't wait for the item to delete itself)
     bool in_list = false;
-    for ( std::list<TemporaryItem*>::iterator it = itemlist.begin(); it != itemlist.end(); ++it ) {
-        if ( *it == tempitem ) {
+    for (auto & it : itemlist) {
+        if ( it == tempitem ) {
             in_list = true;
             break;
         }

@@ -65,13 +65,13 @@ Inkscape::SelCue::~SelCue()
     _sel_changed_connection.disconnect();
     _sel_modified_connection.disconnect();
 
-    for (std::vector<SPCanvasItem*>::iterator i = _item_bboxes.begin(); i != _item_bboxes.end(); ++i) {
-        sp_canvas_item_destroy(*i);
+    for (auto & _item_bboxe : _item_bboxes) {
+        sp_canvas_item_destroy(_item_bboxe);
     }
     _item_bboxes.clear();
 
-    for (std::vector<SPCanvasItem*>::iterator i = _text_baselines.begin(); i != _text_baselines.end(); ++i) {
-        sp_canvas_item_destroy(*i);
+    for (auto & _text_baseline : _text_baselines) {
+        sp_canvas_item_destroy(_text_baseline);
     }
     _text_baselines.clear();
 }
@@ -132,8 +132,8 @@ void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
 
 void Inkscape::SelCue::_newItemBboxes()
 {
-    for (std::vector<SPCanvasItem*>::iterator i = _item_bboxes.begin(); i != _item_bboxes.end(); ++i) {
-        sp_canvas_item_destroy(*i);
+    for (auto & _item_bboxe : _item_bboxes) {
+        sp_canvas_item_destroy(_item_bboxe);
     }
     _item_bboxes.clear();
 
@@ -197,8 +197,8 @@ void Inkscape::SelCue::_newItemBboxes()
 
 void Inkscape::SelCue::_newTextBaselines()
 {
-    for (std::vector<SPCanvasItem*>::iterator i = _text_baselines.begin(); i != _text_baselines.end(); ++i) {
-        sp_canvas_item_destroy(*i);
+    for (auto & _text_baseline : _text_baselines) {
+        sp_canvas_item_destroy(_text_baseline);
     }
     _text_baselines.clear();
 

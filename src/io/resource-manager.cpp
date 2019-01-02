@@ -260,8 +260,8 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
 
     Glib::RefPtr<Gtk::RecentManager> recentMgr = Gtk::RecentManager::get_default();
     std::vector< Glib::RefPtr<Gtk::RecentInfo> > recentItems = recentMgr->get_items();
-    for ( std::vector< Glib::RefPtr<Gtk::RecentInfo> >::iterator it = recentItems.begin(); it != recentItems.end(); ++it ) {
-        Glib::ustring uri = (*it)->get_uri();
+    for (auto & recentItem : recentItems) {
+        Glib::ustring uri = recentItem->get_uri();
         std::string scheme = Glib::uri_parse_scheme(uri);
         if ( scheme == "file" ) {
             try {
@@ -278,11 +278,11 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
     }
 
     // At the moment we expect this list to contain file:// references, or simple relative or absolute paths.
-    for ( std::vector<Glib::ustring>::const_iterator it = brokenLinks.begin(); it != brokenLinks.end(); ++it ) {
+    for (const auto & brokenLink : brokenLinks) {
         // TODO debug g_message("========{%s}", it->c_str());
 
         std::string uri;
-        if ( extractFilepath( *it, uri ) || reconstructFilepath( *it, uri ) ) {
+        if ( extractFilepath( brokenLink, uri ) || reconstructFilepath( brokenLink, uri ) ) {
             // We were able to get some path. Check it
             std::string origPath = uri;
 
@@ -315,7 +315,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
 
                 bool isAbsolute = Glib::path_is_absolute( uri );
                 Glib::ustring replacement = isAbsolute ? Glib::filename_to_uri( uri ) : Glib::filename_to_utf8( uri );
-                result[*it] = replacement;
+                result[brokenLink] = replacement;
             }
         }
     }

@@ -145,8 +145,8 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
 
     units.set_paraller(false);
     Geom::Affine pbtrans = units.get_matrix_display2pb();
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        if (!_primitive[i]->can_handle_affine(pbtrans)) {
+    for (auto & i : _primitive) {
+        if (!i->can_handle_affine(pbtrans)) {
             units.set_paraller(true);
             break;
         }
@@ -157,8 +157,8 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
     slot.set_blurquality(blurquality);
     slot.set_device_scale(graphic.surface()->device_scale());
 
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        _primitive[i]->render_cairo(slot);
+    for (auto & i : _primitive) {
+        i->render_cairo(slot);
     }
 
     Geom::Point origin = graphic.targetLogicalBounds().min();
@@ -185,8 +185,8 @@ void Filter::set_primitive_units(SPFilterUnits unit) {
 }
 
 void Filter::area_enlarge(Geom::IntRect &bbox, Inkscape::DrawingItem const *item) const {
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        if (_primitive[i]) _primitive[i]->area_enlarge(bbox, item->ctm());
+    for (auto i : _primitive) {
+        if (i) i->area_enlarge(bbox, item->ctm());
     }
 
 /*
@@ -279,9 +279,9 @@ Geom::OptRect Filter::filter_effect_area(Geom::OptRect const &bbox)
 double Filter::complexity(Geom::Affine const &ctm)
 {
     double factor = 1.0;
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        if (_primitive[i]) {
-            double f = _primitive[i]->complexity(ctm);
+    for (auto & i : _primitive) {
+        if (i) {
+            double f = i->complexity(ctm);
             factor += (f - 1.0);
         }
     }
@@ -290,8 +290,8 @@ double Filter::complexity(Geom::Affine const &ctm)
 
 bool Filter::uses_background()
 {
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        if (_primitive[i] && _primitive[i]->uses_background()) {
+    for (auto & i : _primitive) {
+        if (i && i->uses_background()) {
             return true;
         }
     }
@@ -374,8 +374,8 @@ FilterPrimitive *Filter::get_primitive(int handle) {
 
 void Filter::clear_primitives()
 {
-    for (unsigned i = 0 ; i < _primitive.size() ; i++) {
-        delete _primitive[i];
+    for (auto & i : _primitive) {
+        delete i;
     }
     _primitive.clear();
 }

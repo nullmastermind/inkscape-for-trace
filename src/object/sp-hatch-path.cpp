@@ -71,9 +71,9 @@ void SPHatchPath::build(SPDocument* doc, Inkscape::XML::Node* repr)
 
 void SPHatchPath::release()
 {
-    for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
-        delete iter->arenaitem;
-        iter->arenaitem = nullptr;
+    for (auto & iter : _display) {
+        delete iter.arenaitem;
+        iter.arenaitem = nullptr;
     }
 
     SPObject::release();
@@ -130,15 +130,15 @@ void SPHatchPath::update(SPCtx* ctx, unsigned int flags)
             double const aw = (ictx) ? 1.0 / ictx->i2vp.descrim() : 1.0;
             style->stroke_width.computed = style->stroke_width.value * aw;
 
-            for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
-                iter->arenaitem->setStyle(style);
+            for (auto & iter : _display) {
+                iter.arenaitem->setStyle(style);
             }
         }
     }
 
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-        for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
-            _updateView(*iter);
+        for (auto & iter : _display) {
+            _updateView(iter);
         }
     }
 }
@@ -178,9 +178,9 @@ void SPHatchPath::hide(unsigned int key)
 
 void SPHatchPath::setStripExtents(unsigned int key, Geom::OptInterval const &extents)
 {
-    for (ViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
-        if (iter->key == key) {
-            iter->extents = extents;
+    for (auto & iter : _display) {
+        if (iter.key == key) {
+            iter.extents = extents;
             break;
         }
     }
@@ -209,9 +209,9 @@ Geom::Interval SPHatchPath::bounds() const
 
 SPCurve *SPHatchPath::calculateRenderCurve(unsigned key) const
 {
-    for (ConstViewIterator iter = _display.begin(); iter != _display.end(); ++iter) {
-        if (iter->key == key) {
-            return _calculateRenderCurve(*iter);
+    for (const auto & iter : _display) {
+        if (iter.key == key) {
+            return _calculateRenderCurve(iter);
         }
     }
     g_assert_not_reached();

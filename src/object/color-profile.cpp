@@ -668,9 +668,9 @@ std::vector<Glib::ustring> Inkscape::CMSSystem::getDisplayNames()
     loadProfiles();
     std::vector<Glib::ustring> result;
 
-    for ( std::vector<ProfileInfo>::iterator it = knownProfiles.begin(); it != knownProfiles.end(); ++it ) {
-        if ( it->getClass() == cmsSigDisplayClass && it->getSpace() == cmsSigRgbData ) {
-            result.push_back( it->getName() );
+    for (auto & knownProfile : knownProfiles) {
+        if ( knownProfile.getClass() == cmsSigDisplayClass && knownProfile.getSpace() == cmsSigRgbData ) {
+            result.push_back( knownProfile.getName() );
         }
     }
     std::sort(result.begin(), result.end());
@@ -683,9 +683,9 @@ std::vector<Glib::ustring> Inkscape::CMSSystem::getSoftproofNames()
     loadProfiles();
     std::vector<Glib::ustring> result;
 
-    for ( std::vector<ProfileInfo>::iterator it = knownProfiles.begin(); it != knownProfiles.end(); ++it ) {
-        if ( it->getClass() == cmsSigOutputClass ) {
-            result.push_back( it->getName() );
+    for (auto & knownProfile : knownProfiles) {
+        if ( knownProfile.getClass() == cmsSigOutputClass ) {
+            result.push_back( knownProfile.getName() );
         }
     }
     std::sort(result.begin(), result.end());
@@ -698,9 +698,9 @@ Glib::ustring Inkscape::CMSSystem::getPathForProfile(Glib::ustring const& name)
     loadProfiles();
     Glib::ustring result;
 
-    for ( std::vector<ProfileInfo>::iterator it = knownProfiles.begin(); it != knownProfiles.end(); ++it ) {
-        if ( name == it->getName() ) {
-            result = it->getPath();
+    for (auto & knownProfile : knownProfiles) {
+        if ( name == knownProfile.getName() ) {
+            result = knownProfile.getPath();
             break;
         }
     }

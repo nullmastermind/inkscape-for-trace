@@ -25,8 +25,8 @@ Inkscape::SnapPreferences::SnapPreferences() :
     g_assert((SNAPTARGET_DATUMS_CATEGORY != 0) && !(SNAPTARGET_DATUMS_CATEGORY & (SNAPTARGET_DATUMS_CATEGORY - 1)));
     g_assert((SNAPTARGET_OTHERS_CATEGORY != 0) && !(SNAPTARGET_OTHERS_CATEGORY & (SNAPTARGET_OTHERS_CATEGORY - 1)));
 
-    for (int n = 0; n < SNAPTARGET_MAX_ENUM_VALUE; n++) {
-        _active_snap_targets[n] = -1;
+    for (int & _active_snap_target : _active_snap_targets) {
+        _active_snap_target = -1;
     }
 }
 

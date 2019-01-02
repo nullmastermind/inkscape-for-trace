@@ -385,8 +385,8 @@ PathParam::ensure_pwd2()
 {
     if (must_recalculate_pwd2) {
         _pwd2.clear();
-        for (unsigned int i=0; i < _pathvector.size(); i++) {
-            _pwd2.concat( _pathvector[i].toPwSb() );
+        for (const auto & i : _pathvector) {
+            _pwd2.concat( i.toPwSb() );
         }
 
         must_recalculate_pwd2 = false;

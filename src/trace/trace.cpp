@@ -510,9 +510,8 @@ void Tracer::traceThread()
 
     long totalNodeCount = 0L;
 
-    for (unsigned int i=0 ; i<results.size() ; i++)
+    for (auto result : results)
         {
-        TracingEngineResult result = results[i];
         totalNodeCount += result.getNodeCount();
 
         Inkscape::XML::Node *pathRepr = xml_doc->createElement("svg:path");

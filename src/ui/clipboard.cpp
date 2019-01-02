@@ -676,16 +676,14 @@ std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *de
         types.push_back((Glib::ustring)"svg:use");
         types.push_back((Glib::ustring)"svg:g");
         types.push_back((Glib::ustring)"svg:image");
-        for (auto i=types.begin();i!=types.end();++i) {
-            Glib::ustring type_elem = *i;
+        for (auto type_elem : types) {
             std::vector<Inkscape::XML::Node const *> reprs_found = sp_repr_lookup_name_many(root, type_elem.c_str(), maxdepth); // unlimited search depth
             reprs.insert(reprs.end(), reprs_found.begin(), reprs_found.end());
         }
     } else {
         reprs = sp_repr_lookup_name_many(root, type, maxdepth);
     }
-    for (auto i=reprs.begin();i!=reprs.end();++i) {
-        Inkscape::XML::Node const * node = *i;
+    for (auto node : reprs) {
         result.emplace_back(node->attribute("id"));
     }
     if ( result.empty() ) {
@@ -721,12 +719,12 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
 
     //remove already copied elements from cloned_elements
     std::vector<SPItem*>tr;
-    for(std::set<SPItem*>::iterator it = cloned_elements.begin();it!=cloned_elements.end();++it){
-        if(std::find(sorted_items.begin(),sorted_items.end(),*it)!=sorted_items.end())
-            tr.push_back(*it);
+    for(auto cloned_element : cloned_elements){
+        if(std::find(sorted_items.begin(),sorted_items.end(),cloned_element)!=sorted_items.end())
+            tr.push_back(cloned_element);
     }
-    for(std::vector<SPItem*>::iterator it = tr.begin();it!=tr.end();++it){
-        cloned_elements.erase(*it);
+    for(auto & it : tr){
+        cloned_elements.erase(it);
     }
 
     sorted_items.insert(sorted_items.end(),cloned_elements.begin(),cloned_elements.end());
@@ -830,9 +828,9 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     // For shapes, copy all of the shape's markers
     SPShape *shape = dynamic_cast<SPShape *>(item);
     if (shape) {
-        for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
-            if (shape->_marker[i]) {
-                _copyNode(shape->_marker[i]->getRepr(), _doc, _defs);
+        for (auto & i : shape->_marker) {
+            if (i) {
+                _copyNode(i->getRepr(), _doc, _defs);
             }
         }
     }
@@ -887,8 +885,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem) {
         if (lpeitem->hasPathEffect()) {
-            for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it){
-                LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            for (auto & it : *lpeitem->path_effect_list){
+                LivePathEffectObject *lpeobj = it->lpeobject;
                 if (lpeobj) {
                   _copyNode(lpeobj->getRepr(), _doc, _defs);
                 }
@@ -1388,11 +1386,10 @@ Glib::ustring ClipboardManagerImpl::_getBestTarget()
     g_message("End clipboard targets\n");
     //*/
 
-    for (std::list<Glib::ustring>::iterator i = _preferred_targets.begin() ;
-        i != _preferred_targets.end() ; ++i)
+    for (auto & _preferred_target : _preferred_targets)
     {
-        if ( std::find(targets.begin(), targets.end(), *i) != targets.end() ) {
-            return *i;
+        if ( std::find(targets.begin(), targets.end(), _preferred_target) != targets.end() ) {
+            return _preferred_target;
         }
     }
 #ifdef _WIN32

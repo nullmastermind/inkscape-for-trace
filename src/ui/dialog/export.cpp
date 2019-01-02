@@ -332,13 +332,13 @@ Export::Export () :
     Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),true));
     expander.set_label_widget(*label_advanced);
     const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
-    for(int i=0; i<11; ++i)
-        bitdepth_cb.append(modes_list[i]);
+    for(auto i : modes_list)
+        bitdepth_cb.append(i);
     bitdepth_cb.set_active_text("RGBA_8");
     bitdepth_cb.set_hexpand();
     const char* const zlist[]={"Z_NO_COMPRESSION","Z_BEST_SPEED","2","3","4","5","Z_DEFAULT_COMPRESSION","7","8","Z_BEST_COMPRESSION"};
-    for(int i=0; i<10; ++i)
-        zlib_compression.append(zlist[i]);
+    for(auto i : zlist)
+        zlib_compression.append(i);
     zlib_compression.set_active_text("Z_DEFAULT_COMPRESSION");
     pHYs_adj = Gtk::Adjustment::create(0, 0, 100000, 0.1, 1.0, 0);
     pHYs_sb.set_adjustment(pHYs_adj);
@@ -346,8 +346,8 @@ Export::Export () :
     pHYs_sb.set_tooltip_text( _("Will force-set the physical dpi for the png file. Set this to 72 if you're planning to work on your png with Photoshop") );
     zlib_compression.set_hexpand();
     const char* const antialising_list[] = {"CAIRO_ANTIALIAS_NONE","CAIRO_ANTIALIAS_FAST","CAIRO_ANTIALIAS_GOOD (default)","CAIRO_ANTIALIAS_BEST"};
-    for(int i=0; i<4; ++i)
-        antialiasing_cb.append(antialising_list[i]);
+    for(auto i : antialising_list)
+        antialiasing_cb.append(i);
     antialiasing_cb.set_active_text(antialising_list[2]);
     auto table = new Gtk::Grid();
     gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));

@@ -155,27 +155,27 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
     }
     Geom::PathVector tmp_path;
     Geom::CubicBezier const *cubic = nullptr;
-    for (Geom::PathVector::iterator path_it = result.begin(); path_it != result.end(); ++path_it) {
-        if (path_it->empty()) {
+    for (auto & path_it : result) {
+        if (path_it.empty()) {
             continue;
         }
 
-        Geom::Path::iterator curve_it1 = path_it->begin(); // incoming curve
-        Geom::Path::iterator curve_it2 = ++(path_it->begin());// outgoing curve
-        Geom::Path::iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
+        Geom::Path::iterator curve_it1 = path_it.begin(); // incoming curve
+        Geom::Path::iterator curve_it2 = ++(path_it.begin());// outgoing curve
+        Geom::Path::iterator curve_endit = path_it.end_default(); // this determines when the loop has to stop
         SPCurve *nCurve = new SPCurve();
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             // if the path is closed, maybe we have to stop a bit earlier because the
             // closing line segment has zerolength.
             const Geom::Curve &closingline =
-                path_it->back_closed(); // the closing line segment is always of type
+                path_it.back_closed(); // the closing line segment is always of type
             // Geom::LineSegment.
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 // closingline.isDegenerate() did not work, because it only checks for
                 // *exact* zero length, which goes wrong for relative coordinates and
                 // rounding errors...
                 // the closing line segment has zero-length. So stop before that one!
-                curve_endit = path_it->end_open();
+                curve_endit = path_it.end_open();
             }
         }
         if(helper_size > 0) {
@@ -199,7 +199,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
                 point_at2 = (*cubic)[2];
             }
 
-            if(path_it->closed() && curve_it2 == curve_endit) {
+            if(path_it.closed() && curve_it2 == curve_endit) {
                 point_at4 = start;
             }
             if(curve_it2 != curve_endit) {
@@ -240,7 +240,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
             ++curve_it1;
             ++curve_it2;
         }
-        if (path_it->closed()) {
+        if (path_it.closed()) {
             nCurve->closepath_current();
         }
         tmp_path.push_back(nCurve->get_pathvector()[0]);

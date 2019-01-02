@@ -79,10 +79,10 @@ std::vector<Geom::Interval> complementOf(Geom::Interval I, std::vector<Geom::Int
         Geom::Interval I1 = Geom::Interval(min,I.min());
         Geom::Interval I2 = Geom::Interval(I.max(),max);
 
-        for (unsigned i = 0; i<domain.size(); i++){
-            boost::optional<Geom::Interval> I1i = intersect(domain.at(i),I1);
+        for (auto i : domain){
+            boost::optional<Geom::Interval> I1i = intersect(i,I1);
             if (I1i && !I1i->isSingular()) ret.push_back(I1i.get());
-            boost::optional<Geom::Interval> I2i = intersect(domain.at(i),I2);
+            boost::optional<Geom::Interval> I2i = intersect(i,I2);
             if (I2i && !I2i->isSingular()) ret.push_back(I2i.get());
         }
     }
@@ -119,8 +119,8 @@ findShadowedTime(Geom::Path const &patha, std::vector<Geom::Point> const &pt_and
         times_i.insert(times_i.end(), temptimes.begin(), temptimes.end() ); 
         temptimes = roots(f[X]+3*width);
         times_i.insert(times_i.end(), temptimes.begin(), temptimes.end() );
-        for (unsigned k=0; k<times_i.size(); k++){
-            times_i[k]+=i;
+        for (double & k : times_i){
+            k+=i;
         }
         times.insert(times.end(), times_i.begin(), times_i.end() );
     }
@@ -180,29 +180,29 @@ CrossingPoints::CrossingPoints(Geom::PathVector const &paths) : std::vector<Cros
 
                         find_intersections( times, paths[i][ii].toSBasis(), paths[j][jj].toSBasis() );
                     }
-                    for (unsigned k=0; k<times.size(); k++){
+                    for (auto & time : times){
                         //std::cout<<"intersection "<<i<<"["<<ii<<"]("<<times[k].first<<")= "<<j<<"["<<jj<<"]("<<times[k].second<<")\n";
-                        if ( !IS_NAN(times[k].first) && !IS_NAN(times[k].second) ){
+                        if ( !IS_NAN(time.first) && !IS_NAN(time.second) ){
                             double zero = 1e-4;
-                            if ( (i==j) && (fabs(times[k].first+ii - times[k].second-jj) <= zero) )
+                            if ( (i==j) && (fabs(time.first+ii - time.second-jj) <= zero) )
                             { //this is just end=start of successive curves in a path.
                                 continue;
                             }
                             if ( (i==j) && (ii == 0) && (jj == size_nondegenerate(paths[i])-1)
                                  && paths[i].closed()
-                                 && (fabs(times[k].first) <= zero)
-                                 && (fabs(times[k].second - 1) <= zero) )
+                                 && (fabs(time.first) <= zero)
+                                 && (fabs(time.second - 1) <= zero) )
                             {//this is just end=start of a closed path.
                                 continue;
                             }
                             CrossingPoint cp;
-                            cp.pt = paths[i][ii].pointAt(times[k].first);
+                            cp.pt = paths[i][ii].pointAt(time.first);
                             cp.sign = 1;
                             cp.i = i;
                             cp.j = j;
                             cp.ni = 0; cp.nj=0;//not set yet
-                            cp.ti = times[k].first + ii;
-                            cp.tj = times[k].second + jj;
+                            cp.ti = time.first + ii;
+                            cp.tj = time.second + jj;
                             push_back(cp);
                         }else{
                             std::cout<<"ooops: find_(self)_intersections returned NaN:" << std::endl;
@@ -221,11 +221,11 @@ CrossingPoints::CrossingPoints(Geom::PathVector const &paths) : std::vector<Cros
             if (cp.j == i) cuts[cp.tj] = k;
         }
         unsigned count = 0;
-        for ( std::map < double, unsigned >::iterator m=cuts.begin(); m!=cuts.end(); ++m ){
-            if ( ((*this)[m->second].i == i) && ((*this)[m->second].ti == m->first) ){
-                (*this)[m->second].ni = count;
+        for (auto & cut : cuts){
+            if ( ((*this)[cut.second].i == i) && ((*this)[cut.second].ti == cut.first) ){
+                (*this)[cut.second].ni = count;
             }else{
-                (*this)[m->second].nj = count;
+                (*this)[cut.second].nj = count;
             }
             count++;
         }
@@ -412,7 +412,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
-    for (unsigned comp=0; comp<original_pathv.size(); comp++){
+    for (const auto & comp : original_pathv){
 
         //find the relevant path component in gpaths (required to allow groups!)
         //Q: do we always receive the group members in the same order? can we rest on that?
@@ -421,7 +421,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
         gint precision = prefs->getInt("/options/svgoutput/numericprecision");
         prefs->setInt("/options/svgoutput/numericprecision", 4); // I think this is enough for minor differences
         for (i0=0; i0<gpaths.size(); i0++){
-            if (!strcmp(sp_svg_write_path(original_pathv[comp]), sp_svg_write_path(gpaths[i0])))
+            if (!strcmp(sp_svg_write_path(comp), sp_svg_write_path(gpaths[i0])))
                 break;
         }
         prefs->setInt("/options/svgoutput/numericprecision", precision);
@@ -556,8 +556,8 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
         SPCurve * c = SP_SHAPE(lpeitem)->getCurve();
         if (c) {
             Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-            for (unsigned i=0; i<subpaths.size(); i++){
-                paths.push_back(subpaths[i]);
+            for (const auto & subpath : subpaths){
+                paths.push_back(subpath);
                 //FIXME: do we have to be more careful when trying to access stroke width?
                 stroke_widths.push_back(lpeitem->style->stroke_width.computed);
             }
