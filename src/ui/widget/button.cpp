@@ -37,9 +37,6 @@ Button::~Button()
     if (_doubleclick_action) {
         set_doubleclick_action(nullptr);
     }
-
-    _c_set_active.~connection();
-    _c_set_sensitive.~connection();
 }
 
 void
@@ -127,9 +124,6 @@ Button::Button(GtkIconSize   size,
     _type(type),
     _lsize(CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG))
 {
-    new (&_c_set_active) sigc::connection();
-    new (&_c_set_sensitive) sigc::connection();
-
     set_border_width(0);
 
     set_can_focus(false);
@@ -251,8 +245,6 @@ Button::Button(GtkIconSize               size,
         _type(type),
         _lsize(CLAMP(size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG))
 {
-    new (&_c_set_active) sigc::connection();
-    new (&_c_set_sensitive) sigc::connection();
     set_border_width(0);
 
     set_can_focus(false);
