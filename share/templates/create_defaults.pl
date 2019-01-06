@@ -22,6 +22,7 @@ my @data = (
 	["eu",	"Capa 1",	"layer1"],
 	["fi",	"Taso 1",	"layer1"],
 	["fr",	"Calque 1",	"layer1"],
+	["hr",	"Sloj 1",	"layer1"],
 	["hu",	"1. réteg",	"layer1"],
 	["it",	"Livello 1",	"layer1"],
 	["ja",	"レイヤー 1",	"layer1"],
