@@ -234,7 +234,8 @@ pkg_check_modules(
     )
 list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
 list(APPEND INKSCAPE_INCS_SYS ${GTK3_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${GTK3_LDFLAGS})
+list(APPEND INKSCAPE_LIBS ${GTK3_LIBRARIES})
+link_directories(${GTK3_LIBRARY_DIRS})
 
 pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 if("${GDL_3_6_FOUND}")
