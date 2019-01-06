@@ -269,6 +269,7 @@ public:
             char const *base, char const *name, unsigned int keepalive,
             SPDocument *parent);
 
+    int ref_count;
     SPDocument *doRef();
     SPDocument *doUnref();
     Inkscape::Util::Unit const* getDisplayUnit() const;

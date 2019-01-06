@@ -146,8 +146,6 @@ SPDesktop *sp_file_new(const std::string &templ)
     sp_create_window(dtw, TRUE);
     SPDesktop* desktop = static_cast<SPDesktop *>(dtw->view);
 
-    doc->doUnref();
-
     sp_namedview_window_from_document(desktop);
     sp_namedview_update_layers_from_document(desktop);
 
@@ -230,12 +228,12 @@ bool sp_file_open(const Glib::ustring &uri,
         doc = nullptr;
         cancelled = true;
     }
+
     if (desktop) {
         desktop->clearWaitingCursor();
     }
 
     if (doc) {
-
         SPDocument *existing = desktop ? desktop->getDocument() : nullptr;
 
         if (existing && existing->virgin && replace_empty) {
@@ -251,9 +249,6 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         doc->virgin = FALSE;
-
-        // everyone who cares now has a reference, get rid of our`s
-        doc->doUnref();
 
         SPRoot *root = doc->getRoot();
 
@@ -1299,7 +1294,6 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
         }
 
-        doc->doUnref();
         DocumentUndo::done(in_doc, SP_VERB_FILE_IMPORT,
                            _("Import"));
         return new_obj;
