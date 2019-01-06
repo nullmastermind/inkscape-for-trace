@@ -754,7 +754,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     }
     if (item->mask_ref){
         if (item->mask_ref->getObject()) {
-            auto value = item->clip_ref->getURI()->cssStr();
+            auto value = item->mask_ref->getURI()->cssStr();
             repr->setAttribute("mask", value.c_str());
         }
     }
