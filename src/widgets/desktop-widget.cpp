@@ -2291,7 +2291,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_ungrab(seat);
 #else
-        gdk_device_ungrab(device, event->time);
+        gdk_device_ungrab(event->device, event->time);
 #endif
 
         Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
