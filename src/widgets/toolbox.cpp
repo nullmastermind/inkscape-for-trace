@@ -976,15 +976,35 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
     }
 }
 
+/**
+ * \brief Generate the auxilliary toolbox
+ *
+ * \details This is the one that appears below the main menu, and contains
+ *          tool-specific toolbars.  Each toolbar is created here, using
+ *          either:
+ *          * Its "create" method - this directly prepares a GtkToolbar
+ *            widget, containing all the tools, or
+ *          * Its "prep" method - this defines a set of GtkActions, which
+ *            are later used to populate a toolbar.
+ *          The actual method used for each toolbar is specified in the
+ *          "aux_toolboxes" array, defined above.
+ *
+ * \todo Needs to be rewritten so that GtkActions and GtkUIManager
+ *       are not used.  This means that the "prep" approach is deprecated
+ *       and we should adapt all toolbars to have a "create" method instead.
+ */
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
+
+    // The UI Manager creates widgets based on the definitions in the
+    // "select-toolbar.ui" file.  This is only used with the "prep"
+    // method of toolbar-creation
     GtkUIManager* mgr = gtk_ui_manager_new();
     GError *err = nullptr;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-
     Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
     guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename.c_str(), &err);
     if(err) {
@@ -993,12 +1013,20 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
       return;
     }
 
+    // For the "prep" method, we create a "fake" set of toolbars
+    // that just contain a set of GtkActions.  These are stored
+    // in the "dataHolders" map.
     std::map<std::string, GtkWidget*> dataHolders;
 
+    // Loop through all the toolboxes and create them using either
+    // their "prep" or "create" methods.
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
 
+            // For the "prep" method, create a "fake" toolbar
+            // that only contains a set of GtkActions.  In other
+            // words, this doesn't actually show anything... it
+            // just defines behaviour.
             GtkWidget* kludge = gtk_toolbar_new();
             gtk_widget_set_name( kludge, "Kludge" );
             g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
@@ -1007,6 +1035,9 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
         } else {
 
+            // For the "create" method, directly create a "real" toolbar,
+            // which contains visible, fully functional widgets.  Note that
+            // this should also contain any swatches that are needed.
             GtkWidget *sub_toolbox = nullptr;
             if (aux_toolboxes[i].create_func == nullptr) {
                 sub_toolbox = sp_empty_toolbox_new(desktop);
@@ -1016,26 +1047,51 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_widget_set_name( sub_toolbox, "SubToolBox" );
             gtk_size_group_add_widget( grouper, sub_toolbox );
 
+            // Add the new toolbar into the toolbox (i.e., make it the visible toolbar)
+            // and also store a pointer to it inside the toolbox.  This allows the
+            // active toolbar to be changed.
             gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
 
+            // TODO: We could make the toolbox a custom subclass of GtkEventBox
+            //       so that we can store a list of toolbars, rather than using
+            //       GObject data
+            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
         }
     }
 
     // Second pass to create toolbars *after* all GtkActions are created
+    // This is only used for toolbars that are being created using the "prep"
+    // method
     for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
         if ( aux_toolboxes[i].prep_func ) {
-            // converted to GtkActions and UIManager
 
+            // Get the previously created "fake" toolbar that just contains
+            // invisible GtkAction definitions
             auto kludge = dataHolders[aux_toolboxes[i].type_name];
+
+            // The thing that we put into the toolbox is actually a GtkGrid.
+            // It contains three elements... from left-to-right:
+            // * A "real" toolbar containing all the visible, fully functional
+            //   widgets
+            // * (optionally) A swatch widget for use with that toolbar
+            // * The "fake" toolbar containing the action definitions, which we
+            //   created previously
             auto holder = gtk_grid_new();
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
+
+            // First pack the "fake" toolbar with the action definitions
             gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
+
+            // Now, use the UI Manager to create a "real" toolbar.  This works
+            // because the actions needed by the UI file have all been defined
+            // in the "fake" toolbar
             gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
             GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );
             g_free( tmp );
             tmp = nullptr;
 
+            // This part is just for styling
+            // TODO: Should we include this in the "create" method too?
             if ( prefs->getBool( "/toolbox/icononly", true) ) {
                 gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
             }
@@ -1045,6 +1101,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_widget_set_hexpand(toolBar, TRUE);
             gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
 
+            // Add a swatch widget if one was specified
+            // TODO: Should this be in the "create" method too?
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
                 Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( nullptr, _(aux_toolboxes[i].swatch_tip) );
                 swatch->setDesktop( desktop );
@@ -1074,6 +1132,9 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
             gtk_size_group_add_widget( grouper, holder );
 
+            // Finally add the grid to the toolbox.
+            // As described above, a pointer is also stored so that toolbars can be
+            // switched later.
             gtk_container_add( GTK_CONTAINER(toolbox), holder );
             g_object_set_data( G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder );
         }
