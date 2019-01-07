@@ -437,13 +437,27 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
     //set correct coloring, depending preference (when zoomed out, always major coloring or minor coloring)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     guint32 _empcolor;
+    guint32 _color = color;
     bool preference = prefs->getBool("/options/grids/no_emphasize_when_zoomedout", false);
     if( scaled && preference ) {
         _empcolor = color;
     } else {
         _empcolor = empcolor;
     }
-
+    bool xrayactive = prefs->getBool("/desktop/xrayactive", false);
+    if (xrayactive) {  //this allow good looking on xray zones
+        guint32 bg = namedview->pagecolor;
+        _color = SP_RGBA32_F_COMPOSE(
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_R_F(_color)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_G_F(_color)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_B_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_B_F(_color)), 0.0, 1.0),
+                1.0);
+        _empcolor = SP_RGBA32_F_COMPOSE(
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_R_F(_empcolor)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_G_F(_empcolor)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_B_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_B_F(_empcolor)), 0.0, 1.0),
+                1.0);
+    }
     cairo_save(buf->ct);
     cairo_translate(buf->ct, -buf->rect.left(), -buf->rect.top());
     cairo_set_line_width(buf->ct, 1.0);
@@ -480,7 +494,7 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
         }
 
         if (!scaled && (xlinenum % empspacing) != 0) {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _color);
         } else {
             sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
         }
@@ -497,7 +511,7 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
             gint const x1 = x0 + round( (y1 - y0) / tan_angle[X] );
 
             if (!scaled && (xlinenum % empspacing) != 0) {
-                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _color);
             } else {
                 sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
             }
@@ -512,7 +526,7 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
         gint const x0 = round(x);
 
         if (!scaled && (ylinenum % empspacing) != 0) {
-            sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, color);
+            sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, _color);
         } else {
             sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, _empcolor);
         }
@@ -536,7 +550,7 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
         }
 
         if (!scaled && (zlinenum % empspacing) != 0) {
-            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+            sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _color);
         } else {
             sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
         }
@@ -552,7 +566,7 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
             gint const x1 = x0 + round(buf->rect.height() / tan_angle[Z] );
 
             if (!scaled && (zlinenum % empspacing) != 0) {
-                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, color);
+                sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _color);
             } else {
                 sp_caxonomgrid_drawline (buf, x0, y0, x1, y1, _empcolor);
             }

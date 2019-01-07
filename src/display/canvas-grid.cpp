@@ -573,7 +573,7 @@ CanvasXYGrid::readRepr()
             }
         }
     }
-
+ 
     if ( (value = repr->attribute("color")) ) {
         color = (color & 0xff) | sp_svg_read_color(value, color);
     }
@@ -581,7 +581,7 @@ CanvasXYGrid::readRepr()
     if ( (value = repr->attribute("empcolor")) ) {
         empcolor = (empcolor & 0xff) | sp_svg_read_color(value, empcolor);
     }
-
+           
     if ( (value = repr->attribute("opacity")) ) {
         sp_nv_read_opacity(value, &color);
     }
@@ -867,6 +867,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
     // no_emphasize_when_zoomedout determines color (minor or major) when only major grid lines/dots shown.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     guint32 _empcolor;
+    guint32 _color = color;
     bool no_emp_when_zoomed_out = prefs->getBool("/options/grids/no_emphasize_when_zoomedout", false);
     if( (scaled[Geom::X] || scaled[Geom::Y]) && no_emp_when_zoomed_out ) {
         _empcolor = color;
@@ -874,6 +875,20 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         _empcolor = empcolor;
     }
 
+    bool xrayactive = prefs->getBool("/desktop/xrayactive", false);
+    if (xrayactive) {
+        guint32 bg = namedview->pagecolor;
+        _color = SP_RGBA32_F_COMPOSE(
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_R_F(_color)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_G_F(_color)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_color)) * SP_RGBA32_B_F(bg)) + (SP_RGBA32_A_F(_color) * SP_RGBA32_B_F(_color)), 0.0, 1.0),
+                1.0);
+        _empcolor = SP_RGBA32_F_COMPOSE(
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_R_F(_empcolor)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_G_F(_empcolor)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(_empcolor)) * SP_RGBA32_B_F(bg)) + (SP_RGBA32_A_F(_empcolor) * SP_RGBA32_B_F(_empcolor)), 0.0, 1.0),
+                1.0);
+    }
     cairo_save(buf->ct);
     cairo_translate(buf->ct, -buf->rect.left(), -buf->rect.top());
     cairo_set_line_width(buf->ct, 1.0);
@@ -951,10 +966,10 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
                         _empdot = 0xff;
                     _empdot += (_empcolor & 0xffffff00);
 
-                    guint32 _colordot = (color & 0xff) << 2;
+                    guint32 _colordot = (_color & 0xff) << 2;
                     if (_colordot > 0xff)
                         _colordot = 0xff;
-                    _colordot += (color & 0xffffff00);
+                    _colordot += (_color & 0xffffff00);
 
                     // Dash pattern must use spacing from orthogonal direction.
                     // Offset is to center dash on orthogonal lines.
@@ -987,7 +1002,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
                     // Set color
                     if (!scaled[dim] && (j % empspacing) != 0) {
-                        ink_cairo_set_source_rgba32(buf->ct, color );
+                        ink_cairo_set_source_rgba32(buf->ct, _color );
                     } else {
                         ink_cairo_set_source_rgba32(buf->ct, _empcolor );
                     }

@@ -187,6 +187,7 @@ public:
     Geom::OptIntRect _spliter_right;
     Geom::Point _spliter_control_pos;
     Geom::Point _spliter_in_control_pos;
+    Geom::Point _xray_orig;
     double _split_value;
     bool _split_vertical;
     bool _split_inverse;

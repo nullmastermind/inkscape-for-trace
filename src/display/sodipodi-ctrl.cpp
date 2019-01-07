@@ -657,9 +657,14 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_surface_t *cache = cairo_image_surface_create_for_data(
             reinterpret_cast<unsigned char*>(ctrl->cache), CAIRO_FORMAT_ARGB32, w, h, w*4);
         cairo_surface_set_device_scale(cache, buf->device_scale, buf->device_scale);
+        cairo_surface_mark_dirty(cache);
+        cairo_save(buf->ct);
         cairo_set_source_surface(buf->ct, cache,
             ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
+        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/buf->device_scale, h/buf->device_scale);
+        cairo_clip(buf->ct);
         cairo_paint(buf->ct);
+        cairo_restore(buf->ct);
         cairo_surface_destroy(cache);
     }
     ctrl->shown = TRUE;

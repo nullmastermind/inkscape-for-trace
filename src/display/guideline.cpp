@@ -21,10 +21,12 @@
 #include <2geom/line.h>
 
 #include "sp-canvas-util.h"
+#include "inkscape.h"
 #include "guideline.h"
 #include "display/cairo-utils.h"
 #include "display/sp-canvas.h"
 #include "display/sodipodi-ctrl.h"
+#include "object/sp-namedview.h"
 
 static void sp_guideline_destroy(SPCanvasItem *object);
 
@@ -82,7 +84,20 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
 
     cairo_save(buf->ct);
     cairo_translate(buf->ct, -buf->rect.left(), -buf->rect.top());
-    ink_cairo_set_source_rgba32(buf->ct, gl->rgba);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool xrayactive = prefs->getBool("/desktop/xrayactive", false);
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (xrayactive && desktop) {
+        guint32 bg = desktop->getNamedView()->pagecolor;
+        guint32 _color = SP_RGBA32_F_COMPOSE(
+                CLAMP(((1 - SP_RGBA32_A_F(gl->rgba)) * SP_RGBA32_R_F(bg)) + (SP_RGBA32_A_F(gl->rgba) * SP_RGBA32_R_F(gl->rgba)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(gl->rgba)) * SP_RGBA32_G_F(bg)) + (SP_RGBA32_A_F(gl->rgba) * SP_RGBA32_G_F(gl->rgba)), 0.0, 1.0),
+                CLAMP(((1 - SP_RGBA32_A_F(gl->rgba)) * SP_RGBA32_B_F(bg)) + (SP_RGBA32_A_F(gl->rgba) * SP_RGBA32_B_F(gl->rgba)), 0.0, 1.0),
+                1.0);
+        ink_cairo_set_source_rgba32(buf->ct, _color);
+    } else {
+        ink_cairo_set_source_rgba32(buf->ct, gl->rgba);
+    }
     cairo_set_line_width(buf->ct, 1);
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
     cairo_set_font_size(buf->ct, 10);

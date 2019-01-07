@@ -780,8 +780,6 @@ Geom::Point SPDesktop::point() const
         return p;
     }
 
-    // Shouldn't happen
-    std::cerr << "SPDesktop::point(): point outside of canvas!" << std::endl;
     Geom::Point r0 = w2d(r.min());
     Geom::Point r1 = w2d(r.max());
     return (r0 + r1) / 2.0;

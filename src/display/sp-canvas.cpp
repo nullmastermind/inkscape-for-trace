@@ -1033,6 +1033,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_split_dragging = false;
     canvas->_xray_radius = 100;
     canvas->_xray = false;
+    canvas->_xray_orig = Geom::Point();
     canvas->_changecursor = 0;
     bool _is_dragging;
 
@@ -1767,8 +1768,14 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             if (!canvas->_xray) {
                 sp_reset_spliter(canvas);
             }
+            Geom::Point prev_orig = canvas->_xray_orig;
+            canvas->_xray_orig = desktop->point();
+            canvas->_xray_orig *= desktop->current_zoom();
             canvas->_xray = true;
-            canvas->addIdle();
+            if (!Geom::are_near(prev_orig, canvas->_xray_orig)) { //to avoid redraw when outside
+                canvas->dirtyAll();
+                canvas->addIdle();
+            }
             status = 1;
         } else {
             canvas->_xray = false;
@@ -1857,12 +1864,6 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && _xray) {
-        cairo_set_source_rgba(buf.ct, 1, 1, 1, 0);
-        cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
-        cairo_paint(buf.ct);
-    }
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
     // output to X
@@ -1920,10 +1921,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // Make sure the following code does not go outside of _backing_store's data
     // FIXME for device_scale.
     assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
-    assert(paint_rect.left() - _x0 >= 0);
-    assert(paint_rect.top() - _y0 >= 0);
-    assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
-    assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
     cairo_surface_t *copy_backing = cairo_surface_create_similar_image(_backing_store, CAIRO_FORMAT_ARGB32,
                                                                        paint_rect.width(), paint_rect.height());
     buf.ct = cairo_create(copy_backing);
@@ -1935,11 +1932,12 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_arc(buf.ct, _xray_radius, _xray_radius, _xray_radius, 0, 2 * M_PI);
     cairo_clip(buf.ct);
     cairo_paint(buf.ct);
+    cairo_translate(buf.ct, -paint_rect.left(), -paint_rect.top());
     cairo_set_source(buf.ct, _background);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
-
-    // cairo_surface_write_to_png( copy_backing, "debug1.png" );
+    cairo_translate(buf.ct, paint_rect.left(), paint_rect.top());
+        // cairo_surface_write_to_png( copy_backing, "debug1.png" );
 
 
 
@@ -1951,9 +1949,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_clip(buf.ct);
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_DEST_IN);
     cairo_paint(buf.ct);
-    // cairo_arc(buf.ct, _xray_orig[Geom::X], _xray_orig[Geom::Y], _xray_radius, 0, 2*M_PI);
-    // cairo_clip(buf.ct);
-    // cairo_paint(buf.ct);
     // cairo_surface_write_to_png( copy_backing, "debug2.png" );
 
     // output to X
@@ -1968,8 +1963,6 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // cairo_surface_write_to_png( _backing_store, "debug3.png" );
     cairo_surface_mark_dirty(_backing_store);
     // Mark the painted rectangle un-clean to remove old x-ray when mouse change position
-    markRect(paint_rect, 1);
-
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
                                paint_rect.height());
 }
@@ -2393,38 +2386,44 @@ int SPCanvas::paint()
 
     double split_x = 1;
     double split_y = 1;
-    if (desktop && desktop->splitMode()) {
+    Inkscape::RenderMode rm = Inkscape::RENDERMODE_NORMAL;
+    if (desktop) {
         split = desktop->splitMode();
         arena = SP_CANVAS_ARENA(desktop->drawing);
-        auto window = desktop->getToplevel();
-        auto dtw = static_cast<SPDesktopWidget *>(window->get_data("desktopwidget"));
-        bool hasrullers = prefs->getBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state");
-        int hruler_gap = hasrullers ? dtw->get_hruler_thickness() : 1;
-        int vruler_gap = hasrullers ? dtw->get_vruler_thickness() : 1;
-        
-        split_x = !_split_vertical ? 0 : _split_value;
-        split_y = _split_vertical ? 0 : _split_value;
+        rm = arena->drawing.renderMode();
+        if (split) {
+            auto window = desktop->getToplevel();
+            auto dtw = static_cast<SPDesktopWidget *>(window->get_data("desktopwidget"));
+            bool hasrullers = prefs->getBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state");
+            int hruler_gap = hasrullers ? dtw->get_hruler_thickness() : 1;
+            int vruler_gap = hasrullers ? dtw->get_vruler_thickness() : 1;
+            
+            split_x = !_split_vertical ? 0 : _split_value;
+            split_y = _split_vertical ? 0 : _split_value;
 
-        Geom::IntCoord coord1x =
-            allocation.x + (int((allocation.width) * split_x))  - (3 * canvas->_device_scale) - vruler_gap;
-        Geom::IntCoord coord1y =
-            allocation.y + (int((allocation.height) * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
-        split_x = !_split_vertical ? 1 : _split_value;
-        split_y = _split_vertical ? 1 : _split_value;
-        Geom::IntCoord coord2x =
-            allocation.x + (int((allocation.width)  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
-        Geom::IntCoord coord2y =
-            allocation.y + (int((allocation.height) * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
-        _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
-        split_x = !_split_vertical ? 0 : _split_value;
-        split_y = _split_vertical ? 0 : _split_value;
-        coord1x = allocation.x + (int((allocation.width ) * split_x)) - vruler_gap;
-        coord1y = allocation.y + (int((allocation.height) * split_y)) - hruler_gap;
-        split_x = !_split_vertical ? 1 : _split_value;
-        split_y = _split_vertical ? 1 : _split_value;
-        coord2x = allocation.x + allocation.width;
-        coord2y = allocation.y + allocation.height;        
-        _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+            Geom::IntCoord coord1x =
+                allocation.x + (int((allocation.width) * split_x))  - (3 * canvas->_device_scale) - vruler_gap;
+            Geom::IntCoord coord1y =
+                allocation.y + (int((allocation.height) * split_y)) - (3 * canvas->_device_scale) - hruler_gap;
+            split_x = !_split_vertical ? 1 : _split_value;
+            split_y = _split_vertical ? 1 : _split_value;
+            Geom::IntCoord coord2x =
+                allocation.x + (int((allocation.width)  * split_x)) + (3 * canvas->_device_scale) - vruler_gap;
+            Geom::IntCoord coord2y =
+                allocation.y + (int((allocation.height) * split_y)) + (3 * canvas->_device_scale) - hruler_gap;
+            _spliter = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+            split_x = !_split_vertical ? 0 : _split_value;
+            split_y = _split_vertical ? 0 : _split_value;
+            coord1x = allocation.x + (int((allocation.width ) * split_x)) - vruler_gap;
+            coord1y = allocation.y + (int((allocation.height) * split_y)) - hruler_gap;
+            split_x = !_split_vertical ? 1 : _split_value;
+            split_y = _split_vertical ? 1 : _split_value;
+            coord2x = allocation.x + allocation.width;
+            coord2y = allocation.y + allocation.height;        
+            _spliter_area = Geom::OptIntRect(coord1x, coord1y, coord2x, coord2y);
+        } else {
+            sp_reset_spliter(canvas);
+        }
     } else {
         sp_reset_spliter(canvas);
     }
@@ -2459,14 +2458,11 @@ int SPCanvas::paint()
         };
     }
 
-    if (arena) {
-        Inkscape::RenderMode rm = arena->drawing.renderMode();
+    if (split) {
         arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
         bool exact = arena->drawing.getExact();
         arena->drawing.setExact(false);
         int n_rects = cairo_region_num_rectangles(to_draw_outline);
-       // _split_value /= canvas->_split_vertical ? ((allocation.widt) * _split_value ) / allocation.height)
-         //                                       : ((allocation.width) * _split_value ) / allocation.height);
         for (int i = 0; i < n_rects; ++i) {
             cairo_rectangle_int_t crect;
             cairo_region_get_rectangle(to_draw_outline, i, &crect);
@@ -2483,19 +2479,20 @@ int SPCanvas::paint()
         arena->drawing.setRenderMode(rm);
         canvas->paintSpliter();
     } else if (desktop && _xray) {
-        Geom::Point _xray_orig = desktop->point();
-        _xray_orig *= desktop->current_zoom();
-        arena = SP_CANVAS_ARENA(desktop->drawing);
-        Inkscape::RenderMode rm = arena->drawing.renderMode();
-        arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
-        bool exact = arena->drawing.getExact();
-        arena->drawing.setExact(false);
-        Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
-        Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius,
-                                                            (_xray_radius * 2), (_xray_radius * 2));
-        paintXRayBuffer(_xray_rect, canvas_rect);
-        arena->drawing.setExact(exact);
-        arena->drawing.setRenderMode(rm);
+        if (rm != Inkscape::RENDERMODE_OUTLINE) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->setBool("/desktop/xrayactive", true);
+            arena->drawing.setRenderMode(Inkscape::RENDERMODE_OUTLINE);
+            bool exact = arena->drawing.getExact();
+            arena->drawing.setExact(false);
+            Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
+            Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius,
+                                                                (_xray_radius * 2), (_xray_radius * 2));
+            paintXRayBuffer(_xray_rect, canvas_rect);
+            arena->drawing.setExact(exact);
+            arena->drawing.setRenderMode(rm);
+            prefs->setBool("/desktop/xrayactive", false);
+        }
     }
 
     // we've had a full unaborted redraw, reset the full redraw counter
