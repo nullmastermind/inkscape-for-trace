@@ -39,8 +39,6 @@
 #include "selection-chemistry.h"
 #include "verbs.h"
 
-#include "helper/window.h"
-
 #include "io/resource.h"
 
 #include "object/sp-defs.h"
@@ -939,7 +937,10 @@ GtkWidget * sp_gradient_vector_editor_new(SPGradient *gradient, SPStop *stop)
     if (dlg == nullptr) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-        dlg = sp_window_new(_("Gradient editor"), TRUE);
+        dlg = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+        gtk_window_set_title ((GtkWindow *) dlg, _("Gradient editor"));
+        gtk_window_set_resizable ((GtkWindow *) dlg, true);
+
         if (x == -1000 || y == -1000) {
             x = prefs->getInt(prefs_path + "x", -1000);
             y = prefs->getInt(prefs_path + "y", -1000);
