@@ -8339,7 +8339,7 @@ msgstr "Type d'importation des images SVG :"
 #: ../src/extension/internal/svg.cpp:638
 msgid "Include SVG image as editable object(s) in the current file"
 msgstr ""
-"Inclure les images SVG en tant qu'objets modifiables dans le fichier courant"
+"Inclure les images SVG en tant qu'objets modifiables dans le fichier actuel"
 
 #: ../src/extension/internal/svg.cpp:639
 msgid "Embed the SVG file in a image tag (not editable in this document)"
@@ -17864,7 +17864,7 @@ msgstr "_Tout"
 
 #: ../src/ui/dialog/find.cpp:67
 msgid "Current _layer"
-msgstr "Ca_lque courant"
+msgstr "Ca_lque actuel"
 
 #: ../src/ui/dialog/find.cpp:68
 msgid "Sele_ction"
@@ -18006,7 +18006,7 @@ msgstr "Limiter la recherche au calque actif"
 
 #: ../src/ui/dialog/find.cpp:123
 msgid "Limit search to the current selection"
-msgstr "Limiter la recherche à la sélection actuelle"
+msgstr "Limiter la recherche à la sélection"
 
 #: ../src/ui/dialog/find.cpp:125
 msgid "Search in text objects"
@@ -19016,7 +19016,7 @@ msgstr "Verrouiller le déplacement des guides"
 
 #: ../src/ui/dialog/guides.cpp:54
 msgid "Move and/or rotate the guide relative to current settings"
-msgstr "Déplacer et/ou tourner le guide par rapport à sa position courante"
+msgstr "Déplacer et/ou tourner le guide par rapport à sa position actuelle"
 
 #: ../src/ui/dialog/guides.cpp:134
 msgid "Set guide properties"
@@ -19099,12 +19099,12 @@ msgstr "_Taille des points du Ctrl-clic :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:235
 msgid "times current stroke width"
-msgstr "fois l'épaisseur courante de contour"
+msgstr "fois l'épaisseur actuelle de contour"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:236
 msgid "Size of dots created with Ctrl+click (relative to current stroke width)"
 msgstr ""
-"Taille des points créés avec Ctrl+clic (par rapport à l'épaisseur courante "
+"Taille des points créés avec Ctrl+clic (par rapport à l'épaisseur actuelle "
 "de contour)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:244
@@ -22820,15 +22820,15 @@ msgstr "Ajouter un effet de chemin"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:126
 msgid "Delete current path effect"
-msgstr "Supprimer l'effet de chemin courant"
+msgstr "Supprimer l'effet de chemin actif"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:130
 msgid "Raise the current path effect"
-msgstr "Monter l'effet de chemin courant"
+msgstr "Monter l'effet de chemin actif"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:134
 msgid "Lower the current path effect"
-msgstr "Descendre l'effet de chemin courant"
+msgstr "Descendre l'effet de chemin actif"
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:309
 msgid "Unknown effect is applied"
@@ -24581,7 +24581,7 @@ msgstr "Dimension horizontale (absolue ou pourcentage de l'existant)"
 
 #: ../src/ui/dialog/transformation.cpp:70
 msgid "Vertical size (absolute or percentage of current)"
-msgstr "Dimension verticals (absolue ou pourcentage de l'existant)"
+msgstr "Dimension verticale (absolue ou pourcentage de l'existant)"
 
 #: ../src/ui/dialog/transformation.cpp:72
 msgid "A_ngle:"
@@ -24653,8 +24653,8 @@ msgid ""
 "Add the specified relative displacement to the current position; otherwise, "
 "edit the current absolute position directly"
 msgstr ""
-"Ajoute le déplacement relatif spécifié à la position courante; sinon, "
-"modifie directement la position absolue courante"
+"Ajoute le déplacement relatif spécifié à la position actuelle; sinon, "
+"modifie directement la position absolue actuelle"
 
 #: ../src/ui/dialog/transformation.cpp:98
 msgid "Preserve the width/height ratio of the scaled objects"
@@ -24673,8 +24673,8 @@ msgid ""
 "Edit the current transform= matrix; otherwise, post-multiply transform= by "
 "this matrix"
 msgstr ""
-"Si coché, édite la matrice de la transformation courante; sinon, post-"
-"multiplie la transformation courante par cette matrice."
+"Si coché, édite la matrice de la transformation actuelle; sinon, post-"
+"multiplie la transformation actuelle par cette matrice."
 
 #: ../src/ui/dialog/transformation.cpp:113
 msgid "_Scale"
@@ -24694,7 +24694,7 @@ msgstr "Matri_ce"
 
 #: ../src/ui/dialog/transformation.cpp:153
 msgid "Reset the values on the current tab to defaults"
-msgstr "Rétablir les valeurs par défaut dans l'onglet courant"
+msgstr "Rétablir les valeurs par défaut dans l'onglet actif"
 
 #: ../src/ui/dialog/transformation.cpp:160
 msgid "Apply transformation to selection"
@@ -28677,7 +28677,7 @@ msgid ""
 "object's fill and stroke to the current setting."
 msgstr ""
 "<b>Cliquer</b> pour remplir une région bornée, <b>Maj+clic</b> pour unir le "
-"nouveau fond avec la sélection actuelle, <b>Ctrl+clic</b> pour changer le "
+"nouveau fond avec la sélection, <b>Ctrl+clic</b> pour changer le "
 "contour et le fond de l'objet désigné."
 
 #: ../src/ui/tools-switch.cpp:117
@@ -29596,7 +29596,7 @@ msgid ""
 "The frame is <b>too small</b> for the current font size. Flowed text not "
 "created."
 msgstr ""
-"Le cadre est <b>trop petit</b> pour la taille de police courante. Le texte "
+"Le cadre est <b>trop petit</b> pour la taille de police actuelle. Le texte "
 "encadré n'a pas été créé."
 
 #: ../src/ui/tools/text-tool.cpp:825
@@ -33614,7 +33614,7 @@ msgstr "Répéter la dernière extension avec les nouveaux paramètres"
 
 #: ../src/verbs.cpp:3256
 msgid "Fit the page to the current selection"
-msgstr "Ajuster la taille de la page à la sélection actuelle"
+msgstr "Ajuster la taille de la page à la sélection"
 
 #: ../src/verbs.cpp:3258
 msgid "Fit the page to the drawing"
@@ -33628,8 +33628,7 @@ msgstr "_Ajuster la taille de la page à la sélection"
 msgid ""
 "Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
-"Ajuster la taille de la page à la sélection actuelle ou au dessin s'il n'y "
-"en a pas"
+"Ajuster la taille de la page à la sélection ou au dessin s'il n'y en a pas"
 
 #: ../src/verbs.cpp:3265
 msgid "Unlock All in All Layers"
@@ -33926,7 +33925,7 @@ msgstr "Ajouter un nouveau stop de contrôle au dégradé"
 
 #: ../src/widgets/gradient-vector.cpp:842
 msgid "Delete current control stop from gradient"
-msgstr "Supprimer le stop courant du dégradé"
+msgstr "Supprimer le stop actif du dégradé"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
 #: ../src/widgets/gradient-vector.cpp:903
