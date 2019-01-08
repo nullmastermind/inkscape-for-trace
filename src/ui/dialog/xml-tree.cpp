@@ -32,8 +32,6 @@
 #include "shortcuts.h"
 #include "verbs.h"
 
-#include "helper/window.h"
-
 #include "object/sp-root.h"
 #include "object/sp-string.h"
 
@@ -702,78 +700,30 @@ gboolean XmlTree::quit_on_esc (GtkWidget *w, GdkEventKey *event, GObject */*tbl*
 
 void XmlTree::cmd_new_element_node()
 {
-    GtkWidget *cancel, *vbox, *bbox, *sep;
+    Gtk::Dialog dialog;
+    Gtk::Entry entry;
 
-    g_assert(selected_repr != nullptr);
+    dialog.get_content_area()->pack_start(entry);
+    dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+    dialog.add_button("Create", Gtk::RESPONSE_OK);
+    dialog.show_all();
 
-    new_window = sp_window_new(nullptr, TRUE);
-    gtk_container_set_border_width(GTK_CONTAINER(new_window), 4);
-    gtk_window_set_title(GTK_WINDOW(new_window), _("New element node..."));
-    gtk_window_set_resizable(GTK_WINDOW(new_window), FALSE);
-    gtk_window_set_position(GTK_WINDOW(new_window), GTK_WIN_POS_CENTER);
-    gtk_window_set_transient_for(GTK_WINDOW(new_window), GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(gobj()))));
-    gtk_window_set_modal(GTK_WINDOW(new_window), TRUE);
-    g_signal_connect(G_OBJECT(new_window), "destroy", gtk_main_quit, NULL);
-    g_signal_connect(G_OBJECT(new_window), "key-press-event", G_CALLBACK(quit_on_esc), new_window);
+    int result = dialog.run();
+    if (result == Gtk::RESPONSE_OK) {
+        Glib::ustring new_name = entry.get_text();
+        if (!new_name.empty()) {
+            Inkscape::XML::Document *xml_doc = current_document->getReprDoc();
+            Inkscape::XML::Node *new_repr;
+            new_repr = xml_doc->createElement(new_name.c_str());
+            Inkscape::GC::release(new_repr);
+            selected_repr->appendChild(new_repr);
+            set_tree_select(new_repr);
+            set_dt_select(new_repr);
 
-    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
-    gtk_box_set_homogeneous(GTK_BOX(vbox), FALSE);
-
-    gtk_container_add(GTK_CONTAINER(new_window), vbox);
-
-    name_entry = new Gtk::Entry();
-    gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(name_entry->gobj()), FALSE, TRUE, 0);
-
-    sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-
-    gtk_box_pack_start(GTK_BOX(vbox), sep, FALSE, TRUE, 0);
-
-    bbox = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-
-    gtk_container_set_border_width(GTK_CONTAINER(bbox), 4);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
-    gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, TRUE, 0);
-
-    cancel = gtk_button_new_with_label(_("Cancel"));
-    g_signal_connect_swapped( G_OBJECT(cancel), "clicked",
-                                G_CALLBACK(gtk_widget_destroy),
-                                G_OBJECT(new_window) );
-    gtk_container_add(GTK_CONTAINER(bbox), cancel);
-
-    create_button = new Gtk::Button(_("Create"));
-    create_button->set_sensitive(FALSE);
-
-    name_entry->signal_changed().connect(sigc::mem_fun(*this, &XmlTree::onCreateNameChanged));
-
-    g_signal_connect_swapped( G_OBJECT(create_button->gobj()), "clicked",
-                                G_CALLBACK(gtk_widget_destroy),
-                                G_OBJECT(new_window) );
-    create_button->set_can_default( TRUE );
-    create_button->set_receives_default( TRUE );
-    gtk_container_add(GTK_CONTAINER(bbox), GTK_WIDGET(create_button->gobj()));
-
-    gtk_widget_show_all(GTK_WIDGET(new_window));
-    //gtk_window_set_default(GTK_WINDOW(window), GTK_WIDGET(create));
-    name_entry->grab_focus();
-
-    gtk_main();
-
-    gchar *new_name = g_strdup(name_entry->get_text().c_str());
-
-    if (new_name) {
-        Inkscape::XML::Document *xml_doc = current_document->getReprDoc();
-        Inkscape::XML::Node *new_repr;
-        new_repr = xml_doc->createElement(new_name);
-        Inkscape::GC::release(new_repr);
-        g_free(new_name);
-        selected_repr->appendChild(new_repr);
-        set_tree_select(new_repr);
-        set_dt_select(new_repr);
-
-        DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                           _("Create new element node"));
+            DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
+                               _("Create new element node"));
+        }
     }
-
 } // end of cmd_new_element_node()
 
 
