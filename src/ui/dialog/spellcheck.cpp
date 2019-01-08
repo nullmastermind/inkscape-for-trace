@@ -20,7 +20,6 @@
 #include "spellcheck.h"
 #include "message-stack.h"
 
-#include "helper/window.h"
 #include "inkscape.h"
 #include "document.h"
 #include "desktop.h"
