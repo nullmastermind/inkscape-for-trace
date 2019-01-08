@@ -26,8 +26,6 @@
 #include "text-editing.h"
 #include "verbs.h"
 
-#include "helper/window.h"
-
 #include "object/sp-defs.h"
 #include "object/sp-ellipse.h"
 #include "object/sp-flowdiv.h"

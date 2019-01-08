@@ -40,8 +40,6 @@ extern "C" {
 #include "text-editing.h"
 #include "verbs.h"
 
-#include "helper/window.h"
-
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
 

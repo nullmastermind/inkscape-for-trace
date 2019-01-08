@@ -42,7 +42,6 @@
 #include "message-stack.h"
 
 #include "helper/png-write.h"
-#include "helper/window.h"
 
 #include "io/resource.h"
 #include "io/sys.h"
