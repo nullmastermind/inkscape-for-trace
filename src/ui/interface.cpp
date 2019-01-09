@@ -46,7 +46,7 @@
 #include "extension/input.h"
 
 #include "helper/action.h"
-#include "helper/window.h"
+
 #include "ui/icon-loader.h"
 
 #include "io/sys.h"
@@ -140,13 +140,22 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
                                      Glib::ustring const &name);
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
+static bool sp_on_window_key_press(GdkEventKey* event)
+{
+    unsigned shortcut = 0;
+    shortcut = sp_shortcut_get_for_event(event);
+    return sp_shortcut_invoke (shortcut, SP_ACTIVE_DESKTOP);
+}
+
 void
 sp_create_window(SPViewWidget *vw, bool editable)
 {
     g_return_if_fail(vw != nullptr);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
 
-    Gtk::Window *win = Inkscape::UI::window_new("", TRUE);
+    Gtk::Window *win = new Gtk::Window(Gtk::WINDOW_TOPLEVEL);
+    win->set_resizable(true);
+    win->signal_key_press_event().connect(sigc::ptr_fun(&sp_on_window_key_press));
 
     gtk_container_add(GTK_CONTAINER(win->gobj()), GTK_WIDGET(vw));
     gtk_widget_show(GTK_WIDGET(vw));
