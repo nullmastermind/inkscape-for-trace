@@ -216,6 +216,11 @@ set(inkscape_SRC
   vanishing-point.h
   verbs.h
   version.h
+
+  # TEMP  Need to detangle inkscape-view from ui/interface.cpp
+  inkscape-window.h
+  inkscape-window.cpp
+
 )
   
 # -----------------------------------------------------------------------------
