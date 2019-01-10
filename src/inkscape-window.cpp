@@ -23,7 +23,7 @@ InkscapeWindow::InkscapeWindow()
 {
 
     // Callbacks
-    signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapeWindow::key_press), false);
+    signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapeWindow::key_press));
 
     // Actions
 }
