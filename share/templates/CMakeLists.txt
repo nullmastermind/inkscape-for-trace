@@ -11,3 +11,14 @@ set_source_files_properties(${CMAKE_SOURCE_DIR}/templates.h PROPERTIES GENERATED
 add_custom_target(templates_h ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/templates.h)
 
 install(FILES ${_FILES} "README" DESTINATION ${INKSCAPE_SHARE_INSTALL}/templates)
+
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} DESTINATION ${INKSCAPE_SHARE_INSTALL} 
+  FILES_MATCHING PATTERN "*.svg" PATTERN "CMakeFiles" EXCLUDE )
+
+add_custom_target(inkscape_default_svg ALL 
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/create_defaults.pl ${CMAKE_CURRENT_SOURCE_DIR}/default.svg 
+  BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/default.*.svg
+  COMMAND sh -c "${CMAKE_CURRENT_SOURCE_DIR}/create_defaults.pl"
+  COMMAND mv default.*.svg ${CMAKE_CURRENT_BINARY_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
