@@ -272,6 +272,10 @@ public:
     void save();
 
     /**
+     * Deletes the preferences.xml file.
+     */
+    void reset();
+    /**
      * Check whether saving the preferences will have any effect.
      */
     bool isWritable() { return _writable; }

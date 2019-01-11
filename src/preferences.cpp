@@ -160,15 +160,6 @@ void Preferences::_load()
                 g_free(msg);
                 return;
             }
-            // create some subdirectories for user stuff
-            char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", nullptr};
-            for (int i=0; user_dirs[i]; ++i) {
-                // XXX Why are we doing this here? shouldn't this be an IO load item?
-                char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);
-                g_mkdir(dir, 0755);
-                g_free(dir);
-            }
-
         } else if (!g_file_test(_prefs_dir, G_FILE_TEST_IS_DIR)) {
             // The profile dir is not actually a directory
             //_reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
@@ -177,6 +168,15 @@ void Preferences::_load()
             _reportError(msg, not_saved);
             g_free(msg);
             return;
+        }
+        // create some subdirectories for user stuff
+        char const *user_dirs[] = {"extensions", "fonts", "icons", "keys", "palettes", "templates", nullptr};
+        for (int i=0; user_dirs[i]; ++i) {
+            // XXX Why are we doing this here? shouldn't this be an IO load item?
+            char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);
+            if (!g_file_test(dir, G_FILE_TEST_EXISTS))
+                g_mkdir(dir, 0755);
+            g_free(dir);
         }
         // The profile dir exists and is valid.
         if (!g_file_set_contents(_prefs_filename.c_str(), preferences_skeleton, PREFERENCES_SKELETON_SIZE, nullptr)) {
@@ -290,6 +290,27 @@ void Preferences::save()
             sp_repr_save_file(_prefs_doc, utf8name.c_str());
         }
     }
+}
+
+/**
+ * Deletes the preferences.xml file
+ */
+void Preferences::reset()
+{
+    if (g_file_test(_prefs_filename.c_str(), G_FILE_TEST_EXISTS)) {
+        int retcode = g_unlink (_prefs_filename.c_str());
+        if (retcode == 0) g_strdup_printf(_("Preferences file was deleted."));
+        else g_warning(_("There was an error trying to delete the preferences file."));
+    }
+    for (_ObsMap::iterator i = _observer_map.begin(); i != _observer_map.end(); ) {
+        delete (*i++).second; // avoids reference to a deleted key
+    }
+    _observer_map.clear();
+    Inkscape::GC::release(_prefs_doc);
+    _prefs_doc = nullptr;
+    _loadDefaults();
+    _load();
+    save();
 }
 
 bool Preferences::getLastError( Glib::ustring& primary, Glib::ustring& secondary )

@@ -555,6 +555,7 @@ protected:
 
     void on_pagelist_selection_changed();
     void on_reset_open_recent_clicked();
+    void on_reset_prefs_clicked();
 
     void initPageTools();
     void initPageUI();

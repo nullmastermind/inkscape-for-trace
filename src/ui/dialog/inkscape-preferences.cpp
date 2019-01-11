@@ -2300,8 +2300,11 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_prefs.set_text(prefs->getPrefsFilename());
     _sys_user_prefs.set_editable(false);
+    Gtk::Button* reset_prefs = Gtk::manage(new Gtk::Button(_("Reset Preferences")));
+    reset_prefs->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::on_reset_prefs_clicked));
+
     _page_system.add_line(true, _("User preferences: "), _sys_user_prefs, "",
-                          _("Location of the user’s preferences file"), true);
+                          _("Location of the user’s preferences file"), true, reset_prefs);
 
     _sys_user_config.init((char const *)Inkscape::IO::Resource::profile_path(""), _("Open preferences folder"));
     _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
@@ -2444,6 +2447,11 @@ void InkscapePreferences::on_reset_open_recent_clicked()
             manager->remove_item(e->get_uri());
         }
     }
+}
+
+void InkscapePreferences::on_reset_prefs_clicked()
+{
+    Inkscape::Preferences::get()->reset();
 }
 
 void InkscapePreferences::on_pagelist_selection_changed()
