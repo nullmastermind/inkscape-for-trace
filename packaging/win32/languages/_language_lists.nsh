@@ -14,6 +14,7 @@
 !macro INSTALLER_TRANSLATIONS _MACRONAME
     !insertmacro ${_MACRONAME} Breton       1150
     !insertmacro ${_MACRONAME} Catalan      1027
+    !insertmacro ${_MACRONAME} Croatian     1050
     !insertmacro ${_MACRONAME} Czech        1029
     !insertmacro ${_MACRONAME} Danish       1030
     !insertmacro ${_MACRONAME} Dutch        1043

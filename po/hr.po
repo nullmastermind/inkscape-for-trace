@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-01-03 00:43+0100\n"
-"PO-Revision-Date: 2019-01-06 21:37+0100\n"
+"PO-Revision-Date: 2019-01-10 14:51+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +42,7 @@ msgstr "Inkscape – uređivač vektorskih grafika"
 
 #: ../inkscape.desktop.in.h:4
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr "Stvori i uredi vektorske (SVG) slike"
+msgstr "Stvaraj i uređuj skalabilne vektorske grafike"
 
 #: ../inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
@@ -4691,7 +4691,7 @@ msgstr "staza (tangencijalno)"
 
 #: ../src/display/snap-indicator.cpp:119
 msgid "path intersection"
-msgstr "sjecište staze"
+msgstr "sjecište staza"
 
 #: ../src/display/snap-indicator.cpp:122
 msgid "guide-path intersection"
@@ -5758,7 +5758,7 @@ msgstr "PostScript datoteka"
 #: ../src/extension/internal/cairo-ps-out.cpp:371
 #: ../share/extensions/eps_input.inx.h:3
 msgid "Encapsulated PostScript"
-msgstr "Uokvireni Postscript"
+msgstr "Encapsulated Postscript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:388
 msgid "Bleed/margin (mm)"
@@ -8248,7 +8248,7 @@ msgstr ""
 
 #: ../src/extension/internal/svg.cpp:653
 msgid "Scalable Vector Graphic (*.svg)"
-msgstr "Scalable Vector Graphic (*.svg)"
+msgstr "Skalabilna vektorska grafika (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:654
 msgid "Inkscape native file format and W3C standard"
@@ -8277,7 +8277,7 @@ msgstr "Obični SVG (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:682
 msgid "Scalable Vector Graphics format as defined by the W3C"
-msgstr "Scalable Vector Graphics format, koji je definirao W3C"
+msgstr "Format skalabilnih vektorskih grafika, koji je definirao W3C"
 
 #: ../src/extension/internal/svgz.cpp:44
 msgid "SVGZ Input"
@@ -8305,7 +8305,7 @@ msgstr "Komprimirani SVG (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:79
 msgid "Scalable Vector Graphics format compressed with GZip"
-msgstr "Scalable Vector Graphics format, komprimiran GZip-om"
+msgstr "Format skalabilnih vektorskih grafika, komprimiran GZip-om"
 
 #: ../src/extension/internal/vsd-input.cpp:326
 msgid "VSD Input"
@@ -14054,7 +14054,7 @@ msgstr "Prilagodi stranicu odabiru"
 
 #: ../src/selection-chemistry.cpp:4331 ../src/verbs.cpp:2735
 msgid "Swap fill and stroke of an object"
-msgstr "Zamijeni ispunu i potez"
+msgstr "Zamijeni ispunu i potez objekta"
 
 #: ../src/selection-chemistry.cpp:4359 ../src/verbs.cpp:3257
 msgid "Fit Page to Drawing"
@@ -14751,8 +14751,8 @@ msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
 msgstr ""
-"Uređivač za skalirane vektorske grafike, otvorenoga koda\n"
-"Crtaj prostoručno."
+"Uređivač otvorenoga koda za skalabilne vektorske grafike\n"
+"Bezgranično crtanje."
 
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
 #. the `screens' directory.  Thus the translation of "about.svg" should be
@@ -18680,7 +18680,7 @@ msgstr "_Etiketa:"
 
 #: ../src/ui/dialog/guides.cpp:47
 msgid "Optionally give this guideline a name"
-msgstr "Dodatno, daj ime vodilici"
+msgstr "Ako želiš, zadaj ime ovoj vodilici"
 
 #: ../src/ui/dialog/guides.cpp:48
 msgid "_Angle:"
@@ -29544,12 +29544,12 @@ msgstr "Gornji indeks"
 #: ../src/ui/widget/font-variants.cpp:126
 msgctxt "Font feature"
 msgid "Capitals"
-msgstr "Kapitalna slova"
+msgstr "Kapitalke"
 
 #: ../src/ui/widget/font-variants.cpp:128
 msgctxt "Font feature"
 msgid "Small"
-msgstr "Mala"
+msgstr "Kapitalke"
 
 #: ../src/ui/widget/font-variants.cpp:129
 msgctxt "Font feature"
@@ -29569,12 +29569,12 @@ msgstr "Sve u male kapitalke"
 #: ../src/ui/widget/font-variants.cpp:132
 msgctxt "Font feature"
 msgid "Unicase"
-msgstr "Poravnata verzalna i kurentna slova"
+msgstr "Ujednačena slova"
 
 #: ../src/ui/widget/font-variants.cpp:133
 msgctxt "Font feature"
 msgid "Titling"
-msgstr "Natpisna kapitalna slova"
+msgstr "Naslovna verzalna slova"
 
 #: ../src/ui/widget/font-variants.cpp:135
 msgctxt "Font feature"
@@ -29737,38 +29737,39 @@ msgstr "Normalna upotreba velikih/malih slova."
 
 #: ../src/ui/widget/font-variants.cpp:258
 msgid "Small-caps (lowercase). OpenType table: 'smcp'"
-msgstr "Umanjena verzalna slova (samo za mala slova). OpenType tablica: ‚smcp‘"
+msgstr "Kapitalke (samo za mala slova). OpenType tablica: ‚smcp‘"
 
 #: ../src/ui/widget/font-variants.cpp:259
 msgid ""
 "All small-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'smcp'"
 msgstr ""
-"Umanjena verzalna slova za sve (za velika i mala slova). OpenType tablice: "
-"‚c2sc‘ i ‚smcp‘"
+"Sve u kapitalke (za velika i mala slova). OpenType tablice: ‚c2sc‘ i ‚smcp‘"
 
 #: ../src/ui/widget/font-variants.cpp:260
 msgid "Petite-caps (lowercase). OpenType table: 'pcap'"
-msgstr "Mala verzalna slova. OpenType tablica: ‚pcap‘"
+msgstr "Male kapitalke. OpenType tablica: ‚pcap‘"
 
 #: ../src/ui/widget/font-variants.cpp:261
 msgid ""
 "All petite-caps (uppercase and lowercase). OpenType tables: 'c2sc' and 'pcap'"
 msgstr ""
-"Mala verzalna slova za sve (za velika i mala slova). OpenType tablice: "
-"‚c2sc‘ i ‚pcap‘"
+"Sve u male kapitalke (za velika i mala slova). OpenType tablice: ‚c2sc‘ i "
+"‚pcap‘"
 
 #: ../src/ui/widget/font-variants.cpp:262
 msgid ""
 "Unicase (small caps for uppercase, normal for lowercase). OpenType table: "
 "'unic'"
-msgstr "Jednolika veličina velikih i malih slova. OpenType tablica: ‚unic‘"
+msgstr ""
+"Ujednačena slova (kapitalke za velika slova, normalno za mala slova). "
+"OpenType tablica: ‚unic‘"
 
 #: ../src/ui/widget/font-variants.cpp:263
 msgid ""
 "Titling caps (lighter-weight uppercase for use in titles). OpenType table: "
 "'titl'"
 msgstr ""
-"Natpisna verzalna slova (tanji pismovni rez verzalnih slova za naslove). "
+"Naslovna verzalna slova (tanji pismovni rez verzalnih slova za naslove). "
 "OpenType tablica: ‚titl‘"
 
 #. Numeric ------------------------------
@@ -29779,11 +29780,11 @@ msgstr "Normalni stil."
 
 #: ../src/ui/widget/font-variants.cpp:300
 msgid "Lining numerals. OpenType table: 'lnum'"
-msgstr "Brojke jednakih visina. OpenType tablica: ‚lnum‘"
+msgstr "Poravnate brojke. OpenType tablica: ‚lnum‘"
 
 #: ../src/ui/widget/font-variants.cpp:301
 msgid "Old style numerals. OpenType table: 'onum'"
-msgstr "Brojke različitih visina. OpenType tablica: ‚onum‘"
+msgstr "Medievalne brojke. OpenType tablica: ‚onum‘"
 
 #: ../src/ui/widget/font-variants.cpp:302
 msgid "Normal widths."
@@ -30167,7 +30168,7 @@ msgstr "Linearni gradijent poteza"
 
 #: ../src/ui/widget/selected-style.cpp:211
 msgid "<b>R</b>"
-msgstr "<b>R</b>"
+msgstr "<b>K</b>"
 
 #: ../src/ui/widget/selected-style.cpp:214
 #: ../src/ui/widget/style-swatch.cpp:298
@@ -30458,11 +30459,11 @@ msgstr "Poveznica"
 
 #: ../src/ui/widget/style-swatch.cpp:292
 msgid "L Gradient"
-msgstr "Pravocrtni gradijent"
+msgstr "Linearni gradijent"
 
 #: ../src/ui/widget/style-swatch.cpp:296
 msgid "R Gradient"
-msgstr "Kružni radijent"
+msgstr "Kružni gradijent"
 
 #: ../src/ui/widget/style-swatch.cpp:312
 #, c-format
@@ -32235,7 +32236,7 @@ msgstr "Postavke zumiranja"
 
 #: ../src/verbs.cpp:3021
 msgid "Open Preferences for the Zoom tool"
-msgstr "Otvori postavke alata za povećavanje"
+msgstr "Otvori postavke alata za zumiranje"
 
 #: ../src/verbs.cpp:3022
 msgid "Measure Preferences"
@@ -39178,7 +39179,7 @@ msgstr "Nasložen stupčasti dijagram"
 
 #: ../share/extensions/output_scour.inx.h:1
 msgid "Optimized SVG Output"
-msgstr "Optimiran izlazni SVG"
+msgstr "Optimirani izlazni SVG"
 
 #: ../share/extensions/output_scour.inx.h:3
 msgid "Number of significant digits for coordinates:"
@@ -39490,7 +39491,7 @@ msgstr "Prikaži upozorenja starijih verzija „Scour-a”"
 
 #: ../share/extensions/output_scour.inx.h:60
 msgid "Optimized SVG Output is provided by"
-msgstr "Izlazni optimirani SVG je omogućen kroz"
+msgstr "Optimirani izlazni SVG je omogućen kroz"
 
 #: ../share/extensions/output_scour.inx.h:61
 msgid "For details please refer to"
@@ -39498,19 +39499,19 @@ msgstr "Za detalje, pogledaj"
 
 #: ../share/extensions/output_scour.inx.h:62
 msgid "This version of the extension is designed for"
-msgstr "Ova verzija sufiksa je napravljena za"
+msgstr "Ova verzija proširenja je napravljena za"
 
 #: ../share/extensions/output_scour.inx.h:63
 msgid "Optimized SVG (*.svg)"
-msgstr "Optimizirani SVG (*.svg)"
+msgstr "Optimirani SVG (*.svg)"
 
 #: ../share/extensions/output_scour.inx.h:64
 msgid "Scalable Vector Graphics"
-msgstr "Skalirana vektorska grafika"
+msgstr "Skalabilne vektorske grafike"
 
 #: ../share/extensions/param_curves.inx.h:1
 msgid "Parametric Curves"
-msgstr "Parametarska krivulja"
+msgstr "Parametarske krivulje"
 
 #: ../share/extensions/param_curves.inx.h:2
 msgid "Range and Sampling"
@@ -39518,11 +39519,11 @@ msgstr "Raspon i Uzorkovanje"
 
 #: ../share/extensions/param_curves.inx.h:3
 msgid "Start t-value:"
-msgstr "Početna vrijednost t:"
+msgstr "Početna t-vrijednost:"
 
 #: ../share/extensions/param_curves.inx.h:4
 msgid "End t-value:"
-msgstr "Krajnja t vrijednost:"
+msgstr "Krajnja t-vrijednost:"
 
 #: ../share/extensions/param_curves.inx.h:5
 msgid "Multiply t-range by 2*pi"
@@ -39530,11 +39531,11 @@ msgstr "Pomnoži t-raspon s 2*pi"
 
 #: ../share/extensions/param_curves.inx.h:6
 msgid "X-value of rectangle's left:"
-msgstr "X vrijednost lijevog dijela pravokutnika:"
+msgstr "X vrijednost lijeve strane pravokutnika:"
 
 #: ../share/extensions/param_curves.inx.h:7
 msgid "X-value of rectangle's right:"
-msgstr "X vrijednost desnog dijela pravokutnika:"
+msgstr "X vrijednost desne strane pravokutnika:"
 
 #: ../share/extensions/param_curves.inx.h:8
 msgid "Y-value of rectangle's bottom:"
