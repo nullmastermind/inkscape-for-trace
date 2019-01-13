@@ -8596,7 +8596,7 @@ msgstr "Gravar documento"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default.pt.svg"
+msgstr "default-pt.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."

@@ -8581,7 +8581,7 @@ msgstr "Actualitza el document"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default.ca.svg"
+msgstr "default-ca.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."

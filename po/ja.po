@@ -8530,7 +8530,7 @@ msgstr "ドキュメントを保存"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default.ja.svg"
+msgstr "default-ja.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."

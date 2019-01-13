@@ -8417,7 +8417,7 @@ msgstr "Eguneratu dokumentua"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default.eu.svg"
+msgstr "default-eu.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."

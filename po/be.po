@@ -9138,7 +9138,7 @@ msgstr "Захаваць дакумэнт"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default.be.svg"
+msgstr "default-be.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."

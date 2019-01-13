@@ -42,7 +42,7 @@ foreach my $lang (@data ) {
     my @values = @{$lang};
     print "$values[0]\n";
 
-    my $filename = "default." . $values[0] . ".svg";
+    my $filename = "default-" . $values[0] . ".svg";
     open( OUTPUT, '>:encoding(UTF-8)', $filename ) or die "Cannot open $filename.\n";
 
     # Open input again to return to top...
