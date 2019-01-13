@@ -6,13 +6,13 @@
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-01-03 00:43+0100\n"
-"PO-Revision-Date: 2018-06-03 14:42+0200\n"
+"PO-Revision-Date: 2019-01-13 15:11+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -8543,7 +8543,6 @@ msgid "More details..."
 msgstr "Подробиці…"
 
 #: ../src/file-update.cpp:363
-#, fuzzy
 msgid ""
 "<small>We've updated Inkscape to follow the CSS standard of 96 DPI for "
 "better browser compatibility; we used to use 90 DPI. Digital artwork for "
@@ -9058,9 +9057,8 @@ msgid "Delete gradient stop(s)"
 msgstr "Вилучити опорні точки градієнта"
 
 #: ../src/inkscape-application.cpp:65
-#, fuzzy
 msgid "Inkscape - A Vector Drawing Program"
-msgstr "Редактор векторної графіки Inkscape"
+msgstr "Inkscape — програма для векторного малювання"
 
 #. After gettext() init.
 #. ======================== Actions =========================
@@ -9074,144 +9072,141 @@ msgstr "Редактор векторної графіки Inkscape"
 #. Actions
 #: ../src/inkscape-application.cpp:79
 msgid "Actions (with optional arguments), semi-colon separated."
-msgstr ""
+msgstr "Дії (з необов'язковими аргументами), відокремлюються крапкою з комою."
 
 #: ../src/inkscape-application.cpp:79
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
-msgstr ""
+msgstr "ДІЯ(:АРГУМЕНТ)[;ДІЯ(:АРГУМЕНТ)]*"
 
 #: ../src/inkscape-application.cpp:80
 msgid "Actions: List available actions."
-msgstr ""
+msgstr "Дії: список доступних дій."
 
 #. Query
 #: ../src/inkscape-application.cpp:83
-#, fuzzy
 msgid "Print: Inkscape version."
-msgstr "Вивести версію Inkscape"
+msgstr "Виведення: версія Inkscape."
 
 #: ../src/inkscape-application.cpp:84
-#, fuzzy
 msgid "Print: Extensions directory."
-msgstr "Вивести на екран каталог додатка і вийти"
+msgstr "Виведення: каталог розширень."
 
 #: ../src/inkscape-application.cpp:85
 msgid "Print: List verbs."
-msgstr ""
+msgstr "Виведення: список команд."
 
 #. Interface
 #: ../src/inkscape-application.cpp:88
 msgid "GUI: With graphical interface."
-msgstr ""
+msgstr "Графічний інтерфейс: із графічним інтерфейсом."
 
 #: ../src/inkscape-application.cpp:89
-#, fuzzy
 msgid "GUI: Console only."
-msgstr "Лише піктограми"
+msgstr "Графічний інтерфейс: лише консоль."
 
 #. Open/Import
 #: ../src/inkscape-application.cpp:92
-#, fuzzy
 msgid "Open: PDF page to import"
-msgstr "Виберіть файл для імпортування"
+msgstr "Відкриття: сторінка PDF для імпортування"
 
 #: ../src/inkscape-application.cpp:92
 msgid "PAGE"
-msgstr ""
+msgstr "СТОРІНКА"
 
 #: ../src/inkscape-application.cpp:93
-#, fuzzy
 msgid ""
 "Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
 "viewbox|scale-document]."
 msgstr ""
-"Спосіб перетворення роздільності документів до версії 0.92, якщо це "
+"Відкриття: спосіб перетворення роздільності документів до версії 0.92, якщо"
+" це "
 "потрібно. ([none|scale-viewbox|scale-document])"
 
 #: ../src/inkscape-application.cpp:94
-#, fuzzy
 msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
 msgstr ""
-"Не виправляти застарілі (до 0.92) інтервали між базовими лініями тексту під "
+"Відкриття: не виправляти застарілі (до 0.92) інтервали між базовими лініями"
+" тексту у документі під "
 "час відкриття."
 
 #. Query - Geometry
 #: ../src/inkscape-application.cpp:97
-#, fuzzy
 msgid "Query: ID(s) of object(s) to be queried."
-msgstr "Ідентифікатор об'єкта, розміри якого опитуються"
+msgstr "Запит: ідентифікатори об'єктів для запиту."
 
 #: ../src/inkscape-application.cpp:97 ../src/inkscape-application.cpp:106
 msgid "OBJECT-ID[,OBJECT-ID]*"
-msgstr ""
+msgstr "ІД-ОБʼЄКТА[,ІД-ОБʼЄКТА]*"
 
 #: ../src/inkscape-application.cpp:98
 msgid "Query: Print bounding boxes of all objects."
-msgstr ""
+msgstr "Запит: вивести рамки-обгортки для усіх об'єктів."
 
 #: ../src/inkscape-application.cpp:99
-#, fuzzy
 msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
-msgstr "Запитати X-координату рисунка чи, якщо вказано, об'єкта з --query-id"
+msgstr ""
+"Запит: координата X малюнка або об'єкта (якщо такий вказано за допомогою"
+" --query-id)."
 
 #: ../src/inkscape-application.cpp:100
-#, fuzzy
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
-msgstr "Запитати Y-координату рисунка чи, якщо вказано, об'єкта з --query-id"
+msgstr ""
+"Запит: координата Y малюнка або об'єкта (якщо такий вказано за допомогою"
+" --query-id)."
 
 #: ../src/inkscape-application.cpp:101
-#, fuzzy
 msgid "Query: Width of drawing or object (if specified by --query-id)."
-msgstr "Запитати ширину рисунка чи, якщо вказано, об'єкта з --query-id"
+msgstr ""
+"Запит: ширина малюнка або об'єкта (якщо такий вказано за допомогою"
+" --query-id)."
 
 #: ../src/inkscape-application.cpp:102
-#, fuzzy
 msgid "Query: Heightof drawing or object (if specified by --query-id)."
-msgstr "Запитати висоту рисунка чи, якщо вказано, об'єкта з --query-id"
+msgstr ""
+"Запит: висота малюнка або об'єкта (якщо такий вказано за допомогою"
+" --query-id)."
 
 #. Processing
 #: ../src/inkscape-application.cpp:105
-#, fuzzy
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
-msgstr "Вилучити з розділу defs документа визначення, що не використовуються"
+msgstr ""
+"Обробка: вилучити з розділу <defs> документа визначення, що не"
+" використовуються."
 
 #: ../src/inkscape-application.cpp:106
 msgid "Process: Select objects: comma separated list of IDs."
 msgstr ""
+"Обробка: позначення об'єктів: список ідентифікаторів, відокремлених комами."
 
 #: ../src/inkscape-application.cpp:107
-#, fuzzy
 msgid "Process: Verb(s) to call when Inkscape opens."
-msgstr "Дієслово, що викликається при відкриванні Inkscape."
+msgstr "Обробка: команди, які слід віддати при відкритті Inkscape."
 
 #: ../src/inkscape-application.cpp:107
 msgid "VERB-ID[;VERB-ID]*"
-msgstr ""
+msgstr "ІД-КОМАНДИ[;ІД-КОМАНДИ]*"
 
 #: ../src/inkscape-application.cpp:108
-#, fuzzy
 msgid "Process: Start Inkscape in interactive shell mode."
-msgstr "Запустити Inkscape у режимі інтерактивної оболонки."
+msgstr "Обробка: запустити Inkscape у режимі інтерактивної оболонки."
 
 #. Export - File and File Type
 #: ../src/inkscape-application.cpp:111
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
-msgstr ""
+msgstr "Експортування: тип файла: [svg,png,ps,psf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:112
-#, fuzzy
 msgid "Export: File name"
-msgstr "Назва файла"
+msgstr "Експортування: назва файла"
 
 #: ../src/inkscape-application.cpp:112
-#, fuzzy
 msgid "EXPORT-FILENAME"
-msgstr "НАЗВА_ФАЙЛА"
+msgstr "НАЗВА_ЕКСПОРТОВАНОГО_ФАЙЛА"
 
 #: ../src/inkscape-application.cpp:113
 msgid "Export: Overwrite input file."
-msgstr ""
+msgstr "Експортування: перезаписати файл вхідних даних."
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
@@ -9219,6 +9214,8 @@ msgstr ""
 #: ../src/inkscape-application.cpp:117
 msgid "Export: Area to export in SVG user units."
 msgstr ""
+"Експортування: область для експортування у визначених користувачем одиницях"
+" SVG."
 
 #: ../src/inkscape-application.cpp:117
 msgid "x0:y0:x1:y1"
@@ -9226,40 +9223,38 @@ msgstr "x0:y0:x1:y1"
 
 #. BSP
 #: ../src/inkscape-application.cpp:118
-#, fuzzy
 msgid "Export: Area to export is drawing (not page)."
-msgstr "Область експорту є суцільним малюнком (не сторінкою)"
+msgstr "Експортування: областю експорту є увесь малюнок (не сторінка)."
 
 #. BSP
 #: ../src/inkscape-application.cpp:119
-#, fuzzy
 msgid "Export: Area to export is page."
-msgstr "Ділянкою експорту є вся сторінка"
+msgstr "Експортування: областю експортування є сторінка."
 
 #. BSP
 #: ../src/inkscape-application.cpp:120
-#, fuzzy
 msgid ""
 "Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
 "PDF."
 msgstr ""
-"Встановлює поле навколо експортованої області (типовою є ширина поля 0) у "
-"одиницях розміру сторінки для SVG і міліметрах для PS/EPS/PDF"
+"Експортування: встановити поле навколо експортованої області (типовою є"
+" ширина поля 0) у "
+"одиницях розміру сторінки для SVG і міліметрах для PS/EPS/PDF."
 
 #. xSP
 #: ../src/inkscape-application.cpp:121
-#, fuzzy
 msgid ""
 "Export: Snap the bitmap export area outwards to the nearest integer values."
 msgstr ""
-"Округлити ділянку експорту растру назовні до найближчого цілого значення (в "
-"одиницях SVG)"
+"Експортування: округлити ділянку експорту растру назовні до найближчого"
+" цілого значення."
 
 #. Bxx
 #: ../src/inkscape-application.cpp:122
-#, fuzzy
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
-msgstr "Ширина зображення для експорту у точках (перевизначає export-dpi)"
+msgstr ""
+"Експортування: висота зображення для експортування у точках (перевизначає"
+" --export-dpi)."
 
 #: ../src/inkscape-application.cpp:122
 msgid "WIDTH"
@@ -9267,9 +9262,10 @@ msgstr "ШИРИНА"
 
 #. Bxx
 #: ../src/inkscape-application.cpp:123
-#, fuzzy
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
-msgstr "Ширина зображення для експорту у точках (перевизначає export-dpi)"
+msgstr ""
+"Експортування: ширина зображення для експортування у точках (перевизначає"
+" --export-dpi)."
 
 #: ../src/inkscape-application.cpp:123
 msgid "HEIGHT"
@@ -9278,34 +9274,32 @@ msgstr "ВИСОТА"
 #. Bxx
 #. Export - Options
 #: ../src/inkscape-application.cpp:126
-#, fuzzy
 msgid "Export: ID(s) of object(s) to export."
-msgstr "Ідентифікатор об'єкта, що експортується"
+msgstr "Експортування: ідентифікатори об'єктів для експортування."
 
 #: ../src/inkscape-application.cpp:126
 msgid "OBJECT-ID[;OBJECT-ID]*"
-msgstr ""
+msgstr "ІД-ОБʼЄКТА[,ІД-ОБʼЄКТА]*"
 
 #. BSP
 #: ../src/inkscape-application.cpp:127
-#, fuzzy
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr ""
-"В експортованому зображенні приховувати всі об'єкти, за винятком позначених"
+"Експортування: в експортованому зображенні приховувати всі об'єкти, окрім"
+" визначеного export-id об'єкта."
 
 #. BSx
 #: ../src/inkscape-application.cpp:128
 msgid "Export: Remove items in the Inkscape namespace."
-msgstr ""
+msgstr "Експортування: вилучити пункти у просторі назв Inkscape."
 
 #. xSx
 #: ../src/inkscape-application.cpp:129
-#, fuzzy
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
 msgstr ""
-"Роздільна здатність для експортування у растр і для растеризації фільтрів у "
-"PS/EPS/PDF (типове значення 96)"
+"Експортування: роздільна здатність для експортування у растр і для"
+" растеризації фільтрів (типове значення — 96)."
 
 #: ../src/inkscape-application.cpp:129
 #: ../src/ui/widget/rendering-options.cpp:34
@@ -9314,40 +9308,36 @@ msgstr "Роздільність"
 
 #. BxP
 #: ../src/inkscape-application.cpp:130
-#, fuzzy
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
 msgstr ""
-"Показувати фільтровані об'єкти без фільтрів, замість растеризації (PS, EPS, "
-"PDF)"
+"Експортування: показувати об'єкти без фільтрів, замість растеризації (PS,"
+" EPS, PDF)."
 
 #. xxP
 #: ../src/inkscape-application.cpp:131
-#, fuzzy
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr ""
-"Перетворити тестовий об'єкт на контури під час експортування (PS, EPS, PDF? "
-"SVG)"
+"Експортування: перетворити тестовий об'єкт на контури під час експортування"
+" (PS, EPS, PDF, SVG)."
 
 #. xxP
 #: ../src/inkscape-application.cpp:132
 msgid "Export: Postscript level (2 or 3). Default is 3."
-msgstr ""
+msgstr "Експортування: рівень Postscript (2 або 3). Типовим є рівень 3."
 
 #: ../src/inkscape-application.cpp:132
-#, fuzzy
 msgid "PS-Level"
 msgstr "Рівень PS"
 
 #. xxP
 #: ../src/inkscape-application.cpp:133
 msgid "Export: PDF level (1.4 or 1.5)"
-msgstr ""
+msgstr "Експортування: рівень PDF (1.4 або 1.5)"
 
 #: ../src/inkscape-application.cpp:133
-#, fuzzy
 msgid "PDF-Level"
-msgstr "Рівень"
+msgstr "Рівень PDF"
 
 #. xxP
 #: ../src/inkscape-application.cpp:134
@@ -9355,23 +9345,24 @@ msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
 msgstr ""
+"Експортування: експортувати текст окремо до файла LaTeX (PS/EPS/PDF)."
+" Включити такий файл можна командою \\input{file.tex}"
 
 #. xxP
 #: ../src/inkscape-application.cpp:135
-#, fuzzy
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
 "--export-id."
 msgstr ""
-"При експорті використовувати збережену назву файла та розширення (лише з "
-"export-id)"
+"Експортування: при експортуванні вибраного за допомогою --export-id об'єкта"
+" використовувати збережену назву файла та роздільність."
 
 #. Bxx
 #: ../src/inkscape-application.cpp:136
-#, fuzzy
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr ""
-"Колір тла для експорту растрового зображення (будь-яка підтримувана SVG-"
+"Експортування: колір тла для експорту растрового зображення (будь-яка"
+" підтримувана SVG-"
 "кольорова гама)"
 
 #: ../src/inkscape-application.cpp:136
@@ -9380,37 +9371,35 @@ msgstr "КОЛІР"
 
 #. Bxx
 #: ../src/inkscape-application.cpp:137
-#, fuzzy
 msgid ""
 "Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
 "255)."
-msgstr "Прозорість тла для експорту растру (від 0.0 до 1.0, або від 1 до 255)"
+msgstr ""
+"Експортування: прозорість тла для експорту растру (від 0.0 до 1.0, або від 1"
+" до 255)"
 
 #: ../src/inkscape-application.cpp:137
 msgid "VALUE"
 msgstr "ЗНАЧЕННЯ"
 
 #: ../src/inkscape-application.cpp:140
-#, fuzzy
 msgid "Process: xverb command file."
-msgstr "програма xverbs"
+msgstr "Обробка: файл команд xverb."
 
 #: ../src/inkscape-application.cpp:140
-#, fuzzy
 msgid "XVERBS-FILENAME"
 msgstr "НАЗВА_ФАЙЛА_XVERBS"
 
 #: ../src/inkscape-application.cpp:144
-#, fuzzy
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr ""
-"Увійти у цикл очікування повідомлень D-Bus, працюючи у консольному режимі"
+"D-Bus: увійти у цикл очікування повідомлень D-Bus, працюючи у консольному"
+" режимі."
 
 #: ../src/inkscape-application.cpp:145
-#, fuzzy
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr ""
-"Вкажіть назву каналу D-Bus, на якому слід очікувати на повідомлення (типовою "
+"D-Bus: назва каналу D-Bus, на якому слід очікувати на повідомлення (типовою "
 "є org.inkscape)"
 
 #: ../src/inkscape-application.cpp:145
@@ -9465,15 +9454,14 @@ msgstr "Не вдається створити резервну копію та�
 
 #: ../src/inkview-application.cpp:57
 msgid "Inkview - An SVG File Viewer"
-msgstr ""
+msgstr "Inkview — програма для перегляду файлів SVG"
 
 #. After gettext() init.
 #. Will automatically handle character conversions.
 #. Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 #: ../src/inkview-application.cpp:62
-#, fuzzy
 msgid "Print: Inkview version."
-msgstr "Вивести версію Inkscape"
+msgstr "Виведення: версія Inkview."
 
 #: ../src/inkview-application.cpp:63
 msgid "Launch in fullscreen mode"
@@ -9484,23 +9472,20 @@ msgid "Search folders recursively"
 msgstr "Рекурсивний пошук у теках"
 
 #: ../src/inkview-application.cpp:65
-#, fuzzy
 msgid "Change image every NUMBER seconds"
 msgstr "Змінювати зображення кожні ЧИСЛО секунд"
 
 #: ../src/inkview-application.cpp:65 ../src/inkview-application.cpp:66
 msgid "NUMBER"
-msgstr ""
+msgstr "ЧИСЛО"
 
 #: ../src/inkview-application.cpp:66
-#, fuzzy
 msgid "Scale image by factor NUMBER"
 msgstr "Масштабувати зображення із коефіцієнтом ЧИСЛО"
 
 #: ../src/inkview-application.cpp:67
-#, fuzzy
 msgid "Preload files"
-msgstr "З файла"
+msgstr "Попереднє завантаження файлів"
 
 #: ../src/io/resource-manager.cpp:377
 msgid "Fixup broken links"
@@ -10383,7 +10368,6 @@ msgid "Unify dashes"
 msgstr "Уніфікувати риски"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
-#, fuzzy
 msgid "Approximately unify the dashes length using the minimal length segment"
 msgstr ""
 "Приблизно уніфікувати довжину рисок на основі довжини мінімального сегмента"
@@ -10619,9 +10603,8 @@ msgid "Close path"
 msgstr "Замкнути контур"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
-#, fuzzy
 msgid "Autoreverse"
-msgstr "Обернути"
+msgstr "Автообертання"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path:"
@@ -10680,9 +10663,8 @@ msgid "Chamfer steps"
 msgstr "Кроки фаски"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
-#, fuzzy
 msgid "Radius in %"
-msgstr "Радіус: "
+msgstr "Радіус у відсотках"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Flexible radius size (%)"
@@ -10922,9 +10904,8 @@ msgstr "Перевизначає обмеження вістря і примус
 
 #. initialise your parameters here:
 #: ../src/live_effects/lpe-knot.cpp:353
-#, fuzzy
 msgid "_Gap length:"
-msgstr "Довжина стовпчика:"
+msgstr "Довжина _проміжку:"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "Size of hidden region of lower string"
@@ -10939,24 +10920,26 @@ msgid ""
 "Gap width is given in multiples of stroke width. When unchecked, document "
 "units are used."
 msgstr ""
+"Ширина інтервалу визначається у одиницях товщини штриха. Якщо не позначено,"
+" буде використано одиниці документа."
 
 #: ../src/live_effects/lpe-knot.cpp:359
-#, fuzzy
 msgid "_Both gaps"
-msgstr "Закрити проміжки"
+msgstr "_Обидва проміжки"
 
 #: ../src/live_effects/lpe-knot.cpp:359
-#, fuzzy
 msgid "Use gap in both intersection elements"
-msgstr "Прилипання до перетинів контурів"
+msgstr "Використовувати проміжки у обох елементах перетину"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "_Groups: Inverse"
-msgstr ""
+msgstr "_Групи: інвертувати"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "Use other stroke width, useful in groups with different stroke widths"
 msgstr ""
+"Використовувати іншу товщину штриха. Корисно у групах із різними товщинами"
+" штрихів."
 
 #: ../src/live_effects/lpe-knot.cpp:366
 msgid "S_witcher size:"
@@ -10979,6 +10962,9 @@ msgid ""
 "Drag to select a crossing, click to flip it, Shift + click to change all "
 "crossings, Ctrl + click to reset and change all crossings"
 msgstr ""
+"Перетягніть, щоб вибрати перехрестя, клацніть, щоб віддзеркалити його. Shift"
+" + клацання для зміни усіх перехресть, Ctrl + клацання для скидання і зміни"
+" усіх перехресть"
 
 #. / @todo Is this the right verb?
 #: ../src/live_effects/lpe-knot.cpp:709
@@ -11317,7 +11303,6 @@ msgid "Fix overlaps °"
 msgstr "Виправити перекриття °"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:72
-#, fuzzy
 msgid "Min angle where overlaps are fixed, 180° not fixed"
 msgstr ""
 "Мінімальний кут, за якого виправляються перекриття. 180° — не виправляти"
@@ -11367,7 +11352,6 @@ msgid "Blacklist"
 msgstr "Чорний список"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
-#, fuzzy
 msgid ""
 "Optional segment index that exclude measurement, comma limited, you can add "
 "more LPE like this to fill the holes"
@@ -11405,7 +11389,6 @@ msgid "Scale sensitive"
 msgstr "З урахування масштабу"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:86
-#, fuzzy
 msgid "Constrained scale sensitive to transformed containers"
 msgstr "Обмежити масштабування відповідно до перетворюваних контейнерів"
 
@@ -11561,9 +11544,8 @@ msgid "Help"
 msgstr "Довідка"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
-#, fuzzy
 msgid "Measure segments help"
-msgstr "Виміряти сегменти"
+msgstr "Довідка з вимірювання сегментів"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:183
 msgid ""
@@ -11586,6 +11568,24 @@ msgid ""
 "projection \n"
 "<b><i>Set Defaults</i></b> Remember all LPE has it in the bottom"
 msgstr ""
+"<b><big>Загальне</big></b>\n"
+"Показ і розташування вимірів\n"
+"\n"
+"<b><big>Проекція</big></b>\n"
+"Показувати лінію із результатами вимірів відповідно до позначених елементів\n"
+"\n"
+"<b><big>Параметри</big></b>\n"
+"Зміни, яких можна досягти за допомогою параметрів, є незначними\n"
+"\n"
+"<b><big>Підказки</big></b>\n"
+"<b><i>Вікно стилів</i></b> зміна стилів за допомогою редактора XML, можна"
+" знайти відповідні класи або ідентифікатори\n"
+"<b><i>Чорні списки</i></b> надають змогу приховати певні сегменти або кроки"
+" проектування для вимірювання\n"
+"<b><i>Декілька вимірів</i></b> для одного об'єкта, у поєднанні із чорними"
+" списками, надають змогу вимірювати у різних орієнтаціях або із додатковим"
+" проектуванням\n"
+"<b><i>Зробити типовими</i></b> — запам'ятати усі геометричні параметри"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:276
 #: ../src/ui/dialog/find.cpp:80
@@ -13386,14 +13386,12 @@ msgid "Conditional Group"
 msgstr "Умовна група"
 
 #: ../src/object/sp-text.cpp:323
-#, fuzzy
 msgid "Auto-wrapped text"
-msgstr "Додати текст"
+msgstr "Автоверстання тексту"
 
 #: ../src/object/sp-text.cpp:325
-#, fuzzy
 msgid "Text in-a-shape"
-msgstr "Верстання тексту у фігуру"
+msgstr "Верстання тексту у формі"
 
 #: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:346
 #: ../share/extensions/lorem_ipsum.inx.h:8
@@ -14899,9 +14897,8 @@ msgid "Inkscape website"
 msgstr "Сайт Inkscape"
 
 #: ../src/ui/dialog/aboutbox.cpp:90
-#, fuzzy
 msgid "© 2019 Inkscape Developers"
-msgstr "© Розробники Inkscape, 2017"
+msgstr "© Розробники Inkscape, 2019"
 
 #: ../src/ui/dialog/aboutbox.cpp:91
 msgid ""
@@ -15209,17 +15206,14 @@ msgid "Max value"
 msgstr "Макс. значення"
 
 #: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
-#, fuzzy
 msgid "Add a new attribute"
-msgstr "Змінити атрибут"
+msgstr "Додати новий атрибут"
 
 #: ../src/ui/dialog/attrdialog.cpp:94
-#, fuzzy
 msgid "Attribute Name"
-msgstr "Назва атрибута"
+msgstr "Назва атрибуту"
 
 #: ../src/ui/dialog/attrdialog.cpp:116
-#, fuzzy
 msgid "Attribute Value"
 msgstr "Значення атрибута"
 
@@ -15246,14 +15240,12 @@ msgid "Delete attribute"
 msgstr "Вилучити атрибут"
 
 #: ../src/ui/dialog/attrdialog.cpp:322
-#, fuzzy
 msgid "Rename attribute"
-msgstr "Вилучати атрибути"
+msgstr "Перейменувати атрибут"
 
 #: ../src/ui/dialog/attrdialog.cpp:348
-#, fuzzy
 msgid "Change attribute value"
-msgstr "Змінити атрибут"
+msgstr "Змінити значення атрибута"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:31
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:118
@@ -16044,17 +16036,16 @@ msgid "Set fill color from swatch"
 msgstr "Встановити колір заливки зі зразків"
 
 #: ../src/ui/dialog/cssdialog.cpp:151
-#, fuzzy
 msgid "<b>Click</b> CSS property to edit."
-msgstr "<b>Клацніть мишею</b> на атрибуті для редагування."
+msgstr "<b>Клацніть мишею</b> на властивості CSS для редагування."
 
 #: ../src/ui/dialog/cssdialog.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
-"позначено атрибут <b>%s</b>. Натисніть <b>Ctrl+Enter</b>, коли закінчите "
+"Позначено властивість <b>%s</b>. Натисніть <b>Ctrl+Enter</b>, коли закінчите "
 "редагування."
 
 #: ../src/ui/dialog/debug.cpp:66
@@ -16801,9 +16792,8 @@ msgid "Parameters"
 msgstr "Параметри"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:460
-#, fuzzy
 msgid "Too large for preview"
-msgstr "завелике для перегляду"
+msgstr "Завелике для перегляду"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:543
 msgid "Enable preview"
@@ -16812,6 +16802,7 @@ msgstr "Дозволити перегляд"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:548
 msgid "Export as SVG 1.1 per settings in Preference Dialog."
 msgstr ""
+"Експортувати відповідно до SVG 1.1 на основі параметрів з вікна налаштувань."
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:671
 msgid "_Open"
@@ -19394,14 +19385,15 @@ msgstr ""
 "не буде виявлено потрібних шрифтів."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:511
-#, fuzzy
 msgid "Use SVG2 auto-flowed text"
-msgstr "Створити контурний текст"
+msgstr "Текст SVG2 із автоматичними контурами"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:512
 msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
 msgstr ""
+"Використовувати текст SVG2 із автоматичними контурами замість тексту SVG1.2"
+" із автоматичними контурами (рекомендовано)."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:515
 msgid "Pixel"
@@ -20052,64 +20044,63 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:828
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
 msgstr ""
+"Початок координат у верхньому лівому куті, вісь y спрямовано донизу (потребує"
+" перезапуску)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:830
 msgid "When off, origin is at lower left corner and y-axis points up"
 msgstr ""
+"Якщо вимкнено, початок координат розташовуватиметься у нижньому лівому куті,"
+" а вісь y буде спрямовано вгору"
 
 #. Theme
 #: ../src/ui/dialog/inkscape-preferences.cpp:834
-#, fuzzy
 msgid "Theme changes"
-msgstr "Відно_сна зміна"
+msgstr "Зміни теми"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:886
-#, fuzzy
 msgid "Change Gtk theme:"
-msgstr "Змінити товщину"
+msgstr "Змінити тему Gtk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:889
 #: ../src/ui/dialog/inkscape-preferences.cpp:890
 msgid "Use dark theme"
-msgstr ""
+msgstr "Використовувати темну тему"
 
 #. Icons
 #: ../src/ui/dialog/inkscape-preferences.cpp:893
 msgid "Display icons, press reload icons or restart to apply"
 msgstr ""
+"Показувати піктограми. Щоб було застосовано, натисніть кнопку"
+" перезавантаження піктограм або перезапустіть програму"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:916
-#, fuzzy
 msgid "Use system icons"
-msgstr "Використовувати сегменти"
+msgstr "Загальносистемні піктограми"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:919
-#, fuzzy
 msgid "Change icon theme:"
-msgstr "Тема піктограм: "
+msgstr "Змінити тему піктограм:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:922
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "Символічні піктограми"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:925
-#, fuzzy
 msgid "Color for symbolic icons:"
-msgstr "Вмикати/Вимикати символи підбирання розмірів у просторі піктограм."
+msgstr "Колір символічних піктограм:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:926
-#, fuzzy
 msgid "Apply color"
-msgstr "Копіювати колір"
+msgstr "Застосувати кольори"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:927
 msgid "Apply color to symbolic icons)"
-msgstr ""
+msgstr "Застосовувати кольори до символічних піктограм"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:929
-#, fuzzy
 msgid "Color for symbolic icons"
-msgstr "Вмикати/Вимикати символи підбирання розмірів у просторі піктограм."
+msgstr "Колір символічних піктограм"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:931
 msgctxt "Icon size"
@@ -20159,21 +20150,19 @@ msgstr "Вказати розмір вторинної панелі інстру
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:949
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:949
-#, fuzzy
 msgid "No"
-msgstr "Н'Ко"
+msgstr "Ні"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:949
-#, fuzzy
 msgid "Theme decides"
-msgstr "За трьома сторонами"
+msgstr "Визначається темою"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:952
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "Показувати піктограми у меню:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:953
 msgid ""
@@ -20181,18 +20170,21 @@ msgid ""
 "determines which icons to display by using the 'show-icons' attribute in its "
 "'menus.xml' file."
 msgstr ""
+"Ви можете увімкнути або вимкнути усі піктограми у меню. Типово, тема"
+" піктограм, яка використовується для показу, визначається за допомогою"
+" атрибута show-icons у відповідному файлі menus.xml."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:955
 msgid "Reload icons"
-msgstr ""
+msgstr "Перезавантажити піктограми"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:956
 msgid "Apply icon changes (may take a few seconds)"
-msgstr ""
+msgstr "Застосувати зміни у піктограмах (дія може тривати декілька секунд)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:959
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #. Windows
 #: ../src/ui/dialog/inkscape-preferences.cpp:962
@@ -20818,49 +20810,49 @@ msgstr "Експорт до SVG"
 #. SVG 2 Fallbacks
 #: ../src/ui/dialog/inkscape-preferences.cpp:1275
 msgid "SVG 2"
-msgstr ""
+msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1276
 msgid "Insert SVG 1.1 fallback in text."
-msgstr ""
+msgstr "Вставити резервний код SVG 1.1 у текст."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1277
 msgid "Insert Mesh Gradient JavaScript polyfill."
-msgstr ""
+msgstr "Вставити полізаповнення градієнтної сітки за допомогою JavaScript."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1279
 msgid "Adds fallback options for non-SVG 2 renderers."
-msgstr ""
+msgstr "Додає резервні варіанти для засобів показу без підтримки SVG 2."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1280
 msgid "Adds JavaScript polyfill to render meshes (only fill."
-msgstr ""
+msgstr "Додає полізаповнення JavaScript для показу сіток (лише заповнення)."
 
 #. SVG Export Options (SVG 2 -> SVG 1)
 #: ../src/ui/dialog/inkscape-preferences.cpp:1283
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 у SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1285
 msgid "Replace markers with 'auto_start_reverse'."
-msgstr ""
+msgstr "Замінити позначки на «auto_start_reverse»."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1286
 msgid "Replace markers using 'context_paint' or 'context_fill'."
-msgstr ""
+msgstr "Замірити позначки за допомогою «context_paint» або «context_fill»."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1288
 msgid "SVG 2 allows markers to automatically be reversed at start of path."
-msgstr ""
+msgstr "У SVG 2 позначки може бути автоматично розвернуто на початку контуру."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1289
 msgid "SVG 2 allows markers to automatically match stroke color."
 msgstr ""
+"У SVG 2 позначки може бути автоматично вирівняно за кольором зі штрихом."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1291
-#, fuzzy
 msgid "SVG export"
-msgstr "Ре_дактор SVG:"
+msgstr "Експортування до SVG"
 
 #. TRANSLATORS: see http://www.newsandtech.com/issues/2004/03-04/pt/03-04_rendering.htm
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
@@ -21272,18 +21264,16 @@ msgid "Transforms"
 msgstr "Трансформації"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1543
-#, fuzzy
 msgid "Scale dashes with stroke"
-msgstr "Форма кінця штриха"
+msgstr "Масштабувати риски за штрихом"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1544
 msgid "When changing stroke width, scale dash array"
-msgstr ""
+msgstr "При зміни товщини штриха змінювати масив рисок"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1546
-#, fuzzy
 msgid "Dashes"
-msgstr "Пунктир:"
+msgstr "Пунктир"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1550
 msgid "Mouse _wheel scrolls by:"
@@ -21380,20 +21370,20 @@ msgstr "Гортання"
 
 #. Snapping options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1575
-#, fuzzy
 msgid "Snap defaults"
-msgstr "Зробити _типовим"
+msgstr "Типові параметри прилипання"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1577
-#, fuzzy
 msgid "Enabled in new document"
-msgstr "Без назви"
+msgstr "Увімкнено у новому документі"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1579
 msgid ""
 "When creating a new document, or opening a non-inkscape svg, what should "
 "global snapping be set to."
 msgstr ""
+"Визначає, якими будуть загальні параметри прилипання при відкритті SVG, який"
+" не було створено за допомогою inkscape."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1581
 msgid "Snap indicator"
@@ -21496,9 +21486,8 @@ msgstr ""
 
 #. defaultscale is limited to 1000 in select-context.cpp: use the same limit here
 #: ../src/ui/dialog/inkscape-preferences.cpp:1622
-#, fuzzy
 msgid "&gt; and &lt; _scale by:"
-msgstr "Кр_ок зміни масштабу при > та <:"
+msgstr "Кр_ок зміни масштабу при &gt; та &lt;:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1623
 msgid "Pressing > or < scales selection up or down by this increment"
@@ -21828,15 +21817,20 @@ msgid ""
 "zooming and panning in relevant areas faster on low-end hardware in drawings "
 "with few or no filters."
 msgstr ""
+"На сучасному обладнанні збільшення цього значення (типовим є значення 16)"
+" може допомогти із пришвидшенням обробки, якщо на рисунку є великі області із"
+" фільтрованими об'єктами (це стосується режимів розмивання та злиття)."
+" Зменшіть значення, щоб зробити масштабування та панорамування у відповідних"
+" областях швидшим на повільних комп'ютерах та на рисунках, де мало або немає"
+" фільтрування."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1756
-#, fuzzy
 msgid "Rendering XRay radius:"
-msgstr "Розмір _кешу обробки:"
+msgstr "Обробка радіуса XRay:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1757
 msgid "XRay mode radius preview"
-msgstr ""
+msgstr "Перегляд режиму радіуса XRay"
 
 #. blur quality
 #. filter quality
@@ -21915,7 +21909,6 @@ msgid "Edit"
 msgstr "Змінити"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1814
-#, fuzzy
 msgid "Automatically reload images"
 msgstr "Автоматично перезавантажувати зображення"
 
@@ -21944,7 +21937,6 @@ msgid "Default export _resolution:"
 msgstr "Типова роз_дільна здатність для експорту:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1825
-#, fuzzy
 msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr "Типова роздільна здатність (у точках на дюйм) у вікні експортування"
 
@@ -21963,9 +21955,10 @@ msgstr ""
 "Роздільна здатність, яку буде використано у команді створення растрової копії"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1832
-#, fuzzy
 msgid "Ask about linking and scaling when importing bitmap images"
-msgstr "Запитувати щодо пов’язування і масштабування під час імпортування"
+msgstr ""
+"Запитувати щодо пов’язування і масштабування під час імпортування растрових"
+" зображень"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1834
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
@@ -21974,16 +21967,16 @@ msgstr ""
 "растрових зображень."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1835
-#, fuzzy
 msgid "Ask about linking and scaling when importing SVG images"
-msgstr "Запитувати щодо пов’язування і масштабування під час імпортування"
+msgstr ""
+"Запитувати щодо пов’язування і масштабування під час імпортування зображень"
+" SVG"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1837
-#, fuzzy
 msgid "Pop-up linking and scaling dialog when importing SVG image."
 msgstr ""
-"Показувати діалогове вікно пов’язування і масштабування під час імпортування "
-"растрових зображень."
+"Показувати діалогове вікно пов’язування і масштабування під час імпортування"
+" зображень SVG."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1843
 msgid "Bitmap import/open mode:"
@@ -21998,7 +21991,6 @@ msgid "SVG import mode:"
 msgstr "Режим імпортування SVG:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1857
-#, fuzzy
 msgid "Image scale (image-rendering):"
 msgstr "Масштаб зображення (обробка зображення):"
 
@@ -22007,7 +21999,6 @@ msgid "Default _import resolution:"
 msgstr "Типова роздільна здатність для _імпортування:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1863
-#, fuzzy
 msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
 msgstr ""
 "Типова роздільна здатність (у точках на дюйм) для імпортованих растрових "
@@ -22188,14 +22179,12 @@ msgid "User preferences: "
 msgstr "Параметри користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2304
-#, fuzzy
 msgid "Location of the user’s preferences file"
-msgstr "Розташування файлів з параметрами користувачів"
+msgstr "Розташування файла налаштувань користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2306
-#, fuzzy
 msgid "Open preferences folder"
-msgstr "Відкрити вікно параметрів Inkscape для інструмента «Редактор вузлів»"
+msgstr "Відкрити теку налаштувань"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2307
 msgid "User config: "
@@ -22206,127 +22195,106 @@ msgid "Location of users configuration"
 msgstr "Розташування налаштувань користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2310
-#, fuzzy
 msgid "Open extensions folder"
-msgstr "Додатки користувача: "
+msgstr "Відкрити теку розширень"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2311
 msgid "User extensions: "
 msgstr "Додатки користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2312
-#, fuzzy
 msgid "Location of the user’s extensions"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування розширень користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2314
 msgid "Open themes folder"
-msgstr ""
+msgstr "Відкрити теку тем"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2315
-#, fuzzy
 msgid "User themes: "
-msgstr "Кеш користувача: "
+msgstr "Теми користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2315
-#, fuzzy
 msgid "Location of the user’s themes"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування тем користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2318
 msgid "Open icons folder"
-msgstr ""
+msgstr "Відкрити теку піктограм"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2319
-#, fuzzy
 msgid "User icons: "
-msgstr "Налаштування користувача: "
+msgstr "Піктограми користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2319
-#, fuzzy
 msgid "Location of the user’s icons"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування піктограм користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2322
-#, fuzzy
 msgid "Open templates folder"
-msgstr "не вибрано шаблону"
+msgstr "Відкрити теку шаблонів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2323
-#, fuzzy
 msgid "User templates: "
-msgstr "Зберегти шаблон…"
+msgstr "Шаблони користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2324
-#, fuzzy
 msgid "Location of the user’s templates"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування шаблонів користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2327
-#, fuzzy
 msgid "Open symbols folder"
-msgstr "Символів не знайдено"
+msgstr "Відкрити теку символів"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2328
-#, fuzzy
 msgid "User symbols: "
-msgstr "кхмерські символи"
+msgstr "Символи користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2328
-#, fuzzy
 msgid "Location of the user’s symbols"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування символів користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2332
-#, fuzzy
 msgid "Open palettes folder"
-msgstr "Відкрити файли плотера HPGL"
+msgstr "Відкрити теку палітр"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2333
-#, fuzzy
 msgid "User palettes: "
-msgstr "Додатки користувача: "
+msgstr "Палітри користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2333
-#, fuzzy
 msgid "Location of the user’s palettes"
-msgstr "Розташування додатків користувача"
+msgstr "Розташування палітр користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2337
-#, fuzzy
 msgid "Open keyboard shortcuts folder"
-msgstr "Імпортувати нетипові клавіатурні скорочення з файла"
+msgstr "Відкрити теку даних клавіатурних скорочень"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2338
-#, fuzzy
 msgid "User keys: "
-msgstr "Кеш користувача: "
+msgstr "Прив'язки клавіш користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2339
-#, fuzzy
 msgid "Location of the user’s keyboard mapping files"
-msgstr "Розташування файлів з параметрами користувачів"
+msgstr "Розташування файлів із параметрами прив'язки клавіш користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2342
 msgid "Open user interface folder"
-msgstr ""
+msgstr "Відкрити теку інтерфейсу користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2343
-#, fuzzy
 msgid "User UI: "
-msgstr "Кеш користувача: "
+msgstr "Інтерфейс користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2344
-#, fuzzy
 msgid "Location of the user’s user interface description files"
-msgstr "Розташування файлів з параметрами користувачів"
+msgstr "Розташування файлів із описом інтерфейсу користувача"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2348
 msgid "User cache: "
 msgstr "Кеш користувача: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2348
-#, fuzzy
 msgid "Location of user’s cache"
 msgstr "Розташування кешу даних користувача"
 
@@ -22841,7 +22809,7 @@ msgstr "_Заголовок:"
 
 #: ../src/ui/dialog/object-properties.cpp:59
 msgid "_DPI SVG:"
-msgstr ""
+msgstr "_Роздільність SVG:"
 
 #: ../src/ui/dialog/object-properties.cpp:60
 msgid "_Image Rendering:"
@@ -22856,9 +22824,8 @@ msgid "L_ock"
 msgstr "За_мкнути"
 
 #: ../src/ui/dialog/object-properties.cpp:63
-#, fuzzy
 msgid "Pereserve Ratio"
-msgstr "Зберегти розташування"
+msgstr "Зберігати співвідношення"
 
 #. Create the entry box for the object id
 #: ../src/ui/dialog/object-properties.cpp:124
@@ -22908,7 +22875,7 @@ msgstr "Зробити цей об'єкт нечутливим до познач
 #. Preserve aspect ratio
 #: ../src/ui/dialog/object-properties.cpp:262
 msgid "Check to preserve aspect ratio on images"
-msgstr ""
+msgstr "Позначте, якщо співвідношення розмірів зображення слід зберегти"
 
 #. Button for setting the object's id, label, title and description.
 #: ../src/ui/dialog/object-properties.cpp:271 ../src/verbs.cpp:2918
@@ -22947,9 +22914,8 @@ msgid "Set object title"
 msgstr "Встановити назву об'єкта"
 
 #: ../src/ui/dialog/object-properties.cpp:440
-#, fuzzy
 msgid "Set image DPI"
-msgstr "Роздільність зображення:"
+msgstr "Встановити роздільність зображення"
 
 #: ../src/ui/dialog/object-properties.cpp:449
 msgid "Set object description"
@@ -22968,9 +22934,8 @@ msgid "Unlock object"
 msgstr "Відімкнути об'єкт"
 
 #: ../src/ui/dialog/object-properties.cpp:521
-#, fuzzy
 msgid "Set preserve ratio"
-msgstr "Зберегти розташування"
+msgstr "Встановити збереження співвідношення розмірів"
 
 #: ../src/ui/dialog/object-properties.cpp:538
 msgid "Hide object"
@@ -23574,27 +23539,23 @@ msgstr "X гор. відступу"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid "Average amount of horizontal space each letter takes up."
-msgstr ""
+msgstr "Середній горизонтальний розмір літери."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
-#, fuzzy
 msgid "Horiz. Origin X"
-msgstr "X гор. точки відліку "
+msgstr "X гор. точки відліку"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
-#, fuzzy
 msgid "Average horizontal origin location for each letter."
-msgstr "Чергувати напрямок обертання на кожен рядок"
+msgstr "Середня горизонтальна координата точки відліку для кожної з літер."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:468
-#, fuzzy
 msgid "Horiz. Origin Y"
-msgstr "Y гор. точки відліку "
+msgstr "Y гор. точки відліку"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:468
-#, fuzzy
 msgid "Average vertical origin location for each letter."
-msgstr "Чергувати напрямок обертання на кожен рядок"
+msgstr "Середня вертикальна координата точки відліку для кожної з літер."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:469
 msgid "Font Face Attributes"
@@ -23609,6 +23570,8 @@ msgid ""
 "Name of the font as it appears in font selectors and css font-family "
 "properties."
 msgstr ""
+"Назва шрифту, як її показано у списку вибору шрифтів та у властивостях"
+" гарнітури шрифтів css."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:471
 msgid "Units per em"
@@ -23616,7 +23579,7 @@ msgstr "Одиниць на em"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:471
 msgid "Number of display units each letter takes up."
-msgstr ""
+msgstr "Кількість одиниць показу, яку призначено для показу кожної літери."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:472
 msgid "Ascent:"
@@ -23625,7 +23588,7 @@ msgstr "Підйом:"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:472
 msgid ""
 "Amount of space taken up by accenders like the tall line on the letter 'h'."
-msgstr ""
+msgstr "Розмір верхніх частин літер, наприклад верхньої частини літери «h»."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:473
 msgid "Descent:"
@@ -23633,7 +23596,7 @@ msgstr "Спуск:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:473
 msgid "Amount of space taken up by decenders like the tail on the letter 'g'."
-msgstr ""
+msgstr "Розмір нижніх частин літер, наприклад хвостика літери «g»."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:474
 msgid "Cap Height:"
@@ -23641,7 +23604,7 @@ msgstr "Висота великих літер:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:474
 msgid "I don't know what this does."
-msgstr ""
+msgstr "Не знаю, для чого це."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
 msgid "x Height:"
@@ -23649,7 +23612,7 @@ msgstr "Висота за X:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
 msgid "Not sure about this one either."
-msgstr ""
+msgstr "Щодо цього теж немає певності."
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:548
 msgid "glyph"
@@ -24551,9 +24514,8 @@ msgstr "Дублювати вузол"
 
 #. tree view
 #: ../src/ui/dialog/xml-tree.cpp:102
-#, fuzzy
 msgid "_Nodes"
-msgstr "Вузли"
+msgstr "_Вузли"
 
 #: ../src/ui/dialog/xml-tree.cpp:104
 msgid "Drag to reorder nodes"
@@ -24580,14 +24542,12 @@ msgid "Lower node"
 msgstr "Опустити вузол"
 
 #: ../src/ui/dialog/xml-tree.cpp:186
-#, fuzzy
 msgid "_Attributes"
-msgstr "_Атрибут:"
+msgstr "_Атрибути"
 
 #: ../src/ui/dialog/xml-tree.cpp:207
-#, fuzzy
 msgid "_Styles"
-msgstr "С_тиль"
+msgstr "С_тилі"
 
 #: ../src/ui/dialog/xml-tree.cpp:250
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
@@ -24827,13 +24787,12 @@ msgid "Adjust the <b>offset distance</b>"
 msgstr "Міняти <b>відстань втягування</b>"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1831
-#, fuzzy
 msgid "Adjust the <b>rectangular</b> region of the text."
-msgstr "Скоригувати «лівий» кінець дотичної"
+msgstr "Скоригувати <b>прямокутну</b> область тексту."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1841
 msgid "Adjust the <b>inline size</b> (line length) of the text."
-msgstr ""
+msgstr "Скоригувати <b>рядковий розмір</b> (довжину рядка) тексту."
 
 #: ../src/ui/shape-editor-knotholders.cpp:1880
 msgid "Drag to resize the <b>flowed text frame</b>"
@@ -25348,7 +25307,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:140
 msgid "Ellipse: Change radius"
-msgstr ""
+msgstr "Еліпс: змінити радіус"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:206
 msgid "Arc: Change start/end"
@@ -26217,7 +26176,6 @@ msgstr "Відкриті обидва кінці"
 #. Name
 #. Label
 #: ../src/ui/toolbar/lpe-toolbar.cpp:371
-#, fuzzy
 msgid "Choose a line segment type"
 msgstr "Вибрати тип сегмента лінії"
 
@@ -28835,9 +28793,8 @@ msgid "Not selected"
 msgstr "Не позначено"
 
 #: ../src/ui/tools/measure-tool.cpp:1211
-#, fuzzy
 msgid "Press 'CTRL' to measure into group"
-msgstr "Shift для вимірювання у групі"
+msgstr "Ctrl для вимірювання у групі"
 
 #: ../src/ui/tools/measure-tool.cpp:1401 ../src/ui/tools/measure-tool.cpp:1403
 #, c-format
@@ -29787,31 +29744,26 @@ msgid "Style"
 msgstr "Стиль"
 
 #: ../src/ui/widget/font-variants.cpp:115
-#, fuzzy
 msgctxt "Font feature"
 msgid "Ligatures"
 msgstr "Лігатури"
 
 #: ../src/ui/widget/font-variants.cpp:116
-#, fuzzy
 msgctxt "Font feature"
 msgid "Common"
 msgstr "Загальні"
 
 #: ../src/ui/widget/font-variants.cpp:117
-#, fuzzy
 msgctxt "Font feature"
 msgid "Discretionary"
 msgstr "Дискреційні"
 
 #: ../src/ui/widget/font-variants.cpp:118
-#, fuzzy
 msgctxt "Font feature"
 msgid "Historical"
 msgstr "Історичні"
 
 #: ../src/ui/widget/font-variants.cpp:119
-#, fuzzy
 msgctxt "Font feature"
 msgid "Contextual"
 msgstr "Контекстуальні"
@@ -29828,19 +29780,16 @@ msgid "Normal"
 msgstr "Звичайне"
 
 #: ../src/ui/widget/font-variants.cpp:123
-#, fuzzy
 msgctxt "Font feature"
 msgid "Subscript"
 msgstr "Нижній індекс"
 
 #: ../src/ui/widget/font-variants.cpp:124
-#, fuzzy
 msgctxt "Font feature"
 msgid "Superscript"
 msgstr "Верхній індекс"
 
 #: ../src/ui/widget/font-variants.cpp:126
-#, fuzzy
 msgctxt "Font feature"
 msgid "Capitals"
 msgstr "Прописні"
@@ -29851,172 +29800,148 @@ msgid "Small"
 msgstr "Малі"
 
 #: ../src/ui/widget/font-variants.cpp:129
-#, fuzzy
 msgctxt "Font feature"
 msgid "All small"
 msgstr "Усі малі"
 
 #: ../src/ui/widget/font-variants.cpp:130
-#, fuzzy
 msgctxt "Font feature"
 msgid "Petite"
 msgstr "Капітель"
 
 #: ../src/ui/widget/font-variants.cpp:131
-#, fuzzy
 msgctxt "Font feature"
 msgid "All petite"
 msgstr "Усі капітель"
 
 #: ../src/ui/widget/font-variants.cpp:132
-#, fuzzy
 msgctxt "Font feature"
 msgid "Unicase"
 msgstr "Єдиний регістр"
 
 #: ../src/ui/widget/font-variants.cpp:133
-#, fuzzy
 msgctxt "Font feature"
 msgid "Titling"
 msgstr "Форми заголовків"
 
 #: ../src/ui/widget/font-variants.cpp:135
-#, fuzzy
 msgctxt "Font feature"
 msgid "Numeric"
 msgstr "Числа"
 
 #: ../src/ui/widget/font-variants.cpp:136
-#, fuzzy
 msgctxt "Font feature"
 msgid "Lining"
 msgstr "Вирівняні"
 
 #: ../src/ui/widget/font-variants.cpp:137
-#, fuzzy
 msgctxt "Font feature"
 msgid "Old Style"
 msgstr "Старий стиль"
 
 #: ../src/ui/widget/font-variants.cpp:138
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default Style"
 msgstr "Типовий стиль"
 
 #: ../src/ui/widget/font-variants.cpp:139
 #: ../src/ui/widget/font-variants.cpp:158
-#, fuzzy
 msgctxt "Font feature"
 msgid "Proportional"
-msgstr "Пропорційно"
+msgstr "Пропорційні"
 
 #: ../src/ui/widget/font-variants.cpp:140
-#, fuzzy
 msgctxt "Font feature"
 msgid "Tabular"
-msgstr "Таблиця"
+msgstr "Табличні"
 
 #: ../src/ui/widget/font-variants.cpp:141
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default Width"
 msgstr "Типова ширина"
 
 #: ../src/ui/widget/font-variants.cpp:142
-#, fuzzy
 msgctxt "Font feature"
 msgid "Diagonal"
 msgstr "Діагональні"
 
 #: ../src/ui/widget/font-variants.cpp:143
-#, fuzzy
 msgctxt "Font feature"
 msgid "Stacked"
 msgstr "Двоповерхові"
 
 #: ../src/ui/widget/font-variants.cpp:144
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default Fractions"
 msgstr "Типові дроби"
 
 #: ../src/ui/widget/font-variants.cpp:145
-#, fuzzy
 msgctxt "Font feature"
 msgid "Ordinal"
 msgstr "Порядкові"
 
 #: ../src/ui/widget/font-variants.cpp:146
-#, fuzzy
 msgctxt "Font feature"
 msgid "Slashed Zero"
 msgstr "Перекреслений нуль"
 
 #: ../src/ui/widget/font-variants.cpp:148
-#, fuzzy
 msgctxt "Font feature"
 msgid "East Asian"
-msgstr "Гауса"
+msgstr "Східноазійські"
 
 #: ../src/ui/widget/font-variants.cpp:149
 #: ../src/ui/widget/font-variants.cpp:156
-#, fuzzy
 msgctxt "Font feature"
 msgid "Default"
-msgstr "Типовий"
+msgstr "Типові"
 
 #: ../src/ui/widget/font-variants.cpp:150
 msgctxt "Font feature"
 msgid "JIS78"
-msgstr ""
+msgstr "JIS78"
 
 #: ../src/ui/widget/font-variants.cpp:151
 msgctxt "Font feature"
 msgid "JIS83"
-msgstr ""
+msgstr "JIS83"
 
 #: ../src/ui/widget/font-variants.cpp:152
 msgctxt "Font feature"
 msgid "JIS90"
-msgstr ""
+msgstr "JIS90"
 
 #: ../src/ui/widget/font-variants.cpp:153
 msgctxt "Font feature"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: ../src/ui/widget/font-variants.cpp:154
-#, fuzzy
 msgctxt "Font feature"
 msgid "Simplified"
-msgstr "Спростити"
+msgstr "Спрощені"
 
 #: ../src/ui/widget/font-variants.cpp:155
-#, fuzzy
 msgctxt "Font feature"
 msgid "Traditional"
-msgstr "Переходи"
+msgstr "Традиційні"
 
 #: ../src/ui/widget/font-variants.cpp:157
-#, fuzzy
 msgctxt "Font feature"
 msgid "Full Width"
-msgstr "Типова ширина"
+msgstr "Повна ширина"
 
 #: ../src/ui/widget/font-variants.cpp:159
 msgctxt "Font feature"
 msgid "Ruby"
-msgstr ""
+msgstr "Рубінові"
 
 #: ../src/ui/widget/font-variants.cpp:161
-#, fuzzy
 msgctxt "Font feature"
 msgid "Feature Settings"
 msgstr "Параметри модифікацій"
 
 #: ../src/ui/widget/font-variants.cpp:162
-#, fuzzy
 msgctxt "Font feature"
 msgid "Selection has different Feature Settings!"
 msgstr "Позначений фрагмент має інші параметри модифікацій!"
@@ -30145,67 +30070,54 @@ msgstr "Перекреслені нулі. Таблиця OpenType: «zero»"
 #. East Asian
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:368
-#, fuzzy
 msgid "Default variant."
-msgstr "Типовий заголовок"
+msgstr "Типовий варіант."
 
 #: ../src/ui/widget/font-variants.cpp:369
-#, fuzzy
 msgid "JIS78 forms. OpenType table: 'jp78'."
-msgstr "Верхній індекс. Таблиця OpenType: «sups»"
+msgstr "Форми JIS78. Таблиця OpenType: «jp78»."
 
 #: ../src/ui/widget/font-variants.cpp:370
-#, fuzzy
 msgid "JIS83 forms. OpenType table: 'jp83'."
-msgstr "Верхній індекс. Таблиця OpenType: «sups»"
+msgstr "Форми JIS83. Таблиця OpenType: «jp83»."
 
 #: ../src/ui/widget/font-variants.cpp:371
-#, fuzzy
 msgid "JIS90 forms. OpenType table: 'jp90'."
-msgstr "Верхній індекс. Таблиця OpenType: «sups»"
+msgstr "Форми JIS90. Таблиця OpenType: «jp90»."
 
 #: ../src/ui/widget/font-variants.cpp:372
-#, fuzzy
 msgid "JIS2004 forms. OpenType table: 'jp04'."
-msgstr "Верхній індекс. Таблиця OpenType: «sups»"
+msgstr "Форми JIS2004. Таблиця OpenType: «jp04»."
 
 #: ../src/ui/widget/font-variants.cpp:373
-#, fuzzy
 msgid "Simplified forms. OpenType table: 'smpl'."
-msgstr "Верхній індекс. Таблиця OpenType: «sups»"
+msgstr "Спрощені форми. Таблиця OpenType: «smpl»."
 
 #: ../src/ui/widget/font-variants.cpp:374
-#, fuzzy
 msgid "Traditional forms. OpenType table: 'trad'."
-msgstr "Діагональні дроби. Таблиця OpenType: «frac»"
+msgstr "Традиційні форми. Таблиця OpenType: «trad»."
 
 #: ../src/ui/widget/font-variants.cpp:375
-#, fuzzy
 msgid "Default width."
-msgstr "Типова ширина"
+msgstr "Типова ширина."
 
 #: ../src/ui/widget/font-variants.cpp:376
-#, fuzzy
 msgid "Full width variants. OpenType table: 'fwid'."
-msgstr "Числа однакової ширини. Таблиця OpenType: «tnum»"
+msgstr "Варіанти повної ширини. Таблиця OpenType: «fwid»."
 
 #: ../src/ui/widget/font-variants.cpp:377
-#, fuzzy
 msgid "Proportional width variants. OpenType table: 'pwid'."
-msgstr "Числа пропорційної ширини. Таблиця OpenType: «pnum»"
+msgstr "Варіанти пропорційної ширини. Таблиця OpenType: «pwid»."
 
 #: ../src/ui/widget/font-variants.cpp:378
-#, fuzzy
 msgid "Ruby variants. OpenType table: 'ruby'."
-msgstr "Нижній індекс. Таблиця OpenType: «subs»"
+msgstr "Рубінові варіанти. Таблиця OpenType: «ruby»."
 
 #. Feature settings ---------------------
 #. Add tooltips
 #: ../src/ui/widget/font-variants.cpp:425
-#, fuzzy
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
-msgstr ""
-"Параметри модифікацій у формі CSS. Перевірки щодо коректності не виконується."
+msgstr "Параметри можливостей у формі CSS (наприклад \"wxyz\" або \"wxyz\" 3)."
 
 #: ../src/ui/widget/layer-selector.cpp:115
 msgid "Toggle current layer visibility"
@@ -30320,9 +30232,8 @@ msgstr ""
 "неоднорідне масштабування, вкажіть «viewBox» безпосередньо."
 
 #: ../src/ui/widget/page-sizer.cpp:115
-#, fuzzy
 msgid "Failed to create the page file."
-msgstr "На вдалося створити файл налаштувань %s."
+msgstr "Не вдалося створити файл сторінки."
 
 #: ../src/ui/widget/page-sizer.cpp:152
 msgid "Orientation:"
@@ -30465,12 +30376,12 @@ msgstr "<i>Немає</i>"
 #: ../src/ui/widget/selected-style.cpp:194
 msgctxt "Fill and stroke"
 msgid "No fill, middle-click for black fill"
-msgstr ""
+msgstr "Без заповнення, клацніть середньою кнопкою для заповнення чорним"
 
 #: ../src/ui/widget/selected-style.cpp:194
 msgctxt "Fill and stroke"
 msgid "No stroke, middle-click for black stroke"
-msgstr ""
+msgstr "Без штрихів, клацніть середньою кнопкою для чорних штрихів"
 
 #: ../src/ui/widget/selected-style.cpp:196
 #: ../src/ui/widget/style-swatch.cpp:300 ../src/widgets/paint-selector.cpp:222
@@ -30695,7 +30606,7 @@ msgstr "Змінити товщину штриха"
 
 #: ../src/ui/widget/selected-style.cpp:1023
 msgid ", drag to adjust, middle-click to remove"
-msgstr ""
+msgstr ", перетягніть, щоб змінити, клацніть середньою кнопкою, щоб вилучити"
 
 #: ../src/ui/widget/selected-style.cpp:1107
 #, c-format
@@ -32904,13 +32815,13 @@ msgid "Switch to outline (wireframe) display mode"
 msgstr "Перемкнутися на каркасний режим відображення"
 
 #: ../src/verbs.cpp:3109
-#, fuzzy
 msgid "Visible _Hairlines"
-msgstr "Видимі кольори"
+msgstr "Видимі _волосяні лінії"
 
 #: ../src/verbs.cpp:3110
 msgid "Make sure hairlines are always drawn thick enough to see"
 msgstr ""
+"Забезпечити належну товщину волосяних літер, щоб їх можна було завжди бачити"
 
 #. new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW, "ViewColorModePrintColorsPreview", N_("_Print
 #. Colors Preview"),
@@ -32941,24 +32852,20 @@ msgstr ""
 "Перемикач між нормальним режимом показу та режимом показу у відтінках сірого"
 
 #: ../src/verbs.cpp:3123
-#, fuzzy
 msgid "Toggle _Split View Mode"
-msgstr "Перемкнути режим _фокусування"
+msgstr "Перемкнути режим _розділеного перегляду"
 
 #: ../src/verbs.cpp:3124
-#, fuzzy
 msgid "Split canvas in 2 to show outline"
-msgstr "Завжди показувати обрис"
+msgstr "Розділити полотно на дві частини для показу обрису"
 
 #: ../src/verbs.cpp:3126
-#, fuzzy
 msgid "Toggle _XRay Mode"
-msgstr "Перемкнути режим _фокусування"
+msgstr "П_еремкнути режим XRay"
 
 #: ../src/verbs.cpp:3126
-#, fuzzy
 msgid "XRay arround cursor"
-msgstr " під курсором"
+msgstr "XRay навколо вказівника"
 
 #: ../src/verbs.cpp:3129
 msgid "Color-managed view"
@@ -33028,7 +32935,6 @@ msgid "_Unicode Characters..."
 msgstr "Си_мволи Unicode…"
 
 #: ../src/verbs.cpp:3153
-#, fuzzy
 msgid "Select Unicode characters from a palette"
 msgstr "Вибрати символи Unicode з палітри"
 
@@ -33502,9 +33408,8 @@ msgid "no filters"
 msgstr "без фільтрування"
 
 #: ../src/widgets/desktop-widget.cpp:803
-#, fuzzy
 msgid "visible hairlines"
-msgstr "помітно округлений"
+msgstr "видимі волосяні лінії"
 
 #: ../src/widgets/desktop-widget.cpp:812
 msgid "grayscale"
@@ -34207,17 +34112,17 @@ msgid "Sorry we could not locate %s"
 msgstr "Вибачте, нам не вдалося знайти %s"
 
 #: ../share/extensions/embedimage.py:119
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
 "or image/x-icon"
 msgstr ""
-"%s не належить до типу image/svg, image/png, image/jpeg, image/bmp, image/"
-"gif, image/tiff, або image/x-icon"
+"%s не належить до типу image/png, image/jpeg, image/bmp, image/gif, image/"
+"tiff, або image/x-icon"
 
 #: ../share/extensions/eqtexsvg.py:123
 msgid "empty LaTeX input. Nothing to be done"
-msgstr ""
+msgstr "порожні вхідні дані LaTeX. Ніяких дій виконано не буде"
 
 #: ../share/extensions/extractimage.py:93
 #, python-format
@@ -34581,7 +34486,7 @@ msgstr "Площа дорівнює нулю. Визначення центра 
 
 #: ../share/extensions/inkex/deprecated.py:64
 msgid "{} is deprecated and should be removed"
-msgstr ""
+msgstr "{} є застарілим, його слід вилучити"
 
 #: ../share/extensions/inkex/deprecated.py:71
 msgid ""
@@ -34590,112 +34495,153 @@ msgid ""
 "OptionParser.add_option` to `self.arg_parser.add_argument` the arguments are "
 "similar."
 msgstr ""
+"{} або «optparse» є дуже давнім, його було визнано застарілим ще у python 2.7"
+" у 2009 році і тепер замінено на «argparser». Вам слід замінити"
+" «self.OptionParser.add_option» на «self.arg_parser.add_argument». Аргументи"
+" лишаться тими самими."
 
 #: ../share/extensions/inkex/deprecated.py:88
 msgid ""
 "{} method is now a required method. It should be created in your extension "
 "class, even if it does nothing."
 msgstr ""
+"Метод {} у нових версіях слід вказувати як метод. Його має бути створено у"
+" вашому класі розширення, навіть якщо він не виконує ніяких дій."
 
 #: ../share/extensions/inkex/deprecated.py:93
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_current_layer()` "
 "instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.get_current_layer()»."
 
 #: ../share/extensions/inkex/deprecated.py:99
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_center_position()` "
 "instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.get_center_position()»."
 
 #: ../share/extensions/inkex/deprecated.py:105
 msgid ""
 "{} is now a dictionary in the svg document. Use self.svg.selected instead."
 msgstr ""
+"У нових версіях {} є словником у документі svg. Скористайтеся замість нього"
+" «self.svg.selected»."
 
 #: ../share/extensions/inkex/deprecated.py:111
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.get_ids()»."
 
 #: ../share/extensions/inkex/deprecated.py:116
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.getElementById(eid)` "
 "instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.getElementById(eid)»."
 
 #: ../share/extensions/inkex/deprecated.py:121
 msgid ""
 "{} is now a new method in the svg document. Use `self.svg.getElement(path)` "
 "instead.`"
 msgstr ""
+"У нових версіях {} є новим методом у документі svg. Скористайтеся замість"
+" нього «self.svg.getElement(path)»."
 
 #: ../share/extensions/inkex/deprecated.py:126
 msgid ""
 "{} should never have existed. lxml always had a getparent() method and that "
 "should be used instead of this custom Effect method."
 msgstr ""
+"{} не мало існувати. У lxml завжди був метод getparent(). Саме ним слід"
+" користуватися замість цього нетипового методу Effect."
 
 #: ../share/extensions/inkex/deprecated.py:132
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.namedview` to access "
 "this element"
 msgstr ""
+"У нових версіях {} є властивістю документа svg. Скористайтеся"
+" «self.svg.namedview» для отримання доступу до цього елемента."
 
 #: ../share/extensions/inkex/deprecated.py:137
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
 "create_guide(x, y, a)` instead"
 msgstr ""
+"У нових версіях {} є методом об'єкта елемента namedview. Скористайтеся"
+" замість нього «self.svg.namedview.create_guide(x, y, a)»"
 
 #. pylint: disable=dangerous-default-value
 #. We need a list as the default value to preserve backwards compatibility
 #: ../share/extensions/inkex/deprecated.py:143
 msgid "{} is now `Effect.run()` with the same args"
 msgstr ""
+"У нових версіях {} слід замінити на «Effect.run()» із тими самими аргументами"
 
 #: ../share/extensions/inkex/deprecated.py:147
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.get_unique_id(old_id)»."
 
 #: ../share/extensions/inkex/deprecated.py:153
 msgid ""
 "{} wasn't even a public property, why is your effect extension even using "
 "it? Should be inkex.units.CONVERSIONS"
 msgstr ""
+"{} навіть не є відкритою властивістю. Чому ваше розширення ефекту"
+" використовує її? Має бути inkex.units.CONVERSIONS"
 
 #: ../share/extensions/inkex/deprecated.py:159
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
+"У нових версіях {} є властивістю документа svg. Скористайтеся замість нього"
+" «self.svg.width»."
 
 #: ../share/extensions/inkex/deprecated.py:164
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
+"У нових версіях {} є властивістю документа svg. Скористайтеся замість нього"
+" «self.svg.height»."
 
 #: ../share/extensions/inkex/deprecated.py:169
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
+"У нових версіях {} є властивістю документа svg. Скористайтеся замість нього"
+" «self.svg.unit»."
 
 #: ../share/extensions/inkex/deprecated.py:174
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.unittouu(str)»."
 
 #: ../share/extensions/inkex/deprecated.py:179
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.uutounit(value, unit)»."
 
 #: ../share/extensions/inkex/deprecated.py:184
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
+"У нових версіях {} є методом у документі svg. Скористайтеся замість нього"
+" «self.svg.add_unit(value)»."
 
 #: ../share/extensions/interp_att_g.py:139
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
@@ -34982,14 +34928,13 @@ msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "Будь ласка, спочатку перетворіть об'єкти на контури! (Отримано [%s].)"
 
 #: ../share/extensions/perspective.py:47
-#, fuzzy
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them.  On a Debian-like system "
 "this can be done with the command, sudo apt-get install python-numpy."
 msgstr ""
 "Не вдалося імпортувати модуль numpy або numpy.linalg. Ці модулі потрібні для "
-"роботи цього додатка. Будь ласка, встановіть модулі і повторіть спробу. У "
+"роботи цього додатка. Будь ласка, встановіть модулі. У "
 "системах, заснованих на Debian, цю операцію можна виконати командою sudo apt-"
 "get install python-numpy."
 
@@ -38290,9 +38235,8 @@ msgstr "Нове у поточній версії"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx.h:3
-#, fuzzy
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
-msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
+msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
 
 #: ../share/extensions/inkscape_help_reportabug.inx.h:1
 msgid "Report a Bug"
@@ -38501,7 +38445,6 @@ msgid "Duration in seconds:"
 msgstr "Тривалість (у секундах):"
 
 #: ../share/extensions/jessyInk_effects.inx.h:6
-#, fuzzy
 msgid "Built-in effect"
 msgstr "Вбудований ефект"
 
