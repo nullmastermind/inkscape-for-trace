@@ -20,6 +20,8 @@
 #include <gtkmm.h>
 
 class SPDocument;
+class SPDesktop;
+class SPDesktopWidget;
 
 namespace Inkscape {
 namespace UI {
@@ -33,9 +35,12 @@ namespace View {
 class InkscapeWindow : public Gtk::ApplicationWindow {
 
 public:
-    InkscapeWindow();
+    InkscapeWindow(SPDocument* document);
+    void set_desktop_widget(SPDesktopWidget* desktop_widget); // Temp: We should be creating desktop in constructor!
 
 private:
+    SPDocument* _document;
+    SPDesktop*  _desktop;
 
     // Callbacks
     bool key_press(GdkEventKey* event);

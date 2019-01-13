@@ -154,21 +154,10 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     T::register_application();
 }
 
-SPDocument*
-InkscapeApplication::get_active_document()
-{
-    // This should change based on last document window in focus if with GUI.  But for now we're
-    // only using it for command line mode so return last document (the one currently be read in).
-    return _documents.back();
-}
-
 Inkscape::Selection*
 InkscapeApplication::get_active_selection()
 {
-    // This should change based on last document window in focus if with GUI.  But for now we're
-    // only using it for command line mode so return last document (the one currently be read in).
-    SPDocument* document = _documents.back();
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(_active_document);
     return context.getSelection();
 }
 
@@ -263,7 +252,6 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     for (auto file : files) {
         if (_with_gui) {
             // Create a window for each file.
-
             SPDesktop* desktop = create_window(file);
 
             // Process each file.
@@ -278,7 +266,6 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             }
 
         } else {
-
             // Open file
             SPDocument *doc = ink_file_open(file);
             if (!doc) continue;
@@ -289,7 +276,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             doc->ensureUpToDate(); // Or queries don't work!
 
             // Add to our application
-            _documents.push_back(doc);
+            _active_document = doc;
 
             // process_file(file);
             for (auto action: _command_line_actions) {
@@ -303,8 +290,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
                 _file_export.do_export(doc, file->get_path());
             }
 
-            // Remove from our application... we only have one in command-line mode.
-            _documents.pop_back();
+            _active_document = nullptr;
 
             // Close file
             INKSCAPE.remove_document(doc);
@@ -324,12 +310,15 @@ ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& fil
 {
     SPDesktop* desktop = nullptr;
     if (file) {
-        desktop = sp_file_new_default();
         sp_file_open(file->get_parse_name(), nullptr, false, true);
+        desktop = SP_ACTIVE_DESKTOP;
     } else {
         desktop = sp_file_new_default();
     }
-    _documents.push_back(desktop->getDocument());
+
+    _active_document = desktop->getDocument();
+    // _documents.push_back(desktop->getDocument());
+
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
 
@@ -347,9 +336,10 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
         desktop = sp_file_new_default();
     }
 
-    _documents.push_back(desktop->getDocument());
+    _active_document = desktop->getDocument();
+    // _documents.push_back(desktop->getDocument());
 
-    // Add to Gtk::Window to app window list.
+    // Add Gtk::Window to app window list.
     add_window(*desktop->getToplevel());
 
     return (desktop); // Temp: Need to track desktop for shell mode.

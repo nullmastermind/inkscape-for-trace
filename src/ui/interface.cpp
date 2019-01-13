@@ -147,16 +147,16 @@ sp_create_window(SPViewWidget *vw, bool editable)
     g_return_if_fail(vw != nullptr);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
 
-    InkscapeWindow* win = new InkscapeWindow();
-    win->set_resizable(true);
-    gtk_container_add(GTK_CONTAINER(win->gobj()), GTK_WIDGET(vw));
-    gtk_widget_show(GTK_WIDGET(vw));
+    SPDesktopWidget *desktop_widget = reinterpret_cast<SPDesktopWidget*>(vw);
+    SPDesktop* desktop = desktop_widget->desktop;
+    SPDocument* document = desktop->getDocument();
+
+    InkscapeWindow* win = new InkscapeWindow(document);
+    win->set_desktop_widget(desktop_widget);
 
     if (editable) {
         g_object_set_data(G_OBJECT(vw), "window", win);
 
-        SPDesktopWidget *desktop_widget = reinterpret_cast<SPDesktopWidget*>(vw);
-        SPDesktop* desktop = desktop_widget->desktop;
 
         desktop_widget->window = win;
 

@@ -30,6 +30,9 @@
 
 typedef std::vector<std::pair<std::string, Glib::VariantBase> > action_vector_t;
 
+class InkscapeWindow;
+class SPDocument;
+class SPDesktop;
 
 class InkscapeApplication
 {
@@ -40,8 +43,8 @@ public:
     virtual int  on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options) = 0;
     virtual void on_new() = 0;
     virtual void on_quit() = 0;
-    SPDocument* get_active_document();
-    Inkscape::Selection* get_active_selection();
+    SPDocument* get_active_document() { return _active_document; };
+    Inkscape::Selection* get_active_selection(); // { return _active_selection; };
 
 protected:
     bool _with_gui;
@@ -50,7 +53,12 @@ protected:
     InkscapeApplication();
 
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP
-    std::vector<SPDocument*> _documents;
+    // std::vector<SPDocument*> _documents;   For a true headless version
+    std::map<SPDocument*, std::vector<InkscapeWindow*> > _documents;
+
+    // We keep track of these things so we don't need a window to find them (for headless operation).
+    SPDocument* _active_document;
+    Inkscape::Selection* active_selection;  // This should be a view once view doesn't depend on GUI.
 
     InkFileExportCmd _file_export;
 
