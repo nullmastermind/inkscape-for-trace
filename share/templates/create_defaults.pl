@@ -30,6 +30,7 @@ my @data = (
 	["nl",	"Laag 1",	"layer1"],
 	["pl",	"Warstwa 1",	"layer1"],
 	["pt_BR",	"Camada 1",	"layer1"],
+	["pt",	"Camada 1",	"layer1"],
 	["ro",	"Strat 1",	"layer1"],
 	["sk",	"Vrstva 1",	"layer1"],
 	["zh_TW",	"圖層 1",	"layer1"]
