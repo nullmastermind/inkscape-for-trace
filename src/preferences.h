@@ -111,7 +111,7 @@ public:
 
         Glib::ustring const observed_path; ///< Path which the observer watches
     private:
-        _ObserverData *_data; ///< additional data used by the implementation while the observer is active
+        std::unique_ptr<_ObserverData> _data; ///< additional data used by the implementation while the observer is active
     };
 
 
@@ -610,7 +610,7 @@ private:
 
     // privilege escalation methods for PrefNodeObserver
     static Entry const _create_pref_value(Glib::ustring const &, void const *ptr);
-    static _ObserverData *_get_pref_observer_data(Observer &o) { return o._data; }
+    static _ObserverData *_get_pref_observer_data(Observer &o) { return o._data.get(); }
 
     static Preferences *_instance;
 

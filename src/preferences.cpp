@@ -675,10 +675,7 @@ void Preferences::addObserver(Observer &o)
         node = _findObserverNode(o.observed_path, node_key, attr_key, true);
         if (node) {
             // set additional data
-            if (o._data) {
-                delete o._data;
-            }
-            o._data = new _ObserverData(node, !attr_key.empty());
+            o._data.reset(new _ObserverData(node, !attr_key.empty()));
 
             _observer_map[&o].reset(new PrefNodeObserver(o, attr_key));
 
@@ -695,20 +692,18 @@ void Preferences::addObserver(Observer &o)
 void Preferences::removeObserver(Observer &o)
 {
     // prevent removing an observer which was not added
-    if ( _observer_map.find(&o) != _observer_map.end() ) {
+    auto it = _observer_map.find(&o);
+    if (it != _observer_map.end()) {
         Inkscape::XML::Node *node = o._data->_node;
-        _ObserverData *priv_data = o._data;
-        o._data = nullptr;
+        _ObserverData *priv_data = o._data.get();
 
         if (priv_data->_is_attr) {
-            node->removeObserver( *(_observer_map[&o]) );
+            node->removeObserver(*it->second);
         } else {
-            node->removeSubtreeObserver( *(_observer_map[&o]) );
+            node->removeSubtreeObserver(*it->second);
         }
 
-        delete priv_data;
-        priv_data = nullptr;
-        _observer_map.erase(&o);
+        _observer_map.erase(it);
     }
 }
 
