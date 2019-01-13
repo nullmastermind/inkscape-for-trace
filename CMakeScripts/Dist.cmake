@@ -15,9 +15,7 @@ include(CMakeScripts/inkscape-version.cmake)
 message("INKSCAPE_DIST_PREFIX: ${INKSCAPE_DIST_PREFIX}")
 add_custom_target(dist
     COMMAND sed -i "s/unknown/${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
-    COMMAND sed -i "/VER_GITREV=/d" src/Makefile.am
-    COMMAND sed -i "s/..VER_GITREV/ ${INKSCAPE_REVISION}/" src/Makefile.am
-    COMMAND git commit -m "RELEASE" CMakeScripts/inkscape-version.cmake src/Makefile.am
+    COMMAND git commit -m "RELEASE" CMakeScripts/inkscape-version.cmake
     COMMAND git config tar.bz2.command bzip2
     COMMAND git archive --prefix=${INKSCAPE_DIST_PREFIX}/ -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2 HEAD
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
