@@ -45,6 +45,7 @@ public:
 
 protected:
     bool _with_gui;
+    bool _batch_process; // Temp
     bool _use_shell;
     InkscapeApplication();
 

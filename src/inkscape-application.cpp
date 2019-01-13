@@ -43,7 +43,7 @@ using Inkscape::IO::Resource::UIS;
 // flags are set. If the open flag is set and the command line not, the all the remainng arguments
 // after calling on_handle_local_options() are assumed to be filenames.
 
-InkscapeApplication::InkscapeApplication() : _with_gui(true), _use_shell(false) {}
+InkscapeApplication::InkscapeApplication() : _with_gui(true), _batch_process(false), _use_shell(false) {}
 
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
@@ -87,6 +87,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // Interface
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",            'g', N_("GUI: With graphical interface."),                                                    "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",         'G', N_("GUI: Console only."),                                                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",      '\0', N_("GUI: Close window after processing actions (needed as some verbs require GUI)."),    "");
 
     // Open/Import
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "pdf-page",           '\0', N_("Open: PDF page to import"),         N_("PAGE"));
@@ -263,11 +264,17 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
         if (_with_gui) {
             // Create a window for each file.
 
-            create_window(file);
+            SPDesktop* desktop = create_window(file);
 
             // Process each file.
             for (auto action: _command_line_actions) {
 		    Gio::Application::activate_action( action.first, action.second );
+            }
+
+            // Close window after we're done with file. This may not be the best way...
+            // but we need to rewrite most of the window handling code so do this for now.
+            if (_batch_process) {
+                desktop->getToplevel()->hide();
             }
 
         } else {
@@ -461,7 +468,7 @@ ConcreteInkscapeApplication<T>::shell()
         }
     }
 
-    T::quit(); // Must quit or segfault.
+    T::quit(); // Must quit or segfault. (Might be fixed by using desktop->getToplevel()->hide() above.);
 }
 
 // Once we don't need to create a window just to process verbs!
@@ -539,7 +546,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     // ================== GUI and Shell ================
     if (options->contains("without-gui"))    _with_gui = false;
     if (options->contains("with-gui"))       _with_gui = true;
-    if (options->contains("shell"))         _use_shell = true;
+    if (options->contains("batch-process"))  _batch_process = true;
+    if (options->contains("shell"))          _use_shell = true;
 
     // Some options should preclude using gui!
     if (options->contains("query-id")         ||
