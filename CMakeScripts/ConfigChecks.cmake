@@ -1,3 +1,5 @@
+include(${CMAKE_CURRENT_LIST_DIR}/ConfigPaths.cmake)
+
 #---------------
 # From here on:
 # Set all HAVE_XXX variables, to correctly set all defines in config.h
