@@ -18,6 +18,7 @@
 #include <cfloat>
 #include <glibmm/ustring.h>
 #include <map>
+#include <memory>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -603,7 +604,7 @@ private:
     /// Wrapper class for XML node observers
     class PrefNodeObserver;
 
-    typedef std::map<Observer *, PrefNodeObserver *> _ObsMap;
+    typedef std::map<Observer *, std::unique_ptr<PrefNodeObserver>> _ObsMap;
     /// Map that keeps track of wrappers assigned to PrefObservers
     _ObsMap _observer_map;
 
