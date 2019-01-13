@@ -19,6 +19,6 @@ add_custom_target(inkscape_default_svg ALL
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/create_defaults.pl ${CMAKE_CURRENT_SOURCE_DIR}/default.svg 
   BYPRODUCTS ${CMAKE_CURRENT_BINARY_DIR}/default.*.svg
   COMMAND sh -c "${CMAKE_CURRENT_SOURCE_DIR}/create_defaults.pl"
-  COMMAND mv default.*.svg ${CMAKE_CURRENT_BINARY_DIR}
+  COMMAND sh -c "mv default.*.svg ${CMAKE_CURRENT_BINARY_DIR}"
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
