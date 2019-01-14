@@ -43,7 +43,7 @@ msgstr "Tvorba a úprava obrázkov Scalable Vector Graphics"
 
 #: ../inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr "obrázok;editor;vektorový;kreslenie"
+msgstr "obrázok;editor;vektorový;kreslenie;"
 
 #: ../inkscape.desktop.in.h:6
 msgid "New Drawing"

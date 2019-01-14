@@ -16,7 +16,7 @@ StartupNotify=true
 Icon=${INKSCAPE_ICONPATH}
 X-Ayatana-Desktop-Shortcuts=Drawing
 
-[Drawing Shortcut Group]
+[X-Drawing Shortcut Group]
 Name=New Drawing
 Exec=inkscape
 TargetEnvironment=Unity

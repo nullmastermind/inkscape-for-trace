@@ -7,7 +7,6 @@ variables:
   GIT_DEPTH: "10"
   GIT_SUBMODULE_STRATEGY: recursive
 
-
 # Building inkscape
 inkscape:linux:
   stage: build
@@ -50,17 +49,11 @@ appimage:linux:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
   script:
-    - mkdir -p build && cd build
-    - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-    - make -j$(nproc)
-    - make DESTDIR=appdir -j$(nproc) install ; find appdir/
-    - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-    - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-    - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
+    - bash -ex packaging/appimage/generate.sh
   artifacts:
     expire_in: 1 year
     paths:
-      - build/Inkscape*.AppImage*
+      - Inkscape*.AppImage*
 
 inkscape:mac:
   stage: build
