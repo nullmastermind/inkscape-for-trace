@@ -471,8 +471,8 @@ Gtk::VBox* SvgFontsDialog::global_settings_tab(){
     _units_per_em_spin   = new AttrSpin( this, (gchar*) _("Units per em"), _("Number of display units each letter takes up."), SP_ATTR_UNITS_PER_EM);
     _ascent_spin         = new AttrSpin( this, (gchar*) _("Ascent:"),      _("Amount of space taken up by accenders like the tall line on the letter 'h'."), SP_ATTR_ASCENT);
     _descent_spin        = new AttrSpin( this, (gchar*) _("Descent:"),     _("Amount of space taken up by decenders like the tail on the letter 'g'."), SP_ATTR_DESCENT);
-    _cap_height_spin     = new AttrSpin( this, (gchar*) _("Cap Height:"),  _("I don't know what this does."), SP_ATTR_CAP_HEIGHT);
-    _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    _("Not sure about this one either."), SP_ATTR_X_HEIGHT);
+    _cap_height_spin     = new AttrSpin( this, (gchar*) _("Cap Height:"),  _("The height of a capital letter above the baseline like the letter 'H' or 'I'."), SP_ATTR_CAP_HEIGHT);
+    _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    _("The height of a lower-case letter above the baseline like the letter 'x'."), SP_ATTR_X_HEIGHT);
 
     //_descent_spin->set_range(-4096,0);
 
