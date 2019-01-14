@@ -33,7 +33,7 @@ SPDesktopWidget:
 
 
 SVGViewWidget:
-  Used many places as a convienient way to show an SVG (file dialog, Inkview).
+  Used many places as a convenient way to show an SVG (file dialog, Inkview).
   Derived, rather uselessly, from Gtk::Scrollbar.
   It no longer is dependent on View (and really doesn't belong here anymore).
 

@@ -483,7 +483,7 @@ void MultiPathManipulator::distributeNodes(Geom::Dim2 d)
     if (_selection.empty()) return;
     _selection.distribute(d);
     if (d == Geom::X) {
-        _done("Distrubute nodes horizontally");
+        _done("Distribute nodes horizontally");
     } else {
         _done("Distribute nodes vertically");
     }
@@ -827,7 +827,7 @@ void MultiPathManipulator::_commit(CommitEvent cps)
         break;
     default: return;
     }
-    
+
     _selection.signal_update.emit();
     invokeForAll(&PathManipulator::writeXML);
     if (key) {

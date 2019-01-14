@@ -759,7 +759,7 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
 
     if (unit_tracker) {
         unit_tracker->addAdjustment(adj);
-    } 
+    }
 
     // Using a cast just to make sure we pass in the right kind of function pointer
     g_object_set( G_OBJECT(act), "tool-post", static_cast<EgeWidgetFixup>(sp_set_font_size_smaller), NULL );
@@ -977,7 +977,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
 }
 
 /**
- * \brief Generate the auxilliary toolbox
+ * \brief Generate the auxiliary toolbox
  *
  * \details This is the one that appears below the main menu, and contains
  *          tool-specific toolbars.  Each toolbar is created here, using

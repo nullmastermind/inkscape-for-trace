@@ -153,7 +153,7 @@ void CssDialog::css_reset_context(gint css)
         const gchar *name = g_quark_to_string(css);
         _message_context->setF(
             Inkscape::NORMAL_MESSAGE,
-            _("Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+            _("Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
     }
 }
 

@@ -18,7 +18,7 @@
 
 #include "inkscape.h"             // Inkscape::Application
 
-// Actions for command line output (should be intergrated with file dialog).
+// Actions for command line output (should be integrated with file dialog).
 
 // These actions are currently stateless and result in changes to an instance of the
 // InkFileExportCmd class owned by the application.

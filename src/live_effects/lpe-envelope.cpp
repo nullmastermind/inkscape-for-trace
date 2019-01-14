@@ -66,7 +66,7 @@ LPEEnvelope::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd
 
     /*
     The code below is inspired from the Bend Path code developed by jfb and mgsloan
-    Please, read it before tring to understand this one
+    Please, read it before trying to understand this one
     */
 
     Piecewise<D2<SBasis> > uskeleton1 = arc_length_parametrization(bend_path1.get_pwd2(),2,.1);

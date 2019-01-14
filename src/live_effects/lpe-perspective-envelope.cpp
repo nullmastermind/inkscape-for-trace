@@ -6,7 +6,7 @@
 /*
  * Authors:
  *   Jabiertxof Code migration from python extensions envelope and perspective
- *   Aaron Spike, aaron@ekips.org from envelope and perspective phyton code
+ *   Aaron Spike, aaron@ekips.org from envelope and perspective python code
  *   Dmitry Platonov, shadowjack@mail.ru, 2006 perspective approach & math
  *   Jose Hevia (freon) Transform algorithm from envelope
  *
