@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-01-03 00:43+0100\n"
-"PO-Revision-Date: 2017-01-05 12:49+0200\n"
+"PO-Revision-Date: 2019-01-13 12:25+0100\n"
 "Last-Translator: Ivan Masár <helix84@centrum.sk>\n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: ../inkscape.appdata.xml.in.h:1
 msgid "Main application window"
@@ -275,7 +275,6 @@ msgid "Sharpen edges and boundaries within the object, force=0.3"
 msgstr "Zaostriť hrany a hranice v rámci objektu, sila=0.3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
 msgstr "Olejomaľba"
 
@@ -1151,7 +1150,6 @@ msgstr "Komiksový krém"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-#, fuzzy
 msgid "Non-realistic 3D Shaders"
 msgstr "Nerealistické 3D tieňovanie"
 
@@ -1172,7 +1170,6 @@ msgstr ""
 "priesečníkoch"
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
 msgstr "Tma a žiara"
 
@@ -1519,7 +1516,6 @@ msgid "Pixellize"
 msgstr "Pixelizovať"
 
 #: ../share/filters/filters.svg.h:591
-#, fuzzy
 msgid "Pixel Tools"
 msgstr "Nástroje na prácu s pixlami"
 
@@ -4615,9 +4611,8 @@ msgstr ""
 "neviditeľným mriežkam."
 
 #: ../src/display/canvas-grid.cpp:327
-#, fuzzy
 msgid "Align to page:"
-msgstr "Zarovnať vrchné strany"
+msgstr "Zarovnať na stranu:"
 
 #: ../src/display/canvas-grid.cpp:650
 msgid "Spacing _X:"
@@ -5020,9 +5015,8 @@ msgstr ""
 "v konferencii."
 
 #: ../src/extension/implementation/script.cpp:715
-#, fuzzy
 msgid "The output from the extension could not be parsed."
-msgstr "Súbor s nastavením %s nebolo možné prečítať."
+msgstr "Výstup z extenzie sa nepodarilo analyzovať."
 
 #: ../src/extension/implementation/script.cpp:1043
 msgid ""
@@ -6190,7 +6184,6 @@ msgstr "Stmaviť"
 #: ../src/extension/internal/filter/paint.h:704
 #: ../src/extension/internal/filter/transparency.h:63
 #: ../src/filter-enums.cpp:55 ../src/ui/dialog/input.cpp:369
-#, fuzzy
 msgid "Screen"
 msgstr "Tieniť"
 
@@ -6296,7 +6289,6 @@ msgstr "Typ zmiešania:"
 #: ../src/extension/internal/filter/transparency.h:62
 #: ../src/filter-enums.cpp:53 ../src/live_effects/lpe-copy_rotate.cpp:39
 #: ../src/ui/dialog/inkscape-preferences.cpp:980
-#, fuzzy
 msgid "Normal"
 msgstr "Normálne"
 
@@ -7006,9 +6998,8 @@ msgid "Replace hue by two colors"
 msgstr "Nahradiť odtieň dvoma farbami"
 
 #: ../src/extension/internal/filter/color.h:1568
-#, fuzzy
 msgid "Simple blend"
-msgstr "Jednoduché rozostrenie"
+msgstr "Jednoduché miešanie"
 
 #: ../src/extension/internal/filter/color.h:1571
 #: ../src/extension/internal/filter/paint.h:594
@@ -7058,9 +7049,8 @@ msgid "Exclusion"
 msgstr "Vylúčenie"
 
 #: ../src/extension/internal/filter/color.h:1595
-#, fuzzy
 msgid "Simple blend filter"
-msgstr "Jednoduché rozostrenie"
+msgstr "Jednoduchý zmiešavací filter"
 
 #: ../src/extension/internal/filter/color.h:1656
 msgid "Hue rotation (°)"
@@ -8210,18 +8200,16 @@ msgid "PDF Input"
 msgstr "Vstup PDF"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:959
-#, fuzzy
 msgid "Portable Document Format (*.pdf)"
-msgstr "Adobe Portable Document Format"
+msgstr "Adobe Portable Document Format  (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:960
-#, fuzzy
 msgid "Portable Document Format"
 msgstr "Adobe Portable Document Format"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:967
 msgid "AI Input"
-msgstr "Výstup AI"
+msgstr "Vstup AI"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:972
 msgid "Adobe Illustrator 9.0 and above (*.ai)"
@@ -8248,9 +8236,8 @@ msgid "SVG Input"
 msgstr "Vstup SVG"
 
 #: ../src/extension/internal/svg.cpp:637
-#, fuzzy
 msgid "SVG Image Import Type:"
-msgstr "Typ importu obrázka:"
+msgstr "Typ vstupu SVG obrázku"
 
 #: ../src/extension/internal/svg.cpp:638
 #, fuzzy
@@ -8467,13 +8454,12 @@ msgid ""
 msgstr ""
 
 #: ../src/file-update.cpp:359
-#, fuzzy
 msgid "Create a backup file in same directory."
 msgstr "Vytvoriť záložný súbor (v rovnakom adresári)."
 
 #: ../src/file-update.cpp:360
 msgid "More details..."
-msgstr ""
+msgstr "Viac detajlov..."
 
 #: ../src/file-update.cpp:363
 msgid ""
@@ -8500,9 +8486,8 @@ msgid ""
 msgstr ""
 
 #: ../src/file-update.cpp:407
-#, fuzzy
 msgid "OK"
-msgstr "_OK"
+msgstr "OK"
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
@@ -8512,7 +8497,7 @@ msgstr "Aktualizovať dokument"
 
 #: ../src/file.cpp:168
 msgid "default.svg"
-msgstr "default-sk.svg"
+msgstr "default.sk.svg"
 
 #: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
 msgid "Broken links have been changed to point to existing files."
@@ -8961,7 +8946,6 @@ msgid "Delete gradient stop(s)"
 msgstr "Zmazať priehradku farebného prechodu"
 
 #: ../src/inkscape-application.cpp:65
-#, fuzzy
 msgid "Inkscape - A Vector Drawing Program"
 msgstr "Inkscape - editor vektorovej grafiky"
 
@@ -9835,27 +9819,22 @@ msgid "Change the width"
 msgstr "Zmeniť šírku"
 
 #: ../src/live_effects/lpe-bool.cpp:38
-#, fuzzy
 msgid "union"
-msgstr "Zjednotenie"
+msgstr "spojenie"
 
 #: ../src/live_effects/lpe-bool.cpp:39
-#, fuzzy
 msgid "intersection"
-msgstr "Prienik"
+msgstr "prienik"
 
 #: ../src/live_effects/lpe-bool.cpp:40
-#, fuzzy
 msgid "difference"
-msgstr "Rozdiel"
+msgstr "rozdiel"
 
 #: ../src/live_effects/lpe-bool.cpp:41
-#, fuzzy
 msgid "symmetric difference"
-msgstr "Symetrický uzol"
+msgstr "Symetrické rozdiel"
 
 #: ../src/live_effects/lpe-bool.cpp:42
-#, fuzzy
 msgid "division"
 msgstr "Rozdelenie"
 
@@ -9863,9 +9842,8 @@ msgstr "Rozdelenie"
 #. bool_op_cut is called "Division" in the manu, see sp_selected_path_cut
 #. bool_op_slice is called "Cut path" in the menu, see sp_selected_path_slice
 #: ../src/live_effects/lpe-bool.cpp:46
-#, fuzzy
 msgid "cut"
-msgstr "Von"
+msgstr "odstrihnie"
 
 #: ../src/live_effects/lpe-bool.cpp:47
 #, fuzzy
@@ -9912,9 +9890,8 @@ msgid "Operation:"
 msgstr "Operátor:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
-#, fuzzy
 msgid "Boolean Operation"
-msgstr "Ručná operácia"
+msgstr "Boolean Operácia"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Swap operands:"
@@ -10034,45 +10011,39 @@ msgid "Change scalar parameter"
 msgstr "Zmeniť skalárny parameter"
 
 #: ../src/live_effects/lpe-clone-original.cpp:31
-#, fuzzy
 msgid "No shape"
-msgstr "Nevymeniť"
+msgstr "Žiaden tvar"
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
 msgid "Without LPE's"
-msgstr ""
+msgstr "Bez LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
-#, fuzzy
 msgid "With Spiro or BSpline"
-msgstr "Spiro spline"
+msgstr "S Spiro alebo BSpline"
 
 #: ../src/live_effects/lpe-clone-original.cpp:34
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
 msgid "With LPE's"
-msgstr ""
+msgstr "S LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
-#, fuzzy
 msgid "Linked Item:"
-msgstr "Spojená cesta:"
+msgstr "Spojený objekt:"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
-#, fuzzy
 msgid "Item from which to take the original data"
-msgstr "Cesta, z ktorej vziať dáta pôvodnej cesty"
+msgstr "Objekt, z ktorého vziať dáta pôvodnej cesty"
 
 #: ../src/live_effects/lpe-clone-original.cpp:41
-#, fuzzy
 msgid "Shape linked"
-msgstr "sa odpoja"
+msgstr "Spojený Tvar"
 
 #: ../src/live_effects/lpe-clone-original.cpp:44
-#, fuzzy
 msgid "Allow transforms"
-msgstr "Transformácie"
+msgstr "Povoľ Transformácie"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:25
 msgid "Size _X:"
@@ -10092,7 +10063,7 @@ msgstr "Veľkosť mriežky v smere Y."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:40
 msgid "Kaleidoscope"
-msgstr ""
+msgstr "Kalejdoskop"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:41
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
@@ -10106,9 +10077,8 @@ msgid "Method:"
 msgstr "Spôsob:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:62
-#, fuzzy
 msgid "Rotate methods"
-msgstr "Režim otáčania"
+msgstr "Spôsob otáčania"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:63
 msgid "Origin"
@@ -10156,9 +10126,8 @@ msgid "Number of copies of the original path"
 msgstr "Počet kópií pôvodnej cesty"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:68
-#, fuzzy
 msgid "Gap"
-msgstr "Graf"
+msgstr "Medzera"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "360º Copies"
@@ -10169,31 +10138,27 @@ msgid "No rotation angle, fixed to 360º"
 msgstr "Žiaden uhol otáčania, pevných 360º"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
-#, fuzzy
 msgid "Mirror copies"
-msgstr "Zrkadlovo otočiť os X"
+msgstr "Zrkadlové kópie"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
-#, fuzzy
 msgid "Mirror between copies"
-msgstr "Rozostup medzi kópiami:"
+msgstr "Zrkadlenie medzi kópiami"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "Split elements"
-msgstr "Zmeniť veľkosť prvkov"
+msgstr "Rozdel elementy"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
 msgid "Split elements, this allow gradients and other paints."
-msgstr ""
+msgstr "Rozdel elementy, toto umožní prechody a ostatné výplne"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:338
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:154
-#, fuzzy
 msgid "Reset styles"
-msgstr "Zachovať štýl"
+msgstr "Obnov štýl"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:37
 msgid "Stitch path:"
@@ -10276,52 +10241,46 @@ msgid "Scale the width of the stitch path relative to its length"
 msgstr "Zmena mierky šírky zošitej cesty relatívne k jej dĺžke"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:18
-#, fuzzy
 msgid "Number of dashes"
-msgstr "Počet krokov:"
+msgstr "Počet čiariek:"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:19
-#, fuzzy
 msgid "Hole factor"
-msgstr "Koeficient zväčšenia"
+msgstr ""
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:20
-#, fuzzy
 msgid "Use segments"
-msgstr "Zmazať segment"
+msgstr "Použi segmenty"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:21
-#, fuzzy
 msgid "Half start/end"
-msgstr "Oblúk: Zmeniť začiatok/koniec"
+msgstr "Polovica začiatku/konca"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:21
-#, fuzzy
 msgid "Start and end of each segment has half size"
-msgstr "Začiatočné a koncové meranie neaktívne."
+msgstr "Začiatočné a koniec každého segmentu má polovičnú velkosť"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 msgid "Unify dashes"
-msgstr ""
+msgstr "Zjednoť čiarky"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:22
 msgid "Approximately unify the dashes length using the minimal length segment"
-msgstr ""
+msgstr "Približne zarovnanie dĺžky čiarok podľa minimálnej dĺžky segmentu"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:23
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
-msgstr ""
+msgstr "Informácie"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:23
 #: ../src/live_effects/lpe-powerclip.cpp:37
-#, fuzzy
 msgid "Important messages"
-msgstr "Nastavenia importu"
+msgstr "Dôležitá správa"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:23
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr ""
+msgstr "Pridaj: <b>\"Výplň medzi mnohými LPE\"</b> do pridanej výplňe."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10332,26 +10291,24 @@ msgid "No ellipse found for specified points"
 msgstr "Pre zadané body nebol nájdená žiadna elipsa"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
-#, fuzzy
 msgid "no reordering"
-msgstr "Vykresľovanie"
+msgstr "Nemeň poradie"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag"
-msgstr ""
+msgstr "cik-cak"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "cik-cak, obrátene"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
-#, fuzzy
 msgid "closest"
-msgstr "Zatvoriť"
+msgstr "najbližší"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "closest, reverse first"
-msgstr ""
+msgstr "najbližší,  obrátene"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:35
 msgid "traveling salesman 2-opt (fast, bad)"
@@ -10370,24 +10327,20 @@ msgid "traveling salesman 5-opt (minutes)"
 msgstr ""
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:45
-#, fuzzy
 msgid "straight line"
-msgstr "čiara mriežky"
+msgstr "rovná čiara"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:46
-#, fuzzy
 msgid "move to begin"
-msgstr "Presunúť do vrstvy"
+msgstr "Presunúť na začiatok"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:47
-#, fuzzy
 msgid "move to middle"
-msgstr "Konvertovať na zaoblenie"
+msgstr "Presunúť na stred"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:48
-#, fuzzy
 msgid "move to end"
-msgstr "Presunúť do vrstvy"
+msgstr "Presunúť na koniec"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 #, fuzzy
@@ -10399,9 +10352,8 @@ msgid "Method used to order sub paths"
 msgstr ""
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
-#, fuzzy
 msgid "Connection method"
-msgstr "Dĺžka konektorov"
+msgstr "Spôsob spájania"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "Method to connect end points of sub paths"
@@ -10426,9 +10378,8 @@ msgid "Combine steps shorter than this [%]"
 msgstr ""
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
-#, fuzzy
 msgid "Stitch pattern"
-msgstr "Zošiť cestu:"
+msgstr "Spoj cestu"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 #, fuzzy
@@ -10552,14 +10503,12 @@ msgstr "Zatvoriť"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Close path"
-msgstr "Uzatvoriť podcestu"
+msgstr "Uzatvoriť cestu"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
-#, fuzzy
 msgid "Autoreverse"
-msgstr "Obrátiť smer"
+msgstr "Obrátiť smer cesty"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path:"
@@ -10599,7 +10548,7 @@ msgstr "Jednotka"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:43
 msgid "Methods to calculate the fillet or chamfer"
-msgstr ""
+msgstr "Metóda výpočtu zaoblenia alebo skosenia"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:45
 #, fuzzy
@@ -10619,9 +10568,8 @@ msgid "Chamfer steps"
 msgstr "Kroky úkosu"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
-#, fuzzy
 msgid "Radius in %"
-msgstr "Polomer, v jednotkách alebo %"
+msgstr "Polomer v %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Flexible radius size (%)"
@@ -10637,14 +10585,12 @@ msgid "Hide knots"
 msgstr "Skryť uzly"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:61
-#, fuzzy
 msgid "Apply changes if radius = 0"
-msgstr "Použiť zmeny ak váha = 0 %"
+msgstr "Použiť zmeny ak je polomer = 0 %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:62
-#, fuzzy
 msgid "Apply changes if radius > 0"
-msgstr "Použiť zmeny ak váha > 0 %"
+msgstr "Použiť zmeny ak polomer > 0 %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:212
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:60
@@ -10691,7 +10637,6 @@ msgid "Min Radius:"
 msgstr "Min. polomer:"
 
 #: ../src/live_effects/lpe-gears.cpp:211
-#, fuzzy
 msgid "Minimum radius, low values can be slow"
 msgstr "Minimálny polomer; nízke hodnoty môžu byť pomalé"
 
@@ -10865,9 +10810,8 @@ msgstr "Prekoná limit ostrosti rohu a vynúti spojenie."
 
 #. initialise your parameters here:
 #: ../src/live_effects/lpe-knot.cpp:353
-#, fuzzy
 msgid "_Gap length:"
-msgstr "Dĺžka stĺpca:"
+msgstr "_Dľžka medzery:"
 
 #: ../src/live_effects/lpe-knot.cpp:353
 msgid "Size of hidden region of lower string"
@@ -10884,9 +10828,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-knot.cpp:359
-#, fuzzy
 msgid "_Both gaps"
-msgstr "Zatvoriť medzery"
+msgstr "_Obe medzery"
 
 #: ../src/live_effects/lpe-knot.cpp:359
 #, fuzzy
@@ -10895,11 +10838,11 @@ msgstr "Prichytávať k priesečníkom ciest"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "_Groups: Inverse"
-msgstr ""
+msgstr "_Skupiny: Obrátene"
 
 #: ../src/live_effects/lpe-knot.cpp:360
 msgid "Use other stroke width, useful in groups with different stroke widths"
-msgstr ""
+msgstr "Použi inú hrúbku ťahu, užitočné v skupinách s rôznymi hrúbkami ťahu"
 
 #: ../src/live_effects/lpe-knot.cpp:366
 msgid "S_witcher size:"
@@ -10939,9 +10882,8 @@ msgid "Mirror movements in vertical"
 msgstr "Zrkadliť pohyby zvisle"
 
 #: ../src/live_effects/lpe-lattice2.cpp:39
-#, fuzzy
 msgid "Use only perimeter"
-msgstr "Zmeniť parameter bool"
+msgstr "Použi iba obvod"
 
 #: ../src/live_effects/lpe-lattice2.cpp:40
 msgid "Update while moving knots (maybe slow)"
@@ -16975,7 +16917,6 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:516
 #: ../share/extensions/grid_polar.inx.h:4
-#, fuzzy
 msgctxt "Label"
 msgid "None"
 msgstr "Žiadny"
@@ -19379,9 +19320,8 @@ msgstr ""
 "nie sú v systéme dostupné"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:511
-#, fuzzy
 msgid "Use SVG2 auto-flowed text"
-msgstr "Vytvoriť textový tok"
+msgstr "Použi SVG2 na Auto-flowed text"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:512
 msgid ""
@@ -19434,9 +19374,8 @@ msgstr "Vždy zapisovať veľkosť písma v pixeloch (px)"
 
 #. _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
 #: ../src/ui/dialog/inkscape-preferences.cpp:525
-#, fuzzy
 msgid "Font directories"
-msgstr "Výber písma"
+msgstr "Zložka s písmami"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:526
 msgid "Use Inkscape's fonts directory"
@@ -19459,13 +19398,13 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:531
-#, fuzzy
 msgid "Additional font directories"
-msgstr "Ďalší post-procesor:"
+msgstr "Dodatočné zložky s písmami"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:531
 msgid "Load additional fonts from custom locations (one path per line)"
 msgstr ""
+"Načítaj ďalšie fonty s špecifickej lokácie (jedna lokácia na jeden riadok)"
 
 #. Spray
 #: ../src/ui/dialog/inkscape-preferences.cpp:537
@@ -21893,7 +21832,6 @@ msgid "Edit"
 msgstr "Upraviť"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1814
-#, fuzzy
 msgid "Automatically reload images"
 msgstr "Automaticky znova načítavať bitmapy"
 
@@ -21908,9 +21846,8 @@ msgid "_Bitmap editor:"
 msgstr "Editor _bitmáp:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1820
-#, fuzzy
 msgid "_SVG editor:"
-msgstr "Editor _bitmáp:"
+msgstr "Editor _SVG:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1822
 #: ../share/extensions/guillotine.inx.h:5 ../share/extensions/plotter.inx.h:72
@@ -21924,7 +21861,6 @@ msgid "Default export _resolution:"
 msgstr "Štandardné _rozlíšenie pre export:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1825
-#, fuzzy
 msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr "Štandardné rozlíšenie bitmapy (v bodoch na palec) v exportnom dialógu"
 
@@ -25995,7 +25931,6 @@ msgid "No gradient"
 msgstr "Bez farebného prechodu"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:148
-#, fuzzy
 msgid "Nothing Selected"
 msgstr "Nič nebolo vybrané"
 
@@ -26795,9 +26730,8 @@ msgstr "Režim nových čiar nakreslených týmto nástrojom"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:184
 #: ../src/ui/toolbar/pencil-toolbar.cpp:185
-#, fuzzy
 msgid "LPE spiro or bspline flatten"
-msgstr "Zjednodušenie LPE sploštením"
+msgstr "LPE spiro alebo BSpline sploštenie "
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:222
 msgctxt "Freehand shape"
@@ -26826,9 +26760,8 @@ msgstr "Posledné použité"
 
 #. Name
 #: ../src/ui/toolbar/pencil-toolbar.cpp:250
-#, fuzzy
 msgid "Shape"
-msgstr "Tvary"
+msgstr "Tvar"
 
 #. Label
 #: ../src/ui/toolbar/pencil-toolbar.cpp:251
@@ -26836,38 +26769,33 @@ msgid "Shape of new paths drawn by this tool"
 msgstr "Tvar nových čiar nakreslených týmto nástrojom"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:503
-#, fuzzy
 msgid "Min pressure"
-msgstr "Prítlak"
+msgstr "Minimálny prítlak"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:503
 msgid "Min:"
-msgstr ""
+msgstr "Min:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:503
-#, fuzzy
 msgid "Min percent of pressure"
-msgstr "Účet tohto zdroja"
+msgstr "Minimálne percentá prítlaku"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:521
-#, fuzzy
 msgid "Max pressure"
-msgstr "Prítlak"
+msgstr "Maximálny Prítlak"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:521
 msgid "Max:"
-msgstr ""
+msgstr "Max:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:521
-#, fuzzy
 msgid "Max percent of pressure"
-msgstr "Voskový odtlačok na textúre tkaniva"
+msgstr "Maximálne percentá prítlaku"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:538
 #: ../src/ui/toolbar/pencil-toolbar.cpp:539
-#, fuzzy
 msgid "Use pressure input"
-msgstr "Tlak gumy"
+msgstr "Použi prítlak "
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:556
 msgid "(many nodes, rough)"
@@ -27630,9 +27558,8 @@ msgid "Text: Change line-height unit"
 msgstr "Text: Zmeniť jednotku výšky riadka"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1057
-#, fuzzy
 msgid "Text: Change line spacing mode"
-msgstr "Text: Zmeniť režim zápisu"
+msgstr "Text: Zmeniť režim rozostupov"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1094
 msgid "Text: Change word-spacing"
@@ -27663,7 +27590,6 @@ msgid "Text: Change orientation"
 msgstr "Text: Zmeniť orientáciu"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1394
-#, fuzzy
 msgid "Text: Change direction"
 msgstr "Text: Zmeniť orientáciu"
 
@@ -27817,29 +27743,26 @@ msgid "LTR"
 msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2252
-#, fuzzy
 msgid "Left to right text"
-msgstr "Zľava doprava"
+msgstr "Text z Ľava do Prava"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2257
 msgid "RTL"
 msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2258
-#, fuzzy
 msgid "Right to left text"
-msgstr "Zľava doprava"
+msgstr "Text z Prava do Ľava"
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:2264
-#, fuzzy
 msgid "Text direction"
-msgstr "Smer textu:"
+msgstr "Smer textu"
 
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:2265
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Smer textu pre normálny horizontálny text"
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2291
@@ -27873,9 +27796,8 @@ msgid "Spacing between baselines"
 msgstr "Rozostupy medzi základňami textu"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2337
-#, fuzzy
 msgid "Adaptive"
-msgstr "Relatívne"
+msgstr "Adavtívne"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2338
 msgid "Line spacing adapts to font size."
@@ -27899,9 +27821,8 @@ msgid "Lines evenly spaced."
 msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2354
-#, fuzzy
 msgid "Adjustable ☠"
-msgstr "Doladiť alfa"
+msgstr "Nastaviteľné ☠"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:2355
 msgid "Line spacing fully adjustable"
@@ -28786,18 +28707,16 @@ msgid "Add global measure line"
 msgstr "Pridať globálnu meraciu úsečku"
 
 #: ../src/ui/tools/measure-tool.cpp:1198
-#, fuzzy
 msgid "Selected"
-msgstr "Vybrať"
+msgstr "Vybrané"
 
 #: ../src/ui/tools/measure-tool.cpp:1200
-#, fuzzy
 msgid "Not selected"
 msgstr "Nič nebolo vybrané"
 
 #: ../src/ui/tools/measure-tool.cpp:1211
 msgid "Press 'CTRL' to measure into group"
-msgstr ""
+msgstr "Stlač 'CTRL' na odmeranie do skupiny"
 
 #: ../src/ui/tools/measure-tool.cpp:1401 ../src/ui/tools/measure-tool.cpp:1403
 #, c-format
@@ -30434,12 +30353,12 @@ msgstr "<i>Žiaden</i>"
 #: ../src/ui/widget/selected-style.cpp:194
 msgctxt "Fill and stroke"
 msgid "No fill, middle-click for black fill"
-msgstr ""
+msgstr "Žiadna výplň, stlač stredne tlačidlo na vyplnenie čiernou"
 
 #: ../src/ui/widget/selected-style.cpp:194
 msgctxt "Fill and stroke"
 msgid "No stroke, middle-click for black stroke"
-msgstr ""
+msgstr "Žiaden ťah, stlač stredne tlačidlo na vyplnenie čiernou"
 
 #: ../src/ui/widget/selected-style.cpp:196
 #: ../src/ui/widget/style-swatch.cpp:300 ../src/widgets/paint-selector.cpp:222
@@ -31061,7 +30980,6 @@ msgid "Unhide all objects in all layers"
 msgstr "Odkryť všetky objekty vo všetkých vrstvách"
 
 #: ../src/verbs.cpp:2590
-#, fuzzy
 msgctxt "Verb"
 msgid "None"
 msgstr "Žiadny"
@@ -31111,14 +31029,12 @@ msgid "Save a copy of the document under a new name"
 msgstr "Uloží kópiu dokumentu pod novým názvom"
 
 #: ../src/verbs.cpp:2605
-#, fuzzy
 msgid "Save template ..."
-msgstr "Nový dokumen_t zo šablóny..."
+msgstr "Nový dokument zo šablóny..."
 
 #: ../src/verbs.cpp:2606
-#, fuzzy
 msgid "Save a copy of the document as template"
-msgstr "Uloží kópiu dokumentu pod novým názvom"
+msgstr "Uloží kópiu dokumentu ako šablónu"
 
 #: ../src/verbs.cpp:2607
 msgid "_Print..."
@@ -32703,13 +32619,12 @@ msgid "Rotate canvas counter-clockwise"
 msgstr "Otočenie proti smeru hodinových ručičiek"
 
 #: ../src/verbs.cpp:3061
-#, fuzzy
 msgid "Reset Rotation"
-msgstr "Otočenie"
+msgstr "Obnov Rotáciu"
 
 #: ../src/verbs.cpp:3061
 msgid "Reset canvas rotation to zero"
-msgstr ""
+msgstr "Obnov rotáciu strany na nula stupňov"
 
 #: ../src/verbs.cpp:3063
 #, fuzzy
@@ -34092,22 +34007,21 @@ msgstr ""
 "Nie je možné spracovať tento objekt. Skúste ho najskôr zmeniť na cestu."
 
 #: ../share/extensions/draw_from_triangle.py:186
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'a' ({0}): {1}"
-msgstr "Dĺžka strany „a“ ("
+msgstr "Dĺžka strany 'a' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:187
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'b' ({0}): {1}"
-msgstr "Dĺžka strany „b“ ("
+msgstr "Dĺžka strany 'b' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:188
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Side Length 'c' ({0}): {1}"
-msgstr "Dĺžka strany „c“ ("
+msgstr "Dĺžka strany 'c' ({0}): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:189
-#, fuzzy
 msgid "Angle 'A' (radians): {}"
 msgstr "Uhol A (v radiánoch):"
 
@@ -34122,14 +34036,13 @@ msgid "Angle 'C' (radians): {}"
 msgstr "Uhol C (v radiánoch):"
 
 #: ../share/extensions/draw_from_triangle.py:192
-#, fuzzy
 msgid "Semiperimeter (px): {}"
-msgstr "Polobvod (px): "
+msgstr "Polobvod ({0}^2): {1}"
 
 #: ../share/extensions/draw_from_triangle.py:193
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Area ({0}^2): {1}"
-msgstr "Plocha (px^2):"
+msgstr "Plocha ({0}^2): {1}"
 
 #: ../share/extensions/dxf_input.py:564
 #, python-format
@@ -36182,9 +36095,8 @@ msgid "Extract Image"
 msgstr "Extrahovať obrázok"
 
 #: ../share/extensions/extractimage.inx.h:2
-#, fuzzy
 msgid "Extract only selected images"
-msgstr "Vkladať iba vybrané obrázky"
+msgstr "Vyňať iba vybrané obrázky"
 
 #: ../share/extensions/extractimage.inx.h:3
 msgid "Path to save image:"
@@ -39793,18 +39705,16 @@ msgid "Show warnings for older versions of Scour"
 msgstr ""
 
 #: ../share/extensions/output_scour.inx.h:60
-#, fuzzy
 msgid "Optimized SVG Output is provided by"
-msgstr "Optimalizovaný výstup SVG"
+msgstr "Optimalizovaný výstup SVG spravený "
 
 #: ../share/extensions/output_scour.inx.h:61
 msgid "For details please refer to"
-msgstr ""
+msgstr "Pre viac detailov prosím kontaktuj"
 
 #: ../share/extensions/output_scour.inx.h:62
-#, fuzzy
 msgid "This version of the extension is designed for"
-msgstr "rozšírenie je určené len pre Windows."
+msgstr "rozšírenie je nadizajnované pre"
 
 #: ../share/extensions/output_scour.inx.h:63
 msgid "Optimized SVG (*.svg)"
@@ -40076,14 +39986,12 @@ msgid "Connection Settings "
 msgstr "Nastavenie spojenia"
 
 #: ../share/extensions/plotter.inx.h:4
-#, fuzzy
 msgid "Port type:"
-msgstr "Typ grafu:"
+msgstr "Typ portu:"
 
 #: ../share/extensions/plotter.inx.h:5
-#, fuzzy
 msgid "Parallel port:"
-msgstr "Rovnobežne"
+msgstr "Rovnobežný port:"
 
 #: ../share/extensions/plotter.inx.h:6
 #, fuzzy
@@ -40453,7 +40361,7 @@ msgstr "Stred"
 
 #: ../share/extensions/prepare_file_save_as.inx.h:1
 msgid "Pre-Process File Save As..."
-msgstr ""
+msgstr "Predpracuj Súbor Uložiť Ako..."
 
 #: ../share/extensions/previous_glyph_layer.inx.h:1
 msgid "View Previous Glyph"
@@ -41814,9 +41722,8 @@ msgid "_Color display mode"
 msgstr "Režim zobrazenia _farieb"
 
 #: ../share/ui/menus.xml.h:10
-#, fuzzy
 msgid "_Canvas orientation"
-msgstr "Orientácia stránky:"
+msgstr "_Orientácia stránky:"
 
 #: ../share/ui/menus.xml.h:11
 msgid "Sh_ow/Hide"
