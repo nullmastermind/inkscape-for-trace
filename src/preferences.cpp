@@ -299,7 +299,7 @@ void Preferences::reset()
 {
     if (g_file_test(_prefs_filename.c_str(), G_FILE_TEST_EXISTS)) {
         int retcode = g_unlink (_prefs_filename.c_str());
-        if (retcode == 0) g_strdup_printf(_("Preferences file was deleted."));
+        if (retcode == 0) g_warning(_("Preferences file was deleted."));
         else g_warning(_("There was an error trying to delete the preferences file."));
     }
     for (_ObsMap::iterator i = _observer_map.begin(); i != _observer_map.end(); ) {
