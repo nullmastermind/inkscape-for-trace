@@ -11,37 +11,38 @@ foreach(language ${LANGUAGES})
 endforeach(language)
 
 
-# translate inkscape.desktop
-if("${GETTEXT_VERSION_STRING}" VERSION_GREATER "0.19")
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.desktop
-        DEPENDS ${LANGUAGES}
-        COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} --desktop --template ${CMAKE_SOURCE_DIR}/inkscape.desktop.template -d ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_BINARY_DIR}/inkscape.desktop.template.in --keyword=Name --keyword=GenericName --keyword=X-GNOME-FullName --keyword=Comment --keyword=Keywords
-        COMMAND ${CMAKE_COMMAND} -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR} -DENABLE_BINRELOC=${ENABLE_BINRELOC} -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-desktop.cmake
-    )
-else()
-    message("Old gettext version, not translating inkscape.desktop")
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.desktop
-        COMMAND cp ${CMAKE_SOURCE_DIR}/inkscape.desktop.template ${CMAKE_BINARY_DIR}/inkscape.desktop.template.in
-        COMMAND ${CMAKE_COMMAND} -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR} -DENABLE_BINRELOC=${ENABLE_BINRELOC} -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-desktop.cmake
-    )
+if(UNIX)
+    # translate inkscape.desktop
+    if("${GETTEXT_VERSION_STRING}" VERSION_GREATER "0.19")
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.desktop
+            DEPENDS ${LANGUAGES}
+            COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} --desktop --template ${CMAKE_SOURCE_DIR}/inkscape.desktop.template -d ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_BINARY_DIR}/inkscape.desktop.template.in --keyword=Name --keyword=GenericName --keyword=X-GNOME-FullName --keyword=Comment --keyword=Keywords
+            COMMAND ${CMAKE_COMMAND} -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR} -DENABLE_BINRELOC=${ENABLE_BINRELOC} -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-desktop.cmake
+        )
+    else()
+        message("Old gettext version, not translating inkscape.desktop")
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.desktop
+            COMMAND cp ${CMAKE_SOURCE_DIR}/inkscape.desktop.template ${CMAKE_BINARY_DIR}/inkscape.desktop.template.in
+            COMMAND ${CMAKE_COMMAND} -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR} -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR} -DENABLE_BINRELOC=${ENABLE_BINRELOC} -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-desktop.cmake
+        )
+    endif()
+    add_custom_target(inkscape_desktop ALL DEPENDS ${CMAKE_BINARY_DIR}/inkscape.desktop)
+
+
+    # translate inkscape.appdata.xml
+    if("${GETTEXT_VERSION_STRING}" VERSION_GREATER "0.19")
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+            DEPENDS ${LANGUAGES}
+            COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} --xml --template ${CMAKE_SOURCE_DIR}/inkscape.appdata.xml.in -d ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+        )
+    else()
+        message("Old gettext version, not translating inkscape.appdata.xml")
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+            COMMAND cp ${CMAKE_SOURCE_DIR}/inkscape.appdata.xml.in ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+        )
+    endif()
+    add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/inkscape.appdata.xml)
 endif()
-add_custom_target(inkscape_desktop ALL DEPENDS ${CMAKE_BINARY_DIR}/inkscape.desktop)
-
-
-# translate inkscape.appdata.xml
-if("${GETTEXT_VERSION_STRING}" VERSION_GREATER "0.19")
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
-        DEPENDS ${LANGUAGES}
-        COMMAND ${GETTEXT_MSGFMT_EXECUTABLE} --xml --template ${CMAKE_SOURCE_DIR}/inkscape.appdata.xml.in -d ${CMAKE_CURRENT_SOURCE_DIR} -o ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
-    )
-else()
-    message("Old gettext version, not translating inkscape.appdata.xml")
-    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
-        COMMAND cp ${CMAKE_SOURCE_DIR}/inkscape.appdata.xml.in ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
-    )
-endif()
-add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/inkscape.appdata.xml)
-
 
 # update inkscape.pot
 if(INTLTOOL-UPDATE)
