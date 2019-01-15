@@ -290,7 +290,7 @@ void sp_file_convert_dpi(SPDocument *doc)
             // OK                                                                              
             break;
         default:
-            std::cerr << "sp_file_open: Unhandled width unit!" << std::endl;
+            std::cerr << "sp_file_convert_dpi: Unhandled width unit!" << std::endl;
     }
 
     switch (root->height.unit) {
@@ -311,7 +311,7 @@ void sp_file_convert_dpi(SPDocument *doc)
             // OK                                                                              
             break;
         default:
-            std::cerr << "sp_file_open: Unhandled height unit!" << std::endl;
+            std::cerr << "sp_file_convert_dpi: Unhandled height unit!" << std::endl;
     }
 
     if (need_fix_units && need_fix_viewbox) {
