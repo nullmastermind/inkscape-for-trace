@@ -267,7 +267,8 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
         } else {
             // Open file
-            SPDocument *doc = ink_file_open(file);
+            bool cancelled = false;
+            SPDocument *doc = ink_file_open(file, cancelled);
             if (!doc) continue;
 
             // Add to Inkscape::Application...
