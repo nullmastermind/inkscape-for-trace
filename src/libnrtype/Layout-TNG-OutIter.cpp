@@ -789,7 +789,10 @@ bool Layout::iterator::nextLineCursor(int n)
                          - _parent_layout->_chunks[_parent_layout->_spans[_parent_layout->_lineToSpan(line_index)].in_chunk].left_x;
     }
     _char_index = _parent_layout->_cursorXOnLineToIterator(line_index + n, _x_coordinate)._char_index;
-    _glyph_index = _parent_layout->_characters[_char_index].in_glyph;
+    if (_char_index == _parent_layout->_characters.size())
+        _glyph_index = _parent_layout->_glyphs.size();
+    else
+        _glyph_index = _parent_layout->_characters[_char_index].in_glyph;
     return true;
 }
 
