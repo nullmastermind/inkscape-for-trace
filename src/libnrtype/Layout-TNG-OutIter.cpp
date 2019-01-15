@@ -503,7 +503,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
                 if (it._glyph_index == -1) {
                     rotation = 0.0;
                 } else if(it._glyph_index == 0) {
-                    rotation = _glyphs[0].rotation;
+                    rotation = _glyphs.empty() ? 0.0 : _glyphs[0].rotation;
                 } else{
                     rotation = _glyphs[it._glyph_index - 1].rotation;
                 }
