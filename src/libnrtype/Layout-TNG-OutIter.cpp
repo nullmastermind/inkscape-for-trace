@@ -47,7 +47,10 @@ Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double lo
             best_x_difference = this_x_difference;
         }
     }
-    if (best_char_index == -1) return iterator(this, char_index);
+    if (best_char_index == -1)
+        best_char_index = char_index;
+    if (best_char_index == _characters.size())
+        return end();
     return iterator(this, best_char_index);
 }
 
